@@ -2,139 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0447D361683
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 01:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A524836188C
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 06:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235669AbhDOXuO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Apr 2021 19:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235576AbhDOXuN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Apr 2021 19:50:13 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80220C061574;
-        Thu, 15 Apr 2021 16:49:49 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id j4so2383135lfp.0;
-        Thu, 15 Apr 2021 16:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=93RaKIcPxj4ed/vj3/T6taZCo8gljqrXH2nCGhdkM1Q=;
-        b=aBCM67HeOS1RQpmZ9d1xkBbfZ9OjHVKizD6JMJntC1jztjXCaMAD4PxLVP6PE65ty3
-         cKPeKzgiEbgw3SQZ8eR83qtBjTP2OYUdbnqkzhUAbE0u+1hOdGsAn8xKem5MzABFlQgD
-         mRXyEbRdJWemOBA5ZL1H2F5rm/kMfg/eeqCccq1PGYnduzRrD+ZOmE6Jc8ZifznL8idv
-         FrDgLXsLKsMduLqpBFFg7xH0u5XmXHclHLbXV0TX9HDDr95c+SXlKyzlZoT5Ez5tEE8O
-         yL7SLoB/UGXylkkP0jVvQUti3azG7QIpldbt+d5lTdgqR0VqbJM4y+Fb3QAjnu0TlNPa
-         AWGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=93RaKIcPxj4ed/vj3/T6taZCo8gljqrXH2nCGhdkM1Q=;
-        b=NBeeKEl+SDqHxh0WzmN7s/knZGZEHz9+ow9jKXLEnCkg8ZCNlAK8VquipOILHOPasM
-         G6PX5iw5kJFSM/WWJQdJFnxhnGANHBNakvIkAgPKiC3eHVS65skz8zcNslTG/8GeJPeX
-         D+KY5lvbBuvNfEOUcMl6oTYR05yesWVw/iX2LbOj4YzVvuL7R+Wl0KayDpLfR4p1z/Cz
-         aF2TWgaOdOiKC5qW9nKluFNK77YYTM/OwywIEzkTlqXh3q6DO6WSShNGLpqEXkUfq+dW
-         o6cXoVD0x5kjaWeo0yMAI+B5q+XrSUbF1ONuX+O9VEtOY0xofyCkNZ3OxQ13ZtCK8gaG
-         Dgog==
-X-Gm-Message-State: AOAM533kX0OdH+H6rXq5RAVhK167nyX6Qf7HgnHu+iQQszdYyqGY76hQ
-        57otHoWt+UXRfpV77SDnzsBgyrpvEbjNSULikuk=
-X-Google-Smtp-Source: ABdhPJyNhOogFP8g+e8x1hnSTCcEzJfdpg/9ifXfqOKSgpR6Q7EyYPjeRQKWzaeLUb3+uY3vv8XYIkkzgMMMfdz4tQA=
-X-Received: by 2002:ac2:4d4d:: with SMTP id 13mr1106974lfp.540.1618530588068;
- Thu, 15 Apr 2021 16:49:48 -0700 (PDT)
+        id S231193AbhDPEJv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Apr 2021 00:09:51 -0400
+Received: from rcdn-iport-8.cisco.com ([173.37.86.79]:1805 "EHLO
+        rcdn-iport-8.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229502AbhDPEJv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Apr 2021 00:09:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=4282; q=dns/txt; s=iport;
+  t=1618546167; x=1619755767;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qPo8os07gANgYc92EpzGmy/chN2RQQ3R6N3KjLTucyI=;
+  b=FyFqKR2/9aOfEoN32IL1cXM0n9yiJHC4fiUqXGAHnhZTu/WkVrM0zBC/
+   rsFL30WkrWYjuSVKS+9S6wSQvYqRIupZhbXCmUxYvrfMnwhL8Y9UwaJxp
+   x/uq9Edm07sDAtz6jVuJzENsUFrIn8rSBnKv0AaYzj2WG68Kdy2Xh8LSd
+   s=;
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AsIMqfqGs638gs2jIpLqEdseALOonbusQ8z?=
+ =?us-ascii?q?AX/mp6ICY4TuWzkceykPMHkSLugDEKV3063fyGMq+MQXTTnKQFg7U5EL++UG?=
+ =?us-ascii?q?Dd1leAA5pl6eLZqQHIPw3b2qpj2bx7c654YeeAbmRSqcrh+gG3H5IBzbC8kZ?=
+ =?us-ascii?q?yAvuvVw3dzQQwCUcgJhDtRMBqREUF9WWB9aqYRKZz03Kd6jgvlXXwWa8ihb0?=
+ =?us-ascii?q?NkY8Hz4/vWiZnhfRkKQzkg5QXmt0LN1JfKVz6FwxwZTzRDhY0HzFGAuQn46q?=
+ =?us-ascii?q?K/2svLryPh6w=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0BMAAAiDXlg/4sNJK1aHAEBAQEBAQc?=
+ =?us-ascii?q?BARIBAQQEAQGBfgcBAQsBAYIpgU0BOY0YiU2BDJligXwLAQEBDzQEAQGEUIF?=
+ =?us-ascii?q?1AiU0CQ4CAwEBDAEBBQEBAQIBBgRxE4VdQxYBhiMBRoE+AYMDgwisCIIrgQG?=
+ =?us-ascii?q?IM4FEgTkBiGt0hBwcgUlCgROCbIstBIJABQEBgQ8HHoI4QpwtgX+KS5Figxa?=
+ =?us-ascii?q?BJptRDyOkfJUYo2KBVDqBWTMaCBsVgyVPGQ6cLAFbIQNnAgYKAQEDCYlOg0A?=
+ =?us-ascii?q?BAQ?=
+X-IronPort-AV: E=Sophos;i="5.82,226,1613433600"; 
+   d="scan'208";a="884877150"
+Received: from alln-core-6.cisco.com ([173.36.13.139])
+  by rcdn-iport-8.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 16 Apr 2021 04:09:25 +0000
+Received: from zorba.cisco.com ([10.24.7.67])
+        by alln-core-6.cisco.com (8.15.2/8.15.2) with ESMTP id 13G49OHf016753;
+        Fri, 16 Apr 2021 04:09:24 GMT
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Will Deacon <will@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>,
+        Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
+        Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org
+Cc:     linux-efi@vger.kernel.org
+Subject: [PATCH 0/8] generic command line v4
+Date:   Thu, 15 Apr 2021 21:09:11 -0700
+Message-Id: <20210416040924.2882771-1-danielwa@cisco.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210415093250.3391257-1-Jianlin.Lv@arm.com> <9c4a78d2-f73c-832a-e6e2-4b4daa729e07@iogearbox.net>
- <d3949501-8f7d-57c4-b3fe-bcc3b24c09d8@isovalent.com>
-In-Reply-To: <d3949501-8f7d-57c4-b3fe-bcc3b24c09d8@isovalent.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 15 Apr 2021 16:49:36 -0700
-Message-ID: <CAADnVQJ2oHbYfgY9jqM_JMxUsoZxaNrxKSVFYfgCXuHVpDehpQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Remove bpf_jit_enable=2 debugging mode
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Jianlin Lv <Jianlin.Lv@arm.com>, bpf <bpf@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, paulburton@kernel.org,
-        tsbogend@alpha.franken.de,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Wang YanQing <udknight@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Mahesh Bandewar <maheshb@google.com>,
-        Simon Horman <horms@verge.net.au>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tobias Klauser <tklauser@distanz.ch>, grantseltzer@gmail.com,
-        Ian Rogers <irogers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org,
-        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux@vger.kernel.org, iecedge@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Outbound-SMTP-Client: 10.24.7.67, [10.24.7.67]
+X-Outbound-Node: alln-core-6.cisco.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Apr 15, 2021 at 8:41 AM Quentin Monnet <quentin@isovalent.com> wrote:
->
-> 2021-04-15 16:37 UTC+0200 ~ Daniel Borkmann <daniel@iogearbox.net>
-> > On 4/15/21 11:32 AM, Jianlin Lv wrote:
-> >> For debugging JITs, dumping the JITed image to kernel log is discouraged,
-> >> "bpftool prog dump jited" is much better way to examine JITed dumps.
-> >> This patch get rid of the code related to bpf_jit_enable=2 mode and
-> >> update the proc handler of bpf_jit_enable, also added auxiliary
-> >> information to explain how to use bpf_jit_disasm tool after this change.
-> >>
-> >> Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
->
-> Hello,
->
-> For what it's worth, I have already seen people dump the JIT image in
-> kernel logs in Qemu VMs running with just a busybox, not for kernel
-> development, but in a context where buiding/using bpftool was not
-> possible.
 
-If building/using bpftool is not possible then majority of selftests won't
-be exercised. I don't think such environment is suitable for any kind
-of bpf development. Much so for JIT debugging.
-While bpf_jit_enable=2 is nothing but the debugging tool for JIT developers.
-I'd rather nuke that code instead of carrying it from kernel to kernel.
+v4 release changes
+
+* Updated insert-sys-cert tool to change command line symbols after
+  compilation.
+
+	This tool is used to release binary kernels internally to companies
+	and then later insert certificates for each product by consumers of
+	the binary kernel. Cisco uses this tool for this purpose.
+
+	Cisco has a similar need for the command line to be modified on a
+	binary released kernels similar to how certificates are setup.
+
+* Added global symbols to hold append and prepend values.
+
+	These changes follow the system certificate code to allow the
+	insert-sys-cert tool to be used.
+
+* Added a test case to confirm functionality.
+
+	Seemed sensible to add this to make sure everything is working.
+
+* Dropped powerpc changes
+
+	Christophe Leroy has reservations about the features for powerpc. I
+	don't think his reservations are founded, and these changes should
+	fully work on powerpc. However, I dropped these changes so Christophe
+	can have more time to get comfortable with the changes.
+
+
+Enjoy!
+
+
+Daniel Walker (8):
+  CMDLINE: add generic builtin command line
+  scripts: insert-sys-cert: add command line insert capability
+  scripts: insert-sys-cert: change name to insert-symbol
+  CMDLINE: mips: convert to generic builtin command line
+  drivers: firmware: efi: libstub: enable generic commandline
+  CMDLINE: x86: convert to generic builtin command line
+  of: allow sending a NULL value to early_init_dt_scan_chosen
+  CMDLINE: arm64: convert to generic builtin command line
+
+ arch/arm64/Kconfig                            |  33 +--
+ arch/arm64/include/asm/setup.h                |   2 +
+ arch/arm64/kernel/idreg-override.c            |   9 +-
+ arch/mips/Kconfig                             |   4 +-
+ arch/mips/Kconfig.debug                       |  44 ----
+ arch/mips/configs/ar7_defconfig               |   9 +-
+ arch/mips/configs/bcm47xx_defconfig           |   8 +-
+ arch/mips/configs/bcm63xx_defconfig           |  15 +-
+ arch/mips/configs/bmips_be_defconfig          |  11 +-
+ arch/mips/configs/bmips_stb_defconfig         |  11 +-
+ arch/mips/configs/capcella_defconfig          |  11 +-
+ arch/mips/configs/ci20_defconfig              |  10 +-
+ arch/mips/configs/cu1000-neo_defconfig        |  10 +-
+ arch/mips/configs/cu1830-neo_defconfig        |  10 +-
+ arch/mips/configs/e55_defconfig               |   4 +-
+ arch/mips/configs/generic_defconfig           |   6 +-
+ arch/mips/configs/gpr_defconfig               |  18 +-
+ arch/mips/configs/loongson3_defconfig         |  13 +-
+ arch/mips/configs/mpc30x_defconfig            |   7 +-
+ arch/mips/configs/tb0219_defconfig            |   7 +-
+ arch/mips/configs/tb0226_defconfig            |   7 +-
+ arch/mips/configs/tb0287_defconfig            |   7 +-
+ arch/mips/configs/workpad_defconfig           |  11 +-
+ arch/mips/include/asm/setup.h                 |   2 +
+ arch/mips/kernel/relocate.c                   |  17 +-
+ arch/mips/kernel/setup.c                      |  36 +--
+ arch/mips/pic32/pic32mzda/early_console.c     |   2 +-
+ arch/mips/pic32/pic32mzda/init.c              |   3 +-
+ arch/x86/Kconfig                              |  44 +---
+ arch/x86/kernel/setup.c                       |  18 +-
+ .../firmware/efi/libstub/efi-stub-helper.c    |  29 +++
+ drivers/firmware/efi/libstub/efi-stub.c       |   9 +
+ drivers/firmware/efi/libstub/efistub.h        |   1 +
+ drivers/firmware/efi/libstub/x86-stub.c       |  13 +-
+ drivers/of/fdt.c                              |  44 ++--
+ include/linux/cmdline.h                       | 103 ++++++++
+ init/Kconfig                                  |  78 ++++++
+ lib/Kconfig                                   |   4 +
+ lib/Makefile                                  |   3 +
+ lib/generic_cmdline.S                         |  53 ++++
+ lib/test_cmdline1.c                           | 139 ++++++++++
+ scripts/Makefile                              |   2 +-
+ .../{insert-sys-cert.c => insert-symbol.c}    | 243 ++++++++++++------
+ 43 files changed, 716 insertions(+), 394 deletions(-)
+ create mode 100644 include/linux/cmdline.h
+ create mode 100644 lib/generic_cmdline.S
+ create mode 100644 lib/test_cmdline1.c
+ rename scripts/{insert-sys-cert.c => insert-symbol.c} (72%)
+
+-- 
+2.25.1
+
