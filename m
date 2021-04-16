@@ -2,46 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B01361895
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 06:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B5436189B
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Apr 2021 06:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238213AbhDPEKM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Apr 2021 00:10:12 -0400
-Received: from rcdn-iport-1.cisco.com ([173.37.86.72]:61800 "EHLO
-        rcdn-iport-1.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238416AbhDPEKG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Apr 2021 00:10:06 -0400
+        id S238379AbhDPEKO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Apr 2021 00:10:14 -0400
+Received: from rcdn-iport-7.cisco.com ([173.37.86.78]:34304 "EHLO
+        rcdn-iport-7.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238453AbhDPEKI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Apr 2021 00:10:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=4126; q=dns/txt; s=iport;
-  t=1618546182; x=1619755782;
+  d=cisco.com; i=@cisco.com; l=3912; q=dns/txt; s=iport;
+  t=1618546184; x=1619755784;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PeTW14FxWGoMvyvzYReuQevTCGzCc/Dodslmcogr2V0=;
-  b=Cbpy86nlKr92xMbU4yXgSsk50cj+qIyzoSOQpk11rneDmBs0B4DpOMxd
-   VPVc35+3Jy/agC5PlS2EERPY4jmEzY9u/DUTriGLbLVz2QLdnYmt1VFlx
-   h3Mg2lsEyqdFVRn9YaQCWp+f3v/9l+UAfY5nqdTz2Jfx6RyLrZyMXySki
+  bh=VP7PAoaR3l2w3et6aEwl6bAiAhFA9JKl6Z/MedxCeK8=;
+  b=UDO5fTNGt6fMUB4MZ2SxCaCWoZhuGCByf5fDu1nrtDno/0T5iD/lyIKs
+   cyvO1Jh3vUJPRhLw1G+PMcbJpj7p6+bumpRvzE4Acz7OiCwa+VO5WTOBT
+   21vW2f+dHSEovcdCu7Cy6PAL8GdmSY0CCIdy5ML68kJ7R48F/RLRngqu7
    U=;
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AYqph260lbigOnMHLnaSIxgqjBe9yeYIsi2?=
- =?us-ascii?q?QD101hICF9WMbwrayTtd4c0gL5jytUZWopnsqONLLFbXTX85N05od5B8bHYC?=
- =?us-ascii?q?DKsHalRbsN0aLM2DvlcheVysd80uNaf7F6GJnMCzFB/KXHyS2ZN/pl/9Wd6q?=
- =?us-ascii?q?Cvgo7lvhJQZCVncbtp4Qs8KgvzKCxLbTJLD5Y4C5aQj/Avz1GdUE8aYcihCn?=
- =?us-ascii?q?4OU/KrnayoqLvdfRUECxQ7gTPgsRqU7tfBfiSw71M3Ty5IhYwv63HClBb0op?=
- =?us-ascii?q?++quihxgXHvlWjiKh+qZ/EwttHCNfksKgoAwSprBq0b4J8XLDHmzY5rIiUmS?=
- =?us-ascii?q?8XueiJhQs8NMJu7H6UREWJmF/G3gnt1ytG0Q6F9WOl?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AfmS0yqCf5eLAQ2PlHejxsceALOonbusQ8z?=
+ =?us-ascii?q?AX/mp6ICY4TuWzkceykPMHkSLugDEKV3063fyGMq+MQXTTnKQFhbU5EL++UG?=
+ =?us-ascii?q?Dd1leAA5pl6eLZqQHIOyq7zeJF0LclTq4WMqySMXFfreLXpDa1CMwhxt7vyt?=
+ =?us-ascii?q?HMuc77w212RQ9nL4Fshj0ZNi+hHkd7RBZLCPMCffL22uN9qzWtYngRZMigb0?=
+ =?us-ascii?q?N1PdTrncHBl57tfHc9aCIP1Q/mt16VwY+/OwSE2FMkXylXx7A5/Sz+jxXh/a?=
+ =?us-ascii?q?m4qZiAu3jh/l6Wy5xXndf7o+EiOOW8zu4INz7rlgGkIKNmVrHqhkFNnMifrH?=
+ =?us-ascii?q?A3jdLLvxAse/5W1kqUVGS0rRzxsjOQtgoT1w=3D=3D?=
 X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0BMAACIDXlg/4sNJK1aHAEBAQEBAQc?=
- =?us-ascii?q?BARIBAQQEAQGBfgcBAQsBAYIpgU0BOTGMZ4lOijKQPIF8CwEBAQ80BAEBhFA?=
- =?us-ascii?q?CgXMCJTQJDgIDAQEMAQEFAQEBAgEGBHEThV1DFgGFawYyATgOEFEhNgYBEoJ?=
- =?us-ascii?q?xglYDL6wHgiuBAYdDDWOBRBSBJQGIa3SDdSccgUlChHOCHogbBIJGAXUZAQo?=
- =?us-ascii?q?lAYFUgRuQWYJyimGbUluDFoEmliaFKw8jpHyVGI8HlFuBVDqBWTMaCBsVgyR?=
- =?us-ascii?q?QGQ6OKxaNawFbIQMvOAIGCgEBAwmJToNAAQE?=
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0BMAABLDXlg/4sNJK1aHAEBAQEBAQc?=
+ =?us-ascii?q?BARIBAQQEAQGBfgcBAQsBAYF6L4FNATkxjGeJTYEMlCyFNoF8CwEBAQ80BAE?=
+ =?us-ascii?q?BhFACgXMCJTQJDgIDAQEMAQEFAQEBAgEGBHEThV1DFgGFawYyAUYQHTRJDgY?=
+ =?us-ascii?q?BEoJxgwisB4IrgQGIM4FEFIElAYhrdIN1JxyBSUKBE4JsdIo5BIJABwaBCII?=
+ =?us-ascii?q?6IwGRG41TnC2DFoEmm1EPI6R8LZRro2KBVDqBWTMaCBsVgyRQGQ6OKxaBAgE?=
+ =?us-ascii?q?CjGYBWyEDLzgCBgoBAQMJiU6DQAEB?=
 X-IronPort-AV: E=Sophos;i="5.82,226,1613433600"; 
-   d="scan'208";a="876181661"
+   d="scan'208";a="871030791"
 Received: from alln-core-6.cisco.com ([173.36.13.139])
-  by rcdn-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 16 Apr 2021 04:09:38 +0000
+  by rcdn-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 16 Apr 2021 04:09:40 +0000
 Received: from zorba.cisco.com ([10.24.7.67])
-        by alln-core-6.cisco.com (8.15.2/8.15.2) with ESMTP id 13G49OHl016753;
-        Fri, 16 Apr 2021 04:09:37 GMT
+        by alln-core-6.cisco.com (8.15.2/8.15.2) with ESMTP id 13G49OHm016753;
+        Fri, 16 Apr 2021 04:09:39 GMT
 From:   Daniel Walker <danielwa@cisco.com>
 To:     Will Deacon <will@kernel.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
@@ -49,16 +49,13 @@ To:     Will Deacon <will@kernel.org>,
         Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>,
         Andrew Morton <akpm@linux-foundation.org>, x86@kernel.org,
         linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     xe-linux-external@cisco.com,
-        Ruslan Ruslichenko <rruslich@cisco.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     xe-linux-external@cisco.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 6/8] CMDLINE: x86: convert to generic builtin command line
-Date:   Thu, 15 Apr 2021 21:09:17 -0700
-Message-Id: <20210416040924.2882771-7-danielwa@cisco.com>
+Subject: [PATCH 7/8] of: allow sending a NULL value to early_init_dt_scan_chosen
+Date:   Thu, 15 Apr 2021 21:09:18 -0700
+Message-Id: <20210416040924.2882771-8-danielwa@cisco.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210416040924.2882771-1-danielwa@cisco.com>
 References: <20210416040924.2882771-1-danielwa@cisco.com>
@@ -71,122 +68,109 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This updates the x86 code to use the CONFIG_GENERIC_CMDLINE
-option.
+It's possible that an architecture may want to populate
+boot_command_line before calling the device tree code.
+Currently, early_init_dt_scan_chosen won't accept a NULL
+in the data parameter and it returns immediately if you
+send one.
+
+I changed early_init_dt_scan_nodes() to send a NULL into
+early_init_dt_scan_chosen() , then I made
+early_init_dt_scan_chosen() to do the initrd checking, and
+the rng-seed checking and skip all the command line related
+code.
+
+Given lots of changes to the command line, I think it makes sense
+to allow the initrd code and rng-seed code to be run without
+forcing the command line handling. I'm also submitting changes
+to arm64 which populate boot_command_line much early and this
+device tree code overwrites boot_command_line in that case.
+
+This code depends on all architecture to have a NULL
+boot_command_line at boot up when this function runs, unless
+it's already populated.
+
+This code was boot tested on powerpc 32bit, x86, and arm64.
 
 Cc: xe-linux-external@cisco.com
-Signed-off-by: Ruslan Ruslichenko <rruslich@cisco.com>
-Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
 Signed-off-by: Daniel Walker <danielwa@cisco.com>
 ---
- arch/x86/Kconfig        | 44 +----------------------------------------
- arch/x86/kernel/setup.c | 18 ++---------------
- 2 files changed, 3 insertions(+), 59 deletions(-)
+ drivers/of/fdt.c | 44 +++++++++++++++++++++++++-------------------
+ 1 file changed, 25 insertions(+), 19 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2792879d398e..73ea9589e50d 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -118,6 +118,7 @@ config X86
- 	select EDAC_SUPPORT
- 	select GENERIC_CLOCKEVENTS_BROADCAST	if X86_64 || (X86_32 && X86_LOCAL_APIC)
- 	select GENERIC_CLOCKEVENTS_MIN_ADJUST
-+	select GENERIC_CMDLINE
- 	select GENERIC_CMOS_UPDATE
- 	select GENERIC_CPU_AUTOPROBE
- 	select GENERIC_CPU_VULNERABILITIES
-@@ -2358,49 +2359,6 @@ choice
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index adb26aff481d..a1fda952ce60 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -1052,36 +1052,38 @@ int __init early_init_dt_scan_chosen(unsigned long node, const char *uname,
  
- endchoice
+ 	pr_debug("search \"chosen\", depth: %d, uname: %s\n", depth, uname);
  
--config CMDLINE_BOOL
--	bool "Built-in kernel command line"
--	help
--	  Allow for specifying boot arguments to the kernel at
--	  build time.  On some systems (e.g. embedded ones), it is
--	  necessary or convenient to provide some or all of the
--	  kernel boot arguments with the kernel itself (that is,
--	  to not rely on the boot loader to provide them.)
--
--	  To compile command line arguments into the kernel,
--	  set this option to 'Y', then fill in the
--	  boot arguments in CONFIG_CMDLINE.
--
--	  Systems with fully functional boot loaders (i.e. non-embedded)
--	  should leave this option set to 'N'.
--
--config CMDLINE
--	string "Built-in kernel command string"
--	depends on CMDLINE_BOOL
--	default ""
--	help
--	  Enter arguments here that should be compiled into the kernel
--	  image and used at boot time.  If the boot loader provides a
--	  command line at boot time, it is appended to this string to
--	  form the full kernel command line, when the system boots.
--
--	  However, you can use the CONFIG_CMDLINE_OVERRIDE option to
--	  change this behavior.
--
--	  In most cases, the command line (whether built-in or provided
--	  by the boot loader) should specify the device for the root
--	  file system.
--
--config CMDLINE_OVERRIDE
--	bool "Built-in command line overrides boot loader arguments"
--	depends on CMDLINE_BOOL && CMDLINE != ""
--	help
--	  Set this option to 'Y' to have the kernel ignore the boot loader
--	  command line, and use ONLY the built-in command line.
--
--	  This is used to work around broken boot loaders.  This should
--	  be set to 'N' under normal conditions.
--
- config MODIFY_LDT_SYSCALL
- 	bool "Enable the LDT (local descriptor table)" if EXPERT
- 	default y
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 5ecd69a48393..cd2aa33c44d7 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -47,6 +47,7 @@
- #include <asm/unwind.h>
- #include <asm/vsyscall.h>
- #include <linux/vmalloc.h>
-+#include <linux/cmdline.h>
+-	if (depth != 1 || !data ||
+-	    (strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
++	if (depth != 1 || (strcmp(uname, "chosen") != 0
++				&& strcmp(uname, "chosen@0") != 0))
+ 		return 0;
  
- /*
-  * max_low_pfn_mapped: highest directly mapped pfn < 4 GB
-@@ -161,9 +162,6 @@ unsigned long saved_video_mode;
- #define RAMDISK_LOAD_FLAG		0x4000
+ 	early_init_dt_check_for_initrd(node);
  
- static char __initdata command_line[COMMAND_LINE_SIZE];
--#ifdef CONFIG_CMDLINE_BOOL
--static char __initdata builtin_cmdline[COMMAND_LINE_SIZE] = CONFIG_CMDLINE;
--#endif
+-	/* Retrieve command line */
+-	p = of_get_flat_dt_prop(node, "bootargs", &l);
+-	if (p != NULL && l > 0)
+-		strlcpy(data, p, min(l, COMMAND_LINE_SIZE));
++	if (data) {
++		/* Retrieve command line */
++		p = of_get_flat_dt_prop(node, "bootargs", &l);
++		if (p != NULL && l > 0)
++			strlcpy(data, p, min(l, COMMAND_LINE_SIZE));
  
- #if defined(CONFIG_EDD) || defined(CONFIG_EDD_MODULE)
- struct edd edd;
-@@ -883,19 +881,7 @@ void __init setup_arch(char **cmdline_p)
- 	bss_resource.start = __pa_symbol(__bss_start);
- 	bss_resource.end = __pa_symbol(__bss_stop)-1;
- 
--#ifdef CONFIG_CMDLINE_BOOL
--#ifdef CONFIG_CMDLINE_OVERRIDE
--	strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
+-	/*
+-	 * CONFIG_CMDLINE is meant to be a default in case nothing else
+-	 * managed to set the command line, unless CONFIG_CMDLINE_FORCE
+-	 * is set in which case we override whatever was found earlier.
+-	 */
++		/*
++		 * CONFIG_CMDLINE is meant to be a default in case nothing else
++		 * managed to set the command line, unless CONFIG_CMDLINE_FORCE
++		 * is set in which case we override whatever was found earlier.
++		 */
+ #ifdef CONFIG_CMDLINE
+ #if defined(CONFIG_CMDLINE_EXTEND)
+-	strlcat(data, " ", COMMAND_LINE_SIZE);
+-	strlcat(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
++		strlcat(data, " ", COMMAND_LINE_SIZE);
++		strlcat(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+ #elif defined(CONFIG_CMDLINE_FORCE)
+-	strlcpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
 -#else
--	if (builtin_cmdline[0]) {
--		/* append boot loader cmdline to builtin */
--		strlcat(builtin_cmdline, " ", COMMAND_LINE_SIZE);
--		strlcat(builtin_cmdline, boot_command_line, COMMAND_LINE_SIZE);
--		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
--	}
--#endif
--#endif
--
-+	cmdline_add_builtin(boot_command_line);
- 	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
- 	*cmdline_p = command_line;
+-	/* No arguments from boot loader, use kernel's  cmdl*/
+-	if (!((char *)data)[0])
+ 		strlcpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
++#else
++		/* No arguments from boot loader, use kernel's  cmdl*/
++		if (!((char *)data)[0])
++			strlcpy(data, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+ #endif
+ #endif /* CONFIG_CMDLINE */
+ 
+-	pr_debug("Command line is: %s\n", (char *)data);
++		pr_debug("Command line is: %s\n", (char *)data);
++	}
+ 
+ 	rng_seed = of_get_flat_dt_prop(node, "rng-seed", &l);
+ 	if (rng_seed && l > 0) {
+@@ -1202,7 +1204,11 @@ void __init early_init_dt_scan_nodes(void)
+ 	int rc = 0;
+ 
+ 	/* Retrieve various information from the /chosen node */
+-	rc = of_scan_flat_dt(early_init_dt_scan_chosen, boot_command_line);
++	if (boot_command_line[0])
++		rc = of_scan_flat_dt(early_init_dt_scan_chosen, NULL);
++	else
++		rc = of_scan_flat_dt(early_init_dt_scan_chosen,
++					boot_command_line);
+ 	if (!rc)
+ 		pr_warn("No chosen node found, continuing without\n");
  
 -- 
 2.25.1
