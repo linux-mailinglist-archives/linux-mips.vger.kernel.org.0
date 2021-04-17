@@ -2,185 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AA4362E57
-	for <lists+linux-mips@lfdr.de>; Sat, 17 Apr 2021 09:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860DD362E80
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Apr 2021 10:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbhDQHe6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Apr 2021 03:34:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59194 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230393AbhDQHe6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 17 Apr 2021 03:34:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618644870;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ukfumMluZP0EnUtJDPV+zqcuT6EyAAYlsiNwPNai6SA=;
-        b=L+tLYfTqTGkcnroOcqRsrYv/YPG1LB9dxNKjwNo2Yz/K+P3wY5Red7Zo/brk6RSUmoE7Ce
-        sOGgMJ8O/HXk8iSwig5dFr2YxDIQXl+TZ/jaZxRKUPwixcWUoeez1rauP8nhS7VPn2iWds
-        2LOX+H96F78rP93PlML0256fAPVv95Q=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-542-NiqHmWmsNzuzO21lRXyc-g-1; Sat, 17 Apr 2021 03:34:26 -0400
-X-MC-Unique: NiqHmWmsNzuzO21lRXyc-g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 897248189C6;
-        Sat, 17 Apr 2021 07:34:24 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F89E5D9C6;
-        Sat, 17 Apr 2021 07:34:17 +0000 (UTC)
-Date:   Sat, 17 Apr 2021 09:34:15 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        ilias.apalodimas@linaro.org, mcroce@linux.microsoft.com,
-        grygorii.strashko@ti.com, arnd@kernel.org, hch@lst.de,
-        linux-snps-arc@lists.infradead.org, mhocko@kernel.org,
-        mgorman@suse.de, brouer@redhat.com
-Subject: Re: [PATCH 1/2] mm: Fix struct page layout on 32-bit systems
-Message-ID: <20210417093415.41bcfde7@carbon>
-In-Reply-To: <20210416230724.2519198-2-willy@infradead.org>
-References: <20210416230724.2519198-1-willy@infradead.org>
-        <20210416230724.2519198-2-willy@infradead.org>
+        id S231277AbhDQIQ4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Apr 2021 04:16:56 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:1364 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229631AbhDQIQ4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 17 Apr 2021 04:16:56 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4FMmBL3B3mz9vBnD;
+        Sat, 17 Apr 2021 10:16:26 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id KdXChgWPk-BP; Sat, 17 Apr 2021 10:16:26 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4FMmBL21vRz9vBnC;
+        Sat, 17 Apr 2021 10:16:26 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 312848B777;
+        Sat, 17 Apr 2021 10:16:27 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id efFKgaQ79CvE; Sat, 17 Apr 2021 10:16:27 +0200 (CEST)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3BFFF8B75B;
+        Sat, 17 Apr 2021 10:16:24 +0200 (CEST)
+Subject: Re: [PATCH bpf-next 1/2] bpf: Remove bpf_jit_enable=2 debugging mode
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Cc:     Ian Rogers <irogers@google.com>, Song Liu <songliubraving@fb.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Mahesh Bandewar <maheshb@google.com>,
+        Will Deacon <will@kernel.org>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>, paulburton@kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        linux-mips@vger.kernel.org, grantseltzer@gmail.com,
+        Xi Wang <xi.wang@gmail.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        KP Singh <kpsingh@kernel.org>, iecedge@gmail.com,
+        Simon Horman <horms@verge.net.au>,
+        Borislav Petkov <bp@alien8.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Yonghong Song <yhs@fb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dmitry Vyukov <dvyukov@google.com>, tsbogend@alpha.franken.de,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Network Development <netdev@vger.kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Wang YanQing <udknight@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>, bpf <bpf@vger.kernel.org>,
+        Jianlin Lv <Jianlin.Lv@arm.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20210415093250.3391257-1-Jianlin.Lv@arm.com>
+ <9c4a78d2-f73c-832a-e6e2-4b4daa729e07@iogearbox.net>
+ <d3949501-8f7d-57c4-b3fe-bcc3b24c09d8@isovalent.com>
+ <CAADnVQJ2oHbYfgY9jqM_JMxUsoZxaNrxKSVFYfgCXuHVpDehpQ@mail.gmail.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <0dea05ba-9467-0d84-4515-b8766f60318e@csgroup.eu>
+Date:   Sat, 17 Apr 2021 10:16:22 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <CAADnVQJ2oHbYfgY9jqM_JMxUsoZxaNrxKSVFYfgCXuHVpDehpQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 17 Apr 2021 00:07:23 +0100
-"Matthew Wilcox (Oracle)" <willy@infradead.org> wrote:
 
-> 32-bit architectures which expect 8-byte alignment for 8-byte integers
-> and need 64-bit DMA addresses (arc, arm, mips, ppc) had their struct
-> page inadvertently expanded in 2019.  When the dma_addr_t was added,
-> it forced the alignment of the union to 8 bytes, which inserted a 4 byte
-> gap between 'flags' and the union.
+
+Le 16/04/2021 à 01:49, Alexei Starovoitov a écrit :
+> On Thu, Apr 15, 2021 at 8:41 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>>
+>> 2021-04-15 16:37 UTC+0200 ~ Daniel Borkmann <daniel@iogearbox.net>
+>>> On 4/15/21 11:32 AM, Jianlin Lv wrote:
+>>>> For debugging JITs, dumping the JITed image to kernel log is discouraged,
+>>>> "bpftool prog dump jited" is much better way to examine JITed dumps.
+>>>> This patch get rid of the code related to bpf_jit_enable=2 mode and
+>>>> update the proc handler of bpf_jit_enable, also added auxiliary
+>>>> information to explain how to use bpf_jit_disasm tool after this change.
+>>>>
+>>>> Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
+>>
+>> Hello,
+>>
+>> For what it's worth, I have already seen people dump the JIT image in
+>> kernel logs in Qemu VMs running with just a busybox, not for kernel
+>> development, but in a context where buiding/using bpftool was not
+>> possible.
 > 
-> Fix this by storing the dma_addr_t in one or two adjacent unsigned longs.
-> This restores the alignment to that of an unsigned long, and also fixes a
-> potential problem where (on a big endian platform), the bit used to denote
-> PageTail could inadvertently get set, and a racing get_user_pages_fast()
-> could dereference a bogus compound_head().
+> If building/using bpftool is not possible then majority of selftests won't
+> be exercised. I don't think such environment is suitable for any kind
+> of bpf development. Much so for JIT debugging.
+> While bpf_jit_enable=2 is nothing but the debugging tool for JIT developers.
+> I'd rather nuke that code instead of carrying it from kernel to kernel.
 > 
-> Fixes: c25fff7171be ("mm: add dma_addr_t to struct page")
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
 
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+When I implemented JIT for PPC32, it was extremely helpfull.
 
-Thanks you Matthew for working on a fix for this.  It's been a pleasure
-working with you and exchanging crazy ideas with you for solving this.
-Most of them didn't work out, especially those that came to me during
-restless nights ;-).
+As far as I understand, for the time being bpftool is not usable in my environment because it 
+doesn't support cross compilation when the target's endianess differs from the building host 
+endianess, see discussion at 
+https://lore.kernel.org/bpf/21e66a09-514f-f426-b9e2-13baab0b938b@csgroup.eu/
 
-Having worked through the other solutions, some very intrusive and some
-could even be consider ugly.  I think we have a good and non-intrusive
-solution/workaround in this patch.  Thanks!
+That's right that selftests can't be exercised because they don't build.
 
-
->  include/linux/mm_types.h |  4 ++--
->  include/net/page_pool.h  | 12 +++++++++++-
->  net/core/page_pool.c     | 12 +++++++-----
->  3 files changed, 20 insertions(+), 8 deletions(-)
->
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 6613b26a8894..5aacc1c10a45 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -97,10 +97,10 @@ struct page {
->  		};
->  		struct {	/* page_pool used by netstack */
->  			/**
-> -			 * @dma_addr: might require a 64-bit value even on
-> +			 * @dma_addr: might require a 64-bit value on
->  			 * 32-bit architectures.
->  			 */
-> -			dma_addr_t dma_addr;
-> +			unsigned long dma_addr[2];
->  		};
->  		struct {	/* slab, slob and slub */
->  			union {
-> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-> index b5b195305346..db7c7020746a 100644
-> --- a/include/net/page_pool.h
-> +++ b/include/net/page_pool.h
-> @@ -198,7 +198,17 @@ static inline void page_pool_recycle_direct(struct page_pool *pool,
->  
->  static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
->  {
-> -	return page->dma_addr;
-> +	dma_addr_t ret = page->dma_addr[0];
-> +	if (sizeof(dma_addr_t) > sizeof(unsigned long))
-> +		ret |= (dma_addr_t)page->dma_addr[1] << 32;
-> +	return ret;
-> +}
-> +
-> +static inline void page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
-> +{
-> +	page->dma_addr[0] = addr;
-> +	if (sizeof(dma_addr_t) > sizeof(unsigned long))
-> +		page->dma_addr[1] = addr >> 32;
->  }
->  
->  static inline bool is_page_pool_compiled_in(void)
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index ad8b0707af04..f014fd8c19a6 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -174,8 +174,10 @@ static void page_pool_dma_sync_for_device(struct page_pool *pool,
->  					  struct page *page,
->  					  unsigned int dma_sync_size)
->  {
-> +	dma_addr_t dma_addr = page_pool_get_dma_addr(page);
-> +
->  	dma_sync_size = min(dma_sync_size, pool->p.max_len);
-> -	dma_sync_single_range_for_device(pool->p.dev, page->dma_addr,
-> +	dma_sync_single_range_for_device(pool->p.dev, dma_addr,
->  					 pool->p.offset, dma_sync_size,
->  					 pool->p.dma_dir);
->  }
-> @@ -226,7 +228,7 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
->  		put_page(page);
->  		return NULL;
->  	}
-> -	page->dma_addr = dma;
-> +	page_pool_set_dma_addr(page, dma);
->  
->  	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
->  		page_pool_dma_sync_for_device(pool, page, pool->p.max_len);
-> @@ -294,13 +296,13 @@ void page_pool_release_page(struct page_pool *pool, struct page *page)
->  		 */
->  		goto skip_dma_unmap;
->  
-> -	dma = page->dma_addr;
-> +	dma = page_pool_get_dma_addr(page);
->  
-> -	/* When page is unmapped, it cannot be returned our pool */
-> +	/* When page is unmapped, it cannot be returned to our pool */
->  	dma_unmap_page_attrs(pool->p.dev, dma,
->  			     PAGE_SIZE << pool->p.order, pool->p.dma_dir,
->  			     DMA_ATTR_SKIP_CPU_SYNC);
-> -	page->dma_addr = 0;
-> +	page_pool_set_dma_addr(page, 0);
->  skip_dma_unmap:
->  	/* This may be the last page returned, releasing the pool, so
->  	 * it is not safe to reference pool afterwards.
-
-
-
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+The question might be candid as I didn't investigate much about the replacement of "bpf_jit_enable=2 
+debugging mode" by bpftool, how do we use bpftool exactly for that ? Especially when using the BPF 
+test module ?
 
