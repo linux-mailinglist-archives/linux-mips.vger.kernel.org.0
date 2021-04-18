@@ -2,106 +2,108 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD99436329A
-	for <lists+linux-mips@lfdr.de>; Sun, 18 Apr 2021 01:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C31363475
+	for <lists+linux-mips@lfdr.de>; Sun, 18 Apr 2021 11:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbhDQXCk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Apr 2021 19:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbhDQXCj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Apr 2021 19:02:39 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3DCC06174A;
-        Sat, 17 Apr 2021 16:02:12 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 65so34332902ybc.4;
-        Sat, 17 Apr 2021 16:02:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=v+fGXEgbrGdx6+TuWWCXqx2OMPgyqor4usSIuoCSShg=;
-        b=M45uwCOeLF0d6j5kXIG+MhQqV21BKFs+kyQ4xbO/8ZSCu7dNgReLnkamB+6Nl6sxg0
-         Jz/PmcOWFAHW1o+gFjblHHFKtpkrI844GlzV4XPHupYokB4rdWMdYp420iXbRJdXG6cl
-         R2ecldc1qDqgmQ1WPqemqIfab1u+jBe+XPseDSdKB1x+CPNRppCf+gE/EFqy7iZl+YHu
-         fegrjX2h3UmjhCMaBGQwzYfzmYlwFuDAK0t1L+9ZfNPJKkp2mAExOlNN/ZRHxU+PoqYV
-         yDFNvrwaISKJRBki6QkMPjlWBvgNnH7Xga9s3dp12q9njT1gPGoNnonLm69vG5RRdK9X
-         Phog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=v+fGXEgbrGdx6+TuWWCXqx2OMPgyqor4usSIuoCSShg=;
-        b=DtuQihbfAf1mcYETDs2PylFpxcwo5kxCHRK7nh4Xjh1XwE5t3o1hmO8c5cfW0Lopf1
-         82l7YCPyUpDHZliL5UeXRAumpS610viamIXYH+cNP9E5FAaDcXW26KzplnPbbQElE4sM
-         w5GE5FNfLKiRyHn9mA/LpdlwfTKXuLncFOCamVuYgYsCNR7tU1abBTSIQ/eNkZ3MBBof
-         ioUtIes04iiiFw+fE+vpgjYT1XgWAZJ5HpnRweT5DA1vq/VXOMLxzqx/X99zCWMesPLP
-         xVIoH9oRzIyaZbAsFcF85t6f14ZPicafF6Ae5dYHVCo8X0FIryKWc7wHxZP5Uli8IXFx
-         0yjA==
-X-Gm-Message-State: AOAM531bPB0AXYyGwNbMGffMxgTr7ZTpDm9OQrh6vn91jvycEoVtFldg
-        AGOoNbj1BLv2Q0ZxqOEzDgprI7C5fiKnJVfW7JQLisVMHLw=
-X-Google-Smtp-Source: ABdhPJzPzQ2oj8Xxg/k3WiOoJwOG30R67LsSPAR0IuQvYCF220ed2cTehc/D0ffmvbBqumj+e7OEZJxgaWoml6sz/kw=
-X-Received: by 2002:a25:244e:: with SMTP id k75mr8141951ybk.342.1618700532214;
- Sat, 17 Apr 2021 16:02:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <YG35ULOblq/gUZmh@debian> <CAKcpw6VrbA2+mq42=0FjE7Y9e6OM-Q9WxvYPWtAF4t0hRWKB1A@mail.gmail.com>
- <20210409121637.GA13010@alpha.franken.de>
-In-Reply-To: <20210409121637.GA13010@alpha.franken.de>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Sun, 18 Apr 2021 00:01:36 +0100
-Message-ID: <CADVatmPcL0YF0h6cnUbyo-4xp1re1DTARGKpq9_DYp+hTsueVw@mail.gmail.com>
-Subject: Re: build failure of malta_qemu_32r6_defconfig
+        id S229823AbhDRJfs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 18 Apr 2021 05:35:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41724 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229807AbhDRJfq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 18 Apr 2021 05:35:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 72B8A600CD;
+        Sun, 18 Apr 2021 09:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618738518;
+        bh=qv8wADW+muFr8WpYAfX+6bIu6e6NMZO1CVAeLWGp2J8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uioPKfg8WrHZs19RNadLHdYiJVqzZFlm7kZIEotkqOfR54BYo7KC/CsWkmtLM4oi4
+         5liTWPkf/i/gtWfIElEL7t31Q3LvhV/kFaTda/EFL7nRuSA+v7wF1qqtx/vOxKkI2N
+         86wrvz8Pc7UTb0tJyrtC1IvCs38fl3uhVEBAyzCCKKSLgSdkUWDgFAosRRhYCo4vpy
+         g87eGvn7J4E2RG5P1hiV7+ooLCcELPvRCH8qZdQpPSx/6+FnuMwcnIF1/m0z5vwX/i
+         iGyfF1n9YrGgzMTQ21WonMlFtpQGqrtcgx/l6GZkVOCBAVYRAfblK46hFb5zXAEEC5
+         /z/8p8kzfc1eQ==
+From:   Mike Rapoport <rppt@kernel.org>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     YunQiang Su <wzssyqa@gmail.com>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: [RFT PATCH] MIPS: Octeon: drop dependency on CONFIG_HOLES_IN_ZONE
+Date:   Sun, 18 Apr 2021 12:35:12 +0300
+Message-Id: <20210418093512.668-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-On Fri, Apr 9, 2021 at 1:17 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Thu, Apr 08, 2021 at 09:42:11AM +0800, YunQiang Su wrote:
-> > Sudip Mukherjee <sudipm.mukherjee@gmail.com> =E4=BA=8E2021=E5=B9=B44=E6=
-=9C=888=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=8D=882:26=E5=86=99=E9=81=93=
-=EF=BC=9A
-> > >
-> > > Hi Thomas,
-> > >
-> > > I was building v5.10.28 with malta_qemu_32r6_defconfig and noticed th=
-at
-> > > it fails to build, so tried next-20210407 to see if it has been fixed=
-.
-> > > But linux-next also has the issue with gcc-10.
-> > >
-> > > The error is:
-> > >
-> > > ./arch/mips/include/asm/vdso/gettimeofday.h: In function '__vdso_cloc=
-k_gettime':
-> > > ./arch/mips/include/asm/vdso/gettimeofday.h:103:2: error: the registe=
-r 'lo' cannot be clobbered in 'asm' for the current target
-> > >   103 |  asm volatile(
-> > >       |  ^~~
-> >
-> > this operation try to save lo and hi register, while they are not
-> > exisiting on r6.
-> > We are working on figure out a patch for it.
->
-> looks like there is already a patch in patchwork, which just needs
-> a workup:
->
-> https://patchwork.kernel.org/project/linux-mips/patch/20200801154401.4177=
-009-1-romain.naour@gmail.com/
+CAVIUM_OCTEON_SOC configuration selects HOLES_IN_ZONE option to cope with
+memory crashes that were happening in 2011.
 
-Looks like there has been no response to it since last 8 months. Do
-you want me to respin it and send a proper patch?
+This option effectively aliases pfn_valid_within() to pfn_valid() when
+enabled and hardwires it to 1 when disabled. The check for
+pfn_valid_within() is only relevant in case the memory map may have holes
+or undefined struct page instances inside MAX_ORDER chunks.
 
+Since 2011 memory management initialization in general and memory map
+initialization particularly became much more robust so the check for
+pfn_valid_within() is not required on Octeon even despite its, hmm, unusual
+memory setup.
 
---
-Regards
-Sudip
+Remove the selection of HOLES_IN_ZONE by CAVIUM_OCTEON_SOC and drop the
+HOLES_IN_ZONE configuration option entirely as Octeon was the only MIPS
+platform to use it.
+
+Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+---
+
+Hi,
+
+I've tried to find why Octeon needed CONFIG_HOLES_IN_ZONE in the first
+place, but there is nothing except the changelog in commit 465aaed0030b
+("MIPS: Octeon: Select CONFIG_HOLES_IN_ZONE"):
+
+  Current Octeon systems do in fact have holes in their memory zones.
+  We need to select HOLES_IN_ZONE. If we do not, some memory configurations
+  will result in crashes at boot time
+
+Since then there were too many changes around memory management
+initialization both in the generic mm and on the MIPS side to track what
+exactly could case the crashes.
+
+I'm pretty confident that HOLES_IN_ZONE is not required for Octeon systems
+anymore and can be removed.
+
+I'd really appreciate if somebody with access to an Octeon system could
+test this patch.
+
+ arch/mips/Kconfig | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index d89efba3d8a4..96b08cd3b442 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -990,7 +990,6 @@ config CAVIUM_OCTEON_SOC
+ 	select HAVE_PLAT_FW_INIT_CMDLINE
+ 	select HAVE_PLAT_MEMCPY
+ 	select ZONE_DMA32
+-	select HOLES_IN_ZONE
+ 	select GPIOLIB
+ 	select USE_OF
+ 	select ARCH_SPARSEMEM_ENABLE
+@@ -1226,9 +1225,6 @@ config HAVE_PLAT_MEMCPY
+ config ISA_DMA_API
+ 	bool
+ 
+-config HOLES_IN_ZONE
+-	bool
+-
+ config SYS_SUPPORTS_RELOCATABLE
+ 	bool
+ 	help
+-- 
+2.28.0
+
