@@ -2,217 +2,197 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBED6363D52
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Apr 2021 10:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404FF363DF1
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Apr 2021 10:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbhDSIUh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 19 Apr 2021 04:20:37 -0400
-Received: from aposti.net ([89.234.176.197]:46346 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229635AbhDSIUg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 19 Apr 2021 04:20:36 -0400
-Date:   Mon, 19 Apr 2021 09:19:47 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v6 05/12] pinctrl: Ingenic: Add DMIC pins support for
- Ingenic SoCs.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-Cc:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        hns@goldelico.com, paul@boddie.org.uk, andy.shevchenko@gmail.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com
-Message-Id: <ZSXSRQ.5IWXIL536Y38@crapouillou.net>
-In-Reply-To: <1618757073-1724-6-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1618757073-1724-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1618757073-1724-6-git-send-email-zhouyanjie@wanyeetech.com>
+        id S238364AbhDSIuC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Apr 2021 04:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238331AbhDSIuB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Apr 2021 04:50:01 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61795C06174A;
+        Mon, 19 Apr 2021 01:49:30 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id u80so1157134oia.0;
+        Mon, 19 Apr 2021 01:49:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j08yIBwXLk5HTWZ6SAY1miLlwOHxJ1A2dFdxyi2DvcY=;
+        b=ukeWmfzj4t9brWPWzsNE3efem5PCcXY6cXNQYcKhjpD9UkFz4br1NIN8f/JBbihNmc
+         vYpUKm/Vr/B4dKqp2kH4f6bCVJejPqdAhqwyGlqZ+V5te749g4/JhajR6YKNGTZfHPE4
+         9GAqcvd4JZc+6feJzwqc0YVM3+6G4G83pBQSCd2ZZ3rooz34mB/YLXy6ZS8PLGZh8Omx
+         mFd0TiOioATJNxlJI2ajCidOxSN6ig9CoEKCLhG4SSrQkVZHB+uNTmYbGuntT3PFGI0J
+         n+/n6yEnzHnvcEFp2rzTzc+KrdM8uac5ciHP738zzQ0p/eD208FmpVF7kZw4Z+kSIUDs
+         cFJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j08yIBwXLk5HTWZ6SAY1miLlwOHxJ1A2dFdxyi2DvcY=;
+        b=IawgxPcSOL7hRez6WTUtSjJsDdynYgS0MLpSRvgsXDbida/0s8YWlzv8R2Tk/vi3F/
+         OQAsTCqSrMEo2PvjYXI6JBbN0/fbCnade3p4i66L+RDk3Oh4Q9gz+vWIlJZwbd/Pb/Ia
+         kb26N4vKHhdrVw7N2o71+aS0kXIiuKXJ/azhx8sYYJlYFyUiTi05GdU8LPvS20UDvLAD
+         gqx6ew6wHekOtMkxBZr5ARvBjCmpZOSq0NZFNzGw96b9VUvg3R/Y1PxE/uSKEuPfAWPB
+         +hXIEgK7HOjMdU/AEGZtmcbgycvUFBaoPjIo1rMh5PoutX+7bys0Scpj10V6wQxDFYno
+         dRwg==
+X-Gm-Message-State: AOAM533RSaQPypaoCes8dPdMgQ5EkqQ7FSfAxJbarLi6rtm1dYZ2OWIW
+        XqyXFcm+8dexopv2PN961h4XkIyQ4TcQ4lPKj30=
+X-Google-Smtp-Source: ABdhPJy8F5yRINkAPts04KIndUObakf6+CqY0t8sQ3XggJcJX4zD4FAEWgQI/Ot5FoTZGR5pMwoWgxTwQHjcY6LtqVc=
+X-Received: by 2002:a05:6808:5c5:: with SMTP id d5mr15029122oij.141.1618822169834;
+ Mon, 19 Apr 2021 01:49:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+References: <20210402005658.3024832-1-seanjc@google.com> <20210402005658.3024832-10-seanjc@google.com>
+In-Reply-To: <20210402005658.3024832-10-seanjc@google.com>
+From:   Wanpeng Li <kernellwp@gmail.com>
+Date:   Mon, 19 Apr 2021 16:49:20 +0800
+Message-ID: <CANRm+Cwt9Xs=13r9E4YWOhcE6oEJXmVrkKrv_wQ5jMUkY8+Stw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/10] KVM: Don't take mmu_lock for range invalidation
+ unless necessary
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        kvm <kvm@vger.kernel.org>, kvm-ppc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Zhou,
+On Fri, 2 Apr 2021 at 08:59, Sean Christopherson <seanjc@google.com> wrote:
+>
+> Avoid taking mmu_lock for unrelated .invalidate_range_{start,end}()
+> notifications.  Because mmu_notifier_count must be modified while holding
+> mmu_lock for write, and must always be paired across start->end to stay
+> balanced, lock elision must happen in both or none.  To meet that
+> requirement, add a rwsem to prevent memslot updates across range_start()
+> and range_end().
+>
+> Use a rwsem instead of a rwlock since most notifiers _allow_ blocking,
+> and the lock will be endl across the entire start() ... end() sequence.
+> If anything in the sequence sleeps, including the caller or a different
+> notifier, holding the spinlock would be disastrous.
+>
+> For notifiers that _disallow_ blocking, e.g. OOM reaping, simply go down
+> the slow path of unconditionally acquiring mmu_lock.  The sane
+> alternative would be to try to acquire the lock and force the notifier
+> to retry on failure.  But since OOM is currently the _only_ scenario
+> where blocking is disallowed attempting to optimize a guest that has been
+> marked for death is pointless.
+>
+> Unconditionally define and use mmu_notifier_slots_lock in the memslots
+> code, purely to avoid more #ifdefs.  The overhead of acquiring the lock
+> is negligible when the lock is uncontested, which will always be the case
+> when the MMU notifiers are not used.
+>
+> Note, technically flag-only memslot updates could be allowed in parallel,
+> but stalling a memslot update for a relatively short amount of time is
+> not a scalability issue, and this is all more than complex enough.
+>
+> Based heavily on code from Ben Gardon.
+>
+> Suggested-by: Ben Gardon <bgardon@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Le dim. 18 avril 2021 à 22:44, 周琰杰 (Zhou Yanjie) 
-<zhouyanjie@wanyeetech.com> a écrit :
-> 1.Add DMIC pins support for the JZ4780 SoC.
-> 2.Add DMIC pins support for the X1000 SoC.
-> 3.Add DMIC pins support for the X1500 SoC.
-> 4.Add DMIC pins support for the X1830 SoC.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+I saw this splatting:
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+ ======================================================
+ WARNING: possible circular locking dependency detected
+ 5.12.0-rc3+ #6 Tainted: G           OE
+ ------------------------------------------------------
+ qemu-system-x86/3069 is trying to acquire lock:
+ ffffffff9c775ca0 (mmu_notifier_invalidate_range_start){+.+.}-{0:0},
+at: __mmu_notifier_invalidate_range_end+0x5/0x190
 
-Cheers,
--Paul
+ but task is already holding lock:
+ ffffaff7410a9160 (&kvm->mmu_notifier_slots_lock){.+.+}-{3:3}, at:
+kvm_mmu_notifier_invalidate_range_start+0x36d/0x4f0 [kvm]
 
-> ---
-> 
-> Notes:
->     v6:
->     New patch.
-> 
->  drivers/pinctrl/pinctrl-ingenic.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c 
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 8ed62a4..b57433d 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -941,6 +941,7 @@ static int jz4780_i2s_data_rx_pins[] = { 0x86, };
->  static int jz4780_i2s_clk_txrx_pins[] = { 0x6c, 0x6d, };
->  static int jz4780_i2s_clk_rx_pins[] = { 0x88, 0x89, };
->  static int jz4780_i2s_sysclk_pins[] = { 0x85, };
-> +static int jz4780_dmic_pins[] = { 0x32, 0x33, };
->  static int jz4780_hdmi_ddc_pins[] = { 0xb9, 0xb8, };
-> 
->  static u8 jz4780_i2s_clk_txrx_funcs[] = { 1, 0, };
-> @@ -1039,6 +1040,7 @@ static const struct group_desc jz4780_groups[] 
-> = {
->  				jz4780_i2s_clk_txrx_funcs),
->  	INGENIC_PIN_GROUP("i2s-clk-rx", jz4780_i2s_clk_rx, 1),
->  	INGENIC_PIN_GROUP("i2s-sysclk", jz4780_i2s_sysclk, 2),
-> +	INGENIC_PIN_GROUP("dmic", jz4780_dmic, 1),
->  	INGENIC_PIN_GROUP("hdmi-ddc", jz4780_hdmi_ddc, 0),
->  	INGENIC_PIN_GROUP("cim-data", jz4770_cim_8bit, 0),
->  	INGENIC_PIN_GROUP("cim-data-12bit", jz4770_cim_12bit, 0),
-> @@ -1095,6 +1097,7 @@ static const char *jz4780_i2c4_groups[] = { 
-> "i2c4-data-e", "i2c4-data-f", };
->  static const char *jz4780_i2s_groups[] = {
->  	"i2s-data-tx", "i2s-data-rx", "i2s-clk-txrx", "i2s-clk-rx", 
-> "i2s-sysclk",
->  };
-> +static const char *jz4780_dmic_groups[] = { "dmic", };
->  static const char *jz4780_cim_groups[] = { "cim-data", };
->  static const char *jz4780_hdmi_ddc_groups[] = { "hdmi-ddc", };
-> 
-> @@ -1122,6 +1125,7 @@ static const struct function_desc 
-> jz4780_functions[] = {
->  	{ "i2c3", jz4780_i2c3_groups, ARRAY_SIZE(jz4780_i2c3_groups), },
->  	{ "i2c4", jz4780_i2c4_groups, ARRAY_SIZE(jz4780_i2c4_groups), },
->  	{ "i2s", jz4780_i2s_groups, ARRAY_SIZE(jz4780_i2s_groups), },
-> +	{ "dmic", jz4780_dmic_groups, ARRAY_SIZE(jz4780_dmic_groups), },
->  	{ "cim", jz4780_cim_groups, ARRAY_SIZE(jz4780_cim_groups), },
->  	{ "lcd", jz4770_lcd_groups, ARRAY_SIZE(jz4770_lcd_groups), },
->  	{ "pwm0", jz4770_pwm0_groups, ARRAY_SIZE(jz4770_pwm0_groups), },
-> @@ -1207,6 +1211,8 @@ static int x1000_i2s_data_tx_pins[] = { 0x24, };
->  static int x1000_i2s_data_rx_pins[] = { 0x23, };
->  static int x1000_i2s_clk_txrx_pins[] = { 0x21, 0x22, };
->  static int x1000_i2s_sysclk_pins[] = { 0x20, };
-> +static int x1000_dmic0_pins[] = { 0x35, 0x36, };
-> +static int x1000_dmic1_pins[] = { 0x25, };
->  static int x1000_cim_pins[] = {
->  	0x08, 0x09, 0x0a, 0x0b,
->  	0x13, 0x12, 0x11, 0x10, 0x0f, 0x0e, 0x0d, 0x0c,
-> @@ -1272,6 +1278,8 @@ static const struct group_desc x1000_groups[] = 
-> {
->  	INGENIC_PIN_GROUP("i2s-data-rx", x1000_i2s_data_rx, 1),
->  	INGENIC_PIN_GROUP("i2s-clk-txrx", x1000_i2s_clk_txrx, 1),
->  	INGENIC_PIN_GROUP("i2s-sysclk", x1000_i2s_sysclk, 1),
-> +	INGENIC_PIN_GROUP("dmic0", x1000_dmic0, 0),
-> +	INGENIC_PIN_GROUP("dmic1", x1000_dmic1, 1),
->  	INGENIC_PIN_GROUP("cim-data", x1000_cim, 2),
->  	INGENIC_PIN_GROUP("lcd-8bit", x1000_lcd_8bit, 1),
->  	INGENIC_PIN_GROUP("lcd-16bit", x1000_lcd_16bit, 1),
-> @@ -1315,6 +1323,7 @@ static const char *x1000_i2c2_groups[] = { 
-> "i2c2-data", };
->  static const char *x1000_i2s_groups[] = {
->  	"i2s-data-tx", "i2s-data-rx", "i2s-clk-txrx", "i2s-sysclk",
->  };
-> +static const char *x1000_dmic_groups[] = { "dmic0", "dmic1", };
->  static const char *x1000_cim_groups[] = { "cim-data", };
->  static const char *x1000_lcd_groups[] = { "lcd-8bit", "lcd-16bit", };
->  static const char *x1000_pwm0_groups[] = { "pwm0", };
-> @@ -1339,6 +1348,7 @@ static const struct function_desc 
-> x1000_functions[] = {
->  	{ "i2c1", x1000_i2c1_groups, ARRAY_SIZE(x1000_i2c1_groups), },
->  	{ "i2c2", x1000_i2c2_groups, ARRAY_SIZE(x1000_i2c2_groups), },
->  	{ "i2s", x1000_i2s_groups, ARRAY_SIZE(x1000_i2s_groups), },
-> +	{ "dmic", x1000_dmic_groups, ARRAY_SIZE(x1000_dmic_groups), },
->  	{ "cim", x1000_cim_groups, ARRAY_SIZE(x1000_cim_groups), },
->  	{ "lcd", x1000_lcd_groups, ARRAY_SIZE(x1000_lcd_groups), },
->  	{ "pwm0", x1000_pwm0_groups, ARRAY_SIZE(x1000_pwm0_groups), },
-> @@ -1378,6 +1388,8 @@ static int x1500_i2s_data_tx_pins[] = { 0x24, };
->  static int x1500_i2s_data_rx_pins[] = { 0x23, };
->  static int x1500_i2s_clk_txrx_pins[] = { 0x21, 0x22, };
->  static int x1500_i2s_sysclk_pins[] = { 0x20, };
-> +static int x1500_dmic0_pins[] = { 0x35, 0x36, };
-> +static int x1500_dmic1_pins[] = { 0x25, };
->  static int x1500_cim_pins[] = {
->  	0x08, 0x09, 0x0a, 0x0b,
->  	0x13, 0x12, 0x11, 0x10, 0x0f, 0x0e, 0x0d, 0x0c,
-> @@ -1407,6 +1419,8 @@ static const struct group_desc x1500_groups[] = 
-> {
->  	INGENIC_PIN_GROUP("i2s-data-rx", x1500_i2s_data_rx, 1),
->  	INGENIC_PIN_GROUP("i2s-clk-txrx", x1500_i2s_clk_txrx, 1),
->  	INGENIC_PIN_GROUP("i2s-sysclk", x1500_i2s_sysclk, 1),
-> +	INGENIC_PIN_GROUP("dmic0", x1500_dmic0, 0),
-> +	INGENIC_PIN_GROUP("dmic1", x1500_dmic1, 1),
->  	INGENIC_PIN_GROUP("cim-data", x1500_cim, 2),
->  	INGENIC_PIN_GROUP("pwm0", x1500_pwm_pwm0, 0),
->  	INGENIC_PIN_GROUP("pwm1", x1500_pwm_pwm1, 1),
-> @@ -1427,6 +1441,7 @@ static const char *x1500_i2c2_groups[] = { 
-> "i2c2-data", };
->  static const char *x1500_i2s_groups[] = {
->  	"i2s-data-tx", "i2s-data-rx", "i2s-clk-txrx", "i2s-sysclk",
->  };
-> +static const char *x1500_dmic_groups[] = { "dmic0", "dmic1", };
->  static const char *x1500_cim_groups[] = { "cim-data", };
->  static const char *x1500_pwm0_groups[] = { "pwm0", };
->  static const char *x1500_pwm1_groups[] = { "pwm1", };
-> @@ -1444,6 +1459,7 @@ static const struct function_desc 
-> x1500_functions[] = {
->  	{ "i2c1", x1500_i2c1_groups, ARRAY_SIZE(x1500_i2c1_groups), },
->  	{ "i2c2", x1500_i2c2_groups, ARRAY_SIZE(x1500_i2c2_groups), },
->  	{ "i2s", x1500_i2s_groups, ARRAY_SIZE(x1500_i2s_groups), },
-> +	{ "dmic", x1500_dmic_groups, ARRAY_SIZE(x1500_dmic_groups), },
->  	{ "cim", x1500_cim_groups, ARRAY_SIZE(x1500_cim_groups), },
->  	{ "pwm0", x1500_pwm0_groups, ARRAY_SIZE(x1500_pwm0_groups), },
->  	{ "pwm1", x1500_pwm1_groups, ARRAY_SIZE(x1500_pwm1_groups), },
-> @@ -1506,6 +1522,8 @@ static int x1830_i2s_data_rx_pins[] = { 0x54, };
->  static int x1830_i2s_clk_txrx_pins[] = { 0x58, 0x52, };
->  static int x1830_i2s_clk_rx_pins[] = { 0x56, 0x55, };
->  static int x1830_i2s_sysclk_pins[] = { 0x57, };
-> +static int x1830_dmic0_pins[] = { 0x48, 0x59, };
-> +static int x1830_dmic1_pins[] = { 0x5a, };
->  static int x1830_lcd_tft_8bit_pins[] = {
->  	0x62, 0x63, 0x64, 0x65, 0x66, 0x67,
->  	0x68, 0x73, 0x72, 0x69,
-> @@ -1576,6 +1594,8 @@ static const struct group_desc x1830_groups[] = 
-> {
->  	INGENIC_PIN_GROUP("i2s-clk-txrx", x1830_i2s_clk_txrx, 0),
->  	INGENIC_PIN_GROUP("i2s-clk-rx", x1830_i2s_clk_rx, 0),
->  	INGENIC_PIN_GROUP("i2s-sysclk", x1830_i2s_sysclk, 0),
-> +	INGENIC_PIN_GROUP("dmic0", x1830_dmic0, 2),
-> +	INGENIC_PIN_GROUP("dmic1", x1830_dmic1, 2),
->  	INGENIC_PIN_GROUP("lcd-tft-8bit", x1830_lcd_tft_8bit, 0),
->  	INGENIC_PIN_GROUP("lcd-tft-24bit", x1830_lcd_tft_24bit, 0),
->  	INGENIC_PIN_GROUP("lcd-slcd-8bit", x1830_lcd_slcd_8bit, 1),
-> @@ -1621,6 +1641,7 @@ static const char *x1830_i2c2_groups[] = { 
-> "i2c2-data", };
->  static const char *x1830_i2s_groups[] = {
->  	"i2s-data-tx", "i2s-data-rx", "i2s-clk-txrx", "i2s-clk-rx", 
-> "i2s-sysclk",
->  };
-> +static const char *x1830_dmic_groups[] = { "dmic0", "dmic1", };
->  static const char *x1830_lcd_groups[] = {
->  	"lcd-tft-8bit", "lcd-tft-24bit", "lcd-slcd-8bit", "lcd-slcd-16bit",
->  };
-> @@ -1646,6 +1667,7 @@ static const struct function_desc 
-> x1830_functions[] = {
->  	{ "i2c1", x1830_i2c1_groups, ARRAY_SIZE(x1830_i2c1_groups), },
->  	{ "i2c2", x1830_i2c2_groups, ARRAY_SIZE(x1830_i2c2_groups), },
->  	{ "i2s", x1830_i2s_groups, ARRAY_SIZE(x1830_i2s_groups), },
-> +	{ "dmic", x1830_dmic_groups, ARRAY_SIZE(x1830_dmic_groups), },
->  	{ "lcd", x1830_lcd_groups, ARRAY_SIZE(x1830_lcd_groups), },
->  	{ "pwm0", x1830_pwm0_groups, ARRAY_SIZE(x1830_pwm0_groups), },
->  	{ "pwm1", x1830_pwm1_groups, ARRAY_SIZE(x1830_pwm1_groups), },
-> --
-> 2.7.4
-> 
+ which lock already depends on the new lock.
 
 
+ the existing dependency chain (in reverse order) is:
+
+ -> #1 (&kvm->mmu_notifier_slots_lock){.+.+}-{3:3}:
+        down_read+0x48/0x250
+        kvm_mmu_notifier_invalidate_range_start+0x36d/0x4f0 [kvm]
+        __mmu_notifier_invalidate_range_start+0xe8/0x260
+        wp_page_copy+0x82b/0xa30
+        do_wp_page+0xde/0x420
+        __handle_mm_fault+0x935/0x1230
+        handle_mm_fault+0x179/0x420
+        do_user_addr_fault+0x1b3/0x690
+        exc_page_fault+0x82/0x2b0
+        asm_exc_page_fault+0x1e/0x30
+
+ -> #0 (mmu_notifier_invalidate_range_start){+.+.}-{0:0}:
+        __lock_acquire+0x110f/0x1980
+        lock_acquire+0x1bc/0x400
+        __mmu_notifier_invalidate_range_end+0x47/0x190
+        wp_page_copy+0x796/0xa30
+        do_wp_page+0xde/0x420
+        __handle_mm_fault+0x935/0x1230
+        handle_mm_fault+0x179/0x420
+        do_user_addr_fault+0x1b3/0x690
+        exc_page_fault+0x82/0x2b0
+        asm_exc_page_fault+0x1e/0x30
+
+ other info that might help us debug this:
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(&kvm->mmu_notifier_slots_lock);
+                                lock(mmu_notifier_invalidate_range_start);
+                                lock(&kvm->mmu_notifier_slots_lock);
+   lock(mmu_notifier_invalidate_range_start);
+
+  *** DEADLOCK ***
+
+ 2 locks held by qemu-system-x86/3069:
+  #0: ffff9e4269f8a9e0 (&mm->mmap_lock#2){++++}-{3:3}, at:
+do_user_addr_fault+0x10e/0x690
+  #1: ffffaff7410a9160 (&kvm->mmu_notifier_slots_lock){.+.+}-{3:3},
+at: kvm_mmu_notifier_invalidate_range_start+0x36d/0x4f0 [kvm]
+
+ stack backtrace:
+ CPU: 0 PID: 3069 Comm: qemu-system-x86 Tainted: G           OE
+5.12.0-rc3+ #6
+ Hardware name: LENOVO ThinkCentre M8500t-N000/SHARKBAY, BIOS
+FBKTC1AUS 02/16/2016
+ Call Trace:
+  dump_stack+0x87/0xb7
+  print_circular_bug.isra.39+0x1b4/0x210
+  check_noncircular+0x103/0x150
+  __lock_acquire+0x110f/0x1980
+  ? __lock_acquire+0x110f/0x1980
+  lock_acquire+0x1bc/0x400
+  ? __mmu_notifier_invalidate_range_end+0x5/0x190
+  ? find_held_lock+0x40/0xb0
+  __mmu_notifier_invalidate_range_end+0x47/0x190
+  ? __mmu_notifier_invalidate_range_end+0x5/0x190
+  wp_page_copy+0x796/0xa30
+  do_wp_page+0xde/0x420
+  __handle_mm_fault+0x935/0x1230
+  handle_mm_fault+0x179/0x420
+  do_user_addr_fault+0x1b3/0x690
+  ? rcu_read_lock_sched_held+0x4f/0x80
+  exc_page_fault+0x82/0x2b0
+  ? asm_exc_page_fault+0x8/0x30
+  asm_exc_page_fault+0x1e/0x30
+ RIP: 0033:0x55f5bef2560f
