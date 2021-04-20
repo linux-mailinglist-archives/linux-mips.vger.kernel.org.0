@@ -2,122 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F933652B8
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 09:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B8D3652DD
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 09:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbhDTHBm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Apr 2021 03:01:42 -0400
-Received: from lucky1.263xmail.com ([211.157.147.130]:35384 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbhDTHBm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Apr 2021 03:01:42 -0400
-Received: from localhost (unknown [192.168.167.13])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 62C10D1792;
-        Tue, 20 Apr 2021 15:00:55 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED: 0
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [124.126.19.250])
-        by smtp.263.net (postfix) whith ESMTP id P1751T140588898838272S1618902053720262_;
-        Tue, 20 Apr 2021 15:00:55 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <589c6610ad5b49d8d0e2a298788d901b>
-X-RL-SENDER: zhaoxiao@uniontech.com
-X-SENDER: zhaoxiao@uniontech.com
-X-LOGIN-NAME: zhaoxiao@uniontech.com
-X-FST-TO: tsbogend@alpha.franken.de
-X-RCPT-COUNT: 17
-X-SENDER-IP: 124.126.19.250
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   zhaoxiao <zhaoxiao@uniontech.com>
-To:     tsbogend@alpha.franken.de, jiaxun.yang@flygoat.com,
-        chenhuacai@kernel.org, viro@zeniv.linux.org.uk, morbo@google.com
-Cc:     paul@crapouillou.net, alobakin@pm.me, suxingxing@loongson.cn,
-        tangyouling@loongson.cn, yangtiezhu@loongson.cn,
-        ralf@linux-mips.org, nathan@kernel.org, masahiroy@kernel.org,
-        keescook@chromium.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhaoxiao <zhaoxiao@uniontech.com>
-Subject: [PATCH v3] MIPS: Makefile: Replace -pg with CC_FLAGS_FTRACE
-Date:   Tue, 20 Apr 2021 15:00:52 +0800
-Message-Id: <20210420070052.25593-1-zhaoxiao@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S229985AbhDTHIo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Apr 2021 03:08:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52068 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229843AbhDTHIo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 20 Apr 2021 03:08:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E8B261220;
+        Tue, 20 Apr 2021 07:08:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618902493;
+        bh=DOW/KsRt5H6t1Pgz46XK8iIY+rilYGODWaTzp+KKVBg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bGeMIcK4oyaw9PKWK4LZfywrca9QFox2DwtXtJf3Rpcw/1K0zEYwkxTvdm9Wy2p/k
+         6FGb/yaJGmnEbuwRVwyZQkwjZldF6m9tFCT+KATXFY8IrIR886CLL8liQSNzWyh2yw
+         iJSJjHp3Z+yxDM9fPgaOfcQdSbHoO+TCqiHV+U8+DlXk0kyo+sveadEsfFEWKESyT3
+         JVcLzmur1EbwKBuEBrxveDtDEWusqRL4P/EY4pV14VHKqTqzeLRn2qWiYT9IAC9QW1
+         bErddbD2N2wX+mbwamKuFEVf0NAPJ+BT3maEQ6dNvAXY5/xnZvWRUHB1OYwLit78CN
+         d989R9HQVE2fA==
+Received: by mail-wm1-f49.google.com with SMTP id y204so18099109wmg.2;
+        Tue, 20 Apr 2021 00:08:13 -0700 (PDT)
+X-Gm-Message-State: AOAM533Qqa5ol86S8ezf9zHdovf6eLUUl4dmm3NXOBrf0cc0ineN5Cby
+        jP7z2BR+9sRQYcp1k/O77a/Y1XxIZcHV6dWXzsA=
+X-Google-Smtp-Source: ABdhPJzw8YTyu5KshxUEZlu3irZnfAegvQ8VILMGpH1RGSIFiQhsKgjG1gjcqz1I3fFsHj1Q1aLjZg7NWbZtj6Nq3DE=
+X-Received: by 2002:a7b:c14a:: with SMTP id z10mr2758133wmi.75.1618902491684;
+ Tue, 20 Apr 2021 00:08:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210416230724.2519198-1-willy@infradead.org> <20210416230724.2519198-2-willy@infradead.org>
+ <20210417024522.GP2531743@casper.infradead.org> <9f99b0a0-f1c1-f3b0-5f84-3a4bfc711725@synopsys.com>
+ <20210420031029.GI2531743@casper.infradead.org>
+In-Reply-To: <20210420031029.GI2531743@casper.infradead.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 20 Apr 2021 09:07:55 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0KUwf1Z0bHiUaHC2nHztevkxg5_FBSzHddNeSsBayWUA@mail.gmail.com>
+Message-ID: <CAK8P3a0KUwf1Z0bHiUaHC2nHztevkxg5_FBSzHddNeSsBayWUA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm: Fix struct page layout on 32-bit systems
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        "grygorii.strashko@ti.com" <grygorii.strashko@ti.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "ilias.apalodimas@linaro.org" <ilias.apalodimas@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "brouer@redhat.com" <brouer@redhat.com>,
+        "mcroce@linux.microsoft.com" <mcroce@linux.microsoft.com>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "hch@lst.de" <hch@lst.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch replaces the "open-coded" -pg compile flag with a CC_FLAGS_FTRACE
-makefile variable which architectures can override if a different option
-should be used for code generation.
+On Tue, Apr 20, 2021 at 5:10 AM Matthew Wilcox <willy@infradead.org> wrote:
+>
+> On Tue, Apr 20, 2021 at 02:48:17AM +0000, Vineet Gupta wrote:
+> > > 32-bit architectures which expect 8-byte alignment for 8-byte integers
+> > > and need 64-bit DMA addresses (arc, arm, mips, ppc) had their struct
+> > > page inadvertently expanded in 2019.
+> >
+> > FWIW, ARC doesn't require 8 byte alignment for 8 byte integers. This is
+> > only needed for 8-byte atomics due to the requirements of LLOCKD/SCOND
+> > instructions.
+>
+> Ah, like x86?  OK, great, I'll drop your arch from the list of
+> affected.  Thanks!
 
-Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
----
-v3:Modify the description for the patch.
- arch/mips/boot/compressed/Makefile | 2 +-
- arch/mips/kernel/Makefile          | 8 ++++----
- arch/mips/vdso/Makefile            | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+I mistakenly assumed that i386 and m68k were the only supported
+architectures with 32-bit alignment on u64. I checked it now and found
 
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index f93f72bcba97..e4b7839293e1 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -18,7 +18,7 @@ include $(srctree)/arch/mips/Kbuild.platforms
- BOOT_HEAP_SIZE := 0x400000
- 
- # Disable Function Tracer
--KBUILD_CFLAGS := $(filter-out -pg, $(KBUILD_CFLAGS))
-+KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE), $(KBUILD_CFLAGS))
- 
- KBUILD_CFLAGS := $(filter-out -fstack-protector, $(KBUILD_CFLAGS))
- 
-diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
-index b4a57f1de772..814b3da30501 100644
---- a/arch/mips/kernel/Makefile
-+++ b/arch/mips/kernel/Makefile
-@@ -17,10 +17,10 @@ obj-y		+= cpu-probe.o
- endif
- 
- ifdef CONFIG_FUNCTION_TRACER
--CFLAGS_REMOVE_ftrace.o = -pg
--CFLAGS_REMOVE_early_printk.o = -pg
--CFLAGS_REMOVE_perf_event.o = -pg
--CFLAGS_REMOVE_perf_event_mipsxx.o = -pg
-+CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_early_printk.o =  $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_perf_event.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_perf_event_mipsxx.o = $(CC_FLAGS_FTRACE)
- endif
- 
- obj-$(CONFIG_CEVT_BCM1480)	+= cevt-bcm1480.o
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 2131d3fd7333..1b2ea34c3d3b 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -46,7 +46,7 @@ CFLAGS_vgettimeofday-o32.o = -include $(srctree)/$(src)/config-n32-o32-env.c -in
- CFLAGS_vgettimeofday-n32.o = -include $(srctree)/$(src)/config-n32-o32-env.c -include $(c-gettimeofday-y)
- endif
- 
--CFLAGS_REMOVE_vgettimeofday.o = -pg
-+CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE)
- 
- ifdef CONFIG_MIPS_DISABLE_VDSO
-   ifndef CONFIG_MIPS_LD_CAN_LINK_VDSO
-@@ -60,7 +60,7 @@ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
- 	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
- 	-G 0 --eh-frame-hdr --hash-style=sysv --build-id=sha1 -T
- 
--CFLAGS_REMOVE_vdso.o = -pg
-+CFLAGS_REMOVE_vdso.o = $(CC_FLAGS_FTRACE)
- 
- GCOV_PROFILE := n
- UBSAN_SANITIZE := n
--- 
-2.20.1
+$ for i in /home/arnd/cross/x86_64/gcc-10.1.0-nolibc/*/bin/*-gcc ; do
+echo `echo 'int a = __alignof__(long long);' | $i -xc - -Wall -S -o- |
+grep -A1 a: | tail -n 1 | cut -f 3 -d\   `
+${i#/home/arnd/cross/x86_64/gcc-10.1.0-nolibc/*/bin/} ; done
+8 aarch64-linux-gcc
+8 alpha-linux-gcc
+4 arc-linux-gcc
+8 arm-linux-gnueabi-gcc
+8 c6x-elf-gcc
+4 csky-linux-gcc
+4 h8300-linux-gcc
+8 hppa-linux-gcc
+8 hppa64-linux-gcc
+8 i386-linux-gcc
+8 ia64-linux-gcc
+2 m68k-linux-gcc
+4 microblaze-linux-gcc
+8 mips-linux-gcc
+8 mips64-linux-gcc
+8 nds32le-linux-gcc
+4 nios2-linux-gcc
+4 or1k-linux-gcc
+8 powerpc-linux-gcc
+8 powerpc64-linux-gcc
+8 riscv32-linux-gcc
+8 riscv64-linux-gcc
+8 s390-linux-gcc
+4 sh2-linux-gcc
+4 sh4-linux-gcc
+8 sparc-linux-gcc
+8 sparc64-linux-gcc
+8 x86_64-linux-gcc
+8 xtensa-linux-gcc
 
+which means that half the 32-bit architectures do this. This may
+cause more problems when arc and/or microblaze want to support
+64-bit kernels and compat mode in the future on their latest hardware,
+as that means duplicating the x86 specific hacks we have for compat.
 
+What is alignof(u64) on 64-bit arc?
 
+      Arnd
