@@ -2,71 +2,181 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1FC3650AD
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 05:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC423650D9
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 05:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbhDTDLi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Apr 2021 23:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
+        id S229566AbhDTD3Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Apr 2021 23:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhDTDLh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Apr 2021 23:11:37 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88327C06174A;
-        Mon, 19 Apr 2021 20:11:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AqTuRNKIkAmLe8Av3ztkUAdmYLIeq8PftziUxkdnED4=; b=cmFm54dBhWL/FJIZPa1qLdPQCh
-        Hw3d+6yeN1BRhVLA8lXi0+OxBNGlwLN0iOxnz1tNw19z7dwED70uUHLHZ0QHCfVKNKBQenpL6sjTp
-        RiTDO60rG0H/+Io0sMW2Sl9Yi8uXuQbOmHCm5NzIBmET6uhHQgkerVA9dwlFEY8qLE05GHB/V0PuZ
-        Ao/jqa8j5AAd9wR8FIZ6K7RUe8Zya2Y8SayHTkT8KDCcVbyrGWXzGbXLEMb2IexWdlSkgwpOFyitu
-        JUjQ4dGrsXV5WoOuWngimlVppnjX5FKsAVbm0+zGZtX6LrP+cU2NI9VCFMIOrg0zh0XBFnqcrMJKV
-        Y0NuvgGw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lYgmT-00Ee86-KY; Tue, 20 Apr 2021 03:10:34 +0000
-Date:   Tue, 20 Apr 2021 04:10:29 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Cc:     "brouer@redhat.com" <brouer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "ilias.apalodimas@linaro.org" <ilias.apalodimas@linaro.org>,
-        "mcroce@linux.microsoft.com" <mcroce@linux.microsoft.com>,
-        "grygorii.strashko@ti.com" <grygorii.strashko@ti.com>,
-        "arnd@kernel.org" <arnd@kernel.org>, "hch@lst.de" <hch@lst.de>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "mgorman@suse.de" <mgorman@suse.de>
-Subject: Re: [PATCH 1/2] mm: Fix struct page layout on 32-bit systems
-Message-ID: <20210420031029.GI2531743@casper.infradead.org>
-References: <20210416230724.2519198-1-willy@infradead.org>
- <20210416230724.2519198-2-willy@infradead.org>
- <20210417024522.GP2531743@casper.infradead.org>
- <9f99b0a0-f1c1-f3b0-5f84-3a4bfc711725@synopsys.com>
+        with ESMTP id S229508AbhDTD3Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Apr 2021 23:29:24 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10933C06174A;
+        Mon, 19 Apr 2021 20:28:54 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id j4so19800989lfp.0;
+        Mon, 19 Apr 2021 20:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=sjA5c4MI/V/Us5khupc3zlEWJtPk9Lba1kHWIn9xqrM=;
+        b=aZSJaNW84mZRYAHIY5t88erflreGTdYjaH3FYtF1qHJPn6VWs0jryZT46tcKmPEGha
+         /og/FC8vcGojrzKljv51Y7lWbKJNsViPSNua0KzzWTeHQBaA77mtr8NCMQ4THd2QTzcC
+         W4NX+bAwjkGszUu3wkPlccw0aoYiZjMS+T4JTPsVHoVH+R4TOOISLvGTXFbJ16T+Dgur
+         kbNEKiwtz58pU2SAt4AjUcSxyUGvQb0yQueu6ghHyatn+Cc/mNZXXrnsQvXgxCwKXuNp
+         sZTyXkoz02r+DOAERoaXyqJHUX8rL4MjlDqKs+1CuVe940UruGYC9kE+b/nNTgV9xhkG
+         purg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sjA5c4MI/V/Us5khupc3zlEWJtPk9Lba1kHWIn9xqrM=;
+        b=LgJPb5MBlEKi1REqgkAuvdlJjsp0gQpZhNPuzFcdyfII3Wkdw2WUL93Hhz5Yp/9s/z
+         Zg3K4GmkMz47pxCriTVhhLFa+EON2SMq/RUwepb7LMM7I0nyTU2HjfRMS/O5k2DUF7h6
+         dYKaMX88np5drCkQ3VCx9WuUfiml+evx0IN99nW0ssu3Vb9/aYOurM+c3WnyiX1Lyejn
+         q7uNJZm6MC/WC35f4g+0UdSpmrkh4zRUSH+bmQZU1DEIARkeRedC9zVo5cTd52D9b2Hz
+         8Lg8v95BMLJEnyFKvMm+eBXFz/WhbJ0o918UxMIpL4vwo2eI8q+SZCX0nZ1SqGGk/LrS
+         Exkw==
+X-Gm-Message-State: AOAM530Nb75ftxe060+0oeBb+vVmav6/Y7uUN3xTz1ok6Q2Z0C9FT6Bl
+        CF9Mupz/vZH60+Tz8lPd7DAow43Kjj+6XiluqSo=
+X-Google-Smtp-Source: ABdhPJxtNTC6hNyk2mAr0jYIRtC3Pnw65n4y2IU2BFaZPz0SzJ5eF0gkFi6YsfR4xYcNBc9nZPkqaJatjNPZ02gYJpQ=
+X-Received: by 2002:ac2:510d:: with SMTP id q13mr13835296lfb.75.1618889332453;
+ Mon, 19 Apr 2021 20:28:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f99b0a0-f1c1-f3b0-5f84-3a4bfc711725@synopsys.com>
+References: <20210415093250.3391257-1-Jianlin.Lv@arm.com> <9c4a78d2-f73c-832a-e6e2-4b4daa729e07@iogearbox.net>
+ <d3949501-8f7d-57c4-b3fe-bcc3b24c09d8@isovalent.com> <CAADnVQJ2oHbYfgY9jqM_JMxUsoZxaNrxKSVFYfgCXuHVpDehpQ@mail.gmail.com>
+ <0dea05ba-9467-0d84-4515-b8766f60318e@csgroup.eu>
+In-Reply-To: <0dea05ba-9467-0d84-4515-b8766f60318e@csgroup.eu>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 19 Apr 2021 20:28:41 -0700
+Message-ID: <CAADnVQ+oQT6C7Qv7P5TV-x7im54omKoCYYKtYhcnhb1Uv3LPMQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Remove bpf_jit_enable=2 debugging mode
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Quentin Monnet <quentin@isovalent.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Sandipan Das <sandipan@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Mahesh Bandewar <maheshb@google.com>,
+        Will Deacon <will@kernel.org>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>, paulburton@kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        linux-mips@vger.kernel.org, grantseltzer@gmail.com,
+        Xi Wang <xi.wang@gmail.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        KP Singh <kpsingh@kernel.org>, iecedge@gmail.com,
+        Simon Horman <horms@verge.net.au>,
+        Borislav Petkov <bp@alien8.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Yonghong Song <yhs@fb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dmitry Vyukov <dvyukov@google.com>, tsbogend@alpha.franken.de,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Network Development <netdev@vger.kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Wang YanQing <udknight@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>, bpf <bpf@vger.kernel.org>,
+        Jianlin Lv <Jianlin.Lv@arm.com>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 20, 2021 at 02:48:17AM +0000, Vineet Gupta wrote:
-> > 32-bit architectures which expect 8-byte alignment for 8-byte integers
-> > and need 64-bit DMA addresses (arc, arm, mips, ppc) had their struct
-> > page inadvertently expanded in 2019.
-> 
-> FWIW, ARC doesn't require 8 byte alignment for 8 byte integers. This is 
-> only needed for 8-byte atomics due to the requirements of LLOCKD/SCOND 
-> instructions.
+On Sat, Apr 17, 2021 at 1:16 AM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 16/04/2021 =C3=A0 01:49, Alexei Starovoitov a =C3=A9crit :
+> > On Thu, Apr 15, 2021 at 8:41 AM Quentin Monnet <quentin@isovalent.com> =
+wrote:
+> >>
+> >> 2021-04-15 16:37 UTC+0200 ~ Daniel Borkmann <daniel@iogearbox.net>
+> >>> On 4/15/21 11:32 AM, Jianlin Lv wrote:
+> >>>> For debugging JITs, dumping the JITed image to kernel log is discour=
+aged,
+> >>>> "bpftool prog dump jited" is much better way to examine JITed dumps.
+> >>>> This patch get rid of the code related to bpf_jit_enable=3D2 mode an=
+d
+> >>>> update the proc handler of bpf_jit_enable, also added auxiliary
+> >>>> information to explain how to use bpf_jit_disasm tool after this cha=
+nge.
+> >>>>
+> >>>> Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
+> >>
+> >> Hello,
+> >>
+> >> For what it's worth, I have already seen people dump the JIT image in
+> >> kernel logs in Qemu VMs running with just a busybox, not for kernel
+> >> development, but in a context where buiding/using bpftool was not
+> >> possible.
+> >
+> > If building/using bpftool is not possible then majority of selftests wo=
+n't
+> > be exercised. I don't think such environment is suitable for any kind
+> > of bpf development. Much so for JIT debugging.
+> > While bpf_jit_enable=3D2 is nothing but the debugging tool for JIT deve=
+lopers.
+> > I'd rather nuke that code instead of carrying it from kernel to kernel.
+> >
+>
+> When I implemented JIT for PPC32, it was extremely helpfull.
+>
+> As far as I understand, for the time being bpftool is not usable in my en=
+vironment because it
+> doesn't support cross compilation when the target's endianess differs fro=
+m the building host
+> endianess, see discussion at
+> https://lore.kernel.org/bpf/21e66a09-514f-f426-b9e2-13baab0b938b@csgroup.=
+eu/
+>
+> That's right that selftests can't be exercised because they don't build.
+>
+> The question might be candid as I didn't investigate much about the repla=
+cement of "bpf_jit_enable=3D2
+> debugging mode" by bpftool, how do we use bpftool exactly for that ? Espe=
+cially when using the BPF
+> test module ?
 
-Ah, like x86?  OK, great, I'll drop your arch from the list of
-affected.  Thanks!
+the kernel developers can add any amount of printk and dumps to debug
+their code,
+but such debugging aid should not be part of the production kernel.
+That sysctl was two things at once: debugging tool for kernel devs and
+introspection for users.
+bpftool jit dump solves the 2nd part. It provides JIT introspection to user=
+s.
+Debugging of the kernel can be done with any amount of auxiliary code
+including calling print_hex_dump() during jiting.
