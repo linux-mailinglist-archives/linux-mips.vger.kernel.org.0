@@ -2,129 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F5F3651CC
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 07:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE1736526F
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 08:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbhDTFXy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Apr 2021 01:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
+        id S230018AbhDTGlb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Apr 2021 02:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbhDTFXy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Apr 2021 01:23:54 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F8AC06174A;
-        Mon, 19 Apr 2021 22:23:22 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id u16so20523062oiu.7;
-        Mon, 19 Apr 2021 22:23:22 -0700 (PDT)
+        with ESMTP id S229831AbhDTGla (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Apr 2021 02:41:30 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000B9C06174A;
+        Mon, 19 Apr 2021 23:40:59 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id g16so2271428plq.3;
+        Mon, 19 Apr 2021 23:40:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SrMiG9tkfnIwZi2qx3u5+XtSbmv2aCutrNCW7yEp9U4=;
-        b=h6zEMfXzSV3iet6RXOlKqyubE7kXrZlcfYbWChBKf7CYocvDpRlAdgA0oieA1o3BAR
-         27UCTg3MfjtCnxQ4NUbcTIl6LgSP39RwzkmwxFI1rEYcvqiJ8uLRveGEMYjPguIiroT+
-         z1581YSQLMyMFrUkT5093PIlIibFwRyMUwMCq+5Inc+ro7itwgVF9zwgMOh25YPbDcif
-         +4bYEgWSVoM8djCPKl/Ui/rxGgk18cjKdAUjo8abxLW2SegMiQzZ8x95Tymt9Blx85TJ
-         kF5YuUlHIW5IOtIHambku3KNdYhDMR2S5/6tmUb9hKtU0mOHd7m2vruujBr/S4aJlaaa
-         Er1g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=7+QGbNN4XGQqzSpMblrh9U55SNG2B814LfT0acp5AwI=;
+        b=LK1jsnU6kPomI5mAvI8dytkhIYftLbm6EhSajQDbNelizA0oFFyaZfRJMHC31I2xlu
+         aPnuvtOr9apvUKqILCE6CjYixsjwaWcT1mVk0gPGLiH/rPRKEqyibLlZ+BwZW2QIO5NU
+         EIpq4cjwd/G6lYxhMTyanWKNRkh3HB9Ll7NMcE/UxbMk5tC96k6BkjAZtZs0HB5ryCI1
+         E0pofN4AwbEbP8n0pWHXt6qUxcbCdWpjjUg7H+Nl8SrwDexqy4jIXjYAU7I3qynfPA7a
+         11GbbfYFxAD6kgfsCgISwYwgN4Sh3ByZFYhif/HiEWP/d+ouTG/RCbDtkLemi/Jg6sw7
+         g9jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SrMiG9tkfnIwZi2qx3u5+XtSbmv2aCutrNCW7yEp9U4=;
-        b=f+LahaMQ0MVMR9/E0DIZ94z6OoMHFKCupCShlvTb/kucuLjbdO+ENyoUkry67Hnkxb
-         kePTH0E9H4Em53KVIlheT07L0MKCMwJuF/g6hGiJxc8op11SWfdJdfMUnlqJ28hG5MGE
-         WHhorj4rXXnfSI2N8qA0v2zYlqD4K+Pz3dXMXEcHRfkaaxaxqU1yt8q19BqWfLyXqM2v
-         jOEcwmTC8TWoOcHLe0mE/bgoc2PYt3QPkvOxI1qYBtLgeyBn0YanC2i5gmhfdt/lTZB/
-         Cv+egpBqwxDVLUdNSr+cbu3ALdAR2GKghrncyD6zz6MpYeQZgKUWLemhhNvF5fGs1dSm
-         iHcw==
-X-Gm-Message-State: AOAM531ReqOm4prV/IKl/0iDIsqn9fn8HZL4Q56iW2GPJHHLu/zN6I46
-        Mupd42V+buBfFmX7kDPldkY=
-X-Google-Smtp-Source: ABdhPJxrjIuo3xv00gz/Ej97Xw+UIa2Ipy5cQsWiz82zl0k4XUOPg4kUKFnsuMTuJHTm5RQTDonP0A==
-X-Received: by 2002:a05:6808:13c6:: with SMTP id d6mr1843424oiw.155.1618896201956;
-        Mon, 19 Apr 2021 22:23:21 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o186sm2113264ooa.35.2021.04.19.22.23.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 19 Apr 2021 22:23:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 19 Apr 2021 22:23:20 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 8/8] MIPS: pci-legacy: use generic pci_enable_resources
-Message-ID: <20210420052319.GA162457@roeck-us.net>
-References: <20210414031240.313852-1-ilya.lipnitskiy@gmail.com>
- <20210414031240.313852-9-ilya.lipnitskiy@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7+QGbNN4XGQqzSpMblrh9U55SNG2B814LfT0acp5AwI=;
+        b=Encoy+ZRQ2kRLEymnB/3QzX/U+yfJyfHcuPrlMVJPCYkFHhSRaxu5rjfPs7nD4RYZi
+         8R5zC2a1mq6875qxfvwmfrn2BQ+78HPYcynw5tN4qQR8A4CbV66c9K37SrTuULXJnfbl
+         K7Vq6FTMUDvOkxTCSLh1w0PWLJVit3vrdxsYVkuhTyRkz7Is9+peVbnfHeGeefPhofwD
+         Is0ZUKmE221B0Y2UtH+NDcw1tzC+MtJe1qjz8/eU5iDPzuNB31OfhFW3S8MDhn7upW2R
+         B5VueQB+Gr7S5xbDk+mWBM6bJF8iR4O5v46paYz2FLyoQknmQbP+EPSxBqbPpqqVKZtN
+         qYJw==
+X-Gm-Message-State: AOAM532qRZH6YGLmzzqrgyT6MIt4izIKaBikeJ9zMNLi8lLvU52zSz/M
+        at8tiaHG8Hp8PZWJT+A9jDsoq5WCn6eCTThG
+X-Google-Smtp-Source: ABdhPJyNVCJoe8kwWM/hHm4TT66sJhmmc38ZfQNv3ISufm//f1HtvghsAPix86SmKkFBguK8c/F0cQ==
+X-Received: by 2002:a17:902:9685:b029:e9:abc1:7226 with SMTP id n5-20020a1709029685b02900e9abc17226mr27665255plp.64.1618900859030;
+        Mon, 19 Apr 2021 23:40:59 -0700 (PDT)
+Received: from z640-arch.lan ([2602:61:7344:f100::678])
+        by smtp.gmail.com with ESMTPSA id z62sm690956pfb.110.2021.04.19.23.40.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Apr 2021 23:40:58 -0700 (PDT)
+From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] MIPS: pci-legacy: revert "use generic pci_enable_resources"
+Date:   Mon, 19 Apr 2021 23:39:43 -0700
+Message-Id: <20210420063942.7041-1-ilya.lipnitskiy@gmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210420052319.GA162457@roeck-us.net>
+References: <20210420052319.GA162457@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210414031240.313852-9-ilya.lipnitskiy@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 08:12:40PM -0700, Ilya Lipnitskiy wrote:
-> Follow the reasoning from commit 842de40d93e0 ("PCI: add generic
-> pci_enable_resources()"):
-> 
->   The only functional difference from the MIPS version is that the
->   generic one uses "!r->parent" to check for resource collisions
->   instead of "!r->start && r->end".
-> 
-> That should have no effect on any pci-legacy driver.
-> 
+This mostly reverts commit 99bca615d895 ("MIPS: pci-legacy: use generic
+pci_enable_resources"). Fixes regressions such as:
+  ata_piix 0000:00:0a.1: can't enable device: BAR 0 [io  0x01f0-0x01f7] not
+	claimed
+  ata_piix: probe of 0000:00:0a.1 failed with error -22
 
-Unfortunately it does. With this patch in place, all my mips qemu emulations
-fail to boot from ide/ata drive; the driver is not instantiated. The error
-message is:
+The only changes from the strict revert are to fix checkpatch errors:
+  ERROR: spaces required around that '=' (ctx:VxV)
+  #33: FILE: arch/mips/pci/pci-legacy.c:252:
+  +	for (idx=0; idx < PCI_NUM_RESOURCES; idx++) {
+ 	        ^
 
-ata_piix 0000:00:0a.1: can't enable device: BAR 0 [io  0x01f0-0x01f7] not claimed
-ata_piix: probe of 0000:00:0a.1 failed with error -22
+  ERROR: do not use assignment in if condition
+  #67: FILE: arch/mips/pci/pci-legacy.c:284:
+  +	if ((err = pcibios_enable_resources(dev, mask)) < 0)
 
-Reverting this patch fixes the problem, and the message displayed by the driver
-is:
-
-ata_piix 0000:00:0a.1: enabling device (0000 -> 0001)
-
-Bisect log is attached.
-
-Guenter
-
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
 ---
-# bad: [50b8b1d699ac313c0a07a3c185ffb23aecab8abb] Add linux-next specific files for 20210419
-# good: [bf05bf16c76bb44ab5156223e1e58e26dfe30a88] Linux 5.12-rc8
-git bisect start 'HEAD' 'v5.12-rc8'
-# bad: [c4bb91fc07e59241cde97f913d7a2fbedc248f0d] Merge remote-tracking branch 'crypto/master'
-git bisect bad c4bb91fc07e59241cde97f913d7a2fbedc248f0d
-# bad: [499f739ad70f2a58aac985dceb25ca7666da88be] Merge remote-tracking branch 'jc_docs/docs-next'
-git bisect bad 499f739ad70f2a58aac985dceb25ca7666da88be
-# bad: [11b56408a328d1c5c4dfa7667c5dc46956b64aec] Merge remote-tracking branch 'parisc-hd/for-next'
-git bisect bad 11b56408a328d1c5c4dfa7667c5dc46956b64aec
-# good: [09ccc0ee1227f2cfe50d8dbbe241d115d9b3885f] Merge branch 'arm/defconfig' into for-next
-git bisect good 09ccc0ee1227f2cfe50d8dbbe241d115d9b3885f
-# good: [a5b76c2f17330e266a5c56dde21430e27b0d0dbb] Merge remote-tracking branch 'arm-soc/for-next'
-git bisect good a5b76c2f17330e266a5c56dde21430e27b0d0dbb
-# good: [1e4241f6813f1c1a0027d96df075ffd01808b3cf] Merge remote-tracking branch 'ti-k3/ti-k3-next'
-git bisect good 1e4241f6813f1c1a0027d96df075ffd01808b3cf
-# good: [7496a43be7a362391607d78e49a3f28de80029ce] Merge remote-tracking branch 'h8300/h8300-next'
-git bisect good 7496a43be7a362391607d78e49a3f28de80029ce
-# good: [66633abd0642f1e89d26e15f36fb13d3a1c535ff] MIPS/bpf: Enable bpf_probe_read{, str}() on MIPS again
-git bisect good 66633abd0642f1e89d26e15f36fb13d3a1c535ff
-# good: [2c92ef8ff8d327797c1920ae7f938bcc6f3f7421] MIPS: Fix strnlen_user access check
-git bisect good 2c92ef8ff8d327797c1920ae7f938bcc6f3f7421
-# good: [3a070801c61f4e3987d59b1068368ba71d727208] Merge remote-tracking branch 'microblaze/next'
-git bisect good 3a070801c61f4e3987d59b1068368ba71d727208
-# good: [317f553bb677e324c9c865ff7f14597bc5ceeb9c] MIPS: pci-legacy: remove redundant info messages
-git bisect good 317f553bb677e324c9c865ff7f14597bc5ceeb9c
-# bad: [6ce48897ce476bed86fde28752c27596e8753277] MIPS: Loongson64: Add kexec/kdump support
-git bisect bad 6ce48897ce476bed86fde28752c27596e8753277
-# bad: [99bca615d89510917864fac6b26fd343eff2aba2] MIPS: pci-legacy: use generic pci_enable_resources
-git bisect bad 99bca615d89510917864fac6b26fd343eff2aba2
-# good: [0af83d2e447af3e5098583cb6320bb1b1fb0976b] MIPS: pci-legacy: remove busn_resource field
-git bisect good 0af83d2e447af3e5098583cb6320bb1b1fb0976b
-# first bad commit: [99bca615d89510917864fac6b26fd343eff2aba2] MIPS: pci-legacy: use generic pci_enable_resources
+Guenter, sorry about this - let's just revert this for now to minimize
+turmoil to the legacy PCI code. Obviously, this needs more testing
+before applying. Thanks for your report!
+
+ arch/mips/pci/pci-legacy.c | 38 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/pci/pci-legacy.c b/arch/mips/pci/pci-legacy.c
+index c24226ea0a6e..468722c8a5c6 100644
+--- a/arch/mips/pci/pci-legacy.c
++++ b/arch/mips/pci/pci-legacy.c
+@@ -241,9 +241,45 @@ static int __init pcibios_init(void)
+ 
+ subsys_initcall(pcibios_init);
+ 
++static int pcibios_enable_resources(struct pci_dev *dev, int mask)
++{
++	u16 cmd, old_cmd;
++	int idx;
++	struct resource *r;
++
++	pci_read_config_word(dev, PCI_COMMAND, &cmd);
++	old_cmd = cmd;
++	for (idx = 0; idx < PCI_NUM_RESOURCES; idx++) {
++		/* Only set up the requested stuff */
++		if (!(mask & (1<<idx)))
++			continue;
++
++		r = &dev->resource[idx];
++		if (!(r->flags & (IORESOURCE_IO | IORESOURCE_MEM)))
++			continue;
++		if ((idx == PCI_ROM_RESOURCE) &&
++				(!(r->flags & IORESOURCE_ROM_ENABLE)))
++			continue;
++		if (!r->start && r->end) {
++			pci_err(dev,
++				"can't enable device: resource collisions\n");
++			return -EINVAL;
++		}
++		if (r->flags & IORESOURCE_IO)
++			cmd |= PCI_COMMAND_IO;
++		if (r->flags & IORESOURCE_MEM)
++			cmd |= PCI_COMMAND_MEMORY;
++	}
++	if (cmd != old_cmd) {
++		pci_info(dev, "enabling device (%04x -> %04x)\n", old_cmd, cmd);
++		pci_write_config_word(dev, PCI_COMMAND, cmd);
++	}
++	return 0;
++}
++
+ int pcibios_enable_device(struct pci_dev *dev, int mask)
+ {
+-	int err = pci_enable_resources(dev, mask);
++	int err = pcibios_enable_resources(dev, mask);
+ 
+ 	if (err < 0)
+ 		return err;
+-- 
+2.31.1
+
