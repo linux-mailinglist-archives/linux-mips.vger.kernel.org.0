@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E2C365A85
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 15:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 595F8365AB6
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 16:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232731AbhDTNsO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Apr 2021 09:48:14 -0400
-Received: from out28-149.mail.aliyun.com ([115.124.28.149]:39494 "EHLO
-        out28-149.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbhDTNsL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Apr 2021 09:48:11 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0839631-0.0011211-0.914916;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047188;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.K15QXLp_1618926456;
-Received: from 192.168.88.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.K15QXLp_1618926456)
-          by smtp.aliyun-inc.com(10.147.42.198);
-          Tue, 20 Apr 2021 21:47:37 +0800
+        id S232609AbhDTODh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Apr 2021 10:03:37 -0400
+Received: from out28-97.mail.aliyun.com ([115.124.28.97]:49466 "EHLO
+        out28-97.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232094AbhDTODh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Apr 2021 10:03:37 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0839631-0.0011211-0.914916;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.K15f5SI_1618927381;
+Received: from 192.168.88.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.K15f5SI_1618927381)
+          by smtp.aliyun-inc.com(10.147.42.241);
+          Tue, 20 Apr 2021 22:03:02 +0800
 Subject: Re: [PATCH] Revert "MIPS: make userspace mapping young by default".
 To:     Huang Pei <huangpei@loongson.cn>
 Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
@@ -22,7 +22,8 @@ Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
         paul.burton@mips.com, paul@crapouillou.net, siyanteng@loongson.cn,
         ira.weiny@intel.com, yangtiezhu@loongson.cn, jun.jiang@ingenic.com,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        sihui.liu@ingenic.com
 References: <1618562868-91115-1-git-send-email-zhouyanjie@wanyeetech.com>
  <20210416092003.5754967.19768.9603@loongson.cn>
  <ae06522f-eda8-96d1-6f58-072905afa65c@wanyeetech.com>
@@ -30,8 +31,8 @@ References: <1618562868-91115-1-git-send-email-zhouyanjie@wanyeetech.com>
  <13e37741-c1b4-2aae-471e-0790adc8db59@wanyeetech.com>
  <20210420024818.r6jf243oglb2ywbr@ambrosehua-HP-xw6600-Workstation>
 From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <e8528334-75cb-e62e-64b6-f6d63acebd05@wanyeetech.com>
-Date:   Tue, 20 Apr 2021 21:47:35 +0800
+Message-ID: <fd1e02ff-0165-7e7e-8bc6-55fb278fc50f@wanyeetech.com>
+Date:   Tue, 20 Apr 2021 22:03:01 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
@@ -43,7 +44,6 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
 
 On 2021/4/20 上午10:48, Huang Pei wrote:
 > Hi,
@@ -218,260 +218,159 @@ On 2021/4/20 上午10:48, Huang Pei wrote:
 > Could you print the PTE value, not the value in TLB?
 
 
-The following is the value of PTE.
-
-There are 5 access operations from"pte = mk_pte(page, 
-vma->vm_page_prot)" to "set_pte_at(vma->vm_mm, vmf->address, vmf->pte, 
-pte)" in the "mm/memory.c" file.
-
-They are named pte 1/pte 2/pte 3/pte 4/pte 5.
+Sorry for my carelessness, the log in the previous email was wrong, 
+please check the log in this email.
 
 
-[   37.433993] --- pte 1 = 07b02685
-[   37.437283] --- pte 3 = 07b02685
-[   37.441005] --- pte 1 = 07c0c685
-[   37.444241] --- pte 3 = 07c0c685
-[   37.453561] --- pte 1 = 07b05685
-[   37.456885] --- pte 3 = 07b05685
-[   37.460915] --- pte 1 = 07b8c685
-[   37.464157] --- pte 2 = 07b8c78f
-[   37.467449] --- pte 3 = 07b8c78f
-[   37.472461] --- pte 1 = 07aff685
-[   37.475694] --- pte 3 = 07aff685
-[   37.479970] --- pte 1 = 07b16685
-[   37.483205] --- pte 3 = 07b16685
-[   37.487443] --- pte 1 = 07c20685
-[   37.490679] --- pte 3 = 07c20685
-[   37.494043] --- pte 1 = 07bd9685
-[   37.497337] --- pte 3 = 07bd9685
-[   37.501678] --- pte 1 = 07c0e685
-[   37.504913] --- pte 3 = 07c0e685
-[   37.510009] --- pte 1 = 07c11685
-[   37.513242] --- pte 3 = 07c11685
-[   37.535431] --- pte 1 = 07afd685
-[   37.538721] --- pte 3 = 07afd685
-[   37.542363] --- pte 1 = 07c92685
-[   37.545599] --- pte 3 = 07c92685
-[   37.737458] --- pte 1 = 06853685
-[   37.740698] --- pte 3 = 06853685
-[   37.760229] --- pte 1 = 06853685
-[   37.763504] --- pte 3 = 06853685
-[   37.786619] --- pte 1 = 06853685
-[   37.789895] --- pte 3 = 06853685
-[   37.822622] --- pte 1 = 06853685
-[   37.825928] --- pte 3 = 06853685
-[   37.984660] --- pte 1 = 06853685
-[   37.987995] --- pte 3 = 06853685
-[   40.917495] --- pte 1 = 07b07685
-[   40.920753] --- pte 3 = 07b07685
-[   40.924017] --- pte 1 = 042c6685
-[   40.927306] --- pte 3 = 042c6685
-[   40.931823] --- pte 1 = 07c0d685
-[   40.935073] --- pte 3 = 07c0d685
-[   40.940130] --- pte 1 = 04976685
-[   40.943364] --- pte 3 = 04976685
-[   41.187955] --- pte 1 = 06cb7685
-[   41.191204] --- pte 3 = 06cb7685
-[   41.194841] --- pte 1 = 06d11685
-[   41.198147] --- pte 3 = 06d11685
-[   41.202959] --- pte 1 = 06c85685
-[   41.206287] --- pte 3 = 06c85685
-[   41.210331] --- pte 1 = 03965685
-[   41.213675] --- pte 3 = 03965685
-[   41.218629] --- pte 1 = 0396f685
-[   41.221886] --- pte 3 = 0396f685
-[   41.242299] --- pte 1 = 03fa9685
-[   41.245561] --- pte 3 = 03fa9685
-[   41.282717] --- pte 1 = 026fa685
-[   41.286029] --- pte 2 = 026fa78f
-[   41.289248] --- pte 3 = 026fa78f
-[   41.308755] --- pte 1 = 0767f685
-[   41.311993] --- pte 3 = 0767f685
-[   41.329631] --- pte 1 = 069c4685
-[   41.332925] --- pte 2 = 069c478f
-[   41.336201] --- pte 3 = 069c478f
-[   41.358331] --- pte 1 = 01e3f685
-[   41.361593] --- pte 2 = 01e3f78f
-[   41.364810] --- pte 3 = 01e3f78f
-[   41.371673] --- pte 1 = 03855685
-[   41.374952] --- pte 2 = 0385578f
-[   41.378221] --- pte 3 = 0385578f
-[   41.390334] --- pte 1 = 07781685
-[   41.393596] --- pte 2 = 0778178f
-[   41.396882] --- pte 3 = 0778178f
-[   41.411191] --- pte 1 = 07a41685
-[   41.414462] --- pte 3 = 07a41685
-[   42.328309] --- pte 1 = 06f1a685
-[   42.331544] --- pte 3 = 06f1a685
-[   42.334857] --- pte 1 = 075dc685
-[   42.338157] --- pte 3 = 075dc685
-[   42.343129] --- pte 1 = 076ae685
-[   42.346456] --- pte 3 = 076ae685
-[   42.356107] --- pte 1 = 076bd685
-[   42.359340] --- pte 3 = 076bd685
-[   47.550904] --- pte 1 = 01f15685
-[   47.554140] --- pte 3 = 01f15685
-[   47.559395] --- pte 1 = 07190685
-[   47.562631] --- pte 3 = 07190685
-[   47.567481] --- pte 1 = 07192685
-[   47.570717] --- pte 3 = 07192685
-[   47.578143] --- pte 1 = 0208a685
-[   47.581380] --- pte 3 = 0208a685
-[   47.586849] --- pte 1 = 02aa3685
-[   47.590085] --- pte 3 = 02aa3685
-[   47.594058] --- pte 1 = 02bb4685
-[   47.597358] --- pte 3 = 02bb4685
-[   47.601741] --- pte 1 = 02088685
-[   47.604993] --- pte 3 = 02088685
-[   47.626492] --- pte 1 = 02bb5685
-[   47.629749] --- pte 3 = 02bb5685
-[   47.648313] --- pte 1 = 02aa2685
-[   47.651551] --- pte 3 = 02aa2685
-[   47.683155] --- pte 1 = 01c93685
-[   47.686449] --- pte 3 = 01c93685
-[   48.409395] --- pte 1 = 07f02685
-[   48.412632] --- pte 3 = 07f02685
-[   49.639047] --- pte 1 = 05cd0685
-[   49.642283] --- pte 3 = 05cd0685
-[   49.756173] --- pte 1 = 043e7685
-[   49.759410] --- pte 3 = 043e7685
-[   49.775899] --- pte 1 = 02a22685
-[   49.779158] --- pte 3 = 02a22685
-[   49.801083] --- pte 1 = 018bc685
-[   49.804337] --- pte 3 = 018bc685
-[   49.826453] --- pte 1 = 01db1685
-[   49.829690] --- pte 3 = 01db1685
-[   49.848209] --- pte 1 = 07cb7685
-[   49.851446] --- pte 3 = 07cb7685
-[   49.865907] --- pte 1 = 02592685
-[   49.869172] --- pte 3 = 02592685
-[   49.880463] --- pte 1 = 0256c685
-[   49.883714] --- pte 3 = 0256c685
-[   50.019617] --- pte 1 = 03e30685
-[   50.022854] --- pte 3 = 03e30685
-[   50.027982] --- pte 1 = 07184685
-[   50.031218] --- pte 3 = 07184685
-[   50.034461] --- pte 1 = 07787685
-[   50.037732] --- pte 3 = 07787685
-[   50.056424] --- pte 1 = 01bf4685
-[   50.059660] --- pte 3 = 01bf4685
-[   50.075875] --- pte 1 = 01bf5685
-[   50.079111] --- pte 3 = 01bf5685
-[   50.082879] --- pte 1 = 07e37685
-[   50.086165] --- pte 3 = 07e37685
-[   50.096771] --- pte 1 = 0644c685
-[   50.100007] --- pte 3 = 0644c685
-[   50.103231] --- pte 1 = 07fa3685
-[   50.106523] --- pte 3 = 07fa3685
-[   50.126426] --- pte 1 = 04ca0685
-[   50.129672] --- pte 2 = 04ca078f
-[   50.132889] --- pte 3 = 04ca078f
-[   50.150463] --- pte 1 = 019cf685
-[   50.153699] --- pte 3 = 019cf685
-[   50.176439] --- pte 1 = 07a4e685
-[   50.179675] --- pte 3 = 07a4e685
-[   50.187700] --- pte 1 = 02b44685
-[   50.190966] --- pte 3 = 02b44685
-[   50.206031] --- pte 1 = 03620685
-[   50.209267] --- pte 3 = 03620685
-[   50.213061] --- pte 1 = 02275685
-[   50.216356] --- pte 3 = 02275685
-[   50.239359] --- pte 1 = 07765685
-[   50.242596] --- pte 3 = 07765685
-[   50.263367] --- pte 1 = 04221685
-[   50.266648] --- pte 3 = 04221685
-[   50.292287] irq/37-13450000: page allocation failure: order:0, 
-mode:0x40800(GFP_NOWAIT|__GFP_COMP), nodemask=(null)
-[   50.302738] CPU: 0 PID: 517 Comm: irq/37-13450000 Not tainted 
+[   53.684067] --- pte 1 = 07698685
+[   53.687376] --- pte 3 = 07698685
+[   53.737175] --- pte 1 = 07699685
+[   53.740412] --- pte 3 = 07699685
+[   53.744064] --- pte 1 = 076c3685
+[   53.747358] --- pte 3 = 076c3685
+[   53.899679] --- pte 1 = 076c3685
+[   53.902916] --- pte 3 = 076c3685
+[   53.986275] --- pte 1 = 07825685
+[   53.989511] --- pte 3 = 07825685
+[   53.992739] --- pte 1 = 07800685
+[   53.996031] --- pte 3 = 07800685
+[   54.021555] --- pte 1 = 076d0685
+[   54.024797] --- pte 3 = 076d0685
+[   54.047399] --- pte 1 = 0768f685
+[   54.050635] --- pte 3 = 0768f685
+[   55.087662] --- pte 1 = 07971685
+[   55.090934] --- pte 2 = 0797178f
+[   55.094152] --- pte 3 = 0797178f
+[   55.101275] --- pte 1 = 07976685
+[   55.104511] --- pte 3 = 07976685
+[   55.108895] --- pte 1 = 0797e685
+[   55.112131] --- pte 3 = 0797e685
+[   55.115357] --- pte 1 = 07a34685
+[   55.118684] --- pte 3 = 07a34685
+[   55.123019] --- pte 1 = 0625b685
+[   55.126324] --- pte 3 = 0625b685
+[   55.131577] --- pte 1 = 07a0c685
+[   55.134820] --- pte 2 = 07a0c78f
+[   55.138101] --- pte 3 = 07a0c78f
+[   55.142280] --- pte 1 = 07b8e685
+[   55.145587] --- pte 3 = 07b8e685
+[   55.150378] --- pte 1 = 0797b685
+[   55.153611] --- pte 3 = 0797b685
+[   55.157897] --- pte 1 = 079af685
+[   55.161134] --- pte 3 = 079af685
+[   55.164361] --- pte 1 = 0797a685
+[   55.167655] --- pte 3 = 0797a685
+[   55.172019] --- pte 1 = 07b5f685
+[   55.175255] --- pte 3 = 07b5f685
+[   55.180359] --- pte 1 = 07b8b685
+[   55.183592] --- pte 3 = 07b8b685
+[   55.187921] --- pte 1 = 07a69685
+[   55.191157] --- pte 3 = 07a69685
+[   55.194392] --- pte 1 = 07a33685
+[   55.197689] --- pte 3 = 07a33685
+[   55.202073] --- pte 1 = 07aa6685
+[   55.205307] --- pte 3 = 07aa6685
+[   55.220744] --- pte 1 = 07974685
+[   55.223981] --- pte 3 = 07974685
+[   55.228617] --- pte 1 = 07b20685
+[   55.231857] --- pte 3 = 07b20685
+[   55.235091] CPU 0 Unable to handle kernel paging request at virtual 
+address 77e9c000, epc == 801178ac, ra == 80118250
+[   55.245763] Oops[#1]:
+[   55.248033] CPU: 0 PID: 1392 Comm: Xsession Not tainted 
 5.12.0-rc8-dirty #6
-[   50.310207] Stack : 00040800 00000000 00000001 801565b8 00000000 
-00000007 00000000 635e192b
-[   50.318570]         80ea5bf4 80860000 807e9c80 80860000 80865923 
-00000001 80ea5b98 635e192b
-[   50.326933]         00000000 00000000 807e9c80 00000003 00000001 
-80ea5a6c 00000000 00000bd3
-[   50.335294]         bff4ffd7 120b6cde 80ea5a64 302e3231 80860000 
-00000000 807e8508 00040800
-[   50.343657]         00000000 00000850 00040800 00000000 00000000 
-8042a10c 00000000 808e0000
-[   50.352018]         ...
-[   50.354459] Call Trace:
-[   50.356895] [<80107db8>] show_stack+0x6c/0x12c
-[   50.361341] [<801e2f4c>] warn_alloc+0xa8/0x148
-[   50.365780] [<801e38e0>] __alloc_pages_nodemask+0x8d4/0x908
-[   50.371346] [<801f24ac>] ____cache_alloc+0x2dc/0x6a4
-[   50.376305] [<801f2a10>] kmem_cache_alloc+0x6c/0x104
-[   50.381263] [<803feac0>] jz4780_dma_desc_alloc.isra.9+0x40/0xa0
-[   50.387177] [<803fee90>] jz4780_dma_prep_slave_sg+0x54/0x184
-[   50.392828] [<804f72a8>] jz_mmc_irq_worker+0x2a8/0x760
-[   50.397958] [<80159e88>] irq_thread_fn+0x2c/0x6c
-[   50.402567] [<8015a4a0>] irq_thread+0x128/0x200
-[   50.407089] [<8013c0c8>] kthread+0x148/0x150
-[   50.411351] [<8010224c>] ret_from_kernel_thread+0x14/0x1c
-[   50.416742]
-[   50.418225] Index:  0 pgmask=4kb va=7709a000 asid=1a
-[   50.418225]  [pa=02155000 c=3 d=0 v=0 g=0] [pa=02156000 c=3 d=0 v=1 g=0]
-[   50.429873] Index:  1 pgmask=4kb va=77072000 asid=1a
-[   50.429873]  [pa=038d7000 c=3 d=0 v=0 g=0] [pa=07810000 c=3 d=0 v=1 g=0]
-[   50.441520] Index:  2 pgmask=4kb va=76e1a000 asid=1a
-[   50.441520]  [pa=01f53000 c=3 d=0 v=0 g=0] [pa=01f54000 c=3 d=0 v=1 g=0]
-[   50.453167] Index:  3 pgmask=4kb va=770fe000 asid=1a
-[   50.453167]  [pa=0208d000 c=3 d=0 v=0 g=0] [pa=0208e000 c=3 d=0 v=1 g=0]
-[   50.464814] Index:  4 pgmask=4kb va=566f8000 asid=1a
-[   50.464814]  [pa=03a52000 c=3 d=0 v=0 g=0] [pa=03a53000 c=3 d=0 v=1 g=0]
-[   50.476461] Index:  5 pgmask=4kb va=7fece000 asid=1a
-[   50.476461]  [pa=07ac3000 c=3 d=0 v=1 g=0] [pa=00000000 c=0 d=0 v=0 g=0]
-[   50.488108] Index:  6 pgmask=4kb va=566fe000 asid=1a
-[   50.488108]  [pa=01bcf000 c=3 d=1 v=1 g=0] [pa=05eb1000 c=3 d=1 v=1 g=0]
-[   50.499755] Index:  7 pgmask=4kb va=77098000 asid=1a
-[   50.499755]  [pa=05417000 c=3 d=0 v=1 g=0] [pa=02154000 c=3 d=0 v=1 g=0]
-[   50.511402] Index:  8 pgmask=4kb va=77e64000 asid=1a
-[   50.511402]  [pa=05333000 c=3 d=0 v=1 g=0] [pa=04c85000 c=3 d=0 v=0 g=0]
-[   50.523049] Index:  9 pgmask=4kb va=76e6a000 asid=1a
-[   50.523049]  [pa=021fe000 c=3 d=0 v=1 g=0] [pa=021ff000 c=3 d=0 v=1 g=0]
-[   50.534696] Index: 10 pgmask=4kb va=76f76000 asid=1a
-[   50.534696]  [pa=0698f000 c=3 d=1 v=1 g=0] [pa=0697a000 c=3 d=1 v=1 g=0]
-[   50.546343] Index: 11 pgmask=4kb va=762d6000 asid=1a
-[   50.546343]  [pa=06988000 c=3 d=1 v=1 g=0] [pa=00000000 c=0 d=0 v=0 g=0]
-[   50.557989] Index: 12 pgmask=4kb va=76f74000 asid=1a
-[   50.557989]  [pa=0103d000 c=3 d=1 v=1 g=0] [pa=02b40000 c=3 d=0 v=1 g=0]
-[   50.569636] Index: 13 pgmask=4kb va=566e8000 asid=1a
-[   50.569636]  [pa=05dd0000 c=3 d=1 v=1 g=0] [pa=053e6000 c=3 d=1 v=1 g=0]
-[   50.581283] Index: 14 pgmask=4kb va=566ac000 asid=1a
-[   50.581283]  [pa=00000000 c=0 d=0 v=0 g=0] [pa=04b26000 c=3 d=1 v=1 g=0]
-[   50.592930] Index: 17 pgmask=4kb va=76eca000 asid=1a
-[   50.592930]  [pa=02184000 c=3 d=0 v=1 g=0] [pa=02185000 c=3 d=0 v=0 g=0]
-[   50.604577] Index: 18 pgmask=4kb va=76f8c000 asid=1a
-[   50.604577]  [pa=01da3000 c=3 d=0 v=1 g=0] [pa=01da4000 c=3 d=0 v=1 g=0]
-[   50.616224] Index: 19 pgmask=4kb va=76e9c000 asid=1a
-[   50.616224]  [pa=02225000 c=3 d=0 v=0 g=0] [pa=02226000 c=3 d=0 v=1 g=0]
-[   50.627871] Index: 20 pgmask=4kb va=7fecc000 asid=1a
-[   50.627871]  [pa=05b01000 c=3 d=1 v=1 g=0] [pa=05abe000 c=3 d=1 v=1 g=0]
-[   50.639518] Index: 21 pgmask=4kb va=76ef0000 asid=1a
-[   50.639518]  [pa=021aa000 c=3 d=0 v=1 g=0] [pa=021ab000 c=3 d=0 v=1 g=0]
-[   50.651165] Index: 22 pgmask=4kb va=76e62000 asid=1a
-[   50.651165]  [pa=021f6000 c=3 d=0 v=1 g=0] [pa=021f7000 c=3 d=0 v=1 g=0]
-[   50.662812] Index: 23 pgmask=4kb va=74a00000 asid=1a
-[   50.662812]  [pa=03395000 c=3 d=1 v=1 g=0] [pa=028a0000 c=3 d=1 v=1 g=0]
-[   50.674459] Index: 24 pgmask=4kb va=75400000 asid=1a
-[   50.674459]  [pa=05ec6000 c=3 d=1 v=1 g=0] [pa=00000000 c=0 d=0 v=0 g=0]
-[   50.686105] Index: 25 pgmask=4kb va=76ede000 asid=1a
-[   50.686105]  [pa=02198000 c=3 d=0 v=0 g=0] [pa=02199000 c=3 d=0 v=1 g=0]
-[   50.697753] Index: 26 pgmask=4kb va=c009a000 asid=1a
-[   50.697753]  [pa=00000000 c=0 d=0 v=0 g=1] [pa=02f90000 c=3 d=1 v=1 g=1]
-[   50.709399] Index: 27 pgmask=4kb va=c0086000 asid=1a
-[   50.709399]  [pa=02f69000 c=3 d=1 v=1 g=1] [pa=02f6a000 c=3 d=1 v=1 g=1]
-[   50.721046] Index: 28 pgmask=4kb va=770f2000 asid=1a
-[   50.721046]  [pa=06915000 c=3 d=0 v=1 g=0] [pa=06916000 c=3 d=0 v=1 g=0]
-[   50.732693] Index: 29 pgmask=4kb va=56700000 asid=1a
-[   50.732693]  [pa=0357b000 c=3 d=1 v=1 g=0] [pa=07f9c000 c=3 d=1 v=1 g=0]
-[   50.744340] Index: 30 pgmask=4kb va=76f88000 asid=1a
-[   50.744340]  [pa=01d9f000 c=3 d=0 v=1 g=0] [pa=01da0000 c=3 d=0 v=1 g=0]
-[   50.755987] Index: 31 pgmask=4kb va=76fa4000 asid=1a
-[   50.755987]  [pa=03c3d000 c=3 d=0 v=1 g=0] [pa=00000000 c=0 d=0 v=0 g=0]
-
-
-Thanks and best regards!
+[   55.254983] $ 0   : 00000000 00000001 801178a8 77e9d000
+[   55.260211] $ 4   : 77e9c000 824139c0 80118130 858ed800
+[   55.265439] $ 8   : 83394a80 8596e800 00007017 8596e800
+[   55.270667] $12   : 00000002 00000575 00000001 00000000
+[   55.275893] $16   : 824139c0 77e9c000 80a17d00 00000004
+[   55.281120] $20   : 77e9c000 824139c0 858ed800 80860000
+[   55.286347] $24   : 00000000 801178a8
+[   55.291573] $28   : 825c2000 825c3d68 00000000 80118250
+[   55.296799] Hi    : 0000f640
+[   55.299668] Lo    : 00007b20
+[   55.302537] epc   : 801178ac r4k_blast_dcache_page_dc32+0x4/0x9c
+[   55.308541] ra    : 80118250 local_r4k_flush_cache_page+0x120/0x2c8
+[   55.314800] Status: 10001403 KERNEL EXL IE
+[   55.318981] Cause : 4080800c (ExcCode 03)
+[   55.322978] BadVA : 77e9c000
+[   55.325847] PrId  : 00d00100 (Ingenic XBurst)
+[   55.330191] Modules linked in:
+[   55.333235] Process Xsession (pid: 1392, threadinfo=a50f3c17, 
+task=72017642, tls=77ea1690)
+[   55.341487] Stack : 808a256c 00000000 808a256c 2dfe3c82 8596e800 
+80860000 80929d70 80a17d00
+[   55.349850]         858ed800 80117fd8 80929d70 824139c0 8596e800 
+801fdb50 00000000 801180fc
+[   55.358213]         825c3e80 80110b8c 80a17d00 858ed800 858ed800 
+77e9c000 00007b20 2dfe3c82
+[   55.366575]         825c3e80 801cbe38 00000000 80a17d00 858ed800 
+801fa300 858ed800 840dea70
+[   55.374938]         80860000 825c3e80 80a17d00 2dfe3c82 80a17d00 
+07b20685 825c3e80 00000000
+[   55.383301]         ...
+[   55.385741] Call Trace:
+[   55.388177] [<801178ac>] r4k_blast_dcache_page_dc32+0x4/0x9c
+[   55.393829] [<80118250>] local_r4k_flush_cache_page+0x120/0x2c8
+[   55.399741] [<80117fd8>] r4k_on_each_cpu.isra.10+0x24/0x58
+[   55.405219] [<801180fc>] r4k_flush_cache_page+0x34/0x58
+[   55.410438] [<801cbe38>] wp_page_copy+0x3a8/0x56c
+[   55.415138] [<801ceba8>] do_swap_page+0x500/0x58c
+[   55.419833] [<801cf65c>] handle_mm_fault+0x790/0x93c
+[   55.424789] [<8011026c>] do_page_fault+0x19c/0x540
+[   55.429574] [<80114300>] tlb_do_page_fault_1+0x10c/0x11c
+[   55.434881]
+[   55.436363] Index:  0 pgmask=4kb va=77d70000 asid=ea
+[   55.436363]  [pa=0209d000 c=3 d=0 v=1 g=0] [pa=0209e000 c=3 d=0 v=1 g=0]
+[   55.448010] Index:  1 pgmask=4kb va=77d72000 asid=ea
+[   55.448010]  [pa=0209f000 c=3 d=0 v=1 g=0] [pa=020a0000 c=3 d=0 v=1 g=0]
+[   55.459657] Index:  2 pgmask=4kb va=77d74000 asid=ea
+[   55.459657]  [pa=020a1000 c=3 d=0 v=1 g=0] [pa=020a2000 c=3 d=0 v=1 g=0]
+[   55.471303] Index:  3 pgmask=4kb va=77d76000 asid=ea
+[   55.471303]  [pa=020a3000 c=3 d=0 v=1 g=0] [pa=020a4000 c=3 d=0 v=1 g=0]
+[   55.482949] Index:  4 pgmask=4kb va=77d78000 asid=ea
+[   55.482949]  [pa=020a5000 c=3 d=0 v=1 g=0] [pa=020a6000 c=3 d=0 v=1 g=0]
+[   55.494596] Index:  5 pgmask=4kb va=77d7c000 asid=ea
+[   55.494596]  [pa=020a9000 c=3 d=0 v=1 g=0] [pa=020aa000 c=3 d=0 v=1 g=0]
+[   55.506243] Index:  6 pgmask=4kb va=77d7e000 asid=ea
+[   55.506243]  [pa=020ab000 c=3 d=0 v=1 g=0] [pa=020ac000 c=3 d=0 v=1 g=0]
+[   55.517889] Index:  7 pgmask=4kb va=7f890000 asid=ea
+[   55.517889]  [pa=03bd6000 c=3 d=0 v=1 g=0] [pa=00000000 c=0 d=0 v=0 g=0]
+[   55.529535] Index:  8 pgmask=4kb va=77e52000 asid=ea
+[   55.529535]  [pa=061d9000 c=3 d=0 v=1 g=0] [pa=07a34000 c=3 d=0 v=1 g=0]
+[   55.541181] Index:  9 pgmask=4kb va=77e54000 asid=ea
+[   55.541181]  [pa=0625b000 c=3 d=0 v=1 g=0] [pa=07974000 c=3 d=0 v=0 g=0]
+[   55.552828] Index: 10 pgmask=4kb va=77e9c000 asid=ea
+[   55.552828]  [pa=18166000 c=0 d=0 v=0 g=0] [pa=00000000 c=0 d=0 v=0 g=0]
+[   55.564474] Index: 11 pgmask=4kb va=c008e000 asid=ea
+[   55.564474]  [pa=027bb000 c=3 d=1 v=1 g=1] [pa=027bc000 c=3 d=1 v=1 g=1]
+[   55.576121] Index: 22 pgmask=4kb va=77e9a000 asid=ea
+[   55.576121]  [pa=0115b000 c=3 d=1 v=1 g=0] [pa=0797e000 c=3 d=0 v=0 g=0]
+[   55.587767] Index: 23 pgmask=4kb va=77dbc000 asid=ea
+[   55.587767]  [pa=0201a000 c=3 d=0 v=1 g=0] [pa=0201b000 c=3 d=0 v=1 g=0]
+[   55.599413] Index: 24 pgmask=4kb va=77db0000 asid=ea
+[   55.599413]  [pa=0200e000 c=3 d=0 v=1 g=0] [pa=0200f000 c=3 d=0 v=1 g=0]
+[   55.611060] Index: 25 pgmask=4kb va=77db2000 asid=ea
+[   55.611060]  [pa=02010000 c=3 d=0 v=1 g=0] [pa=02011000 c=3 d=0 v=1 g=0]
+[   55.622707] Index: 26 pgmask=4kb va=77db4000 asid=ea
+[   55.622707]  [pa=02012000 c=3 d=0 v=1 g=0] [pa=02013000 c=3 d=0 v=1 g=0]
+[   55.634354] Index: 27 pgmask=4kb va=77db6000 asid=ea
+[   55.634354]  [pa=02014000 c=3 d=0 v=1 g=0] [pa=02015000 c=3 d=0 v=1 g=0]
+[   55.646000] Index: 28 pgmask=4kb va=77db8000 asid=ea
+[   55.646000]  [pa=02016000 c=3 d=0 v=1 g=0] [pa=02017000 c=3 d=0 v=1 g=0]
+[   55.657647] Index: 29 pgmask=4kb va=77dba000 asid=ea
+[   55.657647]  [pa=02018000 c=3 d=0 v=1 g=0] [pa=02019000 c=3 d=0 v=1 g=0]
+[   55.669294] Index: 30 pgmask=4kb va=77dbe000 asid=ea
+[   55.669294]  [pa=0201c000 c=3 d=0 v=1 g=0] [pa=0201d000 c=3 d=0 v=1 g=0]
+[   55.680941] Index: 31 pgmask=4kb va=77d7a000 asid=ea
+[   55.680941]  [pa=020a7000 c=3 d=0 v=1 g=0] [pa=020a8000 c=3 d=0 v=1 g=0]
+[   55.692588]
+[   55.694068] Code: 03e00008  00000000  24831000 <bc950000> bc950020  
+bc950040  bc950060  bc950080  bc9500a0
+[   55.703829]
+[   55.705356] ---[ end trace 61b1a20b38fed08e ]---
+[   55.709981] Kernel panic - not syncing: Fatal exception
+[   55.715199] Rebooting in 10 seconds..
 
 
 >
