@@ -2,251 +2,326 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C236365074
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 04:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9499F365078
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 04:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbhDTCtB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Apr 2021 22:49:01 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:49326 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229508AbhDTCtA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 19 Apr 2021 22:49:00 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AEE07C0080;
-        Tue, 20 Apr 2021 02:48:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1618886910; bh=qUAQP+IGrGdZp0YA+E2JQQ+xs1dUfAdn6QvpZjqfK2o=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=jAt+h+uwzj3Qc0I5b/CfO4CqwhoDdPqf/fW1vkLKbIyl+nF54GNdJI2TwAje68eNX
-         ze/DSIQvgv/PnVjBGOoMx0WmhM1JeXGDebND6AJGfTraa/8o3F4LSf/u9u4iQJYTQf
-         iU36VyI1LIKdGkVpXH+zf8bTov4U5CAiEChAMk7RmTXV3tHhroySpcBDaV5YLKoBGM
-         +jCVzSh3FW08oz7jVtRml6zBr8TKh8Pnej6N5gf/sAQdfAJAHZv5Y4PVoS3pe4dQcB
-         ZttN1M25DwzQ9GxCeL0hRq7mrTzCN+JtMyrBux3oismNFN3qjw4yKViCjqLCu6+As2
-         vmpJZ1iN/RoOA==
-Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 5A85AA0096;
-        Tue, 20 Apr 2021 02:48:23 +0000 (UTC)
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2044.outbound.protection.outlook.com [104.47.74.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id C88E04009A;
-        Tue, 20 Apr 2021 02:48:20 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=vgupta@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="Q4RCQFRY";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dzVLhOq1G7swHWFHB+GNE4jXIZjVUI0fk8tazUbFmlnBN7pVtS93bxxOF7+J8TmJ0AGgnKFA0124DPQUdhvaxO2JH8cbsB3OSinKrm39hQ8GnmG/ZxE7geb3nXv2GCFkI4s/XOxUVrnOe6ZXXTblLcC2tmNqsGFufuizBqJQfelnK8KJWZWQwVtxiudtCTT/YT9gZIzGjwLGGiIBRNaksxXfCtL2e51d8iT4Dy+Wnj0FAjF8EReeldP42ylWrAEgWZIJ1CPX4BhKSJNLvBtB848CtQYWSDmvFUBfXD0GuuQGLwGmAHzPQ9D5Z3wVsga5JGl/7WXAob7DCoE+lU5eUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qUAQP+IGrGdZp0YA+E2JQQ+xs1dUfAdn6QvpZjqfK2o=;
- b=Xjjhxg8ASS3Xsa9iFjmP5eaig8AU7UFOqEg3ZdWot+cwt/jAiv9UtpjkMdGkJTOwfnh+5s52pXkIer9TF7hL8wcMrORUFeJ1tIKNeEU2VwZoIsBUqxDzHZAttpEt9IgDNOViUpKOdS9sGZIbt8+S00pcWPhYxN/cHj9h++13+Gb4XxIQjbaiyL7BdnQHB5hwi1WuOeUmfQQOFNF/mQCmvNBDkCEnTPT01CN0ZyRPTO1y9IRaqzXP/c3hxirjHRhQ7/vN83Qn2Q5OoUQanX/DMhtRAUFCPV8j5/NfyHelJsMf0X/N9IgiVGQx458Y2nat8eE/IeG9bUjaEdb1loLSdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qUAQP+IGrGdZp0YA+E2JQQ+xs1dUfAdn6QvpZjqfK2o=;
- b=Q4RCQFRYvLoPAJY0k4dhNg5HIeqpZuUipyR56fvdXtxiqkBsJavn4e1vSf3wbHNMkE3mdAQ9ZkFHG/X5M0KWQp66f3rnTwv4DmV3QGxdyZsKBTIsnY8dR9aPN1P63p0qidt3P4sVNePAV86BYMgVSpxqYYVRyc4P5VqfNBMjflA=
-Received: from BYAPR12MB3479.namprd12.prod.outlook.com (2603:10b6:a03:dc::26)
- by BYAPR12MB4982.namprd12.prod.outlook.com (2603:10b6:a03:106::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.24; Tue, 20 Apr
- 2021 02:48:18 +0000
-Received: from BYAPR12MB3479.namprd12.prod.outlook.com
- ([fe80::88a:1041:81ed:982]) by BYAPR12MB3479.namprd12.prod.outlook.com
- ([fe80::88a:1041:81ed:982%7]) with mapi id 15.20.4042.024; Tue, 20 Apr 2021
- 02:48:18 +0000
-X-SNPS-Relay: synopsys.com
-From:   Vineet Gupta <Vineet.Gupta1@synopsys.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        "brouer@redhat.com" <brouer@redhat.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "ilias.apalodimas@linaro.org" <ilias.apalodimas@linaro.org>,
-        "mcroce@linux.microsoft.com" <mcroce@linux.microsoft.com>,
-        "grygorii.strashko@ti.com" <grygorii.strashko@ti.com>,
-        "arnd@kernel.org" <arnd@kernel.org>, "hch@lst.de" <hch@lst.de>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "mgorman@suse.de" <mgorman@suse.de>
-Subject: Re: [PATCH 1/2] mm: Fix struct page layout on 32-bit systems
-Thread-Topic: [PATCH 1/2] mm: Fix struct page layout on 32-bit systems
-Thread-Index: AQHXMxVijWO/awtGlkiVwcCofC+50Kq4AUEAgAS3z4A=
-Date:   Tue, 20 Apr 2021 02:48:17 +0000
-Message-ID: <9f99b0a0-f1c1-f3b0-5f84-3a4bfc711725@synopsys.com>
-References: <20210416230724.2519198-1-willy@infradead.org>
- <20210416230724.2519198-2-willy@infradead.org>
- <20210417024522.GP2531743@casper.infradead.org>
-In-Reply-To: <20210417024522.GP2531743@casper.infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-authentication-results: infradead.org; dkim=none (message not signed)
- header.d=none;infradead.org; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [24.4.73.83]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ae4a7ca5-bbfb-496c-d44b-08d903a6c09c
-x-ms-traffictypediagnostic: BYAPR12MB4982:
-x-microsoft-antispam-prvs: <BYAPR12MB498243392B89A28882FE3071B6489@BYAPR12MB4982.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HgwXo2HX2pqA9pAHhYTMJVVDJaASZ9sfGYdBkwlxzuarA/FxzHKP2IE7n0T3LQRrjqhwcXOqFc43I96ZtybhZ7zei9fs8OxN1rrdWQxBqmzF5it4KXKdxqddq4Sbv7TdSGCSrKlxPfkpdZtOrukICFc42tm6AgBhER4Wel28hA5gr3bYanZoKkglQ3RPwNmLWOIwBhFSL/9Cv8UHYCrETljQckq4aW43Qben3SkeAEilmWT9oI17cYvgzoSCq8QCqaiWyFV9WD3wAhXuw2uOUsD78ViBUYUAQ4uQLToddwku1KoqTCs2/8ZElYEyfo4w2W3xSN7LfSQpYBJdY0s4h5bb2bLT9JFXZSLMt1nXvFNQ7tualty+MesrrM+xj53QFl96oFu3ysuSpsnHizHK1eBiVaPqe6FGqr2peDE4lDQ+2pzHbrK+/BA7lVyCm5XODpyd7DvvrR7HcvR8EBTr2wLJVSs6hXA+OfuV6XKghtwt3Gqd/582EC03TePdA7+/svbsnQHi053Re9R6CDVUNaBEjyY3wP/uhvtCm4szhD8ngnZXUPhik/7J9pjKYRcGUqBHsNhfuxAxNCTp3qqc18ff687X74ijBqvMSO7fO3f8rAWNwB8FYwmihvhQI2ADd3m+b3SdEJOvhTde5EjQ1CTl8qkwdYOBp7D7nfFO52XZ3SjPktCJNpmAYhuvqWou
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3479.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(346002)(39860400002)(136003)(366004)(376002)(66476007)(66946007)(64756008)(31686004)(66446008)(66556008)(2616005)(53546011)(36756003)(6506007)(76116006)(8676002)(186003)(8936002)(83380400001)(26005)(6486002)(110136005)(7416002)(6512007)(316002)(54906003)(478600001)(5660300002)(122000001)(38100700002)(4326008)(71200400001)(2906002)(31696002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?dmVPMTd2N2ZQWnppMkcreFJzTVlHZ2tDNnIwT202bk9aQm5tUGxKL3B3WE83?=
- =?utf-8?B?cWlPK0NzZzFyYU5tUUNkTWRhSjJRd3QwbnMxU1dDMDM2WEtZSmliNVcvZlND?=
- =?utf-8?B?Ky95UkVzdG1yQ2NQU3U4cUQyQVQvdXRubDlKS2Q4Z2N2ZG1KajhBc2JZdDVi?=
- =?utf-8?B?Vm1TZkRWQ21sRGRnYzVKMXV0Umk5T2RMaEUrL2NTbnl2VnhkTUdWTElyWHQ2?=
- =?utf-8?B?d3RmYWNHcFRYa0VGd1U4RmUzKzI0NXVZMmtNdTNzTnNnanJXVkJzWlc0NFZy?=
- =?utf-8?B?VDNiYVZqYzdidUlDZVNrNHpyRVFQSk1rTGwyR0Z0aGFVZHhDWHM0SXdyMGdy?=
- =?utf-8?B?VHJEbTBJaEsvck90T3FyL21XcUlMQjU3RG1KRGtyb29IV2VINDRSM1k5ZzFn?=
- =?utf-8?B?MncrRXRPYTVEQ0dxL0xXQzhZQVlpYU15UG9jT0psU1FGUUwraHhPVkFURWpq?=
- =?utf-8?B?V0xZdEIzSy9vOHpZbWtrQjJrZlFxNklVNEhXWkxFS1RCaGlPUzB4OG8xbGhz?=
- =?utf-8?B?azlBZi9JeFdaVm1iTnRyS1ROa0kvWi9BcmJCWjh5b2dGbmRwTmlvT3EyTkQz?=
- =?utf-8?B?bkZoeFo4SG1KTkFlVVhVQ0tnQ25sSG9SN21hZDdGNHE1SG1iYm1Na3ZOSzV6?=
- =?utf-8?B?TjBFMGF3Ti8rbStWTmJVWUVibWhDR2xCWXN1cUUxdEczdTZpZWNxK21XUWxa?=
- =?utf-8?B?a3J5WUJ6TFI4MGcyc214SGtFZVlySmlOa0I0M1Y2TERrSTNCeldXcitUM2c0?=
- =?utf-8?B?cU1VeFE2NGtjZ3JJZVFZNWFUd0MxcXFGTWFCYkVaYnJUalNGWDVxWkE4Sks5?=
- =?utf-8?B?OFZnRE5pajdTcGRqYnpHWDI5Q2dNcEVSMVhQWUF4K0djOWYyNWFrWEQwYTRN?=
- =?utf-8?B?WE9wNEdqc1RFUDhkMytsZXUwbW1iQkFGTFlDOUVDVnMrSjRyME1WT0EzSVY2?=
- =?utf-8?B?Tk9aS2dTS2VWT0taeER5ekZyb1YwK2xDWnhYK1plUkpiUGxDZVFadEdDQmVh?=
- =?utf-8?B?bjFZVytCS0hxa1NhN2xWN01naGFiK1d3dkw4QWZoTUNMOXFLTmRlcHFVQThn?=
- =?utf-8?B?amE2aHhnZHkwN0VPSWgyWUtndDFZV3FaY291OGhnS2VRU0twOVpVSGQ5Q1A2?=
- =?utf-8?B?OUozVnNObm9FQi9URjNoWm9vUlVQRkRSTzl4R3hEL1h0R1VMcDBubmFBckZC?=
- =?utf-8?B?WDU1b2Z6TTR4eDVCRGZMTVhBNFhQOXl5SW1meTBKamhMMDRFSUJ2cDlQNXhU?=
- =?utf-8?B?QTFvQ2hGZ2NVbk1nUnp4VGFIYTFQRTJHV2NnQzJNa0dIR2wzcDVOUGtwNG8v?=
- =?utf-8?B?NlFRS1V2ZkM2N3hNK1hsVmlVcDVXWGNQajRHQVo5amJLZmN4dEpIOEVSV2Ny?=
- =?utf-8?B?UGsvZWI2TEl6a3VWNG50ZWI4S3ZKRkEwWnJCTU5iZE5Ddnp4SWRIREh3RXhI?=
- =?utf-8?B?YWVqR21NZFVqNTN4ZzhGK29lYXB5QVVLdlo2QXJYQkhCWFJzRHFiWm9XUk12?=
- =?utf-8?B?UkJOblAwVHBkR0V0T2x4Z01kSW9aL3VlbUI0Nzlxa1lUQ3kzTG9GNHhKN0F6?=
- =?utf-8?B?cDkwb0ZYYkFtVWZWUFlzZEJ4aGhCSkRlbzV1N0tORjB6eHdQUklTQlJJa1pN?=
- =?utf-8?B?UWw3Q2xFUnNERXlCRzJ5dlZLOWRxUGxSMVpDemR6ZUsrWXhFNDRQZGN2ME1C?=
- =?utf-8?B?VkoxNldmWVNrRlQrR3QrQW01VHAwUk5yeXpUNVM1bi9vZTFXUHhiWG9nOENX?=
- =?utf-8?Q?LgoZTf9Z1d4IaxtQ7Y=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4BDBF6EFD3284647AECFC870F7B57F29@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S229689AbhDTCtM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Apr 2021 22:49:12 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:49000 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229690AbhDTCtM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 19 Apr 2021 22:49:12 -0400
+Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.161.16])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxmcnyQH5gHs8KAA--.9922S2;
+        Tue, 20 Apr 2021 10:48:20 +0800 (CST)
+Date:   Tue, 20 Apr 2021 10:48:18 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        paul.burton@mips.com, paul@crapouillou.net, siyanteng@loongson.cn,
+        ira.weiny@intel.com, yangtiezhu@loongson.cn, jun.jiang@ingenic.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com
+Subject: Re: [PATCH] Revert "MIPS: make userspace mapping young by default".
+Message-ID: <20210420024818.r6jf243oglb2ywbr@ambrosehua-HP-xw6600-Workstation>
+References: <1618562868-91115-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <20210416092003.5754967.19768.9603@loongson.cn>
+ <ae06522f-eda8-96d1-6f58-072905afa65c@wanyeetech.com>
+ <20210419045610.frhzxskec47s5rmq@ambrosehua-HP-xw6600-Workstation>
+ <13e37741-c1b4-2aae-471e-0790adc8db59@wanyeetech.com>
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3479.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae4a7ca5-bbfb-496c-d44b-08d903a6c09c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2021 02:48:17.9954
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sSIHKpZAMSbnlRcpRRWTq7fVCDb0jABv8dUhZuXm/OzEtRDgUG5Kz47UksNzMNEPkTPgwzM/eLTm/wntBwD2cA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4982
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <13e37741-c1b4-2aae-471e-0790adc8db59@wanyeetech.com>
+User-Agent: NeoMutt/20171215
+X-CM-TRANSID: AQAAf9CxmcnyQH5gHs8KAA--.9922S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfJFy8trWfJw13ZFWUXFy8uFg_yoW8GF1Duo
+        WYkr4fGF4rCryUCF13C3y5Jr4kKwna9Fn3KF1UtFnrX3WqyFy5J34jvrWFyFWjyFn2k3W5
+        uwn7t34UZwsxXaykn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYh7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20EY4v20xva
+        j40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
+        x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWx
+        JVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfUO_MaUUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SGkgTWF0dGhldywNCg0KT24gNC8xNi8yMSA3OjQ1IFBNLCBNYXR0aGV3IFdpbGNveCB3cm90ZToN
-Cj4gUmVwbGFjZW1lbnQgcGF0Y2ggdG8gZml4IGNvbXBpbGVyIHdhcm5pbmcuDQo+DQo+IEZyb206
-ICJNYXR0aGV3IFdpbGNveCAoT3JhY2xlKSIgPHdpbGx5QGluZnJhZGVhZC5vcmc+DQo+IERhdGU6
-IEZyaSwgMTYgQXByIDIwMjEgMTY6MzQ6NTUgLTA0MDANCj4gU3ViamVjdDogW1BBVENIIDEvMl0g
-bW06IEZpeCBzdHJ1Y3QgcGFnZSBsYXlvdXQgb24gMzItYml0IHN5c3RlbXMNCj4gVG86IGJyb3Vl
-ckByZWRoYXQuY29tDQo+IENjOiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLA0KPiAgICAg
-IGxpbnV4LW1tQGt2YWNrLm9yZywNCj4gICAgICBuZXRkZXZAdmdlci5rZXJuZWwub3JnLA0KPiAg
-ICAgIGxpbnV4cHBjLWRldkBsaXN0cy5vemxhYnMub3JnLA0KPiAgICAgIGxpbnV4LWFybS1rZXJu
-ZWxAbGlzdHMuaW5mcmFkZWFkLm9yZywNCj4gICAgICBsaW51eC1taXBzQHZnZXIua2VybmVsLm9y
-ZywNCj4gICAgICBpbGlhcy5hcGFsb2RpbWFzQGxpbmFyby5vcmcsDQo+ICAgICAgbWNyb2NlQGxp
-bnV4Lm1pY3Jvc29mdC5jb20sDQo+ICAgICAgZ3J5Z29yaWkuc3RyYXNoa29AdGkuY29tLA0KPiAg
-ICAgIGFybmRAa2VybmVsLm9yZywNCj4gICAgICBoY2hAbHN0LmRlLA0KPiAgICAgIGxpbnV4LXNu
-cHMtYXJjQGxpc3RzLmluZnJhZGVhZC5vcmcsDQo+ICAgICAgbWhvY2tvQGtlcm5lbC5vcmcsDQo+
-ICAgICAgbWdvcm1hbkBzdXNlLmRlDQo+DQo+IDMyLWJpdCBhcmNoaXRlY3R1cmVzIHdoaWNoIGV4
-cGVjdCA4LWJ5dGUgYWxpZ25tZW50IGZvciA4LWJ5dGUgaW50ZWdlcnMNCj4gYW5kIG5lZWQgNjQt
-Yml0IERNQSBhZGRyZXNzZXMgKGFyYywgYXJtLCBtaXBzLCBwcGMpIGhhZCB0aGVpciBzdHJ1Y3QN
-Cj4gcGFnZSBpbmFkdmVydGVudGx5IGV4cGFuZGVkIGluIDIwMTkuDQoNCkZXSVcsIEFSQyBkb2Vz
-bid0IHJlcXVpcmUgOCBieXRlIGFsaWdubWVudCBmb3IgOCBieXRlIGludGVnZXJzLiBUaGlzIGlz
-IA0Kb25seSBuZWVkZWQgZm9yIDgtYnl0ZSBhdG9taWNzIGR1ZSB0byB0aGUgcmVxdWlyZW1lbnRz
-IG9mIExMT0NLRC9TQ09ORCANCmluc3RydWN0aW9ucy4NCg0KPiBXaGVuIHRoZSBkbWFfYWRkcl90
-IHdhcyBhZGRlZCwNCj4gaXQgZm9yY2VkIHRoZSBhbGlnbm1lbnQgb2YgdGhlIHVuaW9uIHRvIDgg
-Ynl0ZXMsIHdoaWNoIGluc2VydGVkIGEgNCBieXRlDQo+IGdhcCBiZXR3ZWVuICdmbGFncycgYW5k
-IHRoZSB1bmlvbi4NCj4NCj4gRml4IHRoaXMgYnkgc3RvcmluZyB0aGUgZG1hX2FkZHJfdCBpbiBv
-bmUgb3IgdHdvIGFkamFjZW50IHVuc2lnbmVkIGxvbmdzLg0KPiBUaGlzIHJlc3RvcmVzIHRoZSBh
-bGlnbm1lbnQgdG8gdGhhdCBvZiBhbiB1bnNpZ25lZCBsb25nLCBhbmQgYWxzbyBmaXhlcyBhDQo+
-IHBvdGVudGlhbCBwcm9ibGVtIHdoZXJlIChvbiBhIGJpZyBlbmRpYW4gcGxhdGZvcm0pLCB0aGUg
-Yml0IHVzZWQgdG8gZGVub3RlDQo+IFBhZ2VUYWlsIGNvdWxkIGluYWR2ZXJ0ZW50bHkgZ2V0IHNl
-dCwgYW5kIGEgcmFjaW5nIGdldF91c2VyX3BhZ2VzX2Zhc3QoKQ0KPiBjb3VsZCBkZXJlZmVyZW5j
-ZSBhIGJvZ3VzIGNvbXBvdW5kX2hlYWQoKS4NCj4NCj4gRml4ZXM6IGMyNWZmZjcxNzFiZSAoIm1t
-OiBhZGQgZG1hX2FkZHJfdCB0byBzdHJ1Y3QgcGFnZSIpDQo+IFNpZ25lZC1vZmYtYnk6IE1hdHRo
-ZXcgV2lsY294IChPcmFjbGUpIDx3aWxseUBpbmZyYWRlYWQub3JnPg0KPiAtLS0NCj4gICBpbmNs
-dWRlL2xpbnV4L21tX3R5cGVzLmggfCAgNCArKy0tDQo+ICAgaW5jbHVkZS9uZXQvcGFnZV9wb29s
-LmggIHwgMTIgKysrKysrKysrKystDQo+ICAgbmV0L2NvcmUvcGFnZV9wb29sLmMgICAgIHwgMTIg
-KysrKysrKy0tLS0tDQo+ICAgMyBmaWxlcyBjaGFuZ2VkLCAyMCBpbnNlcnRpb25zKCspLCA4IGRl
-bGV0aW9ucygtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9tbV90eXBlcy5oIGIv
-aW5jbHVkZS9saW51eC9tbV90eXBlcy5oDQo+IGluZGV4IDY2MTNiMjZhODg5NC4uNWFhY2MxYzEw
-YTQ1IDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L21tX3R5cGVzLmgNCj4gKysrIGIvaW5j
-bHVkZS9saW51eC9tbV90eXBlcy5oDQo+IEBAIC05NywxMCArOTcsMTAgQEAgc3RydWN0IHBhZ2Ug
-ew0KPiAgIAkJfTsNCj4gICAJCXN0cnVjdCB7CS8qIHBhZ2VfcG9vbCB1c2VkIGJ5IG5ldHN0YWNr
-ICovDQo+ICAgCQkJLyoqDQo+IC0JCQkgKiBAZG1hX2FkZHI6IG1pZ2h0IHJlcXVpcmUgYSA2NC1i
-aXQgdmFsdWUgZXZlbiBvbg0KPiArCQkJICogQGRtYV9hZGRyOiBtaWdodCByZXF1aXJlIGEgNjQt
-Yml0IHZhbHVlIG9uDQo+ICAgCQkJICogMzItYml0IGFyY2hpdGVjdHVyZXMuDQo+ICAgCQkJICov
-DQo+IC0JCQlkbWFfYWRkcl90IGRtYV9hZGRyOw0KPiArCQkJdW5zaWduZWQgbG9uZyBkbWFfYWRk
-clsyXTsNCj4gICAJCX07DQo+ICAgCQlzdHJ1Y3QgewkvKiBzbGFiLCBzbG9iIGFuZCBzbHViICov
-DQo+ICAgCQkJdW5pb24gew0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9uZXQvcGFnZV9wb29sLmgg
-Yi9pbmNsdWRlL25ldC9wYWdlX3Bvb2wuaA0KPiBpbmRleCBiNWIxOTUzMDUzNDYuLmFkNjE1NGRj
-MjA2YyAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9uZXQvcGFnZV9wb29sLmgNCj4gKysrIGIvaW5j
-bHVkZS9uZXQvcGFnZV9wb29sLmgNCj4gQEAgLTE5OCw3ICsxOTgsMTcgQEAgc3RhdGljIGlubGlu
-ZSB2b2lkIHBhZ2VfcG9vbF9yZWN5Y2xlX2RpcmVjdChzdHJ1Y3QgcGFnZV9wb29sICpwb29sLA0K
-PiAgIA0KPiAgIHN0YXRpYyBpbmxpbmUgZG1hX2FkZHJfdCBwYWdlX3Bvb2xfZ2V0X2RtYV9hZGRy
-KHN0cnVjdCBwYWdlICpwYWdlKQ0KPiAgIHsNCj4gLQlyZXR1cm4gcGFnZS0+ZG1hX2FkZHI7DQo+
-ICsJZG1hX2FkZHJfdCByZXQgPSBwYWdlLT5kbWFfYWRkclswXTsNCj4gKwlpZiAoc2l6ZW9mKGRt
-YV9hZGRyX3QpID4gc2l6ZW9mKHVuc2lnbmVkIGxvbmcpKQ0KPiArCQlyZXQgfD0gKGRtYV9hZGRy
-X3QpcGFnZS0+ZG1hX2FkZHJbMV0gPDwgMTYgPDwgMTY7DQo+ICsJcmV0dXJuIHJldDsNCj4gK30N
-Cj4gKw0KPiArc3RhdGljIGlubGluZSB2b2lkIHBhZ2VfcG9vbF9zZXRfZG1hX2FkZHIoc3RydWN0
-IHBhZ2UgKnBhZ2UsIGRtYV9hZGRyX3QgYWRkcikNCj4gK3sNCj4gKwlwYWdlLT5kbWFfYWRkclsw
-XSA9IGFkZHI7DQo+ICsJaWYgKHNpemVvZihkbWFfYWRkcl90KSA+IHNpemVvZih1bnNpZ25lZCBs
-b25nKSkNCj4gKwkJcGFnZS0+ZG1hX2FkZHJbMV0gPSBhZGRyID4+IDE2ID4+IDE2Ow0KPiAgIH0N
-Cj4gICANCj4gICBzdGF0aWMgaW5saW5lIGJvb2wgaXNfcGFnZV9wb29sX2NvbXBpbGVkX2luKHZv
-aWQpDQo+IGRpZmYgLS1naXQgYS9uZXQvY29yZS9wYWdlX3Bvb2wuYyBiL25ldC9jb3JlL3BhZ2Vf
-cG9vbC5jDQo+IGluZGV4IGFkOGIwNzA3YWYwNC4uZjAxNGZkOGMxOWE2IDEwMDY0NA0KPiAtLS0g
-YS9uZXQvY29yZS9wYWdlX3Bvb2wuYw0KPiArKysgYi9uZXQvY29yZS9wYWdlX3Bvb2wuYw0KPiBA
-QCAtMTc0LDggKzE3NCwxMCBAQCBzdGF0aWMgdm9pZCBwYWdlX3Bvb2xfZG1hX3N5bmNfZm9yX2Rl
-dmljZShzdHJ1Y3QgcGFnZV9wb29sICpwb29sLA0KPiAgIAkJCQkJICBzdHJ1Y3QgcGFnZSAqcGFn
-ZSwNCj4gICAJCQkJCSAgdW5zaWduZWQgaW50IGRtYV9zeW5jX3NpemUpDQo+ICAgew0KPiArCWRt
-YV9hZGRyX3QgZG1hX2FkZHIgPSBwYWdlX3Bvb2xfZ2V0X2RtYV9hZGRyKHBhZ2UpOw0KPiArDQo+
-ICAgCWRtYV9zeW5jX3NpemUgPSBtaW4oZG1hX3N5bmNfc2l6ZSwgcG9vbC0+cC5tYXhfbGVuKTsN
-Cj4gLQlkbWFfc3luY19zaW5nbGVfcmFuZ2VfZm9yX2RldmljZShwb29sLT5wLmRldiwgcGFnZS0+
-ZG1hX2FkZHIsDQo+ICsJZG1hX3N5bmNfc2luZ2xlX3JhbmdlX2Zvcl9kZXZpY2UocG9vbC0+cC5k
-ZXYsIGRtYV9hZGRyLA0KPiAgIAkJCQkJIHBvb2wtPnAub2Zmc2V0LCBkbWFfc3luY19zaXplLA0K
-PiAgIAkJCQkJIHBvb2wtPnAuZG1hX2Rpcik7DQo+ICAgfQ0KPiBAQCAtMjI2LDcgKzIyOCw3IEBA
-IHN0YXRpYyBzdHJ1Y3QgcGFnZSAqX19wYWdlX3Bvb2xfYWxsb2NfcGFnZXNfc2xvdyhzdHJ1Y3Qg
-cGFnZV9wb29sICpwb29sLA0KPiAgIAkJcHV0X3BhZ2UocGFnZSk7DQo+ICAgCQlyZXR1cm4gTlVM
-TDsNCj4gICAJfQ0KPiAtCXBhZ2UtPmRtYV9hZGRyID0gZG1hOw0KPiArCXBhZ2VfcG9vbF9zZXRf
-ZG1hX2FkZHIocGFnZSwgZG1hKTsNCj4gICANCj4gICAJaWYgKHBvb2wtPnAuZmxhZ3MgJiBQUF9G
-TEFHX0RNQV9TWU5DX0RFVikNCj4gICAJCXBhZ2VfcG9vbF9kbWFfc3luY19mb3JfZGV2aWNlKHBv
-b2wsIHBhZ2UsIHBvb2wtPnAubWF4X2xlbik7DQo+IEBAIC0yOTQsMTMgKzI5NiwxMyBAQCB2b2lk
-IHBhZ2VfcG9vbF9yZWxlYXNlX3BhZ2Uoc3RydWN0IHBhZ2VfcG9vbCAqcG9vbCwgc3RydWN0IHBh
-Z2UgKnBhZ2UpDQo+ICAgCQkgKi8NCj4gICAJCWdvdG8gc2tpcF9kbWFfdW5tYXA7DQo+ICAgDQo+
-IC0JZG1hID0gcGFnZS0+ZG1hX2FkZHI7DQo+ICsJZG1hID0gcGFnZV9wb29sX2dldF9kbWFfYWRk
-cihwYWdlKTsNCj4gICANCj4gLQkvKiBXaGVuIHBhZ2UgaXMgdW5tYXBwZWQsIGl0IGNhbm5vdCBi
-ZSByZXR1cm5lZCBvdXIgcG9vbCAqLw0KPiArCS8qIFdoZW4gcGFnZSBpcyB1bm1hcHBlZCwgaXQg
-Y2Fubm90IGJlIHJldHVybmVkIHRvIG91ciBwb29sICovDQo+ICAgCWRtYV91bm1hcF9wYWdlX2F0
-dHJzKHBvb2wtPnAuZGV2LCBkbWEsDQo+ICAgCQkJICAgICBQQUdFX1NJWkUgPDwgcG9vbC0+cC5v
-cmRlciwgcG9vbC0+cC5kbWFfZGlyLA0KPiAgIAkJCSAgICAgRE1BX0FUVFJfU0tJUF9DUFVfU1lO
-Qyk7DQo+IC0JcGFnZS0+ZG1hX2FkZHIgPSAwOw0KPiArCXBhZ2VfcG9vbF9zZXRfZG1hX2FkZHIo
-cGFnZSwgMCk7DQo+ICAgc2tpcF9kbWFfdW5tYXA6DQo+ICAgCS8qIFRoaXMgbWF5IGJlIHRoZSBs
-YXN0IHBhZ2UgcmV0dXJuZWQsIHJlbGVhc2luZyB0aGUgcG9vbCwgc28NCj4gICAJICogaXQgaXMg
-bm90IHNhZmUgdG8gcmVmZXJlbmNlIHBvb2wgYWZ0ZXJ3YXJkcy4NCg0K
+Hi,
+On Mon, Apr 19, 2021 at 10:21:40PM +0800, Zhou Yanjie wrote:
+> Hi
+> 
+> On 2021/4/19 下午12:56, Huang Pei wrote:
+> > On Sat, Apr 17, 2021 at 12:45:59AM +0800, Zhou Yanjie wrote:
+> > > On 2021/4/16 下午5:20, 黄沛 wrote:
+> > > > Is there any log about the panic?
+> > > 
+> > > Yes, below is the log:
+> > > 
+> > > 
+> > > [  195.436017] CPU 0 Unable to handle kernel paging request at virtual
+> > > address 77eb8000, epc == 80117868, ra == 80118208
+> > > [  195.446709] Oops[#1]:
+> > > [  195.448977] CPU: 0 PID: 1461 Comm: Xsession Not tainted
+> > > 5.12.0-rc6-00227-gc8fc6defbd2e-dirty #1
+> > > [  195.457661] $ 0   : 00000000 00000001 80117864 77eb9000
+> > > [  195.462888] $ 4   : 77eb8000 82419600 838ea000 82482ba0
+> > > [  195.468116] $ 8   : 826f8b18 8306f800 000072d5 8306f800
+> > > [  195.473343] $12   : 00000002 00000a03 00000001 00000402
+> > > [  195.478568] $16   : 77eb8000 809faf60 00000004 82482ba0
+> > > [  195.483794] $20   : 77eb8000 82419600 82482ba0 80860000
+> > > [  195.489021] $24   : 8086121c 80117864
+> > > [  195.494248] $28   : 838ea000 838ebd70 00000000 80118208
+> > > [  195.499475] Hi    : 00008c4e
+> > > [  195.502343] Lo    : 00004627
+> > > [  195.505212] epc   : 80117868 r4k_blast_dcache_page_dc32+0x4/0x9c
+> > > [  195.511217] ra    : 80118208 local_r4k_flush_cache_page+0x120/0x1b8
+> > > [  195.517476] Status: 10001403 KERNEL EXL IE
+> > > [  195.521657] Cause : 4080800c (ExcCode 03)
+> > > [  195.525654] BadVA : 77eb8000
+> > > [  195.528523] PrId  : 00d00100 (Ingenic XBurst)
+> > > [  195.532866] Modules linked in:
+> > > [  195.535911] Process Xsession (pid: 1461, threadinfo=00975a3e,
+> > > task=3724fd66, tls=77ebd690)
+> > > [  195.544162] Stack : 808a05ec f7edcbfd 8306f800 00000000 80860000 809faf60
+> > > 80990a3c 80117f90
+> > > [  195.552524]         809faf60 82419600 8306f800 801fd84c 00000000 801180b4
+> > > 838ebe80 80110b7c
+> > > [  195.560887]         80990a3c 82482ba0 82482ba0 77eb8000 00004627 f7edcbfd
+> > > 838ebe80 801cbc08
+> > > [  195.569249]         00000001 181b2000 00000000 801fa06c 00000000 83999ae0
+> > > 80860000 00000004
+> > > [  195.577610]         80990a3c f7edcbfd 80990a3c 838ebe80 00000004 80990a3c
+> > > 82482ba0 04627685
+> > > [  195.585973]         ...
+> > > [  195.588413] Call Trace:
+> > > [  195.590849] [<80117868>] r4k_blast_dcache_page_dc32+0x4/0x9c
+> > > [  195.596501] [<80118208>] local_r4k_flush_cache_page+0x120/0x1b8
+> > > [  195.602413] [<80117f90>] r4k_on_each_cpu.isra.8+0x24/0x58
+> > > [  195.607805] [<801180b4>] r4k_flush_cache_page+0x34/0x58
+> > > [  195.613023] [<801cbc08>] wp_page_copy+0x3a8/0x56c
+> > > [  195.617723] [<801ce944>] do_swap_page+0x4cc/0x558
+> > > [  195.622419] [<801cf3f8>] handle_mm_fault+0x790/0x93c
+> > > [  195.627374] [<8011025c>] do_page_fault+0x19c/0x540
+> > > [  195.632159] [<801142f0>] tlb_do_page_fault_1+0x10c/0x11c
+> > > [  195.637465]
+> > > [  195.638947] Code: 03e00008  00000000  24831000 <bc950000> bc950020
+> > > bc950040  bc950060  bc950080  bc9500a0
+> > > [  195.648706]
+> > > [  195.650243] ---[ end trace 7cc7d7f611932c42 ]---
+> > > [  195.654857] Kernel panic - not syncing: Fatal exception
+> > > [  195.660072] Rebooting in 10 seconds..
+> > > 
+> > > 
+> > > this problem can be triggered stably (by use Microsoft Remote Desktop client
+> > > to login to debian9 running on CU1830-Neo).
+> > > 
+> > Could you print out the PTE value at 0x77eb8000 ?
+> 
+> 
+> Here is the new log:
+> 
+> 
+> [   33.681712] CPU 0 Unable to handle kernel paging request at virtual
+> address 77ea4000, epc == 801178ac, ra == 80118250
+> [   33.692395] Oops[#1]:
+> [   33.694662] CPU: 0 PID: 1389 Comm: Xsession Not tainted 5.12.0-rc8-dirty
+> #2
+> [   33.701612] $ 0   : 00000000 00000001 801178a8 77ea5000
+> [   33.706839] $ 4   : 77ea4000 81bcd220 80118130 856712a0
+> [   33.712066] $ 8   : 833e4a80 8544b800 000070a8 8544b800
+> [   33.717293] $12   : 00000002 000005b7 00000001 00000000
+> [   33.722518] $16   : 81bcd220 77ea4000 80a11ad8 00000004
+> [   33.727745] $20   : 77ea4000 81bcd220 856712a0 80860000
+> [   33.732972] $24   : 0000001c 801178a8
+> [   33.738197] $28   : 82564000 82565d68 00000000 80118250
+> [   33.743424] Hi    : 0000f0cc
+> [   33.746293] Lo    : 00007866
+> [   33.749162] epc   : 801178ac r4k_blast_dcache_page_dc32+0x4/0x9c
+> [   33.755166] ra    : 80118250 local_r4k_flush_cache_page+0x120/0x2c8
+> [   33.761425] Status: 10001403 KERNEL EXL IE
+> [   33.765605] Cause : 4080800c (ExcCode 03)
+> [   33.769603] BadVA : 77ea4000
+> [   33.772472] PrId  : 00d00100 (Ingenic XBurst)
+> [   33.776816] Modules linked in:
+> [   33.779861] Process Xsession (pid: 1389, threadinfo=c8bdf64c,
+> task=2372d853, tls=77ea9690)
+> [   33.788111] Stack : 808a256c 00000000 808a256c bfa6939a 8544b800 80860000
+> 8094d308 80a11ad8
+> [   33.796474]         856712a0 80117fd8 8094d308 81bcd220 8544b800 801fdb10
+> 80945ce8 801180fc
+> [   33.804838]         82565e80 80110b8c 80a11ad8 856712a0 856712a0 77ea4000
+> 00007866 bfa6939a
+> [   33.813201]         82565e80 801cbe38 00000000 bfa6939a 80863494 801fa2c0
+> 856712a0 82562a90
+> [   33.821564]         80860000 00000000 80a11ad8 bfa6939a 80a11ad8 82565e80
+> 00000000 80a11ad8
+> [   33.829927]         ...
+> [   33.832367] Call Trace:
+> [   33.834803] [<801178ac>] r4k_blast_dcache_page_dc32+0x4/0x9c
+> [   33.840455] [<80118250>] local_r4k_flush_cache_page+0x120/0x2c8
+> [   33.846367] [<80117fd8>] r4k_on_each_cpu.isra.10+0x24/0x58
+> [   33.851845] [<801180fc>] r4k_flush_cache_page+0x34/0x58
+> [   33.857062] [<801cbe38>] wp_page_copy+0x3a8/0x56c
+> [   33.861763] [<801ceb74>] do_swap_page+0x4cc/0x558
+> [   33.866458] [<801cf628>] handle_mm_fault+0x790/0x93c
+> [   33.871414] [<8011026c>] do_page_fault+0x19c/0x540
+> [   33.876199] [<80114300>] tlb_do_page_fault_1+0x10c/0x11c
+> [   33.881506]
+> [   33.882987] Index:  5 pgmask=4kb va=77ea2000 asid=fd
+> [   33.882987]  [pa=02a99000 c=3 d=1 v=1 g=0] [pa=0690d000 c=3 d=0 v=0 g=0]
+> [   33.894635] Index:  6 pgmask=4kb va=77dc4000 asid=fd
+> [   33.894635]  [pa=01d30000 c=3 d=0 v=1 g=0] [pa=01d31000 c=3 d=0 v=1 g=0]
+> [   33.906281] Index:  7 pgmask=4kb va=77dc0000 asid=fd
+> [   33.906281]  [pa=01d2c000 c=3 d=0 v=1 g=0] [pa=01d2d000 c=3 d=0 v=1 g=0]
+> [   33.917928] Index:  8 pgmask=4kb va=77dc2000 asid=fd
+> [   33.917928]  [pa=01d2e000 c=3 d=0 v=1 g=0] [pa=01d2f000 c=3 d=0 v=1 g=0]
+> [   33.929574] Index:  9 pgmask=4kb va=77dc6000 asid=fd
+> [   33.929574]  [pa=01d32000 c=3 d=0 v=1 g=0] [pa=01d33000 c=3 d=0 v=1 g=0]
+> [   33.941220] Index: 10 pgmask=4kb va=77dc8000 asid=fd
+> [   33.941220]  [pa=01d34000 c=3 d=0 v=1 g=0] [pa=01d35000 c=3 d=0 v=1 g=0]
+> [   33.952866] Index: 11 pgmask=4kb va=77dca000 asid=fd
+> [   33.952866]  [pa=01d36000 c=3 d=0 v=1 g=0] [pa=01d37000 c=3 d=0 v=1 g=0]
+> [   33.964512] Index: 12 pgmask=4kb va=77dcc000 asid=fd
+> [   33.964512]  [pa=01d38000 c=3 d=0 v=1 g=0] [pa=01d39000 c=3 d=0 v=1 g=0]
+> [   33.976159] Index: 13 pgmask=4kb va=77dce000 asid=fd
+> [   33.976159]  [pa=01d3a000 c=3 d=0 v=1 g=0] [pa=01d3b000 c=3 d=0 v=1 g=0]
+> [   33.987805] Index: 14 pgmask=4kb va=77d82000 asid=fd
+> [   33.987805]  [pa=01dbd000 c=3 d=0 v=1 g=0] [pa=01dbe000 c=3 d=0 v=1 g=0]
+> [   33.999451] Index: 15 pgmask=4kb va=77d80000 asid=fd
+> [   33.999451]  [pa=01dbb000 c=3 d=0 v=1 g=0] [pa=01dbc000 c=3 d=0 v=1 g=0]
+> [   34.011097] Index: 16 pgmask=4kb va=77d84000 asid=fd
+> [   34.011097]  [pa=01dbf000 c=3 d=0 v=1 g=0] [pa=01dc0000 c=3 d=0 v=1 g=0]
+> [   34.022743] Index: 17 pgmask=4kb va=77d86000 asid=fd
+> [   34.022743]  [pa=01dc1000 c=3 d=0 v=1 g=0] [pa=01dc2000 c=3 d=0 v=1 g=0]
+> [   34.034389] Index: 18 pgmask=4kb va=77d88000 asid=fd
+> [   34.034389]  [pa=01dc3000 c=3 d=0 v=1 g=0] [pa=01dc4000 c=3 d=0 v=1 g=0]
+> [   34.046035] Index: 19 pgmask=4kb va=77d8a000 asid=fd
+> [   34.046035]  [pa=01dc5000 c=3 d=0 v=1 g=0] [pa=01dc6000 c=3 d=0 v=1 g=0]
+> [   34.057682] Index: 20 pgmask=4kb va=77d8c000 asid=fd
+> [   34.057682]  [pa=01dc7000 c=3 d=0 v=1 g=0] [pa=01dc8000 c=3 d=0 v=1 g=0]
+> [   34.069328] Index: 21 pgmask=4kb va=77d8e000 asid=fd
+> [   34.069328]  [pa=01dc9000 c=3 d=0 v=1 g=0] [pa=01dca000 c=3 d=0 v=1 g=0]
+> [   34.080975] Index: 22 pgmask=4kb va=7f7b0000 asid=fd
+> [   34.080975]  [pa=078ea000 c=3 d=0 v=1 g=0] [pa=07801000 c=3 d=0 v=0 g=0]
+> [   34.092621] Index: 23 pgmask=4kb va=77e5a000 asid=fd
+> [   34.092621]  [pa=07ece000 c=3 d=0 v=1 g=0] [pa=077fb000 c=3 d=0 v=1 g=0]
+> [   34.104267] Index: 24 pgmask=4kb va=77e5c000 asid=fd
+> [   34.104267]  [pa=0775f000 c=3 d=0 v=1 g=0] [pa=07314000 c=3 d=0 v=0 g=0]
+> [   34.115913] Index: 25 pgmask=4kb va=77ea4000 asid=fd
+> [   34.115913]  [pa=18122000 c=0 d=0 v=0 g=0] [pa=00000000 c=0 d=0 v=0 g=0]
+C = 0, pa = 18122000,  it is weird, 
+
++. pa is too high for 32bit SOC here;
+
++. C=0 is not a valid cache attribute;
+
+I think this is "not" a PTE for memory, maybe a swap entry?
+
+Could you print the PTE value, not the value in TLB?
+
+tTLB value lost software PTE bits
+
+> [   34.127559] Index: 26 pgmask=4kb va=c0096000 asid=fd
+> [   34.127559]  [pa=0302f000 c=3 d=1 v=1 g=1] [pa=03008000 c=3 d=1 v=1 g=1]
+> [   34.139205]
+> [   34.140686] Code: 03e00008  00000000  24831000 <bc950000> bc950020 
+> bc950040  bc950060  bc950080  bc9500a0
+> [   34.150445]
+> [   34.151987] ---[ end trace 30089d2c358ff363 ]---
+> [   34.156614] Kernel panic - not syncing: Fatal exception
+> [   34.161831] Rebooting in 10 seconds..
+> 
+> > 
+> > I really have no idea of how the page_prot setting affecting the swap
+> > handling.
+> > 
+> > > Thanks and best regards!
+> > > 
+> > > 
+> > > >     Original Message
+> > > > From: 周琰杰 (Zhou Yanjie)
+> > > > Sent: 2021年4月16日星期五 16:48
+> > > > To: tsbogend@alpha.franken.de
+> > > > Cc: linux-mips@vger.kernel.org; linux-kernel@vger.kernel.org; akpm@linux-foundation.org; paul.burton@mips.com; paul@crapouillou.net; siyanteng@loongson.cn; huangpei@loongson.cn; ira.weiny@intel.com; yangtiezhu@loongson.cn; zhouyanjie@wanyeetech.com; jun.jiang@ingenic.com; dongsheng.qiu@ingenic.com; aric.pzqi@ingenic.com; rick.tyliu@ingenic.com; sernia.zhou@foxmail.com
+> > > > Subject: [PATCH] Revert "MIPS: make userspace mapping young by default".
+> > > > 
+> > > > This reverts commit f685a533a7fab35c5d069dcd663f59c8e4171a75.
+> > > > 
+> > > > It cause kernel panic on Ingenic X1830, so let's revert it.
+> > > > 
+> > > > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> > > > ---
+> > > > arch/mips/mm/cache.c | 31 ++++++++++++++-----------------
+> > > > 1 file changed, 14 insertions(+), 17 deletions(-)
+> > > > 
+> > > > diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
+> > > > index 7719d63..9cfd432 100644
+> > > > --- a/arch/mips/mm/cache.c
+> > > > +++ b/arch/mips/mm/cache.c
+> > > > @@ -21,7 +21,6 @@
+> > > > #include <asm/cpu.h>
+> > > > #include <asm/cpu-features.h>
+> > > > #include <asm/setup.h>
+> > > > -#include <asm/pgtable.h>
+> > > > 
+> > > > /* Cache operations. */
+> > > > void (*flush_cache_all)(void);
+> > > > @@ -157,31 +156,29 @@ unsigned long _page_cachable_default;
+> > > > EXPORT_SYMBOL(_page_cachable_default);
+> > > > 
+> > > > #define PM(p)	__pgprot(_page_cachable_default | (p))
+> > > > -#define PVA(p)	PM(_PAGE_VALID | _PAGE_ACCESSED | (p))
+> > > > 
+> > > > static inline void setup_protection_map(void)
+> > > > {
+> > > > protection_map[0] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+> > > > -	protection_map[1] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
+> > > > -	protection_map[2] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+> > > > -	protection_map[3] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
+> > > > -	protection_map[4] = PVA(_PAGE_PRESENT);
+> > > > -	protection_map[5] = PVA(_PAGE_PRESENT);
+> > > > -	protection_map[6] = PVA(_PAGE_PRESENT);
+> > > > -	protection_map[7] = PVA(_PAGE_PRESENT);
+> > > > +	protection_map[1] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+> > > > +	protection_map[2] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+> > > > +	protection_map[3] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+> > > > +	protection_map[4] = PM(_PAGE_PRESENT);
+> > > > +	protection_map[5] = PM(_PAGE_PRESENT);
+> > > > +	protection_map[6] = PM(_PAGE_PRESENT);
+> > > > +	protection_map[7] = PM(_PAGE_PRESENT);
+> > > > 
+> > > > protection_map[8] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+> > > > -	protection_map[9] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
+> > > > -	protection_map[10] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
+> > > > +	protection_map[9] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+> > > > +	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
+> > > > _PAGE_NO_READ);
+> > > > -	protection_map[11] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+> > > > -	protection_map[12] = PVA(_PAGE_PRESENT);
+> > > > -	protection_map[13] = PVA(_PAGE_PRESENT);
+> > > > -	protection_map[14] = PVA(_PAGE_PRESENT);
+> > > > -	protection_map[15] = PVA(_PAGE_PRESENT);
+> > > > +	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+> > > > +	protection_map[12] = PM(_PAGE_PRESENT);
+> > > > +	protection_map[13] = PM(_PAGE_PRESENT);
+> > > > +	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
+> > > > +	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
+> > > > }
+> > > > 
+> > > > -#undef _PVA
+> > > > #undef PM
+> > > > 
+> > > > void cpu_cache_init(void)
+
