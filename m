@@ -2,117 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC8C364FB4
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 03:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A3C365041
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 04:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbhDTBMF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Apr 2021 21:12:05 -0400
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:50401 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229994AbhDTBME (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 19 Apr 2021 21:12:04 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id B779D33B5;
-        Mon, 19 Apr 2021 21:11:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 19 Apr 2021 21:11:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=2
-        PZTex3av6DtVxv7nSM5bRbe2hR7e4Ewi7UMffg6+xs=; b=nhblEcEWTeS+NLG7W
-        YfYdsSFnQx0UHRmnLbI/hHEsk8I7X/AMAhgwD3YbnUZcCl8v7t4Y062CyrChQ9jL
-        6yjBAZv1F/5sS5Qtq/Dn9OBuWacx4YQQh2pLjEnXiD8FrYO/wfxy8s06XXpNyD++
-        h6sugDvTiHdefjDP+C0/qE9HjSO0TPoZNM15Qd7nGCodzGI/FBvPAc4ghpQSbF2z
-        O3lEQ5pCsAkxbGd1BIERd7N1lheyQp/8O3tBQACTNfgKPbe8HvE5B9M9SEN0KRqZ
-        zZU+7dTTsQbOvjffSnrDDPNEG8Pv3Lnq6VDoW7YHmpuSI1cbTyMdndqX7j1jtCET
-        q1yJA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=2PZTex3av6DtVxv7nSM5bRbe2hR7e4Ewi7UMffg6+
-        xs=; b=DB7mRFgPTttzJ2lt+ny2qbBt14ULHDVitD40RV6utjMhb5GAgteC9QwdU
-        lt1Ls93IF3Mcw2YFw75PfdCUiOVKNK0WnGKVsuP9ktYZUmz5hYLOhogtKT1IB18C
-        w/5BCeWOV65oRYM9Lv0GQBn/vUEaSk3/kBBOU86V4NW/7Vf2JCoCmtYXuroFbe3z
-        qSxrQZOqNK/N2TlL0S5lQ98k1mKDzvNP93Pw5CiIPXG7t6yDC4MHbo7xXz/37y43
-        5iW7oZ6UtlL7rnlm+cb5R4gLBPWDyMr30/Y1Th2m+yHk2tQcI/CXhc6dlb0tkpiO
-        sMGc40Qa7ZtNSMbAlNdz5NBYOduZg==
-X-ME-Sender: <xms:Qyp-YCZ079hxBKayHveICxY0comEvhIroKGP6NpgF-ujGlzUedCEYg>
-    <xme:Qyp-YFa0TM-h2lQvdLL67KVfoyadq6N3YfPJU9E-cAYCneUJFBwH1lDibvg3lvzMu
-    kSnZvwJ7jwrYRppjtA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvddthedggeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdeftfenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeefleduiedtvdekffeggfeukeejgeeffeetlefghfekffeuteei
-    jeeghefhueffvdenucfkphepudduiedrvddvgedrvdegjedrgedunecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:RCp-YM9kVvgd_u_kUpFIrkJhQBs79TGLqkF09lrgLGTRgdcaqGBPKw>
-    <xmx:RCp-YEpSEhFaRYiBpTgi1nhiN-qCD6bsCVk0RiGl7VWxbQ-77RhBNw>
-    <xmx:RCp-YNpJN_8a_zcercstGmzAxy2Ehbcvl2o6naXcRD9Hui3xN_FJQA>
-    <xmx:RSp-YE34Swz4s-peB6wSQXrL7nhBotkeCziCEGa987-7AM_qMGDNWQ>
-Received: from [10.20.195.140] (unknown [116.224.247.41])
-        by mail.messagingengine.com (Postfix) with ESMTPA id B3426240054;
-        Mon, 19 Apr 2021 21:11:29 -0400 (EDT)
-Subject: Re: [PATCH] mips: kdump: Crash kernel should be able to see old
- memories
-To:     Youling Tang <tangyouling@loongson.cn>,
+        id S229711AbhDTCRB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Apr 2021 22:17:01 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:42222 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229534AbhDTCRA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 19 Apr 2021 22:17:00 -0400
+Received: from [10.130.0.193] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxU+B4OX5ga8oKAA--.18176S3;
+        Tue, 20 Apr 2021 10:16:26 +0800 (CST)
+Subject: Re: [PATCH] MIPS: Fix cmdline "mem=" parameter parsing
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1618829425-11873-1-git-send-email-tangyouling@loongson.cn>
+ <5d4d31aa-7fe5-bf8d-1d77-a1605f0c2793@flygoat.com>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-References: <1618829807-12522-1-git-send-email-tangyouling@loongson.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <bd5b70cf-cfdf-0a4a-dfb5-08e030864138@flygoat.com>
-Date:   Tue, 20 Apr 2021 09:11:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Jinyang He <hejinyang@loongson.cn>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <3e8be714-6017-b0c7-9c71-7464d9b2b793@loongson.cn>
+Date:   Tue, 20 Apr 2021 10:16:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <1618829807-12522-1-git-send-email-tangyouling@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
+In-Reply-To: <5d4d31aa-7fe5-bf8d-1d77-a1605f0c2793@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9CxU+B4OX5ga8oKAA--.18176S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFWkur1UXFy7ArW3ur15urg_yoW8Cr4xpw
+        4UCa4Fka1qgr9Fg3W0y395uw1rJas5GFWxJF47Zwn5A3WqqF1xJF1FqF15uFyIvrW7K3WI
+        qa4j9ryUuan7ZFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfUnhFxUUUUU
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi, Jiaxun
 
-ÔÚ 2021/4/19 18:56, Youling Tang Ð´µÀ:
-> From: Huacai Chen <chenhc@lemote.com>
+On 04/20/2021 09:05 AM, Jiaxun Yang wrote:
 >
-> kexec-tools use mem=X@Y to pass usable memories to crash kernel, but in
-> commit a94e4f24ec836c8984f83959 ("MIPS: init: Drop boot_mem_map") all
-> BIOS passed memories are removed by early_parse_mem(). I think this is
-> reasonable for a normal kernel but not for a crash kernel, because a
-> crash kernel should be able to see all old memories, even though it is
-> not supposed to use them.
+> åœ¨ 2021/4/19 18:50, Youling Tang å†™é“:
+>> This problem may only occur on NUMA platforms. When machine start 
+>> with the
+>> "mem=" parameter on Loongson64, it cannot boot. When parsing the "mem="
+>> parameter, first remove all RAM, and then add memory through 
+>> memblock_add(),
+>> which causes the newly added memory to be located on MAX_NUMNODES.
+>>
+>> The solution is to add the current "mem=" parameter range to the 
+>> memory area
+>> of the corresponding node, instead of adding all of it to the 
+>> MAX_NUMNODES
+>> node area. Get the node number corresponding to the "mem=" parameter 
+>> range
+>> through pa_to_nid(), and then add it to the corresponding node through
+>> memblock_add_node().
+>>
+>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+>> ---
+>>   arch/mips/kernel/setup.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+>> index 279be01..b86e241 100644
+>> --- a/arch/mips/kernel/setup.c
+>> +++ b/arch/mips/kernel/setup.c
+>> @@ -359,7 +359,7 @@ static int __init early_parse_mem(char *p)
+>>       if (*p == '@')
+>>           start = memparse(p + 1, &p);
+>>   -    memblock_add(start, size);
+>> +    memblock_add_node(start, size, pa_to_nid(start));
 >
-> Fixes: a94e4f24ec836c8984f83959 ("MIPS: init: Drop boot_mem_map")
-> Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
-> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-> ---
->   arch/mips/kernel/setup.c | 2 ++
->   1 file changed, 2 insertions(+)
+> pa_to_nid is not available for all platforms.
 >
-> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-> index b86e241..ac90d3b 100644
-> --- a/arch/mips/kernel/setup.c
-> +++ b/arch/mips/kernel/setup.c
-> @@ -351,8 +351,10 @@ static int __init early_parse_mem(char *p)
->   	 */
->   	if (usermem == 0) {
->   		usermem = 1;
-> +#ifndef CONFIG_CRASH_DUMP
+Thanks for your correction.
 
-Why depend on a config instead of a runtime variable?
+pa_to_nid() only has actual definitions in mach-ip27 and mach-loongson64 
+(only
+for NUMA platform).
 
-Btw as you are fixing my commit please keep me CCed.
+In arch/mips/include/asm/mmzone.h:
+#ifndef pa_to_nid
+#define pa_to_nid(addr) 0
+#endif
 
+So only need #include <asm/mmzone.h> to solve the "error: implicit 
+declaration
+of function'pa_to_nid'" compilation error.
 
-Thanks.
-
-
-- Jiaxun
-
+Thanks,
+Youling
+>
+> Thanks.
+>
+> - Jiaxun
+>
+>>         return 0;
+>>   }
 
