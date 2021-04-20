@@ -2,326 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9499F365078
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 04:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6C0365081
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 04:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbhDTCtM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Apr 2021 22:49:12 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:49000 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229690AbhDTCtM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 19 Apr 2021 22:49:12 -0400
-Received: from ambrosehua-HP-xw6600-Workstation (unknown [182.149.161.16])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxmcnyQH5gHs8KAA--.9922S2;
-        Tue, 20 Apr 2021 10:48:20 +0800 (CST)
-Date:   Tue, 20 Apr 2021 10:48:18 +0800
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        paul.burton@mips.com, paul@crapouillou.net, siyanteng@loongson.cn,
-        ira.weiny@intel.com, yangtiezhu@loongson.cn, jun.jiang@ingenic.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com
-Subject: Re: [PATCH] Revert "MIPS: make userspace mapping young by default".
-Message-ID: <20210420024818.r6jf243oglb2ywbr@ambrosehua-HP-xw6600-Workstation>
-References: <1618562868-91115-1-git-send-email-zhouyanjie@wanyeetech.com>
- <20210416092003.5754967.19768.9603@loongson.cn>
- <ae06522f-eda8-96d1-6f58-072905afa65c@wanyeetech.com>
- <20210419045610.frhzxskec47s5rmq@ambrosehua-HP-xw6600-Workstation>
- <13e37741-c1b4-2aae-471e-0790adc8db59@wanyeetech.com>
+        id S229657AbhDTCu4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Apr 2021 22:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbhDTCuz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Apr 2021 22:50:55 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38AC0C06174A;
+        Mon, 19 Apr 2021 19:50:24 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 9483392009C; Tue, 20 Apr 2021 04:50:22 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 8D69C92009B;
+        Tue, 20 Apr 2021 04:50:22 +0200 (CEST)
+Date:   Tue, 20 Apr 2021 04:50:22 +0200 (CEST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] Reinstate and improve MIPS `do_div' implementation
+Message-ID: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <13e37741-c1b4-2aae-471e-0790adc8db59@wanyeetech.com>
-User-Agent: NeoMutt/20171215
-X-CM-TRANSID: AQAAf9CxmcnyQH5gHs8KAA--.9922S2
-X-Coremail-Antispam: 1UD129KBjvAXoWfJFy8trWfJw13ZFWUXFy8uFg_yoW8GF1Duo
-        WYkr4fGF4rCryUCF13C3y5Jr4kKwna9Fn3KF1UtFnrX3WqyFy5J34jvrWFyFWjyFn2k3W5
-        uwn7t34UZwsxXaykn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUYh7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20EY4v20xva
-        j40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
-        x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWx
-        JVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUO_MaUUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi,
-On Mon, Apr 19, 2021 at 10:21:40PM +0800, Zhou Yanjie wrote:
-> Hi
-> 
-> On 2021/4/19 下午12:56, Huang Pei wrote:
-> > On Sat, Apr 17, 2021 at 12:45:59AM +0800, Zhou Yanjie wrote:
-> > > On 2021/4/16 下午5:20, 黄沛 wrote:
-> > > > Is there any log about the panic?
-> > > 
-> > > Yes, below is the log:
-> > > 
-> > > 
-> > > [  195.436017] CPU 0 Unable to handle kernel paging request at virtual
-> > > address 77eb8000, epc == 80117868, ra == 80118208
-> > > [  195.446709] Oops[#1]:
-> > > [  195.448977] CPU: 0 PID: 1461 Comm: Xsession Not tainted
-> > > 5.12.0-rc6-00227-gc8fc6defbd2e-dirty #1
-> > > [  195.457661] $ 0   : 00000000 00000001 80117864 77eb9000
-> > > [  195.462888] $ 4   : 77eb8000 82419600 838ea000 82482ba0
-> > > [  195.468116] $ 8   : 826f8b18 8306f800 000072d5 8306f800
-> > > [  195.473343] $12   : 00000002 00000a03 00000001 00000402
-> > > [  195.478568] $16   : 77eb8000 809faf60 00000004 82482ba0
-> > > [  195.483794] $20   : 77eb8000 82419600 82482ba0 80860000
-> > > [  195.489021] $24   : 8086121c 80117864
-> > > [  195.494248] $28   : 838ea000 838ebd70 00000000 80118208
-> > > [  195.499475] Hi    : 00008c4e
-> > > [  195.502343] Lo    : 00004627
-> > > [  195.505212] epc   : 80117868 r4k_blast_dcache_page_dc32+0x4/0x9c
-> > > [  195.511217] ra    : 80118208 local_r4k_flush_cache_page+0x120/0x1b8
-> > > [  195.517476] Status: 10001403 KERNEL EXL IE
-> > > [  195.521657] Cause : 4080800c (ExcCode 03)
-> > > [  195.525654] BadVA : 77eb8000
-> > > [  195.528523] PrId  : 00d00100 (Ingenic XBurst)
-> > > [  195.532866] Modules linked in:
-> > > [  195.535911] Process Xsession (pid: 1461, threadinfo=00975a3e,
-> > > task=3724fd66, tls=77ebd690)
-> > > [  195.544162] Stack : 808a05ec f7edcbfd 8306f800 00000000 80860000 809faf60
-> > > 80990a3c 80117f90
-> > > [  195.552524]         809faf60 82419600 8306f800 801fd84c 00000000 801180b4
-> > > 838ebe80 80110b7c
-> > > [  195.560887]         80990a3c 82482ba0 82482ba0 77eb8000 00004627 f7edcbfd
-> > > 838ebe80 801cbc08
-> > > [  195.569249]         00000001 181b2000 00000000 801fa06c 00000000 83999ae0
-> > > 80860000 00000004
-> > > [  195.577610]         80990a3c f7edcbfd 80990a3c 838ebe80 00000004 80990a3c
-> > > 82482ba0 04627685
-> > > [  195.585973]         ...
-> > > [  195.588413] Call Trace:
-> > > [  195.590849] [<80117868>] r4k_blast_dcache_page_dc32+0x4/0x9c
-> > > [  195.596501] [<80118208>] local_r4k_flush_cache_page+0x120/0x1b8
-> > > [  195.602413] [<80117f90>] r4k_on_each_cpu.isra.8+0x24/0x58
-> > > [  195.607805] [<801180b4>] r4k_flush_cache_page+0x34/0x58
-> > > [  195.613023] [<801cbc08>] wp_page_copy+0x3a8/0x56c
-> > > [  195.617723] [<801ce944>] do_swap_page+0x4cc/0x558
-> > > [  195.622419] [<801cf3f8>] handle_mm_fault+0x790/0x93c
-> > > [  195.627374] [<8011025c>] do_page_fault+0x19c/0x540
-> > > [  195.632159] [<801142f0>] tlb_do_page_fault_1+0x10c/0x11c
-> > > [  195.637465]
-> > > [  195.638947] Code: 03e00008  00000000  24831000 <bc950000> bc950020
-> > > bc950040  bc950060  bc950080  bc9500a0
-> > > [  195.648706]
-> > > [  195.650243] ---[ end trace 7cc7d7f611932c42 ]---
-> > > [  195.654857] Kernel panic - not syncing: Fatal exception
-> > > [  195.660072] Rebooting in 10 seconds..
-> > > 
-> > > 
-> > > this problem can be triggered stably (by use Microsoft Remote Desktop client
-> > > to login to debian9 running on CU1830-Neo).
-> > > 
-> > Could you print out the PTE value at 0x77eb8000 ?
-> 
-> 
-> Here is the new log:
-> 
-> 
-> [   33.681712] CPU 0 Unable to handle kernel paging request at virtual
-> address 77ea4000, epc == 801178ac, ra == 80118250
-> [   33.692395] Oops[#1]:
-> [   33.694662] CPU: 0 PID: 1389 Comm: Xsession Not tainted 5.12.0-rc8-dirty
-> #2
-> [   33.701612] $ 0   : 00000000 00000001 801178a8 77ea5000
-> [   33.706839] $ 4   : 77ea4000 81bcd220 80118130 856712a0
-> [   33.712066] $ 8   : 833e4a80 8544b800 000070a8 8544b800
-> [   33.717293] $12   : 00000002 000005b7 00000001 00000000
-> [   33.722518] $16   : 81bcd220 77ea4000 80a11ad8 00000004
-> [   33.727745] $20   : 77ea4000 81bcd220 856712a0 80860000
-> [   33.732972] $24   : 0000001c 801178a8
-> [   33.738197] $28   : 82564000 82565d68 00000000 80118250
-> [   33.743424] Hi    : 0000f0cc
-> [   33.746293] Lo    : 00007866
-> [   33.749162] epc   : 801178ac r4k_blast_dcache_page_dc32+0x4/0x9c
-> [   33.755166] ra    : 80118250 local_r4k_flush_cache_page+0x120/0x2c8
-> [   33.761425] Status: 10001403 KERNEL EXL IE
-> [   33.765605] Cause : 4080800c (ExcCode 03)
-> [   33.769603] BadVA : 77ea4000
-> [   33.772472] PrId  : 00d00100 (Ingenic XBurst)
-> [   33.776816] Modules linked in:
-> [   33.779861] Process Xsession (pid: 1389, threadinfo=c8bdf64c,
-> task=2372d853, tls=77ea9690)
-> [   33.788111] Stack : 808a256c 00000000 808a256c bfa6939a 8544b800 80860000
-> 8094d308 80a11ad8
-> [   33.796474]         856712a0 80117fd8 8094d308 81bcd220 8544b800 801fdb10
-> 80945ce8 801180fc
-> [   33.804838]         82565e80 80110b8c 80a11ad8 856712a0 856712a0 77ea4000
-> 00007866 bfa6939a
-> [   33.813201]         82565e80 801cbe38 00000000 bfa6939a 80863494 801fa2c0
-> 856712a0 82562a90
-> [   33.821564]         80860000 00000000 80a11ad8 bfa6939a 80a11ad8 82565e80
-> 00000000 80a11ad8
-> [   33.829927]         ...
-> [   33.832367] Call Trace:
-> [   33.834803] [<801178ac>] r4k_blast_dcache_page_dc32+0x4/0x9c
-> [   33.840455] [<80118250>] local_r4k_flush_cache_page+0x120/0x2c8
-> [   33.846367] [<80117fd8>] r4k_on_each_cpu.isra.10+0x24/0x58
-> [   33.851845] [<801180fc>] r4k_flush_cache_page+0x34/0x58
-> [   33.857062] [<801cbe38>] wp_page_copy+0x3a8/0x56c
-> [   33.861763] [<801ceb74>] do_swap_page+0x4cc/0x558
-> [   33.866458] [<801cf628>] handle_mm_fault+0x790/0x93c
-> [   33.871414] [<8011026c>] do_page_fault+0x19c/0x540
-> [   33.876199] [<80114300>] tlb_do_page_fault_1+0x10c/0x11c
-> [   33.881506]
-> [   33.882987] Index:  5 pgmask=4kb va=77ea2000 asid=fd
-> [   33.882987]  [pa=02a99000 c=3 d=1 v=1 g=0] [pa=0690d000 c=3 d=0 v=0 g=0]
-> [   33.894635] Index:  6 pgmask=4kb va=77dc4000 asid=fd
-> [   33.894635]  [pa=01d30000 c=3 d=0 v=1 g=0] [pa=01d31000 c=3 d=0 v=1 g=0]
-> [   33.906281] Index:  7 pgmask=4kb va=77dc0000 asid=fd
-> [   33.906281]  [pa=01d2c000 c=3 d=0 v=1 g=0] [pa=01d2d000 c=3 d=0 v=1 g=0]
-> [   33.917928] Index:  8 pgmask=4kb va=77dc2000 asid=fd
-> [   33.917928]  [pa=01d2e000 c=3 d=0 v=1 g=0] [pa=01d2f000 c=3 d=0 v=1 g=0]
-> [   33.929574] Index:  9 pgmask=4kb va=77dc6000 asid=fd
-> [   33.929574]  [pa=01d32000 c=3 d=0 v=1 g=0] [pa=01d33000 c=3 d=0 v=1 g=0]
-> [   33.941220] Index: 10 pgmask=4kb va=77dc8000 asid=fd
-> [   33.941220]  [pa=01d34000 c=3 d=0 v=1 g=0] [pa=01d35000 c=3 d=0 v=1 g=0]
-> [   33.952866] Index: 11 pgmask=4kb va=77dca000 asid=fd
-> [   33.952866]  [pa=01d36000 c=3 d=0 v=1 g=0] [pa=01d37000 c=3 d=0 v=1 g=0]
-> [   33.964512] Index: 12 pgmask=4kb va=77dcc000 asid=fd
-> [   33.964512]  [pa=01d38000 c=3 d=0 v=1 g=0] [pa=01d39000 c=3 d=0 v=1 g=0]
-> [   33.976159] Index: 13 pgmask=4kb va=77dce000 asid=fd
-> [   33.976159]  [pa=01d3a000 c=3 d=0 v=1 g=0] [pa=01d3b000 c=3 d=0 v=1 g=0]
-> [   33.987805] Index: 14 pgmask=4kb va=77d82000 asid=fd
-> [   33.987805]  [pa=01dbd000 c=3 d=0 v=1 g=0] [pa=01dbe000 c=3 d=0 v=1 g=0]
-> [   33.999451] Index: 15 pgmask=4kb va=77d80000 asid=fd
-> [   33.999451]  [pa=01dbb000 c=3 d=0 v=1 g=0] [pa=01dbc000 c=3 d=0 v=1 g=0]
-> [   34.011097] Index: 16 pgmask=4kb va=77d84000 asid=fd
-> [   34.011097]  [pa=01dbf000 c=3 d=0 v=1 g=0] [pa=01dc0000 c=3 d=0 v=1 g=0]
-> [   34.022743] Index: 17 pgmask=4kb va=77d86000 asid=fd
-> [   34.022743]  [pa=01dc1000 c=3 d=0 v=1 g=0] [pa=01dc2000 c=3 d=0 v=1 g=0]
-> [   34.034389] Index: 18 pgmask=4kb va=77d88000 asid=fd
-> [   34.034389]  [pa=01dc3000 c=3 d=0 v=1 g=0] [pa=01dc4000 c=3 d=0 v=1 g=0]
-> [   34.046035] Index: 19 pgmask=4kb va=77d8a000 asid=fd
-> [   34.046035]  [pa=01dc5000 c=3 d=0 v=1 g=0] [pa=01dc6000 c=3 d=0 v=1 g=0]
-> [   34.057682] Index: 20 pgmask=4kb va=77d8c000 asid=fd
-> [   34.057682]  [pa=01dc7000 c=3 d=0 v=1 g=0] [pa=01dc8000 c=3 d=0 v=1 g=0]
-> [   34.069328] Index: 21 pgmask=4kb va=77d8e000 asid=fd
-> [   34.069328]  [pa=01dc9000 c=3 d=0 v=1 g=0] [pa=01dca000 c=3 d=0 v=1 g=0]
-> [   34.080975] Index: 22 pgmask=4kb va=7f7b0000 asid=fd
-> [   34.080975]  [pa=078ea000 c=3 d=0 v=1 g=0] [pa=07801000 c=3 d=0 v=0 g=0]
-> [   34.092621] Index: 23 pgmask=4kb va=77e5a000 asid=fd
-> [   34.092621]  [pa=07ece000 c=3 d=0 v=1 g=0] [pa=077fb000 c=3 d=0 v=1 g=0]
-> [   34.104267] Index: 24 pgmask=4kb va=77e5c000 asid=fd
-> [   34.104267]  [pa=0775f000 c=3 d=0 v=1 g=0] [pa=07314000 c=3 d=0 v=0 g=0]
-> [   34.115913] Index: 25 pgmask=4kb va=77ea4000 asid=fd
-> [   34.115913]  [pa=18122000 c=0 d=0 v=0 g=0] [pa=00000000 c=0 d=0 v=0 g=0]
-C = 0, pa = 18122000,  it is weird, 
 
-+. pa is too high for 32bit SOC here;
+ As Huacai has recently discovered the MIPS backend for `do_div' has been 
+broken and inadvertently disabled with commit c21004cd5b4c ("MIPS: Rewrite 
+<asm/div64.h> to work with gcc 4.4.0.").  As it is code I have originally 
+written myself and Huacai had issues bringing it back to life leading to a 
+request to discard it even I have decided to step in.
 
-+. C=0 is not a valid cache attribute;
+ In the end I have fixed the code and measured its performance to be ~100% 
+better on average than our generic code.  I have decided it would be worth 
+having the test module I have prepared for correctness evaluation as well 
+as benchmarking, so I have included it with the series, also so that I can 
+refer to the results easily.
 
-I think this is "not" a PTE for memory, maybe a swap entry?
+ In the end I have included four patches on this occasion: 1/4 is the test 
+module, 2/4 is an inline documentation fix/clarification for the `do_div' 
+wrapper, 3/4 enables the MIPS `__div64_32' backend and 4/4 adds a small 
+performance improvement to it.
 
-Could you print the PTE value, not the value in TLB?
+ I have investigated a fifth change as a potential improvement where I 
+replaced the call to `do_div64_32' with a DIVU instruction for cases where 
+the high part of the intermediate divident is zero, but it has turned out 
+to regress performance a little, so I have discarded it.
 
-tTLB value lost software PTE bits
+ Also a follow-up change might be worth having to reduce the code size and 
+place `__div64_32' out of line for CC_OPTIMIZE_FOR_SIZE configurations, 
+but I have not fully prepared such a change at this time.  I did use the 
+WIP form I have for performance evaluation however; see the figures quoted 
+with 4/4.
 
-> [   34.127559] Index: 26 pgmask=4kb va=c0096000 asid=fd
-> [   34.127559]  [pa=0302f000 c=3 d=1 v=1 g=1] [pa=03008000 c=3 d=1 v=1 g=1]
-> [   34.139205]
-> [   34.140686] Code: 03e00008  00000000  24831000 <bc950000> bc950020 
-> bc950040  bc950060  bc950080  bc9500a0
-> [   34.150445]
-> [   34.151987] ---[ end trace 30089d2c358ff363 ]---
-> [   34.156614] Kernel panic - not syncing: Fatal exception
-> [   34.161831] Rebooting in 10 seconds..
-> 
-> > 
-> > I really have no idea of how the page_prot setting affecting the swap
-> > handling.
-> > 
-> > > Thanks and best regards!
-> > > 
-> > > 
-> > > >     Original Message
-> > > > From: 周琰杰 (Zhou Yanjie)
-> > > > Sent: 2021年4月16日星期五 16:48
-> > > > To: tsbogend@alpha.franken.de
-> > > > Cc: linux-mips@vger.kernel.org; linux-kernel@vger.kernel.org; akpm@linux-foundation.org; paul.burton@mips.com; paul@crapouillou.net; siyanteng@loongson.cn; huangpei@loongson.cn; ira.weiny@intel.com; yangtiezhu@loongson.cn; zhouyanjie@wanyeetech.com; jun.jiang@ingenic.com; dongsheng.qiu@ingenic.com; aric.pzqi@ingenic.com; rick.tyliu@ingenic.com; sernia.zhou@foxmail.com
-> > > > Subject: [PATCH] Revert "MIPS: make userspace mapping young by default".
-> > > > 
-> > > > This reverts commit f685a533a7fab35c5d069dcd663f59c8e4171a75.
-> > > > 
-> > > > It cause kernel panic on Ingenic X1830, so let's revert it.
-> > > > 
-> > > > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> > > > ---
-> > > > arch/mips/mm/cache.c | 31 ++++++++++++++-----------------
-> > > > 1 file changed, 14 insertions(+), 17 deletions(-)
-> > > > 
-> > > > diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-> > > > index 7719d63..9cfd432 100644
-> > > > --- a/arch/mips/mm/cache.c
-> > > > +++ b/arch/mips/mm/cache.c
-> > > > @@ -21,7 +21,6 @@
-> > > > #include <asm/cpu.h>
-> > > > #include <asm/cpu-features.h>
-> > > > #include <asm/setup.h>
-> > > > -#include <asm/pgtable.h>
-> > > > 
-> > > > /* Cache operations. */
-> > > > void (*flush_cache_all)(void);
-> > > > @@ -157,31 +156,29 @@ unsigned long _page_cachable_default;
-> > > > EXPORT_SYMBOL(_page_cachable_default);
-> > > > 
-> > > > #define PM(p)	__pgprot(_page_cachable_default | (p))
-> > > > -#define PVA(p)	PM(_PAGE_VALID | _PAGE_ACCESSED | (p))
-> > > > 
-> > > > static inline void setup_protection_map(void)
-> > > > {
-> > > > protection_map[0] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-> > > > -	protection_map[1] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
-> > > > -	protection_map[2] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-> > > > -	protection_map[3] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
-> > > > -	protection_map[4] = PVA(_PAGE_PRESENT);
-> > > > -	protection_map[5] = PVA(_PAGE_PRESENT);
-> > > > -	protection_map[6] = PVA(_PAGE_PRESENT);
-> > > > -	protection_map[7] = PVA(_PAGE_PRESENT);
-> > > > +	protection_map[1] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-> > > > +	protection_map[2] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-> > > > +	protection_map[3] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-> > > > +	protection_map[4] = PM(_PAGE_PRESENT);
-> > > > +	protection_map[5] = PM(_PAGE_PRESENT);
-> > > > +	protection_map[6] = PM(_PAGE_PRESENT);
-> > > > +	protection_map[7] = PM(_PAGE_PRESENT);
-> > > > 
-> > > > protection_map[8] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-> > > > -	protection_map[9] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
-> > > > -	protection_map[10] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
-> > > > +	protection_map[9] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-> > > > +	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
-> > > > _PAGE_NO_READ);
-> > > > -	protection_map[11] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
-> > > > -	protection_map[12] = PVA(_PAGE_PRESENT);
-> > > > -	protection_map[13] = PVA(_PAGE_PRESENT);
-> > > > -	protection_map[14] = PVA(_PAGE_PRESENT);
-> > > > -	protection_map[15] = PVA(_PAGE_PRESENT);
-> > > > +	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
-> > > > +	protection_map[12] = PM(_PAGE_PRESENT);
-> > > > +	protection_map[13] = PM(_PAGE_PRESENT);
-> > > > +	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
-> > > > +	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
-> > > > }
-> > > > 
-> > > > -#undef _PVA
-> > > > #undef PM
-> > > > 
-> > > > void cpu_cache_init(void)
+ These changes have been verified with a DECstation system with an R3400 
+MIPS I processor @40MHz and a MTI Malta system with a 5Kc MIPS64 processor 
+@160MHz.
 
+ See individual change descriptions and any additional discussions for
+further details.
+
+ Questions, comments or concerns?  Otherwise please apply.
+
+  Maciej
