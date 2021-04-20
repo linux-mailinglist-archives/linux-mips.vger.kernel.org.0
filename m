@@ -2,81 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8940236508E
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 04:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1FC3650AD
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Apr 2021 05:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbhDTCvW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Apr 2021 22:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
+        id S229566AbhDTDLi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Apr 2021 23:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhDTCvV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Apr 2021 22:51:21 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADB8AC06174A;
-        Mon, 19 Apr 2021 19:50:49 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 07E0D9200BC; Tue, 20 Apr 2021 04:50:49 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 03A6C92009D;
-        Tue, 20 Apr 2021 04:50:48 +0200 (CEST)
-Date:   Tue, 20 Apr 2021 04:50:48 +0200 (CEST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] MIPS: Avoid DIVU in `__div64_32' is result would be
- zero
-In-Reply-To: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2104200331110.44318@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S229508AbhDTDLh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Apr 2021 23:11:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88327C06174A;
+        Mon, 19 Apr 2021 20:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AqTuRNKIkAmLe8Av3ztkUAdmYLIeq8PftziUxkdnED4=; b=cmFm54dBhWL/FJIZPa1qLdPQCh
+        Hw3d+6yeN1BRhVLA8lXi0+OxBNGlwLN0iOxnz1tNw19z7dwED70uUHLHZ0QHCfVKNKBQenpL6sjTp
+        RiTDO60rG0H/+Io0sMW2Sl9Yi8uXuQbOmHCm5NzIBmET6uhHQgkerVA9dwlFEY8qLE05GHB/V0PuZ
+        Ao/jqa8j5AAd9wR8FIZ6K7RUe8Zya2Y8SayHTkT8KDCcVbyrGWXzGbXLEMb2IexWdlSkgwpOFyitu
+        JUjQ4dGrsXV5WoOuWngimlVppnjX5FKsAVbm0+zGZtX6LrP+cU2NI9VCFMIOrg0zh0XBFnqcrMJKV
+        Y0NuvgGw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lYgmT-00Ee86-KY; Tue, 20 Apr 2021 03:10:34 +0000
+Date:   Tue, 20 Apr 2021 04:10:29 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Cc:     "brouer@redhat.com" <brouer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "ilias.apalodimas@linaro.org" <ilias.apalodimas@linaro.org>,
+        "mcroce@linux.microsoft.com" <mcroce@linux.microsoft.com>,
+        "grygorii.strashko@ti.com" <grygorii.strashko@ti.com>,
+        "arnd@kernel.org" <arnd@kernel.org>, "hch@lst.de" <hch@lst.de>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "mgorman@suse.de" <mgorman@suse.de>
+Subject: Re: [PATCH 1/2] mm: Fix struct page layout on 32-bit systems
+Message-ID: <20210420031029.GI2531743@casper.infradead.org>
+References: <20210416230724.2519198-1-willy@infradead.org>
+ <20210416230724.2519198-2-willy@infradead.org>
+ <20210417024522.GP2531743@casper.infradead.org>
+ <9f99b0a0-f1c1-f3b0-5f84-3a4bfc711725@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f99b0a0-f1c1-f3b0-5f84-3a4bfc711725@synopsys.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We already check the high part of the divident against zero to avoid the 
-costly DIVU instruction in that case, needed to reduce the high part of 
-the divident, so we may well check against the divisor instead and set 
-the high part of the quotient to zero right away.  We need to treat the 
-high part the divident in that case though as the remainder that would 
-be calculated by the DIVU instruction we avoided.
+On Tue, Apr 20, 2021 at 02:48:17AM +0000, Vineet Gupta wrote:
+> > 32-bit architectures which expect 8-byte alignment for 8-byte integers
+> > and need 64-bit DMA addresses (arc, arm, mips, ppc) had their struct
+> > page inadvertently expanded in 2019.
+> 
+> FWIW, ARC doesn't require 8 byte alignment for 8 byte integers. This is 
+> only needed for 8-byte atomics due to the requirements of LLOCKD/SCOND 
+> instructions.
 
-This has passed correctness verification with test_div64 and reduced the
-module's average execution time down to 1.0445s and 0.2619s from 1.0668s
-and 0.2629s respectively for an R3400 CPU @40MHz and a 5Kc CPU @160MHz.
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
----
-I have made an experimental change on top of this to put `__div64_32' out 
-of line, and that increases the averages respectively up to 1.0785s and 
-0.2705s.  Not a terrible loss, especially compared to generic times quoted 
-with 3/4, but still, so I think it would best be made where optimising for 
-size, as noted in the cover letter.
----
- arch/mips/include/asm/div64.h |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-Index: linux-3maxp-div64/arch/mips/include/asm/div64.h
-===================================================================
---- linux-3maxp-div64.orig/arch/mips/include/asm/div64.h
-+++ linux-3maxp-div64/arch/mips/include/asm/div64.h
-@@ -68,9 +68,11 @@
- 									\
- 	__high = __div >> 32;						\
- 	__low = __div;							\
--	__upper = __high;						\
- 									\
--	if (__high) {							\
-+	if (__high < __radix) {						\
-+		__upper = __high;					\
-+		__high = 0;						\
-+	} else {							\
- 		__asm__("divu	$0, %z1, %z2"				\
- 		: "=x" (__modquot)					\
- 		: "Jr" (__high), "Jr" (__radix));			\
+Ah, like x86?  OK, great, I'll drop your arch from the list of
+affected.  Thanks!
