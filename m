@@ -2,225 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 401EA366F18
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Apr 2021 17:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E80D366F9F
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Apr 2021 18:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243471AbhDUP1n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Apr 2021 11:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243419AbhDUP1m (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Apr 2021 11:27:42 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80252C06138B
-        for <linux-mips@vger.kernel.org>; Wed, 21 Apr 2021 08:27:09 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id y124-20020a1c32820000b029010c93864955so1513318wmy.5
-        for <linux-mips@vger.kernel.org>; Wed, 21 Apr 2021 08:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gKdt8Wk+0o9N/o4Eeh7jFivsYAp+6odRUk2hDoOYTNE=;
-        b=Ld1STCnsE1eouA8OovEt+JR3kvLhy+38SIeXNlwIkDlOiLq05bK7Xtf0K9jrzy0JBg
-         l7Vv9cqjwitQLtZanAgbC4FHzf0jZYrRiLFa1aiMF+HviBubCWXTbitrlhIeZgclqfrr
-         rNSiHWguSr/4GVnfTLurIDqrGY85zcHBi1fjyNVIwnwt04M07BxCWghuUhWyyCRBw0PQ
-         kODch46wzB/NfbSZH3OkAXLF7Scy075Euz1AgKCdsC/jqLZFujuUsUSTB9qK2x31ltBH
-         td1grGFzAsMrRdOHHH0QYY+3dvXwt//4U27ImWFpSaFnt7wVbc0SpT/Y+WZBQRPuwY4A
-         rcLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gKdt8Wk+0o9N/o4Eeh7jFivsYAp+6odRUk2hDoOYTNE=;
-        b=gHp+dM3bNGdrY+4sMg5erxs0Y+QB7maJNLH6MN7/6RM9Rllb2Ya1kkegpRIU/wJ8BV
-         L5btCnmhN9i1Agtb758plO4D6d7gWshNmvC/s/IxgxnIrdZDZwgrJE838/EDJVVEkntu
-         aGMnyc050mFQxluOUl08BkXR+9rlUO/4fNM+uk6Fl2bDyx2bJfxSegS+9ZwcOQFY1Sc0
-         CLUm0bE8FdFSVPdtvjq8n40YxXvI9fQY/f2YnupVX5a3y/fYm6p5/gzC0wq4JwlPBMsG
-         5XxoR+ROUnxEuCT9aBaAYFNuGM38nQ+RtiLdwdErZ7PI7EDVGvE4+emtgNbAsJog3SIr
-         OJOw==
-X-Gm-Message-State: AOAM530Ma9/CuBY2gUX1iPXb0zo4lDifGoG0XVDN5xJ+hldEM9snggtr
-        9L+uRI7PyTb0A45AEP8GjuLSgA==
-X-Google-Smtp-Source: ABdhPJx/Z4/wH0IczXzrpu1/+CHFDyPCB4UahTsagrUa+vs9LV/LiT8hoPliplY5euRpNBomq4NZqQ==
-X-Received: by 2002:a1c:1f8e:: with SMTP id f136mr10451672wmf.17.1619018828018;
-        Wed, 21 Apr 2021 08:27:08 -0700 (PDT)
-Received: from [192.168.1.8] ([149.86.81.177])
-        by smtp.gmail.com with ESMTPSA id n2sm3159970wmb.32.2021.04.21.08.27.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Apr 2021 08:27:07 -0700 (PDT)
-Subject: Re: [PATCH bpf-next 1/2] bpf: Remove bpf_jit_enable=2 debugging mode
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Ian Rogers <irogers@google.com>, Song Liu <songliubraving@fb.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Mahesh Bandewar <maheshb@google.com>,
-        Will Deacon <will@kernel.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>, paulburton@kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        linux-mips@vger.kernel.org, grantseltzer@gmail.com,
-        Xi Wang <xi.wang@gmail.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        KP Singh <kpsingh@kernel.org>, iecedge@gmail.com,
-        Simon Horman <horms@verge.net.au>,
-        Borislav Petkov <bp@alien8.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Yonghong Song <yhs@fb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dmitry Vyukov <dvyukov@google.com>, tsbogend@alpha.franken.de,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Network Development <netdev@vger.kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Wang YanQing <udknight@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, bpf <bpf@vger.kernel.org>,
-        Jianlin Lv <Jianlin.Lv@arm.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20210415093250.3391257-1-Jianlin.Lv@arm.com>
- <9c4a78d2-f73c-832a-e6e2-4b4daa729e07@iogearbox.net>
- <d3949501-8f7d-57c4-b3fe-bcc3b24c09d8@isovalent.com>
- <CAADnVQJ2oHbYfgY9jqM_JMxUsoZxaNrxKSVFYfgCXuHVpDehpQ@mail.gmail.com>
- <0dea05ba-9467-0d84-4515-b8766f60318e@csgroup.eu>
- <CAADnVQ+oQT6C7Qv7P5TV-x7im54omKoCYYKtYhcnhb1Uv3LPMQ@mail.gmail.com>
- <7dc31256-eb1d-dc93-5e55-2de27475e0c6@csgroup.eu>
-From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <c84445eb-8621-9ac2-2e8a-b58b8241903a@isovalent.com>
-Date:   Wed, 21 Apr 2021 16:27:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
-MIME-Version: 1.0
-In-Reply-To: <7dc31256-eb1d-dc93-5e55-2de27475e0c6@csgroup.eu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+        id S243880AbhDUQBW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Apr 2021 12:01:22 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:8178 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240399AbhDUQBV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Apr 2021 12:01:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1619020836; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=GY31OMHAfxOgQ5MSqvtRPjan7JM7k9o/QCAWSPD/XzsFpM106CS3/FEtgNxP1tvVOs
+    xOlahGr4AbYwgmpY/eIj8+0sRj6YGqdtuwJUUaO6WhEgWuRqBQYCmPtyEvIJrj1OAD90
+    2++98YsqkMhfXkM/9ZqxGtsh49s+Uk4CWRe0E0QrNGzHCXTraZfBX/YtFIBqTzvFuUpX
+    0FsSVWVsBrBzmRuj9I4mr0dT9srysUuC287SyIW+srxNL/ef0mYfrkoZAH4y45l9Copj
+    rFQfIT4+o2ebB9cctbXPjxJe6gdAKwrRx/PX/DummtMAbgidYDOnrtL++vKVKTlCfYyy
+    sFTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1619020836;
+    s=strato-dkim-0002; d=strato.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=r4OO92Oeg3ScSSut97SNxzYQ47ACxnRLJOORI5ZDQ3A=;
+    b=OsZoI+eliGLENqQTsEvidWaOtvkGbxkRjemUNYbhVD4k23KNV9tAh6fEmU31WHGGpi
+    wpdWZeFWcoWA+/huNu6Ne7Uc/tuF2NYLWR3R6rZYFP7DaMnM1HvRyq+F/A/2ZuJB6p3i
+    p7aNM57wsZQDWAhzfupDAQahhk6rKtikBIVH61GUYB6C4XnwBETBRErR+j+5YY6j/ehi
+    8W8EusV9HZxmU5J9C7xZPan33Zrtjp0K5WTTFx7MsEZujXFw5qLLKoVHlSXgFNhKwhYM
+    y1iktl+FDYdjD0nUDwTpBmzcl2H+cIFmyhALTsPOK3136fiVkJueJp/3kUJ2J4+vPMZH
+    YJLQ==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1619020836;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=r4OO92Oeg3ScSSut97SNxzYQ47ACxnRLJOORI5ZDQ3A=;
+    b=YN6CSLsj4H8OCV9Ziev9OIL5+k1qhc59WUdB2EPLftQT7HyU2uxL4i0NBd+bDniBUW
+    snZwHIlQbgOVi/qTP1gXZKNIIB6AYUm4A2+RfeG6l3DzECxcXVuWAPqoH5QGksZcKKwI
+    cmeVVw9iO+c0QwwzDMVMlT7WnJ9AGORTe9WsQYR7uNhbm3xWReeTf8wmPlO6EVlOdOdJ
+    eC3e4P8vP52guDdk6J2MYPveGPdnERe9P2G1tUgEcX+B3ooVe40DYCeGp3XeU+vey6Gi
+    vREA267U314Zz6UOtsz9RWXYbCwvIPSf1GUeCNKckB6wqYBA/krHjabWBx79LYagXeJX
+    ACUw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Qpw97WFDlSeXA9h"
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.24.3 DYNA|AUTH)
+    with ESMTPSA id Q01a92x3LG0ZSuO
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 21 Apr 2021 18:00:35 +0200 (CEST)
+Subject: Re: [PATCH 0/4] Reinstate and improve MIPS `do_div' implementation
+Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
+Content-Type: text/plain; charset=us-ascii
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk>
+Date:   Wed, 21 Apr 2021 18:00:34 +0200
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <51BC7C74-68BF-4A8E-8CFB-DB4EBBC89706@goldelico.com>
+References: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+X-Mailer: Apple Mail (2.3124)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-2021-04-21 15:10 UTC+0200 ~ Christophe Leroy <christophe.leroy@csgroup.eu>
+Hi,
+
+> Am 20.04.2021 um 04:50 schrieb Maciej W. Rozycki <macro@orcam.me.uk>:
 > 
+> Hi,
 > 
-> Le 20/04/2021 à 05:28, Alexei Starovoitov a écrit :
->> On Sat, Apr 17, 2021 at 1:16 AM Christophe Leroy
->> <christophe.leroy@csgroup.eu> wrote:
->>>
->>>
->>>
->>> Le 16/04/2021 à 01:49, Alexei Starovoitov a écrit :
->>>> On Thu, Apr 15, 2021 at 8:41 AM Quentin Monnet
->>>> <quentin@isovalent.com> wrote:
->>>>>
->>>>> 2021-04-15 16:37 UTC+0200 ~ Daniel Borkmann <daniel@iogearbox.net>
->>>>>> On 4/15/21 11:32 AM, Jianlin Lv wrote:
->>>>>>> For debugging JITs, dumping the JITed image to kernel log is
->>>>>>> discouraged,
->>>>>>> "bpftool prog dump jited" is much better way to examine JITed dumps.
->>>>>>> This patch get rid of the code related to bpf_jit_enable=2 mode and
->>>>>>> update the proc handler of bpf_jit_enable, also added auxiliary
->>>>>>> information to explain how to use bpf_jit_disasm tool after this
->>>>>>> change.
->>>>>>>
->>>>>>> Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
->>>>>
->>>>> Hello,
->>>>>
->>>>> For what it's worth, I have already seen people dump the JIT image in
->>>>> kernel logs in Qemu VMs running with just a busybox, not for kernel
->>>>> development, but in a context where buiding/using bpftool was not
->>>>> possible.
->>>>
->>>> If building/using bpftool is not possible then majority of selftests
->>>> won't
->>>> be exercised. I don't think such environment is suitable for any kind
->>>> of bpf development. Much so for JIT debugging.
->>>> While bpf_jit_enable=2 is nothing but the debugging tool for JIT
->>>> developers.
->>>> I'd rather nuke that code instead of carrying it from kernel to kernel.
->>>>
->>>
->>> When I implemented JIT for PPC32, it was extremely helpfull.
->>>
->>> As far as I understand, for the time being bpftool is not usable in
->>> my environment because it
->>> doesn't support cross compilation when the target's endianess differs
->>> from the building host
->>> endianess, see discussion at
->>> https://lore.kernel.org/bpf/21e66a09-514f-f426-b9e2-13baab0b938b@csgroup.eu/
->>>
->>>
->>> That's right that selftests can't be exercised because they don't build.
->>>
->>> The question might be candid as I didn't investigate much about the
->>> replacement of "bpf_jit_enable=2
->>> debugging mode" by bpftool, how do we use bpftool exactly for that ?
->>> Especially when using the BPF
->>> test module ?
->>
->> the kernel developers can add any amount of printk and dumps to debug
->> their code,
->> but such debugging aid should not be part of the production kernel.
->> That sysctl was two things at once: debugging tool for kernel devs and
->> introspection for users.
->> bpftool jit dump solves the 2nd part. It provides JIT introspection to
->> users.
->> Debugging of the kernel can be done with any amount of auxiliary code
->> including calling print_hex_dump() during jiting.
->>
+> As Huacai has recently discovered the MIPS backend for `do_div' has been 
+> broken and inadvertently disabled with commit c21004cd5b4c ("MIPS: Rewrite 
+> <asm/div64.h> to work with gcc 4.4.0.").  As it is code I have originally 
+> written myself and Huacai had issues bringing it back to life leading to a 
+> request to discard it even I have decided to step in.
 > 
-> I get the following message when trying the command suggested in the
-> patch message:
+> In the end I have fixed the code and measured its performance to be ~100% 
+> better on average than our generic code.
+
+That would be good.
+
+>  I have decided it would be worth 
+> having the test module I have prepared for correctness evaluation as well 
+> as benchmarking, so I have included it with the series, also so that I can 
+> refer to the results easily.
 > 
-> root@vgoip:~# ./bpftool prog dump jited
-> Error: No libbfd support
+> In the end I have included four patches on this occasion: 1/4 is the test 
+> module, 2/4 is an inline documentation fix/clarification for the `do_div' 
+> wrapper, 3/4 enables the MIPS `__div64_32' backend and 4/4 adds a small 
+> performance improvement to it.
+
+How can I apply them to the kernel? There is something wrong which makes
+git am fail.
+
 > 
-> Christophe
+> I have investigated a fifth change as a potential improvement where I 
+> replaced the call to `do_div64_32' with a DIVU instruction for cases where 
+> the high part of the intermediate divident is zero, but it has turned out 
+> to regress performance a little, so I have discarded it.
+> 
+> Also a follow-up change might be worth having to reduce the code size and 
+> place `__div64_32' out of line for CC_OPTIMIZE_FOR_SIZE configurations, 
+> but I have not fully prepared such a change at this time.  I did use the 
+> WIP form I have for performance evaluation however; see the figures quoted 
+> with 4/4.
+> 
+> These changes have been verified with a DECstation system with an R3400 
+> MIPS I processor @40MHz and a MTI Malta system with a 5Kc MIPS64 processor 
+> @160MHz.
 
-Hi Christophe,
+I'd like to test on ~320 MHz JZ4730.
 
-Bpftool relies on libbfd to disassemble the JIT-ed instructions, but
-this is an optional dependency and your version of bpftool has been
-compiled without it.
+> 
+> See individual change descriptions and any additional discussions for
+> further details.
+> 
+> Questions, comments or concerns?  Otherwise please apply.
+> 
+>  Maciej
 
-You could try to install it on your system (it is usually shipped with
-binutils, package "binutils-dev" on Ubuntu for example). If you want to
-cross-compile bpftool, the libbfd version provided by your distribution
-may not include support for the target architecture. In that case you
-would have to build libbfd yourself to make sure it supports it.
-
-Then you can clean up the results from the libbfd probing:
-
-    $ make -C tools/build/feature/ clean
-
-and recompile bpftool.
-
-I hope this helps,
-Quentin
+BR and thanks,
+Nikolaus Schaller
