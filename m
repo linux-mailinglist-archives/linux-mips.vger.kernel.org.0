@@ -2,30 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4370366727
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Apr 2021 10:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0469366765
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Apr 2021 10:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236707AbhDUIni (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Apr 2021 04:43:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:29015 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236284AbhDUInh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 21 Apr 2021 04:43:37 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-118-CrBwdaVmPfOEx9eMOh2cMQ-1; Wed, 21 Apr 2021 09:43:02 +0100
-X-MC-Unique: CrBwdaVmPfOEx9eMOh2cMQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Wed, 21 Apr 2021 09:43:01 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.015; Wed, 21 Apr 2021 09:43:01 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@kernel.org>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>
-CC:     Matthew Wilcox <willy@infradead.org>,
+        id S237720AbhDUI7P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Apr 2021 04:59:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39330 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235313AbhDUI7L (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 21 Apr 2021 04:59:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CB79661442;
+        Wed, 21 Apr 2021 08:58:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618995518;
+        bh=64KJf6xIhQSnl3PhQoQ0a9YdaBe+gMwA8Np6LwW1+/4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KspKrNpocGC+THW2FQf8l/RTxYj9VsuAMN9o6fRqaCIHROlddiUnVoGVbSJevcK8P
+         t9Ih4ay4gNZRHVDqglHOGunFJvorx346JxWj8TRSdxkGT0Mx+bIg6kSOy9/tw6wrli
+         AyoCGd/Aj4lwDeEU4D5FwKzcgcMb/8X46RKGEXUG2g1sE3gyPvvaBF9LVNzp8ElJtH
+         nxpWNiCTcCzxZsHmOA3b5MzE1AlJaFRQLBbGl79XxBJRzbOZ0HNJnsSBV2Azw6FIoW
+         hMQ03qhaDP19GOcFUHxal2wg+Dsk2MwLLe7C5x4sfsipcA0LcpO/cD4GZh1Ilzc8Wj
+         Fofb7CfADu1kg==
+Received: by mail-wm1-f41.google.com with SMTP id y124-20020a1c32820000b029010c93864955so813562wmy.5;
+        Wed, 21 Apr 2021 01:58:38 -0700 (PDT)
+X-Gm-Message-State: AOAM531Kp2AXW+HY9HLB32geyZ/Va+EPyrxSSOZWhgjWMVsNx6Rt2fVK
+        c+cGX8VWgxHhaUFtsVR+y4V+oS3IPsrXJ65rjbo=
+X-Google-Smtp-Source: ABdhPJzfODrhPhGfivkqeugtVvYFeuZiRdEx50xM7G3CMPJPgDkMCFmpfx3SbcIBA3tmKParqz5KGFeTEwP9bSV2emc=
+X-Received: by 2002:a05:600c:2282:: with SMTP id 2mr8921317wmf.84.1618995517297;
+ Wed, 21 Apr 2021 01:58:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210416230724.2519198-1-willy@infradead.org> <20210416230724.2519198-2-willy@infradead.org>
+ <20210417024522.GP2531743@casper.infradead.org> <9f99b0a0-f1c1-f3b0-5f84-3a4bfc711725@synopsys.com>
+ <20210420031029.GI2531743@casper.infradead.org> <CAK8P3a0KUwf1Z0bHiUaHC2nHztevkxg5_FBSzHddNeSsBayWUA@mail.gmail.com>
+ <8d0fce1c-be7c-1c9b-bf5c-0c531db496ac@synopsys.com> <CAK8P3a3rzz1gfNLoGC8aZJiAC-tgZYD6P8pQsoEfgCAmQK=FAw@mail.gmail.com>
+ <5c41d562589b497ca3c1047e0e18b3a1@AcuMS.aculab.com>
+In-Reply-To: <5c41d562589b497ca3c1047e0e18b3a1@AcuMS.aculab.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 21 Apr 2021 10:58:18 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2GN9HVwSjfsXaYVO29zeUNB1hQENRw1K0DXCLdt-M-qA@mail.gmail.com>
+Message-ID: <CAK8P3a2GN9HVwSjfsXaYVO29zeUNB1hQENRw1K0DXCLdt-M-qA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mm: Fix struct page layout on 32-bit systems
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        Matthew Wilcox <willy@infradead.org>,
         "grygorii.strashko@ti.com" <grygorii.strashko@ti.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "ilias.apalodimas@linaro.org" <ilias.apalodimas@linaro.org>,
@@ -42,60 +61,45 @@ CC:     Matthew Wilcox <willy@infradead.org>,
         "hch@lst.de" <hch@lst.de>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH 1/2] mm: Fix struct page layout on 32-bit systems
-Thread-Topic: [PATCH 1/2] mm: Fix struct page layout on 32-bit systems
-Thread-Index: AQHXNir2f1yRrc3ugkWz9MvyD1ZvgKq+pqyQ
-Date:   Wed, 21 Apr 2021 08:43:01 +0000
-Message-ID: <5c41d562589b497ca3c1047e0e18b3a1@AcuMS.aculab.com>
-References: <20210416230724.2519198-1-willy@infradead.org>
- <20210416230724.2519198-2-willy@infradead.org>
- <20210417024522.GP2531743@casper.infradead.org>
- <9f99b0a0-f1c1-f3b0-5f84-3a4bfc711725@synopsys.com>
- <20210420031029.GI2531743@casper.infradead.org>
- <CAK8P3a0KUwf1Z0bHiUaHC2nHztevkxg5_FBSzHddNeSsBayWUA@mail.gmail.com>
- <8d0fce1c-be7c-1c9b-bf5c-0c531db496ac@synopsys.com>
- <CAK8P3a3rzz1gfNLoGC8aZJiAC-tgZYD6P8pQsoEfgCAmQK=FAw@mail.gmail.com>
-In-Reply-To: <CAK8P3a3rzz1gfNLoGC8aZJiAC-tgZYD6P8pQsoEfgCAmQK=FAw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyMCBBcHJpbCAyMDIxIDIyOjIwDQo+IA0KPiBP
-biBUdWUsIEFwciAyMCwgMjAyMSBhdCAxMToxNCBQTSBWaW5lZXQgR3VwdGENCj4gPFZpbmVldC5H
-dXB0YTFAc3lub3BzeXMuY29tPiB3cm90ZToNCj4gPiBPbiA0LzIwLzIxIDEyOjA3IEFNLCBBcm5k
-IEJlcmdtYW5uIHdyb3RlOg0KPiANCj4gPiA+DQo+ID4gPiB3aGljaCBtZWFucyB0aGF0IGhhbGYg
-dGhlIDMyLWJpdCBhcmNoaXRlY3R1cmVzIGRvIHRoaXMuIFRoaXMgbWF5DQo+ID4gPiBjYXVzZSBt
-b3JlIHByb2JsZW1zIHdoZW4gYXJjIGFuZC9vciBtaWNyb2JsYXplIHdhbnQgdG8gc3VwcG9ydA0K
-PiA+ID4gNjQtYml0IGtlcm5lbHMgYW5kIGNvbXBhdCBtb2RlIGluIHRoZSBmdXR1cmUgb24gdGhl
-aXIgbGF0ZXN0IGhhcmR3YXJlLA0KPiA+ID4gYXMgdGhhdCBtZWFucyBkdXBsaWNhdGluZyB0aGUg
-eDg2IHNwZWNpZmljIGhhY2tzIHdlIGhhdmUgZm9yIGNvbXBhdC4NCj4gPiA+DQo+ID4gPiBXaGF0
-IGlzIGFsaWdub2YodTY0KSBvbiA2NC1iaXQgYXJjPw0KPiA+DQo+ID4gJCBlY2hvICdpbnQgYSA9
-IF9fYWxpZ25vZl9fKGxvbmcgbG9uZyk7JyB8IGFyYzY0LWxpbnV4LWdudS1nY2MgLXhjIC0NCj4g
-PiAtV2FsbCAtUyAtbyAtIHwgZ3JlcCAtQTEgYTogfCB0YWlsIC1uIDEgfCBjdXQgLWYgMw0KPiA+
-IDgNCj4gDQo+IE9rLCBnb29kLg0KDQpUaGF0IHRlc3QgZG9lc24ndCBwcm92ZSBhbnl0aGluZy4N
-ClRyeSBydW5uaW5nIG9uIHg4NjoNCiQgZWNobyAnaW50IGEgPSBfX2FsaWdub2ZfXyhsb25nIGxv
-bmcpOycgfCBnY2MgLXhjIC0gLVdhbGwgLVMgLW8gLSAtbTMyDQogICAgICAgIC5maWxlICAgIiIN
-CiAgICAgICAgLmdsb2JsICBhDQogICAgICAgIC5kYXRhDQogICAgICAgIC5hbGlnbiA0DQogICAg
-ICAgIC50eXBlICAgYSwgQG9iamVjdA0KICAgICAgICAuc2l6ZSAgIGEsIDQNCmE6DQogICAgICAg
-IC5sb25nICAgOA0KICAgICAgICAuaWRlbnQgICJHQ0M6IChVYnVudHUgNS40LjAtNnVidW50dTF+
-MTYuMDQuMTApIDUuNC4wIDIwMTYwNjA5Ig0KICAgICAgICAuc2VjdGlvbiAgICAgICAgLm5vdGUu
-R05VLXN0YWNrLCIiLEBwcm9nYml0cw0KDQpVc2luZyAnX19hbGlnbm9mX18oc3RydWN0IHtsb25n
-IGxvbmcgeDt9KScgZG9lcyBnaXZlIHRoZSBleHBlY3RlZCA0Lg0KDQpfX2FsaWdub2ZfXygpIHJl
-dHVybnMgdGhlIHByZWZlcnJlZCBhbGlnbm1lbnQsIG5vdCB0aGUgZW5mb3JjZWQNCmFsaWdubW5l
-dCAtIGdvIGZpZ3VyZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lk
-ZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0K
-UmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Wed, Apr 21, 2021 at 10:43 AM David Laight <David.Laight@aculab.com> wrote:
+> From: Arnd Bergmann Sent: 20 April 2021 22:20
+> > On Tue, Apr 20, 2021 at 11:14 PM Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+> > > On 4/20/21 12:07 AM, Arnd Bergmann wrote:
+> >
+> > > >
+> > > > which means that half the 32-bit architectures do this. This may
+> > > > cause more problems when arc and/or microblaze want to support
+> > > > 64-bit kernels and compat mode in the future on their latest hardware,
+> > > > as that means duplicating the x86 specific hacks we have for compat.
+> > > >
+> > > > What is alignof(u64) on 64-bit arc?
+> > >
+> > > $ echo 'int a = __alignof__(long long);' | arc64-linux-gnu-gcc -xc -
+> > > -Wall -S -o - | grep -A1 a: | tail -n 1 | cut -f 3
+> > > 8
+> >
+> > Ok, good.
+>
+> That test doesn't prove anything.
+> Try running on x86:
+> $ echo 'int a = __alignof__(long long);' | gcc -xc - -Wall -S -o - -m32
+> a:
+>         .long   8
 
+Right, I had wondered about that one after I sent the email.
+
+> Using '__alignof__(struct {long long x;})' does give the expected 4.
+>
+> __alignof__() returns the preferred alignment, not the enforced
+> alignmnet - go figure.
+
+I checked the others as well now, and i386 is the only one that
+changed here: m68k still has '2', while arc/csky/h8300/microblaze/
+nios2/or1k/sh/i386 all have '4' and the rest have '8'.
+
+     Arnd
