@@ -2,81 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C05366B33
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Apr 2021 14:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CB2366B35
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Apr 2021 14:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239978AbhDUMw3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S239969AbhDUMw3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Wed, 21 Apr 2021 08:52:29 -0400
-Received: from elvis.franken.de ([193.175.24.41]:35165 "EHLO elvis.franken.de"
+Received: from elvis.franken.de ([193.175.24.41]:35169 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239950AbhDUMw2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 21 Apr 2021 08:52:28 -0400
+        id S239954AbhDUMw1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 21 Apr 2021 08:52:27 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lZCKf-0004Cw-02; Wed, 21 Apr 2021 14:51:53 +0200
+        id 1lZCKf-0004Cw-03; Wed, 21 Apr 2021 14:51:53 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id AA7E0C0840; Wed, 21 Apr 2021 14:01:48 +0200 (CEST)
-Date:   Wed, 21 Apr 2021 14:01:48 +0200
+        id 2C349C0840; Wed, 21 Apr 2021 14:02:14 +0200 (CEST)
+Date:   Wed, 21 Apr 2021 14:02:14 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-arch@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] Reinstate and improve MIPS `do_div' implementation
-Message-ID: <20210421120148.GC8637@alpha.franken.de>
-References: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk>
+To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] MIPS: pci-legacy: revert "use generic
+ pci_enable_resources"
+Message-ID: <20210421120214.GD8637@alpha.franken.de>
+References: <20210420052319.GA162457@roeck-us.net>
+ <20210420063942.7041-1-ilya.lipnitskiy@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2104200044060.44318@angie.orcam.me.uk>
+In-Reply-To: <20210420063942.7041-1-ilya.lipnitskiy@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 20, 2021 at 04:50:22AM +0200, Maciej W. Rozycki wrote:
-> Hi,
+On Mon, Apr 19, 2021 at 11:39:43PM -0700, Ilya Lipnitskiy wrote:
+> This mostly reverts commit 99bca615d895 ("MIPS: pci-legacy: use generic
+> pci_enable_resources"). Fixes regressions such as:
+>   ata_piix 0000:00:0a.1: can't enable device: BAR 0 [io  0x01f0-0x01f7] not
+> 	claimed
+>   ata_piix: probe of 0000:00:0a.1 failed with error -22
 > 
->  As Huacai has recently discovered the MIPS backend for `do_div' has been 
-> broken and inadvertently disabled with commit c21004cd5b4c ("MIPS: Rewrite 
-> <asm/div64.h> to work with gcc 4.4.0.").  As it is code I have originally 
-> written myself and Huacai had issues bringing it back to life leading to a 
-> request to discard it even I have decided to step in.
+> The only changes from the strict revert are to fix checkpatch errors:
+>   ERROR: spaces required around that '=' (ctx:VxV)
+>   #33: FILE: arch/mips/pci/pci-legacy.c:252:
+>   +	for (idx=0; idx < PCI_NUM_RESOURCES; idx++) {
+>  	        ^
 > 
->  In the end I have fixed the code and measured its performance to be ~100% 
-> better on average than our generic code.  I have decided it would be worth 
-> having the test module I have prepared for correctness evaluation as well 
-> as benchmarking, so I have included it with the series, also so that I can 
-> refer to the results easily.
+>   ERROR: do not use assignment in if condition
+>   #67: FILE: arch/mips/pci/pci-legacy.c:284:
+>   +	if ((err = pcibios_enable_resources(dev, mask)) < 0)
 > 
->  In the end I have included four patches on this occasion: 1/4 is the test 
-> module, 2/4 is an inline documentation fix/clarification for the `do_div' 
-> wrapper, 3/4 enables the MIPS `__div64_32' backend and 4/4 adds a small 
-> performance improvement to it.
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+> ---
+> Guenter, sorry about this - let's just revert this for now to minimize
+> turmoil to the legacy PCI code. Obviously, this needs more testing
+> before applying. Thanks for your report!
 > 
->  I have investigated a fifth change as a potential improvement where I 
-> replaced the call to `do_div64_32' with a DIVU instruction for cases where 
-> the high part of the intermediate divident is zero, but it has turned out 
-> to regress performance a little, so I have discarded it.
-> 
->  Also a follow-up change might be worth having to reduce the code size and 
-> place `__div64_32' out of line for CC_OPTIMIZE_FOR_SIZE configurations, 
-> but I have not fully prepared such a change at this time.  I did use the 
-> WIP form I have for performance evaluation however; see the figures quoted 
-> with 4/4.
-> 
->  These changes have been verified with a DECstation system with an R3400 
-> MIPS I processor @40MHz and a MTI Malta system with a 5Kc MIPS64 processor 
-> @160MHz.
-> 
->  See individual change descriptions and any additional discussions for
-> further details.
-> 
->  Questions, comments or concerns?  Otherwise please apply.
+>  arch/mips/pci/pci-legacy.c | 38 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 37 insertions(+), 1 deletion(-)
 
-series applied to mips-next.
+applied to mips-next.
 
 Thomas.
 
