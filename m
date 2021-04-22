@@ -2,37 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9959367768
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Apr 2021 04:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE3536776C
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Apr 2021 04:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbhDVCZh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Apr 2021 22:25:37 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:44226 "EHLO loongson.cn"
+        id S234306AbhDVCZx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Apr 2021 22:25:53 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:44372 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230319AbhDVCZh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 21 Apr 2021 22:25:37 -0400
+        id S234361AbhDVCZw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 21 Apr 2021 22:25:52 -0400
 Received: from bogon.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT+5n3oBgwxoMAA--.4114S3;
-        Thu, 22 Apr 2021 10:24:43 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxT+5n3oBgwxoMAA--.4114S4;
+        Thu, 22 Apr 2021 10:25:05 +0800 (CST)
 From:   Youling Tang <tangyouling@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, Baoquan He <bhe@redhat.com>,
         Huacai Chen <chenhuacai@kernel.org>,
         Jinyang He <hejinyang@loongson.cn>, kexec@lists.infradead.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/4] MIPS: Fix cmdline "mem=" parameter parsing
-Date:   Thu, 22 Apr 2021 10:24:31 +0800
-Message-Id: <1619058274-6996-2-git-send-email-tangyouling@loongson.cn>
+Subject: [PATCH v2 2/4] mips: kdump: Capture kernel should be able to see old memories
+Date:   Thu, 22 Apr 2021 10:24:32 +0800
+Message-Id: <1619058274-6996-3-git-send-email-tangyouling@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1619058274-6996-1-git-send-email-tangyouling@loongson.cn>
 References: <1619058274-6996-1-git-send-email-tangyouling@loongson.cn>
-X-CM-TRANSID: AQAAf9DxT+5n3oBgwxoMAA--.4114S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFWkur1UXF4UXrWUAr1xGrg_yoW8XFWDpa
-        1UC395trs8u3W7W3WrCrZY9w43Jas5JF47JFW7u3s5A3ZIqFyrJrsYqF1jgFy0qFWkt3Wj
-        qFyjvr45Ga1qyr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBm14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+X-CM-TRANSID: AQAAf9DxT+5n3oBgwxoMAA--.4114S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur18Gw4UWryDAFyUAF18Zrb_yoW8XFyrpw
+        47A34Fyr48G3WxXayfZFn8urWfXa1kGry7WanrWw4rXr1rZr1xJw40q3ZFgryFqryxtFWq
+        gFnYvry09ayvy37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBm14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
         Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
         A2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0
         owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
@@ -41,55 +41,53 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7uFWkur1UXF4UXrWUAr1xGrg_yoW8XFWDpa
         xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
         GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
         8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOHUqUUUUU
+        MIIF0xvE42xK8VAvwI8IcIk0rVW8JVW3JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
+        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUnCJmUUUUU
 X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This problem may only occur on NUMA platforms. When machine start with the
-"mem=" parameter on Loongson64, it cannot boot. When parsing the "mem="
-parameter, first remove all RAM, and then add memory through memblock_add(),
-which causes the newly added memory to be located on MAX_NUMNODES.
+From: Huacai Chen <chenhc@lemote.com>
 
-The solution is to add the current "mem=" parameter range to the memory area
-of the corresponding node, instead of adding all of it to the MAX_NUMNODES
-node area. Get the node number corresponding to the "mem=" parameter range
-through pa_to_nid(), and then add it to the corresponding node through
-memblock_add_node().
+kexec-tools use mem=X@Y to pass usable memories to capture kernel, but
+in commit a94e4f24ec836c8984f83959 ("MIPS: init: Drop boot_mem_map") all
+BIOS passed memories are removed by early_parse_mem(). I think this is
+reasonable for a normal kernel but not for a capture kernel, because a
+capture kernel should be able to see all old memories, even though it is
+not supposed to use them.
 
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+Fixes: a94e4f24ec836c8984f83959 ("MIPS: init: Drop boot_mem_map")
+Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
 Signed-off-by: Youling Tang <tangyouling@loongson.cn>
 ---
 v2:
- - Include the mmzone.h header file, to solve the "error: implicit
-   declaration of function'pa_to_nid'" compilation error.
+- Determine whether it is a capture kernel by judging whether there
+  is an "elfcorehdr" parameter in the cmdline.
 
- arch/mips/kernel/setup.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/mips/kernel/setup.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index 279be01..9338520 100644
+index 9338520..1bc8a9cc 100644
 --- a/arch/mips/kernel/setup.c
 +++ b/arch/mips/kernel/setup.c
-@@ -37,6 +37,7 @@
- #include <asm/cdmm.h>
- #include <asm/cpu.h>
- #include <asm/debug.h>
-+#include <asm/mmzone.h>
- #include <asm/sections.h>
- #include <asm/setup.h>
- #include <asm/smp-ops.h>
-@@ -359,7 +360,7 @@ static int __init early_parse_mem(char *p)
- 	if (*p == '@')
- 		start = memparse(p + 1, &p);
- 
--	memblock_add(start, size);
-+	memblock_add_node(start, size, pa_to_nid(start));
- 
- 	return 0;
- }
+@@ -352,8 +352,13 @@ static int __init early_parse_mem(char *p)
+ 	 */
+ 	if (usermem == 0) {
+ 		usermem = 1;
+-		memblock_remove(memblock_start_of_DRAM(),
+-			memblock_end_of_DRAM() - memblock_start_of_DRAM());
++		/*
++		 * During the kdump operation, the old memory should be
++		 * visible to the capture kernel.
++		 */
++		if (!strstr(boot_command_line, "elfcorehdr"))
++			memblock_remove(memblock_start_of_DRAM(),
++				memblock_end_of_DRAM() - memblock_start_of_DRAM());
+ 	}
+ 	start = 0;
+ 	size = memparse(p, &p);
 -- 
 2.1.0
 
