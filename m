@@ -2,31 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDE836881A
-	for <lists+linux-mips@lfdr.de>; Thu, 22 Apr 2021 22:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4924336881C
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Apr 2021 22:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236851AbhDVUgp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Apr 2021 16:36:45 -0400
-Received: from angie.orcam.me.uk ([157.25.102.26]:39526 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239274AbhDVUgo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Apr 2021 16:36:44 -0400
+        id S239318AbhDVUgs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Apr 2021 16:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239298AbhDVUgs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 22 Apr 2021 16:36:48 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7206DC06174A;
+        Thu, 22 Apr 2021 13:36:13 -0700 (PDT)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 9004A92009D; Thu, 22 Apr 2021 22:36:08 +0200 (CEST)
+        id C1C8E92009E; Thu, 22 Apr 2021 22:36:12 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 8CA1292009B;
-        Thu, 22 Apr 2021 22:36:08 +0200 (CEST)
-Date:   Thu, 22 Apr 2021 22:36:08 +0200 (CEST)
+        by angie.orcam.me.uk (Postfix) with ESMTP id BB91F92009B;
+        Thu, 22 Apr 2021 22:36:12 +0200 (CEST)
+Date:   Thu, 22 Apr 2021 22:36:12 +0200 (CEST)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 cc:     Huacai Chen <chenhuacai@kernel.org>,
         Huacai Chen <chenhuacai@loongson.cn>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] lib/math/test_div64: Correct the spelling of
- "dividend"
+Subject: [PATCH 2/2] MIPS: Avoid handcoded DIVU in `__div64_32' altogether
 In-Reply-To: <alpine.DEB.2.21.2104222124010.44318@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2104222157180.44318@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2104222203130.44318@angie.orcam.me.uk>
 References: <alpine.DEB.2.21.2104222124010.44318@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
@@ -35,107 +37,69 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The word is spelt with a final "d" of course.  What a massive messup!
+Remove the inline asm with a DIVU instruction from `__div64_32' and use 
+plain C code for the intended DIVMOD calculation instead.  GCC is smart 
+enough to know that both the quotient and the remainder are calculated 
+with single DIVU, so with ISAs up to R5 the same instruction is actually 
+produced with overall similar code.
+
+For R6 compiled code will work, but separate DIVU and MODU instructions 
+will be produced, which are also interlocked, so scalar implementations 
+will likely not perform as well as older ISAs with their asynchronous MD 
+unit.  Likely still faster then the generic algorithm though.
+
+This removes a compilation error for R6 however where the original DIVU 
+instruction is not supported anymore and the MDU accumulator registers 
+have been removed and consequently GCC complains as to a constraint it 
+cannot find a register for:
+
+In file included from ./include/linux/math.h:5,
+                 from ./include/linux/kernel.h:13,
+                 from mm/page-writeback.c:15:
+./include/linux/math64.h: In function 'div_u64_rem':
+./arch/mips/include/asm/div64.h:76:17: error: inconsistent operand constraints in an 'asm'
+   76 |                 __asm__("divu   $0, %z1, %z2"                           \
+      |                 ^~~~~~~
+./include/asm-generic/div64.h:245:25: note: in expansion of macro '__div64_32'
+  245 |                 __rem = __div64_32(&(n), __base);       \
+      |                         ^~~~~~~~~~
+./include/linux/math64.h:91:22: note: in expansion of macro 'do_div'
+   91 |         *remainder = do_div(dividend, divisor);
+      |                      ^~~~~~
+
+This has passed correctness verification with test_div64 and reduced the 
+module's average execution time down to 1.0404s from 1.0445s with R3400 
+@40MHz.  The module's MIPS I machine code has also shrunk by 12 bytes or 
+3 instructions.
 
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 ---
- lib/math/test_div64.c |   38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ arch/mips/include/asm/div64.h |    8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-linux-div64-test-dividend.diff
-Index: linux-3maxp-div64/lib/math/test_div64.c
+Index: linux-3maxp-div64/arch/mips/include/asm/div64.h
 ===================================================================
---- linux-3maxp-div64.orig/lib/math/test_div64.c
-+++ linux-3maxp-div64/lib/math/test_div64.c
-@@ -16,7 +16,7 @@
+--- linux-3maxp-div64.orig/arch/mips/include/asm/div64.h
++++ linux-3maxp-div64/arch/mips/include/asm/div64.h
+@@ -58,7 +58,6 @@
  
- #define TEST_DIV64_N_ITER 1024
- 
--static const u64 test_div64_dividents[] = {
-+static const u64 test_div64_dividends[] = {
- 	0x00000000ab275080,
- 	0x0000000fe73c1959,
- 	0x000000e54c0a74b1,
-@@ -27,7 +27,7 @@ static const u64 test_div64_dividents[]
- 	0x0842f488162e2284,
- 	0xf66745411d8ab063,
- };
--#define SIZE_DIV64_DIVIDENTS ARRAY_SIZE(test_div64_dividents)
-+#define SIZE_DIV64_DIVIDENDS ARRAY_SIZE(test_div64_dividends)
- 
- #define TEST_DIV64_DIVISOR_0 0x00000009
- #define TEST_DIV64_DIVISOR_1 0x0000007c
-@@ -55,7 +55,7 @@ static const u32 test_div64_divisors[] =
- static const struct {
- 	u64 quotient;
- 	u32 remainder;
--} test_div64_results[SIZE_DIV64_DIVISORS][SIZE_DIV64_DIVIDENTS] = {
-+} test_div64_results[SIZE_DIV64_DIVISORS][SIZE_DIV64_DIVIDENDS] = {
- 	{
- 		{ 0x0000000013045e47, 0x00000001 },
- 		{ 0x000000000161596c, 0x00000030 },
-@@ -160,16 +160,16 @@ static inline bool test_div64_verify(u64
-  * to do constant propagation, and `do_div' may take a different path for
-  * constants, so we do want to verify that as well.
-  */
--#define test_div64_one(divident, divisor, i, j) ({			\
-+#define test_div64_one(dividend, divisor, i, j) ({			\
- 	bool result = true;						\
- 	u64 quotient;							\
- 	u32 remainder;							\
+ #define __div64_32(n, base) ({						\
+ 	unsigned long __upper, __low, __high, __radix;			\
+-	unsigned long long __modquot;					\
+ 	unsigned long long __quot;					\
+ 	unsigned long long __div;					\
+ 	unsigned long __mod;						\
+@@ -73,11 +72,8 @@
+ 		__upper = __high;					\
+ 		__high = 0;						\
+ 	} else {							\
+-		__asm__("divu	$0, %z1, %z2"				\
+-		: "=x" (__modquot)					\
+-		: "Jr" (__high), "Jr" (__radix));			\
+-		__upper = __modquot >> 32;				\
+-		__high = __modquot;					\
++		__upper = __high % __radix;				\
++		__high /= __radix;					\
+ 	}								\
  									\
--	quotient = divident;						\
-+	quotient = dividend;						\
- 	remainder = do_div(quotient, divisor);				\
- 	if (!test_div64_verify(quotient, remainder, i, j)) {		\
- 		pr_err("ERROR: %016llx / %08x => %016llx,%08x\n",	\
--		       divident, divisor, quotient, remainder);		\
-+		       dividend, divisor, quotient, remainder);		\
- 		pr_err("ERROR: expected value              => %016llx,%08x\n",\
- 		       test_div64_results[i][j].quotient,		\
- 		       test_div64_results[i][j].remainder);		\
-@@ -185,31 +185,31 @@ static inline bool test_div64_verify(u64
-  */
- static bool __init test_div64(void)
- {
--	u64 divident;
-+	u64 dividend;
- 	int i, j;
- 
--	for (i = 0; i < SIZE_DIV64_DIVIDENTS; i++) {
--		divident = test_div64_dividents[i];
--		if (!test_div64_one(divident, TEST_DIV64_DIVISOR_0, i, 0))
-+	for (i = 0; i < SIZE_DIV64_DIVIDENDS; i++) {
-+		dividend = test_div64_dividends[i];
-+		if (!test_div64_one(dividend, TEST_DIV64_DIVISOR_0, i, 0))
- 			return false;
--		if (!test_div64_one(divident, TEST_DIV64_DIVISOR_1, i, 1))
-+		if (!test_div64_one(dividend, TEST_DIV64_DIVISOR_1, i, 1))
- 			return false;
--		if (!test_div64_one(divident, TEST_DIV64_DIVISOR_2, i, 2))
-+		if (!test_div64_one(dividend, TEST_DIV64_DIVISOR_2, i, 2))
- 			return false;
--		if (!test_div64_one(divident, TEST_DIV64_DIVISOR_3, i, 3))
-+		if (!test_div64_one(dividend, TEST_DIV64_DIVISOR_3, i, 3))
- 			return false;
--		if (!test_div64_one(divident, TEST_DIV64_DIVISOR_4, i, 4))
-+		if (!test_div64_one(dividend, TEST_DIV64_DIVISOR_4, i, 4))
- 			return false;
--		if (!test_div64_one(divident, TEST_DIV64_DIVISOR_5, i, 5))
-+		if (!test_div64_one(dividend, TEST_DIV64_DIVISOR_5, i, 5))
- 			return false;
--		if (!test_div64_one(divident, TEST_DIV64_DIVISOR_6, i, 6))
-+		if (!test_div64_one(dividend, TEST_DIV64_DIVISOR_6, i, 6))
- 			return false;
--		if (!test_div64_one(divident, TEST_DIV64_DIVISOR_7, i, 7))
-+		if (!test_div64_one(dividend, TEST_DIV64_DIVISOR_7, i, 7))
- 			return false;
--		if (!test_div64_one(divident, TEST_DIV64_DIVISOR_8, i, 8))
-+		if (!test_div64_one(dividend, TEST_DIV64_DIVISOR_8, i, 8))
- 			return false;
- 		for (j = 0; j < SIZE_DIV64_DIVISORS; j++) {
--			if (!test_div64_one(divident, test_div64_divisors[j],
-+			if (!test_div64_one(dividend, test_div64_divisors[j],
- 					    i, j))
- 				return false;
- 		}
+ 	__mod = do_div64_32(__low, __upper, __low, __radix);		\
