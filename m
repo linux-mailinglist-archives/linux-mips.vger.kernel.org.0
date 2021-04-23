@@ -2,113 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6842E368EBF
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Apr 2021 10:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A43F368ED6
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Apr 2021 10:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbhDWIUN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Apr 2021 04:20:13 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:58640 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229456AbhDWIUM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 23 Apr 2021 04:20:12 -0400
-Received: from [10.0.2.15] (unknown [58.249.121.165])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL+4Pg4JgZNQMAA--.4973S3;
-        Fri, 23 Apr 2021 16:19:28 +0800 (CST)
-Subject: =?UTF-8?B?UmU6IOWbnuWkje+8miBbUEFUQ0hdIE1JUFM6RFRTOkZpeCBsYWJlbCBu?=
- =?UTF-8?Q?ame_and_interrupt_number_of_ohci_for_Loongson-2K?=
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20210423015234.23870-1-maoxiaochuan@loongson.cn>
- <1053fddf-479a-6014-ca2c-110c19574f84@loongson.cn>
- <tencent_A816CB57EADAD19FD3FFC04C3598E81B5608@qq.com>
- <6abcefbe-0e49-4e68-abc1-b9535d5467ea@www.fastmail.com>
-From:   Xiaochuan Mao <maoxiaochuan@loongson.cn>
-Message-ID: <24218389-e2d8-6e91-d72d-f0d961e3f9b8@loongson.cn>
-Date:   Fri, 23 Apr 2021 16:19:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <6abcefbe-0e49-4e68-abc1-b9535d5467ea@www.fastmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf9DxL+4Pg4JgZNQMAA--.4973S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF1xAw48tFW7Zr1xCw1Utrb_yoW8Ww17pr
-        s3Aa1IgF4DJr1Ikw42kr1j9F1jq34UJrn5XFn8Cas5GFWqvwn5Jry8ZrW0qry2qry7Ca1U
-        Zry2qr429as8ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E
-        87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfU0yxRDUUUU
-X-CM-SenderInfo: xpdr5xxdrfx3ldqnw6o6or00hjvr0hdfq/
+        id S230191AbhDWIbL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Apr 2021 04:31:11 -0400
+Received: from mail-m118208.qiye.163.com ([115.236.118.208]:31558 "EHLO
+        mail-m118208.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229917AbhDWIbK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Apr 2021 04:31:10 -0400
+Received: from ubuntu.localdomain (unknown [36.152.145.182])
+        by mail-m118208.qiye.163.com (Hmail) with ESMTPA id 26CBCE040D;
+        Fri, 23 Apr 2021 16:30:31 +0800 (CST)
+From:   zhouchuangao <zhouchuangao@vivo.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        zhouchuangao <zhouchuangao@vivo.com>, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mips/bcm63xx: Use BUG_ON instead of if condition followed by BUG
+Date:   Fri, 23 Apr 2021 01:30:21 -0700
+Message-Id: <1619166623-70445-1-git-send-email-zhouchuangao@vivo.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZQ0pKT1YeTEIZQxkaSxlLTU9VEwETFhoSFyQUDg9ZV1kWGg8SFR0UWUFZT0tIVUpKS0
+        hKTFVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MDo6HSo4GT8KAgxKDCscAjAN
+        Nj0aChlVSlVKTUpCSk1NTUhKTUNJVTMWGhIXVQETFA4YEw4aFRwaFDsNEg0UVRgUFkVZV1kSC1lB
+        WUhNVUpOSVVKT05VSkNJWVdZCAFZQUlJTUo3Bg++
+X-HM-Tid: 0a78fdda159d2c17kusn26cbce040d
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+BUG_ON uses unlikely in if(), it can be optimized at compile time.
 
-On 2021/4/23 下午12:02, Jiaxun Yang wrote:
->
-> On Fri, Apr 23, 2021, at 10:47 AM, maoxiaochuan wrote:
->> Ok, I will send a another patch for it.
-> Please correct your email client setup.
->
->
-> https://www.kernel.org/doc/html/latest/process/email-clients.html
-thanks for your suggest.
->>  
->> 祝好
->>  
->>
->>
->> ------------------ 原始邮件 ------------------
->> *发件人:* "zhangqing"<zhangqing@loongson.cn>; 
->> *发送时间:* 2021年4月23日(星期五) 上午10:37
->> *收件人:* "xiaochuan mao"<maoxiaochuan@loongson.cn>; "Rob 
->> Herring"<robh+dt@kernel.org>; "Thomas 
->> Bogendoerfer"<tsbogend@alpha.franken.de>; "Jiaxun 
->> Yang"<jiaxun.yang@flygoat.com>; 
->> *抄送:* "devicetree"<devicetree@vger.kernel.org>; 
->> "linux-mips"<linux-mips@vger.kernel.org>; 
->> "linux-kernel"<linux-kernel@vger.kernel.org>; 
->> *主题:* Re: [PATCH] MIPS:DTS:Fix label name and interrupt number of ohci 
->> for Loongson-2K
->>
->>
->> On 04/23/2021 09:52 AM, xiaochuan mao wrote:
->>> from Loongson-2K1000 user manual know that under pci bus
->>> the device num is 4, function number is 2 and register is 0x2200
->>> is ohci. the ohci interrupt number is 51. because Loongson-2K1000 has
->>> 64 interrupt sources, 0-31 correspond to the device tree liointc0 device
->>>   node, and the other correspond to liointc1 node. so it should be
->>> number 19 correspon to liointc1.
->>>
->>> Signed-off-by: xiaochuan mao <maoxiaochuan@loongson.cn>
->>>
->> Hi, xiaozhuan
->>
->>
->> Thanks for the patch, this is my mistake.
->>
->> Can you correct the GPL-3.0 of this file to GPL-2.0 by the way?
->>
->> Thanks
->>
->> -Qing
->
+Usually, the condition in if() is not satisfied. In my opinion,
+this can improve the efficiency of the multi-stage pipeline.
+
+Signed-off-by: zhouchuangao <zhouchuangao@vivo.com>
+---
+ arch/mips/bcm63xx/gpio.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/arch/mips/bcm63xx/gpio.c b/arch/mips/bcm63xx/gpio.c
+index 16f353a..5c4a233 100644
+--- a/arch/mips/bcm63xx/gpio.c
++++ b/arch/mips/bcm63xx/gpio.c
+@@ -43,8 +43,7 @@ static void bcm63xx_gpio_set(struct gpio_chip *chip,
+ 	u32 *v;
+ 	unsigned long flags;
+ 
+-	if (gpio >= chip->ngpio)
+-		BUG();
++	BUG_ON(gpio >= chip->ngpio);
+ 
+ 	if (gpio < 32) {
+ 		reg = gpio_out_low_reg;
+@@ -70,8 +69,7 @@ static int bcm63xx_gpio_get(struct gpio_chip *chip, unsigned gpio)
+ 	u32 reg;
+ 	u32 mask;
+ 
+-	if (gpio >= chip->ngpio)
+-		BUG();
++	BUG_ON(gpio >= chip->ngpio);
+ 
+ 	if (gpio < 32) {
+ 		reg = gpio_out_low_reg;
+@@ -92,8 +90,7 @@ static int bcm63xx_gpio_set_direction(struct gpio_chip *chip,
+ 	u32 tmp;
+ 	unsigned long flags;
+ 
+-	if (gpio >= chip->ngpio)
+-		BUG();
++	BUG_ON(gpio >= chip->ngpio);
+ 
+ 	if (gpio < 32) {
+ 		reg = GPIO_CTL_LO_REG;
 -- 
---xiaochuan
+2.7.4
 
