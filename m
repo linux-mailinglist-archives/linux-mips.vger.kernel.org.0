@@ -2,142 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD2E368BC3
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Apr 2021 06:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5556368C9D
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Apr 2021 07:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbhDWEDA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Apr 2021 00:03:00 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:44525 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229454AbhDWEDA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 23 Apr 2021 00:03:00 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2AA9F5C00BA;
-        Fri, 23 Apr 2021 00:02:24 -0400 (EDT)
-Received: from imap1 ([10.202.2.51])
-  by compute6.internal (MEProxy); Fri, 23 Apr 2021 00:02:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type:content-transfer-encoding; s=fm2; bh=03/g2
-        xB/0xYGPh0ut2C+Web+4rsnUfIFZ7I++jHdcLU=; b=ri0ZrUL+Xmgf47+zY/kEv
-        8AWobWZff9EKRomXOpV+CE4nK5h4Dbxe5ztuV2+AQy+F5zAmT1bLMdRQ9HvK7D2/
-        eZZ/LpvoRGIWmHvJEIB4IjtoFxnpd/G+tYM7tpgnzxLMF3MP2gUqPccDHGecZdrY
-        48Sz/ANQZIG33emg3/MlU/ewVJoZFMJYrV/vAmDCTDWqYu5TAcqFesfn3rE6Qsrw
-        HdDRWDVgqUNCbihaICi8eispkIpTA6HX7BVgGaRwWGc70PME4GpyyMZxUCeHuODC
-        772KrJpWEmXr9+qfbFLF+XMc5G3EalZYOnk/zGlWu3RTcIAAE62BejYzxClV5I5j
-        Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=03/g2xB/0xYGPh0ut2C+Web+4rsnUfIFZ7I++jHdc
-        LU=; b=C8U0eC7iTodc6ivFPRSZVIvQcXPUXdXt4NAP9QI6CfTYJ/gujtbfLKBvx
-        TGxEqBgEbG095UWdezP7qiXu826FNqmCbCzyH/0aLwuTXwu6GS6L+IPDaPPQkhIY
-        8d363t0ua7QFXXtKYzGuxAgnRaCUU452tEbHHxONdHOCY2laR2bUlpgRg9TfVU1t
-        5pffrgcLFctJsL40AgL0k2jotm2Yowq19RX4CLfuXZW+IlzRF4KFw7bqO2z5k3sy
-        /ODl2HBZd3Qts8xbdh7dmvzbeTUbAyOM0nqg8T85Hv003Q9hJ96hAWI7BSd47baE
-        92qWM0prMZ6cAN3yCw7SpsFbJ0/iw==
-X-ME-Sender: <xms:zkaCYOIZPxSlBgK850lYIVrKyPLdYv7NAoqoVvlqjm87UAHZJzKUVw>
-    <xme:zkaCYGItbXBhyT7e5DCXCRqk7G6M1dfp3YQUX_BZX-6WyK45GCQ7oQgowf2QJshPF
-    RmRWFOji3NvY1pa1ik>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdduuddgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
-    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-    eqnecuggftrfgrthhtvghrnheptedtjedvvddthffgheeujedttddtgfektdeghfeltdek
-    leefhffhleelvdejkeffnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigr
-    nhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:zkaCYOu2-r7BVvj1-_2sRPBY0DSIhqmO1lLou_1h8nNE4IcBLzCB2A>
-    <xmx:zkaCYDZwnkCCnCY4m0UKcAZo7y1nT_62q0j9iCWu-IA8fENgnIWPcA>
-    <xmx:zkaCYFYPUl6nvkakOLecgkZSZGiSTgJdIJ192myLsV_sBgC3lmv_pg>
-    <xmx:0EaCYIzL5m6u3iZHEY5J1VjiETi9p3cNVRJ7my2uWmvbZP9M5MKUAw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AB7A7130005F; Fri, 23 Apr 2021 00:02:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-403-gbc3c488b23-fm-20210419.005-gbc3c488b
-Mime-Version: 1.0
-Message-Id: <6abcefbe-0e49-4e68-abc1-b9535d5467ea@www.fastmail.com>
-In-Reply-To: <tencent_A816CB57EADAD19FD3FFC04C3598E81B5608@qq.com>
-References: <20210423015234.23870-1-maoxiaochuan@loongson.cn>
- <1053fddf-479a-6014-ca2c-110c19574f84@loongson.cn>
- <tencent_A816CB57EADAD19FD3FFC04C3598E81B5608@qq.com>
-Date:   Fri, 23 Apr 2021 12:02:01 +0800
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     maoxiaochuan <maoxiaochuan-gz@loongson.cn>,
-        "Qing Zhang" <zhangqing@loongson.cn>,
-        "xiaochuan mao" <maoxiaochuan@loongson.cn>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?Q?Re:_=E5=9B=9E=E5=A4=8D=EF=BC=9A_[PATCH]_MIPS:DTS:Fix_label_nam?=
- =?UTF-8?Q?e_and_interrupt_number_of_ohci_for_Loongson-2K?=
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S240561AbhDWFYE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Apr 2021 01:24:04 -0400
+Received: from mail-bn8nam12on2040.outbound.protection.outlook.com ([40.107.237.40]:35937
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240552AbhDWFYD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 23 Apr 2021 01:24:03 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JJdvkTTJk+AUHTv+SJXmJv5YBSjkEE6GJ3NrLHWN5EwKhs9o4R3xEC3XME339IuM0Q+Up5e50VN2Zc2/Zj/BdF5DhBjcQssU+RkX59g7Z2oR0lHrAs5EL7XhcFddtkww93R98A47Q8hYbyBY4TFieYPzXsNHtb+xJ1ca7htsTsJKzYRgvzYxjgRcLCdSyLRIYzDXakUmdVe09hbVTLARZNPn4zQE/4Zt3WWwsr15mtG40sLk50/UAMh0vf/Flp6A3tVQdYFZyyK6SO1a34h9k85LrgcXB5iKSGi7PZOm+p4VdKSC1GUybUFhnPOjfdUMR+1hll2egiSnNElWMaN7SA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RY4G4M8QTTcCTu/5KMbW8BSCWDpoABobgoE4sdkLTIw=;
+ b=eYbjiwkYASj4izCcquz/ond7cNB12CCIbqdenUlz2ttrTPGkuyVltP0epsGdOE8oasEX4cUinYjSNiBkka3/8A9ovHh8ZPnrINv1Wslll5sTXLNn/i43F+ECCA99nWVUtVvfRH97kAdOGm+X3B6hvAeoQna2qo+VMYgG380CA9oVstMKFFEcm5JDLPvJJI/jEDM02+3+fR3476U6OJNqrxTHt68McQyG0OcnHPMYMC1tbCczaNpcqMAe1P4v96qXsay8XvzSzbGsXObSVOANGjc4RAFlWmwXemXMtxyh3qqtZl/cplzKWXth5YGb4cAyUF8y0cMhqMf/G6shIMpPuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RY4G4M8QTTcCTu/5KMbW8BSCWDpoABobgoE4sdkLTIw=;
+ b=nnE7ci27nax07zSmhJ9DhEgFZ83vanxETRrbD3Ux87v8vrsUBKH6MSYcmNfY5F+AD6xB5z2Pf23hRPO/e+n2WA5K2J/4IJ32RSX1uMYt+B4Xl++/DuPyfCj0pYxQYFQ/gZZvtNIFZJtxkgyQliGn3NseDClhDCQhb/jcym4U1So=
+Authentication-Results: lists.linux-foundation.org; dkim=none (message not
+ signed) header.d=none;lists.linux-foundation.org; dmarc=none action=none
+ header.from=amd.com;
+Received: from DM5PR12MB1355.namprd12.prod.outlook.com (2603:10b6:3:6e::7) by
+ DM6PR12MB2796.namprd12.prod.outlook.com (2603:10b6:5:50::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4042.19; Fri, 23 Apr 2021 05:23:25 +0000
+Received: from DM5PR12MB1355.namprd12.prod.outlook.com
+ ([fe80::b914:4704:ad6f:aba9]) by DM5PR12MB1355.namprd12.prod.outlook.com
+ ([fe80::b914:4704:ad6f:aba9%12]) with mapi id 15.20.4065.023; Fri, 23 Apr
+ 2021 05:23:25 +0000
+Subject: Re: [PATCH 7/7] swiotlb: don't override the command line in
+ swiotlb_adjust_size
+To:     Christoph Hellwig <hch@lst.de>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        xen-devel@lists.xenproject.org, iommu@lists.linux-foundation.org
+References: <20210422071921.1428607-1-hch@lst.de>
+ <20210422071921.1428607-8-hch@lst.de>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+Message-ID: <5df0f10e-4c70-6554-6cb8-10ea3acde92b@amd.com>
+Date:   Fri, 23 Apr 2021 00:23:23 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+In-Reply-To: <20210422071921.1428607-8-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [67.79.209.213]
+X-ClientProxiedBy: SN4PR0201CA0016.namprd02.prod.outlook.com
+ (2603:10b6:803:2b::26) To DM5PR12MB1355.namprd12.prod.outlook.com
+ (2603:10b6:3:6e::7)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from office-linux.texastahm.com (67.79.209.213) by SN4PR0201CA0016.namprd02.prod.outlook.com (2603:10b6:803:2b::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.20 via Frontend Transport; Fri, 23 Apr 2021 05:23:24 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9580de32-2a97-4345-a99f-08d90617eb6a
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2796:
+X-Microsoft-Antispam-PRVS: <DM6PR12MB27964A541A6E4DF9FC753A39EC459@DM6PR12MB2796.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bf/52Jsd8+fIuaD8hODKcjIlZ35D/mOa5AN0kL0R+btQvaRgBKlBwkKcKZTZ509cPE6g0nO5Chra7vjW/7Vl0jOK909ydqOEM+Od90Qo4O3+8/SF3eR6SxW6IH70VfGH8Ukvr30UQ+SLHGHg/zZsPKzqSgwvMw6dRyAKtmjIFeoUybiY5+vIjZJKX/TEi3gPi68GeQXKkqdvCXauFl5ix1d5BmLjmSPIQDpYtmjE4tkmdIWiaNjYOgEIcZPWjskKfE//Hkh8WviiesFDE7Xwt3iKhv8ktKuIyiJBz0EUo8mihZvSPUWgwF1F+NhRFRIMEh/hHGY+95FqdIKYCHfZNn6VLZ5b3G9tk2ovVVx8UdZDvMa1FlRneI6VlY9/mbZIhDpv1Yr4GYFXXvDJTLnidPeOVy+sxHWJspBL6/5Wxa4zYELbzyS3w5jOU9WMOqjWoFX3lliBcxcnI2/tbBwX53m82ShrH8aO/TjEvL7LnOKtVjGA+yzhB3dCZMeV+MPQ6Yzm7mTXh1rxPnIXqgY/PSWy4UG3/MRZ9WsqJ4UToziLQQWTN6dtoSM7Si8rCN7ZDm9EiIEoraUKZJN4IEMo+Ma98xifrRdlkNxKVbI8NuD9ul8hnTeeIcwzQRY1AyuhB4BLgip92cqtE7iEhFDuT+dgZiQYsJLHEiI7zHADmdx1RQgIBCqE8f8OotnrijR5
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1355.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(396003)(39860400002)(366004)(376002)(2616005)(6506007)(316002)(38100700002)(16526019)(86362001)(66476007)(36756003)(8676002)(186003)(53546011)(5660300002)(83380400001)(31696002)(2906002)(66946007)(66556008)(8936002)(54906003)(31686004)(4326008)(26005)(956004)(7416002)(110136005)(6486002)(478600001)(6512007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?aDg4MVM4Wm1oNldrYWlmSUF1VnU2YUw2T1UyNnp3cDVnNjdOTW5UZVJuZ0l6?=
+ =?utf-8?B?NFZrM2JRSnBSTG5nckZ2NFJhY2RJWFFRblREbUEyeGFiMEk3dXRnSkM2Z09V?=
+ =?utf-8?B?VExScmo0VDQyODVYVFd3clR1dGpsVzdIT3FmclJ5eHFwNE8rZXdXWVVUQzdu?=
+ =?utf-8?B?TEFIRzRRbDFKNlpzdWVpQVZYelpJa1lKK2IrV0hTLzJMbFBUeHVPT3BHaGJr?=
+ =?utf-8?B?M3ZtdU8zdjdnZCtHQXAxRjArS3B6QnBRemtTWEQ2L0g0czFLdExsYVZyNUVB?=
+ =?utf-8?B?VExkTWlha3lMS3BxaHMvaHNxc1BhYWM4TXVNaFdWS1lML2J3NGZ1aWFDeVc3?=
+ =?utf-8?B?L1FZcytVN3FWVVYxUkxuaFV0OXc2Q3QzbjlBS296d2oxalVOV1l4VzVKQUlU?=
+ =?utf-8?B?cG5DRzc5UnEzUVlJaVp3M0hRbEtsbEhLdVRwRzdPNEhsQmR2ZVVvYXA0MGlp?=
+ =?utf-8?B?UGk4dTBtRjdpbXZvR040dXVFWjlGbUNSS255WlA1dGtpYVc5ZkhZU1I4K0lJ?=
+ =?utf-8?B?c0lGc01rV3pZclorS2ZiUmFKTHZLaU1WLzhZQmpNWVBSbXZFY2J3ZThMQmRo?=
+ =?utf-8?B?YjN2cngrcVF6aDkzUit4ZDBQWDREeklwVGwxSDM3UlhKeUJCK3JyUTRQZ1pk?=
+ =?utf-8?B?eE83akcxUnVOem9EVFAxWWZDQ2hZZVc1L25LOVRNZ3MyMHBEOHBoc2tFTjVW?=
+ =?utf-8?B?U0RGVDdEOCswTElDK05yVHlhdnVKcW5MemMzSUJQZkxQT3F3ZEY3eDkzVmtw?=
+ =?utf-8?B?YkRqbXdtK1lSdGtIaDA1TnFPZ1lzOVR6VG5JYWxOeDJuQnYrKzFVVGlHS3lF?=
+ =?utf-8?B?S3NHcytWWTlYYXlpeVIxd29iSHMweW5pemhCek44c2tUc0VMWFpnRFFTS3FE?=
+ =?utf-8?B?VzIwK3VNTWxmZ3N0QUpWWWIweTl1c05UWjJZMVIvbWJyQ0cvcTZqeXpEeERH?=
+ =?utf-8?B?YVlvUDZwblU1VHBEdGd0UlphT0xCRFM1SFR3aUFzVHJzcS9BVjdObTh5R0NK?=
+ =?utf-8?B?aUJ6TVgzQ3ZpS3V5WFBPY0F5VXhYSk9VbVRDT3cyOUJOZXlRRGprMDNKRVUr?=
+ =?utf-8?B?SFk1dDlObi83VFhxbDU4NURhbEpQNDY2R0J0bmFMN1QreXNXV011bDAxbmFB?=
+ =?utf-8?B?UEtpNWhURGluUHA2eEJiUEM5YTR4WjRCeUxGVlNLYnJzMzhUQStDVk4rTUtE?=
+ =?utf-8?B?T1hFMzVVdXY5VGJnNWhHWm4vSWhTZEZxcEp2VHM4TURwWTMvVG1WNjRudWJz?=
+ =?utf-8?B?dmxJSW4zbVVDaXR0RE9LQVhKcEFqWlowTFEyODgxODRRcmtSbWtqYXluSEJq?=
+ =?utf-8?B?MWtZWnFPT2w3SGtNZnJzT0JySFNMU0RkcFg0emtzbnhmSk80OHpUdk9uRVpr?=
+ =?utf-8?B?dEpvbWx2cjl3bllxcFBtczBDc2lwV1B3ZnlvemsxR2lmRHpvY2t0ZHBwckJ2?=
+ =?utf-8?B?NERvMFVRSHgvVjRzT0ZuS0F3Q29tbC9LMUpLMWxia3lMeU5SdWlIVzJCZFZB?=
+ =?utf-8?B?VytzTzZJazlrenNjYVBkZ3BrMGtMckp2NDJiOEFSRnZPRDFhcU9WVWJuYkFm?=
+ =?utf-8?B?dTY5Y1FhTVM1SUVXUHNBaUxYVjVsSWtaNDdhL3kzR2ljQnVQVDNBYjlDNG1q?=
+ =?utf-8?B?eFUvblVuV2dKc25NSm1GbmIyc0hVUVUxS0VWb0hNY3NNa3pXdjRYemwrdHFa?=
+ =?utf-8?B?OGdNSTN3UHAzeEZobm13Rkdia25vWWVxMjF5MTNheTIyeVVBNmJkWXRoUDhM?=
+ =?utf-8?Q?lIpBtONcmB8FHK55uAD/HHLKYuPZOe9K6ylXBhC?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9580de32-2a97-4345-a99f-08d90617eb6a
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1355.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2021 05:23:25.6554
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TKhf6JG5RsavOCQixlYfMrOKmHaxxw8ROenFmKCOT5gI1AVR++Eg3ftKamtjIrBKqDmSnUxMcgxqX4xvgkHsxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2796
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 4/22/21 2:19 AM, Christoph Hellwig wrote:
+> When the user specified an explicit swiotlb size on the command line,
+> the achitecture code should not override it.
+> 
+> Fixes: 2cbc2776efe4 ("swiotlb: remove swiotlb_nr_tbl")
+> Reported-by: Tom Lendacky <thomas.lendacky@amd.com>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
+I tested this patchset and I'm not able to get the override via the
+command line or via the SEV adjustment function. Looking at the code,
+swiotlb_default_size is initialized, so the call to swiotlb_adjust_size()
+always returns without setting the new size.
 
-On Fri, Apr 23, 2021, at 10:47 AM, maoxiaochuan wrote:
-> Ok, I will send a another patch for it.
+Thanks,
+Tom
 
-Please correct your email client setup.
-
-
-https://www.kernel.org/doc/html/latest/process/email-clients.html
-
-> =20
-> =E7=A5=9D=E5=A5=BD
-> =20
->=20
->=20
-> ------------------ =E5=8E=9F=E5=A7=8B=E9=82=AE=E4=BB=B6 --------------=
-----
-> *=E5=8F=91=E4=BB=B6=E4=BA=BA:* "zhangqing"<zhangqing@loongson.cn>;=20
-> *=E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4:* 2021=E5=B9=B44=E6=9C=8823=E6=97=
-=A5(=E6=98=9F=E6=9C=9F=E4=BA=94) =E4=B8=8A=E5=8D=8810:37
-> *=E6=94=B6=E4=BB=B6=E4=BA=BA:* "xiaochuan mao"<maoxiaochuan@loongson.c=
-n>; "Rob=20
-> Herring"<robh+dt@kernel.org>; "Thomas=20
-> Bogendoerfer"<tsbogend@alpha.franken.de>; "Jiaxun=20
-> Yang"<jiaxun.yang@flygoat.com>;=20
-> *=E6=8A=84=E9=80=81:* "devicetree"<devicetree@vger.kernel.org>;=20
-> "linux-mips"<linux-mips@vger.kernel.org>;=20
-> "linux-kernel"<linux-kernel@vger.kernel.org>;=20
-> *=E4=B8=BB=E9=A2=98:* Re: [PATCH] MIPS:DTS:Fix label name and interrup=
-t number of ohci=20
-> for Loongson-2K
->=20
->=20
-> On 04/23/2021 09:52 AM, xiaochuan mao wrote:
-> > from Loongson-2K1000 user manual know that under pci bus
-> > the device num is 4, function number is 2 and register is 0x2200
-> > is ohci. the ohci interrupt number is 51. because Loongson-2K1000 ha=
-s
-> > 64 interrupt sources, 0-31 correspond to the device tree liointc0 de=
-vice
-> >   node, and the other correspond to liointc1 node. so it should be
-> > number 19 correspon to liointc1.
-> >
-> > Signed-off-by: xiaochuan mao <maoxiaochuan@loongson.cn>
-> >
-> Hi, xiaozhuan
->=20
->=20
-> Thanks for the patch, this is my mistake.
->=20
-> Can you correct the GPL-3.0 of this file to GPL-2.0 by the way?
->=20
-> Thanks
->=20
-> -Qing
-
-
---=20
-- Jiaxun
+> ---
+>  kernel/dma/swiotlb.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+> index 87d06ddf4753f3..aef02a3825b494 100644
+> --- a/kernel/dma/swiotlb.c
+> +++ b/kernel/dma/swiotlb.c
+> @@ -106,7 +106,9 @@ void swiotlb_set_max_segment(unsigned int val)
+>  
+>  unsigned long swiotlb_size_or_default(void)
+>  {
+> -	return swiotlb_default_size;
+> +	if (swiotlb_default_size)
+> +		return swiotlb_default_size;
+> +	return IO_TLB_DEFAULT_SIZE;
+>  }
+>  
+>  void __init swiotlb_adjust_size(unsigned long size)
+> @@ -116,6 +118,8 @@ void __init swiotlb_adjust_size(unsigned long size)
+>  	 * architectures such as those supporting memory encryption to
+>  	 * adjust/expand SWIOTLB size for their use.
+>  	 */
+> +	if (swiotlb_default_size)
+> +		return;
+>  	swiotlb_default_size = ALIGN(size, IO_TLB_SEGSIZE << IO_TLB_SHIFT);
+>  	pr_info("SWIOTLB bounce buffer size adjusted to %luMB",
+>  		swiotlb_default_size >> 20);
+> 
