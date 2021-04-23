@@ -2,185 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2FD368DCD
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Apr 2021 09:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6842E368EBF
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Apr 2021 10:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240729AbhDWHTt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Apr 2021 03:19:49 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:18001 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229935AbhDWHTs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 23 Apr 2021 03:19:48 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4FRQdS46lvz9tynk;
-        Fri, 23 Apr 2021 09:19:08 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id 0oQPQKgd4ski; Fri, 23 Apr 2021 09:19:08 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4FRQdS3HSvz9tynf;
-        Fri, 23 Apr 2021 09:19:08 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C25808B798;
-        Fri, 23 Apr 2021 09:19:09 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id QeOANgzeLlXn; Fri, 23 Apr 2021 09:19:09 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D2C2E8B765;
-        Fri, 23 Apr 2021 09:19:06 +0200 (CEST)
-Subject: Re: [PATCH bpf-next 1/2] bpf: Remove bpf_jit_enable=2 debugging mode
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Quentin Monnet <quentin@isovalent.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Mahesh Bandewar <maheshb@google.com>,
-        Will Deacon <will@kernel.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>, paulburton@kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        linux-mips@vger.kernel.org, grantseltzer@gmail.com,
-        Xi Wang <xi.wang@gmail.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        KP Singh <kpsingh@kernel.org>, iecedge@gmail.com,
-        Simon Horman <horms@verge.net.au>,
-        Borislav Petkov <bp@alien8.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Yonghong Song <yhs@fb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dmitry Vyukov <dvyukov@google.com>, tsbogend@alpha.franken.de,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Network Development <netdev@vger.kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Wang YanQing <udknight@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, bpf <bpf@vger.kernel.org>,
-        Jianlin Lv <Jianlin.Lv@arm.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20210415093250.3391257-1-Jianlin.Lv@arm.com>
- <9c4a78d2-f73c-832a-e6e2-4b4daa729e07@iogearbox.net>
- <d3949501-8f7d-57c4-b3fe-bcc3b24c09d8@isovalent.com>
- <CAADnVQJ2oHbYfgY9jqM_JMxUsoZxaNrxKSVFYfgCXuHVpDehpQ@mail.gmail.com>
- <0dea05ba-9467-0d84-4515-b8766f60318e@csgroup.eu>
- <CAADnVQ+oQT6C7Qv7P5TV-x7im54omKoCYYKtYhcnhb1Uv3LPMQ@mail.gmail.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <be132117-f267-5817-136d-e1aeb8409c2a@csgroup.eu>
-Date:   Fri, 23 Apr 2021 09:19:06 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        id S230059AbhDWIUN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Apr 2021 04:20:13 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:58640 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229456AbhDWIUM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 23 Apr 2021 04:20:12 -0400
+Received: from [10.0.2.15] (unknown [58.249.121.165])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL+4Pg4JgZNQMAA--.4973S3;
+        Fri, 23 Apr 2021 16:19:28 +0800 (CST)
+Subject: =?UTF-8?B?UmU6IOWbnuWkje+8miBbUEFUQ0hdIE1JUFM6RFRTOkZpeCBsYWJlbCBu?=
+ =?UTF-8?Q?ame_and_interrupt_number_of_ohci_for_Loongson-2K?=
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     devicetree <devicetree@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20210423015234.23870-1-maoxiaochuan@loongson.cn>
+ <1053fddf-479a-6014-ca2c-110c19574f84@loongson.cn>
+ <tencent_A816CB57EADAD19FD3FFC04C3598E81B5608@qq.com>
+ <6abcefbe-0e49-4e68-abc1-b9535d5467ea@www.fastmail.com>
+From:   Xiaochuan Mao <maoxiaochuan@loongson.cn>
+Message-ID: <24218389-e2d8-6e91-d72d-f0d961e3f9b8@loongson.cn>
+Date:   Fri, 23 Apr 2021 16:19:26 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQ+oQT6C7Qv7P5TV-x7im54omKoCYYKtYhcnhb1Uv3LPMQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
+In-Reply-To: <6abcefbe-0e49-4e68-abc1-b9535d5467ea@www.fastmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf9DxL+4Pg4JgZNQMAA--.4973S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF1xAw48tFW7Zr1xCw1Utrb_yoW8Ww17pr
+        s3Aa1IgF4DJr1Ikw42kr1j9F1jq34UJrn5XFn8Cas5GFWqvwn5Jry8ZrW0qry2qry7Ca1U
+        Zry2qr429as8ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
+        Y487MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E
+        87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
+        IFyTuYvjfU0yxRDUUUU
+X-CM-SenderInfo: xpdr5xxdrfx3ldqnw6o6or00hjvr0hdfq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-
-Le 20/04/2021 à 05:28, Alexei Starovoitov a écrit :
-> On Sat, Apr 17, 2021 at 1:16 AM Christophe Leroy
-> <christophe.leroy@csgroup.eu> wrote:
+On 2021/4/23 下午12:02, Jiaxun Yang wrote:
+>
+> On Fri, Apr 23, 2021, at 10:47 AM, maoxiaochuan wrote:
+>> Ok, I will send a another patch for it.
+> Please correct your email client setup.
+>
+>
+> https://www.kernel.org/doc/html/latest/process/email-clients.html
+thanks for your suggest.
+>>  
+>> 祝好
+>>  
 >>
 >>
+>> ------------------ 原始邮件 ------------------
+>> *发件人:* "zhangqing"<zhangqing@loongson.cn>; 
+>> *发送时间:* 2021年4月23日(星期五) 上午10:37
+>> *收件人:* "xiaochuan mao"<maoxiaochuan@loongson.cn>; "Rob 
+>> Herring"<robh+dt@kernel.org>; "Thomas 
+>> Bogendoerfer"<tsbogend@alpha.franken.de>; "Jiaxun 
+>> Yang"<jiaxun.yang@flygoat.com>; 
+>> *抄送:* "devicetree"<devicetree@vger.kernel.org>; 
+>> "linux-mips"<linux-mips@vger.kernel.org>; 
+>> "linux-kernel"<linux-kernel@vger.kernel.org>; 
+>> *主题:* Re: [PATCH] MIPS:DTS:Fix label name and interrupt number of ohci 
+>> for Loongson-2K
 >>
->> Le 16/04/2021 à 01:49, Alexei Starovoitov a écrit :
->>> On Thu, Apr 15, 2021 at 8:41 AM Quentin Monnet <quentin@isovalent.com> wrote:
->>>>
->>>> 2021-04-15 16:37 UTC+0200 ~ Daniel Borkmann <daniel@iogearbox.net>
->>>>> On 4/15/21 11:32 AM, Jianlin Lv wrote:
->>>>>> For debugging JITs, dumping the JITed image to kernel log is discouraged,
->>>>>> "bpftool prog dump jited" is much better way to examine JITed dumps.
->>>>>> This patch get rid of the code related to bpf_jit_enable=2 mode and
->>>>>> update the proc handler of bpf_jit_enable, also added auxiliary
->>>>>> information to explain how to use bpf_jit_disasm tool after this change.
->>>>>>
->>>>>> Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
->>>>
->>>> Hello,
->>>>
->>>> For what it's worth, I have already seen people dump the JIT image in
->>>> kernel logs in Qemu VMs running with just a busybox, not for kernel
->>>> development, but in a context where buiding/using bpftool was not
->>>> possible.
+>>
+>> On 04/23/2021 09:52 AM, xiaochuan mao wrote:
+>>> from Loongson-2K1000 user manual know that under pci bus
+>>> the device num is 4, function number is 2 and register is 0x2200
+>>> is ohci. the ohci interrupt number is 51. because Loongson-2K1000 has
+>>> 64 interrupt sources, 0-31 correspond to the device tree liointc0 device
+>>>   node, and the other correspond to liointc1 node. so it should be
+>>> number 19 correspon to liointc1.
 >>>
->>> If building/using bpftool is not possible then majority of selftests won't
->>> be exercised. I don't think such environment is suitable for any kind
->>> of bpf development. Much so for JIT debugging.
->>> While bpf_jit_enable=2 is nothing but the debugging tool for JIT developers.
->>> I'd rather nuke that code instead of carrying it from kernel to kernel.
+>>> Signed-off-by: xiaochuan mao <maoxiaochuan@loongson.cn>
 >>>
+>> Hi, xiaozhuan
 >>
->> When I implemented JIT for PPC32, it was extremely helpfull.
 >>
->> As far as I understand, for the time being bpftool is not usable in my environment because it
->> doesn't support cross compilation when the target's endianess differs from the building host
->> endianess, see discussion at
->> https://lore.kernel.org/bpf/21e66a09-514f-f426-b9e2-13baab0b938b@csgroup.eu/
+>> Thanks for the patch, this is my mistake.
 >>
->> That's right that selftests can't be exercised because they don't build.
+>> Can you correct the GPL-3.0 of this file to GPL-2.0 by the way?
 >>
->> The question might be candid as I didn't investigate much about the replacement of "bpf_jit_enable=2
->> debugging mode" by bpftool, how do we use bpftool exactly for that ? Especially when using the BPF
->> test module ?
-> 
-> the kernel developers can add any amount of printk and dumps to debug
-> their code,
-> but such debugging aid should not be part of the production kernel.
-> That sysctl was two things at once: debugging tool for kernel devs and
-> introspection for users.
-> bpftool jit dump solves the 2nd part. It provides JIT introspection to users.
-> Debugging of the kernel can be done with any amount of auxiliary code
-> including calling print_hex_dump() during jiting.
-> 
+>> Thanks
+>>
+>> -Qing
+>
+-- 
+--xiaochuan
 
-I finally managed to cross compile bpftool with libbpf, libopcodes, readline, ncurses, libcap, libz 
-and all needed stuff. Was not easy but I made it.
-
-Now, how do I use it ?
-
-Let say I want to dump the jitted code generated from a call to 'tcpdump'. How do I do that with 
-'bpftool prog dump jited' ?
-
-I thought by calling this line I would then get programs dumped in a way or another just like when 
-setting 'bpf_jit_enable=2', but calling that line just provides me some bpftool help text.
-
-By the way, I would be nice to have a kernel OPTION that selects all OPTIONS required for building 
-bpftool. Because you discover them one by one at every build failure. I had to had CONFIG_IPV6, 
-CONFIG_DEBUG_BTF, CONFIG_CGROUPS, ... If there could be an option like "Build a 'bpftool' ready 
-kernel" that selected all those, it would be great.
-
-Christophe
