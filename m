@@ -2,72 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 125C736953C
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Apr 2021 16:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D341369659
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Apr 2021 17:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbhDWO5z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Apr 2021 10:57:55 -0400
-Received: from elvis.franken.de ([193.175.24.41]:38697 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229454AbhDWO5z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 23 Apr 2021 10:57:55 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lZxF0-0003RE-00; Fri, 23 Apr 2021 16:57:10 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 31E1CC0B3B; Fri, 23 Apr 2021 16:51:31 +0200 (CEST)
-Date:   Fri, 23 Apr 2021 16:51:31 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Cc:     Huang Pei <huangpei@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        paul.burton@mips.com, paul@crapouillou.net, siyanteng@loongson.cn,
-        ira.weiny@intel.com, yangtiezhu@loongson.cn, jun.jiang@ingenic.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        sihui.liu@ingenic.com
-Subject: Re: [PATCH] Revert "MIPS: make userspace mapping young by default".
-Message-ID: <20210423145131.GA11112@alpha.franken.de>
-References: <1618562868-91115-1-git-send-email-zhouyanjie@wanyeetech.com>
- <20210416092003.5754967.19768.9603@loongson.cn>
- <ae06522f-eda8-96d1-6f58-072905afa65c@wanyeetech.com>
- <20210419045610.frhzxskec47s5rmq@ambrosehua-HP-xw6600-Workstation>
- <13e37741-c1b4-2aae-471e-0790adc8db59@wanyeetech.com>
- <20210420024818.r6jf243oglb2ywbr@ambrosehua-HP-xw6600-Workstation>
- <fd1e02ff-0165-7e7e-8bc6-55fb278fc50f@wanyeetech.com>
+        id S230470AbhDWPqW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Apr 2021 11:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230294AbhDWPqV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Apr 2021 11:46:21 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C50CC061574;
+        Fri, 23 Apr 2021 08:45:45 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id a12so34328924pfc.7;
+        Fri, 23 Apr 2021 08:45:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=xVcqGlzpyrQHNmToxJ7ZnGOGDgcVdGv3b8uz5G7yLRM=;
+        b=MfCOYQ7+QkiuAqFXjNyCl3AQCTca/IPTcblAM4Hg6d3RhpTMT2WBStXyvQI49KWb6H
+         MbLXF2DNQ0E+7mFIN/vs+jkFznXXfHL+Z9UbPbtA6xh9VPYIRJqcUZtv8epFTxk8qgV2
+         HPcF7i0Mo4PrfTNo1LQzvvSzdcSOH+2eyLi7pRx1LHuV+fN849SvA0ez5+y27eWhPnhL
+         fclz5ZQTsdPWSRaFBYN31MFeNwT4ucAsvoKoShj6U6rghZsgSMsPRHDFDMVLKlWeRgPY
+         tlZlnuVy1Ge/P4cdjlCEr17+7D8wGxr7/kaKqam36GVb+sjZlb5p+nc8+sUDXjWJSrT8
+         ACuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xVcqGlzpyrQHNmToxJ7ZnGOGDgcVdGv3b8uz5G7yLRM=;
+        b=TEoCScPfJma0WMNOjW7bxRPRA8Ioj/3QgwiSw8FrWlmV2eTzXc3m222wO+6cFJvqHD
+         jb0lW3y5hxgF3DQEVOuoyBx3LzLiHJSiNAlOIsmmhjILkyFjoDhBtMCniqt63wMv0qmR
+         3cyq4ZWLnF45j2MGIVV5ikbl9RZeDUT6pVccOVL/+dW0zQcsdNDcJNzwZ3yc3bGBrEoE
+         IyQ7XfMr3zLwsan7BLIENmycUCcW2o9qTr2gJXGTb6V4nhYfoyMidOPzxyS/1y+Zn15u
+         EP1tLOHlHgFNkWGb5IBebsU2ikq6fUIOiHYUcwZ3OFY5nyR6wtIStteQ80O+kifIKhtm
+         rM2g==
+X-Gm-Message-State: AOAM532127FbxvhtbPIUWMjROjHPDhib3q6GMF08cC+eBNGa4ivfhozR
+        n4y9zo0weJEWg7tW3P2nMMningvUQSY=
+X-Google-Smtp-Source: ABdhPJxMlBmMG7vSUI9BH9dYl6JGX6gw0FsoAOwoI0X9yC0u3xDMjYH9BLWIehqsPteetytEj9M95g==
+X-Received: by 2002:a63:b515:: with SMTP id y21mr4423576pge.253.1619192744212;
+        Fri, 23 Apr 2021 08:45:44 -0700 (PDT)
+Received: from [10.230.29.202] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id g1sm5509326pgi.64.2021.04.23.08.45.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Apr 2021 08:45:43 -0700 (PDT)
+Subject: Re: [PATCH] mips/bcm63xx: Use BUG_ON instead of if condition followed
+ by BUG
+To:     zhouchuangao <zhouchuangao@vivo.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1619166623-70445-1-git-send-email-zhouchuangao@vivo.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <800fd777-dc61-07e0-bc13-bb95a0924335@gmail.com>
+Date:   Fri, 23 Apr 2021 08:45:41 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fd1e02ff-0165-7e7e-8bc6-55fb278fc50f@wanyeetech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1619166623-70445-1-git-send-email-zhouchuangao@vivo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Apr 20, 2021 at 10:03:01PM +0800, Zhou Yanjie wrote:
-> Sorry for my carelessness, the log in the previous email was wrong, please
-> check the log in this email.
+
+
+On 4/23/2021 1:30 AM, zhouchuangao wrote:
+> BUG_ON uses unlikely in if(), it can be optimized at compile time.
 > 
-> [   53.684067] --- pte 1 = 07698685
+> Usually, the condition in if() is not satisfied. In my opinion,
+> this can improve the efficiency of the multi-stage pipeline.
+> 
+> Signed-off-by: zhouchuangao <zhouchuangao@vivo.com>
 
-any chance to print the virtual address to this pte ?
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 
-> [   53.687376] --- pte 3 = 07698685
-> [   53.737175] --- pte 1 = 07699685
-> [   53.740412] --- pte 3 = 07699685
-> [   53.744064] --- pte 1 = 076c3685
-> [..]
-
-could you print PTE, which faults ? And what is mapped there ?
-
-
-so far I haven't seen any ill-effects of the (bisected ?) patch.
-The problem I have with reverting is that IMHO we re-introduce the bug,
-which this patch fixed.
-
-Thomas.
-
+Subject prefix should have been: MIPS: BCM63XX: Use BUG_ON instead of
+condition followed by BUG to match prior submissions done to this
+directory. Thanks.
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Florian
