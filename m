@@ -2,109 +2,192 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E0236A5D8
-	for <lists+linux-mips@lfdr.de>; Sun, 25 Apr 2021 10:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C991136A6B9
+	for <lists+linux-mips@lfdr.de>; Sun, 25 Apr 2021 12:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbhDYIpP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 25 Apr 2021 04:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbhDYIpP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 25 Apr 2021 04:45:15 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7DFC061574;
-        Sun, 25 Apr 2021 01:44:34 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id c4so13769046wrt.8;
-        Sun, 25 Apr 2021 01:44:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=31vdil8td01hkvlGl+21+jMqDUYmSn86sls5WfMRhSg=;
-        b=lgPkMKm/tYu+zzdehfIt3WP/UYMJP5J1wLwGb97bDBn5e7XUzz6oOK8mx0XvA89J4a
-         reLzRoDLV7JApHd/GyLEadfUGzmULqJ4NMVzqqCJYnos687TYhufLOzSZu/i4hHNHQAk
-         /FBnMU2IiUARmDbsveWkv9q9udiPK49ybFNZLK5uZlSlymT9iW2YRGTr6K6mdsbefY4s
-         NXZOENTSn4dIDbqLveDy8wZOU8R0gQ65az+yMo/F04RrRvRmoUNkiDS6/4hSIiDKZD8P
-         VMCqTpoe7M+IoxPnjKUOtACUJAzro5uVQdUqP832lYV6KRx5glrfFX4YadG3LkVioE3t
-         qFdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=31vdil8td01hkvlGl+21+jMqDUYmSn86sls5WfMRhSg=;
-        b=TD8RowfO6MXAAFc1TzrxxXkdIWJtHT4E5EeeLc8j/CMpPETMSjxci+miLq1efp8Li4
-         fV2tLvYpN37Z9qxz5ObopOzuqMm41hNwoioTOwtJIKmB9a1b2Xyvct6fitwnETU00vy3
-         NF0rZw7FIA6VVMMLdSZX5xJvGHCP2faDwG8QnGpgXzGTW8PwwxxnqA4/E+3wZK87031R
-         NR/gNS8XVvjtaDcoC23lPuMRooE09Zp4v3wjhbJKdqU3uIaC1CWUq3Mo9vRWW2d2U0jB
-         oINLKegfGt5zvV9T/H1ekpQVLXyR3S8F3BRVT836zTVNJLCwTgF1iU+lWfwR5jUD16AS
-         EHow==
-X-Gm-Message-State: AOAM531NiDghJcBZrS/nFAFm5a5kERunCBmeyagtMiAqF2moz43hPsvJ
-        ENU5Lbdb3OMkFjdxTugVpK+1klGOL1Q=
-X-Google-Smtp-Source: ABdhPJweHiH/5X/2E9b9TYd3Tsbs3DeJYVqXTQrldUVE2z3siASvHPRHi7TkqNplK658uUMGs7wI+w==
-X-Received: by 2002:adf:ec42:: with SMTP id w2mr15660229wrn.373.1619340272873;
-        Sun, 25 Apr 2021 01:44:32 -0700 (PDT)
-Received: from ?IPv6:2a01:cb05:8f8a:1800:2216:4e4e:b697:b4ce? (2a01cb058f8a180022164e4eb697b4ce.ipv6.abo.wanadoo.fr. [2a01:cb05:8f8a:1800:2216:4e4e:b697:b4ce])
-        by smtp.gmail.com with ESMTPSA id f7sm15432133wrp.48.2021.04.25.01.44.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Apr 2021 01:44:32 -0700 (PDT)
-Subject: Re: [PATCH v4] mips: Do not include hi and lo in clobber list for R6
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20210420211210.702980-1-sudipm.mukherjee@gmail.com>
-From:   Romain Naour <romain.naour@gmail.com>
-Message-ID: <79aa7a3c-92ee-48d4-4945-48061e77541d@gmail.com>
-Date:   Sun, 25 Apr 2021 10:44:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20210420211210.702980-1-sudipm.mukherjee@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S229668AbhDYKkY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 25 Apr 2021 06:40:24 -0400
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:52857 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229466AbhDYKkX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 25 Apr 2021 06:40:23 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id C5FC714E2;
+        Sun, 25 Apr 2021 06:39:42 -0400 (EDT)
+Received: from imap1 ([10.202.2.51])
+  by compute6.internal (MEProxy); Sun, 25 Apr 2021 06:39:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm2; bh=XoLG+aIFDcgO90G6lE25YWBzpmWK/3l
+        +t91ve9Q4KX4=; b=ikyRl9eulf1qr1qyOGRAubwZCS5+ndJyQXTExuVp4v4VN/6
+        E67mYf/wMF18RZ/a527+TlQkuYFtHzoAncKWNVPL1aFIBeL8omCjjY7s2mxXNqD/
+        92nQPbUnUGJmls52B4AgV+tBJ/yq1afG8hF0iAXEyx2boTWb6HSt+768LwADJQnm
+        MxF1o/sByOU1KuU5ZoVXfw+q2UXqKrViNgUj0MVsg7Zs7CjCVhmXEzGUL/pSIAfu
+        wpnAnIYn5vBoQ0lLp0C4zpJBygTMU4gxMtOI+sGGzEznQ40F4j9VejLFF6e29VWh
+        Mgg18f/UuqzEhSPPY5espI15hlzANSF1Ra7bCow==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=XoLG+a
+        IFDcgO90G6lE25YWBzpmWK/3l+t91ve9Q4KX4=; b=Dx9fYcxegZ32Iquv3WkUZ/
+        hfhXzCHAt+QYgqH+2QknmfWke7IBshyCd/1hsNJAq+s3j8zAPz3PlxR87F/IQow9
+        3b61dnsWex28u0iUxt9xOMrmDLGyNTEKJY8b6ALNkJrRpl6f1XVNKLHDG+/ZUP3Y
+        fpiSMDmRHx6UGhGeKUnRnAysYYf8YeEg/nTJNphkLUQbfQRGJvcG/5QNry7OOQSM
+        iG7bO+NALoVcv0uyH2TjIZZD2JY/usMGHKDziORPIdDlefNRm23tR84jXUtYQ4zr
+        D3Qwk2xTf5gJdlGU/9diV7LFA9Gq+w49YdZvfiF2a1wrgzmfmwg1FcbJdEbECJUQ
+        ==
+X-ME-Sender: <xms:7UaFYO4Q8fmbSKSkzZSsNpDn32ELhHmUgkQXFrAyiRbWiJc7Mw46Jg>
+    <xme:7UaFYH4lOEgTTpQG5laIVFqwOn1GZXuZToVfQn-T9mby1_kHSQjbcaRAqEArO2kru
+    eyeQ2MnKYQBezv_dGM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdduiedgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreerjeenucfhrhhomhepfdflihgr
+    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeevtdehveetkedvvdehhfeuueeffeduffduveevudeiveeu
+    tedvheekteeujeegueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:7UaFYNeCH_1OmQv000hUNRqdE_nlmqKcjUdu2cZXYugo1XlPildYJQ>
+    <xmx:7UaFYLJLD2tY4ZhbY22l1hm-xCm9hjInQE49QUPef1sLLCWcuSriLA>
+    <xmx:7UaFYCLr4LMTpPHGKgbEctaQRuOgVPhKj6-Uyu5z7gU5mRDn--5XCw>
+    <xmx:7kaFYHEqYYxL4DD9PYhgcasNJ107VpD23N1mVrVPnnh0dSO7tS3bYw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1E246130005F; Sun, 25 Apr 2021 06:39:41 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-403-gbc3c488b23-fm-20210419.005-gbc3c488b
+Mime-Version: 1.0
+Message-Id: <8cd60ba7-b0db-450f-8285-eb5429c4f3ec@www.fastmail.com>
+In-Reply-To: <20210425052817.27373-1-maoxiaochuan@loongson.cn>
+References: <20210425052817.27373-1-maoxiaochuan@loongson.cn>
+Date:   Sun, 25 Apr 2021 18:39:20 +0800
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "xiaochuan mao" <maoxiaochuan@loongson.cn>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Qing Zhang" <zhangqing@loongson.cn>
+Cc:     devicetree@vger.kernel.org,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: =?UTF-8?Q?Re:_[PATCH]_MIPS:DTS:Correct_device_id_and_class_code_of_pcie_?=
+ =?UTF-8?Q?for_Loongnon-2K?=
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sudip, All,
 
-Le 20/04/2021 à 23:12, Sudip Mukherjee a écrit :
-> From: Romain Naour <romain.naour@gmail.com>
+
+On Sun, Apr 25, 2021, at 1:28 PM, Xiaochuan Mao wrote:
+> from Loongson-2K user manual know that Loongson-2K have two
+> pcie controller pcie0 and pcie1, pcie0 have four port named port0~port3
+> and pcie1 have 2 port named port0~port1. the device id of port0 is 7a19
+> in each pcie controller and others are 7a09. and their class code is 0b0300.
+
+The manual is obviously incorrect.
+
+class0604 is PCI to PCI bridge that matches. hardware. 0b03 is undefined.
+
+Thanks.
+
 > 
-> From [1]
-> "GCC 10 (PR 91233) won't silently allow registers that are not
-> architecturally available to be present in the clobber list anymore,
-> resulting in build failure for mips*r6 targets in form of:
-> ...
-> .../sysdep.h:146:2: error: the register ‘lo’ cannot be clobbered in ‘asm’ for the current target
->   146 |  __asm__ volatile (      \
->       |  ^~~~~~~
-> 
-> This is because base R6 ISA doesn't define hi and lo registers w/o DSP
-> extension. This patch provides the alternative clobber list for r6 targets
-> that won't include those registers."
-> 
-> Since kernel 5.4 and mips support for generic vDSO [2], the kernel fail to
-> build for mips r6 cpus with gcc 10 for the same reason as glibc.
-> 
-> [1] https://sourceware.org/git/?p=glibc.git;a=commit;h=020b2a97bb15f807c0482f0faee2184ed05bcad8
-> [2] '24640f233b46 ("mips: Add support for generic vDSO")'
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+> Signed-off-by: Xiaochuan Mao <maoxiaochuan@loongson.cn>
 > ---
+>  .../boot/dts/loongson/loongson64-2k1000.dtsi  | 40 +++++++++----------
+>  1 file changed, 20 insertions(+), 20 deletions(-)
 > 
-> v4: [sudip] added macro VDSO_SYSCALL_CLOBBERS and fix checkpatch errors with commit message.
-> v3 Avoid duplicate code (Maciej W. Rozycki)
-> v2 use MIPS_ISA_REV instead of __mips_isa_rev (Alexander Lobakin)
+> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi 
+> b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> index 569e814def83..a95121359080 100644
+> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> @@ -150,8 +150,8 @@
+>  			pci_bridge@9,0 {
+>  				compatible = "pci0014,7a19.0",
+>  						   "pci0014,7a19",
+> -						   "pciclass060400",
+> -						   "pciclass0604";
+> +						   "pciclass0b0300",
+> +						   "pciclass0b03";
+>  
+>  				reg = <0x4800 0x0 0x0 0x0 0x0>;
+>  				#interrupt-cells = <1>;
+> @@ -163,10 +163,10 @@
+>  			};
+>  
+>  			pci_bridge@a,0 {
+> -				compatible = "pci0014,7a19.0",
+> -						   "pci0014,7a19",
+> -						   "pciclass060400",
+> -						   "pciclass0604";
+> +				compatible = "pci0014,7a09.0",
+> +						   "pci0014,7a09",
+> +						   "pciclass0b0300",
+> +						   "pciclass0b03";
+>  
+>  				reg = <0x5000 0x0 0x0 0x0 0x0>;
+>  				#interrupt-cells = <1>;
+> @@ -178,10 +178,10 @@
+>  			};
+>  
+>  			pci_bridge@b,0 {
+> -				compatible = "pci0014,7a19.0",
+> -						   "pci0014,7a19",
+> -						   "pciclass060400",
+> -						   "pciclass0604";
+> +				compatible = "pci0014,7a09.0",
+> +						   "pci0014,7a09",
+> +						   "pciclass0b0300",
+> +						   "pciclass0b03";
+>  
+>  				reg = <0x5800 0x0 0x0 0x0 0x0>;
+>  				#interrupt-cells = <1>;
+> @@ -193,10 +193,10 @@
+>  			};
+>  
+>  			pci_bridge@c,0 {
+> -				compatible = "pci0014,7a19.0",
+> -						   "pci0014,7a19",
+> -						   "pciclass060400",
+> -						   "pciclass0604";
+> +				compatible = "pci0014,7a09.0",
+> +						   "pci0014,7a09",
+> +						   "pciclass0b0300",
+> +						   "pciclass0b03";
+>  
+>  				reg = <0x6000 0x0 0x0 0x0 0x0>;
+>  				#interrupt-cells = <1>;
+> @@ -210,8 +210,8 @@
+>  			pci_bridge@d,0 {
+>  				compatible = "pci0014,7a19.0",
+>  						   "pci0014,7a19",
+> -						   "pciclass060400",
+> -						   "pciclass0604";
+> +						   "pciclass0b0300",
+> +						   "pciclass0b03";
+>  
+>  				reg = <0x6800 0x0 0x0 0x0 0x0>;
+>  				#interrupt-cells = <1>;
+> @@ -223,10 +223,10 @@
+>  			};
+>  
+>  			pci_bridge@e,0 {
+> -				compatible = "pci0014,7a19.0",
+> -						   "pci0014,7a19",
+> -						   "pciclass060400",
+> -						   "pciclass0604";
+> +				compatible = "pci0014,7a09.0",
+> +						   "pci0014,7a09",
+> +						   "pciclass0b0300",
+> +						   "pciclass0b03";
+>  
+>  				reg = <0x7000 0x0 0x0 0x0 0x0>;
+>  				#interrupt-cells = <1>;
+> -- 
+> 2.17.1
 > 
-> I have reused the original patch by Romain and have retained his s-o-b
-> and author name as he is the original author of this patch. I have just
-> added the macro. Build tested with gcc-10.3.1 and gcc-9.3.0.
 > 
 
-Thanks for the rework!
 
-Best regards,
-Romain
+-- 
+- Jiaxun
