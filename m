@@ -2,228 +2,181 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9909136BB55
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Apr 2021 23:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0E636BBC0
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Apr 2021 00:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234497AbhDZVnq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Apr 2021 17:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
+        id S232235AbhDZWk2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Apr 2021 18:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233257AbhDZVnq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Apr 2021 17:43:46 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050::465:102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5FDC061574;
-        Mon, 26 Apr 2021 14:43:03 -0700 (PDT)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4FTdfs63PVzQk1C;
-        Mon, 26 Apr 2021 23:43:01 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
-        t=1619473379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5ThGRYtIT0Xf5EcsvLom88a5OB6as8AShYIxI5j+0zI=;
-        b=BoY6pzyOol+4uR0XyRuiOYQE0uRUKZm7MsB7raTPrynmGusJ04t8QOkdnybImot6LkHJlH
-        9Bl/8UCCwd7SlPss0VGLi4VN/AHoaxXV+wl6TYMafcukOLAAkhAbmOnBT1ghfC/emTASRn
-        QQ8ydX+PxQwCHhIYkIehZ+ySvXib7+xdeYKzdevjxJ9xun8MNixeavi7WFepSIZ9mCdJ30
-        0rA5wXQ+83z4CwAf2cJ1LkC6LMjZUNNydfbf9g290yPx3aQanfFm2OzaTJ29M/DyVDTANA
-        RZHgVoma8qIRmVnZg4PhGakW0dE/oLK0XAnnnmfuQKyf8Y3Gv8lLC+BwpaWL6Q==
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id zfk35RdLgCyX; Mon, 26 Apr 2021 23:42:57 +0200 (CEST)
-Subject: Re: [PATCH v2 3/3] MIPS: kernel: proc: add CPU option reporting
-To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        with ESMTP id S232116AbhDZWk2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Apr 2021 18:40:28 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22163C061574;
+        Mon, 26 Apr 2021 15:39:45 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id i16-20020a9d68d00000b0290286edfdfe9eso43025846oto.3;
+        Mon, 26 Apr 2021 15:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=e2srYZCezWerrvydsSZOThr9vW3FBvIYlx0HWy9kKVI=;
+        b=kZLCwHWTPoCcIznJyyl8a3iAnUuAxn9tfyhdI58/vJAMgIn2vpqTrUBu47TY/hQQiR
+         uO8AIaZfajAooZ2UPa2HYMgSzPac/4wNu15g55rd6AmgzoRYAqWQP0SN6ltG8tS7Gpwe
+         cvPGEkrS1UMHNyhdZ+s044cm6zwkzta+5syQ6XEj2rELova0e++K5/jzAHe/VykL04CF
+         /opVpyk75zqh1BIJF5FWsGs3U7NgrYgjM73UOXodkhPxMj3vLlVsxppmRuP4x5HwNxwX
+         H4D8STjwwLUU5/ZhLRKwZuQaDG9FjrxYMTmHwD6NsHiy0dUrxEnjNfsH+JSYQyb4a+c0
+         dbtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=e2srYZCezWerrvydsSZOThr9vW3FBvIYlx0HWy9kKVI=;
+        b=b1ZgFWvTGGPel0qQukmlstakGrtjAUD6Hjrg3CHBu9bZ6r+DBtU2j0s98JW85i/lBd
+         KT1/UyoID79qNr0MYWUgVjKhC7V4kgNYmztSUfL8F/OX3ZFY6AvJnk39lEGp/F95ThP9
+         TV6vX56BYIKirNSTP1y19mxe7Y26GaxZFLzXjtL4NdpQd0glRhTNaOn9Z7Ynaf1kAPXi
+         Sm9ICJUGwPR/gdDQxHMBe/3WUTKjbgykfB8gvucdvI9TdOJTrodB6eQKayRx+a2HLKHA
+         OAIpJq3Wke+NwJa/oQE4arbIBFV+EX96c7p7m/wiXk95yg65CeigcZ+dFc4DkNBG0Im+
+         k0iA==
+X-Gm-Message-State: AOAM5321Mb8aodOzdYLYeW29yXX68z4ILGc05ZpYBSLrFCh9ks030/Zm
+        7p1G1Tb5mP/s/rzgu6JCyTRtnjujQq0=
+X-Google-Smtp-Source: ABdhPJw9DQu6UlUVdcz2g1TBfNWipkC8oX5M3o9tQoOEORwU6A+PwH/pqnvpJVU+kZH5F1gVYOKZGg==
+X-Received: by 2002:a9d:1d6a:: with SMTP id m97mr16357004otm.322.1619476784287;
+        Mon, 26 Apr 2021 15:39:44 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v81sm3322047oie.13.2021.04.26.15.39.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 26 Apr 2021 15:39:43 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 26 Apr 2021 15:39:42 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiri Kosina <trivial@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210424215618.1017539-1-ilya.lipnitskiy@gmail.com>
- <20210424215618.1017539-4-ilya.lipnitskiy@gmail.com>
-From:   Hauke Mehrtens <hauke@hauke-m.de>
-Message-ID: <ae83282b-19e6-8b91-443b-40f393fb1433@hauke-m.de>
-Date:   Mon, 26 Apr 2021 23:42:56 +0200
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 2/9] ARM: PXA: Kill use of irq_create_strict_mappings()
+Message-ID: <20210426223942.GA213931@roeck-us.net>
+References: <20210406093557.1073423-1-maz@kernel.org>
+ <20210406093557.1073423-3-maz@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210424215618.1017539-4-ilya.lipnitskiy@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-MBO-SPAM-Probability: 
-X-Rspamd-Score: -4.28 / 15.00 / 15.00
-X-Rspamd-Queue-Id: 12EE917FC
-X-Rspamd-UID: d5211b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210406093557.1073423-3-maz@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 4/24/21 11:56 PM, Ilya Lipnitskiy wrote:
-> From: Hauke Mehrtens <hauke@hauke-m.de>
+On Tue, Apr 06, 2021 at 10:35:50AM +0100, Marc Zyngier wrote:
+> irq_create_strict_mappings() is a poor way to allow the use of
+> a linear IRQ domain as a legacy one. Let's be upfront about
+> it and use a legacy domain when appropriate.
 > 
-> Many MIPS CPUs have optional CPU features which are not activated for
-> all CPU cores. Print the CPU options, which are implemented in the core,
-> in /proc/cpuinfo. This makes it possible to see which features are
-> supported and which are not supported. This should cover all standard
-> MIPS extensions. Before, it only printed information about the main MIPS
-> ASEs.
-> 
-> Signed-off-by: Hauke Mehrtens <hauke@hauke-m.de>
-> 
-> Changes from original patch[0]:
-> - Remove cpu_has_6k_cache and cpu_has_8k_cache due to commit 6ce91ba8589a
->    ("MIPS: Remove cpu_has_6k_cache and cpu_has_8k_cache in cpu_cache_init()")
-> - Add new options: mac2008_only, ftlbparex, gsexcex, mmid, mm_sysad,
->    mm_full
-> - Use seq_puts instead of seq_printf as suggested by checkpatch
-> - Minor commit message reword
-> 
-> [0]: https://lore.kernel.org/linux-mips/20181223225224.23042-1-hauke@hauke-m.de/
-> Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-
-Thanks for taking care of this patch.
-
-Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
-
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
 > ---
->   arch/mips/kernel/proc.c | 122 ++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 122 insertions(+)
-> 
-> diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
-> index 7d8481d9acc3..376a6e2676e9 100644
-> --- a/arch/mips/kernel/proc.c
-> +++ b/arch/mips/kernel/proc.c
-> @@ -157,6 +157,128 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->   		seq_printf(m, "micromips kernel\t: %s\n",
->   		      (read_c0_config3() & MIPS_CONF3_ISA_OE) ?  "yes" : "no");
->   	}
-> +
-> +	seq_puts(m, "Options implemented\t:");
-> +	if (cpu_has_tlb)
-> +		seq_puts(m, " tlb");
-> +	if (cpu_has_ftlb)
-> +		seq_puts(m, " ftlb");
-> +	if (cpu_has_tlbinv)
-> +		seq_puts(m, " tlbinv");
-> +	if (cpu_has_segments)
-> +		seq_puts(m, " segments");
-> +	if (cpu_has_rixiex)
-> +		seq_puts(m, " rixiex");
-> +	if (cpu_has_ldpte)
-> +		seq_puts(m, " ldpte");
-> +	if (cpu_has_maar)
-> +		seq_puts(m, " maar");
-> +	if (cpu_has_rw_llb)
-> +		seq_puts(m, " rw_llb");
-> +	if (cpu_has_4kex)
-> +		seq_puts(m, " 4kex");
-> +	if (cpu_has_3k_cache)
-> +		seq_puts(m, " 3k_cache");
-> +	if (cpu_has_4k_cache)
-> +		seq_puts(m, " 4k_cache");
-> +	if (cpu_has_tx39_cache)
-> +		seq_puts(m, " tx39_cache");
-> +	if (cpu_has_octeon_cache)
-> +		seq_puts(m, " octeon_cache");
-> +	if (cpu_has_fpu)
-> +		seq_puts(m, " fpu");
-> +	if (cpu_has_32fpr)
-> +		seq_puts(m, " 32fpr");
-> +	if (cpu_has_cache_cdex_p)
-> +		seq_puts(m, " cache_cdex_p");
-> +	if (cpu_has_cache_cdex_s)
-> +		seq_puts(m, " cache_cdex_s");
-> +	if (cpu_has_prefetch)
-> +		seq_puts(m, " prefetch");
-> +	if (cpu_has_mcheck)
-> +		seq_puts(m, " mcheck");
-> +	if (cpu_has_ejtag)
-> +		seq_puts(m, " ejtag");
-> +	if (cpu_has_llsc)
-> +		seq_puts(m, " llsc");
-> +	if (cpu_has_guestctl0ext)
-> +		seq_puts(m, " guestctl0ext");
-> +	if (cpu_has_guestctl1)
-> +		seq_puts(m, " guestctl1");
-> +	if (cpu_has_guestctl2)
-> +		seq_puts(m, " guestctl2");
-> +	if (cpu_has_guestid)
-> +		seq_puts(m, " guestid");
-> +	if (cpu_has_drg)
-> +		seq_puts(m, " drg");
-> +	if (cpu_has_rixi)
-> +		seq_puts(m, " rixi");
-> +	if (cpu_has_lpa)
-> +		seq_puts(m, " lpa");
-> +	if (cpu_has_mvh)
-> +		seq_puts(m, " mvh");
-> +	if (cpu_has_vtag_icache)
-> +		seq_puts(m, " vtag_icache");
-> +	if (cpu_has_dc_aliases)
-> +		seq_puts(m, " dc_aliases");
-> +	if (cpu_has_ic_fills_f_dc)
-> +		seq_puts(m, " ic_fills_f_dc");
-> +	if (cpu_has_pindexed_dcache)
-> +		seq_puts(m, " pindexed_dcache");
-> +	if (cpu_has_userlocal)
-> +		seq_puts(m, " userlocal");
-> +	if (cpu_has_nofpuex)
-> +		seq_puts(m, " nofpuex");
-> +	if (cpu_has_vint)
-> +		seq_puts(m, " vint");
-> +	if (cpu_has_veic)
-> +		seq_puts(m, " veic");
-> +	if (cpu_has_inclusive_pcaches)
-> +		seq_puts(m, " inclusive_pcaches");
-> +	if (cpu_has_perf_cntr_intr_bit)
-> +		seq_puts(m, " perf_cntr_intr_bit");
-> +	if (cpu_has_ufr)
-> +		seq_puts(m, " ufr");
-> +	if (cpu_has_fre)
-> +		seq_puts(m, " fre");
-> +	if (cpu_has_cdmm)
-> +		seq_puts(m, " cdmm");
-> +	if (cpu_has_small_pages)
-> +		seq_puts(m, " small_pages");
-> +	if (cpu_has_nan_legacy)
-> +		seq_puts(m, " nan_legacy");
-> +	if (cpu_has_nan_2008)
-> +		seq_puts(m, " nan_2008");
-> +	if (cpu_has_ebase_wg)
-> +		seq_puts(m, " ebase_wg");
-> +	if (cpu_has_badinstr)
-> +		seq_puts(m, " badinstr");
-> +	if (cpu_has_badinstrp)
-> +		seq_puts(m, " badinstrp");
-> +	if (cpu_has_contextconfig)
-> +		seq_puts(m, " contextconfig");
-> +	if (cpu_has_perf)
-> +		seq_puts(m, " perf");
-> +	if (cpu_has_mac2008_only)
-> +		seq_puts(m, " mac2008_only");
-> +	if (cpu_has_ftlbparex)
-> +		seq_puts(m, " ftlbparex");
-> +	if (cpu_has_gsexcex)
-> +		seq_puts(m, " gsexcex");
-> +	if (cpu_has_shared_ftlb_ram)
-> +		seq_puts(m, " shared_ftlb_ram");
-> +	if (cpu_has_shared_ftlb_entries)
-> +		seq_puts(m, " shared_ftlb_entries");
-> +	if (cpu_has_mipsmt_pertccounters)
-> +		seq_puts(m, " mipsmt_pertccounters");
-> +	if (cpu_has_mmid)
-> +		seq_puts(m, " mmid");
-> +	if (cpu_has_mm_sysad)
-> +		seq_puts(m, " mm_sysad");
-> +	if (cpu_has_mm_full)
-> +		seq_puts(m, " mm_full");
-> +	seq_puts(m, "\n");
-> +
->   	seq_printf(m, "shadow register sets\t: %d\n",
->   		      cpu_data[n].srsets);
->   	seq_printf(m, "kscratch registers\t: %d\n",
-> 
 
+When running the "mainstone" qemu emulation, this patch results
+in many (32, actually) runtime warnings such as the following.
+
+[    0.528272] ------------[ cut here ]------------
+[    0.528285] WARNING: CPU: 0 PID: 1 at kernel/irq/irqdomain.c:550 irq_domain_associate+0x194/0x1f0
+[    0.528315] error: virq335 is not allocated
+[    0.528325] Modules linked in:
+[    0.528351] CPU: 0 PID: 1 Comm: swapper Tainted: G        W         5.12.0-rc8-next-20210423 #1
+[    0.528372] Hardware name: Intel HCDDBBVA0 Development Platform (aka Mainstone)
+[    0.528387] Backtrace:
+[    0.528406] [<c06bd188>] (dump_backtrace) from [<c06bd468>] (show_stack+0x20/0x24)
+[    0.528441]  r7:00000226 r6:c00796e8 r5:00000009 r4:c088d2a0
+[    0.528454] [<c06bd448>] (show_stack) from [<c06c11dc>] (dump_stack+0x28/0x30)
+[    0.528479] [<c06c11b4>] (dump_stack) from [<c002a2b8>] (__warn+0xe8/0x110)
+[    0.528507]  r5:00000009 r4:c0872698
+[    0.528520] [<c002a1d0>] (__warn) from [<c06bdbc0>] (warn_slowpath_fmt+0xa0/0xe0)
+[    0.528551]  r7:c00796e8 r6:00000226 r5:c0872698 r4:c0872700
+[    0.528564] [<c06bdb24>] (warn_slowpath_fmt) from [<c00796e8>] (irq_domain_associate+0x194/0x1f0)
+[    0.528597]  r8:00000130 r7:0000014f r6:0000001f r5:00000000 r4:c11bd780
+[    0.528610] [<c0079554>] (irq_domain_associate) from [<c00797a4>] (irq_domain_associate_many+0x60/0xa4)
+[    0.528642]  r8:00000130 r7:c11bd780 r6:fffffed0 r5:00000150 r4:00000150
+[    0.528655] [<c0079744>] (irq_domain_associate_many) from [<c0079e5c>] (irq_domain_create_legacy+0x5c/0x68)
+[    0.528687]  r8:00000130 r7:00000130 r6:00000020 r5:00000000 r4:c11bd780
+[    0.528699] [<c0079e00>] (irq_domain_create_legacy) from [<c0079e9c>] (irq_domain_add_legacy+0x34/0x3c)
+[    0.528730]  r7:c09b1370 r6:c09b1360 r5:c11bd3a0 r4:00000000
+[    0.528743] [<c0079e68>] (irq_domain_add_legacy) from [<c0024f28>] (cplds_probe+0x170/0x1ac)
+[    0.528768] [<c0024db8>] (cplds_probe) from [<c0432cec>] (platform_probe+0x50/0xb0)
+[    0.528800]  r8:c09d2c94 r7:c0aa4f88 r6:c09d2c94 r5:c09b1370 r4:00000000
+[    0.528814] [<c0432c9c>] (platform_probe) from [<c042fc70>] (really_probe+0x100/0x4d4)
+[    0.528844]  r7:c0aa4f88 r6:00000000 r5:00000000 r4:c09b1370
+[    0.528858] [<c042fb70>] (really_probe) from [<c04300cc>] (driver_probe_device+0x88/0x20c)
+[    0.528892]  r10:c0974830 r9:c0a70000 r8:c093b224 r7:c0a31de8 r6:c09d2c94 r5:c09d2c94
+[    0.528907]  r4:c09b1370
+[    0.528919] [<c0430044>] (driver_probe_device) from [<c04306cc>] (device_driver_attach+0x68/0x70)
+[    0.528953]  r9:c0a70000 r8:c093b224 r7:c0a31de8 r6:c09d2c94 r5:00000000 r4:c09b1370
+[    0.528969] [<c0430664>] (device_driver_attach) from [<c0430794>] (__driver_attach+0xc0/0x164)
+[    0.528997]  r7:c0a31de8 r6:c09b1370 r5:c09d2c94 r4:00000000
+[    0.529009] [<c04306d4>] (__driver_attach) from [<c042d8d0>] (bus_for_each_dev+0x84/0xcc)
+[    0.529039]  r7:c0a31de8 r6:c04306d4 r5:c09d2c94 r4:00000000
+[    0.529052] [<c042d84c>] (bus_for_each_dev) from [<c042f494>] (driver_attach+0x28/0x30)
+[    0.529082]  r6:00000000 r5:c11bd200 r4:c09d2c94
+[    0.529095] [<c042f46c>] (driver_attach) from [<c042edac>] (bus_add_driver+0x168/0x210)
+[    0.529122] [<c042ec44>] (bus_add_driver) from [<c0431304>] (driver_register+0x88/0x120)
+[    0.529152]  r7:c0a5c7e0 r6:00000000 r5:ffffe000 r4:c09d2c94
+[    0.529165] [<c043127c>] (driver_register) from [<c04329a0>] (__platform_driver_register+0x2c/0x34)
+[    0.529191]  r5:ffffe000 r4:c094ba64
+[    0.529204] [<c0432974>] (__platform_driver_register) from [<c094ba84>] (cplds_driver_init+0x20/0x28)
+[    0.529230] [<c094ba64>] (cplds_driver_init) from [<c000a2a8>] (do_one_initcall+0x60/0x27c)
+[    0.529255] [<c000a248>] (do_one_initcall) from [<c093f244>] (kernel_init_freeable+0x158/0x1e4)
+[    0.529284]  r7:c0974850 r6:00000007 r5:c0c0f720 r4:c09a02fc
+[    0.529297] [<c093f0ec>] (kernel_init_freeable) from [<c06c5274>] (kernel_init+0x18/0x110)
+[    0.529328]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:00000000 r5:c06c525c
+[    0.529343]  r4:00000000
+[    0.529354] [<c06c525c>] (kernel_init) from [<c0008348>] (ret_from_fork+0x14/0x2c)
+[    0.529387] Exception stack(0xc0bdffb0 to 0xc0bdfff8)
+[    0.529467] ffa0:                                     00000000 00000000 00000000 00000000
+[    0.529587] ffc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[    0.529684] ffe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[    0.529726]  r5:c06c525c r4:00000000
+[    0.529752] ---[ end trace d199929d2b87e077 ]---
+
+Bisect log attached.
+
+Guenter
+
+---
+# bad: [e3d35712f85ac84fb06234848f6c043ab418cf8b] Add linux-next specific files for 20210423
+# good: [bf05bf16c76bb44ab5156223e1e58e26dfe30a88] Linux 5.12-rc8
+git bisect start 'HEAD' 'v5.12-rc8'
+# good: [d4b5d9d94679a18bfa4ccdafd19876d58777911e] Merge remote-tracking branch 'crypto/master'
+git bisect good d4b5d9d94679a18bfa4ccdafd19876d58777911e
+# good: [27628e42fe59a698e66b671bf1e1f01f6a3fe765] Merge remote-tracking branch 'tip/auto-latest'
+git bisect good 27628e42fe59a698e66b671bf1e1f01f6a3fe765
+# bad: [bc6c3ae4f662fc719d0bf144f150f72cab8912d4] Merge remote-tracking branch 'vfio/next'
+git bisect bad bc6c3ae4f662fc719d0bf144f150f72cab8912d4
+# bad: [5ff5b00609c64a043ccd5bc92273c132b33f7f9a] Merge remote-tracking branch 'driver-core/driver-core-next'
+git bisect bad 5ff5b00609c64a043ccd5bc92273c132b33f7f9a
+# bad: [c878be9c883153797d5749620e58f180cc429e88] Merge remote-tracking branch 'kvm/next'
+git bisect bad c878be9c883153797d5749620e58f180cc429e88
+# good: [52acd22faa1af8a0514ccd075a6978ac97986425] KVM: Boost vCPU candidate in user mode which is delivering interrupt
+git bisect good 52acd22faa1af8a0514ccd075a6978ac97986425
+# good: [988aab640a6c46ab9552e65c2c3a8d577a4e30f3] rcu: Make rcu_gp_cleanup() be noinline for tracing
+git bisect good 988aab640a6c46ab9552e65c2c3a8d577a4e30f3
+# bad: [6603c2d8bd6cc7fa591fd3b4232bf25b65a0ea8f] Merge remote-tracking branch 'ftrace/for-next'
+git bisect bad 6603c2d8bd6cc7fa591fd3b4232bf25b65a0ea8f
+# good: [c658797f1a70561205a224be0c8be64977ed64e8] tracing: Add method for recording "func_repeats" events
+git bisect good c658797f1a70561205a224be0c8be64977ed64e8
+# good: [46135d6f878ab00261d4a2082d620bfb41019aab] irqchip/gic-v4.1: Disable vSGI upon (GIC CPUIF < v4.1) detection
+git bisect good 46135d6f878ab00261d4a2082d620bfb41019aab
+# bad: [05d7bf817019890e4d049e0b851940c596adbd9b] dt-bindings: interrupt-controller: Add IDT 79RC3243x Interrupt Controller
+git bisect bad 05d7bf817019890e4d049e0b851940c596adbd9b
+# bad: [1a0b05e435544cd53cd3936bdab425d88784b71a] irqdomain: Get rid of irq_create_strict_mappings()
+git bisect bad 1a0b05e435544cd53cd3936bdab425d88784b71a
+# bad: [5f8b938bd790cff6542c7fe3c1495c71f89fef1b] irqchip/jcore-aic: Kill use of irq_create_strict_mappings()
+git bisect bad 5f8b938bd790cff6542c7fe3c1495c71f89fef1b
+# bad: [b68761da01114a64b9c521975c3bca6d10eeb950] ARM: PXA: Kill use of irq_create_strict_mappings()
+git bisect bad b68761da01114a64b9c521975c3bca6d10eeb950
+# first bad commit: [b68761da01114a64b9c521975c3bca6d10eeb950] ARM: PXA: Kill use of irq_create_strict_mappings()
