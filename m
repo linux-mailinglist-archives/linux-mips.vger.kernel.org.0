@@ -2,79 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9EC36FD65
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Apr 2021 17:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC32136FDDB
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Apr 2021 17:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbhD3PMk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Apr 2021 11:12:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55858 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229819AbhD3PMj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 30 Apr 2021 11:12:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 39F88613B4;
-        Fri, 30 Apr 2021 15:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619795510;
-        bh=45dt6NERsMIsJ4AaWz0oUtcNhoaNV5B6r1s1SXdPLNc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UKxRQKX5DFWQT9/VeGheTFshJt1BinzHdic8QJr7D4yYgCTZa+jUxDElsxJT2j1cj
-         5hAR6SxlWCL0M3SWC0fBcwl4lDcPmydZ4tzhYNpxQzlWEfRqEfkFBXEhI1Pn15otVg
-         m6HVtkdDfW2sVmXobhWo2MCd9frs6KbzecRVhAY0+WIXICI4alO4geVDkBzy96y+oD
-         RbOiUW1kbDOllru/JhnI+GxhF+c737SqTK1uu3++TzNa75KqaYcq3EUSrQl1BagEOE
-         7K1Fnfh5Kd+w+PmbAt3U9MCEaUw68dAj6X2sJ2sHjR4nCh+iR+LTdFtc/vWAE8Jgd8
-         q6OhyRhUuYOvA==
-Date:   Fri, 30 Apr 2021 18:11:44 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [RFT PATCH] MIPS: Octeon: drop dependency on CONFIG_HOLES_IN_ZONE
-Message-ID: <YIweMMiWyMXTsijo@kernel.org>
-References: <20210418093512.668-1-rppt@kernel.org>
- <20210429210632.GA11767@alpha.franken.de>
- <YIvPZNM23Gpt8MAN@kernel.org>
- <20210430104256.GA6148@alpha.franken.de>
+        id S229532AbhD3PgC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Apr 2021 11:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229797AbhD3PgA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Apr 2021 11:36:00 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BDBC06138B
+        for <linux-mips@vger.kernel.org>; Fri, 30 Apr 2021 08:35:11 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id v6so4541663ljj.5
+        for <linux-mips@vger.kernel.org>; Fri, 30 Apr 2021 08:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zw/V8/6W4skoSH0mSs8cW3qf3BAXRpq8TIlzvcUbh9Y=;
+        b=KB8gW36y7USDPOimeqhXInwA40Pnt1d90bk9cbUzrAJc2frJTwsE8DUmYpsixNTY5D
+         0VEStw8wvZ8I0IlKf2CJfoljSzTfYWIayX3SvyxM1bomk9H/siwFiNjIEIKFbzohtdgO
+         w6vFYnxfHEF3wCnVt6V3YoSITDNsGsa10Pis/sjL+FQpIE58o9XbL+C2P81CYaPhq8Qt
+         qj8CGwVy7J+1cUwf/CXA01U/5rkNLcbVSAinzGvr1lHAjjXEfQK4i5hKVhhHHO2QhunW
+         aiKrl9b+u8yIOotQlVcCRKukY18jn7e3TOfbROxw1rCaup7aO+V4Nvp132xeshzjhRwg
+         DFLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zw/V8/6W4skoSH0mSs8cW3qf3BAXRpq8TIlzvcUbh9Y=;
+        b=XQEbnMfeJcnQTV+H4VMaHLyf3ssWo1dbFnlsgmQ/KFzE8d6FkYj3azqJrgQylUkWKN
+         D5/gNfLZgUMUf/NCvvKWmqx22pwetIUcNCOBvFLo21VYEb+KFY1Ap+20KtLNZZymZnYW
+         5+1a4Dw3JJ1XPuzSsVl4qTte+DTi5pvo53t5YnXF3E4rnr5rzPFvrYr5lx7sBo4y29OX
+         FrtlYEh0KUSgcF3M+aZ77eD1wI9ZZtGeNmab0paemur7SD1Slzan8BTKkznI4sq6Hlvp
+         xYYujEFMDOAZJCndb8b84d9B6yGpcY/ac1frX/NzJKaNhVCbjmGWbNRuQacvZHv4eLgN
+         0E5A==
+X-Gm-Message-State: AOAM533r7nizjz3Rlt/fSetkAgPs/t0td5H2bFkUmz0pVfKYc/I0gv6x
+        fT7FyxJ9Bjtp6e4DlFkYy+SLY0NY7OaJBQu7rZYu7tsIzxeQl8u7
+X-Google-Smtp-Source: ABdhPJx/QRgwRdWJdR4aTn2uakfmtAz6C7OxdhfGIo2oiu582wd/0wprc5qi+RX6OipU6nb2KN0bPjeYB4Dj/CDoOuM=
+X-Received: by 2002:a2e:9a0a:: with SMTP id o10mr4294282lji.216.1619796910218;
+ Fri, 30 Apr 2021 08:35:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210430104256.GA6148@alpha.franken.de>
+References: <20210429203740.1935629-1-jingzhangos@google.com>
+ <20210429203740.1935629-2-jingzhangos@google.com> <87bl9wnfgo.wl-maz@kernel.org>
+In-Reply-To: <87bl9wnfgo.wl-maz@kernel.org>
+From:   Jing Zhang <jingzhangos@google.com>
+Date:   Fri, 30 Apr 2021 10:34:58 -0500
+Message-ID: <CAAdAUtiMV_cVXPKBBEymNub8qYq-whLdihKG0si4_ALxK=yv6g@mail.gmail.com>
+Subject: Re: [PATCH v4 1/4] KVM: stats: Separate common stats from
+ architecture specific ones
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 12:42:56PM +0200, Thomas Bogendoerfer wrote:
-> On Fri, Apr 30, 2021 at 12:35:32PM +0300, Mike Rapoport wrote:
-> > Hi Thomas,
-> > 
-> > On Thu, Apr 29, 2021 at 11:06:32PM +0200, Thomas Bogendoerfer wrote:
-> > > On Sun, Apr 18, 2021 at 12:35:12PM +0300, Mike Rapoport wrote:
-> > > > I'd really appreciate if somebody with access to an Octeon system could
-> > > > test this patch.
-> > > 
-> > > Tested on an Ubiquiti edgerouter 12. Works with problem and I haven't
-> > > even seen a change in memory output.
-> > 
-> > Is "works with problem" a misprint or something went wrong?
-> 
-> that should have been "without problem".
+Hi Marc,
 
-Thanks for the clarification :)
+On Fri, Apr 30, 2021 at 7:07 AM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Thu, 29 Apr 2021 21:37:37 +0100,
+> Jing Zhang <jingzhangos@google.com> wrote:
+>
+> > +struct kvm_vm_stat_common {
+> > +     ulong remote_tlb_flush;
+> > +};
+> > +
+> > +struct kvm_vcpu_stat_common {
+> > +     u64 halt_successful_poll;
+> > +     u64 halt_attempted_poll;
+> > +     u64 halt_poll_invalid;
+> > +     u64 halt_wakeup;
+> > +     u64 halt_poll_success_ns;
+> > +     u64 halt_poll_fail_ns;
+> > +};
+>
+> Why can't we make everything a u64? Is there anything that really
+> needs to be a ulong? On most architectures, they are the same anyway,
+> so we might as well bite the bullet.
+That's a question I have asked myself many times. It is a little bit annoying
+to handle different types for VM and VCPU stats.
+This divergence was from the  commit 8a7e75d47b681933, which says
+"However vm statistics
+ could potentially be updated by multiple vcpus from that vm at a time.
+ To avoid the overhead of atomics make all vm statistics ulong such that
+ they are 64-bit on 64-bit systems where they can be atomically incremented
+ and are 32-bit on 32-bit systems which may not be able to atomically
+ increment 64-bit numbers."
 
-> All good in my test, but that was more or less booting and checking
-> memory log messages. 
+I would be very happy if there is a lock-free way to use u64 for VM stats.
+Please let me know if anyone has any idea about this.
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.
 
-Well, this is way better than build testing I did. The commit 465aaed0030b
-("MIPS: Octeon: Select CONFIG_HOLES_IN_ZONE") that added
-CONFIG_HOLES_IN_ZONE for Octeons talked about crashes at boot time, so
-boot testing seems appropriate.
-
-The only concern, is peculiar memory configuration Octeon may have with
-Linux and non-Linux "partitions" that will be different on different
-systems, but nevertheless I think the generic mm nowadays is robust enough
-to cope with those without CONFIG_HOLES_IN_ZONE.
-
-I presumed the patch would go via MIPS tree, so it's you call Thomas.
-
--- 
-Sincerely yours,
-Mike.
+Thanks,
+Jing
