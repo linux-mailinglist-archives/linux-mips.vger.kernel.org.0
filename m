@@ -2,150 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 552F2370836
-	for <lists+linux-mips@lfdr.de>; Sat,  1 May 2021 19:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4346F370B9A
+	for <lists+linux-mips@lfdr.de>; Sun,  2 May 2021 15:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbhEAR1G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 1 May 2021 13:27:06 -0400
-Received: from conuserg-08.nifty.com ([210.131.2.75]:47042 "EHLO
-        conuserg-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbhEAR1F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 1 May 2021 13:27:05 -0400
-Received: from localhost.localdomain (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 141HOcsb024068;
-        Sun, 2 May 2021 02:24:39 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 141HOcsb024068
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1619889880;
-        bh=DKpAtplaQKg143e+7vSq9Fg8LaAV0UcKHDXnRDpAwB8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rVe0kBlYfm5mf5koQK5x+ddei74+pKW5XvZOKTZeHAioqHrhu/gxXy4Wza0fypF4B
-         6A1jxXt017YrDWOVESl/9VuszooqpsI28jl6gV7TRLeGYGPsGLcQOgqE0Tq4OiXesC
-         L9sAqcSXi1L4D7sKx2RKh5qDREK2YFAIpJFLZDXWG836PKolgRSHLsP6nlFAlwV605
-         6um1B5NFGu24WHxuldifXj9iM5UOKPI9FNtnLn4H2XrPWaOI+XL2Bf4mUXHrtWBALg
-         w3csdIFGgvhJNmVMLs3YCk07ePvz8SG5G3Axq4pMvmomGu3dVX6N6g5EappzZG97xm
-         NZQtfKTdIhfYA==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Helge Deller <deller@gmx.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org
-Subject: [PATCH 2/2] arch: use cross_compiling to check whether it is a cross build or not
-Date:   Sun,  2 May 2021 02:24:36 +0900
-Message-Id: <20210501172437.156926-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210501172437.156926-1-masahiroy@kernel.org>
-References: <20210501172437.156926-1-masahiroy@kernel.org>
+        id S231964AbhEBNJ5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 2 May 2021 09:09:57 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.164]:11944 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230354AbhEBNJ4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 2 May 2021 09:09:56 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1619960936; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=rrYm0s2AeKoUram284OazedvzXEb190T6zyFhfFIyi99aUCGS9/HT74W3rPdg3Y8xQ
+    634/MUWzSkhJgTyDoEiFgUG1XTzKLDkREgWOULipXsxANTp/mr7pb98H24MgpNq6lHyH
+    1bBPJSYi99XR1lADpAiKlGfsgwtVYthi1KNCP6McP1YeGpdYrFHjdjQFJ7/H4RpqE42t
+    dh7I6tEoFJGOJnZs5vqhvgA/rhl2kqpX72FHqfOb4Ck5JkRs61DLnTcTfhPR8ZlDSDMW
+    40T/GtAHSlw47pvLXEBdBiQHdANm2NGHi+KIlpLMovcE3uAmedewI0p/GR7+foBMx7S+
+    689g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1619960936;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=PnHjKegTtwRmpr11RIcWdd+iwYXSfLmt2v9dbXMfP5g=;
+    b=im8n74/2yMA+drEJiHnilyNlHQBVI7ZGac3Gjf+4HGSbRJcUK2hKkRFJYpGZ2STm4U
+    /DtmNY3tCNb0pg5Mmfqy3AGflSNDVVDGcrAnMqEhrQTPtbEySdIMI0qVdlYBoz3IgyOV
+    PJpOEXS4Ub9Jr0TxuFmyobdJKHGcDZHhZ/j3gze/LkqtrsCptRadcKBAYOzREUpMDkA5
+    LfWIZskfMO3TqaNT5/M9efT3SRL8dUYiQkV5KkAQF++pR/DRz3zvfrFKftB2eulB6Q88
+    FZPnhjPYv4VnHSwxDyNCmPVcPZYMgFyf3hc+GmHkuelwsPMw239EhpSTJFA3W3HKkSnk
+    rxeQ==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1619960936;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=PnHjKegTtwRmpr11RIcWdd+iwYXSfLmt2v9dbXMfP5g=;
+    b=Znf0t1aRQOrwXi1yRLBxw/7lUavCgnW3j5zy1xNfp/r5D4DCnAsKqP1ZYC9B97JX37
+    hXuqMfS6taiHP6k+sLDM4lCT0oo6BjGBMHI62irA1fqH95Fle7IBLn1l9XplS9PA0L7a
+    MWz9DnhFMdiBPSJWg2r445lbGhqGiDbhve9khWpLh1oGoHTiBHrlYblJJCTPO05nv50G
+    Q14JbLMFhXvODdM+GrdExcFdvvXYLsJZhMvW8EgpsYWFQux7K7d0hDg+f3di11WwDrav
+    DSZ0PKoHtlGa0bp71YCdCEQVlLCYkmh3GLtS9XeECwy+UBRZSzOm+QplmyFg9GoDo5+8
+    PSGQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1mfYzBGHXH4GJ9tiK2/"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.25.2 DYNA|AUTH)
+    with ESMTPSA id i0b37fx42D8uOF0
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 2 May 2021 15:08:56 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-mips@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH] ASoC: jz4740-i2s: fix function name
+Date:   Sun,  2 May 2021 15:08:55 +0200
+Message-Id: <56f9c8518870263698b00d10de4821d2dc8932be.1619960935.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-'cross_compiling' is defined by the top Makefile and available for
-arch Makefiles to check whether it is a cross build or not. A good
-thing is the variable name 'cross_compiling' is self-documenting.
+This driver is not related to I2C protocol.
 
-This is a simple replacement for m68k, mips, sh, for which $(ARCH)
-and $(SRCARCH) always match.
+s/_i2c_/_i2s_/
 
-No functional change is intended for xtensa, either.
-
-This is rather a fix for parisc because arch/parisc/Makefile defines
-UTS_MATCHINE depending on CONFIG_64BIT, therefore cc-cross-prefix
-is not working in Kconfig time.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
+ sound/soc/jz4740/jz4740-i2s.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- arch/m68k/Makefile   | 2 +-
- arch/mips/Makefile   | 2 +-
- arch/parisc/Makefile | 2 +-
- arch/sh/Makefile     | 2 +-
- arch/xtensa/Makefile | 6 +-----
- 5 files changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/arch/m68k/Makefile b/arch/m68k/Makefile
-index ea14f2046fb4..82620f14124d 100644
---- a/arch/m68k/Makefile
-+++ b/arch/m68k/Makefile
-@@ -16,7 +16,7 @@
+diff --git a/sound/soc/jz4740/jz4740-i2s.c b/sound/soc/jz4740/jz4740-i2s.c
+index 47d955c0bb6a1..fe5b3a2b239c6 100644
+--- a/sound/soc/jz4740/jz4740-i2s.c
++++ b/sound/soc/jz4740/jz4740-i2s.c
+@@ -372,7 +372,7 @@ static int jz4740_i2s_resume(struct snd_soc_component *component)
+ 	return 0;
+ }
  
- KBUILD_DEFCONFIG := multi_defconfig
+-static void jz4740_i2c_init_pcm_config(struct jz4740_i2s *i2s)
++static void jz4740_i2s_init_pcm_config(struct jz4740_i2s *i2s)
+ {
+ 	struct snd_dmaengine_dai_dma_data *dma_data;
  
--ifneq ($(SUBARCH),$(ARCH))
-+ifdef cross_compiling
- 	ifeq ($(CROSS_COMPILE),)
- 		CROSS_COMPILE := $(call cc-cross-prefix, \
- 			m68k-linux-gnu- m68k-linux- m68k-unknown-linux-gnu-)
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index e71d587af49c..258234c35a09 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -50,7 +50,7 @@ tool-archpref		= $(64bit-tool-archpref)
- UTS_MACHINE		:= mips64
- endif
+@@ -397,7 +397,7 @@ static int jz4740_i2s_dai_probe(struct snd_soc_dai *dai)
+ 	if (ret)
+ 		return ret;
  
--ifneq ($(SUBARCH),$(ARCH))
-+ifdef cross_compiling
-   ifeq ($(CROSS_COMPILE),)
-     CROSS_COMPILE := $(call cc-cross-prefix, $(tool-archpref)-linux-  $(tool-archpref)-linux-gnu-  $(tool-archpref)-unknown-linux-gnu-)
-   endif
-diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
-index 7d9f71aa829a..aed8ea29268b 100644
---- a/arch/parisc/Makefile
-+++ b/arch/parisc/Makefile
-@@ -41,7 +41,7 @@ endif
+-	jz4740_i2c_init_pcm_config(i2s);
++	jz4740_i2s_init_pcm_config(i2s);
+ 	snd_soc_dai_init_dma_data(dai, &i2s->playback_dma_data,
+ 		&i2s->capture_dma_data);
  
- export LD_BFD
- 
--ifneq ($(SUBARCH),$(UTS_MACHINE))
-+ifdef cross_compiling
- 	ifeq ($(CROSS_COMPILE),)
- 		CC_SUFFIXES = linux linux-gnu unknown-linux-gnu
- 		CROSS_COMPILE := $(call cc-cross-prefix, \
-diff --git a/arch/sh/Makefile b/arch/sh/Makefile
-index 3bcbf52fb30e..44bcb80e791a 100644
---- a/arch/sh/Makefile
-+++ b/arch/sh/Makefile
-@@ -9,7 +9,7 @@
- # License.  See the file "COPYING" in the main directory of this archive
- # for more details.
- #
--ifneq ($(SUBARCH),$(ARCH))
-+ifdef cross_compiling
-   ifeq ($(CROSS_COMPILE),)
-     CROSS_COMPILE := $(call cc-cross-prefix, sh-linux- sh-linux-gnu- sh-unknown-linux-gnu-)
-   endif
-diff --git a/arch/xtensa/Makefile b/arch/xtensa/Makefile
-index ba9fee75e675..e9c8f064c44d 100644
---- a/arch/xtensa/Makefile
-+++ b/arch/xtensa/Makefile
-@@ -19,12 +19,8 @@ variant-y := $(patsubst "%",%,$(CONFIG_XTENSA_VARIANT_NAME))
- VARIANT = $(variant-y)
- export VARIANT
- 
--# Test for cross compiling
--
- ifneq ($(VARIANT),)
--  COMPILE_ARCH = $(shell uname -m)
--
--  ifneq ($(COMPILE_ARCH), xtensa)
-+  ifdef cross_compiling
-     ifndef CROSS_COMPILE
-       CROSS_COMPILE = xtensa_$(VARIANT)-
-     endif
 -- 
-2.27.0
+2.26.2
 
