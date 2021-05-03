@@ -2,81 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8B4370BAB
-	for <lists+linux-mips@lfdr.de>; Sun,  2 May 2021 15:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BB2371575
+	for <lists+linux-mips@lfdr.de>; Mon,  3 May 2021 14:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbhEBNrR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 2 May 2021 09:47:17 -0400
-Received: from aposti.net ([89.234.176.197]:47286 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231941AbhEBNrR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 2 May 2021 09:47:17 -0400
-Date:   Sun, 02 May 2021 14:45:43 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] ASoC: jz4740-i2s: fix function name
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-mips@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org
-Message-Id: <7KFHSQ.0D5Z90AZRGJV@crapouillou.net>
-In-Reply-To: <56f9c8518870263698b00d10de4821d2dc8932be.1619960935.git.hns@goldelico.com>
-References: <56f9c8518870263698b00d10de4821d2dc8932be.1619960935.git.hns@goldelico.com>
+        id S233570AbhECMyu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 May 2021 08:54:50 -0400
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:46794 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230246AbhECMyt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 3 May 2021 08:54:49 -0400
+Received: by mail-ua1-f43.google.com with SMTP id d30so283171uae.13;
+        Mon, 03 May 2021 05:53:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6sRTDx/pvT9oKMRoUjacP8gFXuJ+4JRD0jTuVOJOzkc=;
+        b=SkpUYlGCA04B6Ljct1NGDG3Py2gDKkl1BJqlsrdAS+t7rVOuLntIeubOPYEUSsvA/C
+         NlVVsKIPh0qbnaj49cIdr3ZNoiZHZtRhwVfwgwmrFITcDh/hgxE3q6+zzmm/9ooZqjSZ
+         2b2b/9219cesIp9W6nmEzmj0DegvSSVBlx1LXclJWBVv1SjuXZ73DV/bD7MMkyCygHHR
+         p4eFExKNBeArHiDZwFVXdOo4Pval7vrTymI5HBlmh71yygjZc3Fxh4gxK35Y+JI1oVft
+         LwO8uwYyHITRwFTUd8WUlokBpfiLsKY5R2YpoBfjre+sjq/Vn6e6jR07ueSUZjlx8MOo
+         aMKQ==
+X-Gm-Message-State: AOAM532k/Qw2rwU0QzBxMmYsr7/2L0FV+qxcC258+0RGPFaJfceQeb/k
+        Bs/H+8mozP89t4Vgo1/oS7bCyLjthdKSvmeiTyk=
+X-Google-Smtp-Source: ABdhPJyY6HmMK+W9rt69v5I2kwTL7IQIj/ouQs0jw6zSbbR1oc5JQ0kbR20w16rDCmSsQz7HN14LdrNs2RquXDAeA5o=
+X-Received: by 2002:ab0:5f8d:: with SMTP id b13mr14381698uaj.4.1620046435558;
+ Mon, 03 May 2021 05:53:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+References: <20210501172437.156926-1-masahiroy@kernel.org> <20210501172437.156926-2-masahiroy@kernel.org>
+In-Reply-To: <20210501172437.156926-2-masahiroy@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 3 May 2021 14:53:44 +0200
+Message-ID: <CAMuHMdUsXpvUeF4vUWTmAk-ADivHXoVYo-YOw7hB2OGT7qxqLw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arch: use cross_compiling to check whether it is a
+ cross build or not
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Chris Zankel <chris@zankel.net>,
+        Helge Deller <deller@gmx.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Yamada-san,
 
+On Sat, May 1, 2021 at 7:26 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> 'cross_compiling' is defined by the top Makefile and available for
+> arch Makefiles to check whether it is a cross build or not. A good
+> thing is the variable name 'cross_compiling' is self-documenting.
+>
+> This is a simple replacement for m68k, mips, sh, for which $(ARCH)
+> and $(SRCARCH) always match.
+>
+> No functional change is intended for xtensa, either.
+>
+> This is rather a fix for parisc because arch/parisc/Makefile defines
+> UTS_MATCHINE depending on CONFIG_64BIT, therefore cc-cross-prefix
+> is not working in Kconfig time.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Le dim., mai 2 2021 at 15:08:55 +0200, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> This driver is not related to I2C protocol.
-> 
-> s/_i2c_/_i2s_/
-> 
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>  arch/m68k/Makefile   | 2 +-
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Cheers,
--Paul
+Gr{oetje,eeting}s,
 
-> ---
->  sound/soc/jz4740/jz4740-i2s.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/sound/soc/jz4740/jz4740-i2s.c 
-> b/sound/soc/jz4740/jz4740-i2s.c
-> index 47d955c0bb6a1..fe5b3a2b239c6 100644
-> --- a/sound/soc/jz4740/jz4740-i2s.c
-> +++ b/sound/soc/jz4740/jz4740-i2s.c
-> @@ -372,7 +372,7 @@ static int jz4740_i2s_resume(struct 
-> snd_soc_component *component)
->  	return 0;
->  }
-> 
-> -static void jz4740_i2c_init_pcm_config(struct jz4740_i2s *i2s)
-> +static void jz4740_i2s_init_pcm_config(struct jz4740_i2s *i2s)
->  {
->  	struct snd_dmaengine_dai_dma_data *dma_data;
-> 
-> @@ -397,7 +397,7 @@ static int jz4740_i2s_dai_probe(struct 
-> snd_soc_dai *dai)
->  	if (ret)
->  		return ret;
-> 
-> -	jz4740_i2c_init_pcm_config(i2s);
-> +	jz4740_i2s_init_pcm_config(i2s);
->  	snd_soc_dai_init_dma_data(dai, &i2s->playback_dma_data,
->  		&i2s->capture_dma_data);
-> 
-> --
-> 2.26.2
-> 
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
