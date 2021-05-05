@@ -2,105 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A8D374443
-	for <lists+linux-mips@lfdr.de>; Wed,  5 May 2021 19:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881493743B6
+	for <lists+linux-mips@lfdr.de>; Wed,  5 May 2021 19:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235415AbhEEQ4A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 May 2021 12:56:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60512 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236733AbhEEQug (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 5 May 2021 12:50:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 323656196C;
-        Wed,  5 May 2021 16:37:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232660;
-        bh=QtLZFvkFiF9ocPEowz07n+K0Aep2FRW1jo4+c5mClUU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bt/6r+Clwph+hEjMZ/jGfZDkd5qQAX2WtBNdorkydoObBzk1Pl4vjF8ReLH5ouULP
-         PseXmvMhqL86b76b5hF/lC4bYXiOteLEU3JxvNPq2Zuo/xQOVjnsHohfTE0cELp+HM
-         v/ETjyXgYlbpa0w2RJi/9VY4bEvSRDw0BIQSRCBwsPXJ8RQPZDUURpugE3Xru/x4pQ
-         By5Ic9bgUQy5d9KgY3eojo/SRdX1RiranBtgbf2wqglPKm0Rh+i2c7sDfT4r4RhKDI
-         ACV295sIFwK5F6oUb/UpUkGBKDDgZcDrRzxzT55L59JOJZoiOkJ87EKv1m08CRn8p8
-         9FrpYYr4O4sQg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 35/85] MIPS: Loongson64: Use _CACHE_UNCACHED instead of _CACHE_UNCACHED_ACCELERATED
-Date:   Wed,  5 May 2021 12:35:58 -0400
-Message-Id: <20210505163648.3462507-35-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210505163648.3462507-1-sashal@kernel.org>
-References: <20210505163648.3462507-1-sashal@kernel.org>
+        id S234378AbhEEQve (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 May 2021 12:51:34 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:46574 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S236095AbhEEQrr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 5 May 2021 12:47:47 -0400
+Received: from ld50.lan (unknown [101.224.80.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E4D5C600BB;
+        Thu,  6 May 2021 00:39:19 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1620232760; bh=vx2b9SDlVsCxcZQpwe+BPwvZaY58DskBa9Xh3l9tEsU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Iv6fvd4LG7IJZ4UiEwXerPPa0GGFiS1lx/U1JkiqAzBNKqHzYUkjlL4kCLVhXZgR8
+         5STrugC+hrEN6Gt7ixDqaNnxIPAV7QGUvVuH2nAL8f36lxgixABrJGtsV+uuTl9V60
+         G6ETTQMHFI79jXudUgHUs2KO5WV5xIBTMZdM7l5o=
+From:   WANG Xuerui <git@xen0n.name>
+To:     linux-rtc@vger.kernel.org
+Cc:     WANG Xuerui <git@xen0n.name>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 0/6] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+Date:   Thu,  6 May 2021 00:38:59 +0800
+Message-Id: <20210505163905.1199923-1-git@xen0n.name>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
+It has been a while since v1 of this series was sent (2020-09);
+apparently, I did not have enough time or resource figuring out the exact
+difference between rtc-ls1x and rtc-ls2x to see if the two can in fact be
+merged, even today. Sorry for the long delay!
 
-[ Upstream commit 5e65c52ec716af6e8f51dacdaeb4a4d872249af1 ]
+According to the manuals, though, the initialization sequence and
+bitfield descriptions look certainly different, so I'm a bit wary about
+just going ahead and merging these. Per Tiezhu's suggestion in the
+previous thread, I'm just re-submitting this series with tags collected
+and Huacai's e-mail address updated. If anyone (probably Loongson guys?)
+could provide more information regarding the possible merger of rtc-ls1x
+and rtc-ls2x, that would be great.
 
-Loongson64 processors have a writecombine issue that maybe failed to
-write back framebuffer used with ATI Radeon or AMD GPU at times, after
-commit 8a08e50cee66 ("drm: Permit video-buffers writecombine mapping
-for MIPS"), there exists some errors such as blurred screen and lockup,
-and so on.
+This patch series adds support for the RTC module found on various
+Loongson systems with the Loongson-2K SoC or the LS7A bridge chip.
+The driver is rewritten from an out-of-tree version to meet mainline
+standards. I write kernel code as a hobby, though, so there might still
+be overlooked issues. Any suggestions are welcome.
 
-[   60.958721] radeon 0000:03:00.0: ring 0 stalled for more than 10079msec
-[   60.965315] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000112 last fence id 0x000000000000011d on ring 0)
-[   60.976525] radeon 0000:03:00.0: ring 3 stalled for more than 10086msec
-[   60.983156] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000374 last fence id 0x00000000000003a8 on ring 3)
+Note that, the Loongson-2K platform was upstreamed after v1 of this
+series, so v2 additionally contains enablement for it. I'm unable to
+test with my 2K board now, however, so Loongson guys, please test this
+series again on your collection of LS7A and 2K systems, thanks!
 
-As discussed earlier [1], it might be better to disable writecombine
-on the CPU detection side because the root cause is unknown now.
+v2:
+- Rebased on top of latest linux-next
+- Updated Huacai's e-mail address to the kernel.org one
+- Added collected tags
+- Added adaptation for newly upstreamed Loongson-2K platforms
 
-Actually, this patch is a temporary solution to just make it work well,
-it is not a proper and final solution, I hope someone will have a better
-solution to fix this issue in the future.
+WANG Xuerui (6):
+  rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+  dt-bindings: rtc: Add bindings for LS2X RTC
+  MIPS: Loongson64: DTS: Add RTC support to LS7A
+  MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
+  MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+  MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
 
-[1] https://lore.kernel.org/patchwork/patch/1285542/
+ .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |   5 +
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   5 +
+ arch/mips/configs/loongson2k_defconfig        |   1 +
+ arch/mips/configs/loongson3_defconfig         |   1 +
+ drivers/rtc/Kconfig                           |  11 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ls2x.c                        | 225 ++++++++++++++++++
+ 8 files changed, 251 insertions(+)
+ create mode 100644 drivers/rtc/rtc-ls2x.c
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/kernel/cpu-probe.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index 31cb9199197c..e6ae2bcdbeda 100644
---- a/arch/mips/kernel/cpu-probe.c
-+++ b/arch/mips/kernel/cpu-probe.c
-@@ -1739,7 +1739,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 			set_isa(c, MIPS_CPU_ISA_M64R2);
- 			break;
- 		}
--		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_EXT |
- 				MIPS_ASE_LOONGSON_EXT2);
- 		break;
-@@ -1769,7 +1768,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 		 * register, we correct it here.
- 		 */
- 		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
--		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
- 			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
- 		c->ases &= ~MIPS_ASE_VZ; /* VZ of Loongson-3A2000/3000 is incomplete */
-@@ -1780,7 +1778,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
- 		set_elf_platform(cpu, "loongson3a");
- 		set_isa(c, MIPS_CPU_ISA_M64R2);
- 		decode_cpucfg(c);
--		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
- 		break;
- 	default:
- 		panic("Unknown Loongson Processor ID!");
 -- 
-2.30.2
+2.30.1
 
