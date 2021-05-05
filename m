@@ -2,38 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DFC374088
-	for <lists+linux-mips@lfdr.de>; Wed,  5 May 2021 18:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E042D374289
+	for <lists+linux-mips@lfdr.de>; Wed,  5 May 2021 18:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234663AbhEEQfM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 May 2021 12:35:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53358 "EHLO mail.kernel.org"
+        id S235769AbhEEQrG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 May 2021 12:47:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49594 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234274AbhEEQdh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 5 May 2021 12:33:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B29446141D;
-        Wed,  5 May 2021 16:32:27 +0000 (UTC)
+        id S234539AbhEEQn4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 5 May 2021 12:43:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9F17613C3;
+        Wed,  5 May 2021 16:35:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232348;
-        bh=9ZPI8c8ZgyNTASDUo0CAywJ/citlMl5b9hVSu6rXPjI=;
+        s=k20201202; t=1620232515;
+        bh=rpLi6obJg7z+Xp2DoJtz1BqvPDpy3Mlmr1qOG2hQV2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sjSgiI+52cSssSqMSJSCjb/C27sNDh+md5QJk5XZlLIdF+b1L51a990ciX5uQQScr
-         QjxzXlOcJvg5c4Z8aewD3Us/6UEv4yh4ZPJh3cS1apmNM5VRcM7YG6LXluhzhN8OtI
-         R267GvVZWkcC4XhIRJoyx9DTiruS8ou7VY1YqSBkpfPVdVRsz6N9i6afEdOd2syzwb
-         6klUBeHPYY1lZHXyEkNd+01Zgxt2oNuGN5kahsCk/a4gp2u7HXG8TwsqidZJxAlTXq
-         QBq+PIvKNrkj16DboEC/FdiI3sxVJRYrUbgEaFZzPCWpUtPm23fXV95pftjlsoW2Rk
-         aSJrMPbVOttEA==
+        b=RYs3bC3rDfh7BFQA9VITtZrof9KM44TErVTWAus1swAJ7heWIZSfL2N9/lhuPk6KT
+         8WYt/gFHltkXH7T+CIcQLxv8J8Pq9im0ytAFPZaYc+8ZGxgj1N3R55PY3YlEI6Q39Z
+         NdjFT5cZjivIuWYDz2bA373J2gdFSgiML2yEjyY5+1trAjd4FRu4dto/3ZprV6UV43
+         H040Ru0YL9NRnnwCL0XY3whIdBd0JmQsR3K8U4c3Rn5OJy+X95AldxQ0YH79wK51/J
+         J2ekTEPlNUBymWgFW3ItXtH+sP3CzHXfEIzy/xioA4dnX8pRZlJHgae3GiY1R4M5IL
+         0NHPRMKsRVLbQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 046/116] MIPS: Loongson64: Use _CACHE_UNCACHED instead of _CACHE_UNCACHED_ACCELERATED
-Date:   Wed,  5 May 2021 12:30:14 -0400
-Message-Id: <20210505163125.3460440-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.11 043/104] MIPS: Loongson64: Use _CACHE_UNCACHED instead of _CACHE_UNCACHED_ACCELERATED
+Date:   Wed,  5 May 2021 12:33:12 -0400
+Message-Id: <20210505163413.3461611-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210505163125.3460440-1-sashal@kernel.org>
-References: <20210505163125.3460440-1-sashal@kernel.org>
+In-Reply-To: <20210505163413.3461611-1-sashal@kernel.org>
+References: <20210505163413.3461611-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -74,10 +74,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 deletions(-)
 
 diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-index b71892064f27..0ef240adefb5 100644
+index 21794db53c05..8895eb6568ca 100644
 --- a/arch/mips/kernel/cpu-probe.c
 +++ b/arch/mips/kernel/cpu-probe.c
-@@ -1752,7 +1752,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+@@ -1743,7 +1743,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
  			set_isa(c, MIPS_CPU_ISA_M64R2);
  			break;
  		}
@@ -85,7 +85,7 @@ index b71892064f27..0ef240adefb5 100644
  		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_EXT |
  				MIPS_ASE_LOONGSON_EXT2);
  		break;
-@@ -1782,7 +1781,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+@@ -1773,7 +1772,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
  		 * register, we correct it here.
  		 */
  		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
@@ -93,7 +93,7 @@ index b71892064f27..0ef240adefb5 100644
  		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
  			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
  		c->ases &= ~MIPS_ASE_VZ; /* VZ of Loongson-3A2000/3000 is incomplete */
-@@ -1793,7 +1791,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+@@ -1784,7 +1782,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
  		set_elf_platform(cpu, "loongson3a");
  		set_isa(c, MIPS_CPU_ISA_M64R2);
  		decode_cpucfg(c);
