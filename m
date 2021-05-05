@@ -2,142 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FF8372C19
-	for <lists+linux-mips@lfdr.de>; Tue,  4 May 2021 16:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DFC374088
+	for <lists+linux-mips@lfdr.de>; Wed,  5 May 2021 18:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbhEDOgN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 May 2021 10:36:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57972 "EHLO mail.kernel.org"
+        id S234663AbhEEQfM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 May 2021 12:35:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53358 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231126AbhEDOgN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 4 May 2021 10:36:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0369B613CC;
-        Tue,  4 May 2021 14:35:18 +0000 (UTC)
+        id S234274AbhEEQdh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 5 May 2021 12:33:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B29446141D;
+        Wed,  5 May 2021 16:32:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620138918;
-        bh=9ZtBEC0XYgFjUhKlLdRO0G8aZQVeAPm5gU3FvbURgNI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h0KOgursxmzw4sVUAVaDfHBs66qmCEIiCjxswvd6kqY3cj2hsRNSF3WvAwJTO286S
-         qW+XBOWKnJrcwGa20y7JomKYpbrwSzEKeku4IVjJ7edBkbRDFACKjJsWE1lq1YNURh
-         jD7exZS37Q3/EbbTz6RnB+MRoGkRdcKuf/dfUoNEqQ5WBeAFOrlkpuoo4n11V80bF0
-         CV5XGbUnfdXR+3IZ5BLSQvh6IqAmsDyB3ADLYtI81EeGYXlKWHVBmSJ1VfDjjp3XAt
-         lLoSp/muYSrSTE1u++/VRVj6rAlGteww6J6cJcSTizuKaqRyDJKV1LXSHg48RVzJih
-         tJhpXKaJwm52Q==
-Received: by mail-ej1-f46.google.com with SMTP id y7so13501590ejj.9;
-        Tue, 04 May 2021 07:35:17 -0700 (PDT)
-X-Gm-Message-State: AOAM5308EBpE77TPt44FmX4dNHQVYFikal7YzAvJFeOnuRIv+aZdye0K
-        cCytKyWczM55CGnnHLuSGmAVn1+LlF1nIUP9Qw==
-X-Google-Smtp-Source: ABdhPJwrXSHJlK+c9A8BGCApjGExqZKLfC0iqptDV3LyvQikAcUut5OrhYKxptbz6VWBzAfQFR/aPczv/DY3nVrYeYY=
-X-Received: by 2002:a17:907:161e:: with SMTP id hb30mr21030769ejc.360.1620138916277;
- Tue, 04 May 2021 07:35:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210503144635.2297386-1-boqun.feng@gmail.com>
- <20210503144635.2297386-2-boqun.feng@gmail.com> <YJDYrn7Nt+xyHbyr@kernel.org>
-In-Reply-To: <YJDYrn7Nt+xyHbyr@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 4 May 2021 09:34:54 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLMAyUEZgLjiKmNL2ioTYJwj-TbTWFJmEi7pynKZHXmoQ@mail.gmail.com>
-Message-ID: <CAL_JsqLMAyUEZgLjiKmNL2ioTYJwj-TbTWFJmEi7pynKZHXmoQ@mail.gmail.com>
-Subject: Re: [RFC v2 1/7] PCI: Introduce pci_host_bridge::domain_nr
-To:     Mike Rapoport <rppt@kernel.org>, Boqun Feng <boqun.feng@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        s=k20201202; t=1620232348;
+        bh=9ZPI8c8ZgyNTASDUo0CAywJ/citlMl5b9hVSu6rXPjI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=sjSgiI+52cSssSqMSJSCjb/C27sNDh+md5QJk5XZlLIdF+b1L51a990ciX5uQQScr
+         QjxzXlOcJvg5c4Z8aewD3Us/6UEv4yh4ZPJh3cS1apmNM5VRcM7YG6LXluhzhN8OtI
+         R267GvVZWkcC4XhIRJoyx9DTiruS8ou7VY1YqSBkpfPVdVRsz6N9i6afEdOd2syzwb
+         6klUBeHPYY1lZHXyEkNd+01Zgxt2oNuGN5kahsCk/a4gp2u7HXG8TwsqidZJxAlTXq
+         QBq+PIvKNrkj16DboEC/FdiI3sxVJRYrUbgEaFZzPCWpUtPm23fXV95pftjlsoW2Rk
+         aSJrMPbVOttEA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jon Derrick <jonathan.derrick@intel.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 046/116] MIPS: Loongson64: Use _CACHE_UNCACHED instead of _CACHE_UNCACHED_ACCELERATED
+Date:   Wed,  5 May 2021 12:30:14 -0400
+Message-Id: <20210505163125.3460440-46-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210505163125.3460440-1-sashal@kernel.org>
+References: <20210505163125.3460440-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 4, 2021 at 12:16 AM Mike Rapoport <rppt@kernel.org> wrote:
->
-> On Mon, May 03, 2021 at 10:46:29PM +0800, Boqun Feng wrote:
-> > Currently we retrieve the PCI domain number of the host bridge from the
-> > bus sysdata (or pci_config_window if PCI_DOMAINS_GENERIC=y). Actually
-> > we have the information at PCI host bridge probing time, and it makes
-> > sense that we store it into pci_host_bridge. One benefit of doing so is
-> > the requirement for supporting PCI on Hyper-V for ARM64, because the
-> > host bridge of Hyper-V doesnt' have pci_config_window, whereas ARM64 is
-> > a PCI_DOMAINS_GENERIC=y arch, so we cannot retrieve the PCI domain
-> > number from pci_config_window on ARM64 Hyper-V guest.
-> >
-> > As the preparation for ARM64 Hyper-V PCI support, we introduce the
-> > domain_nr in pci_host_bridge, and set it properly at probing time, then
-> > for PCI_DOMAINS_GENERIC=y archs, bus domain numbers are set by the
-> > bridge domain_nr.
-> >
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > ---
-> >  arch/arm/kernel/bios32.c              |  2 ++
-> >  arch/arm/mach-dove/pcie.c             |  2 ++
-> >  arch/arm/mach-mv78xx0/pcie.c          |  2 ++
-> >  arch/arm/mach-orion5x/pci.c           |  2 ++
-> >  arch/arm64/kernel/pci.c               |  3 +--
-> >  arch/mips/pci/pci-legacy.c            |  2 ++
-> >  arch/mips/pci/pci-xtalk-bridge.c      |  2 ++
-> >  drivers/pci/controller/pci-ftpci100.c |  2 ++
-> >  drivers/pci/controller/pci-mvebu.c    |  2 ++
-> >  drivers/pci/pci.c                     |  4 ++--
-> >  drivers/pci/probe.c                   |  7 ++++++-
-> >  include/linux/pci.h                   | 11 ++++++++---
-> >  12 files changed, 33 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/arch/arm/kernel/bios32.c b/arch/arm/kernel/bios32.c
-> > index e7ef2b5bea9c..4942cd681e41 100644
-> > --- a/arch/arm/kernel/bios32.c
-> > +++ b/arch/arm/kernel/bios32.c
-> > @@ -471,6 +471,8 @@ static void pcibios_init_hw(struct device *parent, struct hw_pci *hw,
-> >                               bridge->sysdata = sys;
-> >                               bridge->busnr = sys->busnr;
-> >                               bridge->ops = hw->ops;
-> > +                             if (IS_ENABLED(CONFIG_PCI_DOMAINS_GENERIC))
-> > +                                     bridge->domain_nr = pci_bus_find_domain_nr(sys, parent);
-> >
-> >                               ret = pci_scan_root_bus_bridge(bridge);
-> >                       }
-> > diff --git a/arch/arm/mach-dove/pcie.c b/arch/arm/mach-dove/pcie.c
-> > index ee91ac6b5ebf..92eb8484b49b 100644
-> > --- a/arch/arm/mach-dove/pcie.c
-> > +++ b/arch/arm/mach-dove/pcie.c
-> > @@ -167,6 +167,8 @@ dove_pcie_scan_bus(int nr, struct pci_host_bridge *bridge)
-> >       bridge->sysdata = sys;
-> >       bridge->busnr = sys->busnr;
-> >       bridge->ops = &pcie_ops;
-> > +     if (IS_ENABLED(CONFIG_PCI_DOMAINS_GENERIC))
-> > +             bridge->domain_nr = pci_bus_find_domain_nr(sys, NULL);
->
-> The check for CONFIG_PCI_DOMAINS_GENERIC is excessive because there is a
-> stub for pci_bus_find_domain_nr().
->
-> I'm not an expert in PCI, but maybe the repeated assignment of
-> bridge->domain_nr can live in the generic code, say, in
-> pci_scan_root_bus_bridge(). E.g. it will set the domain_nr when it is zero.
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-Yes. There's zero reason h/w drivers should care what the domain_nr is.
+[ Upstream commit 5e65c52ec716af6e8f51dacdaeb4a4d872249af1 ]
 
-There's another issue with domains you should be aware of:
+Loongson64 processors have a writecombine issue that maybe failed to
+write back framebuffer used with ATI Radeon or AMD GPU at times, after
+commit 8a08e50cee66 ("drm: Permit video-buffers writecombine mapping
+for MIPS"), there exists some errors such as blurred screen and lockup,
+and so on.
 
-https://lore.kernel.org/linux-pci/20210425152155.mstuxndsoqdbdape@pali/
+[   60.958721] radeon 0000:03:00.0: ring 0 stalled for more than 10079msec
+[   60.965315] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000112 last fence id 0x000000000000011d on ring 0)
+[   60.976525] radeon 0000:03:00.0: ring 3 stalled for more than 10086msec
+[   60.983156] radeon 0000:03:00.0: GPU lockup (current fence id 0x0000000000000374 last fence id 0x00000000000003a8 on ring 3)
 
-That may need to be fixed first because deferred probing could cause
-the domain to increment each time you retry probe.
+As discussed earlier [1], it might be better to disable writecombine
+on the CPU detection side because the root cause is unknown now.
 
-Rob
+Actually, this patch is a temporary solution to just make it work well,
+it is not a proper and final solution, I hope someone will have a better
+solution to fix this issue in the future.
+
+[1] https://lore.kernel.org/patchwork/patch/1285542/
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/kernel/cpu-probe.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index b71892064f27..0ef240adefb5 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1752,7 +1752,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 			set_isa(c, MIPS_CPU_ISA_M64R2);
+ 			break;
+ 		}
+-		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_EXT |
+ 				MIPS_ASE_LOONGSON_EXT2);
+ 		break;
+@@ -1782,7 +1781,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 		 * register, we correct it here.
+ 		 */
+ 		c->options |= MIPS_CPU_FTLB | MIPS_CPU_TLBINV | MIPS_CPU_LDPTE;
+-		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		c->ases |= (MIPS_ASE_LOONGSON_MMI | MIPS_ASE_LOONGSON_CAM |
+ 			MIPS_ASE_LOONGSON_EXT | MIPS_ASE_LOONGSON_EXT2);
+ 		c->ases &= ~MIPS_ASE_VZ; /* VZ of Loongson-3A2000/3000 is incomplete */
+@@ -1793,7 +1791,6 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 		set_elf_platform(cpu, "loongson3a");
+ 		set_isa(c, MIPS_CPU_ISA_M64R2);
+ 		decode_cpucfg(c);
+-		c->writecombine = _CACHE_UNCACHED_ACCELERATED;
+ 		break;
+ 	default:
+ 		panic("Unknown Loongson Processor ID!");
+-- 
+2.30.2
+
