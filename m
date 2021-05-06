@@ -2,133 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CA93752A1
-	for <lists+linux-mips@lfdr.de>; Thu,  6 May 2021 12:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FE3375348
+	for <lists+linux-mips@lfdr.de>; Thu,  6 May 2021 13:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234533AbhEFKxw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 May 2021 06:53:52 -0400
-Received: from foss.arm.com ([217.140.110.172]:32996 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234508AbhEFKxv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 6 May 2021 06:53:51 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89FF4D6E;
-        Thu,  6 May 2021 03:52:53 -0700 (PDT)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BD663F73B;
-        Thu,  6 May 2021 03:52:50 -0700 (PDT)
-Date:   Thu, 6 May 2021 11:52:45 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        id S231916AbhEFL5Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 May 2021 07:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231452AbhEFL5O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 May 2021 07:57:14 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07351C061761
+        for <linux-mips@vger.kernel.org>; Thu,  6 May 2021 04:56:17 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id u19-20020a0568302493b02902d61b0d29adso3827013ots.10
+        for <linux-mips@vger.kernel.org>; Thu, 06 May 2021 04:56:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6QseWDJD7yxOU5rG3+na4aQGSjg/EdTCgN17vCsxG6Y=;
+        b=mlbBVVOHOhncgw4lopPiGHy6NNG+4vZNsw5TbuB+kL97hTTKGxe5M48hp1hvmqSvnF
+         TSbCiiwh7InDzzaKZVtA3pjlysz37bVZGSCyJ5xA5NXZELSzieFVupzlCzENCfXyLVJ8
+         lQ9ClTaR8Gyxc8SmKu694ilUnDrjFcHKBD5EfnDMKjtMldRlGlU6ijU33bbZRQ7i5eML
+         dvNfjxZc8a2KIIzUY8fEf70ryxOfYQn5p1meuFhSQI+sR7voUjNDnM0cjo9fXGauaAkY
+         tdgwC8B68IfrCM00egmCeciw+m5i3CcQKpiCdhAAe24DXvHylSzVuunNLT65gIvMce3o
+         mJsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6QseWDJD7yxOU5rG3+na4aQGSjg/EdTCgN17vCsxG6Y=;
+        b=nFE3rErEGHQ109YHeIWBzPUXXamvo/Ep+oyymOhe0PxYLFMLaa3Na48FpfaGqHoV9J
+         OGtnMJi4J/sH+vW14K/X785IwJQNKnybn2QyOmWcnoac6LwovElFjQQnmgkvHdF/IY3+
+         FtBYWa/nkzKd64E2wjQhqpoKovSwvuMLZgeD6qaTYiwg2VDoXsflvxHhXLgrV0GbGV8x
+         UHqV7k0Q3rx28/PKVjjdlIEVgzh2dcADqRzYbKwqMB81haQBcR8lSMamx0pKqSDYUhz9
+         uL3hq0i5u4WpJ5kcLixMBRs2erdqDTt2Oqd/OxQnfC6jfE4HbhOsFl7SCxOfRwHG6v2n
+         gk3A==
+X-Gm-Message-State: AOAM531Wp5hHGhfqO3fqfH+Uwv8d8RihQUD7cbaFwXieZbnqFdym8tVU
+        r8FilOF3HnV+tdixN6+92GZtRw==
+X-Google-Smtp-Source: ABdhPJw9TnD7fJ5mwyTc0krHc+cYRAlG0zHj8GY6A4eINag7hGLuvphIDB2gNYjb4J55cRecfnyT/g==
+X-Received: by 2002:a9d:6242:: with SMTP id i2mr3187364otk.273.1620302176492;
+        Thu, 06 May 2021 04:56:16 -0700 (PDT)
+Received: from [192.168.101.238] ([172.58.96.242])
+        by smtp.gmail.com with ESMTPSA id q2sm14055ool.3.2021.05.06.04.56.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 May 2021 04:56:15 -0700 (PDT)
+Subject: Re: [PATCH 2/2] arch: use cross_compiling to check whether it is a
+ cross build or not
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Chris Zankel <chris@zankel.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Helge Deller <deller@gmx.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Rich Felker <dalias@libc.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh@kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jon Derrick <jonathan.derrick@intel.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [RFC v2 1/7] PCI: Introduce pci_host_bridge::domain_nr
-Message-ID: <20210506105245.GA26351@lpieralisi>
-References: <20210503144635.2297386-1-boqun.feng@gmail.com>
- <20210503144635.2297386-2-boqun.feng@gmail.com>
- <YJDYrn7Nt+xyHbyr@kernel.org>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org
+References: <20210501172437.156926-1-masahiroy@kernel.org>
+ <20210501172437.156926-2-masahiroy@kernel.org>
+From:   Rob Landley <rob@landley.net>
+Message-ID: <664383ae-8ab2-da1d-601d-365d507f47db@landley.net>
+Date:   Thu, 6 May 2021 07:11:51 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YJDYrn7Nt+xyHbyr@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210501172437.156926-2-masahiroy@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 04, 2021 at 08:16:30AM +0300, Mike Rapoport wrote:
-> On Mon, May 03, 2021 at 10:46:29PM +0800, Boqun Feng wrote:
-> > Currently we retrieve the PCI domain number of the host bridge from the
-> > bus sysdata (or pci_config_window if PCI_DOMAINS_GENERIC=y). Actually
-> > we have the information at PCI host bridge probing time, and it makes
-> > sense that we store it into pci_host_bridge. One benefit of doing so is
-> > the requirement for supporting PCI on Hyper-V for ARM64, because the
-> > host bridge of Hyper-V doesnt' have pci_config_window, whereas ARM64 is
-> > a PCI_DOMAINS_GENERIC=y arch, so we cannot retrieve the PCI domain
-> > number from pci_config_window on ARM64 Hyper-V guest.
-> > 
-> > As the preparation for ARM64 Hyper-V PCI support, we introduce the
-> > domain_nr in pci_host_bridge, and set it properly at probing time, then
-> > for PCI_DOMAINS_GENERIC=y archs, bus domain numbers are set by the
-> > bridge domain_nr.
-> > 
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > ---
-> >  arch/arm/kernel/bios32.c              |  2 ++
-> >  arch/arm/mach-dove/pcie.c             |  2 ++
-> >  arch/arm/mach-mv78xx0/pcie.c          |  2 ++
-> >  arch/arm/mach-orion5x/pci.c           |  2 ++
-> >  arch/arm64/kernel/pci.c               |  3 +--
-> >  arch/mips/pci/pci-legacy.c            |  2 ++
-> >  arch/mips/pci/pci-xtalk-bridge.c      |  2 ++
-> >  drivers/pci/controller/pci-ftpci100.c |  2 ++
-> >  drivers/pci/controller/pci-mvebu.c    |  2 ++
-> >  drivers/pci/pci.c                     |  4 ++--
-> >  drivers/pci/probe.c                   |  7 ++++++-
-> >  include/linux/pci.h                   | 11 ++++++++---
-> >  12 files changed, 33 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/arch/arm/kernel/bios32.c b/arch/arm/kernel/bios32.c
-> > index e7ef2b5bea9c..4942cd681e41 100644
-> > --- a/arch/arm/kernel/bios32.c
-> > +++ b/arch/arm/kernel/bios32.c
-> > @@ -471,6 +471,8 @@ static void pcibios_init_hw(struct device *parent, struct hw_pci *hw,
-> >  				bridge->sysdata = sys;
-> >  				bridge->busnr = sys->busnr;
-> >  				bridge->ops = hw->ops;
-> > +				if (IS_ENABLED(CONFIG_PCI_DOMAINS_GENERIC))
-> > +					bridge->domain_nr = pci_bus_find_domain_nr(sys, parent);
-> >  
-> >  				ret = pci_scan_root_bus_bridge(bridge);
-> >  			}
-> > diff --git a/arch/arm/mach-dove/pcie.c b/arch/arm/mach-dove/pcie.c
-> > index ee91ac6b5ebf..92eb8484b49b 100644
-> > --- a/arch/arm/mach-dove/pcie.c
-> > +++ b/arch/arm/mach-dove/pcie.c
-> > @@ -167,6 +167,8 @@ dove_pcie_scan_bus(int nr, struct pci_host_bridge *bridge)
-> >  	bridge->sysdata = sys;
-> >  	bridge->busnr = sys->busnr;
-> >  	bridge->ops = &pcie_ops;
-> > +	if (IS_ENABLED(CONFIG_PCI_DOMAINS_GENERIC))
-> > +		bridge->domain_nr = pci_bus_find_domain_nr(sys, NULL);
+On 5/1/21 12:24 PM, Masahiro Yamada wrote:
+> 'cross_compiling' is defined by the top Makefile and available for
+> arch Makefiles to check whether it is a cross build or not. A good
+> thing is the variable name 'cross_compiling' is self-documenting.
 > 
-> The check for CONFIG_PCI_DOMAINS_GENERIC is excessive because there is a
-> stub for pci_bus_find_domain_nr().
+> This is a simple replacement for m68k, mips, sh, for which $(ARCH)
+> and $(SRCARCH) always match.
 > 
-> I'm not an expert in PCI, but maybe the repeated assignment of
-> bridge->domain_nr can live in the generic code, say, in
-> pci_scan_root_bus_bridge(). E.g. it will set the domain_nr when it is zero.
+> No functional change is intended for xtensa, either.
 > 
-> >  
+> This is rather a fix for parisc because arch/parisc/Makefile defines
+> UTS_MATCHINE depending on CONFIG_64BIT, therefore cc-cross-prefix
+> is not working in Kconfig time.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Yes, this churn should be avoided. We need a sentinel value to detect
-whether the domain_nr is invalid (0 is a valid domain) so generic code
-(ie pci_scan_root_bus_bridge() and friends) has to call generic
-functions to get it (pci_bus_find_domain_nr()).
+Tried the patch in my sh build, the result built and booted.
 
-We can implement it as a flag or function pointer in the struct
-pci_host_bridge, if the flag or function pointer is not set the
-generic pci_bus_find_domain_nr() should be called.
+Tested-by: Rob Landley <rob@landley.net>
 
-Lorenzo
+Rob
