@@ -2,115 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDE9374DC9
-	for <lists+linux-mips@lfdr.de>; Thu,  6 May 2021 05:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CA93752A1
+	for <lists+linux-mips@lfdr.de>; Thu,  6 May 2021 12:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbhEFDD1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 5 May 2021 23:03:27 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:40866 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230495AbhEFDD0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 5 May 2021 23:03:26 -0400
-Received: from [10.130.0.193] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_+4_XJNgzJASAA--.12190S3;
-        Thu, 06 May 2021 11:02:24 +0800 (CST)
-Subject: Re: [PATCH] MIPS: Loongson64: Fix build error 'secondary_kexec_args'
- undeclared under !SMP
-To:     Jinyang He <hejinyang@loongson.cn>
-References: <1620266570-21585-1-git-send-email-tangyouling@loongson.cn>
- <c3d635ee-2478-c786-59fe-f630e4980a77@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <1d9db325-0c3b-30a4-3501-f195591379ea@loongson.cn>
-Date:   Thu, 6 May 2021 11:02:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S234533AbhEFKxw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 May 2021 06:53:52 -0400
+Received: from foss.arm.com ([217.140.110.172]:32996 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234508AbhEFKxv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 6 May 2021 06:53:51 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89FF4D6E;
+        Thu,  6 May 2021 03:52:53 -0700 (PDT)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BD663F73B;
+        Thu,  6 May 2021 03:52:50 -0700 (PDT)
+Date:   Thu, 6 May 2021 11:52:45 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh@kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jon Derrick <jonathan.derrick@intel.com>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [RFC v2 1/7] PCI: Introduce pci_host_bridge::domain_nr
+Message-ID: <20210506105245.GA26351@lpieralisi>
+References: <20210503144635.2297386-1-boqun.feng@gmail.com>
+ <20210503144635.2297386-2-boqun.feng@gmail.com>
+ <YJDYrn7Nt+xyHbyr@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <c3d635ee-2478-c786-59fe-f630e4980a77@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dx_+4_XJNgzJASAA--.12190S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFW7KFW3CryDWw1fCw17Jrb_yoW8Zry5pF
-        4rGa4UtFWFqr42yrWfZrn8Z34ru393XrW7Jay7C3s8Ka4DWr1UXFyxKF4UXF92vw43KFW8
-        XFWagr1DAFnIkrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
-        bIxvr21lc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUUVHq5UUUUU==
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YJDYrn7Nt+xyHbyr@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Jinyang
+On Tue, May 04, 2021 at 08:16:30AM +0300, Mike Rapoport wrote:
+> On Mon, May 03, 2021 at 10:46:29PM +0800, Boqun Feng wrote:
+> > Currently we retrieve the PCI domain number of the host bridge from the
+> > bus sysdata (or pci_config_window if PCI_DOMAINS_GENERIC=y). Actually
+> > we have the information at PCI host bridge probing time, and it makes
+> > sense that we store it into pci_host_bridge. One benefit of doing so is
+> > the requirement for supporting PCI on Hyper-V for ARM64, because the
+> > host bridge of Hyper-V doesnt' have pci_config_window, whereas ARM64 is
+> > a PCI_DOMAINS_GENERIC=y arch, so we cannot retrieve the PCI domain
+> > number from pci_config_window on ARM64 Hyper-V guest.
+> > 
+> > As the preparation for ARM64 Hyper-V PCI support, we introduce the
+> > domain_nr in pci_host_bridge, and set it properly at probing time, then
+> > for PCI_DOMAINS_GENERIC=y archs, bus domain numbers are set by the
+> > bridge domain_nr.
+> > 
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > ---
+> >  arch/arm/kernel/bios32.c              |  2 ++
+> >  arch/arm/mach-dove/pcie.c             |  2 ++
+> >  arch/arm/mach-mv78xx0/pcie.c          |  2 ++
+> >  arch/arm/mach-orion5x/pci.c           |  2 ++
+> >  arch/arm64/kernel/pci.c               |  3 +--
+> >  arch/mips/pci/pci-legacy.c            |  2 ++
+> >  arch/mips/pci/pci-xtalk-bridge.c      |  2 ++
+> >  drivers/pci/controller/pci-ftpci100.c |  2 ++
+> >  drivers/pci/controller/pci-mvebu.c    |  2 ++
+> >  drivers/pci/pci.c                     |  4 ++--
+> >  drivers/pci/probe.c                   |  7 ++++++-
+> >  include/linux/pci.h                   | 11 ++++++++---
+> >  12 files changed, 33 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/arch/arm/kernel/bios32.c b/arch/arm/kernel/bios32.c
+> > index e7ef2b5bea9c..4942cd681e41 100644
+> > --- a/arch/arm/kernel/bios32.c
+> > +++ b/arch/arm/kernel/bios32.c
+> > @@ -471,6 +471,8 @@ static void pcibios_init_hw(struct device *parent, struct hw_pci *hw,
+> >  				bridge->sysdata = sys;
+> >  				bridge->busnr = sys->busnr;
+> >  				bridge->ops = hw->ops;
+> > +				if (IS_ENABLED(CONFIG_PCI_DOMAINS_GENERIC))
+> > +					bridge->domain_nr = pci_bus_find_domain_nr(sys, parent);
+> >  
+> >  				ret = pci_scan_root_bus_bridge(bridge);
+> >  			}
+> > diff --git a/arch/arm/mach-dove/pcie.c b/arch/arm/mach-dove/pcie.c
+> > index ee91ac6b5ebf..92eb8484b49b 100644
+> > --- a/arch/arm/mach-dove/pcie.c
+> > +++ b/arch/arm/mach-dove/pcie.c
+> > @@ -167,6 +167,8 @@ dove_pcie_scan_bus(int nr, struct pci_host_bridge *bridge)
+> >  	bridge->sysdata = sys;
+> >  	bridge->busnr = sys->busnr;
+> >  	bridge->ops = &pcie_ops;
+> > +	if (IS_ENABLED(CONFIG_PCI_DOMAINS_GENERIC))
+> > +		bridge->domain_nr = pci_bus_find_domain_nr(sys, NULL);
+> 
+> The check for CONFIG_PCI_DOMAINS_GENERIC is excessive because there is a
+> stub for pci_bus_find_domain_nr().
+> 
+> I'm not an expert in PCI, but maybe the repeated assignment of
+> bridge->domain_nr can live in the generic code, say, in
+> pci_scan_root_bus_bridge(). E.g. it will set the domain_nr when it is zero.
+> 
+> >  
 
-On 05/06/2021 10:21 AM, Jinyang He wrote:
-> On 05/06/2021 10:02 AM, Youling Tang wrote:
->
->> On the Loongson64 platform, if CONFIG_SMP is not set, the following 
->> build
->> error will occur:
->> arch/mips/loongson64/reset.c:133:2: error:'secondary_kexec_args' 
->> undeclared
->>
->> Because the definition and declaration of secondary_kexec_args are in 
->> the
->> CONFIG_SMP, the secondary_kexec_args variable should be used in 
->> CONFIG_SMP.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
->> ---
->>   arch/mips/loongson64/reset.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/mips/loongson64/reset.c b/arch/mips/loongson64/reset.c
->> index c97bfdc..758d5d2 100644
->> --- a/arch/mips/loongson64/reset.c
->> +++ b/arch/mips/loongson64/reset.c
->> @@ -126,11 +126,12 @@ static void loongson_kexec_shutdown(void)
->>       for_each_possible_cpu(cpu)
->>           if (!cpu_online(cpu))
->>               cpu_device_up(get_cpu_device(cpu));
->> +
->> +    secondary_kexec_args[0] = TO_UNCAC(0x3ff01000);
->>   #endif
->>       kexec_args[0] = kexec_argc;
->>       kexec_args[1] = fw_arg1;
->>       kexec_args[2] = fw_arg2;
->> -    secondary_kexec_args[0] = TO_UNCAC(0x3ff01000);
->>       memcpy((void *)fw_arg1, kexec_argv, KEXEC_ARGV_SIZE);
->>       memcpy((void *)fw_arg2, kexec_envp, KEXEC_ENVP_SIZE);
->>   }
->> @@ -141,7 +142,9 @@ static void loongson_crash_shutdown(struct 
->> pt_regs *regs)
->>       kexec_args[0] = kdump_argc;
->>       kexec_args[1] = fw_arg1;
->>       kexec_args[2] = fw_arg2;
->> +#ifdef CONFIG_SMP
->>       secondary_kexec_args[0] = TO_UNCAC(0x3ff01000);
->> +#endif
->>       memcpy((void *)fw_arg1, kdump_argv, KEXEC_ARGV_SIZE);
->>       memcpy((void *)fw_arg2, kexec_envp, KEXEC_ENVP_SIZE);
->>   }
->
-> Hi, Youling,
->
-> The earlier fix is here,
-> https://lkml.org/lkml/2021/4/30/874
->
-Thank you for reminding me.
+Yes, this churn should be avoided. We need a sentinel value to detect
+whether the domain_nr is invalid (0 is a valid domain) so generic code
+(ie pci_scan_root_bus_bridge() and friends) has to call generic
+functions to get it (pci_bus_find_domain_nr()).
 
-Thanks,
-Youling.
-> Thanks.
+We can implement it as a flag or function pointer in the struct
+pci_host_bridge, if the flag or function pointer is not set the
+generic pci_bus_find_domain_nr() should be called.
 
+Lorenzo
