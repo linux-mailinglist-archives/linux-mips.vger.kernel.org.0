@@ -2,147 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA19375EDA
-	for <lists+linux-mips@lfdr.de>; Fri,  7 May 2021 04:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2886637616A
+	for <lists+linux-mips@lfdr.de>; Fri,  7 May 2021 09:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbhEGCn4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 May 2021 22:43:56 -0400
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:51205 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231334AbhEGCn4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 May 2021 22:43:56 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2A1775C00DB;
-        Thu,  6 May 2021 22:42:57 -0400 (EDT)
-Received: from imap1 ([10.202.2.51])
-  by compute6.internal (MEProxy); Thu, 06 May 2021 22:42:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=250IqGvz6u58BFoPT4ncZ3T/BSW+bwX
-        b69ZJGgm1m6Y=; b=DmnR23jccaLHmGz8kQCwEW30ZRoW37dSJE0BTW4X+qAV4wG
-        XLgmaD41kGD5CrwPvLqmerpmQssu/PEkqd98oYKGH+0gollmsdyVxlydC03tJHoU
-        ko0SAN0fXFPbkXerETerKSFHp8mOGhCD/OW6yPM1Je6MxtFoVwoh4HJqlE0Q51D5
-        EghG3GKHy4K/zBZa86i6/31n0DZtTSGMLaucqmXInqNL022wt8WQeo5VeXcyGKXW
-        mt7WLt6FcwiwtAcED/54a08WathJuO9/7VEAr1wWdwe8sWP68toe9H5K85gPNLSJ
-        PSx1AwnDI1EVCRFHBlSveQkP6oHQdpp92FxGFFg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=250IqG
-        vz6u58BFoPT4ncZ3T/BSW+bwXb69ZJGgm1m6Y=; b=QVOH2pa6EYn8CQRf6Q/fH4
-        cEt8t7OzmyQ7S+RhDWEdw4kpD+AaSGgbTLnxrhwrZh5yrAnbCXjWyebjr63MDM1f
-        OyWFSE7tNJRsuRgiv3pmcRFuuSHBW6BktF1ZbPO6R5LroUnnqeBtaarcfbfIxx4K
-        irqb001J0WWwNZ0XIAtOpov6xHYQYipM/35Ti1rr6+9DvyM/2uCetjtVH2Xjetf1
-        tixt1wTG26zi6NuyDSqgd4D2izsdCmgqqh4Xnrj2RBG7Hoys7dutrLe0nGmqvqLu
-        cAkOvcZ4O8fPgaCnuyEUwmp0qFzJgestsH/NBV0OVt4UO42P1xqJVl/3dljPXKgg
-        ==
-X-ME-Sender: <xms:MKmUYEEuPU-Fk-nIv0D-w9Kab-NVorJjtEdqAxs9Vw9Qq8qG0ynH9w>
-    <xme:MKmUYNUzff48h_TobGwswu1Kh2K57soazzgWrhgx1kSb4L1vxFBApi4brZsYUh9kn
-    i-uew4L1bRJwGw2mig>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdeguddgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvufgtsehttd
-    ertderreejnecuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdih
-    rghnghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepieetvdefleejud
-    elffegudetiedvgeegieehjeeiieduleehuddvlefgueefgedvnecuffhomhgrihhnpehk
-    vghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:MKmUYOLHnE2-RhEY_I1AD19gqdXbt5I8xAgLUqsJae9b2LoL8EPWaA>
-    <xmx:MKmUYGGTkWxVZMiZj-3ixlLxHlS11A4zP8kxiAsnfvSf-YZVa4YyhQ>
-    <xmx:MKmUYKWqFDzO0B1TCjwYi2uvygWEDPUod2Zel5e__7QWMLq0tBYEqg>
-    <xmx:MamUYNdJqRC_8-WcmM9Ip2iP1gqG3_yKX0gyaI70jZPw-a1r00GfZw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4C59C1300504; Thu,  6 May 2021 22:42:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-448-gae190416c7-fm-20210505.004-gae190416
-Mime-Version: 1.0
-Message-Id: <1463598d-8248-4b11-aab6-45bf2f997cd7@www.fastmail.com>
-In-Reply-To: <20210506010435.1333647-1-git@xen0n.name>
-References: <20210506010435.1333647-1-git@xen0n.name>
-Date:   Fri, 07 May 2021 10:42:36 +0800
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "WANG Xuerui" <git@xen0n.name>, linux-rtc@vger.kernel.org
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Subject: =?UTF-8?Q?Re:_[PATCH_v3_0/6]_rtc:_ls2x:_Add_support_for_the_Loongson-2K/?=
- =?UTF-8?Q?LS7A_RTC?=
-Content-Type: text/plain
+        id S235718AbhEGHsd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 May 2021 03:48:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35326 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235710AbhEGHsc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 7 May 2021 03:48:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5350661132;
+        Fri,  7 May 2021 07:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620373640;
+        bh=XFqW5/0INXkY7fiA03jYF2gDpE6cWawWuPSZmXlC8s0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VqiXPuGjge0oMUa49t2d0omFSMtna+bT91ylp6Oqkyx2pRb9umJaFAZe4WlPT6gfD
+         eud1JN3+NvEHqOoiyi9w5K3l7icH4HGodFnB2z1hRJFjTSLKHW5F+EMJq3FklvMStz
+         0C4JjTcjpc9tsScwQYCF7lXu9oHA1dTB2fGF5z1EchN8EPkIbRSJMJ9s1hs87PHYv0
+         Yml3/2bm8UmFHXa5QedKYc9/Qe0NVPDpsWyJ0m9+KALHB3YGN7UOofdLRDSyJLnizK
+         ehLfohPefUL0qNRHhki4CfdIiHW02h3tRJDjNs6PBKXqoUYtgnRK5eZEG2NFXQ1MgV
+         pT7vGXQ9Iga3Q==
+Date:   Fri, 7 May 2021 00:47:14 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Fangrui Song <maskray@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [BUG mips llvm] MIPS: malformed R_MIPS_{HI16,LO16} with LLVM
+Message-ID: <YJTwglbUOb67r733@archlinux-ax161>
+References: <20210109171058.497636-1-alobakin@pm.me>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210109171058.497636-1-alobakin@pm.me>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On Thu, May 6, 2021, at 9:04 AM, WANG Xuerui wrote:
-> It has been a while since v1 of this series was sent (2020-09);
-> apparently, I did not have enough time or resource figuring out the exact
-> difference between rtc-ls1x and rtc-ls2x to see if the two can in fact be
-> merged, even today. Sorry for the long delay!
+On Sat, Jan 09, 2021 at 05:11:18PM +0000, Alexander Lobakin wrote:
+> Machine: MIPS32 R2 Big Endian (interAptiv (multi))
 > 
-> According to the manuals, though, the initialization sequence and
-> bitfield descriptions look certainly different, so I'm a bit wary about
-> just going ahead and merging these. Per Tiezhu's suggestion in the
-> previous thread, I'm just re-submitting this series with tags collected
-> and Huacai's e-mail address updated. If anyone (probably Loongson guys?)
-> could provide more information regarding the possible merger of rtc-ls1x
-> and rtc-ls2x, that would be great.
+> While testing MIPS with LLVM, I found a weird and very rare bug with
+> MIPS relocs that LLVM emits into kernel modules. It happens on both
+> 11.0.0 and latest git snapshot and applies, as I can see, only to
+> references to static symbols.
 > 
-> This patch series adds support for the RTC module found on various
-> Loongson systems with the Loongson-2K SoC or the LS7A bridge chip.
-> The driver is rewritten from an out-of-tree version to meet mainline
-> standards. I write kernel code as a hobby, though, so there might still
-> be overlooked issues. Any suggestions are welcome.
+> When the kernel loads the module, it allocates a space for every
+> section and then manually apply the relocations relative to the
+> new address.
 > 
-> Note that, the Loongson-2K platform was upstreamed after v1 of this
-> series, so v2 additionally contains enablement for it. I'm unable to
-> test with my 2K board now, however, so Loongson guys, please test this
-> series again on your collection of LS7A and 2K systems, thanks!
+> Let's say we have a function phy_probe() in drivers/net/phy/libphy.ko.
+> It's static and referenced only in phy_register_driver(), where it's
+> used to fill callback pointer in a structure.
 > 
-> This patch is based on next-20210505, since we're in the middle of merge
-> window. Should apply cleanly after the merge window closes, though.
-
-For whole series,
-Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # loongson2k
-
-
+> The real function address after module loading is 0xc06c1444, that
+> is observed in its ELF st_value field.
+> There are two relocs related to this usage in phy_register_driver():
 > 
-> v3:
-> - Fixed compile error not discovered after rebase (blame sleep
->   deprivation)
-> - Tested on Loongson-3A4000 (still need testing on Loongson-2K)
+> R_MIPS_HI16 refers to 0x3c010000
+> R_MIPS_LO16 refers to 0x24339444
 > 
-> v2:
-> - Rebased on top of latest linux-next
-> - Updated Huacai's e-mail address to the kernel.org one
-> - Added collected tags
-> - Added adaptation for newly upstreamed Loongson-2K platforms
+> The address of .text is 0xc06b8000. So the destination is calculated
+> as follows:
 > 
-> WANG Xuerui (6):
->   rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
->   dt-bindings: rtc: Add bindings for LS2X RTC
->   MIPS: Loongson64: DTS: Add RTC support to LS7A
->   MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
->   MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
->   MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
+> 0x00000000 from hi16;
+> 0xffff9444 from lo16 (sign extend as it's always treated as signed);
+> 0xc06b8000 from base.
 > 
->  .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
->  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   5 +
->  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   5 +
->  arch/mips/configs/loongson2k_defconfig        |   1 +
->  arch/mips/configs/loongson3_defconfig         |   1 +
->  drivers/rtc/Kconfig                           |  11 +
->  drivers/rtc/Makefile                          |   1 +
->  drivers/rtc/rtc-ls2x.c                        | 225 ++++++++++++++++++
->  8 files changed, 251 insertions(+)
->  create mode 100644 drivers/rtc/rtc-ls2x.c
+> = 0xc06b1444. The value is lower than the real phy_probe() address
+> (0xc06c1444) by 0x10000 and is lower than the base address of
+> module's .text, so it's 100% incorrect.
 > 
+> This results in:
 > 
-> base-commit: 29955e0289b3255c5f609a7564a0f0bb4ae35c7a
-> -- 
-> 2.30.1
+> [    2.204022] CPU 3 Unable to handle kernel paging request at virtual
+> address c06b1444, epc == c06b1444, ra == 803f1090
 > 
+> The correct instructions should be:
+> 
+> R_MIPS_HI16 0x3c010001
+> R_MIPS_LO16 0x24339444
+> 
+> so there'll be 0x00010000 from hi16.
+> 
+> I tried to catch those bugs in arch/mips/kernel/module.c (by checking
+> if the destination is lower than the base address, which should never
+> happen), and seems like I have only 3 such places in libphy.ko (and
+> one in nf_tables.ko).
+> I don't think it should be handled somehow in mentioned source code
+> as it would look rather ugly and may break kernels build with GNU
+> stack, which seems to not produce such bad codes.
+> 
+> If I should report this to any other resources, please let me know.
+> I chose clang-built-linux and LKML as it may not happen with userland
+> (didn't tried to catch).
+> 
+> Thanks,
+> Al
 > 
 
+Hi Alexander,
 
--- 
-- Jiaxun
+Doubling back around to this as I was browsing through the LLVM 12.0.1
+blockers on LLVM's bug tracker and I noticed a commit that could resolve
+this? It refers to the same relocations that you reference here.
+
+https://bugs.llvm.org/show_bug.cgi?id=49821
+
+http://github.com/llvm/llvm-project/commit/7e83a7f1fdfcc2edde61f0a535f9d7a56f531db9
+
+I think that Debian's apt.llvm.org repository should have a build
+available with that commit in it. Otherwise, building it from source is
+not too complicated with my script:
+
+https://github.com/ClangBuiltLinux/tc-build
+
+$ ./build-llvm.py --build-stage1-only --install-stage1-only --projects "clang;lld" --targets "Mips;X86"
+
+would get you a working toolchain relatively quickly.
+
+Cheers,
+Nathan
