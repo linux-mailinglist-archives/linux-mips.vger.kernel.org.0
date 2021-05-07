@@ -2,109 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 246B5375D2A
-	for <lists+linux-mips@lfdr.de>; Fri,  7 May 2021 00:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA19375EDA
+	for <lists+linux-mips@lfdr.de>; Fri,  7 May 2021 04:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbhEFW0c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 May 2021 18:26:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51598 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230149AbhEFW0b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 6 May 2021 18:26:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DCDCB61057;
-        Thu,  6 May 2021 22:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620339932;
-        bh=NJ1s9KsbTwMRkgcGjSh2NdaFzXd0HMKRyslD8lM2WzY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LWAvu+8wVKwzJctAgyb0KBP9FpGjbaiAGHrbf/xOuUPL6BB0y03P/zGOVzk4Pk025
-         mqDHIzAHE4eWFQm4/0iDxcv5x9Y/GpdHc3XEQc03uxPZBKiEtYXG8XfPxZn7/2W5YS
-         Z6mdJIlofH0c5Ery0WW4yLEDrMdYM4asO8IiuONBhlwzCGWJ4jFTxjV+SVCzTaFlch
-         7f7OOi95dFSrU15AV9UhdBLvQlkoLLNVkFJ0ys7u4+caYQacDfP5tmiSoKG4eAEXa7
-         0dhIeyzRhBhjQe7TN4FSABaHKOEYu/vUdfUscvGWZEAdMI5RaFlhugXJLNKI3J6N8g
-         Jtl95d53f3V8Q==
-Date:   Thu, 6 May 2021 17:25:30 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jon Derrick <jonathan.derrick@intel.com>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [RFC v2 6/7] PCI: arm64: Allow pci_config_window::parent to be
- NULL
-Message-ID: <20210506222530.GA1441653@bjorn-Precision-5520>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210503144635.2297386-7-boqun.feng@gmail.com>
+        id S233657AbhEGCn4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 May 2021 22:43:56 -0400
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:51205 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231334AbhEGCn4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 May 2021 22:43:56 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2A1775C00DB;
+        Thu,  6 May 2021 22:42:57 -0400 (EDT)
+Received: from imap1 ([10.202.2.51])
+  by compute6.internal (MEProxy); Thu, 06 May 2021 22:42:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm2; bh=250IqGvz6u58BFoPT4ncZ3T/BSW+bwX
+        b69ZJGgm1m6Y=; b=DmnR23jccaLHmGz8kQCwEW30ZRoW37dSJE0BTW4X+qAV4wG
+        XLgmaD41kGD5CrwPvLqmerpmQssu/PEkqd98oYKGH+0gollmsdyVxlydC03tJHoU
+        ko0SAN0fXFPbkXerETerKSFHp8mOGhCD/OW6yPM1Je6MxtFoVwoh4HJqlE0Q51D5
+        EghG3GKHy4K/zBZa86i6/31n0DZtTSGMLaucqmXInqNL022wt8WQeo5VeXcyGKXW
+        mt7WLt6FcwiwtAcED/54a08WathJuO9/7VEAr1wWdwe8sWP68toe9H5K85gPNLSJ
+        PSx1AwnDI1EVCRFHBlSveQkP6oHQdpp92FxGFFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=250IqG
+        vz6u58BFoPT4ncZ3T/BSW+bwXb69ZJGgm1m6Y=; b=QVOH2pa6EYn8CQRf6Q/fH4
+        cEt8t7OzmyQ7S+RhDWEdw4kpD+AaSGgbTLnxrhwrZh5yrAnbCXjWyebjr63MDM1f
+        OyWFSE7tNJRsuRgiv3pmcRFuuSHBW6BktF1ZbPO6R5LroUnnqeBtaarcfbfIxx4K
+        irqb001J0WWwNZ0XIAtOpov6xHYQYipM/35Ti1rr6+9DvyM/2uCetjtVH2Xjetf1
+        tixt1wTG26zi6NuyDSqgd4D2izsdCmgqqh4Xnrj2RBG7Hoys7dutrLe0nGmqvqLu
+        cAkOvcZ4O8fPgaCnuyEUwmp0qFzJgestsH/NBV0OVt4UO42P1xqJVl/3dljPXKgg
+        ==
+X-ME-Sender: <xms:MKmUYEEuPU-Fk-nIv0D-w9Kab-NVorJjtEdqAxs9Vw9Qq8qG0ynH9w>
+    <xme:MKmUYNUzff48h_TobGwswu1Kh2K57soazzgWrhgx1kSb4L1vxFBApi4brZsYUh9kn
+    i-uew4L1bRJwGw2mig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdeguddgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvufgtsehttd
+    ertderreejnecuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdih
+    rghnghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepieetvdefleejud
+    elffegudetiedvgeegieehjeeiieduleehuddvlefgueefgedvnecuffhomhgrihhnpehk
+    vghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:MKmUYOLHnE2-RhEY_I1AD19gqdXbt5I8xAgLUqsJae9b2LoL8EPWaA>
+    <xmx:MKmUYGGTkWxVZMiZj-3ixlLxHlS11A4zP8kxiAsnfvSf-YZVa4YyhQ>
+    <xmx:MKmUYKWqFDzO0B1TCjwYi2uvygWEDPUod2Zel5e__7QWMLq0tBYEqg>
+    <xmx:MamUYNdJqRC_8-WcmM9Ip2iP1gqG3_yKX0gyaI70jZPw-a1r00GfZw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4C59C1300504; Thu,  6 May 2021 22:42:56 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-448-gae190416c7-fm-20210505.004-gae190416
+Mime-Version: 1.0
+Message-Id: <1463598d-8248-4b11-aab6-45bf2f997cd7@www.fastmail.com>
+In-Reply-To: <20210506010435.1333647-1-git@xen0n.name>
+References: <20210506010435.1333647-1-git@xen0n.name>
+Date:   Fri, 07 May 2021 10:42:36 +0800
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "WANG Xuerui" <git@xen0n.name>, linux-rtc@vger.kernel.org
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Subject: =?UTF-8?Q?Re:_[PATCH_v3_0/6]_rtc:_ls2x:_Add_support_for_the_Loongson-2K/?=
+ =?UTF-8?Q?LS7A_RTC?=
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Make your subject something like this so it matches previous practice:
 
-  arm64: PCI: ...
 
-The "::" notation probably comes from C++, but doesn't really apply in
-C.  In C, we would say "cfg.parent" or "cfg->parent".
-
-But pci_config_window and cfg->parent are probably too low-level for
-the subject anyway.  Seems like it should mention Hyper-V, for
-instance.
-
-On Mon, May 03, 2021 at 10:46:34PM +0800, Boqun Feng wrote:
-> This is purely a hack, for ARM64 Hyper-V guest, there is no
-> corresponding ACPI device for the root bridge, so the best we can
-> provide is an all-zeroed pci_config_window, and in this case make
-> pcibios_root_bridge_prepare() act as the ACPI device is NULL.
-
-Why is there no ACPI device?  Is this a needless arch dependency?  Or
-is this related to using DT instead of ACPI?
-
-The cover letter hints that this might be related to
-PCI_DOMAINS_GENERIC=y, but that doesn't sound like a very convincing
-reason (and the cover letter can provide an overview, but the commit
-logs of individual patches shouldn't assume knowledge of the cover
-letter).
-
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> ---
->  arch/arm64/kernel/pci.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, May 6, 2021, at 9:04 AM, WANG Xuerui wrote:
+> It has been a while since v1 of this series was sent (2020-09);
+> apparently, I did not have enough time or resource figuring out the exact
+> difference between rtc-ls1x and rtc-ls2x to see if the two can in fact be
+> merged, even today. Sorry for the long delay!
 > 
-> diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
-> index e9a6eeb6a694..f159df903ccb 100644
-> --- a/arch/arm64/kernel/pci.c
-> +++ b/arch/arm64/kernel/pci.c
-> @@ -83,7 +83,7 @@ int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
->  {
->  	if (!acpi_disabled) {
->  		struct pci_config_window *cfg = bridge->bus->sysdata;
-> -		struct acpi_device *adev = to_acpi_device(cfg->parent);
-> +		struct acpi_device *adev = cfg->parent ? to_acpi_device(cfg->parent) : NULL;
->  		struct device *bus_dev = &bridge->bus->dev;
->  
->  		ACPI_COMPANION_SET(&bridge->dev, adev);
+> According to the manuals, though, the initialization sequence and
+> bitfield descriptions look certainly different, so I'm a bit wary about
+> just going ahead and merging these. Per Tiezhu's suggestion in the
+> previous thread, I'm just re-submitting this series with tags collected
+> and Huacai's e-mail address updated. If anyone (probably Loongson guys?)
+> could provide more information regarding the possible merger of rtc-ls1x
+> and rtc-ls2x, that would be great.
+> 
+> This patch series adds support for the RTC module found on various
+> Loongson systems with the Loongson-2K SoC or the LS7A bridge chip.
+> The driver is rewritten from an out-of-tree version to meet mainline
+> standards. I write kernel code as a hobby, though, so there might still
+> be overlooked issues. Any suggestions are welcome.
+> 
+> Note that, the Loongson-2K platform was upstreamed after v1 of this
+> series, so v2 additionally contains enablement for it. I'm unable to
+> test with my 2K board now, however, so Loongson guys, please test this
+> series again on your collection of LS7A and 2K systems, thanks!
+> 
+> This patch is based on next-20210505, since we're in the middle of merge
+> window. Should apply cleanly after the merge window closes, though.
+
+For whole series,
+Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # loongson2k
+
+
+> 
+> v3:
+> - Fixed compile error not discovered after rebase (blame sleep
+>   deprivation)
+> - Tested on Loongson-3A4000 (still need testing on Loongson-2K)
+> 
+> v2:
+> - Rebased on top of latest linux-next
+> - Updated Huacai's e-mail address to the kernel.org one
+> - Added collected tags
+> - Added adaptation for newly upstreamed Loongson-2K platforms
+> 
+> WANG Xuerui (6):
+>   rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+>   dt-bindings: rtc: Add bindings for LS2X RTC
+>   MIPS: Loongson64: DTS: Add RTC support to LS7A
+>   MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
+>   MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+>   MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
+> 
+>  .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
+>  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   5 +
+>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   5 +
+>  arch/mips/configs/loongson2k_defconfig        |   1 +
+>  arch/mips/configs/loongson3_defconfig         |   1 +
+>  drivers/rtc/Kconfig                           |  11 +
+>  drivers/rtc/Makefile                          |   1 +
+>  drivers/rtc/rtc-ls2x.c                        | 225 ++++++++++++++++++
+>  8 files changed, 251 insertions(+)
+>  create mode 100644 drivers/rtc/rtc-ls2x.c
+> 
+> 
+> base-commit: 29955e0289b3255c5f609a7564a0f0bb4ae35c7a
 > -- 
-> 2.30.2
+> 2.30.1
 > 
+> 
+
+
+-- 
+- Jiaxun
