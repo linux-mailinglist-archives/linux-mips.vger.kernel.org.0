@@ -2,156 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF3B3772F7
-	for <lists+linux-mips@lfdr.de>; Sat,  8 May 2021 18:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB4E377C79
+	for <lists+linux-mips@lfdr.de>; Mon, 10 May 2021 08:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbhEHQaz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 8 May 2021 12:30:55 -0400
-Received: from mail1.protonmail.ch ([185.70.40.18]:47258 "EHLO
-        mail1.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbhEHQay (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 May 2021 12:30:54 -0400
-Date:   Sat, 08 May 2021 16:29:33 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1620491388; bh=5rNl+kAanqy5Ow6PHG0Nk/iTcHfaHO7mTi0wPOmmCc0=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=WyD5ez/5my30NXYcWHdga/2UTQhj3s1Mai4b6T2yCM7pXPFqSIyVDLZr44wTS1Sz6
-         9JnHA0T8xPqHDnBBEngpRZ9z/HlmGq5WdFMsxgIQyE6HZQi/WcWkpStY4jdMmBFZ03
-         QmWx1tyQKZv31lXLsZOPWM/yc3JUTdeIzzNZZ0YuWUrQPIe41RMeeFT1ZOQu5EPlQX
-         eeNtYz6tMydBuvU/l1YDzPcaWpKbnohxfwvDNkRMAKXeILIBtFlCwdW0UFvOHYfEB5
-         TLfd8iAn6ysn8OTtXLzEE5aHuj0aWwGlEnLwHk+Lfn9UG2BhGfJRD4BAXwsPqHGwlQ
-         liOPHHS4GgHVQ==
-To:     Nathan Chancellor <nathan@kernel.org>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [BUG mips llvm] MIPS: malformed R_MIPS_{HI16,LO16} with LLVM
-Message-ID: <s6F4SDP26btK3zHEtGxYELVAR2oXYQu1JaXYCbCj4VyBigG5ROOk2JTLIw4Gs8fVC6SALoV7tgH7uJ7_fg0cQdpJ9TXJZmQSychOLMczMC4=@pm.me>
-In-Reply-To: <YJTwglbUOb67r733@archlinux-ax161>
-References: <20210109171058.497636-1-alobakin@pm.me> <YJTwglbUOb67r733@archlinux-ax161>
+        id S230002AbhEJGpI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 May 2021 02:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229996AbhEJGpI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 May 2021 02:45:08 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8160FC061573
+        for <linux-mips@vger.kernel.org>; Sun,  9 May 2021 23:44:03 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id b25so9662310oic.0
+        for <linux-mips@vger.kernel.org>; Sun, 09 May 2021 23:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=p4QVkoSceAD0cNWEBhxG7I+e5PtbXU/V6ZHwSLEEg1A=;
+        b=lZTydeU3Odd/M0wXuPJxS/YMhYeN5mCiEpBi8Vnn85eGvurhAW2fvB13yKPa8gFJRF
+         0LQDpzGxrf5XOsCmOWK3bmGRLCP60ZgyBB1U9XyHo2j7vDwRDXuu6S1CuHZjYi1yw1uX
+         mWlT2pncAbnEhESFceelHU/uF9tVUmeC9gyk7zK1y4D9Y3ZhLVJgF2XQQ67Ccrulb0US
+         KgyO0iHt9Bi9zhg6YkfV343/g7WYy27P13SRhuNMPr8ItoegAlT9mUUSQgZubtVb6bwB
+         3zZJjAMM//hDuVr/G6QMv9xTxPUhYm33hKQlmoD0S562zhfRFeM4eZdfNN56EUTQ2XVw
+         Yz4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=p4QVkoSceAD0cNWEBhxG7I+e5PtbXU/V6ZHwSLEEg1A=;
+        b=Fjm3wXs4eCl5+TMRKSYQsGSD0emShO89enlXrE/Omt6AWnU0f+e3Gc56hZehIbtcp1
+         3St0ew3T1mwvHUYl9MjNC/ImMGvOYT3Giv/Mp9GMfJlsw5XePlmgSqup2Mi1wsmey9vS
+         9SUlB8fsAogd51WnXANInqziQMru/Dq/Gq/66FelB5yLCZJKJU3gNAjX93LZ78qnErBe
+         QS+HtchC98FxlQ944p0RlP+h2xZ1xvcfmxAyPAl65EcbkiawGKFQIZaNgzDVT6WmJJhk
+         qg/2u2eGJ8OrS1dX52CMU7LGc9Aqfy7peLlBTTqSGw/jQwVIT94nEyJC5QIjxme7lM1t
+         mLUw==
+X-Gm-Message-State: AOAM532NnbIQEZhasVT8Fcf/Bp/6G+ODwyOhegO5xu3b6C2tsXVkn8qQ
+        9o87VetvnfwWFIOE5DBd6NLap1QvuqlzCBWLJ/vEv3RskI5zqQ==
+X-Google-Smtp-Source: ABdhPJyVdzqsP+rLX3WJ06Fa548PdjAPpu5WsmTRzTVyrvsS1mL0XEd0wQQfYD9tsk1p+FGwkPBSHAcU2C79xQXsKWw=
+X-Received: by 2002:aca:b5c4:: with SMTP id e187mr17106264oif.149.1620629042789;
+ Sun, 09 May 2021 23:44:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 10 May 2021 08:43:51 +0200
+Message-ID: <CAMhs-H-1f72=7C3j1jCmdLU8+5LurPO6nRVcvPJO_rxPitQBnA@mail.gmail.com>
+Subject: Some doubts about mt7621-pci mainline place
+To:     "open list:MIPS" <linux-mips@vger.kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 7 May 2021 00:47:14 -0700
+Hi,
 
-> On Sat, Jan 09, 2021 at 05:11:18PM +0000, Alexander Lobakin wrote:
-> > Machine: MIPS32 R2 Big Endian (interAptiv (multi))
-> >
-> > While testing MIPS with LLVM, I found a weird and very rare bug with
-> > MIPS relocs that LLVM emits into kernel modules. It happens on both
-> > 11.0.0 and latest git snapshot and applies, as I can see, only to
-> > references to static symbols.
-> >
-> > When the kernel loads the module, it allocates a space for every
-> > section and then manually apply the relocations relative to the
-> > new address.
-> >
-> > Let's say we have a function phy_probe() in drivers/net/phy/libphy.ko.
-> > It's static and referenced only in phy_register_driver(), where it's
-> > used to fill callback pointer in a structure.
-> >
-> > The real function address after module loading is 0xc06c1444, that
-> > is observed in its ELF st_value field.
-> > There are two relocs related to this usage in phy_register_driver():
-> >
-> > R_MIPS_HI16 refers to 0x3c010000
-> > R_MIPS_LO16 refers to 0x24339444
-> >
-> > The address of .text is 0xc06b8000. So the destination is calculated
-> > as follows:
-> >
-> > 0x00000000 from hi16;
-> > 0xffff9444 from lo16 (sign extend as it's always treated as signed);
-> > 0xc06b8000 from base.
-> >
-> > =3D3D 0xc06b1444. The value is lower than the real phy_probe() address
-> > (0xc06c1444) by 0x10000 and is lower than the base address of
-> > module's .text, so it's 100% incorrect.
-> >
-> > This results in:
-> >
-> > [    2.204022] CPU 3 Unable to handle kernel paging request at virtual
-> > address c06b1444, epc =3D3D=3D3D c06b1444, ra =3D3D=3D3D 803f1090
-> >
-> > The correct instructions should be:
-> >
-> > R_MIPS_HI16 0x3c010001
-> > R_MIPS_LO16 0x24339444
-> >
-> > so there'll be 0x00010000 from hi16.
-> >
-> > I tried to catch those bugs in arch/mips/kernel/module.c (by checking
-> > if the destination is lower than the base address, which should never
-> > happen), and seems like I have only 3 such places in libphy.ko (and
-> > one in nf_tables.ko).
-> > I don't think it should be handled somehow in mentioned source code
-> > as it would look rather ugly and may break kernels build with GNU
-> > stack, which seems to not produce such bad codes.
-> >
-> > If I should report this to any other resources, please let me know.
-> > I chose clang-built-linux and LKML as it may not happen with userland
-> > (didn't tried to catch).
-> >
-> > Thanks,
-> > Al
-> >
->
-> Hi Alexander,
+I'd like to mainline for the next merge window the current mt7621-pci
+driver which is in staging now. I am in the process of validating
+current bindings to make first all the need changes in staging before.
+This SoC is based on mips ralink platform. MediaTek MT7621 PCIe subsys
+supports single Root complex (RC) with 3 Root Ports. Each Root Ports
+supports a Gen1 1-lane Link. I have some concerns that I am not sure
+how to achieve before getting this an attempt to put in its correct
+place of the kernel. This driver has been cleaned during its long time
+in staging and is properly using the pci generic APIs instead of the
+PCI_LEGACY which seems that all other drivers in 'arch/mips/pci' are
+using. The driver is generic enough but it needs mips iocu region
+configuration that is done in the driver itself. So here it is where
+my questions come. Is 'arch/mips/pci' the place to move this driver?
+Is the driver the correct place to configure the iocu related with
+pci?
 
-Hi!
+There is also one issue from a while now that sometimes is reported by
+the kernel test robot [0] that I'd like also to fix correctly. please
+see the link and my comments there.
 
-> Doubling back around to this as I was browsing through the LLVM 12.0.1
-> blockers on LLVM's bug tracker and I noticed a commit that could resolve
-> this? It refers to the same relocations that you reference here.
->
-> https://bugs.llvm.org/show_bug.cgi?id=3D3D49821
->
-> http://github.com/llvm/llvm-project/commit/7e83a7f1fdfcc2edde61f0a535f9d7=
-a=3D
-> 56f531db9
+Thanks in advance for your comments and help.
 
-This really seems very related to the bug I encountered.
-Currently I don't have a MIPS setup to try since I've moved to
-another country, but I should "deploy" it again soon. So I'll
-definitely take a look a bit later, thanks for pointing on this
-commit!
+Best regards,
+    Sergio Paracuellos
 
-> I think that Debian's apt.llvm.org repository should have a build
-> available with that commit in it. Otherwise, building it from source is
-> not too complicated with my script:
->
-> https://github.com/ClangBuiltLinux/tc-build
->
-> $ ./build-llvm.py --build-stage1-only --install-stage1-only --projects "c=
-l=3D
-> ang;lld" --targets "Mips;X86"
->
-> would get you a working toolchain relatively quickly.
-
-I could just build llvm-git from Arch Linux User Repository :) I did
-that last time when was checking if the latest snapshot also suffers
-from the bug, and I think it didn't take much time to build.
-
-> Cheers,
-> Nathan
-
-Thanks,
-Al
+[0]: https://www.spinics.net/lists/kernel/msg3617511.html
