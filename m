@@ -2,190 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1D237A251
-	for <lists+linux-mips@lfdr.de>; Tue, 11 May 2021 10:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A5837A3C0
+	for <lists+linux-mips@lfdr.de>; Tue, 11 May 2021 11:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbhEKIkD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 11 May 2021 04:40:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21399 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230338AbhEKIkB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 11 May 2021 04:40:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620722335;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oAopTEbdD9SUh6PQTXI2MykT2T2jIRp0VGhtGVWodjg=;
-        b=I9C6OlbcmXOMZOkN0/jLrZOqQ1B+Rf890chd7w6VaAKWOoI0nKTlHCPThla8IthEZMj6iz
-        zNYnKvTpfrSjh6/22ZHLmF2RiHJhn1BfxxjIrSXRuczEcDjQRfPbToETKhFVxpsZZeKhGK
-        Qo33zxiA30ezsYMg6ffxUj9vYPfG2pk=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-190-ZnI-1GO3MmCM1Emhd03dkQ-1; Tue, 11 May 2021 04:38:53 -0400
-X-MC-Unique: ZnI-1GO3MmCM1Emhd03dkQ-1
-Received: by mail-ed1-f70.google.com with SMTP id i17-20020a50fc110000b0290387c230e257so10540102edr.0
-        for <linux-mips@vger.kernel.org>; Tue, 11 May 2021 01:38:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oAopTEbdD9SUh6PQTXI2MykT2T2jIRp0VGhtGVWodjg=;
-        b=ab2m9HB19tLVqV0jkztK1t8JrRqj8GJu1wE6kwGBmb8EIb9D5FHFOmErzbwNXLEQO6
-         T/qmkEYc8luxQfuBflkOFWBhDYKOBMCgRNF9xGr75vPADyMQOdf6bjcB4F0kOrgTqU/V
-         rTnjYLFZa/86Yvcml1GIEaelfmqYTt1KEYGeLx6ld3PjpCvZytz6Vh8tLE+8ckdmv1tN
-         3Mj5FY8J9IOJA+FnXiURgQ5GH5iNHUVSGbjpM/5WAN6DG/MU7mB6a8sl1hILvdqqWFTs
-         aSuoVC6akRunnwTYXqeBHWxJEoHXTBW1/d5blHdr7PF6mmQDN0kwhx8yJUSJE/hnwPJa
-         lQLA==
-X-Gm-Message-State: AOAM533QLjTjC9dU8cezEicQ8CW+nlawWYkM0ueL0rEBS4WWSb35R4qa
-        oztyDlZ9zmGTG0HgN+K0VC0lyq8+G8jiRjq2AuNk7J3wtFPprY5ScAV2fTNwjMPEsSpR8PbSQsQ
-        ShveSTYJS1JQinRASfyo8AA==
-X-Received: by 2002:a17:906:9718:: with SMTP id k24mr1941015ejx.23.1620722332728;
-        Tue, 11 May 2021 01:38:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyT75fua4+WgIi/rgmXTzVvo4K8REfXZdDbFxcG2kK4Dqn2ZsdkeL1pgt+qT2yOLrXO7W/tLA==
-X-Received: by 2002:a17:906:9718:: with SMTP id k24mr1940987ejx.23.1620722332520;
-        Tue, 11 May 2021 01:38:52 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id b21sm11083756ejg.80.2021.05.11.01.38.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 May 2021 01:38:51 -0700 (PDT)
-Subject: Re: [PATCH v4 0/4] KVM statistics data fd-based binary interface
-To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
-        KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-References: <20210429203740.1935629-1-jingzhangos@google.com>
- <CAAdAUtgW0vYmr5rqiMJKbZSjgEtLQqxfHd8H0fxrTbE0o4zmWw@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <cdf0a42f-c52b-bf79-5237-5f3b31077db7@redhat.com>
-Date:   Tue, 11 May 2021 10:38:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231223AbhEKJev (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 11 May 2021 05:34:51 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:2625 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231220AbhEKJev (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 11 May 2021 05:34:51 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FfXjw3krfzlZTt;
+        Tue, 11 May 2021 17:31:32 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.177.72) by
+ DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
+ 14.3.498.0; Tue, 11 May 2021 17:33:35 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 1/1] mmc: jz4740: Remove redundant error printing in jz4740_mmc_probe()
+Date:   Tue, 11 May 2021 17:33:29 +0800
+Message-ID: <20210511093329.4670-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-In-Reply-To: <CAAdAUtgW0vYmr5rqiMJKbZSjgEtLQqxfHd8H0fxrTbE0o4zmWw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.177.72]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/05/21 20:57, Jing Zhang wrote:
-> Hi Paolo,
-> 
-> On Thu, Apr 29, 2021 at 3:37 PM Jing Zhang <jingzhangos@google.com> wrote:
->>
->> This patchset provides a file descriptor for every VM and VCPU to read
->> KVM statistics data in binary format.
->> It is meant to provide a lightweight, flexible, scalable and efficient
->> lock-free solution for user space telemetry applications to pull the
->> statistics data periodically for large scale systems. The pulling
->> frequency could be as high as a few times per second.
->> In this patchset, every statistics data are treated to have some
->> attributes as below:
->>    * architecture dependent or common
->>    * VM statistics data or VCPU statistics data
->>    * type: cumulative, instantaneous,
->>    * unit: none for simple counter, nanosecond, microsecond,
->>      millisecond, second, Byte, KiByte, MiByte, GiByte. Clock Cycles
->> Since no lock/synchronization is used, the consistency between all
->> the statistics data is not guaranteed. That means not all statistics
->> data are read out at the exact same time, since the statistics date
->> are still being updated by KVM subsystems while they are read out.
->>
->> ---
->>
->> * v3 -> v4
->>    - Rebase to kvm/queue, commit 9f242010c3b4 ("KVM: avoid "deadlock"
->>      between install_new_memslots and MMU notifier")
->>    - Use C-stype comments in the whole patch
->>    - Fix wrong count for x86 VCPU stats descriptors
->>    - Fix KVM stats data size counting and validity check in selftest
->>
->> * v2 -> v3
->>    - Rebase to kvm/queue, commit edf408f5257b ("KVM: avoid "deadlock"
->>      between install_new_memslots and MMU notifier")
->>    - Resolve some nitpicks about format
->>
->> * v1 -> v2
->>    - Use ARRAY_SIZE to count the number of stats descriptors
->>    - Fix missing `size` field initialization in macro STATS_DESC
->>
->> [1] https://lore.kernel.org/kvm/20210402224359.2297157-1-jingzhangos@google.com
->> [2] https://lore.kernel.org/kvm/20210415151741.1607806-1-jingzhangos@google.com
->> [3] https://lore.kernel.org/kvm/20210423181727.596466-1-jingzhangos@google.com
->>
->> ---
->>
->> Jing Zhang (4):
->>    KVM: stats: Separate common stats from architecture specific ones
->>    KVM: stats: Add fd-based API to read binary stats data
->>    KVM: stats: Add documentation for statistics data binary interface
->>    KVM: selftests: Add selftest for KVM statistics data binary interface
->>
->>   Documentation/virt/kvm/api.rst                | 171 ++++++++
->>   arch/arm64/include/asm/kvm_host.h             |   9 +-
->>   arch/arm64/kvm/guest.c                        |  42 +-
->>   arch/mips/include/asm/kvm_host.h              |   9 +-
->>   arch/mips/kvm/mips.c                          |  67 ++-
->>   arch/powerpc/include/asm/kvm_host.h           |   9 +-
->>   arch/powerpc/kvm/book3s.c                     |  68 +++-
->>   arch/powerpc/kvm/book3s_hv.c                  |  12 +-
->>   arch/powerpc/kvm/book3s_pr.c                  |   2 +-
->>   arch/powerpc/kvm/book3s_pr_papr.c             |   2 +-
->>   arch/powerpc/kvm/booke.c                      |  63 ++-
->>   arch/s390/include/asm/kvm_host.h              |   9 +-
->>   arch/s390/kvm/kvm-s390.c                      | 133 +++++-
->>   arch/x86/include/asm/kvm_host.h               |   9 +-
->>   arch/x86/kvm/x86.c                            |  71 +++-
->>   include/linux/kvm_host.h                      | 132 +++++-
->>   include/linux/kvm_types.h                     |  12 +
->>   include/uapi/linux/kvm.h                      |  50 +++
->>   tools/testing/selftests/kvm/.gitignore        |   1 +
->>   tools/testing/selftests/kvm/Makefile          |   3 +
->>   .../testing/selftests/kvm/include/kvm_util.h  |   3 +
->>   .../selftests/kvm/kvm_bin_form_stats.c        | 380 ++++++++++++++++++
->>   tools/testing/selftests/kvm/lib/kvm_util.c    |  11 +
->>   virt/kvm/kvm_main.c                           | 237 ++++++++++-
->>   24 files changed, 1415 insertions(+), 90 deletions(-)
->>   create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
->>
->>
->> base-commit: 9f242010c3b46e63bc62f08fff42cef992d3801b
->> --
->> 2.31.1.527.g47e6f16901-goog
->>
-> 
-> Do I need to send another version for this?
+When devm_ioremap_resource() fails, a clear enough error message will be
+printed by its subfunction __devm_ioremap_resource(). The error
+information contains the device name, failure cause, and possibly resource
+information.
 
-No, the merge window has just finished and I wanted to flush the dozens 
-of bugfix patches that I had.  I'll get to it shortly.
+Therefore, remove the error printing here to simplify code and reduce the
+binary size.
 
-Paolo
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ drivers/mmc/host/jz4740_mmc.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+index b3c636edbb4610d..861ff6d9661a908 100644
+--- a/drivers/mmc/host/jz4740_mmc.c
++++ b/drivers/mmc/host/jz4740_mmc.c
+@@ -1013,7 +1013,6 @@ static int jz4740_mmc_probe(struct platform_device* pdev)
+ 	host->base = devm_ioremap_resource(&pdev->dev, host->mem_res);
+ 	if (IS_ERR(host->base)) {
+ 		ret = PTR_ERR(host->base);
+-		dev_err(&pdev->dev, "Failed to ioremap base memory\n");
+ 		goto err_free_host;
+ 	}
+ 
+-- 
+2.26.0.106.g9fadedd
+
 
