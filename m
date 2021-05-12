@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1C937C0D4
-	for <lists+linux-mips@lfdr.de>; Wed, 12 May 2021 16:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4D537C379
+	for <lists+linux-mips@lfdr.de>; Wed, 12 May 2021 17:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbhELOyc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 May 2021 10:54:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42902 "EHLO mail.kernel.org"
+        id S233657AbhELPTA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 May 2021 11:19:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41568 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231377AbhELOyR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 12 May 2021 10:54:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 151786142E;
-        Wed, 12 May 2021 14:53:08 +0000 (UTC)
+        id S233239AbhELPME (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 12 May 2021 11:12:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F18BE61628;
+        Wed, 12 May 2021 15:03:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620831189;
+        s=korg; t=1620831813;
         bh=s3BM/sj6oyrnLcGniBopzOVI6NUof9Zb1aULINA8GoI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TZSPX/be2iNGkyzGWzjKgKMn2KODKEED30h3s5pvRYFHKMRNPezo1ApXc3hbhqxs/
-         j6s2BkXA7DstrjvKWJQ42bmoY6teum0NP4osjFZibPtu4TZAoOYmhwyx/EuomjUcE5
-         iUT3+AntdrmEP0bI4ppVkCX78K00xUkBA0BlrlC0=
+        b=Hsr6RGl0jSb5yG+CGC4qzGgh/Y6Hhb+w3CDi6SltCygsUnZxyMpY8EwISVTwaVYTu
+         THn09oZfppmgRmTLco3SpF+w7DSRgVdfjIEweClIn6dSPCnMek8R8xqcwi6vlcqAb1
+         Z3m3jpvpq2F9e/FibVNgcwIBru3K6g/9YemEWL6Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -28,12 +28,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 5.4 021/244] MIPS: pci-mt7620: fix PLL lock check
-Date:   Wed, 12 May 2021 16:46:32 +0200
-Message-Id: <20210512144743.726838190@linuxfoundation.org>
+Subject: [PATCH 5.10 025/530] MIPS: pci-mt7620: fix PLL lock check
+Date:   Wed, 12 May 2021 16:42:15 +0200
+Message-Id: <20210512144820.562269751@linuxfoundation.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210512144743.039977287@linuxfoundation.org>
-References: <20210512144743.039977287@linuxfoundation.org>
+In-Reply-To: <20210512144819.664462530@linuxfoundation.org>
+References: <20210512144819.664462530@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
