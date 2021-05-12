@@ -2,97 +2,367 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9A037B4CD
-	for <lists+linux-mips@lfdr.de>; Wed, 12 May 2021 06:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AAD37B75C
+	for <lists+linux-mips@lfdr.de>; Wed, 12 May 2021 10:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbhELEMp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 May 2021 00:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbhELEMo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 May 2021 00:12:44 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6833EC061574
-        for <linux-mips@vger.kernel.org>; Tue, 11 May 2021 21:11:37 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso19418258otb.13
-        for <linux-mips@vger.kernel.org>; Tue, 11 May 2021 21:11:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+ZVDcTMbC1aiWsLtnnQkNmtuDQK56GjzbJG6dgvkY6Y=;
-        b=gyDmRiMY3fF4stRtW2YLntDpQV69V4WHa/ApTt2f3of6WZxE/xk7681QmOwd7ee4ju
-         bvGa5p5z156sgYA9G+G8mCdYErWiyFDewuE/q/Sso4VhnxdlbHa7kUFurfHh15KjAR0J
-         dgZS99WzOMtLifcNjRulLMDyzUPAhgUHviuDlDXpPAjhbWf7zbKrnNk2NLjyHWk5mdJc
-         WsfSuz+PHVFO8g/eJ1wMdybzclDOl8TWUgsbGZ6uAMdaISZKG/6LtdY9UI8cRz5IHjC1
-         UFkvSEJbu2vBz0i+ANEpF3bZ9SeYNGvW2jJvTLeAYD5wdNicaIQdfPCujNNw6Cl8Hp1h
-         ZeEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+ZVDcTMbC1aiWsLtnnQkNmtuDQK56GjzbJG6dgvkY6Y=;
-        b=GAc6xPYYytfClp811ljYzNavxphfHQIBdp6/xfJ8sret4YNUMI2zGoywcx5g3mCmtO
-         k8lLaxuoqwy9FWRntNpdJD0TZ6HfjxVvfh6XMnkN7WBIyRQQl4JOIehS/NXGIFXaJHGZ
-         zSlxn27D9fZtKIakjLqzsXX1EpdKXylBqDf4jV4Ck9VhmXuCUD3bsAITpWj2XxNjCZF5
-         zt3/4c/TQ65rCzNgj6Pei0pOQ7dj6LFerlhiCP+1Gzrx4v2NACcLclhDbQil5VAzWoeF
-         HfQ0H97BGXKr0KAnccdGHfd/QtDluEDM2B4UGU7Ym+qhhrsnn3m3iAx1pux/FVE9gAaM
-         zTxQ==
-X-Gm-Message-State: AOAM530q2U8RdpZmKhp1+zoOsov8R0al1TcaT8ysrslcGUJVAs6hyT1/
-        gDD0IZ8QG+9BUn/orYGexVg0x+uF+BNf+MyG4U4=
-X-Google-Smtp-Source: ABdhPJxukURS5VskjkpMQX+3qeDMmAefANqTt+R52x8btgKpfpTR0p8ud7jPVz6NkRG2Zkn8noPlDXCz3HQy4F75ZKM=
-X-Received: by 2002:a9d:2ae8:: with SMTP id e95mr29656787otb.72.1620792696803;
- Tue, 11 May 2021 21:11:36 -0700 (PDT)
+        id S230011AbhELIFh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 12 May 2021 04:05:37 -0400
+Received: from conuserg-07.nifty.com ([210.131.2.74]:53036 "EHLO
+        conuserg-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229968AbhELIFh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 12 May 2021 04:05:37 -0400
+X-Greylist: delayed 345 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 May 2021 04:05:34 EDT
+Received: from grover.RMN.KIBA.LAB.jp (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 14C7vbPs028192;
+        Wed, 12 May 2021 16:57:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 14C7vbPs028192
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1620806261;
+        bh=wIUNhcOB6btFOL0gSpr92RlYruAqiaKJ+SP4MHn4OAA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MEPfaL+dgaQHelu1aORa4dkshKUoXyML9ToegfF2X/+DDlDkT2NTxvVtRobsDkp3y
+         w6q0OMUPClkMLevvjlJySVaAGk9chQn5JmHYb+Sby+ocz18EmUyh5EfwgbghPbCUMs
+         BfqHu2GczlJunlpKBWtiGYnb5THa+fwMAHT17a+4GK1J+KWFOc18MvDzUYfMdu9apT
+         X6Smfz3LDGjObml+5VUPVmYQNjXkkTpqKOuY3LDfkxKy7PEEqqJdMx9ujR6UWsgJpM
+         n0Q+gHtNpnXSYPWFtp4AhWmiwdi6gcYpdR3mkS/pbX/h/3dXftILrjdVKvAqW4utJB
+         bGXpxDJOBDv8Q==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Brian Cain <bcain@codeaurora.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greentime Hu <green.hu@gmail.com>, Guo Ren <guoren@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jeff Dike <jdike@addtoit.com>, Jonas Bonn <jonas@southpole.se>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Michal Simek <monstr@monstr.eu>,
+        Nick Hu <nickhu@andestech.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
+        sparclinux@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp,
+        x86@kernel.org
+Subject: [PATCH 1/5] kbuild: require all architectures to have arch/$(SRCARCH)/Kbuild
+Date:   Wed, 12 May 2021 16:57:25 +0900
+Message-Id: <20210512075729.60291-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <CAMhs-H-1f72=7C3j1jCmdLU8+5LurPO6nRVcvPJO_rxPitQBnA@mail.gmail.com>
- <20210511204758.GD18185@alpha.franken.de>
-In-Reply-To: <20210511204758.GD18185@alpha.franken.de>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 12 May 2021 06:11:25 +0200
-Message-ID: <CAMhs-H_4YPevS5KuuTrhXAzMVfPrTiosg88Ch8s=iXYrkJ2biw@mail.gmail.com>
-Subject: Re: Some doubts about mt7621-pci mainline place
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+arch/$(SRCARCH)/Kbuild is useful for Makefile cleanups because you can
+use the obj-y syntax.
 
-On Tue, May 11, 2021 at 10:48 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Mon, May 10, 2021 at 08:43:51AM +0200, Sergio Paracuellos wrote:
-> > in staging and is properly using the pci generic APIs instead of the
-> > PCI_LEGACY which seems that all other drivers in 'arch/mips/pci' are
-> > using. The driver is generic enough but it needs mips iocu region
-> > configuration that is done in the driver itself. So here it is where
-> > my questions come. Is 'arch/mips/pci' the place to move this driver?
->
-> moving to arch/mips/pci would work for me. Could you look at converting
-> the driver to PCI_DRIVERS_GENERIC instead of LEGACY ? I want to
-> get rid of PCI_LEGACY...
+Add an empty file if it is missing in arch/$(SRCARCH)/.
 
-Driver is already using PCI_DRIVERS_GENERIC, so as soon as I get
-bindings validated I will send patches to move into 'arch/mips/pci'.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
->
-> > Is the driver the correct place to configure the iocu related with
-> > pci?
->
-> I see no problem with this at the moment.
+ Makefile               | 2 +-
+ arch/alpha/Kbuild      | 1 +
+ arch/arc/Makefile      | 3 ---
+ arch/arm/Makefile      | 1 -
+ arch/arm64/Makefile    | 1 -
+ arch/csky/Kbuild       | 1 +
+ arch/h8300/Kbuild      | 1 +
+ arch/hexagon/Kbuild    | 1 +
+ arch/ia64/Kbuild       | 1 +
+ arch/microblaze/Kbuild | 1 +
+ arch/mips/Makefile     | 3 ---
+ arch/nds32/Kbuild      | 1 +
+ arch/nios2/Kbuild      | 1 +
+ arch/openrisc/Makefile | 1 -
+ arch/parisc/Kbuild     | 1 +
+ arch/powerpc/Makefile  | 3 ---
+ arch/riscv/Makefile    | 1 -
+ arch/s390/Makefile     | 3 ---
+ arch/sh/Kbuild         | 1 +
+ arch/sparc/Makefile    | 3 ---
+ arch/um/Kbuild         | 1 +
+ arch/x86/Makefile      | 3 ---
+ arch/xtensa/Kbuild     | 1 +
+ 23 files changed, 13 insertions(+), 23 deletions(-)
+ create mode 100644 arch/alpha/Kbuild
+ create mode 100644 arch/csky/Kbuild
+ create mode 100644 arch/h8300/Kbuild
+ create mode 100644 arch/hexagon/Kbuild
+ create mode 100644 arch/ia64/Kbuild
+ create mode 100644 arch/microblaze/Kbuild
+ create mode 100644 arch/nds32/Kbuild
+ create mode 100644 arch/nios2/Kbuild
+ create mode 100644 arch/parisc/Kbuild
+ create mode 100644 arch/sh/Kbuild
+ create mode 100644 arch/um/Kbuild
+ create mode 100644 arch/xtensa/Kbuild
 
-Ok, good to know :).
+diff --git a/Makefile b/Makefile
+index 15b6476d0f89..7df040b1b023 100644
+--- a/Makefile
++++ b/Makefile
+@@ -658,7 +658,7 @@ endif
+ 
+ ifeq ($(KBUILD_EXTMOD),)
+ # Objects we will link into vmlinux / subdirs we need to visit
+-core-y		:= init/ usr/
++core-y		:= init/ usr/ arch/$(SRCARCH)/
+ drivers-y	:= drivers/ sound/
+ drivers-$(CONFIG_SAMPLES) += samples/
+ drivers-$(CONFIG_NET) += net/
+diff --git a/arch/alpha/Kbuild b/arch/alpha/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/alpha/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/arc/Makefile b/arch/arc/Makefile
+index 4392c9c189c4..3e6d4b84797f 100644
+--- a/arch/arc/Makefile
++++ b/arch/arc/Makefile
+@@ -85,9 +85,6 @@ KBUILD_LDFLAGS	+= $(ldflags-y)
+ 
+ head-y		:= arch/arc/kernel/head.o
+ 
+-# See arch/arc/Kbuild for content of core part of the kernel
+-core-y		+= arch/arc/
+-
+ # w/o this dtb won't embed into kernel binary
+ core-y		+= arch/arc/boot/dts/
+ 
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 415c3514573a..173da685a52e 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -252,7 +252,6 @@ endif
+ 
+ export	TEXT_OFFSET GZFLAGS MMUEXT
+ 
+-core-y				+= arch/arm/
+ # If we have a machine-specific directory, then include it in the build.
+ core-y				+= $(machdirs) $(platdirs)
+ 
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 7ef44478560d..b73c151f3a53 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -149,7 +149,6 @@ KBUILD_CFLAGS += -DKASAN_SHADOW_SCALE_SHIFT=$(KASAN_SHADOW_SCALE_SHIFT)
+ KBUILD_CPPFLAGS += -DKASAN_SHADOW_SCALE_SHIFT=$(KASAN_SHADOW_SCALE_SHIFT)
+ KBUILD_AFLAGS += -DKASAN_SHADOW_SCALE_SHIFT=$(KASAN_SHADOW_SCALE_SHIFT)
+ 
+-core-y		+= arch/arm64/
+ libs-y		:= arch/arm64/lib/ $(libs-y)
+ libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+ 
+diff --git a/arch/csky/Kbuild b/arch/csky/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/csky/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/h8300/Kbuild b/arch/h8300/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/h8300/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/hexagon/Kbuild b/arch/hexagon/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/hexagon/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/ia64/Kbuild b/arch/ia64/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/ia64/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/microblaze/Kbuild b/arch/microblaze/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/microblaze/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index 258234c35a09..4e942b7ef022 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -332,9 +332,6 @@ head-y := arch/mips/kernel/head.o
+ libs-y			+= arch/mips/lib/
+ libs-$(CONFIG_MIPS_FP_SUPPORT) += arch/mips/math-emu/
+ 
+-# See arch/mips/Kbuild for content of core part of the kernel
+-core-y += arch/mips/
+-
+ drivers-y			+= arch/mips/crypto/
+ 
+ # suspend and hibernation support
+diff --git a/arch/nds32/Kbuild b/arch/nds32/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/nds32/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/nios2/Kbuild b/arch/nios2/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/nios2/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/openrisc/Makefile b/arch/openrisc/Makefile
+index 410e7abfac69..c52de526e518 100644
+--- a/arch/openrisc/Makefile
++++ b/arch/openrisc/Makefile
+@@ -42,7 +42,6 @@ endif
+ 
+ head-y 		:= arch/openrisc/kernel/head.o
+ 
+-core-y		+= arch/openrisc/
+ libs-y		+= $(LIBGCC)
+ 
+ PHONY += vmlinux.bin
+diff --git a/arch/parisc/Kbuild b/arch/parisc/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/parisc/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index 3212d076ac6a..af669aa75b73 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -267,9 +267,6 @@ head-$(CONFIG_PPC_FPU)		+= arch/powerpc/kernel/fpu.o
+ head-$(CONFIG_ALTIVEC)		+= arch/powerpc/kernel/vector.o
+ head-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)  += arch/powerpc/kernel/prom_init.o
+ 
+-# See arch/powerpc/Kbuild for content of core part of the kernel
+-core-y += arch/powerpc/
+-
+ # Default to zImage, override when needed
+ all: zImage
+ 
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 3eb9590a0775..c5f359540862 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -90,7 +90,6 @@ endif
+ 
+ head-y := arch/riscv/kernel/head.o
+ 
+-core-y += arch/riscv/
+ core-$(CONFIG_RISCV_ERRATA_ALTERNATIVE) += arch/riscv/errata/
+ 
+ libs-y += arch/riscv/lib/
+diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+index e443ed9947bd..37b61645694c 100644
+--- a/arch/s390/Makefile
++++ b/arch/s390/Makefile
+@@ -128,9 +128,6 @@ OBJCOPYFLAGS	:= -O binary
+ 
+ head-y		:= arch/s390/kernel/head64.o
+ 
+-# See arch/s390/Kbuild for content of core part of the kernel
+-core-y		+= arch/s390/
+-
+ libs-y		+= arch/s390/lib/
+ drivers-y	+= drivers/s390/
+ 
+diff --git a/arch/sh/Kbuild b/arch/sh/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/sh/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
+index bee99e65fe23..4e65245bc755 100644
+--- a/arch/sparc/Makefile
++++ b/arch/sparc/Makefile
+@@ -58,9 +58,6 @@ endif
+ 
+ head-y                 := arch/sparc/kernel/head_$(BITS).o
+ 
+-# See arch/sparc/Kbuild for the core part of the kernel
+-core-y                 += arch/sparc/
+-
+ libs-y                 += arch/sparc/prom/
+ libs-y                 += arch/sparc/lib/
+ 
+diff --git a/arch/um/Kbuild b/arch/um/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/um/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index c77c5d8a7b3e..4307bf48ec53 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -239,9 +239,6 @@ head-y += arch/x86/kernel/platform-quirks.o
+ 
+ libs-y  += arch/x86/lib/
+ 
+-# See arch/x86/Kbuild for content of core part of the kernel
+-core-y += arch/x86/
+-
+ # drivers-y are linked after core-y
+ drivers-$(CONFIG_MATH_EMULATION) += arch/x86/math-emu/
+ drivers-$(CONFIG_PCI)            += arch/x86/pci/
+diff --git a/arch/xtensa/Kbuild b/arch/xtensa/Kbuild
+new file mode 100644
+index 000000000000..a4e40e534e6a
+--- /dev/null
++++ b/arch/xtensa/Kbuild
+@@ -0,0 +1 @@
++# SPDX-License-Identifier: GPL-2.0-only
+-- 
+2.27.0
 
->
-> Thomas.
->
-
-Thanks,
-    Sergio Paracuellos
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
