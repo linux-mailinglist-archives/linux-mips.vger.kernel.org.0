@@ -2,95 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 314CA37CFBB
-	for <lists+linux-mips@lfdr.de>; Wed, 12 May 2021 19:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6933637F7F2
+	for <lists+linux-mips@lfdr.de>; Thu, 13 May 2021 14:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234501AbhELRRC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 12 May 2021 13:17:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42394 "EHLO mail.kernel.org"
+        id S233852AbhEMMa7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 13 May 2021 08:30:59 -0400
+Received: from aposti.net ([89.234.176.197]:43604 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241253AbhELQ06 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 12 May 2021 12:26:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BA7C61DF1;
-        Wed, 12 May 2021 15:50:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620834656;
-        bh=s3BM/sj6oyrnLcGniBopzOVI6NUof9Zb1aULINA8GoI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iJg0wugv9JT/r0vWbE8x6Cr6ioP/TqgbzfwPHDoMsOsULyRXdK4Hyu+k72KPW0K6Q
-         +NT15Rmwz6KxD5AKn2V7mPwXqUAfBsoaKP7x+B3UfpZg/BfLP44L7TnfVNVHlZsDsF
-         lVv03vG9BQlMIL1Y6E4/KCY7xrwUordixD+exigY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 5.12 030/677] MIPS: pci-mt7620: fix PLL lock check
-Date:   Wed, 12 May 2021 16:41:16 +0200
-Message-Id: <20210512144838.225243488@linuxfoundation.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210512144837.204217980@linuxfoundation.org>
-References: <20210512144837.204217980@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S233305AbhEMMa6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 13 May 2021 08:30:58 -0400
+Date:   Thu, 13 May 2021 13:29:30 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] drm/ingenic: Fix pixclock rate for 24-bit serial panels
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
+Cc:     Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Message-Id: <6DP1TQ.W6B9JRRW1OY5@crapouillou.net>
+In-Reply-To: <20210323144008.166248-1-paul@crapouillou.net>
+References: <20210323144008.166248-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Hi,
 
-commit c15b99ae2ba9ea30da3c7cd4765b8a4707e530a6 upstream.
+Almost two months later,
 
-Upstream a long-standing OpenWrt patch [0] that fixes MT7620 PCIe PLL
-lock check. The existing code checks the wrong register bit: PPLL_SW_SET
-is not defined in PPLL_CFG1 and bit 31 of PPLL_CFG1 is marked as reserved
-in the MT7620 Programming Guide. The correct bit to check for PLL lock
-is PPLL_LD (bit 23).
 
-Also reword the error message for clarity.
+Le mar., mars 23 2021 at 14:40:08 +0000, Paul Cercueil 
+<paul@crapouillou.net> a écrit :
+> When using a 24-bit panel on a 8-bit serial bus, the pixel clock
+> requested by the panel has to be multiplied by 3, since the subpixels
+> are shifted sequentially.
+> 
+> The code (in ingenic_drm_encoder_atomic_check) already computed
+> crtc_state->adjusted_mode->crtc_clock accordingly, but clk_set_rate()
+> used crtc_state->adjusted_mode->clock instead.
+> 
+> Fixes: 28ab7d35b6e0 ("drm/ingenic: Properly compute timings when 
+> using a 3x8-bit panel")
+> Cc: stable@vger.kernel.org # v5.10
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Without this change it is unlikely that this driver ever worked with
-mainline kernel.
+Can I get an ACK for my patch?
 
-[0]: https://lists.infradead.org/pipermail/lede-commits/2017-July/004441.html
+Thanks!
+-Paul
 
-Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Cc: John Crispin <john@phrozen.org>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-mediatek@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/mips/pci/pci-mt7620.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
---- a/arch/mips/pci/pci-mt7620.c
-+++ b/arch/mips/pci/pci-mt7620.c
-@@ -30,6 +30,7 @@
- #define RALINK_GPIOMODE			0x60
- 
- #define PPLL_CFG1			0x9c
-+#define PPLL_LD				BIT(23)
- 
- #define PPLL_DRV			0xa0
- #define PDRV_SW_SET			BIT(31)
-@@ -239,8 +240,8 @@ static int mt7620_pci_hw_init(struct pla
- 	rt_sysc_m32(0, RALINK_PCIE0_CLK_EN, RALINK_CLKCFG1);
- 	mdelay(100);
- 
--	if (!(rt_sysc_r32(PPLL_CFG1) & PDRV_SW_SET)) {
--		dev_err(&pdev->dev, "MT7620 PPLL unlock\n");
-+	if (!(rt_sysc_r32(PPLL_CFG1) & PPLL_LD)) {
-+		dev_err(&pdev->dev, "pcie PLL not locked, aborting init\n");
- 		reset_control_assert(rstpcie0);
- 		rt_sysc_m32(RALINK_PCIE0_CLK_EN, 0, RALINK_CLKCFG1);
- 		return -1;
+> ---
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
+> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> index d60e1eefc9d1..cba68bf52ec5 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -342,7 +342,7 @@ static void ingenic_drm_crtc_atomic_flush(struct 
+> drm_crtc *crtc,
+>  	if (priv->update_clk_rate) {
+>  		mutex_lock(&priv->clk_mutex);
+>  		clk_set_rate(priv->pix_clk,
+> -			     crtc_state->adjusted_mode.clock * 1000);
+> +			     crtc_state->adjusted_mode.crtc_clock * 1000);
+>  		priv->update_clk_rate = false;
+>  		mutex_unlock(&priv->clk_mutex);
+>  	}
+> --
+> 2.30.2
+> 
 
 
