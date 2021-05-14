@@ -2,55 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DC4380AAF
-	for <lists+linux-mips@lfdr.de>; Fri, 14 May 2021 15:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3AE8380B01
+	for <lists+linux-mips@lfdr.de>; Fri, 14 May 2021 16:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbhENNua (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 May 2021 09:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbhENNuO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 May 2021 09:50:14 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BA7C061574;
-        Fri, 14 May 2021 06:49:01 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id k127so28721183qkc.6;
-        Fri, 14 May 2021 06:49:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=v7envtOK34MisCuunSy9i4m5rHJ2gBT5MkdwSIGdAWs=;
-        b=dNAZUugxYkn+hF4br8MJ38OZrDb7y6n7LxDIlNrqTTFx4rqs5s+ZtEdj/D7Ynf/xIc
-         HFeZfxCFeYT7/Xt5AIqgyvf7G6gxZJ/3oPhBywL9PMglXz9/ML+NZVyx55krs2OxtHIH
-         aDfyLpKrX/5RdRn/Y05xa2piLhxIuqu55YoRam4+JR7CFSPJWeGZf99mzvKFvCqVcyr1
-         jvggqwYZJXI3VlMbhjIR1pFXBzik8ky8ni7DJzXh1cuGt9R83Kn1U3R1BS5klqGENYT5
-         OKqAlPVBx3d1+oVmMsF3PIT2mV5H0177bMGeJOO/Ug92M0IZyKlnt783DuePUCio2Nm/
-         3C8w==
+        id S230305AbhENOFs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 May 2021 10:05:48 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:43765 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231256AbhENOFr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 May 2021 10:05:47 -0400
+Received: from mail-ua1-f71.google.com ([209.85.222.71])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lhYQc-00034D-F8
+        for linux-mips@vger.kernel.org; Fri, 14 May 2021 14:04:34 +0000
+Received: by mail-ua1-f71.google.com with SMTP id u3-20020ab069c30000b02901ebe1c8da33so5483172uaq.7
+        for <linux-mips@vger.kernel.org>; Fri, 14 May 2021 07:04:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=v7envtOK34MisCuunSy9i4m5rHJ2gBT5MkdwSIGdAWs=;
-        b=j+JyNGkluVAwnPFndCpjoGEdPPJBMBo9PH0WXC3iXr0C2ZSQcAjSXTHvwjpvylmMdU
-         pPgb+GlJ0dZfVrl9Dg3c4aHdj+fSM0xYIEuIbPdjFPSqHZV8+8b8/uVFZIpKEppVepZJ
-         ULHWPqw+q5MFyZCai5m8d0xD5LhWRCk4cn4R02BSLCL1H3x4fq8Eq0SG+/O05pdgF2Gu
-         DHN+IOdZEuXOWEqR7uggMYrAY/TOIIfYLaD7XBBB7kRNAOIW+8JBly9pdUo6CJ4Npzr+
-         lM/UR+XsZOpGOpsYpN2he63vw70SiFnZFnlk5engfpd3e/k52R0BgVAUELsQVcCvqHXZ
-         KccQ==
-X-Gm-Message-State: AOAM532fn5SbBNXFaInarf9wP1LG5ZHXRe1o9BEh9LMOwUn8/MsWWwJu
-        BoqbfBnYNale6Q0EsIIvkr8=
-X-Google-Smtp-Source: ABdhPJxtT1LtsCTv7tdzgTtzPh+9uvCtjpGbihG6efIy/RujCNJRHtAKN9mYrCcS0p+lVYvZbuhGNg==
-X-Received: by 2002:a37:9e44:: with SMTP id h65mr43929384qke.297.1621000140911;
-        Fri, 14 May 2021 06:49:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l197sm4881001qke.121.2021.05.14.06.48.59
+        bh=QU/Hksxi2+pFDWpDvWUPYqDD7PqBm7YcgQmJYrRUtOY=;
+        b=lPbtnqVMP12jayxaqw/4fIudHewpj41O8rsZmVLbbNaCSVDQUYU6ZPJebAPioqhr2j
+         vfOaUv8zHMgoWVYvbdAlT6IStYvHtjiQ+QKWA1FNhLJGb6s2ebDJgJgl6dLbmfzUo97/
+         yI/JgGy21ndgR/aWGoFVjjlWWOexKN55B4QB0Q8wacCtMkKwq9f46sWm9tokvkpGIiDk
+         6uqB8LxyiZap4lKqlSte9iiUHg+EpSp9aXonYWIRn5bEmlFkTBV3ys8Vxp3kBReJ6UtJ
+         zZ1u1xvadGbxNoVHZt0BPeMj2tTG/jK3cNbwxmRQkiWc+3PO4OyMv/kvNZoNY84IG8I1
+         dvmQ==
+X-Gm-Message-State: AOAM530fb0zTxxCktTWmKRV9OdmtU2SRcHK4jJki+c1bOoHts3K7cZZ2
+        xOJa7XM9rhtQ7M4hxuCcnNKQpnhMiDWEdxinvXglkZRmHWF0QNtDClVyrSF8n0dwYZl3XZR7v+G
+        OtVFmS6JRsil3XmakmS6e1Bq23t/CMBnLuXXWNvQ=
+X-Received: by 2002:a1f:160c:: with SMTP id 12mr37650302vkw.25.1621001073612;
+        Fri, 14 May 2021 07:04:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwylx1xY4Sf3udb6i6sdh04vHdujnzpZFF+f+9W/4TRbEFNhRCcUwNy8maLRsZ7g612dyKCKA==
+X-Received: by 2002:a1f:160c:: with SMTP id 12mr37650275vkw.25.1621001073395;
+        Fri, 14 May 2021 07:04:33 -0700 (PDT)
+Received: from [192.168.1.4] ([45.237.48.3])
+        by smtp.gmail.com with ESMTPSA id b2sm851232uaq.16.2021.05.14.07.04.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 May 2021 06:49:00 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
+        Fri, 14 May 2021 07:04:32 -0700 (PDT)
 Subject: Re: [PATCH] MIPS: ralink: of: fix build of rt2880_wdt watchdog module
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+To:     Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -58,54 +52,41 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         linux-mips@vger.kernel.org, John Crispin <john@phrozen.org>
 Cc:     Lee Jones <lee.jones@linaro.org>, kernel test robot <lkp@intel.com>
 References: <20210514131750.52867-1-krzysztof.kozlowski@canonical.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <2b427eca-fd6c-d099-337f-39cfbd85cb46@roeck-us.net>
-Date:   Fri, 14 May 2021 06:48:58 -0700
+ <2b427eca-fd6c-d099-337f-39cfbd85cb46@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <a15e7f62-12a0-1ec7-5104-f01f9e3eccc7@canonical.com>
+Date:   Fri, 14 May 2021 10:04:31 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210514131750.52867-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <2b427eca-fd6c-d099-337f-39cfbd85cb46@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/14/21 6:17 AM, Krzysztof Kozlowski wrote:
-> When rt2880_wdt watchdog driver is built as a module, the
-> rt_sysc_membase needs to be exported (it is being used via inlined
-> rt_sysc_r32):
+On 14/05/2021 09:48, Guenter Roeck wrote:
+> On 5/14/21 6:17 AM, Krzysztof Kozlowski wrote:
+>> When rt2880_wdt watchdog driver is built as a module, the
+>> rt_sysc_membase needs to be exported (it is being used via inlined
+>> rt_sysc_r32):
+>>
+>>    ERROR: modpost: "rt_sysc_membase" [drivers/watchdog/rt2880_wdt.ko] undefined!
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > 
->    ERROR: modpost: "rt_sysc_membase" [drivers/watchdog/rt2880_wdt.ko] undefined!
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> I don't see a recent change in the code. Has that problem been there
+> all along ?
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+I think the problem was there always but 0-day builder did not hit it
+until recently:
+https://lore.kernel.org/lkml/202105082122.yrF7ploN-lkp@intel.com/
 
-I don't see a recent change in the code. Has that problem been there
-all along ?
 
-Thanks,
-Guenter
-
-> ---
->   arch/mips/ralink/of.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
-> index 0c5de07da097..b3ce706426c4 100644
-> --- a/arch/mips/ralink/of.c
-> +++ b/arch/mips/ralink/of.c
-> @@ -24,6 +24,8 @@
->   #include "common.h"
->   
->   __iomem void *rt_sysc_membase;
-> +EXPORT_SYMBOL_GPL(rt_sysc_membase);
-> +
->   __iomem void *rt_memc_membase;
->   
->   __iomem void *plat_of_remap_node(const char *node)
-> 
-
+Best regards,
+Krzysztof
