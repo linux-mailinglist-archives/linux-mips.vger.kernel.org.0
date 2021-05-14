@@ -2,159 +2,173 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DD13803AE
-	for <lists+linux-mips@lfdr.de>; Fri, 14 May 2021 08:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE1E380609
+	for <lists+linux-mips@lfdr.de>; Fri, 14 May 2021 11:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbhENGfZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 May 2021 02:35:25 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:37459 "EHLO pegase2.c-s.fr"
+        id S231958AbhENJVD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 14 May 2021 05:21:03 -0400
+Received: from foss.arm.com ([217.140.110.172]:45432 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230329AbhENGfY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 14 May 2021 02:35:24 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4FhJdv1Shwz9sZK;
-        Fri, 14 May 2021 08:34:11 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id T1_jWZQjZv-c; Fri, 14 May 2021 08:34:11 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4FhJdv0Rs5z9sZJ;
-        Fri, 14 May 2021 08:34:11 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E2D018B7F7;
-        Fri, 14 May 2021 08:34:10 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id mVreRObY4o1i; Fri, 14 May 2021 08:34:10 +0200 (CEST)
-Received: from [192.168.4.90] (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D62098B7F6;
-        Fri, 14 May 2021 08:34:07 +0200 (CEST)
-Subject: Re: [PATCH bpf-next 1/2] bpf: Remove bpf_jit_enable=2 debugging mode
-To:     Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Ian Rogers <irogers@google.com>, Song Liu <songliubraving@fb.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Mahesh Bandewar <maheshb@google.com>,
-        Will Deacon <will@kernel.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>, paulburton@kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
+        id S230000AbhENJVD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 14 May 2021 05:21:03 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F09BA1480;
+        Fri, 14 May 2021 02:19:51 -0700 (PDT)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C13FB3F719;
+        Fri, 14 May 2021 02:19:48 -0700 (PDT)
+Date:   Fri, 14 May 2021 10:19:43 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        linux-mips@vger.kernel.org, grantseltzer@gmail.com,
-        Xi Wang <xi.wang@gmail.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        KP Singh <kpsingh@kernel.org>, iecedge@gmail.com,
-        Simon Horman <horms@verge.net.au>,
-        Borislav Petkov <bp@alien8.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Yonghong Song <yhs@fb.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh@kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Robin Murphy <robin.murphy@arm.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Dmitry Vyukov <dvyukov@google.com>, tsbogend@alpha.franken.de,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Network Development <netdev@vger.kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Wang YanQing <udknight@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, bpf <bpf@vger.kernel.org>,
-        Jianlin Lv <Jianlin.Lv@arm.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20210415093250.3391257-1-Jianlin.Lv@arm.com>
- <9c4a78d2-f73c-832a-e6e2-4b4daa729e07@iogearbox.net>
- <d3949501-8f7d-57c4-b3fe-bcc3b24c09d8@isovalent.com>
- <CAADnVQJ2oHbYfgY9jqM_JMxUsoZxaNrxKSVFYfgCXuHVpDehpQ@mail.gmail.com>
- <0dea05ba-9467-0d84-4515-b8766f60318e@csgroup.eu>
- <CAADnVQ+oQT6C7Qv7P5TV-x7im54omKoCYYKtYhcnhb1Uv3LPMQ@mail.gmail.com>
- <be132117-f267-5817-136d-e1aeb8409c2a@csgroup.eu>
- <58296f87-ad00-a0f5-954b-2150aa84efc4@isovalent.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <52171382-1eca-58e2-b3d1-b2cc6b431e27@csgroup.eu>
-Date:   Fri, 14 May 2021 08:34:07 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Jon Derrick <jonathan.derrick@intel.com>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [RFC v2 1/7] PCI: Introduce pci_host_bridge::domain_nr
+Message-ID: <20210514091943.GA13309@lpieralisi>
+References: <20210503144635.2297386-1-boqun.feng@gmail.com>
+ <20210503144635.2297386-2-boqun.feng@gmail.com>
+ <YJDYrn7Nt+xyHbyr@kernel.org>
+ <20210506105245.GA26351@lpieralisi>
+ <YJk4vdJnOxHvlFLT@boqun-archlinux>
 MIME-Version: 1.0
-In-Reply-To: <58296f87-ad00-a0f5-954b-2150aa84efc4@isovalent.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YJk4vdJnOxHvlFLT@boqun-archlinux>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, May 10, 2021 at 09:44:29PM +0800, Boqun Feng wrote:
+> [Copy Rob]
+> 
+> On Thu, May 06, 2021 at 11:52:45AM +0100, Lorenzo Pieralisi wrote:
+> > On Tue, May 04, 2021 at 08:16:30AM +0300, Mike Rapoport wrote:
+> > > On Mon, May 03, 2021 at 10:46:29PM +0800, Boqun Feng wrote:
+> > > > Currently we retrieve the PCI domain number of the host bridge from the
+> > > > bus sysdata (or pci_config_window if PCI_DOMAINS_GENERIC=y). Actually
+> > > > we have the information at PCI host bridge probing time, and it makes
+> > > > sense that we store it into pci_host_bridge. One benefit of doing so is
+> > > > the requirement for supporting PCI on Hyper-V for ARM64, because the
+> > > > host bridge of Hyper-V doesnt' have pci_config_window, whereas ARM64 is
+> > > > a PCI_DOMAINS_GENERIC=y arch, so we cannot retrieve the PCI domain
+> > > > number from pci_config_window on ARM64 Hyper-V guest.
+> > > > 
+> > > > As the preparation for ARM64 Hyper-V PCI support, we introduce the
+> > > > domain_nr in pci_host_bridge, and set it properly at probing time, then
+> > > > for PCI_DOMAINS_GENERIC=y archs, bus domain numbers are set by the
+> > > > bridge domain_nr.
+> > > > 
+> > > > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > > > ---
+> > > >  arch/arm/kernel/bios32.c              |  2 ++
+> > > >  arch/arm/mach-dove/pcie.c             |  2 ++
+> > > >  arch/arm/mach-mv78xx0/pcie.c          |  2 ++
+> > > >  arch/arm/mach-orion5x/pci.c           |  2 ++
+> > > >  arch/arm64/kernel/pci.c               |  3 +--
+> > > >  arch/mips/pci/pci-legacy.c            |  2 ++
+> > > >  arch/mips/pci/pci-xtalk-bridge.c      |  2 ++
+> > > >  drivers/pci/controller/pci-ftpci100.c |  2 ++
+> > > >  drivers/pci/controller/pci-mvebu.c    |  2 ++
+> > > >  drivers/pci/pci.c                     |  4 ++--
+> > > >  drivers/pci/probe.c                   |  7 ++++++-
+> > > >  include/linux/pci.h                   | 11 ++++++++---
+> > > >  12 files changed, 33 insertions(+), 8 deletions(-)
+> > > > 
+> > > > diff --git a/arch/arm/kernel/bios32.c b/arch/arm/kernel/bios32.c
+> > > > index e7ef2b5bea9c..4942cd681e41 100644
+> > > > --- a/arch/arm/kernel/bios32.c
+> > > > +++ b/arch/arm/kernel/bios32.c
+> > > > @@ -471,6 +471,8 @@ static void pcibios_init_hw(struct device *parent, struct hw_pci *hw,
+> > > >  				bridge->sysdata = sys;
+> > > >  				bridge->busnr = sys->busnr;
+> > > >  				bridge->ops = hw->ops;
+> > > > +				if (IS_ENABLED(CONFIG_PCI_DOMAINS_GENERIC))
+> > > > +					bridge->domain_nr = pci_bus_find_domain_nr(sys, parent);
+> > > >  
+> > > >  				ret = pci_scan_root_bus_bridge(bridge);
+> > > >  			}
+> > > > diff --git a/arch/arm/mach-dove/pcie.c b/arch/arm/mach-dove/pcie.c
+> > > > index ee91ac6b5ebf..92eb8484b49b 100644
+> > > > --- a/arch/arm/mach-dove/pcie.c
+> > > > +++ b/arch/arm/mach-dove/pcie.c
+> > > > @@ -167,6 +167,8 @@ dove_pcie_scan_bus(int nr, struct pci_host_bridge *bridge)
+> > > >  	bridge->sysdata = sys;
+> > > >  	bridge->busnr = sys->busnr;
+> > > >  	bridge->ops = &pcie_ops;
+> > > > +	if (IS_ENABLED(CONFIG_PCI_DOMAINS_GENERIC))
+> > > > +		bridge->domain_nr = pci_bus_find_domain_nr(sys, NULL);
+> > > 
+> > > The check for CONFIG_PCI_DOMAINS_GENERIC is excessive because there is a
+> > > stub for pci_bus_find_domain_nr().
+> > > 
+> > > I'm not an expert in PCI, but maybe the repeated assignment of
+> > > bridge->domain_nr can live in the generic code, say, in
+> > > pci_scan_root_bus_bridge(). E.g. it will set the domain_nr when it is zero.
+> > > 
+> > > >  
+> > 
+> > Yes, this churn should be avoided. We need a sentinel value to detect
+> > whether the domain_nr is invalid (0 is a valid domain) so generic code
+> > (ie pci_scan_root_bus_bridge() and friends) has to call generic
+> > functions to get it (pci_bus_find_domain_nr()).
+> > 
+> 
+> Agreed. Thank you all for the inputs.
+> 
+> According to [1], "PCI Conventional" has at most 256 PCI bus segments
+> and "PCI Express" has at most 65536 "PCI Segments Groups", so any value
+> outside [0, 65536] can be used as a sentinel. I'm planning to use -1
+> like:
+> 
+> 	#define PCI_DOMAIN_NR_NOT_SET (-1)
+> 
+> 	(in pci_alloc_host_bridge())
+> 	bridge->domain_nr = PCI_DOMAIN_NR_NOT_SET;
+> 
+> 	(in pci_register_host_bridge())
+> 	if (bridge->domain_nr == PCI_DOMAIN_NR_NOT_SET)
+> 		bridge->domain_nr = pci_bus_find_domain_nr(...);
 
+It should be fine. I'd move the check
 
-Le 23/04/2021 à 12:26, Quentin Monnet a écrit :
-> 2021-04-23 09:19 UTC+0200 ~ Christophe Leroy <christophe.leroy@csgroup.eu>
-> 
-> [...]
-> 
->> I finally managed to cross compile bpftool with libbpf, libopcodes,
->> readline, ncurses, libcap, libz and all needed stuff. Was not easy but I
->> made it.
-> 
-> Libcap is optional and bpftool does not use readline or ncurses. May I
-> ask how you tried to build it?
-> 
->>
->> Now, how do I use it ?
->>
->> Let say I want to dump the jitted code generated from a call to
->> 'tcpdump'. How do I do that with 'bpftool prog dump jited' ?
->>
->> I thought by calling this line I would then get programs dumped in a way
->> or another just like when setting 'bpf_jit_enable=2', but calling that
->> line just provides me some bpftool help text.
-> 
-> Well the purpose of this text is to help you find the way to call
-> bpftool to do what you want :). For dumping your programs' instructions,
-> you need to tell bpftool what program to dump: Bpftool isn't waiting
-> until you load a program to dump it, instead you need to load your
-> program first and then tell bpftool to retrieve the instructions from
-> the kernel. To reference your program you could use a pinned path, or
-> first list the programs on your system with "bpftool prog show":
-> 
-> 
->      # bpftool prog show
->      138: tracing  name foo  tag e54c922dfa54f65f  gpl
->              loaded_at 2021-02-25T01:32:30+0000  uid 0
->              xlated 256B  jited 154B  memlock 4096B  map_ids 64
->              btf_id 235
+if (bridge->domain_nr == PCI_DOMAIN_NR_NOT_SET)
 
-Got the following error:
+in pci_bus_find_domain_nr()
 
-root@vgoip:~# ./bpftool prog show
-libbpf: elf: endianness mismatch in pid_iter_bpf.
-libbpf: failed to initialize skeleton BPF object 'pid_iter_bpf': -4003
-Error: failed to open PID iterator skeleton
+to make the logic contained in there but that's a nit.
 
+Lorenzo
 
-Christophe
+> Thoughts?
+> 
+> Regards,
+> Boqun
+> 
+> [1]: https://wiki.osdev.org/PCI_Express
+> 
+> > We can implement it as a flag or function pointer in the struct
+> > pci_host_bridge, if the flag or function pointer is not set the
+> > generic pci_bus_find_domain_nr() should be called.
+> > 
+> > Lorenzo
