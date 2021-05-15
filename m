@@ -2,277 +2,261 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7C338197A
-	for <lists+linux-mips@lfdr.de>; Sat, 15 May 2021 16:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74159381A96
+	for <lists+linux-mips@lfdr.de>; Sat, 15 May 2021 20:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbhEOO4M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 15 May 2021 10:56:12 -0400
-Received: from aposti.net ([89.234.176.197]:58420 "EHLO aposti.net"
+        id S234494AbhEOSu0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 15 May 2021 14:50:26 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58370 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232263AbhEOOz4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 15 May 2021 10:55:56 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        id S231558AbhEOSu0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 15 May 2021 14:50:26 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 688AAAF5B;
+        Sat, 15 May 2021 18:49:11 +0000 (UTC)
+Subject: Re: [PATCH v4 1/3] drm: Add support for GEM buffers backed by
+ non-coherent memory
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     Christoph Hellwig <hch@infradead.org>, list@opendingux.net,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v4 3/3] drm/ingenic: Add option to alloc cached GEM buffers
-Date:   Sat, 15 May 2021 15:53:59 +0100
-Message-Id: <20210515145359.64802-4-paul@crapouillou.net>
-In-Reply-To: <20210515145359.64802-1-paul@crapouillou.net>
+        linux-mips@vger.kernel.org
 References: <20210515145359.64802-1-paul@crapouillou.net>
+ <20210515145359.64802-2-paul@crapouillou.net>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Message-ID: <fce9aae9-a9f8-1b90-33fc-16cf64888ff7@suse.de>
+Date:   Sat, 15 May 2021 20:49:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210515145359.64802-2-paul@crapouillou.net>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="sJrRFkDAoEyRy39xoYSrAUozzf6xYe2ID"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Alloc GEM buffers backed by noncoherent memory on SoCs where it is
-actually faster than write-combine.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--sJrRFkDAoEyRy39xoYSrAUozzf6xYe2ID
+Content-Type: multipart/mixed; boundary="qhw4perhhhklxwtWZJOyFEtlE03cfno0Q";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Paul Cercueil <paul@crapouillou.net>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: Christoph Hellwig <hch@infradead.org>, list@opendingux.net,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org
+Message-ID: <fce9aae9-a9f8-1b90-33fc-16cf64888ff7@suse.de>
+Subject: Re: [PATCH v4 1/3] drm: Add support for GEM buffers backed by
+ non-coherent memory
+References: <20210515145359.64802-1-paul@crapouillou.net>
+ <20210515145359.64802-2-paul@crapouillou.net>
+In-Reply-To: <20210515145359.64802-2-paul@crapouillou.net>
 
-This dramatically speeds up software rendering on these SoCs, even for
-tasks where write-combine memory should in theory be faster (e.g. simple
-blits).
+--qhw4perhhhklxwtWZJOyFEtlE03cfno0Q
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-v3: The option is now selected per-SoC instead of being a module
-    parameter.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 56 ++++++++++++++++++++++-
- drivers/gpu/drm/ingenic/ingenic-ipu.c     | 18 ++++++--
- 2 files changed, 68 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 09225b770bb8..5f64e8583eec 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -9,6 +9,7 @@
- #include <linux/component.h>
- #include <linux/clk.h>
- #include <linux/dma-mapping.h>
-+#include <linux/io.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/of_device.h>
-@@ -23,6 +24,7 @@
- #include <drm/drm_color_mgmt.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_crtc_helper.h>
-+#include <drm/drm_damage_helper.h>
- #include <drm/drm_drv.h>
- #include <drm/drm_encoder.h>
- #include <drm/drm_gem_cma_helper.h>
-@@ -57,6 +59,7 @@ struct ingenic_dma_hwdescs {
- struct jz_soc_info {
- 	bool needs_dev_clk;
- 	bool has_osd;
-+	bool map_noncoherent;
- 	unsigned int max_width, max_height;
- 	const u32 *formats_f0, *formats_f1;
- 	unsigned int num_formats_f0, num_formats_f1;
-@@ -410,6 +413,8 @@ static int ingenic_drm_plane_atomic_check(struct drm_plane *plane,
- 	     old_plane_state->fb->format->format != new_plane_state->fb->format->format))
- 		crtc_state->mode_changed = true;
- 
-+	drm_atomic_helper_check_plane_damage(state, new_plane_state);
-+
- 	return 0;
- }
- 
-@@ -544,8 +549,8 @@ static void ingenic_drm_plane_atomic_update(struct drm_plane *plane,
- 					    struct drm_atomic_state *state)
- {
- 	struct ingenic_drm *priv = drm_device_get_priv(plane->dev);
--	struct drm_plane_state *newstate = drm_atomic_get_new_plane_state(state,
--									  plane);
-+	struct drm_plane_state *newstate = drm_atomic_get_new_plane_state(state, plane);
-+	struct drm_plane_state *oldstate = drm_atomic_get_old_plane_state(state, plane);
- 	struct drm_crtc_state *crtc_state;
- 	struct ingenic_dma_hwdesc *hwdesc;
- 	unsigned int width, height, cpp, offset;
-@@ -553,6 +558,8 @@ static void ingenic_drm_plane_atomic_update(struct drm_plane *plane,
- 	u32 fourcc;
- 
- 	if (newstate && newstate->fb) {
-+		drm_gem_cma_sync_data(&priv->drm, oldstate, newstate);
-+
- 		crtc_state = newstate->crtc->state;
- 
- 		addr = drm_fb_cma_get_gem_addr(newstate->fb, newstate, 0);
-@@ -742,6 +749,43 @@ static void ingenic_drm_disable_vblank(struct drm_crtc *crtc)
- 	regmap_update_bits(priv->map, JZ_REG_LCD_CTRL, JZ_LCD_CTRL_EOF_IRQ, 0);
- }
- 
-+static int ingenic_drm_atomic_helper_dirtyfb(struct drm_framebuffer *fb,
-+					     struct drm_file *file_priv,
-+					     unsigned int flags,
-+					     unsigned int color,
-+					     struct drm_clip_rect *clips,
-+					     unsigned int num_clips)
-+{
-+	struct ingenic_drm *priv = drm_device_get_priv(fb->dev);
-+
-+	if (!priv->soc_info->map_noncoherent)
-+		return 0;
-+
-+	return drm_atomic_helper_dirtyfb(fb, file_priv, flags,
-+					 color, clips, num_clips);
-+}
-+
-+static const struct drm_framebuffer_funcs ingenic_drm_gem_fb_funcs = {
-+	.destroy	= drm_gem_fb_destroy,
-+	.create_handle	= drm_gem_fb_create_handle,
-+	.dirty          = ingenic_drm_atomic_helper_dirtyfb,
-+};
-+
-+static struct drm_gem_object *
-+ingenic_drm_gem_create_object(struct drm_device *drm, size_t size)
-+{
-+	struct ingenic_drm *priv = drm_device_get_priv(drm);
-+	struct drm_gem_cma_object *obj;
-+
-+	obj = kzalloc(sizeof(*obj), GFP_KERNEL);
-+	if (!obj)
-+		return ERR_PTR(-ENOMEM);
-+
-+	obj->map_noncoherent = priv->soc_info->map_noncoherent;
-+
-+	return &obj->base;
-+}
-+
- DEFINE_DRM_GEM_CMA_FOPS(ingenic_drm_fops);
- 
- static const struct drm_driver ingenic_drm_driver_data = {
-@@ -754,6 +798,7 @@ static const struct drm_driver ingenic_drm_driver_data = {
- 	.patchlevel		= 0,
- 
- 	.fops			= &ingenic_drm_fops,
-+	.gem_create_object	= ingenic_drm_gem_create_object,
- 	DRM_GEM_CMA_DRIVER_OPS,
- 
- 	.irq_handler		= ingenic_drm_irq_handler,
-@@ -961,6 +1006,8 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 		return ret;
- 	}
- 
-+	drm_plane_enable_fb_damage_clips(&priv->f1);
-+
- 	drm_crtc_helper_add(&priv->crtc, &ingenic_drm_crtc_helper_funcs);
- 
- 	ret = drm_crtc_init_with_planes(drm, &priv->crtc, primary,
-@@ -989,6 +1036,8 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 			return ret;
- 		}
- 
-+		drm_plane_enable_fb_damage_clips(&priv->f0);
-+
- 		if (IS_ENABLED(CONFIG_DRM_INGENIC_IPU) && has_components) {
- 			ret = component_bind_all(dev, drm);
- 			if (ret) {
-@@ -1245,6 +1294,7 @@ static const u32 jz4770_formats_f0[] = {
- static const struct jz_soc_info jz4740_soc_info = {
- 	.needs_dev_clk = true,
- 	.has_osd = false,
-+	.map_noncoherent = false,
- 	.max_width = 800,
- 	.max_height = 600,
- 	.formats_f1 = jz4740_formats,
-@@ -1255,6 +1305,7 @@ static const struct jz_soc_info jz4740_soc_info = {
- static const struct jz_soc_info jz4725b_soc_info = {
- 	.needs_dev_clk = false,
- 	.has_osd = true,
-+	.map_noncoherent = false,
- 	.max_width = 800,
- 	.max_height = 600,
- 	.formats_f1 = jz4725b_formats_f1,
-@@ -1266,6 +1317,7 @@ static const struct jz_soc_info jz4725b_soc_info = {
- static const struct jz_soc_info jz4770_soc_info = {
- 	.needs_dev_clk = false,
- 	.has_osd = true,
-+	.map_noncoherent = true,
- 	.max_width = 1280,
- 	.max_height = 720,
- 	.formats_f1 = jz4770_formats_f1,
-diff --git a/drivers/gpu/drm/ingenic/ingenic-ipu.c b/drivers/gpu/drm/ingenic/ingenic-ipu.c
-index 3b1091e7c0cd..a4d1b500c3ad 100644
---- a/drivers/gpu/drm/ingenic/ingenic-ipu.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-ipu.c
-@@ -20,10 +20,13 @@
- 
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
-+#include <drm/drm_damage_helper.h>
- #include <drm/drm_drv.h>
- #include <drm/drm_fb_cma_helper.h>
- #include <drm/drm_fourcc.h>
- #include <drm/drm_gem_atomic_helper.h>
-+#include <drm/drm_gem_cma_helper.h>
-+#include <drm/drm_gem_framebuffer_helper.h>
- #include <drm/drm_plane.h>
- #include <drm/drm_plane_helper.h>
- #include <drm/drm_property.h>
-@@ -285,8 +288,8 @@ static void ingenic_ipu_plane_atomic_update(struct drm_plane *plane,
- 					    struct drm_atomic_state *state)
- {
- 	struct ingenic_ipu *ipu = plane_to_ingenic_ipu(plane);
--	struct drm_plane_state *newstate = drm_atomic_get_new_plane_state(state,
--									  plane);
-+	struct drm_plane_state *newstate = drm_atomic_get_new_plane_state(state, plane);
-+	struct drm_plane_state *oldstate = drm_atomic_get_new_plane_state(state, plane);
- 	const struct drm_format_info *finfo;
- 	u32 ctrl, stride = 0, coef_index = 0, format = 0;
- 	bool needs_modeset, upscaling_w, upscaling_h;
-@@ -317,6 +320,8 @@ static void ingenic_ipu_plane_atomic_update(struct drm_plane *plane,
- 				JZ_IPU_CTRL_CHIP_EN | JZ_IPU_CTRL_LCDC_SEL);
- 	}
- 
-+	drm_gem_cma_sync_data(ipu->drm, oldstate, newstate);
-+
- 	/* New addresses will be committed in vblank handler... */
- 	ipu->addr_y = drm_fb_cma_get_gem_addr(newstate->fb, newstate, 0);
- 	if (finfo->num_planes > 1)
-@@ -541,7 +546,7 @@ static int ingenic_ipu_plane_atomic_check(struct drm_plane *plane,
- 
- 	if (!new_plane_state->crtc ||
- 	    !crtc_state->mode.hdisplay || !crtc_state->mode.vdisplay)
--		return 0;
-+		goto out_check_damage;
- 
- 	/* Plane must be fully visible */
- 	if (new_plane_state->crtc_x < 0 || new_plane_state->crtc_y < 0 ||
-@@ -558,7 +563,7 @@ static int ingenic_ipu_plane_atomic_check(struct drm_plane *plane,
- 		return -EINVAL;
- 
- 	if (!osd_changed(new_plane_state, old_plane_state))
--		return 0;
-+		goto out_check_damage;
- 
- 	crtc_state->mode_changed = true;
- 
-@@ -592,6 +597,9 @@ static int ingenic_ipu_plane_atomic_check(struct drm_plane *plane,
- 	ipu->denom_w = denom_w;
- 	ipu->denom_h = denom_h;
- 
-+out_check_damage:
-+	drm_atomic_helper_check_plane_damage(state, new_plane_state);
-+
- 	return 0;
- }
- 
-@@ -773,6 +781,8 @@ static int ingenic_ipu_bind(struct device *dev, struct device *master, void *d)
- 		return err;
- 	}
- 
-+	drm_plane_enable_fb_damage_clips(plane);
-+
- 	/*
- 	 * Sharpness settings range is [0,32]
- 	 * 0       : nearest-neighbor
--- 
-2.30.2
+Am 15.05.21 um 16:53 schrieb Paul Cercueil:
+> Having GEM buffers backed by non-coherent memory is interesting in the
+> particular case where it is faster to render to a non-coherent buffer
+> then sync the data cache, than to render to a write-combine buffer, and=
 
+> (by extension) much faster than using a shadow buffer. This is true for=
+
+> instance on some Ingenic SoCs, where even simple blits (e.g. memcpy)
+> are about three times faster using this method.
+>=20
+> Add a 'map_noncoherent' flag to the drm_gem_cma_object structure, which=
+
+> can be set by the drivers when they create the dumb buffer.
+>=20
+> Since this really only applies to software rendering, disable this flag=
+
+> as soon as the CMA objects are exported via PRIME.
+>=20
+> v3: New patch. Now uses a simple 'map_noncoherent' flag to control how
+>      the objects are mapped, and use the new dma_mmap_pages function.
+>=20
+> v4: Make sure map_noncoherent is always disabled when creating GEM
+>      objects meant to be used with dma-buf.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+
+> ---
+>   drivers/gpu/drm/drm_gem_cma_helper.c | 38 +++++++++++++++++++++------=
+-
+>   include/drm/drm_gem_cma_helper.h     |  3 +++
+>   2 files changed, 32 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm=
+_gem_cma_helper.c
+> index 7942cf05cd93..235c7a63da2b 100644
+> --- a/drivers/gpu/drm/drm_gem_cma_helper.c
+> +++ b/drivers/gpu/drm/drm_gem_cma_helper.c
+> @@ -46,6 +46,7 @@ static const struct drm_gem_object_funcs drm_gem_cma_=
+default_funcs =3D {
+>    * __drm_gem_cma_create - Create a GEM CMA object without allocating =
+memory
+>    * @drm: DRM device
+>    * @size: size of the object to allocate
+> + * @private: true if used for internal purposes
+>    *
+>    * This function creates and initializes a GEM CMA object of the give=
+n size,
+>    * but doesn't allocate any memory to back the object.
+> @@ -55,11 +56,11 @@ static const struct drm_gem_object_funcs drm_gem_cm=
+a_default_funcs =3D {
+>    * error code on failure.
+>    */
+>   static struct drm_gem_cma_object *
+> -__drm_gem_cma_create(struct drm_device *drm, size_t size)
+> +__drm_gem_cma_create(struct drm_device *drm, size_t size, bool private=
+)
+>   {
+>   	struct drm_gem_cma_object *cma_obj;
+>   	struct drm_gem_object *gem_obj;
+> -	int ret;
+> +	int ret =3D 0;
+>  =20
+>   	if (drm->driver->gem_create_object)
+>   		gem_obj =3D drm->driver->gem_create_object(drm, size);
+> @@ -73,7 +74,14 @@ __drm_gem_cma_create(struct drm_device *drm, size_t =
+size)
+>  =20
+>   	cma_obj =3D container_of(gem_obj, struct drm_gem_cma_object, base);
+>  =20
+> -	ret =3D drm_gem_object_init(drm, gem_obj, size);
+> +	if (private) {
+> +		drm_gem_private_object_init(drm, gem_obj, size);
+> +
+> +		/* Always use writecombine for dma-buf mappings */
+> +		cma_obj->map_noncoherent =3D false;
+> +	} else {
+> +		ret =3D drm_gem_object_init(drm, gem_obj, size);
+> +	}
+>   	if (ret)
+>   		goto error;
+>  =20
+> @@ -111,12 +119,19 @@ struct drm_gem_cma_object *drm_gem_cma_create(str=
+uct drm_device *drm,
+>  =20
+>   	size =3D round_up(size, PAGE_SIZE);
+>  =20
+> -	cma_obj =3D __drm_gem_cma_create(drm, size);
+> +	cma_obj =3D __drm_gem_cma_create(drm, size, false);
+>   	if (IS_ERR(cma_obj))
+>   		return cma_obj;
+>  =20
+> -	cma_obj->vaddr =3D dma_alloc_wc(drm->dev, size, &cma_obj->paddr,
+> -				      GFP_KERNEL | __GFP_NOWARN);
+> +	if (cma_obj->map_noncoherent) {
+> +		cma_obj->vaddr =3D dma_alloc_noncoherent(drm->dev, size,
+> +						       &cma_obj->paddr,
+> +						       DMA_TO_DEVICE,
+> +						       GFP_KERNEL | __GFP_NOWARN);
+> +	} else {
+> +		cma_obj->vaddr =3D dma_alloc_wc(drm->dev, size, &cma_obj->paddr,
+> +					      GFP_KERNEL | __GFP_NOWARN);
+> +	}
+>   	if (!cma_obj->vaddr) {
+>   		drm_dbg(drm, "failed to allocate buffer with size %zu\n",
+>   			 size);
+> @@ -432,7 +447,7 @@ drm_gem_cma_prime_import_sg_table(struct drm_device=20
+*dev,
+>   		return ERR_PTR(-EINVAL);
+>  =20
+>   	/* Create a CMA GEM buffer. */
+> -	cma_obj =3D __drm_gem_cma_create(dev, attach->dmabuf->size);
+> +	cma_obj =3D __drm_gem_cma_create(dev, attach->dmabuf->size, true);
+>   	if (IS_ERR(cma_obj))
+>   		return ERR_CAST(cma_obj);
+>  =20
+> @@ -499,8 +514,13 @@ int drm_gem_cma_mmap(struct drm_gem_object *obj, s=
+truct vm_area_struct *vma)
+>  =20
+>   	cma_obj =3D to_drm_gem_cma_obj(obj);
+>  =20
+> -	ret =3D dma_mmap_wc(cma_obj->base.dev->dev, vma, cma_obj->vaddr,
+> -			  cma_obj->paddr, vma->vm_end - vma->vm_start);
+> +	vma->vm_page_prot =3D vm_get_page_prot(vma->vm_flags);
+> +	if (!cma_obj->map_noncoherent)
+> +		vma->vm_page_prot =3D pgprot_writecombine(vma->vm_page_prot);
+> +
+> +	ret =3D dma_mmap_pages(cma_obj->base.dev->dev,
+> +			     vma, vma->vm_end - vma->vm_start,
+> +			     virt_to_page(cma_obj->vaddr));
+>   	if (ret)
+>   		drm_gem_vm_close(vma);
+>  =20
+> diff --git a/include/drm/drm_gem_cma_helper.h b/include/drm/drm_gem_cma=
+_helper.h
+> index 0a9711caa3e8..cd13508acbc1 100644
+> --- a/include/drm/drm_gem_cma_helper.h
+> +++ b/include/drm/drm_gem_cma_helper.h
+> @@ -16,6 +16,7 @@ struct drm_mode_create_dumb;
+>    *       more than one entry but they are guaranteed to have contiguo=
+us
+>    *       DMA addresses.
+>    * @vaddr: kernel virtual address of the backing memory
+> + * @map_noncoherent: if true, the GEM object is backed by non-coherent=20
+memory
+>    */
+>   struct drm_gem_cma_object {
+>   	struct drm_gem_object base;
+> @@ -24,6 +25,8 @@ struct drm_gem_cma_object {
+>  =20
+>   	/* For objects with DMA memory allocated by GEM CMA */
+>   	void *vaddr;
+> +
+> +	bool map_noncoherent;
+>   };
+>  =20
+>   #define to_drm_gem_cma_obj(gem_obj) \
+>=20
+
+--=20
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+(HRB 36809, AG N=C3=BCrnberg)
+Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+
+
+--qhw4perhhhklxwtWZJOyFEtlE03cfno0Q--
+
+--sJrRFkDAoEyRy39xoYSrAUozzf6xYe2ID
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmCgF6QFAwAAAAAACgkQlh/E3EQov+A+
+EBAAtZY98FyozHDlGm2x7d3eNgL9WTOzVRGUEu9zoZ7uqTT7++ejjpRBsfOB/a+xe8xAkOsIrSkm
+0IHmR1uoMAxCfNCT9IYGjGSky/ZAxMWedHxmSZzNfYE4gW5iudZAO5HIBPVFCsmr9EASxSa2Gorz
+u6t8fBiat9JxNUmGVULgeJogtTfIUX9AYRyMISf2Zs/E1QWVKwsnF5yAI41ePqtdxvj4UNauElnF
+BRv9JJxg8Sl2jVcvVRaaT9v3KOj/y5nKwxPNaDkfy5unryvUOkW2myws8inkhwPnCJVwt7hz/o69
+ub7fJFhX+T9B/3J89+B7lcuERAWcOuYTI7Yz4B05XU9FQTzCvkaKgLBJX3c6eDsYZ5yBEbjSXM1s
+ozmb7wPrCj2x4SNj+EAPGc65BMWNr60/RBB5E8YQknenHjY1MmcrC0hHUsp258I2Z9SMqGU0ZWy7
+XxH+mTIpfFGQ5sQTP4WRq+CSVwH54voG/mQkDLX56oqxfnMKB7Us4ZXKf7Yn/ecyXutvZmzB9q6G
+r6bnFJPvAaP1LYJuDrD+yBoVCgfT0aKqEwoJxNUAAxFYeBuiTJfsPEd2HS89RxEdup8WTgABlES3
+UUhKJ/BwP5XDeL6iUYaajTumKuRi3ncfCp2tvmKTQL3MCKhcG++EHFe6+zu39aZ00Ndp90nqRRPx
+Ouk=
+=Mttz
+-----END PGP SIGNATURE-----
+
+--sJrRFkDAoEyRy39xoYSrAUozzf6xYe2ID--
