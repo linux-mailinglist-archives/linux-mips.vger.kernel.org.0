@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7B2381AA7
-	for <lists+linux-mips@lfdr.de>; Sat, 15 May 2021 21:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C91381ACE
+	for <lists+linux-mips@lfdr.de>; Sat, 15 May 2021 21:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhEOTIN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 15 May 2021 15:08:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34906 "EHLO mx2.suse.de"
+        id S234661AbhEOTn7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 15 May 2021 15:43:59 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42198 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234579AbhEOTIM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 15 May 2021 15:08:12 -0400
+        id S231334AbhEOTn4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 15 May 2021 15:43:56 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6334DAFD5;
-        Sat, 15 May 2021 19:06:58 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id D9C36B03B;
+        Sat, 15 May 2021 19:42:41 +0000 (UTC)
 To:     Paul Cercueil <paul@crapouillou.net>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -24,25 +24,26 @@ Cc:     Christoph Hellwig <hch@infradead.org>, list@opendingux.net,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
 References: <20210515145359.64802-1-paul@crapouillou.net>
- <20210515145359.64802-3-paul@crapouillou.net>
+ <20210515145359.64802-4-paul@crapouillou.net>
 From:   Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v4 2/3] drm: Add and export function drm_gem_cma_sync_data
-Message-ID: <93fce1ea-f18d-7941-e973-9748243882b6@suse.de>
-Date:   Sat, 15 May 2021 21:06:56 +0200
+Subject: Re: [PATCH v4 3/3] drm/ingenic: Add option to alloc cached GEM
+ buffers
+Message-ID: <4aae6b75-4f7e-2b6e-d8e7-b2599fdfd49d@suse.de>
+Date:   Sat, 15 May 2021 21:42:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210515145359.64802-3-paul@crapouillou.net>
+In-Reply-To: <20210515145359.64802-4-paul@crapouillou.net>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="x2vTxhbmwOfkAFOdrM8fvhtRRGsi5zKVn"
+ boundary="YZCcuMKFdIINPia8KMqWziuKz0T7y2Bnw"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---x2vTxhbmwOfkAFOdrM8fvhtRRGsi5zKVn
-Content-Type: multipart/mixed; boundary="dPf7PCMtJc55MN21CIHNv1YF93Ixa5987";
+--YZCcuMKFdIINPia8KMqWziuKz0T7y2Bnw
+Content-Type: multipart/mixed; boundary="AkwaZtTB2iysm9rks9oywaRH9lt7Qx6fu";
  protected-headers="v1"
 From: Thomas Zimmermann <tzimmermann@suse.de>
 To: Paul Cercueil <paul@crapouillou.net>,
@@ -52,13 +53,14 @@ To: Paul Cercueil <paul@crapouillou.net>,
 Cc: Christoph Hellwig <hch@infradead.org>, list@opendingux.net,
  dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-mips@vger.kernel.org
-Message-ID: <93fce1ea-f18d-7941-e973-9748243882b6@suse.de>
-Subject: Re: [PATCH v4 2/3] drm: Add and export function drm_gem_cma_sync_data
+Message-ID: <4aae6b75-4f7e-2b6e-d8e7-b2599fdfd49d@suse.de>
+Subject: Re: [PATCH v4 3/3] drm/ingenic: Add option to alloc cached GEM
+ buffers
 References: <20210515145359.64802-1-paul@crapouillou.net>
- <20210515145359.64802-3-paul@crapouillou.net>
-In-Reply-To: <20210515145359.64802-3-paul@crapouillou.net>
+ <20210515145359.64802-4-paul@crapouillou.net>
+In-Reply-To: <20210515145359.64802-4-paul@crapouillou.net>
 
---dPf7PCMtJc55MN21CIHNv1YF93Ixa5987
+--AkwaZtTB2iysm9rks9oywaRH9lt7Qx6fu
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
@@ -66,170 +68,307 @@ Content-Transfer-Encoding: quoted-printable
 Hi
 
 Am 15.05.21 um 16:53 schrieb Paul Cercueil:
-> This function can be used by drivers that use damage clips and have
-> CMA GEM objects backed by non-coherent memory. Calling this function
-> in a plane's .atomic_update ensures that all the data in the backing
-> memory have been written to RAM.
+> Alloc GEM buffers backed by noncoherent memory on SoCs where it is
+> actually faster than write-combine.
 >=20
-> v3: - Only sync data if using GEM objects backed by non-coherent memory=
-=2E
->      - Use a drm_device pointer instead of device pointer in prototype
+> This dramatically speeds up software rendering on these SoCs, even for
+> tasks where write-combine memory should in theory be faster (e.g. simpl=
+e
+> blits).
+>=20
+> v3: The option is now selected per-SoC instead of being a module
+>      parameter.
 >=20
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->   drivers/gpu/drm/drm_gem_cma_helper.c | 55 +++++++++++++++++++++++++++=
-+
->   include/drm/drm_gem_cma_helper.h     |  5 +++
->   2 files changed, 60 insertions(+)
+>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 56 ++++++++++++++++++++++=
+-
+>   drivers/gpu/drm/ingenic/ingenic-ipu.c     | 18 ++++++--
+>   2 files changed, 68 insertions(+), 6 deletions(-)
 >=20
-> diff --git a/drivers/gpu/drm/drm_gem_cma_helper.c b/drivers/gpu/drm/drm=
-_gem_cma_helper.c
-> index 235c7a63da2b..41f309e0e049 100644
-> --- a/drivers/gpu/drm/drm_gem_cma_helper.c
-> +++ b/drivers/gpu/drm/drm_gem_cma_helper.c
-> @@ -17,9 +17,14 @@
->   #include <linux/slab.h>
->  =20
->   #include <drm/drm.h>
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/dr=
+m/ingenic/ingenic-drm-drv.c
+> index 09225b770bb8..5f64e8583eec 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -9,6 +9,7 @@
+>   #include <linux/component.h>
+>   #include <linux/clk.h>
+>   #include <linux/dma-mapping.h>
+> +#include <linux/io.h>
+>   #include <linux/module.h>
+>   #include <linux/mutex.h>
+>   #include <linux/of_device.h>
+> @@ -23,6 +24,7 @@
+>   #include <drm/drm_color_mgmt.h>
+>   #include <drm/drm_crtc.h>
+>   #include <drm/drm_crtc_helper.h>
 > +#include <drm/drm_damage_helper.h>
->   #include <drm/drm_device.h>
 >   #include <drm/drm_drv.h>
-> +#include <drm/drm_fourcc.h>
-> +#include <drm/drm_fb_cma_helper.h>
-
-Alphabetical order:
-
-fb < fourcc
-
-> +#include <drm/drm_framebuffer.h>
+>   #include <drm/drm_encoder.h>
 >   #include <drm/drm_gem_cma_helper.h>
-> +#include <drm/drm_plane.h>
->   #include <drm/drm_vma_manager.h>
+> @@ -57,6 +59,7 @@ struct ingenic_dma_hwdescs {
+>   struct jz_soc_info {
+>   	bool needs_dev_clk;
+>   	bool has_osd;
+> +	bool map_noncoherent;
+>   	unsigned int max_width, max_height;
+>   	const u32 *formats_f0, *formats_f1;
+>   	unsigned int num_formats_f0, num_formats_f1;
+> @@ -410,6 +413,8 @@ static int ingenic_drm_plane_atomic_check(struct dr=
+m_plane *plane,
+>   	     old_plane_state->fb->format->format !=3D new_plane_state->fb->f=
+ormat->format))
+>   		crtc_state->mode_changed =3D true;
 >  =20
->   /**
-> @@ -576,3 +581,53 @@ drm_gem_cma_prime_import_sg_table_vmap(struct drm_=
-device *dev,
->   	return obj;
+> +	drm_atomic_helper_check_plane_damage(state, new_plane_state);
+> +
+>   	return 0;
 >   }
->   EXPORT_SYMBOL(drm_gem_cma_prime_import_sg_table_vmap);
+>  =20
+> @@ -544,8 +549,8 @@ static void ingenic_drm_plane_atomic_update(struct =
+drm_plane *plane,
+>   					    struct drm_atomic_state *state)
+>   {
+>   	struct ingenic_drm *priv =3D drm_device_get_priv(plane->dev);
+> -	struct drm_plane_state *newstate =3D drm_atomic_get_new_plane_state(s=
+tate,
+> -									  plane);
+> +	struct drm_plane_state *newstate =3D drm_atomic_get_new_plane_state(s=
+tate, plane);
+> +	struct drm_plane_state *oldstate =3D drm_atomic_get_old_plane_state(s=
+tate, plane);
+>   	struct drm_crtc_state *crtc_state;
+>   	struct ingenic_dma_hwdesc *hwdesc;
+>   	unsigned int width, height, cpp, offset;
+> @@ -553,6 +558,8 @@ static void ingenic_drm_plane_atomic_update(struct =
+drm_plane *plane,
+>   	u32 fourcc;
+>  =20
+>   	if (newstate && newstate->fb) {
+> +		drm_gem_cma_sync_data(&priv->drm, oldstate, newstate);
 > +
-> +/**
-> + * drm_gem_cma_sync_data - Sync GEM object to non-coherent backing mem=
-ory
-> + * @drm: DRM device
-> + * @old_state: Old plane state
-> + * @state: New plane state
-> + *
-> + * This function can be used by drivers that use damage clips and have=
-
-> + * CMA GEM objects backed by non-coherent memory. Calling this functio=
-n
-> + * in a plane's .atomic_update ensures that all the data in the backin=
-g
-> + * memory have been written to RAM.
-> + */
-> +void drm_gem_cma_sync_data(struct drm_device *drm,
-> +			   struct drm_plane_state *old_state,
-> +			   struct drm_plane_state *state)
+>   		crtc_state =3D newstate->crtc->state;
+>  =20
+>   		addr =3D drm_fb_cma_get_gem_addr(newstate->fb, newstate, 0);
+> @@ -742,6 +749,43 @@ static void ingenic_drm_disable_vblank(struct drm_=
+crtc *crtc)
+>   	regmap_update_bits(priv->map, JZ_REG_LCD_CTRL, JZ_LCD_CTRL_EOF_IRQ, =
+0);
+>   }
+>  =20
+> +static int ingenic_drm_atomic_helper_dirtyfb(struct drm_framebuffer *f=
+b,
+> +					     struct drm_file *file_priv,
+> +					     unsigned int flags,
+> +					     unsigned int color,
+> +					     struct drm_clip_rect *clips,
+> +					     unsigned int num_clips)
 > +{
-> +	const struct drm_format_info *finfo =3D state->fb->format;
-> +	struct drm_atomic_helper_damage_iter iter;
-> +	const struct drm_gem_cma_object *cma_obj;
-> +	unsigned int offset, i;
-> +	struct drm_rect clip;
-> +	dma_addr_t daddr;
+> +	struct ingenic_drm *priv =3D drm_device_get_priv(fb->dev);
 > +
-> +	for (i =3D 0; i < finfo->num_planes; i++) {
-> +		cma_obj =3D drm_fb_cma_get_gem_obj(state->fb, i);
+> +	if (!priv->soc_info->map_noncoherent)
+> +		return 0;
+
+I'm not sure you can get away without calling=20
+drm_atomic_helper_dirtyfb(). The function does some things with the=20
+plane's damage-clips property. If you don't call it here, the plane=20
+might pile up unhandled clipping areas. It's better to call it and rely=20
+on the test in drm_gem_cma_sync_data(). See below on how to optimize this=
+=2E
+
 > +
-> +		if (cma_obj->map_noncoherent)
-> +			break;
-> +	}
-> +
-> +	/* No non-coherent buffers - no need to sync anything. */
-> +	if (i =3D=3D finfo->num_planes)
-> +		return;
-> +
-> +	drm_atomic_helper_damage_iter_init(&iter, old_state, state);
-> +
-> +	drm_atomic_for_each_plane_damage(&iter, &clip) {
-> +		for (i =3D 0; i < finfo->num_planes; i++) {
-> +			daddr =3D drm_fb_cma_get_gem_addr(state->fb, state, i);
-> +
-> +			/* Ignore x1/x2 values, invalidate complete lines */
-> +			offset =3D clip.y1 * state->fb->pitches[i];
-> +
-> +			dma_sync_single_for_device(drm->dev, daddr + offset,
-> +				       (clip.y2 - clip.y1) * state->fb->pitches[i],
-> +				       DMA_TO_DEVICE);
-
-A framebuffer can have multiple BOs with different coherency. The=20
-current loop syncs every BO, but you only have to sync non-coherent memor=
-y.
-
-I suggest to merge the above test loop into this sync loop, such that=20
-only non-coherent BOs get synced
-
-damage_iter_init(iter)
-
-for_each_damage_plane(iter) {
-   for (i < finfo->num_planes) {
-     cma_obj =3D drm_fb_cma_get_gem_obj(i)
-     if (!cma_obj->non_coherent)
-       continue;
-     dma_sync_single_for_device()
-   }
-}
-
-For cache locality, it might be better to exchange the loops:
-
-for (i < finfo->num_planes) {
-
-   damage_iter_init(iter)
-   for_each_damage_plane(iter) {
-
-
-   }
-}
-
-This way, you operate on the BOs one by one.
-
-> +		}
-> +	}
+> +	return drm_atomic_helper_dirtyfb(fb, file_priv, flags,
+> +					 color, clips, num_clips);
 > +}
-> +EXPORT_SYMBOL_GPL(drm_gem_cma_sync_data);
-> diff --git a/include/drm/drm_gem_cma_helper.h b/include/drm/drm_gem_cma=
-_helper.h
-> index cd13508acbc1..76af066ae3a7 100644
-> --- a/include/drm/drm_gem_cma_helper.h
-> +++ b/include/drm/drm_gem_cma_helper.h
-> @@ -7,6 +7,7 @@
->   #include <drm/drm_gem.h>
+> +
+> +static const struct drm_framebuffer_funcs ingenic_drm_gem_fb_funcs =3D=20
+{
+> +	.destroy	=3D drm_gem_fb_destroy,
+> +	.create_handle	=3D drm_gem_fb_create_handle,
+> +	.dirty          =3D ingenic_drm_atomic_helper_dirtyfb,
+> +};
+
+You don't seem to be using this anywhere. You have to implement a custom =
+
+fb_create for drm_mode_config_funcs. [1]
+
+BUT: I think the overall approach should be to only use this on SoCs=20
+with non-coherency setting. Use drm_gem_fb_create() on systems without=20
+non-coherency and use drm_gem_fb_create_with_dirty() on systems with=20
+non-coherency (i.e., have two instances of drm_mode_config_funcs). Only=20
+call drm_plane_enable_fb_damage_clips() on systems with non-coherency.
+
+> +
+> +static struct drm_gem_object *
+> +ingenic_drm_gem_create_object(struct drm_device *drm, size_t size)
+> +{
+> +	struct ingenic_drm *priv =3D drm_device_get_priv(drm);
+> +	struct drm_gem_cma_object *obj;
+> +
+> +	obj =3D kzalloc(sizeof(*obj), GFP_KERNEL);
+> +	if (!obj)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	obj->map_noncoherent =3D priv->soc_info->map_noncoherent;
+> +
+> +	return &obj->base;
+> +}
+> +
+>   DEFINE_DRM_GEM_CMA_FOPS(ingenic_drm_fops);
 >  =20
->   struct drm_mode_create_dumb;
-> +struct drm_plane_state;
+>   static const struct drm_driver ingenic_drm_driver_data =3D {
+> @@ -754,6 +798,7 @@ static const struct drm_driver ingenic_drm_driver_d=
+ata =3D {
+>   	.patchlevel		=3D 0,
 >  =20
->   /**
->    * struct drm_gem_cma_object - GEM object backed by CMA memory alloca=
-tions
-> @@ -185,4 +186,8 @@ drm_gem_cma_prime_import_sg_table_vmap(struct drm_d=
-evice *drm,
->   				       struct dma_buf_attachment *attach,
->   				       struct sg_table *sgt);
+>   	.fops			=3D &ingenic_drm_fops,
+> +	.gem_create_object	=3D ingenic_drm_gem_create_object,
+>   	DRM_GEM_CMA_DRIVER_OPS,
 >  =20
-> +void drm_gem_cma_sync_data(struct drm_device *drm,
-> +			   struct drm_plane_state *old_state,
-> +			   struct drm_plane_state *state);
+>   	.irq_handler		=3D ingenic_drm_irq_handler,
+> @@ -961,6 +1006,8 @@ static int ingenic_drm_bind(struct device *dev, bo=
+ol has_components)
+>   		return ret;
+>   	}
+>  =20
+> +	drm_plane_enable_fb_damage_clips(&priv->f1);
+> +
+>   	drm_crtc_helper_add(&priv->crtc, &ingenic_drm_crtc_helper_funcs);
+>  =20
+>   	ret =3D drm_crtc_init_with_planes(drm, &priv->crtc, primary,
+> @@ -989,6 +1036,8 @@ static int ingenic_drm_bind(struct device *dev, bo=
+ol has_components)
+>   			return ret;
+>   		}
+>  =20
+> +		drm_plane_enable_fb_damage_clips(&priv->f0);
+> +
+>   		if (IS_ENABLED(CONFIG_DRM_INGENIC_IPU) && has_components) {
+>   			ret =3D component_bind_all(dev, drm);
+>   			if (ret) {
+> @@ -1245,6 +1294,7 @@ static const u32 jz4770_formats_f0[] =3D {
+>   static const struct jz_soc_info jz4740_soc_info =3D {
+>   	.needs_dev_clk =3D true,
+>   	.has_osd =3D false,
+> +	.map_noncoherent =3D false,
+>   	.max_width =3D 800,
+>   	.max_height =3D 600,
+>   	.formats_f1 =3D jz4740_formats,
+> @@ -1255,6 +1305,7 @@ static const struct jz_soc_info jz4740_soc_info =3D=20
+{
+>   static const struct jz_soc_info jz4725b_soc_info =3D {
+>   	.needs_dev_clk =3D false,
+>   	.has_osd =3D true,
+> +	.map_noncoherent =3D false,
+>   	.max_width =3D 800,
+>   	.max_height =3D 600,
+>   	.formats_f1 =3D jz4725b_formats_f1,
+> @@ -1266,6 +1317,7 @@ static const struct jz_soc_info jz4725b_soc_info =
+=3D {
+>   static const struct jz_soc_info jz4770_soc_info =3D {
+>   	.needs_dev_clk =3D false,
+>   	.has_osd =3D true,
+> +	.map_noncoherent =3D true,
+>   	.max_width =3D 1280,
+>   	.max_height =3D 720,
+>   	.formats_f1 =3D jz4770_formats_f1,
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-ipu.c b/drivers/gpu/drm/in=
+genic/ingenic-ipu.c
+> index 3b1091e7c0cd..a4d1b500c3ad 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-ipu.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-ipu.c
+> @@ -20,10 +20,13 @@
+>  =20
+>   #include <drm/drm_atomic.h>
+>   #include <drm/drm_atomic_helper.h>
+> +#include <drm/drm_damage_helper.h>
+>   #include <drm/drm_drv.h>
+>   #include <drm/drm_fb_cma_helper.h>
+>   #include <drm/drm_fourcc.h>
+>   #include <drm/drm_gem_atomic_helper.h>
+> +#include <drm/drm_gem_cma_helper.h>
+> +#include <drm/drm_gem_framebuffer_helper.h>
+>   #include <drm/drm_plane.h>
+>   #include <drm/drm_plane_helper.h>
+>   #include <drm/drm_property.h>
+> @@ -285,8 +288,8 @@ static void ingenic_ipu_plane_atomic_update(struct =
+drm_plane *plane,
+>   					    struct drm_atomic_state *state)
+>   {
+>   	struct ingenic_ipu *ipu =3D plane_to_ingenic_ipu(plane);
+> -	struct drm_plane_state *newstate =3D drm_atomic_get_new_plane_state(s=
+tate,
+> -									  plane);
+> +	struct drm_plane_state *newstate =3D drm_atomic_get_new_plane_state(s=
+tate, plane);
+> +	struct drm_plane_state *oldstate =3D drm_atomic_get_new_plane_state(s=
+tate, plane);
+
+get_old_state ?
+
+>   	const struct drm_format_info *finfo;
+>   	u32 ctrl, stride =3D 0, coef_index =3D 0, format =3D 0;
+>   	bool needs_modeset, upscaling_w, upscaling_h;
+> @@ -317,6 +320,8 @@ static void ingenic_ipu_plane_atomic_update(struct =
+drm_plane *plane,
+>   				JZ_IPU_CTRL_CHIP_EN | JZ_IPU_CTRL_LCDC_SEL);
+>   	}
+>  =20
+> +	drm_gem_cma_sync_data(ipu->drm, oldstate, newstate);
 > +
 
-Maybe call this function drm_gem_cma_sync_non_coherent() so that it's=20
-clear what the sync is about.
+If you want to optimize, maybe put this line behind
+
+   if (priv->soc_info->map_noncoherent)
+
+>   	/* New addresses will be committed in vblank handler... */
+>   	ipu->addr_y =3D drm_fb_cma_get_gem_addr(newstate->fb, newstate, 0);
+>   	if (finfo->num_planes > 1)
+> @@ -541,7 +546,7 @@ static int ingenic_ipu_plane_atomic_check(struct dr=
+m_plane *plane,
+>  =20
+>   	if (!new_plane_state->crtc ||
+>   	    !crtc_state->mode.hdisplay || !crtc_state->mode.vdisplay)
+> -		return 0;
+> +		goto out_check_damage;
+>  =20
+>   	/* Plane must be fully visible */
+>   	if (new_plane_state->crtc_x < 0 || new_plane_state->crtc_y < 0 ||
+> @@ -558,7 +563,7 @@ static int ingenic_ipu_plane_atomic_check(struct dr=
+m_plane *plane,
+>   		return -EINVAL;
+>  =20
+>   	if (!osd_changed(new_plane_state, old_plane_state))
+> -		return 0;
+> +		goto out_check_damage;
+>  =20
+>   	crtc_state->mode_changed =3D true;
+>  =20
+> @@ -592,6 +597,9 @@ static int ingenic_ipu_plane_atomic_check(struct dr=
+m_plane *plane,
+>   	ipu->denom_w =3D denom_w;
+>   	ipu->denom_h =3D denom_h;
+>  =20
+> +out_check_damage:
+> +	drm_atomic_helper_check_plane_damage(state, new_plane_state);
+> +
+
+If you implement my suggestion above, this line could also be behind
+
+   if (priv->soc_info->map_noncoherent)
 
 Best regards
+
 Thomas
 
->   #endif /* __DRM_GEM_CMA_HELPER_H__ */
->=20
+
+
+[1]=20
+https://elixir.bootlin.com/linux/v5.13-rc1/source/drivers/gpu/drm/ingenic=
+/ingenic-drm-drv.c#L808
+
+
 
 --=20
 Thomas Zimmermann
@@ -240,27 +379,27 @@ Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
 Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
 
 
---dPf7PCMtJc55MN21CIHNv1YF93Ixa5987--
+--AkwaZtTB2iysm9rks9oywaRH9lt7Qx6fu--
 
---x2vTxhbmwOfkAFOdrM8fvhtRRGsi5zKVn
+--YZCcuMKFdIINPia8KMqWziuKz0T7y2Bnw
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmCgG9AFAwAAAAAACgkQlh/E3EQov+DQ
-tA/+JvvM1uDc8G9rNsR2O7LjyGk5y3GZqbmvgG7vabjuqeTO/dNVVs1NclHBG9nUMiHaaaHIemNR
-0/CgCdcOMfwpvbKZmyRK0An8yo1Ajg1BakVSf29HpIUwpwYpnH7sKDb00yW3le97OKpTfK/jBbOd
-JOxOYk37VXz8OMA4zYERgfjU5lgGXywBumDteE03OIXi8jBZkdPaVLPuX7+4r862EybBv0kBJjZG
-ZEdaXpkqdF+ZJKGGcPB2b9MGfhCrnKtK/q9vSw5SMYwnv9eQdmSSJJRYaYhDw6bzXAJRwRUjDf7e
-xS5b+G8vAVgC1ycBttaflx68lcyEk6XbM45ePVcTeOuAAho523+LnRdrpzxBxpWXz6L7skJqRK/z
-OYw2hekgpL06Z+CU6O7Eb0ni57y42fw4jVzbHAixvbsVQhJeo1DQD9Sesy0ETYRaAbicQsuwKTBr
-ljfBbodl1Zdt3q+i378ugdjhialHfnxdAPXEIKWOOyMN4Bhz3ToOAW1c5j+BHWaCz1pDhAw868Q7
-3BMAVJXzpkKuoeZRNJmuyWdVL90wHUZvdKEKBVmAH+mXrg8m6oCHY22WqiZgssUN99R7ZxL9eiSC
-hwgyHBu7+OiZmiJLKxRToBVNsKfKGmtkKgipTdR9J3m3zzJvN0jHs7YcfMm0ZxV0Qh5yOBp1e9sg
-2Rk=
-=I/0w
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmCgJDAFAwAAAAAACgkQlh/E3EQov+Aa
+6g//Uk6/4Dl0BU/200Z59y9djSnAiGh5pJVett02FZbdnCPwOE4tuOs49eY5dWzR4b8vfqkfoPIE
+cOKJJ+xy5tD96o+hwoOyPYRqv/qRR0lkTiwhH0IzOw+wiOESYBoyUU9Jeb5YwBlNgGR/MxEHELC2
+/lrMRYoyiWm9XLWluLyfBlldT+guds8JlJxzYiw0LR5O6xqW2A4m6MwJ1IEh3Qu79Du4ncEDECtP
+S7W+phCzMIqhs7KgwwKU9fKKYMCRv6ZFQ3iWVCpNWk7EUoSjh8AaypeJUPJyPQkUKnRLfr6aljvq
+GQeEJc7R889xhon972FZbvFkPkInyFGJYQ7DtjEPeMHO3rfja4lywjKTuS71N+10ItnA6aJoLZWE
+YEWpEqkVh6GmiNo+D3QNKUaVUF+LHY3oKqH7vNQ/NhB96FllCXtkukMcorPkv27ruo5Xkke8/4/j
+k33qf59i4wLI8Wk3WO0zgWgpL0t5uyaoA0bEVfohSg6i4243mfAhTOddzmOw6uIhD6yZbPSxEM52
+xlaqI/3qKztLOnTEsCmnGzXp7XSyHu7NG7MCs23lrdtntLhk3HWV9JZb4FjXQ/goDwlUoPvyIpy5
+rsdxoEx4kHm1a99gNALTUYUbZxsKzHOtXqTgpTcpxl38/+QQAondOwt0lW4D4PD3kLonrS/pIPoW
+z5Q=
+=xsWZ
 -----END PGP SIGNATURE-----
 
---x2vTxhbmwOfkAFOdrM8fvhtRRGsi5zKVn--
+--YZCcuMKFdIINPia8KMqWziuKz0T7y2Bnw--
