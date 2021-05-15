@@ -2,142 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F36381820
-	for <lists+linux-mips@lfdr.de>; Sat, 15 May 2021 13:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20CA3818CD
+	for <lists+linux-mips@lfdr.de>; Sat, 15 May 2021 14:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbhEOLGG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 15 May 2021 07:06:06 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:48308 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233077AbhEOLD1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 15 May 2021 07:03:27 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axrcgpqp9g598WAA--.13691S4;
-        Sat, 15 May 2021 19:02:08 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 2/2] MIPS: Fix kernel hang under FUNCTION_GRAPH_TRACER and PREEMPT_TRACER
-Date:   Sat, 15 May 2021 19:02:01 +0800
-Message-Id: <1621076521-22412-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1621076521-22412-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1621076521-22412-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Axrcgpqp9g598WAA--.13691S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxZFy5CF4kArW3uF4ftry3CFg_yoW5XF1Upr
-        4Ika4vy3y8XayYg3sFvr18Zr13Xan7t3s2yFyUCayfZws8AF4kXr1xtw18XF1jqr95XayS
-        qas7AF4j9a18Z3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBa14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8KwCF04k20x
-        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1I6r4UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUOXowUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S232287AbhEOMmQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 15 May 2021 08:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229939AbhEOMmP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 15 May 2021 08:42:15 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8251DC061573;
+        Sat, 15 May 2021 05:40:59 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id h4so1729487wrt.12;
+        Sat, 15 May 2021 05:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YWAKRSKjuVwXHj547jD7swDaSS5/nkXNep5jUTBM2h8=;
+        b=rmGbSlQtviY60sTtjMrRQOGtfSOh7vaReKMjtlVGS8LMRasQDY2hvNq50q67ibQ3yZ
+         +cIWIDqV9mVpFb6wuu92gxzngGbCkJRetXvZwPsLjzyUuGI25OetjhprgI1moAJmceyS
+         bDI3NbA7QvBH+pgXV0AOzV67k3zbP9a7Ah9Y3YG9a8Av7Me0U3Y1blSjNCjIqZjVsZ4/
+         hZADEq7vtUFz8tntMbgtQ2glc3Zu/fXMPRP094sUyRU6csgrelVhDKQ+StyXdSa/VHa5
+         COi/frdkEWRPMl5qvmnzg1XkDuHrqO4I5Yffx+QxV4TbE9yIGgOiSKfefqmv+YufblHe
+         kVMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YWAKRSKjuVwXHj547jD7swDaSS5/nkXNep5jUTBM2h8=;
+        b=V29pzN7eehkfPDSVAC78HS4pRrGOSvZmUd0U9wjDYq13oJeOMezkGlooAL5bmzDS0L
+         28XjiIaAApAfiltfDxg3/ueCCyzpJSz0WptQjdk70PwhgK3yBakZ1cvIXOeCFHb8Rp1b
+         pPCN2b5/urOJH5EyZoqKIwzrhQwsEGWJM8Q/75HdQJpbrOfoGRLlcxEbs7tkm8Plctwd
+         of3hXsLGy49RMMKPmPeGZk1Jm3F2kL5/gbg09IvtEd45z0iiWq5g56RvqkXSN73W9cAI
+         HkgZiILfiQJTgDxgVIz+Rz1X2QvPP73UrG9SnU5TGzfNI716CzDuBktgZ9QdQgXTzOpT
+         oPtQ==
+X-Gm-Message-State: AOAM531dcYNRDnkEwL3pYWxeJPJ77LzJO4SAuaCbJrLTuhorgmQrR4+Q
+        IZrE9dVMJQ70ysdOHC2ZTIMDhVk400TpoLeZ
+X-Google-Smtp-Source: ABdhPJye3BL6Wtnn7eS7GpkzG94zZqlaXHdv49/2d9179RGlmN8Fcx+CPEw2MIp7hIbHcWI8vH22lQ==
+X-Received: by 2002:adf:fc44:: with SMTP id e4mr784584wrs.23.1621082457854;
+        Sat, 15 May 2021 05:40:57 -0700 (PDT)
+Received: from localhost.localdomain (29.red-83-49-33.dynamicip.rima-tde.net. [83.49.33.29])
+        by smtp.gmail.com with ESMTPSA id w7sm9472749wru.51.2021.05.15.05.40.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 15 May 2021 05:40:57 -0700 (PDT)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, devicetree@vger.kernel.org,
+        matthias.bgg@gmail.com, john@phrozen.org, bhelgaas@google.com,
+        robh+dt@kernel.org, linux-staging@lists.linux.dev,
+        gregkh@linuxfoundation.org, neil@brown.name,
+        ilya.lipnitskiy@gmail.com, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: [PATCH 0/4] MIPS: ralink: pci: driver for Pcie controller in MT7621 SoCs
+Date:   Sat, 15 May 2021 14:40:51 +0200
+Message-Id: <20210515124055.22225-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When update the latest mainline kernel with the following three configs,
-the kernel hangs during startup:
+MediaTek MT7621 PCIe subsys supports single Root complex (RC)
+with 3 Root Ports. Each Root Ports supports a Gen1 1-lane Link.
+Topology is as follows:
 
-(1) CONFIG_FUNCTION_GRAPH_TRACER=y
-(2) CONFIG_PREEMPT_TRACER=y
-(3) CONFIG_FTRACE_STARTUP_TEST=y
+                          MT7621 PCIe HOST Topology
 
-When update the latest mainline kernel with the above two configs (1)
-and (2), the kernel starts normally, but it still hangs when execute
-the following command:
+                                   .-------.
+                                   |       |
+                                   |  CPU  |
+                                   |       |
+                                   '-------'
+                                       |
+                                       |
+                                       |
+                                       v
+                              .------------------.
+                  .-----------|  HOST/PCI Bridge |------------.
+                  |           '------------------'            |     Type1 
+         BUS0     |                     |                     |    Access 
+                  v                     v                     v    On Bus0
+          .-------------.        .-------------.       .-------------.
+          | VIRTUAL P2P |        | VIRTUAL P2P |       | VIRTUAL P2P |
+          |    BUS0     |        |    BUS0     |       |    BUS0     |
+          |    DEV0     |        |    DEV1     |       |    DEV2     |
+          '-------------'        '-------------'       '-------------'
+    Type0        |          Type0       |         Type0       |
+   Access   BUS1 |         Access   BUS2|        Access   BUS3|
+   On Bus1       v         On Bus2      v        On Bus3      v
+           .----------.           .----------.          .----------.
+           | Device 0 |           | Device 0 |          | Device 0 |
+           |  Func 0  |           |  Func 0  |          |  Func 0  |
+           '----------'           '----------'          '----------'
 
-echo "function_graph" > /sys/kernel/debug/tracing/current_tracer
+This driver has been very long time in staging and I have been cleaning
+it from its first versions where there was code kaos and PCI_LEGACY support.
+Original code came probably from openWRT based on mediatek's SDK code. There
+is no documentation at all about the mt7621 PCI subsystem.
+I have been cleaning it targeting mt7621 SoC which is the one I use in
+my GNUBee PC1 board and HiLink HLK-MT7621A evaluation board.
 
-Without CONFIG_PREEMPT_TRACER=y, the above two kinds of kernel hangs
-disappeared, so it seems that CONFIG_PREEMPT_TRACER has some influences
-with function_graph tracer at the first glance.
+Now I think is clean enough to be moved into 'arch/mips/pci'.
 
-I use ejtag to find out the epc address is related with preempt_enable()
-in the file arch/mips/lib/mips-atomic.c, because function tracing can
-trace the preempt_{enable,disable} calls that are traced, replace them
-with preempt_{enable,disable}_notrace to prevent function tracing from
-going into an infinite loop, and then it can fix the kernel hang issue.
+This driver also uses already mainlined pci phy driver located in
+'drivers/phy/ralink/phy-mt7621-pci.c'. There are two instances of
+the phy being the first one dual ported for pci0 and pci1, and the 
+second one not dual ported dedicated to pci2. Because of writing twice 
+some phy registers of the dual-ported one sometimes become in not
+confident boot cycles we have to take care of this when device link
+is checked here in controller driver. We power on the dual ported-phy
+if there is something connected in pcie0 or pcie1. In the same manner
+we have to properly disable it only if nothing is connected in of both
+pcie0 and pci1 slots.
 
-By the way, it seems that this commit is a complement and improvement of
-commit f93a1a00f2bd ("MIPS: Fix crash that occurs when function tracing
-is enabled").
+Another thing that must be mentioned is that this driver uses IO
+in physical address 0x001e160000. IO_SPACE_LIMIT for MIPS is 0xffff
+so some generic PCI functions (like of_pci_range_to_resource) won't
+work and the resource ranges part for IO is set manually.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Steven Rostedt <rostedt@goodmis.org>
----
- arch/mips/lib/mips-atomic.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+I had already sent binding documentation to be reviewed but I am
+include also here with the driver itself and this cover letter
+to make easy review process.
 
-diff --git a/arch/mips/lib/mips-atomic.c b/arch/mips/lib/mips-atomic.c
-index de03838..a9b72ea 100644
---- a/arch/mips/lib/mips-atomic.c
-+++ b/arch/mips/lib/mips-atomic.c
-@@ -37,7 +37,7 @@
-  */
- notrace void arch_local_irq_disable(void)
- {
--	preempt_disable();
-+	preempt_disable_notrace();
- 
- 	__asm__ __volatile__(
- 	"	.set	push						\n"
-@@ -53,7 +53,7 @@ notrace void arch_local_irq_disable(void)
- 	: /* no inputs */
- 	: "memory");
- 
--	preempt_enable();
-+	preempt_enable_notrace();
- }
- EXPORT_SYMBOL(arch_local_irq_disable);
- 
-@@ -61,7 +61,7 @@ notrace unsigned long arch_local_irq_save(void)
- {
- 	unsigned long flags;
- 
--	preempt_disable();
-+	preempt_disable_notrace();
- 
- 	__asm__ __volatile__(
- 	"	.set	push						\n"
-@@ -78,7 +78,7 @@ notrace unsigned long arch_local_irq_save(void)
- 	: /* no inputs */
- 	: "memory");
- 
--	preempt_enable();
-+	preempt_enable_notrace();
- 
- 	return flags;
- }
-@@ -88,7 +88,7 @@ notrace void arch_local_irq_restore(unsigned long flags)
- {
- 	unsigned long __tmp1;
- 
--	preempt_disable();
-+	preempt_disable_notrace();
- 
- 	__asm__ __volatile__(
- 	"	.set	push						\n"
-@@ -106,7 +106,7 @@ notrace void arch_local_irq_restore(unsigned long flags)
- 	: "0" (flags)
- 	: "memory");
- 
--	preempt_enable();
-+	preempt_enable_notrace();
- }
- EXPORT_SYMBOL(arch_local_irq_restore);
- 
+Best regards,
+    Sergio Paracuellos
+
+Sergio Paracuellos (4):
+  dt-bindings: mt7621-pci: PCIe binding documentation for MT7621 SoCs
+  MIPS: pci: Add driver for MT7621 PCIe controller
+  staging: mt7621-pci: remove driver from staging
+  MAINTAINERS: add myself as maintainer of the MT7621 PCI controller
+    driver
+
+ .../bindings/pci/mediatek,mt7621-pci.yaml     | 149 ++++++++++++++++++
+ MAINTAINERS                                   |   6 +
+ arch/mips/pci/Makefile                        |   1 +
+ .../mt7621-pci => arch/mips/pci}/pci-mt7621.c |   0
+ arch/mips/ralink/Kconfig                      |   9 +-
+ drivers/staging/Kconfig                       |   2 -
+ drivers/staging/Makefile                      |   1 -
+ drivers/staging/mt7621-pci/Kconfig            |   8 -
+ drivers/staging/mt7621-pci/Makefile           |   2 -
+ drivers/staging/mt7621-pci/TODO               |   4 -
+ .../mt7621-pci/mediatek,mt7621-pci.txt        | 104 ------------
+ 11 files changed, 164 insertions(+), 122 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pci/mediatek,mt7621-pci.yaml
+ rename {drivers/staging/mt7621-pci => arch/mips/pci}/pci-mt7621.c (100%)
+ delete mode 100644 drivers/staging/mt7621-pci/Kconfig
+ delete mode 100644 drivers/staging/mt7621-pci/Makefile
+ delete mode 100644 drivers/staging/mt7621-pci/TODO
+ delete mode 100644 drivers/staging/mt7621-pci/mediatek,mt7621-pci.txt
+
 -- 
-2.1.0
-
+2.25.1
