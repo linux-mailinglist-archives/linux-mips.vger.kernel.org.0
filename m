@@ -2,137 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0BA38245C
-	for <lists+linux-mips@lfdr.de>; Mon, 17 May 2021 08:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0853825D5
+	for <lists+linux-mips@lfdr.de>; Mon, 17 May 2021 09:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234317AbhEQGdZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 May 2021 02:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S231585AbhEQHvu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 May 2021 03:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbhEQGdY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 May 2021 02:33:24 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428A6C061573;
-        Sun, 16 May 2021 23:32:08 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 69-20020a9d0a4b0000b02902ed42f141e1so4685096otg.2;
-        Sun, 16 May 2021 23:32:08 -0700 (PDT)
+        with ESMTP id S229755AbhEQHvq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 May 2021 03:51:46 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6558C061573;
+        Mon, 17 May 2021 00:50:29 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id q7-20020a9d57870000b02902a5c2bd8c17so4813234oth.5;
+        Mon, 17 May 2021 00:50:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ie0SvJLAVnukBdnR1QH9TyMAlD3l6NvpyUmRVBYG5OM=;
-        b=TG5DifERKl9iNqPG0E2T+TEQURb3zYbaADjc2V1XVmPJyQYoQd5P4j8KsJgj3Rp17c
-         N2+UPPvB6AbrnqB6zsWEXuGAjYlzHqccnAwaGIBEOAPNkqvyBb4l1CK9lGna5hwlIC4/
-         zOza1nbmi9FqwkejMr006NTVkEWlRaU/ePq73k7//0o1EDu9F+OgHijJkNV4/VyjDCUs
-         Uw5P4T/y7SuLTWAV2YjywWQvlX87wJmqXjITw7/o+/pfxJ1mUZtEGczyXzReoF5kQ9RS
-         bG22l1mKkSLUxKqu8wOQFjbX0HCBYl0JIl4SvyaUwxz3ucRGzVW7c2U/Sgq2+x+kbwwC
-         EbUg==
+        bh=vT6tVfgVQYax85ltv/yac9IUk/uA4vEprh4TNBKtlVo=;
+        b=oEJ+FkzCAYVGNQuUH4qv+SoSmQPSANTJf31/FDy0Tb/92Bkg68SJQLBekz+JLd1ptU
+         iGM9CKiH6/1gStpkopD39bEMw3X29dDPRQ0lYxa1BVpl4fXvCc8BKM9bC1DImzt2MbMx
+         IzBCRq7CaNqntGWV4NNPoPPs2DmreKlrFcuZjE2vTaBr00gJDgcPbf7SCa+9vT5dExfU
+         Nhsvm1SPzWFGUFvBcF9B3YGDQZc7vAHyX4RX/tH5jsaBj5osntfjhXUbqq6mML6szy00
+         xGYXwxEGh7hQ9R/UdOHEEkFqWgYbutRS078EH9uRdo2fb88NT6Q1ca+JTMiefNOFFzFm
+         FtVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ie0SvJLAVnukBdnR1QH9TyMAlD3l6NvpyUmRVBYG5OM=;
-        b=bkWPyTvExnjeqyFVND+uh9phJh3uR31nyOs860A6Sw0lpqCrjwb/MFh0FrPO5dZBCa
-         Q/dSTotI1eJbNFOt8IjuiMQYmT2k+fSqIs9M4FlcyHgPIdQx+rdOdHSWs+ihwWmXjfsK
-         ue2vzyTZY8gNxPpL4n2XWacsesVo5PKCjTFoORaS2ij2LkpCRIdQUlBG+9cVSzGjp+z5
-         rjrnc9Ezj8EVAL69N2L+LbdfowI1TqQ/hYP1ybx4OUDx3NOFa2q11kg/L++XojX3zBbN
-         e3DMeDtcGzf+1N6OdQPnTc2jXlEedVb+c4MIceWEPQAzTRIZhbNbQoOTU+LpjKE1OfQD
-         OvTA==
-X-Gm-Message-State: AOAM532pjc1AgbpM/kI2+c3sDYZlZaTHWA9ZXAHC9MvHC302OVImLbpE
-        ko3lN0d+ekztzZPDO877tLCpe+UbQaXP3A5dEhhjbOuDT2Giuw==
-X-Google-Smtp-Source: ABdhPJxjC5r+0BGClxopx1pgtNNKYuabuin6oS0xx/Xg9kGTm/WcJZeJguQLHlAUx7KNjOJnZu4DMwdxp+EMEii3U44=
-X-Received: by 2002:a9d:2ae8:: with SMTP id e95mr50259208otb.72.1621233127733;
- Sun, 16 May 2021 23:32:07 -0700 (PDT)
+        bh=vT6tVfgVQYax85ltv/yac9IUk/uA4vEprh4TNBKtlVo=;
+        b=mZ9EGLSPugxA0MLuu48GXzbjkaBghYRxq7WlLjdlty4ow50dVLOjYkSdp0NPy8Ajek
+         UW82o91srAPWk5eFu6eYUYAg6zcAhFQQeEekyNtlPhbohd+ACOqBgyVBe4RpSwJuCYJY
+         ZRqsnBYM8quOf7r74lRmah13DM69xrnEZMIlL/KjsC0jMPTbI4RLPK5sXGVvGVRtIhh8
+         Wq9QNNBM1kYjY2dzNe8ElVhplODGQJSD1JUZ+J8oA5j1PoFuSuCTP53M33kNcnUg4WuT
+         4S0j9psN+WsoFt//ljyTNnIg5j22pufaN1bPM6+LRP2UOtTCXTmqU+78iH6BfnsCr5le
+         KdoA==
+X-Gm-Message-State: AOAM5313pYZ7qMr9MwZyKN0vRmcIEuE2+Icvkrw+lX76ntDW9wvbioJV
+        xLkI8cyLhUXRRLSk0nm2Yn3axS7+LzJS6pYwD9U=
+X-Google-Smtp-Source: ABdhPJwApu7Ibyl11BxwMoiIUtxGt5Yho6kiWDwGr7lzrzX6b81rl//LyrMsBGiUzKt9kYgrfNbvY2UZA3B7OTcrwAY=
+X-Received: by 2002:a05:6830:1510:: with SMTP id k16mr35262204otp.290.1621237829236;
+ Mon, 17 May 2021 00:50:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210517005417.18338-1-rdunlap@infradead.org> <e56fa6d9-1305-b3c5-d385-37042835686c@roeck-us.net>
-In-Reply-To: <e56fa6d9-1305-b3c5-d385-37042835686c@roeck-us.net>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 17 May 2021 08:31:56 +0200
-Message-ID: <CAMhs-H9nfHxGTOgww-cC-s_gkZtJBtWsQkhNKCX3NdTJpD=R0Q@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: ralink: export rt_sysc_membase for rt2880_wdt.c
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@iguana.be>,
-        John Crispin <john@phrozen.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org
+References: <20210517000108.26015-1-rdunlap@infradead.org>
+In-Reply-To: <20210517000108.26015-1-rdunlap@infradead.org>
+From:   Manuel Lauss <manuel.lauss@gmail.com>
+Date:   Mon, 17 May 2021 09:49:53 +0200
+Message-ID: <CAOLZvyEyayWctr4uv4MUaUknZ7FVhtCcG7ErjRuYBdez7zJuLA@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: alchemy: xxs1500: add gpio-au1000.h header file
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linux-MIPS <linux-mips@vger.kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Guenter,
+Hello,
 
-On Mon, May 17, 2021 at 8:23 AM Guenter Roeck <linux@roeck-us.net> wrote:
+On Mon, May 17, 2021 at 2:01 AM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> On 5/16/21 5:54 PM, Randy Dunlap wrote:
-> > rt2880_wdt.c uses (well, attempts to use) rt_sysc_membase. However,
-> > when this watchdog driver is built as a loadable module, there is a
-> > build error since the rt_sysc_membase symbol is not exported.
-> > Export it to quell the build error.
-> >
-> > ERROR: modpost: "rt_sysc_membase" [drivers/watchdog/rt2880_wdt.ko] undefined!
-> >
-> > Fixes: 473cf939ff34 ("watchdog: add ralink watchdog driver")
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Wim Van Sebroeck <wim@iguana.be>
+> board-xxs1500.c references 2 functions without declaring them, so add
+> the header file to placate the build.
 >
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> ../arch/mips/alchemy/board-xxs1500.c: In function 'board_setup':
+> ../arch/mips/alchemy/board-xxs1500.c:56:2: error: implicit declaration of function 'alchemy_gpio1_input_enable' [-Werror=implicit-function-declaration]
+>    56 |  alchemy_gpio1_input_enable();
+> ../arch/mips/alchemy/board-xxs1500.c:57:2: error: implicit declaration of function 'alchemy_gpio2_enable'; did you mean 'alchemy_uart_enable'? [-Werror=implicit-function-declaration]
+>    57 |  alchemy_gpio2_enable();
 >
-> > Cc: John Crispin <john@phrozen.org>
-> > Cc: linux-mips@vger.kernel.org
-> > Cc: linux-watchdog@vger.kernel.org
-> > ---
-> > or make the Kconfig symbol RALINK_WDT bool instead of tristate?
-> >
+> Fixes: 8e026910fcd4 ("MIPS: Alchemy: merge GPR/MTX-1/XXS1500 board code into single files")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Manuel Lauss <manuel.lauss@googlemail.com>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> ---
+>  arch/mips/alchemy/board-xxs1500.c |    1 +
+>  1 file changed, 1 insertion(+)
 >
-> You'd have to change several other config symbols to boolean as well.
->
-> Example with PHY_MT7621_PCI=m:
->
-> ERROR: modpost: "rt_sysc_membase" [drivers/phy/ralink/phy-mt7621-pci.ko] undefined!
-> make[1]: *** [scripts/Makefile.modpost:150: modules-only.symvers] Error 1
+> --- linux-next-20210514.orig/arch/mips/alchemy/board-xxs1500.c
+> +++ linux-next-20210514/arch/mips/alchemy/board-xxs1500.c
+> @@ -18,6 +18,7 @@
+>  #include <asm/reboot.h>
+>  #include <asm/setup.h>
+>  #include <asm/mach-au1x00/au1000.h>
+> +#include <asm/mach-au1x00/gpio-au1000.h>
 
-This is already changed and not using this rt_* apis anymore. See:
+Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
 
-https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git/commit/?h=next&id=60ece833ccd00c4fc9b10bbce2fa6291f61c6230
-https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git/commit/?h=next&id=6eded551cefe3ef6e2b3ff76b6a77a2ecd4fa20a
-
->
-> Same with MT7621_WDT=m.
->
-> ERROR: modpost: "rt_sysc_membase" [drivers/watchdog/mt7621_wdt.ko] undefined!
->
-> At that point I stopped looking.
->
-> Guenter
-
-Best regards,
-    Sergio Paracuellos
-
->
-> >   arch/mips/ralink/of.c |    2 ++
-> >   1 file changed, 2 insertions(+)
-> >
-> > --- linux-next-20210514.orig/arch/mips/ralink/of.c
-> > +++ linux-next-20210514/arch/mips/ralink/of.c
-> > @@ -8,6 +8,7 @@
-> >
-> >   #include <linux/io.h>
-> >   #include <linux/clk.h>
-> > +#include <linux/export.h>
-> >   #include <linux/init.h>
-> >   #include <linux/sizes.h>
-> >   #include <linux/of_fdt.h>
-> > @@ -25,6 +26,7 @@
-> >
-> >   __iomem void *rt_sysc_membase;
-> >   __iomem void *rt_memc_membase;
-> > +EXPORT_SYMBOL_GPL(rt_sysc_membase);
-> >
-> >   __iomem void *plat_of_remap_node(const char *node)
-> >   {
-> >
->
+Thank you!
+     Manuel
