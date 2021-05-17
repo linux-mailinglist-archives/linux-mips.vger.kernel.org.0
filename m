@@ -2,171 +2,171 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C403837F8
-	for <lists+linux-mips@lfdr.de>; Mon, 17 May 2021 17:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9674E38399B
+	for <lists+linux-mips@lfdr.de>; Mon, 17 May 2021 18:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238211AbhEQPsK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 May 2021 11:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
+        id S243878AbhEQQZE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 May 2021 12:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344965AbhEQPqJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 May 2021 11:46:09 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569DEC04315F
-        for <linux-mips@vger.kernel.org>; Mon, 17 May 2021 07:37:10 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso5309628wmh.4
-        for <linux-mips@vger.kernel.org>; Mon, 17 May 2021 07:37:10 -0700 (PDT)
+        with ESMTP id S1346360AbhEQQYa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 May 2021 12:24:30 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59273C034614
+        for <linux-mips@vger.kernel.org>; Mon, 17 May 2021 07:53:20 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id q6-20020a25bfc60000b02904f9715cd13cso9636520ybm.3
+        for <linux-mips@vger.kernel.org>; Mon, 17 May 2021 07:53:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/GFAh/A0GfFHYjaPNZwKZ40wIJJNt8CthQS4oei97uk=;
-        b=h1wuf3FDnPnhu/NTS/DGYPHZdVKHA7X0UeMSxqbK8OHp9Y9MGLH57PZg9Qq+YKVN9C
-         f1PzgpBk8JnbGGg0Jul6KKY+PbSiYLRCPvROXGw6CrhBHvnnJ2jknpy9EMz4mNaccm+A
-         2Vi+KxQMcXfSOelOWfaGM3sHyWCC0HwtlIPjk=
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=4HJ66++ZeWXgUMvYaSH59XIw9b5t7+bKx/IVCdRe4G0=;
+        b=tEchB3/NvHaS2iYBDSPPFoO6QDvpctN/kh8GNdmz+3BV51fgxznShQgFUWKmVHsnCB
+         aIexAfoWXg6sUKvOWx3mQ0ROzie/dXZfhTjzynlDE/FK5ic3y2TmhEJfI8B7wwhTPFpn
+         5h+DUByZwY/YPA72ASBm/UMCFkrOZA/0KTlulemK4yZ/LlMl38QNjbYECaAyv39jZ2PN
+         kDcNISNoaDXMKrAuVsEts6T5iHO9gRSmdqijjd9/w146GvRse1G4R+oaPhYi9pQfgSH5
+         oDg000282+nVSW7qP3y3olOlbJ9JWfuRlxcA2Gv3VnuXIzwfdrZZ4BCdlEpRaNi4S8X0
+         BP7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=/GFAh/A0GfFHYjaPNZwKZ40wIJJNt8CthQS4oei97uk=;
-        b=o8+ScnvN24U9v5jOVNs1Xi7DbOxEmoNWrG02S2ziOZqGi+vNp3GilYAGDfXyxMhUht
-         eIYc8puHmzJ+T9TgvRCtRjOwDQzQ4i1KCnRCpm7YksFUOXbG5ez+vy9Qfh7UVNHTeSaz
-         ERGOubGVzvEf1IWPLqi6U6N6pIdgN1z3obtddFlB8bB/10mmZ3vu4ND8kQ4wcma1F9UX
-         ThdGU7qPZRElVZvByaWWy9R9hrh6tkvoCEyCkuEWeT6ePsKeH3/wDFpoK7KfKZwpt922
-         /z+EcW8ysGYtn+fc7SjMYUmRc079SgLYoCrMMJt70g5VPQf3c0VyioARkh9yQn/YIvVo
-         gWGg==
-X-Gm-Message-State: AOAM530B+UlUQxrZxAMA/D9aN/WW7maxdrjQ/vUBPlEy5E6yLYJuBMut
-        0fKJOSM1dRRiPPoTU1XODRgwjQ==
-X-Google-Smtp-Source: ABdhPJxHkNcCNOXeddsZB81LmqWH5+pYAOLu1aI1JjnYFrX7APUE2O+sB7/Hq0DVxtbEP3FM30JHoA==
-X-Received: by 2002:a7b:c5d2:: with SMTP id n18mr253800wmk.97.1621262229091;
-        Mon, 17 May 2021 07:37:09 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id a129sm4249659wmh.20.2021.05.17.07.37.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 07:37:08 -0700 (PDT)
-Date:   Mon, 17 May 2021 16:37:06 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>, od@zcrc.me,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] drm/ingenic: Fix pixclock rate for 24-bit serial panels
-Message-ID: <YKJ/ko7+HZix4znQ@phenom.ffwll.local>
-Mail-Followup-To: Paul Cercueil <paul@crapouillou.net>,
-        David Airlie <airlied@linux.ie>, Sam Ravnborg <sam@ravnborg.org>,
-        od@zcrc.me, linux-mips@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20210323144008.166248-1-paul@crapouillou.net>
- <6DP1TQ.W6B9JRRW1OY5@crapouillou.net>
- <YKJsj+dDUshm/ZiT@phenom.ffwll.local>
- <9N99TQ.6E5XN4XTCLTT1@crapouillou.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9N99TQ.6E5XN4XTCLTT1@crapouillou.net>
-X-Operating-System: Linux phenom 5.10.32scarlett+ 
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=4HJ66++ZeWXgUMvYaSH59XIw9b5t7+bKx/IVCdRe4G0=;
+        b=t2iPqPTFi9J+F7aTrALOvH6r3cb6HfBSxiVUL10plZn+pU3F08sdCInPm2GedpO5Ar
+         90sre0uVO7XYBM/sl9n/ImmZYQ0v00uKpYh/459DMrzlVJ8OhloPM+IiBiZ0AH8B4AgA
+         HMOEXSrk9SJ8B+aJn0WXj8dhHwSwvzMc8lxT0VT7q3NlbtuSlVP8B1l2TZMKpS189gXB
+         8C8Uok+Rq4Ro8Vb7H7i4YpXPGWCNko+RCPKGFQNyXB2leLHqmMsU/AdFox0avpfEmHfk
+         4sFoVA0AXYtq4CQgx7PsNDJmSGaNjEMObClT4Au83coZVmWK1eyWZIUqGp/ua9G7bW5s
+         Fv/Q==
+X-Gm-Message-State: AOAM5301cCBxptpRa6XXb9ZgDFWQaGHTyEHDIGXlI9nz8X1JxXNMpLMT
+        wnMz+b2vW6xhtICl9yFYpjim6Frb9+4edCMp4g==
+X-Google-Smtp-Source: ABdhPJxVSYPxCoq4VDHfaNcpUYnOeavMMHtUfXfKI9+aR8ach/FPO0fxCU0HVpVBmnunXxkvJEfDJDgTUXDf+b1H8A==
+X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
+ (user=jingzhangos job=sendgmr) by 2002:a5b:1c8:: with SMTP id
+ f8mr317938ybp.44.1621263199546; Mon, 17 May 2021 07:53:19 -0700 (PDT)
+Date:   Mon, 17 May 2021 14:53:10 +0000
+Message-Id: <20210517145314.157626-1-jingzhangos@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
+Subject: [PATCH v5 0/4] KVM statistics data fd-based binary interface
+From:   Jing Zhang <jingzhangos@google.com>
+To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Cc:     Jing Zhang <jingzhangos@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 17, 2021 at 03:30:45PM +0100, Paul Cercueil wrote:
-> Hi Daniel,
-> 
-> Le lun., mai 17 2021 at 15:15:59 +0200, Daniel Vetter <daniel@ffwll.ch> a
-> écrit :
-> > On Thu, May 13, 2021 at 01:29:30PM +0100, Paul Cercueil wrote:
-> > >  Hi,
-> > > 
-> > >  Almost two months later,
-> > 
-> > Since you're committer it's expected that you go actively out to look
-> > for
-> > review or trade with someone else who has some patches that need a quick
-> > look. It will not happen automatically, this is on you.
-> 
-> I maintain all drivers, platform code and DTS for Ingenic SoCs so I do my
-> part, just not in this subsystem.
-> 
-> > Also generally after 2 weeks the patch is lost and you need to ping it.
-> 
-> OK. Then I guess I'll just include this one in a future patchset.
+This patchset provides a file descriptor for every VM and VCPU to read
+KVM statistics data in binary format.
+It is meant to provide a lightweight, flexible, scalable and efficient
+lock-free solution for user space telemetry applications to pull the
+statistics data periodically for large scale systems. The pulling
+frequency could be as high as a few times per second.
+In this patchset, every statistics data are treated to have some
+attributes as below:
+  * architecture dependent or common
+  * VM statistics data or VCPU statistics data
+  * type: cumulative, instantaneous,
+  * unit: none for simple counter, nanosecond, microsecond,
+    millisecond, second, Byte, KiByte, MiByte, GiByte. Clock Cycles
+Since no lock/synchronization is used, the consistency between all
+the statistics data is not guaranteed. That means not all statistics
+data are read out at the exact same time, since the statistics date
+are still being updated by KVM subsystems while they are read out.
 
-Well you do have an ack now. I just meant to highlight that generally it
-doesn't happen automatically, and also that after 2 weeks generally a
-patchset wont get attention anymore.
--Daniel
+---
 
-> 
+* v4 -> v5
+  - Rebase to kvm/queue, commit a4345a7cecfb ("Merge tag
+    'kvmarm-fixes-5.13-1'")
+  - Change maximum stats name length to 48
+  - Replace VM_STATS_COMMON/VCPU_STATS_COMMON macros with stats
+    descriptor definition macros.
+  - Fixed some errors/warnings reported by checkpatch.pl
 
-> > -Daniel
-> 
-> Cheers,
-> -Paul
-> 
-> > > 
-> > > 
-> > >  Le mar., mars 23 2021 at 14:40:08 +0000, Paul Cercueil
-> > >  <paul@crapouillou.net> a écrit :
-> > >  > When using a 24-bit panel on a 8-bit serial bus, the pixel clock
-> > >  > requested by the panel has to be multiplied by 3, since the
-> > > subpixels
-> > >  > are shifted sequentially.
-> > >  >
-> > >  > The code (in ingenic_drm_encoder_atomic_check) already computed
-> > >  > crtc_state->adjusted_mode->crtc_clock accordingly, but
-> > > clk_set_rate()
-> > >  > used crtc_state->adjusted_mode->clock instead.
-> > >  >
-> > >  > Fixes: 28ab7d35b6e0 ("drm/ingenic: Properly compute timings when
-> > > using a
-> > >  > 3x8-bit panel")
-> > >  > Cc: stable@vger.kernel.org # v5.10
-> > >  > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> > > 
-> > >  Can I get an ACK for my patch?
-> > > 
-> > >  Thanks!
-> > >  -Paul
-> > > 
-> > >  > ---
-> > >  >  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 2 +-
-> > >  >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >  >
-> > >  > diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> > >  > b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> > >  > index d60e1eefc9d1..cba68bf52ec5 100644
-> > >  > --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> > >  > +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> > >  > @@ -342,7 +342,7 @@ static void
-> > > ingenic_drm_crtc_atomic_flush(struct
-> > >  > drm_crtc *crtc,
-> > >  >  	if (priv->update_clk_rate) {
-> > >  >  		mutex_lock(&priv->clk_mutex);
-> > >  >  		clk_set_rate(priv->pix_clk,
-> > >  > -			     crtc_state->adjusted_mode.clock * 1000);
-> > >  > +			     crtc_state->adjusted_mode.crtc_clock * 1000);
-> > >  >  		priv->update_clk_rate = false;
-> > >  >  		mutex_unlock(&priv->clk_mutex);
-> > >  >  	}
-> > >  > --
-> > >  > 2.30.2
-> > >  >
-> > > 
-> > > 
-> > 
-> > --
-> > Daniel Vetter
-> > Software Engineer, Intel Corporation
-> > http://blog.ffwll.ch
-> 
-> 
+* v3 -> v4
+  - Rebase to kvm/queue, commit 9f242010c3b4 ("KVM: avoid "deadlock"
+    between install_new_memslots and MMU notifier")
+  - Use C-stype comments in the whole patch
+  - Fix wrong count for x86 VCPU stats descriptors
+  - Fix KVM stats data size counting and validity check in selftest
 
+* v2 -> v3
+  - Rebase to kvm/queue, commit edf408f5257b ("KVM: avoid "deadlock"
+    between install_new_memslots and MMU notifier")
+  - Resolve some nitpicks about format
+
+* v1 -> v2
+  - Use ARRAY_SIZE to count the number of stats descriptors
+  - Fix missing `size` field initialization in macro STATS_DESC
+
+[1] https://lore.kernel.org/kvm/20210402224359.2297157-1-jingzhangos@google.com
+[2] https://lore.kernel.org/kvm/20210415151741.1607806-1-jingzhangos@google.com
+[3] https://lore.kernel.org/kvm/20210423181727.596466-1-jingzhangos@google.com
+[4] https://lore.kernel.org/kvm/20210429203740.1935629-1-jingzhangos@google.com
+
+---
+
+Jing Zhang (4):
+  KVM: stats: Separate common stats from architecture specific ones
+  KVM: stats: Add fd-based API to read binary stats data
+  KVM: stats: Add documentation for statistics data binary interface
+  KVM: selftests: Add selftest for KVM statistics data binary interface
+
+ Documentation/virt/kvm/api.rst                | 171 ++++++++
+ arch/arm64/include/asm/kvm_host.h             |   9 +-
+ arch/arm64/kvm/guest.c                        |  38 +-
+ arch/mips/include/asm/kvm_host.h              |   9 +-
+ arch/mips/kvm/mips.c                          |  64 ++-
+ arch/powerpc/include/asm/kvm_host.h           |   9 +-
+ arch/powerpc/kvm/book3s.c                     |  64 ++-
+ arch/powerpc/kvm/book3s_hv.c                  |  12 +-
+ arch/powerpc/kvm/book3s_pr.c                  |   2 +-
+ arch/powerpc/kvm/book3s_pr_papr.c             |   2 +-
+ arch/powerpc/kvm/booke.c                      |  59 ++-
+ arch/s390/include/asm/kvm_host.h              |   9 +-
+ arch/s390/kvm/kvm-s390.c                      | 129 +++++-
+ arch/x86/include/asm/kvm_host.h               |   9 +-
+ arch/x86/kvm/x86.c                            |  67 +++-
+ include/linux/kvm_host.h                      | 136 ++++++-
+ include/linux/kvm_types.h                     |  12 +
+ include/uapi/linux/kvm.h                      |  50 +++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   3 +
+ .../selftests/kvm/kvm_bin_form_stats.c        | 379 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
+ virt/kvm/kvm_main.c                           | 237 ++++++++++-
+ 24 files changed, 1396 insertions(+), 90 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
+
+
+base-commit: a4345a7cecfb91ae78cd43d26b0c6a956420761a
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.31.1.751.gd2f1c929bd-goog
+
