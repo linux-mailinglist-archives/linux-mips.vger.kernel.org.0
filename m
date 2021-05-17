@@ -2,179 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE183839B7
-	for <lists+linux-mips@lfdr.de>; Mon, 17 May 2021 18:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C327383A54
+	for <lists+linux-mips@lfdr.de>; Mon, 17 May 2021 18:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344572AbhEQQZw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 May 2021 12:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
+        id S239951AbhEQQsH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 May 2021 12:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344343AbhEQQZq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 May 2021 12:25:46 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82442C030CFC
-        for <linux-mips@vger.kernel.org>; Mon, 17 May 2021 07:55:38 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id e2so1299069ljk.4
-        for <linux-mips@vger.kernel.org>; Mon, 17 May 2021 07:55:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=QUe8DOeGFSdZ193LBrJppmyu5E2kuzgS0SpFBXrhdow=;
-        b=U7wtNIdm28GJ8gwv7rj2npD297B+CJPksgybK+hTA7W8lHEhapKJxMIG5HQ3HNjXTg
-         rWb17bnmwUibfb6rDGPoRpsUcTBKgheHmdEsYQPVx7KYwyYWUJ/UNRkKfjb9d5ibFSFt
-         v0Ow6tYwRBxOkRkqYu/DG4+zFO+zy6inj96rgHrhP8QNsj4HQXzBUbFw/rjoY9+IIM+C
-         OhujAr86N4O2dvGqUDJI0zXBe8E1N459vTzNZ6MB6PKR1p/o3iIaEdbHCI2e1Ze+ICqd
-         +af/XXK+6g5EVl721j8io2s5td6Cu6Uh4DS/OUMJSH13vFDYn9PvexXNAac5d0rx2akL
-         Bijg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=QUe8DOeGFSdZ193LBrJppmyu5E2kuzgS0SpFBXrhdow=;
-        b=CJGu3t0GLUzCIakIwidvomJF4vaOm07//5iL0O9t8imaURh567Z+3F+Hh0/c+Y1G+T
-         n0ULMUn/2vPY6eUB9V12+9zUFihKLXF8z+kRqip2Z5WT7Z2wvK/JMoSEy9vG985PqeFC
-         ei6jGM7y7WEgbb0BZ0golc/ncdx9NUHzzgbfVPorf04brfw4Nb2nlY7XlPiS+NGK1B0e
-         rncGLLGiXFrRc2OIM9sEYlkxu2imxZ3Lo7boDHyVHtL0RJ8CdD2Hw3k9I88kqExy6yBz
-         s0hLJVQ6ioJITUvQrNhEbAOhaH/6Dcm8kMV7vQOvbvh4eUOFFbj4yWl9TgFKGGB2sBHo
-         QzHA==
-X-Gm-Message-State: AOAM533p9CoVfybHKJbpopkvnp0mECf8/nxzKSFdd6aDWMJ7G0+gATII
-        rEZFaQk9ZJ9G06MftBdi1fWRL7TfTjDu4+7lfHnUHQ==
-X-Google-Smtp-Source: ABdhPJyyt3vMBNkKRAxRLZE9D6Z3kkpMMjxSYVr0MStibqeH5eOvyHWZ8uTTaM8cQ8iiN2h4w0DZq9BBNo0X0WVeHiI=
-X-Received: by 2002:a05:651c:1251:: with SMTP id h17mr50489673ljh.215.1621263336866;
- Mon, 17 May 2021 07:55:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210517145314.157626-1-jingzhangos@google.com>
-In-Reply-To: <20210517145314.157626-1-jingzhangos@google.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Mon, 17 May 2021 09:55:25 -0500
-Message-ID: <CAAdAUtixWdpFvY1Vq5e+VqoFjZ9xoTyb0gi4MD9=u8rMj4NEJQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/4] KVM statistics data fd-based binary interface
-To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        with ESMTP id S239204AbhEQQr7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 May 2021 12:47:59 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C268FC04A05C;
+        Mon, 17 May 2021 09:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=D5eX4KgU6Q08BtWp0alaF4iGc+iWIBQF2uar2PYOHUc=; b=SI8qiQJ1mPwMO363pwJu6urylo
+        dLs5oVmPYyYQJxH0M1j2e3hH8leGyGkM/aLk85T0JYMfNn6Dh8I6P9wKyX5YSHihLveMVX+uRf6qo
+        i69reejNSy04FIaaTdaoGTCO55CN0piXkKCTw54D8AQYTKypDPc87uE+oY58EU6oaHM7OZBh2Ihp0
+        fQP1dMCLrqCzCCbZABuxwI8LR8beOuTV5sUxeDi80I93uD7CDMq/+NrUc/aONsiahjlNxKWO7kUO8
+        g8gJugo/4buid2pRgyeFg50OFUPIguZgXlERSd4qmd8lvJJjxkPlmmrWwcgJ1+x4bFYYy8v6/1e6l
+        G0kYb5VQ==;
+Received: from [2601:1c0:6280:3f0::7376]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lifuj-00DyRK-6J; Mon, 17 May 2021 16:16:17 +0000
+Subject: Re: [PATCH] PCI: ftpci100: rename macro name collision
+To:     =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-mips@vger.kernel.org
+References: <20210516190014.25664-1-rdunlap@infradead.org>
+ <CACRpkdbcN4d2sdCDjqqW7txDm7--_B2MX10CDA6z8FOq4mQ7=g@mail.gmail.com>
+ <20210517103435.GA179901@rocinante.localdomain>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <2a5204be-7761-2d0b-e1a6-af5b6d4fdb0d@infradead.org>
+Date:   Mon, 17 May 2021 09:16:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210517103435.GA179901@rocinante.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paolo,
+On 5/17/21 3:34 AM, Krzysztof Wilczyński wrote:
+> Hi Randy and Linus,
+> 
+> [...]
+>>> PCI_IOSIZE is defined in mach-loongson64/spaces.h, so change the name
+>>> of this macro in pci-ftpci100.c.
+> [...]
+>> Though I suspect the real solution is to prefix all macros with FTPCI_*?
 
-On Mon, May 17, 2021 at 9:53 AM Jing Zhang <jingzhangos@google.com> wrote:
->
-> This patchset provides a file descriptor for every VM and VCPU to read
-> KVM statistics data in binary format.
-> It is meant to provide a lightweight, flexible, scalable and efficient
-> lock-free solution for user space telemetry applications to pull the
-> statistics data periodically for large scale systems. The pulling
-> frequency could be as high as a few times per second.
-> In this patchset, every statistics data are treated to have some
-> attributes as below:
->   * architecture dependent or common
->   * VM statistics data or VCPU statistics data
->   * type: cumulative, instantaneous,
->   * unit: none for simple counter, nanosecond, microsecond,
->     millisecond, second, Byte, KiByte, MiByte, GiByte. Clock Cycles
-> Since no lock/synchronization is used, the consistency between all
-> the statistics data is not guaranteed. That means not all statistics
-> data are read out at the exact same time, since the statistics date
-> are still being updated by KVM subsystems while they are read out.
->
-> ---
->
-> * v4 -> v5
->   - Rebase to kvm/queue, commit a4345a7cecfb ("Merge tag
->     'kvmarm-fixes-5.13-1'")
->   - Change maximum stats name length to 48
->   - Replace VM_STATS_COMMON/VCPU_STATS_COMMON macros with stats
->     descriptor definition macros.
->   - Fixed some errors/warnings reported by checkpatch.pl
->
-> * v3 -> v4
->   - Rebase to kvm/queue, commit 9f242010c3b4 ("KVM: avoid "deadlock"
->     between install_new_memslots and MMU notifier")
->   - Use C-stype comments in the whole patch
->   - Fix wrong count for x86 VCPU stats descriptors
->   - Fix KVM stats data size counting and validity check in selftest
->
-> * v2 -> v3
->   - Rebase to kvm/queue, commit edf408f5257b ("KVM: avoid "deadlock"
->     between install_new_memslots and MMU notifier")
->   - Resolve some nitpicks about format
->
-> * v1 -> v2
->   - Use ARRAY_SIZE to count the number of stats descriptors
->   - Fix missing `size` field initialization in macro STATS_DESC
->
-> [1] https://lore.kernel.org/kvm/20210402224359.2297157-1-jingzhangos@google.com
-> [2] https://lore.kernel.org/kvm/20210415151741.1607806-1-jingzhangos@google.com
-> [3] https://lore.kernel.org/kvm/20210423181727.596466-1-jingzhangos@google.com
-> [4] https://lore.kernel.org/kvm/20210429203740.1935629-1-jingzhangos@google.com
->
-> ---
->
-> Jing Zhang (4):
->   KVM: stats: Separate common stats from architecture specific ones
->   KVM: stats: Add fd-based API to read binary stats data
->   KVM: stats: Add documentation for statistics data binary interface
->   KVM: selftests: Add selftest for KVM statistics data binary interface
->
->  Documentation/virt/kvm/api.rst                | 171 ++++++++
->  arch/arm64/include/asm/kvm_host.h             |   9 +-
->  arch/arm64/kvm/guest.c                        |  38 +-
->  arch/mips/include/asm/kvm_host.h              |   9 +-
->  arch/mips/kvm/mips.c                          |  64 ++-
->  arch/powerpc/include/asm/kvm_host.h           |   9 +-
->  arch/powerpc/kvm/book3s.c                     |  64 ++-
->  arch/powerpc/kvm/book3s_hv.c                  |  12 +-
->  arch/powerpc/kvm/book3s_pr.c                  |   2 +-
->  arch/powerpc/kvm/book3s_pr_papr.c             |   2 +-
->  arch/powerpc/kvm/booke.c                      |  59 ++-
->  arch/s390/include/asm/kvm_host.h              |   9 +-
->  arch/s390/kvm/kvm-s390.c                      | 129 +++++-
->  arch/x86/include/asm/kvm_host.h               |   9 +-
->  arch/x86/kvm/x86.c                            |  67 +++-
->  include/linux/kvm_host.h                      | 136 ++++++-
->  include/linux/kvm_types.h                     |  12 +
->  include/uapi/linux/kvm.h                      |  50 +++
->  tools/testing/selftests/kvm/.gitignore        |   1 +
->  tools/testing/selftests/kvm/Makefile          |   3 +
->  .../testing/selftests/kvm/include/kvm_util.h  |   3 +
->  .../selftests/kvm/kvm_bin_form_stats.c        | 379 ++++++++++++++++++
->  tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
->  virt/kvm/kvm_main.c                           | 237 ++++++++++-
->  24 files changed, 1396 insertions(+), 90 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
->
->
-> base-commit: a4345a7cecfb91ae78cd43d26b0c6a956420761a
-> --
-> 2.31.1.751.gd2f1c929bd-goog
->
-Please use this patchset which has some nontrivial changes and improvements.
+I'm willing to go that far.
 
-Thanks,
-Jing
+> Agreed, especially since some of the constants and macros in this
+> driver already prefix various names using "FARADAY_".  We could keep
+> this pattern and apply this prefix to other things.  There are also
+> other constants and macros named starting with "PCI_" that could
+> potentially be renamed too.
+> 
+> Having said that, I actually wonder if some of these constants and
+> macros are would be something we already have declared (people tend to
+> often solve the same problems)and could be reused, as per:
+> 
+>   #define PCI_IOSIZE	0x00
+>   #define PCI_PROT	0x04 /* AHB protection */
+>   #define PCI_CTRL	0x08 /* PCI control signal */
+>   #define PCI_SOFTRST	0x10 /* Soft reset counter and response error enable */
+>   #define PCI_CONFIG	0x28 /* PCI configuration command register */
+>   #define PCI_DATA	0x2C
+> 
+> Or these:
+> 
+>   #define PCI_CONF_ENABLE	BIT(31)
+>   #define PCI_CONF_WHERE(r)	((r) & 0xFC)
+>   #define PCI_CONF_BUS(b)	(((b) & 0xFF) << 16)
+>   #define PCI_CONF_DEVICE(d)	(((d) & 0x1F) << 11)
+>   #define PCI_CONF_FUNCTION(f)	(((f) & 0x07) << 8)
+
+
+If you would like to take that and run with it, please go ahead.
+
+thanks.
+-- 
+~Randy
+
