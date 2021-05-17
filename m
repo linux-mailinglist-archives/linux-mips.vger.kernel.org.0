@@ -2,91 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB125386CC1
-	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 00:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C7C386D00
+	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 00:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239687AbhEQWG3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 May 2021 18:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
+        id S242674AbhEQWh3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 May 2021 18:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235143AbhEQWG3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 May 2021 18:06:29 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA38EC061756
-        for <linux-mips@vger.kernel.org>; Mon, 17 May 2021 15:05:10 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id v9so9672049lfa.4
-        for <linux-mips@vger.kernel.org>; Mon, 17 May 2021 15:05:10 -0700 (PDT)
+        with ESMTP id S236978AbhEQWh2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 May 2021 18:37:28 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E99C061573;
+        Mon, 17 May 2021 15:36:10 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id k10so6087080qtp.9;
+        Mon, 17 May 2021 15:36:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0EnX96LwxQySMD7I4X6fO6Rjc5x34+gOGsRYBFgDTog=;
-        b=qK4wqp1m3BeMYs8JRjpUe+jYFuWN1Ex03txiYUevSXortgsFyi5QTGOhWKZmYXPWBK
-         UyajBCIqb9pg0cEN4P2vBJODU1HLkfL7MMT5r6OHY3xSpgEVz4usMhWkrZCjKpsIXf10
-         zFkrX3RUDbN9DCDx8vOKvEyyL+aSaNa+z0v+ShnkIPeAO7G+XouF6HEZ7HQsOJY0zAhZ
-         2b64tAjqpBWKw6j7H9C4UrY3y3D9ah1wM/swQn+hicno+e5howWuYm9PbpyqDErPZnAv
-         RVEi/RCPdD+QY7kxKOTUmzOJAeizYg6lOIQsnShC2qCtkc1+84Y+y6TnxoCQXQ/CZsU6
-         ydxA==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/BL81Zvw47CwZwFDCCckd5WGqcHgC/YA9bmIFVjzNT0=;
+        b=JTNH/INRb5+rdbfSEjXZ/kvPEYZTwfpcpJpgIQCj5G9kViFSAHDWb31Ckhy6Tp13zt
+         GCmgQ9cGbnnwk0UVUHBcHh3xWxvVgQX1Kp212V3oz7Y8j5RZYSqzNQjsU1BO1M+d4XgO
+         Ttk62KvtpkdxjHFLa10cpODOLiuzykNlSazLFJoB1ykjeN9hQVIxTJYIRmhapY2BxyVM
+         swEFhmQPNHpVFbk5vwOBAD32L2dUGV39mGvo5KK0Nik8QlUUX63nhboWLAM7ox0cML98
+         UXJ/CjMiN3p/8G5z4JQ4soahT3tjjfB4Xd/jaEq4VqQmBiE/Zlk5EqK3kZWxkNpnXqqv
+         2+jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0EnX96LwxQySMD7I4X6fO6Rjc5x34+gOGsRYBFgDTog=;
-        b=tIa+AW8khTRIOaNOdOCi4qgjHvk+4U1Dwx8RVfdzqvtpVU3q+x4iJRuyZcJYfK/23q
-         gSqzEUGC0uq64pMbGLcUe7oTd/HPVvKM12ZqJl1FrLkCkep8HPJoI8t6va/TvdcPC0oL
-         bIP6w8CE7JgAbU5Sq5WDBGfvgkPHHV8YKiX8xuAdOZN04DLtDx5yggaZo+/W8MEa5fbp
-         sdZNZPV5dFHQHfVd+l5IcErzUY3oyK+DUSE5TgHl98QCIcYPLbWm8pf+pFzlN9I9aQWm
-         aC1e2FV+9bnfQRZcWIlakHHvMFIWn/s626lQQIu6fhgN97uyz5P/g1/QBhJyrnn8QWaI
-         03uQ==
-X-Gm-Message-State: AOAM531+pizrytg/If7yHlnT4/LqynrA5Hx/shxICyoiMJ9WSAFSfB8n
-        VUygQEyT5hfFOaaUPMHJbkzgn1rdlJQpKpHydXKSHw==
-X-Google-Smtp-Source: ABdhPJzl7dXCM37hLA/3mkPPX/iWZAFk9lbQyOoe5Ys2y8odDTzF7712gF3wvnQrQLLs8jNqPWEDff17PPpBHSaVjfc=
-X-Received: by 2002:a19:b0b:: with SMTP id 11mr1359070lfl.291.1621289109448;
- Mon, 17 May 2021 15:05:09 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=/BL81Zvw47CwZwFDCCckd5WGqcHgC/YA9bmIFVjzNT0=;
+        b=txilG4wYGKQ67a7poMzyQ/YHrj9mB482kCAgy3dG0adx0Fbgzz7n7tPqs4bPO8wO3J
+         JZDLc6ZBqnoCsmRSrnIvsHnPNzP7PQmv1SLERRmzZga8e3gfRFHFa+hPLmmBIR0fwX08
+         Pq/o3Gq6ta7qtHat8p0Zg+kAGLpePJfG0d2QKNrQAD6pQTp0Og4Wqa/jydDF/0/hApoN
+         viDLQSWeqU3NxfVkV6dFFE4SbDADE+I1YXcT5ZmLRSe9lUbS48oZuGqO7EznharnNthD
+         wsl+4Pic4rFvG71VWYt5d6DDwxYOCwgx9/WQT9c5uSZ5QaM9N32k5J6+Rxw0PHXHDMEB
+         NbkA==
+X-Gm-Message-State: AOAM5318lzVVvvQ7bh70vhPC75Xp2QgWPP67kma6UQQDC/9H3OiJbYoW
+        jE3c76RXonqZxS5Ze9AZ7rc=
+X-Google-Smtp-Source: ABdhPJw8fL/eLIB8o69xiooADp1RJIks4Qz1C3Bv3bpYnXa2jFykj0Mlx8098hm+PQz4FqaRP+fxYg==
+X-Received: by 2002:ac8:7956:: with SMTP id r22mr1016958qtt.361.1621290970055;
+        Mon, 17 May 2021 15:36:10 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w7sm11143840qtn.91.2021.05.17.15.36.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 May 2021 15:36:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 17 May 2021 15:36:08 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     'Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH -next] watchdog: jz4740: Fix return value check in
+ jz4740_wdt_probe()
+Message-ID: <20210517223608.GA3628982@roeck-us.net>
+References: <20210304045909.945799-1-weiyongjun1@huawei.com>
 MIME-Version: 1.0
-References: <20210516190014.25664-1-rdunlap@infradead.org> <CACRpkdbcN4d2sdCDjqqW7txDm7--_B2MX10CDA6z8FOq4mQ7=g@mail.gmail.com>
- <20210517103435.GA179901@rocinante.localdomain> <2a5204be-7761-2d0b-e1a6-af5b6d4fdb0d@infradead.org>
-In-Reply-To: <2a5204be-7761-2d0b-e1a6-af5b6d4fdb0d@infradead.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 18 May 2021 00:04:58 +0200
-Message-ID: <CACRpkdYdFLrt0Mtb+KxQPZKebuMMr7bq6_J7SR=Z9DJxVemu3w@mail.gmail.com>
-Subject: Re: [PATCH] PCI: ftpci100: rename macro name collision
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210304045909.945799-1-weiyongjun1@huawei.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 17, 2021 at 6:16 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Thu, Mar 04, 2021 at 04:59:09AM +0000, 'Wei Yongjun wrote:
+> From: Wei Yongjun <weiyongjun1@huawei.com>
+> 
+> In case of error, the function device_node_to_regmap() returns
+> ERR_PTR() and never returns NULL. The NULL test in the return
+> value check should be replaced with IS_ERR().
+> 
+> Fixes: 6d532143c915 ("watchdog: jz4740: Use regmap provided by TCU driver")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> Acked-by: Paul Cercueil <paul@crapouillou.net>
 
-> On 5/17/21 3:34 AM, Krzysztof Wilczy=C5=84ski wrote:
-> > Hi Randy and Linus,
-> >
-> > [...]
-> >>> PCI_IOSIZE is defined in mach-loongson64/spaces.h, so change the name
-> >>> of this macro in pci-ftpci100.c.
-> > [...]
-> >> Though I suspect the real solution is to prefix all macros with FTPCI_=
-*?
->
-> I'm willing to go that far.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Go for it.
-
-> > Having said that, I actually wonder if some of these constants and
-> > macros are would be something we already have declared (people tend to
-> > often solve the same problems)and could be reused, as per:
-(...)
-> If you would like to take that and run with it, please go ahead.
-
-I will look into it on top of your syntactic fix.
-
-Yours,
-Linus Walleij
+> ---
+>  drivers/watchdog/jz4740_wdt.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/jz4740_wdt.c b/drivers/watchdog/jz4740_wdt.c
+> index bdf9564efa29..395bde79e292 100644
+> --- a/drivers/watchdog/jz4740_wdt.c
+> +++ b/drivers/watchdog/jz4740_wdt.c
+> @@ -176,9 +176,9 @@ static int jz4740_wdt_probe(struct platform_device *pdev)
+>  	watchdog_set_drvdata(jz4740_wdt, drvdata);
+>  
+>  	drvdata->map = device_node_to_regmap(dev->parent->of_node);
+> -	if (!drvdata->map) {
+> +	if (IS_ERR(drvdata->map)) {
+>  		dev_err(dev, "regmap not found\n");
+> -		return -EINVAL;
+> +		return PTR_ERR(drvdata->map);
+>  	}
+>  
+>  	return devm_watchdog_register_device(dev, &drvdata->wdt);
