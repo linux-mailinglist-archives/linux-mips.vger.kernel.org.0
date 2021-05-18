@@ -2,45 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAD9387CA3
-	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 17:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A671A387D1E
+	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 18:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350278AbhERPnb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 May 2021 11:43:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57606 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350273AbhERPna (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 18 May 2021 11:43:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A6CCB6117A;
-        Tue, 18 May 2021 15:42:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621352532;
-        bh=6/AZpMiQsWIzehSS0pf9F1Zsz6DBuPBxPZHPFBj/4IQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dBATrxKUo+9lJRDkt+z44QyPpRbXGotCZKr7AmmONwoFikB5osIBfIBVRceLC+s/H
-         SnW6BZd5EWBLhwSeaBwmfz9S9R8szJaAPokYGPoP0Sg3PvdU8nUbhobryrwFPpHPjj
-         WDSdsEjeVms2eWWsQhljQoKhKdJJHTNo+d+VuzQHT+eYfpnRA63htHOOF6C8X3qOXW
-         zYp59xGkk5LpZ3cB4qalJMDfXTkHjIURbL0mO/WL4hQJ8zQ21Mp4TI1PG9RaxcLTJQ
-         88Vbl26D+hVKhJoZAT00KFXyQSCrnezmlZH8yEIZbeUgB+85RWqyMFt+TuDRB0nYHE
-         FLRjzLcNwCCEg==
-Received: by mail-wr1-f44.google.com with SMTP id z17so10720406wrq.7;
-        Tue, 18 May 2021 08:42:12 -0700 (PDT)
-X-Gm-Message-State: AOAM533T1vQOgqjSit4dvrHcbMwWDUiMrpxij7qU0lIMnorKE9t+uj7d
-        bEpjVjtl9TYFCjCMjvPBiTTuOHmP24v8205+YRw=
-X-Google-Smtp-Source: ABdhPJyqM7bHu1qcSQI74/RObeZl1HWDfzmYNgspCaVb1ZNRDA2D4kfkWRWH7fq0f6j61Y5yW03ZTIhOATwfLihnHPY=
-X-Received: by 2002:a05:6000:18a:: with SMTP id p10mr7805910wrx.99.1621352531347;
- Tue, 18 May 2021 08:42:11 -0700 (PDT)
+        id S1350514AbhERQNq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 May 2021 12:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350239AbhERQNn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 May 2021 12:13:43 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EED5C061756
+        for <linux-mips@vger.kernel.org>; Tue, 18 May 2021 09:12:24 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id e11so12229629ljn.13
+        for <linux-mips@vger.kernel.org>; Tue, 18 May 2021 09:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ryNGn3iPnypPYn2b5vg9zKKQ/b9xvDeiGVvzaVD/bEs=;
+        b=EaWVhjNrNBWn6f1mh1OvKUeDE/tFuKqvgMLfofpYgBGgWg79RhbWTVMtICXNGGKhjS
+         3Mq5M+u41o3/M+25Q2/C6ZfA8MHWu/DrQxEX0WIpCg+HH9Ws5sQuJVmPUoK2wkGm2nzc
+         sbk5hpok8r5v8UCa0qR/IAKlL2f1Ed+l4beT4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ryNGn3iPnypPYn2b5vg9zKKQ/b9xvDeiGVvzaVD/bEs=;
+        b=eS8/QmHmbs3vJxu2Dag0Vi17/s13nWwGYMGFNasfkdyqSvDeygSMpug23ip9yyk1Cd
+         MVBQHQDCZKfHj3YYVluAn9c6RqsNoOa7QqLF3uN/efq4qIOpLUTpVf4qBmcpIZx6XCix
+         DmDeR4/wcONK5z+kWT8gsyngoMijmLONfBAIpdp6yJYHI0hvTpdatw7XMsS0IhvHXQeh
+         V5VabcUm1WlgPM/KFV49pRySYb8U4fT3WikpWnuJw+FVs/2CrfRK8V/zE1LPJHhPb3Yn
+         5CSRPmrZHFBXGOWcVMQffuTpmVknj9Z2HhMREzS/feEMq4N462US5/BqBAwpsmw5QiT1
+         y4NQ==
+X-Gm-Message-State: AOAM531DaDBA0CJ00PUNI6FGOFgmu3m+hIODA+Nx6s2M+7xneml6vhq6
+        lMlXy7m6dsLcMuTEF/tDVJ9UpY4SRZD0SeAk
+X-Google-Smtp-Source: ABdhPJz+3CoXsMIuoUuAcFQ2SlA56CTrQNbsrlgLuuHaes7eH99br8IWmcXfrYQmGHAVTigESj9y1w==
+X-Received: by 2002:a05:651c:230:: with SMTP id z16mr4517466ljn.439.1621354342320;
+        Tue, 18 May 2021 09:12:22 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id z20sm2188412ljk.123.2021.05.18.09.12.20
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 May 2021 09:12:20 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id v8so10001618lft.8
+        for <linux-mips@vger.kernel.org>; Tue, 18 May 2021 09:12:20 -0700 (PDT)
+X-Received: by 2002:a19:ca15:: with SMTP id a21mr4619384lfg.487.1621354340156;
+ Tue, 18 May 2021 09:12:20 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210514100106.3404011-1-arnd@kernel.org> <20210514100106.3404011-8-arnd@kernel.org>
  <YKLlyQnR+3uW4ETD@gmail.com> <CAK8P3a0iqe5V6uvaW+Eo0qiwzvyUVavVEfZGwXh4s8ad+0RdCg@mail.gmail.com>
- <CAHk-=wjjo+F8HVkq3eLg+=7hjZPF5mkA4JbgAU8FGE_oAw2MEg@mail.gmail.com>
-In-Reply-To: <CAHk-=wjjo+F8HVkq3eLg+=7hjZPF5mkA4JbgAU8FGE_oAw2MEg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 18 May 2021 17:41:00 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3hbts4k+rrfnE8Z78ezCaME0UVgwqkdLW5NOps2YHUQQ@mail.gmail.com>
-Message-ID: <CAK8P3a3hbts4k+rrfnE8Z78ezCaME0UVgwqkdLW5NOps2YHUQQ@mail.gmail.com>
+ <CAHk-=wjjo+F8HVkq3eLg+=7hjZPF5mkA4JbgAU8FGE_oAw2MEg@mail.gmail.com> <CAK8P3a3hbts4k+rrfnE8Z78ezCaME0UVgwqkdLW5NOps2YHUQQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a3hbts4k+rrfnE8Z78ezCaME0UVgwqkdLW5NOps2YHUQQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 18 May 2021 06:12:03 -1000
+X-Gmail-Original-Message-ID: <CAHk-=wjuoGyxDhAF8SsrTkN0-YfCx7E6jUN3ikC_tn2AKWTTsA@mail.gmail.com>
+Message-ID: <CAHk-=wjuoGyxDhAF8SsrTkN0-YfCx7E6jUN3ikC_tn2AKWTTsA@mail.gmail.com>
 Subject: Re: [PATCH v2 07/13] asm-generic: unaligned always use struct helpers
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
 Cc:     Eric Biggers <ebiggers@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Vineet Gupta <vgupta@synopsys.com>,
@@ -58,56 +78,71 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, May 18, 2021 at 4:56 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Tue, May 18, 2021 at 5:42 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> On Tue, May 18, 2021 at 12:27 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> > >
-> > > I wonder if the kernel should do the same, or whether there are still cases
-> > > where memcpy() isn't compiled optimally.  armv6/7 used to be one such case, but
-> > > it was fixed in gcc 6.
-> >
-> > It would have to be memmove(), not memcpy() in this case, right?
->
-> No, it would simply be something like
->
->   #define __get_unaligned_t(type, ptr) \
->         ({ type __val; memcpy(&__val, ptr, sizeof(type)); __val; })
->
->   #define get_unaligned(ptr) \
->         __get_unaligned_t(typeof(*(ptr)), ptr)
->
-> but honestly, the likelihood that the compiler generates something
-> horrible (possibly because of KASAN etc) is uncomfortably high.
->
-> I'd prefer the __packed thing. We don't actually use -O3, and it's
-> considered a bad idea, and the gcc bug is as such less likely than
-> just  the above generating unacceptable code (we have several cases
-> where "bad code generation" ends up being an actual bug, since we
-> depend on inlining and depend on some code sequences not generating
-> calls etc).
+> To be on the safe side, we could pass -fno-tree-loop-vectorize along
+> with -O3 on the affected gcc versions, or use a bigger hammer
+> (not use -O3 at all, always set -fno-tree-loop-vectorize, ...).
 
-I think the important question is whether we know that the bug that Eric
-pointed to can only happen with -O3, or whether it is something in
-gcc-10.1 that got triggered by -O3 -msse on x86-64 but could equally
-well get triggered on some other architecture without -O3 or
-vector instructions enabled.
+I personally think -O3 in general is unsafe.
 
-From the gcc fix at
-https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=9fa5b473b5b8e289b
-it looks like this code path is entered when compiling with
--ftree-loop-vectorize, which is documented as
+It has historically been horribly buggy. It's gotten better, but this
+case clearly shows that "gotten better" really isn't that high of a
+bar.
 
-'-ftree-loop-vectorize'
-     Perform loop vectorization on trees.  This flag is enabled by
-     default at '-O3' and by '-ftree-vectorize', '-fprofile-use', and
-     '-fauto-profile'.
+Very few projects use -O3, which is obviously part of why it's buggy.
+But the other part of why it's buggy is that vectorization is simply
+very complicated, and honestly, judging by the last report the gcc
+people don't care about being careful. They literally are ok with
+knowingly generating an off-by-one range check, because "it's
+undefined behavior".
 
--ftree-vectorize is set in arch/arm/lib/xor-neon.c
--O3 is set for the lz4 and zstd compression helpers and for wireguard.
+With that kind of mentality, I'm not personally all that inclined to
+say "sure, use -O3". We know it has bugs even for the well-defined
+cases.
 
-To be on the safe side, we could pass -fno-tree-loop-vectorize along
-with -O3 on the affected gcc versions, or use a bigger hammer
-(not use -O3 at all, always set -fno-tree-loop-vectorize, ...).
+> -O3 is set for the lz4 and zstd compression helpers and for wireguard.
 
-        Arnd
+I'm actually surprised wireguard would use -O3. Yes, performance is
+important. But for wireguard, correctness is certainly important too.
+Maybe Jason isn't aware of just how bad gcc -O3 has historically been?
+
+And -O3 has often generated _slower_ code, in addition to the bugs.
+It's not like it's a situation where "-O3 is obviously better than
+-O2". There's a reason -O2 is the default.
+
+And that tends to be even more true in the kernel than in many user
+space programs (ie smaller loops, generally much higher I$ miss rates
+etc).
+
+Jason? How big of a deal is that -O3 for wireguard wrt the normal -O2?
+There are known buggy gcc versions that aren't ancient.
+
+Of the other cases, that xor-neon.c case actually makes sense. For
+that file, it literally exists _only_ to get a vectorized version of
+the trivial xor_8regs loop. It's one of the (very very few) cases of
+vectorization we actually want. And in that case, we might even want
+to make things easier - and more explicit - for the compiler by making
+the xor_8regs loops use "restrict" pointers.
+
+That neon case actually wants and needs that tree-vectorization to
+DTRT. But maybe it doesn't need the actual _loop_ vectorization? The
+xor_8regs code is literally using hand-unrolled loops already, exactly
+to make it as simple as possible for the compiler (but the lack of
+"restrict" pointers means that it's not all that simple after all, and
+I assume the compiler generates conditionals for the NEON case?
+
+lz4 is questionable - yes, upstream lh4 seems to use -O3 (good), but
+it also very much uses unaligned accesses, which is where the gcc bug
+hits. I doubt that it really needs or wants the loop vectorization.
+
+zstd looks very similar to lz4.
+
+End result: at a minimum, I'd suggest using
+"-fno-tree-loop-vectorize", although somebody should check that NEON
+case.
+
+And I still think that using O3 for anything halfway complicated
+should be considered odd and need some strong numbers to enable.
+
+               Linus
