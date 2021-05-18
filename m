@@ -2,225 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9774E38785F
-	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 14:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDF5387B39
+	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 16:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244697AbhERMFQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 May 2021 08:05:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23309 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244353AbhERMFP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 18 May 2021 08:05:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621339437;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F7A0h/wa7e7/Tasvo9gaiD2QfuqTtOZnS8ypc2xwcz8=;
-        b=DTS27fLufhJV3alG0gV1+kkaf0+lif+eSU1HS0RWFF3kBPa7WbC92J6OD8GD85YQATrrhZ
-        dfy7CQI23BRIDaaD/pQbusGxihlZks4C3GxnomXfZE7xREibH1WYr/uQ8iAzBrH/+wlKvj
-        wjwEzab9FZB4vNEMTd8XrSh+FQuKdYM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-396-ypQuU2gjNqivi2ZAkRO10Q-1; Tue, 18 May 2021 08:03:56 -0400
-X-MC-Unique: ypQuU2gjNqivi2ZAkRO10Q-1
-Received: by mail-wr1-f69.google.com with SMTP id i102-20020adf90ef0000b029010dfcfc46c0so5513633wri.1
-        for <linux-mips@vger.kernel.org>; Tue, 18 May 2021 05:03:55 -0700 (PDT)
+        id S233250AbhEROgr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 May 2021 10:36:47 -0400
+Received: from mail-ua1-f47.google.com ([209.85.222.47]:39794 "EHLO
+        mail-ua1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232245AbhEROgp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 May 2021 10:36:45 -0400
+Received: by mail-ua1-f47.google.com with SMTP id a12so3301727uak.6;
+        Tue, 18 May 2021 07:35:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:organization:subject
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=F7A0h/wa7e7/Tasvo9gaiD2QfuqTtOZnS8ypc2xwcz8=;
-        b=CP1FlYrHEIHNon+Vs4AVlRZv8sdPPIDOnZ1BZIORE2IGe9VMmCvqVcZ/dzOE0VamG4
-         r4mKrsK+uMP+vJ8KpmTQ2L20APwzC1cVsNX9VEpvrW5hIlRAc0D2fS2oX0FpZzdxOs6u
-         /1pfuEX/7NgfntOF/Kqr5obSjBQ+VlRNnKuVNXBmeSFiq0y82cfbpEDJsjDV9aecxZCX
-         DdZXWToR/NeCGxKD3+3dFGTnn8/aNLgEZz9AscI1WfsP/eJPz+8Bys6s7X7bIq2p0ACN
-         SNBrHqH6tnbvaMVwMzBf358g2EEPLZA51h8hERAhUFFKDmnZEZ9JVJ3bZ93fPUXW2VxA
-         v5vg==
-X-Gm-Message-State: AOAM531xHE039jc2RwWFi+AG2cNAX2wHBl38EOZQhJ0w+FmV/oUN1XZF
-        Y2QUsaFs551c+o+oF+bc63vIOCqbamDKCdrRUVOOHjovfOP3XlVClAqeetqJyKBPk2ItbGviM2O
-        A2bwfVKyFVwdrrxRr4j5p0A==
-X-Received: by 2002:a1c:4c03:: with SMTP id z3mr5151126wmf.58.1621339434751;
-        Tue, 18 May 2021 05:03:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyr5Bgt53O6C5VMUFGO4r7zh5yLm4RnZeG8MK0yO3eR1vv5vvDmG2V0a/pykWs1t6HOhZ/1gg==
-X-Received: by 2002:a1c:4c03:: with SMTP id z3mr5151081wmf.58.1621339434387;
-        Tue, 18 May 2021 05:03:54 -0700 (PDT)
-Received: from [192.168.3.132] (p5b0c64fd.dip0.t-ipconnect.de. [91.12.100.253])
-        by smtp.gmail.com with ESMTPSA id q19sm2364810wmc.44.2021.05.18.05.03.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 May 2021 05:03:54 -0700 (PDT)
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
-References: <20210511081534.3507-1-david@redhat.com>
- <20210511081534.3507-3-david@redhat.com> <YKOR/8LzEaOgCvio@dhcp22.suse.cz>
- <bb0e2ebb-e66d-176c-b20a-fbadd95cde98@redhat.com>
- <YKOiV9VkEdYFM9nB@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH resend v2 2/5] mm/madvise: introduce
- MADV_POPULATE_(READ|WRITE) to prefault page tables
-Message-ID: <b2fa988d-9625-7c0e-ce83-158af0058e38@redhat.com>
-Date:   Tue, 18 May 2021 14:03:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zebz9Gz8Zw8lQG2LiaFvqSG6xwA9z2xU/a+9st7RAd4=;
+        b=QX5XhXPgXZXKx+b6wLRpuQjUKP5WvNh3V6YWnWL432vHixlzaOrnACFcVgMg2PaoHS
+         KIafGF2j35uUqwjL/7/ypWz30iikkN8M8d0yqiLEmW4BKa9l0qSytViZRYRNeP29MSCu
+         R5pSaTs6+m18MioQwsUE69u/Os6MNuJ+EAww/mVLpsIHSAalJuMjh5EAlJXonA+x+AGS
+         LpZSbH2Mmx/pE3XkGqpPDvU0d9aCGJZOhln5TJaBIaEUZqirpG53bN0KwDSEA6NERwrg
+         e/20rDjxFe+fRXOOUyZB4m2tsxsP9iBI4aTbcO3W+f/1nfnF6Fp4NeFT1Kounffe2bgT
+         1YPg==
+X-Gm-Message-State: AOAM530dorFPjcpfccUm4a/PE0DIiCd/HDKI29Z9x/6rL6rr25VGWOZ5
+        FTJUexx7EJVmMg2ZyfXRH/d6DKG4yRSMZLCIksPxh0QmvEg=
+X-Google-Smtp-Source: ABdhPJzasGlFQRXLxNTx9IOFZHu2tN4P8gFB4eopIGDQ9iVTdObR7fr+c/2eBhcaOmDqqiI3Ejua84TD9jYUXq1w3e0=
+X-Received: by 2002:ab0:7705:: with SMTP id z5mr6782625uaq.2.1621348527338;
+ Tue, 18 May 2021 07:35:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YKOiV9VkEdYFM9nB@dhcp22.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210322144848.1065067-1-geert@linux-m68k.org>
+ <20210322144848.1065067-3-geert@linux-m68k.org> <fb42abb0e79a57e2aab123468d95ff7e@protonic.nl>
+In-Reply-To: <fb42abb0e79a57e2aab123468d95ff7e@protonic.nl>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 May 2021 16:35:16 +0200
+Message-ID: <CAMuHMdXN9bPnEjXJUWszS5iwuVLBHJV7c+jhBU1t1EXnAnFYig@mail.gmail.com>
+Subject: Re: [PATCH 02/17] dt-bindings: auxdisplay: ht16k33: Document Adafruit
+ segment displays
+To:     Robin van der Gracht <robin@protonic.nl>
+Cc:     Rob Herring <robh+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
->>> This means that you want to have two different uses depending on the
->>> underlying mapping type. MADV_POPULATE_READ seems rather weak for
->>> anonymous/private mappings. Memory backed by zero pages seems rather
->>> unhelpful as the PF would need to do all the heavy lifting anyway.
->>> Or is there any actual usecase when this is desirable?
->>
->> Currently, userfaultfd-wp, which requires "some mapping" to be able to arm
->> successfully. In QEMU, we currently have to prefault the shared zeropage for
->> userfaultfd-wp to work as expected.
-> 
-> Just for clarification. The aim is to reduce the memory footprint at the
-> same time, right? If that is really the case then this is worth adding.
+Hoi Robin,
 
-Yes. userfaultfd-wp is right now used in QEMU for background 
-snapshotting of VMs. Just because you trigger a background snapshot 
-doesn't mean that you want to COW all pages. (especially, if your VM 
-previously inflated the balloon, was using free page reporting etc.)
+On Tue, Mar 23, 2021 at 10:12 AM robin <robin@protonic.nl> wrote:
+> On 2021-03-22 15:48, Geert Uytterhoeven wrote:
+> > The Holtek HT16K33 LED controller is not only used for driving
+> > dot-matrix displays, but also for driving segment displays.
+> >
+> > Document compatible values for the Adafruit 7-segment[1] and
+> > 14-segment[2] FeatherWing expansion boards with red displays.
+> > According
+> > to the schematics, all other Adafruit 7-segment and 14-segment display
+> > backpack and FeatherWing expansion boards (including bare boards and
+> > boards fitted with displays) are compatible with these two boards.
+> > Add a "color" property to support the different color variants.
+> >
+> > [1] https://www.adafruit.com/product/3108
+> > [2] https://www.adafruit.com/product/3130
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-> 
->> I expect that use case might vanish over
->> time (eventually with new kernels and updated user space), but it might
->> stick for a bit.
-> 
-> Could you elaborate some more please?
+> > --- a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> > +++ b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
+> > @@ -14,14 +14,23 @@ allOf:
+> >
+> >  properties:
+> >    compatible:
+> > -    const: holtek,ht16k33
+> > +    oneOf:
+> > +      - items:
+> > +          - const: adafruit,3108  # 0.56" 4-Digit 7-Segment
+> > FeatherWing Display (Red)
+> > +          - const: holtek,ht16k33
+> > +
+> > +      - items:
+> > +          - const: adafruit,3130  # 0.54" Quad Alphanumeric
+> > FeatherWing Display (Red)
+> > +          - const: holtek,ht16k33
+> > +
+> > +      - const: holtek,ht16k33     # Generic 16*8 LED controller with
+> > dot-matrix display
+> >
+> >    reg:
+> >      maxItems: 1
+> >
+> >    refresh-rate-hz:
+> >      maxItems: 1
+> > -    description: Display update interval in Hertz
+> > +    description: Display update interval in Hertz for dot-matrix
+> > displays
+>
+> The above should be included in patch 16
 
-After I raised that the current behavior of userfaultfd-wp is 
-suboptimal, Peter started working on a userfaultfd-wp mode that doesn't 
-require to prefault all pages just to have it working reliably -- 
-getting notified when any page changes, including ones that haven't been 
-populated yet and would have been populated with the shared zeropage on 
-first access. Not sure what the state of that is and when we might see it.
+I disagree: bindings are independent from the driver implementation.
 
-> 
->> Apart from that, populating the shared zeropage might be relevant in some
->> corner cases: I remember there are sparse matrix algorithms that operate
->> heavily on the shared zeropage.
-> 
-> I am not sure I see why this would be a useful interface for those? Zero
-> page read fault is really low cost. Or are you worried about cummulative
-> overhead by entering the kernel many times?
+> >    interrupts:
+> >      maxItems: 1
+> > @@ -41,10 +50,17 @@ properties:
+> >      default: 16
+> >      description: Initial brightness level
+> >
+> > +  color: true
+> > +    description:
+> > +      Color of the display.  Use one of the LED_COLOR_ID_* prefixed
+> > definitions
+> > +      from the header include/dt-bindings/leds/common.h.  The default
+> > is red.
+> > +    minimum: 0
+> > +    maximum: 9
+> > +    default: 1
+> > +
+>
+> The above should be included in patch 17
 
-Yes, cumulative overhead when dealing with large, sparse matrices. Just 
-an example where I think it could be applied in the future -- but not 
-that I consider populating the shared zeropage a really important use 
-case in general (besides for userfaultfd-wp right now).
+Same here.
 
-> 
->>> So the split into these two modes seems more like gup interface
->>> shortcomings bubbling up to the interface. I do expect userspace only
->>> cares about pre-faulting the address range. No matter what the backing
->>> storage is.
->>>
->>> Or do I still misunderstand all the usecases?
->>
->> Let me give you an example where we really cannot tell what would be best
->> from a kernel perspective.
->>
->> a) Mapping a file into a VM to be used as RAM. We might expect the guest
->> writing all memory immediately (e.g., booting Windows). We would want
->> MADV_POPULATE_WRITE as we expect a write access immediately.
->>
->> b) Mapping a file into a VM to be used as fake-NVDIMM, for example, ROOTFS
->> or just data storage. We expect mostly reading from this memory, thus, we
->> would want MADV_POPULATE_READ.
-> 
-> I am afraid I do not follow. Could you be more explicit about advantages
-> of using those two modes for those example usecases? Is that to share
-> resources (e.g. by not breaking CoW)?
+> >  required:
+> >    - compatible
+> >    - reg
+> > -  - refresh-rate-hz
+>
+> 'refresh-rate-hz' is still a required property for the dot-matrix /
+> fbdev setup.
 
-I'm only talking about shared mappings "ordinary files" for now, because 
-that's where MADV_POPULATE_READ vs MADV_POPULATE_WRITE differ in regards 
-of "mark something dirty and write it back"; CoW doesn't apply to shared 
-mappings, it's really just a difference in dirtying and having to write 
-back. For things like PMEM/hugetlbfs/... we usually want 
-MADV_POPULATE_WRITE because then we'd avoid a context switch when our VM 
-actually writes to a page the first time -- and we don't care about 
-dirtying, because we don't have writeback.
+True.
 
-But again, that's just one use case I have in mind coming from the VM 
-area. I consider MADV_POPULATE_READ really only useful when we are 
-expecting mostly read access on a mapping. (I assume there are other use 
-cases for databases etc. not explored yet where MADV_POPULATE_WRITE 
-would not be desired for performance reasons)
+> If it can no longer be listed here than maybe its nice to mention that
+> it's required
+> somewhere else (in it's description?).
 
-> 
->> Instead of trying to be smart in the kernel, I think for this case it makes
->> much more sense to provide user space the options. IMHO it doesn't really
->> hurt to let user space decide on what it thinks is best.
-> 
-> I am mostly worried that this will turn out to be more confusing than
-> helpful. People will need to grasp non trivial concepts and kernel
-> internal implementation details about how read/write faults are handled.
+    if:
+      properties:
+        compatible:
+          const: holtek,ht16k33
+    then:
+      required:
+        - refresh-rate-hz
 
-And that's the point: in the simplest case (without any additional 
-considerations about the underlying mapping), if you end up mostly 
-*reading* MADV_POPULATE_READ is the right thing. If you end up mostly 
-*writing* MADV_POPULATE_WRITE is the right thing. Only care has to be 
-taken when you really want a "prealloction" as in "allocate backend 
-storage" or "don't ever use the shared zeropage". I agree that these 
-details require more knowledge, but so does anything that messes with 
-memory mappings on that level (VMs, databases, ...).
+Thanks!
 
-QEMU currently implements exactly these two cases manually in user space.
+Gr{oetje,eeting}s,
 
-Anyhow, please suggest a way to handle it via a single flag in the 
-kernel -- which would be some kind of heuristic as we know from 
-MAP_POPULATE. Having an alternative at hand would make it easier to 
-discuss this topic further. I certainly *don't* want MAP_POPULATE 
-semantics when it comes to MADV_POPULATE, especially when it comes to 
-shared mappings. Not useful in QEMU now and in the future.
-
-We could make MADV_POPULATE act depending on the readability/writability 
-of a mapping. Use MADV_POPULATE_WRITE on writable mappings, use 
-MADV_POPULATE_READ on readable mappings. Certainly not perfect for use 
-cases where you have writable mappings that are mostly read only (as in 
-the example with fake-NVDIMMs I gave ...), but if it makes people happy, 
-fine with me. I mostly care about MADV_POPULATE_WRITE.
+                        Geert
 
 -- 
-Thanks,
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-David / dhildenb
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
