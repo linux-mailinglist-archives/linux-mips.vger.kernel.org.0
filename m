@@ -2,147 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9236387E57
-	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 19:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1963387F67
+	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 20:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351114AbhERR06 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 May 2021 13:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351112AbhERR06 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 May 2021 13:26:58 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CFDC061573
-        for <linux-mips@vger.kernel.org>; Tue, 18 May 2021 10:25:38 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id v5so12468032ljg.12
-        for <linux-mips@vger.kernel.org>; Tue, 18 May 2021 10:25:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mSnQ4LBK1uIXV07PEAq0LLHlwweU24rztLmKUUxmtEw=;
-        b=cVzaFjUacrAERsYDIZbRfiVBm3UJe9PfiIi7VMEBI4+mneYhTfREF32Ug/H7xsKLXF
-         xipKw744Y+OPokHmPOwiIilZlVMYtdOjIl5i+xzJy7TSKI5AdyAp62xAFFvkz5aGK7IR
-         rcFwa6FW0Zd3WOBHc48RIIAD4Evo4cCVo4dzA/EBc5YwUsnO0+ec80kxrOAFwBSHfz24
-         4e/5s/iwhO092+JJCHv/Mly7vK5p7eUvyheKOSI7fXe24zmHVEHwIeyudrmdfiXjw4AW
-         BgKIuFcumclXiaD/TAOYs9fp/I9XvbqU76xLXdbQq1MXVo7j4RToAD81UGguuU1ez9aX
-         XYDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mSnQ4LBK1uIXV07PEAq0LLHlwweU24rztLmKUUxmtEw=;
-        b=Zh+jYLXFASyaBtiWxAmNA5UX9KErtAt88+W9ySLLz+pNxQYRw5o3iaskLG7nwEeX7s
-         BxcUizxcf4lQK6wsAZRILvslOX4TwmEns1uokch7tDIXltqqtlCaZ7CxE0j/DEFUFCcC
-         V/F8SRpDvvwGm5dyAPTeFATzXnW81M6QQc9T2wiVp3samy2EGEWTfnCEYARTXfqAJGri
-         D8IfEL/dh0KgxXfGoPdupX4Iin6GPecL0FeLzhvywZHM06URz/Im24/owrw12qckdN9n
-         3ytAFyoa9ZOQBeeB8ypuqnGOL2CD0amTeo+LdDw4C57VfB4HKzfR2DP/BMsB3hXEZdDK
-         YXjw==
-X-Gm-Message-State: AOAM532Gep7FnfN3ynzxKP1okwXWIqtuo4IN9labtTWglBTkseNOaYXF
-        PnpRtG0BtmNAooSfIWpfC7baEhFKLc4t11FB1Jw3kA==
-X-Google-Smtp-Source: ABdhPJwmvfrKFgUyKP/HRH4nFuJ9B6kEhZAEG5g+dr6hELyJdzM7GIR8aVIZG1uUChl8DfU1otU2kJaVQc2bMkV5kGM=
-X-Received: by 2002:a2e:87ce:: with SMTP id v14mr4952952ljj.28.1621358736766;
- Tue, 18 May 2021 10:25:36 -0700 (PDT)
+        id S234319AbhERSRn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 May 2021 14:17:43 -0400
+Received: from mail.zx2c4.com ([104.131.123.232]:58458 "EHLO mail.zx2c4.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229652AbhERSRl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 18 May 2021 14:17:41 -0400
+X-Greylist: delayed 397 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 May 2021 14:17:40 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1621361380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8rS8izsTLYXgTg5EMvpq46Wwtz/UgRyB75Drw18GbEc=;
+        b=ordstdKxuroSvOenGkA5+S0n5Eaelw4XVAjEk8UkZ+3isrXKa/wmD2IPj5r0Kfvq1zfUvP
+        CY+6i6WC3N7rlrm8aZt38e2edfNAMTLd+AO8SdHBhlEwi2KfGNHs1D7pQQWn5EZk5/Ft6s
+        3IM/CNVZLwMM7ldWaZFwTTdsthAFBJk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dd3e8623 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 18 May 2021 18:09:40 +0000 (UTC)
+Received: by mail-yb1-f175.google.com with SMTP id g38so14466582ybi.12;
+        Tue, 18 May 2021 11:09:40 -0700 (PDT)
+X-Gm-Message-State: AOAM533Fu+hAseTLmikalDAeO39oFaAUX/oBSRZs40DjskHEVMYuQuNd
+        E+jEl+sU9jL/f36vhSipVszbjC+cFV2t6fZ0QrM=
+X-Google-Smtp-Source: ABdhPJzjL1VkURyiOt9hWVcfIhsJ4Fpd+evfXoJrwAsTV/P9d+CfD5cJgWw4InGE4VmuxwkJA2Pvdq6MOW/JGmXtt8w=
+X-Received: by 2002:a25:be09:: with SMTP id h9mr9533216ybk.239.1621361379012;
+ Tue, 18 May 2021 11:09:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210517145314.157626-1-jingzhangos@google.com>
- <20210517145314.157626-2-jingzhangos@google.com> <CALzav=dGT7B7FWw_d5v3QaJxgfp6TZv7E4fdchG_7LKh+C17gg@mail.gmail.com>
- <CAAdAUtjyFhuh4iFJJOkkO20XXKqbcRO-S0ziFfUW1rHL-bkeZw@mail.gmail.com> <CALzav=dHjy8wnLckxifrjVDfVNBmqHcJgeS7PK6BnAp6UCyO5A@mail.gmail.com>
-In-Reply-To: <CALzav=dHjy8wnLckxifrjVDfVNBmqHcJgeS7PK6BnAp6UCyO5A@mail.gmail.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Tue, 18 May 2021 12:25:24 -0500
-Message-ID: <CAAdAUtiXE=CXU_LWG9SpnHsnqUBMC327jC2AvXAFX7-vwwoBog@mail.gmail.com>
-Subject: Re: [PATCH v5 1/4] KVM: stats: Separate common stats from
- architecture specific ones
-To:     David Matlack <dmatlack@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+References: <20210514100106.3404011-1-arnd@kernel.org> <20210514100106.3404011-8-arnd@kernel.org>
+ <YKLlyQnR+3uW4ETD@gmail.com> <CAK8P3a0iqe5V6uvaW+Eo0qiwzvyUVavVEfZGwXh4s8ad+0RdCg@mail.gmail.com>
+ <CAHk-=wjjo+F8HVkq3eLg+=7hjZPF5mkA4JbgAU8FGE_oAw2MEg@mail.gmail.com>
+ <CAK8P3a3hbts4k+rrfnE8Z78ezCaME0UVgwqkdLW5NOps2YHUQQ@mail.gmail.com> <CAHk-=wjuoGyxDhAF8SsrTkN0-YfCx7E6jUN3ikC_tn2AKWTTsA@mail.gmail.com>
+In-Reply-To: <CAHk-=wjuoGyxDhAF8SsrTkN0-YfCx7E6jUN3ikC_tn2AKWTTsA@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 18 May 2021 20:09:27 +0200
+X-Gmail-Original-Message-ID: <CAHmME9otB5Wwxp7H8bR_i2uH2esEMvoBMC8uEXBMH9p0q1s6Bw@mail.gmail.com>
+Message-ID: <CAHmME9otB5Wwxp7H8bR_i2uH2esEMvoBMC8uEXBMH9p0q1s6Bw@mail.gmail.com>
+Subject: Re: [PATCH v2 07/13] asm-generic: unaligned always use struct helpers
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi David,
+Hi Linus,
 
-On Tue, May 18, 2021 at 11:27 AM David Matlack <dmatlack@google.com> wrote:
->
-> On Mon, May 17, 2021 at 5:10 PM Jing Zhang <jingzhangos@google.com> wrote:
-> <snip>
-> > Actually the definition of kvm_{vcpu,vm}_stat are arch specific. There is
-> > no real structure for arch agnostic stats. Most of the stats in common
-> > structures are arch agnostic, but not all of them.
-> > There are some benefits to put all common stats in a separate structure.
-> > e.g. if we want to add a stat in kvm_main.c, we only need to add this stat
-> > in the common structure, don't have to update all kvm_{vcpu,vm}_stat
-> > definition for all architectures.
->
-> I meant rename the existing arch-specific struct kvm_{vcpu,vm}_stat to
-> kvm_{vcpu,vm}_stat_arch and rename struct kvm_{vcpu,vm}_stat_common to
-> kvm_{vcpu,vm}_stat.
->
-> So in  include/linux/kvm_types.h you'd have:
->
-> struct kvm_vm_stat {
->   ulong remote_tlb_flush;
->   struct kvm_vm_stat_arch arch;
-> };
->
-> struct kvm_vcpu_stat {
->   u64 halt_successful_poll;
->   u64 halt_attempted_poll;
->   u64 halt_poll_invalid;
->   u64 halt_wakeup;
->   u64 halt_poll_success_ns;
->   u64 halt_poll_fail_ns;
->   struct kvm_vcpu_stat_arch arch;
-> };
->
-> And in arch/x86/include/asm/kvm_host.h you'd have:
->
-> struct kvm_vm_stat_arch {
->   ulong mmu_shadow_zapped;
->   ...
-> };
->
-> struct kvm_vcpu_stat_arch {
->   u64 pf_fixed;
->   u64 pf_guest;
->   u64 tlb_flush;
->   ...
-> };
->
-> You still have the same benefits of having an arch-neutral place to
-> store stats but the struct layout more closely resembles struct
-> kvm_vcpu and struct kvm.
-You are right. This is a more reasonable way to layout the structures.
-I remember that I didn't choose this way is only because that it needs
-touching every arch specific stats in all architectures (stat.name ->
-stat.arch.name) instead of only touching arch neutral stats.
-Let's see if there is any vote from others about this.
+On Tue, May 18, 2021 at 6:12 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> I'm actually surprised wireguard would use -O3. Yes, performance is
+> important. But for wireguard, correctness is certainly important too.
+> Maybe Jason isn't aware of just how bad gcc -O3 has historically been?
+> Jason? How big of a deal is that -O3 for wireguard wrt the normal -O2?
+> There are known buggy gcc versions that aren't ancient.
 
-Thanks,
-Jing
+My impression has always been that O3 might sometimes generate slower
+code, but not that it generates buggy code so commonly. Thanks for
+letting me know.
+
+I have a habit of compulsively run IDA Pro after making changes (brain
+damage from too many years as a "security person" or something), to
+see what the compiler did, and I've just been doing that with O3 since
+the beginning of the project, so that's what I wound up optimizing
+for. Or sometimes I'll work little things out in Godbolt's compiler
+explorer. It's not like it matters much most of the time, but
+sometimes I enjoy the golf. Anyway, I've never noticed it producing
+any clearly wrong code compared to O2. But I'm obviously not testing
+on all compilers or on all architectures. So if you think there's
+danger lurking somewhere, it seems reasonable to change that to O2.
+
+Comparing gcc 11's output between O2 and O3, it looks like the primary
+difference is that the constant propagation is much less aggressive
+with O2, and less inlining in general also means that some stores and
+loads to local variables across static function calls aren't being
+coalesced. A few null checks are removed too, where the compiler can
+prove them away.
+
+So while I've never seen issues with that code under O3, I don't see a
+super compelling speed up anywhere either, but rather a bunch of
+places that may or may not be theoretically faster or slower on some
+system, maybe. I can queue up a patch for the next wireguard series I
+send to Dave.
+
+Jason
