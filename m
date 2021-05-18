@@ -2,127 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 868BB38734D
-	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 09:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F82A38761C
+	for <lists+linux-mips@lfdr.de>; Tue, 18 May 2021 12:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240722AbhERH20 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 May 2021 03:28:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56646 "EHLO mail.kernel.org"
+        id S243478AbhERKJV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 May 2021 06:09:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37960 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240235AbhERH2X (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 18 May 2021 03:28:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EE75161353;
-        Tue, 18 May 2021 07:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621322826;
-        bh=tr42CgFCvzDLTaED1GLg2sfLJpu7z95Hx0uB17IraIA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vFuTpSZlyekcp66+1xXP7UZO1BN2bgkvFtUPcj1zJCS149c+Zvi5hPquocBVIojB2
-         Z7exeBYrhumkzjJUSvEpKFGW4FaqBqZSq7xU7M8ZbBXk0ZQ5jVfmLPFTh3D4RbZM9j
-         lrUhs82y4HlTvmFkV/mBBanL9tIfDdHW4GCSJAjCwx8xBjvD/9MzWbWnE1oIuT7iX5
-         gYhCI1yVOzSCg5K38ilmDg450rgYNeNMsjsLC6gOgw0amIXTpygFFnPllY+Yc4M1UR
-         B2od90rmhi/bP2cvywv26nLYI1niEqFU+sMFU1it04NiboiejydzFTKGEQcZqqBYpS
-         U/cWQ9vRIoLtg==
-Received: by mail-wr1-f49.google.com with SMTP id a4so9011174wrr.2;
-        Tue, 18 May 2021 00:27:05 -0700 (PDT)
-X-Gm-Message-State: AOAM533uYGieda+TwW6tF4wz8TdYChzHQDjVJR2354nb6NmMyl4ketaJ
-        8Bg2PHoUUjerVtW3qhap3NailXosaBVZsQYTYjQ=
-X-Google-Smtp-Source: ABdhPJw7JTt4IAZe/TChTanjbi1ijbilhjNGsF3uk1EUqanoDrTYb4AVMmBaFkHaFRFYOWXro9yDE/Lwgvl9R0Actyg=
-X-Received: by 2002:a5d:6dc4:: with SMTP id d4mr5094533wrz.105.1621322824578;
- Tue, 18 May 2021 00:27:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210514100106.3404011-1-arnd@kernel.org> <20210514100106.3404011-8-arnd@kernel.org>
- <YKLlyQnR+3uW4ETD@gmail.com>
-In-Reply-To: <YKLlyQnR+3uW4ETD@gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 18 May 2021 09:25:54 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0iqe5V6uvaW+Eo0qiwzvyUVavVEfZGwXh4s8ad+0RdCg@mail.gmail.com>
-Message-ID: <CAK8P3a0iqe5V6uvaW+Eo0qiwzvyUVavVEfZGwXh4s8ad+0RdCg@mail.gmail.com>
-Subject: Re: [PATCH v2 07/13] asm-generic: unaligned always use struct helpers
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S1348390AbhERKJU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 18 May 2021 06:09:20 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1621332481; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gigLto3lPv80FBXCxS3AVF3qLiXYEjmKtIPmgS5Cpus=;
+        b=rO1X3eI4OIacPcCVcwRsqXTr7RBYSjw1S9LpAfLKyZFW7yqJTB5gDPbzF+U9Tt1ai2tN3Q
+        JKfht12ARMgFgTtq52DowvkKXf3UiQV9CBdNqcwLR9X3GPBHdhqPg1io7tGbr5bzKIyiMU
+        7AHrYmrt5Gsl7DQ5vh15i/vJ2SvvL28=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id CDC14B1F7;
+        Tue, 18 May 2021 10:08:00 +0000 (UTC)
+Date:   Tue, 18 May 2021 12:07:59 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hugh Dickins <hughd@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Peter Xu <peterx@redhat.com>,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
+Subject: Re: [PATCH resend v2 2/5] mm/madvise: introduce
+ MADV_POPULATE_(READ|WRITE) to prefault page tables
+Message-ID: <YKOR/8LzEaOgCvio@dhcp22.suse.cz>
+References: <20210511081534.3507-1-david@redhat.com>
+ <20210511081534.3507-3-david@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210511081534.3507-3-david@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 17, 2021 at 11:53 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> On Fri, May 14, 2021 at 12:00:55PM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > As found by Vineet Gupta and Linus Torvalds, gcc has somewhat unexpected
-> > behavior when faced with overlapping unaligned pointers. The kernel's
-> > unaligned/access-ok.h header technically invokes undefined behavior
-> > that happens to usually work on the architectures using it, but if the
-> > compiler optimizes code based on the assumption that undefined behavior
-> > doesn't happen, it can create output that actually causes data corruption.
-> >
-> > A related problem was previously found on 32-bit ARMv7, where most
-> > instructions can be used on unaligned data, but 64-bit ldrd/strd causes
-> > an exception. The workaround was to always use the unaligned/le_struct.h
-> > helper instead of unaligned/access-ok.h, in commit 1cce91dfc8f7 ("ARM:
-> > 8715/1: add a private asm/unaligned.h").
-> >
-> > The same solution should work on all other architectures as well, so
-> > remove the access-ok.h variant and use the other one unconditionally on
-> > all architectures, picking either the big-endian or little-endian version.
->
-> FYI, gcc 10 had a bug where it miscompiled code that uses "packed structs" to
-> copy between overlapping unaligned pointers
-> (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94994).
+[sorry for a long silence on this]
 
-Thank you for pointing this out
+On Tue 11-05-21 10:15:31, David Hildenbrand wrote:
+[...]
 
-> I'm not sure whether the kernel will run into that or not, and gcc has since
-> fixed it.  But it's worth mentioning, especially since the issue mentioned in
-> this commit sounds very similar (overlapping unaligned pointers), and both
-> involved implementations of DEFLATE decompression.
+Thanks for the extensive usecase description. That is certainly useful
+background. I am sorry to bring this up again but I am still not
+convinced that READ/WRITE variant are the best interface.
+ 
+> While the use case for MADV_POPULATE_WRITE is fairly obvious (i.e.,
+> preallocate memory and prefault page tables for VMs), one issue is that
+> whenever we prefault pages writable, the pages have to be marked dirty,
+> because the CPU could dirty them any time. while not a real problem for
+> hugetlbfs or dax/pmem, it can be a problem for shared file mappings: each
+> page will be marked dirty and has to be written back later when evicting.
+> 
+> MADV_POPULATE_READ allows for optimizing this scenario: Pre-read a whole
+> mapping from backend storage without marking it dirty, such that eviction
+> won't have to write it back. As discussed above, shared file mappings
+> might require an explciit fallocate() upfront to achieve
+> preallcoation+prepopulation.
 
-I tried reproducing this on the kernel deflate code with the kernel.org gcc-10.1
-and gcc-10.3 crosstool versions but couldn't quite get there with Vineet's
-preprocessed source https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363
+This means that you want to have two different uses depending on the
+underlying mapping type. MADV_POPULATE_READ seems rather weak for
+anonymous/private mappings. Memory backed by zero pages seems rather
+unhelpful as the PF would need to do all the heavy lifting anyway.
+Or is there any actual usecase when this is desirable?
 
-Trying with both the original get_unaligned() version in there and the
-packed-struct
-variant, I get the same output from gcc-10.1 and gcc-10.3 when I compile those
-myself for arc hs4x , but it's rather different from the output that Vineet got
-and I don't know how to spot whether the problem exists in any of those
-versions.
+So the split into these two modes seems more like gup interface
+shortcomings bubbling up to the interface. I do expect userspace only
+cares about pre-faulting the address range. No matter what the backing
+storage is. 
 
-> Anyway, partly due to the above, in userspace I now only use memcpy() to
-> implement {get,put}_unaligned_*, since these days it seems to be compiled
-> optimally and have the least amount of problems.
->
-> I wonder if the kernel should do the same, or whether there are still cases
-> where memcpy() isn't compiled optimally.  armv6/7 used to be one such case, but
-> it was fixed in gcc 6.
-
-It would have to be memmove(), not memcpy() in this case, right?
-My feeling is that if gcc-4.9 and gcc-5 produce correct but slightly slower
-code, we can live with that, unlike the possibility of gcc-10.{1,2} producing
-incorrect code.
-
-Since the new asm/unaligned.h has a single implementation across all
-architectures, we could probably fall back to a memmove based version for
-the compilers affected by the 94994 bug,  but I'd first need to have a better
-way to test regarding whether given combination of asm/unaligned.h and
-compiler version runs into this bug.
-
-I have checked your reproducer and confirmed that it does affect x86_64
-gcc-10.1 -O3 with my proposed version of asm-generic/unaligned.h, but
-does not trigger on any other version (4.9 though 9.3, 10.3 or 11.1), and not
-on -O2 or "-O3 -mno-sse" builds or on arm64, but that doesn't necessarily
-mean it's safe on these.
-
-        Arnd
+Or do I still misunderstand all the usecases?
+-- 
+Michal Hocko
+SUSE Labs
