@@ -2,383 +2,272 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F37238B7C8
-	for <lists+linux-mips@lfdr.de>; Thu, 20 May 2021 21:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C9F38B7E1
+	for <lists+linux-mips@lfdr.de>; Thu, 20 May 2021 21:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbhETTsS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 May 2021 15:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234309AbhETTsR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 15:48:17 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3130BC061761
-        for <linux-mips@vger.kernel.org>; Thu, 20 May 2021 12:46:55 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id q7so24875312lfr.6
-        for <linux-mips@vger.kernel.org>; Thu, 20 May 2021 12:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8CoNBU6S+QMKlmES2bhHvQHlgfmNmuwQ2e+CyUIRdpY=;
-        b=tgDnvxI1eMTQHE2YH0Yhoqgf/oTEYx85ecLpE455RjCwvhIGF24sICQiSUrE8rac2j
-         Q06ws3HwP+UATSHKZt62RjDiXBOWmJnMfnP6S0getzXyupOg72piqwUwWuNrIOMyQb7C
-         pOuJOtAn+ZO5xuHl1Nd5mHSrN8xdo4xlVD/KfIJmVZ25UlzaBRPiqlisE2adc8nDioRP
-         roHZqb9nqK7eS6R9Hny8D47BpAfwjDkuwNyYEMcQscIUbrhJ4lontbaDPPk4K6vzXew8
-         TsaOiNins2NsIcjj+Pjf5n5dJgdbWGxuyZUIsg7iodsATjtLFFgV25QPay5nBjWE5EX6
-         rykQ==
+        id S237748AbhETT5a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 May 2021 15:57:30 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:41730 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231917AbhETT5a (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 15:57:30 -0400
+Received: by mail-oi1-f172.google.com with SMTP id c3so17510513oic.8;
+        Thu, 20 May 2021 12:56:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8CoNBU6S+QMKlmES2bhHvQHlgfmNmuwQ2e+CyUIRdpY=;
-        b=KFqH9oTKRUlmF48Jn+TQAuv97gPIvhzq7QY9YPGQf25LBlAyijbYpMzUke0ZHoarby
-         pfmdl2tZCLwIG7lnNqAL9XoQz98HkCdx1r4R9mzpU5Nq6EoeHlR4zJkcrtIqAiOyoTMz
-         CgG7ZhaM2FDPDaNxv9qsXGdKd93IgLCbnbNWIopmMKgK8/yvITBWqpfGDl1JDtnqWaE0
-         OJ/PDTcMtYrTTKmkpKV7tezVK4XK9pFw11bqWXHy2ksloBbpVdr1fdtmyZlBBsrpUsAq
-         izeW1tZ7myP1pLmNhVxDsCGlC6OJaOrEdPQr3RTnU4pjstyomsDig9PUy/mpH7x9o+Xs
-         hlvw==
-X-Gm-Message-State: AOAM533fjhnyvJRNBbZROY2eCVhFQHxt7jtSEtKmcXWu2fre5GYmc+EU
-        siRijFFMpsTN1NgbOcipODhwDLAll0Jd6+H8DBYP2w==
-X-Google-Smtp-Source: ABdhPJyVR5rOr2nFM9vGn5skactc9OJCshxa2H6D2diM8RAZqpQ74XqjZQ2VlRY5yK/SMUeZN+ByvQhTFuaIIlIY0PU=
-X-Received: by 2002:a05:6512:3a88:: with SMTP id q8mr4334156lfu.106.1621540013172;
- Thu, 20 May 2021 12:46:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210517145314.157626-1-jingzhangos@google.com>
- <20210517145314.157626-3-jingzhangos@google.com> <YKXj3gHvUoLnojzB@google.com>
- <CAAdAUtieAd6kvrXBNXc1TfO84ZxQ4xM30Z_G5F9CoT2gxeGrLA@mail.gmail.com> <YKaxYZYQRp0/9f+A@google.com>
-In-Reply-To: <YKaxYZYQRp0/9f+A@google.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Thu, 20 May 2021 14:46:41 -0500
-Message-ID: <CAAdAUtiZxw9_qQ4eszsxSQmmL7j46LRhixL5zYttcOzL0da42Q@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] KVM: stats: Add fd-based API to read binary stats data
-To:     Ricardo Koller <ricarkol@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0VijoX5LDfg/1oOMw8LJ4ISDw0Fwkh41HHXpCYwtkuk=;
+        b=t4Hwas5F0SLFu3gyJdU4YBsSLWjW8zHAibcmvnmuc7rPThICuUfzO/go/R9aiQXOUi
+         8hM47Lm7cY5CiGBoW4SOW87bPu3Q1g4vWvlGe/Gkyat7MF4py3rIWHmvFHAZobcAndjj
+         lCS4FpiI/WB4xNXyIeTXHpJ7i4l9xBNz17L9RGG+RZo9iBTGvix2C1VqTXs5mgD1b2sU
+         aTaMfnnJQnDxIkYcMTew28eCJreeN2I5Y36U5asapie6KT+r6c8SPhqIdhGU+xoMZQJW
+         MqSUvtaVAsKFiIqfIshOpGZ9YANVk44VuwtIPQTEljUHUlIh8mG4D+QmYebzumHhgvXi
+         OY5w==
+X-Gm-Message-State: AOAM533T+xG6FSfgBittyRhLDuENlgF+BcD6dMP5rogg+uEQ1FHneIef
+        IujgOg/EB8X4F39js5wLGg==
+X-Google-Smtp-Source: ABdhPJxO098MtKv/xIJDFHZb/QaNSKzx1aj3RdQ/IxvXFpRSQej3EhxKYRK3bRpKefU+2PHk7np0Ew==
+X-Received: by 2002:a05:6808:488:: with SMTP id z8mr4563022oid.135.1621540567686;
+        Thu, 20 May 2021 12:56:07 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id s4sm846291otr.80.2021.05.20.12.56.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 12:56:06 -0700 (PDT)
+Received: (nullmailer pid 1840621 invoked by uid 1000);
+        Thu, 20 May 2021 19:56:05 -0000
+Date:   Thu, 20 May 2021 14:56:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] dt-bindings: net: sms911x: Convert to json-schema
+Message-ID: <20210520195605.GA1832858@robh.at.kernel.org>
+References: <cover.1621518686.git.geert+renesas@glider.be>
+ <f3f33f75c8911697f2c1dbde626f01187199bdc2.1621518686.git.geert+renesas@glider.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f3f33f75c8911697f2c1dbde626f01187199bdc2.1621518686.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Ricardo,
+On Thu, May 20, 2021 at 03:58:39PM +0200, Geert Uytterhoeven wrote:
+> Convert the Smart Mixed-Signal Connectivity (SMSC) LAN911x/912x
+> Controller Device Tree binding documentation to json-schema.
+> 
+> Document missing properties.
+> Make "phy-mode" not required, as many DTS files do not have it, and the
+> Linux drivers falls back to PHY_INTERFACE_MODE_NA.
+> Correct nodename in example.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> I have listed Shawn as the maintainer, as he wrote the original
+> bindings.  Shawn: Please scream if this is inappropriate ;-)
+> 
+> I left "additionalProperties: true", as there are lots of bus-specific
+> properties ("qcom,*", "samsung,*", "fsl,*", "gpmc,*", ...) to be found,
+> that actually depend on the compatible value of the parent node.
 
-On Thu, May 20, 2021 at 1:58 PM Ricardo Koller <ricarkol@google.com> wrote:
->
-> On Thu, May 20, 2021 at 12:37:59PM -0500, Jing Zhang wrote:
-> > Hi Ricardo,
-> >
-> > On Wed, May 19, 2021 at 11:21 PM Ricardo Koller <ricarkol@google.com> wrote:
-> > >
-> > > On Mon, May 17, 2021 at 02:53:12PM +0000, Jing Zhang wrote:
-> > > > Provides a file descriptor per VM to read VM stats info/data.
-> > > > Provides a file descriptor per vCPU to read vCPU stats info/data.
-> > > >
-> > > > Signed-off-by: Jing Zhang <jingzhangos@google.com>
-> > > > ---
-> > > >  arch/arm64/kvm/guest.c    |  26 +++++
-> > > >  arch/mips/kvm/mips.c      |  52 +++++++++
-> > > >  arch/powerpc/kvm/book3s.c |  52 +++++++++
-> > > >  arch/powerpc/kvm/booke.c  |  45 ++++++++
-> > > >  arch/s390/kvm/kvm-s390.c  | 117 ++++++++++++++++++++
-> > > >  arch/x86/kvm/x86.c        |  53 +++++++++
-> > > >  include/linux/kvm_host.h  | 127 ++++++++++++++++++++++
-> > > >  include/uapi/linux/kvm.h  |  50 +++++++++
-> > > >  virt/kvm/kvm_main.c       | 223 ++++++++++++++++++++++++++++++++++++++
-> > > >  9 files changed, 745 insertions(+)
-> > > >
-> > >
-> > > > +static ssize_t kvm_vcpu_stats_read(struct file *file, char __user *user_buffer,
-> > > > +                           size_t size, loff_t *offset)
-> > > > +{
-> > > > +     char id[KVM_STATS_ID_MAXLEN];
-> > > > +     struct kvm_vcpu *vcpu = file->private_data;
-> > > > +     ssize_t copylen, len, remain = size;
-> > > > +     size_t size_header, size_desc, size_stats;
-> > > > +     loff_t pos = *offset;
-> > > > +     char __user *dest = user_buffer;
-> > > > +     void *src;
-> > >
-> > > Nit. Better to do pointer arithmetic on a "char *".  Note that gcc and
-> > > clang will do the expected thing.
-> > >
-> > > > +
-> > > > +     snprintf(id, sizeof(id), "kvm-%d/vcpu-%d",
-> > > > +                     task_pid_nr(current), vcpu->vcpu_id);
-> > > > +     size_header = sizeof(kvm_vcpu_stats_header);
-> > > > +     size_desc =
-> > > > +             kvm_vcpu_stats_header.count * sizeof(struct _kvm_stats_desc);
-> > > > +     size_stats = sizeof(vcpu->stat);
-> > > > +
-> > > > +     len = sizeof(id) + size_header + size_desc + size_stats - pos;
-> > > > +     len = min(len, remain);
-> > > > +     if (len <= 0)
-> > > > +             return 0;
-> > > > +     remain = len;
-> > >
-> > > If 'desc_offset' is not right after the header, then the 'len'
-> > > calculation is missing the gap into account. For example, assuming there
-> > > is a gap of 0x1000000 between the header and the descriptors:
-> > >
-> > >         desc_offset = sizeof(id) + size_header + 0x1000000
-> > >
-> > > and the user calls the ioctl with enough space for the whole file,
-> > > including the gap:
-> > >
-> > >         *offset = 0
-> > >         size = sizeof(id) + size_header + size_desc + size_stats + 0x1000000
-> > >
-> > > then 'remain' gets the wrong size:
-> > >
-> > >         remain = sizeof(id) + size_header + size_desc + size_stats
-> > >
-> > > and ... (more below)
-> > >
-> > > > +
-> > > > +     /* Copy kvm vcpu stats header id string */
-> > > > +     copylen = sizeof(id) - pos;
-> > > > +     copylen = min(copylen, remain);
-> > > > +     if (copylen > 0) {
-> > > > +             src = (void *)id + pos;
-> > > > +             if (copy_to_user(dest, src, copylen))
-> > > > +                     return -EFAULT;
-> > > > +             remain -= copylen;
-> > > > +             pos += copylen;
-> > > > +             dest += copylen;
-> > > > +     }
-> > > > +     /* Copy kvm vcpu stats header */
-> > > > +     copylen = sizeof(id) + size_header - pos;
-> > > > +     copylen = min(copylen, remain);
-> > > > +     if (copylen > 0) {
-> > > > +             src = (void *)&kvm_vcpu_stats_header;
-> > > > +             src += pos - sizeof(id);
-> > > > +             if (copy_to_user(dest, src, copylen))
-> > > > +                     return -EFAULT;
-> > > > +             remain -= copylen;
-> > > > +             pos += copylen;
-> > > > +             dest += copylen;
-> > > > +     }
-> > > > +     /* Copy kvm vcpu stats descriptors */
-> > > > +     copylen = kvm_vcpu_stats_header.desc_offset + size_desc - pos;
-> > >
-> > > This would be the state at this point:
-> > >
-> > >         pos     = sizeof(id) + size_header
-> > >         copylen = sizeof(id) + size_header + 0x1000000 + size_desc - (sizeof(id) + size_header)
-> > >                 = 0x1000000 + size_desc
-> > >         remain  = size_desc + size_stats
-> > >
-> > > > +     copylen = min(copylen, remain);
-> > >
-> > >         copylen = size_desc + size_stats
-> > >
-> > > which is not enough to copy the descriptors (and the data).
-> > >
-> > > > +     if (copylen > 0) {
-> > > > +             src = (void *)&kvm_vcpu_stats_desc;
-> > > > +             src += pos - kvm_vcpu_stats_header.desc_offset;
-> > >
-> > > Moreover, src also needs to take the gap into account.
-> > >
-> > >         src     = &kvm_vcpu_stats_desc + (sizeof(id) + size_header) - (sizeof(id) + size_header + 0x1000000)
-> > >                 = &kvm_vcpu_stats_desc - 0x1000000
-> > >
-> > > Otherwise, src ends up pointing at the wrong place.
-> > >
-> > > > +             if (copy_to_user(dest, src, copylen))
-> > > > +                     return -EFAULT;
-> > > > +             remain -= copylen;
-> > > > +             pos += copylen;
-> > > > +             dest += copylen;
-> > > > +     }
-> > > > +     /* Copy kvm vcpu stats values */
-> > > > +     copylen = kvm_vcpu_stats_header.data_offset + size_stats - pos;
-> > >
-> > > The same problem occurs here. There is a potential gap before
-> > > data_offset that needs to be taken into account for src and len.
-> > >
-> > > Would it be possible to just ensure that there is no gap? maybe even
-> > > remove data_offset and desc_offset and always place them adjacent, and
-> > > have the descriptors right after the header.
-> > >
-> > I guess I didn't make it clear about the offset fields in the header block.
-> > We don't create any gap here. In this implementation, kernel knows that
-> > descriptor block is right after header block and data block is right after
-> > descriptor block.
-> > The reason we have offset fields for descriptor block and data block is
-> > for flexibility and future potential extension. e.g. we might add another
-> > block between header block and descriptor block in the future for some
-> > other metadata information.
-> > I think we are good here.
->
-> Hi Jing,
->
-> I realize they are adjacent right now, as the function wouldn't work if
-> they weren't. My comment was more about code maintenance, what happens
-> if the layout changes. This function depends on an asumption about a
-> layout defined somewhere else. For example,
->
->         copylen = kvm_vm_stats_header.desc_offset + size_desc - pos;
->
-> makes an assumption about desc_offset being set to:
->
->         .desc_offset = sizeof(struct kvm_stats_header),
->
-> and if desc_offset is not exactly that, then the function doesn't
-> explicitely fail and instead does unexpected things (probably undetected
-> by tests).
->
-> I think the solution is to just check the assumptions. Either an assert
-> or just bail out with a warning:
->
->         /* This function currently depends on the following layout. */
->         if (kvm_vm_stats_header.desc_offset != sizeof(struct kvm_stats_header) ||
->                         kvm_vm_stats_header.data_offset != sizeof(struct kvm_stats_header) +
->                         sizeof(kvm_vm_stats_desc)) {
->                 warning(...);
->                 return 0;
->         }
->
-I understand your concern. But whenever layout changes, the read function needs
-to be updated anyway. The read function is actually the place to cook
-the data layout
-of the anonymous file. If the vm/vcpu stats header has an incorrect
-offset value that is
-defined in the read function, the test will complain about wrong stats
-descriptor field
-values usually.
-Anyway, I will add more sanity tests in the selftest to cover the
-potential risks.
-Thanks.
-> > > > +     copylen = min(copylen, remain);
-> > > > +     if (copylen > 0) {
-> > > > +             src = (void *)&vcpu->stat;
-> > > > +             src += pos - kvm_vcpu_stats_header.data_offset;
-> > > > +             if (copy_to_user(dest, src, copylen))
-> > > > +                     return -EFAULT;
-> > > > +             remain -= copylen;
-> > > > +             pos += copylen;
-> > > > +             dest += copylen;
-> > > > +     }
-> > > > +
-> > > > +     *offset = pos;
-> > > > +     return len;
-> > > > +}
-> > > > +
-> > > >
-> > >
-> > >
-> > >
-> > > > +static ssize_t kvm_vm_stats_read(struct file *file, char __user *user_buffer,
-> > > > +                           size_t size, loff_t *offset)
-> > > > +{
-> > >
-> > > Consider moving the common code between kvm_vcpu_stats_read and this one
-> > > into some function that takes pointers to header, desc, and data. Unless
-> > > there is something vcpu or vm specific besides that.
-> > >
-> > Will do that, thanks.
-> > > > +     char id[KVM_STATS_ID_MAXLEN];
-> > > > +     struct kvm *kvm = file->private_data;
-> > > > +     ssize_t copylen, len, remain = size;
-> > > > +     size_t size_header, size_desc, size_stats;
-> > > > +     loff_t pos = *offset;
-> > > > +     char __user *dest = user_buffer;
-> > > > +     void *src;
-> > > > +
-> > > > +     snprintf(id, sizeof(id), "kvm-%d", task_pid_nr(current));
-> > > > +     size_header = sizeof(kvm_vm_stats_header);
-> > > > +     size_desc = kvm_vm_stats_header.count * sizeof(struct _kvm_stats_desc);
-> > > > +     size_stats = sizeof(kvm->stat);
-> > > > +
-> > > > +     len = sizeof(id) + size_header + size_desc + size_stats - pos;
-> > > > +     len = min(len, remain);
-> > > > +     if (len <= 0)
-> > > > +             return 0;
-> > > > +     remain = len;
-> > > > +
-> > > > +     /* Copy kvm vm stats header id string */
-> > > > +     copylen = sizeof(id) - pos;
-> > > > +     copylen = min(copylen, remain);
-> > > > +     if (copylen > 0) {
-> > > > +             src = (void *)id + pos;
-> > > > +             if (copy_to_user(dest, src, copylen))
-> > > > +                     return -EFAULT;
-> > > > +             remain -= copylen;
-> > > > +             pos += copylen;
-> > > > +             dest += copylen;
-> > > > +     }
-> > > > +     /* Copy kvm vm stats header */
-> > > > +     copylen = sizeof(id) + size_header - pos;
-> > > > +     copylen = min(copylen, remain);
-> > > > +     if (copylen > 0) {
-> > > > +             src = (void *)&kvm_vm_stats_header;
-> > > > +             src += pos - sizeof(id);
-> > > > +             if (copy_to_user(dest, src, copylen))
-> > > > +                     return -EFAULT;
-> > > > +             remain -= copylen;
-> > > > +             pos += copylen;
-> > > > +             dest += copylen;
-> > > > +     }
-> > > > +     /* Copy kvm vm stats descriptors */
-> > > > +     copylen = kvm_vm_stats_header.desc_offset + size_desc - pos;
-> > > > +     copylen = min(copylen, remain);
-> > > > +     if (copylen > 0) {
-> > > > +             src = (void *)&kvm_vm_stats_desc;
-> > > > +             src += pos - kvm_vm_stats_header.desc_offset;
-> > > > +             if (copy_to_user(dest, src, copylen))
-> > > > +                     return -EFAULT;
-> > > > +             remain -= copylen;
-> > > > +             pos += copylen;
-> > > > +             dest += copylen;
-> > > > +     }
-> > > > +     /* Copy kvm vm stats values */
-> > > > +     copylen = kvm_vm_stats_header.data_offset + size_stats - pos;
-> > > > +     copylen = min(copylen, remain);
-> > > > +     if (copylen > 0) {
-> > > > +             src = (void *)&kvm->stat;
-> > > > +             src += pos - kvm_vm_stats_header.data_offset;
-> > > > +             if (copy_to_user(dest, src, copylen))
-> > > > +                     return -EFAULT;
-> > > > +             remain -= copylen;
-> > > > +             pos += copylen;
-> > > > +             dest += copylen;
-> > > > +     }
-> > > > +
-> > > > +     *offset = pos;
-> > > > +     return len;
-> > > > +}
-> > > > +
-> > > > --
-> > > > 2.31.1.751.gd2f1c929bd-goog
-> > > >
-> > > > _______________________________________________
-> > > > kvmarm mailing list
-> > > > kvmarm@lists.cs.columbia.edu
-> > > > https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
+Can you put a comment above additionalProperties to that effect. I need 
+to come up with some solution for this, but don't want folks copying 
+that when normally not needed.
 
-Jing
+> 
+> ---
+>  .../devicetree/bindings/net/gpmc-eth.txt      |   2 +-
+>  .../devicetree/bindings/net/smsc,lan9115.yaml | 107 ++++++++++++++++++
+>  .../devicetree/bindings/net/smsc911x.txt      |  43 -------
+>  3 files changed, 108 insertions(+), 44 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/smsc,lan9115.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/smsc911x.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/net/gpmc-eth.txt b/Documentation/devicetree/bindings/net/gpmc-eth.txt
+> index f7da3d73ca1b2e15..32821066a85b0078 100644
+> --- a/Documentation/devicetree/bindings/net/gpmc-eth.txt
+> +++ b/Documentation/devicetree/bindings/net/gpmc-eth.txt
+> @@ -13,7 +13,7 @@ Documentation/devicetree/bindings/memory-controllers/omap-gpmc.txt
+>  
+>  For the properties relevant to the ethernet controller connected to the GPMC
+>  refer to the binding documentation of the device. For example, the documentation
+> -for the SMSC 911x is Documentation/devicetree/bindings/net/smsc911x.txt
+> +for the SMSC 911x is Documentation/devicetree/bindings/net/smsc,lan9115.yaml
+>  
+>  Child nodes need to specify the GPMC bus address width using the "bank-width"
+>  property but is possible that an ethernet controller also has a property to
+> diff --git a/Documentation/devicetree/bindings/net/smsc,lan9115.yaml b/Documentation/devicetree/bindings/net/smsc,lan9115.yaml
+> new file mode 100644
+> index 0000000000000000..294fa3edf966695a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/smsc,lan9115.yaml
+> @@ -0,0 +1,107 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/smsc,lan9115.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Smart Mixed-Signal Connectivity (SMSC) LAN911x/912x Controller
+> +
+> +maintainers:
+> +  - Shawn Guo <shawnguo@kernel.org>
+> +
+> +allOf:
+> +  - $ref: ethernet-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: smsc,lan9115
+> +      - items:
+> +          - enum:
+> +              - "smsc,lan89218"
+> +              - "smsc,lan9117"
+> +              - "smsc,lan9118"
+> +              - "smsc,lan9220"
+> +              - "smsc,lan9221"
+
+Don't need quotes.
+
+> +          - const: smsc,lan9115
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  reg-shift: true
+> +
+> +  reg-io-width:
+> +    enum: [ 2, 4 ]
+> +    default: 2
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    items:
+> +      - description:
+> +          LAN interrupt line
+> +      - description:
+> +          Optional PME (power management event) interrupt that is able to wake
+> +          up the host system with a 50ms pulse on network activity
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  phy-mode: true
+> +
+> +  smsc,irq-active-high:
+> +    type: boolean
+> +    description: Indicates the IRQ polarity is active-high
+> +
+> +  smsc,irq-push-pull:
+> +    type: boolean
+> +    description: Indicates the IRQ type is push-pull
+> +
+> +  smsc,force-internal-phy:
+> +    type: boolean
+> +    description: Forces SMSC LAN controller to use internal PHY
+> +
+> +  smsc,force-external-phy:
+> +    type: boolean
+> +    description: Forces SMSC LAN controller to use external PHY
+> +
+> +  smsc,save-mac-address:
+> +    type: boolean
+> +    description:
+> +      Indicates that MAC address needs to be saved before resetting the
+> +      controller
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description:
+> +      A GPIO line connected to the RESET (active low) signal of the device.
+> +      On many systems this is wired high so the device goes out of reset at
+> +      power-on, but if it is under program control, this optional GPIO can
+> +      wake up in response to it.
+> +
+> +  vdd33a-supply:
+> +    description: 3.3V analog power supply
+> +
+> +  vddvario-supply:
+> +    description: IO logic power supply
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    ethernet@f4000000 {
+> +            compatible = "smsc,lan9220", "smsc,lan9115";
+> +            reg = <0xf4000000 0x2000000>;
+> +            phy-mode = "mii";
+> +            interrupt-parent = <&gpio1>;
+> +            interrupts = <31>, <32>;
+> +            reset-gpios = <&gpio1 30 GPIO_ACTIVE_LOW>;
+> +            reg-io-width = <4>;
+> +            smsc,irq-push-pull;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/net/smsc911x.txt b/Documentation/devicetree/bindings/net/smsc911x.txt
+> deleted file mode 100644
+> index acfafc8e143c4c85..0000000000000000
+> --- a/Documentation/devicetree/bindings/net/smsc911x.txt
+> +++ /dev/null
+> @@ -1,43 +0,0 @@
+> -* Smart Mixed-Signal Connectivity (SMSC) LAN911x/912x Controller
+> -
+> -Required properties:
+> -- compatible : Should be "smsc,lan<model>", "smsc,lan9115"
+> -- reg : Address and length of the io space for SMSC LAN
+> -- interrupts : one or two interrupt specifiers
+> -  - The first interrupt is the SMSC LAN interrupt line
+> -  - The second interrupt (if present) is the PME (power
+> -    management event) interrupt that is able to wake up the host
+> -     system with a 50ms pulse on network activity
+> -- phy-mode : See ethernet.txt file in the same directory
+> -
+> -Optional properties:
+> -- reg-shift : Specify the quantity to shift the register offsets by
+> -- reg-io-width : Specify the size (in bytes) of the IO accesses that
+> -  should be performed on the device.  Valid value for SMSC LAN is
+> -  2 or 4.  If it's omitted or invalid, the size would be 2.
+> -- smsc,irq-active-high : Indicates the IRQ polarity is active-high
+> -- smsc,irq-push-pull : Indicates the IRQ type is push-pull
+> -- smsc,force-internal-phy : Forces SMSC LAN controller to use
+> -  internal PHY
+> -- smsc,force-external-phy : Forces SMSC LAN controller to use
+> -  external PHY
+> -- smsc,save-mac-address : Indicates that mac address needs to be saved
+> -  before resetting the controller
+> -- reset-gpios : a GPIO line connected to the RESET (active low) signal
+> -  of the device. On many systems this is wired high so the device goes
+> -  out of reset at power-on, but if it is under program control, this
+> -  optional GPIO can wake up in response to it.
+> -- vdd33a-supply, vddvario-supply : 3.3V analog and IO logic power supplies
+> -
+> -Examples:
+> -
+> -lan9220@f4000000 {
+> -	compatible = "smsc,lan9220", "smsc,lan9115";
+> -	reg = <0xf4000000 0x2000000>;
+> -	phy-mode = "mii";
+> -	interrupt-parent = <&gpio1>;
+> -	interrupts = <31>, <32>;
+> -	reset-gpios = <&gpio1 30 GPIO_ACTIVE_LOW>;
+> -	reg-io-width = <4>;
+> -	smsc,irq-push-pull;
+> -};
+> -- 
+> 2.25.1
+> 
