@@ -2,152 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A48038B046
-	for <lists+linux-mips@lfdr.de>; Thu, 20 May 2021 15:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5961838B056
+	for <lists+linux-mips@lfdr.de>; Thu, 20 May 2021 15:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbhETNqA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 May 2021 09:46:00 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43768 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233593AbhETNp4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 20 May 2021 09:45:56 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1621518266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8FtvtQGziQhcsaA/EvzWrXNbEVs6OaNRrt/mRJMM9cU=;
-        b=CQ8uUnw1rxMpz8avh1mYAkvdbRHR4IgjibUucNFDQIxbmYf5sXdDKB/hypasyxUHH5Zd2I
-        PlCAJhUGC7VlaSrCbqMlySmj05bdOcEzKaPXQ/KuYsubdNFiKqJQy0eG7QG5h6+9OZ/xFK
-        wqindb7jd/LPH8oYEy+S9+XBsVBqP7U=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 2246EABE8;
-        Thu, 20 May 2021 13:44:26 +0000 (UTC)
-Date:   Thu, 20 May 2021 15:44:18 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
-Subject: Re: [PATCH resend v2 2/5] mm/madvise: introduce
- MADV_POPULATE_(READ|WRITE) to prefault page tables
-Message-ID: <YKZnsnqgEMx6Xl6X@dhcp22.suse.cz>
-References: <20210511081534.3507-1-david@redhat.com>
- <20210511081534.3507-3-david@redhat.com>
- <YKOR/8LzEaOgCvio@dhcp22.suse.cz>
- <bb0e2ebb-e66d-176c-b20a-fbadd95cde98@redhat.com>
- <YKOiV9VkEdYFM9nB@dhcp22.suse.cz>
- <b2fa988d-9625-7c0e-ce83-158af0058e38@redhat.com>
+        id S233298AbhETNtm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 May 2021 09:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232412AbhETNtm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 09:49:42 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C91C061574;
+        Thu, 20 May 2021 06:48:20 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id e15so2441157plh.1;
+        Thu, 20 May 2021 06:48:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uaQphQqIy8iAUW0DAv32A4yBEG37F4G/mNVlzt/Q+ME=;
+        b=HRyhkFUmiSLZKeZWFF3Dvzlj5g1okiPe87ymdtYmd8U5fk0hoWu8uyvzuonLEDFUe6
+         Q4cmcEwDcH6aRO/a/1BB4hSDMUDefJgy0MY4pIMuxvuaP38O+mdT7Vbv02of2sjIixFx
+         RWabRb+N+SBhfWiCVU2VWPs4teO9NFb2uOv07C38SXQ98ryHr4bP3C/xL0+7a8aiIil+
+         6kt2VtT0E8fTQWqTBbmp9U/eS0dkwM+YRRVD08/rjUp4C/4gnRwywtR2UtdPvvykIZFC
+         RqugG2Y/6OEE8ATbUs52DDJszRmgvBjZ/yyTPQj58p9TLvc8dn7s+60MHP8q0lbAbOZK
+         0jsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uaQphQqIy8iAUW0DAv32A4yBEG37F4G/mNVlzt/Q+ME=;
+        b=OuJGb84gACP13BPXEMk/Vj5kYxxliHK9ElbU7wgw6TN6rFCctADHozh9QXdsFn7M35
+         +N9om6ydaqnuTmew0JSnjTYXW1qn2BnA5k3vr+I/+8efIREHPekuBP/b84yVAicHWXcl
+         hbB087QW6b+JxJKgbyvjmztk2ge+lDTTydTu0gD4Ta7O0+//kOi624qV3iSjYVA7Ybvl
+         9Y7Q2f1xDokbfrQu887wv3cK8CGti0kjA4fI3ayx4RkWOGCyq/JcY/sbz8kzffB6sRB9
+         +VsTX0e7nB5XKscTm1Hz3JMW8q2sNH8LUkcrWDhvb6QtmVkLO9xuNIqpizTWeZXzSoIQ
+         FiRw==
+X-Gm-Message-State: AOAM531OB9y9bbdqVXdYceWwhyapuW+RtiBI9iPIE+2KI9qOyUPHHejx
+        fPGrbOuHue9zGBr1GaaK3tnyDKCLPI+R/Q==
+X-Google-Smtp-Source: ABdhPJwEcBL5Cs0/MDEIhsfJxHQzbcHFh9+N4ADM0mun9mIH3esx0GWBR5zjbnNVhbYZfoKM8Xf4Qw==
+X-Received: by 2002:a17:902:bc88:b029:ee:7ef1:e770 with SMTP id bb8-20020a170902bc88b02900ee7ef1e770mr6017321plb.19.1621518499626;
+        Thu, 20 May 2021 06:48:19 -0700 (PDT)
+Received: from kelvin-System-Product-Name.lan ([117.173.226.141])
+        by smtp.gmail.com with ESMTPSA id t14sm1954025pfg.168.2021.05.20.06.48.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 06:48:19 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Keguang Zhang <keguang.zhang@unisoc.com>
+Subject: [PATCH 0/3] MIPS: Loongson1B: Add dmaengine and NAND device
+Date:   Thu, 20 May 2021 21:48:06 +0800
+Message-Id: <20210520134809.27143-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b2fa988d-9625-7c0e-ce83-158af0058e38@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue 18-05-21 14:03:52, David Hildenbrand wrote:
-[...]
-> > > I expect that use case might vanish over
-> > > time (eventually with new kernels and updated user space), but it might
-> > > stick for a bit.
-> > 
-> > Could you elaborate some more please?
-> 
-> After I raised that the current behavior of userfaultfd-wp is suboptimal,
-> Peter started working on a userfaultfd-wp mode that doesn't require to
-> prefault all pages just to have it working reliably -- getting notified when
-> any page changes, including ones that haven't been populated yet and would
-> have been populated with the shared zeropage on first access. Not sure what
-> the state of that is and when we might see it.
+From: Keguang Zhang <keguang.zhang@unisoc.com>
 
-OK, thanks for the clarification. This suggests that inventing a new
-interface to cover this usecase doesn't sound like the strongest
-justification to me. But this doesn't mean this disqualifies it either.
+This patchset is to add dmaengine and NAND device
+for Loongson1B.
 
-> > > Apart from that, populating the shared zeropage might be relevant in some
-> > > corner cases: I remember there are sparse matrix algorithms that operate
-> > > heavily on the shared zeropage.
-> > 
-> > I am not sure I see why this would be a useful interface for those? Zero
-> > page read fault is really low cost. Or are you worried about cummulative
-> > overhead by entering the kernel many times?
-> 
-> Yes, cumulative overhead when dealing with large, sparse matrices. Just an
-> example where I think it could be applied in the future -- but not that I
-> consider populating the shared zeropage a really important use case in
-> general (besides for userfaultfd-wp right now).
+This applies on top of mips-next.
 
-OK.
- 
-[...]
-> Anyhow, please suggest a way to handle it via a single flag in the kernel --
-> which would be some kind of heuristic as we know from MAP_POPULATE. Having
-> an alternative at hand would make it easier to discuss this topic further. I
-> certainly *don't* want MAP_POPULATE semantics when it comes to
-> MADV_POPULATE, especially when it comes to shared mappings. Not useful in
-> QEMU now and in the future.
+Keguang Zhang (3):
+  MIPS: Loongson1B: Add dma_slave_map to DMA platform data
+  MIPS: Loongson1B: Add Loongson1 dmaengine device
+  MIPS: Loongson1B: Add Loongson1 NAND device
 
-OK, this point is still not entirely clear to me. Elsewhere you are
-saying that QEMU cannot use MAP_POPULATE because it ignores errors
-and also it doesn't support sparse mappings because they apply to the
-whole mmap. These are all clear but it is less clear to me why the same
-semantic is not applicable for QEMU when used through madvise interface
-which can handle both of those.
-Do I get it right that you really want to emulate the full fledged write
-fault to a) limit another write fault when the content is actually
-modified and b) prevent from potential errors during the write fault
-(e.g. mkwrite failing on the fs data)?
+ arch/mips/include/asm/mach-loongson32/dma.h   |  7 ++-
+ arch/mips/include/asm/mach-loongson32/nand.h  |  4 --
+ .../include/asm/mach-loongson32/platform.h    |  4 ++
+ arch/mips/loongson32/common/platform.c        | 63 +++++++++++++++++++
+ arch/mips/loongson32/ls1b/board.c             | 37 ++++++++++-
+ 5 files changed, 107 insertions(+), 8 deletions(-)
 
-> We could make MADV_POPULATE act depending on the readability/writability of
-> a mapping. Use MADV_POPULATE_WRITE on writable mappings, use
-> MADV_POPULATE_READ on readable mappings. Certainly not perfect for use cases
-> where you have writable mappings that are mostly read only (as in the
-> example with fake-NVDIMMs I gave ...), but if it makes people happy, fine
-> with me. I mostly care about MADV_POPULATE_WRITE.
 
-Yes, this is where my thinking was going as well. Essentially define
-MADV_POPULATE as "Populate the mapping with the memory based on the
-mapping access." This looks like a straightforward semantic to me and it
-doesn't really require any deep knowledge of internals.
-
-Now, I was trying to compare which of those would be more tricky to
-understand and use and TBH I am not really convinced any of the two is
-much better. Separate READ/WRITE modes are explicit which can be good
-but it will require quite an advanced knowledge of the #PF behavior.
-On the other hand MADV_POPULATE would require some tricks like mmap,
-madvise and mprotect(to change to writable) when the data is really
-written to. I am not sure how much of a deal this would be for QEMU for
-example.
-
-So, all that being said, I am not really sure. I am not really happy
-about READ/WRITE split but if a simpler interface is going to be a bad
-fit for existing usecases then I believe a proper way to go is the
-document the more complex interface thoroughly.
+base-commit: 33ae8f801ad8bec48e886d368739feb2816478f2
 -- 
-Michal Hocko
-SUSE Labs
+2.25.1
+
