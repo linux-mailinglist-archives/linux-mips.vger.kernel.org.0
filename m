@@ -2,92 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1767838B125
-	for <lists+linux-mips@lfdr.de>; Thu, 20 May 2021 16:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1769B38B297
+	for <lists+linux-mips@lfdr.de>; Thu, 20 May 2021 17:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241123AbhETOKw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 May 2021 10:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243738AbhETOJ0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 10:09:26 -0400
-X-Greylist: delayed 458 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 May 2021 07:06:36 PDT
-Received: from leibniz.telenet-ops.be (leibniz.telenet-ops.be [IPv6:2a02:1800:110:4::f00:d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49347C0612EA
-        for <linux-mips@vger.kernel.org>; Thu, 20 May 2021 07:06:36 -0700 (PDT)
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by leibniz.telenet-ops.be (Postfix) with ESMTPS id 4FmBDC4YDxzMqg35
-        for <linux-mips@vger.kernel.org>; Thu, 20 May 2021 15:58:51 +0200 (CEST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:9cc6:7165:bcc2:1e70])
-        by baptiste.telenet-ops.be with bizsmtp
-        id 71yi2500G31btb9011yiMP; Thu, 20 May 2021 15:58:51 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ljjCE-007Wn4-3R; Thu, 20 May 2021 15:58:42 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ljjCD-008zrh-In; Thu, 20 May 2021 15:58:41 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        id S240781AbhETPJr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 May 2021 11:09:47 -0400
+Received: from elvis.franken.de ([193.175.24.41]:41345 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232452AbhETPJq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 20 May 2021 11:09:46 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1ljkHS-0001VG-01; Thu, 20 May 2021 17:08:10 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 47969C101E; Thu, 20 May 2021 17:07:42 +0200 (CEST)
+Date:   Thu, 20 May 2021 17:07:42 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 3/5] ARM: dts: qcom-apq8060: Correct Ethernet node name and drop bogus irq property
-Date:   Thu, 20 May 2021 15:58:37 +0200
-Message-Id: <8abfe44e2ad77b6309866531ec662c5daf1e4dbf.1621518686.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1621518686.git.geert+renesas@glider.be>
+        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] MIPS: SEAD3: Correct Ethernet node name
+Message-ID: <20210520150742.GB22843@alpha.franken.de>
 References: <cover.1621518686.git.geert+renesas@glider.be>
+ <b708fdb009912cf247ef257dce519c52889688d8.1621518686.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b708fdb009912cf247ef257dce519c52889688d8.1621518686.git.geert+renesas@glider.be>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-make dtbs_check:
+On Thu, May 20, 2021 at 03:58:38PM +0200, Geert Uytterhoeven wrote:
+> make dtbs_check:
+> 
+>     eth@1f010000: $nodename:0: 'eth@1f010000' does not match '^ethernet(@.*)?$'
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  arch/mips/boot/dts/mti/sead3.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-    ethernet-ebi2@2,0: $nodename:0: 'ethernet-ebi2@2,0' does not match '^ethernet(@.*)?$'
-    ethernet-ebi2@2,0: 'smsc,irq-active-low' does not match any of the regexes: 'pinctrl-[0-9]+'
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-There is no "smsc,irq-active-low" property, as active low is the
-default.
-
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- arch/arm/boot/dts/qcom-apq8060-dragonboard.dts | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
-index dace8ffeb99118cb..0a4ffd10c48464f5 100644
---- a/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
-+++ b/arch/arm/boot/dts/qcom-apq8060-dragonboard.dts
-@@ -581,7 +581,7 @@ external-bus@1a100000 {
- 			 * EBI2. This has a 25MHz chrystal next to it, so no
- 			 * clocking is needed.
- 			 */
--			ethernet-ebi2@2,0 {
-+			ethernet@2,0 {
- 				compatible = "smsc,lan9221", "smsc,lan9115";
- 				reg = <2 0x0 0x100>;
- 				/*
-@@ -598,8 +598,6 @@ ethernet-ebi2@2,0 {
- 				phy-mode = "mii";
- 				reg-io-width = <2>;
- 				smsc,force-external-phy;
--				/* IRQ on edge falling = active low */
--				smsc,irq-active-low;
- 				smsc,irq-push-pull;
- 
- 				/*
 -- 
-2.25.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
