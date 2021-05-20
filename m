@@ -2,622 +2,905 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FAAD38B8FE
-	for <lists+linux-mips@lfdr.de>; Thu, 20 May 2021 23:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7690F38B992
+	for <lists+linux-mips@lfdr.de>; Fri, 21 May 2021 00:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbhETVc1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 May 2021 17:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S231750AbhETWnv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 May 2021 18:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbhETVc0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 17:32:26 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71977C061761
-        for <linux-mips@vger.kernel.org>; Thu, 20 May 2021 14:31:04 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id j10so26554675lfb.12
-        for <linux-mips@vger.kernel.org>; Thu, 20 May 2021 14:31:04 -0700 (PDT)
+        with ESMTP id S230239AbhETWnv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 18:43:51 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F91C061574;
+        Thu, 20 May 2021 15:42:29 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 29so1757299pgu.11;
+        Thu, 20 May 2021 15:42:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ewcVH7ybbe/n8+nzkmMx0r+7XrGSbJUpsG/BLFE/JFQ=;
-        b=jpeIoJrgehHbS+dqP1XgldW7z0+b6uDeFAQscuvdUA7ixmeNWeVyBJNSOh385SIop4
-         0AU5LmfVSLuXSjZu8U1wrY2yxYClU7lXVipZshhIRUvwLM1JcxYNHKem7dob9IYYRBJ2
-         2tpUy6rqNwF41OOtfpMZkVtjrkhIOc4dCwFEL1v0cQ57U399s5NU+SFQgDNRqo5gj9E6
-         KFnKqObImtNXHbuPZauwVNxBLtTbsgiGD7G9PBoorNL2jO5/2+bMgIZUSoHfDT4l0Fcs
-         TjD4Xles7GK111G6w5yj1ySilbKPpWIi41sQW5p4q1aA4kNQoEtHnVZA4K74Lk/29p4T
-         DMPQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xkriF9NnJrPZDnJdeIW217IGGqShONtPkN5S7gfsOZo=;
+        b=SWCOvLnQTv8J4NhFgrYt16JCflnrtswikc5WHL+rRhmB7Mf71qRvFU802mrO3ZW1go
+         nWeU0IYKQxTrZciRQEo2NH+cB+6UTdMcHs2455dDn9JSDfq0bt4pxg9AAPn6I4b58lO2
+         l88FqosLmIfnj+P0msQGnkU0zI06wdvFZ8qpVhgB1ioGzxYR/2ZlzSF1ZwUMoA7nuRTt
+         dDac293JMAIfpivmK6DQqZDcE733JExLsEdzhwBxzIJXjLONT54ekG/0g4BLvkJ3W9EM
+         f75/DUt4iNYBeEBiHQ33mWLq9qYoiJJ+oiC1hUNLzrkRNMffTnwdQD7M1FAFfQkxOvR1
+         /XNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ewcVH7ybbe/n8+nzkmMx0r+7XrGSbJUpsG/BLFE/JFQ=;
-        b=h4HfRq1leenJRyFT1xGWvazCgMZD3xi2MNQv2UnmP2IsckNI3VDghtQUhTUIAKVZ/0
-         8aL7OxDtBX2KLwsQV9rqRC+OILaBUA0qK/rFHC/iMl53ZMSp31sGBAwJX1LR2mqzTt06
-         76CDeyheKcUcGe56m1qoWuDT858t2uvPdoRnHRt9S52mOtxOg4OXVxUa4/G5v5e+bi75
-         h/97Jam4Vth4urOjuSsErePlWfIDD6jMmAVLSQd5D7zg/r0js33pE/oOPR6amPLeAZ+O
-         oxNIV6f3g+2A/bn/z2fzVVR2zSwrWj1j7xcqYtiP+JRHSIiRV4rXnUs8yGOg8Pe3rWad
-         j8Zg==
-X-Gm-Message-State: AOAM5300WbwngSxzZXRWbwKBu1qDb9ktyuWjvxgd1xphM7N29bRCB6L+
-        WQt+3hZhtzWpvGQoPlcNag1VHUCu9zfph6ePhNNKnA==
-X-Google-Smtp-Source: ABdhPJztD/SkZ7Km31dTkM1ndTf/yzu3dibr8iXoJiQ8HR9DqiV/tJikxnMjLumsw6a8jfdUBB2g9BvOsiKf10pB0rk=
-X-Received: by 2002:a05:6512:228d:: with SMTP id f13mr4039027lfu.178.1621546262478;
- Thu, 20 May 2021 14:31:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xkriF9NnJrPZDnJdeIW217IGGqShONtPkN5S7gfsOZo=;
+        b=VdA9DOcBPUQaNLHHeGbUpoLn8AeUdISAd1yZsAmAIpmIeAaxUWpnpMThpTcYUidZ7Q
+         NplJgDOTDhHADXKkYqhPjdPyhDrszz2Qn/0AGEcHWOcsWUHQhV1ttdHr6fRsHVvq3Y1t
+         m4qzqQSercJsJ9aCSRbXDt/RRfHuVFf7MxUlEWQn9fj8YT+WAQYhpd78y0R4VCqjVHZp
+         fte/ENgNjRm1EQjIt5Ofyb1SD/XKuUe8fAnCnyfU2UOjA/O98HRi8gMnugN2+Kb6L8EK
+         ED+fe2sib2wXUtuZgHNiPsGtoLGch78bFQ0PXq22jd2abGqx4oQzaKae+iCusnlCh5z7
+         YiRQ==
+X-Gm-Message-State: AOAM531O1KY9isPxF0OFfSGZK6X0+ipu7srsmy6ikkuAGzPaIzjuUwJE
+        Mhi3+JO5Kl1sxg5mjCpHATo=
+X-Google-Smtp-Source: ABdhPJz7lEKT/xYwkb/6E6tdWgFuCgAnSwoHX5LXvuNL2J9dfDFoI9iqfXV4pvvXmg5m85457Bd5ug==
+X-Received: by 2002:a62:d0c2:0:b029:2d9:529f:f4ef with SMTP id p185-20020a62d0c20000b02902d9529ff4efmr6825391pfg.41.1621550548786;
+        Thu, 20 May 2021 15:42:28 -0700 (PDT)
+Received: from kelvin-System-Product-Name.lan ([117.173.227.56])
+        by smtp.gmail.com with ESMTPSA id b16sm2951879pju.35.2021.05.20.15.42.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 15:42:28 -0700 (PDT)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-mtd@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Kelvin Cheung <keguang.zhang@gmail.com>
+Subject: [PATCH V5 RESEND] mtd: rawnand: Add Loongson1 NAND driver
+Date:   Fri, 21 May 2021 06:42:13 +0800
+Message-Id: <20210520224213.7907-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210517145314.157626-1-jingzhangos@google.com>
- <20210517145314.157626-5-jingzhangos@google.com> <YKWKbfXwVx0+G0OX@google.com>
-In-Reply-To: <YKWKbfXwVx0+G0OX@google.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Thu, 20 May 2021 16:30:50 -0500
-Message-ID: <CAAdAUtgdWR0fi0NkPEKTbeNLpoi2j1M8xo0-LpSVM03GhRmJ5g@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] KVM: selftests: Add selftest for KVM statistics
- data binary interface
-To:     Ricardo Koller <ricarkol@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 19, 2021 at 5:00 PM Ricardo Koller <ricarkol@google.com> wrote:
->
-> On Mon, May 17, 2021 at 02:53:14PM +0000, Jing Zhang wrote:
-> > Add selftest to check KVM stats descriptors validity.
-> >
-> > Signed-off-by: Jing Zhang <jingzhangos@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/.gitignore        |   1 +
-> >  tools/testing/selftests/kvm/Makefile          |   3 +
-> >  .../testing/selftests/kvm/include/kvm_util.h  |   3 +
-> >  .../selftests/kvm/kvm_bin_form_stats.c        | 379 ++++++++++++++++++
-> >  tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
-> >  5 files changed, 398 insertions(+)
-> >  create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
-> >
-> > diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> > index bd83158e0e0b..35796667c944 100644
-> > --- a/tools/testing/selftests/kvm/.gitignore
-> > +++ b/tools/testing/selftests/kvm/.gitignore
-> > @@ -43,3 +43,4 @@
-> >  /memslot_modification_stress_test
-> >  /set_memory_region_test
-> >  /steal_time
-> > +/kvm_bin_form_stats
-> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> > index e439d027939d..2984c86c848a 100644
-> > --- a/tools/testing/selftests/kvm/Makefile
-> > +++ b/tools/testing/selftests/kvm/Makefile
-> > @@ -76,6 +76,7 @@ TEST_GEN_PROGS_x86_64 += kvm_page_table_test
-> >  TEST_GEN_PROGS_x86_64 += memslot_modification_stress_test
-> >  TEST_GEN_PROGS_x86_64 += set_memory_region_test
-> >  TEST_GEN_PROGS_x86_64 += steal_time
-> > +TEST_GEN_PROGS_x86_64 += kvm_bin_form_stats
-> >
-> >  TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
-> >  TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list-sve
-> > @@ -87,6 +88,7 @@ TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
-> >  TEST_GEN_PROGS_aarch64 += kvm_page_table_test
-> >  TEST_GEN_PROGS_aarch64 += set_memory_region_test
-> >  TEST_GEN_PROGS_aarch64 += steal_time
-> > +TEST_GEN_PROGS_aarch64 += kvm_bin_form_stats
-> >
-> >  TEST_GEN_PROGS_s390x = s390x/memop
-> >  TEST_GEN_PROGS_s390x += s390x/resets
-> > @@ -96,6 +98,7 @@ TEST_GEN_PROGS_s390x += dirty_log_test
-> >  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-> >  TEST_GEN_PROGS_s390x += kvm_page_table_test
-> >  TEST_GEN_PROGS_s390x += set_memory_region_test
-> > +TEST_GEN_PROGS_s390x += kvm_bin_form_stats
-> >
-> >  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
-> >  LIBKVM += $(LIBKVM_$(UNAME_M))
-> > diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> > index a8f022794ce3..ee01a67022d9 100644
-> > --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> > +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> > @@ -387,4 +387,7 @@ uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc);
-> >  #define GUEST_ASSERT_4(_condition, arg1, arg2, arg3, arg4) \
-> >       __GUEST_ASSERT((_condition), 4, (arg1), (arg2), (arg3), (arg4))
-> >
-> > +int vm_get_statsfd(struct kvm_vm *vm);
-> > +int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid);
-> > +
-> >  #endif /* SELFTEST_KVM_UTIL_H */
-> > diff --git a/tools/testing/selftests/kvm/kvm_bin_form_stats.c b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
-> > new file mode 100644
-> > index 000000000000..dae44397d0f4
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/kvm/kvm_bin_form_stats.c
-> > @@ -0,0 +1,379 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * kvm_bin_form_stats
-> > + *
-> > + * Copyright (C) 2021, Google LLC.
-> > + *
-> > + * Test the fd-based interface for KVM statistics.
-> > + */
-> > +
-> > +#define _GNU_SOURCE /* for program_invocation_short_name */
-> > +#include <fcntl.h>
-> > +#include <stdio.h>
-> > +#include <stdlib.h>
-> > +#include <string.h>
-> > +#include <errno.h>
-> > +
-> > +#include "test_util.h"
-> > +
-> > +#include "kvm_util.h"
-> > +#include "asm/kvm.h"
-> > +#include "linux/kvm.h"
-> > +
-> > +int vm_stats_test(struct kvm_vm *vm)
-> > +{
-> > +     ssize_t ret;
-> > +     int i, stats_fd, err = -1;
-> > +     size_t size_desc, size_data = 0;
-> > +     struct kvm_stats_header header;
-> > +     struct kvm_stats_desc *stats_desc, *pdesc;
-> > +     struct kvm_vm_stats_data *stats_data;
-> > +
-> > +     /* Get fd for VM stats */
-> > +     stats_fd = vm_get_statsfd(vm);
-> > +     if (stats_fd < 0) {
-> > +             perror("Get VM stats fd");
-> > +             return err;
-> > +     }
->
-> It seems that the only difference between vm_stats_test and
-> vcpu_stats_test is what function to use for getting the fd.  If that's
-> the case, it might be better to move all the checks to a common
-> function.
->
-> > +     /* Read kvm vm stats header */
-> > +     ret = read(stats_fd, &header, sizeof(header));
-> > +     if (ret != sizeof(header)) {
-> > +             perror("Read VM stats header");
-> > +             goto out_close_fd;
-> > +     }
-> > +     size_desc = sizeof(*stats_desc) + header.name_size;
-> > +     /* Check id string in header, that should start with "kvm" */
-> > +     if (strncmp(header.id, "kvm", 3) ||
-> > +                     strlen(header.id) >= KVM_STATS_ID_MAXLEN) {
-> > +             printf("Invalid KVM VM stats type!\n");
-> > +             goto out_close_fd;
-> > +     }
-> > +     /* Sanity check for other fields in header */
-> > +     if (header.count == 0) {
-> > +             err = 0;
-> > +             goto out_close_fd;
-> > +     }
->
-> As mentioned by David, it would be better to replace the checks with
-> TEST_ASSERT's. Most other selftests rely on TEST_ASSERT.
->
-> > +     /* Check overlap */
-> > +     if (header.desc_offset == 0 || header.data_offset == 0 ||
-> > +                     header.desc_offset < sizeof(header) ||
-> > +                     header.data_offset < sizeof(header)) {
-> > +             printf("Invalid offset fields in header!\n");
-> > +             goto out_close_fd;
-> > +     }
-> > +     if (header.desc_offset < header.data_offset &&
-> > +                     (header.desc_offset + size_desc * header.count >
-> > +                     header.data_offset)) {
->
-> Could you make the check more strict?
->
-> TEST_ASSERT(header.desc_offset + size_desc * header.count == header.data_offset,
->         "The data block should be at the end of the descriptor block.");
->
-> > +             printf("VM Descriptor block is overlapped with data block!\n");
-> > +             goto out_close_fd;
-> > +     }
-> > +
-> > +     /* Allocate memory for stats descriptors */
-> > +     stats_desc = calloc(header.count, size_desc);
-> > +     if (!stats_desc) {
-> > +             perror("Allocate memory for VM stats descriptors");
-> > +             goto out_close_fd;
-> > +     }
-> > +     /* Read kvm vm stats descriptors */
-> > +     ret = pread(stats_fd, stats_desc,
-> > +                     size_desc * header.count, header.desc_offset);
->
-> You could stress kvm_vm_stats_read() more by calling pread for more
-> offsets. For example, for every descriptor:
->
->         pread(..., header.desc_offset + i * size_desc)
->
-> I realize that the typical usage will be to read once for all
-> descriptors. But kvm_vm_stats_read (and kvm_vcpu_stats_read) need to
-> handle any offset, and doing so seems to be quite complicated.
->
-> Actually, you could stress kvm_vm_stats_read() even more by calling it
-> for _every_ possible offset (and eventually invalid offsets and sizes).
-> One easier way to check this is by calling read all descriptors into
-> some reference buffer using a single pread, and then call it for all
-> offsets while comparing against the reference buf.
->
-> > +     if (ret != size_desc * header.count) {
-> > +             perror("Read KVM VM stats descriptors");
-> > +             goto out_free_desc;
-> > +     }
-> > +     /* Sanity check for fields in descriptors */
-> > +     for (i = 0; i < header.count; ++i) {
-> > +             pdesc = (void *)stats_desc + i * size_desc;
->
-> cast to (struct kvm_stats_desc *)
->
-> > +             /* Check type,unit,scale boundaries */
-> > +             if ((pdesc->flags & KVM_STATS_TYPE_MASK) > KVM_STATS_TYPE_MAX) {
-> > +                     printf("Unknown KVM stats type!\n");
-> > +                     goto out_free_desc;
-> > +             }
-> > +             if ((pdesc->flags & KVM_STATS_UNIT_MASK) > KVM_STATS_UNIT_MAX) {
-> > +                     printf("Unknown KVM stats unit!\n");
-> > +                     goto out_free_desc;
-> > +             }
-> > +             if ((pdesc->flags & KVM_STATS_SCALE_MASK) >
-> > +                             KVM_STATS_SCALE_MAX) {
-> > +                     printf("Unknown KVM stats scale!\n");
-> > +                     goto out_free_desc;
-> > +             }
-> > +             /* Check exponent for stats unit
-> > +              * Exponent for counter should be greater than or equal to 0
-> > +              * Exponent for unit bytes should be greater than or equal to 0
-> > +              * Exponent for unit seconds should be less than or equal to 0
-> > +              * Exponent for unit clock cycles should be greater than or
-> > +              * equal to 0
-> > +              */
-> > +             switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
-> > +             case KVM_STATS_UNIT_NONE:
-> > +             case KVM_STATS_UNIT_BYTES:
-> > +             case KVM_STATS_UNIT_CYCLES:
-> > +                     if (pdesc->exponent < 0) {
-> > +                             printf("Unsupported KVM stats unit!\n");
-> > +                             goto out_free_desc;
-> > +                     }
-> > +                     break;
-> > +             case KVM_STATS_UNIT_SECONDS:
-> > +                     if (pdesc->exponent > 0) {
-> > +                             printf("Unsupported KVM stats unit!\n");
-> > +                             goto out_free_desc;
-> > +                     }
-> > +                     break;
->
->                 default:
->                         TEST_FAIL("Unexpected unit ...");
->
-> > +             }
-> > +             /* Check name string */
-> > +             if (strlen(pdesc->name) >= header.name_size) {
-> > +                     printf("KVM stats name(%s) too long!\n", pdesc->name);
-> > +                     goto out_free_desc;
-> > +             }
->
-> Tighter check:
->
-> TEST_ASSERT(header.name_size > 0 &&
->         strlen(pdesc->name) + 1 == header.name_size);
->
-> > +             /* Check size field, which should not be zero */
-> > +             if (pdesc->size == 0) {
-> > +                     printf("KVM descriptor(%s) with size of 0!\n",
-> > +                                     pdesc->name);
-> > +                     goto out_free_desc;
-> > +             }
-> > +             size_data += pdesc->size * sizeof(stats_data->value[0]);
-> > +     }
-> > +     /* Check overlap */
-> > +     if (header.data_offset < header.desc_offset &&
-> > +             header.data_offset + size_data > header.desc_offset) {
-> > +             printf("Data block is overlapped with Descriptor block!\n");
-> > +             goto out_free_desc;
-> > +     }
->
-> This won't be needed if you use the suggested TEST_ASSERT (the other
-> overlap check).
->
-> > +     /* Check validity of all stats data size */
-> > +     if (size_data < header.count * sizeof(stats_data->value[0])) {
-> > +             printf("Data size is not correct!\n");
-> > +             goto out_free_desc;
-> > +     }
->
-> Tighter check:
->
-> TEST_ASSERT(size_data == header.count * stats_data->value[0]);
->
-The value of size_data should be equal or larger than
-header.count * stats_data->value[0], since some stats may
-have size (the size field in descriptor) larger than 1.
-> > +
-> > +     /* Allocate memory for stats data */
-> > +     stats_data = malloc(size_data);
-> > +     if (!stats_data) {
-> > +             perror("Allocate memory for VM stats data");
-> > +             goto out_free_desc;
-> > +     }
-> > +     /* Read kvm vm stats data */
-> > +     ret = pread(stats_fd, stats_data, size_data, header.data_offset);
-> > +     if (ret != size_data) {
-> > +             perror("Read KVM VM stats data");
-> > +             goto out_free_data;
-> > +     }
-> > +
-> > +     err = 0;
-> > +out_free_data:
-> > +     free(stats_data);
-> > +out_free_desc:
-> > +     free(stats_desc);
-> > +out_close_fd:
-> > +     close(stats_fd);
-> > +     return err;
-> > +}
-> > +
-> > +int vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
-> > +{
-> > +     ssize_t ret;
-> > +     int i, stats_fd, err = -1;
-> > +     size_t size_desc, size_data = 0;
-> > +     struct kvm_stats_header header;
-> > +     struct kvm_stats_desc *stats_desc, *pdesc;
-> > +     struct kvm_vcpu_stats_data *stats_data;
-> > +
-> > +     /* Get fd for VCPU stats */
-> > +     stats_fd = vcpu_get_statsfd(vm, vcpu_id);
-> > +     if (stats_fd < 0) {
-> > +             perror("Get VCPU stats fd");
-> > +             return err;
-> > +     }
-> > +     /* Read kvm vcpu stats header */
-> > +     ret = read(stats_fd, &header, sizeof(header));
-> > +     if (ret != sizeof(header)) {
-> > +             perror("Read VCPU stats header");
-> > +             goto out_close_fd;
-> > +     }
-> > +     size_desc = sizeof(*stats_desc) + header.name_size;
-> > +     /* Check id string in header, that should start with "kvm" */
-> > +     if (strncmp(header.id, "kvm", 3) ||
-> > +                     strlen(header.id) >= KVM_STATS_ID_MAXLEN) {
-> > +             printf("Invalid KVM VCPU stats type!\n");
-> > +             goto out_close_fd;
-> > +     }
-> > +     /* Sanity check for other fields in header */
-> > +     if (header.count == 0) {
-> > +             err = 0;
-> > +             goto out_close_fd;
-> > +     }
-> > +     /* Check overlap */
-> > +     if (header.desc_offset == 0 || header.data_offset == 0 ||
-> > +                     header.desc_offset < sizeof(header) ||
-> > +                     header.data_offset < sizeof(header)) {
-> > +             printf("Invalid offset fields in header!\n");
-> > +             goto out_close_fd;
-> > +     }
-> > +     if (header.desc_offset < header.data_offset &&
-> > +                     (header.desc_offset + size_desc * header.count >
-> > +                     header.data_offset)) {
-> > +             printf("VCPU Descriptor block is overlapped with data block!\n");
-> > +             goto out_close_fd;
-> > +     }
->
-> Same as above (tighter check).
->
-> > +
-> > +     /* Allocate memory for stats descriptors */
-> > +     stats_desc = calloc(header.count, size_desc);
-> > +     if (!stats_desc) {
-> > +             perror("Allocate memory for VCPU stats descriptors");
-> > +             goto out_close_fd;
-> > +     }
-> > +     /* Read kvm vcpu stats descriptors */
-> > +     ret = pread(stats_fd, stats_desc,
-> > +                     size_desc * header.count, header.desc_offset);
-> > +     if (ret != size_desc * header.count) {
-> > +             perror("Read KVM VCPU stats descriptors");
-> > +             goto out_free_desc;
-> > +     }
-> > +     /* Sanity check for fields in descriptors */
-> > +     for (i = 0; i < header.count; ++i) {
-> > +             pdesc = (void *)stats_desc + i * size_desc;
-> > +             /* Check boundaries */
-> > +             if ((pdesc->flags & KVM_STATS_TYPE_MASK) > KVM_STATS_TYPE_MAX) {
-> > +                     printf("Unknown KVM stats type!\n");
-> > +                     goto out_free_desc;
-> > +             }
-> > +             if ((pdesc->flags & KVM_STATS_UNIT_MASK) > KVM_STATS_UNIT_MAX) {
-> > +                     printf("Unknown KVM stats unit!\n");
-> > +                     goto out_free_desc;
-> > +             }
-> > +             if ((pdesc->flags & KVM_STATS_SCALE_MASK) >
-> > +                             KVM_STATS_SCALE_MAX) {
-> > +                     printf("Unknown KVM stats scale!\n");
-> > +                     goto out_free_desc;
-> > +             }
-> > +             /* Check exponent for stats unit
-> > +              * Exponent for counter should be greater than or equal to 0
-> > +              * Exponent for unit bytes should be greater than or equal to 0
-> > +              * Exponent for unit seconds should be less than or equal to 0
-> > +              * Exponent for unit clock cycles should be greater than or
-> > +              * equal to 0
-> > +              */
-> > +             switch (pdesc->flags & KVM_STATS_UNIT_MASK) {
-> > +             case KVM_STATS_UNIT_NONE:
-> > +             case KVM_STATS_UNIT_BYTES:
-> > +             case KVM_STATS_UNIT_CYCLES:
-> > +                     if (pdesc->exponent < 0) {
-> > +                             printf("Unsupported KVM stats unit!\n");
-> > +                             goto out_free_desc;
-> > +                     }
-> > +                     break;
-> > +             case KVM_STATS_UNIT_SECONDS:
-> > +                     if (pdesc->exponent > 0) {
-> > +                             printf("Unsupported KVM stats unit!\n");
-> > +                             goto out_free_desc;
-> > +                     }
-> > +                     break;
-> > +             }
-> > +             /* Check name string */
-> > +             if (strlen(pdesc->name) >= header.name_size) {
-> > +                     printf("KVM stats name(%s) too long!\n", pdesc->name);
-> > +                     goto out_free_desc;
-> > +             }
-> > +             /* Check size field, which should not be zero */
-> > +             if (pdesc->size == 0) {
-> > +                     printf("KVM descriptor(%s) with size of 0!\n",
-> > +                                     pdesc->name);
-> > +                     goto out_free_desc;
-> > +             }
-> > +             size_data += pdesc->size * sizeof(stats_data->value[0]);
-> > +     }
-> > +     /* Check overlap */
-> > +     if (header.data_offset < header.desc_offset &&
-> > +             header.data_offset + size_data > header.desc_offset) {
-> > +             printf("Data block is overlapped with Descriptor block!\n");
-> > +             goto out_free_desc;
-> > +     }
-> > +     /* Check validity of all stats data size */
-> > +     if (size_data < header.count * sizeof(stats_data->value[0])) {
-> > +             printf("Data size is not correct!\n");
-> > +             goto out_free_desc;
-> > +     }
-> > +
-> > +     /* Allocate memory for stats data */
-> > +     stats_data = malloc(size_data);
-> > +     if (!stats_data) {
-> > +             perror("Allocate memory for VCPU stats data");
-> > +             goto out_free_desc;
-> > +     }
-> > +     /* Read kvm vcpu stats data */
-> > +     ret = pread(stats_fd, stats_data, size_data, header.data_offset);
-> > +     if (ret != size_data) {
-> > +             perror("Read KVM VCPU stats data");
-> > +             goto out_free_data;
-> > +     }
-> > +
-> > +     err = 0;
-> > +out_free_data:
-> > +     free(stats_data);
-> > +out_free_desc:
-> > +     free(stats_desc);
-> > +out_close_fd:
-> > +     close(stats_fd);
-> > +     return err;
-> > +}
-> > +
-> > +/*
-> > + * Usage: kvm_bin_form_stats [#vm] [#vcpu]
-> > + * The first parameter #vm set the number of VMs being created.
-> > + * The second parameter #vcpu set the number of VCPUs being created.
-> > + * By default, 1 VM and 1 VCPU for the VM would be created for testing.
-> > + */
-> > +
-> > +int main(int argc, char *argv[])
-> > +{
-> > +     int max_vm = 1, max_vcpu = 1, ret, i, j, err = -1;
-> > +     struct kvm_vm **vms;
-> > +
-> > +     /* Get the number of VMs and VCPUs that would be created for testing. */
-> > +     if (argc > 1) {
-> > +             max_vm = strtol(argv[1], NULL, 0);
-> > +             if (max_vm <= 0)
-> > +                     max_vm = 1;
-> > +     }
-> > +     if (argc > 2) {
-> > +             max_vcpu = strtol(argv[2], NULL, 0);
-> > +             if (max_vcpu <= 0)
-> > +                     max_vcpu = 1;
-> > +     }
-> > +
-> > +     /* Check the extension for binary stats */
-> > +     ret = kvm_check_cap(KVM_CAP_STATS_BINARY_FD);
-> > +     if (ret < 0) {
-> > +             printf("Binary form statistics interface is not supported!\n");
-> > +             return err;
-> > +     }
-> > +
-> > +     /* Create VMs and VCPUs */
-> > +     vms = malloc(sizeof(vms[0]) * max_vm);
-> > +     if (!vms) {
-> > +             perror("Allocate memory for storing VM pointers");
-> > +             return err;
-> > +     }
-> > +     for (i = 0; i < max_vm; ++i) {
-> > +             vms[i] = vm_create(VM_MODE_DEFAULT,
-> > +                             DEFAULT_GUEST_PHY_PAGES, O_RDWR);
-> > +             for (j = 0; j < max_vcpu; ++j)
-> > +                     vm_vcpu_add(vms[i], j);
-> > +     }
-> > +
-> > +     /* Check stats read for every VM and VCPU */
-> > +     for (i = 0; i < max_vm; ++i) {
-> > +             if (vm_stats_test(vms[i]))
-> > +                     goto out_free_vm;
-> > +             for (j = 0; j < max_vcpu; ++j) {
-> > +                     if (vcpu_stats_test(vms[i], j))
-> > +                             goto out_free_vm;
-> > +             }
-> > +     }
-> > +
-> > +     err = 0;
-> > +out_free_vm:
-> > +     for (i = 0; i < max_vm; ++i)
-> > +             kvm_vm_free(vms[i]);
-> > +     free(vms);
-> > +     return err;
-> > +}
-> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > index fc83f6c5902d..d9e0b2c8b906 100644
-> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > @@ -2090,3 +2090,15 @@ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size)
-> >       n = DIV_ROUND_UP(size, vm_guest_mode_params[mode].page_size);
-> >       return vm_adjust_num_guest_pages(mode, n);
-> >  }
-> > +
-> > +int vm_get_statsfd(struct kvm_vm *vm)
-> > +{
-> > +     return ioctl(vm->fd, KVM_STATS_GETFD, NULL);
-> > +}
-> > +
-> > +int vcpu_get_statsfd(struct kvm_vm *vm, uint32_t vcpuid)
-> > +{
-> > +     struct vcpu *vcpu = vcpu_find(vm, vcpuid);
-> > +
-> > +     return ioctl(vcpu->fd, KVM_STATS_GETFD, NULL);
-> > +}
-> > --
-> > 2.31.1.751.gd2f1c929bd-goog
-> >
-> > _______________________________________________
-> > kvmarm mailing list
-> > kvmarm@lists.cs.columbia.edu
-> > https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+
+This patch adds NAND driver for Loongson1B.
+
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+---
+V4 -> V5:
+   Update the driver to fit the raw NAND framework.
+   Implement exec_op() instead of legacy cmdfunc().
+   Use dma_request_chan() instead of dma_request_channel().
+   Some minor fixes and cleanups.
+V3 -> V4:
+   Retrieve the controller from nand_hw_control.
+V2 -> V3:
+   Replace __raw_readl/__raw_writel with readl/writel.
+   Split ls1x_nand into two structures: ls1x_nand_chip and
+   ls1x_nand_controller.
+V1 -> V2:
+   Modify the dependency in Kconfig due to the changes of DMA
+   module.
+---
+ drivers/mtd/nand/raw/Kconfig          |   8 +
+ drivers/mtd/nand/raw/Makefile         |   1 +
+ drivers/mtd/nand/raw/loongson1_nand.c | 770 ++++++++++++++++++++++++++
+ 3 files changed, 779 insertions(+)
+ create mode 100644 drivers/mtd/nand/raw/loongson1_nand.c
+
+diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+index 30f061939560..63402e335df4 100644
+--- a/drivers/mtd/nand/raw/Kconfig
++++ b/drivers/mtd/nand/raw/Kconfig
+@@ -453,6 +453,14 @@ config MTD_NAND_ROCKCHIP
+ 	    NFC v800: RK3308, RV1108
+ 	    NFC v900: PX30, RK3326
+ 
++config MTD_NAND_LOONGSON1
++	tristate "Support for Loongson1 SoC NAND controller"
++	depends on MACH_LOONGSON32
++	select MTD_NAND_ECC_SW_HAMMING
++	select LOONGSON1_DMA
++	help
++	  Enables support for NAND controller on Loongson1 SoCs.
++
+ comment "Misc"
+ 
+ config MTD_SM_COMMON
+diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
+index d011c6c53f8f..50a51ad6ec21 100644
+--- a/drivers/mtd/nand/raw/Makefile
++++ b/drivers/mtd/nand/raw/Makefile
+@@ -57,6 +57,7 @@ obj-$(CONFIG_MTD_NAND_CADENCE)		+= cadence-nand-controller.o
+ obj-$(CONFIG_MTD_NAND_ARASAN)		+= arasan-nand-controller.o
+ obj-$(CONFIG_MTD_NAND_INTEL_LGM)	+= intel-nand-controller.o
+ obj-$(CONFIG_MTD_NAND_ROCKCHIP)		+= rockchip-nand-controller.o
++obj-$(CONFIG_MTD_NAND_LOONGSON1)        += loongson1_nand.o
+ 
+ nand-objs := nand_base.o nand_legacy.o nand_bbt.o nand_timings.o nand_ids.o
+ nand-objs += nand_onfi.o
+diff --git a/drivers/mtd/nand/raw/loongson1_nand.c b/drivers/mtd/nand/raw/loongson1_nand.c
+new file mode 100644
+index 000000000000..b06e36ec32da
+--- /dev/null
++++ b/drivers/mtd/nand/raw/loongson1_nand.c
+@@ -0,0 +1,770 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * NAND Flash Driver for Loongson 1 SoC
++ *
++ * Copyright (C) 2015-2021 Zhang, Keguang <keguang.zhang@gmail.com>
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/clk.h>
++#include <linux/dmaengine.h>
++#include <linux/dma-mapping.h>
++#include <linux/iopoll.h>
++#include <linux/mtd/mtd.h>
++#include <linux/mtd/rawnand.h>
++#include <linux/platform_device.h>
++#include <linux/sizes.h>
++
++#include <nand.h>
++
++/* Loongson 1 NAND Register Definitions */
++#define NAND_CMD		0x0
++#define NAND_ADDR1		0x4
++#define NAND_ADDR2		0x8
++#define NAND_TIMING		0xc
++#define NAND_IDL		0x10
++#define NAND_IDH		0x14
++#define NAND_STATUS		0x15
++#define NAND_PARAM		0x18
++#define NAND_OP_NUM		0x1c
++#define NAND_CS_RDY		0x20
++
++#define NAND_DMA_ADDR		0x40
++
++/* NAND Command Register Bits */
++#define OP_DONE			BIT(10)
++#define OP_SPARE		BIT(9)
++#define OP_MAIN			BIT(8)
++#define CMD_STATUS		BIT(7)
++#define CMD_RESET		BIT(6)
++#define CMD_READID		BIT(5)
++#define BLOCKS_ERASE		BIT(4)
++#define CMD_ERASE		BIT(3)
++#define CMD_WRITE		BIT(2)
++#define CMD_READ		BIT(1)
++#define CMD_VALID		BIT(0)
++
++#define MAX_ADDR_CYC		5U
++#define MAX_ID_SIZE		(NAND_STATUS - NAND_IDL)
++#define SIZE_MASK		GENMASK(11, 8)
++
++#define BITS_PER_WORD		32
++
++/* macros for registers read/write */
++#define nand_readl(nc, off)		\
++	readl((nc)->reg_base + (off))
++
++#define nand_writel(nc, off, val)	\
++	writel((val), (nc)->reg_base + (off))
++
++struct ls1x_nand_controller {
++	void __iomem *reg_base;
++	__le32 addr1_reg;
++	__le32 addr2_reg;
++
++	char *buf;
++	unsigned int len;
++	unsigned int rdy_timeout;
++
++	/* DMA Engine stuff */
++	struct dma_chan *dma_chan;
++	dma_cookie_t dma_cookie;
++	struct completion dma_complete;
++};
++
++struct ls1x_nand {
++	struct device *dev;
++	struct clk *clk;
++	struct nand_chip chip;
++	struct nand_controller controller;
++	struct ls1x_nand_controller nc;
++	struct plat_ls1x_nand *pdata;
++};
++
++static void ls1x_nand_dump_regs(struct nand_chip *chip)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++
++	print_hex_dump(KERN_INFO, "REG: ", DUMP_PREFIX_OFFSET, 16, 4,
++		       nc->reg_base, 0x44, false);
++}
++
++static void ls1x_nand_dma_callback(void *data)
++{
++	struct ls1x_nand *nand = (struct ls1x_nand *)data;
++	struct ls1x_nand_controller *nc = &nand->nc;
++	enum dma_status status;
++
++	status = dmaengine_tx_status(nc->dma_chan, nc->dma_cookie, NULL);
++	if (likely(status == DMA_COMPLETE))
++		dev_dbg(nand->dev, "DMA complete with cookie=%d\n",
++			nc->dma_cookie);
++	else
++		dev_err(nand->dev, "DMA error with cookie=%d\n",
++			nc->dma_cookie);
++
++	complete(&nc->dma_complete);
++}
++
++static int ls1x_nand_dma_transfer(struct ls1x_nand *nand, bool is_write)
++{
++	struct ls1x_nand_controller *nc = &nand->nc;
++	struct dma_chan *chan = nc->dma_chan;
++	struct dma_async_tx_descriptor *desc;
++	enum dma_data_direction data_dir =
++	    is_write ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
++	enum dma_transfer_direction xfer_dir =
++	    is_write ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM;
++	dma_addr_t dma_addr;
++	int ret;
++
++	dma_addr = dma_map_single(chan->device->dev, nc->buf, nc->len,
++				  data_dir);
++	if (dma_mapping_error(chan->device->dev, dma_addr)) {
++		dev_err(nand->dev, "failed to map DMA buffer!\n");
++		return -ENXIO;
++	}
++
++	desc = dmaengine_prep_slave_single(chan, dma_addr, nc->len, xfer_dir,
++					   DMA_PREP_INTERRUPT);
++	if (!desc) {
++		dev_err(nand->dev, "failed to prepare DMA descriptor!\n");
++		ret = PTR_ERR(desc);
++		goto err;
++	}
++	desc->callback = ls1x_nand_dma_callback;
++	desc->callback_param = nand;
++
++	nc->dma_cookie = dmaengine_submit(desc);
++	ret = dma_submit_error(nc->dma_cookie);
++	if (ret) {
++		dev_err(nand->dev, "failed to submit DMA descriptor!\n");
++		goto err;
++	}
++
++	dev_dbg(nand->dev, "issue DMA with cookie=%d\n", nc->dma_cookie);
++	dma_async_issue_pending(chan);
++
++	ret = wait_for_completion_timeout(&nc->dma_complete,
++					  msecs_to_jiffies(nc->rdy_timeout));
++	if (ret <= 0) {
++		dev_err(nand->dev, "DMA timeout!\n");
++		dmaengine_terminate_all(chan);
++		ret = -EIO;
++	}
++	ret = 0;
++err:
++	dma_unmap_single(chan->device->dev, dma_addr, nc->len, data_dir);
++
++	return ret;
++}
++
++static inline void ls1x_nand_parse_address(struct nand_chip *chip,
++					   const u8 *addrs,
++					   unsigned int naddrs, int cmd)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++#if defined(CONFIG_LOONGSON1_LS1B)
++	unsigned int page_shift = chip->page_shift + 1;
++#endif
++	int i;
++
++	nc->addr1_reg = 0;
++	nc->addr2_reg = 0;
++#if defined(CONFIG_LOONGSON1_LS1B)
++	if (cmd == CMD_ERASE) {
++		page_shift = chip->page_shift;
++
++		for (i = 0; i < min(MAX_ADDR_CYC - 2, naddrs); i++)
++			nc->addr1_reg |=
++			    (u32)addrs[i] << (page_shift + BITS_PER_BYTE * i);
++		if (i == MAX_ADDR_CYC - 2)
++			nc->addr2_reg |=
++			    (u32)addrs[i] >> (BITS_PER_WORD - page_shift -
++					      BITS_PER_BYTE * (i - 1));
++
++		return;
++	}
++
++	for (i = 0; i < min(2U, naddrs); i++)
++		nc->addr1_reg |= (u32)addrs[i] << BITS_PER_BYTE * i;
++	for (i = 2; i < min(MAX_ADDR_CYC, naddrs); i++)
++		nc->addr1_reg |=
++		    (u32)addrs[i] << (page_shift + BITS_PER_BYTE * (i - 2));
++	if (i == MAX_ADDR_CYC)
++		nc->addr2_reg |=
++		    (u32)addrs[i] >> (BITS_PER_WORD - page_shift -
++				      BITS_PER_BYTE * (i - 1));
++#elif defined(CONFIG_LOONGSON1_LS1C)
++	if (cmd == CMD_ERASE) {
++		for (i = 0; i < min(MAX_ADDR_CYC, naddrs); i++)
++			nc->addr2_reg |= (u32)addrs[i] << BITS_PER_BYTE * i;
++
++		return;
++	}
++
++	for (i = 0; i < min(MAX_ADDR_CYC, naddrs); i++) {
++		if (i < 2)
++			nc->addr1_reg |= (u32)addrs[i] << BITS_PER_BYTE * i;
++		else
++			nc->addr2_reg |=
++			    (u32)addrs[i] << BITS_PER_BYTE * (i - 2);
++	}
++#endif
++}
++
++static int ls1x_nand_set_controller(struct nand_chip *chip,
++				    const struct nand_subop *subop, int cmd)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++	unsigned int op_id;
++
++	nc->buf = NULL;
++	nc->len = 0;
++	nc->rdy_timeout = 0;
++
++	for (op_id = 0; op_id < subop->ninstrs; op_id++) {
++		const struct nand_op_instr *instr = &subop->instrs[op_id];
++		unsigned int offset, naddrs;
++		const u8 *addrs;
++
++		switch (instr->type) {
++		case NAND_OP_CMD_INSTR:
++			break;
++		case NAND_OP_ADDR_INSTR:
++			offset = nand_subop_get_addr_start_off(subop, op_id);
++			naddrs = nand_subop_get_num_addr_cyc(subop, op_id);
++			addrs = &instr->ctx.addr.addrs[offset];
++
++			ls1x_nand_parse_address(chip, addrs, naddrs, cmd);
++			/* set NAND address */
++			nand_writel(nc, NAND_ADDR1, nc->addr1_reg);
++			nand_writel(nc, NAND_ADDR2, nc->addr2_reg);
++			break;
++		case NAND_OP_DATA_IN_INSTR:
++			offset = nand_subop_get_data_start_off(subop, op_id);
++			nc->len = nand_subop_get_data_len(subop, op_id);
++			nc->buf = instr->ctx.data.buf.in + offset;
++
++			if (!IS_ALIGNED(nc->len, chip->buf_align) ||
++			    !IS_ALIGNED((unsigned int)nc->buf, chip->buf_align))
++				return -ENOTSUPP;
++			/* set NAND data length */
++			nand_writel(nc, NAND_OP_NUM, nc->len);
++			break;
++		case NAND_OP_DATA_OUT_INSTR:
++			offset = nand_subop_get_data_start_off(subop, op_id);
++			nc->len = nand_subop_get_data_len(subop, op_id);
++			nc->buf = (void *)instr->ctx.data.buf.out + offset;
++
++			if (!IS_ALIGNED(nc->len, chip->buf_align) ||
++			    !IS_ALIGNED((unsigned int)nc->buf, chip->buf_align))
++				return -ENOTSUPP;
++			/* set NAND data length */
++			nand_writel(nc, NAND_OP_NUM, nc->len);
++			break;
++		case NAND_OP_WAITRDY_INSTR:
++			nc->rdy_timeout = instr->ctx.waitrdy.timeout_ms;
++			break;
++		}
++	}
++
++	/*set NAND erase block count */
++	if (cmd & CMD_ERASE)
++		nand_writel(nc, NAND_OP_NUM, 1);
++	/*set NAND operation region */
++	if (nc->buf && nc->len) {
++		if (nc->addr1_reg & BIT(chip->page_shift))
++			cmd |= OP_SPARE;
++		else
++			cmd |= OP_SPARE | OP_MAIN;
++	}
++
++	/*set NAND command */
++	nand_writel(nc, NAND_CMD, cmd);
++	/* Trigger operation */
++	nand_writel(nc, NAND_CMD, nand_readl(nc, NAND_CMD) | CMD_VALID);
++
++	return 0;
++}
++
++static inline int ls1x_nand_wait_for_op_done(struct ls1x_nand_controller *nc)
++{
++	unsigned int val;
++	int ret = 0;
++
++	/* Wait for operation done */
++	if (nc->rdy_timeout)
++		ret = readl_relaxed_poll_timeout(nc->reg_base + NAND_CMD, val,
++						 val & OP_DONE, 0,
++						 nc->rdy_timeout * 1000);
++
++	return ret;
++}
++
++static int ls1x_nand_reset_exec(struct nand_chip *chip,
++				const struct nand_subop *subop)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++	int ret;
++
++	ls1x_nand_set_controller(chip, subop, CMD_RESET);
++
++	ret = ls1x_nand_wait_for_op_done(nc);
++	if (ret)
++		dev_err(nand->dev, "CMD_RESET failed! %d\n", ret);
++
++	return ret;
++}
++
++static int ls1x_nand_read_id_exec(struct nand_chip *chip,
++				  const struct nand_subop *subop)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++	int idl, i;
++	int ret;
++
++	ls1x_nand_set_controller(chip, subop, CMD_READID);
++
++	ret = ls1x_nand_wait_for_op_done(nc);
++	if (ret) {
++		dev_err(nand->dev, "CMD_READID failed! %d\n", ret);
++		return ret;
++	}
++
++	idl = (nand_readl(nc, NAND_IDL));
++	for (i = 0; i < min_t(unsigned int, nc->len, MAX_ID_SIZE); i++)
++		if (i > 0)
++			nc->buf[i] = *((char *)&idl + 4 - i);
++		else
++			nc->buf[i] = (char)(nand_readl(nc, NAND_IDH));
++
++	return ret;
++}
++
++static int ls1x_nand_erase_exec(struct nand_chip *chip,
++				const struct nand_subop *subop)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++	int ret;
++
++	ls1x_nand_set_controller(chip, subop, CMD_ERASE);
++
++	ret = ls1x_nand_wait_for_op_done(nc);
++	if (ret)
++		dev_err(nand->dev, "CMD_ERASE failed! %d\n", ret);
++
++	return ret;
++}
++
++static int ls1x_nand_read_exec(struct nand_chip *chip,
++			       const struct nand_subop *subop)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++	int ret;
++
++	ls1x_nand_set_controller(chip, subop, CMD_READ);
++
++	ret = ls1x_nand_dma_transfer(nand, false);
++	if (ret)
++		return ret;
++
++	ret = ls1x_nand_wait_for_op_done(nc);
++	if (ret)
++		dev_err(nand->dev, "CMD_READ failed! %d\n", ret);
++
++	return ret;
++}
++
++static int ls1x_nand_write_exec(struct nand_chip *chip,
++				const struct nand_subop *subop)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++	int ret;
++
++	ls1x_nand_set_controller(chip, subop, CMD_WRITE);
++
++	ret = ls1x_nand_dma_transfer(nand, true);
++	if (ret)
++		return ret;
++
++	ret = ls1x_nand_wait_for_op_done(nc);
++	if (ret)
++		dev_err(nand->dev, "CMD_WRITE failed! %d\n", ret);
++
++	return ret;
++}
++
++static int ls1x_nand_read_status_exec(struct nand_chip *chip,
++				      const struct nand_subop *subop)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++	int ret;
++
++	ls1x_nand_set_controller(chip, subop, CMD_STATUS);
++
++	ret = ls1x_nand_wait_for_op_done(nc);
++	if (ret) {
++		dev_err(nand->dev, "CMD_STATUS failed! %d\n", ret);
++		return ret;
++	}
++
++	nc->buf[0] = nand_readl(nc, NAND_IDH) >> BITS_PER_BYTE;
++
++	return ret;
++}
++
++static const struct nand_op_parser ls1x_nand_op_parser = NAND_OP_PARSER(
++	NAND_OP_PARSER_PATTERN(
++		ls1x_nand_reset_exec,
++		NAND_OP_PARSER_PAT_CMD_ELEM(false),
++		NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
++	NAND_OP_PARSER_PATTERN(
++		ls1x_nand_read_id_exec,
++		NAND_OP_PARSER_PAT_CMD_ELEM(false),
++		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
++		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 8)),
++	NAND_OP_PARSER_PATTERN(
++		ls1x_nand_erase_exec,
++		NAND_OP_PARSER_PAT_CMD_ELEM(false),
++		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
++		NAND_OP_PARSER_PAT_CMD_ELEM(false),
++		NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
++	NAND_OP_PARSER_PATTERN(
++		ls1x_nand_read_exec,
++		NAND_OP_PARSER_PAT_CMD_ELEM(false),
++		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
++		NAND_OP_PARSER_PAT_CMD_ELEM(false),
++		NAND_OP_PARSER_PAT_WAITRDY_ELEM(true),
++		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 0)),
++	NAND_OP_PARSER_PATTERN(
++		ls1x_nand_write_exec,
++		NAND_OP_PARSER_PAT_CMD_ELEM(false),
++		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
++		NAND_OP_PARSER_PAT_DATA_OUT_ELEM(false, 0),
++		NAND_OP_PARSER_PAT_CMD_ELEM(false),
++		NAND_OP_PARSER_PAT_WAITRDY_ELEM(true)),
++	NAND_OP_PARSER_PATTERN(
++		ls1x_nand_read_status_exec,
++		NAND_OP_PARSER_PAT_CMD_ELEM(false),
++		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 1)),
++	);
++
++static int ls1x_nand_exec_op(struct nand_chip *chip,
++			     const struct nand_operation *op, bool check_only)
++{
++	return nand_op_parser_exec_op(chip, &ls1x_nand_op_parser, op,
++				      check_only);
++}
++
++static int ls1x_nand_read_subpage(struct nand_chip *chip,
++				  unsigned int data_offs, unsigned int readlen,
++				  unsigned char *bufpoi, int page)
++{
++	struct mtd_info *mtd = nand_to_mtd(chip);
++	int start_step, end_step, num_steps, ret;
++	char *p;
++	int data_col_addr, i;
++	int datafrag_len, eccfrag_len, aligned_len, aligned_pos;
++	int busw = (chip->options & NAND_BUSWIDTH_16) ? 2 : 1;
++	int index, section = 0;
++	unsigned int max_bitflips = 0;
++	struct mtd_oob_region oobregion = { };
++
++	/* Read the whole page and OOB data */
++	ret = chip->ecc.read_page_raw(chip, bufpoi, 1, page);
++	if (ret)
++		return ret;
++
++	/* Column address within the page aligned to ECC size (256bytes) */
++	start_step = data_offs / chip->ecc.size;
++	end_step = (data_offs + readlen - 1) / chip->ecc.size;
++	num_steps = end_step - start_step + 1;
++	index = start_step * chip->ecc.bytes;
++
++	/* Data size aligned to ECC ecc.size */
++	datafrag_len = num_steps * chip->ecc.size;
++	eccfrag_len = num_steps * chip->ecc.bytes;
++
++	data_col_addr = start_step * chip->ecc.size;
++	/* If we read not a page aligned data */
++	p = bufpoi + data_col_addr;
++
++	/* Calculate ECC */
++	for (i = 0; i < eccfrag_len; i += chip->ecc.bytes, p += chip->ecc.size)
++		chip->ecc.calculate(chip, p, &chip->ecc.calc_buf[i]);
++
++	ret = mtd_ooblayout_find_eccregion(mtd, index, &section, &oobregion);
++	if (ret)
++		return ret;
++
++	aligned_pos = oobregion.offset & ~(busw - 1);
++	aligned_len = eccfrag_len;
++	if (oobregion.offset & (busw - 1))
++		aligned_len++;
++	if ((oobregion.offset + (num_steps * chip->ecc.bytes)) & (busw - 1))
++		aligned_len++;
++
++	memcpy(&chip->oob_poi[aligned_pos],
++	       bufpoi + mtd->writesize + aligned_pos, aligned_len);
++
++	ret = mtd_ooblayout_get_eccbytes(mtd, chip->ecc.code_buf,
++					 chip->oob_poi, index, eccfrag_len);
++	if (ret)
++		return ret;
++
++	p = bufpoi + data_col_addr;
++	for (i = 0; i < eccfrag_len; i += chip->ecc.bytes, p += chip->ecc.size) {
++		int stat;
++
++		stat = chip->ecc.correct(chip, p, &chip->ecc.code_buf[i],
++					 &chip->ecc.calc_buf[i]);
++		if (stat)
++			ls1x_nand_dump_regs(chip);
++
++		if (stat == -EBADMSG &&
++		    (chip->ecc.options & NAND_ECC_GENERIC_ERASED_CHECK)) {
++			/* check for empty pages with bitflips */
++			stat = nand_check_erased_ecc_chunk(p, chip->ecc.size,
++							&chip->ecc.code_buf[i],
++							chip->ecc.bytes,
++							NULL, 0,
++							chip->ecc.strength);
++		}
++
++		if (stat < 0) {
++			mtd->ecc_stats.failed++;
++		} else {
++			mtd->ecc_stats.corrected += stat;
++			max_bitflips = max_t(unsigned int, max_bitflips, stat);
++		}
++	}
++	return max_bitflips;
++}
++
++static int ls1x_nand_attach_chip(struct nand_chip *chip)
++{
++	struct ls1x_nand *nand = nand_get_controller_data(chip);
++	struct ls1x_nand_controller *nc = &nand->nc;
++	struct plat_ls1x_nand *pdata = nand->pdata;
++	int hold_cycle = pdata->hold_cycle;
++	int wait_cycle = pdata->wait_cycle;
++	u64 chipsize = nanddev_target_size(&chip->base);
++	int cell_size = 0;
++
++	switch (chipsize) {
++	case SZ_128M:
++		cell_size = 0x0;
++		break;
++	case SZ_256M:
++		cell_size = 0x1;
++		break;
++	case SZ_512M:
++		cell_size = 0x2;
++		break;
++	case SZ_1G:
++		cell_size = 0x3;
++		break;
++	case SZ_2G:
++		cell_size = 0x4;
++		break;
++	case SZ_4G:
++		cell_size = 0x5;
++		break;
++	case (SZ_2G * SZ_4G):	/*8G */
++		cell_size = 0x6;
++		break;
++	case (SZ_4G * SZ_4G):	/*16G */
++		cell_size = 0x7;
++		break;
++	default:
++		dev_err(nand->dev, "unsupported chip size: %llu MB\n",
++			chipsize);
++		break;
++	}
++
++	if (hold_cycle && wait_cycle)
++		nand_writel(nc, NAND_TIMING,
++			    (hold_cycle << BITS_PER_BYTE) | wait_cycle);
++	nand_writel(nc, NAND_PARAM,
++		    (nand_readl(nc, NAND_PARAM) & ~SIZE_MASK) | cell_size <<
++		    BITS_PER_BYTE);
++
++	chip->ecc.read_page_raw = nand_monolithic_read_page_raw;
++	chip->ecc.write_page_raw = nand_monolithic_write_page_raw;
++
++	return 0;
++}
++
++static const struct nand_controller_ops ls1x_nc_ops = {
++	.exec_op = ls1x_nand_exec_op,
++	.attach_chip = ls1x_nand_attach_chip,
++};
++
++static void ls1x_nand_controller_cleanup(struct ls1x_nand *nand)
++{
++	if (nand->nc.dma_chan)
++		dma_release_channel(nand->nc.dma_chan);
++}
++
++static int ls1x_nand_controller_init(struct ls1x_nand *nand,
++				     struct platform_device *pdev)
++{
++	struct ls1x_nand_controller *nc = &nand->nc;
++	struct device *dev = &pdev->dev;
++	struct dma_slave_config cfg;
++	struct resource *res;
++	int ret;
++
++	nc->reg_base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(nc->reg_base))
++		return PTR_ERR(nc->reg_base);
++
++	res = platform_get_resource(pdev, IORESOURCE_DMA, 0);
++	if (!res) {
++		dev_err(dev, "failed to get DMA information!\n");
++		return -ENXIO;
++	}
++
++	nc->dma_chan = dma_request_chan(dev, res->name);
++	if (!nc->dma_chan) {
++		dev_err(dev, "failed to request DMA channel!\n");
++		return -EBUSY;
++	}
++	dev_info(dev, "got %s for %s access\n",
++		 dma_chan_name(nc->dma_chan), dev_name(dev));
++
++	cfg.src_addr = CPHYSADDR(nc->reg_base + NAND_DMA_ADDR);
++	cfg.dst_addr = CPHYSADDR(nc->reg_base + NAND_DMA_ADDR);
++	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++	cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++	ret = dmaengine_slave_config(nc->dma_chan, &cfg);
++	if (ret) {
++		dev_err(dev, "failed to config DMA channel!\n");
++		dma_release_channel(nc->dma_chan);
++		return ret;
++	}
++
++	init_completion(&nc->dma_complete);
++
++	return 0;
++}
++
++static int ls1x_nand_chip_init(struct ls1x_nand *nand)
++{
++	struct nand_chip *chip = &nand->chip;
++	struct mtd_info *mtd = nand_to_mtd(chip);
++	struct plat_ls1x_nand *pdata = nand->pdata;
++	int ret = 0;
++
++	chip->controller = &nand->controller;
++	chip->options = NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA | NAND_BROKEN_XD;
++	chip->buf_align = 16;
++	chip->ecc.engine_type = NAND_ECC_ENGINE_TYPE_SOFT;
++	chip->ecc.algo = NAND_ECC_ALGO_HAMMING;
++	nand_set_controller_data(chip, nand);
++
++	mtd->dev.parent = nand->dev;
++	mtd->name = "ls1x-nand";
++	mtd->owner = THIS_MODULE;
++
++	ret = nand_scan(chip, 1);
++	if (ret)
++		return ret;
++
++	chip->ecc.read_subpage = ls1x_nand_read_subpage;
++
++	ret = mtd_device_register(mtd, pdata->parts, pdata->nr_parts);
++	if (ret) {
++		dev_err(nand->dev, "failed to register MTD device! %d\n", ret);
++		nand_cleanup(chip);
++	}
++
++	return ret;
++}
++
++static int ls1x_nand_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct plat_ls1x_nand *pdata;
++	struct ls1x_nand *nand;
++	int ret;
++
++	pdata = dev_get_platdata(dev);
++	if (!pdata) {
++		dev_err(dev, "platform data missing!\n");
++		return -EINVAL;
++	}
++
++	nand = devm_kzalloc(dev, sizeof(*nand), GFP_KERNEL);
++	if (!nand)
++		return -ENOMEM;
++
++	nand->pdata = pdata;
++	nand->dev = dev;
++	nand->controller.ops = &ls1x_nc_ops;
++	nand_controller_init(&nand->controller);
++
++	ret = ls1x_nand_controller_init(nand, pdev);
++	if (ret)
++		return ret;
++
++	nand->clk = devm_clk_get(dev, pdev->name);
++	if (IS_ERR(nand->clk)) {
++		dev_err(dev, "failed to get %s clock!\n", pdev->name);
++		return PTR_ERR(nand->clk);
++	}
++	clk_prepare_enable(nand->clk);
++
++	ret = ls1x_nand_chip_init(nand);
++	if (ret) {
++		clk_disable_unprepare(nand->clk);
++		goto err;
++	}
++
++	platform_set_drvdata(pdev, nand);
++	dev_info(dev, "Loongson1 NAND driver registered\n");
++
++	return 0;
++err:
++	ls1x_nand_controller_cleanup(nand);
++	return ret;
++}
++
++static int ls1x_nand_remove(struct platform_device *pdev)
++{
++	struct ls1x_nand *nand = platform_get_drvdata(pdev);
++	struct nand_chip *chip = &nand->chip;
++
++	mtd_device_unregister(nand_to_mtd(chip));
++	nand_cleanup(chip);
++	clk_disable_unprepare(nand->clk);
++	ls1x_nand_controller_cleanup(nand);
++
++	return 0;
++}
++
++static struct platform_driver ls1x_nand_driver = {
++	.probe	= ls1x_nand_probe,
++	.remove	= ls1x_nand_remove,
++	.driver	= {
++		.name	= "ls1x-nand",
++		.owner	= THIS_MODULE,
++	},
++};
++
++module_platform_driver(ls1x_nand_driver);
++
++MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
++MODULE_DESCRIPTION("Loongson1 NAND Flash driver");
++MODULE_LICENSE("GPL");
+
+base-commit: fd0d8d85f7230052e638a56d1bfea170c488e6bc
+-- 
+2.30.2
+
