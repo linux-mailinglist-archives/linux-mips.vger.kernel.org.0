@@ -2,62 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7690F38B992
-	for <lists+linux-mips@lfdr.de>; Fri, 21 May 2021 00:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F3E38B9EE
+	for <lists+linux-mips@lfdr.de>; Fri, 21 May 2021 01:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbhETWnv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 May 2021 18:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
+        id S232819AbhETXEC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 May 2021 19:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbhETWnv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 18:43:51 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F91C061574;
-        Thu, 20 May 2021 15:42:29 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 29so1757299pgu.11;
-        Thu, 20 May 2021 15:42:29 -0700 (PDT)
+        with ESMTP id S232619AbhETXEC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 19:04:02 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944CAC061574;
+        Thu, 20 May 2021 16:02:39 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id b7so5798810plg.0;
+        Thu, 20 May 2021 16:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=xkriF9NnJrPZDnJdeIW217IGGqShONtPkN5S7gfsOZo=;
-        b=SWCOvLnQTv8J4NhFgrYt16JCflnrtswikc5WHL+rRhmB7Mf71qRvFU802mrO3ZW1go
-         nWeU0IYKQxTrZciRQEo2NH+cB+6UTdMcHs2455dDn9JSDfq0bt4pxg9AAPn6I4b58lO2
-         l88FqosLmIfnj+P0msQGnkU0zI06wdvFZ8qpVhgB1ioGzxYR/2ZlzSF1ZwUMoA7nuRTt
-         dDac293JMAIfpivmK6DQqZDcE733JExLsEdzhwBxzIJXjLONT54ekG/0g4BLvkJ3W9EM
-         f75/DUt4iNYBeEBiHQ33mWLq9qYoiJJ+oiC1hUNLzrkRNMffTnwdQD7M1FAFfQkxOvR1
-         /XNA==
+        bh=QhESEWNq0QZuoMD/+nbvb2Hxc08lKuOSGspufr3QET4=;
+        b=Bk/WuQ0qDbXrMgK8dvol3N22a1lMiMoO9omeYGFNzXchgnuJ/HZqlGo6s0OZatbpeL
+         v+KV8d4gFSmwEaHfVaV1C+XqoMP1qoAbfYnDm9vhwhBAvJeBgSqi/OjwnH5iv/G2r/Hp
+         zknKuhv/DaPDsMhTmEprVFAqo6ectWkyWVikjsF2DmySI/I9j54TSFnAjPrLjQdYMFYw
+         tjZt9F2eEBcfsNCtj5wbicy2tZVo86UZyHwaFv4i+L6ScHr8lr6XDO/Dg4Ndn1nR8Bix
+         zOj1DXja1V/muNp9g61DWLhAEvEbjCPYu4LSZAktr5Ttw0ZfCk3iMkybBvJ1Kmb8Vm6e
+         lAqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=xkriF9NnJrPZDnJdeIW217IGGqShONtPkN5S7gfsOZo=;
-        b=VdA9DOcBPUQaNLHHeGbUpoLn8AeUdISAd1yZsAmAIpmIeAaxUWpnpMThpTcYUidZ7Q
-         NplJgDOTDhHADXKkYqhPjdPyhDrszz2Qn/0AGEcHWOcsWUHQhV1ttdHr6fRsHVvq3Y1t
-         m4qzqQSercJsJ9aCSRbXDt/RRfHuVFf7MxUlEWQn9fj8YT+WAQYhpd78y0R4VCqjVHZp
-         fte/ENgNjRm1EQjIt5Ofyb1SD/XKuUe8fAnCnyfU2UOjA/O98HRi8gMnugN2+Kb6L8EK
-         ED+fe2sib2wXUtuZgHNiPsGtoLGch78bFQ0PXq22jd2abGqx4oQzaKae+iCusnlCh5z7
-         YiRQ==
-X-Gm-Message-State: AOAM531O1KY9isPxF0OFfSGZK6X0+ipu7srsmy6ikkuAGzPaIzjuUwJE
-        Mhi3+JO5Kl1sxg5mjCpHATo=
-X-Google-Smtp-Source: ABdhPJz7lEKT/xYwkb/6E6tdWgFuCgAnSwoHX5LXvuNL2J9dfDFoI9iqfXV4pvvXmg5m85457Bd5ug==
-X-Received: by 2002:a62:d0c2:0:b029:2d9:529f:f4ef with SMTP id p185-20020a62d0c20000b02902d9529ff4efmr6825391pfg.41.1621550548786;
-        Thu, 20 May 2021 15:42:28 -0700 (PDT)
+        bh=QhESEWNq0QZuoMD/+nbvb2Hxc08lKuOSGspufr3QET4=;
+        b=EfHYcCI7PleSuMnQAoAtIYC44scasCQjsuGE9PKzz0xxETwxsECpUialY7668iwjCA
+         BCXzFjcU49/Aa/JCKdinAZXjjNWw2U0TD2fhHAYb17htCCXZBQQzK7k8HUuNwcqLme+f
+         xVCegA+blc7dvW7T8JEa0h3DHvSiETeKmKjWnoGvcgQnEzpkJWFLLvAvj1saf7klGU4Z
+         fphLZ2SkNp/qfCa9N83Dw26g0MP9ynyq/Xi3LM2HV3l8IQLyPAZjFXOmLArmRsZaYhEo
+         Yy/DlDwlh8plKI6XqfmCJQa7uCSHfQWclsnnz85wicNvwKWjISVVAi1D3CHcFPlY/xED
+         Xt2g==
+X-Gm-Message-State: AOAM533rHyAqOva3oTkf6Oe92VXWTg9VcVMM6dS+2em1+peN3/M+jiPZ
+        Ali3ThDhoPbb27hu1cZUpVYt9dLJSgy63g==
+X-Google-Smtp-Source: ABdhPJwswUlJQ52Yx2IwQucl/Vxrp+E8ukwZ7A4CGNkRPr9kEW1PUuybmkLlov0NVmDTn5wvfNlsYw==
+X-Received: by 2002:a17:903:4106:b029:e9:244f:9aca with SMTP id r6-20020a1709034106b02900e9244f9acamr8624559pld.58.1621551758300;
+        Thu, 20 May 2021 16:02:38 -0700 (PDT)
 Received: from kelvin-System-Product-Name.lan ([117.173.227.56])
-        by smtp.gmail.com with ESMTPSA id b16sm2951879pju.35.2021.05.20.15.42.23
+        by smtp.gmail.com with ESMTPSA id e34sm3604276pjk.31.2021.05.20.16.02.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 15:42:28 -0700 (PDT)
+        Thu, 20 May 2021 16:02:37 -0700 (PDT)
 From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-mtd@lists.infradead.org, linux-mips@vger.kernel.org,
+To:     dmaengine@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
+Cc:     Vinod Koul <vkoul@kernel.org>,
         Kelvin Cheung <keguang.zhang@gmail.com>
-Subject: [PATCH V5 RESEND] mtd: rawnand: Add Loongson1 NAND driver
-Date:   Fri, 21 May 2021 06:42:13 +0800
-Message-Id: <20210520224213.7907-1-keguang.zhang@gmail.com>
+Subject: [PATCH V4 RESEND] dmaengine: Loongson1: Add Loongson1 dmaengine driver
+Date:   Fri, 21 May 2021 07:02:25 +0800
+Message-Id: <20210520230225.11911-1-keguang.zhang@gmail.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -67,769 +64,474 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Kelvin Cheung <keguang.zhang@gmail.com>
 
-This patch adds NAND driver for Loongson1B.
+This patch adds DMA Engine driver for Loongson1B.
 
 Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 ---
-V4 -> V5:
-   Update the driver to fit the raw NAND framework.
-   Implement exec_op() instead of legacy cmdfunc().
-   Use dma_request_chan() instead of dma_request_channel().
-   Some minor fixes and cleanups.
 V3 -> V4:
-   Retrieve the controller from nand_hw_control.
+   Use dma_slave_map to find the proper channel.
+   Explicitly call devm_request_irq() and tasklet_kill().
+   Fix namespace issue.
+   Some minor fixes and cleanups.
 V2 -> V3:
-   Replace __raw_readl/__raw_writel with readl/writel.
-   Split ls1x_nand into two structures: ls1x_nand_chip and
-   ls1x_nand_controller.
+   Rename ls1x_dma_filter_fn to ls1x_dma_filter.
 V1 -> V2:
-   Modify the dependency in Kconfig due to the changes of DMA
-   module.
+   Change the config from 'DMA_LOONGSON1' to 'LOONGSON1_DMA',
+   and rearrange it in alphabetical order in Kconfig and Makefile.
+   Fix comment style.
 ---
- drivers/mtd/nand/raw/Kconfig          |   8 +
- drivers/mtd/nand/raw/Makefile         |   1 +
- drivers/mtd/nand/raw/loongson1_nand.c | 770 ++++++++++++++++++++++++++
- 3 files changed, 779 insertions(+)
- create mode 100644 drivers/mtd/nand/raw/loongson1_nand.c
+ drivers/dma/Kconfig         |   9 +
+ drivers/dma/Makefile        |   1 +
+ drivers/dma/loongson1-dma.c | 514 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 524 insertions(+)
+ create mode 100644 drivers/dma/loongson1-dma.c
 
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index 30f061939560..63402e335df4 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -453,6 +453,14 @@ config MTD_NAND_ROCKCHIP
- 	    NFC v800: RK3308, RV1108
- 	    NFC v900: PX30, RK3326
+diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+index 6ab9d9a488a6..b3ceeae61483 100644
+--- a/drivers/dma/Kconfig
++++ b/drivers/dma/Kconfig
+@@ -343,6 +343,15 @@ config K3_DMA
+ 	  Support the DMA engine for Hisilicon K3 platform
+ 	  devices.
  
-+config MTD_NAND_LOONGSON1
-+	tristate "Support for Loongson1 SoC NAND controller"
++config LOONGSON1_DMA
++	tristate "Loongson1 DMA support"
 +	depends on MACH_LOONGSON32
-+	select MTD_NAND_ECC_SW_HAMMING
-+	select LOONGSON1_DMA
++	select DMA_ENGINE
++	select DMA_VIRTUAL_CHANNELS
 +	help
-+	  Enables support for NAND controller on Loongson1 SoCs.
++	  This selects support for the DMA controller in Loongson1 SoCs,
++	  and is required by Loongson1 NAND controller and AC97 support.
 +
- comment "Misc"
- 
- config MTD_SM_COMMON
-diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
-index d011c6c53f8f..50a51ad6ec21 100644
---- a/drivers/mtd/nand/raw/Makefile
-+++ b/drivers/mtd/nand/raw/Makefile
-@@ -57,6 +57,7 @@ obj-$(CONFIG_MTD_NAND_CADENCE)		+= cadence-nand-controller.o
- obj-$(CONFIG_MTD_NAND_ARASAN)		+= arasan-nand-controller.o
- obj-$(CONFIG_MTD_NAND_INTEL_LGM)	+= intel-nand-controller.o
- obj-$(CONFIG_MTD_NAND_ROCKCHIP)		+= rockchip-nand-controller.o
-+obj-$(CONFIG_MTD_NAND_LOONGSON1)        += loongson1_nand.o
- 
- nand-objs := nand_base.o nand_legacy.o nand_bbt.o nand_timings.o nand_ids.o
- nand-objs += nand_onfi.o
-diff --git a/drivers/mtd/nand/raw/loongson1_nand.c b/drivers/mtd/nand/raw/loongson1_nand.c
+ config LPC18XX_DMAMUX
+ 	bool "NXP LPC18xx/43xx DMA MUX for PL080"
+ 	depends on ARCH_LPC18XX || COMPILE_TEST
+diff --git a/drivers/dma/Makefile b/drivers/dma/Makefile
+index aa69094e3547..6d54e485036e 100644
+--- a/drivers/dma/Makefile
++++ b/drivers/dma/Makefile
+@@ -44,6 +44,7 @@ obj-$(CONFIG_INTEL_IOATDMA) += ioat/
+ obj-$(CONFIG_INTEL_IDXD) += idxd/
+ obj-$(CONFIG_INTEL_IOP_ADMA) += iop-adma.o
+ obj-$(CONFIG_K3_DMA) += k3dma.o
++obj-$(CONFIG_LOONGSON1_DMA) += loongson1-dma.o
+ obj-$(CONFIG_LPC18XX_DMAMUX) += lpc18xx-dmamux.o
+ obj-$(CONFIG_MILBEAUT_HDMAC) += milbeaut-hdmac.o
+ obj-$(CONFIG_MILBEAUT_XDMAC) += milbeaut-xdmac.o
+diff --git a/drivers/dma/loongson1-dma.c b/drivers/dma/loongson1-dma.c
 new file mode 100644
-index 000000000000..b06e36ec32da
+index 000000000000..5899509125fe
 --- /dev/null
-+++ b/drivers/mtd/nand/raw/loongson1_nand.c
-@@ -0,0 +1,770 @@
++++ b/drivers/dma/loongson1-dma.c
+@@ -0,0 +1,514 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * NAND Flash Driver for Loongson 1 SoC
++ * DMA Driver for Loongson 1 SoC
 + *
 + * Copyright (C) 2015-2021 Zhang, Keguang <keguang.zhang@gmail.com>
 + */
 +
-+#include <linux/kernel.h>
-+#include <linux/module.h>
 +#include <linux/clk.h>
-+#include <linux/dmaengine.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/iopoll.h>
-+#include <linux/mtd/mtd.h>
-+#include <linux/mtd/rawnand.h>
++#include <linux/dmapool.h>
++#include <linux/init.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_dma.h>
 +#include <linux/platform_device.h>
-+#include <linux/sizes.h>
++#include <linux/slab.h>
 +
-+#include <nand.h>
++#include <dma.h>
 +
-+/* Loongson 1 NAND Register Definitions */
-+#define NAND_CMD		0x0
-+#define NAND_ADDR1		0x4
-+#define NAND_ADDR2		0x8
-+#define NAND_TIMING		0xc
-+#define NAND_IDL		0x10
-+#define NAND_IDH		0x14
-+#define NAND_STATUS		0x15
-+#define NAND_PARAM		0x18
-+#define NAND_OP_NUM		0x1c
-+#define NAND_CS_RDY		0x20
++#include "dmaengine.h"
++#include "virt-dma.h"
 +
-+#define NAND_DMA_ADDR		0x40
++/* Loongson 1 DMA Register Definitions */
++#define LS1X_DMA_CTRL		0x0
 +
-+/* NAND Command Register Bits */
-+#define OP_DONE			BIT(10)
-+#define OP_SPARE		BIT(9)
-+#define OP_MAIN			BIT(8)
-+#define CMD_STATUS		BIT(7)
-+#define CMD_RESET		BIT(6)
-+#define CMD_READID		BIT(5)
-+#define BLOCKS_ERASE		BIT(4)
-+#define CMD_ERASE		BIT(3)
-+#define CMD_WRITE		BIT(2)
-+#define CMD_READ		BIT(1)
-+#define CMD_VALID		BIT(0)
++/* DMA Control Register Bits */
++#define LS1X_DMA_STOP		BIT(4)
++#define LS1X_DMA_START		BIT(3)
 +
-+#define MAX_ADDR_CYC		5U
-+#define MAX_ID_SIZE		(NAND_STATUS - NAND_IDL)
-+#define SIZE_MASK		GENMASK(11, 8)
++#define LS1X_DMA_ADDR_MASK	GENMASK(31, 6)
 +
-+#define BITS_PER_WORD		32
++/* DMA Command Register Bits */
++#define LS1X_DMA_RAM2DEV		BIT(12)
++#define LS1X_DMA_TRANS_OVER		BIT(3)
++#define LS1X_DMA_SINGLE_TRANS_OVER	BIT(2)
++#define LS1X_DMA_INT			BIT(1)
++#define LS1X_DMA_INT_MASK		BIT(0)
++
++struct ls1x_dma_lli {
++	u32 next;		/* next descriptor address */
++	u32 saddr;		/* memory DMA address */
++	u32 daddr;		/* device DMA address */
++	u32 length;
++	u32 stride;
++	u32 cycles;
++	u32 cmd;
++} __aligned(64);
++
++struct ls1x_dma_hwdesc {
++	struct ls1x_dma_lli *lli;
++	dma_addr_t phys;
++};
++
++struct ls1x_dma_desc {
++	struct virt_dma_desc vdesc;
++	struct ls1x_dma_chan *chan;
++
++	enum dma_transfer_direction dir;
++	enum dma_transaction_type type;
++
++	unsigned int nr_descs;	/* number of descriptors */
++	unsigned int nr_done;	/* number of completed descriptors */
++	struct ls1x_dma_hwdesc hwdesc[];	/* DMA coherent descriptors */
++};
++
++struct ls1x_dma_chan {
++	struct virt_dma_chan vchan;
++	struct dma_pool *desc_pool;
++	struct dma_slave_config cfg;
++
++	unsigned int id;
++	void __iomem *reg_base;
++	unsigned int irq;
++
++	struct ls1x_dma_desc *desc;
++};
++
++struct ls1x_dma {
++	struct dma_device ddev;
++	struct clk *clk;
++	void __iomem *reg_base;
++
++	unsigned int nr_chans;
++	struct ls1x_dma_chan chan[];
++};
++
++#define to_ls1x_dma_chan(dchan)		\
++	container_of(dchan, struct ls1x_dma_chan, vchan.chan)
++
++#define to_ls1x_dma_desc(vdesc)		\
++	container_of(vdesc, struct ls1x_dma_desc, vdesc)
 +
 +/* macros for registers read/write */
-+#define nand_readl(nc, off)		\
-+	readl((nc)->reg_base + (off))
++#define chan_readl(chan, off)		\
++	readl((chan)->reg_base + (off))
 +
-+#define nand_writel(nc, off, val)	\
-+	writel((val), (nc)->reg_base + (off))
++#define chan_writel(chan, off, val)	\
++	writel((val), (chan)->reg_base + (off))
 +
-+struct ls1x_nand_controller {
-+	void __iomem *reg_base;
-+	__le32 addr1_reg;
-+	__le32 addr2_reg;
++static bool ls1x_dma_filter(struct dma_chan *chan, void *param);
 +
-+	char *buf;
-+	unsigned int len;
-+	unsigned int rdy_timeout;
-+
-+	/* DMA Engine stuff */
-+	struct dma_chan *dma_chan;
-+	dma_cookie_t dma_cookie;
-+	struct completion dma_complete;
-+};
-+
-+struct ls1x_nand {
-+	struct device *dev;
-+	struct clk *clk;
-+	struct nand_chip chip;
-+	struct nand_controller controller;
-+	struct ls1x_nand_controller nc;
-+	struct plat_ls1x_nand *pdata;
-+};
-+
-+static void ls1x_nand_dump_regs(struct nand_chip *chip)
++static inline struct device *chan2dev(struct dma_chan *chan)
 +{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+
-+	print_hex_dump(KERN_INFO, "REG: ", DUMP_PREFIX_OFFSET, 16, 4,
-+		       nc->reg_base, 0x44, false);
++	return &chan->dev->device;
 +}
 +
-+static void ls1x_nand_dma_callback(void *data)
++static void ls1x_dma_free_chan_resources(struct dma_chan *dchan)
 +{
-+	struct ls1x_nand *nand = (struct ls1x_nand *)data;
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	enum dma_status status;
++	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
 +
-+	status = dmaengine_tx_status(nc->dma_chan, nc->dma_cookie, NULL);
-+	if (likely(status == DMA_COMPLETE))
-+		dev_dbg(nand->dev, "DMA complete with cookie=%d\n",
-+			nc->dma_cookie);
-+	else
-+		dev_err(nand->dev, "DMA error with cookie=%d\n",
-+			nc->dma_cookie);
-+
-+	complete(&nc->dma_complete);
++	vchan_free_chan_resources(&chan->vchan);
++	dma_pool_destroy(chan->desc_pool);
++	chan->desc_pool = NULL;
 +}
 +
-+static int ls1x_nand_dma_transfer(struct ls1x_nand *nand, bool is_write)
++static int ls1x_dma_alloc_chan_resources(struct dma_chan *dchan)
 +{
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	struct dma_chan *chan = nc->dma_chan;
-+	struct dma_async_tx_descriptor *desc;
-+	enum dma_data_direction data_dir =
-+	    is_write ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
-+	enum dma_transfer_direction xfer_dir =
-+	    is_write ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM;
-+	dma_addr_t dma_addr;
-+	int ret;
++	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
 +
-+	dma_addr = dma_map_single(chan->device->dev, nc->buf, nc->len,
-+				  data_dir);
-+	if (dma_mapping_error(chan->device->dev, dma_addr)) {
-+		dev_err(nand->dev, "failed to map DMA buffer!\n");
-+		return -ENXIO;
++	chan->desc_pool = dma_pool_create(dma_chan_name(dchan),
++					  dchan->device->dev,
++					  sizeof(struct ls1x_dma_lli),
++					  __alignof__(struct ls1x_dma_lli), 0);
++	if (!chan->desc_pool) {
++		dev_err(chan2dev(dchan),
++			"failed to alloc DMA descriptor pool!\n");
++		return -ENOMEM;
 +	}
-+
-+	desc = dmaengine_prep_slave_single(chan, dma_addr, nc->len, xfer_dir,
-+					   DMA_PREP_INTERRUPT);
-+	if (!desc) {
-+		dev_err(nand->dev, "failed to prepare DMA descriptor!\n");
-+		ret = PTR_ERR(desc);
-+		goto err;
-+	}
-+	desc->callback = ls1x_nand_dma_callback;
-+	desc->callback_param = nand;
-+
-+	nc->dma_cookie = dmaengine_submit(desc);
-+	ret = dma_submit_error(nc->dma_cookie);
-+	if (ret) {
-+		dev_err(nand->dev, "failed to submit DMA descriptor!\n");
-+		goto err;
-+	}
-+
-+	dev_dbg(nand->dev, "issue DMA with cookie=%d\n", nc->dma_cookie);
-+	dma_async_issue_pending(chan);
-+
-+	ret = wait_for_completion_timeout(&nc->dma_complete,
-+					  msecs_to_jiffies(nc->rdy_timeout));
-+	if (ret <= 0) {
-+		dev_err(nand->dev, "DMA timeout!\n");
-+		dmaengine_terminate_all(chan);
-+		ret = -EIO;
-+	}
-+	ret = 0;
-+err:
-+	dma_unmap_single(chan->device->dev, dma_addr, nc->len, data_dir);
-+
-+	return ret;
-+}
-+
-+static inline void ls1x_nand_parse_address(struct nand_chip *chip,
-+					   const u8 *addrs,
-+					   unsigned int naddrs, int cmd)
-+{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+#if defined(CONFIG_LOONGSON1_LS1B)
-+	unsigned int page_shift = chip->page_shift + 1;
-+#endif
-+	int i;
-+
-+	nc->addr1_reg = 0;
-+	nc->addr2_reg = 0;
-+#if defined(CONFIG_LOONGSON1_LS1B)
-+	if (cmd == CMD_ERASE) {
-+		page_shift = chip->page_shift;
-+
-+		for (i = 0; i < min(MAX_ADDR_CYC - 2, naddrs); i++)
-+			nc->addr1_reg |=
-+			    (u32)addrs[i] << (page_shift + BITS_PER_BYTE * i);
-+		if (i == MAX_ADDR_CYC - 2)
-+			nc->addr2_reg |=
-+			    (u32)addrs[i] >> (BITS_PER_WORD - page_shift -
-+					      BITS_PER_BYTE * (i - 1));
-+
-+		return;
-+	}
-+
-+	for (i = 0; i < min(2U, naddrs); i++)
-+		nc->addr1_reg |= (u32)addrs[i] << BITS_PER_BYTE * i;
-+	for (i = 2; i < min(MAX_ADDR_CYC, naddrs); i++)
-+		nc->addr1_reg |=
-+		    (u32)addrs[i] << (page_shift + BITS_PER_BYTE * (i - 2));
-+	if (i == MAX_ADDR_CYC)
-+		nc->addr2_reg |=
-+		    (u32)addrs[i] >> (BITS_PER_WORD - page_shift -
-+				      BITS_PER_BYTE * (i - 1));
-+#elif defined(CONFIG_LOONGSON1_LS1C)
-+	if (cmd == CMD_ERASE) {
-+		for (i = 0; i < min(MAX_ADDR_CYC, naddrs); i++)
-+			nc->addr2_reg |= (u32)addrs[i] << BITS_PER_BYTE * i;
-+
-+		return;
-+	}
-+
-+	for (i = 0; i < min(MAX_ADDR_CYC, naddrs); i++) {
-+		if (i < 2)
-+			nc->addr1_reg |= (u32)addrs[i] << BITS_PER_BYTE * i;
-+		else
-+			nc->addr2_reg |=
-+			    (u32)addrs[i] << BITS_PER_BYTE * (i - 2);
-+	}
-+#endif
-+}
-+
-+static int ls1x_nand_set_controller(struct nand_chip *chip,
-+				    const struct nand_subop *subop, int cmd)
-+{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	unsigned int op_id;
-+
-+	nc->buf = NULL;
-+	nc->len = 0;
-+	nc->rdy_timeout = 0;
-+
-+	for (op_id = 0; op_id < subop->ninstrs; op_id++) {
-+		const struct nand_op_instr *instr = &subop->instrs[op_id];
-+		unsigned int offset, naddrs;
-+		const u8 *addrs;
-+
-+		switch (instr->type) {
-+		case NAND_OP_CMD_INSTR:
-+			break;
-+		case NAND_OP_ADDR_INSTR:
-+			offset = nand_subop_get_addr_start_off(subop, op_id);
-+			naddrs = nand_subop_get_num_addr_cyc(subop, op_id);
-+			addrs = &instr->ctx.addr.addrs[offset];
-+
-+			ls1x_nand_parse_address(chip, addrs, naddrs, cmd);
-+			/* set NAND address */
-+			nand_writel(nc, NAND_ADDR1, nc->addr1_reg);
-+			nand_writel(nc, NAND_ADDR2, nc->addr2_reg);
-+			break;
-+		case NAND_OP_DATA_IN_INSTR:
-+			offset = nand_subop_get_data_start_off(subop, op_id);
-+			nc->len = nand_subop_get_data_len(subop, op_id);
-+			nc->buf = instr->ctx.data.buf.in + offset;
-+
-+			if (!IS_ALIGNED(nc->len, chip->buf_align) ||
-+			    !IS_ALIGNED((unsigned int)nc->buf, chip->buf_align))
-+				return -ENOTSUPP;
-+			/* set NAND data length */
-+			nand_writel(nc, NAND_OP_NUM, nc->len);
-+			break;
-+		case NAND_OP_DATA_OUT_INSTR:
-+			offset = nand_subop_get_data_start_off(subop, op_id);
-+			nc->len = nand_subop_get_data_len(subop, op_id);
-+			nc->buf = (void *)instr->ctx.data.buf.out + offset;
-+
-+			if (!IS_ALIGNED(nc->len, chip->buf_align) ||
-+			    !IS_ALIGNED((unsigned int)nc->buf, chip->buf_align))
-+				return -ENOTSUPP;
-+			/* set NAND data length */
-+			nand_writel(nc, NAND_OP_NUM, nc->len);
-+			break;
-+		case NAND_OP_WAITRDY_INSTR:
-+			nc->rdy_timeout = instr->ctx.waitrdy.timeout_ms;
-+			break;
-+		}
-+	}
-+
-+	/*set NAND erase block count */
-+	if (cmd & CMD_ERASE)
-+		nand_writel(nc, NAND_OP_NUM, 1);
-+	/*set NAND operation region */
-+	if (nc->buf && nc->len) {
-+		if (nc->addr1_reg & BIT(chip->page_shift))
-+			cmd |= OP_SPARE;
-+		else
-+			cmd |= OP_SPARE | OP_MAIN;
-+	}
-+
-+	/*set NAND command */
-+	nand_writel(nc, NAND_CMD, cmd);
-+	/* Trigger operation */
-+	nand_writel(nc, NAND_CMD, nand_readl(nc, NAND_CMD) | CMD_VALID);
 +
 +	return 0;
 +}
 +
-+static inline int ls1x_nand_wait_for_op_done(struct ls1x_nand_controller *nc)
++static void ls1x_dma_free_desc(struct virt_dma_desc *vdesc)
 +{
-+	unsigned int val;
-+	int ret = 0;
++	struct ls1x_dma_desc *desc = to_ls1x_dma_desc(vdesc);
 +
-+	/* Wait for operation done */
-+	if (nc->rdy_timeout)
-+		ret = readl_relaxed_poll_timeout(nc->reg_base + NAND_CMD, val,
-+						 val & OP_DONE, 0,
-+						 nc->rdy_timeout * 1000);
++	if (desc->nr_descs) {
++		unsigned int i = desc->nr_descs;
++		struct ls1x_dma_hwdesc *hwdesc;
 +
-+	return ret;
-+}
-+
-+static int ls1x_nand_reset_exec(struct nand_chip *chip,
-+				const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	int ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_RESET);
-+
-+	ret = ls1x_nand_wait_for_op_done(nc);
-+	if (ret)
-+		dev_err(nand->dev, "CMD_RESET failed! %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_read_id_exec(struct nand_chip *chip,
-+				  const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	int idl, i;
-+	int ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_READID);
-+
-+	ret = ls1x_nand_wait_for_op_done(nc);
-+	if (ret) {
-+		dev_err(nand->dev, "CMD_READID failed! %d\n", ret);
-+		return ret;
++		do {
++			hwdesc = &desc->hwdesc[--i];
++			dma_pool_free(desc->chan->desc_pool, hwdesc->lli,
++				      hwdesc->phys);
++		} while (i);
 +	}
 +
-+	idl = (nand_readl(nc, NAND_IDL));
-+	for (i = 0; i < min_t(unsigned int, nc->len, MAX_ID_SIZE); i++)
-+		if (i > 0)
-+			nc->buf[i] = *((char *)&idl + 4 - i);
-+		else
-+			nc->buf[i] = (char)(nand_readl(nc, NAND_IDH));
-+
-+	return ret;
++	kfree(desc);
 +}
 +
-+static int ls1x_nand_erase_exec(struct nand_chip *chip,
-+				const struct nand_subop *subop)
++static struct ls1x_dma_desc *ls1x_dma_alloc_desc(struct ls1x_dma_chan *chan,
++						 int sg_len)
 +{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	int ret;
++	struct ls1x_dma_desc *desc;
++	struct dma_chan *dchan = &chan->vchan.chan;
 +
-+	ls1x_nand_set_controller(chip, subop, CMD_ERASE);
++	desc = kzalloc(struct_size(desc, hwdesc, sg_len), GFP_NOWAIT);
++	if (!desc)
++		dev_err(chan2dev(dchan), "failed to alloc DMA descriptor!\n");
 +
-+	ret = ls1x_nand_wait_for_op_done(nc);
-+	if (ret)
-+		dev_err(nand->dev, "CMD_ERASE failed! %d\n", ret);
-+
-+	return ret;
++	return desc;
 +}
 +
-+static int ls1x_nand_read_exec(struct nand_chip *chip,
-+			       const struct nand_subop *subop)
++static struct dma_async_tx_descriptor *
++ls1x_dma_prep_slave_sg(struct dma_chan *dchan, struct scatterlist *sgl,
++		       unsigned int sg_len,
++		       enum dma_transfer_direction direction,
++		       unsigned long flags, void *context)
 +{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	int ret;
++	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
++	struct dma_slave_config *cfg = &chan->cfg;
++	struct ls1x_dma_desc *desc;
++	struct scatterlist *sg;
++	unsigned int dev_addr, bus_width, cmd, i;
 +
-+	ls1x_nand_set_controller(chip, subop, CMD_READ);
-+
-+	ret = ls1x_nand_dma_transfer(nand, false);
-+	if (ret)
-+		return ret;
-+
-+	ret = ls1x_nand_wait_for_op_done(nc);
-+	if (ret)
-+		dev_err(nand->dev, "CMD_READ failed! %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_write_exec(struct nand_chip *chip,
-+				const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	int ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_WRITE);
-+
-+	ret = ls1x_nand_dma_transfer(nand, true);
-+	if (ret)
-+		return ret;
-+
-+	ret = ls1x_nand_wait_for_op_done(nc);
-+	if (ret)
-+		dev_err(nand->dev, "CMD_WRITE failed! %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_read_status_exec(struct nand_chip *chip,
-+				      const struct nand_subop *subop)
-+{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	int ret;
-+
-+	ls1x_nand_set_controller(chip, subop, CMD_STATUS);
-+
-+	ret = ls1x_nand_wait_for_op_done(nc);
-+	if (ret) {
-+		dev_err(nand->dev, "CMD_STATUS failed! %d\n", ret);
-+		return ret;
++	if (!is_slave_direction(direction)) {
++		dev_err(chan2dev(dchan), "invalid DMA direction!\n");
++		return NULL;
 +	}
 +
-+	nc->buf[0] = nand_readl(nc, NAND_IDH) >> BITS_PER_BYTE;
++	dev_dbg(chan2dev(dchan), "sg_len=%d, dir=%s, flags=0x%lx\n", sg_len,
++		direction == DMA_MEM_TO_DEV ? "to device" : "from device",
++		flags);
 +
-+	return ret;
-+}
-+
-+static const struct nand_op_parser ls1x_nand_op_parser = NAND_OP_PARSER(
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_reset_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_read_id_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 8)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_erase_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_read_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(true),
-+		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 0)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_write_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_DATA_OUT_ELEM(false, 0),
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(true)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_read_status_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 1)),
-+	);
-+
-+static int ls1x_nand_exec_op(struct nand_chip *chip,
-+			     const struct nand_operation *op, bool check_only)
-+{
-+	return nand_op_parser_exec_op(chip, &ls1x_nand_op_parser, op,
-+				      check_only);
-+}
-+
-+static int ls1x_nand_read_subpage(struct nand_chip *chip,
-+				  unsigned int data_offs, unsigned int readlen,
-+				  unsigned char *bufpoi, int page)
-+{
-+	struct mtd_info *mtd = nand_to_mtd(chip);
-+	int start_step, end_step, num_steps, ret;
-+	char *p;
-+	int data_col_addr, i;
-+	int datafrag_len, eccfrag_len, aligned_len, aligned_pos;
-+	int busw = (chip->options & NAND_BUSWIDTH_16) ? 2 : 1;
-+	int index, section = 0;
-+	unsigned int max_bitflips = 0;
-+	struct mtd_oob_region oobregion = { };
-+
-+	/* Read the whole page and OOB data */
-+	ret = chip->ecc.read_page_raw(chip, bufpoi, 1, page);
-+	if (ret)
-+		return ret;
-+
-+	/* Column address within the page aligned to ECC size (256bytes) */
-+	start_step = data_offs / chip->ecc.size;
-+	end_step = (data_offs + readlen - 1) / chip->ecc.size;
-+	num_steps = end_step - start_step + 1;
-+	index = start_step * chip->ecc.bytes;
-+
-+	/* Data size aligned to ECC ecc.size */
-+	datafrag_len = num_steps * chip->ecc.size;
-+	eccfrag_len = num_steps * chip->ecc.bytes;
-+
-+	data_col_addr = start_step * chip->ecc.size;
-+	/* If we read not a page aligned data */
-+	p = bufpoi + data_col_addr;
-+
-+	/* Calculate ECC */
-+	for (i = 0; i < eccfrag_len; i += chip->ecc.bytes, p += chip->ecc.size)
-+		chip->ecc.calculate(chip, p, &chip->ecc.calc_buf[i]);
-+
-+	ret = mtd_ooblayout_find_eccregion(mtd, index, &section, &oobregion);
-+	if (ret)
-+		return ret;
-+
-+	aligned_pos = oobregion.offset & ~(busw - 1);
-+	aligned_len = eccfrag_len;
-+	if (oobregion.offset & (busw - 1))
-+		aligned_len++;
-+	if ((oobregion.offset + (num_steps * chip->ecc.bytes)) & (busw - 1))
-+		aligned_len++;
-+
-+	memcpy(&chip->oob_poi[aligned_pos],
-+	       bufpoi + mtd->writesize + aligned_pos, aligned_len);
-+
-+	ret = mtd_ooblayout_get_eccbytes(mtd, chip->ecc.code_buf,
-+					 chip->oob_poi, index, eccfrag_len);
-+	if (ret)
-+		return ret;
-+
-+	p = bufpoi + data_col_addr;
-+	for (i = 0; i < eccfrag_len; i += chip->ecc.bytes, p += chip->ecc.size) {
-+		int stat;
-+
-+		stat = chip->ecc.correct(chip, p, &chip->ecc.code_buf[i],
-+					 &chip->ecc.calc_buf[i]);
-+		if (stat)
-+			ls1x_nand_dump_regs(chip);
-+
-+		if (stat == -EBADMSG &&
-+		    (chip->ecc.options & NAND_ECC_GENERIC_ERASED_CHECK)) {
-+			/* check for empty pages with bitflips */
-+			stat = nand_check_erased_ecc_chunk(p, chip->ecc.size,
-+							&chip->ecc.code_buf[i],
-+							chip->ecc.bytes,
-+							NULL, 0,
-+							chip->ecc.strength);
-+		}
-+
-+		if (stat < 0) {
-+			mtd->ecc_stats.failed++;
-+		} else {
-+			mtd->ecc_stats.corrected += stat;
-+			max_bitflips = max_t(unsigned int, max_bitflips, stat);
-+		}
-+	}
-+	return max_bitflips;
-+}
-+
-+static int ls1x_nand_attach_chip(struct nand_chip *chip)
-+{
-+	struct ls1x_nand *nand = nand_get_controller_data(chip);
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	struct plat_ls1x_nand *pdata = nand->pdata;
-+	int hold_cycle = pdata->hold_cycle;
-+	int wait_cycle = pdata->wait_cycle;
-+	u64 chipsize = nanddev_target_size(&chip->base);
-+	int cell_size = 0;
-+
-+	switch (chipsize) {
-+	case SZ_128M:
-+		cell_size = 0x0;
++	switch (direction) {
++	case DMA_MEM_TO_DEV:
++		dev_addr = cfg->dst_addr;
++		bus_width = cfg->dst_addr_width;
++		cmd = LS1X_DMA_RAM2DEV | LS1X_DMA_INT;
 +		break;
-+	case SZ_256M:
-+		cell_size = 0x1;
-+		break;
-+	case SZ_512M:
-+		cell_size = 0x2;
-+		break;
-+	case SZ_1G:
-+		cell_size = 0x3;
-+		break;
-+	case SZ_2G:
-+		cell_size = 0x4;
-+		break;
-+	case SZ_4G:
-+		cell_size = 0x5;
-+		break;
-+	case (SZ_2G * SZ_4G):	/*8G */
-+		cell_size = 0x6;
-+		break;
-+	case (SZ_4G * SZ_4G):	/*16G */
-+		cell_size = 0x7;
++	case DMA_DEV_TO_MEM:
++		dev_addr = cfg->src_addr;
++		bus_width = cfg->src_addr_width;
++		cmd = LS1X_DMA_INT;
 +		break;
 +	default:
-+		dev_err(nand->dev, "unsupported chip size: %llu MB\n",
-+			chipsize);
-+		break;
++		dev_err(chan2dev(dchan),
++			"unsupported DMA transfer mode! %d\n", direction);
++		return NULL;
 +	}
 +
-+	if (hold_cycle && wait_cycle)
-+		nand_writel(nc, NAND_TIMING,
-+			    (hold_cycle << BITS_PER_BYTE) | wait_cycle);
-+	nand_writel(nc, NAND_PARAM,
-+		    (nand_readl(nc, NAND_PARAM) & ~SIZE_MASK) | cell_size <<
-+		    BITS_PER_BYTE);
++	/* allocate DMA descriptor */
++	desc = ls1x_dma_alloc_desc(chan, sg_len);
++	if (!desc)
++		return NULL;
 +
-+	chip->ecc.read_page_raw = nand_monolithic_read_page_raw;
-+	chip->ecc.write_page_raw = nand_monolithic_write_page_raw;
++	for_each_sg(sgl, sg, sg_len, i) {
++		dma_addr_t buf_addr = sg_dma_address(sg);
++		size_t buf_len = sg_dma_len(sg);
++		struct ls1x_dma_hwdesc *hwdesc = &desc->hwdesc[i];
++		struct ls1x_dma_lli *lli;
++
++		if (!is_dma_copy_aligned(dchan->device, buf_addr, 0, buf_len)) {
++			dev_err(chan2dev(dchan), "%s: buffer is not aligned!\n",
++				__func__);
++			goto err;
++		}
++
++		/* allocate HW DMA descriptors */
++		lli = dma_pool_alloc(chan->desc_pool, GFP_NOWAIT,
++				     &hwdesc->phys);
++		if (!lli) {
++			dev_err(chan2dev(dchan),
++				"%s: failed to alloc HW DMA descriptor!\n",
++				__func__);
++			goto err;
++		}
++		hwdesc->lli = lli;
++
++		/* config HW DMA descriptors */
++		lli->saddr = buf_addr;
++		lli->daddr = dev_addr;
++		lli->length = buf_len / bus_width;
++		lli->stride = 0;
++		lli->cycles = 1;
++		lli->cmd = cmd;
++		lli->next = 0;
++
++		if (i)
++			desc->hwdesc[i - 1].lli->next = hwdesc->phys;
++
++		dev_dbg(chan2dev(dchan),
++			"hwdesc=%px, saddr=%08x, daddr=%08x, length=%u\n",
++			hwdesc, buf_addr, dev_addr, buf_len);
++	}
++
++	/* config DMA descriptor */
++	desc->chan = chan;
++	desc->dir = direction;
++	desc->type = DMA_SLAVE;
++	desc->nr_descs = sg_len;
++	desc->nr_done = 0;
++
++	return vchan_tx_prep(&chan->vchan, &desc->vdesc, flags);
++err:
++	desc->nr_descs = i;
++	ls1x_dma_free_desc(&desc->vdesc);
++	return NULL;
++}
++
++static int ls1x_dma_slave_config(struct dma_chan *dchan,
++				 struct dma_slave_config *config)
++{
++	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
++
++	if (!dchan)
++		return -EINVAL;
++
++	chan->cfg = *config;
 +
 +	return 0;
 +}
 +
-+static const struct nand_controller_ops ls1x_nc_ops = {
-+	.exec_op = ls1x_nand_exec_op,
-+	.attach_chip = ls1x_nand_attach_chip,
-+};
-+
-+static void ls1x_nand_controller_cleanup(struct ls1x_nand *nand)
++static int ls1x_dma_terminate_all(struct dma_chan *dchan)
 +{
-+	if (nand->nc.dma_chan)
-+		dma_release_channel(nand->nc.dma_chan);
-+}
++	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
++	unsigned long flags;
++	LIST_HEAD(head);
 +
-+static int ls1x_nand_controller_init(struct ls1x_nand *nand,
-+				     struct platform_device *pdev)
-+{
-+	struct ls1x_nand_controller *nc = &nand->nc;
-+	struct device *dev = &pdev->dev;
-+	struct dma_slave_config cfg;
-+	struct resource *res;
-+	int ret;
++	spin_lock_irqsave(&chan->vchan.lock, flags);
 +
-+	nc->reg_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(nc->reg_base))
-+		return PTR_ERR(nc->reg_base);
++	chan_writel(chan, LS1X_DMA_CTRL,
++		    chan_readl(chan, LS1X_DMA_CTRL) | LS1X_DMA_STOP);
++	chan->desc = NULL;
++	vchan_get_all_descriptors(&chan->vchan, &head);
 +
-+	res = platform_get_resource(pdev, IORESOURCE_DMA, 0);
-+	if (!res) {
-+		dev_err(dev, "failed to get DMA information!\n");
-+		return -ENXIO;
-+	}
++	spin_unlock_irqrestore(&chan->vchan.lock, flags);
 +
-+	nc->dma_chan = dma_request_chan(dev, res->name);
-+	if (!nc->dma_chan) {
-+		dev_err(dev, "failed to request DMA channel!\n");
-+		return -EBUSY;
-+	}
-+	dev_info(dev, "got %s for %s access\n",
-+		 dma_chan_name(nc->dma_chan), dev_name(dev));
-+
-+	cfg.src_addr = CPHYSADDR(nc->reg_base + NAND_DMA_ADDR);
-+	cfg.dst_addr = CPHYSADDR(nc->reg_base + NAND_DMA_ADDR);
-+	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	ret = dmaengine_slave_config(nc->dma_chan, &cfg);
-+	if (ret) {
-+		dev_err(dev, "failed to config DMA channel!\n");
-+		dma_release_channel(nc->dma_chan);
-+		return ret;
-+	}
-+
-+	init_completion(&nc->dma_complete);
++	vchan_dma_desc_free_list(&chan->vchan, &head);
 +
 +	return 0;
 +}
 +
-+static int ls1x_nand_chip_init(struct ls1x_nand *nand)
++static void ls1x_dma_trigger(struct ls1x_dma_chan *chan)
 +{
-+	struct nand_chip *chip = &nand->chip;
-+	struct mtd_info *mtd = nand_to_mtd(chip);
-+	struct plat_ls1x_nand *pdata = nand->pdata;
-+	int ret = 0;
++	struct dma_chan *dchan = &chan->vchan.chan;
++	struct ls1x_dma_desc *desc;
++	struct virt_dma_desc *vdesc;
++	unsigned int val;
 +
-+	chip->controller = &nand->controller;
-+	chip->options = NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA | NAND_BROKEN_XD;
-+	chip->buf_align = 16;
-+	chip->ecc.engine_type = NAND_ECC_ENGINE_TYPE_SOFT;
-+	chip->ecc.algo = NAND_ECC_ALGO_HAMMING;
-+	nand_set_controller_data(chip, nand);
-+
-+	mtd->dev.parent = nand->dev;
-+	mtd->name = "ls1x-nand";
-+	mtd->owner = THIS_MODULE;
-+
-+	ret = nand_scan(chip, 1);
-+	if (ret)
-+		return ret;
-+
-+	chip->ecc.read_subpage = ls1x_nand_read_subpage;
-+
-+	ret = mtd_device_register(mtd, pdata->parts, pdata->nr_parts);
-+	if (ret) {
-+		dev_err(nand->dev, "failed to register MTD device! %d\n", ret);
-+		nand_cleanup(chip);
++	vdesc = vchan_next_desc(&chan->vchan);
++	if (!vdesc) {
++		dev_warn(chan2dev(dchan), "No pending descriptor\n");
++		return;
 +	}
++	chan->desc = desc = to_ls1x_dma_desc(vdesc);
 +
-+	return ret;
++	dev_dbg(chan2dev(dchan), "cookie=%d, %u descs, starting hwdesc=%px\n",
++		dchan->cookie, desc->nr_descs, &desc->hwdesc[0]);
++
++	val = desc->hwdesc[0].phys & LS1X_DMA_ADDR_MASK;
++	val |= chan->id;
++	val |= LS1X_DMA_START;
++	chan_writel(chan, LS1X_DMA_CTRL, val);
 +}
 +
-+static int ls1x_nand_probe(struct platform_device *pdev)
++static void ls1x_dma_issue_pending(struct dma_chan *dchan)
++{
++	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
++	unsigned long flags;
++
++	spin_lock_irqsave(&chan->vchan.lock, flags);
++
++	if (vchan_issue_pending(&chan->vchan) && !chan->desc)
++		ls1x_dma_trigger(chan);
++
++	spin_unlock_irqrestore(&chan->vchan.lock, flags);
++}
++
++static irqreturn_t ls1x_dma_irq_handler(int irq, void *data)
++{
++	struct ls1x_dma_chan *chan = data;
++	struct dma_chan *dchan = &chan->vchan.chan;
++
++	dev_dbg(chan2dev(dchan), "DMA IRQ %d on channel %d\n", irq, chan->id);
++	if (!chan->desc) {
++		dev_warn(chan2dev(dchan),
++			 "DMA IRQ with no active descriptor on channel %d\n",
++			 chan->id);
++		return IRQ_NONE;
++	}
++
++	spin_lock(&chan->vchan.lock);
++
++	if (chan->desc->type == DMA_CYCLIC) {
++		vchan_cyclic_callback(&chan->desc->vdesc);
++	} else {
++		list_del(&chan->desc->vdesc.node);
++		vchan_cookie_complete(&chan->desc->vdesc);
++		chan->desc = NULL;
++	}
++
++	spin_unlock(&chan->vchan.lock);
++	return IRQ_HANDLED;
++}
++
++static int ls1x_dma_chan_probe(struct platform_device *pdev,
++			       struct ls1x_dma *dma, int chan_id)
 +{
 +	struct device *dev = &pdev->dev;
-+	struct plat_ls1x_nand *pdata;
-+	struct ls1x_nand *nand;
++	struct ls1x_dma_chan *chan = &dma->chan[chan_id];
++	char *irq_name;
 +	int ret;
++
++	chan->irq = platform_get_irq(pdev, chan_id);
++	if (chan->irq < 0) {
++		dev_err(dev, "failed to get IRQ %d!\n", chan->irq);
++		return ret;
++	}
++
++	irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s:ch%u",
++				  dev_name(dev), chan_id);
++	if (!irq_name)
++		return -ENOMEM;
++
++	ret = devm_request_irq(dev, chan->irq, ls1x_dma_irq_handler,
++			       IRQF_SHARED, irq_name, chan);
++	if (ret) {
++		dev_err(dev, "failed to request IRQ %u!\n", chan->irq);
++		return ret;
++	}
++
++	chan->id = chan_id;
++	chan->reg_base = dma->reg_base;
++	chan->vchan.desc_free = ls1x_dma_free_desc;
++	vchan_init(&chan->vchan, &dma->ddev);
++	dev_info(dev, "channel %d (irq %d) initialized\n", chan->id, chan->irq);
++
++	return 0;
++}
++
++static void ls1x_dma_chan_remove(struct ls1x_dma *dma, int chan_id)
++{
++	struct device *dev = dma->ddev.dev;
++	struct ls1x_dma_chan *chan = &dma->chan[chan_id];
++
++	devm_free_irq(dev, chan->irq, chan);
++	list_del(&chan->vchan.chan.device_node);
++	tasklet_kill(&chan->vchan.task);
++}
++
++static int ls1x_dma_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct plat_ls1x_dma *pdata;
++	struct dma_device *ddev;
++	struct ls1x_dma *dma;
++	int nr_chans, ret, i;
 +
 +	pdata = dev_get_platdata(dev);
 +	if (!pdata) {
@@ -837,70 +539,107 @@ index 000000000000..b06e36ec32da
 +		return -EINVAL;
 +	}
 +
-+	nand = devm_kzalloc(dev, sizeof(*nand), GFP_KERNEL);
-+	if (!nand)
++	nr_chans = platform_irq_count(pdev);
++	if (nr_chans <= 0)
++		return nr_chans;
++
++	dma = devm_kzalloc(dev, struct_size(dma, chan, nr_chans), GFP_KERNEL);
++	if (!dma)
 +		return -ENOMEM;
 +
-+	nand->pdata = pdata;
-+	nand->dev = dev;
-+	nand->controller.ops = &ls1x_nc_ops;
-+	nand_controller_init(&nand->controller);
++	/* initialize DMA device */
++	dma->reg_base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(dma->reg_base))
++		return PTR_ERR(dma->reg_base);
 +
-+	ret = ls1x_nand_controller_init(nand, pdev);
-+	if (ret)
-+		return ret;
++	ddev = &dma->ddev;
++	ddev->dev = dev;
++	ddev->copy_align = DMAENGINE_ALIGN_16_BYTES;
++	ddev->src_addr_widths = BIT(DMA_SLAVE_BUSWIDTH_4_BYTES);
++	ddev->dst_addr_widths = BIT(DMA_SLAVE_BUSWIDTH_4_BYTES);
++	ddev->directions = BIT(DMA_DEV_TO_MEM) | BIT(DMA_MEM_TO_DEV);
++	ddev->residue_granularity = DMA_RESIDUE_GRANULARITY_SEGMENT;
++	ddev->device_alloc_chan_resources = ls1x_dma_alloc_chan_resources;
++	ddev->device_free_chan_resources = ls1x_dma_free_chan_resources;
++	ddev->device_prep_slave_sg = ls1x_dma_prep_slave_sg;
++	ddev->device_config = ls1x_dma_slave_config;
++	ddev->device_terminate_all = ls1x_dma_terminate_all;
++	ddev->device_tx_status = dma_cookie_status;
++	ddev->device_issue_pending = ls1x_dma_issue_pending;
++	ddev->filter.map = pdata->slave_map;
++	ddev->filter.mapcnt = pdata->slavecnt;
++	ddev->filter.fn = ls1x_dma_filter;
 +
-+	nand->clk = devm_clk_get(dev, pdev->name);
-+	if (IS_ERR(nand->clk)) {
++	dma_cap_set(DMA_SLAVE, ddev->cap_mask);
++	INIT_LIST_HEAD(&ddev->channels);
++
++	/* initialize DMA channels */
++	for (i = 0; i < nr_chans; i++) {
++		ret = ls1x_dma_chan_probe(pdev, dma, i);
++		if (ret)
++			return ret;
++	}
++	dma->nr_chans = nr_chans;
++
++	dma->clk = devm_clk_get(dev, pdev->name);
++	if (IS_ERR(dma->clk)) {
 +		dev_err(dev, "failed to get %s clock!\n", pdev->name);
-+		return PTR_ERR(nand->clk);
++		return PTR_ERR(dma->clk);
 +	}
-+	clk_prepare_enable(nand->clk);
++	clk_prepare_enable(dma->clk);
 +
-+	ret = ls1x_nand_chip_init(nand);
++	ret = dma_async_device_register(ddev);
 +	if (ret) {
-+		clk_disable_unprepare(nand->clk);
-+		goto err;
++		dev_err(dev, "failed to register DMA device! %d\n", ret);
++		clk_disable_unprepare(dma->clk);
++		return ret;
 +	}
 +
-+	platform_set_drvdata(pdev, nand);
-+	dev_info(dev, "Loongson1 NAND driver registered\n");
++	platform_set_drvdata(pdev, dma);
++	dev_info(dev, "Loongson1 DMA driver registered\n");
 +
 +	return 0;
-+err:
-+	ls1x_nand_controller_cleanup(nand);
-+	return ret;
 +}
 +
-+static int ls1x_nand_remove(struct platform_device *pdev)
++static int ls1x_dma_remove(struct platform_device *pdev)
 +{
-+	struct ls1x_nand *nand = platform_get_drvdata(pdev);
-+	struct nand_chip *chip = &nand->chip;
++	struct ls1x_dma *dma = platform_get_drvdata(pdev);
++	int i;
 +
-+	mtd_device_unregister(nand_to_mtd(chip));
-+	nand_cleanup(chip);
-+	clk_disable_unprepare(nand->clk);
-+	ls1x_nand_controller_cleanup(nand);
++	dma_async_device_unregister(&dma->ddev);
++	clk_disable_unprepare(dma->clk);
++	for (i = 0; i < dma->nr_chans; i++)
++		ls1x_dma_chan_remove(dma, i);
 +
 +	return 0;
 +}
 +
-+static struct platform_driver ls1x_nand_driver = {
-+	.probe	= ls1x_nand_probe,
-+	.remove	= ls1x_nand_remove,
++static struct platform_driver ls1x_dma_driver = {
++	.probe	= ls1x_dma_probe,
++	.remove	= ls1x_dma_remove,
 +	.driver	= {
-+		.name	= "ls1x-nand",
-+		.owner	= THIS_MODULE,
++		.name	= "ls1x-dma",
 +	},
 +};
 +
-+module_platform_driver(ls1x_nand_driver);
++module_platform_driver(ls1x_dma_driver);
++
++static bool ls1x_dma_filter(struct dma_chan *dchan, void *param)
++{
++	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
++	unsigned int chan_id = (unsigned int)param;
++
++	if (dchan->device->dev->driver != &ls1x_dma_driver.driver)
++		return false;
++
++	return chan_id == chan->id;
++}
 +
 +MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
-+MODULE_DESCRIPTION("Loongson1 NAND Flash driver");
++MODULE_DESCRIPTION("Loongson1 DMA driver");
 +MODULE_LICENSE("GPL");
 
-base-commit: fd0d8d85f7230052e638a56d1bfea170c488e6bc
+base-commit: 6f64aa5746d254f2b9b94b837b7862549f2565a0
 -- 
 2.30.2
 
