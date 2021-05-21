@@ -2,59 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B39EA38BAA8
-	for <lists+linux-mips@lfdr.de>; Fri, 21 May 2021 02:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5932038BAAA
+	for <lists+linux-mips@lfdr.de>; Fri, 21 May 2021 02:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234774AbhEUAGO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 May 2021 20:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
+        id S234808AbhEUAGS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 May 2021 20:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbhEUAGO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 20:06:14 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BABAC061574;
-        Thu, 20 May 2021 17:04:51 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id x188so13586294pfd.7;
-        Thu, 20 May 2021 17:04:51 -0700 (PDT)
+        with ESMTP id S234821AbhEUAGR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 May 2021 20:06:17 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646D4C061574;
+        Thu, 20 May 2021 17:04:55 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d78so12722493pfd.10;
+        Thu, 20 May 2021 17:04:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+WD1bA7qEE56Fcg4L44BJACIdsdydoY9l3pDTKqewqc=;
-        b=EGakKBwPKC/CpT1NEr2Vt8BM4b1JRvz0hHMeKJl4aNi13WSiwMzF4iyCkuwSlwGxur
-         Zpu0qGXMDEF4timdIZ8B9Z3wK+lSwmwoTap9ceJfP7CyaBZ0l3GoTiNoSkV6rNvhNzAI
-         Uq/7WdQOISrGud4e5hWWbh1KThzII/ZPZcGxsYNTM/3JhcPGolSImLRlv1z5ndWZS95/
-         lrJVfk8nCmX4GBrlna9c8zq2oJrByhF3s7aTx071JnV7RTdNZtw/IXUwur4/IO9+pPeJ
-         xPEaeptQTq5bBaCpOwcvav5W3Mw6kguRClbAtrODO5UStKJFQqHetShoH/QFWTWbxxFK
-         HosA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VOb8c6DZ7VIZrD+3PTSNQOJnewy5P64QbYyctDZQTrE=;
+        b=uaQ+eWVqskRrc2U6AMLDHjLUw6NhUlTTXoatJaJB9NRMrJNDngSJQQNCsWivgHstu+
+         95Yf75yp+EB1VRElEEID7eIQP28OgfDYzOLg0h9PiuzZdsbUPLl+zIZDWxz2/AcDrU7q
+         AucY2MFxWCn7pU9TW4D5kuYARdT5NbSC+uuyXOJlDTYB+QoGPSGsiYtC5XK3N8taoB5h
+         Auk8C/uqqc3pQ9nZIMLXbJzLxCYFkkK9oQTyJo0AytT6GB61DcuU1twu1nRrcBmT0DRa
+         nBWxgNHOs4Wgn81jsuZxCSiSTSPaMwphnS3bwfeESFDjvL03e25xXZ7MESFCUiEgaTRE
+         TUUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+WD1bA7qEE56Fcg4L44BJACIdsdydoY9l3pDTKqewqc=;
-        b=Cv21GVS9aOk76yKK6T6FMBFGUT6c31Olequr9IUCMWz+F52Fh29CCoKaoSOqfTs9sb
-         CA7v0TUCJ8hbri+PLXMmYndZ36lOnXUIXkIA6MBWMAHc40wJDApH6TiyJgvT0jr2KQp1
-         /F6keUoj1gQ1csdRSofv7w+wtie32mF9apZ5J4EjTTbRnPdbxsTEkX62MRSgHStGJ68i
-         yjpklN+ocuD5YGgbPs4kP0t9eVwxsHLZKcHySRotPj7+QyPux1uVBc4cbsh5rFq7FalI
-         W4Ho23ImE92XmyyQAIYxuVeqVvWYsn/ExRnjT9ucoNeszGQpJr5W/flLU4m9eRqV0FTG
-         GGug==
-X-Gm-Message-State: AOAM532aAWOWgwlnSPbllhYd3UjDTERbOmg1uwmwdFqdvwZi4gwPX5zL
-        qM8bUrsINpPa4gzXPtkw4nfnC8w/aNxy/w==
-X-Google-Smtp-Source: ABdhPJzyXixnJwT3dIdVGaBn1fJ2Fdw9+FACZ1FT4k74jrqH5GUqcCD/2IbwMorrUqcLQ6vpe/E9EQ==
-X-Received: by 2002:a65:4689:: with SMTP id h9mr6909294pgr.347.1621555490434;
-        Thu, 20 May 2021 17:04:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VOb8c6DZ7VIZrD+3PTSNQOJnewy5P64QbYyctDZQTrE=;
+        b=PKlRAI4E2qgOHFtBeVtJYteSuFlT3w24V0lOn0ggd+2gK38VDfF06m9xQekSrr45Wi
+         PJQKu5BwzEEBMQlh6WOORLp4lIhZ1cIUweLcVKM7XIPJIjFn/AqPBAlISFUYRk3pjErR
+         65tdSqrFItQ9zxj3+cJiZ7lQnB2KVgi1luUIKKNwwfJ164TUY5NyF4cYE7utc3e8igoa
+         okVi/9hgnLwH+YhXOCLiH9EN+UWvZgzCeOQzIsHTNJz7fjgaGk7+n7x6k7BXH3Ryzcoj
+         ZShhXqHQCcaqRACDhkqwLcoJnxz7fA3iibKtIWBWoMuYHzaUrPgdEQCnXyQxTDbiKcbi
+         jRGA==
+X-Gm-Message-State: AOAM532As8tZnxPtqYrzpNLCZxAokQkezjJPoVyDzjsjGNUtHumFfilS
+        WN6rnePl8FGmH71ZUyNv5H+GNOjHoGeF1Q==
+X-Google-Smtp-Source: ABdhPJyLrLKfrmzXg8EPLHlFdEDRs+BVVt4V/ZEYOX4Ys+pBL+p6ZwI8lCKG0H3xudaTf5aHiObkKA==
+X-Received: by 2002:aa7:9f8f:0:b029:2dc:76bc:edce with SMTP id z15-20020aa79f8f0000b02902dc76bcedcemr7085511pfr.29.1621555494430;
+        Thu, 20 May 2021 17:04:54 -0700 (PDT)
 Received: from kelvin-System-Product-Name.lan ([117.173.227.56])
-        by smtp.gmail.com with ESMTPSA id t22sm2736016pfl.50.2021.05.20.17.04.46
+        by smtp.gmail.com with ESMTPSA id t22sm2736016pfl.50.2021.05.20.17.04.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 17:04:49 -0700 (PDT)
+        Thu, 20 May 2021 17:04:53 -0700 (PDT)
 From:   Keguang Zhang <keguang.zhang@gmail.com>
 To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Kelvin Cheung <keguang.zhang@gmail.com>
-Subject: [PATCH 0/3] MIPS: Loongson1B: Add dmaengine and NAND device
-Date:   Fri, 21 May 2021 08:04:02 +0800
-Message-Id: <20210521000405.4387-1-keguang.zhang@gmail.com>
+Subject: [PATCH 1/3] MIPS: Loongson1B: Add dma_slave_map to DMA platform data
+Date:   Fri, 21 May 2021 08:04:03 +0800
+Message-Id: <20210521000405.4387-2-keguang.zhang@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210521000405.4387-1-keguang.zhang@gmail.com>
+References: <20210521000405.4387-1-keguang.zhang@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -63,25 +65,51 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Kelvin Cheung <keguang.zhang@gmail.com>
 
-This patchset is to add dmaengine and NAND device
-for Loongson1B.
+This patch add dma_slave_map to DMA platform data,
+and remove unnecessary DMA filter declaration.
 
-This applies on top of mips-next.
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+---
+ arch/mips/include/asm/mach-loongson32/dma.h  | 7 ++++---
+ arch/mips/include/asm/mach-loongson32/nand.h | 4 ----
+ 2 files changed, 4 insertions(+), 7 deletions(-)
 
-Kelvin Cheung (3):
-  MIPS: Loongson1B: Add dma_slave_map to DMA platform data
-  MIPS: Loongson1B: Add Loongson1 dmaengine device
-  MIPS: Loongson1B: Add Loongson1 NAND device
-
- arch/mips/include/asm/mach-loongson32/dma.h   |  7 ++-
- arch/mips/include/asm/mach-loongson32/nand.h  |  4 --
- .../include/asm/mach-loongson32/platform.h    |  4 ++
- arch/mips/loongson32/common/platform.c        | 63 +++++++++++++++++++
- arch/mips/loongson32/ls1b/board.c             | 37 ++++++++++-
- 5 files changed, 107 insertions(+), 8 deletions(-)
-
-
-base-commit: 33ae8f801ad8bec48e886d368739feb2816478f2
+diff --git a/arch/mips/include/asm/mach-loongson32/dma.h b/arch/mips/include/asm/mach-loongson32/dma.h
+index e917b3ccb2c2..1bcf1eb8fe3d 100644
+--- a/arch/mips/include/asm/mach-loongson32/dma.h
++++ b/arch/mips/include/asm/mach-loongson32/dma.h
+@@ -8,14 +8,15 @@
+ #ifndef __ASM_MACH_LOONGSON32_DMA_H
+ #define __ASM_MACH_LOONGSON32_DMA_H
+ 
++#include <linux/dmaengine.h>
++
+ #define LS1X_DMA_CHANNEL0	0
+ #define LS1X_DMA_CHANNEL1	1
+ #define LS1X_DMA_CHANNEL2	2
+ 
+ struct plat_ls1x_dma {
+-	int nr_channels;
++	const struct dma_slave_map *slave_map;
++	int slavecnt;
+ };
+ 
+-extern struct plat_ls1x_dma ls1b_dma_pdata;
+-
+ #endif /* __ASM_MACH_LOONGSON32_DMA_H */
+diff --git a/arch/mips/include/asm/mach-loongson32/nand.h b/arch/mips/include/asm/mach-loongson32/nand.h
+index aaf5ed19d78d..d6eff2fadca2 100644
+--- a/arch/mips/include/asm/mach-loongson32/nand.h
++++ b/arch/mips/include/asm/mach-loongson32/nand.h
+@@ -19,8 +19,4 @@ struct plat_ls1x_nand {
+ 	int wait_cycle;
+ };
+ 
+-extern struct plat_ls1x_nand ls1b_nand_pdata;
+-
+-bool ls1x_dma_filter_fn(struct dma_chan *chan, void *param);
+-
+ #endif /* __ASM_MACH_LOONGSON32_NAND_H */
 -- 
 2.30.2
 
