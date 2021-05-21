@@ -2,237 +2,330 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF3538C241
-	for <lists+linux-mips@lfdr.de>; Fri, 21 May 2021 10:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E164D38C2AF
+	for <lists+linux-mips@lfdr.de>; Fri, 21 May 2021 11:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbhEUIu3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 May 2021 04:50:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30124 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233751AbhEUIu1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 21 May 2021 04:50:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621586944;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ss3oq71TJpZynR4jRUU0R8ghR5Bhj/98WSz+6h5ZWWw=;
-        b=hdEAG1ZUglmz9WLA1mTx9/R/biXUQSfU04hHNIu8Gm+GXw1WjJwbGYBsLZ6kp8q9jHfHcS
-        tQor3uaX9bKQlmi3bVzU0Q+/ePDAACx3iDuGkFKgQ5YvjdPe8HZFyMmF2PA+KbgMOxuvYl
-        2UjwHaQ8nVwfrOTA4OKxUsSjsw0PMhc=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-250-hrBl1jgiMlmhbzzUuGE-uA-1; Fri, 21 May 2021 04:49:01 -0400
-X-MC-Unique: hrBl1jgiMlmhbzzUuGE-uA-1
-Received: by mail-wr1-f69.google.com with SMTP id 67-20020adf81490000b029010756d109e6so9092521wrm.13
-        for <linux-mips@vger.kernel.org>; Fri, 21 May 2021 01:49:01 -0700 (PDT)
+        id S234581AbhEUJLf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 May 2021 05:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233695AbhEUJLe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 May 2021 05:11:34 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B7EC061574
+        for <linux-mips@vger.kernel.org>; Fri, 21 May 2021 02:10:12 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id t206so10730216wmf.0
+        for <linux-mips@vger.kernel.org>; Fri, 21 May 2021 02:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=KsB8c95RBqgbk06LSBJpUGVB4fOCkAPy66b3WiLSiL8=;
+        b=ZoAE9j3FV7nGldJBi9CcW8szXRlLm5OscpoLL2wDayboupPVGS+9B73m1Fj67mXFae
+         tOajGSRpsmgKfdQpGP+RF1dmD9SP4ycErALrXFQqes8x4qlqgLeGUXVW3uWvvfOeQDXk
+         g8kMq4znSHseNeULTml3ts3LhIKkSaq/VMllo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:organization:subject
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=Ss3oq71TJpZynR4jRUU0R8ghR5Bhj/98WSz+6h5ZWWw=;
-        b=SJKNaSRjPz576Kgtp0QvLSdAKHLKMGKqQWSgNSK/OCACBdC5FjBUbuf+jdNzHj7K1z
-         GOiwbK+07p+dpMjaFX7EZQMpHPi61SanmuesuZcCGfiK4TjLyMw0UhHCDrejbqt/35xo
-         YGeFTBDZlscD2kfJac4p2WaFfFYvv4bbfdpG3wYy2TrfUHa0y9Tx64vaOGoU7Ks/k/6C
-         kaMePqG4AUlJYDVqEswGGQvFsRKdJvorMdD7uicP1mGPH8bNCds4qPNesmNZwXZnxvfG
-         3o9Wu0ziNzTKbtr4Y63nvsKJ2Ba/9dVc8LgxBsueGYd4LrM0V5+Wj/OPvUeZ45xIVzXT
-         OH3w==
-X-Gm-Message-State: AOAM530OdhnBUBHEzIwm+TRD4sZNjY9iDcvZCoQnzDHUgAJR6ES2DOrN
-        CU5tEvKp8WTAkjREwgSRyqWYchUJVy05WqCoanYEdoB3nOIgpv+9Ys2t8yMhYvG7OnWlSJh02pI
-        ybDV68uKth8zmtCubm+dTSg==
-X-Received: by 2002:a05:600c:3592:: with SMTP id p18mr7606410wmq.44.1621586940345;
-        Fri, 21 May 2021 01:49:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwEzS6ZR08kC/nab/1F9qSPZO8CRDhLDB8U6o4FhSCqgEsVRhOFUu1qq4q3oGPk3STOmbHF0Q==
-X-Received: by 2002:a05:600c:3592:: with SMTP id p18mr7606385wmq.44.1621586939966;
-        Fri, 21 May 2021 01:48:59 -0700 (PDT)
-Received: from [192.168.3.132] (p5b0c6502.dip0.t-ipconnect.de. [91.12.101.2])
-        by smtp.gmail.com with ESMTPSA id x4sm11507774wmj.17.2021.05.21.01.48.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 May 2021 01:48:59 -0700 (PDT)
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>, Jann Horn <jannh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        Rolf Eike Beer <eike-kernel@sf-tec.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>
-References: <20210511081534.3507-1-david@redhat.com>
- <20210511081534.3507-3-david@redhat.com> <YKOR/8LzEaOgCvio@dhcp22.suse.cz>
- <bb0e2ebb-e66d-176c-b20a-fbadd95cde98@redhat.com>
- <YKOiV9VkEdYFM9nB@dhcp22.suse.cz>
- <b2fa988d-9625-7c0e-ce83-158af0058e38@redhat.com>
- <YKZnsnqgEMx6Xl6X@dhcp22.suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH resend v2 2/5] mm/madvise: introduce
- MADV_POPULATE_(READ|WRITE) to prefault page tables
-Message-ID: <2e41144c-27f4-f341-d855-f966dabc2c21@redhat.com>
-Date:   Fri, 21 May 2021 10:48:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=KsB8c95RBqgbk06LSBJpUGVB4fOCkAPy66b3WiLSiL8=;
+        b=XUTAEyfwdt8BA/CXBmc2fUI9F6P9s/LNX8oHyd0ugEZmZkpS+SFXCvBsw/UPGT4jtw
+         ml6ZWc9FZQhB6sPPXonSTAjL8h4nhB+uYyplwQXfm8Tp1zyWaIdAb6UbaKFPYTllo5fN
+         7o9YaVS0rphcDBTXXkgFKssTgy3wz5G3SYrJJvtJoRYP9q0CYcgxXIB4FeHBlTPATHAM
+         wyETShwzmKDZtonMQ2DoFvOcE1+Qg0TwZDb9aAmqm7Xi75UqR9Fgv05X5WjgQg2gbcCE
+         HpDuCy2uLjUFnB8wDwK3qdSflIE4NK/404Vcd9WvrcG3Xs6ELPiL5k9v2DRFTeXzDV/c
+         BKOA==
+X-Gm-Message-State: AOAM531Ex5UpmuyY8hLsDaV5rUEZApGTSw4dNikqlL++IK2JXuRK92dP
+        VqxRJxoUHLJy+NryPN4+je4Ucg==
+X-Google-Smtp-Source: ABdhPJwxzqMjXiunMtYCQ3wsk1wAop9n+YWZ2p4X1wwbbVMp6Fs0i7RZrR7zPKHIMQ8MouNbhBccFA==
+X-Received: by 2002:a1c:4e0b:: with SMTP id g11mr7647579wmh.3.1621588210578;
+        Fri, 21 May 2021 02:10:10 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id y2sm13589457wmq.45.2021.05.21.02.10.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 May 2021 02:10:10 -0700 (PDT)
+From:   Daniel Vetter <daniel.vetter@ffwll.ch>
+To:     DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+        Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH 06/11] drm/<driver>: drm_gem_plane_helper_prepare_fb is now the default
+Date:   Fri, 21 May 2021 11:09:54 +0200
+Message-Id: <20210521090959.1663703-6-daniel.vetter@ffwll.ch>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20210521090959.1663703-1-daniel.vetter@ffwll.ch>
+References: <20210521090959.1663703-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
-In-Reply-To: <YKZnsnqgEMx6Xl6X@dhcp22.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> [...]
->> Anyhow, please suggest a way to handle it via a single flag in the kernel --
->> which would be some kind of heuristic as we know from MAP_POPULATE. Having
->> an alternative at hand would make it easier to discuss this topic further. I
->> certainly *don't* want MAP_POPULATE semantics when it comes to
->> MADV_POPULATE, especially when it comes to shared mappings. Not useful in
->> QEMU now and in the future.
-> 
-> OK, this point is still not entirely clear to me. Elsewhere you are
-> saying that QEMU cannot use MAP_POPULATE because it ignores errors
-> and also it doesn't support sparse mappings because they apply to the
-> whole mmap. These are all clear but it is less clear to me why the same
-> semantic is not applicable for QEMU when used through madvise interface
-> which can handle both of those.
+No need to set it explicitly.
 
-It's a combination of things:
+Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+Cc: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+Cc: Lucas Stach <l.stach@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Stefan Agner <stefan@agner.ch>
+Cc: Sandy Huang <hjc@rock-chips.com>
+Cc: "Heiko Stübner" <heiko@sntech.de>
+Cc: Yannick Fertre <yannick.fertre@foss.st.com>
+Cc: Philippe Cornu <philippe.cornu@foss.st.com>
+Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc: Jyri Sarha <jyri.sarha@iki.fi>
+Cc: Tomi Valkeinen <tomba@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-amlogic@lists.infradead.org
+Cc: linux-rockchip@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-sunxi@lists.linux.dev
+---
+ drivers/gpu/drm/imx/dcss/dcss-plane.c       | 1 -
+ drivers/gpu/drm/imx/ipuv3-plane.c           | 1 -
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c   | 1 -
+ drivers/gpu/drm/ingenic/ingenic-ipu.c       | 1 -
+ drivers/gpu/drm/mediatek/mtk_drm_plane.c    | 1 -
+ drivers/gpu/drm/meson/meson_overlay.c       | 1 -
+ drivers/gpu/drm/meson/meson_plane.c         | 1 -
+ drivers/gpu/drm/mxsfb/mxsfb_kms.c           | 2 --
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 1 -
+ drivers/gpu/drm/stm/ltdc.c                  | 1 -
+ drivers/gpu/drm/sun4i/sun4i_layer.c         | 1 -
+ drivers/gpu/drm/sun4i/sun8i_ui_layer.c      | 1 -
+ drivers/gpu/drm/sun4i/sun8i_vi_layer.c      | 1 -
+ drivers/gpu/drm/tidss/tidss_plane.c         | 1 -
+ 14 files changed, 15 deletions(-)
 
-a) MAP_POPULATE never was an option simply because of deferred
-    "prealloc=on" handling in QEMU, happening way after we created the
-    memmap. Further it doesn't report if there was an error, which is
-    another reason why it's basically useless for QEMU use cases.
-b) QEMU uses manual read-write prefaulting for "preallocation", for
-    example, to avoid SIGBUS on hugetlbfs or shmem at runtime. There are
-    cases where we absolutely want to avoid crashing the VM later just
-    because of a user error. MAP_POPULATE does *not* do what we want for
-    shared mappings, because it triggers a read fault.
-c) QEMU uses the same mechanism for prefaulting in RT environments,
-    where we want to avoid any kind of pagefault, using mlock() etc.
-d) MAP_POPULATE does not apply to sparse memory mappings that I'll be
-    using more heavily in QEMU, also for the purpose of preallocation
-    with virtio-mem.
-
-See the current QEMU code along with a comment in
-
-https://github.com/qemu/qemu/blob/972e848b53970d12cb2ca64687ef8ff797fb6236/util/oslib-posix.c#L496
-
-it's especially bad for PMEM ("wear on the storage backing"), which is 
-why we have to trust on users not to trigger preallocation/prefaulting 
-on PMEM, otherwise (as already expressed via bug reports) we waste a lot 
-of time when backing VMs on PMEM or forwarding NVDIMMs, unnecessarily 
-read/writing (slow) DAX.
-
-> Do I get it right that you really want to emulate the full fledged write
-> fault to a) limit another write fault when the content is actually
-> modified and b) prevent from potential errors during the write fault
-> (e.g. mkwrite failing on the fs data)?
-
-Yes, for the use case of "preallocation" in QEMU. See the QEMU link.
-
-But again, the thing that makes it more complicated is that I can come 
-up with some use cases that want to handle "shared mappings of ordinary 
-files" a little better. Or the usefaultfd-wp example I gave, where 
-prefaulting via MADV_POPULATE_READ can roughly half the population time.
-
->> We could make MADV_POPULATE act depending on the readability/writability of
->> a mapping. Use MADV_POPULATE_WRITE on writable mappings, use
->> MADV_POPULATE_READ on readable mappings. Certainly not perfect for use cases
->> where you have writable mappings that are mostly read only (as in the
->> example with fake-NVDIMMs I gave ...), but if it makes people happy, fine
->> with me. I mostly care about MADV_POPULATE_WRITE.
-> 
-> Yes, this is where my thinking was going as well. Essentially define
-> MADV_POPULATE as "Populate the mapping with the memory based on the
-> mapping access." This looks like a straightforward semantic to me and it
-> doesn't really require any deep knowledge of internals.
-> 
-> Now, I was trying to compare which of those would be more tricky to
-> understand and use and TBH I am not really convinced any of the two is
-> much better. Separate READ/WRITE modes are explicit which can be good
-> but it will require quite an advanced knowledge of the #PF behavior.
-> On the other hand MADV_POPULATE would require some tricks like mmap,
-> madvise and mprotect(to change to writable) when the data is really
-> written to. I am not sure how much of a deal this would be for QEMU for
-> example.
-
-IIRC, at the time we enable background snapshotting, the VM is running 
-and we cannot temporarily mprotect(PROT_READ) without making the guest 
-crash. But again, uffd-wp handling is somewhat a special case because 
-the implementation in the kernel is really suboptimal.
-
-The reason I chose MADV_POPULATE_READ + MADV_POPULATE_WRITE is because 
-it really mimics what user space currently does to get the job done.
-
-I guess the important part to document is that "be careful when using 
-MADV_POPULATE_READ because it might just populate the shared zeropage" 
-and "be careful with MADV_POPULATE_WRITE because it will do the same as 
-when writing to every page: dirty the pages such that they will have to 
-be written back when backed by actual files".
-
-
-The current MAN page entry for MADV_POPULATE_READ reads:
-
-"
-Populate (prefault) page tables readable for the whole range without 
-actually reading. Depending on the underlying mapping, map the shared 
-zeropage, preallocate memory or read the underlying file. Do not 
-generate SIGBUS when populating fails, return an error instead.
-
-If  MADV_POPULATE_READ succeeds, all page tables have been populated 
-(prefaulted) readable once. If MADV_POPULATE_READ fails, some page 
-tables might have been populated.
-
-MADV_POPULATE_READ cannot be applied to mappings without read 
-permissions  and  special mappings marked with the kernel-internal 
-VM_PFNMAP and VM_IO.
-
-Note that with MADV_POPULATE_READ, the process can still be killed at 
-any moment when the system runs out of memory.
-"
-
-
-> 
-> So, all that being said, I am not really sure. I am not really happy
-> about READ/WRITE split but if a simpler interface is going to be a bad
-> fit for existing usecases then I believe a proper way to go is the
-> document the more complex interface thoroughly.
-
-I think with the split we are better off long term without requiring 
-workarounds (mprotect()) to make some use cases work in the long term.
-
-But again, if there is a good justification why a single MADV_POPULATE 
-make sense, I'm happy to change it. Again, for me, the most important 
-thing long-term is MADV_POPULATE_WRITE because that's really what QEMU 
-mainly uses right now for preallocation. But I can see use cases for 
-MADV_POPULATE_READ as well.
-
-Thanks for your input!
-
+diff --git a/drivers/gpu/drm/imx/dcss/dcss-plane.c b/drivers/gpu/drm/imx/dcss/dcss-plane.c
+index 044d3bdf313c..ac45d54acd4e 100644
+--- a/drivers/gpu/drm/imx/dcss/dcss-plane.c
++++ b/drivers/gpu/drm/imx/dcss/dcss-plane.c
+@@ -361,7 +361,6 @@ static void dcss_plane_atomic_disable(struct drm_plane *plane,
+ }
+ 
+ static const struct drm_plane_helper_funcs dcss_plane_helper_funcs = {
+-	.prepare_fb = drm_gem_plane_helper_prepare_fb,
+ 	.atomic_check = dcss_plane_atomic_check,
+ 	.atomic_update = dcss_plane_atomic_update,
+ 	.atomic_disable = dcss_plane_atomic_disable,
+diff --git a/drivers/gpu/drm/imx/ipuv3-plane.c b/drivers/gpu/drm/imx/ipuv3-plane.c
+index 8710f55d2579..ef114b6aa691 100644
+--- a/drivers/gpu/drm/imx/ipuv3-plane.c
++++ b/drivers/gpu/drm/imx/ipuv3-plane.c
+@@ -772,7 +772,6 @@ static void ipu_plane_atomic_update(struct drm_plane *plane,
+ }
+ 
+ static const struct drm_plane_helper_funcs ipu_plane_helper_funcs = {
+-	.prepare_fb = drm_gem_plane_helper_prepare_fb,
+ 	.atomic_check = ipu_plane_atomic_check,
+ 	.atomic_disable = ipu_plane_atomic_disable,
+ 	.atomic_update = ipu_plane_atomic_update,
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index 389cad59e090..62db7349bf6a 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -786,7 +786,6 @@ static const struct drm_plane_helper_funcs ingenic_drm_plane_helper_funcs = {
+ 	.atomic_update		= ingenic_drm_plane_atomic_update,
+ 	.atomic_check		= ingenic_drm_plane_atomic_check,
+ 	.atomic_disable		= ingenic_drm_plane_atomic_disable,
+-	.prepare_fb		= drm_gem_plane_helper_prepare_fb,
+ };
+ 
+ static const struct drm_crtc_helper_funcs ingenic_drm_crtc_helper_funcs = {
+diff --git a/drivers/gpu/drm/ingenic/ingenic-ipu.c b/drivers/gpu/drm/ingenic/ingenic-ipu.c
+index 3b1091e7c0cd..caf038f3e231 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-ipu.c
++++ b/drivers/gpu/drm/ingenic/ingenic-ipu.c
+@@ -615,7 +615,6 @@ static const struct drm_plane_helper_funcs ingenic_ipu_plane_helper_funcs = {
+ 	.atomic_update		= ingenic_ipu_plane_atomic_update,
+ 	.atomic_check		= ingenic_ipu_plane_atomic_check,
+ 	.atomic_disable		= ingenic_ipu_plane_atomic_disable,
+-	.prepare_fb		= drm_gem_plane_helper_prepare_fb,
+ };
+ 
+ static int
+diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+index b5582dcf564c..1667a7e7de38 100644
+--- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
++++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+@@ -227,7 +227,6 @@ static void mtk_plane_atomic_update(struct drm_plane *plane,
+ }
+ 
+ static const struct drm_plane_helper_funcs mtk_plane_helper_funcs = {
+-	.prepare_fb = drm_gem_plane_helper_prepare_fb,
+ 	.atomic_check = mtk_plane_atomic_check,
+ 	.atomic_update = mtk_plane_atomic_update,
+ 	.atomic_disable = mtk_plane_atomic_disable,
+diff --git a/drivers/gpu/drm/meson/meson_overlay.c b/drivers/gpu/drm/meson/meson_overlay.c
+index ed063152aecd..dfef8afcc245 100644
+--- a/drivers/gpu/drm/meson/meson_overlay.c
++++ b/drivers/gpu/drm/meson/meson_overlay.c
+@@ -747,7 +747,6 @@ static const struct drm_plane_helper_funcs meson_overlay_helper_funcs = {
+ 	.atomic_check	= meson_overlay_atomic_check,
+ 	.atomic_disable	= meson_overlay_atomic_disable,
+ 	.atomic_update	= meson_overlay_atomic_update,
+-	.prepare_fb	= drm_gem_plane_helper_prepare_fb,
+ };
+ 
+ static bool meson_overlay_format_mod_supported(struct drm_plane *plane,
+diff --git a/drivers/gpu/drm/meson/meson_plane.c b/drivers/gpu/drm/meson/meson_plane.c
+index a18510dae4c8..8640a8a8a469 100644
+--- a/drivers/gpu/drm/meson/meson_plane.c
++++ b/drivers/gpu/drm/meson/meson_plane.c
+@@ -422,7 +422,6 @@ static const struct drm_plane_helper_funcs meson_plane_helper_funcs = {
+ 	.atomic_check	= meson_plane_atomic_check,
+ 	.atomic_disable	= meson_plane_atomic_disable,
+ 	.atomic_update	= meson_plane_atomic_update,
+-	.prepare_fb	= drm_gem_plane_helper_prepare_fb,
+ };
+ 
+ static bool meson_plane_format_mod_supported(struct drm_plane *plane,
+diff --git a/drivers/gpu/drm/mxsfb/mxsfb_kms.c b/drivers/gpu/drm/mxsfb/mxsfb_kms.c
+index 300e7bab0f43..8797c671d0d5 100644
+--- a/drivers/gpu/drm/mxsfb/mxsfb_kms.c
++++ b/drivers/gpu/drm/mxsfb/mxsfb_kms.c
+@@ -500,13 +500,11 @@ static bool mxsfb_format_mod_supported(struct drm_plane *plane,
+ }
+ 
+ static const struct drm_plane_helper_funcs mxsfb_plane_primary_helper_funcs = {
+-	.prepare_fb = drm_gem_plane_helper_prepare_fb,
+ 	.atomic_check = mxsfb_plane_atomic_check,
+ 	.atomic_update = mxsfb_plane_primary_atomic_update,
+ };
+ 
+ static const struct drm_plane_helper_funcs mxsfb_plane_overlay_helper_funcs = {
+-	.prepare_fb = drm_gem_plane_helper_prepare_fb,
+ 	.atomic_check = mxsfb_plane_atomic_check,
+ 	.atomic_update = mxsfb_plane_overlay_atomic_update,
+ };
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+index 64469439ddf2..6406bc0a71c7 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+@@ -1109,7 +1109,6 @@ static const struct drm_plane_helper_funcs plane_helper_funcs = {
+ 	.atomic_disable = vop_plane_atomic_disable,
+ 	.atomic_async_check = vop_plane_atomic_async_check,
+ 	.atomic_async_update = vop_plane_atomic_async_update,
+-	.prepare_fb = drm_gem_plane_helper_prepare_fb,
+ };
+ 
+ static const struct drm_plane_funcs vop_plane_funcs = {
+diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+index e99771b947b6..a5a2956f23f2 100644
+--- a/drivers/gpu/drm/stm/ltdc.c
++++ b/drivers/gpu/drm/stm/ltdc.c
+@@ -946,7 +946,6 @@ static const struct drm_plane_funcs ltdc_plane_funcs = {
+ };
+ 
+ static const struct drm_plane_helper_funcs ltdc_plane_helper_funcs = {
+-	.prepare_fb = drm_gem_plane_helper_prepare_fb,
+ 	.atomic_check = ltdc_plane_atomic_check,
+ 	.atomic_update = ltdc_plane_atomic_update,
+ 	.atomic_disable = ltdc_plane_atomic_disable,
+diff --git a/drivers/gpu/drm/sun4i/sun4i_layer.c b/drivers/gpu/drm/sun4i/sun4i_layer.c
+index 11771bdd6e7c..929e95f86b5b 100644
+--- a/drivers/gpu/drm/sun4i/sun4i_layer.c
++++ b/drivers/gpu/drm/sun4i/sun4i_layer.c
+@@ -127,7 +127,6 @@ static bool sun4i_layer_format_mod_supported(struct drm_plane *plane,
+ }
+ 
+ static const struct drm_plane_helper_funcs sun4i_backend_layer_helper_funcs = {
+-	.prepare_fb	= drm_gem_plane_helper_prepare_fb,
+ 	.atomic_disable	= sun4i_backend_layer_atomic_disable,
+ 	.atomic_update	= sun4i_backend_layer_atomic_update,
+ };
+diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+index 0db164a774a1..ac3d43394589 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
++++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
+@@ -332,7 +332,6 @@ static void sun8i_ui_layer_atomic_update(struct drm_plane *plane,
+ }
+ 
+ static const struct drm_plane_helper_funcs sun8i_ui_layer_helper_funcs = {
+-	.prepare_fb	= drm_gem_plane_helper_prepare_fb,
+ 	.atomic_check	= sun8i_ui_layer_atomic_check,
+ 	.atomic_disable	= sun8i_ui_layer_atomic_disable,
+ 	.atomic_update	= sun8i_ui_layer_atomic_update,
+diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+index 46420780db59..45b1e37f9cda 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
++++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+@@ -436,7 +436,6 @@ static void sun8i_vi_layer_atomic_update(struct drm_plane *plane,
+ }
+ 
+ static const struct drm_plane_helper_funcs sun8i_vi_layer_helper_funcs = {
+-	.prepare_fb	= drm_gem_plane_helper_prepare_fb,
+ 	.atomic_check	= sun8i_vi_layer_atomic_check,
+ 	.atomic_disable	= sun8i_vi_layer_atomic_disable,
+ 	.atomic_update	= sun8i_vi_layer_atomic_update,
+diff --git a/drivers/gpu/drm/tidss/tidss_plane.c b/drivers/gpu/drm/tidss/tidss_plane.c
+index 1acd15aa4193..217415ec8eea 100644
+--- a/drivers/gpu/drm/tidss/tidss_plane.c
++++ b/drivers/gpu/drm/tidss/tidss_plane.c
+@@ -158,7 +158,6 @@ static void drm_plane_destroy(struct drm_plane *plane)
+ }
+ 
+ static const struct drm_plane_helper_funcs tidss_plane_helper_funcs = {
+-	.prepare_fb = drm_gem_plane_helper_prepare_fb,
+ 	.atomic_check = tidss_plane_atomic_check,
+ 	.atomic_update = tidss_plane_atomic_update,
+ 	.atomic_disable = tidss_plane_atomic_disable,
 -- 
-Thanks,
-
-David / dhildenb
+2.31.0
 
