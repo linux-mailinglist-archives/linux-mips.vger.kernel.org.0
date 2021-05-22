@@ -2,134 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE0838D1E4
-	for <lists+linux-mips@lfdr.de>; Sat, 22 May 2021 01:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E5438D6F0
+	for <lists+linux-mips@lfdr.de>; Sat, 22 May 2021 20:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbhEUXTr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 May 2021 19:19:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41388 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230017AbhEUXTq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 21 May 2021 19:19:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C29C2613EE
-        for <linux-mips@vger.kernel.org>; Fri, 21 May 2021 23:18:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621639102;
-        bh=Hd7KH/71GldwhXzi4DHrPnVVlwTF8/7LpSIK8f+o37k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b+pJqynW1w/R+LL4I9BTLAU0+XCyitL1GREgBtbsk0yx4tb+e6tJb7lyi4kJ+9+Xx
-         wO874yz9I7DAU3nW/Xx20HKrKsnewOR7Eds005yluqh/t9+XkOiSl+K7xv3w/KTy+m
-         q5eV15a4pC1xbnnCjsnR6BY5KeOGs7aZ0JHy0qbQRp8GLwzG+O4yKit7Aljt4lbgkl
-         z4m2FQomV1XpAe8piLyBXjnydgO9Id17vT/M7TffdLdg5aTurpFvgsFo9LXadfEJ7J
-         dVD4xJkNDvyvaiBiCqMf2EPsbttEdMTK7+Uo3sMLmsNxDBl3wA4W1LjGEejq9/6RyX
-         S+M4uSk4UJpAw==
-Received: by mail-wr1-f48.google.com with SMTP id d11so22465648wrw.8
-        for <linux-mips@vger.kernel.org>; Fri, 21 May 2021 16:18:22 -0700 (PDT)
-X-Gm-Message-State: AOAM533I/qot2FgIN9HCHHEuT8lDz9i45AWoKYooiEvpJuOakfRZk85/
-        gN5UcB+wj46SGqhcts4qTj2x2x8FCb7I2qq2jQ==
-X-Google-Smtp-Source: ABdhPJwLJlzlmPOVRB7WKK0qZ9/SZhKCK9XRN5xQd6mPkGwxMkeGWm/SWipPm0RU1P626dAzclwFX7nQ2tzbyDx7y90=
-X-Received: by 2002:aa7:d550:: with SMTP id u16mr11816867edr.72.1621639091092;
- Fri, 21 May 2021 16:18:11 -0700 (PDT)
+        id S231153AbhEVS03 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 22 May 2021 14:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231146AbhEVS02 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 22 May 2021 14:26:28 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EFFC061574;
+        Sat, 22 May 2021 11:25:02 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id k4so17492841ili.4;
+        Sat, 22 May 2021 11:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Gxvf6CItXhnwkIkAhhU1TGdchDlAJrQF9LriPZOdZ1w=;
+        b=qt2eDctdLY3j41bD8Ba658MYI1+6yvGtzO/8BZjL7iNqT/wVKZWnnOFIM8INFQ0zBk
+         B7klkA1BA6+h0H5E7hehfgbJM1/fAF41c7WgSUgel0rJdGCpeEK3r/XHy/kIRefNRpDZ
+         FOhfB66jaxIPmd6i7vuKkcSH9fSvbIVk9wGVVcnC0xPYY8dQEqEfpRKaFIL9cBHbugZr
+         U2ujsTw+Ld+L7DBWMBX59zIF2rk16LKj2T1esLXrhxEE98EtfWBFpz50bgHZvYe5WbPh
+         jntI9SHXCNYTa+rUGaaNAuS5dRSKzw/jnJqBMNwbw7DX4e+ZcoiwTYcHhWXCSQJi8gvQ
+         Xw8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gxvf6CItXhnwkIkAhhU1TGdchDlAJrQF9LriPZOdZ1w=;
+        b=dqomDZr3I8aBC14nH1iVCiaOWeF1CfJSbENSPcg57Eo+RbW6DBILOBm9gD6DjGHls4
+         F/GW51VndDhYynDDCWTAAfgK0opZa19SYyg7jo58vlJlWjQUqJKy2oG+qzCrPiupa4Q0
+         TO6lIEA5Jw4XIxXsMGIVy8RQ83eE/Q0uQ2uv+Oef18puS0N0llTmE25Vt6bnglhRwS2v
+         4y/PyduAE/9t7AkP8nQ1QUtjgsHQAKCCQB3Wca0bjQsMjehrFf1bRzlTj+pVHUoUFNax
+         kUUAU1Eh+HI/6Kq5c4CEjy7RMfkBgCxeRt8IDJhQXXVAeIUTKclz9tEgfNv1E/x/WPWv
+         avBQ==
+X-Gm-Message-State: AOAM532BzHkMNFEddLCMcsXchixHVmOOijiqx7/99MChCfAyayUnH7Aw
+        xkSPcjJvgUo2dOMbje8nfqk/BNCY6/ycSCJSRKg0bbBa+lJRCA==
+X-Google-Smtp-Source: ABdhPJxToo0dsn97OUWHNita+P6de7hRF+rG4qV618HdE0nBwC84ekAAI42jVUHkBMm+w0lE2C6feTdKf3W5BguMkFI=
+X-Received: by 2002:a05:6e02:df2:: with SMTP id m18mr6221698ilj.77.1621707901668;
+ Sat, 22 May 2021 11:25:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210521090959.1663703-1-daniel.vetter@ffwll.ch> <20210521090959.1663703-6-daniel.vetter@ffwll.ch>
-In-Reply-To: <20210521090959.1663703-6-daniel.vetter@ffwll.ch>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Sat, 22 May 2021 07:18:00 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-PKbYrREUccm5ZbTaMawpaZ7c=1zBbQBFfCZqfpu-1Hg@mail.gmail.com>
-Message-ID: <CAAOTY_-PKbYrREUccm5ZbTaMawpaZ7c=1zBbQBFfCZqfpu-1Hg@mail.gmail.com>
-Subject: Re: [PATCH 06/11] drm/<driver>: drm_gem_plane_helper_prepare_fb is
- now the default
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
-        Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev
+References: <20210521051343.20059-1-rdunlap@infradead.org>
+In-Reply-To: <20210521051343.20059-1-rdunlap@infradead.org>
+From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+Date:   Sat, 22 May 2021 11:24:50 -0700
+Message-ID: <CALCv0x0mHPCvknB-jUS8V8t5mnFTMrENcbNA2oFuX+Z2gmPTHg@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: launch.h: add include guard to prevent build errors
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Daniel:
-
-Daniel Vetter <daniel.vetter@ffwll.ch> =E6=96=BC 2021=E5=B9=B45=E6=9C=8821=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:10=E5=AF=AB=E9=81=93=EF=BC=
-=9A
+On Thu, May 20, 2021 at 10:13 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> No need to set it explicitly.
+> arch/mips/include/asm/mips-boards/launch.h needs an include guard
+> to prevent it from being #included more than once.
+> Prevents these build errors:
 >
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Paul Cercueil <paul@crapouillou.net>
-> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: Stefan Agner <stefan@agner.ch>
-> Cc: Sandy Huang <hjc@rock-chips.com>
-> Cc: "Heiko St=C3=BCbner" <heiko@sntech.de>
-> Cc: Yannick Fertre <yannick.fertre@foss.st.com>
-> Cc: Philippe Cornu <philippe.cornu@foss.st.com>
-> Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Jyri Sarha <jyri.sarha@iki.fi>
-> Cc: Tomi Valkeinen <tomba@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
+> In file included from ../arch/mips/mti-malta/malta-amon.c:16:
+> ../arch/mips/include/asm/mips-boards/launch.h:8:8: error: redefinition of 'struct cpulaunch'
+>     8 | struct cpulaunch {
+>       |        ^~~~~~~~~
+> In file included from ../arch/mips/include/asm/mips-cps.h:13,
+>                  from ../arch/mips/include/asm/smp-ops.h:16,
+>                  from ../arch/mips/include/asm/smp.h:21,
+>                  from ../include/linux/smp.h:114,
+>                  from ../arch/mips/mti-malta/malta-amon.c:12:
+> ../arch/mips/include/asm/mips-boards/launch.h:8:8: note: originally defined here
+>     8 | struct cpulaunch {
+>       |        ^~~~~~~~~
+> make[3]: [../scripts/Makefile.build:273: arch/mips/mti-malta/malta-amon.o] Error 1 (ignored)
+>
+> Fixes: 6decd1aad15f ("MIPS: add support for buggy MT7621S core detection")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > Cc: linux-mips@vger.kernel.org
-> Cc: linux-mediatek@lists.infradead.org
-> Cc: linux-amlogic@lists.infradead.org
-> Cc: linux-rockchip@lists.infradead.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-sunxi@lists.linux.dev
+> Cc: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+> ---
+>  arch/mips/include/asm/mips-boards/launch.h |    5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> --- linux-next-20210520.orig/arch/mips/include/asm/mips-boards/launch.h
+> +++ linux-next-20210520/arch/mips/include/asm/mips-boards/launch.h
+> @@ -3,6 +3,9 @@
+>   *
+>   */
+>
+> +#ifndef _ASM_MIPS_BOARDS_LAUNCH_H
+> +#define _ASM_MIPS_BOARDS_LAUNCH_H
+> +
+>  #ifndef _ASSEMBLER_
+>
+>  struct cpulaunch {
+> @@ -34,3 +37,5 @@ struct cpulaunch {
+>
+>  /* Polling period in count cycles for secondary CPU's */
+>  #define LAUNCHPERIOD   10000
+> +
+> +#endif /* _ASM_MIPS_BOARDS_LAUNCH_H */
+Thank you for fixing this.
 
-For Mediatek,
-Acked-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Reviewed-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
