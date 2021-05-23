@@ -2,125 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDE638DC94
-	for <lists+linux-mips@lfdr.de>; Sun, 23 May 2021 21:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9D838DE06
+	for <lists+linux-mips@lfdr.de>; Mon, 24 May 2021 01:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbhEWTVI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 23 May 2021 15:21:08 -0400
-Received: from aposti.net ([89.234.176.197]:55128 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231887AbhEWTVI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 23 May 2021 15:21:08 -0400
-Date:   Sun, 23 May 2021 20:19:27 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v5 0/3] Add option to mmap GEM buffers cached
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>, list@opendingux.net
-Message-Id: <F0RKTQ.VPIWIN1LS7JH3@crapouillou.net>
-In-Reply-To: <452b2228-2415-69d7-9212-51707daf8616@suse.de>
-References: <20210523170415.90410-1-paul@crapouillou.net>
-        <452b2228-2415-69d7-9212-51707daf8616@suse.de>
+        id S232041AbhEWX1e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 23 May 2021 19:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231982AbhEWX1d (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 May 2021 19:27:33 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEE8C061574;
+        Sun, 23 May 2021 16:26:05 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id b12so23929979ljp.1;
+        Sun, 23 May 2021 16:26:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pPiK1DfUxZZrTBI/5iz69l7qULP78LHErLsYFXd4x9o=;
+        b=Wh4IAnNxXo994rOpcpBG1uHjyJm1icPsdNE7/2cIz+9OcmAv8x5QRPsjauEGrPNXiW
+         RQkuH5Bx1P5mQmEgcSIo+dbZENJWfm+ttnjxO+s92XMY+RPBJ2+nun7R4NtaOHRkojvQ
+         W5cyhqxNL775x1J4LWzOqkZigA/1vrCffMUNYpOkXrHm5cFJmaSSfTKIr13MI9bCY/Nq
+         LR2+mcOUhyQTrJmbrtHh4CssW4Gvgsl5T+cpjBpF4kz2QpQPMu12h5jDZ0hMpEJyjgTp
+         0ruHCtRGDigp05ZBlZJ/ZsD0UV5aaUlUx5toHznF4RKhugLSlHIIAWqhOg4k8RZwG5Gm
+         lDow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pPiK1DfUxZZrTBI/5iz69l7qULP78LHErLsYFXd4x9o=;
+        b=jhWIjkhX2KaEO3WTXIqdibrHMOxSzM8s9SLXzZKmdrV/A3PCU6al9QfdugiZwy9mlN
+         lhCel3t9yKV1V+diDuQiBlTOSYuIcSYbw3MSDZ6bzhxCJ/8aWfVBNCadDfGhnWhCvT9P
+         MwXZXRnitNsTbpQ8FTCVoZN/idVqIkAB5wqmpNf04LN1CwvZ1YsERImnOblBxnVqE5je
+         Y5T2CsxSubh2JSAWuh+fJhybVKa+tTykpdwYtHBNt4QwJIl2mH160FqFyGhjyq3fX1aJ
+         yFKrdemv+KYfKo2QTNxJ7jm+6Tx4fsWjWhYpIM+uXgLbNeK99VvoRljb10tQsqA234aA
+         safg==
+X-Gm-Message-State: AOAM5325oMpCA4l1MeupAONgBuU40P4cn2SCQQxOmRX+6L/IJbJ3E4k+
+        vCY65+A9PTgl24Qykw2B5gs=
+X-Google-Smtp-Source: ABdhPJzn0nkTvNJ4/y5/7O9Cpdv0X5iyxFW9w+e888CSbB1VKcAijfzu9imoGp+TgHIWvgjlKrqffQ==
+X-Received: by 2002:a05:651c:1043:: with SMTP id x3mr14722134ljm.130.1621812363346;
+        Sun, 23 May 2021 16:26:03 -0700 (PDT)
+Received: from localhost.localdomain (109-252-193-110.dynamic.spd-mgts.ru. [109.252.193.110])
+        by smtp.gmail.com with ESMTPSA id p7sm1489329ljg.61.2021.05.23.16.26.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 May 2021 16:26:02 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Burton <paul.burton@mips.com>,
+        John Crispin <john@phrozen.org>
+Cc:     linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: [PATCH v1] kbuild: Disable compile testing if HAVE_LEGACY_CLK enabled
+Date:   Mon, 24 May 2021 02:25:56 +0300
+Message-Id: <20210523232556.15017-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+There are couple older platforms that can't be compile-tested because they
+partially implement CLK API. It causes build failure of kernel drivers due
+to the missing symbols of the unimplemented part of CLK API.
 
-Le dim., mai 23 2021 at 21:05:30 +0200, Thomas Zimmermann 
-<tzimmermann@suse.de> a écrit :
-> Hi
-> 
-> Am 23.05.21 um 19:04 schrieb Paul Cercueil:
->> V5 of my patchset which adds the option for having GEM buffers 
->> backed by
->> non-coherent memory.
->> 
->> Changes from V4:
->> 
->> - [2/3]:
->>      - Rename to drm_fb_cma_sync_non_coherent
->>      - Invert loops for better cache locality
->>      - Only sync BOs that have the non-coherent flag
->>      - Properly sort includes
->>      - Move to drm_fb_cma_helper.c to avoid circular dependency
-> 
-> I'm pretty sure it's still not the right place. That would be 
-> something like drm_gem_cma_atomic_helper.c, but creating a new file 
-> just for a single function doesn't make sense.
+These platforms are: ARM EP93XX, ARM OMAP1, m68k ColdFire, MIPS AR7,
+                     MIPS Ralink.
 
-drm_fb_cma_sync_non_coherent calls drm_fb_cma_* functions, so it's a 
-better match than its former location (which wasn't good as it created 
-a circular dependency between drm.ko and drm-kms-helper.ko).
+Disable compile-testing for HAVE_LEGACY_CLK=y.
 
-Do you have a better idea?
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ init/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> 
->> - [3/3]:
->>      - Fix drm_atomic_get_new_plane_state() used to retrieve the old
->>        state
->>      - Use custom drm_gem_fb_create()
-> 
-> It's often a better choice to express such differences via different 
-> data structures (i.e., different instances of drm_mode_config_funcs) 
-> but it's not a big deal either.
-
-The different drm_mode_config_funcs instances already exist in 
-drm_gem_framebuffer_helper.c but are static, and drm_gem_fb_create() 
-and drm_gem_fb_create_with_dirty() are just tiny wrappers around 
-drm_gem_fb_create_with_funcs() with the corresponding 
-drm_mode_config_funcs instance. I didn't want to copy them to 
-ingenic-drm-drv.c, but maybe I can export the symbols and use 
-drm_gem_fb_create_with_funcs() directly?
-
-> Please go ahaed and merge if no one objects. All patches:
-> 
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-
-Thanks!
-
-Cheers,
--Paul
-
-> Best regards
-> Thomas
-> 
->>      - Only check damage clips and sync DMA buffers if non-coherent
->>        buffers are used
->> 
->> Cheers,
->> -Paul
->> 
->> Paul Cercueil (3):
->>    drm: Add support for GEM buffers backed by non-coherent memory
->>    drm: Add and export function drm_fb_cma_sync_non_coherent
->>    drm/ingenic: Add option to alloc cached GEM buffers
->> 
->>   drivers/gpu/drm/drm_fb_cma_helper.c       | 46 ++++++++++++++++++
->>   drivers/gpu/drm/drm_gem_cma_helper.c      | 38 +++++++++++----
->>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 59 
->> +++++++++++++++++++++--
->>   drivers/gpu/drm/ingenic/ingenic-drm.h     |  1 +
->>   drivers/gpu/drm/ingenic/ingenic-ipu.c     | 21 ++++++--
->>   include/drm/drm_fb_cma_helper.h           |  4 ++
->>   include/drm/drm_gem_cma_helper.h          |  3 ++
->>   7 files changed, 156 insertions(+), 16 deletions(-)
->> 
-> 
-> --
-> Thomas Zimmermann
-> Graphics Driver Developer
-> SUSE Software Solutions Germany GmbH
-> Maxfeldstr. 5, 90409 Nürnberg, Germany
-> (HRB 36809, AG Nürnberg)
-> Geschäftsführer: Felix Imendörffer
-> 
-
+diff --git a/init/Kconfig b/init/Kconfig
+index 173a474012d7..42701b04be00 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -131,7 +131,7 @@ config INIT_ENV_ARG_LIMIT
+ 
+ config COMPILE_TEST
+ 	bool "Compile also drivers which will not load"
+-	depends on HAS_IOMEM
++	depends on HAS_IOMEM && !HAVE_LEGACY_CLK
+ 	help
+ 	  Some drivers can be compiled on a different platform than they are
+ 	  intended to be run on. Despite they cannot be loaded there (or even
+-- 
+2.30.2
 
