@@ -2,117 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA6F38E112
-	for <lists+linux-mips@lfdr.de>; Mon, 24 May 2021 08:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 941D538E202
+	for <lists+linux-mips@lfdr.de>; Mon, 24 May 2021 09:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbhEXGi4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 May 2021 02:38:56 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:36605 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232266AbhEXGi4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 24 May 2021 02:38:56 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 525BB5C00EE;
-        Mon, 24 May 2021 02:37:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 24 May 2021 02:37:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=i
-        mV8mjswkBJvQ7+FyKqZ30/NY1ju3UpvGEBroWywsfY=; b=eFq0rAu8YiUw2SyKr
-        b5hzq/vpDOFY+UAGWUKhC2AgL2OanK189XCWZhan9i6MjnwY7d0j5pB0BzvhFsO5
-        RbuyrsWraZMvjYocQ0MX8sWJYH9PhkeDKm75sjdxxatvssSIqy1PQ+2fBTQcs0P2
-        qtbLHmtVf31CrEkimlhxecuIS8QieqX+Y+Gdw3pHRiscAY5m5xcbKtJOrA8yqK4U
-        RaDNW2w9GiQE05Hb3DGEKtN57Kg5lWVlWK3tXgOE61SkYGMkmC3cq/+jsBqBhar6
-        kudWuAnEEJ32hqbeKVHzyKI8v9yMZZdmzm+4NqI166sCY0ASq2q6A1S6/b/6piWV
-        lxMCw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=imV8mjswkBJvQ7+FyKqZ30/NY1ju3UpvGEBroWyws
-        fY=; b=DPzKJkVi2k1anjX7aVCYch9jDhfJUej5MNbPQ2uEzOavTvT1mfUMmlKjM
-        +jtMHfPrgGheFcPYg7GkxQSH7Paz4fOf1e5bAWupSPAM1zbBz2P8CTIhqar6HiF1
-        UvbrCTt5gJcF3ZNXV4al4RaldOTp7kPvifDQYpad1AUgbscxSYyBn8UZ8J4ZxB8u
-        VoncfR1QBDhMLvIAQNWXRjUfr4ma+z3HxRL95SgQoCLtMIccH8lnZqtMqjQplLPp
-        vTuCCR9sQAyvTTFHl0cwQZXy3UiumUwPOKBrAC0PO3W5kYIp+HhPRQMrWABGu08w
-        t9VwNpf/KRVX10tCcyXJ41EoRjWYA==
-X-ME-Sender: <xms:pkmrYP_FDiQFSCb-_D-lkThFkjW6vvfQ3NezLpwsyEqBW7pU0CbX1A>
-    <xme:pkmrYLuDN5FRoBQKAQyn5OguMWCYZ19gMGcLJXNdqw0oYJlgOzaDD9OhrMxpmlwOS
-    WRdrrFM7KjvjYaBluY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdejkedgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefuvfhfhffkffgfgggjtgfgsehtke
-    ertddtfeftnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
-    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludeitddvkeffge
-    fgueekjeegfeefteelgffhkeffueetieejgeehhfeuffdvnecukfhppedutddurdekvddr
-    heejrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:pkmrYNBwwUYoEKxJ2kdIIwZaqKuk3XuM4y9lW46-H76SrHhmdUzRyQ>
-    <xmx:pkmrYLdUW5BiOoeuQP1YuyCSf50P675wXXem9dERGMDkJ_1a7Imyfg>
-    <xmx:pkmrYENA94t_3SQDLC3jCvcXP9VJwSeWYSpyvfJQGwN-kdzV6dhIKw>
-    <xmx:qEmrYD1Y71-Qre-dyaq9qOqszVFaL9EsVHayKWkZAqFYA1stFD6mLA>
-Received: from [192.168.140.245] (unknown [101.82.57.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Mon, 24 May 2021 02:37:23 -0400 (EDT)
-Subject: Re: [PATCH 2/5] mips: dts: loongson: fix DTC unit name warnings
-To:     zhaoxiao <zhaoxiao@uniontech.com>, robh+dt@kernel.org,
-        tsbogend@alpha.franken.de
-Cc:     maoxiaochuan@loongson.cn, zhangqing@loongson.cn,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1621586643.git.zhaoxiao@uniontech.com>
- <a6343f728252e4134b01c2c5f63acba3b38bcdd5.1621586643.git.zhaoxiao@uniontech.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <b5e7ac2f-cd8b-507b-e9dc-4d3d174d1776@flygoat.com>
-Date:   Mon, 24 May 2021 14:37:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        id S232306AbhEXH4L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 May 2021 03:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232266AbhEXH4K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 May 2021 03:56:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E40C061574
+        for <linux-mips@vger.kernel.org>; Mon, 24 May 2021 00:54:43 -0700 (PDT)
+Received: from [192.168.1.111] (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0ABD71315;
+        Mon, 24 May 2021 09:54:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1621842878;
+        bh=nQQLNOZHnWiuc9bVbNIPySsUX8BVfY7zKLqSjjjmqow=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=eP/n0p6WGzQZageTDgh+AhAcs/g5Ue1NYt36d3FWKJQJaTvUMj3hrq8+fQwTDYsqg
+         Qiwo2GzlBbrg64RXzSwS8WGOPR2HHdLSIbrjQa3SmUmIPz8qikHGRXxlQgTdAuSvZD
+         m5qtsfBYdKDyEA1AOMNDxtttFSFlN8wpwtRhKuuM=
+Subject: Re: [PATCH 06/11] drm/<driver>: drm_gem_plane_helper_prepare_fb is
+ now the default
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+        Sandy Huang <hjc@rock-chips.com>,
+        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev
+References: <20210521090959.1663703-1-daniel.vetter@ffwll.ch>
+ <20210521090959.1663703-6-daniel.vetter@ffwll.ch>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Message-ID: <71ba0c85-be5d-21f9-6817-9848dafde6ea@ideasonboard.com>
+Date:   Mon, 24 May 2021 10:54:35 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <a6343f728252e4134b01c2c5f63acba3b38bcdd5.1621586643.git.zhaoxiao@uniontech.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210521090959.1663703-6-daniel.vetter@ffwll.ch>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-‘⁄ 2021/5/24 14:07, zhaoxiao –¥µ¿:
-> Fixes the following W=1 kernel build warning(s):
-> arch/mips/boot/dts/loongson/loongson64g-package.dtsi:42.30-49.5: Warning (simple_bus_reg): /bus@1fe00000/serial@1fe001e0: simple-bus unit address format error, expected "1fe00100"
-> arch/mips/boot/dts/loongson/loongson64g-package.dtsi:51.30-59.5: Warning (simple_bus_reg): /bus@1fe00000/serial@1fe001e8: simple-bus unit address format error, expected "1fe00110"
-
-Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
->
-> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+On 21/05/2021 12:09, Daniel Vetter wrote:
+> No need to set it explicitly.
+> 
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> Cc: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
+> Cc: Lucas Stach <l.stach@pengutronix.de>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Paul Cercueil <paul@crapouillou.net>
+> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: Marek Vasut <marex@denx.de>
+> Cc: Stefan Agner <stefan@agner.ch>
+> Cc: Sandy Huang <hjc@rock-chips.com>
+> Cc: "Heiko St√ºbner" <heiko@sntech.de>
+> Cc: Yannick Fertre <yannick.fertre@foss.st.com>
+> Cc: Philippe Cornu <philippe.cornu@foss.st.com>
+> Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Jyri Sarha <jyri.sarha@iki.fi>
+> Cc: Tomi Valkeinen <tomba@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-mediatek@lists.infradead.org
+> Cc: linux-amlogic@lists.infradead.org
+> Cc: linux-rockchip@lists.infradead.org
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> Cc: linux-sunxi@lists.linux.dev
 > ---
->   arch/mips/boot/dts/loongson/loongson64g-package.dtsi | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/boot/dts/loongson/loongson64g-package.dtsi b/arch/mips/boot/dts/loongson/loongson64g-package.dtsi
-> index 38abc570cd82..d4314f62ccc2 100644
-> --- a/arch/mips/boot/dts/loongson/loongson64g-package.dtsi
-> +++ b/arch/mips/boot/dts/loongson/loongson64g-package.dtsi
-> @@ -39,7 +39,7 @@
->   
->   		};
->   
-> -		cpu_uart0: serial@1fe001e0 {
-> +		cpu_uart0: serial@1fe00100 {
->   			compatible = "ns16550a";
->   			reg = <0 0x1fe00100 0x10>;
->   			clock-frequency = <100000000>;
-> @@ -48,7 +48,7 @@
->   			no-loopback-test;
->   		};
->   
-> -		cpu_uart1: serial@1fe001e8 {
-> +		cpu_uart1: serial@1fe00110 {
->   			status = "disabled";
->   			compatible = "ns16550a";
->   			reg = <0 0x1fe00110 0x10>;
+>   drivers/gpu/drm/imx/dcss/dcss-plane.c       | 1 -
+>   drivers/gpu/drm/imx/ipuv3-plane.c           | 1 -
+>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c   | 1 -
+>   drivers/gpu/drm/ingenic/ingenic-ipu.c       | 1 -
+>   drivers/gpu/drm/mediatek/mtk_drm_plane.c    | 1 -
+>   drivers/gpu/drm/meson/meson_overlay.c       | 1 -
+>   drivers/gpu/drm/meson/meson_plane.c         | 1 -
+>   drivers/gpu/drm/mxsfb/mxsfb_kms.c           | 2 --
+>   drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 1 -
+>   drivers/gpu/drm/stm/ltdc.c                  | 1 -
+>   drivers/gpu/drm/sun4i/sun4i_layer.c         | 1 -
+>   drivers/gpu/drm/sun4i/sun8i_ui_layer.c      | 1 -
+>   drivers/gpu/drm/sun4i/sun8i_vi_layer.c      | 1 -
+>   drivers/gpu/drm/tidss/tidss_plane.c         | 1 -
+>   14 files changed, 15 deletions(-)
 
+For tidss:
+
+Acked-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+
+  Tomi
