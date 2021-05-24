@@ -2,144 +2,184 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F7F38E6BE
-	for <lists+linux-mips@lfdr.de>; Mon, 24 May 2021 14:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE07038F0BD
+	for <lists+linux-mips@lfdr.de>; Mon, 24 May 2021 18:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbhEXMkw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 May 2021 08:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S235741AbhEXQGJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 May 2021 12:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232700AbhEXMkv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 May 2021 08:40:51 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4253FC061574;
-        Mon, 24 May 2021 05:39:23 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id i9so40451808lfe.13;
-        Mon, 24 May 2021 05:39:23 -0700 (PDT)
+        with ESMTP id S237091AbhEXQFI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 May 2021 12:05:08 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAD1C0612FD
+        for <linux-mips@vger.kernel.org>; Mon, 24 May 2021 08:18:32 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d14-20020a056a00198eb029028eb1d4a555so18490244pfl.7
+        for <linux-mips@vger.kernel.org>; Mon, 24 May 2021 08:18:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=13zcyWdsm4gpffNG5ZgDMwvczQG34AV4139pdXe/s/0=;
-        b=Ukzs1lpffefInt+Tc3rj13rbWCFBfbLYbuOBDb1j5YTp/JNEMJrM+0BS9pYYP38s9n
-         7HnDgswflfy/VLz9qqAzPEQ99K+h8Qw9BP4SNjW8CFWmWgh5JMUSDfFAJeK+RZdsaGGL
-         E/Dufo5c9cUI5wYk5ZS925uvNbuEl/D0DVzT9JJnHjAK1LG65AMdNhVEY5bjp2L2ZkJx
-         xTyf1oVqYbmYguDJ4dsI4rGt5dv+nSIZOdciE20NRNrrOmtUf9V4AfSlhip/ALqlXDCi
-         a3xqCn7eZwwF4XtCyKGnbWeeDVyinyJ8tey0f34ksGlX16trBozo1SFW0R8FUHxTuMe2
-         gCpw==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=hsUoOGhK41uMiUMibdY4aJzD3L98/UiwuU5d74aCT5c=;
+        b=grl3R4lWY+xXFxpFitAl3zhdfmFAs89StA2Ji9s3d/B2KH6pdBk72CLWtEduhvKNfo
+         iIz00QlLOwJ6Y6Ai8wBpzGPfcGEwBACfhGYtOGLvLrgSDG4mnLPIk5zIThj/UOzmczx7
+         p/SP0aizUe+vwZfezt4kWxQh9FvmJN7ScVdPnbFt3b3X2xhWLbgRMBhpWhOFdVnuNrLA
+         JoZSB7oVUumnRupw3HeRzO6TaAwLVK8M7I4kcWjBtBGLSCfRzB9++ypo8b2OSo+qG124
+         gYSQWV6jgypmwYgMZyfG/lE973elU2q2ykhk6ZZDeN6dBwjT+sBsDlwg86sgs0sGLfdL
+         9Ipg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=13zcyWdsm4gpffNG5ZgDMwvczQG34AV4139pdXe/s/0=;
-        b=JPtwYE8hRhKABXJqAdQPEmS/j++lk9UmOM98vt2+exheyVdkYJyhD3XKbkieLeMkqL
-         /UHrG5P34T7pgyKMjm7tYUro2k/bNz5UjhoS0FeZtZeMRMrF+PUZDhp2E6Nexp93rb1f
-         DVVmp2GE0TIukOoJtXuZoF9czCz2kJ3gmg+tGP5aQRuWZb6Hg8CDqHeWhOmUvWH6SkVx
-         VUVniWHnHdYwP0nz2h3s4ZhLVBgyW5KMY2K4TIG2Uf6Qck41AbhHhcSAyEpiIIVdieG9
-         2wkXGhDq7EseZM03ePl8uRyWjf6rPdDGtFegsHRW6OgBREFluVHCx3ZKSM7UvuOhJlug
-         9OfQ==
-X-Gm-Message-State: AOAM533KhURQfuH5gHNIe/ch3AcEg24inlOXm8PTgtQ+2smqFB8dpza0
-        JZsPVjBoZ88+S3e9qraZZZD7vr48hSM=
-X-Google-Smtp-Source: ABdhPJyhCOFQn/Z1pKRmtZeJWu1d4dSY2QLiSj+ONw56eIR3cGKanVoF3Tn/DOinhtQ09s5N7gDupw==
-X-Received: by 2002:a05:6512:128c:: with SMTP id u12mr10567429lfs.160.1621859961442;
-        Mon, 24 May 2021 05:39:21 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-110.dynamic.spd-mgts.ru. [109.252.193.110])
-        by smtp.googlemail.com with ESMTPSA id p21sm1409745lfg.97.2021.05.24.05.39.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 May 2021 05:39:21 -0700 (PDT)
-Subject: Re: [PATCH v1] kbuild: Disable compile testing if HAVE_LEGACY_CLK
- enabled
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Burton <paul.burton@mips.com>,
-        John Crispin <john@phrozen.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
-        <linux-omap@vger.kernel.org>
-References: <20210523232556.15017-1-digetx@gmail.com>
- <CAMuHMdWqNngrDQOut1r5aD1Nk5BMXEV4m8+OBix4DXOV6OSpNg@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <8b6af8c0-6f01-193f-1eb4-4e230871f0cd@gmail.com>
-Date:   Mon, 24 May 2021 15:39:20 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <CAMuHMdWqNngrDQOut1r5aD1Nk5BMXEV4m8+OBix4DXOV6OSpNg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=hsUoOGhK41uMiUMibdY4aJzD3L98/UiwuU5d74aCT5c=;
+        b=cpwyIiPsU1SPqLefHPAq2xWyVt+sA7zHOKYdiQLce95yggn3oWjIAiHIL3UOtj26Lj
+         g/Pu+0YKADFTGKXKUm+2mo1GS6bi776QSMD/oFGyPPghXWWzvJjhT41M/ZpWAqRhK7Qe
+         DMkDwl5HGdG0EF9XrYv8sbmnjUPL/t+kNp3oYO26HTYAbFGTVHOA7vHH3fOQUkQ6gMhu
+         HDuuKRYhLiBD4iUV4yj8lpNnQ4m5YsboJjv0oscoStTtS6oTerSEU0mDU07Ra1A91RM4
+         NZsU3BfAPyUZVSl1GuEcVkxGH7x6jfb+pej6bzWceOhNNmY2o6jDD+Cr8kV5y1aGAJxh
+         HTEg==
+X-Gm-Message-State: AOAM532dqPIRRGrYC3LlGnbrrGOo0n6ZSgc0Gak4uPW9BOji9593qkw7
+        dlo2bJA+VKfEWN6ERzVbF57+jNBR1ilDbHQkPQ==
+X-Google-Smtp-Source: ABdhPJxXtI/1dIGUSOnlwdZP5pVxH5ZIpkvTAxwzuzAnLE0CS16jMydJPMj+BH0vIgpLcLjWr90NhFsWDjXmEfhRlA==
+X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
+ (user=jingzhangos job=sendgmr) by 2002:a05:6a00:882:b029:2de:b01d:755a with
+ SMTP id q2-20020a056a000882b02902deb01d755amr25260828pfj.43.1621869511859;
+ Mon, 24 May 2021 08:18:31 -0700 (PDT)
+Date:   Mon, 24 May 2021 15:18:24 +0000
+Message-Id: <20210524151828.4113777-1-jingzhangos@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.818.g46aad6cb9e-goog
+Subject: [PATCH v6 0/4] KVM statistics data fd-based binary interface
+From:   Jing Zhang <jingzhangos@google.com>
+To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>
+Cc:     Jing Zhang <jingzhangos@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-24.05.2021 11:54, Geert Uytterhoeven пишет:
-> Hi Dmitry,
-> 
-> On Mon, May 24, 2021 at 1:26 AM Dmitry Osipenko <digetx@gmail.com> wrote:
->> There are couple older platforms that can't be compile-tested because they
->> partially implement CLK API. It causes build failure of kernel drivers due
->> to the missing symbols of the unimplemented part of CLK API.
->>
->> These platforms are: ARM EP93XX, ARM OMAP1, m68k ColdFire, MIPS AR7,
->>                      MIPS Ralink.
->>
->> Disable compile-testing for HAVE_LEGACY_CLK=y.
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> 
-> Thanks for your patch!
-> 
->> --- a/init/Kconfig
->> +++ b/init/Kconfig
->> @@ -131,7 +131,7 @@ config INIT_ENV_ARG_LIMIT
->>
->>  config COMPILE_TEST
->>         bool "Compile also drivers which will not load"
->> -       depends on HAS_IOMEM
->> +       depends on HAS_IOMEM && !HAVE_LEGACY_CLK
-> 
-> That sounds a bit drastic to me.  Usually we just try to implement the
-> missing functionality, or provide stubs.
-> Which functions are missing?
+This patchset provides a file descriptor for every VM and VCPU to read
+KVM statistics data in binary format.
+It is meant to provide a lightweight, flexible, scalable and efficient
+lock-free solution for user space telemetry applications to pull the
+statistics data periodically for large scale systems. The pulling
+frequency could be as high as a few times per second.
+In this patchset, every statistics data are treated to have some
+attributes as below:
+  * architecture dependent or common
+  * VM statistics data or VCPU statistics data
+  * type: cumulative, instantaneous,
+  * unit: none for simple counter, nanosecond, microsecond,
+    millisecond, second, Byte, KiByte, MiByte, GiByte. Clock Cycles
+Since no lock/synchronization is used, the consistency between all
+the statistics data is not guaranteed. That means not all statistics
+data are read out at the exact same time, since the statistics date
+are still being updated by KVM subsystems while they are read out.
 
-Everything that belongs to CONFIG_COMMON_CLK needs stubs.
+---
 
-That is everything under CONFIG_HAVE_CLK [1], excluding functions
-belonging to clk-devres.o and clk-bulk.o [2]. The HAVE_LEGACY_CLK
-selects HAVE_CLK, but the COMMON_CLK is under HAVE_CLK too.
+* v5 -> v6
+  - Use designated initializers for STATS_DESC
+  - Change KVM_STATS_SCALE... to KVM_STATS_BASE...
+  - Use a common function for kvm_[vm|vcpu]_stats_read
+  - Fix some documentation errors/missings
+  - Use TEST_ASSERT in selftest
+  - Use a common function for [vm|vcpu]_stats_test in selftest
 
-[1]
-https://elixir.bootlin.com/linux/v5.13-rc3/source/include/linux/clk.h#L786
-[2]
-https://elixir.bootlin.com/linux/v5.13-rc3/source/drivers/clk/Makefile#L3
+* v4 -> v5
+  - Rebase to kvm/queue, commit a4345a7cecfb ("Merge tag
+    'kvmarm-fixes-5.13-1'")
+  - Change maximum stats name length to 48
+  - Replace VM_STATS_COMMON/VCPU_STATS_COMMON macros with stats
+    descriptor definition macros.
+  - Fixed some errors/warnings reported by checkpatch.pl
 
-This problem is repeated over and over again for the past years. Some
-maintainers are adding "depends on COMMON_CLK" for COMPILE_TEST of each
-driver, but this doesn't solve the root of the problem, and thus, it's
-constantly reoccurring.
+* v3 -> v4
+  - Rebase to kvm/queue, commit 9f242010c3b4 ("KVM: avoid "deadlock"
+    between install_new_memslots and MMU notifier")
+  - Use C-stype comments in the whole patch
+  - Fix wrong count for x86 VCPU stats descriptors
+  - Fix KVM stats data size counting and validity check in selftest
 
-Recently Krzysztof Kozlowski added couple more clk stubs for MIPS, but
-still lots of stubs are missing. Some platforms don't have any stubs at
-all and apparently nobody cares to fix them.
+* v2 -> v3
+  - Rebase to kvm/queue, commit edf408f5257b ("KVM: avoid "deadlock"
+    between install_new_memslots and MMU notifier")
+  - Resolve some nitpicks about format
 
-There 3 possible solutions:
+* v1 -> v2
+  - Use ARRAY_SIZE to count the number of stats descriptors
+  - Fix missing `size` field initialization in macro STATS_DESC
 
-1. Factor out COMMON_CLK from HAVE_LEGACY_CLK, if this is possible
-2. Build stubs universally, maybe using weak functions.
-3. Disable compile-testing for HAVE_LEGACY_CLK
+[1] https://lore.kernel.org/kvm/20210402224359.2297157-1-jingzhangos@google.com
+[2] https://lore.kernel.org/kvm/20210415151741.1607806-1-jingzhangos@google.com
+[3] https://lore.kernel.org/kvm/20210423181727.596466-1-jingzhangos@google.com
+[4] https://lore.kernel.org/kvm/20210429203740.1935629-1-jingzhangos@google.com
+[5] https://lore.kernel.org/kvm/20210517145314.157626-1-jingzhangos@google.com
 
-The third option is the simplest. If anyone will care to fix those
-legacy platforms properly, then compile-testing could be re-enabled for
-them. This is my proposal.
+---
+
+Jing Zhang (4):
+  KVM: stats: Separate common stats from architecture specific ones
+  KVM: stats: Add fd-based API to read binary stats data
+  KVM: stats: Add documentation for statistics data binary interface
+  KVM: selftests: Add selftest for KVM statistics data binary interface
+
+ Documentation/virt/kvm/api.rst                | 179 +++++++++++++++
+ arch/arm64/include/asm/kvm_host.h             |   9 +-
+ arch/arm64/kvm/guest.c                        |  38 ++-
+ arch/mips/include/asm/kvm_host.h              |   9 +-
+ arch/mips/kvm/mips.c                          |  64 +++++-
+ arch/powerpc/include/asm/kvm_host.h           |   9 +-
+ arch/powerpc/kvm/book3s.c                     |  64 +++++-
+ arch/powerpc/kvm/book3s_hv.c                  |  12 +-
+ arch/powerpc/kvm/book3s_pr.c                  |   2 +-
+ arch/powerpc/kvm/book3s_pr_papr.c             |   2 +-
+ arch/powerpc/kvm/booke.c                      |  59 ++++-
+ arch/s390/include/asm/kvm_host.h              |   9 +-
+ arch/s390/kvm/kvm-s390.c                      | 129 ++++++++++-
+ arch/x86/include/asm/kvm_host.h               |   9 +-
+ arch/x86/kvm/x86.c                            |  67 +++++-
+ include/linux/kvm_host.h                      | 141 +++++++++++-
+ include/linux/kvm_types.h                     |  12 +
+ include/uapi/linux/kvm.h                      |  50 ++++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   3 +
+ .../selftests/kvm/kvm_bin_form_stats.c        | 216 ++++++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
+ virt/kvm/kvm_main.c                           | 179 ++++++++++++++-
+ 24 files changed, 1188 insertions(+), 90 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_bin_form_stats.c
+
+
+base-commit: a4345a7cecfb91ae78cd43d26b0c6a956420761a
+-- 
+2.31.1.818.g46aad6cb9e-goog
+
