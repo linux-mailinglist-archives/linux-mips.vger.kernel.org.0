@@ -2,142 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 941D538E202
-	for <lists+linux-mips@lfdr.de>; Mon, 24 May 2021 09:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7679338E2D0
+	for <lists+linux-mips@lfdr.de>; Mon, 24 May 2021 10:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbhEXH4L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 May 2021 03:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbhEXH4K (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 May 2021 03:56:10 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E40C061574
-        for <linux-mips@vger.kernel.org>; Mon, 24 May 2021 00:54:43 -0700 (PDT)
-Received: from [192.168.1.111] (91-157-208-71.elisa-laajakaista.fi [91.157.208.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0ABD71315;
-        Mon, 24 May 2021 09:54:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1621842878;
-        bh=nQQLNOZHnWiuc9bVbNIPySsUX8BVfY7zKLqSjjjmqow=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=eP/n0p6WGzQZageTDgh+AhAcs/g5Ue1NYt36d3FWKJQJaTvUMj3hrq8+fQwTDYsqg
-         Qiwo2GzlBbrg64RXzSwS8WGOPR2HHdLSIbrjQa3SmUmIPz8qikHGRXxlQgTdAuSvZD
-         m5qtsfBYdKDyEA1AOMNDxtttFSFlN8wpwtRhKuuM=
-Subject: Re: [PATCH 06/11] drm/<driver>: drm_gem_plane_helper_prepare_fb is
- now the default
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
-        Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev
-References: <20210521090959.1663703-1-daniel.vetter@ffwll.ch>
- <20210521090959.1663703-6-daniel.vetter@ffwll.ch>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Message-ID: <71ba0c85-be5d-21f9-6817-9848dafde6ea@ideasonboard.com>
-Date:   Mon, 24 May 2021 10:54:35 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232484AbhEXI4i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 May 2021 04:56:38 -0400
+Received: from mail-ua1-f51.google.com ([209.85.222.51]:42496 "EHLO
+        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232362AbhEXI4g (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 May 2021 04:56:36 -0400
+Received: by mail-ua1-f51.google.com with SMTP id 14so9083664uac.9;
+        Mon, 24 May 2021 01:55:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5H0qZkzumrdkYcAyVjQDQA6Hje2p2FxbSu2Plzs94Cg=;
+        b=Bn/c6Kw7q0MNLCbshYdbAYgS97X7nKSJGRbi6LfqPjQuE8DXHOElGQnZ5C3wKeIgcy
+         4KkM51ueXOpt1GLBYOfYiUylUogOKUgzWQLvNYK9gmnBPRLAPq5/vg1YblRRFhYqlETi
+         oejDUHfGr+TTCKy/8RkHw8U639RPilcjlMeJRFkv9UJk3j6BlpbJT1SS5NsyttGttx54
+         VoiIW5IeABFkIEIEb6x9K37WzXB+Max8o5z9nBwyXvPuOSNl8uGK2lul+dTRbFr4E3d8
+         9Ak4hbkPX4bWQXLg8KIyOOj0lZJn+OyE3NgXUoVAYLeqC5e5fR+ZViFlgZSo7X+rvQCU
+         yJ8Q==
+X-Gm-Message-State: AOAM5311EDvujXylHpzfASl67Hhlo2oCu5I2vwwRODy8IjlTmaGwMlVy
+        oBQaOAua/sxGfVg4R77llrw4sf7V/VGQhC3Znig=
+X-Google-Smtp-Source: ABdhPJxxyosYrdj1GqNypPiBnYRArw2E3/38homNMO1Av1PFu0RXXr0Dh8t9Utur9chqZtb0X55m4PfZQwmS3BcBlZQ=
+X-Received: by 2002:ab0:7705:: with SMTP id z5mr20481974uaq.2.1621846508208;
+ Mon, 24 May 2021 01:55:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210521090959.1663703-6-daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210523232556.15017-1-digetx@gmail.com>
+In-Reply-To: <20210523232556.15017-1-digetx@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 24 May 2021 10:54:57 +0200
+Message-ID: <CAMuHMdWqNngrDQOut1r5aD1Nk5BMXEV4m8+OBix4DXOV6OSpNg@mail.gmail.com>
+Subject: Re: [PATCH v1] kbuild: Disable compile testing if HAVE_LEGACY_CLK enabled
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Burton <paul.burton@mips.com>,
+        John Crispin <john@phrozen.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
+        <linux-omap@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 21/05/2021 12:09, Daniel Vetter wrote:
-> No need to set it explicitly.
-> 
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Paul Cercueil <paul@crapouillou.net>
-> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: Stefan Agner <stefan@agner.ch>
-> Cc: Sandy Huang <hjc@rock-chips.com>
-> Cc: "Heiko Stübner" <heiko@sntech.de>
-> Cc: Yannick Fertre <yannick.fertre@foss.st.com>
-> Cc: Philippe Cornu <philippe.cornu@foss.st.com>
-> Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Jyri Sarha <jyri.sarha@iki.fi>
-> Cc: Tomi Valkeinen <tomba@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-mediatek@lists.infradead.org
-> Cc: linux-amlogic@lists.infradead.org
-> Cc: linux-rockchip@lists.infradead.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-sunxi@lists.linux.dev
-> ---
->   drivers/gpu/drm/imx/dcss/dcss-plane.c       | 1 -
->   drivers/gpu/drm/imx/ipuv3-plane.c           | 1 -
->   drivers/gpu/drm/ingenic/ingenic-drm-drv.c   | 1 -
->   drivers/gpu/drm/ingenic/ingenic-ipu.c       | 1 -
->   drivers/gpu/drm/mediatek/mtk_drm_plane.c    | 1 -
->   drivers/gpu/drm/meson/meson_overlay.c       | 1 -
->   drivers/gpu/drm/meson/meson_plane.c         | 1 -
->   drivers/gpu/drm/mxsfb/mxsfb_kms.c           | 2 --
->   drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 1 -
->   drivers/gpu/drm/stm/ltdc.c                  | 1 -
->   drivers/gpu/drm/sun4i/sun4i_layer.c         | 1 -
->   drivers/gpu/drm/sun4i/sun8i_ui_layer.c      | 1 -
->   drivers/gpu/drm/sun4i/sun8i_vi_layer.c      | 1 -
->   drivers/gpu/drm/tidss/tidss_plane.c         | 1 -
->   14 files changed, 15 deletions(-)
+Hi Dmitry,
 
-For tidss:
+On Mon, May 24, 2021 at 1:26 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+> There are couple older platforms that can't be compile-tested because they
+> partially implement CLK API. It causes build failure of kernel drivers due
+> to the missing symbols of the unimplemented part of CLK API.
+>
+> These platforms are: ARM EP93XX, ARM OMAP1, m68k ColdFire, MIPS AR7,
+>                      MIPS Ralink.
+>
+> Disable compile-testing for HAVE_LEGACY_CLK=y.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-Acked-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Thanks for your patch!
 
-  Tomi
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -131,7 +131,7 @@ config INIT_ENV_ARG_LIMIT
+>
+>  config COMPILE_TEST
+>         bool "Compile also drivers which will not load"
+> -       depends on HAS_IOMEM
+> +       depends on HAS_IOMEM && !HAVE_LEGACY_CLK
+
+That sounds a bit drastic to me.  Usually we just try to implement the
+missing functionality, or provide stubs.
+Which functions are missing?
+
+>         help
+>           Some drivers can be compiled on a different platform than they are
+>           intended to be run on. Despite they cannot be loaded there (or even
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
