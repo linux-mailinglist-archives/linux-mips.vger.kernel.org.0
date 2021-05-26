@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 269453918E1
-	for <lists+linux-mips@lfdr.de>; Wed, 26 May 2021 15:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83073918E3
+	for <lists+linux-mips@lfdr.de>; Wed, 26 May 2021 15:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234191AbhEZNdd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 May 2021 09:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48086 "EHLO
+        id S234104AbhEZNdg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 May 2021 09:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234151AbhEZNda (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 May 2021 09:33:30 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF8EC061574;
-        Wed, 26 May 2021 06:31:56 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id m8-20020a17090a4148b029015fc5d36343so348284pjg.1;
-        Wed, 26 May 2021 06:31:56 -0700 (PDT)
+        with ESMTP id S234194AbhEZNdd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 May 2021 09:33:33 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59E4C061756;
+        Wed, 26 May 2021 06:32:00 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id b15-20020a17090a550fb029015dad75163dso364971pji.0;
+        Wed, 26 May 2021 06:32:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2DQOrp/2nBQQBAnbdNXHFx/Lg5dT9OWRcZXgoZ6JVwA=;
-        b=TAHBfywIJjcUTa3g6EdBZMf97q5GVuhNpYDBMsBl1qv9cxFUXdoftHJP/B6tbacO50
-         2fU1sw23THJI5V+MlRBEar0IHV7xquEBiW/D8qOosOo34DhaH9V9e+TKFwFZvugiVMxS
-         Ec9lao6GayyjmYaZzFa+YyrgYIH0CfQPMic5xv9PX1KB1+0kX5Fo5Sn5YZodUG0wCYx5
-         5qWOJq60YzURUDqaRy3FCl45psUlvMSShlfYe7Sy7oEEO/AxwO/rGUPPaAP/KSnreLsi
-         wZSiyg3VngLbx7iMYLYrtFYx4JqlaSNwM4EdfewKrPs84Pf7VgBojD4q7dGkY+AkIAM/
-         uPxw==
+        bh=rnhfCchLZDc9lwMhT0TQRY62P4juld204oIgv5PA9GM=;
+        b=kxmY6bowaOjF/ClDUyUMMCzy44ovJXU3pIOmbWNgw7P1HWQ8t6nGLlebaYa2vNmp1C
+         1fy3+UOk27ZnVJnYPu9xcSVsmXwEaXij1vuBR39+jl3UAIGXZDXsUbwadOXXgKhaI7gS
+         ppJRgx9lj/j+DnkT/4Yp3KjYr7BvfznasUs3ss5tD6I+o2IDgLTOVIthEsqzeo1lBzGb
+         jy6XpviJ4kVjB0UPUjN/Qvm6AU6qEEKkdu2s+h7kR64CZnUoqupXYI1IEwhihEa1Aceg
+         i8zlS9vLibExMC/ckSirtHBR1zWCSFElBtKzmR+CO87+J8HYRlt8LJ5gpm+xSpsdBMhl
+         GeZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2DQOrp/2nBQQBAnbdNXHFx/Lg5dT9OWRcZXgoZ6JVwA=;
-        b=k+QowEya+D60TtcTxMnQRc0iqeRuzpiRMSJjZcTND/E74+6s6H2BC3vm5dGZ8flBMt
-         vQjdRwwxqit5xFUCVt5lGvFxi0ubIgPOD9+frbuvD0DV+UBiLJmdGgHdfVcP2sO+sL1h
-         mJFLcDTpSlBzSIfSBzvH0dU5JIPCGML+33E6g+4N/xZyN8Qkn88qnCLOMNOX58a+IvVo
-         kVEh6b0O2Eh3q1FQKZNgiGSbdJJLsKynGINYRcc9cMYcmtde36EBIBC47Nl19/lormAC
-         ZFiAmCNUJkarXXbgu3dmdfivilG1KzPnmMWbe/zSFmNC7gMlbzZtV1fsSZHCtownWNtz
-         ixMw==
-X-Gm-Message-State: AOAM532g6kOTUSh6UDH/Sk3jhveX5EhvKq4HZkzGyJ3D7f0VNYQIVNob
-        x/exUq4yJCnPjHAJJWJUaPHj4gfiQ477LA==
-X-Google-Smtp-Source: ABdhPJxgfuFx7lRZrK8PscSYRLNl8OgdCtBeJRBDOk+Odtd1M8dO2nmSSdnXeBbLSKGVUQ9aZC37UQ==
-X-Received: by 2002:a17:903:20cc:b029:f0:cc11:51c2 with SMTP id i12-20020a17090320ccb02900f0cc1151c2mr35990343plb.32.1622035915869;
-        Wed, 26 May 2021 06:31:55 -0700 (PDT)
+        bh=rnhfCchLZDc9lwMhT0TQRY62P4juld204oIgv5PA9GM=;
+        b=onXh9DvMb5EZ7YSDinO21EtzAU1N70SeiZzPWn/bh0Oy15ir4CWhGLWl2fIp8x0yNC
+         ji7/AUxnX2XPev1PGQgHUA4RcTP0uX9cc0jh+GlEgmigcV2uzFLjKwEJnkfBbMNQfwBX
+         /+rGYxfKGYcgcq5QsoXcbxcCM5GvUYz4NhzykZKswXazanY1nWyd8BkjQiRGZVjlhJi4
+         16c5hqzG/phuBBOmq0VO5dj7Y9clmkpE41eBNbapAyG6W8cEjmwwiPhGS6XPeCEqB2wN
+         8MAET6LKQ1PKdyct6Gv71IgT/+KRT0lEZs9SQmyJwBHJ/hxjHIL6eoPwzLjOgr4bLcXP
+         BdLg==
+X-Gm-Message-State: AOAM531j6y1zoBGmumAl5AoAGSegvVZC4BKidYyB0BNhZ02JTqbB8ArQ
+        bY2JXq0rvDMnm3fja/ppXaftsmqnBbKbaw==
+X-Google-Smtp-Source: ABdhPJzLI2B1hMnagrzaAKYa1sCH2mML4p56TG2WTSr8JE6qPilPHqqr7dbsCqOyOOcx9s6o2bXqQA==
+X-Received: by 2002:a17:902:d2c5:b029:f1:c207:b0fd with SMTP id n5-20020a170902d2c5b02900f1c207b0fdmr35025450plc.45.1622035919972;
+        Wed, 26 May 2021 06:31:59 -0700 (PDT)
 Received: from kelvin-System-Product-Name.lan ([112.45.97.46])
-        by smtp.gmail.com with ESMTPSA id a15sm15223088pff.128.2021.05.26.06.31.52
+        by smtp.gmail.com with ESMTPSA id a15sm15223088pff.128.2021.05.26.06.31.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 May 2021 06:31:55 -0700 (PDT)
+        Wed, 26 May 2021 06:31:59 -0700 (PDT)
 From:   Keguang Zhang <keguang.zhang@gmail.com>
 To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Kelvin Cheung <keguang.zhang@gmail.com>
-Subject: [PATCH V1 3/4] MIPS: Loongson1B: Add Loongson1 NAND device
-Date:   Wed, 26 May 2021 21:30:59 +0800
-Message-Id: <20210526133100.436048-4-keguang.zhang@gmail.com>
+Subject: [PATCH V1 4/4] MIPS: Loongson1B: Enable NAND by default
+Date:   Wed, 26 May 2021 21:31:00 +0800
+Message-Id: <20210526133100.436048-5-keguang.zhang@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210526133100.436048-1-keguang.zhang@gmail.com>
 References: <20210526133100.436048-1-keguang.zhang@gmail.com>
@@ -65,118 +65,71 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Kelvin Cheung <keguang.zhang@gmail.com>
 
-This patch adds NAND device and its platform data for Loongson1B.
+Update defconfig to enable NAND by default.
 
 Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 ---
- .../include/asm/mach-loongson32/platform.h    |  2 ++
- arch/mips/loongson32/common/platform.c        | 27 +++++++++++++++++++
- arch/mips/loongson32/ls1b/board.c             | 22 +++++++++++++++
- 3 files changed, 51 insertions(+)
+ arch/mips/configs/loongson1b_defconfig | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/arch/mips/include/asm/mach-loongson32/platform.h b/arch/mips/include/asm/mach-loongson32/platform.h
-index d4d2a9baacdb..daf02b5c83a7 100644
---- a/arch/mips/include/asm/mach-loongson32/platform.h
-+++ b/arch/mips/include/asm/mach-loongson32/platform.h
-@@ -19,11 +19,13 @@ extern struct platform_device ls1x_eth1_pdev;
- extern struct platform_device ls1x_ehci_pdev;
- extern struct platform_device ls1x_gpio0_pdev;
- extern struct platform_device ls1x_gpio1_pdev;
-+extern struct platform_device ls1x_nand_pdev;
- extern struct platform_device ls1x_rtc_pdev;
- extern struct platform_device ls1x_wdt_pdev;
- 
- void __init ls1x_clk_init(void);
- void __init ls1x_dma_set_platdata(struct plat_ls1x_dma *pdata);
-+void __init ls1x_nand_set_platdata(struct plat_ls1x_nand *pdata);
- void __init ls1x_rtc_set_extclk(struct platform_device *pdev);
- void __init ls1x_serial_set_uartclk(struct platform_device *pdev);
- 
-diff --git a/arch/mips/loongson32/common/platform.c b/arch/mips/loongson32/common/platform.c
-index 2092a7ff32e0..d47a84ecf193 100644
---- a/arch/mips/loongson32/common/platform.c
-+++ b/arch/mips/loongson32/common/platform.c
-@@ -287,6 +287,33 @@ struct platform_device ls1x_gpio1_pdev = {
- 	.resource	= ls1x_gpio1_resources,
- };
- 
-+/* NAND Flash */
-+static struct resource ls1x_nand_resources[] = {
-+	[0] = {
-+		.start	= LS1X_NAND_BASE,
-+		.end	= LS1X_NAND_BASE + SZ_32 - 1,
-+		.flags	= IORESOURCE_MEM,
-+	},
-+	[1] = {
-+		.name	= "dmachan0",
-+		.start	= LS1X_DMA_CHANNEL0,
-+		.end	= LS1X_DMA_CHANNEL0,
-+		.flags	= IORESOURCE_DMA,
-+	},
-+};
-+
-+struct platform_device ls1x_nand_pdev = {
-+	.name		= "ls1x-nand",
-+	.id		= -1,
-+	.num_resources	= ARRAY_SIZE(ls1x_nand_resources),
-+	.resource	= ls1x_nand_resources,
-+};
-+
-+void __init ls1x_nand_set_platdata(struct plat_ls1x_nand *pdata)
-+{
-+	ls1x_nand_pdev.dev.platform_data = pdata;
-+}
-+
- /* USB EHCI */
- static u64 ls1x_ehci_dmamask = DMA_BIT_MASK(32);
- 
-diff --git a/arch/mips/loongson32/ls1b/board.c b/arch/mips/loongson32/ls1b/board.c
-index 2be4d8544444..dd5a0ce9e4fb 100644
---- a/arch/mips/loongson32/ls1b/board.c
-+++ b/arch/mips/loongson32/ls1b/board.c
-@@ -23,6 +23,26 @@ struct plat_ls1x_dma ls1x_dma_pdata = {
- 	.slavecnt = ARRAY_SIZE(ls1x_dma_slave_map),
- };
- 
-+static struct mtd_partition ls1x_nand_parts[] = {
-+	{
-+		.name        = "kernel",
-+		.offset      = 0,
-+		.size        = SZ_16M,
-+	},
-+	{
-+		.name        = "rootfs",
-+		.offset      = MTDPART_OFS_APPEND,
-+		.size        = MTDPART_SIZ_FULL,
-+	},
-+};
-+
-+struct plat_ls1x_nand ls1x_nand_pdata = {
-+	.parts		= ls1x_nand_parts,
-+	.nr_parts	= ARRAY_SIZE(ls1x_nand_parts),
-+	.hold_cycle	= 0x2,
-+	.wait_cycle	= 0xc,
-+};
-+
- static const struct gpio_led ls1x_gpio_leds[] __initconst = {
- 	{
- 		.name			= "LED9",
-@@ -53,6 +73,7 @@ static struct platform_device *ls1b_platform_devices[] __initdata = {
- 	&ls1x_ehci_pdev,
- 	&ls1x_gpio0_pdev,
- 	&ls1x_gpio1_pdev,
-+	&ls1x_nand_pdev,
- 	&ls1x_rtc_pdev,
- 	&ls1x_wdt_pdev,
- };
-@@ -61,6 +82,7 @@ static int __init ls1b_platform_init(void)
- {
- 	ls1x_serial_set_uartclk(&ls1x_uart_pdev);
- 	ls1x_dma_set_platdata(&ls1x_dma_pdata);
-+	ls1x_nand_set_platdata(&ls1x_nand_pdata);
- 
- 	gpio_led_register_device(-1, &ls1x_led_pdata);
- 
+diff --git a/arch/mips/configs/loongson1b_defconfig b/arch/mips/configs/loongson1b_defconfig
+index 25e70423e17d..ce5f99bd54b9 100644
+--- a/arch/mips/configs/loongson1b_defconfig
++++ b/arch/mips/configs/loongson1b_defconfig
+@@ -14,10 +14,12 @@ CONFIG_EXPERT=y
+ CONFIG_PERF_EVENTS=y
+ # CONFIG_COMPAT_BRK is not set
+ CONFIG_MACH_LOONGSON32=y
+-# CONFIG_SECCOMP is not set
+ # CONFIG_SUSPEND is not set
++# CONFIG_SECCOMP is not set
++# CONFIG_GCC_PLUGINS is not set
+ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
++CONFIG_MODULE_FORCE_UNLOAD=y
+ CONFIG_MODVERSIONS=y
+ # CONFIG_BLK_DEV_BSG is not set
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+@@ -28,9 +30,6 @@ CONFIG_INET=y
+ CONFIG_IP_PNP=y
+ CONFIG_IP_PNP_DHCP=y
+ CONFIG_SYN_COOKIES=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+ # CONFIG_INET_DIAG is not set
+ # CONFIG_IPV6 is not set
+ # CONFIG_WIRELESS is not set
+@@ -41,6 +40,7 @@ CONFIG_MTD=y
+ CONFIG_MTD_CMDLINE_PARTS=y
+ CONFIG_MTD_BLOCK=y
+ CONFIG_MTD_RAW_NAND=y
++CONFIG_MTD_NAND_LOONGSON1=y
+ CONFIG_MTD_UBI=y
+ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_SCSI=m
+@@ -92,6 +92,7 @@ CONFIG_LEDS_TRIGGERS=y
+ CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+ CONFIG_RTC_CLASS=y
+ CONFIG_RTC_DRV_LOONGSON1=y
++CONFIG_DMADEVICES=y
+ # CONFIG_IOMMU_SUPPORT is not set
+ CONFIG_EXT2_FS=y
+ CONFIG_EXT2_FS_XATTR=y
+@@ -112,12 +113,10 @@ CONFIG_NFS_FS=y
+ CONFIG_ROOT_NFS=y
+ CONFIG_NLS_CODEPAGE_437=m
+ CONFIG_NLS_ISO8859_1=m
+-# CONFIG_CRYPTO_ECHAINIV is not set
+ # CONFIG_CRYPTO_HW is not set
+ CONFIG_DYNAMIC_DEBUG=y
+-# CONFIG_ENABLE_MUST_CHECK is not set
+-CONFIG_DEBUG_FS=y
+ CONFIG_MAGIC_SYSRQ=y
++CONFIG_DEBUG_FS=y
+ # CONFIG_SCHED_DEBUG is not set
+ # CONFIG_DEBUG_PREEMPT is not set
+ # CONFIG_FTRACE is not set
 -- 
 2.30.2
 
