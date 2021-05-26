@@ -2,116 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1744E390D6A
-	for <lists+linux-mips@lfdr.de>; Wed, 26 May 2021 02:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8209E3913EA
+	for <lists+linux-mips@lfdr.de>; Wed, 26 May 2021 11:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbhEZAlf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 May 2021 20:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbhEZAle (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 May 2021 20:41:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9995C061574;
-        Tue, 25 May 2021 17:40:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=tETNDjNyS9VWp0lmkXGYY/OSTeXZstfAPKUdqUv0Z6g=; b=cuho+FlC0QiW7LCkxQwvlW2LIn
-        vdATixI4JJu6Nb5GPntqn1h36tTA2GAp4u6SqyHeh4v/U8os2HHd7AJ/qdpILv+k7W42QdTck2XWp
-        1JNEx++xFzzmG/OqOkdDRyqor7KWVOXZlaDgM5qdCCy4aTs/dbpv9AHRjiYmlFO0D6i/OWquSxpkO
-        qeUqZahCEgKwivrncyTcomGUWpOtgWIr5NwvudL22BrVdrI6GA11Ps039sQ6LcjvsUEDYGNXXWPzI
-        H9DZWM9o05gvYQiMEMB6c1Ey3T+ysWCYP18tsz3oEA7nbelPsDblH6/nnLJHpyNVnqgdwRAHAsJsK
-        6lhywPkA==;
-Received: from [2601:1c0:6280:3f0::7376]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1llhaa-009Y5s-Ge; Wed, 26 May 2021 00:40:00 +0000
-Subject: Re: [PATCH v1] kbuild: Disable compile testing if HAVE_LEGACY_CLK
- enabled
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Burton <paul.burton@mips.com>,
-        John Crispin <john@phrozen.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
-        <linux-omap@vger.kernel.org>
-References: <20210523232556.15017-1-digetx@gmail.com>
- <CAMuHMdWqNngrDQOut1r5aD1Nk5BMXEV4m8+OBix4DXOV6OSpNg@mail.gmail.com>
- <8b6af8c0-6f01-193f-1eb4-4e230871f0cd@gmail.com>
- <f12b4622-6cea-ac65-2d94-f50a85c29215@canonical.com>
- <CAMuHMdW_G259Nwx1EEf38h0AcVH8yjmjqp9Mh-vQ4LJJMzD8Dg@mail.gmail.com>
- <2e5bb7c2-62d9-b1f7-7f35-2b379d3692d5@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <3661fdba-ad32-5d16-7714-1ebc58caf435@infradead.org>
-Date:   Tue, 25 May 2021 17:39:55 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S233212AbhEZJpN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 May 2021 05:45:13 -0400
+Received: from mx2.suse.de ([195.135.220.15]:32774 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233117AbhEZJpM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 26 May 2021 05:45:12 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 83E15B20F;
+        Wed, 26 May 2021 09:43:40 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>
+Subject: [PATCH] Revert "MIPS: make userspace mapping young by default"
+Date:   Wed, 26 May 2021 11:43:35 +0200
+Message-Id: <20210526094335.92948-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <2e5bb7c2-62d9-b1f7-7f35-2b379d3692d5@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/25/21 2:29 PM, Dmitry Osipenko wrote:
-> 25.05.2021 15:19, Geert Uytterhoeven пишет:
-> ...
->>>> There 3 possible solutions:
->>>>
->>>> 1. Factor out COMMON_CLK from HAVE_LEGACY_CLK, if this is possible
->>>> 2. Build stubs universally, maybe using weak functions.
->>>
->>> I vote for this one - global stubs.
->>
->> Yep.
->>
->>> Or for a new one:
->>> 4. Disable COMPILE_TEST for specific platforms (mentioned in commit
->>> msg). Eventually could be like:
->>> config RALINK
->>>         depends !COMPILE_TEST || (COMPILE_TEST && COMMON_CLK)
->>
->> That's a neat idea!
->>
->> Of course there's a fifth option:
->>
->> 5. Convert legacy platforms to COMMON_CLK.
->>
->> Which is already happening for ARM EP93XX.
-> 
-> I'll try to take a closer look at alternative options, thank you for
-> yours input.
+This reverts commit f685a533a7fab35c5d069dcd663f59c8e4171a75.
 
-Hi,
+MIPS cache flush logic needs to know whether the mapping was already
+established to decide how to flush caches. This is done by checking the
+valid bit in the PTE. The commit above breaks this logic by setting
+the valid in the PTE in new mappings, which causes kernel crashes.
 
-If you are messing around with HAVE_LEGACY_CLK and COMMON_CLK
-and don't mind, please have a look at this report from
-'kernel test robot':
-  https://lore.kernel.org/lkml/202103162301.oomY9NwI-lkp@intel.com/
+Reported-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/mm/cache.c    | 30 ++++++++++++++----------------
+ include/linux/pgtable.h |  8 ++++++++
+ mm/memory.c             |  4 ++++
+ 3 files changed, 26 insertions(+), 16 deletions(-)
 
-
-Maybe this one is more MIPS-specific. I dunno.
-I tried to come up with a patch for it and failed.
-
-I will be happy to built-test any patches that you come up with.
-
-Maybe I have just looked at this too long...
-
-thanks.
+diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
+index a7bf0c80371c..830ab91e574f 100644
+--- a/arch/mips/mm/cache.c
++++ b/arch/mips/mm/cache.c
+@@ -158,31 +158,29 @@ unsigned long _page_cachable_default;
+ EXPORT_SYMBOL(_page_cachable_default);
+ 
+ #define PM(p)	__pgprot(_page_cachable_default | (p))
+-#define PVA(p)	PM(_PAGE_VALID | _PAGE_ACCESSED | (p))
+ 
+ static inline void setup_protection_map(void)
+ {
+ 	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[1]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[2]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[3]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[4]  = PVA(_PAGE_PRESENT);
+-	protection_map[5]  = PVA(_PAGE_PRESENT);
+-	protection_map[6]  = PVA(_PAGE_PRESENT);
+-	protection_map[7]  = PVA(_PAGE_PRESENT);
++	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
++	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[4]  = PM(_PAGE_PRESENT);
++	protection_map[5]  = PM(_PAGE_PRESENT);
++	protection_map[6]  = PM(_PAGE_PRESENT);
++	protection_map[7]  = PM(_PAGE_PRESENT);
+ 
+ 	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[9]  = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[10] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
++	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
+ 				_PAGE_NO_READ);
+-	protection_map[11] = PVA(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+-	protection_map[12] = PVA(_PAGE_PRESENT);
+-	protection_map[13] = PVA(_PAGE_PRESENT);
+-	protection_map[14] = PVA(_PAGE_PRESENT);
+-	protection_map[15] = PVA(_PAGE_PRESENT);
++	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
++	protection_map[12] = PM(_PAGE_PRESENT);
++	protection_map[13] = PM(_PAGE_PRESENT);
++	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
++	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
+ }
+ 
+-#undef _PVA
+ #undef PM
+ 
+ void cpu_cache_init(void)
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 46b13780c2c8..a43047b1030d 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -432,6 +432,14 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
+  * To be differentiate with macro pte_mkyoung, this macro is used on platforms
+  * where software maintains page access bit.
+  */
++#ifndef pte_sw_mkyoung
++static inline pte_t pte_sw_mkyoung(pte_t pte)
++{
++	return pte;
++}
++#define pte_sw_mkyoung	pte_sw_mkyoung
++#endif
++
+ #ifndef pte_savedwrite
+ #define pte_savedwrite pte_write
+ #endif
+diff --git a/mm/memory.c b/mm/memory.c
+index 730daa00952b..f3ffab9b9e39 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2939,6 +2939,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		}
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+ 		entry = mk_pte(new_page, vma->vm_page_prot);
++		entry = pte_sw_mkyoung(entry);
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
+ 
+ 		/*
+@@ -3602,6 +3603,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
+ 	__SetPageUptodate(page);
+ 
+ 	entry = mk_pte(page, vma->vm_page_prot);
++	entry = pte_sw_mkyoung(entry);
+ 	if (vma->vm_flags & VM_WRITE)
+ 		entry = pte_mkwrite(pte_mkdirty(entry));
+ 
+@@ -3786,6 +3788,8 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+ 
+ 	if (prefault && arch_wants_old_prefaulted_pte())
+ 		entry = pte_mkold(entry);
++	else
++		entry = pte_sw_mkyoung(entry);
+ 
+ 	if (write)
+ 		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
 -- 
-~Randy
+2.29.2
 
