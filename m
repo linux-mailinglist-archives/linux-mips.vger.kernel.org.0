@@ -2,826 +2,658 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E2A391CA8
-	for <lists+linux-mips@lfdr.de>; Wed, 26 May 2021 18:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840AA391E80
+	for <lists+linux-mips@lfdr.de>; Wed, 26 May 2021 19:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235445AbhEZQGw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 26 May 2021 12:06:52 -0400
-Received: from out28-221.mail.aliyun.com ([115.124.28.221]:56261 "EHLO
-        out28-221.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbhEZQGp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 May 2021 12:06:45 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0208391-0.00822249-0.970938;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047205;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.KJ7lqx9_1622045110;
-Received: from 192.168.101.16(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KJ7lqx9_1622045110)
-          by smtp.aliyun-inc.com(10.147.41.199);
-          Thu, 27 May 2021 00:05:11 +0800
-Subject: Re: [PATCH] clocksource: Ingenic: Add SMP/SMT support for sysost
- driver.
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com
-References: <1621963596-78952-1-git-send-email-zhouyanjie@wanyeetech.com>
- <4XPPTQ.AM74BCKXPWDR@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <5fbc94b7-107a-3edc-a84e-208bffd6cdf5@wanyeetech.com>
-Date:   Thu, 27 May 2021 00:05:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S232812AbhEZR7M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 May 2021 13:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235167AbhEZR7L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 May 2021 13:59:11 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3B1C061756
+        for <linux-mips@vger.kernel.org>; Wed, 26 May 2021 10:57:39 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id f12so2821428ljp.2
+        for <linux-mips@vger.kernel.org>; Wed, 26 May 2021 10:57:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BP7AVVWC00f5O5DdPWJFvTwM9UlAC3Lo9UzGNRTN8W0=;
+        b=qn21GZCqM3CdN9b0wmUYg5A5XR2EPaOTWbRJTChWT2OWQ2I+vV4mcxRuQ9+b0ayyr4
+         HDo6hwrbmzMdBp2QL4qxrkpf/1+vcvY+HcA7NbuSoXpXt+f4vU78LXb03UcB6QcQD/O/
+         vgzQthQxEfC87Jl6ZnVEUSM1liU2AvmQUYlqCs/9lDPS0ueMRt7o9oPjoStjoUs+0Em0
+         FThyVRawmPw1ZmAut+m5ExtMqJPwGpWEFQ/hCRugZ7K74r2vwJHyKEQzhI9hGxNCpVdw
+         ioys63I6jtJ7h9Sq8MavL2zpEHAg2qZQKTb3giKF7+LjhglfONShKiESxCF/z+RFjKpb
+         fjXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BP7AVVWC00f5O5DdPWJFvTwM9UlAC3Lo9UzGNRTN8W0=;
+        b=uksW+bm98l9dDlOv3qXgda0TshDzdK8c13PoKP9coeDgRHSHq9645DhOL+lvfScEHI
+         zMggLpjqOLIgx8rElgUv6ETUezrvgFAGSfrQRMh4TaYf/v3on27LffYsZqR/2YD7j2U8
+         HVS2nsitopDw2BpadbCYcU8Uha9t+85pAj/wa7eWGswRclZRdjQU7d+/k56NyxHAzRVm
+         TxuWN7crclBWeE0I/0pRNveq0gvlff0fRX2npWffOsgTPrhyvhx36PDzXI77V6jGhvlB
+         1CENldVA/JlnUAe0xpVGOQUDhXFYMYitKbbHBE3+NBuZmG7Hv+BwijnKBsKLVARmMst2
+         /A+g==
+X-Gm-Message-State: AOAM532YKuQdEb31bAXnh4FAYr027sQuc1CkHRLVpCkRGjydpmQUe+S/
+        KNmDmiYHZTCIjHALe7iLu/1N3Is1FqL7qNnaHcrflg==
+X-Google-Smtp-Source: ABdhPJx5JUYM4IKNZyZsbyZC8ZANOpBcePssBpbJ/PcrcuWVg8OWepadaIF6aThX19d61KFUDQoF6Nu4HXi6gGLnn5Q=
+X-Received: by 2002:a05:651c:1251:: with SMTP id h17mr3305446ljh.215.1622051857582;
+ Wed, 26 May 2021 10:57:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <4XPPTQ.AM74BCKXPWDR@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20210524151828.4113777-1-jingzhangos@google.com>
+ <20210524151828.4113777-2-jingzhangos@google.com> <CALzav=c_syZ9NKo6RshrdbjgbtZb0TNH_zcVTpJJ14HnDn=M9Q@mail.gmail.com>
+In-Reply-To: <CALzav=c_syZ9NKo6RshrdbjgbtZb0TNH_zcVTpJJ14HnDn=M9Q@mail.gmail.com>
+From:   Jing Zhang <jingzhangos@google.com>
+Date:   Wed, 26 May 2021 12:57:26 -0500
+Message-ID: <CAAdAUtgabA2YZNZoCQ8a8FDRLEz2Kb6s82mnQ64VLLHPh6fw3g@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] KVM: stats: Separate common stats from
+ architecture specific ones
+To:     David Matlack <dmatlack@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
-
-On 2021/5/26 下午7:43, Paul Cercueil wrote:
-> Hi Zhou,
+On Tue, May 25, 2021 at 4:36 PM David Matlack <dmatlack@google.com> wrote:
 >
-> Le mer., mai 26 2021 at 01:26:36 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> The OST in Ingenic XBurst®2 SoCs such as X2000 and X2100, has a global
->> timer and two or four percpu timers, add support for the percpu timers.
+> On Mon, May 24, 2021 at 8:18 AM Jing Zhang <jingzhangos@google.com> wrote:
+> >
+> > Put all common statistics in a separate structure to ease
+> > statistics handling for the incoming new statistics API.
+> >
+> > No functional change intended.
+> >
+> > Reviewed-by: David Matlack <dmatlack@google.com>
 >
-> That means X2100 is a quad-core? :)
-
-
-No, the X2100 is still a single-core dual-thread (two logical CPUs). 
-According to rumors, the dual-core four-thread processor may be X2800 or 
-X2900.
-
-
+> FYI I think you only add Reviewed-by tags if they are offered by the
+> reviewer explicitly [1]. Offering your Reviewed-by tag is similar to
+> hitting the +1 button on Gerrit.
 >
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>  drivers/clocksource/ingenic-sysost.c | 324 
->> ++++++++++++++++++++++++++---------
->>  1 file changed, 246 insertions(+), 78 deletions(-)
->>
->> diff --git a/drivers/clocksource/ingenic-sysost.c 
->> b/drivers/clocksource/ingenic-sysost.c
->> index e77d584..f35e0a3 100644
->> --- a/drivers/clocksource/ingenic-sysost.c
->> +++ b/drivers/clocksource/ingenic-sysost.c
->> @@ -13,6 +13,8 @@
->>  #include <linux/mfd/syscon.h>
->>  #include <linux/of_address.h>
->>  #include <linux/of_irq.h>
->> +#include <linux/of_platform.h>
->> +#include <linux/overflow.h>
->>  #include <linux/sched_clock.h>
->>  #include <linux/slab.h>
->>  #include <linux/syscore_ops.h>
->> @@ -21,10 +23,14 @@
->>
->>  /* OST register offsets */
->>  #define OST_REG_OSTCCR            0x00
->> +#define OST_REG_OSTER            0x04
->>  #define OST_REG_OSTCR            0x08
->>  #define OST_REG_OSTFR            0x0c
->> +#define OST_REG_OSTCNTH            0x0c
->>  #define OST_REG_OSTMR            0x10
->> +#define OST_REG_OSTCNTL            0x10
->>  #define OST_REG_OST1DFR            0x14
->> +#define OST_REG_OSTCNTB            0x14
->>  #define OST_REG_OST1CNT            0x18
->>  #define OST_REG_OST2CNTL        0x20
->>  #define OST_REG_OSTCNT2HBUF        0x24
->> @@ -55,13 +61,24 @@
->>  #define OSTECR_OST1ENC            BIT(0)
->>  #define OSTECR_OST2ENC            BIT(1)
->>
->> +enum ingenic_ost_version {
->> +    ID_X1000,
->> +    ID_X2000,
->> +};
->> +
->>  struct ingenic_soc_info {
->> +    enum ingenic_ost_version version;
->> +    const struct ingenic_ost_clk_info *clk_info;
->> +
->>      unsigned int num_channels;
->> +    unsigned int base_offset;
->>  };
->>
->>  struct ingenic_ost_clk_info {
->>      struct clk_init_data init_data;
->> -    u8 ostccr_reg;
->> +    unsigned int idx;
->> +    u32 ostccr_reg;
->> +    u32 ostcntl_reg;
->>  };
->>
->>  struct ingenic_ost_clk {
->> @@ -71,15 +88,27 @@ struct ingenic_ost_clk {
->>      const struct ingenic_ost_clk_info *info;
->>  };
->>
->> +struct ingenic_ost_timer {
->> +    void __iomem *base;
->> +    unsigned int cpu;
->> +    unsigned int channel;
->> +    struct clock_event_device cevt;
->> +    struct clk *clk;
->> +    char name[20];
->> +    spinlock_t    lock;
+> But in any case, this patch looks good so here's my tag:
 >
-> Use a regular space instead of the tab.
-
-
-Sure.
-
-
+> Reviewed-by: David Matlack <dmatlack@google.com>
 >
->> +};
->> +
->>  struct ingenic_ost {
->>      void __iomem *base;
->>      const struct ingenic_soc_info *soc_info;
->> -    struct clk *clk, *percpu_timer_clk, *global_timer_clk;
->> -    struct clock_event_device cevt;
->> +    struct clk *clk, *global_timer_clk;
->> +    struct device_node *np;
->>      struct clocksource cs;
->> -    char name[20];
->>
->>      struct clk_hw_onecell_data *clocks;
->> +    struct ingenic_ost_timer __percpu *timers;
->> +
->> +    int irq;
->>  };
->>
->>  static struct ingenic_ost *ingenic_ost;
->> @@ -94,9 +123,10 @@ static unsigned long 
->> ingenic_ost_percpu_timer_recalc_rate(struct clk_hw *hw,
->>  {
->>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
->>      const struct ingenic_ost_clk_info *info = ost_clk->info;
->> +    struct ingenic_ost_timer *timer = 
->> per_cpu_ptr(ost_clk->ost->timers, info->idx);
->>      unsigned int prescale;
->>
->> -    prescale = readl(ost_clk->ost->base + info->ostccr_reg);
->> +    prescale = readl(timer->base + info->ostccr_reg);
->>
->>      prescale = (prescale & OSTCCR_PRESCALE1_MASK) >> 
->> OSTCCR_PRESCALE1_LSB;
->>
->> @@ -108,11 +138,12 @@ static unsigned long 
->> ingenic_ost_global_timer_recalc_rate(struct clk_hw *hw,
->>  {
->>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
->>      const struct ingenic_ost_clk_info *info = ost_clk->info;
->> +    struct ingenic_ost_timer *timer = 
->> per_cpu_ptr(ost_clk->ost->timers, info->idx);
->>      unsigned int prescale;
->>
->> -    prescale = readl(ost_clk->ost->base + info->ostccr_reg);
->> +    prescale = readl(timer->base + info->ostccr_reg);
->>
->> -    prescale = (prescale & OSTCCR_PRESCALE2_MASK) >> 
->> OSTCCR_PRESCALE2_LSB;
->> +    prescale = (prescale & OSTCCR_PRESCALE1_MASK) >> 
->> OSTCCR_PRESCALE1_LSB;
+> [1] https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#reviewer-s-statement-of-oversight
 >
-> This looks bogus to me, especially when looking at 
-> ingenic_ost_global_timer_set_rate().
->
+> > Reviewed-by: Ricardo Koller <ricarkol@google.com>
+> > Signed-off-by: Jing Zhang <jingzhangos@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_host.h   |  9 ++-------
+> >  arch/arm64/kvm/guest.c              | 12 ++++++------
+> >  arch/mips/include/asm/kvm_host.h    |  9 ++-------
+> >  arch/mips/kvm/mips.c                | 12 ++++++------
+> >  arch/powerpc/include/asm/kvm_host.h |  9 ++-------
+> >  arch/powerpc/kvm/book3s.c           | 12 ++++++------
+> >  arch/powerpc/kvm/book3s_hv.c        | 12 ++++++------
+> >  arch/powerpc/kvm/book3s_pr.c        |  2 +-
+> >  arch/powerpc/kvm/book3s_pr_papr.c   |  2 +-
+> >  arch/powerpc/kvm/booke.c            | 14 +++++++-------
+> >  arch/s390/include/asm/kvm_host.h    |  9 ++-------
+> >  arch/s390/kvm/kvm-s390.c            | 12 ++++++------
+> >  arch/x86/include/asm/kvm_host.h     |  9 ++-------
+> >  arch/x86/kvm/x86.c                  | 14 +++++++-------
+> >  include/linux/kvm_host.h            |  9 +++++++--
+> >  include/linux/kvm_types.h           | 12 ++++++++++++
+> >  virt/kvm/kvm_main.c                 | 14 +++++++-------
+> >  17 files changed, 82 insertions(+), 90 deletions(-)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > index 7cd7d5c8c4bc..f3ad7a20b0af 100644
+> > --- a/arch/arm64/include/asm/kvm_host.h
+> > +++ b/arch/arm64/include/asm/kvm_host.h
+> > @@ -556,16 +556,11 @@ static inline bool __vcpu_write_sys_reg_to_cpu(u64 val, int reg)
+> >  }
+> >
+> >  struct kvm_vm_stat {
+> > -       ulong remote_tlb_flush;
+> > +       struct kvm_vm_stat_common common;
+> >  };
+> >
+> >  struct kvm_vcpu_stat {
+> > -       u64 halt_successful_poll;
+> > -       u64 halt_attempted_poll;
+> > -       u64 halt_poll_success_ns;
+> > -       u64 halt_poll_fail_ns;
+> > -       u64 halt_poll_invalid;
+> > -       u64 halt_wakeup;
+> > +       struct kvm_vcpu_stat_common common;
+> >         u64 hvc_exit_stat;
+> >         u64 wfe_exit_stat;
+> >         u64 wfi_exit_stat;
+> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> > index 5cb4a1cd5603..0e41331b0911 100644
+> > --- a/arch/arm64/kvm/guest.c
+> > +++ b/arch/arm64/kvm/guest.c
+> > @@ -29,18 +29,18 @@
+> >  #include "trace.h"
+> >
+> >  struct kvm_stats_debugfs_item debugfs_entries[] = {
+> > -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
+> > -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+> > -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+> > -       VCPU_STAT("halt_wakeup", halt_wakeup),
+> > +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
+> > +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
+> > +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
+> > +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
+> >         VCPU_STAT("hvc_exit_stat", hvc_exit_stat),
+> >         VCPU_STAT("wfe_exit_stat", wfe_exit_stat),
+> >         VCPU_STAT("wfi_exit_stat", wfi_exit_stat),
+> >         VCPU_STAT("mmio_exit_user", mmio_exit_user),
+> >         VCPU_STAT("mmio_exit_kernel", mmio_exit_kernel),
+> >         VCPU_STAT("exits", exits),
+> > -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+> > -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+> > +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
+> > +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
+> >         { NULL }
+> >  };
+> >
+> > diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> > index fca4547d580f..6f610fbcd8d1 100644
+> > --- a/arch/mips/include/asm/kvm_host.h
+> > +++ b/arch/mips/include/asm/kvm_host.h
+> > @@ -109,10 +109,11 @@ static inline bool kvm_is_error_hva(unsigned long addr)
+> >  }
+> >
+> >  struct kvm_vm_stat {
+> > -       ulong remote_tlb_flush;
+> > +       struct kvm_vm_stat_common common;
+> >  };
+> >
+> >  struct kvm_vcpu_stat {
+> > +       struct kvm_vcpu_stat_common common;
+> >         u64 wait_exits;
+> >         u64 cache_exits;
+> >         u64 signal_exits;
+> > @@ -142,12 +143,6 @@ struct kvm_vcpu_stat {
+> >  #ifdef CONFIG_CPU_LOONGSON64
+> >         u64 vz_cpucfg_exits;
+> >  #endif
+> > -       u64 halt_successful_poll;
+> > -       u64 halt_attempted_poll;
+> > -       u64 halt_poll_success_ns;
+> > -       u64 halt_poll_fail_ns;
+> > -       u64 halt_poll_invalid;
+> > -       u64 halt_wakeup;
+> >  };
+> >
+> >  struct kvm_arch_memory_slot {
+> > diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> > index 4d4af97dcc88..f4fc60c05e9c 100644
+> > --- a/arch/mips/kvm/mips.c
+> > +++ b/arch/mips/kvm/mips.c
+> > @@ -68,12 +68,12 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+> >  #ifdef CONFIG_CPU_LOONGSON64
+> >         VCPU_STAT("vz_cpucfg", vz_cpucfg_exits),
+> >  #endif
+> > -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
+> > -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+> > -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+> > -       VCPU_STAT("halt_wakeup", halt_wakeup),
+> > -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+> > -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+> > +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
+> > +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
+> > +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
+> > +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
+> > +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
+> > +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
+> >         {NULL}
+> >  };
+> >
+> > diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
+> > index 1e83359f286b..473d9d0804ff 100644
+> > --- a/arch/powerpc/include/asm/kvm_host.h
+> > +++ b/arch/powerpc/include/asm/kvm_host.h
+> > @@ -80,12 +80,13 @@ struct kvmppc_book3s_shadow_vcpu;
+> >  struct kvm_nested_guest;
+> >
+> >  struct kvm_vm_stat {
+> > -       ulong remote_tlb_flush;
+> > +       struct kvm_vm_stat_common common;
+> >         ulong num_2M_pages;
+> >         ulong num_1G_pages;
+> >  };
+> >
+> >  struct kvm_vcpu_stat {
+> > +       struct kvm_vcpu_stat_common common;
+> >         u64 sum_exits;
+> >         u64 mmio_exits;
+> >         u64 signal_exits;
+> > @@ -101,14 +102,8 @@ struct kvm_vcpu_stat {
+> >         u64 emulated_inst_exits;
+> >         u64 dec_exits;
+> >         u64 ext_intr_exits;
+> > -       u64 halt_poll_success_ns;
+> > -       u64 halt_poll_fail_ns;
+> >         u64 halt_wait_ns;
+> > -       u64 halt_successful_poll;
+> > -       u64 halt_attempted_poll;
+> >         u64 halt_successful_wait;
+> > -       u64 halt_poll_invalid;
+> > -       u64 halt_wakeup;
+> >         u64 dbell_exits;
+> >         u64 gdbell_exits;
+> >         u64 ld;
+> > diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+> > index 2b691f4d1f26..bd3a10e1fdaf 100644
+> > --- a/arch/powerpc/kvm/book3s.c
+> > +++ b/arch/powerpc/kvm/book3s.c
+> > @@ -47,14 +47,14 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+> >         VCPU_STAT("dec", dec_exits),
+> >         VCPU_STAT("ext_intr", ext_intr_exits),
+> >         VCPU_STAT("queue_intr", queue_intr),
+> > -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+> > -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+> > +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
+> > +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
+> >         VCPU_STAT("halt_wait_ns", halt_wait_ns),
+> > -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
+> > -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+> > +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
+> > +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
+> >         VCPU_STAT("halt_successful_wait", halt_successful_wait),
+> > -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+> > -       VCPU_STAT("halt_wakeup", halt_wakeup),
+> > +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
+> > +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
+> >         VCPU_STAT("pf_storage", pf_storage),
+> >         VCPU_STAT("sp_storage", sp_storage),
+> >         VCPU_STAT("pf_instruc", pf_instruc),
+> > diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+> > index 28a80d240b76..58e187e03c52 100644
+> > --- a/arch/powerpc/kvm/book3s_hv.c
+> > +++ b/arch/powerpc/kvm/book3s_hv.c
+> > @@ -236,7 +236,7 @@ static void kvmppc_fast_vcpu_kick_hv(struct kvm_vcpu *vcpu)
+> >
+> >         waitp = kvm_arch_vcpu_get_wait(vcpu);
+> >         if (rcuwait_wake_up(waitp))
+> > -               ++vcpu->stat.halt_wakeup;
+> > +               ++vcpu->stat.common.halt_wakeup;
+> >
+> >         cpu = READ_ONCE(vcpu->arch.thread_cpu);
+> >         if (cpu >= 0 && kvmppc_ipi_thread(cpu))
+> > @@ -3925,7 +3925,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
+> >         cur = start_poll = ktime_get();
+> >         if (vc->halt_poll_ns) {
+> >                 ktime_t stop = ktime_add_ns(start_poll, vc->halt_poll_ns);
+> > -               ++vc->runner->stat.halt_attempted_poll;
+> > +               ++vc->runner->stat.common.halt_attempted_poll;
+> >
+> >                 vc->vcore_state = VCORE_POLLING;
+> >                 spin_unlock(&vc->lock);
+> > @@ -3942,7 +3942,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
+> >                 vc->vcore_state = VCORE_INACTIVE;
+> >
+> >                 if (!do_sleep) {
+> > -                       ++vc->runner->stat.halt_successful_poll;
+> > +                       ++vc->runner->stat.common.halt_successful_poll;
+> >                         goto out;
+> >                 }
+> >         }
+> > @@ -3954,7 +3954,7 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
+> >                 do_sleep = 0;
+> >                 /* If we polled, count this as a successful poll */
+> >                 if (vc->halt_poll_ns)
+> > -                       ++vc->runner->stat.halt_successful_poll;
+> > +                       ++vc->runner->stat.common.halt_successful_poll;
+> >                 goto out;
+> >         }
+> >
+> > @@ -3981,13 +3981,13 @@ static void kvmppc_vcore_blocked(struct kvmppc_vcore *vc)
+> >                         ktime_to_ns(cur) - ktime_to_ns(start_wait);
+> >                 /* Attribute failed poll time */
+> >                 if (vc->halt_poll_ns)
+> > -                       vc->runner->stat.halt_poll_fail_ns +=
+> > +                       vc->runner->stat.common.halt_poll_fail_ns +=
+> >                                 ktime_to_ns(start_wait) -
+> >                                 ktime_to_ns(start_poll);
+> >         } else {
+> >                 /* Attribute successful poll time */
+> >                 if (vc->halt_poll_ns)
+> > -                       vc->runner->stat.halt_poll_success_ns +=
+> > +                       vc->runner->stat.common.halt_poll_success_ns +=
+> >                                 ktime_to_ns(cur) -
+> >                                 ktime_to_ns(start_poll);
+> >         }
+> > diff --git a/arch/powerpc/kvm/book3s_pr.c b/arch/powerpc/kvm/book3s_pr.c
+> > index d7733b07f489..214caa9d9675 100644
+> > --- a/arch/powerpc/kvm/book3s_pr.c
+> > +++ b/arch/powerpc/kvm/book3s_pr.c
+> > @@ -493,7 +493,7 @@ static void kvmppc_set_msr_pr(struct kvm_vcpu *vcpu, u64 msr)
+> >                 if (!vcpu->arch.pending_exceptions) {
+> >                         kvm_vcpu_block(vcpu);
+> >                         kvm_clear_request(KVM_REQ_UNHALT, vcpu);
+> > -                       vcpu->stat.halt_wakeup++;
+> > +                       vcpu->stat.common.halt_wakeup++;
+> >
+> >                         /* Unset POW bit after we woke up */
+> >                         msr &= ~MSR_POW;
+> > diff --git a/arch/powerpc/kvm/book3s_pr_papr.c b/arch/powerpc/kvm/book3s_pr_papr.c
+> > index 031c8015864a..9384625c8051 100644
+> > --- a/arch/powerpc/kvm/book3s_pr_papr.c
+> > +++ b/arch/powerpc/kvm/book3s_pr_papr.c
+> > @@ -378,7 +378,7 @@ int kvmppc_h_pr(struct kvm_vcpu *vcpu, unsigned long cmd)
+> >                 kvmppc_set_msr_fast(vcpu, kvmppc_get_msr(vcpu) | MSR_EE);
+> >                 kvm_vcpu_block(vcpu);
+> >                 kvm_clear_request(KVM_REQ_UNHALT, vcpu);
+> > -               vcpu->stat.halt_wakeup++;
+> > +               vcpu->stat.common.halt_wakeup++;
+> >                 return EMULATE_DONE;
+> >         case H_LOGICAL_CI_LOAD:
+> >                 return kvmppc_h_pr_logical_ci_load(vcpu);
+> > diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
+> > index 7d5fe43f85c4..07fdd7a1254a 100644
+> > --- a/arch/powerpc/kvm/booke.c
+> > +++ b/arch/powerpc/kvm/booke.c
+> > @@ -49,15 +49,15 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+> >         VCPU_STAT("inst_emu", emulated_inst_exits),
+> >         VCPU_STAT("dec", dec_exits),
+> >         VCPU_STAT("ext_intr", ext_intr_exits),
+> > -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
+> > -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+> > -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+> > -       VCPU_STAT("halt_wakeup", halt_wakeup),
+> > +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
+> > +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
+> > +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
+> > +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
+> >         VCPU_STAT("doorbell", dbell_exits),
+> >         VCPU_STAT("guest doorbell", gdbell_exits),
+> > -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+> > -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+> > -       VM_STAT("remote_tlb_flush", remote_tlb_flush),
+> > +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
+> > +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
+> > +       VM_STAT_COM("remote_tlb_flush", remote_tlb_flush),
+> >         { NULL }
+> >  };
+> >
+> > diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+> > index 8925f3969478..57a20897f3db 100644
+> > --- a/arch/s390/include/asm/kvm_host.h
+> > +++ b/arch/s390/include/asm/kvm_host.h
+> > @@ -361,6 +361,7 @@ struct sie_page {
+> >  };
+> >
+> >  struct kvm_vcpu_stat {
+> > +       struct kvm_vcpu_stat_common common;
+> >         u64 exit_userspace;
+> >         u64 exit_null;
+> >         u64 exit_external_request;
+> > @@ -370,13 +371,7 @@ struct kvm_vcpu_stat {
+> >         u64 exit_validity;
+> >         u64 exit_instruction;
+> >         u64 exit_pei;
+> > -       u64 halt_successful_poll;
+> > -       u64 halt_attempted_poll;
+> > -       u64 halt_poll_invalid;
+> >         u64 halt_no_poll_steal;
+> > -       u64 halt_wakeup;
+> > -       u64 halt_poll_success_ns;
+> > -       u64 halt_poll_fail_ns;
+> >         u64 instruction_lctl;
+> >         u64 instruction_lctlg;
+> >         u64 instruction_stctl;
+> > @@ -755,12 +750,12 @@ struct kvm_vcpu_arch {
+> >  };
+> >
+> >  struct kvm_vm_stat {
+> > +       struct kvm_vm_stat_common common;
+> >         u64 inject_io;
+> >         u64 inject_float_mchk;
+> >         u64 inject_pfault_done;
+> >         u64 inject_service_signal;
+> >         u64 inject_virtio;
+> > -       u64 remote_tlb_flush;
+> >  };
+> >
+> >  struct kvm_arch_memory_slot {
+> > diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> > index 1296fc10f80c..d6bf3372bb10 100644
+> > --- a/arch/s390/kvm/kvm-s390.c
+> > +++ b/arch/s390/kvm/kvm-s390.c
+> > @@ -72,13 +72,13 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+> >         VCPU_STAT("exit_program_interruption", exit_program_interruption),
+> >         VCPU_STAT("exit_instr_and_program_int", exit_instr_and_program),
+> >         VCPU_STAT("exit_operation_exception", exit_operation_exception),
+> > -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
+> > -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+> > -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+> > +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
+> > +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
+> > +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
+> >         VCPU_STAT("halt_no_poll_steal", halt_no_poll_steal),
+> > -       VCPU_STAT("halt_wakeup", halt_wakeup),
+> > -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+> > -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+> > +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
+> > +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
+> > +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
+> >         VCPU_STAT("instruction_lctlg", instruction_lctlg),
+> >         VCPU_STAT("instruction_lctl", instruction_lctl),
+> >         VCPU_STAT("instruction_stctl", instruction_stctl),
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 55efbacfc244..5bfd6893fbf6 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1127,6 +1127,7 @@ struct kvm_arch {
+> >  };
+> >
+> >  struct kvm_vm_stat {
+> > +       struct kvm_vm_stat_common common;
+> >         ulong mmu_shadow_zapped;
+> >         ulong mmu_pte_write;
+> >         ulong mmu_pde_zapped;
+> > @@ -1134,13 +1135,13 @@ struct kvm_vm_stat {
+> >         ulong mmu_recycled;
+> >         ulong mmu_cache_miss;
+> >         ulong mmu_unsync;
+> > -       ulong remote_tlb_flush;
+> >         ulong lpages;
+> >         ulong nx_lpage_splits;
+> >         ulong max_mmu_page_hash_collisions;
+> >  };
+> >
+> >  struct kvm_vcpu_stat {
+> > +       struct kvm_vcpu_stat_common common;
+> >         u64 pf_fixed;
+> >         u64 pf_guest;
+> >         u64 tlb_flush;
+> > @@ -1154,10 +1155,6 @@ struct kvm_vcpu_stat {
+> >         u64 nmi_window_exits;
+> >         u64 l1d_flush;
+> >         u64 halt_exits;
+> > -       u64 halt_successful_poll;
+> > -       u64 halt_attempted_poll;
+> > -       u64 halt_poll_invalid;
+> > -       u64 halt_wakeup;
+> >         u64 request_irq_exits;
+> >         u64 irq_exits;
+> >         u64 host_state_reload;
+> > @@ -1168,8 +1165,6 @@ struct kvm_vcpu_stat {
+> >         u64 irq_injections;
+> >         u64 nmi_injections;
+> >         u64 req_event;
+> > -       u64 halt_poll_success_ns;
+> > -       u64 halt_poll_fail_ns;
+> >         u64 nested_run;
+> >         u64 directed_yield_attempted;
+> >         u64 directed_yield_successful;
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 9b6bca616929..9a93d80caff6 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -226,10 +226,10 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+> >         VCPU_STAT("irq_window", irq_window_exits),
+> >         VCPU_STAT("nmi_window", nmi_window_exits),
+> >         VCPU_STAT("halt_exits", halt_exits),
+> > -       VCPU_STAT("halt_successful_poll", halt_successful_poll),
+> > -       VCPU_STAT("halt_attempted_poll", halt_attempted_poll),
+> > -       VCPU_STAT("halt_poll_invalid", halt_poll_invalid),
+> > -       VCPU_STAT("halt_wakeup", halt_wakeup),
+> > +       VCPU_STAT_COM("halt_successful_poll", halt_successful_poll),
+> > +       VCPU_STAT_COM("halt_attempted_poll", halt_attempted_poll),
+> > +       VCPU_STAT_COM("halt_poll_invalid", halt_poll_invalid),
+> > +       VCPU_STAT_COM("halt_wakeup", halt_wakeup),
+> >         VCPU_STAT("hypercalls", hypercalls),
+> >         VCPU_STAT("request_irq", request_irq_exits),
+> >         VCPU_STAT("irq_exits", irq_exits),
+> > @@ -241,8 +241,8 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+> >         VCPU_STAT("nmi_injections", nmi_injections),
+> >         VCPU_STAT("req_event", req_event),
+> >         VCPU_STAT("l1d_flush", l1d_flush),
+> > -       VCPU_STAT("halt_poll_success_ns", halt_poll_success_ns),
+> > -       VCPU_STAT("halt_poll_fail_ns", halt_poll_fail_ns),
+> > +       VCPU_STAT_COM("halt_poll_success_ns", halt_poll_success_ns),
+> > +       VCPU_STAT_COM("halt_poll_fail_ns", halt_poll_fail_ns),
+> >         VCPU_STAT("nested_run", nested_run),
+> >         VCPU_STAT("directed_yield_attempted", directed_yield_attempted),
+> >         VCPU_STAT("directed_yield_successful", directed_yield_successful),
+> > @@ -253,7 +253,7 @@ struct kvm_stats_debugfs_item debugfs_entries[] = {
+> >         VM_STAT("mmu_recycled", mmu_recycled),
+> >         VM_STAT("mmu_cache_miss", mmu_cache_miss),
+> >         VM_STAT("mmu_unsync", mmu_unsync),
+> > -       VM_STAT("remote_tlb_flush", remote_tlb_flush),
+> > +       VM_STAT_COM("remote_tlb_flush", remote_tlb_flush),
+> >         VM_STAT("largepages", lpages, .mode = 0444),
+> >         VM_STAT("nx_largepages_splitted", nx_lpage_splits, .mode = 0444),
+> >         VM_STAT("max_mmu_page_hash_collisions", max_mmu_page_hash_collisions),
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index 2f34487e21f2..97700e41db3b 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -1243,10 +1243,15 @@ struct kvm_stats_debugfs_item {
+> >  #define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
+> >         ((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
+> >
+> > -#define VM_STAT(n, x, ...)                                                     \
+> > +#define VM_STAT(n, x, ...)                                                    \
+> >         { n, offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__ }
+> > -#define VCPU_STAT(n, x, ...)                                                   \
+> > +#define VCPU_STAT(n, x, ...)                                                  \
+> >         { n, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__ }
+> > +#define VM_STAT_COM(n, x, ...)                                                \
+> > +       { n, offsetof(struct kvm, stat.common.x), KVM_STAT_VM, ## __VA_ARGS__ }
+> > +#define VCPU_STAT_COM(n, x, ...)                                              \
+> > +       { n, offsetof(struct kvm_vcpu, stat.common.x),                         \
+> > +         KVM_STAT_VCPU, ## __VA_ARGS__ }
+> >
+> >  extern struct kvm_stats_debugfs_item debugfs_entries[];
+> >  extern struct dentry *kvm_debugfs_dir;
+> > diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+> > index a7580f69dda0..87eb05ad678b 100644
+> > --- a/include/linux/kvm_types.h
+> > +++ b/include/linux/kvm_types.h
+> > @@ -76,5 +76,17 @@ struct kvm_mmu_memory_cache {
+> >  };
+> >  #endif
+> >
+> > +struct kvm_vm_stat_common {
+> > +       ulong remote_tlb_flush;
+> > +};
+> > +
+> > +struct kvm_vcpu_stat_common {
+> > +       u64 halt_successful_poll;
+> > +       u64 halt_attempted_poll;
+> > +       u64 halt_poll_invalid;
+> > +       u64 halt_wakeup;
+> > +       u64 halt_poll_success_ns;
+> > +       u64 halt_poll_fail_ns;
+> > +};
+> >
+> >  #endif /* __KVM_TYPES_H__ */
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 6b4feb92dc79..34a4cf265297 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -330,7 +330,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm)
+> >          */
+> >         if (!kvm_arch_flush_remote_tlb(kvm)
+> >             || kvm_make_all_cpus_request(kvm, KVM_REQ_TLB_FLUSH))
+> > -               ++kvm->stat.remote_tlb_flush;
+> > +               ++kvm->stat.common.remote_tlb_flush;
+> >         cmpxchg(&kvm->tlbs_dirty, dirty_count, 0);
+> >  }
+> >  EXPORT_SYMBOL_GPL(kvm_flush_remote_tlbs);
+> > @@ -2940,9 +2940,9 @@ static inline void
+> >  update_halt_poll_stats(struct kvm_vcpu *vcpu, u64 poll_ns, bool waited)
+> >  {
+> >         if (waited)
+> > -               vcpu->stat.halt_poll_fail_ns += poll_ns;
+> > +               vcpu->stat.common.halt_poll_fail_ns += poll_ns;
+> >         else
+> > -               vcpu->stat.halt_poll_success_ns += poll_ns;
+> > +               vcpu->stat.common.halt_poll_success_ns += poll_ns;
+> >  }
+> >
+> >  /*
+> > @@ -2960,16 +2960,16 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+> >         if (vcpu->halt_poll_ns && !kvm_arch_no_poll(vcpu)) {
+> >                 ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
+> >
+> > -               ++vcpu->stat.halt_attempted_poll;
+> > +               ++vcpu->stat.common.halt_attempted_poll;
+> >                 do {
+> >                         /*
+> >                          * This sets KVM_REQ_UNHALT if an interrupt
+> >                          * arrives.
+> >                          */
+> >                         if (kvm_vcpu_check_block(vcpu) < 0) {
+> > -                               ++vcpu->stat.halt_successful_poll;
+> > +                               ++vcpu->stat.common.halt_successful_poll;
+> >                                 if (!vcpu_valid_wakeup(vcpu))
+> > -                                       ++vcpu->stat.halt_poll_invalid;
+> > +                                       ++vcpu->stat.common.halt_poll_invalid;
+> >                                 goto out;
+> >                         }
+> >                         poll_end = cur = ktime_get();
+> > @@ -3027,7 +3027,7 @@ bool kvm_vcpu_wake_up(struct kvm_vcpu *vcpu)
+> >         waitp = kvm_arch_vcpu_get_wait(vcpu);
+> >         if (rcuwait_wake_up(waitp)) {
+> >                 WRITE_ONCE(vcpu->ready, true);
+> > -               ++vcpu->stat.halt_wakeup;
+> > +               ++vcpu->stat.common.halt_wakeup;
+> >                 return true;
+> >         }
+> >
+> > --
+> > 2.31.1.818.g46aad6cb9e-goog
+> >
+Thanks David!
 
-My mistake, there is indeed a problem here.
-
-
-> Also, use FIELD_GET() from <linux/bitfield.h>, then you can drop the 
-> *_LSB macros (maybe do that in a first patch).
->
-
-Sure.
-
-
->>
->>      return parent_rate >> (prescale * 2);
->>  }
->> @@ -147,12 +178,13 @@ static int 
->> ingenic_ost_percpu_timer_set_rate(struct clk_hw *hw, unsigned long re
->>  {
->>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
->>      const struct ingenic_ost_clk_info *info = ost_clk->info;
->> +    struct ingenic_ost_timer *timer = 
->> per_cpu_ptr(ost_clk->ost->timers, info->idx);
->>      u8 prescale = ingenic_ost_get_prescale(parent_rate, req_rate);
->>      int val;
->>
->> -    val = readl(ost_clk->ost->base + info->ostccr_reg);
->> +    val = readl(timer->base + info->ostccr_reg);
->>      val = (val & ~OSTCCR_PRESCALE1_MASK) | (prescale << 
->> OSTCCR_PRESCALE1_LSB);
->> -    writel(val, ost_clk->ost->base + info->ostccr_reg);
->> +    writel(val, timer->base + info->ostccr_reg);
->>
->>      return 0;
->>  }
->> @@ -162,12 +194,16 @@ static int 
->> ingenic_ost_global_timer_set_rate(struct clk_hw *hw, unsigned long re
->>  {
->>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
->>      const struct ingenic_ost_clk_info *info = ost_clk->info;
->> +    struct ingenic_ost_timer *timer = 
->> per_cpu_ptr(ost_clk->ost->timers, info->idx);
->>      u8 prescale = ingenic_ost_get_prescale(parent_rate, req_rate);
->>      int val;
->>
->> -    val = readl(ost_clk->ost->base + info->ostccr_reg);
->> -    val = (val & ~OSTCCR_PRESCALE2_MASK) | (prescale << 
->> OSTCCR_PRESCALE2_LSB);
->> -    writel(val, ost_clk->ost->base + info->ostccr_reg);
->> +    val = readl(timer->base + info->ostccr_reg);
->> +    if (ost_clk->ost->soc_info->version >= ID_X2000)
->> +        val = (val & ~OSTCCR_PRESCALE1_MASK) | (prescale << 
->> OSTCCR_PRESCALE1_LSB);
->> +    else
->> +        val = (val & ~OSTCCR_PRESCALE2_MASK) | (prescale << 
->> OSTCCR_PRESCALE2_LSB);
->> +    writel(val, timer->base + info->ostccr_reg);
->>
->>      return 0;
->>  }
->> @@ -186,7 +222,19 @@ static const struct clk_ops 
->> ingenic_ost_global_timer_ops = {
->>
->>  static const char * const ingenic_ost_clk_parents[] = { "ext" };
->>
->> -static const struct ingenic_ost_clk_info ingenic_ost_clk_info[] = {
->> +static const struct ingenic_ost_clk_info x1000_ost_clk_info[] = {
->> +    [OST_CLK_GLOBAL_TIMER] = {
->> +        .init_data = {
->> +            .name = "global timer",
->> +            .parent_names = ingenic_ost_clk_parents,
->> +            .num_parents = ARRAY_SIZE(ingenic_ost_clk_parents),
->> +            .ops = &ingenic_ost_global_timer_ops,
->> +            .flags = CLK_SET_RATE_UNGATE,
->> +        },
->> +        .ostccr_reg = OST_REG_OSTCCR,
->> +        .ostcntl_reg = OST_REG_OST2CNTL,
->> +    },
->
-> Here you add "global timer" support for the X1000 SoC, correct? Then 
-> this is unrelated to this commit and should be done separately, I think.
->
-
-OK, I will split it to a new patch.
-
-
->> +
->>      [OST_CLK_PERCPU_TIMER] = {
->>          .init_data = {
->>              .name = "percpu timer",
->> @@ -195,9 +243,12 @@ static const struct ingenic_ost_clk_info 
->> ingenic_ost_clk_info[] = {
->>              .ops = &ingenic_ost_percpu_timer_ops,
->>              .flags = CLK_SET_RATE_UNGATE,
->>          },
->> +        .idx = 0,
->>          .ostccr_reg = OST_REG_OSTCCR,
->>      },
->> +};
->>
->> +static const struct ingenic_ost_clk_info x2000_ost_clk_info[] = {
->>      [OST_CLK_GLOBAL_TIMER] = {
->>          .init_data = {
->>              .name = "global timer",
->> @@ -207,6 +258,31 @@ static const struct ingenic_ost_clk_info 
->> ingenic_ost_clk_info[] = {
->>              .flags = CLK_SET_RATE_UNGATE,
->>          },
->>          .ostccr_reg = OST_REG_OSTCCR,
->> +        .ostcntl_reg = OST_REG_OSTCNTL,
->> +    },
->> +
->> +    [OST_CLK_PERCPU_TIMER0] = {
->> +        .init_data = {
->> +            .name = "percpu timer0",
->> +            .parent_names = ingenic_ost_clk_parents,
->> +            .num_parents = ARRAY_SIZE(ingenic_ost_clk_parents),
->> +            .ops = &ingenic_ost_percpu_timer_ops,
->> +            .flags = CLK_SET_RATE_UNGATE,
->> +        },
->> +        .idx = 0,
->> +        .ostccr_reg = OST_REG_OSTCCR,
->> +    },
->> +
->> +    [OST_CLK_PERCPU_TIMER1] = {
->> +        .init_data = {
->> +            .name = "percpu timer1",
->> +            .parent_names = ingenic_ost_clk_parents,
->> +            .num_parents = ARRAY_SIZE(ingenic_ost_clk_parents),
->> +            .ops = &ingenic_ost_percpu_timer_ops,
->> +            .flags = CLK_SET_RATE_UNGATE,
->> +        },
->> +        .idx = 1,
->> +        .ostccr_reg = OST_REG_OSTCCR,
->>      },
->>  };
->>
->> @@ -215,7 +291,7 @@ static u64 notrace 
->> ingenic_ost_global_timer_read_cntl(void)
->>      struct ingenic_ost *ost = ingenic_ost;
->>      unsigned int count;
->>
->> -    count = readl(ost->base + OST_REG_OST2CNTL);
->> +    count = readl(ost->base + ost->soc_info->clk_info->ostcntl_reg);
->>
->>      return count;
->>  }
->> @@ -225,16 +301,21 @@ static u64 notrace 
->> ingenic_ost_clocksource_read(struct clocksource *cs)
->>      return ingenic_ost_global_timer_read_cntl();
->>  }
->>
->> -static inline struct ingenic_ost *to_ingenic_ost(struct 
->> clock_event_device *evt)
->> +static inline struct ingenic_ost_timer *
->> +to_ingenic_ost_timer(struct clock_event_device *evt)
->>  {
->> -    return container_of(evt, struct ingenic_ost, cevt);
->> +    return container_of(evt, struct ingenic_ost_timer, cevt);
->>  }
->>
->>  static int ingenic_ost_cevt_set_state_shutdown(struct 
->> clock_event_device *evt)
->>  {
->> -    struct ingenic_ost *ost = to_ingenic_ost(evt);
->> +    struct ingenic_ost_timer *timer = to_ingenic_ost_timer(evt);
->> +    struct ingenic_ost *ost = ingenic_ost;
->
-> You should avoid referencing the global 'ingenic_ost' variable if you 
-> can. You could instead add a backpointer to the ingenic_ost structure 
-> in your 'ingenic_ost_timer'.
->
-
-Sure, I will try.
-
-
->>
->> -    writel(OSTECR_OST1ENC, ost->base + OST_REG_OSTECR);
->> +    if (ost->soc_info->version >= ID_X2000)
->> +        writel(0, timer->base + OST_REG_OSTER);
->> +    else
->> +        writel(OSTECR_OST1ENC, timer->base + OST_REG_OSTECR);
->>
->>      return 0;
->>  }
->> @@ -242,26 +323,44 @@ static int 
->> ingenic_ost_cevt_set_state_shutdown(struct clock_event_device *evt)
->>  static int ingenic_ost_cevt_set_next(unsigned long next,
->>                       struct clock_event_device *evt)
->>  {
->> -    struct ingenic_ost *ost = to_ingenic_ost(evt);
->> +    struct ingenic_ost_timer *timer = to_ingenic_ost_timer(evt);
->> +    struct ingenic_ost *ost = ingenic_ost;
->> +    unsigned long flags;
->> +
->> +    spin_lock_irqsave(&timer->lock, flags);
->>
->> -    writel((u32)~OSTFR_FFLAG, ost->base + OST_REG_OSTFR);
->> -    writel(next, ost->base + OST_REG_OST1DFR);
->> -    writel(OSTCR_OST1CLR, ost->base + OST_REG_OSTCR);
->> -    writel(OSTESR_OST1ENS, ost->base + OST_REG_OSTESR);
->> -    writel((u32)~OSTMR_FMASK, ost->base + OST_REG_OSTMR);
->> +    writel((u32)~OSTFR_FFLAG, timer->base + OST_REG_OSTFR);
->> +    writel(next, timer->base + OST_REG_OST1DFR);
->> +    writel(OSTCR_OST1CLR, timer->base + OST_REG_OSTCR);
->> +
->> +    if (ost->soc_info->version >= ID_X2000) {
->> +        writel(OSTESR_OST1ENS, timer->base + OST_REG_OSTER);
->> +    } else {
->> +        writel(OSTESR_OST1ENS, timer->base + OST_REG_OSTESR);
->> +        writel((u32)~OSTMR_FMASK, timer->base + OST_REG_OSTMR);
->> +    }
->> +
->> +    spin_unlock_irqrestore(&timer->lock, flags);
->>
->>      return 0;
->>  }
->>
->>  static irqreturn_t ingenic_ost_cevt_cb(int irq, void *dev_id)
->>  {
->> -    struct clock_event_device *evt = dev_id;
->> -    struct ingenic_ost *ost = to_ingenic_ost(evt);
->> +    struct ingenic_ost *ost = ingenic_ost;
->> +    struct ingenic_ost_timer *timer = dev_id;
->> +    unsigned long flags;
->> +
->> +    spin_lock_irqsave(&timer->lock, flags);
->
-> You're doing only one writel() here - I *think* it should be fine 
-> without the spinlock.
->
-
-Sure, I will drop it.
-
-
->> +
->> +    if (ost->soc_info->version >= ID_X2000)
->> +        writel(0, timer->base + OST_REG_OSTER);
->> +    else
->> +        writel(OSTECR_OST1ENC, timer->base + OST_REG_OSTECR);
->>
->> -    writel(OSTECR_OST1ENC, ost->base + OST_REG_OSTECR);
->> +    spin_unlock_irqrestore(&timer->lock, flags);
->>
->> -    if (evt->event_handler)
->> -        evt->event_handler(evt);
->> +    timer->cevt.event_handler(&timer->cevt);
->>
->>      return IRQ_HANDLED;
->>  }
->> @@ -271,6 +370,7 @@ static int __init 
->> ingenic_ost_register_clock(struct ingenic_ost *ost,
->>              struct clk_hw_onecell_data *clocks)
->>  {
->>      struct ingenic_ost_clk *ost_clk;
->> +    struct ingenic_ost_timer *timer = per_cpu_ptr(ost->timers, 
->> info->idx);
->>      int val, err;
->>
->>      ost_clk = kzalloc(sizeof(*ost_clk), GFP_KERNEL);
->> @@ -283,9 +383,9 @@ static int __init 
->> ingenic_ost_register_clock(struct ingenic_ost *ost,
->>      ost_clk->ost = ost;
->>
->>      /* Reset clock divider */
->> -    val = readl(ost->base + info->ostccr_reg);
->> -    val &= ~(OSTCCR_PRESCALE1_MASK | OSTCCR_PRESCALE2_MASK);
->> -    writel(val, ost->base + info->ostccr_reg);
->> +    val = readl(timer->base + info->ostccr_reg);
->> +    val &= ~(OSTCCR_PRESCALE1_MASK);
->> +    writel(val, timer->base + info->ostccr_reg);
->>
->>      err = clk_hw_register(NULL, &ost_clk->hw);
->>      if (err) {
->> @@ -309,57 +409,53 @@ static struct clk * __init 
->> ingenic_ost_get_clock(struct device_node *np, int id)
->>      return of_clk_get_from_provider(&args);
->>  }
->>
->> -static int __init ingenic_ost_percpu_timer_init(struct device_node *np,
->> -                     struct ingenic_ost *ost)
->> +static int __init ingenic_ost_setup_cevt(unsigned int cpu)
->>  {
->> -    unsigned int timer_virq, channel = OST_CLK_PERCPU_TIMER;
->> +    struct ingenic_ost *ost = ingenic_ost;
->> +    struct ingenic_ost_timer *timer = this_cpu_ptr(ost->timers);
->>      unsigned long rate;
->>      int err;
->>
->> -    ost->percpu_timer_clk = ingenic_ost_get_clock(np, channel);
->> -    if (IS_ERR(ost->percpu_timer_clk))
->> -        return PTR_ERR(ost->percpu_timer_clk);
->> +    timer->clk = ingenic_ost_get_clock(ost->np, timer->channel);
->> +    if (IS_ERR(timer->clk))
->> +        return PTR_ERR(timer->clk);
->>
->> -    err = clk_prepare_enable(ost->percpu_timer_clk);
->> +    err = clk_prepare_enable(timer->clk);
->>      if (err)
->>          goto err_clk_put;
->>
->> -    rate = clk_get_rate(ost->percpu_timer_clk);
->> +    rate = clk_get_rate(timer->clk);
->>      if (!rate) {
->>          err = -EINVAL;
->>          goto err_clk_disable;
->>      }
->>
->> -    timer_virq = of_irq_get(np, 0);
->> -    if (!timer_virq) {
->> -        err = -EINVAL;
->> -        goto err_clk_disable;
->> -    }
->> +    snprintf(timer->name, sizeof(timer->name), "OST percpu timer%u", 
->> cpu);
->>
->> -    snprintf(ost->name, sizeof(ost->name), "OST percpu timer");
->> +    /* Unmask full comparison match interrupt */
->> +    writel((u32)~OSTMR_FMASK, timer->base + OST_REG_OSTMR);
->>
->> -    err = request_irq(timer_virq, ingenic_ost_cevt_cb, IRQF_TIMER,
->> -              ost->name, &ost->cevt);
->> -    if (err)
->> -        goto err_irq_dispose_mapping;
->> +    timer->cpu = smp_processor_id();
->> +    timer->cevt.cpumask = cpumask_of(smp_processor_id());
->> +    timer->cevt.features = CLOCK_EVT_FEAT_ONESHOT;
->> +    timer->cevt.name = timer->name;
->> +    timer->cevt.rating = 400;
->> +    timer->cevt.set_state_shutdown = 
->> ingenic_ost_cevt_set_state_shutdown;
->> +    timer->cevt.set_next_event = ingenic_ost_cevt_set_next;
->> +
->> +    clockevents_config_and_register(&timer->cevt, rate, 4, 0xffffffff);
->>
->> -    ost->cevt.cpumask = cpumask_of(smp_processor_id());
->> -    ost->cevt.features = CLOCK_EVT_FEAT_ONESHOT;
->> -    ost->cevt.name = ost->name;
->> -    ost->cevt.rating = 400;
->> -    ost->cevt.set_state_shutdown = ingenic_ost_cevt_set_state_shutdown;
->> -    ost->cevt.set_next_event = ingenic_ost_cevt_set_next;
->> +    if (ost->soc_info->version >= ID_X2000)
->> +        enable_percpu_irq(ost->irq, IRQ_TYPE_NONE);
->>
->> -    clockevents_config_and_register(&ost->cevt, rate, 4, 0xffffffff);
->> +    spin_lock_init(&timer->lock);
->>
->>      return 0;
->>
->> -err_irq_dispose_mapping:
->> -    irq_dispose_mapping(timer_virq);
->>  err_clk_disable:
->> -    clk_disable_unprepare(ost->percpu_timer_clk);
->> +    clk_disable_unprepare(timer->clk);
->>  err_clk_put:
->> -    clk_put(ost->percpu_timer_clk);
->> +    clk_put(timer->clk);
->>      return err;
->>  }
->>
->> @@ -385,11 +481,14 @@ static int __init 
->> ingenic_ost_global_timer_init(struct device_node *np,
->>          goto err_clk_disable;
->>      }
->>
->> -    /* Clear counter CNT registers */
->> -    writel(OSTCR_OST2CLR, ost->base + OST_REG_OSTCR);
->> -
->> -    /* Enable OST channel */
->> -    writel(OSTESR_OST2ENS, ost->base + OST_REG_OSTESR);
->> +    /* Clear counter CNT registers and enable OST channel */
->> +    if (ost->soc_info->version >= ID_X2000) {
->> +        writel(OSTCR_OST1CLR, ost->base + OST_REG_OSTCR);
->> +        writel(OSTESR_OST1ENS, ost->base + OST_REG_OSTER);
->> +    } else {
->> +        writel(OSTCR_OST2CLR, ost->base + OST_REG_OSTCR);
->> +        writel(OSTESR_OST2ENS, ost->base + OST_REG_OSTESR);
->> +    }
->>
->>      cs->name = "ingenic-ost";
->>      cs->rating = 400;
->> @@ -411,18 +510,33 @@ static int __init 
->> ingenic_ost_global_timer_init(struct device_node *np,
->>  }
->>
->>  static const struct ingenic_soc_info x1000_soc_info = {
->> +    .version = ID_X1000,
->> +    .clk_info = x1000_ost_clk_info,
->> +
->>      .num_channels = 2,
->>  };
->>
->> -static const struct of_device_id __maybe_unused 
->> ingenic_ost_of_match[] __initconst = {
->> -    { .compatible = "ingenic,x1000-ost", .data = &x1000_soc_info, },
->> +static const struct ingenic_soc_info x2000_soc_info = {
->> +    .version = ID_X2000,
->> +    .clk_info = x2000_ost_clk_info,
->> +
->> +    .num_channels = 3,
->> +    .base_offset = 0x100,
->> +};
->> +
->> +static const struct of_device_id __maybe_unused 
->> ingenic_ost_of_matches[] __initconst = {
->> +    { .compatible = "ingenic,x1000-ost", .data = &x1000_soc_info },
->> +    { .compatible = "ingenic,x2000-ost", .data = &x2000_soc_info },
->>      { /* sentinel */ }
->>  };
->>
->>  static int __init ingenic_ost_probe(struct device_node *np)
->>  {
->> -    const struct of_device_id *id = 
->> of_match_node(ingenic_ost_of_match, np);
->> +    const struct of_device_id *id = 
->> of_match_node(ingenic_ost_of_matches, np);
->
-> Avoid any changes unrelated to the commit - for instance renaming 
-> 'ingenic_ost_of_match' or removing the comma after the .data field, 
-> there's just no need and it artificially grows the patch.
->
-
-I thought about it this way: when "ingenic,x2000-ost" is added, there 
-are two compatible strings, so it seems more appropriate to use matches 
-than match, and removing the comma can reduce the code size a bit 
-(though insignificant), I will split them into independent patch.
-
-
-> Please be extra careful to make the smallest patch possible by not 
-> adding unrelated changes; smaller patches are easier to review, and 
-> are more likely to be accepted sooner.
->
-
-Sure, thanks!
-
-
->> +    struct ingenic_ost_timer *timer;
->>      struct ingenic_ost *ost;
->> +    void __iomem *base;
->> +    unsigned int cpu;
->>      unsigned int i;
->>      int ret;
->>
->> @@ -430,18 +544,43 @@ static int __init ingenic_ost_probe(struct 
->> device_node *np)
->>      if (!ost)
->>          return -ENOMEM;
->>
->> +    ost->timers = alloc_percpu(struct ingenic_ost_timer);
->> +    if (!ost->timers) {
->> +        ret = -ENOMEM;
->> +        goto err_free_ost;
->> +    }
->> +
->> +    ost->np = np;
->> +    ost->soc_info = id->data;
->
-> This was moved but didn't have to, as far as I can see.
->
-
-Because we need to determine whether we need to obtain the base of (np, 
-1) according to the model below, we need to move "ost->soc_info = 
-id->data" here to ensure that relevant information is already stored in 
-ost->soc_info when the judgment is made.
-
-
->> +
->>      ost->base = of_io_request_and_map(np, 0, of_node_full_name(np));
->>      if (IS_ERR(ost->base)) {
->>          pr_err("%s: Failed to map OST registers\n", __func__);
->>          ret = PTR_ERR(ost->base);
->> -        goto err_free_ost;
->> +        goto err_free_timers;
->> +    }
->> +
->> +    if (ost->soc_info->version >= ID_X2000) {
->> +        base = of_io_request_and_map(np, 1, of_node_full_name(np));
->> +        if (IS_ERR(base)) {
->> +            pr_err("%s: Failed to map OST registers\n", __func__);
->> +            ret = PTR_ERR(base);
->> +            goto err_free_timers;
->> +        }
->> +    }
->> +
->> +    ost->irq = irq_of_parse_and_map(np, 0);
->> +    if (ost->irq < 0) {
->> +        pr_crit("%s: Cannot to get OST IRQ\n", __func__);
->> +        ret = -EINVAL;
->
-> ret = ost->irq?
-
-
-I will change it in the next version.
-
-
->
->> +        goto err_free_timers;
->>      }
->>
->>      ost->clk = of_clk_get_by_name(np, "ost");
->>      if (IS_ERR(ost->clk)) {
->> -        ret = PTR_ERR(ost->clk);
->>          pr_crit("%s: Cannot get OST clock\n", __func__);
->> -        goto err_free_ost;
->> +        ret = PTR_ERR(ost->clk);
->> +        goto err_free_timers;
->>      }
->>
->>      ret = clk_prepare_enable(ost->clk);
->> @@ -450,8 +589,6 @@ static int __init ingenic_ost_probe(struct 
->> device_node *np)
->>          goto err_put_clk;
->>      }
->>
->> -    ost->soc_info = id->data;
->> -
->>      ost->clocks = kzalloc(struct_size(ost->clocks, hws, 
->> ost->soc_info->num_channels),
->>                    GFP_KERNEL);
->>      if (!ost->clocks) {
->> @@ -461,8 +598,20 @@ static int __init ingenic_ost_probe(struct 
->> device_node *np)
->>
->>      ost->clocks->num = ost->soc_info->num_channels;
->>
->> -    for (i = 0; i < ost->clocks->num; i++) {
->> -        ret = ingenic_ost_register_clock(ost, i, 
->> &ingenic_ost_clk_info[i], ost->clocks);
->> +    for (cpu = 0; cpu < num_possible_cpus(); cpu++) {
->> +        timer = per_cpu_ptr(ost->timers, cpu);
->> +
->> +        if (ost->soc_info->version >= ID_X2000)
->> +            timer->base = base + ost->soc_info->base_offset * cpu;
->> +        else
->> +            timer->base = ost->base;
->> +
->> +        timer->cpu = cpu;
->> +        timer->channel = OST_CLK_PERCPU_TIMER + cpu;
->> +    }
->> +
->> +    for (i = 0; i < num_possible_cpus() + 1; i++) {
->> +        ret = ingenic_ost_register_clock(ost, i, 
->> &ost->soc_info->clk_info[i], ost->clocks);
->
-> This won't work. Your 'clk_info' array only has 2-3 entries. 
-> num_possible_cpus() returns the maximum number of CPUs that is 
-> supported by the kernel, which could be way more than the number of 
-> cores you actually have. I think you want num_online_cpus() here, as 
-> the number of online CPUs is guaranteed to be lower or equal to the 
-> actual number of cores.
-
-
-Sure, I will change it in the next version.
-
-
->
->>          if (ret) {
->>              pr_crit("%s: Cannot register clock %d\n", __func__, i);
->>              goto err_unregister_ost_clocks;
->> @@ -488,6 +637,8 @@ static int __init ingenic_ost_probe(struct 
->> device_node *np)
->>      clk_disable_unprepare(ost->clk);
->>  err_put_clk:
->>      clk_put(ost->clk);
->> +err_free_timers:
->> +    free_percpu(ost->timers);
->>  err_free_ost:
->>      kfree(ost);
->>      return ret;
->> @@ -517,9 +668,25 @@ static int __init ingenic_ost_init(struct 
->> device_node *np)
->>          goto err_free_ingenic_ost;
->>      }
->>
->> -    ret = ingenic_ost_percpu_timer_init(np, ost);
->> -    if (ret)
->> +    if (ost->soc_info->version >= ID_X2000)
->> +        ret = request_percpu_irq(ost->irq, ingenic_ost_cevt_cb,
->> +                  "OST percpu timer", ost->timers);
->> +    else
->> +        ret = request_irq(ost->irq, ingenic_ost_cevt_cb, IRQF_TIMER,
->> +                  "OST percpu timer", ost->timers);
->> +
->> +    if (ret) {
->> +        pr_crit("%s: Unable to request percpu IRQ: %x\n", __func__, 
->> ret);
->
-> You mean %d?
-
-
-My fault, will change it in next version.
-
-
->
->>          goto err_ost_global_timer_cleanup;
->> +    }
->> +
->> +    /* Setup clock events on each CPU core */
->> +    ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "Ingenic XBurst: 
->> online",
->> +                ingenic_ost_setup_cevt, NULL);
->> +    if (ret < 0) {
->> +        pr_crit("%s: Unable to init percpu timers: %x\n", __func__, 
->> ret);
->
-> Same here.
-
-
-Will change it in next version.
-
-
-Thanks and best regards!
-
-
->
-> Cheers,
-> -Paul
->
->> +        goto err_ost_global_timer_cleanup;
->> +    }
->>
->>      /* Register the sched_clock at the end as there's no way to undo 
->> it */
->>      rate = clk_get_rate(ost->global_timer_clk);
->> @@ -537,3 +704,4 @@ static int __init ingenic_ost_init(struct 
->> device_node *np)
->>  }
->>
->>  TIMER_OF_DECLARE(x1000_ost,  "ingenic,x1000-ost", ingenic_ost_init);
->> +TIMER_OF_DECLARE(x2000_ost,  "ingenic,x2000-ost", ingenic_ost_init);
->> -- 
->> 2.7.4
->>
->
+Jing
