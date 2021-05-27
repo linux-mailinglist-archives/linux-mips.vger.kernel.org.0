@@ -2,62 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 762DB392AA7
-	for <lists+linux-mips@lfdr.de>; Thu, 27 May 2021 11:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53363392AFD
+	for <lists+linux-mips@lfdr.de>; Thu, 27 May 2021 11:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235762AbhE0JYh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 May 2021 05:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235754AbhE0JYh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 May 2021 05:24:37 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E33C061574
-        for <linux-mips@vger.kernel.org>; Thu, 27 May 2021 02:23:03 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id b5so3491303ilc.12
-        for <linux-mips@vger.kernel.org>; Thu, 27 May 2021 02:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=ihTlmAV/GpipKJzzEgtKSqPYmQFRtozEHMdYY//+Szg=;
-        b=ROINrdUgNhrztaUSYcf1Tx46SDj+tEYn/47InPZWXCgL9BkyexBIaogvpQetAlrtUy
-         yEBgvHN6kzfVVZkHOlt4sDekI6ht+VvmWQVPk4Gm42ybhH9YW38SZ0lrSiHSiVS9bzqi
-         S/QO5+W7KK14pu5OaBoLIjcXkWd3Wzu6ZttBN1fjMB6zZGrf939QCe5YZXiNsbyzpmCG
-         HG7HDBe63U+SRLsM0ay/TbkFvoGTNzuqj+X+tGfajXl1L4mAew9BlGX7rBgAHnT2ShP5
-         JLk1+M5fTsLVuGani30MeT8/oqWrd9GINvXFU3cIzCZaiQxGIV/VqWMLyi4L5bROFjnz
-         Zk2g==
+        id S235803AbhE0JqM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 May 2021 05:46:12 -0400
+Received: from mail-ua1-f45.google.com ([209.85.222.45]:41570 "EHLO
+        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235675AbhE0JqL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 May 2021 05:46:11 -0400
+Received: by mail-ua1-f45.google.com with SMTP id g34so832210uah.8;
+        Thu, 27 May 2021 02:44:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=ihTlmAV/GpipKJzzEgtKSqPYmQFRtozEHMdYY//+Szg=;
-        b=RK5f1UC76j4dVMWfZT63/z8q5ApDgcO6hSXZ7Mxqm4ldrc29wyXdgRSHNBSBt7Dz8j
-         014x+j9FmmNEtfIko+f1PyRkXlH34IHeyR5FShEdlTviPw4fqbzs1hzoU/NlgWWfncZC
-         Pk50PzNy/DQvbWUju6HTkcBHHBocXh6N9YnwrZnPdYKS8wvfuXxXNBnrwOK3VSIlWGxf
-         iusDmh/rL8CKRRcQuROVL95aEw8D1gpnhN0VTeUxGB5j3JJIj9oQo/FOEtcpf6lqxhFK
-         zyH35R0AauTTzFjAB/3qWaiJfOCudZB1opJAdlM/2R6SPwSf4lDnR7sIYc+8BnjATJyD
-         /Vyw==
-X-Gm-Message-State: AOAM533kFmzA8/jrHjDSjixcIwLEDSuvK6jl8SJDnF2MrZS9Ldlwkxj4
-        H8sVs0qplQtfZ0XLcXhaesNGxGbJ9+zqYflfXAo=
-X-Google-Smtp-Source: ABdhPJwNhrPEhKY5EXhxAtGOBFHNwiXcHpEGX6txVfWUuN48Zlcq4JPN4brP4r9u8/5F8II9uj8bAgvX6DArtFlTrZE=
-X-Received: by 2002:a05:6e02:1046:: with SMTP id p6mr2173239ilj.86.1622107382699;
- Thu, 27 May 2021 02:23:02 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xyO91WwRYqo2wMXqgZeeHTqV+3eSTnV/ZWWMMo01lKE=;
+        b=ZrNnBYATMgUyUZPJ/kijSLyvp8j4jJE4H2GpG1+0QHySWSAg+Qiy6orVjRExt+DRtF
+         2xLxsd0oyT8bf8fFHHORm0kMnisJawQRKfZSjCpWO0s2uA0tpWWxZDuIh/Z0SqX3bP1b
+         XvmE/woTMa+uQSgSd0cIRFqNrKfCiUiuQZ1tLZrFccLP6dv6BEpQvGXLdLo3PjaTuSQu
+         XlHWVAWmBsJNNLktE1oTjOgggxnanzHyUnS7+VTXfcngImgxfaljYP/yOGM5QXIhsM2Q
+         +nbodyM6uiDce+ZomhVDNm/X1dltCzqRl/KriRGQ3prtlhxKxyaWApdekP9gdzuw2ESF
+         lLTA==
+X-Gm-Message-State: AOAM530j42ej/cFHHZj2iJ5HAd50Pz5qdCJSLfZZMwC+jsKB7JK71oUs
+        QTi5AGQ6nAjOSSFoP6diodcVeWZGuVSqVq9FnmGqQ+0M
+X-Google-Smtp-Source: ABdhPJxm04ulbfNwcj1J1dC242uqkUkgB3I1fmf2xJPxaK+VsPn+SlpCJ5YiUalQQXQPXVe94B31n4eYZnyyCgmzn+Q=
+X-Received: by 2002:a1f:a388:: with SMTP id m130mr1257979vke.1.1622108678468;
+ Thu, 27 May 2021 02:44:38 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6602:2c93:0:0:0:0 with HTTP; Thu, 27 May 2021 02:23:02
- -0700 (PDT)
-From:   mark milley <markmilley20171@gmail.com>
-Date:   Thu, 27 May 2021 10:23:02 +0100
-Message-ID: <CAOHeAmqakz-yFwTX0rk91c+QEONYY-ydfGEocWoks2Znc8QExA@mail.gmail.com>
-Subject: Hello.
-To:     undisclosed-recipients:;
+References: <cover.1621518686.git.geert+renesas@glider.be> <b708fdb009912cf247ef257dce519c52889688d8.1621518686.git.geert+renesas@glider.be>
+ <20210520150742.GB22843@alpha.franken.de>
+In-Reply-To: <20210520150742.GB22843@alpha.franken.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 27 May 2021 11:44:27 +0200
+Message-ID: <CAMuHMdXtn9e9mvRP63GYXuGG7Gfwxoc8bmGrBwfV2UOPizD6Qw@mail.gmail.com>
+Subject: Re: [PATCH 4/5] MIPS: SEAD3: Correct Ethernet node name
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello nice to meet you,
+Hi Thomas,
 
-Am Lawyer Mark Milley, there is an inheritance
-funds bequeathed in your name from my late client who has the same
-last name and nationality with you. contact me with my email:
-markmilley201711@gmail.com WhatsApp: +22898363077  for more details.
-Thanks
+On Thu, May 20, 2021 at 5:08 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+> On Thu, May 20, 2021 at 03:58:38PM +0200, Geert Uytterhoeven wrote:
+> > make dtbs_check:
+> >
+> >     eth@1f010000: $nodename:0: 'eth@1f010000' does not match '^ethernet(@.*)?$'
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+> >  arch/mips/boot/dts/mti/sead3.dts | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+
+Can you please take this through the MIPS tree?
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
