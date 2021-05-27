@@ -2,68 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D0C393510
-	for <lists+linux-mips@lfdr.de>; Thu, 27 May 2021 19:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E141A393914
+	for <lists+linux-mips@lfdr.de>; Fri, 28 May 2021 01:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbhE0RpE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 May 2021 13:45:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38398 "EHLO mail.kernel.org"
+        id S234964AbhE0XWt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 May 2021 19:22:49 -0400
+Received: from aposti.net ([89.234.176.197]:35876 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229811AbhE0RpA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 27 May 2021 13:45:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B02F6610A0;
-        Thu, 27 May 2021 17:43:23 +0000 (UTC)
-Date:   Thu, 27 May 2021 18:43:21 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-mm@kvack.org,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH] mm: generalize ZONE_[DMA|DMA32]
-Message-ID: <20210527174321.GI8661@arm.com>
-References: <20210527143047.123611-1-wangkefeng.wang@huawei.com>
+        id S236567AbhE0XWs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 27 May 2021 19:22:48 -0400
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 00/11] ingenic-drm cleanups and doublescan feature
+Date:   Fri, 28 May 2021 00:20:54 +0100
+Message-Id: <20210527232104.152577-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210527143047.123611-1-wangkefeng.wang@huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, May 27, 2021 at 10:30:47PM +0800, Kefeng Wang wrote:
-> ZONE_[DMA|DMA32] configs have duplicate definitions on platforms
-> that subscribe them. Instead, just make them generic options which
-> can be selected on applicable platforms.
-> 
-> Also only x86/arm64 architectures could enable both ZONE_DMA and
-> ZONE_DMA32 if EXPERT, add ARCH_HAS_ZONE_DMA_SET to make dma zone
-> configurable and visible on the two architectures.
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com> 
-> Cc: Will Deacon <will@kernel.org> 
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org> 
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de> 
-> Cc: "David S. Miller" <davem@davemloft.net> 
-> Cc: Ingo Molnar <mingo@redhat.com> 
-> Cc: Borislav Petkov <bp@alien8.de> 
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Richard Henderson <rth@twiddle.net> 
-> Cc: Russell King <linux@armlinux.org.uk>
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Hi,
 
-For arm64:
+Here is a set of 11 patches for the ingenic-drm driver.
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Patches 1-7 are mostly generic cleanups, which will grease up the way
+for bigger changes to be introduced.
+
+Patch 3 adds support for a private state structure, which is then used
+to store state-specific information, which was previously stored in the
+driver's private structure directly.
+
+Patch 10 is the big one; it adds a double-scan feature emulated with DMA
+descriptors. This trick makes it possible to support a handful of boards
+which have strange panels with non-square pixels (320x480 4:3).
+
+Patch 11 updates the driver to support one top-level bridge per encoder,
+as it seems to be the norm now.
+
+Cheers,
+-Paul
+
+Paul Cercueil (11):
+  drm/ingenic: Remove dead code
+  drm/ingenic: Simplify code by using hwdescs array
+  drm/ingenic: Add support for private objects
+  drm/ingenic: Move no_vblank to private state
+  drm/ingenic: Move IPU scale settings to private state
+  drm/ingenic: Set DMA descriptor chain register when starting CRTC
+  drm/ingenic: Upload palette before frame
+  drm/ingenic: Support custom GEM object
+  drm/ingenic: Add ingenic_drm_gem_fb_destroy() function
+  drm/ingenic: Add doublescan feature
+  drm/ingenic: Attach bridge chain to encoders
+
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 414 ++++++++++++++++++----
+ drivers/gpu/drm/ingenic/ingenic-ipu.c     | 127 ++++++-
+ 2 files changed, 458 insertions(+), 83 deletions(-)
+
+-- 
+2.30.2
+
