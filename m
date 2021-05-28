@@ -2,50 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57530394372
-	for <lists+linux-mips@lfdr.de>; Fri, 28 May 2021 15:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A671394389
+	for <lists+linux-mips@lfdr.de>; Fri, 28 May 2021 15:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbhE1Nj7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 May 2021 09:39:59 -0400
-Received: from elvis.franken.de ([193.175.24.41]:53912 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229653AbhE1Nj4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 28 May 2021 09:39:56 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lmcgs-00013T-00; Fri, 28 May 2021 15:38:18 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 750C4C1B28; Fri, 28 May 2021 15:37:50 +0200 (CEST)
-Date:   Fri, 28 May 2021 15:37:50 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V1 0/4] MIPS: Loongson1B: Add dmaengine and NAND device
-Message-ID: <20210528133750.GA3164@alpha.franken.de>
-References: <20210526133100.436048-1-keguang.zhang@gmail.com>
+        id S231219AbhE1NtL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 28 May 2021 09:49:11 -0400
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:39554 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233040AbhE1NtG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 May 2021 09:49:06 -0400
+Received: by mail-oi1-f180.google.com with SMTP id y76so4277045oia.6;
+        Fri, 28 May 2021 06:47:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+8bir7D+9xSBCnnQ4ocUkiOkW+oFAxTnt8bJwzWtlT0=;
+        b=eAgp9CGlQ0zjOjfK6dhWJpsElQuuSnalB3JPHMx8WYWoIgswtpUMVLicA3bHLcVyAH
+         FgK0Qlv9tJZZmEtdxMWKXYzmRDdd8p5/PVHBlmBfhPAMbbX2uRVKGDQVWy7im7mGcEog
+         th0c64svMglbywZz791BYEwaTrLtzBcqOp/U2AhJoQ+ChYqfCorGBjWPPGo4dMEw3mZb
+         V8jaR9t4i3/pdLjWJfaYxxQM6Ncgfp9IMWgGXywTDA5mhg5qHJBzqFMe+ecNUNLrRuUu
+         lfyuQTV9vFGlnecpQXwVsP84wG1h1KZ5Pt5y93CSm/tTisFs/a+yOwn1zQEi+rx9iNjJ
+         prdw==
+X-Gm-Message-State: AOAM532rmd3xmxMhCEr6pNKwUYeVPIgMllp1WdK58mwD9wt/BQtBBzkx
+        WGhF8q9J6sQmQFFlKq4QbjyP3lDa6nx0C5uNH3E=
+X-Google-Smtp-Source: ABdhPJy+fZSwdodnEs0gbrEYhWJrdrofbU3jly7QP6L+qJ/qO77pjrbOB2xYQM7N9VmWCxWB/u637S4xP4KOOVrWxXo=
+X-Received: by 2002:a05:6808:f94:: with SMTP id o20mr6026847oiw.121.1622209650484;
+ Fri, 28 May 2021 06:47:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210526133100.436048-1-keguang.zhang@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20210528034615.2157002-1-masahiroy@kernel.org>
+In-Reply-To: <20210528034615.2157002-1-masahiroy@kernel.org>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Fri, 28 May 2021 15:47:19 +0200
+Message-ID: <CAAdtpL77zwffQAP6ihf5kQ6E5nOmOOnHZ8KD33ZN+kNGU0sZLQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] mips: syscalls: define syscall offsets directly in <asm/unistd.h>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, May 26, 2021 at 09:30:56PM +0800, Keguang Zhang wrote:
-> From: Kelvin Cheung <keguang.zhang@gmail.com>
-> 
-> This patchset is to add dmaengine and NAND device
-> for Loongson1B.
+On Fri, May 28, 2021 at 8:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> There is no good reason to generate the syscall offset macros by
+> scripting since they are not derived from the syscall tables.
+>
+> Define __NR_*_Linux macros directly in arch/mips/include/asm/unistd.h,
+> and clean up the Makefile and the shell script.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  arch/mips/include/asm/unistd.h         | 4 ++++
+>  arch/mips/kernel/syscalls/Makefile     | 6 +-----
+>  arch/mips/kernel/syscalls/syscallnr.sh | 2 --
+>  3 files changed, 5 insertions(+), 7 deletions(-)
 
-as I saw two more versions of this series, is this something to look at
-and apply ?
-
-For future submissions, could you please add a changelog when you update
-a series ? Thanks a lot.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
