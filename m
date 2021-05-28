@@ -2,236 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF574393939
-	for <lists+linux-mips@lfdr.de>; Fri, 28 May 2021 01:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC70393C0F
+	for <lists+linux-mips@lfdr.de>; Fri, 28 May 2021 05:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236476AbhE0XYf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 May 2021 19:24:35 -0400
-Received: from aposti.net ([89.234.176.197]:36364 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233528AbhE0XYa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 27 May 2021 19:24:30 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 11/11] drm/ingenic: Attach bridge chain to encoders
-Date:   Fri, 28 May 2021 00:22:06 +0100
-Message-Id: <20210527232206.152771-2-paul@crapouillou.net>
-In-Reply-To: <20210527232206.152771-1-paul@crapouillou.net>
-References: <20210527232104.152577-1-paul@crapouillou.net>
- <20210527232206.152771-1-paul@crapouillou.net>
+        id S233040AbhE1Dtt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 May 2021 23:49:49 -0400
+Received: from conuserg-08.nifty.com ([210.131.2.75]:45874 "EHLO
+        conuserg-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229846AbhE1Dtt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 27 May 2021 23:49:49 -0400
+Received: from localhost.localdomain (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id 14S3lbQR031425;
+        Fri, 28 May 2021 12:47:37 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 14S3lbQR031425
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1622173658;
+        bh=BV0Xhzu11ytLpeCNoa7cH4BZNQYYRY20XqustzLMqtw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UDTQuIN7y8sRPPl4Jpoku4ALmYQznnc2oqzi3Xg80Z2JM3zZE5+zTUbbjESFHL3tX
+         NxFjiPzqv7pxqPwNcB1nCECxtQ1kF2x/4K3d98topILkLSlSGPeMAKGDA2dCksW16L
+         fP1SyXQbsl4PYyiNxQR6GehUwtui0NxAZd4PzjvDaFDxsEu79R3i9Av5UU358quZCI
+         raa4UId+c37NCMbeaEfgQ+5Jd5E0JVYxHzp1fsibGugJEYgzZXeN5Al0sd9sb0ufqy
+         SwHol4hDQHPRj3D32yC+o53DZT86ei/BQXMLnkN6IsT3vwfma//xlRDV8UnF3FWp6j
+         98fbENepqb53Q==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH 1/2] mips: syscalls: define syscall offsets directly in <asm/unistd.h>
+Date:   Fri, 28 May 2021 12:46:14 +0900
+Message-Id: <20210528034615.2157002-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Attach a top-level bridge to each encoder, which will be used for
-negociating the bus format and flags.
+There is no good reason to generate the syscall offset macros by
+scripting since they are not derived from the syscall tables.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Define __NR_*_Linux macros directly in arch/mips/include/asm/unistd.h,
+and clean up the Makefile and the shell script.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 98 ++++++++++++++++++-----
- 1 file changed, 77 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 01d8490393d1..f0242e917d6e 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -21,6 +21,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_bridge.h>
-+#include <drm/drm_bridge_connector.h>
- #include <drm/drm_color_mgmt.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_crtc_helper.h>
-@@ -132,6 +133,26 @@ struct ingenic_drm {
- 	struct drm_private_obj private_obj;
- };
+ arch/mips/include/asm/unistd.h         | 4 ++++
+ arch/mips/kernel/syscalls/Makefile     | 6 +-----
+ arch/mips/kernel/syscalls/syscallnr.sh | 2 --
+ 3 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/arch/mips/include/asm/unistd.h b/arch/mips/include/asm/unistd.h
+index 5d70babfc9ee..c2196b1b6604 100644
+--- a/arch/mips/include/asm/unistd.h
++++ b/arch/mips/include/asm/unistd.h
+@@ -17,6 +17,10 @@
+ #include <asm/unistd_nr_n64.h>
+ #include <asm/unistd_nr_o32.h>
  
-+struct ingenic_drm_bridge {
-+	struct drm_encoder encoder;
-+	struct drm_bridge bridge;
-+	struct drm_bridge *next_bridge;
++#define __NR_N32_Linux	6000
++#define __NR_64_Linux	5000
++#define __NR_O32_Linux	4000
 +
-+	/*
-+	 * FIXME: this should really be in ingenic_drm_private_state, but there
-+	 * doesn't seem to be a way to retrieve a pointer to it from within
-+	 * ingenic_drm_encoder_atomic_mode_set (no drm_atomic_state
-+	 * back-pointers).
-+	 */
-+	struct drm_bus_cfg bus_cfg;
-+};
-+
-+static inline struct ingenic_drm_bridge *
-+to_ingenic_drm_bridge(struct drm_encoder *encoder)
-+{
-+	return container_of(encoder, struct ingenic_drm_bridge, encoder);
-+}
-+
- static inline struct ingenic_drm_private_state *
- to_ingenic_drm_priv_state(struct drm_private_state *state)
- {
-@@ -749,11 +770,10 @@ static void ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
- {
- 	struct ingenic_drm *priv = drm_device_get_priv(encoder->dev);
- 	struct drm_display_mode *mode = &crtc_state->adjusted_mode;
--	struct drm_connector *conn = conn_state->connector;
--	struct drm_display_info *info = &conn->display_info;
-+	struct ingenic_drm_bridge *bridge = to_ingenic_drm_bridge(encoder);
- 	unsigned int cfg, rgbcfg = 0;
+ #ifdef CONFIG_MIPS32_N32
+ #define NR_syscalls  (__NR_N32_Linux + __NR_N32_Linux_syscalls)
+ #elif defined(CONFIG_64BIT)
+diff --git a/arch/mips/kernel/syscalls/Makefile b/arch/mips/kernel/syscalls/Makefile
+index 904452992992..6eee6a3b85df 100644
+--- a/arch/mips/kernel/syscalls/Makefile
++++ b/arch/mips/kernel/syscalls/Makefile
+@@ -18,8 +18,7 @@ quiet_cmd_syshdr = SYSHDR  $@
+ quiet_cmd_sysnr = SYSNR   $@
+       cmd_sysnr = $(CONFIG_SHELL) '$(sysnr)' '$<' '$@'		\
+ 		  '$(sysnr_abis_$(basetarget))'			\
+-		  '$(sysnr_pfx_$(basetarget))'			\
+-		  '$(sysnr_offset_$(basetarget))'
++		  '$(sysnr_pfx_$(basetarget))'
  
--	priv->panel_is_sharp = info->bus_flags & DRM_BUS_FLAG_SHARP_SIGNALS;
-+	priv->panel_is_sharp = bridge->bus_cfg.flags & DRM_BUS_FLAG_SHARP_SIGNALS;
+ quiet_cmd_systbl = SYSTBL  $@
+       cmd_systbl = $(CONFIG_SHELL) $(systbl) $< $@
+@@ -34,17 +33,14 @@ $(uapi)/unistd_o32.h: $(syscallo32) $(syshdr) FORCE
+ 	$(call if_changed,syshdr)
  
- 	if (priv->panel_is_sharp) {
- 		cfg = JZ_LCD_CFG_MODE_SPECIAL_TFT_1 | JZ_LCD_CFG_REV_POLARITY;
-@@ -766,19 +786,19 @@ static void ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
- 		cfg |= JZ_LCD_CFG_HSYNC_ACTIVE_LOW;
- 	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
- 		cfg |= JZ_LCD_CFG_VSYNC_ACTIVE_LOW;
--	if (info->bus_flags & DRM_BUS_FLAG_DE_LOW)
-+	if (bridge->bus_cfg.flags & DRM_BUS_FLAG_DE_LOW)
- 		cfg |= JZ_LCD_CFG_DE_ACTIVE_LOW;
--	if (info->bus_flags & DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)
-+	if (bridge->bus_cfg.flags & DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)
- 		cfg |= JZ_LCD_CFG_PCLK_FALLING_EDGE;
+ sysnr_pfx_unistd_nr_n32 := N32
+-sysnr_offset_unistd_nr_n32 := 6000
+ $(kapi)/unistd_nr_n32.h: $(syscalln32) $(sysnr) FORCE
+ 	$(call if_changed,sysnr)
  
- 	if (!priv->panel_is_sharp) {
--		if (conn->connector_type == DRM_MODE_CONNECTOR_TV) {
-+		if (conn_state->connector->connector_type == DRM_MODE_CONNECTOR_TV) {
- 			if (mode->flags & DRM_MODE_FLAG_INTERLACE)
- 				cfg |= JZ_LCD_CFG_MODE_TV_OUT_I;
- 			else
- 				cfg |= JZ_LCD_CFG_MODE_TV_OUT_P;
- 		} else {
--			switch (*info->bus_formats) {
-+			switch (bridge->bus_cfg.format) {
- 			case MEDIA_BUS_FMT_RGB565_1X16:
- 				cfg |= JZ_LCD_CFG_MODE_GENERIC_16BIT;
- 				break;
-@@ -804,20 +824,31 @@ static void ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
- 	regmap_write(priv->map, JZ_REG_LCD_RGBC, rgbcfg);
- }
+ sysnr_pfx_unistd_nr_n64 := 64
+-sysnr_offset_unistd_nr_n64 := 5000
+ $(kapi)/unistd_nr_n64.h: $(syscalln64) $(sysnr) FORCE
+ 	$(call if_changed,sysnr)
  
--static int ingenic_drm_encoder_atomic_check(struct drm_encoder *encoder,
--					    struct drm_crtc_state *crtc_state,
--					    struct drm_connector_state *conn_state)
-+static int ingenic_drm_bridge_attach(struct drm_bridge *bridge,
-+				     enum drm_bridge_attach_flags flags)
-+{
-+	struct drm_encoder *encoder = bridge->encoder;
-+	struct ingenic_drm_bridge *ingenic_bridge = to_ingenic_drm_bridge(encoder);
-+
-+	return drm_bridge_attach(encoder, ingenic_bridge->next_bridge,
-+				 &ingenic_bridge->bridge, flags);
-+}
-+
-+static int ingenic_drm_bridge_atomic_check(struct drm_bridge *bridge,
-+					   struct drm_bridge_state *bridge_state,
-+					   struct drm_crtc_state *crtc_state,
-+					   struct drm_connector_state *conn_state)
- {
--	struct drm_display_info *info = &conn_state->connector->display_info;
- 	struct drm_display_mode *mode = &crtc_state->adjusted_mode;
-+	struct drm_encoder *encoder = bridge->encoder;
-+	struct ingenic_drm_bridge *ingenic_bridge = to_ingenic_drm_bridge(encoder);
+ sysnr_pfx_unistd_nr_o32 := O32
+-sysnr_offset_unistd_nr_o32 := 4000
+ $(kapi)/unistd_nr_o32.h: $(syscallo32) $(sysnr) FORCE
+ 	$(call if_changed,sysnr)
  
--	if (info->num_bus_formats != 1)
--		return -EINVAL;
-+	ingenic_bridge->bus_cfg = bridge_state->output_bus_cfg;
+diff --git a/arch/mips/kernel/syscalls/syscallnr.sh b/arch/mips/kernel/syscalls/syscallnr.sh
+index 60bbdb3fe03a..c190bbefbfc2 100644
+--- a/arch/mips/kernel/syscalls/syscallnr.sh
++++ b/arch/mips/kernel/syscalls/syscallnr.sh
+@@ -5,7 +5,6 @@ in="$1"
+ out="$2"
+ my_abis=`echo "($3)" | tr ',' '|'`
+ prefix="$4"
+-offset="$5"
  
- 	if (conn_state->connector->connector_type == DRM_MODE_CONNECTOR_TV)
- 		return 0;
+ fileguard=_UAPI_ASM_MIPS_`basename "$out" | sed \
+ 	-e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' \
+@@ -20,7 +19,6 @@ grep -E "^[0-9A-Fa-fXx]+[[:space:]]+${my_abis}" "$in" | sort -n | (
+ 		nxt=$((nr+1))
+ 	done
  
--	switch (*info->bus_formats) {
-+	switch (bridge_state->output_bus_cfg.format) {
- 	case MEDIA_BUS_FMT_RGB888_3X8:
- 	case MEDIA_BUS_FMT_RGB888_3X8_DELTA:
- 		/*
-@@ -1056,8 +1087,16 @@ static const struct drm_crtc_helper_funcs ingenic_drm_crtc_helper_funcs = {
- };
- 
- static const struct drm_encoder_helper_funcs ingenic_drm_encoder_helper_funcs = {
--	.atomic_mode_set	= ingenic_drm_encoder_atomic_mode_set,
--	.atomic_check		= ingenic_drm_encoder_atomic_check,
-+	.atomic_mode_set        = ingenic_drm_encoder_atomic_mode_set,
-+};
-+
-+static const struct drm_bridge_funcs ingenic_drm_bridge_funcs = {
-+	.attach			= ingenic_drm_bridge_attach,
-+	.atomic_check		= ingenic_drm_bridge_atomic_check,
-+	.atomic_reset		= drm_atomic_helper_bridge_reset,
-+	.atomic_duplicate_state	= drm_atomic_helper_bridge_duplicate_state,
-+	.atomic_destroy_state	= drm_atomic_helper_bridge_destroy_state,
-+	.atomic_get_input_bus_fmts = drm_atomic_helper_bridge_propagate_bus_fmt,
- };
- 
- static const struct drm_mode_config_funcs ingenic_drm_mode_config_funcs = {
-@@ -1097,12 +1136,14 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- {
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct ingenic_drm_private_state *private_state;
-+	struct ingenic_drm_bridge *ingenic_bridge;
- 	const struct jz_soc_info *soc_info;
- 	struct ingenic_drm *priv;
- 	struct clk *parent_clk;
- 	struct drm_plane *primary;
- 	struct drm_bridge *bridge;
- 	struct drm_panel *panel;
-+	struct drm_connector *connector;
- 	struct drm_encoder *encoder;
- 	struct drm_device *drm;
- 	void __iomem *base;
-@@ -1291,22 +1332,37 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 			bridge = devm_drm_panel_bridge_add_typed(dev, panel,
- 								 DRM_MODE_CONNECTOR_DPI);
- 
--		encoder = drmm_plain_encoder_alloc(drm, NULL, DRM_MODE_ENCODER_DPI, NULL);
--		if (IS_ERR(encoder)) {
--			ret = PTR_ERR(encoder);
-+		ingenic_bridge = drmm_encoder_alloc(drm, struct ingenic_drm_bridge,
-+						    encoder, NULL,
-+						    DRM_MODE_ENCODER_DPI, NULL);
-+		if (IS_ERR(ingenic_bridge)) {
-+			ret = PTR_ERR(ingenic_bridge);
- 			dev_err(dev, "Failed to init encoder: %d\n", ret);
- 			return ret;
- 		}
- 
--		encoder->possible_crtcs = 1;
-+		encoder = &ingenic_bridge->encoder;
-+		encoder->possible_crtcs = drm_crtc_mask(&priv->crtc);
- 
- 		drm_encoder_helper_add(encoder, &ingenic_drm_encoder_helper_funcs);
- 
--		ret = drm_bridge_attach(encoder, bridge, NULL, 0);
-+		ingenic_bridge->bridge.funcs = &ingenic_drm_bridge_funcs;
-+		ingenic_bridge->next_bridge = bridge;
-+
-+		ret = drm_bridge_attach(encoder, &ingenic_bridge->bridge, NULL,
-+					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
- 		if (ret) {
- 			dev_err(dev, "Unable to attach bridge\n");
- 			return ret;
- 		}
-+
-+		connector = drm_bridge_connector_init(drm, encoder);
-+		if (IS_ERR(connector)) {
-+			dev_err(dev, "Unable to init connector\n");
-+			return PTR_ERR(connector);
-+		}
-+
-+		drm_connector_attach_encoder(connector, encoder);
- 	}
- 
- 	drm_for_each_encoder(encoder, drm) {
+-	printf "#define __NR_%s_Linux\t%s\n" "${prefix}" "${offset}"
+ 	printf "#define __NR_%s_Linux_syscalls\t%s\n" "${prefix}" "${nxt}"
+ 	printf "\n"
+ 	printf "#endif /* %s */" "${fileguard}"
 -- 
-2.30.2
+2.27.0
 
