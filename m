@@ -2,15 +2,15 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5CE395237
-	for <lists+linux-mips@lfdr.de>; Sun, 30 May 2021 19:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E29C39523A
+	for <lists+linux-mips@lfdr.de>; Sun, 30 May 2021 19:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbhE3RTz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 30 May 2021 13:19:55 -0400
-Received: from aposti.net ([89.234.176.197]:37646 "EHLO aposti.net"
+        id S229828AbhE3RUB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 30 May 2021 13:20:01 -0400
+Received: from aposti.net ([89.234.176.197]:37692 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229671AbhE3RTz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 30 May 2021 13:19:55 -0400
+        id S229671AbhE3RUB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 30 May 2021 13:20:01 -0400
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -18,45 +18,54 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, list@opendingux.net,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 0/8] Misc Ingenic patches
-Date:   Sun, 30 May 2021 18:17:54 +0100
-Message-Id: <20210530171802.23649-1-paul@crapouillou.net>
+Subject: [PATCH 1/8] MIPS: mm: XBurst CPU requires sync after DMA
+Date:   Sun, 30 May 2021 18:17:55 +0100
+Message-Id: <20210530171802.23649-2-paul@crapouillou.net>
+In-Reply-To: <20210530171802.23649-1-paul@crapouillou.net>
+References: <20210530171802.23649-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+I am not sure why this is required, but if this is not enabled, reading
+from a buffer in which data has been DMA'd may read incorrect values.
 
-Here is a set of misc patches that don't really have any relation
-between themselves. I just thought you'd prefer one patchset than eight
-individual patches :)
+This used to happen for instance in mmc_app_send_scr()
+(drivers/mmc/core/sd_ops.c), where data is DMA'd to a buffer then copied
+by the CPU to a different location.
 
-Cheers,
--Paul
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ arch/mips/Kconfig              | 1 +
+ arch/mips/mm/dma-noncoherent.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-Paul Cercueil (8):
-  MIPS: mm: XBurst CPU requires sync after DMA
-  MIPS: boot: Support specifying UART port on Ingenic SoCs
-  MIPS: cpu-probe: Fix FPU detection on Ingenic JZ4760(B)
-  MIPS: Kconfig: ingenic: Ensure MACH_INGENIC_GENERIC selects all SoCs
-  MIPS: ingenic: Select CPU_SUPPORTS_CPUFREQ && MIPS_EXTERNAL_TIMER
-  MIPS: ingenic: jz4780: Fix I2C nodes to match DT doc
-  MIPS: ingenic: gcw0: Set codec to cap-less mode for FM radio
-  MIPS: ingenic: rs90: Add dedicated VRAM memory region
-
- arch/mips/Kconfig                      |  3 +++
- arch/mips/Kconfig.debug                |  8 ++++++++
- arch/mips/boot/compressed/uart-16550.c |  4 ++--
- arch/mips/boot/dts/ingenic/gcw0.dts    |  5 ++---
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 10 +++++-----
- arch/mips/boot/dts/ingenic/rs90.dts    | 14 ++++++++++++++
- arch/mips/ingenic/Kconfig              |  2 ++
- arch/mips/kernel/cpu-probe.c           |  5 +++++
- arch/mips/mm/dma-noncoherent.c         |  1 +
- 9 files changed, 42 insertions(+), 10 deletions(-)
-
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index ed51970c08e7..310ce50ad285 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -112,6 +112,7 @@ config MACH_INGENIC
+ 	select SYS_SUPPORTS_LITTLE_ENDIAN
+ 	select SYS_SUPPORTS_ZBOOT
+ 	select DMA_NONCOHERENT
++	select ARCH_HAS_SYNC_DMA_FOR_CPU
+ 	select IRQ_MIPS_CPU
+ 	select PINCTRL
+ 	select GPIOLIB
+diff --git a/arch/mips/mm/dma-noncoherent.c b/arch/mips/mm/dma-noncoherent.c
+index 212f3ce75a6b..3c4fc97b9f39 100644
+--- a/arch/mips/mm/dma-noncoherent.c
++++ b/arch/mips/mm/dma-noncoherent.c
+@@ -32,6 +32,7 @@ static inline bool cpu_needs_post_dma_flush(void)
+ 	case CPU_R12000:
+ 	case CPU_BMIPS5000:
+ 	case CPU_LOONGSON2EF:
++	case CPU_XBURST:
+ 		return true;
+ 	default:
+ 		/*
 -- 
 2.30.2
 
