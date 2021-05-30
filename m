@@ -2,15 +2,15 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D34395249
-	for <lists+linux-mips@lfdr.de>; Sun, 30 May 2021 19:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C57439524C
+	for <lists+linux-mips@lfdr.de>; Sun, 30 May 2021 19:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbhE3RUh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 30 May 2021 13:20:37 -0400
-Received: from aposti.net ([89.234.176.197]:37834 "EHLO aposti.net"
+        id S229828AbhE3RUo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 30 May 2021 13:20:44 -0400
+Received: from aposti.net ([89.234.176.197]:37872 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229956AbhE3RUf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 30 May 2021 13:20:35 -0400
+        id S229783AbhE3RUo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 30 May 2021 13:20:44 -0400
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -18,9 +18,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, list@opendingux.net,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 6/8] MIPS: ingenic: jz4780: Fix I2C nodes to match DT doc
-Date:   Sun, 30 May 2021 18:18:00 +0100
-Message-Id: <20210530171802.23649-7-paul@crapouillou.net>
+Subject: [PATCH 7/8] MIPS: ingenic: gcw0: Set codec to cap-less mode for FM radio
+Date:   Sun, 30 May 2021 18:18:01 +0100
+Message-Id: <20210530171802.23649-8-paul@crapouillou.net>
 In-Reply-To: <20210530171802.23649-1-paul@crapouillou.net>
 References: <20210530171802.23649-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -29,64 +29,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The "ingenic,jz4780-i2c" should have "ingenic,jz4770-i2c" as a fallback
-compatible, as per the Device Tree documentation found in
-Documentation/devicetree/bindings/i2c/ingenic,i2c.yaml.
+When using the FM radio, we must not have capacitors on the headphones
+line, since it is used as the antenna.
+
+The "FM Radio" widget is removed so that the cap-less mode can be
+enabled dynamically through DAPM when the line input is used.
+This widget was useless anyway.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ arch/mips/boot/dts/ingenic/gcw0.dts | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index 8d01feef7ff5..9e34f433b9b5 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -339,7 +339,7 @@ uart4: serial@10034000 {
- 	};
- 
- 	i2c0: i2c@10050000 {
--		compatible = "ingenic,jz4780-i2c";
-+		compatible = "ingenic,jz4780-i2c", "ingenic,jz4770-i2c";
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 
-@@ -357,7 +357,7 @@ i2c0: i2c@10050000 {
- 	};
- 
- 	i2c1: i2c@10051000 {
--		compatible = "ingenic,jz4780-i2c";
-+		compatible = "ingenic,jz4780-i2c", "ingenic,jz4770-i2c";
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 		reg = <0x10051000 0x1000>;
-@@ -374,7 +374,7 @@ i2c1: i2c@10051000 {
- 	};
- 
- 	i2c2: i2c@10052000 {
--		compatible = "ingenic,jz4780-i2c";
-+		compatible = "ingenic,jz4780-i2c", "ingenic,jz4770-i2c";
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 		reg = <0x10052000 0x1000>;
-@@ -391,7 +391,7 @@ i2c2: i2c@10052000 {
- 	};
- 
- 	i2c3: i2c@10053000 {
--		compatible = "ingenic,jz4780-i2c";
-+		compatible = "ingenic,jz4780-i2c", "ingenic,jz4770-i2c";
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 		reg = <0x10053000 0x1000>;
-@@ -408,7 +408,7 @@ i2c3: i2c@10053000 {
- 	};
- 
- 	i2c4: i2c@10054000 {
--		compatible = "ingenic,jz4780-i2c";
-+		compatible = "ingenic,jz4780-i2c", "ingenic,jz4770-i2c";
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 		reg = <0x10054000 0x1000>;
+diff --git a/arch/mips/boot/dts/ingenic/gcw0.dts b/arch/mips/boot/dts/ingenic/gcw0.dts
+index f4c04f2263ea..4abb0318416c 100644
+--- a/arch/mips/boot/dts/ingenic/gcw0.dts
++++ b/arch/mips/boot/dts/ingenic/gcw0.dts
+@@ -74,7 +74,6 @@ sound {
+ 		simple-audio-card,widgets =
+ 			"Speaker", "Speaker",
+ 			"Headphone", "Headphones",
+-			"Line", "FM Radio",
+ 			"Microphone", "Built-in Mic";
+ 		simple-audio-card,routing =
+ 			"Headphones Amp INL", "LHPOUT",
+@@ -85,8 +84,8 @@ sound {
+ 			"Speaker Amp INR", "ROUT",
+ 			"Speaker", "Speaker Amp OUTL",
+ 			"Speaker", "Speaker Amp OUTR",
+-			"LLINEIN", "FM Radio",
+-			"RLINEIN", "FM Radio",
++			"LLINEIN", "Cap-less",
++			"RLINEIN", "Cap-less",
+ 			"Built-in Mic", "MICBIAS",
+ 			"MIC1P", "Built-in Mic",
+ 			"MIC1N", "Built-in Mic";
 -- 
 2.30.2
 
