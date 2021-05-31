@@ -2,30 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAA5396731
-	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 19:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2342039680F
+	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbhEaRh5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 May 2021 13:37:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42548 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232419AbhEaRhh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 31 May 2021 13:37:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F2CF9610FC;
-        Mon, 31 May 2021 17:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622482556;
-        bh=C1wH2WfIbNUJFe4kox5BWM12iGOxjbJIjroW8ADDhTI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JC9/NPOm3lLBQD14qU/YEc54GWn0ocKzxROUVNSu0R6nA6bk6JXfDxro9OXmsCTPX
-         UEONh5KymXhEipAj0gqXxwo7qBi9rZCiAdB7zqKXTkYe42NubRjHzUQRaQEUEHs2nX
-         K3/fyEhJLwWjeLZbs89bJ5B8QVFmyP7osrRfuuOs3yYM9P9zp0UFpwBSW1X4xoAv0O
-         AIwLXfKzcKp7Cx/H2KtacK0xRo7quzj/WGK1hyZFaQ1Xa6XPivRVmP0/slt+uK+LcZ
-         lckxnFXn1927nJrLlK4pdRzFVK8JV6OIkQzfWCDAwudmL9plqY62OP2mFGVuO3MpBF
-         u5NfEn0HaRW0Q==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-clk@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
+        id S230523AbhEaSq6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 May 2021 14:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231542AbhEaSqo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 May 2021 14:46:44 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2058C061760;
+        Mon, 31 May 2021 11:44:57 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id o8so16159924ljp.0;
+        Mon, 31 May 2021 11:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=79vD5fPBpuqJk8BjQVZSQr4mk68U0V00Pi0IrfP1E+M=;
+        b=ixQHV7O1Jnid0/lAhrc6f8PJ7yXOT3iZeSwgte5o+5eGGjBWik4JLPgjXKgQqbI/4n
+         AzcbI3Xn0bBqNWcRRZZ3Ejy7opZhfIva3huN4AcImLORMW7r0annLMjRcYdH1Fz1z/uV
+         7VeN+6GDRjSvTUSgVomxmD5GeLQ8Oc0fOEVwh5RDCKyXhyJTY8d6BnmyyzgESlc1nOxT
+         YsAZ0CfgHfN7mBpqbvQDzxFE45TNOW1hhIcbx3WYdkQN795zoe4FAiqZQvla2PkrARvA
+         ADkUFG6M722rPlnqXpZq089sOC0+qhLUZvS12KHL0NFlXBlZLEyAIDKa30T3Qwv5+BYK
+         GzUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=79vD5fPBpuqJk8BjQVZSQr4mk68U0V00Pi0IrfP1E+M=;
+        b=GsG8EiOmvWJjk6zpPSXW37kjGr7aGPn+e+vf0HVG5kYwJ2Q3Sf/kbJUIXJIYbXioZS
+         N2zcl5+R3LMYFC+o4LRFn64IbdRUhTmdqZ8uZT7yqiI/8gMZrl8JG0Drs7V2WDZE/sQG
+         0EFYA/a9Dz6FVzbRXM9k8CjI/LXhfJzYAttObst2b6Eh7/ZCNLaZmpoadbS328xrMLgZ
+         bPe7PJpvpcBpPmR7t6/sViuecaPkGBhMVtPoPriIYll/hK/cQymkwgz6e2SgKGmfqYjL
+         A9zcQR9MbgLiG7P0G0HyGeKG+f6mYrahfeB7s93tO2V+PXfGyZjSL4j6YT3yp8l3n7Sq
+         5XZw==
+X-Gm-Message-State: AOAM5305+ATG90qrnG6ZUOh2CgvKzH/w/P4I+89/s4ud/EBhT5/UoZ7w
+        EWWLwBWEogf3Vquxs06aj+knqZf2hHY=
+X-Google-Smtp-Source: ABdhPJzwHa2O3tQI6SdJ2nYRIHhOGUD4JpkZi3hQlX9rJYnZ5sdfcrEYOKXStv1Grwdln5npijZ3JA==
+X-Received: by 2002:a2e:9c8e:: with SMTP id x14mr3613896lji.264.1622486696164;
+        Mon, 31 May 2021 11:44:56 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-170-222.dynamic.spd-mgts.ru. [79.139.170.222])
+        by smtp.googlemail.com with ESMTPSA id o2sm1631880ljp.60.2021.05.31.11.44.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 May 2021 11:44:55 -0700 (PDT)
+Subject: Re: [PATCH 0/7] clk: clean up legacy clock interfaces
+To:     Arnd Bergmann <arnd@kernel.org>, linux-clk@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Florian Fainelli <florian@openwrt.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Greg Ungerer <gerg@linux-m68k.org>,
@@ -37,91 +62,41 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
-Subject: [PATCH 0/7] clk: clean up legacy clock interfaces
-Date:   Mon, 31 May 2021 19:34:22 +0200
-Message-Id: <20210531173429.2467403-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+References: <20210531173429.2467403-1-arnd@kernel.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <c4161b44-1628-9b75-083d-2715fa366596@gmail.com>
+Date:   Mon, 31 May 2021 21:44:55 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20210531173429.2467403-1-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+31.05.2021 20:34, Arnd Bergmann пишет:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> A recent discussion about legacy clk interface users revealed
+> that there are only two platforms remaining that provide their own
+> clk_get()/clk_put() implementations, MIPS ar7 and and m68k coldfire.
+> 
+> I managed to rework both of these to just use the normal clkdev code,
+> and fold CONFIG_CLKDEV_LOOKUP into CONFIG_HAVE_CLK as it is now shared
+> among all users.
+> 
+> As I noticed that the ar7 clock implementation and the ralink version
+> are rather trivial, I ended up converting those to use the common-clk
+> interfaces as well, though this is unrelated to the other changes.
+> 
+>      Arnd
+> 
+> Link: https://lore.kernel.org/lkml/CAK8P3a2XsrfUJQQAfnGknh8HiA-D9L_wmEoAgXU89KqagE31NQ@mail.gmail.com/
 
-A recent discussion about legacy clk interface users revealed
-that there are only two platforms remaining that provide their own
-clk_get()/clk_put() implementations, MIPS ar7 and and m68k coldfire.
+Awesome, thank you very much!
 
-I managed to rework both of these to just use the normal clkdev code,
-and fold CONFIG_CLKDEV_LOOKUP into CONFIG_HAVE_CLK as it is now shared
-among all users.
-
-As I noticed that the ar7 clock implementation and the ralink version
-are rather trivial, I ended up converting those to use the common-clk
-interfaces as well, though this is unrelated to the other changes.
-
-     Arnd
-
-Link: https://lore.kernel.org/lkml/CAK8P3a2XsrfUJQQAfnGknh8HiA-D9L_wmEoAgXU89KqagE31NQ@mail.gmail.com/
-
-Arnd Bergmann (7):
-  mips: ar7: convert to clkdev_lookup
-  mips: ar7: convert to CONFIG_COMMON_CLK
-  mips: ralink: convert to CONFIG_COMMON_CLK
-  m68k: coldfire: use clkdev_lookup on most coldfire
-  m68k: coldfire: remove private clk_get/clk_put
-  clkdev: remove CONFIG_CLKDEV_LOOKUP
-  clkdev: remove unused clkdev_alloc() interfaces
-
- arch/arm/Kconfig                     |   2 -
- arch/m68k/coldfire/clk.c             |  21 -----
- arch/m68k/coldfire/m5206.c           |  25 +++---
- arch/m68k/coldfire/m520x.c           |  51 +++++------
- arch/m68k/coldfire/m523x.c           |  42 ++++-----
- arch/m68k/coldfire/m5249.c           |  33 +++----
- arch/m68k/coldfire/m525x.c           |  33 +++----
- arch/m68k/coldfire/m5272.c           |  35 +++-----
- arch/m68k/coldfire/m527x.c           |  46 ++++------
- arch/m68k/coldfire/m528x.c           |  42 ++++-----
- arch/m68k/coldfire/m5307.c           |  27 +++---
- arch/m68k/coldfire/m53xx.c           |  80 ++++++++---------
- arch/m68k/coldfire/m5407.c           |  25 +++---
- arch/m68k/coldfire/m5441x.c          | 126 +++++++++++++--------------
- arch/m68k/coldfire/m54xx.c           |  33 +++----
- arch/m68k/include/asm/mcfclk.h       |   5 --
- arch/mips/Kconfig                    |   6 +-
- arch/mips/ar7/clock.c                | 113 ++++++------------------
- arch/mips/include/asm/mach-ar7/ar7.h |   4 -
- arch/mips/pic32/Kconfig              |   1 -
- arch/mips/ralink/Kconfig             |   5 --
- arch/mips/ralink/clk.c               |  64 +-------------
- arch/sh/Kconfig                      |   1 -
- drivers/clk/Kconfig                  |   6 +-
- drivers/clk/Makefile                 |   3 +-
- drivers/clk/clkdev.c                 |  28 ------
- drivers/clocksource/Kconfig          |   6 +-
- drivers/mmc/host/Kconfig             |   4 +-
- drivers/staging/board/Kconfig        |   2 +-
- include/linux/clkdev.h               |   5 --
- sound/soc/dwc/Kconfig                |   2 +-
- sound/soc/rockchip/Kconfig           |  14 +--
- 32 files changed, 320 insertions(+), 570 deletions(-)
-
--- 
-2.29.2
-
-Cc: Dmitry Osipenko <digetx@gmail.com>
-Cc: Florian Fainelli <florian@openwrt.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Greg Ungerer <gerg@linux-m68k.org>
-Cc: John Crispin <john@phrozen.org>
-Cc: Jonas Gorski <jonas.gorski@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-clk@vger.kernel.org
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: linux-mips@vger.kernel.org
+I see only this cover-letter email, will we see the rest of the patches?
+The patches 1-7 have only linux-clk@vger.kernel.org in the recipients.
