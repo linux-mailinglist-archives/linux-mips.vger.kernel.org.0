@@ -2,78 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C48396554
-	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 18:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAA5396731
+	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 19:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233335AbhEaQb7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 May 2021 12:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234574AbhEaQ3w (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 May 2021 12:29:52 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F44C061231;
-        Mon, 31 May 2021 07:57:50 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f080f002c54d32600da041e.dip0.t-ipconnect.de [IPv6:2003:ec:2f08:f00:2c54:d326:da:41e])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CE2831EC03D5;
-        Mon, 31 May 2021 16:57:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1622473068;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=q7UmMu6yCEwDn6Mhju/5FZSpRM+RHoqO1YzwnVQdAIc=;
-        b=CnuqzZp9CdIqZCLzQ/uVm/VkRZPAVWiKX6Ujd8k8/5gz7ZyPKx2HrfSRB8bHOcPB0Ndx2x
-        5If4ygHSaRaj2YwFd+7G3YcIUzLndyEgJVBDtJXeT4C5hEUIpFT+99CAf5zBRUpjPIsbBI
-        B4beGHQQWlCAKGw5o9PAQfLZgl7YT4c=
-Date:   Mon, 31 May 2021 16:57:39 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Johannes Thumshirn <morbidrsa@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Channagoud Kadabi <ckadabi@codeaurora.org>,
-        Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        York Sun <york.sun@nxp.com>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] edac: Use 'ret' instead of 'res' to store the
- return value
-Message-ID: <YLT5Y+FRhUWWszOq@zn.tnic>
-References: <20210531145302.9655-1-thunder.leizhen@huawei.com>
- <20210531145302.9655-4-thunder.leizhen@huawei.com>
+        id S233465AbhEaRh5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 May 2021 13:37:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42548 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232419AbhEaRhh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 31 May 2021 13:37:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F2CF9610FC;
+        Mon, 31 May 2021 17:35:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622482556;
+        bh=C1wH2WfIbNUJFe4kox5BWM12iGOxjbJIjroW8ADDhTI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JC9/NPOm3lLBQD14qU/YEc54GWn0ocKzxROUVNSu0R6nA6bk6JXfDxro9OXmsCTPX
+         UEONh5KymXhEipAj0gqXxwo7qBi9rZCiAdB7zqKXTkYe42NubRjHzUQRaQEUEHs2nX
+         K3/fyEhJLwWjeLZbs89bJ5B8QVFmyP7osrRfuuOs3yYM9P9zp0UFpwBSW1X4xoAv0O
+         AIwLXfKzcKp7Cx/H2KtacK0xRo7quzj/WGK1hyZFaQ1Xa6XPivRVmP0/slt+uK+LcZ
+         lckxnFXn1927nJrLlK4pdRzFVK8JV6OIkQzfWCDAwudmL9plqY62OP2mFGVuO3MpBF
+         u5NfEn0HaRW0Q==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-clk@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
+        Florian Fainelli <florian@openwrt.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        John Crispin <john@phrozen.org>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
+Subject: [PATCH 0/7] clk: clean up legacy clock interfaces
+Date:   Mon, 31 May 2021 19:34:22 +0200
+Message-Id: <20210531173429.2467403-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210531145302.9655-4-thunder.leizhen@huawei.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 31, 2021 at 10:53:02PM +0800, Zhen Lei wrote:
-> Usually 'ret' or 'rc' is used as the abbreviation for 'return code', and
-> 'res' is used as the abbreviation for 'resource'.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Or "result."
+A recent discussion about legacy clk interface users revealed
+that there are only two platforms remaining that provide their own
+clk_get()/clk_put() implementations, MIPS ar7 and and m68k coldfire.
 
-Please refrain from doing pointless patches like that - it is a totally
-unnecessary churn.
+I managed to rework both of these to just use the normal clkdev code,
+and fold CONFIG_CLKDEV_LOOKUP into CONFIG_HAVE_CLK as it is now shared
+among all users.
+
+As I noticed that the ar7 clock implementation and the ralink version
+are rather trivial, I ended up converting those to use the common-clk
+interfaces as well, though this is unrelated to the other changes.
+
+     Arnd
+
+Link: https://lore.kernel.org/lkml/CAK8P3a2XsrfUJQQAfnGknh8HiA-D9L_wmEoAgXU89KqagE31NQ@mail.gmail.com/
+
+Arnd Bergmann (7):
+  mips: ar7: convert to clkdev_lookup
+  mips: ar7: convert to CONFIG_COMMON_CLK
+  mips: ralink: convert to CONFIG_COMMON_CLK
+  m68k: coldfire: use clkdev_lookup on most coldfire
+  m68k: coldfire: remove private clk_get/clk_put
+  clkdev: remove CONFIG_CLKDEV_LOOKUP
+  clkdev: remove unused clkdev_alloc() interfaces
+
+ arch/arm/Kconfig                     |   2 -
+ arch/m68k/coldfire/clk.c             |  21 -----
+ arch/m68k/coldfire/m5206.c           |  25 +++---
+ arch/m68k/coldfire/m520x.c           |  51 +++++------
+ arch/m68k/coldfire/m523x.c           |  42 ++++-----
+ arch/m68k/coldfire/m5249.c           |  33 +++----
+ arch/m68k/coldfire/m525x.c           |  33 +++----
+ arch/m68k/coldfire/m5272.c           |  35 +++-----
+ arch/m68k/coldfire/m527x.c           |  46 ++++------
+ arch/m68k/coldfire/m528x.c           |  42 ++++-----
+ arch/m68k/coldfire/m5307.c           |  27 +++---
+ arch/m68k/coldfire/m53xx.c           |  80 ++++++++---------
+ arch/m68k/coldfire/m5407.c           |  25 +++---
+ arch/m68k/coldfire/m5441x.c          | 126 +++++++++++++--------------
+ arch/m68k/coldfire/m54xx.c           |  33 +++----
+ arch/m68k/include/asm/mcfclk.h       |   5 --
+ arch/mips/Kconfig                    |   6 +-
+ arch/mips/ar7/clock.c                | 113 ++++++------------------
+ arch/mips/include/asm/mach-ar7/ar7.h |   4 -
+ arch/mips/pic32/Kconfig              |   1 -
+ arch/mips/ralink/Kconfig             |   5 --
+ arch/mips/ralink/clk.c               |  64 +-------------
+ arch/sh/Kconfig                      |   1 -
+ drivers/clk/Kconfig                  |   6 +-
+ drivers/clk/Makefile                 |   3 +-
+ drivers/clk/clkdev.c                 |  28 ------
+ drivers/clocksource/Kconfig          |   6 +-
+ drivers/mmc/host/Kconfig             |   4 +-
+ drivers/staging/board/Kconfig        |   2 +-
+ include/linux/clkdev.h               |   5 --
+ sound/soc/dwc/Kconfig                |   2 +-
+ sound/soc/rockchip/Kconfig           |  14 +--
+ 32 files changed, 320 insertions(+), 570 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.29.2
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Cc: Dmitry Osipenko <digetx@gmail.com>
+Cc: Florian Fainelli <florian@openwrt.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Greg Ungerer <gerg@linux-m68k.org>
+Cc: John Crispin <john@phrozen.org>
+Cc: Jonas Gorski <jonas.gorski@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
