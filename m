@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0D039681C
-	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0204339681E
+	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbhEaSvB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 May 2021 14:51:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39950 "EHLO mail.kernel.org"
+        id S231210AbhEaSvG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 May 2021 14:51:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230174AbhEaSvB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 31 May 2021 14:51:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C9F4E6124B;
-        Mon, 31 May 2021 18:49:17 +0000 (UTC)
+        id S230289AbhEaSvE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 31 May 2021 14:51:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 80F776135C;
+        Mon, 31 May 2021 18:49:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622486961;
-        bh=C1wH2WfIbNUJFe4kox5BWM12iGOxjbJIjroW8ADDhTI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HKCcMJqmChQmpSEHoTdMgwBp0NVe+YPNFb5CIKtBf61Ccar2Bl6Q4ADGJT+AW7PU7
-         BWySZmNiFAbMcRHZvAizwWylUR0424Zr6tLEyy8gmb1bvb4+YnVy94pyXzSSo2azLj
-         CdeMKysqiRdjUU9vOf0q2qqHgfkgezH8xd+JWH+6+lM6cx9FwgU7B7UTXSwEJTKKHA
-         6p3LDr81U/2KPUjngY8tyBEAVjbNHbd0Scb65j3BSSqGtFCTNSdhZqRfgRX6GNLEtv
-         QVsp0XPomaDrg+Ez5VCx+Xzl8Y4d9fyjZL6VmZMK0ilnChO7oUjZD2DD1i1Sg4AlMH
-         8MBG5iEjwpwOA==
+        s=k20201202; t=1622486964;
+        bh=CjtccExGdEjqd7ZBav8OsgNzxL/PiG1ahhPgaXxezeE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oT4hnyqHfyVQDA94H5JilIJndUMJw1CcyPRPd4GSAdeKn/6T8pTrXExT7LJnZpmx2
+         oa3JTalsLbCed2Me8y72B/7iPGyGC4Fj97Xawik57WshSMduUmKb9V4LPx+97so+qi
+         fCdzYHxADfRMHb2+/Dj+paRWcoOkRSThhHzLriu+5MTb+gKG/pm0wKDLoC/7ZTmkd3
+         kQlFlT6qr81CI01JAQs8iVXLMGZmDgxA8wwIgWm3+Y28kIt1tChrpNmBpY3+Q8FVJT
+         r4jaeJXCeZfCaKrYJ8EwAaFZL66W4Zpqq4yPW2IIvtU+WqHbkRti9no379/s51Cs3V
+         Ywb55LB+QgKtA==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-clk@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
@@ -37,10 +37,12 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
-Subject: [PATCH 0/7] clk: clean up legacy clock interfaces
-Date:   Mon, 31 May 2021 20:47:42 +0200
-Message-Id: <20210531184749.2475868-1-arnd@kernel.org>
+Subject: [PATCH 1/7] mips: ar7: convert to clkdev_lookup
+Date:   Mon, 31 May 2021 20:47:43 +0200
+Message-Id: <20210531184749.2475868-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210531184749.2475868-1-arnd@kernel.org>
+References: <20210531184749.2475868-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -49,79 +51,94 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-A recent discussion about legacy clk interface users revealed
-that there are only two platforms remaining that provide their own
-clk_get()/clk_put() implementations, MIPS ar7 and and m68k coldfire.
+ar7 is one of only two platforms that provide the clock interface but
+implement a custom version of the clkdev_lookup code.
 
-I managed to rework both of these to just use the normal clkdev code,
-and fold CONFIG_CLKDEV_LOOKUP into CONFIG_HAVE_CLK as it is now shared
-among all users.
+Change this to use the generic version instead.
 
-As I noticed that the ar7 clock implementation and the ralink version
-are rather trivial, I ended up converting those to use the common-clk
-interfaces as well, though this is unrelated to the other changes.
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/mips/Kconfig     |  1 +
+ arch/mips/ar7/clock.c | 32 ++++++++++++--------------------
+ 2 files changed, 13 insertions(+), 20 deletions(-)
 
-     Arnd
-
-Link: https://lore.kernel.org/lkml/CAK8P3a2XsrfUJQQAfnGknh8HiA-D9L_wmEoAgXU89KqagE31NQ@mail.gmail.com/
-
-Arnd Bergmann (7):
-  mips: ar7: convert to clkdev_lookup
-  mips: ar7: convert to CONFIG_COMMON_CLK
-  mips: ralink: convert to CONFIG_COMMON_CLK
-  m68k: coldfire: use clkdev_lookup on most coldfire
-  m68k: coldfire: remove private clk_get/clk_put
-  clkdev: remove CONFIG_CLKDEV_LOOKUP
-  clkdev: remove unused clkdev_alloc() interfaces
-
- arch/arm/Kconfig                     |   2 -
- arch/m68k/coldfire/clk.c             |  21 -----
- arch/m68k/coldfire/m5206.c           |  25 +++---
- arch/m68k/coldfire/m520x.c           |  51 +++++------
- arch/m68k/coldfire/m523x.c           |  42 ++++-----
- arch/m68k/coldfire/m5249.c           |  33 +++----
- arch/m68k/coldfire/m525x.c           |  33 +++----
- arch/m68k/coldfire/m5272.c           |  35 +++-----
- arch/m68k/coldfire/m527x.c           |  46 ++++------
- arch/m68k/coldfire/m528x.c           |  42 ++++-----
- arch/m68k/coldfire/m5307.c           |  27 +++---
- arch/m68k/coldfire/m53xx.c           |  80 ++++++++---------
- arch/m68k/coldfire/m5407.c           |  25 +++---
- arch/m68k/coldfire/m5441x.c          | 126 +++++++++++++--------------
- arch/m68k/coldfire/m54xx.c           |  33 +++----
- arch/m68k/include/asm/mcfclk.h       |   5 --
- arch/mips/Kconfig                    |   6 +-
- arch/mips/ar7/clock.c                | 113 ++++++------------------
- arch/mips/include/asm/mach-ar7/ar7.h |   4 -
- arch/mips/pic32/Kconfig              |   1 -
- arch/mips/ralink/Kconfig             |   5 --
- arch/mips/ralink/clk.c               |  64 +-------------
- arch/sh/Kconfig                      |   1 -
- drivers/clk/Kconfig                  |   6 +-
- drivers/clk/Makefile                 |   3 +-
- drivers/clk/clkdev.c                 |  28 ------
- drivers/clocksource/Kconfig          |   6 +-
- drivers/mmc/host/Kconfig             |   4 +-
- drivers/staging/board/Kconfig        |   2 +-
- include/linux/clkdev.h               |   5 --
- sound/soc/dwc/Kconfig                |   2 +-
- sound/soc/rockchip/Kconfig           |  14 +--
- 32 files changed, 320 insertions(+), 570 deletions(-)
-
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index ed51970c08e7..1cc03a7652a9 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -215,6 +215,7 @@ config AR7
+ 	select SYS_SUPPORTS_ZBOOT_UART16550
+ 	select GPIOLIB
+ 	select VLYNQ
++	select CLKDEV_LOOKUP
+ 	select HAVE_LEGACY_CLK
+ 	help
+ 	  Support for the Texas Instruments AR7 System-on-a-Chip
+diff --git a/arch/mips/ar7/clock.c b/arch/mips/ar7/clock.c
+index 95def949c971..c614f254f370 100644
+--- a/arch/mips/ar7/clock.c
++++ b/arch/mips/ar7/clock.c
+@@ -5,6 +5,7 @@
+  * Copyright (C) 2009 Florian Fainelli <florian@openwrt.org>
+  */
+ 
++#include <linux/clkdev.h>
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+ #include <linux/types.h>
+@@ -14,6 +15,7 @@
+ #include <linux/io.h>
+ #include <linux/err.h>
+ #include <linux/clk.h>
++#include <linux/clkdev.h>
+ 
+ #include <asm/addrspace.h>
+ #include <asm/mach-ar7/ar7.h>
+@@ -424,27 +426,15 @@ unsigned long clk_get_rate(struct clk *clk)
+ }
+ EXPORT_SYMBOL(clk_get_rate);
+ 
+-struct clk *clk_get(struct device *dev, const char *id)
+-{
+-	if (!strcmp(id, "bus"))
+-		return &bus_clk;
++static struct clk_lookup ar7_clkdev_table[] = {
++	CLKDEV_INIT(NULL, "bus", &bus_clk),
+ 	/* cpmac and vbus share the same rate */
+-	if (!strcmp(id, "cpmac"))
+-		return &vbus_clk;
+-	if (!strcmp(id, "cpu"))
+-		return &cpu_clk;
+-	if (!strcmp(id, "dsp"))
+-		return &dsp_clk;
+-	if (!strcmp(id, "vbus"))
+-		return &vbus_clk;
+-	return ERR_PTR(-ENOENT);
+-}
+-EXPORT_SYMBOL(clk_get);
+-
+-void clk_put(struct clk *clk)
+-{
+-}
+-EXPORT_SYMBOL(clk_put);
++	CLKDEV_INIT("cpmac.0", "cpmac", &vbus_clk),
++	CLKDEV_INIT("cpmac.1", "cpmac", &vbus_clk),
++	CLKDEV_INIT(NULL, "cpu", &cpu_clk),
++	CLKDEV_INIT(NULL, "dsp", &dsp_clk),
++	CLKDEV_INIT(NULL, "vbus", &vbus_clk),
++};
+ 
+ void __init ar7_init_clocks(void)
+ {
+@@ -462,6 +452,8 @@ void __init ar7_init_clocks(void)
+ 	}
+ 	/* adjust vbus clock rate */
+ 	vbus_clk.rate = bus_clk.rate / 2;
++
++	clkdev_add_table(ar7_clkdev_table, ARRAY_SIZE(ar7_clkdev_table));
+ }
+ 
+ /* dummy functions, should not be called */
 -- 
 2.29.2
 
-Cc: Dmitry Osipenko <digetx@gmail.com>
-Cc: Florian Fainelli <florian@openwrt.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Greg Ungerer <gerg@linux-m68k.org>
-Cc: John Crispin <john@phrozen.org>
-Cc: Jonas Gorski <jonas.gorski@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-clk@vger.kernel.org
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: linux-mips@vger.kernel.org
