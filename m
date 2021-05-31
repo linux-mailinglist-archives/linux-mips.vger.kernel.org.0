@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F11396827
-	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A981F396829
+	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbhEaSvZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 May 2021 14:51:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40154 "EHLO mail.kernel.org"
+        id S231342AbhEaSv1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 May 2021 14:51:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230351AbhEaSvT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 31 May 2021 14:51:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 431466124B;
-        Mon, 31 May 2021 18:49:36 +0000 (UTC)
+        id S231151AbhEaSvX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 31 May 2021 14:51:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EDC246128A;
+        Mon, 31 May 2021 18:49:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622486979;
-        bh=btFFYY3u5orCiLCk9inxBgrXpI/VL8RywOBGiPSIwNE=;
+        s=k20201202; t=1622486983;
+        bh=CqS/REIRdXuu3G6qnyJfdGMwzUbALygTwd2BA259Hq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f9e69/vWXiPJWAJljdpn1WHruGC9CNIHSWOiKBg2YvBuwFtJEIHJp9/0uXaQOtZPb
-         GGnT3vgpxfOeuMO5m51FOtFjrcj0D2w2Dtjz03pJHqVySMfNeSSGQnrd/Wd5JhpUmR
-         iyH4HbY4SIjDJgaBYh5PhCuaz07LNf4I36scOP7xz/xy8JRbKkBN7WtunpJ9UttshO
-         P0StNpYz5qP2Ucha3BuXiW4OHFXsZQRcH/i7unmTPVP3CHD8bjg/pWL+V7pgwqYKoP
-         YmjXwI/vVRIQqH3yqulDTL5+ypSq64v2DOSbFNPOca+n4MO6WcbIySySiiD2phGD3J
-         KpitWAMQnoV1Q==
+        b=swME707fstUzuduT66x57HyshN0dnn9nSoAmyV3HwUVz5+yj/+tMbYOoYdpFWwy9k
+         6/0TwovT0d1NfUeSqtBFnyaV2+T4oj5b9XzTlTJE/uVoRuVD8S7qwzD0MGxrbT7jAd
+         hXfUrZL7T4mJ/Fbvs9bNFBuNzxibWa2P4Bcd1xTkfTQsxnGaB7oEt43tjb4V6RE27p
+         0pT2cB3iU3Vc9X4/ifUT2XJF1IVrLeCfqmkvZw3TZCiJAlxKVkhVwCOTEUpqSUqKxA
+         7OjnICwbTbkdMhf8WhRxpt1R3Q3MxSwdaoDw/mf3S9mrTGZXh4X5WydsGSkVpjKZm9
+         F+7EDyZRQ6qXQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-clk@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
@@ -37,9 +37,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
-Subject: [PATCH 5/7] m68k: coldfire: remove private clk_get/clk_put
-Date:   Mon, 31 May 2021 20:47:47 +0200
-Message-Id: <20210531184749.2475868-6-arnd@kernel.org>
+Subject: [PATCH 6/7] clkdev: remove CONFIG_CLKDEV_LOOKUP
+Date:   Mon, 31 May 2021 20:47:48 +0200
+Message-Id: <20210531184749.2475868-7-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210531184749.2475868-1-arnd@kernel.org>
 References: <20210531184749.2475868-1-arnd@kernel.org>
@@ -51,459 +51,291 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Only three SoCs remain that use the custom clk_get/clk_put.
-Move these over to clkdev_lookup tables as well. As before,
-treat the "sys.0" and "pll.0" clocks as system-wide clocks,
-and all the other ones as device specific.
-
-The "name" field in 'struct clock' is now unused, so rename
-that as well as a cleanup and to reduce the object code size.
-The DEFINE_CLK macro could be changed the same way, but it
-is less churn to just leave those in place, that can be
-done as a follow-up later if someone is interested.
+This option is now synonymous with CONFIG_HAVE_CLK, so use
+the latter globally. Any out-of-tree platform ports that
+still use a private clk_get()/clk_put() implementation should
+move to CONFIG_COMMON_CLK.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/m68k/Kconfig.cpu          |   5 +-
- arch/m68k/coldfire/clk.c       |  21 ------
- arch/m68k/coldfire/m520x.c     |  51 ++++++-------
- arch/m68k/coldfire/m53xx.c     |  80 ++++++++++-----------
- arch/m68k/coldfire/m5441x.c    | 126 ++++++++++++++++-----------------
- arch/m68k/include/asm/mcfclk.h |   5 --
- 6 files changed, 129 insertions(+), 159 deletions(-)
+ arch/arm/Kconfig              |  2 --
+ arch/m68k/Kconfig.cpu         |  1 -
+ arch/mips/Kconfig             |  3 ---
+ arch/mips/pic32/Kconfig       |  1 -
+ arch/sh/Kconfig               |  1 -
+ drivers/clk/Kconfig           |  6 +-----
+ drivers/clk/Makefile          |  3 +--
+ drivers/clocksource/Kconfig   |  6 +++---
+ drivers/mmc/host/Kconfig      |  4 ++--
+ drivers/staging/board/Kconfig |  2 +-
+ sound/soc/dwc/Kconfig         |  2 +-
+ sound/soc/rockchip/Kconfig    | 14 +++++++-------
+ 12 files changed, 16 insertions(+), 29 deletions(-)
 
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 24804f11302d..809317b5a6c6 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -353,7 +353,6 @@ config ARCH_EP93XX
+ 	select ARM_VIC
+ 	select GENERIC_IRQ_MULTI_HANDLER
+ 	select AUTO_ZRELADDR
+-	select CLKDEV_LOOKUP
+ 	select CLKSRC_MMIO
+ 	select CPU_ARM920T
+ 	select GPIOLIB
+@@ -504,7 +503,6 @@ config ARCH_OMAP1
+ 	bool "TI OMAP1"
+ 	depends on MMU
+ 	select ARCH_OMAP
+-	select CLKDEV_LOOKUP
+ 	select CLKSRC_MMIO
+ 	select GENERIC_IRQ_CHIP
+ 	select GENERIC_IRQ_MULTI_HANDLER
 diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
-index b3483929b313..e54167a64cbf 100644
+index e54167a64cbf..f4d23977d2a5 100644
 --- a/arch/m68k/Kconfig.cpu
 +++ b/arch/m68k/Kconfig.cpu
-@@ -29,6 +29,7 @@ config COLDFIRE
+@@ -29,7 +29,6 @@ config COLDFIRE
  	select CPU_HAS_NO_MULDIV64
  	select GENERIC_CSUM
  	select GPIOLIB
-+	select CLKDEV_LOOKUP
+-	select CLKDEV_LOOKUP
  	select HAVE_LEGACY_CLK
  
  endchoice
-@@ -328,10 +329,6 @@ config COLDFIRE_SLTIMERS
- 	bool
- 	select LEGACY_TIMER_TICK
- 
--config COLDFIRE_CLKDEV_LOOKUP
--	def_bool !(M5206 || M5206e || M53xx || M5441x)
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 8fe6b30de7dd..96ab1a2a9357 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -332,7 +332,6 @@ config BCM63XX
+ 	select SWAP_IO_SPACE
+ 	select GPIOLIB
+ 	select MIPS_L1_CACHE_SHIFT_4
 -	select CLKDEV_LOOKUP
+ 	select HAVE_LEGACY_CLK
+ 	help
+ 	  Support for BCM63XX based boards
+@@ -446,7 +445,6 @@ config LANTIQ
+ 	select GPIOLIB
+ 	select SWAP_IO_SPACE
+ 	select BOOT_RAW
+-	select CLKDEV_LOOKUP
+ 	select HAVE_LEGACY_CLK
+ 	select USE_OF
+ 	select PINCTRL
+@@ -643,7 +641,6 @@ config RALINK
+ 	select SYS_SUPPORTS_MIPS16
+ 	select SYS_SUPPORTS_ZBOOT
+ 	select SYS_HAS_EARLY_PRINTK
+-	select CLKDEV_LOOKUP
+ 	select ARCH_HAS_RESET_CONTROLLER
+ 	select RESET_CONTROLLER
+ 
+diff --git a/arch/mips/pic32/Kconfig b/arch/mips/pic32/Kconfig
+index 7acbb50c1dcd..bb6ab1f3e80d 100644
+--- a/arch/mips/pic32/Kconfig
++++ b/arch/mips/pic32/Kconfig
+@@ -17,7 +17,6 @@ config PIC32MZDA
+ 	select SYS_SUPPORTS_LITTLE_ENDIAN
+ 	select GPIOLIB
+ 	select COMMON_CLK
+-	select CLKDEV_LOOKUP
+ 	select LIBFDT
+ 	select USE_OF
+ 	select PINCTRL
+diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+index 68129537e350..45a0549421cd 100644
+--- a/arch/sh/Kconfig
++++ b/arch/sh/Kconfig
+@@ -14,7 +14,6 @@ config SUPERH
+ 	select ARCH_HIBERNATION_POSSIBLE if MMU
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+ 	select ARCH_WANT_IPC_PARSE_VERSION
+-	select CLKDEV_LOOKUP
+ 	select CPU_NO_EFFICIENT_FFS
+ 	select DMA_DECLARE_COHERENT
+ 	select GENERIC_ATOMIC64
+diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+index e80918be8e9c..ed1364ac376b 100644
+--- a/drivers/clk/Kconfig
++++ b/drivers/clk/Kconfig
+@@ -6,10 +6,6 @@ config HAVE_CLK
+ 	  The <linux/clk.h> calls support software clock gating and
+ 	  thus are a key power management tool on many systems.
+ 
+-config CLKDEV_LOOKUP
+-	bool
+-	select HAVE_CLK
 -
- endif # COLDFIRE
+ config HAVE_CLK_PREPARE
+ 	bool
  
+@@ -26,7 +22,7 @@ menuconfig COMMON_CLK
+ 	bool "Common Clock Framework"
+ 	depends on !HAVE_LEGACY_CLK
+ 	select HAVE_CLK_PREPARE
+-	select CLKDEV_LOOKUP
++	select HAVE_CLK
+ 	select SRCU
+ 	select RATIONAL
+ 	help
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index 5f06879d7fe9..5341c37b62dc 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -1,7 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # common clock types
+-obj-$(CONFIG_HAVE_CLK)		+= clk-devres.o clk-bulk.o
+-obj-$(CONFIG_CLKDEV_LOOKUP)	+= clkdev.o
++obj-$(CONFIG_HAVE_CLK)		+= clk-devres.o clk-bulk.o clkdev.o
+ obj-$(CONFIG_COMMON_CLK)	+= clk.o
+ obj-$(CONFIG_COMMON_CLK)	+= clk-divider.o
+ obj-$(CONFIG_COMMON_CLK)	+= clk-fixed-factor.o
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 39aa21d01e05..938087347927 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -360,7 +360,7 @@ config ARM_GLOBAL_TIMER
  
-diff --git a/arch/m68k/coldfire/clk.c b/arch/m68k/coldfire/clk.c
-index ffe36627bab8..2ed841e94111 100644
---- a/arch/m68k/coldfire/clk.c
-+++ b/arch/m68k/coldfire/clk.c
-@@ -71,27 +71,6 @@ struct clk_ops clk_ops1 = {
- 	.disable	= __clk_disable1,
- };
- #endif /* MCFPM_PPMCR1 */
--
--struct clk *clk_get(struct device *dev, const char *id)
--{
--	const char *clk_name = dev ? dev_name(dev) : id ? id : NULL;
--	struct clk *clk;
--	unsigned i;
--
--	for (i = 0; (clk = mcf_clks[i]) != NULL; ++i)
--		if (!strcmp(clk->name, clk_name))
--			return clk;
--	pr_warn("clk_get: didn't find clock %s\n", clk_name);
--	return ERR_PTR(-ENOENT);
--}
--EXPORT_SYMBOL(clk_get);
--
--void clk_put(struct clk *clk)
--{
--	if (clk->enabled != 0)
--		pr_warn("clk_put %s still enabled\n", clk->name);
--}
--EXPORT_SYMBOL(clk_put);
- #endif /* MCFPM_PPMCR0 */
+ config ARM_TIMER_SP804
+ 	bool "Support for Dual Timer SP804 module" if COMPILE_TEST
+-	depends on GENERIC_SCHED_CLOCK && CLKDEV_LOOKUP
++	depends on GENERIC_SCHED_CLOCK && HAVE_CLK
+ 	select CLKSRC_MMIO
+ 	select TIMER_OF if OF
  
- int clk_enable(struct clk *clk)
-diff --git a/arch/m68k/coldfire/m520x.c b/arch/m68k/coldfire/m520x.c
-index b5b2a267dada..d2f96b40aee1 100644
---- a/arch/m68k/coldfire/m520x.c
-+++ b/arch/m68k/coldfire/m520x.c
-@@ -12,6 +12,7 @@
+@@ -570,12 +570,12 @@ config H8300_TPU
  
- /***************************************************************************/
+ config CLKSRC_IMX_GPT
+ 	bool "Clocksource using i.MX GPT" if COMPILE_TEST
+-	depends on (ARM || ARM64) && CLKDEV_LOOKUP
++	depends on (ARM || ARM64) && HAVE_CLK
+ 	select CLKSRC_MMIO
  
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -48,31 +49,29 @@ DEFINE_CLK(0, "sys.0", 40, MCF_BUSCLK);
- DEFINE_CLK(0, "gpio.0", 41, MCF_BUSCLK);
- DEFINE_CLK(0, "sdram.0", 42, MCF_CLK);
+ config CLKSRC_IMX_TPM
+ 	bool "Clocksource using i.MX TPM" if COMPILE_TEST
+-	depends on (ARM || ARM64) && CLKDEV_LOOKUP
++	depends on (ARM || ARM64) && HAVE_CLK
+ 	select CLKSRC_MMIO
+ 	select TIMER_OF
+ 	help
+diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+index a4d4c757eea0..4f1468a79126 100644
+--- a/drivers/mmc/host/Kconfig
++++ b/drivers/mmc/host/Kconfig
+@@ -329,7 +329,7 @@ config MMC_SDHCI_S3C
  
--struct clk *mcf_clks[] = {
--	&__clk_0_2, /* flexbus */
--	&__clk_0_12, /* fec.0 */
--	&__clk_0_17, /* edma */
--	&__clk_0_18, /* intc.0 */
--	&__clk_0_21, /* iack.0 */
--	&__clk_0_22, /* imx1-i2c.0 */
--	&__clk_0_23, /* mcfqspi.0 */
--	&__clk_0_24, /* mcfuart.0 */
--	&__clk_0_25, /* mcfuart.1 */
--	&__clk_0_26, /* mcfuart.2 */
--	&__clk_0_28, /* mcftmr.0 */
--	&__clk_0_29, /* mcftmr.1 */
--	&__clk_0_30, /* mcftmr.2 */
--	&__clk_0_31, /* mcftmr.3 */
--
--	&__clk_0_32, /* mcfpit.0 */
--	&__clk_0_33, /* mcfpit.1 */
--	&__clk_0_34, /* mcfeport.0 */
--	&__clk_0_35, /* mcfwdt.0 */
--	&__clk_0_36, /* pll.0 */
--	&__clk_0_40, /* sys.0 */
--	&__clk_0_41, /* gpio.0 */
--	&__clk_0_42, /* sdram.0 */
--	NULL,
-+static struct clk_lookup m520x_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "flexbus", &__clk_0_2),
-+	CLKDEV_INIT("fec.0", NULL, &__clk_0_12),
-+	CLKDEV_INIT("edma", NULL, &__clk_0_17),
-+	CLKDEV_INIT("intc.0", NULL, &__clk_0_18),
-+	CLKDEV_INIT("iack.0", NULL, &__clk_0_21),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &__clk_0_22),
-+	CLKDEV_INIT("mcfqspi.0", NULL, &__clk_0_23),
-+	CLKDEV_INIT("mcfuart.0", NULL, &__clk_0_24),
-+	CLKDEV_INIT("mcfuart.1", NULL, &__clk_0_25),
-+	CLKDEV_INIT("mcfuart.2", NULL, &__clk_0_26),
-+	CLKDEV_INIT("mcftmr.0", NULL, &__clk_0_28),
-+	CLKDEV_INIT("mcftmr.1", NULL, &__clk_0_29),
-+	CLKDEV_INIT("mcftmr.2", NULL, &__clk_0_30),
-+	CLKDEV_INIT("mcftmr.3", NULL, &__clk_0_31),
-+	CLKDEV_INIT("mcfpit.0", NULL, &__clk_0_32),
-+	CLKDEV_INIT("mcfpit.1", NULL, &__clk_0_33),
-+	CLKDEV_INIT("mcfeport.0", NULL, &__clk_0_34),
-+	CLKDEV_INIT("mcfwdt.0", NULL, &__clk_0_35),
-+	CLKDEV_INIT(NULL, "pll.0", &__clk_0_36),
-+	CLKDEV_INIT(NULL, "sys.0", &__clk_0_40),
-+	CLKDEV_INIT("gpio.0", NULL, &__clk_0_41),
-+	CLKDEV_INIT("sdram.0", NULL, &__clk_0_42),
- };
+ config MMC_SDHCI_PXAV3
+ 	tristate "Marvell MMP2 SD Host Controller support (PXAV3)"
+-	depends on CLKDEV_LOOKUP
++	depends on HAVE_CLK
+ 	depends on MMC_SDHCI_PLTFM
+ 	depends on ARCH_BERLIN || ARCH_MMP || ARCH_MVEBU || COMPILE_TEST
+ 	default CPU_MMP2
+@@ -342,7 +342,7 @@ config MMC_SDHCI_PXAV3
  
- static struct clk * const enable_clks[] __initconst = {
-@@ -115,6 +114,8 @@ static void __init m520x_clk_init(void)
- 	/* make sure these clocks are disabled */
- 	for (i = 0; i < ARRAY_SIZE(disable_clks); ++i)
- 		__clk_init_disabled(disable_clks[i]);
-+
-+	clkdev_add_table(m520x_clk_lookup, ARRAY_SIZE(m520x_clk_lookup));
- }
+ config MMC_SDHCI_PXAV2
+ 	tristate "Marvell PXA9XX SD Host Controller support (PXAV2)"
+-	depends on CLKDEV_LOOKUP
++	depends on HAVE_CLK
+ 	depends on MMC_SDHCI_PLTFM
+ 	depends on ARCH_MMP || COMPILE_TEST
+ 	default CPU_PXA910
+diff --git a/drivers/staging/board/Kconfig b/drivers/staging/board/Kconfig
+index 64c77970eee8..b49216768ef6 100644
+--- a/drivers/staging/board/Kconfig
++++ b/drivers/staging/board/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ config STAGING_BOARD
+ 	bool "Staging Board Support"
+-	depends on OF_ADDRESS && OF_IRQ && CLKDEV_LOOKUP
++	depends on OF_ADDRESS && OF_IRQ && HAVE_CLK
+ 	help
+ 	  Staging board base is to support continuous upstream
+ 	  in-tree development and integration of platform devices.
+diff --git a/sound/soc/dwc/Kconfig b/sound/soc/dwc/Kconfig
+index 0cd1a15f40aa..71a58f7ac13a 100644
+--- a/sound/soc/dwc/Kconfig
++++ b/sound/soc/dwc/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config SND_DESIGNWARE_I2S
+ 	tristate "Synopsys I2S Device Driver"
+-	depends on CLKDEV_LOOKUP
++	depends on HAVE_CLK
+ 	select SND_SOC_GENERIC_DMAENGINE_PCM
+ 	help
+ 	 Say Y or M if you want to add support for I2S driver for
+diff --git a/sound/soc/rockchip/Kconfig b/sound/soc/rockchip/Kconfig
+index d610b553ea3b..053097b73e28 100644
+--- a/sound/soc/rockchip/Kconfig
++++ b/sound/soc/rockchip/Kconfig
+@@ -9,7 +9,7 @@ config SND_SOC_ROCKCHIP
  
- /***************************************************************************/
-diff --git a/arch/m68k/coldfire/m53xx.c b/arch/m68k/coldfire/m53xx.c
-index 075722c0c4f0..335095bb1d8a 100644
---- a/arch/m68k/coldfire/m53xx.c
-+++ b/arch/m68k/coldfire/m53xx.c
-@@ -13,6 +13,7 @@
+ config SND_SOC_ROCKCHIP_I2S
+ 	tristate "Rockchip I2S Device Driver"
+-	depends on CLKDEV_LOOKUP && SND_SOC_ROCKCHIP
++	depends on HAVE_CLK && SND_SOC_ROCKCHIP
+ 	select SND_SOC_GENERIC_DMAENGINE_PCM
+ 	help
+ 	  Say Y or M if you want to add support for I2S driver for
+@@ -18,7 +18,7 @@ config SND_SOC_ROCKCHIP_I2S
  
- /***************************************************************************/
+ config SND_SOC_ROCKCHIP_PDM
+ 	tristate "Rockchip PDM Controller Driver"
+-	depends on CLKDEV_LOOKUP && SND_SOC_ROCKCHIP
++	depends on HAVE_CLK && SND_SOC_ROCKCHIP
+ 	select SND_SOC_GENERIC_DMAENGINE_PCM
+ 	select RATIONAL
+ 	help
+@@ -28,7 +28,7 @@ config SND_SOC_ROCKCHIP_PDM
  
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -65,45 +66,42 @@ DEFINE_CLK(1, "mdha.0", 32, MCF_CLK);
- DEFINE_CLK(1, "skha.0", 33, MCF_CLK);
- DEFINE_CLK(1, "rng.0", 34, MCF_CLK);
+ config SND_SOC_ROCKCHIP_SPDIF
+ 	tristate "Rockchip SPDIF Device Driver"
+-	depends on CLKDEV_LOOKUP && SND_SOC_ROCKCHIP
++	depends on HAVE_CLK && SND_SOC_ROCKCHIP
+ 	select SND_SOC_GENERIC_DMAENGINE_PCM
+ 	help
+ 	  Say Y or M if you want to add support for SPDIF driver for
+@@ -36,7 +36,7 @@ config SND_SOC_ROCKCHIP_SPDIF
  
--struct clk *mcf_clks[] = {
--	&__clk_0_2,	/* flexbus */
--	&__clk_0_8,	/* mcfcan.0 */
--	&__clk_0_12,	/* fec.0 */
--	&__clk_0_17,	/* edma */
--	&__clk_0_18,	/* intc.0 */
--	&__clk_0_19,	/* intc.1 */
--	&__clk_0_21,	/* iack.0 */
--	&__clk_0_22,	/* imx1-i2c.0 */
--	&__clk_0_23,	/* mcfqspi.0 */
--	&__clk_0_24,	/* mcfuart.0 */
--	&__clk_0_25,	/* mcfuart.1 */
--	&__clk_0_26,	/* mcfuart.2 */
--	&__clk_0_28,	/* mcftmr.0 */
--	&__clk_0_29,	/* mcftmr.1 */
--	&__clk_0_30,	/* mcftmr.2 */
--	&__clk_0_31,	/* mcftmr.3 */
--
--	&__clk_0_32,	/* mcfpit.0 */
--	&__clk_0_33,	/* mcfpit.1 */
--	&__clk_0_34,	/* mcfpit.2 */
--	&__clk_0_35,	/* mcfpit.3 */
--	&__clk_0_36,	/* mcfpwm.0 */
--	&__clk_0_37,	/* mcfeport.0 */
--	&__clk_0_38,	/* mcfwdt.0 */
--	&__clk_0_40,	/* sys.0 */
--	&__clk_0_41,	/* gpio.0 */
--	&__clk_0_42,	/* mcfrtc.0 */
--	&__clk_0_43,	/* mcflcd.0 */
--	&__clk_0_44,	/* mcfusb-otg.0 */
--	&__clk_0_45,	/* mcfusb-host.0 */
--	&__clk_0_46,	/* sdram.0 */
--	&__clk_0_47,	/* ssi.0 */
--	&__clk_0_48,	/* pll.0 */
--
--	&__clk_1_32,	/* mdha.0 */
--	&__clk_1_33,	/* skha.0 */
--	&__clk_1_34,	/* rng.0 */
--	NULL,
-+static struct clk_lookup m53xx_clk_lookup[] = {
-+	CLKDEV_INIT("flexbus", NULL, &__clk_0_2),
-+	CLKDEV_INIT("mcfcan.0", NULL, &__clk_0_8),
-+	CLKDEV_INIT("fec.0", NULL, &__clk_0_12),
-+	CLKDEV_INIT("edma", NULL, &__clk_0_17),
-+	CLKDEV_INIT("intc.0", NULL, &__clk_0_18),
-+	CLKDEV_INIT("intc.1", NULL, &__clk_0_19),
-+	CLKDEV_INIT("iack.0", NULL, &__clk_0_21),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &__clk_0_22),
-+	CLKDEV_INIT("mcfqspi.0", NULL, &__clk_0_23),
-+	CLKDEV_INIT("mcfuart.0", NULL, &__clk_0_24),
-+	CLKDEV_INIT("mcfuart.1", NULL, &__clk_0_25),
-+	CLKDEV_INIT("mcfuart.2", NULL, &__clk_0_26),
-+	CLKDEV_INIT("mcftmr.0", NULL, &__clk_0_28),
-+	CLKDEV_INIT("mcftmr.1", NULL, &__clk_0_29),
-+	CLKDEV_INIT("mcftmr.2", NULL, &__clk_0_30),
-+	CLKDEV_INIT("mcftmr.3", NULL, &__clk_0_31),
-+	CLKDEV_INIT("mcfpit.0", NULL, &__clk_0_32),
-+	CLKDEV_INIT("mcfpit.1", NULL, &__clk_0_33),
-+	CLKDEV_INIT("mcfpit.2", NULL, &__clk_0_34),
-+	CLKDEV_INIT("mcfpit.3", NULL, &__clk_0_35),
-+	CLKDEV_INIT("mcfpwm.0", NULL, &__clk_0_36),
-+	CLKDEV_INIT("mcfeport.0", NULL, &__clk_0_37),
-+	CLKDEV_INIT("mcfwdt.0", NULL, &__clk_0_38),
-+	CLKDEV_INIT(NULL, "sys.0", &__clk_0_40),
-+	CLKDEV_INIT("gpio.0", NULL, &__clk_0_41),
-+	CLKDEV_INIT("mcfrtc.0", NULL, &__clk_0_42),
-+	CLKDEV_INIT("mcflcd.0", NULL, &__clk_0_43),
-+	CLKDEV_INIT("mcfusb-otg.0", NULL, &__clk_0_44),
-+	CLKDEV_INIT("mcfusb-host.0", NULL, &__clk_0_45),
-+	CLKDEV_INIT("sdram.0", NULL, &__clk_0_46),
-+	CLKDEV_INIT("ssi.0", NULL, &__clk_0_47),
-+	CLKDEV_INIT(NULL, "pll.0", &__clk_0_48),
-+	CLKDEV_INIT("mdha.0", NULL, &__clk_1_32),
-+	CLKDEV_INIT("skha.0", NULL, &__clk_1_33),
-+	CLKDEV_INIT("rng.0", NULL, &__clk_1_34),
- };
+ config SND_SOC_ROCKCHIP_MAX98090
+ 	tristate "ASoC support for Rockchip boards using a MAX98090 codec"
+-	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && CLKDEV_LOOKUP
++	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && HAVE_CLK
+ 	select SND_SOC_ROCKCHIP_I2S
+ 	select SND_SOC_MAX98090
+ 	select SND_SOC_TS3A227E
+@@ -47,7 +47,7 @@ config SND_SOC_ROCKCHIP_MAX98090
  
- static struct clk * const enable_clks[] __initconst = {
-@@ -158,6 +156,8 @@ static void __init m53xx_clk_init(void)
- 	/* make sure these clocks are disabled */
- 	for (i = 0; i < ARRAY_SIZE(disable_clks); ++i)
- 		__clk_init_disabled(disable_clks[i]);
-+
-+	clkdev_add_table(m53xx_clk_lookup, ARRAY_SIZE(m53xx_clk_lookup));
- }
+ config SND_SOC_ROCKCHIP_RT5645
+ 	tristate "ASoC support for Rockchip boards using a RT5645/RT5650 codec"
+-	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && CLKDEV_LOOKUP
++	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && HAVE_CLK
+ 	select SND_SOC_ROCKCHIP_I2S
+ 	select SND_SOC_RT5645
+ 	help
+@@ -56,7 +56,7 @@ config SND_SOC_ROCKCHIP_RT5645
  
- /***************************************************************************/
-@@ -275,7 +275,7 @@ void __init config_BSP(char *commandp, int size)
- #define SDRAM_TRFC	7	/* in clocks */
- #define SDRAM_TREFI	7800	/* in ns */
+ config SND_SOC_RK3288_HDMI_ANALOG
+ 	tristate "ASoC support multiple codecs for Rockchip RK3288 boards"
+-	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && CLKDEV_LOOKUP
++	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && HAVE_CLK
+ 	select SND_SOC_ROCKCHIP_I2S
+ 	select SND_SOC_HDMI_CODEC
+ 	select SND_SOC_ES8328_I2C
+@@ -68,7 +68,7 @@ config SND_SOC_RK3288_HDMI_ANALOG
  
--#define EXT_SRAM_ADDRESS	(0xC0000000)
-+#define EXT_SRAM_ADDRESS	(0,xC0000000)
- #define FLASH_ADDRESS		(0x00000000)
- #define SDRAM_ADDRESS		(0x40000000)
- 
-diff --git a/arch/m68k/coldfire/m5441x.c b/arch/m68k/coldfire/m5441x.c
-index 1e5259a652d1..ce14693d18b6 100644
---- a/arch/m68k/coldfire/m5441x.c
-+++ b/arch/m68k/coldfire/m5441x.c
-@@ -5,6 +5,7 @@
-  *	(C) Copyright Steven King <sfking@fdwdc.com>
-  */
- 
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -78,72 +79,67 @@ DEFINE_CLK(2, "ipg.0", 0, MCF_CLK);
- DEFINE_CLK(2, "ahb.0", 1, MCF_CLK);
- DEFINE_CLK(2, "per.0", 2, MCF_CLK);
- 
--struct clk *mcf_clks[] = {
--	&__clk_0_2,
--	&__clk_0_8,
--	&__clk_0_9,
--	&__clk_0_14,
--	&__clk_0_15,
--	&__clk_0_17,
--	&__clk_0_18,
--	&__clk_0_19,
--	&__clk_0_20,
--	&__clk_0_22,
--	&__clk_0_23,
--	&__clk_0_24,
--	&__clk_0_25,
--	&__clk_0_26,
--	&__clk_0_27,
--	&__clk_0_28,
--	&__clk_0_29,
--	&__clk_0_30,
--	&__clk_0_31,
--	&__clk_0_32,
--	&__clk_0_33,
--	&__clk_0_34,
--	&__clk_0_35,
--	&__clk_0_37,
--	&__clk_0_38,
--	&__clk_0_39,
--	&__clk_0_42,
--	&__clk_0_43,
--	&__clk_0_44,
--	&__clk_0_45,
--	&__clk_0_46,
--	&__clk_0_47,
--	&__clk_0_48,
--	&__clk_0_49,
--	&__clk_0_50,
--	&__clk_0_51,
--	&__clk_0_53,
--	&__clk_0_54,
--	&__clk_0_55,
--	&__clk_0_56,
--	&__clk_0_63,
--
--	&__clk_1_2,
--	&__clk_1_4,
--	&__clk_1_5,
--	&__clk_1_6,
--	&__clk_1_7,
--	&__clk_1_24,
--	&__clk_1_25,
--	&__clk_1_26,
--	&__clk_1_27,
--	&__clk_1_28,
--	&__clk_1_29,
--	&__clk_1_34,
--	&__clk_1_36,
--	&__clk_1_37,
--
--	&__clk_2_0,
--	&__clk_2_1,
--	&__clk_2_2,
--
--	NULL,
-+static struct clk_lookup m5411x_clk_lookup[] = {
-+	CLKDEV_INIT("flexbus", NULL, &__clk_0_2),
-+	CLKDEV_INIT("mcfcan.0", NULL, &__clk_0_8),
-+	CLKDEV_INIT("mcfcan.1", NULL, &__clk_0_9),
-+	CLKDEV_INIT("imx1-i2c.1", NULL, &__clk_0_14),
-+	CLKDEV_INIT("mcfdspi.1", NULL, &__clk_0_15),
-+	CLKDEV_INIT("edma", NULL, &__clk_0_17),
-+	CLKDEV_INIT("intc.0", NULL, &__clk_0_18),
-+	CLKDEV_INIT("intc.1", NULL, &__clk_0_19),
-+	CLKDEV_INIT("intc.2", NULL, &__clk_0_20),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &__clk_0_22),
-+	CLKDEV_INIT("fsl-dspi.0", NULL, &__clk_0_23),
-+	CLKDEV_INIT("mcfuart.0", NULL, &__clk_0_24),
-+	CLKDEV_INIT("mcfuart.1", NULL, &__clk_0_25),
-+	CLKDEV_INIT("mcfuart.2", NULL, &__clk_0_26),
-+	CLKDEV_INIT("mcfuart.3", NULL, &__clk_0_27),
-+	CLKDEV_INIT("mcftmr.0", NULL, &__clk_0_28),
-+	CLKDEV_INIT("mcftmr.1", NULL, &__clk_0_29),
-+	CLKDEV_INIT("mcftmr.2", NULL, &__clk_0_30),
-+	CLKDEV_INIT("mcftmr.3", NULL, &__clk_0_31),
-+	CLKDEV_INIT("mcfpit.0", NULL, &__clk_0_32),
-+	CLKDEV_INIT("mcfpit.1", NULL, &__clk_0_33),
-+	CLKDEV_INIT("mcfpit.2", NULL, &__clk_0_34),
-+	CLKDEV_INIT("mcfpit.3", NULL, &__clk_0_35),
-+	CLKDEV_INIT("mcfeport.0", NULL, &__clk_0_37),
-+	CLKDEV_INIT("mcfadc.0", NULL, &__clk_0_38),
-+	CLKDEV_INIT("mcfdac.0", NULL, &__clk_0_39),
-+	CLKDEV_INIT("mcfrtc.0", NULL, &__clk_0_42),
-+	CLKDEV_INIT("mcfsim.0", NULL, &__clk_0_43),
-+	CLKDEV_INIT("mcfusb-otg.0", NULL, &__clk_0_44),
-+	CLKDEV_INIT("mcfusb-host.0", NULL, &__clk_0_45),
-+	CLKDEV_INIT("mcfddr-sram.0", NULL, &__clk_0_46),
-+	CLKDEV_INIT("mcfssi.0", NULL, &__clk_0_47),
-+	CLKDEV_INIT(NULL, "pll.0", &__clk_0_48),
-+	CLKDEV_INIT("mcfrng.0", NULL, &__clk_0_49),
-+	CLKDEV_INIT("mcfssi.1", NULL, &__clk_0_50),
-+	CLKDEV_INIT("sdhci-esdhc-mcf.0", NULL, &__clk_0_51),
-+	CLKDEV_INIT("enet-fec.0", NULL, &__clk_0_53),
-+	CLKDEV_INIT("enet-fec.1", NULL, &__clk_0_54),
-+	CLKDEV_INIT("switch.0", NULL, &__clk_0_55),
-+	CLKDEV_INIT("switch.1", NULL, &__clk_0_56),
-+	CLKDEV_INIT("nand.0", NULL, &__clk_0_63),
-+	CLKDEV_INIT("mcfow.0", NULL, &__clk_1_2),
-+	CLKDEV_INIT("imx1-i2c.2", NULL, &__clk_1_4),
-+	CLKDEV_INIT("imx1-i2c.3", NULL, &__clk_1_5),
-+	CLKDEV_INIT("imx1-i2c.4", NULL, &__clk_1_6),
-+	CLKDEV_INIT("imx1-i2c.5", NULL, &__clk_1_7),
-+	CLKDEV_INIT("mcfuart.4", NULL, &__clk_1_24),
-+	CLKDEV_INIT("mcfuart.5", NULL, &__clk_1_25),
-+	CLKDEV_INIT("mcfuart.6", NULL, &__clk_1_26),
-+	CLKDEV_INIT("mcfuart.7", NULL, &__clk_1_27),
-+	CLKDEV_INIT("mcfuart.8", NULL, &__clk_1_28),
-+	CLKDEV_INIT("mcfuart.9", NULL, &__clk_1_29),
-+	CLKDEV_INIT("mcfpwm.0", NULL, &__clk_1_34),
-+	CLKDEV_INIT(NULL, "sys.0", &__clk_1_36),
-+	CLKDEV_INIT("gpio.0", NULL, &__clk_1_37),
-+	CLKDEV_INIT("ipg.0", NULL, &__clk_2_0),
-+	CLKDEV_INIT("ahb.0", NULL, &__clk_2_1),
-+	CLKDEV_INIT("per.0", NULL, &__clk_2_2),
- };
- 
--
- static struct clk * const enable_clks[] __initconst = {
- 	/* make sure these clocks are enabled */
- 	&__clk_0_15, /* dspi.1 */
-@@ -228,6 +224,8 @@ static void __init m5441x_clk_init(void)
- 	/* make sure these clocks are disabled */
- 	for (i = 0; i < ARRAY_SIZE(disable_clks); ++i)
- 		__clk_init_disabled(disable_clks[i]);
-+
-+	clkdev_add_table(m5411x_clk_lookup, ARRAY_SIZE(m5411x_clk_lookup));
- }
- 
- static void __init m5441x_uarts_init(void)
-diff --git a/arch/m68k/include/asm/mcfclk.h b/arch/m68k/include/asm/mcfclk.h
-index 722627e06d66..4e9a6b827a14 100644
---- a/arch/m68k/include/asm/mcfclk.h
-+++ b/arch/m68k/include/asm/mcfclk.h
-@@ -15,15 +15,12 @@ struct clk_ops {
- };
- 
- struct clk {
--	const char *name;
- 	struct clk_ops *clk_ops;
- 	unsigned long rate;
- 	unsigned long enabled;
- 	u8 slot;
- };
- 
--extern struct clk *mcf_clks[];
--
- #ifdef MCFPM_PPMCR0
- extern struct clk_ops clk_ops0;
- #ifdef MCFPM_PPMCR1
-@@ -34,7 +31,6 @@ extern struct clk_ops clk_ops2;
- 
- #define DEFINE_CLK(clk_bank, clk_name, clk_slot, clk_rate) \
- static struct clk __clk_##clk_bank##_##clk_slot = { \
--	.name = clk_name, \
- 	.clk_ops = &clk_ops##clk_bank, \
- 	.rate = clk_rate, \
- 	.slot = clk_slot, \
-@@ -45,7 +41,6 @@ void __clk_init_disabled(struct clk *);
- #else
- #define DEFINE_CLK(clk_ref, clk_name, clk_rate) \
-         static struct clk clk_##clk_ref = { \
--                .name = clk_name, \
-                 .rate = clk_rate, \
-         }
- #endif /* MCFPM_PPMCR0 */
+ config SND_SOC_RK3399_GRU_SOUND
+ 	tristate "ASoC support multiple codecs for Rockchip RK3399 GRU boards"
+-	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && CLKDEV_LOOKUP && SPI
++	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && HAVE_CLK && SPI
+ 	select SND_SOC_ROCKCHIP_I2S
+ 	select SND_SOC_MAX98357A
+ 	select SND_SOC_RT5514
 -- 
 2.29.2
 
