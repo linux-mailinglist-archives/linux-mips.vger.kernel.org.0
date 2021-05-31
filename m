@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD634396825
-	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F11396827
+	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbhEaSvT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 May 2021 14:51:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40124 "EHLO mail.kernel.org"
+        id S231305AbhEaSvZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 May 2021 14:51:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40154 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230351AbhEaSvQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 31 May 2021 14:51:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C27A6135B;
-        Mon, 31 May 2021 18:49:32 +0000 (UTC)
+        id S230351AbhEaSvT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 31 May 2021 14:51:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 431466124B;
+        Mon, 31 May 2021 18:49:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622486975;
-        bh=jtSsetYmuEjt3QS3BhhUr2hzb3iSK9CaEzvTKPx1+No=;
+        s=k20201202; t=1622486979;
+        bh=btFFYY3u5orCiLCk9inxBgrXpI/VL8RywOBGiPSIwNE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ijp2w1xaoluvIomX1eXc0uutXecWVnqA5KDpMZ07uth6jPuSWg+VfKJ8kxofYDYxL
-         S4/ML9adG9IBcINubpwrnsgOn0xGQqhD79FDPbUc8EAja1TJz8ray7r9Dio/kBl74C
-         sEOEqLY6yPEOXw9ON3Lp9YXEi43/dqtSkoKMLsVyfi/j90o9Ez8sTKWOFWjFvY1/y/
-         2o3mEDnMZF/FygxW0rUu5eKH3W37ZRGlVYOSs1OaoGWkg/DM0KrrirX2eO1q/6BUEq
-         Ib4CmnVquOYSAo+kGAAAJThbZql9OLK04LyYmh59nNqxWo6gbem74+pLYMuB8MuJWE
-         g2gvXRrEZ6y3A==
+        b=f9e69/vWXiPJWAJljdpn1WHruGC9CNIHSWOiKBg2YvBuwFtJEIHJp9/0uXaQOtZPb
+         GGnT3vgpxfOeuMO5m51FOtFjrcj0D2w2Dtjz03pJHqVySMfNeSSGQnrd/Wd5JhpUmR
+         iyH4HbY4SIjDJgaBYh5PhCuaz07LNf4I36scOP7xz/xy8JRbKkBN7WtunpJ9UttshO
+         P0StNpYz5qP2Ucha3BuXiW4OHFXsZQRcH/i7unmTPVP3CHD8bjg/pWL+V7pgwqYKoP
+         YmjXwI/vVRIQqH3yqulDTL5+ypSq64v2DOSbFNPOca+n4MO6WcbIySySiiD2phGD3J
+         KpitWAMQnoV1Q==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-clk@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
@@ -37,9 +37,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
-Subject: [PATCH 4/7] m68k: coldfire: use clkdev_lookup on most coldfire
-Date:   Mon, 31 May 2021 20:47:46 +0200
-Message-Id: <20210531184749.2475868-5-arnd@kernel.org>
+Subject: [PATCH 5/7] m68k: coldfire: remove private clk_get/clk_put
+Date:   Mon, 31 May 2021 20:47:47 +0200
+Message-Id: <20210531184749.2475868-6-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210531184749.2475868-1-arnd@kernel.org>
 References: <20210531184749.2475868-1-arnd@kernel.org>
@@ -51,92 +51,87 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Coldfire is now the only target that implements the clk_get()/clk_put()
-helpers itself rather than using the common implementation.
+Only three SoCs remain that use the custom clk_get/clk_put.
+Move these over to clkdev_lookup tables as well. As before,
+treat the "sys.0" and "pll.0" clocks as system-wide clocks,
+and all the other ones as device specific.
 
-Most coldfire variants only have two distinct clocks and use the clk
-code purely for lookup. Change those over to use clkdev_lookup instead
-but leave the custom clk interface for those two clocks.
-
-Also leave the four SoCs that have gated clocks.
+The "name" field in 'struct clock' is now unused, so rename
+that as well as a cleanup and to reduce the object code size.
+The DEFINE_CLK macro could be changed the same way, but it
+is less churn to just leave those in place, that can be
+done as a follow-up later if someone is interested.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/m68k/Kconfig.cpu      |  4 ++++
- arch/m68k/coldfire/clk.c   | 16 ++++++-------
- arch/m68k/coldfire/m5206.c | 25 +++++++++------------
- arch/m68k/coldfire/m523x.c | 42 ++++++++++++++--------------------
- arch/m68k/coldfire/m5249.c | 33 ++++++++++++---------------
- arch/m68k/coldfire/m525x.c | 33 ++++++++++++---------------
- arch/m68k/coldfire/m5272.c | 35 ++++++++++++-----------------
- arch/m68k/coldfire/m527x.c | 46 +++++++++++++++-----------------------
- arch/m68k/coldfire/m528x.c | 42 ++++++++++++++--------------------
- arch/m68k/coldfire/m5307.c | 27 ++++++++++------------
- arch/m68k/coldfire/m5407.c | 25 +++++++++------------
- arch/m68k/coldfire/m54xx.c | 33 ++++++++++++---------------
- 12 files changed, 154 insertions(+), 207 deletions(-)
+ arch/m68k/Kconfig.cpu          |   5 +-
+ arch/m68k/coldfire/clk.c       |  21 ------
+ arch/m68k/coldfire/m520x.c     |  51 ++++++-------
+ arch/m68k/coldfire/m53xx.c     |  80 ++++++++++-----------
+ arch/m68k/coldfire/m5441x.c    | 126 ++++++++++++++++-----------------
+ arch/m68k/include/asm/mcfclk.h |   5 --
+ 6 files changed, 129 insertions(+), 159 deletions(-)
 
 diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
-index f4d23977d2a5..b3483929b313 100644
+index b3483929b313..e54167a64cbf 100644
 --- a/arch/m68k/Kconfig.cpu
 +++ b/arch/m68k/Kconfig.cpu
-@@ -328,6 +328,10 @@ config COLDFIRE_SLTIMERS
+@@ -29,6 +29,7 @@ config COLDFIRE
+ 	select CPU_HAS_NO_MULDIV64
+ 	select GENERIC_CSUM
+ 	select GPIOLIB
++	select CLKDEV_LOOKUP
+ 	select HAVE_LEGACY_CLK
+ 
+ endchoice
+@@ -328,10 +329,6 @@ config COLDFIRE_SLTIMERS
  	bool
  	select LEGACY_TIMER_TICK
  
-+config COLDFIRE_CLKDEV_LOOKUP
-+	def_bool !(M5206 || M5206e || M53xx || M5441x)
-+	select CLKDEV_LOOKUP
-+
+-config COLDFIRE_CLKDEV_LOOKUP
+-	def_bool !(M5206 || M5206e || M53xx || M5441x)
+-	select CLKDEV_LOOKUP
+-
  endif # COLDFIRE
  
  
 diff --git a/arch/m68k/coldfire/clk.c b/arch/m68k/coldfire/clk.c
-index 076a9caa9557..ffe36627bab8 100644
+index ffe36627bab8..2ed841e94111 100644
 --- a/arch/m68k/coldfire/clk.c
 +++ b/arch/m68k/coldfire/clk.c
-@@ -71,7 +71,6 @@ struct clk_ops clk_ops1 = {
+@@ -71,27 +71,6 @@ struct clk_ops clk_ops1 = {
  	.disable	= __clk_disable1,
  };
  #endif /* MCFPM_PPMCR1 */
--#endif /* MCFPM_PPMCR0 */
- 
- struct clk *clk_get(struct device *dev, const char *id)
- {
-@@ -87,6 +86,14 @@ struct clk *clk_get(struct device *dev, const char *id)
- }
- EXPORT_SYMBOL(clk_get);
- 
-+void clk_put(struct clk *clk)
-+{
-+	if (clk->enabled != 0)
-+		pr_warn("clk_put %s still enabled\n", clk->name);
-+}
-+EXPORT_SYMBOL(clk_put);
-+#endif /* MCFPM_PPMCR0 */
-+
- int clk_enable(struct clk *clk)
- {
- 	unsigned long flags;
-@@ -117,13 +124,6 @@ void clk_disable(struct clk *clk)
- }
- EXPORT_SYMBOL(clk_disable);
- 
+-
+-struct clk *clk_get(struct device *dev, const char *id)
+-{
+-	const char *clk_name = dev ? dev_name(dev) : id ? id : NULL;
+-	struct clk *clk;
+-	unsigned i;
+-
+-	for (i = 0; (clk = mcf_clks[i]) != NULL; ++i)
+-		if (!strcmp(clk->name, clk_name))
+-			return clk;
+-	pr_warn("clk_get: didn't find clock %s\n", clk_name);
+-	return ERR_PTR(-ENOENT);
+-}
+-EXPORT_SYMBOL(clk_get);
+-
 -void clk_put(struct clk *clk)
 -{
 -	if (clk->enabled != 0)
 -		pr_warn("clk_put %s still enabled\n", clk->name);
 -}
 -EXPORT_SYMBOL(clk_put);
--
- unsigned long clk_get_rate(struct clk *clk)
- {
- 	if (!clk)
-diff --git a/arch/m68k/coldfire/m5206.c b/arch/m68k/coldfire/m5206.c
-index 2f14ea95c391..5e726e94b5ab 100644
---- a/arch/m68k/coldfire/m5206.c
-+++ b/arch/m68k/coldfire/m5206.c
-@@ -10,6 +10,7 @@
+ #endif /* MCFPM_PPMCR0 */
+ 
+ int clk_enable(struct clk *clk)
+diff --git a/arch/m68k/coldfire/m520x.c b/arch/m68k/coldfire/m520x.c
+index b5b2a267dada..d2f96b40aee1 100644
+--- a/arch/m68k/coldfire/m520x.c
++++ b/arch/m68k/coldfire/m520x.c
+@@ -12,6 +12,7 @@
  
  /***************************************************************************/
  
@@ -144,49 +139,74 @@ index 2f14ea95c391..5e726e94b5ab 100644
  #include <linux/kernel.h>
  #include <linux/param.h>
  #include <linux/init.h>
-@@ -23,21 +24,15 @@
- 
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr0, "mcftmr.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr1, "mcftmr.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c0, "imx1-i2c.0", MCF_BUSCLK);
+@@ -48,31 +49,29 @@ DEFINE_CLK(0, "sys.0", 40, MCF_BUSCLK);
+ DEFINE_CLK(0, "gpio.0", 41, MCF_BUSCLK);
+ DEFINE_CLK(0, "sdram.0", 42, MCF_CLK);
  
 -struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcftmr0,
--	&clk_mcftmr1,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfi2c0,
--	NULL
-+static struct clk_lookup m5206_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcftmr.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcftmr.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
+-	&__clk_0_2, /* flexbus */
+-	&__clk_0_12, /* fec.0 */
+-	&__clk_0_17, /* edma */
+-	&__clk_0_18, /* intc.0 */
+-	&__clk_0_21, /* iack.0 */
+-	&__clk_0_22, /* imx1-i2c.0 */
+-	&__clk_0_23, /* mcfqspi.0 */
+-	&__clk_0_24, /* mcfuart.0 */
+-	&__clk_0_25, /* mcfuart.1 */
+-	&__clk_0_26, /* mcfuart.2 */
+-	&__clk_0_28, /* mcftmr.0 */
+-	&__clk_0_29, /* mcftmr.1 */
+-	&__clk_0_30, /* mcftmr.2 */
+-	&__clk_0_31, /* mcftmr.3 */
+-
+-	&__clk_0_32, /* mcfpit.0 */
+-	&__clk_0_33, /* mcfpit.1 */
+-	&__clk_0_34, /* mcfeport.0 */
+-	&__clk_0_35, /* mcfwdt.0 */
+-	&__clk_0_36, /* pll.0 */
+-	&__clk_0_40, /* sys.0 */
+-	&__clk_0_41, /* gpio.0 */
+-	&__clk_0_42, /* sdram.0 */
+-	NULL,
++static struct clk_lookup m520x_clk_lookup[] = {
++	CLKDEV_INIT(NULL, "flexbus", &__clk_0_2),
++	CLKDEV_INIT("fec.0", NULL, &__clk_0_12),
++	CLKDEV_INIT("edma", NULL, &__clk_0_17),
++	CLKDEV_INIT("intc.0", NULL, &__clk_0_18),
++	CLKDEV_INIT("iack.0", NULL, &__clk_0_21),
++	CLKDEV_INIT("imx1-i2c.0", NULL, &__clk_0_22),
++	CLKDEV_INIT("mcfqspi.0", NULL, &__clk_0_23),
++	CLKDEV_INIT("mcfuart.0", NULL, &__clk_0_24),
++	CLKDEV_INIT("mcfuart.1", NULL, &__clk_0_25),
++	CLKDEV_INIT("mcfuart.2", NULL, &__clk_0_26),
++	CLKDEV_INIT("mcftmr.0", NULL, &__clk_0_28),
++	CLKDEV_INIT("mcftmr.1", NULL, &__clk_0_29),
++	CLKDEV_INIT("mcftmr.2", NULL, &__clk_0_30),
++	CLKDEV_INIT("mcftmr.3", NULL, &__clk_0_31),
++	CLKDEV_INIT("mcfpit.0", NULL, &__clk_0_32),
++	CLKDEV_INIT("mcfpit.1", NULL, &__clk_0_33),
++	CLKDEV_INIT("mcfeport.0", NULL, &__clk_0_34),
++	CLKDEV_INIT("mcfwdt.0", NULL, &__clk_0_35),
++	CLKDEV_INIT(NULL, "pll.0", &__clk_0_36),
++	CLKDEV_INIT(NULL, "sys.0", &__clk_0_40),
++	CLKDEV_INIT("gpio.0", NULL, &__clk_0_41),
++	CLKDEV_INIT("sdram.0", NULL, &__clk_0_42),
  };
  
- /***************************************************************************/
-@@ -66,6 +61,8 @@ void __init config_BSP(char *commandp, int size)
- 	mcf_mapirq2imr(28, MCFINTC_EINT4);
- 	mcf_mapirq2imr(31, MCFINTC_EINT7);
- 	m5206_i2c_init();
+ static struct clk * const enable_clks[] __initconst = {
+@@ -115,6 +114,8 @@ static void __init m520x_clk_init(void)
+ 	/* make sure these clocks are disabled */
+ 	for (i = 0; i < ARRAY_SIZE(disable_clks); ++i)
+ 		__clk_init_disabled(disable_clks[i]);
 +
-+	clkdev_add_table(m5206_clk_lookup, ARRAY_SIZE(m5206_clk_lookup));
++	clkdev_add_table(m520x_clk_lookup, ARRAY_SIZE(m520x_clk_lookup));
  }
  
  /***************************************************************************/
-diff --git a/arch/m68k/coldfire/m523x.c b/arch/m68k/coldfire/m523x.c
-index ddf2496ed117..193c178162c1 100644
---- a/arch/m68k/coldfire/m523x.c
-+++ b/arch/m68k/coldfire/m523x.c
+diff --git a/arch/m68k/coldfire/m53xx.c b/arch/m68k/coldfire/m53xx.c
+index 075722c0c4f0..335095bb1d8a 100644
+--- a/arch/m68k/coldfire/m53xx.c
++++ b/arch/m68k/coldfire/m53xx.c
 @@ -13,6 +13,7 @@
  
  /***************************************************************************/
@@ -195,543 +215,295 @@ index ddf2496ed117..193c178162c1 100644
  #include <linux/kernel.h>
  #include <linux/param.h>
  #include <linux/init.h>
-@@ -26,31 +27,20 @@
+@@ -65,45 +66,42 @@ DEFINE_CLK(1, "mdha.0", 32, MCF_CLK);
+ DEFINE_CLK(1, "skha.0", 33, MCF_CLK);
+ DEFINE_CLK(1, "rng.0", 34, MCF_CLK);
  
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcfpit0, "mcfpit.0", MCF_CLK);
--DEFINE_CLK(mcfpit1, "mcfpit.1", MCF_CLK);
--DEFINE_CLK(mcfpit2, "mcfpit.2", MCF_CLK);
--DEFINE_CLK(mcfpit3, "mcfpit.3", MCF_CLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart2, "mcfuart.2", MCF_BUSCLK);
--DEFINE_CLK(mcfqspi0, "mcfqspi.0", MCF_BUSCLK);
--DEFINE_CLK(fec0, "fec.0", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c0, "imx1-i2c.0", MCF_BUSCLK);
--
 -struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcfpit0,
--	&clk_mcfpit1,
--	&clk_mcfpit2,
--	&clk_mcfpit3,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfuart2,
--	&clk_mcfqspi0,
--	&clk_fec0,
--	&clk_mcfi2c0,
--	NULL
-+
-+struct clk_lookup m523x_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcfpit.0", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfpit.1", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfpit.2", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfpit.3", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.2", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfqspi.0", NULL, &clk_sys),
-+	CLKDEV_INIT("fec.0", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
+-	&__clk_0_2,	/* flexbus */
+-	&__clk_0_8,	/* mcfcan.0 */
+-	&__clk_0_12,	/* fec.0 */
+-	&__clk_0_17,	/* edma */
+-	&__clk_0_18,	/* intc.0 */
+-	&__clk_0_19,	/* intc.1 */
+-	&__clk_0_21,	/* iack.0 */
+-	&__clk_0_22,	/* imx1-i2c.0 */
+-	&__clk_0_23,	/* mcfqspi.0 */
+-	&__clk_0_24,	/* mcfuart.0 */
+-	&__clk_0_25,	/* mcfuart.1 */
+-	&__clk_0_26,	/* mcfuart.2 */
+-	&__clk_0_28,	/* mcftmr.0 */
+-	&__clk_0_29,	/* mcftmr.1 */
+-	&__clk_0_30,	/* mcftmr.2 */
+-	&__clk_0_31,	/* mcftmr.3 */
+-
+-	&__clk_0_32,	/* mcfpit.0 */
+-	&__clk_0_33,	/* mcfpit.1 */
+-	&__clk_0_34,	/* mcfpit.2 */
+-	&__clk_0_35,	/* mcfpit.3 */
+-	&__clk_0_36,	/* mcfpwm.0 */
+-	&__clk_0_37,	/* mcfeport.0 */
+-	&__clk_0_38,	/* mcfwdt.0 */
+-	&__clk_0_40,	/* sys.0 */
+-	&__clk_0_41,	/* gpio.0 */
+-	&__clk_0_42,	/* mcfrtc.0 */
+-	&__clk_0_43,	/* mcflcd.0 */
+-	&__clk_0_44,	/* mcfusb-otg.0 */
+-	&__clk_0_45,	/* mcfusb-host.0 */
+-	&__clk_0_46,	/* sdram.0 */
+-	&__clk_0_47,	/* ssi.0 */
+-	&__clk_0_48,	/* pll.0 */
+-
+-	&__clk_1_32,	/* mdha.0 */
+-	&__clk_1_33,	/* skha.0 */
+-	&__clk_1_34,	/* rng.0 */
+-	NULL,
++static struct clk_lookup m53xx_clk_lookup[] = {
++	CLKDEV_INIT("flexbus", NULL, &__clk_0_2),
++	CLKDEV_INIT("mcfcan.0", NULL, &__clk_0_8),
++	CLKDEV_INIT("fec.0", NULL, &__clk_0_12),
++	CLKDEV_INIT("edma", NULL, &__clk_0_17),
++	CLKDEV_INIT("intc.0", NULL, &__clk_0_18),
++	CLKDEV_INIT("intc.1", NULL, &__clk_0_19),
++	CLKDEV_INIT("iack.0", NULL, &__clk_0_21),
++	CLKDEV_INIT("imx1-i2c.0", NULL, &__clk_0_22),
++	CLKDEV_INIT("mcfqspi.0", NULL, &__clk_0_23),
++	CLKDEV_INIT("mcfuart.0", NULL, &__clk_0_24),
++	CLKDEV_INIT("mcfuart.1", NULL, &__clk_0_25),
++	CLKDEV_INIT("mcfuart.2", NULL, &__clk_0_26),
++	CLKDEV_INIT("mcftmr.0", NULL, &__clk_0_28),
++	CLKDEV_INIT("mcftmr.1", NULL, &__clk_0_29),
++	CLKDEV_INIT("mcftmr.2", NULL, &__clk_0_30),
++	CLKDEV_INIT("mcftmr.3", NULL, &__clk_0_31),
++	CLKDEV_INIT("mcfpit.0", NULL, &__clk_0_32),
++	CLKDEV_INIT("mcfpit.1", NULL, &__clk_0_33),
++	CLKDEV_INIT("mcfpit.2", NULL, &__clk_0_34),
++	CLKDEV_INIT("mcfpit.3", NULL, &__clk_0_35),
++	CLKDEV_INIT("mcfpwm.0", NULL, &__clk_0_36),
++	CLKDEV_INIT("mcfeport.0", NULL, &__clk_0_37),
++	CLKDEV_INIT("mcfwdt.0", NULL, &__clk_0_38),
++	CLKDEV_INIT(NULL, "sys.0", &__clk_0_40),
++	CLKDEV_INIT("gpio.0", NULL, &__clk_0_41),
++	CLKDEV_INIT("mcfrtc.0", NULL, &__clk_0_42),
++	CLKDEV_INIT("mcflcd.0", NULL, &__clk_0_43),
++	CLKDEV_INIT("mcfusb-otg.0", NULL, &__clk_0_44),
++	CLKDEV_INIT("mcfusb-host.0", NULL, &__clk_0_45),
++	CLKDEV_INIT("sdram.0", NULL, &__clk_0_46),
++	CLKDEV_INIT("ssi.0", NULL, &__clk_0_47),
++	CLKDEV_INIT(NULL, "pll.0", &__clk_0_48),
++	CLKDEV_INIT("mdha.0", NULL, &__clk_1_32),
++	CLKDEV_INIT("skha.0", NULL, &__clk_1_33),
++	CLKDEV_INIT("rng.0", NULL, &__clk_1_34),
  };
  
- /***************************************************************************/
-@@ -100,6 +90,8 @@ void __init config_BSP(char *commandp, int size)
- 	m523x_fec_init();
- 	m523x_qspi_init();
- 	m523x_i2c_init();
+ static struct clk * const enable_clks[] __initconst = {
+@@ -158,6 +156,8 @@ static void __init m53xx_clk_init(void)
+ 	/* make sure these clocks are disabled */
+ 	for (i = 0; i < ARRAY_SIZE(disable_clks); ++i)
+ 		__clk_init_disabled(disable_clks[i]);
 +
-+	clkdev_add_table(m523x_clk_lookup, ARRAY_SIZE(m523x_clk_lookup));
++	clkdev_add_table(m53xx_clk_lookup, ARRAY_SIZE(m53xx_clk_lookup));
  }
  
  /***************************************************************************/
-diff --git a/arch/m68k/coldfire/m5249.c b/arch/m68k/coldfire/m5249.c
-index 0590f8c421f1..6d66972de214 100644
---- a/arch/m68k/coldfire/m5249.c
-+++ b/arch/m68k/coldfire/m5249.c
-@@ -9,6 +9,7 @@
+@@ -275,7 +275,7 @@ void __init config_BSP(char *commandp, int size)
+ #define SDRAM_TRFC	7	/* in clocks */
+ #define SDRAM_TREFI	7800	/* in ns */
  
- /***************************************************************************/
+-#define EXT_SRAM_ADDRESS	(0xC0000000)
++#define EXT_SRAM_ADDRESS	(0,xC0000000)
+ #define FLASH_ADDRESS		(0x00000000)
+ #define SDRAM_ADDRESS		(0x40000000)
+ 
+diff --git a/arch/m68k/coldfire/m5441x.c b/arch/m68k/coldfire/m5441x.c
+index 1e5259a652d1..ce14693d18b6 100644
+--- a/arch/m68k/coldfire/m5441x.c
++++ b/arch/m68k/coldfire/m5441x.c
+@@ -5,6 +5,7 @@
+  *	(C) Copyright Steven King <sfking@fdwdc.com>
+  */
  
 +#include <linux/clkdev.h>
  #include <linux/kernel.h>
  #include <linux/param.h>
  #include <linux/init.h>
-@@ -23,25 +24,17 @@
+@@ -78,72 +79,67 @@ DEFINE_CLK(2, "ipg.0", 0, MCF_CLK);
+ DEFINE_CLK(2, "ahb.0", 1, MCF_CLK);
+ DEFINE_CLK(2, "per.0", 2, MCF_CLK);
  
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr0, "mcftmr.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr1, "mcftmr.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfqspi0, "mcfqspi.0", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c0, "imx1-i2c.0", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c1, "imx1-i2c.1", MCF_BUSCLK);
+-struct clk *mcf_clks[] = {
+-	&__clk_0_2,
+-	&__clk_0_8,
+-	&__clk_0_9,
+-	&__clk_0_14,
+-	&__clk_0_15,
+-	&__clk_0_17,
+-	&__clk_0_18,
+-	&__clk_0_19,
+-	&__clk_0_20,
+-	&__clk_0_22,
+-	&__clk_0_23,
+-	&__clk_0_24,
+-	&__clk_0_25,
+-	&__clk_0_26,
+-	&__clk_0_27,
+-	&__clk_0_28,
+-	&__clk_0_29,
+-	&__clk_0_30,
+-	&__clk_0_31,
+-	&__clk_0_32,
+-	&__clk_0_33,
+-	&__clk_0_34,
+-	&__clk_0_35,
+-	&__clk_0_37,
+-	&__clk_0_38,
+-	&__clk_0_39,
+-	&__clk_0_42,
+-	&__clk_0_43,
+-	&__clk_0_44,
+-	&__clk_0_45,
+-	&__clk_0_46,
+-	&__clk_0_47,
+-	&__clk_0_48,
+-	&__clk_0_49,
+-	&__clk_0_50,
+-	&__clk_0_51,
+-	&__clk_0_53,
+-	&__clk_0_54,
+-	&__clk_0_55,
+-	&__clk_0_56,
+-	&__clk_0_63,
 -
--struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcftmr0,
--	&clk_mcftmr1,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfqspi0,
--	&clk_mcfi2c0,
--	&clk_mcfi2c1,
--	NULL
-+
-+struct clk_lookup m5249_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcftmr.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcftmr.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfqspi.0", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.1", NULL, &clk_sys),
- };
- 
- /***************************************************************************/
-@@ -137,6 +130,8 @@ void __init config_BSP(char *commandp, int size)
- #endif
- 	m5249_qspi_init();
- 	m5249_i2c_init();
-+
-+	clkdev_add_table(m5249_clk_lookup, ARRAY_SIZE(m5249_clk_lookup));
- }
- 
- /***************************************************************************/
-diff --git a/arch/m68k/coldfire/m525x.c b/arch/m68k/coldfire/m525x.c
-index 1772359c416c..2c4d2ca2f20d 100644
---- a/arch/m68k/coldfire/m525x.c
-+++ b/arch/m68k/coldfire/m525x.c
-@@ -9,6 +9,7 @@
- 
- /***************************************************************************/
- 
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -23,25 +24,17 @@
- 
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr0, "mcftmr.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr1, "mcftmr.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfqspi0, "mcfqspi.0", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c0, "imx1-i2c.0", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c1, "imx1-i2c.1", MCF_BUSCLK);
+-	&__clk_1_2,
+-	&__clk_1_4,
+-	&__clk_1_5,
+-	&__clk_1_6,
+-	&__clk_1_7,
+-	&__clk_1_24,
+-	&__clk_1_25,
+-	&__clk_1_26,
+-	&__clk_1_27,
+-	&__clk_1_28,
+-	&__clk_1_29,
+-	&__clk_1_34,
+-	&__clk_1_36,
+-	&__clk_1_37,
 -
--struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcftmr0,
--	&clk_mcftmr1,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfqspi0,
--	&clk_mcfi2c0,
--	&clk_mcfi2c1,
--	NULL
-+
-+static struct clk_lookup m525x_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcftmr.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcftmr.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfqspi.0", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.1", NULL, &clk_sys),
- };
- 
- /***************************************************************************/
-@@ -88,6 +81,8 @@ void __init config_BSP(char *commandp, int size)
- 
- 	m525x_qspi_init();
- 	m525x_i2c_init();
-+
-+	clkdev_add_table(m525x_clk_lookup, ARRAY_SIZE(m525x_clk_lookup));
- }
- 
- /***************************************************************************/
-diff --git a/arch/m68k/coldfire/m5272.c b/arch/m68k/coldfire/m5272.c
-index 6b3ab583c698..734dab657fe3 100644
---- a/arch/m68k/coldfire/m5272.c
-+++ b/arch/m68k/coldfire/m5272.c
-@@ -10,6 +10,7 @@
- 
- /***************************************************************************/
- 
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -34,27 +35,18 @@ unsigned char ledbank = 0xff;
- 
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr0, "mcftmr.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr1, "mcftmr.1", MCF_BUSCLK);
--DEFINE_CLK(mcftmr2, "mcftmr.2", MCF_BUSCLK);
--DEFINE_CLK(mcftmr3, "mcftmr.3", MCF_BUSCLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfqspi0, "mcfqspi.0", MCF_BUSCLK);
--DEFINE_CLK(fec0, "fec.0", MCF_BUSCLK);
+-	&__clk_2_0,
+-	&__clk_2_1,
+-	&__clk_2_2,
 -
--struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcftmr0,
--	&clk_mcftmr1,
--	&clk_mcftmr2,
--	&clk_mcftmr3,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfqspi0,
--	&clk_fec0,
--	NULL
-+
-+static struct clk_lookup m5272_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcftmr.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcftmr.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcftmr.2", NULL, &clk_sys),
-+	CLKDEV_INIT("mcftmr.3", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfqspi.0", NULL, &clk_sys),
-+	CLKDEV_INIT("fec.0", NULL, &clk_sys),
+-	NULL,
++static struct clk_lookup m5411x_clk_lookup[] = {
++	CLKDEV_INIT("flexbus", NULL, &__clk_0_2),
++	CLKDEV_INIT("mcfcan.0", NULL, &__clk_0_8),
++	CLKDEV_INIT("mcfcan.1", NULL, &__clk_0_9),
++	CLKDEV_INIT("imx1-i2c.1", NULL, &__clk_0_14),
++	CLKDEV_INIT("mcfdspi.1", NULL, &__clk_0_15),
++	CLKDEV_INIT("edma", NULL, &__clk_0_17),
++	CLKDEV_INIT("intc.0", NULL, &__clk_0_18),
++	CLKDEV_INIT("intc.1", NULL, &__clk_0_19),
++	CLKDEV_INIT("intc.2", NULL, &__clk_0_20),
++	CLKDEV_INIT("imx1-i2c.0", NULL, &__clk_0_22),
++	CLKDEV_INIT("fsl-dspi.0", NULL, &__clk_0_23),
++	CLKDEV_INIT("mcfuart.0", NULL, &__clk_0_24),
++	CLKDEV_INIT("mcfuart.1", NULL, &__clk_0_25),
++	CLKDEV_INIT("mcfuart.2", NULL, &__clk_0_26),
++	CLKDEV_INIT("mcfuart.3", NULL, &__clk_0_27),
++	CLKDEV_INIT("mcftmr.0", NULL, &__clk_0_28),
++	CLKDEV_INIT("mcftmr.1", NULL, &__clk_0_29),
++	CLKDEV_INIT("mcftmr.2", NULL, &__clk_0_30),
++	CLKDEV_INIT("mcftmr.3", NULL, &__clk_0_31),
++	CLKDEV_INIT("mcfpit.0", NULL, &__clk_0_32),
++	CLKDEV_INIT("mcfpit.1", NULL, &__clk_0_33),
++	CLKDEV_INIT("mcfpit.2", NULL, &__clk_0_34),
++	CLKDEV_INIT("mcfpit.3", NULL, &__clk_0_35),
++	CLKDEV_INIT("mcfeport.0", NULL, &__clk_0_37),
++	CLKDEV_INIT("mcfadc.0", NULL, &__clk_0_38),
++	CLKDEV_INIT("mcfdac.0", NULL, &__clk_0_39),
++	CLKDEV_INIT("mcfrtc.0", NULL, &__clk_0_42),
++	CLKDEV_INIT("mcfsim.0", NULL, &__clk_0_43),
++	CLKDEV_INIT("mcfusb-otg.0", NULL, &__clk_0_44),
++	CLKDEV_INIT("mcfusb-host.0", NULL, &__clk_0_45),
++	CLKDEV_INIT("mcfddr-sram.0", NULL, &__clk_0_46),
++	CLKDEV_INIT("mcfssi.0", NULL, &__clk_0_47),
++	CLKDEV_INIT(NULL, "pll.0", &__clk_0_48),
++	CLKDEV_INIT("mcfrng.0", NULL, &__clk_0_49),
++	CLKDEV_INIT("mcfssi.1", NULL, &__clk_0_50),
++	CLKDEV_INIT("sdhci-esdhc-mcf.0", NULL, &__clk_0_51),
++	CLKDEV_INIT("enet-fec.0", NULL, &__clk_0_53),
++	CLKDEV_INIT("enet-fec.1", NULL, &__clk_0_54),
++	CLKDEV_INIT("switch.0", NULL, &__clk_0_55),
++	CLKDEV_INIT("switch.1", NULL, &__clk_0_56),
++	CLKDEV_INIT("nand.0", NULL, &__clk_0_63),
++	CLKDEV_INIT("mcfow.0", NULL, &__clk_1_2),
++	CLKDEV_INIT("imx1-i2c.2", NULL, &__clk_1_4),
++	CLKDEV_INIT("imx1-i2c.3", NULL, &__clk_1_5),
++	CLKDEV_INIT("imx1-i2c.4", NULL, &__clk_1_6),
++	CLKDEV_INIT("imx1-i2c.5", NULL, &__clk_1_7),
++	CLKDEV_INIT("mcfuart.4", NULL, &__clk_1_24),
++	CLKDEV_INIT("mcfuart.5", NULL, &__clk_1_25),
++	CLKDEV_INIT("mcfuart.6", NULL, &__clk_1_26),
++	CLKDEV_INIT("mcfuart.7", NULL, &__clk_1_27),
++	CLKDEV_INIT("mcfuart.8", NULL, &__clk_1_28),
++	CLKDEV_INIT("mcfuart.9", NULL, &__clk_1_29),
++	CLKDEV_INIT("mcfpwm.0", NULL, &__clk_1_34),
++	CLKDEV_INIT(NULL, "sys.0", &__clk_1_36),
++	CLKDEV_INIT("gpio.0", NULL, &__clk_1_37),
++	CLKDEV_INIT("ipg.0", NULL, &__clk_2_0),
++	CLKDEV_INIT("ahb.0", NULL, &__clk_2_1),
++	CLKDEV_INIT("per.0", NULL, &__clk_2_2),
  };
  
- /***************************************************************************/
-@@ -128,6 +120,7 @@ static int __init init_BSP(void)
- {
- 	m5272_uarts_init();
- 	fixed_phy_add(PHY_POLL, 0, &nettel_fixed_phy_status);
-+	clkdev_add_table(m5272_clk_lookup, ARRAY_SIZE(m5272_clk_lookup));
- 	return 0;
- }
- 
-diff --git a/arch/m68k/coldfire/m527x.c b/arch/m68k/coldfire/m527x.c
-index cad462df6861..ff29c7a947e2 100644
---- a/arch/m68k/coldfire/m527x.c
-+++ b/arch/m68k/coldfire/m527x.c
-@@ -13,6 +13,7 @@
- 
- /***************************************************************************/
- 
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -27,33 +28,21 @@
- 
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcfpit0, "mcfpit.0", MCF_CLK);
--DEFINE_CLK(mcfpit1, "mcfpit.1", MCF_CLK);
--DEFINE_CLK(mcfpit2, "mcfpit.2", MCF_CLK);
--DEFINE_CLK(mcfpit3, "mcfpit.3", MCF_CLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart2, "mcfuart.2", MCF_BUSCLK);
--DEFINE_CLK(mcfqspi0, "mcfqspi.0", MCF_BUSCLK);
--DEFINE_CLK(fec0, "fec.0", MCF_BUSCLK);
--DEFINE_CLK(fec1, "fec.1", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c0, "imx1-i2c.0", MCF_BUSCLK);
 -
--struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcfpit0,
--	&clk_mcfpit1,
--	&clk_mcfpit2,
--	&clk_mcfpit3,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfuart2,
--	&clk_mcfqspi0,
--	&clk_fec0,
--	&clk_fec1,
--	&clk_mcfi2c0,
--	NULL
+ static struct clk * const enable_clks[] __initconst = {
+ 	/* make sure these clocks are enabled */
+ 	&__clk_0_15, /* dspi.1 */
+@@ -228,6 +224,8 @@ static void __init m5441x_clk_init(void)
+ 	/* make sure these clocks are disabled */
+ 	for (i = 0; i < ARRAY_SIZE(disable_clks); ++i)
+ 		__clk_init_disabled(disable_clks[i]);
 +
-+static struct clk_lookup m527x_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcfpit.0", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfpit.1", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfpit.2", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfpit.3", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.2", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfqspi.0", NULL, &clk_sys),
-+	CLKDEV_INIT("fec.0", NULL, &clk_sys),
-+	CLKDEV_INIT("fec.1", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
++	clkdev_add_table(m5411x_clk_lookup, ARRAY_SIZE(m5411x_clk_lookup));
+ }
+ 
+ static void __init m5441x_uarts_init(void)
+diff --git a/arch/m68k/include/asm/mcfclk.h b/arch/m68k/include/asm/mcfclk.h
+index 722627e06d66..4e9a6b827a14 100644
+--- a/arch/m68k/include/asm/mcfclk.h
++++ b/arch/m68k/include/asm/mcfclk.h
+@@ -15,15 +15,12 @@ struct clk_ops {
  };
  
- /***************************************************************************/
-@@ -97,7 +86,7 @@ static void __init m527x_i2c_init(void)
- 	/*  set PAR_SCL to SCL and PAR_SDA to SDA */
- 	par = readw(MCFGPIO_PAR_FECI2C);
- 	par |= 0x0f;
--	writew(par, MCFGPIO_PAR_FECI2C);
-+	wm527x_clk_lookupritew(par, MCFGPIO_PAR_FECI2C);
- #endif
- #endif /* IS_ENABLED(CONFIG_I2C_IMX) */
- }
-@@ -151,6 +140,7 @@ void __init config_BSP(char *commandp, int size)
- 	m527x_fec_init();
- 	m527x_qspi_init();
- 	m527x_i2c_init();
-+	clkdev_add_table(m527x_clk_lookup, ARRAY_SIZE(m527x_clk_lookup));
- }
+ struct clk {
+-	const char *name;
+ 	struct clk_ops *clk_ops;
+ 	unsigned long rate;
+ 	unsigned long enabled;
+ 	u8 slot;
+ };
  
- /***************************************************************************/
-diff --git a/arch/m68k/coldfire/m528x.c b/arch/m68k/coldfire/m528x.c
-index 7ad3193887e8..51a6a6236e12 100644
---- a/arch/m68k/coldfire/m528x.c
-+++ b/arch/m68k/coldfire/m528x.c
-@@ -13,6 +13,7 @@
- 
- /***************************************************************************/
- 
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -28,31 +29,20 @@
- 
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcfpit0, "mcfpit.0", MCF_CLK);
--DEFINE_CLK(mcfpit1, "mcfpit.1", MCF_CLK);
--DEFINE_CLK(mcfpit2, "mcfpit.2", MCF_CLK);
--DEFINE_CLK(mcfpit3, "mcfpit.3", MCF_CLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart2, "mcfuart.2", MCF_BUSCLK);
--DEFINE_CLK(mcfqspi0, "mcfqspi.0", MCF_BUSCLK);
--DEFINE_CLK(fec0, "fec.0", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c0, "imx1-i2c.0", MCF_BUSCLK);
+-extern struct clk *mcf_clks[];
 -
--struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcfpit0,
--	&clk_mcfpit1,
--	&clk_mcfpit2,
--	&clk_mcfpit3,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfuart2,
--	&clk_mcfqspi0,
--	&clk_fec0,
--	&clk_mcfi2c0,
--	NULL
-+
-+static struct clk_lookup m528x_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcfpit.0", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfpit.1", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfpit.2", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfpit.3", NULL, &clk_pll),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.2", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfqspi.0", NULL, &clk_sys),
-+	CLKDEV_INIT("fec.0", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
- };
+ #ifdef MCFPM_PPMCR0
+ extern struct clk_ops clk_ops0;
+ #ifdef MCFPM_PPMCR1
+@@ -34,7 +31,6 @@ extern struct clk_ops clk_ops2;
  
- /***************************************************************************/
-@@ -146,6 +136,8 @@ void __init config_BSP(char *commandp, int size)
- 	m528x_fec_init();
- 	m528x_qspi_init();
- 	m528x_i2c_init();
-+
-+	clkdev_add_table(m528x_clk_lookup, ARRAY_SIZE(m528x_clk_lookup));
- }
- 
- /***************************************************************************/
-diff --git a/arch/m68k/coldfire/m5307.c b/arch/m68k/coldfire/m5307.c
-index 64b4b1fd34ff..4ed2e43ab3ad 100644
---- a/arch/m68k/coldfire/m5307.c
-+++ b/arch/m68k/coldfire/m5307.c
-@@ -10,6 +10,7 @@
- 
- /***************************************************************************/
- 
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -32,21 +33,15 @@ unsigned char ledbank = 0xff;
- 
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr0, "mcftmr.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr1, "mcftmr.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c0, "imx1-i2c.0", MCF_BUSCLK);
--
--struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcftmr0,
--	&clk_mcftmr1,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfi2c0,
--	NULL
-+
-+static struct clk_lookup m5307_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcftmr.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcftmr.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
- };
- 
- /***************************************************************************/
-@@ -88,6 +83,8 @@ void __init config_BSP(char *commandp, int size)
- 	wdebug(MCFDEBUG_CSR, MCFDEBUG_CSR_PSTCLK);
- #endif
- 	m5307_i2c_init();
-+
-+	clkdev_add_table(m5307_clk_lookup, ARRAY_SIZE(m5307_clk_lookup));
- }
- 
- /***************************************************************************/
-diff --git a/arch/m68k/coldfire/m5407.c b/arch/m68k/coldfire/m5407.c
-index 0400d76115a1..b32efb3042a2 100644
---- a/arch/m68k/coldfire/m5407.c
-+++ b/arch/m68k/coldfire/m5407.c
-@@ -10,6 +10,7 @@
- 
- /***************************************************************************/
- 
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -23,21 +24,15 @@
- 
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr0, "mcftmr.0", MCF_BUSCLK);
--DEFINE_CLK(mcftmr1, "mcftmr.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c0, "imx1-i2c.0", MCF_BUSCLK);
- 
--struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcftmr0,
--	&clk_mcftmr1,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfi2c0,
--	NULL
-+static struct clk_lookup m5407_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcftmr.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcftmr.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
- };
- 
- /***************************************************************************/
-@@ -63,6 +58,8 @@ void __init config_BSP(char *commandp, int size)
- 	mcf_mapirq2imr(29, MCFINTC_EINT5);
- 	mcf_mapirq2imr(31, MCFINTC_EINT7);
- 	m5407_i2c_init();
-+
-+	clkdev_add_table(m5407_clk_lookup, ARRAY_SIZE(m5407_clk_lookup));
- }
- 
- /***************************************************************************/
-diff --git a/arch/m68k/coldfire/m54xx.c b/arch/m68k/coldfire/m54xx.c
-index 360c723c0ae6..8e3c8fee8327 100644
---- a/arch/m68k/coldfire/m54xx.c
-+++ b/arch/m68k/coldfire/m54xx.c
-@@ -9,6 +9,7 @@
- 
- /***************************************************************************/
- 
-+#include <linux/clkdev.h>
- #include <linux/kernel.h>
- #include <linux/param.h>
- #include <linux/init.h>
-@@ -32,25 +33,17 @@
- 
- DEFINE_CLK(pll, "pll.0", MCF_CLK);
- DEFINE_CLK(sys, "sys.0", MCF_BUSCLK);
--DEFINE_CLK(mcfslt0, "mcfslt.0", MCF_BUSCLK);
--DEFINE_CLK(mcfslt1, "mcfslt.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart0, "mcfuart.0", MCF_BUSCLK);
--DEFINE_CLK(mcfuart1, "mcfuart.1", MCF_BUSCLK);
--DEFINE_CLK(mcfuart2, "mcfuart.2", MCF_BUSCLK);
--DEFINE_CLK(mcfuart3, "mcfuart.3", MCF_BUSCLK);
--DEFINE_CLK(mcfi2c0, "imx1-i2c.0", MCF_BUSCLK);
--
--struct clk *mcf_clks[] = {
--	&clk_pll,
--	&clk_sys,
--	&clk_mcfslt0,
--	&clk_mcfslt1,
--	&clk_mcfuart0,
--	&clk_mcfuart1,
--	&clk_mcfuart2,
--	&clk_mcfuart3,
--	&clk_mcfi2c0,
--	NULL
-+
-+static struct clk_lookup m54xx_clk_lookup[] = {
-+	CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-+	CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-+	CLKDEV_INIT("mcfslt.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfslt.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.2", NULL, &clk_sys),
-+	CLKDEV_INIT("mcfuart.3", NULL, &clk_sys),
-+	CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
- };
- 
- /***************************************************************************/
-@@ -100,6 +93,8 @@ void __init config_BSP(char *commandp, int size)
- 	mach_sched_init = hw_timer_init;
- 	m54xx_uarts_init();
- 	m54xx_i2c_init();
-+
-+	clkdev_add_table(m54xx_clk_lookup, ARRAY_SIZE(m54xx_clk_lookup));
- }
- 
- /***************************************************************************/
+ #define DEFINE_CLK(clk_bank, clk_name, clk_slot, clk_rate) \
+ static struct clk __clk_##clk_bank##_##clk_slot = { \
+-	.name = clk_name, \
+ 	.clk_ops = &clk_ops##clk_bank, \
+ 	.rate = clk_rate, \
+ 	.slot = clk_slot, \
+@@ -45,7 +41,6 @@ void __clk_init_disabled(struct clk *);
+ #else
+ #define DEFINE_CLK(clk_ref, clk_name, clk_rate) \
+         static struct clk clk_##clk_ref = { \
+-                .name = clk_name, \
+                 .rate = clk_rate, \
+         }
+ #endif /* MCFPM_PPMCR0 */
 -- 
 2.29.2
 
