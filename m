@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 953AF396821
-	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7936B396823
+	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbhEaSvJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 May 2021 14:51:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40040 "EHLO mail.kernel.org"
+        id S230424AbhEaSvR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 May 2021 14:51:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40082 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231228AbhEaSvI (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 31 May 2021 14:51:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 33BF46128A;
-        Mon, 31 May 2021 18:49:25 +0000 (UTC)
+        id S230439AbhEaSvM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 31 May 2021 14:51:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D9C956127C;
+        Mon, 31 May 2021 18:49:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622486968;
-        bh=mIYhxJIp0tEQnItbiI+2e4XQ9Cn2lxzgUpiDhFxG/W8=;
+        s=k20201202; t=1622486972;
+        bh=bWlqfBY4H7dnMT6+o3IWxYiXTD9T9L6bekH/c2DVyUA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tk8GL/t+n473EOHe7gZaO9kys/5AiuY20abuQ93uGJ7M+ctmoYaGqlawxZXLs4MS/
-         GyTP3LUb2f4u1aFvW4HihsjxeYFJKk10kl0TvbTfisZj1PCHTAadrqsWSCpif4WQwh
-         wLoYcjdTCGIfjj2JtORfv49htmS1M3bYUunDunMrorUjIv8kgF1Owv/I6GnpGMp9MR
-         s+ATmhlmxX+5c0VkUsPSFrfISlgLB7ZAi5hyFOxcglZpHc9lmfdHrIHJHZa/4nY/6p
-         9oH22WWTVPn4gk2A41eN3/ypgw5dGsY0xbhqHjs8Yh+TRzLxlA+hlgA6qCYbEhzbh+
-         EJGKnWTRuKwZA==
+        b=FIeZBgBSon6ajt6hwIw7PxBGMTA39GugiV+7rQvUPARa7/XhBJvY0yqTBJpOfvYF2
+         5AVBIAMZULxaoab7tZ/Eo2oIUAWGBxVx5q5pYQhfBECCAfnJXHky6r+yx1ZqP9setv
+         /sukv3FaIlhW5ntjQiVPzL247Cz0Xpd7f+6I63EQeZx7Nulcr1SATELJJtKGfNmgKu
+         O4dW4f/fW8AQKyaRGTpjfJbOVlh78o+ePaPffNpTt3bBd83p4INQyjTxw9NHkpsT5T
+         wH+yb9aH+DGV1QMMyCcSXB11MBnCY93mezGo7G+W3T1Em4hz6W0PsIrLW0sH/BPuYY
+         b04F4nxy64BdA==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-clk@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
@@ -37,9 +37,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
-Subject: [PATCH 2/7] mips: ar7: convert to CONFIG_COMMON_CLK
-Date:   Mon, 31 May 2021 20:47:44 +0200
-Message-Id: <20210531184749.2475868-3-arnd@kernel.org>
+Subject: [PATCH 3/7] mips: ralink: convert to CONFIG_COMMON_CLK
+Date:   Mon, 31 May 2021 20:47:45 +0200
+Message-Id: <20210531184749.2475868-4-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210531184749.2475868-1-arnd@kernel.org>
 References: <20210531184749.2475868-1-arnd@kernel.org>
@@ -51,128 +51,110 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Perform a minimal conversion of the ar7 clock implementation to the common
-clock framework. While the hardware can control the rates, this is left
-unchanged, and all clocks are registered as fixed-rate or fixed-divider
-clocks. Similarly, the clkdev lookup information is left unchanged but
-moved from the table format into individual allocations.
+ralink only has a very trivial clock implementation, with everything
+being fixed clocks.
 
-There is a small increase in code size:
+Convert it to CONFIG_COMMON_CLK to reduce the number of platforms
+that rely on legacy clocks. Of course, the clocks really should
+be read from the device tree instead, but this is a step into that
+direction.
+
+This adds about 50KB to the kernel image size, which is an unfortunate
+increase, but not as bad as I had feared:
 
    text	   data	    bss	    dec	    hex	filename
-4757116	 596640	  91328	5445084	 5315dc	vmlinux-before
-4806159	 602360	  91344	5499863	 53ebd7	vmlinux-after
+3778560	1582216	  92256	5453032	 5334e8	vmlinux-vocore-before
+3822148	1601192	  92304	5515644	 54297c	vmlinux-vocore-after
+3870226	1644468	 200192	5714886	 5733c6	vmlinux-rt305x-before
+3916727	1668404	 200240	5785371	 58471b	vmlinux-rt305x-after
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/mips/Kconfig                    |   3 +-
- arch/mips/ar7/clock.c                | 103 ++++++++-------------------
- arch/mips/include/asm/mach-ar7/ar7.h |   4 --
- 3 files changed, 29 insertions(+), 81 deletions(-)
+ arch/mips/Kconfig        |  1 +
+ arch/mips/ralink/Kconfig |  5 ----
+ arch/mips/ralink/clk.c   | 64 ++--------------------------------------
+ 3 files changed, 4 insertions(+), 66 deletions(-)
 
 diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 1cc03a7652a9..5dbc60adb2f0 100644
+index 5dbc60adb2f0..8fe6b30de7dd 100644
 --- a/arch/mips/Kconfig
 +++ b/arch/mips/Kconfig
-@@ -201,6 +201,7 @@ config MIPS_ALCHEMY
- config AR7
- 	bool "Texas Instruments AR7"
- 	select BOOT_ELF32
-+	select COMMON_CLK
- 	select DMA_NONCOHERENT
+@@ -630,6 +630,7 @@ config MACH_NINTENDO64
+ config RALINK
+ 	bool "Ralink based machines"
  	select CEVT_R4K
++	select COMMON_CLK
  	select CSRC_R4K
-@@ -215,8 +216,6 @@ config AR7
- 	select SYS_SUPPORTS_ZBOOT_UART16550
- 	select GPIOLIB
- 	select VLYNQ
--	select CLKDEV_LOOKUP
--	select HAVE_LEGACY_CLK
- 	help
- 	  Support for the Texas Instruments AR7 System-on-a-Chip
- 	  family: TNETD7100, 7200 and 7300.
-diff --git a/arch/mips/ar7/clock.c b/arch/mips/ar7/clock.c
-index c614f254f370..31455180ce63 100644
---- a/arch/mips/ar7/clock.c
-+++ b/arch/mips/ar7/clock.c
-@@ -15,7 +15,7 @@
- #include <linux/io.h>
- #include <linux/err.h>
+ 	select BOOT_RAW
+ 	select DMA_NONCOHERENT
+diff --git a/arch/mips/ralink/Kconfig b/arch/mips/ralink/Kconfig
+index ec4daa63c5e3..c800bf5559b5 100644
+--- a/arch/mips/ralink/Kconfig
++++ b/arch/mips/ralink/Kconfig
+@@ -28,22 +28,18 @@ choice
+ 		bool "RT288x"
+ 		select MIPS_AUTO_PFN_OFFSET
+ 		select MIPS_L1_CACHE_SHIFT_4
+-		select HAVE_LEGACY_CLK
+ 		select HAVE_PCI
+ 
+ 	config SOC_RT305X
+ 		bool "RT305x"
+-		select HAVE_LEGACY_CLK
+ 
+ 	config SOC_RT3883
+ 		bool "RT3883"
+-		select HAVE_LEGACY_CLK
+ 		select HAVE_PCI
+ 
+ 	config SOC_MT7620
+ 		bool "MT7620/8"
+ 		select CPU_MIPSR2_IRQ_VI
+-		select HAVE_LEGACY_CLK
+ 		select HAVE_PCI
+ 
+ 	config SOC_MT7621
+@@ -54,7 +50,6 @@ choice
+ 		select SYS_SUPPORTS_MIPS_CPS
+ 		select SYS_SUPPORTS_HIGHMEM
+ 		select MIPS_GIC
+-		select COMMON_CLK
+ 		select CLKSRC_MIPS_GIC
+ 		select HAVE_PCI if PCI_MT7621
+ 		select SOC_BUS
+diff --git a/arch/mips/ralink/clk.c b/arch/mips/ralink/clk.c
+index f0bcb1051c30..5b02bb7e0829 100644
+--- a/arch/mips/ralink/clk.c
++++ b/arch/mips/ralink/clk.c
+@@ -10,79 +10,21 @@
+ #include <linux/export.h>
+ #include <linux/clkdev.h>
  #include <linux/clk.h>
--#include <linux/clkdev.h>
 +#include <linux/clk-provider.h>
  
- #include <asm/addrspace.h>
- #include <asm/mach-ar7/ar7.h>
-@@ -86,17 +86,17 @@ struct tnetd7200_clocks {
- 	struct tnetd7200_clock usb;
- };
+ #include <asm/time.h>
  
--static struct clk bus_clk = {
-+struct clk_rate {
-+	u32 rate;
-+};
-+static struct clk_rate bus_clk = {
- 	.rate	= 125000000,
- };
+ #include "common.h"
  
--static struct clk cpu_clk = {
-+static struct clk_rate cpu_clk = {
- 	.rate	= 150000000,
- };
- 
--static struct clk dsp_clk;
--static struct clk vbus_clk;
+-struct clk {
+-	struct clk_lookup cl;
+-	unsigned long rate;
+-};
 -
- static void approximate(int base, int target, int *prediv,
- 			int *postdiv, int *mul)
+ void ralink_clk_add(const char *dev, unsigned long rate)
  {
-@@ -242,6 +242,8 @@ static void __init tnetd7300_init_clocks(void)
- 	struct tnetd7300_clocks *clocks =
- 					ioremap(UR8_REGS_CLOCKS,
- 					sizeof(struct tnetd7300_clocks));
-+	u32 dsp_clk;
-+	struct clk *clk;
+-	struct clk *clk = kzalloc(sizeof(struct clk), GFP_KERNEL);
++	struct clk *clk = clk_register_fixed_rate(NULL, dev, NULL, 0, rate);
  
- 	bus_clk.rate = tnetd7300_get_clock(BUS_PLL_SOURCE_SHIFT,
- 		&clocks->bus, bootcr, AR7_AFE_CLOCK);
-@@ -252,12 +254,18 @@ static void __init tnetd7300_init_clocks(void)
- 	else
- 		cpu_clk.rate = bus_clk.rate;
+ 	if (!clk)
+ 		panic("failed to add clock");
  
--	if (dsp_clk.rate == 250000000)
-+	dsp_clk = tnetd7300_dsp_clock();
-+	if (dsp_clk == 250000000)
- 		tnetd7300_set_clock(DSP_PLL_SOURCE_SHIFT, &clocks->dsp,
--			bootcr, dsp_clk.rate);
-+			bootcr, dsp_clk);
- 
- 	iounmap(clocks);
- 	iounmap(bootcr);
-+
-+	clk = clk_register_fixed_rate(NULL, "cpu", NULL, 0, cpu_clk.rate);
-+	clkdev_create(clk, "cpu", NULL);
-+	clk = clk_register_fixed_rate(NULL, "dsp", NULL, 0, dsp_clk);
-+	clkdev_create(clk, "dsp", NULL);
- }
- 
- static void tnetd7200_set_clock(int base, struct tnetd7200_clock *clock,
-@@ -329,6 +337,7 @@ static void __init tnetd7200_init_clocks(void)
- 	int cpu_base, cpu_mul, cpu_prediv, cpu_postdiv;
- 	int dsp_base, dsp_mul, dsp_prediv, dsp_postdiv;
- 	int usb_base, usb_mul, usb_prediv, usb_postdiv;
-+	struct clk *clk;
- 
- 	cpu_base = tnetd7200_get_clock_base(TNETD7200_CLOCK_ID_CPU, bootcr);
- 	dsp_base = tnetd7200_get_clock_base(TNETD7200_CLOCK_ID_DSP, bootcr);
-@@ -397,90 +406,34 @@ static void __init tnetd7200_init_clocks(void)
- 		usb_prediv, usb_postdiv, -1, usb_mul,
- 		TNETD7200_DEF_USB_CLK);
- 
--	dsp_clk.rate = cpu_clk.rate;
+-	clk->cl.dev_id = dev;
+-	clk->cl.clk = clk;
 -
- 	iounmap(clocks);
- 	iounmap(bootcr);
+-	clk->rate = rate;
+-
+-	clkdev_add(&clk->cl);
 -}
 -
 -/*
@@ -182,106 +164,51 @@ index c614f254f370..31455180ce63 100644
 -{
 -	return 0;
 -}
--EXPORT_SYMBOL(clk_enable);
+-EXPORT_SYMBOL_GPL(clk_enable);
 -
 -void clk_disable(struct clk *clk)
 -{
 -}
--EXPORT_SYMBOL(clk_disable);
+-EXPORT_SYMBOL_GPL(clk_disable);
 -
 -unsigned long clk_get_rate(struct clk *clk)
 -{
 -	if (!clk)
 -		return 0;
- 
+-
 -	return clk->rate;
-+	clk = clk_register_fixed_rate(NULL, "cpu", NULL, 0, cpu_clk.rate);
-+	clkdev_create(clk, "cpu", NULL);
-+	clkdev_create(clk, "dsp", NULL);
- }
--EXPORT_SYMBOL(clk_get_rate);
--
--static struct clk_lookup ar7_clkdev_table[] = {
--	CLKDEV_INIT(NULL, "bus", &bus_clk),
--	/* cpmac and vbus share the same rate */
--	CLKDEV_INIT("cpmac.0", "cpmac", &vbus_clk),
--	CLKDEV_INIT("cpmac.1", "cpmac", &vbus_clk),
--	CLKDEV_INIT(NULL, "cpu", &cpu_clk),
--	CLKDEV_INIT(NULL, "dsp", &dsp_clk),
--	CLKDEV_INIT(NULL, "vbus", &vbus_clk),
--};
- 
- void __init ar7_init_clocks(void)
- {
-+	struct clk *clk;
-+
- 	switch (ar7_chip_id()) {
- 	case AR7_CHIP_7100:
- 	case AR7_CHIP_7200:
- 		tnetd7200_init_clocks();
- 		break;
- 	case AR7_CHIP_7300:
--		dsp_clk.rate = tnetd7300_dsp_clock();
- 		tnetd7300_init_clocks();
- 		break;
- 	default:
- 		break;
- 	}
-+	clk = clk_register_fixed_rate(NULL, "bus", NULL, 0, bus_clk.rate);
-+	clkdev_create(clk, "bus", NULL);
- 	/* adjust vbus clock rate */
--	vbus_clk.rate = bus_clk.rate / 2;
--
--	clkdev_add_table(ar7_clkdev_table, ARRAY_SIZE(ar7_clkdev_table));
 -}
--
--/* dummy functions, should not be called */
--long clk_round_rate(struct clk *clk, unsigned long rate)
--{
--	WARN_ON(clk);
--	return 0;
--}
--EXPORT_SYMBOL(clk_round_rate);
+-EXPORT_SYMBOL_GPL(clk_get_rate);
 -
 -int clk_set_rate(struct clk *clk, unsigned long rate)
 -{
--	WARN_ON(clk);
--	return 0;
+-	return -1;
 -}
--EXPORT_SYMBOL(clk_set_rate);
+-EXPORT_SYMBOL_GPL(clk_set_rate);
+-
+-long clk_round_rate(struct clk *clk, unsigned long rate)
+-{
+-	return -1;
+-}
+-EXPORT_SYMBOL_GPL(clk_round_rate);
 -
 -int clk_set_parent(struct clk *clk, struct clk *parent)
 -{
 -	WARN_ON(clk);
--	return 0;
+-	return -1;
 -}
--EXPORT_SYMBOL(clk_set_parent);
+-EXPORT_SYMBOL_GPL(clk_set_parent);
 -
 -struct clk *clk_get_parent(struct clk *clk)
 -{
 -	WARN_ON(clk);
 -	return NULL;
-+	clk = clk_register_fixed_factor(NULL, "vbus", "bus", 0, 1, 2);
-+	clkdev_create(clk, "vbus", NULL);
-+	clkdev_create(clk, "cpmac", "cpmac.1");
-+	clkdev_create(clk, "cpmac", "cpmac.1");
++	clkdev_create(clk, NULL, "%s", dev);
  }
--EXPORT_SYMBOL(clk_get_parent);
-diff --git a/arch/mips/include/asm/mach-ar7/ar7.h b/arch/mips/include/asm/mach-ar7/ar7.h
-index dd09c3bf0601..cbe75ade3277 100644
---- a/arch/mips/include/asm/mach-ar7/ar7.h
-+++ b/arch/mips/include/asm/mach-ar7/ar7.h
-@@ -131,10 +131,6 @@ static inline u8 ar7_chip_rev(void)
- 		0x14))) >> 16) & 0xff;
- }
+-EXPORT_SYMBOL_GPL(clk_get_parent);
  
--struct clk {
--	unsigned int	rate;
--};
--
- static inline int ar7_has_high_cpmac(void)
+ void __init plat_time_init(void)
  {
- 	u16 chip_id = ar7_chip_id();
 -- 
 2.29.2
 
