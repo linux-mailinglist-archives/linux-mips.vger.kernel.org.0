@@ -2,37 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F6F395CF1
-	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 15:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBB2395CEF
+	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 15:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbhEaNkS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 May 2021 09:40:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44426 "EHLO mail.kernel.org"
+        id S232227AbhEaNkO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 May 2021 09:40:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44432 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232583AbhEaNhy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 31 May 2021 09:37:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 13C4161450;
-        Mon, 31 May 2021 13:26:23 +0000 (UTC)
+        id S232251AbhEaNhv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 31 May 2021 09:37:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B515A61406;
+        Mon, 31 May 2021 13:26:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1622467584;
-        bh=AGDQ7EhDEKWLNEGK3KULBHI5AROZPAykwWkmLbXLINI=;
+        s=korg; t=1622467587;
+        bh=lLdB2C7FvsBE8EVewfRYKHQ7yxsd5rLBd+AkuN39X6Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QuttTQYd8luIeR0wvgM9NfKKCUJ8DkICIE8TTU/JvBVupJcedMxarWggkd7fS/K9G
-         5b/hPyMoTPKT6u7JSaLkGbDlASXI09RtBVwGsuPz8m/AEmpgN1rsNGjT3sB9pNTwig
-         tFId7EMBvDnH4wUB0PdSGki7wYMOWBU3P0s8/JbQ=
+        b=UWsp/e6YXL4U9KcaAFAGXzZkC/1CoSLhZfXijiu9uAgufSWm/gNfTzOYJvyZNDpUf
+         fgDE8il/o6O/xIaxv4qpAgcMO1iGYh7eciW0usapaZkIVjb6LblsuhUiPEwHWszbre
+         AHZ0PEK8kzmW0oAVsB0Aj+H5NtPMUk4ubla+LXkI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@iguana.be>,
+        John Crispin <john@phrozen.org>, linux-mips@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Manuel Lauss <manuel.lauss@googlemail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Manuel Lauss <manuel.lauss@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 111/116] MIPS: alchemy: xxs1500: add gpio-au1000.h header file
-Date:   Mon, 31 May 2021 15:14:47 +0200
-Message-Id: <20210531130643.878727518@linuxfoundation.org>
+Subject: [PATCH 4.19 112/116] MIPS: ralink: export rt_sysc_membase for rt2880_wdt.c
+Date:   Mon, 31 May 2021 15:14:48 +0200
+Message-Id: <20210531130643.911662126@linuxfoundation.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210531130640.131924542@linuxfoundation.org>
 References: <20210531130640.131924542@linuxfoundation.org>
@@ -46,42 +46,49 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit ff4cff962a7eedc73e54b5096693da7f86c61346 ]
+[ Upstream commit fef532ea0cd871afab7d9a7b6e9da99ac2c24371 ]
 
-board-xxs1500.c references 2 functions without declaring them, so add
-the header file to placate the build.
+rt2880_wdt.c uses (well, attempts to use) rt_sysc_membase. However,
+when this watchdog driver is built as a loadable module, there is a
+build error since the rt_sysc_membase symbol is not exported.
+Export it to quell the build error.
 
-../arch/mips/alchemy/board-xxs1500.c: In function 'board_setup':
-../arch/mips/alchemy/board-xxs1500.c:56:2: error: implicit declaration of function 'alchemy_gpio1_input_enable' [-Werror=implicit-function-declaration]
-   56 |  alchemy_gpio1_input_enable();
-../arch/mips/alchemy/board-xxs1500.c:57:2: error: implicit declaration of function 'alchemy_gpio2_enable'; did you mean 'alchemy_uart_enable'? [-Werror=implicit-function-declaration]
-   57 |  alchemy_gpio2_enable();
+ERROR: modpost: "rt_sysc_membase" [drivers/watchdog/rt2880_wdt.ko] undefined!
 
-Fixes: 8e026910fcd4 ("MIPS: Alchemy: merge GPR/MTX-1/XXS1500 board code into single files")
+Fixes: 473cf939ff34 ("watchdog: add ralink watchdog driver")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Wim Van Sebroeck <wim@iguana.be>
+Cc: John Crispin <john@phrozen.org>
 Cc: linux-mips@vger.kernel.org
-Cc: Manuel Lauss <manuel.lauss@googlemail.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
+Cc: linux-watchdog@vger.kernel.org
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/alchemy/board-xxs1500.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/ralink/of.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/mips/alchemy/board-xxs1500.c b/arch/mips/alchemy/board-xxs1500.c
-index 5f05b8714385..b968cff5baa7 100644
---- a/arch/mips/alchemy/board-xxs1500.c
-+++ b/arch/mips/alchemy/board-xxs1500.c
-@@ -31,6 +31,7 @@
- #include <asm/reboot.h>
- #include <asm/setup.h>
- #include <asm/mach-au1x00/au1000.h>
-+#include <asm/mach-au1x00/gpio-au1000.h>
- #include <prom.h>
+diff --git a/arch/mips/ralink/of.c b/arch/mips/ralink/of.c
+index 1ada8492733b..92b3d4849996 100644
+--- a/arch/mips/ralink/of.c
++++ b/arch/mips/ralink/of.c
+@@ -10,6 +10,7 @@
  
- const char *get_system_type(void)
+ #include <linux/io.h>
+ #include <linux/clk.h>
++#include <linux/export.h>
+ #include <linux/init.h>
+ #include <linux/sizes.h>
+ #include <linux/of_fdt.h>
+@@ -27,6 +28,7 @@
+ 
+ __iomem void *rt_sysc_membase;
+ __iomem void *rt_memc_membase;
++EXPORT_SYMBOL_GPL(rt_sysc_membase);
+ 
+ __iomem void *plat_of_remap_node(const char *node)
+ {
 -- 
 2.30.2
 
