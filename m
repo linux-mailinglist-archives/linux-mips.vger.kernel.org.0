@@ -2,91 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 910B8396AA5
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Jun 2021 03:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E087396BA9
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Jun 2021 04:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbhFABmG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 May 2021 21:42:06 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:3309 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbhFABmG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 May 2021 21:42:06 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4FvF986B4rz1BFXw;
-        Tue,  1 Jun 2021 09:35:40 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 1 Jun 2021 09:40:21 +0800
-Received: from [127.0.0.1] (10.174.177.72) by dggpemm500006.china.huawei.com
- (7.185.36.236) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 1 Jun 2021
- 09:40:20 +0800
-Subject: Re: [PATCH v2 3/3] edac: Use 'ret' instead of 'res' to store the
- return value
-To:     Borislav Petkov <bp@alien8.de>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Johannes Thumshirn <morbidrsa@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jan Luebbe <jlu@pengutronix.de>,
-        Andre Przywara <andre.przywara@arm.com>,
-        "Channagoud Kadabi" <ckadabi@codeaurora.org>,
-        Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        York Sun <york.sun@nxp.com>,
-        linux-edac <linux-edac@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20210531145302.9655-1-thunder.leizhen@huawei.com>
- <20210531145302.9655-4-thunder.leizhen@huawei.com> <YLT5Y+FRhUWWszOq@zn.tnic>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <4f96d85f-a7a6-531b-a032-a04e51a218cc@huawei.com>
-Date:   Tue, 1 Jun 2021 09:40:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S232268AbhFAC6L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 May 2021 22:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232515AbhFAC6J (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 May 2021 22:58:09 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9B3C061574;
+        Mon, 31 May 2021 19:56:27 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4FvGy61k79z9sWF;
+        Tue,  1 Jun 2021 12:56:13 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1622516184;
+        bh=iY7MeF5kJVTgb76PGSIe64N6mVxLFvLQ+P911N0MgIM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mgyJJS7Mpwj0xHxjTQUJCbxWXBqEpx7u6kJmlJrory1kepRlcJMq86u8b7CRC0TBx
+         2eKAPApa1yyT+8Bx3Nq7xXqq+U0aoxEZ+zVk8LZNufbS19MjY54JklUeikWPo3saVu
+         rZYPlntAMlPhhFnF6Z4PsS/40mD9BayKN5dAP0deDvSFY91SZJGkqyvQLfTKpVKAj7
+         nHaMrjkuyFLjQPzypNJGHxewO6DV/mxxi6HJjuKa/Hbn4YkWBejjdidjhax1ODsJHB
+         2xtaQQzhaLoYsK439xsAx0/uvUVbRJkkNCZEwtolQgis+ZjvEfMSx7TFq4rv4vlYtC
+         mKEDQ5CYN2DQw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-mm@kvack.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH v2] mm: generalize ZONE_[DMA|DMA32]
+In-Reply-To: <20210528074557.17768-1-wangkefeng.wang@huawei.com>
+References: <20210527143047.123611-1-wangkefeng.wang@huawei.com>
+ <20210528074557.17768-1-wangkefeng.wang@huawei.com>
+Date:   Tue, 01 Jun 2021 12:56:10 +1000
+Message-ID: <87k0negunp.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-In-Reply-To: <YLT5Y+FRhUWWszOq@zn.tnic>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.72]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Kefeng Wang <wangkefeng.wang@huawei.com> writes:
+> ZONE_[DMA|DMA32] configs have duplicate definitions on platforms
+> that subscribe them. Instead, just make them generic options which
+> can be selected on applicable platforms.
+>
+> Also only x86/arm64 architectures could enable both ZONE_DMA and
+> ZONE_DMA32 if EXPERT, add ARCH_HAS_ZONE_DMA_SET to make dma zone
+> configurable and visible on the two architectures.
+>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Richard Henderson <rth@twiddle.net>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com> # for arm64
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # for m68k
+> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+> v2:
+> -i386 can't enable ZONE_DMA32, fix it.
+> -make ZONE_DMA default y on X86 as before.
+> -collect ACKs
+>
+>  arch/alpha/Kconfig                     |  5 +----
+>  arch/arm/Kconfig                       |  3 ---
+>  arch/arm64/Kconfig                     |  9 +--------
+>  arch/ia64/Kconfig                      |  4 +---
+>  arch/m68k/Kconfig                      |  5 +----
+>  arch/microblaze/Kconfig                |  4 +---
+>  arch/mips/Kconfig                      |  7 -------
+>  arch/powerpc/Kconfig                   |  4 ----
+>  arch/powerpc/platforms/Kconfig.cputype |  1 +
 
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-On 2021/5/31 22:57, Borislav Petkov wrote:
-> On Mon, May 31, 2021 at 10:53:02PM +0800, Zhen Lei wrote:
->> Usually 'ret' or 'rc' is used as the abbreviation for 'return code', and
->> 'res' is used as the abbreviation for 'resource'.
-> 
-> Or "result."
-
-https://www.allacronyms.com/result/abbreviated
-
-It seems 'res' is the right abbreviation for 'result'. But since people see 'res',
-it's easier to associate 'resource', it's probably better to use it sparingly.
-And it seems that 'ret' and 'rc' are used more frequently.
-
-However, the greens and radishes have their own love. So I'm fine with ignoring
-this patch.
-
-> 
-> Please refrain from doing pointless patches like that - it is a totally
-> unnecessary churn.
-
-OK
-
-> 
-
+cheers
