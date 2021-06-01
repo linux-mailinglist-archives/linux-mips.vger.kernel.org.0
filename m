@@ -2,124 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA82A39682A
-	for <lists+linux-mips@lfdr.de>; Mon, 31 May 2021 20:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910B8396AA5
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Jun 2021 03:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbhEaSvd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 May 2021 14:51:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40228 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230523AbhEaSv1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 31 May 2021 14:51:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9DF596135C;
-        Mon, 31 May 2021 18:49:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622486986;
-        bh=LuPsBIFhxgd/n8nHsszgAmLqq7folE7IErl+jaDcRN8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fcp6c+wZo5wEr710/B2ayV2ajI/zLr+FjkaCm6Mf1S4AqqJWj62k9nfTBcsUjp0KU
-         K6IuUxOMbzlfA9/+4DED2VF7ciCjTe2yel6zir9R0NLY2KrkUw9k+cx1iJjYwsXkZH
-         uQLxp5m/nADmnU8AnrcbeGKxB8TkgjX3wdJ5ikQdzVxwWnTwSIvfs7TWGlsDMjYkv0
-         3S4MKwXHBBpeTKQMsau34FJXuNTh4KpFwpVHZY5EQIoWc9JkOrCraESIeIJSIRBSVg
-         xQlc9x4/KOL8BYZjQZco9HJ0pMIC6zCanrFgBs4BQyNX8vJDIf3C8ntY5y0isRpuA5
-         lCd768WIJ/Z7w==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-clk@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
-        Florian Fainelli <florian@openwrt.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        John Crispin <john@phrozen.org>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
-Subject: [PATCH 7/7] clkdev: remove unused clkdev_alloc() interfaces
-Date:   Mon, 31 May 2021 20:47:49 +0200
-Message-Id: <20210531184749.2475868-8-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210531184749.2475868-1-arnd@kernel.org>
-References: <20210531184749.2475868-1-arnd@kernel.org>
+        id S232505AbhFABmG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 May 2021 21:42:06 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:3309 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232207AbhFABmG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 May 2021 21:42:06 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4FvF986B4rz1BFXw;
+        Tue,  1 Jun 2021 09:35:40 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 1 Jun 2021 09:40:21 +0800
+Received: from [127.0.0.1] (10.174.177.72) by dggpemm500006.china.huawei.com
+ (7.185.36.236) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Tue, 1 Jun 2021
+ 09:40:20 +0800
+Subject: Re: [PATCH v2 3/3] edac: Use 'ret' instead of 'res' to store the
+ return value
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jan Luebbe <jlu@pengutronix.de>,
+        Andre Przywara <andre.przywara@arm.com>,
+        "Channagoud Kadabi" <ckadabi@codeaurora.org>,
+        Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        York Sun <york.sun@nxp.com>,
+        linux-edac <linux-edac@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20210531145302.9655-1-thunder.leizhen@huawei.com>
+ <20210531145302.9655-4-thunder.leizhen@huawei.com> <YLT5Y+FRhUWWszOq@zn.tnic>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <4f96d85f-a7a6-531b-a032-a04e51a218cc@huawei.com>
+Date:   Tue, 1 Jun 2021 09:40:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YLT5Y+FRhUWWszOq@zn.tnic>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.72]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-The last user of clkdev_alloc() and clkdev_hw_alloc() was
-removed last year, so everything now calls clkdev_create()
-and clkdev_hw_create() instead.
 
-Removing the unused functions lets the compiler optimize
-the remaining ones slightly better.
+On 2021/5/31 22:57, Borislav Petkov wrote:
+> On Mon, May 31, 2021 at 10:53:02PM +0800, Zhen Lei wrote:
+>> Usually 'ret' or 'rc' is used as the abbreviation for 'return code', and
+>> 'res' is used as the abbreviation for 'resource'.
+> 
+> Or "result."
 
-Fixes: e5006671acc7 ("clk: versatile: Drop the legacy IM-PD1 clock code")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/clk/clkdev.c   | 28 ----------------------------
- include/linux/clkdev.h |  5 -----
- 2 files changed, 33 deletions(-)
+https://www.allacronyms.com/result/abbreviated
 
-diff --git a/drivers/clk/clkdev.c b/drivers/clk/clkdev.c
-index 0f2e3fcf0f19..67f601a41023 100644
---- a/drivers/clk/clkdev.c
-+++ b/drivers/clk/clkdev.c
-@@ -190,34 +190,6 @@ vclkdev_create(struct clk_hw *hw, const char *con_id, const char *dev_fmt,
- 	return cl;
- }
- 
--struct clk_lookup * __ref
--clkdev_alloc(struct clk *clk, const char *con_id, const char *dev_fmt, ...)
--{
--	struct clk_lookup *cl;
--	va_list ap;
--
--	va_start(ap, dev_fmt);
--	cl = vclkdev_alloc(__clk_get_hw(clk), con_id, dev_fmt, ap);
--	va_end(ap);
--
--	return cl;
--}
--EXPORT_SYMBOL(clkdev_alloc);
--
--struct clk_lookup *
--clkdev_hw_alloc(struct clk_hw *hw, const char *con_id, const char *dev_fmt, ...)
--{
--	struct clk_lookup *cl;
--	va_list ap;
--
--	va_start(ap, dev_fmt);
--	cl = vclkdev_alloc(hw, con_id, dev_fmt, ap);
--	va_end(ap);
--
--	return cl;
--}
--EXPORT_SYMBOL(clkdev_hw_alloc);
--
- /**
-  * clkdev_create - allocate and add a clkdev lookup structure
-  * @clk: struct clk to associate with all clk_lookups
-diff --git a/include/linux/clkdev.h b/include/linux/clkdev.h
-index fd06b2780a22..8a8423eb8e9a 100644
---- a/include/linux/clkdev.h
-+++ b/include/linux/clkdev.h
-@@ -30,11 +30,6 @@ struct clk_lookup {
- 		.clk = c,	\
- 	}
- 
--struct clk_lookup *clkdev_alloc(struct clk *clk, const char *con_id,
--	const char *dev_fmt, ...) __printf(3, 4);
--struct clk_lookup *clkdev_hw_alloc(struct clk_hw *hw, const char *con_id,
--	const char *dev_fmt, ...) __printf(3, 4);
--
- void clkdev_add(struct clk_lookup *cl);
- void clkdev_drop(struct clk_lookup *cl);
- 
--- 
-2.29.2
+It seems 'res' is the right abbreviation for 'result'. But since people see 'res',
+it's easier to associate 'resource', it's probably better to use it sparingly.
+And it seems that 'ret' and 'rc' are used more frequently.
+
+However, the greens and radishes have their own love. So I'm fine with ignoring
+this patch.
+
+> 
+> Please refrain from doing pointless patches like that - it is a totally
+> unnecessary churn.
+
+OK
+
+> 
 
