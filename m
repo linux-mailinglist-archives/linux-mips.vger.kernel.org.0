@@ -2,101 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1213974A8
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Jun 2021 15:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296F439750F
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Jun 2021 16:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbhFAN4A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Jun 2021 09:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbhFAN4A (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Jun 2021 09:56:00 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B468FC061574;
-        Tue,  1 Jun 2021 06:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=7XhK7llXjchxp+a7TIgBxmkimmZHUZAa+hOWlZXnwvg=; b=KncBS8kthwg3/xy/MOY43kE0h
-        GeNUvPLx3dDFs6+dHwh1EQOBgZeQ5IT1d6n3R/Tb9lm/DMGylf0lUWUfHQgt2DqU57BKJrjGLuvI7
-        /vG8ZR1O/gMBxZmdlgxD7Q/TaSqixgY9cAfRnSEnXeV0PUNFEG3eNEL+1XBwizX7EYHRMzqQ43K/N
-        CZ1f/ezxnSUS0YZXKaQIkgAlYsa3pzKPIqcnNjV3ovUf2LlvfMC3e4VdVzEcyf/0G8HWTl+HqgSjn
-        IlpWwBowpE8lGcsTYVuz8eRYavqP0MF5t6cOubxsRlbYL2kfbZW4Aswfj/WFcqA+RlCKRKpGB+Sza
-        FTmWKOfNA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:44578)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1lo4qW-0004A2-Hm; Tue, 01 Jun 2021 14:54:16 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1lo4qV-0000Al-MC; Tue, 01 Jun 2021 14:54:15 +0100
-Date:   Tue, 1 Jun 2021 14:54:15 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org
-Subject: Re: [RFC/RFT PATCH 2/5] memblock: introduce generic
- memblock_setup_resources()
-Message-ID: <20210601135415.GZ30436@shell.armlinux.org.uk>
-References: <20210531122959.23499-1-rppt@kernel.org>
- <20210531122959.23499-3-rppt@kernel.org>
+        id S234331AbhFAOJe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Jun 2021 10:09:34 -0400
+Received: from out28-73.mail.aliyun.com ([115.124.28.73]:59720 "EHLO
+        out28-73.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234188AbhFAOJc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Jun 2021 10:09:32 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1111761|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.432646-0.00042108-0.566933;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047208;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.KM.eRxy_1622556466;
+Received: from 192.168.0.103(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KM.eRxy_1622556466)
+          by smtp.aliyun-inc.com(10.147.41.121);
+          Tue, 01 Jun 2021 22:07:47 +0800
+Subject: Re: [PATCH v2 4/6] clk: ingenic: Remove pll_info.no_bypass_bit
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        list@opendingux.net
+References: <20210530164923.18134-1-paul@crapouillou.net>
+ <20210530164923.18134-5-paul@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <dd9a3581-1391-962e-c5b3-e8bed90f3087@wanyeetech.com>
+Date:   Tue, 1 Jun 2021 22:07:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210531122959.23499-3-rppt@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20210530164923.18134-5-paul@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, May 31, 2021 at 03:29:56PM +0300, Mike Rapoport wrote:
-> +	code_resource.start = __pa_symbol(_text);
-> +	code_resource.end = __pa_symbol(_etext)-1;
-> +	rodata_resource.start = __pa_symbol(__start_rodata);
-> +	rodata_resource.end = __pa_symbol(__end_rodata)-1;
-> +	data_resource.start = __pa_symbol(_sdata);
-> +	data_resource.end = __pa_symbol(_edata)-1;
-> +	bss_resource.start = __pa_symbol(__bss_start);
-> +	bss_resource.end = __pa_symbol(__bss_stop)-1;
 
-This falls short on 32-bit ARM. The old code was:
+On 2021/5/31 上午12:49, Paul Cercueil wrote:
+> We can express that a PLL has no bypass bit by simply setting the
+> .bypass_bit field to a negative value.
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>   drivers/clk/ingenic/cgu.c        | 4 ++--
+>   drivers/clk/ingenic/cgu.h        | 7 +++----
+>   drivers/clk/ingenic/jz4770-cgu.c | 3 +--
+>   3 files changed, 6 insertions(+), 8 deletions(-)
 
--       kernel_code.start   = virt_to_phys(_text);
--       kernel_code.end     = virt_to_phys(__init_begin - 1);
--       kernel_data.start   = virt_to_phys(_sdata);                             
--       kernel_data.end     = virt_to_phys(_end - 1);                           
 
-If I look at one of my kernels:
+Tested-by: 周琰杰 (Zhou Yanjie)<zhouyanjie@wanyeetech.com>    # on CU1830-neo/X1830
 
-c0008000 T _text
-c0b5b000 R __end_rodata
-... exception and unwind tables live here ...
-c0c00000 T __init_begin
-c0e00000 D _sdata
-c0e68870 D _edata
-c0e68870 B __bss_start
-c0e995d4 B __bss_stop
-c0e995d4 B _end
 
-So the original covers _text..__init_begin-1 which includes the
-exception and unwind tables. Your version above omits these, which
-leaves them exposed.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+>
+> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
+> index 7686072aff8f..58f7ab5cf0fe 100644
+> --- a/drivers/clk/ingenic/cgu.c
+> +++ b/drivers/clk/ingenic/cgu.c
+> @@ -99,7 +99,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+>   	od_enc = ctl >> pll_info->od_shift;
+>   	od_enc &= GENMASK(pll_info->od_bits - 1, 0);
+>   
+> -	if (!pll_info->no_bypass_bit) {
+> +	if (pll_info->bypass_bit >= 0) {
+>   		ctl = readl(cgu->base + pll_info->bypass_reg);
+>   
+>   		bypass = !!(ctl & BIT(pll_info->bypass_bit));
+> @@ -226,7 +226,7 @@ static int ingenic_pll_enable(struct clk_hw *hw)
+>   	u32 ctl;
+>   
+>   	spin_lock_irqsave(&cgu->lock, flags);
+> -	if (!pll_info->no_bypass_bit) {
+> +	if (pll_info->bypass_bit >= 0) {
+>   		ctl = readl(cgu->base + pll_info->bypass_reg);
+>   
+>   		ctl &= ~BIT(pll_info->bypass_bit);
+> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
+> index 44d97a259692..10521d1b7b12 100644
+> --- a/drivers/clk/ingenic/cgu.h
+> +++ b/drivers/clk/ingenic/cgu.h
+> @@ -39,10 +39,10 @@
+>    *               their encoded values in the PLL control register, or -1 for
+>    *               unsupported values
+>    * @bypass_reg: the offset of the bypass control register within the CGU
+> - * @bypass_bit: the index of the bypass bit in the PLL control register
+> + * @bypass_bit: the index of the bypass bit in the PLL control register, or
+> + *              -1 if there is no bypass bit
+>    * @enable_bit: the index of the enable bit in the PLL control register
+>    * @stable_bit: the index of the stable bit in the PLL control register
+> - * @no_bypass_bit: if set, the PLL has no bypass functionality
+>    */
+>   struct ingenic_cgu_pll_info {
+>   	unsigned reg;
+> @@ -52,10 +52,9 @@ struct ingenic_cgu_pll_info {
+>   	u8 n_shift, n_bits, n_offset;
+>   	u8 od_shift, od_bits, od_max;
+>   	unsigned bypass_reg;
+> -	u8 bypass_bit;
+> +	s8 bypass_bit;
+>   	u8 enable_bit;
+>   	u8 stable_bit;
+> -	bool no_bypass_bit;
+>   };
+>   
+>   /**
+> diff --git a/drivers/clk/ingenic/jz4770-cgu.c b/drivers/clk/ingenic/jz4770-cgu.c
+> index 381a27f20b51..2321742b3471 100644
+> --- a/drivers/clk/ingenic/jz4770-cgu.c
+> +++ b/drivers/clk/ingenic/jz4770-cgu.c
+> @@ -139,8 +139,7 @@ static const struct ingenic_cgu_clk_info jz4770_cgu_clocks[] = {
+>   			.od_bits = 2,
+>   			.od_max = 8,
+>   			.od_encoding = pll_od_encoding,
+> -			.bypass_reg = CGU_REG_CPPCR1,
+> -			.no_bypass_bit = true,
+> +			.bypass_bit = -1,
+>   			.enable_bit = 7,
+>   			.stable_bit = 6,
+>   		},
