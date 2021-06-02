@@ -2,446 +2,162 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7383989E1
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jun 2021 14:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8079D398B22
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jun 2021 15:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhFBMpt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Jun 2021 08:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhFBMps (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Jun 2021 08:45:48 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E36C061574;
-        Wed,  2 Jun 2021 05:44:06 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id i14-20020a9d624e0000b029033683c71999so2284781otk.5;
-        Wed, 02 Jun 2021 05:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MW8o4EIgVKG5AkNL8mgbNRCVVUkJWDWwo/k1KObUVqA=;
-        b=Y1U55xjwdfHNEis2rGe2ENfvs5hhYL0a5sPtCfj2ff+NGgKlaLHgKd98pn4BmhtjXG
-         m2dQaZpvB0lzD963bCY9ykHF++pbpa/PvGxCG4LRCEbSeMm3wYxnQH2p43cVRPgbQOq0
-         CJNn8jxtcwTjl0h5RFGSj4b9PufUjRQRyKFtwIKOZk1NaqwShjBGkf5GV+h8GKKicO0Y
-         kb7wj3IGvAxXvy2DyGdrMYJSeLnukgSwRofJDA0Fxo90L80pJl6454M6YMtmJKC78OTE
-         Xeq/0JTMNBVA+hkyxbIoSz+WrqzKujjlNLXIIqgVqGtuLxVITR+IXjnSYx+PBhRrLJfU
-         AD2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MW8o4EIgVKG5AkNL8mgbNRCVVUkJWDWwo/k1KObUVqA=;
-        b=gSstIzUj5zSEUMM7nyANFCVmF4qE+ob79p064r8IWeeDO01rjH6etA7FaW2a89BxG8
-         d1O//pA3nJNZhQuCQXiNeWNmtOkk7vJFaY5i9ZsdQVXAYpFZjID7qE0mTz/KJSMExbre
-         lM42lrBcl1drfcut/7sySqHuvuwkurwU3Og2Z9Qs/ojQdd6bhMBI8WqDZZQepRzrUH5N
-         QMvxF+/T1y1OB4hQkxUXxFgHlEbDXaaiCedF4e+wwc+iGOYWsfa88VC5/ieeu04mR7zy
-         w3KCZXbfsNkjkGV7f/FIg/GDCSk8Oy6KuzlSNBBuN91cHQc+i+Q50MjKnWP+95ZcK25X
-         BO3g==
-X-Gm-Message-State: AOAM533Sr6XZtHN0mfPjE3MFdwoKi7Z1ga6WvyAYNdpM2K6hHyCFos9k
-        N53jIl/JnGTp4OmISnPbxQjOfdXEAgMl/Up7fww=
-X-Google-Smtp-Source: ABdhPJw6vHEJd7VGoLXB6NyhLonTIXgEktNNQCsa50N618rAysR8pyXgGTPxJl10wQsk23Cwst2sXV5Mk2S8v9ugsgg=
-X-Received: by 2002:a9d:4f19:: with SMTP id d25mr138576otl.72.1622637845314;
- Wed, 02 Jun 2021 05:44:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210515124055.22225-1-sergio.paracuellos@gmail.com>
- <20210515124055.22225-3-sergio.paracuellos@gmail.com> <20210531131431.bzsvmefqdyawmeo2@pali>
- <CAMhs-H80=7jctPT70rOmcwcqPw+9iUF84_ZCgGr-TKwJ4eB2Lg@mail.gmail.com>
- <20210531135041.42ovpmbwuc3yfkaw@pali> <CAMhs-H_fR5aXJ=diTm-2yhgjjv9S6N6jA-DOZ0K_BnQ4UHHh3Q@mail.gmail.com>
- <CAMhs-H8EwQDvZtzpPn2u_WOWt1wcixOvz5nVZP2miM6j0+P7EA@mail.gmail.com> <20210602122337.fxwaikulbawwkc2j@pali>
-In-Reply-To: <20210602122337.fxwaikulbawwkc2j@pali>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 2 Jun 2021 14:43:53 +0200
-Message-ID: <CAMhs-H8Gr=ObgMZAZ9VuNqHX4TaKQPPGNNMY4pzh9o=3EbAgUQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] MIPS: pci: Add driver for MT7621 PCIe controller
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        id S229607AbhFBN4w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Jun 2021 09:56:52 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49130 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229590AbhFBN4v (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Jun 2021 09:56:51 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 152DaiWL008290;
+        Wed, 2 Jun 2021 09:54:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=WmZjR7l62AhdoDS2RktXANR5nkORtTOgYHzx6ctUV/Q=;
+ b=kG0JKv/BHTALc3tO3r5A13m7Xay13WCPa+NOcKGpk/mbNx8wNgZstAb6Z3Onmy/APSoU
+ LJ0SuNz2jdsq1g3ymHLVt3CerXwq1O6IrUOSr1Sc2GTdvhbETJGoz+NyVNM2UQZHOu0r
+ WPy+mmVUbcD0gZXWHuX3Fa0D20m+v0SMLU32Q1iYzhzyW/b/bmMuWKYcOqesOJRItgOF
+ mjogp2RwJG0aZyEGnrkOIiw7vEIS0BLdLEXkc95neVeDkt6MRBGJ5VhiQ5FD+JW8J9Z6
+ jbgRnB7EO9rLZ7ACN/kEweMvbYJapo72OaidBN4TUIu2ft6f0aYQP1VxwsLXrgoWsoyZ 1w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38x92dm0s1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Jun 2021 09:54:29 -0400
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 152Dcx18017122;
+        Wed, 2 Jun 2021 09:54:28 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 38x92dm0qe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Jun 2021 09:54:28 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 152Dlt2n024334;
+        Wed, 2 Jun 2021 13:54:25 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 38ud88acyf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Jun 2021 13:54:25 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 152DsNhj27853120
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Jun 2021 13:54:23 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F296711C05C;
+        Wed,  2 Jun 2021 13:54:22 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E020411C054;
+        Wed,  2 Jun 2021 13:54:19 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.77.40])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  2 Jun 2021 13:54:19 +0000 (GMT)
+Date:   Wed, 2 Jun 2021 16:54:17 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org
+Subject: Re: [RFC/RFT PATCH 2/5] memblock: introduce generic
+ memblock_setup_resources()
+Message-ID: <YLeNiUkIw+aFpMcz@linux.ibm.com>
+References: <20210531122959.23499-1-rppt@kernel.org>
+ <20210531122959.23499-3-rppt@kernel.org>
+ <20210601135415.GZ30436@shell.armlinux.org.uk>
+ <YLdCRoldZFYMZ0BG@linux.ibm.com>
+ <20210602101521.GD30436@shell.armlinux.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210602101521.GD30436@shell.armlinux.org.uk>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: J1pL7ClAT_QwidlIsJz58cbv6Fart2RR
+X-Proofpoint-ORIG-GUID: t-LdfegxWsAyi89ULkkDrRm0-GDDH0TW
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-02_07:2021-06-02,2021-06-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 mlxscore=0 malwarescore=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 clxscore=1015 suspectscore=0
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106020088
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Pali,
+On Wed, Jun 02, 2021 at 11:15:21AM +0100, Russell King (Oracle) wrote:
+> On Wed, Jun 02, 2021 at 11:33:10AM +0300, Mike Rapoport wrote:
+> > On Tue, Jun 01, 2021 at 02:54:15PM +0100, Russell King (Oracle) wrote:
+> > > On Mon, May 31, 2021 at 03:29:56PM +0300, Mike Rapoport wrote:
+> > > > +	code_resource.start = __pa_symbol(_text);
+> > > > +	code_resource.end = __pa_symbol(_etext)-1;
+> > > > +	rodata_resource.start = __pa_symbol(__start_rodata);
+> > > > +	rodata_resource.end = __pa_symbol(__end_rodata)-1;
+> > > > +	data_resource.start = __pa_symbol(_sdata);
+> > > > +	data_resource.end = __pa_symbol(_edata)-1;
+> > > > +	bss_resource.start = __pa_symbol(__bss_start);
+> > > > +	bss_resource.end = __pa_symbol(__bss_stop)-1;
+> > > 
+> > > This falls short on 32-bit ARM. The old code was:
+> > > 
+> > > -       kernel_code.start   = virt_to_phys(_text);
+> > > -       kernel_code.end     = virt_to_phys(__init_begin - 1);
+> > > -       kernel_data.start   = virt_to_phys(_sdata);                             
+> > > -       kernel_data.end     = virt_to_phys(_end - 1);                           
+> > > 
+> > > If I look at one of my kernels:
+> > > 
+> > > c0008000 T _text
+> > > c0b5b000 R __end_rodata
+> > > ... exception and unwind tables live here ...
+> > > c0c00000 T __init_begin
+> > > c0e00000 D _sdata
+> > > c0e68870 D _edata
+> > > c0e68870 B __bss_start
+> > > c0e995d4 B __bss_stop
+> > > c0e995d4 B _end
+> > > 
+> > > So the original covers _text..__init_begin-1 which includes the
+> > > exception and unwind tables. Your version above omits these, which
+> > > leaves them exposed.
+> > 
+> > Right, this needs to be fixed. Is there any reason the exception and unwind
+> > tables cannot be placed between _sdata and _edata? 
+> > 
+> > It seems to me that they were left outside for purely historical reasons.
+> > Commit ee951c630c5c ("ARM: 7568/1: Sort exception table at compile time")
+> > moved the exception tables out of .data section before _sdata existed.
+> > Commit 14c4a533e099 ("ARM: 8583/1: mm: fix location of _etext") moved
+> > _etext before the unwind tables and didn't bother to put them into data or
+> > rodata areas.
+> 
+> You can not assume that all sections will be between these symbols. This
+> isn't specific to 32-bit ARM. If you look at x86's vmlinux.lds.in, you
+> will see that BUG_TABLE and ORC_UNWIND_TABLE are after _edata, along
+> with many other undiscarded sections before __bss_start.
 
-On Wed, Jun 2, 2021 at 2:23 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
->
-> On Wednesday 02 June 2021 14:16:26 Sergio Paracuellos wrote:
-> > Hi Pali,
-> >
-> > On Mon, May 31, 2021 at 4:19 PM Sergio Paracuellos
-> > <sergio.paracuellos@gmail.com> wrote:
-> > >
-> > > On Mon, May 31, 2021 at 3:50 PM Pali Roh=C3=A1r <pali@kernel.org> wro=
-te:
-> > > >
-> > > > On Monday 31 May 2021 15:39:55 Sergio Paracuellos wrote:
-> > > > > Hi Pali,
-> > > > >
-> > > > > Thanks for your comments.
-> > > > >
-> > > > > On Mon, May 31, 2021 at 3:14 PM Pali Roh=C3=A1r <pali@kernel.org>=
- wrote:
-> > > > > >
-> > > > > > On Saturday 15 May 2021 14:40:53 Sergio Paracuellos wrote:
-> > > > > > > This patch adds a driver for the PCIe controller of MT7621 So=
-C.
-> > > > > > >
-> > > > > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.c=
-om>
-> > > > > > > ---
-> > > > > > >  arch/mips/pci/Makefile     |   1 +
-> > > > > > >  arch/mips/pci/pci-mt7621.c | 624 +++++++++++++++++++++++++++=
-++++++++++
-> > > > > > >  arch/mips/ralink/Kconfig   |   9 +-
-> > > > > > >  3 files changed, 633 insertions(+), 1 deletion(-)
-> > > > > > >  create mode 100644 arch/mips/pci/pci-mt7621.c
-> > > > > > >
-> > > > > > > diff --git a/arch/mips/pci/Makefile b/arch/mips/pci/Makefile
-> > > > > > > index f3eecc065e5c..178c550739c4 100644
-> > > > > > > --- a/arch/mips/pci/Makefile
-> > > > > > > +++ b/arch/mips/pci/Makefile
-> > > > > > > @@ -24,6 +24,7 @@ obj-$(CONFIG_PCI_AR2315)    +=3D pci-ar2315=
-.o
-> > > > > > >  obj-$(CONFIG_SOC_AR71XX)     +=3D pci-ar71xx.o
-> > > > > > >  obj-$(CONFIG_PCI_AR724X)     +=3D pci-ar724x.o
-> > > > > > >  obj-$(CONFIG_PCI_XTALK_BRIDGE)       +=3D pci-xtalk-bridge.o
-> > > > > > > +obj-$(CONFIG_PCI_MT7621)     +=3D pci-mt7621.o
-> > > > > > >  #
-> > > > > > >  # These are still pretty much in the old state, watch, go bl=
-ind.
-> > > > > > >  #
-> > > > > > > diff --git a/arch/mips/pci/pci-mt7621.c b/arch/mips/pci/pci-m=
-t7621.c
-> > > > > > > new file mode 100644
-> > > > > > > index 000000000000..fe1945819d25
-> > > > > > > --- /dev/null
-> > > > > > > +++ b/arch/mips/pci/pci-mt7621.c
-> > > > > > ...
-> > > > > > > +static int mt7621_pcie_enable_ports(struct mt7621_pcie *pcie=
-)
-> > > > > > > +{
-> > > > > > > +     struct device *dev =3D pcie->dev;
-> > > > > > > +     struct mt7621_pcie_port *port;
-> > > > > > > +     u8 num_slots_enabled =3D 0;
-> > > > > > > +     u32 slot;
-> > > > > > > +     u32 val;
-> > > > > > > +     int err;
-> > > > > > > +
-> > > > > > > +     /* Setup MEMWIN and IOWIN */
-> > > > > > > +     pcie_write(pcie, 0xffffffff, RALINK_PCI_MEMBASE);
-> > > > > > > +     pcie_write(pcie, pcie->io.start, RALINK_PCI_IOBASE);
-> > > > > > > +
-> > > > > > > +     list_for_each_entry(port, &pcie->ports, list) {
-> > > > > > > +             if (port->enabled) {
-> > > > > > > +                     err =3D clk_prepare_enable(port->clk);
-> > > > > > > +                     if (err) {
-> > > > > > > +                             dev_err(dev, "enabling clk pcie=
-%d\n", slot);
-> > > > > > > +                             return err;
-> > > > > > > +                     }
-> > > > > > > +
-> > > > > > > +                     mt7621_pcie_enable_port(port);
-> > > > > > > +                     dev_info(dev, "PCIE%d enabled\n", port-=
->slot);
-> > > > > > > +                     num_slots_enabled++;
-> > > > > > > +             }
-> > > > > > > +     }
-> > > > > > > +
-> > > > > > > +     for (slot =3D 0; slot < num_slots_enabled; slot++) {
-> > > > > > > +             val =3D read_config(pcie, slot, PCI_COMMAND);
-> > > > > > > +             val |=3D PCI_COMMAND_MASTER;
-> > > > > > > +             write_config(pcie, slot, PCI_COMMAND, val);
-> > > > > >
-> > > > > > Hello! Is this part of code correct? Because it looks strange i=
-f PCIe
-> > > > > > controller driver automatically enables PCI bus mastering, prio=
-r device
-> > > > > > driver initialize itself.
-> > > > > >
-> > > > > > Moreover kernel has already function pci_set_master() for this =
-purpose
-> > > > > > which is used by device drivers.
-> > > > > >
-> > > > > > So I think this code can confuse some device drivers...
-> > > > >
-> > > > > I agree that we have pci_set_master() to be used in pci device dr=
-iver
-> > > > > code. Original controller driver set this bit for enabled slots. =
-Since
-> > > > > there is no documentation at all for the PCI in this SoC
-> > > >
-> > > > I see... this is really a big problem to do any driver development.=
-..
-> > >
-> > > For sure it is :(.
-> > >
-> > > >
-> > > > > I have
-> > > > > maintained the setting in the driver in a cleaner way. See origin=
-al
-> > > > > driver code and the setting here [0]. There is no other reason th=
-an
-> > > > > that. I am ok with removing this from here and testing with my tw=
-o
-> > > > > devices that everything is still ok if having this setting in the=
- pci
-> > > > > controller driver is a real problem.
-> > > >
-> > > > You can run lspci -nnvv with and without PCI_COMMAND_MASTER code an=
-d
-> > > > then compare outputs.
-> > > >
-> > > > Device drivers for sure enable PCI_COMMAND_MASTER at the time when =
-it is
-> > > > needed, so it is possible that there would be no difference in lspc=
-i
-> > > > output.
-> > >
-> > > Thanks. I will take this into account when v2 is submitted after more
-> > > review comments come :).
-> >
-> > I have tested to remove this and check lspci -nnvv output with and
-> > without PCI_COMMAND_MASTER code and, as you pointed out, there is no
-> > difference between them. Also, both boards are working without
-> > regressions at all. So I will remove this code for next version.
->
-> Perfect!
->
-> > Thanks,
-> >     Sergio Paracuellos
-> > >
-> > > >
-> > > > > [0]: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/stagi=
-ng.git/tree/drivers/staging/mt7621-pci/pci-mt7621.c?h=3Dv4.18#n676
-> > > > >
-> > > > > Best regards,
-> > > > >     Sergio Paracuellos
-> > > > > >
-> > > > > > > +             /* configure RC FTS number to 250 when it leave=
-s L0s */
-> > > > > > > +             val =3D read_config(pcie, slot, PCIE_FTS_NUM);
-> > > > > > > +             val &=3D ~PCIE_FTS_NUM_MASK;
-> > > > > > > +             val |=3D PCIE_FTS_NUM_L0(0x50);
-> > > > > > > +             write_config(pcie, slot, PCIE_FTS_NUM, val);
->
-> Could you look also what is doing this code (PCIE_FTS_NUM)? It is marked
-> as MT specific register. But from this code for me it looks like that it
-> just access config space of some device and therefore it could be some
-> standard PCIe register. Just with hardcoded calculated offset.
->
-> Could you provide output from lspci -nnvv? So other people could look at
-> it and maybe we decode what is this code doing and if it is needed.
+But if you look at x86's setup_arch() all these never make it to the
+resource tree. So there are holes in /proc/iomem between the kernel
+resources.
 
-# lspci -nnvv
-00:02.0 PCI bridge [0604]: Device [0e8d:0801] (rev 01) (prog-if 00
-[Normal decode])
-        Device tree node: /sys/firmware/devicetree/base/pcie@1e140000/pcie@=
-2,0
-        Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop-
-ParErr- Stepping- SERR- FastB2B- DisINTx-
-        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=3Dfast >TAbort-
-<TAbort- <MAbort- >SERR- <PERR- INTx-
-        Latency: 0
-        Interrupt: pin A routed to IRQ 255
-        Region 1: Memory at 60200000 (32-bit, non-prefetchable) [size=3D64K=
-]
-        Bus: primary=3D00, secondary=3D01, subordinate=3D01, sec-latency=3D=
-0
-        I/O behind bridge: 00000000-00000fff [size=3D4K]
-        Memory behind bridge: 60000000-600fffff [size=3D1M]
-        Prefetchable memory behind bridge: 60100000-601fffff [size=3D1M]
-        Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=3Dfast >TAbort-
-<TAbort- <MAbort- <SERR- <PERR-
-        BridgeCtl: Parity- SERR+ NoISA- VGA- VGA16- MAbort- >Reset- FastB2B=
--
-                PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
-        Capabilities: [40] Power Management version 3
-                Flags: PMEClk- DSI- D1+ D2- AuxCurrent=3D375mA
-PME(D0+,D1+,D2-,D3hot+,D3cold-)
-                Status: D0 NoSoftRst- PME-Enable- DSel=3D0 DScale=3D0 PME-
-        Capabilities: [50] MSI: Enable- Count=3D1/1 Maskable- 64bit+
-                Address: 0000000000000000  Data: 0000
-        Capabilities: [70] Express (v2) Root Port (Slot-), MSI 00
-                DevCap: MaxPayload 128 bytes, PhantFunc 0
-                        ExtTag- RBE+
-                DevCtl: CorrErr- NonFatalErr- FatalErr- UnsupReq-
-                        RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop-
-                        MaxPayload 128 bytes, MaxReadReq 128 bytes
-                DevSta: CorrErr+ NonFatalErr- FatalErr- UnsupReq-
-AuxPwr- TransPend-
-                LnkCap: Port #0, Speed 2.5GT/s, Width x1, ASPM L0s L1,
-Exit Latency L0s <512ns, L1 <64us
-                        ClockPM- Surprise- LLActRep+ BwNot- ASPMOptComp-
-                LnkCtl: ASPM Disabled; RCB 128 bytes, Disabled- CommClk-
-                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-                LnkSta: Speed 2.5GT/s (ok), Width x1 (ok)
-                        TrErr- Train- SlotClk+ DLActive+ BWMgmt- ABWMgmt-
-                RootCap: CRSVisible-
-                RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal-
-PMEIntEna- CRSVisible-
-                RootSta: PME ReqID 0000, PMEStatus- PMEPending-
-                DevCap2: Completion Timeout: Not Supported,
-TimeoutDis+ NROPrPrP- LTR-
-                         10BitTagComp- 10BitTagReq- OBFF Not
-Supported, ExtFmt- EETLPPrefix-
-                         EmergencyPowerReduction Not Supported,
-EmergencyPowerReductionInit-
-                         FRS- LN System CLS Not Supported, TPHComp-
-ExtTPHComp- ARIFwd-
-                         AtomicOpsCap: Routing- 32bit- 64bit- 128bitCAS-
-                DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-
-LTR- OBFF Disabled, ARIFwd-
-                         AtomicOpsCtl: ReqEn- EgressBlck-
-                LnkCap2: Supported Link Speeds: 2.5GT/s, Crosslink-
-Retimer- 2Retimers- DRS-
-                LnkCtl2: Target Link Speed: 2.5GT/s, EnterCompliance- Speed=
-Dis-
-                         Transmit Margin: Normal Operating Range,
-EnterModifiedCompliance- ComplianceSOS-
-                         Compliance De-emphasis: -6dB
-                LnkSta2: Current De-emphasis Level: -6dB,
-EqualizationComplete- EqualizationPhase1-
-                         EqualizationPhase2- EqualizationPhase3-
-LinkEqualizationRequest-
-                         Retimer- 2Retimers- CrosslinkRes: unsupported
-        Capabilities: [100 v1] Advanced Error Reporting
-                UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt-
-UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-                UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt-
-UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-                UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt-
-UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-                CESta:  RxErr+ BadTLP- BadDLLP- Rollover- Timeout-
-AdvNonFatalErr-
-                CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-AdvNonFatalErr+
-                AERCap: First Error Pointer: 00, ECRCGenCap+
-ECRCGenEn- ECRCChkCap+ ECRCChkEn-
-                        MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
-                HeaderLog: 00000000 00000000 00000000 00000000
-                RootCmd: CERptEn- NFERptEn- FERptEn-
-                RootSta: CERcvd- MultCERcvd- UERcvd- MultUERcvd-
-                         FirstFatal- NonFatalMsg- FatalMsg- IntMsg 0
-                ErrorSrc: ERR_COR: 0000 ERR_FATAL/NONFATAL: 0000
-        Capabilities: [140 v1] Virtual Channel
-                Caps:   LPEVC=3D0 RefClk=3D100ns PATEntryBits=3D1
-                Arb:    Fixed- WRR32- WRR64- WRR128-
-                Ctrl:   ArbSelect=3DFixed
-                Status: InProgress-
-                VC0:    Caps:   PATOffset=3D00 MaxTimeSlots=3D1 RejSnoopTra=
-ns-
-                        Arb:    Fixed- WRR32- WRR64- WRR128- TWRR128- WRR25=
-6-
-                        Ctrl:   Enable+ ID=3D0 ArbSelect=3DFixed TC/VC=3Dff
-                        Status: NegoPending- InProgress-
-lspci: Unable to load libkmod resources: error -12
+> So it seems your assumptions in trying to clean this up are somewhat
+> false.
 
-01:00.0 Network controller [0280]: MEDIATEK Corp. Device [14c3:7612]
-        Subsystem: MEDIATEK Corp. Device [14c3:7612]
-        Device tree node:
-/sys/firmware/devicetree/base/pcie@1e140000/pcie@2,0/wifi@0,0
-        Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop-
-ParErr- Stepping- SERR- FastB2B- DisINTx-
-        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=3Dfast >TAbort-
-<TAbort- <MAbort- >SERR- <PERR- INTx-
-        Latency: 0
-        Interrupt: pin A routed to IRQ 20
-        Region 0: Memory at 60000000 (64-bit, non-prefetchable) [size=3D1M]
-        Expansion ROM at 60100000 [virtual] [disabled] [size=3D64K]
-        Capabilities: [40] Power Management version 3
-                Flags: PMEClk- DSI- D1- D2- AuxCurrent=3D375mA
-PME(D0+,D1-,D2-,D3hot+,D3cold+)
-                Status: D0 NoSoftRst- PME-Enable- DSel=3D0 DScale=3D0 PME-
-        Capabilities: [50] MSI: Enable- Count=3D1/1 Maskable- 64bit+
-                Address: 0000000000000000  Data: 0000
-        Capabilities: [70] Express (v2) Endpoint, MSI 00
-                DevCap: MaxPayload 128 bytes, PhantFunc 0, Latency L0s
-unlimited, L1 unlimited
-                        ExtTag- AttnBtn- AttnInd- PwrInd- RBE+
-FLReset- SlotPowerLimit 0.000W
-                DevCtl: CorrErr- NonFatalErr- FatalErr- UnsupReq-
-                        RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop-
-                        MaxPayload 128 bytes, MaxReadReq 128 bytes
-                DevSta: CorrErr- NonFatalErr- FatalErr- UnsupReq-
-AuxPwr+ TransPend-
-                LnkCap: Port #0, Speed 2.5GT/s, Width x1, ASPM L0s L1,
-Exit Latency L0s <2us, L1 unlimited
-                        ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp+
-                LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk-
-                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-                LnkSta: Speed 2.5GT/s (ok), Width x1 (ok)
-                        TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
-                DevCap2: Completion Timeout: Range ABCD, TimeoutDis+
-NROPrPrP- LTR-
-                         10BitTagComp- 10BitTagReq- OBFF Not
-Supported, ExtFmt- EETLPPrefix-
-                         EmergencyPowerReduction Not Supported,
-EmergencyPowerReductionInit-
-                         FRS- TPHComp- ExtTPHComp-
-                         AtomicOpsCap: 32bit- 64bit- 128bitCAS-
-                DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-
-LTR- OBFF Disabled,
-                         AtomicOpsCtl: ReqEn-
-                LnkCap2: Supported Link Speeds: 2.5GT/s, Crosslink-
-Retimer- 2Retimers- DRS-
-                LnkCtl2: Target Link Speed: 5GT/s, EnterCompliance- SpeedDi=
-s-
-                         Transmit Margin: Normal Operating Range,
-EnterModifiedCompliance- ComplianceSOS-
-                         Compliance De-emphasis: -6dB
-                LnkSta2: Current De-emphasis Level: -3.5dB,
-EqualizationComplete- EqualizationPhase1-
-                         EqualizationPhase2- EqualizationPhase3-
-LinkEqualizationRequest-
-                         Retimer- 2Retimers- CrosslinkRes: unsupported
-        Capabilities: [100 v2] Advanced Error Reporting
-                UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt-
-UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-                UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt-
-UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-                UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt-
-UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-                CESta:  RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-AdvNonFatalErr-
-                CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-AdvNonFatalErr+
-                AERCap: First Error Pointer: 00, ECRCGenCap+
-ECRCGenEn- ECRCChkCap+ ECRCChkEn-
-                        MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
-                HeaderLog: 00000000 00000000 00000000 00000000
-        Capabilities: [148 v1] Device Serial Number 00-00-00-00-00-00-00-00
-        Capabilities: [158 v1] Latency Tolerance Reporting
-                Max snoop latency: 0ns
-                Max no snoop latency: 0ns
-        Capabilities: [160 v1] L1 PM Substates
-                L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
-ASPM_L1.1+ L1_PM_Substates+
-                          PortCommonModeRestoreTime=3D50us PortTPowerOnTime=
-=3D10us
-                L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1.1-
-                           T_CommonMode=3D0us LTR1.2_Threshold=3D0ns
-                L1SubCtl2: T_PwrOn=3D10us
-        Kernel driver in use: mt76x2e
-
-Best regards,
-    Sergio Paracuellos
-
->
-> > > > > > > +     }
-> > > > > > > +
-> > > > > > > +     return 0;
-> > > > > > > +}
+My assumption was that there is complete lack of consistency between what
+is reserved memory and how it is reported in /proc/iomem or
+/sys/firmware/memmap for that matter. I'm not trying to clean this up, I'm
+trying to make different views of the physical memory consistent.
+Consolidating several similar per-arch implementations is the first step in
+this direction.
+ 
+-- 
+Sincerely yours,
+Mike.
