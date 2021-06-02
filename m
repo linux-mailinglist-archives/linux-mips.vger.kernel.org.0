@@ -2,86 +2,160 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EA83986AE
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jun 2021 12:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C804398705
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jun 2021 12:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbhFBKkw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Jun 2021 06:40:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35210 "EHLO mail.kernel.org"
+        id S231506AbhFBKzo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Jun 2021 06:55:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38344 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229541AbhFBKkw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 2 Jun 2021 06:40:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4E25F613BE;
-        Wed,  2 Jun 2021 10:39:09 +0000 (UTC)
+        id S229745AbhFBKzm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 2 Jun 2021 06:55:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A7462613B8;
+        Wed,  2 Jun 2021 10:53:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622630349;
-        bh=xscBNGdgmKGqvdZAiQKuvfYAUc7B9BbcxRBT59+5ZOY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Hz/A98NJ/xcvhZd9ZNyMVQi6zUvnUC0/7LUrDDbXTguMX84mAQdH6yhT2gck95c2a
-         N/i3Hma2f2kRJOdtkvmq6jZ6zf1ZUha43C3lZjmkQnwSD4JTGzuOpHjr67lUnryRbg
-         p8QtEHupGkLdwAclzswPZgcIeG3BJsU533I0k6Op+iufhQ3qe09HiF7gX8bydjda8w
-         Wzfi4UDXUSyhQUHxDnHDoQ9suKhhi5OieKFlNFShWzmNkSKEBP3VfZbOmLNb39wr6y
-         2DA+ggnsYCNFipkC3tc4vF5gZrBcCp+sf9K/HPIm8GAsIoX3mR770sjC9fpG5ctNnp
-         3raIywYDT2VjQ==
-Received: by mail-wr1-f53.google.com with SMTP id c5so1757646wrq.9;
-        Wed, 02 Jun 2021 03:39:09 -0700 (PDT)
-X-Gm-Message-State: AOAM531nca26DQxZJRiEURKRRduLfUYCH59B/JzkN4bHNr/uy1bBVnvq
-        rV6IuZkbXRz3eGl/5v89YqtQzBFO/Nmt4zjvMHw=
-X-Google-Smtp-Source: ABdhPJw1yDtR1g+RhxgV73exD8GZ7Zlc3UlK2QOxfUHJQ0YgqPNiNyVgdN0aBIvksGMnFyNkUFE9lTL3NcJjxiDkPBk=
-X-Received: by 2002:adf:a28c:: with SMTP id s12mr34315203wra.105.1622630347892;
- Wed, 02 Jun 2021 03:39:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210531184749.2475868-1-arnd@kernel.org> <20210601095129.GF6961@alpha.franken.de>
- <CAK8P3a2Ueg0UFZisrzrrL_MkBLnu6TbMtVGx4_wO0d6rj48weg@mail.gmail.com> <162258513314.4130789.12039373985147120919@swboyd.mtv.corp.google.com>
-In-Reply-To: <162258513314.4130789.12039373985147120919@swboyd.mtv.corp.google.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 2 Jun 2021 12:37:29 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3VtsTfkJKuVzMP30qPSEUE+W4MJ0aUg=-v5n+cafn0Ag@mail.gmail.com>
-Message-ID: <CAK8P3a3VtsTfkJKuVzMP30qPSEUE+W4MJ0aUg=-v5n+cafn0Ag@mail.gmail.com>
-Subject: Re: [PATCH 0/7] clk: clean up legacy clock interfaces
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Florian Fainelli <florian@openwrt.org>,
+        s=k20201202; t=1622631239;
+        bh=y04Os44exMBIW1Oj5as14/40OpMcFnf5BYhM91VeMF8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IEhFtfyiZrWl3O/lHICDDnQPCxbhh7le0oxMDdcE956zeFwuutavFE98cPQhAN3Tb
+         MS+0z8cAJdIWUVI8O3sVG0JRS++QBslPsnJw+3KBzPzOGqhfnDKfhgG2E3lQUvkQgb
+         U4HK86IALTVpok5dJHV5FJGv2u/pAI2+NR6w1EN3dv0kQ5VybgSLkvF/RWYfHfO8ld
+         oSmL9cAeen9wXpQhbHyPbH7rQ2tDffpLdnha53qaZPiC2WS7D2aeJaOw5ziEvrDUkZ
+         bz6vOk8nu9D6FUv1Ys08o5AILZj7Ue07McpXaWjgeCnhhfBDjcYc5GYcVel/pE6Mxt
+         wIIpWqcVnlJmQ==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        John Crispin <john@phrozen.org>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        BROADCOM NVRAM DRIVER <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
+Subject: [PATCH 0/9] Remove DISCINTIGMEM memory model
+Date:   Wed,  2 Jun 2021 13:53:39 +0300
+Message-Id: <20210602105348.13387-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 2, 2021 at 12:05 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> Quoting Arnd Bergmann (2021-06-01 05:24:59)
-> > On Tue, Jun 1, 2021 at 11:51 AM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > >
-> > > On Mon, May 31, 2021 at 08:47:42PM +0200, Arnd Bergmann wrote:
-> > > > As I noticed that the ar7 clock implementation and the ralink version
-> > > > are rather trivial, I ended up converting those to use the common-clk
-> > > > interfaces as well, though this is unrelated to the other changes.
-> > >
-> > > excellent, how is your plan for merging the series ?
-> >
-> > I have not decided yet. I think it would be best to keep the series together
-> > and merge it through the clk maintainer tree, or possibly my asm-generic
-> > tree, but as there is no rush, we could also do the mips and m68k bits
-> > through the architecture trees, and defer the rest for 5.15.
-> >
->
-> I'm happy to take the series through clk tree if that helps.
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Ok, great. I've addressed all the issues that were pointed out, but it
-would be good to get an Acked-by or some testing for the MIPS
-(ar7 and ralink) bits. Thomas and John, let me know if you find
-something that needs to be addressed first, or if you are happy
-me to send the latest version for merging.
+Hi,
 
-       Arnd
+SPARSEMEM memory model was supposed to entirely replace DISCONTIGMEM a
+(long) while ago. The last architectures that used DISCONTIGMEM were
+updated to use other memory models in v5.11 and it is about the time to
+entirely remove DISCONTIGMEM from the kernel.
+
+This set removes DISCONTIGMEM from alpha, arc and m68k, simplifies memory
+model selection in mm/Kconfig and replaces usage of redundant
+CONFIG_NEED_MULTIPLE_NODES and CONFIG_FLAT_NODE_MEM_MAP with CONFIG_NUMA
+and CONFIG_FLATMEM respectively. 
+
+I've also removed NUMA support on alpha that was BROKEN for more than 15
+years.
+
+There were also minor updates all over arch/ to remove mentions of
+DISCONTIGMEM in comments and #ifdefs.
+
+Mike Rapoport (9):
+  alpha: remove DISCONTIGMEM and NUMA
+  arc: update comment about HIGHMEM implementation
+  arc: remove support for DISCONTIGMEM
+  m68k: remove support for DISCONTIGMEM
+  mm: remove CONFIG_DISCONTIGMEM
+  arch, mm: remove stale mentions of DISCONIGMEM
+  docs: remove description of DISCONTIGMEM
+  mm: replace CONFIG_NEED_MULTIPLE_NODES with CONFIG_NUMA
+  mm: replace CONFIG_FLAT_NODE_MEM_MAP with CONFIG_FLATMEM
+
+ Documentation/admin-guide/sysctl/vm.rst |  12 +-
+ Documentation/vm/memory-model.rst       |  45 +----
+ arch/alpha/Kconfig                      |  22 ---
+ arch/alpha/include/asm/machvec.h        |   6 -
+ arch/alpha/include/asm/mmzone.h         | 100 -----------
+ arch/alpha/include/asm/pgtable.h        |   4 -
+ arch/alpha/include/asm/topology.h       |  39 -----
+ arch/alpha/kernel/core_marvel.c         |  53 +-----
+ arch/alpha/kernel/core_wildfire.c       |  29 +--
+ arch/alpha/kernel/pci_iommu.c           |  29 ---
+ arch/alpha/kernel/proto.h               |   8 -
+ arch/alpha/kernel/setup.c               |  16 --
+ arch/alpha/kernel/sys_marvel.c          |   5 -
+ arch/alpha/kernel/sys_wildfire.c        |   5 -
+ arch/alpha/mm/Makefile                  |   2 -
+ arch/alpha/mm/init.c                    |   3 -
+ arch/alpha/mm/numa.c                    | 223 ------------------------
+ arch/arc/Kconfig                        |  13 --
+ arch/arc/include/asm/mmzone.h           |  40 -----
+ arch/arc/mm/init.c                      |  21 +--
+ arch/arm64/Kconfig                      |   2 +-
+ arch/ia64/Kconfig                       |   2 +-
+ arch/ia64/kernel/topology.c             |   5 +-
+ arch/ia64/mm/numa.c                     |   5 +-
+ arch/m68k/Kconfig.cpu                   |  10 --
+ arch/m68k/include/asm/page.h            |   2 +-
+ arch/m68k/include/asm/page_mm.h         |  33 ----
+ arch/m68k/mm/init.c                     |  20 ---
+ arch/mips/Kconfig                       |   2 +-
+ arch/mips/include/asm/mmzone.h          |   8 +-
+ arch/mips/include/asm/page.h            |   2 +-
+ arch/mips/mm/init.c                     |   7 +-
+ arch/nds32/include/asm/memory.h         |   6 -
+ arch/powerpc/Kconfig                    |   2 +-
+ arch/powerpc/include/asm/mmzone.h       |   4 +-
+ arch/powerpc/kernel/setup_64.c          |   2 +-
+ arch/powerpc/kernel/smp.c               |   2 +-
+ arch/powerpc/kexec/core.c               |   4 +-
+ arch/powerpc/mm/Makefile                |   2 +-
+ arch/powerpc/mm/mem.c                   |   4 +-
+ arch/riscv/Kconfig                      |   2 +-
+ arch/s390/Kconfig                       |   2 +-
+ arch/sh/include/asm/mmzone.h            |   4 +-
+ arch/sh/kernel/topology.c               |   2 +-
+ arch/sh/mm/Kconfig                      |   2 +-
+ arch/sh/mm/init.c                       |   2 +-
+ arch/sparc/Kconfig                      |   2 +-
+ arch/sparc/include/asm/mmzone.h         |   4 +-
+ arch/sparc/kernel/smp_64.c              |   2 +-
+ arch/sparc/mm/init_64.c                 |  12 +-
+ arch/x86/Kconfig                        |   2 +-
+ arch/x86/kernel/setup_percpu.c          |   6 +-
+ arch/x86/mm/init_32.c                   |   4 +-
+ arch/xtensa/include/asm/page.h          |   4 -
+ include/asm-generic/memory_model.h      |  37 +---
+ include/asm-generic/topology.h          |   2 +-
+ include/linux/gfp.h                     |   4 +-
+ include/linux/memblock.h                |   6 +-
+ include/linux/mm.h                      |   4 +-
+ include/linux/mmzone.h                  |  16 +-
+ kernel/crash_core.c                     |   4 +-
+ mm/Kconfig                              |  36 +---
+ mm/memblock.c                           |   8 +-
+ mm/memory.c                             |   3 +-
+ mm/page_alloc.c                         |  25 +--
+ mm/page_ext.c                           |   2 +-
+ 66 files changed, 98 insertions(+), 898 deletions(-)
+ delete mode 100644 arch/alpha/include/asm/mmzone.h
+ delete mode 100644 arch/alpha/mm/numa.c
+ delete mode 100644 arch/arc/include/asm/mmzone.h
+
+
+base-commit: c4681547bcce777daf576925a966ffa824edd09d
+-- 
+2.28.0
+
