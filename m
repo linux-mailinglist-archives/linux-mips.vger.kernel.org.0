@@ -2,120 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9784F39861A
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jun 2021 12:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EA83986AE
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jun 2021 12:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbhFBKRM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Jun 2021 06:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbhFBKRK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Jun 2021 06:17:10 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44666C061574;
-        Wed,  2 Jun 2021 03:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=fmGY2nI0Vp6TsNVIwXBzebajJgSbQrncqCC+od0RbVA=; b=Bme3nUMcHhzLBe47U302hAVD7
-        ncr3HnbXsgya5LaTfL5cUlqWe0l+aWayODB1FTdohKpCOvbRoQ9B5NnSQC1hUjNpypqjR1fN1PQQF
-        EmLpbZonirz2e3YoyOSThY5E0lix2TkdHs3RvKZ0WGQcpvRJWo7jl7+Sd4pVhY9wMQGID428NDAfR
-        tDLuzxegmwbAPhvf3aMw5EigGcS1DyMbXmGmpdGrXKm5On/nK+b3sKLInwrMzmYfvmfGD9qH1w87q
-        T7nUNYMl8o6oRG4qxx6w4zkv0PQiQ1rzn5cCLH4uIl5EHEqyBrncopbDV0wF8U1cy2fU8CovyJrSN
-        XzqrCiGYw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:44608)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1loNuF-0000xC-Gl; Wed, 02 Jun 2021 11:15:23 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1loNuD-00011p-IK; Wed, 02 Jun 2021 11:15:21 +0100
-Date:   Wed, 2 Jun 2021 11:15:21 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org
-Subject: Re: [RFC/RFT PATCH 2/5] memblock: introduce generic
- memblock_setup_resources()
-Message-ID: <20210602101521.GD30436@shell.armlinux.org.uk>
-References: <20210531122959.23499-1-rppt@kernel.org>
- <20210531122959.23499-3-rppt@kernel.org>
- <20210601135415.GZ30436@shell.armlinux.org.uk>
- <YLdCRoldZFYMZ0BG@linux.ibm.com>
+        id S231877AbhFBKkw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Jun 2021 06:40:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35210 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229541AbhFBKkw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 2 Jun 2021 06:40:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4E25F613BE;
+        Wed,  2 Jun 2021 10:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622630349;
+        bh=xscBNGdgmKGqvdZAiQKuvfYAUc7B9BbcxRBT59+5ZOY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Hz/A98NJ/xcvhZd9ZNyMVQi6zUvnUC0/7LUrDDbXTguMX84mAQdH6yhT2gck95c2a
+         N/i3Hma2f2kRJOdtkvmq6jZ6zf1ZUha43C3lZjmkQnwSD4JTGzuOpHjr67lUnryRbg
+         p8QtEHupGkLdwAclzswPZgcIeG3BJsU533I0k6Op+iufhQ3qe09HiF7gX8bydjda8w
+         Wzfi4UDXUSyhQUHxDnHDoQ9suKhhi5OieKFlNFShWzmNkSKEBP3VfZbOmLNb39wr6y
+         2DA+ggnsYCNFipkC3tc4vF5gZrBcCp+sf9K/HPIm8GAsIoX3mR770sjC9fpG5ctNnp
+         3raIywYDT2VjQ==
+Received: by mail-wr1-f53.google.com with SMTP id c5so1757646wrq.9;
+        Wed, 02 Jun 2021 03:39:09 -0700 (PDT)
+X-Gm-Message-State: AOAM531nca26DQxZJRiEURKRRduLfUYCH59B/JzkN4bHNr/uy1bBVnvq
+        rV6IuZkbXRz3eGl/5v89YqtQzBFO/Nmt4zjvMHw=
+X-Google-Smtp-Source: ABdhPJw1yDtR1g+RhxgV73exD8GZ7Zlc3UlK2QOxfUHJQ0YgqPNiNyVgdN0aBIvksGMnFyNkUFE9lTL3NcJjxiDkPBk=
+X-Received: by 2002:adf:a28c:: with SMTP id s12mr34315203wra.105.1622630347892;
+ Wed, 02 Jun 2021 03:39:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YLdCRoldZFYMZ0BG@linux.ibm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20210531184749.2475868-1-arnd@kernel.org> <20210601095129.GF6961@alpha.franken.de>
+ <CAK8P3a2Ueg0UFZisrzrrL_MkBLnu6TbMtVGx4_wO0d6rj48weg@mail.gmail.com> <162258513314.4130789.12039373985147120919@swboyd.mtv.corp.google.com>
+In-Reply-To: <162258513314.4130789.12039373985147120919@swboyd.mtv.corp.google.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 2 Jun 2021 12:37:29 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3VtsTfkJKuVzMP30qPSEUE+W4MJ0aUg=-v5n+cafn0Ag@mail.gmail.com>
+Message-ID: <CAK8P3a3VtsTfkJKuVzMP30qPSEUE+W4MJ0aUg=-v5n+cafn0Ag@mail.gmail.com>
+Subject: Re: [PATCH 0/7] clk: clean up legacy clock interfaces
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Florian Fainelli <florian@openwrt.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        John Crispin <john@phrozen.org>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        BROADCOM NVRAM DRIVER <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Jun 02, 2021 at 11:33:10AM +0300, Mike Rapoport wrote:
-> On Tue, Jun 01, 2021 at 02:54:15PM +0100, Russell King (Oracle) wrote:
-> > On Mon, May 31, 2021 at 03:29:56PM +0300, Mike Rapoport wrote:
-> > > +	code_resource.start = __pa_symbol(_text);
-> > > +	code_resource.end = __pa_symbol(_etext)-1;
-> > > +	rodata_resource.start = __pa_symbol(__start_rodata);
-> > > +	rodata_resource.end = __pa_symbol(__end_rodata)-1;
-> > > +	data_resource.start = __pa_symbol(_sdata);
-> > > +	data_resource.end = __pa_symbol(_edata)-1;
-> > > +	bss_resource.start = __pa_symbol(__bss_start);
-> > > +	bss_resource.end = __pa_symbol(__bss_stop)-1;
-> > 
-> > This falls short on 32-bit ARM. The old code was:
-> > 
-> > -       kernel_code.start   = virt_to_phys(_text);
-> > -       kernel_code.end     = virt_to_phys(__init_begin - 1);
-> > -       kernel_data.start   = virt_to_phys(_sdata);                             
-> > -       kernel_data.end     = virt_to_phys(_end - 1);                           
-> > 
-> > If I look at one of my kernels:
-> > 
-> > c0008000 T _text
-> > c0b5b000 R __end_rodata
-> > ... exception and unwind tables live here ...
-> > c0c00000 T __init_begin
-> > c0e00000 D _sdata
-> > c0e68870 D _edata
-> > c0e68870 B __bss_start
-> > c0e995d4 B __bss_stop
-> > c0e995d4 B _end
-> > 
-> > So the original covers _text..__init_begin-1 which includes the
-> > exception and unwind tables. Your version above omits these, which
-> > leaves them exposed.
-> 
-> Right, this needs to be fixed. Is there any reason the exception and unwind
-> tables cannot be placed between _sdata and _edata? 
-> 
-> It seems to me that they were left outside for purely historical reasons.
-> Commit ee951c630c5c ("ARM: 7568/1: Sort exception table at compile time")
-> moved the exception tables out of .data section before _sdata existed.
-> Commit 14c4a533e099 ("ARM: 8583/1: mm: fix location of _etext") moved
-> _etext before the unwind tables and didn't bother to put them into data or
-> rodata areas.
+On Wed, Jun 2, 2021 at 12:05 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> Quoting Arnd Bergmann (2021-06-01 05:24:59)
+> > On Tue, Jun 1, 2021 at 11:51 AM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > >
+> > > On Mon, May 31, 2021 at 08:47:42PM +0200, Arnd Bergmann wrote:
+> > > > As I noticed that the ar7 clock implementation and the ralink version
+> > > > are rather trivial, I ended up converting those to use the common-clk
+> > > > interfaces as well, though this is unrelated to the other changes.
+> > >
+> > > excellent, how is your plan for merging the series ?
+> >
+> > I have not decided yet. I think it would be best to keep the series together
+> > and merge it through the clk maintainer tree, or possibly my asm-generic
+> > tree, but as there is no rush, we could also do the mips and m68k bits
+> > through the architecture trees, and defer the rest for 5.15.
+> >
+>
+> I'm happy to take the series through clk tree if that helps.
 
-You can not assume that all sections will be between these symbols. This
-isn't specific to 32-bit ARM. If you look at x86's vmlinux.lds.in, you
-will see that BUG_TABLE and ORC_UNWIND_TABLE are after _edata, along
-with many other undiscarded sections before __bss_start. So it seems
-your assumptions in trying to clean this up are somewhat false.
+Ok, great. I've addressed all the issues that were pointed out, but it
+would be good to get an Acked-by or some testing for the MIPS
+(ar7 and ralink) bits. Thomas and John, let me know if you find
+something that needs to be addressed first, or if you are happy
+me to send the latest version for merging.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+       Arnd
