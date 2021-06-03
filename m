@@ -2,68 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 667AD39A2A7
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 15:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFFE39A5B1
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 18:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbhFCOBR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Jun 2021 10:01:17 -0400
-Received: from m12-16.163.com ([220.181.12.16]:39974 "EHLO m12-16.163.com"
+        id S229726AbhFCQ20 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Jun 2021 12:28:26 -0400
+Received: from foss.arm.com ([217.140.110.172]:45280 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230114AbhFCOBR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Jun 2021 10:01:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=ovTmFJoXQpFc2h6BCr
-        Ci4j2sS7eqhHBmX24K13m10vs=; b=QfV8Z/gEYzbOTgapXXMTZd9MDSDmPwuh18
-        oIYv578C8Xbo/7zXr33NkFN02vHTG9RoMD8mL1kPoiRaHMNu7BgFmeJmcv2f11HK
-        Vw2Pay6HttdinebgxJfzccp1YTBHYJ9ETMrXRKcOMI0sfcG0a4LGwwpgND6TIpH2
-        ux8QBI8uQ=
-Received: from localhost.localdomain (unknown [117.139.248.43])
-        by smtp12 (Coremail) with SMTP id EMCowAAXHRn437hg6GEIvA--.51074S2;
-        Thu, 03 Jun 2021 21:58:17 +0800 (CST)
-From:   Hailong Liu <liuhailongg6@163.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hailong Liu <liu.hailong6@zte.com.cn>
-Subject: [PATCH] CPUFREQ: loongson2: Remove unused linux/sched.h headers
-Date:   Thu,  3 Jun 2021 21:57:52 +0800
-Message-Id: <20210603135752.30162-1-liuhailongg6@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: EMCowAAXHRn437hg6GEIvA--.51074S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GFWrtw15KF1DKw1fAw43KFg_yoW3tFb_u3
-        W3Kr48urW7AwnxtFy3uFnaqr1Sqw43JF1vvF1rK34DXayDAan0kw4kJFyUW34Sgw47Gr1f
-        Xw48Ka4xCr1YgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8JKsUUUUUU==
-X-Originating-IP: [117.139.248.43]
-X-CM-SenderInfo: xolxxtxlor0wjjw6il2tof0z/1tbiDRSmYFQHWZdOUgABsf
+        id S229656AbhFCQ20 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Jun 2021 12:28:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A97411B3;
+        Thu,  3 Jun 2021 09:26:41 -0700 (PDT)
+Received: from e123427-lin.arm.com (unknown [10.57.39.253])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 39ACD3F73D;
+        Thu,  3 Jun 2021 09:26:39 -0700 (PDT)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     linux-pci@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kernel test robot <lkp@intel.com>,
+        linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH v2] PCI: ftpci100: rename macro name collision
+Date:   Thu,  3 Jun 2021 17:26:34 +0100
+Message-Id: <162273757835.25424.5463028137806948110.b4-ty@arm.com>
+X-Mailer: git-send-email 2.26.1
+In-Reply-To: <20210517234117.3660-1-rdunlap@infradead.org>
+References: <20210517234117.3660-1-rdunlap@infradead.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Hailong Liu <liu.hailong6@zte.com.cn>
+On Mon, 17 May 2021 16:41:17 -0700, Randy Dunlap wrote:
+> PCI_IOSIZE is defined in mach-loongson64/spaces.h, so change the name
+> of the PCI_* macros in pci-ftpci100.c to use FTPCI_* so that they are
+> more localized and won't conflict with other drivers or arches.
+> 
+> ../drivers/pci/controller/pci-ftpci100.c:37: warning: "PCI_IOSIZE" redefined
+>    37 | #define PCI_IOSIZE 0x00
+>       |
+> In file included from ../arch/mips/include/asm/addrspace.h:13,
+> ...              from ../drivers/pci/controller/pci-ftpci100.c:15:
+> arch/mips/include/asm/mach-loongson64/spaces.h:11: note: this is the location of the previous definition
+>    11 | #define PCI_IOSIZE SZ_16M
 
-Since commit 759f534e93ac(CPUFREQ: Loongson2: drop set_cpus_allowed_ptr()),
-the header <linux/sched.h> is useless in oongson2_cpufreq.c, so remove it.
+Applied to pci/ftpci100, thanks!
 
-Signed-off-by: Hailong Liu <liu.hailong6@zte.com.cn>
----
- drivers/cpufreq/loongson2_cpufreq.c | 1 -
- 1 file changed, 1 deletion(-)
+[1/1] PCI: ftpci100: rename macro name collision
+      https://git.kernel.org/lpieralisi/pci/c/b1cb890637
 
-diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
-index d05e761d9572..afc59b292153 100644
---- a/drivers/cpufreq/loongson2_cpufreq.c
-+++ b/drivers/cpufreq/loongson2_cpufreq.c
-@@ -16,7 +16,6 @@
- #include <linux/cpufreq.h>
- #include <linux/module.h>
- #include <linux/err.h>
--#include <linux/sched.h>	/* set_cpus_allowed() */
- #include <linux/delay.h>
- #include <linux/platform_device.h>
- 
--- 
-2.17.1
-
-
+Thanks,
+Lorenzo
