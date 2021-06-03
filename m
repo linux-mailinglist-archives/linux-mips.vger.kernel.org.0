@@ -2,59 +2,285 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFFE39A5B1
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 18:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8543F39A60F
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 18:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhFCQ20 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Jun 2021 12:28:26 -0400
-Received: from foss.arm.com ([217.140.110.172]:45280 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229656AbhFCQ20 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Jun 2021 12:28:26 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A97411B3;
-        Thu,  3 Jun 2021 09:26:41 -0700 (PDT)
-Received: from e123427-lin.arm.com (unknown [10.57.39.253])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 39ACD3F73D;
-        Thu,  3 Jun 2021 09:26:39 -0700 (PDT)
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     linux-pci@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH v2] PCI: ftpci100: rename macro name collision
-Date:   Thu,  3 Jun 2021 17:26:34 +0100
-Message-Id: <162273757835.25424.5463028137806948110.b4-ty@arm.com>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20210517234117.3660-1-rdunlap@infradead.org>
-References: <20210517234117.3660-1-rdunlap@infradead.org>
+        id S229975AbhFCQqw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Jun 2021 12:46:52 -0400
+Received: from mail-pf1-f174.google.com ([209.85.210.174]:36366 "EHLO
+        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229888AbhFCQqw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Jun 2021 12:46:52 -0400
+Received: by mail-pf1-f174.google.com with SMTP id c12so5339830pfl.3
+        for <linux-mips@vger.kernel.org>; Thu, 03 Jun 2021 09:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9Q2DATu13P1pzwQHWEVjGMuJXKz5nnidG53u8t/T69Y=;
+        b=oZWknSmeVZZfZwya3xUfjHMkrSowYXFuz2O2dLlUa9GiJ/jfDEeFrwHMXwjBA4wEI+
+         KgJVTITaDxvaEi2nzAHfwWTEAk9ONAyP6YJm2+/EYC4K3inpb83m3E64GzZtZ9U1kDBl
+         lZo5D5cvDzPWuhMzO9hZfc3PzZmWok9dwf5rg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9Q2DATu13P1pzwQHWEVjGMuJXKz5nnidG53u8t/T69Y=;
+        b=aDw0V34p2XZQ6fqyJhvkCrG6aAX5Po0IEKXbbOYOFOmn7qcme+alagdPCW+eahNjnt
+         MLOAx6aZoDqHiimktI4A6zmiRnNrKC76i9X70rHy2kahFiSc4f+ZIzBMmVYIH90XY6Je
+         d7r9rKzJlRgyvD+tdj7z9papBgtV4u9T6OMWHbBpNgEMYFc9o+n+LpEGHoLaDYkproiy
+         77vCVmjWeOhnBcbrtOgnzkaRxkdOpPlm9EZmujQ4+x3W3RnIYvQjmoit3HW0qK1WHvKb
+         cntiCjzhZDl1tkX/LS67N2XPBk3DuQIHkHpmYGD8stwQHKO65f5LgWl2Be42ph1Xdpoe
+         wcBA==
+X-Gm-Message-State: AOAM530F2AIqwjlP3cjhiAhwCAlj1gW4Xv+kIvaqXEYoJ/OmlinLQOBx
+        1e6d4udG5w0JcAbBOU/fkXGk5Q==
+X-Google-Smtp-Source: ABdhPJx7I5PtkMSKl9b8zDas4WwIKw7SMCpW5CkmtGzDxyA7T/ENxk1ZY0pC15QcFzNPM4JDV5yvgQ==
+X-Received: by 2002:a63:dc4e:: with SMTP id f14mr368523pgj.378.1622738632157;
+        Thu, 03 Jun 2021 09:43:52 -0700 (PDT)
+Received: from senozhatsky.flets-east.jp ([2409:10:2e40:5100:1585:76c1:e367:901a])
+        by smtp.gmail.com with ESMTPSA id 76sm2749589pfy.82.2021.06.03.09.43.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Jun 2021 09:43:51 -0700 (PDT)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Suleiman Souhlal <suleiman@google.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linux-s390@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [RFC][PATCH] kvm: add suspend pm-notifier
+Date:   Fri,  4 Jun 2021 01:43:15 +0900
+Message-Id: <20210603164315.682994-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.32.0.rc0.204.g9fa02ecfa5-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 17 May 2021 16:41:17 -0700, Randy Dunlap wrote:
-> PCI_IOSIZE is defined in mach-loongson64/spaces.h, so change the name
-> of the PCI_* macros in pci-ftpci100.c to use FTPCI_* so that they are
-> more localized and won't conflict with other drivers or arches.
-> 
-> ../drivers/pci/controller/pci-ftpci100.c:37: warning: "PCI_IOSIZE" redefined
->    37 | #define PCI_IOSIZE 0x00
->       |
-> In file included from ../arch/mips/include/asm/addrspace.h:13,
-> ...              from ../drivers/pci/controller/pci-ftpci100.c:15:
-> arch/mips/include/asm/mach-loongson64/spaces.h:11: note: this is the location of the previous definition
->    11 | #define PCI_IOSIZE SZ_16M
+Add KVM suspend/hibernate PM-notifier which lets architectures
+to implement arch-specific VM suspend code. For instance, on x86
+this sets PVCLOCK_GUEST_STOPPED on all the VCPUs.
 
-Applied to pci/ftpci100, thanks!
+Our case is that user puts the host system into sleep multiple
+times a day (e.g. closes the laptop's lid) so we need a reliable
+way to suspend VMs properly.
 
-[1/1] PCI: ftpci100: rename macro name collision
-      https://git.kernel.org/lpieralisi/pci/c/b1cb890637
+Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+---
+ arch/arm64/kvm/arm.c       |  4 ++++
+ arch/mips/kvm/mips.c       |  4 ++++
+ arch/powerpc/kvm/powerpc.c |  4 ++++
+ arch/s390/kvm/kvm-s390.c   |  4 ++++
+ arch/x86/kvm/x86.c         | 21 ++++++++++++++++++++
+ include/linux/kvm_host.h   |  8 ++++++++
+ virt/kvm/kvm_main.c        | 40 ++++++++++++++++++++++++++++++++++++++
+ 7 files changed, 85 insertions(+)
 
-Thanks,
-Lorenzo
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 1126eae27400..547dbe44d039 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -1311,6 +1311,10 @@ static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
+ 	}
+ }
+ 
++void kvm_arch_pm_notifier(struct kvm *kvm)
++{
++}
++
+ long kvm_arch_vm_ioctl(struct file *filp,
+ 		       unsigned int ioctl, unsigned long arg)
+ {
+diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+index 4d4af97dcc88..d4408acd2be6 100644
+--- a/arch/mips/kvm/mips.c
++++ b/arch/mips/kvm/mips.c
+@@ -980,6 +980,10 @@ void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
+ 	kvm_flush_remote_tlbs(kvm);
+ }
+ 
++void kvm_arch_pm_notifier(struct kvm *kvm)
++{
++}
++
+ long kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
+ {
+ 	long r;
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index a2a68a958fa0..96e8a7b6fcf0 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -2334,6 +2334,10 @@ static int kvmppc_get_cpu_char(struct kvm_ppc_cpu_char *cp)
+ }
+ #endif
+ 
++void kvm_arch_pm_notifier(struct kvm *kvm)
++{
++}
++
+ long kvm_arch_vm_ioctl(struct file *filp,
+                        unsigned int ioctl, unsigned long arg)
+ {
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 1296fc10f80c..c5f86fc1e497 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -2367,6 +2367,10 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+ 	return r;
+ }
+ 
++void kvm_arch_pm_notifier(struct kvm *kvm)
++{
++}
++
+ long kvm_arch_vm_ioctl(struct file *filp,
+ 		       unsigned int ioctl, unsigned long arg)
+ {
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index bbc4e04e67ad..3f3d6497593f 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -5613,6 +5613,27 @@ static int kvm_vm_ioctl_set_msr_filter(struct kvm *kvm, void __user *argp)
+ 	return 0;
+ }
+ 
++void kvm_arch_pm_notifier(struct kvm *kvm)
++{
++#ifdef CONFIG_PM
++	int c;
++
++	mutex_lock(&kvm->lock);
++	for (c = 0; c < kvm->created_vcpus; c++) {
++		struct kvm_vcpu *vcpu = kvm->vcpus[c];
++		int r;
++
++		if (!vcpu)
++			continue;
++		r = kvm_set_guest_paused(vcpu);
++		if (!r)
++			continue;
++		pr_err("Failed to suspend VCPU-%d: %d\n", vcpu->vcpu_id,  r);
++	}
++	mutex_unlock(&kvm->lock);
++#endif
++}
++
+ long kvm_arch_vm_ioctl(struct file *filp,
+ 		       unsigned int ioctl, unsigned long arg)
+ {
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 2f34487e21f2..86695320a6b7 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -37,6 +37,8 @@
+ #include <asm/kvm_host.h>
+ #include <linux/kvm_dirty_ring.h>
+ 
++#include <linux/notifier.h>
++
+ #ifndef KVM_MAX_VCPU_ID
+ #define KVM_MAX_VCPU_ID KVM_MAX_VCPUS
+ #endif
+@@ -579,6 +581,10 @@ struct kvm {
+ 	pid_t userspace_pid;
+ 	unsigned int max_halt_poll_ns;
+ 	u32 dirty_ring_size;
++
++#ifdef CONFIG_PM
++	struct notifier_block pm_notifier;
++#endif
+ };
+ 
+ #define kvm_err(fmt, ...) \
+@@ -992,6 +998,8 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu);
+ void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu);
+ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu);
+ 
++void kvm_arch_pm_notifier(struct kvm *kvm);
++
+ #ifdef __KVM_HAVE_ARCH_VCPU_DEBUGFS
+ void kvm_arch_create_vcpu_debugfs(struct kvm_vcpu *vcpu, struct dentry *debugfs_dentry);
+ #endif
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 6b4feb92dc79..86925ab7d162 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -51,6 +51,7 @@
+ #include <linux/io.h>
+ #include <linux/lockdep.h>
+ #include <linux/kthread.h>
++#include <linux/suspend.h>
+ 
+ #include <asm/processor.h>
+ #include <asm/ioctl.h>
+@@ -779,6 +780,43 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
+ 
+ #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
+ 
++#ifdef CONFIG_PM
++static int kvm_pm_notifier_call(struct notifier_block *bl,
++				unsigned long state,
++				void *unused)
++{
++	struct kvm *kvm = container_of(bl, struct kvm, pm_notifier);
++
++	switch (state) {
++	case PM_HIBERNATION_PREPARE:
++	case PM_SUSPEND_PREPARE:
++		kvm_arch_pm_notifier(kvm);
++		break;
++	}
++	return NOTIFY_DONE;
++}
++
++static void kvm_init_pm_notifier(struct kvm *kvm)
++{
++	kvm->pm_notifier.notifier_call = kvm_pm_notifier_call;
++	kvm->pm_notifier.priority = INT_MAX;
++	register_pm_notifier(&kvm->pm_notifier);
++}
++
++static void kvm_destroy_pm_notifier(struct kvm *kvm)
++{
++	unregister_pm_notifier(&kvm->pm_notifier);
++}
++#else
++static void kvm_init_pm_notifier(struct kvm *kvm)
++{
++}
++
++static void kvm_destroy_pm_notifier(struct kvm *kvm)
++{
++}
++#endif /* CONFIG_PM */
++
+ static struct kvm_memslots *kvm_alloc_memslots(void)
+ {
+ 	int i;
+@@ -962,6 +1000,7 @@ static struct kvm *kvm_create_vm(unsigned long type)
+ 	mutex_unlock(&kvm_lock);
+ 
+ 	preempt_notifier_inc();
++	kvm_init_pm_notifier(kvm);
+ 
+ 	return kvm;
+ 
+@@ -1009,6 +1048,7 @@ static void kvm_destroy_vm(struct kvm *kvm)
+ 	int i;
+ 	struct mm_struct *mm = kvm->mm;
+ 
++	kvm_destroy_pm_notifier(kvm);
+ 	kvm_uevent_notify_change(KVM_EVENT_DESTROY_VM, kvm);
+ 	kvm_destroy_vm_debugfs(kvm);
+ 	kvm_arch_sync_events(kvm);
+-- 
+2.32.0.rc0.204.g9fa02ecfa5-goog
+
