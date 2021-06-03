@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B19339A8BC
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 19:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD13939A8D5
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 19:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbhFCRRl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Jun 2021 13:17:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43268 "EHLO mail.kernel.org"
+        id S233116AbhFCRSC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Jun 2021 13:18:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49358 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233613AbhFCRPs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Jun 2021 13:15:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D80061443;
-        Thu,  3 Jun 2021 17:11:09 +0000 (UTC)
+        id S233699AbhFCRQT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Jun 2021 13:16:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F06161445;
+        Thu,  3 Jun 2021 17:11:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622740270;
-        bh=3LvHQp1xxlyxC7ZpjBoqWXgvRjOcDdp7uDfoI2xNWCI=;
+        s=k20201202; t=1622740290;
+        bh=2NVq7XYzDTyqtrhj14PtMlCHTHI8xeDSUJOP8zruYow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FMi15bk2m8or+Aybtk0MMz5a61dC6vSeIvXrgnqcy4e+Wy1GUdENclDPxtZWDuxzm
-         uHIS+sviNNkrc8nEq/5SqUn+gOxLws1pdvVc/yaVOheV3N7jTDez6keN3JqwNkMXn/
-         d04PMkw+zEITkpdS4iRCqa4QyZfKnB6BI7cUi3W/EU9o1NNEhvSzGj7Lsx9TFnG3I3
-         cLz9tJSr7hOyUwr5qsMAMZKRjjhy0Z8m5YJPSu70vbiGtKt7FfcYTfom6Rd8cZTpYP
-         SCzYJHG1tJyetPzYoT0/oYWdden/OHpowF3XNN0oiIK/aNCQUZxGz9tUDox8ePi2Tv
-         FKOOzgPn+1ezQ==
+        b=PEYfyh9HMv2Xr4PecdCpt8JtiY1y6nx6fws1mdlSSQumcBZ0uMwgkRNtIti3oey64
+         xMDNmb57ZI/wNkU2T7V6qSKDM4WUWLkBUGdY8t+ZAEZATJBCFMaoFDeAfBzDKf730/
+         m76MWE9Fqs8nEAwFc6U/MkHNgkSV6AiMcmCQUiMPUzO1jAHXpBX+JyflBeUIMmZnlF
+         xfB4vGpR2+sPSW6ZnK6TozAvQTgSX1Q+yyi6BnUpZ8TYhUC8vl1WBr1fR3/Nu80e46
+         +5Yk01Q4NiKV2Hk98Tdjh7VTSGFbZC20WpgSrvhlQpxpWBrsTpfvbbUxoB9tlQHRzP
+         SsogoBkiFBBgw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 14/17] MIPS: Fix kernel hang under FUNCTION_GRAPH_TRACER and PREEMPT_TRACER
-Date:   Thu,  3 Jun 2021 13:10:49 -0400
-Message-Id: <20210603171052.3169893-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 12/15] MIPS: Fix kernel hang under FUNCTION_GRAPH_TRACER and PREEMPT_TRACER
+Date:   Thu,  3 Jun 2021 13:11:11 -0400
+Message-Id: <20210603171114.3170086-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210603171052.3169893-1-sashal@kernel.org>
-References: <20210603171052.3169893-1-sashal@kernel.org>
+In-Reply-To: <20210603171114.3170086-1-sashal@kernel.org>
+References: <20210603171114.3170086-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -83,7 +83,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/arch/mips/lib/mips-atomic.c b/arch/mips/lib/mips-atomic.c
-index 5530070e0d05..57497a26e79c 100644
+index 272af8ac2425..fd50aa7b178a 100644
 --- a/arch/mips/lib/mips-atomic.c
 +++ b/arch/mips/lib/mips-atomic.c
 @@ -37,7 +37,7 @@
@@ -104,7 +104,7 @@ index 5530070e0d05..57497a26e79c 100644
  }
  EXPORT_SYMBOL(arch_local_irq_disable);
  
-@@ -61,7 +61,7 @@ notrace unsigned long arch_local_irq_save(void)
+@@ -62,7 +62,7 @@ notrace unsigned long arch_local_irq_save(void)
  {
  	unsigned long flags;
  
@@ -113,7 +113,7 @@ index 5530070e0d05..57497a26e79c 100644
  
  	__asm__ __volatile__(
  	"	.set	push						\n"
-@@ -78,7 +78,7 @@ notrace unsigned long arch_local_irq_save(void)
+@@ -79,7 +79,7 @@ notrace unsigned long arch_local_irq_save(void)
  	: /* no inputs */
  	: "memory");
  
@@ -122,7 +122,7 @@ index 5530070e0d05..57497a26e79c 100644
  
  	return flags;
  }
-@@ -88,7 +88,7 @@ notrace void arch_local_irq_restore(unsigned long flags)
+@@ -89,7 +89,7 @@ notrace void arch_local_irq_restore(unsigned long flags)
  {
  	unsigned long __tmp1;
  
@@ -131,7 +131,7 @@ index 5530070e0d05..57497a26e79c 100644
  
  	__asm__ __volatile__(
  	"	.set	push						\n"
-@@ -106,7 +106,7 @@ notrace void arch_local_irq_restore(unsigned long flags)
+@@ -107,7 +107,7 @@ notrace void arch_local_irq_restore(unsigned long flags)
  	: "0" (flags)
  	: "memory");
  
