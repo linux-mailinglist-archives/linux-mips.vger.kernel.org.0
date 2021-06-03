@@ -2,144 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD13939A8D5
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 19:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DA739A92B
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 19:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbhFCRSC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Jun 2021 13:18:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49358 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233699AbhFCRQT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Jun 2021 13:16:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F06161445;
-        Thu,  3 Jun 2021 17:11:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622740290;
-        bh=2NVq7XYzDTyqtrhj14PtMlCHTHI8xeDSUJOP8zruYow=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PEYfyh9HMv2Xr4PecdCpt8JtiY1y6nx6fws1mdlSSQumcBZ0uMwgkRNtIti3oey64
-         xMDNmb57ZI/wNkU2T7V6qSKDM4WUWLkBUGdY8t+ZAEZATJBCFMaoFDeAfBzDKf730/
-         m76MWE9Fqs8nEAwFc6U/MkHNgkSV6AiMcmCQUiMPUzO1jAHXpBX+JyflBeUIMmZnlF
-         xfB4vGpR2+sPSW6ZnK6TozAvQTgSX1Q+yyi6BnUpZ8TYhUC8vl1WBr1fR3/Nu80e46
-         +5Yk01Q4NiKV2Hk98Tdjh7VTSGFbZC20WpgSrvhlQpxpWBrsTpfvbbUxoB9tlQHRzP
-         SsogoBkiFBBgw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 12/15] MIPS: Fix kernel hang under FUNCTION_GRAPH_TRACER and PREEMPT_TRACER
-Date:   Thu,  3 Jun 2021 13:11:11 -0400
-Message-Id: <20210603171114.3170086-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210603171114.3170086-1-sashal@kernel.org>
-References: <20210603171114.3170086-1-sashal@kernel.org>
+        id S230197AbhFCRa1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Jun 2021 13:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229695AbhFCRa0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Jun 2021 13:30:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C18C06174A;
+        Thu,  3 Jun 2021 10:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=C2x93GCoZiin4wmQCRttzlu4GmKci1Z97/29V5OUIBQ=; b=GRDRbyMv6qCSE0sh84jmHsdNkF
+        Ca7KqDDXhE6PMeMjq9YlXaVzupQWhipW2IItm4ocsfSpw+d/efAwGK8FtYyzr6e9U2OdG0QNXnu1+
+        4QMVh94o4r91Nb9pKuH/aEiHNN/RaaYLJk1EDj7snekcEw+wEoPAM7KtleMUX7IvQ0ursPrzg7ZF/
+        gXXzGmAwjg3XV30CvwWJ354CMua5g6UeT0oN8FI3A0frhhHpPWm8cujn3JtHZoyDZpU/SxKz+S99B
+        vDFcvTD2d81achEPArKXYaS7aFfuHurRAPSgV0E+UgPbkBvDEdjoVzzfxyhE5YcHK539uoPArzXor
+        gytVNA5Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lor85-00COf2-Ei; Thu, 03 Jun 2021 17:27:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 63300300269;
+        Thu,  3 Jun 2021 19:27:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 400C72BF86F79; Thu,  3 Jun 2021 19:27:35 +0200 (CEST)
+Date:   Thu, 3 Jun 2021 19:27:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Suleiman Souhlal <suleiman@google.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [RFC][PATCH] kvm: add suspend pm-notifier
+Message-ID: <YLkRB3qxjrXB99He@hirez.programming.kicks-ass.net>
+References: <20210603164315.682994-1-senozhatsky@chromium.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210603164315.682994-1-senozhatsky@chromium.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
+On Fri, Jun 04, 2021 at 01:43:15AM +0900, Sergey Senozhatsky wrote:
+> Add KVM suspend/hibernate PM-notifier which lets architectures
+> to implement arch-specific VM suspend code. For instance, on x86
+> this sets PVCLOCK_GUEST_STOPPED on all the VCPUs.
+> 
+> Our case is that user puts the host system into sleep multiple
+> times a day (e.g. closes the laptop's lid) so we need a reliable
+> way to suspend VMs properly.
+> 
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  arch/arm64/kvm/arm.c       |  4 ++++
+>  arch/mips/kvm/mips.c       |  4 ++++
+>  arch/powerpc/kvm/powerpc.c |  4 ++++
+>  arch/s390/kvm/kvm-s390.c   |  4 ++++
+>  arch/x86/kvm/x86.c         | 21 ++++++++++++++++++++
+>  include/linux/kvm_host.h   |  8 ++++++++
+>  virt/kvm/kvm_main.c        | 40 ++++++++++++++++++++++++++++++++++++++
+>  7 files changed, 85 insertions(+)
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 1126eae27400..547dbe44d039 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -1311,6 +1311,10 @@ static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
+>  	}
+>  }
+>  
+> +void kvm_arch_pm_notifier(struct kvm *kvm)
+> +{
+> +}
+> +
+>  long kvm_arch_vm_ioctl(struct file *filp,
+>  		       unsigned int ioctl, unsigned long arg)
+>  {
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index 4d4af97dcc88..d4408acd2be6 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -980,6 +980,10 @@ void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
+>  	kvm_flush_remote_tlbs(kvm);
+>  }
+>  
+> +void kvm_arch_pm_notifier(struct kvm *kvm)
+> +{
+> +}
+> +
+>  long kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
+>  {
+>  	long r;
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index a2a68a958fa0..96e8a7b6fcf0 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -2334,6 +2334,10 @@ static int kvmppc_get_cpu_char(struct kvm_ppc_cpu_char *cp)
+>  }
+>  #endif
+>  
+> +void kvm_arch_pm_notifier(struct kvm *kvm)
+> +{
+> +}
+> +
+>  long kvm_arch_vm_ioctl(struct file *filp,
+>                         unsigned int ioctl, unsigned long arg)
+>  {
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 1296fc10f80c..c5f86fc1e497 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -2367,6 +2367,10 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+>  	return r;
+>  }
+>  
+> +void kvm_arch_pm_notifier(struct kvm *kvm)
+> +{
+> +}
+> +
+>  long kvm_arch_vm_ioctl(struct file *filp,
+>  		       unsigned int ioctl, unsigned long arg)
+>  {
 
-[ Upstream commit 78cf0eb926cb1abeff2106bae67752e032fe5f3e ]
-
-When update the latest mainline kernel with the following three configs,
-the kernel hangs during startup:
-
-(1) CONFIG_FUNCTION_GRAPH_TRACER=y
-(2) CONFIG_PREEMPT_TRACER=y
-(3) CONFIG_FTRACE_STARTUP_TEST=y
-
-When update the latest mainline kernel with the above two configs (1)
-and (2), the kernel starts normally, but it still hangs when execute
-the following command:
-
-echo "function_graph" > /sys/kernel/debug/tracing/current_tracer
-
-Without CONFIG_PREEMPT_TRACER=y, the above two kinds of kernel hangs
-disappeared, so it seems that CONFIG_PREEMPT_TRACER has some influences
-with function_graph tracer at the first glance.
-
-I use ejtag to find out the epc address is related with preempt_enable()
-in the file arch/mips/lib/mips-atomic.c, because function tracing can
-trace the preempt_{enable,disable} calls that are traced, replace them
-with preempt_{enable,disable}_notrace to prevent function tracing from
-going into an infinite loop, and then it can fix the kernel hang issue.
-
-By the way, it seems that this commit is a complement and improvement of
-commit f93a1a00f2bd ("MIPS: Fix crash that occurs when function tracing
-is enabled").
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/lib/mips-atomic.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/mips/lib/mips-atomic.c b/arch/mips/lib/mips-atomic.c
-index 272af8ac2425..fd50aa7b178a 100644
---- a/arch/mips/lib/mips-atomic.c
-+++ b/arch/mips/lib/mips-atomic.c
-@@ -37,7 +37,7 @@
-  */
- notrace void arch_local_irq_disable(void)
- {
--	preempt_disable();
-+	preempt_disable_notrace();
- 
- 	__asm__ __volatile__(
- 	"	.set	push						\n"
-@@ -53,7 +53,7 @@ notrace void arch_local_irq_disable(void)
- 	: /* no inputs */
- 	: "memory");
- 
--	preempt_enable();
-+	preempt_enable_notrace();
- }
- EXPORT_SYMBOL(arch_local_irq_disable);
- 
-@@ -62,7 +62,7 @@ notrace unsigned long arch_local_irq_save(void)
- {
- 	unsigned long flags;
- 
--	preempt_disable();
-+	preempt_disable_notrace();
- 
- 	__asm__ __volatile__(
- 	"	.set	push						\n"
-@@ -79,7 +79,7 @@ notrace unsigned long arch_local_irq_save(void)
- 	: /* no inputs */
- 	: "memory");
- 
--	preempt_enable();
-+	preempt_enable_notrace();
- 
- 	return flags;
- }
-@@ -89,7 +89,7 @@ notrace void arch_local_irq_restore(unsigned long flags)
- {
- 	unsigned long __tmp1;
- 
--	preempt_disable();
-+	preempt_disable_notrace();
- 
- 	__asm__ __volatile__(
- 	"	.set	push						\n"
-@@ -107,7 +107,7 @@ notrace void arch_local_irq_restore(unsigned long flags)
- 	: "0" (flags)
- 	: "memory");
- 
--	preempt_enable();
-+	preempt_enable_notrace();
- }
- EXPORT_SYMBOL(arch_local_irq_restore);
- 
--- 
-2.30.2
-
+What looks like you wants a __weak function.
