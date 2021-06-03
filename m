@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B13639A7CE
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 19:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79EFA39A84B
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Jun 2021 19:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbhFCRMp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Jun 2021 13:12:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43256 "EHLO mail.kernel.org"
+        id S232480AbhFCROc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Jun 2021 13:14:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42858 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232650AbhFCRL4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Jun 2021 13:11:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B1C76140B;
-        Thu,  3 Jun 2021 17:09:51 +0000 (UTC)
+        id S232929AbhFCRMx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Jun 2021 13:12:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D8C2D61403;
+        Thu,  3 Jun 2021 17:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622740191;
+        s=k20201202; t=1622740224;
         bh=3LvHQp1xxlyxC7ZpjBoqWXgvRjOcDdp7uDfoI2xNWCI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o8R+5WcYGLRr4BAr8Mtwv7qsBbE4urebxO18txFbWDJrY5DMRbGNVz5mDcS26Yip3
-         eN6ZXGDRqJpl5K4aBafmMl1bgXDWHusAvN76X0rNdWCyp5aoqW/7JhFZ9T313GGMfs
-         R2+qPMLidMbCjlxid9dzMFIw9iDsSIxQNINcJ+pmgdSHRqOZKSqAonZQB/LADu5OB3
-         vwkr6yTuEFucofYuEDI0E3LPkP+5D24L/gVoIBZq6qJ0fglT9Sqcb39sjW7V308WIr
-         uge8f66Jp2EH/CpOkQ00FZSiK47va7JkDXl/dbD6SW5djMEjPST6M8rDmV1F+jrhhN
-         8+Ftgqg5KCVIg==
+        b=UyAOr7dua2LgjgGZ+79CNy9zDm0mZTGQpMhmJRMI3HFsKntF7tj1eVqHYUZmj7C+q
+         fYjbAqo+wgXROO35EKHH8M2cQu1AxP9vDrqCvyhAlUWHfP8gt63DvYTk7jd7iwpk2F
+         97NGgiPA0hR76cBd9Rgi6n8qDCUNQl/MCdS1xYR0IUdg/c5OcStmkqNAfX3Sif/ih+
+         13P3UoC6U8OcyPoy4kl9iDE+/Hj8RRZbIxWzyjjJJZAsH4vh0T+IHnCMFEbcNtiF4o
+         qi5+HQMmi+REA73Vdwsp5eVlR7trq/F1H5UcjwvQxux59peGZGWL4sqdIi/A/HpREV
+         3O616qqchv5Hw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 26/31] MIPS: Fix kernel hang under FUNCTION_GRAPH_TRACER and PREEMPT_TRACER
-Date:   Thu,  3 Jun 2021 13:09:14 -0400
-Message-Id: <20210603170919.3169112-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 20/23] MIPS: Fix kernel hang under FUNCTION_GRAPH_TRACER and PREEMPT_TRACER
+Date:   Thu,  3 Jun 2021 13:09:56 -0400
+Message-Id: <20210603170959.3169420-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210603170919.3169112-1-sashal@kernel.org>
-References: <20210603170919.3169112-1-sashal@kernel.org>
+In-Reply-To: <20210603170959.3169420-1-sashal@kernel.org>
+References: <20210603170959.3169420-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
