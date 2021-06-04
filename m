@@ -2,56 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFBA39B866
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Jun 2021 13:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9FB39B84E
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Jun 2021 13:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbhFDLzG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Jun 2021 07:55:06 -0400
-Received: from mail-wm1-f46.google.com ([209.85.128.46]:53154 "EHLO
-        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbhFDLzG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Jun 2021 07:55:06 -0400
-Received: by mail-wm1-f46.google.com with SMTP id f17so5210503wmf.2;
-        Fri, 04 Jun 2021 04:53:04 -0700 (PDT)
+        id S230246AbhFDLxw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Jun 2021 07:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229682AbhFDLxw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Jun 2021 07:53:52 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373B2C061763;
+        Fri,  4 Jun 2021 04:52:06 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id n17-20020a7bc5d10000b0290169edfadac9so7753838wmk.1;
+        Fri, 04 Jun 2021 04:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IFkFZkUEu8pyfmElOSW0LNkJkb9AwGYnZod3dF9RUZA=;
-        b=VFs6VVQEwxaV72eFc/7Yd+SN5Vx3VqIMOhPcU1YHG3PwUfWT1fikGPakgkTT6LZWpp
-         uZSWxVPKcNVOSGKitgF+njSLldoa1/STR8S1Y/ewxnXUE0Fu7SO6uAJ1dFxr6V5rkTLK
-         GQ8keo8x/kKOTRpvjBNGbbFj3K3xQzRb6M45HZV+SATuj22DefGSCgGYTw5bEpqIX3gW
-         oHPAFQua5W31PHBvE7rHgYxEcLLXNkn92jOqFQX+C8gOluflEITmo+yWLRAjgsEX0DTR
-         qkY8IYR+GbPmdRuL65AGLXcLe0dJXcb3w8e2FztDkjIgGLdfqfOlHyrbooSzLFYV9luz
-         o6yg==
+        bh=SmBykUAHwb33q76FE7n++M2GRAkAkX9TUwvnlibu7Iw=;
+        b=YSMG48WwtX2vDWePRoDbCk2CCd731DZb70MW0oN/qziN+qPo8b9azlOVn4+71e0wD0
+         N5JEifHlQZh/XL76RZbwpatAI1T95O8VtTNik9jdO/WqbtSmZAkBcU+bcxFv2Pt7MS66
+         VhPSzvtW9yUfSvtmDmG/qekzOvjxpLXFBnJoM1qRxE8bW4wn/QN0nINVMgJugmmeTomA
+         TYUDjjDn3wt956bhlhU3YqrGYjCX99ttDIho4d/tn1g03F54BpUzGesFtL8NCIrbjkS0
+         Kmn62TlzLgA1yJJFJjiHm9Ql1Wpypsrje2YyRbnYGH1/SN4lkwVEsoD6xxizDF7GtKL3
+         mMhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IFkFZkUEu8pyfmElOSW0LNkJkb9AwGYnZod3dF9RUZA=;
-        b=dLBJZZz8nhNii1mwGDPn7lWZy3mjDUSCCBK1UZLjmBAa25TZ08QrSl80yHliXWJn0j
-         t6mZk2ORM9ht8PM0dvZYKqOI0tipXhIEIHyqlqcg1kN1yRKWZ3pi2HkLW//xz7UNeolB
-         W6xeGm0L64zK0e9FU1mBIcgM9oS1XHlNnn3hsJfeFK2ebT1tcTm7TsnnE5BvF6QyT3D/
-         e8nt9jIM83kbZ8H/eZoUE6tJTGJCi3qp5AzCdx5qOWWDJvsMMhlyWsGB3pgP59FdR9j8
-         qZ2Cy2hjjr6GBlB9lyZCdxaEYk0GJKKLJ/cj0AZf/N6HD1VUvXRjXI1CZDR1mhEC/y6u
-         lfmQ==
-X-Gm-Message-State: AOAM530PNdb1nhz9b10PDhTTVdfVg1YnMxiYLkUq20BNFKBuOMxAsyZV
-        2VqjAOplnDpQXAM3LFg3/v1aWu5vtTdsSQ==
-X-Google-Smtp-Source: ABdhPJyWEukUTZm93KgnHtIegIsQ9XsuyDLECPOmv6AmlQCJYurXj4Bi2a94xpxpJ8wiZ5/gD07OMA==
-X-Received: by 2002:a05:600c:4285:: with SMTP id v5mr3300821wmc.184.1622807523930;
-        Fri, 04 Jun 2021 04:52:03 -0700 (PDT)
+        bh=SmBykUAHwb33q76FE7n++M2GRAkAkX9TUwvnlibu7Iw=;
+        b=jP+7SGZbVQtL3Iv62fHbFj2tA91XtO1yvWmoGH3ZEcJFV79thNzmW4jpaphM030U+b
+         2CUCl0UU9qo2qFCjnUiousmyShqqv7pHJ6f4EkcDtBuDbbzwjt1ziMyiRyrqiAIj0NPG
+         AyiPpPqsve9sx1eKPenVfg4Tda6QnsQRJLifyMyRUqoyBcVPfeQYYLEhzAqc73c5BPWE
+         KXGoJYu4R+fK48brwqg+Tl4p7XiI1V8bbGLrRaR70XvwcUYykkL37U16ElSzfeZ60bBh
+         3tQHx3tf8/UX1fjKAK7Q3marjNurZUZPmqqElUQ4GRQLpcQqNVVmqy5vwLDRJllKP1hx
+         74/g==
+X-Gm-Message-State: AOAM532n9NKBXUpWk6Ilj1fwtHjO2srjm+DMr5bIsJ1+0MEADl/Ix88M
+        vZ5oKecpDv4Grx2cOKHuFVg=
+X-Google-Smtp-Source: ABdhPJzzuK8vWp/xkgFJgfGk3MgPEqqFKmSS/GNSDsxbcvJPCh+wEgYd5rJ7ItyDrCnrxbg3MxuyXQ==
+X-Received: by 2002:a05:600c:2199:: with SMTP id e25mr3270247wme.140.1622807524849;
+        Fri, 04 Jun 2021 04:52:04 -0700 (PDT)
 Received: from localhost.localdomain (113.red-88-4-247.dynamicip.rima-tde.net. [88.4.247.113])
-        by smtp.gmail.com with ESMTPSA id v10sm6924530wre.33.2021.06.04.04.52.03
+        by smtp.gmail.com with ESMTPSA id v10sm6924530wre.33.2021.06.04.04.52.04
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Jun 2021 04:52:03 -0700 (PDT)
+        Fri, 04 Jun 2021 04:52:04 -0700 (PDT)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To:     john@phrozen.org
 Cc:     linus.walleij@linaro.org, tsbogend@alpha.franken.de,
         linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org,
         ilya.lipnitskiy@gmail.com, neil@brown.name
-Subject: [PATCH 3/6] pinctrl: ralink: move RT3883 SoC pinmux config into a new 'pinctrl-rt3883.c' file
-Date:   Fri,  4 Jun 2021 13:51:56 +0200
-Message-Id: <20210604115159.8834-4-sergio.paracuellos@gmail.com>
+Subject: [PATCH 4/6] pinctrl: ralink: move RT305X SoC pinmux config into a new 'pinctrl-rt305x.c' file
+Date:   Fri,  4 Jun 2021 13:51:57 +0200
+Message-Id: <20210604115159.8834-5-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210604115159.8834-1-sergio.paracuellos@gmail.com>
 References: <20210604115159.8834-1-sergio.paracuellos@gmail.com>
@@ -61,72 +64,62 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Move all related code for SoC RT3883 into a new driver located
-in 'pinctrl-rt3883.c' source file
+Move all related code for SoC RT305X into a new driver located
+in 'pinctrl-rt305x.c' source file.
 
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- arch/mips/include/asm/mach-ralink/rt3883.h |  34 -------
- arch/mips/ralink/rt3883.c                  |  45 ---------
+ arch/mips/include/asm/mach-ralink/rt305x.h |  24 ----
+ arch/mips/ralink/rt305x.c                  |  77 ------------
  drivers/pinctrl/ralink/Kconfig             |   5 +
  drivers/pinctrl/ralink/Makefile            |   1 +
- drivers/pinctrl/ralink/pinctrl-rt3883.c    | 107 +++++++++++++++++++++
- 5 files changed, 113 insertions(+), 79 deletions(-)
- create mode 100644 drivers/pinctrl/ralink/pinctrl-rt3883.c
+ drivers/pinctrl/ralink/pinctrl-rt305x.c    | 136 +++++++++++++++++++++
+ 5 files changed, 142 insertions(+), 101 deletions(-)
+ create mode 100644 drivers/pinctrl/ralink/pinctrl-rt305x.c
 
-diff --git a/arch/mips/include/asm/mach-ralink/rt3883.h b/arch/mips/include/asm/mach-ralink/rt3883.h
-index 565f2548496a..f250de9c055b 100644
---- a/arch/mips/include/asm/mach-ralink/rt3883.h
-+++ b/arch/mips/include/asm/mach-ralink/rt3883.h
-@@ -109,40 +109,6 @@
- #define RT3883_CLKCFG1_PCI_CLK_EN	BIT(19)
- #define RT3883_CLKCFG1_UPHY0_CLK_EN	BIT(18)
+diff --git a/arch/mips/include/asm/mach-ralink/rt305x.h b/arch/mips/include/asm/mach-ralink/rt305x.h
+index b54619dc4b88..4d8e8c8d83ce 100644
+--- a/arch/mips/include/asm/mach-ralink/rt305x.h
++++ b/arch/mips/include/asm/mach-ralink/rt305x.h
+@@ -114,30 +114,6 @@ static inline int soc_is_rt5350(void)
+ #define RT305X_GPIO_GE0_TXD0		40
+ #define RT305X_GPIO_GE0_RXCLK		51
  
--#define RT3883_GPIO_MODE_UART0_SHIFT	2
--#define RT3883_GPIO_MODE_UART0_MASK	0x7
--#define RT3883_GPIO_MODE_UART0(x)	((x) << RT3883_GPIO_MODE_UART0_SHIFT)
--#define RT3883_GPIO_MODE_UARTF		0x0
--#define RT3883_GPIO_MODE_PCM_UARTF	0x1
--#define RT3883_GPIO_MODE_PCM_I2S	0x2
--#define RT3883_GPIO_MODE_I2S_UARTF	0x3
--#define RT3883_GPIO_MODE_PCM_GPIO	0x4
--#define RT3883_GPIO_MODE_GPIO_UARTF	0x5
--#define RT3883_GPIO_MODE_GPIO_I2S	0x6
--#define RT3883_GPIO_MODE_GPIO		0x7
+-#define RT305X_GPIO_MODE_UART0_SHIFT	2
+-#define RT305X_GPIO_MODE_UART0_MASK	0x7
+-#define RT305X_GPIO_MODE_UART0(x)	((x) << RT305X_GPIO_MODE_UART0_SHIFT)
+-#define RT305X_GPIO_MODE_UARTF		0
+-#define RT305X_GPIO_MODE_PCM_UARTF	1
+-#define RT305X_GPIO_MODE_PCM_I2S	2
+-#define RT305X_GPIO_MODE_I2S_UARTF	3
+-#define RT305X_GPIO_MODE_PCM_GPIO	4
+-#define RT305X_GPIO_MODE_GPIO_UARTF	5
+-#define RT305X_GPIO_MODE_GPIO_I2S	6
+-#define RT305X_GPIO_MODE_GPIO		7
 -
--#define RT3883_GPIO_MODE_I2C		0
--#define RT3883_GPIO_MODE_SPI		1
--#define RT3883_GPIO_MODE_UART1		5
--#define RT3883_GPIO_MODE_JTAG		6
--#define RT3883_GPIO_MODE_MDIO		7
--#define RT3883_GPIO_MODE_GE1		9
--#define RT3883_GPIO_MODE_GE2		10
+-#define RT305X_GPIO_MODE_I2C		0
+-#define RT305X_GPIO_MODE_SPI		1
+-#define RT305X_GPIO_MODE_UART1		5
+-#define RT305X_GPIO_MODE_JTAG		6
+-#define RT305X_GPIO_MODE_MDIO		7
+-#define RT305X_GPIO_MODE_SDRAM		8
+-#define RT305X_GPIO_MODE_RGMII		9
+-#define RT5350_GPIO_MODE_PHY_LED	14
+-#define RT5350_GPIO_MODE_SPI_CS1	21
+-#define RT3352_GPIO_MODE_LNA		18
+-#define RT3352_GPIO_MODE_PA		20
 -
--#define RT3883_GPIO_MODE_PCI_SHIFT	11
--#define RT3883_GPIO_MODE_PCI_MASK	0x7
--#define RT3883_GPIO_MODE_PCI		(RT3883_GPIO_MODE_PCI_MASK << RT3883_GPIO_MODE_PCI_SHIFT)
--#define RT3883_GPIO_MODE_LNA_A_SHIFT	16
--#define RT3883_GPIO_MODE_LNA_A_MASK	0x3
--#define _RT3883_GPIO_MODE_LNA_A(_x)	((_x) << RT3883_GPIO_MODE_LNA_A_SHIFT)
--#define RT3883_GPIO_MODE_LNA_A_GPIO	0x3
--#define RT3883_GPIO_MODE_LNA_A		_RT3883_GPIO_MODE_LNA_A(RT3883_GPIO_MODE_LNA_A_MASK)
--#define RT3883_GPIO_MODE_LNA_G_SHIFT	18
--#define RT3883_GPIO_MODE_LNA_G_MASK	0x3
--#define _RT3883_GPIO_MODE_LNA_G(_x)	((_x) << RT3883_GPIO_MODE_LNA_G_SHIFT)
--#define RT3883_GPIO_MODE_LNA_G_GPIO	0x3
--#define RT3883_GPIO_MODE_LNA_G		_RT3883_GPIO_MODE_LNA_G(RT3883_GPIO_MODE_LNA_G_MASK)
--
- #define RT3883_GPIO_I2C_SD		1
- #define RT3883_GPIO_I2C_SCLK		2
- #define RT3883_GPIO_SPI_CS0		3
-diff --git a/arch/mips/ralink/rt3883.c b/arch/mips/ralink/rt3883.c
-index ff91f3531ad0..d9875f146d66 100644
---- a/arch/mips/ralink/rt3883.c
-+++ b/arch/mips/ralink/rt3883.c
-@@ -14,52 +14,9 @@
+ #define RT3352_SYSC_REG_SYSCFG0		0x010
+ #define RT3352_SYSC_REG_SYSCFG1         0x014
+ #define RT3352_SYSC_REG_CLKCFG1         0x030
+diff --git a/arch/mips/ralink/rt305x.c b/arch/mips/ralink/rt305x.c
+index c5b63c142705..8b095a9dcb15 100644
+--- a/arch/mips/ralink/rt305x.c
++++ b/arch/mips/ralink/rt305x.c
+@@ -16,83 +16,9 @@
  #include <asm/mipsregs.h>
  #include <asm/mach-ralink/ralink_regs.h>
- #include <asm/mach-ralink/rt3883.h>
+ #include <asm/mach-ralink/rt305x.h>
 -#include <asm/mach-ralink/pinmux.h>
  
  #include "common.h"
@@ -134,192 +127,262 @@ index ff91f3531ad0..d9875f146d66 100644
 -static struct rt2880_pmx_func i2c_func[] =  { FUNC("i2c", 0, 1, 2) };
 -static struct rt2880_pmx_func spi_func[] = { FUNC("spi", 0, 3, 4) };
 -static struct rt2880_pmx_func uartf_func[] = {
--	FUNC("uartf", RT3883_GPIO_MODE_UARTF, 7, 8),
--	FUNC("pcm uartf", RT3883_GPIO_MODE_PCM_UARTF, 7, 8),
--	FUNC("pcm i2s", RT3883_GPIO_MODE_PCM_I2S, 7, 8),
--	FUNC("i2s uartf", RT3883_GPIO_MODE_I2S_UARTF, 7, 8),
--	FUNC("pcm gpio", RT3883_GPIO_MODE_PCM_GPIO, 11, 4),
--	FUNC("gpio uartf", RT3883_GPIO_MODE_GPIO_UARTF, 7, 4),
--	FUNC("gpio i2s", RT3883_GPIO_MODE_GPIO_I2S, 7, 4),
+-	FUNC("uartf", RT305X_GPIO_MODE_UARTF, 7, 8),
+-	FUNC("pcm uartf", RT305X_GPIO_MODE_PCM_UARTF, 7, 8),
+-	FUNC("pcm i2s", RT305X_GPIO_MODE_PCM_I2S, 7, 8),
+-	FUNC("i2s uartf", RT305X_GPIO_MODE_I2S_UARTF, 7, 8),
+-	FUNC("pcm gpio", RT305X_GPIO_MODE_PCM_GPIO, 11, 4),
+-	FUNC("gpio uartf", RT305X_GPIO_MODE_GPIO_UARTF, 7, 4),
+-	FUNC("gpio i2s", RT305X_GPIO_MODE_GPIO_I2S, 7, 4),
 -};
 -static struct rt2880_pmx_func uartlite_func[] = { FUNC("uartlite", 0, 15, 2) };
 -static struct rt2880_pmx_func jtag_func[] = { FUNC("jtag", 0, 17, 5) };
 -static struct rt2880_pmx_func mdio_func[] = { FUNC("mdio", 0, 22, 2) };
--static struct rt2880_pmx_func lna_a_func[] = { FUNC("lna a", 0, 32, 3) };
--static struct rt2880_pmx_func lna_g_func[] = { FUNC("lna g", 0, 35, 3) };
--static struct rt2880_pmx_func pci_func[] = {
--	FUNC("pci-dev", 0, 40, 32),
--	FUNC("pci-host2", 1, 40, 32),
--	FUNC("pci-host1", 2, 40, 32),
--	FUNC("pci-fnc", 3, 40, 32)
+-static struct rt2880_pmx_func rt5350_led_func[] = { FUNC("led", 0, 22, 5) };
+-static struct rt2880_pmx_func rt5350_cs1_func[] = {
+-	FUNC("spi_cs1", 0, 27, 1),
+-	FUNC("wdg_cs1", 1, 27, 1),
 -};
--static struct rt2880_pmx_func ge1_func[] = { FUNC("ge1", 0, 72, 12) };
--static struct rt2880_pmx_func ge2_func[] = { FUNC("ge2", 0, 84, 12) };
+-static struct rt2880_pmx_func sdram_func[] = { FUNC("sdram", 0, 24, 16) };
+-static struct rt2880_pmx_func rt3352_rgmii_func[] = {
+-	FUNC("rgmii", 0, 24, 12)
+-};
+-static struct rt2880_pmx_func rgmii_func[] = { FUNC("rgmii", 0, 40, 12) };
+-static struct rt2880_pmx_func rt3352_lna_func[] = { FUNC("lna", 0, 36, 2) };
+-static struct rt2880_pmx_func rt3352_pa_func[] = { FUNC("pa", 0, 38, 2) };
+-static struct rt2880_pmx_func rt3352_led_func[] = { FUNC("led", 0, 40, 5) };
+-static struct rt2880_pmx_func rt3352_cs1_func[] = {
+-	FUNC("spi_cs1", 0, 45, 1),
+-	FUNC("wdg_cs1", 1, 45, 1),
+-};
 -
--static struct rt2880_pmx_group rt3883_pinmux_data[] = {
--	GRP("i2c", i2c_func, 1, RT3883_GPIO_MODE_I2C),
--	GRP("spi", spi_func, 1, RT3883_GPIO_MODE_SPI),
--	GRP("uartf", uartf_func, RT3883_GPIO_MODE_UART0_MASK,
--		RT3883_GPIO_MODE_UART0_SHIFT),
--	GRP("uartlite", uartlite_func, 1, RT3883_GPIO_MODE_UART1),
--	GRP("jtag", jtag_func, 1, RT3883_GPIO_MODE_JTAG),
--	GRP("mdio", mdio_func, 1, RT3883_GPIO_MODE_MDIO),
--	GRP("lna a", lna_a_func, 1, RT3883_GPIO_MODE_LNA_A),
--	GRP("lna g", lna_g_func, 1, RT3883_GPIO_MODE_LNA_G),
--	GRP("pci", pci_func, RT3883_GPIO_MODE_PCI_MASK,
--		RT3883_GPIO_MODE_PCI_SHIFT),
--	GRP("ge1", ge1_func, 1, RT3883_GPIO_MODE_GE1),
--	GRP("ge2", ge2_func, 1, RT3883_GPIO_MODE_GE2),
+-static struct rt2880_pmx_group rt3050_pinmux_data[] = {
+-	GRP("i2c", i2c_func, 1, RT305X_GPIO_MODE_I2C),
+-	GRP("spi", spi_func, 1, RT305X_GPIO_MODE_SPI),
+-	GRP("uartf", uartf_func, RT305X_GPIO_MODE_UART0_MASK,
+-		RT305X_GPIO_MODE_UART0_SHIFT),
+-	GRP("uartlite", uartlite_func, 1, RT305X_GPIO_MODE_UART1),
+-	GRP("jtag", jtag_func, 1, RT305X_GPIO_MODE_JTAG),
+-	GRP("mdio", mdio_func, 1, RT305X_GPIO_MODE_MDIO),
+-	GRP("rgmii", rgmii_func, 1, RT305X_GPIO_MODE_RGMII),
+-	GRP("sdram", sdram_func, 1, RT305X_GPIO_MODE_SDRAM),
 -	{ 0 }
 -};
 -
- void __init ralink_clk_init(void)
- {
- 	unsigned long cpu_rate, sys_rate;
-@@ -142,7 +99,5 @@ void __init prom_soc_init(struct ralink_soc_info *soc_info)
- 	soc_info->mem_size_min = RT3883_MEM_SIZE_MIN;
- 	soc_info->mem_size_max = RT3883_MEM_SIZE_MAX;
- 
--	rt2880_pinmux_data = rt3883_pinmux_data;
+-static struct rt2880_pmx_group rt3352_pinmux_data[] = {
+-	GRP("i2c", i2c_func, 1, RT305X_GPIO_MODE_I2C),
+-	GRP("spi", spi_func, 1, RT305X_GPIO_MODE_SPI),
+-	GRP("uartf", uartf_func, RT305X_GPIO_MODE_UART0_MASK,
+-		RT305X_GPIO_MODE_UART0_SHIFT),
+-	GRP("uartlite", uartlite_func, 1, RT305X_GPIO_MODE_UART1),
+-	GRP("jtag", jtag_func, 1, RT305X_GPIO_MODE_JTAG),
+-	GRP("mdio", mdio_func, 1, RT305X_GPIO_MODE_MDIO),
+-	GRP("rgmii", rt3352_rgmii_func, 1, RT305X_GPIO_MODE_RGMII),
+-	GRP("lna", rt3352_lna_func, 1, RT3352_GPIO_MODE_LNA),
+-	GRP("pa", rt3352_pa_func, 1, RT3352_GPIO_MODE_PA),
+-	GRP("led", rt3352_led_func, 1, RT5350_GPIO_MODE_PHY_LED),
+-	GRP("spi_cs1", rt3352_cs1_func, 2, RT5350_GPIO_MODE_SPI_CS1),
+-	{ 0 }
+-};
 -
- 	ralink_soc = RT3883_SOC;
+-static struct rt2880_pmx_group rt5350_pinmux_data[] = {
+-	GRP("i2c", i2c_func, 1, RT305X_GPIO_MODE_I2C),
+-	GRP("spi", spi_func, 1, RT305X_GPIO_MODE_SPI),
+-	GRP("uartf", uartf_func, RT305X_GPIO_MODE_UART0_MASK,
+-		RT305X_GPIO_MODE_UART0_SHIFT),
+-	GRP("uartlite", uartlite_func, 1, RT305X_GPIO_MODE_UART1),
+-	GRP("jtag", jtag_func, 1, RT305X_GPIO_MODE_JTAG),
+-	GRP("led", rt5350_led_func, 1, RT5350_GPIO_MODE_PHY_LED),
+-	GRP("spi_cs1", rt5350_cs1_func, 2, RT5350_GPIO_MODE_SPI_CS1),
+-	{ 0 }
+-};
+-
+ static unsigned long rt5350_get_mem_size(void)
+ {
+ 	void __iomem *sysc = (void __iomem *) KSEG1ADDR(RT305X_SYSC_BASE);
+@@ -265,14 +191,11 @@ void __init prom_soc_init(struct ralink_soc_info *soc_info)
+ 	soc_info->mem_base = RT305X_SDRAM_BASE;
+ 	if (soc_is_rt5350()) {
+ 		soc_info->mem_size = rt5350_get_mem_size();
+-		rt2880_pinmux_data = rt5350_pinmux_data;
+ 	} else if (soc_is_rt305x() || soc_is_rt3350()) {
+ 		soc_info->mem_size_min = RT305X_MEM_SIZE_MIN;
+ 		soc_info->mem_size_max = RT305X_MEM_SIZE_MAX;
+-		rt2880_pinmux_data = rt3050_pinmux_data;
+ 	} else if (soc_is_rt3352()) {
+ 		soc_info->mem_size_min = RT3352_MEM_SIZE_MIN;
+ 		soc_info->mem_size_max = RT3352_MEM_SIZE_MAX;
+-		rt2880_pinmux_data = rt3352_pinmux_data;
+ 	}
  }
 diff --git a/drivers/pinctrl/ralink/Kconfig b/drivers/pinctrl/ralink/Kconfig
-index ef8990a4c1eb..6f5fb3dc0a41 100644
+index 6f5fb3dc0a41..705a63d34d3c 100644
 --- a/drivers/pinctrl/ralink/Kconfig
 +++ b/drivers/pinctrl/ralink/Kconfig
-@@ -16,4 +16,9 @@ config PINCTRL_MT7621
+@@ -16,6 +16,11 @@ config PINCTRL_MT7621
          depends on RALINK && SOC_MT7621
          select PINCTRL_RT2880
  
-+config PINCTRL_RT3883
-+        bool "RT3883 pinctrl driver for RALINK/Mediatek SOCs"
-+        depends on RALINK && SOC_RT3883
++config PINCTRL_RT305X
++        bool "RT305X pinctrl driver for RALINK/Mediatek SOCs"
++        depends on RALINK && SOC_RT305X
 +        select PINCTRL_RT2880
 +
- endmenu
+ config PINCTRL_RT3883
+         bool "RT3883 pinctrl driver for RALINK/Mediatek SOCs"
+         depends on RALINK && SOC_RT3883
 diff --git a/drivers/pinctrl/ralink/Makefile b/drivers/pinctrl/ralink/Makefile
-index 470855290ff6..86d6f8253afa 100644
+index 86d6f8253afa..119d30ecea98 100644
 --- a/drivers/pinctrl/ralink/Makefile
 +++ b/drivers/pinctrl/ralink/Makefile
-@@ -2,3 +2,4 @@
+@@ -2,4 +2,5 @@
  obj-$(CONFIG_PINCTRL_RT2880)   += pinctrl-rt2880.o
  
  obj-$(CONFIG_PINCTRL_MT7621)   += pinctrl-mt7621.o
-+obj-$(CONFIG_PINCTRL_RT3883)   += pinctrl-rt3883.o
-diff --git a/drivers/pinctrl/ralink/pinctrl-rt3883.c b/drivers/pinctrl/ralink/pinctrl-rt3883.c
++obj-$(CONFIG_PINCTRL_RT305X)   += pinctrl-rt305x.o
+ obj-$(CONFIG_PINCTRL_RT3883)   += pinctrl-rt3883.o
+diff --git a/drivers/pinctrl/ralink/pinctrl-rt305x.c b/drivers/pinctrl/ralink/pinctrl-rt305x.c
 new file mode 100644
-index 000000000000..3e0e1b4caa64
+index 000000000000..699fe18e7000
 --- /dev/null
-+++ b/drivers/pinctrl/ralink/pinctrl-rt3883.c
-@@ -0,0 +1,107 @@
++++ b/drivers/pinctrl/ralink/pinctrl-rt305x.c
+@@ -0,0 +1,136 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
++#include <asm/mach-ralink/rt305x.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
 +#include <linux/of.h>
 +#include "pinmux.h"
 +
-+#define RT3883_GPIO_MODE_UART0_SHIFT	2
-+#define RT3883_GPIO_MODE_UART0_MASK	0x7
-+#define RT3883_GPIO_MODE_UART0(x)	((x) << RT3883_GPIO_MODE_UART0_SHIFT)
-+#define RT3883_GPIO_MODE_UARTF		0x0
-+#define RT3883_GPIO_MODE_PCM_UARTF	0x1
-+#define RT3883_GPIO_MODE_PCM_I2S	0x2
-+#define RT3883_GPIO_MODE_I2S_UARTF	0x3
-+#define RT3883_GPIO_MODE_PCM_GPIO	0x4
-+#define RT3883_GPIO_MODE_GPIO_UARTF	0x5
-+#define RT3883_GPIO_MODE_GPIO_I2S	0x6
-+#define RT3883_GPIO_MODE_GPIO		0x7
++#define RT305X_GPIO_MODE_UART0_SHIFT	2
++#define RT305X_GPIO_MODE_UART0_MASK	0x7
++#define RT305X_GPIO_MODE_UART0(x)	((x) << RT305X_GPIO_MODE_UART0_SHIFT)
++#define RT305X_GPIO_MODE_UARTF		0
++#define RT305X_GPIO_MODE_PCM_UARTF	1
++#define RT305X_GPIO_MODE_PCM_I2S	2
++#define RT305X_GPIO_MODE_I2S_UARTF	3
++#define RT305X_GPIO_MODE_PCM_GPIO	4
++#define RT305X_GPIO_MODE_GPIO_UARTF	5
++#define RT305X_GPIO_MODE_GPIO_I2S	6
++#define RT305X_GPIO_MODE_GPIO		7
 +
-+#define RT3883_GPIO_MODE_I2C		0
-+#define RT3883_GPIO_MODE_SPI		1
-+#define RT3883_GPIO_MODE_UART1		5
-+#define RT3883_GPIO_MODE_JTAG		6
-+#define RT3883_GPIO_MODE_MDIO		7
-+#define RT3883_GPIO_MODE_GE1		9
-+#define RT3883_GPIO_MODE_GE2		10
-+
-+#define RT3883_GPIO_MODE_PCI_SHIFT	11
-+#define RT3883_GPIO_MODE_PCI_MASK	0x7
-+#define RT3883_GPIO_MODE_PCI		(RT3883_GPIO_MODE_PCI_MASK << RT3883_GPIO_MODE_PCI_SHIFT)
-+#define RT3883_GPIO_MODE_LNA_A_SHIFT	16
-+#define RT3883_GPIO_MODE_LNA_A_MASK	0x3
-+#define _RT3883_GPIO_MODE_LNA_A(_x)	((_x) << RT3883_GPIO_MODE_LNA_A_SHIFT)
-+#define RT3883_GPIO_MODE_LNA_A_GPIO	0x3
-+#define RT3883_GPIO_MODE_LNA_A		_RT3883_GPIO_MODE_LNA_A(RT3883_GPIO_MODE_LNA_A_MASK)
-+#define RT3883_GPIO_MODE_LNA_G_SHIFT	18
-+#define RT3883_GPIO_MODE_LNA_G_MASK	0x3
-+#define _RT3883_GPIO_MODE_LNA_G(_x)	((_x) << RT3883_GPIO_MODE_LNA_G_SHIFT)
-+#define RT3883_GPIO_MODE_LNA_G_GPIO	0x3
-+#define RT3883_GPIO_MODE_LNA_G		_RT3883_GPIO_MODE_LNA_G(RT3883_GPIO_MODE_LNA_G_MASK)
++#define RT305X_GPIO_MODE_I2C		0
++#define RT305X_GPIO_MODE_SPI		1
++#define RT305X_GPIO_MODE_UART1		5
++#define RT305X_GPIO_MODE_JTAG		6
++#define RT305X_GPIO_MODE_MDIO		7
++#define RT305X_GPIO_MODE_SDRAM		8
++#define RT305X_GPIO_MODE_RGMII		9
++#define RT5350_GPIO_MODE_PHY_LED	14
++#define RT5350_GPIO_MODE_SPI_CS1	21
++#define RT3352_GPIO_MODE_LNA		18
++#define RT3352_GPIO_MODE_PA		20
 +
 +static struct rt2880_pmx_func i2c_func[] =  { FUNC("i2c", 0, 1, 2) };
 +static struct rt2880_pmx_func spi_func[] = { FUNC("spi", 0, 3, 4) };
 +static struct rt2880_pmx_func uartf_func[] = {
-+	FUNC("uartf", RT3883_GPIO_MODE_UARTF, 7, 8),
-+	FUNC("pcm uartf", RT3883_GPIO_MODE_PCM_UARTF, 7, 8),
-+	FUNC("pcm i2s", RT3883_GPIO_MODE_PCM_I2S, 7, 8),
-+	FUNC("i2s uartf", RT3883_GPIO_MODE_I2S_UARTF, 7, 8),
-+	FUNC("pcm gpio", RT3883_GPIO_MODE_PCM_GPIO, 11, 4),
-+	FUNC("gpio uartf", RT3883_GPIO_MODE_GPIO_UARTF, 7, 4),
-+	FUNC("gpio i2s", RT3883_GPIO_MODE_GPIO_I2S, 7, 4),
++	FUNC("uartf", RT305X_GPIO_MODE_UARTF, 7, 8),
++	FUNC("pcm uartf", RT305X_GPIO_MODE_PCM_UARTF, 7, 8),
++	FUNC("pcm i2s", RT305X_GPIO_MODE_PCM_I2S, 7, 8),
++	FUNC("i2s uartf", RT305X_GPIO_MODE_I2S_UARTF, 7, 8),
++	FUNC("pcm gpio", RT305X_GPIO_MODE_PCM_GPIO, 11, 4),
++	FUNC("gpio uartf", RT305X_GPIO_MODE_GPIO_UARTF, 7, 4),
++	FUNC("gpio i2s", RT305X_GPIO_MODE_GPIO_I2S, 7, 4),
 +};
 +static struct rt2880_pmx_func uartlite_func[] = { FUNC("uartlite", 0, 15, 2) };
 +static struct rt2880_pmx_func jtag_func[] = { FUNC("jtag", 0, 17, 5) };
 +static struct rt2880_pmx_func mdio_func[] = { FUNC("mdio", 0, 22, 2) };
-+static struct rt2880_pmx_func lna_a_func[] = { FUNC("lna a", 0, 32, 3) };
-+static struct rt2880_pmx_func lna_g_func[] = { FUNC("lna g", 0, 35, 3) };
-+static struct rt2880_pmx_func pci_func[] = {
-+	FUNC("pci-dev", 0, 40, 32),
-+	FUNC("pci-host2", 1, 40, 32),
-+	FUNC("pci-host1", 2, 40, 32),
-+	FUNC("pci-fnc", 3, 40, 32)
++static struct rt2880_pmx_func rt5350_led_func[] = { FUNC("led", 0, 22, 5) };
++static struct rt2880_pmx_func rt5350_cs1_func[] = {
++	FUNC("spi_cs1", 0, 27, 1),
++	FUNC("wdg_cs1", 1, 27, 1),
 +};
-+static struct rt2880_pmx_func ge1_func[] = { FUNC("ge1", 0, 72, 12) };
-+static struct rt2880_pmx_func ge2_func[] = { FUNC("ge2", 0, 84, 12) };
++static struct rt2880_pmx_func sdram_func[] = { FUNC("sdram", 0, 24, 16) };
++static struct rt2880_pmx_func rt3352_rgmii_func[] = {
++	FUNC("rgmii", 0, 24, 12)
++};
++static struct rt2880_pmx_func rgmii_func[] = { FUNC("rgmii", 0, 40, 12) };
++static struct rt2880_pmx_func rt3352_lna_func[] = { FUNC("lna", 0, 36, 2) };
++static struct rt2880_pmx_func rt3352_pa_func[] = { FUNC("pa", 0, 38, 2) };
++static struct rt2880_pmx_func rt3352_led_func[] = { FUNC("led", 0, 40, 5) };
++static struct rt2880_pmx_func rt3352_cs1_func[] = {
++	FUNC("spi_cs1", 0, 45, 1),
++	FUNC("wdg_cs1", 1, 45, 1),
++};
 +
-+static struct rt2880_pmx_group rt3883_pinmux_data[] = {
-+	GRP("i2c", i2c_func, 1, RT3883_GPIO_MODE_I2C),
-+	GRP("spi", spi_func, 1, RT3883_GPIO_MODE_SPI),
-+	GRP("uartf", uartf_func, RT3883_GPIO_MODE_UART0_MASK,
-+		RT3883_GPIO_MODE_UART0_SHIFT),
-+	GRP("uartlite", uartlite_func, 1, RT3883_GPIO_MODE_UART1),
-+	GRP("jtag", jtag_func, 1, RT3883_GPIO_MODE_JTAG),
-+	GRP("mdio", mdio_func, 1, RT3883_GPIO_MODE_MDIO),
-+	GRP("lna a", lna_a_func, 1, RT3883_GPIO_MODE_LNA_A),
-+	GRP("lna g", lna_g_func, 1, RT3883_GPIO_MODE_LNA_G),
-+	GRP("pci", pci_func, RT3883_GPIO_MODE_PCI_MASK,
-+		RT3883_GPIO_MODE_PCI_SHIFT),
-+	GRP("ge1", ge1_func, 1, RT3883_GPIO_MODE_GE1),
-+	GRP("ge2", ge2_func, 1, RT3883_GPIO_MODE_GE2),
++static struct rt2880_pmx_group rt3050_pinmux_data[] = {
++	GRP("i2c", i2c_func, 1, RT305X_GPIO_MODE_I2C),
++	GRP("spi", spi_func, 1, RT305X_GPIO_MODE_SPI),
++	GRP("uartf", uartf_func, RT305X_GPIO_MODE_UART0_MASK,
++		RT305X_GPIO_MODE_UART0_SHIFT),
++	GRP("uartlite", uartlite_func, 1, RT305X_GPIO_MODE_UART1),
++	GRP("jtag", jtag_func, 1, RT305X_GPIO_MODE_JTAG),
++	GRP("mdio", mdio_func, 1, RT305X_GPIO_MODE_MDIO),
++	GRP("rgmii", rgmii_func, 1, RT305X_GPIO_MODE_RGMII),
++	GRP("sdram", sdram_func, 1, RT305X_GPIO_MODE_SDRAM),
 +	{ 0 }
 +};
 +
-+static int rt3883_pinmux_probe(struct platform_device *pdev)
++static struct rt2880_pmx_group rt3352_pinmux_data[] = {
++	GRP("i2c", i2c_func, 1, RT305X_GPIO_MODE_I2C),
++	GRP("spi", spi_func, 1, RT305X_GPIO_MODE_SPI),
++	GRP("uartf", uartf_func, RT305X_GPIO_MODE_UART0_MASK,
++		RT305X_GPIO_MODE_UART0_SHIFT),
++	GRP("uartlite", uartlite_func, 1, RT305X_GPIO_MODE_UART1),
++	GRP("jtag", jtag_func, 1, RT305X_GPIO_MODE_JTAG),
++	GRP("mdio", mdio_func, 1, RT305X_GPIO_MODE_MDIO),
++	GRP("rgmii", rt3352_rgmii_func, 1, RT305X_GPIO_MODE_RGMII),
++	GRP("lna", rt3352_lna_func, 1, RT3352_GPIO_MODE_LNA),
++	GRP("pa", rt3352_pa_func, 1, RT3352_GPIO_MODE_PA),
++	GRP("led", rt3352_led_func, 1, RT5350_GPIO_MODE_PHY_LED),
++	GRP("spi_cs1", rt3352_cs1_func, 2, RT5350_GPIO_MODE_SPI_CS1),
++	{ 0 }
++};
++
++static struct rt2880_pmx_group rt5350_pinmux_data[] = {
++	GRP("i2c", i2c_func, 1, RT305X_GPIO_MODE_I2C),
++	GRP("spi", spi_func, 1, RT305X_GPIO_MODE_SPI),
++	GRP("uartf", uartf_func, RT305X_GPIO_MODE_UART0_MASK,
++		RT305X_GPIO_MODE_UART0_SHIFT),
++	GRP("uartlite", uartlite_func, 1, RT305X_GPIO_MODE_UART1),
++	GRP("jtag", jtag_func, 1, RT305X_GPIO_MODE_JTAG),
++	GRP("led", rt5350_led_func, 1, RT5350_GPIO_MODE_PHY_LED),
++	GRP("spi_cs1", rt5350_cs1_func, 2, RT5350_GPIO_MODE_SPI_CS1),
++	{ 0 }
++};
++
++static int rt305x_pinmux_probe(struct platform_device *pdev)
 +{
-+	return rt2880_pinmux_init(pdev, rt3883_pinmux_data);
++	if (soc_is_rt5350())
++		return rt2880_pinmux_init(pdev, rt5350_pinmux_data);
++	else if (soc_is_rt305x() || soc_is_rt3350())
++		return rt2880_pinmux_init(pdev, rt3050_pinmux_data);
++	else if (soc_is_rt3352())
++		return rt2880_pinmux_init(pdev, rt3352_pinmux_data);
++	else
++		return -EINVAL;
 +}
 +
-+static const struct of_device_id rt3883_pinmux_match[] = {
++static const struct of_device_id rt305x_pinmux_match[] = {
 +	{ .compatible = "ralink,rt2880-pinmux" },
 +	{}
 +};
-+MODULE_DEVICE_TABLE(of, rt3883_pinmux_match);
++MODULE_DEVICE_TABLE(of, rt305x_pinmux_match);
 +
-+static struct platform_driver rt3883_pinmux_driver = {
-+	.probe = rt3883_pinmux_probe,
++static struct platform_driver rt305x_pinmux_driver = {
++	.probe = rt305x_pinmux_probe,
 +	.driver = {
 +		.name = "rt2880-pinmux",
-+		.of_match_table = rt3883_pinmux_match,
++		.of_match_table = rt305x_pinmux_match,
 +	},
 +};
 +
-+static int __init rt3883_pinmux_init(void)
++static int __init rt305x_pinmux_init(void)
 +{
-+	return platform_driver_register(&rt3883_pinmux_driver);
++	return platform_driver_register(&rt305x_pinmux_driver);
 +}
-+core_initcall_sync(rt3883_pinmux_init);
++core_initcall_sync(rt305x_pinmux_init);
 -- 
 2.25.1
 
