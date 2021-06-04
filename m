@@ -2,89 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C94B839AF23
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Jun 2021 02:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F18839B11D
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Jun 2021 05:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbhFDAmj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Jun 2021 20:42:39 -0400
-Received: from mail-pj1-f44.google.com ([209.85.216.44]:44784 "EHLO
-        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbhFDAmj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Jun 2021 20:42:39 -0400
-Received: by mail-pj1-f44.google.com with SMTP id h12-20020a17090aa88cb029016400fd8ad8so4891769pjq.3
-        for <linux-mips@vger.kernel.org>; Thu, 03 Jun 2021 17:40:37 -0700 (PDT)
+        id S229786AbhFDDuJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Jun 2021 23:50:09 -0400
+Received: from mail-pg1-f177.google.com ([209.85.215.177]:34751 "EHLO
+        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229718AbhFDDuI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Jun 2021 23:50:08 -0400
+Received: by mail-pg1-f177.google.com with SMTP id l1so6797301pgm.1
+        for <linux-mips@vger.kernel.org>; Thu, 03 Jun 2021 20:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hsyO5EEm3dG2GUVsZApwZQUFiUjt1oJTpcTgXFZNdfs=;
-        b=BlYNVPE305FbxEUMO5lSCEn5LG3JutO1Lg3tWns9s0oCrpDQwG+i6qmuM/hisKYpP+
-         y5qZfeRJIC4++esHrRYMFwklEwa2AsIP8FI2G+izcydAmHDQpIvGWGtM265YiTqVep0S
-         1wPk4/uTSpfKNxeIwC0sNPU2Zfv4gAByw74Ls=
+         :content-disposition:in-reply-to:user-agent;
+        bh=pIq+JVIVR9DjAt6LSJSdRSoXJZoMpMbdkGfBUXWctS8=;
+        b=MLa6uHvz/HBRNKFlje+iv6q7NwcrPZZLfLn72Auow2MiBy9pXci6zDSsVtz093uJAQ
+         tI2l7rOo5uSkQTM3OLvDb71ZAStKA4kYtUGedUNpqGfacmpPpQbBtiDOfjyVKaEdlDG9
+         05yUJ5lAHQVrD94AKI0UneZBLVGoIcr+bX5to7eO7yq0PYK7EhlL1b6Ye5MaO/ENje7Q
+         UFfa0CXyEclTLRcfL6hvzL3FFLN9XPQ+5DNPc/lkeEJnZnXZFIWoj/1hnTpM4Jle0jJw
+         q/NxexA90JJcPCe+2pIQ2U1mqW1wKQZQkofCHOuIJDTZTwfHlZRSIdWWi9PdWMfgdrWu
+         MBvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hsyO5EEm3dG2GUVsZApwZQUFiUjt1oJTpcTgXFZNdfs=;
-        b=AkAdGpYEZEmgLD8djFFTiP3kmDyYgJFeAODdnd2LRTeE48k+PZ33WYjKwNhJeFfGHp
-         /ZlOLi4N+09PIdmt7nNrJFDrKM2qE8i6X1e26J8S5XqHFQB3xX1VUdxRrktyLpQXuX5Q
-         PIXzb07bJirQ5p+DQmZKy1umWz8I7wNZ3f8c7fWFFqreqYUuYAcDqbGDeTzEpPrgAegy
-         MiGxUwQS4+Yw73QQH5OWKE4/To0pJFyi5rcknOCc5FnXZ4y/0RyQUx/WiEHI/cP1asCr
-         aSjIX9oAyb/uPHRKig+4q3ZxAyKMDSm8l3c+yRYkCg4T9DmBzFske2NywQExrm3vZuw8
-         QNCg==
-X-Gm-Message-State: AOAM53271OfG0r9tX+zjn9j+MzpbQbNQq6UeuQwpda3crenYyPkDxAYg
-        wulbK6bU+DyfToEstmz2Yr9IsA==
-X-Google-Smtp-Source: ABdhPJwUR3L1tC9qXtsxtXxpLe8tNcJAE3/COLahbUTOQi2i1KnLOCdr6jBvw3P/Ytpi3HasD6ls1Q==
-X-Received: by 2002:a17:90a:7345:: with SMTP id j5mr13827315pjs.64.1622767177417;
-        Thu, 03 Jun 2021 17:39:37 -0700 (PDT)
-Received: from google.com ([2409:10:2e40:5100:36b:f5b6:c380:9ccf])
-        by smtp.gmail.com with ESMTPSA id j16sm3074017pjn.55.2021.06.03.17.39.32
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pIq+JVIVR9DjAt6LSJSdRSoXJZoMpMbdkGfBUXWctS8=;
+        b=VmbX2K4SSkv2d7KPjSD4zd00pDR0ti5sGUjDm6/+ZEQf9BhlBDq4FF1MjuGRcP3JuK
+         98pqLYeQbN+Jk3Gseoauo4cCfYZRlN70L8hL9LYO1iUqa8EKGudqMFprk/+b5Th37NUm
+         gd67EHNJaVw4Uo7bJqkrCNHuep3tiUpebfdoKn1Bi03UM3Bk19oCPNM4ws3ZuqAqTo/c
+         gzPjEeWVSh0Nf48ssW4YDlz1o5JkrHfaJKDf/Zxykd07/k8kP2/Q69E6sLSvm0jCa69X
+         a5WhUj87iHLDSgyf1LNrkWZF873aEur+qYrlg6N7Z01Cf7Z8hElXKs+h2uWDju+yC9uY
+         NVvQ==
+X-Gm-Message-State: AOAM530ZLG4EpkWn9U/Q7tctTCdc3cO0bVaTILM52dpEF++eqOVDL4Mh
+        drUdTT8amqwRO/Sp2kIBUzKKfQ==
+X-Google-Smtp-Source: ABdhPJxPYL3u14YlbpACeDySBpftc5/sS7Ra4HGar7+d8+9245hYpnWmvs5a96W4jbVQ38b28AS5mg==
+X-Received: by 2002:a63:af46:: with SMTP id s6mr2802591pgo.446.1622778434301;
+        Thu, 03 Jun 2021 20:47:14 -0700 (PDT)
+Received: from localhost ([136.185.154.93])
+        by smtp.gmail.com with ESMTPSA id t1sm488715pgl.40.2021.06.03.20.47.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 17:39:36 -0700 (PDT)
-Date:   Fri, 4 Jun 2021 09:39:29 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Suleiman Souhlal <suleiman@google.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [RFC][PATCH] kvm: add suspend pm-notifier
-Message-ID: <YLl2QeoziEVHvRAO@google.com>
-References: <20210603164315.682994-1-senozhatsky@chromium.org>
- <YLkRB3qxjrXB99He@hirez.programming.kicks-ass.net>
+        Thu, 03 Jun 2021 20:47:13 -0700 (PDT)
+Date:   Fri, 4 Jun 2021 09:17:09 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hailong Liu <liuhailongg6@163.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hailong Liu <liu.hailong6@zte.com.cn>
+Subject: Re: [PATCH] CPUFREQ: loongson2: Remove unused linux/sched.h headers
+Message-ID: <20210604034709.kxqy6vcfvtxf5rje@vireshk-i7>
+References: <20210603135752.30162-1-liuhailongg6@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YLkRB3qxjrXB99He@hirez.programming.kicks-ass.net>
+In-Reply-To: <20210603135752.30162-1-liuhailongg6@163.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On (21/06/03 19:27), Peter Zijlstra wrote:
-> On Fri, Jun 04, 2021 at 01:43:15AM +0900, Sergey Senozhatsky wrote:
-[..]
-> >  
-> > +void kvm_arch_pm_notifier(struct kvm *kvm)
-> > +{
-> > +}
-> > +
-> >  long kvm_arch_vm_ioctl(struct file *filp,
-> >  		       unsigned int ioctl, unsigned long arg)
-> >  {
+On 03-06-21, 21:57, Hailong Liu wrote:
+> From: Hailong Liu <liu.hailong6@zte.com.cn>
 > 
-> What looks like you wants a __weak function.
+> Since commit 759f534e93ac(CPUFREQ: Loongson2: drop set_cpus_allowed_ptr()),
+> the header <linux/sched.h> is useless in oongson2_cpufreq.c, so remove it.
+> 
+> Signed-off-by: Hailong Liu <liu.hailong6@zte.com.cn>
+> ---
+>  drivers/cpufreq/loongson2_cpufreq.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/loongson2_cpufreq.c b/drivers/cpufreq/loongson2_cpufreq.c
+> index d05e761d9572..afc59b292153 100644
+> --- a/drivers/cpufreq/loongson2_cpufreq.c
+> +++ b/drivers/cpufreq/loongson2_cpufreq.c
+> @@ -16,7 +16,6 @@
+>  #include <linux/cpufreq.h>
+>  #include <linux/module.h>
+>  #include <linux/err.h>
+> -#include <linux/sched.h>	/* set_cpus_allowed() */
+>  #include <linux/delay.h>
+>  #include <linux/platform_device.h>
 
-True. Thanks for the suggestion.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-I thought about it, but I recalled that tglx had  __strong opinions
-on __weak functions.
+-- 
+viresh
