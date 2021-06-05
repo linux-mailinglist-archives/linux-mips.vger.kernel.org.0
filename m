@@ -2,82 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A6239C6A7
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Jun 2021 09:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FF839C8D4
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Jun 2021 15:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbhFEHxK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Jun 2021 03:53:10 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:3069 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbhFEHxK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Jun 2021 03:53:10 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FxsCF43pKzWqHK;
-        Sat,  5 Jun 2021 15:46:33 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 5 Jun 2021 15:51:20 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Sat, 5 Jun 2021
- 15:51:19 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>
-CC:     <tsbogend@alpha.franken.de>
-Subject: [PATCH -next] MIPS: OCTEON: octeon-usb: Use devm_platform_get_and_ioremap_resource()
-Date:   Sat, 5 Jun 2021 15:55:37 +0800
-Message-ID: <20210605075537.2046896-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+        id S229933AbhFENii (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Jun 2021 09:38:38 -0400
+Received: from mail-m964.mail.126.com ([123.126.96.4]:49054 "EHLO
+        mail-m964.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229931AbhFENii (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Jun 2021 09:38:38 -0400
+X-Greylist: delayed 1809 seconds by postgrey-1.27 at vger.kernel.org; Sat, 05 Jun 2021 09:38:38 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=f9Wj/cFcMSLEZt3a7k
+        mUO3fOZsRQwFcAJUxx6KOO8rY=; b=dgBcVpYkyLhYg+wZ891XWY1D3GEcnPbNxE
+        7IigG2C8/d4bBBu3O7NJHZ/7XXUQftsQ9FurkSi90nOra6S+vzH36rA7+9NFz2H2
+        S6QCOL2P35aI6iF9/ykNmYhUBoG5Df2wyhaLIFNh+IRbunua6U6vx3cZWiTNbODn
+        evH3vjh1M=
+Received: from localhost.localdomain (unknown [122.194.9.184])
+        by smtp9 (Coremail) with SMTP id NeRpCgCn1__cdrtgbpN7XA--.36462S3;
+        Sat, 05 Jun 2021 21:06:37 +0800 (CST)
+From:   chenxb_99091@126.com
+To:     yanh@lemote.com, linux-mips@vger.kernel.org
+Cc:     Kailong <wkailong1993@163.com>
+Subject: [PATCH] MIPS:Loongson2F:delete mutex defined but not used
+Date:   Sat,  5 Jun 2021 21:06:33 +0800
+Message-Id: <1622898393-3777-1-git-send-email-chenxb_99091@126.com>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: NeRpCgCn1__cdrtgbpN7XA--.36462S3
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Wr4UKrWrWry8Xry7tr43ZFb_yoW3JFXEgF
+        y2kw48urWrAF1fu3sruF15Kw429a4ruFnxCF93Gr95Za1FvF9xCF4vvry8Wrn0gFnIv34r
+        WF48Cr45uF47tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU86uWJUUUUU==
+X-Originating-IP: [122.194.9.184]
+X-CM-SenderInfo: hfkh05lebzmiizr6ij2wof0z/1tbiWBqoxV1w6hTzowAAss
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Remove unneeded error handling on the result of a call
-to platform_get_resource() when the value is passed to
-devm_ioremap_resource().
+From: Kailong <wkailong1993@163.com>
 
-And use devm_platform_get_and_ioremap_resource() to simplify
-code.
+For 4.19.X, mutex clock_list_sem defined in
+ arch/mips/loongson64/lemote-2f/clock.c never be used.  So delete it
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Kailong <wkailong1993@163.com>
 ---
- arch/mips/cavium-octeon/octeon-usb.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ arch/mips/loongson64/lemote-2f/clock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/arch/mips/cavium-octeon/octeon-usb.c
-index 950e6c6e8629..6e4d3619137a 100644
---- a/arch/mips/cavium-octeon/octeon-usb.c
-+++ b/arch/mips/cavium-octeon/octeon-usb.c
-@@ -516,20 +516,13 @@ static int __init dwc3_octeon_device_init(void)
- 			if (!pdev)
- 				return -ENODEV;
+diff --git a/arch/mips/loongson64/lemote-2f/clock.c b/arch/mips/loongson64/lemote-2f/clock.c
+index 8281334..aff58b0 100644
+--- a/arch/mips/loongson64/lemote-2f/clock.c
++++ b/arch/mips/loongson64/lemote-2f/clock.c
+@@ -19,7 +19,7 @@
  
--			res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--			if (res == NULL) {
--				put_device(&pdev->dev);
--				dev_err(&pdev->dev, "No memory resources\n");
--				return -ENXIO;
--			}
--
- 			/*
- 			 * The code below maps in the registers necessary for
- 			 * setting up the clocks and reseting PHYs. We must
- 			 * release the resources so the dwc3 subsystem doesn't
- 			 * know the difference.
- 			 */
--			base = devm_ioremap_resource(&pdev->dev, res);
-+			base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 			if (IS_ERR(base)) {
- 				put_device(&pdev->dev);
- 				return PTR_ERR(base);
+ static LIST_HEAD(clock_list);
+ static DEFINE_SPINLOCK(clock_lock);
+-static DEFINE_MUTEX(clock_list_sem);
++
+ 
+ /* Minimum CLK support */
+ enum {
 -- 
-2.25.1
+2.7.4
 
