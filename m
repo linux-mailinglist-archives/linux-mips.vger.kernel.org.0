@@ -2,92 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BC039D5E9
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Jun 2021 09:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348EB39D7D3
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Jun 2021 10:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbhFGH0k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Jun 2021 03:26:40 -0400
-Received: from mail-lj1-f177.google.com ([209.85.208.177]:37735 "EHLO
-        mail-lj1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbhFGH0k (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Jun 2021 03:26:40 -0400
-Received: by mail-lj1-f177.google.com with SMTP id e2so20837181ljk.4
-        for <linux-mips@vger.kernel.org>; Mon, 07 Jun 2021 00:24:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7XFKCqW38BpyvPGAj77mmhqNmYLUf96meoe7Ud9PZGU=;
-        b=vC945zI42SGNSFLbyn9rEsAMxhu45h3PuyKwFq7h1XDlOcuIvmpK2VLv7G+BBx3R19
-         OH4Aw4xp8La+eZdh0eIqHcJWyA2rJzbJsacmKxJZ4wEmCIDZhOlZ7M/W7YkPuMGespU5
-         iOT4lSj6twrWYh8tX4uZANH/g7fph/NM7y88ljWtvZWwKlwIDUvOs3MxGL/7XjxdIue2
-         TV+hjVHq4B/I48nKs6/qn3JWVR8h5l/UR5+6DEpp+fOVQ3kqVZ3/ubY7kPOepLISAqFg
-         WMJN2+j2OcIIps7I8rdr7P1mVl6n7gdaTp640izQ/ao/yv+97MZ+70SkBV3MTWVNuiPF
-         02sA==
+        id S231266AbhFGIrH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Jun 2021 04:47:07 -0400
+Received: from mail-vs1-f54.google.com ([209.85.217.54]:46775 "EHLO
+        mail-vs1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230374AbhFGIrF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Jun 2021 04:47:05 -0400
+Received: by mail-vs1-f54.google.com with SMTP id z15so8465015vsn.13;
+        Mon, 07 Jun 2021 01:44:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7XFKCqW38BpyvPGAj77mmhqNmYLUf96meoe7Ud9PZGU=;
-        b=qIBIPzAF/fRYlXUHbj4qF0F1G/JwyOAJSCrVP+c8Y1ckvIi7q9mvAdLQbRTKc+vIxm
-         ib/iezIqJ/aRFsygEb/5tkdtCkPu8tIHmAp62DeLiCEzg6Ggnqqr/UTDpywfmu/mv28O
-         SCZfQCCJkD2FHFOyOeWZjhyYgV/bPkxOBdjZzWN1bmbY+bEJhpgruoY4yra+Hut/Aoxl
-         ThM3zfybGU6o/Xpo/L6FVE65rIVxBu1nh9bhGMdB1an7FGzAK7Nxgw6hMWfQ9bLf/MfU
-         9+uaPbBGTm72h6vNewEcrLREh8TzpsA5p3is/m2sJGmF3VDdwNFxA1Xs3KBtZCEhwAek
-         P5sQ==
-X-Gm-Message-State: AOAM533ZKf1aiN9UeWIMERKe3sLh3Vg2m/uCuNZyvTtjjWckluOblCf2
-        mOet7RjBxul7dbjlwehFmwQrKqvQHxVNGjJh4Op0PQ==
-X-Google-Smtp-Source: ABdhPJwuqelB5PyBM1VHEI4uCLaiUDh/xZ4mnMHjjpAkJNVH6A3JSlSz6qXB+TBuE3fPhVBKTCgunUZRFppjWZPs2IY=
-X-Received: by 2002:a2e:7811:: with SMTP id t17mr4226689ljc.368.1623050628263;
- Mon, 07 Jun 2021 00:23:48 -0700 (PDT)
+        bh=NMLFqpyinJNzmHBwsTXpi/IC86W5Z3EEdqUV4Gadqtw=;
+        b=YUbC/hYOqslL6/ObJ+SXGcYz04AW2Bl5kv0FBQfpyjrL1K7dEe9Jz1aEp2NiZngjqB
+         pSImytQZbfunCF1nFrabAKZEPGMM8ewN2IRHchhEzV/nYh5y/alwS+udHY3OPsnOON1Y
+         4Xwm5ojYKx5hdJ/T6P8utxYGmz+IB4ppUWd+eM4j3CE47XU/UZuL/SkA2kOa7aActou/
+         OyC8obJD+2c2fOb8kD2ODUnnj5MrNeFGYuxC4XCfTihVUNbSMFCrHtfOzqlzF4HAMjsY
+         zkC762tdDvl6yJw6YGJIOcrTOsfhDtYPbkxFw4S89QDbSQG7rzDaI9BEZr52j2ZolYrn
+         CNsA==
+X-Gm-Message-State: AOAM531A7/q0k6XkJa7PviYZZbEnu+lu+QtUCrpCSqXAlKUzqzKPQ0SS
+        EDUmHfNsLJQSXn4b+SrfpeNLxqy6IQ/7I1ozums=
+X-Google-Smtp-Source: ABdhPJwMLHirwEQ4tJUPI7qaplUDz3bp0fsmhod8P88K7RhBRU2njU8TgCywfoM2VwxcEnVDrH/bezsBM2ie2giEJTc=
+X-Received: by 2002:a05:6102:c4c:: with SMTP id y12mr3863270vss.18.1623055497041;
+ Mon, 07 Jun 2021 01:44:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210604115159.8834-1-sergio.paracuellos@gmail.com>
-In-Reply-To: <20210604115159.8834-1-sergio.paracuellos@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 7 Jun 2021 09:23:37 +0200
-Message-ID: <CACRpkdbn+OTdTgTj5wmDiegetoe=Wbz3YbWMwqR9TQAFND+H4g@mail.gmail.com>
-Subject: Re: [PATCH 0/6] pinctrl: ralink: move all pinmux arch stuff into
- driver code
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-mips@vger.kernel.org, ilya.lipnitskiy@gmail.com,
-        NeilBrown <neil@brown.name>
+References: <20210604064916.26580-1-rppt@kernel.org>
+In-Reply-To: <20210604064916.26580-1-rppt@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 7 Jun 2021 10:44:45 +0200
+Message-ID: <CAMuHMdWuOk2LBJunCsCjzjYnBDs1rZh_x=ez7N=gjYv_ETMAcQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] Remove DISCINTIGMEM memory model
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sparclinux <sparclinux@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 4, 2021 at 1:52 PM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
+Hi Mike,
 
-> We currently have 'drivers/pinctrl/ralink/' with common code to all of them
-> in 'pinctrl-rt2880.c' file. Pinctrl data was being passed in SoC initilization
-> to the driver. Instead of doing that just move all related code to the driver
-> itself. We maintain for all of them compatible string to avoid to make more
-> changes in dts's an so on. If a new compatible string is neccessary to be
-> defined for each different SoC, we can change them after this series are
-> applied.
->
-> I have only tested MT7621 platform using GNUBee PC1 board. I don't have
-> other boards to test other SoC changes.
->
-> This series are rebased on the master branch of linux-pinctrl git tree so
-> I expect this to be merged through pinctrl tree. Thomas, if 'linux-mips'
-> is preferred to merge this series just let me know and I can rebase them
-> to make you things easier.
->
-> Thanks in advance for your time.
+You may want to fix the DISCINTIGMEM typo in the subject for v3, unless
+you think that makes tracking series versions more complicated ;-)
 
-I have simply applied all patches so we get some testing in linux-next
-(last time we found some snags through linux-next).
+Gr{oetje,eeting}s,
 
-This is an important modernization of the ralink SoCs so I
-am pushing the fastforward button a bit.
+                        Geert
 
-If some ralink maintainer has opinions they can either patch it or
-complain loudly so I can take the patches out again.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Yours,
-Linus Walleij
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
