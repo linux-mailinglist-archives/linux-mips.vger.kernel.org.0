@@ -2,111 +2,208 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9744339D881
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Jun 2021 11:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8903239DAA5
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Jun 2021 13:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbhFGJVC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Jun 2021 05:21:02 -0400
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:34685 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbhFGJU7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Jun 2021 05:20:59 -0400
-Received: by mail-oi1-f169.google.com with SMTP id u11so17390849oiv.1;
-        Mon, 07 Jun 2021 02:19:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vaMfDc5+xZHaTJ5VtyzdwaPy3rvFSYLfAqTz4rcxcKQ=;
-        b=YB5mufC+GqLiPx78PP4hKgVJO5vjSwTwzg6cfAoYZhgCaSEWj4uXQPC0+BJUWyI681
-         epWToEASJO8izUjKBhZOGo2eLaTB7eqT5hanfAmfXUDeja4SSQekNVo5UGFvtNDyuUE9
-         tqgNhP9n625Oem72nQ03IW/uixZki+GMiV7mYhaS5j/bhH7MWTPWoyZkW4cpQ+5i20G8
-         iuEA9njdQrliLC0oz+k9n/vaGRcPB6c9wbJm6M3ZkdGA5A9Dcvn3F3nGQwRJLnW6Whgd
-         7SL7HiJlCSbbFBDd2FX1I24/iyT97piIkA50ERwPV0cFXzJaMlsykD8udqBK0viH0pjT
-         /TuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vaMfDc5+xZHaTJ5VtyzdwaPy3rvFSYLfAqTz4rcxcKQ=;
-        b=Qy7sM6MCtcK0jrzQFKddu+wNs7Xx0nxaCNC5HF5pyjyg9/4gA2tx6PaVrqT9EyrE8f
-         BpY5bNQsJ+NdcpNv8fiDDueJgPaIf2qkoV58LT3P6QIeVIUdUPkrc7oDOA94WVk+l6No
-         BJSslt/pJ5tkRbLjUmlrHP9d5sCp10HuDTcXbrGUt6x7QFuEcAbIM5GxeL5tij5fygza
-         00/CRMvrDp0jEuVCqah53fI2emNiF7wEE5HEEySGf/TqaM6OaKmmXVfUk8TOIGkBhlmr
-         lJsekuPcMiTZ8yPTQtZOiEgue9CvPckjKILowjJ+0Gtg6tVT78zZd8ILRZfoaLkkMB3t
-         Q20g==
-X-Gm-Message-State: AOAM532R+7MYbNgg6Xxyqgdf1HOuZuNJQaTTI5fIsge5AFLYm0T8Z6y2
-        HCgQ46RZ+x+jxKjoBsXvkDq3QurGD4zkTbtbhXxtQfSFmy4=
-X-Google-Smtp-Source: ABdhPJzmAVq+vWXAYtgelslvcmb9xZfuSXaCyhX01mJIED4SxLCj2JymDNAcopsMCdiSE7lih9GF7um8RJSyFifHdew=
-X-Received: by 2002:a54:400a:: with SMTP id x10mr19351976oie.158.1623057487457;
- Mon, 07 Jun 2021 02:18:07 -0700 (PDT)
+        id S230341AbhFGLJC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Jun 2021 07:09:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54758 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230131AbhFGLJC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 7 Jun 2021 07:09:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 99C4E60FF2;
+        Mon,  7 Jun 2021 11:07:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623064031;
+        bh=XXIzcNn0RfGrbstV7HqbdbJu6dyRY4Wigc4ycJ5cQAA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SCHcXrAYH6lYO04Q1YOP/5j+Y/z78DgbM9QO3dK7sackBRR7JTleFkFPkZVP/OAjB
+         OIHE0TxF2gXIqBwvb2sGo8LFn5fbNSnintYjs9yughUH4XwSvHVdhKknqg/0eUb9ZA
+         5ARqT8d4oN0uYHXJYFtGtZHEsiNAt7A5lnAycRgshjZHrNqcmMMhj8h/w/8OATBFq4
+         B2yVZJcHZVnpRfIDRYeiBV4bmKXRyelr/gnAT+Al4YGybZuPaXT5pk/RLXkrX5hbYD
+         afYCA0ux1AUGutkUnhXQXsHv1gElNu+kV9r2B6S/002ySyWOnKKfdUsbC0sZtQcLmi
+         BAiM6MCqkhD6w==
+Date:   Mon, 7 Jun 2021 16:37:07 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     dmaengine@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 RESEND] dmaengine: Loongson1: Add Loongson1 dmaengine
+ driver
+Message-ID: <YL392y4a6iRf1UyQ@vkoul-mobl>
+References: <20210520230225.11911-1-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-References: <20210604115159.8834-1-sergio.paracuellos@gmail.com> <CACRpkdbn+OTdTgTj5wmDiegetoe=Wbz3YbWMwqR9TQAFND+H4g@mail.gmail.com>
-In-Reply-To: <CACRpkdbn+OTdTgTj5wmDiegetoe=Wbz3YbWMwqR9TQAFND+H4g@mail.gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 7 Jun 2021 11:17:56 +0200
-Message-ID: <CAMhs-H-fRzfU8E94O4DjHGyHO2_GKhOfC0cxiGiJZ5PkxrS5Cg@mail.gmail.com>
-Subject: Re: [PATCH 0/6] pinctrl: ralink: move all pinmux arch stuff into
- driver code
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        NeilBrown <neil@brown.name>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210520230225.11911-1-keguang.zhang@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Linus,
+On 21-05-21, 07:02, Keguang Zhang wrote:
 
-On Mon, Jun 7, 2021 at 9:23 AM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Fri, Jun 4, 2021 at 1:52 PM Sergio Paracuellos
-> <sergio.paracuellos@gmail.com> wrote:
->
-> > We currently have 'drivers/pinctrl/ralink/' with common code to all of them
-> > in 'pinctrl-rt2880.c' file. Pinctrl data was being passed in SoC initilization
-> > to the driver. Instead of doing that just move all related code to the driver
-> > itself. We maintain for all of them compatible string to avoid to make more
-> > changes in dts's an so on. If a new compatible string is neccessary to be
-> > defined for each different SoC, we can change them after this series are
-> > applied.
-> >
-> > I have only tested MT7621 platform using GNUBee PC1 board. I don't have
-> > other boards to test other SoC changes.
-> >
-> > This series are rebased on the master branch of linux-pinctrl git tree so
-> > I expect this to be merged through pinctrl tree. Thomas, if 'linux-mips'
-> > is preferred to merge this series just let me know and I can rebase them
-> > to make you things easier.
-> >
-> > Thanks in advance for your time.
->
-> I have simply applied all patches so we get some testing in linux-next
-> (last time we found some snags through linux-next).
+> +config LOONGSON1_DMA
+> +	tristate "Loongson1 DMA support"
+> +	depends on MACH_LOONGSON32
 
-Good! Let's see what happen, then :)
+Why does it have to do that? The dma driver is generic..
 
->
-> This is an important modernization of the ralink SoCs so I
-> am pushing the fastforward button a bit.
+> +static int ls1x_dma_alloc_chan_resources(struct dma_chan *dchan)
+> +{
+> +	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
+> +
+> +	chan->desc_pool = dma_pool_create(dma_chan_name(dchan),
+> +					  dchan->device->dev,
+> +					  sizeof(struct ls1x_dma_lli),
+> +					  __alignof__(struct ls1x_dma_lli), 0);
+> +	if (!chan->desc_pool) {
+> +		dev_err(chan2dev(dchan),
+> +			"failed to alloc DMA descriptor pool!\n");
 
-I also do believe that having moved all of this stuff from the arch
-headers to the driver itself is a very good step.
+This can be dropped, allocators will warn you for the allocation
+failures
 
->
-> If some ralink maintainer has opinions they can either patch it or
-> complain loudly so I can take the patches out again.
+> +		return -ENOMEM;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void ls1x_dma_free_desc(struct virt_dma_desc *vdesc)
+> +{
+> +	struct ls1x_dma_desc *desc = to_ls1x_dma_desc(vdesc);
+> +
+> +	if (desc->nr_descs) {
+> +		unsigned int i = desc->nr_descs;
+> +		struct ls1x_dma_hwdesc *hwdesc;
+> +
+> +		do {
+> +			hwdesc = &desc->hwdesc[--i];
+> +			dma_pool_free(desc->chan->desc_pool, hwdesc->lli,
+> +				      hwdesc->phys);
+> +		} while (i);
+> +	}
+> +
+> +	kfree(desc);
+> +}
+> +
+> +static struct ls1x_dma_desc *ls1x_dma_alloc_desc(struct ls1x_dma_chan *chan,
+> +						 int sg_len)
 
-Please, complain loudly if necessary :). As I said I only tested the
-changes for mt7621 SoC, so it might be something wrong there.
+single line now :)
 
->
-> Yours,
-> Linus Walleij
+> +{
+> +	struct ls1x_dma_desc *desc;
+> +	struct dma_chan *dchan = &chan->vchan.chan;
+> +
+> +	desc = kzalloc(struct_size(desc, hwdesc, sg_len), GFP_NOWAIT);
+> +	if (!desc)
+> +		dev_err(chan2dev(dchan), "failed to alloc DMA descriptor!\n");
 
-Thanks!
-    Sergio Paracuellos
+this can be dropped too..
+
+> +static struct dma_async_tx_descriptor *
+> +ls1x_dma_prep_slave_sg(struct dma_chan *dchan, struct scatterlist *sgl,
+> +		       unsigned int sg_len,
+> +		       enum dma_transfer_direction direction,
+> +		       unsigned long flags, void *context)
+> +{
+> +	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
+> +	struct dma_slave_config *cfg = &chan->cfg;
+> +	struct ls1x_dma_desc *desc;
+> +	struct scatterlist *sg;
+> +	unsigned int dev_addr, bus_width, cmd, i;
+> +
+> +	if (!is_slave_direction(direction)) {
+> +		dev_err(chan2dev(dchan), "invalid DMA direction!\n");
+> +		return NULL;
+> +	}
+> +
+> +	dev_dbg(chan2dev(dchan), "sg_len=%d, dir=%s, flags=0x%lx\n", sg_len,
+> +		direction == DMA_MEM_TO_DEV ? "to device" : "from device",
+> +		flags);
+> +
+> +	switch (direction) {
+> +	case DMA_MEM_TO_DEV:
+> +		dev_addr = cfg->dst_addr;
+> +		bus_width = cfg->dst_addr_width;
+> +		cmd = LS1X_DMA_RAM2DEV | LS1X_DMA_INT;
+> +		break;
+> +	case DMA_DEV_TO_MEM:
+> +		dev_addr = cfg->src_addr;
+> +		bus_width = cfg->src_addr_width;
+> +		cmd = LS1X_DMA_INT;
+> +		break;
+> +	default:
+> +		dev_err(chan2dev(dchan),
+> +			"unsupported DMA transfer mode! %d\n", direction);
+> +		return NULL;
+
+will this be ever executed?
+
+> +static int ls1x_dma_slave_config(struct dma_chan *dchan,
+> +				 struct dma_slave_config *config)
+> +{
+> +	struct ls1x_dma_chan *chan = to_ls1x_dma_chan(dchan);
+> +
+> +	if (!dchan)
+> +		return -EINVAL;
+
+should this not be checked before you dereference this to get chan
+
+> +static void ls1x_dma_trigger(struct ls1x_dma_chan *chan)
+> +{
+> +	struct dma_chan *dchan = &chan->vchan.chan;
+> +	struct ls1x_dma_desc *desc;
+> +	struct virt_dma_desc *vdesc;
+> +	unsigned int val;
+> +
+> +	vdesc = vchan_next_desc(&chan->vchan);
+> +	if (!vdesc) {
+> +		dev_warn(chan2dev(dchan), "No pending descriptor\n");
+
+Hmm, I would not log that... this is called from
+ls1x_dma_issue_pending() and which can be called from client driver but
+previous completion would push and this can find empty queue so it can
+happen quite frequently
+
+> +static irqreturn_t ls1x_dma_irq_handler(int irq, void *data)
+> +{
+> +	struct ls1x_dma_chan *chan = data;
+> +	struct dma_chan *dchan = &chan->vchan.chan;
+> +
+> +	dev_dbg(chan2dev(dchan), "DMA IRQ %d on channel %d\n", irq, chan->id);
+> +	if (!chan->desc) {
+> +		dev_warn(chan2dev(dchan),
+> +			 "DMA IRQ with no active descriptor on channel %d\n",
+> +			 chan->id);
+
+single line pls
+
+> +		return IRQ_NONE;
+> +	}
+> +
+> +	spin_lock(&chan->vchan.lock);
+> +
+> +	if (chan->desc->type == DMA_CYCLIC) {
+> +		vchan_cyclic_callback(&chan->desc->vdesc);
+> +	} else {
+> +		list_del(&chan->desc->vdesc.node);
+> +		vchan_cookie_complete(&chan->desc->vdesc);
+> +		chan->desc = NULL;
+> +	}
+
+not submitting next txn, defeats the purpose of dma if we dont push txns
+as fast as possible..
+
+> +static struct platform_driver ls1x_dma_driver = {
+> +	.probe	= ls1x_dma_probe,
+> +	.remove	= ls1x_dma_remove,
+> +	.driver	= {
+> +		.name	= "ls1x-dma",
+> +	},
+
+No device tree?
+
+-- 
+~Vinod
