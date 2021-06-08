@@ -2,241 +2,546 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD9439EFDE
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jun 2021 09:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6E739F157
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jun 2021 10:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbhFHHsL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Jun 2021 03:48:11 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:37590 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229507AbhFHHsK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 8 Jun 2021 03:48:10 -0400
-Received: from [10.130.0.193] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxX0E_IL9g8fAMAA--.14895S3;
-        Tue, 08 Jun 2021 15:46:08 +0800 (CST)
-Subject: Re: [PATCH] mips: kdump: Crash kernel should be able to see old
- memories
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-References: <1618829807-12522-1-git-send-email-tangyouling@loongson.cn>
- <bd5b70cf-cfdf-0a4a-dfb5-08e030864138@flygoat.com>
- <a04a736e-4f64-0491-165c-2544bb178d73@loongson.cn>
- <alpine.DEB.2.21.2106080215490.1601@angie.orcam.me.uk>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S230425AbhFHIsi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 8 Jun 2021 04:48:38 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:36783 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230266AbhFHIsh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Jun 2021 04:48:37 -0400
+Received: (Authenticated sender: paul@opendingux.net)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id E46531BF209;
+        Tue,  8 Jun 2021 08:46:36 +0000 (UTC)
+Date:   Tue, 08 Jun 2021 09:46:28 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 2/2] net: stmmac: Add Ingenic SoCs MAC support.
+To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <bd05cb85-2c9a-d152-98d3-4c7573b6e9d5@loongson.cn>
-Date:   Tue, 8 Jun 2021 15:46:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com
+Message-Id: <GDKDUQ.OOVD9KC4HV31@crapouillou.net>
+In-Reply-To: <1623086867-119039-3-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1623086867-119039-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1623086867-119039-3-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.21.2106080215490.1601@angie.orcam.me.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9DxX0E_IL9g8fAMAA--.14895S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxtw1rGw43Gw4rXw47uF1xZrb_yoWxur1kpr
-        1UJrWUCr48Gr1UAw1xGr1rXry3tw18Ca4UJFy7Gr15ZF1UWr1kJr18J3yj9r1DJr15JF97
-        Jr1DXw4Utw4DGw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY
-        02Avz4vE14v_GF4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
-        6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
-        9x07botxDUUUUU=
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Maciej
+Hi Zhou,
 
-On 06/08/2021 08:16 AM, Maciej W. Rozycki wrote:
-> On Tue, 20 Apr 2021, Youling Tang wrote:
->
->>> Why depend on a config instead of a runtime variable?
->>>
->> If not depend on config, we can determine whether the command line contains
->> the "elfcorehdr=" parameter, because the "mem=" and "elfcorhdr=" parameters
->> are automatically added in kexec-tools. So if there is an "elfcorehdr="
->> parameter in the command line, it means that the currently running kernel
->> is a capture kernel, and the memblock_remove() operation is not called.
->>
->> The revised patch is as follows:
->>          if (usermem == 0) {
->>                  usermem = 1;
->> -               memblock_remove(memblock_start_of_DRAM(),
->> -                       memblock_end_of_DRAM() - memblock_start_of_DRAM());
->> +               if (!strstr(boot_command_line, "elfcorehdr")) {
->> +                       memblock_remove(memblock_start_of_DRAM(),
->> +                               memblock_end_of_DRAM() -
->> memblock_start_of_DRAM());
->> +               }
->>
->> Do you think it is feasible?
->   This looks like a hack to me.  How do other platforms solve it, e.g. x86?
-In the x86 architecture, when parsing "mem=" or "memmap=", there is no
-requirement to process visible operations on old memory.
+Le mar., juin 8 2021 at 01:27:47 +0800, 周琰杰 (Zhou Yanjie) 
+<zhouyanjie@wanyeetech.com> a écrit :
+> Add support for Ingenic SoC MAC glue layer support for the stmmac
+> device driver. This driver is used on for the MAC ethernet controller
+> found in the JZ4775 SoC, the X1000 SoC, the X1600 SoC, the X1830 SoC,
+> and the X2000 SoC.
+> 
+> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig        |  16 +-
+>  drivers/net/ethernet/stmicro/stmmac/Makefile       |   1 +
+>  .../net/ethernet/stmicro/stmmac/dwmac-ingenic.c    | 367 
+> +++++++++++++++++++++
+>  3 files changed, 382 insertions(+), 2 deletions(-)
+>  create mode 100644 
+> drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig 
+> b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> index 7737e4d0..fb58537 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> @@ -66,6 +66,18 @@ config DWMAC_ANARION
+> 
+>  	  This selects the Anarion SoC glue layer support for the stmmac 
+> driver.
+> 
+> +config DWMAC_INGENIC
+> +	tristate "Ingenic MAC support"
+> +	default MACH_INGENIC
+> +	depends on OF && HAS_IOMEM && (MACH_INGENIC || COMPILE_TEST)
+> +	select MFD_SYSCON
+> +	help
+> +	  Support for ethernet controller on Ingenic SoCs.
+> +
+> +	  This selects Ingenic SoCs glue layer support for the stmmac
+> +	  device driver. This driver is used on for the Ingenic SoCs
+> +	  MAC ethernet controller.
+> +
+>  config DWMAC_IPQ806X
+>  	tristate "QCA IPQ806x DWMAC support"
+>  	default ARCH_QCOM
+> @@ -129,7 +141,7 @@ config DWMAC_QCOM_ETHQOS
+> 
+>  config DWMAC_ROCKCHIP
+>  	tristate "Rockchip dwmac support"
+> -	default ARCH_ROCKCHIP
+> +	default MACH_ROCKCHIP
+>  	depends on OF && (ARCH_ROCKCHIP || COMPILE_TEST)
+>  	select MFD_SYSCON
+>  	help
+> @@ -164,7 +176,7 @@ config DWMAC_STI
+> 
+>  config DWMAC_STM32
+>  	tristate "STM32 DWMAC support"
+> -	default ARCH_STM32
+> +	default MACH_STM32
+>  	depends on OF && HAS_IOMEM && (ARCH_STM32 || COMPILE_TEST)
+>  	select MFD_SYSCON
+>  	help
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile 
+> b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> index f2e478b..6471f93 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> @@ -14,6 +14,7 @@ stmmac-$(CONFIG_STMMAC_SELFTESTS) += 
+> stmmac_selftests.o
+>  # Ordering matters. Generic driver must be last.
+>  obj-$(CONFIG_STMMAC_PLATFORM)	+= stmmac-platform.o
+>  obj-$(CONFIG_DWMAC_ANARION)	+= dwmac-anarion.o
+> +obj-$(CONFIG_DWMAC_INGENIC)	+= dwmac-ingenic.o
+>  obj-$(CONFIG_DWMAC_IPQ806X)	+= dwmac-ipq806x.o
+>  obj-$(CONFIG_DWMAC_LPC18XX)	+= dwmac-lpc18xx.o
+>  obj-$(CONFIG_DWMAC_MEDIATEK)	+= dwmac-mediatek.o
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c 
+> b/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c
+> new file mode 100644
+> index 00000000..8be8caa
+> --- /dev/null
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-ingenic.c
+> @@ -0,0 +1,367 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * dwmac-ingenic.c - Ingenic SoCs DWMAC specific glue layer
+> + *
+> + * Copyright (c) 2020 周琰杰 (Zhou Yanjie) 
+> <zhouyanjie@wanyeetech.com>
 
-In the MIPS architecture, there should be no need to make the old memory
-visible. The reason for adding the patch at the time is that without the
-patch, the following panic will occur during the kdump operation.
+2021?
 
-[    0.229919] CPU 0 Unable to handle kernel paging request at virtual 
-address 0000000001004c80, epc == fffff4
-[    0.245191] Oops[#1]:
-[    0.247365] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 
-5.12.0-rc2kdump+ #48
-[    0.254211] Hardware name: THTF CX TL630 
-Series/THTF-LS3A4000-7A1000-ML4A, BIOS V2.1.1 06/29/2020
-[    0.263055] $ 0   : 0000000000000000 ffffffff8432ede4 
-ffffffffffffffe0 0000000001004c80
-[    0.271030] $ 4   : 0000000000040132 9800000006400000 
-0000000000004000 0000000000000000
-[    0.279006] $ 8   : 0000000000000000 0000000000000000 
-980000000aafa000 980000000aaf6100
-[    0.286982] $12   : 98000000061c7bc8 ffffffffffffffff 
-fffffffffffffffc 0000000000000000
-[    0.294958] $16   : 0000000000004000 9800000006400000 
-0000000000000000 98000000061c7c40
-[    0.302934] $20   : 0000000000000000 0000000000000000 
-ffffffff85070000 0000000000040132
-[    0.310912] $24   : 0000000000000000 ffffffff845bb520
-[    0.318887] $28   : 98000000061c4000 98000000061c7bc0 
-0000000000004024 ffffffff8432ede4
-[    0.326863] Hi    : 000000000000000e
-[    0.330418] Lo    : ffffffffcfd21432
-[    0.333973] epc   : ffffffff84020808 copy_oldmem_page+0x58/0x1a0
-[    0.339956] ra    : ffffffff8432ede4 read_from_oldmem.part.8+0xdc/0x120
-[    0.346544] Status: 5400cce3 KX SX UX KERNEL EXL IE
-[    0.351486] Cause : 10000008 (ExcCode 02)
-[    0.355473] BadVA : 0000000001004c80
-[    0.359029] PrId  : 0014c004 (ICT Loongson-3)
-[    0.363364] Modules linked in:
-[    0.366398] Process swapper/0 (pid: 1, threadinfo=(____ptrval____), 
-task=(____ptrval____), tls=00000000000)
-[    0.376543] Stack : 0000000000004000 ffffffff8432ede4 
-9800000006400000 0000000000000000
-[    0.384518]         00000000000001f4 98000000063fc000 
-98000000063fc120 98000000063fc040
-[    0.392494]         ffffffff84da0000 0000000000004024 
-ffffffff84c7f010 0000000000000004
-[    0.400469]         9800000006400000 ffffffff84f60208 
-980000025fffe500 ffffffff84c7efb8
-[    0.408445]         00000001004c8000 0000000100000000 
-0000000000000000 a8fc2d8167e1bd00
-[    0.416420]         0000000000000270 ffffffff8432ede4 
-ffffffff84c60000 a8fc2d8167e1bd00
-[    0.424396]         0000000000000270 ffffffff85070000 
-0000000000000000 ffffffff84e60000
-[    0.432371]         ffffffff85070000 ffffffff84da0000 
-0000000000000005 0000000000000006
-[    0.440348]         ffffffff84f7c568 ffffffff84f6093c 
-0000000000000000 98000000061c7d48
-[    0.448324]         ffffffff84e90000 98000000061c7d38 
-ffffffff84daa968 ffffffff84da0000
-[    0.456300]         ...
-[    0.458728] Call Trace:
-[    0.461154] [<ffffffff84020808>] copy_oldmem_page+0x58/0x1a0
-[    0.466792] [<ffffffff8432ede4>] read_from_oldmem.part.8+0xdc/0x120
-[    0.473033] [<ffffffff84f60208>] 
-merge_note_headers_elf64.constprop.14+0xa8/0x308
-[    0.480489] [<ffffffff84f6093c>] vmcore_init+0x1d8/0x5fc
-[    0.485776] [<ffffffff84000c9c>] do_one_initcall+0x54/0x2b8
-[    0.491325] [<ffffffff84f451e8>] kernel_init_freeable+0x1e4/0x234
-[    0.497394] [<ffffffff84aba374>] kernel_init+0x1c/0x128
-[    0.502597] [<ffffffff84005d0c>] ret_from_kernel_thread+0x14/0x1c
-[    0.508669]
-[    0.510139] Code: 2402ffe0  01224824  0123182d <dc640000> 00044dbe  
-000948f8  d94a4803  1140003b  7c844b02
-[    0.519848]
-[    0.521331] ---[ end trace 0f67ff1443cfce3c ]---
-[    0.525927] Kernel panic - not syncing: Attempted to kill init! 
-exitcode=0x0000000b
-[    0.533554] ---[ end Kernel panic - not syncing: Attempted to kill 
-init! exitcode=0x0000000b ]---
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_net.h>
+> +#include <linux/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +#include <linux/stmmac.h>
+> +
+> +#include "stmmac_platform.h"
+> +
+> +#define MACPHYC_TXCLK_SEL_MASK		GENMASK(31, 31)
+> +#define MACPHYC_TXCLK_SEL_OUTPUT	0x1
+> +#define MACPHYC_TXCLK_SEL_INPUT		0x0
+> +#define MACPHYC_MODE_SEL_MASK		GENMASK(31, 31)
+> +#define MACPHYC_MODE_SEL_RMII		0x0
+> +#define MACPHYC_TX_SEL_MASK			GENMASK(19, 19)
+> +#define MACPHYC_TX_SEL_ORIGIN		0x0
+> +#define MACPHYC_TX_SEL_DELAY		0x1
+> +#define MACPHYC_TX_DELAY_MASK		GENMASK(18, 12)
+> +#define MACPHYC_TX_DELAY_63_UNIT	0x3e
+> +#define MACPHYC_RX_SEL_MASK			GENMASK(11, 11)
+> +#define MACPHYC_RX_SEL_ORIGIN		0x0
+> +#define MACPHYC_RX_SEL_DELAY		0x1
+> +#define MACPHYC_RX_DELAY_MASK		GENMASK(10, 4)
+> +#define MACPHYC_SOFT_RST_MASK		GENMASK(3, 3)
+> +#define MACPHYC_PHY_INFT_MASK		GENMASK(2, 0)
+> +#define MACPHYC_PHY_INFT_RMII		0x4
+> +#define MACPHYC_PHY_INFT_RGMII		0x1
+> +#define MACPHYC_PHY_INFT_GMII		0x0
+> +#define MACPHYC_PHY_INFT_MII		0x0
+> +
+> +enum ingenic_mac_version {
+> +	ID_JZ4775,
+> +	ID_X1000,
+> +	ID_X1600,
+> +	ID_X1830,
+> +	ID_X2000,
 
+You could test it on all these? I never heard about the X1600 before.
 
-The reason is that kmap_local_pfn() will call kmap_atomic(pfn_to_page(pfn)),
-and when pfn_to_page(), the page does not exist, so a panic occurs when the
-page is accessed.
-With this patch, the old memory is made visible, and the page is available
-to the old memory, so the page can be accessed normally without panic.
+> +};
+> +
+> +struct ingenic_mac {
+> +	const struct ingenic_soc_info *soc_info;
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +};
+> +
+> +struct ingenic_soc_info {
+> +	enum ingenic_mac_version version;
+> +	u32 mask;
+> +
+> +	int (*set_mode)(struct plat_stmmacenet_data *plat_dat);
+> +	int (*suspend)(struct ingenic_mac *mac);
+> +	void (*resume)(struct ingenic_mac *mac);
 
-So the root of the problem is that there is a problem with the 
-implementation
-of copy_oldmem_page(). The panic can be solved in the following two ways.
+These suspend/resume callbacks are not used anywhere - just drop them.
 
+> +};
+> +
+> +static int ingenic_mac_init(struct plat_stmmacenet_data *plat_dat)
+> +{
+> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
+> +	int ret;
+> +
+> +	if (mac->soc_info->set_mode) {
+> +		ret = mac->soc_info->set_mode(plat_dat);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return ret;
 
-Method One:
-This function can refer to the implementation of arm64, and use memremap()
-to map an available range instead of getting addr directly through 
-pfn_to_page().
-The patch is as follows:
-diff --git a/arch/mips/kernel/crash_dump.c b/arch/mips/kernel/crash_dump.c
-index 2e50f551..e122477 100644
---- a/arch/mips/kernel/crash_dump.c
-+++ b/arch/mips/kernel/crash_dump.c
-@@ -23,16 +23,21 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
-         if (!csize)
-                 return 0;
+You are returning an uninitialized variable.
 
--       vaddr = kmap_local_pfn(pfn);
-+       vaddr = memremap(__pfn_to_phys(pfn), PAGE_SIZE, MEMREMAP_WB);
+> +}
+> +
+> +static int jz4775_mac_set_mode(struct plat_stmmacenet_data *plat_dat)
+> +{
+> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
+> +	int val;
 
-         if (!userbuf) {
-                 memcpy(buf, vaddr + offset, csize);
-         } else {
--               if (copy_to_user(buf, vaddr + offset, csize))
-+               if (copy_to_user(buf, vaddr + offset, csize)) {
-+                       memunmap(vaddr);
-                         csize = -EFAULT;
-+               }
-         }
+unsigned int val;
 
--       kunmap_local(vaddr);
-+       memunmap(vaddr);
+> +
+> +	switch (plat_dat->interface) {
+> +	case PHY_INTERFACE_MODE_MII:
+> +		val = FIELD_PREP(MACPHYC_TXCLK_SEL_MASK, MACPHYC_TXCLK_SEL_INPUT) |
+> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_MII);
+> +		pr_debug("MAC PHY Control Register: PHY_INTERFACE_MODE_MII\n");
 
-         return csize;
-  }
+Use dev_dbg() with mac->dev, instead of pr_debug().
 
+(Same for all pr_debug() calls below)
 
-Method Two:
-This function can also refer to the implementation of ia64 to obtain the
-virtual address corresponding to pfn through __va().
-The patch is as follows:
+> +		break;
+> +
+> +	case PHY_INTERFACE_MODE_GMII:
+> +		val = FIELD_PREP(MACPHYC_TXCLK_SEL_MASK, MACPHYC_TXCLK_SEL_INPUT) |
+> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_GMII);
+> +		pr_debug("MAC PHY Control Register: PHY_INTERFACE_MODE_GMII\n");
+> +		break;
+> +
+> +	case PHY_INTERFACE_MODE_RMII:
+> +		val = FIELD_PREP(MACPHYC_TXCLK_SEL_MASK, MACPHYC_TXCLK_SEL_INPUT) |
+> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RMII);
+> +		pr_debug("MAC PHY Control Register: PHY_INTERFACE_MODE_RMII\n");
+> +		break;
+> +
+> +	case PHY_INTERFACE_MODE_RGMII:
+> +		val = FIELD_PREP(MACPHYC_TXCLK_SEL_MASK, MACPHYC_TXCLK_SEL_INPUT) |
+> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII);
+> +		pr_debug("MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII\n");
+> +		break;
+> +
+> +	default:
+> +		dev_err(mac->dev, "unsupported interface %d", plat_dat->interface);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Update MAC PHY control register */
+> +	return regmap_update_bits(mac->regmap, 0, mac->soc_info->mask, val);
+> +}
+> +
+> +static int x1000_mac_set_mode(struct plat_stmmacenet_data *plat_dat)
+> +{
+> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
+> +	int val;
+> +
+> +	switch (plat_dat->interface) {
+> +	case PHY_INTERFACE_MODE_RMII:
+> +		pr_debug("MAC PHY Control Register: PHY_INTERFACE_MODE_RMII\n");
+> +		break;
+> +
+> +	default:
+> +		dev_err(mac->dev, "unsupported interface %d", plat_dat->interface);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Update MAC PHY control register */
+> +	return regmap_update_bits(mac->regmap, 0, mac->soc_info->mask, val);
 
-diff --git a/arch/mips/kernel/crash_dump.c b/arch/mips/kernel/crash_dump.c
-index 2e50f551..e122477 100644
---- a/arch/mips/kernel/crash_dump.c
-+++ b/arch/mips/kernel/crash_dump.c
-@@ -23,16 +23,21 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
-         if (!csize)
-                 return 0;
+You're passing 'val', which is an uninitialized variable.
 
--       vaddr = kmap_local_pfn(pfn);
-+       vaddr = __va(pfn << PAGE_SHIFT);
+> +}
+> +
+> +static int x1600_mac_set_mode(struct plat_stmmacenet_data *plat_dat)
+> +{
+> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
+> +	int val;
 
-         if (!userbuf) {
-                 memcpy(buf, vaddr + offset, csize);
-         } else {
-                 if (copy_to_user(buf, vaddr + offset, csize))
-                         csize = -EFAULT;
-         }
+unsigned int val;
 
--       kunmap_local(vaddr);
+> +
+> +	switch (plat_dat->interface) {
+> +	case PHY_INTERFACE_MODE_RMII:
+> +		val = FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RMII);
+> +		pr_debug("MAC PHY Control Register: PHY_INTERFACE_MODE_RMII\n");
+> +		break;
+> +
+> +	default:
+> +		dev_err(mac->dev, "unsupported interface %d", plat_dat->interface);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Update MAC PHY control register */
+> +	return regmap_update_bits(mac->regmap, 0, mac->soc_info->mask, val);
+> +}
+> +
+> +static int x1830_mac_set_mode(struct plat_stmmacenet_data *plat_dat)
+> +{
+> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
+> +	int val;
 
-         return csize;
-  }
->
->    Maciej
-Thanks,
-Youling
+Same here,
+
+> +
+> +	switch (plat_dat->interface) {
+> +	case PHY_INTERFACE_MODE_RMII:
+> +		val = FIELD_PREP(MACPHYC_MODE_SEL_MASK, MACPHYC_MODE_SEL_RMII) |
+> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RMII);
+> +		pr_debug("MAC PHY Control Register: PHY_INTERFACE_MODE_RMII\n");
+> +		break;
+> +
+> +	default:
+> +		dev_err(mac->dev, "unsupported interface %d", plat_dat->interface);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Update MAC PHY control register */
+> +	return regmap_update_bits(mac->regmap, 0, mac->soc_info->mask, val);
+> +}
+> +
+> +static int x2000_mac_set_mode(struct plat_stmmacenet_data *plat_dat)
+> +{
+> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
+> +	int val;
+
+Same here.
+
+> +
+> +	switch (plat_dat->interface) {
+> +	case PHY_INTERFACE_MODE_RMII:
+> +		val = FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_ORIGIN) |
+> +			  FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN) |
+> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RMII);
+> +		pr_debug("MAC PHY Control Register: PHY_INTERFACE_MODE_RMII\n");
+> +		break;
+> +
+> +	case PHY_INTERFACE_MODE_RGMII:
+> +		val = FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_DELAY) |
+> +			  FIELD_PREP(MACPHYC_TX_DELAY_MASK, MACPHYC_TX_DELAY_63_UNIT) |
+> +			  FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN) |
+> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII);
+> +		pr_debug("MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII\n");
+> +		break;
+> +
+> +	default:
+> +		dev_err(mac->dev, "unsupported interface %d", plat_dat->interface);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Update MAC PHY control register */
+> +	return regmap_update_bits(mac->regmap, 0, mac->soc_info->mask, val);
+> +}
+> +
+> +static int ingenic_mac_probe(struct platform_device *pdev)
+> +{
+> +	struct plat_stmmacenet_data *plat_dat;
+> +	struct stmmac_resources stmmac_res;
+> +	struct ingenic_mac *mac;
+> +	const struct ingenic_soc_info *data;
+> +	int ret;
+> +
+> +	ret = stmmac_get_platform_resources(pdev, &stmmac_res);
+> +	if (ret)
+> +		return ret;
+> +
+> +	plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+> +	if (IS_ERR(plat_dat))
+> +		return PTR_ERR(plat_dat);
+> +
+> +	mac = devm_kzalloc(&pdev->dev, sizeof(*mac), GFP_KERNEL);
+> +	if (!mac) {
+> +		ret = -ENOMEM;
+> +		goto err_remove_config_dt;
+> +	}
+> +
+> +	data = of_device_get_match_data(&pdev->dev);
+> +	if (!data) {
+> +		dev_err(&pdev->dev, "no of match data provided\n");
+> +		ret = -EINVAL;
+> +		goto err_remove_config_dt;
+> +	}
+> +
+> +	/* Get MAC PHY control register */
+> +	mac->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, 
+> "mode-reg");
+> +	if (IS_ERR(mac->regmap)) {
+> +		pr_err("%s: failed to get syscon regmap\n", __func__);
+
+dev_err?
+
+> +		goto err_remove_config_dt;
+> +	}
+> +
+> +	mac->soc_info = data;
+> +	mac->dev = &pdev->dev;
+> +
+> +	plat_dat->bsp_priv = mac;
+> +
+> +	ret = ingenic_mac_init(plat_dat);
+> +	if (ret)
+> +		goto err_remove_config_dt;
+> +
+> +	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+> +	if (ret)
+> +		goto err_remove_config_dt;
+> +
+> +	return 0;
+> +
+> +err_remove_config_dt:
+> +	stmmac_remove_config_dt(pdev, plat_dat);
+> +
+> +	return ret;
+> +}
+> +
+> +#ifdef CONFIG_PM_SLEEP
+
+Remove this #ifdef.
+
+> +static int ingenic_mac_suspend(struct device *dev)
+> +{
+> +	struct net_device *ndev = dev_get_drvdata(dev);
+> +	struct stmmac_priv *priv = netdev_priv(ndev);
+> +	struct ingenic_mac *mac = priv->plat->bsp_priv;
+> +
+> +	int ret;
+> +
+> +	ret = stmmac_suspend(dev);
+> +
+> +	if (mac->soc_info->suspend)
+> +		ret = mac->soc_info->suspend(mac);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ingenic_mac_resume(struct device *dev)
+> +{
+> +	struct net_device *ndev = dev_get_drvdata(dev);
+> +	struct stmmac_priv *priv = netdev_priv(ndev);
+> +	struct ingenic_mac *mac = priv->plat->bsp_priv;
+> +	int ret;
+> +
+> +	if (mac->soc_info->resume)
+> +		mac->soc_info->resume(mac);
+> +
+> +	ret = ingenic_mac_init(priv->plat);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = stmmac_resume(dev);
+> +
+> +	return ret;
+> +}
+> +#endif /* CONFIG_PM_SLEEP */
+> +
+> +static SIMPLE_DEV_PM_OPS(ingenic_mac_pm_ops,
+> +	ingenic_mac_suspend, ingenic_mac_resume);
+> +
+> +static struct ingenic_soc_info jz4775_soc_info = {
+> +	.version = ID_JZ4775,
+> +	.mask = MACPHYC_TXCLK_SEL_MASK | MACPHYC_SOFT_RST_MASK | 
+> MACPHYC_PHY_INFT_MASK,
+> +
+> +	.set_mode = jz4775_mac_set_mode,
+> +};
+> +
+> +static struct ingenic_soc_info x1000_soc_info = {
+> +	.version = ID_X1000,
+> +	.mask = MACPHYC_SOFT_RST_MASK,
+> +
+> +	.set_mode = x1000_mac_set_mode,
+> +};
+> +
+> +static struct ingenic_soc_info x1600_soc_info = {
+> +	.version = ID_X1600,
+> +	.mask = MACPHYC_SOFT_RST_MASK | MACPHYC_PHY_INFT_MASK,
+> +
+> +	.set_mode = x1600_mac_set_mode,
+> +};
+> +
+> +static struct ingenic_soc_info x1830_soc_info = {
+> +	.version = ID_X1830,
+> +	.mask = MACPHYC_MODE_SEL_MASK | MACPHYC_SOFT_RST_MASK | 
+> MACPHYC_PHY_INFT_MASK,
+> +
+> +	.set_mode = x1830_mac_set_mode,
+> +};
+> +
+> +static struct ingenic_soc_info x2000_soc_info = {
+> +	.version = ID_X2000,
+> +	.mask = MACPHYC_TX_SEL_MASK | MACPHYC_TX_DELAY_MASK | 
+> MACPHYC_RX_SEL_MASK |
+> +			MACPHYC_RX_DELAY_MASK | MACPHYC_SOFT_RST_MASK | 
+> MACPHYC_PHY_INFT_MASK,
+> +
+> +	.set_mode = x2000_mac_set_mode,
+> +};
+> +
+> +static const struct of_device_id ingenic_mac_of_matches[] = {
+> +	{ .compatible = "ingenic,jz4775-mac", .data = &jz4775_soc_info },
+> +	{ .compatible = "ingenic,x1000-mac", .data = &x1000_soc_info },
+> +	{ .compatible = "ingenic,x1600-mac", .data = &x1600_soc_info },
+> +	{ .compatible = "ingenic,x1830-mac", .data = &x1830_soc_info },
+> +	{ .compatible = "ingenic,x2000-mac", .data = &x2000_soc_info },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ingenic_mac_of_matches);
+> +
+> +static struct platform_driver ingenic_mac_driver = {
+> +	.probe		= ingenic_mac_probe,
+> +	.remove		= stmmac_pltfr_remove,
+> +	.driver		= {
+> +		.name	= "ingenic-mac",
+> +		.pm		= &ingenic_mac_pm_ops,
+
+.pm = pm_ptr(&ingenic_mac_pm_ops),
+
+> +		.of_match_table = ingenic_mac_of_matches,
+> +	},
+> +};
+> +module_platform_driver(ingenic_mac_driver);
+> +
+> +MODULE_AUTHOR("周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>");
+> +MODULE_DESCRIPTION("Ingenic SoCs DWMAC specific glue layer");
+> +MODULE_LICENSE("GPL v2");
+> --
+> 2.7.4
+> 
+
+Cheers,
+-Paul
+
 
