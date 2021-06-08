@@ -2,239 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A51839F996
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jun 2021 16:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B5639FA65
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jun 2021 17:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbhFHOwR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Jun 2021 10:52:17 -0400
-Received: from out28-53.mail.aliyun.com ([115.124.28.53]:40964 "EHLO
-        out28-53.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233363AbhFHOwQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Jun 2021 10:52:16 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436284|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0498931-0.00130407-0.948803;FP=12645373337884369137|2|1|3|0|-1|-1|-1;HT=ay29a033018047204;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KPTncC0_1623163818;
-Received: from 192.168.0.103(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KPTncC0_1623163818)
-          by smtp.aliyun-inc.com(10.147.40.2);
-          Tue, 08 Jun 2021 22:50:20 +0800
-Subject: Re: [PATCH 2/2] mmc: JZ4740: Add support for JZ4775 and rename
- unreasonable array name.
-To:     Paul Cercueil <paul@opendingux.net>
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com,
-        paul@crapouillou.net
-References: <1623002884-57244-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1623002884-57244-3-git-send-email-zhouyanjie@wanyeetech.com>
- <B6YDUQ.LVNCFD4XPUIY1@opendingux.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <ba66ff69-5ab9-0e6e-9da9-d4b2bf342b61@wanyeetech.com>
-Date:   Tue, 8 Jun 2021 22:50:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S231935AbhFHP0H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Jun 2021 11:26:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46282 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231934AbhFHPZ7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 8 Jun 2021 11:25:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4FE1361108;
+        Tue,  8 Jun 2021 15:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623165846;
+        bh=n0cuHdEnBZUYW5KoLbhUKaES1lTb5eTER3NCQ2J6Kiw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hrDy6QCCLVT/diEm7qbNC76WFH2eKrYJmog6zqI8Bdudt71ZlX6qsapzdsfqQ6032
+         XHhqRAR78pJlWwwaYd7a+hjAqXwjvyxJNC2MioEt/DSR0BdPsFOXPsukbJjmwharjQ
+         opc4xuLeIlJt6o3xMOAMJqpNMCkuDcKqYKT+7GtjsEPROCsiJqjcedzJht4IJ633Qs
+         LRBWv6T2ubJ1cnN1e+zD3YG1IWCslyfMEmQOAG4Qe+M6IY4WSFWq4V1oOgRNv9PdUE
+         Bm7+EQY0L89idUqPo9RFR0kXYHLhDEeltfTcTuOqPj2oeatgOGXawmEJcswJ0MW1pU
+         VxeSjQIc+bDXQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
+        Florian Fainelli <florian@openwrt.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        John Crispin <john@phrozen.org>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL v2] clk: clean up legacy clock interfaces
+Date:   Tue,  8 Jun 2021 17:22:07 +0200
+Message-Id: <20210608152214.1231666-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <B6YDUQ.LVNCFD4XPUIY1@opendingux.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+From: Arnd Bergmann <arnd@arndb.de>
 
-On 2021/6/8 下午9:44, Paul Cercueil wrote:
-> Hi Zhou,
->
-> Le lun., juin 7 2021 at 02:08:04 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> 1.Add support for probing mmc driver on the JZ4775 SoC from Ingenic.
->> 2.When the support for JZ4775 SoC is added, there will be six compatible
->>   strings, so renaming "jz4740_mmc_of_match[]" to 
->> "jz4740_mmc_of_matches[]"
->>   is more reasonable.
->
-> Honestly, you can drop #2. We don't really care about the 
-> variable/function names not being "perfect". For instance this driver 
-> still use "jz4740_mmc*" functions everywhere even though it supports 
-> many more SoCs. Besides, renames like that makes it harder to "git 
-> blame" afterwards since it fills the git history with non-functional 
-> changes.
+The following changes since commit 8124c8a6b35386f73523d27eacb71b5364a68c4c:
 
+  Linux 5.13-rc4 (2021-05-30 11:58:25 -1000)
 
-Sure, I will drop #2.
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/clkdev-cleanup
 
->
->>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>  drivers/mmc/host/jz4740_mmc.c | 25 ++++++++++++++-----------
->>  1 file changed, 14 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/mmc/host/jz4740_mmc.c 
->> b/drivers/mmc/host/jz4740_mmc.c
->> index b3c636e..ea8434f 100644
->> --- a/drivers/mmc/host/jz4740_mmc.c
->> +++ b/drivers/mmc/host/jz4740_mmc.c
->> @@ -2,6 +2,7 @@
->>  /*
->>   *  Copyright (C) 2009-2010, Lars-Peter Clausen <lars@metafoo.de>
->>   *  Copyright (C) 2013, Imagination Technologies
->> + *  Copyright (C) 2021, 周琰杰 (Zhou Yanjie) 
->> <zhouyanjie@wanyeetech.com>
->>   *
->>   *  JZ4740 SD/MMC controller driver
->>   */
->> @@ -114,6 +115,7 @@ enum jz4740_mmc_version {
->>      JZ_MMC_JZ4740,
->>      JZ_MMC_JZ4725B,
->>      JZ_MMC_JZ4760,
->> +    JZ_MMC_JZ4775,
->>      JZ_MMC_JZ4780,
->>      JZ_MMC_X1000,
->>  };
->> @@ -138,7 +140,7 @@ enum jz4740_mmc_state {
->>   * COOKIE_MAPPED: the request was mapped in the irq handler,
->>   * and should be unmapped before mmc_request_done is called..
->>   */
->> -enum jz4780_cookie {
->> +enum jz4775_cookie {
->>      COOKIE_UNMAPPED = 0,
->>      COOKIE_PREMAPPED,
->>      COOKIE_MAPPED,
->> @@ -194,7 +196,7 @@ static void jz4740_mmc_write_irq_mask(struct 
->> jz4740_mmc_host *host,
->>  static void jz4740_mmc_write_irq_reg(struct jz4740_mmc_host *host,
->>                       uint32_t val)
->>  {
->> -    if (host->version >= JZ_MMC_JZ4780)
->> +    if (host->version >= JZ_MMC_JZ4775)
->>          writel(val, host->base + JZ_REG_MMC_IREG);
->>      else
->>          writew(val, host->base + JZ_REG_MMC_IREG);
->> @@ -202,7 +204,7 @@ static void jz4740_mmc_write_irq_reg(struct 
->> jz4740_mmc_host *host,
->>
->>  static uint32_t jz4740_mmc_read_irq_reg(struct jz4740_mmc_host *host)
->>  {
->> -    if (host->version >= JZ_MMC_JZ4780)
->> +    if (host->version >= JZ_MMC_JZ4775)
->>          return readl(host->base + JZ_REG_MMC_IREG);
->>      else
->>          return readw(host->base + JZ_REG_MMC_IREG);
->> @@ -674,7 +676,7 @@ static void jz4740_mmc_send_command(struct 
->> jz4740_mmc_host *host,
->>              cmdat |= JZ_MMC_CMDAT_WRITE;
->>          if (host->use_dma) {
->>              /*
->> -             * The 4780's MMC controller has integrated DMA ability
->> +             * The JZ4775's MMC controller has integrated DMA ability
->>               * in addition to being able to use the external DMA
->>               * controller. It moves DMA control bits to a separate
->>               * register. The DMA_SEL bit chooses the external
->> @@ -682,13 +684,13 @@ static void jz4740_mmc_send_command(struct 
->> jz4740_mmc_host *host,
->>               * can only use the external controller, and have a
->>               * single DMA enable bit in CMDAT.
->>               */
->> -            if (host->version >= JZ_MMC_JZ4780) {
->> +            if (host->version >= JZ_MMC_JZ4775) {
->>                  writel(JZ_MMC_DMAC_DMA_EN | JZ_MMC_DMAC_DMA_SEL,
->>                         host->base + JZ_REG_MMC_DMAC);
->>              } else {
->>                  cmdat |= JZ_MMC_CMDAT_DMA_EN;
->>              }
->> -        } else if (host->version >= JZ_MMC_JZ4780) {
->> +        } else if (host->version >= JZ_MMC_JZ4775) {
->>              writel(0, host->base + JZ_REG_MMC_DMAC);
->>          }
->>
->> @@ -866,7 +868,7 @@ static int jz4740_mmc_set_clock_rate(struct 
->> jz4740_mmc_host *host, int rate)
->>      writew(div, host->base + JZ_REG_MMC_CLKRT);
->>
->>      if (real_rate > 25000000) {
->> -        if (host->version >= JZ_MMC_X1000) {
->> +        if (host->version >= JZ_MMC_JZ4775) {
->
-> This changes the behaviour for the JZ4780.
->
-> Even if it is correct, this belongs in its own commit (with a Fixes 
-> tag), or at the very least a mention about it in the commit message.
+for you to fetch changes up to 84587cb0f9ed09b9b7f787276ef05beda4ae0ba8:
 
+  clkdev: remove unused clkdev_alloc() interfaces (2021-06-02 12:31:10 +0200)
 
-In fact, both JZ4775 and JZ4780 support this feature, I will add a 
-corresponding description in the commit message.
+---
+clk: clean up legacy clock interfaces
 
+A recent discussion about legacy clk interface users revealed
+that there are only two platforms remaining that provide their own
+clk_get()/clk_put() implementations, MIPS ar7 and and m68k coldfire.
 
->
->> writel(JZ_MMC_LPM_DRV_RISING_QTR_PHASE_DLY |
->>                     JZ_MMC_LPM_SMP_RISING_QTR_OR_HALF_PHASE_DLY |
->>                     JZ_MMC_LPM_LOW_POWER_MODE_EN,
->> @@ -955,15 +957,16 @@ static const struct mmc_host_ops jz4740_mmc_ops 
->> = {
->>      .enable_sdio_irq = jz4740_mmc_enable_sdio_irq,
->>  };
->>
->> -static const struct of_device_id jz4740_mmc_of_match[] = {
->> +static const struct of_device_id jz4740_mmc_of_matches[] = {
->>      { .compatible = "ingenic,jz4740-mmc", .data = (void *) 
->> JZ_MMC_JZ4740 },
->>      { .compatible = "ingenic,jz4725b-mmc", .data = (void 
->> *)JZ_MMC_JZ4725B },
->>      { .compatible = "ingenic,jz4760-mmc", .data = (void *) 
->> JZ_MMC_JZ4760 },
->> +    { .compatible = "ingenic,jz4775-mmc", .data = (void *) 
->> JZ_MMC_JZ4775 },
->>      { .compatible = "ingenic,jz4780-mmc", .data = (void *) 
->> JZ_MMC_JZ4780 },
->
-> Looks to me that the JZ4775 and JZ4780 have the exact same behaviour, 
-> so this patch could have been a one-liner, adding "ingenic,jz4775-mmc" 
-> with the JZ_MMC_JZ4780 ID.
->
+I managed to rework both of these to just use the normal clkdev code,
+and fold CONFIG_CLKDEV_LOOKUP into CONFIG_HAVE_CLK as it is now shared
+among all users.
 
-Sure, I will change it in the next version.
+As I noticed that the ar7 clock implementation and the ralink version
+are rather trivial, I ended up converting those to use the common-clk
+interfaces as well, though this is unrelated to the other changes.
 
+Link: https://lore.kernel.org/linux-clk/20210531184749.2475868-1-arnd@kernel.org/
+Link: https://lore.kernel.org/lkml/CAK8P3a2XsrfUJQQAfnGknh8HiA-D9L_wmEoAgXU89KqagE31NQ@mail.gmail.com/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
 
-Thanks and best regards!
+Stephen offered to merge these through the clk tree. I was waiting
+for an Ack/Nack from the MIPS/ar7/ralink maintainers but got no further
+reply, so sending this as a pull request now.
 
+Please pull or apply, assuming there are no further concerns.
 
-> Cheers,
-> -Paul
->
->>      { .compatible = "ingenic,x1000-mmc", .data = (void *) 
->> JZ_MMC_X1000 },
->>      {},
->>  };
->> -MODULE_DEVICE_TABLE(of, jz4740_mmc_of_match);
->> +MODULE_DEVICE_TABLE(of, jz4740_mmc_of_matches);
->>
->>  static int jz4740_mmc_probe(struct platform_device* pdev)
->>  {
->> @@ -980,7 +983,7 @@ static int jz4740_mmc_probe(struct 
->> platform_device* pdev)
->>
->>      host = mmc_priv(mmc);
->>
->> -    match = of_match_device(jz4740_mmc_of_match, &pdev->dev);
->> +    match = of_match_device(jz4740_mmc_of_matches, &pdev->dev);
->>      if (match) {
->>          host->version = (enum jz4740_mmc_version)match->data;
->>      } else {
->> @@ -1124,7 +1127,7 @@ static struct platform_driver jz4740_mmc_driver 
->> = {
->>      .driver = {
->>          .name = "jz4740-mmc",
->>          .probe_type = PROBE_PREFER_ASYNCHRONOUS,
->> -        .of_match_table = of_match_ptr(jz4740_mmc_of_match),
->> +        .of_match_table = of_match_ptr(jz4740_mmc_of_matches),
->>          .pm = pm_ptr(&jz4740_mmc_pm_ops),
->>      },
->>  };
->> -- 
->> 2.7.4
->>
->
+     Arnd
+
+Changes since v1:
+ - fix two typos on coldfire
+ - remove duplicate #include
+ - rebased to v5.13-rc1 to avoid backmerge
+
+Arnd Bergmann (7):
+  mips: ar7: convert to clkdev_lookup
+  mips: ar7: convert to CONFIG_COMMON_CLK
+  mips: ralink: convert to CONFIG_COMMON_CLK
+  m68k: coldfire: use clkdev_lookup on most coldfire
+  m68k: coldfire: remove private clk_get/clk_put
+  clkdev: remove CONFIG_CLKDEV_LOOKUP
+  clkdev: remove unused clkdev_alloc() interfaces
+
+ arch/arm/Kconfig                     |   2 -
+ arch/m68k/coldfire/clk.c             |  21 -----
+ arch/m68k/coldfire/m5206.c           |  25 +++---
+ arch/m68k/coldfire/m520x.c           |  51 +++++------
+ arch/m68k/coldfire/m523x.c           |  42 ++++-----
+ arch/m68k/coldfire/m5249.c           |  33 +++----
+ arch/m68k/coldfire/m525x.c           |  33 +++----
+ arch/m68k/coldfire/m5272.c           |  35 +++-----
+ arch/m68k/coldfire/m527x.c           |  44 ++++------
+ arch/m68k/coldfire/m528x.c           |  42 ++++-----
+ arch/m68k/coldfire/m5307.c           |  27 +++---
+ arch/m68k/coldfire/m53xx.c           |  78 ++++++++---------
+ arch/m68k/coldfire/m5407.c           |  25 +++---
+ arch/m68k/coldfire/m5441x.c          | 126 +++++++++++++--------------
+ arch/m68k/coldfire/m54xx.c           |  33 +++----
+ arch/m68k/include/asm/mcfclk.h       |   5 --
+ arch/mips/Kconfig                    |   6 +-
+ arch/mips/ar7/clock.c                | 113 ++++++------------------
+ arch/mips/include/asm/mach-ar7/ar7.h |   4 -
+ arch/mips/pic32/Kconfig              |   1 -
+ arch/mips/ralink/Kconfig             |   5 --
+ arch/mips/ralink/clk.c               |  64 +-------------
+ arch/sh/Kconfig                      |   1 -
+ drivers/clk/Kconfig                  |   6 +-
+ drivers/clk/Makefile                 |   3 +-
+ drivers/clk/clkdev.c                 |  28 ------
+ drivers/clocksource/Kconfig          |   6 +-
+ drivers/mmc/host/Kconfig             |   4 +-
+ drivers/staging/board/Kconfig        |   2 +-
+ include/linux/clkdev.h               |   5 --
+ sound/soc/dwc/Kconfig                |   2 +-
+ sound/soc/rockchip/Kconfig           |  14 +--
+ 32 files changed, 318 insertions(+), 568 deletions(-)
+
+-- 
+2.29.2
+
+Cc: Dmitry Osipenko <digetx@gmail.com>
+Cc: Florian Fainelli <florian@openwrt.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Greg Ungerer <gerg@linux-m68k.org>
+Cc: John Crispin <john@phrozen.org>
+Cc: Jonas Gorski <jonas.gorski@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
