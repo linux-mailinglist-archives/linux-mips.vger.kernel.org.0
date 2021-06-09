@@ -2,54 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C943A105D
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Jun 2021 12:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF693A1049
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Jun 2021 12:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238148AbhFIJn1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Jun 2021 05:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
+        id S238069AbhFIJjn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Jun 2021 05:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234720AbhFIJn0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Jun 2021 05:43:26 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D9DC061574;
-        Wed,  9 Jun 2021 02:41:31 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id j12so18978861pgh.7;
-        Wed, 09 Jun 2021 02:41:31 -0700 (PDT)
+        with ESMTP id S234748AbhFIJjm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Jun 2021 05:39:42 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA42C061574;
+        Wed,  9 Jun 2021 02:37:47 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id b5so24586358ilc.12;
+        Wed, 09 Jun 2021 02:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mhMcjERsi3wx3J0HCHYpS+goiMXBDBgg8cMNxlYjvGA=;
-        b=ADcj1YVvHTLC+vKMpsqWPDJsBSDbQj9Juth1j7LfkjKpeyQiAv4eLJia7JtZshRFtJ
-         A+TDHANIoo9IOJ4Kh0lYPvrrYa5nHWPVMBPmA405nRsS3sz38uj/ZBeAXl2ZMbNQjV+D
-         mqkGmibxA5nlTggMZR8xaJL9mgWWlN0qvJ13j0sbvH5mcxMOF9754ReExqahIfdHqL2I
-         NGrYqKJ6VLkatC3yXMel7BVvJXeid1JTMV2nRKXWSqgMLC4VnNuNxzIDSde7bQegncwu
-         8i1TuPOBXCJ8KzJ7C/7oFxid3upfTcHVU7lyPDQqvDi7b+rtEOCs4e9uougdvb5+gY72
-         zPtQ==
+        bh=11paM/1lp22CavDEEN3A/olA+tOS+m0UgIjuNNPMc5c=;
+        b=AUn30ilbL3NzF5q2BCp0QVXHikpm8Vm6yUAM9SdAhos2m9u8xXGwxlhY7L/mh5ETkk
+         xMDLHdDCnvMj9u5VwkHn37GW+ujRpw2uJn/g/RTKxpbLL7paohPJB9BFTIoD6vBOz0FJ
+         wlEZkhAcmqWn9YlRTm67JdkNWHAiNqs9sQF7kLfjGLtZZjwbbdwYYhZL9eEqO6j8XGwT
+         WGtn6z7Ok1u7/f7AJWVfLsFL4AOnd9bBJ2NKdphWe6mO0Sya+xn+4ljLwykvBX8unsLj
+         qDtDo0A3iPuoyVDOa2dKVu/uzCQIFKij1E9QJ4Rpt6+OuJFeAbsxKLDuKg+JVf9eTdvV
+         qvfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mhMcjERsi3wx3J0HCHYpS+goiMXBDBgg8cMNxlYjvGA=;
-        b=ZwyFoZ53V0dbFpm6oVmzTiQtyyCEfJTI9z3MPc9OY6EFJpmkkteZ466t9mbB5u0PDr
-         nAZuYLqz0rmGo0DwpVMMQRuQ3SMl8CWcW4PFTX1eUY9CiAZu6tGnMNo2XxHGqmvlddcb
-         sXnh1tIBj+z7ojFXEqIxre4fvESjSTZnpKupLIG/WJHYvUDZofFm6LojcgB+5cJfPl24
-         EwR/p11kAdrynFD3/D8gGUMMKHsGr5UHcWP6LWMZK2nnfnQhjBQTdez7GJl97vntFceA
-         0x7zb2KVcxPmywj4V2S25Jnz70/PJOW5QLnEuVsaYFh0Cf9UOoGvcd6RcxTvmFheJWxi
-         WNjw==
-X-Gm-Message-State: AOAM532QXMwSk4MEFV1rcDXVB7QZVtWxnWlHpHTZg05X2MhAeWTbBR+N
-        XeOnMRYimKy1lcoWHAL7v0u0hhqTCzQuHQS5GOXjkVZ/dhWXvg==
-X-Google-Smtp-Source: ABdhPJwAXk5XLhiYZ2SCv5KKecZJLPTCdFzz10ao0FJv/DCA2fGlPOpnYQTjWTA/Q177jVl11ZJJ3bM2RHXJ7omJZKU=
-X-Received: by 2002:a6b:287:: with SMTP id 129mr18520979ioc.182.1623231195095;
- Wed, 09 Jun 2021 02:33:15 -0700 (PDT)
+        bh=11paM/1lp22CavDEEN3A/olA+tOS+m0UgIjuNNPMc5c=;
+        b=D+4f2a9eNChSRAA625nVypjPfxAKmgHzYO1PX48Zh64AITQquDEUcgJsuj5a5bt9Pe
+         hom6FP+cbzAgNCSYOESRIYnfS1uG1p5/dEH/Un0rgmryIYpZ+cF2Cfls+nXrjLjil0kX
+         ++Y2rVWNge8GsGQ0wAnyvp6krHA0qhkGyv90uI+kD8OwvMWE61w/X8KIruWRBaVcRbAd
+         8uurSPMiRqj4Glm73UCXY8RjzBGQwPZ7SYck9AWcu9PwzXFyPDGYrI12bS6b/OJp2rcp
+         E4Yanqjz3qv8QMw4JdZalSq7AHWEvkTHUbn32UKVfAaMj0Zid0ki4ydmZGazXirvIWhH
+         wM7A==
+X-Gm-Message-State: AOAM5313/mgOhvCJK8cXznROgr0ZWB9nDI6Rrd2UXhB+50CP7KG6CXx8
+        FkPmpgMQkFRnWwoBUe4/JP3QuYSc9LrmgZKthEs=
+X-Google-Smtp-Source: ABdhPJy5AROZdbsU+O1Vh/bwrnsq7wRpZEor176YD0iLaHDJhsh5Ad6i076nqZiL2In6oQ6aCiJFsx/mBME7wo4cSUc=
+X-Received: by 2002:a05:6638:267:: with SMTP id x7mr7028650jaq.51.1623231466755;
+ Wed, 09 Jun 2021 02:37:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210608160603.1535935-1-hch@lst.de> <20210608160603.1535935-5-hch@lst.de>
-In-Reply-To: <20210608160603.1535935-5-hch@lst.de>
+References: <20210608160603.1535935-1-hch@lst.de> <20210608160603.1535935-8-hch@lst.de>
+In-Reply-To: <20210608160603.1535935-8-hch@lst.de>
 From:   Ilya Dryomov <idryomov@gmail.com>
-Date:   Wed, 9 Jun 2021 11:33:13 +0200
-Message-ID: <CAOi1vP8Xe1ZqE8fe=8KcU00xDjRrvaRONAC_TYYctsE1dns0Og@mail.gmail.com>
-Subject: Re: [PATCH 04/16] bvec: add a bvec_kmap_local helper
+Date:   Wed, 9 Jun 2021 11:37:45 +0200
+Message-ID: <CAOi1vP-zSAnx5z7EbPNVLoCHWdK5iGjXU7KKrRL8YZF1QfMf3A@mail.gmail.com>
+Subject: Re: [PATCH 07/16] rbd: use memzero_bvec
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Jens Axboe <axboe@kernel.dk>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -68,41 +68,57 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Tue, Jun 8, 2021 at 6:06 PM Christoph Hellwig <hch@lst.de> wrote:
 >
-> Add a helper to call kmap_local_page on a bvec.  There is no need for
-> an unmap helper given that kunmap_local accept any address in the mapped
-> page.
+> Use memzero_bvec instead of reimplementing it.
 >
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
->  include/linux/bvec.h | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/block/rbd.c | 15 ++-------------
+>  1 file changed, 2 insertions(+), 13 deletions(-)
 >
-> diff --git a/include/linux/bvec.h b/include/linux/bvec.h
-> index 883faf5f1523..d64d6c0ceb77 100644
-> --- a/include/linux/bvec.h
-> +++ b/include/linux/bvec.h
-> @@ -7,6 +7,7 @@
->  #ifndef __LINUX_BVEC_H
->  #define __LINUX_BVEC_H
->
-> +#include <linux/highmem.h>
->  #include <linux/bug.h>
->  #include <linux/errno.h>
->  #include <linux/limits.h>
-> @@ -183,4 +184,9 @@ static inline void bvec_advance(const struct bio_vec *bvec,
->         }
+> diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
+> index bbb88eb009e0..eb243fc4d108 100644
+> --- a/drivers/block/rbd.c
+> +++ b/drivers/block/rbd.c
+> @@ -1219,24 +1219,13 @@ static void rbd_dev_mapping_clear(struct rbd_device *rbd_dev)
+>         rbd_dev->mapping.size = 0;
 >  }
 >
-> +static inline void *bvec_kmap_local(struct bio_vec *bvec)
-> +{
-> +       return kmap_local_page(bvec->bv_page) + bvec->bv_offset;
-> +}
-> +
->  #endif /* __LINUX_BVEC_H */
+> -static void zero_bvec(struct bio_vec *bv)
+> -{
+> -       void *buf;
+> -       unsigned long flags;
+> -
+> -       buf = bvec_kmap_irq(bv, &flags);
+> -       memset(buf, 0, bv->bv_len);
+> -       flush_dcache_page(bv->bv_page);
+> -       bvec_kunmap_irq(buf, &flags);
+> -}
+> -
+>  static void zero_bios(struct ceph_bio_iter *bio_pos, u32 off, u32 bytes)
+>  {
+>         struct ceph_bio_iter it = *bio_pos;
+>
+>         ceph_bio_iter_advance(&it, off);
+>         ceph_bio_iter_advance_step(&it, bytes, ({
+> -               zero_bvec(&bv);
+> +               memzero_bvec(&bv);
+>         }));
+>  }
+>
+> @@ -1246,7 +1235,7 @@ static void zero_bvecs(struct ceph_bvec_iter *bvec_pos, u32 off, u32 bytes)
+>
+>         ceph_bvec_iter_advance(&it, off);
+>         ceph_bvec_iter_advance_step(&it, bytes, ({
+> -               zero_bvec(&bv);
+> +               memzero_bvec(&bv);
+>         }));
+>  }
+>
 
-Might be useful to add the second sentence of the commit message as
-a comment for bvec_kmap_local().  It could be expanded to mention the
-single-page bvec caveat too.
+Ira already brought up the fact that this conversion drops
+flush_dcache_page() calls throughout.  Other than that:
+
+Acked-by: Ilya Dryomov <idryomov@gmail.com>
 
 Thanks,
 
