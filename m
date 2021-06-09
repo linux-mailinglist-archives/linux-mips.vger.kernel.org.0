@@ -2,134 +2,266 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABB03A11A0
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Jun 2021 12:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9623A11A9
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Jun 2021 12:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237409AbhFIKyV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Jun 2021 06:54:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:33410 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238458AbhFIKyK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Jun 2021 06:54:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623235935;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VZPPxlVuFpma5nN0KBwsgNEj1D60a3U+wCT7M5MPOro=;
-        b=Km5r1M+sxIq4QxvZF6wtjHOv+NX0GD/tnBHzME3FShlP42FQZPxI28LSs2skwcRMKR6KJh
-        0XJz2rmTh/jJT0lX2DtPOYM/XEAPwKAOmVwutgOGYzNlj3DmYYtDvRxwcjs6H58IXcjOxC
-        UvVr5TV7PvMy2NUxlLSDVJZr9BvC36k=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-39-a464Zmr6OCGzfxBvrrO12Q-1; Wed, 09 Jun 2021 06:52:14 -0400
-X-MC-Unique: a464Zmr6OCGzfxBvrrO12Q-1
-Received: by mail-wr1-f69.google.com with SMTP id m27-20020a056000025bb0290114d19822edso10597637wrz.21
-        for <linux-mips@vger.kernel.org>; Wed, 09 Jun 2021 03:52:14 -0700 (PDT)
+        id S235055AbhFIKzI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Jun 2021 06:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238378AbhFIKy6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Jun 2021 06:54:58 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DDCC061574
+        for <linux-mips@vger.kernel.org>; Wed,  9 Jun 2021 03:53:03 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id r16so900414ljc.0
+        for <linux-mips@vger.kernel.org>; Wed, 09 Jun 2021 03:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jHoLzWYdp5ISlDbBgSFyYCfDrRI9tCvY5DjfYUh62BA=;
+        b=KvGCLXJmmHNlmQX/QoxMVyfxDRR3r7eVLp45X9EBG0XeEtxFPOUFh06aZcuuk5oFLG
+         lpm91ccBIFw/dn8dGZQ1SK/02tBGP3LTgyr2G9u2TvdwKp5HPr7rP36U+mIsGhKzoMTC
+         niXvJwObjsvSaCBDPAwGUwEgYZyQJTlauSDuf2u+RFcA6QZoiSaxSR5PZ0AWCj/JncyT
+         NnZRDcrMI1X6dsMUcR9kZ6NwaG0lYhVAkeQaJNBuAO0VAuyEylnaPct/QqSyFR/gxd+d
+         ZrFM1/6yw1hOqlJD/LVfKX3wj2XpRNOq2NcjXn/q/B4FBjMRtgeTfhge1NciqG4bdbHN
+         6aSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=VZPPxlVuFpma5nN0KBwsgNEj1D60a3U+wCT7M5MPOro=;
-        b=hNySQ80QpWpOGYKrYmbmrsn9yGzyI9tiyeQ3fG+Id63EkubAYJrb4W85wiU2Dozcn/
-         yYrkFCFF9fY29FbU/hwldu6UXzpAHoZDF2hu1QPS2Vpg63C2Hns5zMbCdeJuhfxMgaY6
-         ZcfPzHBztOaTV+GkdM95HhMjqYqXE3vuJA7szxuTtvN3/0NfW7EEqsJ8SV5qtBCQ4IkU
-         8gJNpef7kLKo0ptRh5WSCsmuoYWNi4jQKzGDWh8/51Rv+SZUkLq9OK6cU6TRy+dWFd/z
-         vyCeGxrKGWTxQ9PHAuR/uhrYPDsYMUNwUAewSviIpvChGDfcdFxQSbLb3CswZo6buflG
-         ntRw==
-X-Gm-Message-State: AOAM533ea2qe7VhJvyRVJ4dGp/vOkj2gojwTpoDaAtFxJEnS8OBp+vpU
-        v9A3OnBgYHFbQytgGVQv4p68IiC/+ZCbFU/KJy0kkjhnoa77m0fIGX5KewWtvaO79Oh0bfACCPJ
-        wMiNKHpHpfoTJM3HEdz+GMw==
-X-Received: by 2002:a05:600c:c9:: with SMTP id u9mr26528255wmm.156.1623235933485;
-        Wed, 09 Jun 2021 03:52:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwOhpm0kR/qb02GnRlZAdwrQqqdavzoWPuk2BGBrMztminfq9lmdrK+j2M/FH+Xh9QtwaeMHg==
-X-Received: by 2002:a05:600c:c9:: with SMTP id u9mr26528228wmm.156.1623235933268;
-        Wed, 09 Jun 2021 03:52:13 -0700 (PDT)
-Received: from [192.168.3.132] (p5b0c611d.dip0.t-ipconnect.de. [91.12.97.29])
-        by smtp.gmail.com with ESMTPSA id 89sm25391165wrq.14.2021.06.09.03.52.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Jun 2021 03:52:13 -0700 (PDT)
-Subject: Re: [PATCH 2/9] arc: update comment about HIGHMEM implementation
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matt Turner <mattst88@gmail.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-References: <20210602105348.13387-1-rppt@kernel.org>
- <20210602105348.13387-3-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Message-ID: <2764dca8-f395-f76a-0939-215eccdfd82e@redhat.com>
-Date:   Wed, 9 Jun 2021 12:52:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jHoLzWYdp5ISlDbBgSFyYCfDrRI9tCvY5DjfYUh62BA=;
+        b=bo146GzMOnUxol+31Re4xyjNznxMQNL5edB01ao9B5NixOvZRYPqQ8nKpxNm/NSJ29
+         3fgT/53FfbUCqexE0R5NI9viRRCeee3mzNFkNH3j8ERmUIVLTYBVY9McCj1avVWqGKIZ
+         HpqCXdUCpBdl49UgDIUgGTjCIczHv4lEUwlmFF3jSG+Tw2XNCRlUKbHMgvo2chutAFWQ
+         FVk3OFYLj9pDL5amSzAYPNIdIMnMbH9ZaNQI3mxdU8IT4Z4ojrP0LMO/HfwvUXXCDp10
+         tYJLlwv6etQFjzFIM+NyC1cw/wzEZlbLraJ71UBt5V0JLhNAFjpXF+7tvsC+rfSr9iMJ
+         ZqJg==
+X-Gm-Message-State: AOAM532K9mali9kTso0mt1tf+rm8vJ/H0zRfPI0H+zSo0LoWHGIeGXzK
+        +QA5c3lNPjim5NiHUbHa0SmIn85pNsRa8Qqif1zYMw==
+X-Google-Smtp-Source: ABdhPJxOvZ653gXz8b2XaprzpT+yfuP0mYWyhgZZ2glHnPl2rchtXEglpZh8pIPlpxgE/I5ucU0RMR2SDRkZYkGlTT8=
+X-Received: by 2002:a2e:2f09:: with SMTP id v9mr21288074ljv.152.1623235981301;
+ Wed, 09 Jun 2021 03:53:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210602105348.13387-3-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210609002326.210024-1-tyhicks@linux.microsoft.com>
+ <20210609002326.210024-6-tyhicks@linux.microsoft.com> <CAFA6WYOZC0iHzZm6pOxz31eW_=8g2wyJdm4wiOGKggO6-a9MdA@mail.gmail.com>
+ <20210609054621.GB4910@sequoia>
+In-Reply-To: <20210609054621.GB4910@sequoia>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 9 Jun 2021 16:22:49 +0530
+Message-ID: <CAFA6WYOYt2vcQ4ng=Nwu2R7d6=R=DGXQKpQ-+UiENerEtQRKWg@mail.gmail.com>
+Subject: Re: [PATCH v3 5/7] tee: Support shm registration without dma-buf backing
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>, Rijo-john.Thomas@amd.com
+Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
+        Allen Pais <apais@linux.microsoft.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Vikas Gupta <vikas.gupta@broadcom.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        op-tee@lists.trustedfirmware.org,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 02.06.21 12:53, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> Arc does not use DISCONTIGMEM to implement high memory, update the comment
-> describing how high memory works to reflect this.
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->   arch/arc/mm/init.c | 13 +++++--------
->   1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
-> index e2ed355438c9..397a201adfe3 100644
-> --- a/arch/arc/mm/init.c
-> +++ b/arch/arc/mm/init.c
-> @@ -139,16 +139,13 @@ void __init setup_arch_memory(void)
->   
->   #ifdef CONFIG_HIGHMEM
->   	/*
-> -	 * Populate a new node with highmem
-> -	 *
->   	 * On ARC (w/o PAE) HIGHMEM addresses are actually smaller (0 based)
-> -	 * than addresses in normal ala low memory (0x8000_0000 based).
-> +	 * than addresses in normal aka low memory (0x8000_0000 based).
->   	 * Even with PAE, the huge peripheral space hole would waste a lot of
-> -	 * mem with single mem_map[]. This warrants a mem_map per region design.
-> -	 * Thus HIGHMEM on ARC is imlemented with DISCONTIGMEM.
-> -	 *
-> -	 * DISCONTIGMEM in turns requires multiple nodes. node 0 above is
-> -	 * populated with normal memory zone while node 1 only has highmem
-> +	 * mem with single contiguous mem_map[].
-> +	 * Thus when HIGHMEM on ARC is enabled the memory map corresponding
-> +	 * to the hole is freed and ARC specific version of pfn_valid()
-> +	 * handles the hole in the memory map.
->   	 */
->   #ifdef CONFIG_DISCONTIGMEM
->   	node_set_online(1);
-> 
++ Rijo
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+On Wed, 9 Jun 2021 at 11:16, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
+>
+> On 2021-06-09 09:59:04, Sumit Garg wrote:
+> > Hi Tyler,
+>
+> Hey Sumit - Thanks for the review.
+>
+> >
+> > On Wed, 9 Jun 2021 at 05:55, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
+> > >
+> > > Uncouple the registration of dynamic shared memory buffers from the
+> > > TEE_SHM_DMA_BUF flag. Drivers may wish to allocate dynamic shared memory
+> > > regions but do not need them to be backed by a dma-buf when the memory
+> > > region is private to the driver.
+> >
+> > In this case drivers should use tee_shm_register() instead where the
+> > memory allocated is actually private to the driver. However, you need
+> > to remove TEE_SHM_DMA_BUF as a mandatory flag for tee_shm_register().
+> > Have a look at an example here [1]. So modifying tee_shm_alloc() for
+> > this purpose doesn't look appropriate to me.
+> >
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/security/keys/trusted-keys/trusted_tee.c#n73
+>
+> I noticed what you did in commit 2a6ba3f794e8 ("tee: enable support to
+> register kernel memory") and considered moving ftpm and tee_bnxt_fw over
+> to tee_shm_register(). I think that's likely the right long term
+> approach but I decided against it since this series is a minimal set of
+> bug fixes that will hopefully go to stable (I'm affected by these bugs
+> in 5.4). Here are my reasons for feeling like moving to
+> tee_shm_register() isn't minimal in terms of a stable-focused fix:
+>
+> - tee_shm_alloc() looks like it should work fine with AMD-TEE today.
+>   tee_shm_register() definitely does not since AMD-TEE doesn't provide a
+>   .shm_register or .shm_unregister hook. This may break existing users
+>   of AMD-TEE?
 
--- 
-Thanks,
+AFAIK, ftpm and tee_bnxt_fw drivers only support OP-TEE at this point.
+See ftpm_tee_match() and optee_ctx_match() APIs in corresponding
+drivers.
 
-David / dhildenb
+> - tee_shm_register() has not historically been used for kernel
+>   allocations and is not fixed wrt the bug that Jens fixed in commit
+>   f1bbacedb0af ("tee: don't assign shm id for private shms").
 
+Yes, that's what I meant earlier to make the TEE_SHM_DMA_BUF flag optional.
+
+> - tee_shm_alloc() performs allocations using contiguous pages
+>   from alloc_pages() while tee_shm_register() performs non-contiguous
+>   allocations with kcalloc(). I suspect this would be fine but I don't
+>   know the secure world side of these things well enough to assess the
+>   risk involved with such a change on the kernel side.
+>
+
+I don't think that would make any difference.
+
+> I should have mentioned this in the cover letter but my hope was that
+> these minimal changes would be accepted and then additional work could
+> be done to merge tee_shm_alloc() and tee_shm_register() in a way that
+> would allow the caller to request contiguous or non-contiguous pages,
+> fix up the additional issues mentioned above, and then adjust the
+> call sites in ftpm and tee_bnxt_fw as appropriate.
+>
+> I think that's a bigger set of changes because there are several things
+> that still confuse/concern me:
+>
+> - Why does tee_shm_alloc() use TEE_SHM_MAPPED while tee_shm_register()
+>   uses TEE_SHM_KERNEL_MAPPED or TEE_SHM_USER_MAPPED? Why do all three
+>   exist?
+
+AFAIK, its due the the inherent nature of tee_shm_alloc() and
+tee_shm_register() where tee_shm_alloc() doesn't need to know whether
+its a kernel or user-space memory since it is the one that allocates
+whereas tee_shm_register() need to know that since it has to register
+pre-allocated client memory.
+
+> - Why does tee_shm_register() unconditionally use non-contiguous
+>   allocations without ever taking into account whether or not
+>   OPTEE_SMC_SEC_CAP_DYNAMIC_SHM was set? It sounds like that's required
+>   from my reading of https://optee.readthedocs.io/en/latest/architecture/core.html#noncontiguous-shared-buffers.
+
+Yeah, but do we have platforms in OP-TEE that don't support dynamic
+shared memory? I guess it has become the sane default which is a
+mandatory requirement when it comes to OP-TEE driver in u-boot.
+
+> - Why is TEE_SHM_REGISTER implemented at the TEE driver level when it is
+>   specific to OP-TEE? How to better abstract that away?
+>
+
+I would like you to go through Section "3.2.4. Shared Memory" in TEE
+Client API Specification. There are two standard ways for shared
+memory approach with TEE:
+
+1. A Shared Memory block can either be existing Client Application
+memory (kernel driver in our case) which is subsequently registered
+with the TEE Client API (using tee_shm_register() in our case).
+
+2. Or memory which is allocated on behalf of the Client Application
+using the TEE
+Client API (using tee_shm_alloc() in our case).
+
+> Let me know if you agree with the more minimal approach that I took for
+> these bug fix series or still feel like tee_shm_register() should be
+> fixed up so that it is usable. Thanks!
+
+From drivers perspective I think the change should be:
+
+tee_shm_alloc()
+
+to
+
+kcalloc()
+tee_shm_register()
+
+-Sumit
+
+> > > Allow callers of tee_shm_alloc() to specify the TEE_SHM_REGISTER flag to.
+> > > request registration. If the TEE implementation does not require dynamic
+> > > shared memory to be registered, clear the flag prior to calling the
+> > > corresponding pool alloc function. Update the OP-TEE driver to respect
+> > > TEE_SHM_REGISTER, rather than TEE_SHM_DMA_BUF, when deciding whether to
+> > > (un)register on alloc/free operations. The AMD-TEE driver continues to
+> > > ignore the TEE_SHM_REGISTER flag.
+> > >
+> > > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> > > ---
+> > >  drivers/tee/optee/shm_pool.c |  5 ++---
+> > >  drivers/tee/tee_shm.c        | 11 ++++++++++-
+> > >  2 files changed, 12 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/tee/optee/shm_pool.c b/drivers/tee/optee/shm_pool.c
+> > > index da06ce9b9313..6054343a29fb 100644
+> > > --- a/drivers/tee/optee/shm_pool.c
+> > > +++ b/drivers/tee/optee/shm_pool.c
+> > > @@ -27,7 +27,7 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
+> > >         shm->paddr = page_to_phys(page);
+> > >         shm->size = PAGE_SIZE << order;
+> > >
+> > > -       if (shm->flags & TEE_SHM_DMA_BUF) {
+> > > +       if (shm->flags & TEE_SHM_REGISTER) {
+> > >                 unsigned int nr_pages = 1 << order, i;
+> > >                 struct page **pages;
+> > >
+> > > @@ -42,7 +42,6 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
+> > >                         page++;
+> > >                 }
+> > >
+> > > -               shm->flags |= TEE_SHM_REGISTER;
+> > >                 rc = optee_shm_register(shm->ctx, shm, pages, nr_pages,
+> > >                                         (unsigned long)shm->kaddr);
+> > >                 kfree(pages);
+> > > @@ -60,7 +59,7 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
+> > >  static void pool_op_free(struct tee_shm_pool_mgr *poolm,
+> > >                          struct tee_shm *shm)
+> > >  {
+> > > -       if (shm->flags & TEE_SHM_DMA_BUF)
+> > > +       if (shm->flags & TEE_SHM_REGISTER)
+> > >                 optee_shm_unregister(shm->ctx, shm);
+> > >
+> > >         free_pages((unsigned long)shm->kaddr, get_order(shm->size));
+> > > diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> > > index 00472f5ce22e..1c0176550b9c 100644
+> > > --- a/drivers/tee/tee_shm.c
+> > > +++ b/drivers/tee/tee_shm.c
+> > > @@ -117,7 +117,7 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> > >                 return ERR_PTR(-EINVAL);
+> > >         }
+> > >
+> > > -       if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF))) {
+> > > +       if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF | TEE_SHM_REGISTER))) {
+> > >                 dev_err(teedev->dev.parent, "invalid shm flags 0x%x", flags);
+> > >                 return ERR_PTR(-EINVAL);
+> > >         }
+> > > @@ -137,6 +137,15 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
+> > >                 goto err_dev_put;
+> > >         }
+> > >
+> > > +       if (!teedev->desc->ops->shm_register ||
+> > > +           !teedev->desc->ops->shm_unregister) {
+> > > +               /* registration is not required by the TEE implementation */
+> > > +               flags &= ~TEE_SHM_REGISTER;
+> > > +       } else if (flags & TEE_SHM_DMA_BUF) {
+> > > +               /* all dma-buf backed shm allocations are registered */
+> > > +               flags |= TEE_SHM_REGISTER;
+> > > +       }
+> > > +
+> > >         shm->flags = flags | TEE_SHM_POOL;
+> > >         shm->ctx = ctx;
+> > >         if (flags & TEE_SHM_DMA_BUF)
+> > > --
+> > > 2.25.1
+> > >
+> >
