@@ -2,72 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 878173A087E
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Jun 2021 02:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AB53A099B
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Jun 2021 03:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbhFIAp1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Jun 2021 20:45:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51532 "EHLO mail.kernel.org"
+        id S232831AbhFIBuV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 8 Jun 2021 21:50:21 -0400
+Received: from mga05.intel.com ([192.55.52.43]:38052 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232568AbhFIAp0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 8 Jun 2021 20:45:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4A6E2613AD;
-        Wed,  9 Jun 2021 00:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623199409;
-        bh=+3nbsaIYk/9yAUNJxwycOrUZJOcVP4C0cA9bFgpvN1Y=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=V947suxOBLRh/R8cG/0idwsQNEccuscTWYgWGIfxx58Q9a8ZGN1do2O4RzQE7msXK
-         fd+RRvSNSqBUg+4JSvaDCWwba6vxYzIoJzzfMhnedXMPRehrKqEG7h7T599ccTmjWs
-         k2dtcOFXAdhQ3XasfnLrDkF1P4UKrWcmdCAdBe/A17snmb2fGG7DNjFpHKWXGglsvF
-         qHUNR5YQHtc9IQ2ZNDP5Dy/cR2dl7+RXFpIvjCXiTnNLwe0ORxZR/Lw199UL+BlJJl
-         PxzH/8o/RIDelePzZ6aR2PVwfD2V17MOV+IP4s5qjxPcYhG2cVNfJDOi0dP2ab5Na9
-         CLMbDkoGfSXmQ==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210608152214.1231666-1-arnd@kernel.org>
-References: <20210608152214.1231666-1-arnd@kernel.org>
-Subject: Re: [GIT PULL v2] clk: clean up legacy clock interfaces
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
-        Florian Fainelli <florian@openwrt.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        John Crispin <john@phrozen.org>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
+        id S231438AbhFIBuU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 8 Jun 2021 21:50:20 -0400
+IronPort-SDR: ojc764/nv4txkxhexo1hpQcCS/Ug64IxXfzphmm5e3724pKz8R9h5KDOX+xO2SgqyFsN/PK2hQ
+ xa8XOtYQvJOw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10009"; a="290612580"
+X-IronPort-AV: E=Sophos;i="5.83,259,1616482800"; 
+   d="scan'208";a="290612580"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2021 18:48:24 -0700
+IronPort-SDR: SRFfjIkTZkgdiWUkfbuxO/DHCb0ZQrp7YLBvUKhmAbESyYDmfBnXBu/pgXAlW0d/t+PE9XTYIq
+ c7l/dYjK3T5A==
+X-IronPort-AV: E=Sophos;i="5.83,259,1616482800"; 
+   d="scan'208";a="448117931"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2021 18:48:23 -0700
+Date:   Tue, 8 Jun 2021 18:48:22 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Arnd Bergmann <arnd@kernel.org>, linux-clk@vger.kernel.org
-Date:   Tue, 08 Jun 2021 17:43:27 -0700
-Message-ID: <162319940793.1835121.10609879074370607740@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+        Geoff Levand <geoff@infradead.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        ceph-devel@vger.kernel.org
+Subject: Re: [PATCH 09/16] ps3disk: use memcpy_{from,to}_bvec
+Message-ID: <20210609014822.GT3697498@iweiny-DESK2.sc.intel.com>
+References: <20210608160603.1535935-1-hch@lst.de>
+ <20210608160603.1535935-10-hch@lst.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210608160603.1535935-10-hch@lst.de>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Arnd Bergmann (2021-06-08 08:22:07)
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The following changes since commit 8124c8a6b35386f73523d27eacb71b5364a68c=
-4c:
->=20
->   Linux 5.13-rc4 (2021-05-30 11:58:25 -1000)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags=
-/clkdev-cleanup
->=20
-> for you to fetch changes up to 84587cb0f9ed09b9b7f787276ef05beda4ae0ba8:
->=20
->   clkdev: remove unused clkdev_alloc() interfaces (2021-06-02 12:31:10 +0=
-200)
->=20
-> ---
+On Tue, Jun 08, 2021 at 06:05:56PM +0200, Christoph Hellwig wrote:
+>  
+>  	rq_for_each_segment(bvec, req, iter) {
+> -		unsigned long flags;
+> -		dev_dbg(&dev->sbd.core, "%s:%u: bio %u: %u sectors from %llu\n",
+> -			__func__, __LINE__, i, bio_sectors(iter.bio),
+> -			iter.bio->bi_iter.bi_sector);
+> -
+> -		size = bvec.bv_len;
+> -		buf = bvec_kmap_irq(&bvec, &flags);
+>  		if (gather)
+> -			memcpy(dev->bounce_buf+offset, buf, size);
+> +			memcpy_from_bvec(dev->bounce_buf + offset, &bvec);
+>  		else
+> -			memcpy(buf, dev->bounce_buf+offset, size);
+> -		offset += size;
+> -		flush_kernel_dcache_page(bvec.bv_page);
 
-Thanks. Pulled into clk-next
+I'm still not 100% sure that these flushes are needed but the are not no-ops on
+every arch.  Would it be best to preserve them after the memcpy_to/from_bvec()?
+
+Same thing in patch 11 and 14.
+
+Ira
