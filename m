@@ -2,93 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5153A167A
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Jun 2021 16:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660883A17E4
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Jun 2021 16:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237226AbhFIOFD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Jun 2021 10:05:03 -0400
-Received: from mail-wr1-f41.google.com ([209.85.221.41]:37853 "EHLO
-        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237227AbhFIOFC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Jun 2021 10:05:02 -0400
-Received: by mail-wr1-f41.google.com with SMTP id i94so20589360wri.4;
-        Wed, 09 Jun 2021 07:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AYWDI6BG8IdRoFPaJz/bP9vC9WkcUEC9Y1+RTob9aXc=;
-        b=b5m4IM3yjBet0AWST2O9Jpwxqjd2kDUCn92XMVhC72ujjOfkDoVI4N41Z0NTFy5VpE
-         OglH+M9cHy9M3rUqXKcFYPNr3qBW51d5WebmAHdVIjFkUcfVn3F3Y8Q6Rxt5HpJl2DK7
-         PFdUjeD0uO+NFVCQJHsP2sUMqtC5aA3tbVEKs9gJNFHh3c4rkVAe7k8QLlKkoK5QxtkU
-         o3Gdi6kAVjOU2MnTvDPB5oFQT3IhDOoM/eJyQK9ABnYQvXqYBgT09bo29dStiR32Hakl
-         onIiJnMpNpr6WheKCJTWb8PyeY+SFdBNaflEzsojeh306rMxNJh+2ipkEMCRXTL6/bRb
-         6M1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AYWDI6BG8IdRoFPaJz/bP9vC9WkcUEC9Y1+RTob9aXc=;
-        b=NNd2FnlS2I6499ZEdHcrcmTKgqKQVHdfgGVu9BhGGHSlhhcl9AJqXKvcsL+Btg+I9T
-         cL4r76wJ+p0Tu4P6rO8Dznm3QU+Dj1gYW4cXwH4l6fSAfaxqpnKb3EYe6uLmSve4TDjF
-         UctlXA1yxJx55nrcQ0yIa4Bophc3KETzItYC3HeslngeZXmtEvsKpy6mMHAiCS7T5VWs
-         LRE0t47lMuQsNvI9Gr81tztaOqlluUjStwFocqv9y4M+q8kHbvVnyWlzrElDRNQTwaVk
-         4B+3oc4+3HhDeN+L8+/Dae3cOzdP3H76JLHjBXQaULGurvZK/aCApdcgs+f2nNQJAdzu
-         wJcg==
-X-Gm-Message-State: AOAM533hFj/LViusQeXAmhJz5w+ty5gZ6J5gmXbD23zrFtweMBTOIIfD
-        NmjX6x/yTRLCD6f8qw5jtbTBVDvj125Dfg==
-X-Google-Smtp-Source: ABdhPJyyaptNj1K8oWVB9T8IptJSFw4/2SNsjIpbwawKmVfW8s1K4w8ilEL0kkh4lazfgShnc3pfhQ==
-X-Received: by 2002:adf:e401:: with SMTP id g1mr27533771wrm.415.1623247325881;
-        Wed, 09 Jun 2021 07:02:05 -0700 (PDT)
-Received: from localhost.localdomain (103.red-81-47-144.staticip.rima-tde.net. [81.47.144.103])
-        by smtp.gmail.com with ESMTPSA id m23sm5673912wms.2.2021.06.09.07.02.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 09 Jun 2021 07:02:05 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-pci@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        devicetree@vger.kernel.org, matthias.bgg@gmail.com,
-        john@phrozen.org, bhelgaas@google.com, robh+dt@kernel.org,
-        linux-staging@lists.linux.dev, gregkh@linuxfoundation.org,
-        neil@brown.name, ilya.lipnitskiy@gmail.com,
-        linux-kernel@vger.kernel.org, pali@kernel.org
-Subject: [PATCH v2 3/3] MAINTAINERS: add myself as maintainer of the MT7621 PCI controller driver
-Date:   Wed,  9 Jun 2021 16:01:59 +0200
-Message-Id: <20210609140159.20476-4-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210609140159.20476-1-sergio.paracuellos@gmail.com>
-References: <20210609140159.20476-1-sergio.paracuellos@gmail.com>
+        id S238277AbhFIOw4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Jun 2021 10:52:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59320 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238257AbhFIOw4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 9 Jun 2021 10:52:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2163C6128A;
+        Wed,  9 Jun 2021 14:50:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623250261;
+        bh=svcXYr1x4uog0gl91R41ozY2Q0KNDzZmG4YRGTMMy2A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YkHX/JVfHqUvpWvWXkgg3rdrkk7agHtEIKqaX0vfSpX504lTGaDjO7Qz7iARqzkGp
+         DWsHVY+tAbRsBUSVBkbhVjgZvGY6y/wRIXGMo+CgzooB/zqPomfgnsHX9y3mgTbMXc
+         xGiW+RangNEk+pKIT8UX8w6paGaFQZLDQ+McKqTpjqFKueMHIVGMXJpalfW0Fph76r
+         Lcm2WPwzewVnde/Vu5ujWTdQssxwNbFghUliAxp8Ku3YbSQHaHnLbkGz+awfGrnWGJ
+         yu4qANQoP9p9s4/vzkSPeJiYpDnHVlRdjW4xbBVW2tivL4go8M8laNS3QaNsdGKKc0
+         R1JEjjJpSG45g==
+Date:   Wed, 9 Jun 2021 17:50:50 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Vineet Gupta <vgupta@synopsys.com>, kexec@lists.infradead.org,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sparclinux <sparclinux@vger.kernel.org>
+Subject: Re: [PATCH v2 0/9] Remove DISCINTIGMEM memory model
+Message-ID: <YMDVSu00xXGmdCtC@kernel.org>
+References: <20210604064916.26580-1-rppt@kernel.org>
+ <CAK8P3a2tZDJDqgr9-1vJrnbDhd_36eKq8LMEznDkU7rvuAnAag@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2tZDJDqgr9-1vJrnbDhd_36eKq8LMEznDkU7rvuAnAag@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add myself as maintainer of the PCie Controlller driver for
-MT7621 SoCs.
+Hi Arnd,
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Wed, Jun 09, 2021 at 01:30:39PM +0200, Arnd Bergmann wrote:
+> On Fri, Jun 4, 2021 at 8:49 AM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > From: Mike Rapoport <rppt@linux.ibm.com>
+> >
+> > Hi,
+> >
+> > SPARSEMEM memory model was supposed to entirely replace DISCONTIGMEM a
+> > (long) while ago. The last architectures that used DISCONTIGMEM were
+> > updated to use other memory models in v5.11 and it is about the time to
+> > entirely remove DISCONTIGMEM from the kernel.
+> >
+> > This set removes DISCONTIGMEM from alpha, arc and m68k, simplifies memory
+> > model selection in mm/Kconfig and replaces usage of redundant
+> > CONFIG_NEED_MULTIPLE_NODES and CONFIG_FLAT_NODE_MEM_MAP with CONFIG_NUMA
+> > and CONFIG_FLATMEM respectively.
+> >
+> > I've also removed NUMA support on alpha that was BROKEN for more than 15
+> > years.
+> >
+> > There were also minor updates all over arch/ to remove mentions of
+> > DISCONTIGMEM in comments and #ifdefs.
+> 
+> Hi Mike and Andrew,
+> 
+> It looks like everyone is happy with this version so far. How should we merge it
+> for linux-next? I'm happy to take it through the asm-generic tree, but linux-mm
+> would fit at least as well. In case we go for linux-mm, feel free to add
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9c55fdcc1514..2e58fba01289 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11574,6 +11574,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/i2c/i2c-mt7621.txt
- F:	drivers/i2c/busses/i2c-mt7621.c
+Andrew already took to mmotm.
  
-+MEDIATEK MT7621 PCI CONTROLLER DRIVER
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/pci/mediatek,mt7621-pci.yaml
-+F:	drivers/pci/controller/pci-mt7621.c
-+
- MEDIATEK MT7621 PHY PCI DRIVER
- M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
- S:	Maintained
--- 
-2.25.1
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
 
+Thanks!
+
+> for the whole series.
+
+-- 
+Sincerely yours,
+Mike.
