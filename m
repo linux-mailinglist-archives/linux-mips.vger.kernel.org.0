@@ -2,97 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 515CF3A36F6
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 00:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A9A3A3761
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 00:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbhFJWZu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Jun 2021 18:25:50 -0400
-Received: from smtprelay0143.hostedemail.com ([216.40.44.143]:38892 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230236AbhFJWZu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 10 Jun 2021 18:25:50 -0400
-X-Greylist: delayed 516 seconds by postgrey-1.27 at vger.kernel.org; Thu, 10 Jun 2021 18:25:50 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id CB1421828B337;
-        Thu, 10 Jun 2021 22:15:18 +0000 (UTC)
-Received: from omf16.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id F1676837F24C;
-        Thu, 10 Jun 2021 22:15:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf16.hostedemail.com (Postfix) with ESMTPA id 2C534255104;
-        Thu, 10 Jun 2021 22:15:04 +0000 (UTC)
-Message-ID: <fa180c7093b946f2bd86d26d5875db28f80957de.camel@perches.com>
-Subject: Re: [PATCH 1/7] checkpatch: check Makefiles and Kconfigs for SPDX
- tag
-From:   Joe Perches <joe@perches.com>
-To:     trix@redhat.com, robh+dt@kernel.org, tsbogend@alpha.franken.de,
-        jic23@kernel.org, lars@metafoo.de, tomas.winkler@intel.com,
-        arnd@arndb.de, gregkh@linuxfoundation.org, nbd@nbd.name,
-        lorenzo.bianconi83@gmail.com, ryder.lee@mediatek.com,
-        kvalo@codeaurora.org, davem@davemloft.net, kuba@kernel.org,
-        matthias.bgg@gmail.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, apw@canonical.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        chenhuacai@kernel.org, jiaxun.yang@flygoat.com,
-        zhangqing@loongson.cn, jbhayana@google.com, sean.wang@mediatek.com,
-        shayne.chen@mediatek.com, Soul.Huang@mediatek.com,
-        shorne@gmail.com, gsomlo@gmail.com,
-        pczarnecki@internships.antmicro.com, mholenko@antmicro.com,
-        davidgow@google.com
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Date:   Thu, 10 Jun 2021 15:15:02 -0700
-In-Reply-To: <20210610214438.3161140-3-trix@redhat.com>
-References: <20210610214438.3161140-1-trix@redhat.com>
-         <20210610214438.3161140-3-trix@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S230001AbhFJWvE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Jun 2021 18:51:04 -0400
+Received: from mail-lf1-f41.google.com ([209.85.167.41]:35675 "EHLO
+        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230248AbhFJWvE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Jun 2021 18:51:04 -0400
+Received: by mail-lf1-f41.google.com with SMTP id i10so5679099lfj.2
+        for <linux-mips@vger.kernel.org>; Thu, 10 Jun 2021 15:48:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NB6oruf2NY8GhkThmLRjR9OK5AwQwpQtqUKMMQIim6Q=;
+        b=RlAcwFqFOmgURmrxCa/W36B7QDS48JsLtq3ukyvETwbEWY9n6kYR15OJLR1+m/Ayoa
+         IFOPgRn+MWHaHRxfzFfw8YKkIIgs2ZCGs14vP+ZHoxKKjXRv9KyIxggliDfqvjBIjYCq
+         V94EObt9JIV8pROJEKleOqvY3Lp4pDZx/7FjYYuWinqlm2/1Nytb+dPDD+hsW55nAX2C
+         NGH7VQWOTOBEWWcYPh7P7p/+0rXPvWK0nt69u5R3R8eLlCTBAmYqdMr2C3ARulRpzg4R
+         8Q+QNXpBn09jeaY6tlsnVHADHx9NQbdhTP8oD+yYICZdPO5DY7zVDUU7MeMZbXvDgcyf
+         zO/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NB6oruf2NY8GhkThmLRjR9OK5AwQwpQtqUKMMQIim6Q=;
+        b=Mia/he+vpmv9QlWhZUY/rNVXcoBvk5L2QjiWd0VkzmdPlxLNTOm8nFMzgl2/M0X1c6
+         DtE4yisS+EqU1JRdJYCrhIn8wsATUagcFHAV50z9OeTP1JyOWYDOSNtP77yYCcTxOC+Y
+         RiuHKYQ08isrJ9zh4yh6UxzlDm4BXUK9bOeYRR47TbiCoHoHfujMQbjph+9TuFaear2O
+         XhQJflnvypOZUDZYs9jCwtRik2tzQ2KGktZHqYZ6oZX81mLI6gV/nJM0xr3uMcps7N+b
+         TQfyiMnoFKUJbmbNzxxKOC/KwsrapyazdvCLB6yFl9++zgpFgtWOI5fBBkHKsvIsLlcp
+         UPYA==
+X-Gm-Message-State: AOAM5331qy4jQ8YVf9k0+atFBdFT8XXkpv9w2J7pc5/buSgr/MlnkhhL
+        S5yhEZMjkRMi5VIRQ8b9xLQkj/i4HvHrPvwjPgiguQ==
+X-Google-Smtp-Source: ABdhPJwpq8QDGCaA9l+lT37FAjCpuN+L2RrV3HuGV2JBb0AyojuY/TbuPJ2PuprqJ9F9pWJFYjBYz3jwM7wdjjpecmI=
+X-Received: by 2002:a05:6512:39ca:: with SMTP id k10mr657852lfu.473.1623365274281;
+ Thu, 10 Jun 2021 15:47:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.56
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 2C534255104
-X-Stat-Signature: hbs5edjb7ssp137oygbp83agndwobmm6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX188Q7ACCxeE8e0t3mWcK2DFYS2XGLRcOCk=
-X-HE-Tag: 1623363304-278120
+References: <20210603211426.790093-1-jingzhangos@google.com>
+ <20210603211426.790093-3-jingzhangos@google.com> <e3b2b3ab-88a2-827c-7775-10be63158ff3@redhat.com>
+In-Reply-To: <e3b2b3ab-88a2-827c-7775-10be63158ff3@redhat.com>
+From:   Jing Zhang <jingzhangos@google.com>
+Date:   Thu, 10 Jun 2021 17:47:41 -0500
+Message-ID: <CAAdAUtjAuDdyBz7qd7UE0WuY77US-bhY1-jA9E11ddhZ0=gw6g@mail.gmail.com>
+Subject: Re: [PATCH v7 2/4] KVM: stats: Add fd-based API to read binary stats data
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 2021-06-10 at 14:44 -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Both Makefiles and Kconfigs should carry an SPDX tag.
-> Something like
->  # SPDX-License-Identifier: GPL-2.0-only
-> 
-> Add a matcher to existing check
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi Paolo,
 
-Seems fine, thanks.
+On Thu, Jun 10, 2021 at 11:23 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 03/06/21 23:14, Jing Zhang wrote:
+> > +#define DEFINE_VM_STATS_DESC(...) {                                         \
+> > +     STATS_DESC_COUNTER("remote_tlb_flush"),                                \
+> > +     ## __VA_ARGS__                                                         \
+> > +}
+> > +
+> > +#define DEFINE_VCPU_STATS_DESC(...) {                                               \
+> > +     STATS_DESC_COUNTER("halt_successful_poll"),                            \
+> > +     STATS_DESC_COUNTER("halt_attempted_poll"),                             \
+> > +     STATS_DESC_COUNTER("halt_poll_invalid"),                               \
+> > +     STATS_DESC_COUNTER("halt_wakeup"),                                     \
+> > +     STATS_DESC_TIME_NSEC("halt_poll_success_ns"),                          \
+> > +     STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),                             \
+> > +     ## __VA_ARGS__                                                         \
+>
+> Let's instead put this (note it's without braces) in macros like these
+>
+> #define KVM_GENERIC_VM_STATS()                                                  \
+>         STATS_DESC_COUNTER("remote_tlb_flush"),
+>
+> #define KVM_GENERIC_VCPU_STATS(...)                                             \
+>         STATS_DESC_COUNTER("halt_successful_poll"),                             \
+>         STATS_DESC_COUNTER("halt_attempted_poll"),                              \
+>         STATS_DESC_COUNTER("halt_poll_invalid"),                                \
+>         STATS_DESC_COUNTER("halt_wakeup"),                                      \
+>         STATS_DESC_TIME_NSEC("halt_poll_success_ns"),                           \
+>         STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),
+>
+> and it can be used in the arch files.  In fact it can even be added in patch 1 and
+> switched to STATS_DESC_* here.
+>
+> Paolo
+>
+I just remember that the reason I used braces is due to following
+error from checkpatch.pl:
+ERROR: Macros with complex values should be enclosed in parentheses
 
-There's a Makefile with two tags that could be updated too.
----
- drivers/staging/media/atomisp/Makefile | 1 -
- 1 file changed, 1 deletion(-)
+So, just keep it as it is?
 
-diff --git a/drivers/staging/media/atomisp/Makefile b/drivers/staging/media/atomisp/Makefile
-index 51498b2e85b8f..cee03e31f420d 100644
---- a/drivers/staging/media/atomisp/Makefile
-+++ b/drivers/staging/media/atomisp/Makefile
-@@ -11,7 +11,6 @@ DEFINES += -DDEBUG
- 
- atomisp = $(srctree)/drivers/staging/media/atomisp/
- 
--# SPDX-License-Identifier: GPL-2.0
- atomisp-objs += \
- 	pci/atomisp_acc.o \
- 	pci/atomisp_cmd.o \
-
-
+Thanks,
+Jing
