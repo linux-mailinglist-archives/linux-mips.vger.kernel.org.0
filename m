@@ -2,261 +2,208 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B47323A22F6
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Jun 2021 05:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CF33A22E0
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Jun 2021 05:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbhFJDwF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Jun 2021 23:52:05 -0400
-Received: from [40.92.63.80] ([40.92.63.80]:2168 "EHLO
-        AUS01-ME3-obe.outbound.protection.outlook.com"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229557AbhFJDwE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 9 Jun 2021 23:52:04 -0400
-X-Greylist: delayed 1928 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Jun 2021 23:52:04 EDT
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=STuccVpL/L6JP9MtZN21odqAacmmEz0K9aZ8IiHbAC4r+Opa1jKAZGrfoV5foKkMJYuoHGf8a+TW6f4xOjgnsFyNPpG3WsGVhbpPRwJ8VMYSVWZJ8tbRG+4v+hTFlx5chaQKd7lUS/qdtjoQg+J8eKgRW2eRHB4h4VzJEAMATyQj0htDlpjhlA8F/njvipFvkjsQOCy4Lkd6cAl9wa1cGHjc7TvvpjM5TNW0SU0LkIOfaoLrIAUcv7B/D+n3KIdfx6/kXREs8zo9UypZ/xNZIAHxNiNG1Um06ZXpZgPFA0G0hQjbkVEL9yJf4C8WWqKq5Mhrvdz/RwihJgy4D6dlgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=poRSzC+4FNPGTIBDrn2oFp3IHOcy3tRXbIUfKomKdSs=;
- b=eNvQLe5Kw6+3B1hO8/T2zKzn09tMeuTI13WIrP0owLmVoP1g//JIE1C9Stco+xtYSD+UT67C4msG7hFYN8GmS/P7LYdbadq5ft5pqe1+BDuQTT5GjFLrlL5y37la63XN/WmQp+CTv+BHKSMsNkeDgjrOoBFjtM0ARfLMYK3QZx3nMdMk0vrYR9j3K1vYIVlH7aRUQFDVo2PHiM24/CbTXQr/HXy11NNju79fTc0A8omjxYfTOACcuuFP6512FxdBSj3ZsrILSgaodZ29eb8uNMWXk9vojW3VvhbW2+Axtg7aeC6Ii0pxI7IltJBQd0Zf/5m1RH7Pr+oE6V49PUBCVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=poRSzC+4FNPGTIBDrn2oFp3IHOcy3tRXbIUfKomKdSs=;
- b=Pa9PhfizwfqteXTxLwUawTvLiBv7Nqf3CPuxaBCs+d8vbdAEGjNHsfyy8J1lFYs9kLRHMycVB4zqnGh0wNw+S8lNyl76HuDiE9wtWcCLzqfdRLjG3BoUSUEZcYH8Yt6GbE80EOEE4ERxiORshs3wdc9581ML5AJpxHSFY9FWBYzYlO04E0DjH+E+bEVl55yN9DElvo+jvbyXCKYkSdcKCB1o84WQpQomuDDIcaNz7DHirWYiufS+X0PySndzh0wLHcnpFJi5Ngw8JXjuKEXaoRkytGQ0cmRsGnKqFg3qO1Ps40TXOPBow/nmgzlEoD5pnOrjupvrAdaUqZNETA4WDQ==
-Received: from ME3P282MB1969.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:a5::8) by
- ME4P282MB0982.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:c::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4219.22; Thu, 10 Jun 2021 03:15:22 +0000
-Received: from ME3P282MB1969.AUSP282.PROD.OUTLOOK.COM
- ([fe80::3424:8e:7191:6ed2]) by ME3P282MB1969.AUSP282.PROD.OUTLOOK.COM
- ([fe80::3424:8e:7191:6ed2%7]) with mapi id 15.20.4219.022; Thu, 10 Jun 2021
- 03:15:22 +0000
-From:   Liu Yu <f78fk@live.com>
-To:     f78fk@163.com
-Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org
-Subject: MIPS: cmdline: Clean up boot_command_line initialization
-Date:   Thu, 10 Jun 2021 11:14:54 +0800
-Message-ID: <ME3P282MB1969135A6A8C47008E75A316C7359@ME3P282MB1969.AUSP282.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-TMN:  [PMCBLnRPwUiapSBiDciYB4Gh5nmqve3h]
-X-ClientProxiedBy: HK2PR02CA0139.apcprd02.prod.outlook.com
- (2603:1096:202:16::23) To ME3P282MB1969.AUSP282.PROD.OUTLOOK.COM
- (2603:10c6:220:a5::8)
-X-Microsoft-Original-Message-ID: <20210610031454.24901-1-f78fk@live.com>
+        id S229557AbhFJDkY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Jun 2021 23:40:24 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:55536 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229986AbhFJDkW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 9 Jun 2021 23:40:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=jWmr2xlRwn6JQaehy4GwAbYBW8L4D3ESDbeB+eyjFlI=; b=hhiJjKT6WeE4zxbXF0IMfq/cIp
+        4f29LBeN15gfX1AVIvAng+bg3qf9bFv4B9FvdCvxTnIDHot3hU6fdyvFxCB+L1skt3f3wTRAu4Y/K
+        XQ44pUFutdRWIB7WN+v7catNdKHEgF0mCEaMjZLPh97X6hBkFGOR19LeXsxGtklpHdko=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1lrBE2-008axE-Ng; Thu, 10 Jun 2021 05:19:22 +0200
+Date:   Thu, 10 Jun 2021 05:19:22 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com, paul@crapouillou.net
+Subject: Re: [PATCH v2 2/2] net: stmmac: Add Ingenic SoCs MAC support.
+Message-ID: <YMGEutCet7fP1NZ9@lunn.ch>
+References: <1623260110-25842-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1623260110-25842-3-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (123.235.214.42) by HK2PR02CA0139.apcprd02.prod.outlook.com (2603:1096:202:16::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.21 via Frontend Transport; Thu, 10 Jun 2021 03:15:21 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 253ea2cb-a465-472b-3ed0-08d92bbdfb96
-X-MS-TrafficTypeDiagnostic: ME4P282MB0982:
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DGV39l6e+XpVfeRTc+w5uyrYWgSosxygaunUiYo72PF7wafm6uqTUQqAm1DDh25EtRv39Xjcz8hGM5iFLwdQTnuy9jKz4QQK8fmi9CApHWkYELrVVjHLGwF+zlQrVkEbN2hBPranIgE3EHivbUMilEFt2UkoGJzHi5YsNvfoSunoUUHfWMCLLYtYHZyW5gVw36ybjzDBwk3CvycgPsNDSjzKC12WdzuQVzSNE9w5nQ2pS2X37+iO3i15Q/KKEspT1IYqZah/erS6onDTCqCObqgvmZIFfv0VrkchqEqufcn8ESNQMXrWSwlqF7WjCyaF36pVX95fhlErBKUCoFJHM3l9qSdYHS9+mRVdGFcWVzzgutK7mSXmOJIWzCumlbPcaODOSbOAkGBeqMRVF1u44yvH3orWvFzSPfiGEuDM5YmcL7TyVSJPyECrcyplT4F7PMRqfA9o0hiIF+uNTLvQuG368hrGg539Mvukgt8Qkc8=
-X-MS-Exchange-AntiSpam-MessageData: 0TMaIdZzY+JtD7CQ8wMH87uT4PcBNP2a/QYKlBBgOapI9tMm4DwR9OyDSiQC6R5U2u6LIhZDSCNrCmhDXKR5A2dnfncULCDzk27XUkXpE+lDdGkRacq+av9qLzlNknkSndBcW1lFSAjjIBfSlO6Fqg==
-X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-8dac2.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 253ea2cb-a465-472b-3ed0-08d92bbdfb96
-X-MS-Exchange-CrossTenant-AuthSource: ME3P282MB1969.AUSP282.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2021 03:15:22.2981
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME4P282MB0982
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1623260110-25842-3-git-send-email-zhouyanjie@wanyeetech.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Burton <paul.burton@mips.com>
+> +static int jz4775_mac_set_mode(struct plat_stmmacenet_data *plat_dat)
+> +{
+> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
+> +	unsigned int val;
 
-Our current code to initialize boot_command_line is a mess. Some of this
-is due to the addition of too many options over the years, and some of
-this is due to workarounds for early_init_dt_scan_chosen() performing
-actions specific to options from other architectures that probably
-shouldn't be in generic code.
 
-Clean this up by introducing a new bootcmdline_init() function that
-simplifies the initialization somewhat. The major changes are:
+> +	case PHY_INTERFACE_MODE_RGMII:
+> +	case PHY_INTERFACE_MODE_RGMII_ID:
+> +	case PHY_INTERFACE_MODE_RGMII_RXID:
+> +	case PHY_INTERFACE_MODE_RGMII_TXID:
+> +		val = FIELD_PREP(MACPHYC_TXCLK_SEL_MASK, MACPHYC_TXCLK_SEL_INPUT) |
+> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII);
+> +		dev_dbg(mac->dev, "MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII\n");
+> +		break;
 
-- Because bootcmdline_init() is a function it can return early in the
-  CONFIG_CMDLINE_OVERRIDE case.
+So this does what DT writes expect. They put 'rgmii-id' as phy
+mode. The MAC does not add a delay. PHY_INTERFACE_MODE_RGMII_ID is
+passed to the PHY and it adds the delay. And frames flow to/from the
+PHY and users are happy. The majority of MAC drivers are like this.
 
-- We clear boot_command_line rather than inheriting whatever
-  early_init_dt_scan_chosen() may have left us. This means we no longer
-  need to set boot_command_line to a space character in an attempt to
-  prevent early_init_dt_scan_chosen() from copying CONFIG_CMDLINE into
-  boot_command_line without us knowing about it.
+> +static int x2000_mac_set_mode(struct plat_stmmacenet_data *plat_dat)
+> +{
+> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
+> +	unsigned int val;
 
-- Indirection via USE_PROM_CMDLINE, USE_DTB_CMDLINE, EXTEND_WITH_PROM &
-  BUILTIN_EXTEND_WITH_PROM macros is removed; they seemingly served only
-  to obfuscate the code.
+Here we have a complete different story. 
 
-- The logic is cleaner, clearer & commented.
 
-Two minor drawbacks of this approach are:
+> +	case PHY_INTERFACE_MODE_RGMII:
+> +		val = FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII);
+> +
+> +		if (mac->tx_delay == 0) {
+> +			val |= FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_ORIGIN);
+> +		} else {
+> +			val |= FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_DELAY);
+> +
+> +			if (mac->tx_delay > MACPHYC_TX_DELAY_MAX)
+> +				val |= FIELD_PREP(MACPHYC_TX_DELAY_MASK, MACPHYC_TX_DELAY_MAX - 1);
+> +			else
+> +				val |= FIELD_PREP(MACPHYC_TX_DELAY_MASK, mac->tx_delay - 1);
+> +		}
 
-1) We call of_scan_flat_dt(), which means we scan through the DT again.
-   The overhead is fairly minimal & shouldn't be noticeable.
+What are the units of tx_delay. The DT binding should be pS, and you
+need to convert from that to whatever the hardware is using.
 
-2) cmdline_scan_chosen() duplicates a small amount of the logic from
-   early_init_dt_scan_chosen(). Alternatives might be to allow the
-   generic FDT code to keep & expose a copy of the arguments taken from
-   the /chosen node's bootargs property, or to introduce a function like
-   early_init_dt_scan_chosen() that retrieves them without modification
-   to handle CONFIG_CMDLINE. Neither of these sounds particularly
-   cleaner though, and this way we at least keep the extra work in
-   arch/mips.
+If mac->tx_delay is greater than MACPHYC_TX_DELAY_MAX, please return
+-EINVAL when parsing the binding. We want the DT writer to know they
+have requested something the hardware cannot do.
 
-Origin: upstream, https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7784cac697351f0cc0a4bb619594c0c99348c5aa
-Signed-off-by: Paul Burton <paul.burton@mips.com>
-Cc: linux-mips@vger.kernel.org
+So if the device tree contains 'rgmii' for PHY mode, you can use this
+for when you have long clock lines on your board adding the delay, and
+you just need to fine tune the delay, add a few pS. The PHY will also
+not add a delay, due to receiving PHY_INTERFACE_MODE_RGMII.
 
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -538,11 +538,88 @@ static void __init check_kernel_sections
- 	}
- }
- 
--#define USE_PROM_CMDLINE	IS_ENABLED(CONFIG_MIPS_CMDLINE_FROM_BOOTLOADER)
--#define USE_DTB_CMDLINE		IS_ENABLED(CONFIG_MIPS_CMDLINE_FROM_DTB)
--#define EXTEND_WITH_PROM	IS_ENABLED(CONFIG_MIPS_CMDLINE_DTB_EXTEND)
--#define BUILTIN_EXTEND_WITH_PROM	\
--	IS_ENABLED(CONFIG_MIPS_CMDLINE_BUILTIN_EXTEND)
-+static void __init bootcmdline_append(const char *s, size_t max)
-+{
-+	if (!s[0] || !max)
-+		return;
-+
-+	if (boot_command_line[0])
-+		strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
-+
-+	strlcat(boot_command_line, s, max);
-+}
-+
-+static int __init bootcmdline_scan_chosen(unsigned long node, const char *uname,
-+					  int depth, void *data)
-+{
-+	bool *dt_bootargs = data;
-+	const char *p;
-+	int l;
-+
-+	if (depth != 1 || !data ||
-+	    (strcmp(uname, "chosen") != 0 && strcmp(uname, "chosen@0") != 0))
-+		return 0;
-+
-+	p = of_get_flat_dt_prop(node, "bootargs", &l);
-+	if (p != NULL && l > 0) {
-+		bootcmdline_append(p, min(l, COMMAND_LINE_SIZE));
-+		*dt_bootargs = true;
-+	}
-+
-+	return 1;
-+}
-+
-+static void __init bootcmdline_init(char **cmdline_p)
-+{
-+	bool dt_bootargs = false;
-+
-+	/*
-+	 * If CMDLINE_OVERRIDE is enabled then initializing the command line is
-+	 * trivial - we simply use the built-in command line unconditionally &
-+	 * unmodified.
-+	 */
-+	if (IS_ENABLED(CONFIG_CMDLINE_OVERRIDE)) {
-+		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
-+		return;
-+	}
-+
-+	/*
-+	 * If the user specified a built-in command line &
-+	 * MIPS_CMDLINE_BUILTIN_EXTEND, then the built-in command line is
-+	 * prepended to arguments from the bootloader or DT so we'll copy them
-+	 * to the start of boot_command_line here. Otherwise, empty
-+	 * boot_command_line to undo anything early_init_dt_scan_chosen() did.
-+	 */
-+	if (IS_ENABLED(CONFIG_MIPS_CMDLINE_BUILTIN_EXTEND))
-+		strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
-+	else
-+		boot_command_line[0] = 0;
-+
-+	/*
-+	 * If we're configured to take boot arguments from DT, look for those
-+	 * now.
-+	 */
-+	if (IS_ENABLED(CONFIG_MIPS_CMDLINE_FROM_DTB))
-+		of_scan_flat_dt(bootcmdline_scan_chosen, &dt_bootargs);
-+
-+	/*
-+	 * If we didn't get any arguments from DT (regardless of whether that's
-+	 * because we weren't configured to look for them, or because we looked
-+	 * & found none) then we'll take arguments from the bootloader.
-+	 * plat_mem_setup() should have filled arcs_cmdline with arguments from
-+	 * the bootloader.
-+	 */
-+	if (IS_ENABLED(CONFIG_MIPS_CMDLINE_DTB_EXTEND) || !dt_bootargs)
-+		bootcmdline_append(arcs_cmdline, COMMAND_LINE_SIZE);
-+
-+	/*
-+	 * If the user specified a built-in command line & we didn't already
-+	 * prepend it, we append it to boot_command_line here.
-+	 */
-+	if (IS_ENABLED(CONFIG_CMDLINE_BOOL) &&
-+	    !IS_ENABLED(CONFIG_MIPS_CMDLINE_BUILTIN_EXTEND))
-+		bootcmdline_append(builtin_cmdline, COMMAND_LINE_SIZE);
-+}
- 
- /*
-  * arch_mem_init - initialize memory management subsystem
-@@ -570,48 +647,12 @@ static void __init arch_mem_init(char **
- {
- 	extern void plat_mem_setup(void);
- 
--	/*
--	 * Initialize boot_command_line to an innocuous but non-empty string in
--	 * order to prevent early_init_dt_scan_chosen() from copying
--	 * CONFIG_CMDLINE into it without our knowledge. We handle
--	 * CONFIG_CMDLINE ourselves below & don't want to duplicate its
--	 * content because repeating arguments can be problematic.
--	 */
--	strlcpy(boot_command_line, " ", COMMAND_LINE_SIZE);
--
- 	/* call board setup routine */
- 	plat_mem_setup();
- 	memblock_set_bottom_up(true);
- 
--#if defined(CONFIG_CMDLINE_BOOL) && defined(CONFIG_CMDLINE_OVERRIDE)
--	strlcpy(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
--#else
--	if ((USE_PROM_CMDLINE && arcs_cmdline[0]) ||
--	    (USE_DTB_CMDLINE && !boot_command_line[0]))
--		strlcpy(boot_command_line, arcs_cmdline, COMMAND_LINE_SIZE);
--
--	if (EXTEND_WITH_PROM && arcs_cmdline[0]) {
--		if (boot_command_line[0])
--			strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
--		strlcat(boot_command_line, arcs_cmdline, COMMAND_LINE_SIZE);
--	}
--
--#if defined(CONFIG_CMDLINE_BOOL)
--	if (builtin_cmdline[0]) {
--		if (boot_command_line[0])
--			strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
--		strlcat(boot_command_line, builtin_cmdline, COMMAND_LINE_SIZE);
--	}
--
--	if (BUILTIN_EXTEND_WITH_PROM && arcs_cmdline[0]) {
--		if (boot_command_line[0])
--			strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
--		strlcat(boot_command_line, arcs_cmdline, COMMAND_LINE_SIZE);
--	}
--#endif
--#endif
-+	bootcmdline_init(cmdline_p);
- 	strlcpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
--
- 	*cmdline_p = command_line;
- 
- 	parse_early_param();
+> +
+> +		if (mac->rx_delay == 0) {
+> +			val |= FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN);
+> +		} else {
+> +			val |= FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_DELAY);
+> +
+> +			if (mac->rx_delay > MACPHYC_RX_DELAY_MAX)
+> +				val |= FIELD_PREP(MACPHYC_RX_DELAY_MASK, MACPHYC_RX_DELAY_MAX - 1);
+> +			else
+> +				val |= FIELD_PREP(MACPHYC_RX_DELAY_MASK, mac->rx_delay - 1);
+> +		}
+> +
+> +		dev_dbg(mac->dev, "MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII\n");
+> +		break;
+> +
+> +	case PHY_INTERFACE_MODE_RGMII_ID:
+> +		val = FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_ORIGIN) |
+> +			  FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN) |
+> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII);
+> +		dev_dbg(mac->dev, "MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII_ID\n");
+> +		break;
+
+So this one is pretty normal. The MAC does not add a delay,
+PHY_INTERFACE_MODE_RGMII_ID is passed to the PHY, and it adds the
+delay. The interface will likely work.
+
+> +
+> +	case PHY_INTERFACE_MODE_RGMII_RXID:
+> +		val = FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII) |
+> +			  FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN);
+> +
+> +		if (mac->tx_delay == 0) {
+> +			val |= FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_ORIGIN);
+> +		} else {
+> +			val |= FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_DELAY);
+> +
+> +			if (mac->tx_delay > MACPHYC_TX_DELAY_MAX)
+> +				val |= FIELD_PREP(MACPHYC_TX_DELAY_MASK, MACPHYC_TX_DELAY_MAX - 1);
+> +			else
+> +				val |= FIELD_PREP(MACPHYC_TX_DELAY_MASK, mac->tx_delay - 1);
+> +		}
+
+So here, the PHY is going to be passed PHY_INTERFACE_MODE_RGMII_RXID.
+The PHY will add a delay in the receive path. The MAC needs to add the
+delay in the transmit path. So tx_delay needs to be the full 2ns, not
+just a small fine tuning value, or the PCB is adding the delay. And
+you also cannot fine tune the RX delay, since rx_delay is ignored.
+
+> +
+> +		dev_dbg(mac->dev, "MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII_RXID\n");
+> +		break;
+> +
+> +	case PHY_INTERFACE_MODE_RGMII_TXID:
+> +		val = FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII) |
+> +			  FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_ORIGIN);
+> +
+> +		if (mac->rx_delay == 0) {
+> +			val |= FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN);
+> +		} else {
+> +			val |= FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_DELAY);
+> +
+> +			if (mac->rx_delay > MACPHYC_RX_DELAY_MAX)
+> +				val |= FIELD_PREP(MACPHYC_RX_DELAY_MASK, MACPHYC_RX_DELAY_MAX - 1);
+> +			else
+> +				val |= FIELD_PREP(MACPHYC_RX_DELAY_MASK, mac->rx_delay - 1);
+> +		}
+
+And here we have the opposite to PHY_INTERFACE_MODE_RGMII_RXID.
+
+So you need to clearly document in the device tree binding when
+rx_delay and tx_delay are used, and when they are ignored. You don't
+want to have DT writers having to look deep into the code to figure
+this out.
+
+Personally, i would simply this, in a big way. I see two options:
+
+1) The MAC never adds a delay. The hardware is there, but simply don't
+use it, to keep thing simple, and the same as nearly every other MAC.
+
+2) If the hardware can do small steps of delay, allow this delay, both
+RX and TX, to be configured in all four modes, in order to allow for
+fine tuning. Leave the PHY to insert the majority of the delay.
+
+> +	/* Get MAC PHY control register */
+> +	mac->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "mode-reg");
+> +	if (IS_ERR(mac->regmap)) {
+> +		dev_err(&pdev->dev, "%s: failed to get syscon regmap\n", __func__);
+> +		goto err_remove_config_dt;
+> +	}
+
+Please document this in the device tree binding.
+
+> +
+> +	ret = of_property_read_u32(pdev->dev.of_node, "rx-clk-delay", &mac->rx_delay);
+> +	if (ret)
+> +		mac->rx_delay = 0;
+> +
+> +	ret = of_property_read_u32(pdev->dev.of_node, "tx-clk-delay", &mac->tx_delay);
+> +	if (ret)
+> +		mac->tx_delay = 0;
+
+Please take a look at dwmac-mediatek.c. It handles delays nicely. I
+would suggest that is the model to follow.
+
+       Andrew
