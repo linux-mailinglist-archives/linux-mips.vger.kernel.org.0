@@ -2,117 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D74473A2CE1
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Jun 2021 15:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003733A2E73
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Jun 2021 16:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbhFJN04 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 10 Jun 2021 09:26:56 -0400
-Received: from mslow1.mail.gandi.net ([217.70.178.240]:41473 "EHLO
-        mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbhFJN0z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Jun 2021 09:26:55 -0400
-Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id D51B3C2D4D;
-        Thu, 10 Jun 2021 13:16:06 +0000 (UTC)
-Received: (Authenticated sender: paul@opendingux.net)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 70543C0005;
-        Thu, 10 Jun 2021 13:15:40 +0000 (UTC)
-Date:   Thu, 10 Jun 2021 14:15:31 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 2/2] mmc: JZ4740: Add support for JZ4775.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org,
+        id S230394AbhFJOol (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Jun 2021 10:44:41 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:56482 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230153AbhFJOoj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 10 Jun 2021 10:44:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=G/4KF+EXeK0CRlPgzQxnXXiJ5+yIDNT85WHr1QHw8N4=; b=bq6a+xbXIB1VsshgmgoWDw7fAT
+        /kuSotYXw8oH5HLpnxnKBV4PyCkWApEMh58y6y4Aotl9R0MwhEAwj+aVwrPImpTouEQDSwaRS+zU/
+        zO4nYHZVJiwA//O0wt9I9mViPntavLET86XzTsSw3ftWyntMVOZ5mPkRvC1Yl2tROeww=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1lrLt2-008fqS-RB; Thu, 10 Jun 2021 16:42:24 +0200
+Date:   Thu, 10 Jun 2021 16:42:24 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
-Message-Id: <V5MHUQ.E8C6HNTG18GS3@crapouillou.net>
-In-Reply-To: <1623329930-14387-3-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1623329930-14387-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1623329930-14387-3-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: geary/40.0
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com, paul@crapouillou.net
+Subject: Re: [PATCH v2 2/2] net: stmmac: Add Ingenic SoCs MAC support.
+Message-ID: <YMIk0NfOPryoY607@lunn.ch>
+References: <1623260110-25842-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1623260110-25842-3-git-send-email-zhouyanjie@wanyeetech.com>
+ <YMGEutCet7fP1NZ9@lunn.ch>
+ <405696cb-5987-0e56-87f8-5a1443eadc19@wanyeetech.com>
+ <YMICTvjyEAgPMH9u@lunn.ch>
+ <346f64d9-6949-b506-258f-4cfa7eb22784@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <346f64d9-6949-b506-258f-4cfa7eb22784@wanyeetech.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Zhou,
-
-Le jeu., juin 10 2021 at 20:58:50 +0800, 周琰杰 (Zhou Yanjie) 
-<zhouyanjie@wanyeetech.com> a écrit :
-> 1.Add support for probing mmc driver on the JZ4775 SoC from Ingenic.
-> 2.The drive clock selection and sample clock selection have been
->   supported since JZ4775, not X1000. So support for these two
->   functions has been added for JZ4775 and JZ4780.
+>     We are much more strict about this now than before. You have to use
+>     standard units and convert to hardware values. It also makes it a lot
+>     easier for DT writers, if they have an idea what the units mean.
 > 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-
-Acked-by: Paul Cercueil <paul@crapouillou.net>
-
-Now that's a good-looking patch ;)
-Thanks for working on it.
-
-Cheers,
--Paul
-
-> ---
+>     Having the MAC add small delays is something you can add later,
+>     without breaking backwards compatibility. So if you cannot determine
+>     what the units are now, just submit the glue driver without support
+>     for this feature. If anybody really needs it, they can do the needed
+>     research, maybe do some measurements, and then add the code.
 > 
-> Notes:
->     v1->v2:
->     1.Remove unnecessary renaming as Paul Cercueil's suggestion.
->     2.Reuse the ID of JZ4775 and JZ4780 to simplify the code.
->     3.Add support of drive clock selection and sample clock
->       selection for JZ4775 and JZ4780.
 > 
->  drivers/mmc/host/jz4740_mmc.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/jz4740_mmc.c 
-> b/drivers/mmc/host/jz4740_mmc.c
-> index b3c636e..f3172e5 100644
-> --- a/drivers/mmc/host/jz4740_mmc.c
-> +++ b/drivers/mmc/host/jz4740_mmc.c
-> @@ -674,7 +674,7 @@ static void jz4740_mmc_send_command(struct 
-> jz4740_mmc_host *host,
->  			cmdat |= JZ_MMC_CMDAT_WRITE;
->  		if (host->use_dma) {
->  			/*
-> -			 * The 4780's MMC controller has integrated DMA ability
-> +			 * The JZ4780's MMC controller has integrated DMA ability
->  			 * in addition to being able to use the external DMA
->  			 * controller. It moves DMA control bits to a separate
->  			 * register. The DMA_SEL bit chooses the external
-> @@ -866,7 +866,7 @@ static int jz4740_mmc_set_clock_rate(struct 
-> jz4740_mmc_host *host, int rate)
->  	writew(div, host->base + JZ_REG_MMC_CLKRT);
-> 
->  	if (real_rate > 25000000) {
-> -		if (host->version >= JZ_MMC_X1000) {
-> +		if (host->version >= JZ_MMC_JZ4780) {
->  			writel(JZ_MMC_LPM_DRV_RISING_QTR_PHASE_DLY |
->  				   JZ_MMC_LPM_SMP_RISING_QTR_OR_HALF_PHASE_DLY |
->  				   JZ_MMC_LPM_LOW_POWER_MODE_EN,
-> @@ -959,6 +959,7 @@ static const struct of_device_id 
-> jz4740_mmc_of_match[] = {
->  	{ .compatible = "ingenic,jz4740-mmc", .data = (void *) 
-> JZ_MMC_JZ4740 },
->  	{ .compatible = "ingenic,jz4725b-mmc", .data = (void 
-> *)JZ_MMC_JZ4725B },
->  	{ .compatible = "ingenic,jz4760-mmc", .data = (void *) 
-> JZ_MMC_JZ4760 },
-> +	{ .compatible = "ingenic,jz4775-mmc", .data = (void *) 
-> JZ_MMC_JZ4780 },
->  	{ .compatible = "ingenic,jz4780-mmc", .data = (void *) 
-> JZ_MMC_JZ4780 },
->  	{ .compatible = "ingenic,x1000-mmc", .data = (void *) JZ_MMC_X1000 
-> },
->  	{},
-> --
-> 2.7.4
-> 
+> I did an experiment, when the tx delay is not set, RGMII works a
 
+You had rgmii-id in your device tree, so that the PHY added the
+delays?
 
+	Andrew
