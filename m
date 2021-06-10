@@ -2,75 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CDC3A2B35
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Jun 2021 14:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCEA3A2C36
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Jun 2021 14:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbhFJMRe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Jun 2021 08:17:34 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:56194 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229935AbhFJMRd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 10 Jun 2021 08:17:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=xEv51sL5EtFzsgzhQPHw+OPzs2HAlZHNonW9nRpKG/U=; b=R/0HmcqT+8j+7PIsTRgOII6VSu
-        zz/HCyX4LK9B0VENcHvghbxfRlYqWEJnFqy2mvGX2Rj/VN1xCuy6X2xhmbznaPz0FGkl+Bheyd2ZY
-        0/QGwDu46fFKrzbDaxbCgeZuCEbxjSK7i30WGX3nm4j9mW7cuKJvb2Wp4+clHhP8Bv+0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1lrJaY-008eiZ-NU; Thu, 10 Jun 2021 14:15:10 +0200
-Date:   Thu, 10 Jun 2021 14:15:10 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com, paul@crapouillou.net
-Subject: Re: [PATCH v2 2/2] net: stmmac: Add Ingenic SoCs MAC support.
-Message-ID: <YMICTvjyEAgPMH9u@lunn.ch>
-References: <1623260110-25842-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1623260110-25842-3-git-send-email-zhouyanjie@wanyeetech.com>
- <YMGEutCet7fP1NZ9@lunn.ch>
- <405696cb-5987-0e56-87f8-5a1443eadc19@wanyeetech.com>
+        id S230390AbhFJNBC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Jun 2021 09:01:02 -0400
+Received: from out28-147.mail.aliyun.com ([115.124.28.147]:46198 "EHLO
+        out28-147.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230272AbhFJNBC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Jun 2021 09:01:02 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.4741654|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00585626-0.000580943-0.993563;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KQVfrD4_1623329936;
+Received: from zhouyanjie-virtual-machine.lan(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KQVfrD4_1623329936)
+          by smtp.aliyun-inc.com(10.147.41.137);
+          Thu, 10 Jun 2021 20:59:02 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     ulf.hansson@linaro.org, robh+dt@kernel.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
+        jun.jiang@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, paul@crapouillou.net
+Subject: [PATCH v2 0/2] Add support for JZ4775
+Date:   Thu, 10 Jun 2021 20:58:48 +0800
+Message-Id: <1623329930-14387-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <405696cb-5987-0e56-87f8-5a1443eadc19@wanyeetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> The manual does not tell how much ps a unit is.
-> 
-> I am confirming with Ingenic, but there is no reply
-> 
-> at the moment. Can we follow Rockchip's approach?
-> 
-> According to the description in "rockchip-dwmac.yaml"
-> 
-> and the related code in "dwmac-rk.c", it seems that their
-> 
-> delay parameter seems to be the value used by the hardware
-> 
-> directly instead of ps.
+v1->v2:
+1.Add support for probing mmc driver on the JZ4775 SoC from Ingenic.
+2.The drive clock selection and sample clock selection have been
+  supported since JZ4775, not X1000. So support for these two
+  functions has been added for JZ4775 and JZ4780.
 
-We are much more strict about this now than before. You have to use
-standard units and convert to hardware values. It also makes it a lot
-easier for DT writers, if they have an idea what the units mean.
+周琰杰 (Zhou Yanjie) (2):
+  dt-bindings: mmc: JZ4740: Add bindings for JZ4775.
+  mmc: JZ4740: Add support for JZ4775.
 
-Having the MAC add small delays is something you can add later,
-without breaking backwards compatibility. So if you cannot determine
-what the units are now, just submit the glue driver without support
-for this feature. If anybody really needs it, they can do the needed
-research, maybe do some measurements, and then add the code.
+ Documentation/devicetree/bindings/mmc/ingenic,mmc.yaml | 1 +
+ drivers/mmc/host/jz4740_mmc.c                          | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-    Andrew
+-- 
+2.7.4
+
