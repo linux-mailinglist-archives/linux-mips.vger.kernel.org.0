@@ -2,208 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CF33A22E0
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Jun 2021 05:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1A93A252F
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Jun 2021 09:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbhFJDkY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Jun 2021 23:40:24 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:55536 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229986AbhFJDkW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 9 Jun 2021 23:40:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=jWmr2xlRwn6JQaehy4GwAbYBW8L4D3ESDbeB+eyjFlI=; b=hhiJjKT6WeE4zxbXF0IMfq/cIp
-        4f29LBeN15gfX1AVIvAng+bg3qf9bFv4B9FvdCvxTnIDHot3hU6fdyvFxCB+L1skt3f3wTRAu4Y/K
-        XQ44pUFutdRWIB7WN+v7catNdKHEgF0mCEaMjZLPh97X6hBkFGOR19LeXsxGtklpHdko=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1lrBE2-008axE-Ng; Thu, 10 Jun 2021 05:19:22 +0200
-Date:   Thu, 10 Jun 2021 05:19:22 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com, paul@crapouillou.net
-Subject: Re: [PATCH v2 2/2] net: stmmac: Add Ingenic SoCs MAC support.
-Message-ID: <YMGEutCet7fP1NZ9@lunn.ch>
-References: <1623260110-25842-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1623260110-25842-3-git-send-email-zhouyanjie@wanyeetech.com>
+        id S229808AbhFJHUM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Jun 2021 03:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229634AbhFJHUM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Jun 2021 03:20:12 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F41EC061574
+        for <linux-mips@vger.kernel.org>; Thu, 10 Jun 2021 00:18:16 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id x14so3403015ljp.7
+        for <linux-mips@vger.kernel.org>; Thu, 10 Jun 2021 00:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=S5kcCRgSqcTyKNiNJobzPvsYTBfnwg3R0que6HtV/iA=;
+        b=gOyVmQmkTb6Ht4MxUDwsPv+sgfc47kSAG/YUkq2lleF0q/dOq8uSIGGFMyN4q/919a
+         vrJXYZGjINTU2nFw31tmzr7UDTqOrJJz80C+ggrqqVmA5YeKdVS6YnlKCutUlQvN8ys7
+         PdCttBfPd8Cua8+a9j7SkMwppyzT2wfq2EtsMK0eY5Oy+NN9hQqPBG3uZSm73nZgL1N5
+         BhVxxVkDqx6eIMkQFiJ16ncU+3RzDLkPJUn6QbS8U+36Vmbnsfum1QLFYtyd33zifNwj
+         30Pw7cA4+dV2r8vNEYcmfBqHwmgg5NgA5fXbPYR+Pr++yb8uBu3+MmUp3tIUe5ktU+E7
+         1mQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S5kcCRgSqcTyKNiNJobzPvsYTBfnwg3R0que6HtV/iA=;
+        b=Bicrlh54XwgXIjzstm0IhKPxH1yI2Hz28bMa7P3Vs5kfOM/JSF6THa0OMuFQPIUiSM
+         oO9P9smVohBX+NtrSdqYSO6PTz9nt7Lhg/7e53v86mhExCetrg/7AfbKQk9dsE1RkXSW
+         emi+P5LpRnfFgqKftR8OzddCFTsVUl8k08KVxa6bh78QF8h+xpSuTUiehUxxE84G/Nqk
+         6gXhOsHrd/JT3DVFKcFzhvy1qaLoscM5YVZSusVxgW+V0+t85iVE/pBFTYS0YJBImbSe
+         LWYhvvIGg9JYz6JuTy3TTJi/BBrChef6HMVAJ502K+uJTVhuiK3JizgJTeEJfXnQPnHA
+         XQWQ==
+X-Gm-Message-State: AOAM533xrI2HG6vwvljBAy+x8939jv7+KHNLxj0dWfxY7LCcdTQbIDPH
+        R+ARK2CqW5K0sNrT5ITXal7EttYx1jOE2UTq
+X-Google-Smtp-Source: ABdhPJyMj9lGwOCH+acQAVtjCYP7GB+omoXpgU6UYPUc+PU0pXjGQscDFQVLqGLZ50u23iwL4TVVSg==
+X-Received: by 2002:a2e:a605:: with SMTP id v5mr1129883ljp.128.1623309494502;
+        Thu, 10 Jun 2021 00:18:14 -0700 (PDT)
+Received: from jade (h-79-136-85-3.A175.priv.bahnhof.se. [79.136.85.3])
+        by smtp.gmail.com with ESMTPSA id i21sm238059ljb.10.2021.06.10.00.18.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Jun 2021 00:18:14 -0700 (PDT)
+Date:   Thu, 10 Jun 2021 09:18:12 +0200
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Rijo-john.Thomas@amd.com, Allen Pais <apais@linux.microsoft.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Vikas Gupta <vikas.gupta@broadcom.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        op-tee@lists.trustedfirmware.org,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 5/7] tee: Support shm registration without dma-buf
+ backing
+Message-ID: <20210610071812.GA2753553@jade>
+References: <20210609002326.210024-1-tyhicks@linux.microsoft.com>
+ <20210609002326.210024-6-tyhicks@linux.microsoft.com>
+ <CAFA6WYOZC0iHzZm6pOxz31eW_=8g2wyJdm4wiOGKggO6-a9MdA@mail.gmail.com>
+ <20210609054621.GB4910@sequoia>
+ <CAFA6WYOYt2vcQ4ng=Nwu2R7d6=R=DGXQKpQ-+UiENerEtQRKWg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1623260110-25842-3-git-send-email-zhouyanjie@wanyeetech.com>
+In-Reply-To: <CAFA6WYOYt2vcQ4ng=Nwu2R7d6=R=DGXQKpQ-+UiENerEtQRKWg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> +static int jz4775_mac_set_mode(struct plat_stmmacenet_data *plat_dat)
-> +{
-> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
-> +	unsigned int val;
+On Wed, Jun 09, 2021 at 04:22:49PM +0530, Sumit Garg wrote:
+> + Rijo
+> 
+> On Wed, 9 Jun 2021 at 11:16, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
+[snip]
+> 
+> > - tee_shm_alloc() performs allocations using contiguous pages
+> >   from alloc_pages() while tee_shm_register() performs non-contiguous
+> >   allocations with kcalloc(). I suspect this would be fine but I don't
+> >   know the secure world side of these things well enough to assess the
+> >   risk involved with such a change on the kernel side.
+> >
+> 
+> I don't think that would make any difference.
 
+Agree.
 
-> +	case PHY_INTERFACE_MODE_RGMII:
-> +	case PHY_INTERFACE_MODE_RGMII_ID:
-> +	case PHY_INTERFACE_MODE_RGMII_RXID:
-> +	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +		val = FIELD_PREP(MACPHYC_TXCLK_SEL_MASK, MACPHYC_TXCLK_SEL_INPUT) |
-> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII);
-> +		dev_dbg(mac->dev, "MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII\n");
-> +		break;
+> 
+> > I should have mentioned this in the cover letter but my hope was that
+> > these minimal changes would be accepted and then additional work could
+> > be done to merge tee_shm_alloc() and tee_shm_register() in a way that
+> > would allow the caller to request contiguous or non-contiguous pages,
+> > fix up the additional issues mentioned above, and then adjust the
+> > call sites in ftpm and tee_bnxt_fw as appropriate.
+> >
+> > I think that's a bigger set of changes because there are several things
+> > that still confuse/concern me:
+> >
+> > - Why does tee_shm_alloc() use TEE_SHM_MAPPED while tee_shm_register()
+> >   uses TEE_SHM_KERNEL_MAPPED or TEE_SHM_USER_MAPPED? Why do all three
+> >   exist?
+> 
+> AFAIK, its due the the inherent nature of tee_shm_alloc() and
+> tee_shm_register() where tee_shm_alloc() doesn't need to know whether
+> its a kernel or user-space memory since it is the one that allocates
+> whereas tee_shm_register() need to know that since it has to register
+> pre-allocated client memory.
+> 
+> > - Why does tee_shm_register() unconditionally use non-contiguous
+> >   allocations without ever taking into account whether or not
+> >   OPTEE_SMC_SEC_CAP_DYNAMIC_SHM was set? It sounds like that's required
+> >   from my reading of https://optee.readthedocs.io/en/latest/architecture/core.html#noncontiguous-shared-buffers.
+> 
+> Yeah, but do we have platforms in OP-TEE that don't support dynamic
+> shared memory? I guess it has become the sane default which is a
+> mandatory requirement when it comes to OP-TEE driver in u-boot.
+> 
+> > - Why is TEE_SHM_REGISTER implemented at the TEE driver level when it is
+> >   specific to OP-TEE? How to better abstract that away?
+> >
+> 
+> I would like you to go through Section "3.2.4. Shared Memory" in TEE
+> Client API Specification. There are two standard ways for shared
+> memory approach with TEE:
+> 
+> 1. A Shared Memory block can either be existing Client Application
+> memory (kernel driver in our case) which is subsequently registered
+> with the TEE Client API (using tee_shm_register() in our case).
+> 
+> 2. Or memory which is allocated on behalf of the Client Application
+> using the TEE
+> Client API (using tee_shm_alloc() in our case).
+> 
+> > Let me know if you agree with the more minimal approach that I took for
+> > these bug fix series or still feel like tee_shm_register() should be
+> > fixed up so that it is usable. Thanks!
+> 
+> From drivers perspective I think the change should be:
+> 
+> tee_shm_alloc()
+> 
+> to
+> 
+> kcalloc()
+> tee_shm_register()
 
-So this does what DT writes expect. They put 'rgmii-id' as phy
-mode. The MAC does not add a delay. PHY_INTERFACE_MODE_RGMII_ID is
-passed to the PHY and it adds the delay. And frames flow to/from the
-PHY and users are happy. The majority of MAC drivers are like this.
+I had another approach in mind in "[PATCH 0/7] tee: shared memory updates",
+https://lore.kernel.org/lkml/20210609102324.2222332-1-jens.wiklander@linaro.org/
 
-> +static int x2000_mac_set_mode(struct plat_stmmacenet_data *plat_dat)
-> +{
-> +	struct ingenic_mac *mac = plat_dat->bsp_priv;
-> +	unsigned int val;
+The flags needed by tee_shm_alloc() and tee_shm_register() aren't
+very intuitive and in fact only accept quite few combinations. So my
+idea was to hide those flags from callers outside of the TEE subsystem
+with tee_shm_alloc_kernel_buf().
 
-Here we have a complete different story. 
+The approach with tee_shm_register() you suggest above has the drawback
+that the TEE driver is forced to be able to handle any kernel memory.
+This is OK with OP-TEE and dynamic shared memory enabled, but there are
+platforms where dynamic shared memory isn't enabled. In those case must
+the memory be allocated from a special pool.
 
+Do you see any problem with instead replacing tee_shm_alloc()
+with tee_shm_alloc_kernel_buf()?
 
-> +	case PHY_INTERFACE_MODE_RGMII:
-> +		val = FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII);
-> +
-> +		if (mac->tx_delay == 0) {
-> +			val |= FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_ORIGIN);
-> +		} else {
-> +			val |= FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_DELAY);
-> +
-> +			if (mac->tx_delay > MACPHYC_TX_DELAY_MAX)
-> +				val |= FIELD_PREP(MACPHYC_TX_DELAY_MASK, MACPHYC_TX_DELAY_MAX - 1);
-> +			else
-> +				val |= FIELD_PREP(MACPHYC_TX_DELAY_MASK, mac->tx_delay - 1);
-> +		}
-
-What are the units of tx_delay. The DT binding should be pS, and you
-need to convert from that to whatever the hardware is using.
-
-If mac->tx_delay is greater than MACPHYC_TX_DELAY_MAX, please return
--EINVAL when parsing the binding. We want the DT writer to know they
-have requested something the hardware cannot do.
-
-So if the device tree contains 'rgmii' for PHY mode, you can use this
-for when you have long clock lines on your board adding the delay, and
-you just need to fine tune the delay, add a few pS. The PHY will also
-not add a delay, due to receiving PHY_INTERFACE_MODE_RGMII.
-
-> +
-> +		if (mac->rx_delay == 0) {
-> +			val |= FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN);
-> +		} else {
-> +			val |= FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_DELAY);
-> +
-> +			if (mac->rx_delay > MACPHYC_RX_DELAY_MAX)
-> +				val |= FIELD_PREP(MACPHYC_RX_DELAY_MASK, MACPHYC_RX_DELAY_MAX - 1);
-> +			else
-> +				val |= FIELD_PREP(MACPHYC_RX_DELAY_MASK, mac->rx_delay - 1);
-> +		}
-> +
-> +		dev_dbg(mac->dev, "MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII\n");
-> +		break;
-> +
-> +	case PHY_INTERFACE_MODE_RGMII_ID:
-> +		val = FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_ORIGIN) |
-> +			  FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN) |
-> +			  FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII);
-> +		dev_dbg(mac->dev, "MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII_ID\n");
-> +		break;
-
-So this one is pretty normal. The MAC does not add a delay,
-PHY_INTERFACE_MODE_RGMII_ID is passed to the PHY, and it adds the
-delay. The interface will likely work.
-
-> +
-> +	case PHY_INTERFACE_MODE_RGMII_RXID:
-> +		val = FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII) |
-> +			  FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN);
-> +
-> +		if (mac->tx_delay == 0) {
-> +			val |= FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_ORIGIN);
-> +		} else {
-> +			val |= FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_DELAY);
-> +
-> +			if (mac->tx_delay > MACPHYC_TX_DELAY_MAX)
-> +				val |= FIELD_PREP(MACPHYC_TX_DELAY_MASK, MACPHYC_TX_DELAY_MAX - 1);
-> +			else
-> +				val |= FIELD_PREP(MACPHYC_TX_DELAY_MASK, mac->tx_delay - 1);
-> +		}
-
-So here, the PHY is going to be passed PHY_INTERFACE_MODE_RGMII_RXID.
-The PHY will add a delay in the receive path. The MAC needs to add the
-delay in the transmit path. So tx_delay needs to be the full 2ns, not
-just a small fine tuning value, or the PCB is adding the delay. And
-you also cannot fine tune the RX delay, since rx_delay is ignored.
-
-> +
-> +		dev_dbg(mac->dev, "MAC PHY Control Register: PHY_INTERFACE_MODE_RGMII_RXID\n");
-> +		break;
-> +
-> +	case PHY_INTERFACE_MODE_RGMII_TXID:
-> +		val = FIELD_PREP(MACPHYC_PHY_INFT_MASK, MACPHYC_PHY_INFT_RGMII) |
-> +			  FIELD_PREP(MACPHYC_TX_SEL_MASK, MACPHYC_TX_SEL_ORIGIN);
-> +
-> +		if (mac->rx_delay == 0) {
-> +			val |= FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_ORIGIN);
-> +		} else {
-> +			val |= FIELD_PREP(MACPHYC_RX_SEL_MASK, MACPHYC_RX_SEL_DELAY);
-> +
-> +			if (mac->rx_delay > MACPHYC_RX_DELAY_MAX)
-> +				val |= FIELD_PREP(MACPHYC_RX_DELAY_MASK, MACPHYC_RX_DELAY_MAX - 1);
-> +			else
-> +				val |= FIELD_PREP(MACPHYC_RX_DELAY_MASK, mac->rx_delay - 1);
-> +		}
-
-And here we have the opposite to PHY_INTERFACE_MODE_RGMII_RXID.
-
-So you need to clearly document in the device tree binding when
-rx_delay and tx_delay are used, and when they are ignored. You don't
-want to have DT writers having to look deep into the code to figure
-this out.
-
-Personally, i would simply this, in a big way. I see two options:
-
-1) The MAC never adds a delay. The hardware is there, but simply don't
-use it, to keep thing simple, and the same as nearly every other MAC.
-
-2) If the hardware can do small steps of delay, allow this delay, both
-RX and TX, to be configured in all four modes, in order to allow for
-fine tuning. Leave the PHY to insert the majority of the delay.
-
-> +	/* Get MAC PHY control register */
-> +	mac->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "mode-reg");
-> +	if (IS_ERR(mac->regmap)) {
-> +		dev_err(&pdev->dev, "%s: failed to get syscon regmap\n", __func__);
-> +		goto err_remove_config_dt;
-> +	}
-
-Please document this in the device tree binding.
-
-> +
-> +	ret = of_property_read_u32(pdev->dev.of_node, "rx-clk-delay", &mac->rx_delay);
-> +	if (ret)
-> +		mac->rx_delay = 0;
-> +
-> +	ret = of_property_read_u32(pdev->dev.of_node, "tx-clk-delay", &mac->tx_delay);
-> +	if (ret)
-> +		mac->tx_delay = 0;
-
-Please take a look at dwmac-mediatek.c. It handles delays nicely. I
-would suggest that is the model to follow.
-
-       Andrew
+Cheers,
+Jens
