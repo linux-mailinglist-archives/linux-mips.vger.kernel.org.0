@@ -2,209 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE653A3B45
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 07:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC053A3B81
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 07:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbhFKFSs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Jun 2021 01:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbhFKFSs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Jun 2021 01:18:48 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DDFC061574
-        for <linux-mips@vger.kernel.org>; Thu, 10 Jun 2021 22:16:34 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id r16so8064429ljc.0
-        for <linux-mips@vger.kernel.org>; Thu, 10 Jun 2021 22:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fyj5SdPfNyQtiASRP36GPtu32bXzI+wL6n1PWw7J0sI=;
-        b=gJATbDLIE1ZTmNmyxCMb3WaAShm5EV56gII2UEwB1nmyrs3ytAryxfqMgZJnHcFiSh
-         RfXvt/8+UX3axvsE93C5aqsNaaLmpbJHzkdlQxk0gKF0SqMz9G7t4aydro9wwPCI40I7
-         L1v1otgLI7VgKa6g09nRvkaq52+GyppWeBsLB5uShR5vLa5thyAA5K1hbVuf+NnTGe67
-         cFufoLWlvEjSWvlEthm7aIDZaT5yxp6YCJ/MK08neSy96rqA6rZ26sMU8vtDnrtepthG
-         ANKXSUdZxdl+oGKeqZbXhgtKmrw34ibPI2fZ/laduNThZXmtC143rb3+ZGAuF9RHsFi+
-         1Ytg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fyj5SdPfNyQtiASRP36GPtu32bXzI+wL6n1PWw7J0sI=;
-        b=b1bDflxGNcnWA6HYM4+a6rUHs6SFX6Q+H+C1DtW63D7/XxQxpRTZkB6bd5HsfztlIs
-         TptPb+Tv6lkpo2ZG57xiN242SVLnzFbhn6acl04Fx7JFCIoDsLbzWyjjct/u+XHQXGid
-         aJf5vR2st+/ze4a1On6c5nd12FWvcEGroW4mbSkyqqBGpGvU7t/V/iFATOVuJZqvtSy4
-         K18sXXG/JL/stInopEQ7J5HGcK+zfaQelhtaBUI7DJffT3hRR+EzKcrym9dRYgNJudeT
-         YcG34zLLU/cJlbS8IPI8B78d2Iw0z1z5hcJ0bGaQzOAas/JLgCMERAwftFaCRKP8joCr
-         BLGQ==
-X-Gm-Message-State: AOAM5327GTJAwq+zRvNezzdGpu0guHy7b9kIWuJbHXomanTaG3btJhhZ
-        YziVwhTdJyZUNh4x+JVlooJ3RIMgH3tecL19ze5Tjw==
-X-Google-Smtp-Source: ABdhPJz5i3I6GjTKhbtNhG2oTgwzlpu84D8lr6tgvjr9hfM31HGkzcRmKSVL+L31wq4Sx82KRerKOPia9J/1sxEKqzA=
-X-Received: by 2002:a2e:2f09:: with SMTP id v9mr1525954ljv.152.1623388592055;
- Thu, 10 Jun 2021 22:16:32 -0700 (PDT)
+        id S230517AbhFKFyu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Jun 2021 01:54:50 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:55206 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230001AbhFKFyu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 11 Jun 2021 01:54:50 -0400
+Received: from [10.130.0.77] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxEOIu+sJgcxQPAA--.17828S3;
+        Fri, 11 Jun 2021 13:52:46 +0800 (CST)
+Subject: Re: [PATCH] MIPS: add PMD table accounting into MIPS'pmd_alloc_one
+To:     Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+References: <20210611021235.2426442-1-huangpei@loongson.cn>
+Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <bc494f2f-9593-ddfa-11bf-ef33d0a614ee@loongson.cn>
+Date:   Fri, 11 Jun 2021 13:52:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <20210610210913.536081-1-tyhicks@linux.microsoft.com> <20210610210913.536081-7-tyhicks@linux.microsoft.com>
-In-Reply-To: <20210610210913.536081-7-tyhicks@linux.microsoft.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Fri, 11 Jun 2021 10:46:20 +0530
-Message-ID: <CAFA6WYMcGGkAAWxK2vmM8CNsgTKJpegkZZjJZy4pvXhKe9WGvA@mail.gmail.com>
-Subject: Re: [PATCH v4 6/8] tee: Support kernel shm registration without
- dma-buf backing
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Allen Pais <apais@linux.microsoft.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Vikas Gupta <vikas.gupta@broadcom.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        op-tee@lists.trustedfirmware.org,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210611021235.2426442-1-huangpei@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9BxEOIu+sJgcxQPAA--.17828S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr18Ar1rZF1UKw1xZF1rCrg_yoW8Gr4rpa
+        1kCa48G3yYgry5KFW3Ar4v9rZ8Jan5GrWvgr47urnIv3ZrWr4fKryDKw1DZFn8Aa95JF48
+        urWSgF1DCr4293JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_GrWl42xK82IYc2Ij64vIr4
+        1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
+        67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
+        8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
+        wI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUfCztUUUUU=
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 11 Jun 2021 at 02:39, Tyler Hicks <tyhicks@linux.microsoft.com> wrote:
->
-> Uncouple the registration of kernel shared memory buffers from the
-> TEE_SHM_DMA_BUF flag. Drivers may wish to allocate multi-page contiguous
-> shared memory regions but do not need them to be backed by a dma-buf
-> when the memory region is only used by the driver.
->
-> If the TEE implementation does not require shared memory to be
-> registered, clear the flag prior to calling the corresponding pool alloc
-> function. Update the OP-TEE driver to respect TEE_SHM_REGISTER, rather
-> than TEE_SHM_DMA_BUF, when deciding whether to (un)register on
-> alloc/free operations.
+On 06/11/2021 10:12 AM, Huang Pei wrote:
 
-> The AMD-TEE driver continues to ignore the
-> TEE_SHM_REGISTER flag.
+> This fixes Page Table accounting bug.
 >
-
-That's the main point that no other TEE implementation would honour
-TEE_SHM_REGISTER and I think it's just the incorrect usage of
-TEE_SHM_REGISTER flag to suffice OP-TEE underlying implementation.
-
-> Allow callers of tee_shm_alloc_kernel_buf() to allocate and register a
-> shared memory region without the backing of dma-buf.
+> MIPS is the ONLY arch just defining __HAVE_ARCH_PMD_ALLOC_ONE alone.
+> Since commit b2b29d6d011944 (mm: account PMD tables like PTE tables),
+> "pmd_free" in asm-generic with PMD table accounting and "pmd_alloc_one"
+> in MIPS without PMD table accounting causes PageTable accounting number
+> negative, which read by global_zone_page_state(), always returns 0.
 >
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
 > ---
->  drivers/tee/optee/shm_pool.c |  5 ++---
->  drivers/tee/tee_shm.c        | 13 +++++++++++--
->  2 files changed, 13 insertions(+), 5 deletions(-)
+>   arch/mips/include/asm/pgalloc.h | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
 >
+> diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
+> index 8b18424b3120..916bd637d30f 100644
+> --- a/arch/mips/include/asm/pgalloc.h
+> +++ b/arch/mips/include/asm/pgalloc.h
+> @@ -60,10 +60,14 @@ do {							\
+>   static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+>   {
+>   	pmd_t *pmd;
 
-This patch is just mixing two separate approaches to TEE shared
-memory. Have a look at alternative suggestions below.
+pmd_t *pmd = NULL;
 
-> diff --git a/drivers/tee/optee/shm_pool.c b/drivers/tee/optee/shm_pool.c
-> index da06ce9b9313..6054343a29fb 100644
-> --- a/drivers/tee/optee/shm_pool.c
-> +++ b/drivers/tee/optee/shm_pool.c
-> @@ -27,7 +27,7 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
->         shm->paddr = page_to_phys(page);
->         shm->size = PAGE_SIZE << order;
->
-> -       if (shm->flags & TEE_SHM_DMA_BUF) {
-> +       if (shm->flags & TEE_SHM_REGISTER) {
+Does it needed?
 
-Here you can just do following check instead:
+Thanks,
+Jinyang
 
-       if (!(shm->flags & TEE_SHM_PRIV)) {
+> +	struct page *pg;
+>   
+> -	pmd = (pmd_t *) __get_free_pages(GFP_KERNEL, PMD_ORDER);
+> -	if (pmd)
+> +	pg = alloc_pages(GFP_KERNEL, PMD_ORDER);
+> +	if (pg) {
+> +		pgtable_pmd_page_ctor(pg);
+> +		pmd = (pmd_t *)page_address(pg);
+>   		pmd_init((unsigned long)pmd, (unsigned long)invalid_pte_table);
+> +	}
+>   	return pmd;
+>   }
+>   
 
-And this flag needs to be passed from the call sites here [1] [2].
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/tee/optee/core.c#n280
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/tee/optee/call.c#n186
-
->                 unsigned int nr_pages = 1 << order, i;
->                 struct page **pages;
->
-> @@ -42,7 +42,6 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
->                         page++;
->                 }
->
-> -               shm->flags |= TEE_SHM_REGISTER;
-
-This should remain as it is.
-
->                 rc = optee_shm_register(shm->ctx, shm, pages, nr_pages,
->                                         (unsigned long)shm->kaddr);
->                 kfree(pages);
-> @@ -60,7 +59,7 @@ static int pool_op_alloc(struct tee_shm_pool_mgr *poolm,
->  static void pool_op_free(struct tee_shm_pool_mgr *poolm,
->                          struct tee_shm *shm)
->  {
-> -       if (shm->flags & TEE_SHM_DMA_BUF)
-> +       if (shm->flags & TEE_SHM_REGISTER)
-
-Same as above.
-
->                 optee_shm_unregister(shm->ctx, shm);
->
->         free_pages((unsigned long)shm->kaddr, get_order(shm->size));
-> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> index c65e44707cd6..26a76f817c57 100644
-> --- a/drivers/tee/tee_shm.c
-> +++ b/drivers/tee/tee_shm.c
-> @@ -117,7 +117,7 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
->                 return ERR_PTR(-EINVAL);
->         }
->
-> -       if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF))) {
-> +       if ((flags & ~(TEE_SHM_MAPPED | TEE_SHM_DMA_BUF | TEE_SHM_REGISTER))) {
-
-No need for this change.
-
->                 dev_err(teedev->dev.parent, "invalid shm flags 0x%x", flags);
->                 return ERR_PTR(-EINVAL);
->         }
-> @@ -137,6 +137,15 @@ struct tee_shm *tee_shm_alloc(struct tee_context *ctx, size_t size, u32 flags)
->                 goto err_dev_put;
->         }
->
-> +       if (!teedev->desc->ops->shm_register ||
-> +           !teedev->desc->ops->shm_unregister) {
-> +               /* registration is not required by the TEE implementation */
-> +               flags &= ~TEE_SHM_REGISTER;
-> +       } else if (flags & TEE_SHM_DMA_BUF) {
-> +               /* all dma-buf backed shm allocations are registered */
-> +               flags |= TEE_SHM_REGISTER;
-> +       }
-> +
-
-This change isn't required as well as underlying TEE implementation:
-OP-TEE in this case knows how to implement shared memory allocation
-whether to use reserved shared memory pool or dynamic shared memory
-pool. For more details see shared memory pool creation in
-optee_probe().
-
->         shm->flags = flags | TEE_SHM_POOL;
->         shm->ctx = ctx;
->         if (flags & TEE_SHM_DMA_BUF)
-> @@ -207,7 +216,7 @@ EXPORT_SYMBOL_GPL(tee_shm_alloc);
->   */
->  struct tee_shm *tee_shm_alloc_kernel_buf(struct tee_context *ctx, size_t size)
->  {
-> -       return tee_shm_alloc(ctx, size, TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
-> +       return tee_shm_alloc(ctx, size, TEE_SHM_MAPPED | TEE_SHM_REGISTER);
-
-Here it could just be:
-
-       return tee_shm_alloc(ctx, size, TEE_SHM_MAPPED);
-
--Sumit
-
->  }
->  EXPORT_SYMBOL_GPL(tee_shm_alloc_kernel_buf);
->
-> --
-> 2.25.1
->
