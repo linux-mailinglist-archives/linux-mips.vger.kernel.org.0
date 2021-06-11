@@ -2,112 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B2E3A3B8F
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 08:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BE83A3BA9
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 08:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbhFKGCz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 11 Jun 2021 02:02:55 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:57042 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230117AbhFKGCy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 11 Jun 2021 02:02:54 -0400
-Received: from [127.0.0.1] (unknown [222.209.8.141])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH0IE_MJg2xUPAA--.5471S2;
-        Fri, 11 Jun 2021 14:00:38 +0800 (CST)
-Content-Type: text/plain; charset="utf-8"
+        id S230291AbhFKGJZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Jun 2021 02:09:25 -0400
+Received: from mail-wr1-f50.google.com ([209.85.221.50]:45026 "EHLO
+        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230251AbhFKGJY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Jun 2021 02:09:24 -0400
+Received: by mail-wr1-f50.google.com with SMTP id f2so4683654wri.11;
+        Thu, 10 Jun 2021 23:07:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AZMS2A4sumtCqfcNbQEYzMmO3IZvf2HY+g4HgiE7meY=;
+        b=P9M+3TfkPCtOk03F/IkNnBLpwBFxJ4/6PWwtGWZdMNhGE8rwXdXLlWICW+uEEZHduq
+         QajKEpOaCdLyLlW/n8t3N3AF71m5G026mEvBQAlUCs9qE1ITF5/fcdzK8dFKL6Hf0CeR
+         aR2OHSlFv56rLxkNHWhR59vr7H5KJ4Nt7PhAoQvQ0Q8VGZXQhxImp5FML5HVKIOq4aBm
+         eJ8xmbyfipRR2EWXtmEAJCg6f1dhKmXgCNI1O39HhZ3vYwSTyO3/lEmJwRvgcPI27x4U
+         oqGvE89fREpOc9bceFgrQeCmjGuC9epERevc+uaV1OQG+8uORRtPU5rGJNp3vMgHEAkG
+         3N4A==
+X-Gm-Message-State: AOAM533LQC09yj+dNFhiPVx5mCnJJHTqO8EQp1A17MyDHX6G4V1dNIsu
+        VQztUOVihO/OaoHODvCVwTT3/p5BDBk=
+X-Google-Smtp-Source: ABdhPJxjEIF41BMJdDoto8M4WZ5XYmslV5qnXD0oaW9mXsN6wP8UKQhJLVT9lH7G+hSlHgP+5koqag==
+X-Received: by 2002:adf:df02:: with SMTP id y2mr1995807wrl.120.1623391645775;
+        Thu, 10 Jun 2021 23:07:25 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id q19sm11019277wmc.44.2021.06.10.23.07.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Jun 2021 23:07:25 -0700 (PDT)
+Subject: Re: [PATCH 1/2] serial: 8250: Mask out floating 16/32-bit bus bits
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-serial@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <alpine.DEB.2.21.2105161721220.3032@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2105181508460.3032@angie.orcam.me.uk>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Message-ID: <0cba710e-dc70-2b5c-ef48-a54cad0cae05@kernel.org>
+Date:   Fri, 11 Jun 2021 08:07:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-Mailer: BlackBerry Email (10.3.3.3216)
-Message-ID: <20210611060037.5779544.79787.9730@loongson.cn>
-Date:   Fri, 11 Jun 2021 14:00:37 +0800
-Subject: Re: [PATCH] MIPS: add PMD table accounting into MIPS'pmd_alloc_one
-From:   =?utf-8?b?6buE5rKb?= <huangpei@loongson.cn>
-In-Reply-To: <bc494f2f-9593-ddfa-11bf-ef33d0a614ee@loongson.cn>
-References: <20210611021235.2426442-1-huangpei@loongson.cn>
- <bc494f2f-9593-ddfa-11bf-ef33d0a614ee@loongson.cn>
-To:     Jinyang He <hejinyang@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-X-CM-TRANSID: AQAAf9DxH0IE_MJg2xUPAA--.5471S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KryfArWfXw15Aw45CrW3Wrg_yoW8AryfpF
-        4kAa48G3yYgry8uFW3Ar4v9rW5Gw45GrZYgF47uwnav3ZrGFyrK34kKwn8ZFn8Aws5GF48
-        urZagF1DCr42va7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
-        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
-        evJa73UjIFyTuYvjfUndb1UUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+In-Reply-To: <alpine.DEB.2.21.2105181508460.3032@angie.orcam.me.uk>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-yes，my bad，I will resend soon
-
-  Original Message  
-From: Jinyang He
-Sent: 2021年6月11日星期五 13:52
-To: Huang Pei; Thomas Bogendoerfer; ambrosehua@gmail.com
-Cc: Bibo Mao; linux-mips@vger.kernel.org; Jiaxun Yang; Paul Burton; Li Xuefeng; Yang Tiezhu; Gao Juxin; Huacai Chen
-Subject: Re: [PATCH] MIPS: add PMD table accounting into MIPS'pmd_alloc_one
-
-On 06/11/2021 10:12 AM, Huang Pei wrote:
-
-> This fixes Page Table accounting bug.
->
-> MIPS is the ONLY arch just defining __HAVE_ARCH_PMD_ALLOC_ONE alone.
-> Since commit b2b29d6d011944 (mm: account PMD tables like PTE tables),
-> "pmd_free" in asm-generic with PMD table accounting and "pmd_alloc_one"
-> in MIPS without PMD table accounting causes PageTable accounting number
-> negative, which read by global_zone_page_state(), always returns 0.
->
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+On 10. 06. 21, 20:38, Maciej W. Rozycki wrote:
+> Make sure only actual 8 bits of the IIR register are used in determining
+> the port type in `autoconfig'.
+> 
+> The `serial_in' port accessor returns the `unsigned int' type, meaning
+> that with UPIO_AU, UPIO_MEM16, UPIO_MEM32, and UPIO_MEM32BE access types
+> more than 8 bits of data are returned, of which the high order bits will
+> often come from bus lines that are left floating in the data phase.  For
+> example with the MIPS Malta board's CBUS UART, where the registers are
+> aligned on 8-byte boundaries and which uses 32-bit accesses, data as
+> follows is returned:
+> 
+> YAMON> dump -32 0xbf000900 0x40
+> 
+> BF000900: 1F000942 1F000942 1F000900 1F000900  ...B...B........
+> BF000910: 1F000901 1F000901 1F000900 1F000900  ................
+> BF000920: 1F000900 1F000900 1F000960 1F000960  ...........`...`
+> BF000930: 1F000900 1F000900 1F0009FF 1F0009FF  ................
+> 
+> YAMON>
+> 
+> Evidently high-order 24 bits return values previously driven in the
+> address phase (the 3 highest order address bits used with the command
+> above are masked out in the simple virtual address mapping used here and
+> come out at zeros on the external bus), a common scenario with bus lines
+> left floating, due to bus capacitance.
+> 
+> Consequently when the value of IIR, mapped at 0x1f000910, is retrieved
+> in `autoconfig', it comes out at 0x1f0009c1 and when it is right-shifted
+> by 6 and then assigned to 8-bit `scratch' variable, the value calculated
+> is 0x27, not one of 0, 1, 2, 3 expected in port type determination.
+> 
+> Fix the issue then, by assigning the value returned from `serial_in' to
+> `scratch' first, which masks out 24 high-order bits retrieved, and only
+> then right-shift the resulting 8-bit data quantity, producing the value
+> of 3 in this case, as expected.  Fix the same issue in `serial_dl_read'.
+> 
+> The problem first appeared with Linux 2.6.9-rc3 which predates our repo
+> history, but the origin could be identified with the old MIPS/Linux repo
+> also at: <git://git.kernel.org/pub/scm/linux/kernel/git/ralf/linux.git>
+> as commit e0d2356c0777 ("Merge with Linux 2.6.9-rc3."), where code in
+> `serial_in' was updated with this case:
+> 
+> +	case UPIO_MEM32:
+> +		return readl(up->port.membase + offset);
+> +
+> 
+> which made it produce results outside the unsigned 8-bit range for the
+> first time, though obviously it is system dependent what actual values
+> appear in the high order bits retrieved and it may well have been zeros
+> in the relevant positions with the system the change originally was
+> intended for.  It is at that point that code in `autoconf' should have
+> been updated accordingly, but clearly it was overlooked.
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 > ---
-> arch/mips/include/asm/pgalloc.h | 8 ++++++--
-> 1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
-> index 8b18424b3120..916bd637d30f 100644
-> --- a/arch/mips/include/asm/pgalloc.h
-> +++ b/arch/mips/include/asm/pgalloc.h
-> @@ -60,10 +60,14 @@ do {	 \
-> static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
-> {
-> pmd_t *pmd;
-
-pmd_t *pmd = NULL;
-
-Does it needed?
-
-Thanks,
-Jinyang
-
-> +	struct page *pg;
+>   drivers/tty/serial/8250/8250_port.c |    9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
 > 
-> -	pmd = (pmd_t *) __get_free_pages(GFP_KERNEL, PMD_ORDER);
-> -	if (pmd)
-> +	pg = alloc_pages(GFP_KERNEL, PMD_ORDER);
-> +	if (pg) {
-> +	 pgtable_pmd_page_ctor(pg);
-> +	 pmd = (pmd_t *)page_address(pg);
-> pmd_init((unsigned long)pmd, (unsigned long)invalid_pte_table);
-> +	}
-> return pmd;
-> }
+> linux-serial-8250-floating-bus-mask.diff
+> Index: linux-malta-cbus-uart/drivers/tty/serial/8250/8250_port.c
+> ===================================================================
+> --- linux-malta-cbus-uart.orig/drivers/tty/serial/8250/8250_port.c
+> +++ linux-malta-cbus-uart/drivers/tty/serial/8250/8250_port.c
+> @@ -311,7 +311,10 @@ static const struct serial8250_config ua
+>   /* Uart divisor latch read */
+>   static int default_serial_dl_read(struct uart_8250_port *up)
+>   {
+> -	return serial_in(up, UART_DLL) | serial_in(up, UART_DLM) << 8;
+> +	unsigned char dll = serial_in(up, UART_DLL);
+> +	unsigned char dlm = serial_in(up, UART_DLM);
+> +
+> +	return dll | dlm << 8;
+>   }
+>   
+>   /* Uart divisor latch write */
+> @@ -1297,9 +1300,9 @@ static void autoconfig(struct uart_8250_
+>   	serial_out(up, UART_LCR, 0);
+>   
+>   	serial_out(up, UART_FCR, UART_FCR_ENABLE_FIFO);
+> -	scratch = serial_in(up, UART_IIR) >> 6;
+> +	scratch = serial_in(up, UART_IIR);
+>   
+> -	switch (scratch) {
+> +	switch (scratch >> 6) {
+
+COrrect, but not obvious on the first look. People could revert this 
+change inadverently. So could you add a comment, or simply cast 
+serial_in() output to (u8)?
+
+>   	case 0:
+>   		autoconfig_8250(up);
+>   		break;
 > 
 
+thanks,
+-- 
+js
+suse labs
