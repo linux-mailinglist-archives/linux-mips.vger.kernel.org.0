@@ -2,97 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E34E3A3EC3
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 11:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFCB3A4034
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 12:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbhFKJNo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Jun 2021 05:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbhFKJNn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Jun 2021 05:13:43 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9871FC0613A3
-        for <linux-mips@vger.kernel.org>; Fri, 11 Jun 2021 02:11:45 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id a20so5277744wrc.0
-        for <linux-mips@vger.kernel.org>; Fri, 11 Jun 2021 02:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YElcP8wY/ItH22s2CX3Yk/qIGr089Bxcg+NXSKlpwwM=;
-        b=woZ9K25EeoLQgFPoZVy3NGyq6fwzaVKAJZhft3QVaaHAwjel+T2FHYXKeJVF0dq4IV
-         KT4si0PHrixQw5HW0jmWLmRYpEtsp3/eZfK1U1nrDfC+VhljAejz/6LwRdKB8Bvb2tMa
-         H8J9YWPe2MRbFZbJXcHP9jn7fySM4WPSRK7A5F8GgRiy8AGIsgp23zFDTlJdWTDgJ7cW
-         xXmc3PcmEMqJbvIehCJmyyOqmCmZDswRrH03zxLaBPaRmV2V5yqUL83Ikt6z3g2y/aXt
-         ybc6xsaj2MgpPjXFU9ob9H9own759QmqW4hygFJqr/9Sgi2hbAlnjJGYMW/I5iO5C/CZ
-         ycXQ==
+        id S229480AbhFKKfA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Jun 2021 06:35:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55586 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231196AbhFKKfA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 11 Jun 2021 06:35:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623407581;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WBC8jsi6sMgVpUZekFliEqdwU62og4a57VgKDjRa+Sc=;
+        b=Kbo1bduKxHcMlJtsP8EmYeW4thj78zCb6mYjJxCjcEHDDQziKzra0btuJSBLBtM2NrIcSP
+        ws783wS9ByuG9PXIDZD2c91dI3z36f/Rlilt8KSwSW9Nw9/gSyykyX/e7PeD9Mth32Nfwe
+        eOpmaZ3rU9PvTZ2Ex07vi7cQFAQhKJI=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-244-974ema65NyG7TUmZOG-PKA-1; Fri, 11 Jun 2021 06:33:00 -0400
+X-MC-Unique: 974ema65NyG7TUmZOG-PKA-1
+Received: by mail-wr1-f71.google.com with SMTP id z13-20020adfec8d0000b0290114cc6b21c4so2390653wrn.22
+        for <linux-mips@vger.kernel.org>; Fri, 11 Jun 2021 03:33:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YElcP8wY/ItH22s2CX3Yk/qIGr089Bxcg+NXSKlpwwM=;
-        b=MPy+o/fAUCsDX7K8WNSE/vZMFyjs197S5o31ScgZCyAR2ia3PYTZX71ea8PtN+Th8K
-         BDfDK2mntWvZe58K5BBWkRrAdg/cwFrOxc40NvjjB6xNk+FJdURr0sDCy1wOSu0+B7Mj
-         IdCK6VINPdz6wQP1ZmaHbePhRobbLLdu4TqP3KYS2ng5D/qGP3jDzKQ4si8XK/E89lKT
-         eNLap5I+XT/Ny0YH+6bTyA8b01yhuEeGoYLgg0lr/iJMZnFf9ScOZPlOf6r/ouNRDzdK
-         gUOnzlGemfvgCDm9Eehk9LggZ3NondCq3O3v07X7tBeCpgX6voEa75nZb+5rmzL0iKZx
-         etzA==
-X-Gm-Message-State: AOAM532Ln5yr+zeAWxVPvCj/dH1rNa54W2pyjrPw5H4xqoNkec+JtDzf
-        fm5hWkb1nItxNj9KmjDUW+0+bkI4miKS4u/gK04YZA==
-X-Google-Smtp-Source: ABdhPJygoquYofYpaeSWf98r/mIW7k2U9CQBWHXDLqMaKoPkUUyF4l08eSJo3Yli8sYbBlkW2zzw2hVNtPKpLBXGTGc=
-X-Received: by 2002:a05:6000:229:: with SMTP id l9mr2803707wrz.43.1623402704237;
- Fri, 11 Jun 2021 02:11:44 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WBC8jsi6sMgVpUZekFliEqdwU62og4a57VgKDjRa+Sc=;
+        b=ieZXcPa3xBxWjSbOhl7nYF6zn/0JSlea5JNYw+RfZxsdNHDnzI1PbOXhBvpXwkosqi
+         DhHExH4BGF4I8t3zHzYReb4lefHrxndFb2naChs+7L0VHjvvDtVNZuThlwzYgNnrpG5v
+         2tWYZHiWR/XQ5SqAqtfQFIMQ1Jkxx5lrCSYgo9shgU55VNM5PdBzqY4LpplV2y6BzQF1
+         bgw38kn78uEUayJOgOYHnmC+pkoE8W4I5pZ5bDHqNWZRkvCSQ0QwSK9yMPtM+MsvmiCX
+         X/apbwdhuwiJc/Sph1H+JvalSTHxfn+rp5Kdk7sVjTRHdzlugSO8IcZIpsQ4WgEjpipA
+         FJcA==
+X-Gm-Message-State: AOAM532bMfEf1Yeb7+twP2iixQwGJ06VNQ4zZIoppEJtEEKKFcJx9i1j
+        8ZqHAtQTgLO3E8Eza25356NwA6S7aSvdng4akAVBR+qs/+jYsCagnauA8junXNjxwf3gkhmPFbU
+        UMtF5UxLBkNl27aplHMEsRA==
+X-Received: by 2002:a5d:47a3:: with SMTP id 3mr2224939wrb.255.1623407579424;
+        Fri, 11 Jun 2021 03:32:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwf8tRH1WD2BkDk0nh3u9+JxAlR1FoBopNGcMDh/7aHVklUCngEpCzpbjrac9bNu9rkTLOqQw==
+X-Received: by 2002:a5d:47a3:: with SMTP id 3mr2224904wrb.255.1623407579190;
+        Fri, 11 Jun 2021 03:32:59 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id s62sm12741514wms.13.2021.06.11.03.32.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Jun 2021 03:32:58 -0700 (PDT)
+Subject: Re: [PATCH v7 2/4] KVM: stats: Add fd-based API to read binary stats
+ data
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>
+References: <20210603211426.790093-1-jingzhangos@google.com>
+ <20210603211426.790093-3-jingzhangos@google.com>
+ <e3b2b3ab-88a2-827c-7775-10be63158ff3@redhat.com>
+ <CAAdAUtjAuDdyBz7qd7UE0WuY77US-bhY1-jA9E11ddhZ0=gw6g@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <2ed4afbf-c5b8-82a5-5fc6-04f00f933761@redhat.com>
+Date:   Fri, 11 Jun 2021 12:32:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20210610210913.536081-1-tyhicks@linux.microsoft.com> <20210610210913.536081-4-tyhicks@linux.microsoft.com>
-In-Reply-To: <20210610210913.536081-4-tyhicks@linux.microsoft.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Fri, 11 Jun 2021 11:11:33 +0200
-Message-ID: <CAHUa44H=vJrkYYTb2T8WPfy6TznQyO8a8wnLCbJUuSE8QO4iuw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/8] optee: fix tee out of memory failure seen during
- kexec reboot
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Allen Pais <apais@linux.microsoft.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Vikas Gupta <vikas.gupta@broadcom.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAAdAUtjAuDdyBz7qd7UE0WuY77US-bhY1-jA9E11ddhZ0=gw6g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 11:09 PM Tyler Hicks
-<tyhicks@linux.microsoft.com> wrote:
->
-> From: Allen Pais <apais@linux.microsoft.com>
->
-> The following out of memory errors are seen on kexec reboot
-> from the optee core.
->
-> [    0.368428] tee_bnxt_fw optee-clnt0: tee_shm_alloc failed
-> [    0.368461] tee_bnxt_fw: probe of optee-clnt0 failed with error -22
->
-> tee_shm_release() is not invoked on dma shm buffer.
->
-> Implement .shutdown() method to handle the release of the buffers
-> correctly.
->
-> More info:
-> https://github.com/OP-TEE/optee_os/issues/3637
->
-> Signed-off-by: Allen Pais <apais@linux.microsoft.com>
-> Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+On 11/06/21 00:47, Jing Zhang wrote:
+> Hi Paolo,
+> 
+> On Thu, Jun 10, 2021 at 11:23 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>>
+>> On 03/06/21 23:14, Jing Zhang wrote:
+>>> +#define DEFINE_VM_STATS_DESC(...) {                                         \
+>>> +     STATS_DESC_COUNTER("remote_tlb_flush"),                                \
+>>> +     ## __VA_ARGS__                                                         \
+>>> +}
+>>> +
+>>> +#define DEFINE_VCPU_STATS_DESC(...) {                                               \
+>>> +     STATS_DESC_COUNTER("halt_successful_poll"),                            \
+>>> +     STATS_DESC_COUNTER("halt_attempted_poll"),                             \
+>>> +     STATS_DESC_COUNTER("halt_poll_invalid"),                               \
+>>> +     STATS_DESC_COUNTER("halt_wakeup"),                                     \
+>>> +     STATS_DESC_TIME_NSEC("halt_poll_success_ns"),                          \
+>>> +     STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),                             \
+>>> +     ## __VA_ARGS__                                                         \
+>>
+>> Let's instead put this (note it's without braces) in macros like these
+>>
+>> #define KVM_GENERIC_VM_STATS()                                                  \
+>>          STATS_DESC_COUNTER("remote_tlb_flush"),
+>>
+>> #define KVM_GENERIC_VCPU_STATS(...)                                             \
+>>          STATS_DESC_COUNTER("halt_successful_poll"),                             \
+>>          STATS_DESC_COUNTER("halt_attempted_poll"),                              \
+>>          STATS_DESC_COUNTER("halt_poll_invalid"),                                \
+>>          STATS_DESC_COUNTER("halt_wakeup"),                                      \
+>>          STATS_DESC_TIME_NSEC("halt_poll_success_ns"),                           \
+>>          STATS_DESC_TIME_NSEC("halt_poll_fail_ns"),
+>>
+>> and it can be used in the arch files.  In fact it can even be added in patch 1 and
+>> switched to STATS_DESC_* here.
+>>
+>> Paolo
+>>
+> I just remember that the reason I used braces is due to following
+> error from checkpatch.pl:
+> ERROR: Macros with complex values should be enclosed in parentheses
 
-Do we really need this considering the patch "optee: Refuse to load
-the driver under the kdump kernel"?
+No, just ignore the bogus error from checkpatch.pl.  But, thanks for 
+checking!
 
-Jens
+Paolo
+
