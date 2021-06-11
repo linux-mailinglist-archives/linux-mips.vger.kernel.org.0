@@ -2,52 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E4E3A3E97
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 11:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824053A3EBA
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 11:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbhFKJIi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Jun 2021 05:08:38 -0400
-Received: from mail-wm1-f52.google.com ([209.85.128.52]:39661 "EHLO
-        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbhFKJIh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Jun 2021 05:08:37 -0400
-Received: by mail-wm1-f52.google.com with SMTP id l18-20020a1ced120000b029014c1adff1edso8206059wmh.4
-        for <linux-mips@vger.kernel.org>; Fri, 11 Jun 2021 02:06:29 -0700 (PDT)
+        id S231466AbhFKJMQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Jun 2021 05:12:16 -0400
+Received: from mail-wm1-f50.google.com ([209.85.128.50]:41867 "EHLO
+        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231261AbhFKJMN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Jun 2021 05:12:13 -0400
+Received: by mail-wm1-f50.google.com with SMTP id y13-20020a1c4b0d0000b02901c20173e165so140534wma.0
+        for <linux-mips@vger.kernel.org>; Fri, 11 Jun 2021 02:09:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ry2suuzXUcu07KBYOEsb0YWMddgl4sZoFMfa7hKOgms=;
-        b=zP33EHoQsf7qLPQMdpBdFo7t8iJNFw2h3mCHTGhZs6q/PNkWYYg6Lj7b/4oKCHxfnc
-         PgeM5chi+Q2hdpb0PWjfcfrWfXduRDbn6SHDbUR5I5kDp5EZpJx5mC58hsnSEYi307LR
-         RCj3W0r3b6rJDe6LZH0lOoufyqEM+UKiPVAEmHiBY1lHpwqRGcdrPktVAI+y8ZvDMQ+2
-         JQLootHAB320n0+/e0lXFYpv+2wOJWGGG6pbel+FSRTZSG9Cwuh2998/wEA1CPCO1PP7
-         nZrN/tES0u0uBGJ2bYXyhm4Rh1DSYTXg4imyqZcDbZ50jciSX6AK+TJoeffZbadQZpA7
-         q1Gw==
+        bh=1Egx3T+r+MdqwKDRFu2oj7ToUZ/M+AjkRGEvdLGmyR0=;
+        b=rZfaoDUnOmmtnXLuSumOibA5QNMCiMlQ80NgjHRY0Shk27yj3NfbvwJfg6HLwrNGsQ
+         MZmn0iJ7rTMWg6Zrazz6eZVpBFfKISTNYlJzDhje0d9DxqZMuvip9tgAuSdRIX7TCij2
+         5+NFIjRh/OASeCDEbuMnbPDQBVf+sQyGH8KFEjTdVnAEZjtt8l08imL6UU11G/iJECnY
+         WPbH7Vk4DSMomRmti8r2X5RsYK/g6H9o7ZrWDkSh050129aUcCZ3LSQ63V2UbWWQ4upG
+         Vkl5PcUwYvhDULREMhlevbgGM5pmAI0YHHXYaK6AENNYo7Un8Q99OH1B3q8sI0SVh4Tw
+         +Wdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ry2suuzXUcu07KBYOEsb0YWMddgl4sZoFMfa7hKOgms=;
-        b=nr3K6vHJLMv7pQW5iz7gtKthax3X3xi9Fh43ZHHs2npCy+w2Y14UKiEaT373wqJJid
-         ASCCrMxUpBuGFV9e0tUDq5ofVgEbZenBm1iobK0iOzJBLFt8WhYv3E1aBsgaelxBa3wt
-         82Dkqub/tbNswPP3kl8ncnDNapc5Gv1TDTLk5k/Ll366lLIhk6kCAgolcHoM3ODT18lx
-         NVcYZ7YDWrgefwHWk4exE4Ivi8p8KAsOWIDhI8MrlladHgkN7zoT43ue7Is0xP68QmPa
-         4IVjbC8PyR1jyDnumtIx+yvmZyR8OS/3TMztgvb49+RbCw4hFXtvDMDy6b6z2vfEd2fz
-         2YiQ==
-X-Gm-Message-State: AOAM532rNDFlmF41n7kYyYQn0hc6HlpRUkDRbT4pJuABJmJHbRa7hu2v
-        c1yoggY7CBbVXND7Di+c4qEcSVf5ehWpfxUKixdqbw==
-X-Google-Smtp-Source: ABdhPJyMlGh/XMRZoKA9ZoOaNrMuesnznrGSeVm7Eiib/+SYCe73p200udVyt5+QPKdB81ZQgtzC6XY+WhMXpi1YZsM=
-X-Received: by 2002:a1c:41c5:: with SMTP id o188mr19048807wma.60.1623402329133;
- Fri, 11 Jun 2021 02:05:29 -0700 (PDT)
+        bh=1Egx3T+r+MdqwKDRFu2oj7ToUZ/M+AjkRGEvdLGmyR0=;
+        b=XNR9V99VDVDwEpMhUuMyiCIfEALbU/AXPvILY7vCdRAKwKKIJR8ygNdaLVLoLyxmXu
+         IVM8P2xTILca9LGgr9vxRqU03sBvhlw9wfYI1nRZsYLEWPhgKM7y8JMorJQL7ipeF1qG
+         jWdow5R8/n6pqQIWvQsmBd6dJjMBYMlTVLUYXt4L4JsJCpPFvFFP9AOGEUnqvlC8q4z+
+         ZCBUQqyCXR31B221puNxtOkwhAWjf+5/adxXXT32zil8YYW6yJRTI3EsKoYsgwlHgizx
+         XdvCvzadY8Xw6sdWJCVnzK0iuN7ofeHcA/nmQJ1tLUhx+gXFuQlrZOU7JwWpREQn9x6H
+         I4/w==
+X-Gm-Message-State: AOAM533RF/Qg66KiWHC4lTJAp61CMQNwwpOlvW6IcngLS88I9mrQyVFI
+        p+cvjOh3QE47E9Dbjs0nnUiDRCG2g6ocZc/3RQ8yTQ==
+X-Google-Smtp-Source: ABdhPJxm4IyPJvEMYQF+cuZdjXmewYzeznnDW42omLFdC7jhbt58zwV/AAUm8apWJ3kgHgKNnR7FZoCanj7gvHCZmnU=
+X-Received: by 2002:a1c:41c5:: with SMTP id o188mr19063241wma.60.1623402539314;
+ Fri, 11 Jun 2021 02:08:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210610210913.536081-1-tyhicks@linux.microsoft.com> <20210610210913.536081-2-tyhicks@linux.microsoft.com>
-In-Reply-To: <20210610210913.536081-2-tyhicks@linux.microsoft.com>
+References: <20210610210913.536081-1-tyhicks@linux.microsoft.com> <20210610210913.536081-3-tyhicks@linux.microsoft.com>
+In-Reply-To: <20210610210913.536081-3-tyhicks@linux.microsoft.com>
 From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Fri, 11 Jun 2021 11:05:18 +0200
-Message-ID: <CAHUa44HU+KnqRKnvhK=Xm3WJeYN5HPJ83e0=v+CZ0hztBWh6Fw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/8] optee: Fix memory leak when failing to register
- shm pages
+Date:   Fri, 11 Jun 2021 11:08:48 +0200
+Message-ID: <CAHUa44Hh2Q06zu0TwvCejcc_0cqXeTVNA8fyt=1VH9uT7++1vg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/8] optee: Refuse to load the driver under the kdump kernel
 To:     Tyler Hicks <tyhicks@linux.microsoft.com>
 Cc:     Allen Pais <apais@linux.microsoft.com>,
         Sumit Garg <sumit.garg@linaro.org>,
@@ -70,16 +69,51 @@ X-Mailing-List: linux-mips@vger.kernel.org
 On Thu, Jun 10, 2021 at 11:09 PM Tyler Hicks
 <tyhicks@linux.microsoft.com> wrote:
 >
-> Free the previously allocated pages when we encounter an error condition
-> while attempting to register the pages with the secure world.
+> Fix a hung task issue, seen when booting the kdump kernel, that is
+> caused by all of the secure world threads being in a permanent suspended
+> state:
 >
-> Fixes: a249dd200d03 ("tee: optee: Fix dynamic shm pool allocations")
-> Fixes: 5a769f6ff439 ("optee: Fix multi page dynamic shm pool alloc")
+>  INFO: task swapper/0:1 blocked for more than 120 seconds.
+>        Not tainted 5.4.83 #1
+>  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>  swapper/0       D    0     1      0 0x00000028
+>  Call trace:
+>   __switch_to+0xc8/0x118
+>   __schedule+0x2e0/0x700
+>   schedule+0x38/0xb8
+>   schedule_timeout+0x258/0x388
+>   wait_for_completion+0x16c/0x4b8
+>   optee_cq_wait_for_completion+0x28/0xa8
+>   optee_disable_shm_cache+0xb8/0xf8
+>   optee_probe+0x560/0x61c
+>   platform_drv_probe+0x58/0xa8
+>   really_probe+0xe0/0x338
+>   driver_probe_device+0x5c/0xf0
+>   device_driver_attach+0x74/0x80
+>   __driver_attach+0x64/0xe0
+>   bus_for_each_dev+0x84/0xd8
+>   driver_attach+0x30/0x40
+>   bus_add_driver+0x188/0x1e8
+>   driver_register+0x64/0x110
+>   __platform_driver_register+0x54/0x60
+>   optee_driver_init+0x20/0x28
+>   do_one_initcall+0x54/0x24c
+>   kernel_init_freeable+0x1e8/0x2c0
+>   kernel_init+0x18/0x118
+>   ret_from_fork+0x10/0x18
+>
+> The invoke_fn hook returned OPTEE_SMC_RETURN_ETHREAD_LIMIT, indicating
+> that the secure world threads were all in a suspended state at the time
+> of the kernel crash. This intermittently prevented the kdump kernel from
+> booting, resulting in a failure to collect the kernel dump.
+>
+> Make kernel dump collection more reliable on systems utilizing OP-TEE by
+> refusing to load the driver under the kdump kernel.
+>
 > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 > ---
->  drivers/tee/optee/shm_pool.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+>  drivers/tee/optee/core.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 
-Looks good.
-
+Looks good
 Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
