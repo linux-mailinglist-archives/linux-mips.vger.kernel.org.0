@@ -2,810 +2,743 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B01F63A44F0
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 17:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41B73A4568
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Jun 2021 17:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbhFKP2x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Jun 2021 11:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbhFKP2x (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Jun 2021 11:28:53 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B866C061574
-        for <linux-mips@vger.kernel.org>; Fri, 11 Jun 2021 08:26:55 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id e11so10146033ljn.13
-        for <linux-mips@vger.kernel.org>; Fri, 11 Jun 2021 08:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TrJa/N2j8SJSl1JllzG09UPARwup/Vp978b7RHSf7FI=;
-        b=IkF1zgFt39xLHyRpSin1UH0SkLr/vbOlLIDEcV4H2qgao+uFJV/ktO/becxWW4cwkF
-         S/HrrVeLTVOM00Q/S7GiTy+2HiMXMNKI7v0pkQkcGb0rCbL6eyPSxbQzxLip2hPb7yex
-         6ZEBxytZHJClha7hfYG5ccqVmtRmUAB/6Vr92VhLxblIpCmZ48e83Sx1I+3zo1vPPr8h
-         B3OzT6CIoTiLGL4O8ijMG/efomz7RBur0EviFy7L2Kt5NoTeuCH8vY2Vvprfkyk5NU+z
-         WXDrn8ye2zwHuGhsxdfC+Ioq2+p0BY9o8MJ5PAq0zXxlLyx0Rnxr4/tbSBD5mzBJyc0z
-         Omeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TrJa/N2j8SJSl1JllzG09UPARwup/Vp978b7RHSf7FI=;
-        b=LoAIL9CM9jeSxSRS6nvSz9eYnKLWuBJ1GAq8YysLQGYj6ih4g3Ao4a4nmk/sq1MZtF
-         RC2NkYJ7RjQqr/h/1xcCrP6HE7BTZWrh/Q6A+GPgw5GPOclli0WZiLjXtFNWVkWflHaS
-         s1jZoIi6YEzODDk2FXMyeNPE3aS4wpamQpG1fP69/G/xFrenXii08tFJBt72ocyRtaEl
-         ddQxVSfDg4wLb6Kfz9UP3XnXd/WOZKPbWE29VahZAwbj33+7XzbN12fz3p0oJ6M7H+V+
-         8GEWHisJRDr47MUd88YH2VfeUz5+WzplCmVOC7/9XHKL785dVQASEzCq1Qv1+IwTSFsQ
-         MpXw==
-X-Gm-Message-State: AOAM532doVZNImOrp1m5NK8UwvipA/nX54/o0gHd5ygGLkRD9kM3OjrO
-        Nz2oM2pScXdVP2GDQR1yt/9RVD5ijrRwpWVPYIgcsg==
-X-Google-Smtp-Source: ABdhPJw/FO7EkStimROrV7o7ZpzuOAlq8HY/fHs+5q1RPjL3jrdv7icMVCBLUzhvcBH11eYkfXAVcYDDv18IBByErr8=
-X-Received: by 2002:a2e:8814:: with SMTP id x20mr3604582ljh.394.1623425213250;
- Fri, 11 Jun 2021 08:26:53 -0700 (PDT)
+        id S231639AbhFKPeA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Jun 2021 11:34:00 -0400
+Received: from out29-149.mail.aliyun.com ([115.124.29.149]:35144 "EHLO
+        out29-149.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231318AbhFKPeA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Jun 2021 11:34:00 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.06712966|-1;BR=01201311R121S46rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0172356-0.00540507-0.977359;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.KR3O.Jg_1623425517;
+Received: from 192.168.88.129(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.KR3O.Jg_1623425517)
+          by smtp.aliyun-inc.com(10.147.42.22);
+          Fri, 11 Jun 2021 23:31:58 +0800
+Subject: Re: [PATCH v2 2/2] clocksource: Ingenic: Add SMP/SMT support for
+ sysost driver.
+To:     Paul Cercueil <paul@crapouillou.net>,
+        =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
+        jun.jiang@ingenic.com, sernia.zhou@foxmail.com
+References: <1622824306-30987-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1622824306-30987-3-git-send-email-zhouyanjie@wanyeetech.com>
+ <8ESHUQ.VB8PTX94HN193@crapouillou.net>
+From:   Zhou Yanjie <zhouyu@wanyeetech.com>
+Message-ID: <28c290db-d382-ac96-62c9-cf38fd367714@wanyeetech.com>
+Date:   Fri, 11 Jun 2021 23:31:57 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20210611150037.1969770-1-jingzhangos@google.com> <cc1c2160-2e81-1040-833b-125512109d81@redhat.com>
-In-Reply-To: <cc1c2160-2e81-1040-833b-125512109d81@redhat.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Fri, 11 Jun 2021 10:26:41 -0500
-Message-ID: <CAAdAUthyd9f3K7AGBmyrPErLppyj45OrAjG3S-sKPvzd3Ys1SQ@mail.gmail.com>
-Subject: Re: [PATCH] KVM: stats: Remove debugfs interface for KVM stats
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <8ESHUQ.VB8PTX94HN193@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 10:18 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 11/06/21 17:00, Jing Zhang wrote:
-> > To avoid duplication, remove the debugfs interface for KVM stats,
-> > since the fd-based binary stats interface is available.
->
-> That would be too easy. :)  We need to keep the debugfs code because it
-> is not yet a 100% replacement for binary stats (it allows to inspect all
-> running guests without collaboration from the VMM); however we can make
-> it work on the binary stats descriptors instead of using struct
-> kvm_stats_debugfs_item.  This way you can remove the duplication between
-> the stats descriptors and the VCPU_STAT/VM_STAT entries.
->
-> Thanks,
->
-> Paolo
->
-Ha, now I got the point. Will do.
+Hi Paul,
 
-Thanks,
-Jing
-> > Signed-off-by: Jing Zhang <jingzhangos@google.com>
-> > ---
-> >   arch/arm64/kvm/guest.c    |  16 ---
-> >   arch/mips/kvm/mips.c      |  39 ------
-> >   arch/powerpc/kvm/book3s.c |  33 -----
-> >   arch/powerpc/kvm/booke.c  |  25 ----
-> >   arch/s390/kvm/kvm-s390.c  | 108 ----------------
-> >   arch/x86/kvm/x86.c        |  47 -------
-> >   include/linux/kvm_host.h  |  34 +----
-> >   virt/kvm/kvm_main.c       | 258 --------------------------------------
-> >   8 files changed, 1 insertion(+), 559 deletions(-)
-> >
-> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-> > index 7048603f4b26..ab5b878b8b14 100644
-> > --- a/arch/arm64/kvm/guest.c
-> > +++ b/arch/arm64/kvm/guest.c
-> > @@ -62,22 +62,6 @@ struct _kvm_stats_header kvm_vcpu_stats_header = {
-> >       }
-> >   };
-> >
-> > -struct kvm_stats_debugfs_item debugfs_entries[] = {
-> > -     VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
-> > -     VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
-> > -     VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
-> > -     VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
-> > -     VCPU_STAT("hvc_exit_stat", hvc_exit_stat),
-> > -     VCPU_STAT("wfe_exit_stat", wfe_exit_stat),
-> > -     VCPU_STAT("wfi_exit_stat", wfi_exit_stat),
-> > -     VCPU_STAT("mmio_exit_user", mmio_exit_user),
-> > -     VCPU_STAT("mmio_exit_kernel", mmio_exit_kernel),
-> > -     VCPU_STAT("exits", exits),
-> > -     VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
-> > -     VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
-> > -     { NULL }
-> > -};
-> > -
-> >   static bool core_reg_offset_is_vreg(u64 off)
-> >   {
-> >       return off >= KVM_REG_ARM_CORE_REG(fp_regs.vregs) &&
-> > diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> > index 8fc70539a83b..285f009f02d1 100644
-> > --- a/arch/mips/kvm/mips.c
-> > +++ b/arch/mips/kvm/mips.c
-> > @@ -97,45 +97,6 @@ struct _kvm_stats_header kvm_vcpu_stats_header = {
-> >       }
-> >   };
-> >
-> > -struct kvm_stats_debugfs_item debugfs_entries[] = {
-> > -     VCPU_STAT("wait", wait_exits),
-> > -     VCPU_STAT("cache", cache_exits),
-> > -     VCPU_STAT("signal", signal_exits),
-> > -     VCPU_STAT("interrupt", int_exits),
-> > -     VCPU_STAT("cop_unusable", cop_unusable_exits),
-> > -     VCPU_STAT("tlbmod", tlbmod_exits),
-> > -     VCPU_STAT("tlbmiss_ld", tlbmiss_ld_exits),
-> > -     VCPU_STAT("tlbmiss_st", tlbmiss_st_exits),
-> > -     VCPU_STAT("addrerr_st", addrerr_st_exits),
-> > -     VCPU_STAT("addrerr_ld", addrerr_ld_exits),
-> > -     VCPU_STAT("syscall", syscall_exits),
-> > -     VCPU_STAT("resvd_inst", resvd_inst_exits),
-> > -     VCPU_STAT("break_inst", break_inst_exits),
-> > -     VCPU_STAT("trap_inst", trap_inst_exits),
-> > -     VCPU_STAT("msa_fpe", msa_fpe_exits),
-> > -     VCPU_STAT("fpe", fpe_exits),
-> > -     VCPU_STAT("msa_disabled", msa_disabled_exits),
-> > -     VCPU_STAT("flush_dcache", flush_dcache_exits),
-> > -     VCPU_STAT("vz_gpsi", vz_gpsi_exits),
-> > -     VCPU_STAT("vz_gsfc", vz_gsfc_exits),
-> > -     VCPU_STAT("vz_hc", vz_hc_exits),
-> > -     VCPU_STAT("vz_grr", vz_grr_exits),
-> > -     VCPU_STAT("vz_gva", vz_gva_exits),
-> > -     VCPU_STAT("vz_ghfc", vz_ghfc_exits),
-> > -     VCPU_STAT("vz_gpa", vz_gpa_exits),
-> > -     VCPU_STAT("vz_resvd", vz_resvd_exits),
-> > -#ifdef CONFIG_CPU_LOONGSON64
-> > -     VCPU_STAT("vz_cpucfg", vz_cpucfg_exits),
-> > -#endif
-> > -     VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
-> > -     VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
-> > -     VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
-> > -     VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
-> > -     VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
-> > -     VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
-> > -     {NULL}
-> > -};
-> > -
-> >   bool kvm_trace_guest_mode_change;
-> >
-> >   int kvm_guest_mode_change_trace_reg(void)
-> > diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
-> > index eff5a96aa638..f0fd9d1d5ee0 100644
-> > --- a/arch/powerpc/kvm/book3s.c
-> > +++ b/arch/powerpc/kvm/book3s.c
-> > @@ -98,39 +98,6 @@ struct _kvm_stats_header kvm_vcpu_stats_header = {
-> >       }
-> >   };
-> >
-> > -struct kvm_stats_debugfs_item debugfs_entries[] = {
-> > -     VCPU_STAT("exits", sum_exits),
-> > -     VCPU_STAT("mmio", mmio_exits),
-> > -     VCPU_STAT("sig", signal_exits),
-> > -     VCPU_STAT("sysc", syscall_exits),
-> > -     VCPU_STAT("inst_emu", emulated_inst_exits),
-> > -     VCPU_STAT("dec", dec_exits),
-> > -     VCPU_STAT("ext_intr", ext_intr_exits),
-> > -     VCPU_STAT("queue_intr", queue_intr),
-> > -     VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
-> > -     VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
-> > -     VCPU_STAT("halt_wait_ns", halt_wait_ns),
-> > -     VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
-> > -     VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
-> > -     VCPU_STAT("halt_successful_wait", halt_successful_wait),
-> > -     VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
-> > -     VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
-> > -     VCPU_STAT("pf_storage", pf_storage),
-> > -     VCPU_STAT("sp_storage", sp_storage),
-> > -     VCPU_STAT("pf_instruc", pf_instruc),
-> > -     VCPU_STAT("sp_instruc", sp_instruc),
-> > -     VCPU_STAT("ld", ld),
-> > -     VCPU_STAT("ld_slow", ld_slow),
-> > -     VCPU_STAT("st", st),
-> > -     VCPU_STAT("st_slow", st_slow),
-> > -     VCPU_STAT("pthru_all", pthru_all),
-> > -     VCPU_STAT("pthru_host", pthru_host),
-> > -     VCPU_STAT("pthru_bad_aff", pthru_bad_aff),
-> > -     VM_STAT("largepages_2M", num_2M_pages, .mode = 0444),
-> > -     VM_STAT("largepages_1G", num_1G_pages, .mode = 0444),
-> > -     { NULL }
-> > -};
-> > -
-> >   static inline void kvmppc_update_int_pending(struct kvm_vcpu *vcpu,
-> >                       unsigned long pending_now, unsigned long old_pending)
-> >   {
-> > diff --git a/arch/powerpc/kvm/booke.c b/arch/powerpc/kvm/booke.c
-> > index 5b0c4dff4f10..890ec72cd327 100644
-> > --- a/arch/powerpc/kvm/booke.c
-> > +++ b/arch/powerpc/kvm/booke.c
-> > @@ -89,31 +89,6 @@ struct _kvm_stats_header kvm_vcpu_stats_header = {
-> >       }
-> >   };
-> >
-> > -struct kvm_stats_debugfs_item debugfs_entries[] = {
-> > -     VCPU_STAT("mmio", mmio_exits),
-> > -     VCPU_STAT("sig", signal_exits),
-> > -     VCPU_STAT("itlb_r", itlb_real_miss_exits),
-> > -     VCPU_STAT("itlb_v", itlb_virt_miss_exits),
-> > -     VCPU_STAT("dtlb_r", dtlb_real_miss_exits),
-> > -     VCPU_STAT("dtlb_v", dtlb_virt_miss_exits),
-> > -     VCPU_STAT("sysc", syscall_exits),
-> > -     VCPU_STAT("isi", isi_exits),
-> > -     VCPU_STAT("dsi", dsi_exits),
-> > -     VCPU_STAT("inst_emu", emulated_inst_exits),
-> > -     VCPU_STAT("dec", dec_exits),
-> > -     VCPU_STAT("ext_intr", ext_intr_exits),
-> > -     VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
-> > -     VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
-> > -     VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
-> > -     VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
-> > -     VCPU_STAT("doorbell", dbell_exits),
-> > -     VCPU_STAT("guest doorbell", gdbell_exits),
-> > -     VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
-> > -     VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
-> > -     VM_STAT_GENERIC("remote_tlb_flush", remote_tlb_flush),
-> > -     { NULL }
-> > -};
-> > -
-> >   /* TODO: use vcpu_printf() */
-> >   void kvmppc_dump_vcpu(struct kvm_vcpu *vcpu)
-> >   {
-> > diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> > index 522a6ac2e347..75d6d499c455 100644
-> > --- a/arch/s390/kvm/kvm-s390.c
-> > +++ b/arch/s390/kvm/kvm-s390.c
-> > @@ -183,114 +183,6 @@ struct _kvm_stats_header kvm_vcpu_stats_header = {
-> >       }
-> >   };
-> >
-> > -struct kvm_stats_debugfs_item debugfs_entries[] = {
-> > -     VCPU_STAT("userspace_handled", exit_userspace),
-> > -     VCPU_STAT("exit_null", exit_null),
-> > -     VCPU_STAT("pfault_sync", pfault_sync),
-> > -     VCPU_STAT("exit_validity", exit_validity),
-> > -     VCPU_STAT("exit_stop_request", exit_stop_request),
-> > -     VCPU_STAT("exit_external_request", exit_external_request),
-> > -     VCPU_STAT("exit_io_request", exit_io_request),
-> > -     VCPU_STAT("exit_external_interrupt", exit_external_interrupt),
-> > -     VCPU_STAT("exit_instruction", exit_instruction),
-> > -     VCPU_STAT("exit_pei", exit_pei),
-> > -     VCPU_STAT("exit_program_interruption", exit_program_interruption),
-> > -     VCPU_STAT("exit_instr_and_program_int", exit_instr_and_program),
-> > -     VCPU_STAT("exit_operation_exception", exit_operation_exception),
-> > -     VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
-> > -     VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
-> > -     VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
-> > -     VCPU_STAT("halt_no_poll_steal", halt_no_poll_steal),
-> > -     VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
-> > -     VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
-> > -     VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
-> > -     VCPU_STAT("instruction_lctlg", instruction_lctlg),
-> > -     VCPU_STAT("instruction_lctl", instruction_lctl),
-> > -     VCPU_STAT("instruction_stctl", instruction_stctl),
-> > -     VCPU_STAT("instruction_stctg", instruction_stctg),
-> > -     VCPU_STAT("deliver_ckc", deliver_ckc),
-> > -     VCPU_STAT("deliver_cputm", deliver_cputm),
-> > -     VCPU_STAT("deliver_emergency_signal", deliver_emergency_signal),
-> > -     VCPU_STAT("deliver_external_call", deliver_external_call),
-> > -     VCPU_STAT("deliver_service_signal", deliver_service_signal),
-> > -     VCPU_STAT("deliver_virtio", deliver_virtio),
-> > -     VCPU_STAT("deliver_stop_signal", deliver_stop_signal),
-> > -     VCPU_STAT("deliver_prefix_signal", deliver_prefix_signal),
-> > -     VCPU_STAT("deliver_restart_signal", deliver_restart_signal),
-> > -     VCPU_STAT("deliver_program", deliver_program),
-> > -     VCPU_STAT("deliver_io", deliver_io),
-> > -     VCPU_STAT("deliver_machine_check", deliver_machine_check),
-> > -     VCPU_STAT("exit_wait_state", exit_wait_state),
-> > -     VCPU_STAT("inject_ckc", inject_ckc),
-> > -     VCPU_STAT("inject_cputm", inject_cputm),
-> > -     VCPU_STAT("inject_external_call", inject_external_call),
-> > -     VM_STAT("inject_float_mchk", inject_float_mchk),
-> > -     VCPU_STAT("inject_emergency_signal", inject_emergency_signal),
-> > -     VM_STAT("inject_io", inject_io),
-> > -     VCPU_STAT("inject_mchk", inject_mchk),
-> > -     VM_STAT("inject_pfault_done", inject_pfault_done),
-> > -     VCPU_STAT("inject_program", inject_program),
-> > -     VCPU_STAT("inject_restart", inject_restart),
-> > -     VM_STAT("inject_service_signal", inject_service_signal),
-> > -     VCPU_STAT("inject_set_prefix", inject_set_prefix),
-> > -     VCPU_STAT("inject_stop_signal", inject_stop_signal),
-> > -     VCPU_STAT("inject_pfault_init", inject_pfault_init),
-> > -     VM_STAT("inject_virtio", inject_virtio),
-> > -     VCPU_STAT("instruction_epsw", instruction_epsw),
-> > -     VCPU_STAT("instruction_gs", instruction_gs),
-> > -     VCPU_STAT("instruction_io_other", instruction_io_other),
-> > -     VCPU_STAT("instruction_lpsw", instruction_lpsw),
-> > -     VCPU_STAT("instruction_lpswe", instruction_lpswe),
-> > -     VCPU_STAT("instruction_pfmf", instruction_pfmf),
-> > -     VCPU_STAT("instruction_ptff", instruction_ptff),
-> > -     VCPU_STAT("instruction_stidp", instruction_stidp),
-> > -     VCPU_STAT("instruction_sck", instruction_sck),
-> > -     VCPU_STAT("instruction_sckpf", instruction_sckpf),
-> > -     VCPU_STAT("instruction_spx", instruction_spx),
-> > -     VCPU_STAT("instruction_stpx", instruction_stpx),
-> > -     VCPU_STAT("instruction_stap", instruction_stap),
-> > -     VCPU_STAT("instruction_iske", instruction_iske),
-> > -     VCPU_STAT("instruction_ri", instruction_ri),
-> > -     VCPU_STAT("instruction_rrbe", instruction_rrbe),
-> > -     VCPU_STAT("instruction_sske", instruction_sske),
-> > -     VCPU_STAT("instruction_ipte_interlock", instruction_ipte_interlock),
-> > -     VCPU_STAT("instruction_essa", instruction_essa),
-> > -     VCPU_STAT("instruction_stsi", instruction_stsi),
-> > -     VCPU_STAT("instruction_stfl", instruction_stfl),
-> > -     VCPU_STAT("instruction_tb", instruction_tb),
-> > -     VCPU_STAT("instruction_tpi", instruction_tpi),
-> > -     VCPU_STAT("instruction_tprot", instruction_tprot),
-> > -     VCPU_STAT("instruction_tsch", instruction_tsch),
-> > -     VCPU_STAT("instruction_sthyi", instruction_sthyi),
-> > -     VCPU_STAT("instruction_sie", instruction_sie),
-> > -     VCPU_STAT("instruction_sigp_sense", instruction_sigp_sense),
-> > -     VCPU_STAT("instruction_sigp_sense_running", instruction_sigp_sense_running),
-> > -     VCPU_STAT("instruction_sigp_external_call", instruction_sigp_external_call),
-> > -     VCPU_STAT("instruction_sigp_emergency", instruction_sigp_emergency),
-> > -     VCPU_STAT("instruction_sigp_cond_emergency", instruction_sigp_cond_emergency),
-> > -     VCPU_STAT("instruction_sigp_start", instruction_sigp_start),
-> > -     VCPU_STAT("instruction_sigp_stop", instruction_sigp_stop),
-> > -     VCPU_STAT("instruction_sigp_stop_store_status", instruction_sigp_stop_store_status),
-> > -     VCPU_STAT("instruction_sigp_store_status", instruction_sigp_store_status),
-> > -     VCPU_STAT("instruction_sigp_store_adtl_status", instruction_sigp_store_adtl_status),
-> > -     VCPU_STAT("instruction_sigp_set_arch", instruction_sigp_arch),
-> > -     VCPU_STAT("instruction_sigp_set_prefix", instruction_sigp_prefix),
-> > -     VCPU_STAT("instruction_sigp_restart", instruction_sigp_restart),
-> > -     VCPU_STAT("instruction_sigp_cpu_reset", instruction_sigp_cpu_reset),
-> > -     VCPU_STAT("instruction_sigp_init_cpu_reset", instruction_sigp_init_cpu_reset),
-> > -     VCPU_STAT("instruction_sigp_unknown", instruction_sigp_unknown),
-> > -     VCPU_STAT("instruction_diag_10", diagnose_10),
-> > -     VCPU_STAT("instruction_diag_44", diagnose_44),
-> > -     VCPU_STAT("instruction_diag_9c", diagnose_9c),
-> > -     VCPU_STAT("diag_9c_ignored", diagnose_9c_ignored),
-> > -     VCPU_STAT("diag_9c_forward", diagnose_9c_forward),
-> > -     VCPU_STAT("instruction_diag_258", diagnose_258),
-> > -     VCPU_STAT("instruction_diag_308", diagnose_308),
-> > -     VCPU_STAT("instruction_diag_500", diagnose_500),
-> > -     VCPU_STAT("instruction_diag_other", diagnose_other),
-> > -     { NULL }
-> > -};
-> > -
-> >   /* allow nested virtualization in KVM (if enabled by user space) */
-> >   static int nested;
-> >   module_param(nested, int, S_IRUGO);
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index abc5cc8293b3..d24055fcdc0b 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -282,53 +282,6 @@ struct _kvm_stats_header kvm_vcpu_stats_header = {
-> >       }
-> >   };
-> >
-> > -struct kvm_stats_debugfs_item debugfs_entries[] = {
-> > -     VCPU_STAT("pf_fixed", pf_fixed),
-> > -     VCPU_STAT("pf_guest", pf_guest),
-> > -     VCPU_STAT("tlb_flush", tlb_flush),
-> > -     VCPU_STAT("invlpg", invlpg),
-> > -     VCPU_STAT("exits", exits),
-> > -     VCPU_STAT("io_exits", io_exits),
-> > -     VCPU_STAT("mmio_exits", mmio_exits),
-> > -     VCPU_STAT("signal_exits", signal_exits),
-> > -     VCPU_STAT("irq_window", irq_window_exits),
-> > -     VCPU_STAT("nmi_window", nmi_window_exits),
-> > -     VCPU_STAT("halt_exits", halt_exits),
-> > -     VCPU_STAT_GENERIC("halt_successful_poll", halt_successful_poll),
-> > -     VCPU_STAT_GENERIC("halt_attempted_poll", halt_attempted_poll),
-> > -     VCPU_STAT_GENERIC("halt_poll_invalid", halt_poll_invalid),
-> > -     VCPU_STAT_GENERIC("halt_wakeup", halt_wakeup),
-> > -     VCPU_STAT("hypercalls", hypercalls),
-> > -     VCPU_STAT("request_irq", request_irq_exits),
-> > -     VCPU_STAT("irq_exits", irq_exits),
-> > -     VCPU_STAT("host_state_reload", host_state_reload),
-> > -     VCPU_STAT("fpu_reload", fpu_reload),
-> > -     VCPU_STAT("insn_emulation", insn_emulation),
-> > -     VCPU_STAT("insn_emulation_fail", insn_emulation_fail),
-> > -     VCPU_STAT("irq_injections", irq_injections),
-> > -     VCPU_STAT("nmi_injections", nmi_injections),
-> > -     VCPU_STAT("req_event", req_event),
-> > -     VCPU_STAT("l1d_flush", l1d_flush),
-> > -     VCPU_STAT_GENERIC("halt_poll_success_ns", halt_poll_success_ns),
-> > -     VCPU_STAT_GENERIC("halt_poll_fail_ns", halt_poll_fail_ns),
-> > -     VCPU_STAT("nested_run", nested_run),
-> > -     VCPU_STAT("directed_yield_attempted", directed_yield_attempted),
-> > -     VCPU_STAT("directed_yield_successful", directed_yield_successful),
-> > -     VCPU_STAT("guest_mode", guest_mode),
-> > -     VM_STAT("mmu_shadow_zapped", mmu_shadow_zapped),
-> > -     VM_STAT("mmu_pte_write", mmu_pte_write),
-> > -     VM_STAT("mmu_pde_zapped", mmu_pde_zapped),
-> > -     VM_STAT("mmu_flooded", mmu_flooded),
-> > -     VM_STAT("mmu_recycled", mmu_recycled),
-> > -     VM_STAT("mmu_cache_miss", mmu_cache_miss),
-> > -     VM_STAT("mmu_unsync", mmu_unsync),
-> > -     VM_STAT_GENERIC("remote_tlb_flush", remote_tlb_flush),
-> > -     VM_STAT("largepages", lpages, .mode = 0444),
-> > -     VM_STAT("nx_largepages_splitted", nx_lpage_splits, .mode = 0444),
-> > -     VM_STAT("max_mmu_page_hash_collisions", max_mmu_page_hash_collisions),
-> > -     { NULL }
-> > -};
-> > -
-> >   u64 __read_mostly host_xcr0;
-> >   u64 __read_mostly supported_xcr0;
-> >   EXPORT_SYMBOL_GPL(supported_xcr0);
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index 5e77f32abef5..60ddb64a134e 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -589,7 +589,6 @@ struct kvm {
-> >       struct list_head devices;
-> >       u64 manual_dirty_log_protect;
-> >       struct dentry *debugfs_dentry;
-> > -     struct kvm_stat_data **debugfs_stat_data;
-> >       struct srcu_struct srcu;
-> >       struct srcu_struct irq_srcu;
-> >       pid_t userspace_pid;
-> > @@ -1255,23 +1254,6 @@ static inline bool kvm_is_error_gpa(struct kvm *kvm, gpa_t gpa)
-> >       return kvm_is_error_hva(hva);
-> >   }
-> >
-> > -enum kvm_stat_kind {
-> > -     KVM_STAT_VM,
-> > -     KVM_STAT_VCPU,
-> > -};
-> > -
-> > -struct kvm_stat_data {
-> > -     struct kvm *kvm;
-> > -     struct kvm_stats_debugfs_item *dbgfs_item;
-> > -};
-> > -
-> > -struct kvm_stats_debugfs_item {
-> > -     const char *name;
-> > -     int offset;
-> > -     enum kvm_stat_kind kind;
-> > -     int mode;
-> > -};
-> > -
-> >   struct _kvm_stats_header {
-> >       struct kvm_stats_header header;
-> >       char id[KVM_STATS_ID_MAXLEN];
-> > @@ -1283,20 +1265,7 @@ struct _kvm_stats_desc {
-> >       char name[KVM_STATS_NAME_LEN];
-> >   };
-> >
-> > -#define KVM_DBGFS_GET_MODE(dbgfs_item)                                         \
-> > -     ((dbgfs_item)->mode ? (dbgfs_item)->mode : 0644)
-> > -
-> > -#define VM_STAT(n, x, ...)                                                  \
-> > -     { n, offsetof(struct kvm, stat.x), KVM_STAT_VM, ## __VA_ARGS__ }
-> > -#define VCPU_STAT(n, x, ...)                                                \
-> > -     { n, offsetof(struct kvm_vcpu, stat.x), KVM_STAT_VCPU, ## __VA_ARGS__ }
-> > -#define VM_STAT_GENERIC(n, x, ...)                                          \
-> > -     { n, offsetof(struct kvm, stat.generic.x), KVM_STAT_VM, ## __VA_ARGS__ }
-> > -#define VCPU_STAT_GENERIC(n, x, ...)                                        \
-> > -     { n, offsetof(struct kvm_vcpu, stat.generic.x),                        \
-> > -       KVM_STAT_VCPU, ## __VA_ARGS__ }
-> > -
-> > -#define STATS_DESC(stat, type, unit, base, exp)                             \
-> > +#define STATS_DESC(stat, type, unit, base, exp)                                     \
-> >       {                                                                      \
-> >               {                                                              \
-> >                       .flags = type | unit | base |                          \
-> > @@ -1410,7 +1379,6 @@ struct _kvm_stats_desc {
-> >       STATS_DESC_TIME_NSEC("halt_poll_success_ns"),                          \
-> >       STATS_DESC_TIME_NSEC("halt_poll_fail_ns")
-> >
-> > -extern struct kvm_stats_debugfs_item debugfs_entries[];
-> >   extern struct dentry *kvm_debugfs_dir;
-> >   extern struct _kvm_stats_header kvm_vm_stats_header;
-> >   extern struct _kvm_stats_header kvm_vcpu_stats_header;
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index f5bea71ea61c..f2da1d94057d 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -115,9 +115,6 @@ static DEFINE_PER_CPU(struct kvm_vcpu *, kvm_running_vcpu);
-> >   struct dentry *kvm_debugfs_dir;
-> >   EXPORT_SYMBOL_GPL(kvm_debugfs_dir);
-> >
-> > -static int kvm_debugfs_num_entries;
-> > -static const struct file_operations stat_fops_per_vm;
-> > -
-> >   static long kvm_vcpu_ioctl(struct file *file, unsigned int ioctl,
-> >                          unsigned long arg);
-> >   #ifdef CONFIG_KVM_COMPAT
-> > @@ -862,25 +859,15 @@ static void kvm_free_memslots(struct kvm *kvm, struct kvm_memslots *slots)
-> >
-> >   static void kvm_destroy_vm_debugfs(struct kvm *kvm)
-> >   {
-> > -     int i;
-> > -
-> >       if (!kvm->debugfs_dentry)
-> >               return;
-> >
-> >       debugfs_remove_recursive(kvm->debugfs_dentry);
-> > -
-> > -     if (kvm->debugfs_stat_data) {
-> > -             for (i = 0; i < kvm_debugfs_num_entries; i++)
-> > -                     kfree(kvm->debugfs_stat_data[i]);
-> > -             kfree(kvm->debugfs_stat_data);
-> > -     }
-> >   }
-> >
-> >   static int kvm_create_vm_debugfs(struct kvm *kvm, int fd)
-> >   {
-> >       char dir_name[ITOA_MAX_LEN * 2];
-> > -     struct kvm_stat_data *stat_data;
-> > -     struct kvm_stats_debugfs_item *p;
-> >
-> >       if (!debugfs_initialized())
-> >               return 0;
-> > @@ -888,24 +875,6 @@ static int kvm_create_vm_debugfs(struct kvm *kvm, int fd)
-> >       snprintf(dir_name, sizeof(dir_name), "%d-%d", task_pid_nr(current), fd);
-> >       kvm->debugfs_dentry = debugfs_create_dir(dir_name, kvm_debugfs_dir);
-> >
-> > -     kvm->debugfs_stat_data = kcalloc(kvm_debugfs_num_entries,
-> > -                                      sizeof(*kvm->debugfs_stat_data),
-> > -                                      GFP_KERNEL_ACCOUNT);
-> > -     if (!kvm->debugfs_stat_data)
-> > -             return -ENOMEM;
-> > -
-> > -     for (p = debugfs_entries; p->name; p++) {
-> > -             stat_data = kzalloc(sizeof(*stat_data), GFP_KERNEL_ACCOUNT);
-> > -             if (!stat_data)
-> > -                     return -ENOMEM;
-> > -
-> > -             stat_data->kvm = kvm;
-> > -             stat_data->dbgfs_item = p;
-> > -             kvm->debugfs_stat_data[p - debugfs_entries] = stat_data;
-> > -             debugfs_create_file(p->name, KVM_DBGFS_GET_MODE(p),
-> > -                                 kvm->debugfs_dentry, stat_data,
-> > -                                 &stat_fops_per_vm);
-> > -     }
-> >       return 0;
-> >   }
-> >
-> > @@ -4937,214 +4906,6 @@ struct kvm_io_device *kvm_io_bus_get_dev(struct kvm *kvm, enum kvm_bus bus_idx,
-> >   }
-> >   EXPORT_SYMBOL_GPL(kvm_io_bus_get_dev);
-> >
-> > -static int kvm_debugfs_open(struct inode *inode, struct file *file,
-> > -                        int (*get)(void *, u64 *), int (*set)(void *, u64),
-> > -                        const char *fmt)
-> > -{
-> > -     struct kvm_stat_data *stat_data = (struct kvm_stat_data *)
-> > -                                       inode->i_private;
-> > -
-> > -     /* The debugfs files are a reference to the kvm struct which
-> > -      * is still valid when kvm_destroy_vm is called.
-> > -      * To avoid the race between open and the removal of the debugfs
-> > -      * directory we test against the users count.
-> > -      */
-> > -     if (!refcount_inc_not_zero(&stat_data->kvm->users_count))
-> > -             return -ENOENT;
-> > -
-> > -     if (simple_attr_open(inode, file, get,
-> > -                 KVM_DBGFS_GET_MODE(stat_data->dbgfs_item) & 0222
-> > -                 ? set : NULL,
-> > -                 fmt)) {
-> > -             kvm_put_kvm(stat_data->kvm);
-> > -             return -ENOMEM;
-> > -     }
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -static int kvm_debugfs_release(struct inode *inode, struct file *file)
-> > -{
-> > -     struct kvm_stat_data *stat_data = (struct kvm_stat_data *)
-> > -                                       inode->i_private;
-> > -
-> > -     simple_attr_release(inode, file);
-> > -     kvm_put_kvm(stat_data->kvm);
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -static int kvm_get_stat_per_vm(struct kvm *kvm, size_t offset, u64 *val)
-> > -{
-> > -     *val = *(u64 *)((void *)kvm + offset);
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -static int kvm_clear_stat_per_vm(struct kvm *kvm, size_t offset)
-> > -{
-> > -     *(u64 *)((void *)kvm + offset) = 0;
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -static int kvm_get_stat_per_vcpu(struct kvm *kvm, size_t offset, u64 *val)
-> > -{
-> > -     int i;
-> > -     struct kvm_vcpu *vcpu;
-> > -
-> > -     *val = 0;
-> > -
-> > -     kvm_for_each_vcpu(i, vcpu, kvm)
-> > -             *val += *(u64 *)((void *)vcpu + offset);
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -static int kvm_clear_stat_per_vcpu(struct kvm *kvm, size_t offset)
-> > -{
-> > -     int i;
-> > -     struct kvm_vcpu *vcpu;
-> > -
-> > -     kvm_for_each_vcpu(i, vcpu, kvm)
-> > -             *(u64 *)((void *)vcpu + offset) = 0;
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -static int kvm_stat_data_get(void *data, u64 *val)
-> > -{
-> > -     int r = -EFAULT;
-> > -     struct kvm_stat_data *stat_data = (struct kvm_stat_data *)data;
-> > -
-> > -     switch (stat_data->dbgfs_item->kind) {
-> > -     case KVM_STAT_VM:
-> > -             r = kvm_get_stat_per_vm(stat_data->kvm,
-> > -                                     stat_data->dbgfs_item->offset, val);
-> > -             break;
-> > -     case KVM_STAT_VCPU:
-> > -             r = kvm_get_stat_per_vcpu(stat_data->kvm,
-> > -                                       stat_data->dbgfs_item->offset, val);
-> > -             break;
-> > -     }
-> > -
-> > -     return r;
-> > -}
-> > -
-> > -static int kvm_stat_data_clear(void *data, u64 val)
-> > -{
-> > -     int r = -EFAULT;
-> > -     struct kvm_stat_data *stat_data = (struct kvm_stat_data *)data;
-> > -
-> > -     if (val)
-> > -             return -EINVAL;
-> > -
-> > -     switch (stat_data->dbgfs_item->kind) {
-> > -     case KVM_STAT_VM:
-> > -             r = kvm_clear_stat_per_vm(stat_data->kvm,
-> > -                                       stat_data->dbgfs_item->offset);
-> > -             break;
-> > -     case KVM_STAT_VCPU:
-> > -             r = kvm_clear_stat_per_vcpu(stat_data->kvm,
-> > -                                         stat_data->dbgfs_item->offset);
-> > -             break;
-> > -     }
-> > -
-> > -     return r;
-> > -}
-> > -
-> > -static int kvm_stat_data_open(struct inode *inode, struct file *file)
-> > -{
-> > -     __simple_attr_check_format("%llu\n", 0ull);
-> > -     return kvm_debugfs_open(inode, file, kvm_stat_data_get,
-> > -                             kvm_stat_data_clear, "%llu\n");
-> > -}
-> > -
-> > -static const struct file_operations stat_fops_per_vm = {
-> > -     .owner = THIS_MODULE,
-> > -     .open = kvm_stat_data_open,
-> > -     .release = kvm_debugfs_release,
-> > -     .read = simple_attr_read,
-> > -     .write = simple_attr_write,
-> > -     .llseek = no_llseek,
-> > -};
-> > -
-> > -static int vm_stat_get(void *_offset, u64 *val)
-> > -{
-> > -     unsigned offset = (long)_offset;
-> > -     struct kvm *kvm;
-> > -     u64 tmp_val;
-> > -
-> > -     *val = 0;
-> > -     mutex_lock(&kvm_lock);
-> > -     list_for_each_entry(kvm, &vm_list, vm_list) {
-> > -             kvm_get_stat_per_vm(kvm, offset, &tmp_val);
-> > -             *val += tmp_val;
-> > -     }
-> > -     mutex_unlock(&kvm_lock);
-> > -     return 0;
-> > -}
-> > -
-> > -static int vm_stat_clear(void *_offset, u64 val)
-> > -{
-> > -     unsigned offset = (long)_offset;
-> > -     struct kvm *kvm;
-> > -
-> > -     if (val)
-> > -             return -EINVAL;
-> > -
-> > -     mutex_lock(&kvm_lock);
-> > -     list_for_each_entry(kvm, &vm_list, vm_list) {
-> > -             kvm_clear_stat_per_vm(kvm, offset);
-> > -     }
-> > -     mutex_unlock(&kvm_lock);
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -DEFINE_SIMPLE_ATTRIBUTE(vm_stat_fops, vm_stat_get, vm_stat_clear, "%llu\n");
-> > -
-> > -static int vcpu_stat_get(void *_offset, u64 *val)
-> > -{
-> > -     unsigned offset = (long)_offset;
-> > -     struct kvm *kvm;
-> > -     u64 tmp_val;
-> > -
-> > -     *val = 0;
-> > -     mutex_lock(&kvm_lock);
-> > -     list_for_each_entry(kvm, &vm_list, vm_list) {
-> > -             kvm_get_stat_per_vcpu(kvm, offset, &tmp_val);
-> > -             *val += tmp_val;
-> > -     }
-> > -     mutex_unlock(&kvm_lock);
-> > -     return 0;
-> > -}
-> > -
-> > -static int vcpu_stat_clear(void *_offset, u64 val)
-> > -{
-> > -     unsigned offset = (long)_offset;
-> > -     struct kvm *kvm;
-> > -
-> > -     if (val)
-> > -             return -EINVAL;
-> > -
-> > -     mutex_lock(&kvm_lock);
-> > -     list_for_each_entry(kvm, &vm_list, vm_list) {
-> > -             kvm_clear_stat_per_vcpu(kvm, offset);
-> > -     }
-> > -     mutex_unlock(&kvm_lock);
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -DEFINE_SIMPLE_ATTRIBUTE(vcpu_stat_fops, vcpu_stat_get, vcpu_stat_clear,
-> > -                     "%llu\n");
-> > -
-> > -static const struct file_operations *stat_fops[] = {
-> > -     [KVM_STAT_VCPU] = &vcpu_stat_fops,
-> > -     [KVM_STAT_VM]   = &vm_stat_fops,
-> > -};
-> > -
-> >   static void kvm_uevent_notify_change(unsigned int type, struct kvm *kvm)
-> >   {
-> >       struct kobj_uevent_env *env;
-> > @@ -5179,16 +4940,6 @@ static void kvm_uevent_notify_change(unsigned int type, struct kvm *kvm)
-> >       }
-> >       add_uevent_var(env, "PID=%d", kvm->userspace_pid);
-> >
-> > -     if (!IS_ERR_OR_NULL(kvm->debugfs_dentry)) {
-> > -             char *tmp, *p = kmalloc(PATH_MAX, GFP_KERNEL_ACCOUNT);
-> > -
-> > -             if (p) {
-> > -                     tmp = dentry_path_raw(kvm->debugfs_dentry, p, PATH_MAX);
-> > -                     if (!IS_ERR(tmp))
-> > -                             add_uevent_var(env, "STATS_PATH=%s", tmp);
-> > -                     kfree(p);
-> > -             }
-> > -     }
-> >       /* no need for checks, since we are adding at most only 5 keys */
-> >       env->envp[env->envp_idx++] = NULL;
-> >       kobject_uevent_env(&kvm_dev.this_device->kobj, KOBJ_CHANGE, env->envp);
-> > @@ -5197,16 +4948,7 @@ static void kvm_uevent_notify_change(unsigned int type, struct kvm *kvm)
-> >
-> >   static void kvm_init_debug(void)
-> >   {
-> > -     struct kvm_stats_debugfs_item *p;
-> > -
-> >       kvm_debugfs_dir = debugfs_create_dir("kvm", NULL);
-> > -
-> > -     kvm_debugfs_num_entries = 0;
-> > -     for (p = debugfs_entries; p->name; ++p, kvm_debugfs_num_entries++) {
-> > -             debugfs_create_file(p->name, KVM_DBGFS_GET_MODE(p),
-> > -                                 kvm_debugfs_dir, (void *)(long)p->offset,
-> > -                                 stat_fops[p->kind]);
-> > -     }
-> >   }
-> >
-> >   static int kvm_suspend(void)
-> >
+On 2021/6/10 下午11:30, Paul Cercueil wrote:
+> Hi Zhou,
+>
+> Le sam., juin 5 2021 at 00:31:46 +0800, 周琰杰 (Zhou Yanjie) 
+> <zhouyanjie@wanyeetech.com> a écrit :
+>> The OST in Ingenic XBurst®2 SoCs such as X2000 and X2100, has a global
+>> timer and two or four percpu timers, add support for the percpu timers.
+>>
+>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>> ---
+>>
+>> Notes:
+>>     v1->v2:
+>>     1.Fix bug in ingenic_ost_global_timer_recalc_rate().
+>>     2.Add a backpointer to the ingenic_ost structure.
+>>     3.Remove unnecessary spinlock.
+>>     4.Use "ret = ost->irq" instead "ret = -EINVAL".
+>>     5.Use "%d" instead "%x" in pr_crit().
+>
+> I can't shake the feeling that you are doing way too many things in 
+> one single commit.
+>
+> From what I can see, this commit can be split in 4 patches:
+>
+> - Fix the "%x" in pr_crit(),
+> - Add the global timer support to the X1000,
+> - Add "ingenic_ost_timer" and update the code to use it,
+> - Finally add X2000 support.
+>
+>
+
+Sure.
+
+
+>
+>>  drivers/clocksource/ingenic-sysost.c | 315 
+>> ++++++++++++++++++++++++++---------
+>>  1 file changed, 236 insertions(+), 79 deletions(-)
+>>
+>> diff --git a/drivers/clocksource/ingenic-sysost.c 
+>> b/drivers/clocksource/ingenic-sysost.c
+>> index a129840..6f080e4 100644
+>> --- a/drivers/clocksource/ingenic-sysost.c
+>> +++ b/drivers/clocksource/ingenic-sysost.c
+>> @@ -4,6 +4,7 @@
+>>   * Copyright (c) 2020 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>   */
+>>
+>> +#include <linux/bitfield.h>
+>>  #include <linux/bitops.h>
+>>  #include <linux/clk.h>
+>>  #include <linux/clk-provider.h>
+>> @@ -13,6 +14,8 @@
+>>  #include <linux/mfd/syscon.h>
+>>  #include <linux/of_address.h>
+>>  #include <linux/of_irq.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/overflow.h>
+>>  #include <linux/sched_clock.h>
+>>  #include <linux/slab.h>
+>>  #include <linux/syscore_ops.h>
+>> @@ -21,10 +24,14 @@
+>>
+>>  /* OST register offsets */
+>>  #define OST_REG_OSTCCR            0x00
+>> +#define OST_REG_OSTER            0x04
+>>  #define OST_REG_OSTCR            0x08
+>>  #define OST_REG_OSTFR            0x0c
+>> +#define OST_REG_OSTCNTH            0x0c
+>>  #define OST_REG_OSTMR            0x10
+>> +#define OST_REG_OSTCNTL            0x10
+>>  #define OST_REG_OST1DFR            0x14
+>> +#define OST_REG_OSTCNTB            0x14
+>>  #define OST_REG_OST1CNT            0x18
+>>  #define OST_REG_OST2CNTL        0x20
+>>  #define OST_REG_OSTCNT2HBUF        0x24
+>> @@ -55,13 +62,23 @@
+>>  #define OSTECR_OST1ENC            BIT(0)
+>>  #define OSTECR_OST2ENC            BIT(1)
+>>
+>> +enum ingenic_ost_version {
+>> +    ID_X1000,
+>> +    ID_X2000,
+>> +};
+>> +
+>>  struct ingenic_soc_info {
+>> +    enum ingenic_ost_version version;
+>> +    const struct ingenic_ost_clk_info *clk_info;
+>> +
+>>      unsigned int num_channels;
+>> +    unsigned int base_offset;
+>>  };
+>>
+>>  struct ingenic_ost_clk_info {
+>>      struct clk_init_data init_data;
+>> -    u8 ostccr_reg;
+>> +    unsigned int idx;
+>> +    u32 ostcntl_reg;
+>>  };
+>>
+>>  struct ingenic_ost_clk {
+>> @@ -71,15 +88,27 @@ struct ingenic_ost_clk {
+>>      const struct ingenic_ost_clk_info *info;
+>>  };
+>>
+>> +struct ingenic_ost_timer {
+>> +    void __iomem *base;
+>> +    unsigned int cpu;
+>> +    unsigned int channel;
+>> +    struct clock_event_device cevt;
+>> +    struct ingenic_ost *ost;
+>> +    struct clk *clk;
+>> +    char name[20];
+>> +};
+>> +
+>>  struct ingenic_ost {
+>>      void __iomem *base;
+>>      const struct ingenic_soc_info *soc_info;
+>> -    struct clk *clk, *percpu_timer_clk, *global_timer_clk;
+>> -    struct clock_event_device cevt;
+>> +    struct clk *clk, *global_timer_clk;
+>> +    struct device_node *np;
+>>      struct clocksource cs;
+>> -    char name[20];
+>>
+>>      struct clk_hw_onecell_data *clocks;
+>> +    struct ingenic_ost_timer __percpu *timers;
+>> +
+>> +    int irq;
+>>  };
+>>
+>>  static struct ingenic_ost *ingenic_ost;
+>> @@ -94,11 +123,12 @@ static unsigned long 
+>> ingenic_ost_percpu_timer_recalc_rate(struct clk_hw *hw,
+>>  {
+>>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
+>>      const struct ingenic_ost_clk_info *info = ost_clk->info;
+>> +    struct ingenic_ost_timer *timer = 
+>> per_cpu_ptr(ost_clk->ost->timers, info->idx);
+>>      unsigned int prescale;
+>>
+>> -    prescale = readl(ost_clk->ost->base + info->ostccr_reg);
+>> +    prescale = readl(timer->base + OST_REG_OSTCCR);
+>>
+>> -    prescale = (prescale & OSTCCR_PRESCALE1_MASK) >> 
+>> OSTCCR_PRESCALE1_LSB;
+>> +    prescale = FIELD_GET(OSTCCR_PRESCALE1_MASK, prescale);
+>>
+>>      return parent_rate >> (prescale * 2);
+>>  }
+>> @@ -108,11 +138,15 @@ static unsigned long 
+>> ingenic_ost_global_timer_recalc_rate(struct clk_hw *hw,
+>>  {
+>>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
+>>      const struct ingenic_ost_clk_info *info = ost_clk->info;
+>> +    struct ingenic_ost_timer *timer = 
+>> per_cpu_ptr(ost_clk->ost->timers, info->idx);
+>>      unsigned int prescale;
+>>
+>> -    prescale = readl(ost_clk->ost->base + info->ostccr_reg);
+>> +    prescale = readl(timer->base + OST_REG_OSTCCR);
+>>
+>> -    prescale = (prescale & OSTCCR_PRESCALE2_MASK) >> 
+>> OSTCCR_PRESCALE2_LSB;
+>> +    if (ost_clk->ost->soc_info->version >= ID_X2000)
+>> +        prescale = FIELD_GET(OSTCCR_PRESCALE1_MASK, prescale);
+>> +    else
+>> +        prescale = FIELD_GET(OSTCCR_PRESCALE2_MASK, prescale);
+>>
+>>      return parent_rate >> (prescale * 2);
+>>  }
+>> @@ -147,12 +181,13 @@ static int 
+>> ingenic_ost_percpu_timer_set_rate(struct clk_hw *hw, unsigned long re
+>>  {
+>>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
+>>      const struct ingenic_ost_clk_info *info = ost_clk->info;
+>> +    struct ingenic_ost_timer *timer = 
+>> per_cpu_ptr(ost_clk->ost->timers, info->idx);
+>>      u8 prescale = ingenic_ost_get_prescale(parent_rate, req_rate);
+>>      int val;
+>>
+>> -    val = readl(ost_clk->ost->base + info->ostccr_reg);
+>> +    val = readl(timer->base + OST_REG_OSTCCR);
+>>      val = (val & ~OSTCCR_PRESCALE1_MASK) | (prescale << 
+>> OSTCCR_PRESCALE1_LSB);
+>> -    writel(val, ost_clk->ost->base + info->ostccr_reg);
+>> +    writel(val, timer->base + OST_REG_OSTCCR);
+>>
+>>      return 0;
+>>  }
+>> @@ -162,12 +197,18 @@ static int 
+>> ingenic_ost_global_timer_set_rate(struct clk_hw *hw, unsigned long re
+>>  {
+>>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
+>>      const struct ingenic_ost_clk_info *info = ost_clk->info;
+>> +    struct ingenic_ost_timer *timer = 
+>> per_cpu_ptr(ost_clk->ost->timers, info->idx);
+>>      u8 prescale = ingenic_ost_get_prescale(parent_rate, req_rate);
+>>      int val;
+>>
+>> -    val = readl(ost_clk->ost->base + info->ostccr_reg);
+>> -    val = (val & ~OSTCCR_PRESCALE2_MASK) | (prescale << 
+>> OSTCCR_PRESCALE2_LSB);
+>> -    writel(val, ost_clk->ost->base + info->ostccr_reg);
+>> +    val = readl(timer->base + OST_REG_OSTCCR);
+>> +
+>> +    if (ost_clk->ost->soc_info->version >= ID_X2000)
+>> +        val = (val & ~OSTCCR_PRESCALE1_MASK) | (prescale << 
+>> OSTCCR_PRESCALE1_LSB);
+>> +    else
+>> +        val = (val & ~OSTCCR_PRESCALE2_MASK) | (prescale << 
+>> OSTCCR_PRESCALE2_LSB);
+>> +
+>> +    writel(val, timer->base + OST_REG_OSTCCR);
+>>
+>>      return 0;
+>>  }
+>> @@ -195,7 +236,42 @@ static const struct ingenic_ost_clk_info 
+>> x1000_ost_clk_info[] = {
+>>              .ops = &ingenic_ost_percpu_timer_ops,
+>>              .flags = CLK_SET_RATE_UNGATE,
+>>          },
+>> -        .ostccr_reg = OST_REG_OSTCCR,
+>> +        .idx = 0,
+>> +    },
+>> +
+>> +    [OST_CLK_GLOBAL_TIMER] = {
+>> +        .init_data = {
+>> +            .name = "global timer",
+>> +            .parent_names = ingenic_ost_clk_parents,
+>> +            .num_parents = ARRAY_SIZE(ingenic_ost_clk_parents),
+>> +            .ops = &ingenic_ost_global_timer_ops,
+>> +            .flags = CLK_SET_RATE_UNGATE,
+>> +        },
+>> +        .ostcntl_reg = OST_REG_OST2CNTL,
+>> +    },
+>> +};
+>> +
+>> +static const struct ingenic_ost_clk_info x2000_ost_clk_info[] = {
+>> +    [OST_CLK_PERCPU_TIMER0] = {
+>> +        .init_data = {
+>> +            .name = "percpu timer0",
+>> +            .parent_names = ingenic_ost_clk_parents,
+>> +            .num_parents = ARRAY_SIZE(ingenic_ost_clk_parents),
+>> +            .ops = &ingenic_ost_percpu_timer_ops,
+>> +            .flags = CLK_SET_RATE_UNGATE,
+>> +        },
+>> +        .idx = 0,
+>> +    },
+>> +
+>> +    [OST_CLK_PERCPU_TIMER1] = {
+>> +        .init_data = {
+>> +            .name = "percpu timer1",
+>> +            .parent_names = ingenic_ost_clk_parents,
+>> +            .num_parents = ARRAY_SIZE(ingenic_ost_clk_parents),
+>> +            .ops = &ingenic_ost_percpu_timer_ops,
+>> +            .flags = CLK_SET_RATE_UNGATE,
+>> +        },
+>> +        .idx = 1,
+>>      },
+>>
+>>      [OST_CLK_GLOBAL_TIMER] = {
+>> @@ -206,7 +282,7 @@ static const struct ingenic_ost_clk_info 
+>> x1000_ost_clk_info[] = {
+>>              .ops = &ingenic_ost_global_timer_ops,
+>>              .flags = CLK_SET_RATE_UNGATE,
+>>          },
+>> -        .ostccr_reg = OST_REG_OSTCCR,
+>> +        .ostcntl_reg = OST_REG_OSTCNTL,
+>>      },
+>>  };
+>>
+>> @@ -215,7 +291,7 @@ static u64 notrace 
+>> ingenic_ost_global_timer_read_cntl(void)
+>>      struct ingenic_ost *ost = ingenic_ost;
+>>      unsigned int count;
+>>
+>> -    count = readl(ost->base + OST_REG_OST2CNTL);
+>> +    count = readl(ost->base + ost->soc_info->clk_info->ostcntl_reg);
+>>
+>>      return count;
+>>  }
+>> @@ -225,16 +301,21 @@ static u64 notrace 
+>> ingenic_ost_clocksource_read(struct clocksource *cs)
+>>      return ingenic_ost_global_timer_read_cntl();
+>>  }
+>>
+>> -static inline struct ingenic_ost *to_ingenic_ost(struct 
+>> clock_event_device *evt)
+>> +static inline struct ingenic_ost_timer *
+>> +to_ingenic_ost_timer(struct clock_event_device *evt)
+>>  {
+>> -    return container_of(evt, struct ingenic_ost, cevt);
+>> +    return container_of(evt, struct ingenic_ost_timer, cevt);
+>>  }
+>>
+>>  static int ingenic_ost_cevt_set_state_shutdown(struct 
+>> clock_event_device *evt)
+>>  {
+>> -    struct ingenic_ost *ost = to_ingenic_ost(evt);
+>> +    struct ingenic_ost_timer *timer = to_ingenic_ost_timer(evt);
+>> +    struct ingenic_ost *ost = timer->ost;
+>>
+>> -    writel(OSTECR_OST1ENC, ost->base + OST_REG_OSTECR);
+>> +    if (ost->soc_info->version >= ID_X2000)
+>> +        writel(0, timer->base + OST_REG_OSTER);
+>> +    else
+>> +        writel(OSTECR_OST1ENC, timer->base + OST_REG_OSTECR);
+>>
+>>      return 0;
+>>  }
+>> @@ -242,26 +323,34 @@ static int 
+>> ingenic_ost_cevt_set_state_shutdown(struct clock_event_device *evt)
+>>  static int ingenic_ost_cevt_set_next(unsigned long next,
+>>                       struct clock_event_device *evt)
+>>  {
+>> -    struct ingenic_ost *ost = to_ingenic_ost(evt);
+>> -
+>> -    writel((u32)~OSTFR_FFLAG, ost->base + OST_REG_OSTFR);
+>> -    writel(next, ost->base + OST_REG_OST1DFR);
+>> -    writel(OSTCR_OST1CLR, ost->base + OST_REG_OSTCR);
+>> -    writel(OSTESR_OST1ENS, ost->base + OST_REG_OSTESR);
+>> -    writel((u32)~OSTMR_FMASK, ost->base + OST_REG_OSTMR);
+>> +    struct ingenic_ost_timer *timer = to_ingenic_ost_timer(evt);
+>> +    struct ingenic_ost *ost = timer->ost;
+>> +
+>> +    writel((u32)~OSTFR_FFLAG, timer->base + OST_REG_OSTFR);
+>> +    writel(next, timer->base + OST_REG_OST1DFR);
+>> +    writel(OSTCR_OST1CLR, timer->base + OST_REG_OSTCR);
+>> +
+>> +    if (ost->soc_info->version >= ID_X2000) {
+>> +        writel(OSTESR_OST1ENS, timer->base + OST_REG_OSTER);
+>> +    } else {
+>> +        writel(OSTESR_OST1ENS, timer->base + OST_REG_OSTESR);
+>> +        writel((u32)~OSTMR_FMASK, timer->base + OST_REG_OSTMR);
+>> +    }
+>>
+>>      return 0;
+>>  }
+>>
+>>  static irqreturn_t ingenic_ost_cevt_cb(int irq, void *dev_id)
+>>  {
+>> -    struct clock_event_device *evt = dev_id;
+>> -    struct ingenic_ost *ost = to_ingenic_ost(evt);
+>> +    struct ingenic_ost_timer *timer = dev_id;
+>> +    struct ingenic_ost *ost = timer->ost;
+>>
+>> -    writel(OSTECR_OST1ENC, ost->base + OST_REG_OSTECR);
+>> +    if (ost->soc_info->version >= ID_X2000)
+>> +        writel(0, timer->base + OST_REG_OSTER);
+>> +    else
+>> +        writel(OSTECR_OST1ENC, timer->base + OST_REG_OSTECR);
+>>
+>> -    if (evt->event_handler)
+>> -        evt->event_handler(evt);
+>> +    timer->cevt.event_handler(&timer->cevt);
+>>
+>>      return IRQ_HANDLED;
+>>  }
+>> @@ -271,6 +360,7 @@ static int __init 
+>> ingenic_ost_register_clock(struct ingenic_ost *ost,
+>>              struct clk_hw_onecell_data *clocks)
+>>  {
+>>      struct ingenic_ost_clk *ost_clk;
+>> +    struct ingenic_ost_timer *timer = per_cpu_ptr(ost->timers, 
+>> info->idx);
+>>      int val, err;
+>>
+>>      ost_clk = kzalloc(sizeof(*ost_clk), GFP_KERNEL);
+>> @@ -283,9 +373,9 @@ static int __init 
+>> ingenic_ost_register_clock(struct ingenic_ost *ost,
+>>      ost_clk->ost = ost;
+>>
+>>      /* Reset clock divider */
+>> -    val = readl(ost->base + info->ostccr_reg);
+>> -    val &= ~(OSTCCR_PRESCALE1_MASK | OSTCCR_PRESCALE2_MASK);
+>> -    writel(val, ost->base + info->ostccr_reg);
+>> +    val = readl(timer->base + OST_REG_OSTCCR);
+>> +    val &= ~(OSTCCR_PRESCALE1_MASK);
+>> +    writel(val, timer->base + OST_REG_OSTCCR);
+>>
+>>      err = clk_hw_register(NULL, &ost_clk->hw);
+>>      if (err) {
+>> @@ -309,57 +399,51 @@ static struct clk * __init 
+>> ingenic_ost_get_clock(struct device_node *np, int id)
+>>      return of_clk_get_from_provider(&args);
+>>  }
+>>
+>> -static int __init ingenic_ost_percpu_timer_init(struct device_node *np,
+>> -                     struct ingenic_ost *ost)
+>> +static int __init ingenic_ost_setup_cevt(unsigned int cpu)
+>>  {
+>> -    unsigned int timer_virq, channel = OST_CLK_PERCPU_TIMER;
+>> +    struct ingenic_ost *ost = ingenic_ost;
+>> +    struct ingenic_ost_timer *timer = this_cpu_ptr(ost->timers);
+>>      unsigned long rate;
+>>      int err;
+>>
+>> -    ost->percpu_timer_clk = ingenic_ost_get_clock(np, channel);
+>> -    if (IS_ERR(ost->percpu_timer_clk))
+>> -        return PTR_ERR(ost->percpu_timer_clk);
+>> +    timer->clk = ingenic_ost_get_clock(ost->np, timer->channel);
+>> +    if (IS_ERR(timer->clk))
+>> +        return PTR_ERR(timer->clk);
+>>
+>> -    err = clk_prepare_enable(ost->percpu_timer_clk);
+>> +    err = clk_prepare_enable(timer->clk);
+>>      if (err)
+>>          goto err_clk_put;
+>>
+>> -    rate = clk_get_rate(ost->percpu_timer_clk);
+>> +    rate = clk_get_rate(timer->clk);
+>>      if (!rate) {
+>>          err = -EINVAL;
+>>          goto err_clk_disable;
+>>      }
+>>
+>> -    timer_virq = of_irq_get(np, 0);
+>> -    if (!timer_virq) {
+>> -        err = -EINVAL;
+>> -        goto err_clk_disable;
+>> -    }
+>> +    snprintf(timer->name, sizeof(timer->name), "OST percpu timer%u", 
+>> cpu);
+>>
+>> -    snprintf(ost->name, sizeof(ost->name), "OST percpu timer");
+>> +    /* Unmask full comparison match interrupt */
+>> +    writel((u32)~OSTMR_FMASK, timer->base + OST_REG_OSTMR);
+>>
+>> -    err = request_irq(timer_virq, ingenic_ost_cevt_cb, IRQF_TIMER,
+>> -              ost->name, &ost->cevt);
+>> -    if (err)
+>> -        goto err_irq_dispose_mapping;
+>> +    timer->cpu = smp_processor_id();
+>> +    timer->cevt.cpumask = cpumask_of(smp_processor_id());
+>> +    timer->cevt.features = CLOCK_EVT_FEAT_ONESHOT;
+>> +    timer->cevt.name = timer->name;
+>> +    timer->cevt.rating = 400;
+>> +    timer->cevt.set_state_shutdown = 
+>> ingenic_ost_cevt_set_state_shutdown;
+>> +    timer->cevt.set_next_event = ingenic_ost_cevt_set_next;
+>>
+>> -    ost->cevt.cpumask = cpumask_of(smp_processor_id());
+>> -    ost->cevt.features = CLOCK_EVT_FEAT_ONESHOT;
+>> -    ost->cevt.name = ost->name;
+>> -    ost->cevt.rating = 400;
+>> -    ost->cevt.set_state_shutdown = ingenic_ost_cevt_set_state_shutdown;
+>> -    ost->cevt.set_next_event = ingenic_ost_cevt_set_next;
+>> +    clockevents_config_and_register(&timer->cevt, rate, 4, 0xffffffff);
+>>
+>> -    clockevents_config_and_register(&ost->cevt, rate, 4, 0xffffffff);
+>> +    if (ost->soc_info->version >= ID_X2000)
+>> +        enable_percpu_irq(ost->irq, IRQ_TYPE_NONE);
+>>
+>>      return 0;
+>>
+>> -err_irq_dispose_mapping:
+>> -    irq_dispose_mapping(timer_virq);
+>>  err_clk_disable:
+>> -    clk_disable_unprepare(ost->percpu_timer_clk);
+>> +    clk_disable_unprepare(timer->clk);
+>>  err_clk_put:
+>> -    clk_put(ost->percpu_timer_clk);
+>> +    clk_put(timer->clk);
+>>      return err;
+>>  }
+>>
+>> @@ -385,11 +469,14 @@ static int __init 
+>> ingenic_ost_global_timer_init(struct device_node *np,
+>>          goto err_clk_disable;
+>>      }
+>>
+>> -    /* Clear counter CNT registers */
+>> -    writel(OSTCR_OST2CLR, ost->base + OST_REG_OSTCR);
+>> -
+>> -    /* Enable OST channel */
+>> -    writel(OSTESR_OST2ENS, ost->base + OST_REG_OSTESR);
+>> +    /* Clear counter CNT registers and enable OST channel */
+>> +    if (ost->soc_info->version >= ID_X2000) {
+>> +        writel(OSTCR_OST1CLR, ost->base + OST_REG_OSTCR);
+>> +        writel(OSTESR_OST1ENS, ost->base + OST_REG_OSTER);
+>> +    } else {
+>> +        writel(OSTCR_OST2CLR, ost->base + OST_REG_OSTCR);
+>> +        writel(OSTESR_OST2ENS, ost->base + OST_REG_OSTESR);
+>> +    }
+>>
+>>      cs->name = "ingenic-ost";
+>>      cs->rating = 400;
+>> @@ -411,18 +498,33 @@ static int __init 
+>> ingenic_ost_global_timer_init(struct device_node *np,
+>>  }
+>>
+>>  static const struct ingenic_soc_info x1000_soc_info = {
+>> +    .version = ID_X1000,
+>> +    .clk_info = x1000_ost_clk_info,
+>> +
+>>      .num_channels = 2,
+>>  };
+>>
+>> +static const struct ingenic_soc_info x2000_soc_info = {
+>> +    .version = ID_X2000,
+>> +    .clk_info = x2000_ost_clk_info,
+>> +
+>> +    .num_channels = 3,
+>> +    .base_offset = 0x100,
+>> +};
+>> +
+>>  static const struct of_device_id __maybe_unused 
+>> ingenic_ost_of_matches[] __initconst = {
+>>      { .compatible = "ingenic,x1000-ost", .data = &x1000_soc_info },
+>> +    { .compatible = "ingenic,x2000-ost", .data = &x2000_soc_info },
+>>      { /* sentinel */ }
+>>  };
+>>
+>>  static int __init ingenic_ost_probe(struct device_node *np)
+>>  {
+>>      const struct of_device_id *id = 
+>> of_match_node(ingenic_ost_of_matches, np);
+>> +    struct ingenic_ost_timer *timer;
+>>      struct ingenic_ost *ost;
+>> +    void __iomem *base;
+>> +    unsigned int cpu;
+>>      unsigned int i;
+>>      int ret;
+>>
+>> @@ -430,18 +532,43 @@ static int __init ingenic_ost_probe(struct 
+>> device_node *np)
+>>      if (!ost)
+>>          return -ENOMEM;
+>>
+>> +    ost->timers = alloc_percpu(struct ingenic_ost_timer);
+>> +    if (!ost->timers) {
+>> +        ret = -ENOMEM;
+>> +        goto err_free_ost;
+>> +    }
+>> +
+>> +    ost->np = np;
+>> +    ost->soc_info = id->data;
+>> +
+>>      ost->base = of_io_request_and_map(np, 0, of_node_full_name(np));
+>>      if (IS_ERR(ost->base)) {
+>>          pr_err("%s: Failed to map OST registers\n", __func__);
+>>          ret = PTR_ERR(ost->base);
+>> -        goto err_free_ost;
+>> +        goto err_free_timers;
+>> +    }
+>> +
+>> +    if (ost->soc_info->version >= ID_X2000) {
+>> +        base = of_io_request_and_map(np, 1, of_node_full_name(np));
+>> +        if (IS_ERR(base)) {
+>> +            pr_err("%s: Failed to map OST registers\n", __func__);
+>> +            ret = PTR_ERR(base);
+>> +            goto err_free_timers;
+>> +        }
+>> +    }
+>
+> The DT documentation only mentions one memory resource. Here, you map 
+> a second one, which is not used anywhere. I'm really confused about 
+> what you're trying to do here.
+>
+
+X2000 and X2100 divide the OST into two parts. The global timer is
+the first part, which is still located at the address of 0x12000000,
+and the percpu timers are the second part, the starting address is
+0x12100000, and each timer is offset by 0x100 (percpu timer0 is at
+0x12100000, percpu timer1 is at 0x12100100, percpu timer2 is at
+0x12100200, percpu timer3 is at 0x12100300). This one is used in
+line 593 of the code.
+
+>> +
+>> +    ost->irq = irq_of_parse_and_map(np, 0);
+>> +    if (ost->irq < 0) {
+>> +        pr_crit("%s: Cannot to get OST IRQ\n", __func__);
+>> +        ret = ost->irq;
+>> +        goto err_free_timers;
+>>      }
+>>
+>>      ost->clk = of_clk_get_by_name(np, "ost");
+>>      if (IS_ERR(ost->clk)) {
+>> -        ret = PTR_ERR(ost->clk);
+>>          pr_crit("%s: Cannot get OST clock\n", __func__);
+>> -        goto err_free_ost;
+>> +        ret = PTR_ERR(ost->clk);
+>> +        goto err_free_timers;
+>>      }
+>>
+>>      ret = clk_prepare_enable(ost->clk);
+>> @@ -450,8 +577,6 @@ static int __init ingenic_ost_probe(struct 
+>> device_node *np)
+>>          goto err_put_clk;
+>>      }
+>>
+>> -    ost->soc_info = id->data;
+>> -
+>>      ost->clocks = kzalloc(struct_size(ost->clocks, hws, 
+>> ost->soc_info->num_channels),
+>>                    GFP_KERNEL);
+>>      if (!ost->clocks) {
+>> @@ -461,8 +586,21 @@ static int __init ingenic_ost_probe(struct 
+>> device_node *np)
+>>
+>>      ost->clocks->num = ost->soc_info->num_channels;
+>>
+>> -    for (i = 0; i < ost->clocks->num; i++) {
+>> -        ret = ingenic_ost_register_clock(ost, i, 
+>> &x1000_ost_clk_info[i], ost->clocks);
+>> +    for (cpu = 0; cpu < num_possible_cpus(); cpu++) {
+>> +        timer = per_cpu_ptr(ost->timers, cpu);
+>> +
+>> +        if (ost->soc_info->version >= ID_X2000)
+>> +            timer->base = base + ost->soc_info->base_offset * cpu;
+>> +        else
+>> +            timer->base = ost->base;
+>> +
+>> +        timer->ost = ost;
+>> +        timer->cpu = cpu;
+>> +        timer->channel = OST_CLK_PERCPU_TIMER + cpu;
+>> +    }
+>> +
+>> +    for (i = 0; i < num_possible_cpus() + 1; i++) {
+>> +        ret = ingenic_ost_register_clock(ost, i, 
+>> &ost->soc_info->clk_info[i], ost->clocks);
+>>          if (ret) {
+>>              pr_crit("%s: Cannot register clock %d\n", __func__, i);
+>>              goto err_unregister_ost_clocks;
+>> @@ -488,6 +626,8 @@ static int __init ingenic_ost_probe(struct 
+>> device_node *np)
+>>      clk_disable_unprepare(ost->clk);
+>>  err_put_clk:
+>>      clk_put(ost->clk);
+>> +err_free_timers:
+>> +    free_percpu(ost->timers);
+>>  err_free_ost:
+>>      kfree(ost);
+>>      return ret;
+>> @@ -513,13 +653,29 @@ static int __init ingenic_ost_init(struct 
+>> device_node *np)
+>>
+>>      ret = ingenic_ost_global_timer_init(np, ost);
+>>      if (ret) {
+>> -        pr_crit("%s: Unable to init global timer: %x\n", __func__, 
+>> ret);
+>> +        pr_crit("%s: Unable to init global timer: %d\n", __func__, 
+>> ret);
+>
+> This is a fix, so it needs to be a separate commit with a Fixes: tag.
+
+
+Sure.
+
+
+Thanks and best regards!
+
+
+>
+> Cheers,
+> -Paul
+>
+>>          goto err_free_ingenic_ost;
+>>      }
+>>
+>> -    ret = ingenic_ost_percpu_timer_init(np, ost);
+>> -    if (ret)
+>> +    if (ost->soc_info->version >= ID_X2000)
+>> +        ret = request_percpu_irq(ost->irq, ingenic_ost_cevt_cb,
+>> +                  "OST percpu timer", ost->timers);
+>> +    else
+>> +        ret = request_irq(ost->irq, ingenic_ost_cevt_cb, IRQF_TIMER,
+>> +                  "OST percpu timer", ost->timers);
+>> +
+>> +    if (ret) {
+>> +        pr_crit("%s: Unable to request percpu IRQ: %d\n", __func__, 
+>> ret);
+>> +        goto err_ost_global_timer_cleanup;
+>> +    }
+>> +
+>> +    /* Setup clock events on each CPU core */
+>> +    ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "Ingenic XBurst: 
+>> online",
+>> +                ingenic_ost_setup_cevt, NULL);
+>> +    if (ret < 0) {
+>> +        pr_crit("%s: Unable to init percpu timers: %d\n", __func__, 
+>> ret);
+>>          goto err_ost_global_timer_cleanup;
+>> +    }
+>>
+>>      /* Register the sched_clock at the end as there's no way to undo 
+>> it */
+>>      rate = clk_get_rate(ost->global_timer_clk);
+>> @@ -537,3 +693,4 @@ static int __init ingenic_ost_init(struct 
+>> device_node *np)
+>>  }
+>>
+>>  TIMER_OF_DECLARE(x1000_ost,  "ingenic,x1000-ost", ingenic_ost_init);
+>> +TIMER_OF_DECLARE(x2000_ost,  "ingenic,x2000-ost", ingenic_ost_init);
+>> -- 
+>> 2.7.4
+>>
 >
