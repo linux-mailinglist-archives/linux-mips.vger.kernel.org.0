@@ -2,804 +2,272 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 560B33A4F8A
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Jun 2021 17:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D9C3A516E
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Jun 2021 02:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbhFLPur convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sat, 12 Jun 2021 11:50:47 -0400
-Received: from out28-195.mail.aliyun.com ([115.124.28.195]:34485 "EHLO
-        out28-195.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbhFLPuo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Jun 2021 11:50:44 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0707095-0.0109663-0.918324;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047212;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.KRRi5Ag_1623512919;
-Received: from zhouyanjie-virtual-machine(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KRRi5Ag_1623512919)
-          by smtp.aliyun-inc.com(10.147.42.16);
-          Sat, 12 Jun 2021 23:48:40 +0800
-Date:   Sat, 12 Jun 2021 23:48:38 +0800
-From:   =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-To:     Paul Cercueil <paul@opendingux.net>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com
-Subject: Re: [PATCH v2 2/2] clocksource: Ingenic: Add SMP/SMT support for
- sysost driver.
-Message-ID: <20210612234243.69b68d7e@zhouyanjie-virtual-machine>
-In-Reply-To: <GPNJUQ.ZA1NJ09Y47YY2@opendingux.net>
-References: <1622824306-30987-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1622824306-30987-3-git-send-email-zhouyanjie@wanyeetech.com>
- <8ESHUQ.VB8PTX94HN193@crapouillou.net>
- <28c290db-d382-ac96-62c9-cf38fd367714@wanyeetech.com>
- <GPNJUQ.ZA1NJ09Y47YY2@opendingux.net>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
+        id S229985AbhFMAK0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Jun 2021 20:10:26 -0400
+Received: from mail-io1-f50.google.com ([209.85.166.50]:42557 "EHLO
+        mail-io1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229753AbhFMAKZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Jun 2021 20:10:25 -0400
+Received: by mail-io1-f50.google.com with SMTP id s26so6539940ioe.9;
+        Sat, 12 Jun 2021 17:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GSKrcPGu335cHezrGXttTKy9INtNuY4zhBjhpk4ZArA=;
+        b=LQVahZzSxCnwoLa2Zkiljbv0dXpSrxXVuvY3BGQmnqL7Yt0c38UtA4oYjD1tTWGqq2
+         Z21uzb+fEasKtlWs40v9cF25xMQPlvnFiIeDU3g/bY0+L4JvHVlpYdKLhimoO32PVwca
+         l8QP5WlHtYn/Ooxsyv+hDSJP6Kd93ZO8W7EL0RNWZgorApBh+emLWZnLEA64KeFBMUL8
+         J/IYZJmNnS4cLhFgFBF+rRotnJPqtoejmBlWfokLHTVswSUwP1vwA5fvePID07YvDPft
+         QoeY2UA4zWd97rmNxn5WP+A31GvbNZ++BLnjzF0X2fOQoE/JKyF/S51IsM1ZGLCLqbGA
+         NYlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GSKrcPGu335cHezrGXttTKy9INtNuY4zhBjhpk4ZArA=;
+        b=j8DLuwMuX2ovyDYbv/mGhL61A0m8U5vNpQgc8VrcIfMXwr5bExjFtpBjEE0l61M5ie
+         NvVAecEexJNMmzsY2f5BzW4qKrEp6ELGZooWXPPyLpJY+kWg8Wo/u7xarwhHZSTGLNna
+         C0SBXcO9N4OMGfLDPMuGopt2odeQeTVk9ghvh23qUn9VPrRvrlJyW0tFIBQvDYoqtFmh
+         0/bD5Ou0IHuMzKG0MORn6o8IVqRMtL1hZivXaOI7EKltghDDRiaAi9UEELv/p+aPIJq9
+         Qz/HYAQKS65YFGLtyZ9ERi9a/wfKVgXrRevNUibo0pZ1vRODsCrxvNwCgTh+Wu+rnZ8n
+         e8AQ==
+X-Gm-Message-State: AOAM531skNkFhzwoWDOgDx1WwqODJLC6xaBolcNtHIU+Cjb9Ecqeue9u
+        3aU2yqNt1wUKiBviXhEJxbQcvFdbavc4nYh+TGcvSMhJCzSvzQ==
+X-Google-Smtp-Source: ABdhPJzG2N4tnJJXZBoz6y7svGbH6o2af1VFj/WCTdC4GDCqAPBRB90TZN5mQTlPlr85OyLSzr0Q/WZGy7ruMg8rP3Q=
+X-Received: by 2002:a02:a19e:: with SMTP id n30mr10740183jah.109.1623542832263;
+ Sat, 12 Jun 2021 17:07:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <CAPGftE_eY-Zdi3wBcgDfkz_iOr1KF10n=9mJHm1_a_PykcsoeA@mail.gmail.com>
+ <ce6fd0fd-2fb3-7a66-4910-5fe8c2b4d593@fb.com>
+In-Reply-To: <ce6fd0fd-2fb3-7a66-4910-5fe8c2b4d593@fb.com>
+From:   Tony Ambardar <tony.ambardar@gmail.com>
+Date:   Sat, 12 Jun 2021 17:07:01 -0700
+Message-ID: <CAPGftE9+CVuK7KwExRiqsuKHMEUrPsXraBbC5qw8N2NFrE5MYg@mail.gmail.com>
+Subject: Re: Kernel Oops in test_verifier "#828/p reference tracking: bpf_sk_release(btf_tcp_sock)"
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, linux-mips@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Fri, 11 Jun 2021 at 08:57, Yonghong Song <yhs@fb.com> wrote:
+>
+> On 6/10/21 6:02 PM, Tony Ambardar wrote:
+> > Hello,
+> >
+> > I encountered an NPE and kernel Oops [1] while running the
+> > 'test_verifier' selftest on MIPS32 with LTS kernel 5.10.41. This was
+> > observed during development of a MIPS32 JIT but is verifier-related.
+> >
+> > Initial troubleshooting [2] points to an unchecked NULL dereference in
+> > btf_type_by_id(), with an unexpected BTF type ID. The root cause is
+> > unclear, whether source of the ID or a potential underlying BTF
+> > problem.
+>
+> Do you know what is the faulty btf ID number? What is the maximum id
+> for vmlinux BTF?
 
-于 Fri, 11 Jun 2021 16:44:04 +0100
-Paul Cercueil <paul@opendingux.net> 写道:
+Thanks for the suggestions, Yonghong.
 
-> Hi Zhou,
-> 
-> Le ven., juin 11 2021 at 23:31:57 +0800, Zhou Yanjie 
-> <zhouyu@wanyeetech.com> a écrit :
-> > Hi Paul,
-> > 
-> > On 2021/6/10 下午11:30, Paul Cercueil wrote:  
-> >> Hi Zhou,
-> >> 
-> >> Le sam., juin 5 2021 at 00:31:46 +0800, 周琰杰 (Zhou Yanjie) 
-> >> <zhouyanjie@wanyeetech.com> a écrit :  
-> >>> The OST in Ingenic XBurst®2 SoCs such as X2000 and X2100, has a 
-> >>> global
-> >>> timer and two or four percpu timers, add support for the percpu 
-> >>> timers.
-> >>> 
-> >>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> >>> ---
-> >>> 
-> >>> Notes:
-> >>>     v1->v2:
-> >>>     1.Fix bug in ingenic_ost_global_timer_recalc_rate().
-> >>>     2.Add a backpointer to the ingenic_ost structure.
-> >>>     3.Remove unnecessary spinlock.
-> >>>     4.Use "ret = ost->irq" instead "ret = -EINVAL".
-> >>>     5.Use "%d" instead "%x" in pr_crit().  
-> >> 
-> >> I can't shake the feeling that you are doing way too many things
-> >> in one single commit.
-> >> 
-> >> From what I can see, this commit can be split in 4 patches:
-> >> 
-> >> - Fix the "%x" in pr_crit(),
-> >> - Add the global timer support to the X1000,
-> >> - Add "ingenic_ost_timer" and update the code to use it,
-> >> - Finally add X2000 support.
-> >> 
-> >>   
-> > 
-> > Sure.
-> > 
-> >   
-> >>   
-> >>>  drivers/clocksource/ingenic-sysost.c | 315 
-> >>> ++++++++++++++++++++++++++---------
-> >>>  1 file changed, 236 insertions(+), 79 deletions(-)
-> >>> 
-> >>> diff --git a/drivers/clocksource/ingenic-sysost.c 
-> >>> b/drivers/clocksource/ingenic-sysost.c
-> >>> index a129840..6f080e4 100644
-> >>> --- a/drivers/clocksource/ingenic-sysost.c
-> >>> +++ b/drivers/clocksource/ingenic-sysost.c
-> >>> @@ -4,6 +4,7 @@
-> >>>   * Copyright (c) 2020 周琰杰 (Zhou Yanjie) 
-> >>> <zhouyanjie@wanyeetech.com>
-> >>>   */
-> >>> 
-> >>> +#include <linux/bitfield.h>
-> >>>  #include <linux/bitops.h>
-> >>>  #include <linux/clk.h>
-> >>>  #include <linux/clk-provider.h>
-> >>> @@ -13,6 +14,8 @@
-> >>>  #include <linux/mfd/syscon.h>
-> >>>  #include <linux/of_address.h>
-> >>>  #include <linux/of_irq.h>
-> >>> +#include <linux/of_platform.h>
-> >>> +#include <linux/overflow.h>
-> >>>  #include <linux/sched_clock.h>
-> >>>  #include <linux/slab.h>
-> >>>  #include <linux/syscore_ops.h>
-> >>> @@ -21,10 +24,14 @@
-> >>> 
-> >>>  /* OST register offsets */
-> >>>  #define OST_REG_OSTCCR            0x00
-> >>> +#define OST_REG_OSTER            0x04
-> >>>  #define OST_REG_OSTCR            0x08
-> >>>  #define OST_REG_OSTFR            0x0c
-> >>> +#define OST_REG_OSTCNTH            0x0c
-> >>>  #define OST_REG_OSTMR            0x10
-> >>> +#define OST_REG_OSTCNTL            0x10
-> >>>  #define OST_REG_OST1DFR            0x14
-> >>> +#define OST_REG_OSTCNTB            0x14
-> >>>  #define OST_REG_OST1CNT            0x18
-> >>>  #define OST_REG_OST2CNTL        0x20
-> >>>  #define OST_REG_OSTCNT2HBUF        0x24
-> >>> @@ -55,13 +62,23 @@
-> >>>  #define OSTECR_OST1ENC            BIT(0)
-> >>>  #define OSTECR_OST2ENC            BIT(1)
-> >>> 
-> >>> +enum ingenic_ost_version {
-> >>> +    ID_X1000,
-> >>> +    ID_X2000,
-> >>> +};
-> >>> +
-> >>>  struct ingenic_soc_info {
-> >>> +    enum ingenic_ost_version version;
-> >>> +    const struct ingenic_ost_clk_info *clk_info;
-> >>> +
-> >>>      unsigned int num_channels;
-> >>> +    unsigned int base_offset;
-> >>>  };
-> >>> 
-> >>>  struct ingenic_ost_clk_info {
-> >>>      struct clk_init_data init_data;
-> >>> -    u8 ostccr_reg;
-> >>> +    unsigned int idx;
-> >>> +    u32 ostcntl_reg;
-> >>>  };
-> >>> 
-> >>>  struct ingenic_ost_clk {
-> >>> @@ -71,15 +88,27 @@ struct ingenic_ost_clk {
-> >>>      const struct ingenic_ost_clk_info *info;
-> >>>  };
-> >>> 
-> >>> +struct ingenic_ost_timer {
-> >>> +    void __iomem *base;
-> >>> +    unsigned int cpu;
-> >>> +    unsigned int channel;
-> >>> +    struct clock_event_device cevt;
-> >>> +    struct ingenic_ost *ost;
-> >>> +    struct clk *clk;
-> >>> +    char name[20];
-> >>> +};
-> >>> +
-> >>>  struct ingenic_ost {
-> >>>      void __iomem *base;
-> >>>      const struct ingenic_soc_info *soc_info;
-> >>> -    struct clk *clk, *percpu_timer_clk, *global_timer_clk;
-> >>> -    struct clock_event_device cevt;
-> >>> +    struct clk *clk, *global_timer_clk;
-> >>> +    struct device_node *np;
-> >>>      struct clocksource cs;
-> >>> -    char name[20];
-> >>> 
-> >>>      struct clk_hw_onecell_data *clocks;
-> >>> +    struct ingenic_ost_timer __percpu *timers;
-> >>> +
-> >>> +    int irq;
-> >>>  };
-> >>> 
-> >>>  static struct ingenic_ost *ingenic_ost;
-> >>> @@ -94,11 +123,12 @@ static unsigned long 
-> >>> ingenic_ost_percpu_timer_recalc_rate(struct clk_hw *hw,
-> >>>  {
-> >>>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
-> >>>      const struct ingenic_ost_clk_info *info = ost_clk->info;
-> >>> +    struct ingenic_ost_timer *timer = 
-> >>> per_cpu_ptr(ost_clk->ost->timers, info->idx);
-> >>>      unsigned int prescale;
-> >>> 
-> >>> -    prescale = readl(ost_clk->ost->base + info->ostccr_reg);
-> >>> +    prescale = readl(timer->base + OST_REG_OSTCCR);
-> >>> 
-> >>> -    prescale = (prescale & OSTCCR_PRESCALE1_MASK) >> 
-> >>> OSTCCR_PRESCALE1_LSB;
-> >>> +    prescale = FIELD_GET(OSTCCR_PRESCALE1_MASK, prescale);
-> >>> 
-> >>>      return parent_rate >> (prescale * 2);
-> >>>  }
-> >>> @@ -108,11 +138,15 @@ static unsigned long 
-> >>> ingenic_ost_global_timer_recalc_rate(struct clk_hw *hw,
-> >>>  {
-> >>>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
-> >>>      const struct ingenic_ost_clk_info *info = ost_clk->info;
-> >>> +    struct ingenic_ost_timer *timer = 
-> >>> per_cpu_ptr(ost_clk->ost->timers, info->idx);
-> >>>      unsigned int prescale;
-> >>> 
-> >>> -    prescale = readl(ost_clk->ost->base + info->ostccr_reg);
-> >>> +    prescale = readl(timer->base + OST_REG_OSTCCR);
-> >>> 
-> >>> -    prescale = (prescale & OSTCCR_PRESCALE2_MASK) >> 
-> >>> OSTCCR_PRESCALE2_LSB;
-> >>> +    if (ost_clk->ost->soc_info->version >= ID_X2000)
-> >>> +        prescale = FIELD_GET(OSTCCR_PRESCALE1_MASK, prescale);
-> >>> +    else
-> >>> +        prescale = FIELD_GET(OSTCCR_PRESCALE2_MASK, prescale);
-> >>> 
-> >>>      return parent_rate >> (prescale * 2);
-> >>>  }
-> >>> @@ -147,12 +181,13 @@ static int 
-> >>> ingenic_ost_percpu_timer_set_rate(struct clk_hw *hw, unsigned 
-> >>> long re
-> >>>  {
-> >>>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
-> >>>      const struct ingenic_ost_clk_info *info = ost_clk->info;
-> >>> +    struct ingenic_ost_timer *timer = 
-> >>> per_cpu_ptr(ost_clk->ost->timers, info->idx);
-> >>>      u8 prescale = ingenic_ost_get_prescale(parent_rate,
-> >>> req_rate); int val;
-> >>> 
-> >>> -    val = readl(ost_clk->ost->base + info->ostccr_reg);
-> >>> +    val = readl(timer->base + OST_REG_OSTCCR);
-> >>>      val = (val & ~OSTCCR_PRESCALE1_MASK) | (prescale << 
-> >>> OSTCCR_PRESCALE1_LSB);
-> >>> -    writel(val, ost_clk->ost->base + info->ostccr_reg);
-> >>> +    writel(val, timer->base + OST_REG_OSTCCR);
-> >>> 
-> >>>      return 0;
-> >>>  }
-> >>> @@ -162,12 +197,18 @@ static int 
-> >>> ingenic_ost_global_timer_set_rate(struct clk_hw *hw, unsigned 
-> >>> long re
-> >>>  {
-> >>>      struct ingenic_ost_clk *ost_clk = to_ost_clk(hw);
-> >>>      const struct ingenic_ost_clk_info *info = ost_clk->info;
-> >>> +    struct ingenic_ost_timer *timer = 
-> >>> per_cpu_ptr(ost_clk->ost->timers, info->idx);
-> >>>      u8 prescale = ingenic_ost_get_prescale(parent_rate,
-> >>> req_rate); int val;
-> >>> 
-> >>> -    val = readl(ost_clk->ost->base + info->ostccr_reg);
-> >>> -    val = (val & ~OSTCCR_PRESCALE2_MASK) | (prescale << 
-> >>> OSTCCR_PRESCALE2_LSB);
-> >>> -    writel(val, ost_clk->ost->base + info->ostccr_reg);
-> >>> +    val = readl(timer->base + OST_REG_OSTCCR);
-> >>> +
-> >>> +    if (ost_clk->ost->soc_info->version >= ID_X2000)
-> >>> +        val = (val & ~OSTCCR_PRESCALE1_MASK) | (prescale << 
-> >>> OSTCCR_PRESCALE1_LSB);
-> >>> +    else
-> >>> +        val = (val & ~OSTCCR_PRESCALE2_MASK) | (prescale << 
-> >>> OSTCCR_PRESCALE2_LSB);
-> >>> +
-> >>> +    writel(val, timer->base + OST_REG_OSTCCR);
-> >>> 
-> >>>      return 0;
-> >>>  }
-> >>> @@ -195,7 +236,42 @@ static const struct ingenic_ost_clk_info 
-> >>> x1000_ost_clk_info[] = {
-> >>>              .ops = &ingenic_ost_percpu_timer_ops,
-> >>>              .flags = CLK_SET_RATE_UNGATE,
-> >>>          },
-> >>> -        .ostccr_reg = OST_REG_OSTCCR,
-> >>> +        .idx = 0,
-> >>> +    },
-> >>> +
-> >>> +    [OST_CLK_GLOBAL_TIMER] = {
-> >>> +        .init_data = {
-> >>> +            .name = "global timer",
-> >>> +            .parent_names = ingenic_ost_clk_parents,
-> >>> +            .num_parents = ARRAY_SIZE(ingenic_ost_clk_parents),
-> >>> +            .ops = &ingenic_ost_global_timer_ops,
-> >>> +            .flags = CLK_SET_RATE_UNGATE,
-> >>> +        },
-> >>> +        .ostcntl_reg = OST_REG_OST2CNTL,
-> >>> +    },
-> >>> +};
-> >>> +
-> >>> +static const struct ingenic_ost_clk_info x2000_ost_clk_info[] = {
-> >>> +    [OST_CLK_PERCPU_TIMER0] = {
-> >>> +        .init_data = {
-> >>> +            .name = "percpu timer0",
-> >>> +            .parent_names = ingenic_ost_clk_parents,
-> >>> +            .num_parents = ARRAY_SIZE(ingenic_ost_clk_parents),
-> >>> +            .ops = &ingenic_ost_percpu_timer_ops,
-> >>> +            .flags = CLK_SET_RATE_UNGATE,
-> >>> +        },
-> >>> +        .idx = 0,
-> >>> +    },
-> >>> +
-> >>> +    [OST_CLK_PERCPU_TIMER1] = {
-> >>> +        .init_data = {
-> >>> +            .name = "percpu timer1",
-> >>> +            .parent_names = ingenic_ost_clk_parents,
-> >>> +            .num_parents = ARRAY_SIZE(ingenic_ost_clk_parents),
-> >>> +            .ops = &ingenic_ost_percpu_timer_ops,
-> >>> +            .flags = CLK_SET_RATE_UNGATE,
-> >>> +        },
-> >>> +        .idx = 1,
-> >>>      },
-> >>> 
-> >>>      [OST_CLK_GLOBAL_TIMER] = {
-> >>> @@ -206,7 +282,7 @@ static const struct ingenic_ost_clk_info 
-> >>> x1000_ost_clk_info[] = {
-> >>>              .ops = &ingenic_ost_global_timer_ops,
-> >>>              .flags = CLK_SET_RATE_UNGATE,
-> >>>          },
-> >>> -        .ostccr_reg = OST_REG_OSTCCR,
-> >>> +        .ostcntl_reg = OST_REG_OSTCNTL,
-> >>>      },
-> >>>  };
-> >>> 
-> >>> @@ -215,7 +291,7 @@ static u64 notrace 
-> >>> ingenic_ost_global_timer_read_cntl(void)
-> >>>      struct ingenic_ost *ost = ingenic_ost;
-> >>>      unsigned int count;
-> >>> 
-> >>> -    count = readl(ost->base + OST_REG_OST2CNTL);
-> >>> +    count = readl(ost->base + 
-> >>> ost->soc_info->clk_info->ostcntl_reg);
-> >>> 
-> >>>      return count;
-> >>>  }
-> >>> @@ -225,16 +301,21 @@ static u64 notrace 
-> >>> ingenic_ost_clocksource_read(struct clocksource *cs)
-> >>>      return ingenic_ost_global_timer_read_cntl();
-> >>>  }
-> >>> 
-> >>> -static inline struct ingenic_ost *to_ingenic_ost(struct 
-> >>> clock_event_device *evt)
-> >>> +static inline struct ingenic_ost_timer *
-> >>> +to_ingenic_ost_timer(struct clock_event_device *evt)
-> >>>  {
-> >>> -    return container_of(evt, struct ingenic_ost, cevt);
-> >>> +    return container_of(evt, struct ingenic_ost_timer, cevt);
-> >>>  }
-> >>> 
-> >>>  static int ingenic_ost_cevt_set_state_shutdown(struct 
-> >>> clock_event_device *evt)
-> >>>  {
-> >>> -    struct ingenic_ost *ost = to_ingenic_ost(evt);
-> >>> +    struct ingenic_ost_timer *timer = to_ingenic_ost_timer(evt);
-> >>> +    struct ingenic_ost *ost = timer->ost;
-> >>> 
-> >>> -    writel(OSTECR_OST1ENC, ost->base + OST_REG_OSTECR);
-> >>> +    if (ost->soc_info->version >= ID_X2000)
-> >>> +        writel(0, timer->base + OST_REG_OSTER);
-> >>> +    else
-> >>> +        writel(OSTECR_OST1ENC, timer->base + OST_REG_OSTECR);
-> >>> 
-> >>>      return 0;
-> >>>  }
-> >>> @@ -242,26 +323,34 @@ static int 
-> >>> ingenic_ost_cevt_set_state_shutdown(struct clock_event_device 
-> >>> *evt)
-> >>>  static int ingenic_ost_cevt_set_next(unsigned long next,
-> >>>                       struct clock_event_device *evt)
-> >>>  {
-> >>> -    struct ingenic_ost *ost = to_ingenic_ost(evt);
-> >>> -
-> >>> -    writel((u32)~OSTFR_FFLAG, ost->base + OST_REG_OSTFR);
-> >>> -    writel(next, ost->base + OST_REG_OST1DFR);
-> >>> -    writel(OSTCR_OST1CLR, ost->base + OST_REG_OSTCR);
-> >>> -    writel(OSTESR_OST1ENS, ost->base + OST_REG_OSTESR);
-> >>> -    writel((u32)~OSTMR_FMASK, ost->base + OST_REG_OSTMR);
-> >>> +    struct ingenic_ost_timer *timer = to_ingenic_ost_timer(evt);
-> >>> +    struct ingenic_ost *ost = timer->ost;
-> >>> +
-> >>> +    writel((u32)~OSTFR_FFLAG, timer->base + OST_REG_OSTFR);
-> >>> +    writel(next, timer->base + OST_REG_OST1DFR);
-> >>> +    writel(OSTCR_OST1CLR, timer->base + OST_REG_OSTCR);
-> >>> +
-> >>> +    if (ost->soc_info->version >= ID_X2000) {
-> >>> +        writel(OSTESR_OST1ENS, timer->base + OST_REG_OSTER);
-> >>> +    } else {
-> >>> +        writel(OSTESR_OST1ENS, timer->base + OST_REG_OSTESR);
-> >>> +        writel((u32)~OSTMR_FMASK, timer->base + OST_REG_OSTMR);
-> >>> +    }
-> >>> 
-> >>>      return 0;
-> >>>  }
-> >>> 
-> >>>  static irqreturn_t ingenic_ost_cevt_cb(int irq, void *dev_id)
-> >>>  {
-> >>> -    struct clock_event_device *evt = dev_id;
-> >>> -    struct ingenic_ost *ost = to_ingenic_ost(evt);
-> >>> +    struct ingenic_ost_timer *timer = dev_id;
-> >>> +    struct ingenic_ost *ost = timer->ost;
-> >>> 
-> >>> -    writel(OSTECR_OST1ENC, ost->base + OST_REG_OSTECR);
-> >>> +    if (ost->soc_info->version >= ID_X2000)
-> >>> +        writel(0, timer->base + OST_REG_OSTER);
-> >>> +    else
-> >>> +        writel(OSTECR_OST1ENC, timer->base + OST_REG_OSTECR);
-> >>> 
-> >>> -    if (evt->event_handler)
-> >>> -        evt->event_handler(evt);
-> >>> +    timer->cevt.event_handler(&timer->cevt);
-> >>> 
-> >>>      return IRQ_HANDLED;
-> >>>  }
-> >>> @@ -271,6 +360,7 @@ static int __init 
-> >>> ingenic_ost_register_clock(struct ingenic_ost *ost,
-> >>>              struct clk_hw_onecell_data *clocks)
-> >>>  {
-> >>>      struct ingenic_ost_clk *ost_clk;
-> >>> +    struct ingenic_ost_timer *timer = per_cpu_ptr(ost->timers, 
-> >>> info->idx);
-> >>>      int val, err;
-> >>> 
-> >>>      ost_clk = kzalloc(sizeof(*ost_clk), GFP_KERNEL);
-> >>> @@ -283,9 +373,9 @@ static int __init 
-> >>> ingenic_ost_register_clock(struct ingenic_ost *ost,
-> >>>      ost_clk->ost = ost;
-> >>> 
-> >>>      /* Reset clock divider */
-> >>> -    val = readl(ost->base + info->ostccr_reg);
-> >>> -    val &= ~(OSTCCR_PRESCALE1_MASK | OSTCCR_PRESCALE2_MASK);
-> >>> -    writel(val, ost->base + info->ostccr_reg);
-> >>> +    val = readl(timer->base + OST_REG_OSTCCR);
-> >>> +    val &= ~(OSTCCR_PRESCALE1_MASK);
-> >>> +    writel(val, timer->base + OST_REG_OSTCCR);
-> >>> 
-> >>>      err = clk_hw_register(NULL, &ost_clk->hw);
-> >>>      if (err) {
-> >>> @@ -309,57 +399,51 @@ static struct clk * __init 
-> >>> ingenic_ost_get_clock(struct device_node *np, int id)
-> >>>      return of_clk_get_from_provider(&args);
-> >>>  }
-> >>> 
-> >>> -static int __init ingenic_ost_percpu_timer_init(struct
-> >>> device_node *np,
-> >>> -                     struct ingenic_ost *ost)
-> >>> +static int __init ingenic_ost_setup_cevt(unsigned int cpu)
-> >>>  {
-> >>> -    unsigned int timer_virq, channel = OST_CLK_PERCPU_TIMER;
-> >>> +    struct ingenic_ost *ost = ingenic_ost;
-> >>> +    struct ingenic_ost_timer *timer = this_cpu_ptr(ost->timers);
-> >>>      unsigned long rate;
-> >>>      int err;
-> >>> 
-> >>> -    ost->percpu_timer_clk = ingenic_ost_get_clock(np, channel);
-> >>> -    if (IS_ERR(ost->percpu_timer_clk))
-> >>> -        return PTR_ERR(ost->percpu_timer_clk);
-> >>> +    timer->clk = ingenic_ost_get_clock(ost->np, timer->channel);
-> >>> +    if (IS_ERR(timer->clk))
-> >>> +        return PTR_ERR(timer->clk);
-> >>> 
-> >>> -    err = clk_prepare_enable(ost->percpu_timer_clk);
-> >>> +    err = clk_prepare_enable(timer->clk);
-> >>>      if (err)
-> >>>          goto err_clk_put;
-> >>> 
-> >>> -    rate = clk_get_rate(ost->percpu_timer_clk);
-> >>> +    rate = clk_get_rate(timer->clk);
-> >>>      if (!rate) {
-> >>>          err = -EINVAL;
-> >>>          goto err_clk_disable;
-> >>>      }
-> >>> 
-> >>> -    timer_virq = of_irq_get(np, 0);
-> >>> -    if (!timer_virq) {
-> >>> -        err = -EINVAL;
-> >>> -        goto err_clk_disable;
-> >>> -    }
-> >>> +    snprintf(timer->name, sizeof(timer->name), "OST percpu 
-> >>> timer%u", cpu);
-> >>> 
-> >>> -    snprintf(ost->name, sizeof(ost->name), "OST percpu timer");
-> >>> +    /* Unmask full comparison match interrupt */
-> >>> +    writel((u32)~OSTMR_FMASK, timer->base + OST_REG_OSTMR);
-> >>> 
-> >>> -    err = request_irq(timer_virq, ingenic_ost_cevt_cb,
-> >>> IRQF_TIMER,
-> >>> -              ost->name, &ost->cevt);
-> >>> -    if (err)
-> >>> -        goto err_irq_dispose_mapping;
-> >>> +    timer->cpu = smp_processor_id();
-> >>> +    timer->cevt.cpumask = cpumask_of(smp_processor_id());
-> >>> +    timer->cevt.features = CLOCK_EVT_FEAT_ONESHOT;
-> >>> +    timer->cevt.name = timer->name;
-> >>> +    timer->cevt.rating = 400;
-> >>> +    timer->cevt.set_state_shutdown = 
-> >>> ingenic_ost_cevt_set_state_shutdown;
-> >>> +    timer->cevt.set_next_event = ingenic_ost_cevt_set_next;
-> >>> 
-> >>> -    ost->cevt.cpumask = cpumask_of(smp_processor_id());
-> >>> -    ost->cevt.features = CLOCK_EVT_FEAT_ONESHOT;
-> >>> -    ost->cevt.name = ost->name;
-> >>> -    ost->cevt.rating = 400;
-> >>> -    ost->cevt.set_state_shutdown = 
-> >>> ingenic_ost_cevt_set_state_shutdown;
-> >>> -    ost->cevt.set_next_event = ingenic_ost_cevt_set_next;
-> >>> +    clockevents_config_and_register(&timer->cevt, rate, 4, 
-> >>> 0xffffffff);
-> >>> 
-> >>> -    clockevents_config_and_register(&ost->cevt, rate, 4, 
-> >>> 0xffffffff);
-> >>> +    if (ost->soc_info->version >= ID_X2000)
-> >>> +        enable_percpu_irq(ost->irq, IRQ_TYPE_NONE);
-> >>> 
-> >>>      return 0;
-> >>> 
-> >>> -err_irq_dispose_mapping:
-> >>> -    irq_dispose_mapping(timer_virq);
-> >>>  err_clk_disable:
-> >>> -    clk_disable_unprepare(ost->percpu_timer_clk);
-> >>> +    clk_disable_unprepare(timer->clk);
-> >>>  err_clk_put:
-> >>> -    clk_put(ost->percpu_timer_clk);
-> >>> +    clk_put(timer->clk);
-> >>>      return err;
-> >>>  }
-> >>> 
-> >>> @@ -385,11 +469,14 @@ static int __init 
-> >>> ingenic_ost_global_timer_init(struct device_node *np,
-> >>>          goto err_clk_disable;
-> >>>      }
-> >>> 
-> >>> -    /* Clear counter CNT registers */
-> >>> -    writel(OSTCR_OST2CLR, ost->base + OST_REG_OSTCR);
-> >>> -
-> >>> -    /* Enable OST channel */
-> >>> -    writel(OSTESR_OST2ENS, ost->base + OST_REG_OSTESR);
-> >>> +    /* Clear counter CNT registers and enable OST channel */
-> >>> +    if (ost->soc_info->version >= ID_X2000) {
-> >>> +        writel(OSTCR_OST1CLR, ost->base + OST_REG_OSTCR);
-> >>> +        writel(OSTESR_OST1ENS, ost->base + OST_REG_OSTER);
-> >>> +    } else {
-> >>> +        writel(OSTCR_OST2CLR, ost->base + OST_REG_OSTCR);
-> >>> +        writel(OSTESR_OST2ENS, ost->base + OST_REG_OSTESR);
-> >>> +    }
-> >>> 
-> >>>      cs->name = "ingenic-ost";
-> >>>      cs->rating = 400;
-> >>> @@ -411,18 +498,33 @@ static int __init 
-> >>> ingenic_ost_global_timer_init(struct device_node *np,
-> >>>  }
-> >>> 
-> >>>  static const struct ingenic_soc_info x1000_soc_info = {
-> >>> +    .version = ID_X1000,
-> >>> +    .clk_info = x1000_ost_clk_info,
-> >>> +
-> >>>      .num_channels = 2,
-> >>>  };
-> >>> 
-> >>> +static const struct ingenic_soc_info x2000_soc_info = {
-> >>> +    .version = ID_X2000,
-> >>> +    .clk_info = x2000_ost_clk_info,
-> >>> +
-> >>> +    .num_channels = 3,
-> >>> +    .base_offset = 0x100,
-> >>> +};
-> >>> +
-> >>>  static const struct of_device_id __maybe_unused 
-> >>> ingenic_ost_of_matches[] __initconst = {
-> >>>      { .compatible = "ingenic,x1000-ost", .data =
-> >>> &x1000_soc_info },
-> >>> +    { .compatible = "ingenic,x2000-ost", .data =
-> >>> &x2000_soc_info }, { /* sentinel */ }
-> >>>  };
-> >>> 
-> >>>  static int __init ingenic_ost_probe(struct device_node *np)
-> >>>  {
-> >>>      const struct of_device_id *id = 
-> >>> of_match_node(ingenic_ost_of_matches, np);
-> >>> +    struct ingenic_ost_timer *timer;
-> >>>      struct ingenic_ost *ost;
-> >>> +    void __iomem *base;
-> >>> +    unsigned int cpu;
-> >>>      unsigned int i;
-> >>>      int ret;
-> >>> 
-> >>> @@ -430,18 +532,43 @@ static int __init ingenic_ost_probe(struct 
-> >>> device_node *np)
-> >>>      if (!ost)
-> >>>          return -ENOMEM;
-> >>> 
-> >>> +    ost->timers = alloc_percpu(struct ingenic_ost_timer);
-> >>> +    if (!ost->timers) {
-> >>> +        ret = -ENOMEM;
-> >>> +        goto err_free_ost;
-> >>> +    }
-> >>> +
-> >>> +    ost->np = np;
-> >>> +    ost->soc_info = id->data;
-> >>> +
-> >>>      ost->base = of_io_request_and_map(np, 0, 
-> >>> of_node_full_name(np));
-> >>>      if (IS_ERR(ost->base)) {
-> >>>          pr_err("%s: Failed to map OST registers\n", __func__);
-> >>>          ret = PTR_ERR(ost->base);
-> >>> -        goto err_free_ost;
-> >>> +        goto err_free_timers;
-> >>> +    }
-> >>> +
-> >>> +    if (ost->soc_info->version >= ID_X2000) {
-> >>> +        base = of_io_request_and_map(np, 1,
-> >>> of_node_full_name(np));
-> >>> +        if (IS_ERR(base)) {
-> >>> +            pr_err("%s: Failed to map OST registers\n",
-> >>> __func__);
-> >>> +            ret = PTR_ERR(base);
-> >>> +            goto err_free_timers;
-> >>> +        }
-> >>> +    }  
-> >> 
-> >> The DT documentation only mentions one memory resource. Here, you 
-> >> map a second one, which is not used anywhere. I'm really confused 
-> >> about what you're trying to do here.
-> >>   
-> > 
-> > X2000 and X2100 divide the OST into two parts. The global timer is
-> > the first part, which is still located at the address of 0x12000000,
-> > and the percpu timers are the second part, the starting address is
-> > 0x12100000, and each timer is offset by 0x100 (percpu timer0 is at
-> > 0x12100000, percpu timer1 is at 0x12100100, percpu timer2 is at
-> > 0x12100200, percpu timer3 is at 0x12100300). This one is used in
-> > line 593 of the code.  
-> 
-> Then you need two different DT nodes, one at each start address.
-> Either use different drivers (since the register sets are different),
-> or *if* it can be implemented cleanly in ingenic-sysost.c, different
-> compatible strings - one for the global timer and one for the percpu
-> timers.
+I had built/packaged bpftool for the target, which shows the maximum as:
 
-Sorry, I did not describe it clearly. Although the global timer and
-percpu timers are divided into two parts, they still belong to the same
-hardware module. The base address of the entire module is 0x12000000,
-but the control register of the global timer is not shifted. The percpu
-timers are shifted by 0x100000 as a whole (the situation here is
-similar to PDMA, which is also divided into two parts: the
-channel-related registers are not shifted, while the system
-control-related registers are shifted by 0x1000 as a whole). I think
-maybe we can follow PDMA's approach and add corresponding instructions
-in the DT documentation. This can avoid confusion caused by splitting
-different parts of the same hardware module into two nodes, and at the
-same time keep the code of the devicetree as simple and clear as
-possible.
+  root@OpenWrt:~# bpftool btf dump file /sys/kernel/btf/vmlinux format
+raw|tail -5
+  [43179] FUNC 'pci_load_of_ranges' type_id=43178 linkage=static
+  [43180] ARRAY '(anon)' type_id=23 index_type_id=23 nr_elems=16
+  [43181] FUNC 'pcibios_plat_dev_init' type_id=29264 linkage=static
+  [43182] FUNC 'pcibios_map_irq' type_id=29815 linkage=static
+  [43183] FUNC 'mips_pcibios_init' type_id=115 linkage=static
 
-What do you think about that?
+After adding NULL handling and debug pr_err() to kernel_type_name(), I next see:
 
+  root@OpenWrt:~# ./test_verifier_eb 828
+  [   87.196692] btf_type_by_id(btf_vmlinux, 3062497280) returns NULL
+  [   87.196958] btf_type_by_id(btf_vmlinux, 2936995840) returns NULL
+  #828/p reference tracking: bpf_sk_release(btf_tcp_sock) FAIL
 
-Thanks and best regards!
+Those large type ids make me suspect an endianness issue, even though bpftool
+can still properly access the vmlinux BTF. Changing byte order and
+looking up the
+resulting type ids seems to confirm this:
 
-> 
-> -Paul
-> 
-> >>> +
-> >>> +    ost->irq = irq_of_parse_and_map(np, 0);
-> >>> +    if (ost->irq < 0) {
-> >>> +        pr_crit("%s: Cannot to get OST IRQ\n", __func__);
-> >>> +        ret = ost->irq;
-> >>> +        goto err_free_timers;
-> >>>      }
-> >>> 
-> >>>      ost->clk = of_clk_get_by_name(np, "ost");
-> >>>      if (IS_ERR(ost->clk)) {
-> >>> -        ret = PTR_ERR(ost->clk);
-> >>>          pr_crit("%s: Cannot get OST clock\n", __func__);
-> >>> -        goto err_free_ost;
-> >>> +        ret = PTR_ERR(ost->clk);
-> >>> +        goto err_free_timers;
-> >>>      }
-> >>> 
-> >>>      ret = clk_prepare_enable(ost->clk);
-> >>> @@ -450,8 +577,6 @@ static int __init ingenic_ost_probe(struct 
-> >>> device_node *np)
-> >>>          goto err_put_clk;
-> >>>      }
-> >>> 
-> >>> -    ost->soc_info = id->data;
-> >>> -
-> >>>      ost->clocks = kzalloc(struct_size(ost->clocks, hws, 
-> >>> ost->soc_info->num_channels),
-> >>>                    GFP_KERNEL);
-> >>>      if (!ost->clocks) {
-> >>> @@ -461,8 +586,21 @@ static int __init ingenic_ost_probe(struct 
-> >>> device_node *np)
-> >>> 
-> >>>      ost->clocks->num = ost->soc_info->num_channels;
-> >>> 
-> >>> -    for (i = 0; i < ost->clocks->num; i++) {
-> >>> -        ret = ingenic_ost_register_clock(ost, i, 
-> >>> &x1000_ost_clk_info[i], ost->clocks);
-> >>> +    for (cpu = 0; cpu < num_possible_cpus(); cpu++) {
-> >>> +        timer = per_cpu_ptr(ost->timers, cpu);
-> >>> +
-> >>> +        if (ost->soc_info->version >= ID_X2000)
-> >>> +            timer->base = base + ost->soc_info->base_offset *
-> >>> cpu;
-> >>> +        else
-> >>> +            timer->base = ost->base;
-> >>> +
-> >>> +        timer->ost = ost;
-> >>> +        timer->cpu = cpu;
-> >>> +        timer->channel = OST_CLK_PERCPU_TIMER + cpu;
-> >>> +    }
-> >>> +
-> >>> +    for (i = 0; i < num_possible_cpus() + 1; i++) {
-> >>> +        ret = ingenic_ost_register_clock(ost, i, 
-> >>> &ost->soc_info->clk_info[i], ost->clocks);
-> >>>          if (ret) {
-> >>>              pr_crit("%s: Cannot register clock %d\n", __func__,
-> >>> i); goto err_unregister_ost_clocks;
-> >>> @@ -488,6 +626,8 @@ static int __init ingenic_ost_probe(struct 
-> >>> device_node *np)
-> >>>      clk_disable_unprepare(ost->clk);
-> >>>  err_put_clk:
-> >>>      clk_put(ost->clk);
-> >>> +err_free_timers:
-> >>> +    free_percpu(ost->timers);
-> >>>  err_free_ost:
-> >>>      kfree(ost);
-> >>>      return ret;
-> >>> @@ -513,13 +653,29 @@ static int __init ingenic_ost_init(struct 
-> >>> device_node *np)
-> >>> 
-> >>>      ret = ingenic_ost_global_timer_init(np, ost);
-> >>>      if (ret) {
-> >>> -        pr_crit("%s: Unable to init global timer: %x\n",
-> >>> __func__, ret);
-> >>> +        pr_crit("%s: Unable to init global timer: %d\n",
-> >>> __func__, ret);  
-> >> 
-> >> This is a fix, so it needs to be a separate commit with a Fixes:
-> >> tag.  
-> > 
-> > 
-> > Sure.
-> > 
-> > 
-> > Thanks and best regards!
-> > 
-> >   
-> >> 
-> >> Cheers,
-> >> -Paul
-> >>   
-> >>>          goto err_free_ingenic_ost;
-> >>>      }
-> >>> 
-> >>> -    ret = ingenic_ost_percpu_timer_init(np, ost);
-> >>> -    if (ret)
-> >>> +    if (ost->soc_info->version >= ID_X2000)
-> >>> +        ret = request_percpu_irq(ost->irq, ingenic_ost_cevt_cb,
-> >>> +                  "OST percpu timer", ost->timers);
-> >>> +    else
-> >>> +        ret = request_irq(ost->irq, ingenic_ost_cevt_cb, 
-> >>> IRQF_TIMER,
-> >>> +                  "OST percpu timer", ost->timers);
-> >>> +
-> >>> +    if (ret) {
-> >>> +        pr_crit("%s: Unable to request percpu IRQ: %d\n", 
-> >>> __func__, ret);
-> >>> +        goto err_ost_global_timer_cleanup;
-> >>> +    }
-> >>> +
-> >>> +    /* Setup clock events on each CPU core */
-> >>> +    ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "Ingenic
-> >>> XBurst: online",
-> >>> +                ingenic_ost_setup_cevt, NULL);
-> >>> +    if (ret < 0) {
-> >>> +        pr_crit("%s: Unable to init percpu timers: %d\n", 
-> >>> __func__, ret);
-> >>>          goto err_ost_global_timer_cleanup;
-> >>> +    }
-> >>> 
-> >>>      /* Register the sched_clock at the end as there's no way to 
-> >>> undo it */
-> >>>      rate = clk_get_rate(ost->global_timer_clk);
-> >>> @@ -537,3 +693,4 @@ static int __init ingenic_ost_init(struct 
-> >>> device_node *np)
-> >>>  }
-> >>> 
-> >>>  TIMER_OF_DECLARE(x1000_ost,  "ingenic,x1000-ost", 
-> >>> ingenic_ost_init);
-> >>> +TIMER_OF_DECLARE(x2000_ost,  "ingenic,x2000-ost", 
-> >>> ingenic_ost_init);
-> >>> --
-> >>> 2.7.4
-> >>>   
-> >>   
-> 
+  Check endianness:
+    3062497280 -> 0xB68A0000 --swap endian--> 0x00008AB6 -> 35510
+  bpftool btf dump file /sys/kernel/btf/vmlinux format raw|fgrep "[35510]":
+    [35510] STRUCT 'tcp_sock' size=1752 vlen=136
 
+  Check endianness:
+    2936995840 -> 0xAF0F0000 --swap endian--> 0x00000FAF -> 4015
+  bpftool btf dump file /sys/kernel/btf/vmlinux format raw|fgrep "[4015]":
+    [4015] STRUCT 'sock_common' size=112 vlen=25
+
+As a further test, I repeated "test_verifier 828" across mips{32,64}{be,le}
+systems and confirm seeing the problem only with the big-endian ones.
+
+> The involved helper is bpf_sk_release.
+>
+> static const struct bpf_func_proto bpf_sk_release_proto = {
+>          .func           = bpf_sk_release,
+>          .gpl_only       = false,
+>          .ret_type       = RET_INTEGER,
+>          .arg1_type      = ARG_PTR_TO_BTF_ID_SOCK_COMMON,
+> };
+>
+> Eventually, the btf_id is taken from btf_sock_ids[6] where
+> btf_sock_ids is a kernel global variable.
+>
+> Could you check btf_sock_ids[6] to see whether the number
+> makes sense?
+
+What I see matches the second btf_type_by_id() NULL call above:
+  [   56.556121] btf_sock_ids[6]: 2936995840
+
+> The id is computed by resolve_btfids in
+> tools/bpf/resolve_btfids, you might add verbose mode to your linux build
+> to get more information.
+
+The verbose build didn't print any details of the btf ids. Was there anything
+special to do in invocation? I manually ran "resolve_btfids -v vmlinux" from
+the build dir and this, strangely, gave slightly different results than bpftool
+but not the huge endian-swapped type ids. Is this expected?
+
+  # ./tools/bpf/resolve_btfids/resolve_btfids -v vmlinux
+  ...
+  patching addr   116: ID   35522 [tcp_sock]
+  ...
+  patching addr   112: ID    4021 [sock_common]
+
+Do any of the details above help narrow down things? What do you suggest
+for next steps?
+
+Thanks,
+Tony
+
+> >
+> > Has this been seen before? How best to debug this further or resolve?
+> > What other details would be useful for BPF kernel developers?
+> >
+> > Thanks for any help,
+> > Tony
+> >
+> > [1]:
+> > (Host details)
+> > kodidev:~/openwrt-project$ ./staging_dir/host/bin/pahole --version
+> > v1.21
+> >
+> > (Target details)
+> > root@OpenWrt:/# uname -a
+> > Linux OpenWrt 5.10.41 #0 SMP Tue Jun 1 00:54:31 2021 mips GNU/Linux
+> >
+> > root@OpenWrt:~# sysctl net.core.bpf_jit_enable=0; ./test_verifier 826 828
+> > net.core.bpf_jit_enable = 0
+> >
+> > #826/p reference tracking: branch tracking valid pointer null comparison OK
+> > #827/p reference tracking: branch tracking valid pointer value comparison OK
+> > CPU 0 Unable to handle kernel paging request at virtual address
+> > 00000000, epc == 80244654, ra == 80244654
+> > Oops[#1]:
+> > CPU: 0 PID: 16274 Comm: test_verifier Not tainted 5.10.41 #0
+> > $ 0   : 00000000 00000001 00000000 0000a8a2
+> > $ 4   : 835ac580 a6280000 00000000 00000001
+> > $ 8   : 835ac580 a6280000 00000000 02020202
+> > $12   : 8348de58 834ba800 00000000 00000000
+> > $16   : 835ac580 8098be2c fffffff3 834bdb38
+> > $20   : 8098be0c 00000001 00000018 00000000
+> > $24   : 00000000 01415415
+> > $28   : 834bc000 834bdac8 00000005 80244654
+> > Hi    : 00000017
+> > Lo    : 0a3d70a2
+> > epc   : 80244654 kernel_type_name+0x20/0x38
+> > ra    : 80244654 kernel_type_name+0x20/0x38
+> > Status: 1000a403 KERNEL EXL IE
+> > Cause : 00800008 (ExcCode 02)
+> > BadVA : 00000000
+> > PrId  : 00019300 (MIPS 24Kc)
+> > Modules linked in: pppoe ppp_async pppox ppp_generic mac80211_hwsim
+> > mac80211 iptable_nat ipt_REJECT cfg80211 xt_time xt_tcpudp xt_tcpmss
+> > xt_statistic xt_state xt_recent xt_nat xt_multiport xt_mark xt_mac
+> > xt_limit xt_length xt_hl xt_helper xt_ecn xt_dscp xt_conntrack
+> > xt_connmark xt_connlimit xt_connbytes xt_comment xt_TCPMSS xt_REDIRECT
+> > xt_MASQUERADE xt_LOG xt_HL xt_FLOWOFFLOAD xt_DSCP xt_CT xt_CLASSIFY
+> > slhc sch_mqprio sch_cake pcnet32 nf_reject_ipv4 nf_nat nf_log_ipv4
+> > nf_flow_table nf_conntrack_netlink nf_conncount iptable_raw
+> > iptable_mangle iptable_filter ipt_ECN ip_tables crc_ccitt compat
+> > cls_flower act_vlan pktgen sch_teql sch_sfq sch_red sch_prio sch_pie
+> > sch_multiq sch_gred sch_fq sch_dsmark sch_codel em_text em_nbyte
+> > em_meta em_cmp act_simple act_police act_pedit act_ipt act_csum
+> > libcrc32c em_ipset cls_bpf act_bpf act_ctinfo act_connmark
+> > nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 sch_tbf sch_ingress sch_htb
+> > sch_hfsc em_u32 cls_u32 cls_tcindex cls_route cls_matchall cls_fw
+> >   cls_flow cls_basic act_skbedit act_mirred act_gact xt_set
+> > ip_set_list_set ip_set_hash_netportnet ip_set_hash_netport
+> > ip_set_hash_netnet ip_set_hash_netiface ip_set_hash_net
+> > ip_set_hash_mac ip_set_hash_ipportnet ip_set_hash_ipportip
+> > ip_set_hash_ipport ip_set_hash_ipmark ip_set_hash_ip
+> > ip_set_bitmap_port ip_set_bitmap_ipmac ip_set_bitmap_ip ip_set
+> > nfnetlink nf_log_ipv6 nf_log_common ip6table_mangle ip6table_filter
+> > ip6_tables ip6t_REJECT x_tables nf_reject_ipv6 ifb dummy netlink_diag
+> > mii
+> > Process test_verifier (pid: 16274, threadinfo=c1418596, task=05765195,
+> > tls=77e5aec8)
+> > Stack : 83428000 83428000 8098be2c 00000000 83428000 8024af78 834bacdc 834bb000
+> >          a98a0000 834e2580 834e2c00 00000000 834e2c00 8023da9c 834bb070 00000013
+> >          80925164 80924f44 00000000 80925164 00000000 83428140 80bc3864 834bb070
+> >          834e2c00 00000000 00000010 802c441c 00000000 00000000 00000000 00000000
+> >          00000000 00000000 00000000 00000000 00000000 00000056 00000000 00000000
+> >          ...
+> > Call Trace:
+> > [<80244654>] kernel_type_name+0x20/0x38
+> > [<8024af78>] check_helper_call+0x1c9c/0x1dbc
+> > [<8024d008>] do_check_common+0x1f70/0x2a3c
+> > [<8024fb6c>] bpf_check+0x18f8/0x2308
+> > [<802369ec>] bpf_prog_load+0x378/0x860
+> > [<80237e1c>] __do_sys_bpf+0x3e0/0x2100
+> > [<801142d8>] syscall_common+0x34/0x58
+> >
+> > Code: afbf0014  0c099b58  02002025 <8c450000> 8fbf0014  02002025
+> > 8fb00010  08099b4f  27bd0018
+> >
+> > ---[ end trace ab13ac5f89eb825b ]---
+> > Kernel panic - not syncing: Fatal exception
+> > Rebooting in 3 seconds..
+> > QEMU: Terminated
+> >
+> >
+> > [2]:
+> > Function Code:
+> > ==============
+> > const char *kernel_type_name(u32 id)
+> > {
+> >      return btf_name_by_offset(btf_vmlinux,
+> >                    btf_type_by_id(btf_vmlinux, id)->name_off);
+> > }
+> >
+> > const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id)
+> > {
+> >      if (type_id > btf->nr_types)
+> >          return NULL;
+> >
+> >      return btf->types[type_id];
+> > }
+> >
+> > Disassembled Code:
+> > ==================
+> > 0x0000000000000000:  AF BF 00 14    sw    $ra, 0x14($sp)
+> > 0x0000000000000004:  0C 09 9B 58    jal   btf_type_by_id
+> > 0x0000000000000008:  02 00 20 25    move  $a0, $s0
+> > 0x000000000000000c:  8C 45 00 00    lw    $a1, ($v0)         <-- NPE
+> > 0x0000000000000010:  8F BF 00 14    lw    $ra, 0x14($sp)
+> > 0x0000000000000014:  02 00 20 25    move  $a0, $s0
+> > 0x0000000000000018:  8F B0 00 10    lw    $s0, 0x10($sp)
+> > 0x000000000000001c:  08 09 9B 4F    j     btf_name_by_offset
+> > 0x0000000000000020:  27 BD 00 18    addiu $sp, $sp, 0x18
+> >
