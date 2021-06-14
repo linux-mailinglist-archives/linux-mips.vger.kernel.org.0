@@ -2,176 +2,210 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A65C03A6EAE
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 21:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A6C3A7148
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 23:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233725AbhFNTSM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Jun 2021 15:18:12 -0400
-Received: from mail-lf1-f44.google.com ([209.85.167.44]:43704 "EHLO
-        mail-lf1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbhFNTSM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Jun 2021 15:18:12 -0400
-Received: by mail-lf1-f44.google.com with SMTP id x24so17231585lfr.10
-        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 12:16:09 -0700 (PDT)
+        id S235192AbhFNVZQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Jun 2021 17:25:16 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:34619 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234143AbhFNVZQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Jun 2021 17:25:16 -0400
+Received: by mail-pf1-f201.google.com with SMTP id q3-20020aa784230000b02902ea311f25e2so8890834pfn.1
+        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 14:22:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Wy8kQavMtXmWXRWEMXyBLTsbu5eZVxKlmyQPGuM6Q58=;
-        b=FWr0n7oPVWQ+3ixl2B6aJCUI1aaCUd3rD6xJGopgi+G3S51eI5WKQ6RLQjpPrczgUw
-         Uv0FHlvR2bzE518D6Y8Nnd/A9KiVMaCI2gSxXq8KXbC9nPq7xPZUmdAb20/xqNrBMm2Q
-         CGXZz1OHoOXQIUe+85wv+Fkcar+3OSXseqHfWbcgWwW0BU6jkdXwsT97JMQNw7Tf/2+X
-         p7oPoA/6/h+DD9SL5oa6HWhxT5QuVdVfooxkkHO+C3hr+rcIBRMMAX8k0bck9jBNCTh1
-         Jm3gyrqgrVOn9jD0nZlU0ZGZpJBRY8kw5pL418zBh/RpWSEEhpl0Xk+GqptBgSYtL73c
-         9Cyg==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=SlycgcgP2oQfG/m1tsRJUCUu6HgyYclxJAGE9lbfI7I=;
+        b=J5OsUMD3R5is1cvWM/Tf1GSvgvYrw1ZTFA6WV9mLsYov03y0xK/HdMK6yCJsYckKRo
+         TtGE8n4Fxq4EYtG5ozUsMbV4AkLNWy6LWw1l/UrYBiYJu0fC4BCnkbAiprvyp67AI3ez
+         ++RPtlvVdFNIPeK0a8u7bdfuzu81cD4Qr5bFuVp+KHu3u+cD9+BzjSE+HCFtNuDlrUSs
+         4IlHyplTtL9gmtWN9jVHfwL72LuuWxHzrtkVsRISlOX67uSROjJCiF8xz508A4WqzgR2
+         QZih02YKtsk/ChyGZd7Eon8GpWthGvOj55UNC2eUCNQplIFeeOGWlfJrOndDtyOb0zWF
+         m4QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Wy8kQavMtXmWXRWEMXyBLTsbu5eZVxKlmyQPGuM6Q58=;
-        b=Cj6Nv3EmYA7lzhmN4iDQc03SdtEmOZYLASycyrgNH43YyLiZQTi+oi/PT7AV+4EqZ8
-         fPt/S5uLKm3ounW+AhXdbETltp/9MjlsZoDUxwOXj/xtK2JkuMVB+8RkHn3dXoy8EgDq
-         7dYY1MQxZddnWrH/rCoofIOFNcJi2ohQflqNmLnonyGfHA8P7uh4IQ/eR1JD5GIBFhSj
-         dQIFxOfgwxVPZntWHrs60IY5qWgKLkjhDfAwdmQG7NZ1ReEX5ymCdNtJJu7Sg5QwnY3k
-         wDXUeIs6OdXvJjTJCOGWOgixkHOcdAMvPD/FZQTqiYSjTyC8aabIWckkiWR0ZV+Cg9gt
-         12Vw==
-X-Gm-Message-State: AOAM532HfXbYd6y9QOI3sR9eT+AMqzjjVZQFft0CY0dPH2uU+I3fVQQe
-        hBaYv9yXrIKOPv2JofJPhCx6Lg==
-X-Google-Smtp-Source: ABdhPJzy3L13GiiOVq+u0errQIuLZDbWTXWtPICnFywU3zpYMn5wnv69XzZ5bLPGkSg6b7LUTT5JwA==
-X-Received: by 2002:a19:480a:: with SMTP id v10mr12826757lfa.565.1623698108333;
-        Mon, 14 Jun 2021 12:15:08 -0700 (PDT)
-Received: from jade (h-79-136-85-3.A175.priv.bahnhof.se. [79.136.85.3])
-        by smtp.gmail.com with ESMTPSA id i5sm1559817lfe.113.2021.06.14.12.15.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jun 2021 12:15:07 -0700 (PDT)
-Date:   Mon, 14 Jun 2021 21:15:06 +0200
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Allen Pais <apais@linux.microsoft.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Vikas Gupta <vikas.gupta@broadcom.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        op-tee@lists.trustedfirmware.org, linux-integrity@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/8] optee: Clear stale cache entries during
- initialization
-Message-ID: <20210614191506.GA1373417@jade>
-References: <20210610210913.536081-1-tyhicks@linux.microsoft.com>
- <20210610210913.536081-5-tyhicks@linux.microsoft.com>
- <20210614082715.GC1033436@jade>
- <20210614190646.GW4910@sequoia>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210614190646.GW4910@sequoia>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=SlycgcgP2oQfG/m1tsRJUCUu6HgyYclxJAGE9lbfI7I=;
+        b=AwaKRRk6kWllouo2TVh1AscidD+99A1VGQ+T8tYmZiC6r1XunlyI3EwnJ5aSSVpsLb
+         biZzU1/+YGIVKrVLLb9mFeGpkkmDTNXgO3LSavX2ldcK6Lg+qUnSKZE2OmZ+EA3/S0Pg
+         7o8G/SfFdTKLXDDXm5VH8+DoVBRK8JS8De2PorKzVS+0W/tcAVj9iDG9hucGjeJ5MFk8
+         UXoUEy3KXHgOav998GCofNi8DELcp0k/JjENx5+U2TMBVr72Pz51AgvPgwEes/7mESYx
+         7fm9owklzW3hfEDEekFg0pgmkkeWVNqjaJpzkPU5tWaSC10woQnPLAnTEHiYgQVWcvWJ
+         gNWQ==
+X-Gm-Message-State: AOAM531B/XfIxxuSofdYdjtHUZy6Qa6imeE/NQYIswOpI0utWnczA53E
+        g2jJ5E16w4jY2bwJ8XVSonaSuEtZT+m0sHQRVw==
+X-Google-Smtp-Source: ABdhPJz2FI55sVryTZAxtgeRMOOpHWs/+X17g6DjdqznoExrtjOxluBZp09o2sArM1nsheTY/TttMFSWE8kjHPwfdA==
+X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
+ (user=jingzhangos job=sendgmr) by 2002:a17:902:7d8c:b029:105:2b81:3915 with
+ SMTP id a12-20020a1709027d8cb02901052b813915mr985196plm.71.1623705717928;
+ Mon, 14 Jun 2021 14:21:57 -0700 (PDT)
+Date:   Mon, 14 Jun 2021 21:21:50 +0000
+Message-Id: <20210614212155.1670777-1-jingzhangos@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.272.g935e593368-goog
+Subject: [PATCH v9 0/5] KVM statistics data fd-based binary interface
+From:   Jing Zhang <jingzhangos@google.com>
+To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+Cc:     Jing Zhang <jingzhangos@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 14, 2021 at 02:06:46PM -0500, Tyler Hicks wrote:
-> On 2021-06-14 10:27:15, Jens Wiklander wrote:
-> > On Thu, Jun 10, 2021 at 04:09:09PM -0500, Tyler Hicks wrote:
-> > > The shm cache could contain invalid addresses if
-> > > optee_disable_shm_cache() was not called from the .shutdown hook of the
-> > > previous kernel before a kexec. These addresses could be unmapped or
-> > > they could point to mapped but unintended locations in memory.
-> > > 
-> > > Clear the shared memory cache, while being careful to not translate the
-> > > addresses returned from OPTEE_SMC_DISABLE_SHM_CACHE, during driver
-> > > initialization. Once all pre-cache shm objects are removed, proceed with
-> > > enabling the cache so that we know that we can handle cached shm objects
-> > > with confidence later in the .shutdown hook.
-> > > 
-> > > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> > > ---
-> > >  drivers/tee/optee/call.c          | 11 ++++++++++-
-> > >  drivers/tee/optee/core.c          | 13 +++++++++++--
-> > >  drivers/tee/optee/optee_private.h |  2 +-
-> > >  3 files changed, 22 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-> > > index 6e6eb836e9b6..5dcba6105ed7 100644
-> > > --- a/drivers/tee/optee/call.c
-> > > +++ b/drivers/tee/optee/call.c
-> > > @@ -419,8 +419,10 @@ void optee_enable_shm_cache(struct optee *optee)
-> > >   * optee_disable_shm_cache() - Disables caching of some shared memory allocation
-> > >   *			      in OP-TEE
-> > >   * @optee:	main service struct
-> > > + * @is_mapped:	true if the cached shared memory addresses were mapped by this
-> > > + *		kernel, are safe to dereference, and should be freed
-> > >   */
-> > > -void optee_disable_shm_cache(struct optee *optee)
-> > > +void optee_disable_shm_cache(struct optee *optee, bool is_mapped)
-> > >  {
-> > >  	struct optee_call_waiter w;
-> > >  
-> > > @@ -439,6 +441,13 @@ void optee_disable_shm_cache(struct optee *optee)
-> > >  		if (res.result.status == OPTEE_SMC_RETURN_OK) {
-> > >  			struct tee_shm *shm;
-> > >  
-> > > +			/*
-> > > +			 * Shared memory references that were not mapped by
-> > > +			 * this kernel must be ignored to prevent a crash.
-> > > +			 */
-> > > +			if (!is_mapped)
-> > > +				continue;
-> > > +
-> > >  			shm = reg_pair_to_ptr(res.result.shm_upper32,
-> > >  					      res.result.shm_lower32);
-> > >  			tee_shm_free(shm);
-> > > diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
-> > > index 0987074d7ed0..6974e1104bd4 100644
-> > > --- a/drivers/tee/optee/core.c
-> > > +++ b/drivers/tee/optee/core.c
-> > > @@ -589,7 +589,7 @@ static int optee_remove(struct platform_device *pdev)
-> > >  	 * reference counters and also avoid wild pointers in secure world
-> > >  	 * into the old shared memory range.
-> > >  	 */
-> > > -	optee_disable_shm_cache(optee);
-> > > +	optee_disable_shm_cache(optee, true);
-> > 
-> > Naked "true" or "false" parameters are normally not very descriptive.
-> > Would it make sense to write this as:
-> > optee_disable_shm_cache(optee, true /*is_mapped*/);
-> > instead (same for the other call sites in this patch)? That way it would
-> > be easier to see what it is that is true or false.
-> 
-> Yeah, I understand the issue with the naked bools. What about turning
-> 'optee_disable_shm_cache(struct optee *optee, bool is_mapped)' into
-> '__optee_disable_shm_cache(struct optee *optee, bool is_mapped)' and
-> introducing these two wrappers:
-> 
-> /**
->  * optee_disable_shm_cache() - Disables caching of mapped shared memory
->  *                             allocations in OP-TEE
->  * @optee:     main service struct
->  */
-> void optee_disable_shm_cache(struct optee *optee)
-> {
->        return __optee_disable_shm_cache(optee, true);
-> }
-> 
-> /**
->  * optee_disable_unmapped_shm_cache() - Disables caching of shared memory
->  *                                      allocations in OP-TEE which are not
->  *                                      currently mapped
->  * @optee:     main service struct
->  */
-> void optee_disable_unmapped_shm_cache(struct optee *optee)
-> {
->        return __optee_disable_shm_cache(optee, false);
-> }
-> 
-> Existing callers of optee_disable_shm_cache() remain unchanged and we just add
-> one caller of optee_disable_unmapped_shm_cache() with this patch.
-> 
+This patchset provides a file descriptor for every VM and VCPU to read
+KVM statistics data in binary format.
+It is meant to provide a lightweight, flexible, scalable and efficient
+lock-free solution for user space telemetry applications to pull the
+statistics data periodically for large scale systems. The pulling
+frequency could be as high as a few times per second.
+In this patchset, every statistics data are treated to have some
+attributes as below:
+  * architecture dependent or generic
+  * VM statistics data or VCPU statistics data
+  * type: cumulative, instantaneous, peak
+  * unit: none for simple counter, nanosecond, microsecond,
+    millisecond, second, Byte, KiByte, MiByte, GiByte. Clock Cycles
+Since no lock/synchronization is used, the consistency between all
+the statistics data is not guaranteed. That means not all statistics
+data are read out at the exact same time, since the statistics date
+are still being updated by KVM subsystems while they are read out.
 
-Sounds good.
+---
 
-Jens
+* v8 -> v9
+  - Rebase to commit 8331a2bc0898
+    (KVM: X86: Introduce KVM_HC_MAP_GPA_RANGE hypercall)
+  - Reduce code duplication between binary and debugfs interface
+  - Add field "offset" in stats descriptor to let us define stats
+    descriptors in any order (not necessary in the order of stats
+    defined in vm/vcpu stats structures)
+  - Add static check to make sure the number of stats descriptors
+    is the same as the number of stats defined in vm/vcpu stats
+    structures
+  - Fix missing/mismatched stats descriptor definition caused by
+    rebase
+
+* v7 -> v8
+  - Rebase to kvm/queue, commit c1dc20e254b4 ("KVM: switch per-VM
+  stats to u64")
+  - Revise code to reflect the per-VM stats type from ulong to u64
+  - Addressed some other nits
+
+* v6 -> v7
+  - Improve file descriptor allocation function by Krish suggestion
+  - Use "generic stats" instead of "common stats" as Krish suggested
+  - Addressed some other nits from Krish and David Matlack
+
+* v5 -> v6
+  - Use designated initializers for STATS_DESC
+  - Change KVM_STATS_SCALE... to KVM_STATS_BASE...
+  - Use a common function for kvm_[vm|vcpu]_stats_read
+  - Fix some documentation errors/missings
+  - Use TEST_ASSERT in selftest
+  - Use a common function for [vm|vcpu]_stats_test in selftest
+
+* v4 -> v5
+  - Rebase to kvm/queue, commit a4345a7cecfb ("Merge tag
+    'kvmarm-fixes-5.13-1'")
+  - Change maximum stats name length to 48
+  - Replace VM_STATS_COMMON/VCPU_STATS_COMMON macros with stats
+    descriptor definition macros.
+  - Fixed some errors/warnings reported by checkpatch.pl
+
+* v3 -> v4
+  - Rebase to kvm/queue, commit 9f242010c3b4 ("KVM: avoid "deadlock"
+    between install_new_memslots and MMU notifier")
+  - Use C-stype comments in the whole patch
+  - Fix wrong count for x86 VCPU stats descriptors
+  - Fix KVM stats data size counting and validity check in selftest
+
+* v2 -> v3
+  - Rebase to kvm/queue, commit edf408f5257b ("KVM: avoid "deadlock"
+    between install_new_memslots and MMU notifier")
+  - Resolve some nitpicks about format
+
+* v1 -> v2
+  - Use ARRAY_SIZE to count the number of stats descriptors
+  - Fix missing `size` field initialization in macro STATS_DESC
+
+[1] https://lore.kernel.org/kvm/20210402224359.2297157-1-jingzhangos@google.com
+[2] https://lore.kernel.org/kvm/20210415151741.1607806-1-jingzhangos@google.com
+[3] https://lore.kernel.org/kvm/20210423181727.596466-1-jingzhangos@google.com
+[4] https://lore.kernel.org/kvm/20210429203740.1935629-1-jingzhangos@google.com
+[5] https://lore.kernel.org/kvm/20210517145314.157626-1-jingzhangos@google.com
+[6] https://lore.kernel.org/kvm/20210524151828.4113777-1-jingzhangos@google.com
+[7] https://lore.kernel.org/kvm/20210603211426.790093-1-jingzhangos@google.com
+[8] https://lore.kernel.org/kvm/20210611124624.1404010-1-jingzhangos@google.com
+
+---
+
+Jing Zhang (5):
+  KVM: stats: Separate generic stats from architecture specific ones
+  KVM: stats: Add fd-based API to read binary stats data
+  KVM: stats: Add documentation for statistics data binary interface
+  KVM: selftests: Add selftest for KVM statistics data binary interface
+  KVM: stats: Remove code duplication for binary and debugfs stats
+
+ Documentation/virt/kvm/api.rst                | 177 +++++++++++-
+ arch/arm64/include/asm/kvm_host.h             |   9 +-
+ arch/arm64/kvm/guest.c                        |  50 +++-
+ arch/mips/include/asm/kvm_host.h              |   9 +-
+ arch/mips/kvm/mips.c                          |  92 +++---
+ arch/powerpc/include/asm/kvm_host.h           |   9 +-
+ arch/powerpc/kvm/book3s.c                     |  93 ++++---
+ arch/powerpc/kvm/book3s_hv.c                  |  12 +-
+ arch/powerpc/kvm/book3s_pr.c                  |   2 +-
+ arch/powerpc/kvm/book3s_pr_papr.c             |   2 +-
+ arch/powerpc/kvm/booke.c                      |  78 ++++--
+ arch/s390/include/asm/kvm_host.h              |   9 +-
+ arch/s390/kvm/kvm-s390.c                      | 234 +++++++++-------
+ arch/x86/include/asm/kvm_host.h               |   9 +-
+ arch/x86/kvm/x86.c                            | 111 +++++---
+ include/linux/kvm_host.h                      | 178 +++++++++++-
+ include/linux/kvm_types.h                     |  12 +
+ include/uapi/linux/kvm.h                      |  48 ++++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ .../testing/selftests/kvm/include/kvm_util.h  |   3 +
+ .../selftests/kvm/kvm_binary_stats_test.c     | 225 +++++++++++++++
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +
+ virt/kvm/kvm_main.c                           | 261 +++++++++++++++---
+ 24 files changed, 1293 insertions(+), 346 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/kvm_binary_stats_test.c
+
+
+base-commit: 8331a2bc089881d7fd2fc9a6658f39780817e4e0
+-- 
+2.32.0.272.g935e593368-goog
+
