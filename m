@@ -2,56 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0383A5BA3
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 04:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26EB43A5BB9
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 04:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbhFNC4E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 13 Jun 2021 22:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbhFNC4E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Jun 2021 22:56:04 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D442EC0613A2
-        for <linux-mips@vger.kernel.org>; Sun, 13 Jun 2021 19:54:01 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id 62-20020aed30440000b029024cabef375cso3478912qte.17
-        for <linux-mips@vger.kernel.org>; Sun, 13 Jun 2021 19:54:01 -0700 (PDT)
+        id S232336AbhFNC5W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 13 Jun 2021 22:57:22 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:42597 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232383AbhFNC5U (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Jun 2021 22:57:20 -0400
+Received: by mail-pl1-f202.google.com with SMTP id x15-20020a170902e04fb02900f5295925dbso4040994plx.9
+        for <linux-mips@vger.kernel.org>; Sun, 13 Jun 2021 19:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=EFssac9rz7i/Qr9EpSWwLvB4XY7qiCj+W7+6Jhxuqag=;
-        b=LYERAZ7y42UfbmbPlfdmiRT+5SUAlpPUpcnKAJ06pnxNMruCW5nQs9eoLdhY4QqimU
-         Bw60ALBxFeHcd/4Y9jIRzBOR9/jMvrFmonm5knRkEcDKOB3k8Nb4pdzKFF+bTNo8qSkm
-         LW4hKTBMV2DNjCzUzntynYfjW6IAKSv/c/Xb2y6CY8rqY5Rw4e+W4wgtv7ZA858F3JCH
-         Zl4LhituKwhgS7GcTCyVhu28y+SbW3QLn/N4f5Iatuc8SttyxjK8JXA4Tnh9QopWwUl4
-         oZCcRWH9m6pqfBku+n2hHpfC7LViqfP68y/Fz+T5Qfck+/1uBFBrVHOLCvaP8cjdEJAO
-         vTUQ==
+        bh=G0BvcWLb4IeXiMagmDzrz7Uqmh6mNFjQeYSUfBYTeS0=;
+        b=J5d2R6fWgIT7owLOkJV6VeWqsPNmA3XhITMy2ACzrDEZhT0Hlwu1Mv1CGvxmT9xZEJ
+         zOh45iAE5qCbYIz/1wXZBdrottBUD7tpMTeePsXb7v9pq1MVKNz/w44zNDX5DV7GJSNw
+         tUg2JDh1hnHw8Fct0UeMIcmZl+UUTt3HJqYS4yXoEOYYItYDzo+7W04DATqfZNjGj0EE
+         FJ4jtuO3fwrMXv+WswutYrXdpiDAx3BQTTnr1PTdXUUB8IPOb33aV1KfvgYWQbQSHSW+
+         jN4K6ERakZJxjI6TqbwlCEllee61z7OrSO6pbKuyV3wieGgx7IAhVQP6z/uCtPoNXmQE
+         gfOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=EFssac9rz7i/Qr9EpSWwLvB4XY7qiCj+W7+6Jhxuqag=;
-        b=mY2+7JKKh2Uh+U80VCoPZw+BAMYAKFxjorAPo4C6LzSIt92mjPlAhmAuF/sA+HH+CM
-         IPWR7IiRHNsozmliorkubfqRZ4NsNnd74zbCczcHvlLvpL1OyDapjhQulnIcFSLu2AWr
-         2j2Z3nEhsqslvlveHjmLffaUUI8yzSQ4fobSNskQzKlem6QvSO1dOdFPxh8j5X2KZLHa
-         xZzB3l21q+QrS5rHFiibpHP4rPmROJ47JUSdLLJDDgU647oF02csb0QDou4bqwsr9Rc2
-         KNBddAs4xIB/6Z8TfMpZKwWH12tEanrDvbDqNQsyxAglRCUNnGPpG9Hoq8iWX5IQlR3+
-         wI7g==
-X-Gm-Message-State: AOAM531fDZp3w3Ucw7zOWQmtyS48ERjYRSc38GKr9j567mCNzwBcuAIK
-        JNd8CQZacqLqaHL92Q3kIOrOEfGiiIanJYQOoQ==
-X-Google-Smtp-Source: ABdhPJx06RmEFcd18ZQJLMbPbZxx739B0LLW3SWUDB8V4bqvcXAZJX+M+bK78AWrb7OsWvWt/mmcsnPMfO++tuNCdA==
+        bh=G0BvcWLb4IeXiMagmDzrz7Uqmh6mNFjQeYSUfBYTeS0=;
+        b=jBIZ5seUqDvp3ZOZg92K/+3fka8ZUeKiT+zR/vwzi+o2e56uKa7oinc1uxNk2Dx/oE
+         r7FgTmXcHyk51YUZ5WbKrUxgaPfeWbaR+WPuhoZMbp//YaNgjnBIgcyB16srjJrk7jJy
+         NuTdlQhSeNMMM7n5BtKdtQkCTJlb3Cvedh0tzh7SgUGzHv4GWKWglGRcTHXIHhT/XrAA
+         MzbIYMk40X9/2iFU7PSjeXVItxQG+LKyWajtDrJX1FYW8P7mmzcHfGGKW4QoljymOu4W
+         MBJSnjf8dQpEox7UfB3aIX7hP5WRhIU3ZU53eecVPpvk5Tq9bOHOeCOjCUlKoq0ADPCp
+         OxFA==
+X-Gm-Message-State: AOAM532+ZKbq/s5W9GVfjASfuNMm5sCz7itQrOqJ46LMF5d+oxBjisVG
+        Vr75l2+7ktDkEzgzrZv9ZcXFezZ3Mzyq+QZm9g==
+X-Google-Smtp-Source: ABdhPJycgiFSbxMZLS8Bil1CYzhmeCE7vWg07Yh1drE2XVuoYrfaHxoRxI6LH8bCvEcGVqokSkYhAgwO3CRfAtV4/A==
 X-Received: from jgzg.c.googlers.com ([fda3:e722:ac3:10:7f:e700:c0a8:1acf])
- (user=jingzhangos job=sendgmr) by 2002:a05:6214:20c4:: with SMTP id
- 4mr8552573qve.1.1623639240966; Sun, 13 Jun 2021 19:54:00 -0700 (PDT)
-Date:   Mon, 14 Jun 2021 02:53:50 +0000
+ (user=jingzhangos job=sendgmr) by 2002:a63:ed4d:: with SMTP id
+ m13mr15005137pgk.433.1623639242315; Sun, 13 Jun 2021 19:54:02 -0700 (PDT)
+Date:   Mon, 14 Jun 2021 02:53:51 +0000
 In-Reply-To: <20210614025351.365284-1-jingzhangos@google.com>
-Message-Id: <20210614025351.365284-4-jingzhangos@google.com>
+Message-Id: <20210614025351.365284-5-jingzhangos@google.com>
 Mime-Version: 1.0
 References: <20210614025351.365284-1-jingzhangos@google.com>
 X-Mailer: git-send-email 2.32.0.272.g935e593368-goog
-Subject: [PATCH 3/4] KVM: stats: Update documentation supporting stats mode
- and offset
+Subject: [PATCH 4/4] KVM: selftests: Update binary stats test for stats mode
 From:   Jing Zhang <jingzhangos@google.com>
 To:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
@@ -65,82 +61,48 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Update documentation to reflect that stats descriptor supports new
-flags for read/write mode and an offset field is added in stats
-descriptor.
+Update binary stats selftest to support sanity test for stats
+read/write mode and offset.
 
 Signed-off-by: Jing Zhang <jingzhangos@google.com>
 ---
- Documentation/virt/kvm/api.rst | 33 ++++++++++++++++++++++++++-------
- 1 file changed, 26 insertions(+), 7 deletions(-)
+ tools/testing/selftests/kvm/kvm_binary_stats_test.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index d1ad30212726..67979700a90e 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -5160,12 +5160,19 @@ below code block::
- 	#define KVM_STATS_BASE_POW2		(0x1 << KVM_STATS_BASE_SHIFT)
- 	#define KVM_STATS_BASE_MAX		KVM_STATS_BASE_POW2
+diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+index d85859a6815a..2a34b5e822e8 100644
+--- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
++++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+@@ -77,6 +77,8 @@ static void stats_test(int stats_fd)
+ 				<= KVM_STATS_UNIT_MAX, "Unknown KVM stats unit");
+ 		TEST_ASSERT((pdesc->flags & KVM_STATS_BASE_MASK)
+ 				<= KVM_STATS_BASE_MAX, "Unknown KVM stats base");
++		TEST_ASSERT((pdesc->flags & KVM_STATS_MODE_MASK)
++				<= KVM_STATS_MODE_MAX, "Unknown KVM stats mode");
+ 		/* Check exponent for stats unit
+ 		 * Exponent for counter should be greater than or equal to 0
+ 		 * Exponent for unit bytes should be greater than or equal to 0
+@@ -106,11 +108,18 @@ static void stats_test(int stats_fd)
+ 	}
+ 	/* Check overlap */
+ 	TEST_ASSERT(header->data_offset >= header->desc_offset
+-			|| header->data_offset + size_data <= header->desc_offset,
+-			"Data block is overlapped with Descriptor block");
++		|| header->data_offset + size_data <= header->desc_offset,
++		"Data block is overlapped with Descriptor block");
+ 	/* Check validity of all stats data size */
+ 	TEST_ASSERT(size_data >= header->count * sizeof(stats_data->value[0]),
+ 			"Data size is not correct");
++	/* Check stats offset */
++	for (i = 0; i < header->count; ++i) {
++		pdesc = (void *)stats_desc + i * size_desc;
++		TEST_ASSERT(pdesc->offset < size_data,
++			"Invalid offset (%u) for stats: %s",
++			pdesc->offset, pdesc->name);
++	}
  
-+        #define KVM_STATS_MODE_SHIFT		12
-+        #define KVM_STATS_MODE_MASK		(0xF << KVM_STATS_MODE_SHIFT)
-+        #define KVM_STATS_MODE_RW		(0x0 << KVM_STATS_MODE_SHIFT)
-+        #define KVM_STATS_MODE_READ		(0x1 << KVM_STATS_MODE_SHIFT)
-+        #define KVM_STATS_MODE_WRITE		(0x2 << KVM_STATS_MODE_SHIFT)
-+        #define KVM_STATS_MODE_MAX		KVM_STATS_MODE_WRITE
-+
- 	struct kvm_stats_desc {
- 		__u32 flags;
- 		__s16 exponent;
- 		__u16 size;
--		__u32 unused1;
--		__u32 unused2;
-+		__u32 offset;
-+		__u32 unused;
- 		char name[0];
- 	};
- 
-@@ -5212,23 +5219,35 @@ Bits 4-7 of ``flags`` encode the unit:
-     value is 200, ``exponent`` is 4, we can get the number of CPU clock cycles
-     by ``value * pow(10, exponent) = 200 * pow(10, 4) = 2000000``.
- 
--Bits 7-11 of ``flags`` encode the base:
-+Bits 8-11 of ``flags`` encode the base:
-   * ``KVM_STATS_BASE_POW10``
-     The scale is based on power of 10. It is used for measurement of time and
-     CPU clock cycles.
-   * ``KVM_STATS_BASE_POW2``
-     The scale is based on power of 2. It is used for measurement of memory size.
- 
-+Bits 12-15 of ``flags`` encode the mode:
-+  * ``KVM_STATS_MODE_RW``
-+    The corresponding statistics supports both read and write (clear).
-+  * ``KVM_STATS_MODE_READ``
-+    The corresponding statistics supports read only.
-+  * ``KVM_STATS_MODE_WRITE``
-+    The corresponding statistics supports write only. (Not used for now, added
-+    for completeness)
-+
- The ``exponent`` field is the scale of corresponding statistics data. For
- example, if the unit is ``KVM_STATS_UNIT_BYTES``, the base is
- ``KVM_STATS_BASE_POW2``, the ``exponent`` is 10, then we know that the real
- unit of the statistics data is KBytes a.k.a pow(2, 10) = 1024 bytes.
- 
--The ``size`` field is the number of values of this statistics data. It is in the
--unit of ``unsigned long`` for VM or ``__u64`` for VCPU.
-+The ``size`` field is the number of values (u64) of this statistics data. Its
-+value is usually 1 for most of simple statistics.
-+
-+The ``offset`` field is the offset from the start of Data Block to the start of
-+the corresponding statistics data.
- 
--The ``unused1`` and ``unused2`` fields are reserved for future
--support for other types of statistics data, like log/linear histogram.
-+The ``unused`` fields are reserved for future support for other types of
-+statistics data, like log/linear histogram.
- 
- The ``name`` field points to the name string of the statistics data. The name
- string starts at the end of ``struct kvm_stats_desc``.
+ 	/* Allocate memory for stats data */
+ 	stats_data = malloc(size_data);
 -- 
 2.32.0.272.g935e593368-goog
 
