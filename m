@@ -2,114 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F00403A5F91
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 11:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 599873A5FAD
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 12:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbhFNJ7o (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Jun 2021 05:59:44 -0400
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:43526 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbhFNJ7m (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Jun 2021 05:59:42 -0400
-Received: by mail-oo1-f54.google.com with SMTP id z14-20020a4a984e0000b029024a8c622149so1995553ooi.10
-        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 02:57:40 -0700 (PDT)
+        id S232739AbhFNKI0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Jun 2021 06:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232579AbhFNKIY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Jun 2021 06:08:24 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7BFC061574
+        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 03:06:20 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id h11-20020a05600c350bb02901b59c28e8b4so12144241wmq.1
+        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 03:06:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=17xdYDaXcr1GgYwnSmChvSTc/UXYmZQtZNjoRDgyHAw=;
-        b=cZEhqQwUMi3qA2skVWLwd278vC0Of6ba8gN/ywOqCCPGS2nVuE5tlQ3Ec/BCfmY21k
-         R9Ay7mTCx4f494TfLoQwYgM5qMWjZz4ZeOJ3ThrxH54CT2h1CMfpU+jz69bsTOgXJkJ0
-         zrm0RAdmF0RWeqH8203uXoRnvqCC21rwONaz07Oeh3aKDJEnWNCUa3E/yUDJCFrBUzzZ
-         lZRtRpgFOAPlGiBe+9NYqJNScFMRNAxGh7yoClYylxwtVqcFa0x9TtP64+gHhr+6yMsS
-         Or8sJAeAZRQI2iEcXsiGCBr2ywyq87AqlR/hEdzHE86ox4DqD2aqHvW4/R9HGK0fRN5K
-         h2qA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZWPfS1j+ZHcYwLa9t4ZB3v5pOc9zAsYC3fSyZAd4gAE=;
+        b=GcEj5ddWydc/sAv5he2N/y5bpXlWw5mx0y3eAO9ji5dLRl1Xuz0qKZ7T0mn32RS/nP
+         cvcKgIcwBU0wI71qVnfWvGDHNyczVw49QI/ml1dp0agfc/xTpcysI8WoC9gzUyP1evnw
+         xEXxjRDbzKGMnaeHFBT13PglA0quivN+A4ZFb1FrpWu4VDhPRIRmMZec+m13MUZHpQFt
+         BMcFyZ9YUp+hbc/4iEIfv+lI3MRkvFEbx5NJBYClmiph5dYHq6+qKPPvKnjG+eDbEjUr
+         76E++oYvIRT/wV5sVS+Vb/gzEZhcl1M4zuGuEmFdsdbdGGFvOz++IAwhyQJl5caOVOdE
+         F/dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=17xdYDaXcr1GgYwnSmChvSTc/UXYmZQtZNjoRDgyHAw=;
-        b=SdSaSkT5UnsRC16D7KaM4uQCP5xFT7iWUjXmoyn+AYsfwrs5ra1NJCiOX0HvKauheH
-         Fgpm2wgZ7xRfGn1fuh0FiLf2dN+r23/fkZlmEyf0Aw5KtV3qqHn0QkSlHWYXszQi3zKE
-         2LfiKrYD5jMPsrM+blMA1ERngTf9dqGZRFR3tnHc+L1AZSH5Ns5vDtS4mP6vFkTNlpf6
-         f0vyO58hA43ZpWdpG5LJPz2OcPLCOl3BzMwTw69/T2x++CI6hto2fEt4yVIFqnmwFUOf
-         1cGhEVmI98EkeC7fdXELrqe1o2EO+IDhKHWmGPD/KpM/d6YEe5nz8rTNVVMkisDcm8cv
-         8VKg==
-X-Gm-Message-State: AOAM533tZe4rbJQ4mm/lia8ZqbmXdF6PjZwSCb3I9e77VFz+3I1dGWjl
-        oMO+SgPk12j8bEBg2kodJcuHULJ4sZz8v2QcvoY=
-X-Google-Smtp-Source: ABdhPJxK+IiZ7hAc2SVBDlCb8Xoaf0kIEdwUnJ0Ua2eG3Zz2A1TApntQ8+Di6xjSdvMmjoD8JVgG2AOZjxp78QuDPs8=
-X-Received: by 2002:a05:6820:386:: with SMTP id r6mr12312802ooj.25.1623664599826;
- Mon, 14 Jun 2021 02:56:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210613155623.17233-1-sergio.paracuellos@gmail.com>
- <20210613155623.17233-2-sergio.paracuellos@gmail.com> <12f81f6e-41be-7e0f-5590-67591c722a38@gmail.com>
-In-Reply-To: <12f81f6e-41be-7e0f-5590-67591c722a38@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZWPfS1j+ZHcYwLa9t4ZB3v5pOc9zAsYC3fSyZAd4gAE=;
+        b=Vj9bVp5GlqgVULhNVlXRNJl2BAIwhJDABZDWolvfItQbC1JNizpCxscOJA6VkN8rpl
+         gTtAc8pIcV/3od0pptgpS2QhGeJR1+D1UP8Rw+0F9qCunlmkot5OCFjY4jOgKAvsg5w+
+         +NLDhJIlnSUwM2hC+MIhn8DQzlJNQW1+yhPlRBHL9X3z9vQ+2FUnRVTvEVdzhT28rhu2
+         s+JN8TM6kbAzO7OBBPUG0EMU4tT0fSUJ6Q0HWYLXqESmX6aJX745GTAxDEm0sFjRSBNt
+         cfCOd4GSDQoWU90PBU4B2uYPHqImP/Wmh6s/4R22RS0X64Hhnj4XDaB14IdrPmipknQK
+         CZNQ==
+X-Gm-Message-State: AOAM530MOBG3Ym/xxKgnDs2pLEGAiSwxuON+yIpZWr36mS9WSZyg1r5p
+        ZxRD+07RZAhSeu6SGUBQo70yJhb/px0=
+X-Google-Smtp-Source: ABdhPJzzcuILbxNELcXrkQEB9Y1VJl9xbp0YX6DYhYIpF2TAv5LsbxGNbfhW6dKyCOgz3kUMhc5CRg==
+X-Received: by 2002:a1c:f70d:: with SMTP id v13mr15046481wmh.183.1623665179095;
+        Mon, 14 Jun 2021 03:06:19 -0700 (PDT)
+Received: from localhost.localdomain (98.red-81-38-58.dynamicip.rima-tde.net. [81.38.58.98])
+        by smtp.gmail.com with ESMTPSA id k5sm16476566wrv.85.2021.06.14.03.06.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 14 Jun 2021 03:06:18 -0700 (PDT)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Mon, 14 Jun 2021 11:56:28 +0200
-Message-ID: <CAMhs-H_tb8B52+-i1mLMWfEbgcuvngfdm=UzpxZmiaBKA=ywxg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] MIPS: ralink: Define PCI_IOBASE
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        John Crispin <john@phrozen.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     linux-staging@lists.linux.dev
+Cc:     gregkh@linuxfoundation.org, neil@brown.name,
+        linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        ilya.lipnitskiy@gmail.com, john@phrozen.org
+Subject: [PATCH v2 0/3] staging: mt7621-pci: define ralink PCI_IOBASE to avoid manually ranges parsing
+Date:   Mon, 14 Jun 2021 12:06:14 +0200
+Message-Id: <20210614100617.28753-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Sergei,
+Ralink MIPS platforms do not define PCI_IOBASE. This ends up in
+pci generic apis not working with io resources when calls to function
+'of_pci_range_to_resource' are performed because internall function
+'pci_address_to_pio()' is call and it results in getting 'OF_BAD_ADDR'
+as result. If we define PCI_IOBASE pci generic apis properly works for
+ralink pci controllers. In this particular case, we can remove all
+manually ranges and resource from driver code decresing LOC and being
+more standard.
 
-On Mon, Jun 14, 2021 at 11:13 AM Sergei Shtylyov
-<sergei.shtylyov@gmail.com> wrote:
->
-> Hello!
->
-> On 13.06.2021 18:56, Sergio Paracuellos wrote:
->
-> > PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
-> > required by generic PCI drivers to make memory mapped I/O range
-> > work. Hence define it for ralink architectures to be able to
-> > avoid parsing manually IO ranges in PCI generic driver code.
-> > Function 'plat_mem_setup' for ralink is using 'set_io_port_base'
-> > call using '0xa0000000' as address, so use the same address in
-> > the definition to align things.
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >   arch/mips/include/asm/mach-ralink/spaces.h | 10 ++++++++++
-> >   1 file changed, 10 insertions(+)
-> >   create mode 100644 arch/mips/include/asm/mach-ralink/spaces.h
-> >
-> > diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-> > new file mode 100644
-> > index 000000000000..ec58d4a9ed05
-> > --- /dev/null
-> > +++ b/arch/mips/include/asm/mach-ralink/spaces.h
-> > @@ -0,0 +1,10 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef __ASM_MACH_RALINK_SPACES_H_
-> > +#define __ASM_MACH_RALINK_SPACES_H_
-> > +
-> > +#define PCI_IOBASE   _AC(0xa0000000, UL)
-> > +#define PCI_IOSIZE   SZ_16M
-> > +#define IO_SPACE_LIMIT  (PCI_IOSIZE - 1)
->
->     Why this sudden switch to spaces for indentation? Previous lines were
-> (correctly) indented with tabs...
+In the future, this is also useful for mips pci drivers which are still
+using pci legacy apis. After having PCI_IOBASE defined, only defining 
+'pci_address_to_pio' for PCI_LEGACY might be remaining to also make 
+work 'pci-rt3883', 'pci-mt7620' among others. Sadly I don't have devices
+to test that so I haven't write the code by myself.
 
-I don't really know what could have happened, honestly. I will fix
-spaces into tabs and send v2.
+Thanks in advance for your time.
 
->
-> > +
-> > +#include <asm/mach-generic/spaces.h>
-> > +#endif
->
-> MBR, Sergei
+Changes in v2:
+  - Fix PATCH 1 indentation converting spaces into tabs.
 
 Best regards,
-    Sergio Paracuellos
+     Sergio Paracuellos
+
+Sergio Paracuellos (3):
+  MIPS: ralink: Define PCI_IOBASE
+  staging: mt7621-pci: remove 'mt7621_pci_parse_request_of_pci_ranges'
+  staging: mt7621-dts: fix pci address for PCI memory range
+
+ arch/mips/include/asm/mach-ralink/spaces.h |  10 +++
+ drivers/staging/mt7621-dts/mt7621.dtsi     |   2 +-
+ drivers/staging/mt7621-pci/pci-mt7621.c    | 100 ++++++---------------
+ 3 files changed, 38 insertions(+), 74 deletions(-)
+ create mode 100644 arch/mips/include/asm/mach-ralink/spaces.h
+
+-- 
+2.25.1
+
