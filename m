@@ -2,319 +2,185 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE263A5DFD
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 09:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF64F3A5E62
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 10:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbhFNH7v (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Jun 2021 03:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbhFNH7t (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Jun 2021 03:59:49 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDDEC061767
-        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 00:57:30 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id w127so13493049oig.12
-        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 00:57:30 -0700 (PDT)
+        id S232578AbhFNIag (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Jun 2021 04:30:36 -0400
+Received: from mail-lf1-f52.google.com ([209.85.167.52]:33694 "EHLO
+        mail-lf1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232594AbhFNIad (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Jun 2021 04:30:33 -0400
+Received: by mail-lf1-f52.google.com with SMTP id bp38so19802850lfb.0
+        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 01:28:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Yq6AnfCSSGBKIjj0YUKAQhUo7JvGmmvBuQXaLpyD50c=;
-        b=XG+FKxmfcX5Krd+wIYJAOJoEAWGt7/+MF5rP5R9m2fDAOoDqN0bp1FI4ZBUxKjT94g
-         JOFOq6f8O/MH4bjUOFM/HsKKw8lt2xDloBBqnhsxMiFH7BgC104XADMYjavu8Oup4LfR
-         jgOigas1ZFTjt9q08NEOSVzlwtG64oK84LVMHeY+LhTboYum8BN5sCyOdSGxmORa+HjT
-         0Kp+XpFY030W3lQLTJn+XHETgjud/jARd8OzJUALsnLrwe4yGHKJoJKDEeStFESCJUWO
-         e9Bx1xfCBodSDdwymUkwEqonPH/2P04s1JHSmEL7bvEdY0wiFNt6/NKLg3HEYHV0pFvw
-         Xf3Q==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lKShWs6TAgVDNzfvLDvoWvURVhGxJq2LT0tIZHvVVo0=;
+        b=tN6TUcF1TaNeAv5IgKoqjQFB0qVI0cHpgVdomlqe+8Pj3SSETdMRfS7bj0kO71T7C9
+         On/qnrk8Yi6Rp9P9MPKQejEJj+M1+uvKuBgoUmmyegx3spH/RDiAgP/ruvV1HVaD5kDS
+         fEUhLAISCUTrPZm3WmOjpufgAiCbN5S5ZAlaN1wnCVZAW3JGI8n7uzr8GibXmqzYaOQ3
+         i8XiNp07KWXX8VbPtK6W6qWbomiNDwD173c6milPN/HNRDRy/4FTU45XIH6/QRThKsiq
+         oiZwJVAjcdLM2GSF2v63/zDQh3yDPINJ8QiyerHYl98+6nxfL6KB8TXJrDRCEo/y2IHC
+         LGJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yq6AnfCSSGBKIjj0YUKAQhUo7JvGmmvBuQXaLpyD50c=;
-        b=d3oeORDrodexXO8hn2qwnLXJVsHgrnvEMIfJYvdnPPd1IyGvYerDiaDVnHgnPrCS6D
-         WAMnOaR44iShU4GREFL3JEY5Ac9Gmx2z5n6KBQ0SjRl6SM4sgZWrjny77b9HLNuShfDx
-         30EXNWiE6lt2+DjxI/CfgB2fb0M9x8st+/y7oJzrjixZLTr+wDgZXG4AVEi/nMv76m/9
-         UwCanX/kBkLyox1Ke45qOjY3N+EUXzS0s6UtKMxPWlzhJEphdmvoSDJBsmzU7+vX2LKh
-         RVlBCri+EJlcGMUGEi/+l0V9gqts+zrhIlc8mwrb8HhXByQ/8IklbtWLIoGmVngJdVdv
-         COzA==
-X-Gm-Message-State: AOAM530eIR1ExruLgop7IfPJu5IhGSTRoPWv16vwS71iek8FSQ7beD50
-        enARr/ncKvwDh7Dd0xa1o4tw356X5i6MMMGSBsldxQ==
-X-Google-Smtp-Source: ABdhPJxXbh3raDmzdNtJDlVZIjrXxst6G4uF4DHsOU1jnE1vIsaJzRI1vd/bW3K4lBCJONGuzpQ3gE6UIVFo/t0pyEc=
-X-Received: by 2002:aca:b38a:: with SMTP id c132mr4604810oif.90.1623657449654;
- Mon, 14 Jun 2021 00:57:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lKShWs6TAgVDNzfvLDvoWvURVhGxJq2LT0tIZHvVVo0=;
+        b=KDD4swmv+n0OOqJc4HwfcywLIGynOwdeN9QqlNGs2T4rPhCsPzGfBHNDKaIwcevW4R
+         mZ1k8wQOywJB5PEIcjUDhtqlKjKwDNLQeKmZVHRzXm/w4t3P8RF+vqvCktkbQXoOh6I9
+         FoekNtnOVUKwjxCMWN7LxnQzHk6nikhqmT+ABrm7p3ke9nFf66KhNLB+CwwYym1r5/R2
+         TS0AWbaDhlYtrJ0Imjpdyp0CwZ6mMykqB25U3xgXPCXjh3QOf3OM9NROs0nuxZWlspSh
+         xAGZSn2uDupnKtEbj92+nlCydsFUQshT+rFzfnsXwvcMWsR34/9BdZQNLcuP+snVZJwi
+         Dd9g==
+X-Gm-Message-State: AOAM533SITJkO3jePMk2EZ/8DUM64rj5+SX3jT9/2eWaKhCd9htCUd6u
+        C1J5aqADhnqy22gCuqQd0Ymviw==
+X-Google-Smtp-Source: ABdhPJz42E9QOqr7X/zeify/amV4v5uusvVtstK1olJuD9DDoUwb8Z/vy6Y/+TZYLNLJI9S0U9Lmng==
+X-Received: by 2002:a05:6512:398a:: with SMTP id j10mr11424003lfu.636.1623659237016;
+        Mon, 14 Jun 2021 01:27:17 -0700 (PDT)
+Received: from jade (h-79-136-85-3.A175.priv.bahnhof.se. [79.136.85.3])
+        by smtp.gmail.com with ESMTPSA id a1sm1406066lfu.45.2021.06.14.01.27.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jun 2021 01:27:16 -0700 (PDT)
+Date:   Mon, 14 Jun 2021 10:27:15 +0200
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     Allen Pais <apais@linux.microsoft.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Vikas Gupta <vikas.gupta@broadcom.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        op-tee@lists.trustedfirmware.org, linux-integrity@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/8] optee: Clear stale cache entries during
+ initialization
+Message-ID: <20210614082715.GC1033436@jade>
+References: <20210610210913.536081-1-tyhicks@linux.microsoft.com>
+ <20210610210913.536081-5-tyhicks@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20210603211426.790093-1-jingzhangos@google.com> <20210603211426.790093-4-jingzhangos@google.com>
-In-Reply-To: <20210603211426.790093-4-jingzhangos@google.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Mon, 14 Jun 2021 08:56:53 +0100
-Message-ID: <CA+EHjTxeZOAPA9w6UJe7rW+-UdznrEsNmomWodZDN3DLgLoJKA@mail.gmail.com>
-Subject: Re: [PATCH v7 3/4] KVM: stats: Add documentation for statistics data
- binary interface
-To:     Jing Zhang <jingzhangos@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210610210913.536081-5-tyhicks@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jing,
-
-
-On Thu, Jun 3, 2021 at 10:14 PM Jing Zhang <jingzhangos@google.com> wrote:
->
-> Update KVM API documentation for binary statistics.
->
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> Reviewed-by: Ricardo Koller <ricarkol@google.com>
-> Signed-off-by: Jing Zhang <jingzhangos@google.com>
+On Thu, Jun 10, 2021 at 04:09:09PM -0500, Tyler Hicks wrote:
+> The shm cache could contain invalid addresses if
+> optee_disable_shm_cache() was not called from the .shutdown hook of the
+> previous kernel before a kexec. These addresses could be unmapped or
+> they could point to mapped but unintended locations in memory.
+> 
+> Clear the shared memory cache, while being careful to not translate the
+> addresses returned from OPTEE_SMC_DISABLE_SHM_CACHE, during driver
+> initialization. Once all pre-cache shm objects are removed, proceed with
+> enabling the cache so that we know that we can handle cached shm objects
+> with confidence later in the .shutdown hook.
+> 
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 > ---
->  Documentation/virt/kvm/api.rst | 180 +++++++++++++++++++++++++++++++++
->  1 file changed, 180 insertions(+)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 7fcb2fd38f42..550bfbdf611b 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -5034,6 +5034,178 @@ see KVM_XEN_VCPU_SET_ATTR above.
->  The KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADJUST type may not be used
->  with the KVM_XEN_VCPU_GET_ATTR ioctl.
->
-> +4.130 KVM_GET_STATS_FD
-> +---------------------
+>  drivers/tee/optee/call.c          | 11 ++++++++++-
+>  drivers/tee/optee/core.c          | 13 +++++++++++--
+>  drivers/tee/optee/optee_private.h |  2 +-
+>  3 files changed, 22 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
+> index 6e6eb836e9b6..5dcba6105ed7 100644
+> --- a/drivers/tee/optee/call.c
+> +++ b/drivers/tee/optee/call.c
+> @@ -419,8 +419,10 @@ void optee_enable_shm_cache(struct optee *optee)
+>   * optee_disable_shm_cache() - Disables caching of some shared memory allocation
+>   *			      in OP-TEE
+>   * @optee:	main service struct
+> + * @is_mapped:	true if the cached shared memory addresses were mapped by this
+> + *		kernel, are safe to dereference, and should be freed
+>   */
+> -void optee_disable_shm_cache(struct optee *optee)
+> +void optee_disable_shm_cache(struct optee *optee, bool is_mapped)
+>  {
+>  	struct optee_call_waiter w;
+>  
+> @@ -439,6 +441,13 @@ void optee_disable_shm_cache(struct optee *optee)
+>  		if (res.result.status == OPTEE_SMC_RETURN_OK) {
+>  			struct tee_shm *shm;
+>  
+> +			/*
+> +			 * Shared memory references that were not mapped by
+> +			 * this kernel must be ignored to prevent a crash.
+> +			 */
+> +			if (!is_mapped)
+> +				continue;
+> +
+>  			shm = reg_pair_to_ptr(res.result.shm_upper32,
+>  					      res.result.shm_lower32);
+>  			tee_shm_free(shm);
+> diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
+> index 0987074d7ed0..6974e1104bd4 100644
+> --- a/drivers/tee/optee/core.c
+> +++ b/drivers/tee/optee/core.c
+> @@ -589,7 +589,7 @@ static int optee_remove(struct platform_device *pdev)
+>  	 * reference counters and also avoid wild pointers in secure world
+>  	 * into the old shared memory range.
+>  	 */
+> -	optee_disable_shm_cache(optee);
+> +	optee_disable_shm_cache(optee, true);
 
-nit: missing one - (to match the subtitle length)
+Naked "true" or "false" parameters are normally not very descriptive.
+Would it make sense to write this as:
+optee_disable_shm_cache(optee, true /*is_mapped*/);
+instead (same for the other call sites in this patch)? That way it would
+be easier to see what it is that is true or false.
 
-> +
-> +:Capability: KVM_CAP_STATS_BINARY_FD
-> +:Architectures: all
-> +:Type: vm ioctl, vcpu ioctl
-> +:Parameters: none
-> +:Returns: statistics file descriptor on success, < 0 on error
-> +
-> +Errors:
-> +
-> +  ======     ======================================================
-> +  ENOMEM     if the fd could not be created due to lack of memory
-> +  EMFILE     if the number of opened files exceeds the limit
-> +  ======     ======================================================
-> +
-> +The file descriptor can be used to read VM/vCPU statistics data in binary
-> +format. The file data is organized into three blocks as below:
-> ++-------------+
-> +|   Header    |
-> ++-------------+
-> +| Descriptors |
-> ++-------------+
-> +| Stats Data  |
-> ++-------------+
-> +
-> +The Header block is always at the start of the file. It is only needed to be
-> +read one time for the lifetime of the file descriptor.
-> +It is in the form of ``struct kvm_stats_header`` as below::
-> +
-> +       #define KVM_STATS_ID_MAXLEN             64
-> +
-> +       struct kvm_stats_header {
-> +               char id[KVM_STATS_ID_MAXLEN];
-> +               __u32 name_size;
-> +               __u32 count;
-> +               __u32 desc_offset;
-> +               __u32 data_offset;
-> +       };
-> +
-> +The ``id`` field is identification for the corresponding KVM statistics. For
-> +VM statistics, it is in the form of "kvm-{kvm pid}", like "kvm-12345". For
-> +VCPU statistics, it is in the form of "kvm-{kvm pid}/vcpu-{vcpu id}", like
-> +"kvm-12345/vcpu-12".
-> +
-> +The ``name_size`` field is the size (byte) of the statistics name string
-> +(including trailing '\0') appended to the end of every statistics descriptor.
-> +
-> +The ``count`` field is the number of statistics.
-> +
-> +The ``desc_offset`` field is the offset of the Descriptors block from the start
-> +of the file indicated by the file descriptor.
-> +
-> +The ``data_offset`` field is the offset of the Stats Data block from the start
-> +of the file indicated by the file descriptor.
-> +
-> +The Descriptors block is only needed to be read once for the lifetime of the
-> +file descriptor. It is an array of ``struct kvm_stats_desc`` as shown in
-> +below code block::
-> +
-> +       #define KVM_STATS_TYPE_SHIFT            0
-> +       #define KVM_STATS_TYPE_MASK             (0xF << KVM_STATS_TYPE_SHIFT)
-> +       #define KVM_STATS_TYPE_CUMULATIVE       (0x0 << KVM_STATS_TYPE_SHIFT)
-> +       #define KVM_STATS_TYPE_INSTANT          (0x1 << KVM_STATS_TYPE_SHIFT)
-> +       #define KVM_STATS_TYPE_MAX              KVM_STATS_TYPE_INSTANT
-> +
-> +       #define KVM_STATS_UNIT_SHIFT            4
-> +       #define KVM_STATS_UNIT_MASK             (0xF << KVM_STATS_UNIT_SHIFT)
-> +       #define KVM_STATS_UNIT_NONE             (0x0 << KVM_STATS_UNIT_SHIFT)
-> +       #define KVM_STATS_UNIT_BYTES            (0x1 << KVM_STATS_UNIT_SHIFT)
-> +       #define KVM_STATS_UNIT_SECONDS          (0x2 << KVM_STATS_UNIT_SHIFT)
-> +       #define KVM_STATS_UNIT_CYCLES           (0x3 << KVM_STATS_UNIT_SHIFT)
-> +       #define KVM_STATS_UNIT_MAX              KVM_STATS_UNIT_CYCLES
-> +
-> +       #define KVM_STATS_BASE_SHIFT            8
-> +       #define KVM_STATS_BASE_MASK             (0xF << KVM_STATS_BASE_SHIFT)
-> +       #define KVM_STATS_BASE_POW10            (0x0 << KVM_STATS_BASE_SHIFT)
-> +       #define KVM_STATS_BASE_POW2             (0x1 << KVM_STATS_BASE_SHIFT)
-> +       #define KVM_STATS_BASE_MAX              KVM_STATS_BASE_POW2
-> +
-> +       struct kvm_stats_desc {
-> +               __u32 flags;
-> +               __s16 exponent;
-> +               __u16 size;
-> +               __u32 unused1;
-> +               __u32 unused2;
-> +               char name[0];
-> +       };
-> +
-> +The ``flags`` field contains the type and unit of the statistics data described
-> +by this descriptor. The following flags are supported:
-> +
-> +Bits 0-3 of ``flags`` encode the type:
-> +  * ``KVM_STATS_TYPE_CUMULATIVE``
-> +    The statistics data is cumulative. The value of data can only be increased.
-> +    Most of the counters used in KVM are of this type.
-> +    The corresponding ``count`` filed for this type is always 1.
+/Jens
 
-filed -> field
-
-> +  * ``KVM_STATS_TYPE_INSTANT``
-> +    The statistics data is instantaneous. Its value can be increased or
-> +    decreased. This type is usually used as a measurement of some resources,
-> +    like the number of dirty pages, the number of large pages, etc.
-> +    The corresponding ``count`` field for this type is always 1.
+>  
+>  	/*
+>  	 * The two devices have to be unregistered before we can free the
+> @@ -619,7 +619,7 @@ static int optee_remove(struct platform_device *pdev)
+>   */
+>  static void optee_shutdown(struct platform_device *pdev)
+>  {
+> -	optee_disable_shm_cache(platform_get_drvdata(pdev));
+> +	optee_disable_shm_cache(platform_get_drvdata(pdev), true);
+>  }
+>  
+>  static int optee_probe(struct platform_device *pdev)
+> @@ -716,6 +716,15 @@ static int optee_probe(struct platform_device *pdev)
+>  	optee->memremaped_shm = memremaped_shm;
+>  	optee->pool = pool;
+>  
+> +	/*
+> +	 * Ensure that there are no pre-existing shm objects before enabling
+> +	 * the shm cache so that there's no chance of receiving an invalid
+> +	 * address during shutdown. This could occur, for example, if we're
+> +	 * kexec booting from an older kernel that did not properly cleanup the
+> +	 * shm cache.
+> +	 */
+> +	optee_disable_shm_cache(optee, false);
 > +
-> +Bits 4-7 of ``flags`` encode the unit:
-> +  * ``KVM_STATS_UNIT_NONE``
-> +    There is no unit for the value of statistics data. This usually means that
-> +    the value is a simple counter of an event.
-> +  * ``KVM_STATS_UNIT_BYTES``
-> +    It indicates that the statistics data is used to measure memory size, in the
-> +    unit of Byte, KiByte, MiByte, GiByte, etc. The unit of the data is
-> +    determined by the ``exponent`` field in the descriptor. The
-> +    ``KVM_STATS_BASE_POW2`` flag is valid in this case. The unit of the data is
-> +    determined by ``pow(2, exponent)``. For example, if value is 10,
-> +    ``exponent`` is 20, which means the unit of statistics data is MiByte, we
-> +    can get the statistics data in the unit of Byte by
-> +    ``value * pow(2, exponent) = 10 * pow(2, 20) = 10 MiByte`` which is
-> +    10 * 1024 * 1024 Bytes.
-> +  * ``KVM_STATS_UNIT_SECONDS``
-> +    It indicates that the statistics data is used to measure time/latency, in
-> +    the unit of nanosecond, microsecond, millisecond and second. The unit of the
-> +    data is determined by the ``exponent`` field in the descriptor. The
-> +    ``KVM_STATS_BASE_POW10`` flag is valid in this case. The unit of the data
-> +    is determined by ``pow(10, exponent)``. For example, if value is 2000000,
-> +    ``exponent`` is -6, which means the unit of statistics data is microsecond,
-> +    we can get the statistics data in the unit of second by
-> +    ``value * pow(10, exponent) = 2000000 * pow(10, -6) = 2 seconds``.
-> +  * ``KVM_STATS_UNIT_CYCLES``
-> +    It indicates that the statistics data is used to measure CPU clock cycles.
-> +    The ``KVM_STATS_BASE_POW10`` flag is valid in this case. For example, if
-> +    value is 200, ``exponent`` is 4, we can get the number of CPU clock cycles
-> +    by ``value * pow(10, exponent) = 200 * pow(10, 4) = 2000000``.
-> +
-> +Bits 7-11 of ``flags`` encode the base:
-
-Bits 8-11
-
-> +  * ``KVM_STATS_BASE_POW10``
-> +    The scale is based on power of 10. It is used for measurement of time and
-> +    CPU clock cycles.
-> +  * ``KVM_STATS_BASE_POW2``
-> +    The scale is based on power of 2. It is used for measurement of memory size.
-> +
-> +The ``exponent`` field is the scale of corresponding statistics data. For
-> +example, if the unit is ``KVM_STATS_UNIT_BYTES``, the base is
-> +``KVM_STATS_BASE_POW2``, the ``exponent`` is 10, then we know that the real
-> +unit of the statistics data is KBytes a.k.a pow(2, 10) = 1024 bytes.
-> +
-> +The ``size`` field is the number of values of this statistics data. It is in the
-> +unit of ``unsigned long`` for VM or ``__u64`` for VCPU.
-> +
-> +The ``unused1`` and ``unused2`` fields are reserved for future
-> +support for other types of statistics data, like log/linear histogram.
-> +
-> +The ``name`` field points to the name string of the statistics data. The name
-> +string starts at the end of ``struct kvm_stats_desc``.
-> +The maximum length (including trailing '\0') is indicated by ``name_size``
-> +in ``struct kvm_stats_header``.
-> +
-> +The Stats Data block contains an array of data values of type ``struct
-> +kvm_vm_stats_data`` or ``struct kvm_vcpu_stats_data``. It would be read by
-> +user space periodically to pull statistics data.
-> +The order of data value in Stats Data block is the same as the order of
-> +descriptors in Descriptors block.
-> +  * Statistics data for VM::
-> +
-> +       struct kvm_vm_stats_data {
-> +               unsigned long value[0];
-> +       };
-> +
-> +  * Statistics data for VCPU::
-> +
-> +       struct kvm_vcpu_stats_data {
-> +               __u64 value[0];
-> +       };
-> +
->  5. The kvm_run structure
->  ========================
->
-> @@ -6891,3 +7063,11 @@ This capability is always enabled.
->  This capability indicates that the KVM virtual PTP service is
->  supported in the host. A VMM can check whether the service is
->  available to the guest on migration.
-> +
-> +8.33 KVM_CAP_STATS_BINARY_FD
-> +----------------------------
-> +
-> +:Architectures: all
-> +
-> +This capability indicates the feature that user space can create get a file
-> +descriptor for every VM and VCPU to read statistics data in binary format.
-
-nit: user space -> userspace (it's spelled that way throughout this document)
-
-Cheers,
-/fuad
-
-> --
-> 2.32.0.rc1.229.g3e70b5a671-goog
->
-> _______________________________________________
-> kvmarm mailing list
-> kvmarm@lists.cs.columbia.edu
-> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
+>  	optee_enable_shm_cache(optee);
+>  
+>  	if (optee->sec_caps & OPTEE_SMC_SEC_CAP_DYNAMIC_SHM)
+> diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+> index e25b216a14ef..16d8c82213e7 100644
+> --- a/drivers/tee/optee/optee_private.h
+> +++ b/drivers/tee/optee/optee_private.h
+> @@ -158,7 +158,7 @@ int optee_invoke_func(struct tee_context *ctx, struct tee_ioctl_invoke_arg *arg,
+>  int optee_cancel_req(struct tee_context *ctx, u32 cancel_id, u32 session);
+>  
+>  void optee_enable_shm_cache(struct optee *optee);
+> -void optee_disable_shm_cache(struct optee *optee);
+> +void optee_disable_shm_cache(struct optee *optee, bool is_mapped);
+>  
+>  int optee_shm_register(struct tee_context *ctx, struct tee_shm *shm,
+>  		       struct page **pages, size_t num_pages,
+> -- 
+> 2.25.1
+> 
