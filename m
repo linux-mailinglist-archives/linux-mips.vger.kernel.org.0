@@ -2,108 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BE53A5F82
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 11:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00403A5F91
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Jun 2021 11:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbhFNJzb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Jun 2021 05:55:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:40542 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232579AbhFNJza (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 14 Jun 2021 05:55:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623664407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4kx9Q3nsVnRINu0vIrWoo9nXjPPqt9AsqYqJM+8URyI=;
-        b=DmD/zzSyyUI6UUPShMbzTxNeTo/xOFNgRuLH8zvd5h0q5W3o9M/ziOX1UUGjGGaVMZ9WoP
-        mcGiC1AiHS2I1M558nxIrQ4oQGaB9g2+2zTL58I/xRc3avbhZVbBrTqAXkuF9jWouL478/
-        QU4KNwQ6Fyz3piVQwMfvIiZkExrV7so=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-257-3iUWC02VN5iiAp2_eyHQPg-1; Mon, 14 Jun 2021 05:53:26 -0400
-X-MC-Unique: 3iUWC02VN5iiAp2_eyHQPg-1
-Received: by mail-ed1-f71.google.com with SMTP id y18-20020a0564022712b029038ffac1995eso20074013edd.12
-        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 02:53:25 -0700 (PDT)
+        id S232730AbhFNJ7o (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Jun 2021 05:59:44 -0400
+Received: from mail-oo1-f54.google.com ([209.85.161.54]:43526 "EHLO
+        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232711AbhFNJ7m (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Jun 2021 05:59:42 -0400
+Received: by mail-oo1-f54.google.com with SMTP id z14-20020a4a984e0000b029024a8c622149so1995553ooi.10
+        for <linux-mips@vger.kernel.org>; Mon, 14 Jun 2021 02:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=17xdYDaXcr1GgYwnSmChvSTc/UXYmZQtZNjoRDgyHAw=;
+        b=cZEhqQwUMi3qA2skVWLwd278vC0Of6ba8gN/ywOqCCPGS2nVuE5tlQ3Ec/BCfmY21k
+         R9Ay7mTCx4f494TfLoQwYgM5qMWjZz4ZeOJ3ThrxH54CT2h1CMfpU+jz69bsTOgXJkJ0
+         zrm0RAdmF0RWeqH8203uXoRnvqCC21rwONaz07Oeh3aKDJEnWNCUa3E/yUDJCFrBUzzZ
+         lZRtRpgFOAPlGiBe+9NYqJNScFMRNAxGh7yoClYylxwtVqcFa0x9TtP64+gHhr+6yMsS
+         Or8sJAeAZRQI2iEcXsiGCBr2ywyq87AqlR/hEdzHE86ox4DqD2aqHvW4/R9HGK0fRN5K
+         h2qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4kx9Q3nsVnRINu0vIrWoo9nXjPPqt9AsqYqJM+8URyI=;
-        b=gOYFaa0ybCY7qJq4EFd1x4tUvL8xgNLnDOVbg46DUIc84tMX1raSdyvICFWVjkx9FH
-         4+rVbCENlEIj1q53HR7HQYdxpphAzMugkT6CRTf0+gLZY4povx34UiSn+ccQxUpAuLN8
-         U8mCGBL8zpskzA0OGXewrMyc8wLCmpP9EafevpCoX71oJggxFiwsODVjbN6M6qJCOtj8
-         mpU2mwvKq5NK72zIbM3Y9JuvRFeHWGbcUovUD1eCoowurrCRhmGO3XNDqVhvetUMvdCw
-         OOxpmCUa0iWbyhU5vDFjXzZd1UbOBTxZgXW5GiloYgzeQ9NvQR0IQDMkjHwshStTig2B
-         zvNw==
-X-Gm-Message-State: AOAM533VesNqrAeMnVKwrQNQPojE0gusVAR8JQpic3zK+j5s8Ci4Q7Tq
-        MIyq7JwQML1HLhxrkVnPS2EO0DHLObORfmDQWHuihEN7M2wXXK29cJI8YvtmHf1RpWojlMQ2HU2
-        sZ2SZxHdAboC7cdpsPtyP8g==
-X-Received: by 2002:aa7:dd1a:: with SMTP id i26mr16204802edv.358.1623664405038;
-        Mon, 14 Jun 2021 02:53:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxDkQ0JPU1g5M6jhW9DnavBLG6plfx7uGDLrqTbEtcjhKBQcyMeEBajFaPx2nWsm5OdUYvaJg==
-X-Received: by 2002:aa7:dd1a:: with SMTP id i26mr16204789edv.358.1623664404859;
-        Mon, 14 Jun 2021 02:53:24 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id p10sm8486235edy.86.2021.06.14.02.53.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Jun 2021 02:53:24 -0700 (PDT)
-Subject: Re: [PATCH 0/4] Remove duplicated stats definitions for debugfs
-To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
-        KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Fuad Tabba <tabba@google.com>
-References: <20210614025351.365284-1-jingzhangos@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <dc48637c-e683-a64a-b744-bd5fe2037f31@redhat.com>
-Date:   Mon, 14 Jun 2021 11:53:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=17xdYDaXcr1GgYwnSmChvSTc/UXYmZQtZNjoRDgyHAw=;
+        b=SdSaSkT5UnsRC16D7KaM4uQCP5xFT7iWUjXmoyn+AYsfwrs5ra1NJCiOX0HvKauheH
+         Fgpm2wgZ7xRfGn1fuh0FiLf2dN+r23/fkZlmEyf0Aw5KtV3qqHn0QkSlHWYXszQi3zKE
+         2LfiKrYD5jMPsrM+blMA1ERngTf9dqGZRFR3tnHc+L1AZSH5Ns5vDtS4mP6vFkTNlpf6
+         f0vyO58hA43ZpWdpG5LJPz2OcPLCOl3BzMwTw69/T2x++CI6hto2fEt4yVIFqnmwFUOf
+         1cGhEVmI98EkeC7fdXELrqe1o2EO+IDhKHWmGPD/KpM/d6YEe5nz8rTNVVMkisDcm8cv
+         8VKg==
+X-Gm-Message-State: AOAM533tZe4rbJQ4mm/lia8ZqbmXdF6PjZwSCb3I9e77VFz+3I1dGWjl
+        oMO+SgPk12j8bEBg2kodJcuHULJ4sZz8v2QcvoY=
+X-Google-Smtp-Source: ABdhPJxK+IiZ7hAc2SVBDlCb8Xoaf0kIEdwUnJ0Ua2eG3Zz2A1TApntQ8+Di6xjSdvMmjoD8JVgG2AOZjxp78QuDPs8=
+X-Received: by 2002:a05:6820:386:: with SMTP id r6mr12312802ooj.25.1623664599826;
+ Mon, 14 Jun 2021 02:56:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210614025351.365284-1-jingzhangos@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210613155623.17233-1-sergio.paracuellos@gmail.com>
+ <20210613155623.17233-2-sergio.paracuellos@gmail.com> <12f81f6e-41be-7e0f-5590-67591c722a38@gmail.com>
+In-Reply-To: <12f81f6e-41be-7e0f-5590-67591c722a38@gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 14 Jun 2021 11:56:28 +0200
+Message-ID: <CAMhs-H_tb8B52+-i1mLMWfEbgcuvngfdm=UzpxZmiaBKA=ywxg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] MIPS: ralink: Define PCI_IOBASE
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     linux-staging@lists.linux.dev,
+        Greg KH <gregkh@linuxfoundation.org>,
+        NeilBrown <neil@brown.name>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        John Crispin <john@phrozen.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 14/06/21 04:53, Jing Zhang wrote:
-> This is a follow-up patchset to binary stats interface patchset as below:
-> https://lore.kernel.org/kvm/20210611124624.1404010-1-jingzhangos@google.com
-> 
-> This patchset contains a commit to fix some missing stats and add static
-> check to make sure we have the right number of stats descriptors and add an
-> 'offset' field in stats descriptor to make sure the or order of stats
-> descriptors is not relevant to the order of stats in vm/vcpu stats
-> structure. This will totally avoid the possibility of missing stats and
-> mismatched stats definitions.
-> 
-> The binary stats interface defines stats in another array of descriptors,
-> while the original stats debugfs interface uses array of kvm_stats_debugfs
-> item. To remove the duplicated stats definition, this patchset would
-> utilize only the stats descriptors to provide stats information to debugfs
-> interface. This patchset adds a 'mode' flag to support the read/write mode
-> of stats, which can be used to indicate the file permission of debugfs
-> stats files. It removes the usage of kvm_stats_debugfs_item and all the
-> debugfs_entries defined in all archs.
-> 
-> The patch also fixes an issue that read only stats could be cleared in
-> global level, though not permitted in VM level in the original debugfs
-> code.
+Hi Sergei,
 
-Thanks for putting this together quickly.  I think we can drop the mode, 
-see the suggestion in patch 2.
+On Mon, Jun 14, 2021 at 11:13 AM Sergei Shtylyov
+<sergei.shtylyov@gmail.com> wrote:
+>
+> Hello!
+>
+> On 13.06.2021 18:56, Sergio Paracuellos wrote:
+>
+> > PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
+> > required by generic PCI drivers to make memory mapped I/O range
+> > work. Hence define it for ralink architectures to be able to
+> > avoid parsing manually IO ranges in PCI generic driver code.
+> > Function 'plat_mem_setup' for ralink is using 'set_io_port_base'
+> > call using '0xa0000000' as address, so use the same address in
+> > the definition to align things.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >   arch/mips/include/asm/mach-ralink/spaces.h | 10 ++++++++++
+> >   1 file changed, 10 insertions(+)
+> >   create mode 100644 arch/mips/include/asm/mach-ralink/spaces.h
+> >
+> > diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
+> > new file mode 100644
+> > index 000000000000..ec58d4a9ed05
+> > --- /dev/null
+> > +++ b/arch/mips/include/asm/mach-ralink/spaces.h
+> > @@ -0,0 +1,10 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef __ASM_MACH_RALINK_SPACES_H_
+> > +#define __ASM_MACH_RALINK_SPACES_H_
+> > +
+> > +#define PCI_IOBASE   _AC(0xa0000000, UL)
+> > +#define PCI_IOSIZE   SZ_16M
+> > +#define IO_SPACE_LIMIT  (PCI_IOSIZE - 1)
+>
+>     Why this sudden switch to spaces for indentation? Previous lines were
+> (correctly) indented with tabs...
 
-It's probably best to fold the v8 for the stats functionality, these 
-patches (squashed appropriately) and Fuad's remars in a single posting. 
-  But I'm quite confident that it can make it in 5.14.
+I don't really know what could have happened, honestly. I will fix
+spaces into tabs and send v2.
 
-Paolo
+>
+> > +
+> > +#include <asm/mach-generic/spaces.h>
+> > +#endif
+>
+> MBR, Sergei
 
+Best regards,
+    Sergio Paracuellos
