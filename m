@@ -2,109 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 001623A7ECC
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 15:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D051A3A7F13
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 15:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbhFONPQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Jun 2021 09:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbhFONPQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 09:15:16 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE7FC061574
-        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 06:13:11 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id m137so18168947oig.6
-        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 06:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tWfCA/cj4bP11aI8fVw9bNbVzWrfY1MM09q/MJvO4sI=;
-        b=i6NFfe6OqKkc2GjuixTIl6bkyFY/nAnyVpdf6bF7QM61nCgHovApujmDFYzOF9lwJm
-         y2eO3cMlFvpPzJVoJmJ8C1GNWbNvG9YSnnR+CRENe040E4Yn0GQp/2t40HEXb4sPHOsm
-         1hxQMJ9R5UtmttEvYcGQZFzVbur0cec6vjjFiDXuxexdrga9fOqJIVXgSEZ0CNepuRdf
-         y/E6FpOxc+0R36qQBew9l7ZRd09QcUZECSzMe8kdByHUEbyUKqwCfjjbCvaDwydgNzJ3
-         ebb2vGKoFEZm7tQhhp3bPrJkUcjv0YvWWb1H5oAV8CghI66nsj2TUs+1bXrQYjSJMQ6n
-         VJiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tWfCA/cj4bP11aI8fVw9bNbVzWrfY1MM09q/MJvO4sI=;
-        b=TjcuLVpxcljxT+0vKTTuUSLm0kyV/8gOCdu312aAEqq6+Y2brwwan8C0HeuNIeOBiK
-         SdHvOg7hnchP9/EWF29Pxp0SOVeMErAP0/2nKHnMjKaVW7//8bdoLxSLZr4Oyyeo8QjO
-         4SVaMsE2Jz2mQ5HGsVa2x4MmtwE+kTVg/x5civ6ca8p1tVwtWekXZ95f8DV55gRMpx5D
-         0NZNVp2fHU6K7RvrvLoDgBvXmmIu59IYdevo3y2e1rVuU3Wgfw+6bJDatDqZLoCqsmnO
-         Mf5Julk1m8XiyDx66uUnbguAHRDRJhcW/+kvBXXHZJSWlqBDulaNroIvb9Aa1m2/ES2P
-         o+Eg==
-X-Gm-Message-State: AOAM530PZ2GfDLb3tzOnd4h8FrcCE39ISTT9Ijja6PIwIqf9a5HJgVNS
-        TMRzPqwVo84oV3xNI259+iDSeAYGUcb3RROkWPo=
-X-Google-Smtp-Source: ABdhPJzjl3D4rly1033Ap18MIjyOPpXtFkFicUf+prWCfDN1Vg3sD2xplaKOs9IMGu15u/DVE6jFV2V9s/wiOyN2EXA=
-X-Received: by 2002:aca:aad4:: with SMTP id t203mr14189684oie.149.1623762790534;
- Tue, 15 Jun 2021 06:13:10 -0700 (PDT)
+        id S230060AbhFONVo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Jun 2021 09:21:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39764 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230012AbhFONVm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 15 Jun 2021 09:21:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C6E186145D;
+        Tue, 15 Jun 2021 13:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623763178;
+        bh=QUjTO9qA9P0XSpHtk0ljNgiuHJvfQJgoZdIkwhL9kVk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AABeXVMvFm01gQQ4tEeRo70Ttojrt+hEBRyC0NqQk7OqaJvsZ8+YT7ytnzFr9xwus
+         358Hr6OOpRmOT4HQeYP45/NavjEX8UyhzYqE2YLJR3Z8YZ+IccNRJw4jYpakzzOB+D
+         EgFRZZlKZk1YAFaOBtxCst6+hLobhIsAo+02IP4g=
+Date:   Tue, 15 Jun 2021 15:19:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] serial: core, 8250: Add a hook for extra port
+ property reporting
+Message-ID: <YMio51m/EaS0vIsb@kroah.com>
+References: <alpine.DEB.2.21.2105181800170.3032@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2105190414160.29169@angie.orcam.me.uk>
 MIME-Version: 1.0
-References: <20210614100617.28753-1-sergio.paracuellos@gmail.com>
- <20210614100617.28753-2-sergio.paracuellos@gmail.com> <20210615130830.GA7029@alpha.franken.de>
-In-Reply-To: <20210615130830.GA7029@alpha.franken.de>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 15 Jun 2021 15:12:59 +0200
-Message-ID: <CAMhs-H8TM=m2ULVYwOFR8kEw4h1EDHOeGaVh9WpvxmY8oP8NTg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] MIPS: ralink: Define PCI_IOBASE
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        John Crispin <john@phrozen.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2105190414160.29169@angie.orcam.me.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 3:09 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Mon, Jun 14, 2021 at 12:06:15PM +0200, Sergio Paracuellos wrote:
-> > PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
-> > required by generic PCI drivers to make memory mapped I/O range
-> > work. Hence define it for ralink architectures to be able to
-> > avoid parsing manually IO ranges in PCI generic driver code.
-> > Function 'plat_mem_setup' for ralink is using 'set_io_port_base'
-> > call using '0xa0000000' as address, so use the same address in
-> > the definition to align things.
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >  arch/mips/include/asm/mach-ralink/spaces.h | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >  create mode 100644 arch/mips/include/asm/mach-ralink/spaces.h
-> >
-> > diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-> > new file mode 100644
-> > index 000000000000..87d085c9ad61
-> > --- /dev/null
-> > +++ b/arch/mips/include/asm/mach-ralink/spaces.h
-> > @@ -0,0 +1,10 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef __ASM_MACH_RALINK_SPACES_H_
-> > +#define __ASM_MACH_RALINK_SPACES_H_
-> > +
-> > +#define PCI_IOBASE   _AC(0xa0000000, UL)
-> > +#define PCI_IOSIZE   SZ_16M
-> > +#define IO_SPACE_LIMIT       (PCI_IOSIZE - 1)
-> > +
-> > +#include <asm/mach-generic/spaces.h>
-> > +#endif
-> > --
-> > 2.25.1
->
-> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+On Thu, Jun 10, 2021 at 08:38:44PM +0200, Maciej W. Rozycki wrote:
+> Add a hook for `uart_report_port' to let serial ports report extra 
+> properties beyond `irq' and `base_baud'.  Use it with the 8250 backend 
+> to report extra baud rates supported above the base rate for ports with 
+> the UPF_MAGIC_MULTIPLIER property, so that people have a way to find out 
+> that they are supported with their system, e.g.:
+> 
+> Serial: 8250/16550 driver, 5 ports, IRQ sharing enabled
+> printk: console [ttyS0] disabled
+> serial8250.0: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200 [+230400, 460800]) is a 16550A
+> printk: console [ttyS0] enabled
+> printk: console [ttyS0] enabled
+> printk: bootconsole [uart8250] disabled
+> printk: bootconsole [uart8250] disabled
+> serial8250.0: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200 [+230400, 460800]) is a 16550A
+> serial8250.0: ttyS2 at MMIO 0x1f000900 (irq = 20, base_baud = 230400) is a 16550A
+> 
+> Otherwise there is no clear way to figure this out.
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> ---
+>  drivers/tty/serial/8250/8250_core.c |   10 ++++++++++
+>  drivers/tty/serial/serial_core.c    |   11 +++++++++--
+>  include/linux/serial_core.h         |    3 +++
+>  3 files changed, 22 insertions(+), 2 deletions(-)
+> 
+> linux-serial-core-baud-extra.diff
+> Index: linux-malta-cbus-uart/drivers/tty/serial/8250/8250_core.c
+> ===================================================================
+> --- linux-malta-cbus-uart.orig/drivers/tty/serial/8250/8250_core.c
+> +++ linux-malta-cbus-uart/drivers/tty/serial/8250/8250_core.c
+> @@ -952,6 +952,13 @@ static struct uart_8250_port *serial8250
+>  	return NULL;
+>  }
+>  
+> +static void serial8250_report_magic(struct uart_port *port,
+> +				    char *report_buf, size_t report_size)
+> +{
+> +	snprintf(report_buf, report_size,
+> +		 " [+%d, %d]", port->uartclk / 8, port->uartclk / 4);
+> +}
+> +
+>  static void serial_8250_overrun_backoff_work(struct work_struct *work)
+>  {
+>  	struct uart_8250_port *up =
+> @@ -1048,6 +1055,9 @@ int serial8250_register_8250_port(struct
+>  			}
+>  		}
+>  
+> +		if (up->port.flags & UPF_MAGIC_MULTIPLIER)
+> +			uart->port.report_extra = serial8250_report_magic;
+> +
+>  		serial8250_set_defaults(uart);
+>  
+>  		/* Possibly override default I/O functions.  */
+> Index: linux-malta-cbus-uart/drivers/tty/serial/serial_core.c
+> ===================================================================
+> --- linux-malta-cbus-uart.orig/drivers/tty/serial/serial_core.c
+> +++ linux-malta-cbus-uart/drivers/tty/serial/serial_core.c
+> @@ -2309,6 +2309,7 @@ int uart_resume_port(struct uart_driver
+>  static inline void
+>  uart_report_port(struct uart_driver *drv, struct uart_port *port)
+>  {
+> +	char report_extra[64];
+>  	char address[64];
+>  
+>  	switch (port->iotype) {
+> @@ -2333,11 +2334,17 @@ uart_report_port(struct uart_driver *drv
+>  		break;
+>  	}
+>  
+> -	pr_info("%s%s%s at %s (irq = %d, base_baud = %d) is a %s\n",
+> +	if (port->report_extra)
+> +		port->report_extra(port, report_extra, sizeof(report_extra));
+> +	else
+> +		report_extra[0] = '\0';
+> +
+> +	pr_info("%s%s%s at %s (irq = %d, base_baud = %d%s) is a %s\n",
+>  	       port->dev ? dev_name(port->dev) : "",
+>  	       port->dev ? ": " : "",
+>  	       port->name,
+> -	       address, port->irq, port->uartclk / 16, uart_type(port));
+> +	       address, port->irq, port->uartclk / 16, report_extra,
+> +	       uart_type(port));
 
-Fastest response ever :) Thanks!
+Ick, really?  What relies on this print message?  Why do we need a whole
+new uart port hook for this?
 
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+Isn't there some other way for your specific variant to print out
+another message if you really want to do something "odd" like this?
+
+And you did not document what your new change did anywhere in the tree,
+so people are going to be confused.
+
+I've taken the other patches here, but not this one.
+
+thanks,
+
+greg k-h
