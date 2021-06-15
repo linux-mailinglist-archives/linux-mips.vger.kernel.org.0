@@ -2,163 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC2F3A7B97
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 12:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE24D3A7C9F
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 13:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbhFOKRu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Jun 2021 06:17:50 -0400
-Received: from mslow1.mail.gandi.net ([217.70.178.240]:46883 "EHLO
-        mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbhFOKRt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 06:17:49 -0400
-Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 7B9CECC5B1;
-        Tue, 15 Jun 2021 10:06:54 +0000 (UTC)
-Received: (Authenticated sender: paul@opendingux.net)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id ABEC0C0010;
-        Tue, 15 Jun 2021 10:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=opendingux.net;
-        s=gm1; t=1623751590;
+        id S229918AbhFOLFq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Jun 2021 07:05:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43240 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229845AbhFOLFp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 15 Jun 2021 07:05:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623755021;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XuVVJBxzTq/nezMzQHmQ1iVQtTJi09b38NBbn1HjEvw=;
-        b=JHYLsSG9c/DxPug2+3SS07gd9NSKQdIOHICPsS6HGrJIp5dhUaBO4zub1qz10DE6zncynR
-        MAot7LCUhW/EFVNxL0XBzz51PoBF6avWqVYnPEkGmRRfgViAKEg79y9sFwxNhftod0dWIU
-        Uby73qZbDhZZC2Q0XIHgTBadil6EHZEBEWQO2q16MYtxJCQHyg4yYiYmKNZ7V+80Dm5uZK
-        KM/s42LdGBMV8JceVMNeTMfX3Y530BiykAx/xqHcVU/Z6BiO5/262Gab7IZXWJNoKqZQba
-        x+OYathox+vQMl54ravzHVrSAUfD6zrJzz1g/qBNA0U/GB7DPey2ecs24cSt2g==
-Date:   Tue, 15 Jun 2021 11:06:17 +0100
-From:   Paul Cercueil <paul@opendingux.net>
-Subject: Re: [PATCH] USB: DWC2: Add VBUS overcurrent detection control.
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        hminas@synopsys.com, paul@crapouillou.net,
-        linux-mips@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, sernia.zhou@foxmail.com,
-        Dragan =?iso-8859-2?b?yGXoYXZhYw==?= <dragancecavac@yahoo.com>
-Message-Id: <HQMQUQ.3AEG9G7WVQKQ2@opendingux.net>
-In-Reply-To: <YMh3bpRjyTZC2Hsd@kroah.com>
-References: <1616513066-62025-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <YFoJ0Z6K4B5smbQx@kroah.com>
-        <20210615161456.2dd501a1@zhouyanjie-virtual-machine>
-        <8BJQUQ.QJOE5WOSWVBU@opendingux.net> <YMh3bpRjyTZC2Hsd@kroah.com>
-X-Mailer: geary/40.0
+        bh=iEAQAQmkLLT7lE0HbV2Awm5nECfUPpZCvFSfqi2dN24=;
+        b=dgU/gWK0iVVvZnA7dQMnHYQsjxQh186wjN2Y59+jDfpuXAi/C/jQh59iVs45YCtdWpeh2I
+        WrIv/ZsxXitFxUTtDE/jZE4TT4Vk8D5ShGgDY8cmAfLeptx4Hgcc8dVnzpShkbedDH9GFW
+        R2+QwFP8emCv4zImix8NIEAkmpUGA1g=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-513-PcAO9LDYOK-RSnTPuhtgnw-1; Tue, 15 Jun 2021 07:03:40 -0400
+X-MC-Unique: PcAO9LDYOK-RSnTPuhtgnw-1
+Received: by mail-ej1-f72.google.com with SMTP id gv42-20020a1709072beab02903eab8e33118so4350181ejc.19
+        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 04:03:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iEAQAQmkLLT7lE0HbV2Awm5nECfUPpZCvFSfqi2dN24=;
+        b=NhFmekxShaLbN8L3mGCF3rZZUMEd1ACQ/lrinTLf19s59RzOXE9jBMTZn63dNkJait
+         OYk0xrDFa/Hw679/Avg2seYF/LE8gSJy6Jj/nWp7qHTx2ptpmU5VAsL/kVPhkJ2cd/UH
+         /3nbJsduZCQpInwbbwsio/4y4o/bYHpwCyhMXYCkVC6ZoXP5jbZTtGGnDNpCvrmOO3z+
+         aENhV0z9z1SlOQD09S53ib+v3h2QmAosWGiMVYDZ6DhYpleu6dP6Fa4UPbvkJ7SVDFHX
+         tLkuqH+lMzDUTy8XsDheGWJ5mmrKUfGnTNEXQReYbtSO8CQDCUcfq9cexnMkwcR3Ykol
+         vwuA==
+X-Gm-Message-State: AOAM531vzOAd91LzbKXILzxgbVOHOVq/6rf8t9E4aOBgJ4Uo+DEu5m5s
+        xcekjcgjBppSHjMGPPtMsDBU+njHbuCCgmD7E2LPdGfzXMM167qtJTACbgymzakM6Vw3XB1RZI7
+        g61aV0I1KAzkPr5HjiMD1/Q==
+X-Received: by 2002:aa7:cb90:: with SMTP id r16mr22601063edt.121.1623755019227;
+        Tue, 15 Jun 2021 04:03:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyyVGoTcEFV+m9u1f3g2PKtrTco2TK6Sy4Mfoi+BgNSLuNotL7Uvem+oaDEtZ7dwo5Mk49IJg==
+X-Received: by 2002:aa7:cb90:: with SMTP id r16mr22601014edt.121.1623755018970;
+        Tue, 15 Jun 2021 04:03:38 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id h8sm10123527ejj.22.2021.06.15.04.03.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jun 2021 04:03:38 -0700 (PDT)
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+References: <20210614212155.1670777-1-jingzhangos@google.com>
+ <YMg5xPbmK3myjIX8@unreal> <15875c41-e1e7-3bf2-a85c-21384684d279@redhat.com>
+ <YMhcek2cIu3Oz5Ek@unreal>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v9 0/5] KVM statistics data fd-based binary interface
+Message-ID: <9df462c0-e0ea-8173-0705-369d6a81107c@redhat.com>
+Date:   Tue, 15 Jun 2021 13:03:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YMhcek2cIu3Oz5Ek@unreal>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Greg,
-
-Le mar., juin 15 2021 at 11:48:30 +0200, Greg KH=20
-<gregkh@linuxfoundation.org> a =C3=A9crit :
-> On Tue, Jun 15, 2021 at 09:52:20AM +0100, Paul Cercueil wrote:
->>  Hi Zhou,
->>=20
->>  Le mar., juin 15 2021 at 16:16:39 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0=20
->> <zhouyanjie@wanyeetech.com>
->>  a =C3=A9crit :
->>  > Hi Greg,
->>  >
->>  > Sorry for taking so long to reply.
->>  >
->>  > =E4=BA=8E Tue, 23 Mar 2021 16:31:29 +0100
->>  > Greg KH <gregkh@linuxfoundation.org> =E5=86=99=E9=81=93:
->>  >
->>  > >  On Tue, Mar 23, 2021 at 11:24:26PM +0800, =E5=91=A8=E7=90=B0=E6=9D=
-=B0 (Zhou=20
->> Yanjie)
->>  > > wrote:
->>  > >  > Introduce configurable option for enabling GOTGCTL register
->>  > >  > bits VbvalidOvEn and VbvalidOvVal. Once selected it disables
->>  > >  > VBUS overcurrent detection.
->>  > >  >
->>  > >  > This patch is derived from Dragan =C4=8Ce=C4=8Davac (in the kern=
-el=20
->> 3.18
->>  > >  > tree of CI20). It is very useful for the MIPS Creator=20
->> CI20(r1).
->>  > >  > Without this patch, CI20's OTG port has a great probability=20
->> to
->>  > >  > face overcurrent warning, which breaks the OTG functionality.
->>  > >  >
->>  > >  > Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)=20
->> <zhouyanjie@wanyeetech.com>
->>  > >  > Signed-off-by: Dragan =C4=8Ce=C4=8Davac <dragancecavac@yahoo.com=
+On 15/06/21 09:53, Leon Romanovsky wrote:
+>> Sorry for my naive questions, but how does telemetry get statistics
+>> for hypervisors? Why is KVM different from hypervisors or NIC's statistics
+>> or any other high speed devices (RDMA) that generate tons of data?
 >
->>  > >  > ---
->>  > >  >  drivers/usb/dwc2/Kconfig | 6 ++++++
->>  > >  >  drivers/usb/dwc2/core.c  | 9 +++++++++
->>  > >  >  2 files changed, 15 insertions(+)
->>  > >  >
->>  > >  > diff --git a/drivers/usb/dwc2/Kconfig=20
->> b/drivers/usb/dwc2/Kconfig
->>  > >  > index c131719..e40d187 100644
->>  > >  > --- a/drivers/usb/dwc2/Kconfig
->>  > >  > +++ b/drivers/usb/dwc2/Kconfig
->>  > >  > @@ -94,4 +94,10 @@ config USB_DWC2_DEBUG_PERIODIC
->>  > >  >  	  non-periodic transfers, but of course the debug logs
->>  > >  > will be incomplete. Note that this also disables some debug
->>  > > messages
->>  > >  >  	  for which the transfer type cannot be deduced.
->>  > >  > +
->>  > >  > +config USB_DWC2_DISABLE_VOD
->>  > >  > +	bool "Disable VBUS overcurrent detection"
->>  > >  > +	help
->>  > >  > +	  Say Y here to switch off VBUS overcurrent detection. It
->>  > >  > enables USB
->>  > >  > +	  functionality blocked by overcurrent detection.
->>  > >
->>  > >  Why would this be a configuration option?  Shouldn't this be=20
->> dynamic
->>  > >  and just work properly automatically?
->>  > >
->>  > >  You should not have to do this on a build-time basis, it=20
->> should be
->>  > >  able to be detected and handled properly at run-time for all
->>  > > devices.
->>  > >
->>  >
->>  > I consulted the original author Dragan =C4=8Ce=C4=8Davac, he think si=
-nce=20
->> this is
->>  > a feature which disables overcurrent detection, so we are not=20
->> sure if
->>  > it could be harmful for some devices. Therefore he advise against
->>  > enabling it in runtime, and in favor that user explicitely has to
->>  > enable it.
->>=20
->>  This could still be enabled at runtime, though, via a module=20
->> parameter.
->>  Leave it enabled by default, and those who want to disable it can=20
->> do it.
->=20
-> This is not the 1990's, please NEVER add new module parameters,
+> So the answer to the question "why KVM is different" is that it doesn't
+> have any stable identification except file descriptor. While hypervisors
+> have stable names, NICs and RDMA devices have interface indexes etc.
+> Did I get it right?
 
-First time I hear this.
+Right.
 
-> especially ones that are somehow supposed to be device-specific.
->=20
-> Remember, module options are code-wide, not device-specific.
+> And this was second part of my question, the first part was my attempt to
+> get on answer why current statistics like process info (/proc/xxx/*), NICs
+> (netlink) and RDMA (sysfs) are not using binary format.
 
-Right. I thought "just make the option available on devices that=20
-support it" but that's not how it works.
+NICs are using binary format (partly in struct ethtool_stats, partly in 
+an array of u64).  For KVM we decided to put the schema and the stats in 
+the same file (though you can use pread to get only the stats) to have a 
+single interface and avoid ioctls, unlike having both ETH_GSTRINGS and 
+ETH_GSTATS.
 
--Paul
+I wouldn't say processes are using any specific format.  There's a mix 
+of "one value per file" (e.g. cpuset), human-readable tabular format 
+(e.g. limits, sched), human- and machine-readable tabular format (e.g. 
+status), and files that are ASCII but not human-readable (e.g. stat).
 
-> Just do this based on the device type, or something else dynamic, do=20
-> NOT
-> make this be forced to be selected by a kernel configuration option=20
-> or a
-> random module option at runtime.
->=20
-> thanks,
->=20
-> greg k-h
-
+Paolo
 
