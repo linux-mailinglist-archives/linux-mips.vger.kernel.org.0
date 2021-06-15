@@ -2,87 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F12983A7640
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 07:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE16E3A766F
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 07:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbhFOFGX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Jun 2021 01:06:23 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:50656 "EHLO deadmen.hmeau.com"
+        id S229493AbhFOF1c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Jun 2021 01:27:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55090 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229463AbhFOFGW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 15 Jun 2021 01:06:22 -0400
-Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
-        by deadmen.hmeau.com with esmtp (Exim 4.92 #5 (Debian))
-        id 1lt1Ec-0006cw-4n; Tue, 15 Jun 2021 13:03:34 +0800
-Received: from herbert by gondobar with local (Exim 4.92)
-        (envelope-from <herbert@gondor.apana.org.au>)
-        id 1lt1E3-0001MR-0g; Tue, 15 Jun 2021 13:02:59 +0800
-Date:   Tue, 15 Jun 2021 13:02:59 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Ira Weiny <ira.weiny@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        id S229463AbhFOF1c (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 15 Jun 2021 01:27:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EC7106140C;
+        Tue, 15 Jun 2021 05:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623734728;
+        bh=ccQSlvryxnxETl+l+tNcmXDaNhM9HlrwPO8EJMj+lco=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VqGj7By+d/l6mauCaIJU0c/KV3+rqklJy6aVtPt9CDzS7chlu0KCSgJohCt6ENRFB
+         hZbqrm74sk+HbYGsLB2IFGR0HNlTtEDCiJ45q53lv3oXtKgbUi2LTn6IBkCySex0Ut
+         v+lP6YYo+18NfLUwnU/avHN5VCfXxHGNOLiIYOEUwXTfMSpFZLeX2c5sZ6FUPzXloJ
+         3NKX84fPqnuujHvw9LaCnskPcKNSo1gTZ6gUirpGBA4TSmfzxMrFZtGX6C09vzgi+w
+         E6/8CN+r511QtRKRmtzndwnz2BF4ZxWPZTO723jD82/gwROR8WDqwapMzkmkXos310
+         A6WpBeSUo/T1g==
+Date:   Tue, 15 Jun 2021 08:25:24 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geoff Levand <geoff@infradead.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Dongsheng Yang <dongsheng.yang@easystack.cn>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        ceph-devel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        linux-arch@vger.kernel.org, Tero Kristo <t-kristo@ti.com>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 09/16] ps3disk: use memcpy_{from,to}_bvec
-Message-ID: <20210615050258.GA5208@gondor.apana.org.au>
-References: <20210608160603.1535935-1-hch@lst.de>
- <20210608160603.1535935-10-hch@lst.de>
- <20210609014822.GT3697498@iweiny-DESK2.sc.intel.com>
- <20210611065338.GA31210@lst.de>
- <20210612040743.GG1600546@iweiny-DESK2.sc.intel.com>
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+Subject: Re: [PATCH v9 0/5] KVM statistics data fd-based binary interface
+Message-ID: <YMg5xPbmK3myjIX8@unreal>
+References: <20210614212155.1670777-1-jingzhangos@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210612040743.GG1600546@iweiny-DESK2.sc.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210614212155.1670777-1-jingzhangos@google.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 09:07:43PM -0700, Ira Weiny wrote:
->
-> More recently this was added:
-> 
-> 7e34e0bbc644 crypto: omap-crypto - fix userspace copied buffer access
-> 
-> I'm CC'ing Tero and Herbert to see why they added the SLAB check.
+On Mon, Jun 14, 2021 at 09:21:50PM +0000, Jing Zhang wrote:
+> This patchset provides a file descriptor for every VM and VCPU to read
+> KVM statistics data in binary format.
+> It is meant to provide a lightweight, flexible, scalable and efficient
+> lock-free solution for user space telemetry applications to pull the
+> statistics data periodically for large scale systems. The pulling
+> frequency could be as high as a few times per second.
+> In this patchset, every statistics data are treated to have some
+> attributes as below:
+>   * architecture dependent or generic
+>   * VM statistics data or VCPU statistics data
+>   * type: cumulative, instantaneous, peak
+>   * unit: none for simple counter, nanosecond, microsecond,
+>     millisecond, second, Byte, KiByte, MiByte, GiByte. Clock Cycles
+> Since no lock/synchronization is used, the consistency between all
+> the statistics data is not guaranteed. That means not all statistics
+> data are read out at the exact same time, since the statistics date
+> are still being updated by KVM subsystems while they are read out.
 
-Probably because the generic Crypto API has the same check.  This
-all goes back to
+Sorry for my naive questions, but how does telemetry get statistics
+for hypervisors? Why is KVM different from hypervisors or NIC's statistics
+or any other high speed devices (RDMA) that generate tons of data?
 
-commit 4f3e797ad07d52d34983354a77b365dfcd48c1b4
-Author: Herbert Xu <herbert@gondor.apana.org.au>
-Date:   Mon Feb 9 14:22:14 2009 +1100
-
-    crypto: scatterwalk - Avoid flush_dcache_page on slab pages
-
-    It's illegal to call flush_dcache_page on slab pages on a number
-    of architectures.  So this patch avoids doing so if PageSlab is
-    true.
-
-    In future we can move the flush_dcache_page call to those page
-    cache users that actually need it.
-
-    Reported-by: David S. Miller <davem@davemloft.net>
-    Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-But I can't find any emails discussing this so let me ask Dave
-directly and see if he can tell us what the issue was or might
-have been.
-
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Thanks
