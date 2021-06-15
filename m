@@ -2,93 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CC83A777A
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 09:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9423A779B
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 09:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbhFOHCx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Jun 2021 03:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbhFOHCx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 03:02:53 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B5AC0617AF
-        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 00:00:48 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id c18-20020a05600c0ad2b02901cee262e45fso419571wmr.4
-        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 00:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uxV9YrfPTMckE68tXN+z29g+tg5T03Yl2qalXJXkNkc=;
-        b=r1wXG2g3Ij7IpQjP3ce3rAGLFuR/t7fpjpPV3DAsvtb0rvkoXniW0jXUy+NFu5v6an
-         x/aIbngSA6Xg7x/oLGbVkkYcRzXPDK5ehnrd9eM/25bUwjs8Y522tphG2C8cfXnne7cV
-         xYpaXi3tIr/v9hFceGqOcf3cmqMGNeB5OhuSQPWArWyZo7OL3/WlWSn2Okuae5hbnq3V
-         w6HUmWtV46Zm7eZnxeEHgBVovzkqzs24QKVAq3w7iUtVgpsCplS98uWkG/9iCS6Bhwf6
-         2jTsZeaM3ZocTTRy2Qly0vGDBHFL/M+tjK+eo7swwiNa25dlYsPKVLTybPI84W9C1ghE
-         ZCiA==
+        id S229960AbhFOHIy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Jun 2021 03:08:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58103 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230236AbhFOHIx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 15 Jun 2021 03:08:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623740809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1bptQkqZVqAajaLHu25xIp56mYAPhq5K+DznNXOGR0E=;
+        b=ih96Qtb+AugWtRO4zjNU0hlO0tGSglXwuR1o6G2h/++c+KLXiodeJ2qfomtOc/fKAqWgHl
+        Vkjc8gMaggYDZv1q2aHNPa5RQs5se8q6vW8dGMdEt8UscyCLg0k6RgAuxAf7yRIdw35csR
+        Bacjc9b6YQT8TPpEAPyB7Ewrb7XFN4k=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-474-CdFP4crWN0G10p0fNs4I3Q-1; Tue, 15 Jun 2021 03:06:48 -0400
+X-MC-Unique: CdFP4crWN0G10p0fNs4I3Q-1
+Received: by mail-ed1-f72.google.com with SMTP id q7-20020aa7cc070000b029038f59dab1c5so21732678edt.23
+        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 00:06:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uxV9YrfPTMckE68tXN+z29g+tg5T03Yl2qalXJXkNkc=;
-        b=nmz0BcuIfqIFdVCy5fIqOvc0jIzCVGhVqylstCR/X3iiBtRTjd6rSJO56VJau0RuJ5
-         jtI3yfbBK1tqnxsGWfBHDjsQxApPF90IMTLyExsb/0lCncO7AHb+23eXoUZVDSlYjdRT
-         0fRsqr5mV9S7nplVHEJ6BmQSSzhubGf/JotU/LI0ExtZMTYmWhcCiRAnQmSVAf4QKZGA
-         ppJP7lFtL+j9ML/VbJkHBD+U0bOGvBdxIzVYssUUWXc6eKEV2Bmkt3h+GfyPh4xups3c
-         A9Nay+MGS+JuIZ9q1C+M37L0pw3+SJqfWJiEZyXzNUgQUHgbTsTQzZvgZ3LhlYdunx+I
-         HGrA==
-X-Gm-Message-State: AOAM533vs8tQPYCB3YbNxpJf0N+I1LAnu+t//k/GzAriHJzoUL78q5NJ
-        e+upuIYV3E9egLR/CsX+c+GXXcDwHOle2PR3YJ6G3g==
-X-Google-Smtp-Source: ABdhPJywx870VvTJLcC/IUKQvu1pmDshczTbWjQNPyhg5UovPLLVsbpeCyE2WdcabCSWVbVPXbT8GqEPYMFv9vt2Oh4=
-X-Received: by 2002:a1c:41c5:: with SMTP id o188mr3401371wma.60.1623740447101;
- Tue, 15 Jun 2021 00:00:47 -0700 (PDT)
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1bptQkqZVqAajaLHu25xIp56mYAPhq5K+DznNXOGR0E=;
+        b=rvB7P7dmTG31uRblPowWSPe8f5OdJDu671lytalPZ8PcxuTjBdyiS6IXJCZsxS6Kr9
+         ay4TOiKOW2YprlCS5mQ5G5KIJc0+w/gHQu23qp4oBbFSltWFx53Hzni+tBAQXrWftY03
+         +Mw6lyCBWCtEyijJ4u92g9yTPUFyWYm/TzomkzkFKsR3Y1UOeSUiLHKVnFIe2ANGBc2C
+         WQIbvJr1XOhN57C/52AGpMaJFf2qz+6YI+KFyeVLQ0y+dhfBpjv16OfSKpa+yaLkIos3
+         +uTUQQEd1Ya7b/K6vQ8TgTXrKkFfQWzuavr/Q0+rrdhKdfBv2OcExfdFTFlthiGaxllK
+         UMEQ==
+X-Gm-Message-State: AOAM530dLTqKxhqEfGzP3QdR1nvU5W+EEHmt5BtURNMsv5TWEkAFBTkN
+        G+l0gdoMFbNsbHBvPQNYkQlDlxLjDRbUI7xyAOOgduw2k+Z4imSU8PPDaeXNV+fue4fz7ix0Ay5
+        MZlxZmK0G7dfX99i5QOZsEQ==
+X-Received: by 2002:a05:6402:1e8b:: with SMTP id f11mr21756483edf.86.1623740807165;
+        Tue, 15 Jun 2021 00:06:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzjr2XSQSGkPxI3dJja1mbqx7MqydkJIqxXPBC64kHnxRq+99yMj0rlssdO/n6Q7TVjtTbx4g==
+X-Received: by 2002:a05:6402:1e8b:: with SMTP id f11mr21756454edf.86.1623740806968;
+        Tue, 15 Jun 2021 00:06:46 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.gmail.com with ESMTPSA id d4sm9179485ejo.98.2021.06.15.00.06.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jun 2021 00:06:46 -0700 (PDT)
+To:     Leon Romanovsky <leon@kernel.org>,
+        Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+References: <20210614212155.1670777-1-jingzhangos@google.com>
+ <YMg5xPbmK3myjIX8@unreal>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v9 0/5] KVM statistics data fd-based binary interface
+Message-ID: <15875c41-e1e7-3bf2-a85c-21384684d279@redhat.com>
+Date:   Tue, 15 Jun 2021 09:06:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20210614223317.999867-1-tyhicks@linux.microsoft.com> <20210614223317.999867-5-tyhicks@linux.microsoft.com>
-In-Reply-To: <20210614223317.999867-5-tyhicks@linux.microsoft.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Tue, 15 Jun 2021 09:00:36 +0200
-Message-ID: <CAHUa44HeJu9_33H3V=ms5=Z4tKSgQ8=3nWqUDvvNgJvaUB4H=A@mail.gmail.com>
-Subject: Re: [PATCH v5 4/8] optee: Clear stale cache entries during initialization
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>
-Cc:     Allen Pais <apais@linux.microsoft.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Vikas Gupta <vikas.gupta@broadcom.com>,
-        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YMg5xPbmK3myjIX8@unreal>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 12:33 AM Tyler Hicks
-<tyhicks@linux.microsoft.com> wrote:
->
-> The shm cache could contain invalid addresses if
-> optee_disable_shm_cache() was not called from the .shutdown hook of the
-> previous kernel before a kexec. These addresses could be unmapped or
-> they could point to mapped but unintended locations in memory.
->
-> Clear the shared memory cache, while being careful to not translate the
-> addresses returned from OPTEE_SMC_DISABLE_SHM_CACHE, during driver
-> initialization. Once all pre-cache shm objects are removed, proceed with
-> enabling the cache so that we know that we can handle cached shm objects
-> with confidence later in the .shutdown hook.
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
-> ---
->  drivers/tee/optee/call.c          | 36 ++++++++++++++++++++++++++++---
->  drivers/tee/optee/core.c          |  9 ++++++++
->  drivers/tee/optee/optee_private.h |  1 +
->  3 files changed, 43 insertions(+), 3 deletions(-)
+On 15/06/21 07:25, Leon Romanovsky wrote:
+> Sorry for my naive questions, but how does telemetry get statistics
+> for hypervisors? Why is KVM different from hypervisors or NIC's statistics
+> or any other high speed devices (RDMA) that generate tons of data?
 
-Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+Right now, the only way is debugfs but it's slow, and it's disabled when 
+using lockdown mode; this series is a way to fix this.
+
+I sense that there is another question in there; are you wondering if 
+another mechanism should be used, for example netlink?  The main issue 
+there is how to identify a VM, since KVM file descriptors don't have a 
+name.  Using a pid works (sort of) for debugfs, but pids are not 
+appropriate for a stable API.  Using a file descriptor as in this series 
+requires collaboration from the userspace program; howver, once the file 
+descriptor has been transmitted via SCM_RIGHTS, telemetry can read it 
+forever without further IPC, and there is proper privilege separation.
+
+Paolo
+
