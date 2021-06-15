@@ -2,146 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3443A79E1
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 11:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4F73A7A60
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 11:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbhFOJQ1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 15 Jun 2021 05:16:27 -0400
-Received: from out28-123.mail.aliyun.com ([115.124.28.123]:50984 "EHLO
-        out28-123.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbhFOJQY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 05:16:24 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07603748|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.166083-0.00128143-0.832635;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.KSYsb6a_1623748456;
-Received: from zhouyanjie-virtual-machine(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KSYsb6a_1623748456)
-          by smtp.aliyun-inc.com(10.147.42.197);
-          Tue, 15 Jun 2021 17:14:17 +0800
-Date:   Tue, 15 Jun 2021 17:14:14 +0800
-From:   =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-To:     Paul Cercueil <paul@opendingux.net>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, hminas@synopsys.com,
-        paul@crapouillou.net, linux-mips@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        sernia.zhou@foxmail.com,
-        Dragan =?UTF-8?B?xIxlxI1hdmFj?= <dragancecavac@yahoo.com>
-Subject: Re: [PATCH] USB: DWC2: Add VBUS overcurrent detection control.
-Message-ID: <20210615171414.2020ad9b@zhouyanjie-virtual-machine>
-In-Reply-To: <8BJQUQ.QJOE5WOSWVBU@opendingux.net>
-References: <1616513066-62025-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <YFoJ0Z6K4B5smbQx@kroah.com>
-        <20210615161456.2dd501a1@zhouyanjie-virtual-machine>
-        <8BJQUQ.QJOE5WOSWVBU@opendingux.net>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
+        id S231281AbhFOJXq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Jun 2021 05:23:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52836 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231146AbhFOJXp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 15 Jun 2021 05:23:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E23BF6137D;
+        Tue, 15 Jun 2021 09:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623748901;
+        bh=0tj/dQXhQr4F8TkJ6u1QLLJjy1TjKMTf4Ej+MdIFcnI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q5lST+dKOr4Dkl2UvZOYXFU0nxIYOs1vGMf3GpujfqPe/5SiJ3pNN9BuT6A9RmZcR
+         D/kah3Ydys+8ikUaKNj4CpYs+Byb3CybeMwgGrGiBMlDVhfeqyDewJ7I7wZzC0m6fi
+         2mRxpNnl2uEoOWM10Sps8EkZbn/PVdnivEL0TO28=
+Date:   Tue, 15 Jun 2021 11:21:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+Subject: Re: [PATCH v9 0/5] KVM statistics data fd-based binary interface
+Message-ID: <YMhxIiciyzPchF/2@kroah.com>
+References: <20210614212155.1670777-1-jingzhangos@google.com>
+ <b86aa6df-5fd7-d705-1688-4d325df6f7d9@metux.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b86aa6df-5fd7-d705-1688-4d325df6f7d9@metux.net>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-于 Tue, 15 Jun 2021 09:52:20 +0100
-Paul Cercueil <paul@opendingux.net> 写道:
+On Tue, Jun 15, 2021 at 10:37:36AM +0200, Enrico Weigelt, metux IT consult wrote:
+> Why not putting this into sysfs ?
 
-> Hi Zhou,
-> 
-> Le mar., juin 15 2021 at 16:16:39 +0800, 周琰杰 
-> <zhouyanjie@wanyeetech.com> a écrit :
-> > Hi Greg,
-> > 
-> > Sorry for taking so long to reply.
-> > 
-> > 于 Tue, 23 Mar 2021 16:31:29 +0100
-> > Greg KH <gregkh@linuxfoundation.org> 写道:
-> >   
-> >>  On Tue, Mar 23, 2021 at 11:24:26PM +0800, 周琰杰 (Zhou Yanjie) 
-> >> wrote:  
-> >>  > Introduce configurable option for enabling GOTGCTL register
-> >>  > bits VbvalidOvEn and VbvalidOvVal. Once selected it disables
-> >>  > VBUS overcurrent detection.
-> >>  >
-> >>  > This patch is derived from Dragan Čečavac (in the kernel 3.18
-> >>  > tree of CI20). It is very useful for the MIPS Creator CI20(r1).
-> >>  > Without this patch, CI20's OTG port has a great probability to
-> >>  > face overcurrent warning, which breaks the OTG functionality.
-> >>  >
-> >>  > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> >>  > Signed-off-by: Dragan Čečavac <dragancecavac@yahoo.com>
-> >>  > ---
-> >>  >  drivers/usb/dwc2/Kconfig | 6 ++++++
-> >>  >  drivers/usb/dwc2/core.c  | 9 +++++++++
-> >>  >  2 files changed, 15 insertions(+)
-> >>  >
-> >>  > diff --git a/drivers/usb/dwc2/Kconfig b/drivers/usb/dwc2/Kconfig
-> >>  > index c131719..e40d187 100644
-> >>  > --- a/drivers/usb/dwc2/Kconfig
-> >>  > +++ b/drivers/usb/dwc2/Kconfig
-> >>  > @@ -94,4 +94,10 @@ config USB_DWC2_DEBUG_PERIODIC
-> >>  >  	  non-periodic transfers, but of course the debug logs
-> >>  > will be incomplete. Note that this also disables some debug   
-> >> messages  
-> >>  >  	  for which the transfer type cannot be deduced.
-> >>  > +
-> >>  > +config USB_DWC2_DISABLE_VOD
-> >>  > +	bool "Disable VBUS overcurrent detection"
-> >>  > +	help
-> >>  > +	  Say Y here to switch off VBUS overcurrent detection.
-> >>  > It enables USB
-> >>  > +	  functionality blocked by overcurrent detection.  
-> >> 
-> >>  Why would this be a configuration option?  Shouldn't this be
-> >> dynamic and just work properly automatically?
-> >> 
-> >>  You should not have to do this on a build-time basis, it should be
-> >>  able to be detected and handled properly at run-time for all 
-> >> devices.
-> >>   
-> > 
-> > I consulted the original author Dragan Čečavac, he think since this 
-> > is
-> > a feature which disables overcurrent detection, so we are not sure
-> > if it could be harmful for some devices. Therefore he advise against
-> > enabling it in runtime, and in favor that user explicitely has to
-> > enable it.  
-> 
-> This could still be enabled at runtime, though, via a module
-> parameter. Leave it enabled by default, and those who want to disable
-> it can do it.
-> 
-> Also, overcurrent detection is just "detection", so enabling or 
-> disabling it won't change the fact that you can get overcurrent 
-> conditions, right?
+Because sysfs is "one value per file".
 
-emmm, the main problem now is that there is a phenomenon on CI20 r1
-(JZ4780) and CU1000 (X1000) that even if there is no overcurrent
-(nothing is connected), there is still a high probability (about every
-10 times it will be 6 to 7 times) an overcurrent warning appears (even
-when just finish detect the OTG driver during the kernel startup),
-which then causes the OTG function to not work normally before the
-system restarts.
-
-Thanks and best regards!
-
+> I see two options:
 > 
-> -Paul
-> 
-> >>  If you know this is needed for a specific type of device, detect
-> >> it and make the change then, otherwise this could break working 
-> >> systems,
-> >>  right?  
-> > 
-> > According to the information provided by Dragan Čečavac, this 
-> > function
-> > (select whether to enable over-current detection through the otgctl
-> > register) don't seem to be available for all dwc2 controllers, so it
-> > might make sense to add MACH_INGENIC dependency to
-> > USB_DWC2_DISABLE_VOD, which could provide additional protection from
-> > unwanted usage.
-> > 
-> > Thanks and best regards!
-> >   
-> >> 
-> >>  thanks,
-> >> 
-> >>  greg k-h  
-> 
+> a) if it's really kvm-specific (and no chance of using the same
+>    interface for other hypervisors), we could put it under the
+>    kvm device (/sys/class/misc/kvm).
 
+Again, that is NOT what sysfs is for.
+
+> b) have a generic VMM stats interface that theroretically could work
+>    with any hypervisor.
+
+What other hypervisor matters?
+
+greg k-h
