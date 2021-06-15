@@ -2,175 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 251A03A78AB
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 10:03:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2673A78E3
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 10:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbhFOIF5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Jun 2021 04:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbhFOIF4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 04:05:56 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1CEC061767
-        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 01:03:52 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id l15-20020a05683016cfb02903fca0eacd15so13447559otr.7
-        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 01:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2CSh1z7Vp1/cJggYoB1jYFqsZlnKuhPcaTsNgRYwVSI=;
-        b=O8yz83yvBRCtMVSzbGCfMg/eHcmAvfvQZTkOIrDmMi4Ya9lSWjT7L4v+4BdKPCHAr7
-         o8i/5oXrv/AX3rVcPJxU+O2mwmLoFJX9GDiqaz5HSgNfEsgXYCPNJcP9FgE7IRuDoNkx
-         tFHDu7d25Ci7vkTPCNOjJ0ZeoYPOGokqwLAGhgNmbyNuAeTPp5zd/L63WYBxn4HYzh91
-         dRMVX09ftVaQWQV+pkiXcPlwECefKY/kQlEEaHx+kpinhn6YKL1DlJZq56FcetiW7RNx
-         Kb+r7EfzgK//Y13xIojAuhb9Q27hA0AvG7oieQon3sgYE3dxk47SHgpgdFK6ACeBafwq
-         FXKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2CSh1z7Vp1/cJggYoB1jYFqsZlnKuhPcaTsNgRYwVSI=;
-        b=sOLI7l/dPde5CdCRE9xII3nA1LcQYzkWrXrLLX9d9YzrrFzlt8Bq9/kSiSYWi5QWaS
-         c9t4SXqLolx/msXAmeD+PVZ4KQ1UQY6NVQFEDx7haLDWCBh81VERdy3M3EcEDaN9Wiu6
-         d76ImzKYt+7KevTkEoPxHTLF1Z446cGzZN3erE5FL8IX+qy6rfYIopcGRk7sd76vCS/4
-         OBP9pTCX+9FCcw25s2yPoOOxNBt9EHCSyYMzskIKkzlFvCBqC6M642V1Tp1H8yXvSnsP
-         uHyoxvsnWIW6e53yDN0OjNwUkGYXRqSmE2x7LwKlwH5x+lFifrHDU0LKa68KSI/EQp1Y
-         Mv+g==
-X-Gm-Message-State: AOAM533ACNmH6Hq2ozjnE3DfrASqKkYL46eW5Yc7xglELR/2XfYqOGgN
-        7Hv+N/wyC/Pa6av04QKH9sjCC0W0Z+5bJ8tSHq201g==
-X-Google-Smtp-Source: ABdhPJw2enLCtbwE/790AuD9R9YvbkgrP2ijrQxAzA0UdoAox+QIbPoUXnczIrY5AxRCozcc/VKv6rYEd/Kk/Su7FrA=
-X-Received: by 2002:a05:6830:1002:: with SMTP id a2mr16213078otp.144.1623744231983;
- Tue, 15 Jun 2021 01:03:51 -0700 (PDT)
+        id S230497AbhFOISu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 15 Jun 2021 04:18:50 -0400
+Received: from out28-50.mail.aliyun.com ([115.124.28.50]:43064 "EHLO
+        out28-50.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230329AbhFOISt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 04:18:49 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08489759|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.494894-0.00593734-0.499169;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=10;RT=10;SR=0;TI=SMTPD_---.KSX0zZM_1623745001;
+Received: from zhouyanjie-virtual-machine(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KSX0zZM_1623745001)
+          by smtp.aliyun-inc.com(10.147.41.138);
+          Tue, 15 Jun 2021 16:16:42 +0800
+Date:   Tue, 15 Jun 2021 16:16:39 +0800
+From:   =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     hminas@synopsys.com, paul@crapouillou.net,
+        linux-mips@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, sernia.zhou@foxmail.com,
+        Dragan =?UTF-8?B?xIxlxI1hdmFj?= <dragancecavac@yahoo.com>
+Subject: Re: [PATCH] USB: DWC2: Add VBUS overcurrent detection control.
+Message-ID: <20210615161456.2dd501a1@zhouyanjie-virtual-machine>
+In-Reply-To: <YFoJ0Z6K4B5smbQx@kroah.com>
+References: <1616513066-62025-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <YFoJ0Z6K4B5smbQx@kroah.com>
+X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20210614212155.1670777-1-jingzhangos@google.com> <20210614212155.1670777-5-jingzhangos@google.com>
-In-Reply-To: <20210614212155.1670777-5-jingzhangos@google.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Tue, 15 Jun 2021 09:03:15 +0100
-Message-ID: <CA+EHjTybjrYL5KUJebmjvj_R5yULDxXsiPzn6f5f-y5HzQqM6A@mail.gmail.com>
-Subject: Re: [PATCH v9 4/5] KVM: selftests: Add selftest for KVM statistics
- data binary interface
-To:     Jing Zhang <jingzhangos@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Jing,
+Hi Greg,
 
-> +int main(int argc, char *argv[])
-> +{
-> +       int max_vm = DEFAULT_NUM_VM, max_vcpu = DEFAULT_NUM_VCPU, ret, i, j;
-> +       struct kvm_vm **vms;
-> +
-> +       /* Get the number of VMs and VCPUs that would be created for testing. */
-> +       if (argc > 1) {
-> +               max_vm = strtol(argv[1], NULL, 0);
-> +               if (max_vm <= 0)
-> +                       max_vm = DEFAULT_NUM_VM;
-> +       }
-> +       if (argc > 2) {
-> +               max_vcpu = strtol(argv[2], NULL, 0);
-> +               if (max_vcpu <= 0)
-> +                       max_vcpu = DEFAULT_NUM_VCPU;
-> +       }
-> +
-> +       /* Check the extension for binary stats */
-> +       ret = kvm_check_cap(KVM_CAP_BINARY_STATS_FD);
-> +       TEST_ASSERT(ret >= 0,
-> +                       "Binary form statistics interface is not supported");
+Sorry for taking so long to reply.
 
-kvm_check_cap returns the value of KVM_CHECK_EXTENSION, which is 0 if
-unsupported (-ERROR on an error). The assertion should be for ret > 0.
+于 Tue, 23 Mar 2021 16:31:29 +0100
+Greg KH <gregkh@linuxfoundation.org> 写道:
 
-Made that change locally, and tested it with various configurations
-(vhe, nvhe), as well as kernel versions (with and without
-KVM_CAP_BINARY_STATS_FD), and it passes (or fails as expected).
-Without that fix and with a kernel that doesn't support
-KVM_CAP_BINARY_STATS_FD, it passes that assertion, but fails later at
-vcpu_stats_test().
+> On Tue, Mar 23, 2021 at 11:24:26PM +0800, 周琰杰 (Zhou Yanjie) wrote:
+> > Introduce configurable option for enabling GOTGCTL register
+> > bits VbvalidOvEn and VbvalidOvVal. Once selected it disables
+> > VBUS overcurrent detection.
+> > 
+> > This patch is derived from Dragan Čečavac (in the kernel 3.18
+> > tree of CI20). It is very useful for the MIPS Creator CI20(r1).
+> > Without this patch, CI20's OTG port has a great probability to
+> > face overcurrent warning, which breaks the OTG functionality.
+> > 
+> > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> > Signed-off-by: Dragan Čečavac <dragancecavac@yahoo.com>
+> > ---
+> >  drivers/usb/dwc2/Kconfig | 6 ++++++
+> >  drivers/usb/dwc2/core.c  | 9 +++++++++
+> >  2 files changed, 15 insertions(+)
+> > 
+> > diff --git a/drivers/usb/dwc2/Kconfig b/drivers/usb/dwc2/Kconfig
+> > index c131719..e40d187 100644
+> > --- a/drivers/usb/dwc2/Kconfig
+> > +++ b/drivers/usb/dwc2/Kconfig
+> > @@ -94,4 +94,10 @@ config USB_DWC2_DEBUG_PERIODIC
+> >  	  non-periodic transfers, but of course the debug logs
+> > will be incomplete. Note that this also disables some debug messages
+> >  	  for which the transfer type cannot be deduced.
+> > +
+> > +config USB_DWC2_DISABLE_VOD
+> > +	bool "Disable VBUS overcurrent detection"
+> > +	help
+> > +	  Say Y here to switch off VBUS overcurrent detection. It
+> > enables USB
+> > +	  functionality blocked by overcurrent detection.  
+> 
+> Why would this be a configuration option?  Shouldn't this be dynamic
+> and just work properly automatically?
+> 
+> You should not have to do this on a build-time basis, it should be
+> able to be detected and handled properly at run-time for all devices.
+> 
 
-With that fixed:
-Tested-by: Fuad Tabba <tabba@google.com> #arm64
+I consulted the original author Dragan Čečavac, he think since this is
+a feature which disables overcurrent detection, so we are not sure if
+it could be harmful for some devices. Therefore he advise against
+enabling it in runtime, and in favor that user explicitely has to
+enable it.
 
-Cheers,
-/fuad
+> If you know this is needed for a specific type of device, detect it
+> and make the change then, otherwise this could break working systems,
+> right?
 
+According to the information provided by Dragan Čečavac, this function
+(select whether to enable over-current detection through the otgctl
+register) don't seem to be available for all dwc2 controllers, so it
+might make sense to add MACH_INGENIC dependency to
+USB_DWC2_DISABLE_VOD, which could provide additional protection from
+unwanted usage.
 
-> +
-> +       /* Create VMs and VCPUs */
-> +       vms = malloc(sizeof(vms[0]) * max_vm);
-> +       TEST_ASSERT(vms, "Allocate memory for storing VM pointers");
-> +       for (i = 0; i < max_vm; ++i) {
-> +               vms[i] = vm_create(VM_MODE_DEFAULT,
-> +                               DEFAULT_GUEST_PHY_PAGES, O_RDWR);
-> +               for (j = 0; j < max_vcpu; ++j)
-> +                       vm_vcpu_add(vms[i], j);
-> +       }
-> +
-> +       /* Check stats read for every VM and VCPU */
-> +       for (i = 0; i < max_vm; ++i) {
-> +               vm_stats_test(vms[i]);
-> +               for (j = 0; j < max_vcpu; ++j)
-> +                       vcpu_stats_test(vms[i], j);
-> +       }
-> +
-> +       for (i = 0; i < max_vm; ++i)
-> +               kvm_vm_free(vms[i]);
-> +       free(vms);
-> +       return 0;
-> +}
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 5c70596dd1b9..83c02cb0ae1e 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -2286,3 +2286,15 @@ unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size)
->         n = DIV_ROUND_UP(size, vm_guest_mode_params[mode].page_size);
->         return vm_adjust_num_guest_pages(mode, n);
->  }
-> +
-> +int vm_get_stats_fd(struct kvm_vm *vm)
-> +{
-> +       return ioctl(vm->fd, KVM_GET_STATS_FD, NULL);
-> +}
-> +
-> +int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid)
-> +{
-> +       struct vcpu *vcpu = vcpu_find(vm, vcpuid);
-> +
-> +       return ioctl(vcpu->fd, KVM_GET_STATS_FD, NULL);
-> +}
-> --
-> 2.32.0.272.g935e593368-goog
->
+Thanks and best regards!
+
+> 
+> thanks,
+> 
+> greg k-h
