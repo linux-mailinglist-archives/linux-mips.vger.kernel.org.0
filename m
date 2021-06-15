@@ -2,86 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E33113A7F22
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 15:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDE03A7F6B
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 15:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbhFON0v (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Jun 2021 09:26:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54262 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230146AbhFON0v (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 15 Jun 2021 09:26:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3676F61465;
-        Tue, 15 Jun 2021 13:24:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623763486;
-        bh=V4tpiMC8eA/B5+op+TxQhJBdvP2Y7K62zVk556CGsz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mg0ecllN6Lnek19Zxt/aZ8T/HNJfQBlqWdtiorbaZ3+uIinhLkt9yPQp4RG6diIjX
-         ZwdNdqvaCcMHPrJ661+0GlYUk+zy/oaUxFI6AqGVZ3cNF3/JGA583lMsyONIEZCWWB
-         62ldCKKRy4oDy1mHZfVI79BkW6E2douBMlzRtc5M=
-Date:   Tue, 15 Jun 2021 15:24:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+        id S231376AbhFON37 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Jun 2021 09:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231350AbhFON36 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 09:29:58 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3A2C061574;
+        Tue, 15 Jun 2021 06:27:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=VDFAq4RAyfQcvq7NcXCc5PqaLI7MmLBvTcVGlewKg1A=; b=s7YJ177kDcPbGM2WG8E+hJ1eLZ
+        A1GJ//E9BY/h/KFsN/+xFtAt0xf/30EdK+nx0yjsgtcrBDojX9AN5RpjcSCtdMxjtx1wom3sFgkz+
+        jRxU56885taXJpb3fzrHtO95l7X/Ha/D/RNf+W3SuXaqFKdEquI5QY44BCPkNT/Mu4EqVp4Vp4wNj
+        D65VpSGqfI2RQOFGedk/fn2HZRpohCK/tqwtdvnvfyEoGZ2iXjmVRQWRbTTsLmkQ0HBvbRBhdd9C6
+        94Pzz8/3dAoDT0LTvf9w7WwF0gajKYl/xdC/TPIYGTqpn52ZYVVfuS+JrLhG4XqMBJ3JNGq65TZbi
+        0ZI+8hOQ==;
+Received: from [2001:4bb8:19b:fdce:9045:1e63:20f0:ca9] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1lt95X-006nz9-7r; Tue, 15 Jun 2021 13:26:53 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>, Thomas Gleixner <tglx@linutronix.de>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        John Crispin <john@phrozen.org>
-Subject: Re: [PATCH v2 1/3] MIPS: ralink: Define PCI_IOBASE
-Message-ID: <YMiqHBVuoyd4EcIz@kroah.com>
-References: <20210614100617.28753-1-sergio.paracuellos@gmail.com>
- <20210614100617.28753-2-sergio.paracuellos@gmail.com>
- <20210615130830.GA7029@alpha.franken.de>
- <CAMhs-H8TM=m2ULVYwOFR8kEw4h1EDHOeGaVh9WpvxmY8oP8NTg@mail.gmail.com>
+        Geoff Levand <geoff@infradead.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Mike Snitzer <snitzer@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Ira Weiny <ira.weiny@intel.com>, dm-devel@redhat.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        ceph-devel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Subject: [PATCH 06/18] bvec: add a bvec_kmap_local helper
+Date:   Tue, 15 Jun 2021 15:24:44 +0200
+Message-Id: <20210615132456.753241-7-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210615132456.753241-1-hch@lst.de>
+References: <20210615132456.753241-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H8TM=m2ULVYwOFR8kEw4h1EDHOeGaVh9WpvxmY8oP8NTg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 03:12:59PM +0200, Sergio Paracuellos wrote:
-> On Tue, Jun 15, 2021 at 3:09 PM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> >
-> > On Mon, Jun 14, 2021 at 12:06:15PM +0200, Sergio Paracuellos wrote:
-> > > PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
-> > > required by generic PCI drivers to make memory mapped I/O range
-> > > work. Hence define it for ralink architectures to be able to
-> > > avoid parsing manually IO ranges in PCI generic driver code.
-> > > Function 'plat_mem_setup' for ralink is using 'set_io_port_base'
-> > > call using '0xa0000000' as address, so use the same address in
-> > > the definition to align things.
-> > >
-> > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > ---
-> > >  arch/mips/include/asm/mach-ralink/spaces.h | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > >  create mode 100644 arch/mips/include/asm/mach-ralink/spaces.h
-> > >
-> > > diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-> > > new file mode 100644
-> > > index 000000000000..87d085c9ad61
-> > > --- /dev/null
-> > > +++ b/arch/mips/include/asm/mach-ralink/spaces.h
-> > > @@ -0,0 +1,10 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +#ifndef __ASM_MACH_RALINK_SPACES_H_
-> > > +#define __ASM_MACH_RALINK_SPACES_H_
-> > > +
-> > > +#define PCI_IOBASE   _AC(0xa0000000, UL)
-> > > +#define PCI_IOSIZE   SZ_16M
-> > > +#define IO_SPACE_LIMIT       (PCI_IOSIZE - 1)
-> > > +
-> > > +#include <asm/mach-generic/spaces.h>
-> > > +#endif
-> > > --
-> > > 2.25.1
-> >
-> > Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> 
-> Fastest response ever :) Thanks!
+Add a helper to call kmap_local_page on a bvec.  There is no need for
+an unmap helper given that kunmap_local accept any address in the mapped
+page.
 
-Thanks, all now queued up.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+---
+ include/linux/bvec.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/include/linux/bvec.h b/include/linux/bvec.h
+index 883faf5f1523..f8710af18eef 100644
+--- a/include/linux/bvec.h
++++ b/include/linux/bvec.h
+@@ -7,6 +7,7 @@
+ #ifndef __LINUX_BVEC_H
+ #define __LINUX_BVEC_H
+ 
++#include <linux/highmem.h>
+ #include <linux/bug.h>
+ #include <linux/errno.h>
+ #include <linux/limits.h>
+@@ -183,4 +184,16 @@ static inline void bvec_advance(const struct bio_vec *bvec,
+ 	}
+ }
+ 
++/**
++ * bvec_kmap_local - map a bvec into the kernel virtual address space
++ * @bvec: bvec to map
++ *
++ * Must be called on single-page bvecs only.  Call kunmap_local on the returned
++ * address to unmap.
++ */
++static inline void *bvec_kmap_local(struct bio_vec *bvec)
++{
++	return kmap_local_page(bvec->bv_page) + bvec->bv_offset;
++}
++
+ #endif /* __LINUX_BVEC_H */
+-- 
+2.30.2
+
