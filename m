@@ -2,312 +2,192 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5013A7D2F
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 13:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 400DB3A7D2B
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 13:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhFOLeB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Jun 2021 07:34:01 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:7394 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229659AbhFOLeA (ORCPT
+        id S230039AbhFOLdY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Jun 2021 07:33:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35497 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230045AbhFOLdV (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 15 Jun 2021 07:34:00 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15FBB46P063562;
-        Tue, 15 Jun 2021 07:31:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=46lRDQvPDCMptNp8KPNFjxHnQhG6dR0aecdnO90y5zY=;
- b=jKcOlBHhGIfgGnqdP/XmHzlW9TZpQtHvF+GSdiBeRW4b5r4eLE+1+OBzHpb7PxV/BI1S
- 12Q0a/IZSky1B4fLZFAnSdt5kGuow/Ra2l3LOXC34BhVvbwZD7nBLWJSxm1LrlivhLE6
- ltZc9alf5qb9wBvCTDVZiByBSEc3R5Z5mlu0YUpHu2j4nYQlONKr/FLO+LXozFQ7jz7K
- QhXyCZ8tI5Ak4i6aheaRwZLeJPmRFrwYrTGVxoShJxCfZFvebp74ehuBpf/hjT9yYpCZ
- 1AFuYjC1KojjhfosdvvwB0hQeRUrqkb+eqWnFF7Du+24ONS8vH7Oi8qM8weUfsC1lsC/ vw== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 396tq4s28y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Jun 2021 07:31:04 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15FBNNI9020401;
-        Tue, 15 Jun 2021 11:31:03 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma01wdc.us.ibm.com with ESMTP id 394mj97b34-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Jun 2021 11:31:03 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15FBV29Y30147066
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Jun 2021 11:31:02 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1977EAE0DA;
-        Tue, 15 Jun 2021 11:09:24 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 530C0AE06D;
-        Tue, 15 Jun 2021 11:09:19 +0000 (GMT)
-Received: from skywalker.ibmuc.com (unknown [9.199.54.82])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 15 Jun 2021 11:09:19 +0000 (GMT)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH v2 2/2] mm: rename p4d_page_vaddr to p4d_pgtable and make it return pud_t *
-Date:   Tue, 15 Jun 2021 16:38:59 +0530
-Message-Id: <20210615110859.320299-2-aneesh.kumar@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210615110859.320299-1-aneesh.kumar@linux.ibm.com>
-References: <20210615110859.320299-1-aneesh.kumar@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _LkL_3fJzhGn91Y5tgVoMjM15-XPwyMY
-X-Proofpoint-GUID: _LkL_3fJzhGn91Y5tgVoMjM15-XPwyMY
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 15 Jun 2021 07:33:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623756676;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aQ2nOAspl2AGDi9hsIXoVirS49xlNLfSm3ZVd3FKUiQ=;
+        b=V82DZbveubcSsIiwIZDz6ctHABaVoWqBPZAL0FfNG1bV3tVMXdn+nK4bOIWM4cnDLQv9K6
+        CDEdRKojsAN/h0R5S1GddXdv10jrXlVD4DvTCEtnXfvh5BDpuIQuAY0rw7Ce1vRz4NyVHN
+        kqk0I1LCNdK1iNyzhV2Rnb7fvwNUq/g=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-157-SgOPF56iOw2PBpPZdIDjgg-1; Tue, 15 Jun 2021 07:31:14 -0400
+X-MC-Unique: SgOPF56iOw2PBpPZdIDjgg-1
+Received: by mail-ej1-f70.google.com with SMTP id k1-20020a17090666c1b029041c273a883dso4415489ejp.3
+        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 04:31:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aQ2nOAspl2AGDi9hsIXoVirS49xlNLfSm3ZVd3FKUiQ=;
+        b=bDcl0dt/EFVJBeZRIM+EF5fZBnVIluuRU5tws1FRWsyVMepLorH49VKVeYY/vYFQN2
+         RzIYTnfgEz/6ll39hHRf1TsZ/DeuX34VdiNpW3MJas39/8QOsnCLzGog4zvjSQllQ+zN
+         7TLMz8Pk3gzjWJq4tbqW6kKMjx0UZoQljwQEe8PlQdnzRx8J/3od9VrXxuJF2GTPgliC
+         CLEXlXqOsqGa6i/o2m3x/DIWWTDIYHNkdoxef3KoC3FL3E7a1lVvmeCwQGSL+9syQpV4
+         5iAq6Gj7i2+tZRF1iYMqsoKcA/lzPDMePhzc9L5zVB0viviP32mgdtCjhvgg1hDc7S4f
+         Kp5w==
+X-Gm-Message-State: AOAM532yrCFYKx0HhRHFatQvsKOQLuPbtrBB686LTk4p7m+LCMb4kHuV
+        tUQxo6WaFcd0Sc4B7++tw5fjCqshGGLOkQG9MOgzxVKP0iXdD70JHMRIoKN7yXq2N9OcOjFcWOO
+        hm1TQeaq9vNQwhZcgDUqmHg==
+X-Received: by 2002:a17:906:6ad0:: with SMTP id q16mr20563659ejs.286.1623756673650;
+        Tue, 15 Jun 2021 04:31:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzKlp02kMxK2rO+S69nIrAnTgSLt5X2p2XEkmw4RDKa1lrb0dqopq+Tz3VP4q2ZjtECG1DKNg==
+X-Received: by 2002:a17:906:6ad0:: with SMTP id q16mr20563625ejs.286.1623756673461;
+        Tue, 15 Jun 2021 04:31:13 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id u21sm7110928eja.59.2021.06.15.04.31.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jun 2021 04:31:12 -0700 (PDT)
+To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
+        Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+References: <20210614212155.1670777-1-jingzhangos@google.com>
+ <b86aa6df-5fd7-d705-1688-4d325df6f7d9@metux.net>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v9 0/5] KVM statistics data fd-based binary interface
+Message-ID: <ad7905f9-8338-382a-b1df-9b3352bbd2f8@redhat.com>
+Date:   Tue, 15 Jun 2021 13:31:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-15_04:2021-06-14,2021-06-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
- spamscore=0 malwarescore=0 phishscore=0 adultscore=0 suspectscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- mlxlogscore=848 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106150070
+In-Reply-To: <b86aa6df-5fd7-d705-1688-4d325df6f7d9@metux.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-No functional change in this patch.
+On 15/06/21 10:37, Enrico Weigelt, metux IT consult wrote:
+> * why is it binary instead of text ? is it so very high volume that
+>    it really matters ?
 
-Cc: linux-alpha@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-ia64@vger.kernel.org
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-riscv@lists.infradead.org
-Cc: linux-sh@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: linux-um@lists.infradead.org
-Cc: linux-arch@vger.kernel.org
+The main reason to have a binary format is not the high volume actually 
+(though it also has its part).  Rather, we would really like to include 
+the schema to make the statistics self-describing.  This includes stuff 
+like whether the unit of measure of a statistic is clock cycles, 
+nanoseconds, pages or whatnot; having this kind of information in text 
+leads to awkwardness in the parsers.  trace-cmd is another example where 
+the data consists of a schema followed by binary data.
 
-Link: https://lore.kernel.org/linuxppc-dev/CAHk-=wi+J+iodze9FtjM3Zi4j4OeS+qqbKxME9QN4roxPEXH9Q@mail.gmail.com/
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
----
- arch/arm64/include/asm/pgtable.h                | 4 ++--
- arch/ia64/include/asm/pgtable.h                 | 2 +-
- arch/mips/include/asm/pgtable-64.h              | 4 ++--
- arch/powerpc/include/asm/book3s/64/pgtable.h    | 5 ++++-
- arch/powerpc/include/asm/nohash/64/pgtable-4k.h | 6 +++++-
- arch/powerpc/mm/book3s64/radix_pgtable.c        | 2 +-
- arch/powerpc/mm/pgtable_64.c                    | 2 +-
- arch/sparc/include/asm/pgtable_64.h             | 4 ++--
- arch/x86/include/asm/pgtable.h                  | 4 ++--
- arch/x86/mm/init_64.c                           | 4 ++--
- include/asm-generic/pgtable-nop4d.h             | 2 +-
- include/asm-generic/pgtable-nopud.h             | 2 +-
- include/linux/pgtable.h                         | 2 +-
- 13 files changed, 25 insertions(+), 18 deletions(-)
+Text format could certainly be added if there's a usecase, but for 
+developer use debugfs is usually a suitable replacement.
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 53a415b329b0..fde06639fff8 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -697,9 +697,9 @@ static inline phys_addr_t p4d_page_paddr(p4d_t p4d)
- 	return __p4d_to_phys(p4d);
- }
- 
--static inline unsigned long p4d_page_vaddr(p4d_t p4d)
-+static inline pud_t *p4d_pgtable(p4d_t p4d)
- {
--	return (unsigned long)__va(p4d_page_paddr(p4d));
-+	return (pud_t *)__va(p4d_page_paddr(p4d));
- }
- 
- /* Find an entry in the frst-level page table. */
-diff --git a/arch/ia64/include/asm/pgtable.h b/arch/ia64/include/asm/pgtable.h
-index b2ddfbe70365..a2d5098b299a 100644
---- a/arch/ia64/include/asm/pgtable.h
-+++ b/arch/ia64/include/asm/pgtable.h
-@@ -282,7 +282,7 @@ ia64_phys_addr_valid (unsigned long addr)
- #define p4d_bad(p4d)			(!ia64_phys_addr_valid(p4d_val(p4d)))
- #define p4d_present(p4d)		(p4d_val(p4d) != 0UL)
- #define p4d_clear(p4dp)			(p4d_val(*(p4dp)) = 0UL)
--#define p4d_page_vaddr(p4d)		((unsigned long) __va(p4d_val(p4d) & _PFN_MASK))
-+#define p4d_pgtable(p4d)		((pud_t *) __va(p4d_val(p4d) & _PFN_MASK))
- #define p4d_page(p4d)			virt_to_page((p4d_val(p4d) + PAGE_OFFSET))
- #endif
- 
-diff --git a/arch/mips/include/asm/pgtable-64.h b/arch/mips/include/asm/pgtable-64.h
-index ab305453e90f..b865edff2670 100644
---- a/arch/mips/include/asm/pgtable-64.h
-+++ b/arch/mips/include/asm/pgtable-64.h
-@@ -210,9 +210,9 @@ static inline void p4d_clear(p4d_t *p4dp)
- 	p4d_val(*p4dp) = (unsigned long)invalid_pud_table;
- }
- 
--static inline unsigned long p4d_page_vaddr(p4d_t p4d)
-+static inline pud_t *p4d_pgtable(p4d_t p4d)
- {
--	return p4d_val(p4d);
-+	return (pud_t *)p4d_val(p4d);
- }
- 
- #define p4d_phys(p4d)		virt_to_phys((void *)p4d_val(p4d))
-diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/include/asm/book3s/64/pgtable.h
-index 40bafe1e80c9..cbedc7c8959d 100644
---- a/arch/powerpc/include/asm/book3s/64/pgtable.h
-+++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
-@@ -1048,7 +1048,10 @@ extern struct page *p4d_page(p4d_t p4d);
- /* Pointers in the page table tree are physical addresses */
- #define __pgtable_ptr_val(ptr)	__pa(ptr)
- 
--#define p4d_page_vaddr(p4d)	__va(p4d_val(p4d) & ~P4D_MASKED_BITS)
-+static inline pud_t *p4d_pgtable(p4d_t p4d)
-+{
-+	return (pud_t *)__va(p4d_val(p4d) & ~P4D_MASKED_BITS);
-+}
- 
- static inline pmd_t *pud_pgtable(pud_t pud)
- {
-diff --git a/arch/powerpc/include/asm/nohash/64/pgtable-4k.h b/arch/powerpc/include/asm/nohash/64/pgtable-4k.h
-index fe2f4c9acd9e..10f5cf444d72 100644
---- a/arch/powerpc/include/asm/nohash/64/pgtable-4k.h
-+++ b/arch/powerpc/include/asm/nohash/64/pgtable-4k.h
-@@ -56,10 +56,14 @@
- #define p4d_none(p4d)		(!p4d_val(p4d))
- #define p4d_bad(p4d)		(p4d_val(p4d) == 0)
- #define p4d_present(p4d)	(p4d_val(p4d) != 0)
--#define p4d_page_vaddr(p4d)	(p4d_val(p4d) & ~P4D_MASKED_BITS)
- 
- #ifndef __ASSEMBLY__
- 
-+static inline pud_t *p4d_pgtable(p4d_t p4d)
-+{
-+	return (pud_t *) (p4d_val(p4d) & ~P4D_MASKED_BITS);
-+}
-+
- static inline void p4d_clear(p4d_t *p4dp)
- {
- 	*p4dp = __p4d(0);
-diff --git a/arch/powerpc/mm/book3s64/radix_pgtable.c b/arch/powerpc/mm/book3s64/radix_pgtable.c
-index b663d8f9f05c..1ba6d9291c10 100644
---- a/arch/powerpc/mm/book3s64/radix_pgtable.c
-+++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
-@@ -859,7 +859,7 @@ static void __meminit remove_pagetable(unsigned long start, unsigned long end)
- 			continue;
- 		}
- 
--		pud_base = (pud_t *)p4d_page_vaddr(*p4d);
-+		pud_base = p4d_pgtable(*p4d);
- 		remove_pud_table(pud_base, addr, next);
- 		free_pud_table(pud_base, p4d);
- 	}
-diff --git a/arch/powerpc/mm/pgtable_64.c b/arch/powerpc/mm/pgtable_64.c
-index 4ba311808bdb..78c8cf01db5f 100644
---- a/arch/powerpc/mm/pgtable_64.c
-+++ b/arch/powerpc/mm/pgtable_64.c
-@@ -105,7 +105,7 @@ struct page *p4d_page(p4d_t p4d)
- 		VM_WARN_ON(!p4d_huge(p4d));
- 		return pte_page(p4d_pte(p4d));
- 	}
--	return virt_to_page(p4d_page_vaddr(p4d));
-+	return virt_to_page(p4d_pgtable(p4d));
- }
- #endif
- 
-diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
-index 534ec872fa2c..c0f56da1c205 100644
---- a/arch/sparc/include/asm/pgtable_64.h
-+++ b/arch/sparc/include/asm/pgtable_64.h
-@@ -860,8 +860,8 @@ static inline pmd_t *pud_pgtable(pud_t pud)
- #define pmd_clear(pmdp)			(pmd_val(*(pmdp)) = 0UL)
- #define pud_present(pud)		(pud_val(pud) != 0U)
- #define pud_clear(pudp)			(pud_val(*(pudp)) = 0UL)
--#define p4d_page_vaddr(p4d)		\
--	((unsigned long) __va(p4d_val(p4d)))
-+#define p4d_pgtable(p4d)		\
-+	((pud_t *) __va(p4d_val(p4d)))
- #define p4d_present(p4d)		(p4d_val(p4d) != 0U)
- #define p4d_clear(p4dp)			(p4d_val(*(p4dp)) = 0UL)
- 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 35a34ca6f2e9..b6c97b8f59ec 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -906,9 +906,9 @@ static inline int p4d_present(p4d_t p4d)
- 	return p4d_flags(p4d) & _PAGE_PRESENT;
- }
- 
--static inline unsigned long p4d_page_vaddr(p4d_t p4d)
-+static inline pud_t *p4d_pgtable(p4d_t p4d)
- {
--	return (unsigned long)__va(p4d_val(p4d) & p4d_pfn_mask(p4d));
-+	return (pud_t *)__va(p4d_val(p4d) & p4d_pfn_mask(p4d));
- }
- 
- /*
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index e527d829e1ed..ffb3da2cb038 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -193,8 +193,8 @@ static void sync_global_pgds_l4(unsigned long start, unsigned long end)
- 			spin_lock(pgt_lock);
- 
- 			if (!p4d_none(*p4d_ref) && !p4d_none(*p4d))
--				BUG_ON(p4d_page_vaddr(*p4d)
--				       != p4d_page_vaddr(*p4d_ref));
-+				BUG_ON(p4d_pgtable(*p4d)
-+				       != p4d_pgtable(*p4d_ref));
- 
- 			if (p4d_none(*p4d))
- 				set_p4d(p4d, *p4d_ref);
-diff --git a/include/asm-generic/pgtable-nop4d.h b/include/asm-generic/pgtable-nop4d.h
-index ce2cbb3c380f..982de5102fc1 100644
---- a/include/asm-generic/pgtable-nop4d.h
-+++ b/include/asm-generic/pgtable-nop4d.h
-@@ -42,7 +42,7 @@ static inline p4d_t *p4d_offset(pgd_t *pgd, unsigned long address)
- #define __p4d(x)				((p4d_t) { __pgd(x) })
- 
- #define pgd_page(pgd)				(p4d_page((p4d_t){ pgd }))
--#define pgd_page_vaddr(pgd)			(p4d_page_vaddr((p4d_t){ pgd }))
-+#define pgd_page_vaddr(pgd)			(p4d_pgtable((p4d_t){ pgd }))
- 
- /*
-  * allocating and freeing a p4d is trivial: the 1-entry p4d is
-diff --git a/include/asm-generic/pgtable-nopud.h b/include/asm-generic/pgtable-nopud.h
-index 7cbd15f70bf5..eb70c6d7ceff 100644
---- a/include/asm-generic/pgtable-nopud.h
-+++ b/include/asm-generic/pgtable-nopud.h
-@@ -49,7 +49,7 @@ static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
- #define __pud(x)				((pud_t) { __p4d(x) })
- 
- #define p4d_page(p4d)				(pud_page((pud_t){ p4d }))
--#define p4d_page_vaddr(p4d)			(pud_pgtable((pud_t){ p4d }))
-+#define p4d_pgtable(p4d)			((pud_t *)(pud_pgtable((pud_t){ p4d })))
- 
- /*
-  * allocating and freeing a pud is trivial: the 1-entry pud is
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 311984f87cf9..d355290bf70e 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -96,7 +96,7 @@ static inline pmd_t *pmd_offset(pud_t *pud, unsigned long address)
- #ifndef pud_offset
- static inline pud_t *pud_offset(p4d_t *p4d, unsigned long address)
- {
--	return (pud_t *)p4d_page_vaddr(*p4d) + pud_index(address);
-+	return p4d_pgtable(*p4d) + pud_index(address);
- }
- #define pud_offset pud_offset
- #endif
--- 
-2.31.1
+Last year we tried the opposite direction: we built a one-value-per-file 
+filesystem with a common API that any subsystem could use (e.g. 
+providing ethtool stats, /proc/interrupts, etc. in addition to KVM 
+stats).  We started with text, similar to sysfs, with the plan of 
+extending it to a binary format later.  However, other subsystems 
+expressed very little interest in this, so instead we decided to go with 
+something that is designed around KVM needs.
+
+Still, the binary format that KVM uses is designed not to be 
+KVM-specific.  If other subsystems want to publish high-volume, 
+self-describing statistic information, they are welcome to share the 
+binary format and the code.  Perhaps it may make sense in some cases to 
+have them in sysfs, even (e.g. /sys/kernel/slab/*/.stats).  As Greg said 
+sysfs is currently one value per file, but perhaps that could be changed 
+if the binary format is an additional way to access the information and 
+not the only one (not that I'm planning to do it).
+
+> * how will possible future extensions of the telemetry packets work ?
+
+The format includes a schema, so it's possible to add more statistics in 
+the future.  The exact list of statistics varies per architecture and is 
+not part of the userspace API (obvious caveat: https://xkcd.com/1172/).
+
+> * aren't there other means to get this fd instead of an ioctl() on the
+>    VM fd ? something more from the outside (eg. sysfs/procfs)
+
+Not yet, but if there's a need it can be added.  It'd be plausible to 
+publish system-wide statistics via a ioctl on /dev/kvm, for example. 
+We'd have to check how this compares with stuff that is world-readable 
+in procfs and sysfs, but I don't think there are security concerns in 
+exposing that.
+
+There's also pidfd_getfd(2) which can be used to pull a VM file 
+descriptor from another running process.  That can be used to avoid the 
+issue of KVM file descriptors being unnamed.
+
+> * how will that relate to other hypervisors ?
+
+Other hypervisors do not run as part of the Linux kernel (at least they 
+are not upstream).  These statistics only apply to Linux *hosts*, not 
+guests.
+
+As far as I know, there is no standard that Xen or the proprietary 
+hypervisors use to communicate their telemetry info to monitoring tools, 
+and also no standard binary format used by exporters to talk to 
+monitoring tools.  If this format will be adopted by other hypervisors 
+or any random software, I will be happy.
+
+> Some notes from the operating perspective:
+> 
+> In typical datacenters we've got various monitoring tools that are able
+> to catch up lots of data from different sources (especially files). If
+> an operator e.g. is interested in something in happening in some file
+> (e.g. in /proc of /sys), it's quite trivial - just configure yet another
+> probe (maybe some regex for parsing) and done. Automatically fed in his
+> $monitoring_solution (e.g. nagios, ELK, Splunk, whatsnot)
+
+... but in practice what you do is you have prebuilt exporters that 
+talks to $monitoring_solution.  Monitoring individual files is the 
+exception, not the rule.  But indeed Libvirt already has I/O and network 
+statistics and there is an exporter for Prometheus, so we should add 
+support for this new method as well to both QEMU (exporting the file 
+descriptor) and Libvirt.
+
+I hope this helps clarifying your doubts!
+
+Paolo
+
+> With your approach, it's not that simple: now the operator needs to
+> create (and deploy and manage) a separate agent that somehow receives
+> that fd from the VMM, reads and parses that specific binary stream
+> and finally pushes it into the monitoring infrastructure. Or the VMM
+> writes it into some file, where some monitoring agent can pick it up.
+> In any case, not actually trivial from ops perspective.
 
