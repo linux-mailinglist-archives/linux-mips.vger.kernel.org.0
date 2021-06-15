@@ -2,115 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E863A7E48
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 14:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407C53A7E9C
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 15:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbhFOMkU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Jun 2021 08:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbhFOMkT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 08:40:19 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A87C061574
-        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 05:38:14 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id j11-20020a9d738b0000b02903ea3c02ded8so14121168otk.5
-        for <linux-mips@vger.kernel.org>; Tue, 15 Jun 2021 05:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ficQ6Tww5rQWbuZhPE3EU+jqogC/DlraVO6vAn62sH8=;
-        b=Lp+48USM5gnu+eeiY9Ryndm4K5fG/VsCibPh6LcsrDucCKozYimMQbl3c5s+M9nTd2
-         kWSmLb1v/6huguWcIj5VMtNX8v8JJ3iEFARDXK3PZcl0yhm4u8om8kGk9jl2uHnjvCqc
-         T1ZVitgGHX3+mzf1uc5QBYfeBS1gEfgQdebwp6YZos97rmVDouzW2Eo4Df+Teos8bytb
-         h3l3fzGY0JAm+muk3HTuDiEmkPUiX/s/1c9WE/HreoqIlVEFbftB4UEICL+CGx5P5/mt
-         EmWgnENkf3qQ03D6T0tBhGTEZcJLbm94Z9GBugQeNIn86VAeehW9NMChjaNfoR5cOp3y
-         fNWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ficQ6Tww5rQWbuZhPE3EU+jqogC/DlraVO6vAn62sH8=;
-        b=SNS01YokfEQlM83HMFXtCvA43XXpIhogtA6AAGnk/6Eg+XBC1Nt8cOYYnoeJOgahR/
-         eOxe5htBZBDrlIUktIfRNywznYQf4Pwpj7pxESqIgbXAUx0EqGhx3zvQOrc6kloUsqQB
-         ZeUgXc5poULfRwj2fGqNVNwIzIJmCGGCFEXeszSWav5iAkQtGqh6bxGBcD4D+a14Fsb/
-         QM70LQ0REaQ6yik5fr9Jrmo9c985BHpb0c0HRSmquX9SQzotzQy8pUcYA//3vzcpTqSp
-         oSmedo2ZyDkLrJdcgmm4BB3Td3CN2OD7YLtc+iLWWW3OYxzFnJIPFuQ3JxXdUx7PudGP
-         6Vow==
-X-Gm-Message-State: AOAM5311Ggi+P4ANhxo8qjvr5s9wTPnUXHWX6xwwBbhAimX85Bj53Akw
-        nkdROa+JNLxVe728f/a1ghAcaWvF6EumLwDlVS/DyDQbmhvEjw==
-X-Google-Smtp-Source: ABdhPJw0GeGfibEnccUzSpoNh5NwbGf8dGBP93VtfjUh74h4iIR91O5ulOPCrMrUMeeckCmb0NxMwdAgQVTm490yoMU=
-X-Received: by 2002:a05:6830:99:: with SMTP id a25mr17941206oto.72.1623760693573;
- Tue, 15 Jun 2021 05:38:13 -0700 (PDT)
+        id S230083AbhFONGS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Jun 2021 09:06:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52468 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229977AbhFONGS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 15 Jun 2021 09:06:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6988261468;
+        Tue, 15 Jun 2021 13:04:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623762253;
+        bh=ry99x+VlQjPK7efumwMdnhXfJRG8zvDuRrxE6Ux6eR8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jDvDqv8CLOWhE9drMsXT3eTVyW3tyOo1D1tbIUn/raoSEEyC5NL+OsLfKSll9XhwF
+         9J1aBty8Nmxq1V00hXTgElu39a/vhaUyL6XeOuDBiRwFsbDyIw+9aRBJkigYJwu6qq
+         oje+lVDELB/ILDfIf3qiYZG/5Q1W3nm+uVJCdGnjpV6oY0nBM6sLQuNQBfFVbXrKnG
+         qZZrH/iqY9AJHCAmOvdJHP4489lXF23Id8tE7mQQVNjzfGINloc9SX6hf9GmyvdDgV
+         x/7qD6GO4EH9zDLSLA1a+ey+USon9Hh/Rfp+Vosj6bEvmkmmAGsX2t1ZrR4cJybUYi
+         mjd3FoMOOZyIg==
+Date:   Tue, 15 Jun 2021 16:04:11 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
+        Allen Pais <apais@linux.microsoft.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Vikas Gupta <vikas.gupta@broadcom.com>,
+        Thirupathaiah Annapureddy <thiruan@microsoft.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        op-tee@lists.trustedfirmware.org, linux-integrity@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 7/8] tpm_ftpm_tee: Free and unregister TEE shared
+ memory during kexec
+Message-ID: <20210615130411.hvpnaxnhimjloiz3@kernel.org>
+References: <20210610210913.536081-1-tyhicks@linux.microsoft.com>
+ <20210610210913.536081-8-tyhicks@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20210614100617.28753-1-sergio.paracuellos@gmail.com>
- <20210614100617.28753-2-sergio.paracuellos@gmail.com> <YMiUKkYL7B7qTU/X@kroah.com>
-In-Reply-To: <YMiUKkYL7B7qTU/X@kroah.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 15 Jun 2021 14:38:02 +0200
-Message-ID: <CAMhs-H8SJttFRUtE-sbqNbOAAiht1SaYMzVZGU0Zqzuat1pCPQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] MIPS: ralink: Define PCI_IOBASE
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        John Crispin <john@phrozen.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210610210913.536081-8-tyhicks@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 1:51 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Jun 14, 2021 at 12:06:15PM +0200, Sergio Paracuellos wrote:
-> > PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
-> > required by generic PCI drivers to make memory mapped I/O range
-> > work. Hence define it for ralink architectures to be able to
-> > avoid parsing manually IO ranges in PCI generic driver code.
-> > Function 'plat_mem_setup' for ralink is using 'set_io_port_base'
-> > call using '0xa0000000' as address, so use the same address in
-> > the definition to align things.
-> >
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > ---
-> >  arch/mips/include/asm/mach-ralink/spaces.h | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >  create mode 100644 arch/mips/include/asm/mach-ralink/spaces.h
-> >
-> > diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-> > new file mode 100644
-> > index 000000000000..87d085c9ad61
-> > --- /dev/null
-> > +++ b/arch/mips/include/asm/mach-ralink/spaces.h
-> > @@ -0,0 +1,10 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef __ASM_MACH_RALINK_SPACES_H_
-> > +#define __ASM_MACH_RALINK_SPACES_H_
-> > +
-> > +#define PCI_IOBASE   _AC(0xa0000000, UL)
-> > +#define PCI_IOSIZE   SZ_16M
-> > +#define IO_SPACE_LIMIT       (PCI_IOSIZE - 1)
-> > +
-> > +#include <asm/mach-generic/spaces.h>
-> > +#endif
-> > --
-> > 2.25.1
-> >
-> >
->
-> I really can't take a change outside of drivers/staging/ for a staging
-> driver.
->
-> So unless you can get a MIPS maintainer to ACK this, I can't accept
-> this change, sorry.
+On Thu, Jun 10, 2021 at 04:09:12PM -0500, Tyler Hicks wrote:
+> dma-buf backed shared memory cannot be reliably freed and unregistered
+> during a kexec operation even when tee_shm_free() is called on the shm
+> from a .shutdown hook. The problem occurs because dma_buf_put() calls
+> fput() which then uses task_work_add(), with the TWA_RESUME parameter,
+> to queue tee_shm_release() to be called before the current task returns
+> to user mode. However, the current task never returns to user mode
+> before the kexec completes so the memory is never freed nor
+> unregistered.
+> 
+> Use tee_shm_alloc_kernel_buf() to avoid dma-buf backed shared memory
+> allocation so that tee_shm_free() can directly call tee_shm_release().
+> This will ensure that the shm can be freed and unregistered during a
+> kexec operation.
+> 
+> Fixes: 09e574831b27 ("tpm/tpm_ftpm_tee: A driver for firmware TPM running inside TEE")
+> Fixes: 1760eb689ed6 ("tpm/tpm_ftpm_tee: add shutdown call back")
+> Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
 
-I know, I was expecting Thomas to ACK this, if it is ok. Thomas, what
-do you think about this?
 
-Best regards,
-    Sergio Paracuellos
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
->
-> greg k-h
+> ---
+>  drivers/char/tpm/tpm_ftpm_tee.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> index 2ccdf8ac6994..6e3235565a4d 100644
+> --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -254,11 +254,11 @@ static int ftpm_tee_probe(struct device *dev)
+>  	pvt_data->session = sess_arg.session;
+>  
+>  	/* Allocate dynamic shared memory with fTPM TA */
+> -	pvt_data->shm = tee_shm_alloc(pvt_data->ctx,
+> -				      MAX_COMMAND_SIZE + MAX_RESPONSE_SIZE,
+> -				      TEE_SHM_MAPPED | TEE_SHM_DMA_BUF);
+> +	pvt_data->shm = tee_shm_alloc_kernel_buf(pvt_data->ctx,
+> +						 MAX_COMMAND_SIZE +
+> +						 MAX_RESPONSE_SIZE);
+>  	if (IS_ERR(pvt_data->shm)) {
+> -		dev_err(dev, "%s: tee_shm_alloc failed\n", __func__);
+> +		dev_err(dev, "%s: tee_shm_alloc_kernel_buf failed\n", __func__);
+>  		rc = -ENOMEM;
+>  		goto out_shm_alloc;
+>  	}
+> -- 
+> 2.25.1
+> 
+> 
+
+/Jarkko
