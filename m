@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D96B93A7FDC
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 15:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619153A7FEA
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jun 2021 15:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbhFONdL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Jun 2021 09:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S231697AbhFONdp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Jun 2021 09:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbhFONc6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 09:32:58 -0400
+        with ESMTP id S230187AbhFONdb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Jun 2021 09:33:31 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F660C06124A;
-        Tue, 15 Jun 2021 06:30:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECC0C0613A2;
+        Tue, 15 Jun 2021 06:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=D2NyEkivGq35/XB8ZrKpJ9lVXxzvPgI+FDaHZRBySGE=; b=TmNRQKLnud3uwzyjMydzbSJfrh
-        BUJXCHnte2MFC4FMcAP4A1XLTem5f5unb3GakJLVQjDAN1tGxdFV9ldX7NbhePbfXRxc+YviESftx
-        lQSLQeNMSjVpsxcE7PsIejk3HMOwXBsuKnWULutnUyjxA+Xr3jfFu8t0WH2PS7NJAR00Cte32oJNZ
-        cd0vi+AVGJ2ollCE2ajdR53U/4ikrSGYTIUiMuNIV4zc/hNhZwk22PyjHQswkruthZMIdTTrnU9cL
-        f5EG4dS8FfWOCpsXXVe/20Bz+yXVXj85HBXD5K0vQU5nasd6XeTvybt/aZaN2igE/rZ/VAHr89gKf
-        ypDTe0Tw==;
+        bh=rADL90S3oRiyRdCFkcJ9oLhZvXcChQZEzORShMtqGjI=; b=XAkxYShyFl3Yvr1dnBp7XvRpkB
+        qSquvmmDJ6/T+WVpbxDkhyzGsiibmReOK5vCy8Nh7B9HMQ5Pj8fUJhD7UsXfi69vc1X0dVwkns/PI
+        /rrhMP7m44kHM8c8VtorOapnH8Ze4ZTA3OIAavXCEBu3G75QlAsZO1cic4/cgFEaCIX50yfYen1b9
+        c57XNXTHy45fTQhu7/8gKpFWTJA3bus8t5RM7TSC+Hxw03tl0waaUrTMlvGa8HOKRYESPiuAGLK+A
+        +kKwh6FJokJ3DVkOEvwMVt8/0J/yzKIOvQBxHaK9nBhqL0iqcoigsfH1jRQH0UCw6Ucwp6Si5NM9J
+        nCY48npA==;
 Received: from [2001:4bb8:19b:fdce:9045:1e63:20f0:ca9] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1lt98X-006oIn-SA; Tue, 15 Jun 2021 13:29:57 +0000
+        id 1lt98u-006oLz-5Y; Tue, 15 Jun 2021 13:30:16 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>, Thomas Gleixner <tglx@linutronix.de>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -39,9 +39,9 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         ceph-devel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 12/18] block: remove bvec_kmap_irq and bvec_kunmap_irq
-Date:   Tue, 15 Jun 2021 15:24:50 +0200
-Message-Id: <20210615132456.753241-13-hch@lst.de>
+Subject: [PATCH 13/18] block: rewrite bio_copy_data_iter to use bvec_kmap_local and memcpy_to_bvec
+Date:   Tue, 15 Jun 2021 15:24:51 +0200
+Message-Id: <20210615132456.753241-14-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210615132456.753241-1-hch@lst.de>
 References: <20210615132456.753241-1-hch@lst.de>
@@ -52,73 +52,53 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-These two helpers are entirely unused now.
+Use the proper helpers instead of open coding the copy.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- include/linux/bio.h | 42 ------------------------------------------
- 1 file changed, 42 deletions(-)
+ block/bio.c | 28 ++++++++--------------------
+ 1 file changed, 8 insertions(+), 20 deletions(-)
 
-diff --git a/include/linux/bio.h b/include/linux/bio.h
-index d2b98efb5cc5..8070f3f77c14 100644
---- a/include/linux/bio.h
-+++ b/include/linux/bio.h
-@@ -5,7 +5,6 @@
- #ifndef __LINUX_BIO_H
- #define __LINUX_BIO_H
+diff --git a/block/bio.c b/block/bio.c
+index 1d7abdb83a39..c14d2e66c084 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -1186,27 +1186,15 @@ EXPORT_SYMBOL(bio_advance);
+ void bio_copy_data_iter(struct bio *dst, struct bvec_iter *dst_iter,
+ 			struct bio *src, struct bvec_iter *src_iter)
+ {
+-	struct bio_vec src_bv, dst_bv;
+-	void *src_p, *dst_p;
+-	unsigned bytes;
+-
+ 	while (src_iter->bi_size && dst_iter->bi_size) {
+-		src_bv = bio_iter_iovec(src, *src_iter);
+-		dst_bv = bio_iter_iovec(dst, *dst_iter);
+-
+-		bytes = min(src_bv.bv_len, dst_bv.bv_len);
+-
+-		src_p = kmap_atomic(src_bv.bv_page);
+-		dst_p = kmap_atomic(dst_bv.bv_page);
+-
+-		memcpy(dst_p + dst_bv.bv_offset,
+-		       src_p + src_bv.bv_offset,
+-		       bytes);
+-
+-		kunmap_atomic(dst_p);
+-		kunmap_atomic(src_p);
+-
+-		flush_dcache_page(dst_bv.bv_page);
++		struct bio_vec src_bv = bio_iter_iovec(src, *src_iter);
++		struct bio_vec dst_bv = bio_iter_iovec(dst, *dst_iter);
++		unsigned int bytes = min(src_bv.bv_len, dst_bv.bv_len);
++		void *src_buf;
++
++		src_buf = bvec_kmap_local(&src_bv);
++		memcpy_to_bvec(&dst_bv, src_buf);
++		kunmap_local(src_buf);
  
--#include <linux/highmem.h>
- #include <linux/mempool.h>
- #include <linux/ioprio.h>
- /* struct bio, bio_vec and BIO_* flags are defined in blk_types.h */
-@@ -519,47 +518,6 @@ static inline void bio_clone_blkg_association(struct bio *dst,
- 					      struct bio *src) { }
- #endif	/* CONFIG_BLK_CGROUP */
- 
--#ifdef CONFIG_HIGHMEM
--/*
-- * remember never ever reenable interrupts between a bvec_kmap_irq and
-- * bvec_kunmap_irq!
-- */
--static inline char *bvec_kmap_irq(struct bio_vec *bvec, unsigned long *flags)
--{
--	unsigned long addr;
--
--	/*
--	 * might not be a highmem page, but the preempt/irq count
--	 * balancing is a lot nicer this way
--	 */
--	local_irq_save(*flags);
--	addr = (unsigned long) kmap_atomic(bvec->bv_page);
--
--	BUG_ON(addr & ~PAGE_MASK);
--
--	return (char *) addr + bvec->bv_offset;
--}
--
--static inline void bvec_kunmap_irq(char *buffer, unsigned long *flags)
--{
--	unsigned long ptr = (unsigned long) buffer & PAGE_MASK;
--
--	kunmap_atomic((void *) ptr);
--	local_irq_restore(*flags);
--}
--
--#else
--static inline char *bvec_kmap_irq(struct bio_vec *bvec, unsigned long *flags)
--{
--	return page_address(bvec->bv_page) + bvec->bv_offset;
--}
--
--static inline void bvec_kunmap_irq(char *buffer, unsigned long *flags)
--{
--	*flags = 0;
--}
--#endif
--
- /*
-  * BIO list management for use by remapping drivers (e.g. DM or MD) and loop.
-  *
+ 		bio_advance_iter_single(src, src_iter, bytes);
+ 		bio_advance_iter_single(dst, dst_iter, bytes);
 -- 
 2.30.2
 
