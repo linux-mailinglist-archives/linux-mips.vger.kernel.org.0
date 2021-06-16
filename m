@@ -2,517 +2,595 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9383A91BC
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Jun 2021 08:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC3E3A9B3D
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Jun 2021 14:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbhFPGQO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Jun 2021 02:16:14 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:25410 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229543AbhFPGQO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 16 Jun 2021 02:16:14 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15G668MN029023;
-        Tue, 15 Jun 2021 23:13:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=1zDiUXVBpbUcYRQ4f3xXX5ppQiNQm5bcVCXYVuy3JtA=;
- b=JwTLT9YaTJ3bdjWpu7ZNdWeI1XHVwI8yymDQt2d03MF7CgmfvFTJdzrUnb0g8N2NpdBu
- TPYM+UPks+WhluabWEBgdc0P0KGtO//13nAXDNcPshbtNN2pdjdXYE27OZnorI2m+lB+
- 4jj66PiYEEVx8t4Oa9R7VfKv2LHoraUKuZI= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 396x3hvp3q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 15 Jun 2021 23:13:53 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 15 Jun 2021 23:13:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=maNUjdzgCCjD85K2l5e6jfQObwQsnWOtmHWDPuAHWFzvz81zz/06PdsQx67zkWr3aj0XSVeawKVuklJaG25PAoJDbuUfw6tU2AzUK1vFXeqLHdeLKQ++9TfSF86SJNMDuyafuOBdlaKB/7OPW/qj84WT0qXj8PTqa8O0ZERz3V5XQvwWeXXW1HK8klr5gCh5CDdm7nH8klAC6PV9WSZqyvwlIKCYnM1ysLD+Qoc6SOlTOw+Fr1Kkont0IwUhhGaxmQtZxstvuMgf4hotY/s9pCkkX9baP3sm6jbwzeFK9LC/vZFrrlM8IK6iDP0O0GybHzQ4xlaNqxX+IcEnEUjLKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1zDiUXVBpbUcYRQ4f3xXX5ppQiNQm5bcVCXYVuy3JtA=;
- b=GxM3IQO4kkw19/5+P2RZuAfoa6LDO8g7fcDDCIt74nbA05Q47XygRgzUpcH4tsfzyXubL1hfrW15if5Q41caok79vhdAYPrIY9LiiDDBSqNtpS5oq2JgGWKYvJjTMf2ywe15jlGAoA+/oWbWXAVHwAkn/imk1n43VNWqfr7iBvle4rGiSzp8BYHUPYIkTAF3CFlAEjt7lmgyqzsMPPVhKeXPUs1um16lr9skrFJtXalnr+dfkxz6M0UCJ2eu9xdLeT6ERLjS2drVHzBTjUAvJaBEjTAMixLlmFdmrdW2QrK/8VjWGafYt3PAnhZfd9fbYVE0sTMYTYWzz8e8zk9X1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=fb.com;
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SA1PR15MB4450.namprd15.prod.outlook.com (2603:10b6:806:195::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.20; Wed, 16 Jun
- 2021 06:13:50 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::d886:b658:e2eb:a906]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::d886:b658:e2eb:a906%5]) with mapi id 15.20.4219.026; Wed, 16 Jun 2021
- 06:13:50 +0000
-Subject: Re: Kernel Oops in test_verifier "#828/p reference tracking:
- bpf_sk_release(btf_tcp_sock)"
-To:     Tony Ambardar <tony.ambardar@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-References: <CAPGftE_eY-Zdi3wBcgDfkz_iOr1KF10n=9mJHm1_a_PykcsoeA@mail.gmail.com>
- <ce6fd0fd-2fb3-7a66-4910-5fe8c2b4d593@fb.com>
- <CAPGftE9+CVuK7KwExRiqsuKHMEUrPsXraBbC5qw8N2NFrE5MYg@mail.gmail.com>
- <4ec3c676-e219-6aaf-fe5c-76abbb0c9535@fb.com>
- <CAPGftE8d03K4_S1pTyRVWZL7w67FukES_PV8SR=0_6DXhXzjQw@mail.gmail.com>
- <CAPGftE9CvDN4T2_xyn8xB_f247-da+nrDH6o35e_Yu9rSL=ehg@mail.gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <5261ac5c-b51c-e7c7-a105-38b10b0f07c0@fb.com>
-Date:   Tue, 15 Jun 2021 23:13:46 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.11.0
-In-Reply-To: <CAPGftE9CvDN4T2_xyn8xB_f247-da+nrDH6o35e_Yu9rSL=ehg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [2620:10d:c090:400::5:99ad]
-X-ClientProxiedBy: CO1PR15CA0051.namprd15.prod.outlook.com
- (2603:10b6:101:1f::19) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        id S232946AbhFPM5t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Jun 2021 08:57:49 -0400
+Received: from mga07.intel.com ([134.134.136.100]:38939 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232550AbhFPM5t (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 16 Jun 2021 08:57:49 -0400
+IronPort-SDR: 2hxxd5nD+EOU6PaCuNyhySVLuGf36C5gcGph5SWkrQrAx+sTkNl9LRApxD0gK86EEcr/WjH1+9
+ dEOoQQGukCwg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10016"; a="270018716"
+X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
+   d="gz'50?scan'50,208,50";a="270018716"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2021 05:55:42 -0700
+IronPort-SDR: Y6fXVe7nkLge2k3LyShwCt8mMFLwGSBr1DgPkCQUgh/TANllVMbX84QG0tNe+t0HXveCn6s2j4
+ 6KqzboqhV/oQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
+   d="gz'50?scan'50,208,50";a="554026010"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 Jun 2021 05:55:39 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ltV50-0001CU-JE; Wed, 16 Jun 2021 12:55:38 +0000
+Date:   Wed, 16 Jun 2021 20:55:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
+        KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Fuad Tabba <tabba@google.com>
+Cc:     kbuild-all@lists.01.org, clang-built-linux@googlegroups.com,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH 1/4] KVM: stats: Make sure no missing or mismatched
+ binary stats definition
+Message-ID: <202106162007.Ut8IJLnT-lkp@intel.com>
+References: <20210614025351.365284-2-jingzhangos@google.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21d6::1441] (2620:10d:c090:400::5:99ad) by CO1PR15CA0051.namprd15.prod.outlook.com (2603:10b6:101:1f::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.20 via Frontend Transport; Wed, 16 Jun 2021 06:13:49 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ff299142-9d46-4308-191f-08d9308de88c
-X-MS-TrafficTypeDiagnostic: SA1PR15MB4450:
-X-Microsoft-Antispam-PRVS: <SA1PR15MB4450041C75094213E177E1DED30F9@SA1PR15MB4450.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DfBb6196ZJmFkBiujSo6fEmWNDHowEBpPG4BO22ieEHreo2CQhcjk1ZsgiAjMwq+ocxYuc/C8ntumW0EnfI4X5uhHXGrg6aupb8NmImW8edTyCYxmlYTlL6vuipY867dlL43zoRaXwMeppCTf04pfZTNt5Q24H/ljIYVfal+oZ3rUEqTiErOaamQWquJ3mZK/TdkXB6QnpECVRvE1d9jFU0hOvIEEpL91JzPys6+mRlEyc1KuiMZAnXfuEM1D0hrZf4yPShn+D5HVnJFWEAzcG7Cgcc7kwJSHo+qavzTBrYFPh0rbIVx6feNNxv2IJWqzx4nm0c4+V8Rup4zXYRWfkjih/SvgweiABCAMQPeXsxZyMHVv8ls35LrXuTb57kc8Ppjny78tnSlwjYrWc/USvNPKz2CyBB7/u9/KU6uQWKPcChRg3KmAUJzg0JHwP/m9wWfZrN7L8sOISnyhsLVDous6J8TyLDYeYYkuEeuBCTbLnD6JV7GwQoMhO6Ca4W99LIyzRdDiKZtfZYvhSYgX6OhtG+NC0XuuGru7FI+CFX2fKQ6tTaFWdNKyjfiUmBG+++nY+v/0HJQiSFGXBXjl1gIgFx1NYQrRszDjfgBw8uQMq6YZ6EtQPKNWmMaoNxgyPCxXVa7Pm8o4Jdvlz8aiOCpI9QcnqMM9vk2PT623X2w5g7SZ5mjvAh+JmnvpXRu
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(376002)(366004)(396003)(346002)(6486002)(16526019)(2616005)(31686004)(53546011)(186003)(31696002)(83380400001)(86362001)(66946007)(66476007)(66556008)(6916009)(52116002)(38100700002)(8676002)(478600001)(5660300002)(45080400002)(6666004)(316002)(2906002)(54906003)(4326008)(8936002)(30864003)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QTlGanA5OG9CakFIdnJyREZzLzRiTHMwNTJ5VmE1enJlQTR5SWw0dkg5YVRu?=
- =?utf-8?B?L2hobldydmh0Sno0a3puQUwybjAwek9oS2huUXA3MTVpeGVqNEk1S3NIcVpV?=
- =?utf-8?B?c2NHMk55OVFESjhBeG44VitSU3JKNk1IUEEvRG5zbDhEOHVmSnBoZjVBM3Bt?=
- =?utf-8?B?VGRoUXdGTm5GVjhyRkxTTWc4ZGkxR3UyMWx1dldMUHh6dm92TEt1VnNuTTdv?=
- =?utf-8?B?V2hvOWlSejJHYWlFVGhIVjROOWh6S3R3Mlk0WEFNeEhPM0VtVmlYb0dUQkNU?=
- =?utf-8?B?eTlNUkt6Y3hmL3Q0eUVKR0ZWQzZzRUc0ZHd2a1dvSnNlc1JxeTFjZkhia2ds?=
- =?utf-8?B?VkxqWUpRbGlmZ3lnZ2g0blMxZVlNUHhOZTh0T0RUdW9WeFUzQ2hvK2E1bTFu?=
- =?utf-8?B?YnZjQUZLL2VYcGo3YjFRZjgyZ0hRQThQQ1R6Q25hRG9ETTN3cHRMdzdYYVBV?=
- =?utf-8?B?ZnNVMkxYdTJFRytLOEdaK1RpRmR5Q2NlZ0VQamEzRzNDeFBJdXhPcFAxUFZE?=
- =?utf-8?B?UVZ4aXJXOHc2UTFDOXhmdUxVOCtKUWZid0l4K0orZXNhZ25zQzdjRWhkeC94?=
- =?utf-8?B?dW5qbXhQRGpJc0d0VlZUQ1lYSmEyMFB6NC9hc3QyWmhyRjI4OFQ2bU42aGpv?=
- =?utf-8?B?U1orSDBjTDRHN3dzZzdmMkdwK2orR2lRYnh0ZlNHdk8xQWszcC9HblFhSGxl?=
- =?utf-8?B?eDArOXlRcUNmYkhtZmFsemNXT2lteFQ5SGoyU1pKOUMwRzAxYUpEK2FUSG8r?=
- =?utf-8?B?NGFmUVVXbHpLVlVJZXJRSmZ4cFhPbjFsVVRDaTBxQWdiUDhIVEFmbmNxY3ZE?=
- =?utf-8?B?MmVJM3FkV0Vvang5eXhKcEFIVkZWZzdHMmlxNW1KZ1hjOUtCQ0I0SWhTSlIr?=
- =?utf-8?B?c0l4QU41TnRYcmRFT1NmSzQrTlRabkdoQzRrU1lnek8wQUh3aUlVaVc1NDcy?=
- =?utf-8?B?MHRjL3JBSWp2R1RRRUFaVUNmb2pRQUI4VW8xdm9kU1dCUDU1ZDlTT0ltRkM4?=
- =?utf-8?B?ZktoUVhUL3VPeDYyY0pBck9tSUEvWnhlU3lPanpua0F0enhwT2Jvd2Fmd0lH?=
- =?utf-8?B?bi9TYnB6NENVdG83Sk4yZlMzWkNkcUZrbXM1MXlPOUlUa01mV3FYWXd0alNM?=
- =?utf-8?B?dlFmbWpVUkN1citxZVJvZjU4UXVpUExSL0pMR3lidFdseGdmbGdZbVUzWTRj?=
- =?utf-8?B?Q2Vwd09SdVdnTXdDSm9IZzdkTFFMb2tOOExSK1FhU0EvcktROXdkMkhONUVl?=
- =?utf-8?B?aWkxbklYREhFSlViTFdKdmhNRXJzRHZVMUNFcHE1eVJwRDdFT2RUS3JqODJG?=
- =?utf-8?B?U05TejhpNVJ5TDV2Sk9scWZPTjMzdnZFUWpkUE40RmowQitKMTBoM2dHUjNu?=
- =?utf-8?B?VEVGLzl4S3o1RFlVa3d6eXVZdUh2NkhHaDZrV0NEWVhOeHNweUhGZVJWb2gx?=
- =?utf-8?B?aEFYTVFzTHgzT0NhenphUVg0WnNxT0x4WkpsVkFnMFlFU0xkV1k4NThUZGJY?=
- =?utf-8?B?VFM1VCtoVThFdlUyWjF4YzlDakVVbnRFREFjcXU3Z2tCQUkvbWZoVWQ3cTdJ?=
- =?utf-8?B?RXA4Sy9oNVZaclZ6VW9Rb2M1c043aDExQmhHNzAzZG96MndUMGFtVjZQbmow?=
- =?utf-8?B?Z3UwWCsvTVdHUnh2UnlKSWdXQmRpTGIzN2hwYVBtS0xWeVhldW40NWEzLzJs?=
- =?utf-8?B?R2R2MVpGK0NmR1lWZWN6Q3RLNjZPeXdVS2hycUF3Z2RpR05pQjlCazd6ZjQ0?=
- =?utf-8?B?MVZHMWczNTZENW5RMXgvRllsWGFGK3h6T2RXQ0FoQmFDWnVOZWFadEs3TXBI?=
- =?utf-8?Q?sF9bZPICtjEk3VD9MrJhvO662EMW7Ml6wN7YE=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff299142-9d46-4308-191f-08d9308de88c
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2021 06:13:50.1222
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OXSYIFdqmmbukaK4qmNZojJd0KJhUmeM05E5PlYLm/+ccLj8Q48PdMFekyIkU1jt
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4450
-X-OriginatorOrg: fb.com
-X-Proofpoint-GUID: 9scUKqGOAWIh0ZWmegG5QjtuSVV71-SH
-X-Proofpoint-ORIG-GUID: 9scUKqGOAWIh0ZWmegG5QjtuSVV71-SH
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-15_09:2021-06-15,2021-06-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- adultscore=0 impostorscore=0 spamscore=0 priorityscore=1501 mlxscore=0
- mlxlogscore=999 bulkscore=0 suspectscore=0 lowpriorityscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106160038
-X-FB-Internal: deliver
+Content-Type: multipart/mixed; boundary="envbJBWh7q8WU6mo"
+Content-Disposition: inline
+In-Reply-To: <20210614025351.365284-2-jingzhangos@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
+--envbJBWh7q8WU6mo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 6/15/21 8:38 PM, Tony Ambardar wrote:
-> On Tue, 15 Jun 2021 at 19:21, Tony Ambardar <tony.ambardar@gmail.com> wrote:
->>
->> On Sun, 13 Jun 2021 at 23:14, Yonghong Song <yhs@fb.com> wrote:
->>>
->>> On 6/12/21 5:07 PM, Tony Ambardar wrote:
->>>> On Fri, 11 Jun 2021 at 08:57, Yonghong Song <yhs@fb.com> wrote:
->>>>>
->>>>> On 6/10/21 6:02 PM, Tony Ambardar wrote:
->>>>>> Hello,
->>>>>>
->>>>>> I encountered an NPE and kernel Oops [1] while running the
->>>>>> 'test_verifier' selftest on MIPS32 with LTS kernel 5.10.41. This was
->>>>>> observed during development of a MIPS32 JIT but is verifier-related.
->>>>>>
->>>>>> Initial troubleshooting [2] points to an unchecked NULL dereference in
->>>>>> btf_type_by_id(), with an unexpected BTF type ID. The root cause is
->>>>>> unclear, whether source of the ID or a potential underlying BTF
->>>>>> problem.
->>>>>
->>>>> Do you know what is the faulty btf ID number? What is the maximum id
->>>>> for vmlinux BTF?
->>>>
->>>> Thanks for the suggestions, Yonghong.
->>>>
->>>> I had built/packaged bpftool for the target, which shows the maximum as:
->>>>
->>>>     root@OpenWrt:~# bpftool btf dump file /sys/kernel/btf/vmlinux format
->>>> raw|tail -5
->>>>     [43179] FUNC 'pci_load_of_ranges' type_id=43178 linkage=static
->>>>     [43180] ARRAY '(anon)' type_id=23 index_type_id=23 nr_elems=16
->>>>     [43181] FUNC 'pcibios_plat_dev_init' type_id=29264 linkage=static
->>>>     [43182] FUNC 'pcibios_map_irq' type_id=29815 linkage=static
->>>>     [43183] FUNC 'mips_pcibios_init' type_id=115 linkage=static
->>>>
->>>> After adding NULL handling and debug pr_err() to kernel_type_name(), I next see:
->>>>
->>>>     root@OpenWrt:~# ./test_verifier_eb 828
->>>>     [   87.196692] btf_type_by_id(btf_vmlinux, 3062497280) returns NULL
->>>>     [   87.196958] btf_type_by_id(btf_vmlinux, 2936995840) returns NULL
->>>>     #828/p reference tracking: bpf_sk_release(btf_tcp_sock) FAIL
->>>>
->>>> Those large type ids make me suspect an endianness issue, even though bpftool
->>>> can still properly access the vmlinux BTF. Changing byte order and
->>>> looking up the
->>>> resulting type ids seems to confirm this:
->>>>
->>>>     Check endianness:
->>>>       3062497280 -> 0xB68A0000 --swap endian--> 0x00008AB6 -> 35510
->>>>     bpftool btf dump file /sys/kernel/btf/vmlinux format raw|fgrep "[35510]":
->>>>       [35510] STRUCT 'tcp_sock' size=1752 vlen=136
->>>>
->>>>     Check endianness:
->>>>       2936995840 -> 0xAF0F0000 --swap endian--> 0x00000FAF -> 4015
->>>>     bpftool btf dump file /sys/kernel/btf/vmlinux format raw|fgrep "[4015]":
->>>>       [4015] STRUCT 'sock_common' size=112 vlen=25
->>>>
->>>> As a further test, I repeated "test_verifier 828" across mips{32,64}{be,le}
->>>> systems and confirm seeing the problem only with the big-endian ones.
->>>
->>>   From the above information, looks like vmlinux BTF is correct.
->>> Below resolve_btfids command output seems indicating the btf_id list
->>> is also correct.
->>>
->>> The kernel_type_name is used in a few places for verifier verbose output.
->>>
->>> $ grep kernel_type_name kernel/bpf/verifier.c
->>> static const char *kernel_type_name(const struct btf* btf, u32 id)
->>>                                   verbose(env, "%s",
->>> kernel_type_name(reg->btf, reg->btf_id));
->>>                                   regno, kernel_type_name(reg->btf,
->>> reg->btf_id),
->>>                                   kernel_type_name(btf_vmlinux,
->>> *arg_btf_id));
->>>
->>> The most suspicous target is reg->btf_id, which is propagated from
->>> the result of bpf_sk_lookup_tcp() helper.
->>>
->>>>
->>>>> The involved helper is bpf_sk_release.
->>>>>
->>>>> static const struct bpf_func_proto bpf_sk_release_proto = {
->>>>>            .func           = bpf_sk_release,
->>>>>            .gpl_only       = false,
->>>>>            .ret_type       = RET_INTEGER,
->>>>>            .arg1_type      = ARG_PTR_TO_BTF_ID_SOCK_COMMON,
->>>>> };
->>>>>
->>>>> Eventually, the btf_id is taken from btf_sock_ids[6] where
->>>>> btf_sock_ids is a kernel global variable.
->>>>>
->>>>> Could you check btf_sock_ids[6] to see whether the number
->>>>> makes sense?
->>>>
->>>> What I see matches the second btf_type_by_id() NULL call above:
->>>>     [   56.556121] btf_sock_ids[6]: 2936995840
->>>>
->>>>> The id is computed by resolve_btfids in
->>>>> tools/bpf/resolve_btfids, you might add verbose mode to your linux build
->>>>> to get more information.
->>>>
->>>> The verbose build didn't print any details of the btf ids. Was there anything
->>>> special to do in invocation? I manually ran "resolve_btfids -v vmlinux" from
->>>> the build dir and this, strangely, gave slightly different results than bpftool
->>>> but not the huge endian-swapped type ids. Is this expected?
->>>>
->>>>     # ./tools/bpf/resolve_btfids/resolve_btfids -v vmlinux
->>>>     ...
->>>>     patching addr   116: ID   35522 [tcp_sock]
->>>>     ...
->>>>     patching addr   112: ID    4021 [sock_common]
->>>>
->>>> Do any of the details above help narrow down things? What do you suggest
->>>> for next steps?
->>>
->>> We need to identify issues by dumping detailed verifier logs.
->>> Could you apply the following change?
->>>
->>> --- a/tools/testing/selftests/bpf/test_verifier.c
->>> +++ b/tools/testing/selftests/bpf/test_verifier.c
->>> @@ -1088,7 +1088,7 @@ static void do_test_single(struct bpf_test *test,
->>> bool unpriv,
->>>           attr.insns_cnt = prog_len;
->>>           attr.license = "GPL";
->>>           if (verbose)
->>> -               attr.log_level = 1;
->>> +               attr.log_level = 3;
->>>           else if (expected_ret == VERBOSE_ACCEPT)
->>>                   attr.log_level = 2;
->>>           else
->>>
->>> Run command like `./test_verifier -v 828 828`?
->>>
->>> I attached the verifier output for x86_64.
->>> Maybe by comparing x86 output vs. mips32 output, you can
->>> find which insn starts to have *wrong* verifier state
->>> and then we can go from there.
->>
->> I realized too late your test output must be for a different kernel version as
->> well as arch, as the test numbering is different and doesn't match my test:
->> "reference tracking: bpf_sk_release(btf_tcp_sock)".
->>
->> Given the problem is seen on big-endian and not little-systems, I applied
->> your patch for both mips32 variant systems and recaptured log output,
->> which should make for a stricter A/B comparison. I also kept my earlier
->> patches to catch the NULLs and print debug info.
->>
->> The logs are identical until insn #18, where the failing MIPS32BE shows:
->>
->> 18: R0_w=ptr_or_null_(null)(id=3,off=0,imm=0)
->> R6_w=sock(id=0,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8=????0000
->> fp-16=0000mmmm fp-24=mmmmmmmm fp-32=mmmmmmmm fp-40=mmmmmmmm
->> fp-48=mmmmmmmm refs=2
->>
->> while the succeed MIPS32LE test shows:
->>
->> 18: R0_w=ptr_or_null_tcp_sock(id=3,off=0,imm=0)
->> R6_w=sock(id=0,ref_obj_id=2,off=0,imm=0) R10=fp0 fp-8=????0000
->> fp-16=0000mmmm fp-24=mmmmmmmm fp-32=mmmmmmmm fp-40=mmmmmmmm
->> fp-48=mmmmmmmm refs=2
->>
->> There are then further differences you can see in the attached logs. It's
->> not clear to me what these differences mean however. Any ideas?
->>
->> Following your earlier comments on the large, endian-swapped values
->> in btf_sock_ids[6], I noticed this is true of all btf_sock_ids[]
->> elements, based on debug output:
->>
->>      btf_sock_ids[0] = 2139684864
->>      btf_sock_ids[1] = 2794061824
->>      btf_sock_ids[2] = 2844459008
->>      btf_sock_ids[3] = 1234305024
->>      btf_sock_ids[4] = 3809411072
->>      btf_sock_ids[5] = 1946812416
->>      btf_sock_ids[6] = 2936995840
->>      btf_sock_ids[7] = 3062497280
->>      btf_sock_ids[8] = 2861236224
->>      btf_sock_ids[9] = 1251082240
->>      btf_sock_ids[10] = 1334968320
->>      btf_sock_ids[11] = 1267859456
->>      btf_sock_ids[12] = 1318191104
->>
->> If these are populated by resolve_btfids, how could we re-verify that
->> it's being done properly?
-> 
-> Following up on this thought, I used objdump to look at the .BTF_ids
-> section and the "struct sock_common" type, comparing the ids for
-> little- and big-endian vmlinux after processing by resolv_btfids.
-> 
-> It appears resolv_btfids always writes these ids as little-endian (the
-> build host) and ignores the target endianness. Do I read this
-> correctly?
+Hi Jing,
 
-Looks like you use cross compiler to build the kernel.
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on 39be2e28180a2e87af5fbb8d83643812e1a3b371]
+
+url:    https://github.com/0day-ci/linux/commits/Jing-Zhang/Remove-duplicated-stats-definitions-for-debugfs/20210616-151523
+base:   39be2e28180a2e87af5fbb8d83643812e1a3b371
+config: s390-randconfig-r022-20210615 (attached as .config)
+compiler: clang version 13.0.0 (https://github.com/llvm/llvm-project 64720f57bea6a6bf033feef4a5751ab9c0c3b401)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://github.com/0day-ci/linux/commit/2145147a4e85c8196c004804d103c1a3d7adeffe
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jing-Zhang/Remove-duplicated-stats-definitions-for-debugfs/20210616-151523
+        git checkout 2145147a4e85c8196c004804d103c1a3d7adeffe
+        # save the attached .config to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=s390 
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/kvm/kvm-s390.c:23:
+   In file included from include/linux/kvm_host.h:35:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:36:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from arch/s390/kvm/kvm-s390.c:23:
+   In file included from include/linux/kvm_host.h:35:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:34:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from arch/s390/kvm/kvm-s390.c:23:
+   In file included from include/linux/kvm_host.h:35:
+   In file included from include/linux/kvm_para.h:5:
+   In file included from include/uapi/linux/kvm_para.h:37:
+   In file included from arch/s390/include/asm/kvm_para.h:25:
+   In file included from arch/s390/include/asm/diag.h:12:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> arch/s390/kvm/kvm-s390.c:63:2: error: implicit declaration of function 'STATS_DESC_COUNTR' [-Werror,-Wimplicit-function-declaration]
+           STATS_DESC_COUNTR(VM, inject_io),
+           ^
+>> arch/s390/kvm/kvm-s390.c:63:20: error: use of undeclared identifier 'VM'
+           STATS_DESC_COUNTR(VM, inject_io),
+                             ^
+>> arch/s390/kvm/kvm-s390.c:63:24: error: use of undeclared identifier 'inject_io'
+           STATS_DESC_COUNTR(VM, inject_io),
+                                 ^
+   arch/s390/kvm/kvm-s390.c:64:20: error: use of undeclared identifier 'VM'
+           STATS_DESC_COUNTR(VM, inject_float_mchk),
+                             ^
+>> arch/s390/kvm/kvm-s390.c:64:24: error: use of undeclared identifier 'inject_float_mchk'
+           STATS_DESC_COUNTR(VM, inject_float_mchk),
+                                 ^
+   arch/s390/kvm/kvm-s390.c:65:20: error: use of undeclared identifier 'VM'
+           STATS_DESC_COUNTR(VM, inject_pfault_done),
+                             ^
+>> arch/s390/kvm/kvm-s390.c:65:24: error: use of undeclared identifier 'inject_pfault_done'
+           STATS_DESC_COUNTR(VM, inject_pfault_done),
+                                 ^
+   arch/s390/kvm/kvm-s390.c:66:20: error: use of undeclared identifier 'VM'
+           STATS_DESC_COUNTR(VM, inject_service_signal),
+                             ^
+>> arch/s390/kvm/kvm-s390.c:66:24: error: use of undeclared identifier 'inject_service_signal'
+           STATS_DESC_COUNTR(VM, inject_service_signal),
+                                 ^
+   arch/s390/kvm/kvm-s390.c:67:20: error: use of undeclared identifier 'VM'
+           STATS_DESC_COUNTR(VM, inject_virtio)
+                             ^
+>> arch/s390/kvm/kvm-s390.c:67:24: error: use of undeclared identifier 'inject_virtio'
+           STATS_DESC_COUNTR(VM, inject_virtio)
+                                 ^
+>> arch/s390/kvm/kvm-s390.c:69:15: error: invalid application of 'sizeof' to an incomplete type 'struct _kvm_stats_desc []'
+   static_assert(ARRAY_SIZE(kvm_vm_stats_desc) ==
+   ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:42:32: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                  ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+   #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+                                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+   #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+                                                          ^~~~
+   arch/s390/kvm/kvm-s390.c:75:12: error: invalid application of 'sizeof' to an incomplete type 'struct _kvm_stats_desc []'
+                   .count = ARRAY_SIZE(kvm_vm_stats_desc),
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:42:32: note: expanded from macro 'ARRAY_SIZE'
+   #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+                                  ^~~~~
+   arch/s390/kvm/kvm-s390.c:78:10: error: invalid application of 'sizeof' to an incomplete type 'struct _kvm_stats_desc []'
+                           sizeof(kvm_vm_stats_desc),
+                                 ^~~~~~~~~~~~~~~~~~~
+   12 warnings and 14 errors generated.
 
 
-The libbpf/btf.c does handle endianness, so resolve_btfids
-get correct endian-adjusted values for btf id, which is
-why debug output is good. But resolve_btfids updated
-the value with host endian which indeed a problem.
+vim +/STATS_DESC_COUNTR +63 arch/s390/kvm/kvm-s390.c
 
-To fix the issue, resolve_btfids needs to test
-whether vmlinux BTF endianness matches host endianness
-or not, if not, it should do a swap.
+    55	
+    56	#define MEM_OP_MAX_SIZE 65536	/* Maximum transfer size for KVM_S390_MEM_OP */
+    57	#define LOCAL_IRQS 32
+    58	#define VCPU_IRQS_MAX_BUF (sizeof(struct kvm_s390_irq) * \
+    59				   (KVM_MAX_VCPUS + LOCAL_IRQS))
+    60	
+    61	struct _kvm_stats_desc kvm_vm_stats_desc[] = {
+    62		KVM_GENERIC_VM_STATS(),
+  > 63		STATS_DESC_COUNTR(VM, inject_io),
+  > 64		STATS_DESC_COUNTR(VM, inject_float_mchk),
+  > 65		STATS_DESC_COUNTR(VM, inject_pfault_done),
+  > 66		STATS_DESC_COUNTR(VM, inject_service_signal),
+  > 67		STATS_DESC_COUNTR(VM, inject_virtio)
+    68	};
+  > 69	static_assert(ARRAY_SIZE(kvm_vm_stats_desc) ==
+    70			sizeof(struct kvm_vm_stat) / sizeof(u64));
+    71	
 
-Maybe you can help debug this issue further and possibly
-suggest a fix?
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 
-cc Jiri Olsa who is the original author of resolve_btfids.
+--envbJBWh7q8WU6mo
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
 
-> 
->    $ objdump --syms -s -j .BTF_ids
-> build_dir/target-mipsel_24kc_musl/linux-malta_le/linux-5.10.41/vmlinux
->    build_dir/target-mipsel_24kc_musl/linux-malta_le/linux-5.10.41/vmlinux:
-> file format elf32-little
-> 
->    SYMBOL TABLE:
->    ...
->    80bbee08 l     O .BTF_ids       00000004 __BTF_ID__struct__sock_common__1116
-> 
->    Contents of section .BTF_ids:
->    ...
->     80bbee08 b40f0000 bc8a0000 b08b0000 50920000  ............P...
-> 
->    $ objdump --syms -s -j .BTF_ids
-> build_dir/target-mips_24kc_musl/linux-malta_be/linux-5.10.41/vmlinux
->    build_dir/target-mips_24kc_musl/linux-malta_be/linux-5.10.41/vmlinux:
-> file format elf32-big
-> 
->    SYMBOL TABLE:
->    ...
->    80bc3ebc l     O .BTF_ids       00000004 __BTF_ID__struct__sock_common__1116
-> 
->    Contents of section .BTF_ids:
->      ...
->     80bc3ebc b50f0000 c28a0000 b68b0000 56920000  ............V...
-> 
-> 
-> I also want to highlight a discrepency I reported earlier between btf
-> ids for "sock_common" reported by resolv_btfids (4021) and bpftool
-> (4015). Why do you suppose this is?
-> 
->>>>
->>>> Thanks,
->>>> Tony
->>>>
->>>>>>
->>>>>> Has this been seen before? How best to debug this further or resolve?
->>>>>> What other details would be useful for BPF kernel developers?
->>>>>>
->>>>>> Thanks for any help,
->>>>>> Tony
->>>>>>
->>>>>> [1]:
->>>>>> (Host details)
->>>>>> kodidev:~/openwrt-project$ ./staging_dir/host/bin/pahole --version
->>>>>> v1.21
->>>>>>
->>>>>> (Target details)
->>>>>> root@OpenWrt:/# uname -a
->>>>>> Linux OpenWrt 5.10.41 #0 SMP Tue Jun 1 00:54:31 2021 mips GNU/Linux
->>>>>>
->>>>>> root@OpenWrt:~# sysctl net.core.bpf_jit_enable=0; ./test_verifier 826 828
->>>>>> net.core.bpf_jit_enable = 0
->>>>>>
->>>>>> #826/p reference tracking: branch tracking valid pointer null comparison OK
->>>>>> #827/p reference tracking: branch tracking valid pointer value comparison OK
->>>>>> CPU 0 Unable to handle kernel paging request at virtual address
->>>>>> 00000000, epc == 80244654, ra == 80244654
->>>>>> Oops[#1]:
->>>>>> CPU: 0 PID: 16274 Comm: test_verifier Not tainted 5.10.41 #0
->>>>>> $ 0   : 00000000 00000001 00000000 0000a8a2
->>>>>> $ 4   : 835ac580 a6280000 00000000 00000001
->>>>>> $ 8   : 835ac580 a6280000 00000000 02020202
->>>>>> $12   : 8348de58 834ba800 00000000 00000000
->>>>>> $16   : 835ac580 8098be2c fffffff3 834bdb38
->>>>>> $20   : 8098be0c 00000001 00000018 00000000
->>>>>> $24   : 00000000 01415415
->>>>>> $28   : 834bc000 834bdac8 00000005 80244654
->>>>>> Hi    : 00000017
->>>>>> Lo    : 0a3d70a2
->>>>>> epc   : 80244654 kernel_type_name+0x20/0x38
->>>>>> ra    : 80244654 kernel_type_name+0x20/0x38
->>>>>> Status: 1000a403 KERNEL EXL IE
->>>>>> Cause : 00800008 (ExcCode 02)
->>>>>> BadVA : 00000000
->>>>>> PrId  : 00019300 (MIPS 24Kc)
->>>>>> Modules linked in: pppoe ppp_async pppox ppp_generic mac80211_hwsim
->>>>>> mac80211 iptable_nat ipt_REJECT cfg80211 xt_time xt_tcpudp xt_tcpmss
->>>>>> xt_statistic xt_state xt_recent xt_nat xt_multiport xt_mark xt_mac
->>>>>> xt_limit xt_length xt_hl xt_helper xt_ecn xt_dscp xt_conntrack
->>>>>> xt_connmark xt_connlimit xt_connbytes xt_comment xt_TCPMSS xt_REDIRECT
->>>>>> xt_MASQUERADE xt_LOG xt_HL xt_FLOWOFFLOAD xt_DSCP xt_CT xt_CLASSIFY
->>>>>> slhc sch_mqprio sch_cake pcnet32 nf_reject_ipv4 nf_nat nf_log_ipv4
->>>>>> nf_flow_table nf_conntrack_netlink nf_conncount iptable_raw
->>>>>> iptable_mangle iptable_filter ipt_ECN ip_tables crc_ccitt compat
->>>>>> cls_flower act_vlan pktgen sch_teql sch_sfq sch_red sch_prio sch_pie
->>>>>> sch_multiq sch_gred sch_fq sch_dsmark sch_codel em_text em_nbyte
->>>>>> em_meta em_cmp act_simple act_police act_pedit act_ipt act_csum
->>>>>> libcrc32c em_ipset cls_bpf act_bpf act_ctinfo act_connmark
->>>>>> nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 sch_tbf sch_ingress sch_htb
->>>>>> sch_hfsc em_u32 cls_u32 cls_tcindex cls_route cls_matchall cls_fw
->>>>>>     cls_flow cls_basic act_skbedit act_mirred act_gact xt_set
->>>>>> ip_set_list_set ip_set_hash_netportnet ip_set_hash_netport
->>>>>> ip_set_hash_netnet ip_set_hash_netiface ip_set_hash_net
->>>>>> ip_set_hash_mac ip_set_hash_ipportnet ip_set_hash_ipportip
->>>>>> ip_set_hash_ipport ip_set_hash_ipmark ip_set_hash_ip
->>>>>> ip_set_bitmap_port ip_set_bitmap_ipmac ip_set_bitmap_ip ip_set
->>>>>> nfnetlink nf_log_ipv6 nf_log_common ip6table_mangle ip6table_filter
->>>>>> ip6_tables ip6t_REJECT x_tables nf_reject_ipv6 ifb dummy netlink_diag
->>>>>> mii
->>>>>> Process test_verifier (pid: 16274, threadinfo=c1418596, task=05765195,
->>>>>> tls=77e5aec8)
->>>>>> Stack : 83428000 83428000 8098be2c 00000000 83428000 8024af78 834bacdc 834bb000
->>>>>>            a98a0000 834e2580 834e2c00 00000000 834e2c00 8023da9c 834bb070 00000013
->>>>>>            80925164 80924f44 00000000 80925164 00000000 83428140 80bc3864 834bb070
->>>>>>            834e2c00 00000000 00000010 802c441c 00000000 00000000 00000000 00000000
->>>>>>            00000000 00000000 00000000 00000000 00000000 00000056 00000000 00000000
->>>>>>            ...
->>>>>> Call Trace:
->>>>>> [<80244654>] kernel_type_name+0x20/0x38
->>>>>> [<8024af78>] check_helper_call+0x1c9c/0x1dbc
->>>>>> [<8024d008>] do_check_common+0x1f70/0x2a3c
->>>>>> [<8024fb6c>] bpf_check+0x18f8/0x2308
->>>>>> [<802369ec>] bpf_prog_load+0x378/0x860
->>>>>> [<80237e1c>] __do_sys_bpf+0x3e0/0x2100
->>>>>> [<801142d8>] syscall_common+0x34/0x58
->>>>>>
->>>>>> Code: afbf0014  0c099b58  02002025 <8c450000> 8fbf0014  02002025
->>>>>> 8fb00010  08099b4f  27bd0018
->>>>>>
->>>>>> ---[ end trace ab13ac5f89eb825b ]---
->>>>>> Kernel panic - not syncing: Fatal exception
->>>>>> Rebooting in 3 seconds..
->>>>>> QEMU: Terminated
->>>>>>
->>>>>>
->>>>>> [2]:
->>>>>> Function Code:
->>>>>> ==============
->>>>>> const char *kernel_type_name(u32 id)
->>>>>> {
->>>>>>        return btf_name_by_offset(btf_vmlinux,
->>>>>>                      btf_type_by_id(btf_vmlinux, id)->name_off);
->>>>>> }
->>>>>>
->>>>>> const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id)
->>>>>> {
->>>>>>        if (type_id > btf->nr_types)
->>>>>>            return NULL;
->>>>>>
->>>>>>        return btf->types[type_id];
->>>>>> }
->>>>>>
->>>>>> Disassembled Code:
->>>>>> ==================
->>>>>> 0x0000000000000000:  AF BF 00 14    sw    $ra, 0x14($sp)
->>>>>> 0x0000000000000004:  0C 09 9B 58    jal   btf_type_by_id
->>>>>> 0x0000000000000008:  02 00 20 25    move  $a0, $s0
->>>>>> 0x000000000000000c:  8C 45 00 00    lw    $a1, ($v0)         <-- NPE
->>>>>> 0x0000000000000010:  8F BF 00 14    lw    $ra, 0x14($sp)
->>>>>> 0x0000000000000014:  02 00 20 25    move  $a0, $s0
->>>>>> 0x0000000000000018:  8F B0 00 10    lw    $s0, 0x10($sp)
->>>>>> 0x000000000000001c:  08 09 9B 4F    j     btf_name_by_offset
->>>>>> 0x0000000000000020:  27 BD 00 18    addiu $sp, $sp, 0x18
->>>>>>
+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
+KaIShbhlyjy6z3mRlNrP4X8B+oT/Gb4PAQA=
+
+--envbJBWh7q8WU6mo--
