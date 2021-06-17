@@ -2,66 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 717173AB2EA
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 13:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8CB3AB670
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 16:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbhFQLs2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Jun 2021 07:48:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33917 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232172AbhFQLs1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 17 Jun 2021 07:48:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623930378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ujv31ni+pedAzRqkqN94IhUeHH6igQoDkhQGmN9rbYg=;
-        b=hpGILq3r6bD1G/hGAnxtpVY85/dETDg9oac92N2dAmxGLvT8lPxz+2RFP8hD+HOrKk0Fwq
-        Ry+nDIXKwbmI236Uyq61v4oGF2qyL55bcviw953NKjjgx0bt1cb+j7Kq7dHrhKoZYbcfYO
-        G3+W+u7M7OVVaXehD2KY1i5lRu4ZY20=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-80-ZcbWDGCONiSblOY-xYmOvA-1; Thu, 17 Jun 2021 07:46:15 -0400
-X-MC-Unique: ZcbWDGCONiSblOY-xYmOvA-1
-Received: by mail-ed1-f70.google.com with SMTP id z16-20020aa7d4100000b029038feb83da57so1359509edq.4
-        for <linux-mips@vger.kernel.org>; Thu, 17 Jun 2021 04:46:15 -0700 (PDT)
+        id S231526AbhFQOu3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Jun 2021 10:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231882AbhFQOu3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Jun 2021 10:50:29 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43715C061767
+        for <linux-mips@vger.kernel.org>; Thu, 17 Jun 2021 07:48:21 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id q20so11001402lfo.2
+        for <linux-mips@vger.kernel.org>; Thu, 17 Jun 2021 07:48:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7xTcig9u+ckmAK7F7nxFSbFSF3LG6qPs6DaQp7FLrvY=;
+        b=bygYJMkfBrOTcD5rgvdu2TqpUYCHPRA5N7W6suhW34MjzQ7Q41hSSaiV4p4h1kSB8B
+         wtVqMlTitgQM18JdvB7h9Q+oFDUtZ5+vI4b0NNHWxiQOyhK6wSHPrWESvV/RMicAbEB2
+         JONdfC82tVgGDbroHeVLo3Zu06osDZZ2CimkJypcMPXAcRddVw5QsLGliJLlP3ZRnfRW
+         QBMeN4RVmbyQ6GXkM4cATYRg3sKqyvnFP/9pSO3RCyzzxmSghU06nl6L+xfZxsQeCtwA
+         OxuR8KUTSn5/6zjnAcYoWUmGsLpODf/TMKL/SNbBxB4gcI/KyOtgXGVUlZqe9XP1j3C1
+         Cw6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Ujv31ni+pedAzRqkqN94IhUeHH6igQoDkhQGmN9rbYg=;
-        b=a+tF9P1b/ttAasfP9T5zO6AezgWpXPRUPvoBfU4kQM0C9uocsAkuGiWh+mzhAWCeDv
-         Cp/p2btVgVxoAqsq7qF6l5yxXCnARYUifcv3v9mpvtWrlwtJddkyZsZlllKEZvlqFbXy
-         3qE/Cd1bdEVGcPak78D8DMGHt+CVMPzslyxraKCzFkrE0EkR7DmKCkFT5fWnQxU8hHDw
-         r0nkUzvsyJzhrOjllzt3UiV01/jnTMPk5fRubajfB9MiDYepZqGf5bYc8DbNoOWfG9bJ
-         mriMR5aXEAP9oXy7/aZ/ctQvbZHqQEeIHGhf7y+QgZ6E0kEbAHC0Fr+kL8lXRYCwjKvb
-         Am+A==
-X-Gm-Message-State: AOAM5332GFfOb8r4ixebpcwaLQnNT1ySRc3acOGLX1s2PKpIrLvqL4rd
-        y2InnclvuJM2Tbr/pjXtR/EItiQHS1T/HmnVbzBB76ReaKpf/Jsj5qR28e6k3omGhRfYYfD74Kt
-        CmrKgw4yz3sTgS4NFLKfeYw==
-X-Received: by 2002:aa7:cf0d:: with SMTP id a13mr5826467edy.384.1623930370629;
-        Thu, 17 Jun 2021 04:46:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyGp0u6bbKTpBWAweRlzIakuy+NTS2L7DG9uaEaAYNed1OyNxc+QE79jbRlb3hr0uHlxKTUpw==
-X-Received: by 2002:aa7:cf0d:: with SMTP id a13mr5826434edy.384.1623930370434;
-        Thu, 17 Jun 2021 04:46:10 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id t14sm1472804edr.36.2021.06.17.04.46.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jun 2021 04:46:09 -0700 (PDT)
-Subject: Re: [PATCH v10 3/5] KVM: stats: Add documentation for binary
- statistics interface
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
-        KVMARM <kvmarm@lists.cs.columbia.edu>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7xTcig9u+ckmAK7F7nxFSbFSF3LG6qPs6DaQp7FLrvY=;
+        b=nuaf945HJWj2PS8UWjm+8T/djb05u8wsMm81W+pdx7IJQabmXf9qz1rRbQmGmn5w3r
+         7zFl84/MRi7MPscbiavxpGzBVxIIIru8Szt41JC9lYzW6tIHn/YZvkWyDlDP2oKNH7T5
+         MI0EVjN2FFmVtrChAv1IOgvmQ6hmVDm/lHgt/4HmFp0pihTFhVPtmcjF32DpdHctdfdF
+         hvERK2PPcTvbgx/KVvOsN7JbZPWkxGBqsmZDUZxHPX+/6wkl9IFdJJzeCJnpcjSgNk4E
+         CZbS2MeCTR6ymDMJoxdtAnUB7WaGX5EnqTqvgkkXGMJ+7v7HZ14fKggUWyV9+QVVwW13
+         F74w==
+X-Gm-Message-State: AOAM533PfkIERlUG0YnE7ubPB/drtRGsBQs66Gey7sU8yEdFXtatKgeU
+        APON0Mg9Mp6n8AYlHmkVMUYYFuFHb4vkAq3iNBGbeaKSm2s=
+X-Google-Smtp-Source: ABdhPJyAGNi+2863i+xt6PnvN+8SqM67FY0o8ilXr0tbP46MEwKu1YD9BBtN+J/dXZivkcBRgfa36w81fk2G41mFTyg=
+X-Received: by 2002:a05:6512:318d:: with SMTP id i13mr4438454lfe.407.1623941299197;
+ Thu, 17 Jun 2021 07:48:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210617044146.2667540-1-jingzhangos@google.com>
+ <20210617044146.2667540-3-jingzhangos@google.com> <YMrzzYEkDQNCpnP7@kroah.com>
+In-Reply-To: <YMrzzYEkDQNCpnP7@kroah.com>
+From:   Jing Zhang <jingzhangos@google.com>
+Date:   Thu, 17 Jun 2021 09:48:07 -0500
+Message-ID: <CAAdAUtibbp4y_Ju4E+EeQ6HmRsEGXycjK-Y_P78xGVySYkftSQ@mail.gmail.com>
+Subject: Re: [PATCH v10 2/5] KVM: stats: Add fd-based API to read binary stats data
+To:     Greg KH <greg@kroah.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         LinuxMIPS <linux-mips@vger.kernel.org>,
         KVMPPC <kvm-ppc@vger.kernel.org>,
         LinuxS390 <linux-s390@vger.kernel.org>,
         Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
         James Morse <james.morse@arm.com>,
         Julien Thierry <julien.thierry.kdev@gmail.com>,
@@ -87,50 +83,86 @@ Cc:     Jing Zhang <jingzhangos@google.com>, KVM <kvm@vger.kernel.org>,
         Ricardo Koller <ricarkol@google.com>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>,
         Fuad Tabba <tabba@google.com>
-References: <20210617044146.2667540-1-jingzhangos@google.com>
- <20210617044146.2667540-4-jingzhangos@google.com>
- <YMrkGZzPrt0jA1iP@kroah.com>
- <0d959828-da89-bceb-f7cc-35622a60c431@redhat.com>
- <YMs1Pwf+nSQsfVUW@kroah.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <348aa108-076b-04dd-9fd2-e840a7a85f5d@redhat.com>
-Date:   Thu, 17 Jun 2021 13:46:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <YMs1Pwf+nSQsfVUW@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17/06/21 13:42, Greg KH wrote:
-> On Thu, Jun 17, 2021 at 01:29:22PM +0200, Paolo Bonzini wrote:
->> On 17/06/21 07:56, Greg KH wrote:
->>> On Thu, Jun 17, 2021 at 04:41:44AM +0000, Jing Zhang wrote:
->>>> +string starts at the end of ``struct kvm_stats_desc``.
->>>> +The maximum length (including trailing '\0') is indicated by ``name_size``
->>>> +in ``struct kvm_stats_header``.
->>>
->>> I thought we were replacing [0] arrays with [], are you sure you should
->>> be declaring this as [0]?  Same for all structures in this document (and
->>> code).
->>
->> In C code [0] is a bit more flexible than [].  I think in this particular
->> case [] won't work due to how the structures are declared. In the
->> documentation [] is certainly clearer.
-> 
-> Look at all of the patches that Gustavo has been doing all over the tree
-> for this work, you do not want to make him do this again here.
-> 
-> Gustavo, is [0] ok for fields like these?
+Hi Greg,
 
-I should be able to get back to KVM stuff later today, I'll check myself 
-if [] can be applied and reply.  I had queued an early version of these 
-for my local build to play with them but I haven't been able to do a 
-complete review.
+On Thu, Jun 17, 2021 at 2:03 AM Greg KH <greg@kroah.com> wrote:
+>
+> On Thu, Jun 17, 2021 at 04:41:43AM +0000, Jing Zhang wrote:
+> > Provides a file descriptor per VM to read VM stats info/data.
+> > Provides a file descriptor per vCPU to read vCPU stats info/data.
+> >
+> > The KVM stats now is only accessible by debugfs, which has some
+> > shortcomings this change are supposed to fix:
+> > 1. Debugfs is not a stable interface for production and it is
+> >    disabled when kernel Lockdown mode is enabled.
+>
+> debugfs _could_ be a stable interface if you want it to be and make that
+> rule for your subsystem.  Disabling it for lockdown mode is a different
+> issue, and that is a system-wide-policy-decision, not a debugfs-specific
+> thing.
+>
+> > 2. Debugfs is organized as "one value per file", it is good for
+> >    debugging, but not supposed to be used for production.
+>
+> debugfs IS NOT one-value-per-file, you can do whatever you want in
+> there.  sysfs IS one-value-per-file, do not get the two confused there.
+>
+> > 3. Debugfs read/clear in KVM are protected by the global kvm_lock.
+>
+> That's your implementation issue, not a debugfs issue.
+>
+> The only "rule" in debugfs is:
+>         There are no rules.
+>
+> So while your subsystem might have issues with using debugfs for
+> statistics like this, that's not debugfs's fault, that's how you want to
+> use the debugfs files for your subsystem.
+>
+You are right. The issues are from how the debugfs is used in KVM stats.
+Will fix the text accordingly.
+> > Besides that, there are some other benefits with this change:
+> > 1. All KVM VM/VCPU stats can be read out in a bulk by one copy
+> >    to userspace.
+> > 2. A schema is used to describe KVM statistics. From userspace's
+> >    perspective, the KVM statistics are self-describing.
+> > 3. Fd-based solution provides the possibility that a telemetry can
+> >    read KVM stats in a less privileged situation.
+>
+> "possiblity"?  Does this work or not?  Have you tested it?
+>
+I should've said "We are able to read KVM stats in a less privileged process".
+> > +static ssize_t kvm_vm_stats_read(struct file *file, char __user *user_buffer,
+> > +                           size_t size, loff_t *offset)
+> > +{
+> > +     struct kvm *kvm = file->private_data;
+> > +
+> > +     snprintf(&kvm_vm_stats_header.id[0], sizeof(kvm_vm_stats_header.id),
+> > +                     "kvm-%d", task_pid_nr(current));
+>
+> Why do you write to this static variable for EVERY read?  Shouldn't you
+> just do it once at open?  How can it change?
+>
+> Wait, it's a single shared variable, what happens when multiple tasks
+> open this thing and read from it?  You race between writing to this
+> variable here and then:
+>
+> > +     return kvm_stats_read(&kvm_vm_stats_header, &kvm_vm_stats_desc[0],
+> > +             &kvm->stat, sizeof(kvm->stat), user_buffer, size, offset);
+>
+> Accessing it here.
+>
+> So how is this really working?
+>
+You are right. We only need to do it once at the open. Will fix it according to
+Paolo's suggestion.
+> thanks,
+>
+> greg k-h
 
-Paolo
-
+Thanks,
+Jing
