@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3D43AB2A7
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 13:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE1B3AB2B5
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 13:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbhFQLgO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Jun 2021 07:36:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39734 "EHLO
+        id S231250AbhFQLg5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Jun 2021 07:36:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50159 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231250AbhFQLgN (ORCPT
+        by vger.kernel.org with ESMTP id S232419AbhFQLg4 (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 17 Jun 2021 07:36:13 -0400
+        Thu, 17 Jun 2021 07:36:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623929646;
+        s=mimecast20190719; t=1623929688;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eFNQaz+UBr3+VeZ6q7OSgOqHodPl71Dh+9dEuoGcM+Q=;
-        b=X5h/oeCAI8KRRy4Ex5oWRMnZDuesw1Sm6Gy2/17xW5kGa2gfOFGLqhpOIl2daBPrN8MQSM
-        SipPCYm0e0KmuciNbz36CZSZvD5gPbRvgcbWWh6T3kxwfCKHNApXWmMPz8D2369MV2LP1j
-        TRM8qsXIxBThVUH220dTPLxM7gA4IvM=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-121-myHHp7BzPzCJ6sEaAlyz_A-1; Thu, 17 Jun 2021 07:34:04 -0400
-X-MC-Unique: myHHp7BzPzCJ6sEaAlyz_A-1
-Received: by mail-ed1-f71.google.com with SMTP id v12-20020aa7dbcc0000b029038fc8e57037so1359203edt.0
-        for <linux-mips@vger.kernel.org>; Thu, 17 Jun 2021 04:34:04 -0700 (PDT)
+        bh=KwQqoYgcuee30cxqMSNTKwW1ocgA4MOYfQQA575EikA=;
+        b=FqWuJHzDhxawxgV0Abl/CglvekLvuiG+ztmiEszvD/4jU7NlnwT7qmmM+z9xusPBEoyu31
+        8cJA0gLtaaOD98Rdxf5NSmrsbMki+79RZcaysFxXpyEzxVPxo6ErjnzeWGher/W9kQBPBZ
+        8j8RTuJb6hCW9KSEqbNnTYpOXq7Z17Q=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-559-PYrN1S-rMxil2sSCv-mVQw-1; Thu, 17 Jun 2021 07:34:47 -0400
+X-MC-Unique: PYrN1S-rMxil2sSCv-mVQw-1
+Received: by mail-ed1-f69.google.com with SMTP id r15-20020aa7da0f0000b02903946a530334so1301672eds.22
+        for <linux-mips@vger.kernel.org>; Thu, 17 Jun 2021 04:34:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=eFNQaz+UBr3+VeZ6q7OSgOqHodPl71Dh+9dEuoGcM+Q=;
-        b=cBIRhtx0TQZxI8fjRT1UsngaXN6IiY+syIoU6rDGHS7RXyWhV0NakmfSdkM/4j6F2e
-         4JMhrpjXpBSDdlnlg18h2BAPd0YrnTPvlzFsL6MshWOGeK52Du/F1JMVTyozv3oJSUvB
-         0mDAoo+JbdFi8ObBDQ2yssJKAmgEI41j71IpTqkb3wvh8Oms17bpM7MdqvDEYxX0vgbf
-         1tQJbdyQipKUdac/bICariH9v+Rv93q9La9o8bqhzWMSuMYjXJ1ghHGiqobbyW2l/LN6
-         rOK6Nr2LiMfdJiOxK6tDmFAvd4XCosjJ8Qa/52Mc7nTZIarUwm3qeYkhP0aSk57nahFs
-         n0LA==
-X-Gm-Message-State: AOAM531Xj017XkgnUaFL3wm518IqY+knRwAlDyDJSmuPkjKQ7B2y0NX5
-        kWHXbl2MNu9CzvPvngb60aNYL+bEN18Pgp0vd+i2SD8Hrm5YmjM9KjkLXUrPEBjfq4Cen5RlxJJ
-        IqwmlRmm2C1ZmU7hwtRoGRA==
-X-Received: by 2002:a17:906:ca4a:: with SMTP id jx10mr4731043ejb.200.1623929246063;
-        Thu, 17 Jun 2021 04:27:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw32CbI/7oXViDiR3/KwQ1e7FS2cEfJU4e5y3PkNkTiAFxV1nv9UNltBlc/li58ogeNN1nAkA==
-X-Received: by 2002:a17:906:ca4a:: with SMTP id jx10mr4730994ejb.200.1623929245836;
-        Thu, 17 Jun 2021 04:27:25 -0700 (PDT)
+        bh=KwQqoYgcuee30cxqMSNTKwW1ocgA4MOYfQQA575EikA=;
+        b=D67MUt8OpLQtITZpPAqVFpq7rZAPKBFzYPLX76H15oyKpSrG9Tkudfan84+EOKnjy3
+         bS1RUSN1WckO5W0DYDqd8/jYxB9Yov4PsNcGWwyPGNBhFOvEnjpNUgpneW0I/LI2zKVz
+         fhzaoQJARHtNNjhtZ3yinFF3hHSx7lH5m7nUy5KHdOrT0nYaM9zFBagwXcpymFkJQDkH
+         aNyvjIQyVoN7ecIzGueh0GiK6CV1jka6zi9SZSus0nSGlLA3dVe02GhXI9w2XWwVWhok
+         fspk8uMzy0CosbWrQ7oJW2u07usQ0fFnyD9k+n9TO2A0y22qmF6QR3YqEgAOZZpalUBG
+         JF7w==
+X-Gm-Message-State: AOAM530KEj4uvXbXtS/WATRSd4GlTWjdw4/o/6GfQWULI2M+OlSAKKl6
+        JcvfecxzcnBH342JPauIfHUB3o1hnw4RhO1PW2UUcA6WxTP6h0jYjTfpMcTfZc8h9Sh7SVxJtGL
+        htvN7jt/nDkdNCBPqsf6O6A==
+X-Received: by 2002:a17:906:b24a:: with SMTP id ce10mr4692502ejb.83.1623929364978;
+        Thu, 17 Jun 2021 04:29:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzQxoLzPkjG7qTF6pnm47FJcTyBPVefQu9Gb2o8Ewl83hG/K5uvahTR/5zWHNZRrxu3APLVbA==
+X-Received: by 2002:a17:906:b24a:: with SMTP id ce10mr4692477ejb.83.1623929364822;
+        Thu, 17 Jun 2021 04:29:24 -0700 (PDT)
 Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id s5sm4131010edi.93.2021.06.17.04.27.24
+        by smtp.gmail.com with ESMTPSA id du16sm3512028ejc.42.2021.06.17.04.29.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jun 2021 04:27:25 -0700 (PDT)
-Subject: Re: [PATCH v10 2/5] KVM: stats: Add fd-based API to read binary stats
- data
+        Thu, 17 Jun 2021 04:29:24 -0700 (PDT)
+Subject: Re: [PATCH v10 3/5] KVM: stats: Add documentation for binary
+ statistics interface
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jing Zhang <jingzhangos@google.com>
 Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
@@ -87,15 +87,15 @@ Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
         Krish Sadhukhan <krish.sadhukhan@oracle.com>,
         Fuad Tabba <tabba@google.com>
 References: <20210617044146.2667540-1-jingzhangos@google.com>
- <20210617044146.2667540-3-jingzhangos@google.com>
- <YMr4rArKvj3obDEM@kroah.com>
+ <20210617044146.2667540-4-jingzhangos@google.com>
+ <YMrkGZzPrt0jA1iP@kroah.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <b9cc4df4-a502-31ec-0f5d-32a53c372f06@redhat.com>
-Date:   Thu, 17 Jun 2021 13:27:23 +0200
+Message-ID: <0d959828-da89-bceb-f7cc-35622a60c431@redhat.com>
+Date:   Thu, 17 Jun 2021 13:29:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <YMr4rArKvj3obDEM@kroah.com>
+In-Reply-To: <YMrkGZzPrt0jA1iP@kroah.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -103,21 +103,41 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17/06/21 09:24, Greg KH wrote:
->> Provides a file descriptor per VM to read VM stats info/data.
->> Provides a file descriptor per vCPU to read vCPU stats info/data.
-> Shouldn't this be two separate patches, one for each thing as these are
-> two different features being added?
+On 17/06/21 07:56, Greg KH wrote:
+> On Thu, Jun 17, 2021 at 04:41:44AM +0000, Jing Zhang wrote:
+>> +	struct kvm_stats_desc {
+>> +		__u32 flags;
+>> +		__s16 exponent;
+>> +		__u16 size;
+>> +		__u32 offset;
+>> +		__u32 unused;
+>> +		char name[0];
+>> +	};
+> 
+> <snip>
+> 
+>> +The ``unused`` fields are reserved for future support for other types of
+>> +statistics data, like log/linear histogram.
+> 
+> you HAVE to set unused to 0 for now, otherwise userspace does not know
+> it is unused, right?
 
-They share a lot of code.  We could have three patches though:
+Jing, I think you planned to use it with other flags that are unused for 
+now?  But please do check that it's zero in the testcase.
 
-- add common code for binary statistics file descriptor
+> It is not a pointer, it is the data itself.
+> 
+>> +string starts at the end of ``struct kvm_stats_desc``.
+>> +The maximum length (including trailing '\0') is indicated by ``name_size``
+>> +in ``struct kvm_stats_header``.
+> 
+> I thought we were replacing [0] arrays with [], are you sure you should
+> be declaring this as [0]?  Same for all structures in this document (and
+> code).
 
-- add VM ioctl to retrieve a statistics file descriptor [including the 
-definition of VM stats descriptors]
-
-- add VCPU ioctl to retrieve a statistics file descriptor [again 
-including the definitions of VCPU stats].
+In C code [0] is a bit more flexible than [].  I think in this 
+particular case [] won't work due to how the structures are declared. 
+In the documentation [] is certainly clearer.
 
 Paolo
 
