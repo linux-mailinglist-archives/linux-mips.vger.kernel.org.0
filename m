@@ -2,56 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 776A13AB7C4
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 17:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FB73AB7D2
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 17:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbhFQPoj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Jun 2021 11:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
+        id S233478AbhFQPre (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Jun 2021 11:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbhFQPoi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Jun 2021 11:44:38 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7704C061768
-        for <linux-mips@vger.kernel.org>; Thu, 17 Jun 2021 08:42:30 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id r198so11221499lff.11
-        for <linux-mips@vger.kernel.org>; Thu, 17 Jun 2021 08:42:30 -0700 (PDT)
+        with ESMTP id S232655AbhFQPrd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Jun 2021 11:47:33 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADCBC061768
+        for <linux-mips@vger.kernel.org>; Thu, 17 Jun 2021 08:45:24 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id q20so11313833lfo.2
+        for <linux-mips@vger.kernel.org>; Thu, 17 Jun 2021 08:45:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gA9TZaqOl3zy1dJIWszjf8FGUKT8ntsayRnFvsMmeKE=;
-        b=rjGGx3hDJcU8YgExYPvnRbDmEiwqIoA9VdAEle1149lM7CLqEmmZ5IGx5C6v2xN+BK
-         erAId3gLrIx3qvunWhwnAkobhgz7xQLbphUZnztf54+GCy7Rt9jJnsQ4GTCIxooMQ6Nh
-         ypsifEZBI7FXjvlJpbG15frf50E6gOgOxPY59sppGE5Gm3EVOP58JfTBQFuDrNsThg4g
-         pW9dY09XQK2DWc9As8xzDId9FTmLnsz2UlZubPkc0QCrvBCN+9v6DMkPxvgT1sLw2hcx
-         nQ6ahn5n70P/Vnyg/uULHRQf/KKgKU03kAOJCg30VCluDTMdCeu/RDCuXgsbWPpmgNDS
-         NGDQ==
+        bh=6PIz2TaIUWVoaOhj01hoKWnDrlEbbHPMNsId5QQRgVk=;
+        b=kK7POj3fWrdNp5TQ/g3C2HbiICwLbyWBlPreXKzcvrqAPYwo5KHxj2hz6zacIzW48g
+         aAWKreLHCRCbzUPm74najsUXpLcac7bKdwfZcU3+QELkdEs02W87bAh8ZDdJ0ka66EBM
+         XhXC61cC8GQ3WfftVjVDmxCfwTULCyLu13yZbkj1sxOpMHcMTJtyBcLE3IiuZSfj9QyL
+         Zk7V0jrjqDgnT7mYuNxBqUJeicHd+u95kjqFE02S8z9QeF4aA6DC0xkfwpcBrQnEBwRZ
+         reOQeIQnwupuCMmH5Pw6Sb3KO0sR5qRGw13cHIT4bOp209Yifcx7flqwWpyurqPIE8Dg
+         A1sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gA9TZaqOl3zy1dJIWszjf8FGUKT8ntsayRnFvsMmeKE=;
-        b=p7pqA7yHJl8Nj0qmOLPKxzmINAs/012ceuO9ngCMnimOpY59qneineB+6Wm8TDnpaL
-         0jP64c5NC9t5FyrbvnKXEmT+8vcetN1Xtbm2qMHOIhMkXMzogaMW+DG8nnmS40nyIRwA
-         OzWa0wiPzv7KUheLZQR5h5GSGb6NnIDd2EDuEcvHbZFOYa8TVG79GeSb9GFU8B48XhMv
-         XkdajFx3VjVJduMhzD5IrsnbMrGnGnSggAxTbZdMqdJHTDgiGKDk/1hQMTE8ERB9t61x
-         huLRAvI109LqI9p2BXoZF88UtH2FTe+3izuha32Ja5x8MNe/M6KfwHsqdK198Ssch8Az
-         cE4Q==
-X-Gm-Message-State: AOAM531Nxxr/iUiVgRr8yNGGTKQ/6DVSa3LnylXLz4gQOUw7lrtGkKZ7
-        wAYZ+BK15Crn3RFRZ0nbmUXRaFyhhaPdyyLlyhLMFQ==
-X-Google-Smtp-Source: ABdhPJxIgtHTYijVD1CpTmwKu7GF1JsNiAyO8otRBPAhPiGuR1/vRj2f9gVDMVv2mwH8Qtqe0siOJfwZGA+WbyKt0Rk=
-X-Received: by 2002:a05:6512:318d:: with SMTP id i13mr4638106lfe.407.1623944549075;
- Thu, 17 Jun 2021 08:42:29 -0700 (PDT)
+        bh=6PIz2TaIUWVoaOhj01hoKWnDrlEbbHPMNsId5QQRgVk=;
+        b=l3MBn599F+OdT3+c3TKzZO++ukfnV/IGmQ/md4Re1pXhNPeOr5Z+xLjrIRpk9h0Wsd
+         tfUmyBcOL6DrMkFVlqpWAzoLeS2qAxzPDpX+VHyVA9TZkh41fWJhQqR4SDWku518sAqg
+         kVNmLktb5PSgokUWncDJ5/Kbbtp/RgfK91rLiuhyY1dDD5DkqdRydsadERUfCLbLwUjz
+         7jyJ159EMSnqoYvE/kDNQaIqhcYrmU2zBn2ynA1n70aZBpxQ7U8NBwPte0YIOXE5baKB
+         cxf7BJ50C8pXYfPAV/oWU1yvR0S52nE8/IG5+AoxoZ+RyFlX3DXVs1gj/6Ej6ctMlbDa
+         xUig==
+X-Gm-Message-State: AOAM532HgR7hkHddeIkb7EljOXWn7H7mYWRFG5AnpvLLfGzqnymDjuxW
+        sKMMlzTu1ROs4/U4bt6oIjZC7gxzNnTjLx55XpAEhA==
+X-Google-Smtp-Source: ABdhPJwP8tw7uaKfFVnTtgmhBu0Z34sOJoaN3DTP50XOdwnYzL4tcVKakB1bGY53u3B1KUyAsBU0zeV3DiONBmuXTbk=
+X-Received: by 2002:a19:7601:: with SMTP id c1mr4591175lff.106.1623944722534;
+ Thu, 17 Jun 2021 08:45:22 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210617044146.2667540-1-jingzhangos@google.com>
- <20210617044146.2667540-3-jingzhangos@google.com> <YMr4rArKvj3obDEM@kroah.com>
- <CAAdAUtiiQ0304vWR3Zm2XUKz374W4LY3=qdrFZCsQ27VkqMn9A@mail.gmail.com> <5ae75b1b-4cba-d06f-625b-35b42f11ac03@redhat.com>
-In-Reply-To: <5ae75b1b-4cba-d06f-625b-35b42f11ac03@redhat.com>
+ <20210617044146.2667540-4-jingzhangos@google.com> <YMrkGZzPrt0jA1iP@kroah.com>
+ <0d959828-da89-bceb-f7cc-35622a60c431@redhat.com>
+In-Reply-To: <0d959828-da89-bceb-f7cc-35622a60c431@redhat.com>
 From:   Jing Zhang <jingzhangos@google.com>
-Date:   Thu, 17 Jun 2021 10:42:17 -0500
-Message-ID: <CAAdAUtigLr+n_d+XZ3FUUXSSb7PmSFNY5+XKATQp2r0s4xiY8A@mail.gmail.com>
-Subject: Re: [PATCH v10 2/5] KVM: stats: Add fd-based API to read binary stats data
+Date:   Thu, 17 Jun 2021 10:45:10 -0500
+Message-ID: <CAAdAUtiAEp-+MydpamzysT4aAXvu9tvhOY0YecnQkGkWp6pJWA@mail.gmail.com>
+Subject: Re: [PATCH v10 3/5] KVM: stats: Add documentation for binary
+ statistics interface
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Greg KH <gregkh@linuxfoundation.org>, KVM <kvm@vger.kernel.org>,
         KVMARM <kvmarm@lists.cs.columbia.edu>,
@@ -89,19 +90,48 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 10:29 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+On Thu, Jun 17, 2021 at 6:32 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> On 17/06/21 16:56, Jing Zhang wrote:
-> > Actually, it is really not easy to separate this change into two patches even by
-> > following Paolo's suggestion. And it would be a surprise to userspace to see
-> > only VM stats, no VCPU stats.
+> On 17/06/21 07:56, Greg KH wrote:
+> > On Thu, Jun 17, 2021 at 04:41:44AM +0000, Jing Zhang wrote:
+> >> +    struct kvm_stats_desc {
+> >> +            __u32 flags;
+> >> +            __s16 exponent;
+> >> +            __u16 size;
+> >> +            __u32 offset;
+> >> +            __u32 unused;
+> >> +            char name[0];
+> >> +    };
+> >
+> > <snip>
+> >
+> >> +The ``unused`` fields are reserved for future support for other types of
+> >> +statistics data, like log/linear histogram.
+> >
+> > you HAVE to set unused to 0 for now, otherwise userspace does not know
+> > it is unused, right?
 >
-> That does not matter.  Having two or three patches is useful because it
-> makes review easier; they will never appear separately in a release.
+> Jing, I think you planned to use it with other flags that are unused for
+> now?  But please do check that it's zero in the testcase.
+>
+Yes, it was planned for future use (to support stats type of histogram).
+Will add check in testcase and clarify it in doc.
+> > It is not a pointer, it is the data itself.
+> >
+> >> +string starts at the end of ``struct kvm_stats_desc``.
+> >> +The maximum length (including trailing '\0') is indicated by ``name_size``
+> >> +in ``struct kvm_stats_header``.
+> >
+> > I thought we were replacing [0] arrays with [], are you sure you should
+> > be declaring this as [0]?  Same for all structures in this document (and
+> > code).
+>
+> In C code [0] is a bit more flexible than [].  I think in this
+> particular case [] won't work due to how the structures are declared.
+> In the documentation [] is certainly clearer.
 >
 > Paolo
 >
-Cool, then I'll separate them.
 
 Thanks,
 Jing
