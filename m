@@ -2,171 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 897DF3AAD75
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 09:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5A73AB092
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 11:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbhFQH0j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Jun 2021 03:26:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50350 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229580AbhFQH0i (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 17 Jun 2021 03:26:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B5C0A61241;
-        Thu, 17 Jun 2021 07:24:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623914671;
-        bh=kNxTxEwPcYv3NN2DfpZ8GnBN8QRikI5mGsAdJMShdj8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vmjn0HbF4vDkLycAFVfFgocX33s32jQVUNaGP0J3DSVKZAgg2IaQrobYDvDawDma7
-         x3ikJMr5SuhJwFPLP6HEpPDeER5nEM2UPQEAeKtSe//vF6YDonr90WBlk5yNgc90ZN
-         Ffb7TLPNWmUzQseIO/Xbs7cENsIfzLUJos/2MPo0=
-Date:   Thu, 17 Jun 2021 09:24:28 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jing Zhang <jingzhangos@google.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Fuad Tabba <tabba@google.com>
-Subject: Re: [PATCH v10 2/5] KVM: stats: Add fd-based API to read binary
- stats data
-Message-ID: <YMr4rArKvj3obDEM@kroah.com>
-References: <20210617044146.2667540-1-jingzhangos@google.com>
- <20210617044146.2667540-3-jingzhangos@google.com>
+        id S232111AbhFQJ76 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Jun 2021 05:59:58 -0400
+Received: from [103.120.28.226] ([103.120.28.226]:17747 "EHLO
+        UPCDCDAMX02.upcl.org" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231132AbhFQJ75 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 17 Jun 2021 05:59:57 -0400
+X-Greylist: delayed 509 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Jun 2021 05:59:47 EDT
+Received: from UPCDCDAMX02.upcl.org (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE69E8B12E;
+        Thu, 17 Jun 2021 13:26:35 +0530 (IST)
+Received: from UPCDCDAMX02.upcl.org (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 715804AFEC;
+        Thu, 17 Jun 2021 12:50:14 +0530 (IST)
+Received: from User (unknown [210.212.82.37])
+        by UPCDCDAMX02.upcl.org (Postfix) with SMTP;
+        Thu, 17 Jun 2021 12:50:14 +0530 (IST)
+Reply-To: <marielthiago102@gmail.com>
+From:   "Mariel Thiago" <info@infotools.in>
+Subject: Re:: Please contact me it's very urgent.
+Date:   Thu, 17 Jun 2021 07:20:41 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210617044146.2667540-3-jingzhangos@google.com>
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20210617072014.715804AFEC@UPCDCDAMX02.upcl.org>
+To:     undisclosed-recipients:;
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSVA-9.1.0.1960-8.6.0.1013-26224.006
+X-TM-AS-Result: No-2.497-5.0-31-10
+X-imss-scan-details: No-2.497-5.0-31-10
+X-TMASE-Version: IMSVA-9.1.0.1960-8.6.1013-26224.006
+X-TMASE-Result: 10-2.496900-10.000000
+X-TMASE-MatchedRID: PEpoWB/n4wPoJ7ZHxnJI6/6CJzEkJBKDVOXpHWpii+ddyparHcc9UIhu
+        TvsiBEc/JfjcKHKDDk8K4MBRf7I7puawzjZNF/+9gM4D72plZiep43A0ENmZJqRrhpwKFLjUkZO
+        l7WKIImpu9tOD27u7FNTHX+rg7MGt505jRA97RdWRSAi45KhHyaxczqyf2GA9LHdIgRft8S1QSp
+        LfxZGQcl8vMu11r33KXPP583vQDYF3yrRBFBiPVS2s/H4x5wHg3QfwsVk0UbuGrPnef/I+ej6N5
+        5/6MNSnpdDo0PaPyGFHwD2XNKdI8sVZh7bvPcyg0m3qDro1rgcxP1evyC/00KVBBtW+D6/IR7CD
+        JBvMFOms6dZMAot5Yg==
+X-IMSS-DKIM-White-List: No
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 04:41:43AM +0000, Jing Zhang wrote:
-> Provides a file descriptor per VM to read VM stats info/data.
-> Provides a file descriptor per vCPU to read vCPU stats info/data.
-
-Shouldn't this be two separate patches, one for each thing as these are
-two different features being added?
-
-Anyway, an implementation question for both of these:
-
-> +static ssize_t kvm_stats_read(struct _kvm_stats_header *header,
-> +		struct _kvm_stats_desc *desc, void *stats, size_t size_stats,
-> +		char __user *user_buffer, size_t size, loff_t *offset)
-> +{
-> +	ssize_t copylen, len, remain = size;
-
-You are "burying" the fact that remain is initialized here, not nice, I
-totally missed it when reading this the first time.
-
-This should be:
-	ssize_t copylen;
-	ssize_t len;
-	ssize_t remain = size;
-to be obvious.
-
-Remember you will be looking at this code for the next 20 years, make it
-easy to read.
-
-> +	size_t size_header, size_desc;
-> +	loff_t pos = *offset;
-> +	char __user *dest = user_buffer;
-> +	void *src;
-> +
-> +	size_header = sizeof(*header);
-> +	size_desc = header->header.count * sizeof(*desc);
-> +
-> +	len = size_header + size_desc + size_stats - pos;
-> +	len = min(len, remain);
-> +	if (len <= 0)
-> +		return 0;
-> +	remain = len;
-> +
-> +	/* Copy kvm stats header */
-> +	copylen = size_header - pos;
-> +	copylen = min(copylen, remain);
-> +	if (copylen > 0) {
-> +		src = (void *)header + pos;
-> +		if (copy_to_user(dest, src, copylen))
-> +			return -EFAULT;
-> +		remain -= copylen;
-> +		pos += copylen;
-> +		dest += copylen;
-> +	}
-
-I thought you said that you would not provide the header for each read,
-if you keep reading from the fd.  It looks like you are adding it here
-to each read, or is there some "magic" with pos happening here that I do
-not understand?
-
-And if there is "magic" with pos, you should document it as it's not
-very obvious :)
-
-> +	/* Copy kvm stats descriptors */
-> +	copylen = header->header.desc_offset + size_desc - pos;
-> +	copylen = min(copylen, remain);
-> +	if (copylen > 0) {
-> +		src = (void *)desc + pos - header->header.desc_offset;
-> +		if (copy_to_user(dest, src, copylen))
-> +			return -EFAULT;
-> +		remain -= copylen;
-> +		pos += copylen;
-> +		dest += copylen;
-> +	}
-> +	/* Copy kvm stats values */
-
-New lines between code blocks of doing things?
-
-And again, why copy the decriptor again?  or is it being skipped
-somehow?  Ah, I think I see how it's being skipped, if I look really
-closely.  But again, it's not obvious, and I could be wrong.  Please
-document this REALLY well.
-
-Write code for the developer first, compiler second.  Again, you are
-going to be maintaining it for 20+ years, think of your future self...
-
-
-> +	copylen = header->header.data_offset + size_stats - pos;
-> +	copylen = min(copylen, remain);
-> +	if (copylen > 0) {
-> +		src = stats + pos - header->header.data_offset;
-> +		if (copy_to_user(dest, src, copylen))
-> +			return -EFAULT;
-> +		remain -= copylen;
-> +		pos += copylen;
-> +		dest += copylen;
-> +	}
-> +
-> +	*offset = pos;
-> +	return len;
-> +}
-
-thanks,
-
-greg k-h
+ I think I have something huge you might be interested in.
