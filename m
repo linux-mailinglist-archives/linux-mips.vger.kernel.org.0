@@ -2,214 +2,228 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 658923AAB8A
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 08:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B135E3AAB9B
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Jun 2021 08:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbhFQGCw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Jun 2021 02:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbhFQGCv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Jun 2021 02:02:51 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89161C061574;
-        Wed, 16 Jun 2021 23:00:38 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id o3so1676623uaw.5;
-        Wed, 16 Jun 2021 23:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nI7yEuG2ARK23uejO9nhB9zAo4xzWVauJN211Odr0ag=;
-        b=S3EyK0G1UBktsOleWFm/MmnmHW2LeOl67vQAXqw+sSV/y6rb5Kzn8/0e/P2xbwqove
-         boggjxcWiH4UnbuXOGKNbuBU364gWdeijLrnuQcI0aolnbkvF1MpdshBPi3W5GZI26iZ
-         VE9ZJQxmSB86xzPT3SBE+PqwKbppwEuqNlhk8NyjiCGmSJ1ifz8JtJgtojOY+/fgtanv
-         MOqv7LVJox0XJ2d1NN6HtmRUwyXaxp5pbsEH0rADbHrlKrejuIDhoW6G+0RbmMIUKvCu
-         sDLKjaYJtfQ0HG+UyfHs6y04Ob8slrJFvpRTMSB3UomwoLt+0xr94/dR3ExVLicO83w6
-         dxGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nI7yEuG2ARK23uejO9nhB9zAo4xzWVauJN211Odr0ag=;
-        b=Yyv8EU0czP3abKR+Mgo9oHWGNnoILneJSZluLd6P0zGTzmw+qrTyoGIEdauv3her9Y
-         RnGXiPMvDsepY8LUjghHiZyZ6G2C3l+yk1PEcc36v+wGbUGMyOV3bKSwPpabc/FrN3oM
-         2QfvX+6Za9gPvIkdwztPOzadCMs1ShM3qQO4K7mb3VNmeBskGRD5+Cvf4FlzmszrNBkE
-         dysSZJFukEprQuQgaZbpDBelhaEisrzcvBfXAJnuWFh17gWsxOC7F9aUY1tBXo8La4AZ
-         /kirxAckK6jobNr2c9MDKe0h4m4rkiwFVDZFws1Pu+0gtkZe2/56LBZfetVkPSgGaTsX
-         +kMA==
-X-Gm-Message-State: AOAM533WQ0xMO5WAGi2ThkBow4KSlR7lDkkV8FBKHScKHDZo8Hrntuv+
-        jizV53iOkkTyqTyoIIDQlxCNvZZ3D7mjFX8q5PeFajlY2iVwxg==
-X-Google-Smtp-Source: ABdhPJyRLlGAMJvGoiPaWvpNElF/xJHOqBPZOWBpR2vkSoib2df0R18MIhqUWtQohPkb7vDP4sEy/87V/xLthopwClk=
-X-Received: by 2002:ab0:49aa:: with SMTP id e39mr3733325uad.0.1623909637178;
- Wed, 16 Jun 2021 23:00:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210609140159.20476-1-sergio.paracuellos@gmail.com>
-In-Reply-To: <20210609140159.20476-1-sergio.paracuellos@gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 17 Jun 2021 08:00:25 +0200
-Message-ID: <CAMhs-H9659uAEb9A-xxfOEqcsUuFE1tNTu_VAj+AskwKUUD8dw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] PCI: mt7621: Add MediaTek MT7621 PCIe host
- controller driver
-To:     linux-pci@vger.kernel.org
-Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
+        id S229565AbhFQGHQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Jun 2021 02:07:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60258 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229515AbhFQGHO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 17 Jun 2021 02:07:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BC0B361241;
+        Thu, 17 Jun 2021 06:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623909907;
+        bh=kjP9+T+FmEwuicRXDVHEk8Z4tkoS0foRxBhRhF9EAqw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IA8d5JaiFMvog9SZe7/L871QLI+SQWNyMXLymWGi3ojDYyeU3RoBRDZSMY3cJkeOO
+         WIg9KihxcaCD0QN4jZhXOB0sFCDIeS9HeWJL7bjZY1sA2LBdtH2DzctLBv1/hhGOjQ
+         b0qwQ03b10MYLb7x1u/SQg8jB1u2z11fol2fq2nE=
+Date:   Thu, 17 Jun 2021 08:05:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+Subject: Re: [PATCH v10 3/5] KVM: stats: Add documentation for binary
+ statistics interface
+Message-ID: <YMrmDwfmBPdZqLjC@kroah.com>
+References: <20210617044146.2667540-1-jingzhangos@google.com>
+ <20210617044146.2667540-4-jingzhangos@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210617044146.2667540-4-jingzhangos@google.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Thu, Jun 17, 2021 at 04:41:44AM +0000, Jing Zhang wrote:
+> +The file descriptor can be used to read VM/vCPU statistics data in binary
+> +format. The file data is organized into three blocks as below:
+> ++-------------+
+> +|   Header    |
+> ++-------------+
+> +| Descriptors |
+> ++-------------+
+> +| Stats Data  |
+> ++-------------+
+> +
+> +The Header block is always at the start of the file. It is only needed to be
+> +read one time for the lifetime of the file descriptor.
+> +It is in the form of ``struct kvm_stats_header`` as below::
+> +
+> +	#define KVM_STATS_ID_MAXLEN		64
+> +
+> +	struct kvm_stats_header {
+> +		__u32 name_size;
+> +		__u32 count;
+> +		__u32 desc_offset;
+> +		__u32 data_offset;
+> +		char id[0];
+> +	};
 
-On Wed, Jun 9, 2021 at 4:02 PM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
->
-> MediaTek MT7621 PCIe subsys supports single Root complex (RC)
-> with 3 Root Ports. Each Root Ports supports a Gen1 1-lane Link.
-> Topology is as follows:
->
->                           MT7621 PCIe HOST Topology
->
->                                    .-------.
->                                    |       |
->                                    |  CPU  |
->                                    |       |
->                                    '-------'
->                                        |
->                                        |
->                                        |
->                                        v
->                               .------------------.
->                   .-----------|  HOST/PCI Bridge |------------.
->                   |           '------------------'            |     Type1
->          BUS0     |                     |                     |    Access
->                   v                     v                     v    On Bus0
->           .-------------.        .-------------.       .-------------.
->           | VIRTUAL P2P |        | VIRTUAL P2P |       | VIRTUAL P2P |
->           |    BUS0     |        |    BUS0     |       |    BUS0     |
->           |    DEV0     |        |    DEV1     |       |    DEV2     |
->           '-------------'        '-------------'       '-------------'
->     Type0        |          Type0       |         Type0       |
->    Access   BUS1 |         Access   BUS2|        Access   BUS3|
->    On Bus1       v         On Bus2      v        On Bus3      v
->            .----------.           .----------.          .----------.
->            | Device 0 |           | Device 0 |          | Device 0 |
->            |  Func 0  |           |  Func 0  |          |  Func 0  |
->            '----------'           '----------'          '----------'
->
-> This driver has been very long time in staging and I have been cleaning
-> it from its first versions where there was code kaos and PCI_LEGACY support.
-> Original code came probably from openWRT based on mediatek's SDK code. There
-> is no documentation at all about the mt7621 PCI subsystem.
-> I have been cleaning it targeting mt7621 SoC which is the one I use in
-> my GNUBee PC1 board and HiLink HLK-MT7621A evaluation board.
->
-> Now I think is clean enough to be moved into 'drivers/pci/controller'.
-> This driver is mips/ralink architecture and need 'mips_cps_numiocu()'
-> to properly configure iocu regions for mips.
->
-> This driver also uses already mainlined pci phy driver located in
-> 'drivers/phy/ralink/phy-mt7621-pci.c'. There are two instances of
-> the phy being the first one dual ported for pci0 and pci1, and the
-> second one not dual ported dedicated to pci2. Because of writing twice
-> some phy registers of the dual-ported one sometimes become in not
-> confident boot cycles we have to take care of this when device link
-> is checked here in controller driver. We power on the dual ported-phy
-> if there is something connected in pcie0 or pcie1. In the same manner
-> we have to properly disable it only if nothing is connected in of both
-> pcie0 and pcie1 slots.
->
-> Another thing that must be mentioned is that this driver uses IO
-> in physical address 0x001e160000. IO_SPACE_LIMIT for MIPS is 0xffff
-> so some generic PCI functions (like of_pci_range_to_resource) won't
-> work and the resource ranges part for IO is set manually.
+So you have no idea the size of the whole header when reading it?  That
+feels odd, are you sure it's not needed?
 
-This has been fixed and now there is no need to set io resources manually.
-See [0].
+> +The ``id`` field is identification for the corresponding KVM statistics. For
+> +VM statistics, it is in the form of "kvm-{kvm pid}", like "kvm-12345". For
+> +VCPU statistics, it is in the form of "kvm-{kvm pid}/vcpu-{vcpu id}", like
+> +"kvm-12345/vcpu-12".
 
->
-> Changes in v2:
->     - Make one commit moving driver directly from staging into
->      'drivers/pci/controllers' instead of two commits making
->      one add and a later remove.
->     - Update binding documentation moving 'clocks', 'resets' and
->      'phys' properties to child root bridge nodes.
->     - Update code to properly be able to use new bindings.
->     - Kconfig: add || (MIPS && COMPILE_TEST).
->     - Use {read/write}_relaxed versions.
->     - Use 'PCI_BASE_ADDRESS_0' instead of a custom definition.
->     - Avoid to set 'PCI_COMMAND_MASTER' and re-do functions
->      'mt7621_pcie_enable_ports' and 'mt7621_pcie_enable_port'.
+Why do you have "name_size" but not "id_size"?
 
-I forgot to comment that all of these changes are rebased on the top
-of staging-next.
-Since this is a 'git mv' as I was told to do by Bjorn, last version of
-the code is available
-here [1] with the following added changes to the ones listed above
-from previously submitted v1 series:
+And is this a \0 terminated string?  If so, please state it here.
 
-- Define PCI_IOBASE for mips (spaces.h) to avoid parsing io resources manually
-so 'mt7621_pci_parse_request_of_pci_ranges' is not needed anymore.
-- Don't store resources in driver private data but just get them to properly
-set io window register and mips iocu memory regions.
+And what is the max size of this string?
 
-Thanks in advance for your time.
+And again, should it be [], not [0]?
 
-Best regards,
-    Sergio Paracuellos
+Will the header be padded out to any specific byte boundry
+(4/8/32/whatever) before the other headers?
 
-[0]: https://lore.kernel.org/linux-staging/20210614100617.28753-1-sergio.paracuellos@gmail.com/T/#t
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/tree/drivers/staging/mt7621-pci/pci-mt7621.c?h=staging-next
+> +
+> +The ``name_size`` field is the size (byte) of the statistics name string
 
->
-> NOTE: Greg, I have maintained your Acked-by from previous series in
-> delete driver commit and added in the one which is moving code here
-> and delete the remaining stuff. If you are not ok with this, just
-> let me now and I'll drop it and resend.
->
-> Thanks in advance for your time.
->
-> Best regards,
->     Sergio Paracuellos
->
-> Sergio Paracuellos (3):
->   dt-bindings: mt7621-pci: PCIe binding documentation for MT7621 SoCs
->   PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver
->   MAINTAINERS: add myself as maintainer of the MT7621 PCI controller
->     driver
->
->  .../bindings/pci/mediatek,mt7621-pci.yaml     | 142 ++++++++++++++++++
->  MAINTAINERS                                   |   6 +
->  arch/mips/ralink/Kconfig                      |   2 +-
->  drivers/pci/controller/Kconfig                |   8 +
->  drivers/pci/controller/Makefile               |   1 +
->  .../controller}/pci-mt7621.c                  |   0
->  drivers/staging/Kconfig                       |   2 -
->  drivers/staging/Makefile                      |   1 -
->  drivers/staging/mt7621-pci/Kconfig            |   8 -
->  drivers/staging/mt7621-pci/Makefile           |   2 -
->  drivers/staging/mt7621-pci/TODO               |   4 -
->  .../mt7621-pci/mediatek,mt7621-pci.txt        | 104 -------------
->  12 files changed, 158 insertions(+), 122 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pci/mediatek,mt7621-pci.yaml
->  rename drivers/{staging/mt7621-pci => pci/controller}/pci-mt7621.c (100%)
->  delete mode 100644 drivers/staging/mt7621-pci/Kconfig
->  delete mode 100644 drivers/staging/mt7621-pci/Makefile
->  delete mode 100644 drivers/staging/mt7621-pci/TODO
->  delete mode 100644 drivers/staging/mt7621-pci/mediatek,mt7621-pci.txt
->
-> --
-> 2.25.1
->
+s/byte/in bytes/
+
+> +(including trailing '\0') appended to the end of every statistics descriptor.
+> +
+> +The ``count`` field is the number of statistics.
+> +
+> +The ``desc_offset`` field is the offset of the Descriptors block from the start
+> +of the file indicated by the file descriptor.
+> +
+> +The ``data_offset`` field is the offset of the Stats Data block from the start
+> +of the file indicated by the file descriptor.
+> +
+> +The Descriptors block is only needed to be read once for the lifetime of the
+> +file descriptor. It is an array of ``struct kvm_stats_desc`` as shown in
+> +below code block::
+> +
+> +	#define KVM_STATS_TYPE_SHIFT		0
+> +	#define KVM_STATS_TYPE_MASK		(0xF << KVM_STATS_TYPE_SHIFT)
+> +	#define KVM_STATS_TYPE_CUMULATIVE	(0x0 << KVM_STATS_TYPE_SHIFT)
+> +	#define KVM_STATS_TYPE_INSTANT		(0x1 << KVM_STATS_TYPE_SHIFT)
+> +	#define KVM_STATS_TYPE_MAX		KVM_STATS_TYPE_INSTANT
+> +
+> +	#define KVM_STATS_UNIT_SHIFT		4
+> +	#define KVM_STATS_UNIT_MASK		(0xF << KVM_STATS_UNIT_SHIFT)
+> +	#define KVM_STATS_UNIT_NONE		(0x0 << KVM_STATS_UNIT_SHIFT)
+> +	#define KVM_STATS_UNIT_BYTES		(0x1 << KVM_STATS_UNIT_SHIFT)
+> +	#define KVM_STATS_UNIT_SECONDS		(0x2 << KVM_STATS_UNIT_SHIFT)
+> +	#define KVM_STATS_UNIT_CYCLES		(0x3 << KVM_STATS_UNIT_SHIFT)
+> +	#define KVM_STATS_UNIT_MAX		KVM_STATS_UNIT_CYCLES
+> +
+> +	#define KVM_STATS_BASE_SHIFT		8
+> +	#define KVM_STATS_BASE_MASK		(0xF << KVM_STATS_BASE_SHIFT)
+> +	#define KVM_STATS_BASE_POW10		(0x0 << KVM_STATS_BASE_SHIFT)
+> +	#define KVM_STATS_BASE_POW2		(0x1 << KVM_STATS_BASE_SHIFT)
+> +	#define KVM_STATS_BASE_MAX		KVM_STATS_BASE_POW2
+> +
+> +	struct kvm_stats_desc {
+> +		__u32 flags;
+> +		__s16 exponent;
+> +		__u16 size;
+> +		__u32 offset;
+> +		__u32 unused;
+> +		char name[0];
+> +	};
+> +
+> +The ``flags`` field contains the type and unit of the statistics data described
+> +by this descriptor. The following flags are supported:
+> +
+> +Bits 0-3 of ``flags`` encode the type:
+> +  * ``KVM_STATS_TYPE_CUMULATIVE``
+> +    The statistics data is cumulative. The value of data can only be increased.
+> +    Most of the counters used in KVM are of this type.
+> +    The corresponding ``count`` field for this type is always 1.
+> +  * ``KVM_STATS_TYPE_INSTANT``
+> +    The statistics data is instantaneous. Its value can be increased or
+> +    decreased. This type is usually used as a measurement of some resources,
+> +    like the number of dirty pages, the number of large pages, etc.
+> +    The corresponding ``count`` field for this type is always 1.
+> +
+> +Bits 4-7 of ``flags`` encode the unit:
+> +  * ``KVM_STATS_UNIT_NONE``
+> +    There is no unit for the value of statistics data. This usually means that
+> +    the value is a simple counter of an event.
+> +  * ``KVM_STATS_UNIT_BYTES``
+> +    It indicates that the statistics data is used to measure memory size, in the
+> +    unit of Byte, KiByte, MiByte, GiByte, etc. The unit of the data is
+> +    determined by the ``exponent`` field in the descriptor. The
+> +    ``KVM_STATS_BASE_POW2`` flag is valid in this case. The unit of the data is
+> +    determined by ``pow(2, exponent)``. For example, if value is 10,
+> +    ``exponent`` is 20, which means the unit of statistics data is MiByte, we
+> +    can get the statistics data in the unit of Byte by
+> +    ``value * pow(2, exponent) = 10 * pow(2, 20) = 10 MiByte`` which is
+> +    10 * 1024 * 1024 Bytes.
+> +  * ``KVM_STATS_UNIT_SECONDS``
+> +    It indicates that the statistics data is used to measure time/latency, in
+> +    the unit of nanosecond, microsecond, millisecond and second. The unit of the
+> +    data is determined by the ``exponent`` field in the descriptor. The
+> +    ``KVM_STATS_BASE_POW10`` flag is valid in this case. The unit of the data
+> +    is determined by ``pow(10, exponent)``. For example, if value is 2000000,
+> +    ``exponent`` is -6, which means the unit of statistics data is microsecond,
+> +    we can get the statistics data in the unit of second by
+> +    ``value * pow(10, exponent) = 2000000 * pow(10, -6) = 2 seconds``.
+> +  * ``KVM_STATS_UNIT_CYCLES``
+> +    It indicates that the statistics data is used to measure CPU clock cycles.
+> +    The ``KVM_STATS_BASE_POW10`` flag is valid in this case. For example, if
+> +    value is 200, ``exponent`` is 4, we can get the number of CPU clock cycles
+> +    by ``value * pow(10, exponent) = 200 * pow(10, 4) = 2000000``.
+> +
+> +Bits 8-11 of ``flags`` encode the base:
+> +  * ``KVM_STATS_BASE_POW10``
+> +    The scale is based on power of 10. It is used for measurement of time and
+> +    CPU clock cycles.
+> +  * ``KVM_STATS_BASE_POW2``
+> +    The scale is based on power of 2. It is used for measurement of memory size.
+> +
+> +The ``exponent`` field is the scale of corresponding statistics data. For
+> +example, if the unit is ``KVM_STATS_UNIT_BYTES``, the base is
+> +``KVM_STATS_BASE_POW2``, the ``exponent`` is 10, then we know that the real
+> +unit of the statistics data is KBytes a.k.a pow(2, 10) = 1024 bytes.
+
+Might also want to show a negative example here for exponent, like you
+show above for time.
+
+
+> +
+> +The ``size`` field is the number of values (u64) of this statistics data. Its
+> +value is usually 1 for most of simple statistics.
+
+What does "u64" mean here?
+
+thanks,
+
+greg k-h
