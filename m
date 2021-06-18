@@ -2,100 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 932C63AC110
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Jun 2021 04:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F663AC127
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Jun 2021 05:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbhFRC4J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Jun 2021 22:56:09 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:39824 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231651AbhFRC4I (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 17 Jun 2021 22:56:08 -0400
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv0CzCsxgVnITAA--.632S5;
-        Fri, 18 Jun 2021 10:53:47 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S231860AbhFRDEI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Jun 2021 23:04:08 -0400
+Received: from mga03.intel.com ([134.134.136.65]:25793 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231815AbhFRDEH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 17 Jun 2021 23:04:07 -0400
+IronPort-SDR: wde48Q8onOCWWWLuTHKh4oHb8HudVZw8WRmTCP3Oz5kFXFaK3W/IYnv/8PCSiQLY9pioGwoFmf
+ c9IqvW1D4Y+A==
+X-IronPort-AV: E=McAfee;i="6200,9189,10018"; a="206524997"
+X-IronPort-AV: E=Sophos;i="5.83,281,1616482800"; 
+   d="scan'208";a="206524997"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 20:01:58 -0700
+IronPort-SDR: kDCIXbw7lwEjZFI+nFNOMy4qgHpPd6rsmqYlpb0ps01Z+DdBhWSAQ5G+mGTpSRcepgH2/cP20z
+ fFfj3eWUWROQ==
+X-IronPort-AV: E=Sophos;i="5.83,281,1616482800"; 
+   d="scan'208";a="451243562"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 20:01:58 -0700
+Date:   Thu, 17 Jun 2021 20:01:57 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Thomas Gleixner <tglx@linutronix.de>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 4/4] dt-bindings: dwmac: Add bindings for new Loongson SoC and bridge chip
-Date:   Fri, 18 Jun 2021 10:53:37 +0800
-Message-Id: <20210618025337.5705-4-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20210618025337.5705-1-zhangqing@loongson.cn>
-References: <20210618025337.5705-1-zhangqing@loongson.cn>
+        Geoff Levand <geoff@infradead.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Mike Snitzer <snitzer@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        dm-devel@redhat.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, ceph-devel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 01/18] mm: add a kunmap_local_dirty helper
+Message-ID: <20210618030157.GA1905674@iweiny-DESK2.sc.intel.com>
+References: <20210615132456.753241-1-hch@lst.de>
+ <20210615132456.753241-2-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxv0CzCsxgVnITAA--.632S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7WrWktry3Ar1UZrWrJrW3trb_yoW8JF4xpr
-        sxCFn3Kr1FyF47Zwn5tF1rCrW7Xr95Jr4xJFs7t3WIqF1kJa1vgw4Fgws8JFW5ur4xZFW2
-        vryS9F4YgFy0kw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPvb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUWwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280
-        aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-        Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S
-        6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mx
-        kIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw
-        0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-        AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuY
-        vjxUcYiiDUUUU
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210615132456.753241-2-hch@lst.de>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add the dwmac bindings for the Loongson-2K SoC and the LS7A
-bridge chip.
+On Tue, Jun 15, 2021 at 03:24:39PM +0200, Christoph Hellwig wrote:
+> Add a helper that calls flush_kernel_dcache_page before unmapping the
+> local mapping.  flush_kernel_dcache_page is required for all pages
+> potentially mapped into userspace that were written to using kmap*,
+> so having a helper that does the right thing can be very convenient.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  include/linux/highmem-internal.h | 7 +++++++
+>  include/linux/highmem.h          | 4 ++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
+> index 7902c7d8b55f..bd37706db147 100644
+> --- a/include/linux/highmem-internal.h
+> +++ b/include/linux/highmem-internal.h
+> @@ -224,4 +224,11 @@ do {								\
+>  	__kunmap_local(__addr);					\
+>  } while (0)
+>  
+> +#define kunmap_local_dirty(__page, __addr)			\
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- Documentation/devicetree/bindings/net/snps,dwmac.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+I think having to store the page and addr to return to kunmap_local_dirty() is
+going to be a pain in some code paths.  Not a show stopper but see below...
 
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index 2edd8bea993e..9631bbbb6f69 100644
---- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -56,6 +56,8 @@ properties:
-         - amlogic,meson8m2-dwmac
-         - amlogic,meson-gxbb-dwmac
-         - amlogic,meson-axg-dwmac
-+        - loongson,ls2k-dwmac
-+        - loongson,ls7a-dwmac
-         - rockchip,px30-gmac
-         - rockchip,rk3128-gmac
-         - rockchip,rk3228-gmac
-@@ -310,6 +312,8 @@ allOf:
-               - allwinner,sun8i-r40-emac
-               - allwinner,sun8i-v3s-emac
-               - allwinner,sun50i-a64-emac
-+              - loongson,ls2k-dwmac
-+              - loongson,ls7a-dwmac
-               - snps,dwxgmac
-               - snps,dwxgmac-2.10
-               - st,spear600-gmac
-@@ -353,6 +357,8 @@ allOf:
-               - allwinner,sun8i-r40-emac
-               - allwinner,sun8i-v3s-emac
-               - allwinner,sun50i-a64-emac
-+              - loongson,ls2k-dwmac
-+              - loongson,ls7a-dwmac
-               - snps,dwmac-4.00
-               - snps,dwmac-4.10a
-               - snps,dwmac-4.20a
--- 
-2.31.0
+> +do {								\
+> +	if (!PageSlab(__page))					\
 
+Was there some clarification why the page can't be a Slab page?  Or is this
+just an optimization?
+
+> +		flush_kernel_dcache_page(__page);		\
+
+Is this required on 32bit systems?  Why is kunmap_flush_on_unmap() not
+sufficient on 64bit systems?  The normal kunmap_local() path does that.
+
+I'm sorry but I did not see a conclusion to my query on V1. Herbert implied the
+he just copied from the crypto code.[1]  I'm concerned that this _dirty() call
+is just going to confuse the users of kmap even more.  So why can't we get to
+the bottom of why flush_kernel_dcache_page() needs so much logic around it
+before complicating the general kernel users.
+
+I would like to see it go away if possible.
+
+Ira
+
+[1] https://lore.kernel.org/lkml/20210615050258.GA5208@gondor.apana.org.au/
+
+> +	kunmap_local(__addr);					\
+> +} while (0)
+> +
+>  #endif
+> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+> index 832b49b50c7b..65f548db4f2d 100644
+> --- a/include/linux/highmem.h
+> +++ b/include/linux/highmem.h
+> @@ -93,6 +93,10 @@ static inline void kmap_flush_unused(void);
+>   * On HIGHMEM enabled systems mapping a highmem page has the side effect of
+>   * disabling migration in order to keep the virtual address stable across
+>   * preemption. No caller of kmap_local_page() can rely on this side effect.
+> + *
+> + * If data is written to the returned kernel mapping, the callers needs to
+> + * unmap the mapping using kunmap_local_dirty(), else kunmap_local() should
+> + * be used.
+>   */
+>  static inline void *kmap_local_page(struct page *page);
+>  
+> -- 
+> 2.30.2
+> 
