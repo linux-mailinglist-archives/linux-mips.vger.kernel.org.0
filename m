@@ -2,121 +2,228 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5447E3AC328
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Jun 2021 08:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30D73AC452
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Jun 2021 08:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbhFRGQv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Jun 2021 02:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbhFRGQu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Jun 2021 02:16:50 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D138C061574;
-        Thu, 17 Jun 2021 23:14:42 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o21so4141063pll.6;
-        Thu, 17 Jun 2021 23:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tZzDh0cilBRIFVtsjTfkPJ4Ams+KhjOfr0u5GSYffMU=;
-        b=IhntsiIG4ttkSAz4oCUj8AajSpZZV4RFr5J9FmqI0zuieAmfYCXdo+cg5ISVjuOA20
-         K5ciskAEH8rX8DQwC93nSvDqXJSW8sJngSUCN039H5Zzx75C6CsqWAPJ7cpTMt5dZvuW
-         3LkrPG189bEfk6sfFNKnrdbbXZyNCYlhFtZ9fmnyiaILeGUn71wD5WppgSOAaLKgL9dG
-         RVvxBXdC8VB/qcMSiAPkOvzRfBlgRVaT0Ky+F5b9SdwI3N5Yw1xWVEl4Rd/ONUhyCOMx
-         GXTTvIIzVYXQ6CPcVIQ3bDLRSmBT3IFAhCgDUfE32WE1L99k63Z+AFyzM8rvdFBr4sgE
-         2HOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tZzDh0cilBRIFVtsjTfkPJ4Ams+KhjOfr0u5GSYffMU=;
-        b=Q6571qx/y0sZf3OffznnrlbZcAjGd6XWXaLv2tzlbUR4UpJ03V5/ULg/xDodx1lFN5
-         lr7Q94yiXVWXWtg2MiwGPdS6AqXj4abfgSXpSwaN3ayGtjZ8iyt3CE+GxsDIlHF4Zntt
-         8QW17fjF7b2g5kcjJABaoXSprZZrSUAYqZYN7BM93rEzII14X7OdzWgJpWz0qI0/RnEW
-         fxaS1eHq8CTMMyIscrNaFR74LuuDEXfv7/khjZvaTWpjyAWOkdaq5VwHLKWEtRlBHGVS
-         RhQg8p9Lw2lJltfjIqYL6b8xqtVJCCvg1GzCnL34cUhwo0Aaz/5tx5jbVlD1MBFBtfE0
-         T4aA==
-X-Gm-Message-State: AOAM531J7DM9/R5Bhc4DxAk3rhF09L1+mP2MnnDn4UKHFYqSHKsmIsvO
-        hRncov/B6Vgjv3ak1uL+BM0=
-X-Google-Smtp-Source: ABdhPJyG9F+P3nC94n7aSBkIaafjWob6oyt+eqbHZIdKyn9lssYRmLrvLdo6fQLbQdbywwuCFVETYg==
-X-Received: by 2002:a17:90a:19c6:: with SMTP id 6mr9393454pjj.125.1623996881696;
-        Thu, 17 Jun 2021 23:14:41 -0700 (PDT)
-Received: from localhost.localdomain ([2001:470:e92d:10:9d34:ce8a:7ace:b692])
-        by smtp.gmail.com with ESMTPSA id v69sm695509pfc.18.2021.06.17.23.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Jun 2021 23:14:41 -0700 (PDT)
-From:   Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-        stable@vger.kernel.org, Frank Eigler <fche@redhat.com>,
-        Mark Wielaard <mark@klomp.org>, Jiri Olsa <jolsa@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Jiri Olsa <jolsa@redhat.com>
-Subject: [PATCH bpf v2] bpf: fix libelf endian handling in resolv_btfids
-Date:   Thu, 17 Jun 2021 23:14:04 -0700
-Message-Id: <20210618061404.818569-1-Tony.Ambardar@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210616092521.800788-1-Tony.Ambardar@gmail.com>
-References: <20210616092521.800788-1-Tony.Ambardar@gmail.com>
+        id S230006AbhFRG7Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Jun 2021 02:59:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43482 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229580AbhFRG7P (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 18 Jun 2021 02:59:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F30D360BBB;
+        Fri, 18 Jun 2021 06:57:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623999426;
+        bh=OpRB/syoWzmdb29I/v2+BhPjDBLNqxmh7heWVRF0lJY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2lUayyXL/vVX5/hSQzVm+ZrRA7eTkrQ8ZZUMVM+o3xwBGz8rUPisuGQyVyWWJrzgr
+         EpyxMDjENopYOPBtAYjH7Ebsd9MK4jNeCQEhKCiFCUiRkfKGtnpok9astNDuEBbBvj
+         P9EDcKp78CwrYzW+weXo3YWcljQXnMuOhiz/jgjE=
+Date:   Fri, 18 Jun 2021 08:57:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jing Zhang <jingzhangos@google.com>
+Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
+        LinuxMIPS <linux-mips@vger.kernel.org>,
+        KVMPPC <kvm-ppc@vger.kernel.org>,
+        LinuxS390 <linux-s390@vger.kernel.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
+        Fuad Tabba <tabba@google.com>
+Subject: Re: [PATCH v11 2/7] KVM: stats: Add fd-based API to read binary
+ stats data
+Message-ID: <YMxDv5BgfdMn2Y9b@kroah.com>
+References: <20210618044819.3690166-1-jingzhangos@google.com>
+ <20210618044819.3690166-3-jingzhangos@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210618044819.3690166-3-jingzhangos@google.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The vmlinux ".BTF_ids" ELF section is declared in btf_ids.h to hold a list
-of zero-filled BTF IDs, which is then patched at link-time with correct
-values by resolv_btfids. The section is flagged as "allocable" to preclude
-compression, but notably the section contents (BTF IDs) are untyped.
+Minor comment nits:
 
-When patching the BTF IDs, resolve_btfids writes in host-native endianness
-and relies on libelf for any required translation on reading and updating
-vmlinux. However, since the type of the .BTF_ids section content defaults
-to ELF_T_BYTE (i.e. unsigned char), no translation occurs. This results in
-incorrect patched values when cross-compiling to non-native endianness,
-and can manifest as kernel Oops and test failures which are difficult to
-troubleshoot [1].
+On Fri, Jun 18, 2021 at 04:48:14AM +0000, Jing Zhang wrote:
+> +/*
+> + * Common vm/vcpu stats read function to userspace.
 
-Explicitly set the type of patched data to ELF_T_WORD, the architecture-
-neutral ELF type corresponding to the u32 BTF IDs. This enables libelf to
-transparently perform any needed endian conversions.
+Should you use a real kernel-doc style here?  You almost are, might as
+well do it "right" :)
 
-Fixes: fbbb68de80a4 ("bpf: Add resolve_btfids tool to resolve BTF IDs in ELF object")
-Cc: stable@vger.kernel.org # v5.10+
-Cc: Frank Eigler <fche@redhat.com>
-Cc: Mark Wielaard <mark@klomp.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Link: [1] https://lore.kernel.org/bpf/CAPGftE_eY-Zdi3wBcgDfkz_iOr1KF10n=9mJHm1_a_PykcsoeA@mail.gmail.com/
-Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
-Acked-by: Jiri Olsa <jolsa@redhat.com>
----
-v1 -> v2:
- * add context and elaborate on commit message per request
- * include ACK from Jiri Olsa
----
- tools/bpf/resolve_btfids/main.c | 3 +++
- 1 file changed, 3 insertions(+)
+> + * @id: identification string of the stats
+> + * @header: stats header for a vm or a vcpu
+> + * @desc: start address of an array of stats descriptors for a vm or a vcpu
+> + * @stats: start address of stats data block for a vm or a vcpu
+> + * @size_stats: the size of stats data block pointed by @stats
+> + * @user_buffer: start address of userspace buffer
+> + * @size: requested read size from userspace
+> + * @offset: the start position from which the content will be read for the
+> + *          corresponding vm or vcp file descriptor
+> + *
+> + * The file content of a vm/vcpu file descriptor is now defined as below:
+> + * +-------------+
+> + * |   Header    |
+> + * +-------------+
+> + * | Descriptors |
+> + * +-------------+
+> + * | Stats Data  |
+> + * +-------------+
 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index d636643ddd35..f32c059fbfb4 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -649,6 +649,9 @@ static int symbols_patch(struct object *obj)
- 	if (sets_patch(obj))
- 		return -1;
- 
-+	/* Set type to ensure endian translation occurs. */
-+	obj->efile.idlist->d_type = ELF_T_WORD;
-+
- 	elf_flagdata(obj->efile.idlist, ELF_C_SET, ELF_F_DIRTY);
- 
- 	err = elf_update(obj->efile.elf, ELF_C_WRITE);
--- 
-2.25.1
+Where is the "header id string"?  In the header?
 
+> + * Although this function allows userspace to read any amount of data (as long
+> + * as in the limit) from any position, the typical usage would follow below
+> + * steps:
+> + * 1. Read header from offset 0. Get the offset of descriptors and stats data
+> + *    and some other necessary information. This is a one-time work for the
+> + *    lifecycle of the corresponding vm/vcpu stats fd.
+> + * 2. Read descriptors from its offset and discover all the stats by parsing
+> + *    descriptors. This is a one-time work for the lifecycle of the
+> + *    corresponding vm/vcpu stats fd.
+> + * 3. Periodically read stats data from its offset.
+
+You forgot "2.5.  rewind fd pointer position", see below...
+
+> + */
+> +ssize_t kvm_stats_read(char *id, struct kvm_stats_header *header,
+> +		struct _kvm_stats_desc *desc, void *stats, size_t size_stats,
+> +		char __user *user_buffer, size_t size, loff_t *offset)
+> +{
+> +	ssize_t len;
+> +	ssize_t copylen;
+> +	ssize_t remain = size;
+> +	size_t size_desc;
+> +	size_t size_header;
+> +	void *src;
+> +	loff_t pos = *offset;
+> +	char __user *dest = user_buffer;
+> +
+> +	size_header = sizeof(*header);
+> +	size_desc = header->count * sizeof(*desc);
+> +
+> +	len = KVM_STATS_ID_MAXLEN + size_header + size_desc + size_stats - pos;
+> +	len = min(len, remain);
+> +	if (len <= 0)
+> +		return 0;
+> +	remain = len;
+> +
+> +	/* Copy kvm stats header.
+> +	 * The header is the first block of content userspace usually read out.
+> +	 * The pos is 0 and the copylen and remain would be the size of header.
+> +	 * The copy of the header would be skipped if offset is larger than the
+> +	 * size of header. That usually happens when userspace reads stats
+> +	 * descriptors and stats data.
+> +	 */
+
+Looks like this is the networking "style" of multi-line comments, not
+the rest of the kernel.  You might want to fix this up to be the normal
+style which would be:
+
+	/*
+	 * Copy kvm stats header.
+	 * The header is the first block of content userspace usually read out.
+	 * The pos is 0 and the copylen and remain would be the size of header.
+	 * The copy of the header would be skipped if offset is larger than the
+	 * size of header. That usually happens when userspace reads stats
+	 * descriptors and stats data.
+	 */
+
+I do not know how picky the kvm maintainers are about this, that's up to
+them :)
+
+
+> +	copylen = size_header - pos;
+> +	copylen = min(copylen, remain);
+> +	if (copylen > 0) {
+> +		src = (void *)header + pos;
+> +		if (copy_to_user(dest, src, copylen))
+> +			return -EFAULT;
+> +		remain -= copylen;
+> +		pos += copylen;
+> +		dest += copylen;
+> +	}
+> +
+> +	/* Copy kvm stats header id string.
+> +	 * The id string is unique for every vm/vcpu, which is stored in kvm
+> +	 * and kvm_vcpu structure.
+> +	 */
+
+This header too is skipped if necessary, so you should say that as well.
+
+
+> +	copylen = size_header + KVM_STATS_ID_MAXLEN - pos;
+> +	copylen = min(copylen, remain);
+> +	if (copylen > 0) {
+> +		src = id + pos - size_header;
+> +		if (copy_to_user(dest, src, copylen))
+> +			return -EFAULT;
+> +		remain -= copylen;
+> +		pos += copylen;
+> +		dest += copylen;
+> +	}
+> +
+> +	/* Copy kvm stats descriptors.
+> +	 * The descriptors copy would be skipped in the typical case that
+> +	 * userspace periodically read stats data, since the pos would be
+> +	 * greater than the end address of descriptors
+> +	 * (header->header.desc_offset + size_desc) causing copylen <= 0.
+> +	 */
+
+But you say that it is skipped here.
+
+> +	copylen = header->desc_offset + size_desc - pos;
+> +	copylen = min(copylen, remain);
+> +	if (copylen > 0) {
+> +		src = (void *)desc + pos - header->desc_offset;
+> +		if (copy_to_user(dest, src, copylen))
+> +			return -EFAULT;
+> +		remain -= copylen;
+> +		pos += copylen;
+> +		dest += copylen;
+> +	}
+> +
+> +	/* Copy kvm stats values */
+> +	copylen = header->data_offset + size_stats - pos;
+> +	copylen = min(copylen, remain);
+> +	if (copylen > 0) {
+> +		src = stats + pos - header->data_offset;
+
+This lets you sync to the end of the header and read just the stats, but
+does that mean that userspace keeps needing to "rewind" back to the end
+of the header to read the stats again?
+
+Or can it just keep reading off the end of the previous read?
+
+It's not quite obvious here, and I mention that above in step "2.5", so
+maybe I am wrong, which is fine, but then I'm confused :)
+
+
+thanks,
+
+greg k-h
