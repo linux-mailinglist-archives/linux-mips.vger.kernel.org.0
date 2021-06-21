@@ -2,76 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2C03AE1C5
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Jun 2021 05:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7C73AE688
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Jun 2021 11:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbhFUDCV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 20 Jun 2021 23:02:21 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:46866 "EHLO vps0.lunn.ch"
+        id S229651AbhFUJ40 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Jun 2021 05:56:26 -0400
+Received: from elvis.franken.de ([193.175.24.41]:40939 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230040AbhFUDCT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 20 Jun 2021 23:02:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=XABV+fu7WuBVU7Zls9QFXa3bbNJ3I+XWXwAfc4iCagM=; b=XbDrYm+k9lPNM9DBO1jazoZUY3
-        25ONFFIOVQqOCIShwwvslQogAmAk1mE6v5ZEDGV/m9HIYVHkVKZGWKopFLCycJAQeESERZrghSBF8
-        YLT0rayJyNbComtrUjsR+wl10Kxt5Z8YTyBNOAUXDw7RTaxOKdJHCCSveMZYVrkGZyVA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1lvAA7-00ARav-E5; Mon, 21 Jun 2021 04:59:47 +0200
-Date:   Mon, 21 Jun 2021 04:59:47 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 2/4] MIPS: Loongson64: Add GMAC support for
- Loongson-2K1000
-Message-ID: <YNAAo+ABaMVmArcM@lunn.ch>
-References: <20210618025337.5705-1-zhangqing@loongson.cn>
- <20210618025337.5705-2-zhangqing@loongson.cn>
+        id S229576AbhFUJ4Z (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 21 Jun 2021 05:56:25 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lvGd7-000490-00; Mon, 21 Jun 2021 11:54:09 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id B8F82C0698; Mon, 21 Jun 2021 11:44:43 +0200 (CEST)
+Date:   Mon, 21 Jun 2021 11:44:43 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH -next] MIPS: OCTEON: octeon-usb: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <20210621094443.GA4425@alpha.franken.de>
+References: <20210605075537.2046896-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210618025337.5705-2-zhangqing@loongson.cn>
+In-Reply-To: <20210605075537.2046896-1-yangyingliang@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-> +			gmac@3,1 {
-> +				compatible = "pci0014,7a03.0",
-> +						   "pci0014,7a03",
-> +						   "pciclass0c0320",
-> +						   "pciclass0c03",
-> +						   "loongson, pci-gmac";
-> +
-> +				reg = <0x1900 0x0 0x0 0x0 0x0>;
-> +				interrupts = <14 IRQ_TYPE_LEVEL_LOW>,
-> +					     <15 IRQ_TYPE_LEVEL_LOW>;
-> +				interrupt-names = "macirq", "eth_lpi";
-> +				interrupt-parent = <&liointc0>;
-> +				phy-mode = "rgmii";
+On Sat, Jun 05, 2021 at 03:55:37PM +0800, Yang Yingliang wrote:
+> Remove unneeded error handling on the result of a call
+> to platform_get_resource() when the value is passed to
+> devm_ioremap_resource().
+> 
+> And use devm_platform_get_and_ioremap_resource() to simplify
+> code.
+> 
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  arch/mips/cavium-octeon/octeon-usb.c | 9 +--------
+>  1 file changed, 1 insertion(+), 8 deletions(-)
 
-rgmii? But you set PHY_INTERFACE_MODE_GMII?
+applied to mips-next.
 
-> +				mdio {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					compatible = "snps,dwmac-mdio";
-> +					phy1: ethernet-phy@1 {
-> +						reg = <0>;
+Thomas.
 
-The value after the @ should match the reg value.
-
-    Andrew
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
