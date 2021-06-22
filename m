@@ -2,112 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41723AF994
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Jun 2021 01:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3ECF3AFAE9
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Jun 2021 04:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbhFUXlS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Jun 2021 19:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbhFUXlR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Jun 2021 19:41:17 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990E6C061766
-        for <linux-mips@vger.kernel.org>; Mon, 21 Jun 2021 16:39:01 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id x24so32897122lfr.10
-        for <linux-mips@vger.kernel.org>; Mon, 21 Jun 2021 16:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LKCX3YjuqUNoE4+roGGfm8o2np78e+Xfu61B4cA+uJI=;
-        b=QFcnGtA3VrPeLLWUQicj9F1i0h1b/5RybgGRdCxbzFL8QhdCFvqX8VwhHYX5q3Pqkr
-         5doeAmEDeGxRt76VeDSVeTUadqoTA9u5/6KTlXOqcOXjJSNpNfPijSSqRT/k13mRT82w
-         BkMfCbkNJslkTjpro+DkmBk3PjS4Hn6PXERxRUa93acO7MAGSIQkTHpMNoCVbbitEC/G
-         3z40+VkdiWaBHfrDy1AVZ8PQ02ycaq32fh4zmxddeYVhD6TbyPzafSla/8UwQq8SJUic
-         P+LJtxgksTY14V5S67BoAcB1O0z9RiIOsr1CYCnuSPJgiazaQKBcf7ytjA/ktHEpP3jT
-         SeQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LKCX3YjuqUNoE4+roGGfm8o2np78e+Xfu61B4cA+uJI=;
-        b=Db6+e3qb+KyyifS0nLadINRRpJtNDa3LVjC7oAddy7W5yHOARs4w4AVlKeAWbFRV5n
-         mvpK4wt+e9QDYZzMsisttHYVCg+Ag/81cT6gPiPPqFrQu501DJkASLU67TObIL1S+v1G
-         +4puJH2aQ9ZdO39Zu+BQlg4AmKf5NhcGJ3oE1QVzYpi1a0MneDafHMRS1T6pAUbrWp5F
-         kbNdBBFkvLKcSwa5wKOW0HQBk8A/9Nb9yZvqAWlXqGM1xaxGcyyOaYXWhcy7YUHhSQP5
-         0z9PVL0Gcs8nkFqDWLniEr6Xb1UFfQVLJcYGYh7z6jq1pWdScj01x6W4Irjx6Hgoe/hl
-         agPA==
-X-Gm-Message-State: AOAM533pTA9bGV6zh7Qs6t9C6w1bcxiJelhjTghPDxC/+XcxPQ0auWrq
-        7X6hs+DOzvSldbXfo2ttcs5bKfeO+glnHkTZ2iVpYQ==
-X-Google-Smtp-Source: ABdhPJyDQGI0gLkASAQSuSpsPjVvNlP9W768H8z16TiAXAgKg2wBct7k8/lWvgPo4urmgneuo0U07ygTChCL7ubyJYY=
-X-Received: by 2002:a05:6512:33c4:: with SMTP id d4mr592219lfg.536.1624318739777;
- Mon, 21 Jun 2021 16:38:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210618222709.1858088-1-jingzhangos@google.com>
- <20210618222709.1858088-3-jingzhangos@google.com> <0cde024e-a234-9a10-5157-d17ba423939e@redhat.com>
- <CAAdAUtiL6DwJDWLLmUqct6B6n7Zaa2DyPhpwKZKb=cpRH+8+vQ@mail.gmail.com>
- <aa1d0bd9-55cf-161a-5af9-f5abde807353@redhat.com> <CAAdAUti1MreOnAXtA+jBEaq+AixmqvBEByi9G4EgDpfu63spHA@mail.gmail.com>
- <c639c557-0e16-6938-2da5-46400ee2dd14@redhat.com>
-In-Reply-To: <c639c557-0e16-6938-2da5-46400ee2dd14@redhat.com>
-From:   Jing Zhang <jingzhangos@google.com>
-Date:   Mon, 21 Jun 2021 18:38:49 -0500
-Message-ID: <CAAdAUtgXAedsXf_1Mjp+mBNkZkHg9feirMpUYQFrYhQ=8vVFcg@mail.gmail.com>
-Subject: Re: [PATCH v12 2/7] KVM: stats: Add fd-based API to read binary stats data
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>, KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LinuxS390 <linux-s390@vger.kernel.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        id S229789AbhFVCNX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Jun 2021 22:13:23 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:46256 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229663AbhFVCNX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 21 Jun 2021 22:13:23 -0400
+Received: from [10.130.0.191] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxIOKSRtFgxZ4VAA--.3572S3;
+        Tue, 22 Jun 2021 10:10:40 +0800 (CST)
+Subject: Re: [PATCH 1/4] stmmac: pci: Add dwmac support for Loongson
+To:     Andrew Lunn <andrew@lunn.ch>
+References: <20210618025337.5705-1-zhangqing@loongson.cn>
+ <YM//kGGAp3vz8OYb@lunn.ch>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Krish Sadhukhan <krish.sadhukhan@oracle.com>,
-        Fuad Tabba <tabba@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Huacai Chen <chenhc@lemote.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
+From:   zhangqing <zhangqing@loongson.cn>
+Message-ID: <d66e6af7-7384-41aa-76a7-7017f27d43cb@loongson.cn>
+Date:   Tue, 22 Jun 2021 10:10:26 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <YM//kGGAp3vz8OYb@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9BxIOKSRtFgxZ4VAA--.3572S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7CF4ftw17JryxXw1xArykuFg_yoW8JF4fpa
+        srGa9xKFZFgFyxCr1FqFWkXFyvvr4Skay0k3y2yFnxK3ZYyrWfX34jgrWUCas3CFZ5Cw45
+        Zw1jgr48Wa4kKrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Kb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJV
+        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkI
+        wI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
+        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7NBMDUUUU
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 6:35 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 22/06/21 00:58, Jing Zhang wrote:
-> >> Pass it as an argument?
-> > The num_desc can only be initialized in the same file that defines the
-> > descriptor array.
-> > Looks like we have to have a global variable to save that. The
-> > solution would be similar
-> > to have a statically defined header for each arch.
-> > So, keep the header structure for each arch?
->
-> Oh, sorry.  I missed that there's only one call to kvm_stats_read and
-> it's in common code.  The remaining comments are small enough that I can
-> apply them myself.  Thanks!
->
-> Paolo
->
-Cool! Thanks, Paolo.
 
-Jing
+
+On 06/21/2021 10:55 AM, Andrew Lunn wrote:
+>> +static int loongson_dwmac_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>> +{
+>> +	struct plat_stmmacenet_data *plat;
+>> +	struct stmmac_resources res;
+>> +	int ret, i, mdio;
+>> +	struct device_node *np;
+>> +
+>> +	np = dev_of_node(&pdev->dev);
+>> +
+>> +	if (!np) {
+>> +		pr_info("dwmac_loongson_pci: No OF node\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	if (!of_device_is_compatible(np, "loongson, pci-gmac")) {
+>> +		pr_info("dwmac_loongson_pci: Incompatible OF node\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	plat = devm_kzalloc(&pdev->dev, sizeof(*plat), GFP_KERNEL);
+>> +	if (!plat)
+>> +		return -ENOMEM;
+>> +
+>> +	if (plat->mdio_node) {
+>> +		dev_err(&pdev->dev, "Found MDIO subnode\n");
+> It is an error is an MDIO node is found?
+
+Hi，Andrew
+
+Thanks for your advice,
+
+Using dev_ DEG () is appropriate,
+
+and other issues I will fix in v2.
+
+Thanks,
+
+-Qing
+
+>
+>> +		mdio = true;
+>> +	}
+>> +
+> ...
+>
+>> +
+>> +	plat->phy_interface = device_get_phy_mode(&pdev->dev);
+>> +	if (plat->phy_interface < 0)
+>> +		dev_err(&pdev->dev, "phy_mode not found\n");
+>> +
+>> +	plat->interface = PHY_INTERFACE_MODE_GMII;
+> Seems odd you call device_get_phy_mode() but then have this hard coded
+> PHY_INTERFACE_MODE_GMII?
+>
+> 	Andrew
+
