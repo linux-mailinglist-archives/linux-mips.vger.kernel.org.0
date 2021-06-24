@@ -2,209 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21A13B2655
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 06:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B313B2771
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 08:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhFXEay (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Jun 2021 00:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhFXEay (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Jun 2021 00:30:54 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0649AC061574
-        for <linux-mips@vger.kernel.org>; Wed, 23 Jun 2021 21:28:34 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id 19so831245qky.13
-        for <linux-mips@vger.kernel.org>; Wed, 23 Jun 2021 21:28:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Vf6iRayWkpLOoYUf7pNtG+CaRTyVw0JAqulSitMDQO0=;
-        b=XhlMv+xUBROxE3lM6Rw1CgXO1kddD8cgUoOHPx8CrrP4EyoU4DEd7SG1RL9I+0DYan
-         boJUZwUYrjArp3SWtAGk9E+FeS6qz4WFyjdbkPcDaZ6Ojv9o8/zJPPYdzKO3qy5vBtEQ
-         HXmGW25TeHi/8kTi8dJmCqS/q5sIDUcuof6X0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Vf6iRayWkpLOoYUf7pNtG+CaRTyVw0JAqulSitMDQO0=;
-        b=ZFVFb+e8tWthk0PDrxxRNlayWtVNDsRj3ikb8MUeSqEpcEWhnO6i6Zl9r5M+zzY1Aq
-         ubWnfZwXVNfEG491k8E+Iud8ssvgqajLNnpE2BvmMqlIj3HxDi6j9dtaOtrManDAxmie
-         sY9le5GDm/6VQvJA/ayGj4H1yNyTsbrw2Hs2HEArti+ynMbVQ6BvWbGfzfya+6qqEUyA
-         UO6cf/mMpPb/NaTJdaW8p9sCVE9djnKma1JdTZJk/o+V8pJTveE+h8jjlXw6QdFQbD7c
-         GQawZkUrtQ3O2pXOmYWb2vQ2Ga9YtgAe4Dnnnf6nHROnkSviu5IFXge4t8H6WcIUeul7
-         f1Hw==
-X-Gm-Message-State: AOAM531X5cCkZRWg/HHzzHxF92+GnrPbcMNlF99rIkcsdhx+BBCc/A33
-        WDReCVc+7GFUPqxfDj+LqQwukKAuDyhP7y+R+ALTeg==
-X-Google-Smtp-Source: ABdhPJzN6yIAnrutP4mXY4YUqxFUME7cFcfwCCdv9KLoP/1Ux65U8D0qn4SKiYpFY+s6pSHfO29nSf+YvOucHrB1PFc=
-X-Received: by 2002:a05:620a:1a87:: with SMTP id bl7mr3690332qkb.232.1624508913860;
- Wed, 23 Jun 2021 21:28:33 -0700 (PDT)
+        id S231307AbhFXGfo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Jun 2021 02:35:44 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:50834 "EHLO deadmen.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231145AbhFXGfm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 24 Jun 2021 02:35:42 -0400
+Received: from gondobar.mordor.me.apana.org.au ([192.168.128.4] helo=gondobar)
+        by deadmen.hmeau.com with esmtp (Exim 4.92 #5 (Debian))
+        id 1lwIun-0005DQ-BZ; Thu, 24 Jun 2021 14:32:41 +0800
+Received: from herbert by gondobar with local (Exim 4.92)
+        (envelope-from <herbert@gondor.apana.org.au>)
+        id 1lwIuN-0000Wf-O4; Thu, 24 Jun 2021 14:32:15 +0800
+Date:   Thu, 24 Jun 2021 14:32:15 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geoff Levand <geoff@infradead.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Mike Snitzer <snitzer@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        dm-devel@redhat.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, ceph-devel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Christoph Lameter <cl@gentwo.de>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Subject: [PATCH] crypto: scatterwalk - Remove obsolete PageSlab check
+Message-ID: <20210624063215.GA31721@gondor.apana.org.au>
+References: <20210615132456.753241-1-hch@lst.de>
+ <20210615132456.753241-2-hch@lst.de>
+ <20210618030157.GA1905674@iweiny-DESK2.sc.intel.com>
+ <20210618033728.GA16787@gondor.apana.org.au>
+ <20210618181258.GC1905674@iweiny-DESK2.sc.intel.com>
 MIME-Version: 1.0
-References: <20210624035749.4054934-1-stevensd@google.com> <20210624035749.4054934-7-stevensd@google.com>
-In-Reply-To: <20210624035749.4054934-7-stevensd@google.com>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Thu, 24 Jun 2021 13:28:23 +0900
-Message-ID: <CAD=HUj6C455sDhBUdQ_Kev=DPpdLRDDycumqfh8kjvredGh=hw@mail.gmail.com>
-Subject: Re: [PATCH 6/6] drm/i915/gvt: use gfn_to_pfn's page instead of pfn
-To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        David Stevens <stevensd@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210618181258.GC1905674@iweiny-DESK2.sc.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Please ignore this last patch. It was put together as an afterthought
-and wasn't properly tested.
+On Fri, Jun 18, 2021 at 11:12:58AM -0700, Ira Weiny wrote:
+>
+> Interesting!  Thanks!
+> 
+> Digging around a bit more I found:
+> 
+> https://lore.kernel.org/patchwork/patch/439637/
 
--David
+Nice find.  So we can at least get rid of the PageSlab call from
+the Crypto API.
 
-On Thu, Jun 24, 2021 at 12:59 PM David Stevens <stevensd@chromium.org> wrote:
->
-> Return struct page instead of pfn from gfn_to_mfn. This function is only
-> used to determine if the page is a transparent hugepage, to enable 2MB
-> huge gtt shadowing. Returning the page directly avoids the risk of
-> calling pfn_to_page on a VM_IO|VM_PFNMAP pfn.
->
-> This change also properly releases the reference on the page returned by
-> gfn_to_pfn.
->
-> Signed-off-by: David Stevens <stevensd@google.com>
-> ---
->  drivers/gpu/drm/i915/gvt/gtt.c       | 12 ++++++++----
->  drivers/gpu/drm/i915/gvt/hypercall.h |  3 ++-
->  drivers/gpu/drm/i915/gvt/kvmgt.c     | 12 ++++--------
->  drivers/gpu/drm/i915/gvt/mpt.h       |  8 ++++----
->  4 files changed, 18 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-> index 9478c132d7b6..b2951c560582 100644
-> --- a/drivers/gpu/drm/i915/gvt/gtt.c
-> +++ b/drivers/gpu/drm/i915/gvt/gtt.c
-> @@ -1160,16 +1160,20 @@ static int is_2MB_gtt_possible(struct intel_vgpu *vgpu,
->         struct intel_gvt_gtt_entry *entry)
->  {
->         struct intel_gvt_gtt_pte_ops *ops = vgpu->gvt->gtt.pte_ops;
-> -       unsigned long pfn;
-> +       struct page *page;
-> +       bool is_trans_huge;
->
->         if (!HAS_PAGE_SIZES(vgpu->gvt->gt->i915, I915_GTT_PAGE_SIZE_2M))
->                 return 0;
->
-> -       pfn = intel_gvt_hypervisor_gfn_to_mfn(vgpu, ops->get_pfn(entry));
-> -       if (pfn == INTEL_GVT_INVALID_ADDR)
-> +       page = intel_gvt_hypervisor_gfn_to_mfn_page(vgpu, ops->get_pfn(entry));
-> +       if (!page)
->                 return -EINVAL;
->
-> -       return PageTransHuge(pfn_to_page(pfn));
-> +       is_trans_huge = PageTransHuge(page);
-> +       put_page(page);
-> +
-> +       return is_trans_huge;
->  }
->
->  static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
-> diff --git a/drivers/gpu/drm/i915/gvt/hypercall.h b/drivers/gpu/drm/i915/gvt/hypercall.h
-> index b79da5124f83..017190ff52d5 100644
-> --- a/drivers/gpu/drm/i915/gvt/hypercall.h
-> +++ b/drivers/gpu/drm/i915/gvt/hypercall.h
-> @@ -60,7 +60,8 @@ struct intel_gvt_mpt {
->                         unsigned long len);
->         int (*write_gpa)(unsigned long handle, unsigned long gpa, void *buf,
->                          unsigned long len);
-> -       unsigned long (*gfn_to_mfn)(unsigned long handle, unsigned long gfn);
-> +       struct page *(*gfn_to_mfn_page)(unsigned long handle,
-> +                                       unsigned long gfn);
->
->         int (*dma_map_guest_page)(unsigned long handle, unsigned long gfn,
->                                   unsigned long size, dma_addr_t *dma_addr);
-> diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> index b829ff67e3d9..1e97ae813ed0 100644
-> --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-> +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> @@ -1928,21 +1928,17 @@ static int kvmgt_inject_msi(unsigned long handle, u32 addr, u16 data)
->         return -EFAULT;
->  }
->
-> -static unsigned long kvmgt_gfn_to_pfn(unsigned long handle, unsigned long gfn)
-> +static struct page *kvmgt_gfn_to_page(unsigned long handle, unsigned long gfn)
->  {
->         struct kvmgt_guest_info *info;
->         kvm_pfn_t pfn;
->
->         if (!handle_valid(handle))
-> -               return INTEL_GVT_INVALID_ADDR;
-> +               return NULL;
->
->         info = (struct kvmgt_guest_info *)handle;
->
-> -       pfn = kvm_pfn_page_unwrap(gfn_to_pfn(info->kvm, gfn));
-> -       if (is_error_noslot_pfn(pfn))
-> -               return INTEL_GVT_INVALID_ADDR;
-> -
-> -       return pfn;
-> +       return gfn_to_pfn(info->kvm, gfn).page;
->  }
->
->  static int kvmgt_dma_map_guest_page(unsigned long handle, unsigned long gfn,
-> @@ -2112,7 +2108,7 @@ static const struct intel_gvt_mpt kvmgt_mpt = {
->         .disable_page_track = kvmgt_page_track_remove,
->         .read_gpa = kvmgt_read_gpa,
->         .write_gpa = kvmgt_write_gpa,
-> -       .gfn_to_mfn = kvmgt_gfn_to_pfn,
-> +       .gfn_to_mfn_page = kvmgt_gfn_to_page,
->         .dma_map_guest_page = kvmgt_dma_map_guest_page,
->         .dma_unmap_guest_page = kvmgt_dma_unmap_guest_page,
->         .dma_pin_guest_page = kvmgt_dma_pin_guest_page,
-> diff --git a/drivers/gpu/drm/i915/gvt/mpt.h b/drivers/gpu/drm/i915/gvt/mpt.h
-> index 550a456e936f..9169b83cf0f6 100644
-> --- a/drivers/gpu/drm/i915/gvt/mpt.h
-> +++ b/drivers/gpu/drm/i915/gvt/mpt.h
-> @@ -214,17 +214,17 @@ static inline int intel_gvt_hypervisor_write_gpa(struct intel_vgpu *vgpu,
->  }
->
->  /**
-> - * intel_gvt_hypervisor_gfn_to_mfn - translate a GFN to MFN
-> + * intel_gvt_hypervisor_gfn_to_mfn_page - translate a GFN to MFN page
->   * @vgpu: a vGPU
->   * @gpfn: guest pfn
->   *
->   * Returns:
-> - * MFN on success, INTEL_GVT_INVALID_ADDR if failed.
-> + * struct page* on success, NULL if failed.
->   */
-> -static inline unsigned long intel_gvt_hypervisor_gfn_to_mfn(
-> +static inline unsigned long intel_gvt_hypervisor_gfn_to_mfn_page(
->                 struct intel_vgpu *vgpu, unsigned long gfn)
->  {
-> -       return intel_gvt_host.mpt->gfn_to_mfn(vgpu->handle, gfn);
-> +       return intel_gvt_host.mpt->gfn_to_mfn_page(vgpu->handle, gfn);
->  }
->
->  /**
-> --
-> 2.32.0.93.g670b81a890-goog
->
+---8<---
+As it is now legal to call flush_dcache_page on slab pages we
+no longer need to do the check in the Crypto API.
+
+Reported-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/include/crypto/scatterwalk.h b/include/crypto/scatterwalk.h
+index c837d0775474..7af08174a721 100644
+--- a/include/crypto/scatterwalk.h
++++ b/include/crypto/scatterwalk.h
+@@ -81,12 +81,7 @@ static inline void scatterwalk_pagedone(struct scatter_walk *walk, int out,
+ 		struct page *page;
+ 
+ 		page = sg_page(walk->sg) + ((walk->offset - 1) >> PAGE_SHIFT);
+-		/* Test ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE first as
+-		 * PageSlab cannot be optimised away per se due to
+-		 * use of volatile pointer.
+-		 */
+-		if (ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE && !PageSlab(page))
+-			flush_dcache_page(page);
++		flush_dcache_page(page);
+ 	}
+ 
+ 	if (more && walk->offset >= walk->sg->offset + walk->sg->length)
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
