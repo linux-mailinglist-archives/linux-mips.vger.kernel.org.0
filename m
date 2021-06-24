@@ -2,105 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9D53B2A6B
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 10:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6673B2A90
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 10:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbhFXIfH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 24 Jun 2021 04:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
+        id S229930AbhFXIp0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Jun 2021 04:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbhFXIfG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Jun 2021 04:35:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46C3C061574
-        for <linux-mips@vger.kernel.org>; Thu, 24 Jun 2021 01:32:47 -0700 (PDT)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1lwKmk-0006cm-HJ; Thu, 24 Jun 2021 10:32:30 +0200
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1lwKmX-0006oO-Cb; Thu, 24 Jun 2021 10:32:17 +0200
-Message-ID: <43f805608f1172b73c62717f6cdc72c7a15d145c.camel@pengutronix.de>
-Subject: Re: [PATCH 08/15] drm/<driver>: drm_gem_plane_helper_prepare_fb is
- now the default
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
-        Sandy Huang <hjc@rock-chips.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev
-Date:   Thu, 24 Jun 2021 10:32:17 +0200
-In-Reply-To: <20210622165511.3169559-9-daniel.vetter@ffwll.ch>
-References: <20210622165511.3169559-1-daniel.vetter@ffwll.ch>
-         <20210622165511.3169559-9-daniel.vetter@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        with ESMTP id S229890AbhFXIp0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Jun 2021 04:45:26 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD76C061574;
+        Thu, 24 Jun 2021 01:43:06 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id u2so2596436plf.3;
+        Thu, 24 Jun 2021 01:43:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=yhvFMq52QAZ9Grg2JNZMftQHgs3RA/23cRzSXZS17k0=;
+        b=gAOPVlMk/C7twisLQPwKCNWWewikvdh3rxAsE3ZtniqnTTajI/NMXYxiFGdNgFsAb5
+         HygkoSZIJ35Gv0csn5ROrHrh88J/UJu+eQftLB0ieYLqxUsTshCjLCXS6gCtoawRaivr
+         09ywa3Xbj5hpxhL9dwXklJBlZskMpYTiquDzecxyLb9cNgD5q6A07FqSvRwXDFm8rCjX
+         BNwM+/+ntQwzLzmsj9QUq7rwCh6LY1EpIQpDwzEMVK8zxcfbTYEjGD1dfARZQBO2ATzQ
+         bXhbvn6/C4gpLxmOLhsNYYF/nPrsfEvzkHwVbcZduLr1uAs8pjNAgfhm1dhPRaqpCZmK
+         qi+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=yhvFMq52QAZ9Grg2JNZMftQHgs3RA/23cRzSXZS17k0=;
+        b=BU3nHJhNpbqzNyn2Kk9HrmtaroFtkm9XNqK5e5rbR+Z/NMmGxaFRQCbSavR9e0lgxi
+         Fto6wNZ7gHIXsYpSxP7JsWapZEHQ7HstMj4Mok7pyhxT6U0JvAV4VjCJ8v1RPRUoUtaa
+         QdA0PE126I/bgM2S3EOjE2wcFy9mVGyhCrymp5kPkN8rGn6AhtPYFFQUtDBce5xyhlpA
+         HfRQsknWKQWdXZYWvm7l7SzIADJtcUP+wr4aZYOzjWrbBw2lg898vMPB+7nLlVOlc8hX
+         yS4kaHsTLtjhHRdHBz5UNjEAlDm3mHWI41vcsDCosfydV+awa5iNsebEytBkmAfEvrQ7
+         R4Lw==
+X-Gm-Message-State: AOAM530FY2fKReHTCME6EoyzKwO3TJNySRwRM0XlkEd8kn6DDgZAo7Bc
+        jhQpyZRVnO8q12Jf13WlELw=
+X-Google-Smtp-Source: ABdhPJxPYtDJj0lFNs0Ok5TeYJmivmtsbDnnr/kiA2/ldwDSYWrbmF8IsiSMPIQHeLM0imoUnt26JQ==
+X-Received: by 2002:a17:90b:793:: with SMTP id l19mr14007232pjz.111.1624524186360;
+        Thu, 24 Jun 2021 01:43:06 -0700 (PDT)
+Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
+        by smtp.gmail.com with ESMTPSA id 23sm1841779pjw.28.2021.06.24.01.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jun 2021 01:43:06 -0700 (PDT)
+Date:   Thu, 24 Jun 2021 18:43:00 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 1/6] KVM: x86/mmu: release audited pfns
+To:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Stevens <stevensd@chromium.org>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>
+Cc:     Alexandru Elisei <alexandru.elisei@arm.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        James Morse <james.morse@arm.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvmarm@lists.cs.columbia.edu,
+        kvm-ppc@vger.kernel.org, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Sean Christopherson <seanjc@google.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Will Deacon <will@kernel.org>
+References: <20210624035749.4054934-1-stevensd@google.com>
+        <20210624035749.4054934-2-stevensd@google.com>
+In-Reply-To: <20210624035749.4054934-2-stevensd@google.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+Message-Id: <1624524156.04etgk7zmz.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 2021-06-22 at 18:55 +0200, Daniel Vetter wrote:
-> No need to set it explicitly.
-> 
-[...]
->  drivers/gpu/drm/imx/ipuv3-plane.c           | 1 -
->  14 files changed, 15 deletions(-)
-> 
-[...]
-> diff --git a/drivers/gpu/drm/imx/ipuv3-plane.c b/drivers/gpu/drm/imx/ipuv3-plane.c
-> index 8710f55d2579..ef114b6aa691 100644
-> --- a/drivers/gpu/drm/imx/ipuv3-plane.c
-> +++ b/drivers/gpu/drm/imx/ipuv3-plane.c
-> @@ -772,7 +772,6 @@ static void ipu_plane_atomic_update(struct drm_plane *plane,
+Excerpts from David Stevens's message of June 24, 2021 1:57 pm:
+> From: David Stevens <stevensd@chromium.org>
+
+Changelog? This looks like a bug, should it have a Fixes: tag?
+
+Thanks,
+Nick
+
+>=20
+> Signed-off-by: David Stevens <stevensd@chromium.org>
+> ---
+>  arch/x86/kvm/mmu/mmu_audit.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/arch/x86/kvm/mmu/mmu_audit.c b/arch/x86/kvm/mmu/mmu_audit.c
+> index cedc17b2f60e..97ff184084b4 100644
+> --- a/arch/x86/kvm/mmu/mmu_audit.c
+> +++ b/arch/x86/kvm/mmu/mmu_audit.c
+> @@ -121,6 +121,8 @@ static void audit_mappings(struct kvm_vcpu *vcpu, u64=
+ *sptep, int level)
+>  		audit_printk(vcpu->kvm, "levels %d pfn %llx hpa %llx "
+>  			     "ent %llxn", vcpu->arch.mmu->root_level, pfn,
+>  			     hpa, *sptep);
+> +
+> +	kvm_release_pfn_clean(pfn);
 >  }
->  
->  static const struct drm_plane_helper_funcs ipu_plane_helper_funcs = {
-> -	.prepare_fb = drm_gem_plane_helper_prepare_fb,
->  	.atomic_check = ipu_plane_atomic_check,
->  	.atomic_disable = ipu_plane_atomic_disable,
->  	.atomic_update = ipu_plane_atomic_update,
-
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
-
-regards
-Philipp
+> =20
+>  static void inspect_spte_has_rmap(struct kvm *kvm, u64 *sptep)
+> --=20
+> 2.32.0.93.g670b81a890-goog
+>=20
+>=20
