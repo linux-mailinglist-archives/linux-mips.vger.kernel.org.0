@@ -2,103 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2AF3B2AD3
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 10:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21333B2B8C
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 11:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbhFXJA0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Jun 2021 05:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbhFXJAZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Jun 2021 05:00:25 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4AFC061574;
-        Thu, 24 Jun 2021 01:58:06 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id s14so3323219pfg.0;
-        Thu, 24 Jun 2021 01:58:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=tKGKGI76BKfQVO8CY1clLxpyySv3vaB3aNh7NWcPhFU=;
-        b=hr3gPiWSs1kzsoT0RN4D0/9u1oAQb1rzWVWLp59xVCkmpZThGbP8ZZHdbz3ZoRByYE
-         Q+bBx6g9vlzubm3xmDqrFRZB2+oF9y38fRVeD/lgeXJbzeuitriXAAYQ0N8Gc/HydmS9
-         h/5/U9gCncS2FPi6hlzNOXRrtw9yomYF3Wegfa7y5BMTxxqMjVRS/4Rtc+vsfYrwyiXs
-         LyEAUsbj+aFGjgwEVS9b0hjW6sOv/s+/X+xMkec2Brf1nwlIC4mUivbzM9KBmc/1CmOo
-         TCEnNnCh1Rmp7Wm6gBzXbz6S+8yTRr+T+rSaRDpuwEYfFxSOn4uIuwntNiH62vmZwJdo
-         +iuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=tKGKGI76BKfQVO8CY1clLxpyySv3vaB3aNh7NWcPhFU=;
-        b=ks5V5HoFfYHrZqnvVUP3SZpsCYaSwBSX8Tkf8LynNcGR2I7B8anfGvu9jIpNNn07Cc
-         2fvBB7QXPs2olhF3NYIH6wOB0xMZWEcMbdhW2Xyj36BabeMF/p41BXG2wEbgh93qS6fm
-         JvZz+Jc89Opb/TUaYjvP1pVzgNlNIwmWJO9yChnVjLJxfXOnu3ahEe2zmKJH/8YkHg7u
-         M47b5E4GnIrGU+MvnPRaMu3smhSGwzK5bs7xEuI3AMRnOxg3fTsg3kuK4ErjTDGA+Bde
-         22SMOA+qhngfUzR7adjDi4U0An6nps/khed6YjZjTNFsVsm2x4PkSrXfx8b6mpScKQo6
-         YWoA==
-X-Gm-Message-State: AOAM53224IMDWWPPmWgUVNhFaFXO7G1uaj2T4V34ytRMdyrE+d78jl1L
-        Jciy/UEvTH/xvEW5LU3tdxQ=
-X-Google-Smtp-Source: ABdhPJw6tjizzTpMBwm3ffTzeTydtLNTRDVWzEX8o5A/u6n7JmgIJ0z9ctLYNOtrV24IDSrsfT+37Q==
-X-Received: by 2002:a63:4e4c:: with SMTP id o12mr3895360pgl.95.1624525086186;
-        Thu, 24 Jun 2021 01:58:06 -0700 (PDT)
-Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
-        by smtp.gmail.com with ESMTPSA id u12sm2003479pjc.0.2021.06.24.01.58.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 01:58:05 -0700 (PDT)
-Date:   Thu, 24 Jun 2021 18:58:00 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 3/6] KVM: x86/mmu: avoid struct page in MMU
-To:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
+        id S231941AbhFXJm2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Jun 2021 05:42:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55238 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231761AbhFXJm0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 24 Jun 2021 05:42:26 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 83160613C3;
+        Thu, 24 Jun 2021 09:40:07 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1lwLq9-009Yqj-H3; Thu, 24 Jun 2021 10:40:05 +0100
+Date:   Thu, 24 Jun 2021 10:40:00 +0100
+Message-ID: <87o8bviosv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Paul Mackerras <paulus@ozlabs.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        David Stevens <stevensd@chromium.org>,
         Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>
-Cc:     Alexandru Elisei <alexandru.elisei@arm.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
+        Zhi Wang <zhi.a.wang@intel.com>,
         James Morse <james.morse@arm.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvmarm@lists.cs.columbia.edu,
-        kvm-ppc@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Sean Christopherson <seanjc@google.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
-        Will Deacon <will@kernel.org>
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 2/6] KVM: mmu: also return page from gfn_to_pfn
+In-Reply-To: <20210624035749.4054934-3-stevensd@google.com>
 References: <20210624035749.4054934-1-stevensd@google.com>
-        <20210624035749.4054934-4-stevensd@google.com>
-In-Reply-To: <20210624035749.4054934-4-stevensd@google.com>
-MIME-Version: 1.0
-Message-Id: <1624524744.2sr7o7ix86.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        <20210624035749.4054934-3-stevensd@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: stevensd@chromium.org, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, paulus@ozlabs.org, pbonzini@redhat.com, zhenyuw@linux.intel.com, zhi.a.wang@intel.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, will@kernel.org, seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, intel-gvt-dev@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Excerpts from David Stevens's message of June 24, 2021 1:57 pm:
+Hi David,
+
+On Thu, 24 Jun 2021 04:57:45 +0100,
+David Stevens <stevensd@chromium.org> wrote:
+> 
 > From: David Stevens <stevensd@chromium.org>
->  out_unlock:
->  	if (is_tdp_mmu_root(vcpu->kvm, vcpu->arch.mmu->root_hpa))
->  		read_unlock(&vcpu->kvm->mmu_lock);
->  	else
->  		write_unlock(&vcpu->kvm->mmu_lock);
-> -	kvm_release_pfn_clean(pfn);
+> 
+> Return a struct kvm_pfn_page containing both a pfn and an optional
+> struct page from the gfn_to_pfn family of functions. This differentiates
+> the gup and follow_fault_pfn cases, which allows callers that only need
+> a pfn to avoid touching the page struct in the latter case. For callers
+> that need a struct page, introduce a helper function that unwraps a
+> struct kvm_pfn_page into a struct page. This helper makes the call to
+> kvm_get_pfn which had previously been in hva_to_pfn_remapped.
+> 
+> For now, wrap all calls to gfn_to_pfn functions in the new helper
+> function. Callers which don't need the page struct will be updated in
+> follow-up patches.
+> 
+> Signed-off-by: David Stevens <stevensd@chromium.org>
+> ---
+>  arch/arm64/kvm/mmu.c                   |   5 +-
+>  arch/mips/kvm/mmu.c                    |   3 +-
+>  arch/powerpc/kvm/book3s.c              |   3 +-
+>  arch/powerpc/kvm/book3s_64_mmu_hv.c    |   5 +-
+>  arch/powerpc/kvm/book3s_64_mmu_radix.c |   5 +-
+>  arch/powerpc/kvm/book3s_hv_uvmem.c     |   4 +-
+>  arch/powerpc/kvm/e500_mmu_host.c       |   2 +-
+>  arch/x86/kvm/mmu/mmu.c                 |  11 ++-
+>  arch/x86/kvm/mmu/mmu_audit.c           |   2 +-
+>  arch/x86/kvm/x86.c                     |   2 +-
+>  drivers/gpu/drm/i915/gvt/kvmgt.c       |   2 +-
+>  include/linux/kvm_host.h               |  27 ++++--
+>  include/linux/kvm_types.h              |   5 +
+>  virt/kvm/kvm_main.c                    | 121 +++++++++++++------------
+>  14 files changed, 109 insertions(+), 88 deletions(-)
+> 
+
+[...]
+
+> +kvm_pfn_t kvm_pfn_page_unwrap(struct kvm_pfn_page pfnpg)
+> +{
 > +	if (pfnpg.page)
-> +		put_page(pfnpg.page);
->  	return r;
->  }
+> +		return pfnpg.pfn;
+> +
+> +	kvm_get_pfn(pfnpg.pfn);
+> +	return pfnpg.pfn;
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_pfn_page_unwrap);
 
-How about
+I'd really like to see a tiny bit of documentation explaining that
+calls to kvm_pfn_page_unwrap() are not idempotent.
 
-  kvm_release_pfn_page_clean(pfnpg);
+Otherwise, looks good to me.
 
 Thanks,
-Nick
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
