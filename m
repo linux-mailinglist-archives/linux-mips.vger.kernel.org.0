@@ -2,65 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8A23B2C3D
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 12:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375973B2C47
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 12:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbhFXKT5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Jun 2021 06:19:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45524 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232145AbhFXKT4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 24 Jun 2021 06:19:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624529857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4frsi0H+HBjHeCdKISuXJMG773wuFNrwEMxUF4xqOQU=;
-        b=H1QmQf0HjgfEEO/YXFb07R4kp428RjM92oYJv9BIIfU1pd6duojaDyI7drSXXC1f8H2Ywn
-        AvXBDSZI/lrCj8j/ASh1qhpRLH3p3oHWD1DEynMOa3UyttSPWHJ+KipgM4k9oOjf43gYiE
-        MaEh2Ii3o4SFW6mTXKeDD9DV8UVUfwc=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-263-eySJLsepPzuvn4CTuMbYEA-1; Thu, 24 Jun 2021 06:17:35 -0400
-X-MC-Unique: eySJLsepPzuvn4CTuMbYEA-1
-Received: by mail-ej1-f72.google.com with SMTP id jw19-20020a17090776b3b0290481592f1fc4so1836121ejc.2
-        for <linux-mips@vger.kernel.org>; Thu, 24 Jun 2021 03:17:35 -0700 (PDT)
+        id S232144AbhFXKUI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Jun 2021 06:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232111AbhFXKUH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Jun 2021 06:20:07 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5891C061574;
+        Thu, 24 Jun 2021 03:17:48 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id bb20so3183730pjb.3;
+        Thu, 24 Jun 2021 03:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=ufPcep0sp8fFam4s8EQWkn+673yXecgGkFHNTHQONWw=;
+        b=sFF5ZYvJivSW9geCDpAWHQIXJqy0TaWKJDeCWyf+SN8sC0zvAWOqxE0kDzVGrlqH0T
+         tmnXDqy/vMEUI/QT1fg3tuAhH6y/WaFDv0bhKrmNY65hIUEPGulyXJKnytExJVEwigXZ
+         EEgjb92CecGE/1ZNSefvvxGTeh5Bu3j4pd19HStH0J6gJv+4gmTPMVXvpU/FEf57f6Z1
+         yZZLHMoK9YK0EH+XiEgmNblrEYdl95qc0I5aDyKhqYAvytW6+/07zmQXw9lEc1D57uv2
+         sPH/vR/v0oM7LuQHI7hajV/RDoziumHUY8ZgFdgAAJLR7DiFovRTgo8M2LsLunQ7LnIe
+         UNoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=4frsi0H+HBjHeCdKISuXJMG773wuFNrwEMxUF4xqOQU=;
-        b=anBSEBR8JbSUnZChpU17PRQX63KA2mBSuei1SxnpIxDKdA7IG/2iWGt+ZdpkJMBOQs
-         amX7WSxZlb9DQZMiPaCrwhsTlB6DuwfURBzY21P1AGYlfQzRUyniLk2CYFAI14XOWeqK
-         yofuvKYfbq6KoSPwjch9/QbBdBxl/sA8vc49Av0J2XgoSEk2Z1ze0eholFN3o6sb4U4y
-         ZQrw+Mfm7PcRHFTT/zFXUO6q75qSFQ+AwdNTfwdvb90IlAwuTQOt3seVP0pUr4TDL7dV
-         u/TVXA/dt6HOgvlPbIEEFJd+P4hDvDOaUvBpsj7zvc7XQhsi22HMffXOHZiqxdzEZ8Af
-         BHpQ==
-X-Gm-Message-State: AOAM5326y3965/glRVxME+us8LMf79bHzlOqOp4VEyX0Sn0D7aCHOVHw
-        m21uSpg1Je3fxsTTEbXCD8m1LLw0aVRCiVGgLQdw9ZGf5FePDov/MFC/JPOn0sv2sgzdY4ek0lw
-        nxK9BjGB0Q0M/MEVso7pzcQ==
-X-Received: by 2002:a17:906:b254:: with SMTP id ce20mr4621419ejb.480.1624529854691;
-        Thu, 24 Jun 2021 03:17:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzxC6TqcAfZORfwKXJXCm8bql8vynsp6j3JYon1fQgnkpoL4xlG5zu/uVtJRITtzGjbxU3KFw==
-X-Received: by 2002:a17:906:b254:: with SMTP id ce20mr4621398ejb.480.1624529854552;
-        Thu, 24 Jun 2021 03:17:34 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id x21sm1600772edv.97.2021.06.24.03.17.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jun 2021 03:17:33 -0700 (PDT)
-Subject: Re: [PATCH 3/6] KVM: x86/mmu: avoid struct page in MMU
-To:     Marc Zyngier <maz@kernel.org>, Nicholas Piggin <npiggin@gmail.com>
-Cc:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=ufPcep0sp8fFam4s8EQWkn+673yXecgGkFHNTHQONWw=;
+        b=aS4wwhJvFaUFn1MsoE7emCf6T3BPewsDquwyDWjz/J+NRe5hMNKkj1Aljz2Ecau/6o
+         NtcLlZNgPkgqdfbcHC6TVEajAYSfy/mjGHddIXWFPj7gF0JJtYu/ONbVbtSbYt0+w+yj
+         G7rAdFNbHSgL66Og7y1N0Bwt7SIlAeUsOb/kZjcxJCCArcCvfdcw1jxqJAdbR3PD04F7
+         2mgPmVbmrjvIlaQfUFe2Ioau0LS2Ipyjl4wuguEZ+EunSb6xZYbjUW73hI5Zfc0F2N+s
+         zy8XDR5lGlapmye5SxnTbZF4b850jgbtXcUs+eDhht7xH64xuiZqwXn5/721xM71I0kk
+         4yMA==
+X-Gm-Message-State: AOAM530byPkbedOQkTcbexzeHypJpzrl6qUbpXF6/nyvKyPIOaD2EVGw
+        K7LiZoqxL3LZatqq77gNaq8=
+X-Google-Smtp-Source: ABdhPJzBDdHKwzOfU1IGTH+/PPCRK2jVsTxYoY95EuRzqDADJIdiFOBloV8Ki52/MFkR99nX/DL1Xg==
+X-Received: by 2002:a17:90a:7401:: with SMTP id a1mr14554343pjg.57.1624529868549;
+        Thu, 24 Jun 2021 03:17:48 -0700 (PDT)
+Received: from localhost (60-242-147-73.tpgi.com.au. [60.242.147.73])
+        by smtp.gmail.com with ESMTPSA id o20sm2094410pjq.57.2021.06.24.03.17.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jun 2021 03:17:48 -0700 (PDT)
+Date:   Thu, 24 Jun 2021 20:17:42 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 2/6] KVM: mmu: also return page from gfn_to_pfn
+To:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Huacai Chen <chenhuacai@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
         Paul Mackerras <paulus@ozlabs.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         David Stevens <stevensd@chromium.org>,
         Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Zhi Wang <zhi.a.wang@intel.com>
+Cc:     Alexandru Elisei <alexandru.elisei@arm.com>,
         dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         intel-gvt-dev@lists.freedesktop.org,
         James Morse <james.morse@arm.com>,
@@ -75,56 +73,53 @@ Cc:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Will Deacon <will@kernel.org>
 References: <20210624035749.4054934-1-stevensd@google.com>
- <20210624035749.4054934-4-stevensd@google.com>
- <1624524744.2sr7o7ix86.astroid@bobo.none> <87mtrfinks.wl-maz@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <0b7f9c30-eb12-35c5-191f-0e8e469e1b88@redhat.com>
-Date:   Thu, 24 Jun 2021 12:17:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        <20210624035749.4054934-3-stevensd@google.com>
+        <1624524331.zsin3qejl9.astroid@bobo.none>
+        <201b68a7-10ea-d656-0c1e-5511b1f22674@redhat.com>
+        <1624528342.s2ezcyp90x.astroid@bobo.none>
+In-Reply-To: <1624528342.s2ezcyp90x.astroid@bobo.none>
 MIME-Version: 1.0
-In-Reply-To: <87mtrfinks.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Message-Id: <1624529635.75a1ann91v.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 24/06/21 12:06, Marc Zyngier wrote:
-> On Thu, 24 Jun 2021 09:58:00 +0100,
-> Nicholas Piggin <npiggin@gmail.com> wrote:
->>
->> Excerpts from David Stevens's message of June 24, 2021 1:57 pm:
->>> From: David Stevens <stevensd@chromium.org>
->>>   out_unlock:
->>>   	if (is_tdp_mmu_root(vcpu->kvm, vcpu->arch.mmu->root_hpa))
->>>   		read_unlock(&vcpu->kvm->mmu_lock);
->>>   	else
->>>   		write_unlock(&vcpu->kvm->mmu_lock);
->>> -	kvm_release_pfn_clean(pfn);
->>> +	if (pfnpg.page)
->>> +		put_page(pfnpg.page);
->>>   	return r;
->>>   }
->>
->> How about
->>
->>    kvm_release_pfn_page_clean(pfnpg);
-> 
-> I'm not sure. I always found kvm_release_pfn_clean() ugly, because it
-> doesn't mark the page 'clean'. I find put_page() more correct.
-> 
-> Something like 'kvm_put_pfn_page()' would make more sense, but I'm so
-> bad at naming things that I could just as well call it 'bob()'.
+Excerpts from Nicholas Piggin's message of June 24, 2021 7:57 pm:
+> Excerpts from Paolo Bonzini's message of June 24, 2021 7:42 pm:
+>> On 24/06/21 10:52, Nicholas Piggin wrote:
+>>>> For now, wrap all calls to gfn_to_pfn functions in the new helper
+>>>> function. Callers which don't need the page struct will be updated in
+>>>> follow-up patches.
+>>> Hmm. You mean callers that do need the page will be updated? Normally
+>>> if there will be leftover users that don't need the struct page then
+>>> you would go the other way and keep the old call the same, and add a ne=
+w
+>>> one (gfn_to_pfn_page) just for those that need it.
+>>=20
+>> Needing kvm_pfn_page_unwrap is a sign that something might be buggy, so=20
+>> it's a good idea to move the short name to the common case and the ugly=20
+>> kvm_pfn_page_unwrap(gfn_to_pfn(...)) for the weird one.  In fact I'm not=
+=20
+>> sure there should be any kvm_pfn_page_unwrap in the end.
+>=20
+> If all callers were updated that is one thing, but from the changelog
+> it sounds like that would not happen and there would be some gfn_to_pfn
+> users left over.
+>=20
+> But yes in the end you would either need to make gfn_to_pfn never return
+> a page found via follow_pte, or change all callers to the new way. If=20
+> the plan is for the latter then I guess that's fine.
 
-The best way to go would be to get rid of kvm_release_pfn_clean() and 
-always go through a pfn_page.  Then we could or could not introduce 
-wrappers kvm_put_pfn_page{,_dirty}.
+Actually in that case anyway I don't see the need -- the existence of
+gfn_to_pfn is enough to know it might be buggy. It can just as easily
+be grepped for as kvm_pfn_page_unwrap. And are gfn_to_page cases also
+vulernable to the same issue?
 
-I think for now it's best to limit the churn since these patches will go 
-in the stable releases too, and clean up the resulting API once we have 
-a clear idea of how all architectures are using kvm_pfn_page.
+So I think it could be marked deprecated or something if not everything=20
+will be converted in the one series, and don't need to touch all that=20
+arch code with this patch.
 
-Paolo
-
+Thanks,
+Nick
