@@ -2,56 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CE73B2E5F
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 14:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8E23B2F3C
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 14:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbhFXMCw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Jun 2021 08:02:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49838 "EHLO
+        id S230241AbhFXMnq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Jun 2021 08:43:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56750 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229448AbhFXMCw (ORCPT
+        by vger.kernel.org with ESMTP id S231811AbhFXMnp (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 24 Jun 2021 08:02:52 -0400
+        Thu, 24 Jun 2021 08:43:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624536032;
+        s=mimecast20190719; t=1624538486;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=avGojGcO92NTULuhKarR1IMbTxAu/KipAq8BEw7I0Ko=;
-        b=NwH7B5NWjpeo7xHuBdxiGRVZh4xvFr+1lFCIJJITHPUdkX1qQF6HaOwh7QLG0Nd8FkYAvF
-        xESavrCoW3oJDHBQuPpw3tbG2YBsPxiC6jO70F5rBsHr1BY5umW0PjAB5zZ5EoQX6wnH1p
-        zktQA9JdpEloy+r80cSPmHzIxlXLtTM=
+        bh=Ao/aik86DETd7ceeMOwWvzTcaJv+rZayOURU+D31sn8=;
+        b=GjvelJK9NqzwPH+wQt4p2rrMHQ+NmPcPSNVXrH2f0EGBGBkRWu28p8uhXdnkGg+jIxxi35
+        K18CZYpwAQXIXJe/qoc0AAtBS6Xqn7n7gbbZtzOsuIr22LchymDudqsIDKQkzI+6dF6VBX
+        PM/RTYHUvoAjjDy3wrUPGHfG0iT5m+I=
 Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
  [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-392-Y8QzNWRdMs22Vic2SAc0yg-1; Thu, 24 Jun 2021 08:00:31 -0400
-X-MC-Unique: Y8QzNWRdMs22Vic2SAc0yg-1
-Received: by mail-wr1-f71.google.com with SMTP id j1-20020adfb3010000b02901232ed22e14so2132622wrd.5
-        for <linux-mips@vger.kernel.org>; Thu, 24 Jun 2021 05:00:31 -0700 (PDT)
+ us-mta-225-ZtJzSSNnP72GWdJbdRfYjA-1; Thu, 24 Jun 2021 08:41:25 -0400
+X-MC-Unique: ZtJzSSNnP72GWdJbdRfYjA-1
+Received: by mail-wr1-f71.google.com with SMTP id l6-20020a0560000226b029011a80413b4fso2146360wrz.23
+        for <linux-mips@vger.kernel.org>; Thu, 24 Jun 2021 05:41:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=avGojGcO92NTULuhKarR1IMbTxAu/KipAq8BEw7I0Ko=;
-        b=TpUshdXzZ4bFGj4vu4hq890HqutfOS1tOCvKg8HjgRkpaL2Wl0/zw8Zs1noKS3TUpa
-         0NR70QnPPUaPbHMetA6l2zqJQOGWPPc3vbBXdPQu/qfQA7RNP1idYDwYRWuvXTEqQqov
-         m1uU0EByT9QdnjV4fK/ifwslQNSGqqpch+omX1tVbFsrTjlzkLvLpFWzbUvAS+PEppck
-         sRB5K0zoRRSlx+gLFMVXVnjzTAyr8dGD5v10mdenjawTD1+9M55PWukCgehwIqEdGpon
-         nXw91VF/809Z4xVeWzhd0hIYPL+tf8ep6Ej9MJZX+VZe+7/0Yo90kCD/b4L3XpgmdAhB
-         rBLA==
-X-Gm-Message-State: AOAM531+pF9dthMfbi/a9zCyqVR4r+g0CsN4lzPMVutKpM7DaM85Eo3q
-        h3JTHlJb2tZBUl42odcO4bAbFo7o0yBOIkU/SN+JKKyj6uMWORSDpJ1Yu+M2SoDRCZEYhxpINSX
-        b/7kva0Y9Lo2pcbafcXIkHw==
-X-Received: by 2002:a1c:f215:: with SMTP id s21mr3879322wmc.179.1624536030031;
-        Thu, 24 Jun 2021 05:00:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxXFCnAp+BCIAB50GwF3Py3d9h4g0enz3/eZSVNkNtDC1Z07h1ecnwnq+OHmfePVB6B9P4IuQ==
-X-Received: by 2002:a1c:f215:: with SMTP id s21mr3879281wmc.179.1624536029808;
-        Thu, 24 Jun 2021 05:00:29 -0700 (PDT)
+        bh=Ao/aik86DETd7ceeMOwWvzTcaJv+rZayOURU+D31sn8=;
+        b=pUyuNRxyt2JWO0cpHt7BBbkEQLtJFUVm+oQ1NbIRgqFyMTy3fLToWi+S+79fdfT2ia
+         bUyiwcU05dpFgfAlL6o9NOa7/fxAMR2NDB5RbTeNwzYa13TT6kZ74wYlxmewv1NRmlOH
+         TJgrkQ4ke38nVcXcPdbb213SSm2AhU/M0+WLo3IOxXeDI5gOFKv50YkSWd+wb95wQqZf
+         UdveUZvjc/fn9H5rmQLqCI/ZslefN2J9Ih32And4lgT7MvH585gdkD5E4wsNTgQ4Y3iu
+         JNfVA4MKINbqBAhTJZa6HL+cIEYDlsugpJInMJnJ8Pn4WSqfc1YPL9PE8n8cUq0sxW7G
+         7ZWg==
+X-Gm-Message-State: AOAM532ReOnh2I5fkQs/RTtxcKVX+LMDSlHUI0ag/c/zogJRpCdIySgh
+        sTuAXshRh9Bq2zHl9FYcvZ3VOOHkWazNRy/9f1dS5GB5CUYGQ1w03uBEnSClkKF/QDCr+Lj3scL
+        fFJ1uOjYEGx4MiOo5b8gjcA==
+X-Received: by 2002:adf:f88e:: with SMTP id u14mr4211974wrp.391.1624538484097;
+        Thu, 24 Jun 2021 05:41:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxX2C4aDAGP4h4xfzWoN2DoJE9Xd7OTVDMCCB2JExPqVzxr2MgGsOeSZupCF70+GqEZaJi1OA==
+X-Received: by 2002:adf:f88e:: with SMTP id u14mr4211952wrp.391.1624538483934;
+        Thu, 24 Jun 2021 05:41:23 -0700 (PDT)
 Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id o2sm3074141wrp.53.2021.06.24.05.00.27
+        by smtp.gmail.com with ESMTPSA id 22sm2818691wmi.4.2021.06.24.05.41.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jun 2021 05:00:29 -0700 (PDT)
+        Thu, 24 Jun 2021 05:41:23 -0700 (PDT)
+Subject: Re: [PATCH 0/6] KVM: Remove uses of struct page from x86 and arm64
+ MMU
 To:     Nicholas Piggin <npiggin@gmail.com>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -79,33 +81,84 @@ References: <20210624035749.4054934-1-stevensd@google.com>
  <1624530624.8jff1f4u11.astroid@bobo.none>
  <1624534759.nj0ylor2eh.astroid@bobo.none>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH 0/6] KVM: Remove uses of struct page from x86 and arm64
- MMU
-Message-ID: <d06a8a55-bb9d-a6ef-21bb-0633b99a50d1@redhat.com>
-Date:   Thu, 24 Jun 2021 14:00:26 +0200
+Message-ID: <0d3a699a-15eb-9f1b-0735-79d14736f38c@redhat.com>
+Date:   Thu, 24 Jun 2021 14:41:21 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
 In-Reply-To: <1624534759.nj0ylor2eh.astroid@bobo.none>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On 24/06/21 13:42, Nicholas Piggin wrote:
+> Excerpts from Nicholas Piggin's message of June 24, 2021 8:34 pm:
+>> Excerpts from David Stevens's message of June 24, 2021 1:57 pm:
+>>> KVM supports mapping VM_IO and VM_PFNMAP memory into the guest by using
+>>> follow_pte in gfn_to_pfn. However, the resolved pfns may not have
+>>> assoicated struct pages, so they should not be passed to pfn_to_page.
+>>> This series removes such calls from the x86 and arm64 secondary MMU. To
+>>> do this, this series modifies gfn_to_pfn to return a struct page in
+>>> addition to a pfn, if the hva was resolved by gup. This allows the
+>>> caller to call put_page only when necessated by gup.
+>>>
+>>> This series provides a helper function that unwraps the new return type
+>>> of gfn_to_pfn to provide behavior identical to the old behavior. As I
+>>> have no hardware to test powerpc/mips changes, the function is used
+>>> there for minimally invasive changes. Additionally, as gfn_to_page and
+>>> gfn_to_pfn_cache are not integrated with mmu notifier, they cannot be
+>>> easily changed over to only use pfns.
+>>>
+>>> This addresses CVE-2021-22543 on x86 and arm64.
+>>
+>> Does this fix the problem? (untested I don't have a POC setup at hand,
+>> but at least in concept)
+> 
+> This one actually compiles at least. Unfortunately I don't have much
+> time in the near future to test, and I only just found out about this
+> CVE a few hours ago.
+
+And it also works (the reproducer gets an infinite stream of userspace 
+exits and especially does not crash).  We can still go for David's 
+solution later since MMU notifiers are able to deal with this pages, but 
+it's a very nice patch for stable kernels.
+
+If you provide a Signed-off-by, I can integrate it.
+
+Paolo
+
+> ---
+> 
+> 
+> It's possible to create a region which maps valid but non-refcounted
+> pages (e.g., tail pages of non-compound higher order allocations). These
+> host pages can then be returned by gfn_to_page, gfn_to_pfn, etc., family
+> of APIs, which take a reference to the page, which takes it from 0 to 1.
+> When the reference is dropped, this will free the page incorrectly.
+> 
+> Fix this by only taking a reference on the page if it was non-zero,
+> which indicates it is participating in normal refcounting (and can be
+> released with put_page).
+> 
+> ---
+>   virt/kvm/kvm_main.c | 19 +++++++++++++++++--
+>   1 file changed, 17 insertions(+), 2 deletions(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 6a6bc7af0e28..46fb042837d2 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2055,6 +2055,13 @@ static bool vma_is_valid(struct vm_area_struct *vma, bool write_fault)
+>   	return true;
+>   }
+>   
 > +static int kvm_try_get_pfn(kvm_pfn_t pfn)
 > +{
 > +	if (kvm_is_reserved_pfn(pfn))
 > +		return 1;
-
-So !pfn_valid would always return true.  Yeah, this should work and is 
-certainly appealing!
-
-Paolo
-
-
 > +	return get_page_unless_zero(pfn_to_page(pfn));
 > +}
 > +
