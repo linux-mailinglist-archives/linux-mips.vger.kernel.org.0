@@ -2,206 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7793B25EE
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 06:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EC33B260D
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 06:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbhFXECV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Jun 2021 00:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbhFXECQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Jun 2021 00:02:16 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E19DC061760
-        for <linux-mips@vger.kernel.org>; Wed, 23 Jun 2021 20:59:57 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id i4so2239678plt.12
-        for <linux-mips@vger.kernel.org>; Wed, 23 Jun 2021 20:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XjEayNMlIwhFhTFpVTjls3Ls2951L1asvLWBRAdhY3Y=;
-        b=G77WVjqExeZDMfTQpHWKdkz3bcIMpyywk0hn2DFzio98Q3inTQhorfjwOkm4iuNKJU
-         mxuBNfP0KjCiAis8RQ+zA3fZcUX2BaLJIDg/t4p3OFlFZkwuDfR2Fh5iQuxQZe1h4JMA
-         4ph+TptUQPX0BjwZV6XTittsxQASh9OxDag80=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XjEayNMlIwhFhTFpVTjls3Ls2951L1asvLWBRAdhY3Y=;
-        b=iXnhpX+I8KuoqvcaDhCHKP/d9DEuDYXy6MfkCx6VOnSF9oYXy0a1k7EYVqjVRUsm4J
-         hQPlWDaOCpOWzHagiyb1XvADAlVDl+XTga1MESCOKKogXRYe0LgkQJ8btFJ7bvHIQyXF
-         DIXqelJUDg8Txcsy2b2p1DnUzoCYkRfW5tW33+HhxQtRW179vKV9StvwZk5YHiqVMOBz
-         y+Lv/A4/hu/WiHYKJ8tl1x+QPAEglmN4wTZjBbp4BNGAKpxnrJ1Pn9uRn+wCsiBUMNEx
-         JA3avuJZmQndsMSkCpcQx37UV1zsDX7xcpWSP8qSvrh0dHE3jyRvK9FsrxAI26hfQl/Z
-         1/8w==
-X-Gm-Message-State: AOAM531jeeVbGaTmktKQrACzPcHAYiQzuvlNTwUBqdXOGkmQWA46OorF
-        Q533u9AE+XnpS/neZieNPJuixw==
-X-Google-Smtp-Source: ABdhPJwBjKIdwJ67nTn5zGrOIiHK3SFb/S1q0kw7SUwOmlUsMSXtCkZWszp3zgRP4jaoChbAevZVNg==
-X-Received: by 2002:a17:902:9006:b029:107:394a:387 with SMTP id a6-20020a1709029006b0290107394a0387mr2507432plp.35.1624507196693;
-        Wed, 23 Jun 2021 20:59:56 -0700 (PDT)
-Received: from localhost ([2401:fa00:8f:203:5038:6344:7f10:3690])
-        by smtp.gmail.com with UTF8SMTPSA id x5sm1155975pff.37.2021.06.23.20.59.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Jun 2021 20:59:56 -0700 (PDT)
-From:   David Stevens <stevensd@chromium.org>
-X-Google-Original-From: David Stevens <stevensd@google.com>
-To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        David Stevens <stevensd@google.com>
-Subject: [PATCH 6/6] drm/i915/gvt: use gfn_to_pfn's page instead of pfn
-Date:   Thu, 24 Jun 2021 12:57:49 +0900
-Message-Id: <20210624035749.4054934-7-stevensd@google.com>
-X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
-In-Reply-To: <20210624035749.4054934-1-stevensd@google.com>
-References: <20210624035749.4054934-1-stevensd@google.com>
+        id S229448AbhFXENS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 24 Jun 2021 00:13:18 -0400
+Received: from out28-219.mail.aliyun.com ([115.124.28.219]:35558 "EHLO
+        out28-219.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229379AbhFXENS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Jun 2021 00:13:18 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08217759|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0126925-0.000244556-0.987063;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.KX7ZxPK_1624507847;
+Received: from zhouyanjie-virtual-machine(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KX7ZxPK_1624507847)
+          by smtp.aliyun-inc.com(10.147.41.138);
+          Thu, 24 Jun 2021 12:10:48 +0800
+Date:   Thu, 24 Jun 2021 12:10:46 +0800
+From:   =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     tsbogend@alpha.franken.de, robh+dt@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com
+Subject: Re: [PATCH v2 2/3] MIPS: Ingenic: Add MAC syscon nodes for Ingenic
+ SoCs.
+Message-ID: <20210624121046.4e1f73e1@zhouyanjie-virtual-machine>
+In-Reply-To: <3L36VQ.1XFKT5OGBXT2@crapouillou.net>
+References: <1624377338-75384-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1624377338-75384-3-git-send-email-zhouyanjie@wanyeetech.com>
+        <3L36VQ.1XFKT5OGBXT2@crapouillou.net>
+X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Return struct page instead of pfn from gfn_to_mfn. This function is only
-used to determine if the page is a transparent hugepage, to enable 2MB
-huge gtt shadowing. Returning the page directly avoids the risk of
-calling pfn_to_page on a VM_IO|VM_PFNMAP pfn.
+Hi Paul,
 
-This change also properly releases the reference on the page returned by
-gfn_to_pfn.
+于 Wed, 23 Jun 2021 19:34:15 +0100
+Paul Cercueil <paul@crapouillou.net> 写道:
 
-Signed-off-by: David Stevens <stevensd@google.com>
----
- drivers/gpu/drm/i915/gvt/gtt.c       | 12 ++++++++----
- drivers/gpu/drm/i915/gvt/hypercall.h |  3 ++-
- drivers/gpu/drm/i915/gvt/kvmgt.c     | 12 ++++--------
- drivers/gpu/drm/i915/gvt/mpt.h       |  8 ++++----
- 4 files changed, 18 insertions(+), 17 deletions(-)
+> Hi Zhou,
+> 
+> Le mar., juin 22 2021 at 23:55:37 +0800, 周琰杰 (Zhou Yanjie) 
+> <zhouyanjie@wanyeetech.com> a écrit :
+> > Add MAC syscon nodes for X1000 SoC and X1830 SoC from Ingenic.
+> > 
+> > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> > Acked-by: Paul Cercueil <paul@crapouillou.net>
+> > ---
+> > 
+> > Notes:
+> >     v1->v2:
+> >     No change.
+> > 
+> >  arch/mips/boot/dts/ingenic/x1000.dtsi | 7 +++++++
+> >  arch/mips/boot/dts/ingenic/x1830.dtsi | 7 +++++++
+> >  2 files changed, 14 insertions(+)
+> > 
+> > diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi 
+> > b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> > index aac9ded..dec7909 100644
+> > --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> > +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> > @@ -80,6 +80,11 @@
+> > 
+> >  			status = "disabled";
+> >  		};
+> > +
+> > +		mac_phy_ctrl: mac-phy-ctrl@e8 {
+> > +			compatible = "syscon";
+> > +			reg = <0xe8 0x4>;
+> > +		};  
+> 
+> I acked this patch already, but you do need to update the CGU binding 
+> documentation as well.
 
-diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-index 9478c132d7b6..b2951c560582 100644
---- a/drivers/gpu/drm/i915/gvt/gtt.c
-+++ b/drivers/gpu/drm/i915/gvt/gtt.c
-@@ -1160,16 +1160,20 @@ static int is_2MB_gtt_possible(struct intel_vgpu *vgpu,
- 	struct intel_gvt_gtt_entry *entry)
- {
- 	struct intel_gvt_gtt_pte_ops *ops = vgpu->gvt->gtt.pte_ops;
--	unsigned long pfn;
-+	struct page *page;
-+	bool is_trans_huge;
- 
- 	if (!HAS_PAGE_SIZES(vgpu->gvt->gt->i915, I915_GTT_PAGE_SIZE_2M))
- 		return 0;
- 
--	pfn = intel_gvt_hypervisor_gfn_to_mfn(vgpu, ops->get_pfn(entry));
--	if (pfn == INTEL_GVT_INVALID_ADDR)
-+	page = intel_gvt_hypervisor_gfn_to_mfn_page(vgpu, ops->get_pfn(entry));
-+	if (!page)
- 		return -EINVAL;
- 
--	return PageTransHuge(pfn_to_page(pfn));
-+	is_trans_huge = PageTransHuge(page);
-+	put_page(page);
-+
-+	return is_trans_huge;
- }
- 
- static int split_2MB_gtt_entry(struct intel_vgpu *vgpu,
-diff --git a/drivers/gpu/drm/i915/gvt/hypercall.h b/drivers/gpu/drm/i915/gvt/hypercall.h
-index b79da5124f83..017190ff52d5 100644
---- a/drivers/gpu/drm/i915/gvt/hypercall.h
-+++ b/drivers/gpu/drm/i915/gvt/hypercall.h
-@@ -60,7 +60,8 @@ struct intel_gvt_mpt {
- 			unsigned long len);
- 	int (*write_gpa)(unsigned long handle, unsigned long gpa, void *buf,
- 			 unsigned long len);
--	unsigned long (*gfn_to_mfn)(unsigned long handle, unsigned long gfn);
-+	struct page *(*gfn_to_mfn_page)(unsigned long handle,
-+					unsigned long gfn);
- 
- 	int (*dma_map_guest_page)(unsigned long handle, unsigned long gfn,
- 				  unsigned long size, dma_addr_t *dma_addr);
-diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-index b829ff67e3d9..1e97ae813ed0 100644
---- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-+++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-@@ -1928,21 +1928,17 @@ static int kvmgt_inject_msi(unsigned long handle, u32 addr, u16 data)
- 	return -EFAULT;
- }
- 
--static unsigned long kvmgt_gfn_to_pfn(unsigned long handle, unsigned long gfn)
-+static struct page *kvmgt_gfn_to_page(unsigned long handle, unsigned long gfn)
- {
- 	struct kvmgt_guest_info *info;
- 	kvm_pfn_t pfn;
- 
- 	if (!handle_valid(handle))
--		return INTEL_GVT_INVALID_ADDR;
-+		return NULL;
- 
- 	info = (struct kvmgt_guest_info *)handle;
- 
--	pfn = kvm_pfn_page_unwrap(gfn_to_pfn(info->kvm, gfn));
--	if (is_error_noslot_pfn(pfn))
--		return INTEL_GVT_INVALID_ADDR;
--
--	return pfn;
-+	return gfn_to_pfn(info->kvm, gfn).page;
- }
- 
- static int kvmgt_dma_map_guest_page(unsigned long handle, unsigned long gfn,
-@@ -2112,7 +2108,7 @@ static const struct intel_gvt_mpt kvmgt_mpt = {
- 	.disable_page_track = kvmgt_page_track_remove,
- 	.read_gpa = kvmgt_read_gpa,
- 	.write_gpa = kvmgt_write_gpa,
--	.gfn_to_mfn = kvmgt_gfn_to_pfn,
-+	.gfn_to_mfn_page = kvmgt_gfn_to_page,
- 	.dma_map_guest_page = kvmgt_dma_map_guest_page,
- 	.dma_unmap_guest_page = kvmgt_dma_unmap_guest_page,
- 	.dma_pin_guest_page = kvmgt_dma_pin_guest_page,
-diff --git a/drivers/gpu/drm/i915/gvt/mpt.h b/drivers/gpu/drm/i915/gvt/mpt.h
-index 550a456e936f..9169b83cf0f6 100644
---- a/drivers/gpu/drm/i915/gvt/mpt.h
-+++ b/drivers/gpu/drm/i915/gvt/mpt.h
-@@ -214,17 +214,17 @@ static inline int intel_gvt_hypervisor_write_gpa(struct intel_vgpu *vgpu,
- }
- 
- /**
-- * intel_gvt_hypervisor_gfn_to_mfn - translate a GFN to MFN
-+ * intel_gvt_hypervisor_gfn_to_mfn_page - translate a GFN to MFN page
-  * @vgpu: a vGPU
-  * @gpfn: guest pfn
-  *
-  * Returns:
-- * MFN on success, INTEL_GVT_INVALID_ADDR if failed.
-+ * struct page* on success, NULL if failed.
-  */
--static inline unsigned long intel_gvt_hypervisor_gfn_to_mfn(
-+static inline unsigned long intel_gvt_hypervisor_gfn_to_mfn_page(
- 		struct intel_vgpu *vgpu, unsigned long gfn)
- {
--	return intel_gvt_host.mpt->gfn_to_mfn(vgpu->handle, gfn);
-+	return intel_gvt_host.mpt->gfn_to_mfn_page(vgpu->handle, gfn);
- }
- 
- /**
--- 
-2.32.0.93.g670b81a890-goog
+Sure, I will send v3.
+
+> 
+> -Paul
+> 
+> >  	};
+> > 
+> >  	ost: timer@12000000 {
+> > @@ -347,6 +352,8 @@
+> >  		clocks = <&cgu X1000_CLK_MAC>;
+> >  		clock-names = "stmmaceth";
+> > 
+> > +		mode-reg = <&mac_phy_ctrl>;
+> > +
+> >  		status = "disabled";
+> > 
+> >  		mdio: mdio {
+> > diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi 
+> > b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> > index 59ca3a8..215257f 100644
+> > --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+> > +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> > @@ -73,6 +73,11 @@
+> > 
+> >  			status = "disabled";
+> >  		};
+> > +
+> > +		mac_phy_ctrl: mac-phy-ctrl@e8 {
+> > +			compatible = "syscon";
+> > +			reg = <0xe8 0x4>;
+> > +		};
+> >  	};
+> > 
+> >  	ost: timer@12000000 {
+> > @@ -336,6 +341,8 @@
+> >  		clocks = <&cgu X1830_CLK_MAC>;
+> >  		clock-names = "stmmaceth";
+> > 
+> > +		mode-reg = <&mac_phy_ctrl>;
+> > +
+> >  		status = "disabled";
+> > 
+> >  		mdio: mdio {
+> > --
+> > 2.7.4
+> >   
+> 
 
