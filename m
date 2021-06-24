@@ -2,98 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 812023B32BA
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 17:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D23933B346A
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jun 2021 19:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbhFXPjF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Jun 2021 11:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
+        id S232452AbhFXRL5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Jun 2021 13:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbhFXPjE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Jun 2021 11:39:04 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7656DC06175F
-        for <linux-mips@vger.kernel.org>; Thu, 24 Jun 2021 08:36:45 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id v13so3144881ple.9
-        for <linux-mips@vger.kernel.org>; Thu, 24 Jun 2021 08:36:45 -0700 (PDT)
+        with ESMTP id S232412AbhFXRLx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Jun 2021 13:11:53 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED34C0617A6
+        for <linux-mips@vger.kernel.org>; Thu, 24 Jun 2021 10:09:31 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id d9so9173115ioo.2
+        for <linux-mips@vger.kernel.org>; Thu, 24 Jun 2021 10:09:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oSmcLkLaYmb30K4x2o5V0PgF5sReFf2n8jT9UaERRsg=;
-        b=bSQo4DhU2KuL3CjUZN64j4WcwdggQch/R7XnEdix2NVuOf40qPGfYHBno8Xm619GAr
-         wg2kvoNy4VPNerE1UJQqTO/mn+wSl2WW8B9f7dL8xOzOgdg74JEfehGKdbWSQ0+1rr/t
-         2LEY4HKbsscIOGINiR9uO5OVpBxOglyxXqSvwqqzzZpKt1BhIehu/QDEuFSbgcAbmd1A
-         2Vn5BfcWryEpw7ny/6e9BAwB13V5uLq3/TeIlPL3nNBaDSZ9vfocg3yuStOuQjDnW2a3
-         vbLINUOPqFtht9Zb0kQj2xFTxtidhP/wmPjkGUm290ZvEfhGiSSc1t+MN7azCayA+NIy
-         PYiw==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
+        b=p95plxgcKdT8+TUJCmcKdAyJL6L8C+j3muAeTI6tbvEOMwKUFZvBH22Z3GEGxdnUZH
+         d9XkDasjcz/bUj2n1PkWxPPQL/Sxtf1a7ckN43IkWwU4a9v6DYeOi9Tg8DPYHl700hH/
+         xlmv54Ir2NUVB8zwaX1UsxTzP5GUW3mdywmszCeflzWKbXzDgkMNhx+qVsi3FklHnD5x
+         fSDWvxz3POXOJ/0yZM+F2G99rPMTFJK+bPA5TWYu0VJpvpEjmQwRSgXLB6dx+kXpC0Uz
+         JX+JhI0lSB7VkwJTdkbApCrUx6TGzp99N5mAm/d0lil4hmexz93RFAPSpMzmwkjNchKB
+         rXTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oSmcLkLaYmb30K4x2o5V0PgF5sReFf2n8jT9UaERRsg=;
-        b=Gh2Ljs5fJVd0m/zGtCUurCOhEVQHr+XZXksrg9ePImbdqo025wjXuFQQ8bQ1gs+k8T
-         54kMtKfltWjRxKdQik1Nh7kvPpEYUr2uAmgFWzKVni90XkjVQmyq8LLYNM6iTv60JfNT
-         +44pbbBc0C3KWfcroVH1iM8EDQXq3p9d+RczAfv1Mq5WoepVkI72oSpkWvZdXyjVb++T
-         IBKejOMZLhe6T6zSfKbaOWhiMKkWcqt1kl+NbqO2SZU3vL5Y7KuE6yykeuw8vb9g5QC9
-         2dcOfzCUYKcDD78Ir6ZVJMp+Su/P8OxcI2e2B39KoGS0LebT1Dbp6Ym9p2Ne7BBbXvME
-         fqJg==
-X-Gm-Message-State: AOAM532bOAxwIQjQSymr9oqTGLRGN22MZubhDx4OQ4reE27RzM4buGfE
-        /58kFmfchClQCkGehdru522Dbg==
-X-Google-Smtp-Source: ABdhPJxfmbtVti63yi0rwniZ/V3vp7ddChowhbbwk916pZwapRYWPu+wwBqr+2N8fYjWJaOb0U93+Q==
-X-Received: by 2002:a17:90a:8542:: with SMTP id a2mr14115924pjw.185.1624549004763;
-        Thu, 24 Jun 2021 08:36:44 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p1sm3132065pfp.137.2021.06.24.08.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 08:36:44 -0700 (PDT)
-Date:   Thu, 24 Jun 2021 15:36:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        David Stevens <stevensd@chromium.org>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        James Morse <james.morse@arm.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvmarm@lists.cs.columbia.edu,
-        kvm-ppc@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 1/6] KVM: x86/mmu: release audited pfns
-Message-ID: <YNSmiOsmJin4UPcG@google.com>
-References: <20210624035749.4054934-1-stevensd@google.com>
- <20210624035749.4054934-2-stevensd@google.com>
- <1624524156.04etgk7zmz.astroid@bobo.none>
- <4816287a-b9a9-d3f4-f844-06922d696e06@redhat.com>
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
+        b=fteVYwEc8MXAeFZxXVWuwsNw1YicT9v6wDbS0nYirp4YUy4LJfYKoF6hfm/0IEGgb+
+         MSTQchOOnJX9j9eYKkUWaJiRkr3OxsVMxpBOz4tjpDhcWDPqAzpNL3PwG4Pw4TlDDp8X
+         5bNMOam28DnVkrk6WJQ05NGSigx3RY8wERnc62O0jekAN0ZBHfJRr7BPSMsQQmWhWLM6
+         hWbxBzM8+Ydt3IGybdKZKFWU6fooX7d5RO9WIS4ezgkK3VeVpEQPC6OE/x1n17K2cysw
+         BHLQad4IAavxxo9oNScJ+CrgEhVi/MmI+gaUbUerE4y9VkcXDGjoBz8cb6K7YcJA044J
+         NslA==
+X-Gm-Message-State: AOAM531QOcXz5JO9I3h4q2EYXuA1mxNTCGcVTdSIL/792xV2OmEh25l/
+        9QU7jW6rdN1IcFyWpKpLe+jbGSwGQhVNZuRn2hPA8vfIeC6S+w==
+X-Google-Smtp-Source: ABdhPJzkYUuO368jts0QgMQyJe9SHzg0U698qd8KdfojEfYsXnHtwMfPGxVHmw7fwQ64+IhHRhAEJH5nusdeW4BWzcA=
+X-Received: by 2002:a05:6e02:524:: with SMTP id h4mr4098121ils.255.1624554560853;
+ Thu, 24 Jun 2021 10:09:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4816287a-b9a9-d3f4-f844-06922d696e06@redhat.com>
+Received: by 2002:a05:6638:3aa:0:0:0:0 with HTTP; Thu, 24 Jun 2021 10:09:20
+ -0700 (PDT)
+Reply-To: tutywoolgar021@gmail.com
+In-Reply-To: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
+References: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
+From:   tuty woolgar <faridaamadoubas@gmail.com>
+Date:   Thu, 24 Jun 2021 17:09:20 +0000
+Message-ID: <CADB47+607zNBfYFb4bj0nUhuuYgAdwT=G_wJ9-EeV0ESHe56Jg@mail.gmail.com>
+Subject: greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jun 24, 2021, Paolo Bonzini wrote:
-> On 24/06/21 10:43, Nicholas Piggin wrote:
-> > Excerpts from David Stevens's message of June 24, 2021 1:57 pm:
-> > > From: David Stevens <stevensd@chromium.org>
-> > 
-> > Changelog? This looks like a bug, should it have a Fixes: tag?
-> 
-> Probably has been there forever... The best way to fix the bug would be to
-> nuke mmu_audit.c, which I've threatened to do many times but never followed
-> up on.
-
-Yar.  It has only survived because it hasn't required any maintenance.
+My greetings to you my friend i hope you are fine and good please respond
+back to me thanks,
