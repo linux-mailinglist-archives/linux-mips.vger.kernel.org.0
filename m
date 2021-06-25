@@ -2,135 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5853B42F9
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Jun 2021 14:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3311F3B437A
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Jun 2021 14:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbhFYMQb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 25 Jun 2021 08:16:31 -0400
-Received: from out28-99.mail.aliyun.com ([115.124.28.99]:51152 "EHLO
-        out28-99.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbhFYMQb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Jun 2021 08:16:31 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07444078|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.157598-0.00389005-0.838512;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.KXvfCQt_1624623247;
-Received: from zhouyanjie-virtual-machine(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KXvfCQt_1624623247)
-          by smtp.aliyun-inc.com(10.147.42.198);
-          Fri, 25 Jun 2021 20:14:08 +0800
-Date:   Fri, 25 Jun 2021 20:14:06 +0800
-From:   =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com
-Subject: Re: [PATCH v3 4/4] MIPS: CI20: Add second percpu timer for SMP.
-Message-ID: <20210625201406.1373aff5@zhouyanjie-virtual-machine>
-In-Reply-To: <5C99VQ.EJKI9MPO7XXO1@crapouillou.net>
-References: <1624547189-61079-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1624547189-61079-5-git-send-email-zhouyanjie@wanyeetech.com>
-        <5C99VQ.EJKI9MPO7XXO1@crapouillou.net>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
+        id S230274AbhFYMmN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Jun 2021 08:42:13 -0400
+Received: from mail-vk1-f181.google.com ([209.85.221.181]:44693 "EHLO
+        mail-vk1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229498AbhFYMmN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Jun 2021 08:42:13 -0400
+Received: by mail-vk1-f181.google.com with SMTP id w1so2043076vkg.11;
+        Fri, 25 Jun 2021 05:39:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BdAFQrYjZ7tFOmYJ4XAsP96fFhUM3/tL0iMbvfXhUVA=;
+        b=YH1Eak56KEbjaEIVcXd8xFwe5QAF6mFqvZ+iFSUcGNzoVIXHetbulVYs2cBTHbB/m5
+         uhYpQNDyWUxXS5Qa0DSQSGmpCxEMS7lJcYfxvlwWLZ5h2zufLtK7T5msjXJCNBzmom8S
+         Skjz/GD59OH5BI9PkoU1q3FStenYGbJh1SbGEeOfvH92y9Lstb2dOnxysMEAYRdoA5PE
+         9Fz6MyEJakXq1jglEUNAccvm03NUUAERlV3aGzC80mRr+Ju3YjzIF9DByOl9X7T0VqRH
+         YVoMUFrm39u6nR7X2veRiMdd+E7YHkhhrK+Oh7Fxhl0lNeIDpFJyPQ+9W7kehYp+ZFLm
+         MtTA==
+X-Gm-Message-State: AOAM532zfiZafocjEkZmnysF8lmK957vAgNXL0Ji0Na4cMkHhSmMgfeK
+        Z3gAhBIBEQRhh6e2vVHjRGE47/k0ivDCCscr3BHTjPKR2sg=
+X-Google-Smtp-Source: ABdhPJyaMqdhFPUsH/gm69FNnsiJ4N+ggk62xelaVga9bulLHdrSTNbV0aBsycWgJx4lWnTIwiUgTfw/VdhZO1fsgaE=
+X-Received: by 2002:a1f:ac45:: with SMTP id v66mr7482776vke.1.1624624792112;
+ Fri, 25 Jun 2021 05:39:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20210322144848.1065067-1-geert@linux-m68k.org>
+ <20210322144848.1065067-18-geert@linux-m68k.org> <543ec200931af3192541fef51bc8e96a@protonic.nl>
+ <CAMuHMdXMQYoGbyLsbiZSEWKK0+iPZe7WELmtDUTjqK-VKMZURg@mail.gmail.com>
+ <20210323204038.GA10002@duo.ucw.cz> <CAMuHMdVF30BCA-7vCiwmKO6KVFhtNLbL+VEW59oxcAfwJ+jXyg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVF30BCA-7vCiwmKO6KVFhtNLbL+VEW59oxcAfwJ+jXyg@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 25 Jun 2021 14:39:40 +0200
+Message-ID: <CAMuHMdWQOQmeoNP8po19m_Fo9d55ur68CqOORX-NGhkLbRAsGg@mail.gmail.com>
+Subject: Re: [PATCH 17/17] auxdisplay: ht16k33: Add segment display LED support
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-leds <linux-leds@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-于 Fri, 25 Jun 2021 12:31:17 +0100
-Paul Cercueil <paul@crapouillou.net> 写道:
+On Wed, Mar 24, 2021 at 9:31 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Tue, Mar 23, 2021 at 9:40 PM Pavel Machek <pavel@ucw.cz> wrote:
+> > > CC linux-leds (which I intended, but forgot to add)
+> > >
+> > > cover letter at
+> > > https://lore.kernel.org/linux-devicetree/20210322144848.1065067-1-geert@linux-m68k.org/
 
-> Hi Zhou,
-> 
-> Le jeu., juin 24 2021 at 23:06:29 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
-> > 1.Add a new TCU channel as the percpu timer of core1, this is to
-> >   prepare for the subsequent SMP support. The newly added channel
-> >   will not adversely affect the current single-core state.
-> > 2.Adjust the position of TCU node to make it consistent with the
-> >   order in jz4780.dtsi file.  
-> 
-> That's a bit superfluous, the order matters when adding new nodes,
-> but once they are added, moving them around only cause annoyance.
-> 
-> > 
-> > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> > ---
-> > 
-> > Notes:
-> >     v2:
-> >     New patch.
-> > 
-> >     v2->v3:
-> >     No change.
-> > 
-> >  arch/mips/boot/dts/ingenic/ci20.dts | 21 +++++++++++----------
-> >  1 file changed, 11 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/arch/mips/boot/dts/ingenic/ci20.dts 
-> > b/arch/mips/boot/dts/ingenic/ci20.dts
-> > index 8877c62..70005cc 100644
-> > --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> > +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> > @@ -118,6 +118,17 @@
-> >  	assigned-clock-rates = <48000000>;
-> >  };
-> > 
-> > +&tcu {
-> > +	/*
-> > +	 * 750 kHz for the system timers and 3 MHz for the
-> > clocksources,
-> > +	 * use channel #0 and #1 for the per cpu system timers,
-> > and use
-> > +	 * channel #2 for the clocksource.
-> > +	 */
-> > +	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu
-> > TCU_CLK_TIMER1>,
-> > +					  <&tcu TCU_CLK_TIMER2>,
-> > <&tcu TCU_CLK_OST>;
-> > +	assigned-clock-rates = <750000>, <750000>, <3000000>,
-> > <3000000>;  
-> 
-> Ideally you'd set TIMER1 to 3 MHz and TIMER2 to 750 kHz, otherwise it 
-> kind of breaks support for older kernels (they would still boot, but 
-> with a very slow clocksource). So in the new DTS you could use the 
-> timer0 clock for CPU #0, timer1 for the clocksource, and timer2+ for 
-> cpus > 0.
+> > > > > +     err = ht16k33_brightness_set(priv, seg->led.brightness);
+> > > > >       if (err)
+> > > > >               return err;
+> > > >
+> > > > The LED class can pretty much do what the backlight class can and more.
+> > > >
+> > > > Maybe we can stop registering a backlight device in the fbdev case and
+> > > > register a led device for both. This makes the code cleaner and drops
+> > > > a dependency but will break backwards compatibility.
+> > > >
+> > > > I'd prefer a single solution that covers both use cases, but I'm not
+> > > > sure about the 'breaking backwards compatibility' consequence...
+> >
+> > For new drivers, breaking compatibility should not be a problem.
+>
+> The dot-matrix support is part of the existing driver, thus subject to
+> backwards compatibility.
+> Perhaps we can register the LED device for both, and build the backlight
+> device on top of the LED device, like "led-backlight" does.  Would that
+> work? Or can't the LED no longer be controlled from sysfs (e.g.
+> triggers) if it is in use by a backlight driver?
 
-Sure, I will change it in v4.
+Using "led-backlight", the backlight can no longer be controlled from
+sysfs, precluding the use of other triggers incl. hardware blinking.
+But a normal LED can be used as a backlight, with ledtrig-backlight,
+so that is the most flexible option, but only if no backwards
+compatibility is to be considered.
 
-Thanks and best regards!
 
-> 
-> Cheers,
-> -Paul
-> 
-> > +};
-> > +
-> >  &mmc0 {
-> >  	status = "okay";
-> > 
-> > @@ -522,13 +533,3 @@
-> >  		bias-disable;
-> >  	};
-> >  };
-> > -
-> > -&tcu {
-> > -	/*
-> > -	 * 750 kHz for the system timer and 3 MHz for the
-> > clocksource,
-> > -	 * use channel #0 for the system timer, #1 for the
-> > clocksource.
-> > -	 */
-> > -	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu
-> > TCU_CLK_TIMER1>,
-> > -					  <&tcu TCU_CLK_OST>;
-> > -	assigned-clock-rates = <750000>, <3000000>, <3000000>;
-> > -};
-> > --
-> > 2.7.4
-> >   
-> 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
