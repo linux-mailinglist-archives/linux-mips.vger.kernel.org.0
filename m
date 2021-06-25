@@ -2,48 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 342E23B3DA0
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Jun 2021 09:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F9C3B3DA4
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Jun 2021 09:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbhFYHkL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Jun 2021 03:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S230152AbhFYHkQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Jun 2021 03:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbhFYHkF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Jun 2021 03:40:05 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55789C061756
-        for <linux-mips@vger.kernel.org>; Fri, 25 Jun 2021 00:37:44 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id m2so6881727pgk.7
-        for <linux-mips@vger.kernel.org>; Fri, 25 Jun 2021 00:37:44 -0700 (PDT)
+        with ESMTP id S230188AbhFYHkL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Jun 2021 03:40:11 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2EAC061756
+        for <linux-mips@vger.kernel.org>; Fri, 25 Jun 2021 00:37:50 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 22-20020a17090a0c16b0290164a5354ad0so7476822pjs.2
+        for <linux-mips@vger.kernel.org>; Fri, 25 Jun 2021 00:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Fqk0DelF/G3CbqfbPGVAAboO/i2+VKjmNvuYbOFS18c=;
-        b=MfQ9c0IIzkrFE+VtmmcjNlao2nJ8ViQGBtFp/x/59KONu6gOH3Mwk5XrtXTblsxFVA
-         1mu4wyW2+1q33Y0q8K+qQlRULEPaJz0VOOS5NpFzA6uNw4HgpMvZ2kLnINHDWsIJVxVX
-         MBdifgomPj+X+YQSA40dAjd9J57SbwAtlWJBo=
+        bh=16WTMv4TM6XRqCXu1WqfhwXLGUuF1I5eSAZgF8nuzNU=;
+        b=j1IBKqLi1jF1pVyyqujoaaEyDD956vhQFsW4IqQOy9pFHxew6pDCRuHqUYQPzXhgIV
+         rZzKBOewFTMPizmmlwFMEzkUu3wwxGe2e89oLtXslKb8oDVXALVjACeulmB5NJhacKR6
+         l2tBxaC35ppPnNjz4UkRwFuKRG263fy/OfW/I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Fqk0DelF/G3CbqfbPGVAAboO/i2+VKjmNvuYbOFS18c=;
-        b=DUTTPjPCMA+JMFc+FLzfdwMFHerSXkBs4DwqZp2sf1y0GBMaaJYHkqadzOhYPrZXij
-         X0sC7VzogElajjxYLP0o9T4HKV5H42Vp6KMCEAzCjhkB65cQnTLgEui1NTfYyuOt40Bo
-         yxL2UATCxFWvXnLOMWLD/OEng3I5bbBzhJel4UzHngiAg8pJ1rmxmmFM2jI9Yr5lgHjO
-         CL44QPq5p9CAyruVT+/NNXieNuiuZ7/CBd3vaD0uqa/aIOgH8b4o2/wQlusOOhIZiG9P
-         mV8XnRNjyXVJZVSP0OOdMaIlMmpIIMHRZp/cDilO4YkC9lp1H4x1PJY58i5NinrDabME
-         WK6g==
-X-Gm-Message-State: AOAM530kbYU9wqwVzfz2ulQC3S/UIIZftZaUkthIhpy89OLSuVbiYR2B
-        ES1xCra+TrM0quZEcNB4DMF4Yw==
-X-Google-Smtp-Source: ABdhPJyDQjJ8DoenzHqpaTZP97J/xwMvdaj5O2QENtyBCuGOv08FPB9cPN0MgLOILspvakBGi9fTdQ==
-X-Received: by 2002:a63:b54:: with SMTP id a20mr8444200pgl.407.1624606663879;
-        Fri, 25 Jun 2021 00:37:43 -0700 (PDT)
+        bh=16WTMv4TM6XRqCXu1WqfhwXLGUuF1I5eSAZgF8nuzNU=;
+        b=mJqN25BosTZwsBVaN1SV8eXVQ/kcvXhjZ3diLHEVboyugqnvm96ZyeLYssHyp5G74S
+         bzONUDD4HB0ZnjQzangRD6moQlXsMVyzSJdD5stocotec6C+mLilReY0f1ajGbbSm8pF
+         U3ynNoHK5lB3BPbryj47vOOjwz3CFOvSNHiSbJGZdvdvWD4IT+eBMOLfYnXHzWZAsVYH
+         bUUgLPQTRNKjTpLOcZvyan5mZKeyTf/W+0D604ybfRUmXrQmPRg2Biw29lbbIkUMD61O
+         s4QS61dOLzV0W1uPWNKxEmYj+Fd6StZyoVRK6CHbqc4kvepzU1C07DpZaPAxCnlCCovF
+         p0JQ==
+X-Gm-Message-State: AOAM532kDTYJUycxOPLCUTvcw7Z7VGkiFqcf9p7h/Cx13VobaD3Oml0b
+        NV15JxL9Ib6HOOOQ08Uk3aqleQ==
+X-Google-Smtp-Source: ABdhPJyNGzGIGPRke+4sy9vknoJlahbCbtDrQ1Pof1+x3qW6lrR+9qBg5laf4ZCLScq2FNWqiUDGlQ==
+X-Received: by 2002:a17:90b:b18:: with SMTP id bf24mr9795691pjb.220.1624606670432;
+        Fri, 25 Jun 2021 00:37:50 -0700 (PDT)
 Received: from localhost ([2401:fa00:8f:203:1492:9d4f:19fa:df61])
-        by smtp.gmail.com with UTF8SMTPSA id m18sm5284072pff.88.2021.06.25.00.37.38
+        by smtp.gmail.com with UTF8SMTPSA id j10sm4395324pjb.36.2021.06.25.00.37.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jun 2021 00:37:43 -0700 (PDT)
+        Fri, 25 Jun 2021 00:37:50 -0700 (PDT)
 From:   David Stevens <stevensd@chromium.org>
 X-Google-Original-From: David Stevens <stevensd@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
@@ -68,9 +68,9 @@ Cc:     James Morse <james.morse@arm.com>,
         linuxppc-dev@lists.ozlabs.org, intel-gvt-dev@lists.freedesktop.org,
         intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         David Stevens <stevensd@chromium.org>
-Subject: [PATCH v2 4/5] KVM: arm64/mmu: use gfn_to_pfn_page
-Date:   Fri, 25 Jun 2021 16:36:15 +0900
-Message-Id: <20210625073616.2184426-5-stevensd@google.com>
+Subject: [PATCH v2 5/5] KVM: mmu: remove over-aggressive warnings
+Date:   Fri, 25 Jun 2021 16:36:16 +0900
+Message-Id: <20210625073616.2184426-6-stevensd@google.com>
 X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
 In-Reply-To: <20210625073616.2184426-1-stevensd@google.com>
 References: <20210625073616.2184426-1-stevensd@google.com>
@@ -82,100 +82,46 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: David Stevens <stevensd@chromium.org>
 
-Covert usages of the deprecated gfn_to_pfn functions to the new
-gfn_to_pfn_page functions.
+Remove two warnings that require ref counts for pages to be non-zero, as
+mapped pfns from follow_pfn may not have an initialized ref count.
 
 Signed-off-by: David Stevens <stevensd@chromium.org>
 ---
- arch/arm64/kvm/mmu.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+ arch/x86/kvm/mmu/mmu.c | 7 -------
+ virt/kvm/kvm_main.c    | 2 +-
+ 2 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index c10207fed2f3..c29da690ed74 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -780,7 +780,7 @@ static bool fault_supports_stage2_huge_mapping(struct kvm_memory_slot *memslot,
- static unsigned long
- transparent_hugepage_adjust(struct kvm_memory_slot *memslot,
- 			    unsigned long hva, kvm_pfn_t *pfnp,
--			    phys_addr_t *ipap)
-+			    struct page **page, phys_addr_t *ipap)
- {
- 	kvm_pfn_t pfn = *pfnp;
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index dd5cb6e33591..0c47245594c6 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -607,13 +607,6 @@ static int mmu_spte_clear_track_bits(u64 *sptep)
  
-@@ -789,7 +789,7 @@ transparent_hugepage_adjust(struct kvm_memory_slot *memslot,
- 	 * sure that the HVA and IPA are sufficiently aligned and that the
- 	 * block map is contained within the memslot.
+ 	pfn = spte_to_pfn(old_spte);
+ 
+-	/*
+-	 * KVM does not hold the refcount of the page used by
+-	 * kvm mmu, before reclaiming the page, we should
+-	 * unmap it from mmu first.
+-	 */
+-	WARN_ON(!kvm_is_reserved_pfn(pfn) && !page_count(pfn_to_page(pfn)));
+-
+ 	if (is_accessed_spte(old_spte))
+ 		kvm_set_pfn_accessed(pfn);
+ 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 1de8702845ac..ce7126bab4b0 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -168,7 +168,7 @@ bool kvm_is_zone_device_pfn(kvm_pfn_t pfn)
+ 	 * the device has been pinned, e.g. by get_user_pages().  WARN if the
+ 	 * page_count() is zero to help detect bad usage of this helper.
  	 */
--	if (kvm_is_transparent_hugepage(pfn) &&
-+	if (*page && kvm_is_transparent_hugepage(pfn) &&
- 	    fault_supports_stage2_huge_mapping(memslot, hva, PMD_SIZE)) {
- 		/*
- 		 * The address we faulted on is backed by a transparent huge
-@@ -810,10 +810,11 @@ transparent_hugepage_adjust(struct kvm_memory_slot *memslot,
- 		 * page accordingly.
- 		 */
- 		*ipap &= PMD_MASK;
--		kvm_release_pfn_clean(pfn);
-+		put_page(*page);
- 		pfn &= ~(PTRS_PER_PMD - 1);
--		kvm_get_pfn(pfn);
- 		*pfnp = pfn;
-+		*page = pfn_to_page(pfn);
-+		get_page(*page);
+-	if (!pfn_valid(pfn) || WARN_ON_ONCE(!page_count(pfn_to_page(pfn))))
++	if (!pfn_valid(pfn) || !page_count(pfn_to_page(pfn)))
+ 		return false;
  
- 		return PMD_SIZE;
- 	}
-@@ -837,6 +838,7 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
- 	short vma_shift;
- 	gfn_t gfn;
- 	kvm_pfn_t pfn;
-+	struct page *page;
- 	bool logging_active = memslot_is_logging(memslot);
- 	unsigned long fault_level = kvm_vcpu_trap_get_fault_level(vcpu);
- 	unsigned long vma_pagesize, fault_granule;
-@@ -933,8 +935,8 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
- 	 */
- 	smp_rmb();
- 
--	pfn = __gfn_to_pfn_memslot(memslot, gfn, false, NULL,
--				   write_fault, &writable, NULL);
-+	pfn = __gfn_to_pfn_page_memslot(memslot, gfn, false, NULL,
-+					write_fault, &writable, NULL, &page);
- 	if (pfn == KVM_PFN_ERR_HWPOISON) {
- 		kvm_send_hwpoison_signal(hva, vma_shift);
- 		return 0;
-@@ -967,7 +969,8 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
- 	 */
- 	if (vma_pagesize == PAGE_SIZE && !force_pte)
- 		vma_pagesize = transparent_hugepage_adjust(memslot, hva,
--							   &pfn, &fault_ipa);
-+							   &pfn, &page,
-+							   &fault_ipa);
- 	if (writable)
- 		prot |= KVM_PGTABLE_PROT_W;
- 
-@@ -999,14 +1002,17 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
- 
- 	/* Mark the page dirty only if the fault is handled successfully */
- 	if (writable && !ret) {
--		kvm_set_pfn_dirty(pfn);
-+		if (page)
-+			kvm_set_pfn_dirty(pfn);
- 		mark_page_dirty_in_slot(kvm, memslot, gfn);
- 	}
- 
- out_unlock:
- 	spin_unlock(&kvm->mmu_lock);
--	kvm_set_pfn_accessed(pfn);
--	kvm_release_pfn_clean(pfn);
-+	if (page) {
-+		kvm_set_pfn_accessed(pfn);
-+		put_page(page);
-+	}
- 	return ret != -EAGAIN ? ret : 0;
- }
- 
+ 	return is_zone_device_page(pfn_to_page(pfn));
 -- 
 2.32.0.93.g670b81a890-goog
 
