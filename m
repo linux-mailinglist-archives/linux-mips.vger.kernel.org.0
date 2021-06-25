@@ -2,161 +2,162 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 824B73B4200
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Jun 2021 12:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491773B4212
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Jun 2021 13:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbhFYK5G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Jun 2021 06:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
+        id S230228AbhFYLG7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Jun 2021 07:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbhFYK5G (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Jun 2021 06:57:06 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC57AC061574;
-        Fri, 25 Jun 2021 03:54:44 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id x16so7692516pfa.13;
-        Fri, 25 Jun 2021 03:54:44 -0700 (PDT)
+        with ESMTP id S229974AbhFYLGx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Jun 2021 07:06:53 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315C1C061574;
+        Fri, 25 Jun 2021 04:04:31 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id yy20so6723654ejb.6;
+        Fri, 25 Jun 2021 04:04:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=g8dcSDtay9ZKvmlnhiFrnVTkruRY03gDn6rtxWB9NOE=;
-        b=c5d/tg6pvX80ksYf6fchGXQmYmFw2BW7VqLofWZyXtBkDrHIS+fFqN/We13KZKUIKh
-         0Q7aySYd+YjXBg3fWiqk2uEq4HvbS/6X+K8rYcZrw5sNZuKKfHvFLnUv1kIBR7ExIQx4
-         y/Fv3FSRKUDp7vczHmGaWgNuIoXbzqnEaXSJV14SJCR7iCfQIqxE5Yh+Nrg6GMFlDQa5
-         LDNvVPgHrKhJZBF19p0N2YYA6KAe6R1QzVdiIig1MzSBoXF4t2HS2hfTMTozdY2cqSnR
-         lU+6AzvjlTC+TV6tGP+qBPoiTovzQ1lXIK0nZo3Kz9SraGnLBSrJ9+An76n2tWT2c+nr
-         FSng==
+        h=from:to:cc:subject:date:message-id;
+        bh=oMTJ/QkeVmFE4EFKrFNWUVeXA/smXrujx1nehRVMF44=;
+        b=VUGuKRFUKSkdLoBalHfnYSj33Nqf+3byDGN4+vDZDEwwKqJfJhSZsJjTDn4E9Xpy1W
+         uMhjPzRH9sCAtCrTdCZvkfjHGKrMuEaCMQrxl8Rir9Wby9WLUnBfHIFvoN2O0xksNf1w
+         MHLrxY1Bkc29o3Q9SfAH/AgSX8WYj2ayfTXdwjYsvJYitattujYNNpo8qoHS3FI2dutR
+         mUUbVOrjHwfkGICanaFXTSrhXaBtYnyLnkgsaMSS7oLeaf5l/I/0NGRkgdBmgfBj74YA
+         0AV2YGzE1vXVtwpjgkqHvTLS9bzPbiXchPds8BRJToNMI38TIFlJtitPY7F9WNAOaOTH
+         YDXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=g8dcSDtay9ZKvmlnhiFrnVTkruRY03gDn6rtxWB9NOE=;
-        b=L59pc06q24VIgFtuMyxZJBHGbwqh1wKK0cj9az6nn2MsMFXLAi9QawJ5iwZbDSCHYY
-         W48tFFcTnCZp4xAwVePi4M1M0SglsczgCEkPB/XOoYC+0Ue4/V++HRPc3VT5sgbKZIdl
-         AUimSgg7ARwiHYKsitUDgArzPqvoJiWhDwlqAdW8bRwdVerZx6aEV0qmKnlLG5XLETEw
-         nUg/K0QmNAgy8G/XGOEOFJSDbovGUHsXVU9A8b2dY2EYS2NXBJYzAaTPZ/vp7hByssdZ
-         WX2/ahVh89aLPT4g1yHc1w8SBRcmSWGhvnzAWHt0DE2u+sNZkXhc/yKbxZULlooVyGU1
-         2L9g==
-X-Gm-Message-State: AOAM533yemP2udMZU5yCgS+4kcObVHTecW1vyoJM2DB51eAuVsqadHP5
-        tv+Zmdqlt6hhn4Rs5UNruL5Z9RhdlGHi4Q==
-X-Google-Smtp-Source: ABdhPJyRYzj47zCBKjv/ZWmWBn9GZFkeF6B32oYlDznife0XSof7JYMRa5W9VaBnjnK3/Rq3HetrxA==
-X-Received: by 2002:a63:a54b:: with SMTP id r11mr9033382pgu.43.1624618484358;
-        Fri, 25 Jun 2021 03:54:44 -0700 (PDT)
-Received: from [192.168.69.111] ([171.6.245.6])
-        by smtp.gmail.com with ESMTPSA id c3sm5387064pfl.42.2021.06.25.03.54.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jun 2021 03:54:43 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: add support for buggy MT7621S core detection
-To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Wei Li <liwei391@huawei.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Felix Fietkau <nbd@nbd.name>
-References: <20210403061912.1012509-1-ilya.lipnitskiy@gmail.com>
- <alpine.DEB.2.21.2104060311490.65251@angie.orcam.me.uk>
- <CALCv0x0SwiOAWXk36vuFkspNSM16nS=wdMhm5ZNyOdFUia5zuw@mail.gmail.com>
- <alpine.DEB.2.21.2104071545330.65251@angie.orcam.me.uk>
- <CALCv0x0wQ9DJUVEPXCgbBFQHjqNCfSYLFkU0Md2zjJ4XfydhXg@mail.gmail.com>
-From:   Strontium <strntydog@gmail.com>
-Message-ID: <0099b98c-3774-c5c0-7b1b-1f9e61e0574f@gmail.com>
-Date:   Fri, 25 Jun 2021 17:54:39 +0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <CALCv0x0wQ9DJUVEPXCgbBFQHjqNCfSYLFkU0Md2zjJ4XfydhXg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=oMTJ/QkeVmFE4EFKrFNWUVeXA/smXrujx1nehRVMF44=;
+        b=GAdT043pGA0r1JKWvRhtzxTYKbDFG8bc1jfB2ZvcBQCpKU108nDGYMU2BbPT3zY0/m
+         KLmT6ylklcVqGMSfND/w75yL+8Du5mAsKKQOSHtbMMM0swyTMZvNbJW5HYLGg1sGE6rj
+         5xASCf5Ko1ddaP+LD33Kg0Ru0LxKzzyLji5Duz8cW0BDX6HumFxWFv++AHVjRGyYOJTT
+         Kg155LKYlA5kpW7XWcmsaakOjn57gvD/hKwgQOLqKH7qyyMJyzXihQzjZKWLiDGlEfMs
+         5EadUkSpwuTcPrcGI2TL6ZtvSD2z4HJi3blvSliNuxXCsLi7xewIx+jtNG5sXBU7HXbg
+         xB3A==
+X-Gm-Message-State: AOAM5303uPoXhVXCtdoDWJrK6pPUjttw2uzKhDRqamrSmfnaf1rUcgWJ
+        IwCHgXCatYEz4Tq7ikEFmKs=
+X-Google-Smtp-Source: ABdhPJxmTfE/ss/bnHF0xXzRsXUc2iIkWDwkPT7ifIa4hBcUSM7q7KCO96+UqjufJvNNPPKUY5GwSQ==
+X-Received: by 2002:a17:906:dbdc:: with SMTP id yc28mr10245592ejb.444.1624619069705;
+        Fri, 25 Jun 2021 04:04:29 -0700 (PDT)
+Received: from felia.fritz.box ([2001:16b8:3852:f400:9496:6480:6c8a:4419])
+        by smtp.gmail.com with ESMTPSA id v28sm2659665ejk.84.2021.06.25.04.04.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jun 2021 04:04:29 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>, Willy Tarreau <w@1wt.eu>,
+        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH v2 0/3] Remove dead linux-mips.org references
+Date:   Fri, 25 Jun 2021 13:04:16 +0200
+Message-Id: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 8/4/21 1:49 am, Ilya Lipnitskiy wrote:
-> On Wed, Apr 7, 2021 at 6:49 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->> On Mon, 5 Apr 2021, Ilya Lipnitskiy wrote:
->>
->>> Thanks for the comments. Including asm/bugs.h in asm/mips-cps.h led to
->>> some circular dependencies when I tried it, but I will try again based
->>> on your feedback - indeed it would be much cleaner to have this logic
->>> in mips_cps_numcores. The only wrinkle is that mips_cps_numcores may
->>> return a different value on MT7621 after the cores have started due to
->>> CPULAUNCH flags changing, but nobody calls mips_cps_numcores later
->>> anyway, so it's a moot point today. I will clean up the change and
->>> resend.
->>  Hmm, I don't know this system, but by the look of the code it queries
->> launch[2], which I gather refers to the VPE #0 of an inexistent core #1,
->> so why would the structure change given that there is no corresponding
->> silicon?
-> The structure would change only on the dual-core flavor of MT7621, the
-> single-core would always report 1 core, but on the dual-core, if
-> somebody were to call mips_cps_numcores after the second core had
-> already started, mips_cps_numcores would return 1 instead of 2. I
-> think it may be feasible to fix it by checking other flags, but there
-> is no use case for that today, so I'd rather keep this hacky logic to
-> a minimum.
->
-> Ilya
->
->
-Actually,  I am currently struggling with a side effect of this approach
-in the original OpenWrt version of this method, although i think this
-version will suffer from the same effect. 
+Dear all,
 
-When you kexec the kernel from a previously running kernel, it only
-detects a single core.  I am about to disable it entirely, as i really
-need to be able to run kexec on a MT7621 platform.
+on 2021-02-22, I reported that:
 
-I have instrumented the code with some debug to prove it is the case:
+The domain lookup for linux-mips.org fails for quite some time now. Hence,
+webpages, the patchwork instance and Ralf Baechle's email there is not
+reachable anymore.
 
-Boot from u-boot:
+In the discussion of that patch series, Kurt Martin promised to get
+linux-mips.org back online. Four months have now passed and the webpage is
+still not back online. So, I suggest to remove these dead references.
+Probably, we do not lose much if the linux-mips.org webpage never comes back.
 
-[    0.000000] nclusters = 1
-[    0.000000] VPE topology
-[    0.000000] cl = 0
-[    0.000000] {
-[    0.000000] ncores = 2
-[    0.000000] cpulaunch.pc = 000000ff
-[    0.000000] cpulaunch.gp = 0000ff00
-[    0.000000] cpulaunch.sp = 0000ffff
-[    0.000000] cpulaunch.a0 = 08000800
-[    0.000000] cpulaunch.flags = 00000020
-[    0.000000] plat_cpu_core_present(0) = true
-[    0.000000] core_vpes = 2
-[    0.000000] 2
-[    0.000000] cpulaunch.pc = 000000ff
-[    0.000000] cpulaunch.gp = 0000ff00
-[    0.000000] cpulaunch.sp = 0000ffff
-[    0.000000] cpulaunch.a0 = 08000800
-[    0.000000] cpulaunch.flags = 00000020
-[    0.000000] plat_cpu_core_present(1) = true
-[    0.000000] core_vpes = 2
-[    0.000000] ,2} total 4
+The domain lookup for linux-mips.org fails for quite some time now. Hence,
+webpages, the patchwork instance and Ralf Baechle's email there is not
+reachable anymore.
 
-Boot from kexec:
+Here is in more detail what I did to create this patch series:
 
-[    0.000000] nclusters = 1
-[    0.000000] VPE topology
-[    0.000000] cl = 0
-[    0.000000] {
-[    0.000000] ncores = 2
-[    0.000000] cpulaunch.pc = 00000000
-[    0.000000] cpulaunch.gp = 00000000
-[    0.000000] cpulaunch.sp = 00000000
-[    0.000000] cpulaunch.a0 = 00000000
-[    0.000000] cpulaunch.flags = 00000000
-[    0.000000] plat_cpu_core_present(0) = true
-[    0.000000] core_vpes = 2
-[    0.000000] 2
-[    0.000000] cpulaunch.pc = 00000000
-[    0.000000] cpulaunch.gp = 00000000
-[    0.000000] cpulaunch.sp = 00000000
-[    0.000000] cpulaunch.a0 = 00000000
-[    0.000000] cpulaunch.flags = 00000000} total 2
+First, I updated all sections in MAINTAINERS for references with linux-mips.org.
+Then, I also quickly scanned through the whole git tree for linux-mips.org
+references, and step-wise filtered out obvious copyright holder lines and
+references to old email addresses.
 
-Steven
+  git ls-files | xargs grep "linux-mips.org" | \
+    grep -v -i "Copyright" | grep -v -i "MODULE_AUTHOR" | grep -v -i "written" | \
+    grep -v "Ralf" | grep -v "Maciej" | grep -v "Yoichi" | grep -v "Ladislav"
+
+I removed dead references or replaced them with their living counterparts if
+available. However, these two cases remain and somebody might want to have a look:
+
+  1. case in ./arch/mips/include/asm/page.h:
+
+<snip>
+/*
+ * RELOC_HIDE was originally added by 6007b903dfe5f1d13e0c711ac2894bdd4a61b1ad
+ * (lmo) rsp. 8431fd094d625b94d364fe393076ccef88e6ce18 (kernel.org).  The
+ * discussion can be found in
+ * https://lore.kernel.org/lkml/a2ebde260608230500o3407b108hc03debb9da6e62c@mail.gmail.com
+ *
+ * It is unclear if the misscompilations mentioned in
+ * https://lore.kernel.org/lkml/1281303490-390-1-git-send-email-namhyung@gmail.com
+ * also affect MIPS so we keep this one until GCC 3.x has been retired
+ * before we can apply https://patchwork.linux-mips.org/patch/1541/
+ */
+</snip>
+
+  Decision: Keep as is. Although GCC 3.x is long retired, it is unclear what
+  https://patchwork.linux-mips.org/patch/1541/ is and if it has been already
+  applied or not.
+  Question: does anyone know how to identify this patch?
+
+
+  2. case in ./drivers/parport/parport_ip32.c:
+
+    linux-mips.org tree is referred to in an old To do item:
+
+<snip>
+ * To do:
+ *
+ *      Fully implement ECP mode.
+ *      EPP and ECP mode need to be tested.  I currently do not own any
+ *      peripheral supporting these extended mode, and cannot test them.
+ *      If DMA mode works well, decide if support for PIO FIFO modes should be
+ *      dropped.
+ *      Use the io{read,write} family functions when they become available in
+ *      the linux-mips.org tree.  Note: the MIPS specific functions readsb()
+ *      and writesb() are to be translated by ioread8_rep() and iowrite8_rep()
+ *      respectively.
+</snip>
+
+  Decision: Keep as is; anyone that wants to follow up on this will probably
+  understand that the reference is outdated anyway.
+
+
+Please comment on these clean-up patches on this administrative topic.
+
+Patch set applies cleanly on next-20210624.
+
+
+Changes since v1: https://lore.kernel.org/lkml/20210222161905.1153-1-lukas.bulwahn@gmail.com/
+  Patches
+    "arch: mips: update references to current linux-mips list"
+    "MIPS: SGI-IP27: fix spelling in Copyright"
+  has been already applied.
+
+Lukas Bulwahn (3):
+  MAINTAINERS: mark sections from Ralf Baechle orphan
+  MAINTAINERS: remove linux-mips.org references
+  arch: mips: remove dead references
+
+ MAINTAINERS                   | 20 ++++++--------------
+ arch/mips/Kconfig             |  8 +-------
+ arch/mips/jazz/Kconfig        | 12 +++---------
+ tools/include/nolibc/nolibc.h |  3 +--
+ 4 files changed, 11 insertions(+), 32 deletions(-)
+
+-- 
+2.17.1
 
