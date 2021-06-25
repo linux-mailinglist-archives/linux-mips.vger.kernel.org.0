@@ -2,160 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3641C3B46E1
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Jun 2021 17:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464E43B46ED
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Jun 2021 17:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbhFYPuD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 25 Jun 2021 11:50:03 -0400
-Received: from aposti.net ([89.234.176.197]:57616 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229759AbhFYPuD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 25 Jun 2021 11:50:03 -0400
-Date:   Fri, 25 Jun 2021 16:47:30 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 4/4] MIPS: CI20: Add second percpu timer for SMP.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com
-Message-Id: <67L9VQ.H1SRDC272GKW@crapouillou.net>
-In-Reply-To: <20210625231942.32945490@zhouyanjie-virtual-machine>
-References: <1624547189-61079-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1624547189-61079-5-git-send-email-zhouyanjie@wanyeetech.com>
-        <5C99VQ.EJKI9MPO7XXO1@crapouillou.net>
-        <20210625231942.32945490@zhouyanjie-virtual-machine>
+        id S229873AbhFYPwI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Jun 2021 11:52:08 -0400
+Received: from angie.orcam.me.uk ([78.133.224.34]:59976 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229630AbhFYPwH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Jun 2021 11:52:07 -0400
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id E9E1592009C; Fri, 25 Jun 2021 17:49:44 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id E628892009B;
+        Fri, 25 Jun 2021 17:49:44 +0200 (CEST)
+Date:   Fri, 25 Jun 2021 17:49:44 +0200 (CEST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Kurt Martin <kmartin@wavecomp.com>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Willy Tarreau <w@1wt.eu>,
+        "Maciej W. Rozycki" <macro@linux-mips.org>,
+        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Remove dead linux-mips.org references
+In-Reply-To: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
+Message-ID: <alpine.DEB.2.21.2106251722470.37803@angie.orcam.me.uk>
+References: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Zhou,
+[Adding Ralf and Kurt to the list of recipients.]
 
-Le ven., juin 25 2021 at 23:19:42 +0800, 周琰杰 
-<zhouyanjie@wanyeetech.com> a écrit :
-> Hi Paul,
-> 
-> 于 Fri, 25 Jun 2021 12:31:17 +0100
-> Paul Cercueil <paul@crapouillou.net> 写道:
-> 
->>  Hi Zhou,
->> 
->>  Le jeu., juin 24 2021 at 23:06:29 +0800, 周琰杰 (Zhou Yanjie)
->>  <zhouyanjie@wanyeetech.com> a écrit :
->>  > 1.Add a new TCU channel as the percpu timer of core1, this is to
->>  >   prepare for the subsequent SMP support. The newly added channel
->>  >   will not adversely affect the current single-core state.
->>  > 2.Adjust the position of TCU node to make it consistent with the
->>  >   order in jz4780.dtsi file.
->> 
->>  That's a bit superfluous, the order matters when adding new nodes,
->>  but once they are added, moving them around only cause annoyance.
->> 
->>  >
->>  > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->>  > ---
->>  >
->>  > Notes:
->>  >     v2:
->>  >     New patch.
->>  >
->>  >     v2->v3:
->>  >     No change.
->>  >
->>  >  arch/mips/boot/dts/ingenic/ci20.dts | 21 +++++++++++----------
->>  >  1 file changed, 11 insertions(+), 10 deletions(-)
->>  >
->>  > diff --git a/arch/mips/boot/dts/ingenic/ci20.dts
->>  > b/arch/mips/boot/dts/ingenic/ci20.dts
->>  > index 8877c62..70005cc 100644
->>  > --- a/arch/mips/boot/dts/ingenic/ci20.dts
->>  > +++ b/arch/mips/boot/dts/ingenic/ci20.dts
->>  > @@ -118,6 +118,17 @@
->>  >  	assigned-clock-rates = <48000000>;
->>  >  };
->>  >
->>  > +&tcu {
->>  > +	/*
->>  > +	 * 750 kHz for the system timers and 3 MHz for the
->>  > clocksources,
->>  > +	 * use channel #0 and #1 for the per cpu system timers,
->>  > and use
->>  > +	 * channel #2 for the clocksource.
->>  > +	 */
->>  > +	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu
->>  > TCU_CLK_TIMER1>,
->>  > +					  <&tcu TCU_CLK_TIMER2>,
->>  > <&tcu TCU_CLK_OST>;
->>  > +	assigned-clock-rates = <750000>, <750000>, <3000000>,
->>  > <3000000>;
->> 
->>  Ideally you'd set TIMER1 to 3 MHz and TIMER2 to 750 kHz, otherwise 
->> it
->>  kind of breaks support for older kernels (they would still boot, but
->>  with a very slow clocksource). So in the new DTS you could use the
->>  timer0 clock for CPU #0, timer1 for the clocksource, and timer2+ for
->>  cpus > 0.
-> 
-> I checked the ingenic-timer driver, and it seems that the last TCU
-> channel is always used as the clocksource in the driver, so it seems
-> that we can only use timer2 as the clocksource in smp mode. Maybe we
-> should add a note for smp is closed in the comment. And I found that I
-> missed a problem, Nikolaus Schaller once reported that because the
-> frequency of the tcu timer (only 16bit) used to provide the 
-> clocksource
-> is too high, there will be a chance that the system will get stuck
-> before the clocksource is switched to ost. And reducing the 
-> clocksource
-> to 750kz can prevent it from happening. I will add this part to v4.
-> When this part is added, both clockevent and clocksource will be
-> 750kHz, but the 750kHz clocksource is only temporary, because it will
-> then switch to the clocksource provided by ost, and ost works at 3MHz.
+On Fri, 25 Jun 2021, Lukas Bulwahn wrote:
 
-Ok, then first change the clocksource to 750 kHz, then update it with 
-timer2.
+> The domain lookup for linux-mips.org fails for quite some time now. Hence,
+> webpages, the patchwork instance and Ralf Baechle's email there is not
+> reachable anymore.
 
-Cheers,
--Paul
+ Well, mail forwarding has now been set up for my old LMO address, and so 
+I believe for Ralf's.  Any other resources remain unavailable.
 
+> In the discussion of that patch series, Kurt Martin promised to get
+> linux-mips.org back online. Four months have now passed and the webpage is
+> still not back online. So, I suggest to remove these dead references.
+> Probably, we do not lose much if the linux-mips.org webpage never comes back.
+
+ While most resources have been migrated I think the wiki was unique and 
+valuable.  Perhaps we could preserve read-only references to archive.org 
+dumps?  It's not clear to me what our policy is here though, if any.
+
+> The domain lookup for linux-mips.org fails for quite some time now. Hence,
+> webpages, the patchwork instance and Ralf Baechle's email there is not
+> reachable anymore.
+
+ Let's see if the copy of this message intended for Ralf bounces.
+
+> I removed dead references or replaced them with their living counterparts if
+> available. However, these two cases remain and somebody might want to have a look:
 > 
-> Thanks and best regards!
+>   1. case in ./arch/mips/include/asm/page.h:
 > 
->> 
->>  Cheers,
->>  -Paul
->> 
->>  > +};
->>  > +
->>  >  &mmc0 {
->>  >  	status = "okay";
->>  >
->>  > @@ -522,13 +533,3 @@
->>  >  		bias-disable;
->>  >  	};
->>  >  };
->>  > -
->>  > -&tcu {
->>  > -	/*
->>  > -	 * 750 kHz for the system timer and 3 MHz for the
->>  > clocksource,
->>  > -	 * use channel #0 for the system timer, #1 for the
->>  > clocksource.
->>  > -	 */
->>  > -	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu
->>  > TCU_CLK_TIMER1>,
->>  > -					  <&tcu TCU_CLK_OST>;
->>  > -	assigned-clock-rates = <750000>, <3000000>, <3000000>;
->>  > -};
->>  > --
->>  > 2.7.4
->>  >
->> 
+> <snip>
+> /*
+>  * RELOC_HIDE was originally added by 6007b903dfe5f1d13e0c711ac2894bdd4a61b1ad
+>  * (lmo) rsp. 8431fd094d625b94d364fe393076ccef88e6ce18 (kernel.org).  The
+>  * discussion can be found in
+>  * https://lore.kernel.org/lkml/a2ebde260608230500o3407b108hc03debb9da6e62c@mail.gmail.com
+>  *
+>  * It is unclear if the misscompilations mentioned in
+>  * https://lore.kernel.org/lkml/1281303490-390-1-git-send-email-namhyung@gmail.com
+>  * also affect MIPS so we keep this one until GCC 3.x has been retired
+>  * before we can apply https://patchwork.linux-mips.org/patch/1541/
+>  */
+> </snip>
 > 
+>   Decision: Keep as is. Although GCC 3.x is long retired, it is unclear what
+>   https://patchwork.linux-mips.org/patch/1541/ is and if it has been already
+>   applied or not.
+>   Question: does anyone know how to identify this patch?
 
+ It's on archive.org, marked rejected:
 
+<https://web.archive.org/web/20180829170737/https://patchwork.linux-mips.org/patch/1541/>
+
+or alternatively: <https://lore.kernel.org/patchwork/patch/210989/> (with 
+no proper status).  Given the note it might make sense to re-evaluate the 
+patch.  Thanks for the heads-up!
+
+>   2. case in ./drivers/parport/parport_ip32.c:
+> 
+>     linux-mips.org tree is referred to in an old To do item:
+> 
+> <snip>
+>  * To do:
+>  *
+>  *      Fully implement ECP mode.
+>  *      EPP and ECP mode need to be tested.  I currently do not own any
+>  *      peripheral supporting these extended mode, and cannot test them.
+>  *      If DMA mode works well, decide if support for PIO FIFO modes should be
+>  *      dropped.
+>  *      Use the io{read,write} family functions when they become available in
+>  *      the linux-mips.org tree.  Note: the MIPS specific functions readsb()
+>  *      and writesb() are to be translated by ioread8_rep() and iowrite8_rep()
+>  *      respectively.
+> </snip>
+> 
+>   Decision: Keep as is; anyone that wants to follow up on this will probably
+>   understand that the reference is outdated anyway.
+
+ Note that a copy of the LMO tree remains available online at: 
+<git://git.kernel.org/pub/scm/linux/kernel/git/ralf/linux.git>, so any 
+references or git commit IDs are reachable.  Perhaps it would be good to 
+add an actual reference somewhere though.
+
+  Maciej
