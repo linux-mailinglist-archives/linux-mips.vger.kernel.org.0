@@ -2,99 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7967D3B4F7D
-	for <lists+linux-mips@lfdr.de>; Sat, 26 Jun 2021 18:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7313E3B4FAF
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Jun 2021 18:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbhFZQrC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sat, 26 Jun 2021 12:47:02 -0400
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:44793 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbhFZQrC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 26 Jun 2021 12:47:02 -0400
-Received: by mail-ot1-f49.google.com with SMTP id 59-20020a9d0ac10000b0290462f0ab0800so5066933otq.11;
-        Sat, 26 Jun 2021 09:44:38 -0700 (PDT)
+        id S230439AbhFZQzF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 26 Jun 2021 12:55:05 -0400
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:41584 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230354AbhFZQzE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 26 Jun 2021 12:55:04 -0400
+Received: by mail-oi1-f173.google.com with SMTP id t40so15415941oiw.8;
+        Sat, 26 Jun 2021 09:52:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HxcRIBCSc7MQbCKOyndHrkKI3BYQ9FTRmkxDuLtYrT8=;
-        b=sJIoJBtoja2yelN1uMLLbJ85v1D7Fj/KYelZ/hR3ERnPxfY42FXrQubWGt7t57YEk9
-         fIfvWtCY0xryY4Ta2vQ+d6X713bvozhhnEFYqLtuuVex6+/b0+LuJLMChJtVxupG/9BF
-         3KbW1guEOUshZNhcUU2FheK5QUg3HXvjnd3Jv1NxNTCytpeAwRjGHP9G1B8FZoWtnI6J
-         JKC9tq7gvHkflwTxH0ov7D86WI5qdn/UG4rxZTzePDlJAFIhGbPfimDiUnnwuXruJW1g
-         ZCcEtDq8f4XLmmy6e97I6anbsj5t95W4bqAVvsimbNcKA/xlyGzBsz6PfXeqQPZOxq39
-         femw==
-X-Gm-Message-State: AOAM5309CxIpZeHz/ytTKyAc/9DItIY4Br/B0yATg/JEk4CKynzC0JTL
-        e1fIwQAB63Qgb6vDPBonMfgInHfd0TmAW+eLkko=
-X-Google-Smtp-Source: ABdhPJyeg/Y2k2Kh3fJCUN2qJd9anY5BtuizAmURtu6JDNx76NA/T6f3mcQX4DsZB1L0wOCadWZupcLkXqXx2M3c2+8=
-X-Received: by 2002:a05:6830:2707:: with SMTP id j7mr14916038otu.37.1624725878591;
- Sat, 26 Jun 2021 09:44:38 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=RjZxnCKisu/yuzm/zETycG8rc5tC3RzprLyQlbTug+k=;
+        b=Isftq1UNErzdesqAEC5Xpl6aw+KheApI5VPBxaacd0pDFZ5gIow9ns7L6D1Uvo6cKG
+         nL3QVSKLtRpfBTKW6Qrl+q7vgIdObvvF8s7FQIcbQq6GvPqSNnvEgWqfICwhJcn/6tYG
+         RYlENqDVpCvt/nT9f8Bp1THsHgGBEGqbthe3KAyFy+KnAwiBfmCQCp3of9rwE9HJUb1r
+         ZRiurocZejtE9Z4GopvXYMZVpN7ojGGYGdIxqGxlFCAcY/NJem1Yc586aTL6gb8GZKv8
+         jo2yBxYgxkplYtyGpkgxv78pJBZxmg3JA8VD4sMSzjHoMf21PFr6EiFlJWP6OMAGPsvg
+         RRKg==
+X-Gm-Message-State: AOAM53386eepEm5CnR07snW7zwT9u+H8t8F6g2Bm3/6O/c5tgLmaDAPH
+        pd6OYU5/2Q3pMMm3ngCu3YXd03M6YbN3rmovj1k=
+X-Google-Smtp-Source: ABdhPJyC5a301nKdQKjA2vzaDvUaVKdwf4Qr5aWApiVCV+yMVGfkYFXsZGAJvjRNQhA8AeUHlFWL/Eit5p59ZFQn3tk=
+X-Received: by 2002:aca:c60c:: with SMTP id w12mr15647925oif.46.1624726359841;
+ Sat, 26 Jun 2021 09:52:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2106260509300.37803@angie.orcam.me.uk> <alpine.DEB.2.21.2106260524430.37803@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2106260524430.37803@angie.orcam.me.uk>
+References: <20210625110419.24503-1-lukas.bulwahn@gmail.com> <20210625110419.24503-4-lukas.bulwahn@gmail.com>
+In-Reply-To: <20210625110419.24503-4-lukas.bulwahn@gmail.com>
 From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Sat, 26 Jun 2021 18:44:27 +0200
-Message-ID: <CAAdtpL6m6zRG7ruYdsjPjbuzuT64ZiBK9tuwcUGEcgkgTfFEmA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] MIPS: Malta: Do not byte-swap accesses to the CBUS UART
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+Date:   Sat, 26 Jun 2021 18:52:28 +0200
+Message-ID: <CAAdtpL6CMAbBPJr3La31Y3AYY48TjLZhDHjKWjUJxXdBS--Xmw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arch: mips: remove dead references
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
+        Tiezhu Yang <yangtiezhu@loongson.cn>, Willy Tarreau <w@1wt.eu>,
+        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jun 26, 2021 at 6:11 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+On Fri, Jun 25, 2021 at 1:05 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
 >
-> Correct big-endian accesses to the CBUS UART, a Malta on-board discrete
-> TI16C550C part wired directly to the system controller's device bus, and
-> do not use byte swapping with the 32-bit accesses to the device.
+> The domain lookup for linux-mips.org fails for quite some time now.
+> Further, the two links:
 >
-> The CBUS is used for devices such as the boot flash memory needed early
-> on in system bootstrap even before PCI has been initialised.  Therefore
-> it uses the system controller's device bus, which follows the endianness
-> set with the CPU, which means no byte-swapping is ever required for data
-> accesses to CBUS, unlike with PCI.
->
-> The CBUS UART uses the UPIO_MEM32 access method, that is the `readl' and
-> `writel' MMIO accessors, which on the MIPS platform imply byte-swapping
-> with PCI systems.  Consequently the wrong byte lane is accessed with the
-> big-endian configuration and the UART is not correctly accessed.
->
-> As it happens the UPIO_MEM32BE access method makes use of the `ioread32'
-> and `iowrite32' MMIO accessors, which still use `readl' and `writel'
-> respectively, however they byte-swap data passed, effectively cancelling
-> swapping done with the accessors themselves and making it suitable for
-> the CBUS UART.
->
-> Make the CBUS UART switch between UPIO_MEM32 and UPIO_MEM32BE then,
-> based on the endianness selected.  With this change in place the device
-> is correctly recognised with big-endian Malta at boot, along with the
-> Super I/O devices behind PCI:
->
-> Serial: 8250/16550 driver, 5 ports, IRQ sharing enabled
-> printk: console [ttyS0] disabled
-> serial8250.0: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-> printk: console [ttyS0] enabled
-> printk: bootconsole [uart8250] disabled
-> serial8250.0: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-> serial8250.0: ttyS2 at MMIO 0x1f000900 (irq = 20, base_baud = 230400) is a 16550A
->
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Fixes: e7c4782f92fc ("[MIPS] Put an end to <asm/serial.h>'s long and annyoing existence")
-> Cc: stable@vger.kernel.org # v2.6.23+
-> ---
-> Changes from v1:
->
-> - Remove console message duplicates from the commit description.
-> ---
->  arch/mips/mti-malta/malta-platform.c |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>   http://decstation.unix-ag.org/
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+https://web.archive.org/web/20061010210936/http://decstation.unix-ag.org/
+
+>   http://www.computer-refuge.org/classiccmp/ftp.digital.com/pub/DEC/TriAdd/
+
+https://web.archive.org/web/20050205114151/ftp.digital.com/pub/DEC/TriAdd/
+
+> refer to old webpages or contain no further technical information.
+
+FWIW the information is still online somewhere.
+
+> Remove all those dead references.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  arch/mips/Kconfig             |  8 +-------
+>  arch/mips/jazz/Kconfig        | 12 +++---------
+>  tools/include/nolibc/nolibc.h |  3 +--
+>  3 files changed, 5 insertions(+), 18 deletions(-)
