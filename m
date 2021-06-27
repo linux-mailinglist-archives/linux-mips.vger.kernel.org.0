@@ -2,114 +2,167 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9C73B522B
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Jun 2021 07:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456E43B526E
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Jun 2021 09:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbhF0FU3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Jun 2021 01:20:29 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:34083 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229472AbhF0FU2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 27 Jun 2021 01:20:28 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A133D58079F;
-        Sun, 27 Jun 2021 01:18:04 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sun, 27 Jun 2021 01:18:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=G
-        wO9YFcvq0p05jwynGkzc5BMfPPFWUI5rALwMlauuEw=; b=Yw7RWUYJ3xyfUlXsN
-        1LD6kZWfY09nctzLxkZ+FL9DfnpOfquMcw8pfphWog+v3MqssQw8panEhZa+Vxi7
-        AUr1VLfoYJThEKCya1a7n0daxYRQPQR73lMqv00LSHh07t/xfrXImA5Hjuo27HvX
-        qpqQOv3WiSU62mnH8trLtrvQ2ri/9xb7ZBTUnQqQzyG7irU1tvQIQh1f19ePi+iG
-        /lp11NhTnC9wca5C3wuZ58tre/xCREcd7p6NhXoAjnBRbTnuEF4LX9fb7gSio+XT
-        2BQhPJ30T03b/LRpKaQLTSkRH8b453A0b9M+l3l7ShTElafFo5ixOWL8EXHexhKx
-        432SA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=GwO9YFcvq0p05jwynGkzc5BMfPPFWUI5rALwMlauu
-        Ew=; b=YLbIOUbXLZc8AqFxAto8j2nVl2G2XqPzrYdxSxjejwDkfP5i1xpEBhkpq
-        pF/2RlVS6Mf5GvSdAfU5MSnfai+iYRGtXSNT3hISzkDNbrPQaxHQ5236aC6kpyT6
-        /uxNziQMhUC2H2lru/k3Z/4BOIsK0iFmvOIDntfej5kocRJm9afLvvze0XRWoxtq
-        /eq4jerAC4AfkHhYQrJan7IRemJC90h0D0Y/6IkxLy58lfLwcwx81wcNT4pMuSCs
-        EK4zqH5KRQRXd/YAKX4/rVkteaWiG5A8PEegB8lrAW7hv63QKVppdCbKxSdKaGma
-        KMOzmFqMJ7KLi4PBpPJxGmOu1DAOA==
-X-ME-Sender: <xms:CwrYYDMOT2sTktKm0aC02IhcXzXeN3Iy9ssRWkmTPRFXLVskaouyVA>
-    <xme:CwrYYN_5ZFAgGOWh39fTTi-P94zdLACrqxI7BAFEp68HsGoXU_QR2P7KeZLj9nmiI
-    yGbX7E2mJ4kB_hwyzQ>
-X-ME-Received: <xmr:CwrYYCQWcaabpvPHMnqg5Jv8bn4gmfm_REPH9u5nYjDgCZy5beAtcn56qTvUdDlDnaEOLA_EQhHwzdIVIrCT3w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeehuddgjeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefuvfhfhffkffgfgggjtgfgsehtke
-    ertddtfeftnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
-    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludeitddvkeffge
-    fgueekjeegfeefteelgffhkeffueetieejgeehhfeuffdvnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
-    hgohgrthdrtghomh
-X-ME-Proxy: <xmx:CwrYYHsxHl7xZJ4Ynn3UMgxpmKQ2bSFGC2E2-8KzSQmGot9T8ZT8Og>
-    <xmx:CwrYYLdX97Zxjxt_Dw7abTEpnrpI9wnPDebZh83jdhfr8rUgalReYQ>
-    <xmx:CwrYYD1fuS8X7tTSjfrUqmIgNFpI5GRh2paFbQOZh0Lca8DdSJVYLg>
-    <xmx:DArYYP6m3sr-N0PUK88ENcRstBYAnVcmV8fnnJVS1eqLdx_EfHBxrg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 27 Jun 2021 01:17:59 -0400 (EDT)
-Subject: Re: [PATCH 9/9] MIPS: Make a alias for pistachio_defconfig
-To:     linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
-        daniel.lezcano@linaro.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20210627045631.2882-1-jiaxun.yang@flygoat.com>
- <20210627045631.2882-10-jiaxun.yang@flygoat.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <1db3e2dd-5874-e1b2-d9b1-da08844edaeb@flygoat.com>
-Date:   Sun, 27 Jun 2021 13:17:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229534AbhF0Hkk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Jun 2021 03:40:40 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:60092 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229519AbhF0Hkj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 27 Jun 2021 03:40:39 -0400
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb0DfKthgFewYAA--.29429S2;
+        Sun, 27 Jun 2021 15:38:07 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] MIPS: Loongson64: Add Loongson-2K1000 reset support
+Date:   Sun, 27 Jun 2021 15:38:06 +0800
+Message-Id: <20210627073806.32564-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-In-Reply-To: <20210627045631.2882-10-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+X-CM-TRANSID: AQAAf9Dxb0DfKthgFewYAA--.29429S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw17Wr1UWrWrAF1UCFWDCFg_yoW5Cw4xpr
+        9xC3WDKFWfuw18ZF1rtFyUtrWUuF9xArsrAFW2gF17G3sxW3s3tws5JFy8tF1kArW7ua4j
+        9rWrGrW8CF4fu3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkab7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r4xMxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jewZ7UUUUU=
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Add power management register operations to support reboot and poweroff.
 
-ÔÚ 2021/6/27 ÏÂÎç12:56, Jiaxun Yang Ð´µÀ:
-> For those who miss the old defconfig, make a alias to generic
-> kernel.
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->   arch/mips/Makefile | 3 +++
->   1 file changed, 3 insertions(+)
->
-> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> index 258234c35a09..9713f8d2fc99 100644
-> --- a/arch/mips/Makefile
-> +++ b/arch/mips/Makefile
-> @@ -563,6 +563,9 @@ sead3micro_defconfig-y		:= micro32r2el_defconfig BOARDS=sead-3
->   legacy_defconfigs		+= xilfpga_defconfig
->   xilfpga_defconfig-y		:= 32r2el_defconfig BOARDS=xilfpga
->   
-> +legacy_defconfigs		+= pistachio_defconfig
-> +xilfpga_defconfig-y		:= 32r2el_defconfig BOARDS=marduk
+Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+---
 
-oops... Typo...
+v1-v2:
+- Add pm block node
 
-Will fix in next reversion.
+Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
 
-Thanks.
+diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+index 569e814def83..929e8ddf86eb 100644
+--- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
++++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+@@ -101,6 +101,14 @@ uart0: serial@1fe00000 {
+ 			no-loopback-test;
+ 		};
+ 
++		pm: power-controller {
++			device_type = "power management";
++			reg = <0 0x1fe0700c 0 0x8>,
++				<0 0x1fe07014 0 0x8>,
++				<0 0x1fe07030 0 0x8>;
++			reg-names = "pm1_sts", "pm1_cnt", "rst_cnt";
++		};
++
+ 		pci@1a000000 {
+ 			compatible = "loongson,ls2k-pci";
+ 			device_type = "pci";
+diff --git a/arch/mips/loongson64/reset.c b/arch/mips/loongson64/reset.c
+index c97bfdc8c922..ea125e925d44 100644
+--- a/arch/mips/loongson64/reset.c
++++ b/arch/mips/loongson64/reset.c
+@@ -10,6 +10,7 @@
+ #include <linux/delay.h>
+ #include <linux/init.h>
+ #include <linux/kexec.h>
++#include <linux/of_address.h>
+ #include <linux/pm.h>
+ #include <linux/slab.h>
+ 
+@@ -20,12 +21,50 @@
+ #include <loongson.h>
+ #include <boot_param.h>
+ 
++static char *pm_reg_name[] = {"pm1_sts", "pm1_cnt", "rst_cnt"};
++
++static void __iomem *get_reg_byname(struct device_node *node, const char *name)
++{
++	int index = of_property_match_string(node, "reg-names", name);
++
++	if (index < 0)
++		return NULL;
++
++	return of_iomap(node, index);
++}
++
++static int  __init loongson_fdt_reset_init(void)
++{
++	struct device_node *np;
++	int i;
++
++	np = of_find_node_by_type(NULL, "power management");
++	if (!np) {
++		pr_info("Failed to get PM node\n");
++		return -ENODEV;
++	}
++
++	for (i = 0; i < sizeof(pm_reg_name)/sizeof(char *); i++) {
++		pm_reg_name[i] = get_reg_byname(np, pm_reg_name[i]);
++		if (!pm_reg_name[i])
++			iounmap(pm_reg_name[i]);
++	}
++
++	of_node_put(np);
++	return 0;
++}
++arch_initcall(loongson_fdt_reset_init);
++
+ static void loongson_restart(char *command)
+ {
++	if ((read_c0_prid() & PRID_IMP_MASK) == PRID_IMP_LOONGSON_64R) {
++		writel(0x1, (void *)pm_reg_name[2]);
++	} else {
++		void (*fw_restart)(void) = (void *)loongson_sysconf.restart_addr;
+ 
+-	void (*fw_restart)(void) = (void *)loongson_sysconf.restart_addr;
++		fw_restart();
++	}
+ 
+-	fw_restart();
+ 	while (1) {
+ 		if (cpu_wait)
+ 			cpu_wait();
+@@ -34,9 +73,18 @@ static void loongson_restart(char *command)
+ 
+ static void loongson_poweroff(void)
+ {
+-	void (*fw_poweroff)(void) = (void *)loongson_sysconf.poweroff_addr;
++	if ((read_c0_prid() & PRID_IMP_MASK) == PRID_IMP_LOONGSON_64R) {
++		/* Clear */
++		writel((readl((void *)pm_reg_name[0]) & 0xffffffff), (void *)pm_reg_name[0]);
++		/* Sleep Enable | Soft Off*/
++		writel(GENMASK(12, 10)|BIT(13), (void *)pm_reg_name[1]);
++	} else {
++
++		void (*fw_poweroff)(void) = (void *)loongson_sysconf.poweroff_addr;
++
++		fw_poweroff();
++	}
+ 
+-	fw_poweroff();
+ 	while (1) {
+ 		if (cpu_wait)
+ 			cpu_wait();
+-- 
+2.31.0
 
-
-- Jiaxun
-
-> +
->   .PHONY: $(legacy_defconfigs)
->   $(legacy_defconfigs):
->   	$(Q)$(MAKE) -f $(srctree)/Makefile $($@-y)
