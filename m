@@ -2,75 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A683B5536
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Jun 2021 23:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2043B55D6
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 01:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbhF0VOo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Jun 2021 17:14:44 -0400
-Received: from smtprelay0212.hostedemail.com ([216.40.44.212]:35754 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231496AbhF0VOo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 27 Jun 2021 17:14:44 -0400
-Received: from omf07.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 0D552182CED2A;
-        Sun, 27 Jun 2021 21:12:18 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id D3A45315D78;
-        Sun, 27 Jun 2021 21:12:15 +0000 (UTC)
-Message-ID: <4c3900ab7d9493e3ce516d3f03ed1de17c1fcb10.camel@perches.com>
-Subject: Re: [PATCH v2 0/3] Remove dead linux-mips.org references
-From:   Joe Perches <joe@perches.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Kurt Martin <kmartin@wavecomp.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Willy Tarreau <w@1wt.eu>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>,
-        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <alpine.DEB.2.21.2106251722470.37803@angie.orcam.me.uk>
-References: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
-         <alpine.DEB.2.21.2106251722470.37803@angie.orcam.me.uk>
-Content-Type: text/plain; charset="ISO-8859-1"
+        id S231735AbhF0XlP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Jun 2021 19:41:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52116 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231491AbhF0XlP (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 27 Jun 2021 19:41:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 92AAE6161E;
+        Sun, 27 Jun 2021 23:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624837130;
+        bh=lenqMCekltDX+AqjNhd4JqLUZdEG+Ux+jyQjI5v5huI=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=jaZVw/TjdAeOh/2jAk4WhKHFhMjAGvUf86jBRnDRkR/jEDNzTsK77UOyarfX89h4V
+         X9DqNoC0n5e35VsFbj8h3BKLdtB93RQSzqOC3Iu+hYohijhD9K9YduwCS0hn/QEIKM
+         6qh876xSLr4e5mPDIM9UfvSzm77vfH+nwcgQEICFGQ2S8vKcqq4ZWmx+feItoTkdNQ
+         XiUNPCQzH/GxiXqJGJB8gOIovctHeWIWy6DOw22pDm/aYvYt2wOydWsgc3brAXU4vr
+         iPJOMG5SVhiW8idUi6G0sfbaLOlbwPv/O5iOwNA4gce9I5Ju19Q14+jRRb+3Q+15KG
+         gTBbmljy7GgoA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Date:   Sat, 26 Jun 2021 16:45:02 -0700
-User-Agent: Evolution 3.40.0-1 
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.45
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: D3A45315D78
-X-Stat-Signature: 51ppnfim499fwps5bzrtzxauy98arc7f
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19Z0wJIIGI4YrqBWx6kzmLHiegdDfERt2s=
-X-HE-Tag: 1624828335-632179
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210627045631.2882-4-jiaxun.yang@flygoat.com>
+References: <20210627045631.2882-1-jiaxun.yang@flygoat.com> <20210627045631.2882-4-jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 3/9] clk: pistachio: Make it selectable for generic MIPS kernel
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
+        daniel.lezcano@linaro.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Date:   Sun, 27 Jun 2021 16:38:49 -0700
+Message-ID: <162483712923.3259633.15640278024587375157@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 2021-06-25 at 17:49 +0200, Maciej W. Rozycki wrote:
-> [Adding Ralf and Kurt to the list of recipients.]
-> 
-> On Fri, 25 Jun 2021, Lukas Bulwahn wrote:
-> 
-> > The domain lookup for linux-mips.org fails for quite some time now. Hence,
-> > webpages, the patchwork instance and Ralf Baechle's email there is not
-> > reachable anymore.
-> 
->  Well, mail forwarding has now been set up for my old LMO address, and so 
-> I believe for Ralf's.  Any other resources remain unavailable.
-> 
-> > In the discussion of that patch series, Kurt Martin promised to get
-> > linux-mips.org back online. Four months have now passed and the webpage is
-> > still not back online. So, I suggest to remove these dead references.
-> > Probably, we do not lose much if the linux-mips.org webpage never comes back.
-> 
->  While most resources have been migrated I think the wiki was unique and 
-> valuable.  Perhaps we could preserve read-only references to archive.org 
-> dumps?  It's not clear to me what our policy is here though, if any.
+Quoting Jiaxun Yang (2021-06-26 21:56:25)
+> diff --git a/drivers/clk/pistachio/Kconfig b/drivers/clk/pistachio/Kconfig
+> new file mode 100644
+> index 000000000000..efb7a7f45259
+> --- /dev/null
+> +++ b/drivers/clk/pistachio/Kconfig
+> @@ -0,0 +1,8 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +config COMMON_CLK_PISTACHIO
+> +       bool "Support for IMG Pistachio SoC clock controllers"
+> +       depends on MIPS
 
-Perhaps better to wholesale copy the content and keep it
-around somewhere else like lore.kernel.org.
+Is anything MIPS specific? Or can this be=20
+
+	depends on MIPS || COMPILE_TEST
 
 
+> +       help
+> +         Support for the IMG Pistachio SoC clock controller.
+> +         Say Y if you want to include clock support.
+> \ No newline at end of file
+> --=20
+> 2.32.0
+>
