@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 946573B6842
+	by mail.lfdr.de (Postfix) with ESMTP id 409633B6841
 	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 20:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234472AbhF1SXZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 14:23:25 -0400
-Received: from out28-49.mail.aliyun.com ([115.124.28.49]:50243 "EHLO
-        out28-49.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233351AbhF1SXU (ORCPT
+        id S234300AbhF1SXY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 14:23:24 -0400
+Received: from out28-195.mail.aliyun.com ([115.124.28.195]:58649 "EHLO
+        out28-195.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233444AbhF1SXU (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 14:23:20 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09155044|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0147751-0.000601563-0.984623;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KZOO9TY_1624904444;
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09420402|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00745146-0.000210352-0.992338;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047213;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KZOO9TY_1624904444;
 Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KZOO9TY_1624904444)
           by smtp.aliyun-inc.com(10.147.42.253);
-          Tue, 29 Jun 2021 02:20:49 +0800
+          Tue, 29 Jun 2021 02:20:50 +0800
 From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>
 To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org
@@ -24,10 +24,12 @@ Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
         aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
         sihui.liu@ingenic.com, jun.jiang@ingenic.com,
         sernia.zhou@foxmail.com
-Subject: [PATCH v5 00/11] Add new clocks and fix bugs for Ingenic SoCs.
-Date:   Tue, 29 Jun 2021 02:20:33 +0800
-Message-Id: <1624904444-2618-1-git-send-email-zhouyanjie@wanyeetech.com>
+Subject: [PATCH v5 01/11] clk: JZ4780: Add function for disable the second core.
+Date:   Tue, 29 Jun 2021 02:20:34 +0800
+Message-Id: <1624904444-2618-2-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1624904444-2618-1-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1624904444-2618-1-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -35,50 +37,63 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-v4->v5:
-1.modify the CGU PLL correlation code to make it compatible with I2S PLL.
-2.Change X1000's I2S clock to CGU_CLK_PLL as Paul Cercueil's suggestion.
-3.Add documentation for JZ4775 and X2000 bindings.
-4.Add JZ4775 and X2000 clock bindings.
-5.Add CGU driver for JZ4775 and X2000.
+Add "jz4780_core1_disable()" for disable the second core of JZ4780,
+prepare for later commits.
 
-周琰杰 (Zhou Yanjie) (11):
-  clk: JZ4780: Add function for disable the second core.
-  clk: Ingenic: Adjust cgu code to make it compatible with I2S PLL.
-  dt-bindings: clock: Add missing clocks for Ingenic SoCs.
-  clk: Ingenic: Fix problem of MAC clock in Ingenic X1000 and X1830.
-  clk: Ingenic: Add missing clocks for Ingenic SoCs.
-  clk: Ingenic: Clean up and reformat the code.
-  dt-bindings: clock: Add documentation for JZ4775 and X2000 bindings.
-  dt-bindings: clock: Add JZ4775 clock bindings.
-  dt-bindings: clock: Add X2000 clock bindings.
-  clk: Ingenic: Add CGU driver for JZ4775.
-  clk: Ingenic: Add CGU driver for X2000.
+Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+---
 
- .../devicetree/bindings/clock/ingenic,cgu.yaml     |   4 +
- drivers/clk/ingenic/Kconfig                        |  20 +
- drivers/clk/ingenic/Makefile                       |   2 +
- drivers/clk/ingenic/cgu.c                          | 118 +++-
- drivers/clk/ingenic/cgu.h                          |   1 +
- drivers/clk/ingenic/jz4725b-cgu.c                  |  48 +-
- drivers/clk/ingenic/jz4740-cgu.c                   |  48 +-
- drivers/clk/ingenic/jz4760-cgu.c                   | 106 ++-
- drivers/clk/ingenic/jz4770-cgu.c                   |  83 +--
- drivers/clk/ingenic/jz4775-cgu.c                   | 571 +++++++++++++++
- drivers/clk/ingenic/jz4780-cgu.c                   | 148 ++--
- drivers/clk/ingenic/x1000-cgu.c                    | 209 ++++--
- drivers/clk/ingenic/x1830-cgu.c                    | 209 ++++--
- drivers/clk/ingenic/x2000-cgu.c                    | 783 +++++++++++++++++++++
- include/dt-bindings/clock/jz4775-cgu.h             |  59 ++
- include/dt-bindings/clock/x1000-cgu.h              |   5 +
- include/dt-bindings/clock/x1830-cgu.h              |   5 +
- include/dt-bindings/clock/x2000-cgu.h              |  88 +++
- 18 files changed, 2189 insertions(+), 318 deletions(-)
- create mode 100644 drivers/clk/ingenic/jz4775-cgu.c
- create mode 100644 drivers/clk/ingenic/x2000-cgu.c
- create mode 100644 include/dt-bindings/clock/jz4775-cgu.h
- create mode 100644 include/dt-bindings/clock/x2000-cgu.h
+Notes:
+    v1->v2:
+    Add Paul Cercueil's Reviewed-by.
+    
+    v2->v3:
+    No change.
+    
+    v3->v4:
+    No change.
+    
+    v4->v5:
+    No change.
 
+ drivers/clk/ingenic/jz4780-cgu.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/drivers/clk/ingenic/jz4780-cgu.c b/drivers/clk/ingenic/jz4780-cgu.c
+index 0268d23..dcca74e 100644
+--- a/drivers/clk/ingenic/jz4780-cgu.c
++++ b/drivers/clk/ingenic/jz4780-cgu.c
+@@ -252,8 +252,29 @@ static int jz4780_core1_enable(struct clk_hw *hw)
+ 	return 0;
+ }
+ 
++static void jz4780_core1_disable(struct clk_hw *hw)
++{
++	struct ingenic_clk *ingenic_clk = to_ingenic_clk(hw);
++	struct ingenic_cgu *cgu = ingenic_clk->cgu;
++	unsigned long flags;
++	u32 lcr, clkgr1;
++
++	spin_lock_irqsave(&cgu->lock, flags);
++
++	lcr = readl(cgu->base + CGU_REG_LCR);
++	lcr |= LCR_PD_SCPU;
++	writel(lcr, cgu->base + CGU_REG_LCR);
++
++	clkgr1 = readl(cgu->base + CGU_REG_CLKGR1);
++	clkgr1 |= CLKGR1_CORE1;
++	writel(clkgr1, cgu->base + CGU_REG_CLKGR1);
++
++	spin_unlock_irqrestore(&cgu->lock, flags);
++}
++
+ static const struct clk_ops jz4780_core1_ops = {
+ 	.enable = jz4780_core1_enable,
++	.disable = jz4780_core1_disable,
+ };
+ 
+ static const s8 pll_od_encoding[16] = {
 -- 
 2.7.4
 
