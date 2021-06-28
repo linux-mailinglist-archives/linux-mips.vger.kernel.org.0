@@ -2,102 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3DD3B5C5D
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 12:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3B53B623C
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 16:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232609AbhF1KUS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 06:20:18 -0400
-Received: from mail-ua1-f43.google.com ([209.85.222.43]:45784 "EHLO
-        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbhF1KUR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 06:20:17 -0400
-Received: by mail-ua1-f43.google.com with SMTP id c20so6751598uar.12;
-        Mon, 28 Jun 2021 03:17:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pr9HGl4FqzQBvqaKGGPpCfCz3bY0d+qLj1EnCPHyL5w=;
-        b=GG/8FZgTQ4sb8MR9WkCWQpfEyY88VrqJ5OijB8p0S/lcbLVLcMRKJEio4KhvQO692w
-         GVcWYJ+edxkHMM8bwRf8OFulFcCQCHn4BYyBafG6b7XfWP5JgBg6TyxtTYHYLmvR3F5n
-         ykE4+h5wXLqtt3AUEE9hoDSYKVdljWjqtmCN0t1zFKw0z0+JCo7f9SHbdZvVURuByQ8E
-         B71RqoSP5hyjAUWATBoZweiiY0PfyF4Qx1S2u4YEDIM4rybmQa0f+/JvLMwBI0xM/94S
-         /S/JPLo5ZOV6lJ0ZcnsT36ZCp/pDrXbydP8RBxbTpknYYEigOTHOYnO6AO8vzqztpmZn
-         PBTg==
-X-Gm-Message-State: AOAM5330ubTFLMlWSHlEYiE52DBi3ADM1nmwm0hlZv8uiUS69EN0MTgV
-        ZLwUe39pC4ipoAHJaUrUHSLMSeFPF36tCGNyzFI=
-X-Google-Smtp-Source: ABdhPJyqF1aSJLgvFbmkLMYCnsnTPHiPUAsGhIVM99tOcWI2ZbGEjju2EsKV4xbyE6jUD9q959uT/dX1hb0S6FovsPA=
-X-Received: by 2002:ab0:1e4c:: with SMTP id n12mr19573056uak.58.1624875470758;
- Mon, 28 Jun 2021 03:17:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210625125902.1162428-7-geert@linux-m68k.org> <202106260719.fU3KdM6r-lkp@intel.com>
-In-Reply-To: <202106260719.fU3KdM6r-lkp@intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Jun 2021 12:17:39 +0200
-Message-ID: <CAMuHMdVf=9XQ49BJ3VcpfJAS1SmEpopqUhkYGqp4fmP-XMBJwg@mail.gmail.com>
-Subject: Re: [PATCH v2 06/18] auxdisplay: Extract character line display core support
-To:     kernel test robot <lkp@intel.com>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
+        id S234487AbhF1On2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 10:43:28 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:59590 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234490AbhF1Ol0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 28 Jun 2021 10:41:26 -0400
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb0L93tlgmsoZAA--.8933S2;
+        Mon, 28 Jun 2021 22:38:53 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, kbuild-all@lists.01.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] MIPS: Loongson-3: Add Loongson-2K1000 reset platform driver
+Date:   Mon, 28 Jun 2021 22:38:51 +0800
+Message-Id: <20210628143852.11504-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.31.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxb0L93tlgmsoZAA--.8933S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFy8WrWDXw4kCw17AF15twb_yoW5CryUpF
+        Z8Gw43CrWrG3W7Kw4rtFyUuFW5Z3Z3tFWjkFW2v345Z3sxWFZ8Jws8tFyFyrnrGrW7AFW3
+        ZFsYgFW8CF4ru3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_Xryl42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07boD7-UUUUU=
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Kernel Test Robot,
+Add power management register operations to support reboot and poweroff.
 
-On Sat, Jun 26, 2021 at 1:36 AM kernel test robot <lkp@intel.com> wrote:
-> I love your patch! Yet something to improve:
->
-> [auto build test ERROR on robh/for-next]
-> [also build test ERROR on staging/staging-testing linus/master v5.13-rc7 next-20210625]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Geert-Uytterhoeven/auxdisplay-ht16k33-Add-character-display-support/20210625-210014
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> config: powerpc-allmodconfig (attached as .config)
-> compiler: powerpc64-linux-gcc (GCC) 9.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/5505aedee505055e2fe16a718203e24fd8519e2a
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Geert-Uytterhoeven/auxdisplay-ht16k33-Add-character-display-support/20210625-210014
->         git checkout 5505aedee505055e2fe16a718203e24fd8519e2a
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=powerpc
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
->
-> >> ERROR: modpost: ".kernfs_create_link" [drivers/auxdisplay/img-ascii-lcd.ko] undefined!
+Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+---
 
-Thanks a lot!
+v2-v3:
+-make reset support as a driver
 
-This helped me finding compat_only_sysfs_link_entry_to_kobj(), which
-I hadn't found before, and which does an even better job than my custom
-sysfs_create_file_link() implementation.
+Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+---
+ drivers/platform/mips/Kconfig      |  6 +++
+ drivers/platform/mips/Makefile     |  1 +
+ drivers/platform/mips/ls2k-reset.c | 60 ++++++++++++++++++++++++++++++
+ 3 files changed, 67 insertions(+)
+ create mode 100644 drivers/platform/mips/ls2k-reset.c
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/platform/mips/Kconfig b/drivers/platform/mips/Kconfig
+index 8ac149173c64..d421e1482395 100644
+--- a/drivers/platform/mips/Kconfig
++++ b/drivers/platform/mips/Kconfig
+@@ -30,4 +30,10 @@ config RS780E_ACPI
+ 	help
+ 	  Loongson RS780E PCH ACPI Controller driver.
+ 
++config LS2K_RESET
++	bool "Loongson-2K1000 Reset Controller"
++	depends on MACH_LOONGSON64 || COMPILE_TEST
++	help
++	  Loongson-2K1000 Reset Controller driver.
++
+ endif # MIPS_PLATFORM_DEVICES
+diff --git a/drivers/platform/mips/Makefile b/drivers/platform/mips/Makefile
+index 178149098777..4c71444e453a 100644
+--- a/drivers/platform/mips/Makefile
++++ b/drivers/platform/mips/Makefile
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-$(CONFIG_CPU_HWMON) += cpu_hwmon.o
+ obj-$(CONFIG_RS780E_ACPI) += rs780e-acpi.o
++obj-$(CONFIG_LS2K_RESET) += ls2k-reset.o
+diff --git a/drivers/platform/mips/ls2k-reset.c b/drivers/platform/mips/ls2k-reset.c
+new file mode 100644
+index 000000000000..c5f073c82c5e
+--- /dev/null
++++ b/drivers/platform/mips/ls2k-reset.c
+@@ -0,0 +1,60 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ *  Copyright (C) 2021, Qing Zhang <zhangqing@loongson.cn>
++ *  Loongson-2K1000 reset support
++ */
++
++#include <linux/of_address.h>
++#include <linux/pm.h>
++#include <asm/reboot.h>
++
++static char *pm_reg_name[] = {"pm1_sts", "pm1_cnt", "rst_cnt"};
++
++static void __iomem *get_reg_byname(struct device_node *node, const char *name)
++{
++	int index = of_property_match_string(node, "reg-names", name);
++
++	if (index < 0)
++		return NULL;
++
++	return of_iomap(node, index);
++}
++
++static void ls2k_restart(char *command)
++{
++	writel(0x1, (void *)pm_reg_name[2]);
++}
++
++static void ls2k_poweroff(void)
++{
++	/* Clear */
++	writel((readl((void *)pm_reg_name[0]) & 0xffffffff), (void *)pm_reg_name[0]);
++	/* Sleep Enable | Soft Off*/
++	writel(GENMASK(12, 10)|BIT(13), (void *)pm_reg_name[1]);
++}
++
++static int ls2k_reset_init(void)
++{
++	struct device_node *np;
++	int i;
++
++	np = of_find_node_by_type(NULL, "power management");
++	if (!np) {
++		pr_info("Failed to get PM node\n");
++		return -ENODEV;
++	}
++
++	for (i = 0; i < sizeof(pm_reg_name)/sizeof(char *); i++) {
++		pm_reg_name[i] = get_reg_byname(np, pm_reg_name[i]);
++		if (!pm_reg_name[i])
++			iounmap(pm_reg_name[i]);
++	}
++
++	_machine_restart = ls2k_restart;
++	pm_power_off = ls2k_poweroff;
++
++	of_node_put(np);
++	return 0;
++}
++
++arch_initcall(ls2k_reset_init);
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.31.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
