@@ -2,67 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 437513B5875
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 06:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9266B3B58BC
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 07:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbhF1Et3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 28 Jun 2021 00:49:29 -0400
-Received: from out28-121.mail.aliyun.com ([115.124.28.121]:42793 "EHLO
-        out28-121.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbhF1Et2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 00:49:28 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1227538|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.00527116-0.00049097-0.994238;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047208;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.KZ3-RCe_1624855620;
-Received: from zhouyanjie-virtual-machine(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KZ3-RCe_1624855620)
-          by smtp.aliyun-inc.com(10.147.44.118);
-          Mon, 28 Jun 2021 12:47:01 +0800
-Date:   Mon, 28 Jun 2021 12:46:57 +0800
-From:   =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     mturquette@baylibre.com, paul@crapouillou.net, robh+dt@kernel.org,
-        tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com
-Subject: Re: [PATCH v4 2/5] dt-bindings: clock: Add documentation for MAC
- PHY control bindings.
-Message-ID: <20210628124657.4a586b03@zhouyanjie-virtual-machine>
-In-Reply-To: <162484872210.2516444.13185593951785977784@swboyd.mtv.corp.google.com>
-References: <1624688321-69131-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1624688321-69131-3-git-send-email-zhouyanjie@wanyeetech.com>
-        <162484872210.2516444.13185593951785977784@swboyd.mtv.corp.google.com>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
+        id S230366AbhF1Fue (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 01:50:34 -0400
+Received: from lucky1.263xmail.com ([211.157.147.130]:49548 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229692AbhF1Fue (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 01:50:34 -0400
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 76E23D5D06;
+        Mon, 28 Jun 2021 13:47:59 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by smtp.263.net (postfix) whith ESMTP id P12363T139709984536320S1624859260300161_;
+        Mon, 28 Jun 2021 13:48:00 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <4742e892832fb92502ccda9ba712ab69>
+X-RL-SENDER: zhanglianjie@uniontech.com
+X-SENDER: zhanglianjie@uniontech.com
+X-LOGIN-NAME: zhanglianjie@uniontech.com
+X-FST-TO: jiaxun.yang@flygoat.com
+X-RCPT-COUNT: 6
+X-SENDER-IP: 58.240.82.166
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   zhanglianjie <zhanglianjie@uniontech.com>
+To:     jiaxun.yang@flygoat.com, chenhuacai@kernel.org,
+        tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhanglianjie <zhanglianjie@uniontech.com>
+Subject: [PATCH v2] mm: Fix the problem of mips architecture Oops
+Date:   Mon, 28 Jun 2021 13:47:38 +0800
+Message-Id: <20210628054738.10964-1-zhanglianjie@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Stephen,
+The cause of the problem is as follows:
+1. when cat /sys/devices/system/memory/memory0/valid_zones,
+   test_pages_in_a_zone() will be called.
+2. test_pages_in_a_zone() finds the zone according to stat_pfn = 0.
+   The smallest pfn of the numa node in the mips architecture is 128,
+   and the page corresponding to the previous 0~127 pfn is not
+   initialized (page->flags is 0xFFFFFFFF)
+3. The nid and zonenum obtained using page_zone(pfn_to_page(0)) are out
+   of bounds in the corresponding array,
+   &NODE_DATA(page_to_nid(page))->node_zones[page_zonenum(page)],
+   access to the out-of-bounds zone member variables appear abnormal,
+   resulting in Oops.
+Therefore, it is necessary to keep the page between 0 and the minimum
+pfn to prevent Oops from appearing.
 
-于 Sun, 27 Jun 2021 19:52:02 -0700
-Stephen Boyd <sboyd@kernel.org> 写道:
+Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
+---
+ arch/mips/loongson64/numa.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> Quoting 周琰杰 (Zhou Yanjie) (2021-06-25 23:18:38)
-> > Update the CGU binding documentation, add mac-phy-ctrl as a
-> > pattern property.
-> > 
-> > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> > Acked-by: Paul Cercueil <paul@crapouillou.net>
-> > ---  
-> 
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
-> 
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index fa9b4a487a47..dba9e6f17b9e 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -129,6 +129,9 @@ static void __init node_mem_init(unsigned int node)
+ 		if (node_end_pfn(0) >= (0xffffffff >> PAGE_SHIFT))
+ 			memblock_reserve((node_addrspace_offset | 0xfe000000),
+ 					 32 << 20);
++
++		/* Reserver pfn range 0~node[0]->node_start_pfn */
++		memblock_reserve(0, PAGE_SIZE * start_pfn);
+ 	}
+ }
 
-Thanks!
+--
+2.20.1
 
-> Would also be good to add it to the example.
 
-Unfortunately, mac-phy-ctrl only appeared after JZ4775 (include JZ4775),
-but now the CGU driver of JZ4775 has not been merged into the mainline.
-My plan is to wait for the CGU driver of JZ4775 to be merged into the
-mainline and then add a new example based on JZ4775 :)
 
-Thanks and best regards!
