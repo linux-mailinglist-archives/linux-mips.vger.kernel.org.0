@@ -2,117 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F0B3B5674
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 03:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 155843B568D
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 03:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbhF1BI5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 27 Jun 2021 21:08:57 -0400
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:33027 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231706AbhF1BI4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 27 Jun 2021 21:08:56 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id DF2062B009B0;
-        Sun, 27 Jun 2021 21:06:30 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 27 Jun 2021 21:06:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=P
-        RaswZ5qlI2jc+vhwIg6RbL8e19UYG11rnfWNNUN5Ww=; b=rtQqygzsVWIKTM2Wz
-        nbuW2cVd4BkWO+d+ygZx1wQmuHM40AM87yZ+im/mRkIP3Qqb3Qi7ZruE1VpFzflN
-        tOqNi3bkH4BaHixbYOprtxkwU3hPRxJX2S0rVlw0MiAVMKvfWWMVWEzk+xorXqln
-        w+JaXqSm4A2yOTu0LWZY+kjUrM1wGmxPtlNXREp9LoXRHW9qK2MfYAoeVYkccKyf
-        PoL81hG4QuWSjAk6xmx/j3MBOvMY9NRXa9dkjr4pw7hOnQ4riGsReDEMLv8NG9iX
-        D31qD545RTGEK2wFlGXXQlOGpExl88oh2jOJ/ro0WiUCF5n8r2TIpMmJ7P8q4juh
-        DQVsw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=PRaswZ5qlI2jc+vhwIg6RbL8e19UYG11rnfWNNUN5
-        Ww=; b=YhAaq37YXqoddC48WCc2HRI74KjeXC9Aorc+wM7n7h+r1EARlSTPsHc9q
-        nRzg1HiB9ZYD7YRTwqP3Hb7j9vMGqpufBykHcZBym5vqS47w7GBYIf5EeCdNOdH9
-        LWzcHtoOm+usjGvfGGD523HUU912K15h2pM3AKqp6SUextoSrGe/jC0HPAPruBD9
-        YsKIfpeWTpZe9VSLbLvvHREF1lUa8rxdv398bjGDUGt9Hp06tgatYorngH3kqznQ
-        28GL5FNR8QGXr4qLA24oH3CSxkN0shRYUFwXQHFXzavv5J0c1r0zZdPpEAgRmuZ2
-        SZrqjSjq/jzvIDwRCrkWUfrU3Dj1Q==
-X-ME-Sender: <xms:lSDZYGvriqTvXG3CrplKdvcKu2uyywvAHxb-f3Uhk91xlUL6AK1vTw>
-    <xme:lSDZYLd6QvdmJW5F4Ldy5_n3_EBQTVqxSXFCyzDkuNFAEH2uH0efUahRuNbOA5eun
-    zO4Ueu19nDheelbiPQ>
-X-ME-Received: <xmr:lSDZYBwCo8uePpYDkaG2R4OzF_sDQwA6eHFYi5hPAq9qgQD-gabLvwBrA1PKoHoG0qwpQ8j2QoZ2C4h_g-da_A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeehfedggedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeeihffghfeikedugeejvefgffevgeevgeehfffhudeiieffffev
-    ffeugeevfefgfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:lSDZYBN6AKcIptkpjKqi-N-KsPj7ml_X6Oq02BikkZH0AgSRo1OcTg>
-    <xmx:lSDZYG_QqMifRz3vMX8KD5A5ROHC4C3j_kypzwmU6cSX-W3JuvWy9w>
-    <xmx:lSDZYJUVXwTZBVtyASTpLZw5BseZlJyHUWbb8A8Y3WgtYhl0oRC8ow>
-    <xmx:liDZYH1cMOcmwy2L0U6wPT_c8VAsjp0DaKUTxZ9DaAlz5S7MBiZPZSpdaDg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 27 Jun 2021 21:06:25 -0400 (EDT)
-Subject: Re: [PATCH 3/9] clk: pistachio: Make it selectable for generic MIPS
- kernel
-To:     Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
-        daniel.lezcano@linaro.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-References: <20210627045631.2882-1-jiaxun.yang@flygoat.com>
- <20210627045631.2882-4-jiaxun.yang@flygoat.com>
- <162483712923.3259633.15640278024587375157@swboyd.mtv.corp.google.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <45a330c0-7b4d-d569-51eb-3eac8f53512a@flygoat.com>
-Date:   Mon, 28 Jun 2021 09:06:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231854AbhF1BQ1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 27 Jun 2021 21:16:27 -0400
+Received: from regular1.263xmail.com ([211.150.70.195]:41392 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231726AbhF1BQ1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 27 Jun 2021 21:16:27 -0400
+X-Greylist: delayed 392 seconds by postgrey-1.27 at vger.kernel.org; Sun, 27 Jun 2021 21:16:26 EDT
+Received: from localhost (unknown [192.168.167.235])
+        by regular1.263xmail.com (Postfix) with ESMTP id 4B4051CAC;
+        Mon, 28 Jun 2021 09:07:15 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ABS-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from [10.4.23.46] (unknown [58.240.82.166])
+        by smtp.263.net (postfix) whith ESMTP id P5175T139827079014144S1624842434919731_;
+        Mon, 28 Jun 2021 09:07:15 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <7be08a7aac80ae91b5dc06d0e1b7a40f>
+X-RL-SENDER: zhanglianjie@uniontech.com
+X-SENDER: zhanglianjie@uniontech.com
+X-LOGIN-NAME: zhanglianjie@uniontech.com
+X-FST-TO: tangyouling@loongson.cn
+X-RCPT-COUNT: 4
+X-SENDER-IP: 58.240.82.166
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+Subject: Re: [PATCH] mm: Fix the problem of mips architecture Oops
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        tangyouling@loongson.cn
+References: <20210624032212.24769-1-zhanglianjie@uniontech.com>
+ <20210625133909.GA2565@alpha.franken.de>
+From:   zhanglianjie <zhanglianjie@uniontech.com>
+Message-ID: <37efbf00-d4c8-b830-a1b6-9f90d990f4e4@uniontech.com>
+Date:   Mon, 28 Jun 2021 09:07:14 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <162483712923.3259633.15640278024587375157@swboyd.mtv.corp.google.com>
+In-Reply-To: <20210625133909.GA2565@alpha.franken.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-在 2021/6/28 上午7:38, Stephen Boyd 写道:
-> Quoting Jiaxun Yang (2021-06-26 21:56:25)
->> diff --git a/drivers/clk/pistachio/Kconfig b/drivers/clk/pistachio/Kconfig
->> new file mode 100644
->> index 000000000000..efb7a7f45259
->> --- /dev/null
->> +++ b/drivers/clk/pistachio/Kconfig
->> @@ -0,0 +1,8 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +config COMMON_CLK_PISTACHIO
->> +       bool "Support for IMG Pistachio SoC clock controllers"
->> +       depends on MIPS
-> Is anything MIPS specific? Or can this be
->
-> 	depends on MIPS || COMPILE_TEST
 
-No there are nothing MIPS specific.
-
-Will fix in next revision.
-
-Thanks.
-
-- Jiaxun
-
->
->
->> +       help
->> +         Support for the IMG Pistachio SoC clock controller.
->> +         Say Y if you want to include clock support.
->> \ No newline at end of file
->> -- 
->> 2.32.0
+On 2021-06-25 21:39, Thomas Bogendoerfer wrote:
+> On Thu, Jun 24, 2021 at 11:22:12AM +0800, zhanglianjie wrote:
+>> The cause of the problem is as follows:
+>> 1. when cat /sys/devices/system/memory/memory0/valid_zones,
+>>     test_pages_in_a_zone() will be called.
+>> 2. test_pages_in_a_zone() finds the zone according to stat_pfn = 0.
+>>     The smallest pfn of the numa node in the mips architecture is 128,
+>>     and the page corresponding to the previous 0~127 pfn is not
+>>     initialized (page->flags is 0xFFFFFFFF)
+>> 3. The nid and zonenum obtained using page_zone(pfn_to_page(0)) are out
+>>     of bounds in the corresponding array,
+>>     &NODE_DATA(page_to_nid(page))->node_zones[page_zonenum(page)],
+>>     access to the out-of-bounds zone member variables appear abnormal,
+>>     resulting in Oops.
+>> Therefore, it is necessary to keep the page between 0 and the minimum
+>> pfn to prevent Oops from appearing.
 >>
+>> Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
+>> ---
+>>   arch/mips/kernel/setup.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+>> index 23a140327a0b..f1da2b2ba5e9 100644
+>> --- a/arch/mips/kernel/setup.c
+>> +++ b/arch/mips/kernel/setup.c
+>> @@ -653,6 +653,8 @@ static void __init arch_mem_init(char **cmdline_p)
+>>   	 */
+>>   	memblock_set_current_limit(PFN_PHYS(max_low_pfn));
+>>
+>> +	memblock_reserve(0, PAGE_SIZE * NODE_DATA(0)->node_start_pfn);
+>> +
+> 
+> which platform needs this ? This look it should be better fixed in
+> the platform memory registration code.
+> 
+> Thomas.
+> 
+
+I have a problem on the loogson platform.
+
+-- 
+Regards,
+Zhang Lianjie
+
+
