@@ -2,87 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D24DC3B5B03
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 11:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5153B5B1F
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 11:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbhF1JOu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 05:14:50 -0400
-Received: from lucky1.263xmail.com ([211.157.147.133]:53150 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232284AbhF1JOt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 05:14:49 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by lucky1.263xmail.com (Postfix) with ESMTP id CBD6CD569E;
-        Mon, 28 Jun 2021 17:12:17 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by smtp.263.net (postfix) whith ESMTP id P5175T139828564965120S1624871521469442_;
-        Mon, 28 Jun 2021 17:12:06 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <8396d42632416c46c702a179716084dd>
-X-RL-SENDER: zhanglianjie@uniontech.com
-X-SENDER: zhanglianjie@uniontech.com
-X-LOGIN-NAME: zhanglianjie@uniontech.com
-X-FST-TO: jiaxun.yang@flygoat.com
-X-RCPT-COUNT: 6
-X-SENDER-IP: 58.240.82.166
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   zhanglianjie <zhanglianjie@uniontech.com>
-To:     jiaxun.yang@flygoat.com, chenhuacai@kernel.org,
-        tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanglianjie <zhanglianjie@uniontech.com>
-Subject: [PATCH v3] mm: Fix the problem of mips architecture Oops
-Date:   Mon, 28 Jun 2021 17:11:05 +0800
-Message-Id: <20210628091105.27641-1-zhanglianjie@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        id S232353AbhF1JXn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 05:23:43 -0400
+Received: from mail-ua1-f44.google.com ([209.85.222.44]:43673 "EHLO
+        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230256AbhF1JXl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 05:23:41 -0400
+Received: by mail-ua1-f44.google.com with SMTP id f1so6698323uaj.10;
+        Mon, 28 Jun 2021 02:21:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Nz4gBHNnVTKqYWPORJVI9vqQQJHDi/JvYhL68Opd7n4=;
+        b=IvFgFcalWBL7x6esMAIgxvDcOyn1d0HYuP8EfBdK6RZPIOq4ZtueVwcwyx8ir89Buw
+         vH6VCkxDGeVUzpwsSNTumMx9gebCAPQWbrpRzUB5tXMh1vqT5zNRYMRb3U64GlkMPNm2
+         JAGCpX1Yfri1xdRCIHb7BwZDW+5clm/AaQXGQC2fjHs0vnX43NUA6W4BeHY0C7vFQQAL
+         Sx8eQGkTogPRK49aBX/b8ChiuS57AiVLM64iC351u7Gej0uEdJyfQ1Pk/bl0gGXHwbwg
+         /l4RtMOTcsd3Ee8h42vyEaqvOplG/8haiWjCejltmMuPeu5lr3J/5IVoj9POZuQO2Lo/
+         OofQ==
+X-Gm-Message-State: AOAM530HFH6SR2VB4xGCyWNhcSTW47UhPWFBvfvAkws10WtsFML67DiO
+        kRgTmVW82t9qVm2YjVHeF/Y+ThG2ULTzbFm8VklD3FUwjJvpVQ==
+X-Google-Smtp-Source: ABdhPJxMSZ00u8nhN9dBzbg8ZSuzKnronkfo2nq+w8WeuwJk4V1l7/qdW7ZjN8RF8UMjOi8X44C61rRdzsx6XQG8kRo=
+X-Received: by 2002:ab0:70b3:: with SMTP id q19mr19594260ual.2.1624872075339;
+ Mon, 28 Jun 2021 02:21:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210625125902.1162428-1-geert@linux-m68k.org>
+ <20210625125902.1162428-19-geert@linux-m68k.org> <20210625223916.7e00e710@thinkpad>
+In-Reply-To: <20210625223916.7e00e710@thinkpad>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Jun 2021 11:21:04 +0200
+Message-ID: <CAMuHMdV5fywjF63MqE_SqfumwN3EY=jBTEiMfqbjFO12c_nj0Q@mail.gmail.com>
+Subject: Re: [PATCH v2 18/18] auxdisplay: ht16k33: Add segment display LED support
+To:     Marek Behun <marek.behun@nic.cz>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The cause of the problem is as follows:
-1. when cat /sys/devices/system/memory/memory0/valid_zones,
-   test_pages_in_a_zone() will be called.
-2. test_pages_in_a_zone() finds the zone according to stat_pfn = 0.
-   The smallest pfn of the numa node in the mips architecture is 128,
-   and the page corresponding to the previous 0~127 pfn is not
-   initialized (page->flags is 0xFFFFFFFF)
-3. The nid and zonenum obtained using page_zone(pfn_to_page(0)) are out
-   of bounds in the corresponding array,
-   &NODE_DATA(page_to_nid(page))->node_zones[page_zonenum(page)],
-   access to the out-of-bounds zone member variables appear abnormal,
-   resulting in Oops.
-Therefore, it is necessary to keep the page between 0 and the minimum
-pfn to prevent Oops from appearing.
+Hi Marek,
 
-Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
----
- arch/mips/loongson64/numa.c | 3 +++
- 1 file changed, 3 insertions(+)
+On Fri, Jun 25, 2021 at 10:39 PM Marek Behun <marek.behun@nic.cz> wrote:
+> On Fri, 25 Jun 2021 14:59:02 +0200
+> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> > Instantiate a single LED for a segment display.  This allows the user to
+> > control display brightness and blinking through the LED class API and
+> > triggers, and exposes the display color.
+> > The LED will be named "auxdisplay:<color>:backlight".
+>
+> What if there are multiple "auxdisplay"s ?
 
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index fa9b4a487a47..e8e3e48c5333 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -129,6 +129,9 @@ static void __init node_mem_init(unsigned int node)
- 		if (node_end_pfn(0) >= (0xffffffff >> PAGE_SHIFT))
- 			memblock_reserve((node_addrspace_offset | 0xfe000000),
- 					 32 << 20);
-+
-+		/* Reserve pfn range 0~node[0]->node_start_pfn */
-+		memblock_reserve(0, PAGE_SIZE * start_pfn);
- 	}
- }
+I understand the LED core will just add a suffix on a name collision.
 
---
-2.20.1
+> Doesn't this subsystem have IDs? So that you can use auxdisplayN for
+> device name, for example?
 
+Auxdisplay does not have IDs, as there is no subsystem to register
+with.  It's just a collection of drivers for auxiliary displays with
+no common API.  Some drivers use fbdev, others use a chardev, or an
+attribute file in sysfs.
 
+BTW, I just followed Pavel's advice in naming.
 
+> > +     of_property_read_u32(node, "color", &color);
+> > +     seg->led.name = devm_kasprintf(dev, GFP_KERNEL,
+> > +                     "auxdisplay:%s:" LED_FUNCTION_BACKLIGHT,
+> > +                     color < LED_COLOR_ID_MAX ? led_colors[color] : "");
+>
+> If you use devm_led_classdev_register_ext and pass struct
+> led_init_data, LED core will generate name of the LED itself.
+
+Will that make any difference, except for adding more code?
+Looking at the implementation, I still have to use devm_kasprintf()
+to combine color and function for led_init_data.default_label?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
