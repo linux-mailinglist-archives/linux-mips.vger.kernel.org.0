@@ -2,125 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA4C3B5C54
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 12:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3DD3B5C5D
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 12:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232483AbhF1KSV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 06:18:21 -0400
-Received: from lists.nic.cz ([217.31.204.67]:60428 "EHLO mail.nic.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231935AbhF1KST (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 28 Jun 2021 06:18:19 -0400
-Received: from thinkpad (unknown [172.20.6.87])
-        by mail.nic.cz (Postfix) with ESMTPSA id 9F04114127E;
-        Mon, 28 Jun 2021 12:15:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nic.cz; s=default;
-        t=1624875352; bh=AVPE3P+nI6g626e4oR2CfVzlMneudbRTcs+sdqt5ipE=;
-        h=Date:From:To;
-        b=pzDhtri1EBf6OwHOBdIQi95Fy/3Kb+zsij38kLZoj4AQ2YY1pCVliJQ6Qbiv9sRLA
-         Q+aj2WcEkHWqXODdEaIL7Tl3dHIkoS5/E0GpAB8AI4fNmzvKJ48IHSgojYM1Wooxg9
-         4lvP0/5HQcCZJHcD+NtwzWWegYJfgApljtZYytAY=
-Date:   Mon, 28 Jun 2021 12:15:51 +0200
-From:   Marek Behun <marek.behun@nic.cz>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+        id S232609AbhF1KUS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 06:20:18 -0400
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:45784 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232452AbhF1KUR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 06:20:17 -0400
+Received: by mail-ua1-f43.google.com with SMTP id c20so6751598uar.12;
+        Mon, 28 Jun 2021 03:17:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pr9HGl4FqzQBvqaKGGPpCfCz3bY0d+qLj1EnCPHyL5w=;
+        b=GG/8FZgTQ4sb8MR9WkCWQpfEyY88VrqJ5OijB8p0S/lcbLVLcMRKJEio4KhvQO692w
+         GVcWYJ+edxkHMM8bwRf8OFulFcCQCHn4BYyBafG6b7XfWP5JgBg6TyxtTYHYLmvR3F5n
+         ykE4+h5wXLqtt3AUEE9hoDSYKVdljWjqtmCN0t1zFKw0z0+JCo7f9SHbdZvVURuByQ8E
+         B71RqoSP5hyjAUWATBoZweiiY0PfyF4Qx1S2u4YEDIM4rybmQa0f+/JvLMwBI0xM/94S
+         /S/JPLo5ZOV6lJ0ZcnsT36ZCp/pDrXbydP8RBxbTpknYYEigOTHOYnO6AO8vzqztpmZn
+         PBTg==
+X-Gm-Message-State: AOAM5330ubTFLMlWSHlEYiE52DBi3ADM1nmwm0hlZv8uiUS69EN0MTgV
+        ZLwUe39pC4ipoAHJaUrUHSLMSeFPF36tCGNyzFI=
+X-Google-Smtp-Source: ABdhPJyqF1aSJLgvFbmkLMYCnsnTPHiPUAsGhIVM99tOcWI2ZbGEjju2EsKV4xbyE6jUD9q959uT/dX1hb0S6FovsPA=
+X-Received: by 2002:ab0:1e4c:: with SMTP id n12mr19573056uak.58.1624875470758;
+ Mon, 28 Jun 2021 03:17:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210625125902.1162428-7-geert@linux-m68k.org> <202106260719.fU3KdM6r-lkp@intel.com>
+In-Reply-To: <202106260719.fU3KdM6r-lkp@intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Jun 2021 12:17:39 +0200
+Message-ID: <CAMuHMdVf=9XQ49BJ3VcpfJAS1SmEpopqUhkYGqp4fmP-XMBJwg@mail.gmail.com>
+Subject: Re: [PATCH v2 06/18] auxdisplay: Extract character line display core support
+To:     kernel test robot <lkp@intel.com>
 Cc:     Robin van der Gracht <robin@protonic.nl>,
         Rob Herring <robh+dt@kernel.org>,
         Miguel Ojeda <ojeda@kernel.org>,
         Paul Burton <paulburton@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
+        Pavel Machek <pavel@ucw.cz>, kbuild-all@lists.01.org,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         linux-leds <linux-leds@vger.kernel.org>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 18/18] auxdisplay: ht16k33: Add segment display LED
- support
-Message-ID: <20210628121551.185ce0f4@thinkpad>
-In-Reply-To: <CAMuHMdV5fywjF63MqE_SqfumwN3EY=jBTEiMfqbjFO12c_nj0Q@mail.gmail.com>
-References: <20210625125902.1162428-1-geert@linux-m68k.org>
-        <20210625125902.1162428-19-geert@linux-m68k.org>
-        <20210625223916.7e00e710@thinkpad>
-        <CAMuHMdV5fywjF63MqE_SqfumwN3EY=jBTEiMfqbjFO12c_nj0Q@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-100.0 required=5.9 tests=SHORTCIRCUIT,
-        USER_IN_WELCOMELIST,USER_IN_WHITELIST shortcircuit=ham
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.nic.cz
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-X-Virus-Status: Clean
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 28 Jun 2021 11:21:04 +0200
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+Hi Kernel Test Robot,
 
-> Hi Marek,
-> 
-> On Fri, Jun 25, 2021 at 10:39 PM Marek Behun <marek.behun@nic.cz> wrote:
-> > On Fri, 25 Jun 2021 14:59:02 +0200
-> > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >  
-> > > Instantiate a single LED for a segment display.  This allows the user to
-> > > control display brightness and blinking through the LED class API and
-> > > triggers, and exposes the display color.
-> > > The LED will be named "auxdisplay:<color>:backlight".  
-> >
-> > What if there are multiple "auxdisplay"s ?  
-> 
-> I understand the LED core will just add a suffix on a name collision.
-> 
-> > Doesn't this subsystem have IDs? So that you can use auxdisplayN for
-> > device name, for example?  
-> 
-> Auxdisplay does not have IDs, as there is no subsystem to register
-> with.  It's just a collection of drivers for auxiliary displays with
-> no common API.  Some drivers use fbdev, others use a chardev, or an
-> attribute file in sysfs.
-> 
-> BTW, I just followed Pavel's advice in naming.
+On Sat, Jun 26, 2021 at 1:36 AM kernel test robot <lkp@intel.com> wrote:
+> I love your patch! Yet something to improve:
+>
+> [auto build test ERROR on robh/for-next]
+> [also build test ERROR on staging/staging-testing linus/master v5.13-rc7 next-20210625]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/0day-ci/linux/commits/Geert-Uytterhoeven/auxdisplay-ht16k33-Add-character-display-support/20210625-210014
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> config: powerpc-allmodconfig (attached as .config)
+> compiler: powerpc64-linux-gcc (GCC) 9.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/5505aedee505055e2fe16a718203e24fd8519e2a
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Geert-Uytterhoeven/auxdisplay-ht16k33-Add-character-display-support/20210625-210014
+>         git checkout 5505aedee505055e2fe16a718203e24fd8519e2a
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=powerpc
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>
+> >> ERROR: modpost: ".kernfs_create_link" [drivers/auxdisplay/img-ascii-lcd.ko] undefined!
 
-Very well.
+Thanks a lot!
 
-> > > +     of_property_read_u32(node, "color", &color);
-> > > +     seg->led.name = devm_kasprintf(dev, GFP_KERNEL,
-> > > +                     "auxdisplay:%s:" LED_FUNCTION_BACKLIGHT,
-> > > +                     color < LED_COLOR_ID_MAX ? led_colors[color] : "");  
-> >
-> > If you use devm_led_classdev_register_ext and pass struct
-> > led_init_data, LED core will generate name of the LED itself.  
-> 
-> Will that make any difference, except for adding more code?
+This helped me finding compat_only_sysfs_link_entry_to_kobj(), which
+I hadn't found before, and which does an even better job than my custom
+sysfs_create_file_link() implementation.
 
-You are hardcoding the backlight function. Using the _ext() registering
-function will make it so that the function and color are parsed from
-fwnode by LED core. I understand that the function will always be
-"backlight" in this case, but this should be specified in the
-device-tree anyway, so why not use it?
+Gr{oetje,eeting}s,
 
-> Looking at the implementation, I still have to use devm_kasprintf()
-> to combine color and function for led_init_data.default_label?
+                        Geert
 
-AFAIK you don't have to fill in default_label. (If the needed OF
-properties are not present so that default_label is tried, it means the
-device-tree does not correctly specify the device. In that case I don't
-think it is a problem if the default_label is not present and LED
-core will use the OF node name as the LED name.)
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-The code could look like this
-
-  struct led_init_data init_data = {};
-
-  init_data.fwnode = of_fwnode_handle(node);
-  init_data.devicename = "auxdisplay";
-  init_data.devname_mandatory = true;
-
-  ...register_ext();
-
-But if you still don't want to do this then ignore me :)
-
-Marek
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
