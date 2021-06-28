@@ -2,144 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 589503B58BF
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 07:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C7A3B5ABA
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 10:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbhF1Fyo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 01:54:44 -0400
-Received: from regular1.263xmail.com ([211.150.70.206]:33004 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbhF1Fyn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 01:54:43 -0400
-Received: from localhost (unknown [192.168.167.235])
-        by regular1.263xmail.com (Postfix) with ESMTP id 1D8A01B24;
-        Mon, 28 Jun 2021 13:52:02 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from [10.4.23.46] (unknown [58.240.82.166])
-        by smtp.263.net (postfix) whith ESMTP id P5175T139827884320512S1624859521564084_;
-        Mon, 28 Jun 2021 13:52:02 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <1f20fdf4e359861942c198caa05c5cb7>
-X-RL-SENDER: zhanglianjie@uniontech.com
-X-SENDER: zhanglianjie@uniontech.com
-X-LOGIN-NAME: zhanglianjie@uniontech.com
-X-FST-TO: tangyouling@loongson.cn
-X-RCPT-COUNT: 5
-X-SENDER-IP: 58.240.82.166
-X-ATTACHMENT-NUM: 0
-X-System-Flag: 0
-From:   zhanglianjie <zhanglianjie@uniontech.com>
-Subject: Re: [PATCH] mm: Fix the problem of mips architecture Oops
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        tangyouling@loongson.cn, linux-mips@vger.kernel.org,
-        tangyouling@loongson.cn
-References: <20210624032212.24769-1-zhanglianjie@uniontech.com>
- <20210625133909.GA2565@alpha.franken.de>
- <37efbf00-d4c8-b830-a1b6-9f90d990f4e4@uniontech.com>
- <d76a111c-61ab-4275-8d87-2ee69087a226@flygoat.com>
-Message-ID: <071b2cb4-fcf3-117e-d50e-bfe4704f01b1@uniontech.com>
-Date:   Mon, 28 Jun 2021 13:52:01 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S232329AbhF1Ixg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 04:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232317AbhF1Ixg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 04:53:36 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535F8C061574;
+        Mon, 28 Jun 2021 01:51:09 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id a18so9032543lfs.10;
+        Mon, 28 Jun 2021 01:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6CQc3fjMKRlg2zFck9NVYvnTowyzhWDlLGttHVE+IT0=;
+        b=LmcZ0jiAiBKGXMLwtYKO/EYri7cHt5Bvayb4f0hQ75ZkfuJJcrhp/xfOABHhU4PnHx
+         245CIGHulSluzEciPc/aIzxqvlKU7KWYJCToRPhcIdvb2iapfHftiWOZWpMQ3vc7jNtO
+         DeCeEQQd7nWcUb9NcXgGXsqSAcqPK1EhX+dd1pHHja3s2BDmt5TD4JTqHoM9iEZ2NBeW
+         Ndny8p0LUr4/J4qkSyibbLvuP2HVBbdvGTKxlcGpMqi1tF9doo7D4g7INLlNjC3V0dAT
+         qI66ER1+5aSBA22ELp2R/gGNJ46eOd8qpZFuB4QlOXh+1Zm6B58kvvKVgB8s1ZZA33bb
+         fsDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=6CQc3fjMKRlg2zFck9NVYvnTowyzhWDlLGttHVE+IT0=;
+        b=EdIfaz45BOrKex7y+Q7ZmE5tVW/edEY7fWVTuSCsDUhZuk+RXn1G3j6NhPR8B7JXbr
+         +nA4z3AJnshKKlUv7S7d7dzASUy679q9eS1M7M6NTYoywURzatK6VNY8AS5qrNKchJje
+         iAPztr6yuHm0r3Y7znkF5u4VnX8Ctd89PAgMiDEoofV2qhGTiV5XnaiUXX4DWtBTXJVY
+         7PTZz+UXxbyYzWVwjyRNIy1U87woEvc5hJZRYQ+M2Csyw5JpqBmdeDDFHIcylbK9VU6U
+         PqpYq8m/zx4FxJvFCq45ZxgMIIuu2k5Wrm+cyV63b2Rwri/9P86kMvwWMu7S/IbOjfi3
+         0oIw==
+X-Gm-Message-State: AOAM532NwLSuxM6g3H8gv7O0XqfsQo5/siEZiH4E8vel/ll1RGTVqg05
+        7UK5QpfXcHLXCsPP6O5sI/+D6+997jg=
+X-Google-Smtp-Source: ABdhPJzvVYPUkB9VP7TcqaQrYRa1aNqdVW+8tP5bkUyUBEczMrgHYJrEWtU2lQtNRxG4HlVwSj3spA==
+X-Received: by 2002:a05:6512:3f1:: with SMTP id n17mr7379524lfq.355.1624870267515;
+        Mon, 28 Jun 2021 01:51:07 -0700 (PDT)
+Received: from [192.168.1.100] ([31.173.86.7])
+        by smtp.gmail.com with ESMTPSA id i4sm1255288lfo.308.2021.06.28.01.51.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Jun 2021 01:51:07 -0700 (PDT)
+Subject: Re: [PATCH v2] mm: Fix the problem of mips architecture Oops
+To:     zhanglianjie <zhanglianjie@uniontech.com>, jiaxun.yang@flygoat.com,
+        chenhuacai@kernel.org, tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210628054738.10964-1-zhanglianjie@uniontech.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <d49404ca-b55c-847d-968d-273ca604b1e6@gmail.com>
+Date:   Mon, 28 Jun 2021 11:51:02 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <d76a111c-61ab-4275-8d87-2ee69087a226@flygoat.com>
+In-Reply-To: <20210628054738.10964-1-zhanglianjie@uniontech.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hello!
 
+On 28.06.2021 8:47, zhanglianjie wrote:
 
-On 2021-06-28 09:17, Jiaxun Yang wrote:
+> The cause of the problem is as follows:
+> 1. when cat /sys/devices/system/memory/memory0/valid_zones,
+>     test_pages_in_a_zone() will be called.
+> 2. test_pages_in_a_zone() finds the zone according to stat_pfn = 0.
+>     The smallest pfn of the numa node in the mips architecture is 128,
+>     and the page corresponding to the previous 0~127 pfn is not
+>     initialized (page->flags is 0xFFFFFFFF)
+> 3. The nid and zonenum obtained using page_zone(pfn_to_page(0)) are out
+>     of bounds in the corresponding array,
+>     &NODE_DATA(page_to_nid(page))->node_zones[page_zonenum(page)],
+>     access to the out-of-bounds zone member variables appear abnormal,
+>     resulting in Oops.
+> Therefore, it is necessary to keep the page between 0 and the minimum
+> pfn to prevent Oops from appearing.
 > 
-> 在 2021/6/28 上午9:07, zhanglianjie 写道:
->>
->>
->> On 2021-06-25 21:39, Thomas Bogendoerfer wrote:
->>> On Thu, Jun 24, 2021 at 11:22:12AM +0800, zhanglianjie wrote:
->>>> The cause of the problem is as follows:
->>>> 1. when cat /sys/devices/system/memory/memory0/valid_zones,
->>>>     test_pages_in_a_zone() will be called.
->>>> 2. test_pages_in_a_zone() finds the zone according to stat_pfn = 0.
->>>>     The smallest pfn of the numa node in the mips architecture is 128,
->>>>     and the page corresponding to the previous 0~127 pfn is not
->>>>     initialized (page->flags is 0xFFFFFFFF)
->>>> 3. The nid and zonenum obtained using page_zone(pfn_to_page(0)) are out
->>>>     of bounds in the corresponding array,
->>>> &NODE_DATA(page_to_nid(page))->node_zones[page_zonenum(page)],
->>>>     access to the out-of-bounds zone member variables appear abnormal,
->>>>     resulting in Oops.
->>>> Therefore, it is necessary to keep the page between 0 and the minimum
->>>> pfn to prevent Oops from appearing.
->>>>
->>>> Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
->>>> ---
->>>>   arch/mips/kernel/setup.c | 2 ++
->>>>   1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
->>>> index 23a140327a0b..f1da2b2ba5e9 100644
->>>> --- a/arch/mips/kernel/setup.c
->>>> +++ b/arch/mips/kernel/setup.c
->>>> @@ -653,6 +653,8 @@ static void __init arch_mem_init(char **cmdline_p)
->>>>        */
->>>>       memblock_set_current_limit(PFN_PHYS(max_low_pfn));
->>>>
->>>> +    memblock_reserve(0, PAGE_SIZE * NODE_DATA(0)->node_start_pfn);
->>>> +
->>>
->>> which platform needs this ? This look it should be better fixed in
->>> the platform memory registration code.
->>>
->>> Thomas.
->>>
->>
->> I have a problem on the loogson platform.
+> Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
+> ---
+>   arch/mips/loongson64/numa.c | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> I had checked a Loongson 3A4000 board (Lemote-A1901) with UEFI firmware 
-> and the region is reserved by firmware.
-> 
-> Hmm, you'd better contact vendor to fix the firmware. If it's not 
-> possible then workaround it in arch/mips/loongson64/numa.c
-> 
-> Thanks.
-> 
-> - Jiaxun
-> 
-> 
-> 
-> 
+> diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+> index fa9b4a487a47..dba9e6f17b9e 100644
+> --- a/arch/mips/loongson64/numa.c
+> +++ b/arch/mips/loongson64/numa.c
+> @@ -129,6 +129,9 @@ static void __init node_mem_init(unsigned int node)
+>   		if (node_end_pfn(0) >= (0xffffffff >> PAGE_SHIFT))
+>   			memblock_reserve((node_addrspace_offset | 0xfe000000),
+>   					 32 << 20);
+> +
+> +		/* Reserver pfn range 0~node[0]->node_start_pfn */
 
-I will try to contact the manufacturer. However, the manufacturer cannot 
-be contacted temporarily. I resubmitted a patch according to your method.
-thank you very much for your help.
+    Reserve?
 
-I want to ask, how do you check that the region is reserved by UEFI 
-firmware?
+> +		memblock_reserve(0, PAGE_SIZE * start_pfn);
+>   	}
+>   }
+[...]
 
-The machine information I tested is as follows:
-1. Lemote board
-- hardware information:
-         Loongson 3A4000 board LEMOTE-LS3A4000-7A1000-1w-V01-pc.
-- pagesize is 16k.
-2. THTF board
-- hardware information:
-         Loongson 3A4000 board THTF-LS3A4000-7A1000-1W-VB1-ML4A
-- pagesize is 16k.
-
-
-
--- 
-Regards,
-Zhang Lianjie
-
-
+MBR, Sergei
