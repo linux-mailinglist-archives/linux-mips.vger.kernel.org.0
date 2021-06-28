@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E783B684A
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 20:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 377CC3B684D
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 20:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbhF1SX2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 14:23:28 -0400
-Received: from out28-121.mail.aliyun.com ([115.124.28.121]:40685 "EHLO
-        out28-121.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbhF1SXW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 14:23:22 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1222889|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00100954-1.46352e-05-0.998976;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KZOO9TY_1624904444;
+        id S233288AbhF1SXb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 14:23:31 -0400
+Received: from out28-170.mail.aliyun.com ([115.124.28.170]:45601 "EHLO
+        out28-170.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233739AbhF1SXX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 14:23:23 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07437116|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0041116-0.000363272-0.995525;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KZOO9TY_1624904444;
 Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KZOO9TY_1624904444)
           by smtp.aliyun-inc.com(10.147.42.253);
-          Tue, 29 Jun 2021 02:20:54 +0800
+          Tue, 29 Jun 2021 02:20:55 +0800
 From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>
 To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org
@@ -24,9 +24,9 @@ Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
         aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
         sihui.liu@ingenic.com, jun.jiang@ingenic.com,
         sernia.zhou@foxmail.com
-Subject: [PATCH v5 04/11] clk: Ingenic: Fix problem of MAC clock in Ingenic X1000 and X1830.
-Date:   Tue, 29 Jun 2021 02:20:37 +0800
-Message-Id: <1624904444-2618-5-git-send-email-zhouyanjie@wanyeetech.com>
+Subject: [PATCH v5 05/11] clk: Ingenic: Add missing clocks for Ingenic SoCs.
+Date:   Tue, 29 Jun 2021 02:20:38 +0800
+Message-Id: <1624904444-2618-6-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1624904444-2618-1-git-send-email-zhouyanjie@wanyeetech.com>
 References: <1624904444-2618-1-git-send-email-zhouyanjie@wanyeetech.com>
@@ -37,95 +37,280 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-X1000 and X1830 have two MAC related clocks, one is MACPHY, which is
-controlled by MACCDR register, the other is MAC, which is controlled
-by the MAC bit in the CLKGR register (with CLK_AHB2 as the parent).
-The original driver mistakenly mixed the two clocks together.
+Add CIM, AIC, DMIC, I2S clocks for the X1000 SoC and the
+X1830 SoC from Ingenic.
 
 Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 ---
 
 Notes:
-    v2:
-    New patch.
+    v1->v2:
+    Add I2S clock for X1000.
     
     v2->v3:
-    No change.
+    Correct the comment in x1000-cgu.c, change it from
+    "Custom (SoC-specific) OTG PHY" to "Custom (SoC-specific)",
+    since there is more than just the "OTG PHY" clock.
     
     v3->v4:
     No change.
     
     v4->v5:
-    No change.
+    1.Change X1000's I2S clock to CGU_CLK_PLL as Paul Cercueil's suggestion
+    2.Add I2S clock for X1830.
 
- drivers/clk/ingenic/x1000-cgu.c | 11 ++++++++---
- drivers/clk/ingenic/x1830-cgu.c | 11 ++++++++---
- 2 files changed, 16 insertions(+), 6 deletions(-)
+ drivers/clk/ingenic/x1000-cgu.c | 88 ++++++++++++++++++++++++++++++++++++++++
+ drivers/clk/ingenic/x1830-cgu.c | 90 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 178 insertions(+)
 
 diff --git a/drivers/clk/ingenic/x1000-cgu.c b/drivers/clk/ingenic/x1000-cgu.c
-index 9aa20b5..53e5fe0 100644
+index 53e5fe0..59b16a6 100644
 --- a/drivers/clk/ingenic/x1000-cgu.c
 +++ b/drivers/clk/ingenic/x1000-cgu.c
-@@ -296,12 +296,11 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		.gate = { CGU_REG_CLKGR, 31 },
- 	},
+@@ -60,6 +60,54 @@
  
--	[X1000_CLK_MAC] = {
--		"mac", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+	[X1000_CLK_MACPHY] = {
-+		"mac_phy", CGU_CLK_MUX | CGU_CLK_DIV,
- 		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_MACCDR, 31, 1 },
- 		.div = { CGU_REG_MACCDR, 0, 1, 8, 29, 28, 27 },
--		.gate = { CGU_REG_CLKGR, 25 },
- 	},
+ static struct ingenic_cgu *cgu;
  
- 	[X1000_CLK_LCD] = {
-@@ -452,6 +451,12 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
- 		.gate = { CGU_REG_CLKGR, 21 },
- 	},
++static void x1000_i2s_calc_m_n(const struct ingenic_cgu_pll_info *pll_info,
++		       unsigned long rate, unsigned long parent_rate,
++		       unsigned int *pm, unsigned int *pn, unsigned int *pod)
++{
++	unsigned int delta, m, n;
++	u64 curr_delta, curr_m, curr_n;
 +
-+	[X1000_CLK_MAC] = {
-+		"mac", CGU_CLK_GATE,
-+		.parents = { X1000_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR, 25 },
-+	},
- };
++	if ((parent_rate % rate == 0) && ((parent_rate / rate) > 1)) {
++		m = 1;
++		n = parent_rate / rate;
++		goto out;
++	}
++
++	delta = rate;
++
++	/*
++	 * The length of M is 9 bits, its value must be between 1 and 511.
++	 * The length of N is 13 bits, its value must be between 2 and 8191,
++	 * and must not be less than 2 times of the value of M.
++	 */
++	for (curr_m = 511; curr_m >= 1; curr_m--) {
++		curr_n = parent_rate * curr_m;
++		curr_delta = do_div(curr_n, rate);
++
++		if (curr_n < 2 * curr_m || curr_n > 8191)
++			continue;
++
++		if (curr_delta == 0)
++			break;
++
++		if (curr_delta < delta) {
++			m = curr_m;
++			n = curr_n;
++			delta = curr_delta;
++		}
++	}
++
++out:
++	*pm = m;
++	*pn = n;
++
++	/*
++	 * The I2S PLL does not have OD bits, so set the *pod to 1 to ensure
++	 * that the ingenic_pll_calc() in cgu.c can run properly.
++	 */
++	*pod = 1;
++}
++
+ static unsigned long x1000_otg_phy_recalc_rate(struct clk_hw *hw,
+ 						unsigned long parent_rate)
+ {
+@@ -227,6 +275,27 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
+ 		},
+ 	},
  
- static void __init x1000_cgu_init(struct device_node *np)
++	[X1000_CLK_I2S] = {
++		"i2s", CGU_CLK_PLL,
++		.parents = { X1000_CLK_EXCLK, X1000_CLK_SCLKA, -1, X1000_CLK_MPLL },
++		.pll = {
++			.reg = CGU_REG_I2SCDR,
++			.rate_multiplier = 1,
++			.mux_shift = 30,
++			.mux_bits = 2,
++			.m_shift = 13,
++			.m_bits = 9,
++			.m_offset = 0,
++			.n_shift = 0,
++			.n_bits = 13,
++			.n_offset = 0,
++			.bypass_bit = -1,
++			.enable_bit = 29,
++			.stable_bit = -1,
++			.calc_m_n_od = x1000_i2s_calc_m_n,
++		},
++	},
++
+ 	/* Custom (SoC-specific) OTG PHY */
+ 
+ 	[X1000_CLK_OTGPHY] = {
+@@ -359,6 +428,13 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
+ 		.mux = { CGU_REG_SSICDR, 30, 1 },
+ 	},
+ 
++	[X1000_CLK_CIM] = {
++		"cim", CGU_CLK_MUX | CGU_CLK_DIV,
++		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
++		.mux = { CGU_REG_CIMCDR, 31, 1 },
++		.div = { CGU_REG_CIMCDR, 0, 1, 8, 29, 28, 27 },
++	},
++
+ 	[X1000_CLK_EXCLK_DIV512] = {
+ 		"exclk_div512", CGU_CLK_FIXDIV,
+ 		.parents = { X1000_CLK_EXCLK },
+@@ -410,6 +486,12 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
+ 		.gate = { CGU_REG_CLKGR, 9 },
+ 	},
+ 
++	[X1000_CLK_AIC] = {
++		"aic", CGU_CLK_GATE,
++		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
++		.gate = { CGU_REG_CLKGR, 11 },
++	},
++
+ 	[X1000_CLK_UART0] = {
+ 		"uart0", CGU_CLK_GATE,
+ 		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
+@@ -428,6 +510,12 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
+ 		.gate = { CGU_REG_CLKGR, 16 },
+ 	},
+ 
++	[X1000_CLK_DMIC] = {
++		"dmic", CGU_CLK_GATE,
++		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
++		.gate = { CGU_REG_CLKGR, 17 },
++	},
++
+ 	[X1000_CLK_TCU] = {
+ 		"tcu", CGU_CLK_GATE,
+ 		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
 diff --git a/drivers/clk/ingenic/x1830-cgu.c b/drivers/clk/ingenic/x1830-cgu.c
-index 950aee2..59342bc 100644
+index 59342bc..cfb0314 100644
 --- a/drivers/clk/ingenic/x1830-cgu.c
 +++ b/drivers/clk/ingenic/x1830-cgu.c
-@@ -270,13 +270,12 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
- 		.gate = { CGU_REG_CLKGR0, 31 },
+@@ -54,6 +54,54 @@
+ 
+ static struct ingenic_cgu *cgu;
+ 
++static void x1830_i2s_calc_m_n(const struct ingenic_cgu_pll_info *pll_info,
++		       unsigned long rate, unsigned long parent_rate,
++		       unsigned int *pm, unsigned int *pn, unsigned int *pod)
++{
++	unsigned int delta, m, n;
++	u64 curr_delta, curr_m, curr_n;
++
++	if ((parent_rate % rate == 0) && ((parent_rate / rate) > 1)) {
++		m = 1;
++		n = parent_rate / rate;
++		goto out;
++	}
++
++	delta = rate;
++
++	/*
++	 * The length of M is 9 bits, its value must be between 1 and 511.
++	 * The length of N is 20 bits, its value must be between 2 and 1048575,
++	 * and must not be less than 2 times of the value of M.
++	 */
++	for (curr_m = 511; curr_m >= 1; curr_m--) {
++		curr_n = parent_rate * curr_m;
++		curr_delta = do_div(curr_n, rate);
++
++		if (curr_n < 2 * curr_m || curr_n > 1048575)
++			continue;
++
++		if (curr_delta == 0)
++			break;
++
++		if (curr_delta < delta) {
++			m = curr_m;
++			n = curr_n;
++			delta = curr_delta;
++		}
++	}
++
++out:
++	*pm = m;
++	*pn = n;
++
++	/*
++	 * The I2S PLL does not have OD bits, so set the *pod to 1 to ensure
++	 * that the ingenic_pll_calc() in cgu.c can run properly.
++	 */
++	*pod = 1;
++}
++
+ static int x1830_usb_phy_enable(struct clk_hw *hw)
+ {
+ 	void __iomem *reg_opcr		= cgu->base + CGU_REG_OPCR;
+@@ -201,6 +249,28 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
+ 		},
  	},
  
--	[X1830_CLK_MAC] = {
--		"mac", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+	[X1830_CLK_MACPHY] = {
-+		"mac_phy", CGU_CLK_MUX | CGU_CLK_DIV,
- 		.parents = { X1830_CLK_SCLKA, X1830_CLK_MPLL,
- 					 X1830_CLK_VPLL, X1830_CLK_EPLL },
- 		.mux = { CGU_REG_MACCDR, 30, 2 },
- 		.div = { CGU_REG_MACCDR, 0, 1, 8, 29, 28, 27 },
--		.gate = { CGU_REG_CLKGR1, 4 },
- 	},
- 
- 	[X1830_CLK_LCD] = {
-@@ -428,6 +427,12 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
- 		.gate = { CGU_REG_CLKGR1, 1 },
- 	},
- 
-+	[X1830_CLK_MAC] = {
-+		"mac", CGU_CLK_GATE,
-+		.parents = { X1830_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR1, 4 },
++	[X1830_CLK_I2S] = {
++		"i2s", CGU_CLK_PLL,
++		.parents = { X1830_CLK_SCLKA, X1830_CLK_MPLL,
++					 X1830_CLK_VPLL, X1830_CLK_EPLL },
++		.pll = {
++			.reg = CGU_REG_I2SCDR,
++			.rate_multiplier = 1,
++			.mux_shift = 30,
++			.mux_bits = 2,
++			.m_shift = 20,
++			.m_bits = 9,
++			.m_offset = 0,
++			.n_shift = 0,
++			.n_bits = 20,
++			.n_offset = 0,
++			.bypass_bit = -1,
++			.enable_bit = 29,
++			.stable_bit = -1,
++			.calc_m_n_od = x1830_i2s_calc_m_n,
++		},
 +	},
 +
- 	[X1830_CLK_OST] = {
- 		"ost", CGU_CLK_GATE,
+ 	/* Custom (SoC-specific) OTG PHY */
+ 
+ 	[X1830_CLK_OTGPHY] = {
+@@ -328,6 +398,14 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
+ 		.mux = { CGU_REG_SSICDR, 29, 1 },
+ 	},
+ 
++	[X1830_CLK_CIM] = {
++		"cim", CGU_CLK_MUX | CGU_CLK_DIV,
++		.parents = { X1830_CLK_SCLKA, X1830_CLK_MPLL,
++					 X1830_CLK_VPLL, X1830_CLK_EPLL },
++		.mux = { CGU_REG_CIMCDR, 30, 2 },
++		.div = { CGU_REG_CIMCDR, 0, 1, 8, 29, 28, 27 },
++	},
++
+ 	[X1830_CLK_EXCLK_DIV512] = {
+ 		"exclk_div512", CGU_CLK_FIXDIV,
+ 		.parents = { X1830_CLK_EXCLK },
+@@ -385,6 +463,18 @@ static const struct ingenic_cgu_clk_info x1830_cgu_clocks[] = {
+ 		.gate = { CGU_REG_CLKGR0, 9 },
+ 	},
+ 
++	[X1830_CLK_AIC] = {
++		"aic", CGU_CLK_GATE,
++		.parents = { X1830_CLK_EXCLK, -1, -1, -1 },
++		.gate = { CGU_REG_CLKGR0, 11 },
++	},
++
++	[X1830_CLK_DMIC] = {
++		"dmic", CGU_CLK_GATE,
++		.parents = { X1830_CLK_PCLK, -1, -1, -1 },
++		.gate = { CGU_REG_CLKGR0, 12 },
++	},
++
+ 	[X1830_CLK_UART0] = {
+ 		"uart0", CGU_CLK_GATE,
  		.parents = { X1830_CLK_EXCLK, -1, -1, -1 },
 -- 
 2.7.4
