@@ -2,141 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C153B65C9
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 17:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2AA3B6659
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 18:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235231AbhF1Phv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 11:37:51 -0400
-Received: from mail-vs1-f43.google.com ([209.85.217.43]:37624 "EHLO
-        mail-vs1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235341AbhF1PgW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 11:36:22 -0400
-Received: by mail-vs1-f43.google.com with SMTP id x12so10260325vsp.4;
-        Mon, 28 Jun 2021 08:33:55 -0700 (PDT)
+        id S232740AbhF1QGE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 12:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232012AbhF1QGD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 12:06:03 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A31C061760;
+        Mon, 28 Jun 2021 09:03:36 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id q16so19328727lfr.4;
+        Mon, 28 Jun 2021 09:03:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9+6mDKjcYk8hmZtLfRjkLtLnizKdu7+ND6kkw+plZIs=;
+        b=WehXqygcDRvt7H9HPjI5+m5XGpLgfQrl2S4E24ioukuled6AKRRPWT6tZJFIsjbv6x
+         feAJbp9u4Y0M1ZAIef8CTj+XcaiQaoygNxtKSD02zlkdSy1nQ7IsQAw+golDYdRnxw+V
+         g0Cn1LTPqgn6gaQKz80QNVDm5o+/yw7nGphsowuJmLcchup/B0mLLaj7HxQo0SIpC/Fq
+         LbsowaQ3lZkLTDwpSTOFFdZRrU5S0o8U+BpInNBQ6UHzHv3NlOarIqRDcNgogLsJpeAy
+         G827P/fyaUcOI8tawXeElqqpKCGgkb8IFA0eKXioxSmVbVqiXCTjwzISSnsZU1QUGs6i
+         u7/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UdLRXPs8N+vjyTcpdNWjfwTJ6bwSxsrt/ayJbQ8pWUQ=;
-        b=hmshMF02JCyDAC78Vr/QcFdPi0+DkMfbBRqCJcqlqHUKOKTuPLeDusXj7GEVF8onoR
-         zZvjgDRUwqm85hOidEuswLqiJr2kuMYFIOOlkI5JEA6JpBJPZSzaYwZLc84tBfMHSqi/
-         bz492X9DUvrexbC71ZV7BbDRczhAX8QUNrUUUyewW74hbtMtpOeKlJBD7Owgdsy/8udk
-         FrAKYrPUUa9LK8PRJCavekt8SCEVvTDb0JMlSUT+Bc1Y/sGjJIYUa0bI75a5OVurVg1e
-         RocFs2yBhm1AEF6PUql5VdCLHFWNPxOA9jtFZV1idga00FGuKZhAcndGnNqiBmG0eC92
-         ooSA==
-X-Gm-Message-State: AOAM533S+ZgQUHHg7Qmdqt8vAUNfm+UFmd8gKrMDNGgwaF7Pi/D8dU24
-        Vh06XeQJh4ueJjRk1Pj06p8LAs9K5xt607jZd/A=
-X-Google-Smtp-Source: ABdhPJwFoBJoPgZAWGd3kME/vgUlz573ZrtzS/NZWRieObafdUkejFkjnVCSEJpGJ51iZzkPkitBYVmSeXEAIlbE2u8=
-X-Received: by 2002:a67:ba0c:: with SMTP id l12mr19184092vsn.40.1624894434798;
- Mon, 28 Jun 2021 08:33:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210625125902.1162428-1-geert@linux-m68k.org>
- <20210625125902.1162428-19-geert@linux-m68k.org> <20210625223916.7e00e710@thinkpad>
- <CAMuHMdV5fywjF63MqE_SqfumwN3EY=jBTEiMfqbjFO12c_nj0Q@mail.gmail.com> <20210628121551.185ce0f4@thinkpad>
-In-Reply-To: <20210628121551.185ce0f4@thinkpad>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 28 Jun 2021 17:33:43 +0200
-Message-ID: <CAMuHMdW=cBxDSNW3DzN1HQyRC1DNtoWDhVA3M0fQhRq-txmb6A@mail.gmail.com>
-Subject: Re: [PATCH v2 18/18] auxdisplay: ht16k33: Add segment display LED support
-To:     Marek Behun <marek.behun@nic.cz>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9+6mDKjcYk8hmZtLfRjkLtLnizKdu7+ND6kkw+plZIs=;
+        b=bLuMY66XAeLsf4Iugp5i87fEkWEmF5OmyVxwgWZ/W0fIwxR18tQySoLp1IXTxmIBwK
+         //Lmm2uIt4/ffW+HCd2y/SG7THSJjZIg2eISqMbiE8xRmz6G8ZKJhZXidLGegNrE5ZOS
+         wbLtA2WyBLge4WvNa/eNvvK1wQsLn8lWOG1mnX/exmvgUioEgFoFlWsdx1U4qD0k3ltZ
+         OC96Nac8ZAEaYli92gAZi+pcGuHJa051Ala1D5s3t64pb2FqGA+ScyhO0CS5bBAZ7iE9
+         DNnK9LWE/Qtmv0hpRfTeRNrYy/kKVLzGhFIDHEgn/P2el4l/y9HgfT51vK1dk5ANyX3e
+         uKDQ==
+X-Gm-Message-State: AOAM532uP+ff+nKqcbU4D/KZP4vSca9f3vnwgZ2kOGnxLEwwGZ5xR5FX
+        biuyChB5yk6H78PMz+MdShrIxb8r0f8=
+X-Google-Smtp-Source: ABdhPJwWRp7/DULQ49/P2nsYmvnte9IYLgVFSaYn2unNvjpyxcxi5BzVuL73LsQA3ECbcHYRzHP79w==
+X-Received: by 2002:a19:ef0b:: with SMTP id n11mr19284891lfh.119.1624896214269;
+        Mon, 28 Jun 2021 09:03:34 -0700 (PDT)
+Received: from [192.168.1.102] ([31.173.82.94])
+        by smtp.gmail.com with ESMTPSA id f15sm1348944lfa.56.2021.06.28.09.03.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Jun 2021 09:03:34 -0700 (PDT)
+Subject: Re: [PATCH v4 2/2] MIPS: Loongson64: Add pm block node for
+ Loongson-2K1000
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210628151330.11952-1-zhangqing@loongson.cn>
+ <20210628151330.11952-2-zhangqing@loongson.cn>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <697cd16e-7131-95d6-6e0b-1034d493b3ce@gmail.com>
+Date:   Mon, 28 Jun 2021 19:03:32 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20210628151330.11952-2-zhangqing@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Marek,
+Hello!
 
-On Mon, Jun 28, 2021 at 12:15 PM Marek Behun <marek.behun@nic.cz> wrote:
-> On Mon, 28 Jun 2021 11:21:04 +0200
-> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Fri, Jun 25, 2021 at 10:39 PM Marek Behun <marek.behun@nic.cz> wrote:
-> > > On Fri, 25 Jun 2021 14:59:02 +0200
-> > > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > >
-> > > > Instantiate a single LED for a segment display.  This allows the user to
-> > > > control display brightness and blinking through the LED class API and
-> > > > triggers, and exposes the display color.
-> > > > The LED will be named "auxdisplay:<color>:backlight".
-> > >
-> > > What if there are multiple "auxdisplay"s ?
-> >
-> > I understand the LED core will just add a suffix on a name collision.
-> >
-> > > Doesn't this subsystem have IDs? So that you can use auxdisplayN for
-> > > device name, for example?
-> >
-> > Auxdisplay does not have IDs, as there is no subsystem to register
-> > with.  It's just a collection of drivers for auxiliary displays with
-> > no common API.  Some drivers use fbdev, others use a chardev, or an
-> > attribute file in sysfs.
-> >
-> > BTW, I just followed Pavel's advice in naming.
->
-> Very well.
->
-> > > > +     of_property_read_u32(node, "color", &color);
-> > > > +     seg->led.name = devm_kasprintf(dev, GFP_KERNEL,
-> > > > +                     "auxdisplay:%s:" LED_FUNCTION_BACKLIGHT,
-> > > > +                     color < LED_COLOR_ID_MAX ? led_colors[color] : "");
-> > >
-> > > If you use devm_led_classdev_register_ext and pass struct
-> > > led_init_data, LED core will generate name of the LED itself.
-> >
-> > Will that make any difference, except for adding more code?
->
-> You are hardcoding the backlight function. Using the _ext() registering
-> function will make it so that the function and color are parsed from
-> fwnode by LED core. I understand that the function will always be
-> "backlight" in this case, but this should be specified in the
-> device-tree anyway, so why not use it?
->
-> > Looking at the implementation, I still have to use devm_kasprintf()
-> > to combine color and function for led_init_data.default_label?
->
-> AFAIK you don't have to fill in default_label. (If the needed OF
-> properties are not present so that default_label is tried, it means the
-> device-tree does not correctly specify the device. In that case I don't
-> think it is a problem if the default_label is not present and LED
-> core will use the OF node name as the LED name.)
->
-> The code could look like this
->
->   struct led_init_data init_data = {};
->
->   init_data.fwnode = of_fwnode_handle(node);
->   init_data.devicename = "auxdisplay";
->   init_data.devname_mandatory = true;
->
->   ...register_ext();
->
-> But if you still don't want to do this then ignore me :)
+On 6/28/21 6:13 PM, Qing Zhang wrote:
 
-No, thanks a lot!
+> The module is now supported, enable it.
+> 
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+> 
+> v3-v4:
+> No change
+> 
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+>  arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> index 569e814def83..e31176ac0ac2 100644
+> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> @@ -101,6 +101,15 @@ uart0: serial@1fe00000 {
+>  			no-loopback-test;
+>  		};
+>  
+> +		pm: power-controller {
+> +			device_type = "power management";
+> +			compatible = "loongson, reset-controller";
 
-Your comments made me realize I should put the LED properties in an
-"led" subnode, and defer all parsing to the LED core.
-This also allows the user to use the more powerful LED mode even in
-dot-matrix mode, while falling back to the existing backlight mode if
-no "led" subnode is found, and thus preserving backwards compatibility.
+   No spaces allowed here, AFAIK.
 
-Gr{oetje,eeting}s,
+> +			reg = <0 0x1fe0700c 0 0x8>,
+> +				<0 0x1fe07014 0 0x8>,
+> +				<0 0x1fe07030 0 0x8>;
 
-                        Geert
+   Better keep those aligned...
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> +			reg-names = "pm1_sts", "pm1_cnt", "rst_cnt";
+> +		};
+> +
+[...]
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+MBR, Sergei
