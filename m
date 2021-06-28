@@ -2,66 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7153B6708
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 18:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946573B6842
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 20:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbhF1Qy2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 12:54:28 -0400
-Received: from [115.28.160.31] ([115.28.160.31]:51248 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S231964AbhF1Qy1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 28 Jun 2021 12:54:27 -0400
-Received: from ld50.lan (unknown [101.224.80.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id C165F60114;
-        Tue, 29 Jun 2021 00:46:24 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1624898784; bh=l6nNtMBrbd9/YgzMBRPnOZZn6huLGhQUw3VJmWG6Ea0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y2t82JyOR547pcCdSk0E4ynKVBLQYH+Gwsot/aKy6jwu5EfzsTTa7HiK9+20163GG
-         JlDcT3BBZf4C1jEi2lGfMBT9VdRVz+IfSfBHxy1KRwxszWzLleLN1MlOCtAtdp2TdE
-         ofx/DTAKamh39BX1UOQhqf3VE9YX83OvwjcIHp3s=
-From:   WANG Xuerui <git@xen0n.name>
-To:     linux-rtc@vger.kernel.org
-Cc:     WANG Xuerui <git@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v4 6/6] MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
-Date:   Tue, 29 Jun 2021 00:45:52 +0800
-Message-Id: <20210628164552.1006079-7-git@xen0n.name>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210628164552.1006079-1-git@xen0n.name>
-References: <20210628164552.1006079-1-git@xen0n.name>
+        id S234472AbhF1SXZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 14:23:25 -0400
+Received: from out28-49.mail.aliyun.com ([115.124.28.49]:50243 "EHLO
+        out28-49.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233351AbhF1SXU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 14:23:20 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09155044|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0147751-0.000601563-0.984623;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KZOO9TY_1624904444;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KZOO9TY_1624904444)
+          by smtp.aliyun-inc.com(10.147.42.253);
+          Tue, 29 Jun 2021 02:20:49 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org
+Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        paul@crapouillou.net, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com
+Subject: [PATCH v5 00/11] Add new clocks and fix bugs for Ingenic SoCs.
+Date:   Tue, 29 Jun 2021 02:20:33 +0800
+Message-Id: <1624904444-2618-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is now supported, enable for Loongson-2K systems.
-Other systems are unaffected.
+v4->v5:
+1.modify the CGU PLL correlation code to make it compatible with I2S PLL.
+2.Change X1000's I2S clock to CGU_CLK_PLL as Paul Cercueil's suggestion.
+3.Add documentation for JZ4775 and X2000 bindings.
+4.Add JZ4775 and X2000 clock bindings.
+5.Add CGU driver for JZ4775 and X2000.
 
-Signed-off-by: WANG Xuerui <git@xen0n.name>
-Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # loongson2k
-Cc: linux-mips@vger.kernel.org
----
- arch/mips/configs/loongson2k_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+周琰杰 (Zhou Yanjie) (11):
+  clk: JZ4780: Add function for disable the second core.
+  clk: Ingenic: Adjust cgu code to make it compatible with I2S PLL.
+  dt-bindings: clock: Add missing clocks for Ingenic SoCs.
+  clk: Ingenic: Fix problem of MAC clock in Ingenic X1000 and X1830.
+  clk: Ingenic: Add missing clocks for Ingenic SoCs.
+  clk: Ingenic: Clean up and reformat the code.
+  dt-bindings: clock: Add documentation for JZ4775 and X2000 bindings.
+  dt-bindings: clock: Add JZ4775 clock bindings.
+  dt-bindings: clock: Add X2000 clock bindings.
+  clk: Ingenic: Add CGU driver for JZ4775.
+  clk: Ingenic: Add CGU driver for X2000.
 
-diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
-index e948ca487e2d..e15f34857956 100644
---- a/arch/mips/configs/loongson2k_defconfig
-+++ b/arch/mips/configs/loongson2k_defconfig
-@@ -280,6 +280,7 @@ CONFIG_USB_SERIAL=m
- CONFIG_USB_SERIAL_OPTION=m
- CONFIG_RTC_CLASS=y
- CONFIG_RTC_DRV_CMOS=y
-+CONFIG_RTC_DRV_LS2X=y
- CONFIG_DMADEVICES=y
- # CONFIG_CPU_HWMON is not set
- CONFIG_PM_DEVFREQ=y
+ .../devicetree/bindings/clock/ingenic,cgu.yaml     |   4 +
+ drivers/clk/ingenic/Kconfig                        |  20 +
+ drivers/clk/ingenic/Makefile                       |   2 +
+ drivers/clk/ingenic/cgu.c                          | 118 +++-
+ drivers/clk/ingenic/cgu.h                          |   1 +
+ drivers/clk/ingenic/jz4725b-cgu.c                  |  48 +-
+ drivers/clk/ingenic/jz4740-cgu.c                   |  48 +-
+ drivers/clk/ingenic/jz4760-cgu.c                   | 106 ++-
+ drivers/clk/ingenic/jz4770-cgu.c                   |  83 +--
+ drivers/clk/ingenic/jz4775-cgu.c                   | 571 +++++++++++++++
+ drivers/clk/ingenic/jz4780-cgu.c                   | 148 ++--
+ drivers/clk/ingenic/x1000-cgu.c                    | 209 ++++--
+ drivers/clk/ingenic/x1830-cgu.c                    | 209 ++++--
+ drivers/clk/ingenic/x2000-cgu.c                    | 783 +++++++++++++++++++++
+ include/dt-bindings/clock/jz4775-cgu.h             |  59 ++
+ include/dt-bindings/clock/x1000-cgu.h              |   5 +
+ include/dt-bindings/clock/x1830-cgu.h              |   5 +
+ include/dt-bindings/clock/x2000-cgu.h              |  88 +++
+ 18 files changed, 2189 insertions(+), 318 deletions(-)
+ create mode 100644 drivers/clk/ingenic/jz4775-cgu.c
+ create mode 100644 drivers/clk/ingenic/x2000-cgu.c
+ create mode 100644 include/dt-bindings/clock/jz4775-cgu.h
+ create mode 100644 include/dt-bindings/clock/x2000-cgu.h
+
 -- 
-2.30.1
+2.7.4
 
