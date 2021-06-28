@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 214373B6856
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 20:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763FB3B6862
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 20:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235323AbhF1SXd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 14:23:33 -0400
-Received: from out28-53.mail.aliyun.com ([115.124.28.53]:50462 "EHLO
-        out28-53.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235033AbhF1SXa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 14:23:30 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0272629-0.000267404-0.97247;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KZOO9TY_1624904444;
+        id S236014AbhF1SXe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 14:23:34 -0400
+Received: from out28-124.mail.aliyun.com ([115.124.28.124]:52676 "EHLO
+        out28-124.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235160AbhF1SXb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 14:23:31 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0313972-0.000392417-0.96821;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KZOO9TY_1624904444;
 Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KZOO9TY_1624904444)
           by smtp.aliyun-inc.com(10.147.42.253);
-          Tue, 29 Jun 2021 02:21:01 +0800
+          Tue, 29 Jun 2021 02:21:02 +0800
 From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>
 To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org
@@ -24,9 +24,9 @@ Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
         aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
         sihui.liu@ingenic.com, jun.jiang@ingenic.com,
         sernia.zhou@foxmail.com
-Subject: [PATCH v5 10/11] clk: Ingenic: Add CGU driver for JZ4775.
-Date:   Tue, 29 Jun 2021 02:20:43 +0800
-Message-Id: <1624904444-2618-11-git-send-email-zhouyanjie@wanyeetech.com>
+Subject: [PATCH v5 11/11] clk: Ingenic: Add CGU driver for X2000.
+Date:   Tue, 29 Jun 2021 02:20:44 +0800
+Message-Id: <1624904444-2618-12-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1624904444-2618-1-git-send-email-zhouyanjie@wanyeetech.com>
 References: <1624904444-2618-1-git-send-email-zhouyanjie@wanyeetech.com>
@@ -37,7 +37,7 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add support for the clocks provided by the CGU in the Ingenic JZ4775
+Add support for the clocks provided by the CGU in the Ingenic X2000
 SoC, making use of the cgu code to do the heavy lifting.
 
 Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
@@ -47,55 +47,53 @@ Notes:
     v5:
     New patch.
 
- drivers/clk/ingenic/Kconfig      |  10 +
- drivers/clk/ingenic/Makefile     |   1 +
- drivers/clk/ingenic/jz4775-cgu.c | 571 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 582 insertions(+)
- create mode 100644 drivers/clk/ingenic/jz4775-cgu.c
+ drivers/clk/ingenic/Kconfig     |  10 +
+ drivers/clk/ingenic/Makefile    |   1 +
+ drivers/clk/ingenic/x2000-cgu.c | 783 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 794 insertions(+)
+ create mode 100644 drivers/clk/ingenic/x2000-cgu.c
 
 diff --git a/drivers/clk/ingenic/Kconfig b/drivers/clk/ingenic/Kconfig
-index 898f1bc..7fda7bb 100644
+index 7fda7bb..f5dd2f2 100644
 --- a/drivers/clk/ingenic/Kconfig
 +++ b/drivers/clk/ingenic/Kconfig
-@@ -45,6 +45,16 @@ config INGENIC_CGU_JZ4770
+@@ -85,6 +85,16 @@ config INGENIC_CGU_X1830
  
- 	  If building for a JZ4770 SoC, you want to say Y here.
+ 	  If building for a X1830 SoC, you want to say Y here.
  
-+config INGENIC_CGU_JZ4775
-+	bool "Ingenic JZ4775 CGU driver"
-+	default MACH_JZ4775
++config INGENIC_CGU_X2000
++	bool "Ingenic X2000 CGU driver"
++	default MACH_X2000
 +	select INGENIC_CGU_COMMON
 +	help
-+	  Support the clocks provided by the CGU hardware on Ingenic JZ4775
++	  Support the clocks provided by the CGU hardware on Ingenic X2000
 +	  and compatible SoCs.
 +
-+	  If building for a JZ4775 SoC, you want to say Y here.
++	  If building for a X2000 SoC, you want to say Y here.
 +
- config INGENIC_CGU_JZ4780
- 	bool "Ingenic JZ4780 CGU driver"
- 	default MACH_JZ4780
+ config INGENIC_TCU_CLK
+ 	bool "Ingenic JZ47xx TCU clocks driver"
+ 	default MACH_INGENIC
 diff --git a/drivers/clk/ingenic/Makefile b/drivers/clk/ingenic/Makefile
-index 9edfaf4..aed8da4 100644
+index aed8da4..de265ae 100644
 --- a/drivers/clk/ingenic/Makefile
 +++ b/drivers/clk/ingenic/Makefile
-@@ -4,6 +4,7 @@ obj-$(CONFIG_INGENIC_CGU_JZ4740)	+= jz4740-cgu.o
- obj-$(CONFIG_INGENIC_CGU_JZ4725B)	+= jz4725b-cgu.o
- obj-$(CONFIG_INGENIC_CGU_JZ4760)	+= jz4760-cgu.o
- obj-$(CONFIG_INGENIC_CGU_JZ4770)	+= jz4770-cgu.o
-+obj-$(CONFIG_INGENIC_CGU_JZ4775)	+= jz4775-cgu.o
+@@ -8,4 +8,5 @@ obj-$(CONFIG_INGENIC_CGU_JZ4775)	+= jz4775-cgu.o
  obj-$(CONFIG_INGENIC_CGU_JZ4780)	+= jz4780-cgu.o
  obj-$(CONFIG_INGENIC_CGU_X1000)		+= x1000-cgu.o
  obj-$(CONFIG_INGENIC_CGU_X1830)		+= x1830-cgu.o
-diff --git a/drivers/clk/ingenic/jz4775-cgu.c b/drivers/clk/ingenic/jz4775-cgu.c
++obj-$(CONFIG_INGENIC_CGU_X2000)		+= x2000-cgu.o
+ obj-$(CONFIG_INGENIC_TCU_CLK)		+= tcu.o
+diff --git a/drivers/clk/ingenic/x2000-cgu.c b/drivers/clk/ingenic/x2000-cgu.c
 new file mode 100644
-index 00000000..b967d61
+index 00000000..21c02a6
 --- /dev/null
-+++ b/drivers/clk/ingenic/jz4775-cgu.c
-@@ -0,0 +1,571 @@
++++ b/drivers/clk/ingenic/x2000-cgu.c
+@@ -0,0 +1,783 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * JZ4775 SoC CGU driver
-+ * Copyright (c) 2020 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
++ * X2000 SoC CGU driver
++ * Copyright (C) 2020 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 + */
 +
 +#include <linux/clk-provider.h>
@@ -103,548 +101,760 @@ index 00000000..b967d61
 +#include <linux/io.h>
 +#include <linux/of.h>
 +
-+#include <dt-bindings/clock/jz4775-cgu.h>
++#include <dt-bindings/clock/x2000-cgu.h>
 +
 +#include "cgu.h"
 +#include "pm.h"
 +
 +/* CGU register offsets */
 +#define CGU_REG_CPCCR			0x00
-+#define CGU_REG_APLL			0x10
-+#define CGU_REG_MPLL			0x14
-+#define CGU_REG_CLKGR			0x20
++#define CGU_REG_LCR				0x04
++#define CGU_REG_CPPCR			0x0c
++#define CGU_REG_CPAPCR			0x10
++#define CGU_REG_CPMPCR			0x14
++#define CGU_REG_CPEPCR			0x18
++#define CGU_REG_CLKGR0			0x20
 +#define CGU_REG_OPCR			0x24
++#define CGU_REG_CLKGR1			0x28
 +#define CGU_REG_DDRCDR			0x2c
-+#define CGU_REG_VPUCDR			0x30
++#define CGU_REG_ISPCDR			0x30
++#define CGU_REG_CPSPR			0x34
++#define CGU_REG_CPSPPR			0x38
 +#define CGU_REG_USBPCR			0x3c
++#define CGU_REG_USBRDT			0x40
++#define CGU_REG_USBVBFIL		0x44
 +#define CGU_REG_USBPCR1			0x48
-+#define CGU_REG_USBCDR			0x50
-+#define CGU_REG_I2SCDR			0x60
++#define CGU_REG_MACPTPCDR		0x4c
++#define CGU_REG_RSACDR			0x50
++#define CGU_REG_MACCDR			0x54
++#define CGU_REG_MAC0TXCDR		0x58
++#define CGU_REG_SSICDR			0x5c
++#define CGU_REG_I2S0CDR			0x60
 +#define CGU_REG_LPCDR			0x64
 +#define CGU_REG_MSC0CDR			0x68
-+#define CGU_REG_UHCCDR			0x6c
-+#define CGU_REG_SSICDR			0x74
-+#define CGU_REG_CIM0CDR			0x7c
-+#define CGU_REG_CIM1CDR			0x80
-+#define CGU_REG_PCMCDR			0x84
++#define CGU_REG_PWMCDR			0x6c
++#define CGU_REG_I2S0CDR1		0x70
++#define CGU_REG_SFCCDR			0x74
++#define CGU_REG_CIMCDR			0x78
++#define CGU_REG_I2S1CDR			0x7c
++#define CGU_REG_I2S1CDR1		0x80
++#define CGU_REG_I2S2CDR			0x84
++#define CGU_REG_I2S2CDR1		0x88
++#define CGU_REG_I2S3CDR			0x8c
++#define CGU_REG_PSWC0ST			0x90
++#define CGU_REG_PSWC1ST			0x94
++#define CGU_REG_PSWC2ST			0x98
++#define CGU_REG_PSWC3ST			0x9c
++#define CGU_REG_I2S3CDR1		0xa0
 +#define CGU_REG_MSC1CDR			0xa4
 +#define CGU_REG_MSC2CDR			0xa8
-+#define CGU_REG_BCHCDR			0xac
++#define CGU_REG_AUDIOCR			0xac
 +#define CGU_REG_CMP_INTR		0xb0
 +#define CGU_REG_CMP_INTRE		0xb4
++#define CGU_REG_CMP_SFTINT		0xbc
 +#define CGU_REG_SRBC			0xc4
++#define CGU_REG_SLBC			0xc8
++#define CGU_REG_SLPC			0xcc
 +#define CGU_REG_DRCG			0xd0
 +#define CGU_REG_CPCSR			0xd4
-+#define CGU_REG_MACPHYC			0xe0
++#define CGU_REG_MAC1TXCDR		0xdc
++#define CGU_REG_MAC0PHYC		0xe4
++#define CGU_REG_MAC1PHYC		0xe8
++#define CGU_REG_MESTSEL			0xec
++#define CGU_REG_MEMPD0			0xf8
++#define CGU_REG_MEMPD1			0xfc
 +
 +/* bits within the OPCR register */
-+#define OPCR_SPENDN0			BIT(7)
++#define OPCR_GATE_USBPHYCLK		BIT(23)
++#define OPCR_SPENDN				BIT(7)
 +
-+/* bits within the USBPCR register */
-+#define USBPCR_SIDDQ			BIT(21)
-+#define USBPCR_OTG_DISABLE		BIT(20)
++/* bits within the I2SCDR register */
++#define I2SCDR_I2PCS_SHIFT		30
++#define I2SCDR_I2PCS_MASK		(0x1 << I2SCDR_I2PCS_SHIFT)
++#define I2SCDR_I2SDIV_M_SHIFT	20
++#define I2SCDR_I2SDIV_M_MASK	(0x1ff << I2SCDR_I2SDIV_M_SHIFT)
++#define I2SCDR_I2SDIV_N_SHIFT	0
++#define I2SCDR_I2SDIV_N_MASK	(0xfffff << I2SCDR_I2SDIV_N_SHIFT)
++#define I2SCDR_CE_I2S			BIT(29)
 +
-+/* bits within the USBPCR1 register */
-+#define USBPCR1_REFCLKDIV_SHIFT	24
-+#define USBPCR1_REFCLKDIV_MASK	(0x3 << USBPCR1_REFCLKDIV_SHIFT)
-+#define USBPCR1_REFCLKDIV_19_2	(0x3 << USBPCR1_REFCLKDIV_SHIFT)
-+#define USBPCR1_REFCLKDIV_48	(0x2 << USBPCR1_REFCLKDIV_SHIFT)
-+#define USBPCR1_REFCLKDIV_24	(0x1 << USBPCR1_REFCLKDIV_SHIFT)
-+#define USBPCR1_REFCLKDIV_12	(0x0 << USBPCR1_REFCLKDIV_SHIFT)
-+#define USBPCR1_PDBAR			BIT(17)
-+#define USBPCR1_XP_SHIFT		12
-+#define USBPCR1_XP_MASK			(0x3 << USBPCR1_XP_SHIFT)
-+#define USBPCR1_XP_DFT			(0x1 << USBPCR1_XP_SHIFT)
-+#define USBPCR1_SM_SHIFT		6
-+#define USBPCR1_SM_MASK			(0x7 << USBPCR1_XP_SHIFT)
-+#define USBPCR1_SM_RPD			(0x1 << USBPCR1_XP_SHIFT)
++/* bits within the CLKGR1 register */
++#define CLKGR1_I2S0				BIT(8)
++#define CLKGR1_I2S1				BIT(9)
++#define CLKGR1_I2S2				BIT(10)
++#define CLKGR1_I2S3				BIT(11)
 +
 +static struct ingenic_cgu *cgu;
 +
-+static int jz4775_uhc_phy_enable(struct clk_hw *hw)
++static void x2000_i2s_calc_m_n(const struct ingenic_cgu_pll_info *pll_info,
++		       unsigned long rate, unsigned long parent_rate,
++		       unsigned int *pm, unsigned int *pn, unsigned int *pod)
 +{
-+	void __iomem *reg_usbpcr1	= cgu->base + CGU_REG_USBPCR1;
-+	u32	usbpcr1;
++	unsigned int delta, m, n;
++	u64 curr_delta, curr_m, curr_n;
 +
-+	usbpcr1 = readl(reg_usbpcr1);
-+	usbpcr1 &= ~(USBPCR1_XP_MASK | USBPCR1_SM_MASK);
-+	usbpcr1 |= USBPCR1_XP_DFT | USBPCR1_SM_RPD;
-+	writel(usbpcr1, reg_usbpcr1);
-+
-+	return 0;
-+}
-+
-+static void jz4775_uhc_phy_disable(struct clk_hw *hw)
-+{
-+	void __iomem *reg_usbpcr1	= cgu->base + CGU_REG_USBPCR1;
-+
-+	writel(readl(reg_usbpcr1) & ~USBPCR1_PDBAR, reg_usbpcr1);
-+}
-+
-+static int jz4775_uhc_phy_is_enabled(struct clk_hw *hw)
-+{
-+	void __iomem *reg_usbpcr1	= cgu->base + CGU_REG_USBPCR1;
-+
-+	return !!(readl(reg_usbpcr1) & USBPCR1_PDBAR);
-+}
-+
-+static const struct clk_ops jz4775_uhc_phy_ops = {
-+	.enable = jz4775_uhc_phy_enable,
-+	.disable = jz4775_uhc_phy_disable,
-+	.is_enabled = jz4775_uhc_phy_is_enabled,
-+};
-+
-+static unsigned long jz4775_otg_phy_recalc_rate(struct clk_hw *hw,
-+						unsigned long parent_rate)
-+{
-+	u32 usbpcr1;
-+	unsigned refclk_div;
-+
-+	usbpcr1 = readl(cgu->base + CGU_REG_USBPCR1);
-+	refclk_div = usbpcr1 & USBPCR1_REFCLKDIV_MASK;
-+
-+	switch (refclk_div) {
-+	case USBPCR1_REFCLKDIV_12:
-+		return 12000000;
-+
-+	case USBPCR1_REFCLKDIV_24:
-+		return 24000000;
-+
-+	case USBPCR1_REFCLKDIV_48:
-+		return 48000000;
-+
-+	case USBPCR1_REFCLKDIV_19_2:
-+		return 19200000;
++	if ((parent_rate % rate == 0) && ((parent_rate / rate) > 1)) {
++		m = 1;
++		n = parent_rate / rate;
++		goto out;
 +	}
 +
-+	return parent_rate;
-+}
++	delta = rate;
 +
-+static long jz4775_otg_phy_round_rate(struct clk_hw *hw, unsigned long req_rate,
-+				      unsigned long *parent_rate)
-+{
-+	if (req_rate < 15600000)
-+		return 12000000;
++	/*
++	 * The length of M is 9 bits, its value must be between 1 and 511.
++	 * The length of N is 20 bits, its value must be between 2 and 1048575,
++	 * and must not be less than 2 times of the value of M.
++	 */
++	for (curr_m = 511; curr_m >= 1; curr_m--) {
++		curr_n = parent_rate * curr_m;
++		curr_delta = do_div(curr_n, rate);
 +
-+	if (req_rate < 21600000)
-+		return 19200000;
++		if (curr_n < 2 * curr_m || curr_n > 1048575)
++			continue;
 +
-+	if (req_rate < 36000000)
-+		return 24000000;
++		if (curr_delta == 0)
++			break;
 +
-+	return 48000000;
-+}
-+
-+static int jz4775_otg_phy_set_rate(struct clk_hw *hw, unsigned long req_rate,
-+				   unsigned long parent_rate)
-+{
-+	unsigned long flags;
-+	u32 usbpcr1, div_bits;
-+
-+	switch (req_rate) {
-+	case 12000000:
-+		div_bits = USBPCR1_REFCLKDIV_12;
-+		break;
-+
-+	case 19200000:
-+		div_bits = USBPCR1_REFCLKDIV_19_2;
-+		break;
-+
-+	case 24000000:
-+		div_bits = USBPCR1_REFCLKDIV_24;
-+		break;
-+
-+	case 48000000:
-+		div_bits = USBPCR1_REFCLKDIV_48;
-+		break;
-+
-+	default:
-+		return -EINVAL;
++		if (curr_delta < delta) {
++			m = curr_m;
++			n = curr_n;
++			delta = curr_delta;
++		}
 +	}
 +
-+	spin_lock_irqsave(&cgu->lock, flags);
++out:
++	*pm = m;
++	*pn = n;
 +
-+	usbpcr1 = readl(cgu->base + CGU_REG_USBPCR1);
-+	usbpcr1 &= ~USBPCR1_REFCLKDIV_MASK;
-+	usbpcr1 |= div_bits;
-+	writel(usbpcr1, cgu->base + CGU_REG_USBPCR1);
++	/*
++	 * The I2S PLL does not have OD bits, so set the *pod to 1 to ensure
++	 * that the ingenic_pll_calc() in cgu.c can run properly.
++	 */
++	*pod = 1;
++}
 +
-+	spin_unlock_irqrestore(&cgu->lock, flags);
++static int x2000_usb_phy_enable(struct clk_hw *hw)
++{
++	void __iomem *reg_opcr	= cgu->base + CGU_REG_OPCR;
++
++	writel((readl(reg_opcr) | OPCR_SPENDN) & ~OPCR_GATE_USBPHYCLK, reg_opcr);
 +
 +	return 0;
 +}
 +
-+static int jz4775_otg_phy_enable(struct clk_hw *hw)
++static void x2000_usb_phy_disable(struct clk_hw *hw)
 +{
-+	void __iomem *reg_opcr		= cgu->base + CGU_REG_OPCR;
-+	void __iomem *reg_usbpcr	= cgu->base + CGU_REG_USBPCR;
++	void __iomem *reg_opcr	= cgu->base + CGU_REG_OPCR;
 +
-+	writel(readl(reg_opcr) | OPCR_SPENDN0, reg_opcr);
-+	writel(readl(reg_usbpcr) & ~USBPCR_OTG_DISABLE & ~USBPCR_SIDDQ, reg_usbpcr);
-+
-+	return 0;
++	writel((readl(reg_opcr) & ~OPCR_SPENDN) | OPCR_GATE_USBPHYCLK, reg_opcr);
 +}
 +
-+static void jz4775_otg_phy_disable(struct clk_hw *hw)
++static int x2000_usb_phy_is_enabled(struct clk_hw *hw)
 +{
-+	void __iomem *reg_opcr		= cgu->base + CGU_REG_OPCR;
-+	void __iomem *reg_usbpcr	= cgu->base + CGU_REG_USBPCR;
++	void __iomem *reg_opcr	= cgu->base + CGU_REG_OPCR;
 +
-+	writel(readl(reg_opcr) & ~OPCR_SPENDN0, reg_opcr);
-+	writel(readl(reg_usbpcr) | USBPCR_OTG_DISABLE | USBPCR_SIDDQ, reg_usbpcr);
++	return !!(readl(reg_opcr) & OPCR_SPENDN);
 +}
 +
-+static int jz4775_otg_phy_is_enabled(struct clk_hw *hw)
-+{
-+	void __iomem *reg_opcr		= cgu->base + CGU_REG_OPCR;
-+	void __iomem *reg_usbpcr	= cgu->base + CGU_REG_USBPCR;
-+
-+	return (readl(reg_opcr) & OPCR_SPENDN0) &&
-+		!(readl(reg_usbpcr) & USBPCR_SIDDQ) &&
-+		!(readl(reg_usbpcr) & USBPCR_OTG_DISABLE);
-+}
-+
-+static const struct clk_ops jz4775_otg_phy_ops = {
-+	.recalc_rate = jz4775_otg_phy_recalc_rate,
-+	.round_rate = jz4775_otg_phy_round_rate,
-+	.set_rate = jz4775_otg_phy_set_rate,
-+
-+	.enable = jz4775_otg_phy_enable,
-+	.disable = jz4775_otg_phy_disable,
-+	.is_enabled = jz4775_otg_phy_is_enabled,
++static const struct clk_ops x2000_otg_phy_ops = {
++	.enable		= x2000_usb_phy_enable,
++	.disable	= x2000_usb_phy_disable,
++	.is_enabled	= x2000_usb_phy_is_enabled,
 +};
 +
-+static const s8 pll_od_encoding[8] = {
-+	0x0, 0x1, -1, 0x2, -1, -1, -1, 0x3,
++static const s8 pll_od_encoding[64] = {
++	 -1, 0x1,  -1, 0x2,  -1,  -1,  -1, 0x3,
++	 -1,  -1,  -1,  -1,  -1,  -1,  -1, 0x4,
++	 -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
++	 -1,  -1,  -1,  -1,  -1,  -1,  -1, 0x5,
++	 -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
++	 -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
++	 -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
++	 -1,  -1,  -1,  -1,  -1,  -1,  -1, 0x6,
 +};
 +
-+static const struct ingenic_cgu_clk_info jz4775_cgu_clocks[] = {
++static const struct ingenic_cgu_clk_info x2000_cgu_clocks[] = {
 +
 +	/* External clocks */
 +
-+	[JZ4775_CLK_EXCLK] = { "ext", CGU_CLK_EXT },
-+	[JZ4775_CLK_RTCLK] = { "rtc", CGU_CLK_EXT },
++	[X2000_CLK_EXCLK] = { "ext", CGU_CLK_EXT },
++	[X2000_CLK_RTCLK] = { "rtc", CGU_CLK_EXT },
 +
 +	/* PLLs */
 +
-+	[JZ4775_CLK_APLL] = {
++	[X2000_CLK_APLL] = {
 +		"apll", CGU_CLK_PLL,
-+		.parents = { JZ4775_CLK_EXCLK, -1, -1, -1 },
++		.parents = { X2000_CLK_EXCLK, -1, -1, -1 },
 +		.pll = {
-+			.reg = CGU_REG_APLL,
-+			.rate_multiplier = 1,
-+			.m_shift = 24,
-+			.m_bits = 7,
++			.reg = CGU_REG_CPAPCR,
++			.rate_multiplier = 2,
++			.m_shift = 20,
++			.m_bits = 9,
 +			.m_offset = 1,
-+			.n_shift = 18,
-+			.n_bits = 5,
++			.n_shift = 14,
++			.n_bits = 6,
 +			.n_offset = 1,
-+			.od_shift = 16,
-+			.od_bits = 2,
-+			.od_max = 8,
++			.od_shift = 11,
++			.od_bits = 3,
++			.od_max = 64,
 +			.od_encoding = pll_od_encoding,
-+			.bypass_reg = CGU_REG_APLL,
-+			.bypass_bit = 9,
-+			.enable_bit = 8,
-+			.stable_bit = 10,
++			.bypass_reg = CGU_REG_CPPCR,
++			.bypass_bit = 30,
++			.enable_bit = 0,
++			.stable_bit = 3,
 +		},
 +	},
 +
-+	[JZ4775_CLK_MPLL] = {
++	[X2000_CLK_MPLL] = {
 +		"mpll", CGU_CLK_PLL,
-+		.parents = { JZ4775_CLK_EXCLK, -1, -1, -1 },
++		.parents = { X2000_CLK_EXCLK, -1, -1, -1 },
 +		.pll = {
-+			.reg = CGU_REG_MPLL,
-+			.rate_multiplier = 1,
-+			.m_shift = 24,
-+			.m_bits = 7,
++			.reg = CGU_REG_CPMPCR,
++			.rate_multiplier = 2,
++			.m_shift = 20,
++			.m_bits = 10,
 +			.m_offset = 1,
-+			.n_shift = 18,
-+			.n_bits = 5,
++			.n_shift = 14,
++			.n_bits = 6,
 +			.n_offset = 1,
-+			.od_shift = 16,
-+			.od_bits = 2,
-+			.od_max = 8,
++			.od_shift = 11,
++			.od_bits = 3,
++			.od_max = 64,
 +			.od_encoding = pll_od_encoding,
-+			.bypass_reg = CGU_REG_MPLL,
-+			.bypass_bit = 6,
-+			.enable_bit = 7,
-+			.stable_bit = 0,
++			.bypass_reg = CGU_REG_CPPCR,
++			.bypass_bit = 28,
++			.enable_bit = 0,
++			.stable_bit = 3,
 +		},
 +	},
 +
-+	/* Custom (SoC-specific) */
-+
-+	[JZ4775_CLK_UHCPHY] = {
-+		"uhc_phy", CGU_CLK_CUSTOM,
-+		.parents = { JZ4775_CLK_UHC, -1, -1, -1 },
-+		.custom = { &jz4775_uhc_phy_ops },
++	[X2000_CLK_EPLL] = {
++		"epll", CGU_CLK_PLL,
++		.parents = { X2000_CLK_EXCLK, -1, -1, -1 },
++		.pll = {
++			.reg = CGU_REG_CPEPCR,
++			.rate_multiplier = 2,
++			.m_shift = 20,
++			.m_bits = 10,
++			.m_offset = 1,
++			.n_shift = 14,
++			.n_bits = 6,
++			.n_offset = 1,
++			.od_shift = 11,
++			.od_bits = 3,
++			.od_max = 64,
++			.od_encoding = pll_od_encoding,
++			.bypass_reg = CGU_REG_CPPCR,
++			.bypass_bit = 26,
++			.enable_bit = 0,
++			.stable_bit = 3,
++		},
 +	},
 +
-+	[JZ4775_CLK_OTGPHY] = {
++	[X2000_CLK_I2S0] = {
++		"i2s0", CGU_CLK_PLL,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_EPLL, -1, -1 },
++		.pll = {
++			.reg = CGU_REG_I2S0CDR,
++			.rate_multiplier = 1,
++			.mux_shift = 30,
++			.mux_bits = 1,
++			.m_shift = 20,
++			.m_bits = 9,
++			.m_offset = 0,
++			.n_shift = 0,
++			.n_bits = 20,
++			.n_offset = 0,
++			.bypass_bit = -1,
++			.enable_bit = 29,
++			.stable_bit = -1,
++			.calc_m_n_od = x2000_i2s_calc_m_n,
++		},
++	},
++
++	[X2000_CLK_I2S1] = {
++		"i2s1", CGU_CLK_PLL,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_EPLL, -1, -1 },
++		.pll = {
++			.reg = CGU_REG_I2S1CDR,
++			.rate_multiplier = 1,
++			.mux_shift = 30,
++			.mux_bits = 1,
++			.m_shift = 20,
++			.m_bits = 9,
++			.m_offset = 0,
++			.n_shift = 0,
++			.n_bits = 20,
++			.n_offset = 0,
++			.bypass_bit = -1,
++			.enable_bit = 29,
++			.stable_bit = -1,
++			.calc_m_n_od = x2000_i2s_calc_m_n,
++		},
++	},
++
++	[X2000_CLK_I2S2] = {
++		"i2s2", CGU_CLK_PLL,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_EPLL, -1, -1 },
++		.pll = {
++			.reg = CGU_REG_I2S2CDR,
++			.rate_multiplier = 1,
++			.mux_shift = 30,
++			.mux_bits = 1,
++			.m_shift = 20,
++			.m_bits = 9,
++			.m_offset = 0,
++			.n_shift = 0,
++			.n_bits = 20,
++			.n_offset = 0,
++			.bypass_bit = -1,
++			.enable_bit = 29,
++			.stable_bit = -1,
++			.calc_m_n_od = x2000_i2s_calc_m_n,
++		},
++	},
++
++	[X2000_CLK_I2S3] = {
++		"i2s3", CGU_CLK_PLL,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_EPLL, -1, -1 },
++		.pll = {
++			.reg = CGU_REG_I2S3CDR,
++			.rate_multiplier = 1,
++			.mux_shift = 30,
++			.mux_bits = 1,
++			.m_shift = 20,
++			.m_bits = 9,
++			.m_offset = 0,
++			.n_shift = 0,
++			.n_bits = 20,
++			.n_offset = 0,
++			.bypass_bit = -1,
++			.enable_bit = 29,
++			.stable_bit = -1,
++			.calc_m_n_od = x2000_i2s_calc_m_n,
++		},
++	},
++
++	/* Custom (SoC-specific) OTG PHY */
++
++	[X2000_CLK_OTGPHY] = {
 +		"otg_phy", CGU_CLK_CUSTOM,
-+		.parents = { JZ4775_CLK_EXCLK, -1, -1, -1 },
-+		.custom = { &jz4775_otg_phy_ops },
++		.parents = { X2000_CLK_EXCLK, -1, -1, -1 },
++		.custom = { &x2000_otg_phy_ops },
 +	},
 +
 +	/* Muxes & dividers */
 +
-+	[JZ4775_CLK_SCLKA] = {
++	[X2000_CLK_SCLKA] = {
 +		"sclk_a", CGU_CLK_MUX,
-+		.parents = { -1, JZ4775_CLK_APLL, JZ4775_CLK_EXCLK, JZ4775_CLK_RTCLK },
++		.parents = { -1, X2000_CLK_EXCLK, X2000_CLK_APLL, -1 },
 +		.mux = { CGU_REG_CPCCR, 30, 2 },
 +	},
 +
-+	[JZ4775_CLK_CPUMUX] = {
++	[X2000_CLK_CPUMUX] = {
 +		"cpu_mux", CGU_CLK_MUX,
-+		.parents = { -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL, -1 },
++		.parents = { -1, X2000_CLK_SCLKA, X2000_CLK_MPLL, -1 },
 +		.mux = { CGU_REG_CPCCR, 28, 2 },
 +	},
 +
-+	[JZ4775_CLK_CPU] = {
++	[X2000_CLK_CPU] = {
 +		"cpu", CGU_CLK_DIV,
-+		.parents = { JZ4775_CLK_CPUMUX },
++		.parents = { X2000_CLK_CPUMUX },
 +		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
 +	},
 +
-+	[JZ4775_CLK_L2CACHE] = {
++	[X2000_CLK_L2CACHE] = {
 +		"l2cache", CGU_CLK_DIV,
-+		.parents = { JZ4775_CLK_CPUMUX },
++		.parents = { X2000_CLK_CPUMUX },
 +		.div = { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
 +	},
 +
-+	[JZ4775_CLK_AHB0] = {
-+		"ahb0", CGU_CLK_MUX | CGU_CLK_DIV,
-+		.parents = { -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL, -1 },
++	[X2000_CLK_AHB0] = {
++		"ahb0", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { -1, X2000_CLK_SCLKA, X2000_CLK_MPLL, -1 },
 +		.mux = { CGU_REG_CPCCR, 26, 2 },
 +		.div = { CGU_REG_CPCCR, 8, 1, 4, 21, -1, -1 },
++		.gate = { CGU_REG_CLKGR0, 29 },
 +	},
 +
-+	[JZ4775_CLK_AHB2PMUX] = {
++	[X2000_CLK_AHB2PMUX] = {
 +		"ahb2_apb_mux", CGU_CLK_MUX,
-+		.parents = { -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL, JZ4775_CLK_RTCLK },
++		.parents = { -1, X2000_CLK_SCLKA, X2000_CLK_MPLL, -1 },
 +		.mux = { CGU_REG_CPCCR, 24, 2 },
 +	},
 +
-+	[JZ4775_CLK_AHB2] = {
++	[X2000_CLK_AHB2] = {
 +		"ahb2", CGU_CLK_DIV,
-+		.parents = { JZ4775_CLK_AHB2PMUX },
++		.parents = { X2000_CLK_AHB2PMUX },
 +		.div = { CGU_REG_CPCCR, 12, 1, 4, 20, -1, -1 },
 +	},
 +
-+	[JZ4775_CLK_PCLK] = {
-+		"pclk", CGU_CLK_DIV,
-+		.parents = { JZ4775_CLK_AHB2PMUX },
++	[X2000_CLK_PCLK] = {
++		"pclk", CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { X2000_CLK_AHB2PMUX },
 +		.div = { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
++		.gate = { CGU_REG_CLKGR0, 28 },
 +	},
 +
-+	[JZ4775_CLK_DDR] = {
++	[X2000_CLK_DDR] = {
 +		"ddr", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL, -1 },
++		.parents = { -1, X2000_CLK_SCLKA, X2000_CLK_MPLL, -1 },
 +		.mux = { CGU_REG_DDRCDR, 30, 2 },
 +		.div = { CGU_REG_DDRCDR, 0, 1, 4, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 31 },
++		.gate = { CGU_REG_CLKGR0, 31 },
 +	},
 +
-+	[JZ4775_CLK_VPU] = {
-+		"vpu", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL },
-+		.mux = { CGU_REG_VPUCDR, 31, 1 },
-+		.div = { CGU_REG_VPUCDR, 0, 1, 4, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 19 },
++	[X2000_CLK_ISP] = {
++		"isp", CGU_CLK_MUX | CGU_CLK_DIV,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
++		.mux = { CGU_REG_ISPCDR, 30, 2 },
++		.div = { CGU_REG_ISPCDR, 0, 1, 4, 29, 28, 27 },
 +	},
 +
-+	[JZ4775_CLK_OTG] = {
-+		"otg", CGU_CLK_DIV | CGU_CLK_GATE | CGU_CLK_MUX,
-+		.parents = { JZ4775_CLK_EXCLK, -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL },
-+		.mux = { CGU_REG_USBCDR, 30, 2 },
-+		.div = { CGU_REG_USBCDR, 0, 1, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 2 },
++	[X2000_CLK_MACPTP] = {
++		"mac_ptp", CGU_CLK_MUX | CGU_CLK_DIV,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
++		.mux = { CGU_REG_MACPTPCDR, 30, 2 },
++		.div = { CGU_REG_MACPTPCDR, 0, 1, 8, 29, 28, 27 },
 +	},
 +
-+	[JZ4775_CLK_EXCLK_DIV2] = {
-+		"exclk_div2", CGU_CLK_FIXDIV,
-+		.parents = { JZ4775_CLK_EXCLK },
-+		.fixdiv = { 2 },
++	[X2000_CLK_MACPHY] = {
++		"mac_phy", CGU_CLK_MUX | CGU_CLK_DIV,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
++		.mux = { CGU_REG_MACCDR, 30, 2 },
++		.div = { CGU_REG_MACCDR, 0, 1, 8, 29, 28, 27 },
 +	},
 +
-+	[JZ4775_CLK_I2S] = {
-+		"i2s", CGU_CLK_MUX | CGU_CLK_DIV,
-+		.parents = { JZ4775_CLK_EXCLK_DIV2, -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL },
-+		.mux = { CGU_REG_I2SCDR, 30, 2 },
-+		.div = { CGU_REG_I2SCDR, 0, 1, 8, 29, 28, 27 },
++	[X2000_CLK_MAC0TX] = {
++		"mac0_tx", CGU_CLK_MUX | CGU_CLK_DIV,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
++		.mux = { CGU_REG_MAC0TXCDR, 30, 2 },
++		.div = { CGU_REG_MAC0TXCDR, 0, 1, 8, 29, 28, 27 },
 +	},
 +
-+	[JZ4775_CLK_LCD] = {
-+		"lcd", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL },
-+		.mux = { CGU_REG_LPCDR, 31, 1 },
-+		.div = { CGU_REG_LPCDR, 0, 1, 8, 28, 27, 26 },
-+		.gate = { CGU_REG_CLKGR, 25 },
++	[X2000_CLK_MAC1TX] = {
++		"mac1_tx", CGU_CLK_MUX | CGU_CLK_DIV,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
++		.mux = { CGU_REG_MAC1TXCDR, 30, 2 },
++		.div = { CGU_REG_MAC1TXCDR, 0, 1, 8, 29, 28, 27 },
 +	},
 +
-+	[JZ4775_CLK_MSCMUX] = {
-+		"msc_mux", CGU_CLK_MUX,
-+		.parents = { -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL, -1 },
-+		.mux = { CGU_REG_MSC0CDR, 30, 2 },
++	[X2000_CLK_RSA] = {
++		"rsa", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
++		.mux = { CGU_REG_LPCDR, 30, 2 },
++		.div = { CGU_REG_LPCDR, 0, 1, 4, 29, 28, 27 },
++		.gate = { CGU_REG_CLKGR0, 25 },
 +	},
 +
-+	[JZ4775_CLK_MSC0] = {
-+		"msc0", CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_MSCMUX },
-+		.div = { CGU_REG_MSC0CDR, 0, 2, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 3 },
-+	},
-+
-+	[JZ4775_CLK_MSC1] = {
-+		"msc1", CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_MSCMUX },
-+		.div = { CGU_REG_MSC1CDR, 0, 2, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 11 },
-+	},
-+
-+	[JZ4775_CLK_MSC2] = {
-+		"msc2", CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_MSCMUX },
-+		.div = { CGU_REG_MSC2CDR, 0, 2, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 12 },
-+	},
-+
-+	[JZ4775_CLK_UHC] = {
-+		"uhc", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL, JZ4775_CLK_OTGPHY, -1 },
-+		.mux = { CGU_REG_UHCCDR, 30, 2 },
-+		.div = { CGU_REG_UHCCDR, 0, 1, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 22 },
-+	},
-+
-+	[JZ4775_CLK_SSI] = {
-+		"ssi", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_EXCLK, -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL },
++	[X2000_CLK_SSIPLL] = {
++		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
 +		.mux = { CGU_REG_SSICDR, 30, 2 },
 +		.div = { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 4 },
 +	},
 +
-+	[JZ4775_CLK_CIM0] = {
-+		"cim0", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL },
-+		.mux = { CGU_REG_CIM0CDR, 31, 1 },
-+		.div = { CGU_REG_CIM0CDR, 0, 1, 8, 30, 29, 28 },
-+		.gate = { CGU_REG_CLKGR, 23 },
++	[X2000_CLK_LCD] = {
++		"lcd", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
++		.mux = { CGU_REG_LPCDR, 30, 2 },
++		.div = { CGU_REG_LPCDR, 0, 1, 8, 29, 28, 27 },
++		.gate = { CGU_REG_CLKGR0, 23 },
 +	},
 +
-+	[JZ4775_CLK_CIM1] = {
-+		"cim1", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL },
-+		.mux = { CGU_REG_CIM1CDR, 31, 1 },
-+		.div = { CGU_REG_CIM1CDR, 0, 1, 8, 30, 29, 28 },
-+		.gate = { CGU_REG_CLKGR, 24 },
++	[X2000_CLK_MSC0] = {
++		"msc0", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
++		.mux = { CGU_REG_MSC0CDR, 30, 2 },
++		.div = { CGU_REG_MSC0CDR, 0, 2, 8, 29, 28, 27 },
++		.gate = { CGU_REG_CLKGR0, 4 },
 +	},
 +
-+	[JZ4775_CLK_PCM] = {
-+		"pcm", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_EXCLK_DIV2, -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL },
-+		.mux = { CGU_REG_PCMCDR, 30, 2 },
-+		.div = { CGU_REG_PCMCDR, 0, 1, 8, 28, 27, 26 },
-+		.gate = { CGU_REG_CLKGR, 13 },
++	[X2000_CLK_MSC1] = {
++		"msc1", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
++		.mux = { CGU_REG_MSC1CDR, 30, 2 },
++		.div = { CGU_REG_MSC1CDR, 0, 2, 8, 29, 28, 27 },
++		.gate = { CGU_REG_CLKGR0, 5 },
 +	},
 +
-+	[JZ4775_CLK_BCH] = {
-+		"bch", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { -1, JZ4775_CLK_SCLKA, JZ4775_CLK_MPLL, -1 },
-+		.mux = { CGU_REG_BCHCDR, 30, 2 },
-+		.div = { CGU_REG_BCHCDR, 0, 1, 4, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 1 },
++	[X2000_CLK_MSC2] = {
++		"msc2", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
++		.mux = { CGU_REG_MSC2CDR, 30, 2 },
++		.div = { CGU_REG_MSC2CDR, 0, 2, 8, 29, 28, 27 },
++		.gate = { CGU_REG_CLKGR1, 25 },
 +	},
 +
-+	[JZ4775_CLK_EXCLK_DIV512] = {
++	[X2000_CLK_PWM] = {
++		"pwm", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
++		.mux = { CGU_REG_PWMCDR, 30, 2 },
++		.div = { CGU_REG_PWMCDR, 0, 1, 4, 29, 28, 27 },
++		.gate = { CGU_REG_CLKGR1, 5 },
++	},
++
++	[X2000_CLK_SFC] = {
++		"sfc", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
++		.mux = { CGU_REG_SFCCDR, 30, 2 },
++		.div = { CGU_REG_SFCCDR, 0, 1, 8, 29, 28, 27 },
++		.gate = { CGU_REG_CLKGR0, 2 },
++	},
++
++	[X2000_CLK_CIM] = {
++		"cim", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
++		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
++		.mux = { CGU_REG_CIMCDR, 30, 2 },
++		.div = { CGU_REG_CIMCDR, 0, 1, 8, 29, 28, 27 },
++		.gate = { CGU_REG_CLKGR0, 22 },
++	},
++
++	[X2000_CLK_DMIC_EXCLK] = {
++		"dmic_exclk", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_AUDIOCR, 31 },
++	},
++
++	[X2000_CLK_DMIC] = {
++		"dmic", CGU_CLK_MUX | CGU_CLK_GATE,
++		.parents = { X2000_CLK_DMIC_EXCLK, X2000_CLK_I2S3 },
++		.mux = { CGU_REG_AUDIOCR, 0, 1},
++		.gate = { CGU_REG_CLKGR1, 13 },
++	},
++
++	[X2000_CLK_EXCLK_DIV512] = {
 +		"exclk_div512", CGU_CLK_FIXDIV,
-+		.parents = { JZ4775_CLK_EXCLK },
++		.parents = { X2000_CLK_EXCLK },
 +		.fixdiv = { 512 },
 +	},
 +
-+	[JZ4775_CLK_RTC] = {
++	[X2000_CLK_RTC] = {
 +		"rtc_ercs", CGU_CLK_MUX | CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_EXCLK_DIV512, JZ4775_CLK_RTCLK },
++		.parents = { X2000_CLK_EXCLK_DIV512, X2000_CLK_RTCLK },
 +		.mux = { CGU_REG_OPCR, 2, 1},
++		.gate = { CGU_REG_CLKGR0, 27 },
 +	},
 +
 +	/* Gate-only clocks */
 +
-+	[JZ4775_CLK_NEMC] = {
-+		"nemc", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR, 0 },
++	[X2000_CLK_EMC] = {
++		"emc", CGU_CLK_GATE,
++		.parents = { X2000_CLK_AHB2 },
++		.gate = { CGU_REG_CLKGR0, 0 },
 +	},
 +
-+	[JZ4775_CLK_I2C0] = {
++	[X2000_CLK_EFUSE] = {
++		"efuse", CGU_CLK_GATE,
++		.parents = { X2000_CLK_AHB2 },
++		.gate = { CGU_REG_CLKGR0, 1 },
++	},
++
++	[X2000_CLK_OTG] = {
++		"otg", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR0, 3 },
++	},
++
++	[X2000_CLK_SCC] = {
++		"scc", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR0, 6 },
++	},
++
++	[X2000_CLK_I2C0] = {
 +		"i2c0", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR, 5 },
++		.parents = { X2000_CLK_PCLK },
++		.gate = { CGU_REG_CLKGR0, 7 },
 +	},
 +
-+	[JZ4775_CLK_I2C1] = {
++	[X2000_CLK_I2C1] = {
 +		"i2c1", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR, 6 },
++		.parents = { X2000_CLK_PCLK },
++		.gate = { CGU_REG_CLKGR0, 8 },
 +	},
 +
-+	[JZ4775_CLK_I2C2] = {
++	[X2000_CLK_I2C2] = {
 +		"i2c2", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR, 7 },
++		.parents = { X2000_CLK_PCLK },
++		.gate = { CGU_REG_CLKGR0, 9 },
 +	},
 +
-+	[JZ4775_CLK_SADC] = {
++	[X2000_CLK_I2C3] = {
++		"i2c3", CGU_CLK_GATE,
++		.parents = { X2000_CLK_PCLK },
++		.gate = { CGU_REG_CLKGR0, 10 },
++	},
++
++	[X2000_CLK_SADC] = {
 +		"sadc", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR, 14 },
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR0, 13 },
 +	},
 +
-+	[JZ4775_CLK_UART0] = {
++	[X2000_CLK_UART0] = {
 +		"uart0", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR, 15 },
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR0, 14 },
 +	},
 +
-+	[JZ4775_CLK_UART1] = {
++	[X2000_CLK_UART1] = {
 +		"uart1", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR, 16 },
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR0, 15 },
 +	},
 +
-+	[JZ4775_CLK_UART2] = {
++	[X2000_CLK_UART2] = {
 +		"uart2", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR, 17 },
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR0, 16 },
 +	},
 +
-+	[JZ4775_CLK_UART3] = {
-+		"uart3", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR, 18 },
++	[X2000_CLK_DTRNG] = {
++		"dtrng", CGU_CLK_GATE,
++		.parents = { X2000_CLK_PCLK },
++		.gate = { CGU_REG_CLKGR0, 17 },
 +	},
 +
-+	[JZ4775_CLK_PDMA] = {
++	[X2000_CLK_TCU] = {
++		"tcu", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR0, 18 },
++	},
++
++	[X2000_CLK_SSI0] = {
++		"ssi0", CGU_CLK_GATE,
++		.parents = { X2000_CLK_SSIPLL },
++		.gate = { CGU_REG_CLKGR0, 19 },
++	},
++
++	[X2000_CLK_OST] = {
++		"ost", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR0, 20 },
++	},
++
++	[X2000_CLK_PDMA] = {
 +		"pdma", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR, 20 },
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR0, 21 },
 +	},
 +
-+	[JZ4775_CLK_MAC] = {
-+		"mac", CGU_CLK_GATE,
-+		.parents = { JZ4775_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR, 21 },
++	[X2000_CLK_SSI1] = {
++		"ssi1", CGU_CLK_GATE,
++		.parents = { X2000_CLK_SSIPLL },
++		.gate = { CGU_REG_CLKGR0, 26 },
++	},
++
++	[X2000_CLK_I2C4] = {
++		"i2c4", CGU_CLK_GATE,
++		.parents = { X2000_CLK_PCLK },
++		.gate = { CGU_REG_CLKGR1, 0 },
++	},
++
++	[X2000_CLK_I2C5] = {
++		"i2c5", CGU_CLK_GATE,
++		.parents = { X2000_CLK_PCLK },
++		.gate = { CGU_REG_CLKGR1, 1 },
++	},
++
++	[X2000_CLK_ISP0] = {
++		"isp0", CGU_CLK_GATE,
++		.parents = { X2000_CLK_ISP },
++		.gate = { CGU_REG_CLKGR1, 2 },
++	},
++
++	[X2000_CLK_ISP1] = {
++		"isp1", CGU_CLK_GATE,
++		.parents = { X2000_CLK_ISP },
++		.gate = { CGU_REG_CLKGR1, 3 },
++	},
++
++	[X2000_CLK_HASH] = {
++		"hash", CGU_CLK_GATE,
++		.parents = { X2000_CLK_AHB2 },
++		.gate = { CGU_REG_CLKGR1, 6 },
++	},
++
++	[X2000_CLK_UART3] = {
++		"uart3", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR1, 16 },
++	},
++
++	[X2000_CLK_UART4] = {
++		"uart4", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR1, 17 },
++	},
++
++	[X2000_CLK_UART5] = {
++		"uart5", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR1, 18 },
++	},
++
++	[X2000_CLK_UART6] = {
++		"uart6", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR1, 19 },
++	},
++
++	[X2000_CLK_UART7] = {
++		"uart7", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR1, 20 },
++	},
++
++	[X2000_CLK_UART8] = {
++		"uart8", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR1, 21 },
++	},
++
++	[X2000_CLK_UART9] = {
++		"uart9", CGU_CLK_GATE,
++		.parents = { X2000_CLK_EXCLK },
++		.gate = { CGU_REG_CLKGR1, 22 },
++	},
++
++	[X2000_CLK_MAC0] = {
++		"mac0", CGU_CLK_GATE,
++		.parents = { X2000_CLK_AHB2 },
++		.gate = { CGU_REG_CLKGR1, 23 },
++	},
++
++	[X2000_CLK_MAC1] = {
++		"mac1", CGU_CLK_GATE,
++		.parents = { X2000_CLK_AHB2 },
++		.gate = { CGU_REG_CLKGR1, 24 },
++	},
++
++	[X2000_CLK_INTC] = {
++		"intc", CGU_CLK_GATE,
++		.parents = { X2000_CLK_AHB2 },
++		.gate = { CGU_REG_CLKGR1, 26 },
++	},
++
++	[X2000_CLK_CSI] = {
++		"csi", CGU_CLK_GATE,
++		.parents = { X2000_CLK_AHB0 },
++		.gate = { CGU_REG_CLKGR1, 28 },
++	},
++
++	[X2000_CLK_DSI] = {
++		"dsi", CGU_CLK_GATE,
++		.parents = { X2000_CLK_AHB0 },
++		.gate = { CGU_REG_CLKGR1, 29 },
 +	},
 +};
 +
-+static void __init jz4775_cgu_init(struct device_node *np)
++static void __init x2000_cgu_init(struct device_node *np)
 +{
 +	int retval;
 +
-+	cgu = ingenic_cgu_new(jz4775_cgu_clocks,
-+			      ARRAY_SIZE(jz4775_cgu_clocks), np);
++	cgu = ingenic_cgu_new(x2000_cgu_clocks,
++			      ARRAY_SIZE(x2000_cgu_clocks), np);
 +	if (!cgu) {
 +		pr_err("%s: failed to initialise CGU\n", __func__);
 +		return;
@@ -662,7 +872,7 @@ index 00000000..b967d61
 + * CGU has some children devices, this is useful for probing children devices
 + * in the case where the device node is compatible with "simple-mfd".
 + */
-+CLK_OF_DECLARE_DRIVER(jz4775_cgu, "ingenic,jz4775-cgu", jz4775_cgu_init);
++CLK_OF_DECLARE_DRIVER(x2000_cgu, "ingenic,x2000-cgu", x2000_cgu_init);
 -- 
 2.7.4
 
