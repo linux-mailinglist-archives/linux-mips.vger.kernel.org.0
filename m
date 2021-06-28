@@ -2,117 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2AA3B6659
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 18:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFA93B670C
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Jun 2021 18:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbhF1QGE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 12:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbhF1QGD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Jun 2021 12:06:03 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A31C061760;
-        Mon, 28 Jun 2021 09:03:36 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id q16so19328727lfr.4;
-        Mon, 28 Jun 2021 09:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9+6mDKjcYk8hmZtLfRjkLtLnizKdu7+ND6kkw+plZIs=;
-        b=WehXqygcDRvt7H9HPjI5+m5XGpLgfQrl2S4E24ioukuled6AKRRPWT6tZJFIsjbv6x
-         feAJbp9u4Y0M1ZAIef8CTj+XcaiQaoygNxtKSD02zlkdSy1nQ7IsQAw+golDYdRnxw+V
-         g0Cn1LTPqgn6gaQKz80QNVDm5o+/yw7nGphsowuJmLcchup/B0mLLaj7HxQo0SIpC/Fq
-         LbsowaQ3lZkLTDwpSTOFFdZRrU5S0o8U+BpInNBQ6UHzHv3NlOarIqRDcNgogLsJpeAy
-         G827P/fyaUcOI8tawXeElqqpKCGgkb8IFA0eKXioxSmVbVqiXCTjwzISSnsZU1QUGs6i
-         u7/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9+6mDKjcYk8hmZtLfRjkLtLnizKdu7+ND6kkw+plZIs=;
-        b=bLuMY66XAeLsf4Iugp5i87fEkWEmF5OmyVxwgWZ/W0fIwxR18tQySoLp1IXTxmIBwK
-         //Lmm2uIt4/ffW+HCd2y/SG7THSJjZIg2eISqMbiE8xRmz6G8ZKJhZXidLGegNrE5ZOS
-         wbLtA2WyBLge4WvNa/eNvvK1wQsLn8lWOG1mnX/exmvgUioEgFoFlWsdx1U4qD0k3ltZ
-         OC96Nac8ZAEaYli92gAZi+pcGuHJa051Ala1D5s3t64pb2FqGA+ScyhO0CS5bBAZ7iE9
-         DNnK9LWE/Qtmv0hpRfTeRNrYy/kKVLzGhFIDHEgn/P2el4l/y9HgfT51vK1dk5ANyX3e
-         uKDQ==
-X-Gm-Message-State: AOAM532uP+ff+nKqcbU4D/KZP4vSca9f3vnwgZ2kOGnxLEwwGZ5xR5FX
-        biuyChB5yk6H78PMz+MdShrIxb8r0f8=
-X-Google-Smtp-Source: ABdhPJwWRp7/DULQ49/P2nsYmvnte9IYLgVFSaYn2unNvjpyxcxi5BzVuL73LsQA3ECbcHYRzHP79w==
-X-Received: by 2002:a19:ef0b:: with SMTP id n11mr19284891lfh.119.1624896214269;
-        Mon, 28 Jun 2021 09:03:34 -0700 (PDT)
-Received: from [192.168.1.102] ([31.173.82.94])
-        by smtp.gmail.com with ESMTPSA id f15sm1348944lfa.56.2021.06.28.09.03.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Jun 2021 09:03:34 -0700 (PDT)
-Subject: Re: [PATCH v4 2/2] MIPS: Loongson64: Add pm block node for
- Loongson-2K1000
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210628151330.11952-1-zhangqing@loongson.cn>
- <20210628151330.11952-2-zhangqing@loongson.cn>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <697cd16e-7131-95d6-6e0b-1034d493b3ce@gmail.com>
-Date:   Mon, 28 Jun 2021 19:03:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S232000AbhF1Qy3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 12:54:29 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:51242 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S231932AbhF1Qy2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 28 Jun 2021 12:54:28 -0400
+Received: from ld50.lan (unknown [101.224.80.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 4948E600FB;
+        Tue, 29 Jun 2021 00:46:07 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1624898767; bh=K00bWN9N6quhHB2UCZGpFJGeUMBWxcPISNFhcBwXLFM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DKx/F2t66nx50RoHm8ZkKuY2ERNnc0P6pMlJng2PWpm3NnPflmWVUx08MMRZFxzJs
+         GGJB1f/h5EbojfBOS20gScM6QpLWkIB7W45xsKm/k4AKyHnKBeew3ftY5f/Cgi7vNa
+         J3ezTpaJzFprKeIVPDgFBVLoTdpafHcw3o9SJZoQ=
+From:   WANG Xuerui <git@xen0n.name>
+To:     linux-rtc@vger.kernel.org
+Cc:     WANG Xuerui <git@xen0n.name>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v4 0/6] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+Date:   Tue, 29 Jun 2021 00:45:46 +0800
+Message-Id: <20210628164552.1006079-1-git@xen0n.name>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-In-Reply-To: <20210628151330.11952-2-zhangqing@loongson.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+Here is the 4th revision of the series; the review mail got lost in my
+inbox so this is a bit late, sorry for the delay!
 
-On 6/28/21 6:13 PM, Qing Zhang wrote:
+The previous revision is tested on Loongson-2K by Jiaxun Yang, and this
+revision contains no functional changes so should work on 2K too. I compiled
+and tested this revision on a Loongson-3A4000 & LS7A system.
 
-> The module is now supported, enable it.
-> 
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
-> 
-> v3-v4:
-> No change
-> 
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
->  arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-> index 569e814def83..e31176ac0ac2 100644
-> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-> @@ -101,6 +101,15 @@ uart0: serial@1fe00000 {
->  			no-loopback-test;
->  		};
->  
-> +		pm: power-controller {
-> +			device_type = "power management";
-> +			compatible = "loongson, reset-controller";
+This patch series adds support for the RTC module found on various
+Loongson systems with the Loongson-2K SoC or the LS7A bridge chip.
+The driver is rewritten from an out-of-tree version to meet mainline
+standards. I write kernel code as a hobby, though, so there might still
+be overlooked issues. Any suggestions are welcome.
 
-   No spaces allowed here, AFAIK.
+This series is based on next-20210628, but should apply cleanly on rtc-next
+too.
 
-> +			reg = <0 0x1fe0700c 0 0x8>,
-> +				<0 0x1fe07014 0 0x8>,
-> +				<0 0x1fe07030 0 0x8>;
+v4:
+- Rebased on top of next-20210628
+- Added Jiaxun's Tested-by tag for Loongson-2K
+- Addressed all review comments from v3
+  - Rewritten field operations with FIELD_GET/FIELD_PREP
+  - Removed all error logs
+  - Removed unnecessary spinlocking (RTC core already protects against
+    concurrent device file operations)
 
-   Better keep those aligned...
+v3:
+- Fixed compile error not discovered after rebase (blame sleep
+  deprivation)
+- Tested on Loongson-3A4000 (still need testing on Loongson-2K)
 
-> +			reg-names = "pm1_sts", "pm1_cnt", "rst_cnt";
-> +		};
-> +
-[...]
+v2:
+- Rebased on top of latest linux-next
+- Updated Huacai's e-mail address to the kernel.org one
+- Added collected tags
+- Added adaptation for newly upstreamed Loongson-2K platforms
 
-MBR, Sergei
+WANG Xuerui (6):
+  rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+  dt-bindings: rtc: Add bindings for LS2X RTC
+  MIPS: Loongson64: DTS: Add RTC support to LS7A
+  MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
+  MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+  MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
+
+ .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |   5 +
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   5 +
+ arch/mips/configs/loongson2k_defconfig        |   1 +
+ arch/mips/configs/loongson3_defconfig         |   1 +
+ drivers/rtc/Kconfig                           |  11 ++
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ls2x.c                        | 184 ++++++++++++++++++
+ 8 files changed, 210 insertions(+)
+ create mode 100644 drivers/rtc/rtc-ls2x.c
+
+
+base-commit: 3579aa488520feeda433ceca23ef4704bf8cd280
+-- 
+2.30.1
+
