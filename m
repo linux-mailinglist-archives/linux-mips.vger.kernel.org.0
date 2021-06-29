@@ -2,59 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1683B6F7A
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Jun 2021 10:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7136B3B6FCB
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Jun 2021 11:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232463AbhF2IgB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 29 Jun 2021 04:36:01 -0400
-Received: from elvis.franken.de ([193.175.24.41]:57427 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232405AbhF2IgA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 29 Jun 2021 04:36:00 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1ly9BU-0004qC-02; Tue, 29 Jun 2021 10:33:32 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id F13CFC073D; Tue, 29 Jun 2021 10:33:19 +0200 (CEST)
-Date:   Tue, 29 Jun 2021 10:33:19 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Dmitry Golovin <dima@golovin.in>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH] MIPS: set mips32r5 for virt extensions
-Message-ID: <20210629083319.GC4650@alpha.franken.de>
-References: <20210628215029.2722537-1-ndesaulniers@google.com>
+        id S232491AbhF2JDW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 29 Jun 2021 05:03:22 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:13040 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232470AbhF2JDV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 29 Jun 2021 05:03:21 -0400
+Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GDdfL4lXpzZdZn;
+        Tue, 29 Jun 2021 16:57:46 +0800 (CST)
+Received: from localhost.localdomain (10.175.103.91) by
+ dggeme754-chm.china.huawei.com (10.3.19.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Tue, 29 Jun 2021 17:00:51 +0800
+From:   Wei Li <liwei391@huawei.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Daniel Silsby <dansilsby@gmail.com>,
+        Paul Burton <paulburton@kernel.org>
+CC:     <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <huawei.libin@huawei.com>
+Subject: [PATCH] MIPS: Fix PKMAP with 32-bit MIPS huge page support
+Date:   Tue, 29 Jun 2021 17:04:05 +0800
+Message-ID: <20210629090405.1228030-1-liwei391@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210628215029.2722537-1-ndesaulniers@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeme754-chm.china.huawei.com (10.3.19.100)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jun 28, 2021 at 02:50:26PM -0700, Nick Desaulniers wrote:
-> Clang's integrated assembler only accepts these instructions when the
-> cpu is set to mips32r5. With this change, we can assemble
-> malta_defconfig with Clang via `make LLVM_IAS=1`.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/763
-> Reported-by: Dmitry Golovin <dima@golovin.in>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> ---
->  arch/mips/include/asm/mipsregs.h | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+When 32-bit MIPS huge page support is enabled, we halve the number of
+pointers a PTE page holds, making its last half go to waste.
+Correspondingly, we should halve the number of kmap entries, as we just
+initialized only a single pte table for that in pagetable_init().
 
-applied to mips-next.
+Fixes: 35476311e529 ("MIPS: Add partial 32-bit huge page support")
+Signed-off-by: Wei Li <liwei391@huawei.com>
+---
+ arch/mips/include/asm/highmem.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas.
-
+diff --git a/arch/mips/include/asm/highmem.h b/arch/mips/include/asm/highmem.h
+index 292d0425717f..bf82e67869fa 100644
+--- a/arch/mips/include/asm/highmem.h
++++ b/arch/mips/include/asm/highmem.h
+@@ -36,7 +36,7 @@ extern pte_t *pkmap_page_table;
+  * easily, subsequent pte tables have to be allocated in one physical
+  * chunk of RAM.
+  */
+-#ifdef CONFIG_PHYS_ADDR_T_64BIT
++#ifdef CONFIG_PHYS_ADDR_T_64BIT || CONFIG_MIPS_HUGE_TLB_SUPPORT
+ #define LAST_PKMAP 512
+ #else
+ #define LAST_PKMAP 1024
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.25.1
+
