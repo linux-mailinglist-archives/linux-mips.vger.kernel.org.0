@@ -2,77 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 037413B6CE7
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Jun 2021 05:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05FE3B6CF4
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Jun 2021 05:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbhF2DTB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 23:19:01 -0400
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:37975 "EHLO
+        id S231817AbhF2D1e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 23:27:34 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:34087 "EHLO
         wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231680AbhF2DTB (ORCPT
+        by vger.kernel.org with ESMTP id S231717AbhF2D1e (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 28 Jun 2021 23:19:01 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id EBB67320055E;
-        Mon, 28 Jun 2021 23:16:33 -0400 (EDT)
+        Mon, 28 Jun 2021 23:27:34 -0400
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 706043200906;
+        Mon, 28 Jun 2021 23:25:07 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 28 Jun 2021 23:16:34 -0400
+  by compute5.internal (MEProxy); Mon, 28 Jun 2021 23:25:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=Z
-        fgomsCwSdXKWwwi7g0uGoQSdn0Bmm4UCRHcNvw8Zno=; b=i0pogZ+rupFDeYeJ2
-        6KW9JrFMeSmfDtz7iGBoOJVJVKL53bzqlnbuoSOuuSio43fC3NEA8jQlB4ZJowdv
-        rSbe0Wm1CQjZo0kM11Kr4xx4IMDNwVOfQTjSPCHoXTxmUFc/1bB0CaP76dQZIiz8
-        scDj3+EKEGsnRsaaTl8FEJa6F/gPdsV06l0Mb5+HL8MorRdML8bwrDUT2n/weFaB
-        GaJFWVMfuVEXjAL/BCVWLZaWj4ihEW9ynDVzP9ZDXILa6Yj9kDVdjklprirNTLb9
-        OF5MGnb2PPsT4oIVTHf6CxTo11dHgQGabOyhzDspudVjE4t8uTJ80cR2UQoziBTl
-        ZiI1g==
+        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=C
+        48dFdNJ496G0g8Z8y2ldEPFtgm21ziIsTq8b2xD0Ds=; b=VMmYsvfsQb1CxwC2A
+        20INAg3dfKaCrgCG/mIErzFMTsNYr0UZsBg2PC6Pjx37xtg0Fw8Nz5VSRzM3jiDY
+        QNBHtddPbxG+4rAoY8zbK4a+h0qDWt+akNVn6HVGzJV14Xr7/Cd0G2lt1HxwMQDB
+        w5UKqRCWvT1QUiI0SICMZDQBSaGM41egy+TtGbUFb+JAP8Ik3FMvHAiRGbgamUVW
+        DfW3Lxpks6g7xIir3tK3Q2QYCmb/2MgvPAEVbgaA9gPithGbu7grgvj2Sn95HyMs
+        I4JDefYe8EAa/aT3RVixgUCv9WCbrV9CBngD3YzGT1ShGIfcuqggGteA1rm0XDEB
+        DkDSg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:content-type
         :date:from:in-reply-to:message-id:mime-version:references
         :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=ZfgomsCwSdXKWwwi7g0uGoQSdn0Bmm4UCRHcNvw8Z
-        no=; b=XcrJ+sHvOlwjW02cLhkKDDyyOMuLGMn44c87Gpt+ViILgqRwgasqaGn8v
-        FzKGNUdVLHoyt97VNvywG22WZgT5SVzF/62WcK2JSzqFDEds811NcaEvpGER02bq
-        o1igNs4w5730qHiIOqfTTkJBb4V+c2qE0+ybjk+Wf2HaUq8WMAwLzPm/l5ZcuwOC
-        D34bArkMW8DV9fLJzzOd1sBoJEnLzEfAqqQoTWYCdSNKj+tpT+7mpDQGIcv3t4qm
-        6CoP4mjCGzWQnTKQiu6jz4pE2WVku2eGeUZIyQFD3nfeTKJ3EX/iBkTFQs4azU/q
-        wXVmrE5kUn4lZ/gqtjg37MOsHZ0OQ==
-X-ME-Sender: <xms:kJDaYMQznc_xThJ8Qbi51SW8bCaYvlEkdACmmOBYhiI_Bsz-smMfVQ>
-    <xme:kJDaYJw-F5sT6a0WK12ULMwpLu1g7SKftZ0HMVQT0kMmhnOC7GhTLp3JxAmTA0tpr
-    wkD9iR4gGVNTYbiE2U>
-X-ME-Received: <xmr:kJDaYJ0oVuJbwVYsii8tqlCDW4OxQClHd9IbIt7u5AnQKfi80uFQlUzG75HW>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeehhedgieehucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm3; bh=C48dFdNJ496G0g8Z8y2ldEPFtgm21ziIsTq8b2xD0
+        Ds=; b=mw4rfn5c4AHC61UxUPnp3IVOL3p0MzhLl1vFTprs+Mk8iZyx1Z46OpqIY
+        2ymZEXXoNbHtrPgJMfmGRrxRmfCGgaWIL37FHNq5NG/mTynW3q40ioo007GMycbL
+        RGvavFryBSVwZsi0OcsNu96nul3m8N1ZBUApGOPVMnRmBzvrPpv2pvTSJSXraWNU
+        gk1n04lD37ew0pEb/2dQIrSLemKn8ujsaDjXfdbWTI6hVlwrD4PCk7Ht92Sx+hYJ
+        UfLAUAOIG4dFyy/RSEHS3SyfkBEMWRM5lvA3a1ifChU8v1wsJXrbcLY5Y472LoG3
+        e+tfgeyOU8D1OaPniIhvResRblrhQ==
+X-ME-Sender: <xms:kpLaYDjkmfNVzGeBxPqzRsS4hR8VT9436yDeuB7Wjvcwyl7YXuKK_w>
+    <xme:kpLaYACYJjdYKE24hzJLnsPhvMNh9Kwpug_1oe641tRoqAPPV-zBui1-mAhluo1IS
+    J3bfZK4MU4gv2XX_DA>
+X-ME-Received: <xmr:kpLaYDEQXz8rSrnrt8A1_8aNnu_JLDIreNZh3snFsUgXAg5sTeOd1cOs19P1>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeehhedgieeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdeftfenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeefleduiedtvdekffeggfeukeejgeeffeetlefghfekffeuteei
-    jeeghefhueffvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:kJDaYADFy6JNgKy5uZasxgFRcPMemqL3EbdgYjaClmsvDF4qpkdCRg>
-    <xmx:kJDaYFilBDzlkHmzOEa9399BJLgDBtTc_-hHWJUz60EMx5nhq3_YbQ>
-    <xmx:kJDaYMoSjvhRWsQEbOA4FwtpS5k-4_DSPWLJoe8KuKtUdyEBG3SG7A>
-    <xmx:kZDaYDYmqMpNWFCDfyi8RYiE29CRAe7w9sjoHGlivgHkS0EjrSfYKQ>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefuvfhfhffkffgfgggjtgfgsehtke
+    ertddtfeftnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghn
+    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepfeeludeitddvkeffge
+    fgueekjeegfeefteelgffhkeffueetieejgeehhfeuffdvnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
+    hgohgrthdrtghomh
+X-ME-Proxy: <xmx:kpLaYARXFRRHVthZTUBM_TEn3KueCOkD1MbYCcdrVQZ6hMu1i82f8g>
+    <xmx:kpLaYAxpN6Vrt4kRcN6dzAQ01gCDMUkc5_1CBuy-PxXcviMY0wm4Tg>
+    <xmx:kpLaYG4e7-AvtJHVYq2YOPZqLuWCsa0FXnI8xMAMAGSH55heNSEAOQ>
+    <xmx:k5LaYM-jRyBDmoi4rF3eN0Fw36tQmcGOhA7h4CUAl4YFiQjawR2L5A>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Jun 2021 23:16:29 -0400 (EDT)
-Subject: Re: [PATCH v5 2/2] MIPS: Loongson64: Add pm block node for
- Loongson-2K1000
-To:     Qing Zhang <zhangqing@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210629011913.18611-1-zhangqing@loongson.cn>
- <20210629011913.18611-2-zhangqing@loongson.cn>
+ 28 Jun 2021 23:25:04 -0400 (EDT)
+Subject: Re: [PATCH v4 3/6] MIPS: Loongson64: DTS: Add RTC support to LS7A
+To:     WANG Xuerui <git@xen0n.name>, linux-rtc@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20210628164552.1006079-1-git@xen0n.name>
+ <20210628164552.1006079-4-git@xen0n.name>
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <df075ce1-0b85-e032-24d5-b028447b64ea@flygoat.com>
-Date:   Tue, 29 Jun 2021 11:16:27 +0800
+Message-ID: <c55d1054-8536-a786-9687-da069faf9d1d@flygoat.com>
+Date:   Tue, 29 Jun 2021 11:25:02 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <20210629011913.18611-2-zhangqing@loongson.cn>
+In-Reply-To: <20210628164552.1006079-4-git@xen0n.name>
 Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -82,50 +78,32 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-在 2021/6/29 上午9:19, Qing Zhang 写道:
-> The module is now supported, enable it.
+在 2021/6/29 上午12:45, WANG Xuerui 写道:
+> The LS7A RTC module is now supported, enable it.
 >
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
+Acked-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
+>   arch/mips/boot/dts/loongson/ls7a-pch.dtsi | 5 +++++
+>   1 file changed, 5 insertions(+)
 >
-> v4-v5:
-> add missing spaces
->
->   arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 10 ++++++++++
->   1 file changed, 10 insertions(+)
->
-> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-> index 569e814def83..38bf14f00694 100644
-> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-> @@ -101,6 +101,16 @@ uart0: serial@1fe00000 {
->   			no-loopback-test;
+> diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> index 2f45fce2cdc4..82035de4774f 100644
+> --- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> +++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> @@ -19,6 +19,11 @@ pic: interrupt-controller@10000000 {
+>   			#interrupt-cells = <2>;
 >   		};
 >   
-> +		pm: power-controller {
-^ power-management@1fe0700c
-> +			device_type = "power management";
-^ Why do you need to specify device type?
-> +			compatible = "loongson, reset-controller";
-^ why space?
-I guess it should be loongson,ls2k-pm...
-
-- Jiaxun
-> +
-> +			reg = <0 0x1fe0700c 0 0x8>,
-> +			      <0 0x1fe07014 0 0x8>,
-> +			      <0 0x1fe07030 0 0x8>;
-> +			reg-names = "pm1_sts", "pm1_cnt", "rst_cnt";
-^ I guess there is no need to specify three reg names, you can simply 
-tell driver 0x1fe07000
-base address and calculate them on your own.
-
-Thanks.
-
-- Jiaxun
+> +		rtc0: rtc@100d0100 {
+> +			compatible = "loongson,ls2x-rtc";
+> +			reg = <0 0x100d0100 0 0x78>;
 > +		};
 > +
->   		pci@1a000000 {
->   			compatible = "loongson,ls2k-pci";
->   			device_type = "pci";
+>   		ls7a_uart0: serial@10080000 {
+>   			compatible = "ns16550a";
+>   			reg = <0 0x10080000 0 0x100>;
 
