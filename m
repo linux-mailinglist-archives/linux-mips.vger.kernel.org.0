@@ -2,87 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E93783B6BFE
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Jun 2021 03:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037413B6CE7
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Jun 2021 05:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbhF2BVq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Jun 2021 21:21:46 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:46396 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230483AbhF2BVq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 28 Jun 2021 21:21:46 -0400
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP0ERddpgWAYaAA--.9325S3;
-        Tue, 29 Jun 2021 09:19:14 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S231805AbhF2DTB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Jun 2021 23:19:01 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:37975 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231680AbhF2DTB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 28 Jun 2021 23:19:01 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id EBB67320055E;
+        Mon, 28 Jun 2021 23:16:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 28 Jun 2021 23:16:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=Z
+        fgomsCwSdXKWwwi7g0uGoQSdn0Bmm4UCRHcNvw8Zno=; b=i0pogZ+rupFDeYeJ2
+        6KW9JrFMeSmfDtz7iGBoOJVJVKL53bzqlnbuoSOuuSio43fC3NEA8jQlB4ZJowdv
+        rSbe0Wm1CQjZo0kM11Kr4xx4IMDNwVOfQTjSPCHoXTxmUFc/1bB0CaP76dQZIiz8
+        scDj3+EKEGsnRsaaTl8FEJa6F/gPdsV06l0Mb5+HL8MorRdML8bwrDUT2n/weFaB
+        GaJFWVMfuVEXjAL/BCVWLZaWj4ihEW9ynDVzP9ZDXILa6Yj9kDVdjklprirNTLb9
+        OF5MGnb2PPsT4oIVTHf6CxTo11dHgQGabOyhzDspudVjE4t8uTJ80cR2UQoziBTl
+        ZiI1g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=ZfgomsCwSdXKWwwi7g0uGoQSdn0Bmm4UCRHcNvw8Z
+        no=; b=XcrJ+sHvOlwjW02cLhkKDDyyOMuLGMn44c87Gpt+ViILgqRwgasqaGn8v
+        FzKGNUdVLHoyt97VNvywG22WZgT5SVzF/62WcK2JSzqFDEds811NcaEvpGER02bq
+        o1igNs4w5730qHiIOqfTTkJBb4V+c2qE0+ybjk+Wf2HaUq8WMAwLzPm/l5ZcuwOC
+        D34bArkMW8DV9fLJzzOd1sBoJEnLzEfAqqQoTWYCdSNKj+tpT+7mpDQGIcv3t4qm
+        6CoP4mjCGzWQnTKQiu6jz4pE2WVku2eGeUZIyQFD3nfeTKJ3EX/iBkTFQs4azU/q
+        wXVmrE5kUn4lZ/gqtjg37MOsHZ0OQ==
+X-ME-Sender: <xms:kJDaYMQznc_xThJ8Qbi51SW8bCaYvlEkdACmmOBYhiI_Bsz-smMfVQ>
+    <xme:kJDaYJw-F5sT6a0WK12ULMwpLu1g7SKftZ0HMVQT0kMmhnOC7GhTLp3JxAmTA0tpr
+    wkD9iR4gGVNTYbiE2U>
+X-ME-Received: <xmr:kJDaYJ0oVuJbwVYsii8tqlCDW4OxQClHd9IbIt7u5AnQKfi80uFQlUzG75HW>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfeehhedgieehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdeftfenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeefleduiedtvdekffeggfeukeejgeeffeetlefghfekffeuteei
+    jeeghefhueffvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:kJDaYADFy6JNgKy5uZasxgFRcPMemqL3EbdgYjaClmsvDF4qpkdCRg>
+    <xmx:kJDaYFilBDzlkHmzOEa9399BJLgDBtTc_-hHWJUz60EMx5nhq3_YbQ>
+    <xmx:kJDaYMoSjvhRWsQEbOA4FwtpS5k-4_DSPWLJoe8KuKtUdyEBG3SG7A>
+    <xmx:kZDaYDYmqMpNWFCDfyi8RYiE29CRAe7w9sjoHGlivgHkS0EjrSfYKQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 28 Jun 2021 23:16:29 -0400 (EDT)
+Subject: Re: [PATCH v5 2/2] MIPS: Loongson64: Add pm block node for
+ Loongson-2K1000
+To:     Qing Zhang <zhangqing@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] MIPS: Loongson64: Add pm block node for Loongson-2K1000
-Date:   Tue, 29 Jun 2021 09:19:13 +0800
-Message-Id: <20210629011913.18611-2-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20210629011913.18611-1-zhangqing@loongson.cn>
 References: <20210629011913.18611-1-zhangqing@loongson.cn>
+ <20210629011913.18611-2-zhangqing@loongson.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+Message-ID: <df075ce1-0b85-e032-24d5-b028447b64ea@flygoat.com>
+Date:   Tue, 29 Jun 2021 11:16:27 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <20210629011913.18611-2-zhangqing@loongson.cn>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxP0ERddpgWAYaAA--.9325S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7XF43KFW7Xr45AFW7Gr4kZwb_yoWftrg_ta
-        s2gw1kCF4fJF1ft3y8Xr1UGFy3u3y7Z3WrCF15XF10qas0vFn3JFWUAFWDCFy3XFyY9rs3
-        Xr48Wr18Ar1xKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbS8YjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7
-        IE14v26r18M28IrcIa0xkI8VCY1x0267AKxVWUCVW8JwA2ocxC64kIII0Yj41l84x0c7CE
-        w4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6x
-        kF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv
-        6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_KwCF04k20xvY0x
-        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
-        CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jnDG5UUUUU=
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The module is now supported, enable it.
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
 
-v4-v5:
-add missing spaces
+ÔÚ 2021/6/29 ÉÏÎç9:19, Qing Zhang Ð´µÀ:
+> The module is now supported, enable it.
+>
+> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> ---
+>
+> v4-v5:
+> add missing spaces
+>
+>   arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> index 569e814def83..38bf14f00694 100644
+> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+> @@ -101,6 +101,16 @@ uart0: serial@1fe00000 {
+>   			no-loopback-test;
+>   		};
+>   
+> +		pm: power-controller {
+^ power-management@1fe0700c
+> +			device_type = "power management";
+^ Why do you need to specify device type?
+> +			compatible = "loongson, reset-controller";
+^ why space?
+I guess it should be loongson,ls2k-pm...
 
- arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+- Jiaxun
+> +
+> +			reg = <0 0x1fe0700c 0 0x8>,
+> +			      <0 0x1fe07014 0 0x8>,
+> +			      <0 0x1fe07030 0 0x8>;
+> +			reg-names = "pm1_sts", "pm1_cnt", "rst_cnt";
+^ I guess there is no need to specify three reg names, you can simply 
+tell driver 0x1fe07000
+base address and calculate them on your own.
 
-diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-index 569e814def83..38bf14f00694 100644
---- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-+++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-@@ -101,6 +101,16 @@ uart0: serial@1fe00000 {
- 			no-loopback-test;
- 		};
- 
-+		pm: power-controller {
-+			device_type = "power management";
-+			compatible = "loongson, reset-controller";
-+
-+			reg = <0 0x1fe0700c 0 0x8>,
-+			      <0 0x1fe07014 0 0x8>,
-+			      <0 0x1fe07030 0 0x8>;
-+			reg-names = "pm1_sts", "pm1_cnt", "rst_cnt";
-+		};
-+
- 		pci@1a000000 {
- 			compatible = "loongson,ls2k-pci";
- 			device_type = "pci";
--- 
-2.31.0
+Thanks.
+
+- Jiaxun
+> +		};
+> +
+>   		pci@1a000000 {
+>   			compatible = "loongson,ls2k-pci";
+>   			device_type = "pci";
 
