@@ -2,112 +2,172 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9983B921B
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Jul 2021 15:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17093B928D
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Jul 2021 15:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236702AbhGANQ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 1 Jul 2021 09:16:58 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:40308 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236673AbhGANQu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 1 Jul 2021 09:16:50 -0400
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxf0OZv91gKz8bAA--.11066S4;
-        Thu, 01 Jul 2021 21:14:09 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v8 3/3] dt-bindings: mips: Add Loongson-2K1000 reset support
-Date:   Thu,  1 Jul 2021 21:14:00 +0800
-Message-Id: <20210701131400.4699-3-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20210701131400.4699-1-zhangqing@loongson.cn>
-References: <20210701131400.4699-1-zhangqing@loongson.cn>
+        id S231915AbhGAN7V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 1 Jul 2021 09:59:21 -0400
+Received: from elvis.franken.de ([193.175.24.41]:33889 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232335AbhGAN7V (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 1 Jul 2021 09:59:21 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1lyxBR-0000bH-00; Thu, 01 Jul 2021 15:56:49 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id DD147C0755; Thu,  1 Jul 2021 15:56:41 +0200 (CEST)
+Date:   Thu, 1 Jul 2021 15:56:41 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes for v5.14
+Message-ID: <20210701135641.GA6868@alpha.franken.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxf0OZv91gKz8bAA--.11066S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF15uF47Gry3tr15Ary3twb_yoW8Gw4rpF
-        nxCw17Kr4F9F13uwsxKFy8AF1rZr9aya4xXF47tw17t3s8Ga1Yvw1ak3Z8ZF17GFy8XFW7
-        XFWxWFWUKa4Ikw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPqb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv
-        6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-        02F40Ex7xfMcIj64x0Y40En7xvr7AKxVWUJVW8JwAv7VC0I7IYx2IY67AKxVWUAVWUtwAv
-        7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMx
-        kIecxEwVAFwVW5GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF
-        0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1I6r4UMIIF0xvEx4A2jsIE14
-        v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x
-        07jkb18UUUUU=
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Switch the DT binding to a YAML schema to enable the DT validation.
+The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
+  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
 
-v7-v8:
-No change
----
- .../bindings/mips/loongson/ls2k-reset.yaml    | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml
+are available in the Git repository at:
 
-diff --git a/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml b/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml
-new file mode 100644
-index 000000000000..6016ea756ccd
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/mips/loongson/ls2k-reset.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Loongson 2K1000 PM Controller
-+
-+maintainers:
-+  - Qing Zhang <zhangqing@loongson.cn>
-+
-+description: |
-+  This controller can be found in Loongson-2K1000 Soc systems.
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-pm
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    bus {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        pm: power-controller@1fe07000 {
-+            compatible = "loongson,ls2k-pm";
-+            reg = <0 0x1fe07000 0 0x422>;
-+        };
-+    };
-+...
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.14
+
+for you to fetch changes up to cf02ce742f09188272bcc8b0e62d789eb671fc4c:
+
+  MIPS: Fix PKMAP with 32-bit MIPS huge page support (2021-06-30 14:41:32 +0200)
+
+----------------------------------------------------------------
+- added support for OpeneEmbed SOM9331 board
+- Ingenic fixes/improvments
+- other fixes and cleanups
+
+----------------------------------------------------------------
+Bibo Mao (1):
+      hugetlb: clear huge pte during flush function on mips platform
+
+Geert Uytterhoeven (1):
+      MIPS: SEAD3: Correct Ethernet node name
+
+Huacai Chen (1):
+      MIPS: Loongson64: Remove a "set but not used" variable
+
+Huang Pei (1):
+      MIPS: add PMD table accounting into MIPS'pmd_alloc_one
+
+Masahiro Yamada (2):
+      mips: syscalls: define syscall offsets directly in <asm/unistd.h>
+      mips: syscalls: use pattern rules to generate syscall headers
+
+Mike Rapoport (1):
+      MIPS: Octeon: drop dependency on CONFIG_HOLES_IN_ZONE
+
+Nick Desaulniers (1):
+      MIPS: set mips32r5 for virt extensions
+
+Oleksij Rempel (3):
+      dt-bindings: vendor-prefixes: Add an entry for OpenEmbed
+      MIPS: ath79: ar9331: Add OpeneEmbed SOM9331 Board
+      MIPS: ath79: ar9331: add pause property for the MAC <> switch link
+
+Paul Cercueil (9):
+      MIPS: mm: XBurst CPU requires sync after DMA
+      MIPS: boot: Support specifying UART port on Ingenic SoCs
+      MIPS: cpu-probe: Fix FPU detection on Ingenic JZ4760(B)
+      MIPS: Kconfig: ingenic: Ensure MACH_INGENIC_GENERIC selects all SoCs
+      MIPS: ingenic: Select CPU_SUPPORTS_CPUFREQ && MIPS_EXTERNAL_TIMER
+      MIPS: ingenic: jz4780: Fix I2C nodes to match DT doc
+      MIPS: ingenic: gcw0: Set codec to cap-less mode for FM radio
+      MIPS: ingenic: rs90: Add dedicated VRAM memory region
+      MIPS: MT extensions are not available on MIPS32r1
+
+Tiezhu Yang (2):
+      MIPS: Loongson64: Update loongson3_defconfig
+      MIPS: Loongson64: Make some functions static in smp.c
+
+Tom Rix (1):
+      MIPS: Loongson64: fix spelling of SPDX tag
+
+Wei Li (1):
+      MIPS: Fix PKMAP with 32-bit MIPS huge page support
+
+Xiaochuan Mao (1):
+      MIPS:DTS:Correct device id of pcie for Loongnon-2K
+
+Yang Yingliang (1):
+      MIPS: OCTEON: octeon-usb: Use devm_platform_get_and_ioremap_resource()
+
+Youling Tang (1):
+      MIPS: Loongson64: Fix build error 'secondary_kexec_args' undeclared under !SMP
+
+zhanglianjie (1):
+      MIPS: loongsoon64: Reserve memory below starting pfn to prevent Oops
+
+zhaoxiao (5):
+      mips: dts: loongson: fix DTC unit name warnings
+      mips: dts: loongson: fix DTC unit name warnings
+      mips: dts: loongson: fix DTC unit name warnings
+      mips: dts: loongson: fix DTC unit name warnings
+      mips: dts: loongson: fix DTC unit name warnings
+
+zhouchuangao (1):
+      mips/kvm: Use BUG_ON instead of if condition followed by BUG
+
+周琰杰 (Zhou Yanjie) (5):
+      MIPS: X1830: Respect cell count of common properties.
+      dt-bindings: clock: Add documentation for MAC PHY control bindings.
+      MIPS: Ingenic: Add MAC syscon nodes for Ingenic SoCs.
+      MIPS: CI20: Reduce clocksource to 750 kHz.
+      MIPS: CI20: Add second percpu timer for SMP.
+
+ .../devicetree/bindings/clock/ingenic,cgu.yaml     |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ arch/mips/Kconfig                                  |   7 +-
+ arch/mips/Kconfig.debug                            |   8 ++
+ arch/mips/boot/compressed/uart-16550.c             |   4 +-
+ arch/mips/boot/dts/ingenic/ci20.dts                |  24 +++--
+ arch/mips/boot/dts/ingenic/gcw0.dts                |   5 +-
+ arch/mips/boot/dts/ingenic/jz4780.dtsi             |  10 +-
+ arch/mips/boot/dts/ingenic/rs90.dts                |  14 +++
+ arch/mips/boot/dts/ingenic/x1000.dtsi              |   7 ++
+ arch/mips/boot/dts/ingenic/x1830.dtsi              |  16 ++-
+ arch/mips/boot/dts/loongson/Makefile               |   2 +-
+ arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi |  18 ++--
+ .../boot/dts/loongson/loongson64g-package.dtsi     |   4 +-
+ .../boot/dts/loongson/loongson64v_4core_virtio.dts |   2 +-
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi          |   2 +-
+ arch/mips/boot/dts/loongson/rs780e-pch.dtsi        |   2 +-
+ arch/mips/boot/dts/mti/sead3.dts                   |   2 +-
+ arch/mips/boot/dts/qca/Makefile                    |   1 +
+ arch/mips/boot/dts/qca/ar9331.dtsi                 |   2 +
+ .../dts/qca/ar9331_openembed_som9331_board.dts     | 110 +++++++++++++++++++++
+ arch/mips/cavium-octeon/octeon-usb.c               |   9 +-
+ arch/mips/configs/loongson3_defconfig              |  12 +--
+ arch/mips/include/asm/cpu-features.h               |   4 +-
+ arch/mips/include/asm/highmem.h                    |   2 +-
+ arch/mips/include/asm/hugetlb.h                    |   8 +-
+ arch/mips/include/asm/mipsregs.h                   |   8 +-
+ arch/mips/include/asm/pgalloc.h                    |  10 +-
+ arch/mips/include/asm/unistd.h                     |   4 +
+ arch/mips/ingenic/Kconfig                          |   2 +
+ arch/mips/kernel/cpu-probe.c                       |   5 +
+ arch/mips/kernel/syscalls/Makefile                 |  34 +------
+ arch/mips/kernel/syscalls/syscallnr.sh             |   2 -
+ arch/mips/kvm/tlb.c                                |   3 +-
+ arch/mips/loongson64/env.c                         |   3 +-
+ arch/mips/loongson64/numa.c                        |   3 +
+ arch/mips/loongson64/reset.c                       |   5 +-
+ arch/mips/loongson64/smp.c                         |  10 +-
+ arch/mips/mm/dma-noncoherent.c                     |   1 +
+ 39 files changed, 254 insertions(+), 115 deletions(-)
+ create mode 100644 arch/mips/boot/dts/qca/ar9331_openembed_som9331_board.dts
+
 -- 
-2.31.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
