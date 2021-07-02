@@ -2,101 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 495F33BA231
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jul 2021 16:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5757A3BA27E
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Jul 2021 17:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbhGBOb5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Jul 2021 10:31:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58056 "EHLO mail.kernel.org"
+        id S232016AbhGBPIw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Jul 2021 11:08:52 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:37628 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232677AbhGBOb5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 2 Jul 2021 10:31:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7FF3B61427;
-        Fri,  2 Jul 2021 14:29:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625236164;
-        bh=64CD+XV1kvpA4iaQPcx3V6TJ1lbYAzNmgJWPg7WUcEQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lvG/vlIQkzIN2V9lY0ULCj7rz6y42uTmJJiwmt+L5kvDaqJKDoiiNPXCpl1U/SfS8
-         0x0mvs0qrkeAN5Q2xwNdAOlUpnHG9GGKrJ331VqGoewBY9RPj+e3FZLIsmvLO1lTj/
-         viaqDRj7K2na73LtjyVGryVyj6lpd1tcX2LfwfflAdL5QCyDi120lNNnfYY+jPX3tG
-         VMnPdz7NS4u/3zTtgRL78/FEP12YlKqd4ii8zJ/aLg4SoggJQvmtPOfRIHz13a5lYX
-         IsTr6iHY0gAsfLhSMvyfeWAJv6ICWtLfojRhr+hRcPAWE+/rD+hVTYmsfvEI8xcSHU
-         EBgRQAL1ZJPNg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Xingxing Su <suxingxing@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Alban Bedel <albeu@free.fr>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mips: always link byteswap helpers into decompressor
-Date:   Fri,  2 Jul 2021 16:28:37 +0200
-Message-Id: <20210702142919.392532-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S231791AbhGBPIw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 2 Jul 2021 11:08:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=vEFH4//fNmJ1dKiJR0SLis4t45bfQOPUbiQDB7XuDNA=; b=5nT8qjfrkE0IcxtelKNfFJfBZf
+        6OFa1V+xg9+TiiXGmlDA0ryD9DxZfhWyNTvJ2Mm2CuiY0cxad3rCHR7insTZQjDKMFSBebwgkaIpu
+        9gRhMJincKxaaa8BNxYV1F58ZkTUQu//gmc1wrDpSNyolk7fOIPafVp9iF1bvhYlW0Ec=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1lzKk7-00BviL-G6; Fri, 02 Jul 2021 17:06:11 +0200
+Date:   Fri, 2 Jul 2021 17:06:11 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/6] net: dsa: qca: ar9331: make proper
+ initial port defaults
+Message-ID: <YN8rY5wDVv0tca85@lunn.ch>
+References: <20210702101751.13168-1-o.rempel@pengutronix.de>
+ <20210702101751.13168-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210702101751.13168-3-o.rempel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jul 02, 2021 at 12:17:47PM +0200, Oleksij Rempel wrote:
+> Make sure that all external port are actually isolated from each other,
+> so no packets are leaked.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-My series to clean up the unaligned access implementation
-across architectures caused some mips randconfig builds to
-fail with:
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-   mips64-linux-ld: arch/mips/boot/compressed/decompress.o: in function `decompress_kernel':
-   decompress.c:(.text.decompress_kernel+0x54): undefined reference to `__bswapsi2'
-
-It turns out that this problem has already been fixed for the XZ
-decompressor but now it also shows up in (at least) LZO and LZ4.  From my
-analysis I concluded that the compiler could always have emitted those
-calls, but the different implementation allowed it to make otherwise
-better decisions about not inlining the byteswap, which results in the
-link error when the out-of-line code is missing.
-
-While it could be addressed by adding it to the two decompressor
-implementations that are known to be affected, but as this only adds
-112 bytes to the kernel, the safer choice is to always add them.
-
-Fixes: c50ec6787536 ("MIPS: zboot: Fix the build with XZ compression on older GCC versions")
-Fixes: 0652035a5794 ("asm-generic: unaligned: remove byteshift helpers")
-Link: https://lore.kernel.org/linux-mm/202106301304.gz2wVY9w-lkp@intel.com/
-Link: https://lore.kernel.org/linux-mm/202106260659.TyMe8mjr-lkp@intel.com/
-Link: https://lore.kernel.org/linux-mm/202106172016.onWT6Tza-lkp@intel.com/
-Link: https://lore.kernel.org/linux-mm/202105231743.JJcALnhS-lkp@intel.com/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/mips/boot/compressed/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index e4b7839293e1..3548b3b45269 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -40,7 +40,7 @@ GCOV_PROFILE := n
- UBSAN_SANITIZE := n
- 
- # decompressor objects (linked with vmlinuz)
--vmlinuzobjs-y := $(obj)/head.o $(obj)/decompress.o $(obj)/string.o
-+vmlinuzobjs-y := $(obj)/head.o $(obj)/decompress.o $(obj)/string.o $(obj)/bswapsi.o
- 
- ifdef CONFIG_DEBUG_ZBOOT
- vmlinuzobjs-$(CONFIG_DEBUG_ZBOOT)		   += $(obj)/dbg.o
-@@ -54,7 +54,7 @@ extra-y += uart-ath79.c
- $(obj)/uart-ath79.c: $(srctree)/arch/mips/ath79/early_printk.c
- 	$(call cmd,shipped)
- 
--vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o $(obj)/bswapsi.o
-+vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
- 
- extra-y += ashldi3.c
- $(obj)/ashldi3.c: $(obj)/%.c: $(srctree)/lib/%.c FORCE
--- 
-2.29.2
-
+    Andrew
