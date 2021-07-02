@@ -2,58 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4875E3B9A32
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jul 2021 02:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 420793B9A31
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Jul 2021 02:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234543AbhGBAs4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S234517AbhGBAs4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Thu, 1 Jul 2021 20:48:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46348 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:46338 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234510AbhGBAs4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 1 Jul 2021 20:48:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id F1C836140E;
+        id S234469AbhGBAsz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 1 Jul 2021 20:48:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id BE6E46140A;
         Fri,  2 Jul 2021 00:46:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625186785;
-        bh=voKr1DSTLMJskXATNUfJ0oSpsSoDaC7HiFwL5Sz8S2M=;
+        s=k20201202; t=1625186784;
+        bh=Ryj7UQ2rLJCZfWpB693+LZFzNiUY3p3z75DQoJF+Nnw=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=rTddCbWKi6kFBivaYgKvwPRPwXH9m983RW8fizGl879IZNuabltelDIPcGc7UHmMn
-         uRfyGbYCOeFjdlYzAvnWXJYkQhvwR5Tp6r0ex7VbIKmWWDxz4TTyMjdqkPF8yTRNyQ
-         vGiBQdDr6CMO2k1UakdRMXOh8IvRgMbNZT7cGw5RB3bYfttMMInBlt71JZ2pTDFwuh
-         KxtrhxsJFwfuoSo7r6PFoP8nEsBvX/RNIyq0u1e8bWOnkote9Bkh+Ojhp/kv43HIQc
-         qBejnCFu2/RgMjysVXtnT/vdFarssUedaeizqI18KMbXOew+B53Q+69P+Z2o7gf7y+
-         LmcVGrGOVekPA==
+        b=VzSz14b4cL7UfFRVuzc9REFfK1QXCg+kBiEU/JBTLk/0NITBI5wk6D1pMhlKrhCMq
+         OluImZWTdTPA/CXhtWjjfCDtawmUH66UVrtR5Z798XGhP56pM6bfkrocBRUJIoeuTr
+         HJgssTaLiRRtIfB/2B1EWS/qOqJaU/HHJuFygZ+3FificLC5hJs+sglDqkYasIN4/L
+         LFBJdbrDNif9C7+8rUmtxvYs/u2GRhGmufgIw3e6m8vysy4/kr5cE3ukhk5/9vVhLs
+         Gf3XoibsPNyzKTX34UswLGTyIEUObOmJdOo/4LS9k72lwD9a9g8/JFvmoKiPGoJISv
+         CgD4VVbvaTUvw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id EBAF6609F7;
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id AC719609F7;
         Fri,  2 Jul 2021 00:46:24 +0000 (UTC)
-Subject: Re: [GIT PULL] bulk pin control changes for v5.14
+Subject: Re: [GIT PULL] MIPS changes for v5.14
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CACRpkdadLCD=LEkq7jj6gu_XyDH5qvfoq3ABAyLU0hk+qPzsAQ@mail.gmail.com>
-References: <CACRpkdadLCD=LEkq7jj6gu_XyDH5qvfoq3ABAyLU0hk+qPzsAQ@mail.gmail.com>
+In-Reply-To: <20210701135641.GA6868@alpha.franken.de>
+References: <20210701135641.GA6868@alpha.franken.de>
 X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CACRpkdadLCD=LEkq7jj6gu_XyDH5qvfoq3ABAyLU0hk+qPzsAQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v5.14-1
-X-PR-Tracked-Commit-Id: bfa50166cd9d5d190b20dc33d1ec7ae19ced7022
+X-PR-Tracked-Message-Id: <20210701135641.GA6868@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.14
+X-PR-Tracked-Commit-Id: cf02ce742f09188272bcc8b0e62d789eb671fc4c
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a32b344e6f4375c5bdc3e89d0997b7eae187a3b1
-Message-Id: <162518678495.2278.10928620210611047907.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 19b438592238b3b40c3f945bb5f9c4ca971c0c45
+Message-Id: <162518678464.2278.11244388223811340173.pr-tracker-bot@kernel.org>
 Date:   Fri, 02 Jul 2021 00:46:24 +0000
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Fri, 2 Jul 2021 01:33:07 +0200:
+The pull request you sent on Thu, 1 Jul 2021 15:56:41 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git tags/pinctrl-v5.14-1
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.14
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a32b344e6f4375c5bdc3e89d0997b7eae187a3b1
+https://git.kernel.org/torvalds/c/19b438592238b3b40c3f945bb5f9c4ca971c0c45
 
 Thank you!
 
