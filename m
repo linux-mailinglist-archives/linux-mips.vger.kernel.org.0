@@ -2,133 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C769B3BA02E
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jul 2021 14:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495F33BA231
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Jul 2021 16:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbhGBMIb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 2 Jul 2021 08:08:31 -0400
-Received: from out28-74.mail.aliyun.com ([115.124.28.74]:52946 "EHLO
-        out28-74.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbhGBMHV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 2 Jul 2021 08:07:21 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07438208|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.257215-0.00260397-0.740181;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.KbD.WuZ_1625227484;
-Received: from 192.168.88.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KbD.WuZ_1625227484)
-          by smtp.aliyun-inc.com(10.147.41.231);
-          Fri, 02 Jul 2021 20:04:45 +0800
-Subject: Re: [PATCH v4 5/5] MIPS: CI20: Add second percpu timer for SMP.
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com
-References: <1624688321-69131-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1624688321-69131-6-git-send-email-zhouyanjie@wanyeetech.com>
- <84LIVQ.EPXA43L4WLUK@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <3b6ffdde-2dcc-4883-f66b-9ca46db636e2@wanyeetech.com>
-Date:   Fri, 2 Jul 2021 20:04:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S232715AbhGBOb5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 2 Jul 2021 10:31:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58056 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232677AbhGBOb5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 2 Jul 2021 10:31:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7FF3B61427;
+        Fri,  2 Jul 2021 14:29:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625236164;
+        bh=64CD+XV1kvpA4iaQPcx3V6TJ1lbYAzNmgJWPg7WUcEQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lvG/vlIQkzIN2V9lY0ULCj7rz6y42uTmJJiwmt+L5kvDaqJKDoiiNPXCpl1U/SfS8
+         0x0mvs0qrkeAN5Q2xwNdAOlUpnHG9GGKrJ331VqGoewBY9RPj+e3FZLIsmvLO1lTj/
+         viaqDRj7K2na73LtjyVGryVyj6lpd1tcX2LfwfflAdL5QCyDi120lNNnfYY+jPX3tG
+         VMnPdz7NS4u/3zTtgRL78/FEP12YlKqd4ii8zJ/aLg4SoggJQvmtPOfRIHz13a5lYX
+         IsTr6iHY0gAsfLhSMvyfeWAJv6ICWtLfojRhr+hRcPAWE+/rD+hVTYmsfvEI8xcSHU
+         EBgRQAL1ZJPNg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Xingxing Su <suxingxing@loongson.cn>,
+        zhaoxiao <zhaoxiao@uniontech.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Alban Bedel <albeu@free.fr>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mips: always link byteswap helpers into decompressor
+Date:   Fri,  2 Jul 2021 16:28:37 +0200
+Message-Id: <20210702142919.392532-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <84LIVQ.EPXA43L4WLUK@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Arnd Bergmann <arnd@arndb.de>
 
-On 2021/6/30 下午8:24, Paul Cercueil wrote:
-> Hi Zhou,
->
-> Le sam., juin 26 2021 at 14:18:41 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> 1.Add a new TCU channel as the percpu timer of core1, this is to
->>   prepare for the subsequent SMP support. The newly added channel
->>   will not adversely affect the current single-core state.
->> 2.Adjust the position of TCU node to make it consistent with the
->>   order in jz4780.dtsi file.
->>
->> Tested-by: Nikolaus Schaller <hns@goldelico.com> # on CI20
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->
-> Again, you should avoid moving nodes like that.
+My series to clean up the unaligned access implementation
+across architectures caused some mips randconfig builds to
+fail with:
 
+   mips64-linux-ld: arch/mips/boot/compressed/decompress.o: in function `decompress_kernel':
+   decompress.c:(.text.decompress_kernel+0x54): undefined reference to `__bswapsi2'
 
-Oops, sorry, forgot to fix it, I will be more careful next time.
+It turns out that this problem has already been fixed for the XZ
+decompressor but now it also shows up in (at least) LZO and LZ4.  From my
+analysis I concluded that the compiler could always have emitted those
+calls, but the different implementation allowed it to make otherwise
+better decisions about not inlining the byteswap, which results in the
+link error when the out-of-line code is missing.
 
+While it could be addressed by adding it to the two decompressor
+implementations that are known to be affected, but as this only adds
+112 bytes to the kernel, the safer choice is to always add them.
 
->
-> Not sure it's worth asking for a v5, so:
-> Acked-by: Paul Cercueil <paul@crapouillou.net>
->
+Fixes: c50ec6787536 ("MIPS: zboot: Fix the build with XZ compression on older GCC versions")
+Fixes: 0652035a5794 ("asm-generic: unaligned: remove byteshift helpers")
+Link: https://lore.kernel.org/linux-mm/202106301304.gz2wVY9w-lkp@intel.com/
+Link: https://lore.kernel.org/linux-mm/202106260659.TyMe8mjr-lkp@intel.com/
+Link: https://lore.kernel.org/linux-mm/202106172016.onWT6Tza-lkp@intel.com/
+Link: https://lore.kernel.org/linux-mm/202105231743.JJcALnhS-lkp@intel.com/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/mips/boot/compressed/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index e4b7839293e1..3548b3b45269 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -40,7 +40,7 @@ GCOV_PROFILE := n
+ UBSAN_SANITIZE := n
+ 
+ # decompressor objects (linked with vmlinuz)
+-vmlinuzobjs-y := $(obj)/head.o $(obj)/decompress.o $(obj)/string.o
++vmlinuzobjs-y := $(obj)/head.o $(obj)/decompress.o $(obj)/string.o $(obj)/bswapsi.o
+ 
+ ifdef CONFIG_DEBUG_ZBOOT
+ vmlinuzobjs-$(CONFIG_DEBUG_ZBOOT)		   += $(obj)/dbg.o
+@@ -54,7 +54,7 @@ extra-y += uart-ath79.c
+ $(obj)/uart-ath79.c: $(srctree)/arch/mips/ath79/early_printk.c
+ 	$(call cmd,shipped)
+ 
+-vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o $(obj)/bswapsi.o
++vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
+ 
+ extra-y += ashldi3.c
+ $(obj)/ashldi3.c: $(obj)/%.c: $(srctree)/lib/%.c FORCE
+-- 
+2.29.2
 
-
-> Cheers,
-> -Paul
->
->> ---
->>
->> Notes:
->>     v2:
->>     New patch.
->>
->>     v2->v3:
->>     No change.
->>
->>     v3->v4:
->>     Improve TCU related notes.
->>
->>  arch/mips/boot/dts/ingenic/ci20.dts | 24 ++++++++++++++----------
->>  1 file changed, 14 insertions(+), 10 deletions(-)
->>
->> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts 
->> b/arch/mips/boot/dts/ingenic/ci20.dts
->> index 3a4eaf1..61c153b 100644
->> --- a/arch/mips/boot/dts/ingenic/ci20.dts
->> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
->> @@ -118,6 +118,20 @@
->>      assigned-clock-rates = <48000000>;
->>  };
->>
->> +&tcu {
->> +    /*
->> +     * 750 kHz for the system timers and clocksource,
->> +     * use channel #0 and #1 for the per cpu system timers,
->> +     * and use channel #2 for the clocksource.
->> +     *
->> +     * 3000 kHz for the OST timer to provide a higher
->> +     * precision clocksource.
->> +     */
->> +    assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
->> +                      <&tcu TCU_CLK_TIMER2>, <&tcu TCU_CLK_OST>;
->> +    assigned-clock-rates = <750000>, <750000>, <750000>, <3000000>;
->> +};
->> +
->>  &mmc0 {
->>      status = "okay";
->>
->> @@ -522,13 +536,3 @@
->>          bias-disable;
->>      };
->>  };
->> -
->> -&tcu {
->> -    /*
->> -     * 750 kHz for the system timer and clocksource,
->> -     * use channel #0 for the system timer, #1 for the clocksource.
->> -     */
->> -    assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
->> -                      <&tcu TCU_CLK_OST>;
->> -    assigned-clock-rates = <750000>, <750000>, <3000000>;
->> -};
->> -- 
->> 2.7.4
->>
->
