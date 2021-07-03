@@ -2,29 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B19B33BA7EF
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Jul 2021 10:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A933BA8FC
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Jul 2021 16:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbhGCI7c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 3 Jul 2021 04:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbhGCI7c (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 3 Jul 2021 04:59:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B7DC061764
-        for <linux-mips@vger.kernel.org>; Sat,  3 Jul 2021 01:56:58 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lzbSA-0006qM-PW; Sat, 03 Jul 2021 10:56:46 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lzbS8-0002kJ-Ut; Sat, 03 Jul 2021 10:56:44 +0200
-Date:   Sat, 3 Jul 2021 10:56:44 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
+        id S229947AbhGCOga (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 3 Jul 2021 10:36:30 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:38768 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229671AbhGCOg3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 3 Jul 2021 10:36:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=bxpmHvEbw/VezIzfHWv/vzLPGzxuLIn6bZO/3A3ERaw=; b=1RSddJ6EHD8GFGpKnfSEtWWYKb
+        mtE5c2rf+BusLTr58CLxPQNtguOqyUV+DlZKqhVJhvcB5JQ1RNkl0NqaIKMLZnuX6K3MGliy/Z/s0
+        M6UwVoTvBBrL/e03lRyR2OyJLkJt8Jb7TrPfjtTwKy0CaxgkrEWeNH/WpcZ8hfGiKon4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1lzgiD-00C2IF-Tf; Sat, 03 Jul 2021 16:33:41 +0200
+Date:   Sat, 3 Jul 2021 16:33:41 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
 Cc:     '@lunn.ch, Florian Fainelli <f.fainelli@gmail.com>,
         linux-mips@vger.kernel.org, netdev@vger.kernel.org,
         Russell King <linux@armlinux.org.uk>,
@@ -36,85 +36,23 @@ Cc:     '@lunn.ch, Florian Fainelli <f.fainelli@gmail.com>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH net-next v2 3/6] net: dsa: qca: ar9331: add forwarding
  database support'
-Message-ID: <20210703085644.dg5faj74ijg7orw6@pengutronix.de>
+Message-ID: <YOB1RRx0L01zJ+/v@lunn.ch>
 References: <20210702101751.13168-1-o.rempel@pengutronix.de>
  <20210702101751.13168-4-o.rempel@pengutronix.de>
  <YN8tWtqfRRO7kAlb@lunn.ch>
+ <20210703085644.dg5faj74ijg7orw6@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YN8tWtqfRRO7kAlb@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:55:21 up 212 days, 23:01, 44 users,  load average: 0.00, 0.01,
- 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+In-Reply-To: <20210703085644.dg5faj74ijg7orw6@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jul 02, 2021 at 05:14:34PM +0200, Andrew Lunn wrote:
-> On Fri, Jul 02, 2021 at 12:17:48PM +0200, Oleksij Rempel wrote:
-> > This switch provides simple address resolution table, without VLAN or
-> > multicast specific information.
-> > With this patch we are able now to read, modify unicast and mulicast
-> 
-> mul_t_icast.
+> Thank you!
+> Can I have your Reviewed-by with this changes?
 
-done
+net-next is not accepting any patches at the moment. So repost when it
+re-opens and i will add the reviewed-by.
 
-> > addresses.
-> > +static int ar9331_sw_port_fdb_dump(struct dsa_switch *ds, int port,
-> > +				   dsa_fdb_dump_cb_t *cb, void *data)
-> > +{
-> > +	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
-> > +	int cnt = AR9331_SW_NUM_ARL_RECORDS;
-> > +	struct ar9331_sw_fdb _fdb = { 0 };
-> 
-> Why use _fdb? There does not appear to be an fdb?
-
-old artifact, renamed.
-
-> > +static int ar9331_sw_port_fdb_rmw(struct ar9331_sw_priv *priv,
-> > +				  const unsigned char *mac,
-> > +				  u8 port_mask_set,
-> > +				  u8 port_mask_clr)
-> > +{
-> > +	struct regmap *regmap = priv->regmap;
-> > +	u32 f0, f1, f2 = 0;
-> > +	u8 port_mask, port_mask_new, status, func;
-> > +	int ret;
-> 
-> Reverse Christmas tree.
-
-done
-
-> > +static int ar9331_sw_port_fdb_add(struct dsa_switch *ds, int port,
-> > +				  const unsigned char *mac, u16 vid)
-> > +{
-> > +	struct ar9331_sw_priv *priv = (struct ar9331_sw_priv *)ds->priv;
-> > +	u16 port_mask = BIT(port);
-> > +
-> > +	dev_info(priv->dev, "%s(%pM, %x)\n", __func__, mac, port);
-> 
-> dev_dbg()?
-
-removed.
-
-Thank you!
-Can I have your Reviewed-by with this changes?
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+	 Andrew
