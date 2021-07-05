@@ -2,101 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 280EB3BB478
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Jul 2021 02:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF063BB5F4
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Jul 2021 05:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbhGEANk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 4 Jul 2021 20:13:40 -0400
-Received: from mxb.hotsplots.de ([185.46.137.13]:54616 "EHLO mxb.hotsplots.de"
+        id S229770AbhGEDvx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 4 Jul 2021 23:51:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36384 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229530AbhGEANk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 4 Jul 2021 20:13:40 -0400
-X-Greylist: delayed 489 seconds by postgrey-1.27 at vger.kernel.org; Sun, 04 Jul 2021 20:13:39 EDT
-From:   =?UTF-8?Q?Martin_F=c3=a4cknitz?= <faecknitz@hotsplots.de>
-Subject: [PATCH] invalid GIC access through VDSO
-To:     linux-mips@vger.kernel.org
-Message-ID: <48756553-5aa2-f07f-ca69-0e4d6bda8f24@hotsplots.de>
-Date:   Mon, 5 Jul 2021 02:03:54 +0200
+        id S229722AbhGEDvx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 4 Jul 2021 23:51:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE11F6135E;
+        Mon,  5 Jul 2021 03:49:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625456956;
+        bh=pSWTYD7+rgxGLmQKw8kDoz3wh1zx9cykgZSMER+kE/c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AALlwd+apx3Rbawu+E16+x1jqReiMhNbLFREI5kP0/wjaa+evSt/QvZnHhh0dhHqz
+         SSLmqR0JX6qDQiquf7kDmneTIrPGpqRZLoLW3vNqym6ickz2uyu55onDZTHH1BSzcm
+         5LKgTgXiQzsg84ER/9j32cVBnwy7v9Bed62Bbblw0L6yHJg2Cg1uWcVxMmO99AabJ6
+         fM42ZbiMumO8Pp3k/nyg+XxrOCC5ruP0OMslxZ0HCUegnrHZkeni0RW0j6eBnKZ4ni
+         mi5SDyZUc8IqVTPe/9p40pUVffMUsW8M5u5bnzZV3YLzdnWze4oS0THiA+8C4KecRN
+         BA0HyYGpPCMew==
+Date:   Mon, 5 Jul 2021 09:19:12 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Kelvin Cheung <keguang.zhang@gmail.com>
+Cc:     dmaengine@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 RESEND] dmaengine: Loongson1: Add Loongson1 dmaengine
+ driver
+Message-ID: <YOKBOFpNH0+3GN6e@matsya>
+References: <20210520230225.11911-1-keguang.zhang@gmail.com>
+ <YL392y4a6iRf1UyQ@vkoul-mobl>
+ <CAJhJPsXv42e23tyQjA52_my1Au6nP_VdLX3c_yzk5MxadQ95iw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------21EAFA0509A76C9450879057"
-Content-Language: de-DE
-X-Spamd-Result: default: False [0.28 / 500.00];
-         MIME_TRACE(0.00)[0:+,1:+,2:+];
-         R_MIXED_CHARSET(0.38)[subject];
-         MIME_GOOD(-0.10)[multipart/mixed,text/plain,text/x-patch];
-         FROM_HAS_DN(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         HAS_ATTACHMENT(0.00)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         TO_DN_NONE(0.00)[];
-         RCVD_COUNT_ZERO(0.00)[0];
-         ASN(0.00)[asn:3320, ipnet:84.128.0.0/10, country:DE];
-         RCPT_COUNT_ONE(0.00)[1];
-         MID_RHS_MATCH_FROM(0.00)[]
-X-Spamd-Bar: /
-X-Rspamd-Server: mxb
-Authentication-Results: ORIGINATING;
-        auth=pass smtp.auth=faecknitz@hotsplots.de smtp.mailfrom=faecknitz@hotsplots.de
-X-Rspamd-Queue-Id: 7A84F8C03E2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJhJPsXv42e23tyQjA52_my1Au6nP_VdLX3c_yzk5MxadQ95iw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------21EAFA0509A76C9450879057
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+On 04-07-21, 22:45, Kelvin Cheung wrote:
+> Vinod Koul <vkoul@kernel.org> 于2021年6月7日周一 下午7:07写道：
+> >
+> > On 21-05-21, 07:02, Keguang Zhang wrote:
+> >
+> > > +config LOONGSON1_DMA
+> > > +     tristate "Loongson1 DMA support"
+> > > +     depends on MACH_LOONGSON32
+> >
+> > Why does it have to do that? The dma driver is generic..
+> 
+> This driver is only available for LOONGSON32 CPUs.
 
-Accessing raw timers (currently only CLOCK_MONOTONIC_RAW) through VDSO doesn't
-return the correct time when using the GIC as clock source. The address of the
-GIC mapped page is in this case not calculated correctly. The GIC mapped page
-is calculated from the VDSO data by subtracting PAGE_SIZE:
+the underlaying firmware would ensure this driver is probed if you have
+such a device, so why have this restriction?
 
-  void *get_gic(const struct vdso_data *data) {
-    return (void __iomem *)data - PAGE_SIZE;
-  }
+> > > +static struct platform_driver ls1x_dma_driver = {
+> > > +     .probe  = ls1x_dma_probe,
+> > > +     .remove = ls1x_dma_remove,
+> > > +     .driver = {
+> > > +             .name   = "ls1x-dma",
+> > > +     },
+> >
+> > No device tree?
+> 
+> Because the LOONGSON32 platform doesn't support DT yet.
 
-However, the data pointer is not page aligned for raw clock sources. This is
-because the VDSO data for raw clock sources (CS_RAW = 1) is stored after the
-VDSO data for coarse clock sources (CS_HRES_COARSE = 0). Therefore, only the
-VDSO data for CS_HRES_COARSE is page aligned:
+Okay so how is the platform device created?
 
-  +--------------------+
-  |                    |
-  | vd[CS_RAW]         | ---+
-  | vd[CS_HRES_COARSE] |    |
-  +--------------------+    | -PAGE_SIZE
-  |                    |    |
-  |  GIC mapped page   | <--+
-  |                    |
-  +--------------------+
-
-When __arch_get_hw_counter() is called with &vd[CS_RAW], get_gic returns the
-wrong address (somewhere inside the GIC mapped page). The GIC counter values
-are not returned which results in an invalid time.
-
-Signed-off-by: Martin Fäcknitz <faecknitz@hotsplots.de>
-
-
---------------21EAFA0509A76C9450879057
-Content-Type: text/x-patch;
- name="gic-vdso.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
- filename="gic-vdso.patch"
-
---- a/arch/mips/include/asm/vdso/vdso.h
-+++ b/arch/mips/include/asm/vdso/vdso.h
-@@ -67,7 +67,7 @@ static inline const struct vdso_data *get_vdso_data(voi=
-d)
-=20
- static inline void __iomem *get_gic(const struct vdso_data *data)
- {
--	return (void __iomem *)data - PAGE_SIZE;
-+	return (void __iomem *)((unsigned long)data & PAGE_MASK) - PAGE_SIZE;
- }
-=20
- #endif /* CONFIG_CLKSRC_MIPS_GIC */
-
---------------21EAFA0509A76C9450879057--
+-- 
+~Vinod
