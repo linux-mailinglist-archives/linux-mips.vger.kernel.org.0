@@ -2,43 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBDB3BD054
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 13:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FA23BD301
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 13:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234596AbhGFLdh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Jul 2021 07:33:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42474 "EHLO mail.kernel.org"
+        id S237326AbhGFLrs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Jul 2021 07:47:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42574 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235870AbhGFLaa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:30:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9BAA261DEB;
-        Tue,  6 Jul 2021 11:22:00 +0000 (UTC)
+        id S235064AbhGFLd4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:33:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 59F9761E2C;
+        Tue,  6 Jul 2021 11:23:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570521;
-        bh=zitxiL8u4atmdpJKFak6cKFgHg9rSPTOWKskZ6B1fKM=;
+        s=k20201202; t=1625570585;
+        bh=oiT+BAiA3TGhR/aJnvoJoBMTK3loyU8sH31J4fwOSCc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R4NmY1UGecH6R676i9CSNeeYug6GV8RGVRz7MryV3O3ChHpErrBa68UG3QUROg4Qg
-         34QtEKZbzHpt51c2C7g3MnhaQOdqanJABbcEjIuMgD1sKvNijnmas8YLczHSJqdKOO
-         5LYkJu9xX4NH/VlT/MvfISp8A16tKE66hVWCjgRUr78RtgB5vmEsE+MhONsgEqWEpL
-         4dkqFkIUmdzUZ8lS4XGQoju3fa7HObaUW4NlIXVuGHGzDngJE6705QQEokAWd6YWWc
-         EF3bC/Zv9BIbt4ETNfpeIZoZdqTX0ua5aPpvHO47pCdoTJHBYwo5ftO78vTUqpzxtU
-         y0gHcNvZfh8yA==
+        b=pWNTxH6Ew7oNCSL0itosNJ+/s+okNFDATUF5AM0BwhioxIgGeVR5s0rEGS8m8o0/T
+         OOjI6c+CPm/SzaIjSBdMgF6vaw2g7Zk8BY39CxQKaYANswufRL7mumfWGb/fHdtFZR
+         mNvRfKHpLHXu95Ld6/6KNIxucmP6UUzlGfVIULVEQJ8k3uI/RHmGMp4aw2JDmfIlou
+         RmU4ZZpD17Lw/kqr7r+J81utRxST27M24LfopiTB3b/sYWtfZO6xEsrMfByRjJMglz
+         3viWUoxzh5fka5qR9JcAZa3EhBdHZuhJQQyOB4mi3KwrTJJaQjATZ+1lPgwm/aRvUj
+         L13Jyre3S7o1Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>, Nikolaus Schaller <hns@goldelico.com>,
-        Paul Cercueil <paul@crapouillou.net>,
+Cc:     Paul Cercueil <paul@crapouillou.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 160/160] MIPS: CI20: Reduce clocksource to 750 kHz.
-Date:   Tue,  6 Jul 2021 07:18:26 -0400
-Message-Id: <20210706111827.2060499-160-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 048/137] MIPS: cpu-probe: Fix FPU detection on Ingenic JZ4760(B)
+Date:   Tue,  6 Jul 2021 07:20:34 -0400
+Message-Id: <20210706112203.2062605-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210706111827.2060499-1-sashal@kernel.org>
-References: <20210706111827.2060499-1-sashal@kernel.org>
+In-Reply-To: <20210706112203.2062605-1-sashal@kernel.org>
+References: <20210706112203.2062605-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -46,40 +42,37 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+From: Paul Cercueil <paul@crapouillou.net>
 
-[ Upstream commit 23c64447b3538a6f34cb38aae3bc19dc1ec53436 ]
+[ Upstream commit fc52f92a653215fbd6bc522ac5311857b335e589 ]
 
-The original clock (3 MHz) is too fast for the clocksource,
-there will be a chance that the system may get stuck.
+Ingenic JZ4760 and JZ4760B do have a FPU, but the config registers don't
+report it. Force the FPU detection in case the processor ID match the
+JZ4760(B) one.
 
-Reported-by: Nikolaus Schaller <hns@goldelico.com>
-Tested-by: Nikolaus Schaller <hns@goldelico.com> # on CI20
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/boot/dts/ingenic/ci20.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/mips/kernel/cpu-probe.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 8877c62609de..3a4eaf1f3f48 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -525,10 +525,10 @@ pins_mmc1: mmc1 {
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index e6ae2bcdbeda..067cb3eb1614 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1827,6 +1827,11 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
+ 		 */
+ 		case PRID_COMP_INGENIC_D0:
+ 			c->isa_level &= ~MIPS_CPU_ISA_M32R2;
++
++			/* FPU is not properly detected on JZ4760(B). */
++			if (c->processor_id == 0x2ed0024f)
++				c->options |= MIPS_CPU_FPU;
++
+ 			fallthrough;
  
- &tcu {
- 	/*
--	 * 750 kHz for the system timer and 3 MHz for the clocksource,
-+	 * 750 kHz for the system timer and clocksource,
- 	 * use channel #0 for the system timer, #1 for the clocksource.
- 	 */
- 	assigned-clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
- 					  <&tcu TCU_CLK_OST>;
--	assigned-clock-rates = <750000>, <3000000>, <3000000>;
-+	assigned-clock-rates = <750000>, <750000>, <3000000>;
- };
+ 		/*
 -- 
 2.30.2
 
