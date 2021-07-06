@@ -2,35 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D95453BD04C
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 13:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C393BD04E
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 13:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232542AbhGFLda (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Jul 2021 07:33:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35636 "EHLO mail.kernel.org"
+        id S234495AbhGFLdd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Jul 2021 07:33:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35434 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233212AbhGFLZo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:25:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D084861D54;
-        Tue,  6 Jul 2021 11:19:38 +0000 (UTC)
+        id S234740AbhGFL2d (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:28:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F107B61D87;
+        Tue,  6 Jul 2021 11:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570379;
-        bh=lFRZNA2axd6y0gh1OLNz3qNQ8ml1pC4bSsvWlDJIezE=;
+        s=k20201202; t=1625570418;
+        bh=Urdi0RMyDw7osxiomLrzAYzglhIWs81NXDgqg0/pm+w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uuDnwozQ1mpDOL9HYaIHzmibBVTPB+81lDiSvUPE/tLcj0O+XM4hrxiJnyI46986/
-         PnjPkHdRVQdfgZV//Ii3qblwPSesfl5bO7YzqbSiDE6neeoFMY3SWUnuulvsslGIr4
-         Y7nuk2YxI18YxUtdof0bllAjSO2hXPNbNLtFJ3TYgzdNaWwwgHhqKHQlt3LuqVvwoX
-         mzrUdJrQxvnr2VJ9dHHQNLrKBRbruWlLaFPxYHWLrW5AOYxNDXeKPzEhV0trFj/tF/
-         LVNsmZF6JxZjtB0hoAhg/9LLzbTc1kACQI2DtVXJybBAgCumgayfqLZMVs59F0V9/N
-         pOiLDdTnCRZIg==
+        b=lnW7TtHspkrgtFJmaszBH6rtSByhV1DR1HRgL8VS5cgKlTOwQmsvP48eVck8mNL65
+         Kue14lMInfjT8ol9pjD6/NUS6vxEKylyA5ts3l4jKCdt1lox9baF429zvjJJiLd0oM
+         oOYs8jyjUk7AjEsOvnVhseuhHYRXas+z+jG/GmABwn5FGN1nESPPTEiYN0kcr2sMFp
+         hCE8Om5NvyQA2x2sNyu9GELw+9P+pll8lq4Afy6g5aUgwa6bWejJeqckh6h2RnwJGB
+         1ek+zTmT4IHQ9AgibV2qnbw1Azj3QL8Y6jfjpRDMhvkuZ0KZk+K+WN+u935hrWNET5
+         d7+nkeQTELihg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 054/160] MIPS: ingenic: Select CPU_SUPPORTS_CPUFREQ && MIPS_EXTERNAL_TIMER
-Date:   Tue,  6 Jul 2021 07:16:40 -0400
-Message-Id: <20210706111827.2060499-54-sashal@kernel.org>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 083/160] net: sgi: ioc3-eth: check return value after calling platform_get_resource()
+Date:   Tue,  6 Jul 2021 07:17:09 -0400
+Message-Id: <20210706111827.2060499-83-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210706111827.2060499-1-sashal@kernel.org>
 References: <20210706111827.2060499-1-sashal@kernel.org>
@@ -42,38 +43,35 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit eb3849370ae32b571e1f9a63ba52c61adeaf88f7 ]
+[ Upstream commit db8f7be1e1d64fbf113a456ef94534fbf5e9a9af ]
 
-The clock driving the XBurst CPUs in Ingenic SoCs is integer divided
-from the main PLL. As such, it is possible to control the frequency of
-the CPU, either by changing the divider, or by changing the rate of the
-main PLL.
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-The XBurst CPUs also lack the CP0 timer; the TCU, a separate piece of
-hardware in the SoC, provides this functionality.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/sgi/ioc3-eth.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index e89d63cd92d1..ab73622b14dd 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -425,6 +425,8 @@ config MACH_INGENIC_SOC
- 	select MIPS_GENERIC
- 	select MACH_INGENIC
- 	select SYS_SUPPORTS_ZBOOT_UART16550
-+	select CPU_SUPPORTS_CPUFREQ
-+	select MIPS_EXTERNAL_TIMER
+diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
+index 6eef0f45b133..2b29fd4cbdf4 100644
+--- a/drivers/net/ethernet/sgi/ioc3-eth.c
++++ b/drivers/net/ethernet/sgi/ioc3-eth.c
+@@ -835,6 +835,10 @@ static int ioc3eth_probe(struct platform_device *pdev)
+ 	int err;
  
- config LANTIQ
- 	bool "Lantiq based platforms"
+ 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!regs) {
++		dev_err(&pdev->dev, "Invalid resource\n");
++		return -EINVAL;
++	}
+ 	/* get mac addr from one wire prom */
+ 	if (ioc3eth_get_mac_addr(regs, mac_addr))
+ 		return -EPROBE_DEFER; /* not available yet */
 -- 
 2.30.2
 
