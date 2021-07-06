@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5913BCBCA
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 13:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4433BCC0A
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 13:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbhGFLR3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Jul 2021 07:17:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52310 "EHLO mail.kernel.org"
+        id S232455AbhGFLSU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Jul 2021 07:18:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232016AbhGFLRR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:17:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BFB3461C23;
-        Tue,  6 Jul 2021 11:14:38 +0000 (UTC)
+        id S232432AbhGFLSS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:18:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 85E7661C3B;
+        Tue,  6 Jul 2021 11:15:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570079;
-        bh=swNqVe0z99ZqvzGEdEapp55al/zXzvnmMw+OPrrGzhc=;
+        s=k20201202; t=1625570139;
+        bh=jkuEZkfL7lr8mk1AeV04Qf6U6eKhfHJ7PJkPe7AUo14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X/ltM1IOekEZt46Qo828Pztp0Jcls01RzLAo2wbMhZhE2bWMOXUtpfXr1/UwhTxtA
-         CWM3cSX7bHf58nKL7haRpN/Ynu0gRfmXTmqTtqmLrjIJGrjpu70bD0+lSESjFwEWr0
-         5qU8dY8kiW75LWAyp+pIlsqTWDECUUGzkuGB8iCVWi72TCvb78DXsHuevsFT30XpHf
-         1ZLXGWnCsBPyfsL5tZUV1/vZbUZuJvrFMc2ZOzGJEmI+p+ta5Dwrl0IxmltsXAJs1g
-         fCYaJMsrXpIfnEJxzu5oaJHKMOWvkA5pmad/Yuz+orwsmrebLzDdzVqRGjR59Y3Kf+
-         amzri/sKOo39Q==
+        b=mxoldD6QBNnZ16zHAsqdK26/z9GV7CR83Alo/ExUCvPwr1CdDAnp39N/Lqs/40s1g
+         yoedNTLhsk3+42k5i1VUXPXPCpZpv7RJcnL5cG5BA73QtKgFelaAlDku+5SGQ+iUeN
+         RxP9sZaxdXdL2OAzxO2wanvi2IezgCNG2VCysTxdngXCR38I4rME3TZ56OMw/k4C0k
+         vq7WmPebXv8Fu9tKtDy0O+yIxlPtiJrTJ8EI7JEk+10sIO+6Zd+5JEI+tTyHe78DHx
+         MdK6RLoTZGOcywJq86synyzoOH1yiyE+73eTcoFE2xyUUjYsFvf+lt7lvx0FNaVlrH
+         Obb6acZECKicw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bibo Mao <maobibo@loongson.cn>,
+Cc:     Paul Cercueil <paul@crapouillou.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 020/189] hugetlb: clear huge pte during flush function on mips platform
-Date:   Tue,  6 Jul 2021 07:11:20 -0400
-Message-Id: <20210706111409.2058071-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 064/189] MIPS: cpu-probe: Fix FPU detection on Ingenic JZ4760(B)
+Date:   Tue,  6 Jul 2021 07:12:04 -0400
+Message-Id: <20210706111409.2058071-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210706111409.2058071-1-sashal@kernel.org>
 References: <20210706111409.2058071-1-sashal@kernel.org>
@@ -42,47 +42,37 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Bibo Mao <maobibo@loongson.cn>
+From: Paul Cercueil <paul@crapouillou.net>
 
-[ Upstream commit 33ae8f801ad8bec48e886d368739feb2816478f2 ]
+[ Upstream commit fc52f92a653215fbd6bc522ac5311857b335e589 ]
 
-If multiple threads are accessing the same huge page at the same
-time, hugetlb_cow will be called if one thread write the COW huge
-page. And function huge_ptep_clear_flush is called to notify other
-threads to clear the huge pte tlb entry. The other threads clear
-the huge pte tlb entry and reload it from page table, the reload
-huge pte entry may be old.
+Ingenic JZ4760 and JZ4760B do have a FPU, but the config registers don't
+report it. Force the FPU detection in case the processor ID match the
+JZ4760(B) one.
 
-This patch fixes this issue on mips platform, and it clears huge
-pte entry before notifying other threads to flush current huge
-page entry, it is similar with other architectures.
-
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/hugetlb.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/mips/kernel/cpu-probe.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
-index 10e3be870df7..c2144409c0c4 100644
---- a/arch/mips/include/asm/hugetlb.h
-+++ b/arch/mips/include/asm/hugetlb.h
-@@ -46,7 +46,13 @@ static inline pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
- static inline void huge_ptep_clear_flush(struct vm_area_struct *vma,
- 					 unsigned long addr, pte_t *ptep)
- {
--	flush_tlb_page(vma, addr & huge_page_mask(hstate_vma(vma)));
-+	/*
-+	 * clear the huge pte entry firstly, so that the other smp threads will
-+	 * not get old pte entry after finishing flush_tlb_page and before
-+	 * setting new huge pte entry
-+	 */
-+	huge_ptep_get_and_clear(vma->vm_mm, addr, ptep);
-+	flush_tlb_page(vma, addr);
- }
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index 0ef240adefb5..630fcb4cb30e 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1840,6 +1840,11 @@ static inline void cpu_probe_ingenic(struct cpuinfo_mips *c, unsigned int cpu)
+ 		 */
+ 		case PRID_COMP_INGENIC_D0:
+ 			c->isa_level &= ~MIPS_CPU_ISA_M32R2;
++
++			/* FPU is not properly detected on JZ4760(B). */
++			if (c->processor_id == 0x2ed0024f)
++				c->options |= MIPS_CPU_FPU;
++
+ 			fallthrough;
  
- #define __HAVE_ARCH_HUGE_PTE_NONE
+ 		/*
 -- 
 2.30.2
 
