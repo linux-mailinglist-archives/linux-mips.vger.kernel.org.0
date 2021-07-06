@@ -2,38 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5793D3BD31B
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 13:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5CF3BD61C
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 14:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237049AbhGFLsO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Jul 2021 07:48:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47622 "EHLO mail.kernel.org"
+        id S237235AbhGFMbh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Jul 2021 08:31:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42374 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237622AbhGFLgT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:36:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B0C8061DE9;
-        Tue,  6 Jul 2021 11:28:50 +0000 (UTC)
+        id S235848AbhGFLa3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:30:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4CDD461DE9;
+        Tue,  6 Jul 2021 11:21:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570931;
-        bh=Nj0Udr4R71nGxE+aMr8O49t+TEjcRM2tKiepHUjqTXA=;
+        s=k20201202; t=1625570520;
+        bh=gHjxUE6q5q2kLdGweCLT5/Xb1aBBzr5wP0DdDKZxUEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PFyVTS4akkFzylVhE5Bx6zACZk+HAeK0rmumhGHnEAF0QvgbAYrNghPxlO44PXq9Q
-         JeidLWizs9bWXYop017x4lnGE/jy4EFBxiHqqETCwd+VxCYs9TxVPJTWt17YonQLad
-         aoaRQCmfRSgCfZNfzfk4CX9AgwBPPG1kMIbqmikKOGYXNyUWxAbTBU5ftKNpRlft+T
-         7ClQTOHHZcWxVzfaPIuaoytvVu+SZx1gaSUFh+ati4/44yzpWKXUFsjqSHlCB2KLXx
-         ZUjpWBpfrZ8NYYpZikpmQZt8tMAeUHoW32wsS5iwZ9VMHFQK64+zTKIxO3gw8wdXD/
-         7vjnGvYk+6Mqw==
+        b=lYJHULSpkp2YcWMYnGIlG1quTt0XWmM5+5WqY717ft1/cCUJrXyIfM3eEmq9ERZJ+
+         kZczoFU2svVgK25nhW7EnLuFiS9wNrxSWHhNk2yPAK1gCOAljRYVznzFhWkaIXsRFz
+         9AHM/gmee2L/te0V/mjFqK8P6la5aBv4u2dbUdwwLieteevlBloMgOFIKJbEeWJnzP
+         1UlaQ9TSU7U/LvfTFYsqGSeLMCzOeINSfUTJ6LRHYWGdV+WWFiP7uN+2lR1Q7xNUfC
+         qDHenSS2MQ8HSgfz8aUpR9fVdhF79XurWfYVt9oLYSBhvRmy+ovcG+PMkrn45CsgT6
+         Sez6IDRY5eoXQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bibo Mao <maobibo@loongson.cn>,
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitry Golovin <dima@golovin.in>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 02/35] hugetlb: clear huge pte during flush function on mips platform
-Date:   Tue,  6 Jul 2021 07:28:14 -0400
-Message-Id: <20210706112848.2066036-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.12 159/160] MIPS: set mips32r5 for virt extensions
+Date:   Tue,  6 Jul 2021 07:18:25 -0400
+Message-Id: <20210706111827.2060499-159-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210706112848.2066036-1-sashal@kernel.org>
-References: <20210706112848.2066036-1-sashal@kernel.org>
+In-Reply-To: <20210706111827.2060499-1-sashal@kernel.org>
+References: <20210706111827.2060499-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,47 +44,63 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Bibo Mao <maobibo@loongson.cn>
+From: Nick Desaulniers <ndesaulniers@google.com>
 
-[ Upstream commit 33ae8f801ad8bec48e886d368739feb2816478f2 ]
+[ Upstream commit c994a3ec7ecc8bd2a837b2061e8a76eb8efc082b ]
 
-If multiple threads are accessing the same huge page at the same
-time, hugetlb_cow will be called if one thread write the COW huge
-page. And function huge_ptep_clear_flush is called to notify other
-threads to clear the huge pte tlb entry. The other threads clear
-the huge pte tlb entry and reload it from page table, the reload
-huge pte entry may be old.
+Clang's integrated assembler only accepts these instructions when the
+cpu is set to mips32r5. With this change, we can assemble
+malta_defconfig with Clang via `make LLVM_IAS=1`.
 
-This patch fixes this issue on mips platform, and it clears huge
-pte entry before notifying other threads to flush current huge
-page entry, it is similar with other architectures.
-
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+Link: https://github.com/ClangBuiltLinux/linux/issues/763
+Reported-by: Dmitry Golovin <dima@golovin.in>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/hugetlb.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/mips/include/asm/mipsregs.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
-index 982bc0685330..4747a4694669 100644
---- a/arch/mips/include/asm/hugetlb.h
-+++ b/arch/mips/include/asm/hugetlb.h
-@@ -67,7 +67,13 @@ static inline pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
- static inline void huge_ptep_clear_flush(struct vm_area_struct *vma,
- 					 unsigned long addr, pte_t *ptep)
- {
--	flush_tlb_page(vma, addr & huge_page_mask(hstate_vma(vma)));
-+	/*
-+	 * clear the huge pte entry firstly, so that the other smp threads will
-+	 * not get old pte entry after finishing flush_tlb_page and before
-+	 * setting new huge pte entry
-+	 */
-+	huge_ptep_get_and_clear(vma->vm_mm, addr, ptep);
-+	flush_tlb_page(vma, addr);
- }
- 
- static inline int huge_pte_none(pte_t pte)
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 9c8099a6ffed..acdf8c69220b 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -2077,7 +2077,7 @@ _ASM_MACRO_0(tlbginvf, _ASM_INSN_IF_MIPS(0x4200000c)
+ ({ int __res;								\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips32r2\n\t"					\
++		".set\tmips32r5\n\t"					\
+ 		_ASM_SET_VIRT						\
+ 		"mfgc0\t%0, " #source ", %1\n\t"			\
+ 		".set\tpop"						\
+@@ -2090,7 +2090,7 @@ _ASM_MACRO_0(tlbginvf, _ASM_INSN_IF_MIPS(0x4200000c)
+ ({ unsigned long long __res;						\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips64r2\n\t"					\
++		".set\tmips64r5\n\t"					\
+ 		_ASM_SET_VIRT						\
+ 		"dmfgc0\t%0, " #source ", %1\n\t"			\
+ 		".set\tpop"						\
+@@ -2103,7 +2103,7 @@ _ASM_MACRO_0(tlbginvf, _ASM_INSN_IF_MIPS(0x4200000c)
+ do {									\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips32r2\n\t"					\
++		".set\tmips32r5\n\t"					\
+ 		_ASM_SET_VIRT						\
+ 		"mtgc0\t%z0, " #register ", %1\n\t"			\
+ 		".set\tpop"						\
+@@ -2115,7 +2115,7 @@ do {									\
+ do {									\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips64r2\n\t"					\
++		".set\tmips64r5\n\t"					\
+ 		_ASM_SET_VIRT						\
+ 		"dmtgc0\t%z0, " #register ", %1\n\t"			\
+ 		".set\tpop"						\
 -- 
 2.30.2
 
