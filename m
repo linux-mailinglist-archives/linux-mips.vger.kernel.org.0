@@ -2,35 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 351BC3BD61E
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 14:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D4E3BD620
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 14:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237541AbhGFMbj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S237639AbhGFMbj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Tue, 6 Jul 2021 08:31:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42622 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:47546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233975AbhGFLam (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:30:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1347161DFA;
-        Tue,  6 Jul 2021 11:22:19 +0000 (UTC)
+        id S236989AbhGFLft (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:35:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CBD2861C9C;
+        Tue,  6 Jul 2021 11:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570540;
-        bh=swNqVe0z99ZqvzGEdEapp55al/zXzvnmMw+OPrrGzhc=;
+        s=k20201202; t=1625570699;
+        bh=GptNHRxt4NSFEH5/XvLFiuhi1vJsblNqdlsj4pppnKI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WxNDUjJ87IjYjZylFfBAN2JHsPCnWpSPsS9iKAzXjySCJ4MKFoL9ZYsGTFsxYa5oy
-         bZh/Dein5jolUHBO0ANUY52oV3Pr3KnywbL6hUARBGAg2xuDIIycAsFMR06KtDrep5
-         u/beuBH3FNLvuVDDpf/rnaYGxrC0Wi4+B2xvc8JII0/Ftc/VsNuXzVF22dVTUXVlzc
-         Bu5TgQLC3KJhpr5BS9DB2C3z3Onxwr8ld08LwRDJCxbn5zu6AYKsBiwhuCThkgXDCr
-         5aXsS6/S3tUMcWdmghQitsyxwLZfIM6/zmajuloJnbyvhEiSe4DwuzNZakxDOr2wAA
-         zDe312GeMzg1w==
+        b=L9sS8hLk7CqTBTt2LGR3WOvhHomOPwAatNVUTKNV/r1Rx7UrjawVTAQmvssn5PxuW
+         2SFH4FSUyfBHcC8eTwN+jvx9MzzLHE5exp0E5QSEDk1YPaf7TBdyqhG3jkHbgSEjYf
+         pbmx1Oq+jLJ4IqMdg5ZQbZM0wh5jWVvZtWFHJL7FBBSnY9dCUhFKfQgXpU8XcPUUxl
+         wJe5WHA3YVGU+L3SlzuAY/qjq4K4BNO+oO8dskBthhh5SEHOqrQO+LgCGXal6iMV7v
+         P7DA8uuClHGNJphXjEVHceKqe50p5v2kLOxRlcv9JIIJgiNNZn1IBUYs8RKnq4HV4X
+         i4DXo2PsyILPw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bibo Mao <maobibo@loongson.cn>,
+Cc:     zhanglianjie <zhanglianjie@uniontech.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 012/137] hugetlb: clear huge pte during flush function on mips platform
-Date:   Tue,  6 Jul 2021 07:19:58 -0400
-Message-Id: <20210706112203.2062605-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 136/137] MIPS: loongsoon64: Reserve memory below starting pfn to prevent Oops
+Date:   Tue,  6 Jul 2021 07:22:02 -0400
+Message-Id: <20210706112203.2062605-136-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210706112203.2062605-1-sashal@kernel.org>
 References: <20210706112203.2062605-1-sashal@kernel.org>
@@ -42,47 +42,46 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Bibo Mao <maobibo@loongson.cn>
+From: zhanglianjie <zhanglianjie@uniontech.com>
 
-[ Upstream commit 33ae8f801ad8bec48e886d368739feb2816478f2 ]
+[ Upstream commit 6817c944430d00f71ccaa9c99ff5b0096aeb7873 ]
 
-If multiple threads are accessing the same huge page at the same
-time, hugetlb_cow will be called if one thread write the COW huge
-page. And function huge_ptep_clear_flush is called to notify other
-threads to clear the huge pte tlb entry. The other threads clear
-the huge pte tlb entry and reload it from page table, the reload
-huge pte entry may be old.
+The cause of the problem is as follows:
+1. when cat /sys/devices/system/memory/memory0/valid_zones,
+   test_pages_in_a_zone() will be called.
+2. test_pages_in_a_zone() finds the zone according to stat_pfn = 0.
+   The smallest pfn of the numa node in the mips architecture is 128,
+   and the page corresponding to the previous 0~127 pfn is not
+   initialized (page->flags is 0xFFFFFFFF)
+3. The nid and zonenum obtained using page_zone(pfn_to_page(0)) are out
+   of bounds in the corresponding array,
+   &NODE_DATA(page_to_nid(page))->node_zones[page_zonenum(page)],
+   access to the out-of-bounds zone member variables appear abnormal,
+   resulting in Oops.
+Therefore, it is necessary to keep the page between 0 and the minimum
+pfn to prevent Oops from appearing.
 
-This patch fixes this issue on mips platform, and it clears huge
-pte entry before notifying other threads to flush current huge
-page entry, it is similar with other architectures.
-
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/hugetlb.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/mips/loongson64/numa.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
-index 10e3be870df7..c2144409c0c4 100644
---- a/arch/mips/include/asm/hugetlb.h
-+++ b/arch/mips/include/asm/hugetlb.h
-@@ -46,7 +46,13 @@ static inline pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
- static inline void huge_ptep_clear_flush(struct vm_area_struct *vma,
- 					 unsigned long addr, pte_t *ptep)
- {
--	flush_tlb_page(vma, addr & huge_page_mask(hstate_vma(vma)));
-+	/*
-+	 * clear the huge pte entry firstly, so that the other smp threads will
-+	 * not get old pte entry after finishing flush_tlb_page and before
-+	 * setting new huge pte entry
-+	 */
-+	huge_ptep_get_and_clear(vma->vm_mm, addr, ptep);
-+	flush_tlb_page(vma, addr);
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index cf9459f79f9b..e4c461df3ee6 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -182,6 +182,9 @@ static void __init node_mem_init(unsigned int node)
+ 		if (node_end_pfn(0) >= (0xffffffff >> PAGE_SHIFT))
+ 			memblock_reserve((node_addrspace_offset | 0xfe000000),
+ 					 32 << 20);
++
++		/* Reserve pfn range 0~node[0]->node_start_pfn */
++		memblock_reserve(0, PAGE_SIZE * start_pfn);
+ 	}
  }
  
- #define __HAVE_ARCH_HUGE_PTE_NONE
 -- 
 2.30.2
 
