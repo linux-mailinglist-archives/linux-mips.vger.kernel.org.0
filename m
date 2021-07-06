@@ -2,39 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 073BB3BD051
-	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 13:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223AD3BD052
+	for <lists+linux-mips@lfdr.de>; Tue,  6 Jul 2021 13:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbhGFLdf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Jul 2021 07:33:35 -0400
+        id S233838AbhGFLdg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Jul 2021 07:33:36 -0400
 Received: from mail.kernel.org ([198.145.29.99]:42404 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235665AbhGFLaS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:30:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 55E1561DD0;
-        Tue,  6 Jul 2021 11:21:33 +0000 (UTC)
+        id S235849AbhGFLa3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:30:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 35D5361DCD;
+        Tue,  6 Jul 2021 11:21:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570494;
-        bh=KSZ7rKJwOjkrmzpOVQugWhLbgtTy/OWflm3K4vutGBM=;
+        s=k20201202; t=1625570518;
+        bh=Ww0TzZHtaUT5LYnKFZ3fmFAe+pRCnhdhpKfT7Z/wy+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IGyYjOHa9T1sxZg0uDONOeJNZ9NzpFMxzwydXbLrZCy4NbYUCuRCJU8PiR25MvnZf
-         mCHcf82hs6FulTY2VIliTPaQixmO16bvxtC1hQIVHoXipjcCrGpTQLbQmF2uPggj5m
-         ofl9u8xFwHlCy1AY7MeFoPVvwDUA/ub6Wq5BSXmA0exrsSjF08Hg1gMMBPJNJ9tORx
-         6DvoMnGmZJGikJ6OguNMslDFiQ5lzDfxzB2hJ1I88Lzs7kVNhMtwZvymjrVVN53sci
-         AoVNCRMdn9RPOME9h2YiQ871rd6SjpPETaMC+ok6CoI/tDvKQIum24Ltp+E8VoAhiT
-         yFgdvZur0or4w==
+        b=JvUzzLgGDLhTgoUGJ0gKE87Lagm5PBVN6G5ukkQUDwCjN4eaBJxKnSSMm0p/tomF5
+         OPSdxLl+LdO+/69j0+0Pyb5lqBNBGiNEgyk7CrJyLoKbJKr2c2d05RoI0wuUuYvpK+
+         gqFi8AEiuOkUKanRg+XKKEh9dSUgFlWiQM4Z3oXMbTu2q2jWRf0YFO1k1xjvkL6nJz
+         x/V0B7NBPFZJpLxs4etpUMK6m1/A9b4JshcazufqkFvNT+loVDXDNPzSSu9nuyMWev
+         x31UkTCrw3aDC42RPRdsHaLKTp3JV9+qV7+c/5HslYRWEV9rptvou6nY6RCaJjNluC
+         rLU8EK4sGDbIw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Martynas Pumputis <m@lambda.lt>, Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 139/160] net: retrieve netns cookie via getsocketopt
-Date:   Tue,  6 Jul 2021 07:18:05 -0400
-Message-Id: <20210706111827.2060499-139-sashal@kernel.org>
+Cc:     zhanglianjie <zhanglianjie@uniontech.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 158/160] MIPS: loongsoon64: Reserve memory below starting pfn to prevent Oops
+Date:   Tue,  6 Jul 2021 07:18:24 -0400
+Message-Id: <20210706111827.2060499-158-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210706111827.2060499-1-sashal@kernel.org>
 References: <20210706111827.2060499-1-sashal@kernel.org>
@@ -46,135 +42,46 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Martynas Pumputis <m@lambda.lt>
+From: zhanglianjie <zhanglianjie@uniontech.com>
 
-[ Upstream commit e8b9eab99232c4e62ada9d7976c80fd5e8118289 ]
+[ Upstream commit 6817c944430d00f71ccaa9c99ff5b0096aeb7873 ]
 
-It's getting more common to run nested container environments for
-testing cloud software. One of such examples is Kind [1] which runs a
-Kubernetes cluster in Docker containers on a single host. Each container
-acts as a Kubernetes node, and thus can run any Pod (aka container)
-inside the former. This approach simplifies testing a lot, as it
-eliminates complicated VM setups.
+The cause of the problem is as follows:
+1. when cat /sys/devices/system/memory/memory0/valid_zones,
+   test_pages_in_a_zone() will be called.
+2. test_pages_in_a_zone() finds the zone according to stat_pfn = 0.
+   The smallest pfn of the numa node in the mips architecture is 128,
+   and the page corresponding to the previous 0~127 pfn is not
+   initialized (page->flags is 0xFFFFFFFF)
+3. The nid and zonenum obtained using page_zone(pfn_to_page(0)) are out
+   of bounds in the corresponding array,
+   &NODE_DATA(page_to_nid(page))->node_zones[page_zonenum(page)],
+   access to the out-of-bounds zone member variables appear abnormal,
+   resulting in Oops.
+Therefore, it is necessary to keep the page between 0 and the minimum
+pfn to prevent Oops from appearing.
 
-Unfortunately, such a setup breaks some functionality when cgroupv2 BPF
-programs are used for load-balancing. The load-balancer BPF program
-needs to detect whether a request originates from the host netns or a
-container netns in order to allow some access, e.g. to a service via a
-loopback IP address. Typically, the programs detect this by comparing
-netns cookies with the one of the init ns via a call to
-bpf_get_netns_cookie(NULL). However, in nested environments the latter
-cannot be used given the Kubernetes node's netns is outside the init ns.
-To fix this, we need to pass the Kubernetes node netns cookie to the
-program in a different way: by extending getsockopt() with a
-SO_NETNS_COOKIE option, the orchestrator which runs in the Kubernetes
-node netns can retrieve the cookie and pass it to the program instead.
-
-Thus, this is following up on Eric's commit 3d368ab87cf6 ("net:
-initialize net->net_cookie at netns setup") to allow retrieval via
-SO_NETNS_COOKIE.  This is also in line in how we retrieve socket cookie
-via SO_COOKIE.
-
-  [1] https://kind.sigs.k8s.io/
-
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Signed-off-by: Martynas Pumputis <m@lambda.lt>
-Cc: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/alpha/include/uapi/asm/socket.h  | 2 ++
- arch/mips/include/uapi/asm/socket.h   | 2 ++
- arch/parisc/include/uapi/asm/socket.h | 2 ++
- arch/sparc/include/uapi/asm/socket.h  | 2 ++
- include/uapi/asm-generic/socket.h     | 2 ++
- net/core/sock.c                       | 7 +++++++
- 6 files changed, 17 insertions(+)
+ arch/mips/loongson64/numa.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-index 57420356ce4c..6b3daba60987 100644
---- a/arch/alpha/include/uapi/asm/socket.h
-+++ b/arch/alpha/include/uapi/asm/socket.h
-@@ -127,6 +127,8 @@
- #define SO_PREFER_BUSY_POLL	69
- #define SO_BUSY_POLL_BUDGET	70
- 
-+#define SO_NETNS_COOKIE		71
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index a8f57bf01285..a791863ed352 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -118,6 +118,9 @@ static void __init node_mem_init(unsigned int node)
+ 		if (node_end_pfn(0) >= (0xffffffff >> PAGE_SHIFT))
+ 			memblock_reserve((node_addrspace_offset | 0xfe000000),
+ 					 32 << 20);
 +
- #if !defined(__KERNEL__)
++		/* Reserve pfn range 0~node[0]->node_start_pfn */
++		memblock_reserve(0, PAGE_SIZE * start_pfn);
+ 	}
+ }
  
- #if __BITS_PER_LONG == 64
-diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-index 2d949969313b..cdf404a831b2 100644
---- a/arch/mips/include/uapi/asm/socket.h
-+++ b/arch/mips/include/uapi/asm/socket.h
-@@ -138,6 +138,8 @@
- #define SO_PREFER_BUSY_POLL	69
- #define SO_BUSY_POLL_BUDGET	70
- 
-+#define SO_NETNS_COOKIE		71
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-index f60904329bbc..5b5351cdcb33 100644
---- a/arch/parisc/include/uapi/asm/socket.h
-+++ b/arch/parisc/include/uapi/asm/socket.h
-@@ -119,6 +119,8 @@
- #define SO_PREFER_BUSY_POLL	0x4043
- #define SO_BUSY_POLL_BUDGET	0x4044
- 
-+#define SO_NETNS_COOKIE		0x4045
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-index 848a22fbac20..92675dc380fa 100644
---- a/arch/sparc/include/uapi/asm/socket.h
-+++ b/arch/sparc/include/uapi/asm/socket.h
-@@ -120,6 +120,8 @@
- #define SO_PREFER_BUSY_POLL	 0x0048
- #define SO_BUSY_POLL_BUDGET	 0x0049
- 
-+#define SO_NETNS_COOKIE          0x0050
-+
- #if !defined(__KERNEL__)
- 
- 
-diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-index 4dcd13d097a9..d588c244ec2f 100644
---- a/include/uapi/asm-generic/socket.h
-+++ b/include/uapi/asm-generic/socket.h
-@@ -122,6 +122,8 @@
- #define SO_PREFER_BUSY_POLL	69
- #define SO_BUSY_POLL_BUDGET	70
- 
-+#define SO_NETNS_COOKIE		71
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
-diff --git a/net/core/sock.c b/net/core/sock.c
-index a266760cd65e..60750f9ae32d 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1622,6 +1622,13 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
- 		v.val = sk->sk_bound_dev_if;
- 		break;
- 
-+	case SO_NETNS_COOKIE:
-+		lv = sizeof(u64);
-+		if (len != lv)
-+			return -EINVAL;
-+		v.val64 = sock_net(sk)->net_cookie;
-+		break;
-+
- 	default:
- 		/* We implement the SO_SNDLOWAT etc to not be settable
- 		 * (1003.1g 7).
 -- 
 2.30.2
 
