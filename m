@@ -2,44 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12ACB3BE164
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Jul 2021 05:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A993BE167
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Jul 2021 05:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbhGGDTS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 6 Jul 2021 23:19:18 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:38713 "EHLO
+        id S230199AbhGGDTW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 6 Jul 2021 23:19:22 -0400
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:52723 "EHLO
         new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230188AbhGGDTR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Jul 2021 23:19:17 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 733BC580452;
-        Tue,  6 Jul 2021 23:16:37 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S230197AbhGGDTW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 6 Jul 2021 23:19:22 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 41251580452;
+        Tue,  6 Jul 2021 23:16:42 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 06 Jul 2021 23:16:37 -0400
+  by compute4.internal (MEProxy); Tue, 06 Jul 2021 23:16:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=GAnaSXIS2U9Oo
-        L6n9RdfOWXq51u5AS/yAPKDVJYSO1k=; b=YWCYGqoXde8aF0FysqBsC/AxjC53L
-        QeSuHmHbLkihFjb4STKoKQeBR35WWIpFIw9KqOaegjRf5Z9qMRjbHBEeEjHBihlC
-        NltK9c5fucPXNx9fRoDdZnqAjd4OhHF3enxd8FIYuZOaReJcE/ZmGKItDyPz2LmW
-        GIFdiGRAjlCtLT/6XU/ikeCOb0S9iqufakqjOIO9eIpMDvlZYuaEBHqpPoAOUBqt
-        qrw1AhSjKhkLajuXjCFT6kOGmOPY7vJaLX5drBCX3LP78Lc9BD6Vn4kNLwoeHadg
-        BPJZyFLf0PIsom1kxEHF5KXdXfD501IHDwjX3OkGxTelEy4Q+ojAPOI4Q==
+        :mime-version:content-transfer-encoding; s=fm2; bh=fK+K0d08qIRtz
+        I5lRyrah+khLjr9G35dqtzXmEd/ZSQ=; b=K5yjgZDNObEfyD4FGM//8X5s2G5As
+        Y2EXZ1U3uNhCVxKoOd6LJiBmJte15E44U6zEA+BbVAUSoe6M7JnF90Yj9gbZjNBi
+        TpDR3b+vDnFb0ThWd+PNN0VUJxJxr+fwsI8CMUqtqyPZ4za8SSppHUBwAuGvNTwh
+        ez+3zSOaDOxdjwSyvRU3fiqCd5YUDbYF52BcLY3dclWuoA3/Uotr++9v9z2wYFd1
+        TtfEnf65scNUnn1CPhaluj1mDrtsqFSjQJoGxFW6u5/atfERLHcH67VT6Q3/L8k3
+        Ps/RhlaTXqYslDxN1rV5P1xXPIEuhhEurBKHMhiC9DDhqBT6PDEUOY3Rw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=GAnaSXIS2U9OoL6n9RdfOWXq51u5AS/yAPKDVJYSO1k=; b=prudk+vU
-        1uSwtnFw/+12NhoXcLk5P5erSqz/Z1w8jR8fYQMqeZnCBYlrHn3AuYvdfyj51Ydh
-        K2w2nKJWuGft03zF06iNCeSDI9ixuiMV4adgts8bkB1PM5e5WDCHi4dLLL9QndsY
-        nJePFKbRFS6PwUh7FgLg8I8o6PiJDxQccI/ZLX0Wy4CZLInHiFZ/vNMu0hvsAdhz
-        55jfqKwDfTB7U67Mw5hY3gdkee2aheLOrtv5zwIPRfDC7digDwmann1jmRIjSCxW
-        P6n/oYxnOhrgFIsr05w7Yxt5QuV+ucCUWka2KGph6lNn6MiUKl1PIWC5D2GTRi7D
-        Hnk4u/Ii+tUIEA==
-X-ME-Sender: <xms:lRzlYMKUb5KWl5S5Xh7X5cZU4AfSeLnouZl6TpnGSrbmdSiciWllJA>
-    <xme:lRzlYMK-9j8UVyWF-FfSARjj3XUZWCmc_T2v9DxDgwH4L6fGBld_ncTzK7LshHrZJ
-    oIpSqtji-ulAN4PIFY>
-X-ME-Received: <xmr:lRzlYMvcqfl8M9GQlpBSNlYlM6Vry860Gmfg_ufum_7rjhb3fHNvnthEToN9U9zL7tgyCAWcHxJ0V11kUg>
+        fm3; bh=fK+K0d08qIRtzI5lRyrah+khLjr9G35dqtzXmEd/ZSQ=; b=k2OsDHsT
+        kpSxf8m54WPa9oscjvIbsvS2Av30gScGSxr37GJEMywvGh7SNGNBRT7r3X7NKAj6
+        8gg9Z3yinXxAAN4VgGcq6nvFTLJOa4ACnEU3DkX5Gk/funEkoiebTgbzpByPPLJ4
+        5O7rtrmzyD2waVAS8rQ++4GiR+dBSDemxC6qYB3RvAtuTqRF54VEn9DDDyjZNzxB
+        fCWLxfvrN2E5O+RwmU4UmusPFxS99wCD92oo3wR/sO1bR42MoDEu4yFIb5pVl7Ap
+        NST08jmgBWq5G3Z6ACmR6HQzqkSUDj+cTXaj/zJ8dUMYm4XavwyBf266m0EpmpbV
+        prCHkG17yaMYaA==
+X-ME-Sender: <xms:mhzlYFX0YBGTG9_78v9Lx8T_TbKeQzCI0ALL8l66za8SUc6F7c_p-Q>
+    <xme:mhzlYFmCHr6lfJgxdI0phmx3IHhycs64Vsex-VR2ZKoSHa8wnXBToaoAeYjVc0cwG
+    0YG8K3A_l341AeYNR8>
+X-ME-Received: <xmr:mhzlYBbOhatMYHF8fAHlBKPPK1PoTK7J0Ae5pwFEFbfzVPSTg99U8wWqVF7JrUtgnzrpkVer-9i0yMvMDw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrtddugdeghecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
@@ -48,12 +48,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrtddugdeghecutefuodetggdote
     dtheevudejvdegkeekjeefhffhhfetudetgfdtffeunecuvehluhhsthgvrhfuihiivgep
     tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
     grthdrtghomh
-X-ME-Proxy: <xmx:lRzlYJbQuMMoFvLEq01SVFJlDJpfqcCvmPukUn-kEHckxobqtMmQrw>
-    <xmx:lRzlYDZYo_uRqsD8oqzaieRys6cTTVOqqyIg7K4dbV4zO57KdpJsoA>
-    <xmx:lRzlYFCve4w77BvIdG_XgB3qC0EhZVU-Sh3GwCzwVZc_ITlIakDrzw>
-    <xmx:lRzlYARkCPTrpU1B7ISpjKU_XBPykJePEeZlSMI57O3n5fd4jajP8A>
+X-ME-Proxy: <xmx:mhzlYIXvS5Qzqkv6Csy7s-zFUW0t5-PaWofd_vjmUv4dVJtV3KUzeg>
+    <xmx:mhzlYPk9Zr5I7IKa66bKG3DU_dHosGml4ZxAAcsMLj8UdXnj2yVr9g>
+    <xmx:mhzlYFe1qH3dlNaSal0xOmDkAY-p4JOjRC3JlnixhmsQTHw8qAisBw>
+    <xmx:mhzlYIdArCmSpaBbY0bw-9oB3S_L0iQDJg0SE-YkWd-MeVHZqg2FsQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Jul 2021 23:16:33 -0400 (EDT)
+ 6 Jul 2021 23:16:37 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
@@ -62,9 +62,9 @@ Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
         linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v2 4/9] clocksource/drivers/pistachio: Make it seletable for MIPS
-Date:   Wed,  7 Jul 2021 11:15:47 +0800
-Message-Id: <20210707031552.20166-5-jiaxun.yang@flygoat.com>
+Subject: [PATCH v2 5/9] phy: pistachio-usb: Depend on MIPS || COMPILE_TEST
+Date:   Wed,  7 Jul 2021 11:15:48 +0800
+Message-Id: <20210707031552.20166-6-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210707031552.20166-1-jiaxun.yang@flygoat.com>
 References: <20210707031552.20166-1-jiaxun.yang@flygoat.com>
@@ -78,24 +78,22 @@ So it will be avilable for generic MIPS kenrel.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
- drivers/clocksource/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/phy/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index 39aa21d01e05..58ad7af8c673 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -234,8 +234,9 @@ config CLKSRC_LPC32XX
- 	  Support for the LPC32XX clocksource.
+diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+index 54c1f2f0985f..f3b08722261d 100644
+--- a/drivers/phy/Kconfig
++++ b/drivers/phy/Kconfig
+@@ -37,7 +37,7 @@ config PHY_LPC18XX_USB_OTG
  
- config CLKSRC_PISTACHIO
--	bool "Clocksource for Pistachio SoC" if COMPILE_TEST
-+	bool "Clocksource for Pistachio SoC"
- 	depends on HAS_IOMEM
+ config PHY_PISTACHIO_USB
+ 	tristate "IMG Pistachio USB2.0 PHY driver"
+-	depends on MACH_PISTACHIO
 +	depends on MIPS || COMPILE_TEST
- 	select TIMER_OF
+ 	select GENERIC_PHY
  	help
- 	  Enables the clocksource for the Pistachio SoC.
+ 	  Enable this to support the USB2.0 PHY on the IMG Pistachio SoC.
 -- 
 2.32.0
 
