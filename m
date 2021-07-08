@@ -2,138 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 615B23C17F4
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Jul 2021 19:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380183C19FC
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Jul 2021 21:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbhGHRTp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Jul 2021 13:19:45 -0400
-Received: from out28-75.mail.aliyun.com ([115.124.28.75]:37144 "EHLO
-        out28-75.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbhGHRTp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jul 2021 13:19:45 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07453699|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.153769-0.00185027-0.844381;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047199;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.KeIlheY_1625764612;
-Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KeIlheY_1625764612)
-          by smtp.aliyun-inc.com(10.147.41.120);
-          Fri, 09 Jul 2021 01:16:59 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     tsbogend@alpha.franken.de, paulburton@kernel.org
+        id S229866AbhGHToe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Jul 2021 15:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229631AbhGHToe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jul 2021 15:44:34 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB9DC061574;
+        Thu,  8 Jul 2021 12:41:51 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id v14so18497191lfb.4;
+        Thu, 08 Jul 2021 12:41:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Bj7dNjsPUKbHFxGqaGSxYHlxZLa3XC/EGhNU6JYPgJ4=;
+        b=kAA3brOxhuB1/yqrpzNZouQy6CJ0zmKFEhxkZAVwFNJu6QQ6Sv0jbZQ2IAwRVVup/E
+         vcDvgJ7RZO+gIm7iKSCO1QyFr07bu+DM/n5Ypi96aoMqpsB9H+xTEAhnG2nAeHNFbNat
+         OsKgkzTf+Uyz70gPGI5ynMa6lMKDDyV0uny9Yt5MngP6eD46ClZv3u1nA/JaoaMR4tHV
+         kYRlWBsX66ZlOsEtevV13yqn6hk5OZB2um+MKofy5uyQHqPWU6JFmn0M42OfOhaXmDE+
+         H7FfccxoZHQkIQEPfHhpaD4Rb1xrfiTT7PLp8fxlGhOevIZE0L1Tcf0nY0yAgaPdLBla
+         dYhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Bj7dNjsPUKbHFxGqaGSxYHlxZLa3XC/EGhNU6JYPgJ4=;
+        b=AITtfZbsgh6qjGEPENUISecKc7++/L/fp1a5ErAFrnfB+HhmNuNb+nJ+kLEjUeJ+JM
+         3kpxJG1MyixsVa1vjsP2DkcotZ+0DqaYG/Le2T8uBD1aR1IyBYJIcJIXgxDI5DWkNjkk
+         p46d4o5RNJcNevNGpgIzqjWnhArPZod2EVlnn4taGNIqpzgKoymbKnATw9REU8+UuiXx
+         Py5L0oAdjp7l5CNibEK/FH8e5P0yKfoJNoOzi2WuRcWyrkUKDPfnw2lWI6SefBPz8iVw
+         Oob8IQSa2ZVhYdqWJCwnNz/9JLIo76Q6XB01LUdjtMHPwTiH74sMkgYicczdFaoLaa2X
+         eDng==
+X-Gm-Message-State: AOAM530hmPqt1UGlrE7pBVHUous5zDAKTPFQ1L4D/80FITH0alzmNnBx
+        3JS0S0g0pu55JBmKTB/2bLA=
+X-Google-Smtp-Source: ABdhPJz80r2KRTtdcl7+KtUakdV/3kloB9Ws2dCxEE4o3oVWX+XpNxuTbiUsdk1k+Meha95tbjq2Og==
+X-Received: by 2002:a19:6b14:: with SMTP id d20mr21042968lfa.562.1625773310197;
+        Thu, 08 Jul 2021 12:41:50 -0700 (PDT)
+Received: from mobilestation ([95.79.127.110])
+        by smtp.gmail.com with ESMTPSA id u5sm325610ljh.29.2021.07.08.12.41.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jul 2021 12:41:49 -0700 (PDT)
+Date:   Thu, 8 Jul 2021 22:41:47 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cand@gmx.com, git@xen0n.name, chenhuacai@kernel.org,
-        maoxiaochuan@loongson.cn, f.fainelli@gmail.com,
-        paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com
-Subject: [PATCH] MIPS: Ingenic: Add system type for new Ingenic SoCs.
-Date:   Fri,  9 Jul 2021 01:16:42 +0800
-Message-Id: <1625764602-67310-1-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
+        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH] irqchip/mips: Fix RCU violation when using irqdomain
+ lookup on interrupt entry
+Message-ID: <20210708194147.a236rqwybgsugwe4@mobilestation>
+References: <20210706110647.3979002-1-maz@kernel.org>
+ <20210708094608.anrgynyzu6h233pr@mobilestation>
+ <87eec83glb.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87eec83glb.wl-maz@kernel.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add JZ4730, JZ4760, JZ4760B, X2000H, and X2100 system type for
-cat /proc/cpuinfo to give out JZ4730, JZ4760, JZ4760B, X2000H,
-and X2100.
+On Thu, Jul 08, 2021 at 05:39:28PM +0100, Marc Zyngier wrote:
+> Hi Sergey,
+> 
+> On Thu, 08 Jul 2021 10:46:08 +0100,
+> Serge Semin <fancer.lancer@gmail.com> wrote:
+> > 
+> > Hi Marc,
+> > Thanks for the fix.
+> > 
+> > On Tue, Jul 06, 2021 at 12:06:47PM +0100, Marc Zyngier wrote:
+> > > Since d4a45c68dc81 ("irqdomain: Protect the linear revmap with RCU"),
+> > > any irqdomain lookup requires the RCU read lock to be held.
+> > > 
+> > > This assumes that the architecture code will be structured such as
+> > > irq_enter() will be called *before* the interrupt is looked up
+> > > in the irq domain. However, this isn't the case for MIPS, and a number
+> > > of drivers are structured to do it the other way around when handling
+> > > an interrupt in their root irqchip (secondary irqchips are OK by
+> > > construction).
+> > > 
+> > > This results in a RCU splat on a lockdep-enabled kernel when the kernel
+> > > takes an interrupt from idle, as reported by Guenter Roeck.
+> > 
+> > Alas I am still on 5.12-rc4, so can't test it out at the moment. Soon
+> > after getting further on the modern kernel version I'll give this
+> > patch a try on my hw and send a report.
+> 
+> It is likely that I'll send a pull request to Thomas with this
+> shortly, given that it affects existing systems and that this patch
+> does address the issue (see Guenter's report). We can always amend
+> things once you've had the time to upgrade your kernel to the latest.
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
- arch/mips/generic/board-ingenic.c | 15 +++++++++++++++
- arch/mips/include/asm/bootinfo.h  |  3 +++
- arch/mips/include/asm/cpu.h       |  4 ++--
- 3 files changed, 20 insertions(+), 2 deletions(-)
+Ok. I'll report the test status once my working branches are rebased on the
+latest version. It will be done in a few weeks from now then after I
+finished my current activity.
 
-diff --git a/arch/mips/generic/board-ingenic.c b/arch/mips/generic/board-ingenic.c
-index 0cec0be..303bee6 100644
---- a/arch/mips/generic/board-ingenic.c
-+++ b/arch/mips/generic/board-ingenic.c
-@@ -21,6 +21,10 @@
- static __init char *ingenic_get_system_type(unsigned long machtype)
- {
- 	switch (machtype) {
-+	case MACH_INGENIC_X2100:
-+		return "X2100";
-+	case MACH_INGENIC_X2000H:
-+		return "X2000H";
- 	case MACH_INGENIC_X2000E:
- 		return "X2000E";
- 	case MACH_INGENIC_X2000:
-@@ -37,8 +41,14 @@ static __init char *ingenic_get_system_type(unsigned long machtype)
- 		return "JZ4775";
- 	case MACH_INGENIC_JZ4770:
- 		return "JZ4770";
-+	case MACH_INGENIC_JZ4760B:
-+		return "JZ4760B";
-+	case MACH_INGENIC_JZ4760:
-+		return "JZ4760";
- 	case MACH_INGENIC_JZ4725B:
- 		return "JZ4725B";
-+	case MACH_INGENIC_JZ4730:
-+		return "JZ4730";
- 	default:
- 		return "JZ4740";
- 	}
-@@ -61,8 +71,11 @@ static __init const void *ingenic_fixup_fdt(const void *fdt, const void *match_d
- }
- 
- static const struct of_device_id ingenic_of_match[] __initconst = {
-+	{ .compatible = "ingenic,jz4730", .data = (void *)MACH_INGENIC_JZ4730 },
- 	{ .compatible = "ingenic,jz4740", .data = (void *)MACH_INGENIC_JZ4740 },
- 	{ .compatible = "ingenic,jz4725b", .data = (void *)MACH_INGENIC_JZ4725B },
-+	{ .compatible = "ingenic,jz4760", .data = (void *)MACH_INGENIC_JZ4760 },
-+	{ .compatible = "ingenic,jz4760b", .data = (void *)MACH_INGENIC_JZ4760B },
- 	{ .compatible = "ingenic,jz4770", .data = (void *)MACH_INGENIC_JZ4770 },
- 	{ .compatible = "ingenic,jz4775", .data = (void *)MACH_INGENIC_JZ4775 },
- 	{ .compatible = "ingenic,jz4780", .data = (void *)MACH_INGENIC_JZ4780 },
-@@ -71,6 +84,8 @@ static const struct of_device_id ingenic_of_match[] __initconst = {
- 	{ .compatible = "ingenic,x1830", .data = (void *)MACH_INGENIC_X1830 },
- 	{ .compatible = "ingenic,x2000", .data = (void *)MACH_INGENIC_X2000 },
- 	{ .compatible = "ingenic,x2000e", .data = (void *)MACH_INGENIC_X2000E },
-+	{ .compatible = "ingenic,x2000h", .data = (void *)MACH_INGENIC_X2000H },
-+	{ .compatible = "ingenic,x2100", .data = (void *)MACH_INGENIC_X2100 },
- 	{}
- };
- 
-diff --git a/arch/mips/include/asm/bootinfo.h b/arch/mips/include/asm/bootinfo.h
-index 4c2e817..2128ba9 100644
---- a/arch/mips/include/asm/bootinfo.h
-+++ b/arch/mips/include/asm/bootinfo.h
-@@ -75,6 +75,7 @@ enum ingenic_machine_type {
- 	MACH_INGENIC_JZ4750,
- 	MACH_INGENIC_JZ4755,
- 	MACH_INGENIC_JZ4760,
-+	MACH_INGENIC_JZ4760B,
- 	MACH_INGENIC_JZ4770,
- 	MACH_INGENIC_JZ4775,
- 	MACH_INGENIC_JZ4780,
-@@ -83,6 +84,8 @@ enum ingenic_machine_type {
- 	MACH_INGENIC_X1830,
- 	MACH_INGENIC_X2000,
- 	MACH_INGENIC_X2000E,
-+	MACH_INGENIC_X2000H,
-+	MACH_INGENIC_X2100,
- };
- 
- extern char *system_type;
-diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-index 9e6211e..c70cac7 100644
---- a/arch/mips/include/asm/cpu.h
-+++ b/arch/mips/include/asm/cpu.h
-@@ -46,8 +46,8 @@
- #define PRID_COMP_NETLOGIC	0x0c0000
- #define PRID_COMP_CAVIUM	0x0d0000
- #define PRID_COMP_LOONGSON	0x140000
--#define PRID_COMP_INGENIC_13	0x130000	/* X2000 */
--#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4740, JZ4750, X1830 */
-+#define PRID_COMP_INGENIC_13	0x130000	/* X2000, X2100 */
-+#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4730, JZ4740, JZ4750, JZ4760, X1830 */
- #define PRID_COMP_INGENIC_D1	0xd10000	/* JZ4770, JZ4775, X1000 */
- #define PRID_COMP_INGENIC_E1	0xe10000	/* JZ4780 */
- 
--- 
-2.7.4
+-Sergey
 
+> 
+> Thanks,
+> 
+> 	M.
+> 
+> -- 
+> Without deviation from the norm, progress is not possible.
