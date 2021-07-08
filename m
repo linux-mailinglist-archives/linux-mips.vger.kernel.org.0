@@ -2,237 +2,236 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C8D3BF7C0
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Jul 2021 11:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F533BFA63
+	for <lists+linux-mips@lfdr.de>; Thu,  8 Jul 2021 14:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbhGHJs4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 8 Jul 2021 05:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S230495AbhGHMoZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 8 Jul 2021 08:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbhGHJs4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jul 2021 05:48:56 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629F2C061574;
-        Thu,  8 Jul 2021 02:46:13 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id c28so13453035lfp.11;
-        Thu, 08 Jul 2021 02:46:13 -0700 (PDT)
+        with ESMTP id S230417AbhGHMoW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 8 Jul 2021 08:44:22 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E956C061767
+        for <linux-mips@vger.kernel.org>; Thu,  8 Jul 2021 05:41:40 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id g25so3516365vss.3
+        for <linux-mips@vger.kernel.org>; Thu, 08 Jul 2021 05:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zfG1OEbM0Q/wHXPD5yKp65Ks0yVn6DHIJgdFIHHsq6w=;
-        b=cK7dnxi7CrvsO3JrDD2RszLHLNpL4TuiIcn3rwMF6RCbc5RyhjTjwLFAzEQ6qEYuH1
-         0OZ2LAo/Nx6gprlUvx93J90XF3EovqBg53LVA/OwNTz5nJCp1sw5WUJ+yBGq77QqtA7k
-         lYeoPA0w4Hxyb2mtje/J6ytD3GK5u6Ym/qateB8S/lpKYYgziwHmklWAvVmoRRXFPdUE
-         NRbfiC3UQQfJ1x3J2unGBmfTP8YyNb1MjA2zfJ2iPQGO6DwVkqH/6Z3ciQasu0wdY4bL
-         7z16dTZl8UhVHYCCYzjZvSkTQGM3ZT8AZBFzeo+LZEKoX6+g1YttpdGJYz/w/LelGz+r
-         EgCA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hP9H7HVTE7TFrRNTl1vyqWVVeZcuqXBCZg0bGqclL/A=;
+        b=VetX2Cfr8bdRNaZiWLEm04u6bqZW3l6DI4CAN74JIY7k4z1gUX2WPAhVDnzm350lf2
+         zN9Z12JQmbzlk/BWNUXvjVAbpB66ZXuvK3SPb444QQ5diXQOytBY51L2/oTaoUD9VeXU
+         uFurAnxdtCpnicZBLB0yD9ojUwv6W/qtm1PvBS9AFUFJNPr3tKxeC4wQWDvFkNeWRoRf
+         7SjXn45LyDiaoeLgbbyRwVPp/zZWqO3qYud0+Xn/514eUefuiFS0gjROioJ7tCP2C/ZN
+         ZUSLS7lmtDXFsaxdqMahs7f08oqXmzo9A5DfBGmAWg3PByPV9/9CFdzFbNZ8GtPMsFJE
+         z42g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zfG1OEbM0Q/wHXPD5yKp65Ks0yVn6DHIJgdFIHHsq6w=;
-        b=dI2Sn5j+KS4RYC0/Ewu0DvFlj5UvppskH4NZdsiZRteE/uXqKZfiiHP6fypgCDjxok
-         LG9ipUVMuTjdkQg/NrdNLpCJGITciHsS5OCduhTUIdV/PHgcYJlyEu7pZqgzMNBuHVLH
-         3FXCuvu7+nc5OXxZvR7yZIPDyuh6eGS4Wjd/p+yo+kCPqq8xiLFCLgovXFglBB2nU2Xx
-         pBgCSEelTru5E0+tNElETIRFdrEynSOet+WJKYhuLhIFbf8puJ0iEDXDwGbdC8Yl0Kvo
-         Zaj8ju/Fc52DNM2HJqPyLUklrXeeRz+PCERRTTi8u8VXoIp5J7/f3tqbcKc+XJRxFqhl
-         wLAw==
-X-Gm-Message-State: AOAM533Y9TLeqdHbicrsMqq1tZ1bPI/4ge3uI1wcpL7j/MrF9wNvukBq
-        bSwe8YUCqZJTRE97xNDWkl0=
-X-Google-Smtp-Source: ABdhPJxvrfXxKOX6fDmusNsC/y3QUsbJvjQJWe+yeeqerPE2OqfrhecTd6Gs4B1RwqX0BZ4AlnZGpQ==
-X-Received: by 2002:a05:6512:3744:: with SMTP id a4mr22850364lfs.112.1625737570703;
-        Thu, 08 Jul 2021 02:46:10 -0700 (PDT)
-Received: from mobilestation ([95.79.127.110])
-        by smtp.gmail.com with ESMTPSA id u14sm77438lfn.47.2021.07.08.02.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jul 2021 02:46:10 -0700 (PDT)
-Date:   Thu, 8 Jul 2021 12:46:08 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH] irqchip/mips: Fix RCU violation when using irqdomain
- lookup on interrupt entry
-Message-ID: <20210708094608.anrgynyzu6h233pr@mobilestation>
-References: <20210706110647.3979002-1-maz@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hP9H7HVTE7TFrRNTl1vyqWVVeZcuqXBCZg0bGqclL/A=;
+        b=Cf3L4MCp1qf3x4Yge5IS9m1hVtctsFM27Hcuc9yIALTyo1yzInu/qCMxnlhhH5CX51
+         jmW2mD88UMMDIi4KeDV4agxbo+XMViUPakgBL+L/k1euETmCVdlgRXmQTKkiDGABM3nL
+         FJ50F4HOeLWYoucYVGPk2h+OuW9yRftHSHGnJ1IW7xXvuN0NR6N9cwZYG6yFG68Ah31t
+         QoVtXLnI+Ba7Qv/Zms0Zb4WIbc++/79VYCkN92DVFAZQ9pVWedze2IMY269uzRP2glpW
+         KD0mvbHpoD4anirqlLS4dJxUh6805o2/rJy8/vLzaULrwfQOAHk9sMo0b9PmInimYnXt
+         N1YA==
+X-Gm-Message-State: AOAM532IcQpJi+F+pxKsONJ8ggxe+XrRonETut4UIAUeP1TMwAQvGfuu
+        /ctcVtXHWjqIfAszbA6dtywHciiXYFMO67qJJIfwBg==
+X-Google-Smtp-Source: ABdhPJywz4fR2V+V+6/E9OWxEVi9/b58VFa4IZ2LlJTPpT0B9SRAdSG9PM7u1rPMHG2ZlSabjmUDzfVjnsqdUEe3bFI=
+X-Received: by 2002:a67:8783:: with SMTP id j125mr27888650vsd.42.1625748098931;
+ Thu, 08 Jul 2021 05:41:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210706110647.3979002-1-maz@kernel.org>
+References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de> <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Jul 2021 14:41:02 +0200
+Message-ID: <CAPDyKFo0zuooWAkuR=BcsvcJ2pmSrcEoBhuC8+ne18GQphyPHA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Geoff Levand <geoff@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>, Lee Jones <lee.jones@linaro.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Thorsten Scherer <t.scherer@eckelmann.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Michael Buesch <m@bues.ch>,
+        Sven Van Asbroeck <TheSven73@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Marc Zyngier <maz@kernel.org>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Qinglang Miao <miaoqinglang@huawei.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Joey Pabalan <jpabalanb@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Frank Li <lznuaa@gmail.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Bodo Stroesser <bostroesser@gmail.com>,
+        Hannes Reinecke <hare@suse.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        SeongJae Park <sjpark@amazon.de>,
+        Julien Grall <jgrall@amazon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Johannes Thumshirn <jth@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Marc,
-Thanks for the fix.
+On Tue, 6 Jul 2021 at 17:53, Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> The driver core ignores the return value of this callback because there
+> is only little it can do when a device disappears.
+>
+> This is the final bit of a long lasting cleanup quest where several
+> buses were converted to also return void from their remove callback.
+> Additionally some resource leaks were fixed that were caused by drivers
+> returning an error code in the expectation that the driver won't go
+> away.
+>
+> With struct bus_type::remove returning void it's prevented that newly
+> implemented buses return an ignored error code and so don't anticipate
+> wrong expectations for driver authors.
+>
+> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk> (For ARM, Am=
+ba and related parts)
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Chen-Yu Tsai <wens@csie.org> (for drivers/bus/sunxi-rsb.c)
+> Acked-by: Pali Roh=C3=A1r <pali@kernel.org>
+> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org> (for drivers/media)
+> Acked-by: Hans de Goede <hdegoede@redhat.com> (For drivers/platform)
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-By: Vinod Koul <vkoul@kernel.org>
+> Acked-by: Juergen Gross <jgross@suse.com> (For Xen)
+> Acked-by: Lee Jones <lee.jones@linaro.org> (For drivers/mfd)
+> Acked-by: Johannes Thumshirn <jth@kernel.org> (For drivers/mcb)
+> Acked-by: Johan Hovold <johan@kernel.org>
+> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org> (For drive=
+rs/slimbus)
+> Acked-by: Kirti Wankhede <kwankhede@nvidia.com> (For drivers/vfio)
+> Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com> (For ulpi and=
+ typec)
+> Acked-by: Samuel Iglesias Gons=C3=A1lvez <siglesias@igalia.com> (For ipac=
+k)
+> Reviewed-by: Tom Rix <trix@redhat.com> (For fpga)
+> Acked-by: Geoff Levand <geoff@infradead.org> (For ps3)
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-On Tue, Jul 06, 2021 at 12:06:47PM +0100, Marc Zyngier wrote:
-> Since d4a45c68dc81 ("irqdomain: Protect the linear revmap with RCU"),
-> any irqdomain lookup requires the RCU read lock to be held.
-> 
-> This assumes that the architecture code will be structured such as
-> irq_enter() will be called *before* the interrupt is looked up
-> in the irq domain. However, this isn't the case for MIPS, and a number
-> of drivers are structured to do it the other way around when handling
-> an interrupt in their root irqchip (secondary irqchips are OK by
-> construction).
-> 
-> This results in a RCU splat on a lockdep-enabled kernel when the kernel
-> takes an interrupt from idle, as reported by Guenter Roeck.
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
 
-Alas I am still on 5.12-rc4, so can't test it out at the moment. Soon
-after getting further on the modern kernel version I'll give this
-patch a try on my hw and send a report.
+[...]
 
-Regards
--Sergey
-
-> 
-> Note that this could have fired previously if any driver had used
-> tree-based irqdomain, which always had the RCU requirement.
-> 
-> To solve this, provide a MIPS-specific helper (do_domain_IRQ())
-> as the pendent of do_IRQ() that will do thing in the right order
-> (and maybe save some cycles in the process).
-> 
-> Ideally, MIPS would be moved over to using handle_domain_irq(),
-> but that's much more ambitious.
-> 
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Tested-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Serge Semin <fancer.lancer@gmail.com>
-> Link: https://lore.kernel.org/r/20210705172352.GA56304@roeck-us.net
-> ---
->  arch/mips/include/asm/irq.h      |  3 +++
->  arch/mips/kernel/irq.c           | 14 ++++++++++++++
->  drivers/irqchip/irq-mips-cpu.c   | 10 ++++++----
->  drivers/irqchip/irq-mips-gic.c   |  8 ++++----
->  drivers/irqchip/irq-pic32-evic.c |  5 ++---
->  5 files changed, 29 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/irq.h b/arch/mips/include/asm/irq.h
-> index d1477ecb1af9..57561e0e6e8d 100644
-> --- a/arch/mips/include/asm/irq.h
-> +++ b/arch/mips/include/asm/irq.h
-> @@ -57,6 +57,9 @@ asmlinkage void plat_irq_dispatch(void);
->  
->  extern void do_IRQ(unsigned int irq);
->  
-> +struct irq_domain;
-> +extern void do_domain_IRQ(struct irq_domain *domain, unsigned int irq);
-> +
->  extern void arch_init_irq(void);
->  extern void spurious_interrupt(void);
->  
-> diff --git a/arch/mips/kernel/irq.c b/arch/mips/kernel/irq.c
-> index 85b6c60f285d..c76005cd3b79 100644
-> --- a/arch/mips/kernel/irq.c
-> +++ b/arch/mips/kernel/irq.c
-> @@ -21,6 +21,7 @@
->  #include <linux/kallsyms.h>
->  #include <linux/kgdb.h>
->  #include <linux/ftrace.h>
-> +#include <linux/irqdomain.h>
->  
->  #include <linux/atomic.h>
->  #include <linux/uaccess.h>
-> @@ -107,3 +108,16 @@ void __irq_entry do_IRQ(unsigned int irq)
->  	irq_exit();
->  }
->  
-> +void __irq_entry do_domain_IRQ(struct irq_domain *domain, unsigned int hwirq)
-> +{
-> +	struct irq_desc *desc;
-> +
-> +	irq_enter();
-> +	check_stack_overflow();
-> +
-> +	desc = irq_resolve_mapping(domain, hwirq);
-> +	if (likely(desc))
-> +		handle_irq_desc(desc);
-> +
-> +	irq_exit();
-> +}
-> diff --git a/drivers/irqchip/irq-mips-cpu.c b/drivers/irqchip/irq-mips-cpu.c
-> index 0bbb0b2d0dd5..0c7ae71a0af0 100644
-> --- a/drivers/irqchip/irq-mips-cpu.c
-> +++ b/drivers/irqchip/irq-mips-cpu.c
-> @@ -127,7 +127,6 @@ static struct irq_chip mips_mt_cpu_irq_controller = {
->  asmlinkage void __weak plat_irq_dispatch(void)
->  {
->  	unsigned long pending = read_c0_cause() & read_c0_status() & ST0_IM;
-> -	unsigned int virq;
->  	int irq;
->  
->  	if (!pending) {
-> @@ -137,12 +136,15 @@ asmlinkage void __weak plat_irq_dispatch(void)
->  
->  	pending >>= CAUSEB_IP;
->  	while (pending) {
-> +		struct irq_domain *d;
-> +
->  		irq = fls(pending) - 1;
->  		if (IS_ENABLED(CONFIG_GENERIC_IRQ_IPI) && irq < 2)
-> -			virq = irq_linear_revmap(ipi_domain, irq);
-> +			d = ipi_domain;
->  		else
-> -			virq = irq_linear_revmap(irq_domain, irq);
-> -		do_IRQ(virq);
-> +			d = irq_domain;
-> +
-> +		do_domain_IRQ(d, irq);
->  		pending &= ~BIT(irq);
->  	}
->  }
-> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-> index b146e069bf5b..54c7092cc61d 100644
-> --- a/drivers/irqchip/irq-mips-gic.c
-> +++ b/drivers/irqchip/irq-mips-gic.c
-> @@ -169,8 +169,8 @@ static void gic_handle_shared_int(bool chained)
->  			generic_handle_domain_irq(gic_irq_domain,
->  						  GIC_SHARED_TO_HWIRQ(intr));
->  		else
-> -			do_IRQ(irq_find_mapping(gic_irq_domain,
-> -						GIC_SHARED_TO_HWIRQ(intr)));
-> +			do_domain_IRQ(gic_irq_domain,
-> +				      GIC_SHARED_TO_HWIRQ(intr));
->  	}
->  }
->  
-> @@ -320,8 +320,8 @@ static void gic_handle_local_int(bool chained)
->  			generic_handle_domain_irq(gic_irq_domain,
->  						  GIC_LOCAL_TO_HWIRQ(intr));
->  		else
-> -			do_IRQ(irq_find_mapping(gic_irq_domain,
-> -						GIC_LOCAL_TO_HWIRQ(intr)));
-> +			do_domain_IRQ(gic_irq_domain,
-> +				      GIC_LOCAL_TO_HWIRQ(intr));
->  	}
->  }
->  
-> diff --git a/drivers/irqchip/irq-pic32-evic.c b/drivers/irqchip/irq-pic32-evic.c
-> index 34c4b4ffacd1..1d9bb28d13e5 100644
-> --- a/drivers/irqchip/irq-pic32-evic.c
-> +++ b/drivers/irqchip/irq-pic32-evic.c
-> @@ -42,11 +42,10 @@ static void __iomem *evic_base;
->  
->  asmlinkage void __weak plat_irq_dispatch(void)
->  {
-> -	unsigned int irq, hwirq;
-> +	unsigned int hwirq;
->  
->  	hwirq = readl(evic_base + REG_INTSTAT) & 0xFF;
-> -	irq = irq_linear_revmap(evic_irq_domain, hwirq);
-> -	do_IRQ(irq);
-> +	do_domain_IRQ(evic_irq_domain, hwirq);
->  }
->  
->  static struct evic_chip_data *irqd_to_priv(struct irq_data *data)
-> -- 
-> 2.30.2
-> 
+Kind regards
+Uffe
