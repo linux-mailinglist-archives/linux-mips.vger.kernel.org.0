@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 778AD3C376E
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Jul 2021 01:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33D03C377C
+	for <lists+linux-mips@lfdr.de>; Sun, 11 Jul 2021 01:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbhGJXwK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 10 Jul 2021 19:52:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38550 "EHLO mail.kernel.org"
+        id S232462AbhGJXwV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 10 Jul 2021 19:52:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39010 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231458AbhGJXvv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 10 Jul 2021 19:51:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 107236135D;
-        Sat, 10 Jul 2021 23:49:03 +0000 (UTC)
+        id S232137AbhGJXwL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 10 Jul 2021 19:52:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E47A61355;
+        Sat, 10 Jul 2021 23:49:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625960945;
+        s=k20201202; t=1625960965;
         bh=qjAee10GKoNtEd3QJvJ5ofikK7mIpHulu3nelTdmX4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r0fFNGfp9/kbHpE8CuQKqVbTnocKN+PgrvjE7e19Nq+7hJQC28CZgE2V2V4Xxb49Y
-         pjaDw43hNalExSAcXRxWlJ2EbG2d5qJ1Vj3+f+FabnsaEfMCPpilq6GE71eiJ0jCwZ
-         cSW60vXVmCd4ktbGuYJFrA5CSeRb86jI3/rN+0d5PWyAPzOkjvYNZjVb9Wnyr+6/+h
-         ac9/7L7S/rL9gLfnzu8GzqggrQQxlEdB9ChHlh3sSp5JNcKAHyBtsjefmZYFlC0YrO
-         O0xcnHQLW9c5P1+W6nWQ5/EP86BBs44JzHH1BM+6s5eVufB6F9y2dFi0+ISxzw51z5
-         XLG1kg5ldQ6Lg==
+        b=gL9m5323Mwr1qKlu7X++woiy5Qo0vwny+GsDEHBS+1avkn9sLv0F32dcw3cJaywR9
+         Rga0NybJXrARDGRgAiDFr12jV5NClAUl07kooQ2/h8w9lGHeK8dck5mIR6kNA8g3RX
+         3tf3P5+kJQa7ut/v+upo5IsZuTLSh3MIQTbql9xCJdJvmt/Meq5dOT83uYdgr430mR
+         FshAHuiZ820Y8WPiVDU7LjerpE56ZP3/yk8Uyy16KYuf7J0df4KCTzL9PQzEA6Fdrz
+         MHUJn+MFMHZ1l2qheaunTdVVmNYOoWJ5b2ZJcfE2jKDRSTcwE3XKA+Qn3fgtIus9q1
+         xjv8GkyjZMMpw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
@@ -34,12 +34,12 @@ Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
         linux-pci@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 05/53] PCI: ftpci100: Rename macro name collision
-Date:   Sat, 10 Jul 2021 19:48:09 -0400
-Message-Id: <20210710234857.3220040-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.12 05/43] PCI: ftpci100: Rename macro name collision
+Date:   Sat, 10 Jul 2021 19:48:37 -0400
+Message-Id: <20210710234915.3220342-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710234857.3220040-1-sashal@kernel.org>
-References: <20210710234857.3220040-1-sashal@kernel.org>
+In-Reply-To: <20210710234915.3220342-1-sashal@kernel.org>
+References: <20210710234915.3220342-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
