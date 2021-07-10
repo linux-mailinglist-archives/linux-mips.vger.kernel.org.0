@@ -2,66 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 474E93C3473
-	for <lists+linux-mips@lfdr.de>; Sat, 10 Jul 2021 14:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92ECB3C361B
+	for <lists+linux-mips@lfdr.de>; Sat, 10 Jul 2021 20:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbhGJMSc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 10 Jul 2021 08:18:32 -0400
-Received: from elvis.franken.de ([193.175.24.41]:50133 "EHLO elvis.franken.de"
+        id S229948AbhGJShk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 10 Jul 2021 14:37:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53828 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231303AbhGJMSc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 10 Jul 2021 08:18:32 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1m2Bta-0004XW-00; Sat, 10 Jul 2021 14:15:46 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id C9424C0813; Sat, 10 Jul 2021 14:15:23 +0200 (CEST)
-Date:   Sat, 10 Jul 2021 14:15:23 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v5.14
-Message-ID: <20210710121523.GA8431@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S229599AbhGJShj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 10 Jul 2021 14:37:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 4FAF261249;
+        Sat, 10 Jul 2021 18:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625942094;
+        bh=seybo4Srl8mhlejim68PrwKNybnRL4PLjAd3mcpnNDQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=eRfjHcDsgLj5vbpqjRubKUBgf8uob4bcz8MuDNzrWOw2iivnZu5uAi/LUv7aoVl0W
+         6xEUo7pblrsJPBxlhUCiJkEidTGSrYk9hY6HT3BrtNHxBEbnM0Di/QJs/CkJg6r3J2
+         yjGqenIkiGpVZJ4v3w9Okr4rXwjwXu04DguZEX3nTtXMeiz/Z0EiXvYYs3ybopCD8/
+         JBcmev/qNOroRRksnX0k8ifIPSdCpJnv1Dlq5mc186+AgGujNfA0T4yG/oBe8qpGl1
+         cTCtx/L9STPWNqWEfNA0wJt5cvE1DqToxAr3cP98a9gFG7dW0qOQzP3ILHbrXkYkNu
+         F0d1fIXjyUw+A==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 48BA9609CD;
+        Sat, 10 Jul 2021 18:34:54 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v5.14
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20210710121523.GA8431@alpha.franken.de>
+References: <20210710121523.GA8431@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20210710121523.GA8431@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.14_1
+X-PR-Tracked-Commit-Id: 47ce8527fbba145a7723685bc9a27d9855e06491
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 379cf80a9861e4356792185bc3fcdd7d4133f2f7
+Message-Id: <162594209429.22528.2441674279705679396.pr-tracker-bot@kernel.org>
+Date:   Sat, 10 Jul 2021 18:34:54 +0000
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit cf02ce742f09188272bcc8b0e62d789eb671fc4c:
+The pull request you sent on Sat, 10 Jul 2021 14:15:23 +0200:
 
-  MIPS: Fix PKMAP with 32-bit MIPS huge page support (2021-06-30 14:41:32 +0200)
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.14_1
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/379cf80a9861e4356792185bc3fcdd7d4133f2f7
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.14_1
-
-for you to fetch changes up to 47ce8527fbba145a7723685bc9a27d9855e06491:
-
-  MIPS: vdso: Invalid GIC access through VDSO (2021-07-09 15:29:06 +0200)
-
-----------------------------------------------------------------
-- fix for accesing gic via vdso
-- two build fixes
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      mips: always link byteswap helpers into decompressor
-
-Martin Fäcknitz (1):
-      MIPS: vdso: Invalid GIC access through VDSO
-
-Randy Dunlap (1):
-      mips: disable branch profiling in boot/decompress.o
-
- arch/mips/boot/compressed/Makefile     | 4 ++--
- arch/mips/boot/compressed/decompress.c | 2 ++
- arch/mips/include/asm/vdso/vdso.h      | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+Thank you!
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
