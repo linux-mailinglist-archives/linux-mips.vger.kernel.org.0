@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4294E3C43EB
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Jul 2021 08:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACC73C43E0
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Jul 2021 08:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbhGLGNx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 12 Jul 2021 02:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
+        id S231558AbhGLGNr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 12 Jul 2021 02:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbhGLGNx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Jul 2021 02:13:53 -0400
+        with ESMTP id S231351AbhGLGNr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 12 Jul 2021 02:13:47 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98353C0613DD;
-        Sun, 11 Jul 2021 23:11:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2D4C0613DD;
+        Sun, 11 Jul 2021 23:10:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=1YkOQcBdgxi62ZhLA0NtO1y6SKPDgvnlI06PbOB4DUw=; b=cj+KTjXg8AMbD8rtYBj+8r7Cxt
-        BIPIRTp20D9LAr4qWIr6U0JC/xVHlXyiIcTpi382wli87gwzL3Ky+H3KogILv29OKGQofxk4HKyqR
-        AiEUkF3fz0flDZ/xb4lpGW1WDvCD6qxQc+HkKDLMWs17uNkI25ouMldR4GbfUgdqhRyD1eO7ejeUK
-        aRa9JYOKdeAzKqSD8RqQQWjuHagl0GUOGEO14F0eiDyAnchuvTZcMJ5utjbxVMfjBg0n7t7VaNAiA
-        Q5H0LUAnMpixjTv1WRiUcuxUg02RkZHPFt7pajAXdDqcjOppur2vp3jUMn2VfXHojK49J5ypV42jW
-        60ew9ukQ==;
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=Myd7IJLJ7heKIz9ETwtcIPphP9GrAs74dKTdw1IlNW0=; b=ukgk67ijHtXQ1PEUlh1WacXdWU
+        WIqEtHEGUD4+e78xBwdDdQ96GHwcDGXZGoKN8p+7q86hvOtOOiHxN3MeKXKst5nZXsCnxOVvoazU/
+        fNRH1LsQFSwgNKmo91nxV6rf73Waco4u5Myk8CuiZco/7k1OMWymTvPMp1oMiDjk5nJyguuWl35YK
+        rTTUQpsDR7CM63pp+JJ59UkU3ymC77BYcTToSPZH4iLbjPc0fsChh2t5T1TgFYBYOeUpvRSe5SMmR
+        Ka/ub8pu+YKXByg5EvKWWlN6GCKOSxnucifSmIQvNhpzSBmXCGvkAumMRr3sCOtBMbh7xWYBGstF+
+        GEZRpeTg==;
 Received: from [2001:4bb8:184:8b7c:bd9:61b8:39ba:d78a] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m2p8D-00GwBl-3g; Mon, 12 Jul 2021 06:09:34 +0000
+        id 1m2p8O-00GwC0-7C; Mon, 12 Jul 2021 06:09:43 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -48,10 +48,12 @@ Cc:     Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
         linux-sh@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-scsi@vger.kernel.org, linux-mm@kvack.org,
         linux-doc@vger.kernel.org
-Subject: flush_kernel_dcache_page fixes and removal
-Date:   Mon, 12 Jul 2021 08:09:22 +0200
-Message-Id: <20210712060928.4161649-1-hch@lst.de>
+Subject: [PATCH 1/6] mmc: JZ4740: remove the flush_kernel_dcache_page call in jz4740_mmc_read_data
+Date:   Mon, 12 Jul 2021 08:09:23 +0200
+Message-Id: <20210712060928.4161649-2-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210712060928.4161649-1-hch@lst.de>
+References: <20210712060928.4161649-1-hch@lst.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
@@ -59,43 +61,29 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi all,
+MIPS now implements flush_kernel_dcache_page (as an alias to
+flush_dcache_page).
 
-while looking to convert the block layer away from kmap_atomic towards
-kmap_local_page and prefeably the helpers that abstract it away I noticed
-that a few block drivers directly or implicitly call
-flush_kernel_dcache_page before kunmapping a page that has been written
-to.  flush_kernel_dcache_page is documented to to be used in such cases,
-but flush_dcache_page is actually required when the page could be in
-the page cache and mapped to userspace, which is pretty much always the
-case when kmapping an arbitrary page.  Unfortunately the documentation
-doesn't exactly make that clear, which lead to this misused.  And it turns
-out that only the copy_strings / copy_string_kernel in the exec code
-were actually correct users of flush_kernel_dcache_page, which is why
-I think we should just remove it and eat the very minor overhead in
-exec rather than confusing poor driver writers.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/mmc/host/jz4740_mmc.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Diffstat:
- Documentation/core-api/cachetlb.rst                    |   86 +++++++----------
- Documentation/translations/zh_CN/core-api/cachetlb.rst |    9 -
- arch/arm/include/asm/cacheflush.h                      |    4 
- arch/arm/mm/flush.c                                    |   33 ------
- arch/arm/mm/nommu.c                                    |    6 -
- arch/csky/abiv1/cacheflush.c                           |   11 --
- arch/csky/abiv1/inc/abi/cacheflush.h                   |    4 
- arch/mips/include/asm/cacheflush.h                     |    8 -
- arch/nds32/include/asm/cacheflush.h                    |    3 
- arch/nds32/mm/cacheflush.c                             |    9 -
- arch/parisc/include/asm/cacheflush.h                   |    8 -
- arch/parisc/kernel/cache.c                             |    3 
- arch/sh/include/asm/cacheflush.h                       |    8 -
- block/blk-map.c                                        |    2 
- drivers/block/ps3disk.c                                |    2 
- drivers/mmc/host/jz4740_mmc.c                          |    4 
- drivers/mmc/host/mmc_spi.c                             |    2 
- drivers/scsi/aacraid/aachba.c                          |    1 
- fs/exec.c                                              |    6 -
- include/linux/highmem.h                                |    5 
- lib/scatterlist.c                                      |    5 
- tools/testing/scatterlist/linux/mm.h                   |    1 
- 22 files changed, 55 insertions(+), 165 deletions(-)
+diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
+index 0db17bcc9c16..aa2240c83510 100644
+--- a/drivers/mmc/host/jz4740_mmc.c
++++ b/drivers/mmc/host/jz4740_mmc.c
+@@ -578,10 +578,6 @@ static bool jz4740_mmc_read_data(struct jz4740_mmc_host *host,
+ 			}
+ 		}
+ 		data->bytes_xfered += miter->length;
+-
+-		/* This can go away once MIPS implements
+-		 * flush_kernel_dcache_page */
+-		flush_dcache_page(miter->page);
+ 	}
+ 	sg_miter_stop(miter);
+ 
+-- 
+2.30.2
+
