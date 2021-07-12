@@ -2,165 +2,234 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2FB53C3802
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Jul 2021 01:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8C03C405D
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Jul 2021 02:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbhGJXxo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 10 Jul 2021 19:53:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40150 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233149AbhGJXxJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 10 Jul 2021 19:53:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2DF0D61361;
-        Sat, 10 Jul 2021 23:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625961023;
-        bh=qjAee10GKoNtEd3QJvJ5ofikK7mIpHulu3nelTdmX4M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ar1L4cnDHzEyC6rccrXu5CMb5+lNwGfRjKMa4pQzi3ooKyVu8h6yhAwOHqdugvztH
-         hNW7WO3YljmmhD3w8CqY4KsRIfJRj3jwxCbyOhPk7/TPHeLSvZYKt2DxMKRLedtMqJ
-         Fi0xe/pwuw7MpHqhEv567maGV++zIaUaS1otUdfmbZLCfOqLYDoErN2LSIFawOG9Fn
-         l8nAH7Y/1gXD/ts/v9zG7YWb86nUS2/ehfJr6z//gEAshJv2l4RB2uevqfT4JSpD5J
-         jjIR8r39RSeIcq5mRo2wKy/2PhR55Su/nLMXBDO9Ca99gP1A0OYfDA0a990tziFI5N
-         cFHxAw8Xf/H1Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        kernel test robot <lkp@intel.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        id S229793AbhGLAiR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 11 Jul 2021 20:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229660AbhGLAiR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 11 Jul 2021 20:38:17 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6FBC0613DD;
+        Sun, 11 Jul 2021 17:35:28 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id n11so9135768pjo.1;
+        Sun, 11 Jul 2021 17:35:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vfgi8rSUdhyhOK+TTG6OcDruFXlt3xOVYmVmmsxO3OY=;
+        b=VMHcyNWhdWyJEyRjEoXABEXH1og6tNvxLu84t9qbomaG48qn7vgQ2av6nwKn+qxPI5
+         kSVUmXqsyt7QxzpNKWtGy2svo05WI0JKrxHPhTYP/nb5bR7YBPJ7GULUpiq1liEs7jXV
+         tqs04nj/A+3T4Y/1ILi1cF6EkELhR828aXlY8Y4t+0/wJS94ceojIv2V4nChmoX9KAOe
+         JPk8PS7TEBkUP7KApO6GJO+UpS/hcr2PVk1SeAgpKSeilbrVDdi/dce8iZnR9jq0evNH
+         uYB+8VKgsJ2vl6haDotokgZZb+NB+A96EsYizgyGru/hn5A3U701+z/OAXZk21CnIzuj
+         aejg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vfgi8rSUdhyhOK+TTG6OcDruFXlt3xOVYmVmmsxO3OY=;
+        b=D98ymaFpSTOR3zOlrdgys7apqFGh9qBHHWtqy1lPpjppSyqEpxrodXhvU0IwHu8Hiq
+         m6GZnaTRsb3V17AV4TZbIp6TiI+kBKt2hed8cQ4LCHpVWBKSC9fTQbGV5ThwkGa72JqB
+         mC6op0WibSdBl54rxDpLS6EalIh6QZhBYsUOXh9NrQG+O5ers9UQn5XXtIL5Ifeu8HVT
+         8sNIOcQs9k+zwzQJ0+RAbyGOSHUQWMTjKPjfmjlxczQ+mMTUzntfdRMa9iJJ6tVHHgrL
+         9egZbg8kLixaGvdEml7eb8eOWbVueQ3+DajfoZsYJevbaz2LOteHPzT/el0Ma4NfhGj0
+         OprA==
+X-Gm-Message-State: AOAM531qipINxJqe1ySJKsgsWxN+DgEor14ntdBa1tr8nbb1OJkWNCRU
+        XxK875nUohfJ+wkVMrDZcbM=
+X-Google-Smtp-Source: ABdhPJxOhaWBhv0i+ISUeOqU2Ho9jiY/LUGAer9OhLDKcWEH7/gMQMQf1FVXrQltJHU94GmBwzQ0Sg==
+X-Received: by 2002:a17:902:f243:b029:129:5706:3c4b with SMTP id j3-20020a170902f243b029012957063c4bmr41150209plc.83.1626050128226;
+        Sun, 11 Jul 2021 17:35:28 -0700 (PDT)
+Received: from localhost.localdomain ([2001:470:e92d:10:4039:6c0e:1168:cc74])
+        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Jul 2021 17:35:27 -0700 (PDT)
+From:   Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        linux-pci@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 05/37] PCI: ftpci100: Rename macro name collision
-Date:   Sat, 10 Jul 2021 19:49:43 -0400
-Message-Id: <20210710235016.3221124-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710235016.3221124-1-sashal@kernel.org>
-References: <20210710235016.3221124-1-sashal@kernel.org>
+        Paul Burton <paulburton@kernel.org>
+Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-mips@vger.kernel.org,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        David Daney <ddaney@caviumnetworks.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Subject: [RFC PATCH bpf-next v1 00/14] MIPS: eBPF: refactor code, add MIPS32 JIT
+Date:   Sun, 11 Jul 2021 17:34:46 -0700
+Message-Id: <cover.1625970383.git.Tony.Ambardar@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+Greetings!
 
-[ Upstream commit 5be967d5016ac5ffb9c4d0df51b48441ee4d5ed1 ]
+This patch series adds an eBPF JIT for MIPS32. The approach taken first
+updates existing code to support MIPS64/MIPS32 systems, then refactors
+source into a common core and dependent MIPS64 JIT, and finally adds a
+MIPS32 eBPF JIT implementation using the common framework.
 
-PCI_IOSIZE is defined in mach-loongson64/spaces.h, so change the name
-of the PCI_* macros in pci-ftpci100.c to use FTPCI_* so that they are
-more localized and won't conflict with other drivers or arches.
+Compared to writing a standalone MIPS32 JIT, this approach has benefits
+for long-term maintainability, but has taken much longer than expected.
+This RFC posting is intended to share progress, gather feedback, and
+raise some questions with BPF and MIPS experts (which I'll cover later).
 
-../drivers/pci/controller/pci-ftpci100.c:37: warning: "PCI_IOSIZE" redefined
-   37 | #define PCI_IOSIZE 0x00
-      |
-In file included from ../arch/mips/include/asm/addrspace.h:13,
-...              from ../drivers/pci/controller/pci-ftpci100.c:15:
-arch/mips/include/asm/mach-loongson64/spaces.h:11: note: this is the location of the previous definition
-   11 | #define PCI_IOSIZE SZ_16M
 
-Suggested-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20210517234117.3660-1-rdunlap@infradead.org
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Krzysztof Wilczyński <kw@linux.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/pci/controller/pci-ftpci100.c | 30 +++++++++++++--------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+Code Overview
+=============
 
-diff --git a/drivers/pci/controller/pci-ftpci100.c b/drivers/pci/controller/pci-ftpci100.c
-index da3cd216da00..aefef1986201 100644
---- a/drivers/pci/controller/pci-ftpci100.c
-+++ b/drivers/pci/controller/pci-ftpci100.c
-@@ -34,12 +34,12 @@
-  * Special configuration registers directly in the first few words
-  * in I/O space.
-  */
--#define PCI_IOSIZE	0x00
--#define PCI_PROT	0x04 /* AHB protection */
--#define PCI_CTRL	0x08 /* PCI control signal */
--#define PCI_SOFTRST	0x10 /* Soft reset counter and response error enable */
--#define PCI_CONFIG	0x28 /* PCI configuration command register */
--#define PCI_DATA	0x2C
-+#define FTPCI_IOSIZE	0x00
-+#define FTPCI_PROT	0x04 /* AHB protection */
-+#define FTPCI_CTRL	0x08 /* PCI control signal */
-+#define FTPCI_SOFTRST	0x10 /* Soft reset counter and response error enable */
-+#define FTPCI_CONFIG	0x28 /* PCI configuration command register */
-+#define FTPCI_DATA	0x2C
- 
- #define FARADAY_PCI_STATUS_CMD		0x04 /* Status and command */
- #define FARADAY_PCI_PMC			0x40 /* Power management control */
-@@ -195,9 +195,9 @@ static int faraday_raw_pci_read_config(struct faraday_pci *p, int bus_number,
- 			PCI_CONF_FUNCTION(PCI_FUNC(fn)) |
- 			PCI_CONF_WHERE(config) |
- 			PCI_CONF_ENABLE,
--			p->base + PCI_CONFIG);
-+			p->base + FTPCI_CONFIG);
- 
--	*value = readl(p->base + PCI_DATA);
-+	*value = readl(p->base + FTPCI_DATA);
- 
- 	if (size == 1)
- 		*value = (*value >> (8 * (config & 3))) & 0xFF;
-@@ -230,17 +230,17 @@ static int faraday_raw_pci_write_config(struct faraday_pci *p, int bus_number,
- 			PCI_CONF_FUNCTION(PCI_FUNC(fn)) |
- 			PCI_CONF_WHERE(config) |
- 			PCI_CONF_ENABLE,
--			p->base + PCI_CONFIG);
-+			p->base + FTPCI_CONFIG);
- 
- 	switch (size) {
- 	case 4:
--		writel(value, p->base + PCI_DATA);
-+		writel(value, p->base + FTPCI_DATA);
- 		break;
- 	case 2:
--		writew(value, p->base + PCI_DATA + (config & 3));
-+		writew(value, p->base + FTPCI_DATA + (config & 3));
- 		break;
- 	case 1:
--		writeb(value, p->base + PCI_DATA + (config & 3));
-+		writeb(value, p->base + FTPCI_DATA + (config & 3));
- 		break;
- 	default:
- 		ret = PCIBIOS_BAD_REGISTER_NUMBER;
-@@ -469,7 +469,7 @@ static int faraday_pci_probe(struct platform_device *pdev)
- 		if (!faraday_res_to_memcfg(io->start - win->offset,
- 					   resource_size(io), &val)) {
- 			/* setup I/O space size */
--			writel(val, p->base + PCI_IOSIZE);
-+			writel(val, p->base + FTPCI_IOSIZE);
- 		} else {
- 			dev_err(dev, "illegal IO mem size\n");
- 			return -EINVAL;
-@@ -477,11 +477,11 @@ static int faraday_pci_probe(struct platform_device *pdev)
- 	}
- 
- 	/* Setup hostbridge */
--	val = readl(p->base + PCI_CTRL);
-+	val = readl(p->base + FTPCI_CTRL);
- 	val |= PCI_COMMAND_IO;
- 	val |= PCI_COMMAND_MEMORY;
- 	val |= PCI_COMMAND_MASTER;
--	writel(val, p->base + PCI_CTRL);
-+	writel(val, p->base + FTPCI_CTRL);
- 	/* Mask and clear all interrupts */
- 	faraday_raw_pci_write_config(p, 0, 0, FARADAY_PCI_CTRL2 + 2, 2, 0xF000);
- 	if (variant->cascaded_irq) {
+The initial code updates and refactoring exposed a number of problems in
+the existing MIPS64 JIT, which the first several patches fix. Patch #11
+updates common code to support MIPS64/MIPS32 operation. Patch #12
+separates the common core from the MIPS64 JIT code. Patch #13 adds a
+needed MIPS32 uasm opcode, while patch #14 adds the MIPS32 eBPF JIT.
+
+On MIPS32, 64-bit BPF registers are mapped to 32-bit register pairs, and
+all 64-bit operations are built on 32-bit subregister ops. The MIPS32
+tailcall counter is stored on the stack however. Notable changes from the
+MIPS64 JIT include:
+
+  * BPF_JMP32: implement all conditionals
+  * BPF_JMP | JSET | BPF_K: drop bbit insns only usable on MIPS64 Octeon
+
+Since MIPS32 does not include 64-bit div/mod or atomic opcodes, these BPF
+insns are implemented by directly calling the built-in kernel functions:
+(with thanks to Luke Nelson for posting similar code online)
+
+  * BPF_STX   | BPF_DW  | BPF_XADD
+  * BPF_ALU64 | BPF_DIV | BPF_X
+  * BPF_ALU64 | BPF_DIV | BPF_K
+  * BPF_ALU64 | BPF_MOD | BPF_X
+  * BPF_ALU64 | BPF_MOD | BPF_K
+
+
+Testing
+=======
+
+Testing used LTS kernel 5.10.x and stable 5.13.x running under QEMU.
+The test suite included the 'test_bpf' module and 'test_verifier' from
+kselftests. Using 'test_progs' from kselftests is too difficult in general
+since cross-compilation depends on libbpf/bpftool, which does not support
+cross-endian builds.
+
+The matrix of test configurations executed for this series covered the
+expected register sizes, MIPS ISA releases, and JIT settings:
+
+  WORDSIZE={64-bit,32-bit} x ISA={R2,R6} x JIT={off,on,hardened}
+
+On MIPS32BE and MIPS32LE there was general parity between the results of
+interpreter vs. JIT-backed tests with respect to the numbers of PASSED,
+SKIPPED, and FAILED tests. The same was also true of MIPS64 retesting.
+
+For example, the results below on MIPS32 are typical. Note that skipped
+tests 854 and 855 are "scale" tests which result in OOM on the QEMU malta
+MIPS32 test systems.
+
+  root@OpenWrt:~# sysctl net.core.bpf_jit_enable=1
+  root@OpenWrt:~# modprobe test_bpf
+  ...
+  test_bpf: Summary: 378 PASSED, 0 FAILED, [366/366 JIT'ed]
+  root@OpenWrt:~# ./test_verifier 0 853
+  ...
+  Summary: 1127 PASSED, 0 SKIPPED, 89 FAILED
+  root@OpenWrt:~# ./test_verifier 855 1149
+  ...
+  Summary: 408 PASSED, 7 SKIPPED, 53 FAILED
+
+
+Open Questions
+==============
+
+1. As seen in the patch series, the static analysis used by the MIPS64 JIT
+tends to be fragile in the face of verifier, insn and patching changes.
+After tracking down and fixing several related bugs, I wonder if it were
+better to remove the static analysis and leave things more robust and
+maintainable going forward.
+
+Paul, Thomas, David, what are your views? Do you have thoughts on how best
+to do this?
+
+Would it be possible to replace the static analysis by accessing verifier
+analysis results from a JIT? Daniel, Alexei, or Andrii?
+
+
+2. The series tries to correctly handle tailcall counter across bpf2bpf
+and tailcalls, and it would be nice to properly support mixing these,
+but this is still a WIP for me. Much of what I've read seems very specific
+to the x86_64 JIT. Is there a good summary of the required changes for a
+JIT in general?
+
+Note: I built a MIPS32LE 'test_progs' after some horrible, ugly hacking,
+and the 'tailcall' tests pass but the 'tailcall_bpf2bpf' tests fail
+cryptically. I can send a log and strace if someone helpful could kindly
+take a look. Is there an alternative, good standalone test available?
+
+
+
+Possible Next Steps
+===================
+
+1. Implementing the new BPF_ATOMIC insns *should* be straightforward
+on MIPS32. I'm less certain of MIPS64 given the static analysis and
+related zext/sext logic.
+
+2. The BPF_JMP32 class is another big gap on MIPS64. Has anyone looked at
+this before? It also ties to the static analysis, but on first glance
+appears feasible.
+
+
+
+Thanks in advance for any feedback or suggestions!
+
+
+Tony Ambardar (14):
+  MIPS: eBPF: support BPF_TAIL_CALL in JIT static analysis
+  MIPS: eBPF: mask 32-bit index for tail calls
+  MIPS: eBPF: fix BPF_ALU|ARSH handling in JIT static analysis
+  MIPS: eBPF: support BPF_JMP32 in JIT static analysis
+  MIPS: eBPF: fix system hang with verifier dead-code patching
+  MIPS: eBPF: fix JIT static analysis hang with bounded loops
+  MIPS: eBPF: fix MOD64 insn on R6 ISA
+  MIPS: eBPF: support long jump for BPF_JMP|EXIT
+  MIPS: eBPF: drop src_reg restriction in BPF_LD|BPF_DW|BPF_IMM
+  MIPS: eBPF: improve and clarify enum 'which_ebpf_reg'
+  MIPS: eBPF: add core support for 32/64-bit systems
+  MIPS: eBPF: refactor common MIPS64/MIPS32 functions and headers
+  MIPS: uasm: Enable muhu opcode for MIPS R6
+  MIPS: eBPF: add MIPS32 JIT
+
+ Documentation/admin-guide/sysctl/net.rst |    6 +-
+ Documentation/networking/filter.rst      |    6 +-
+ arch/mips/Kconfig                        |    4 +-
+ arch/mips/include/asm/uasm.h             |    1 +
+ arch/mips/mm/uasm-mips.c                 |    4 +-
+ arch/mips/mm/uasm.c                      |    3 +-
+ arch/mips/net/Makefile                   |    8 +-
+ arch/mips/net/ebpf_jit.c                 | 1935 ----------------------
+ arch/mips/net/ebpf_jit.h                 |  295 ++++
+ arch/mips/net/ebpf_jit_comp32.c          | 1241 ++++++++++++++
+ arch/mips/net/ebpf_jit_comp64.c          |  987 +++++++++++
+ arch/mips/net/ebpf_jit_core.c            | 1118 +++++++++++++
+ 12 files changed, 3663 insertions(+), 1945 deletions(-)
+ delete mode 100644 arch/mips/net/ebpf_jit.c
+ create mode 100644 arch/mips/net/ebpf_jit.h
+ create mode 100644 arch/mips/net/ebpf_jit_comp32.c
+ create mode 100644 arch/mips/net/ebpf_jit_comp64.c
+ create mode 100644 arch/mips/net/ebpf_jit_core.c
+
 -- 
-2.30.2
+2.25.1
 
