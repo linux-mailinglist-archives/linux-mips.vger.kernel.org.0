@@ -2,108 +2,173 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F19CB3C6CF0
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jul 2021 11:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280283C75ED
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jul 2021 19:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234909AbhGMJOK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Jul 2021 05:14:10 -0400
-Received: from verein.lst.de ([213.95.11.211]:57900 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234916AbhGMJOK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 13 Jul 2021 05:14:10 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 9AF1767373; Tue, 13 Jul 2021 11:11:14 +0200 (CEST)
-Date:   Tue, 13 Jul 2021 11:11:14 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Geoff Levand <geoff@infradead.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alex Shi <alexs@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org
-Subject: Re: flush_kernel_dcache_page fixes and removal
-Message-ID: <20210713091113.GA23518@lst.de>
-References: <20210712060928.4161649-1-hch@lst.de> <20210713084648.GF22278@shell.armlinux.org.uk>
+        id S233090AbhGMRwI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Jul 2021 13:52:08 -0400
+Received: from smtprelay0219.hostedemail.com ([216.40.44.219]:55774 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230145AbhGMRwI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 13 Jul 2021 13:52:08 -0400
+Received: from omf06.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id AA2D9182CED34;
+        Tue, 13 Jul 2021 17:49:17 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id C3A242448BC;
+        Tue, 13 Jul 2021 17:49:16 +0000 (UTC)
+Message-ID: <997c0cdbd57752252d87129185a973c7d42e491f.camel@perches.com>
+Subject: [PATCH] MIPS: octeon: Remove vestiges of CONFIG_CAVIUM_RESERVE32
+From:   Joe Perches <joe@perches.com>
+To:     David Daney <david.daney@cavium.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Date:   Tue, 13 Jul 2021 10:49:15 -0700
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210713084648.GF22278@shell.armlinux.org.uk>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: C3A242448BC
+X-Spam-Status: No, score=-1.09
+X-Stat-Signature: noibhr63sywfph683hp1cq8jj65dttn9
+X-Rspamd-Server: rspamout02
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+RP6DANkgnMILu8gdNJRmDm7aiQfOSFvY=
+X-HE-Tag: 1626198556-395381
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 13, 2021 at 09:46:48AM +0100, Russell King (Oracle) wrote:
-> I think you need to be careful - I seem to have a recollection that the
-> reason we ended up with flush_kernel_dcache_page() was the need to avoid
-> the taking of the mmap lock for 32-bit ARM VIVT based CPUs in
-> flush_dcache_page(). 32-bit ARM flush_dcache_page() can block.
+The config option CAVIUM_RESERVE32 is not used.
+Remove the dead code controlled by it.
 
-Where can arm32 flush_dcache_page block?  __flush_dcache_aliases does
-walk mapping->i_mmap, but using a spinlock hidden under
-flush_dcache_mmap_lock.  If flush_dcache_page did block plenty of code
-already calling it e.g. from interrupt and block submission contexts
-in various mmc/sdcard drivers would be rather unhappy.  Even today
-calls to flush_kernel_dcache_page page in the block I/O path are
-vastly outnumber by calls to flush_dcache_page.
+Signed-off-by: Joe Perches <joe@perches.com>
+---
 
-> The second issue I have is that, when we are reading a page into a page
-> cache page, how can that page be mapped to userspace? Isn't that a
-> violation of semantics? If the page is mapped to userspace but does not
-> contain data from the underlying storage device, then the page contains
-> stale data (if it's a new page, lets hope that's zeroed and not some
-> previous contents - which would be a massive security hole.)
+Uncompiled, untested.
 
-I did not come up with the rules, but these are the existing documented
-ones for flush_dcache_page:
+Found using a grep for unused Kconfig entries:
 
-        Any time the kernel writes to a page cache page, _OR_
-	the kernel is about to read from a page cache page and
-	user space shared/writable mappings of this page potentially
-	exist, this routine is called.
+$ git grep -P '^\s*#\s*if(?:def\s+|\s*defined\s*\(?\s*)CONFIG_[A-Z0-9_]+' | \
+  grep -oh -P '\bCONFIG_[A-Z0-9_]+\b' | \
+  sort | sed -e 's/^CONFIG_//' -e 's/_MODULE$//' | uniq | \
+  while read config ; do \
+    echo CONFIG_$config; \
+    git grep -w $config -- '*/Kconfig*' | \
+    wc -l; \
+  done | \
+  grep -B1 '^0'
 
-So writing to (aka reading into) a page cache page is not conditional
-on it being mapped yet.  Only the kernel reading from the page cache
-page has this condition.
+with some additional inspection of the kernel source tree to verify.
 
-> As I
-> understand it, the flush_kernel_dcache_page() calls in the block layer
-> are primarily there to cope with drivers that do PIO read to write to a
-> page cache page to ensure that later userspace mappings can see the data
-> in the page cache page - by ensuring that the page cache pages are in
-> the same state as far as caches go as if they had been DMA'd to.
+ arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c | 21 +++---------
+ arch/mips/cavium-octeon/setup.c                    | 38 +---------------------
+ 2 files changed, 5 insertions(+), 54 deletions(-)
 
-PIO is one big case, but also kernel generated data and all kinds of
-bounce buffering schemes.
+diff --git a/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c b/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
+index 3839feba68f20..fb42e8e21ea0d 100644
+--- a/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
++++ b/arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c
+@@ -57,27 +57,14 @@ EXPORT_SYMBOL_GPL(__cvmx_cmd_queue_state_ptr);
+ static cvmx_cmd_queue_result_t __cvmx_cmd_queue_init_state_ptr(void)
+ {
+ 	char *alloc_name = "cvmx_cmd_queues";
+-#if defined(CONFIG_CAVIUM_RESERVE32) && CONFIG_CAVIUM_RESERVE32
+-	extern uint64_t octeon_reserve32_memory;
+-#endif
+ 
+ 	if (likely(__cvmx_cmd_queue_state_ptr))
+ 		return CVMX_CMD_QUEUE_SUCCESS;
+ 
+-#if defined(CONFIG_CAVIUM_RESERVE32) && CONFIG_CAVIUM_RESERVE32
+-	if (octeon_reserve32_memory)
+-		__cvmx_cmd_queue_state_ptr =
+-		    cvmx_bootmem_alloc_named_range(sizeof(*__cvmx_cmd_queue_state_ptr),
+-						   octeon_reserve32_memory,
+-						   octeon_reserve32_memory +
+-						   (CONFIG_CAVIUM_RESERVE32 <<
+-						    20) - 1, 128, alloc_name);
+-	else
+-#endif
+-		__cvmx_cmd_queue_state_ptr =
+-		    cvmx_bootmem_alloc_named(sizeof(*__cvmx_cmd_queue_state_ptr),
+-					    128,
+-					    alloc_name);
++	__cvmx_cmd_queue_state_ptr =
++		cvmx_bootmem_alloc_named(sizeof(*__cvmx_cmd_queue_state_ptr),
++					 128,
++					 alloc_name);
+ 	if (__cvmx_cmd_queue_state_ptr)
+ 		memset(__cvmx_cmd_queue_state_ptr, 0,
+ 		       sizeof(*__cvmx_cmd_queue_state_ptr));
+diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
+index ce4e2806159bb..0ddd3cc16ee47 100644
+--- a/arch/mips/cavium-octeon/setup.c
++++ b/arch/mips/cavium-octeon/setup.c
+@@ -284,11 +284,6 @@ void octeon_crash_smp_send_stop(void)
+ 
+ #endif /* CONFIG_KEXEC */
+ 
+-#ifdef CONFIG_CAVIUM_RESERVE32
+-uint64_t octeon_reserve32_memory;
+-EXPORT_SYMBOL(octeon_reserve32_memory);
+-#endif
+-
+ #ifdef CONFIG_KEXEC
+ /* crashkernel cmdline parameter is parsed _after_ memory setup
+  * we also parse it here (workaround for EHB5200) */
+@@ -665,9 +660,7 @@ void __init prom_init(void)
+ 	int i;
+ 	u64 t;
+ 	int argc;
+-#ifdef CONFIG_CAVIUM_RESERVE32
+-	int64_t addr = -1;
+-#endif
++
+ 	/*
+ 	 * The bootloader passes a pointer to the boot descriptor in
+ 	 * $a3, this is available as fw_arg3.
+@@ -782,25 +775,6 @@ void __init prom_init(void)
+ 		cvmx_write_csr(CVMX_LED_UDD_DATX(1), 0);
+ 		cvmx_write_csr(CVMX_LED_EN, 1);
+ 	}
+-#ifdef CONFIG_CAVIUM_RESERVE32
+-	/*
+-	 * We need to temporarily allocate all memory in the reserve32
+-	 * region. This makes sure the kernel doesn't allocate this
+-	 * memory when it is getting memory from the
+-	 * bootloader. Later, after the memory allocations are
+-	 * complete, the reserve32 will be freed.
+-	 *
+-	 * Allocate memory for RESERVED32 aligned on 2MB boundary. This
+-	 * is in case we later use hugetlb entries with it.
+-	 */
+-	addr = cvmx_bootmem_phy_named_block_alloc(CONFIG_CAVIUM_RESERVE32 << 20,
+-						0, 0, 2 << 20,
+-						"CAVIUM_RESERVE32", 0);
+-	if (addr < 0)
+-		pr_err("Failed to allocate CAVIUM_RESERVE32 memory area\n");
+-	else
+-		octeon_reserve32_memory = addr;
+-#endif
+ 
+ #ifdef CONFIG_CAVIUM_OCTEON_LOCK_L2
+ 	if (cvmx_read_csr(CVMX_L2D_FUS3) & (3ull << 34)) {
+@@ -1078,16 +1052,6 @@ void __init plat_mem_setup(void)
+ 	cvmx_bootmem_unlock();
+ #endif /* CONFIG_CRASH_DUMP */
+ 
+-#ifdef CONFIG_CAVIUM_RESERVE32
+-	/*
+-	 * Now that we've allocated the kernel memory it is safe to
+-	 * free the reserved region. We free it here so that builtin
+-	 * drivers can use the memory.
+-	 */
+-	if (octeon_reserve32_memory)
+-		cvmx_bootmem_free_named("CAVIUM_RESERVE32");
+-#endif /* CONFIG_CAVIUM_RESERVE32 */
+-
+ 	if (total == 0)
+ 		panic("Unable to allocate memory from "
+ 		      "cvmx_bootmem_phy_alloc");
 
-> We know that the current implementation works fine - you're now
-> proposing to radically change it, asserting that it's buggy. I'm
-> nervous about this change.
-
-Do we know it works?  There are very few calls to
-flush_dcache_kernel_page and very few implementations that differ from
-flush_dcache_page.  For arm32 the relevant drivers would mostly be
-mmc drivers using the sg_miter interface, are they even used much on
-the platforms where the difference exists?
-
-> 
-> -- 
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
----end quoted text---
