@@ -2,29 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 546FF3C86D7
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jul 2021 17:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0C23C8703
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jul 2021 17:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239772AbhGNPOl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 14 Jul 2021 11:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        id S239803AbhGNPO6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 14 Jul 2021 11:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239778AbhGNPOh (ORCPT
+        with ESMTP id S239781AbhGNPOh (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Wed, 14 Jul 2021 11:14:37 -0400
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A404BC0613E0
-        for <linux-mips@vger.kernel.org>; Wed, 14 Jul 2021 08:11:41 -0700 (PDT)
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC81C0613E9
+        for <linux-mips@vger.kernel.org>; Wed, 14 Jul 2021 08:11:42 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:bcf3:b2b1:dff6:480b])
-        by andre.telenet-ops.be with bizsmtp
-        id V3Bd2500P4sai0K013BdMS; Wed, 14 Jul 2021 17:11:40 +0200
+        by xavier.telenet-ops.be with bizsmtp
+        id V3Be2500G4sai0K013Be4x; Wed, 14 Jul 2021 17:11:40 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1m3gXx-001ARE-KN; Wed, 14 Jul 2021 17:11:37 +0200
+        id 1m3gXy-001ARF-4j; Wed, 14 Jul 2021 17:11:38 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1m3gXx-00AcfN-5R; Wed, 14 Jul 2021 17:11:37 +0200
+        id 1m3gXx-00AcfU-7P; Wed, 14 Jul 2021 17:11:37 +0200
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
 To:     Robin van der Gracht <robin@protonic.nl>,
         Rob Herring <robh+dt@kernel.org>,
@@ -35,9 +35,9 @@ To:     Robin van der Gracht <robin@protonic.nl>,
 Cc:     devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v3 03/19] auxdisplay: img-ascii-lcd: Fix lock-up when displaying empty string
-Date:   Wed, 14 Jul 2021 17:11:14 +0200
-Message-Id: <20210714151130.2531831-4-geert@linux-m68k.org>
+Subject: [PATCH v3 04/19] auxdisplay: img-ascii-lcd: Add helper variable dev
+Date:   Wed, 14 Jul 2021 17:11:15 +0200
+Message-Id: <20210714151130.2531831-5-geert@linux-m68k.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210714151130.2531831-1-geert@linux-m68k.org>
 References: <20210714151130.2531831-1-geert@linux-m68k.org>
@@ -47,54 +47,65 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-While writing an empty string to a device attribute is a no-op, and thus
-does not need explicit safeguards, the user can still write a single
-newline to an attribute file:
+img_ascii_lcd_probe() has many users of "pdev->dev".  Add a shorthand to
+simplify the code.
 
-    echo > .../message
-
-If that happens, img_ascii_lcd_display() trims the newline, yielding an
-empty string, and causing an infinite loop in img_ascii_lcd_scroll().
-
-Fix this by adding a check for empty strings.  Clear the display in case
-one is encountered.
-
-Fixes: 0cad855fbd083ee5 ("auxdisplay: img-ascii-lcd: driver for simple ASCII LCD displays")
 Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 ---
-Untested with img-ascii-lcd, but triggered with my initial version of
-linedisp.
-
 v3:
   - No changes,
 
 v2:
   - No changes.
 ---
- drivers/auxdisplay/img-ascii-lcd.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/auxdisplay/img-ascii-lcd.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/auxdisplay/img-ascii-lcd.c b/drivers/auxdisplay/img-ascii-lcd.c
-index 1cce409ce5cacbc8..e33ce0151cdfd150 100644
+index e33ce0151cdfd150..2b6e41ec57544faa 100644
 --- a/drivers/auxdisplay/img-ascii-lcd.c
 +++ b/drivers/auxdisplay/img-ascii-lcd.c
-@@ -280,6 +280,16 @@ static int img_ascii_lcd_display(struct img_ascii_lcd_ctx *ctx,
- 	if (msg[count - 1] == '\n')
- 		count--;
+@@ -365,26 +365,25 @@ static int img_ascii_lcd_probe(struct platform_device *pdev)
+ {
+ 	const struct of_device_id *match;
+ 	const struct img_ascii_lcd_config *cfg;
++	struct device *dev = &pdev->dev;
+ 	struct img_ascii_lcd_ctx *ctx;
+ 	int err;
  
-+	if (!count) {
-+		/* clear the LCD */
-+		devm_kfree(&ctx->pdev->dev, ctx->message);
-+		ctx->message = NULL;
-+		ctx->message_len = 0;
-+		memset(ctx->curr, ' ', ctx->cfg->num_chars);
-+		ctx->cfg->update(ctx);
-+		return 0;
-+	}
-+
- 	new_msg = devm_kmalloc(&ctx->pdev->dev, count + 1, GFP_KERNEL);
- 	if (!new_msg)
+-	match = of_match_device(img_ascii_lcd_matches, &pdev->dev);
++	match = of_match_device(img_ascii_lcd_matches, dev);
+ 	if (!match)
+ 		return -ENODEV;
+ 
+ 	cfg = match->data;
+-	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx) + cfg->num_chars,
+-			   GFP_KERNEL);
++	ctx = devm_kzalloc(dev, sizeof(*ctx) + cfg->num_chars, GFP_KERNEL);
+ 	if (!ctx)
  		return -ENOMEM;
+ 
+ 	if (cfg->external_regmap) {
+-		ctx->regmap = syscon_node_to_regmap(pdev->dev.parent->of_node);
++		ctx->regmap = syscon_node_to_regmap(dev->parent->of_node);
+ 		if (IS_ERR(ctx->regmap))
+ 			return PTR_ERR(ctx->regmap);
+ 
+-		if (of_property_read_u32(pdev->dev.of_node, "offset",
+-					 &ctx->offset))
++		if (of_property_read_u32(dev->of_node, "offset", &ctx->offset))
+ 			return -EINVAL;
+ 	} else {
+ 		ctx->base = devm_platform_ioremap_resource(pdev, 0);
+@@ -408,7 +407,7 @@ static int img_ascii_lcd_probe(struct platform_device *pdev)
+ 	if (err)
+ 		goto out_del_timer;
+ 
+-	err = device_create_file(&pdev->dev, &dev_attr_message);
++	err = device_create_file(dev, &dev_attr_message);
+ 	if (err)
+ 		goto out_del_timer;
+ 
 -- 
 2.25.1
 
