@@ -2,154 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C0C3C79BF
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jul 2021 00:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C232C3C7C7F
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jul 2021 05:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbhGMWhj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 13 Jul 2021 18:37:39 -0400
-Received: from mail-il1-f179.google.com ([209.85.166.179]:36732 "EHLO
-        mail-il1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234957AbhGMWhj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 13 Jul 2021 18:37:39 -0400
-Received: by mail-il1-f179.google.com with SMTP id j5so7238222ilk.3;
-        Tue, 13 Jul 2021 15:34:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MSpVDdjqrdKEACiUcRPjy60421QiTWxnM6Nv9gHM6wY=;
-        b=Mv+jEAUw4W/FqGmDKWOwy8YX7CRs7+X1chLzCJzdoETkwG51NtmgfKKqBUR6p3DAAj
-         n92ixAIT2W8N+VAoVriGw/uYFzom2AbFheDjwPEvIwFJo7XGv5/KAws77tuV91ypRWC+
-         7k1YpVXFtgiZ+OClTc4FRujIVsosCmmxziKHyT1RV5uSyeaanxgOvu9zuk2jEl367dyC
-         ixrEo5oAB6MOxx2MnrNa9pbibV70BCiRi2QxPQw19xTjoG253t42wTWmGpL67UkLTgrz
-         Hon1d/z/8xFLt8cYufD6DwSpT6UfPLW7JLjenUONNullCC5QXe6W5Qqpla0zqtPOs+W3
-         gkow==
-X-Gm-Message-State: AOAM533wdiKU/MrGP91aapnVhriVAT2SF2xsB18pf3C2Clj4euhtrYY/
-        5XZXJK9+kXb2+HvC71CjzA==
-X-Google-Smtp-Source: ABdhPJztQrp4XrTfokmTBuOkLRxzwLyi96owtmbuyUFlJa6C+A/GJH9q5TB2oBwuCMMltSFkJ5WYFw==
-X-Received: by 2002:a92:6f07:: with SMTP id k7mr4629322ilc.276.1626215687443;
-        Tue, 13 Jul 2021 15:34:47 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id r4sm181262ilb.42.2021.07.13.15.34.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jul 2021 15:34:46 -0700 (PDT)
-Received: (nullmailer pid 973017 invoked by uid 1000);
-        Tue, 13 Jul 2021 22:34:42 -0000
-Date:   Tue, 13 Jul 2021 16:34:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com
-Subject: Re: [PATCH v6 08/11] dt-bindings: clock: Add JZ4775 clock bindings.
-Message-ID: <20210713223442.GA968962@robh.at.kernel.org>
-References: <1624981102-26248-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1624981102-26248-9-git-send-email-zhouyanjie@wanyeetech.com>
+        id S237443AbhGNDQO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 13 Jul 2021 23:16:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60238 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237368AbhGNDQO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 13 Jul 2021 23:16:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 86777613B2;
+        Wed, 14 Jul 2021 03:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626232403;
+        bh=eHqXqU0BSC/4FXMxbMmPUP5y/NWhQgyVoBJ51q6I6VI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RneN6lR7Gk+SyuzkEGUgXr7XT7IriiK0Ld1//j6zYRb/qjM02yKdHFlCHwgq90qaq
+         OPjucaISjtpHs8RTbetzrdLw0tATbov36tOsLzqUKF7hgRqLXL5M0yHnn/NxKihWk6
+         XATsATEQtu6TsePkHQkvwWzzh8U31KxpN30+TtitWfM10iGQUE9q/fcjs7X+unaStk
+         ZHtv2y0Nl7o/khL5FkiHbf6WW2QL+zHAkOE6vysdoTfYAllTgQtdsaRVGM7lQfpLRT
+         dmpkufnoyEh3lCAwyau7PA+Fd+WvV0VZCuzN3IWCM8tiQ264dk4mqkI34mlyVof+4q
+         TRVyTjlfWJ2GQ==
+Received: by mail-lf1-f51.google.com with SMTP id f30so1030255lfj.1;
+        Tue, 13 Jul 2021 20:13:23 -0700 (PDT)
+X-Gm-Message-State: AOAM530pSEqh7KJjPhG2VJJFCX81jVTCkMwj+xPGFp/iTIsvS6iWV+XB
+        7P8QBLGWQxm+IlIYtxD0RijxGQ8AC2XoBmB5Wcg=
+X-Google-Smtp-Source: ABdhPJxjtzRmeK8gT6oxvZVQIbBescQdPKCDPRyAmUuPGRj8zSZMbMltcH961OP7xUnOjUvePsuZ4INz3sZLDriTjNw=
+X-Received: by 2002:ac2:42d6:: with SMTP id n22mr6034055lfl.41.1626232401837;
+ Tue, 13 Jul 2021 20:13:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1624981102-26248-9-git-send-email-zhouyanjie@wanyeetech.com>
+References: <20210712060928.4161649-1-hch@lst.de>
+In-Reply-To: <20210712060928.4161649-1-hch@lst.de>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 14 Jul 2021 11:13:10 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRaRp2nVKGp3+vVnQ3RCvaDxsgHh_vhPTuOxnT51XBXFg@mail.gmail.com>
+Message-ID: <CAJF2gTRaRp2nVKGp3+vVnQ3RCvaDxsgHh_vhPTuOxnT51XBXFg@mail.gmail.com>
+Subject: Re: flush_kernel_dcache_page fixes and removal
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Geoff Levand <geoff@infradead.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alex Shi <alexs@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Linux-MM <linux-mm@kvack.org>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jun 29, 2021 at 11:38:19PM +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Add the clock bindings for the JZ4775 SoC from Ingenic.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
-> 
-> Notes:
->     v5:
->     New patch.
->     
->     v5->v6:
->     No change.
-> 
->  include/dt-bindings/clock/jz4775-cgu.h | 59 ++++++++++++++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 include/dt-bindings/clock/jz4775-cgu.h
-> 
-> diff --git a/include/dt-bindings/clock/jz4775-cgu.h b/include/dt-bindings/clock/jz4775-cgu.h
-> new file mode 100644
-> index 00000000..8c2af69
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/jz4775-cgu.h
-> @@ -0,0 +1,59 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+Acked-by for csky abiv1 part.=EF=BC=88No change to our execution path after
+the patch set.=EF=BC=89
 
-Dual license please.
+On Mon, Jul 12, 2021 at 2:10 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> Hi all,
+>
+> while looking to convert the block layer away from kmap_atomic towards
+> kmap_local_page and prefeably the helpers that abstract it away I noticed
+> that a few block drivers directly or implicitly call
+> flush_kernel_dcache_page before kunmapping a page that has been written
+> to.  flush_kernel_dcache_page is documented to to be used in such cases,
+> but flush_dcache_page is actually required when the page could be in
+> the page cache and mapped to userspace, which is pretty much always the
+> case when kmapping an arbitrary page.  Unfortunately the documentation
+> doesn't exactly make that clear, which lead to this misused.  And it turn=
+s
+> out that only the copy_strings / copy_string_kernel in the exec code
+> were actually correct users of flush_kernel_dcache_page, which is why
+> I think we should just remove it and eat the very minor overhead in
+> exec rather than confusing poor driver writers.
+>
+> Diffstat:
+>  Documentation/core-api/cachetlb.rst                    |   86 +++++++---=
+-------
+>  Documentation/translations/zh_CN/core-api/cachetlb.rst |    9 -
+>  arch/arm/include/asm/cacheflush.h                      |    4
+>  arch/arm/mm/flush.c                                    |   33 ------
+>  arch/arm/mm/nommu.c                                    |    6 -
+>  arch/csky/abiv1/cacheflush.c                           |   11 --
+>  arch/csky/abiv1/inc/abi/cacheflush.h                   |    4
+>  arch/mips/include/asm/cacheflush.h                     |    8 -
+>  arch/nds32/include/asm/cacheflush.h                    |    3
+>  arch/nds32/mm/cacheflush.c                             |    9 -
+>  arch/parisc/include/asm/cacheflush.h                   |    8 -
+>  arch/parisc/kernel/cache.c                             |    3
+>  arch/sh/include/asm/cacheflush.h                       |    8 -
+>  block/blk-map.c                                        |    2
+>  drivers/block/ps3disk.c                                |    2
+>  drivers/mmc/host/jz4740_mmc.c                          |    4
+>  drivers/mmc/host/mmc_spi.c                             |    2
+>  drivers/scsi/aacraid/aachba.c                          |    1
+>  fs/exec.c                                              |    6 -
+>  include/linux/highmem.h                                |    5
+>  lib/scatterlist.c                                      |    5
+>  tools/testing/scatterlist/linux/mm.h                   |    1
+>  22 files changed, 55 insertions(+), 165 deletions(-)
 
-> +/*
-> + * This header provides clock numbers for the ingenic,jz4775-cgu DT binding.
-> + *
-> + * They are roughly ordered as:
-> + *   - external clocks
-> + *   - PLLs
-> + *   - muxes/dividers in the order they appear in the jz4775 programmers manual
-> + *   - gates in order of their bit in the CLKGR* registers
 
-Can one convert index to register/bit offset? If you can avoid made up 
-numbers and use something that corresponds to the h/w, that's preferred.
 
-> + */
-> +
-> +#ifndef __DT_BINDINGS_CLOCK_JZ4775_CGU_H__
-> +#define __DT_BINDINGS_CLOCK_JZ4775_CGU_H__
-> +
-> +#define JZ4775_CLK_EXCLK		0
-> +#define JZ4775_CLK_RTCLK		1
-> +#define JZ4775_CLK_APLL			2
-> +#define JZ4775_CLK_MPLL			3
-> +#define JZ4775_CLK_OTGPHY		4
-> +#define JZ4775_CLK_SCLKA		5
-> +#define JZ4775_CLK_UHC			6
-> +#define JZ4775_CLK_UHCPHY		7
-> +#define JZ4775_CLK_CPUMUX		8
-> +#define JZ4775_CLK_CPU			9
-> +#define JZ4775_CLK_L2CACHE		10
-> +#define JZ4775_CLK_AHB0			11
-> +#define JZ4775_CLK_AHB2PMUX		12
-> +#define JZ4775_CLK_AHB2			13
-> +#define JZ4775_CLK_PCLK			14
-> +#define JZ4775_CLK_DDR			15
-> +#define JZ4775_CLK_VPU			16
-> +#define JZ4775_CLK_OTG			17
-> +#define JZ4775_CLK_EXCLK_DIV2	18
-> +#define JZ4775_CLK_I2S			19
-> +#define JZ4775_CLK_LCD			20
-> +#define JZ4775_CLK_MSCMUX		21
-> +#define JZ4775_CLK_MSC0			22
-> +#define JZ4775_CLK_MSC1			23
-> +#define JZ4775_CLK_MSC2			24
-> +#define JZ4775_CLK_SSI			25
-> +#define JZ4775_CLK_CIM0			26
-> +#define JZ4775_CLK_CIM1			27
-> +#define JZ4775_CLK_PCM			28
-> +#define JZ4775_CLK_BCH			29
-> +#define JZ4775_CLK_EXCLK_DIV512	30
-> +#define JZ4775_CLK_RTC			31
-> +#define JZ4775_CLK_NEMC			32
-> +#define JZ4775_CLK_I2C0			33
-> +#define JZ4775_CLK_I2C1			34
-> +#define JZ4775_CLK_I2C2			35
-> +#define JZ4775_CLK_SADC			36
-> +#define JZ4775_CLK_UART0		37
-> +#define JZ4775_CLK_UART1		38
-> +#define JZ4775_CLK_UART2		39
-> +#define JZ4775_CLK_UART3		40
-> +#define JZ4775_CLK_PDMA			41
-> +#define JZ4775_CLK_MAC			42
-> +
-> +#endif /* __DT_BINDINGS_CLOCK_JZ4775_CGU_H__ */
-> -- 
-> 2.7.4
-> 
-> 
+--=20
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
