@@ -2,120 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E26F63CA2AB
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jul 2021 18:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5F93CA319
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jul 2021 18:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbhGOQtH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jul 2021 12:49:07 -0400
-Received: from ale.deltatee.com ([204.191.154.188]:49988 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233883AbhGOQtE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jul 2021 12:49:04 -0400
+        id S229832AbhGOQul (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jul 2021 12:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229624AbhGOQuk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jul 2021 12:50:40 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B48DC06175F;
+        Thu, 15 Jul 2021 09:47:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Cc:To:From:content-disposition;
-        bh=wWprxpQbGfLFSl5wy/zhotLOA6ZrkLS6haFDYZBjiv4=; b=Spw0vcPuNWrC1VB/N3ErsY9QsR
-        SVOu2pyWJ/FuZ63VRhkHaNrYGNxmmYIXx9PikhM8TCMmdpKyjBuF9RLs0h5USncTLdFqA8ookOx0G
-        Uh+6hSZ1LQ/AT/6fkMs7I/sWmgeij/QksGHD/wcgAvLgLFIYupGJcECBNvTIejINc9vzRhnt1gvMp
-        d1qv/fQOX1iCowsgU//qvf9zBxNSzcO+QCg8whF/oXVJhQQoSMlgUYlJBgNgtfjNvKiSi4udAIPMg
-        kZkbvAnNQf0F0JxQ/F67quZyGQhReNDhJW14fk20qFpoR28wptyOUDAN3gFjO1yJsvCMWx9e+oRs6
-        TMj7iEGw==;
-Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
-        by ale.deltatee.com with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=r4iZBSBArnzjTS6KLDRlSR7w7S6swyImdOsNDPS7Sis=; b=hXyaSz1urrT6N85UjIGFUt7af
+        PiwXb128VN8Nd6dy5SRYwLWwy0SU/ypNmQ5JkYOh1JS2knojDgYLwXthStegnsrmI09YsBKkM5MPT
+        OFWdJtkr7MnIGIFr7Eu7JUWtgArfiSNHXwRV9gQpKR7ScC2Ix9rrzYF2dvjCFdX/L00fOFO76Of4w
+        hfdI4vD/xWj3aJ5FF/avwPxEPbK5jVDDQhEdaOQcff3CqVbPu67/A/baLdEvLiryu7GoHqX4uA6Jq
+        sI/hDfVhZXyZM218k0a5xjDhDyNTv0Fs4cTLfiUQQBY6IBzO7IExkNkK9UfN7Fkbsk7TGJ83IM+Fn
+        E9B14gOZQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46186)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1m44Ut-0001yd-PE; Thu, 15 Jul 2021 10:46:04 -0600
-Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.92)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1m44Up-0001nr-Se; Thu, 15 Jul 2021 10:45:59 -0600
-From:   Logan Gunthorpe <logang@deltatee.com>
-To:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-parisc@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu, 15 Jul 2021 10:45:44 -0600
-Message-Id: <20210715164544.6827-17-logang@deltatee.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210715164544.6827-1-logang@deltatee.com>
-References: <20210715164544.6827-1-logang@deltatee.com>
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1m44WV-000147-6i; Thu, 15 Jul 2021 17:47:43 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1m44WT-0002L1-Ek; Thu, 15 Jul 2021 17:47:41 +0100
+Date:   Thu, 15 Jul 2021 17:47:41 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] arm: Rename PMD_ORDER to PMD_TABLE_ORDER
+Message-ID: <20210715164740.GN22278@shell.armlinux.org.uk>
+References: <20210715134612.809280-1-willy@infradead.org>
+ <20210715134612.809280-2-willy@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 172.16.1.31
-X-SA-Exim-Rcpt-To: linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org, hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com, sbates@raithlin.com, martin.oliveira@eideticom.com, logang@deltatee.com
-X-SA-Exim-Mail-From: gunthorp@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        MYRULES_NO_TEXT autolearn=no autolearn_force=no version=3.4.2
-Subject: [PATCH v1 16/16] dma-mapping: Disallow .map_sg operations from returning zero on error
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210715134612.809280-2-willy@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now that all the .map_sg operations have been converted to returning
-proper error codes, drop the code to handle a zero return value,
-add a warning if a zero is returned and update the comment for the
-map_sg operation.
+On Thu, Jul 15, 2021 at 02:46:10PM +0100, Matthew Wilcox (Oracle) wrote:
+> This is the order of the page table allocation, not the order of a PMD.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  arch/arm/kernel/head.S | 34 +++++++++++++++++-----------------
+>  1 file changed, 17 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/arm/kernel/head.S b/arch/arm/kernel/head.S
+> index 9eb0b4dbcc12..6da39a1d70ba 100644
+> --- a/arch/arm/kernel/head.S
+> +++ b/arch/arm/kernel/head.S
+> @@ -38,10 +38,10 @@
+>  #ifdef CONFIG_ARM_LPAE
+>  	/* LPAE requires an additional page for the PGD */
+>  #define PG_DIR_SIZE	0x5000
+> -#define PMD_ORDER	3
+> +#define PMD_TABLE_ORDER	3
+>  #else
+>  #define PG_DIR_SIZE	0x4000
+> -#define PMD_ORDER	2
+> +#define PMD_TABLE_ORDER	2
 
-Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
----
- include/linux/dma-map-ops.h | 8 +++-----
- kernel/dma/mapping.c        | 6 +++---
- 2 files changed, 6 insertions(+), 8 deletions(-)
+I think PMD_ENTRY_ORDER would make more sense here - this is the
+power-of-2 of an individual PMD entry, not of the entire table.
 
-diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index eaa969be8284..f299bc1e317b 100644
---- a/include/linux/dma-map-ops.h
-+++ b/include/linux/dma-map-ops.h
-@@ -42,11 +42,9 @@ struct dma_map_ops {
- 			unsigned long attrs);
- 	/*
- 	 * map_sg should return a negative error code on error.
--	 * dma_map_sgtable() will return the error code returned and convert
--	 * a zero return (for legacy implementations) into -EINVAL.
--	 *
--	 * dma_map_sg() will always return zero on any negative or zero
--	 * return to satisfy its own calling convention.
-+	 * dma_map_sgtable() will return the error code returned by the
-+	 * operation and dma_map_sg() will always convert any error to zero
-+	 * to satisfy its own calling convention.
- 	 */
- 	int (*map_sg)(struct device *dev, struct scatterlist *sg, int nents,
- 			enum dma_data_direction dir, unsigned long attrs);
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index 30f89d244566..978a6a16aaf7 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -194,6 +194,8 @@ static int __dma_map_sg_attrs(struct device *dev, struct scatterlist *sg,
- 	else
- 		ents = ops->map_sg(dev, sg, nents, dir, attrs);
- 
-+	WARN_ON_ONCE(ents == 0);
-+
- 	if (ents > 0)
- 		debug_dma_map_sg(dev, sg, nents, ents, dir);
- 
-@@ -251,9 +253,7 @@ int dma_map_sgtable(struct device *dev, struct sg_table *sgt,
- 	int nents;
- 
- 	nents = __dma_map_sg_attrs(dev, sgt->sgl, sgt->orig_nents, dir, attrs);
--	if (nents == 0)
--		return -EINVAL;
--	else if (nents < 0)
-+	if (nents < 0)
- 		return nents;
- 
- 	sgt->nents = nents;
 -- 
-2.20.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
