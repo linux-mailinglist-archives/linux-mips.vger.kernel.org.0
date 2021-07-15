@@ -2,99 +2,151 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 135DA3CA369
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jul 2021 18:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717203CA36E
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jul 2021 18:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbhGOQ7Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jul 2021 12:59:25 -0400
-Received: from ale.deltatee.com ([204.191.154.188]:50496 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235390AbhGOQ7P (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jul 2021 12:59:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=zhc7pzLmZmjUsLXsFnMXewKeUUfUybMjLBdEKzxTgWI=; b=a4eD7Hw2j62J4jmrqG3qM9ka82
-        5k5K5mLQB+hZHZqXGBpC8vAokNP0Ip4On3I09UBGqNxaWIRq2dmyriwR06pgFKl9jIT5xqRBf9vsD
-        YwuOCb9uZhKtsGIHsKDWUmojgkYI2/2LwIaMUocRxIEBx7IUQ/6yxeiqqZGnSG4a85UbkDOZqICEa
-        lG9jcrA6QbuiJkY03RA7uB1x8xSEwzPTD/kmMZHa3L73KtXI/2a8MW52t16HXK3n1ZJYijnMXJyfP
-        O/wyAVK1kdSyrErsaIIRyaT5BgNIbq1xTAmZfgnfhUHzVRbyGsOS/vCEnIuD/1MU7ahfhlv+CI82Y
-        BmE/J6uw==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <logang@deltatee.com>)
-        id 1m44eg-0002EB-Nd; Thu, 15 Jul 2021 10:56:11 -0600
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-parisc@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>
-References: <20210715164544.6827-1-logang@deltatee.com>
- <20210715165309.GO22278@shell.armlinux.org.uk>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <aa33d2bf-8324-5647-b800-3a2e3e774e80@deltatee.com>
-Date:   Thu, 15 Jul 2021 10:56:09 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229702AbhGORAM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jul 2021 13:00:12 -0400
+Received: from out28-173.mail.aliyun.com ([115.124.28.173]:49928 "EHLO
+        out28-173.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229666AbhGORAL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jul 2021 13:00:11 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07441034|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.153769-0.00185027-0.844381;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=16;RT=16;SR=0;TI=SMTPD_---.KiFz-tR_1626368228;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KiFz-tR_1626368228)
+          by smtp.aliyun-inc.com(10.147.41.231);
+          Fri, 16 Jul 2021 00:57:15 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     paul@crapouillou.net, paulburton@kernel.org,
+        tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maoxiaochuan@loongson.cn, f.fainelli@gmail.com, git@xen0n.name,
+        chenhuacai@kernel.org, cand@gmx.com, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com
+Subject: [PATCH v2] MIPS: Ingenic: Add system type for new Ingenic SoCs.
+Date:   Fri, 16 Jul 2021 00:57:07 +0800
+Message-Id: <1626368227-119499-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <20210715165309.GO22278@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: martin.oliveira@eideticom.com, sbates@raithlin.com, robin.murphy@arm.com, m.szyprowski@samsung.com, hch@lst.de, xen-devel@lists.xenproject.org, linux-parisc@vger.kernel.org, iommu@lists.linux-foundation.org, sparclinux@vger.kernel.org, linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org, linux-ia64@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, linux@armlinux.org.uk
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.2
-Subject: Re: [PATCH v1 00/16] .map_sg() error cleanup
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Add JZ4730, JZ4750, JZ4755, JZ4760, JZ4760B, X2000H, and X2100 system
+type for cat /proc/cpuinfo to give out JZ4730, JZ4750, JZ4755, JZ4760,
+JZ4760B, X2000H, and X2100.
 
+Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+---
 
+Notes:
+    v1->v2:
+    1.Add system type for JZ4750 and JZ4755 as Paul Cercueil's suggestion.
+    2.Add Paul Cercueil's Reviewed-by.
 
-On 2021-07-15 10:53 a.m., Russell King (Oracle) wrote:
-> On Thu, Jul 15, 2021 at 10:45:28AM -0600, Logan Gunthorpe wrote:
->> Hi,
->>
->> This series is spun out and expanded from my work to add P2PDMA support
->> to DMA map operations[1].
->>
->> The P2PDMA work requires distinguishing different error conditions in
->> a map_sg operation. dma_map_sgtable() already allows for returning an
->> error code (where as dma_map_sg() is only allowed to return zero)
->> however, it currently only returns -EINVAL when a .map_sg() call returns
->> zero.
->>
->> This series cleans up all .map_sg() implementations to return appropriate
->> error codes. After the cleanup, dma_map_sg() will still return zero,
->> however dma_map_sgtable() will pass the error code from the .map_sg()
->> call. Thanks go to Martn Oliveira for doing a lot of the cleanup of the
->> obscure implementations.
->>
->> The patch set is based off of v5.14-rc1 and a git repo can be found
->> here:
-> 
-> Have all the callers for dma_map_sg() been updated to check for error
-> codes? If not, isn't that a pre-requisit to this patch set?
+ arch/mips/generic/board-ingenic.c | 21 +++++++++++++++++++++
+ arch/mips/include/asm/bootinfo.h  |  3 +++
+ arch/mips/include/asm/cpu.h       |  4 ++--
+ 3 files changed, 26 insertions(+), 2 deletions(-)
 
-No. Perhaps I wasn't clear enough: This series is changing only
-impelemntations of .map_sg(). It does *not* change the return code of
-dma_map_sg(). dma_map_sg() will continue to return zero on error for the
-foreseeable future. The dma_map_sgtable() call already allows returning
-error codes and it will pass the new error code through. This is what
-will be used in the P2PDMA work.
+diff --git a/arch/mips/generic/board-ingenic.c b/arch/mips/generic/board-ingenic.c
+index dd855b7..4774636 100644
+--- a/arch/mips/generic/board-ingenic.c
++++ b/arch/mips/generic/board-ingenic.c
+@@ -21,6 +21,10 @@
+ static __init char *ingenic_get_system_type(unsigned long machtype)
+ {
+ 	switch (machtype) {
++	case MACH_INGENIC_X2100:
++		return "X2100";
++	case MACH_INGENIC_X2000H:
++		return "X2000H";
+ 	case MACH_INGENIC_X2000E:
+ 		return "X2000E";
+ 	case MACH_INGENIC_X2000:
+@@ -37,8 +41,18 @@ static __init char *ingenic_get_system_type(unsigned long machtype)
+ 		return "JZ4775";
+ 	case MACH_INGENIC_JZ4770:
+ 		return "JZ4770";
++	case MACH_INGENIC_JZ4760B:
++		return "JZ4760B";
++	case MACH_INGENIC_JZ4760:
++		return "JZ4760";
++	case MACH_INGENIC_JZ4755:
++		return "JZ4755";
++	case MACH_INGENIC_JZ4750:
++		return "JZ4750";
+ 	case MACH_INGENIC_JZ4725B:
+ 		return "JZ4725B";
++	case MACH_INGENIC_JZ4730:
++		return "JZ4730";
+ 	default:
+ 		return "JZ4740";
+ 	}
+@@ -61,8 +75,13 @@ static __init const void *ingenic_fixup_fdt(const void *fdt, const void *match_d
+ }
+ 
+ static const struct of_device_id ingenic_of_match[] __initconst = {
++	{ .compatible = "ingenic,jz4730", .data = (void *)MACH_INGENIC_JZ4730 },
+ 	{ .compatible = "ingenic,jz4740", .data = (void *)MACH_INGENIC_JZ4740 },
+ 	{ .compatible = "ingenic,jz4725b", .data = (void *)MACH_INGENIC_JZ4725B },
++	{ .compatible = "ingenic,jz4750", .data = (void *)MACH_INGENIC_JZ4750 },
++	{ .compatible = "ingenic,jz4755", .data = (void *)MACH_INGENIC_JZ4755 },
++	{ .compatible = "ingenic,jz4760", .data = (void *)MACH_INGENIC_JZ4760 },
++	{ .compatible = "ingenic,jz4760b", .data = (void *)MACH_INGENIC_JZ4760B },
+ 	{ .compatible = "ingenic,jz4770", .data = (void *)MACH_INGENIC_JZ4770 },
+ 	{ .compatible = "ingenic,jz4775", .data = (void *)MACH_INGENIC_JZ4775 },
+ 	{ .compatible = "ingenic,jz4780", .data = (void *)MACH_INGENIC_JZ4780 },
+@@ -71,6 +90,8 @@ static const struct of_device_id ingenic_of_match[] __initconst = {
+ 	{ .compatible = "ingenic,x1830", .data = (void *)MACH_INGENIC_X1830 },
+ 	{ .compatible = "ingenic,x2000", .data = (void *)MACH_INGENIC_X2000 },
+ 	{ .compatible = "ingenic,x2000e", .data = (void *)MACH_INGENIC_X2000E },
++	{ .compatible = "ingenic,x2000h", .data = (void *)MACH_INGENIC_X2000H },
++	{ .compatible = "ingenic,x2100", .data = (void *)MACH_INGENIC_X2100 },
+ 	{}
+ };
+ 
+diff --git a/arch/mips/include/asm/bootinfo.h b/arch/mips/include/asm/bootinfo.h
+index 4c2e817..2128ba9 100644
+--- a/arch/mips/include/asm/bootinfo.h
++++ b/arch/mips/include/asm/bootinfo.h
+@@ -75,6 +75,7 @@ enum ingenic_machine_type {
+ 	MACH_INGENIC_JZ4750,
+ 	MACH_INGENIC_JZ4755,
+ 	MACH_INGENIC_JZ4760,
++	MACH_INGENIC_JZ4760B,
+ 	MACH_INGENIC_JZ4770,
+ 	MACH_INGENIC_JZ4775,
+ 	MACH_INGENIC_JZ4780,
+@@ -83,6 +84,8 @@ enum ingenic_machine_type {
+ 	MACH_INGENIC_X1830,
+ 	MACH_INGENIC_X2000,
+ 	MACH_INGENIC_X2000E,
++	MACH_INGENIC_X2000H,
++	MACH_INGENIC_X2100,
+ };
+ 
+ extern char *system_type;
+diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
+index 35072c4..6ceb5bd 100644
+--- a/arch/mips/include/asm/cpu.h
++++ b/arch/mips/include/asm/cpu.h
+@@ -46,8 +46,8 @@
+ #define PRID_COMP_NETLOGIC	0x0c0000
+ #define PRID_COMP_CAVIUM	0x0d0000
+ #define PRID_COMP_LOONGSON	0x140000
+-#define PRID_COMP_INGENIC_13	0x130000	/* X2000 */
+-#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4740, JZ4750, X1830 */
++#define PRID_COMP_INGENIC_13	0x130000	/* X2000, X2100 */
++#define PRID_COMP_INGENIC_D0	0xd00000	/* JZ4730, JZ4740, JZ4750, JZ4755, JZ4760, X1830 */
+ #define PRID_COMP_INGENIC_D1	0xd10000	/* JZ4770, JZ4775, X1000 */
+ #define PRID_COMP_INGENIC_E1	0xe10000	/* JZ4780 */
+ 
+-- 
+2.7.4
 
-Logan
