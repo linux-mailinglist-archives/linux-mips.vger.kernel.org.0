@@ -2,143 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 147323C996E
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jul 2021 09:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EA73C9C57
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jul 2021 12:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240253AbhGOHPq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jul 2021 03:15:46 -0400
-Received: from mail-vs1-f41.google.com ([209.85.217.41]:46043 "EHLO
-        mail-vs1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239259AbhGOHPq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jul 2021 03:15:46 -0400
-Received: by mail-vs1-f41.google.com with SMTP id h5so2435161vsg.12;
-        Thu, 15 Jul 2021 00:12:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r7Wm2VmRQG0S2YATdr39DjvrwdEWRiViM0Z14vn9XxA=;
-        b=gDYtdN3TQRLThXUNHY7HhW3Fa0z/0/ZWoZ3tu6a2kr01vFYKXrgDOfQ9DtT+SPevUW
-         +U3UiiDAG0Jd9fKtgzLKeiqJXaVjYbWTFvhhvLZKBqiwccnGFDq8pAmcIqdNB3lRFFsD
-         p/uVRmqvxz44AiPIUCiVLKE0mYSYM639Jij2Xi8MI4oXW43/Cu9zjYIGQYL8rWUTWqLq
-         ELeWQTQ0iUhEyjItmtVsn4PSKt3KHKpA5/VkmD/oo1LBmNOwh224eBOeaS3Z3DIj/e1i
-         ElkGGuEoiVDvct36c5VXsB/+aFtl/SzFil2EOM+yNNNVfzS8Fz2emhAUsjKYHCaXtRdX
-         5Wjg==
-X-Gm-Message-State: AOAM532evuS8QLPMAdcJK+EfFDRC2o+SBjjMW3InScct2QLW4/44FVOk
-        YnQqzSDz+diGQjAunHqYrTr4KocoNF0m3GAHnDMbbH+qLai55w==
-X-Google-Smtp-Source: ABdhPJzRni57+mECuuBP2Gv0ZHJyw60s3RqhaO1HEhS2XaiHmrzkqi/2inwoECg+MGxuieUBIAKWhF0tZ5lF8m5w2FI=
-X-Received: by 2002:a67:1542:: with SMTP id 63mr4611663vsv.40.1626333171886;
- Thu, 15 Jul 2021 00:12:51 -0700 (PDT)
+        id S241090AbhGOKFz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jul 2021 06:05:55 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:59564 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240948AbhGOKFz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jul 2021 06:05:55 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 937582292E;
+        Thu, 15 Jul 2021 10:03:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1626343381; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TTJiLS1SqZqXUpzarqa9iMdem2gom5jB+GbHREAEndo=;
+        b=ompT4TVYfygAeL+16TklyknkJ3GUtUmDQsyogyYLrTVjJ2eL+yvX/rBf2atpPPjEuSq9Zk
+        r1LEUKLtFlMOKIUHjQodm17AYdAsLNjTa5pF7GmkqLsTSmXG9AGl1Q8H4kbSSQsBPd9okJ
+        e/DIBL6GeyeqIWr/wU0Nl3GVg27Phgo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1626343381;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TTJiLS1SqZqXUpzarqa9iMdem2gom5jB+GbHREAEndo=;
+        b=F5iMgUiYf/qaamh8p7kjtDd9iEeEXzwij4iXp+hEdkw3P7nMlKAvs0+1HQ/rjYeBu7iIAz
+        Nmxwvqet7ihLpADA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 634FD13C31;
+        Thu, 15 Jul 2021 10:03:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id XlNAF9UH8GCMEQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 15 Jul 2021 10:03:01 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     paul@crapouillou.net, airlied@linux.ie, daniel@ffwll.ch,
+        sam@ravnborg.org
+Cc:     linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v2] drm/ingenic: Convert to Linux IRQ interfaces
+Date:   Thu, 15 Jul 2021 12:02:58 +0200
+Message-Id: <20210715100258.6638-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20210625125902.1162428-1-geert@linux-m68k.org>
- <20210625125902.1162428-3-geert@linux-m68k.org> <20210714203624.GA3466861@robh.at.kernel.org>
-In-Reply-To: <20210714203624.GA3466861@robh.at.kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 15 Jul 2021 09:12:40 +0200
-Message-ID: <CAMuHMdVso6wpX-u6oG+i1B3=4NFO4tyZgQmQW-nG5MQH27t9BA@mail.gmail.com>
-Subject: Re: [PATCH v2 02/18] dt-bindings: auxdisplay: ht16k33: Document
- Adafruit segment displays
-To:     Rob Herring <robh@kernel.org>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
+Drop the DRM IRQ midlayer in favor of Linux IRQ interfaces. DRM's
+IRQ helpers are mostly useful for UMS drivers. Modern KMS drivers
+don't benefit from using it.
 
-Note that you commented on v2, while I posted v3 yesterday.
+This patch also fixes a bug where the driver didn't release the
+IRQ.
 
-On Wed, Jul 14, 2021 at 10:36 PM Rob Herring <robh@kernel.org> wrote:
-> On Fri, Jun 25, 2021 at 02:58:46PM +0200, Geert Uytterhoeven wrote:
-> > The Holtek HT16K33 LED controller is not only used for driving
-> > dot-matrix displays, but also for driving segment displays.
-> >
-> > Document compatible values for the Adafruit 7-segment[1] and
-> > 14-segment[2] FeatherWing expansion boards with red displays.  According
-> > to the schematics, all other Adafruit 7-segment and 14-segment display
-> > backpack and FeatherWing expansion boards (including bare boards and
-> > boards fitted with displays) are compatible with these two boards.
-> > Add a "color" property to support the different color variants.
-> >
-> > [1] https://www.adafruit.com/product/3108
-> > [2] https://www.adafruit.com/product/3130
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+v2:
+	* automatically release IRQ via devm_request_irq() (Paul)
+	* mention the bugfix (Sam)
 
-> > --- a/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-> > +++ b/Documentation/devicetree/bindings/auxdisplay/holtek,ht16k33.yaml
-> > @@ -14,14 +14,23 @@ allOf:
-> >
-> >  properties:
-> >    compatible:
-> > -    const: holtek,ht16k33
-> > +    oneOf:
-> > +      - items:
-> > +          - const: adafruit,3108  # 0.56" 4-Digit 7-Segment FeatherWing Display (Red)
-> > +          - const: holtek,ht16k33
-> > +
-> > +      - items:
-> > +          - const: adafruit,3130  # 0.54" Quad Alphanumeric FeatherWing Display (Red)
-> > +          - const: holtek,ht16k33
->
-> These 2 entries can be combined.
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+---
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Right.  This split dates back from when I considered adding all
-possible compatible values.  It can indeed be simplified to:
-
-          - enum:
-              - adafruit,3108  # 0.56" 4-Digit 7-Segment FeatherWing
-Display (Red)
-              - adafruit,3130  # 0.54" Quad Alphanumeric FeatherWing
-Display (Red)
-          - const: holtek,ht16k33
-
-> Or make the comment a 'description'.
-
-What do you mean?
-
->
-> > +
-> > +      - const: holtek,ht16k33     # Generic 16*8 LED controller with dot-matrix display
-
-> >  required:
-> >    - compatible
-> >    - reg
-> > -  - refresh-rate-hz
-> > +
-> > +if:
-> > +  properties:
-> > +    compatible:
-> > +      const: holtek,ht16k33
->
-> Isn't this always true?
-
-It is false if there is more than one compatible value.
-
->
-> > +then:
-> > +  required:
-> > +    - refresh-rate-hz
-> >
-> >  additionalProperties: false
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index c296472164d9..857ed070b21b 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -33,7 +33,6 @@
+ #include <drm/drm_fourcc.h>
+ #include <drm/drm_gem_atomic_helper.h>
+ #include <drm/drm_gem_framebuffer_helper.h>
+-#include <drm/drm_irq.h>
+ #include <drm/drm_managed.h>
+ #include <drm/drm_of.h>
+ #include <drm/drm_panel.h>
+@@ -799,8 +798,6 @@ static const struct drm_driver ingenic_drm_driver_data = {
+ 	.fops			= &ingenic_drm_fops,
+ 	.gem_create_object	= ingenic_drm_gem_create_object,
+ 	DRM_GEM_CMA_DRIVER_OPS,
+-
+-	.irq_handler		= ingenic_drm_irq_handler,
+ };
+ 
+ static const struct drm_plane_funcs ingenic_drm_primary_plane_funcs = {
+@@ -1098,7 +1095,7 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
+ 		encoder->possible_clones = clone_mask;
+ 	}
+ 
+-	ret = drm_irq_install(drm, irq);
++	ret = devm_request_irq(dev, irq, ingenic_drm_irq_handler, 0, drm->driver->name, drm);
+ 	if (ret) {
+ 		dev_err(dev, "Unable to install IRQ handler\n");
+ 		return ret;
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.32.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
