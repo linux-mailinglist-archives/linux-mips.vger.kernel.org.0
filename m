@@ -2,149 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7BA3C9DC0
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jul 2021 13:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F3C3C9FFF
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jul 2021 15:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241959AbhGOLbl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 15 Jul 2021 07:31:41 -0400
-Received: from out28-194.mail.aliyun.com ([115.124.28.194]:53431 "EHLO
-        out28-194.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbhGOLbk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jul 2021 07:31:40 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1377769|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0168444-0.000132607-0.983023;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.Ki2gLph_1626348524;
-Received: from 192.168.88.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Ki2gLph_1626348524)
-          by smtp.aliyun-inc.com(10.147.41.158);
-          Thu, 15 Jul 2021 19:28:44 +0800
-Subject: Re: [PATCH v6 08/11] dt-bindings: clock: Add JZ4775 clock bindings.
-To:     Rob Herring <robh@kernel.org>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com
-References: <1624981102-26248-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1624981102-26248-9-git-send-email-zhouyanjie@wanyeetech.com>
- <20210713223442.GA968962@robh.at.kernel.org>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <6b318d1b-37de-c039-a994-3d616e013a9d@wanyeetech.com>
-Date:   Thu, 15 Jul 2021 19:28:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S236202AbhGONup (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 15 Jul 2021 09:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229832AbhGONuo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 15 Jul 2021 09:50:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4E7C06175F;
+        Thu, 15 Jul 2021 06:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=S6KcoUIpvrQVi4fHiaoEy/q8bKqLt5r6wwB0LH6OQ30=; b=qIoHgMkZGS55ZNZ53wOSE+skQC
+        D8FpuTVGMgh0TlAxlf+mx+aYylStnfYfFkp0wHjqJV63zzAKMcmDh5INBcD0bjZ0Wy3YnhrUUVIud
+        a+nVTamRqymx60nkQwB293VrSUPUoKFkDlcuxWOgHppbF03xfDbeH7JUrzaEC2u5xU4w/XbtPTKKJ
+        swOWp4g8mthXg+DEWrHIt4xlaGwWsEen42MaZVgNBocTD5yziQNsJB3C+8CKLok5I1z7BXPvb3wJ6
+        VVxkl3C2dPvviZWvQGpVl4l3zAUD0tKdTzX29SfEoZcnbH6dQ5PUbWLefPNlZtT++WtZfPbBSzQKw
+        BR+GmYRw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m41gw-003OYa-Il; Thu, 15 Jul 2021 13:46:34 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-arch@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Make PMD_ORDER generically available
+Date:   Thu, 15 Jul 2021 14:46:09 +0100
+Message-Id: <20210715134612.809280-1-willy@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210713223442.GA968962@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rob,
+These three architectures each define PMD_ORDER to mean "the order of
+an allocation for a PMD table", but logically PMD_ORDER should be the
+order of a PMD allocation, ie (PMD_SHIFT - PAGE_SHIFT) as DAX defines it.
 
-On 2021/7/14 上午6:34, Rob Herring wrote:
-> On Tue, Jun 29, 2021 at 11:38:19PM +0800, 周琰杰 (Zhou Yanjie) wrote:
->> Add the clock bindings for the JZ4775 SoC from Ingenic.
->>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>
->> Notes:
->>      v5:
->>      New patch.
->>      
->>      v5->v6:
->>      No change.
->>
->>   include/dt-bindings/clock/jz4775-cgu.h | 59 ++++++++++++++++++++++++++++++++++
->>   1 file changed, 59 insertions(+)
->>   create mode 100644 include/dt-bindings/clock/jz4775-cgu.h
->>
->> diff --git a/include/dt-bindings/clock/jz4775-cgu.h b/include/dt-bindings/clock/jz4775-cgu.h
->> new file mode 100644
->> index 00000000..8c2af69
->> --- /dev/null
->> +++ b/include/dt-bindings/clock/jz4775-cgu.h
->> @@ -0,0 +1,59 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
-> Dual license please.
+Could each architecture maintainer please apply the appropriate patch
+to their respective trees?
 
+Matthew Wilcox (Oracle) (3):
+  arm: Rename PMD_ORDER to PMD_TABLE_ORDER
+  mips: Rename PMD_ORDER to PMD_TABLE_ORDER
+  parisc: Rename PMD_ORDER to PMD_TABLE_ORDER
 
-Sure, I will change it in v2.
+ arch/arm/kernel/head.S             | 34 +++++++++++++++---------------
+ arch/mips/include/asm/pgalloc.h    |  2 +-
+ arch/mips/include/asm/pgtable-32.h |  2 +-
+ arch/mips/include/asm/pgtable-64.h | 18 ++++++++--------
+ arch/mips/kernel/asm-offsets.c     |  2 +-
+ arch/parisc/include/asm/pgalloc.h  |  6 +++---
+ arch/parisc/include/asm/pgtable.h  |  4 ++--
+ arch/parisc/mm/init.c              |  4 ++--
+ 8 files changed, 36 insertions(+), 36 deletions(-)
 
+-- 
+2.30.2
 
->> +/*
->> + * This header provides clock numbers for the ingenic,jz4775-cgu DT binding.
->> + *
->> + * They are roughly ordered as:
->> + *   - external clocks
->> + *   - PLLs
->> + *   - muxes/dividers in the order they appear in the jz4775 programmers manual
->> + *   - gates in order of their bit in the CLKGR* registers
-> Can one convert index to register/bit offset? If you can avoid made up
-> numbers and use something that corresponds to the h/w, that's preferred.
->
-
-Unfortunately, only part of these clocks are related to registers or bits,
-and the rest are not related to both, so we can't perform the kind of
-conversion you mentioned.
-
-
-Thanks and best regards!
-
-
->> + */
->> +
->> +#ifndef __DT_BINDINGS_CLOCK_JZ4775_CGU_H__
->> +#define __DT_BINDINGS_CLOCK_JZ4775_CGU_H__
->> +
->> +#define JZ4775_CLK_EXCLK		0
->> +#define JZ4775_CLK_RTCLK		1
->> +#define JZ4775_CLK_APLL			2
->> +#define JZ4775_CLK_MPLL			3
->> +#define JZ4775_CLK_OTGPHY		4
->> +#define JZ4775_CLK_SCLKA		5
->> +#define JZ4775_CLK_UHC			6
->> +#define JZ4775_CLK_UHCPHY		7
->> +#define JZ4775_CLK_CPUMUX		8
->> +#define JZ4775_CLK_CPU			9
->> +#define JZ4775_CLK_L2CACHE		10
->> +#define JZ4775_CLK_AHB0			11
->> +#define JZ4775_CLK_AHB2PMUX		12
->> +#define JZ4775_CLK_AHB2			13
->> +#define JZ4775_CLK_PCLK			14
->> +#define JZ4775_CLK_DDR			15
->> +#define JZ4775_CLK_VPU			16
->> +#define JZ4775_CLK_OTG			17
->> +#define JZ4775_CLK_EXCLK_DIV2	18
->> +#define JZ4775_CLK_I2S			19
->> +#define JZ4775_CLK_LCD			20
->> +#define JZ4775_CLK_MSCMUX		21
->> +#define JZ4775_CLK_MSC0			22
->> +#define JZ4775_CLK_MSC1			23
->> +#define JZ4775_CLK_MSC2			24
->> +#define JZ4775_CLK_SSI			25
->> +#define JZ4775_CLK_CIM0			26
->> +#define JZ4775_CLK_CIM1			27
->> +#define JZ4775_CLK_PCM			28
->> +#define JZ4775_CLK_BCH			29
->> +#define JZ4775_CLK_EXCLK_DIV512	30
->> +#define JZ4775_CLK_RTC			31
->> +#define JZ4775_CLK_NEMC			32
->> +#define JZ4775_CLK_I2C0			33
->> +#define JZ4775_CLK_I2C1			34
->> +#define JZ4775_CLK_I2C2			35
->> +#define JZ4775_CLK_SADC			36
->> +#define JZ4775_CLK_UART0		37
->> +#define JZ4775_CLK_UART1		38
->> +#define JZ4775_CLK_UART2		39
->> +#define JZ4775_CLK_UART3		40
->> +#define JZ4775_CLK_PDMA			41
->> +#define JZ4775_CLK_MAC			42
->> +
->> +#endif /* __DT_BINDINGS_CLOCK_JZ4775_CGU_H__ */
->> -- 
->> 2.7.4
->>
->>
