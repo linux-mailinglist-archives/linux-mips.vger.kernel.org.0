@@ -2,83 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE983CBA70
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jul 2021 18:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D71C33CBC6C
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jul 2021 21:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbhGPQVH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Jul 2021 12:21:07 -0400
-Received: from ale.deltatee.com ([204.191.154.188]:57206 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbhGPQVF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jul 2021 12:21:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=BnhY0izzSFVDQcuht2cro6XvHSIBnnpJHK/4w8E4yWs=; b=lHiHBr9UmxsphzyuJXXrFvFkXJ
-        nHnU2Aad+t4uXkXpqnoYYQXL8s0VDrTpcUrSa7MBf3lHNc8SwA72FIyA0EFnNsLaMjuY1HyVFc4eY
-        86UCMlrgVGkMX16Elm46rVT3dMTeEwZNCX1a+CjIpwSiCKZgO96vmX56LfZWgzS5j7bcdiascYBT7
-        QpZUtkyACvD3Bob5Y0jFlifJMDasY0nH1O+2FuN7wP4IsecNoMeLFw+7g7lmwXVQFM8ujekY7qsib
-        a39261ZQjmb8njie60hE0kfk/jWrRkVOwj7hryYFQZ5ncmwJY+tyhtISQB4927wPhvb2n8G328kwr
-        zFWziVNw==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtp (Exim 4.92)
-        (envelope-from <logang@deltatee.com>)
-        id 1m4QXJ-0003ky-3C; Fri, 16 Jul 2021 10:18:01 -0600
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-parisc@vger.kernel.org,
-        xen-devel@lists.xenproject.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>
-References: <20210715164544.6827-1-logang@deltatee.com>
- <20210715164544.6827-17-logang@deltatee.com> <20210716063332.GD13345@lst.de>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <82c0f8d8-9050-dcf7-d68d-93691878a6dd@deltatee.com>
-Date:   Fri, 16 Jul 2021 10:17:58 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232763AbhGPT1u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 16 Jul 2021 15:27:50 -0400
+Received: from mail-il1-f176.google.com ([209.85.166.176]:46848 "EHLO
+        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230256AbhGPT1u (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jul 2021 15:27:50 -0400
+Received: by mail-il1-f176.google.com with SMTP id y6so9261610ilj.13;
+        Fri, 16 Jul 2021 12:24:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fM1A08CWgTV1bBfD5qE67VlFwSFQpiAw2opTe5zweRQ=;
+        b=kH2stglUMG0ubXImNfZrBAQhlNVne0/NUu9pf7J6bje3hmizpklImeEF1yCNUSr7XI
+         wqJ/O0IHyJ68PZ9Xx7BLDJs7zxlkJurqPrv1RPQWeJEqx6FMv/MGR/XiT1ZbHZV06cvX
+         BGhm9bT6Jv1YP1vA7orJ/2g1lcIta4qfMTR0FJ10FsY/FRIt/d307LPdbMOGZK6E8+tI
+         QQPPzJTsoxgnxhdlUnWdY91I2U6eitVY64acivkzfcHbfJEiPCQT9bdG9qk510Z6oqWL
+         /8jP3y/4ncesowqLpHgNU5a01zAuQOVIqCqU1crC5Biqzt1TmWcQPvJBPRmZHIG3GKuo
+         fupw==
+X-Gm-Message-State: AOAM533jHYhzw3tIfA7frJCWIfNQXtFIY1Z2B96pzTWvtUZKt5uwJVry
+        /hPB6vNeO3z96e/j6KbMkA==
+X-Google-Smtp-Source: ABdhPJzJsHWjmOLw//W3RlaIHVWLgA05B7QlnJgNCmRGCRL8qwvXsBAroLMQ1HnLflSk2Jiu4STpkg==
+X-Received: by 2002:a92:de0a:: with SMTP id x10mr7526223ilm.215.1626463493993;
+        Fri, 16 Jul 2021 12:24:53 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id a9sm807689ila.23.2021.07.16.12.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jul 2021 12:24:53 -0700 (PDT)
+Received: (nullmailer pid 3838811 invoked by uid 1000);
+        Fri, 16 Jul 2021 19:24:50 -0000
+Date:   Fri, 16 Jul 2021 13:24:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, linux-mips@vger.kernel.org,
+        Paul Burton <paulburton@kernel.org>,
+        linux-leds@vger.kernel.org, Marek Behun <marek.behun@nic.cz>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 18/19] dt-bindings: auxdisplay: ht16k33: Document LED
+ subnode
+Message-ID: <20210716192450.GA3838756@robh.at.kernel.org>
+References: <20210714151130.2531831-1-geert@linux-m68k.org>
+ <20210714151130.2531831-19-geert@linux-m68k.org>
 MIME-Version: 1.0
-In-Reply-To: <20210716063332.GD13345@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: martin.oliveira@eideticom.com, sbates@raithlin.com, robin.murphy@arm.com, m.szyprowski@samsung.com, xen-devel@lists.xenproject.org, linux-parisc@vger.kernel.org, iommu@lists.linux-foundation.org, sparclinux@vger.kernel.org, linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org, linux-ia64@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, hch@lst.de
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.2
-Subject: Re: [PATCH v1 16/16] dma-mapping: Disallow .map_sg operations from
- returning zero on error
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210714151130.2531831-19-geert@linux-m68k.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 2021-07-16 12:33 a.m., Christoph Hellwig wrote:
-> On Thu, Jul 15, 2021 at 10:45:44AM -0600, Logan Gunthorpe wrote:
->> @@ -194,6 +194,8 @@ static int __dma_map_sg_attrs(struct device *dev, struct scatterlist *sg,
->>  	else
->>  		ents = ops->map_sg(dev, sg, nents, dir, attrs);
->>  
->> +	WARN_ON_ONCE(ents == 0);
+On Wed, 14 Jul 2021 17:11:29 +0200, Geert Uytterhoeven wrote:
+> Extend the Holtek HT16K33 LED controller Device Tree bindings with an
+> LED subnode, conforming to the standard LED bindings.
 > 
-> Turns this into a negative error code while we're at it, just to keep
-> the callers sane?
+> This allows the user to exert more control, like specifying LED color,
+> function, and/or trigger, to extend LED functionality beyond a simple
+> display backlight.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+> v3:
+>   - New.
+> ---
+>  .../bindings/auxdisplay/holtek,ht16k33.yaml           | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
 
-Sure thing. All the feedback makes sense, we'll fix it up and send a v2
-in due course.
-
-Thanks,
-
-Logan
+Reviewed-by: Rob Herring <robh@kernel.org>
