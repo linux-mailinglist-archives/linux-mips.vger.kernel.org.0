@@ -2,78 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D71C33CBC6C
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jul 2021 21:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251F43CC18B
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Jul 2021 08:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbhGPT1u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 16 Jul 2021 15:27:50 -0400
-Received: from mail-il1-f176.google.com ([209.85.166.176]:46848 "EHLO
-        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbhGPT1u (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 16 Jul 2021 15:27:50 -0400
-Received: by mail-il1-f176.google.com with SMTP id y6so9261610ilj.13;
-        Fri, 16 Jul 2021 12:24:54 -0700 (PDT)
+        id S230403AbhGQGz3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Jul 2021 02:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230171AbhGQGz2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Jul 2021 02:55:28 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815A8C06175F;
+        Fri, 16 Jul 2021 23:52:32 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id k184so18513238ybf.12;
+        Fri, 16 Jul 2021 23:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fj4r/axWRIO6jSTkcRS6R08Hk59RDdA00RhrYBvWubg=;
+        b=PTmyJ9xuIut1vhuWMO/d0Zk/gcwgE0m2uYvkM3OcYBxo1lK07xxCASqH6KPVdIcbwB
+         O5X1X9we+GG4MGX+Wdp/or8XRYjo3q88MNgI67HDI2by+Mh3QJpei/OZFn61YSk2fU/d
+         OmnIlWWyBx4DVKy9zYNBRPd0NZEKVnTIdOYjPHJaGBQKvBWwzrjmXOsGiJs19pMP+iD6
+         qje39jgGTUS/wa2WY0VJV3hizLG961fQ43YXLd19dnhxa4KEJ2ZBhMkvaG0k3o/MC2+W
+         SGvANFiHZRzkqHjSYDIA61hBZUw8bNaVomP/aQZgJJ9gFTaOKqtKb61t61r2qm8LZimc
+         m9hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fM1A08CWgTV1bBfD5qE67VlFwSFQpiAw2opTe5zweRQ=;
-        b=kH2stglUMG0ubXImNfZrBAQhlNVne0/NUu9pf7J6bje3hmizpklImeEF1yCNUSr7XI
-         wqJ/O0IHyJ68PZ9Xx7BLDJs7zxlkJurqPrv1RPQWeJEqx6FMv/MGR/XiT1ZbHZV06cvX
-         BGhm9bT6Jv1YP1vA7orJ/2g1lcIta4qfMTR0FJ10FsY/FRIt/d307LPdbMOGZK6E8+tI
-         QQPPzJTsoxgnxhdlUnWdY91I2U6eitVY64acivkzfcHbfJEiPCQT9bdG9qk510Z6oqWL
-         /8jP3y/4ncesowqLpHgNU5a01zAuQOVIqCqU1crC5Biqzt1TmWcQPvJBPRmZHIG3GKuo
-         fupw==
-X-Gm-Message-State: AOAM533jHYhzw3tIfA7frJCWIfNQXtFIY1Z2B96pzTWvtUZKt5uwJVry
-        /hPB6vNeO3z96e/j6KbMkA==
-X-Google-Smtp-Source: ABdhPJzJsHWjmOLw//W3RlaIHVWLgA05B7QlnJgNCmRGCRL8qwvXsBAroLMQ1HnLflSk2Jiu4STpkg==
-X-Received: by 2002:a92:de0a:: with SMTP id x10mr7526223ilm.215.1626463493993;
-        Fri, 16 Jul 2021 12:24:53 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a9sm807689ila.23.2021.07.16.12.24.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jul 2021 12:24:53 -0700 (PDT)
-Received: (nullmailer pid 3838811 invoked by uid 1000);
-        Fri, 16 Jul 2021 19:24:50 -0000
-Date:   Fri, 16 Jul 2021 13:24:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, linux-mips@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        linux-leds@vger.kernel.org, Marek Behun <marek.behun@nic.cz>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 18/19] dt-bindings: auxdisplay: ht16k33: Document LED
- subnode
-Message-ID: <20210716192450.GA3838756@robh.at.kernel.org>
-References: <20210714151130.2531831-1-geert@linux-m68k.org>
- <20210714151130.2531831-19-geert@linux-m68k.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fj4r/axWRIO6jSTkcRS6R08Hk59RDdA00RhrYBvWubg=;
+        b=qDQU5uiSRxhQjCgR7c1L5T6spjeaKvkigckb1d6ewm26iUF06MVsGNwhj0dw15+VZd
+         UZU0NVoM1jDkx2lBcP1zrWUS9kjwc2D+9R6XKnB4+DaXrvEocna0zy3tLlOJ0NMhHHU5
+         cn1NtAE4OQ2ZF2jVsrhdi/5hkPEngOdWgx0+9g7Vvz5MLwoOkUOyHsJs3HieqY9HJsAI
+         +cGb9SiBcY/zokX35XuyF3bf8z+fxhwL0pAiDhA6afwiUhiq/g30oA2cbotsG9/GR0GU
+         8J1SI2JxFhzsbcgOq7oCsejI/Fd8PKu2R1bet/EAgd+1gfkt5zwzJidsxfBoGfTo8Zrj
+         dYeA==
+X-Gm-Message-State: AOAM532urc/3LQMcBoJirD4xO9lmouKunsPOrtvwD3LGX5oGPI5fLrXI
+        hCn5VBDxAMEN4CCHJcCbPQ6zlZ4++tfNklNHddA=
+X-Google-Smtp-Source: ABdhPJxBC15IDzQUHtW2/hmOwt6Vr+EC9eCrxIa0dfDCiEk87DOwUJW5i36noGZM43J5WJiMKdkZqyxphaBBISA9G9M=
+X-Received: by 2002:a25:ab26:: with SMTP id u35mr18449800ybi.151.1626504751445;
+ Fri, 16 Jul 2021 23:52:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210714151130.2531831-19-geert@linux-m68k.org>
+References: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
+ <20210625110419.24503-4-lukas.bulwahn@gmail.com> <CAAdtpL6CMAbBPJr3La31Y3AYY48TjLZhDHjKWjUJxXdBS--Xmw@mail.gmail.com>
+In-Reply-To: <CAAdtpL6CMAbBPJr3La31Y3AYY48TjLZhDHjKWjUJxXdBS--Xmw@mail.gmail.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Sat, 17 Jul 2021 08:52:20 +0200
+Message-ID: <CAKXUXMxJS-H7ZtM0deSN493aQACTtbHH+y8C-f3XKANsH3UCHg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arch: mips: remove dead references
+To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Cc:     "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>, Willy Tarreau <w@1wt.eu>,
+        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 14 Jul 2021 17:11:29 +0200, Geert Uytterhoeven wrote:
-> Extend the Holtek HT16K33 LED controller Device Tree bindings with an
-> LED subnode, conforming to the standard LED bindings.
-> 
-> This allows the user to exert more control, like specifying LED color,
-> function, and/or trigger, to extend LED functionality beyond a simple
-> display backlight.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-> v3:
->   - New.
-> ---
->  .../bindings/auxdisplay/holtek,ht16k33.yaml           | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
+On Sat, Jun 26, 2021 at 6:52 PM Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.or=
+g> wrote:
+>
+> On Fri, Jun 25, 2021 at 1:05 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> w=
+rote:
+> >
+> > The domain lookup for linux-mips.org fails for quite some time now.
+> > Further, the two links:
+> >
+> >   http://decstation.unix-ag.org/
+>
+> https://web.archive.org/web/20061010210936/http://decstation.unix-ag.org/
+>
+> >   http://www.computer-refuge.org/classiccmp/ftp.digital.com/pub/DEC/Tri=
+Add/
+>
+> https://web.archive.org/web/20050205114151/ftp.digital.com/pub/DEC/TriAdd=
+/
+>
+> > refer to old webpages or contain no further technical information.
+>
+> FWIW the information is still online somewhere.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks, I prefer not to reference archive.org links, because I do not
+think that is generally a good practice. But maybe somebody with some
+mild interest in this architecture can support scanning through the
+archived web pages and we store any information still worth mentioning
+in the kernel Documentation?
+
+Lukas
+
+>
+> > Remove all those dead references.
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> >  arch/mips/Kconfig             |  8 +-------
+> >  arch/mips/jazz/Kconfig        | 12 +++---------
+> >  tools/include/nolibc/nolibc.h |  3 +--
+> >  3 files changed, 5 insertions(+), 18 deletions(-)
