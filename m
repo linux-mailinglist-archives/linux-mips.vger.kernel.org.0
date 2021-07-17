@@ -2,84 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 870313CC223
-	for <lists+linux-mips@lfdr.de>; Sat, 17 Jul 2021 11:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31063CC501
+	for <lists+linux-mips@lfdr.de>; Sat, 17 Jul 2021 19:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbhGQJQf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 17 Jul 2021 05:16:35 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:35503 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbhGQJQe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 17 Jul 2021 05:16:34 -0400
-Received: (Authenticated sender: ralf@linux-mips.org)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id A074220005;
-        Sat, 17 Jul 2021 09:13:33 +0000 (UTC)
-Date:   Sat, 17 Jul 2021 11:13:31 +0200
-From:   Ralf Baechle <ralf@linux-mips.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>, Willy Tarreau <w@1wt.eu>,
-        linux-edac@vger.kernel.org, linux-hams@vger.kernel.org,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] MAINTAINERS: mark sections from Ralf Baechle
- orphan
-Message-ID: <YPKfO/d5rjG+C/fG@linux-mips.org>
-References: <20210625110419.24503-1-lukas.bulwahn@gmail.com>
- <20210625110419.24503-2-lukas.bulwahn@gmail.com>
- <CAKXUXMxFBaBneVZf3WCCYJ8Theu55Nf-gFe=hs5u3mMVd41mTw@mail.gmail.com>
+        id S234042AbhGQRvk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 17 Jul 2021 13:51:40 -0400
+Received: from aposti.net ([89.234.176.197]:56892 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231253AbhGQRvj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 17 Jul 2021 13:51:39 -0400
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>,
+        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/3] pinctrl: ingenic: Fix incorrect pull up/down info
+Date:   Sat, 17 Jul 2021 18:48:34 +0100
+Message-Id: <20210717174836.14776-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKXUXMxFBaBneVZf3WCCYJ8Theu55Nf-gFe=hs5u3mMVd41mTw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jul 17, 2021 at 09:03:05AM +0200, Lukas Bulwahn wrote:
+Fix the pull up/down info for both the JZ4760 and JZ4770 SoCs, as the
+previous values sometimes contradicted what's written in the programming
+manual.
 
-> So, given the feedback on this overall patch set from Maciej and Kurt:
-> - the domain lookup for linux-mips.org does resolve again.
-> - the patchwork instance moved.
-> - Ralf Baechle's email now does at least forward somewhere.
+Fixes: b5c23aa46537 ("pinctrl: add a pinctrl driver for the Ingenic jz47xx SoCs")
+Cc: <stable@vger.kernel.org> # v4.12
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/pinctrl/pinctrl-ingenic.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Sorry, the site suffered a complete collapse after a hardware failure
-earlier this year - and I couldn't even get the failed drive replaced at
-the hoster as I didn't have the privilege of opening a ticket; that was
-only possible to the owner of the master account, a former MIPS employee
-who for health reasons no longer is with the company.  The parent company
-of MIPS Wavecomp going through bankrupcy proceedings didn't help resolving
-the situation either.
+diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+index 983ba9865f77..126ca671c3cd 100644
+--- a/drivers/pinctrl/pinctrl-ingenic.c
++++ b/drivers/pinctrl/pinctrl-ingenic.c
+@@ -710,7 +710,7 @@ static const struct ingenic_chip_info jz4755_chip_info = {
+ };
+ 
+ static const u32 jz4760_pull_ups[6] = {
+-	0xffffffff, 0xfffcf3ff, 0xffffffff, 0xffffcfff, 0xfffffb7c, 0xfffff00f,
++	0xffffffff, 0xfffcf3ff, 0xffffffff, 0xffffcfff, 0xfffffb7c, 0x0000000f,
+ };
+ 
+ static const u32 jz4760_pull_downs[6] = {
+@@ -936,11 +936,11 @@ static const struct ingenic_chip_info jz4760_chip_info = {
+ };
+ 
+ static const u32 jz4770_pull_ups[6] = {
+-	0x3fffffff, 0xfff0030c, 0xffffffff, 0xffff4fff, 0xfffffb7c, 0xffa7f00f,
++	0x3fffffff, 0xfff0f3fc, 0xffffffff, 0xffff4fff, 0xfffffb7c, 0x0024f00f,
+ };
+ 
+ static const u32 jz4770_pull_downs[6] = {
+-	0x00000000, 0x000f0c03, 0x00000000, 0x0000b000, 0x00000483, 0x00580ff0,
++	0x00000000, 0x000f0c03, 0x00000000, 0x0000b000, 0x00000483, 0x005b0ff0,
+ };
+ 
+ static int jz4770_uart0_data_pins[] = { 0xa0, 0xa3, };
+-- 
+2.30.2
 
-Anyway, there's progress on that front and I hope to get replacement
-hardware within the next week or so.
-
-The failed drive of the lmo server hardware changed its behavioud allowing
-me to reboot the system again on July 1st.  I had given up on the old
-hardware in frustration so Kurt deserves the credits for getting me to try
-again.
-No data was lost in the crash itself.  I'm now working on fixing all the
-failed subsystems, primarily due to a major OS upgrade by several releases,
-some old to-do list items and changes in the environment that affect the
-system.  The time required to do so is enormous; I've done virtually
-nothing else since 1st of July.
-
-I've put an writeup about the system status to
-https://www.linux-mips.org/wiki/System_Recovery_Status which I'm
-keeping updated as work progresses.
-
-As for the MAINTAINERS for the ham radio protocols - AX.25 use
-is going down for many years and so is NET\ROM.  ROSE has always
-been a very rare protocol but all three stacks still have active
-users.  With that said, I doubt somebody to do active development
-and maintenace will be found.  So maybe leave my name in but
-lower to "Odd Fixes" which has been the reality for years even
-before I took over and imho is how it should be continued.
-
-At this point my immediate priorities are the full restoration of
-the lmo server and after that linux-ax25.org will need TLC and I want
-those to be completed before diving into code again.
-
-  Ralf
