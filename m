@@ -2,88 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBB53CE3D9
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Jul 2021 18:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623F13CE236
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Jul 2021 18:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239768AbhGSPkq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Jul 2021 11:40:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33558 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349774AbhGSPgN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 19 Jul 2021 11:36:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F0E8B606A5;
-        Mon, 19 Jul 2021 16:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626711412;
-        bh=Ih4uw1wLmZuJzPBSa7mFWyX68s4AbA5Yb2/v5MMSeKM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WxEwvz0dhzdE5q+UQ8rhIAK3zk1ZGTdPeH2bRr69RWd+ODx64Kvp0Pyj40lOPF4bz
-         UuQ1HQonHo/QmFZOijfyKyEGRLwu6XjYSSnwyKG5g+OTUZAOIIKlkswG1c8IO58xaG
-         owehHoAzekClHvekMi6xmFz7h4jcoqcM1d03tOjI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Kyungsik Lee <kyungsik.lee@lge.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.13 343/351] mips: disable branch profiling in boot/decompress.o
-Date:   Mon, 19 Jul 2021 16:54:49 +0200
-Message-Id: <20210719144956.416175157@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210719144944.537151528@linuxfoundation.org>
-References: <20210719144944.537151528@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1346590AbhGSP3a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Jul 2021 11:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348511AbhGSPYx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Jul 2021 11:24:53 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A601CC08E88C;
+        Mon, 19 Jul 2021 08:15:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=DEv5AMPYTsRvufOgvEX+iyR62xQvFefugMO+OsVkHzc=; b=DdKXacyQxn7Hz8fN7PJPr6m9x
+        d4hT/T0CJ5vKsm+NrCyfhhcEa16qr7fh5ZmNRudBMiNsh2jWmw+8ed7lCBIMi/jmkxYayCvxuuGFK
+        4hGzvSFep0kUFA1ZNBEEQeCQdSfzUhQ6zgFkq82drCAMx1t9UybqRKDrNW6URJC1JvCwW0DMXWT0J
+        m8V5Vgh2JPge/tTVm8IONzCUUTFB5PbqFmG7VItuZoc2Wg8A7OONJFrHCYD+gnCyml/DiKV1jbrlh
+        EcOJfYmvL8Ub22suPEmn9SZalhR+cT/W6dvmJJoHr8kHoEp/k9Sarl2dHD3wp1WISKxfd40O6Ylfs
+        YGaL+yUww==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46332)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1m5VPo-00054L-KD; Mon, 19 Jul 2021 16:42:44 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1m5VPi-00066F-Ex; Mon, 19 Jul 2021 16:42:38 +0100
+Date:   Mon, 19 Jul 2021 16:42:38 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     hch@lst.de, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, James.Bottomley@hansenpartnership.com,
+        guoren@kernel.org, tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, deanbo422@gmail.com, deller@gmx.de,
+        ysato@users.sourceforge.jp, dalias@libc.org, geoff@infradead.org,
+        paul@crapouillou.net, ulf.hansson@linaro.org, alexs@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-mm@kvack.org, linux-doc@vger.kernel.org
+Subject: Re: flush_kernel_dcache_page fixes and removal
+Message-ID: <20210719154238.GS22278@shell.armlinux.org.uk>
+References: <20210713084648.GF22278@shell.armlinux.org.uk>
+ <20210719053851.GA16780@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210719053851.GA16780@gondor.apana.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Mon, Jul 19, 2021 at 01:38:51PM +0800, Herbert Xu wrote:
+> Russell King Oracle <linux@armlinux.org.uk> wrote:
+> >
+> > I think you need to be careful - I seem to have a recollection that the
+> > reason we ended up with flush_kernel_dcache_page() was the need to avoid
+> > the taking of the mmap lock for 32-bit ARM VIVT based CPUs in
+> > flush_dcache_page(). 32-bit ARM flush_dcache_page() can block.
+> > 
+> > If you're sure that all these changes you're making do not end up
+> > calling flush_dcache_page() from a path where we are atomic, then fine.
+> 
+> The Crypto API has been calling flush_dcache_page from softirq
+> context since before the advent of git (see crypto/scatterwalk.c
+> from the initial import).  So if 32-bit ARM blocks on it then this
+> has been broken for almost 20 years.
 
-[ Upstream commit 97e488073cfca0eea84450169ca4cbfcc64e33e3 ]
+I think what's confusing me is the naming of flush_dcache_mmap_lock().
+The mmap lock is a read-write semaphore (see linux/mmap-lock.h), and
+is even called "mmap_lock" in mm_struct, but this has nothing to do
+with flush_dcache_mmap_lock().
 
-Use DISABLE_BRANCH_PROFILING for arch/mips/boot/compressed/decompress.o
-to prevent linkage errors.
+So no, flush_dcache_mmap_lock() doesn't block as I first thought, and
+therefore flush_dcache_page() doesn't block either.
 
-mips64-linux-ld: arch/mips/boot/compressed/decompress.o: in function `LZ4_decompress_fast_extDict':
-decompress.c:(.text+0x8c): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: decompress.c:(.text+0xf4): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: decompress.c:(.text+0x200): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: decompress.c:(.text+0x230): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: decompress.c:(.text+0x320): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: arch/mips/boot/compressed/decompress.o:decompress.c:(.text+0x3f4): more undefined references to `ftrace_likely_update' follow
+Sorry for the noise.
 
-Fixes: e76e1fdfa8f8 ("lib: add support for LZ4-compressed kernel")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Kyungsik Lee <kyungsik.lee@lge.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/boot/compressed/decompress.c | 2 ++
- 1 file changed, 2 insertions(+)
+However, I now seem to remember some discussion in the past when I was
+trying to get people to use flush_dcache_page() to solve the coherency
+problems when block drivers were doing PIO to page cache pages. I seem
+to remember there being objections to it, which is one of the reasons
+we ended up with a lighter weight flush_kernel_dcache_page(). But
+shrug, dim and distant memories.
 
-diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
-index 3d70d15ada28..aae1346a509a 100644
---- a/arch/mips/boot/compressed/decompress.c
-+++ b/arch/mips/boot/compressed/decompress.c
-@@ -7,6 +7,8 @@
-  * Author: Wu Zhangjin <wuzhangjin@gmail.com>
-  */
- 
-+#define DISABLE_BRANCH_PROFILING
-+
- #include <linux/types.h>
- #include <linux/kernel.h>
- #include <linux/string.h>
 -- 
-2.30.2
-
-
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
