@@ -2,67 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE4A3CD3DB
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Jul 2021 13:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 832CC3CD8BF
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Jul 2021 17:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236462AbhGSKrW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Jul 2021 06:47:22 -0400
-Received: from elvis.franken.de ([193.175.24.41]:39635 "EHLO elvis.franken.de"
+        id S242936AbhGSOZ2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Jul 2021 10:25:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58348 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236076AbhGSKrV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 19 Jul 2021 06:47:21 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1m5RRE-0008KT-01; Mon, 19 Jul 2021 13:27:56 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id ECB0FC0EF6; Mon, 19 Jul 2021 13:27:38 +0200 (CEST)
-Date:   Mon, 19 Jul 2021 13:27:38 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     paul@crapouillou.net, paulburton@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maoxiaochuan@loongson.cn, f.fainelli@gmail.com, git@xen0n.name,
-        chenhuacai@kernel.org, cand@gmx.com, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com
-Subject: Re: [PATCH v2] MIPS: Ingenic: Add system type for new Ingenic SoCs.
-Message-ID: <20210719112738.GB7434@alpha.franken.de>
-References: <1626368227-119499-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S243561AbhGSOYJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 19 Jul 2021 10:24:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E6BBE6124B;
+        Mon, 19 Jul 2021 15:03:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1626707034;
+        bh=VDn8Lf76RE6bwRYg4ASwwlWSFYqZM+D7FfaQchqCbJY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=M/XP/qKxZu0bm3uSKN+tW+sUKRrM4Ji3IOFo3CWr+U+sxFNk7wMACXrEyIRctw54+
+         DakiqGE6ZhRuWdZh16vW0rS1FY0P/9ODL8mCGVi7myqximN7YQ1ycvHHJ7EvDLvf0c
+         EzWQlkHo79nlLdHQivzHdyVp22yMvRjMkZwnvKIM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Kyungsik Lee <kyungsik.lee@lge.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.4 187/188] mips: disable branch profiling in boot/decompress.o
+Date:   Mon, 19 Jul 2021 16:52:51 +0200
+Message-Id: <20210719144942.609613328@linuxfoundation.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210719144913.076563739@linuxfoundation.org>
+References: <20210719144913.076563739@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1626368227-119499-1-git-send-email-zhouyanjie@wanyeetech.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jul 16, 2021 at 12:57:07AM +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Add JZ4730, JZ4750, JZ4755, JZ4760, JZ4760B, X2000H, and X2100 system
-> type for cat /proc/cpuinfo to give out JZ4730, JZ4750, JZ4755, JZ4760,
-> JZ4760B, X2000H, and X2100.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-> ---
-> 
-> Notes:
->     v1->v2:
->     1.Add system type for JZ4750 and JZ4755 as Paul Cercueil's suggestion.
->     2.Add Paul Cercueil's Reviewed-by.
-> 
->  arch/mips/generic/board-ingenic.c | 21 +++++++++++++++++++++
->  arch/mips/include/asm/bootinfo.h  |  3 +++
->  arch/mips/include/asm/cpu.h       |  4 ++--
->  3 files changed, 26 insertions(+), 2 deletions(-)
+From: Randy Dunlap <rdunlap@infradead.org>
 
-applied to mips-next.
+[ Upstream commit 97e488073cfca0eea84450169ca4cbfcc64e33e3 ]
 
-Thomas.
+Use DISABLE_BRANCH_PROFILING for arch/mips/boot/compressed/decompress.o
+to prevent linkage errors.
 
+mips64-linux-ld: arch/mips/boot/compressed/decompress.o: in function `LZ4_decompress_fast_extDict':
+decompress.c:(.text+0x8c): undefined reference to `ftrace_likely_update'
+mips64-linux-ld: decompress.c:(.text+0xf4): undefined reference to `ftrace_likely_update'
+mips64-linux-ld: decompress.c:(.text+0x200): undefined reference to `ftrace_likely_update'
+mips64-linux-ld: decompress.c:(.text+0x230): undefined reference to `ftrace_likely_update'
+mips64-linux-ld: decompress.c:(.text+0x320): undefined reference to `ftrace_likely_update'
+mips64-linux-ld: arch/mips/boot/compressed/decompress.o:decompress.c:(.text+0x3f4): more undefined references to `ftrace_likely_update' follow
+
+Fixes: e76e1fdfa8f8 ("lib: add support for LZ4-compressed kernel")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: Kyungsik Lee <kyungsik.lee@lge.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/boot/compressed/decompress.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
+index 080cd53bac36..a1a54a3af03b 100644
+--- a/arch/mips/boot/compressed/decompress.c
++++ b/arch/mips/boot/compressed/decompress.c
+@@ -11,6 +11,8 @@
+  * option) any later version.
+  */
+ 
++#define DISABLE_BRANCH_PROFILING
++
+ #include <linux/types.h>
+ #include <linux/kernel.h>
+ #include <linux/string.h>
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.30.2
+
+
+
