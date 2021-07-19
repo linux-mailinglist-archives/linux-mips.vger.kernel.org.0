@@ -2,38 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 305BB3CDFD2
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Jul 2021 17:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF343CE237
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Jul 2021 18:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245347AbhGSPMQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Jul 2021 11:12:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48264 "EHLO mail.kernel.org"
+        id S1347825AbhGSP3d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Jul 2021 11:29:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44194 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344896AbhGSPLF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 19 Jul 2021 11:11:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CA2FB60FDA;
-        Mon, 19 Jul 2021 15:51:43 +0000 (UTC)
+        id S1346006AbhGSP1m (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 19 Jul 2021 11:27:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 61300613CF;
+        Mon, 19 Jul 2021 16:08:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626709904;
-        bh=jg9+WrGqWJ2SqvBAU7KcPrIyvo6uHxgYZt05DuCXvqc=;
+        s=korg; t=1626710901;
+        bh=qjAee10GKoNtEd3QJvJ5ofikK7mIpHulu3nelTdmX4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UFvUMBbmGHrYPiG0463l6nMvaW3LGJIr8ZmR3iVK/Ar6yTR+Ds6dD60bOZjsoLMe5
-         hKehMCHqgKfWWm+kKY1EWrIP7mibGFf/Uiau8qilX/o4zvyzliW5tLyTd37ELAt61P
-         accU4lsTEQi2aoCbAX9tKILh93JR3UrdKCIaTlrM=
+        b=O0MIf8cyLlyIbQvqCqKQP9grhoxAZRimw6fvASIMXfnz8HztkPSvJd2j3rE8feEWo
+         D1FoGTrj/hVm1BzM47VZX6RvWbnDd5HzaIgLnCBSZLGCl4hUFlA+lD17WEUY5hsD0s
+         Q59EYF5AzvyUiG3Dn8UHtqkTZ8AkKKi9Afb/Z8+E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        kernel test robot <lkp@intel.com>,
         Randy Dunlap <rdunlap@infradead.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Kyungsik Lee <kyungsik.lee@lge.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 145/149] mips: disable branch profiling in boot/decompress.o
-Date:   Mon, 19 Jul 2021 16:54:13 +0200
-Message-Id: <20210719144935.596994577@linuxfoundation.org>
+        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.13 151/351] PCI: ftpci100: Rename macro name collision
+Date:   Mon, 19 Jul 2021 16:51:37 +0200
+Message-Id: <20210719144949.969845638@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210719144901.370365147@linuxfoundation.org>
-References: <20210719144901.370365147@linuxfoundation.org>
+In-Reply-To: <20210719144944.537151528@linuxfoundation.org>
+References: <20210719144944.537151528@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,44 +47,116 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 97e488073cfca0eea84450169ca4cbfcc64e33e3 ]
+[ Upstream commit 5be967d5016ac5ffb9c4d0df51b48441ee4d5ed1 ]
 
-Use DISABLE_BRANCH_PROFILING for arch/mips/boot/compressed/decompress.o
-to prevent linkage errors.
+PCI_IOSIZE is defined in mach-loongson64/spaces.h, so change the name
+of the PCI_* macros in pci-ftpci100.c to use FTPCI_* so that they are
+more localized and won't conflict with other drivers or arches.
 
-mips64-linux-ld: arch/mips/boot/compressed/decompress.o: in function `LZ4_decompress_fast_extDict':
-decompress.c:(.text+0x8c): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: decompress.c:(.text+0xf4): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: decompress.c:(.text+0x200): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: decompress.c:(.text+0x230): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: decompress.c:(.text+0x320): undefined reference to `ftrace_likely_update'
-mips64-linux-ld: arch/mips/boot/compressed/decompress.o:decompress.c:(.text+0x3f4): more undefined references to `ftrace_likely_update' follow
+../drivers/pci/controller/pci-ftpci100.c:37: warning: "PCI_IOSIZE" redefined
+   37 | #define PCI_IOSIZE 0x00
+      |
+In file included from ../arch/mips/include/asm/addrspace.h:13,
+...              from ../drivers/pci/controller/pci-ftpci100.c:15:
+arch/mips/include/asm/mach-loongson64/spaces.h:11: note: this is the location of the previous definition
+   11 | #define PCI_IOSIZE SZ_16M
 
-Fixes: e76e1fdfa8f8 ("lib: add support for LZ4-compressed kernel")
+Suggested-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20210517234117.3660-1-rdunlap@infradead.org
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Krzysztof Wilczyński <kw@linux.com>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: linux-mips@vger.kernel.org
-Cc: Kyungsik Lee <kyungsik.lee@lge.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/boot/compressed/decompress.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pci/controller/pci-ftpci100.c | 30 +++++++++++++--------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
-index a52e929381ea..281e922e5c65 100644
---- a/arch/mips/boot/compressed/decompress.c
-+++ b/arch/mips/boot/compressed/decompress.c
-@@ -7,6 +7,8 @@
-  * Author: Wu Zhangjin <wuzhangjin@gmail.com>
+diff --git a/drivers/pci/controller/pci-ftpci100.c b/drivers/pci/controller/pci-ftpci100.c
+index da3cd216da00..aefef1986201 100644
+--- a/drivers/pci/controller/pci-ftpci100.c
++++ b/drivers/pci/controller/pci-ftpci100.c
+@@ -34,12 +34,12 @@
+  * Special configuration registers directly in the first few words
+  * in I/O space.
   */
+-#define PCI_IOSIZE	0x00
+-#define PCI_PROT	0x04 /* AHB protection */
+-#define PCI_CTRL	0x08 /* PCI control signal */
+-#define PCI_SOFTRST	0x10 /* Soft reset counter and response error enable */
+-#define PCI_CONFIG	0x28 /* PCI configuration command register */
+-#define PCI_DATA	0x2C
++#define FTPCI_IOSIZE	0x00
++#define FTPCI_PROT	0x04 /* AHB protection */
++#define FTPCI_CTRL	0x08 /* PCI control signal */
++#define FTPCI_SOFTRST	0x10 /* Soft reset counter and response error enable */
++#define FTPCI_CONFIG	0x28 /* PCI configuration command register */
++#define FTPCI_DATA	0x2C
  
-+#define DISABLE_BRANCH_PROFILING
-+
- #include <linux/types.h>
- #include <linux/kernel.h>
- #include <linux/string.h>
+ #define FARADAY_PCI_STATUS_CMD		0x04 /* Status and command */
+ #define FARADAY_PCI_PMC			0x40 /* Power management control */
+@@ -195,9 +195,9 @@ static int faraday_raw_pci_read_config(struct faraday_pci *p, int bus_number,
+ 			PCI_CONF_FUNCTION(PCI_FUNC(fn)) |
+ 			PCI_CONF_WHERE(config) |
+ 			PCI_CONF_ENABLE,
+-			p->base + PCI_CONFIG);
++			p->base + FTPCI_CONFIG);
+ 
+-	*value = readl(p->base + PCI_DATA);
++	*value = readl(p->base + FTPCI_DATA);
+ 
+ 	if (size == 1)
+ 		*value = (*value >> (8 * (config & 3))) & 0xFF;
+@@ -230,17 +230,17 @@ static int faraday_raw_pci_write_config(struct faraday_pci *p, int bus_number,
+ 			PCI_CONF_FUNCTION(PCI_FUNC(fn)) |
+ 			PCI_CONF_WHERE(config) |
+ 			PCI_CONF_ENABLE,
+-			p->base + PCI_CONFIG);
++			p->base + FTPCI_CONFIG);
+ 
+ 	switch (size) {
+ 	case 4:
+-		writel(value, p->base + PCI_DATA);
++		writel(value, p->base + FTPCI_DATA);
+ 		break;
+ 	case 2:
+-		writew(value, p->base + PCI_DATA + (config & 3));
++		writew(value, p->base + FTPCI_DATA + (config & 3));
+ 		break;
+ 	case 1:
+-		writeb(value, p->base + PCI_DATA + (config & 3));
++		writeb(value, p->base + FTPCI_DATA + (config & 3));
+ 		break;
+ 	default:
+ 		ret = PCIBIOS_BAD_REGISTER_NUMBER;
+@@ -469,7 +469,7 @@ static int faraday_pci_probe(struct platform_device *pdev)
+ 		if (!faraday_res_to_memcfg(io->start - win->offset,
+ 					   resource_size(io), &val)) {
+ 			/* setup I/O space size */
+-			writel(val, p->base + PCI_IOSIZE);
++			writel(val, p->base + FTPCI_IOSIZE);
+ 		} else {
+ 			dev_err(dev, "illegal IO mem size\n");
+ 			return -EINVAL;
+@@ -477,11 +477,11 @@ static int faraday_pci_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* Setup hostbridge */
+-	val = readl(p->base + PCI_CTRL);
++	val = readl(p->base + FTPCI_CTRL);
+ 	val |= PCI_COMMAND_IO;
+ 	val |= PCI_COMMAND_MEMORY;
+ 	val |= PCI_COMMAND_MASTER;
+-	writel(val, p->base + PCI_CTRL);
++	writel(val, p->base + FTPCI_CTRL);
+ 	/* Mask and clear all interrupts */
+ 	faraday_raw_pci_write_config(p, 0, 0, FARADAY_PCI_CTRL2 + 2, 2, 0xF000);
+ 	if (variant->cascaded_irq) {
 -- 
 2.30.2
 
