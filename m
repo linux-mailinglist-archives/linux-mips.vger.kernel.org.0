@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B51043CDEF2
-	for <lists+linux-mips@lfdr.de>; Mon, 19 Jul 2021 17:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305BB3CDFD2
+	for <lists+linux-mips@lfdr.de>; Mon, 19 Jul 2021 17:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344238AbhGSPG5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Jul 2021 11:06:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59498 "EHLO mail.kernel.org"
+        id S245347AbhGSPMQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 19 Jul 2021 11:12:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48264 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345763AbhGSPE6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 19 Jul 2021 11:04:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7FDB360FE9;
-        Mon, 19 Jul 2021 15:45:21 +0000 (UTC)
+        id S1344896AbhGSPLF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 19 Jul 2021 11:11:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CA2FB60FDA;
+        Mon, 19 Jul 2021 15:51:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626709522;
-        bh=s8SuyMt/l08oP13Be3zY5b66DEKc3eEYkt9eufeskx0=;
+        s=korg; t=1626709904;
+        bh=jg9+WrGqWJ2SqvBAU7KcPrIyvo6uHxgYZt05DuCXvqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YIcJpx33qBzRmlNVBQDjK9Epb5v5of6jBrj9EkW56EiaRpnHI8kaXRxKjM/TpTw3F
-         EsxQGXSFL2lTkvAAUQwdodRAHMcaYeBGWpcN+IFL8cuHj1JrGxYb9KNFS+huUMXI3y
-         z8NSs1ouq/X6Sw4Lu7ECch2uwQNV0UheMhTmNS3M=
+        b=UFvUMBbmGHrYPiG0463l6nMvaW3LGJIr8ZmR3iVK/Ar6yTR+Ds6dD60bOZjsoLMe5
+         hKehMCHqgKfWWm+kKY1EWrIP7mibGFf/Uiau8qilX/o4zvyzliW5tLyTd37ELAt61P
+         accU4lsTEQi2aoCbAX9tKILh93JR3UrdKCIaTlrM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -28,12 +28,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, Kyungsik Lee <kyungsik.lee@lge.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 417/421] mips: disable branch profiling in boot/decompress.o
-Date:   Mon, 19 Jul 2021 16:53:48 +0200
-Message-Id: <20210719145000.773225244@linuxfoundation.org>
+Subject: [PATCH 5.4 145/149] mips: disable branch profiling in boot/decompress.o
+Date:   Mon, 19 Jul 2021 16:54:13 +0200
+Message-Id: <20210719144935.596994577@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210719144946.310399455@linuxfoundation.org>
-References: <20210719144946.310399455@linuxfoundation.org>
+In-Reply-To: <20210719144901.370365147@linuxfoundation.org>
+References: <20210719144901.370365147@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -70,11 +70,11 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
-index 40218be0b7ce..6403a65f30b9 100644
+index a52e929381ea..281e922e5c65 100644
 --- a/arch/mips/boot/compressed/decompress.c
 +++ b/arch/mips/boot/compressed/decompress.c
-@@ -11,6 +11,8 @@
-  * option) any later version.
+@@ -7,6 +7,8 @@
+  * Author: Wu Zhangjin <wuzhangjin@gmail.com>
   */
  
 +#define DISABLE_BRANCH_PROFILING
