@@ -2,102 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A05E3CF360
-	for <lists+linux-mips@lfdr.de>; Tue, 20 Jul 2021 06:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAB33D00DE
+	for <lists+linux-mips@lfdr.de>; Tue, 20 Jul 2021 19:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbhGTDyr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 19 Jul 2021 23:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
+        id S230465AbhGTRHb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Jul 2021 13:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbhGTDyB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 19 Jul 2021 23:54:01 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF361C061574;
-        Mon, 19 Jul 2021 21:34:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:MIME-Version
-        :Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=oJRAxrYs7RTt5lB7rIWFTEQlzeyXDUjCRcvLy4VcFz8=; b=VwF80pOG0We5K68BTjf8UT0qm1
-        OVXf7dYgS2OHZlKZ5EEyDErpf4zJy9CeqljknbuDR3peRB+97Iq9hoFJVZG/nzAZUljl5VzXcB2aL
-        lPO17ZCqyqCh4QGdLzN8dBUqp2tUWROKTT9EDOfNkscycEXHOqlRBzjgbxI3AfpeX3yK+gFxfSo/q
-        L3ynzUcFjs/PKHz59YiurQL3vksMBKgRhroSHFijNdmpjTckb7PJ6dhs3w7Wc1jVe/ar7j+89PlN7
-        0+f+6Nwmr3dxeWr/y4n0oQXc8B4Goo4Jc+ME9m6g86fEyWuKFwqamEBgJEABZ2udE37v4fqNvQtAr
-        dSrLGMvQ==;
-Received: from [2601:1c0:6280:3f0::a22f] (helo=smtpauth.infradead.org)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m5hSm-001Mf5-EW; Tue, 20 Jul 2021 04:34:36 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Ganesan Ramalingam <ganesanr@broadcom.com>,
-        John Crispin <blogic@openwrt.org>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH] mips: netlogic: fix kernel-doc complaints in fmn-config.c
-Date:   Mon, 19 Jul 2021 21:34:32 -0700
-Message-Id: <20210720043432.1684-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
+        with ESMTP id S231201AbhGTRHX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 20 Jul 2021 13:07:23 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8060C061766;
+        Tue, 20 Jul 2021 10:47:59 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id b29so11046973ljf.11;
+        Tue, 20 Jul 2021 10:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vUmdle0okeye9wG/MQSJUYKK/oNkAcQU0zrJ8K6htdI=;
+        b=bGURyZRhWmst/CyxrE441Wy0VrDxP/9N0HUp8BLrY/7Bo4VgY+M5kThochgSE7OV7R
+         v46ztMO6rt+/OI9yyC1iyBbLrP8KxsKIhnmUg4NwD05S5iPniXaEs0IIrVryP27jyg8d
+         Ryq/Vm/EnscOs3ZqgWouzi+DNt6rhGDQ9nNOwl8xcQkVF3YzvSRiW+66WQJU2hMc2/iU
+         8MPJysddUeExnZupHl4YW4Q6B040CVRleHdG5z0uyIaQSMEbHKkD11PAE4JXsRiAm5Ka
+         64L8F+PauoiUd56ltr+B6k8AjBI8RcAxD7xM8qjpziLWxkaMI1xl0pdNExId2TmpLBE6
+         H09A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vUmdle0okeye9wG/MQSJUYKK/oNkAcQU0zrJ8K6htdI=;
+        b=EeKfziqVHxFr2haVbSLGPzGtE+6jrq8oEnuWAHPH5lSVioykaV/FYaO2P2RbI3GN27
+         Fp+Ur9LPl449KIhU66tlxci60YxMDk6MMDpwbOWudmqmZvDPGJLGANLE8RtfuiRr0zBp
+         Nxw/6egfl7mj5gZg51JWuc57G5SbFkeKxkyfQeZEIHYWZyPf+Ir58V6nfq6Ttk4RrzdY
+         V8UxybYYt/DMBD0e+DvEf27KE0XLGxtSoSB3dPjqIYdf/abQhh7KGxkTsR+4dPUvimYs
+         sxnm2Jw+2mslDqLYzx07UD7kTl8brxETvE85NQeAC12Y6md6wKKMwENkIqG3uditp+s/
+         /fOQ==
+X-Gm-Message-State: AOAM532N9bQ2GoQPzuIHwrdQLY3kyeec8GcFoWtp5zHw0X+J5aLG3W3F
+        Uy/a0+X/mdMM8KZ03OH54hntllFE7uMPVdCMPSk=
+X-Google-Smtp-Source: ABdhPJzbmeNAF0zBbShQOnE3KRREeAQLMAorAb2p3hcXaGq5CM5Vt1aSfKRcfRhigveNTRfu1XrHKW/w7ivq6N6PnKk=
+X-Received: by 2002:a05:651c:32e:: with SMTP id b14mr2282131ljp.258.1626803278013;
+ Tue, 20 Jul 2021 10:47:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1625970383.git.Tony.Ambardar@gmail.com> <CAM1=_QR-siQtH_qE1uj4J_xw-jWwcRZrLL2hxK462HOwDV1f8A@mail.gmail.com>
+In-Reply-To: <CAM1=_QR-siQtH_qE1uj4J_xw-jWwcRZrLL2hxK462HOwDV1f8A@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 20 Jul 2021 10:47:46 -0700
+Message-ID: <CAADnVQJ1uvLm6JC-qUp_owQy-A9N-SyVp1Yim3QHaREo4JArgQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v1 00/14] MIPS: eBPF: refactor code, add
+ MIPS32 JIT
+To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Cc:     Tony Ambardar <tony.ambardar@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, linux-mips@vger.kernel.org,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        David Daney <ddaney@caviumnetworks.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Clean up kernel-doc warnings in netlogic/xlr/fmn-config.c by using
-correct kernel-doc format. Fixes these warnings:
+On Mon, Jul 19, 2021 at 6:25 PM Johan Almbladh
+<johan.almbladh@anyfinetworks.com> wrote:
+>
+> I have been focusing on the code the last couple of weeks so I didn't
+> see your email until now. I am sure that this comes as much of a
+> surprise to you as it did to me. Anyway, can send a patch with my JIT
+> implementation tomorrow.
 
-arch/mips/netlogic/xlr/fmn-config.c:106: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Configure bucket size and credits for a device. 'size' is the size of
-arch/mips/netlogic/xlr/fmn-config.c:181: warning: expecting prototype for Setup the FMN details for each devices according to the device available(). Prototype was for xlr_board_info_setup() instead
+It is surprising to have not one but two mips32 JITs :)
+I really hope you folks can figure out the common path forward.
+It sounds to me that the register mapping choices in both
+implementations are the same (which would be the most debated
+part to agree on).
+Not seeing Johan's patches it's hard to make any comparison.
+So far I like Tony's patches. The refactoring and code sharing is great.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Ganesan Ramalingam <ganesanr@broadcom.com>
-Cc: John Crispin <blogic@openwrt.org>
-Cc: Aditya Srivastava <yashsri421@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
----
- arch/mips/netlogic/xlr/fmn-config.c |   15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+Tony,
+what 'static analysis' by the JIT you're referring to?
+re: bpf_jit_needs_zext issue between JIT and the verifier.
+It's a difficult one.
+opt_subreg_zext_lo32_rnd_hi32() shouldn't depend on JIT
+(other than bpf_jit_needs_zext).
+But you're setting that callback the same way as x86-32 JIT.
+So the same bug should be seen there too.
+Could you double check if it's the case?
+It's either a regression (if both x86-32 and mips32 JITs fail
+this test_verifier test) or endianness related (if it's mip32 JIT only).
 
---- linux-next-20210719.orig/arch/mips/netlogic/xlr/fmn-config.c
-+++ linux-next-20210719/arch/mips/netlogic/xlr/fmn-config.c
-@@ -103,18 +103,19 @@ static void check_credit_distribution(vo
- }
- 
- /**
-- * Configure bucket size and credits for a device. 'size' is the size of
-- * the buckets for the device. This size is distributed among all the CPUs
-- * so that all of them can send messages to the device.
-- *
-- * The device is also given 'cpu_credits' to send messages to the CPUs
-- *
-+ * setup_fmn_cc -  Configure bucket size and credits for a device.
-  * @dev_info: FMN information structure for each devices
-  * @start_stn_id: Starting station id of dev_info
-  * @end_stn_id: End station id of dev_info
-  * @num_buckets: Total number of buckets for den_info
-  * @cpu_credits: Allowed credits to cpu for each devices pointing by dev_info
-  * @size: Size of the each buckets in the device station
-+ *
-+ * 'size' is the size of the buckets for the device. This size is
-+ * distributed among all the CPUs
-+ * so that all of them can send messages to the device.
-+ *
-+ * The device is also given 'cpu_credits' to send messages to the CPUs
-  */
- static void setup_fmn_cc(struct xlr_fmn_info *dev_info, int start_stn_id,
- 		int end_stn_id, int num_buckets, int cpu_credits, int size)
-@@ -174,6 +175,8 @@ static void setup_cpu_fmninfo(struct xlr
- }
- 
- /**
-+ * xlr_board_info_setup - Setup FMN details
-+ *
-  * Setup the FMN details for each devices according to the device available
-  * in each variant of XLR/XLS processor
-  */
+Thank you both for the exciting work!
