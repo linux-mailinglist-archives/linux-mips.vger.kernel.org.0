@@ -2,103 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE183D0710
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jul 2021 05:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AD43D0768
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jul 2021 05:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbhGUCY7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Jul 2021 22:24:59 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:52113 "EHLO
-        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231426AbhGUCWM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 20 Jul 2021 22:22:12 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 722CE2B004FC;
-        Tue, 20 Jul 2021 23:02:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 20 Jul 2021 23:02:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=juuqFtaoRobQQ
-        sYNJO/H9QK58gSnRD3PdI9BHJOIPdI=; b=N3V4TmMuagRkUZ8V5vQ0mdpd46Zzb
-        yYWMtJKFJoojLwgSATkjuDZ3ekBCPfMH23gt2FqRXDuimT8sqBjuG6jPvovxKurG
-        W/QB5TNCNX+X88P5piqPckJn6UaZNHo81jj/8dbjO3ExyrB5h3p0uO9Qluic9Vag
-        2qjNoD3as4UMqbRRjwxiDcpbJBudomKkx4CyvQkteS03oTjzeY4adVxdXm67Q0r9
-        c71xuF5lGGz+AVBdIjoB1Yy14UcrrbWafJ9tZd3sRx6pE6NiebZADfrjE76yy6M+
-        mKee7YoF3afZSv+vy48SLb+YBoDIp3i5M71tTvohoN4EEWUKUZVL9QuIQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=juuqFtaoRobQQsYNJO/H9QK58gSnRD3PdI9BHJOIPdI=; b=Ah7eMR7f
-        DbcWHT/5QGSJCGVe1cyzMPCMLZTDS5DmJhrIvemBcakIffHvaVy1HNpFztTzntjr
-        rouvpfgk9k7R4ONIoD7luqJbyqD+eY8FKjDilm9RTGi4A96wH8kYG1sWSQ2xNBmp
-        Pd6zDis4D+xEzjMTzF4ZispFlSSukqVJDX/ShQGmwqHcUqTvTSVOZW4ueHahfy7N
-        u+FS8bC20Y5Un5ddX8M552NXwbojEgrRBuNuUv9zhjEEY26Di+jRBM2nKppKg0sD
-        N6KVuwV+o3FXPoagtXDsY499iV1pLQmZPknDq81rgjuCJiLHJRWzYdXxypcJ1hav
-        Cl593vFSkoHnuA==
-X-ME-Sender: <xms:WI73YH5un-vJVw7sFD3QrpHhSSXmo6ySkWnZsZneFaPyr0LRHJnkbQ>
-    <xme:WI73YM5bRfjwcMO7Il36rlfv2iDSEfaJ9yG7L9ceVLjzGH90gbvHHPjFP8HEIcdtG
-    a2jDukyv7rKrMau8t0>
-X-ME-Received: <xmr:WI73YOeCS0MAQkpxpW6wePjHoE0hj4BEZvjOwQ69UmHXuL8B3O23c_sVPGSmRkJY-S40PGeRgS4S>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeefgdehiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeeihffgteelkeelffduke
-    dtheevudejvdegkeekjeefhffhhfetudetgfdtffeunecuvehluhhsthgvrhfuihiivgep
-    udenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
-    grthdrtghomh
-X-ME-Proxy: <xmx:WY73YIKymcKrByOFVQ7T_4Wvr_LvzbI6A6GGjEGmuzOWltq85wJuag>
-    <xmx:WY73YLKR7XlsU12E0BojPWj_pmWnyQ5o8zKpNsZPENpaQ9Gh-f9wag>
-    <xmx:WY73YByRC4jhYajC3l3coqO_dzeMrAwI-RM2IBqN2Kx3a5I6cra_ZQ>
-    <xmx:WY73YID0gyUfaSUGCoo1JT5tohEig7qivS52czNkXCJaVmyIdl5dZogTyl0>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Jul 2021 23:02:44 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
-        daniel.lezcano@linaro.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v3 9/9] MIPS: Make a alias for pistachio_defconfig
-Date:   Wed, 21 Jul 2021 11:01:34 +0800
-Message-Id: <20210721030134.10562-10-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210721030134.10562-1-jiaxun.yang@flygoat.com>
-References: <20210721030134.10562-1-jiaxun.yang@flygoat.com>
+        id S231653AbhGUDDT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Jul 2021 23:03:19 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:44832 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231363AbhGUDDS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 20 Jul 2021 23:03:18 -0400
+Received: from ambrosehua-HP-xw6600-Workstation.lan (unknown [222.209.8.152])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxquDnl_dglzMiAA--.20549S2;
+        Wed, 21 Jul 2021 11:43:48 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Joshua Kinard <kumba@gentoo.org>
+Subject: [PATCH] MIPS: check return value of pgtable_pmd_page_ctor
+Date:   Wed, 21 Jul 2021 11:43:35 +0800
+Message-Id: <20210721034335.2015914-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxquDnl_dglzMiAA--.20549S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrur1UAF4fXw4fAw1UKw1UAwb_yoW8JryrpF
+        s3CFWkW3y5G34rWa43JrsY9r43J395GayktFW2934Sq3ZxWF1IqF97J3srZF45XFZ5JF4f
+        urWSqF47Gr4ayw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1l
+        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+        C2KfnxnUUI43ZEXa7VUjQBMtUUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-For those who miss the old defconfig, make a alias to generic
-kernel.
++. According to Documentation/vm/split_page_table_lock, handle failure
+of pgtable_pmd_page_ctor
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
-v2: Fix typo 'xilfpga
----
- arch/mips/Makefile | 3 +++
- 1 file changed, 3 insertions(+)
++. use GFP_KERNEL_ACCOUNT instead of GFP_KERNEL|__GFP_ACCOUNT
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index 258234c35a09..c299c6ae91af 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -563,6 +563,9 @@ sead3micro_defconfig-y		:= micro32r2el_defconfig BOARDS=sead-3
- legacy_defconfigs		+= xilfpga_defconfig
- xilfpga_defconfig-y		:= 32r2el_defconfig BOARDS=xilfpga
+Reported-by: Joshua Kinard <kumba@gentoo.org>
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+---
+ arch/mips/include/asm/pgalloc.h | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
+index d0cf997b4ba8..5c9597a6c60c 100644
+--- a/arch/mips/include/asm/pgalloc.h
++++ b/arch/mips/include/asm/pgalloc.h
+@@ -62,11 +62,15 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+ 	pmd_t *pmd = NULL;
+ 	struct page *pg;
  
-+legacy_defconfigs		+= pistachio_defconfig
-+pistachio_defconfig-y		:= 32r2el_defconfig BOARDS=marduk
+-	pg = alloc_pages(GFP_KERNEL | __GFP_ACCOUNT, PMD_ORDER);
++	pg = alloc_pages(GFP_KERNEL_ACCOUNT, PMD_ORDER);
+ 	if (pg) {
+-		pgtable_pmd_page_ctor(pg);
+-		pmd = (pmd_t *)page_address(pg);
+-		pmd_init((unsigned long)pmd, (unsigned long)invalid_pte_table);
++		if(pgtable_pmd_page_ctor(pg)) {
++			pmd = (pmd_t *)page_address(pg);
++			pmd_init((unsigned long)pmd, (unsigned long)invalid_pte_table);
++		} else {
++			__free_pages(pg, PMD_ORDER);
++		}
 +
- .PHONY: $(legacy_defconfigs)
- $(legacy_defconfigs):
- 	$(Q)$(MAKE) -f $(srctree)/Makefile $($@-y)
+ 	}
+ 	return pmd;
+ }
 -- 
-2.32.0
+2.25.1
 
