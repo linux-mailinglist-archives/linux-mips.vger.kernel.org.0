@@ -2,108 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E12B3D0D70
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jul 2021 13:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076D83D13AE
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jul 2021 18:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237450AbhGUKmw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 21 Jul 2021 06:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240044AbhGUKNV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 21 Jul 2021 06:13:21 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6451C061793;
-        Wed, 21 Jul 2021 03:53:38 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id l6so1081238wmq.0;
-        Wed, 21 Jul 2021 03:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LJLPqjjadNqhWPoGAN+pkYM5Do/hyvJF240tN9r8QeY=;
-        b=BBHF9cWJXUV0DxxVI5a6ZoitdphhzhjsBHqsoeK/iOSSpkbhNpWDC2G21o6D+ivFh6
-         Q88ZuIK3Oc3iqF2I4HnZ8/aOKY28bSFOTQK79Qhw9J6YwRPkyjwI+ts1K6sC0FTaZFpn
-         20MYCNk8R689/agbnGHFQSDUVTn5ue0L5FvJXjx0BOMFbO3oxAMHemuddEtzJVjdYD51
-         hxyQY4ZMwr+qw4Py+d5ESsNeR2HdeFotrEYcsUG4f9bM8YH6ZXXeat2eqMU47NaSEMdJ
-         32r3Jo9amfPs/+nN4yrPlzPAb+Hu9Y6XWmRRbSS78LTJXEvc4qdHhR0Aytp1wWSyQyRC
-         bvFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LJLPqjjadNqhWPoGAN+pkYM5Do/hyvJF240tN9r8QeY=;
-        b=b3mWjAnobzDueA9pO9HN4MPwRCO9Ez93C9zUyr7vI7W5arfb3axk1waBkqOsW9qBBo
-         Hv4CIpUZocfqIvXRtLuUEKiP1t+imvsEOiuM2FCap66HqhrerEB3++zNrUuZI1nHPFho
-         UMgoMwGaY/l16bx5juRNvrBYtFQmwtjE8cq7UKnvaQ315C0CwZQh6ScAawWzDjIs8wYO
-         ylMZuMB0ejvGVhRc4j68AnD84xA/LN5sAbfQN0PVqBXVemBSTQFk+OHJxvfgrW5lYn+I
-         gu7HvI4M+zhQa2RAaWqSDscSxrDGo4GjiSoqYshUTKqn4auoUXulnQXqZmclA5jFK4ZY
-         eKZg==
-X-Gm-Message-State: AOAM532TTikwldgrf8k2E8OPaZofBXCDyeO5u4IRAnYaLQo97JzMq74n
-        C0pQATwRkj7y2f1HdPFNixo=
-X-Google-Smtp-Source: ABdhPJwllgUANedBfKfd5LvirYSQm3kDpMoeWT4BPjiHaqIL4/PLmQnOYTN3WG2XLrbM6SRZWkqnZg==
-X-Received: by 2002:a1c:5458:: with SMTP id p24mr28502629wmi.131.1626864817224;
-        Wed, 21 Jul 2021 03:53:37 -0700 (PDT)
-Received: from monk.home (astrasbourg-157-1-7-84.w90-40.abo.wanadoo.fr. [90.40.218.84])
-        by smtp.gmail.com with ESMTPSA id o14sm26933641wrj.66.2021.07.21.03.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jul 2021 03:53:37 -0700 (PDT)
-From:   citral23 <cbranchereau@gmail.com>
-To:     paul@crapouillou.net
-Cc:     jic23@kernel.org, lars@metafoo.de, linux-mips@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org, linux@roeck-us.net,
-        contact@artur-rojek.eu, citral23 <cbranchereau@gmail.com>
-Subject: [PATCH 6/6] dt-bindings: iio/adc: ingenic: add the JZ4760(B) socs to the sadc Documentation
-Date:   Wed, 21 Jul 2021 12:53:17 +0200
-Message-Id: <20210721105317.36742-7-cbranchereau@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210721105317.36742-1-cbranchereau@gmail.com>
-References: <20210721105317.36742-1-cbranchereau@gmail.com>
+        id S232911AbhGUPgz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 21 Jul 2021 11:36:55 -0400
+Received: from elvis.franken.de ([193.175.24.41]:43886 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232785AbhGUPgz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 21 Jul 2021 11:36:55 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1m6EuY-00011A-00; Wed, 21 Jul 2021 18:17:30 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 29583C0EF7; Wed, 21 Jul 2021 18:17:19 +0200 (CEST)
+Date:   Wed, 21 Jul 2021 18:17:19 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        list@opendingux.net, Kees Cook <keescook@chromium.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Subject: Re: [PATCH] MIPS: Avoid macro redefinitions
+Message-ID: <20210721161719.GA9805@alpha.franken.de>
+References: <20210718130748.230758-1-paul@crapouillou.net>
+ <CAKwvOdkVEa-CxbVschn5Tnh7-Ynvzcz+zChhP3LL3Q745wE7_A@mail.gmail.com>
+ <7YIIWQ.1TU3IBLL4KNC2@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7YIIWQ.1TU3IBLL4KNC2@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Signed-off-by: citral23 <cbranchereau@gmail.com>
----
- .../devicetree/bindings/iio/adc/ingenic,adc.yaml         | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On Mon, Jul 19, 2021 at 11:10:55PM +0100, Paul Cercueil wrote:
+> > >   #ifndef TOOLCHAIN_SUPPORTS_VIRT
+> > 
+> > Same question for GAS version support for virt?
+> > Documentation/process/changes.rst
+> > says GNU binutils 2.23+ is required for building the kernel.
+> > If we still need to support, have you tested this change on such an
+> > older version of GNU binutils?
+> 
+> I have no idea about virt support - I hope Thomas can answer this.
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
-index 433a3fb55a2e..1b423adba61d 100644
---- a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
-@@ -23,6 +23,8 @@ properties:
-     enum:
-       - ingenic,jz4725b-adc
-       - ingenic,jz4740-adc
-+      - ingenic,jz4760-adc
-+      - ingenic,jz4760b-adc
-       - ingenic,jz4770-adc
- 
-   '#io-channel-cells':
-@@ -43,6 +45,12 @@ properties:
-   interrupts:
-     maxItems: 1
- 
-+  ingenic,use-internal-divider: 
-+    description:
-+      This property can be used to set VBAT_SEL in the JZ4760B CFG register
-+      to sample the battery voltage from the internal divider. If absent, it
-+      will sample the external divider.  
-+
- required:
-   - compatible
-   - '#io-channel-cells'
-@@ -53,6 +61,7 @@ required:
- 
- additionalProperties: false
- 
-+
- examples:
-   - |
-     #include <dt-bindings/clock/jz4740-cgu.h>
+virt support was added in 2.24 and xpa in 2.25. So we still need the
+TOOLCHAIN defines for it.
+
+Thomas.
+
 -- 
-2.30.2
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
