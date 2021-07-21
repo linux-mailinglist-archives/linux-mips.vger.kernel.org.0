@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5893D06FA
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jul 2021 05:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2BF3D0708
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jul 2021 05:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbhGUCWP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Jul 2021 22:22:15 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:42857 "EHLO
+        id S232149AbhGUCXA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Jul 2021 22:23:00 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:47513 "EHLO
         wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231432AbhGUCVs (ORCPT
+        by vger.kernel.org with ESMTP id S231467AbhGUCVy (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 20 Jul 2021 22:21:48 -0400
+        Tue, 20 Jul 2021 22:21:54 -0400
 Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id 779282B0050A;
-        Tue, 20 Jul 2021 23:02:24 -0400 (EDT)
+        by mailnew.west.internal (Postfix) with ESMTP id 836962B00513;
+        Tue, 20 Jul 2021 23:02:30 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 20 Jul 2021 23:02:25 -0400
+  by compute1.internal (MEProxy); Tue, 20 Jul 2021 23:02:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=NmMGZALgUPfiC
-        ccQxTOVbNtmDLubEwgB51Zr56BaCn0=; b=PcEaaYDu52lvwFxg5OyLeD/V10jvi
-        RDRHWOI0ewk2d9okT13W8mOIpTSDMS4M/+IfY3ppQ3zqFDaDW4SNiuZ2IXQoZU5m
-        FQGA+31XVxYRBK8ppPIEfWTR6n7jTCT1wNSJfNn47okps5LWnlGJMHa7YuRYjNrn
-        KKdiCVboIkMRlnADvxN8zj9FHqdUdJxdlpVjpi8Z+tFi/036Q3Yx2nixo9po5ue0
-        nZEpuZzCvLGBRcCzAxUVIkBWL7tN11laZcS25qUTsNie9xhI8lduMJ2Kmc/gDl0r
-        n3QeX6Qowcb5FtAaP9mrvXfg64QocqwQHhzevzfvxGquTT5iestbsr5Mg==
+        :mime-version:content-transfer-encoding; s=fm2; bh=l9PH4QLd/cM4/
+        cQPPaMBDFls0x1FzgEX2pJ1FwyEWZE=; b=cZcSPfT5nsjjHMnKkcGG4XUIp3fUn
+        lVTfUhUBnD0sEZAZxcO5JLQyhNrfPihJq8cjYa9Dc4vG7I8L2Sm1qO0/XW9TzFV/
+        GJdDKjNwXmmH2w6hhmMRc9fkhlrLB0xfssZeMjIb4F28e3pG7s8vBXZ/PUqAQ9Xb
+        F7YuX6ZODSCrZHdE0WT39bubElqe1j2u2t49yJF3i1rP5mWwIgTwbjv2EAJjISg/
+        0ezy4afrUBwW18uFMIUGUZKP1Q1qfxIauaNdzt/lNLsmcy8SnQOnJ5p5ndJMkiUj
+        2iq2oJr9ol0740UlZiTrGPuCcvY+Hu/pGvnSf1CXVg/qKDnlLLb1wjMNw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=NmMGZALgUPfiCccQxTOVbNtmDLubEwgB51Zr56BaCn0=; b=Px378Bsg
-        GWj8+NsXIduf199Dd+W51fFOuAcWpskFNbUeNVuDwN2iTMnb8/7tvq6Ptw3Ytpr8
-        0s1DeetpJpX0SLTGSA3sLY2E89584v2kSaSeowJiTBntkJnqz6GIKZJel9PPTqoK
-        fuaIwuK/KuAfl+PJW4sEpJBQUA9YLUaoUwTq6Dz8V3G8AjQEmsvwuUIUlcOgi6Hy
-        RUxDDjXGeOYakNZvZJEJ0ixNMl37O1DdwsJBgQoZid6lWwrBJC4/GyPN31Z9pkdI
-        +Z+XbCI9zzRxbDVUcY5WjkLWpv2CNjmQfpCD1Bnzthp/sotOAd6vNzgmZ2o0yNVw
-        Nj+RIYOgoWi/ug==
-X-ME-Sender: <xms:QI73YHP3wcek5iGG1S7B1sAVo8MB7rAmSJiokaKdEd3ymig630QKGw>
-    <xme:QI73YB_K4XGihIZDxcarNfgda9ByDxnHsAhEjmQWQImwPPBTrGDjro2Vpz4F4fQDS
-    V6Hgs9jgVsznYjGenA>
-X-ME-Received: <xmr:QI73YGRBr4Y6QhY1b_7aQ9aTfq7IyAsaBOpckG16VmXbTsqCBZK_Lc9grK8vjwCesbcuBYWPC7ym>
+        fm3; bh=l9PH4QLd/cM4/cQPPaMBDFls0x1FzgEX2pJ1FwyEWZE=; b=vunWxpF3
+        uuKUM6YB6XS6QSZKOE0H+AkNwupXkbVZEngcYsIOVh8iKdcoRK6i1A9woMjXTwLs
+        gIS58kw0Zlv/daSi84xOU1fMgmXvZrFt2Co/uaPStn3DVfeUURFgt18sVNHK3i5o
+        MWpyn7Ezm/Rpvzc/cmGM+Y1bliJX79vV6fxPNmt9j78P/Fu5Mvivrx3lZwQQCQjP
+        Y8fIv7MUe7r9nzeAD6Xa1qhqM1bFQznmm+Eo9kp7K1Lgw0TXWLEz3s07+x7jIdnD
+        h3/Gd40mVbNd8c3zGOXuRDKLoZPm6bqsjSVIxuAsdIiKkHO8y5GZifRiEHZcPZHJ
+        ahGStgAfpR232Q==
+X-ME-Sender: <xms:Ro73YOtff6AAhz5vCgIkNpp-8y4GwJVuaAEaYeRp-EV1NRU0PKZwNQ>
+    <xme:Ro73YDcVA0U0Pq1dxbjDXIdyTv7xu7-XeyU_ZJHIKwe5_Baee3C91g8PaF5VznFUE
+    4I9hO6i9oI7IDuY_AM>
+X-ME-Received: <xmr:Ro73YJzKc18epeX5tVFiIXuZuIMRcJ7AJ3_5cWSHmxDLQ6QbIK9BJk80lYOCncIQ1W7ErB-gwS9D>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeefgdehiecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
     ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
     fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeeihffgteelkeelffduke
     dtheevudejvdegkeekjeefhffhhfetudetgfdtffeunecuvehluhhsthgvrhfuihiivgep
-    udenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    vdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
     grthdrtghomh
-X-ME-Proxy: <xmx:QI73YLsbchLa6d1rxTFxqJxF5omI4W3eo-bi5KgXStnaiaIRpqjcCA>
-    <xmx:QI73YPeUJ1Y9yigbY-NyxW9Y4IM26TtCqGSrfQ_FPUDuWWJk4TZADg>
-    <xmx:QI73YH3zSkVjTGfmCUzFnOklV6WmPIgWbhUUstxmHyOpFgU4VzSjwg>
-    <xmx:QI73YAVTid84vKVRvSblxq9crjVv3T0W9qh2cl3dX7rZ1SdfsonRwNAkigc>
+X-ME-Proxy: <xmx:Ro73YJPYCAFKXpYcGNRWE1R5jqw4fsJy_vI09Df-msnn0RhbcZYKQQ>
+    <xmx:Ro73YO8MIMGM_ZPYPsyyDc32Txm86m_lhT7mHHqgqrdWMYODZh1qVw>
+    <xmx:Ro73YBXYfrXRWvymNMQwLitWd1b6LS58vi5pAS1XqaQ4svQouYu_gg>
+    <xmx:Ro73YP2471XS2PsYEUO0Fiosw63bVz3GWkWgUd9Yp3UMML3cOLNmM6FZR2s>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Jul 2021 23:02:19 -0400 (EDT)
+ 20 Jul 2021 23:02:25 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
@@ -63,9 +63,9 @@ Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
         linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v3 5/9] phy: pistachio-usb: Depend on MIPS || COMPILE_TEST
-Date:   Wed, 21 Jul 2021 11:01:30 +0800
-Message-Id: <20210721030134.10562-6-jiaxun.yang@flygoat.com>
+Subject: [PATCH v3 6/9] pinctrl: pistachio: Make it as an option
+Date:   Wed, 21 Jul 2021 11:01:31 +0800
+Message-Id: <20210721030134.10562-7-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210721030134.10562-1-jiaxun.yang@flygoat.com>
 References: <20210721030134.10562-1-jiaxun.yang@flygoat.com>
@@ -78,23 +78,33 @@ X-Mailing-List: linux-mips@vger.kernel.org
 So it will be avilable for generic MIPS kernel.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+--
+v3: Depend on OF as well
 ---
- drivers/phy/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pinctrl/Kconfig | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index 54c1f2f0985f..f3b08722261d 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -37,7 +37,7 @@ config PHY_LPC18XX_USB_OTG
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index c2c7e7963ed0..295f5eec58a9 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -248,12 +248,15 @@ config PINCTRL_SX150X
+ 	  - 16 bits: sx1509q, sx1506q
  
- config PHY_PISTACHIO_USB
- 	tristate "IMG Pistachio USB2.0 PHY driver"
--	depends on MACH_PISTACHIO
-+	depends on MIPS || COMPILE_TEST
- 	select GENERIC_PHY
- 	help
- 	  Enable this to support the USB2.0 PHY on the IMG Pistachio SoC.
+ config PINCTRL_PISTACHIO
+-	def_bool y if MACH_PISTACHIO
++	bool "IMG Pistachio SoC pinctrl driver"
++	depends on OF && (MIPS || COMPILE_TEST)
+ 	depends on GPIOLIB
+ 	select PINMUX
+ 	select GENERIC_PINCONF
+ 	select GPIOLIB_IRQCHIP
+ 	select OF_GPIO
++    help
++	  This support pinctrl and gpio driver for IMG Pistachio SoC.
+ 
+ config PINCTRL_ST
+ 	bool
 -- 
 2.32.0
 
