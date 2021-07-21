@@ -2,118 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE943D06A1
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jul 2021 04:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9392B3D06E3
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jul 2021 05:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbhGUBcA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 20 Jul 2021 21:32:00 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:53970 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231392AbhGUBbi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 20 Jul 2021 21:31:38 -0400
-Received: from ambrosehua-HP-xw6600-Workstation (unknown [89.187.161.155])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax2uBsgvdgXy0iAA--.23716S2;
-        Wed, 21 Jul 2021 10:11:59 +0800 (CST)
-Date:   Wed, 21 Jul 2021 10:11:54 +0800
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Joshua Kinard <kumba@gentoo.org>
-Cc:     Linux/MIPS <linux-mips@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [RFC]: Maybe revert 'MIPS: add PMD table accounting into
- MIPS'pmd_alloc_one' from 5.4 LTS?
-Message-ID: <20210721021154.dlyrrtljz2hrlqng@ambrosehua-HP-xw6600-Workstation>
-References: <370c2578-5032-08d6-9f48-c2f284a9b62d@gentoo.org>
+        id S231325AbhGUCV2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 20 Jul 2021 22:21:28 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:35791 "EHLO
+        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230451AbhGUCVW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 20 Jul 2021 22:21:22 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 830012B004FC;
+        Tue, 20 Jul 2021 23:01:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 20 Jul 2021 23:01:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm2; bh=GohC1Xd2UWQStJhSae6I3++vzG
+        AiFbgghmNjmKdy6j0=; b=WkXI/MCbn1fdpcTgR+wb7KadJo2Vm9HCph5shcJ5fw
+        LYRDLfRigLkGW0a0D0eca5+Io5zoJ+3AcC+MFGyAhfR580IPuGevvY+cCdjxUeH3
+        upWSTgr1WxW1Bi7FuN7NuHWCGaNTTfzAAuGjP9uHLvHwoXYgLtL8eyfw6x0RKQr3
+        HwjDppjmKqICiVBQtS/FUzGnQpzUH2rtQhEE6vLV46mDZC3Qfqr5dl3f4jFl2BLp
+        7s1G41F1pKrT22dEqdDOb9wjED8koMRZMYO3U7yrJ1Z3MDIrSxAgEjDBAQAQy7Om
+        hOUcsg4TfyB59O4hW+4o1/bEnEo4yUViVUQOMkiZOrJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=GohC1Xd2UWQStJhSa
+        e6I3++vzGAiFbgghmNjmKdy6j0=; b=d1SIOQXhNs3X+miPCQAPoOp2/pnho2Uy1
+        pYjs9EtfY5f/oVC3b+pZ8LjDAoLHZd8yx1S2JbTPGJFEc+CeLidtYfYFlIena/Rs
+        /8RVhnvd2gS0GAyhrUmbTEopQhKfeLS4k+FA0iuxTHiPcm28OVGA0gSjBFD2ALCI
+        /RQCxalysJMESF6nAdXfJBLRRjAlPLUNHqU1MINCmYUvfuRbUvki0ADsg6AGURga
+        6jdBvAUPbq4E+c3+hXT5kobyO/QpwI+j60qdu1CAfgirEjivU6Ld1PjmwwS6Gw/w
+        WFfsSkcCFjpssqJ6P1zhmsdHnwzEUh9+j5tlb1oUb/kPRbkgbHXoQ==
+X-ME-Sender: <xms:II73YGW0qEDVTEvZ2GJHRq1-sRxJyYBvZVvXVk6dLNFF2d8ADMJzrA>
+    <xme:II73YCmp-UQ2Boiz39sGD21Sd4vdp37WhODwXIde9Zi4BtD0WVxZwMHKCtj770zIg
+    yxsykfd9mer8ar6Cm8>
+X-ME-Received: <xmr:II73YKY0dCPWU2gOMNBRy-WqIBuOScgs8xiFvT4FKQIhQirKFYBJ5g0vtHjmtPlOflyilZ3nj_8S>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeefgdehiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhl
+    hihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfejtdektdeuhedtieefteekve
+    ffteejteefgeekveegffetvddugfeliefhtddunecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrth
+    drtghomh
+X-ME-Proxy: <xmx:II73YNX6skF8MxyWwDXkQV8EfMmJxDsAl5ACgjkilBL17nw0xtUh9g>
+    <xmx:II73YAnvL_WmV8ybFDoPOz9DzLNbUG6BmiEPVdTrtFfD1qn1kszHJw>
+    <xmx:II73YCd5XSHw6t3T1ojDmj_xC_0U4jFhgLbZQAONJHr3z8p704WP6A>
+    <xmx:Io73YJdVhOEQzb6RKtplBhWoAxZeJyLLIUAKuJusIX0M5ja15XCCsfTCXhc>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 20 Jul 2021 23:01:48 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
+        daniel.lezcano@linaro.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v3 0/9] MIPS: Migrate pistachio to generic kernel
+Date:   Wed, 21 Jul 2021 11:01:25 +0800
+Message-Id: <20210721030134.10562-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <370c2578-5032-08d6-9f48-c2f284a9b62d@gentoo.org>
-X-CM-TRANSID: AQAAf9Ax2uBsgvdgXy0iAA--.23716S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr17JFy7XF1kJryDGF47twb_yoW5Ww4kpF
-        Z5WFyrtws5J3WvvwsFyrnY9FyUAw4xJayUW3WFy34rZwn8XryktFySqFZ0vayDWwn5X3y2
-        qr4xKF1FkrZYvaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
-        xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkIecxEwVAF-wCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IUYPR67UUUUU==
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 20, 2021 at 08:45:45PM -0400, Joshua Kinard wrote:
-Hi, 
-> (resend using the correct list address)
-> 
-> Hi all,
-> 
-> I think there may be an issue with upstream commit
-> ed914d48b6a1040d1039d371b56273d422c0081e (MIPS: add PMD table accounting
-> into MIPS'pmd_alloc_one), which got backported to 5.4 LTS.
-> 
-> I am running my SGI Octane on the 5.4 LTS kernel series w/ Gentoo's IP30
-> patches, since basic IP30 support didn't get fully mainlined until ~5.7 and
-> I am just behind on kernels for the time being.  Generally, the 5.4 series
-> is stable on this machine, but as of using 5.4.133 yesterday and 5.4.134
-> today, I have had three kernel panics, all with completely different stack
-> traces, while building a multilib-enabled glibc-2.33 package.
-> 
-> Since the stack traces are all completely different, I am suspecting an
-> issue with memory allocation, which picking through the 5.4.133 changelog,
-> got me to look at commit ed914d48b6a1.  My initial thought is it looks like
-> this patch should not have been backported to 5.4, because 5.4 is missing
-> the asm-generic version of pmd_free(), which means the MIPS-specific version
-> is likely used instead, and that function was not updated alongside
-> pmd_alloc_one().
-> 
-> Now, I am not a memory person, but some quick reading indicates there may be
-> some other issues with this patch as well:
-> 
-> - use of 'GFP_KERNEL | __GFP_ACCOUNT' when there is GFP_KERNEL_ACCOUNT
-> available.
-Yes, this is better
-> 
-> - the return value of pgtable_pmd_page_ctor(pg); is not checked to make sure
-> it succeeded.  Per Documentation/vm/split_page_table_lock, "NOTE:
-> pgtable_page_ctor() and pgtable_pmd_page_ctor() can fail -- it must
-> be handled properly."
+I'm lucky enough to get a Creator CI40 board from dusts.
+This patchset move it to gerneic kernel to reduce maintenance burden.
+It have been tested with SD Card boot.
 
-Yes, I missed this one
-> 
-> - there is no call to pgtable_pmd_page_dtor() in pmd_free() in MIPS'
-> pgalloc.  The commit message indicates that pmd_free in asm-generic will
-> handle this, but that function doesn't exist in 5.4, leading to mismatched
-> implementations.
+--
+v2: Minor fixes
+v3: Typo fixes and 0day testbot warning fix (Thanks to Sergei!)
 
-Yes, my fix is to fix the mismatch. 
+Jiaxun Yang (9):
+  MIPS: generic: Allow generating FIT image for Marduk board
+  MIPS: DTS: Pistachio add missing cpc and cdmm
+  clk: pistachio: Make it selectable for generic MIPS kernel
+  clocksource/drivers/pistachio: Make it selectable for MIPS
+  phy: pistachio-usb: Depend on MIPS || COMPILE_TEST
+  pinctrl: pistachio: Make it as an option
+  MIPS: config: generic: Add config for Marduk board
+  MIPS: Retire MACH_PISTACHIO
+  MIPS: Make a alias for pistachio_defconfig
 
-I think all stable branches before 5.10 should *not* apply this my patch
-> 
-> I think the fix is to either revert ed914d48b6a1 on the 5.4 stable series
-> (and any earlier series that are missing asm-generic pmd_free), or the MIPS
-> pmd_free() needs to be updated to call pgtable_pmd_page_dtor() in a similar
-> manner to x86 and arm64.  I'd opt for reverting.
-> 
-> Currently testing a build of 5.4.134 with this patch reverted running some
-> compile jobs.  If it survives building multilib glibc, then I think my
-> suspicions may be valid.
-> 
-> -- 
-> Joshua Kinard
-> Gentoo/MIPS
-> kumba@gentoo.org
-> rsa6144/5C63F4E3F5C6C943 2015-04-27
-> 177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
-> 
-> "The past tempts us, the present confuses us, the future frightens us.  And
-> our lives slip away, moment by moment, lost in that vast, terrible in-between."
-> 
-> --Emperor Turhan, Centauri Republic
+ arch/mips/Kbuild.platforms                    |   1 -
+ arch/mips/Kconfig                             |  29 --
+ arch/mips/Makefile                            |   3 +
+ arch/mips/boot/dts/Makefile                   |   2 +-
+ arch/mips/boot/dts/img/Makefile               |   3 +-
+ arch/mips/boot/dts/img/pistachio.dtsi         |  10 +
+ arch/mips/configs/generic/board-marduk.config |  53 +++
+ arch/mips/configs/pistachio_defconfig         | 316 ------------------
+ arch/mips/generic/Kconfig                     |   6 +
+ arch/mips/generic/Platform                    |   1 +
+ arch/mips/generic/board-marduk.its.S          |  22 ++
+ arch/mips/pistachio/Kconfig                   |  14 -
+ arch/mips/pistachio/Makefile                  |   2 -
+ arch/mips/pistachio/Platform                  |   6 -
+ arch/mips/pistachio/init.c                    | 125 -------
+ arch/mips/pistachio/irq.c                     |  24 --
+ arch/mips/pistachio/time.c                    |  55 ---
+ drivers/clk/Kconfig                           |   1 +
+ drivers/clk/Makefile                          |   2 +-
+ drivers/clk/pistachio/Kconfig                 |   8 +
+ drivers/clocksource/Kconfig                   |   3 +-
+ drivers/phy/Kconfig                           |   2 +-
+ drivers/pinctrl/Kconfig                       |   5 +-
+ 23 files changed, 114 insertions(+), 579 deletions(-)
+ create mode 100644 arch/mips/configs/generic/board-marduk.config
+ delete mode 100644 arch/mips/configs/pistachio_defconfig
+ create mode 100644 arch/mips/generic/board-marduk.its.S
+ delete mode 100644 arch/mips/pistachio/Kconfig
+ delete mode 100644 arch/mips/pistachio/Makefile
+ delete mode 100644 arch/mips/pistachio/Platform
+ delete mode 100644 arch/mips/pistachio/init.c
+ delete mode 100644 arch/mips/pistachio/irq.c
+ delete mode 100644 arch/mips/pistachio/time.c
+ create mode 100644 drivers/clk/pistachio/Kconfig
+
+-- 
+2.32.0
 
