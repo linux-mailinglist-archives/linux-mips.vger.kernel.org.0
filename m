@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6093D3FD8
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Jul 2021 19:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D563D3FDE
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Jul 2021 19:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbhGWRKk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 23 Jul 2021 13:10:40 -0400
-Received: from ale.deltatee.com ([204.191.154.188]:50820 "EHLO
+        id S233808AbhGWRKl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 23 Jul 2021 13:10:41 -0400
+Received: from ale.deltatee.com ([204.191.154.188]:50828 "EHLO
         ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232787AbhGWRKA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Jul 2021 13:10:00 -0400
+        with ESMTP id S232812AbhGWRKB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 23 Jul 2021 13:10:01 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Cc:To:From:content-disposition;
-        bh=pjSijkDDmu3vPdSgTQKQdclfdyX/CqsmmRRmSWCrGaw=; b=LSuxCbxfYApKFXQ8AgDo9tdTW+
-        qACHbjqbafKVLzWCuI3rtcs2e6WgSEYr8PwVrlp4KWjFXepNuEWOInVkpu9RN2yt81EVF6eiy0LTC
-        Y2By7V77Ne5yKvu87vQSuV+1CGWO8wJmDlHlSeP+Y4k8K1VgdotJlr1CP7U6N+SlCotgM20SLWMmh
-        Ko34yDRUgMm1jFTAIqaRTMTHxxBL0yAUNnVZnq8On76IboN+KPe81sLtRozcb4RdM5wqHxSK++6b2
-        sHgmAVy4CwTbO4mNcLgJzF5wa74lzZY3DkOA1MkiIAOKrGrnN5zZOE7SzSoZMpf9tsWKPArLsOFNX
-        KjPrt9Zg==;
+        bh=HMmFCnKiUdZs8XdQrQe+q8n2y8J+pVaubqcncKbrGOc=; b=TxLSaXfyIrqdZibn+BQXuDk4R/
+        QkjnyO3+7nKEqm6/dBDGqT9B6ehiUwEjYK3p6z170ejG3qzLM7cTIghm+rBdXZtQylTGtZVq/PclA
+        W/tzGcPoosyMbkawZFt6ijD+3xj0KCAMjE/J7NDII9fGZO3zJMzjnCUD5cFRAPB6OMusUcsTmC4+9
+        R8vDLwVQz5dveEX3lbp3d+dJBFS7utdZyK6HVFyf/72sMOPvIje20PrC/wLI1/0SrI35auk/pob13
+        v/FTtTdGeL7zv+mRT/II5A1r8zGvHtaivtA+dsqs3svnUmz2syz2Fr1FHKlWH7Qi77t3YHbS9HKjx
+        an0vDIlA==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1m6zJe-0005Lh-Oe; Fri, 23 Jul 2021 11:50:31 -0600
+        id 1m6zJe-0005Lg-MM; Fri, 23 Jul 2021 11:50:31 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.92)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1m6zJL-0005qw-NN; Fri, 23 Jul 2021 11:50:11 -0600
+        id 1m6zJL-0005qz-RW; Fri, 23 Jul 2021 11:50:11 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
@@ -41,22 +41,26 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Stephen Bates <sbates@raithlin.com>,
         Martin Oliveira <martin.oliveira@eideticom.com>,
         Logan Gunthorpe <logang@deltatee.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date:   Fri, 23 Jul 2021 11:49:56 -0600
-Message-Id: <20210723175008.22410-10-logang@deltatee.com>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Geoff Levand <geoff@infradead.org>
+Date:   Fri, 23 Jul 2021 11:49:57 -0600
+Message-Id: <20210723175008.22410-11-logang@deltatee.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210723175008.22410-1-logang@deltatee.com>
 References: <20210723175008.22410-1-logang@deltatee.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 172.16.1.31
-X-SA-Exim-Rcpt-To: linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org, hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com, sbates@raithlin.com, martin.oliveira@eideticom.com, logang@deltatee.com, tsbogend@alpha.franken.de
+X-SA-Exim-Rcpt-To: linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, linux-parisc@vger.kernel.org, xen-devel@lists.xenproject.org, hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com, sbates@raithlin.com, martin.oliveira@eideticom.com, logang@deltatee.com, mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org, geoff@infradead.org
 X-SA-Exim-Mail-From: gunthorp@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on ale.deltatee.com
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.7 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        MYRULES_NO_TEXT autolearn=no autolearn_force=no version=3.4.2
-Subject: [PATCH v2 09/21] MIPS/jazzdma: return error code from jazz_dma_map_sg()
+        MYRULES_NO_TEXT,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.2
+Subject: [PATCH v2 10/21] powerpc/iommu: return error code from .map_sg() ops
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
@@ -67,30 +71,85 @@ From: Martin Oliveira <martin.oliveira@eideticom.com>
 
 The .map_sg() op now expects an error code instead of zero on failure.
 
-vdma_alloc() may fail for different reasons, but since it only supports
-indicating an error via a return of DMA_MAPPING_ERROR, we coalesce the
-different reasons into -EIO as is documented on dma_map_sgtable().
+Propagate the error up if vio_dma_iommu_map_sg() fails.
+
+ppc_iommu_map_sg() may fail either because of iommu_range_alloc() or
+because of tbl->it_ops->set(). The former only supports returning an
+error with DMA_MAPPING_ERROR and an examination of the latter indicates
+that it may return arch-specific errors (for example,
+tce_buildmulti_pSeriesLP()). Hence, coalesce all of those errors into
+-EIO, per the documentation on dma_map_sgtable().
 
 Signed-off-by: Martin Oliveira <martin.oliveira@eideticom.com>
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: Geoff Levand <geoff@infradead.org>
 ---
- arch/mips/jazz/jazzdma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/kernel/iommu.c             | 4 ++--
+ arch/powerpc/platforms/ps3/system-bus.c | 2 +-
+ arch/powerpc/platforms/pseries/vio.c    | 5 +++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/arch/mips/jazz/jazzdma.c b/arch/mips/jazz/jazzdma.c
-index 461457b28982..eabddb89d221 100644
---- a/arch/mips/jazz/jazzdma.c
-+++ b/arch/mips/jazz/jazzdma.c
-@@ -552,7 +552,7 @@ static int jazz_dma_map_sg(struct device *dev, struct scatterlist *sglist,
- 				dir);
- 		sg->dma_address = vdma_alloc(sg_phys(sg), sg->length);
- 		if (sg->dma_address == DMA_MAPPING_ERROR)
--			return 0;
-+			return -EIO;
- 		sg_dma_len(sg) = sg->length;
- 	}
+diff --git a/arch/powerpc/kernel/iommu.c b/arch/powerpc/kernel/iommu.c
+index 2af89a5e379f..a8ec4fe42817 100644
+--- a/arch/powerpc/kernel/iommu.c
++++ b/arch/powerpc/kernel/iommu.c
+@@ -473,7 +473,7 @@ int ppc_iommu_map_sg(struct device *dev, struct iommu_table *tbl,
+ 	BUG_ON(direction == DMA_NONE);
  
+ 	if ((nelems == 0) || !tbl)
+-		return 0;
++		return -EINVAL;
+ 
+ 	outs = s = segstart = &sglist[0];
+ 	outcount = 1;
+@@ -599,7 +599,7 @@ int ppc_iommu_map_sg(struct device *dev, struct iommu_table *tbl,
+ 		if (s == outs)
+ 			break;
+ 	}
+-	return 0;
++	return -EIO;
+ }
+ 
+ 
+diff --git a/arch/powerpc/platforms/ps3/system-bus.c b/arch/powerpc/platforms/ps3/system-bus.c
+index 1a5665875165..c54eb46f0cfb 100644
+--- a/arch/powerpc/platforms/ps3/system-bus.c
++++ b/arch/powerpc/platforms/ps3/system-bus.c
+@@ -663,7 +663,7 @@ static int ps3_ioc0_map_sg(struct device *_dev, struct scatterlist *sg,
+ 			   unsigned long attrs)
+ {
+ 	BUG();
+-	return 0;
++	return -EINVAL;
+ }
+ 
+ static void ps3_sb_unmap_sg(struct device *_dev, struct scatterlist *sg,
+diff --git a/arch/powerpc/platforms/pseries/vio.c b/arch/powerpc/platforms/pseries/vio.c
+index e00f3725ec96..e31e59c54f30 100644
+--- a/arch/powerpc/platforms/pseries/vio.c
++++ b/arch/powerpc/platforms/pseries/vio.c
+@@ -560,7 +560,8 @@ static int vio_dma_iommu_map_sg(struct device *dev, struct scatterlist *sglist,
+ 	for_each_sg(sglist, sgl, nelems, count)
+ 		alloc_size += roundup(sgl->length, IOMMU_PAGE_SIZE(tbl));
+ 
+-	if (vio_cmo_alloc(viodev, alloc_size))
++	ret = vio_cmo_alloc(viodev, alloc_size);
++	if (ret)
+ 		goto out_fail;
+ 	ret = ppc_iommu_map_sg(dev, tbl, sglist, nelems, dma_get_mask(dev),
+ 			direction, attrs);
+@@ -577,7 +578,7 @@ static int vio_dma_iommu_map_sg(struct device *dev, struct scatterlist *sglist,
+ 	vio_cmo_dealloc(viodev, alloc_size);
+ out_fail:
+ 	atomic_inc(&viodev->cmo.allocs_failed);
+-	return 0;
++	return ret;
+ }
+ 
+ static void vio_dma_iommu_unmap_sg(struct device *dev,
 -- 
 2.20.1
 
