@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EC73D31AC
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Jul 2021 04:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FE63D31B1
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Jul 2021 04:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbhGWBpu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Jul 2021 21:45:50 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:38769 "EHLO
+        id S233308AbhGWBpy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Jul 2021 21:45:54 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:43075 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233308AbhGWBpq (ORCPT
+        by vger.kernel.org with ESMTP id S233324AbhGWBpw (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 22 Jul 2021 21:45:46 -0400
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.nyi.internal (Postfix) with ESMTP id AB3D65808BF;
-        Thu, 22 Jul 2021 22:26:20 -0400 (EDT)
+        Thu, 22 Jul 2021 21:45:52 -0400
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id A0DE75808BF;
+        Thu, 22 Jul 2021 22:26:25 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 22 Jul 2021 22:26:20 -0400
+  by compute5.internal (MEProxy); Thu, 22 Jul 2021 22:26:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=GDs/JfNH4KsVD
-        SUz8zkXViG0OizllYpknHVtjbEEgAA=; b=Kr+InkXUKZdJ916Poj6gB6jHkRKBV
-        F1EYWHM4KUJxlO2C1twPaFZ6k+3AneXL1SnAlb9wMkh7l2v0gDFrdMdUBx/HCyyx
-        Rfy6ng9h3ig6JgkXDVYqStMI4hUob+TeOEB+deUiceIX3dqTnpwQoqofY0IcnfBH
-        IDwf/BxjkUMz4LWeHYFc7gC/mAEu6wVmiKmYwZp/wwRJ1QvcgLiGkKdCJAr4Gm+4
-        QPBcnBlopVV0pGMa2NgU+z7K+5G/X25SriVSsqXKZk1QMfiE0oCunKQF0lNiZDb6
-        aVa5yWylqb2XW8HFlhGhtiTdHHzXorj0qwEiUHRYxmgDWkBcYke2bjVBA==
+        :mime-version:content-transfer-encoding; s=fm2; bh=JP7wdmNFOkH8l
+        L9Kd1NTkGq2wgQnz+eShdtgKZ4UvNY=; b=Ki3BueC2LPKfVT8X6Gvobl0IAxmHn
+        Fc+Yx111wcX1bgFXBL8HSlRmxsWdiYalmpM/iU90cxv9KebSMIeRxDPGyYk4YsS3
+        peCudLfOZt8uy5uPYfGMszDmcHrNnq38VKG8Ff17akLJtdEOV5L0kzSOCS5KOU+A
+        LTenvv8a2tIIeX+K/PXXXmg6quQRP5ij3Aq5k8EYx/GttL8N7S1613d9jhVYWwpU
+        PlvWF8TciMpNlswdt7gvO6rwL8Xdd+Wkgw4NydqirLN3XRaEMV5vsdNXgribifBh
+        pGZhRqx+Uijx76JCWakMKw50jVX7hXctGV/sFCvm8wvgtVK1R3TlEZX3w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=GDs/JfNH4KsVDSUz8zkXViG0OizllYpknHVtjbEEgAA=; b=PT5mhDuF
-        c2wWzcQ3jcECQs1sns9qwiA+atQamoOI2RKYjsW4lkACyTA8nfqUXPK0rgkRiJ33
-        oxPygByKgXKNQuwvaN3sawvja1orHpuSAvZnXkFCd+Gk37oFBr75wumPrIhcFdQb
-        gFF9+7inLj5754Nfy0Tr+8ihy2o2Cbep4heK3ASZv5ew8jAugVkn7lvKlU5NyGUw
-        Ljow8S8dFH5KEDNGSk5RgBU92RRvCFmhQ40emcXC9vE8PNpkOAENvRjfw+bnWzyE
-        Th4a8G5eahQIoA8YV3qXYSEwez6jZFoh18GfQJQMsRqmfzw90fnv5jm1pKjPaYHH
-        wMncsHv/jToAbw==
-X-ME-Sender: <xms:yij6YBvqFBklcT521djTYoh9kCUKR4k5YGjM3GgI8g2GZJNoYHDR6w>
-    <xme:yij6YKcLFvu5aQbIjDTCJxmQ8BKPoZ-0kmkzvJardh8fc75C291V5qvPe0vSuwQrk
-    SHBXEHH5Juo5hzCPHY>
-X-ME-Received: <xmr:yij6YExYLz5MGJE8Xu3_YYygK3nUEZwTzUX9KxzL_qjgHcnMUFUu9mIgwwu8nWeeL-JWqVYWoRET>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeejgdehhecutefuodetggdotefrodftvf
+        fm3; bh=JP7wdmNFOkH8lL9Kd1NTkGq2wgQnz+eShdtgKZ4UvNY=; b=FenKtzNa
+        zSHXSxcxlZ7GdDyySB7Au00pObZojK4GxdvtST1TYFcsejn0JNS3NuWcceaeYAmn
+        vTwoSDXKICssSJHWXfjDx5tKErwABWDPrpcUsIQ6ntEP7ARD8oXnz2q2UHfDQ1v4
+        nWgL0GB/3FGASdIwl0fW3lfTceOnrIY+sgzuLjrwX5k7dveTUaU+7LcNQ+Pedngd
+        tLhZRmqwg7P08g/vn/5aZs+bpk8xEhj0TWkyr1xOI1cHjG+s9EeeasL+Ef4UGwsz
+        4cRU+ZgT3A4swijRr6NJW6DYEmyUQ7MWYNsf0/7aKSbqc7LTCgQgiDa4iGovlTB9
+        9M502DBoJezTQA==
+X-ME-Sender: <xms:0Sj6YAfeT-IiZm0kxeRu_fTiucQvuPlznvAyvfoOChX5eBlwEHtz_g>
+    <xme:0Sj6YCPv5SVhe-huO9sP6Mdr2_5T0NbUVfcQ6P3Bwq0szj53NcMKLTfkQGAOg5NJX
+    _tKPaKsLDqxWMDyI-U>
+X-ME-Received: <xmr:0Sj6YBicZH3NzBCHi_Ai3P0ZQmKl9cTJYskLCweUOGP22zLU6dFw_6ilcCQjAVkRfksxAShalMhJ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeejgdehgecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
     ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
     fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeeihffgteelkeelffduke
     dtheevudejvdegkeekjeefhffhhfetudetgfdtffeunecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    udenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
     grthdrtghomh
-X-ME-Proxy: <xmx:yij6YINMcJZRjhp-Txb60-LaK23m0IIfsq3fg30DxYeAd6G3lFtDpA>
-    <xmx:yij6YB8KllG6Zmf_8Xll_8WLh2BW6Nd6xvnw88wEIa7Ud3emxVQ-gg>
-    <xmx:yij6YIXFdEGRUwDUCZqyt0V4zPRPBC2n_vr1WGVvMuw1ZesBpRzhmQ>
-    <xmx:zCj6YC1in6k1v35NRXaoqmKtEyskQ2KXufGOhof_23UDX7pP8AF0hw>
+X-ME-Proxy: <xmx:0Sj6YF9yF8Pd8JOdhSqxvTvW9ffJM2F_PQoy2uHYumkxRIMzbBEbyw>
+    <xmx:0Sj6YMvQlC-dPsMLjDd11HanGDbjIT46vI9MkdHQIlFUECHwWQgnmA>
+    <xmx:0Sj6YMHk_fu45PDw6jdsoj2w5A4cO-L6bDgs740lSoCW-CsDOenD-Q>
+    <xmx:0Sj6YNkrzYqGgEsAv70ZLWvG8DLea1RGTBsdnz92TToaemweIewWmQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 22 Jul 2021 22:26:14 -0400 (EDT)
+ 22 Jul 2021 22:26:21 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
@@ -63,9 +63,9 @@ Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
         linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v4 3/9] clk: pistachio: Make it selectable for generic MIPS kernel
-Date:   Fri, 23 Jul 2021 10:25:37 +0800
-Message-Id: <20210723022543.4095-4-jiaxun.yang@flygoat.com>
+Subject: [PATCH v4 4/9] clocksource/drivers/pistachio: Make it selectable for MIPS
+Date:   Fri, 23 Jul 2021 10:25:38 +0800
+Message-Id: <20210723022543.4095-5-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210723022543.4095-1-jiaxun.yang@flygoat.com>
 References: <20210723022543.4095-1-jiaxun.yang@flygoat.com>
@@ -75,58 +75,28 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-We're moving pistachio to generic MIPS kernel. The clk driver
-should be avilable to the generic MIPS kernel.
+So it will be avilable for generic MIPS kernel.
 
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 ---
-v2: Depend on MIPS || COMPILE_TEST
----
- drivers/clk/Kconfig           | 1 +
- drivers/clk/Makefile          | 2 +-
- drivers/clk/pistachio/Kconfig | 8 ++++++++
- 3 files changed, 10 insertions(+), 1 deletion(-)
- create mode 100644 drivers/clk/pistachio/Kconfig
+ drivers/clocksource/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index e80918be8e9c..18d31b654d02 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -389,6 +389,7 @@ source "drivers/clk/mediatek/Kconfig"
- source "drivers/clk/meson/Kconfig"
- source "drivers/clk/mstar/Kconfig"
- source "drivers/clk/mvebu/Kconfig"
-+source "drivers/clk/pistachio/Kconfig"
- source "drivers/clk/qcom/Kconfig"
- source "drivers/clk/ralink/Kconfig"
- source "drivers/clk/renesas/Kconfig"
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 5f06879d7fe9..7339a9eabeb4 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -97,7 +97,7 @@ obj-y					+= mstar/
- obj-y					+= mvebu/
- obj-$(CONFIG_ARCH_MXS)			+= mxs/
- obj-$(CONFIG_COMMON_CLK_NXP)		+= nxp/
--obj-$(CONFIG_MACH_PISTACHIO)		+= pistachio/
-+obj-$(CONFIG_COMMON_CLK_PISTACHIO)	+= pistachio/
- obj-$(CONFIG_COMMON_CLK_PXA)		+= pxa/
- obj-$(CONFIG_COMMON_CLK_QCOM)		+= qcom/
- obj-y					+= ralink/
-diff --git a/drivers/clk/pistachio/Kconfig b/drivers/clk/pistachio/Kconfig
-new file mode 100644
-index 000000000000..d00f7b4a25fc
---- /dev/null
-+++ b/drivers/clk/pistachio/Kconfig
-@@ -0,0 +1,8 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+config COMMON_CLK_PISTACHIO
-+	bool "Support for IMG Pistachio SoC clock controllers"
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 39aa21d01e05..58ad7af8c673 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -234,8 +234,9 @@ config CLKSRC_LPC32XX
+ 	  Support for the LPC32XX clocksource.
+ 
+ config CLKSRC_PISTACHIO
+-	bool "Clocksource for Pistachio SoC" if COMPILE_TEST
++	bool "Clocksource for Pistachio SoC"
+ 	depends on HAS_IOMEM
 +	depends on MIPS || COMPILE_TEST
-+	help
-+	  Support for the IMG Pistachio SoC clock controller.
-+	  Say Y if you want to include clock support.
+ 	select TIMER_OF
+ 	help
+ 	  Enables the clocksource for the Pistachio SoC.
 -- 
 2.32.0
 
