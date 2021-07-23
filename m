@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F263D3D319C
-	for <lists+linux-mips@lfdr.de>; Fri, 23 Jul 2021 04:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04C33D319F
+	for <lists+linux-mips@lfdr.de>; Fri, 23 Jul 2021 04:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233233AbhGWBpa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 22 Jul 2021 21:45:30 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:38633 "EHLO
+        id S233245AbhGWBpf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 22 Jul 2021 21:45:35 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:52653 "EHLO
         new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233193AbhGWBp3 (ORCPT
+        by vger.kernel.org with ESMTP id S233193AbhGWBpe (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 22 Jul 2021 21:45:29 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id EF8395808BF;
-        Thu, 22 Jul 2021 22:26:02 -0400 (EDT)
+        Thu, 22 Jul 2021 21:45:34 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 412245808F4;
+        Thu, 22 Jul 2021 22:26:08 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 22 Jul 2021 22:26:02 -0400
+  by compute3.internal (MEProxy); Thu, 22 Jul 2021 22:26:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm2; bh=piA92a2BDHjHVta7hxYES50nPA
-        VoWHmEd4CMr4Jw8yE=; b=O8i9iPg61BaVTDHJ+7F+p+K4obNfEWnV06plnrbs9V
-        gz59nVBrnMGyyl4ydd+J6VQ0J4TL/YghErBXWSzSNMq3046Nbubiv+JZ0q6P6nFq
-        AEo2wseY7rd/ysKnq402bSfCZCWUbAyt0fDZZK2XdgrlD+bIvOI1uXMaVHk5BKkv
-        V20slIVEOaXATSB/LIQT0Ei3uVztAsXDia8PWZD9nNDmCSPs6sDvCvzfHVUHWEyd
-        26qdkHb4CU1E1c87S4+J7ZeD4CjW7JvfgRn9tdbeWnUdVVQOBjUWZKS3Wav+BQ8n
-        OEvtgqRfualemWnGtmNNynV40m828rbL5mFIN8QGMrbw==
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm2; bh=r3qhoAmAxV9Zf
+        2wb/yIVFCBti1RuuU/Z06V8xV+UraI=; b=p5ZOJ7D+0J/Gw2/dghARH2KUv0XUm
+        AFwIb4l/P3CGr6EVf2Z5jo1lOKfElwpdNZuMaWCuT/Gw3jehGPTsM/5qMPrvtM5A
+        HLwliLFoeIHW5CJJe3JlKYadjdeBV6s+nDnLMi1Pu5Nx2oOwJEj204x1XBF886gO
+        3XxtBFEhWfNkFOzTEZAY3cvo0jJjKkIKeOCeys091ajFHCAkz9QGpaC+tWhfvPLF
+        igUn2SKET18MtYMw5GTYR+cBC7h5klENOp9IMQYc7rHyjowPQtN2S+NE9iq4Ogha
+        iJMTD5NbYaJf5LDMhVaxAGE8HyoFiX5FiKW1HRnkKBPjr2tdzsR8aa/rg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=piA92a2BDHjHVta7h
-        xYES50nPAVoWHmEd4CMr4Jw8yE=; b=ZQ6hpGobMwmOQxd1rEYvmPe5JHMCNGCeA
-        nj0uOGapBXCKamXa7S9hx4ZDYMkNOeR31RrVUxnfBZok9j0uCYNfBlrowDEGn7eS
-        lD0Nn+HSnzb6f9LtqwZP5ov12KjhSfJTKab8FnIwrMjiqvCmqmVCF9jI8Qztqsbn
-        NFzdvGFIHg9Ls31RGrbGkmrV0Toa6PWq+ThyZCuMV4bbMCOrY0+2o2iOKwTzkj7b
-        qgtsh+/UUZKdUwo3XhksbnRbpuCbzwJHX7B3lGRPN66yV1Hd0OK2ERfEOfobhozh
-        x8CpBN1BhSxe+o1BA5/qIfBTgaINJGnT8mc+kxKUvTEEJwp5avMgA==
-X-ME-Sender: <xms:uij6YA-berd2T20nD87zdunn_9Al21zaSp3J7v0CcuKYS37EEGWI4A>
-    <xme:uij6YIubTYKKjM7bKFzjLLiUQLMQaFMiQZnG4CLzW1b84jxKyFyUqNIpCKEOMgfmR
-    Uhs_Ph9UL3Mz2yt-mw>
-X-ME-Received: <xmr:uij6YGB0ThpkdKp1pRLlKp9_BbCWtIAzRT6Vl8P1Ug_MnydkuF6j6vTIpYEVafLNsXMlKqwIjFxg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeejgdehhecutefuodetggdotefrodftvf
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; bh=r3qhoAmAxV9Zf2wb/yIVFCBti1RuuU/Z06V8xV+UraI=; b=DLFit7QT
+        Tshudkr7nOp6t1VqGyb1OZnnniS8Niq4idE6tLB3I265Zrf3gxmjAH6hvkSPy70o
+        IESYRL9D1VTGit1tMFZaWzyxpcULBF3OnIR4Hhv4/GoyDKQFtS8UzZsE5Ngh4dTr
+        J7sz9yNjuFtAxtSyHnrHzDy9qOXGfXO27WiYQKM/gfXatO2aCY3vKG9RLOF0Xhue
+        Vmxhg9ECDMbyc3zRgN//nK0q8RC4SzdbCfq8I+VG9XIhIdAgu9UlCc0dvWYG4xPk
+        oS7iy6+m40fjjSfrBSE5jLTiWdw6fTvUzXXy8YPiHu9rdqgdBMyzZ1QJHVrm7FY3
+        H/vVhWRht2cvCg==
+X-ME-Sender: <xms:wCj6YPsiaFesITx11GvTsXz55T_nZLsc-KKfgoCYOBAJ55_kysY1nA>
+    <xme:wCj6YAeDHvguxxr2gMN6iFoLgyT3gm0GX9XzH0PfYT6xzV4e0quv0fUwQ9ucjZxm3
+    AJF_jVDM9uoK42_BO4>
+X-ME-Received: <xmr:wCj6YCxsiuJKBlRdlAUq7_L2UrSxdhKOzVHK52--9xAkszqc80W3HfVZ7a1HZDBZeToj7PTnW8w->
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeejgdehgecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
-    dtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhl
-    hihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepgeffjeeitdegieeujedvvdeije
-    etkeefueevteeltdeiheffgfeuffduiefgtedvnecuffhomhgrihhnpedtuddrohhrghen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgi
-    hunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:uij6YAc5WX1sUpH0A6_9XYJ2magHEth3mi_UxIOnZ9WcTdWSHs-UOQ>
-    <xmx:uij6YFNW8WirigQDIVu5EwN_Qz_zJ26lGiSNrcjU9pS0RGSfc_rb4A>
-    <xmx:uij6YKnvupEuFHbKZ4Y1BuqcA43yIH0xTvcXo5MYo0lfhb-AiNpIRQ>
-    <xmx:uij6YGEj9lVbGfrGG17fkIQTPbnvoVjYu-5pUSV1D4Hw7ZKBA9iXZQ>
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnheplefghfdtjeeftdfhtdefud
+    dtleevveehteetffdvuefgtdejffegkeeigfdufeelnecuffhomhgrihhnpehithhsrdhs
+    sgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjih
+    grgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:wCj6YOMCk_eXM9M5_wPf5-eKQsTp5DJsMpP4iYekBFtQSm0y-ZvNaw>
+    <xmx:wCj6YP_wtz0TNwSBAd_Jt9FdIn-PklcN7nDoI0SArb1UxvCSvA3X_w>
+    <xmx:wCj6YOVS0VdFtbpQhuNuS1Fe0y5qhDEBP4PMw8oTPw_2uBFmdNMtxg>
+    <xmx:wCj6YA3BiH8eFpbRYIJl80uaKTq159TVqNMm_Am2hEM2fxwb4Q8Rag>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 22 Jul 2021 22:25:57 -0400 (EDT)
+ 22 Jul 2021 22:26:03 -0400 (EDT)
 From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
 To:     linux-mips@vger.kernel.org
 Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
@@ -62,71 +63,110 @@ Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
         linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH v4 0/9] MIPS: Migrate pistachio to generic kernel
-Date:   Fri, 23 Jul 2021 10:25:34 +0800
-Message-Id: <20210723022543.4095-1-jiaxun.yang@flygoat.com>
+Subject: [PATCH v4 1/9] MIPS: generic: Allow generating FIT image for Marduk board
+Date:   Fri, 23 Jul 2021 10:25:35 +0800
+Message-Id: <20210723022543.4095-2-jiaxun.yang@flygoat.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210723022543.4095-1-jiaxun.yang@flygoat.com>
+References: <20210723022543.4095-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-I'm lucky enough to get a Creator CI40 board from dusts.
-This patchset move it to gerneic kernel to reduce maintenance burden.
-It have been tested with SD Card boot.
+Marduk is based on IMG pistachio SoC. The platform is using
+MIPS UHI booting protocol and does have a proper devicetree
+implement, thus it could be a part of generic kernel.
 
---
-v2: Minor fixes
-v3: Typo fixes and 0day testbot warning fix (Thanks to Sergei!)
-v4: 01.org warning fix
-
-Jiaxun Yang (9):
-  MIPS: generic: Allow generating FIT image for Marduk board
-  MIPS: DTS: Pistachio add missing cpc and cdmm
-  clk: pistachio: Make it selectable for generic MIPS kernel
-  clocksource/drivers/pistachio: Make it selectable for MIPS
-  phy: pistachio-usb: Depend on MIPS || COMPILE_TEST
-  pinctrl: pistachio: Make it as an option
-  MIPS: config: generic: Add config for Marduk board
-  MIPS: Retire MACH_PISTACHIO
-  MIPS: Make a alias for pistachio_defconfig
-
- arch/mips/Kbuild.platforms                    |   1 -
- arch/mips/Kconfig                             |  30 --
- arch/mips/Makefile                            |   3 +
- arch/mips/boot/dts/Makefile                   |   2 +-
- arch/mips/boot/dts/img/Makefile               |   3 +-
- arch/mips/boot/dts/img/pistachio.dtsi         |  10 +
- arch/mips/configs/generic/board-marduk.config |  53 +++
- arch/mips/configs/pistachio_defconfig         | 316 ------------------
- arch/mips/generic/Kconfig                     |   6 +
- arch/mips/generic/Platform                    |   1 +
- arch/mips/generic/board-marduk.its.S          |  22 ++
- arch/mips/pistachio/Kconfig                   |  14 -
- arch/mips/pistachio/Makefile                  |   2 -
- arch/mips/pistachio/Platform                  |   6 -
- arch/mips/pistachio/init.c                    | 125 -------
- arch/mips/pistachio/irq.c                     |  24 --
- arch/mips/pistachio/time.c                    |  55 ---
- drivers/clk/Kconfig                           |   1 +
- drivers/clk/Makefile                          |   2 +-
- drivers/clk/pistachio/Kconfig                 |   8 +
- drivers/clocksource/Kconfig                   |   3 +-
- drivers/phy/Kconfig                           |   2 +-
- drivers/pinctrl/Kconfig                       |   5 +-
- 23 files changed, 114 insertions(+), 580 deletions(-)
- create mode 100644 arch/mips/configs/generic/board-marduk.config
- delete mode 100644 arch/mips/configs/pistachio_defconfig
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/boot/dts/Makefile          |  1 +
+ arch/mips/boot/dts/img/Makefile      |  2 ++
+ arch/mips/generic/Kconfig            |  6 ++++++
+ arch/mips/generic/Platform           |  1 +
+ arch/mips/generic/board-marduk.its.S | 22 ++++++++++++++++++++++
+ 5 files changed, 32 insertions(+)
  create mode 100644 arch/mips/generic/board-marduk.its.S
- delete mode 100644 arch/mips/pistachio/Kconfig
- delete mode 100644 arch/mips/pistachio/Makefile
- delete mode 100644 arch/mips/pistachio/Platform
- delete mode 100644 arch/mips/pistachio/init.c
- delete mode 100644 arch/mips/pistachio/irq.c
- delete mode 100644 arch/mips/pistachio/time.c
- create mode 100644 drivers/clk/pistachio/Kconfig
 
+diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
+index 60bd7d2a9ad8..188301164d9e 100644
+--- a/arch/mips/boot/dts/Makefile
++++ b/arch/mips/boot/dts/Makefile
+@@ -2,6 +2,7 @@
+ subdir-$(CONFIG_BMIPS_GENERIC)		+= brcm
+ subdir-$(CONFIG_CAVIUM_OCTEON_SOC)	+= cavium-octeon
+ subdir-$(CONFIG_MACH_PISTACHIO)		+= img
++subdir-$(CONFIG_FIT_IMAGE_FDT_MARDUK)   += img
+ subdir-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= img
+ subdir-$(CONFIG_MACH_INGENIC)		+= ingenic
+ subdir-$(CONFIG_LANTIQ)			+= lantiq
+diff --git a/arch/mips/boot/dts/img/Makefile b/arch/mips/boot/dts/img/Makefile
+index 441a3c16efb0..24f6bbeadd48 100644
+--- a/arch/mips/boot/dts/img/Makefile
++++ b/arch/mips/boot/dts/img/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ dtb-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= boston.dtb
+ 
++dtb-$(CONFIG_FIT_IMAGE_FDT_MARDUK)	+= pistachio_marduk.dtb
++
+ dtb-$(CONFIG_MACH_PISTACHIO)	+= pistachio_marduk.dtb
+ obj-$(CONFIG_MACH_PISTACHIO)	+= pistachio_marduk.dtb.o
+diff --git a/arch/mips/generic/Kconfig b/arch/mips/generic/Kconfig
+index 657dd93c5e76..7dc5b3821cc6 100644
+--- a/arch/mips/generic/Kconfig
++++ b/arch/mips/generic/Kconfig
+@@ -58,6 +58,12 @@ config FIT_IMAGE_FDT_BOSTON
+ 	  enable this if you wish to boot on a MIPS Boston board, as it is
+ 	  expected by the bootloader.
+ 
++config FIT_IMAGE_FDT_MARDUK
++	bool "Include FDT for IMG Pistachio Marduk (CI40) boards"
++	help
++	  Enable this to include the FDT for the IMG Pistachio Marduk (CI40)
++	  from Imagination Technologies in the FIT kernel image.
++
+ config FIT_IMAGE_FDT_NI169445
+ 	bool "Include FDT for NI 169445"
+ 	help
+diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
+index b871af16b5b6..e1abc113b409 100644
+--- a/arch/mips/generic/Platform
++++ b/arch/mips/generic/Platform
+@@ -24,3 +24,4 @@ its-$(CONFIG_FIT_IMAGE_FDT_LUTON)	+= board-luton.its.S
+ its-$(CONFIG_FIT_IMAGE_FDT_JAGUAR2)	+= board-jaguar2.its.S
+ its-$(CONFIG_FIT_IMAGE_FDT_SERVAL)	+= board-serval.its.S
+ its-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+= board-xilfpga.its.S
++its-$(CONFIG_FIT_IMAGE_FDT_MARDUK)	+= board-marduk.its.S
+diff --git a/arch/mips/generic/board-marduk.its.S b/arch/mips/generic/board-marduk.its.S
+new file mode 100644
+index 000000000000..4f633794db90
+--- /dev/null
++++ b/arch/mips/generic/board-marduk.its.S
+@@ -0,0 +1,22 @@
++/ {
++	images {
++		fdt-marduk {
++			description = "img,pistachio-marduk Device Tree";
++			data = /incbin/("boot/dts/img/pistachio_marduk.dtb");
++			type = "flat_dt";
++			arch = "mips";
++			compression = "none";
++			hash {
++				algo = "sha1";
++			};
++		};
++	};
++
++	configurations {
++		conf-marduk {
++			description = "Marduk Linux kernel";
++			kernel = "kernel";
++			fdt = "fdt-marduk";
++		};
++	};
++};
 -- 
 2.32.0
 
