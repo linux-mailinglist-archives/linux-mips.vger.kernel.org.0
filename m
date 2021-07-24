@@ -2,214 +2,202 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C22B3D47E5
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 15:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF413D4849
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 17:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbhGXMzp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Jul 2021 08:55:45 -0400
-Received: from out29-121.mail.aliyun.com ([115.124.29.121]:46947 "EHLO
-        out29-121.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbhGXMzo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 08:55:44 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436834|-1;CH=blue;DM=|OVERLOAD|false|;DS=CONTINUE|ham_regular_dialog|0.0659764-0.0011159-0.932908;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.Kq.PDff_1627133772;
-Received: from 192.168.88.130(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Kq.PDff_1627133772)
-          by smtp.aliyun-inc.com(10.147.43.95);
-          Sat, 24 Jul 2021 21:36:14 +0800
-Subject: Re: [PATCH] cpuidle: JZ4780: Add Ingenic JZ4780 cpuidle driver.
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com, Alex Smith <alex.smith@imgtec.com>
-References: <1627118399-125388-1-git-send-email-zhouyanjie@wanyeetech.com>
- <B0YQWQ.OWLDE6KM3L551@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <d8445fe8-01df-2fcc-32b0-cf10432e7d73@wanyeetech.com>
-Date:   Sat, 24 Jul 2021 21:36:11 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S229905AbhGXOkK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Jul 2021 10:40:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36118 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229545AbhGXOkJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 24 Jul 2021 10:40:09 -0400
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 690A260E96;
+        Sat, 24 Jul 2021 15:20:37 +0000 (UTC)
+Date:   Sat, 24 Jul 2021 16:23:09 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Christophe Branchereau <cbranchereau@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Paul Cercueil <paul@crapouillou.net>, lars@metafoo.de,
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux@roeck-us.net,
+        contact@artur-rojek.eu
+Subject: Re: [PATCH V2 5/5] dt-bindings: iio/adc: ingenic: add the JZ4760(B)
+ socs to the sadc Documentation
+Message-ID: <20210724162309.70334ae8@jic23-huawei>
+In-Reply-To: <CAFsFa84mJpAk90W6rSYwZ9m-RCbu959_8HJ+1Dr3ScP2k9SbKw@mail.gmail.com>
+References: <893d6165-0f12-d0da-44be-449a4ae96ac2@roeck-us.net>
+        <20210723085813.1523934-1-cbranchereau@gmail.com>
+        <20210723085813.1523934-6-cbranchereau@gmail.com>
+        <20210723171657.00003d7f@Huawei.com>
+        <CAFsFa84mJpAk90W6rSYwZ9m-RCbu959_8HJ+1Dr3ScP2k9SbKw@mail.gmail.com>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <B0YQWQ.OWLDE6KM3L551@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Sat, 24 Jul 2021 09:33:46 +0200
+Christophe Branchereau <cbranchereau@gmail.com> wrote:
 
-On 2021/7/24 下午7:16, Paul Cercueil wrote:
-> Hi Zhou,
->
-> Le sam., juil. 24 2021 at 17:19:59 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> The JZ4780 has a high overhead to executing a MIPS wait on SMP, as a
->> core must flush out dirty cache lines from its data cache before doing
->> so. This is because the core clock is gated during a wait and if the
->> other core tries to access a dirty line from the waiting core's cache,
->> it will lock up.
->>
->> To mitigate some of this impact, this driver provides a simple polling
->> top level idle state, to try to avoid the cache flushing overhead when
->> the wait will only be short. The second level state is implemented with
->> the MIPS wait instruction.
->>
->> This patch first found in the github repository of CI20, the original
->> author is Alex Smith. Because there is a chance to cause kernel hang
->> scenarios which can occur within hours or even within days, so this
->> patch was abandoned, but now it is determined that this is not the
->> problem caused by this patch, but caused by the cache driver. With
->> the new Ingenic specific cache driver, it has been working properly
->> on CI20 v1 for more than one week.
->>
->> Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
->> Signed-off-by: Alex Smith <alex.smith@imgtec.com>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>  drivers/cpuidle/Kconfig.mips     |  8 +++++
->>  drivers/cpuidle/Makefile         |  1 +
->>  drivers/cpuidle/cpuidle-jz4780.c | 74 
->> ++++++++++++++++++++++++++++++++++++++++
->>  3 files changed, 83 insertions(+)
->>  create mode 100644 drivers/cpuidle/cpuidle-jz4780.c
->>
->> diff --git a/drivers/cpuidle/Kconfig.mips b/drivers/cpuidle/Kconfig.mips
->> index c3c011a..4a55d24 100644
->> --- a/drivers/cpuidle/Kconfig.mips
->> +++ b/drivers/cpuidle/Kconfig.mips
->> @@ -16,3 +16,11 @@ config MIPS_CPS_CPUIDLE
->>        Processing System (CPS) architecture. In order to make use of
->>        the deepest idle states you will need to ensure that you are
->>        also using the CONFIG_MIPS_CPS SMP implementation.
->> +
->> +config MIPS_JZ4780_CPUIDLE
->> +    bool "CPU Idle driver for Ingenic JZ4780"
->> +    depends on MACH_JZ4780 && SMP
->> +    default y
->> +    help
->> +      Select this option to enable CPU idle state management through
->> +      cpuidle for Ingenic JZ4780 platforms.
->> diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
->> index 26bbc5e..1dd372f 100644
->> --- a/drivers/cpuidle/Makefile
->> +++ b/drivers/cpuidle/Makefile
->> @@ -29,6 +29,7 @@ obj-$(CONFIG_ARM_QCOM_SPM_CPUIDLE)    += 
->> cpuidle-qcom-spm.o
->>
->> ############################################################################### 
->>
->>  # MIPS drivers
->>  obj-$(CONFIG_MIPS_CPS_CPUIDLE)        += cpuidle-cps.o
->> +obj-$(CONFIG_MIPS_JZ4780_CPUIDLE)    += cpuidle-jz4780.o
->>
->>
->> ############################################################################### 
->>
->>  # POWERPC drivers
->> diff --git a/drivers/cpuidle/cpuidle-jz4780.c 
->> b/drivers/cpuidle/cpuidle-jz4780.c
->> new file mode 100644
->> index 00000000..2025de4
->> --- /dev/null
->> +++ b/drivers/cpuidle/cpuidle-jz4780.c
->> @@ -0,0 +1,74 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * JZ4780 CPU idle driver
->> + * Copyright (C) 2015 Imagination Technologies
->> + * Author: Alex Smith <alex.smith@imgtec.com>
->> + * Copyright (c) 2020 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> + */
->> +
->> +#include <linux/cpuidle.h>
->> +#include <linux/init.h>
->> +#include <linux/sched.h>
->> +#include <linux/sched/idle.h>
->> +
->> +#include <asm/idle.h>
->> +#include <asm/mipsregs.h>
->> +
->> +/*
->> + * The JZ4780 has a high overhead to entering just the basic MIPS 
->> wait on SMP,
->> + * due to the requirement to flush out dirty lines from the dcache 
->> before
->> + * waiting. Therefore, we try to mitigate this overhead by using a 
->> simple
->> + * polling loop for short waits.
->> + */
->> +static int jz4780_cpuidle_poll_enter(struct cpuidle_device *dev,
->> +                     struct cpuidle_driver *drv, int index)
->> +{
->> +    if (!current_set_polling_and_test())
->> +        while (!need_resched() && !(read_c0_cause() & 
->> read_c0_status() & CAUSEF_IP))
->> +            cpu_relax();
->> +
->> +    current_clr_polling();
->> +    local_irq_enable();
->> +
->> +    return index;
->> +}
->> +
->> +static struct cpuidle_driver jz4780_cpuidle_driver = {
->> +    .name = "jz4780_cpuidle",
->> +    .owner = THIS_MODULE,
->> +    .states = {
->> +        {
->> +            .enter = jz4780_cpuidle_poll_enter,
->> +            .exit_latency = 1,
->> +            .target_residency = 1,
->> +            .power_usage = UINT_MAX,
->> +            .name = "poll",
->> +            .desc = "polling loop",
->> +        },
->> +        {
->> +            .enter = mips_cpuidle_wait_enter,
->> +            .exit_latency = 50,
->> +            .target_residency = 300,
->> +            .power_usage = UINT_MAX,
->> +            .name = "wait",
->> +            .desc = "MIPS wait",
->> +        },
->> +    },
->> +    .state_count = 2,
->> +};
->> +
->> +static int __init jz4780_cpuidle_init(void)
->> +{
->> +    int ret;
->> +
->> +    ret = cpuidle_register(&jz4780_cpuidle_driver, NULL);
->
-> You're missing something here - you never check that the kernel is 
-> actually running on a JZ4780.
+> Hello Johnathan, am I allowed to declare the property within the if
+> block like this?
 
+Test it...
 
-Sure, I will try to fix it.
+Short answer is no you aren't.  As someone explained it to me the other
+day, each layer of the yaml is checked independently so if you declare
+a property in the if block and not the outer layer the additionalProperties
+check will fail should it be present.
 
+So declare it outside, then set it false for the cases where it's not valid.
 
-Thanks and best regards!
+Jonathan
 
+> 
+> # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> # Copyright 2019-2020 Artur Rojek
+> %YAML 1.2
+> ---
+> $id: "http://devicetree.org/schemas/iio/adc/ingenic,adc.yaml#"
+> $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> 
+> title: Ingenic JZ47xx ADC controller IIO bindings
+> 
+> maintainers:
+>   - Artur Rojek <contact@artur-rojek.eu>
+> 
+> description: >
+>   Industrial I/O subsystem bindings for ADC controller found in
+>   Ingenic JZ47xx SoCs.
+> 
+>   ADC clients must use the format described in
+>   https://github.com/devicetree-org/dt-schema/blob/master/schemas/iio/iio-consumer.yaml,
+>   giving a phandle and IIO specifier pair ("io-channels") to the ADC controller.
+> 
+> properties:
+>   compatible:
+>     enum:
+>       - ingenic,jz4725b-adc
+>       - ingenic,jz4740-adc
+>       - ingenic,jz4760-adc
+>       - ingenic,jz4760b-adc
+>       - ingenic,jz4770-adc
+> 
+>   '#io-channel-cells':
+>     const: 1
+>     description:
+>       Must be set to <1> to indicate channels are selected by index.
+> 
+>   reg:
+>     maxItems: 1
+> 
+>   clocks:
+>     maxItems: 1
+> 
+>   clock-names:
+>     items:
+>       - const: adc
+> 
+>   interrupts:
+>     maxItems: 1
+> 
+> allOf:
+>   - if:
+>       properties:
+>         compatible:
+>           contains:
+>             enum:
+>               - ingenic,jz4760b-adc
+> then:
+>   properties:
+>     ingenic,use-internal-divider:
+>       description:
+>         If present, battery voltage is read from the VBAT_IR pin, which has an
+>         internal 1/4 divider. If absent, it is read through the VBAT_ER pin,
+>         which does not have such a divider.
+>       type: boolean
+> 
+> required:
+>   - compatible
+>   - '#io-channel-cells'
+>   - reg
+>   - clocks
+>   - clock-names
+>   - interrupts
+> 
+> additionalProperties: false
+> 
+> examples:
+>   - |
+>     #include <dt-bindings/clock/jz4740-cgu.h>
+>     #include <dt-bindings/iio/adc/ingenic,adc.h>
+> 
+>     adc@10070000 {
+>             compatible = "ingenic,jz4740-adc";
+>             #io-channel-cells = <1>;
+> 
+>             reg = <0x10070000 0x30>;
+> 
+>             clocks = <&cgu JZ4740_CLK_ADC>;
+>             clock-names = "adc";
+> 
+>             interrupt-parent = <&intc>;
+>             interrupts = <18>;
+>     };
+> 
+> On Fri, Jul 23, 2021 at 6:17 PM Jonathan Cameron
+> <Jonathan.Cameron@huawei.com> wrote:
+> >
+> > On Fri, 23 Jul 2021 10:58:13 +0200
+> > Christophe Branchereau <cbranchereau@gmail.com> wrote:
+> >  
+> > > The jz4760b variant differs slightly from the jz4760, add a property to
+> > > let users sample the internal divider if needed and document it.
+> > >
+> > > Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
+> > > ---
+> > >  .../devicetree/bindings/iio/adc/ingenic,adc.yaml         | 9 +++++++++
+> > >  1 file changed, 9 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
+> > > index 433a3fb55a2e..0dc42959a64f 100644
+> > > --- a/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
+> > > +++ b/Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml
+> > > @@ -23,6 +23,8 @@ properties:
+> > >      enum:
+> > >        - ingenic,jz4725b-adc
+> > >        - ingenic,jz4740-adc
+> > > +      - ingenic,jz4760-adc
+> > > +      - ingenic,jz4760b-adc
+> > >        - ingenic,jz4770-adc
+> > >
+> > >    '#io-channel-cells':
+> > > @@ -43,6 +45,13 @@ properties:
+> > >    interrupts:
+> > >      maxItems: 1
+> > >
+> > > +  ingenic,use-internal-divider:
+> > > +    description:
+> > > +      This property can be used to set VBAT_SEL in the JZ4760B CFG register
+> > > +      to sample the battery voltage from the internal divider. If absent, it
+> > > +      will sample the external divider.
+> > > +    type: boolean
+> > > +  
+> > See reply to the v1 patch for hint on how to 'enforce' that this
+> > only exists for the jz4760b
+> >
+> > Thanks,
+> >
+> > Jonathan
+> >  
+> > >  required:
+> > >    - compatible
+> > >    - '#io-channel-cells'  
+> >  
 
->
-> Cheers,
-> -Paul
->
->> +    if (ret) {
->> +        pr_err("Failed to register JZ4780 idle driver: %d\n", ret);
->> +        return ret;
->> +    }
->> +
->> +    pr_info("JZ4780 idle driver registered\n");
->> +
->> +    return 0;
->> +}
->> +device_initcall(jz4780_cpuidle_init);
->> -- 
->> 2.7.4
->>
->
