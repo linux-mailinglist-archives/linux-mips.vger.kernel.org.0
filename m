@@ -2,35 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D48B23D469A
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 11:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F313D46A2
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 11:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234412AbhGXIbf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Jul 2021 04:31:35 -0400
-Received: from out28-122.mail.aliyun.com ([115.124.28.122]:43339 "EHLO
-        out28-122.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234801AbhGXIbR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 04:31:17 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436295|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00847616-0.00124347-0.99028;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047192;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.KpqAhCg_1627117898;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KpqAhCg_1627117898)
-          by smtp.aliyun-inc.com(10.147.41.121);
-          Sat, 24 Jul 2021 17:11:47 +0800
+        id S234830AbhGXIjh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Jul 2021 04:39:37 -0400
+Received: from out28-194.mail.aliyun.com ([115.124.28.194]:44958 "EHLO
+        out28-194.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234748AbhGXIjh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 04:39:37 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07560047|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0220879-0.00120018-0.976712;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.Kpq8T14_1627118399;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Kpq8T14_1627118399)
+          by smtp.aliyun-inc.com(10.147.44.145);
+          Sat, 24 Jul 2021 17:20:07 +0800
 From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
         <zhouyanjie@wanyeetech.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, robh+dt@kernel.org,
-        paul@crapouillou.net
-Cc:     devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org
+Cc:     paul@crapouillou.net, linux-pm@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
         rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com
-Subject: [PATCH 2/2] remoteproc: Ingenic: Add support for new Ingenic SoCs.
-Date:   Sat, 24 Jul 2021 17:11:38 +0800
-Message-Id: <1627117898-125239-3-git-send-email-zhouyanjie@wanyeetech.com>
+        jun.jiang@ingenic.com, sernia.zhou@foxmail.com,
+        Alex Smith <alex.smith@imgtec.com>
+Subject: [PATCH] cpuidle: JZ4780: Add Ingenic JZ4780 cpuidle driver.
+Date:   Sat, 24 Jul 2021 17:19:59 +0800
+Message-Id: <1627118399-125388-1-git-send-email-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1627117898-125239-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1627117898-125239-1-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -38,235 +35,143 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add support for probing the ingenic_rproc driver on the JZ4760 SoC,
-the JZ4760B SoC, the JZ4775 SoC, and the JZ4780 SoC from Ingenic.
+The JZ4780 has a high overhead to executing a MIPS wait on SMP, as a
+core must flush out dirty cache lines from its data cache before doing
+so. This is because the core clock is gated during a wait and if the
+other core tries to access a dirty line from the waiting core's cache,
+it will lock up.
 
+To mitigate some of this impact, this driver provides a simple polling
+top level idle state, to try to avoid the cache flushing overhead when
+the wait will only be short. The second level state is implemented with
+the MIPS wait instruction.
+
+This patch first found in the github repository of CI20, the original
+author is Alex Smith. Because there is a chance to cause kernel hang
+scenarios which can occur within hours or even within days, so this
+patch was abandoned, but now it is determined that this is not the
+problem caused by this patch, but caused by the cache driver. With
+the new Ingenic specific cache driver, it has been working properly
+on CI20 v1 for more than one week.
+
+Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
+Signed-off-by: Alex Smith <alex.smith@imgtec.com>
 Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 ---
- drivers/remoteproc/ingenic_rproc.c | 115 +++++++++++++++++++++++++++++--------
- 1 file changed, 91 insertions(+), 24 deletions(-)
+ drivers/cpuidle/Kconfig.mips     |  8 +++++
+ drivers/cpuidle/Makefile         |  1 +
+ drivers/cpuidle/cpuidle-jz4780.c | 74 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 83 insertions(+)
+ create mode 100644 drivers/cpuidle/cpuidle-jz4780.c
 
-diff --git a/drivers/remoteproc/ingenic_rproc.c b/drivers/remoteproc/ingenic_rproc.c
-index a356738..6a2e864 100644
---- a/drivers/remoteproc/ingenic_rproc.c
-+++ b/drivers/remoteproc/ingenic_rproc.c
-@@ -2,6 +2,7 @@
- /*
-  * Ingenic JZ47xx remoteproc driver
-  * Copyright 2019, Paul Cercueil <paul@crapouillou.net>
-+ * Copyright 2021, 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-  */
+diff --git a/drivers/cpuidle/Kconfig.mips b/drivers/cpuidle/Kconfig.mips
+index c3c011a..4a55d24 100644
+--- a/drivers/cpuidle/Kconfig.mips
++++ b/drivers/cpuidle/Kconfig.mips
+@@ -16,3 +16,11 @@ config MIPS_CPS_CPUIDLE
+ 	  Processing System (CPS) architecture. In order to make use of
+ 	  the deepest idle states you will need to ensure that you are
+ 	  also using the CONFIG_MIPS_CPS SMP implementation.
++
++config MIPS_JZ4780_CPUIDLE
++	bool "CPU Idle driver for Ingenic JZ4780"
++	depends on MACH_JZ4780 && SMP
++	default y
++	help
++	  Select this option to enable CPU idle state management through
++	  cpuidle for Ingenic JZ4780 platforms.
+diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+index 26bbc5e..1dd372f 100644
+--- a/drivers/cpuidle/Makefile
++++ b/drivers/cpuidle/Makefile
+@@ -29,6 +29,7 @@ obj-$(CONFIG_ARM_QCOM_SPM_CPUIDLE)	+= cpuidle-qcom-spm.o
+ ###############################################################################
+ # MIPS drivers
+ obj-$(CONFIG_MIPS_CPS_CPUIDLE)		+= cpuidle-cps.o
++obj-$(CONFIG_MIPS_JZ4780_CPUIDLE)	+= cpuidle-jz4780.o
  
- #include <linux/bitops.h>
-@@ -17,7 +18,7 @@
- 
- #define REG_AUX_CTRL		0x0
- #define REG_AUX_MSG_ACK		0x10
--#define REG_AUX_MSG		0x14
-+#define REG_AUX_MSG			0x14
- #define REG_CORE_MSG_ACK	0x18
- #define REG_CORE_MSG		0x1C
- 
-@@ -32,6 +33,20 @@ module_param(auto_boot, bool, 0400);
- MODULE_PARM_DESC(auto_boot,
- 		 "Auto-boot the remote processor [default=false]");
- 
-+enum ingenic_vpu_version {
-+	ID_JZ4760,
-+	ID_JZ4770,
-+	ID_JZ4775,
+ ###############################################################################
+ # POWERPC drivers
+diff --git a/drivers/cpuidle/cpuidle-jz4780.c b/drivers/cpuidle/cpuidle-jz4780.c
+new file mode 100644
+index 00000000..2025de4
+--- /dev/null
++++ b/drivers/cpuidle/cpuidle-jz4780.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * JZ4780 CPU idle driver
++ * Copyright (C) 2015 Imagination Technologies
++ * Author: Alex Smith <alex.smith@imgtec.com>
++ * Copyright (c) 2020 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
++ */
++
++#include <linux/cpuidle.h>
++#include <linux/init.h>
++#include <linux/sched.h>
++#include <linux/sched/idle.h>
++
++#include <asm/idle.h>
++#include <asm/mipsregs.h>
++
++/*
++ * The JZ4780 has a high overhead to entering just the basic MIPS wait on SMP,
++ * due to the requirement to flush out dirty lines from the dcache before
++ * waiting. Therefore, we try to mitigate this overhead by using a simple
++ * polling loop for short waits.
++ */
++static int jz4780_cpuidle_poll_enter(struct cpuidle_device *dev,
++				     struct cpuidle_driver *drv, int index)
++{
++	if (!current_set_polling_and_test())
++		while (!need_resched() && !(read_c0_cause() & read_c0_status() & CAUSEF_IP))
++			cpu_relax();
++
++	current_clr_polling();
++	local_irq_enable();
++
++	return index;
++}
++
++static struct cpuidle_driver jz4780_cpuidle_driver = {
++	.name = "jz4780_cpuidle",
++	.owner = THIS_MODULE,
++	.states = {
++		{
++			.enter = jz4780_cpuidle_poll_enter,
++			.exit_latency = 1,
++			.target_residency = 1,
++			.power_usage = UINT_MAX,
++			.name = "poll",
++			.desc = "polling loop",
++		},
++		{
++			.enter = mips_cpuidle_wait_enter,
++			.exit_latency = 50,
++			.target_residency = 300,
++			.power_usage = UINT_MAX,
++			.name = "wait",
++			.desc = "MIPS wait",
++		},
++	},
++	.state_count = 2,
 +};
 +
-+struct ingenic_soc_info {
-+	enum ingenic_vpu_version version;
-+	const struct vpu_mem_map *mem_map;
++static int __init jz4780_cpuidle_init(void)
++{
++	int ret;
 +
-+	unsigned int num_clks;
-+	unsigned int num_mems;
-+};
++	ret = cpuidle_register(&jz4780_cpuidle_driver, NULL);
++	if (ret) {
++		pr_err("Failed to register JZ4780 idle driver: %d\n", ret);
++		return ret;
++	}
 +
- struct vpu_mem_map {
- 	const char *name;
- 	unsigned int da;
-@@ -43,26 +58,21 @@ struct vpu_mem_info {
- 	void __iomem *base;
- };
- 
--static const struct vpu_mem_map vpu_mem_map[] = {
--	{ "tcsm0", 0x132b0000 },
--	{ "tcsm1", 0xf4000000 },
--	{ "sram",  0x132f0000 },
--};
--
- /**
-  * struct vpu - Ingenic VPU remoteproc private structure
-  * @irq: interrupt number
-  * @clks: pointers to the VPU and AUX clocks
-  * @aux_base: raw pointer to the AUX interface registers
-- * @mem_info: array of struct vpu_mem_info, which contain the mapping info of
-+ * @mem_info: pointers to the struct vpu_mem_info, which contain the mapping info of
-  *            each of the external memories
-  * @dev: private pointer to the device
-  */
- struct vpu {
- 	int irq;
--	struct clk_bulk_data clks[2];
- 	void __iomem *aux_base;
--	struct vpu_mem_info mem_info[ARRAY_SIZE(vpu_mem_map)];
-+	const struct ingenic_soc_info *soc_info;
-+	struct clk_bulk_data *clks;
-+	struct vpu_mem_info *mem_info;
- 	struct device *dev;
- };
- 
-@@ -72,7 +82,7 @@ static int ingenic_rproc_prepare(struct rproc *rproc)
- 	int ret;
- 
- 	/* The clocks must be enabled for the firmware to be loaded in TCSM */
--	ret = clk_bulk_prepare_enable(ARRAY_SIZE(vpu->clks), vpu->clks);
-+	ret = clk_bulk_prepare_enable(vpu->soc_info->num_clks, vpu->clks);
- 	if (ret)
- 		dev_err(vpu->dev, "Unable to start clocks: %d\n", ret);
- 
-@@ -83,7 +93,7 @@ static int ingenic_rproc_unprepare(struct rproc *rproc)
- {
- 	struct vpu *vpu = rproc->priv;
- 
--	clk_bulk_disable_unprepare(ARRAY_SIZE(vpu->clks), vpu->clks);
-+	clk_bulk_disable_unprepare(vpu->soc_info->num_clks, vpu->clks);
- 
- 	return 0;
- }
-@@ -127,7 +137,7 @@ static void *ingenic_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, boo
- 	void __iomem *va = NULL;
- 	unsigned int i;
- 
--	for (i = 0; i < ARRAY_SIZE(vpu_mem_map); i++) {
-+	for (i = 0; i < vpu->soc_info->num_mems; i++) {
- 		const struct vpu_mem_info *info = &vpu->mem_info[i];
- 		const struct vpu_mem_map *map = info->map;
- 
-@@ -163,8 +173,60 @@ static irqreturn_t vpu_interrupt(int irq, void *data)
- 	return rproc_vq_interrupt(rproc, vring);
- }
- 
-+static const struct vpu_mem_map jz4760_vpu_mem_map[] = {
-+	{ "tcsm0", 0x132b0000 },
-+	{ "tcsm1", 0xf4000000 },
-+	{ "sram",  0x132d0000 },
-+};
++	pr_info("JZ4780 idle driver registered\n");
 +
-+static const struct vpu_mem_map jz4770_vpu_mem_map[] = {
-+	{ "tcsm0", 0x132b0000 },
-+	{ "tcsm1", 0xf4000000 },
-+	{ "sram",  0x132f0000 },
-+};
-+
-+static const struct vpu_mem_map jz4775_vpu_mem_map[] = {
-+	{ "tcsm",  0xf4000000 },
-+	{ "sram",  0x132f0000 },
-+};
-+
-+static const struct ingenic_soc_info jz4760_soc_info = {
-+	.version = ID_JZ4760,
-+	.mem_map = jz4760_vpu_mem_map,
-+
-+	.num_clks = 2,
-+	.num_mems = 3,
-+};
-+
-+static const struct ingenic_soc_info jz4770_soc_info = {
-+	.version = ID_JZ4770,
-+	.mem_map = jz4770_vpu_mem_map,
-+
-+	.num_clks = 2,
-+	.num_mems = 3,
-+};
-+
-+static const struct ingenic_soc_info jz4775_soc_info = {
-+	.version = ID_JZ4775,
-+	.mem_map = jz4775_vpu_mem_map,
-+
-+	.num_clks = 1,
-+	.num_mems = 2,
-+};
-+
-+static const struct of_device_id ingenic_rproc_of_matches[] = {
-+	{ .compatible = "ingenic,jz4760-vpu-rproc", .data = &jz4760_soc_info },
-+	{ .compatible = "ingenic,jz4760b-vpu-rproc", .data = &jz4760_soc_info },
-+	{ .compatible = "ingenic,jz4770-vpu-rproc", .data = &jz4770_soc_info },
-+	{ .compatible = "ingenic,jz4775-vpu-rproc", .data = &jz4775_soc_info },
-+	{ .compatible = "ingenic,jz4780-vpu-rproc", .data = &jz4775_soc_info },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, ingenic_rproc_of_matches);
-+
- static int ingenic_rproc_probe(struct platform_device *pdev)
- {
-+	const struct of_device_id *id = of_match_node(ingenic_rproc_of_matches, pdev->dev.of_node);
- 	struct device *dev = &pdev->dev;
- 	struct resource *mem;
- 	struct rproc *rproc;
-@@ -181,6 +243,7 @@ static int ingenic_rproc_probe(struct platform_device *pdev)
- 
- 	vpu = rproc->priv;
- 	vpu->dev = &pdev->dev;
-+	vpu->soc_info = id->data;
- 	platform_set_drvdata(pdev, vpu);
- 
- 	mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "aux");
-@@ -190,9 +253,13 @@ static int ingenic_rproc_probe(struct platform_device *pdev)
- 		return PTR_ERR(vpu->aux_base);
- 	}
- 
--	for (i = 0; i < ARRAY_SIZE(vpu_mem_map); i++) {
-+	vpu->mem_info = kzalloc(sizeof(struct vpu_mem_info) * vpu->soc_info->num_mems, GFP_KERNEL);
-+	if (!vpu->mem_info)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < vpu->soc_info->num_mems; i++) {
- 		mem = platform_get_resource_byname(pdev, IORESOURCE_MEM,
--						   vpu_mem_map[i].name);
-+						   vpu->soc_info->mem_map[i].name);
- 
- 		vpu->mem_info[i].base = devm_ioremap_resource(dev, mem);
- 		if (IS_ERR(vpu->mem_info[i].base)) {
-@@ -202,13 +269,19 @@ static int ingenic_rproc_probe(struct platform_device *pdev)
- 		}
- 
- 		vpu->mem_info[i].len = resource_size(mem);
--		vpu->mem_info[i].map = &vpu_mem_map[i];
-+		vpu->mem_info[i].map = &vpu->soc_info->mem_map[i];
- 	}
- 
-+	vpu->clks = kzalloc(sizeof(struct clk_bulk_data) * vpu->soc_info->num_clks, GFP_KERNEL);
-+	if (!vpu->clks)
-+		return -ENOMEM;
-+
- 	vpu->clks[0].id = "vpu";
--	vpu->clks[1].id = "aux";
- 
--	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(vpu->clks), vpu->clks);
-+	if (vpu->soc_info->version == ID_JZ4770)
-+		vpu->clks[1].id = "aux";
-+
-+	ret = devm_clk_bulk_get(dev, vpu->soc_info->num_clks, vpu->clks);
- 	if (ret) {
- 		dev_err(dev, "Failed to get clocks\n");
- 		return ret;
-@@ -235,12 +308,6 @@ static int ingenic_rproc_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static const struct of_device_id ingenic_rproc_of_matches[] = {
--	{ .compatible = "ingenic,jz4770-vpu-rproc", },
--	{}
--};
--MODULE_DEVICE_TABLE(of, ingenic_rproc_of_matches);
--
- static struct platform_driver ingenic_rproc_driver = {
- 	.probe = ingenic_rproc_probe,
- 	.driver = {
++	return 0;
++}
++device_initcall(jz4780_cpuidle_init);
 -- 
 2.7.4
 
