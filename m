@@ -2,31 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C4B3D4738
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 12:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFEC3D4743
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 13:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbhGXKJL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sat, 24 Jul 2021 06:09:11 -0400
-Received: from aposti.net ([89.234.176.197]:46804 "EHLO aposti.net"
+        id S229941AbhGXKWK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sat, 24 Jul 2021 06:22:10 -0400
+Received: from aposti.net ([89.234.176.197]:49034 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229966AbhGXKJK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 24 Jul 2021 06:09:10 -0400
-Date:   Sat, 24 Jul 2021 11:49:30 +0100
+        id S229884AbhGXKWK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 24 Jul 2021 06:22:10 -0400
+Date:   Sat, 24 Jul 2021 12:02:30 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 2/2] USB: dwc2: Add OTG support for Ingenic SoCs.
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: Add bindings for new Ingenic
+ SoCs.
 To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        hminas@synopsys.com, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com,
-        Dragan =?iso-8859-2?b?yGXoYXZhYw==?= <dragancecavac@yahoo.com>
-Message-Id: <IQWQWQ.9EAMZ76IPL892@crapouillou.net>
-In-Reply-To: <1627116521-124612-3-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1627116521-124612-3-git-send-email-zhouyanjie@wanyeetech.com>
+Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
+        jun.jiang@ingenic.com, sernia.zhou@foxmail.com
+Message-Id: <6CXQWQ.XVALRMYW4LM72@crapouillou.net>
+In-Reply-To: <1627117898-125239-2-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1627117898-125239-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1627117898-125239-2-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8BIT
@@ -36,167 +36,153 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Zhou,
 
-Le sam., juil. 24 2021 at 16:48:41 +0800, 周琰杰 (Zhou Yanjie) 
+Le sam., juil. 24 2021 at 17:11:37 +0800, 周琰杰 (Zhou Yanjie) 
 <zhouyanjie@wanyeetech.com> a écrit :
-> Add OTG support for the JZ4775 SoC, the JZ4780 SoC, the X1000
-> SoC, the X1600 SoC, the X1830 SoC, and the X2000 SoC. Introduce
-> support for disable Ingenic overcurrent detection, once selected
-> it enables GOTGCTL register bits VbvalidOvEn and VbvalidOvVal to
-> disable the VBUS overcurrent detection.
+> Add the remoteproc bindings for the JZ4760 SoC, the JZ4760B SoC,
+> the JZ4775 SoC, and the JZ4780 SoC from Ingenic.
 > 
-> This patch is derived from Dragan Čečavac (in the kernel 3.18.3
-> tree of CI20). It is very useful for the MIPS Creator CI20 (r1).
-> Without this patch, OTG port of CI20 has a great probability to
-> face overcurrent warning, which breaks the OTG functionality.
-> 
-> Signed-off-by: Dragan Čečavac <dragancecavac@yahoo.com>
 > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 > ---
->  drivers/usb/dwc2/core.c   |  9 +++++++++
->  drivers/usb/dwc2/core.h   |  5 +++++
->  drivers/usb/dwc2/params.c | 49 
-> ++++++++++++++++++++++++++++++++++++++++++++++-
->  3 files changed, 62 insertions(+), 1 deletion(-)
+>  .../bindings/remoteproc/ingenic,vpu.yaml           | 74 
+> ++++++++++++++++------
+>  1 file changed, 56 insertions(+), 18 deletions(-)
 > 
-> diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-> index 272ae57..c35b2e2 100644
-> --- a/drivers/usb/dwc2/core.c
-> +++ b/drivers/usb/dwc2/core.c
-> @@ -1153,6 +1153,7 @@ static void dwc2_set_turnaround_time(struct 
-> dwc2_hsotg *hsotg)
->  int dwc2_phy_init(struct dwc2_hsotg *hsotg, bool select_phy)
->  {
->  	u32 usbcfg;
-> +	u32 otgctl;
->  	int retval = 0;
+> diff --git 
+> a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml 
+> b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
+> index d0aa91b..6154596 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
+> @@ -17,31 +17,52 @@ maintainers:
 > 
->  	if ((hsotg->params.speed == DWC2_SPEED_PARAM_FULL ||
-> @@ -1187,6 +1188,14 @@ int dwc2_phy_init(struct dwc2_hsotg *hsotg, 
-> bool select_phy)
->  		dwc2_writel(hsotg, usbcfg, GUSBCFG);
->  	}
+>  properties:
+>    compatible:
+> -    const: ingenic,jz4770-vpu-rproc
+> +    enum:
+> +      - ingenic,jz4760-vpu-rproc
+> +      - ingenic,jz4760b-vpu-rproc
+> +      - ingenic,jz4770-vpu-rproc
+> +      - ingenic,jz4775-vpu-rproc
+> +      - ingenic,jz4780-vpu-rproc
 > 
-> +	if (hsotg->params.deactivate_ingenic_overcurrent_detection) {
-> +		if (dwc2_is_host_mode(hsotg)) {
-> +			otgctl = readl(hsotg->regs + GOTGCTL);
-> +			otgctl |= GOTGCTL_VBVALOEN | GOTGCTL_VBVALOVAL;
-> +			writel(otgctl, hsotg->regs + GOTGCTL);
-> +		}
-> +	}
-> +
->  	return retval;
->  }
-> 
-> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-> index ab6b815..e026d13 100644
-> --- a/drivers/usb/dwc2/core.h
-> +++ b/drivers/usb/dwc2/core.h
-> @@ -418,6 +418,10 @@ enum dwc2_ep0_state {
->   *			detection using GGPIO register.
->   *			0 - Deactivate the external level detection (default)
->   *			1 - Activate the external level detection
-> + * @deactivate_ingenic_overcurrent_detection: Deactivate Ingenic 
-> overcurrent
-> + *			detection.
-> + *			0 - Activate the overcurrent detection (default)
-> + *			1 - Deactivate the overcurrent detection
->   * @g_dma:              Enables gadget dma usage (default: 
-> autodetect).
->   * @g_dma_desc:         Enables gadget descriptor DMA (default: 
-> autodetect).
->   * @g_rx_fifo_size:	The periodic rx fifo size for the device, in
-> @@ -489,6 +493,7 @@ struct dwc2_core_params {
->  	u8 hird_threshold;
->  	bool activate_stm_fs_transceiver;
->  	bool activate_stm_id_vb_detection;
-> +	bool deactivate_ingenic_overcurrent_detection;
->  	bool ipg_isoc_en;
->  	u16 max_packet_count;
->  	u32 max_transfer_size;
-> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-> index 67c5eb1..a7a1b50 100644
-> --- a/drivers/usb/dwc2/params.c
-> +++ b/drivers/usb/dwc2/params.c
-> @@ -71,6 +71,47 @@ static void dwc2_set_his_params(struct dwc2_hsotg 
-> *hsotg)
->  	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
->  }
-> 
-> +static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
-> +{
-> +	struct dwc2_core_params *p = &hsotg->params;
-> +
-> +	p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
-> +	p->speed = DWC2_SPEED_PARAM_HIGH;
-> +	p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
-> +	p->phy_utmi_width = 16;
-> +	p->deactivate_ingenic_overcurrent_detection =
-> +		device_property_read_bool(hsotg->dev, "disable-over-current");
+>    reg:
+> -    items:
+> -      - description: aux registers
+> -      - description: tcsm0 registers
+> -      - description: tcsm1 registers
+> -      - description: sram registers
+> +    oneOf:
+> +      - items:
+> +          - description: aux registers
+> +          - description: tcsm0 registers
+> +          - description: tcsm1 registers
+> +          - description: sram registers
+> +      - items:
+> +          - description: aux registers
+> +          - description: tcsm registers
+> +          - description: sram registers
 
-That device property was not documented in the previous patch. Also 
-this probably should be "ingenic,disable-over-current".
+Since we have "reg-names" already, we don't really need any 
+description, so you could just have:
+
+reg:
+  minItems: 3
+  maxItems: 4
+
+> 
+>    reg-names:
+> -    items:
+> -      - const: aux
+> -      - const: tcsm0
+> -      - const: tcsm1
+> -      - const: sram
+> +    oneOf:
+> +      - items:
+> +          - const: aux
+> +          - const: tcsm0
+> +          - const: tcsm1
+> +          - const: sram
+> +      - items:
+> +          - const: aux
+> +          - const: tcsm
+> +          - const: sram
+
+You could just add "tcsm" to the items list, and add:
+minItems: 3
+maxItems: 4
+
+> 
+>    clocks:
+> -    items:
+> -      - description: aux clock
+> -      - description: vpu clock
+> +    oneOf:
+> +      - items:
+> +          - description: aux clock
+> +          - description: vpu clock
+> +      - items:
+> +          - description: vpu clock
+
+Same as above, since we already have clock-names, the descriptions 
+don't bring much.
+
+You can replace with:
+
+clocks:
+  minItems: 1
+  maxItems: 2
+
+> 
+>    clock-names:
+> -    items:
+> -      - const: aux
+> -      - const: vpu
+> +    oneOf:
+> +      - items:
+> +          - const: aux
+> +          - const: vpu
+> +      - items:
+> +          - const: vpu
+
+I think you could just add:
+minItems: 1
 
 Cheers,
 -Paul
 
-> +}
-> +
-> +static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
-> +{
-> +	struct dwc2_core_params *p = &hsotg->params;
-> +
-> +	p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
-> +	p->speed = DWC2_SPEED_PARAM_HIGH;
-> +	p->host_channels = 16;
-> +	p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
-> +	p->phy_utmi_width = 16;
-> +	p->deactivate_ingenic_overcurrent_detection =
-> +		device_property_read_bool(hsotg->dev, "disable-over-current");
-> +}
-> +
-> +static void dwc2_set_x2000_params(struct dwc2_hsotg *hsotg)
-> +{
-> +	struct dwc2_core_params *p = &hsotg->params;
-> +
-> +	p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
-> +	p->speed = DWC2_SPEED_PARAM_HIGH;
-> +	p->host_rx_fifo_size = 1024;
-> +	p->host_nperio_tx_fifo_size = 1024;
-> +	p->host_perio_tx_fifo_size = 1024;
-> +	p->host_channels = 16;
-> +	p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
-> +	p->phy_utmi_width = 16;
-> +	p->deactivate_ingenic_overcurrent_detection =
-> +		device_property_read_bool(hsotg->dev, "disable-over-current");
-> +}
-> +
->  static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)
->  {
->  	struct dwc2_core_params *p = &hsotg->params;
-> @@ -202,7 +243,13 @@ static void 
-> dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
 > 
->  const struct of_device_id dwc2_of_match_table[] = {
->  	{ .compatible = "brcm,bcm2835-usb", .data = dwc2_set_bcm_params },
-> -	{ .compatible = "hisilicon,hi6220-usb", .data = dwc2_set_his_params 
->  },
-> +	{ .compatible = "hisilicon,hi6220-usb", .data = dwc2_set_his_params 
-> },
-> +	{ .compatible = "ingenic,jz4775-otg", .data = 
-> dwc2_set_jz4775_params },
-> +	{ .compatible = "ingenic,jz4780-otg", .data = 
-> dwc2_set_jz4775_params },
-> +	{ .compatible = "ingenic,x1000-otg", .data = dwc2_set_jz4775_params 
-> },
-> +	{ .compatible = "ingenic,x1600-otg", .data = dwc2_set_x1600_params 
-> },
-> +	{ .compatible = "ingenic,x1830-otg", .data = dwc2_set_x1600_params 
-> },
-> +	{ .compatible = "ingenic,x2000-otg", .data = dwc2_set_x2000_params 
-> },
->  	{ .compatible = "rockchip,rk3066-usb", .data = dwc2_set_rk_params },
->  	{ .compatible = "lantiq,arx100-usb", .data = dwc2_set_ltq_params },
->  	{ .compatible = "lantiq,xrx200-usb", .data = dwc2_set_ltq_params },
+>    interrupts:
+>      maxItems: 1
+> @@ -60,7 +81,7 @@ examples:
+>    - |
+>      #include <dt-bindings/clock/jz4770-cgu.h>
+> 
+> -    vpu: video-decoder@132a0000 {
+> +    video-decoder@132a0000 {
+>        compatible = "ingenic,jz4770-vpu-rproc";
+> 
+>        reg = <0x132a0000 0x20>, /* AUX */
+> @@ -75,3 +96,20 @@ examples:
+>        interrupt-parent = <&cpuintc>;
+>        interrupts = <3>;
+>      };
+> +  - |
+> +    #include <dt-bindings/clock/jz4780-cgu.h>
+> +
+> +    video-decoder@132a0000 {
+> +      compatible = "ingenic,jz4780-vpu-rproc";
+> +
+> +      reg = <0x132a0000 0x20>, /* AUX */
+> +            <0x132c0000 0x8000>, /* TCSM */
+> +            <0x132f0000 0x4000>; /* SRAM */
+> +      reg-names = "aux", "tcsm", "sram";
+> +
+> +      clocks = <&cgu JZ4780_CLK_VPU>;
+> +      clock-names = "vpu";
+> +
+> +      interrupt-parent = <&intc>;
+> +      interrupts = <62>;
+> +    };
 > --
 > 2.7.4
 > 
