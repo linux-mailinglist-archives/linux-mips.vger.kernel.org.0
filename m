@@ -2,154 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 041EA3D485E
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 17:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECA03D493B
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 20:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbhGXO6D (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Jul 2021 10:58:03 -0400
-Received: from out29-1.mail.aliyun.com ([115.124.29.1]:45713 "EHLO
-        out29-1.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhGXO6C (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 10:58:02 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07438685|-1;CH=blue;DM=|OVERLOAD|false|;DS=CONTINUE|ham_regular_dialog|0.253308-0.00639627-0.740296;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047208;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.Kq2NXC2_1627141111;
-Received: from 192.168.88.130(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Kq2NXC2_1627141111)
-          by smtp.aliyun-inc.com(10.147.40.7);
-          Sat, 24 Jul 2021 23:38:32 +0800
-Subject: Re: [PATCH] clocksource: Ingenic: Improve the code.
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com
-References: <1627121407-131028-1-git-send-email-zhouyanjie@wanyeetech.com>
- <OQZQWQ.MUGEDOGBXJW12@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <ac16a2ef-2532-acb0-7599-7d6a4ac1b95f@wanyeetech.com>
-Date:   Sat, 24 Jul 2021 23:38:31 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S230078AbhGXSH1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Jul 2021 14:07:27 -0400
+Received: from condef-02.nifty.com ([202.248.20.67]:28801 "EHLO
+        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229530AbhGXSH1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 14:07:27 -0400
+X-Greylist: delayed 367 seconds by postgrey-1.27 at vger.kernel.org; Sat, 24 Jul 2021 14:07:27 EDT
+Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-02.nifty.com with ESMTP id 16OIcI4t004960
+        for <linux-mips@vger.kernel.org>; Sun, 25 Jul 2021 03:38:33 +0900
+Received: from localhost.localdomain (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-09.nifty.com with ESMTP id 16OIa5fW011807;
+        Sun, 25 Jul 2021 03:36:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 16OIa5fW011807
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1627151766;
+        bh=adPHQfj4dkdvDSuI2P8Sk/NYpUO6MJy1Eba1ZmTwIqQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mwy+A+WoxA23v7DCIpvZqa01h//pg2w0vRfZRtk8hESAyrN042xstnK84DPzcoea0
+         Beda2yGgKgQ8ezrhrsTt1sXbPOJVN3u+19AnZEZNSpg+BoT1oOKRYZ24GdaREpBSCn
+         fD9NIOGpMZKN8TG7PKW0m/idNM80eGkYUAGzJa+tKDxXaQWP4Zzm9qib1DY3lLHfHW
+         GHHMdqyJ78F6lyNZaPnF16HDyOdcyDxrft1d5WodjnFot7HDAPGwEAIWBQ2c4IBBcU
+         OwFO3HimmyMXY2tYJBWOsoT2f9X+/B9V6bemsoVMOgCLlVzfQnqiuT3+B1bA7FQbAi
+         +/wU2T2agkHoA==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-mips@vger.kernel.org, Michal Marek <michal.lkml@markovi.net>,
+        Richard Weinberger <richard@nod.at>,
+        Ingo Molnar <mingo@redhat.com>, Jeff Dike <jdike@addtoit.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Subject: [PATCH] kbuild: do not require sub-make for separate output tree builds
+Date:   Sun, 25 Jul 2021 03:35:56 +0900
+Message-Id: <20210724183556.76680-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <OQZQWQ.MUGEDOGBXJW12@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+As explained in commit 3204a7fb98a3 ("kbuild: prefix $(srctree)/ to some
+included Makefiles"), I want to stop using --include-dir some day.
 
-On 2021/7/24 下午7:54, Paul Cercueil wrote:
-> Hi Zhou,
->
-> Thanks! I actually had a similar patch locally that I was eventually 
-> going to send.
->
->
-> Le sam., juil. 24 2021 at 18:10:07 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> Use "FIELD_GET()" and "FIELD_PREP()" to simplify the code.
->>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>  drivers/clocksource/ingenic-sysost.c | 11 +++++------
->>  1 file changed, 5 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/clocksource/ingenic-sysost.c 
->> b/drivers/clocksource/ingenic-sysost.c
->> index a129840..1fbea59 100644
->> --- a/drivers/clocksource/ingenic-sysost.c
->> +++ b/drivers/clocksource/ingenic-sysost.c
->> @@ -4,6 +4,7 @@
->>   * Copyright (c) 2020 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->>   */
->>
->> +#include <linux/bitfield.h>
->>  #include <linux/bitops.h>
->>  #include <linux/clk.h>
->>  #include <linux/clk-provider.h>
->> @@ -34,8 +35,6 @@
->>  /* bits within the OSTCCR register */
->>  #define OSTCCR_PRESCALE1_MASK    0x3
->>  #define OSTCCR_PRESCALE2_MASK    0xc
->> -#define OSTCCR_PRESCALE1_LSB    0
->> -#define OSTCCR_PRESCALE2_LSB    2
->>
->>  /* bits within the OSTCR register */
->>  #define OSTCR_OST1CLR            BIT(0)
->> @@ -98,7 +97,7 @@ static unsigned long 
->> ingenic_ost_percpu_timer_recalc_rate(struct clk_hw *hw,
->>
->>      prescale = readl(ost_clk->ost->base + info->ostccr_reg);
->>
->> -    prescale = (prescale & OSTCCR_PRESCALE1_MASK) >> 
->> OSTCCR_PRESCALE1_LSB;
->> +    prescale = FIELD_GET(OSTCCR_PRESCALE1_MASK, prescale);
->>
->>      return parent_rate >> (prescale * 2);
->>  }
->> @@ -112,7 +111,7 @@ static unsigned long 
->> ingenic_ost_global_timer_recalc_rate(struct clk_hw *hw,
->>
->>      prescale = readl(ost_clk->ost->base + info->ostccr_reg);
->>
->> -    prescale = (prescale & OSTCCR_PRESCALE2_MASK) >> 
->> OSTCCR_PRESCALE2_LSB;
->> +    prescale = FIELD_GET(OSTCCR_PRESCALE2_MASK, prescale);
->>
->>      return parent_rate >> (prescale * 2);
->>  }
->> @@ -151,7 +150,7 @@ static int 
->> ingenic_ost_percpu_timer_set_rate(struct clk_hw *hw, unsigned long re
->>      int val;
->>
->>      val = readl(ost_clk->ost->base + info->ostccr_reg);
->> -    val = (val & ~OSTCCR_PRESCALE1_MASK) | (prescale << 
->> OSTCCR_PRESCALE1_LSB);
->> +    val = (val & ~OSTCCR_PRESCALE1_MASK) | 
->> FIELD_PREP(OSTCCR_PRESCALE1_MASK, prescale);
->
-> Just one nitpick, I'd prefer this:
->
-> val ~= &OSTCCR_PRESCALE1_MASK;
-> val |= FIELD_PREP(OSTCCR_PRESCALE1_MASK, prescale);
+I already fixed up the top Makefile, but some arch Makefiles (mips, um,
+x86) still include check-in Makefiles without $(srctree)/.
 
+Fix them up so 'need-sub-make := 1' can go away for this case.
 
-Sure, I will change it in the next version.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
+ Makefile           | 5 ++---
+ arch/mips/Makefile | 2 +-
+ arch/um/Makefile   | 6 +++---
+ arch/x86/Makefile  | 2 +-
+ 4 files changed, 7 insertions(+), 8 deletions(-)
 
->
->>      writel(val, ost_clk->ost->base + info->ostccr_reg);
->>
->>      return 0;
->> @@ -166,7 +165,7 @@ static int 
->> ingenic_ost_global_timer_set_rate(struct clk_hw *hw, unsigned long re
->>      int val;
->>
->>      val = readl(ost_clk->ost->base + info->ostccr_reg);
->> -    val = (val & ~OSTCCR_PRESCALE2_MASK) | (prescale << 
->> OSTCCR_PRESCALE2_LSB);
->> +    val = (val & ~OSTCCR_PRESCALE2_MASK) | 
->> FIELD_PREP(OSTCCR_PRESCALE2_MASK, prescale);
->
-> Same here.
+diff --git a/Makefile b/Makefile
+index e4f5895badb5..bb10a93edf5c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -191,10 +191,9 @@ endif
+ ifneq ($(abs_srctree),$(abs_objtree))
+ # Look for make include files relative to root of kernel src
+ #
+-# This does not become effective immediately because MAKEFLAGS is re-parsed
+-# once after the Makefile is read. We need to invoke sub-make.
++# --included-dir is added for backward compatibility, but you should not rely on
++# it. Please add $(srctree)/ prefix to include Makefiles in the source tree.
+ MAKEFLAGS += --include-dir=$(abs_srctree)
+-need-sub-make := 1
+ endif
+ 
+ ifneq ($(filter 3.%,$(MAKE_VERSION)),)
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index 4e942b7ef022..bc2e1857d8ce 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -254,7 +254,7 @@ endif
+ #
+ # Board-dependent options and extra files
+ #
+-include arch/mips/Kbuild.platforms
++include $(srctree)/arch/mips/Kbuild.platforms
+ 
+ ifdef CONFIG_PHYSICAL_START
+ load-y					= $(CONFIG_PHYSICAL_START)
+diff --git a/arch/um/Makefile b/arch/um/Makefile
+index 12a7acef0357..f2fe63bfd819 100644
+--- a/arch/um/Makefile
++++ b/arch/um/Makefile
+@@ -41,8 +41,8 @@ endif
+ 
+ HOST_DIR := arch/$(HEADER_ARCH)
+ 
+-include $(ARCH_DIR)/Makefile-skas
+-include $(HOST_DIR)/Makefile.um
++include $(srctree)/$(ARCH_DIR)/Makefile-skas
++include $(srctree)/$(HOST_DIR)/Makefile.um
+ 
+ core-y += $(HOST_DIR)/um/
+ 
+@@ -76,7 +76,7 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
+ 		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
+ 
+ #This will adjust *FLAGS accordingly to the platform.
+-include $(ARCH_DIR)/Makefile-os-$(OS)
++include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
+ 
+ KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/include \
+ 		   -I$(srctree)/$(HOST_DIR)/include/uapi \
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 307fd0000a83..0fa7dc73b5d8 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -75,7 +75,7 @@ ifeq ($(CONFIG_X86_32),y)
+         KBUILD_CFLAGS += $(call cc-option,$(cc_stack_align4))
+ 
+         # CPU-specific tuning. Anything which can be shared with UML should go here.
+-        include arch/x86/Makefile_32.cpu
++        include $(srctree)/arch/x86/Makefile_32.cpu
+         KBUILD_CFLAGS += $(cflags-y)
+ 
+         # temporary until string.h is fixed
+-- 
+2.27.0
 
-
-Sure.
-
-
-Thanks and  best regards!
-
-
->
-> Cheers,
-> -Paul
->
->>      writel(val, ost_clk->ost->base + info->ostccr_reg);
->>
->>      return 0;
->> -- 
->> 2.7.4
->>
->
