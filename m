@@ -2,33 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB393D4561
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 08:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D463D4566
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 08:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234046AbhGXGCc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Jul 2021 02:02:32 -0400
-Received: from out28-196.mail.aliyun.com ([115.124.28.196]:45053 "EHLO
-        out28-196.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbhGXGCc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 02:02:32 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1627883|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0376676-0.000498982-0.961833;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047192;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.Kpjys0i_1627108981;
-Received: from 192.168.88.130(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Kpjys0i_1627108981)
-          by smtp.aliyun-inc.com(10.147.43.95);
-          Sat, 24 Jul 2021 14:43:02 +0800
-Subject: Re: [PATCH 2/3] pinctrl: ingenic: Fix bias config for X2000(E)
+        id S233965AbhGXGD1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Jul 2021 02:03:27 -0400
+Received: from out28-73.mail.aliyun.com ([115.124.28.73]:53017 "EHLO
+        out28-73.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229926AbhGXGD1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 02:03:27 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1077663|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00401955-0.000870033-0.99511;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.KpjZ-cN_1627109037;
+Received: from 192.168.88.130(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KpjZ-cN_1627109037)
+          by smtp.aliyun-inc.com(10.147.40.233);
+          Sat, 24 Jul 2021 14:43:58 +0800
+Subject: Re: [PATCH 3/3] pinctrl: ingenic: Add .max_register in regmap_config
 To:     Paul Cercueil <paul@crapouillou.net>,
         Linus Walleij <linus.walleij@linaro.org>
 Cc:     linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+        linux-kernel@vger.kernel.org
 References: <20210717174836.14776-1-paul@crapouillou.net>
- <20210717174836.14776-2-paul@crapouillou.net>
+ <20210717174836.14776-3-paul@crapouillou.net>
 From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <c699e0a3-aa97-e8d8-ddfb-154f6d9344ce@wanyeetech.com>
-Date:   Sat, 24 Jul 2021 14:42:58 +0800
+Message-ID: <ebae8ead-d7c4-071b-7415-d83f2db9f9cc@wanyeetech.com>
+Date:   Sat, 24 Jul 2021 14:43:56 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20210717174836.14776-2-paul@crapouillou.net>
+In-Reply-To: <20210717174836.14776-3-paul@crapouillou.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -39,45 +39,42 @@ X-Mailing-List: linux-mips@vger.kernel.org
 Hi Paul,
 
 On 2021/7/18 上午1:48, Paul Cercueil wrote:
-> The ingenic_set_bias() function's "bias" argument is not a
-> "enum pin_config_param", so its value should not be compared against
-> values of that enum.
+> Compute the max register from the GPIO chip offset and number of GPIO
+> chips.
 >
-> This should fix the bias config not working on the X2000(E) SoCs.
+> This permits to read all registers from debugfs.
 >
-> Fixes: 943e0da15370 ("pinctrl: Ingenic: Add pinctrl driver for X2000.")
-> Cc: <stable@vger.kernel.org> # v5.12
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->   drivers/pinctrl/pinctrl-ingenic.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>   drivers/pinctrl/pinctrl-ingenic.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
 
 
 Tested-by: 周琰杰 (Zhou Yanjie)<zhouyanjie@wanyeetech.com>
 
 
 > diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
-> index 126ca671c3cd..263498be8e31 100644
+> index 263498be8e31..2bbcb8063a16 100644
 > --- a/drivers/pinctrl/pinctrl-ingenic.c
 > +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -3441,17 +3441,17 @@ static void ingenic_set_bias(struct ingenic_pinctrl *jzpc,
->   {
->   	if (jzpc->info->version >= ID_X2000) {
->   		switch (bias) {
-> -		case PIN_CONFIG_BIAS_PULL_UP:
-> +		case GPIO_PULL_UP:
->   			ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPD, false);
->   			ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPU, true);
->   			break;
+> @@ -3759,6 +3759,7 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
+>   	void __iomem *base;
+>   	const struct ingenic_chip_info *chip_info;
+>   	struct device_node *node;
+> +	struct regmap_config regmap_config;
+>   	unsigned int i;
+>   	int err;
 >   
-> -		case PIN_CONFIG_BIAS_PULL_DOWN:
-> +		case GPIO_PULL_DOWN:
->   			ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPU, false);
->   			ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPD, true);
->   			break;
+> @@ -3776,8 +3777,10 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
+>   	if (IS_ERR(base))
+>   		return PTR_ERR(base);
 >   
-> -		case PIN_CONFIG_BIAS_DISABLE:
-> +		case GPIO_PULL_DIS:
->   		default:
->   			ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPU, false);
->   			ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPD, false);
+> -	jzpc->map = devm_regmap_init_mmio(dev, base,
+> -			&ingenic_pinctrl_regmap_config);
+> +	regmap_config = ingenic_pinctrl_regmap_config;
+> +	regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset;
+> +
+> +	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
+>   	if (IS_ERR(jzpc->map)) {
+>   		dev_err(dev, "Failed to create regmap\n");
+>   		return PTR_ERR(jzpc->map);
