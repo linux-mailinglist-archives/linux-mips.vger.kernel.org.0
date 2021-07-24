@@ -2,139 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECA03D493B
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 20:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED5A3D4958
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 21:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbhGXSH1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Jul 2021 14:07:27 -0400
-Received: from condef-02.nifty.com ([202.248.20.67]:28801 "EHLO
-        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbhGXSH1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 14:07:27 -0400
-X-Greylist: delayed 367 seconds by postgrey-1.27 at vger.kernel.org; Sat, 24 Jul 2021 14:07:27 EDT
-Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-02.nifty.com with ESMTP id 16OIcI4t004960
-        for <linux-mips@vger.kernel.org>; Sun, 25 Jul 2021 03:38:33 +0900
-Received: from localhost.localdomain (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 16OIa5fW011807;
-        Sun, 25 Jul 2021 03:36:06 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 16OIa5fW011807
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1627151766;
-        bh=adPHQfj4dkdvDSuI2P8Sk/NYpUO6MJy1Eba1ZmTwIqQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mwy+A+WoxA23v7DCIpvZqa01h//pg2w0vRfZRtk8hESAyrN042xstnK84DPzcoea0
-         Beda2yGgKgQ8ezrhrsTt1sXbPOJVN3u+19AnZEZNSpg+BoT1oOKRYZ24GdaREpBSCn
-         fD9NIOGpMZKN8TG7PKW0m/idNM80eGkYUAGzJa+tKDxXaQWP4Zzm9qib1DY3lLHfHW
-         GHHMdqyJ78F6lyNZaPnF16HDyOdcyDxrft1d5WodjnFot7HDAPGwEAIWBQ2c4IBBcU
-         OwFO3HimmyMXY2tYJBWOsoT2f9X+/B9V6bemsoVMOgCLlVzfQnqiuT3+B1bA7FQbAi
-         +/wU2T2agkHoA==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-mips@vger.kernel.org, Michal Marek <michal.lkml@markovi.net>,
-        Richard Weinberger <richard@nod.at>,
-        Ingo Molnar <mingo@redhat.com>, Jeff Dike <jdike@addtoit.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Subject: [PATCH] kbuild: do not require sub-make for separate output tree builds
-Date:   Sun, 25 Jul 2021 03:35:56 +0900
-Message-Id: <20210724183556.76680-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.27.0
+        id S229697AbhGXSY7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Jul 2021 14:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229510AbhGXSY5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 14:24:57 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4764CC061575;
+        Sat, 24 Jul 2021 12:05:28 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id b9so5142041wrx.12;
+        Sat, 24 Jul 2021 12:05:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZG6iH7qljFvjZVp2NAbqIPjXBeZ+g+2A5OSjvjmCHwc=;
+        b=aoTNUZ4LTzfzAjF8AUZXFttrasZdwRnEzoARVvTmUDQ+G8MgmQfz/xLxewIhFi+c1n
+         CGlhpMDoWUVCioMxCubfyd9izi0k7lRTYDc3ZnP5LSd3e1qN8ewVm2h3Njv6vJaYrHGl
+         OM9PWswDcuuMMHPyeCFm3cLZGvNFlWnbxLs73h+qpSzm0rWeBKEOasDFtBTCAqEpGDta
+         pSaCK+zDt0jKC4dSo2zAnVyyXS32+kS/PpK0VAGDC2DZ5GjGJ9hQ+TmzbDcjrK/tbuGd
+         P/NbvpVxXo57k3Iwtwnx9dkk9JfpueJo2TdmZweXVApQRyxi/ocP2JfWwAJRgZZRWbYi
+         60yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZG6iH7qljFvjZVp2NAbqIPjXBeZ+g+2A5OSjvjmCHwc=;
+        b=rlAygzq9oJEnoFEBfaaDzOreoP/aG4UB+yTArbxW6ysp0DTBFjH/k3KE5kYylYJCSb
+         H/99t4nnFpHyTpWW1i4B1D+fyHzgKO4ZKQQcW16HgyvsME1zs0LvggbYgha9XvSFV+1G
+         r5x0eURQjzijzBbFJRfYM+tafZfwTXTm01JOSL46gsSqv67qHwZJPTRrQqleoF3SjCDL
+         1dT0DFqCXIvYWP1k+PY1gGuzQ4HJs7TbHclcMfosmIhHwqZsNwLH56I034NclBlfWRlN
+         ovEiML1QXW6rdGX2BFoD9Ty22oW9VNeJ5+240PvCjKwB9Jfk/5M0X+q04wNeTwxUvhwk
+         hGxg==
+X-Gm-Message-State: AOAM530eHKPFfrlT8DMTPiQLOIk4oCwjZ99lovKsOBGxV+ykFlldWMPJ
+        jGY/wuHd2S2yu9YVcdJ6D6I=
+X-Google-Smtp-Source: ABdhPJz7wpkQ4xsx6TfNSI5hCjli346t18Z1Lpoh38pmc+aJgHHL9ljETqk+iDVZ6pKIWcdz+dVuIQ==
+X-Received: by 2002:a5d:6d88:: with SMTP id l8mr11178364wrs.301.1627153526579;
+        Sat, 24 Jul 2021 12:05:26 -0700 (PDT)
+Received: from monk.home (astrasbourg-157-1-7-84.w90-40.abo.wanadoo.fr. [90.40.218.84])
+        by smtp.gmail.com with ESMTPSA id j15sm1117798wms.20.2021.07.24.12.05.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Jul 2021 12:05:26 -0700 (PDT)
+From:   Christophe Branchereau <cbranchereau@gmail.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, linux-mips@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org, linux@roeck-us.net,
+        contact@artur-rojek.eu, paul@crapouillou.net,
+        Christophe Branchereau <cbranchereau@gmail.com>
+Subject: [PATCH v3 0/4] iio/adc: ingenic: add support for the JZ4760(B) Socs to the ingenic sadc driver
+Date:   Sat, 24 Jul 2021 21:04:44 +0200
+Message-Id: <20210724190449.221894-1-cbranchereau@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-As explained in commit 3204a7fb98a3 ("kbuild: prefix $(srctree)/ to some
-included Makefiles"), I want to stop using --include-dir some day.
+This is a set of patches to add support to the JZ4760(B) socs found in numerous gaming handhelds and some
+mp3 players to the ingenic-sadc driver.
 
-I already fixed up the top Makefile, but some arch Makefiles (mips, um,
-x86) still include check-in Makefiles without $(srctree)/.
+Changelog for this v3:
+- Minor formatting change in ingenic-adc.c to remain within 80 lines
+- Correctly set the ingenic,use-internal-divider property in the Documentation so it cannot be used on other
+socs than the jz4760b, and modify the description as requested.
 
-Fix them up so 'need-sub-make := 1' can go away for this case.
+Thanks to Paul and Jonathan for their help
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+Christophe Branchereau (5):
+  iio/adc: ingenic: rename has_aux2 to has_aux_md
+  dt-bindings: iio/adc: add an INGENIC_ADC_AUX0 entry
+  iio/adc: ingenic: add JZ4760 support to the sadc driver
+  iio/adc: ingenic: add JZ4760B support to the sadc driver
+  dt-bindings: iio/adc: ingenic: add the JZ4760(B) socs to the sadc
+    Documentation
 
- Makefile           | 5 ++---
- arch/mips/Makefile | 2 +-
- arch/um/Makefile   | 6 +++---
- arch/x86/Makefile  | 2 +-
- 4 files changed, 7 insertions(+), 8 deletions(-)
+ .../bindings/iio/adc/ingenic,adc.yaml         |  19 ++++
+ drivers/iio/adc/ingenic-adc.c                 | 101 ++++++++++++++++--
+ include/dt-bindings/iio/adc/ingenic,adc.h     |   1 +
+ 3 files changed, 112 insertions(+), 9 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index e4f5895badb5..bb10a93edf5c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -191,10 +191,9 @@ endif
- ifneq ($(abs_srctree),$(abs_objtree))
- # Look for make include files relative to root of kernel src
- #
--# This does not become effective immediately because MAKEFLAGS is re-parsed
--# once after the Makefile is read. We need to invoke sub-make.
-+# --included-dir is added for backward compatibility, but you should not rely on
-+# it. Please add $(srctree)/ prefix to include Makefiles in the source tree.
- MAKEFLAGS += --include-dir=$(abs_srctree)
--need-sub-make := 1
- endif
- 
- ifneq ($(filter 3.%,$(MAKE_VERSION)),)
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index 4e942b7ef022..bc2e1857d8ce 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -254,7 +254,7 @@ endif
- #
- # Board-dependent options and extra files
- #
--include arch/mips/Kbuild.platforms
-+include $(srctree)/arch/mips/Kbuild.platforms
- 
- ifdef CONFIG_PHYSICAL_START
- load-y					= $(CONFIG_PHYSICAL_START)
-diff --git a/arch/um/Makefile b/arch/um/Makefile
-index 12a7acef0357..f2fe63bfd819 100644
---- a/arch/um/Makefile
-+++ b/arch/um/Makefile
-@@ -41,8 +41,8 @@ endif
- 
- HOST_DIR := arch/$(HEADER_ARCH)
- 
--include $(ARCH_DIR)/Makefile-skas
--include $(HOST_DIR)/Makefile.um
-+include $(srctree)/$(ARCH_DIR)/Makefile-skas
-+include $(srctree)/$(HOST_DIR)/Makefile.um
- 
- core-y += $(HOST_DIR)/um/
- 
-@@ -76,7 +76,7 @@ USER_CFLAGS = $(patsubst $(KERNEL_DEFINES),,$(patsubst -I%,,$(KBUILD_CFLAGS))) \
- 		-idirafter $(objtree)/include -D__KERNEL__ -D__UM_HOST__
- 
- #This will adjust *FLAGS accordingly to the platform.
--include $(ARCH_DIR)/Makefile-os-$(OS)
-+include $(srctree)/$(ARCH_DIR)/Makefile-os-$(OS)
- 
- KBUILD_CPPFLAGS += -I$(srctree)/$(HOST_DIR)/include \
- 		   -I$(srctree)/$(HOST_DIR)/include/uapi \
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 307fd0000a83..0fa7dc73b5d8 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -75,7 +75,7 @@ ifeq ($(CONFIG_X86_32),y)
-         KBUILD_CFLAGS += $(call cc-option,$(cc_stack_align4))
- 
-         # CPU-specific tuning. Anything which can be shared with UML should go here.
--        include arch/x86/Makefile_32.cpu
-+        include $(srctree)/arch/x86/Makefile_32.cpu
-         KBUILD_CFLAGS += $(cflags-y)
- 
-         # temporary until string.h is fixed
 -- 
-2.27.0
+2.30.2
 
