@@ -2,222 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D273D47C6
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 15:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78523D47D8
+	for <lists+linux-mips@lfdr.de>; Sat, 24 Jul 2021 15:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234377AbhGXM0B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Jul 2021 08:26:01 -0400
-Received: from out29-1.mail.aliyun.com ([115.124.29.1]:48586 "EHLO
-        out29-1.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbhGXM0A (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 24 Jul 2021 08:26:00 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436592|-1;CH=blue;DM=|OVERLOAD|false|;DS=CONTINUE|ham_regular_dialog|0.504641-0.000518222-0.49484;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047213;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.KpzUXqf_1627131989;
-Received: from 192.168.88.130(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KpzUXqf_1627131989)
-          by smtp.aliyun-inc.com(10.147.43.95);
-          Sat, 24 Jul 2021 21:06:30 +0800
-Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: Add bindings for new Ingenic
- SoCs.
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        id S234316AbhGXMnf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 24 Jul 2021 08:43:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49726 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230449AbhGXMnf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 24 Jul 2021 08:43:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 96FD860E8F;
+        Sat, 24 Jul 2021 13:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627133046;
+        bh=mEUw99F293tWtz8wzxel1pIi1bx+JKngz0tGxATEfFo=;
+        h=References:From:To:Cc:Subject:In-reply-to:Date:From;
+        b=W+y68Scxf5cvGO18Lk4XDQUEO3CQJV2QFJ9gKGnbRK3gSaCd+09v3zTyCUorG2awk
+         DnxfrgoAXrNac00GfAOa4X27hrfMIcwBX8c7mBPWbjm2hoJIFXyx/b764zK+gyoYmi
+         MbHAqgYyFyNCXBEy4HZFkFDdaxQHdNC2sqVoQiFb5Kqr2k39IqOufobxBL3hCyOEO+
+         Pu4smcXHc/dEtNn/3JkxXMuHnCx8gZaQLMPa3XBF9oPJzRbxyqC7P69jzxVbSCeXsM
+         bNQtNCzY2gsLIwasjX3xQSB731WcHmuMKcQNuCq+OUG+noj00gdgcIzRu1KfWjSpsY
+         +cEyxcfQ1Nr8g==
+References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1627116521-124612-3-git-send-email-zhouyanjie@wanyeetech.com>
+ <IQWQWQ.9EAMZ76IPL892@crapouillou.net>
+ <e4f7897a-6b70-d936-a968-e66556382851@wanyeetech.com>
+User-agent: mu4e 1.4.15; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, hminas@synopsys.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
         rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com
-References: <1627117898-125239-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1627117898-125239-2-git-send-email-zhouyanjie@wanyeetech.com>
- <6CXQWQ.XVALRMYW4LM72@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <cfeef89e-8049-5895-0e18-31f136c46e84@wanyeetech.com>
-Date:   Sat, 24 Jul 2021 21:06:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        jun.jiang@ingenic.com, sernia.zhou@foxmail.com,
+        Dragan =?utf-8?B?xIxlxI1h?= =?utf-8?B?dmFj?= 
+        <dragancecavac@yahoo.com>
+Subject: Re: [PATCH 2/2] USB: dwc2: Add OTG support for Ingenic SoCs.
+In-reply-to: <e4f7897a-6b70-d936-a968-e66556382851@wanyeetech.com>
+Date:   Sat, 24 Jul 2021 16:24:01 +0300
+Message-ID: <8735s37slq.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <6CXQWQ.XVALRMYW4LM72@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
 
-On 2021/7/24 下午7:02, Paul Cercueil wrote:
-> Hi Zhou,
->
-> Le sam., juil. 24 2021 at 17:11:37 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> Add the remoteproc bindings for the JZ4760 SoC, the JZ4760B SoC,
->> the JZ4775 SoC, and the JZ4780 SoC from Ingenic.
+Hi Zhou,
+
+Zhou Yanjie writes:
+>>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+>>> index 67c5eb1..a7a1b50 100644
+>>> --- a/drivers/usb/dwc2/params.c
+>>> +++ b/drivers/usb/dwc2/params.c
+>>> @@ -71,6 +71,47 @@ static void dwc2_set_his_params(struct
+>>> dwc2_hsotg *hsotg)
+>>>      p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
+>>>  }
+>>>
+>>> +static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
+>>> +{
+>>> +    struct dwc2_core_params *p = &hsotg->params;
+>>> +
+>>> +    p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
+>>> +    p->speed = DWC2_SPEED_PARAM_HIGH;
+>>> +    p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
+>>> +    p->phy_utmi_width = 16;
+>>> +    p->deactivate_ingenic_overcurrent_detection =
+>>> +        device_property_read_bool(hsotg->dev, "disable-over-current");
 >>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>  .../bindings/remoteproc/ingenic,vpu.yaml           | 74 
->> ++++++++++++++++------
->>  1 file changed, 56 insertions(+), 18 deletions(-)
->>
->> diff --git 
->> a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml 
->> b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
->> index d0aa91b..6154596 100644
->> --- a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
->> +++ b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
->> @@ -17,31 +17,52 @@ maintainers:
->>
->>  properties:
->>    compatible:
->> -    const: ingenic,jz4770-vpu-rproc
->> +    enum:
->> +      - ingenic,jz4760-vpu-rproc
->> +      - ingenic,jz4760b-vpu-rproc
->> +      - ingenic,jz4770-vpu-rproc
->> +      - ingenic,jz4775-vpu-rproc
->> +      - ingenic,jz4780-vpu-rproc
->>
->>    reg:
->> -    items:
->> -      - description: aux registers
->> -      - description: tcsm0 registers
->> -      - description: tcsm1 registers
->> -      - description: sram registers
->> +    oneOf:
->> +      - items:
->> +          - description: aux registers
->> +          - description: tcsm0 registers
->> +          - description: tcsm1 registers
->> +          - description: sram registers
->> +      - items:
->> +          - description: aux registers
->> +          - description: tcsm registers
->> +          - description: sram registers
->
-> Since we have "reg-names" already, we don't really need any 
-> description, so you could just have:
->
-> reg:
->  minItems: 3
->  maxItems: 4
-
-
-Sure, I will do it in the next version.
-
-
->
->>
->>    reg-names:
->> -    items:
->> -      - const: aux
->> -      - const: tcsm0
->> -      - const: tcsm1
->> -      - const: sram
->> +    oneOf:
->> +      - items:
->> +          - const: aux
->> +          - const: tcsm0
->> +          - const: tcsm1
->> +          - const: sram
->> +      - items:
->> +          - const: aux
->> +          - const: tcsm
->> +          - const: sram
->
-> You could just add "tcsm" to the items list, and add:
-> minItems: 3
-> maxItems: 4
-
-
-Sure.
-
-
->
->>
->>    clocks:
->> -    items:
->> -      - description: aux clock
->> -      - description: vpu clock
->> +    oneOf:
->> +      - items:
->> +          - description: aux clock
->> +          - description: vpu clock
->> +      - items:
->> +          - description: vpu clock
->
-> Same as above, since we already have clock-names, the descriptions 
-> don't bring much.
->
-> You can replace with:
->
-> clocks:
->  minItems: 1
->  maxItems: 2
-
-
-Sure.
-
-
->
->>
->>    clock-names:
->> -    items:
->> -      - const: aux
->> -      - const: vpu
->> +    oneOf:
->> +      - items:
->> +          - const: aux
->> +          - const: vpu
->> +      - items:
->> +          - const: vpu
->
-> I think you could just add:
-> minItems: 1
-
-
-Sure.
-
-
-Thanks and best regards!
-
-
->
-> Cheers,
-> -Paul
->
->>
->>    interrupts:
->>      maxItems: 1
->> @@ -60,7 +81,7 @@ examples:
->>    - |
->>      #include <dt-bindings/clock/jz4770-cgu.h>
->>
->> -    vpu: video-decoder@132a0000 {
->> +    video-decoder@132a0000 {
->>        compatible = "ingenic,jz4770-vpu-rproc";
->>
->>        reg = <0x132a0000 0x20>, /* AUX */
->> @@ -75,3 +96,20 @@ examples:
->>        interrupt-parent = <&cpuintc>;
->>        interrupts = <3>;
->>      };
->> +  - |
->> +    #include <dt-bindings/clock/jz4780-cgu.h>
->> +
->> +    video-decoder@132a0000 {
->> +      compatible = "ingenic,jz4780-vpu-rproc";
->> +
->> +      reg = <0x132a0000 0x20>, /* AUX */
->> +            <0x132c0000 0x8000>, /* TCSM */
->> +            <0x132f0000 0x4000>; /* SRAM */
->> +      reg-names = "aux", "tcsm", "sram";
->> +
->> +      clocks = <&cgu JZ4780_CLK_VPU>;
->> +      clock-names = "vpu";
->> +
->> +      interrupt-parent = <&intc>;
->> +      interrupts = <62>;
->> +    };
->> -- 
->> 2.7.4
+>> That device property was not documented in the previous patch. Also
+>> this probably should be "ingenic,disable-over-current".
 >>
 >
+> This device property already exists (it has been used in the
+> "dwc2_get_device_properties()" function below).
+>
+> Under normal circumstances, after using this device attribute, it
+> should be possible to turn off the overcurrent
+>
+> detection, but on the Ingenic processors, somehow it did not take
+> effect normally, and we must operate the
+>
+> "VBVALOEN" bit and "VBVALOVAL" bit of "GOTGCTL" register to make it normal.
+
+I believe what Paul is suggesting is that this property lacks
+documentation under Documentation/devicetree/bindings/. If that's the
+case, you could take the opportunity to document the property and,
+perhaps, add the missing prefix.
+
+-- 
+balbi
