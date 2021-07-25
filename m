@@ -2,75 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BFB3D4E41
-	for <lists+linux-mips@lfdr.de>; Sun, 25 Jul 2021 17:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D369D3D4E89
+	for <lists+linux-mips@lfdr.de>; Sun, 25 Jul 2021 18:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbhGYOjB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 25 Jul 2021 10:39:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53264 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231208AbhGYOjA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 25 Jul 2021 10:39:00 -0400
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2109460F38;
-        Sun, 25 Jul 2021 15:19:28 +0000 (UTC)
-Date:   Sun, 25 Jul 2021 16:22:01 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Christophe Branchereau <cbranchereau@gmail.com>
-Cc:     lars@metafoo.de, linux-mips@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org, linux@roeck-us.net,
-        contact@artur-rojek.eu, paul@crapouillou.net
-Subject: Re: [PATCH v3 0/4] iio/adc: ingenic: add support for the JZ4760(B)
- Socs to the ingenic sadc driver
-Message-ID: <20210725162119.242ae17e@jic23-huawei>
-In-Reply-To: <20210724190449.221894-1-cbranchereau@gmail.com>
-References: <20210724190449.221894-1-cbranchereau@gmail.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S231468AbhGYPWf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 25 Jul 2021 11:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231317AbhGYPWd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 25 Jul 2021 11:22:33 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E255DC061765;
+        Sun, 25 Jul 2021 09:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=QP31E/sXq7t2KkleWi4kwdfFIuWaSTTxx1eHMbXw83k=; b=Etc9EI7KD/xNRvBEjHQUYguOwQ
+        AUQnm2uUIzb1ditOcgk/KLVg1I0Ryaucz99ZmW6w62WdVIqrhKgRnjVeBguHL6eWUyYKcNuBB93Uf
+        ZGuZqBgWxfNoFTIFTUmgLzZ+7dr2P5x7176kbxRWfOosZ1jVogk6U6SNyJ8hz0VuFmDVVNtKGq1PF
+        I//lm5jLPtWk5XuYU5/kqNLUcbEQcr45/BPeNzazDzyLJdpbY4vyQNdtLyhFSBCsTggC3Lff2m8ic
+        Jk3FAq2Ssxypgh/Tn9IMFueeQcV2Ywnq75kGtje1T04mp/RoUcdHraXv9BGK6rE4so+C6b7ffexla
+        MqbdlY2w==;
+Received: from [2601:1c0:6280:3f0::aefb] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m7gai-008oIU-O1; Sun, 25 Jul 2021 16:03:00 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: [PATCH 0/3] mips: expunge kernel-doc warnings
+Date:   Sun, 25 Jul 2021 09:02:55 -0700
+Message-Id: <20210725160258.28950-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 24 Jul 2021 21:04:44 +0200
-Christophe Branchereau <cbranchereau@gmail.com> wrote:
+Remove all kernel-doc warnings from arch/mips/ (as reported by the
+kernel test robot).
 
-> This is a set of patches to add support to the JZ4760(B) socs found in numerous gaming handhelds and some
-> mp3 players to the ingenic-sadc driver.
-> 
-> Changelog for this v3:
-> - Minor formatting change in ingenic-adc.c to remain within 80 lines
-> - Correctly set the ingenic,use-internal-divider property in the Documentation so it cannot be used on other
-> socs than the jz4760b, and modify the description as requested.
-> 
-> Thanks to Paul and Jonathan for their help
+[PATCH 1/3] mips: clean up (remove) kernel-doc in cavium-octeon/executive/
+[PATCH 2/3] mips: clean up kernel-doc in cavium-octeon/*.c
+[PATCH 3/3] mips: clean up kernel-doc in mm/c-octeon.c
 
-You are welcome.
+Cc: Aditya Srivastava <yashsri421@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: kernel test robot <lkp@intel.com>
 
-Other than Paul's question on the missing entry in patch 4, these look good to me.
-We should leave a bit of time for others to review but otherwise once that's
-resolved I'll pick them up.
-
-Thanks,
-
-Jonathan
-
-> 
-> Christophe Branchereau (5):
->   iio/adc: ingenic: rename has_aux2 to has_aux_md
->   dt-bindings: iio/adc: add an INGENIC_ADC_AUX0 entry
->   iio/adc: ingenic: add JZ4760 support to the sadc driver
->   iio/adc: ingenic: add JZ4760B support to the sadc driver
->   dt-bindings: iio/adc: ingenic: add the JZ4760(B) socs to the sadc
->     Documentation
-> 
->  .../bindings/iio/adc/ingenic,adc.yaml         |  19 ++++
->  drivers/iio/adc/ingenic-adc.c                 | 101 ++++++++++++++++--
->  include/dt-bindings/iio/adc/ingenic,adc.h     |   1 +
->  3 files changed, 112 insertions(+), 9 deletions(-)
-> 
-
+ arch/mips/cavium-octeon/executive/cvmx-bootmem.c      |   10 +-
+ arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c    |   12 +-
+ arch/mips/cavium-octeon/executive/cvmx-helper-board.c |    8 -
+ arch/mips/cavium-octeon/executive/cvmx-helper-rgmii.c |   12 +-
+ arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c  |    8 -
+ arch/mips/cavium-octeon/executive/cvmx-l2c.c          |    9 --
+ arch/mips/cavium-octeon/executive/cvmx-pko.c          |   22 ++---
+ arch/mips/cavium-octeon/executive/cvmx-spi.c          |   20 ++--
+ arch/mips/cavium-octeon/flash_setup.c                 |    2 
+ arch/mips/cavium-octeon/setup.c                       |   43 +++++-----
+ arch/mips/cavium-octeon/smp.c                         |   14 +--
+ arch/mips/mm/c-octeon.c                               |   29 +++---
+ 12 files changed, 93 insertions(+), 96 deletions(-)
