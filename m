@@ -2,106 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 466233D4B09
-	for <lists+linux-mips@lfdr.de>; Sun, 25 Jul 2021 04:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E993D4C48
+	for <lists+linux-mips@lfdr.de>; Sun, 25 Jul 2021 08:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbhGYCIz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 24 Jul 2021 22:08:55 -0400
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:35719 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229665AbhGYCIy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 24 Jul 2021 22:08:54 -0400
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.west.internal (Postfix) with ESMTP id E91192B0117C;
-        Sat, 24 Jul 2021 22:49:24 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 24 Jul 2021 22:49:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=0
-        YArzRMEkZVJA7cx4IMbm2POjscEV83qSQ0fdLGzAw0=; b=saY3xF7HzgMi/nVhI
-        F1/BAx64jTMHVxQpeOSLKh5TO9UvwCXrFxKcNWvd5Qj8OXQNBxnhkA7Grd5Z7S1K
-        s9xstLG1mbM4y7MIRwMaqCV+PzSoQWBh2fq/4r6qHx3rWuuCDpPGfOly6dO9ObWQ
-        N2u5VMbAh96WlWJMWAaWOw688LTlTdoz/Rwi44O+lTfR+XZA7409Lvi0JnXeJkOJ
-        doJU0ROIazWsE2H6kM7ZcWFG52e1f9pDn6+9BtKdj8tDMdrG95Ww93hrTgi8LpSj
-        efsm5gtOr8rKjq+3VWH0z14K2V9wiIK1OaIXDqAyPRprsEl7KjVSlSEipGqtV/PV
-        QK2lA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=0YArzRMEkZVJA7cx4IMbm2POjscEV83qSQ0fdLGzA
-        w0=; b=COx2CF2PAKRb5oVFOhg9pjeu6TelQj1VStflNVvGSDlCKKesfZdXRED5P
-        bzlr2pCqTWyBddhsriVxMPR9NWTFUQpFe+RnpYcJhDcpSBvntOXMutEAcXDxHMn8
-        /RQkwNubMrjK7JsKyaKtCyh/uQyqv2pZVBtuTTSvZyUokqEi2RLvevT1MD07Tl5G
-        P11KdeWutz5+zyQwMojrdrw9xylfgbv+JUdE7XtmILugwWHZhNJ+2d6KZ8HX3DAE
-        h7fmUkSHVBo19xvXqONn68TFpAiEPGeA4QrohhSCJI1Y9H5RH1hSRmCkr+cv7xyz
-        hALh7PLuDZSIY6mpCg7QTYQK20c6A==
-X-ME-Sender: <xms:M9H8YDK8fYYcYnt64PUkhbYpnqBZrLA6JCS4fQaPrAl397GMGUt0UQ>
-    <xme:M9H8YHIprFy81vo8iLnWCz9JAUZJ-tGcPDZlKuBcxLozMeHKnO7ghPampD1PbBizA
-    GkLDPTwMECoeFu1lww>
-X-ME-Received: <xmr:M9H8YLtpAivUe_UbBzp3pb6KqThR-rfmd5yiMavURt30gsVXxuA4O39_vOQlfeDE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrgedugdehkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
-    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
-    ftrfgrthhtvghrnhepiefhgffhieekudegjeevgfffveegveegheffhfduieeiffffveff
-    ueegveefgfefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:M9H8YMZyTGJrzxG5R33fZPERdX3k1bvx0lm5x6_D9podaM1RYDJQEQ>
-    <xmx:M9H8YKaGdkjl__1vI6d8qqflWKE-vyOxBGBEW1dxfvtCdDH4HUfW9w>
-    <xmx:M9H8YAAVX-29Dj75B7UKw_9uQ9F8xaGwKEgxRKgYd7F55PmH25wwQw>
-    <xmx:NNH8YAnRG-3WFnv40ljg0az6dd3hWEIHVGcAMvp_IB4DAZpKhtVIgbYlrrQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 24 Jul 2021 22:49:19 -0400 (EDT)
-Subject: Re: [PATCH 6/9] pinctrl: pistachio: Make it as a option
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20210627045631.2882-1-jiaxun.yang@flygoat.com>
- <20210627045631.2882-7-jiaxun.yang@flygoat.com>
- <CACRpkdZkvSg___ZxdE639SMbTs5rJbjHBq-HkTCuv0e645Rssg@mail.gmail.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <c7de97c3-196b-6bc3-a8b1-d6c6e6ab583d@flygoat.com>
-Date:   Sun, 25 Jul 2021 10:49:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S229853AbhGYF1V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 25 Jul 2021 01:27:21 -0400
+Received: from verein.lst.de ([213.95.11.211]:41944 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229460AbhGYF1V (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 25 Jul 2021 01:27:21 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 0DC2267373; Sun, 25 Jul 2021 08:07:48 +0200 (CEST)
+Date:   Sun, 25 Jul 2021 08:07:47 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-parisc@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>
+Subject: Re: [PATCH v2 01/21] dma-mapping: Allow map_sg() ops to return
+ negative error codes
+Message-ID: <20210725060747.GA10852@lst.de>
+References: <20210723175008.22410-1-logang@deltatee.com> <20210723175008.22410-2-logang@deltatee.com>
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdZkvSg___ZxdE639SMbTs5rJbjHBq-HkTCuv0e645Rssg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210723175008.22410-2-logang@deltatee.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+> +int dma_map_sgtable(struct device *dev, struct sg_table *sgt,
+> +		    enum dma_data_direction dir, unsigned long attrs)
+> +{
+> +	int nents;
+> +
+> +	nents = __dma_map_sg_attrs(dev, sgt->sgl, sgt->orig_nents, dir, attrs);
+> +	if (nents == 0)
+> +		return -EIO;
+> +	else if (nents < 0) {
+> +		if (WARN_ON_ONCE(nents != -EINVAL && nents != -ENOMEM &&
+> +				 nents != -EIO))
+> +			return -EIO;
 
-在 2021/7/24 上午12:13, Linus Walleij 写道:
-> On Sun, Jun 27, 2021 at 6:57 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
->> So it will be avilable for generic MIPS kernel.
->>
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Is this solved, or should I apply this patch?
-
-I guess so, btw I think it should go via MIPS tree to avoid troubles.
-
-Thanks.
-
-- Jiaxun
-
-
->
-> Yours,
-> Linus Walleij
+I think this validation of the errnos needs to go into __dma_map_sg_attrs,
+so that we catch it for the classic dma_map_sg callers as well.
