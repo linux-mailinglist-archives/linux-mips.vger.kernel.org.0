@@ -2,87 +2,178 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF6A3D5127
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Jul 2021 03:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2AED3D5497
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Jul 2021 09:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbhGZBLm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 25 Jul 2021 21:11:42 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:42626 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230116AbhGZBLm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 25 Jul 2021 21:11:42 -0400
-Received: from smtpclient.apple (unknown [222.209.10.128])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxQOI_Ff5gcN4jAA--.48565S3;
-        Mon, 26 Jul 2021 09:52:00 +0800 (CST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-From:   loongson <huangpei@loongson.cn>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [RFC]: Maybe revert 'MIPS: add PMD table accounting into MIPS'pmd_alloc_one' from 5.4 LTS?
-Date:   Mon, 26 Jul 2021 09:51:59 +0800
-Message-Id: <4E1F7C27-B9E1-4078-A336-AC3198447B55@loongson.cn>
-References: <cca35e7b-d62e-68db-fba4-53689e884d2f@gentoo.org>
-Cc:     Linux/MIPS <linux-mips@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-In-Reply-To: <cca35e7b-d62e-68db-fba4-53689e884d2f@gentoo.org>
-To:     Joshua Kinard <kumba@gentoo.org>
-X-Mailer: iPhone Mail (18G69)
-X-CM-TRANSID: AQAAf9BxQOI_Ff5gcN4jAA--.48565S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFWDJF1UtrW3JF1rAFW3Awb_yoWkGFX_Za
-        1F9rsFk34UA39xKFnrJrW3Zw12gryDur98Z3y2vrWxXws8XwsrA3s0gF9F9w1rAw1avFn8
-        KF4DXr97Ar1qqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb2kYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6w4l42xK
-        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
-        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48J
-        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
-        IF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8BWlDUUUUU==
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+        id S232146AbhGZHH1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Jul 2021 03:07:27 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:15999 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231621AbhGZHH0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Jul 2021 03:07:26 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GYBlG4DtVzZsyD;
+        Mon, 26 Jul 2021 15:44:26 +0800 (CST)
+Received: from dggema764-chm.china.huawei.com (10.1.198.206) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2176.2; Mon, 26 Jul 2021 15:47:52 +0800
+Received: from DESKTOP-8RFUVS3.china.huawei.com (10.174.185.179) by
+ dggema764-chm.china.huawei.com (10.1.198.206) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Mon, 26 Jul 2021 15:47:51 +0800
+From:   Zenghui Yu <yuzenghui@huawei.com>
+To:     <akpm@linux-foundation.org>, <dmitry.torokhov@gmail.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
+        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux@armlinux.org.uk>, <tsbogend@alpha.franken.de>,
+        <James.Bottomley@HansenPartnership.com>, <deller@gmx.de>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <wanghaibin.wang@huawei.com>,
+        Zenghui Yu <yuzenghui@huawei.com>
+Subject: [PATCH] configs: Remove the obsolete CONFIG_INPUT_POLLDEV
+Date:   Mon, 26 Jul 2021 15:47:41 +0800
+Message-ID: <20210726074741.1062-1-yuzenghui@huawei.com>
+X-Mailer: git-send-email 2.23.0.windows.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.185.179]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggema764-chm.china.huawei.com (10.1.198.206)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Sure, it is done
+This CONFIG option was removed in commit 278b13ce3a89 ("Input: remove
+input_polled_dev implementation") so there's no point to keep it in
+defconfigs any longer.
 
+Get rid of the leftover for all arches.
 
-> 在 2021年7月25日，07:22，Joshua Kinard <kumba@gentoo.org> 写道：
-> 
-> ﻿On 7/20/2021 22:11, Huang Pei wrote:
->> On Tue, Jul 20, 2021 at 08:45:45PM -0400, Joshua Kinard wrote:
->> Hi, 
-> 
-> [snip]
-> 
->>> 
->>> - there is no call to pgtable_pmd_page_dtor() in pmd_free() in MIPS'
->>> pgalloc.  The commit message indicates that pmd_free in asm-generic will
->>> handle this, but that function doesn't exist in 5.4, leading to mismatched
->>> implementations.
->> 
->> Yes, my fix is to fix the mismatch. 
->> 
->> I think all stable branches before 5.10 should *not* apply this my patch
-> 
-> Can you submit a revert of this commit to stable@vger.kernel.org so that
-> Greg can include it in an upcoming update to the stable kernels <5.10?
-> 
-> Thanks!,
-> 
-> -- 
-> Joshua Kinard
-> Gentoo/MIPS
-> kumba@gentoo.org
-> rsa6144/5C63F4E3F5C6C943 2015-04-27
-> 177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
-> 
-> "The past tempts us, the present confuses us, the future frightens us.  And
-> our lives slip away, moment by moment, lost in that vast, terrible in-between."
-> 
-> --Emperor Turhan, Centauri Republic
+Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
+---
+ arch/arm/configs/dove_defconfig             | 1 -
+ arch/arm/configs/pxa_defconfig              | 1 -
+ arch/mips/configs/lemote2f_defconfig        | 1 -
+ arch/mips/configs/pic32mzda_defconfig       | 1 -
+ arch/mips/configs/rt305x_defconfig          | 1 -
+ arch/mips/configs/xway_defconfig            | 1 -
+ arch/parisc/configs/generic-32bit_defconfig | 1 -
+ arch/x86/configs/i386_defconfig             | 1 -
+ arch/x86/configs/x86_64_defconfig           | 1 -
+ 9 files changed, 9 deletions(-)
+
+diff --git a/arch/arm/configs/dove_defconfig b/arch/arm/configs/dove_defconfig
+index b935162a8bba..33074fdab2ea 100644
+--- a/arch/arm/configs/dove_defconfig
++++ b/arch/arm/configs/dove_defconfig
+@@ -56,7 +56,6 @@ CONFIG_ATA=y
+ CONFIG_SATA_MV=y
+ CONFIG_NETDEVICES=y
+ CONFIG_MV643XX_ETH=y
+-CONFIG_INPUT_POLLDEV=y
+ # CONFIG_INPUT_MOUSEDEV is not set
+ CONFIG_INPUT_EVDEV=y
+ # CONFIG_KEYBOARD_ATKBD is not set
+diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
+index 363f1b1b08e3..58f4834289e6 100644
+--- a/arch/arm/configs/pxa_defconfig
++++ b/arch/arm/configs/pxa_defconfig
+@@ -284,7 +284,6 @@ CONFIG_RT2800USB=m
+ CONFIG_MWIFIEX=m
+ CONFIG_MWIFIEX_SDIO=m
+ CONFIG_INPUT_FF_MEMLESS=m
+-CONFIG_INPUT_POLLDEV=y
+ CONFIG_INPUT_MATRIXKMAP=y
+ CONFIG_INPUT_MOUSEDEV=m
+ CONFIG_INPUT_MOUSEDEV_SCREEN_X=640
+diff --git a/arch/mips/configs/lemote2f_defconfig b/arch/mips/configs/lemote2f_defconfig
+index aaf9d5e0aa2c..791894c4d8fb 100644
+--- a/arch/mips/configs/lemote2f_defconfig
++++ b/arch/mips/configs/lemote2f_defconfig
+@@ -116,7 +116,6 @@ CONFIG_8139TOO=y
+ CONFIG_R8169=y
+ CONFIG_USB_USBNET=m
+ CONFIG_USB_NET_CDC_EEM=m
+-CONFIG_INPUT_POLLDEV=m
+ CONFIG_INPUT_EVDEV=y
+ # CONFIG_MOUSE_PS2_ALPS is not set
+ # CONFIG_MOUSE_PS2_LOGIPS2PP is not set
+diff --git a/arch/mips/configs/pic32mzda_defconfig b/arch/mips/configs/pic32mzda_defconfig
+index 63fe2da1b37f..fd567247adc7 100644
+--- a/arch/mips/configs/pic32mzda_defconfig
++++ b/arch/mips/configs/pic32mzda_defconfig
+@@ -34,7 +34,6 @@ CONFIG_SCSI_CONSTANTS=y
+ CONFIG_SCSI_SCAN_ASYNC=y
+ # CONFIG_SCSI_LOWLEVEL is not set
+ CONFIG_INPUT_LEDS=m
+-CONFIG_INPUT_POLLDEV=y
+ CONFIG_INPUT_MOUSEDEV=m
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_INPUT_EVBUG=m
+diff --git a/arch/mips/configs/rt305x_defconfig b/arch/mips/configs/rt305x_defconfig
+index fec5851c164b..eb359db15dba 100644
+--- a/arch/mips/configs/rt305x_defconfig
++++ b/arch/mips/configs/rt305x_defconfig
+@@ -90,7 +90,6 @@ CONFIG_PPPOE=m
+ CONFIG_PPP_ASYNC=m
+ CONFIG_ISDN=y
+ CONFIG_INPUT=m
+-CONFIG_INPUT_POLLDEV=m
+ # CONFIG_KEYBOARD_ATKBD is not set
+ # CONFIG_INPUT_MOUSE is not set
+ CONFIG_INPUT_MISC=y
+diff --git a/arch/mips/configs/xway_defconfig b/arch/mips/configs/xway_defconfig
+index 9abbc0debc2a..eeb689f715cb 100644
+--- a/arch/mips/configs/xway_defconfig
++++ b/arch/mips/configs/xway_defconfig
+@@ -96,7 +96,6 @@ CONFIG_PPPOE=m
+ CONFIG_PPP_ASYNC=m
+ CONFIG_ISDN=y
+ CONFIG_INPUT=m
+-CONFIG_INPUT_POLLDEV=m
+ # CONFIG_KEYBOARD_ATKBD is not set
+ # CONFIG_INPUT_MOUSE is not set
+ CONFIG_INPUT_MISC=y
+diff --git a/arch/parisc/configs/generic-32bit_defconfig b/arch/parisc/configs/generic-32bit_defconfig
+index 7611d48c599e..dd14e3131325 100644
+--- a/arch/parisc/configs/generic-32bit_defconfig
++++ b/arch/parisc/configs/generic-32bit_defconfig
+@@ -111,7 +111,6 @@ CONFIG_PPP_BSDCOMP=m
+ CONFIG_PPP_DEFLATE=m
+ CONFIG_PPPOE=m
+ # CONFIG_WLAN is not set
+-CONFIG_INPUT_POLLDEV=y
+ CONFIG_KEYBOARD_HIL_OLD=m
+ CONFIG_KEYBOARD_HIL=m
+ CONFIG_MOUSE_SERIAL=y
+diff --git a/arch/x86/configs/i386_defconfig b/arch/x86/configs/i386_defconfig
+index 9c9c4a888b1d..e81885384f60 100644
+--- a/arch/x86/configs/i386_defconfig
++++ b/arch/x86/configs/i386_defconfig
+@@ -156,7 +156,6 @@ CONFIG_FORCEDETH=y
+ CONFIG_8139TOO=y
+ # CONFIG_8139TOO_PIO is not set
+ CONFIG_R8169=y
+-CONFIG_INPUT_POLLDEV=y
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_INPUT_JOYSTICK=y
+ CONFIG_INPUT_TABLET=y
+diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
+index b60bd2d86034..e8a7a0af2bda 100644
+--- a/arch/x86/configs/x86_64_defconfig
++++ b/arch/x86/configs/x86_64_defconfig
+@@ -148,7 +148,6 @@ CONFIG_SKY2=y
+ CONFIG_FORCEDETH=y
+ CONFIG_8139TOO=y
+ CONFIG_R8169=y
+-CONFIG_INPUT_POLLDEV=y
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_INPUT_JOYSTICK=y
+ CONFIG_INPUT_TABLET=y
+-- 
+2.19.1
 
