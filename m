@@ -2,179 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3D83D4E88
-	for <lists+linux-mips@lfdr.de>; Sun, 25 Jul 2021 18:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF6A3D5127
+	for <lists+linux-mips@lfdr.de>; Mon, 26 Jul 2021 03:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbhGYPWf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 25 Jul 2021 11:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbhGYPWd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 25 Jul 2021 11:22:33 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DAEC061757;
-        Sun, 25 Jul 2021 09:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=QzFZiFA76Dj+mfAsU9w7hQaBbifRrxBFiEHzw9Wl6uU=; b=TTcWU3RfKo8rtmygJL3lMEso7F
-        wsZsTJxcJmEUNjXR2VTOD9XUoixfN+cpT7OSqGNBf9nD4ssNq3Z6/v+uA+mypY7RFqr9sH364Bc9M
-        5DMrTH50Ztb+CTl3JmhUGgISn/JBDstF8/M9/YR5+hJ37qk6u2f8WqEtQm03yQKkol1nssE9WqLJa
-        cdK+6FpOXL06jbNVqulSBZWA0g0RpHFVT/zCIWdH2jJimh8eeGB8q4US+yYn7Oba9ivOIllHjTe+O
-        MmHcDbbJvtcoJzuPuCB2tdHgvH1X2B3y1tXeqEn9bvk4ALLdr3G9llNIoNPxrrQ+E7+NBXxVN0kt1
-        Dyi5AYcQ==;
-Received: from [2601:1c0:6280:3f0::aefb] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m7gaj-008oIU-Sz; Sun, 25 Jul 2021 16:03:01 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Aditya Srivastava <yashsri421@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH 3/3] mips: clean up kernel-doc in mm/c-octeon.c
-Date:   Sun, 25 Jul 2021 09:02:58 -0700
-Message-Id: <20210725160258.28950-4-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210725160258.28950-1-rdunlap@infradead.org>
-References: <20210725160258.28950-1-rdunlap@infradead.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S230272AbhGZBLm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sun, 25 Jul 2021 21:11:42 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:42626 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230116AbhGZBLm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 25 Jul 2021 21:11:42 -0400
+Received: from smtpclient.apple (unknown [222.209.10.128])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxQOI_Ff5gcN4jAA--.48565S3;
+        Mon, 26 Jul 2021 09:52:00 +0800 (CST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+From:   loongson <huangpei@loongson.cn>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC]: Maybe revert 'MIPS: add PMD table accounting into MIPS'pmd_alloc_one' from 5.4 LTS?
+Date:   Mon, 26 Jul 2021 09:51:59 +0800
+Message-Id: <4E1F7C27-B9E1-4078-A336-AC3198447B55@loongson.cn>
+References: <cca35e7b-d62e-68db-fba4-53689e884d2f@gentoo.org>
+Cc:     Linux/MIPS <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+In-Reply-To: <cca35e7b-d62e-68db-fba4-53689e884d2f@gentoo.org>
+To:     Joshua Kinard <kumba@gentoo.org>
+X-Mailer: iPhone Mail (18G69)
+X-CM-TRANSID: AQAAf9BxQOI_Ff5gcN4jAA--.48565S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFWDJF1UtrW3JF1rAFW3Awb_yoWkGFX_Za
+        1F9rsFk34UA39xKFnrJrW3Zw12gryDur98Z3y2vrWxXws8XwsrA3s0gF9F9w1rAw1avFn8
+        KF4DXr97Ar1qqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2kYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6w4l42xK
+        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1Y6r17MIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8BWlDUUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Clean up kernel-doc warnings in arch/mips/mm/c-octeon.c.
-
-   arch/mips/mm/c-octeon.c:34: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Octeon automatically flushes the dcache on tlb changes, so
-   arch/mips/mm/c-octeon.c:65: warning: expecting prototype for Flush caches as necessary for all cores affected by a(). Prototype was for octeon_flush_icache_all_cores() instead
-   arch/mips/mm/c-octeon.c:99: warning: expecting prototype for Called to flush the icache on all cores(). Prototype was for octeon_flush_icache_all() instead
-   arch/mips/mm/c-octeon.c:111: warning: expecting prototype for Called to flush all memory associated with a memory(). Prototype was for octeon_flush_cache_mm() instead
-   arch/mips/mm/c-octeon.c:124: warning: Function parameter or member 'start' not described in 'octeon_flush_icache_range'
-   arch/mips/mm/c-octeon.c:124: warning: Function parameter or member 'end' not described in 'octeon_flush_icache_range'
-   arch/mips/mm/c-octeon.c:124: warning: expecting prototype for Flush a range of kernel addresses out of the icache(). Prototype was for octeon_flush_icache_range() instead
-   arch/mips/mm/c-octeon.c:138: warning: expecting prototype for Flush a range out of a vma(). Prototype was for octeon_flush_cache_range() instead
-   arch/mips/mm/c-octeon.c:153: warning: expecting prototype for Flush a specific page of a vma(). Prototype was for octeon_flush_cache_page() instead
-   arch/mips/mm/c-octeon.c:164: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Probe Octeon's caches
-   arch/mips/mm/c-octeon.c:264: warning: expecting prototype for Setup the Octeon cache flush routines(). Prototype was for octeon_cache_init() instead
-   arch/mips/mm/c-octeon.c:349: warning: expecting prototype for Called when the the exception is not recoverable(). Prototype was for cache_parity_error_octeon_non_recoverable() instead
+Sure, it is done
 
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Aditya Srivastava <yashsri421@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
----
- arch/mips/mm/c-octeon.c |   29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+> 在 2021年7月25日，07:22，Joshua Kinard <kumba@gentoo.org> 写道：
+> 
+> ﻿On 7/20/2021 22:11, Huang Pei wrote:
+>> On Tue, Jul 20, 2021 at 08:45:45PM -0400, Joshua Kinard wrote:
+>> Hi, 
+> 
+> [snip]
+> 
+>>> 
+>>> - there is no call to pgtable_pmd_page_dtor() in pmd_free() in MIPS'
+>>> pgalloc.  The commit message indicates that pmd_free in asm-generic will
+>>> handle this, but that function doesn't exist in 5.4, leading to mismatched
+>>> implementations.
+>> 
+>> Yes, my fix is to fix the mismatch. 
+>> 
+>> I think all stable branches before 5.10 should *not* apply this my patch
+> 
+> Can you submit a revert of this commit to stable@vger.kernel.org so that
+> Greg can include it in an upcoming update to the stable kernels <5.10?
+> 
+> Thanks!,
+> 
+> -- 
+> Joshua Kinard
+> Gentoo/MIPS
+> kumba@gentoo.org
+> rsa6144/5C63F4E3F5C6C943 2015-04-27
+> 177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
+> 
+> "The past tempts us, the present confuses us, the future frightens us.  And
+> our lives slip away, moment by moment, lost in that vast, terrible in-between."
+> 
+> --Emperor Turhan, Centauri Republic
 
---- linux-next-20210723.orig/arch/mips/mm/c-octeon.c
-+++ linux-next-20210723/arch/mips/mm/c-octeon.c
-@@ -30,7 +30,7 @@
- unsigned long long cache_err_dcache[NR_CPUS];
- EXPORT_SYMBOL_GPL(cache_err_dcache);
- 
--/**
-+/*
-  * Octeon automatically flushes the dcache on tlb changes, so
-  * from Linux's viewpoint it acts much like a physically
-  * tagged cache. No flushing is needed
-@@ -56,8 +56,8 @@ static void local_octeon_flush_icache_ra
- }
- 
- /**
-- * Flush caches as necessary for all cores affected by a
-- * vma. If no vma is supplied, all cores are flushed.
-+ * octeon_flush_icache_all_cores -  Flush caches as necessary for all cores
-+ * affected by a vma. If no vma is supplied, all cores are flushed.
-  *
-  * @vma:    VMA to flush or NULL to flush all icaches.
-  */
-@@ -92,7 +92,7 @@ static void octeon_flush_icache_all_core
- }
- 
- 
--/**
-+/*
-  * Called to flush the icache on all cores
-  */
- static void octeon_flush_icache_all(void)
-@@ -102,8 +102,7 @@ static void octeon_flush_icache_all(void
- 
- 
- /**
-- * Called to flush all memory associated with a memory
-- * context.
-+ * octeon_flush_cache_mm - flush all memory associated with a memory context.
-  *
-  * @mm:	    Memory context to flush
-  */
-@@ -116,7 +115,7 @@ static void octeon_flush_cache_mm(struct
- }
- 
- 
--/**
-+/*
-  * Flush a range of kernel addresses out of the icache
-  *
-  */
-@@ -127,11 +126,11 @@ static void octeon_flush_icache_range(un
- 
- 
- /**
-- * Flush a range out of a vma
-+ * octeon_flush_cache_range - Flush a range out of a vma
-  *
-  * @vma:    VMA to flush
-- * @start:
-- * @end:
-+ * @start:  beginning address for flush
-+ * @end:    ending address for flush
-  */
- static void octeon_flush_cache_range(struct vm_area_struct *vma,
- 				     unsigned long start, unsigned long end)
-@@ -142,11 +141,11 @@ static void octeon_flush_cache_range(str
- 
- 
- /**
-- * Flush a specific page of a vma
-+ * octeon_flush_cache_page - Flush a specific page of a vma
-  *
-  * @vma:    VMA to flush page for
-  * @page:   Page to flush
-- * @pfn:
-+ * @pfn:    Page frame number
-  */
- static void octeon_flush_cache_page(struct vm_area_struct *vma,
- 				    unsigned long page, unsigned long pfn)
-@@ -160,7 +159,7 @@ static void octeon_flush_kernel_vmap_ran
- 	BUG();
- }
- 
--/**
-+/*
-  * Probe Octeon's caches
-  *
-  */
-@@ -256,7 +255,7 @@ static void  octeon_cache_error_setup(vo
- 	set_handler(0x100, &except_vec2_octeon, 0x80);
- }
- 
--/**
-+/*
-  * Setup the Octeon cache flush routines
-  *
-  */
-@@ -341,7 +340,7 @@ asmlinkage void cache_parity_error_octeo
- 	co_cache_error_call_notifiers(0);
- }
- 
--/**
-+/*
-  * Called when the the exception is not recoverable
-  */
- 
