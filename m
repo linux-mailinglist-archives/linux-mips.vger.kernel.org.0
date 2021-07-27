@@ -2,67 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 279133D69AE
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jul 2021 00:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECCD3D6AF8
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jul 2021 02:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbhGZWAC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 26 Jul 2021 18:00:02 -0400
-Received: from mail-il1-f171.google.com ([209.85.166.171]:41788 "EHLO
-        mail-il1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233735AbhGZWAB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 26 Jul 2021 18:00:01 -0400
-Received: by mail-il1-f171.google.com with SMTP id u7so7246005ilj.8;
-        Mon, 26 Jul 2021 15:40:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PKyPZZFWNBD3YGcaGyBrYxxu9nXQpsWEDIZhCced8rU=;
-        b=o5+J8qYdZRkPQCMiwWVZDv8hVXJaoHCuft5ZCedNzmGe+oT+eVtWe7HEZD1Nujo7l/
-         FlghBxgoE3TPn3NgQsw/Na3XfH0Jyv4WnA1QNRHfnVtDRwwnabDchBQuo8JFEhkJeS+U
-         TPZAmxJ3g43KpyII860HFJ96T94EATKoXzQPZtDn8xwn8Qn+Gg5PzeRia3d08cROvXeo
-         ee8SkQ3+vMr0dsPPxhNOz73ZPnFqBQwTEfxb6g/eZQz1SjLKbY+R3RdkxH8cdtqXYqHM
-         NZBa6hwdFn7GU4CZTAeSjwcMrbrdHeH4n79XnA5RghRtyMs/XV1xq7AQN7sYFlq3CxAh
-         WiOg==
-X-Gm-Message-State: AOAM530DuV850zED9eIATOsQfTIJGf53u/Y6HWTxdmNHI2VnZP3ICh4E
-        /pVqlQSL4yQS9C0c+tElPQ==
-X-Google-Smtp-Source: ABdhPJzwaI8/pHCM50TQ39rAr0/bljtTErcAH4s4zj9xoSkOpgh3I75KNv8VFfhGiEXVQGLbZiG5pA==
-X-Received: by 2002:a92:c0c2:: with SMTP id t2mr12199743ilf.260.1627339228514;
-        Mon, 26 Jul 2021 15:40:28 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id j20sm724437ile.17.2021.07.26.15.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 15:40:27 -0700 (PDT)
-Received: (nullmailer pid 1006511 invoked by uid 1000);
-        Mon, 26 Jul 2021 22:40:25 -0000
-Date:   Mon, 26 Jul 2021 16:40:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Christophe Branchereau <cbranchereau@gmail.com>
-Cc:     devicetree@vger.kernel.org, jic23@kernel.org, robh+dt@kernel.org,
-        paul@crapouillou.net, linux@roeck-us.net, contact@artur-rojek.eu,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-mips@vger.kernel.org, lars@metafoo.de
-Subject: Re: [PATCH v4 5/5] dt-bindings: iio/adc: ingenic: add the JZ4760(B)
- socs to the sadc Documentation
-Message-ID: <20210726224025.GA1006453@robh.at.kernel.org>
-References: <20210726082033.351533-1-cbranchereau@gmail.com>
- <20210726082033.351533-6-cbranchereau@gmail.com>
+        id S234196AbhGZXlC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 26 Jul 2021 19:41:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57864 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233770AbhGZXlC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 26 Jul 2021 19:41:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E84FF60C51;
+        Tue, 27 Jul 2021 00:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627345290;
+        bh=jx7GrUjcBVT4+QbmqnGbi6IvhiI5CLtmhVggNmKVUU8=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=bN0owBW/W8+hcAOGEtiAIhijoEATVuN/+t1MSymdEmMpYUikvHigO6eNG1xyNFqzr
+         q2yWLXLPBCxO+Fh7xEeZg9QE3MaDq4ufdqibSsrJprqDbXzDhfqmTMGpf0rHkwACBX
+         DTs509F7RRObj8L/yjmGXM1vBwSqVeq8wZfdCy0xJZiN5pc7IcYsf2cszDFGHrt5Oa
+         XUoWvKpiPubRdKaSZMqigNwG5KDsYYjGdROgUD2sPKFUpLK7ErDd20pTs/T0R8Vo5Q
+         dTVb7KheJhWzDl7J74IT2ja6moU4gtJJbTu7jLYgi0oST45+BMODzRf/quC4lEslS7
+         EvcpJ6IxcIUpw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210726082033.351533-6-cbranchereau@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210723022543.4095-4-jiaxun.yang@flygoat.com>
+References: <20210723022543.4095-1-jiaxun.yang@flygoat.com> <20210723022543.4095-4-jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH v4 3/9] clk: pistachio: Make it selectable for generic MIPS kernel
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
+        daniel.lezcano@linaro.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Date:   Mon, 26 Jul 2021 17:21:28 -0700
+Message-ID: <162734528861.2368309.16849274181317725077@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 26 Jul 2021 10:20:33 +0200, Christophe Branchereau wrote:
-> Add both the jz4760 and jz4760b, plus a property to use the internal
-> divider on the b variant and document it.
-> 
-> Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
+Quoting Jiaxun Yang (2021-07-22 19:25:37)
+> We're moving pistachio to generic MIPS kernel. The clk driver
+> should be avilable to the generic MIPS kernel.
+>=20
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  .../bindings/iio/adc/ingenic,adc.yaml         | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Stephen Boyd <sboyd@kernel.org>
