@@ -2,113 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D966C3D7F62
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jul 2021 22:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D713D8076
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jul 2021 23:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbhG0Umg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Jul 2021 16:42:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50666 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230425AbhG0Umg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 27 Jul 2021 16:42:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D6DC060FA0;
-        Tue, 27 Jul 2021 20:42:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627418555;
-        bh=d4JjFlDfF7N2eBt3m9sdZRk+eRhA4ZhBMt2Pq1TZ0cw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZKlOgZHSGjAmEnyaCwMuVKafYPWKeXil2Iiwo9tfWrDpXPrP+nIx5u3FkbHHx9hE7
-         f/+uSzSaAFLY8z0zPS4rMNMGD3DTUb7OLkYFi3ipPjtLYS72UjSrIEZWHsniKmxxZK
-         Le59cWQyoKcdNBRC2NnQPaYKcr4Sl5SxpzzeT6TBVgHinsKuWcX4k1BjDbOE4supyn
-         HiZ19DR0bU/awUHcX41Rjheo1w+obLAaQrJ8Rjja+UBSy51OODPf7/DV6wZKbPG4vd
-         wTF3Um9UkJV8uDOE8zSUVipLRKY8TGL5cXoV09GMyL2Tz2E7xssC3kDmiC7uClw3Me
-         O9bSVwy2lubCA==
-Received: by mail-wm1-f48.google.com with SMTP id m38-20020a05600c3b26b02902161fccabf1so2791363wms.2;
-        Tue, 27 Jul 2021 13:42:35 -0700 (PDT)
-X-Gm-Message-State: AOAM532e/tUB7+Yevh5XKbWHbmLJ44fqx2jx8R5yJ6m8/z1ANBb4cKI8
-        EgRq50X0XEK5e2xk7awNte+MLSMqp1CiNR3aWK8=
-X-Google-Smtp-Source: ABdhPJzIeHa1hycZO5ufjXaaYbpY3YdQw4oHXjfZp2KwEfMcEIfJ5hSLrfTaLF7iY7hnR3dqnN2Y1Sv0AKkyrN9dOFM=
-X-Received: by 2002:a7b:c2fa:: with SMTP id e26mr6005968wmk.84.1627418543998;
- Tue, 27 Jul 2021 13:42:23 -0700 (PDT)
+        id S232392AbhG0VFJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Jul 2021 17:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231368AbhG0VFJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jul 2021 17:05:09 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15C5C061757;
+        Tue, 27 Jul 2021 14:05:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=NO0RGVu+XndYKUq3uNCgF+Kta6CYfhtwRahspvD+83o=; b=LHPi7HOMmKXpl/JTivGeHL+Uc/
+        gubaL8xVK/zdLXCvONaAPiqG5U2sYv8n1bPlDYE/POrSnQYVhIscyxFVGD6H0COPC/fziMsUFIpy6
+        YqheJe1AcA8FtncDzpDzfKvjP5LmVPCsOAJktFaVYBi5pardy6QnQF8Y7A9ucqqfsEYbyX4GC1uM+
+        T9oKfls5/9bUIs7HSJJBJ+hQU814fh9DNJMxovTxGoGgsmSCzk8Ia+uUs/7Qn7CUJz3WGCb12FBt4
+        9kDgGiiaP45Yr75bFU/HFyCEt7ab0t6jWoolqzcgttG+Odq5YouAKuyPkkgAqtrPdy3SAzhRwFLbJ
+        9sc5tW7Q==;
+Received: from [2601:1c0:6280:3f0::aefb]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1m8UGA-00GMRO-TV; Tue, 27 Jul 2021 21:05:07 +0000
+Subject: Re: [PATCH v4 19/19] auxdisplay: ht16k33: Add LED support
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210727140459.3767788-1-geert@linux-m68k.org>
+ <20210727140459.3767788-20-geert@linux-m68k.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <5b70f272-eec9-0ff7-1bd2-bf1659b10e9c@infradead.org>
+Date:   Tue, 27 Jul 2021 14:05:05 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210727144859.4150043-1-arnd@kernel.org> <YQAfa6iObAwwIpzb@infradead.org>
- <20210727131017.f151a81fc69db8f45f81a2b3@linux-foundation.org>
-In-Reply-To: <20210727131017.f151a81fc69db8f45f81a2b3@linux-foundation.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 27 Jul 2021 22:42:07 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2S4Oct4+a8u=ottrW1b+iRf-tRSJb0DvaLNR3CZARmTQ@mail.gmail.com>
-Message-ID: <CAK8P3a2S4Oct4+a8u=ottrW1b+iRf-tRSJb0DvaLNR3CZARmTQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] compat: remove compat_alloc_user_space
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210727140459.3767788-20-geert@linux-m68k.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 10:11 PM Andrew Morton
-<akpm@linux-foundation.org> wrote:
->
-> On Tue, 27 Jul 2021 15:59:55 +0100 Christoph Hellwig <hch@infradead.org> wrote:
->
-> > On Tue, Jul 27, 2021 at 04:48:53PM +0200, Arnd Bergmann wrote:
-> > > Since these patches are now all that remains, it would be nice to
-> > > merge it all through Andrew's Linux-mm tree, which is already based
-> > > on top of linux-next.
-> >
-> > Is it?
->
-> the -mm tree is structured as
->
-> <90% of stuff>
-> linux-next.patch
-> <the other 10% of stuff>
->
-> So things like Arnd's series which have a dependency on linux-next
-> material get added to the "other 10%" and are merged behind the
-> linux-next material and all is good.
->
-> If possible I'll queue things ahead of linux-next.patch.  Those few
-> things which have dependencies on linux-next material get sent to Linus
-> after the required linux-next material is merged into mainline.
+On 7/27/21 7:04 AM, Geert Uytterhoeven wrote:
+> Instantiate a single LED based on the "led" subnode in DT.
+> This allows the user to control display brightness and blinking (backed
+> by hardware support) through the LED class API and triggers, and exposes
+> the display color.  The LED will be named
+> "auxdisplay:<color>:<function>".
+> 
+> When running in dot-matrix mode and if no "led" subnode is found, the
+> driver falls back to the traditional backlight mode, to preserve
+> backwards compatibility.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+> v4:
+>   - Add missing select LEDS_CLASS,
+> 
+> v3:
+>   - Remove unneeded C++ comment,
+>   - Use "err" instead of "error" to be consistent with existing driver
+>     naming style,
+>   - Make the creation of the LED device dependent on the presence of the
+>     "led" subnode in DT, so it can be used in dot-matrix mode too.
+>   - Use led_init_data() and devm_led_classdev_register_ext() to retrieve
+>     all LED properties from DT, instead of manual LED name construction
+>     based on just the "color" property,
+> 
+> v2:
+>   - Use "auxdisplay" instead of DRIVER_NAME in LED name.
 
-The first five patches in my series should apply cleanly on mainline
-kernels and make sense by themselves, the last patch is the one that
-depends on this series as well as another series in the netdev tree,
-so that has to go behind linux-next.
+Hi Geert,
 
-I suppose I could also merge the first five through my asm-generic tree
-and send you the last one if you prefer, but then again two of the patches
-are actually memory management stuff.
+Since LEDS_CLASS depends on NEW_LEDS, does this also need to
+select NEW_LEDS?
 
-         Arnd
+and similar for INPUT_MATRIXKMAP: it depends on INPUT.
+
+However, selecting (enabling) an entire subsystem is not a
+preferable thing to do.
+
+> ---
+>  drivers/auxdisplay/Kconfig   |   1 +
+>  drivers/auxdisplay/ht16k33.c | 124 ++++++++++++++++++++++++++++++-----
+>  2 files changed, 108 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/auxdisplay/Kconfig b/drivers/auxdisplay/Kconfig
+> index 42fc7b155de09dbc..7436b9a4edbe5450 100644
+> --- a/drivers/auxdisplay/Kconfig
+> +++ b/drivers/auxdisplay/Kconfig
+> @@ -176,6 +176,7 @@ config HT16K33
+>  	select FB_SYS_IMAGEBLIT
+>  	select INPUT_MATRIXKMAP
+>  	select FB_BACKLIGHT
+> +	select LEDS_CLASS
+>  	select LINEDISP
+>  	help
+>  	  Say yes here to add support for Holtek HT16K33, RAM mapping 16*8
+
+thanks.
+-- 
+~Randy
+
