@@ -2,101 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7253D8564
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jul 2021 03:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F0D3D88A8
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jul 2021 09:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234450AbhG1Bbj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Jul 2021 21:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234449AbhG1Bbh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jul 2021 21:31:37 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9208C061760
-        for <linux-mips@vger.kernel.org>; Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id ca5so2677894pjb.5
-        for <linux-mips@vger.kernel.org>; Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yHc64D7GeFGFvPKcL3/klEXdsXGAyEbOGkW4X7dqYZk=;
-        b=fhSYS231qJ3sqkIYNi8KPw8MsfS0+ziEaNeUJJgkWRoGnsw+X6Zela3vLGucwxsOnQ
-         T/2eQecJMaDAtj1/fJv4pRgNYPjG5MBwhmQRzKVK7XHucRr9VlsyFnemk7Az0cFRvaoj
-         SXA55eSG8LWFjpI5M4/vVkrChJvWZRFUIvXxtX/YyI6Hetmvo8xUU0IsYqW0uPaYORh+
-         7fbNsmk6bU1nDAoUQ8bBanH/4Fg5DnH45lOS4h8rnJCcsSof3DVR671BuFi4Ezu9qGFc
-         pniezhy1QlK6TDYbbPRo+6/gzTozJcEPXqbmDtUTOLhYVoF+8NtbsE0cFeksRw7VSH/K
-         7dzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yHc64D7GeFGFvPKcL3/klEXdsXGAyEbOGkW4X7dqYZk=;
-        b=lB3jaw+rS0W0MQZL3AksEwFmF6LN1qHNqQNszK6VO/CHu6/biXQV7X5/oFkeE4ws2E
-         uxfsyA7NzxTIjh+8ifbvfiL6/awU1ATXAeJHOGAOD0YSKy0Q1Zmyvaykc3OQTGNgEExn
-         F3Q1Ke6su8CfjWdPEyj/hBIVjgU8B0lLv1bzG2Tt0K/i03zdyA300x3bIrSleCSyN7wo
-         JvOf+laDaODK1thJ8PncC8KlMTtiMLjbqCuDtNOa68sUlUBmZkTApTNwkOMYZmZRL9B6
-         dc7qnJ6Uk2GWaTSTsidjg9wOrG111tWdu/2z7+9MlViYRiPSKscPZOZgRmzU4nWwD31W
-         /b6w==
-X-Gm-Message-State: AOAM530E9ixZML4dlT6ekjJN8rOKl1Zcm81GXY703XcruJSrJhh27zcW
-        HpeisP/aiajUhKK28wOiI3RtWw==
-X-Google-Smtp-Source: ABdhPJzWMYJQkYrSLemCw68WHvxxx2yrrdVHcAiwavOx0x2TeSqkNy6ZylLwTbIdJTyjO+rAuqNUqw==
-X-Received: by 2002:a62:b414:0:b029:317:52d:7fd5 with SMTP id h20-20020a62b4140000b0290317052d7fd5mr25840599pfn.30.1627435895354;
-        Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
-Received: from [192.168.1.116] ([198.8.77.61])
-        by smtp.gmail.com with ESMTPSA id a16sm5054336pfo.66.2021.07.27.18.31.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jul 2021 18:31:34 -0700 (PDT)
-Subject: Re: switch the block layer to use kmap_local_page v3
-To:     Christoph Hellwig <hch@lst.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Geoff Levand <geoff@infradead.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Dongsheng Yang <dongsheng.yang@easystack.cn>,
-        Mike Snitzer <snitzer@redhat.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Ira Weiny <ira.weiny@intel.com>, dm-devel@redhat.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        ceph-devel@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20210727055646.118787-1-hch@lst.de>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <eba0b98f-5b0e-32c4-3b09-fa1946192517@kernel.dk>
-Date:   Tue, 27 Jul 2021 19:31:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S234058AbhG1HQa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Jul 2021 03:16:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51636 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233732AbhG1HQ2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 28 Jul 2021 03:16:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0650160F93;
+        Wed, 28 Jul 2021 07:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627456587;
+        bh=x0xcvQaq9O32Nso7pIl+O6xyOtevShOSKrCBXswXPXg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O/NTRx+isUoN0Lv+rgz6j5o45+43BtRQUES2zsp/QQGZcqbRi4WjQfzzM5JPdacwW
+         QkTowxaah7QCMacjilrpYLDnY5Q2a+S1mmggW/2WG6Ur9Wr6g4h4am/Isc60Ag6dpq
+         7lwle47pO0XoFe37HKoBncAzLIDVOU1Vwt1zkU9s8/bkE6EHC9vmpB5kvaud12yknW
+         ompwuV7hTHZUQYWawL6B2yY3zl5Ypc8GN+7RKIoTQ/nUgqVunhnWKnDJZAHZBlJDub
+         uyP7FDyRZpAfAowA/9iUrwNnXDXDoqDm7muGJHDj7gRnJX8ggw4SZ9nC+Z6LXNW7E4
+         ujQUGM3MNCQ7w==
+Date:   Wed, 28 Jul 2021 12:46:20 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Rob Herring <robh+dt@kernel.org>, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, list@opendingux.net
+Subject: Re: [PATCH 3/3] dma: jz4780: Add support for the MDMA in the
+ JZ4760(B)
+Message-ID: <YQEERH97pngKbTiG@matsya>
+References: <20210718122024.204907-1-paul@crapouillou.net>
+ <20210718122024.204907-3-paul@crapouillou.net>
 MIME-Version: 1.0
-In-Reply-To: <20210727055646.118787-1-hch@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210718122024.204907-3-paul@crapouillou.net>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/26/21 11:56 PM, Christoph Hellwig wrote:
-> Hi all,
-> 
-> this series switches the core block layer code and all users of the
-> existing bvec kmap helpers to use kmap_local_page.  Drivers that
-> currently use open coded kmap_atomic calls will converted in a follow
-> on series.
-> 
-> To do so a new kunmap variant is added that calls
-> flush_kernel_dcache_page.  I'm not entirely sure where to call
-> flush_dcache_page vs flush_kernel_dcache_page, so I've tried to follow
-> the documentation here, but additional feedback would be welcome.
-> 
-> Note that the ps3disk has a minir conflict with the
-> flush_kernel_dcache_page removal in linux-next through the -mm tree.
-> I had hoped that change would go into 5.14, but it seems like it is
-> being held for 5.15.
+On 18-07-21, 13:20, Paul Cercueil wrote:
+> The JZ4760 and JZ4760B SoCs have two regular DMA controllers with 6
+> channels each. They also have an extra DMA controller named MDMA
+> with only 2 channels, that only supports memcpy operations.
 
-Applied for 5.15, thanks.
+It is dmaengine not dma:
+
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/dma/dma-jz4780.c | 22 ++++++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
+> index d71bc7235959..eed505e3cce2 100644
+> --- a/drivers/dma/dma-jz4780.c
+> +++ b/drivers/dma/dma-jz4780.c
+> @@ -93,6 +93,7 @@
+>  #define JZ_SOC_DATA_PER_CHAN_PM		BIT(2)
+>  #define JZ_SOC_DATA_NO_DCKES_DCKEC	BIT(3)
+>  #define JZ_SOC_DATA_BREAK_LINKS		BIT(4)
+> +#define JZ_SOC_DATA_ONLY_MEMCPY		BIT(5)
+
+Why -ve logic? Looks like MEMCPY is eveywhere and only peripheral is not
+there at few SoC, so use JZ_SOC_DATA_PERIPHERAL
+>  
+>  /**
+>   * struct jz4780_dma_hwdesc - descriptor structure read by the DMA controller.
+> @@ -896,8 +897,10 @@ static int jz4780_dma_probe(struct platform_device *pdev)
+>  	dd = &jzdma->dma_device;
+>  
+>  	dma_cap_set(DMA_MEMCPY, dd->cap_mask);
+> -	dma_cap_set(DMA_SLAVE, dd->cap_mask);
+> -	dma_cap_set(DMA_CYCLIC, dd->cap_mask);
+> +	if (!(soc_data->flags & JZ_SOC_DATA_ONLY_MEMCPY)) {
+> +		dma_cap_set(DMA_SLAVE, dd->cap_mask);
+> +		dma_cap_set(DMA_CYCLIC, dd->cap_mask);
+> +	}
+
+and set this if JZ_SOC_DATA_PERIPHERAL is set?
+
+>  
+>  	dd->dev = dev;
+>  	dd->copy_align = DMAENGINE_ALIGN_4_BYTES;
+> @@ -1018,12 +1021,25 @@ static const struct jz4780_dma_soc_data jz4760_dma_soc_data = {
+>  	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_NO_DCKES_DCKEC,
+>  };
+>  
+> +static const struct jz4780_dma_soc_data jz4760_mdma_soc_data = {
+> +	.nb_channels = 2,
+> +	.transfer_ord_max = 6,
+> +	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_NO_DCKES_DCKEC |
+> +		 JZ_SOC_DATA_ONLY_MEMCPY,
+> +};
+> +
+>  static const struct jz4780_dma_soc_data jz4760b_dma_soc_data = {
+>  	.nb_channels = 5,
+>  	.transfer_ord_max = 6,
+>  	.flags = JZ_SOC_DATA_PER_CHAN_PM,
+>  };
+>  
+> +static const struct jz4780_dma_soc_data jz4760b_mdma_soc_data = {
+> +	.nb_channels = 2,
+> +	.transfer_ord_max = 6,
+> +	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_ONLY_MEMCPY,
+> +};
+> +
+>  static const struct jz4780_dma_soc_data jz4770_dma_soc_data = {
+>  	.nb_channels = 6,
+>  	.transfer_ord_max = 6,
+> @@ -1052,7 +1068,9 @@ static const struct of_device_id jz4780_dma_dt_match[] = {
+>  	{ .compatible = "ingenic,jz4740-dma", .data = &jz4740_dma_soc_data },
+>  	{ .compatible = "ingenic,jz4725b-dma", .data = &jz4725b_dma_soc_data },
+>  	{ .compatible = "ingenic,jz4760-dma", .data = &jz4760_dma_soc_data },
+> +	{ .compatible = "ingenic,jz4760-mdma", .data = &jz4760_mdma_soc_data },
+>  	{ .compatible = "ingenic,jz4760b-dma", .data = &jz4760b_dma_soc_data },
+> +	{ .compatible = "ingenic,jz4760b-mdma", .data = &jz4760b_mdma_soc_data },
+>  	{ .compatible = "ingenic,jz4770-dma", .data = &jz4770_dma_soc_data },
+>  	{ .compatible = "ingenic,jz4780-dma", .data = &jz4780_dma_soc_data },
+>  	{ .compatible = "ingenic,x1000-dma", .data = &x1000_dma_soc_data },
+> -- 
+> 2.30.2
 
 -- 
-Jens Axboe
-
+~Vinod
