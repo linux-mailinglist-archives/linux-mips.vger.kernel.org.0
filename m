@@ -2,148 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6BB3D89AD
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jul 2021 10:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022E63D8A8E
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jul 2021 11:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235259AbhG1IWv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 28 Jul 2021 04:22:51 -0400
-Received: from aposti.net ([89.234.176.197]:43998 "EHLO aposti.net"
+        id S231420AbhG1J1W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Jul 2021 05:27:22 -0400
+Received: from elvis.franken.de ([193.175.24.41]:59015 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235169AbhG1IWu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 28 Jul 2021 04:22:50 -0400
-Date:   Wed, 28 Jul 2021 09:22:34 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 3/3] dma: jz4780: Add support for the MDMA in the
- JZ4760(B)
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, list@opendingux.net
-Message-Id: <ML4YWQ.2MOPKABT5JGC1@crapouillou.net>
-In-Reply-To: <YQEERH97pngKbTiG@matsya>
-References: <20210718122024.204907-1-paul@crapouillou.net>
-        <20210718122024.204907-3-paul@crapouillou.net> <YQEERH97pngKbTiG@matsya>
+        id S231392AbhG1J1W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 28 Jul 2021 05:27:22 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1m8fqR-0007rX-00; Wed, 28 Jul 2021 11:27:19 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9014EC11EE; Wed, 28 Jul 2021 11:25:39 +0200 (CEST)
+Date:   Wed, 28 Jul 2021 11:25:39 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        linux-mips@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 0/3] mips: expunge kernel-doc warnings
+Message-ID: <20210728092539.GA6545@alpha.franken.de>
+References: <20210725160258.28950-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210725160258.28950-1-rdunlap@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Vinod,
-
-Le mer., juil. 28 2021 at 12:46:20 +0530, Vinod Koul <vkoul@kernel.org> 
-a écrit :
-> On 18-07-21, 13:20, Paul Cercueil wrote:
->>  The JZ4760 and JZ4760B SoCs have two regular DMA controllers with 6
->>  channels each. They also have an extra DMA controller named MDMA
->>  with only 2 channels, that only supports memcpy operations.
+On Sun, Jul 25, 2021 at 09:02:55AM -0700, Randy Dunlap wrote:
+> Remove all kernel-doc warnings from arch/mips/ (as reported by the
+> kernel test robot).
 > 
-> It is dmaengine not dma:
+> [PATCH 1/3] mips: clean up (remove) kernel-doc in cavium-octeon/executive/
+> [PATCH 2/3] mips: clean up kernel-doc in cavium-octeon/*.c
+> [PATCH 3/3] mips: clean up kernel-doc in mm/c-octeon.c
 > 
->> 
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>   drivers/dma/dma-jz4780.c | 22 ++++++++++++++++++++--
->>   1 file changed, 20 insertions(+), 2 deletions(-)
->> 
->>  diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
->>  index d71bc7235959..eed505e3cce2 100644
->>  --- a/drivers/dma/dma-jz4780.c
->>  +++ b/drivers/dma/dma-jz4780.c
->>  @@ -93,6 +93,7 @@
->>   #define JZ_SOC_DATA_PER_CHAN_PM		BIT(2)
->>   #define JZ_SOC_DATA_NO_DCKES_DCKEC	BIT(3)
->>   #define JZ_SOC_DATA_BREAK_LINKS		BIT(4)
->>  +#define JZ_SOC_DATA_ONLY_MEMCPY		BIT(5)
+> Cc: Aditya Srivastava <yashsri421@gmail.com>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> Cc: kernel test robot <lkp@intel.com>
 > 
-> Why -ve logic? Looks like MEMCPY is eveywhere and only peripheral is 
-> not
-> there at few SoC, so use JZ_SOC_DATA_PERIPHERAL
+>  arch/mips/cavium-octeon/executive/cvmx-bootmem.c      |   10 +-
+>  arch/mips/cavium-octeon/executive/cvmx-cmd-queue.c    |   12 +-
+>  arch/mips/cavium-octeon/executive/cvmx-helper-board.c |    8 -
+>  arch/mips/cavium-octeon/executive/cvmx-helper-rgmii.c |   12 +-
+>  arch/mips/cavium-octeon/executive/cvmx-helper-xaui.c  |    8 -
+>  arch/mips/cavium-octeon/executive/cvmx-l2c.c          |    9 --
+>  arch/mips/cavium-octeon/executive/cvmx-pko.c          |   22 ++---
+>  arch/mips/cavium-octeon/executive/cvmx-spi.c          |   20 ++--
+>  arch/mips/cavium-octeon/flash_setup.c                 |    2 
+>  arch/mips/cavium-octeon/setup.c                       |   43 +++++-----
+>  arch/mips/cavium-octeon/smp.c                         |   14 +--
+>  arch/mips/mm/c-octeon.c                               |   29 +++---
+>  12 files changed, 93 insertions(+), 96 deletions(-)
 
-That means touching every other jz4780_dma_soc_data structure in a 
-patch that's focused on one SoC. That means a messy patch, and I don't 
-like that.
+series applied to mips-next.
 
-Negative logic is a problem if it makes it harder to understand, I 
-don't think it's the case here. Besides, we already have 
-JZ_SOC_DATA_NO_DCKES_DCKEC.
+Thomas.
 
-Cheers,
--Paul
-
->> 
->>   /**
->>    * struct jz4780_dma_hwdesc - descriptor structure read by the DMA 
->> controller.
->>  @@ -896,8 +897,10 @@ static int jz4780_dma_probe(struct 
->> platform_device *pdev)
->>   	dd = &jzdma->dma_device;
->> 
->>   	dma_cap_set(DMA_MEMCPY, dd->cap_mask);
->>  -	dma_cap_set(DMA_SLAVE, dd->cap_mask);
->>  -	dma_cap_set(DMA_CYCLIC, dd->cap_mask);
->>  +	if (!(soc_data->flags & JZ_SOC_DATA_ONLY_MEMCPY)) {
->>  +		dma_cap_set(DMA_SLAVE, dd->cap_mask);
->>  +		dma_cap_set(DMA_CYCLIC, dd->cap_mask);
->>  +	}
-> 
-> and set this if JZ_SOC_DATA_PERIPHERAL is set?
-> 
->> 
->>   	dd->dev = dev;
->>   	dd->copy_align = DMAENGINE_ALIGN_4_BYTES;
->>  @@ -1018,12 +1021,25 @@ static const struct jz4780_dma_soc_data 
->> jz4760_dma_soc_data = {
->>   	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_NO_DCKES_DCKEC,
->>   };
->> 
->>  +static const struct jz4780_dma_soc_data jz4760_mdma_soc_data = {
->>  +	.nb_channels = 2,
->>  +	.transfer_ord_max = 6,
->>  +	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_NO_DCKES_DCKEC |
->>  +		 JZ_SOC_DATA_ONLY_MEMCPY,
->>  +};
->>  +
->>   static const struct jz4780_dma_soc_data jz4760b_dma_soc_data = {
->>   	.nb_channels = 5,
->>   	.transfer_ord_max = 6,
->>   	.flags = JZ_SOC_DATA_PER_CHAN_PM,
->>   };
->> 
->>  +static const struct jz4780_dma_soc_data jz4760b_mdma_soc_data = {
->>  +	.nb_channels = 2,
->>  +	.transfer_ord_max = 6,
->>  +	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_ONLY_MEMCPY,
->>  +};
->>  +
->>   static const struct jz4780_dma_soc_data jz4770_dma_soc_data = {
->>   	.nb_channels = 6,
->>   	.transfer_ord_max = 6,
->>  @@ -1052,7 +1068,9 @@ static const struct of_device_id 
->> jz4780_dma_dt_match[] = {
->>   	{ .compatible = "ingenic,jz4740-dma", .data = 
->> &jz4740_dma_soc_data },
->>   	{ .compatible = "ingenic,jz4725b-dma", .data = 
->> &jz4725b_dma_soc_data },
->>   	{ .compatible = "ingenic,jz4760-dma", .data = 
->> &jz4760_dma_soc_data },
->>  +	{ .compatible = "ingenic,jz4760-mdma", .data = 
->> &jz4760_mdma_soc_data },
->>   	{ .compatible = "ingenic,jz4760b-dma", .data = 
->> &jz4760b_dma_soc_data },
->>  +	{ .compatible = "ingenic,jz4760b-mdma", .data = 
->> &jz4760b_mdma_soc_data },
->>   	{ .compatible = "ingenic,jz4770-dma", .data = 
->> &jz4770_dma_soc_data },
->>   	{ .compatible = "ingenic,jz4780-dma", .data = 
->> &jz4780_dma_soc_data },
->>   	{ .compatible = "ingenic,x1000-dma", .data = &x1000_dma_soc_data 
->> },
->>  --
->>  2.30.2
-> 
-> --
-> ~Vinod
-
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
