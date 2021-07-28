@@ -2,51 +2,74 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D713D8076
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jul 2021 23:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7253D8564
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jul 2021 03:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbhG0VFJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 27 Jul 2021 17:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S234450AbhG1Bbj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 27 Jul 2021 21:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbhG0VFJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jul 2021 17:05:09 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15C5C061757;
-        Tue, 27 Jul 2021 14:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=NO0RGVu+XndYKUq3uNCgF+Kta6CYfhtwRahspvD+83o=; b=LHPi7HOMmKXpl/JTivGeHL+Uc/
-        gubaL8xVK/zdLXCvONaAPiqG5U2sYv8n1bPlDYE/POrSnQYVhIscyxFVGD6H0COPC/fziMsUFIpy6
-        YqheJe1AcA8FtncDzpDzfKvjP5LmVPCsOAJktFaVYBi5pardy6QnQF8Y7A9ucqqfsEYbyX4GC1uM+
-        T9oKfls5/9bUIs7HSJJBJ+hQU814fh9DNJMxovTxGoGgsmSCzk8Ia+uUs/7Qn7CUJz3WGCb12FBt4
-        9kDgGiiaP45Yr75bFU/HFyCEt7ab0t6jWoolqzcgttG+Odq5YouAKuyPkkgAqtrPdy3SAzhRwFLbJ
-        9sc5tW7Q==;
-Received: from [2601:1c0:6280:3f0::aefb]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m8UGA-00GMRO-TV; Tue, 27 Jul 2021 21:05:07 +0000
-Subject: Re: [PATCH v4 19/19] auxdisplay: ht16k33: Add LED support
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210727140459.3767788-1-geert@linux-m68k.org>
- <20210727140459.3767788-20-geert@linux-m68k.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <5b70f272-eec9-0ff7-1bd2-bf1659b10e9c@infradead.org>
-Date:   Tue, 27 Jul 2021 14:05:05 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        with ESMTP id S234449AbhG1Bbh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 27 Jul 2021 21:31:37 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9208C061760
+        for <linux-mips@vger.kernel.org>; Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id ca5so2677894pjb.5
+        for <linux-mips@vger.kernel.org>; Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yHc64D7GeFGFvPKcL3/klEXdsXGAyEbOGkW4X7dqYZk=;
+        b=fhSYS231qJ3sqkIYNi8KPw8MsfS0+ziEaNeUJJgkWRoGnsw+X6Zela3vLGucwxsOnQ
+         T/2eQecJMaDAtj1/fJv4pRgNYPjG5MBwhmQRzKVK7XHucRr9VlsyFnemk7Az0cFRvaoj
+         SXA55eSG8LWFjpI5M4/vVkrChJvWZRFUIvXxtX/YyI6Hetmvo8xUU0IsYqW0uPaYORh+
+         7fbNsmk6bU1nDAoUQ8bBanH/4Fg5DnH45lOS4h8rnJCcsSof3DVR671BuFi4Ezu9qGFc
+         pniezhy1QlK6TDYbbPRo+6/gzTozJcEPXqbmDtUTOLhYVoF+8NtbsE0cFeksRw7VSH/K
+         7dzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yHc64D7GeFGFvPKcL3/klEXdsXGAyEbOGkW4X7dqYZk=;
+        b=lB3jaw+rS0W0MQZL3AksEwFmF6LN1qHNqQNszK6VO/CHu6/biXQV7X5/oFkeE4ws2E
+         uxfsyA7NzxTIjh+8ifbvfiL6/awU1ATXAeJHOGAOD0YSKy0Q1Zmyvaykc3OQTGNgEExn
+         F3Q1Ke6su8CfjWdPEyj/hBIVjgU8B0lLv1bzG2Tt0K/i03zdyA300x3bIrSleCSyN7wo
+         JvOf+laDaODK1thJ8PncC8KlMTtiMLjbqCuDtNOa68sUlUBmZkTApTNwkOMYZmZRL9B6
+         dc7qnJ6Uk2GWaTSTsidjg9wOrG111tWdu/2z7+9MlViYRiPSKscPZOZgRmzU4nWwD31W
+         /b6w==
+X-Gm-Message-State: AOAM530E9ixZML4dlT6ekjJN8rOKl1Zcm81GXY703XcruJSrJhh27zcW
+        HpeisP/aiajUhKK28wOiI3RtWw==
+X-Google-Smtp-Source: ABdhPJzWMYJQkYrSLemCw68WHvxxx2yrrdVHcAiwavOx0x2TeSqkNy6ZylLwTbIdJTyjO+rAuqNUqw==
+X-Received: by 2002:a62:b414:0:b029:317:52d:7fd5 with SMTP id h20-20020a62b4140000b0290317052d7fd5mr25840599pfn.30.1627435895354;
+        Tue, 27 Jul 2021 18:31:35 -0700 (PDT)
+Received: from [192.168.1.116] ([198.8.77.61])
+        by smtp.gmail.com with ESMTPSA id a16sm5054336pfo.66.2021.07.27.18.31.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jul 2021 18:31:34 -0700 (PDT)
+Subject: Re: switch the block layer to use kmap_local_page v3
+To:     Christoph Hellwig <hch@lst.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Geoff Levand <geoff@infradead.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Mike Snitzer <snitzer@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Ira Weiny <ira.weiny@intel.com>, dm-devel@redhat.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        ceph-devel@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20210727055646.118787-1-hch@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <eba0b98f-5b0e-32c4-3b09-fa1946192517@kernel.dk>
+Date:   Tue, 27 Jul 2021 19:31:30 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210727140459.3767788-20-geert@linux-m68k.org>
+In-Reply-To: <20210727055646.118787-1-hch@lst.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -54,64 +77,26 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 7/27/21 7:04 AM, Geert Uytterhoeven wrote:
-> Instantiate a single LED based on the "led" subnode in DT.
-> This allows the user to control display brightness and blinking (backed
-> by hardware support) through the LED class API and triggers, and exposes
-> the display color.  The LED will be named
-> "auxdisplay:<color>:<function>".
+On 7/26/21 11:56 PM, Christoph Hellwig wrote:
+> Hi all,
 > 
-> When running in dot-matrix mode and if no "led" subnode is found, the
-> driver falls back to the traditional backlight mode, to preserve
-> backwards compatibility.
+> this series switches the core block layer code and all users of the
+> existing bvec kmap helpers to use kmap_local_page.  Drivers that
+> currently use open coded kmap_atomic calls will converted in a follow
+> on series.
 > 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-> v4:
->   - Add missing select LEDS_CLASS,
+> To do so a new kunmap variant is added that calls
+> flush_kernel_dcache_page.  I'm not entirely sure where to call
+> flush_dcache_page vs flush_kernel_dcache_page, so I've tried to follow
+> the documentation here, but additional feedback would be welcome.
 > 
-> v3:
->   - Remove unneeded C++ comment,
->   - Use "err" instead of "error" to be consistent with existing driver
->     naming style,
->   - Make the creation of the LED device dependent on the presence of the
->     "led" subnode in DT, so it can be used in dot-matrix mode too.
->   - Use led_init_data() and devm_led_classdev_register_ext() to retrieve
->     all LED properties from DT, instead of manual LED name construction
->     based on just the "color" property,
-> 
-> v2:
->   - Use "auxdisplay" instead of DRIVER_NAME in LED name.
+> Note that the ps3disk has a minir conflict with the
+> flush_kernel_dcache_page removal in linux-next through the -mm tree.
+> I had hoped that change would go into 5.14, but it seems like it is
+> being held for 5.15.
 
-Hi Geert,
+Applied for 5.15, thanks.
 
-Since LEDS_CLASS depends on NEW_LEDS, does this also need to
-select NEW_LEDS?
-
-and similar for INPUT_MATRIXKMAP: it depends on INPUT.
-
-However, selecting (enabling) an entire subsystem is not a
-preferable thing to do.
-
-> ---
->  drivers/auxdisplay/Kconfig   |   1 +
->  drivers/auxdisplay/ht16k33.c | 124 ++++++++++++++++++++++++++++++-----
->  2 files changed, 108 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/auxdisplay/Kconfig b/drivers/auxdisplay/Kconfig
-> index 42fc7b155de09dbc..7436b9a4edbe5450 100644
-> --- a/drivers/auxdisplay/Kconfig
-> +++ b/drivers/auxdisplay/Kconfig
-> @@ -176,6 +176,7 @@ config HT16K33
->  	select FB_SYS_IMAGEBLIT
->  	select INPUT_MATRIXKMAP
->  	select FB_BACKLIGHT
-> +	select LEDS_CLASS
->  	select LINEDISP
->  	help
->  	  Say yes here to add support for Holtek HT16K33, RAM mapping 16*8
-
-thanks.
 -- 
-~Randy
+Jens Axboe
 
