@@ -2,244 +2,293 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7F63D92D4
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jul 2021 18:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656193D952F
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jul 2021 20:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237232AbhG1QK4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Jul 2021 12:10:56 -0400
-Received: from out03.mta.xmission.com ([166.70.13.233]:38752 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237464AbhG1QKu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Jul 2021 12:10:50 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51]:43296)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1m8m8j-00HGYH-Fq; Wed, 28 Jul 2021 10:10:37 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:41390 helo=email.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1m8m8a-00AA3v-G4; Wed, 28 Jul 2021 10:10:31 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Feng Tang <feng.tang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-mm@kvack.org
-References: <20210727144859.4150043-1-arnd@kernel.org>
-        <20210727144859.4150043-3-arnd@kernel.org>
-Date:   Wed, 28 Jul 2021 11:10:20 -0500
-In-Reply-To: <20210727144859.4150043-3-arnd@kernel.org> (Arnd Bergmann's
-        message of "Tue, 27 Jul 2021 16:48:55 +0200")
-Message-ID: <87a6m6fmhf.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1m8m8a-00AA3v-G4;;;mid=<87a6m6fmhf.fsf@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18jESHy/qa/BMuMj4KVyetONWlkP5WqcQ8=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,
-        XMGappySubj_01,XM_B_SpammyWords autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.5 XMGappySubj_01 Very gappy subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Arnd Bergmann <arnd@kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 616 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 12 (1.9%), b_tie_ro: 10 (1.6%), parse: 1.48
-        (0.2%), extract_message_metadata: 27 (4.3%), get_uri_detail_list: 4.8
-        (0.8%), tests_pri_-1000: 46 (7.5%), tests_pri_-950: 1.27 (0.2%),
-        tests_pri_-900: 1.07 (0.2%), tests_pri_-90: 105 (17.0%), check_bayes:
-        102 (16.6%), b_tokenize: 16 (2.6%), b_tok_get_all: 12 (1.9%),
-        b_comp_prob: 2.7 (0.4%), b_tok_touch_all: 68 (11.0%), b_finish: 1.19
-        (0.2%), tests_pri_0: 410 (66.6%), check_dkim_signature: 0.62 (0.1%),
-        check_dkim_adsp: 2.7 (0.4%), poll_dns_idle: 0.75 (0.1%), tests_pri_10:
-        2.1 (0.3%), tests_pri_500: 7 (1.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v5 2/6] kexec: avoid compat_alloc_user_space
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+        id S229620AbhG1SVe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Jul 2021 14:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229542AbhG1SVd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Jul 2021 14:21:33 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADF1C061757;
+        Wed, 28 Jul 2021 11:21:30 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id n11so2034249wmd.2;
+        Wed, 28 Jul 2021 11:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=aF3/VHib9GfO0nFJBohIRSm4KR3E1di5VfkCUNhyYTc=;
+        b=j+7JSdyL/y+5Tp4kgvBfv3a7O8SxDct7cjXFxt3kfO/nBdrjysT8zMYTtmjcjmICNe
+         xXtbgscX5Z0OO2TGenxgzYhXqChAYsMPuE9fLcrY9TZtp3bbRqYTnkU3W1it9aR9oxTs
+         /v02VoW84XyvkeNvrYtqh6CQGDoQDDz1s6G4NMTxlSbXIMfdT05h/dXKstyEPoePxH2I
+         HeZwsjiPBjbjexDG8zIAI1QxlM/cASCcmgVGwALVa66j6CeDbILQqX+Phg4+t/OT6goC
+         npeNIatPb4N8bnvQAhNzyfwiViindBb/BAgUbh2gX2h54t86yGRFpLKg6AUGjq2lr+K1
+         hfyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=aF3/VHib9GfO0nFJBohIRSm4KR3E1di5VfkCUNhyYTc=;
+        b=GeK+jEEZUFRqi8Cmq1NMwBHEGfMUfg964BKRXSeMECGXVEMdoFsWNWXz6d0kGAS7do
+         C6pvuyxA588wwdaoVvCEGF5oJ867kY3FTBO2Afp4i9kdkCMQTTV060xXdBGI9vwqrsN0
+         xyUdnXczN1enQoirPitxAxCVnHBRGLqAhUdVnx3YEJrScdgbKCF3aExy668Z+vl22HGb
+         5x+lrJ1FWtHy3JEAHJUcgtQHQEi4bwVPrBJt7usHgB5wsYC7Ova0gIcrTo5Tuchu5Nl+
+         HIUV+BLI+OSqVG89gcoZJdm1h2PjP2m0PHjJdliET/TL1jgTsapTwFv0kEGomH7OFuIc
+         EhFQ==
+X-Gm-Message-State: AOAM530YXPDgMdwoRPKNWyhwtc7rsOjpzNiK5Xi3YmKSPp5o+FI01EIS
+        RpMU0gOyTDxULWbhuptRx+4=
+X-Google-Smtp-Source: ABdhPJx0eEbkPeH6aJH3m0u5RZgt9e6APmNbopPFI39+3QwRNHGBoeSXptg7zSKawFDABm59R+KI5g==
+X-Received: by 2002:a05:600c:2e4a:: with SMTP id q10mr10720693wmf.133.1627496489195;
+        Wed, 28 Jul 2021 11:21:29 -0700 (PDT)
+Received: from felia.fritz.box ([2001:16b8:2d7f:fa00:1d1c:996c:af83:88fd])
+        by smtp.gmail.com with ESMTPSA id i5sm620880wrs.85.2021.07.28.11.21.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jul 2021 11:21:28 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        uclinux-h8-devel@lists.sourceforge.jp, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] arch: Kconfig: clean up obsolete use of HAVE_IDE
+Date:   Wed, 28 Jul 2021 20:21:15 +0200
+Message-Id: <20210728182115.4401-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
+The arch-specific Kconfig files use HAVE_IDE to indicate if IDE is
+supported.
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> kimage_alloc_init() expects a __user pointer, so compat_sys_kexec_load()
-> uses compat_alloc_user_space() to convert the layout and put it back
-> onto the user space caller stack.
->
-> Moving the user space access into the syscall handler directly actually
-> makes the code simpler, as the conversion for compat mode can now be
-> done on kernel memory.
+As IDE support and the HAVE_IDE config vanishes with commit b7fb14d3ac63
+("ide: remove the legacy ide driver"), there is no need to mention
+HAVE_IDE in all those arch-specific Kconfig files.
 
-Acked-by: "Eric W. Biederman" <ebiederm@xmission.com>
+The issue was identified with ./scripts/checkkconfigsymbols.py.
 
->
-> Co-developed-by: Eric Biederman <ebiederm@xmission.com>
-> Co-developed-by: Christoph Hellwig <hch@infradead.org>
-> Link: https://lore.kernel.org/lkml/YPbtsU4GX6PL7%2F42@infradead.org/
-> Link: https://lore.kernel.org/lkml/m1y2cbzmnw.fsf@fess.ebiederm.org/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  kernel/kexec.c | 61 +++++++++++++++++++++-----------------------------
->  1 file changed, 25 insertions(+), 36 deletions(-)
->
-> diff --git a/kernel/kexec.c b/kernel/kexec.c
-> index 9c7aef8f4bb6..b5e40f069768 100644
-> --- a/kernel/kexec.c
-> +++ b/kernel/kexec.c
-> @@ -19,26 +19,9 @@
->  
->  #include "kexec_internal.h"
->  
-> -static int copy_user_segment_list(struct kimage *image,
-> -				  unsigned long nr_segments,
-> -				  struct kexec_segment __user *segments)
-> -{
-> -	int ret;
-> -	size_t segment_bytes;
-> -
-> -	/* Read in the segments */
-> -	image->nr_segments = nr_segments;
-> -	segment_bytes = nr_segments * sizeof(*segments);
-> -	ret = copy_from_user(image->segment, segments, segment_bytes);
-> -	if (ret)
-> -		ret = -EFAULT;
-> -
-> -	return ret;
-> -}
-> -
->  static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
->  			     unsigned long nr_segments,
-> -			     struct kexec_segment __user *segments,
-> +			     struct kexec_segment *segments,
->  			     unsigned long flags)
->  {
->  	int ret;
-> @@ -58,10 +41,8 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
->  		return -ENOMEM;
->  
->  	image->start = entry;
-> -
-> -	ret = copy_user_segment_list(image, nr_segments, segments);
-> -	if (ret)
-> -		goto out_free_image;
-> +	image->nr_segments = nr_segments;
-> +	memcpy(image->segment, segments, nr_segments * sizeof(*segments));
->  
->  	if (kexec_on_panic) {
->  		/* Enable special crash kernel control page alloc policy. */
-> @@ -104,7 +85,7 @@ static int kimage_alloc_init(struct kimage **rimage, unsigned long entry,
->  }
->  
->  static int do_kexec_load(unsigned long entry, unsigned long nr_segments,
-> -		struct kexec_segment __user *segments, unsigned long flags)
-> +		struct kexec_segment *segments, unsigned long flags)
->  {
->  	struct kimage **dest_image, *image;
->  	unsigned long i;
-> @@ -250,7 +231,8 @@ static inline int kexec_load_check(unsigned long nr_segments,
->  SYSCALL_DEFINE4(kexec_load, unsigned long, entry, unsigned long, nr_segments,
->  		struct kexec_segment __user *, segments, unsigned long, flags)
->  {
-> -	int result;
-> +	struct kexec_segment *ksegments;
-> +	unsigned long result;
->  
->  	result = kexec_load_check(nr_segments, flags);
->  	if (result)
-> @@ -261,7 +243,12 @@ SYSCALL_DEFINE4(kexec_load, unsigned long, entry, unsigned long, nr_segments,
->  		((flags & KEXEC_ARCH_MASK) != KEXEC_ARCH_DEFAULT))
->  		return -EINVAL;
->  
-> -	result = do_kexec_load(entry, nr_segments, segments, flags);
-> +	ksegments = memdup_user(segments, nr_segments * sizeof(ksegments[0]));
-> +	if (IS_ERR(ksegments))
-> +		return PTR_ERR(ksegments);
-> +
-> +	result = do_kexec_load(entry, nr_segments, ksegments, flags);
-> +	kfree(ksegments);
->  
->  	return result;
->  }
-> @@ -273,7 +260,7 @@ COMPAT_SYSCALL_DEFINE4(kexec_load, compat_ulong_t, entry,
->  		       compat_ulong_t, flags)
->  {
->  	struct compat_kexec_segment in;
-> -	struct kexec_segment out, __user *ksegments;
-> +	struct kexec_segment *ksegments;
->  	unsigned long i, result;
->  
->  	result = kexec_load_check(nr_segments, flags);
-> @@ -286,24 +273,26 @@ COMPAT_SYSCALL_DEFINE4(kexec_load, compat_ulong_t, entry,
->  	if ((flags & KEXEC_ARCH_MASK) == KEXEC_ARCH_DEFAULT)
->  		return -EINVAL;
->  
-> -	ksegments = compat_alloc_user_space(nr_segments * sizeof(out));
-> +	ksegments = kmalloc_array(nr_segments, sizeof(ksegments[0]),
-> +			GFP_KERNEL);
-> +	if (!ksegments)
-> +		return -ENOMEM;
-> +
->  	for (i = 0; i < nr_segments; i++) {
->  		result = copy_from_user(&in, &segments[i], sizeof(in));
->  		if (result)
-> -			return -EFAULT;
-> +			goto fail;
->  
-> -		out.buf   = compat_ptr(in.buf);
-> -		out.bufsz = in.bufsz;
-> -		out.mem   = in.mem;
-> -		out.memsz = in.memsz;
-> -
-> -		result = copy_to_user(&ksegments[i], &out, sizeof(out));
-> -		if (result)
-> -			return -EFAULT;
-> +		ksegments[i].buf   = compat_ptr(in.buf);
-> +		ksegments[i].bufsz = in.bufsz;
-> +		ksegments[i].mem   = in.mem;
-> +		ksegments[i].memsz = in.memsz;
->  	}
->  
->  	result = do_kexec_load(entry, nr_segments, ksegments, flags);
->  
-> +fail:
-> +	kfree(ksegments);
->  	return result;
->  }
->  #endif
+Fixes: b7fb14d3ac63 ("ide: remove the legacy ide driver")
+Suggested-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ arch/alpha/Kconfig            | 1 -
+ arch/arm/Kconfig              | 6 ------
+ arch/arm/mach-davinci/Kconfig | 1 -
+ arch/h8300/Kconfig.cpu        | 1 -
+ arch/ia64/Kconfig             | 1 -
+ arch/m68k/Kconfig             | 1 -
+ arch/mips/Kconfig             | 1 -
+ arch/parisc/Kconfig           | 1 -
+ arch/powerpc/Kconfig          | 1 -
+ arch/sh/Kconfig               | 1 -
+ arch/sparc/Kconfig            | 1 -
+ arch/x86/Kconfig              | 1 -
+ arch/xtensa/Kconfig           | 1 -
+ 13 files changed, 18 deletions(-)
+
+diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
+index 77d3280dc678..a6d4c2f744e3 100644
+--- a/arch/alpha/Kconfig
++++ b/arch/alpha/Kconfig
+@@ -14,7 +14,6 @@ config ALPHA
+ 	select PCI_SYSCALL if PCI
+ 	select HAVE_AOUT
+ 	select HAVE_ASM_MODVERSIONS
+-	select HAVE_IDE
+ 	select HAVE_PCSPKR_PLATFORM
+ 	select HAVE_PERF_EVENTS
+ 	select NEED_DMA_MAP_STATE
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 82f908fa5676..2fb7012c3246 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -95,7 +95,6 @@ config ARM
+ 	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
+ 	select HAVE_GCC_PLUGINS
+ 	select HAVE_HW_BREAKPOINT if PERF_EVENTS && (CPU_V6 || CPU_V6K || CPU_V7)
+-	select HAVE_IDE if PCI || ISA || PCMCIA
+ 	select HAVE_IRQ_TIME_ACCOUNTING
+ 	select HAVE_KERNEL_GZIP
+ 	select HAVE_KERNEL_LZ4
+@@ -361,7 +360,6 @@ config ARCH_FOOTBRIDGE
+ 	bool "FootBridge"
+ 	select CPU_SA110
+ 	select FOOTBRIDGE
+-	select HAVE_IDE
+ 	select NEED_MACH_IO_H if !MMU
+ 	select NEED_MACH_MEMORY_H
+ 	help
+@@ -430,7 +428,6 @@ config ARCH_PXA
+ 	select GENERIC_IRQ_MULTI_HANDLER
+ 	select GPIO_PXA
+ 	select GPIOLIB
+-	select HAVE_IDE
+ 	select IRQ_DOMAIN
+ 	select PLAT_PXA
+ 	select SPARSE_IRQ
+@@ -446,7 +443,6 @@ config ARCH_RPC
+ 	select ARM_HAS_SG_CHAIN
+ 	select CPU_SA110
+ 	select FIQ
+-	select HAVE_IDE
+ 	select HAVE_PATA_PLATFORM
+ 	select ISA_DMA_API
+ 	select LEGACY_TIMER_TICK
+@@ -469,7 +465,6 @@ config ARCH_SA1100
+ 	select CPU_SA1100
+ 	select GENERIC_IRQ_MULTI_HANDLER
+ 	select GPIOLIB
+-	select HAVE_IDE
+ 	select IRQ_DOMAIN
+ 	select ISA
+ 	select NEED_MACH_MEMORY_H
+@@ -505,7 +500,6 @@ config ARCH_OMAP1
+ 	select GENERIC_IRQ_CHIP
+ 	select GENERIC_IRQ_MULTI_HANDLER
+ 	select GPIOLIB
+-	select HAVE_IDE
+ 	select HAVE_LEGACY_CLK
+ 	select IRQ_DOMAIN
+ 	select NEED_MACH_IO_H if PCCARD
+diff --git a/arch/arm/mach-davinci/Kconfig b/arch/arm/mach-davinci/Kconfig
+index de11030748d0..1d3aef84287d 100644
+--- a/arch/arm/mach-davinci/Kconfig
++++ b/arch/arm/mach-davinci/Kconfig
+@@ -9,7 +9,6 @@ menuconfig ARCH_DAVINCI
+ 	select PM_GENERIC_DOMAINS_OF if PM && OF
+ 	select REGMAP_MMIO
+ 	select RESET_CONTROLLER
+-	select HAVE_IDE
+ 	select PINCTRL_SINGLE
+ 
+ if ARCH_DAVINCI
+diff --git a/arch/h8300/Kconfig.cpu b/arch/h8300/Kconfig.cpu
+index 2b9cbaf41cd0..e4467d40107d 100644
+--- a/arch/h8300/Kconfig.cpu
++++ b/arch/h8300/Kconfig.cpu
+@@ -44,7 +44,6 @@ config H8300_H8MAX
+ 	bool "H8MAX"
+ 	select H83069
+ 	select RAMKERNEL
+-	select HAVE_IDE
+ 	help
+ 	  H8MAX Evaluation Board Support
+ 	  More Information. (Japanese Only)
+diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+index cf425c2c63af..4993c7ac7ff6 100644
+--- a/arch/ia64/Kconfig
++++ b/arch/ia64/Kconfig
+@@ -25,7 +25,6 @@ config IA64
+ 	select HAVE_ASM_MODVERSIONS
+ 	select HAVE_UNSTABLE_SCHED_CLOCK
+ 	select HAVE_EXIT_THREAD
+-	select HAVE_IDE
+ 	select HAVE_KPROBES
+ 	select HAVE_KRETPROBES
+ 	select HAVE_FTRACE_MCOUNT_RECORD
+diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+index 96989ad46f66..d632a1d576f9 100644
+--- a/arch/m68k/Kconfig
++++ b/arch/m68k/Kconfig
+@@ -23,7 +23,6 @@ config M68K
+ 	select HAVE_DEBUG_BUGVERBOSE
+ 	select HAVE_EFFICIENT_UNALIGNED_ACCESS if !CPU_HAS_NO_UNALIGNED
+ 	select HAVE_FUTEX_CMPXCHG if MMU && FUTEX
+-	select HAVE_IDE
+ 	select HAVE_MOD_ARCH_SPECIFIC
+ 	select HAVE_UID16
+ 	select MMU_GATHER_NO_RANGE if MMU
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index cee6087cd686..6dfb27d531dd 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -71,7 +71,6 @@ config MIPS
+ 	select HAVE_FUNCTION_TRACER
+ 	select HAVE_GCC_PLUGINS
+ 	select HAVE_GENERIC_VDSO
+-	select HAVE_IDE
+ 	select HAVE_IOREMAP_PROT
+ 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
+ 	select HAVE_IRQ_TIME_ACCOUNTING
+diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+index bde9907bc5b2..4f8c1fbf8f2f 100644
+--- a/arch/parisc/Kconfig
++++ b/arch/parisc/Kconfig
+@@ -3,7 +3,6 @@ config PARISC
+ 	def_bool y
+ 	select ARCH_32BIT_OFF_T if !64BIT
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT
+-	select HAVE_IDE
+ 	select HAVE_FUNCTION_TRACER
+ 	select HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_SYSCALL_TRACEPOINTS
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 53db06ba4223..2e213ec6ec05 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -220,7 +220,6 @@ config PPC
+ 	select HAVE_HARDLOCKUP_DETECTOR_ARCH	if PPC_BOOK3S_64 && SMP
+ 	select HAVE_HARDLOCKUP_DETECTOR_PERF	if PERF_EVENTS && HAVE_PERF_EVENTS_NMI && !HAVE_HARDLOCKUP_DETECTOR_ARCH
+ 	select HAVE_HW_BREAKPOINT		if PERF_EVENTS && (PPC_BOOK3S || PPC_8xx)
+-	select HAVE_IDE
+ 	select HAVE_IOREMAP_PROT
+ 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
+ 	select HAVE_IRQ_TIME_ACCOUNTING
+diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+index 45a0549421cd..b683b69a4556 100644
+--- a/arch/sh/Kconfig
++++ b/arch/sh/Kconfig
+@@ -39,7 +39,6 @@ config SUPERH
+ 	select HAVE_FUTEX_CMPXCHG if FUTEX
+ 	select HAVE_FTRACE_MCOUNT_RECORD
+ 	select HAVE_HW_BREAKPOINT
+-	select HAVE_IDE if HAS_IOPORT_MAP
+ 	select HAVE_IOREMAP_PROT if MMU && !X2TLB
+ 	select HAVE_KERNEL_BZIP2
+ 	select HAVE_KERNEL_GZIP
+diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+index c5fa7932b550..f0c0f955e169 100644
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -19,7 +19,6 @@ config SPARC
+ 	select OF
+ 	select OF_PROMTREE
+ 	select HAVE_ASM_MODVERSIONS
+-	select HAVE_IDE
+ 	select HAVE_ARCH_KGDB if !SMP || SPARC64
+ 	select HAVE_ARCH_TRACEHOOK
+ 	select HAVE_ARCH_SECCOMP if SPARC64
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 89a286d5e4b9..ff0769cd4b31 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -202,7 +202,6 @@ config X86
+ 	select HAVE_FUNCTION_TRACER
+ 	select HAVE_GCC_PLUGINS
+ 	select HAVE_HW_BREAKPOINT
+-	select HAVE_IDE
+ 	select HAVE_IOREMAP_PROT
+ 	select HAVE_IRQ_EXIT_ON_IRQ_STACK	if X86_64
+ 	select HAVE_IRQ_TIME_ACCOUNTING
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index 1bdb55c2d0c1..b843902ad9fd 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -327,7 +327,6 @@ config XTENSA_PLATFORM_ISS
+ 
+ config XTENSA_PLATFORM_XT2000
+ 	bool "XT2000"
+-	select HAVE_IDE
+ 	help
+ 	  XT2000 is the name of Tensilica's feature-rich emulation platform.
+ 	  This hardware is capable of running a full Linux distribution.
+-- 
+2.17.1
+
