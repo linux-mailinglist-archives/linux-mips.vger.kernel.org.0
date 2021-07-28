@@ -2,128 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F0D3D88A8
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jul 2021 09:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B503D88FC
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jul 2021 09:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbhG1HQa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 28 Jul 2021 03:16:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51636 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233732AbhG1HQ2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 28 Jul 2021 03:16:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0650160F93;
-        Wed, 28 Jul 2021 07:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627456587;
-        bh=x0xcvQaq9O32Nso7pIl+O6xyOtevShOSKrCBXswXPXg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O/NTRx+isUoN0Lv+rgz6j5o45+43BtRQUES2zsp/QQGZcqbRi4WjQfzzM5JPdacwW
-         QkTowxaah7QCMacjilrpYLDnY5Q2a+S1mmggW/2WG6Ur9Wr6g4h4am/Isc60Ag6dpq
-         7lwle47pO0XoFe37HKoBncAzLIDVOU1Vwt1zkU9s8/bkE6EHC9vmpB5kvaud12yknW
-         ompwuV7hTHZUQYWawL6B2yY3zl5Ypc8GN+7RKIoTQ/nUgqVunhnWKnDJZAHZBlJDub
-         uyP7FDyRZpAfAowA/9iUrwNnXDXDoqDm7muGJHDj7gRnJX8ggw4SZ9nC+Z6LXNW7E4
-         ujQUGM3MNCQ7w==
-Date:   Wed, 28 Jul 2021 12:46:20 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Rob Herring <robh+dt@kernel.org>, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, list@opendingux.net
-Subject: Re: [PATCH 3/3] dma: jz4780: Add support for the MDMA in the
- JZ4760(B)
-Message-ID: <YQEERH97pngKbTiG@matsya>
-References: <20210718122024.204907-1-paul@crapouillou.net>
- <20210718122024.204907-3-paul@crapouillou.net>
+        id S234341AbhG1Hj3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 28 Jul 2021 03:39:29 -0400
+Received: from mail-vk1-f174.google.com ([209.85.221.174]:33674 "EHLO
+        mail-vk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233407AbhG1Hj3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 28 Jul 2021 03:39:29 -0400
+Received: by mail-vk1-f174.google.com with SMTP id x16so285157vkn.0;
+        Wed, 28 Jul 2021 00:39:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IIoR0x4c4qkCDM5zeSgEYpx5IiIPuyajsBO/z2pOlTw=;
+        b=IBlHOBu1zg/Dhv5/Cypb+OLy2iT2ldzdg8eSv2NGtP3IvElOwD7zm67f/HViHm93yY
+         Hp/193A6PR6RoYNLqLPrNiUt5La5Y6Z2p8nsnN0ascK83N1+Sz6h0ZSCWuU/I6ZHerPi
+         TN2tqKFKxS/6DVz8LjJUqFjMbf4+ruy7fkZzJFDCRen0j8V8S3LJ4ToQVkBTWZ/jGQ1P
+         rSWbHBaqd0nmANMznDggtLlkPOMnG10IW3oGngAzLl3F+XHDFVGyo0AXnNRNw2/Z8Utt
+         GiV2b50vUv1PpaW/84Y/8zlLT2FyNgZsvecZPAwGWsSvVR0RlNqEy7z5LA53yn3l0KKy
+         H0rQ==
+X-Gm-Message-State: AOAM532XU0cKtsk2gnQPR6TRbGBzjOvOG2ZZB9DKz7JAQS8OWFXWpMe8
+        ktG6GPWbS9ERD3RuqtKjnBP9LUoh89gP+JYH3lPspJ+yzLmrRQ==
+X-Google-Smtp-Source: ABdhPJz/5pLBCjc+p711ENZhvHSZU+IUCvQRJEKJrih5Ip3PM93F2NaMQ+bYAL2mWIvoL1pPMwxiVTl3BXQ67qFvv8U=
+X-Received: by 2002:ac5:c956:: with SMTP id s22mr17827118vkm.2.1627457966456;
+ Wed, 28 Jul 2021 00:39:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210718122024.204907-3-paul@crapouillou.net>
+References: <20210727140459.3767788-1-geert@linux-m68k.org>
+ <20210727140459.3767788-20-geert@linux-m68k.org> <5b70f272-eec9-0ff7-1bd2-bf1659b10e9c@infradead.org>
+In-Reply-To: <5b70f272-eec9-0ff7-1bd2-bf1659b10e9c@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 28 Jul 2021 09:39:15 +0200
+Message-ID: <CAMuHMdVdB3spJxZ5QVdSV0j8ZxNSZDjcX5B_kGitxyLLdyCwLg@mail.gmail.com>
+Subject: Re: [PATCH v4 19/19] auxdisplay: ht16k33: Add LED support
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 18-07-21, 13:20, Paul Cercueil wrote:
-> The JZ4760 and JZ4760B SoCs have two regular DMA controllers with 6
-> channels each. They also have an extra DMA controller named MDMA
-> with only 2 channels, that only supports memcpy operations.
+Hi Randy,
 
-It is dmaengine not dma:
+On Tue, Jul 27, 2021 at 11:05 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> On 7/27/21 7:04 AM, Geert Uytterhoeven wrote:
+> > Instantiate a single LED based on the "led" subnode in DT.
+> > This allows the user to control display brightness and blinking (backed
+> > by hardware support) through the LED class API and triggers, and exposes
+> > the display color.  The LED will be named
+> > "auxdisplay:<color>:<function>".
+> >
+> > When running in dot-matrix mode and if no "led" subnode is found, the
+> > driver falls back to the traditional backlight mode, to preserve
+> > backwards compatibility.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > ---
+> > v4:
+> >   - Add missing select LEDS_CLASS,
 
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  drivers/dma/dma-jz4780.c | 22 ++++++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-> index d71bc7235959..eed505e3cce2 100644
-> --- a/drivers/dma/dma-jz4780.c
-> +++ b/drivers/dma/dma-jz4780.c
-> @@ -93,6 +93,7 @@
->  #define JZ_SOC_DATA_PER_CHAN_PM		BIT(2)
->  #define JZ_SOC_DATA_NO_DCKES_DCKEC	BIT(3)
->  #define JZ_SOC_DATA_BREAK_LINKS		BIT(4)
-> +#define JZ_SOC_DATA_ONLY_MEMCPY		BIT(5)
+> Since LEDS_CLASS depends on NEW_LEDS, does this also need to
+> select NEW_LEDS?
 
-Why -ve logic? Looks like MEMCPY is eveywhere and only peripheral is not
-there at few SoC, so use JZ_SOC_DATA_PERIPHERAL
->  
->  /**
->   * struct jz4780_dma_hwdesc - descriptor structure read by the DMA controller.
-> @@ -896,8 +897,10 @@ static int jz4780_dma_probe(struct platform_device *pdev)
->  	dd = &jzdma->dma_device;
->  
->  	dma_cap_set(DMA_MEMCPY, dd->cap_mask);
-> -	dma_cap_set(DMA_SLAVE, dd->cap_mask);
-> -	dma_cap_set(DMA_CYCLIC, dd->cap_mask);
-> +	if (!(soc_data->flags & JZ_SOC_DATA_ONLY_MEMCPY)) {
-> +		dma_cap_set(DMA_SLAVE, dd->cap_mask);
-> +		dma_cap_set(DMA_CYCLIC, dd->cap_mask);
-> +	}
+Right, I missed that.  It needs to select both NEW_LEDS and LED_CLASS.
+Do I need to resend the whole series, or can this be fixed while
+applying?
 
-and set this if JZ_SOC_DATA_PERIPHERAL is set?
+> and similar for INPUT_MATRIXKMAP: it depends on INPUT.
 
->  
->  	dd->dev = dev;
->  	dd->copy_align = DMAENGINE_ALIGN_4_BYTES;
-> @@ -1018,12 +1021,25 @@ static const struct jz4780_dma_soc_data jz4760_dma_soc_data = {
->  	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_NO_DCKES_DCKEC,
->  };
->  
-> +static const struct jz4780_dma_soc_data jz4760_mdma_soc_data = {
-> +	.nb_channels = 2,
-> +	.transfer_ord_max = 6,
-> +	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_NO_DCKES_DCKEC |
-> +		 JZ_SOC_DATA_ONLY_MEMCPY,
-> +};
-> +
->  static const struct jz4780_dma_soc_data jz4760b_dma_soc_data = {
->  	.nb_channels = 5,
->  	.transfer_ord_max = 6,
->  	.flags = JZ_SOC_DATA_PER_CHAN_PM,
->  };
->  
-> +static const struct jz4780_dma_soc_data jz4760b_mdma_soc_data = {
-> +	.nb_channels = 2,
-> +	.transfer_ord_max = 6,
-> +	.flags = JZ_SOC_DATA_PER_CHAN_PM | JZ_SOC_DATA_ONLY_MEMCPY,
-> +};
-> +
->  static const struct jz4780_dma_soc_data jz4770_dma_soc_data = {
->  	.nb_channels = 6,
->  	.transfer_ord_max = 6,
-> @@ -1052,7 +1068,9 @@ static const struct of_device_id jz4780_dma_dt_match[] = {
->  	{ .compatible = "ingenic,jz4740-dma", .data = &jz4740_dma_soc_data },
->  	{ .compatible = "ingenic,jz4725b-dma", .data = &jz4725b_dma_soc_data },
->  	{ .compatible = "ingenic,jz4760-dma", .data = &jz4760_dma_soc_data },
-> +	{ .compatible = "ingenic,jz4760-mdma", .data = &jz4760_mdma_soc_data },
->  	{ .compatible = "ingenic,jz4760b-dma", .data = &jz4760b_dma_soc_data },
-> +	{ .compatible = "ingenic,jz4760b-mdma", .data = &jz4760b_mdma_soc_data },
->  	{ .compatible = "ingenic,jz4770-dma", .data = &jz4770_dma_soc_data },
->  	{ .compatible = "ingenic,jz4780-dma", .data = &jz4780_dma_soc_data },
->  	{ .compatible = "ingenic,x1000-dma", .data = &x1000_dma_soc_data },
-> -- 
-> 2.30.2
+HT16K33 already depends on INPUT.
 
--- 
-~Vinod
+> However, selecting (enabling) an entire subsystem is not a
+> preferable thing to do.
+
+Unfortunately we have no choice, unless we untangle the depends/select
+web first:
+
+HT16K33 depends on NEW_LEDS, select LEDS_CLASS:
+
+    drivers/leds/Kconfig:9:error: recursive dependency detected!
+    drivers/leds/Kconfig:9:     symbol NEW_LEDS is selected by SENSORS_APPLESMC
+    drivers/hwmon/Kconfig:324:  symbol SENSORS_APPLESMC depends on HWMON
+    drivers/hwmon/Kconfig:6:    symbol HWMON is selected by EEEPC_LAPTOP
+    drivers/platform/x86/Kconfig:305:   symbol EEEPC_LAPTOP depends on
+ACPI_VIDEO
+
+HT16K33 depends on LEDS_CLASS:
+
+    drivers/leds/Kconfig:17:error: recursive dependency detected!
+    drivers/leds/Kconfig:17:    symbol LEDS_CLASS depends on NEW_LEDS
+    drivers/leds/Kconfig:9:     symbol NEW_LEDS is selected by SENSORS_APPLESMC
+    drivers/hwmon/Kconfig:324:  symbol SENSORS_APPLESMC depends on HWMON
+    drivers/hwmon/Kconfig:6:    symbol HWMON is selected by EEEPC_LAPTOP
+    drivers/platform/x86/Kconfig:305:   symbol EEEPC_LAPTOP depends on
+ACPI_VIDEO
+
+> > --- a/drivers/auxdisplay/Kconfig
+> > +++ b/drivers/auxdisplay/Kconfig
+> > @@ -176,6 +176,7 @@ config HT16K33
+> >       select FB_SYS_IMAGEBLIT
+> >       select INPUT_MATRIXKMAP
+> >       select FB_BACKLIGHT
+> > +     select LEDS_CLASS
+> >       select LINEDISP
+> >       help
+> >         Say yes here to add support for Holtek HT16K33, RAM mapping 16*8
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
