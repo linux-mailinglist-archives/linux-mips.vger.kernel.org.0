@@ -2,71 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4E33DAE66
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jul 2021 23:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614753DAE6C
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jul 2021 23:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbhG2Vhl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 29 Jul 2021 17:37:41 -0400
-Received: from mail-io1-f49.google.com ([209.85.166.49]:34794 "EHLO
-        mail-io1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbhG2Vhk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jul 2021 17:37:40 -0400
-Received: by mail-io1-f49.google.com with SMTP id y200so8960861iof.1;
-        Thu, 29 Jul 2021 14:37:36 -0700 (PDT)
+        id S234022AbhG2Vif (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 29 Jul 2021 17:38:35 -0400
+Received: from mail-il1-f171.google.com ([209.85.166.171]:34548 "EHLO
+        mail-il1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230342AbhG2Vif (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 29 Jul 2021 17:38:35 -0400
+Received: by mail-il1-f171.google.com with SMTP id a14so7375264ila.1;
+        Thu, 29 Jul 2021 14:38:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=GL2xSmRw9g0iLLIt1gTK3ClUNCp2GnYQ9igmDGoEG4M=;
-        b=en935AnxchPVDoFvrN9C6MZMZiTX1snBoHTN0zxEQVbw4VuG/3aYLKzeGlmmcwmc7g
-         hjmL1p9rSFAPHRZibclsUrklel+Kq+IhF18S1GwE0BlnffKE2aVQH8vftpGxxdssQxJ5
-         GHNtY0nk/HGH1DnwFkuT8D/NH3SQckG2voG1ZzjznrGKGWqM13mc+DXbGxs7xQmtUB3C
-         lWKT9xu/OkGYS3AJ67Pzf/n/54/S2YugCdEC3Q38OYrixqB8LYUg91BAvzomPJQocYXj
-         Od4tvlKjhXCncHIUoogvhcL901pJK7vkSByH8AaqsClBU7k9mYWK/qWnjiYD/Jnj0yoK
-         FeZw==
-X-Gm-Message-State: AOAM531l/mv64kYRXrKwU3rRntzRDhvDqWF8HPAWKbCGMl+06lQ8rN0P
-        MWqIqL/NVYknF5C2Lu89lA==
-X-Google-Smtp-Source: ABdhPJyy8HuRAYhK5y+PnEaKuzrXKNGyVb1CWy2JPFLvNMFzBGisXDpLpFgVdfyzMW3yrZGX6ohyiw==
-X-Received: by 2002:a6b:7619:: with SMTP id g25mr5564090iom.151.1627594655721;
-        Thu, 29 Jul 2021 14:37:35 -0700 (PDT)
+        bh=weWgO//c0TSwvdORBfQI0q5l+aoZeVIROfRH7MThAaM=;
+        b=mxaHaRvTWxu8MckTD9q3kkCTOaJxahlZxCksjh76yh4LvaYhk7oslKWiBjZsxyeQKs
+         kPo6etIwjB84pf/4MdErLurL35/NUI++LMg8ZN8wNkouOh5BGesq6wRlMElKfE/McHaL
+         9USrlw7euTrCSpLnDAxEs+eDAGHaEI9wLxs0s+oWhIiCTPnjBSl7GosXJ/hCSigxMbcf
+         VfEaHsUaj0Y1Wc4aqURon2wgtsIGHRgFWl32c7w2F2uFguLy0qYCkixLjUrj7CU5yzhE
+         xXtGMGlsJh2JLPHyJ9zS2AGjqKEUBR5eI4wAYGr/IU7wL+J714Ut7mtfZTRqmuBtdxXI
+         JbLQ==
+X-Gm-Message-State: AOAM533jO8CY8JwEIYerElK1llB6GruVTjATn2V3OYjzpW7aiinLoUFZ
+        t0c/jwyyJ3boo1Y8eoH5CQ==
+X-Google-Smtp-Source: ABdhPJwAOUzTr2jjupUUjm6A2XAKxUh+3/3BQxcw+6CHRe2q7z5wjB7X9/O2qR7ZaNz5jrXGVMkT3Q==
+X-Received: by 2002:a92:cc85:: with SMTP id x5mr5353484ilo.266.1627594710423;
+        Thu, 29 Jul 2021 14:38:30 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id k4sm2981683ior.55.2021.07.29.14.37.33
+        by smtp.gmail.com with ESMTPSA id j20sm2951149ile.17.2021.07.29.14.38.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jul 2021 14:37:34 -0700 (PDT)
-Received: (nullmailer pid 938779 invoked by uid 1000);
-        Thu, 29 Jul 2021 21:37:33 -0000
-Date:   Thu, 29 Jul 2021 15:37:33 -0600
+        Thu, 29 Jul 2021 14:38:29 -0700 (PDT)
+Received: (nullmailer pid 940350 invoked by uid 1000);
+        Thu, 29 Jul 2021 21:38:27 -0000
+Date:   Thu, 29 Jul 2021 15:38:27 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
         <zhouyanjie@wanyeetech.com>
-Cc:     rick.tyliu@ingenic.com, linux-gpio@vger.kernel.org,
-        sernia.zhou@foxmail.com, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul@crapouillou.net,
-        linux-kernel@vger.kernel.org, aric.pzqi@ingenic.com,
-        jun.jiang@ingenic.com, sihui.liu@ingenic.com,
-        dongsheng.qiu@ingenic.com, linux-mips@vger.kernel.org,
-        linus.walleij@linaro.org
-Subject: Re: [PATCH 3/4] dt-bindings: pinctrl: Add bindings for Ingenic X2100.
-Message-ID: <YQMfnQoUjOfjsIGh@robh.at.kernel.org>
-References: <1627108604-91304-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1627108604-91304-4-git-send-email-zhouyanjie@wanyeetech.com>
+Cc:     linux-usb@vger.kernel.org, dongsheng.qiu@ingenic.com,
+        jun.jiang@ingenic.com, hminas@synopsys.com, sihui.liu@ingenic.com,
+        sernia.zhou@foxmail.com, linux-mips@vger.kernel.org,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, paul@crapouillou.net,
+        robh+dt@kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: dwc2: Add bindings for new Ingenic SoCs.
+Message-ID: <YQMf06v4nFTxVdzx@robh.at.kernel.org>
+References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1627116521-124612-2-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1627108604-91304-4-git-send-email-zhouyanjie@wanyeetech.com>
+In-Reply-To: <1627116521-124612-2-git-send-email-zhouyanjie@wanyeetech.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 24 Jul 2021 14:36:43 +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Add the pinctrl bindings for the X2100 SoC from Ingenic.
+On Sat, 24 Jul 2021 16:48:40 +0800, 周琰杰 (Zhou Yanjie) wrote:
+> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000 SoC,
+> the X1600 SoC, the X1830 SoC, and the X2000 SoC from Ingenic.
 > 
 > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 > ---
->  Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.yaml | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
