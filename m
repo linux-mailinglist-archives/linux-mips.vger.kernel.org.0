@@ -2,134 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D433DB50E
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Jul 2021 10:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F27C3DB5FF
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Jul 2021 11:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237910AbhG3IaY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Jul 2021 04:30:24 -0400
-Received: from elvis.franken.de ([193.175.24.41]:34755 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230336AbhG3IaY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 30 Jul 2021 04:30:24 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1m9NuM-0004Cw-00; Fri, 30 Jul 2021 10:30:18 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 3C3A3C2583; Fri, 30 Jul 2021 10:30:07 +0200 (CEST)
-Date:   Fri, 30 Jul 2021 10:30:07 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-staging@lists.linux.dev,
-        Greg KH <gregkh@linuxfoundation.org>,
-        NeilBrown <neil@brown.name>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        John Crispin <john@phrozen.org>
-Subject: Re: [PATCH v2 1/3] MIPS: ralink: Define PCI_IOBASE
-Message-ID: <20210730083007.GA5072@alpha.franken.de>
-References: <20210614100617.28753-1-sergio.paracuellos@gmail.com>
- <20210614100617.28753-2-sergio.paracuellos@gmail.com>
- <20210729100146.GA8648@alpha.franken.de>
- <CAMhs-H-9=H2cTMtQxE_DUMraJ1KVNjOX2J-nO_RSdsyUUkSAMA@mail.gmail.com>
+        id S238298AbhG3Jdc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Jul 2021 05:33:32 -0400
+Received: from out28-51.mail.aliyun.com ([115.124.28.51]:60641 "EHLO
+        out28-51.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238156AbhG3Jdc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Jul 2021 05:33:32 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07529395|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.126289-0.000848962-0.872862;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047188;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.Kt0Ea8-_1627637603;
+Received: from 192.168.88.131(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Kt0Ea8-_1627637603)
+          by smtp.aliyun-inc.com(10.147.41.120);
+          Fri, 30 Jul 2021 17:33:25 +0800
+Subject: Re: [PATCH 1/2] dt-bindings: dwc2: Add bindings for new Ingenic SoCs.
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        hminas@synopsys.com, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com
+References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1627116521-124612-2-git-send-email-zhouyanjie@wanyeetech.com>
+ <CLWQWQ.DBCX3I00Y95T2@crapouillou.net>
+ <ad64396d-d7ab-b8dd-4086-f565e91edb00@wanyeetech.com>
+ <TKQSWQ.K11YHBO0B4FM2@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <0bffb545-212c-2711-43ac-39efc1074c8b@wanyeetech.com>
+Date:   Fri, 30 Jul 2021 17:33:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H-9=H2cTMtQxE_DUMraJ1KVNjOX2J-nO_RSdsyUUkSAMA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <TKQSWQ.K11YHBO0B4FM2@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 01:21:45PM +0200, Sergio Paracuellos wrote:
-> Hi Thomas,
-> 
-> On Thu, Jul 29, 2021 at 12:02 PM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> >
-> > On Mon, Jun 14, 2021 at 12:06:15PM +0200, Sergio Paracuellos wrote:
-> > > PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
-> > > required by generic PCI drivers to make memory mapped I/O range
-> > > work. Hence define it for ralink architectures to be able to
-> > > avoid parsing manually IO ranges in PCI generic driver code.
-> > > Function 'plat_mem_setup' for ralink is using 'set_io_port_base'
-> > > call using '0xa0000000' as address, so use the same address in
-> > > the definition to align things.
-> > >
-> > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > ---
-> > >  arch/mips/include/asm/mach-ralink/spaces.h | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > >  create mode 100644 arch/mips/include/asm/mach-ralink/spaces.h
-> > >
-> > > diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-> > > new file mode 100644
-> > > index 000000000000..87d085c9ad61
-> > > --- /dev/null
-> > > +++ b/arch/mips/include/asm/mach-ralink/spaces.h
-> > > @@ -0,0 +1,10 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +#ifndef __ASM_MACH_RALINK_SPACES_H_
-> > > +#define __ASM_MACH_RALINK_SPACES_H_
-> > > +
-> > > +#define PCI_IOBASE   _AC(0xa0000000, UL)
-> > > +#define PCI_IOSIZE   SZ_16M
-> > > +#define IO_SPACE_LIMIT       (PCI_IOSIZE - 1)
-> > > +
-> > > +#include <asm/mach-generic/spaces.h>
-> > > +#endif
-> >
-> > does this really work for you ? I tried the same trick for RB532
-> > and the generated IO addresses are wrong...
-> 
-> I got pci io resources assigned without complaints from the pci core
-> code. I don't have real pci card that uses I/O bars but this is what I
-> see in the boot (I added some traces when I was testing this):
+Hi Paul,
 
-resource handling works, but the addresses generated for IO access
-are wrong, because the iomap tries to ioremap it to a fixed
-virtual address (PCI_IOBASE), which can't work for KSEG1 addresses.
-
-> Is this wrong?
-
-to get it working this way, we would need to put PCI_IOBASE somewhere
-into KSEG2, which I don't like since it will create TLB entries for IO
-addresses, which most of the time isn't needed on MIPS because of
-access via KSEG1.
-
-I'd much prefer to make the devm_pci_remap_iospace() in drivers/pci/of.c
-optional. Something like this
-
-diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-index a143b02b2dcd..657aef39bf63 100644
---- a/drivers/pci/of.c
-+++ b/drivers/pci/of.c
-@@ -564,12 +564,14 @@ static int pci_parse_request_of_pci_ranges(struct device *dev,
- 
-                switch (resource_type(res)) {
-                case IORESOURCE_IO:
-+#ifdef PCI_IOBASE
-                        err = devm_pci_remap_iospace(dev, res, iobase);
-                        if (err) {
-                                dev_warn(dev, "error %d: failed to map resource %pR\n",
-                                         err, res);
-                                resource_list_destroy_entry(win);
-                        }
-+#endif
-                        break;
-                case IORESOURCE_MEM:
-                        res_valid |= !(res->flags & IORESOURCE_PREFETCH);
+On 2021/7/25 下午6:31, Paul Cercueil wrote:
+> Hi Zhou,
+>
+> Le sam., juil. 24 2021 at 20:52:30 +0800, Zhou Yanjie 
+> <zhouyanjie@wanyeetech.com> a écrit :
+>> Hi Paul,
+>>
+>> On 2021/7/24 下午6:46, Paul Cercueil wrote:
+>>> Hi Zhou,
+>>>
+>>> Le sam., juil. 24 2021 at 16:48:40 +0800, 周琰杰 (Zhou Yanjie) 
+>>> <zhouyanjie@wanyeetech.com> a écrit :
+>>>> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000 
+>>>> SoC,
+>>>> the X1600 SoC, the X1830 SoC, and the X2000 SoC from Ingenic.
+>>>>
+>>>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/usb/dwc2.yaml | 6 ++++++
+>>>>  1 file changed, 6 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml 
+>>>> b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>>> index 10c7d9b..e779d33 100644
+>>>> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>>> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>>> @@ -14,6 +14,12 @@ properties:
+>>>>      oneOf:
+>>>>        - const: brcm,bcm2835-usb
+>>>>        - const: hisilicon,hi6220-usb
+>>>> +      - const: ingenic,jz4775-otg
+>>>> +      - const: ingenic,jz4780-otg
+>>>> +      - const: ingenic,x1000-otg
+>>>> +      - const: ingenic,x1600-otg
+>>>> +      - const: ingenic,x1830-otg
+>>>> +      - const: ingenic,x2000-otg
+>>>
+>>> I don't know if all these IPs are the exact same, but if they are, 
+>>> they all should have "ingenic,jz4775-otg" as the fallback.
+>>
+>>
+>> I'm not too sure whether they are exactly the same, but comparing the 
+>> code in Ingenics SDK,
+>>
+>> the code of the USB part of jz4775, jz4780, and x1000 are the same, 
+>> the code of the USB part
+>>
+>> of x1600 and x1830 are the same, and the USB part code of X2000 are 
+>> different from all of them.
+>
+> In doubt - it's better to keep separate compatible strings, so this is 
+> OK.
 
 
-This together with an increased IO space via
+Sure.
 
-#define IO_SPACE_LIMIT 0x1fffffff
 
-gives me a working PCI bus on the RB532.
+Thanks and best regards!
 
-No idea, if the patch would be accepted by the PCI maintainers.
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+>
+> Cheers,
+> -Paul
+>
