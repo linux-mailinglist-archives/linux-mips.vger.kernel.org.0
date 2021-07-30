@@ -2,264 +2,348 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 686313DB76F
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Jul 2021 12:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BEF3DB7A7
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Jul 2021 13:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238460AbhG3Kyb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Jul 2021 06:54:31 -0400
-Received: from mail-vi1eur05on2108.outbound.protection.outlook.com ([40.107.21.108]:32693
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238383AbhG3Kya (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 30 Jul 2021 06:54:30 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bNvp61XbEc+mEd93wnxTi4oFTTlSO475slngOBaH5KAKEbC3CgU3fo+CscYnV5bqyjRnO+bhAtEyOaI8ntdl15tlBD5G9YA2D4+opBXazGqRH027dyfnyNzyKu4xLO+mGDUAnZWN8buqNFc0/m+twhg4ZY8s6kPJymGGgXiMKR7HMlxLULdzWT7/N+qnV7JvJmoUBCvAGX/kiH8lcuQV6idm7p4yIMORV8iN8nBPq0sV65TBSZCOSU1enuYJJmhiTBykBp5FT1gUg4uoSI7Pyyvwr2IqDLYYmMWZZKmOo18khMwDssADTSDcyVpUQF5Ho30ytQwjHyneaYWa9pF1eQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZTpOjemCEesseaiWSKgeTXEqbENhG4LCitDCqtpHPtk=;
- b=lZwqJ8J3q6lRP1iP1r2PBH4ws+IKqxevYgT5Ndj9dYPhyKdqhCzC7OqMRVSYwzpqAFCEnXu2kR5KPJMD1EkV0Ab59r9vxUKihuWEpjY987lJ2KCGsz/mTkhctXDYsqQobfMDyYvkrrGHftkVGYwCPQjSi9YmTi/tgFWNCYtYDRe6gF3M9X5pD7PRJQnb5L6DW/OdXuknJ0PBOATHavReVz+ZEwsr2vtvH+ECvFaQ/XEu0+NnHTIBMMdu8/EqVh1gCr8e5+nYV1mSmbXWCL6Qsy08hHOoM9DRmVP77OfIqpPlckxXgg6VaZSA38RGeUBRLy4XzUEJ5oni4LARWEhElw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZTpOjemCEesseaiWSKgeTXEqbENhG4LCitDCqtpHPtk=;
- b=u7wBewbkPMTrXfwsDJeJl/sg8moU4E38GKGkDX+6SpdLW5Zi05P1EqRHrlyjfKxI0LBV9T/RsgJjvISo4OfEyNhK3uxq79/kxNCLGkAOplc/oaUBS2Cr2KLmIKNp5fc6JiW4dOyyWIDULCZjbi/gsDlPzjviBk4gpoXzBQCLfCk=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=virtuozzo.com;
-Received: from VE1PR08MB4989.eurprd08.prod.outlook.com (2603:10a6:803:114::19)
- by VE1PR08MB5694.eurprd08.prod.outlook.com (2603:10a6:800:1a3::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18; Fri, 30 Jul
- 2021 10:54:21 +0000
-Received: from VE1PR08MB4989.eurprd08.prod.outlook.com
- ([fe80::c402:b828:df33:5694]) by VE1PR08MB4989.eurprd08.prod.outlook.com
- ([fe80::c402:b828:df33:5694%7]) with mapi id 15.20.4373.022; Fri, 30 Jul 2021
- 10:54:21 +0000
-From:   Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Subject: [PATCH] sock: allow reading and changing sk_userlocks with setsockopt
-Date:   Fri, 30 Jul 2021 13:54:06 +0300
-Message-Id: <20210730105406.318726-1-ptikhomirov@virtuozzo.com>
-X-Mailer: git-send-email 2.31.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: PR2PR09CA0017.eurprd09.prod.outlook.com
- (2603:10a6:101:16::29) To VE1PR08MB4989.eurprd08.prod.outlook.com
- (2603:10a6:803:114::19)
+        id S238552AbhG3LPz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Jul 2021 07:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238403AbhG3LPz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Jul 2021 07:15:55 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986AAC061765
+        for <linux-mips@vger.kernel.org>; Fri, 30 Jul 2021 04:15:49 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id d15so1929472vka.13
+        for <linux-mips@vger.kernel.org>; Fri, 30 Jul 2021 04:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=croOUpjjpUMCMnvpnZ+Hk+cS1UgIbd5hw1PDQ3eqPGY=;
+        b=QEOkhyb3zppVNAkPNnCcPIDIokdiOtxGp7wREvNh50Frvj0oSDaDKoIYJR1yEZagsd
+         lfxEEPSw4XT+0qlsLZGmV3l/k/bCbiDGM7dSRIqLTb1fNKoND+iKG8XzqndVJISiJvnL
+         LgCphQmg2EHC1yHfp/7EsyXUNmGYYOATuh/SwcQp/0e2f2//UdwUJbhhIB+NpiH1R3/s
+         bS90OpRYXKFkhNog+OmHHK0BlQKCy/6SKk2alEQe02NHnBkjr+SdSbbGjboYCjA8lisz
+         N8LdlkOwIIDCOQ33wlESPT3rcjsQ+XkfelfHBI1hVt/prH0kxgTTVMNteIwY1ZMqcE4J
+         uD7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=croOUpjjpUMCMnvpnZ+Hk+cS1UgIbd5hw1PDQ3eqPGY=;
+        b=O/2yu5vTiv3x/owH5BvPrlgU2Ib2s0ut79Y6pd/k3J72/lyVDWNBTYwlZ9OCLLzgAL
+         HHAp0goqCPW2CP+ub02bRwgBTLIOc2Ejju1t+crazXxqgoRxKW6NOfTtuU8cw3Z0URSf
+         3d9gNQ1MXY1sJdajO0FfndiC6DkDBd2BK4T2VKKEgVqziCN/R3NcLpsN4VVFc0B1KoLn
+         ICsgQ39OYiYsM0Op2AXcfrjhGcdhiGlDY4S4R2Dw/a2KybOkQCiISuAS/4VvKyGHuaY4
+         D//REG9UB6NP/vLDEy+DwYOCIwLIpHzNPJSfefzqfkJMXkDsmOmduNXEdlj9VHU1Uf70
+         0XJw==
+X-Gm-Message-State: AOAM530qqtqCB1QA0Zt+O8f5Ti6EGLUvK0a2xhdKIBuqjdAqd4Kz4lQO
+        y6EVwPJTd3vZ8PmA8VGP0FI19aHQ968yNRDFCeg=
+X-Google-Smtp-Source: ABdhPJzvOCsZ6XzFZiO/T2g3Zfq8QB3105V9Kiw3tnPtHw2TuXLx2aEbizRmRD8fNnvu20uGQVVGtpbQ2wb8l95NT44=
+X-Received: by 2002:ac5:cdb8:: with SMTP id l24mr897652vka.21.1627643748117;
+ Fri, 30 Jul 2021 04:15:48 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from fedora.sw.ru (46.39.230.13) by PR2PR09CA0017.eurprd09.prod.outlook.com (2603:10a6:101:16::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.21 via Frontend Transport; Fri, 30 Jul 2021 10:54:20 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 043ce6f3-75bf-4d3f-2ab4-08d95348630d
-X-MS-TrafficTypeDiagnostic: VE1PR08MB5694:
-X-LD-Processed: 0bc7f26d-0264-416e-a6fc-8352af79c58f,ExtAddr
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VE1PR08MB5694E767F683E5C91B616CDCB7EC9@VE1PR08MB5694.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yQHmbwpZCw8+GxdSBdeBghuxdzkYNiE/glFjRo2MnOtXvkanOZTlFDoNODf09utF8hOziCYYg6xCJERSjjhsa9DwhmijOMU1WRls9r0v9zOtGiJhc1A/boWDcV9S3cNig6pRbjAhG8/tSRrwVzSwnHhg+JyXmK7doweQMUq3wSeoKjggoSwX8Nc1dtZWr6+4c0T3htZmcT8A0wbbW6e3TQ5wqsdesIE5V+WmGT5ImztXNC07G6inqvDYVkJjTdPyNU/X+Bw+X3RLf8kad6W7VfklsYSPBOe9gVGCulvKAdlU3XG4mH3jnnixQrCyxbTNJYPOJuh9Yvq4WxAO4APTR9cx1gUXkaFtJVyTjJsi5mCRaXs4r4Qxp38qiSa8c5yqb5ImByn5cLaqJaQZhckMV96nQZfqSeHSKypwXVglZ032H8wt+e+n1v6f9PX2t9KzJmxUtubBmKjVodo4s2rOqcxtxiR7mZ5CliHE2vjZcYEcIC54Ih2+0KTVBlQi6onAS2sz3xGx+eKOPYdKrOXPvVXry0MPWxfxStJBaE6i48Xz5w/7blhloZ3XOI9+rqCHHxOcQCSaxQQpwCk/UUg26x4211b5lp97AWEkcBGffki60nHRF4voW1QAcQ9QeYI2sSAlV69A4arBJ2VBl7eTETH40BZQo2pTsuVmqr8nstQ7nYnabLgb6Nq0jxjnHha9OrVbH1+96XyNjOrk8R7yynRC0XnFjAaslJ5eRDSCrkRqgXxLVokC4mbpnBneA5ee4mjUnlfp6WXzYYLkZQAHLA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4989.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39840400004)(376002)(136003)(346002)(366004)(966005)(2906002)(8936002)(83380400001)(478600001)(186003)(86362001)(38350700002)(5660300002)(6916009)(956004)(38100700002)(66476007)(66556008)(66946007)(6486002)(107886003)(6506007)(7416002)(26005)(54906003)(4326008)(2616005)(316002)(6512007)(8676002)(36756003)(6666004)(52116002)(1076003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LemC+54JyMGw81PoMbs3kqxw+nk66+LSKsu869Dl0mIukn10jhBRR3IaxBJm?=
- =?us-ascii?Q?zbWvo8B0Y7aZ6/efu1qBLgKFuFcnyoe7+0SPAl9xf6Ft3id2/pvf++dTqCvj?=
- =?us-ascii?Q?sYA0nxBhDb7fBAa0Vsihsc4QLKAZ6bOCfgW7m2jlCopjf3UBpd4NDSwGRQjX?=
- =?us-ascii?Q?Kx/5RffJ0tEm2doQDwKmlPiF4FHvjOp5RtK1WsHvHrfJotUKHfuGCwq2quw8?=
- =?us-ascii?Q?8w4te2UES6HJcd6mcIA/UlyaIgzQHp6M43B3wYz63F9CDozdTdnp+uAwN9D0?=
- =?us-ascii?Q?wmY7uM28I6Hsd9M2x0Jo0uRoPeUVVw3cCcDjMmo/ifovvYlqGR4ipks9N8IE?=
- =?us-ascii?Q?s6Z/7xvlxQEnTn1cO+jJhDr1JIULd1P+glZ/sllIRZfgRcpR+VuwJMG7xma4?=
- =?us-ascii?Q?0NZVRWgVjYmUS1KkanuEdysfL5usGaeqp4zmzmzfK+2hWckiFV19M5YhozAc?=
- =?us-ascii?Q?0kYeTuJR79pkiFcdJKSOrX041DRYVLTDKG94TgCDaZ3bu1VVBQjKcWGU7Gnr?=
- =?us-ascii?Q?ZP7ZVCfTI+x+dWoe5eULVLBb36kTIeuFqzn0Xp51G9WtoEwt/FxteZflsEVM?=
- =?us-ascii?Q?CsOsECdUbkf6kWnOlzV+XskJsfkKNYOi9Bbi1PgZcj9k6E+2KmSwBxQc3fL/?=
- =?us-ascii?Q?ELgiwgvqqDrPSipjFb5/+dNSnqMFMdi8RE75JCsu+TtljhWZeVApBAjOPG65?=
- =?us-ascii?Q?p6BAAn1rCxGRhbA0gjo7NBiFaFqgsKKYI6UM+2K3k2vGQy4fkXPktxOl7QzP?=
- =?us-ascii?Q?NTY5zp7nKA5tczAD8KwKXTSx2myoueEcrCl6hsDFS2dhsZBVdbX+kVPEbF5T?=
- =?us-ascii?Q?S0I3wldsBiSVwzjXWYQANhpi2UMUGHSmAg/Ldvukt4u9aArL61AmfKoxEZAW?=
- =?us-ascii?Q?sFiBcpy93SpOzT31sTFXx2ABrcLk4K1zNVa536ULamY0myetDsd5vgoiE6X5?=
- =?us-ascii?Q?KW3XvDLNkLh5h3hs8nN6mT0uKS/kz6hIW9OKTMZpief5mzhinSIDoEO0Lcjw?=
- =?us-ascii?Q?64cG6kbfgluAAcy9MWCzmrgLM7Qfr5zWwApPWfLFJLJkoBWi8K8OUje8szfV?=
- =?us-ascii?Q?6GPLvIGjyUqthMtmM2418nmWMsth0gbSgh1ir7siAJlkk9i9f0qidZvsAChf?=
- =?us-ascii?Q?m0RjzIk4xOj1nyvQfKWm0oTI9PIpbh5u2irBkuo3gzpctqF8klArqvVUCrTR?=
- =?us-ascii?Q?9QtKOudL8djOZsmxgKLD/lqKXjlFOvvjYWZGmwBcTglykvTkxGkCfs8+WUDy?=
- =?us-ascii?Q?BSdooQPb8OZbZFAXN44DyIbelWyS12r2SdhPb6fuwpJl3VlmzHgaee1Cnz8S?=
- =?us-ascii?Q?1uz12Vboyd+fgO+AUmNNUWDM?=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 043ce6f3-75bf-4d3f-2ab4-08d95348630d
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4989.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2021 10:54:21.6242
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DDEoMa+iCpnvIF9ZlHSN6Jegq2GycJ43MFVMPKBJywawmTPsKKrfsHJ080J+saAyRGVlsb1GtfwaOo9aDrqFF8XXyE69/EjD3OCnRoSmbtk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR08MB5694
+References: <20210614100617.28753-1-sergio.paracuellos@gmail.com>
+ <20210614100617.28753-2-sergio.paracuellos@gmail.com> <20210729100146.GA8648@alpha.franken.de>
+ <CAMhs-H-9=H2cTMtQxE_DUMraJ1KVNjOX2J-nO_RSdsyUUkSAMA@mail.gmail.com>
+ <20210730083007.GA5072@alpha.franken.de> <CAMhs-H97LxHeo-4ni=vSiYFhwKrGNMLXHVa263tbDu0+-TwARA@mail.gmail.com>
+In-Reply-To: <CAMhs-H97LxHeo-4ni=vSiYFhwKrGNMLXHVa263tbDu0+-TwARA@mail.gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 30 Jul 2021 13:15:36 +0200
+Message-ID: <CAMhs-H9EMXi_t=r=LuwudYG0oz0O27xj3_ko-eq-R+75wKE3PQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] MIPS: ralink: Define PCI_IOBASE
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-staging@lists.linux.dev,
+        Greg KH <gregkh@linuxfoundation.org>,
+        NeilBrown <neil@brown.name>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        John Crispin <john@phrozen.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK flags disable automatic socket
-buffers adjustment done by kernel (see tcp_fixup_rcvbuf() and
-tcp_sndbuf_expand()). If we've just created a new socket this adjustment
-is enabled on it, but if one changes the socket buffer size by
-setsockopt(SO_{SND,RCV}BUF*) it becomes disabled.
+On Fri, Jul 30, 2021 at 12:22 PM Sergio Paracuellos
+<sergio.paracuellos@gmail.com> wrote:
+>
+> Hi Thomas,
+>
+> On Fri, Jul 30, 2021 at 10:30 AM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > On Thu, Jul 29, 2021 at 01:21:45PM +0200, Sergio Paracuellos wrote:
+> > > Hi Thomas,
+> > >
+> > > On Thu, Jul 29, 2021 at 12:02 PM Thomas Bogendoerfer
+> > > <tsbogend@alpha.franken.de> wrote:
+> > > >
+> > > > On Mon, Jun 14, 2021 at 12:06:15PM +0200, Sergio Paracuellos wrote:
+> > > > > PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
+> > > > > required by generic PCI drivers to make memory mapped I/O range
+> > > > > work. Hence define it for ralink architectures to be able to
+> > > > > avoid parsing manually IO ranges in PCI generic driver code.
+> > > > > Function 'plat_mem_setup' for ralink is using 'set_io_port_base'
+> > > > > call using '0xa0000000' as address, so use the same address in
+> > > > > the definition to align things.
+> > > > >
+> > > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > > > > ---
+> > > > >  arch/mips/include/asm/mach-ralink/spaces.h | 10 ++++++++++
+> > > > >  1 file changed, 10 insertions(+)
+> > > > >  create mode 100644 arch/mips/include/asm/mach-ralink/spaces.h
+> > > > >
+> > > > > diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
+> > > > > new file mode 100644
+> > > > > index 000000000000..87d085c9ad61
+> > > > > --- /dev/null
+> > > > > +++ b/arch/mips/include/asm/mach-ralink/spaces.h
+> > > > > @@ -0,0 +1,10 @@
+> > > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > > +#ifndef __ASM_MACH_RALINK_SPACES_H_
+> > > > > +#define __ASM_MACH_RALINK_SPACES_H_
+> > > > > +
+> > > > > +#define PCI_IOBASE   _AC(0xa0000000, UL)
+> > > > > +#define PCI_IOSIZE   SZ_16M
+> > > > > +#define IO_SPACE_LIMIT       (PCI_IOSIZE - 1)
+> > > > > +
+> > > > > +#include <asm/mach-generic/spaces.h>
+> > > > > +#endif
+> > > >
+> > > > does this really work for you ? I tried the same trick for RB532
+> > > > and the generated IO addresses are wrong...
+> > >
+> > > I got pci io resources assigned without complaints from the pci core
+> > > code. I don't have real pci card that uses I/O bars but this is what I
+> > > see in the boot (I added some traces when I was testing this):
+> >
+> > resource handling works, but the addresses generated for IO access
+> > are wrong, because the iomap tries to ioremap it to a fixed
+> > virtual address (PCI_IOBASE), which can't work for KSEG1 addresses.
+> >
+> > > Is this wrong?
+> >
+> > to get it working this way, we would need to put PCI_IOBASE somewhere
+> > into KSEG2, which I don't like since it will create TLB entries for IO
+> > addresses, which most of the time isn't needed on MIPS because of
+> > access via KSEG1.
+> >
+> > I'd much prefer to make the devm_pci_remap_iospace() in drivers/pci/of.c
+> > optional. Something like this
+> >
+> > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> > index a143b02b2dcd..657aef39bf63 100644
+> > --- a/drivers/pci/of.c
+> > +++ b/drivers/pci/of.c
+> > @@ -564,12 +564,14 @@ static int pci_parse_request_of_pci_ranges(struct device *dev,
+> >
+> >                 switch (resource_type(res)) {
+> >                 case IORESOURCE_IO:
+> > +#ifdef PCI_IOBASE
+> >                         err = devm_pci_remap_iospace(dev, res, iobase);
+> >                         if (err) {
+> >                                 dev_warn(dev, "error %d: failed to map resource %pR\n",
+> >                                          err, res);
+> >                                 resource_list_destroy_entry(win);
+> >                         }
+> > +#endif
+> >                         break;
+> >                 case IORESOURCE_MEM:
+> >                         res_valid |= !(res->flags & IORESOURCE_PREFETCH);
+> >
+> >
+> > This together with an increased IO space via
+> >
+> > #define IO_SPACE_LIMIT 0x1fffffff
+> >
+> > gives me a working PCI bus on the RB532.
+>
+> BTW, I have tested your changes and they result in a no working pci
+> for mt7621. I get a resource collision error:
+>
+> mt7621-pci 1e140000.pcie: resource collision: [io
+> 0x1e160000-0x1e16ffff] conflicts with PCI IO [io  0x0000-0xffff]
+>
+> My changes:
+>  - avoid PCI_IOBASE to be defined.
+>  - avoid map in pci_parse_request_of_pci_ranges
+>  - Change spaces.h to have the new IO_SPACE_LIMIT to 0x1fffffff
+>
+> Am I missing something?
 
-CRIU needs to call setsockopt(SO_{SND,RCV}BUF*) on each socket on
-restore as it first needs to increase buffer sizes for packet queues
-restore and second it needs to restore back original buffer sizes. So
-after CRIU restore all sockets become non-auto-adjustable, which can
-decrease network performance of restored applications significantly.
+I am forced to set ioport_resource stuff at the beginning of the probe
+function to avoid this collision error:
 
-CRIU need to be able to restore sockets with enabled/disabled adjustment
-to the same state it was before dump, so let's add special setsockopt
-for it.
+/* set resources limits */
+ioport_resource.start = 0x1e160000;
+ioport_resource.end = 0x1e16ffff;
 
-Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
----
-Here is a corresponding CRIU commits using these new feature to fix slow
-download speed problem after migration:
-https://github.com/checkpoint-restore/criu/pull/1568 
+Taking into account that we expect pci core code to properly parse and
+get the ranges and so on, if we are forced to do something like this
+(or reading manually ranges for device tree) in driver code looks
+redundant for me...
 
-Origin of the problem:
+That said, I get the following pci working platform with your changes
+and this initial ioport_resource set up:
 
-We have a customer in Virtuozzo who mentioned that nginx server becomes
-slower after container migration. Especially it is easy to mention when
-you wget some big file via localhost from the same container which was
-just migrated. 
- 
-By strace-ing all nginx processes I see that nginx worker process before
-c/r sends data to local wget with big chunks ~1.5Mb, but after c/r it
-only succeeds to send by small chunks ~64Kb.
+[   16.129859] mt7621-pci 1e140000.pcie: host bridge /pcie@1e140000 ranges:
+[   16.143130] mt7621-pci 1e140000.pcie:   No bus range found for
+/pcie@1e140000, using [bus 00-ff]
+[   16.160568] mt7621-pci 1e140000.pcie:      MEM
+0x0060000000..0x006fffffff -> 0x0060000000
+[   16.176783] OF: IO START returned by pci_address_to_pio:
+0x60000000-0x6fffffff
+[   16.191133] mt7621-pci 1e140000.pcie:       IO
+0x001e160000..0x001e16ffff -> 0x0000000000
+[   16.207358] OF: IO START returned by pci_address_to_pio:
+0x1e160000-0x1e16ffff
+[   16.462156] mt7621-pci 1e140000.pcie: PCIE0 enabled
+[   16.471713] mt7621-pci 1e140000.pcie: PCIE1 enabled
+[   16.481422] mt7621-pci 1e140000.pcie: PCIE2 enabled
+[   16.491095] mt7621-pci 1e140000.pcie: PCI coherence region base:
+0x60000000, mask/settings: 0xf0000002
+[   16.509802] mt7621-pci 1e140000.pcie: PCI host bridge to bus 0000:00
+[   16.522365] pci_bus 0000:00: root bus resource [bus 00-ff]
+[   16.533204] pci_bus 0000:00: root bus resource [mem 0x60000000-0x6fffffff]
+[   16.546855] pci_bus 0000:00: root bus resource [io
+0x1e160000-0x1e16ffff] (bus address [0x0000-0xffff])
+[   16.565751] pci 0000:00:00.0: [0e8d:0801] type 01 class 0x060400
+[   16.577629] pci 0000:00:00.0: reg 0x10: [mem 0x00000000-0x7fffffff]
+[   16.590063] pci 0000:00:00.0: reg 0x14: [mem 0x00000000-0x0000ffff]
+[   16.602580] pci 0000:00:00.0: supports D1
+[   16.610413] pci 0000:00:00.0: PME# supported from D0 D1 D3hot
+[   16.622887] pci 0000:00:01.0: [0e8d:0801] type 01 class 0x060400
+[   16.634799] pci 0000:00:01.0: reg 0x10: [mem 0x00000000-0x7fffffff]
+[   16.647186] pci 0000:00:01.0: reg 0x14: [mem 0x00000000-0x0000ffff]
+[   16.659697] pci 0000:00:01.0: supports D1
+[   16.667559] pci 0000:00:01.0: PME# supported from D0 D1 D3hot
+[   16.679943] pci 0000:00:02.0: [0e8d:0801] type 01 class 0x060400
+[   16.691851] pci 0000:00:02.0: reg 0x10: [mem 0x00000000-0x7fffffff]
+[   16.704240] pci 0000:00:02.0: reg 0x14: [mem 0x00000000-0x0000ffff]
+[   16.716751] pci 0000:00:02.0: supports D1
+[   16.724610] pci 0000:00:02.0: PME# supported from D0 D1 D3hot
+[   16.737915] pci 0000:00:00.0: bridge configuration invalid ([bus
+00-00]), reconfiguring
+[   16.753756] pci 0000:00:01.0: bridge configuration invalid ([bus
+00-00]), reconfiguring
+[   16.769631] pci 0000:00:02.0: bridge configuration invalid ([bus
+00-00]), reconfiguring
+[   16.785811] pci 0000:01:00.0: [1b21:0611] type 00 class 0x010185
+[   16.797692] pci 0000:01:00.0: reg 0x10: [io  0x1e160000-0x1e160007]
+[   16.810082] pci 0000:01:00.0: reg 0x14: [io  0x1e160000-0x1e160003]
+[   16.822533] pci 0000:01:00.0: reg 0x18: [io  0x1e160000-0x1e160007]
+[   16.834965] pci 0000:01:00.0: reg 0x1c: [io  0x1e160000-0x1e160003]
+[   16.847405] pci 0000:01:00.0: reg 0x20: [io  0x1e160000-0x1e16000f]
+[   16.859847] pci 0000:01:00.0: reg 0x24: [mem 0x00000000-0x000001ff]
+[   16.872446] pci 0000:01:00.0: 2.000 Gb/s available PCIe bandwidth,
+limited by 2.5 GT/s PCIe x1 link at 0000:00:00.0 (capable of 4.000
+Gb/s with 5.0 GT/s PCIe x1 link)
+[   16.933210] pci 0000:00:00.0: PCI bridge to [bus 01-ff]
+[   16.943503] pci 0000:00:00.0:   bridge window [io  0x1e160000-0x1e160fff]
+[   16.956963] pci 0000:00:00.0:   bridge window [mem 0x00000000-0x000fffff]
+[   16.970442] pci 0000:00:00.0:   bridge window [mem
+0x00000000-0x000fffff pref]
+[   16.984789] pci_bus 0000:01: busn_res: [bus 01-ff] end is updated to 01
+[   16.998209] pci 0000:02:00.0: [1b21:0611] type 00 class 0x010185
+[   17.010096] pci 0000:02:00.0: reg 0x10: [io  0x1e160000-0x1e160007]
+[   17.022483] pci 0000:02:00.0: reg 0x14: [io  0x1e160000-0x1e160003]
+[   17.034923] pci 0000:02:00.0: reg 0x18: [io  0x1e160000-0x1e160007]
+[   17.047364] pci 0000:02:00.0: reg 0x1c: [io  0x1e160000-0x1e160003]
+[   17.059814] pci 0000:02:00.0: reg 0x20: [io  0x1e160000-0x1e16000f]
+[   17.072246] pci 0000:02:00.0: reg 0x24: [mem 0x00000000-0x000001ff]
+[   17.084844] pci 0000:02:00.0: 2.000 Gb/s available PCIe bandwidth,
+limited by 2.5 GT/s PCIe x1 link at 0000:00:01.0 (capable of 4.000
+Gb/s with 5.0 GT/s PCIe x1 link)
+[   17.143234] pci 0000:00:01.0: PCI bridge to [bus 02-ff]
+[   17.153527] pci 0000:00:01.0:   bridge window [io  0x1e160000-0x1e160fff]
+[   17.166987] pci 0000:00:01.0:   bridge window [mem 0x00000000-0x000fffff]
+[   17.180466] pci 0000:00:01.0:   bridge window [mem
+0x00000000-0x000fffff pref]
+[   17.194813] pci_bus 0000:02: busn_res: [bus 02-ff] end is updated to 02
+[   17.208231] pci 0000:03:00.0: [1b21:0611] type 00 class 0x010185
+[   17.220107] pci 0000:03:00.0: reg 0x10: [io  0x1e160000-0x1e160007]
+[   17.232524] pci 0000:03:00.0: reg 0x14: [io  0x1e160000-0x1e160003]
+[   17.244947] pci 0000:03:00.0: reg 0x18: [io  0x1e160000-0x1e160007]
+[   17.257386] pci 0000:03:00.0: reg 0x1c: [io  0x1e160000-0x1e160003]
+[   17.269839] pci 0000:03:00.0: reg 0x20: [io  0x1e160000-0x1e16000f]
+[   17.282269] pci 0000:03:00.0: reg 0x24: [mem 0x00000000-0x000001ff]
+[   17.294868] pci 0000:03:00.0: 2.000 Gb/s available PCIe bandwidth,
+limited by 2.5 GT/s PCIe x1 link at 0000:00:02.0 (capable of 4.000
+Gb/s with 5.0 GT/s PCIe x1 link)
+[   17.353206] pci 0000:00:02.0: PCI bridge to [bus 03-ff]
+[   17.363509] pci 0000:00:02.0:   bridge window [io  0x1e160000-0x1e160fff]
+[   17.376962] pci 0000:00:02.0:   bridge window [mem 0x00000000-0x000fffff]
+[   17.390438] pci 0000:00:02.0:   bridge window [mem
+0x00000000-0x000fffff pref]
+[   17.404785] pci_bus 0000:03: busn_res: [bus 03-ff] end is updated to 03
+[   17.417985] pci 0000:00:00.0: BAR 0: no space for [mem size 0x80000000]
+[   17.431044] pci 0000:00:00.0: BAR 0: failed to assign [mem size 0x80000000]
+[   17.444872] pci 0000:00:01.0: BAR 0: no space for [mem size 0x80000000]
+[   17.458000] pci 0000:00:01.0: BAR 0: failed to assign [mem size 0x80000000]
+[   17.471827] pci 0000:00:02.0: BAR 0: no space for [mem size 0x80000000]
+[   17.484964] pci 0000:00:02.0: BAR 0: failed to assign [mem size 0x80000000]
+[   17.498787] pci 0000:00:00.0: BAR 8: assigned [mem 0x60000000-0x600fffff]
+[   17.512264] pci 0000:00:00.0: BAR 9: assigned [mem
+0x60100000-0x601fffff pref]
+[   17.526607] pci 0000:00:01.0: BAR 8: assigned [mem 0x60200000-0x602fffff]
+[   17.540085] pci 0000:00:01.0: BAR 9: assigned [mem
+0x60300000-0x603fffff pref]
+[   17.554434] pci 0000:00:02.0: BAR 8: assigned [mem 0x60400000-0x604fffff]
+[   17.567907] pci 0000:00:02.0: BAR 9: assigned [mem
+0x60500000-0x605fffff pref]
+[   17.582248] pci 0000:00:00.0: BAR 1: assigned [mem 0x60600000-0x6060ffff]
+[   17.595732] pci 0000:00:01.0: BAR 1: assigned [mem 0x60610000-0x6061ffff]
+[   17.609212] pci 0000:00:02.0: BAR 1: assigned [mem 0x60620000-0x6062ffff]
+[   17.622693] pci 0000:00:00.0: BAR 7: assigned [io  0x1e160000-0x1e160fff]
+[   17.636162] pci 0000:00:01.0: BAR 7: assigned [io  0x1e161000-0x1e161fff]
+[   17.649639] pci 0000:00:02.0: BAR 7: assigned [io  0x1e162000-0x1e162fff]
+[   17.663130] pci 0000:01:00.0: BAR 5: assigned [mem 0x60000000-0x600001ff]
+[   17.676602] pci 0000:01:00.0: BAR 4: assigned [io  0x1e160000-0x1e16000f]
+[   17.690086] pci 0000:01:00.0: BAR 0: assigned [io  0x1e160010-0x1e160017]
+[   17.703558] pci 0000:01:00.0: BAR 2: assigned [io  0x1e160018-0x1e16001f]
+[   17.717036] pci 0000:01:00.0: BAR 1: assigned [io  0x1e160020-0x1e160023]
+[   17.730519] pci 0000:01:00.0: BAR 3: assigned [io  0x1e160024-0x1e160027]
+[   17.743999] pci 0000:00:00.0: PCI bridge to [bus 01]
+[   17.753836] pci 0000:00:00.0:   bridge window [io  0x1e160000-0x1e160fff]
+[   17.767314] pci 0000:00:00.0:   bridge window [mem 0x60000000-0x600fffff]
+[   17.780793] pci 0000:00:00.0:   bridge window [mem
+0x60100000-0x601fffff pref]
+[   17.795145] pci 0000:02:00.0: BAR 5: assigned [mem 0x60200000-0x602001ff]
+[   17.808628] pci 0000:02:00.0: BAR 4: assigned [io  0x1e161000-0x1e16100f]
+[   17.822123] pci 0000:02:00.0: BAR 0: assigned [io  0x1e161010-0x1e161017]
+[   17.835575] pci 0000:02:00.0: BAR 2: assigned [io  0x1e161018-0x1e16101f]
+[   17.849060] pci 0000:02:00.0: BAR 1: assigned [io  0x1e161020-0x1e161023]
+[   17.862541] pci 0000:02:00.0: BAR 3: assigned [io  0x1e161024-0x1e161027]
+[   17.876010] pci 0000:00:01.0: PCI bridge to [bus 02]
+[   17.885854] pci 0000:00:01.0:   bridge window [io  0x1e161000-0x1e161fff]
+[   17.899333] pci 0000:00:01.0:   bridge window [mem 0x60200000-0x602fffff]
+[   17.912810] pci 0000:00:01.0:   bridge window [mem
+0x60300000-0x603fffff pref]
+[   17.927171] pci 0000:03:00.0: BAR 5: assigned [mem 0x60400000-0x604001ff]
+[   17.940639] pci 0000:03:00.0: BAR 4: assigned [io  0x1e162000-0x1e16200f]
+[   17.954118] pci 0000:03:00.0: BAR 0: assigned [io  0x1e162010-0x1e162017]
+[   17.967601] pci 0000:03:00.0: BAR 2: assigned [io  0x1e162018-0x1e16201f]
+[   17.981074] pci 0000:03:00.0: BAR 1: assigned [io  0x1e162020-0x1e162023]
+[   17.994560] pci 0000:03:00.0: BAR 3: assigned [io  0x1e162024-0x1e162027]
+[   18.008030] pci 0000:00:02.0: PCI bridge to [bus 03]
+[   18.017873] pci 0000:00:02.0:   bridge window [io  0x1e162000-0x1e162fff]
+[   18.031352] pci 0000:00:02.0:   bridge window [mem 0x60400000-0x604fffff]
+[   18.044830] pci 0000:00:02.0:   bridge window [mem
+0x60500000-0x605fffff pref]
 
-Before: 
-sendfile(12, 13, [7984974] => [9425600], 11479629) = 1440626 <0.000180> 
- 
-After: 
-sendfile(8, 13, [1507275] => [1568768], 17957328) = 61493 <0.000675> 
 
-Smaller buffer can explain the decrease in download speed. So as a POC I
-just commented out all buffer setting manipulations and that helped.
+Best regards,
+    Sergio Paracuellos
 
----
- arch/alpha/include/uapi/asm/socket.h  |  2 ++
- arch/mips/include/uapi/asm/socket.h   |  2 ++
- arch/parisc/include/uapi/asm/socket.h |  2 ++
- arch/sparc/include/uapi/asm/socket.h  |  2 ++
- include/uapi/asm-generic/socket.h     |  2 ++
- net/core/sock.c                       | 12 ++++++++++++
- 6 files changed, 22 insertions(+)
-
-diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-index 6b3daba60987..1dd9baf4a6c2 100644
---- a/arch/alpha/include/uapi/asm/socket.h
-+++ b/arch/alpha/include/uapi/asm/socket.h
-@@ -129,6 +129,8 @@
- 
- #define SO_NETNS_COOKIE		71
- 
-+#define SO_BUF_LOCK		72
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-index cdf404a831b2..1eaf6a1ca561 100644
---- a/arch/mips/include/uapi/asm/socket.h
-+++ b/arch/mips/include/uapi/asm/socket.h
-@@ -140,6 +140,8 @@
- 
- #define SO_NETNS_COOKIE		71
- 
-+#define SO_BUF_LOCK		72
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-index 5b5351cdcb33..8baaad52d799 100644
---- a/arch/parisc/include/uapi/asm/socket.h
-+++ b/arch/parisc/include/uapi/asm/socket.h
-@@ -121,6 +121,8 @@
- 
- #define SO_NETNS_COOKIE		0x4045
- 
-+#define SO_BUF_LOCK		0x4046
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-index 92675dc380fa..e80ee8641ac3 100644
---- a/arch/sparc/include/uapi/asm/socket.h
-+++ b/arch/sparc/include/uapi/asm/socket.h
-@@ -122,6 +122,8 @@
- 
- #define SO_NETNS_COOKIE          0x0050
- 
-+#define SO_BUF_LOCK              0x0051
-+
- #if !defined(__KERNEL__)
- 
- 
-diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-index d588c244ec2f..1f0a2b4864e4 100644
---- a/include/uapi/asm-generic/socket.h
-+++ b/include/uapi/asm-generic/socket.h
-@@ -124,6 +124,8 @@
- 
- #define SO_NETNS_COOKIE		71
- 
-+#define SO_BUF_LOCK		72
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
-diff --git a/net/core/sock.c b/net/core/sock.c
-index a3eea6e0b30a..843094f069f3 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1357,6 +1357,14 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
- 		ret = sock_bindtoindex_locked(sk, val);
- 		break;
- 
-+	case SO_BUF_LOCK:
-+		{
-+		int mask = SOCK_SNDBUF_LOCK | SOCK_RCVBUF_LOCK;
-+
-+		sk->sk_userlocks = (sk->sk_userlocks & ~mask) | (val & mask);
-+		break;
-+		}
-+
- 	default:
- 		ret = -ENOPROTOOPT;
- 		break;
-@@ -1719,6 +1727,10 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
- 		v.val64 = sock_net(sk)->net_cookie;
- 		break;
- 
-+	case SO_BUF_LOCK:
-+		v.val = sk->sk_userlocks & (SOCK_SNDBUF_LOCK | SOCK_RCVBUF_LOCK);
-+		break;
-+
- 	default:
- 		/* We implement the SO_SNDLOWAT etc to not be settable
- 		 * (1003.1g 7).
--- 
-2.31.1
-
+>
+> Thanks,
+>    Sergio Paracuellos
+> >
+> > No idea, if the patch would be accepted by the PCI maintainers.
+> >
+> > Thomas.
+> >
+> > --
+> > Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> > good idea.                                                [ RFC1925, 2.3 ]
