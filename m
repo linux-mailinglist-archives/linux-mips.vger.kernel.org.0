@@ -2,169 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 970F83DB66B
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Jul 2021 11:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13F63DB715
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Jul 2021 12:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238297AbhG3Jvw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 30 Jul 2021 05:51:52 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21702 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S238223AbhG3Jvv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 30 Jul 2021 05:51:51 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16U9Wma0032673;
-        Fri, 30 Jul 2021 05:49:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=RYVrVB0Cv2/R3lfmKnDGtLWGBHS277MIQR61B43z3uM=;
- b=dGwRHMW+dV44draTp+TTntVOVZQoJjo0X1i/5LdgoAcqjM8JLU7lkDxlZoaKCMUKaNvy
- M+ZjKdhpw34/vrKYLtUjIcBj6RIwv6+gThIzOeXw63W5RhwZ8jEpeJ8lUJRSg2zz7PKT
- zOASTY1gTLrCWIjcz6bYSEGewtcDHLwf8Fzcaot81sFOXT7yz2HvFqBZo3EV+0ejZ807
- GKQxJOKRmMFhInRW8OmWGMh92ydIzQl4xBQTCE6PhqZ4pcTf9HFmQHnHKz/7RK4PlcBW
- De6pJGr9HrSc0qCw+yczs0r3u8j6/ghV1t4+xXF8c6L5aVgh19eC+7GvSO/OXLM2ZsPF Kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3a4e9j1cme-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jul 2021 05:49:24 -0400
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16U9WmsP032691;
-        Fri, 30 Jul 2021 05:49:23 -0400
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3a4e9j1ckr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jul 2021 05:49:23 -0400
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 16U9lRKT013772;
-        Fri, 30 Jul 2021 09:49:21 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06fra.de.ibm.com with ESMTP id 3a235kjwrx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jul 2021 09:49:21 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 16U9kYNh23789872
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jul 2021 09:46:34 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ABB9742052;
-        Fri, 30 Jul 2021 09:49:17 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 77B664203F;
-        Fri, 30 Jul 2021 09:49:16 +0000 (GMT)
-Received: from osiris (unknown [9.145.161.212])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 30 Jul 2021 09:49:16 +0000 (GMT)
-Date:   Fri, 30 Jul 2021 11:49:15 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Feng Tang <feng.tang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v5 0/6] compat: remove compat_alloc_user_space
-Message-ID: <YQPLG20V3dmOfq3a@osiris>
-References: <20210727144859.4150043-1-arnd@kernel.org>
+        id S238352AbhG3KXU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 30 Jul 2021 06:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238368AbhG3KXQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 30 Jul 2021 06:23:16 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEAEC0613C1
+        for <linux-mips@vger.kernel.org>; Fri, 30 Jul 2021 03:23:07 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id v16so5144565vss.7
+        for <linux-mips@vger.kernel.org>; Fri, 30 Jul 2021 03:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J5MNyBQTT5CXBciQaEtEHme59/RCeNBFFmttCvDDhME=;
+        b=JP0lB5IeQdenDjSIlqyTkyPms/2vrAb1GGWftPJ15wRajtqwqIKBSbHL4YKoOASePn
+         FsVQCdyUtFtCOjHo7dutIuiCgeyeNhCcReAIp+I5xSstFkNz43n0vUqUE9cZABH3dTqz
+         AaFT1Y5EpapSpkXMxssXAa/l8BS8Y7Y5Ix+Uh3Yov8Y480XbrnC+9ncUrjgqYHNI+zuw
+         e/a84z8+ghdsMFLEAGaxwceXPdQP/bE7KtrUUIPxs0kcIuQKxd1QmrnnlAeuGql1nFR7
+         7i4fvCE7kDD24GGku9fi9LahfvmkX/ywlkzHyoQpQ2j2VCDwWsuLKKj4GbDkbO7fGJzj
+         Ky4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J5MNyBQTT5CXBciQaEtEHme59/RCeNBFFmttCvDDhME=;
+        b=bGB9M/Le0oYXazhL2qwiq9xpVCcWaBdY2NDq1wd4KIXQ0DqB0UexHxCBuGcDrYoL5m
+         K+G8CQTsxENfwvCt00RpOYkXzlnGg31YsRq0/oWR+RJPKk3S510uKOdWqATqeeDBBGY2
+         gjHyggcrp7rcA8+8yUj6+ChWSZAHf2Qj9nIjyBj2oETCyORAiE++tHHmc2NzO5BgZ/QY
+         n/KX6Fl8b1f1n8jbfnEcM8I6LvUtq1sk0bh7FMlcg/2Y3ztXj8gyEUYu4k2rQTP7r6gU
+         8ICUjuV5RXxwNC6cDMGXoWlaTQpC/bSoCrE2mGuBYZuTwM5W36qhzYaIdd1w/iQsMbFR
+         wQ8A==
+X-Gm-Message-State: AOAM5306WkipyZvUh8LPQv1tR8T0T/GRvq8Oa/CiyZCAaF3WdIgRSGd5
+        YU/h1iP2fzV3gP59uNc9s2bNec4ixb3t75YFkqc=
+X-Google-Smtp-Source: ABdhPJwk4Cd5nDCjtmOfjl9+uRtQ5Blj4Kq268ngWdm5YoguoxF1Oek4MC3EWJbc2QN112A1PsJMMvbEtRO5vRzs8UI=
+X-Received: by 2002:a05:6102:3231:: with SMTP id x17mr856560vsf.30.1627640586932;
+ Fri, 30 Jul 2021 03:23:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210727144859.4150043-1-arnd@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zR7p1uPVJVzE85QHjW8aYnuNusoUj_ko
-X-Proofpoint-GUID: cr8jFOyeRsqaNkR-GlUmXQX1PdWeweCa
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-30_05:2021-07-29,2021-07-30 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=697 impostorscore=0 suspectscore=0 adultscore=0 spamscore=0
- priorityscore=1501 mlxscore=0 clxscore=1015 phishscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2107300057
+References: <20210614100617.28753-1-sergio.paracuellos@gmail.com>
+ <20210614100617.28753-2-sergio.paracuellos@gmail.com> <20210729100146.GA8648@alpha.franken.de>
+ <CAMhs-H-9=H2cTMtQxE_DUMraJ1KVNjOX2J-nO_RSdsyUUkSAMA@mail.gmail.com> <20210730083007.GA5072@alpha.franken.de>
+In-Reply-To: <20210730083007.GA5072@alpha.franken.de>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 30 Jul 2021 12:22:55 +0200
+Message-ID: <CAMhs-H97LxHeo-4ni=vSiYFhwKrGNMLXHVa263tbDu0+-TwARA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] MIPS: ralink: Define PCI_IOBASE
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-staging@lists.linux.dev,
+        Greg KH <gregkh@linuxfoundation.org>,
+        NeilBrown <neil@brown.name>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        John Crispin <john@phrozen.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 04:48:53PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Going through compat_alloc_user_space() to convert indirect system call
-> arguments tends to add complexity compared to handling the native and
-> compat logic in the same code.
-> 
-> Out of the other remaining callers, the linux-media series went into
-> v5.14, and the network ioctl handling is now fixed in net-next, so
-> these are the last remaining users, and I now include the final
-> patch to remove the definitions as well.
-> 
-> Since these patches are now all that remains, it would be nice to
-> merge it all through Andrew's Linux-mm tree, which is already based
-> on top of linux-next.
-...
-> 
-> Arnd Bergmann (6):
->   kexec: move locking into do_kexec_load
->   kexec: avoid compat_alloc_user_space
->   mm: simplify compat_sys_move_pages
->   mm: simplify compat numa syscalls
->   compat: remove some compat entry points
->   arch: remove compat_alloc_user_space
+Hi Thomas,
 
-Our CI reports this with linux-next and running strace selftest in
-compat mode:
+On Fri, Jul 30, 2021 at 10:30 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Thu, Jul 29, 2021 at 01:21:45PM +0200, Sergio Paracuellos wrote:
+> > Hi Thomas,
+> >
+> > On Thu, Jul 29, 2021 at 12:02 PM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > >
+> > > On Mon, Jun 14, 2021 at 12:06:15PM +0200, Sergio Paracuellos wrote:
+> > > > PCI_IOBASE is used to create VM maps for PCI I/O ports, it is
+> > > > required by generic PCI drivers to make memory mapped I/O range
+> > > > work. Hence define it for ralink architectures to be able to
+> > > > avoid parsing manually IO ranges in PCI generic driver code.
+> > > > Function 'plat_mem_setup' for ralink is using 'set_io_port_base'
+> > > > call using '0xa0000000' as address, so use the same address in
+> > > > the definition to align things.
+> > > >
+> > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > > > ---
+> > > >  arch/mips/include/asm/mach-ralink/spaces.h | 10 ++++++++++
+> > > >  1 file changed, 10 insertions(+)
+> > > >  create mode 100644 arch/mips/include/asm/mach-ralink/spaces.h
+> > > >
+> > > > diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
+> > > > new file mode 100644
+> > > > index 000000000000..87d085c9ad61
+> > > > --- /dev/null
+> > > > +++ b/arch/mips/include/asm/mach-ralink/spaces.h
+> > > > @@ -0,0 +1,10 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > +#ifndef __ASM_MACH_RALINK_SPACES_H_
+> > > > +#define __ASM_MACH_RALINK_SPACES_H_
+> > > > +
+> > > > +#define PCI_IOBASE   _AC(0xa0000000, UL)
+> > > > +#define PCI_IOSIZE   SZ_16M
+> > > > +#define IO_SPACE_LIMIT       (PCI_IOSIZE - 1)
+> > > > +
+> > > > +#include <asm/mach-generic/spaces.h>
+> > > > +#endif
+> > >
+> > > does this really work for you ? I tried the same trick for RB532
+> > > and the generated IO addresses are wrong...
+> >
+> > I got pci io resources assigned without complaints from the pci core
+> > code. I don't have real pci card that uses I/O bars but this is what I
+> > see in the boot (I added some traces when I was testing this):
+>
+> resource handling works, but the addresses generated for IO access
+> are wrong, because the iomap tries to ioremap it to a fixed
+> virtual address (PCI_IOBASE), which can't work for KSEG1 addresses.
+>
+> > Is this wrong?
+>
+> to get it working this way, we would need to put PCI_IOBASE somewhere
+> into KSEG2, which I don't like since it will create TLB entries for IO
+> addresses, which most of the time isn't needed on MIPS because of
+> access via KSEG1.
+>
+> I'd much prefer to make the devm_pci_remap_iospace() in drivers/pci/of.c
+> optional. Something like this
+>
+> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> index a143b02b2dcd..657aef39bf63 100644
+> --- a/drivers/pci/of.c
+> +++ b/drivers/pci/of.c
+> @@ -564,12 +564,14 @@ static int pci_parse_request_of_pci_ranges(struct device *dev,
+>
+>                 switch (resource_type(res)) {
+>                 case IORESOURCE_IO:
+> +#ifdef PCI_IOBASE
+>                         err = devm_pci_remap_iospace(dev, res, iobase);
+>                         if (err) {
+>                                 dev_warn(dev, "error %d: failed to map resource %pR\n",
+>                                          err, res);
+>                                 resource_list_destroy_entry(win);
+>                         }
+> +#endif
+>                         break;
+>                 case IORESOURCE_MEM:
+>                         res_valid |= !(res->flags & IORESOURCE_PREFETCH);
+>
+>
+> This together with an increased IO space via
+>
+> #define IO_SPACE_LIMIT 0x1fffffff
+>
+> gives me a working PCI bus on the RB532.
 
-Unable to handle kernel pointer dereference in virtual kernel address space
-Failing address: 0000038003e7c000 TEID: 0000038003e7c803
-Fault in home space mode while using kernel ASCE.
-AS:00000001fb388007 R3:000000008021c007 S:0000000082142000 P:0000000000000400 
-Oops: 0011 ilc:3 [#1] SMP 
-CPU: 0 PID: 1017495 Comm: get_mempolicy Tainted: G           OE     5.14.0-20210730.rc3.git0.4ccc9e2db7ac.300.fc34.s390x+next #1
-Hardware name: IBM 2827 H66 708 (LPAR)
-Krnl PSW : 0704e00180000000 00000001f9f11000 (compat_put_bitmap+0x48/0xd0)
-           R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
-Krnl GPRS: 0000000000810000 0000000000000000 000000007d9df1c0 0000038003e7c008
-           0000000000000004 000000007d9df1c4 0000038003e7be40 0000000000010000
-           0000000000008000 0000000000000000 0000000000000390 00000000000001c8
-           000000020d6ea000 000002aa00401a48 00000001fa0a85fa 0000038003e7bd50
-Krnl Code: 00000001f9f10ff4: a7bb0001            aghi    %r11,1
-           00000001f9f10ff8: 41303008            la      %r3,8(%r3)
-          #00000001f9f10ffc: 41502004            la      %r5,4(%r2)
-          >00000001f9f11000: e3103ff8ff04        lg      %r1,-8(%r3)
-           00000001f9f11006: 5010f0a4            st      %r1,164(%r15)
-           00000001f9f1100a: a50e0081            llilh   %r0,129
-           00000001f9f1100e: c8402000f0a4        mvcos   0(%r2),164(%r15),%r4
-           00000001f9f11014: 1799                xr      %r9,%r9
-Call Trace:
- [<00000001f9f11000>] compat_put_bitmap+0x48/0xd0 
- [<00000001fa0a85fa>] kernel_get_mempolicy+0x102/0x178 
- [<00000001fa0a86b0>] __s390_sys_get_mempolicy+0x40/0x50 
- [<00000001fa92be30>] __do_syscall+0x1c0/0x1e8 
- [<00000001fa939148>] system_call+0x78/0xa0 
-Last Breaking-Event-Address:
- [<0000038003e7bc00>] 0x38003e7bc00
-Kernel panic - not syncing: Fatal exception: panic_on_oops
+BTW, I have tested your changes and they result in a no working pci
+for mt7621. I get a resource collision error:
 
-Note: I did not try to bisect this, since it looks to me like this
-patch series causes the problem. Also, please don't get confused with
-the kernel version name. The date encoded is the build date, not the
-linux-next version.
-linux-next commit 4ccc9e2db7ac ("Add linux-next specific files for
-20210729") was used to build the kernel (s390 defconfig).
+mt7621-pci 1e140000.pcie: resource collision: [io
+0x1e160000-0x1e16ffff] conflicts with PCI IO [io  0x0000-0xffff]
+
+My changes:
+ - avoid PCI_IOBASE to be defined.
+ - avoid map in pci_parse_request_of_pci_ranges
+ - Change spaces.h to have the new IO_SPACE_LIMIT to 0x1fffffff
+
+Am I missing something?
+
+Thanks,
+   Sergio Paracuellos
+>
+> No idea, if the patch would be accepted by the PCI maintainers.
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
