@@ -2,30 +2,30 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 883653DC3A5
-	for <lists+linux-mips@lfdr.de>; Sat, 31 Jul 2021 08:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB90D3DC3B6
+	for <lists+linux-mips@lfdr.de>; Sat, 31 Jul 2021 08:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbhGaGBA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 31 Jul 2021 02:01:00 -0400
-Received: from conuserg-12.nifty.com ([210.131.2.79]:43013 "EHLO
-        conuserg-12.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbhGaGA7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 31 Jul 2021 02:00:59 -0400
-X-Greylist: delayed 1789 seconds by postgrey-1.27 at vger.kernel.org; Sat, 31 Jul 2021 02:00:59 EDT
+        id S236868AbhGaGD1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 31 Jul 2021 02:03:27 -0400
+Received: from conuserg-07.nifty.com ([210.131.2.74]:29206 "EHLO
+        conuserg-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236048AbhGaGD0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 31 Jul 2021 02:03:26 -0400
+X-Greylist: delayed 1935 seconds by postgrey-1.27 at vger.kernel.org; Sat, 31 Jul 2021 02:03:25 EDT
 Received: from localhost.localdomain ([133.106.57.58]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 16V5vc6u023849;
-        Sat, 31 Jul 2021 14:57:39 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 16V5vc6u023849
+        by conuserg-07.nifty.com with ESMTP id 16V60MNT006940;
+        Sat, 31 Jul 2021 15:00:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 16V60MNT006940
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1627711060;
-        bh=kbgy+e6+xWYENR319IquT7ksqMD3Pp/VPUYpU/wDMsw=;
+        s=dec2015msa; t=1627711224;
+        bh=E1KYte6EKYvuOXcazzHUuX4uprDRxjj1nwZUGGg69y0=;
         h=From:To:Cc:Subject:Date:From;
-        b=UMeUDmEBp7Pe6ULmffpzQdudxDWHqtyIw55ItR2H3gT3dotPu+jibOHcSlufO0sIZ
-         11TJa8ycpXmx80P2YYEbvpaBDrNtNarWAjIT6rTK3dZnNESdLyZgBr2uAPxKC3Mexd
-         haACRhbGC7Z3refVuToRuN0ord/K81BZNKrnt6y2NcXNyskT8ZSBV24zRonUhPCPoS
-         8TR4V63Q/qYK7G5eZ0j+lenf4lOj7GcHwTPimFpI1bC2via80DAp5PFjvvIE5O0PB2
-         lVUwZU7JJdrFHYyug8eeBgBfljg+z6PGs67mifx5eEhLmZBXXz8rUVsJlygaveGXEN
-         EVeN+xghrhjrg==
+        b=Ks+HHPyiQsB4OoMywyC5471MbAfkkwSCZmNeD3PTw1B3lkQ77LuPVzltS9vjmtHEv
+         gj73bxnaUqARREufMNwMwgIeatkcHNp+6iL5DFpOkOZ05S0IRw2JTwUe+pgLfMC2L1
+         cEcFnXt4M31ltZPd8C9XlBCW/oU5ZzLVPIHyRUkUYUMicyzf043T8Yh6JSVAuLdhBk
+         cp901SEFrI1NoseIv+DFPesUZambG8FswAOb3cMqcFgucI8L/apFEImtob/q4dTCVw
+         GXnsE6nm0/tOCQrT/4SXRTAGep0guoXmym5jgKo0iB+B3ILb8JHYquSWBPqdhTHxxV
+         F030NsS4YZ7mQ==
 X-Nifty-SrcIP: [133.106.57.58]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     Andy Lutomirski <luto@kernel.org>,
@@ -39,15 +39,16 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-mips@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
+        Guo Ren <guoren@kernel.org>, linux-mips@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org, Albert Ou <aou@eecs.berkeley.edu>,
         linuxppc-dev@lists.ozlabs.org,
         Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org,
         Paul Walmsley <paul.walmsley@sifive.com>
-Subject: [PATCH] arch: vdso: remove if-conditionals of $(c-gettimeofday-y)
-Date:   Sat, 31 Jul 2021 14:57:33 +0900
-Message-Id: <20210731055733.12332-1-masahiroy@kernel.org>
+Subject: [PATCH v2] arch: vdso: remove if-conditionals of $(c-gettimeofday-y)
+Date:   Sat, 31 Jul 2021 15:00:20 +0900
+Message-Id: <20210731060020.12913-1-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,8 +56,8 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-arm, arm64, mips, powerpc always select GENERIC_GETTIMEOFDAY, hence
-$(gettimeofday-y) never becomes empty.
+arm, arm64, csky, mips, powerpc always select GENERIC_GETTIMEOFDAY,
+hence $(gettimeofday-y) never becomes empty.
 
 riscv conditionally selects GENERIC_GETTIMEOFDAY when MMU=y && 64BIT=y,
 but arch/riscv/kernel/vdso/vgettimeofday.o is built only under that
@@ -67,14 +68,18 @@ Remove all the meaningless conditionals.
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
+Changes in v2:
+  - Fix csky as well
+
  arch/arm/vdso/Makefile              |  4 ----
  arch/arm64/kernel/vdso/Makefile     |  5 +----
  arch/arm64/kernel/vdso32/Makefile   |  3 ---
+ arch/csky/kernel/vdso/Makefile      |  4 +---
  arch/mips/vdso/Makefile             |  2 --
  arch/powerpc/kernel/vdso32/Makefile | 14 ++++++--------
  arch/powerpc/kernel/vdso64/Makefile | 14 ++++++--------
  arch/riscv/kernel/vdso/Makefile     |  5 +----
- 7 files changed, 14 insertions(+), 33 deletions(-)
+ 8 files changed, 15 insertions(+), 36 deletions(-)
 
 diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
 index 7c9e395b77f7..d996b57ca19d 100644
@@ -122,6 +127,21 @@ index 3dba0c4f8f42..330111046afc 100644
 -endif
  
  VDSO_CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os
+ 
+diff --git a/arch/csky/kernel/vdso/Makefile b/arch/csky/kernel/vdso/Makefile
+index 0b6909f10667..432adf2c78c2 100644
+--- a/arch/csky/kernel/vdso/Makefile
++++ b/arch/csky/kernel/vdso/Makefile
+@@ -12,9 +12,7 @@ vdso-syms  += vgettimeofday
+ # Files to link into the vdso
+ obj-vdso = $(patsubst %, %.o, $(vdso-syms)) note.o
+ 
+-ifneq ($(c-gettimeofday-y),)
+-	CFLAGS_vgettimeofday.o += -include $(c-gettimeofday-y)
+-endif
++CFLAGS_vgettimeofday.o += -include $(c-gettimeofday-y)
+ 
+ ccflags-y := -fno-stack-protector -DBUILD_VDSO32
  
 diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
 index 1b2ea34c3d3b..c409d551972a 100644
