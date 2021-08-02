@@ -2,119 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F04593DD1E8
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Aug 2021 10:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808723DD3C3
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Aug 2021 12:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbhHBI0b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 Aug 2021 04:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232725AbhHBI0a (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Aug 2021 04:26:30 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36A2C061799
-        for <linux-mips@vger.kernel.org>; Mon,  2 Aug 2021 01:26:20 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id u3so32260971lff.9
-        for <linux-mips@vger.kernel.org>; Mon, 02 Aug 2021 01:26:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kz70ZSfw0gF/+Eh/YJkSF3/zSs7YIozU2Kk7aShS8/8=;
-        b=J5xAHujnzexFvkkaoEUTfQIY3kAfoX3t0epqE64o+NeLDaqffL2McvcjUUxw2ktQY7
-         hq1E6o9GZ/ylYc3n6snTUXx8AnF+RKXZ9lAKxmM5HDmf83z/7B6YEyTs//qYuxKAa6dZ
-         bEJH6KNuLOf1wy7fYK22finBSH/SV7Ds+XeVfwiJJACQJHs4ERQg3gYHwNRm9X+mRL6Y
-         /0tozTp22V26v4/JQKKeDj8ZFY+Pb4bX1pYHZVSE3r8Ok43kmkwDlsDXUrYG7jwC4Uba
-         JzJUSDBcpFT+S/hNuHDbo/L8+V7thyZzJPIdqFsRp3PCMt71hTrIDtdQNTjKXjZFvyvp
-         a0Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kz70ZSfw0gF/+Eh/YJkSF3/zSs7YIozU2Kk7aShS8/8=;
-        b=BucdFxVu2CYFCjZ37DyQlLmYRVCgKjZIF2dl6LGMVtxlymhKbviVCanh4GeH577RQq
-         hoIPgaSdRMjtLv0cAQDmjnMVjjydGVlzFFL59IcMBn+iL25nbl73r37dJaVqs52YiUGZ
-         Q1QLXwrKTqXxohhDeJx/jMNaR4ly7El+s/+ezNWs4ulmBPX4cK0uCjZyMq/yBxe8oLYC
-         yg+6pb/ce7BhuU5kYhFMOONaMg8tU8nB8TWmLQpnRO9xLfZqoKMyP1SCLICbac++oQQW
-         dzoKdDBAJB4hTnlryjHNeU8uUNY9SCENFQ9ByUL6CvpDoJ63XWvN3K/EehV1Uw3Hwce+
-         UKAA==
-X-Gm-Message-State: AOAM533ZwMhtdxG3WnxKz1pWiDzgSS0m6yHs2VDa42rKlfWBfGvzfoCN
-        +VKNHBNd9Ef0GX+DeU5TOlqsCA==
-X-Google-Smtp-Source: ABdhPJw4L1rfWJyd67FPpqtde+HLzdTeW90cWbvOk2oF2MTjUInXvrFZCt9sc56KfGp6ReXUQE5Rzw==
-X-Received: by 2002:a05:6512:1689:: with SMTP id bu9mr4154164lfb.147.1627892779032;
-        Mon, 02 Aug 2021 01:26:19 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id r11sm840514ljp.135.2021.08.02.01.26.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Aug 2021 01:26:18 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 067C3102B6D; Mon,  2 Aug 2021 11:26:22 +0300 (+03)
-Date:   Mon, 2 Aug 2021 11:26:21 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        id S232056AbhHBKfB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 2 Aug 2021 06:35:01 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26504 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231881AbhHBKfB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Aug 2021 06:35:01 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 172A4NG2173500;
+        Mon, 2 Aug 2021 06:34:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=r00k+UjFn2pP62ZTrfQkfAUimzcY0iIqFp/tRGXpoq0=;
+ b=XB+IyIVRuwsaGl5Cf36GJrmEG3pUanAUVbJd0L+oKz2n9pFqA/PMFgwKaU8Fqyy8Lva3
+ Kbt8Pm8E3v6Do/WIyQyINblL2EUrwMVz8/MgaVk9CKB/lYzJLp0Z77DY+Z/NLG27Hxbj
+ E9qpS5txHaS6nt9qU2jVBdzVhvDQmwEAwKpzUg/IADG8yUZYRc/KRZKQB9m3YaMNAQ/V
+ mqocdQdQhDdcY8hBX72GpQ0R0Ltra1dQR25fDeh1xYBUCQnH2894AsakTiIyquwCzLQd
+ SFjOXifLtRwVjfMNlR/0nvfzPGZm64KH9KxFjtA2pZJTcvqIwBuMeqWbhKoD7NaDevz8 Aw== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a5ks7xgv8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Aug 2021 06:34:20 -0400
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 172AY3xg012514;
+        Mon, 2 Aug 2021 10:34:18 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 3a4x594481-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Aug 2021 10:34:18 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 172AYEbo30605618
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 Aug 2021 10:34:14 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 99BA0520E2;
+        Mon,  2 Aug 2021 10:34:14 +0000 (GMT)
+Received: from sig-9-145-37-103.uk.ibm.com (unknown [9.145.37.103])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id AED60520D5;
+        Mon,  2 Aug 2021 10:34:13 +0000 (GMT)
+Message-ID: <a5a46d84866f69df8c9737ecd8b066b61f24960a.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 13/21] s390/pci: don't set failed sg dma_address to
+ DMA_MAPPING_ERROR
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        iommu@lists.linux-foundation.org, linux-parisc@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Stephen Bates <sbates@raithlin.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
         Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Len Brown <lenb@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
         Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v2] memblock: make memblock_find_in_range method private
-Message-ID: <20210802082621.xfbrdg2c6glwz3oq@box.shutemov.name>
-References: <20210802063737.22733-1-rppt@kernel.org>
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Date:   Mon, 02 Aug 2021 12:34:13 +0200
+In-Reply-To: <20210723175008.22410-14-logang@deltatee.com>
+References: <20210723175008.22410-1-logang@deltatee.com>
+         <20210723175008.22410-14-logang@deltatee.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zc7l-lzfyaxYg5Vm8LQLNSA4emMVITXD
+X-Proofpoint-GUID: zc7l-lzfyaxYg5Vm8LQLNSA4emMVITXD
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210802063737.22733-1-rppt@kernel.org>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-02_01:2021-08-02,2021-08-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ malwarescore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
+ mlxscore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1015 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108020069
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 02, 2021 at 09:37:37AM +0300, Mike Rapoport wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
+On Fri, 2021-07-23 at 11:50 -0600, Logan Gunthorpe wrote:
+> Setting the ->dma_address to DMA_MAPPING_ERROR is not part of
+> the ->map_sg calling convention, so remove it.
 > 
-> There are a lot of uses of memblock_find_in_range() along with
-> memblock_reserve() from the times memblock allocation APIs did not exist.
+> Link: https://lore.kernel.org/linux-mips/20210716063241.GC13345@lst.de/
+> Suggested-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+> Cc: Niklas Schnelle <schnelle@linux.ibm.com>
+> Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> ---
+>  arch/s390/pci/pci_dma.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> memblock_find_in_range() is the very core of memblock allocations, so any
-> future changes to its internal behaviour would mandate updates of all the
-> users outside memblock.
-> 
-> Replace the calls to memblock_find_in_range() with an equivalent calls to
-> memblock_phys_alloc() and memblock_phys_alloc_range() and make
-> memblock_find_in_range() private method of memblock.
-> 
-> This simplifies the callers, ensures that (unlikely) errors in
-> memblock_reserve() are handled and improves maintainability of
-> memblock_find_in_range().
-> 
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> diff --git a/arch/s390/pci/pci_dma.c b/arch/s390/pci/pci_dma.c
+> index c78b02012764..be48e5b5bfcf 100644
+> --- a/arch/s390/pci/pci_dma.c
+> +++ b/arch/s390/pci/pci_dma.c
+> @@ -492,7 +492,6 @@ static int s390_dma_map_sg(struct device *dev, struct scatterlist *sg,
+>  	for (i = 1; i < nr_elements; i++) {
+>  		s = sg_next(s);
+>  
+> -		s->dma_address = DMA_MAPPING_ERROR;
+>  		s->dma_length = 0;
+>  
+>  		if (s->offset || (size & ~PAGE_MASK) ||
 
-Looks good to me:
+Acked-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Acked-by: Kirill A. Shutemov <kirill.shtuemov@linux.intel.com>
+Thanks!
 
--- 
- Kirill A. Shutemov
