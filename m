@@ -2,139 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 299D03DF22F
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 18:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB653DF25D
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 18:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbhHCQKw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Aug 2021 12:10:52 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:58112 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231688AbhHCQKv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Aug 2021 12:10:51 -0400
-Date:   Tue, 3 Aug 2021 18:10:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1628007036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZhCR89X1oG7iNKpxBHqwK160maOrSQVKgeomxdN0wRc=;
-        b=LwdXqV6TEL+jelWYIVu/L1AwkukJUhfDeR6fxf6HaCffMyf5pGalG64DdzD6SrFbnK74/x
-        PVNjb7a8JiALCQD3CJBVmxfKVnGPRCXtU70BUFy11admR5LtOLT9dQeI/ENtXdJ/CkhTdc
-        pZNvsYTpT+QPzjRhgzvNT0CjgoFJhxwmycapteSubpDkPSBjZ+FP8bxnvUSWW30Gz0Y7dW
-        1ffy1Rr5tDaLDwQ1cWTtCeME4yw92tE3YUaDago5Lw9pEtw1H1L8au8do+a32W2/sN3gs0
-        btcFKclunpFVufnMA6+fMpSDPoeRfMtyi+RFwzALyjj/jtaWzgKiRMXG8gO4tg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1628007036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZhCR89X1oG7iNKpxBHqwK160maOrSQVKgeomxdN0wRc=;
-        b=CjGblo5JavDHAEsakSWenCqJ60bnDYFeC+TGn7n/YdarB5rRq+iJbcWjrVSzA5F0n0kDM4
-        Vc1wmHGVCRR8DGCA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Ben Segall <bsegall@google.com>,
-        Borislav Petkov <bp@alien8.de>, cgroups@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        coresight@lists.linaro.org,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gonglei <arei.gonglei@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Karol Herbst <karolherbst@gmail.com>,
-        Karsten Graul <kgraul@linux.ibm.com>, kvm-ppc@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Len Brown <lenb@kernel.org>, Len Brown <len.brown@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, live-patching@vger.kernel.org,
-        Mark Gross <mgross@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mel Gorman <mgorman@suse.de>,
+        id S233215AbhHCQTu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Aug 2021 12:19:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53832 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233239AbhHCQTs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Aug 2021 12:19:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2318260F8F;
+        Tue,  3 Aug 2021 16:19:33 +0000 (UTC)
+Date:   Tue, 3 Aug 2021 17:19:26 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Mike Travis <mike.travis@hpe.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Namhyung Kim <namhyung@kernel.org>, netdev@vger.kernel.org,
-        nouveau@lists.freedesktop.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Petr Mladek <pmladek@suse.com>,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org
-Subject: Re: [PATCH 00/38] Replace deprecated CPU-hotplug
-Message-ID: <20210803161033.vp3o34meyw3ek43z@linutronix.de>
-References: <20210803141621.780504-1-bigeasy@linutronix.de>
- <83dc5dfd-1ed0-f428-826f-fb819911fc89@redhat.com>
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Guo Ren <guoren@kernel.org>, linux-mips@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Albert Ou <aou@eecs.berkeley.edu>,
+        linuxppc-dev@lists.ozlabs.org,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: Re: [PATCH v2] arch: vdso: remove if-conditionals of
+ $(c-gettimeofday-y)
+Message-ID: <20210803161925.GC5786@arm.com>
+References: <20210731060020.12913-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <83dc5dfd-1ed0-f428-826f-fb819911fc89@redhat.com>
+In-Reply-To: <20210731060020.12913-1-masahiroy@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2021-08-03 17:30:40 [+0200], Hans de Goede wrote:
-> Hi Sebastien,
-Hi Hans,
-
-> On 8/3/21 4:15 PM, Sebastian Andrzej Siewior wrote:
-> > This is a tree wide replacement of the deprecated CPU hotplug functions
-> > which are only wrappers around the actual functions.
-> > 
-> > Each patch is independent and can be picked up by the relevant maintainer.
+On Sat, Jul 31, 2021 at 03:00:20PM +0900, Masahiro Yamada wrote:
+> arm, arm64, csky, mips, powerpc always select GENERIC_GETTIMEOFDAY,
+> hence $(gettimeofday-y) never becomes empty.
 > 
-> Ok; and I take it that then also is the plan for merging these ?
+> riscv conditionally selects GENERIC_GETTIMEOFDAY when MMU=y && 64BIT=y,
+> but arch/riscv/kernel/vdso/vgettimeofday.o is built only under that
+> condition. So, you can always define CFLAGS_vgettimeofday.o
 > 
-> FWIW I'm fine with the drivers/platform/x86 patch going upstream
-> through some other tree if its easier to keep the set together ...
-
-There is no need to keep that set together since each patch is
-independent. Please merge it through your tree.
-
-> Regards,
+> Remove all the meaningless conditionals.
 > 
-> Hans
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Sebastian
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
