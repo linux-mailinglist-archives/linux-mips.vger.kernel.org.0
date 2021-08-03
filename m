@@ -2,73 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2817A3DE107
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Aug 2021 22:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7B93DE6C5
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 08:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbhHBUwc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 2 Aug 2021 16:52:32 -0400
-Received: from mail-io1-f43.google.com ([209.85.166.43]:43007 "EHLO
-        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbhHBUwb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 2 Aug 2021 16:52:31 -0400
-Received: by mail-io1-f43.google.com with SMTP id h1so21837627iol.9;
-        Mon, 02 Aug 2021 13:52:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yluws7qZTg+lZJa9EBZtSYXJTFq4n6d9IGJLeWwyM7c=;
-        b=eCxYtMPNCe3vJvhlYLwCRwO53afuCYvgLbXDXh3mbqpMJn02neh64tPt+QvzId9M18
-         zqXevSeTqMhATtnsIZZ2zEbOW8tuSDs1QHRwlxMbY6HH5XNsT9JfLR/DtI+t4+7aX0lu
-         m9MYkOnk8th24DVALNzNKpy7WzrGCTCoUPH9nAaODgUVJCDry8yo512Rg8k9RHHtYTbO
-         KkrBhgUe3ahRG2yeb8738uS0cLcH+rdgUkOahHuTO4sivUJvvT5aLZYSmD9xpj2MChZz
-         vJI5v0whDGHTBoHLg8yjHsvhk4byKwU0iqX3neuAgwtfRd5SzEvQqleqXkvjIAOy8F9C
-         oo6g==
-X-Gm-Message-State: AOAM530Z2wCv+AAEkvqN0DamYLvqFpSyh8oZBkDLDUT/fPi78ggAxOp6
-        bOHUxFAbEq2k4v2XZ7/RNg==
-X-Google-Smtp-Source: ABdhPJzgPbQDiHA+qIELIl5HXjaLIKyaqZMqtxwNzDCa0MmRET+HhufCquRhbYGxOpdkdVlj3alEJA==
-X-Received: by 2002:a02:4444:: with SMTP id o65mr16381031jaa.24.1627937539823;
-        Mon, 02 Aug 2021 13:52:19 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id p17sm6197085ilp.83.2021.08.02.13.52.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Aug 2021 13:52:19 -0700 (PDT)
-Received: (nullmailer pid 1588583 invoked by uid 1000);
-        Mon, 02 Aug 2021 20:52:17 -0000
-Date:   Mon, 2 Aug 2021 14:52:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: auxdisplay: img-ascii-lcd: Convert to
- json-schema
-Message-ID: <YQhbATd6RfTO8huV@robh.at.kernel.org>
-References: <6e74aa466d39ddc9abe502e054d04e8cc7b76b40.1627402094.git.geert@linux-m68k.org>
+        id S233911AbhHCGgs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Aug 2021 02:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234057AbhHCGgr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Aug 2021 02:36:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E139AC06175F
+        for <linux-mips@vger.kernel.org>; Mon,  2 Aug 2021 23:36:36 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mAo2M-0008BD-Rf; Tue, 03 Aug 2021 08:36:26 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mAo2L-0006db-Od; Tue, 03 Aug 2021 08:36:25 +0200
+Date:   Tue, 3 Aug 2021 08:36:25 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH net-next v3 2/6] net: dsa: qca: ar9331: make proper
+ initial port defaults
+Message-ID: <20210803063625.k6it72ny2ikrxjak@pengutronix.de>
+References: <20210802131037.32326-1-o.rempel@pengutronix.de>
+ <20210802131037.32326-3-o.rempel@pengutronix.de>
+ <20210802140345.zreovwix6nuyjwjy@skbuf>
+ <YQhLSg3Vr1pvVHsW@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6e74aa466d39ddc9abe502e054d04e8cc7b76b40.1627402094.git.geert@linux-m68k.org>
+In-Reply-To: <YQhLSg3Vr1pvVHsW@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:35:27 up 243 days, 20:41, 14 users,  load average: 0.24, 0.10,
+ 0.05
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 27 Jul 2021 18:10:34 +0200, Geert Uytterhoeven wrote:
-> Convert the Device Tree binding documentation for ASCII LCD displays on
-> Imagination Technologies boards to json-schema.
+On Mon, Aug 02, 2021 at 09:45:14PM +0200, Andrew Lunn wrote:
+> > > +/* AGE_TIME_COEF is not documented. This is "works for me" value */
+> > > +#define AR9331_SW_AT_AGE_TIME_COEF		6900
+> > 
+> > Not documented, not used either, it seems.
+> > "Works for you" based on what?
 > 
-> Drop bogus regmap property.
-> Add example.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
->  .../bindings/auxdisplay/img,ascii-lcd.yaml    | 54 +++++++++++++++++++
->  .../bindings/auxdisplay/img-ascii-lcd.txt     | 17 ------
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 55 insertions(+), 18 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/auxdisplay/img,ascii-lcd.yaml
->  delete mode 100644 Documentation/devicetree/bindings/auxdisplay/img-ascii-lcd.txt
-> 
+> It is used in a later patch. Ideally it would of been introduced in
+> that patch to make this more obvious.
 
-Added a type to 'offset' and applied, thanks!
+ack, i'll move it from this patch
+
+> > >  #define AR9331_SW_REG_MDIO_CTRL			0x98
+> > >  #define AR9331_SW_MDIO_CTRL_BUSY		BIT(31)
+> > >  #define AR9331_SW_MDIO_CTRL_MASTER_EN		BIT(30)
+> > > @@ -101,6 +111,46 @@
+> > >  	 AR9331_SW_PORT_STATUS_RX_FLOW_EN | AR9331_SW_PORT_STATUS_TX_FLOW_EN | \
+> > >  	 AR9331_SW_PORT_STATUS_SPEED_M)
+> > 
+> > Is this patch material for "net"? If standalone ports is all that ar9331
+> > supports, then it would better not do packet forwarding in lack of a
+> > bridge device.
+> 
+> It does seem like this patch should be considered for stable, if by
+> default all ports can talk with all ports when not part of a bridge.
+
+ack, i'll split this patch set
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
