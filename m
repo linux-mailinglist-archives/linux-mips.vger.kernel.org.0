@@ -2,158 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFAF3DF51E
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 21:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D5D3DF6FC
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 23:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239395AbhHCTIa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Aug 2021 15:08:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56410 "EHLO mail.kernel.org"
+        id S232384AbhHCVkR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Aug 2021 17:40:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52432 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239389AbhHCTIa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Aug 2021 15:08:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6758760F9C;
-        Tue,  3 Aug 2021 19:07:45 +0000 (UTC)
+        id S232768AbhHCVkR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Aug 2021 17:40:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id B78356105A;
+        Tue,  3 Aug 2021 21:40:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628017697;
-        bh=+C3jjxLGYKPgJknmmGMOt0xrAE6Lm0yMyg9+fV845Dg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C8zqBiAF+/8ByrtHscexhIqNJ3ZB6Q9VGNwYaOueNcmaK2iVDBJ7DZpIMyN51lRoa
-         /kdDa3fYvlvArsXTmjlHyuNAjtVH4DKC+Oco312NYeUL1Iz1dYwnmfI9MKYYGOFCf+
-         6fdAPndFlrgVFxJGXwp5I9zXWrfeCx6KfEOihedyO/RE0YoZvI8vFnE09Za7bZxbJQ
-         5kuCtIORrLGHG2vE4xsI58xJjXeJjCvuKtQyzTekCAL178KuTOc97FuEFAKt8SRvlM
-         1riAzWuQamXvHnghUF59KN2iD1n7MWJtZ/mPAM7jy2uMfj8GIHqqrCJ5AFZQQeHXLj
-         gDIpHLkooESXg==
-Date:   Tue, 3 Aug 2021 22:07:37 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Len Brown <lenb@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v3] memblock: make memblock_find_in_range method private
-Message-ID: <YQmT+Z9QhcwI43GK@kernel.org>
-References: <20210803064218.6611-1-rppt@kernel.org>
- <20210803180526.GD5786@arm.com>
+        s=k20201202; t=1628026805;
+        bh=SeBOOVHqpljrUUPRiBqGRbCd5MLXu2hyxG7yH/9GdRg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=PUTLJEAU5NnlnMjY0log4ZdM+Oze7MSCYldrQxn3dhX19P4q7egfbfFb8c4K03KlP
+         4DPXmhn1Yv9caKQIH+hxQra8GOjU3R1sLDbsQlljwXV+Py80oklQAeDSTfzHk6A6ZD
+         eq0XXtdSQhMMbaN6I8lQSGaBvuCyE1cJhQbQbVSfWMyR7C/m5OBNqDFaxKFbKtnUIO
+         aZpybB7Yb7uVZbCvBnN0igzR/WW8dwM2Uns8QxdCT2n8xgBX3ciWfFmYeaNqlCf6YT
+         pp3A/IHQ2211VU57WXTrNudlWVwaYRGQ4t/ffjqVB7uGl/+OnHs8I6GUtd2VSFvP6C
+         Hiu6OSNqlrIaA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id ACEAD60A44;
+        Tue,  3 Aug 2021 21:40:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210803180526.GD5786@arm.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/1] net: dsa: qca: ar9331: reorder MDIO write sequence
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162802680570.18812.8483353906615372549.git-patchwork-notify@kernel.org>
+Date:   Tue, 03 Aug 2021 21:40:05 +0000
+References: <20210803063746.3600-1-o.rempel@pengutronix.de>
+In-Reply-To: <20210803063746.3600-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux@armlinux.org.uk, kernel@pengutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 03, 2021 at 07:05:26PM +0100, Catalin Marinas wrote:
-> On Tue, Aug 03, 2021 at 09:42:18AM +0300, Mike Rapoport wrote:
-> > diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> > index 8490ed2917ff..0bffd2d1854f 100644
-> > --- a/arch/arm64/mm/init.c
-> > +++ b/arch/arm64/mm/init.c
-> > @@ -74,6 +74,7 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
-> >  static void __init reserve_crashkernel(void)
-> >  {
-> >  	unsigned long long crash_base, crash_size;
-> > +	unsigned long long crash_max = arm64_dma_phys_limit;
-> >  	int ret;
-> >  
-> >  	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
-> > @@ -84,33 +85,18 @@ static void __init reserve_crashkernel(void)
-> >  
-> >  	crash_size = PAGE_ALIGN(crash_size);
-> >  
-> > -	if (crash_base == 0) {
-> > -		/* Current arm64 boot protocol requires 2MB alignment */
-> > -		crash_base = memblock_find_in_range(0, arm64_dma_phys_limit,
-> > -				crash_size, SZ_2M);
-> > -		if (crash_base == 0) {
-> > -			pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
-> > -				crash_size);
-> > -			return;
-> > -		}
-> > -	} else {
-> > -		/* User specifies base address explicitly. */
-> > -		if (!memblock_is_region_memory(crash_base, crash_size)) {
-> > -			pr_warn("cannot reserve crashkernel: region is not memory\n");
-> > -			return;
-> > -		}
-> > +	/* User specifies base address explicitly. */
-> > +	if (crash_base)
-> > +		crash_max = crash_base + crash_size;
-> >  
-> > -		if (memblock_is_region_reserved(crash_base, crash_size)) {
-> > -			pr_warn("cannot reserve crashkernel: region overlaps reserved memory\n");
-> > -			return;
-> > -		}
-> > -
-> > -		if (!IS_ALIGNED(crash_base, SZ_2M)) {
-> > -			pr_warn("cannot reserve crashkernel: base address is not 2MB aligned\n");
-> > -			return;
-> > -		}
-> > +	/* Current arm64 boot protocol requires 2MB alignment */
-> > +	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
-> > +					       crash_base, crash_max);
-> > +	if (!crash_base) {
-> > +		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
-> > +			crash_size);
-> > +		return;
-> >  	}
-> > -	memblock_reserve(crash_base, crash_size);
+Hello:
+
+This patch was applied to netdev/net.git (refs/heads/master):
+
+On Tue,  3 Aug 2021 08:37:46 +0200 you wrote:
+> In case of this switch we work with 32bit registers on top of 16bit
+> bus. Some registers (for example access to forwarding database) have
+> trigger bit on the first 16bit half of request and the result +
+> configuration of request in the second half. Without this patch, we would
+> trigger database operation and overwrite result in one run.
 > 
-> We'll miss a bit on debug information provided to the user in case of a
-> wrong crash_base/size option on the command line. Not sure we care much,
-> though the alignment would probably be useful (maybe we document it
-> somewhere).
+> To make it work properly, we should do the second part of transfer
+> before the first one is done.
+> 
+> [...]
 
-It is already documented:
+Here is the summary with links:
+  - [net,1/1] net: dsa: qca: ar9331: reorder MDIO write sequence
+    https://git.kernel.org/netdev/net/c/d1a58c013a58
 
-Documentation/admin-guide/kdump/kdump.rst:
-   On arm64, use "crashkernel=Y[@X]".  Note that the start address of
-   the kernel, X if explicitly specified, must be aligned to 2MiB (0x200000).
- 
-> What I haven't checked is whether memblock_phys_alloc_range() aims to
-> get a 2MB aligned end (size) as well. If crash_size is not 2MB aligned,
-> crash_max wouldn't be either and the above could fail. We only care
-> about the crash_base to be aligned but the memblock_phys_alloc_range()
-> doc says that both the start and size would be aligned to this.
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-The doc lies :)
 
-memblock_phys_alloc_range() boils down to 
-
-	for_each_free_mem_range_reverse(i, nid, flags, &this_start, &this_end,
-					NULL) {
-
-		/* clamp this_{start,end} to the user defined limits */
-
-		cand = round_down(this_end - size, align);
-		if (cand >= this_start)
-			return cand;
-	}
-
--- 
-Sincerely yours,
-Mike.
