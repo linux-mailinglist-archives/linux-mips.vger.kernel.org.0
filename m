@@ -2,183 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5423DF1ED
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 17:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 299D03DF22F
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 18:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237140AbhHCP7K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Aug 2021 11:59:10 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:36076 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237131AbhHCP7J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Aug 2021 11:59:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628006307;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=mU3eT7eyGsL5o6LF8h+YK7bclXW4GXpf5fpmDUrcIzU=;
-    b=nlZQVoanb18I3z7wIRRMbvOjqNJXGdBzEiIlUkhXUsWy76YbvNAsAfvfBgjOdRKEaD
-    U29d7bn6ardkbbrpOq1Zqqz3Gh0jnE00shaf+vEjFcBY2WLTdd6ajrcGNrVNdku0E/oS
-    z3EP2PWzZ4E0bqt8Xuy4JM/fArKzo4CH2EDI4iFg4SRRi6HQcx+0Jk23kLaLt4pC1oGc
-    dM0S6TURFE+bKosjdfOw1MPAK1BMjVMavaJyqxeNv6p8srMQjmSMhhJPQwyGoXe4jhN7
-    htFB2QF/uVeiR8s2okhFIuGGcKuRZaQzUw2302hT5o0sGaw5ae5LGL7yf7ou7YjDZqTr
-    bfvw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDOqAdo="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.30.1 DYNA|AUTH)
-    with ESMTPSA id K060b1x73FwN0fL
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 3 Aug 2021 17:58:23 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 0/2] Regex fixes for mips and x86 cross-compile
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <CAKwvOd=FdZsQZCGqqpnbzgVZ+s2=ffyh337RwqyTAzHMcjUb+w@mail.gmail.com>
-Date:   Tue, 3 Aug 2021 17:58:22 +0200
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, Jessica Yu <jeyu@kernel.org>,
+        id S232198AbhHCQKw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Aug 2021 12:10:52 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:58112 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231688AbhHCQKv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Aug 2021 12:10:51 -0400
+Date:   Tue, 3 Aug 2021 18:10:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1628007036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZhCR89X1oG7iNKpxBHqwK160maOrSQVKgeomxdN0wRc=;
+        b=LwdXqV6TEL+jelWYIVu/L1AwkukJUhfDeR6fxf6HaCffMyf5pGalG64DdzD6SrFbnK74/x
+        PVNjb7a8JiALCQD3CJBVmxfKVnGPRCXtU70BUFy11admR5LtOLT9dQeI/ENtXdJ/CkhTdc
+        pZNvsYTpT+QPzjRhgzvNT0CjgoFJhxwmycapteSubpDkPSBjZ+FP8bxnvUSWW30Gz0Y7dW
+        1ffy1Rr5tDaLDwQ1cWTtCeME4yw92tE3YUaDago5Lw9pEtw1H1L8au8do+a32W2/sN3gs0
+        btcFKclunpFVufnMA6+fMpSDPoeRfMtyi+RFwzALyjj/jtaWzgKiRMXG8gO4tg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1628007036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZhCR89X1oG7iNKpxBHqwK160maOrSQVKgeomxdN0wRc=;
+        b=CjGblo5JavDHAEsakSWenCqJ60bnDYFeC+TGn7n/YdarB5rRq+iJbcWjrVSzA5F0n0kDM4
+        Vc1wmHGVCRR8DGCA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Ben Segall <bsegall@google.com>,
+        Borislav Petkov <bp@alien8.de>, cgroups@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        coresight@lists.linaro.org,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gonglei <arei.gonglei@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Karsten Graul <kgraul@linux.ibm.com>, kvm-ppc@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, Len Brown <len.brown@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, live-patching@vger.kernel.org,
+        Mark Gross <mgross@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Mike Travis <mike.travis@hpe.com>,
         Miroslav Benes <mbenes@suse.cz>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel@pyra-handheld.com,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <BFB4FABC-60B7-445D-ACEB-4AAE177AF8D4@goldelico.com>
-References: <cover.1625734629.git.hns@goldelico.com>
- <4AC1CCE9-CCAF-4D4B-BAD5-CEB9E5155FDF@goldelico.com>
- <CAKwvOd=FdZsQZCGqqpnbzgVZ+s2=ffyh337RwqyTAzHMcjUb+w@mail.gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-X-Mailer: Apple Mail (2.3445.104.21)
+        Namhyung Kim <namhyung@kernel.org>, netdev@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org
+Subject: Re: [PATCH 00/38] Replace deprecated CPU-hotplug
+Message-ID: <20210803161033.vp3o34meyw3ek43z@linutronix.de>
+References: <20210803141621.780504-1-bigeasy@linutronix.de>
+ <83dc5dfd-1ed0-f428-826f-fb819911fc89@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <83dc5dfd-1ed0-f428-826f-fb819911fc89@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi all,
-any chance to get that reviewed and merged into v5.15-rc1 and backported =
-to stable?
-Thank you,
-Nikolaus Schaller
+On 2021-08-03 17:30:40 [+0200], Hans de Goede wrote:
+> Hi Sebastien,
+Hi Hans,
 
+> On 8/3/21 4:15 PM, Sebastian Andrzej Siewior wrote:
+> > This is a tree wide replacement of the deprecated CPU hotplug functions
+> > which are only wrappers around the actual functions.
+> > 
+> > Each patch is independent and can be picked up by the relevant maintainer.
+> 
+> Ok; and I take it that then also is the plan for merging these ?
+> 
+> FWIW I'm fine with the drivers/platform/x86 patch going upstream
+> through some other tree if its easier to keep the set together ...
 
-> Am 19.07.2021 um 22:37 schrieb Nick Desaulniers =
-<ndesaulniers@google.com>:
->=20
-> + Masahiro, linux-kbuild (EOM)
->=20
-> On Mon, Jul 19, 2021 at 12:07 PM H. Nikolaus Schaller =
-<hns@goldelico.com> wrote:
->>=20
->> Any chance that it gets merged?
->>=20
->>> Am 08.07.2021 um 10:57 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->>>=20
->>> Trying to run the x86 relocs tool on a BSD based HOSTCC (cross
->>> compilation environment) leads to errors like
->>>=20
->>> VOFFSET arch/x86/boot/compressed/../voffset.h - due to: vmlinux
->>> CC      arch/x86/boot/compressed/misc.o - due to: =
-arch/x86/boot/compressed/../voffset.h
->>> OBJCOPY arch/x86/boot/compressed/vmlinux.bin - due to: vmlinux
->>> RELOCS  arch/x86/boot/compressed/vmlinux.relocs - due to: vmlinux
->>> empty (sub)expressionarch/x86/boot/compressed/Makefile:118: recipe =
-for target 'arch/x86/boot/compressed/vmlinux.relocs' failed
->>> make[3]: *** [arch/x86/boot/compressed/vmlinux.relocs] Error 1
->>>=20
->>> and when cross compiling a MIPS kernel on a BSD based HOSTCC
->>> we get errors like
->>>=20
->>> SYNC    include/config/auto.conf.cmd - due to: .config
->>> egrep: empty (sub)expression
->>> UPD     include/config/kernel.release
->>> HOSTCC  scripts/dtc/dtc.o - due to target missing
->>>=20
->>> It turns out that relocs.c on x86 uses patterns like
->>>=20
->>>      "something(|_end)"
->>>=20
->>> while MIPS uses egrep with
->>>=20
->>>      (|MINOR_|PATCHLEVEL_)
->>>=20
->>> In both cases it is not valid syntax or gives undefined results
->>> according to POSIX 9.5.3 ERE Grammar
->>>=20
->>>      =
-https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap09.html
->>>=20
->>> It seems to be silently accepted by the Linux regcmp() or egrep
->>> implementation while a BSD host complains.
->>>=20
->>> Such patterns can be replaced by a transformation like
->>>=20
->>>      "(|p1|p2)" -> "(p1|p2)?"
->>>=20
->>> Test Linux:
->>>=20
->>> root@letux:~# echo foo | egrep '^(|foo)$'
->>> foo
->>> root@letux:~# echo fool | egrep '^(foo)?$'
->>> root@letux:~# echo fun | egrep '^(|foo)$'
->>> root@letux:~# echo f | egrep '^(|foo)$'
->>> root@letux:~# echo | egrep '^(|foo)$'
->>>=20
->>> root@letux:~# echo foo | egrep '^(foo)?$'
->>> foo
->>> root@letux:~# echo fool | egrep '^(foo)?$'
->>> root@letux:~# echo fun | egrep '^(foo)?$'
->>> root@letux:~# echo f | egrep '^(foo)?$'
->>> root@letux:~# echo | egrep '^(foo)?$'
->>>=20
->>> root@letux:~#
->>>=20
->>> Test BSD:
->>>=20
->>> iMac:master hns$ echo foo | egrep '^(|foo)$'
->>> egrep: empty (sub)expression
->>> iMac:master hns$ echo fool | egrep '^(foo)?$'
->>> egrep: empty (sub)expression
->>> iMac:master hns$ echo fun | egrep '^(|foo)$'
->>> egrep: empty (sub)expression
->>> iMac:master hns$ echo f | egrep '^(|foo)$'
->>> egrep: empty (sub)expression
->>> iMac:master hns$ echo | egrep '^(|foo)$'
->>> egrep: empty (sub)expression
->>> iMac:master hns$ echo foo | egrep '^(foo)?$'
->>> foo
->>> iMac:master hns$ echo fool | egrep '^(foo)?$'
->>> iMac:master hns$ echo fun | egrep '^(foo)?$'
->>> iMac:master hns$ echo f | egrep '^(foo)?$'
->>> iMac:master hns$ echo | egrep '^(foo)?$'
->>>=20
->>> iMac:master hns$
->>>=20
->>>=20
->>> H. Nikolaus Schaller (2):
->>> x86/tools/relocs: Fix non-POSIX regexp
->>> arch: mips: Fix non-POSIX regexp
->>>=20
->>> arch/mips/Makefile      | 2 +-
->>> arch/x86/tools/relocs.c | 8 ++++----
->>> 2 files changed, 5 insertions(+), 5 deletions(-)
->>>=20
->>> --
->>> 2.31.1
->>>=20
->>=20
->=20
->=20
-> --=20
-> Thanks,
-> ~Nick Desaulniers
+There is no need to keep that set together since each patch is
+independent. Please merge it through your tree.
 
+> Regards,
+> 
+> Hans
+
+Sebastian
