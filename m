@@ -2,141 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8773F3DEFE2
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 16:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC043DF049
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 16:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236483AbhHCORS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Aug 2021 10:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236488AbhHCORR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Aug 2021 10:17:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747EC06175F;
-        Tue,  3 Aug 2021 07:17:06 -0700 (PDT)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1628000225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=myV3fFPpmckxFi8iG+1Cz4HE7geihL0CQ+OBM5u9Dbk=;
-        b=g2RGayE7tYJ78jHshfPZKWu5U5dR72hCbCO1rsQHagt9X7BHN68a8LUoBHtBq48oPWseii
-        xv68Biasr4LjXE3GkNSkIoUD/rIh5GbfaJL9w1laDLWZzdSRV8B9+H32R3RWPCNPC9WA7h
-        Xlvcs9eyUlwYCfjTRofzo/VUZHRe1UpcGy6nZHqUhfn0sbzhFqSS3yRBcj5CeB56QeQpgf
-        XaxXqJjOx2+8eIDrCx1pTGazRBJTR+96a11/+KgImr4XdUtrQT0Mj0X8leV6+HmzvTPBnX
-        Z9iLwn5xy5I8iXDdU0P/WCEa6eyBDSUxdzy4J//JxG7d4LswGV7NuCegCV5CPw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1628000225;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=myV3fFPpmckxFi8iG+1Cz4HE7geihL0CQ+OBM5u9Dbk=;
-        b=EOz/aqqRv+PoPnF3qErKabqMDj7hgItZeIjKJNOZHB4wZs6VB+l82ZuzfLyQ9emawL5PeM
-        uz+dzyv6P9PsRsBA==
-To:     linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S234328AbhHCO3e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Aug 2021 10:29:34 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:60012 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236507AbhHCO3e (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Aug 2021 10:29:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=39kNPjDsQBCaa+m6oCrWSY0OrXd5M9GEZtjuh6gG6zs=; b=OJnMgpTiAhK9iiaqw4yuK+PzsD
+        KtFUmXot8A+cAJx7a4u7ARxcZsRrPMVbboCeLMJUjb+RKmQ3TnCPbe1BKYcScrfoQsW+m2Jv8umQ3
+        g+pLjFRs4QyPP7oDWviwIiQXSH0a7TLXbmQs/z3l9hIjWiyy8iuNSSOc400RYT3MhvMw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1mAvPt-00Fyd2-4R; Tue, 03 Aug 2021 16:29:13 +0200
+Date:   Tue, 3 Aug 2021 16:29:13 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: [PATCH 02/38] MIPS: Replace deprecated CPU-hotplug functions.
-Date:   Tue,  3 Aug 2021 16:15:45 +0200
-Message-Id: <20210803141621.780504-3-bigeasy@linutronix.de>
-In-Reply-To: <20210803141621.780504-1-bigeasy@linutronix.de>
-References: <20210803141621.780504-1-bigeasy@linutronix.de>
+Subject: Re: [PATCH net v2 1/1] net: dsa: qca: ar9331: make proper initial
+ port defaults
+Message-ID: <YQlSuX73dUli2rky@lunn.ch>
+References: <20210803085320.23605-1-o.rempel@pengutronix.de>
+ <20210803090605.bud4ocr4siz3jl7r@skbuf>
+ <20210803095419.y6hly7euht7gsktu@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210803095419.y6hly7euht7gsktu@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The functions get_online_cpus() and put_online_cpus() have been
-deprecated during the CPU hotplug rework. They map directly to
-cpus_read_lock() and cpus_read_unlock().
+On Tue, Aug 03, 2021 at 11:54:19AM +0200, Oleksij Rempel wrote:
+> On Tue, Aug 03, 2021 at 12:06:05PM +0300, Vladimir Oltean wrote:
+> > On Tue, Aug 03, 2021 at 10:53:20AM +0200, Oleksij Rempel wrote:
+> > > Make sure that all external port are actually isolated from each other,
+> > > so no packets are leaked.
+> > > 
+> > > Fixes: ec6698c272de ("net: dsa: add support for Atheros AR9331 built-in switch")
+> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > > ---
+> > > changes v2:
+> > > - do not enable address learning by default
+> > > 
+> > >  drivers/net/dsa/qca/ar9331.c | 98 +++++++++++++++++++++++++++++++++++-
+> > >  1 file changed, 97 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/net/dsa/qca/ar9331.c b/drivers/net/dsa/qca/ar9331.c
+> > > index 6686192e1883..de7c06b6c85f 100644
+> > > --- a/drivers/net/dsa/qca/ar9331.c
+> > > +++ b/drivers/net/dsa/qca/ar9331.c
+> > > @@ -101,6 +101,46 @@
+> > >  	 AR9331_SW_PORT_STATUS_RX_FLOW_EN | AR9331_SW_PORT_STATUS_TX_FLOW_EN | \
+> > >  	 AR9331_SW_PORT_STATUS_SPEED_M)
+> > >  
+> > > +#define AR9331_SW_REG_PORT_CTRL(_port)			(0x104 + (_port) * 0x100)
+> > > +#define AR9331_SW_PORT_CTRL_ING_MIRROR_EN		BIT(17)
+> > > +#define AR9331_SW_PORT_CTRL_LOCK_DROP_EN		BIT(5)
+> > 
+> > not used
+> 
+> ack, will remove
 
-Replace deprecated CPU-hotplug functions with the official version.
-The behavior remains unchanged.
+Just expanding Vladimirs comment. Patches for net should be as minimal
+as possible, so they are obviously correct.
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- arch/mips/kernel/mips-mt-fpaff.c | 10 +++++-----
- arch/mips/kernel/process.c       |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/arch/mips/kernel/mips-mt-fpaff.c b/arch/mips/kernel/mips-mt-fp=
-aff.c
-index 6c590ef276482..67e130d3f0385 100644
---- a/arch/mips/kernel/mips-mt-fpaff.c
-+++ b/arch/mips/kernel/mips-mt-fpaff.c
-@@ -76,13 +76,13 @@ asmlinkage long mipsmt_sys_sched_setaffinity(pid_t pid,=
- unsigned int len,
- 	if (copy_from_user(&new_mask, user_mask_ptr, sizeof(new_mask)))
- 		return -EFAULT;
-=20
--	get_online_cpus();
-+	cpus_read_lock();
- 	rcu_read_lock();
-=20
- 	p =3D find_process_by_pid(pid);
- 	if (!p) {
- 		rcu_read_unlock();
--		put_online_cpus();
-+		cpus_read_unlock();
- 		return -ESRCH;
- 	}
-=20
-@@ -147,7 +147,7 @@ asmlinkage long mipsmt_sys_sched_setaffinity(pid_t pid,=
- unsigned int len,
- 	free_cpumask_var(cpus_allowed);
- out_put_task:
- 	put_task_struct(p);
--	put_online_cpus();
-+	cpus_read_unlock();
- 	return retval;
- }
-=20
-@@ -166,7 +166,7 @@ asmlinkage long mipsmt_sys_sched_getaffinity(pid_t pid,=
- unsigned int len,
- 	if (len < real_len)
- 		return -EINVAL;
-=20
--	get_online_cpus();
-+	cpus_read_lock();
- 	rcu_read_lock();
-=20
- 	retval =3D -ESRCH;
-@@ -182,7 +182,7 @@ asmlinkage long mipsmt_sys_sched_getaffinity(pid_t pid,=
- unsigned int len,
-=20
- out_unlock:
- 	rcu_read_unlock();
--	put_online_cpus();
-+	cpus_read_unlock();
- 	if (retval)
- 		return retval;
- 	if (copy_to_user(user_mask_ptr, &mask, real_len))
-diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-index 73c8e7990a973..95aa86fa60778 100644
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -859,10 +859,10 @@ int mips_set_process_fp_mode(struct task_struct *task=
-, unsigned int value)
- 	 * scheduled in then it will already have picked up the new FP mode
- 	 * whilst doing so.
- 	 */
--	get_online_cpus();
-+	cpus_read_lock();
- 	for_each_cpu_and(cpu, &process_cpus, cpu_online_mask)
- 		work_on_cpu(cpu, prepare_for_fp_mode_switch, NULL);
--	put_online_cpus();
-+	cpus_read_unlock();
-=20
- 	return 0;
- }
---=20
-2.32.0
-
+   Andrew
