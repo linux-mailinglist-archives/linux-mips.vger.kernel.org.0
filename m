@@ -2,65 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 084EE3DEF52
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 15:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F13C3DEFC0
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 16:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbhHCNwh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Aug 2021 09:52:37 -0400
-Received: from mga02.intel.com ([134.134.136.20]:39319 "EHLO mga02.intel.com"
+        id S236045AbhHCOIR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Aug 2021 10:08:17 -0400
+Received: from mga18.intel.com ([134.134.136.126]:12751 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234324AbhHCNwg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Aug 2021 09:52:36 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="200861751"
+        id S236469AbhHCOIQ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 3 Aug 2021 10:08:16 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="200888330"
 X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
-   d="scan'208";a="200861751"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 06:52:25 -0700
+   d="scan'208";a="200888330"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 07:08:05 -0700
 X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
-   d="scan'208";a="670439422"
+   d="scan'208";a="568680226"
 Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 06:52:12 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 07:07:58 -0700
 Received: from andy by smile with local (Exim 4.94.2)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mAupt-004kJM-Mo; Tue, 03 Aug 2021 16:52:01 +0300
-Date:   Tue, 3 Aug 2021 16:52:01 +0300
+        id 1mAv5C-004kW7-El; Tue, 03 Aug 2021 17:07:50 +0300
+Date:   Tue, 3 Aug 2021 17:07:50 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>, Tony Lindgren <tony@atomide.com>,
+Cc:     Petr Mladek <pmladek@suse.com>,
         Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Chengyang Fan <cy.fan@huawei.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        kgdb-bugreport@lists.sourceforge.net,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Cengiz Can <cengiz@kernel.wtf>,
         Jiri Slaby <jirislaby@kernel.org>,
         Paul Cercueil <paul@crapouillou.net>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -77,63 +48,148 @@ Cc:     Petr Mladek <pmladek@suse.com>, Tony Lindgren <tony@atomide.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
         Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Al Cooper <alcooperx@gmail.com>, linux-serial@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH printk v1 00/10] printk: introduce atomic consoles and
- sync mode
-Message-ID: <YQlKAeXS9MPmE284@smile.fi.intel.com>
+Subject: Re: [PATCH printk v1 10/10] serial: 8250: implement write_atomic
+Message-ID: <YQlNtr7TNAWtB8XF@smile.fi.intel.com>
 References: <20210803131301.5588-1-john.ogness@linutronix.de>
+ <20210803131301.5588-11-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210803131301.5588-1-john.ogness@linutronix.de>
+In-Reply-To: <20210803131301.5588-11-john.ogness@linutronix.de>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 03, 2021 at 03:18:51PM +0206, John Ogness wrote:
-> Hi,
+On Tue, Aug 03, 2021 at 03:19:01PM +0206, John Ogness wrote:
+> Implement an NMI-safe write_atomic() console function in order to
+> support synchronous console printing.
 > 
-> This is the next part of our printk-rework effort (points 3 and
-> 4 of the LPC 2019 summary [0]).
-> 
-> Here the concept of "atomic consoles" is introduced through  a
-> new (optional) write_atomic() callback for console drivers. This
-> callback must be implemented as an NMI-safe variant of the
-> write() callback, meaning that it can function from any context
-> without relying on questionable tactics such as ignoring locking
-> and also without relying on the synchronization of console
-> semaphore.
-> 
-> As an example of how such an atomic console can look like, this
-> series implements write_atomic() for the 8250 UART driver.
-> 
-> This series also introduces a new console printing mode called
-> "sync mode" that is only activated when the kernel is about to
-> end (such as panic, oops, shutdown, reboot). Sync mode can only
-> be activated if atomic consoles are available. A system without
-> registered atomic consoles will be unaffected by this series.
-> 
-> When in sync mode, the console printing behavior becomes:
-> 
-> - only consoles implementing write_atomic() will be called
-> 
-> - printing occurs within vprintk_store() instead of
->   console_unlock(), since the console semaphore is irrelevant
->   for atomic consoles
-> 
-> For systems that have registered atomic consoles, this series
-> improves the reliability of seeing crash messages by using new
-> locking techniques rather than "ignoring locks and hoping for
-> the best". In particular, atomic consoles rely on the
-> CPU-reentrant spinlock (i.e. the printk cpulock) for
-> synchronizing console output.
+> Since interrupts need to be disabled during transmit, all usage of
+> the IER register is wrapped with access functions that use the
+> printk cpulock to synchronize register access while tracking the
+> state of the interrupts. This is necessary because write_atomic()
+> can be called from an NMI context that has preempted write_atomic().
 
-If console is runtime suspended, who will bring it up?
-Does it mean that this callback can't be implemented on the consoles that
-do runtime suspend (some of 8250 currently, for example)?
+...
+
+> +static inline void serial8250_set_IER(struct uart_8250_port *up,
+> +				      unsigned char ier)
+> +{
+> +	struct uart_port *port = &up->port;
+> +	unsigned long flags;
+> +	bool is_console;
+
+> +	is_console = uart_console(port);
+> +
+> +	if (is_console)
+> +		console_atomic_cpu_lock(flags);
+> +
+> +	serial_out(up, UART_IER, ier);
+> +
+> +	if (is_console)
+> +		console_atomic_cpu_unlock(flags);
+
+I would rewrite it as
+
+	if (uart_console()) {
+		console_atomic_cpu_lock(flags);
+		serial_out(up, UART_IER, ier);
+		console_atomic_cpu_unlock(flags);
+	} else {
+		serial_out(up, UART_IER, ier);
+	}
+
+No additional variable, easier to get the algorithm on the first glance, less
+error prone.
+
+> +}
+
+> +static inline unsigned char serial8250_clear_IER(struct uart_8250_port *up)
+> +{
+> +	struct uart_port *port = &up->port;
+> +	unsigned int clearval = 0;
+> +	unsigned long flags;
+> +	unsigned int prior;
+> +	bool is_console;
+> +
+> +	is_console = uart_console(port);
+> +
+> +	if (up->capabilities & UART_CAP_UUE)
+> +		clearval = UART_IER_UUE;
+> +
+> +	if (is_console)
+> +		console_atomic_cpu_lock(flags);
+> +
+> +	prior = serial_port_in(port, UART_IER);
+> +	serial_port_out(port, UART_IER, clearval);
+> +
+> +	if (is_console)
+> +		console_atomic_cpu_unlock(flags);
+
+Ditto.
+
+> +	return prior;
+> +}
+
+...
+
+> +		is_console = uart_console(port);
+> +
+> +		if (is_console)
+> +			console_atomic_cpu_lock(flags);
+>  		up->ier = port->serial_in(port, UART_IER);
+> +		if (is_console)
+> +			console_atomic_cpu_unlock(flags);
+> +
+
+I'm wondering why you can't call above function here?
+
+...
+
+> +		is_console = uart_console(p);
+> +		if (is_console)
+> +			console_atomic_cpu_lock(flags);
+>  		ier = p->serial_in(p, UART_IER);
+> +		if (is_console)
+> +			console_atomic_cpu_unlock(flags);
+
+Ditto.
+
+...
+
+> +	is_console = uart_console(port);
+> +
+> +	if (is_console)
+> +		console_atomic_cpu_lock(flags);
+> +
+> +	ier = serial_in(up, UART_IER);
+> +	serial_out(up, UART_IER, ier & (~mask));
+> +
+> +	if (is_console)
+> +		console_atomic_cpu_unlock(flags);
+
+Ditto.
+
+...
+
+> +	if (uart_console(port))
+> +		console_atomic_cpu_lock(flags);
+> +
+> +	ier = serial_in(up, UART_IER);
+> +	serial_out(up, UART_IER, ier | mask);
+> +
+> +	if (uart_console(port))
+> +		console_atomic_cpu_unlock(flags);
+
+Ditto.
+
+Looking into above note, that uart_console(port) can give different results
+here, AFAIR.
 
 -- 
 With Best Regards,
