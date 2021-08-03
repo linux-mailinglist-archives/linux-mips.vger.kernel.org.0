@@ -2,84 +2,268 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC043DF049
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 16:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D5B3DF187
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 17:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbhHCO3e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Aug 2021 10:29:34 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:60012 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236507AbhHCO3e (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 3 Aug 2021 10:29:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=39kNPjDsQBCaa+m6oCrWSY0OrXd5M9GEZtjuh6gG6zs=; b=OJnMgpTiAhK9iiaqw4yuK+PzsD
-        KtFUmXot8A+cAJx7a4u7ARxcZsRrPMVbboCeLMJUjb+RKmQ3TnCPbe1BKYcScrfoQsW+m2Jv8umQ3
-        g+pLjFRs4QyPP7oDWviwIiQXSH0a7TLXbmQs/z3l9hIjWiyy8iuNSSOc400RYT3MhvMw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mAvPt-00Fyd2-4R; Tue, 03 Aug 2021 16:29:13 +0200
-Date:   Tue, 3 Aug 2021 16:29:13 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        id S236836AbhHCPbC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Aug 2021 11:31:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45442 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236864AbhHCPa5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Aug 2021 11:30:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1628004645;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ef5H/YzWjPRhpmEEex0YbOyxkXYC0ZJIajn0GIxKBlE=;
+        b=Ge5aL2LJYyL7SFUN4/8+uzVsGUyeqEYdDDb48hSvxnjfaSV82T+lIm94FU1RWi9k4TmkFi
+        Cs8tbhGOKi50b6b+XPumM34mHUbCBvRQ2i7U9Zg/fQuoHjG5K2Bb7Wurot1WjYUL9jGlRW
+        00bOvdsFE1cOQxZqw/DPYEXJd+bACuA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-423-sByY52VpNsS8F_ISGVfrWA-1; Tue, 03 Aug 2021 11:30:44 -0400
+X-MC-Unique: sByY52VpNsS8F_ISGVfrWA-1
+Received: by mail-ed1-f70.google.com with SMTP id s8-20020a0564025208b02903bd8539e1caso3049202edd.22
+        for <linux-mips@vger.kernel.org>; Tue, 03 Aug 2021 08:30:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ef5H/YzWjPRhpmEEex0YbOyxkXYC0ZJIajn0GIxKBlE=;
+        b=W59Eqi3bk7evzBMgT0N+1GrpGiEAVImhehF+oF2mEQyf2NEKwRz+x8Y5+kws0AekV3
+         dt9MU7pdutLlw7QLRkrmw7ixU1azcROTGi2uxu5u3EwbEiaYoy8oYnpBtchwNWDomFEG
+         8r8xSZD0aS64FBpEmDdUPT0o/+e/WAzA0G2/7quC/c/r5N3ha0BJO/yi01H9Fdc8SCLl
+         NTCKHyGq/X+RwOf6jBJ1FXUm4ORJqFNf+Y+WUvycKqLXso+FrJUXJXceQp8phzLqJ6X8
+         QGusat4qp3cPidBVujCKDfT0hOR2DYMbcG//yYHa+qDesaO+/J8cLZ4DHifkrnbFogSj
+         615w==
+X-Gm-Message-State: AOAM530sIRmKP2Tow2Mtus58rWYOfIxsyn/Y2fV0Ip9q3Av4uJJLpi39
+        sV4AMyIcIT0SnQjcVk6VaOn5ZJFZ/lwSdPE/YW8wW4q089QVAVBymTf7FOam6ZWCSgQnAnoecLY
+        ESeG+Z1Jk82nOCXXJZ4bn0Q==
+X-Received: by 2002:a17:906:1da1:: with SMTP id u1mr20660415ejh.307.1628004643329;
+        Tue, 03 Aug 2021 08:30:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxf6rV1ZatT2GQ6a3+XcXIUCr6rut+vBVs6RfI7E2ACDBMkrHwlwXE3OZTZ7a4m4dn8RViNBQ==
+X-Received: by 2002:a17:906:1da1:: with SMTP id u1mr20660382ejh.307.1628004643075;
+        Tue, 03 Aug 2021 08:30:43 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id b17sm4094598edd.27.2021.08.03.08.30.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Aug 2021 08:30:42 -0700 (PDT)
+Subject: Re: [PATCH 00/38] Replace deprecated CPU-hotplug
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de, Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Ben Segall <bsegall@google.com>,
+        Borislav Petkov <bp@alien8.de>, cgroups@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        coresight@lists.linaro.org,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
         "David S. Miller" <davem@davemloft.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gonglei <arei.gonglei@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH net v2 1/1] net: dsa: qca: ar9331: make proper initial
- port defaults
-Message-ID: <YQlSuX73dUli2rky@lunn.ch>
-References: <20210803085320.23605-1-o.rempel@pengutronix.de>
- <20210803090605.bud4ocr4siz3jl7r@skbuf>
- <20210803095419.y6hly7euht7gsktu@pengutronix.de>
+        Jason Wang <jasowang@redhat.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Karsten Graul <kgraul@linux.ibm.com>, kvm-ppc@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Len Brown <lenb@kernel.org>, Len Brown <len.brown@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, live-patching@vger.kernel.org,
+        Mark Gross <mgross@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Mike Travis <mike.travis@hpe.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Namhyung Kim <namhyung@kernel.org>, netdev@vger.kernel.org,
+        nouveau@lists.freedesktop.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, rcu@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org
+References: <20210803141621.780504-1-bigeasy@linutronix.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <83dc5dfd-1ed0-f428-826f-fb819911fc89@redhat.com>
+Date:   Tue, 3 Aug 2021 17:30:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210803095419.y6hly7euht7gsktu@pengutronix.de>
+In-Reply-To: <20210803141621.780504-1-bigeasy@linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 03, 2021 at 11:54:19AM +0200, Oleksij Rempel wrote:
-> On Tue, Aug 03, 2021 at 12:06:05PM +0300, Vladimir Oltean wrote:
-> > On Tue, Aug 03, 2021 at 10:53:20AM +0200, Oleksij Rempel wrote:
-> > > Make sure that all external port are actually isolated from each other,
-> > > so no packets are leaked.
-> > > 
-> > > Fixes: ec6698c272de ("net: dsa: add support for Atheros AR9331 built-in switch")
-> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > > ---
-> > > changes v2:
-> > > - do not enable address learning by default
-> > > 
-> > >  drivers/net/dsa/qca/ar9331.c | 98 +++++++++++++++++++++++++++++++++++-
-> > >  1 file changed, 97 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/net/dsa/qca/ar9331.c b/drivers/net/dsa/qca/ar9331.c
-> > > index 6686192e1883..de7c06b6c85f 100644
-> > > --- a/drivers/net/dsa/qca/ar9331.c
-> > > +++ b/drivers/net/dsa/qca/ar9331.c
-> > > @@ -101,6 +101,46 @@
-> > >  	 AR9331_SW_PORT_STATUS_RX_FLOW_EN | AR9331_SW_PORT_STATUS_TX_FLOW_EN | \
-> > >  	 AR9331_SW_PORT_STATUS_SPEED_M)
-> > >  
-> > > +#define AR9331_SW_REG_PORT_CTRL(_port)			(0x104 + (_port) * 0x100)
-> > > +#define AR9331_SW_PORT_CTRL_ING_MIRROR_EN		BIT(17)
-> > > +#define AR9331_SW_PORT_CTRL_LOCK_DROP_EN		BIT(5)
-> > 
-> > not used
+Hi Sebastien,
+
+On 8/3/21 4:15 PM, Sebastian Andrzej Siewior wrote:
+> This is a tree wide replacement of the deprecated CPU hotplug functions
+> which are only wrappers around the actual functions.
 > 
-> ack, will remove
+> Each patch is independent and can be picked up by the relevant maintainer.
 
-Just expanding Vladimirs comment. Patches for net should be as minimal
-as possible, so they are obviously correct.
+Ok; and I take it that then also is the plan for merging these ?
 
-   Andrew
+FWIW I'm fine with the drivers/platform/x86 patch going upstream
+through some other tree if its easier to keep the set together ...
+
+Regards,
+
+Hans
+
+
+
+> 
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Amit Kucheria <amitk@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: cgroups@vger.kernel.org
+> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> Cc: coresight@lists.linaro.org
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Gonglei <arei.gonglei@huawei.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Jason Wang <jasowang@redhat.com>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: Jiri Olsa <jolsa@redhat.com>
+> Cc: Joe Lawrence <joe.lawrence@redhat.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: John Stultz <john.stultz@linaro.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Julian Wiedmann <jwi@linux.ibm.com>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Karol Herbst <karolherbst@gmail.com>
+> Cc: Karsten Graul <kgraul@linux.ibm.com>
+> Cc: kvm-ppc@vger.kernel.org
+> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: linux-acpi@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-edac@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-raid@vger.kernel.org
+> Cc: linux-s390@vger.kernel.org
+> Cc: live-patching@vger.kernel.org
+> Cc: Mark Gross <mgross@linux.intel.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: "Michael S. Tsirkin" <mst@redhat.com>
+> Cc: Mike Leach <mike.leach@linaro.org>
+> Cc: Mike Travis <mike.travis@hpe.com>
+> Cc: Miroslav Benes <mbenes@suse.cz>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: netdev@vger.kernel.org
+> Cc: nouveau@lists.freedesktop.org
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Pekka Paalanen <ppaalanen@gmail.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: platform-driver-x86@vger.kernel.org
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: rcu@vger.kernel.org
+> Cc: Robin Holt <robinmholt@gmail.com>
+> Cc: Song Liu <song@kernel.org>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steffen Klassert <steffen.klassert@secunet.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Steve Wahl <steve.wahl@hpe.com>
+> Cc: Stuart Hayes <stuart.w.hayes@gmail.com>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: virtualization@lists.linux-foundation.org
+> Cc: x86@kernel.org
+> Cc: Zefan Li <lizefan.x@bytedance.com>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> 
+> Sebastian
+> 
+
