@@ -2,58 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7B93DE6C5
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 08:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8EC3DE6CB
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Aug 2021 08:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbhHCGgs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 3 Aug 2021 02:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S233962AbhHCGiJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 3 Aug 2021 02:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234057AbhHCGgr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Aug 2021 02:36:47 -0400
+        with ESMTP id S233982AbhHCGiI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 3 Aug 2021 02:38:08 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E139AC06175F
-        for <linux-mips@vger.kernel.org>; Mon,  2 Aug 2021 23:36:36 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF8CC061764
+        for <linux-mips@vger.kernel.org>; Mon,  2 Aug 2021 23:37:58 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1mAo2M-0008BD-Rf; Tue, 03 Aug 2021 08:36:26 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        id 1mAo3i-0008Gw-12; Tue, 03 Aug 2021 08:37:50 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1mAo2L-0006db-Od; Tue, 03 Aug 2021 08:36:25 +0200
-Date:   Tue, 3 Aug 2021 08:36:25 +0200
+        id 1mAo3h-0000wv-Mt; Tue, 03 Aug 2021 08:37:49 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
+To:     Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org
-Subject: Re: [PATCH net-next v3 2/6] net: dsa: qca: ar9331: make proper
- initial port defaults
-Message-ID: <20210803063625.k6it72ny2ikrxjak@pengutronix.de>
-References: <20210802131037.32326-1-o.rempel@pengutronix.de>
- <20210802131037.32326-3-o.rempel@pengutronix.de>
- <20210802140345.zreovwix6nuyjwjy@skbuf>
- <YQhLSg3Vr1pvVHsW@lunn.ch>
+Subject: [PATCH net 1/1] net: dsa: qca: ar9331: reorder MDIO write sequence
+Date:   Tue,  3 Aug 2021 08:37:46 +0200
+Message-Id: <20210803063746.3600-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YQhLSg3Vr1pvVHsW@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:35:27 up 243 days, 20:41, 14 users,  load average: 0.24, 0.10,
- 0.05
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
 X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-mips@vger.kernel.org
@@ -61,38 +48,56 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 02, 2021 at 09:45:14PM +0200, Andrew Lunn wrote:
-> > > +/* AGE_TIME_COEF is not documented. This is "works for me" value */
-> > > +#define AR9331_SW_AT_AGE_TIME_COEF		6900
-> > 
-> > Not documented, not used either, it seems.
-> > "Works for you" based on what?
-> 
-> It is used in a later patch. Ideally it would of been introduced in
-> that patch to make this more obvious.
+In case of this switch we work with 32bit registers on top of 16bit
+bus. Some registers (for example access to forwarding database) have
+trigger bit on the first 16bit half of request and the result +
+configuration of request in the second half. Without this patch, we would
+trigger database operation and overwrite result in one run.
 
-ack, i'll move it from this patch
+To make it work properly, we should do the second part of transfer
+before the first one is done.
 
-> > >  #define AR9331_SW_REG_MDIO_CTRL			0x98
-> > >  #define AR9331_SW_MDIO_CTRL_BUSY		BIT(31)
-> > >  #define AR9331_SW_MDIO_CTRL_MASTER_EN		BIT(30)
-> > > @@ -101,6 +111,46 @@
-> > >  	 AR9331_SW_PORT_STATUS_RX_FLOW_EN | AR9331_SW_PORT_STATUS_TX_FLOW_EN | \
-> > >  	 AR9331_SW_PORT_STATUS_SPEED_M)
-> > 
-> > Is this patch material for "net"? If standalone ports is all that ar9331
-> > supports, then it would better not do packet forwarding in lack of a
-> > bridge device.
-> 
-> It does seem like this patch should be considered for stable, if by
-> default all ports can talk with all ports when not part of a bridge.
+So far, this rule seems to work for all registers on this switch.
 
-ack, i'll split this patch set
+Fixes: ec6698c272de ("net: dsa: add support for Atheros AR9331 built-in switch")
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+ drivers/net/dsa/qca/ar9331.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-Regards,
-Oleksij
+diff --git a/drivers/net/dsa/qca/ar9331.c b/drivers/net/dsa/qca/ar9331.c
+index ca2ad77b71f1..6686192e1883 100644
+--- a/drivers/net/dsa/qca/ar9331.c
++++ b/drivers/net/dsa/qca/ar9331.c
+@@ -837,16 +837,24 @@ static int ar9331_mdio_write(void *ctx, u32 reg, u32 val)
+ 		return 0;
+ 	}
+ 
+-	ret = __ar9331_mdio_write(sbus, AR9331_SW_MDIO_PHY_MODE_REG, reg, val);
++	/* In case of this switch we work with 32bit registers on top of 16bit
++	 * bus. Some registers (for example access to forwarding database) have
++	 * trigger bit on the first 16bit half of request, the result and
++	 * configuration of request in the second half.
++	 * To make it work properly, we should do the second part of transfer
++	 * before the first one is done.
++	 */
++	ret = __ar9331_mdio_write(sbus, AR9331_SW_MDIO_PHY_MODE_REG, reg + 2,
++				  val >> 16);
+ 	if (ret < 0)
+ 		goto error;
+ 
+-	ret = __ar9331_mdio_write(sbus, AR9331_SW_MDIO_PHY_MODE_REG, reg + 2,
+-				  val >> 16);
++	ret = __ar9331_mdio_write(sbus, AR9331_SW_MDIO_PHY_MODE_REG, reg, val);
+ 	if (ret < 0)
+ 		goto error;
+ 
+ 	return 0;
++
+ error:
+ 	dev_err_ratelimited(&sbus->dev, "Bus error. Failed to write register.\n");
+ 	return ret;
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.30.2
+
