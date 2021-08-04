@@ -2,283 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F19B3DFCFF
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Aug 2021 10:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 819633DFEBB
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Aug 2021 12:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236596AbhHDIey (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Aug 2021 04:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236582AbhHDIex (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Aug 2021 04:34:53 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBAEC06179C
-        for <linux-mips@vger.kernel.org>; Wed,  4 Aug 2021 01:34:40 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id m193so2847209ybf.9
-        for <linux-mips@vger.kernel.org>; Wed, 04 Aug 2021 01:34:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0CTfCNbfY1m9OBrWFZPhcEhGSy7DNXKX4GwNGkq+X1g=;
-        b=QmT3pbXMsz09tghu3H/sl/G9IDaUhFSWKS74ovRCAFzugw78Ehpt8Zv0Bhs3/XC0mJ
-         BgbGt3YjtGmG1cB8/xM8S8gj0VGKgyFq4CwCqPz9QG3hluAASdeghf0dYhTed90ywkp4
-         csPSMNGXzqJqF5gIZmUVrYGjkY4W9eAxqfIYsgmJsbTs6djsUrvNlyc4hEdxc0Ysa3Mj
-         MPb2pKrKk++1vNXbUtPt5yfykaoZiMTvieLMkO3/9no515vi4YIr5/5XvAyWJKgpBt+J
-         tbNdv0midy6C0QrSTrV76g1vQDFuSzcpjxGqbOm6pmH0Rmdi8BSTm4T4Yu0sUfBRsUUN
-         yKIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0CTfCNbfY1m9OBrWFZPhcEhGSy7DNXKX4GwNGkq+X1g=;
-        b=m3TgOPv9RlyNMW9YdQyRrhFV0ZRIrig0oukivsXYqpAb9XvfQv5Hn/9R+XRW7WnO7h
-         DRhPj4wuB+uqVtfIiOBrwJ1F21ws956a+OGxcIJMHIcW4t0icIFIn83xA+tqZUKk4EpD
-         7xPL0hjBWyEMt72pKKCqR263NSL3yYcAiBiLbQB/lQdW8/Sj1VSdYQBYc7m92lTZYlV3
-         k13fU0fyYcDasDlGXwAzkb98/GJctlb/zyMCh+skqlWU4jA4Px0WM3hzJ163gpqHoluH
-         7C/TlJ7q7Bz2yJ6u/iEmJKX2NZpPPMbr4UHhZ/VYxoU6kt9iIJzNTTPbqkXWq+/vzVg3
-         Miyw==
-X-Gm-Message-State: AOAM533twPSIAUlbXS/W2fFX+hPrKTGG4MdXunAVOmUt+NDn3duuN5Cu
-        j3FWDSxB+6A9XmtX3aS7eFB4uHrugGPz2oPULThxCw==
-X-Google-Smtp-Source: ABdhPJzBEBMFio/4f/n7MXtT8b+2gqBl/NcHszvil/PLytVOHO6+5FiSb1mclZkBCsyKGgRpmhbupM/gkQFyJ4THnPg=
-X-Received: by 2002:a25:ad57:: with SMTP id l23mr34970381ybe.303.1628066079331;
- Wed, 04 Aug 2021 01:34:39 -0700 (PDT)
+        id S237354AbhHDKCx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Aug 2021 06:02:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46428 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237347AbhHDKCw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 4 Aug 2021 06:02:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E224061004;
+        Wed,  4 Aug 2021 10:02:34 +0000 (UTC)
+Date:   Wed, 4 Aug 2021 11:02:32 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Len Brown <lenb@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v3] memblock: make memblock_find_in_range method private
+Message-ID: <20210804100231.GA4857@arm.com>
+References: <20210803064218.6611-1-rppt@kernel.org>
+ <20210803180526.GD5786@arm.com>
+ <YQmT+Z9QhcwI43GK@kernel.org>
 MIME-Version: 1.0
-References: <20210804075556.2582-1-ptikhomirov@virtuozzo.com>
-In-Reply-To: <20210804075556.2582-1-ptikhomirov@virtuozzo.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 4 Aug 2021 10:34:28 +0200
-Message-ID: <CANn89i+Sz1xLmo1tFgbx0KH=RJks6Q=zw0O7NM962T-FG063aQ@mail.gmail.com>
-Subject: Re: [PATCH v3] sock: allow reading and changing sk_userlocks with setsockopt
-To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Cc:     netdev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Paolo Abeni <pabeni@redhat.com>,
-        Florian Westphal <fw@strlen.de>,
-        LKML <linux-kernel@vger.kernel.org>, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrei Vagin <avagin@gmail.com>, kernel@openvz.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YQmT+Z9QhcwI43GK@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 4, 2021 at 9:56 AM Pavel Tikhomirov
-<ptikhomirov@virtuozzo.com> wrote:
->
-> SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK flags disable automatic socket
-> buffers adjustment done by kernel (see tcp_fixup_rcvbuf() and
-> tcp_sndbuf_expand()). If we've just created a new socket this adjustment
-> is enabled on it, but if one changes the socket buffer size by
-> setsockopt(SO_{SND,RCV}BUF*) it becomes disabled.
->
-> CRIU needs to call setsockopt(SO_{SND,RCV}BUF*) on each socket on
-> restore as it first needs to increase buffer sizes for packet queues
-> restore and second it needs to restore back original buffer sizes.
+On Tue, Aug 03, 2021 at 10:07:37PM +0300, Mike Rapoport wrote:
+> On Tue, Aug 03, 2021 at 07:05:26PM +0100, Catalin Marinas wrote:
+> > On Tue, Aug 03, 2021 at 09:42:18AM +0300, Mike Rapoport wrote:
+> > > diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> > > index 8490ed2917ff..0bffd2d1854f 100644
+> > > --- a/arch/arm64/mm/init.c
+> > > +++ b/arch/arm64/mm/init.c
+> > > @@ -74,6 +74,7 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
+> > >  static void __init reserve_crashkernel(void)
+> > >  {
+> > >  	unsigned long long crash_base, crash_size;
+> > > +	unsigned long long crash_max = arm64_dma_phys_limit;
+> > >  	int ret;
+> > >  
+> > >  	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+> > > @@ -84,33 +85,18 @@ static void __init reserve_crashkernel(void)
+> > >  
+> > >  	crash_size = PAGE_ALIGN(crash_size);
+> > >  
+> > > -	if (crash_base == 0) {
+> > > -		/* Current arm64 boot protocol requires 2MB alignment */
+> > > -		crash_base = memblock_find_in_range(0, arm64_dma_phys_limit,
+> > > -				crash_size, SZ_2M);
+> > > -		if (crash_base == 0) {
+> > > -			pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+> > > -				crash_size);
+> > > -			return;
+> > > -		}
+> > > -	} else {
+> > > -		/* User specifies base address explicitly. */
+> > > -		if (!memblock_is_region_memory(crash_base, crash_size)) {
+> > > -			pr_warn("cannot reserve crashkernel: region is not memory\n");
+> > > -			return;
+> > > -		}
+> > > +	/* User specifies base address explicitly. */
+> > > +	if (crash_base)
+> > > +		crash_max = crash_base + crash_size;
+> > >  
+> > > -		if (memblock_is_region_reserved(crash_base, crash_size)) {
+> > > -			pr_warn("cannot reserve crashkernel: region overlaps reserved memory\n");
+> > > -			return;
+> > > -		}
+> > > -
+> > > -		if (!IS_ALIGNED(crash_base, SZ_2M)) {
+> > > -			pr_warn("cannot reserve crashkernel: base address is not 2MB aligned\n");
+> > > -			return;
+> > > -		}
+> > > +	/* Current arm64 boot protocol requires 2MB alignment */
+> > > +	crash_base = memblock_phys_alloc_range(crash_size, SZ_2M,
+> > > +					       crash_base, crash_max);
+> > > +	if (!crash_base) {
+> > > +		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+> > > +			crash_size);
+> > > +		return;
+> > >  	}
+> > > -	memblock_reserve(crash_base, crash_size);
+> > 
+> > We'll miss a bit on debug information provided to the user in case of a
+> > wrong crash_base/size option on the command line. Not sure we care much,
+> > though the alignment would probably be useful (maybe we document it
+> > somewhere).
+> 
+> It is already documented:
+> 
+> Documentation/admin-guide/kdump/kdump.rst:
+>    On arm64, use "crashkernel=Y[@X]".  Note that the start address of
+>    the kernel, X if explicitly specified, must be aligned to 2MiB (0x200000).
 
-We could argue the bug is in TCP_REPAIR code, not allowing restoring
-queues unless
-those setsockopt() calls have been done.
+Thanks for the pointer.
 
-For instance SO_RCVLOWAT is able to automatically increase sk->sk_rcvbuf
+> > What I haven't checked is whether memblock_phys_alloc_range() aims to
+> > get a 2MB aligned end (size) as well. If crash_size is not 2MB aligned,
+> > crash_max wouldn't be either and the above could fail. We only care
+> > about the crash_base to be aligned but the memblock_phys_alloc_range()
+> > doc says that both the start and size would be aligned to this.
+> 
+> The doc lies :)
+> 
+> memblock_phys_alloc_range() boils down to 
+> 
+> 	for_each_free_mem_range_reverse(i, nid, flags, &this_start, &this_end,
+> 					NULL) {
+> 
+> 		/* clamp this_{start,end} to the user defined limits */
+> 
+> 		cand = round_down(this_end - size, align);
+> 		if (cand >= this_start)
+> 			return cand;
+> 	}
 
-But I think this feature might be useful regardless of TCP_REPAIR needs.
+Alright, it should work then. For arm64:
 
-(There is no way to 'undo' a prior SO_RCVBUF or SO_SNDBUF since they are setting
-the SOCK_[SND|RCV]BUF_LOCK bits permanently)
-
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-
-
-> So after CRIU restore all sockets become non-auto-adjustable, which can
-> decrease network performance of restored applications significantly.
->
-> CRIU need to be able to restore sockets with enabled/disabled adjustment
-> to the same state it was before dump, so let's add special setsockopt
-> for it.
->
-> Let's also export SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK flags to uAPI so
-> that using these interface one can reenable automatic socket buffer
-> adjustment on their sockets.
->
-> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> ---
-> Here is a corresponding CRIU commits using these new feature to fix slow
-> download speed problem after migration:
-> https://github.com/checkpoint-restore/criu/pull/1568
->
-> Origin of the problem:
->
-> We have a customer in Virtuozzo who mentioned that nginx server becomes
-> slower after container migration. Especially it is easy to mention when
-> you wget some big file via localhost from the same container which was
-> just migrated.
->
-> By strace-ing all nginx processes I see that nginx worker process before
-> c/r sends data to local wget with big chunks ~1.5Mb, but after c/r it
-> only succeeds to send by small chunks ~64Kb.
->
-> Before:
-> sendfile(12, 13, [7984974] => [9425600], 11479629) = 1440626 <0.000180>
->
-> After:
-> sendfile(8, 13, [1507275] => [1568768], 17957328) = 61493 <0.000675>
->
-> Smaller buffer can explain the decrease in download speed. So as a POC I
-> just commented out all buffer setting manipulations and that helped.
->
-> Note: I'm not sure about the way I export flags to uAPI, probably there
-> is some other better way without separating BUF and BIND lock flags to
-> different header files.
->
-> v2: define SOCK_BUF_LOCK_MASK mask
-> v3: reject other flags except SOCK_SNDBUF_LOCK and SOCK_RCVBUF_LOCK, use
-> mask in sock_getsockopt, export flags to uapi/linux/socket.h
-> ---
->  arch/alpha/include/uapi/asm/socket.h  |  2 ++
->  arch/mips/include/uapi/asm/socket.h   |  2 ++
->  arch/parisc/include/uapi/asm/socket.h |  2 ++
->  arch/sparc/include/uapi/asm/socket.h  |  2 ++
->  include/net/sock.h                    |  3 +--
->  include/uapi/asm-generic/socket.h     |  2 ++
->  include/uapi/linux/socket.h           |  5 +++++
->  net/core/sock.c                       | 13 +++++++++++++
->  8 files changed, 29 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-> index 6b3daba60987..1dd9baf4a6c2 100644
-> --- a/arch/alpha/include/uapi/asm/socket.h
-> +++ b/arch/alpha/include/uapi/asm/socket.h
-> @@ -129,6 +129,8 @@
->
->  #define SO_NETNS_COOKIE                71
->
-> +#define SO_BUF_LOCK            72
-> +
->  #if !defined(__KERNEL__)
->
->  #if __BITS_PER_LONG == 64
-> diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-> index cdf404a831b2..1eaf6a1ca561 100644
-> --- a/arch/mips/include/uapi/asm/socket.h
-> +++ b/arch/mips/include/uapi/asm/socket.h
-> @@ -140,6 +140,8 @@
->
->  #define SO_NETNS_COOKIE                71
->
-> +#define SO_BUF_LOCK            72
-> +
->  #if !defined(__KERNEL__)
->
->  #if __BITS_PER_LONG == 64
-> diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-> index 5b5351cdcb33..8baaad52d799 100644
-> --- a/arch/parisc/include/uapi/asm/socket.h
-> +++ b/arch/parisc/include/uapi/asm/socket.h
-> @@ -121,6 +121,8 @@
->
->  #define SO_NETNS_COOKIE                0x4045
->
-> +#define SO_BUF_LOCK            0x4046
-> +
->  #if !defined(__KERNEL__)
->
->  #if __BITS_PER_LONG == 64
-> diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-> index 92675dc380fa..e80ee8641ac3 100644
-> --- a/arch/sparc/include/uapi/asm/socket.h
-> +++ b/arch/sparc/include/uapi/asm/socket.h
-> @@ -122,6 +122,8 @@
->
->  #define SO_NETNS_COOKIE          0x0050
->
-> +#define SO_BUF_LOCK              0x0051
-> +
->  #if !defined(__KERNEL__)
->
->
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index ff1be7e7e90b..6e761451c927 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -68,6 +68,7 @@
->  #include <net/tcp_states.h>
->  #include <linux/net_tstamp.h>
->  #include <net/l3mdev.h>
-> +#include <uapi/linux/socket.h>
->
->  /*
->   * This structure really needs to be cleaned up.
-> @@ -1438,8 +1439,6 @@ static inline int __sk_prot_rehash(struct sock *sk)
->  #define RCV_SHUTDOWN   1
->  #define SEND_SHUTDOWN  2
->
-> -#define SOCK_SNDBUF_LOCK       1
-> -#define SOCK_RCVBUF_LOCK       2
->  #define SOCK_BINDADDR_LOCK     4
->  #define SOCK_BINDPORT_LOCK     8
->
-> diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-> index d588c244ec2f..1f0a2b4864e4 100644
-> --- a/include/uapi/asm-generic/socket.h
-> +++ b/include/uapi/asm-generic/socket.h
-> @@ -124,6 +124,8 @@
->
->  #define SO_NETNS_COOKIE                71
->
-> +#define SO_BUF_LOCK            72
-> +
->  #if !defined(__KERNEL__)
->
->  #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
-> diff --git a/include/uapi/linux/socket.h b/include/uapi/linux/socket.h
-> index c3409c8ec0dd..eb0a9a5b6e71 100644
-> --- a/include/uapi/linux/socket.h
-> +++ b/include/uapi/linux/socket.h
-> @@ -26,4 +26,9 @@ struct __kernel_sockaddr_storage {
->         };
->  };
->
-> +#define SOCK_SNDBUF_LOCK       1
-> +#define SOCK_RCVBUF_LOCK       2
-> +
-> +#define SOCK_BUF_LOCK_MASK (SOCK_SNDBUF_LOCK | SOCK_RCVBUF_LOCK)
-> +
->  #endif /* _UAPI_LINUX_SOCKET_H */
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 9671c32e6ef5..aada649e07e8 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -1358,6 +1358,15 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
->                 ret = sock_bindtoindex_locked(sk, val);
->                 break;
->
-> +       case SO_BUF_LOCK:
-> +               if (val & ~SOCK_BUF_LOCK_MASK) {
-> +                       ret = -EINVAL;
-> +                       break;
-> +               }
-> +               sk->sk_userlocks = val | (sk->sk_userlocks &
-> +                                         ~SOCK_BUF_LOCK_MASK);
-> +               break;
-> +
->         default:
->                 ret = -ENOPROTOOPT;
->                 break;
-> @@ -1720,6 +1729,10 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
->                 v.val64 = sock_net(sk)->net_cookie;
->                 break;
->
-> +       case SO_BUF_LOCK:
-> +               v.val = sk->sk_userlocks & SOCK_BUF_LOCK_MASK;
-> +               break;
-> +
->         default:
->                 /* We implement the SO_SNDLOWAT etc to not be settable
->                  * (1003.1g 7).
-> --
-> 2.31.1
->
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
