@@ -2,99 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B8E3E1597
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 15:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71EB3E1672
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 16:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234087AbhHENWj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Aug 2021 09:22:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52250 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229771AbhHENWj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 5 Aug 2021 09:22:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2974E6113B;
-        Thu,  5 Aug 2021 13:22:21 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-mips@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Chen Zhu <zhuchen@loongson.cn>
-Subject: [PATCH V2] irqchip/loongson-pch-pic: Improve edge triggered interrupt support
-Date:   Thu,  5 Aug 2021 21:22:16 +0800
-Message-Id: <20210805132216.3539007-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        id S241870AbhHEOIc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Aug 2021 10:08:32 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:36044 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239887AbhHEOIc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 10:08:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628172480;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=alBm07GUiG3xNvu0vvm1f2ekdmy6obwUH/alNSW6LLY=;
+    b=gKxNkYuBqiH+B3Hs1+vQcFCat751wWL0wv6fryCajlGyrhxosChYkzt8RjThegbVXd
+    NSHhAhlXcj0BO+vNtVxV46gdZMyz3mGjnLsJgADP3n8kFBhPUzbU6+B7uUc/1VSLTxxU
+    NW1lZXqFdo+pVJ8Os7eVHCLcMTXNsbXE5C2DuiscxcTxFdRDHdJ1U4HJI469e9qT/mhS
+    hp2/BstIiW7l2h8OTjVtIC34dQy7ojIm2XAlkhJe+He8b7P+4EdDSxzMhZEtl0ABYJ08
+    JW7vjABO4uhlIyHcnM3hIvxPcsz74THKDbmv5mzxLPH+ltJ0bj5RrZQv1bwzXyXhAjaV
+    q6Eg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lByOdbLzk="
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.31.0 DYNA|AUTH)
+    with ESMTPSA id Q02727x75E7w77z
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 5 Aug 2021 16:07:58 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Paul Boddie <paul@boddie.org.uk>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2 0/8] MIPS: jz4780 HDMI
+Date:   Thu,  5 Aug 2021 16:07:49 +0200
+Message-Id: <cover.1628172477.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Edge-triggered mode and level-triggered mode need different handlers,
-and edge-triggered mode need a specific ack operation. So improve it.
+This series adds HDMI support for JZ4780 and CI20 board
 
-Fixes: ef8c01eb64ca6719da449dab0 ("irqchip: Add Loongson PCH PIC controller")
-Signed-off-by: Chen Zhu <zhuchen@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
-V2: Add a Fixes: tag.
+V2:
+- code and commit messages revisited for checkpatch warnings
+- rebased on v5.14-rc4
+- include (failed, hence RFC 8/8) attempt to convert to component framework
+  (was suggested by Paul Cercueil <paul@crapouillou.net> a while ago)
 
- drivers/irqchip/irq-loongson-pch-pic.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
-index f790ca6d78aa..a4eb8a2181c7 100644
---- a/drivers/irqchip/irq-loongson-pch-pic.c
-+++ b/drivers/irqchip/irq-loongson-pch-pic.c
-@@ -92,18 +92,22 @@ static int pch_pic_set_type(struct irq_data *d, unsigned int type)
- 	case IRQ_TYPE_EDGE_RISING:
- 		pch_pic_bitset(priv, PCH_PIC_EDGE, d->hwirq);
- 		pch_pic_bitclr(priv, PCH_PIC_POL, d->hwirq);
-+		irq_set_handler_locked(d, handle_edge_irq);
- 		break;
- 	case IRQ_TYPE_EDGE_FALLING:
- 		pch_pic_bitset(priv, PCH_PIC_EDGE, d->hwirq);
- 		pch_pic_bitset(priv, PCH_PIC_POL, d->hwirq);
-+		irq_set_handler_locked(d, handle_edge_irq);
- 		break;
- 	case IRQ_TYPE_LEVEL_HIGH:
- 		pch_pic_bitclr(priv, PCH_PIC_EDGE, d->hwirq);
- 		pch_pic_bitclr(priv, PCH_PIC_POL, d->hwirq);
-+		irq_set_handler_locked(d, handle_level_irq);
- 		break;
- 	case IRQ_TYPE_LEVEL_LOW:
- 		pch_pic_bitclr(priv, PCH_PIC_EDGE, d->hwirq);
- 		pch_pic_bitset(priv, PCH_PIC_POL, d->hwirq);
-+		irq_set_handler_locked(d, handle_level_irq);
- 		break;
- 	default:
- 		ret = -EINVAL;
-@@ -113,11 +117,24 @@ static int pch_pic_set_type(struct irq_data *d, unsigned int type)
- 	return ret;
- }
- 
-+static void pch_pic_ack_irq(struct irq_data *d)
-+{
-+	unsigned int reg;
-+	struct pch_pic *priv = irq_data_get_irq_chip_data(d);
-+
-+	reg = readl(priv->base + PCH_PIC_EDGE + PIC_REG_IDX(d->hwirq) * 4);
-+	if (reg & BIT(PIC_REG_BIT(d->hwirq))) {
-+		writel(BIT(PIC_REG_BIT(d->hwirq)),
-+			priv->base + PCH_PIC_CLR + PIC_REG_IDX(d->hwirq) * 4);
-+	}
-+	irq_chip_ack_parent(d);
-+}
-+
- static struct irq_chip pch_pic_irq_chip = {
- 	.name			= "PCH PIC",
- 	.irq_mask		= pch_pic_mask_irq,
- 	.irq_unmask		= pch_pic_unmask_irq,
--	.irq_ack		= irq_chip_ack_parent,
-+	.irq_ack		= pch_pic_ack_irq,
- 	.irq_set_affinity	= irq_chip_set_affinity_parent,
- 	.irq_set_type		= pch_pic_set_type,
- };
+H. Nikolaus Schaller (2):
+  MIPS: CI20: defconfig: configure for DRM_DW_HDMI_JZ4780
+  [RFC] drm/ingenic: convert to component framework for jz4780 hdmi
+
+Paul Boddie (5):
+  drm/bridge: synopsis: Add mode_fixup and bridge timings support
+  drm/ingenic: Add jz4780 Synopsys HDMI driver
+  drm/ingenic: Add support for JZ4780 and HDMI output
+  MIPS: DTS: jz4780: account for Synopsys HDMI driver and LCD controller
+  MIPS: DTS: CI20: add HDMI setup
+
+Sam Ravnborg (1):
+  dt-bindings: display: Add ingenic-jz4780-hdmi DT Schema
+
+ .../bindings/display/ingenic-jz4780-hdmi.yaml |  82 +++++++++
+ arch/mips/boot/dts/ingenic/ci20.dts           |  64 +++++++
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        |  45 +++++
+ arch/mips/configs/ci20_defconfig              |   7 +
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c     |  16 ++
+ drivers/gpu/drm/ingenic/Kconfig               |   9 +
+ drivers/gpu/drm/ingenic/Makefile              |   1 +
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     | 163 ++++++++++++++++--
+ drivers/gpu/drm/ingenic/ingenic-drm.h         |  52 ++++++
+ drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c     | 156 +++++++++++++++++
+ include/drm/bridge/dw_hdmi.h                  |   5 +
+ 11 files changed, 585 insertions(+), 15 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+ create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+
 -- 
-2.27.0
+2.31.1
 
