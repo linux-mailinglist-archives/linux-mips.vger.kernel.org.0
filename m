@@ -2,138 +2,441 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F062E3E1BBF
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 20:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DAC3E1BF7
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 21:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239048AbhHESys (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Aug 2021 14:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241297AbhHESyr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 14:54:47 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B9EC06179F
-        for <linux-mips@vger.kernel.org>; Thu,  5 Aug 2021 11:54:32 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id j2so7831346wrx.9
-        for <linux-mips@vger.kernel.org>; Thu, 05 Aug 2021 11:54:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=mCmxN128wN048rQ3mL+tGyaLgz6ahBPx10bueA4yYQQ=;
-        b=GOrV3VP+r8pYdlSiWQTpaesHdYyjntzU0PvvHrN5y3GEyAm/V0Gk6/Q2DVPAjUOuHG
-         cg9PKnXKTT6euec26ur9UeGp7ZJ1lMFf0XKNZ8JHvT1V9wtuX3S5sCHtymzoXEU9qj2q
-         qvrLHR5Nn9+CzXn368JWDViQsPx0sYdfYo81GedinLwzH0j/KWAgMJ76cgcFRANa52Ap
-         k/HeuXbl/H4MM5n9iS0qwck3lV1RsVGsi6ht6u6CHCiFHc0J5dQij11Gxp4rS/NpUOOz
-         xuYYqbl/V2ElVpVt72G3YEr+BRDilwSbeYw+9JCFvZusmxJWVls+zLhfdxvvorH6XeKQ
-         WnMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=mCmxN128wN048rQ3mL+tGyaLgz6ahBPx10bueA4yYQQ=;
-        b=Un2NBgxwzmBv+m/GsXw8yg9v1whOa8aT6HRKiyv1lkwOl+FuUJzicj5UboqAHO0a38
-         beHtDCh5VvXQKO1+F4LOnbXUGX1B9JJ+9D2RFfpKpRaQcQF92XoD3+Kum8GVZs0hR50z
-         TLoq9GbEVOGD98K6Y4LFnij1IBNaRVP4d6C64mcVclChG+rbZ/aW8m8VnUVgZqQJ5nvP
-         4VYj4eVICyZw4J2V7R3Ex4dd5XAZ6469uFZ59Lb8RmRH7jqqUpVwDTG7sdgX6ubfsf+6
-         Xfd1CAcqWz9iJkDU/mmkTm6CDfq1RfxGsCKGJcWoxYiBS+MwjzGhrBg+yue47xfTb2cT
-         V2jQ==
-X-Gm-Message-State: AOAM5320xr3cBHUmYXjAmTPXEMnH2qQDYR6Z6ff9i7SN71SaaLGg/PNw
-        IdTZWFOrmU9VxiYxSTmAiH0o8w==
-X-Google-Smtp-Source: ABdhPJwssE+mX4OXOdITg+L7JFPUjj2TqXmuwypTLByy6roZIhynzabMmSfypihLZgWIBDpfU85saA==
-X-Received: by 2002:a5d:5906:: with SMTP id v6mr6899987wrd.194.1628189670642;
-        Thu, 05 Aug 2021 11:54:30 -0700 (PDT)
-Received: from google.com ([109.180.115.228])
-        by smtp.gmail.com with ESMTPSA id p5sm7799843wrd.25.2021.08.05.11.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Aug 2021 11:54:30 -0700 (PDT)
-Date:   Thu, 5 Aug 2021 19:54:27 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        id S242042AbhHETED (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Aug 2021 15:04:03 -0400
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:53165 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241974AbhHETEC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 15:04:02 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D3BAC5810B2;
+        Thu,  5 Aug 2021 15:03:46 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 05 Aug 2021 15:03:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=from
+        :to:cc:subject:date:message-id:in-reply-to:references:reply-to
+        :mime-version:content-transfer-encoding; s=fm1; bh=zNZUoCQxGeezK
+        ynu9SXf7RK1yXXzs9UrsyBqx4F2Edk=; b=GtL12AmdeZNPHF6SApyO9wGXfEnlg
+        wNhltluDSQzlmgtvgRRPULzc7FzojizjIvGqjq9l0WTHC8gjjwH0OPxXbGnrnUPm
+        hDSMlGCd6ITo+xRpprv6J4fpF05Dz4iPpq0Q6YTMZ43f9noXHFhoA2ryB+1rwXso
+        0xje1RyI2eOjiHlPqHk7sE8QpdSibrVzoNaw67a4doWQGdf2ABU4s86r8dg5LwQ8
+        me86nda6dU5U9VRMEKgR+dFIaxddHn/vkrx5nqQt5s5YvdWVYAaeSBtnQyqaokgp
+        5PjIXA1zjsCvdR3wQlwKJSjLLc4/gwwwSlV50rFq1ZqkR4cvvw3fC8rqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:reply-to:subject
+        :to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; bh=zNZUoCQxGeezKynu9SXf7RK1yXXzs9UrsyBqx4F2Edk=; b=lkUCbjUl
+        PEdQRBtf816Ypmmn3nhNv7Sizw4AzYBiGnl0V9d227YL3157XWzt7AL5QCqGN7cL
+        yqPnZEkLdbcz85N8RdldMN71v2KmRxsPUl7vsMVtamEYXDOPG3U6BvE+pr7+Yru4
+        /FVQdwNbo4Ycp97k//hOBnZ2yca1DgKkAyOxemQjJQPVSeOqcrlkx7j0BGJaFUyS
+        CWPBdaRML51ZDoxDH0rHuU7w62PfIe1ROCUo1cvMbBryWkG7nPr36V8nKMhl2XkD
+        x4NfRrv0ZBtrGiGrKGOyx1ZKcrBy0Yhjm8JPiSOmYop6IZ1wOMqP+pqW7m9ryknq
+        SMva7CVAvywnQA==
+X-ME-Sender: <xms:EDYMYY-DL8P2bcvnLICbJUDwJSM9knPLJLgObnvHJpPeONvY18Y8zA>
+    <xme:EDYMYQuaN103Gqpz6IVwl1J1TfPrOWCIdVik9xAJA4Ej6bJdqSxpwSdpWtrORcNJP
+    zY1qpKdp_dodr_qwg>
+X-ME-Received: <xmr:EDYMYeDQlih2rLrqdgd6jlVePFzv5Z5MhViPFAcjOwbSFYpGFZTVca5ZEJTqPcCHSvsAykOj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrieelgdduvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffojghfrhgggfestdhqredtredttdenucfhrhhomhepkghiucgj
+    rghnuceoiihirdihrghnsehsvghnthdrtghomheqnecuggftrfgrthhtvghrnhepieejue
+    dvueduuefhgefhheeiuedvtedvuefgieegveetueeiueehtdegudehfeelnecuvehluhhs
+    thgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepiihirdihrghnsehsvg
+    hnthdrtghomh
+X-ME-Proxy: <xmx:EDYMYYebQ9uZTltrKTkpcJXLtFJiugbJgfdenr91RlXIpn-tUs0VXA>
+    <xmx:EDYMYdNGPMj1jZn3czxOZ1YHev0_hyrR_EzZOrQpHCpjsp3MQtYpDg>
+    <xmx:EDYMYSlWti7zMr_aZl-0ZjSHN1IURtnEK9-wZbzw1PspP32v-Um2OQ>
+    <xmx:EjYMYVbHX95gn2qpP7YVlS5-XylZg9XCV-qdmTswerMFWoEkCpgRVQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 5 Aug 2021 15:03:43 -0400 (EDT)
+From:   Zi Yan <zi.yan@sent.com>
+To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-kernel@vger.kernel.org, Zi Yan <ziy@nvidia.com>,
         Vineet Gupta <vgupta@synopsys.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Brian Cain <bcain@codeaurora.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Guo Ren <guoren@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>,
         Ley Foon Tan <ley.foon.tan@intel.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "David S. Miller" <davem@davemloft.net>,
         Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH 1/3] arch: Export machine_restart() instances so they can
- be called from modules
-Message-ID: <YQwz4xkuxvfrCnag@google.com>
-References: <20210805075032.723037-1-lee.jones@linaro.org>
- <20210805075032.723037-2-lee.jones@linaro.org>
- <20210805173625.GH6719@arm.com>
- <YQww08x2whx/LIIT@kroah.com>
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org
+Subject: [RFC PATCH 02/15] arch: mm: rename FORCE_MAX_ZONEORDER to ARCH_FORCE_MAX_ORDER
+Date:   Thu,  5 Aug 2021 15:02:40 -0400
+Message-Id: <20210805190253.2795604-3-zi.yan@sent.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210805190253.2795604-1-zi.yan@sent.com>
+References: <20210805190253.2795604-1-zi.yan@sent.com>
+Reply-To: Zi Yan <ziy@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YQww08x2whx/LIIT@kroah.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 05 Aug 2021, Greg Kroah-Hartman wrote:
+From: Zi Yan <ziy@nvidia.com>
 
-> On Thu, Aug 05, 2021 at 06:36:25PM +0100, Catalin Marinas wrote:
-> > On Thu, Aug 05, 2021 at 08:50:30AM +0100, Lee Jones wrote:
-> > > diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> > > index b4bb67f17a2ca..cf89ce91d7145 100644
-> > > --- a/arch/arm64/kernel/process.c
-> > > +++ b/arch/arm64/kernel/process.c
-> > > @@ -212,6 +212,7 @@ void machine_restart(char *cmd)
-> > >  	printk("Reboot failed -- System halted\n");
-> > >  	while (1);
-> > >  }
-> > > +EXPORT_SYMBOL(machine_restart);
-> > 
-> > Should we make this EXPORT_SYMBOL_GPL? I suppose it's not for general
-> > use by out of tree drivers and it matches the other pm_power_off symbol
-> > we export in this file.
-> 
-> Yes please.
+This Kconfig option is used by individual arch to set its desired
+MAX_ORDER. Rename it to reflect its actual use.
 
-Sure.
+Signed-off-by: Zi Yan <ziy@nvidia.com>
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Ley Foon Tan <ley.foon.tan@intel.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-oxnas@groups.io
+Cc: linux-csky@vger.kernel.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+---
+ arch/arc/Kconfig                             | 2 +-
+ arch/arm/Kconfig                             | 2 +-
+ arch/arm/configs/imx_v6_v7_defconfig         | 2 +-
+ arch/arm/configs/milbeaut_m10v_defconfig     | 2 +-
+ arch/arm/configs/oxnas_v6_defconfig          | 2 +-
+ arch/arm/configs/sama7_defconfig             | 2 +-
+ arch/arm64/Kconfig                           | 2 +-
+ arch/csky/Kconfig                            | 2 +-
+ arch/ia64/Kconfig                            | 2 +-
+ arch/ia64/include/asm/sparsemem.h            | 6 +++---
+ arch/m68k/Kconfig.cpu                        | 2 +-
+ arch/mips/Kconfig                            | 2 +-
+ arch/nios2/Kconfig                           | 2 +-
+ arch/powerpc/Kconfig                         | 2 +-
+ arch/powerpc/configs/85xx/ge_imp3a_defconfig | 2 +-
+ arch/powerpc/configs/fsl-emb-nonhw.config    | 2 +-
+ arch/sh/configs/ecovec24_defconfig           | 2 +-
+ arch/sh/mm/Kconfig                           | 2 +-
+ arch/sparc/Kconfig                           | 2 +-
+ arch/xtensa/Kconfig                          | 2 +-
+ include/linux/mmzone.h                       | 4 ++--
+ 21 files changed, 24 insertions(+), 24 deletions(-)
 
-Thanks for the feedback.
+diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
+index b5bf68e74732..923ea4c31e59 100644
+--- a/arch/arc/Kconfig
++++ b/arch/arc/Kconfig
+@@ -583,7 +583,7 @@ config ARC_BUILTIN_DTB_NAME
+=20
+ endmenu	 # "ARC Architecture Configuration"
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "12" if ARC_HUGEPAGE_16M
+ 	default "11"
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 2fb7012c3246..286854318fe5 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -1523,7 +1523,7 @@ config ARM_MODULE_PLTS
+ 	  Disabling this is usually safe for small single-platform
+ 	  configurations. If unsure, say y.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "12" if SOC_AM33XX
+ 	default "9" if SA1111
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6=
+_v7_defconfig
+index 079fcd8d1d11..802310d3ebf5 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -34,7 +34,7 @@ CONFIG_PCI_IMX6=3Dy
+ CONFIG_SMP=3Dy
+ CONFIG_ARM_PSCI=3Dy
+ CONFIG_HIGHMEM=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D14
++CONFIG_ARCH_FORCE_MAX_ORDER=3D14
+ CONFIG_CMDLINE=3D"noinitrd console=3Dttymxc0,115200"
+ CONFIG_KEXEC=3Dy
+ CONFIG_CPU_FREQ=3Dy
+diff --git a/arch/arm/configs/milbeaut_m10v_defconfig b/arch/arm/configs/mi=
+lbeaut_m10v_defconfig
+index 7c07f9893a0f..06967243f74d 100644
+--- a/arch/arm/configs/milbeaut_m10v_defconfig
++++ b/arch/arm/configs/milbeaut_m10v_defconfig
+@@ -26,7 +26,7 @@ CONFIG_THUMB2_KERNEL=3Dy
+ # CONFIG_THUMB2_AVOID_R_ARM_THM_JUMP11 is not set
+ # CONFIG_ARM_PATCH_IDIV is not set
+ CONFIG_HIGHMEM=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D12
++CONFIG_ARCH_FORCE_MAX_ORDER=3D12
+ CONFIG_SECCOMP=3Dy
+ CONFIG_KEXEC=3Dy
+ CONFIG_EFI=3Dy
+diff --git a/arch/arm/configs/oxnas_v6_defconfig b/arch/arm/configs/oxnas_v=
+6_defconfig
+index cae0db6b4eaf..df8462272446 100644
+--- a/arch/arm/configs/oxnas_v6_defconfig
++++ b/arch/arm/configs/oxnas_v6_defconfig
+@@ -17,7 +17,7 @@ CONFIG_MACH_OX820=3Dy
+ CONFIG_SMP=3Dy
+ CONFIG_NR_CPUS=3D16
+ CONFIG_CMA=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D12
++CONFIG_ARCH_FORCE_MAX_ORDER=3D12
+ CONFIG_SECCOMP=3Dy
+ CONFIG_ARM_APPENDED_DTB=3Dy
+ CONFIG_ARM_ATAG_DTB_COMPAT=3Dy
+diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defc=
+onfig
+index 938aae4bd80b..f8683b87cb27 100644
+--- a/arch/arm/configs/sama7_defconfig
++++ b/arch/arm/configs/sama7_defconfig
+@@ -22,7 +22,7 @@ CONFIG_ATMEL_CLOCKSOURCE_TCB=3Dy
+ # CONFIG_CACHE_L2X0 is not set
+ # CONFIG_ARM_PATCH_IDIV is not set
+ # CONFIG_CPU_SW_DOMAIN_PAN is not set
+-CONFIG_FORCE_MAX_ZONEORDER=3D15
++CONFIG_ARCH_FORCE_MAX_ORDER=3D15
+ CONFIG_UACCESS_WITH_MEMCPY=3Dy
+ # CONFIG_ATAGS is not set
+ CONFIG_CMDLINE=3D"console=3DttyS0,115200 earlyprintk ignore_loglevel"
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index b5b13a932561..972d81f6bb2c 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1152,7 +1152,7 @@ config XEN
+ 	help
+ 	  Say Y if you want to run Linux in a Virtual Machine on Xen on ARM64.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int
+ 	default "14" if ARM64_64K_PAGES
+ 	default "12" if ARM64_16K_PAGES
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 2716f6395ba7..0fd2333226b7 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -307,7 +307,7 @@ config HIGHMEM
+ 	select KMAP_LOCAL
+ 	default y
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "11"
+=20
+diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+index 4993c7ac7ff6..d1bd010ee7a5 100644
+--- a/arch/ia64/Kconfig
++++ b/arch/ia64/Kconfig
+@@ -200,7 +200,7 @@ config IA64_CYCLONE
+ 	  Say Y here to enable support for IBM EXA Cyclone time source.
+ 	  If you're unsure, answer N.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "MAX_ORDER (11 - 17)"  if !HUGETLB_PAGE
+ 	range 11 17  if !HUGETLB_PAGE
+ 	default "17" if HUGETLB_PAGE
+diff --git a/arch/ia64/include/asm/sparsemem.h b/arch/ia64/include/asm/spar=
+semem.h
+index 42ed5248fae9..84e8ce387b69 100644
+--- a/arch/ia64/include/asm/sparsemem.h
++++ b/arch/ia64/include/asm/sparsemem.h
+@@ -11,10 +11,10 @@
+=20
+ #define SECTION_SIZE_BITS	(30)
+ #define MAX_PHYSMEM_BITS	(50)
+-#ifdef CONFIG_FORCE_MAX_ZONEORDER
+-#if ((CONFIG_FORCE_MAX_ZONEORDER - 1 + PAGE_SHIFT) > SECTION_SIZE_BITS)
++#ifdef CONFIG_ARCH_FORCE_MAX_ORDER
++#if ((CONFIG_ARCH_FORCE_MAX_ORDER - 1 + PAGE_SHIFT) > SECTION_SIZE_BITS)
+ #undef SECTION_SIZE_BITS
+-#define SECTION_SIZE_BITS (CONFIG_FORCE_MAX_ZONEORDER - 1 + PAGE_SHIFT)
++#define SECTION_SIZE_BITS (CONFIG_ARCH_FORCE_MAX_ORDER - 1 + PAGE_SHIFT)
+ #endif
+ #endif
+=20
+diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
+index 29e946394fdb..c39157f3dd87 100644
+--- a/arch/m68k/Kconfig.cpu
++++ b/arch/m68k/Kconfig.cpu
+@@ -408,7 +408,7 @@ config SINGLE_MEMORY_CHUNK
+ 	  order" to save memory that could be wasted for unused memory map.
+ 	  Say N if not sure.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order" if ADVANCED
+ 	depends on !SINGLE_MEMORY_CHUNK
+ 	default "11"
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 6dfb27d531dd..0998f671ed7e 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2284,7 +2284,7 @@ config PAGE_SIZE_64KB
+=20
+ endchoice
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	range 14 64 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
+ 	default "14" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
+diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
+index c24955c81c92..e5c300198e1f 100644
+--- a/arch/nios2/Kconfig
++++ b/arch/nios2/Kconfig
+@@ -50,7 +50,7 @@ menu "Kernel features"
+=20
+ source "kernel/Kconfig.hz"
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	range 9 20
+ 	default "11"
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 2e213ec6ec05..5edb48b363c4 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -810,7 +810,7 @@ config DATA_SHIFT
+ 	  in that case. If PIN_TLB is selected, it must be aligned to 8M as
+ 	  8M pages will be pinned.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	range 8 9 if PPC64 && PPC_64K_PAGES
+ 	default "9" if PPC64 && PPC_64K_PAGES
+diff --git a/arch/powerpc/configs/85xx/ge_imp3a_defconfig b/arch/powerpc/co=
+nfigs/85xx/ge_imp3a_defconfig
+index f29c166998af..e7672c186325 100644
+--- a/arch/powerpc/configs/85xx/ge_imp3a_defconfig
++++ b/arch/powerpc/configs/85xx/ge_imp3a_defconfig
+@@ -30,7 +30,7 @@ CONFIG_PREEMPT=3Dy
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+ CONFIG_BINFMT_MISC=3Dm
+ CONFIG_MATH_EMULATION=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D17
++CONFIG_ARCH_FORCE_MAX_ORDER=3D17
+ CONFIG_PCI=3Dy
+ CONFIG_PCIEPORTBUS=3Dy
+ CONFIG_PCI_MSI=3Dy
+diff --git a/arch/powerpc/configs/fsl-emb-nonhw.config b/arch/powerpc/confi=
+gs/fsl-emb-nonhw.config
+index df37efed0aec..521e7a530888 100644
+--- a/arch/powerpc/configs/fsl-emb-nonhw.config
++++ b/arch/powerpc/configs/fsl-emb-nonhw.config
+@@ -41,7 +41,7 @@ CONFIG_FIXED_PHY=3Dy
+ CONFIG_FONT_8x16=3Dy
+ CONFIG_FONT_8x8=3Dy
+ CONFIG_FONTS=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D13
++CONFIG_ARCH_FORCE_MAX_ORDER=3D13
+ CONFIG_FRAMEBUFFER_CONSOLE=3Dy
+ CONFIG_FRAME_WARN=3D1024
+ CONFIG_FTL=3Dy
+diff --git a/arch/sh/configs/ecovec24_defconfig b/arch/sh/configs/ecovec24_=
+defconfig
+index 03cb916819fa..4c09ca308d43 100644
+--- a/arch/sh/configs/ecovec24_defconfig
++++ b/arch/sh/configs/ecovec24_defconfig
+@@ -8,7 +8,7 @@ CONFIG_MODULES=3Dy
+ CONFIG_MODULE_UNLOAD=3Dy
+ # CONFIG_BLK_DEV_BSG is not set
+ CONFIG_CPU_SUBTYPE_SH7724=3Dy
+-CONFIG_FORCE_MAX_ZONEORDER=3D12
++CONFIG_ARCH_FORCE_MAX_ORDER=3D12
+ CONFIG_MEMORY_SIZE=3D0x10000000
+ CONFIG_FLATMEM_MANUAL=3Dy
+ CONFIG_SH_ECOVEC=3Dy
+diff --git a/arch/sh/mm/Kconfig b/arch/sh/mm/Kconfig
+index ba569cfb4368..411fdc0901f7 100644
+--- a/arch/sh/mm/Kconfig
++++ b/arch/sh/mm/Kconfig
+@@ -18,7 +18,7 @@ config PAGE_OFFSET
+ 	default "0x80000000" if MMU
+ 	default "0x00000000"
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	range 9 64 if PAGE_SIZE_16KB
+ 	default "9" if PAGE_SIZE_16KB
+diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+index f0c0f955e169..2206c99612ed 100644
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -273,7 +273,7 @@ config ARCH_SPARSEMEM_ENABLE
+ config ARCH_SPARSEMEM_DEFAULT
+ 	def_bool y if SPARC64
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "13"
+ 	help
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index b843902ad9fd..90784aa68cf8 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -709,7 +709,7 @@ config HIGHMEM
+=20
+ 	  If unsure, say Y.
+=20
+-config FORCE_MAX_ZONEORDER
++config ARCH_FORCE_MAX_ORDER
+ 	int "Maximum zone order"
+ 	default "11"
+ 	help
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index c1d914a72489..98e3297b9e09 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -24,10 +24,10 @@
+ #include <asm/page.h>
+=20
+ /* Free memory management - zoned buddy allocator.  */
+-#ifndef CONFIG_FORCE_MAX_ZONEORDER
++#ifndef CONFIG_ARCH_FORCE_MAX_ORDER
+ #define MAX_ORDER 11
+ #else
+-#define MAX_ORDER CONFIG_FORCE_MAX_ZONEORDER
++#define MAX_ORDER CONFIG_ARCH_FORCE_MAX_ORDER
+ #endif
+ #define MAX_ORDER_NR_PAGES (1 << (MAX_ORDER - 1))
+=20
+--=20
+2.30.2
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
