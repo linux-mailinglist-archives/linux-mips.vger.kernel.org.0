@@ -2,42 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B534D3E167B
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 16:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D633E1702
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 16:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241865AbhHEOIh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Aug 2021 10:08:37 -0400
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.123]:8841 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241871AbhHEOIf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 10:08:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628172486;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=CliIVqvNzA/bGBlLAYmf7rIejrGR22i5z/kGrFUsuDU=;
-    b=aQQJPEJ0jCM1iMaL2MFUfRGIIzKEaRcDNf2tGiFM8NcjZCfz4p8vQhjt1lrN7k83ZO
-    BzAU7bAQB9qHCReArzr1c6eZ37KgHwnTGuom6o8amMiIRiaD6CzR3lexc1yketsDJ/Jg
-    pIF7LOcdEkFt83UmjT+B1Z+Aoas3a6BwuStYAzUjWVtM1AIDYeiEiC30DeuJaIjTkK12
-    dEduqK0sP6iJghpdd/R5/cmb1H9RTxOFL47/C8jmtBLJKxB7OIZeELY0TjU2sBEBHQJb
-    MM/BWyMduC99sODYMs4Lx+Lwpd9KaVCIb4CMIanxDUVLhkiSzvEboTPjsPUg6/AjtFml
-    TKJg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lByOdbLzk="
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 47.31.0 DYNA|AUTH)
-    with ESMTPSA id Q02727x75E85789
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 5 Aug 2021 16:08:05 +0200 (CEST)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
+        id S240801AbhHEOco (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Aug 2021 10:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236726AbhHEOcn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 10:32:43 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF14C061798
+        for <linux-mips@vger.kernel.org>; Thu,  5 Aug 2021 07:32:29 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id pj14-20020a17090b4f4eb029017786cf98f9so9928112pjb.2
+        for <linux-mips@vger.kernel.org>; Thu, 05 Aug 2021 07:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hxir+KJT92ne4sjUq07glKFb4339EmPmh/a5GVlr1ko=;
+        b=k3719/z8eUSedQ6lU1Ji4Phj9b5Y8l0i6R93Er8eQtkwn8oV31S9CxSR/eMF8GtlH1
+         xjWqTZwBxPmQfL0Fm2rHuHHJMLShvWbTxr8VBc2YiKbAHxEuCChtZvgmN3DTD0imxKK1
+         oS6rtUVkpsmk2kEb9R0U4Csl2IWbJRtZsVqSOL202172DyPqWAoK0xb58hAC+b2bk0e9
+         JPaySdp1odFbAvM3gJRsak/89lSYGKrBbDzA9kH+zTUYhV0ir3IlKnGeeARonQYLnqUJ
+         mRH09CtOCUWg6lmFaIZdQKUR7lM5V4gSzK5N96JNSgwEQ48WmP5e+YtBxE/j4IRuEFNi
+         xYxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hxir+KJT92ne4sjUq07glKFb4339EmPmh/a5GVlr1ko=;
+        b=nK90X6bERSlumPKb0wQfnQaRgPvpeU1oWpY26w+Tu4vzfh88s6OonEEzWxSAjOKPXO
+         vVGirX6h+DQ61yHWDrB7lRrWEOCIzuEPz837uFjsNPEHxbAw2IVZLEO7f6tZrb9AY6il
+         DmhRIh+V7lOai1SZ+OYzQgNKTMTmTI2zNiDSlkY0kcM0/8kmbdGIYm5GKPKy4DeLLIct
+         mYVrZ+UEq98zel3tP+XE0gsOoqwNwafBUCNiOSLRZkkFXUB+tTUhjSOooqchX0FoJVd2
+         mOoM9u+wsVQ+5fISKlSxV9T5uLHjUBoj5zHS525p5UJdspidCcx5kzp0xrnh+JEPyTMH
+         gzqw==
+X-Gm-Message-State: AOAM532kpG98tBhPPjfCWcMQK8v6K3ZanOX9tGVC9JwQJLweep+aLq4t
+        6ftKGMXcvzu2limyHbvIJiuUl/hj55z66YYdkJg7sQ==
+X-Google-Smtp-Source: ABdhPJzmKvsuXnbAiJTCr2Ie3c70evLDQtBHyeupRXjhU286jch5hsPG3GMDBTl8uNZmPk7w39U7rdBJi7Zo+CSGIZw=
+X-Received: by 2002:a17:90a:604b:: with SMTP id h11mr4973185pjm.220.1628173948924;
+ Thu, 05 Aug 2021 07:32:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1628172477.git.hns@goldelico.com> <15187eccabf39561de226acd8be40b93503cac49.1628172477.git.hns@goldelico.com>
+In-Reply-To: <15187eccabf39561de226acd8be40b93503cac49.1628172477.git.hns@goldelico.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Thu, 5 Aug 2021 16:32:17 +0200
+Message-ID: <CAG3jFyu50h2oLW0U6hJSpxiKp3Hb5Ow8Ujvg2qdKRuy+uhaahw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] drm/bridge: synopsis: Add mode_fixup and bridge
+ timings support
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Kees Cook <keescook@chromium.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
@@ -46,140 +64,117 @@ To:     Paul Cercueil <paul@crapouillou.net>,
         Daniel Vetter <daniel@ffwll.ch>,
         Andrzej Hajda <a.hajda@samsung.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
         Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Harry Wentland <harry.wentland@amd.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Paul Boddie <paul@boddie.org.uk>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        letux-kernel@openphoenux.org, Paul Boddie <paul@boddie.org.uk>,
         Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v2 8/8] [RFC] drm/ingenic: convert to component framework for jz4780 hdmi
-Date:   Thu,  5 Aug 2021 16:07:57 +0200
-Message-Id: <77554dd2612f418f6ab74a8be06c82b71410e0e6.1628172477.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1628172477.git.hns@goldelico.com>
-References: <cover.1628172477.git.hns@goldelico.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch attempts to convert the ingenic-dw-hdmi driver
-into a version that uses the component framework.
+Hey Nikolaus,
 
-Unfortunately the new version does not work.
+Thanks for submitting this series.
 
-Debugging shows that ingenic_dw_hdmi_bind() is never called.
+On Thu, 5 Aug 2021 at 16:08, H. Nikolaus Schaller <hns@goldelico.com> wrote:
+>
+> From: Paul Boddie <paul@boddie.org.uk>
+>
+> The platform-specific configuration structure is augmented with
+> mode_fixup and timings members so that specialisations of the
+> Synopsys driver can introduce mode flags and bus flags.
+>
+> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 16 ++++++++++++++++
+>  include/drm/bridge/dw_hdmi.h              |  5 +++++
+>  2 files changed, 21 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> index e7c7c9b9c646f..e8499eb11328c 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -2810,6 +2810,19 @@ dw_hdmi_bridge_mode_valid(struct drm_bridge *bridge,
+>         return mode_status;
+>  }
+>
+> +static bool
+> +dw_hdmi_bridge_mode_fixup(struct drm_bridge *bridge,
+> +                         const struct drm_display_mode *mode,
+> +                         struct drm_display_mode *adjusted_mode)
+> +{
+> +       struct dw_hdmi *hdmi = bridge->driver_private;
+> +
+> +       if (hdmi->plat_data->mode_fixup)
+> +               return hdmi->plat_data->mode_fixup(bridge, mode, adjusted_mode);
+> +
+> +       return true;
+> +}
+> +
+>  static void dw_hdmi_bridge_mode_set(struct drm_bridge *bridge,
+>                                     const struct drm_display_mode *orig_mode,
+>                                     const struct drm_display_mode *mode)
+> @@ -2883,6 +2896,7 @@ static const struct drm_bridge_funcs dw_hdmi_bridge_funcs = {
+>         .atomic_disable = dw_hdmi_bridge_atomic_disable,
+>         .mode_set = dw_hdmi_bridge_mode_set,
+>         .mode_valid = dw_hdmi_bridge_mode_valid,
+> +       .mode_fixup = dw_hdmi_bridge_mode_fixup,
 
-Suggestions for reasons and fixes are welcome.
+mode_fixup() has been deprecated[1] in favor of atomic_check(), care
+has to be taken when switching to atomic_check() as it has access to
+the full atomic commit.
 
-Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-Co-authored-by: Paul Boddie <paul@boddie.org.uk>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 57 ++++++++++++++++++-----
- 1 file changed, 46 insertions(+), 11 deletions(-)
+Looking at this driver, it's using mode_set as well, which should be fixed.
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-index 61e7a57d7cec1..a5ba0b69baa8c 100644
---- a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-@@ -1,17 +1,24 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
-- * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
-+ * Copyright (C) 2019, 2020, 2021 Paul Boddie <paul@boddie.org.uk>
-  *
-  * Derived from dw_hdmi-imx.c with i.MX portions removed.
-- * Probe and remove operations derived from rcar_dw_hdmi.c.
-  */
- 
-+#include <linux/component.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- 
- #include <drm/bridge/dw_hdmi.h>
- #include <drm/drm_of.h>
-+#include <drm/drm_modeset_helper_vtables.h>
-+#include <drm/drm_simple_kms_helper.h>
-+
-+struct ingenic_dw_hdmi_encoder {
-+	struct drm_encoder encoder;
-+	struct dw_hdmi *hdmi;
-+};
- 
- static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] = {
- 	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2, 0x0000 } } },
-@@ -87,24 +94,52 @@ static const struct of_device_id ingenic_dw_hdmi_dt_ids[] = {
- };
- MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
- 
--static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
-+static int ingenic_dw_hdmi_bind(struct device *dev, struct device *master,
-+				void *data)
- {
--	struct dw_hdmi *hdmi;
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct drm_device *drm = data;
-+	struct drm_encoder *enc;
-+	struct ingenic_dw_hdmi_encoder *hdmi_encoder;
- 
--	hdmi = dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
--	if (IS_ERR(hdmi))
--		return PTR_ERR(hdmi);
-+	hdmi_encoder = drmm_simple_encoder_alloc(drm, struct ingenic_dw_hdmi_encoder,
-+						 encoder, DRM_MODE_ENCODER_TMDS);
-+	if (IS_ERR(hdmi_encoder))
-+		return PTR_ERR(hdmi_encoder);
- 
--	platform_set_drvdata(pdev, hdmi);
-+	enc = &hdmi_encoder->encoder;
-+	drm_encoder_helper_add(enc, NULL);
-+	hdmi_encoder->hdmi = dw_hdmi_bind(pdev, enc, &ingenic_dw_hdmi_plat_data);
-+
-+	if (IS_ERR(hdmi_encoder->hdmi))
-+		return PTR_ERR(hdmi_encoder->hdmi);
-+
-+	dev_set_drvdata(dev, hdmi_encoder->hdmi);
- 
- 	return 0;
- }
- 
--static int ingenic_dw_hdmi_remove(struct platform_device *pdev)
-+static void ingenic_dw_hdmi_unbind(struct device *dev, struct device *master,
-+				   void *data)
-+{
-+	struct dw_hdmi *hdmi = dev_get_drvdata(dev);
-+
-+	dw_hdmi_unbind(hdmi);
-+}
-+
-+static const struct component_ops ingenic_dw_hdmi_ops = {
-+	.bind	= ingenic_dw_hdmi_bind,
-+	.unbind	= ingenic_dw_hdmi_unbind,
-+};
-+
-+static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
- {
--	struct dw_hdmi *hdmi = platform_get_drvdata(pdev);
-+	return component_add(&pdev->dev, &ingenic_dw_hdmi_ops);
-+}
- 
--	dw_hdmi_remove(hdmi);
-+static int ingenic_dw_hdmi_remove(struct platform_device *pdev)
-+{
-+	component_del(&pdev->dev, &ingenic_dw_hdmi_ops);
- 
- 	return 0;
- }
--- 
-2.31.1
+[1] https://lore.kernel.org/dri-devel/20210722062246.2512666-8-sam@ravnborg.org/
 
+>         .detect = dw_hdmi_bridge_detect,
+>         .get_edid = dw_hdmi_bridge_get_edid,
+>  };
+> @@ -3364,6 +3378,8 @@ struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
+>  #ifdef CONFIG_OF
+>         hdmi->bridge.of_node = pdev->dev.of_node;
+>  #endif
+> +       if (plat_data->timings)
+> +               hdmi->bridge.timings = plat_data->timings;
+>
+>         memset(&pdevinfo, 0, sizeof(pdevinfo));
+>         pdevinfo.parent = dev;
+> diff --git a/include/drm/bridge/dw_hdmi.h b/include/drm/bridge/dw_hdmi.h
+> index 6a5716655619b..677137445d534 100644
+> --- a/include/drm/bridge/dw_hdmi.h
+> +++ b/include/drm/bridge/dw_hdmi.h
+> @@ -8,6 +8,7 @@
+>
+>  #include <sound/hdmi-codec.h>
+>
+> +struct drm_bridge;
+>  struct drm_display_info;
+>  struct drm_display_mode;
+>  struct drm_encoder;
+> @@ -140,6 +141,10 @@ struct dw_hdmi_plat_data {
+>         enum drm_mode_status (*mode_valid)(struct dw_hdmi *hdmi, void *data,
+>                                            const struct drm_display_info *info,
+>                                            const struct drm_display_mode *mode);
+> +       bool (*mode_fixup)(struct drm_bridge *bridge,
+> +                          const struct drm_display_mode *mode,
+> +                          struct drm_display_mode *adjusted_mode);
+> +       const struct drm_bridge_timings *timings;
+>
+>         /* Vendor PHY support */
+>         const struct dw_hdmi_phy_ops *phy_ops;
+> --
+> 2.31.1
+>
