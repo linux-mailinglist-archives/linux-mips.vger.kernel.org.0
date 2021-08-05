@@ -2,143 +2,189 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CE43E0F7E
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 09:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518E63E0FA8
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 09:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238768AbhHEHrg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Aug 2021 03:47:36 -0400
-Received: from mail-wm1-f43.google.com ([209.85.128.43]:43544 "EHLO
-        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238826AbhHEHr3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 03:47:29 -0400
-Received: by mail-wm1-f43.google.com with SMTP id l8-20020a05600c1d08b02902b5acf7d8b5so2296589wms.2;
-        Thu, 05 Aug 2021 00:47:14 -0700 (PDT)
+        id S238926AbhHEHvA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Aug 2021 03:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238870AbhHEHuw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 03:50:52 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B77AC06179A
+        for <linux-mips@vger.kernel.org>; Thu,  5 Aug 2021 00:50:37 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id c16so5227340wrp.13
+        for <linux-mips@vger.kernel.org>; Thu, 05 Aug 2021 00:50:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1Os9VBo5ol0/OE/zsUlv+66XdPO6lV3sKgplzYRLLhU=;
+        b=dthuYtFBHhD3kr3ForYIFvZSUVRL+g4AvqqJ5MqApy7GwqLEWJD3FrctTfuA/tYCpx
+         sNlgxyx8sXHQzq89b9u747HAwdEzj71m31DAEjlOG4IqiLXyya660ZghaSD7+gnKMnU7
+         CHSvH2cOEP9AnKaBxJCKZ0NlqS7ZaSFDoptZ9EgPjxRwVWbSl/2PJ56sjS6SUkW+X0O6
+         Ev2dNvflaVoteEN2KzSSdFNpcJpkxuD3jT9ftBEozrIwoGOSjpGgiyC7agZv6GyQQhpF
+         DLkjSoc0Xat8zqIdRl9NoSFJ5NLqQoX9ttPJ8DWoB97sP3VtcZzD/pkBZHXH7KMl1fKB
+         GcCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=I526ijbe8/74kjOA75IwkOyaPcqEXfx0YMdi/ub5h0M=;
-        b=CNUVuwoD+bs9BID+JkSaLIZ2GUCNFulvqOo+Hu9aoGFY3i2YrDFagG5Bftny8vQ+I0
-         TZyQfhn/+RnJt+5wbKum24h8ePCDokT8c8zQ6aXD1T3GnHGGK8vocsLWhvqp6PHC8L6Z
-         72Ws3qvrBkFp9B2PYh0e4AtBRUXDyTJPAWQUXNPX/PiffiiKewZXgOOuX6rVPsCaERQU
-         GpB+i6a+nz+dZOQTJ+dAQ6D1Majpkzqfw1+biIj7llVZk5hBuakG8MVfRQff6Vw5jg4F
-         ZttSaDJLBeoYYUVvR0FdcJs8n5C6swpOBBxRyrlQII6zMJWoDx4ikRRyoAaA2xuK0r1q
-         b83g==
-X-Gm-Message-State: AOAM531WbBYnjSR7/aw9jd7zADyRepkD//levFYY+JEvWPXy0adItB2i
-        jnhWmYJh01eRWNsxD396FI8=
-X-Google-Smtp-Source: ABdhPJwvOwnv09InkfauY/5dCjERsBYo1U1VQMOeA1IMI5PuQsUW4j8b79rm41Lbc7bMwllLsM9EwQ==
-X-Received: by 2002:a05:600c:290:: with SMTP id 16mr13385731wmk.71.1628149634054;
-        Thu, 05 Aug 2021 00:47:14 -0700 (PDT)
-Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
-        by smtp.gmail.com with ESMTPSA id t1sm4985968wrm.42.2021.08.05.00.47.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Aug 2021 00:47:13 -0700 (PDT)
-Subject: Re: [PATCH printk v1 10/10] serial: 8250: implement write_atomic
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        bh=1Os9VBo5ol0/OE/zsUlv+66XdPO6lV3sKgplzYRLLhU=;
+        b=q8PB7EQKPQ6cuZuwijS85AEv3plNkE84+scJWmUNdjJCi7izTPchAWx4cHWHh0iwlY
+         3Ziiwh0OXFiP4qjO7F3zT18oP+Xead9tvaecweHzjeRp5idrQFM38OsCjDSCOp9uGmI9
+         i6vUfFvq+1ktix0OFQb6M6SI2cX03vk6fxrUVZ6nTgRZ3ALonf5n+IyiB6btGpY2nMPj
+         5bqXYSj930i4anqUfKxLOIskIyI5nqemSnk/xKzNjTdwlK0Dqb08TKxpzNMBbjMx08H2
+         x2S487w7OFqRc74DjC2hfGCloB0sjztLLIPvLwH66Miy2p1jBbFOBeZMeTs857rbOTr8
+         rWQg==
+X-Gm-Message-State: AOAM5321Hvpkf9tGEtnkZs+FjDryruQqhuNHFytTWmzPRZyE6mVXJ0mD
+        q6y9JIoiD0emCZtSHXzeaDdsBQ==
+X-Google-Smtp-Source: ABdhPJw8HrMNDFxDvHEKsrTuUr73DV6B7ZEHdGYK/OgbJyv26WO2sghDmY9iYMdlRWWqluqCuDH5CA==
+X-Received: by 2002:adf:ed4f:: with SMTP id u15mr3439300wro.423.1628149836117;
+        Thu, 05 Aug 2021 00:50:36 -0700 (PDT)
+Received: from localhost.localdomain ([109.180.115.228])
+        by smtp.gmail.com with ESMTPSA id h16sm5154491wre.52.2021.08.05.00.50.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Aug 2021 00:50:35 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Brian Cain <bcain@codeaurora.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Chris Zankel <chris@zankel.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jeff Dike <jdike@addtoit.com>, John Crispin <john@phrozen.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>, openrisc@lists.librecores.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rich Felker <dalias@libc.org>, sparclinux@vger.kernel.org,
+        Stafford Horne <shorne@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        kuldip dwivedi <kuldip.dwivedi@puresoftware.com>,
-        Wang Qing <wangqing@vivo.com>, Andrij Abyzov <aabyzov@slb.com>,
-        Johan Hovold <johan@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Claire Chang <tientzu@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Al Cooper <alcooperx@gmail.com>, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20210803131301.5588-1-john.ogness@linutronix.de>
- <20210803131301.5588-11-john.ogness@linutronix.de>
- <YQlNtr7TNAWtB8XF@smile.fi.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Message-ID: <931ebc1a-3cc9-677c-44c3-7cbd645eb4f4@kernel.org>
-Date:   Thu, 5 Aug 2021 09:47:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        uclinux-h8-devel@lists.sourceforge.jp,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: [PATCH 0/3] power: reset: Convert Power-Off driver to tristate
+Date:   Thu,  5 Aug 2021 08:50:29 +0100
+Message-Id: <20210805075032.723037-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.32.0.605.g8dce9f2422-goog
 MIME-Version: 1.0
-In-Reply-To: <YQlNtr7TNAWtB8XF@smile.fi.intel.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 03. 08. 21, 16:07, Andy Shevchenko wrote:
-> On Tue, Aug 03, 2021 at 03:19:01PM +0206, John Ogness wrote:
->> Implement an NMI-safe write_atomic() console function in order to
->> support synchronous console printing.
->>
->> Since interrupts need to be disabled during transmit, all usage of
->> the IER register is wrapped with access functions that use the
->> printk cpulock to synchronize register access while tracking the
->> state of the interrupts. This is necessary because write_atomic()
->> can be called from an NMI context that has preempted write_atomic().
-> 
-> ...
-> 
->> +static inline void serial8250_set_IER(struct uart_8250_port *up,
->> +				      unsigned char ier)
->> +{
->> +	struct uart_port *port = &up->port;
->> +	unsigned long flags;
->> +	bool is_console;
-> 
->> +	is_console = uart_console(port);
->> +
->> +	if (is_console)
->> +		console_atomic_cpu_lock(flags);
->> +
->> +	serial_out(up, UART_IER, ier);
->> +
->> +	if (is_console)
->> +		console_atomic_cpu_unlock(flags);
-> 
-> I would rewrite it as
-> 
-> 	if (uart_console()) {
-> 		console_atomic_cpu_lock(flags);
-> 		serial_out(up, UART_IER, ier);
-> 		console_atomic_cpu_unlock(flags);
-> 	} else {
-> 		serial_out(up, UART_IER, ier);
-> 	}
-> 
-> No additional variable, easier to get the algorithm on the first glance, less
-> error prone.
+Provide support to compile the Power-Off driver as a module.
 
-Yes, the original is terrible.
+Elliot Berman (2):
+  reboot: Export reboot_mode
+  power: reset: Enable tristate on restart power-off driver
 
-Another option:
+Lee Jones (1):
+  arch: Export machine_restart() instances so they can be called from
+    modules
 
-bool locked = console_atomic_cpu_lock(flags, uart_console());
-serial_out(up, UART_IER, ier);
-console_atomic_cpu_unlock(flags, locked);
+ arch/arc/kernel/reset.c            | 1 +
+ arch/arm/kernel/reboot.c           | 1 +
+ arch/arm64/kernel/process.c        | 1 +
+ arch/csky/kernel/power.c           | 1 +
+ arch/h8300/kernel/process.c        | 1 +
+ arch/hexagon/kernel/reset.c        | 1 +
+ arch/m68k/kernel/process.c         | 1 +
+ arch/microblaze/kernel/reset.c     | 1 +
+ arch/mips/kernel/reset.c           | 1 +
+ arch/mips/lantiq/falcon/reset.c    | 1 +
+ arch/mips/sgi-ip27/ip27-reset.c    | 1 +
+ arch/nios2/kernel/process.c        | 1 +
+ arch/openrisc/kernel/process.c     | 1 +
+ arch/parisc/kernel/process.c       | 1 +
+ arch/powerpc/kernel/setup-common.c | 1 +
+ arch/riscv/kernel/reset.c          | 1 +
+ arch/s390/kernel/setup.c           | 1 +
+ arch/sh/kernel/reboot.c            | 1 +
+ arch/sparc/kernel/process_32.c     | 1 +
+ arch/sparc/kernel/reboot.c         | 1 +
+ arch/um/kernel/reboot.c            | 1 +
+ arch/x86/kernel/reboot.c           | 1 +
+ arch/xtensa/kernel/setup.c         | 1 +
+ drivers/power/reset/Kconfig        | 2 +-
+ kernel/reboot.c                    | 2 ++
+ 25 files changed, 26 insertions(+), 1 deletion(-)
 
-
-Which makes console_atomic_cpu_lock to lock only if second parameter is 
-true and return its value too.
-
-BTW I actually don't know what console_atomic_cpu_lock does to think 
-about it more as I was not CCed, and neither lore sees the other patches:
-https://lore.kernel.org/linux-mips/20210803131301.5588-1-john.ogness@linutronix.de/
-
-thanks,
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Brian Cain <bcain@codeaurora.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: John Crispin <john@phrozen.org>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Ley Foon Tan <ley.foon.tan@intel.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-um@lists.infradead.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Michal Simek <monstr@monstr.eu>
+Cc: openrisc@lists.librecores.org
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Rich Felker <dalias@libc.org>
+Cc: sparclinux@vger.kernel.org
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: uclinux-h8-devel@lists.sourceforge.jp
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
 -- 
-js
-suse labs
+2.32.0.605.g8dce9f2422-goog
+
