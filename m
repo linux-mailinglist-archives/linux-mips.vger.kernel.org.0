@@ -2,179 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0BD3E0BE4
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 02:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CE43E0F7E
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 09:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbhHEA4F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Aug 2021 20:56:05 -0400
-Received: from mga09.intel.com ([134.134.136.24]:27469 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237465AbhHEAy6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 4 Aug 2021 20:54:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="214027500"
-X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="214027500"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:53 -0700
-X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="437617307"
-Received: from mjkendri-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.254.17.117])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:51 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Michael S . Tsirkin" <mst@redhat.com>
-Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH v4 15/15] x86/tdx: Add cmdline option to force use of ioremap_shared
-Date:   Wed,  4 Aug 2021 17:52:18 -0700
-Message-Id: <20210805005218.2912076-16-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        id S238768AbhHEHrg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Aug 2021 03:47:36 -0400
+Received: from mail-wm1-f43.google.com ([209.85.128.43]:43544 "EHLO
+        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238826AbhHEHr3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 03:47:29 -0400
+Received: by mail-wm1-f43.google.com with SMTP id l8-20020a05600c1d08b02902b5acf7d8b5so2296589wms.2;
+        Thu, 05 Aug 2021 00:47:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=I526ijbe8/74kjOA75IwkOyaPcqEXfx0YMdi/ub5h0M=;
+        b=CNUVuwoD+bs9BID+JkSaLIZ2GUCNFulvqOo+Hu9aoGFY3i2YrDFagG5Bftny8vQ+I0
+         TZyQfhn/+RnJt+5wbKum24h8ePCDokT8c8zQ6aXD1T3GnHGGK8vocsLWhvqp6PHC8L6Z
+         72Ws3qvrBkFp9B2PYh0e4AtBRUXDyTJPAWQUXNPX/PiffiiKewZXgOOuX6rVPsCaERQU
+         GpB+i6a+nz+dZOQTJ+dAQ6D1Majpkzqfw1+biIj7llVZk5hBuakG8MVfRQff6Vw5jg4F
+         ZttSaDJLBeoYYUVvR0FdcJs8n5C6swpOBBxRyrlQII6zMJWoDx4ikRRyoAaA2xuK0r1q
+         b83g==
+X-Gm-Message-State: AOAM531WbBYnjSR7/aw9jd7zADyRepkD//levFYY+JEvWPXy0adItB2i
+        jnhWmYJh01eRWNsxD396FI8=
+X-Google-Smtp-Source: ABdhPJwvOwnv09InkfauY/5dCjERsBYo1U1VQMOeA1IMI5PuQsUW4j8b79rm41Lbc7bMwllLsM9EwQ==
+X-Received: by 2002:a05:600c:290:: with SMTP id 16mr13385731wmk.71.1628149634054;
+        Thu, 05 Aug 2021 00:47:14 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id t1sm4985968wrm.42.2021.08.05.00.47.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Aug 2021 00:47:13 -0700 (PDT)
+Subject: Re: [PATCH printk v1 10/10] serial: 8250: implement write_atomic
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        kuldip dwivedi <kuldip.dwivedi@puresoftware.com>,
+        Wang Qing <wangqing@vivo.com>, Andrij Abyzov <aabyzov@slb.com>,
+        Johan Hovold <johan@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Claire Chang <tientzu@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Al Cooper <alcooperx@gmail.com>, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20210803131301.5588-1-john.ogness@linutronix.de>
+ <20210803131301.5588-11-john.ogness@linutronix.de>
+ <YQlNtr7TNAWtB8XF@smile.fi.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Message-ID: <931ebc1a-3cc9-677c-44c3-7cbd645eb4f4@kernel.org>
+Date:   Thu, 5 Aug 2021 09:47:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YQlNtr7TNAWtB8XF@smile.fi.intel.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add a command line option to force all the enabled drivers to use
-shared memory mappings. This will be useful when enabling new drivers
-in the protected guest without making all the required changes to use
-shared mappings in it.
+On 03. 08. 21, 16:07, Andy Shevchenko wrote:
+> On Tue, Aug 03, 2021 at 03:19:01PM +0206, John Ogness wrote:
+>> Implement an NMI-safe write_atomic() console function in order to
+>> support synchronous console printing.
+>>
+>> Since interrupts need to be disabled during transmit, all usage of
+>> the IER register is wrapped with access functions that use the
+>> printk cpulock to synchronize register access while tracking the
+>> state of the interrupts. This is necessary because write_atomic()
+>> can be called from an NMI context that has preempted write_atomic().
+> 
+> ...
+> 
+>> +static inline void serial8250_set_IER(struct uart_8250_port *up,
+>> +				      unsigned char ier)
+>> +{
+>> +	struct uart_port *port = &up->port;
+>> +	unsigned long flags;
+>> +	bool is_console;
+> 
+>> +	is_console = uart_console(port);
+>> +
+>> +	if (is_console)
+>> +		console_atomic_cpu_lock(flags);
+>> +
+>> +	serial_out(up, UART_IER, ier);
+>> +
+>> +	if (is_console)
+>> +		console_atomic_cpu_unlock(flags);
+> 
+> I would rewrite it as
+> 
+> 	if (uart_console()) {
+> 		console_atomic_cpu_lock(flags);
+> 		serial_out(up, UART_IER, ier);
+> 		console_atomic_cpu_unlock(flags);
+> 	} else {
+> 		serial_out(up, UART_IER, ier);
+> 	}
+> 
+> No additional variable, easier to get the algorithm on the first glance, less
+> error prone.
 
-Note that this might also allow other non explicitly enabled drivers
-to interact with the host, which could cause other security risks.
+Yes, the original is terrible.
 
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
- .../admin-guide/kernel-parameters.rst         |  1 +
- .../admin-guide/kernel-parameters.txt         | 12 ++++++++++++
- arch/x86/include/asm/io.h                     |  2 ++
- arch/x86/mm/ioremap.c                         | 19 ++++++++++++++++++-
- 4 files changed, 33 insertions(+), 1 deletion(-)
+Another option:
 
-diff --git a/Documentation/admin-guide/kernel-parameters.rst b/Documentation/admin-guide/kernel-parameters.rst
-index 01ba293a2d70..bdf3896a100c 100644
---- a/Documentation/admin-guide/kernel-parameters.rst
-+++ b/Documentation/admin-guide/kernel-parameters.rst
-@@ -147,6 +147,7 @@ parameter is applicable::
- 	PCI	PCI bus support is enabled.
- 	PCIE	PCI Express support is enabled.
- 	PCMCIA	The PCMCIA subsystem is enabled.
-+	PG	Protected guest is enabled.
- 	PNP	Plug & Play support is enabled.
- 	PPC	PowerPC architecture is enabled.
- 	PPT	Parallel port support is enabled.
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index bdb22006f713..ba390be62f89 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2062,6 +2062,18 @@
- 			1 - Bypass the IOMMU for DMA.
- 			unset - Use value of CONFIG_IOMMU_DEFAULT_PASSTHROUGH.
- 
-+	ioremap_force_shared= [X86_64, PG]
-+			Force the kernel to use shared memory mappings which do
-+			not use ioremap_shared/pcimap_shared to opt-in to shared
-+			mappings with the host. This feature is mainly used by
-+			a protected guest when enabling new drivers without
-+			proper shared memory related changes. Please note that
-+			this option might also allow other non explicitly enabled
-+			drivers to interact with the host in protected guest,
-+			which could cause other security risks. This option will
-+			also cause BIOS data structures to be shared with the host,
-+			which might open security holes.
-+
- 	io7=		[HW] IO7 for Marvel-based Alpha systems
- 			See comment before marvel_specify_io7 in
- 			arch/alpha/kernel/core_marvel.c.
-diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
-index 51c2c45456bf..744f72835a30 100644
---- a/arch/x86/include/asm/io.h
-+++ b/arch/x86/include/asm/io.h
-@@ -413,6 +413,8 @@ extern bool arch_memremap_can_ram_remap(resource_size_t offset,
- extern bool phys_mem_access_encrypted(unsigned long phys_addr,
- 				      unsigned long size);
- 
-+extern bool ioremap_force_shared;
-+
- /**
-  * iosubmit_cmds512 - copy data to single MMIO location, in 512-bit units
-  * @dst: destination, in MMIO space (must be 512-bit aligned)
-diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
-index 74260aaa494b..7576e886fad8 100644
---- a/arch/x86/mm/ioremap.c
-+++ b/arch/x86/mm/ioremap.c
-@@ -28,6 +28,7 @@
- #include <asm/memtype.h>
- #include <asm/setup.h>
- #include <asm/tdx.h>
-+#include <asm/cmdline.h>
- 
- #include "physaddr.h"
- 
-@@ -162,6 +163,17 @@ static void __ioremap_check_mem(resource_size_t addr, unsigned long size,
- 	__ioremap_check_other(addr, desc);
- }
- 
-+/*
-+ * Normally only drivers that are hardened for use in confidential guests
-+ * force shared mappings. But if device filtering is disabled other
-+ * devices can be loaded, and these need shared mappings too. This
-+ * variable is set to true if these filters are disabled.
-+ *
-+ * Note this has some side effects, e.g. various BIOS tables
-+ * get shared too which is risky.
-+ */
-+bool ioremap_force_shared;
-+
- /*
-  * Remap an arbitrary physical address space into the kernel virtual
-  * address space. It transparently creates kernel huge I/O mapping when
-@@ -249,7 +261,7 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
- 	prot = PAGE_KERNEL_IO;
- 	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
- 		prot = pgprot_encrypted(prot);
--	else if (shared)
-+	else if (shared || ioremap_force_shared)
- 		prot = pgprot_protected_guest(prot);
- 
- 	switch (pcm) {
-@@ -847,6 +859,11 @@ void __init early_ioremap_init(void)
- 	WARN_ON((fix_to_virt(0) + PAGE_SIZE) & ((1 << PMD_SHIFT) - 1));
- #endif
- 
-+	/* Parse cmdline params for ioremap_force_shared */
-+	if (cmdline_find_option_bool(boot_command_line,
-+				     "ioremap_force_shared"))
-+		ioremap_force_shared = 1;
-+
- 	early_ioremap_setup();
- 
- 	pmd = early_ioremap_pmd(fix_to_virt(FIX_BTMAP_BEGIN));
+bool locked = console_atomic_cpu_lock(flags, uart_console());
+serial_out(up, UART_IER, ier);
+console_atomic_cpu_unlock(flags, locked);
+
+
+Which makes console_atomic_cpu_lock to lock only if second parameter is 
+true and return its value too.
+
+BTW I actually don't know what console_atomic_cpu_lock does to think 
+about it more as I was not CCed, and neither lore sees the other patches:
+https://lore.kernel.org/linux-mips/20210803131301.5588-1-john.ogness@linutronix.de/
+
+thanks,
 -- 
-2.25.1
-
+js
+suse labs
