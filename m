@@ -2,118 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3FA3E1964
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 18:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125813E19E2
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 19:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbhHEQXQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Aug 2021 12:23:16 -0400
-Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.104]:9440 "EHLO
-        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbhHEQXQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 12:23:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628180562;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=1Dt5UDwqFkl+TcejJTVjL9OsBeIhp1y2QdfLef1WZwk=;
-    b=K0+bYSh4/X2Kjca0TE+3SA86Kv4CLrnkiQCEcec2q9Jo/3xOAwKJvhCKnZpYl4ooXM
-    conQltKDH9/f4lKj8X3DDDfDmqHdL3/yFMqjYBZPJkcN8CFanTpkW/Yfr8bA6w6aYT9w
-    x6CdAVCZuUduyD8YlJkFPpW/Zx9Dmv6DVPMP3nEYTKdvwaQX6iunvxv2Ad3oSXLvimT9
-    fYGrg43IlpyuYuBMB4bezLW39Np9ky4k9Sok7PKDUzsUz16Fh8qmgiDWKBsJUG667CuN
-    KI1TfgOQD31eg5M1u9NxBquJ2NTX3bD2p+dxAkSYYcaoh066aokcpZNHkw78n1yWJ5O2
-    1sbQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4rovw=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.31.0 DYNA|AUTH)
-    with ESMTPSA id Q02727x75GMf7Yg
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 5 Aug 2021 18:22:41 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v2 8/8] [RFC] drm/ingenic: convert to component framework
- for jz4780 hdmi
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <8XJDXQ.X70C5WOD0QB7@crapouillou.net>
-Date:   Thu, 5 Aug 2021 18:22:40 +0200
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Paul Boddie <paul@boddie.org.uk>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <15453A89-17E2-4B8B-A131-9B77C42DC1F4@goldelico.com>
-References: <cover.1628172477.git.hns@goldelico.com>
- <77554dd2612f418f6ab74a8be06c82b71410e0e6.1628172477.git.hns@goldelico.com>
- <YQv+DC5yTEGlJYuD@pendragon.ideasonboard.com>
- <BDF501D1-BA1D-4866-8EAF-3862F6CEC6F4@goldelico.com>
- <8XJDXQ.X70C5WOD0QB7@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        id S235289AbhHERCz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Aug 2021 13:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235219AbhHERCy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 13:02:54 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A17BC0613D5
+        for <linux-mips@vger.kernel.org>; Thu,  5 Aug 2021 10:02:39 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id g13so12405666lfj.12
+        for <linux-mips@vger.kernel.org>; Thu, 05 Aug 2021 10:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=iO3iUPhlFRB+uW9z5SZwNaeJSIsWMT9aIwajKIN1Hug=;
+        b=fwuVwcRGj1t7o0djle32NfY3yrLhJAl7N5UBdttp7uNarmBA2ssIxaNM6F0FhTFQc4
+         CPPiRgV0am6vFTGKIfRdZjpdc5621n7MGYGNSF/jrFPFoOZvgjvvHg/DrA+ELDJr/Prt
+         FcNxNK7vmiI+vFWqCtUTi+Yi4o+YUzFsIDjj48o3RHXw6rOAnrMbtHBlv0x7UbyYKMly
+         +nBOQse6zlIkzcIabX8ZqlWAM7MBE7vMPFmWTxspWD2tQ+/CMm2ZicwJ9yH6ujTtd1Lj
+         rIiz9pvZNG5DDrSig2ujCEomNv/Vt/SqD5EP7H03FxuNPgSWmJvBD80NA/w22ArX0zF5
+         I6+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=iO3iUPhlFRB+uW9z5SZwNaeJSIsWMT9aIwajKIN1Hug=;
+        b=adE8T3xXIKZX+YCSL6OCg/XMbZejz5oA2fUrZ32lGz/VlRSeJsy53I1ZidNo4InIo9
+         PFUE85L8TZ3/beqvvV0ov0Bw3E7ooXQfn9kOuLnJQ+vppfjF7wu+HdkpYE7LHFd0Sels
+         YsUknxeZfb4d8XHeDk7F1yZVgNWpSUccc3tNiVdfgCvb1ZnlfwCas32e8cvIcYjuZHrU
+         6ez8FPLnvVxt0+RwgLLAJsQn+Wk3UmQLLwKu9BcvKshOUy2kqrGg6THWf+Qmu4T5eUsa
+         v3huIoOiXPIBttAzuh679h3dFW8jc2L63YRLL9WT3/M2zS6ks6yZ4Uljmyxtz6BThJHP
+         2RPw==
+X-Gm-Message-State: AOAM530cQ07OI+B+IvzJoqnQur814AEDLrA2E+20blmm7mipwv2YMV7Q
+        9QcyZMU4MHyzYT534C5+YG4u4/MLyDc2xzvJ674=
+X-Google-Smtp-Source: ABdhPJwB5SGR3JpA2Q065mGTiNAh4uNngHlia6OZjilDE4Ouo5jFdLZexBymJIr+WBMiyE1iGLwyo2cAW96TNosk7TU=
+X-Received: by 2002:ac2:4152:: with SMTP id c18mr4502703lfi.645.1628182957354;
+ Thu, 05 Aug 2021 10:02:37 -0700 (PDT)
+MIME-Version: 1.0
+Sender: pavelbirukou105@gmail.com
+Received: by 2002:a2e:9e0c:0:0:0:0:0 with HTTP; Thu, 5 Aug 2021 10:02:36 -0700 (PDT)
+From:   Alexandra Kelly <alexandrakelly779@gmail.com>
+Date:   Thu, 5 Aug 2021 18:02:36 +0100
+X-Google-Sender-Auth: rGTmEIcaoT2Mh21xvYD8iAVfryc
+Message-ID: <CAJHpm0z3qpFdCWkQECajnOZpUZ9qHbbY6y0XcqBG7C-iZXfuOw@mail.gmail.com>
+Subject: Urgent Response
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+Dear friend,
 
-> Am 05.08.2021 um 18:17 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Nikolaus and Laurent,
->=20
-> Le jeu., ao=C3=BBt 5 2021 at 18:07:20 +0200, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->> Hi Laurent,
->>> Am 05.08.2021 um 17:04 schrieb Laurent Pinchart =
-<laurent.pinchart@ideasonboard.com>:
->>> Hi Nikolaus,
->>> Thank you for the patch.
->>> On Thu, Aug 05, 2021 at 04:07:57PM +0200, H. Nikolaus Schaller =
-wrote:
->>>> This patch attempts to convert the ingenic-dw-hdmi driver
->>>> into a version that uses the component framework.
->>> Why ? What problem would this solve ?
->> Well, it was suggested in a v1 we did post several months ago. I have =
-not
->> looked up by whom and do not exactly remember the reasons.
->> We now simply thought that it is common style since dome dw-hdmi =
-drivers
->> make use of it but some others don't. And we got it working without.
->> If it is not needed/requested by anyone, we can drop it from v3 (or =
-add later).
->=20
-> I don't remember exactly TBH - the only reason to use a component is =
-to have access to the main driver's "drm_device" structure. The IPU =
-needs it for instance, to register planes; but I don't think this HDMI =
-driver needs it as it registers a bridge.
->=20
-> Cheers,
-> -Paul
 
-Ok, fine! We'll drop it and don't waste time.
+I am contacting you independently of my investigation in
+my bank and no one is informed of this communication. I need your
+urgent assistance in transferring the sum of $5.3 million dollars to
+your private account,that belongs to one of our foreign customers who
+died a longtime with his supposed NEXT OF KIN since July 22, 2003. The
+money has been here in our Bank lying dormant for years now without
+anybody coming to claim it.
 
-BR and thanks,
-NIkolaus
-
+I want to release the money to you as the relative to our deceased
+customer , the Banking laws here does not allow such money to stay
+more than 18 years, because the money will be recalled to the Bank
+treasury account as unclaimed fund. I am ready to share with you 40%
+for you and 60% will be kept for me, by indicating your interest i
+will send you the full details on how the business will be executed, i
+will be waiting for your urgent response.
