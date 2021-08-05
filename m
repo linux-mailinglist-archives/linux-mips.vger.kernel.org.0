@@ -2,93 +2,187 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC483E0B0D
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 02:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D693E0B68
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 02:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbhHEACd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 4 Aug 2021 20:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbhHEACc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 4 Aug 2021 20:02:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB62AC0613D5;
-        Wed,  4 Aug 2021 17:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=M9jCRHqmiUocu+jG8+2QqgsQS7cUPzEMoGSoEbKbCCU=; b=gSDRn8aFjSBuefsUbMv1fSFLsS
-        3NNuCezwlMvwQl6Lyhn4AcYDgJtBPkjq9x/iIlHajsBOAc+Iza8sO+ubqS1xUPgzqYDdD5VALGHJ6
-        2r5ao6bhnwGOVSUcf/EkVqnS3JdHtESafnChl58jJ+cwHRIEBGcj5WFQDjVQ2CPchJo7NzfWzZ476
-        lw5+4LACdHwxSg+Vda/AMWQ0UB7WT1kQikCgiYgSzk6/eM3ILC8oxyilv1SEb6icKbotW6uzsnjHF
-        CKnn3+uq2Ph9Sn227yUtXlV53VZYE7mAicXNvsCYBeNjf0h3klxw6piO/xjUraWUM6JDEk4YGyFGO
-        c+YAR/FA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mBQq1-007iI6-0g; Thu, 05 Aug 2021 00:02:17 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        id S234536AbhHEAxf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 4 Aug 2021 20:53:35 -0400
+Received: from mga02.intel.com ([134.134.136.20]:12119 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231355AbhHEAxf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 4 Aug 2021 20:53:35 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10066"; a="201215413"
+X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
+   d="scan'208";a="201215413"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:20 -0700
+X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
+   d="scan'208";a="437617163"
+Received: from mjkendri-mobl.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.254.17.117])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2021 17:53:17 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: loongson2ef: don't build serial.o unconditionally
-Date:   Wed,  4 Aug 2021 17:02:16 -0700
-Message-Id: <20210805000216.31833-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        James E J Bottomley <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Michael S . Tsirkin" <mst@redhat.com>
+Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH v4 00/15] Add TDX Guest Support (shared-mm support)
+Date:   Wed,  4 Aug 2021 17:52:03 -0700
+Message-Id: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-LOONGSON_UART_BASE depends on EARLY_PRINTK || SERIAL_8250, but when
-neither of these Kconfig symbols is set, the kernel build has errors:
+Hi All,
 
-../arch/mips/loongson2ef/common/serial.c: In function 'serial_init':
-../arch/mips/loongson2ef/common/serial.c:66:25: error: 'loongson_uart_base' undeclared (first use in this function)
-   66 |                         loongson_uart_base;
-../arch/mips/loongson2ef/common/serial.c:66:25: note: each undeclared identifier is reported only once for each function it appears in
-../arch/mips/loongson2ef/common/serial.c:68:41: error: '_loongson_uart_base' undeclared (first use in this function)
-   68 |                         (void __iomem *)_loongson_uart_base;
+Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
+hosts and some physical attacks. Since VMM is untrusted entity, it does
+not allow VMM to access guest private memory. Any memory that is required
+for communication with VMM must be shared explicitly. This series adds
+support to securely share guest memory with VMM when it is required by
+guest.
 
-Fix this by building serial.o only when one (or both) of these
-Kconfig symbols is enabled.
+Originally TDX did automatic sharing of every ioremap. But it was found that
+this ends up with a lot of memory shared that is supposed to be private, for
+example ACPI tables. Also in general since only a few drivers are expected
+to be used it's safer to mark them explicitly (for virtio it actually only
+needs two places). This gives the advantage of automatically preventing
+other drivers from doing MMIO, which can happen in some cases even with
+the device filter. There is still a command line option to override this option,
+which allows to use all drivers.
 
-Tested with:
-	(a) EARLY_PRINTK=y, SERIAL_8250 not set;
-	(b) EARLY_PRINTK=y, SERIAL_8250=y;
-	(c) EARLY_PRINTK=y, SERIAL_8250=m.
-	(d) EARLY_PRINTK not set, SERIAL_8250=y;
-	(e) EARLY_PRINTK not set, SERIAL_8250=m;
-	(f) EARLY_PRINTK not set, SERIAL_8250 not set.
+This series is the continuation of the patch series titled "Add TDX Guest
+Support (Initial support)", "Add TDX Guest Support (#VE handler support)"
+and "Add TDX Guest Support (boot fixes)" which added initial support,
+ #VE handler support and boot fixes for TDX guests. You  can find the
+related patchsets in the following links.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
----
- arch/mips/loongson2ef/common/Makefile |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+[set 1, v5] - https://lore.kernel.org/patchwork/project/lkml/list/?series=510805
+[set 2, v4] - https://lore.kernel.org/patchwork/project/lkml/list/?series=510814
+[set 3, v4] - https://lore.kernel.org/patchwork/project/lkml/list/?series=510816
 
---- linext-20210803.orig/arch/mips/loongson2ef/common/Makefile
-+++ linext-20210803/arch/mips/loongson2ef/common/Makefile
-@@ -4,12 +4,14 @@
- #
- 
- obj-y += setup.o init.o env.o time.o reset.o irq.o \
--    bonito-irq.o mem.o machtype.o platform.o serial.o
-+    bonito-irq.o mem.o machtype.o platform.o
- obj-$(CONFIG_PCI) += pci.o
- 
- #
- # Serial port support
- #
-+obj-$(CONFIG_LOONGSON_UART_BASE) += serial.o
-+obj-$(CONFIG_EARLY_PRINTK) += serial.o
- obj-$(CONFIG_LOONGSON_UART_BASE) += uart_base.o
- obj-$(CONFIG_LOONGSON_MC146818) += rtc.o
- 
+Also please note that this series alone is not necessarily fully
+functional. You need to apply all the above 3 patch series to get
+a fully functional TDX guest.
+
+You can find TDX related documents in the following link.
+
+https://software.intel.com/content/www/br/pt/develop/articles/intel-trust-domain-extensions.html
+
+Also, ioremap related changes in mips, parisc, alpha, sparch archs' are
+only compile tested, and hence need help from the community users of these
+archs' to make sure that it does not break any functionality.
+
+In this patch series, following patches are in PCI domain and are
+meant for the PCI domain reviewers.
+
+  pci: Consolidate pci_iomap* and pci_iomap*wc
+  pci: Add pci_iomap_shared{,_range}
+  pci: Mark MSI data shared
+
+Patch titled "asm/io.h: Add ioremap_shared fallback" adds generic
+and arch specific ioremap_shared headers and are meant to be reviewed
+by linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+sparclinux@vger.kernel.org.
+
+Similarly patch titled "virtio: Use shared mappings for virtio
+PCI devices" adds ioremap_shared() support for virtio drivers
+and are meant to be reviewed by virtio driver maintainers.
+
+I have CCed this patch series to all the related domain maintainers
+and open lists. If you prefer to get only patches specific to your
+domain, please let me know. I will fix this in next submission.
+
+Changes since v3:
+ * Rebased on top of Tom Lendacky's protected guest
+   changes (https://lore.kernel.org/patchwork/cover/1468760/)
+ * Added new API to share io-reamapped memory selectively
+   (using ioremap_shared())
+ * Added new wrapper (pci_iomap_shared_range()) for PCI IO
+   remap shared mappings use case.
+
+Changes since v2:
+ * Rebased on top of v5.14-rc1.
+ * No functional changes.
+
+Andi Kleen (6):
+  pci: Consolidate pci_iomap* and pci_iomap*wc
+  asm/io.h: Add ioremap_shared fallback
+  pci: Add pci_iomap_shared{,_range}
+  pci: Mark MSI data shared
+  virtio: Use shared mappings for virtio PCI devices
+  x86/tdx: Implement ioremap_shared for x86
+
+Isaku Yamahata (1):
+  x86/tdx: ioapic: Add shared bit for IOAPIC base address
+
+Kirill A. Shutemov (6):
+  x86/mm: Move force_dma_unencrypted() to common code
+  x86/tdx: Exclude Shared bit from physical_mask
+  x86/tdx: Make pages shared in ioremap()
+  x86/tdx: Add helper to do MapGPA hypercall
+  x86/tdx: Make DMA pages shared
+  x86/kvm: Use bounce buffers for TD guest
+
+Kuppuswamy Sathyanarayanan (2):
+  x86/tdx: Enable shared memory protected guest flags for TDX guest
+  x86/tdx: Add cmdline option to force use of ioremap_shared
+
+ .../admin-guide/kernel-parameters.rst         |   1 +
+ .../admin-guide/kernel-parameters.txt         |  12 ++
+ arch/alpha/include/asm/io.h                   |   1 +
+ arch/mips/include/asm/io.h                    |   1 +
+ arch/parisc/include/asm/io.h                  |   1 +
+ arch/sparc/include/asm/io_64.h                |   1 +
+ arch/x86/Kconfig                              |   9 +-
+ arch/x86/include/asm/io.h                     |   5 +
+ arch/x86/include/asm/mem_encrypt_common.h     |  20 +++
+ arch/x86/include/asm/pgtable.h                |   5 +
+ arch/x86/include/asm/tdx.h                    |  22 +++
+ arch/x86/kernel/apic/io_apic.c                |  18 ++-
+ arch/x86/kernel/tdx.c                         |  64 +++++++++
+ arch/x86/mm/Makefile                          |   2 +
+ arch/x86/mm/ioremap.c                         |  64 +++++++--
+ arch/x86/mm/mem_encrypt.c                     |   8 +-
+ arch/x86/mm/mem_encrypt_common.c              |  38 ++++++
+ arch/x86/mm/pat/set_memory.c                  |  45 ++++++-
+ drivers/pci/msi.c                             |   2 +-
+ drivers/virtio/virtio_pci_modern_dev.c        |   2 +-
+ include/asm-generic/io.h                      |   4 +
+ include/asm-generic/pci_iomap.h               |   6 +
+ include/linux/protected_guest.h               |   1 +
+ lib/pci_iomap.c                               | 125 +++++++++++++-----
+ 24 files changed, 393 insertions(+), 64 deletions(-)
+ create mode 100644 arch/x86/include/asm/mem_encrypt_common.h
+ create mode 100644 arch/x86/mm/mem_encrypt_common.c
+
+-- 
+2.25.1
+
