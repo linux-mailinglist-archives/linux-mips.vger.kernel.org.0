@@ -2,44 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D20BF3E172D
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 16:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44F43E177F
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 17:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241283AbhHEOpm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Aug 2021 10:45:42 -0400
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.120]:16053 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242043AbhHEOpe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 10:45:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628174703;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=CwTGY3tyiTggufhRZZc5PzbzDRbM+7takEiiMkRCKhk=;
-    b=elT9VPKWNBWzSvkelUN0gWixQmUlXXcWO7AmpcOBD3rKdjd1tidT/v1U7xKBz2BqUv
-    db1DutcLhpQ17stiaAOWSQhgtCHCCDkDXSPVs1lnoUfifFNpkeNqM+LcxxR5lCma9QGB
-    2fHpKTZw4onCNbaguC/7bS2jvumxXGo4xkvDpEMY1xG+50BNNdlGKULbF/uxAIvJJwrZ
-    ruKbf6y0BmX6hlQUM3Pc5d10hKMEShI2HQsA53QfcBqyogUhpW7+/3Bicf9jgGMlBsix
-    1iwNCP0uK4My6YFMqoXQkfrMWEPUrqmssmQ4plgju9GFnEHSh/KyQs1llzrj1weFP0i1
-    SmbQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4rovw=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.31.0 DYNA|AUTH)
-    with ESMTPSA id Q02727x75Ej27Hh
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 5 Aug 2021 16:45:02 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v2 1/8] drm/bridge: synopsis: Add mode_fixup and bridge
- timings support
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <CAG3jFyu50h2oLW0U6hJSpxiKp3Hb5Ow8Ujvg2qdKRuy+uhaahw@mail.gmail.com>
-Date:   Thu, 5 Aug 2021 16:45:01 +0200
+        id S235024AbhHEPFQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Aug 2021 11:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230183AbhHEPFP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 11:05:15 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B486C061765;
+        Thu,  5 Aug 2021 08:05:01 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AD527E04;
+        Thu,  5 Aug 2021 17:04:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1628175896;
+        bh=TEJORNSttP9WWJ4+Duss24NQytGVgycAdaJHtji+RJg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wWF7sGskHUTcMF1oSUefAiPeLWc0md5mV5Z1rg9pU7EAfAjWrqa3XbE8MVQZfkjm9
+         WEbUGfYCJqmHGbBhryEnmaxbw6xd8Tsl+x51s7XOqfJobUtG7ndmHIMVgAC9JCzdVp
+         FwAjt8CyGMsQ1EIWAK7ZuuGjgAeY6gkKdtDU5S1w=
+Date:   Thu, 5 Aug 2021 18:04:44 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
 Cc:     Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -52,64 +39,149 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         Daniel Vetter <daniel@ffwll.ch>,
         Andrzej Hajda <a.hajda@samsung.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Harry Wentland <harry.wentland@amd.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         Maxime Ripard <maxime@cerno.tech>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        letux-kernel@openphoenux.org, Paul Boddie <paul@boddie.org.uk>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Paul Boddie <paul@boddie.org.uk>,
         Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8F63582D-08E9-4B9D-B2E2-B862830C57D1@goldelico.com>
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 8/8] [RFC] drm/ingenic: convert to component framework
+ for jz4780 hdmi
+Message-ID: <YQv+DC5yTEGlJYuD@pendragon.ideasonboard.com>
 References: <cover.1628172477.git.hns@goldelico.com>
- <15187eccabf39561de226acd8be40b93503cac49.1628172477.git.hns@goldelico.com>
- <CAG3jFyu50h2oLW0U6hJSpxiKp3Hb5Ow8Ujvg2qdKRuy+uhaahw@mail.gmail.com>
-To:     Robert Foss <robert.foss@linaro.org>
-X-Mailer: Apple Mail (2.3445.104.21)
+ <77554dd2612f418f6ab74a8be06c82b71410e0e6.1628172477.git.hns@goldelico.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <77554dd2612f418f6ab74a8be06c82b71410e0e6.1628172477.git.hns@goldelico.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Robert,
+Hi Nikolaus,
 
-> Am 05.08.2021 um 16:32 schrieb Robert Foss <robert.foss@linaro.org>:
->=20
-> Hey Nikolaus,
->=20
-> Thanks for submitting this series.
->=20
-> On Thu, 5 Aug 2021 at 16:08, H. Nikolaus Schaller <hns@goldelico.com> =
-wrote:
->>=20
->> From: Paul Boddie <paul@boddie.org.uk>
->>=20
->> +       .mode_fixup =3D dw_hdmi_bridge_mode_fixup,
->=20
-> mode_fixup() has been deprecated[1] in favor of atomic_check(), care
-> has to be taken when switching to atomic_check() as it has access to
-> the full atomic commit.
->=20
-> Looking at this driver, it's using mode_set as well, which should be =
-fixed.
->=20
-> [1] =
-https://lore.kernel.org/dri-devel/20210722062246.2512666-8-sam@ravnborg.or=
-g/
+Thank you for the patch.
 
-Thanks for this link!
+On Thu, Aug 05, 2021 at 04:07:57PM +0200, H. Nikolaus Schaller wrote:
+> This patch attempts to convert the ingenic-dw-hdmi driver
+> into a version that uses the component framework.
 
-I have found some patches which convert mode_fixup -> atomic_check (e.g. =
-3afb2a28fa2404)
-and atomic_check was apparently introduced by b86d895524ab72
+Why ? What problem would this solve ?
 
-That should be sufficient information that we can modify it.
+> Unfortunately the new version does not work.
+> 
+> Debugging shows that ingenic_dw_hdmi_bind() is never called.
+> 
+> Suggestions for reasons and fixes are welcome.
+> 
+> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+> Co-authored-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 57 ++++++++++++++++++-----
+>  1 file changed, 46 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> index 61e7a57d7cec1..a5ba0b69baa8c 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> @@ -1,17 +1,24 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
+> - * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
+> + * Copyright (C) 2019, 2020, 2021 Paul Boddie <paul@boddie.org.uk>
+>   *
+>   * Derived from dw_hdmi-imx.c with i.MX portions removed.
+> - * Probe and remove operations derived from rcar_dw_hdmi.c.
+>   */
+>  
+> +#include <linux/component.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  
+>  #include <drm/bridge/dw_hdmi.h>
+>  #include <drm/drm_of.h>
+> +#include <drm/drm_modeset_helper_vtables.h>
+> +#include <drm/drm_simple_kms_helper.h>
+> +
+> +struct ingenic_dw_hdmi_encoder {
+> +	struct drm_encoder encoder;
+> +	struct dw_hdmi *hdmi;
+> +};
+>  
+>  static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] = {
+>  	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2, 0x0000 } } },
+> @@ -87,24 +94,52 @@ static const struct of_device_id ingenic_dw_hdmi_dt_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
+>  
+> -static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
+> +static int ingenic_dw_hdmi_bind(struct device *dev, struct device *master,
+> +				void *data)
+>  {
+> -	struct dw_hdmi *hdmi;
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct drm_device *drm = data;
+> +	struct drm_encoder *enc;
+> +	struct ingenic_dw_hdmi_encoder *hdmi_encoder;
+>  
+> -	hdmi = dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
+> -	if (IS_ERR(hdmi))
+> -		return PTR_ERR(hdmi);
+> +	hdmi_encoder = drmm_simple_encoder_alloc(drm, struct ingenic_dw_hdmi_encoder,
+> +						 encoder, DRM_MODE_ENCODER_TMDS);
+> +	if (IS_ERR(hdmi_encoder))
+> +		return PTR_ERR(hdmi_encoder);
+>  
+> -	platform_set_drvdata(pdev, hdmi);
+> +	enc = &hdmi_encoder->encoder;
+> +	drm_encoder_helper_add(enc, NULL);
+> +	hdmi_encoder->hdmi = dw_hdmi_bind(pdev, enc, &ingenic_dw_hdmi_plat_data);
+> +
+> +	if (IS_ERR(hdmi_encoder->hdmi))
+> +		return PTR_ERR(hdmi_encoder->hdmi);
+> +
+> +	dev_set_drvdata(dev, hdmi_encoder->hdmi);
+>  
+>  	return 0;
+>  }
+>  
+> -static int ingenic_dw_hdmi_remove(struct platform_device *pdev)
+> +static void ingenic_dw_hdmi_unbind(struct device *dev, struct device *master,
+> +				   void *data)
+> +{
+> +	struct dw_hdmi *hdmi = dev_get_drvdata(dev);
+> +
+> +	dw_hdmi_unbind(hdmi);
+> +}
+> +
+> +static const struct component_ops ingenic_dw_hdmi_ops = {
+> +	.bind	= ingenic_dw_hdmi_bind,
+> +	.unbind	= ingenic_dw_hdmi_unbind,
+> +};
+> +
+> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
+>  {
+> -	struct dw_hdmi *hdmi = platform_get_drvdata(pdev);
+> +	return component_add(&pdev->dev, &ingenic_dw_hdmi_ops);
+> +}
+>  
+> -	dw_hdmi_remove(hdmi);
+> +static int ingenic_dw_hdmi_remove(struct platform_device *pdev)
+> +{
+> +	component_del(&pdev->dev, &ingenic_dw_hdmi_ops);
+>  
+>  	return 0;
+>  }
 
-BR and thanks,
-Nikolaus
+-- 
+Regards,
 
+Laurent Pinchart
