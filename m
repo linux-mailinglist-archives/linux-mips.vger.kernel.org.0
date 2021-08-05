@@ -2,210 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BF93E189A
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 17:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE7D3E1906
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 18:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242663AbhHEPrp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Aug 2021 11:47:45 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:35250 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242471AbhHEPri (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 11:47:38 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 05DC41FE69;
-        Thu,  5 Aug 2021 15:47:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1628178443; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xjyShzouPrJcHBbruWtTQutmAQhza4mB7qEDF4um5Mg=;
-        b=HFFKv1lODf3gm58MqBGWAh8qSB3SjD0CWH1FfzIS9Ttb2ITfRIGZdfCH1BtAnoyP4ESIec
-        etQbWzYl+6ASAoafzEiq37hiOIvpPGQL0Maxr2rIGqwGWJypE77o36bBPH1bIEeFynFgxE
-        JPgwV+WeWHfe1PUy2fE9+HyrOT/gvco=
-Received: from suse.cz (pmladek.udp.ovpn1.prg.suse.de [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 9259EA3EC0;
-        Thu,  5 Aug 2021 15:47:22 +0000 (UTC)
-Date:   Thu, 5 Aug 2021 17:47:22 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Chengyang Fan <cy.fan@huawei.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Cengiz Can <cengiz@kernel.wtf>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        kuldip dwivedi <kuldip.dwivedi@puresoftware.com>,
-        Wang Qing <wangqing@vivo.com>, Andrij Abyzov <aabyzov@slb.com>,
-        Johan Hovold <johan@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Claire Chang <tientzu@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>, linux-serial@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH printk v1 00/10] printk: introduce atomic consoles and
- sync mode
-Message-ID: <YQwHwT2wYM1dJfVk@alley>
-References: <20210803131301.5588-1-john.ogness@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210803131301.5588-1-john.ogness@linutronix.de>
+        id S242899AbhHEQDH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Aug 2021 12:03:07 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.82]:8248 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242882AbhHEQC7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 5 Aug 2021 12:02:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628179296;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=kz7en5zl8fiteD+7Oum9C7YsAgoEzeXk8l+oEFfizAo=;
+    b=sZu6BlP6OpE75L0Oqdx3CmyEW36PC4r0dt8PPRWad0sdlneMMt5MUP+cvZ+Ua/RBCo
+    uORUfbbbf5w294rJ66uvHvvCRp2oy7wk1DtMqKhX0eV5pCTD2N78eLD9vZl0hmo3QZKB
+    uLmUSfp4poDsYCRIgvtBLu4iYG7KbNFdfoGt1/wEaNAZofwFoZTfCV1U7/qj0a69nV+l
+    hLG1LqSsVLC9I+tELJ6I5xsIboL2oC7RWv8ipZt2BtsfSwv0usc/48U1l9LUjnst2K8e
+    7kSCGNG3qtcyT/W4UvOcdcGmBY78g7e53FCkYlIIHQ0DNxhlpvAvfHqo6CPS7+nEFe5b
+    R1qQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4rovw=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.31.0 DYNA|AUTH)
+    with ESMTPSA id Q02727x75G1W7WQ
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Thu, 5 Aug 2021 18:01:32 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v2 3/8] drm/ingenic: Add support for JZ4780 and HDMI
+ output
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <CDHDXQ.QTKW3N6WINVB2@crapouillou.net>
+Date:   Thu, 5 Aug 2021 18:01:31 +0200
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Paul Boddie <paul@boddie.org.uk>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <0F96C1D5-D98B-4461-B691-20A0C3C38C18@goldelico.com>
+References: <cover.1628172477.git.hns@goldelico.com>
+ <263a207d2aeb8bc95aa8464212dcc9b225548f4f.1628172477.git.hns@goldelico.com>
+ <CDHDXQ.QTKW3N6WINVB2@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue 2021-08-03 15:18:51, John Ogness wrote:
-> Hi,
-> 
-> This is the next part of our printk-rework effort (points 3 and
-> 4 of the LPC 2019 summary [0]).
-> 
-> Here the concept of "atomic consoles" is introduced through  a
-> new (optional) write_atomic() callback for console drivers. This
-> callback must be implemented as an NMI-safe variant of the
-> write() callback, meaning that it can function from any context
-> without relying on questionable tactics such as ignoring locking
-> and also without relying on the synchronization of console
-> semaphore.
-> 
-> As an example of how such an atomic console can look like, this
-> series implements write_atomic() for the 8250 UART driver.
-> 
-> This series also introduces a new console printing mode called
-> "sync mode" that is only activated when the kernel is about to
-> end (such as panic, oops, shutdown, reboot). Sync mode can only
-> be activated if atomic consoles are available. A system without
-> registered atomic consoles will be unaffected by this series.
->
-> When in sync mode, the console printing behavior becomes:
-> 
-> - only consoles implementing write_atomic() will be called
-> 
-> - printing occurs within vprintk_store() instead of
->   console_unlock(), since the console semaphore is irrelevant
->   for atomic consoles
+Hi Paul,
 
-I am fine with the new behavior at this stage. It is a quite clear
-win when (only) the atomic console is used. And it does not make any
-difference when atomic consoles are disabled.
+> Am 05.08.2021 um 17:22 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus & Paul,
+>=20
+> Le jeu., ao=C3=BBt 5 2021 at 16:07:52 +0200, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> From: Paul Boddie <paul@boddie.org.uk>
+>> Add support for the LCD controller present on JZ4780 SoCs.
+>> This SoC uses 8-byte descriptors which extend the current
+>> 4-byte descriptors used for other Ingenic SoCs.
+>> Also, add special handling for HDMI-A connectors.
+>> For some reason, only the primary planes are working
+>> properly. As soon as the overlay plane is enabled
+>> things go south :P
+>> Tested on MIPS Creator CI20 board.
+>> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+>> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> ---
+>> drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 163 =
+++++++++++++++++++++--
 
-But I am not sure about the proposed terms and implementation.
-I want to be sure that we are on the right way for introducing
-console kthreads.
+... snip ...
 
-Let me try to compare the behavior:
-
-1. before this patchset():
-
-	/* printk: store immediately; try all consoles immediately */
-	int printk(...)
-	{
-		vprintk_store();
-		if (console_try_lock()) {
-			/* flush pending messages to the consoles */
-			console_unlock();
-		}
-	}
-
-	/* panic: try hard to flush messages to the consoles and avoid deadlock */
-	void panic()
-	{
-		/* Ignore locks in console drivers */
-		bust_spinlocks(1);
-
-		printk("Kernel panic ...);
-		dump_stack();
-
-		smp_send_stop();
-		/* ignore console lock */
-		console_flush_on_panic();
-	}
+>=20
+> We already have these in ingenic-drm.h...
+>=20
+> Please only add the macros that you need and are missing.
+>=20
+> Cheers,
+> -Paul
 
 
-2. after this patchset():
+all are valid comments. We'll add them for v3 or find answers
+if some code fragments are needed (even if we don't know why)
+or not.
 
-   + same as before in normal mode or when there is no atomic console
-
-   + in panic with atomic console; it modifies the behavior:
-
-	/*
-	 * printk: store immediately; immediately flush atomic consoles;
-	 *         unsafe consoles are not used anymore;
-	 */
-	int printk(...)
-	{
-		vprintk_store();
-		flush_atomic_consoles();
-	}
-
-	/* panic: no hacks; only atomic consoles are used */
-	void panic()
-	{
-		printk("Kernel panic ...);
-		dump_stack();
-	}
-
-
-3. After introducing console kthread(s):
-
-	int printk(...)
-	{
-		vprintk_store();
-		wake_consoles_via_irqwork();
-	}
-
-	+ in panic:
-
-	    + with atomic console like after this patchset?
-	    + without atomic consoles?
-
-	+ during early boot?
-
-
-I guess that we will need another sync mode for the early boot,
-panic, suspend, kexec, etc.. It must be posible to debug these states
-even wihtout atomic console and working kthreads.
-
-Best Regards,
-Petr
+BR and thanks,
+Nikolaus
