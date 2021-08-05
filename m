@@ -2,15 +2,15 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A075F3E1C88
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 21:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6B23E1C8C
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Aug 2021 21:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbhHETVg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 5 Aug 2021 15:21:36 -0400
-Received: from aposti.net ([89.234.176.197]:54872 "EHLO aposti.net"
+        id S242509AbhHETVr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 5 Aug 2021 15:21:47 -0400
+Received: from aposti.net ([89.234.176.197]:54888 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242531AbhHETVg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 5 Aug 2021 15:21:36 -0400
+        id S242592AbhHETVm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 5 Aug 2021 15:21:42 -0400
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh@kernel.org>,
@@ -21,9 +21,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     list@opendingux.net, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
         Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 1/2] drivers core: Export driver_deferred_probe_check_state()
-Date:   Thu,  5 Aug 2021 21:21:08 +0200
-Message-Id: <20210805192110.90302-2-paul@crapouillou.net>
+Subject: [PATCH 2/2] gpu/drm: ingenic: Add workaround for disabled drivers
+Date:   Thu,  5 Aug 2021 21:21:09 +0200
+Message-Id: <20210805192110.90302-3-paul@crapouillou.net>
 In-Reply-To: <20210805192110.90302-1-paul@crapouillou.net>
 References: <20210805192110.90302-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -32,26 +32,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Export this function as a GPL symbol, so that it can be used from
-modules.
+When the drivers of remote devices (e.g. HDMI chip) are disabled in the
+config, we want the ingenic-drm driver to be able to probe nonetheless
+with the other devices (e.g. internal LCD panel) that are enabled.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/base/dd.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index daeb9b5763ae..658f1527a58b 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -296,6 +296,7 @@ int driver_deferred_probe_check_state(struct device *dev)
- 
- 	return -EPROBE_DEFER;
- }
-+EXPORT_SYMBOL_GPL(driver_deferred_probe_check_state);
- 
- static void deferred_probe_timeout_work_func(struct work_struct *work)
- {
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index d261f7a03b18..5e1fdbb0ba6b 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -1058,6 +1058,18 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
+ 	for (i = 0; ; i++) {
+ 		ret = drm_of_find_panel_or_bridge(dev->of_node, 0, i, &panel, &bridge);
+ 		if (ret) {
++			/*
++			 * Workaround for the case where the drivers for the
++			 * remote devices are not enabled. When that happens,
++			 * drm_of_find_panel_or_bridge() returns -EPROBE_DEFER
++			 * endlessly, which prevents the ingenic-drm driver from
++			 * working at all.
++			 */
++			if (ret == -EPROBE_DEFER) {
++				ret = driver_deferred_probe_check_state(dev);
++				if (ret == -ENODEV || ret == -ETIMEDOUT)
++					continue;
++			}
+ 			if (ret == -ENODEV)
+ 				break; /* we're done */
+ 			if (ret != -EPROBE_DEFER)
 -- 
 2.30.2
 
