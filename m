@@ -2,59 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7EF3E2F77
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Aug 2021 20:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F0C3E3255
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Aug 2021 02:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243433AbhHFSsY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 6 Aug 2021 14:48:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44628 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231889AbhHFSsY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 6 Aug 2021 14:48:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4558060234;
-        Fri,  6 Aug 2021 18:48:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628275688;
-        bh=CE8JX04R7HeqOCD4uHIl0/q+y1l15x8vqCDJJFNopNw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=aPGQWgK3XJKhBMTUvB+KVtrRPBHS2pxvK54xPfSsbHfDpQZ/KHFMhvNKI+mrdy2ck
-         MB/XoslTMV/UfRlfKrKfSrSBjaY9SDD/0bw8JtoR+195fVZzDDk4a2HXxSddmKDqdr
-         +VGCIKADKWlPXeBLf3PyIMiT3OCJiggMrwF0ygavY6WECtGB3tzi9xGOewo8/1Gd4D
-         zEPfll+l6wfohF+hzrNk4T56oGNEUZMb/cSM2myhfJX4/mgZtK1SQWak/G7ohZGIz9
-         E2s3pgPjUpiWHFOquTnnoB0Xplp+Q8buz6SlLt6csIsa+mYSI/yeGijyeIcM6aYe1r
-         WO1oz6Kq29ziA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 32B98609F1;
-        Fri,  6 Aug 2021 18:48:08 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v5.14
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20210806133655.GA10751@alpha.franken.de>
-References: <20210806133655.GA10751@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20210806133655.GA10751@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.14_1
-X-PR-Tracked-Commit-Id: 6aa32467299e9e12280a6aec9dbc21bf2db830b0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cb407fc81d68f3a61e82eda4e7f9421e67f8aece
-Message-Id: <162827568814.18689.8373488018668167610.pr-tracker-bot@kernel.org>
-Date:   Fri, 06 Aug 2021 18:48:08 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S229445AbhHGAcf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 6 Aug 2021 20:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229379AbhHGAcf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 6 Aug 2021 20:32:35 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFA9C0613CF;
+        Fri,  6 Aug 2021 17:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=xfbXveP9AZ7DrJeKTchC6sa0LBUUGNHkmnU6yLgUglA=; b=S2TjmXhcln45cl7fMiNQjIyZ2
+        QcyEgHwUJIysGWiljwBb4Wif6C/eOS7p1ZICf4FaHW+XkYsAI7UPDKe+CfFnxtp+SWNXtRfAx3o3z
+        TTlFGdBrwAdniov/4ou3trIksj7tnOOCHB9wf2wUBthID93an5PgVcnOpRplyrwhYp13IyCBHUxK+
+        XqGLZDT0YMtQXt5eKvENZHEgxuvPGdJC7oUmG1kSq/k0q2kks9ggOChscscUP3hDaDtEa1xhsN+hu
+        6fs83XPPlosF+YhqubvII+xdisMEijC/aPTjpW7RDcj/I701A+I1K6g0hMHwcBMWQ5snSF8OC2Fim
+        VRYXMtFtA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:47034)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1mCAFa-0003UQ-8w; Sat, 07 Aug 2021 01:31:42 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1mCAFT-0007BF-2P; Sat, 07 Aug 2021 01:31:35 +0100
+Date:   Sat, 7 Aug 2021 01:31:35 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Len Brown <lenb@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2] memblock: make memblock_find_in_range method private
+Message-ID: <20210807003134.GR22278@shell.armlinux.org.uk>
+References: <20210802063737.22733-1-rppt@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210802063737.22733-1-rppt@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Fri, 6 Aug 2021 15:36:56 +0200:
+On Mon, Aug 02, 2021 at 09:37:37AM +0300, Mike Rapoport wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
+> 
+> There are a lot of uses of memblock_find_in_range() along with
+> memblock_reserve() from the times memblock allocation APIs did not exist.
+> 
+> memblock_find_in_range() is the very core of memblock allocations, so any
+> future changes to its internal behaviour would mandate updates of all the
+> users outside memblock.
+> 
+> Replace the calls to memblock_find_in_range() with an equivalent calls to
+> memblock_phys_alloc() and memblock_phys_alloc_range() and make
+> memblock_find_in_range() private method of memblock.
+> 
+> This simplifies the callers, ensures that (unlikely) errors in
+> memblock_reserve() are handled and improves maintainability of
+> memblock_find_in_range().
+> 
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.14_1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cb407fc81d68f3a61e82eda4e7f9421e67f8aece
-
-Thank you!
+Thanks.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
