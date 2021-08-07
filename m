@@ -2,71 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE543E3421
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Aug 2021 10:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54F13E3465
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Aug 2021 11:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbhHGIkX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 7 Aug 2021 04:40:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38840 "EHLO mail.kernel.org"
+        id S231836AbhHGJoM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 7 Aug 2021 05:44:12 -0400
+Received: from elvis.franken.de ([193.175.24.41]:50725 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231509AbhHGIkX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 7 Aug 2021 04:40:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id E8449610A6;
-        Sat,  7 Aug 2021 08:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628325606;
-        bh=sax0nwzMW0QK0S6OTM/6c4GU4567Go1ED9HkiK5WUoo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bRjiGDwroeDwdPxt/6Tecq3dIcteakL25F5xwTwc8JKbjFRNtD2ZwneX25Gh0d5vp
-         c3u4/2Lfco25Ui5u8E2joqQE8mcQjOh6vDG6Abs/sPo8l4Wb2S3/i14ZODW4+X/LsR
-         SXnJoLRn4d46o0v3qxqZlnbK34jRWmS75oRHBG8RB7oru765q5DkAQlHop2mjN4hdB
-         mGnG6Fmjs1ZqhBO3e3UnpB5G1sBD5b/neTfozlYDAMEyfq/eHTwOw0XdGMpOlgJuKp
-         mN93zVFA6e3F8R+J7NENq2g41hJc0KKZqjNz6oxM0vPXv22f/vY2396m6f9DVs7f1I
-         TKUPkYXvYf83Q==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D7AF760A94;
-        Sat,  7 Aug 2021 08:40:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S231687AbhHGJoM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 7 Aug 2021 05:44:12 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mCIru-0007FW-00; Sat, 07 Aug 2021 11:43:50 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id A6D05C0661; Sat,  7 Aug 2021 11:28:19 +0200 (CEST)
+Date:   Sat, 7 Aug 2021 11:28:19 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, mturquette@baylibre.com,
+        daniel.lezcano@linaro.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 0/9] MIPS: Migrate pistachio to generic kernel
+Message-ID: <20210807092819.GA4506@alpha.franken.de>
+References: <20210723022543.4095-1-jiaxun.yang@flygoat.com>
+ <1bb80cdf-f7d5-f99f-a4f3-635552df916b@flygoat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 1/1] net: dsa: qca: ar9331: make proper initial port
- defaults
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162832560587.30769.3952932254667872373.git-patchwork-notify@kernel.org>
-Date:   Sat, 07 Aug 2021 08:40:05 +0000
-References: <20210806094723.19221-1-o.rempel@pengutronix.de>
-In-Reply-To: <20210806094723.19221-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        linux@armlinux.org.uk, kernel@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
+In-Reply-To: <1bb80cdf-f7d5-f99f-a4f3-635552df916b@flygoat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (refs/heads/master):
-
-On Fri,  6 Aug 2021 11:47:23 +0200 you wrote:
-> Make sure that all external port are actually isolated from each other,
-> so no packets are leaked.
+On Sat, Aug 07, 2021 at 11:06:12AM +0800, Jiaxun Yang wrote:
 > 
-> Fixes: ec6698c272de ("net: dsa: add support for Atheros AR9331 built-in switch")
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/net/dsa/qca/ar9331.c | 73 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 72 insertions(+), 1 deletion(-)
+> 
+> 在 2021/7/23 上午10:25, Jiaxun Yang 写道:
+> > I'm lucky enough to get a Creator CI40 board from dusts.
+> > This patchset move it to gerneic kernel to reduce maintenance burden.
+> > It have been tested with SD Card boot.
+> 
+> Hi Thomas,
+> 
+> For the series, the pinctrl one have been applied by subsystem maintainer
+> and
+> rests have been acked by subsystem maintainers, could you please apply them
+> to MIPS tree?
 
-Here is the summary with links:
-  - [net,v3,1/1] net: dsa: qca: ar9331: make proper initial port defaults
-    https://git.kernel.org/netdev/net/c/47fac45600aa
+sure that's my plan.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thomas.
 
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
