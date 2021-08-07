@@ -2,121 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B83E3E3404
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Aug 2021 10:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE543E3421
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Aug 2021 10:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbhHGIEz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 7 Aug 2021 04:04:55 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:33616 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231543AbhHGIEz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 7 Aug 2021 04:04:55 -0400
-Received: from ambrosehua-HP-xw6600-Workstation.lan (unknown [125.69.44.6])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH0KNPg5h_bEsAA--.26836S2;
-        Sat, 07 Aug 2021 16:04:34 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-rt-users@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: [PATCH] MIPS: simplify copy_user_high_page for MIPS64 w/o cache alias
-Date:   Sat,  7 Aug 2021 16:04:29 +0800
-Message-Id: <20210807080429.3323711-1-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        id S231586AbhHGIkX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 7 Aug 2021 04:40:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231509AbhHGIkX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 7 Aug 2021 04:40:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id E8449610A6;
+        Sat,  7 Aug 2021 08:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628325606;
+        bh=sax0nwzMW0QK0S6OTM/6c4GU4567Go1ED9HkiK5WUoo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bRjiGDwroeDwdPxt/6Tecq3dIcteakL25F5xwTwc8JKbjFRNtD2ZwneX25Gh0d5vp
+         c3u4/2Lfco25Ui5u8E2joqQE8mcQjOh6vDG6Abs/sPo8l4Wb2S3/i14ZODW4+X/LsR
+         SXnJoLRn4d46o0v3qxqZlnbK34jRWmS75oRHBG8RB7oru765q5DkAQlHop2mjN4hdB
+         mGnG6Fmjs1ZqhBO3e3UnpB5G1sBD5b/neTfozlYDAMEyfq/eHTwOw0XdGMpOlgJuKp
+         mN93zVFA6e3F8R+J7NENq2g41hJc0KKZqjNz6oxM0vPXv22f/vY2396m6f9DVs7f1I
+         TKUPkYXvYf83Q==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D7AF760A94;
+        Sat,  7 Aug 2021 08:40:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxH0KNPg5h_bEsAA--.26836S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF17AF1UKFWUKr1UGr1Dtrb_yoW8ur13pF
-        43Gw45KrWFgrW7C3Z3Xwsrury3Jas2yay8XF47Ka4Y9wnxWFy3XF1fXFW0qF1YqrWkGa15
-        W3yqgay5GF1Du3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
-        8cxan2IY04v7MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
-        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
-        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
-        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUhdbbUUUUU=
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+Subject: Re: [PATCH net v3 1/1] net: dsa: qca: ar9331: make proper initial port
+ defaults
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162832560587.30769.3952932254667872373.git-patchwork-notify@kernel.org>
+Date:   Sat, 07 Aug 2021 08:40:05 +0000
+References: <20210806094723.19221-1-o.rempel@pengutronix.de>
+In-Reply-To: <20210806094723.19221-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        linux@armlinux.org.uk, kernel@pengutronix.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Borrow from ARM64
+Hello:
 
-MIPS64 CPU has enough direct mapped memory space to access all
-physical memory. In case of no cache alias, bypass both k*map_atomic
-and k*map_coherent for better real-time performance.
+This patch was applied to netdev/net.git (refs/heads/master):
 
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/mm/init.c | 39 ++++++++++++++++++++++++++-------------
- 1 file changed, 26 insertions(+), 13 deletions(-)
+On Fri,  6 Aug 2021 11:47:23 +0200 you wrote:
+> Make sure that all external port are actually isolated from each other,
+> so no packets are leaked.
+> 
+> Fixes: ec6698c272de ("net: dsa: add support for Atheros AR9331 built-in switch")
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/net/dsa/qca/ar9331.c | 73 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 72 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
-index 19347dc6bbf8..1f5bdd18ae7c 100644
---- a/arch/mips/mm/init.c
-+++ b/arch/mips/mm/init.c
-@@ -171,22 +171,35 @@ void copy_user_highpage(struct page *to, struct page *from,
- {
- 	void *vfrom, *vto;
- 
--	vto = kmap_atomic(to);
--	if (cpu_has_dc_aliases &&
--	    page_mapcount(from) && !Page_dcache_dirty(from)) {
--		vfrom = kmap_coherent(from, vaddr);
-+	if (IS_ENABLED(CONFIG_64BIT) && !cpu_has_dc_aliases) {
-+		vfrom = page_address(from);
-+		vto   = page_address(to);
- 		copy_page(vto, vfrom);
--		kunmap_coherent();
-+		/*
-+		 * even without cache alias, still need to maintain
-+		 * coherence between icache and dcache
-+		 */
-+		if (!cpu_has_ic_fills_f_dc)
-+			flush_data_cache_page((unsigned long)vto);
-+
- 	} else {
--		vfrom = kmap_atomic(from);
--		copy_page(vto, vfrom);
--		kunmap_atomic(vfrom);
-+		vto = kmap_atomic(to);
-+		if (cpu_has_dc_aliases &&
-+				page_mapcount(from) && !Page_dcache_dirty(from)) {
-+			vfrom = kmap_coherent(from, vaddr);
-+			copy_page(vto, vfrom);
-+			kunmap_coherent();
-+		} else {
-+			vfrom = kmap_atomic(from);
-+			copy_page(vto, vfrom);
-+			kunmap_atomic(vfrom);
-+		}
-+		if ((!cpu_has_ic_fills_f_dc) ||
-+				pages_do_alias((unsigned long)vto, vaddr & PAGE_MASK))
-+			flush_data_cache_page((unsigned long)vto);
-+		kunmap_atomic(vto);
-+		/* Make sure this page is cleared on other CPU's too before using it */
- 	}
--	if ((!cpu_has_ic_fills_f_dc) ||
--	    pages_do_alias((unsigned long)vto, vaddr & PAGE_MASK))
--		flush_data_cache_page((unsigned long)vto);
--	kunmap_atomic(vto);
--	/* Make sure this page is cleared on other CPU's too before using it */
- 	smp_wmb();
- }
- 
--- 
-2.25.1
+Here is the summary with links:
+  - [net,v3,1/1] net: dsa: qca: ar9331: make proper initial port defaults
+    https://git.kernel.org/netdev/net/c/47fac45600aa
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
