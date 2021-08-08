@@ -2,81 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BDF3E3C29
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Aug 2021 20:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CA23E3C31
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Aug 2021 20:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbhHHS16 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Aug 2021 14:27:58 -0400
-Received: from smtprelay0211.hostedemail.com ([216.40.44.211]:37816 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230049AbhHHS16 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Aug 2021 14:27:58 -0400
-Received: from omf08.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 1364918225E17;
-        Sun,  8 Aug 2021 18:27:38 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 42D601A29F9;
-        Sun,  8 Aug 2021 18:27:36 +0000 (UTC)
-Message-ID: <5a003da4e38fcb50782664496fc37b84773a7813.camel@perches.com>
+        id S230337AbhHHSeO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sun, 8 Aug 2021 14:34:14 -0400
+Received: from aposti.net ([89.234.176.197]:41390 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229977AbhHHSeN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 8 Aug 2021 14:34:13 -0400
+Date:   Sun, 08 Aug 2021 20:33:45 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
 Subject: Re: [PATCH 1/8] drm/ingenic: Remove dead code
-From:   Joe Perches <joe@perches.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Paul Cercueil <paul@crapouillou.net>,
+To:     Joe Perches <joe@perches.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "H . Nikolaus Schaller" <hns@goldelico.com>,
         Paul Boddie <paul@boddie.org.uk>, list@opendingux.net,
         Sam Ravnborg <sam@ravnborg.org>, linux-mips@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Date:   Sun, 08 Aug 2021 11:27:34 -0700
-In-Reply-To: <ff06e53b-ba7e-5535-8931-ce7f7cdae5a6@suse.de>
+Message-Id: <98AJXQ.3ASLLMR2SY4@crapouillou.net>
+In-Reply-To: <5a003da4e38fcb50782664496fc37b84773a7813.camel@perches.com>
 References: <20210808134526.119198-1-paul@crapouillou.net>
-         <20210808134526.119198-2-paul@crapouillou.net>
-         <ff06e53b-ba7e-5535-8931-ce7f7cdae5a6@suse.de>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
+        <20210808134526.119198-2-paul@crapouillou.net>
+        <ff06e53b-ba7e-5535-8931-ce7f7cdae5a6@suse.de>
+        <5a003da4e38fcb50782664496fc37b84773a7813.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 42D601A29F9
-X-Spam-Status: No, score=-0.13
-X-Stat-Signature: q7179owfxbtowekyohhcpja96iagy15d
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+ldakpScWEGEFtHAUPDuqKsB2MKIB/sTQ=
-X-HE-Tag: 1628447256-237769
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 2021-08-08 at 19:58 +0200, Thomas Zimmermann wrote:
+Hi Joe,
+
+Le dim., août 8 2021 at 11:27:34 -0700, Joe Perches <joe@perches.com> 
+a écrit :
+> On Sun, 2021-08-08 at 19:58 +0200, Thomas Zimmermann wrote:
+>> 
+>>  Am 08.08.21 um 15:45 schrieb Paul Cercueil:
+>>  > The priv->ipu_plane would get a different value further down the 
+>> code,
+>>  > without the first assigned value being read first; so the first
+>>  > assignation can be dropped.
+>>  >
+>>  > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>> 
+>>  Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 > 
-> Am 08.08.21 um 15:45 schrieb Paul Cercueil:
-> > The priv->ipu_plane would get a different value further down the code,
-> > without the first assigned value being read first; so the first
-> > assignation can be dropped.
-> > 
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> I think this is at best an incomplete description.
 > 
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+> How is it known that this priv->ipu_plane assignment isn't
+> necessary for any path of any failure path after this assignment
+> and before the new assignment?
 
-I think this is at best an incomplete description.
+It is only used in the .atomic_begin and .atomic_check callbacks of the 
+CRTC. These will only ever be called after the call to 
+drm_dev_register() which happens at the end of the probe function.
 
-How is it known that this priv->ipu_plane assignment isn't
-necessary for any path of any failure path after this assignment
-and before the new assignment?
+Cheers,
+-Paul
 
-> > diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-[]
-> > @@ -984,9 +984,6 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
-> >   	priv->dma_hwdescs->hwdesc_pal.cmd = JZ_LCD_CMD_ENABLE_PAL
-> >   		| (sizeof(priv->dma_hwdescs->palette) / 4);
-> > 
-> > -	if (soc_info->has_osd)
-> > -		priv->ipu_plane = drm_plane_from_index(drm, 0);
-> > -
-> >   	primary = priv->soc_info->has_osd ? &priv->f1 : &priv->f0;
-> > 
-> >   	drm_plane_helper_add(primary, &ingenic_drm_plane_helper_funcs);
-> > 
+>>  > diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
+>> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> []
+>>  > @@ -984,9 +984,6 @@ static int ingenic_drm_bind(struct device 
+>> *dev, bool has_components)
+>>  >   	priv->dma_hwdescs->hwdesc_pal.cmd = JZ_LCD_CMD_ENABLE_PAL
+>>  >   		| (sizeof(priv->dma_hwdescs->palette) / 4);
+>>  >
+>>  > -	if (soc_info->has_osd)
+>>  > -		priv->ipu_plane = drm_plane_from_index(drm, 0);
+>>  > -
+>>  >   	primary = priv->soc_info->has_osd ? &priv->f1 : &priv->f0;
+>>  >
+>>  >   	drm_plane_helper_add(primary, &ingenic_drm_plane_helper_funcs);
+>>  >
+>> 
+> 
 > 
 
 
