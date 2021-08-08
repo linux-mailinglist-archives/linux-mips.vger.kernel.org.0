@@ -2,92 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 231C73E3C7A
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Aug 2021 21:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D503E3C93
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Aug 2021 21:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbhHHTMq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Aug 2021 15:12:46 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.84]:24045 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbhHHTMq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Aug 2021 15:12:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628449941;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=8x7srcrmZ1/WCTZQFJiINnCxHY92TZ+clMgKoK3VcnA=;
-    b=fLeFneLbNeeb+PnUH/azqY+B8iMLLvtOfkUrr7G0dLp4r2fbGkNPez1CDCjmrE4Vmq
-    ZEtwuBG3l+9iYZvLaYHD4BZe3Bt0T+pc54NQN4i/ESD48R7evi5HVt2WY/c5FuIB9Wsy
-    UlQEWEE1gJrpRWNcpJQMLIyfP5xz9bACzuN8Vl+ERC/bmwOr2KkBPBCuf67igbF0amr6
-    VBXb0SNEu4105pt4/PvgHhQIR/mYUKfes96HIDvTc+Da6TKsJtcKk9kfv7J5ZoDNIeyB
-    AeSdx/VrKr+E9YLw2CxwWSy/DHnmNl+7SoaBoEV4pIJc8iyj/dnjgYVgxew64zkoUQpO
-    wqkQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43u3mM="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.31.0 DYNA|AUTH)
-    with ESMTPSA id Q02727x78JCLGc2
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sun, 8 Aug 2021 21:12:21 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 8/8] drm/ingenic: Attach bridge chain to encoders
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <2C83670F-3586-435B-8374-C3CC1C791391@goldelico.com>
-Date:   Sun, 8 Aug 2021 21:12:20 +0200
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        id S232486AbhHHTu3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Aug 2021 15:50:29 -0400
+Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:40883 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230049AbhHHTu3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Aug 2021 15:50:29 -0400
+Received: from [192.168.1.18] ([90.126.253.178])
+        by mwinf5d25 with ME
+        id f7q42500E3riaq2037q5nP; Sun, 08 Aug 2021 21:50:08 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 08 Aug 2021 21:50:08 +0200
+X-ME-IP: 90.126.253.178
+Subject: Re: [PATCH 3/8] drm/ingenic: Use standard
+ drm_atomic_helper_commit_tail
+To:     Paul Cercueil <paul@crapouillou.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     "H . Nikolaus Schaller" <hns@goldelico.com>,
         Paul Boddie <paul@boddie.org.uk>, list@opendingux.net,
-        Sam Ravnborg <sam@ravnborg.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <137A13EE-9E0E-469E-BE43-677349478A58@goldelico.com>
+        Sam Ravnborg <sam@ravnborg.org>, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
 References: <20210808134526.119198-1-paul@crapouillou.net>
- <20210808134526.119198-9-paul@crapouillou.net>
- <2AEC5953-FE54-4DD5-88B7-783C4D9E23B2@goldelico.com>
- <4OBJXQ.DA6PDYNSVNYV1@crapouillou.net>
- <2C83670F-3586-435B-8374-C3CC1C791391@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+ <20210808134526.119198-4-paul@crapouillou.net>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <f3b761ed-4e71-e8b8-f2b5-f4f7f1547fed@wanadoo.fr>
+Date:   Sun, 8 Aug 2021 21:50:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <20210808134526.119198-4-paul@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Le 08/08/2021 à 15:45, Paul Cercueil a écrit :
+> By making the CRTC's .vblank_enable() function return an error when it
+> is known that the hardware won't deliver a VBLANK, we can drop the
+> ingenic_drm_atomic_helper_commit_tail() function and use the standard
+> drm_atomic_helper_commit_tail() function instead.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 28 ++++-------------------
+>   1 file changed, 4 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> index bc71ba44ccf4..3ed7c27a8dde 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -706,29 +706,6 @@ static int ingenic_drm_encoder_atomic_check(struct drm_encoder *encoder,
+>   	}
+>   }
+>   
+> -static void ingenic_drm_atomic_helper_commit_tail(struct drm_atomic_state *old_state)
+> -{
+> -	/*
+> -	 * Just your regular drm_atomic_helper_commit_tail(), but only calls
+> -	 * drm_atomic_helper_wait_for_vblanks() if priv->no_vblank.
+> -	 */
+> -	struct drm_device *dev = old_state->dev;
+> -	struct ingenic_drm *priv = drm_device_get_priv(dev);
+> -
+> -	drm_atomic_helper_commit_modeset_disables(dev, old_state);
+> -
+> -	drm_atomic_helper_commit_planes(dev, old_state, 0);
+> -
+> -	drm_atomic_helper_commit_modeset_enables(dev, old_state);
+> -
+> -	drm_atomic_helper_commit_hw_done(old_state);
+> -
+> -	if (!priv->no_vblank)
+> -		drm_atomic_helper_wait_for_vblanks(dev, old_state);
+> -
+> -	drm_atomic_helper_cleanup_planes(dev, old_state);
+> -}
+> 
 
+Hi,
+if this function is removed, shouldn't:
+   static struct drm_mode_config_helper_funcs 
+ingenic_drm_mode_config_helpers = {
+   	.atomic_commit_tail = ingenic_drm_atomic_helper_commit_tail,
+   };
+be updated as well?
 
-> Am 08.08.2021 um 21:06 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->=20
->=20
->=20
->> Am 08.08.2021 um 21:04 schrieb Paul Cercueil <paul@crapouillou.net>:
->>=20
->> Hi Nikolaus,
->>=20
->> Le dim., ao=C3=BBt 8 2021 at 20:57:09 +0200, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->>> Hi Paul,
->>> all other patches apply cleanly but this one fails on top of =
-v5.14-rc4.
->>> What base are you using?
->>> BR and thanks,
->>> Nikolaus
->>=20
->> The base is drm-misc (https://cgit.freedesktop.org/drm/drm-misc), =
-branch drm-misc-next.
->=20
-> Ok, fine!
+I've not seen it in the serie.
 
-Contains 3 patches for drm/ingenic and after taking them first, I can =
-apply the series.
-
-Again, BR and thanks,
-Nikolaus
-
+Just my 2v.
+CJ
