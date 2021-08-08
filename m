@@ -2,35 +2,36 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D57C3E38C9
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Aug 2021 07:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C070D3E38D2
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Aug 2021 07:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbhHHFLX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 8 Aug 2021 01:11:23 -0400
-Received: from mo4-p03-ob.smtp.rzone.de ([81.169.146.175]:22146 "EHLO
+        id S230176AbhHHFL0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 8 Aug 2021 01:11:26 -0400
+Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.104]:31144 "EHLO
         mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbhHHFLW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Aug 2021 01:11:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628399444;
+        with ESMTP id S229597AbhHHFLY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 8 Aug 2021 01:11:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628399445;
     s=strato-dkim-0002; d=goldelico.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=CIECkD0GrXNC/kX5exe0hD1JNJlextiGGi7cS4Osk+o=;
-    b=WGMGd3sIBjidEfF06ORFpouaOFCWhElBT3mSki82PNau+bHHhjG+fr6biK3ITdgRMo
-    THb5TYBvtA43UTAqWbH4pDaiCDPWA7IMBjFVXvhV9xGJB9BBzD+LipYcG4rpqi/uwm+9
-    IYObL4LtkYJWaEulejgXqeWQxTXMrD7LgWglnwE+Nufp8tFbdtR8bAdD0YC/JAbPze3w
-    s2ffbaCj6/eTwjKHoJBmYrcdldwFQj4QfKDP5h0dnxzhf7e2Z83qzFGSjDjoBrbZvOuc
-    yer7iQC2mSiVgwR/LVO4sGy2R9tfdqu5WvErJ+RTTDeVWCIhZ00CVMSRkz5DT0LLKikS
-    TsHQ==
+    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=V51zDB/SEkNZuZ7ecnZ90otRco0Fi/AE0VB1B0UCNvQ=;
+    b=FpZ8wN4rWt04qJ7xuU9LZ1ljHPkCSqkgGizgunzRRIWR3viQU5Lk12pmK0huKbB4uP
+    Ml2kMSUZYtldXPM1Zsh6l6I+222kj1hcaWPr7dQhy/DwcYZxYvuyH2yQpOMPmItaleBt
+    czgecl7SFS7w7h1ROvooGaeHA/Ejm8ELCePjzPCQ0iynUszBAjScNZw4i+Vv03kHwwOH
+    aS8HY5rFy3ev3xdib0UKmGb+zmpsaXu4KPfuRw42w58cPhn8FRotwKuSDtPwutipX4lx
+    om0yahRD8fQDBw5g5XefWyiJ2tr6YPW29YFk96x0qFDiB6msHX39ouTGzAVI4jqE+kZq
+    6Kfg==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lByOdcKVX0"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 47.31.0 DYNA|AUTH)
-    with ESMTPSA id Q02727x785AhEyb
+    with ESMTPSA id Q02727x785AiEyc
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Sun, 8 Aug 2021 07:10:43 +0200 (CEST)
+    Sun, 8 Aug 2021 07:10:44 +0200 (CEST)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>,
@@ -58,69 +59,51 @@ Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         Paul Boddie <paul@boddie.org.uk>,
         Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH v3 0/9] MIPS: JZ4780 and CI20 HDMI
-Date:   Sun,  8 Aug 2021 07:10:34 +0200
-Message-Id: <cover.1628399442.git.hns@goldelico.com>
+Subject: [PATCH v3 1/9] drm/ingenic: fix drm_init error path if IPU was registered
+Date:   Sun,  8 Aug 2021 07:10:35 +0200
+Message-Id: <8e873f17fcc9aeb326d99b7c2c8cd25b61dca6f5.1628399442.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1628399442.git.hns@goldelico.com>
+References: <cover.1628399442.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This series adds HDMI support for JZ4780 and CI20 board (and fixes one IPU related issue in registration error path)
-- [patch 1/8] switched from mode_fixup to atomic_check (suggested by robert.foss@linaro.org)
-  - the call to the dw-hdmi specialization is still called mode_fixup
-- [patch 3/8] diverse fixes for ingenic-drm-drv (suggested by paul@crapouillou.net)
-  - factor out some non-HDMI features of the jz4780 into a separate patch
-  - multiple fixes around max height
-  - do not change regmap config but a copy on stack
-  - define some constants
-  - factor out fixing of drm_init error path for IPU into separate patch
-  - use FIELD_PREP()
-- [patch 8/8] conversion to component framework dropped (suggested by Laurent.pinchart@ideasonboard.com and paul@crapouillou.net)
+From: Paul Boddie <paul@boddie.org.uk>
 
-PATCH V2 2021-08-05 16:08:05:
-This series adds HDMI support for JZ4780 and CI20 board
+Code structure is in preparation to add hdmi unregistration in error case
+following the same pattern.
 
-V2:
-- code and commit messages revisited for checkpatch warnings
-- rebased on v5.14-rc4
-- include (failed, hence RFC 8/8) attempt to convert to component framework
-  (was suggested by Paul Cercueil <paul@crapouillou.net> a while ago)
+Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+---
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-
-H. Nikolaus Schaller (1):
-  MIPS: CI20: defconfig: configure for DRM_DW_HDMI_JZ4780
-
-Paul Boddie (7):
-  drm/ingenic: fix drm_init error path if IPU was registered
-  drm/bridge: synopsis: Add mode_fixup and bridge timings support
-  drm/ingenic: Add jz4780 Synopsys HDMI driver
-  drm/ingenic: Add support for JZ4780 and HDMI output
-  MIPS: DTS: jz4780: account for Synopsys HDMI driver and LCD
-    controllers
-  MIPS: DTS: CI20: add HDMI setup
-  drm/ingenic: add some jz4780 specific features
-
-Sam Ravnborg (1):
-  dt-bindings: display: Add ingenic-jz4780-hdmi DT Schema
-
- .../bindings/display/ingenic-jz4780-hdmi.yaml |  82 +++++++++
- arch/mips/boot/dts/ingenic/ci20.dts           |  64 +++++++
- arch/mips/boot/dts/ingenic/jz4780.dtsi        |  45 +++++
- arch/mips/configs/ci20_defconfig              |   7 +
- drivers/gpu/drm/bridge/synopsys/dw-hdmi.c     |   7 +
- drivers/gpu/drm/ingenic/Kconfig               |   9 +
- drivers/gpu/drm/ingenic/Makefile              |   1 +
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c     | 169 ++++++++++++++++--
- drivers/gpu/drm/ingenic/ingenic-drm.h         |  42 +++++
- drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c     | 121 +++++++++++++
- include/drm/bridge/dw_hdmi.h                  |   5 +
- 11 files changed, 538 insertions(+), 14 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
- create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index 5244f47634777..d9a793c314c1e 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -1355,7 +1355,16 @@ static int ingenic_drm_init(void)
+ 			return err;
+ 	}
+ 
+-	return platform_driver_register(&ingenic_drm_driver);
++	err = platform_driver_register(&ingenic_drm_driver);
++	if (err)
++		goto err_ipu_unreg;
++
++	return 0;
++
++err_ipu_unreg:
++	if (IS_ENABLED(CONFIG_DRM_INGENIC_IPU))
++		platform_driver_unregister(ingenic_ipu_driver_ptr);
++	return err;
+ }
+ module_init(ingenic_drm_init);
+ 
 -- 
 2.31.1
 
