@@ -2,89 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCFE3E3F2F
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Aug 2021 07:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402FF3E4470
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Aug 2021 13:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbhHIFEh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 9 Aug 2021 01:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbhHIFEg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Aug 2021 01:04:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACD9C061760
-        for <linux-mips@vger.kernel.org>; Sun,  8 Aug 2021 22:04:16 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mCxSG-000493-8P; Mon, 09 Aug 2021 07:04:04 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mCxSE-0007sy-6z; Mon, 09 Aug 2021 07:04:02 +0200
-Date:   Mon, 9 Aug 2021 07:04:02 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH net-next v3 5/6] net: dsa: qca: ar9331: add bridge support
-Message-ID: <20210809050402.o6l2uu75sslol3la@pengutronix.de>
-References: <20210802131037.32326-1-o.rempel@pengutronix.de>
- <20210802131037.32326-6-o.rempel@pengutronix.de>
- <20210807230829.m3eymcwucjtyrgew@skbuf>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210807230829.m3eymcwucjtyrgew@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 07:03:27 up 249 days, 19:09, 12 users,  load average: 0.06, 0.04,
- 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+        id S233516AbhHILOx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 9 Aug 2021 07:14:53 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:17980 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234920AbhHILOv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 9 Aug 2021 07:14:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1628507645;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=D61QcQ2ikH6pyF93PQRIiJa+9hIZ7LO0u46R8W91maQ=;
+    b=UdOYTApLJwx0c2vExbmf7pAQCT6CniU38cVObbtbANOxSSH1+PVPixmZWbCGXOUSH4
+    6sfUFqq7+6UGFy/oG466AqqBUPwRIU+mhVp+HA2gFqPW2tMnlqlM2hMk0q8jQ1Mz7fCk
+    hzEnCwOMUJQ8V/kdMaXarNnfffy+bD5tabNbYiTXs/kAbUq11+EN4QpRJo0E3lcxqYoA
+    SPvIeQ7mV0frwKBBUIlaqnjNyZRC+DWZoC3rSw99x7aRV3NPVvURG2IA1BkUMTIXV8in
+    1GX/IDOJlr3Dw0DE+1FPlc/V+hXqlmEGPlD3LQjx+68abAlC/+xG3BvKSHq7USTjpAlm
+    iUiw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBp5hRw/qOxWRk4dH6ihWzeaSyEkW3kk6mc5VRcFik4jBU+iRlqxmKI"
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2001:16b8:2d70:c400:353e:9c7b:18f6:2302]
+    by smtp.strato.de (RZmta 47.31.0 AUTH)
+    with ESMTPSA id Q02727x79BE4Joa
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Mon, 9 Aug 2021 13:14:04 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [Letux-kernel] [PATCH 8/8] drm/ingenic: Attach bridge chain to
+ encoders
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <137A13EE-9E0E-469E-BE43-677349478A58@goldelico.com>
+Date:   Mon, 9 Aug 2021 13:14:03 +0200
+Cc:     Paul Boddie <paul@boddie.org.uk>, David Airlie <airlied@linux.ie>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>, list@opendingux.net,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5DADB00D-1E0E-4B3A-86CE-4E98A5DC04DE@goldelico.com>
+References: <20210808134526.119198-1-paul@crapouillou.net>
+ <20210808134526.119198-9-paul@crapouillou.net>
+ <2AEC5953-FE54-4DD5-88B7-783C4D9E23B2@goldelico.com>
+ <4OBJXQ.DA6PDYNSVNYV1@crapouillou.net>
+ <2C83670F-3586-435B-8374-C3CC1C791391@goldelico.com>
+ <137A13EE-9E0E-469E-BE43-677349478A58@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Aug 08, 2021 at 02:08:29AM +0300, Vladimir Oltean wrote:
-> Hi Oleksij,
-> 
-> On Mon, Aug 02, 2021 at 03:10:36PM +0200, Oleksij Rempel wrote:
-> > This switch is providing forwarding matrix, with it we can configure
-> > individual bridges. Potentially we can configure more than one not VLAN
-> > based bridge on this HW.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> > ---
-> 
-> I don't see anywhere in this patch or in this series that the
-> tag_ar9331.c file is being patched to set skb->offload_fwd_mark to true
-> for packets sent (flooded) to the CPU that have already been forwarded
-> by the hardware switch. If the software bridge sees a broadcast packet
-> coming from your driver and it has offload_fwd_mark = false, it will
-> forward it a second time and the other nodes in your network will see
-> duplicates.
+Hi Paul,
+quick feedback: our HDMI on top compiles fine after fixing 2 merge =
+conflicts, but dos not yet work.
+Will need some spare time with access to the CI20 board to research the =
+issue, i.e. can not give feedback immediately.
+BR and thanks,
+Nikolaus
 
-Ok, thank you, I'll take a look on it.
+> Am 08.08.2021 um 21:12 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
+>=20
+>=20
+>> Am 08.08.2021 um 21:06 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>>=20
+>>=20
+>>=20
+>>> Am 08.08.2021 um 21:04 schrieb Paul Cercueil <paul@crapouillou.net>:
+>>>=20
+>>> Hi Nikolaus,
+>>>=20
+>>> Le dim., ao=C3=BBt 8 2021 at 20:57:09 +0200, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>>>> Hi Paul,
+>>>> all other patches apply cleanly but this one fails on top of =
+v5.14-rc4.
+>>>> What base are you using?
+>>>> BR and thanks,
+>>>> Nikolaus
+>>>=20
+>>> The base is drm-misc (https://cgit.freedesktop.org/drm/drm-misc), =
+branch drm-misc-next.
+>>=20
+>> Ok, fine!
+>=20
+> Contains 3 patches for drm/ingenic and after taking them first, I can =
+apply the series.
+>=20
+> Again, BR and thanks,
+> Nikolaus
+>=20
+> _______________________________________________
+> https://projects.goldelico.com/p/gta04-kernel/
+> Letux-kernel mailing list
+> Letux-kernel@openphoenux.org
+> http://lists.goldelico.com/mailman/listinfo.cgi/letux-kernel
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
