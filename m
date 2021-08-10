@@ -2,80 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0363E5B99
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Aug 2021 15:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F013E7F30
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Aug 2021 19:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239701AbhHJN2c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 10 Aug 2021 09:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S232964AbhHJRhp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 10 Aug 2021 13:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237320AbhHJN2b (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Aug 2021 09:28:31 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E68DC061799
-        for <linux-mips@vger.kernel.org>; Tue, 10 Aug 2021 06:28:09 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w20so14868607lfu.7
-        for <linux-mips@vger.kernel.org>; Tue, 10 Aug 2021 06:28:09 -0700 (PDT)
+        with ESMTP id S233241AbhHJRgJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 10 Aug 2021 13:36:09 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43BDC06139E
+        for <linux-mips@vger.kernel.org>; Tue, 10 Aug 2021 10:33:36 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id n7so5354971ljq.0
+        for <linux-mips@vger.kernel.org>; Tue, 10 Aug 2021 10:33:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=txwmknRtly19dwG2TwLijdSUyS9aLwYWp1obTuXBfoc=;
-        b=uZbA+1J935R3usprafc8LRUQw8doPbVfcapR1X2WEhOvM+EX7M63d5ZsO0VAvsVNZS
-         xc3FivfT6ubgZbfMXKz52jSnsZIMXiSe+40kgwcbMhimzux+MtLWI03TsIxYPR8J+FXy
-         Fg5ItgR5ZgUAVtjsevhX75vxMeq6H4bInYp3SkK3AbY468I630NCUa9R16uQJpzFZaVl
-         wSQXu0x1FHzzpXqhzKbQ58q8eGA3P6T88AslMArgdP9Yv7k4KPId9rJKhKVQ0lnvZMgF
-         JJiyC3XFKOXLI7k7TQbwnJZ6QDbjb2mbVHMVLbZcReEvjhfrU1stahisnFI79GDgAQW9
-         +JTA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
+        b=BggyEzSIpVznrhWTl8MIRAYEe15KlTxcMGseAQSFa7RDeDzVHxU4eSoETbmExnaLIE
+         zuq8OYsbcAC4TRTZpDVHuqOpZQ9IWzoDnFG9KE9Hgoh5GHNRpLrX7GaTa2Rlpi17Sa+7
+         wynv7o5vGtXcABH0YLjEMHBgYbVN4gwCCmMbmqM96vylTsH+XuSJQxB2T0aZ0px1WpyQ
+         RfAqEbEJWHwau3sZBSpHTPqcKq0lEWF+TZfP6Hoo/gEZtnmpQsbvRYpoOVsYPdrPzr7x
+         t3j+1ErMjanfyKX6UgQnU/AAqtfTm/Qksyzzn7HfgMwEBK6s4oZtKRsuVtciK72GKLQ3
+         6YUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=txwmknRtly19dwG2TwLijdSUyS9aLwYWp1obTuXBfoc=;
-        b=N7f9m01u06Ay1IwW5r9TdKarT21d/Ku0T9IenO7GC+zlDRUU8nPwm3bOUNKt1kJmzH
-         JBmD0WUcyDNtxGavOWdlA/9IRc4TbRnaRuOHso7FIx7qpUeFoMNYHdZMy2TRWtfJUjk9
-         vKJzXpsS/wPpU3kzBMLtNublnmOuR+EnxYr6tZf3aedk3fe543xSulyjElpSYpG7rS5i
-         xTgvPO0k6V3v/I3jn0uFoCiBo6iqXqkiUeURI9LjH832/GkAIkjcVYGnQYM/21j14HOK
-         Wj1i4iFjSeE57Np9d0kXWsKgO7UxoqyqP/O9ENbxQ9+yaBid4jF2N0HeqgIJpDpP0WPg
-         hhBw==
-X-Gm-Message-State: AOAM531hE/hbR1L4v96U0gwuWR/3C9fjS6QYlVAz+8MKVymPSoDMjNtT
-        6xDSzN6TfhVKlruDXsfqp/Hxejf3w8mer+0t+870uw==
-X-Google-Smtp-Source: ABdhPJwobs4y7d/rU3nBa6u5h3FCXzTiFu5hBR5q/ktt76N9parIbFxpmpXXOJKBBwsROkKpvYnYcohfRvGFRZM7pmY=
-X-Received: by 2002:ac2:5d4a:: with SMTP id w10mr22073687lfd.529.1628602087498;
- Tue, 10 Aug 2021 06:28:07 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=y3BZ+wT7TMDVjM2/WQcyPOhYkG/NWjvDbJIsMqFI2RA=;
+        b=bt6vAF2fknoaPEEAx3R0J7y36SbI1cVloU6+joAT2KS9Dev00gzAv5Kkwp3rYORngK
+         stz8q0bdg2yuw+h7xHGCInjNfUpGq4VCuYe3FMLgP+gTejrYjf36yGPlNyLr0xIxa9vp
+         vhxdJASzPz9tkvWPgYfFNInj+V/GbQFizpfWAPMjYDVzHv9lXhEK46WmjWTXxRoNOuvL
+         /flBS84vohUoWfH0nY+WLh9FdsuZfHvBxBjXsf79rS11DsgxvgEx3dLvHdW5vIN5gVD5
+         jd7rRctfrKuLFVkuMzPN9aAjUy+jhZVQ775J6wOKH+4ODiIAloL0jlSGiky+tK3APC9I
+         WFIA==
+X-Gm-Message-State: AOAM530ZrmKxj1Oy9dz5Xc6sWaeGEBFU9jC0hapDyInE/7xxAR68L9LK
+        nzoWJxU+YX+mcBguy5fs+vLmCKS395zUzy687Vc=
+X-Google-Smtp-Source: ABdhPJxJzT1Kb5atT5yD66iaERNxaunOV6XJPdXL1z2OXUo9BKjwXZsRFKaZJQfJZWzQJ7vPYlv2A2MhcLNWOaJIEsQ=
+X-Received: by 2002:a2e:b61c:: with SMTP id r28mr13615658ljn.274.1628616814996;
+ Tue, 10 Aug 2021 10:33:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210723022543.4095-1-jiaxun.yang@flygoat.com> <20210723022543.4095-7-jiaxun.yang@flygoat.com>
-In-Reply-To: <20210723022543.4095-7-jiaxun.yang@flygoat.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 10 Aug 2021 15:27:56 +0200
-Message-ID: <CACRpkdYVcCW2yD_Xva+cog7i5C=YokMw+52i7iq0Nj2vVbWacA@mail.gmail.com>
-Subject: Re: [PATCH v4 6/9] pinctrl: pistachio: Make it as an option
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+Received: by 2002:ac2:5d2e:0:0:0:0:0 with HTTP; Tue, 10 Aug 2021 10:33:33
+ -0700 (PDT)
+Reply-To: majidmuzaffar8@gmail.com
+From:   Majid Muzaffar <ing.abdullabin.rishid.me@gmail.com>
+Date:   Tue, 10 Aug 2021 20:33:33 +0300
+Message-ID: <CAFsu49W_3bbJbgEKV5RQo3TBRgLduTA-4EwS7hHkwcfSHSRrcg@mail.gmail.com>
+Subject: Proposal
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Jul 23, 2021 at 4:26 AM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+Salam alaikum,
 
-> So it will be avilable for generic MIPS kernel.
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> --
-> v3: Depend on OF as well
+I am the investment officer of UAE based investment company who are
+ready to fund projects outside UAE, in the form of debt finance. We
+grant loan to both Corporate and private entities at a low interest
+rate of 3% ROI per annum. The terms are very flexible and interesting.
+Kindly revert back if you have projects that needs funding for further
+discussion and negotiation.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks
 
-Yours,
-Linus Walleij
+investment officer
