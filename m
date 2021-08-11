@@ -2,187 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6A63E8C96
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 10:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E0B3E8DC9
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 11:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbhHKIw1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Aug 2021 04:52:27 -0400
-Received: from leibniz.telenet-ops.be ([195.130.137.77]:51926 "EHLO
-        leibniz.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236397AbhHKIwA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 04:52:00 -0400
+        id S236881AbhHKJ67 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Aug 2021 05:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236904AbhHKJ6h (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 05:58:37 -0400
 Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by leibniz.telenet-ops.be (Postfix) with ESMTPS id 4Gl3TL07DBzMqjMh
-        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 10:51:34 +0200 (CEST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBE9C06179B
+        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 02:58:10 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:438:1ff1:1071:f524])
         by baptiste.telenet-ops.be with bizsmtp
-        id g8rG250061gJxCh018rG45; Wed, 11 Aug 2021 10:51:33 +0200
+        id g9y52500K1gJxCh019y5qP; Wed, 11 Aug 2021 11:58:07 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1mDjxD-001yaH-W7; Wed, 11 Aug 2021 10:51:16 +0200
+        id 1mDkzs-001zgH-Tp; Wed, 11 Aug 2021 11:58:04 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1mDjxD-0058xf-H6; Wed, 11 Aug 2021 10:51:15 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Dave Young <dyoung@redhat.com>
-Cc:     Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kexec@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v5 9/9] ARM: uncompress: Parse "linux,usable-memory-range" DT property
-Date:   Wed, 11 Aug 2021 10:51:07 +0200
-Message-Id: <5b71846020ce8b715423734365fa4f94aa65d77a.1628670468.git.geert+renesas@glider.be>
+        id 1mDkzr-005NO7-6d; Wed, 11 Aug 2021 11:58:03 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Burton <paulburton@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
+        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v5 00/19] auxdisplay: ht16k33: Add character display support
+Date:   Wed, 11 Aug 2021 11:57:40 +0200
+Message-Id: <20210811095759.1281480-1-geert@linux-m68k.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1628670468.git.geert+renesas@glider.be>
-References: <cover.1628670468.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add support for parsing the "linux,usable-memory-range" DT property.
-This property is used to describe the usable memory reserved for the
-crash dump kernel, and thus makes the memory reservation explicit.
-If present, Linux no longer needs to mask the program counter, and rely
-on the "mem=" kernel parameter to obtain the start and size of usable
-memory.
+	Hi all,
 
-For backwards compatibility, the traditional method to derive the start
-of memory is still used if "linux,usable-memory-range" is absent.
+The Holtek HT16K33 LED controller is not only used for driving
+dot-matrix displays, but also for driving segment displays.
+The current auxdisplay driver is limited to dot-matrix displays, which
+are exposed as a frame buffer device.
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-The corresponding patch for kexec-tools is "[PATCH] arm: kdump: Add DT
-properties to crash dump kernel's DTB", which is still valid:
-https://lore.kernel.org/linux-arm-kernel/20200902154129.6358-1-geert+renesas@glider.be/
+This patch series extends the driver to 4-digit 7-segment and quad
+14-segment alphanumeric displays, allowing the user to display and
+scroll text messages.
 
-v5:
-  - Remove the addition of "linux,elfcorehdr" and
-    "linux,usable-memory-range" handling to arch/arm/mm/init.c,
+List of patches:
+  - Patch 1 provides font data for displaying ASCII characters on
+    14-segment displays,
+  - Patch 2 updates the HT16K33 DT bindings for segment displays,
+  - Patches 3-5 contain a bug fix and small improvements for the
+    Imagination Technologies ASCII LCD Display driver,
+  - Patch 6 extracts the character line display core support from the
+    Imagination Technologies ASCII LCD Display driver, for reuse,
+  - Patches 7-8 contain cleanups and improvements for the character line
+    display core driver,
+  - Patches 9-16 contain a bug fix, cleanups and improvements for the
+    HT16K33 driver, to prepare for segment display support,
+  - Patch 17 adds support for 7/14-segment displays to the HT16K33
+    driver,
+  - Patch 18 updates the HT16K33 DT bindings to document an LED subnode,
+  - Patch 19 adds segment display LED support to the HT16K33 driver,
+    to make use of hardware blinking, and to expose display color.
 
-v4:
-  - Remove references to architectures in chosen.txt, to avoid having to
-    change this again when more architectures copy kdump support,
-  - Remove the architecture-specific code for parsing
-    "linux,usable-memory-range" and "linux,elfcorehdr", as the FDT core
-    code now takes care of this,
-  - Move chosen.txt change to patch changing the FDT core,
-  - Use IS_ENABLED(CONFIG_CRASH_DUMP) instead of #ifdef,
+Changes compared to v4[1]:
+  - Add Reviewed-by,
+  - Add missing select NEW_LEDS.
 
-v3:
-  - Rebase on top of accepted solution for DTB memory information
-    handling, which is part of v5.12-rc1,
+Changes compared to v3[2]:
+  - Combine compatible values for 7/14 segment displays into an enum,
+  - Add Reviewed-by,
+  - Add missing select LEDS_CLASS.
 
-v2:
-  - Rebase on top of reworked DTB memory information handling.
----
- .../arm/boot/compressed/fdt_check_mem_start.c | 48 ++++++++++++++++---
- 1 file changed, 42 insertions(+), 6 deletions(-)
+Changes compared to v2[3]:
+  - Drop color property from display node,
+  - Use compat_only_sysfs_link_entry_to_kobj() instead of cooking our
+    own helper on top of kernfs_create_link(),
+  - Use "err" instead of "error" to be consistent with existing driver
+    naming style,
+  - Pass "dev" instead of "client" to ht16k33_fbdev_probe() and
+    ht16k33_seg_probe(),
+  - Drop local variable "node",
+  - Remove unneeded inclusion of <linux/leds.h> and <linux/of_device.h>,
+  - Document LED subnode,
+  - Remove unneeded C++ comment,
+  - Make the creation of the LED device dependent on the presence of the
+    "led" subnode in DT, so it can be used in dot-matrix mode too.
+  - Use led_init_data() and devm_led_classdev_register_ext() to retrieve
+    all LED properties from DT, instead of manual LED name construction
+    based on just the "color" property.
 
-diff --git a/arch/arm/boot/compressed/fdt_check_mem_start.c b/arch/arm/boot/compressed/fdt_check_mem_start.c
-index 62450d824c3ca180..9291a2661bdfe57f 100644
---- a/arch/arm/boot/compressed/fdt_check_mem_start.c
-+++ b/arch/arm/boot/compressed/fdt_check_mem_start.c
-@@ -55,16 +55,17 @@ static uint64_t get_val(const fdt32_t *cells, uint32_t ncells)
-  * DTB, and, if out-of-range, replace it by the real start address.
-  * To preserve backwards compatibility (systems reserving a block of memory
-  * at the start of physical memory, kdump, ...), the traditional method is
-- * always used if it yields a valid address.
-+ * used if it yields a valid address, unless the "linux,usable-memory-range"
-+ * property is present.
-  *
-  * Return value: start address of physical memory to use
-  */
- uint32_t fdt_check_mem_start(uint32_t mem_start, const void *fdt)
- {
--	uint32_t addr_cells, size_cells, base;
-+	uint32_t addr_cells, size_cells, usable_base, base;
- 	uint32_t fdt_mem_start = 0xffffffff;
--	const fdt32_t *reg, *endp;
--	uint64_t size, end;
-+	const fdt32_t *usable, *reg, *endp;
-+	uint64_t size, usable_end, end;
- 	const char *type;
- 	int offset, len;
- 
-@@ -80,6 +81,27 @@ uint32_t fdt_check_mem_start(uint32_t mem_start, const void *fdt)
- 	if (addr_cells > 2 || size_cells > 2)
- 		return mem_start;
- 
-+	/*
-+	 * Usable memory in case of a crash dump kernel
-+	 * This property describes a limitation: memory within this range is
-+	 * only valid when also described through another mechanism
-+	 */
-+	usable = get_prop(fdt, "/chosen", "linux,usable-memory-range",
-+			  (addr_cells + size_cells) * sizeof(fdt32_t));
-+	if (usable) {
-+		size = get_val(usable + addr_cells, size_cells);
-+		if (!size)
-+			return mem_start;
-+
-+		if (addr_cells > 1 && fdt32_ld(usable)) {
-+			/* Outside 32-bit address space */
-+			return mem_start;
-+		}
-+
-+		usable_base = fdt32_ld(usable + addr_cells - 1);
-+		usable_end = usable_base + size;
-+	}
-+
- 	/* Walk all memory nodes and regions */
- 	for (offset = fdt_next_node(fdt, -1, NULL); offset >= 0;
- 	     offset = fdt_next_node(fdt, offset, NULL)) {
-@@ -107,7 +129,20 @@ uint32_t fdt_check_mem_start(uint32_t mem_start, const void *fdt)
- 
- 			base = fdt32_ld(reg + addr_cells - 1);
- 			end = base + size;
--			if (mem_start >= base && mem_start < end) {
-+			if (usable) {
-+				/*
-+				 * Clip to usable range, which takes precedence
-+				 * over mem_start
-+				 */
-+				if (base < usable_base)
-+					base = usable_base;
-+
-+				if (end > usable_end)
-+					end = usable_end;
-+
-+				if (end <= base)
-+					continue;
-+			} else if (mem_start >= base && mem_start < end) {
- 				/* Calculated address is valid, use it */
- 				return mem_start;
- 			}
-@@ -123,7 +158,8 @@ uint32_t fdt_check_mem_start(uint32_t mem_start, const void *fdt)
- 	}
- 
- 	/*
--	 * The calculated address is not usable.
-+	 * The calculated address is not usable, or was overridden by the
-+	 * "linux,usable-memory-range" property.
- 	 * Use the lowest usable physical memory address from the DTB instead,
- 	 * and make sure this is a multiple of 2 MiB for phys/virt patching.
- 	 */
+Changes compared to v1[4]:
+  - Fix type of color to uint32,
+  - "refresh-rate-hz" is still required for dot-matrix displays.
+  - Move "select LINEDISP" for HT16K33 symbol to correct patch,
+  - Add backwards compatibility "message" symlink to img-ascii-lcd,
+  - Connect backlight to fbdev in ht16k33 dot-matrix mode,
+  - Set "err = -EINVAL" in switch() case that cannot happen,
+  - Use "auxdisplay" instead of DRIVER_NAME in LED name.
+
+This series has been tested using an Adafruit 0.54" Quad Alphanumeric
+Red FeatherWing Display, connected to an OrangeCrab ECP5 FPGA board
+running a 64 MHz VexRiscv RISC-V softcore.
+7-segment display support is based purely on schematics, and has not
+been tested on actual hardware.  The changes to img-ascii-lcd.c are also
+untested, due to lack of hardware.
+
+Thanks!
+
+[1] "[PATCH v4 00/19] auxdisplay: ht16k33: Add character display support"
+    https://lore.kernel.org/r/20210727140459.3767788-1-geert@linux-m68k.org/
+[2] "[PATCH v3 00/19] auxdisplay: ht16k33: Add character display support"
+    https://lore.kernel.org/r/20210714151130.2531831-1-geert@linux-m68k.org/
+[3] "[PATCH v2 00/18] auxdisplay: ht16k33: Add character display support"
+    https://lore.kernel.org/r/20210625125902.1162428-1-geert@linux-m68k.org/
+[4] "[PATCH 00/17] auxdisplay: ht16k33: Add character display support"
+    https://lore.kernel.org/r/20210322144848.1065067-1-geert@linux-m68k.org/
+
+Geert Uytterhoeven (19):
+  uapi: Add <linux/map_to_14segment.h>
+  dt-bindings: auxdisplay: ht16k33: Document Adafruit segment displays
+  auxdisplay: img-ascii-lcd: Fix lock-up when displaying empty string
+  auxdisplay: img-ascii-lcd: Add helper variable dev
+  auxdisplay: img-ascii-lcd: Convert device attribute to sysfs_emit()
+  auxdisplay: Extract character line display core support
+  auxdisplay: linedisp: Use kmemdup_nul() helper
+  auxdisplay: linedisp: Add support for changing scroll rate
+  auxdisplay: ht16k33: Connect backlight to fbdev
+  auxdisplay: ht16k33: Use HT16K33_FB_SIZE in ht16k33_initialize()
+  auxdisplay: ht16k33: Remove unneeded error check in keypad probe()
+  auxdisplay: ht16k33: Convert to simple i2c probe function
+  auxdisplay: ht16k33: Add helper variable dev
+  auxdisplay: ht16k33: Move delayed work
+  auxdisplay: ht16k33: Extract ht16k33_brightness_set()
+  auxdisplay: ht16k33: Extract frame buffer probing
+  auxdisplay: ht16k33: Add support for segment displays
+  dt-bindings: auxdisplay: ht16k33: Document LED subnode
+  auxdisplay: ht16k33: Add LED support
+
+ .../bindings/auxdisplay/holtek,ht16k33.yaml   |  31 +-
+ drivers/auxdisplay/Kconfig                    |  10 +
+ drivers/auxdisplay/Makefile                   |   1 +
+ drivers/auxdisplay/ht16k33.c                  | 473 ++++++++++++++----
+ drivers/auxdisplay/img-ascii-lcd.c            | 205 ++------
+ drivers/auxdisplay/line-display.c             | 261 ++++++++++
+ drivers/auxdisplay/line-display.h             |  43 ++
+ include/uapi/linux/map_to_14segment.h         | 239 +++++++++
+ 8 files changed, 996 insertions(+), 267 deletions(-)
+ create mode 100644 drivers/auxdisplay/line-display.c
+ create mode 100644 drivers/auxdisplay/line-display.h
+ create mode 100644 include/uapi/linux/map_to_14segment.h
+
 -- 
 2.25.1
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
