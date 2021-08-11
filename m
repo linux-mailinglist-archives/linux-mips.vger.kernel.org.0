@@ -2,54 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF12D3E8BB6
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 10:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5483E8BBC
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 10:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbhHKIZL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Aug 2021 04:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        id S236024AbhHKIZj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Aug 2021 04:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbhHKIZJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 04:25:09 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5DEC061765
-        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 01:24:46 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z20so4048510lfd.2
-        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 01:24:46 -0700 (PDT)
+        with ESMTP id S235867AbhHKIZi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 04:25:38 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E53C0613D5
+        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 01:25:15 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id m9so3241007ljp.7
+        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 01:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=GVm6z+/Bdr1n5Fxa4kSmJVT5Ljn0y9dUOJYnV8Z4PAA=;
-        b=npDtkwz0NnMywdciIG5W0LkfTTOnjggjeCnH3sgoLPN5Hccs4URBbWq0lmrVIjgkvq
-         xbw1AbzO+nfE/1+yQfqze5oHl+jtYm8kIc0fIISaS/9tYulHcumxsocgP8gWH6N384vJ
-         /wcpWMM9natlQocS/RkP4b+cv2u+VIoEG6se5sHXdymoQP6TbjNPWzqaYk1u1mIzV1m5
-         k/VXeVLYNelL05P2GONZFDXEVKbEMZuK5Wdc/nVDbRe4k2XMzG2/KcI8HKBwvc/QK+7R
-         Xaih6iEM4iWlhD2N2TbtPpV0Txi6EiQpWa5BMj7p3CWEQ5XAdC2r9qfcwTXEOKqm33+t
-         m2yg==
+        bh=zYG5OW/GuymVifdul+I5Blg04g1AAAuKaCzk0pvxhf0=;
+        b=JkV7+VuBX5K8gla+CwLaHXvUhgX/3/dJKO5GvH3X+2fpHvc1tFi1HU1F0ziyTvpwf5
+         QPM7g2HMUSED4KzVS/g/93Duae/vBTVp6NehMfjyCW1VA7AgjotRGjj+qxQylG2s3Wbf
+         bPWzUwSX19VB0o394R2/B8eURFP2w3Yto/QB+Pug9yFjCGd5zwjlVbQOv2vGk6hv744V
+         83I0NxCVq5gx8hG4Jy+sBpnSxOo0BYgeYXD5sFnWakt0/dbE3woTztU3g1TZhQ/dTac7
+         zoGO6i3JdC/phPsXewy/Io6GaXQe+zOnBKcvcziyK/tt3l0HaMe6NA1qa+ZEOJHJmliP
+         gDew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=GVm6z+/Bdr1n5Fxa4kSmJVT5Ljn0y9dUOJYnV8Z4PAA=;
-        b=TbqzDWLqi95jA4jTfUzyKnP+fUCHib5r38yFsQzSRyhVM2Pj8oSSkDqOtSKl/M80Qd
-         E1mtEgkoEYClG0PSHPzrqPtLosjTo/3xMtiAlmY8leDlTCMu0uCWouFhqfD4l8Vp4WDJ
-         ota7QN+yuolbGmamG0Qu41BpAPwrYFwSsMqwMLHSHlEv6XyOiHOgU7yjpdLIYlQVxtwb
-         gY5jBbzDvT9+VxuE0pQMKfM7f81fUoihTxNWcNyKfd4bKRFEgajaoyuq0ztCOS4fHt1L
-         awKfIITq0vElUhZbTh1K9oq78dBqHq0YZWMX7UwtkAbx9aiqGP0nSOOYdbbZ8VfPz5YA
-         SZlQ==
-X-Gm-Message-State: AOAM533sAs8ZYjFEFy2XOfjjFNm0IGzioDwEWSTGn104VoIcce9FE9F6
-        uXsaqUPj6UNc/QO+c2UVMmZNkmOzUnBZN72HYZSulw==
-X-Google-Smtp-Source: ABdhPJw4NdVqOP8gfyXv+14MvH9T3lyPveKwazy7JVk+5XTR/vz5E6tNfn4zvYKymCGWRbOp10vWB0/n7S2SBJmBe0Y=
-X-Received: by 2002:a05:6512:132a:: with SMTP id x42mr24116051lfu.291.1628670284748;
- Wed, 11 Aug 2021 01:24:44 -0700 (PDT)
+        bh=zYG5OW/GuymVifdul+I5Blg04g1AAAuKaCzk0pvxhf0=;
+        b=BsBDK2JxihQwyMrTGayc7a1KtN2STida49caMjPgLwEgUmfABvZ+DpyopnjwErWVLV
+         8qjEEu05s/dsm0wCCFZ6bNdOTmGRUCQUEVbtbCpOAXPTBkmo8vSgcjPKUALSPZKbV1d2
+         Df2sYaJsA0ggBaHGLm2ZrapGzD6/1qEMFYZEVIVgFsGKlqopDOiUZOCCwW6M/hGinVri
+         eBjT3FqxVcfx5bEjKymuNevsJ0U9TTslfuP2D+8aNrCCe/82b3Wrg3FAC8Ga9esj5QHe
+         NZJ5MplejdzZXtLmiTRzcQzER9MFNfp33zgsyXXvNOSZP/52NaoV2ShsvVw0jluN9dUx
+         hu1Q==
+X-Gm-Message-State: AOAM531Vlzf+2mi7EUk9GzTPnaSfYp0soChZZ02+91Ym+PlMH4WwZgwa
+        nTdW4kf/9SGq472M+kyLTOZ1HWnwz4yPYylphvX9zg==
+X-Google-Smtp-Source: ABdhPJyCWvmoleKs+xBVZZ6DUMgjMXPl0OJ3a6DQFu9ePBD1OEIdGRr9JPO3iNfDJuIooutbqNKEx3Horr68DKpJ8SY=
+X-Received: by 2002:a2e:9a4b:: with SMTP id k11mr11984502ljj.368.1628670313474;
+ Wed, 11 Aug 2021 01:25:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210717174836.14776-1-paul@crapouillou.net>
-In-Reply-To: <20210717174836.14776-1-paul@crapouillou.net>
+References: <20210717174836.14776-1-paul@crapouillou.net> <20210717174836.14776-2-paul@crapouillou.net>
+In-Reply-To: <20210717174836.14776-2-paul@crapouillou.net>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 11 Aug 2021 10:24:33 +0200
-Message-ID: <CACRpkdakKpyb375DY+D5BgS6NK4c_LoLRmQ_hh-F8KQpR_wtvg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] pinctrl: ingenic: Fix incorrect pull up/down info
+Date:   Wed, 11 Aug 2021 10:25:02 +0200
+Message-ID: <CACRpkdY3fyAqwGBpBBTNrERMVcP6+61DiDL6BPEFbn5BiuiQ6A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] pinctrl: ingenic: Fix bias config for X2000(E)
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
         linux-mips@vger.kernel.org,
@@ -63,12 +63,14 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Sat, Jul 17, 2021 at 7:48 PM Paul Cercueil <paul@crapouillou.net> wrote:
 
-> Fix the pull up/down info for both the JZ4760 and JZ4770 SoCs, as the
-> previous values sometimes contradicted what's written in the programming
-> manual.
+> The ingenic_set_bias() function's "bias" argument is not a
+> "enum pin_config_param", so its value should not be compared against
+> values of that enum.
 >
-> Fixes: b5c23aa46537 ("pinctrl: add a pinctrl driver for the Ingenic jz47xx SoCs")
-> Cc: <stable@vger.kernel.org> # v4.12
+> This should fix the bias config not working on the X2000(E) SoCs.
+>
+> Fixes: 943e0da15370 ("pinctrl: Ingenic: Add pinctrl driver for X2000.")
+> Cc: <stable@vger.kernel.org> # v5.12
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
 Patch applied!
