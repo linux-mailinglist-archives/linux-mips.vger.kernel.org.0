@@ -2,29 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 619233E8DDD
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 11:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8043E8DA6
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 11:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236816AbhHKJ7W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Aug 2021 05:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S236792AbhHKJ6c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Aug 2021 05:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236807AbhHKJ6c (ORCPT
+        with ESMTP id S236647AbhHKJ6c (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 05:58:32 -0400
 Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132BAC0613D5
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B043FC06179F
         for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 02:58:08 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:438:1ff1:1071:f524])
         by albert.telenet-ops.be with bizsmtp
-        id g9y42500j1gJxCh069y49C; Wed, 11 Aug 2021 11:58:07 +0200
+        id g9y42500S1gJxCh069y498; Wed, 11 Aug 2021 11:58:06 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1mDkzs-001zgO-H9; Wed, 11 Aug 2021 11:58:04 +0200
+        id 1mDkzs-001zgP-9B; Wed, 11 Aug 2021 11:58:04 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1mDkzr-005NP0-He; Wed, 11 Aug 2021 11:58:03 +0200
+        id 1mDkzr-005NP7-IS; Wed, 11 Aug 2021 11:58:03 +0200
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
 To:     Robin van der Gracht <robin@protonic.nl>,
         Miguel Ojeda <ojeda@kernel.org>,
@@ -35,9 +35,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v5 08/19] auxdisplay: linedisp: Add support for changing scroll rate
-Date:   Wed, 11 Aug 2021 11:57:48 +0200
-Message-Id: <20210811095759.1281480-9-geert@linux-m68k.org>
+Subject: [PATCH v5 09/19] auxdisplay: ht16k33: Connect backlight to fbdev
+Date:   Wed, 11 Aug 2021 11:57:49 +0200
+Message-Id: <20210811095759.1281480-10-geert@linux-m68k.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210811095759.1281480-1-geert@linux-m68k.org>
 References: <20210811095759.1281480-1-geert@linux-m68k.org>
@@ -47,13 +47,12 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-If the message to display is longer than the number of characters that
-the display can show, the message will be scrolled.  Currently the
-scroll rate is fixed, moving every 500 ms.
+Currently /sys/class/graphics/fb0/bl_curve is not accessible (-ENODEV),
+as the driver does not connect the backlight to the frame buffer device.
+Fix this moving backlight initialization up, and filling in
+fb_info.bl_dev.
 
-Add support for changing the scroll rate through a "scroll_step_ms"
-device attribute in sysfs.
-
+Fixes: 8992da44c6805d53 ("auxdisplay: ht16k33: Driver for LED controller")
 Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 ---
 v5:
@@ -66,82 +65,92 @@ v3:
   - No changes,
 
 v2:
-  - No changes.
+  - New.
 ---
- drivers/auxdisplay/line-display.c | 37 +++++++++++++++++++++++++++++--
- 1 file changed, 35 insertions(+), 2 deletions(-)
+ drivers/auxdisplay/ht16k33.c | 56 ++++++++++++++++++------------------
+ 1 file changed, 28 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/auxdisplay/line-display.c b/drivers/auxdisplay/line-display.c
-index 3f35199bc39f511f..03e7f104aa1add32 100644
---- a/drivers/auxdisplay/line-display.c
-+++ b/drivers/auxdisplay/line-display.c
-@@ -19,6 +19,8 @@
+diff --git a/drivers/auxdisplay/ht16k33.c b/drivers/auxdisplay/ht16k33.c
+index 1e69cc6d21a0dca2..2b630e194570f6e5 100644
+--- a/drivers/auxdisplay/ht16k33.c
++++ b/drivers/auxdisplay/ht16k33.c
+@@ -413,6 +413,33 @@ static int ht16k33_probe(struct i2c_client *client,
+ 	if (err)
+ 		return err;
  
- #include "line-display.h"
- 
-+#define DEFAULT_SCROLL_RATE	(HZ / 2)
++	/* Backlight */
++	memset(&bl_props, 0, sizeof(struct backlight_properties));
++	bl_props.type = BACKLIGHT_RAW;
++	bl_props.max_brightness = MAX_BRIGHTNESS;
 +
- /**
-  * linedisp_scroll() - scroll the display by a character
-  * @t: really a pointer to the private data structure
-@@ -50,7 +52,7 @@ static void linedisp_scroll(struct timer_list *t)
- 	linedisp->scroll_pos %= linedisp->message_len;
- 
- 	/* rearm the timer */
--	if (linedisp->message_len > num_chars)
-+	if (linedisp->message_len > num_chars && linedisp->scroll_rate)
- 		mod_timer(&linedisp->timer, jiffies + linedisp->scroll_rate);
- }
- 
-@@ -149,8 +151,39 @@ static ssize_t message_store(struct device *dev, struct device_attribute *attr,
- 
- static DEVICE_ATTR_RW(message);
- 
-+static ssize_t scroll_step_ms_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
-+{
-+	struct linedisp *linedisp = container_of(dev, struct linedisp, dev);
-+
-+	return sysfs_emit(buf, "%u\n", jiffies_to_msecs(linedisp->scroll_rate));
-+}
-+
-+static ssize_t scroll_step_ms_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	struct linedisp *linedisp = container_of(dev, struct linedisp, dev);
-+	unsigned int ms;
-+
-+	if (kstrtouint(buf, 10, &ms) != 0)
-+		return -EINVAL;
-+
-+	linedisp->scroll_rate = msecs_to_jiffies(ms);
-+	if (linedisp->message && linedisp->message_len > linedisp->num_chars) {
-+		del_timer_sync(&linedisp->timer);
-+		if (linedisp->scroll_rate)
-+			linedisp_scroll(&linedisp->timer);
++	bl = devm_backlight_device_register(&client->dev, DRIVER_NAME"-bl",
++					    &client->dev, priv,
++					    &ht16k33_bl_ops, &bl_props);
++	if (IS_ERR(bl)) {
++		dev_err(&client->dev, "failed to register backlight\n");
++		return PTR_ERR(bl);
 +	}
 +
-+	return count;
-+}
++	err = of_property_read_u32(node, "default-brightness-level",
++				   &dft_brightness);
++	if (err) {
++		dft_brightness = MAX_BRIGHTNESS;
++	} else if (dft_brightness > MAX_BRIGHTNESS) {
++		dev_warn(&client->dev,
++			 "invalid default brightness level: %u, using %u\n",
++			 dft_brightness, MAX_BRIGHTNESS);
++		dft_brightness = MAX_BRIGHTNESS;
++	}
 +
-+static DEVICE_ATTR_RW(scroll_step_ms);
++	bl->props.brightness = dft_brightness;
++	ht16k33_bl_update_status(bl);
 +
- static struct attribute *linedisp_attrs[] = {
- 	&dev_attr_message.attr,
-+	&dev_attr_scroll_step_ms.attr,
- 	NULL,
- };
- ATTRIBUTE_GROUPS(linedisp);
-@@ -182,7 +215,7 @@ int linedisp_register(struct linedisp *linedisp, struct device *parent,
- 	linedisp->update = update;
- 	linedisp->buf = buf;
- 	linedisp->num_chars = num_chars;
--	linedisp->scroll_rate = HZ / 2;
-+	linedisp->scroll_rate = DEFAULT_SCROLL_RATE;
+ 	/* Framebuffer (2 bytes per column) */
+ 	BUILD_BUG_ON(PAGE_SIZE < HT16K33_FB_SIZE);
+ 	fbdev->buffer = (unsigned char *) get_zeroed_page(GFP_KERNEL);
+@@ -445,6 +472,7 @@ static int ht16k33_probe(struct i2c_client *client,
+ 	fbdev->info->screen_size = HT16K33_FB_SIZE;
+ 	fbdev->info->fix = ht16k33_fb_fix;
+ 	fbdev->info->var = ht16k33_fb_var;
++	fbdev->info->bl_dev = bl;
+ 	fbdev->info->pseudo_palette = NULL;
+ 	fbdev->info->flags = FBINFO_FLAG_DEFAULT;
+ 	fbdev->info->par = priv;
+@@ -460,34 +488,6 @@ static int ht16k33_probe(struct i2c_client *client,
+ 			goto err_fbdev_unregister;
+ 	}
  
- 	device_initialize(&linedisp->dev);
- 	dev_set_name(&linedisp->dev, "linedisp.%lu",
+-	/* Backlight */
+-	memset(&bl_props, 0, sizeof(struct backlight_properties));
+-	bl_props.type = BACKLIGHT_RAW;
+-	bl_props.max_brightness = MAX_BRIGHTNESS;
+-
+-	bl = devm_backlight_device_register(&client->dev, DRIVER_NAME"-bl",
+-					    &client->dev, priv,
+-					    &ht16k33_bl_ops, &bl_props);
+-	if (IS_ERR(bl)) {
+-		dev_err(&client->dev, "failed to register backlight\n");
+-		err = PTR_ERR(bl);
+-		goto err_fbdev_unregister;
+-	}
+-
+-	err = of_property_read_u32(node, "default-brightness-level",
+-				   &dft_brightness);
+-	if (err) {
+-		dft_brightness = MAX_BRIGHTNESS;
+-	} else if (dft_brightness > MAX_BRIGHTNESS) {
+-		dev_warn(&client->dev,
+-			 "invalid default brightness level: %u, using %u\n",
+-			 dft_brightness, MAX_BRIGHTNESS);
+-		dft_brightness = MAX_BRIGHTNESS;
+-	}
+-
+-	bl->props.brightness = dft_brightness;
+-	ht16k33_bl_update_status(bl);
+-
+ 	ht16k33_fb_queue(priv);
+ 	return 0;
+ 
 -- 
 2.25.1
 
