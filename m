@@ -2,308 +2,198 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 331433E8DB6
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 11:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA5A3E8E66
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 12:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236957AbhHKJ6k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Aug 2021 05:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S236948AbhHKKUr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Aug 2021 06:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236890AbhHKJ6h (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 05:58:37 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E2EC06119A
-        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 02:58:10 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:438:1ff1:1071:f524])
-        by xavier.telenet-ops.be with bizsmtp
-        id g9y52500X1gJxCh019y5RV; Wed, 11 Aug 2021 11:58:07 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mDkzs-001zgg-Vh; Wed, 11 Aug 2021 11:58:04 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mDkzr-005NQF-Sm; Wed, 11 Aug 2021 11:58:03 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Burton <paulburton@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
-        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v5 19/19] auxdisplay: ht16k33: Add LED support
-Date:   Wed, 11 Aug 2021 11:57:59 +0200
-Message-Id: <20210811095759.1281480-20-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210811095759.1281480-1-geert@linux-m68k.org>
-References: <20210811095759.1281480-1-geert@linux-m68k.org>
+        with ESMTP id S237045AbhHKKUW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 06:20:22 -0400
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57622C061765;
+        Wed, 11 Aug 2021 03:19:52 -0700 (PDT)
+Received: by mail-vk1-xa2c.google.com with SMTP id x11so527577vke.1;
+        Wed, 11 Aug 2021 03:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I5+sfKd8Qk5fi/K9nkfNRq3adRlaCZduPHrRMySxD8Q=;
+        b=ldcW3CpuFUXP9UrjOK7qktadT10ivs8KVrrs7JsoTaX/NAdEGiTSkixKByyeW1Oc9j
+         xXd+Xr9e2nGn+ttE8jICPmzUBbCcUrgRion53J9uFOkxnvzpTT7mH2YXtO2wsh8AezVV
+         FxxybmRptOKS8f7lyLRnxE9lZclXnFWszANsq2aaBLGgjSitc9JaGYCRDuo2MW+iWfza
+         ebLhrR4FyLBCWy6C/MN1BXRXxhNbdUPNTez56nv4754PQiwHnXWlCHRYPBbfNf3ggCJi
+         Alw63VCEwV1sbaS8KSmKGrJ5ICbHc4SxR04hR2mkiYhIExf6rM9W3Z7X5JhFE1Yo5+J+
+         VCmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I5+sfKd8Qk5fi/K9nkfNRq3adRlaCZduPHrRMySxD8Q=;
+        b=WmvDRdxXP8p/moKH5c4UzYUFVN2qqigrFXp/GMH1xsKcmTn7JLqeNW5BVSlmC6JZ48
+         X9mOFLZmgQFgSR47B+5iJ93aKc9GEhmz1Xd5icj8vZeRPwqOLdfF9/J7vrgznJ/JhRlb
+         uFd1tQ+Gt0dx18frI8Ov8GN+qWTBd/ITbFIR3Y91VhZ7cafNuI4T8uOwh7XYQyEEpVcg
+         Z5wFMklvsuouDgcRvlXjIT9qgGHcxgLEB9z8WbRmRNfgzLSaOL/KF3wC7wrvQ/aq0p02
+         sDyKiTW6TryzkGAIr0J3c+qvlt/Os4taJfbLJ9rPIw7yCK/rBj0iRrnWaVr0JaRvBpY3
+         pn2g==
+X-Gm-Message-State: AOAM530vvUccTORwJtwdipvNSuCIncdWLGgfv2uXsc7MTI60dX8mofs5
+        Ug5YmmWX9Q8GnITK6U0LsepVPr3ZAHNDPXGyDos=
+X-Google-Smtp-Source: ABdhPJxNKHPZi0srhB9nyrbfWxcjJPGixvokF8J7BnQ8SqYZNjtYkAc9Eq6ekrydVHBucD3e4YkM3pbdwPVl9xq89Wc=
+X-Received: by 2002:a05:6122:925:: with SMTP id j37mr3630877vka.21.1628677190504;
+ Wed, 11 Aug 2021 03:19:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210807072409.9018-3-sergio.paracuellos@gmail.com> <20210810223245.GA2311409@bjorn-Precision-5520>
+In-Reply-To: <20210810223245.GA2311409@bjorn-Precision-5520>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Wed, 11 Aug 2021 12:19:39 +0200
+Message-ID: <CAMhs-H9+A1k7=vTHV4TTMOw=8vudD7D5HTgPKGN_NG40=THTQQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] PCI: of: avoid 'devm_pci_remap_iospace' if PCI_IOBASE
+ is not defined
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Instantiate a single LED based on the "led" subnode in DT.
-This allows the user to control display brightness and blinking (backed
-by hardware support) through the LED class API and triggers, and exposes
-the display color.  The LED will be named
-"auxdisplay:<color>:<function>".
+Hi Bjorn,
 
-When running in dot-matrix mode and if no "led" subnode is found, the
-driver falls back to the traditional backlight mode, to preserve
-backwards compatibility.
+On Wed, Aug 11, 2021 at 12:32 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Sat, Aug 07, 2021 at 09:24:08AM +0200, Sergio Paracuellos wrote:
+> > Defining PCI_IOBASE for MIPS ralink in expected addresses results in PCI IO
+> > resources being assigned but the addresses generated for IO accesses are wrong
+> > since the ioremap in the PCI core function 'pci_parse_request_of_pci_ranges'
+> > tries to remap to a fixed virtual address (PC_IOBASE) which can't work for KSEG1
+> > addresses. To get it working this way, we would need to put PCI_IOBASE somewhere
+> > into KSEG2 which will result in creating TLB entries for IO addresses, which most
+> > of the time isn't needed on MIPS because of access via KSEG1. To allow MIPS PCI
+> > drivers to properly use the PCI generic core we need to increase IO_SPACE_LIMIT
+> > since IO addresses are in addresses higher that 0xffff. We also need to avoid
+> > the call 'devm_pci_remap_iospace' when 'pci_parse_request_of_pci_ranges' is
+> > called to avoid the following problem:
+>
+> Rewrap to fit in ~75 columns.
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
-v5:
-  - Add missing select NEW_LEDS,
+I thought it was already around 75 columns :). For sure, I will
+carefully check this for the next version.
 
-v4:
-  - Add missing select LEDS_CLASS,
+>
+> This is a generic change so the commit log needs to be generic as
+> well.  The MIPS/KSEG1/KSEG2 information is not really useful here
+> because most readers won't understand it (and I don't :)).
 
-v3:
-  - Remove unneeded C++ comment,
-  - Use "err" instead of "error" to be consistent with existing driver
-    naming style,
-  - Make the creation of the LED device dependent on the presence of the
-    "led" subnode in DT, so it can be used in dot-matrix mode too.
-  - Use led_init_data() and devm_led_classdev_register_ext() to retrieve
-    all LED properties from DT, instead of manual LED name construction
-    based on just the "color" property,
+Yes, you are right, my bad here. MIPS specific address segment names
+should be out of generic commit messages like this.
 
-v2:
-  - Use "auxdisplay" instead of DRIVER_NAME in LED name.
----
- drivers/auxdisplay/Kconfig   |   2 +
- drivers/auxdisplay/ht16k33.c | 124 ++++++++++++++++++++++++++++++-----
- 2 files changed, 109 insertions(+), 17 deletions(-)
+>
+> devm_pci_remap_iospace() calls pci_remap_iospace(), which already
+> contains #ifdef PCI_IOBASE.  When PCI_IOBASE is not defined (as on
+> MIPS ralink), it emits the warning below and returns failure.
+>
+> This patch avoids that failure, but it still leaves
+> devm_pci_remap_iospace() and pci_remap_iospace() broken on MIPS
+> ralink.  It's true that on MIPS ralink, they are currently only called
+> via pci_parse_request_of_pci_ranges(), but I think it would be better
+> if we could fix pci_remap_iospace() to handle this case so all these
+> interfaces work consistently.
 
-diff --git a/drivers/auxdisplay/Kconfig b/drivers/auxdisplay/Kconfig
-index 42fc7b155de09dbc..e32ef7f9945d49b2 100644
---- a/drivers/auxdisplay/Kconfig
-+++ b/drivers/auxdisplay/Kconfig
-@@ -176,6 +176,8 @@ config HT16K33
- 	select FB_SYS_IMAGEBLIT
- 	select INPUT_MATRIXKMAP
- 	select FB_BACKLIGHT
-+	select NEW_LEDS
-+	select LEDS_CLASS
- 	select LINEDISP
- 	help
- 	  Say yes here to add support for Holtek HT16K33, RAM mapping 16*8
-diff --git a/drivers/auxdisplay/ht16k33.c b/drivers/auxdisplay/ht16k33.c
-index 3b555e119e326cec..8c9a4a554a680ff2 100644
---- a/drivers/auxdisplay/ht16k33.c
-+++ b/drivers/auxdisplay/ht16k33.c
-@@ -18,6 +18,7 @@
- #include <linux/backlight.h>
- #include <linux/input.h>
- #include <linux/input/matrix_keypad.h>
-+#include <linux/leds.h>
- #include <linux/workqueue.h>
- #include <linux/mm.h>
- 
-@@ -34,6 +35,10 @@
- 
- #define REG_DISPLAY_SETUP		0x80
- #define REG_DISPLAY_SETUP_ON		BIT(0)
-+#define REG_DISPLAY_SETUP_BLINK_OFF	(0 << 1)
-+#define REG_DISPLAY_SETUP_BLINK_2HZ	(1 << 1)
-+#define REG_DISPLAY_SETUP_BLINK_1HZ	(2 << 1)
-+#define REG_DISPLAY_SETUP_BLINK_0HZ5	(3 << 1)
- 
- #define REG_ROWINT_SET			0xA0
- #define REG_ROWINT_SET_INT_EN		BIT(0)
-@@ -94,12 +99,14 @@ struct ht16k33_seg {
- struct ht16k33_priv {
- 	struct i2c_client *client;
- 	struct delayed_work work;
-+	struct led_classdev led;
- 	struct ht16k33_keypad keypad;
- 	union {
- 		struct ht16k33_fbdev fbdev;
- 		struct ht16k33_seg seg;
- 	};
- 	enum display_type type;
-+	uint8_t blink;
- };
- 
- static const struct fb_fix_screeninfo ht16k33_fb_fix = {
-@@ -158,7 +165,7 @@ static DEVICE_ATTR(map_seg14, 0644, map_seg_show, map_seg_store);
- 
- static int ht16k33_display_on(struct ht16k33_priv *priv)
- {
--	uint8_t data = REG_DISPLAY_SETUP | REG_DISPLAY_SETUP_ON;
-+	uint8_t data = REG_DISPLAY_SETUP | REG_DISPLAY_SETUP_ON | priv->blink;
- 
- 	return i2c_smbus_write_byte(priv->client, data);
- }
-@@ -173,8 +180,10 @@ static int ht16k33_brightness_set(struct ht16k33_priv *priv,
- {
- 	int err;
- 
--	if (brightness == 0)
-+	if (brightness == 0) {
-+		priv->blink = REG_DISPLAY_SETUP_BLINK_OFF;
- 		return ht16k33_display_off(priv);
-+	}
- 
- 	err = ht16k33_display_on(priv);
- 	if (err)
-@@ -184,6 +193,49 @@ static int ht16k33_brightness_set(struct ht16k33_priv *priv,
- 				    REG_BRIGHTNESS | (brightness - 1));
- }
- 
-+static int ht16k33_brightness_set_blocking(struct led_classdev *led_cdev,
-+					   enum led_brightness brightness)
-+{
-+	struct ht16k33_priv *priv = container_of(led_cdev, struct ht16k33_priv,
-+						 led);
-+
-+	return ht16k33_brightness_set(priv, brightness);
-+}
-+
-+static int ht16k33_blink_set(struct led_classdev *led_cdev,
-+			     unsigned long *delay_on, unsigned long *delay_off)
-+{
-+	struct ht16k33_priv *priv = container_of(led_cdev, struct ht16k33_priv,
-+						 led);
-+	unsigned int delay;
-+	uint8_t blink;
-+	int err;
-+
-+	if (!*delay_on && !*delay_off) {
-+		blink = REG_DISPLAY_SETUP_BLINK_1HZ;
-+		delay = 1000;
-+	} else if (*delay_on <= 750) {
-+		blink = REG_DISPLAY_SETUP_BLINK_2HZ;
-+		delay = 500;
-+	} else if (*delay_on <= 1500) {
-+		blink = REG_DISPLAY_SETUP_BLINK_1HZ;
-+		delay = 1000;
-+	} else {
-+		blink = REG_DISPLAY_SETUP_BLINK_0HZ5;
-+		delay = 2000;
-+	}
-+
-+	err = i2c_smbus_write_byte(priv->client,
-+				   REG_DISPLAY_SETUP | REG_DISPLAY_SETUP_ON |
-+				   blink);
-+	if (err)
-+		return err;
-+
-+	priv->blink = blink;
-+	*delay_on = *delay_off = delay;
-+	return 0;
-+}
-+
- static void ht16k33_fb_queue(struct ht16k33_priv *priv)
- {
- 	struct ht16k33_fbdev *fbdev = &priv->fbdev;
-@@ -425,6 +477,35 @@ static void ht16k33_seg14_update(struct work_struct *work)
- 	i2c_smbus_write_i2c_block_data(priv->client, 0, ARRAY_SIZE(buf), buf);
- }
- 
-+static int ht16k33_led_probe(struct device *dev, struct led_classdev *led,
-+			     unsigned int brightness)
-+{
-+	struct led_init_data init_data = {};
-+	struct device_node *node;
-+	int err;
-+
-+	/* The LED is optional */
-+	node = of_get_child_by_name(dev->of_node, "led");
-+	if (!node)
-+		return 0;
-+
-+	led->brightness_set_blocking = ht16k33_brightness_set_blocking;
-+	led->blink_set = ht16k33_blink_set;
-+	led->flags = LED_CORE_SUSPENDRESUME;
-+	led->brightness = brightness;
-+	led->max_brightness = MAX_BRIGHTNESS;
-+
-+	init_data.fwnode = of_fwnode_handle(node);
-+	init_data.devicename = "auxdisplay";
-+	init_data.devname_mandatory = true;
-+
-+	err = devm_led_classdev_register_ext(dev, led, &init_data);
-+	if (err)
-+		dev_err(dev, "Failed to register LED\n");
-+
-+	return err;
-+}
-+
- static int ht16k33_keypad_probe(struct i2c_client *client,
- 				struct ht16k33_keypad *keypad)
- {
-@@ -498,24 +579,28 @@ static int ht16k33_fbdev_probe(struct device *dev, struct ht16k33_priv *priv,
- 			       uint32_t brightness)
- {
- 	struct ht16k33_fbdev *fbdev = &priv->fbdev;
--	struct backlight_properties bl_props;
--	struct backlight_device *bl;
-+	struct backlight_device *bl = NULL;
- 	int err;
- 
--	/* Backlight */
--	memset(&bl_props, 0, sizeof(struct backlight_properties));
--	bl_props.type = BACKLIGHT_RAW;
--	bl_props.max_brightness = MAX_BRIGHTNESS;
-+	if (!priv->led.dev) {
-+		/* backwards compatibility with DT lacking an led subnode */
-+		struct backlight_properties bl_props;
- 
--	bl = devm_backlight_device_register(dev, DRIVER_NAME"-bl", dev, priv,
--					    &ht16k33_bl_ops, &bl_props);
--	if (IS_ERR(bl)) {
--		dev_err(dev, "failed to register backlight\n");
--		return PTR_ERR(bl);
--	}
-+		memset(&bl_props, 0, sizeof(struct backlight_properties));
-+		bl_props.type = BACKLIGHT_RAW;
-+		bl_props.max_brightness = MAX_BRIGHTNESS;
-+
-+		bl = devm_backlight_device_register(dev, DRIVER_NAME"-bl", dev,
-+						    priv, &ht16k33_bl_ops,
-+						    &bl_props);
-+		if (IS_ERR(bl)) {
-+			dev_err(dev, "failed to register backlight\n");
-+			return PTR_ERR(bl);
-+		}
- 
--	bl->props.brightness = brightness;
--	ht16k33_bl_update_status(bl);
-+		bl->props.brightness = brightness;
-+		ht16k33_bl_update_status(bl);
-+	}
- 
- 	/* Framebuffer (2 bytes per column) */
- 	BUILD_BUG_ON(PAGE_SIZE < HT16K33_FB_SIZE);
-@@ -575,7 +660,7 @@ static int ht16k33_seg_probe(struct device *dev, struct ht16k33_priv *priv,
- 	struct ht16k33_seg *seg = &priv->seg;
- 	int err;
- 
--	err = ht16k33_brightness_set(priv, MAX_BRIGHTNESS);
-+	err = ht16k33_brightness_set(priv, brightness);
- 	if (err)
- 		return err;
- 
-@@ -653,6 +738,11 @@ static int ht16k33_probe(struct i2c_client *client)
- 		dft_brightness = MAX_BRIGHTNESS;
- 	}
- 
-+	/* LED */
-+	err = ht16k33_led_probe(dev, &priv->led, dft_brightness);
-+	if (err)
-+		return err;
-+
- 	/* Keypad */
- 	if (client->irq > 0) {
- 		err = ht16k33_keypad_probe(client, &priv->keypad);
--- 
-2.25.1
+Ok, agred. So... what should be the correct approach here? Change the
+core 'pci_remap_iospace' WARN_ON to a maybe a normal 'pr_warn' message
+and silently return 0 and delete function comment there saying that
+architectures that don't define PCI_IOBASE should not call that
+function? Or should we just redefine this weak 'pci_remap_iospace'
+symbol for mips ralink?? I prefer to always do changes in normal core
+functions but if this is going to be a mips ralink adjustment because
+of architecture specific stuff maybe is better to go for the other
+option... Thoughts?
 
+
+>
+> This patch doesn't do anything with IO_SPACE_LIMIT, so I don't know
+> what that part of the commit log is telling me.
+
+True, I was introducing the whole thing to have all pci io stuff
+working but it is out of scope for this commit in particular. Thanks
+for pointing out this also.
+
+Thanks in advance for your time.
+
+Best regards,
+    Sergio Paracuellos
+>
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 2 PID: 1 at ../drivers/pci/pci.c:4066 pci_remap_iospace+0x3c/0x54
+> > This architecture does not support memory mapped I/O
+> > Modules linked in:
+> > CPU: 2 PID: 1 Comm: swapper/0 Not tainted 5.10.1+ #1228
+> > Stack : 00000000 00000000 807fa974 00000000 827ffa80 80066b48 80710000 0000000b
+> >         00000000 00000000 81c59aac 7d06ddec 80850000 00000001 81c59a40 7d06ddec
+> >         00000000 00000000 807c909c 81c598f0 00000001 81c59904 00000000 0000000a
+> >         203a6d6d 80708880 0000000f 70617773 80850000 00000000 00000000 807d0000
+> >         807ffecc 1e160000 00000001 00000200 00000000 8054e920 00000008 815e0008
+> >         ...
+> > Call Trace:
+> > [<80008efc>] show_stack+0x8c/0x130
+> > [<806e1674>] dump_stack+0x9c/0xc8
+> > [<80024a3c>] __warn+0xc0/0xe8
+> > [<80024ad0>] warn_slowpath_fmt+0x6c/0xbc
+> > [<80410ca8>] pci_remap_iospace+0x3c/0x54
+> > [<80410d20>] devm_pci_remap_iospace+0x58/0xa4
+> > [<8042019c>] devm_of_pci_bridge_init+0x4dc/0x55c
+> > [<80408de8>] devm_pci_alloc_host_bridge+0x78/0x88
+> > [<80424e44>] mt7621_pci_probe+0x68/0x9a4
+> > [<80464804>] platform_drv_probe+0x40/0x7c
+> > [<804628bc>] really_probe+0x2fc/0x4e4
+> > [<80463214>] device_driver_attach+0x4c/0x74
+> > [<80463384>] __driver_attach+0x148/0x150
+> > [<8046047c>] bus_for_each_dev+0x6c/0xb0
+> > [<804614dc>] bus_add_driver+0x1b4/0x1fc
+> > [<80463aa0>] driver_register+0xd0/0x110
+> > [<80001714>] do_one_initcall+0x84/0x1c0
+> > [<808e7fd0>] kernel_init_freeable+0x214/0x24c
+> > [<806e4164>] kernel_init+0x14/0x118
+> > [<80003358>] ret_from_kernel_thread+0x14/0x1c
+> >
+> > ---[ end trace 1c9d4412bd51b53c ]---
+> > mt7621-pci 1e140000.pcie: error -19: failed to map resource [io  0x1e160000-0x1e16ffff]
+> >
+> > Hence don't call 'devm_pci_remap_iospace' if PCI_IOBASE is not defined to get
+> > a working PCI core APIs for MIPS ralink platforms.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >  drivers/pci/of.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> > index a143b02b2dcd..657aef39bf63 100644
+> > --- a/drivers/pci/of.c
+> > +++ b/drivers/pci/of.c
+> > @@ -564,12 +564,14 @@ static int pci_parse_request_of_pci_ranges(struct device *dev,
+> >
+> >               switch (resource_type(res)) {
+> >               case IORESOURCE_IO:
+> > +#ifdef PCI_IOBASE
+> >                       err = devm_pci_remap_iospace(dev, res, iobase);
+> >                       if (err) {
+> >                               dev_warn(dev, "error %d: failed to map resource %pR\n",
+> >                                        err, res);
+> >                               resource_list_destroy_entry(win);
+> >                       }
+> > +#endif
+> >                       break;
+> >               case IORESOURCE_MEM:
+> >                       res_valid |= !(res->flags & IORESOURCE_PREFETCH);
+> > --
+> > 2.25.1
+> >
