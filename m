@@ -2,86 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 417CB3E8BB0
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 10:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF12D3E8BB6
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 10:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235985AbhHKIXa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Aug 2021 04:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        id S234209AbhHKIZL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Aug 2021 04:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233424AbhHKIXa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 04:23:30 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8D9C0613D3
-        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 01:23:06 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t9so3983041lfc.6
-        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 01:23:06 -0700 (PDT)
+        with ESMTP id S232630AbhHKIZJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 04:25:09 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5DEC061765
+        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 01:24:46 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id z20so4048510lfd.2
+        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 01:24:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VLTtyMmDGDzeJmduXV6qMoL0oSJQa7XeVXUnu5F9xhw=;
-        b=HDGk1fId7KbzdQVPCRZyRCmG6dLn3wcHt9IncviPIvRV693NxWhT/l47Cv417wx4r3
-         MbrOh9r1OxZsgDqZVWBmzY6q49QXuXg7JT0ZpSMaf9MZzZCDsYFoutOLEIIs+nJ/Mb/C
-         FLus4CHORu+cOoZmBlwSTxaxFifcBTexkVeeelKS7H4ti+v1hqPTlo6+piCWFLMi3Kv8
-         cYKDXTD/FrXr/+SMEQM4WYPUCZTrQeWFKWaC3GapTcfvrkb5uWpL/+lVEYXKqQG0ApMw
-         j2CMdbexfaeCprtLrflmZue1znqqsIVpXgoPzZDfBk2ijQfWutDCy6uv80VyByNlGvk2
-         rZzg==
+         :cc;
+        bh=GVm6z+/Bdr1n5Fxa4kSmJVT5Ljn0y9dUOJYnV8Z4PAA=;
+        b=npDtkwz0NnMywdciIG5W0LkfTTOnjggjeCnH3sgoLPN5Hccs4URBbWq0lmrVIjgkvq
+         xbw1AbzO+nfE/1+yQfqze5oHl+jtYm8kIc0fIISaS/9tYulHcumxsocgP8gWH6N384vJ
+         /wcpWMM9natlQocS/RkP4b+cv2u+VIoEG6se5sHXdymoQP6TbjNPWzqaYk1u1mIzV1m5
+         k/VXeVLYNelL05P2GONZFDXEVKbEMZuK5Wdc/nVDbRe4k2XMzG2/KcI8HKBwvc/QK+7R
+         Xaih6iEM4iWlhD2N2TbtPpV0Txi6EiQpWa5BMj7p3CWEQ5XAdC2r9qfcwTXEOKqm33+t
+         m2yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VLTtyMmDGDzeJmduXV6qMoL0oSJQa7XeVXUnu5F9xhw=;
-        b=ltLxGgJNXkddXhIZRmGp8jxK/t+1J30uCmiWIy22q8m/7H6WITydzzsdTZWgJsVaD+
-         dx3xKfdTammcKOHi9RXno1380s6T8nCEvjg+ktryCx53Vdsd9f9YG+DeAKeNyGUOQOQN
-         LwEeAKiQo2aRjdqhWe8IdYvTUBkP8dc1rNVKBHjTStcOUGcT+Ak9YOUa9DIQtJtFCXnO
-         EAeHm184w/X8XU/2zQu69HYb33AX3hgnPRtLy6IIBesSBYBfFlmSTHnptxP2fF01IR8F
-         dp2ArUISNHV9nCegbJhbiqsK0ZUs+ns3TkzDUgX8lHT9v5AD9dmfktkbzoU//wCeda+8
-         9sRQ==
-X-Gm-Message-State: AOAM5311fIifNFvz3IUBfb4z4y5b9ui7ZwQv5Qd0y/VB3oD+I7/S6ifu
-        1p4VkxEfVDe5rl2+WRBWMbKvwpYg+Y3GL3aDNLyYGA==
-X-Google-Smtp-Source: ABdhPJwxR7J7CWgtxQ9zR8UiucjVpB8YXeg3uQTR6CcylRP3Ow10t/9bkiil8nl37QrHQ+6BQYXbvMb7F5VU3KhcwzA=
-X-Received: by 2002:a19:c7cd:: with SMTP id x196mr24351162lff.465.1628670184894;
- Wed, 11 Aug 2021 01:23:04 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=GVm6z+/Bdr1n5Fxa4kSmJVT5Ljn0y9dUOJYnV8Z4PAA=;
+        b=TbqzDWLqi95jA4jTfUzyKnP+fUCHib5r38yFsQzSRyhVM2Pj8oSSkDqOtSKl/M80Qd
+         E1mtEgkoEYClG0PSHPzrqPtLosjTo/3xMtiAlmY8leDlTCMu0uCWouFhqfD4l8Vp4WDJ
+         ota7QN+yuolbGmamG0Qu41BpAPwrYFwSsMqwMLHSHlEv6XyOiHOgU7yjpdLIYlQVxtwb
+         gY5jBbzDvT9+VxuE0pQMKfM7f81fUoihTxNWcNyKfd4bKRFEgajaoyuq0ztCOS4fHt1L
+         awKfIITq0vElUhZbTh1K9oq78dBqHq0YZWMX7UwtkAbx9aiqGP0nSOOYdbbZ8VfPz5YA
+         SZlQ==
+X-Gm-Message-State: AOAM533sAs8ZYjFEFy2XOfjjFNm0IGzioDwEWSTGn104VoIcce9FE9F6
+        uXsaqUPj6UNc/QO+c2UVMmZNkmOzUnBZN72HYZSulw==
+X-Google-Smtp-Source: ABdhPJw4NdVqOP8gfyXv+14MvH9T3lyPveKwazy7JVk+5XTR/vz5E6tNfn4zvYKymCGWRbOp10vWB0/n7S2SBJmBe0Y=
+X-Received: by 2002:a05:6512:132a:: with SMTP id x42mr24116051lfu.291.1628670284748;
+ Wed, 11 Aug 2021 01:24:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <1627108604-91304-1-git-send-email-zhouyanjie@wanyeetech.com>
-In-Reply-To: <1627108604-91304-1-git-send-email-zhouyanjie@wanyeetech.com>
+References: <20210717174836.14776-1-paul@crapouillou.net>
+In-Reply-To: <20210717174836.14776-1-paul@crapouillou.net>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 11 Aug 2021 10:22:54 +0200
-Message-ID: <CACRpkdaEL46NzPOk=fU4jAZpf-0aV1gQyPjjLzrNYJUY3Xm73w@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Improve Ingenic pinctrl support.
-To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+Date:   Wed, 11 Aug 2021 10:24:33 +0200
+Message-ID: <CACRpkdakKpyb375DY+D5BgS6NK4c_LoLRmQ_hh-F8KQpR_wtvg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] pinctrl: ingenic: Fix incorrect pull up/down info
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
         linux-mips@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com
+        stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Jul 24, 2021 at 8:37 AM =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)
-<zhouyanjie@wanyeetech.com> wrote:
+On Sat, Jul 17, 2021 at 7:48 PM Paul Cercueil <paul@crapouillou.net> wrote:
 
-> 1.Improve the code to avoid misunderstandings.
-> 2.Add missing SSI pins for JZ4755 and JZ4760.
-> 3.Add support for the X2100 SoC.
+> Fix the pull up/down info for both the JZ4760 and JZ4770 SoCs, as the
+> previous values sometimes contradicted what's written in the programming
+> manual.
 >
-> =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) (4):
->   pinctrl: Ingenic: Improve the code.
->   pinctrl: Ingenic: Add SSI pins support for JZ4755 and JZ4760.
->   dt-bindings: pinctrl: Add bindings for Ingenic X2100.
->   pinctrl: Ingenic: Add pinctrl driver for X2100.
+> Fixes: b5c23aa46537 ("pinctrl: add a pinctrl driver for the Ingenic jz47xx SoCs")
+> Cc: <stable@vger.kernel.org> # v4.12
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Patches applied!
+Patch applied!
 
 Yours,
 Linus Walleij
