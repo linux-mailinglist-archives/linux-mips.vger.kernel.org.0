@@ -2,99 +2,60 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7C73E8F77
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 13:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6243E912B
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 14:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237332AbhHKL3q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 11 Aug 2021 07:29:46 -0400
-Received: from mail-vs1-f45.google.com ([209.85.217.45]:43569 "EHLO
-        mail-vs1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237210AbhHKL3m (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 07:29:42 -0400
-Received: by mail-vs1-f45.google.com with SMTP id s196so1240625vsc.10;
-        Wed, 11 Aug 2021 04:29:18 -0700 (PDT)
+        id S230287AbhHKMcN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Aug 2021 08:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230332AbhHKMcJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 08:32:09 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E73C0619E6
+        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id o185so4224709oih.13
+        for <linux-mips@vger.kernel.org>; Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=l4gMJVQR0kiw5jB7QjBwuNpfM6KgRmAnZ+U3/uWnaDOrOmeNXH1cBsuQp1/yvU/vbe
+         h7truI0tSaL01ahWzSqREXmT86UPLmMGQ2+FLEgN9spMzc4cuAIBO//Q+H5br/KBc0TV
+         kFrfyS3HAXSTLm9xum/FyUF/jALDjxDHHjAbGHdZk+wTj7O/Gvjxi495MUWK0LMLb61t
+         xWjyjzLQh6acP97vVSQvECAoNev4PY9q3zMqG/1nqsutkiyZpW2+ssMsVdYVIVzVs9ax
+         stDtdqMeOw7/9vXNfePZRksemawFwQjcQ1gGbjzrFwOEwtevs3PZsUTk25T8b2r2n2+I
+         0gBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=40wisL4/SKjdMqbDzvwZrkyDfanri5aoKVnQRyWUuY0=;
-        b=SyG6+XczyIGKkdTh4UR41xo5YbZc+ITtlXgZsw+I7R9zWx0YDIqWadUMBjDz1F9WBx
-         6B++eWQDkkBRTwSNCRJUuVjSdXO6XOv1eixJFAiivX8K7gGA7Q8xzctv9xnHX9UvaiLD
-         o1GNzDsw+mjumXC99nphkWAQpzPWgQZXfJEKlxuIuRpspJTWMfD4HzH+PvPvOv8SwmoD
-         oXGfcXRAYQrdLtGsfUQhemsBfC3a8WAx49scXrEseDo5thDJiyClflda/zuUoqbGU1pL
-         q9BAWKt1GZC3wVxVmwQPItLMCrBZkaMqscsuSaq+/NBOUV7dy2lKLYccCDKxGPr/Puv6
-         Ge/Q==
-X-Gm-Message-State: AOAM533G4k4AwlQALJnnZow/MxtR0erk3C6vPZrTVm8XDMdulay5fT05
-        ZU1zppPlQ8mK5ettEk0Dgeohe88pVSzKTVJ5amg=
-X-Google-Smtp-Source: ABdhPJy4XrbkHkqk1N7n531OJu2JQkcYcvarSrfV7a1TjAP6AU3ROsnF7Eatvrj+CJP4HBfqYOWJdNPELnM5eP6VJV4=
-X-Received: by 2002:a67:e2c7:: with SMTP id i7mr25004885vsm.3.1628681358404;
- Wed, 11 Aug 2021 04:29:18 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=ImDuUGXqKYe712mjuwKCJ8n6jtzEpcztIR5F3nIUKw7rnBujgXgBMxPu/hlos9a5fB
+         0QCutgvvOREtlgRZDG+rji89V6jRQr8Um/T2zpXNRpQc2DhwZ5AaH5oWye/bXEZWtcnb
+         uPqpTnjSox808mQ3bKrzfY0QzA+72B/Y34/gtyrsU61G1b2r15juzwdds8cpnMKd2xEC
+         bQlKZ4KBGdWokH+3EhEjHIFnqsg4kIzYo59GraC2eyIzF0hPcAEolPBomp+JnlXn9IJQ
+         e9hcwyTsfbOcDvjZh6+q2AvE9fpz1K0Ry8lSCaLPqiU4GYx0wuY/iaP7cGKEL9awgXUQ
+         Lbpw==
+X-Gm-Message-State: AOAM530NNzA3hvbcM3JPGj7TMYTb6tzAi/g5zo91sFBYOd0yOzEFK306
+        dw0oHX3IOKmgU3vIE0xyhEVHDATQViewFsjLOXA=
+X-Google-Smtp-Source: ABdhPJwW80yC3Jv4N7Ygd/oz/W2w0OMWMVUNvF3laMRZsfuxi/a2uJ5LPRrNJQDqCRwhEl9YwYATyhizs0DKY0HnRMk=
+X-Received: by 2002:a05:6808:1924:: with SMTP id bf36mr24189327oib.106.1628685002002;
+ Wed, 11 Aug 2021 05:30:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210811095759.1281480-1-geert@linux-m68k.org>
- <20210811095759.1281480-20-geert@linux-m68k.org> <20210811124755.37b0a0a9@thinkpad>
-In-Reply-To: <20210811124755.37b0a0a9@thinkpad>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 11 Aug 2021 13:29:07 +0200
-Message-ID: <CAMuHMdUFPvJBuFByiN6pb539REYtcsNJMKML+M2NQw=GJxTYJg@mail.gmail.com>
-Subject: Re: [PATCH v5 19/19] auxdisplay: ht16k33: Add LED support
-To:     =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:30:01
+ -0700 (PDT)
+Reply-To: rihabmanyang07@yahoo.com
+From:   Rihab Manyang <ndourandiogou1@gmail.com>
+Date:   Wed, 11 Aug 2021 13:30:01 +0100
+Message-ID: <CAP5_mB76a-FSZzks8OG9YWvLEFv62qfHQ6sTAFQrmH0xjgR9bw@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Marek,
-
-On Wed, Aug 11, 2021 at 12:48 PM Marek Behún <kabel@kernel.org> wrote:
-> On Wed, 11 Aug 2021 11:57:59 +0200
-> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> > Instantiate a single LED based on the "led" subnode in DT.
-> > This allows the user to control display brightness and blinking (backed
-> > by hardware support) through the LED class API and triggers, and exposes
-> > the display color.  The LED will be named
-> > "auxdisplay:<color>:<function>".
-> >
-> > When running in dot-matrix mode and if no "led" subnode is found, the
-> > driver falls back to the traditional backlight mode, to preserve
-> > backwards compatibility.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
->
-> Reviewed-by: Marek Behún <kabel@kernel.org>
-
-Thanks!
-
-> BTW, this driver does not need to depend on OF, methinks.
-> The few instances of properties reading can be
-> easily rewritten to device_* functions (from include/linux/property.h).
-> The of_get_child_by_name() can become device_get_named_child_node().
->
-> Geert, what do you think?
-
-Sure, that can be done later, when an ACPI user appears?
-The dependency on OF was pre-existing, and this series is already
-at v5.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+How are you?I am miss.Rihab Manyang i will like to be your friend
+please write me back on my email for more details, Thanks.
