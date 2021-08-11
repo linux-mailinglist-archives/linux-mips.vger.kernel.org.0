@@ -2,67 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBBC3E949A
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 17:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA893E9496
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Aug 2021 17:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbhHKPgP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 11 Aug 2021 11:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233010AbhHKPgP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 11:36:15 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAEBC061765;
-        Wed, 11 Aug 2021 08:35:51 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id h13so3699545wrp.1;
-        Wed, 11 Aug 2021 08:35:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=PpD1KVvxnVz+rmv3iCZFOs5Ob5VhklieYZKpJGI6mjzMVfh0IqWIQEkGG8jefSF0Gl
-         UrzNCEX0BvyJkkQLWS7y/O0abHE37dsN/sgJHpFa7ECxuMRzMzNFjzx8EE5RtKBYwmTb
-         NrLgfdwsPRlpitoe+B40gHYtiQIxNqT5YNB6K5sEbSxyUwQX7O+W4KDyTjDwtdatqOwx
-         qSQZ5fdqlCFNty6nv4p41TjPc9FJgNQ5XVklKdKwivwZdstPQSU1ntLvjM9Nv4hqwBEr
-         /2cW2R9+ha/PKz90SChPcfMQGyPTN66Z3yZdvfJuuPxq1Dbx1KA0lwJ4CxJb/nTcic3w
-         N9CQ==
+        id S233058AbhHKPgC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 11 Aug 2021 11:36:02 -0400
+Received: from mail-vs1-f42.google.com ([209.85.217.42]:42700 "EHLO
+        mail-vs1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233010AbhHKPgC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 11 Aug 2021 11:36:02 -0400
+Received: by mail-vs1-f42.google.com with SMTP id k24so1764345vsg.9;
+        Wed, 11 Aug 2021 08:35:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=CV8fq7TVWEmZAG2hZv4J3q+yCXIi6QsmDzTGuprXsy2gveVlQCl2LcATWCnGTXFJeu
-         /iF8YzHb/P4iRfT3hyfuiUDbrY0qtoSxmhaxKhYYlN1c3wfSau21J9CdnZIU2ZMMR3LP
-         1M0it5xj52CQak4rLcPqNTcTgajoBAQJBpDHCheVY7Z8UkXuM7+zgcpZfB8ughvRZiaD
-         4PeCvFidDPLIEXzmsXfL1ACUZNBQD3LaJKyohdnHvGiGyKHQDo8Y74XYzE9rG22dKUKM
-         kKqPQBEqBmsnEhVQksNLZISy1WhzJMgla1FnB2gAsR/irmwe+Pqh//+foBzP3Z7d1813
-         7mVA==
-X-Gm-Message-State: AOAM532ogYSHmmtPf3Nd2+/yDfztdwJag3CKV105VusAkffGD6JPYCLd
-        hN7YlUYdqEF86nWTs8i+/pc=
-X-Google-Smtp-Source: ABdhPJzleJyUH4rR5rGF6HaKFLe8yYY1eTQnRJ+667iopDH9OiBMHRWr+vVrxm2QcwZhWm/Qrn6tuw==
-X-Received: by 2002:adf:dcce:: with SMTP id x14mr25187373wrm.53.1628696149936;
-        Wed, 11 Aug 2021 08:35:49 -0700 (PDT)
-Received: from [192.168.1.70] ([102.64.209.185])
-        by smtp.gmail.com with ESMTPSA id o24sm6251662wmm.37.2021.08.11.08.35.30
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Wed, 11 Aug 2021 08:35:49 -0700 (PDT)
-Message-ID: <6113ee55.1c69fb81.925d2.e690@mx.google.com>
-From:   Vanina curth <curtisvani0038@gmail.com>
-X-Google-Original-From: Vanina  curth
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qe0iSj8XpU18YU856j4Cl+K1mgU1eag6gHjOJIBodYU=;
+        b=NxbMnEOENBHaXg4NMprVdhDf6hm/iv8kojr90GBi/mZJvHW2UBFe3kuT37cSCMFpOJ
+         WSKTIZrLDfHkr3TCElHHczCSfqT94Kl8POn7qJ0H8q4XD+QeFIVI7O5D/ASitH+1RsVz
+         ImwdIRcCp1UJetSE/xdF/uDTnW6WoN0evVQbWoBYLEcLzF4rJUGNwJa/uP9naCWVfW+B
+         5C7uFG3wWW+2dYv59oZRPPhbDzgWUUYfWyNbf5SDQtHLCFUPjH8pekxT2uziRhGOcxTy
+         PkPqp8ozJMKO2RWf6QFF4q7HbJu1awxrLDiqUidDKLSAugYQYAd9RxKGw4jsRdErdNsf
+         NdNQ==
+X-Gm-Message-State: AOAM532FKs2F8dhaSJE9z8LbThpgml7plQ1eXadzYFJKB/UZW59xx9Vq
+        MxkfEDSVkqERhRomXeWlr5HDusICQEN7n/4Yzos=
+X-Google-Smtp-Source: ABdhPJyCg7XeMMJOVeEoBRA0hgH3tr2A9kDf4d5be/Soj53sLrczZ+iXFRzYK6VNuP5kM7qaaKYjO/TzUNz0MI9TmgQ=
+X-Received: by 2002:a67:8009:: with SMTP id b9mr27769636vsd.18.1628696137555;
+ Wed, 11 Aug 2021 08:35:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Dear
-To:     Recipients <Vanina@vger.kernel.org>
-Date:   Wed, 11 Aug 2021 15:35:21 +0000
-Reply-To: curtisvani9008@gmail.com
+References: <cover.1628670468.git.geert+renesas@glider.be> <92b6718f5618d5469f67b48fbea189cca0c12f4b.1628670468.git.geert+renesas@glider.be>
+In-Reply-To: <92b6718f5618d5469f67b48fbea189cca0c12f4b.1628670468.git.geert+renesas@glider.be>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 11 Aug 2021 17:35:26 +0200
+Message-ID: <CAMuHMdVFJ_qGs0V7f+XhfD6v3WnkMJ98fO31sCRSNaeS89XXUQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] MIPS: Avoid future duplicate elf core header reservation
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        kexec@lists.infradead.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-How are you? I'm Vanina. I'm interested to know you and I would like to kno=
-w more about you and establish relationship with you. i will wait for your =
-response. thank you.
+On Wed, Aug 11, 2021 at 10:51 AM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+> Prepare for early_init_fdt_scan_reserved_mem() reserving the memory
+> occupied by an elf core header described in the device tree.
+> As arch_mem_init() calls early_init_fdt_scan_reserved_mem() before
+> mips_reserve_vmcore(), the latter needs to check if the memory has
+> already been reserved before.
+>
+> Note that mips_reserve_vmcore() cannot just be removed, as not all MIPS
+> systems use DT.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> v5:
+>   - New.
+> ---
+>  arch/mips/kernel/setup.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+> index 23a140327a0bac1b..4693add05743d78b 100644
+> --- a/arch/mips/kernel/setup.c
+> +++ b/arch/mips/kernel/setup.c
+> @@ -429,7 +429,8 @@ static void __init mips_reserve_vmcore(void)
+>         pr_info("Reserving %ldKB of memory at %ldKB for kdump\n",
+>                 (unsigned long)elfcorehdr_size >> 10, (unsigned long)elfcorehdr_addr >> 10);
+>
+> -       memblock_reserve(elfcorehdr_addr, elfcorehdr_size);
+> +       if (!memblock_is_region_reserved(elfcorehdr_addr, elfcorehdr_size)
+
+As pointed out by lkp, there's a closing parenthesis missing.
+
+/me hides back under his rock.
+
+> +               memblock_reserve(elfcorehdr_addr, elfcorehdr_size);
+>  #endif
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
