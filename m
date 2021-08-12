@@ -2,268 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 830353EA17E
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Aug 2021 11:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3CA3EA5D5
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Aug 2021 15:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235642AbhHLJFa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Aug 2021 05:05:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46367 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235576AbhHLJF3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 12 Aug 2021 05:05:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628759103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JgMWN7/eNl2nw6MdbRkVkIrc4drjFaFJaW8jw61Jzlk=;
-        b=L9IhEPWzugPGj5W+AveFkpeQh/XKcDSx8l3CgP0m2uJgNBOYN6xuzuQOXdEdhlntdZOey5
-        TAQlVEiAWZC8w00tGyhatKej+Bxh2VEfSfRVZBeh4w0r8AVinvWgWRVuB9FsN1GyQJ7k/7
-        Y1owOm45Z7m3ZT43QChjKZ/RtOaqbhk=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-308-7zgB55jgOdmspVAZINTyUA-1; Thu, 12 Aug 2021 05:05:02 -0400
-X-MC-Unique: 7zgB55jgOdmspVAZINTyUA-1
-Received: by mail-wr1-f72.google.com with SMTP id o10-20020a5d684a0000b0290154758805bcso1600195wrw.3
-        for <linux-mips@vger.kernel.org>; Thu, 12 Aug 2021 02:05:01 -0700 (PDT)
+        id S234916AbhHLNqQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Aug 2021 09:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38220 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233288AbhHLNqQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 12 Aug 2021 09:46:16 -0400
+Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FA1C0613D9
+        for <linux-mips@vger.kernel.org>; Thu, 12 Aug 2021 06:45:51 -0700 (PDT)
+Received: by mail-ua1-x942.google.com with SMTP id m39so2847595uad.9
+        for <linux-mips@vger.kernel.org>; Thu, 12 Aug 2021 06:45:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=iEwfljACpjSjSsmiu2QT772YvP98XxqqzOTzL81mJpg=;
+        b=W8zLr9OpuoPoGc98ulq46PQ+MG5MVmQUsnkS6I4I9dM6uvywPlEmFCGd7YP44kyblj
+         gD6ZWmGH5CpvtFPnGOcL/+ja6OtTjm7/O4kDGXEyij8+gZJPnQgTJi4BVIBeVGJx0ebP
+         bAdnEMzKY3y+WKF80gPo/elAfbwpguEnTJWf5dcXVuRoL8OROim4eUqoBoP66d5FTibu
+         cGEEzkOklgjcpB8azyHpBb9QHOxMVFwkglMb9qkI+KpuXk4aYVpnOpZjUM0VLugMgCIU
+         rjTkVVm2b0yYuRw6yJ5CaSra8gH1ojfYNtF8bXwalbRTfztWQcvt9dYhwlyhyWKPwmHb
+         xeWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=JgMWN7/eNl2nw6MdbRkVkIrc4drjFaFJaW8jw61Jzlk=;
-        b=Xc5XAQJznaG86nI5Y42vcrrRkQvvGCLuaVi7pxGN/DdVRabFgOcQyGjdflZGXey+pE
-         zwr0cWYh0Sfe+DEHEflXk7Wt3uuNUJ46AEb+Pr6BUBXfJKmGPn4sY3bbRz/FZQP6L/zF
-         cKSN4/mGmr+V3ZRF03PfOsJxtRfhTNTeeKRTX9Rpt+FiWa58LSEmqV3oO3++TCmBiBwF
-         x+21qouF3yutXuJucRbN805vbl0aB77P/4zQW/Au4fFYHPLj/Z3tGdN+DMsE1Np51GpS
-         z2mNxAjrqdjd/0gpwOS9Pu2VYxqGZ7oMAd6krkKLNOKmKXeNNUQI3/RPpZk5J6eKtJsB
-         JJsw==
-X-Gm-Message-State: AOAM532PPC+o8OBO5XINWhsStlYaW4L86c+ustVk8YPfJ+LBPOkCSlfJ
-        7TgxeQGOqVH5Wtudzu9TDxiWENSCsUus+xDA6GOLEkvhJyl2YvsXWePwaNaKHE2Apgc3Lzh4sdt
-        mqDtZcdRmXOhL5Rk4f67LMg==
-X-Received: by 2002:a5d:6d03:: with SMTP id e3mr2798719wrq.153.1628759100835;
-        Thu, 12 Aug 2021 02:05:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw14l6W1wkrgjVxsT5cj4nrtOlS6mn0en/HDpnzJRRlmx+RwnP3XwnlZp0HL14993xrDLfaIA==
-X-Received: by 2002:a5d:6d03:: with SMTP id e3mr2798682wrq.153.1628759100598;
-        Thu, 12 Aug 2021 02:05:00 -0700 (PDT)
-Received: from [192.168.3.132] (p4ff23d8b.dip0.t-ipconnect.de. [79.242.61.139])
-        by smtp.gmail.com with ESMTPSA id i21sm2300276wrb.62.2021.08.12.02.04.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Aug 2021 02:05:00 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] KVM: Refactor kvm_arch_vcpu_fault() to return a
- struct page pointer
-To:     Hou Wenlong <houwenlong93@linux.alibaba.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org
-References: <YRQcZqCWwVH8bCGc@google.com>
- <1c510b24fc1d7cbae8aa4b69c0799ebd32e65b82.1628739116.git.houwenlong93@linux.alibaba.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Message-ID: <98adbd3c-ec6f-5689-1686-2a8a7909951a@redhat.com>
-Date:   Thu, 12 Aug 2021 11:04:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=iEwfljACpjSjSsmiu2QT772YvP98XxqqzOTzL81mJpg=;
+        b=bJ9/NMxVwXmmxjAAZioQz+daX/ozb7GLPHmchylL3EVd4rHPplYCPxPckDJxChuUlY
+         zkUVVb+C/1kh1cVwZf8QHsqjWldmIk5Dl/8omJ/JuwqEwcThLXz5VltJG+SsGGPweEGy
+         YGsE8jG9XBgg4n784OalztxUVUNqkKFa2Ob5/v4+biL4/1p6FTDWukeMp9PwjeJUsYGf
+         LnIMPJN2WsT7YeMPa+MtRaef00KEQj5oDNYBASrhghyF2ZLsaMTMs17cXIDTaXJ283TM
+         zETu5WE1Kefv/OSQLaGu1Qr5N142NoOIT8VO+F7cFoez+mZhSTtw7mo8++AahObYROUa
+         OsLg==
+X-Gm-Message-State: AOAM532Fx8iKoiTLTGuENQr1xdcaaO7Tv1kEKisH0wd0XYdr/xvEIlWs
+        sR5MLvRvQhBOajEPMfLCTK1TPNxP6WBBetT+sTI=
+X-Google-Smtp-Source: ABdhPJyjdd48zNbJXxsziiaY81Up12Q5QAu6GcfvRX2VfGLwFbOfE02gnbF5DS2HVSZLeyyQCYL8iE9MAU4V2kRf06k=
+X-Received: by 2002:ab0:2391:: with SMTP id b17mr2317528uan.130.1628775950632;
+ Thu, 12 Aug 2021 06:45:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1c510b24fc1d7cbae8aa4b69c0799ebd32e65b82.1628739116.git.houwenlong93@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ab0:16c6:0:0:0:0:0 with HTTP; Thu, 12 Aug 2021 06:45:50
+ -0700 (PDT)
+Reply-To: lisadennis171@gmail.com
+From:   Lisa Dennis <senalagrande@gmail.com>
+Date:   Thu, 12 Aug 2021 14:45:50 +0100
+Message-ID: <CAPyi5LSR16ZhD61KtX2TsN2SiWD2ZspMcgY5t5Bo4PyAc2vLtg@mail.gmail.com>
+Subject: Greetings to you,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12.08.21 06:02, Hou Wenlong wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Refactor kvm_arch_vcpu_fault() to return 'struct page *' instead of
-> 'vm_fault_t' to simplify architecture specific implementations that do
-> more than return SIGBUS.  Currently this only applies to s390, but a
-> future patch will move x86's pio_data handling into x86 where it belongs.
-> 
-> No functional changed intended.
-> 
-> Cc: Hou Wenlong <houwenlong93@linux.alibaba.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Hou Wenlong <houwenlong93@linux.alibaba.com>
-> ---
->   arch/arm64/kvm/arm.c       |  4 ++--
->   arch/mips/kvm/mips.c       |  4 ++--
->   arch/powerpc/kvm/powerpc.c |  4 ++--
->   arch/s390/kvm/kvm-s390.c   | 12 ++++--------
->   arch/x86/kvm/x86.c         |  4 ++--
->   include/linux/kvm_host.h   |  2 +-
->   virt/kvm/kvm_main.c        |  5 ++++-
->   7 files changed, 17 insertions(+), 18 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index e9a2b8f27792..83f4ffe3e4f2 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -161,9 +161,9 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
->   	return ret;
->   }
->   
-> -vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-> +struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
->   {
-> -	return VM_FAULT_SIGBUS;
-> +	return NULL;
->   }
->   
->   
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index af9dd029a4e1..ae79874e6fd2 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -1053,9 +1053,9 @@ int kvm_arch_vcpu_ioctl_set_fpu(struct kvm_vcpu *vcpu, struct kvm_fpu *fpu)
->   	return -ENOIOCTLCMD;
->   }
->   
-> -vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-> +struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
->   {
-> -	return VM_FAULT_SIGBUS;
-> +	return NULL;
->   }
->   
->   int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-> index be33b5321a76..b9c21f9ab784 100644
-> --- a/arch/powerpc/kvm/powerpc.c
-> +++ b/arch/powerpc/kvm/powerpc.c
-> @@ -2090,9 +2090,9 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->   	return r;
->   }
->   
-> -vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-> +struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
->   {
-> -	return VM_FAULT_SIGBUS;
-> +	return NULL;
->   }
->   
->   static int kvm_vm_ioctl_get_pvinfo(struct kvm_ppc_pvinfo *pvinfo)
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 02574d7b3612..e1b69833e228 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -4979,17 +4979,13 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->   	return r;
->   }
->   
-> -vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-> +struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
->   {
->   #ifdef CONFIG_KVM_S390_UCONTROL
-> -	if ((vmf->pgoff == KVM_S390_SIE_PAGE_OFFSET)
-> -		 && (kvm_is_ucontrol(vcpu->kvm))) {
-> -		vmf->page = virt_to_page(vcpu->arch.sie_block);
-> -		get_page(vmf->page);
-> -		return 0;
-> -	}
-> +	if (vmf->pgoff == KVM_S390_SIE_PAGE_OFFSET && kvm_is_ucontrol(vcpu->kvm))
-> +		return virt_to_page(vcpu->arch.sie_block);
->   #endif
-> -	return VM_FAULT_SIGBUS;
-> +	return NULL;
->   }
->   
->   /* Section: memory related */
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 3cedc7cc132a..1e3bbe5cd33a 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -5347,9 +5347,9 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->   	return r;
->   }
->   
-> -vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-> +struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
->   {
-> -	return VM_FAULT_SIGBUS;
-> +	return NULL;
->   }
->   
->   static int kvm_vm_ioctl_set_tss_addr(struct kvm *kvm, unsigned long addr)
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 492d183dd7d0..a949de534722 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -995,7 +995,7 @@ long kvm_arch_dev_ioctl(struct file *filp,
->   			unsigned int ioctl, unsigned long arg);
->   long kvm_arch_vcpu_ioctl(struct file *filp,
->   			 unsigned int ioctl, unsigned long arg);
-> -vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf);
-> +struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf);
->   
->   int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext);
->   
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 30d322519253..f7d21418971b 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -3448,7 +3448,10 @@ static vm_fault_t kvm_vcpu_fault(struct vm_fault *vmf)
->   		    &vcpu->dirty_ring,
->   		    vmf->pgoff - KVM_DIRTY_LOG_PAGE_OFFSET);
->   	else
-> -		return kvm_arch_vcpu_fault(vcpu, vmf);
-> +		page = kvm_arch_vcpu_fault(vcpu, vmf);
-> +	if (!page)
-> +		return VM_FAULT_SIGBUS;
-> +
->   	get_page(page);
->   	vmf->page = page;
->   	return 0;
-> 
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
-But at the same time I wonder if we should just get rid of 
-CONFIG_KVM_S390_UCONTROL and consequently kvm_arch_vcpu_fault().
-
-
-In practice CONFIG_KVM_S390_UCONTROL, is never enabled in any reasonable 
-kernel build and consequently it's never tested; further, exposing the 
-sie_block to user space allows user space to generate random SIE 
-validity intercepts.
-
-CONFIG_KVM_S390_UCONTROL feels like something that should just be 
-maintained out of tree by someone who really needs to hack deep into hw 
-virtualization for testing purposes etc.
-
--- 
-Thanks,
-
-David / dhildenb
-
+Hello i sent you mail please reply me??
