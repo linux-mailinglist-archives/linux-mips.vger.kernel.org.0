@@ -2,207 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05ABE3E9D20
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Aug 2021 06:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEAB3E9F08
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Aug 2021 08:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbhHLECv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 12 Aug 2021 00:02:51 -0400
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:39336 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229518AbhHLECu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 12 Aug 2021 00:02:50 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=houwenlong93@linux.alibaba.com;NM=1;PH=DS;RN=38;SR=0;TI=SMTPD_---0UikIOfn_1628740941;
-Received: from localhost(mailfrom:houwenlong93@linux.alibaba.com fp:SMTPD_---0UikIOfn_1628740941)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 12 Aug 2021 12:02:21 +0800
-From:   Hou Wenlong <houwenlong93@linux.alibaba.com>
-To:     kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        id S230370AbhHLG7q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 12 Aug 2021 02:59:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57006 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230323AbhHLG7p (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 12 Aug 2021 02:59:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F24AA601FD;
+        Thu, 12 Aug 2021 06:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628751560;
+        bh=YFMZTccB6r2mQUHMX3e0DwUnA6yRsuYhah5UQoES2qE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gqDKL6oFAWPfl+qrvP4ICkIiJuTj0zB5TnIo9v2jyftPMcesd9mebeUTOENH/WF4R
+         PBfqCrnjEHgRHt0O1dyCISfhSxmredSB9XxmW1Ns603miZy037IV2h2edGI81ldDzY
+         NqgDtvGktsfZul6wLbLg1Tgj9dX32EjsY3bdIRoj49WsQpGFdC5ZMg6zFcqteaJDkt
+         0uruPXpJRVzqwUCwDkAf6p3Y7H3f580IbJRG6NdyUWhatq3Gxbuq0XxYssVS/sjhOA
+         hChRFrKVbGxFTcFqXajSbSnyBDOxjDPh7zY8Sk+z4WzAiR3GMcSU98BQ+MjV7C6G/L
+         np4VR2Z/7QAFw==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Len Brown <lenb@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org
-Subject: [PATCH v2 1/2] KVM: Refactor kvm_arch_vcpu_fault() to return a struct page pointer
-Date:   Thu, 12 Aug 2021 12:02:19 +0800
-Message-Id: <1c510b24fc1d7cbae8aa4b69c0799ebd32e65b82.1628739116.git.houwenlong93@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <YRQcZqCWwVH8bCGc@google.com>
-References: <YRQcZqCWwVH8bCGc@google.com>
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Will Deacon <will@kernel.org>, devicetree@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        x86@kernel.org
+Subject: [PATCH v4 0/2] memblock: make memblock_find_in_range method private
+Date:   Thu, 12 Aug 2021 09:59:05 +0300
+Message-Id: <20210812065907.20046-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Refactor kvm_arch_vcpu_fault() to return 'struct page *' instead of
-'vm_fault_t' to simplify architecture specific implementations that do
-more than return SIGBUS.  Currently this only applies to s390, but a
-future patch will move x86's pio_data handling into x86 where it belongs.
+Hi,
 
-No functional changed intended.
+This is v4 of "memblock: make memblock_find_in_range method private" patch
+that essentially replaces memblock_find_in_range() + memblock_reserve()
+calls with equivalent calls to memblock_phys_alloc() and prevents usage of
+memblock_find_in_range() outside memblock itself.
 
-Cc: Hou Wenlong <houwenlong93@linux.alibaba.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Hou Wenlong <houwenlong93@linux.alibaba.com>
----
- arch/arm64/kvm/arm.c       |  4 ++--
- arch/mips/kvm/mips.c       |  4 ++--
- arch/powerpc/kvm/powerpc.c |  4 ++--
- arch/s390/kvm/kvm-s390.c   | 12 ++++--------
- arch/x86/kvm/x86.c         |  4 ++--
- include/linux/kvm_host.h   |  2 +-
- virt/kvm/kvm_main.c        |  5 ++++-
- 7 files changed, 17 insertions(+), 18 deletions(-)
+The patch uncovered an issue with top down memory mapping on x86 and this
+version has a preparation patch that addresses this issue.
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index e9a2b8f27792..83f4ffe3e4f2 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -161,9 +161,9 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
- 	return ret;
- }
- 
--vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-+struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
- {
--	return VM_FAULT_SIGBUS;
-+	return NULL;
- }
- 
- 
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index af9dd029a4e1..ae79874e6fd2 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -1053,9 +1053,9 @@ int kvm_arch_vcpu_ioctl_set_fpu(struct kvm_vcpu *vcpu, struct kvm_fpu *fpu)
- 	return -ENOIOCTLCMD;
- }
- 
--vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-+struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
- {
--	return VM_FAULT_SIGBUS;
-+	return NULL;
- }
- 
- int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index be33b5321a76..b9c21f9ab784 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -2090,9 +2090,9 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
- 	return r;
- }
- 
--vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-+struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
- {
--	return VM_FAULT_SIGBUS;
-+	return NULL;
- }
- 
- static int kvm_vm_ioctl_get_pvinfo(struct kvm_ppc_pvinfo *pvinfo)
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 02574d7b3612..e1b69833e228 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -4979,17 +4979,13 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
- 	return r;
- }
- 
--vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-+struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
- {
- #ifdef CONFIG_KVM_S390_UCONTROL
--	if ((vmf->pgoff == KVM_S390_SIE_PAGE_OFFSET)
--		 && (kvm_is_ucontrol(vcpu->kvm))) {
--		vmf->page = virt_to_page(vcpu->arch.sie_block);
--		get_page(vmf->page);
--		return 0;
--	}
-+	if (vmf->pgoff == KVM_S390_SIE_PAGE_OFFSET && kvm_is_ucontrol(vcpu->kvm))
-+		return virt_to_page(vcpu->arch.sie_block);
- #endif
--	return VM_FAULT_SIGBUS;
-+	return NULL;
- }
- 
- /* Section: memory related */
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 3cedc7cc132a..1e3bbe5cd33a 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5347,9 +5347,9 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
- 	return r;
- }
- 
--vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
-+struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
- {
--	return VM_FAULT_SIGBUS;
-+	return NULL;
- }
- 
- static int kvm_vm_ioctl_set_tss_addr(struct kvm *kvm, unsigned long addr)
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 492d183dd7d0..a949de534722 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -995,7 +995,7 @@ long kvm_arch_dev_ioctl(struct file *filp,
- 			unsigned int ioctl, unsigned long arg);
- long kvm_arch_vcpu_ioctl(struct file *filp,
- 			 unsigned int ioctl, unsigned long arg);
--vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf);
-+struct page *kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf);
- 
- int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext);
- 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 30d322519253..f7d21418971b 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -3448,7 +3448,10 @@ static vm_fault_t kvm_vcpu_fault(struct vm_fault *vmf)
- 		    &vcpu->dirty_ring,
- 		    vmf->pgoff - KVM_DIRTY_LOG_PAGE_OFFSET);
- 	else
--		return kvm_arch_vcpu_fault(vcpu, vmf);
-+		page = kvm_arch_vcpu_fault(vcpu, vmf);
-+	if (!page)
-+		return VM_FAULT_SIGBUS;
-+
- 	get_page(page);
- 	vmf->page = page;
- 	return 0;
+Guenter, I didn't add your Tested-by because the patch that addresses the
+crashes differs from the one you've tested.
+
+v4: 
+* Add patch that prevents the crashes reported by Guenter Roeck on x86/i386
+  on QEMU with 256M or 512M of memory and EFI boot enabled.
+* Add Acked-by and Reviewed-by, thanks everybidy!
+
+v3: https://lore.kernel.org/lkml/20210803064218.6611-1-rppt@kernel.org
+* simplify check for exact crash kerenl allocation on arm, per Rob
+* make crash_max unsigned long long on arm64, per Rob
+
+v2: https://lore.kernel.org/lkml/20210802063737.22733-1-rppt@kernel.org
+* don't change error message in arm::reserve_crashkernel(), per Russell
+
+v1: https://lore.kernel.org/lkml/20210730104039.7047-1-rppt@kernel.org
+
+Mike Rapoport (2):
+  x86/mm: memory_map_top_down: remove spurious reservation of upper 2M
+  memblock: make memblock_find_in_range method private
+
+ arch/arm/kernel/setup.c           | 20 +++++---------
+ arch/arm64/kvm/hyp/reserved_mem.c |  9 +++----
+ arch/arm64/mm/init.c              | 36 ++++++++-----------------
+ arch/mips/kernel/setup.c          | 14 +++++-----
+ arch/riscv/mm/init.c              | 44 ++++++++++---------------------
+ arch/s390/kernel/setup.c          | 10 ++++---
+ arch/x86/kernel/aperture_64.c     |  5 ++--
+ arch/x86/mm/init.c                | 27 +++++++------------
+ arch/x86/mm/numa.c                |  5 ++--
+ arch/x86/mm/numa_emulation.c      |  5 ++--
+ arch/x86/realmode/init.c          |  2 +-
+ drivers/acpi/tables.c             |  5 ++--
+ drivers/base/arch_numa.c          |  5 +---
+ drivers/of/of_reserved_mem.c      | 12 ++++++---
+ include/linux/memblock.h          |  2 --
+ mm/memblock.c                     |  2 +-
+ 16 files changed, 76 insertions(+), 127 deletions(-)
+
+
+base-commit: ff1176468d368232b684f75e82563369208bc371
 -- 
-2.31.1
+2.28.0
 
