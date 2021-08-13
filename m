@@ -2,117 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B3E3EB5C6
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Aug 2021 14:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFF13EB658
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Aug 2021 15:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240279AbhHMMxb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 13 Aug 2021 08:53:31 -0400
-Received: from mail-vs1-f50.google.com ([209.85.217.50]:34646 "EHLO
-        mail-vs1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233416AbhHMMxb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Aug 2021 08:53:31 -0400
-Received: by mail-vs1-f50.google.com with SMTP id l22so5928953vsi.1;
-        Fri, 13 Aug 2021 05:53:04 -0700 (PDT)
+        id S240153AbhHMNzS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Aug 2021 09:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240714AbhHMNzR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Aug 2021 09:55:17 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4EEC061756;
+        Fri, 13 Aug 2021 06:54:50 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id y7so15771335ljp.3;
+        Fri, 13 Aug 2021 06:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O1XdnwWUF59vgK1x0K9t+2GQQ4pwaV3DLawK5UlUo80=;
+        b=hb3nT9IcrGjePqClT5j5lBJ/wY/I9PPAMN9oFbjkvfk+RJH3cP/HUD07Vfdf5eA9su
+         3ESIFrv9OVVZqEfSHWPMS2Vwry6fxX7B3kE/YvuCvp5fon+J9SmhTuNpadxrKOCidR7p
+         3LsN7woGUmLwnLl9JivGGllxsmbkN0NxXnqXeEDP25+qpLSaWQvCdctZQCrqjj8wQE1+
+         cyc/xLmcvgsRPJLq1dCRnhy347bNqgMOl4ysDjOkWSicH7BONijeMZUQDB/r8G3aTxf8
+         CoN6lJXKC7TnbDbJpz+hH5tQ41fUezjCv4wh3dawz77W4mqedjfKNY09JJ5yzoth5ity
+         mUOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GUkLMwD2j+LMs+Mhg8retAXqFr+2fCyVciaZId7XXMA=;
-        b=A+DzMKh4SaI8IKueMe35NE6ASnRVifB/NBYZX/KGnlJTV2kWkfMtpUDCQzWd3qjVJO
-         Wy1VM4v21eEHWU1DfNhtEeV7Fy6cqj2zE6FVwmMBX4WtnbaechVx9fBRbSi2KkBHtUDM
-         ja7sx7g8zMX0g4zN5vAaOLt0JchtWm4Tznc7buTYRItM/C+WTGrmJ7Rv4zD+w6Kbzm95
-         IFOUpwTj1MhzlQF6RWNFRVHnsktUvnoxDOw0IC6BJOHcxUXWf3d2K9QbxK9fz7NWoATu
-         7wOZEe15THA+ykF6m2QwCsZqtJJjHJkamhPFTVVu/U4vcKqVcXY2nfD94t9iLynowXRj
-         LFyw==
-X-Gm-Message-State: AOAM533CYkLOQ078pKB3UPE6RzN1mGLSSWnt8FkimyOtbv2I/a6HFngl
-        uRAcMx2mYV8id8UPumpqQLfqhJXRHEMbImvt+To=
-X-Google-Smtp-Source: ABdhPJzjK6cDtV6QbCobPoCPv+kseDVbo2qNoxZBSAFh+8+1qixu6jaaer/OLjhFttaw7VgR0TV8HigL8Np+ZSkG7+k=
-X-Received: by 2002:a05:6102:e59:: with SMTP id p25mr1482758vst.26.1628859183649;
- Fri, 13 Aug 2021 05:53:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O1XdnwWUF59vgK1x0K9t+2GQQ4pwaV3DLawK5UlUo80=;
+        b=d/LGd26uhI2hT1vv+QlOfm/mANNyFuMMi4ZhVTR/MUXp+5C63yN9zgiVyeimhNzsKy
+         3z0wA7p2zhxgOkzj2zHWH2SeaUTVGP+POLG1SV+S7gd8OsbeBANCdl2ohFOycPaMzGw4
+         q1ALluwfeuiH9yoOJs04n+rs7sCJ6Suv39fKs7eAoAW4k1bl3gfIelDlCCGXzfB2OzZl
+         BBARYvkLiQRbU/wkvWBQLxsPvwbbpuc+tqgU7SaE6Vnxp4JSPyjpG/17ScKipekDattz
+         0xGveKNBssCOeSRhy9fXBUoArS+qFN7k/spYaR+zQ+j35Jn/LKcGttOUO4hvDrCC1Q4z
+         qv7Q==
+X-Gm-Message-State: AOAM532jx/4Yo6VwXtm+ZgiGv0daR8aVGIwsbNHhAF2DTN4hNpJBKVtq
+        2aLRfO1VKuVJq3ea4oSI5JKySuJIVuGBWUZy
+X-Google-Smtp-Source: ABdhPJzrzQR6pAQaUauD6jgHqgRU0Gc25T0BsXZGtG7vhxsbrUSc7RIh+xcxRhLpMe1qAiecXoW9Kw==
+X-Received: by 2002:a2e:a209:: with SMTP id h9mr1930492ljm.249.1628862888667;
+        Fri, 13 Aug 2021 06:54:48 -0700 (PDT)
+Received: from localhost.localdomain (45-11-60-78.ip4.greenlan.pl. [45.11.60.78])
+        by smtp.googlemail.com with ESMTPSA id j16sm178626lja.82.2021.08.13.06.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Aug 2021 06:54:48 -0700 (PDT)
+From:   Marcin Chojnacki <marcinch7@gmail.com>
+Cc:     marcinch7@gmail.com,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mips: mm: correct build errors for debug code in tlb-r3k
+Date:   Fri, 13 Aug 2021 15:54:33 +0200
+Message-Id: <20210813135434.1015906-1-marcinch7@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210811095759.1281480-1-geert@linux-m68k.org>
- <20210811095759.1281480-20-geert@linux-m68k.org> <20210811124755.37b0a0a9@thinkpad>
- <CAMuHMdUFPvJBuFByiN6pb539REYtcsNJMKML+M2NQw=GJxTYJg@mail.gmail.com> <CAHp75VeNyHUmcU7GPnP8woRcDErDNQ5M3FHQGpLnhUoL5qTnLQ@mail.gmail.com>
-In-Reply-To: <CAHp75VeNyHUmcU7GPnP8woRcDErDNQ5M3FHQGpLnhUoL5qTnLQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 Aug 2021 14:52:52 +0200
-Message-ID: <CAMuHMdVFOu6EXKqkiLgBp3n8Oujm+uSpFn-ximtp+37TOZSp9A@mail.gmail.com>
-Subject: Re: [PATCH v5 19/19] auxdisplay: ht16k33: Add LED support
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Andy,
+tlb-r3k has debug code hidden under DEBUG_TLB define. This flag
+is undefined by default which results in the code not being compiled.
+If one would enable the flag, the file would not build because of
+the code being not up to date with the rest of this file.
 
-On Thu, Aug 12, 2021 at 2:33 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Wednesday, August 11, 2021, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->> On Wed, Aug 11, 2021 at 12:48 PM Marek Behún <kabel@kernel.org> wrote:
->> > On Wed, 11 Aug 2021 11:57:59 +0200
->> > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->> > > Instantiate a single LED based on the "led" subnode in DT.
->> > > This allows the user to control display brightness and blinking (backed
->> > > by hardware support) through the LED class API and triggers, and exposes
->> > > the display color.  The LED will be named
->> > > "auxdisplay:<color>:<function>".
->> > >
->> > > When running in dot-matrix mode and if no "led" subnode is found, the
->> > > driver falls back to the traditional backlight mode, to preserve
->> > > backwards compatibility.
->> > >
->> > > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
->> >
->> > Reviewed-by: Marek Behún <kabel@kernel.org>
->>
->> Thanks!
->>
->> > BTW, this driver does not need to depend on OF, methinks.
->> > The few instances of properties reading can be
->> > easily rewritten to device_* functions (from include/linux/property.h).
->> > The of_get_child_by_name() can become device_get_named_child_node().
->> >
->> > Geert, what do you think?
->>
->> Sure, that can be done later, when an ACPI user appears?
->
-> Actually with PRP0001 approach any of compatible driver may be used onACPI platform. So, what you are saying can be interpreted the way “we don’t care about users on ACPI based platforms”. If it is the case, then it should be told explicitly.
+This commit fixes the normally hidden debug code to bring it in line
+with the rest of the file and make it build with the debug flag enabled.
 
-I think you're interpreting too much ;-)
-My point is simply:
+Signed-off-by: Marcin Chojnacki <marcinch7@gmail.com>
+---
+ arch/mips/mm/tlb-r3k.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
->> The dependency on OF was pre-existing, and this series is already
->> at v5.
-
-If any OF compatible driver can now be used on ACPI platforms, perhaps
-this should be handled at the API level? I.e. the distinction between
-OF and device properties should be dropped completely, and all drivers
-be converted mechanically in one shot, instead of a gradual ad-hoc
-conversion being sneaked in through other series like this one?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/arch/mips/mm/tlb-r3k.c b/arch/mips/mm/tlb-r3k.c
+index a36622ebe..ca53f3366 100644
+--- a/arch/mips/mm/tlb-r3k.c
++++ b/arch/mips/mm/tlb-r3k.c
+@@ -77,7 +77,7 @@ void local_flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
+ 		unsigned long size, flags;
+ 
+ #ifdef DEBUG_TLB
+-		printk("[tlbrange<%lu,0x%08lx,0x%08lx>]",
++		printk("[tlbrange<%llu,0x%08lx,0x%08lx>]",
+ 			cpu_context(cpu, mm) & asid_mask, start, end);
+ #endif
+ 		local_irq_save(flags);
+@@ -115,7 +115,7 @@ void local_flush_tlb_kernel_range(unsigned long start, unsigned long end)
+ 	unsigned long size, flags;
+ 
+ #ifdef DEBUG_TLB
+-	printk("[tlbrange<%lu,0x%08lx,0x%08lx>]", start, end);
++	printk("[tlbrange<0x%08lx,0x%08lx>]", start, end);
+ #endif
+ 	local_irq_save(flags);
+ 	size = (end - start + (PAGE_SIZE - 1)) >> PAGE_SHIFT;
+@@ -156,7 +156,7 @@ void local_flush_tlb_page(struct vm_area_struct *vma, unsigned long page)
+ 		int oldpid, newpid, idx;
+ 
+ #ifdef DEBUG_TLB
+-		printk("[tlbpage<%lu,0x%08lx>]", cpu_context(cpu, vma->vm_mm), page);
++		printk("[tlbpage<%llu,0x%08lx>]", cpu_context(cpu, vma->vm_mm), page);
+ #endif
+ 		newpid = cpu_context(cpu, vma->vm_mm) & asid_mask;
+ 		page &= PAGE_MASK;
+@@ -183,6 +183,9 @@ void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t pte)
+ 	unsigned long asid_mask = cpu_asid_mask(&current_cpu_data);
+ 	unsigned long flags;
+ 	int idx, pid;
++#ifdef DEBUG_TLB
++	int cpu = smp_processor_id();
++#endif
+ 
+ 	/*
+ 	 * Handle debugger faulting in for debugee.
+@@ -194,7 +197,7 @@ void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t pte)
+ 
+ #ifdef DEBUG_TLB
+ 	if ((pid != (cpu_context(cpu, vma->vm_mm) & asid_mask)) || (cpu_context(cpu, vma->vm_mm) == 0)) {
+-		printk("update_mmu_cache: Wheee, bogus tlbpid mmpid=%lu tlbpid=%d\n",
++		printk("update_mmu_cache: Wheee, bogus tlbpid mmpid=%llu tlbpid=%d\n",
+ 		       (cpu_context(cpu, vma->vm_mm)), pid);
+ 	}
+ #endif
+@@ -229,7 +232,7 @@ void add_wired_entry(unsigned long entrylo0, unsigned long entrylo1,
+ 		unsigned long w;
+ 
+ #ifdef DEBUG_TLB
+-		printk("[tlbwired<entry lo0 %8x, hi %8x\n, pagemask %8x>]\n",
++		printk("[tlbwired<entry lo0 %8lx, hi %8lx\n, pagemask %8lx>]\n",
+ 		       entrylo0, entryhi, pagemask);
+ #endif
+ 
+@@ -253,7 +256,7 @@ void add_wired_entry(unsigned long entrylo0, unsigned long entrylo1,
+ 
+ 	} else if (wired < 8) {
+ #ifdef DEBUG_TLB
+-		printk("[tlbwired<entry lo0 %8x, hi %8x\n>]\n",
++		printk("[tlbwired<entry lo0 %8lx, hi %8lx\n>]\n",
+ 		       entrylo0, entryhi);
+ #endif
+ 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.30.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
