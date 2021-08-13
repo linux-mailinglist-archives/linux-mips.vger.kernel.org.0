@@ -2,123 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D9E3EB66A
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Aug 2021 15:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC82B3EB9B8
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Aug 2021 18:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbhHMOAU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Aug 2021 10:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S236895AbhHMQDw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Aug 2021 12:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbhHMOAT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Aug 2021 10:00:19 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009F9C061756;
-        Fri, 13 Aug 2021 06:59:53 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id oa17so15387490pjb.1;
-        Fri, 13 Aug 2021 06:59:52 -0700 (PDT)
+        with ESMTP id S241329AbhHMQDw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Aug 2021 12:03:52 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25026C0617AE
+        for <linux-mips@vger.kernel.org>; Fri, 13 Aug 2021 09:03:25 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id o1-20020a05600c5101b02902e676fe1f04so7960427wms.1
+        for <linux-mips@vger.kernel.org>; Fri, 13 Aug 2021 09:03:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LSu8sFAFrhC/odFtHfJqDJdYJpzj9L5nziSDMXR8vEM=;
-        b=TGPQkbTs2i8gpw+d00MDmoYy23labhuVlc9grBKN7y7s+IXbxe31PZ9JEbzgL7HzEz
-         tPEJz0ch5WB3x/Tz9RqOU4uJ4fkgLRguXjyPaLM7lFD+ANJCIpA/XgtJot2H8/acXx+p
-         CYxiUkwJIsKAxsB15IcU7Q9jCgzZ2Djbl24Ea8UvKxQJXPN5rQkGMwIwo4I0jQOjYmRq
-         t6WK9ltK2ROdWHJCFIr/qL5iednM+RuTsMIMET9i1uT1RNaZECZKuwqTfGj6lSuPu4r3
-         LMS9CV64svF2Kt4rdtIDT/mL78QXVMc1F2CaZho6cOKo9HpZdmaGNssTn8S1w0RVkE/c
-         1fUw==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=x0xWLTk86tzzRjkpfY1Nei5soG6C/jHVAXTF3VFx8as=;
+        b=oid8lx5rMiXxBC7FhshiK5zRVwBoupwa7etIGRHYqQP5Ghxv3EasyGjtRUp/q5Z46g
+         dPi4hgDi6lfE5M69WkGUYoB4UpHQjdbW7/b5w+LQt9p0RZAURATPXapoGxPpFNZGjzQ2
+         Va9LQd+pJxCIAWHKes5nlRutYkbGgOx43p5fIFbu9CspxwKZ0CrPNYFzCNlRiL+FJ93W
+         TklrGcoUss7pCNoyZU9yjb2EHpT0pnIOHwJ3YWr6JRwQpdEjkHA7IduQ3ogIp5ZS3EEF
+         TY52xmFQkxtmdRAbmlYH2KZXBZWX0m8UvuZV3/wRxjMEJMwUP5V9hqpzXnySsIbfOhVF
+         3TFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LSu8sFAFrhC/odFtHfJqDJdYJpzj9L5nziSDMXR8vEM=;
-        b=Jssf8q6A6croBuqo4bZew1sx7bUyQs1HJrIRDylvS0deBreJME0V58dSWvOKP9tOax
-         OHrlnjtnbQ2WRzLiIZX+wlY870pnHeIRqLiuY+1zPbeVJr/yzr/PGqJWdf1uBUOgmWdI
-         LesnJXLa3IuoJg9cYheGFSJgmYoqpjx4QmeFjm3TEQbNZpApK6/MzS74M7vwKX+K5eO0
-         52uyLEQDF7bQqzoW/3p/7gT7plY+6s+S9Ru9QK+iCR+aAd3X6obflLJtgoCPe+pu780O
-         KPB/rVqUdHTdJMd8wtDS/bJRsUBzeJ8CjCZh3mauqoZP9oc6cwnDwuzR6T+AMbZmiV+J
-         PEug==
-X-Gm-Message-State: AOAM530k7T2ikqS/5O27dACwpREAHuBGgSsdjy29LUlKyvIdPszdK3zW
-        i2vs/EwvucN/DHcgO5+MZ0+oK+YdRGhY4Nfj9+Y=
-X-Google-Smtp-Source: ABdhPJzQbeYqFgjmUZ7qRC5aFHx8LQJMXfquo7iK9Xh0oX2OxNFjiTy5sHnPApz+D8JrixNPFriP2nkZUsivzsv59Rk=
-X-Received: by 2002:a17:90a:cf18:: with SMTP id h24mr2737483pju.228.1628863192516;
- Fri, 13 Aug 2021 06:59:52 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=x0xWLTk86tzzRjkpfY1Nei5soG6C/jHVAXTF3VFx8as=;
+        b=YD1hJwugTzYR7oxOuq77gDJv95fvgVbjTEVl8GAxiDZ/+xy+J5X3IZd7MuYcPm0dIo
+         abxM25gEd+qDiIWuUaHtEAYI3a4nexEwf6r9xR1ms2p7dZ3eGx7ZUxnMtcLmbVjB1dW0
+         AM3TMOPcBv8wgDy7rS4VXjt89zr/DDOqMfe9xdvpkGM35DV43uB6R/BVhhyjzVk0JNKj
+         4m+rRDdOYJ9YDBohRhfo1jBBTRkePsTpNuK9ONjjhIT/Fa0aaso/a+MAElDzng8CLO3e
+         bVwr1AkPlCZRr4v36ysUq7JJHNhqI3vTt8QtTm8bHKzUieTiMYiGrSIPuHAFSW1DS6lr
+         hRMQ==
+X-Gm-Message-State: AOAM530VaEYklmww6QlcuFcBmYNYxyH/XgCulbJaVnBVAJUEKY4a340y
+        wpTOGO+9PEKK+wVz28WjIopKwQ==
+X-Google-Smtp-Source: ABdhPJxcIJRrl7o4ZN0CYfus5qLWkxvFiJ5ZwqVc8qhAmA8Ox/ETKV+ybqsxewm9Za6B47x1WERQbA==
+X-Received: by 2002:a05:600c:2290:: with SMTP id 16mr3333448wmf.26.1628870603592;
+        Fri, 13 Aug 2021 09:03:23 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:5df3:d0eb:3945:640d? ([2a01:e34:ed2f:f020:5df3:d0eb:3945:640d])
+        by smtp.googlemail.com with ESMTPSA id i9sm2470529wre.36.2021.08.13.09.03.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Aug 2021 09:03:23 -0700 (PDT)
+Subject: Re: [PATCH v4 4/9] clocksource/drivers/pistachio: Make it selectable
+ for MIPS
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
+        linus.walleij@linaro.org, vkoul@kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org
+References: <20210723022543.4095-1-jiaxun.yang@flygoat.com>
+ <20210723022543.4095-5-jiaxun.yang@flygoat.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <9db45153-d4d6-aab9-8cf8-12fdb76be249@linaro.org>
+Date:   Fri, 13 Aug 2021 18:03:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210811095759.1281480-1-geert@linux-m68k.org>
- <20210811095759.1281480-20-geert@linux-m68k.org> <20210811124755.37b0a0a9@thinkpad>
- <CAMuHMdUFPvJBuFByiN6pb539REYtcsNJMKML+M2NQw=GJxTYJg@mail.gmail.com>
- <CAHp75VeNyHUmcU7GPnP8woRcDErDNQ5M3FHQGpLnhUoL5qTnLQ@mail.gmail.com> <CAMuHMdVFOu6EXKqkiLgBp3n8Oujm+uSpFn-ximtp+37TOZSp9A@mail.gmail.com>
-In-Reply-To: <CAMuHMdVFOu6EXKqkiLgBp3n8Oujm+uSpFn-ximtp+37TOZSp9A@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 13 Aug 2021 16:59:13 +0300
-Message-ID: <CAHp75VfsOFdgQP3-XStFieBQ9o4P=FVY43N4WXg6yOe+2O0bwg@mail.gmail.com>
-Subject: Re: [PATCH v5 19/19] auxdisplay: ht16k33: Add LED support
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210723022543.4095-5-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Aug 13, 2021 at 3:53 PM Geert Uytterhoeven <geert@linux-m68k.org> w=
-rote:
-> On Thu, Aug 12, 2021 at 2:33 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Wednesday, August 11, 2021, Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
-> >> On Wed, Aug 11, 2021 at 12:48 PM Marek Beh=C3=BAn <kabel@kernel.org> w=
-rote:
-> >> > On Wed, 11 Aug 2021 11:57:59 +0200
+On 23/07/2021 04:25, Jiaxun Yang wrote:
+> So it will be avilable for generic MIPS kernel.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+>  drivers/clocksource/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> index 39aa21d01e05..58ad7af8c673 100644
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -234,8 +234,9 @@ config CLKSRC_LPC32XX
+>  	  Support for the LPC32XX clocksource.
+>  
+>  config CLKSRC_PISTACHIO
+> -	bool "Clocksource for Pistachio SoC" if COMPILE_TEST
+> +	bool "Clocksource for Pistachio SoC"
+>  	depends on HAS_IOMEM
+> +	depends on MIPS || COMPILE_TEST
 
-...
+The dependency on the platform is only required if the COMPILE_TEST
+fails on other platforms.
 
-> >> Sure, that can be done later, when an ACPI user appears?
-> >
-> > Actually with PRP0001 approach any of compatible driver may be used onA=
-CPI platform. So, what you are saying can be interpreted the way =E2=80=9Cw=
-e don=E2=80=99t care about users on ACPI based platforms=E2=80=9D. If it is=
- the case, then it should be told explicitly.
->
-> I think you're interpreting too much ;-)
-> My point is simply:
->
-> >> The dependency on OF was pre-existing, and this series is already
-> >> at v5.
+The selection is done from arch/mips/Kconfig directly otherwise.
 
-Okay, but we can get rid of it. Why not make it more generic at the
-same time? Does it make sense?
-(I believe this is what Marek is asking initially)
+>  	select TIMER_OF
+>  	help
+>  	  Enables the clocksource for the Pistachio SoC.
+> 
 
-> If any OF compatible driver can now be used on ACPI platforms, perhaps
-> this should be handled at the API level? I.e. the distinction between
-> OF and device properties should be dropped completely,
 
-And this is done by device_*() / fwnode_*() APIs. And that's what can
-be easily done here.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
->  and all drivers
-> be converted mechanically in one shot, instead of a gradual ad-hoc
-> conversion being sneaked in through other series like this one?
-
-Do you realize that you are asking for something impossible?
-
-Moreover, an ad-hoc approach is what we do for plenty of things in the
-kernel (WRT new APIs, that don't replace old ones immediately).
-
---=20
-With Best Regards,
-Andy Shevchenko
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
