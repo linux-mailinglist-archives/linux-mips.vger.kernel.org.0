@@ -2,147 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFF13EB658
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Aug 2021 15:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D9E3EB66A
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Aug 2021 15:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240153AbhHMNzS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Aug 2021 09:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        id S233682AbhHMOAU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 13 Aug 2021 10:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240714AbhHMNzR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Aug 2021 09:55:17 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4EEC061756;
-        Fri, 13 Aug 2021 06:54:50 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id y7so15771335ljp.3;
-        Fri, 13 Aug 2021 06:54:50 -0700 (PDT)
+        with ESMTP id S233514AbhHMOAT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Aug 2021 10:00:19 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009F9C061756;
+        Fri, 13 Aug 2021 06:59:53 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id oa17so15387490pjb.1;
+        Fri, 13 Aug 2021 06:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O1XdnwWUF59vgK1x0K9t+2GQQ4pwaV3DLawK5UlUo80=;
-        b=hb3nT9IcrGjePqClT5j5lBJ/wY/I9PPAMN9oFbjkvfk+RJH3cP/HUD07Vfdf5eA9su
-         3ESIFrv9OVVZqEfSHWPMS2Vwry6fxX7B3kE/YvuCvp5fon+J9SmhTuNpadxrKOCidR7p
-         3LsN7woGUmLwnLl9JivGGllxsmbkN0NxXnqXeEDP25+qpLSaWQvCdctZQCrqjj8wQE1+
-         cyc/xLmcvgsRPJLq1dCRnhy347bNqgMOl4ysDjOkWSicH7BONijeMZUQDB/r8G3aTxf8
-         CoN6lJXKC7TnbDbJpz+hH5tQ41fUezjCv4wh3dawz77W4mqedjfKNY09JJ5yzoth5ity
-         mUOA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LSu8sFAFrhC/odFtHfJqDJdYJpzj9L5nziSDMXR8vEM=;
+        b=TGPQkbTs2i8gpw+d00MDmoYy23labhuVlc9grBKN7y7s+IXbxe31PZ9JEbzgL7HzEz
+         tPEJz0ch5WB3x/Tz9RqOU4uJ4fkgLRguXjyPaLM7lFD+ANJCIpA/XgtJot2H8/acXx+p
+         CYxiUkwJIsKAxsB15IcU7Q9jCgzZ2Djbl24Ea8UvKxQJXPN5rQkGMwIwo4I0jQOjYmRq
+         t6WK9ltK2ROdWHJCFIr/qL5iednM+RuTsMIMET9i1uT1RNaZECZKuwqTfGj6lSuPu4r3
+         LMS9CV64svF2Kt4rdtIDT/mL78QXVMc1F2CaZho6cOKo9HpZdmaGNssTn8S1w0RVkE/c
+         1fUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O1XdnwWUF59vgK1x0K9t+2GQQ4pwaV3DLawK5UlUo80=;
-        b=d/LGd26uhI2hT1vv+QlOfm/mANNyFuMMi4ZhVTR/MUXp+5C63yN9zgiVyeimhNzsKy
-         3z0wA7p2zhxgOkzj2zHWH2SeaUTVGP+POLG1SV+S7gd8OsbeBANCdl2ohFOycPaMzGw4
-         q1ALluwfeuiH9yoOJs04n+rs7sCJ6Suv39fKs7eAoAW4k1bl3gfIelDlCCGXzfB2OzZl
-         BBARYvkLiQRbU/wkvWBQLxsPvwbbpuc+tqgU7SaE6Vnxp4JSPyjpG/17ScKipekDattz
-         0xGveKNBssCOeSRhy9fXBUoArS+qFN7k/spYaR+zQ+j35Jn/LKcGttOUO4hvDrCC1Q4z
-         qv7Q==
-X-Gm-Message-State: AOAM532jx/4Yo6VwXtm+ZgiGv0daR8aVGIwsbNHhAF2DTN4hNpJBKVtq
-        2aLRfO1VKuVJq3ea4oSI5JKySuJIVuGBWUZy
-X-Google-Smtp-Source: ABdhPJzrzQR6pAQaUauD6jgHqgRU0Gc25T0BsXZGtG7vhxsbrUSc7RIh+xcxRhLpMe1qAiecXoW9Kw==
-X-Received: by 2002:a2e:a209:: with SMTP id h9mr1930492ljm.249.1628862888667;
-        Fri, 13 Aug 2021 06:54:48 -0700 (PDT)
-Received: from localhost.localdomain (45-11-60-78.ip4.greenlan.pl. [45.11.60.78])
-        by smtp.googlemail.com with ESMTPSA id j16sm178626lja.82.2021.08.13.06.54.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Aug 2021 06:54:48 -0700 (PDT)
-From:   Marcin Chojnacki <marcinch7@gmail.com>
-Cc:     marcinch7@gmail.com,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mips: mm: correct build errors for debug code in tlb-r3k
-Date:   Fri, 13 Aug 2021 15:54:33 +0200
-Message-Id: <20210813135434.1015906-1-marcinch7@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LSu8sFAFrhC/odFtHfJqDJdYJpzj9L5nziSDMXR8vEM=;
+        b=Jssf8q6A6croBuqo4bZew1sx7bUyQs1HJrIRDylvS0deBreJME0V58dSWvOKP9tOax
+         OHrlnjtnbQ2WRzLiIZX+wlY870pnHeIRqLiuY+1zPbeVJr/yzr/PGqJWdf1uBUOgmWdI
+         LesnJXLa3IuoJg9cYheGFSJgmYoqpjx4QmeFjm3TEQbNZpApK6/MzS74M7vwKX+K5eO0
+         52uyLEQDF7bQqzoW/3p/7gT7plY+6s+S9Ru9QK+iCR+aAd3X6obflLJtgoCPe+pu780O
+         KPB/rVqUdHTdJMd8wtDS/bJRsUBzeJ8CjCZh3mauqoZP9oc6cwnDwuzR6T+AMbZmiV+J
+         PEug==
+X-Gm-Message-State: AOAM530k7T2ikqS/5O27dACwpREAHuBGgSsdjy29LUlKyvIdPszdK3zW
+        i2vs/EwvucN/DHcgO5+MZ0+oK+YdRGhY4Nfj9+Y=
+X-Google-Smtp-Source: ABdhPJzQbeYqFgjmUZ7qRC5aFHx8LQJMXfquo7iK9Xh0oX2OxNFjiTy5sHnPApz+D8JrixNPFriP2nkZUsivzsv59Rk=
+X-Received: by 2002:a17:90a:cf18:: with SMTP id h24mr2737483pju.228.1628863192516;
+ Fri, 13 Aug 2021 06:59:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <20210811095759.1281480-1-geert@linux-m68k.org>
+ <20210811095759.1281480-20-geert@linux-m68k.org> <20210811124755.37b0a0a9@thinkpad>
+ <CAMuHMdUFPvJBuFByiN6pb539REYtcsNJMKML+M2NQw=GJxTYJg@mail.gmail.com>
+ <CAHp75VeNyHUmcU7GPnP8woRcDErDNQ5M3FHQGpLnhUoL5qTnLQ@mail.gmail.com> <CAMuHMdVFOu6EXKqkiLgBp3n8Oujm+uSpFn-ximtp+37TOZSp9A@mail.gmail.com>
+In-Reply-To: <CAMuHMdVFOu6EXKqkiLgBp3n8Oujm+uSpFn-ximtp+37TOZSp9A@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 13 Aug 2021 16:59:13 +0300
+Message-ID: <CAHp75VfsOFdgQP3-XStFieBQ9o4P=FVY43N4WXg6yOe+2O0bwg@mail.gmail.com>
+Subject: Re: [PATCH v5 19/19] auxdisplay: ht16k33: Add LED support
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-tlb-r3k has debug code hidden under DEBUG_TLB define. This flag
-is undefined by default which results in the code not being compiled.
-If one would enable the flag, the file would not build because of
-the code being not up to date with the rest of this file.
+On Fri, Aug 13, 2021 at 3:53 PM Geert Uytterhoeven <geert@linux-m68k.org> w=
+rote:
+> On Thu, Aug 12, 2021 at 2:33 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> > On Wednesday, August 11, 2021, Geert Uytterhoeven <geert@linux-m68k.org=
+> wrote:
+> >> On Wed, Aug 11, 2021 at 12:48 PM Marek Beh=C3=BAn <kabel@kernel.org> w=
+rote:
+> >> > On Wed, 11 Aug 2021 11:57:59 +0200
 
-This commit fixes the normally hidden debug code to bring it in line
-with the rest of the file and make it build with the debug flag enabled.
+...
 
-Signed-off-by: Marcin Chojnacki <marcinch7@gmail.com>
----
- arch/mips/mm/tlb-r3k.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+> >> Sure, that can be done later, when an ACPI user appears?
+> >
+> > Actually with PRP0001 approach any of compatible driver may be used onA=
+CPI platform. So, what you are saying can be interpreted the way =E2=80=9Cw=
+e don=E2=80=99t care about users on ACPI based platforms=E2=80=9D. If it is=
+ the case, then it should be told explicitly.
+>
+> I think you're interpreting too much ;-)
+> My point is simply:
+>
+> >> The dependency on OF was pre-existing, and this series is already
+> >> at v5.
 
-diff --git a/arch/mips/mm/tlb-r3k.c b/arch/mips/mm/tlb-r3k.c
-index a36622ebe..ca53f3366 100644
---- a/arch/mips/mm/tlb-r3k.c
-+++ b/arch/mips/mm/tlb-r3k.c
-@@ -77,7 +77,7 @@ void local_flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
- 		unsigned long size, flags;
- 
- #ifdef DEBUG_TLB
--		printk("[tlbrange<%lu,0x%08lx,0x%08lx>]",
-+		printk("[tlbrange<%llu,0x%08lx,0x%08lx>]",
- 			cpu_context(cpu, mm) & asid_mask, start, end);
- #endif
- 		local_irq_save(flags);
-@@ -115,7 +115,7 @@ void local_flush_tlb_kernel_range(unsigned long start, unsigned long end)
- 	unsigned long size, flags;
- 
- #ifdef DEBUG_TLB
--	printk("[tlbrange<%lu,0x%08lx,0x%08lx>]", start, end);
-+	printk("[tlbrange<0x%08lx,0x%08lx>]", start, end);
- #endif
- 	local_irq_save(flags);
- 	size = (end - start + (PAGE_SIZE - 1)) >> PAGE_SHIFT;
-@@ -156,7 +156,7 @@ void local_flush_tlb_page(struct vm_area_struct *vma, unsigned long page)
- 		int oldpid, newpid, idx;
- 
- #ifdef DEBUG_TLB
--		printk("[tlbpage<%lu,0x%08lx>]", cpu_context(cpu, vma->vm_mm), page);
-+		printk("[tlbpage<%llu,0x%08lx>]", cpu_context(cpu, vma->vm_mm), page);
- #endif
- 		newpid = cpu_context(cpu, vma->vm_mm) & asid_mask;
- 		page &= PAGE_MASK;
-@@ -183,6 +183,9 @@ void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t pte)
- 	unsigned long asid_mask = cpu_asid_mask(&current_cpu_data);
- 	unsigned long flags;
- 	int idx, pid;
-+#ifdef DEBUG_TLB
-+	int cpu = smp_processor_id();
-+#endif
- 
- 	/*
- 	 * Handle debugger faulting in for debugee.
-@@ -194,7 +197,7 @@ void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t pte)
- 
- #ifdef DEBUG_TLB
- 	if ((pid != (cpu_context(cpu, vma->vm_mm) & asid_mask)) || (cpu_context(cpu, vma->vm_mm) == 0)) {
--		printk("update_mmu_cache: Wheee, bogus tlbpid mmpid=%lu tlbpid=%d\n",
-+		printk("update_mmu_cache: Wheee, bogus tlbpid mmpid=%llu tlbpid=%d\n",
- 		       (cpu_context(cpu, vma->vm_mm)), pid);
- 	}
- #endif
-@@ -229,7 +232,7 @@ void add_wired_entry(unsigned long entrylo0, unsigned long entrylo1,
- 		unsigned long w;
- 
- #ifdef DEBUG_TLB
--		printk("[tlbwired<entry lo0 %8x, hi %8x\n, pagemask %8x>]\n",
-+		printk("[tlbwired<entry lo0 %8lx, hi %8lx\n, pagemask %8lx>]\n",
- 		       entrylo0, entryhi, pagemask);
- #endif
- 
-@@ -253,7 +256,7 @@ void add_wired_entry(unsigned long entrylo0, unsigned long entrylo1,
- 
- 	} else if (wired < 8) {
- #ifdef DEBUG_TLB
--		printk("[tlbwired<entry lo0 %8x, hi %8x\n>]\n",
-+		printk("[tlbwired<entry lo0 %8lx, hi %8lx\n>]\n",
- 		       entrylo0, entryhi);
- #endif
- 
--- 
-2.30.2
+Okay, but we can get rid of it. Why not make it more generic at the
+same time? Does it make sense?
+(I believe this is what Marek is asking initially)
 
+> If any OF compatible driver can now be used on ACPI platforms, perhaps
+> this should be handled at the API level? I.e. the distinction between
+> OF and device properties should be dropped completely,
+
+And this is done by device_*() / fwnode_*() APIs. And that's what can
+be easily done here.
+
+>  and all drivers
+> be converted mechanically in one shot, instead of a gradual ad-hoc
+> conversion being sneaked in through other series like this one?
+
+Do you realize that you are asking for something impossible?
+
+Moreover, an ad-hoc approach is what we do for plenty of things in the
+kernel (WRT new APIs, that don't replace old ones immediately).
+
+--=20
+With Best Regards,
+Andy Shevchenko
