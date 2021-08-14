@@ -2,90 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2413EBF9E
-	for <lists+linux-mips@lfdr.de>; Sat, 14 Aug 2021 04:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1445B3EC204
+	for <lists+linux-mips@lfdr.de>; Sat, 14 Aug 2021 12:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236588AbhHNCGq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 13 Aug 2021 22:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236552AbhHNCGp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 13 Aug 2021 22:06:45 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3DDC0612A6
-        for <linux-mips@vger.kernel.org>; Fri, 13 Aug 2021 19:06:16 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id h2so18385311lji.6
-        for <linux-mips@vger.kernel.org>; Fri, 13 Aug 2021 19:06:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
-        b=bMjFQnnAZpaPHPewg53a/655rlJcZF3F6tOCYZw1vRKDz/xIJdx97rNr27JLkW56nx
-         /iUhkVkrv2vt56YQtzEazhRgIPy/DINH4WyHeEexrKrG7liGbayL7Temc7NGvW0bB8Ad
-         jYLKY+nfNSoS1rYKoflW5LtIinkjSZBTTSJCtk74RyRz5/H1kPwLgMirqvm1jZ9Q2lvS
-         mysy6xLOxs0wYu9KWpVs3ZVzmyzuM6cY3iz+yVlGPkz3Lkb+v57sIQRRUb+ypy4gjifF
-         STYdF7upxk4m3MFQNQv0T7Zw+Yt5F/OYhuRsX60kpa6PLdNBh1LpNqMT51M2pasOSTPy
-         0wUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
-        b=EcP5QDStTRiMVvoXD0a4ZJo1B/SX8UsmqBPoOFiYjoELg1+/aRTm++AUO4xqiNhh2U
-         jrqb29xOaorsaJdi6xFQCdv0Q3nhvPaiA+1aFc9fYeTVpQm339a8Jsniz49Nf0dKtetB
-         6nw3h9L3Db7rjiiF01/oBGPVe7QLK05z/EmtadaCxYjPWG+1jpvrTfT/i5JjWfdQAtIw
-         vXXvpOZfdorMNYR2Lwqt9THpddnx/tmC/2VZjbKsJv+IisyenPUUvB9hhF+5EsfxGBSo
-         819JT2/NyQMR0awnR2WlsFn+oTHyLWVVmYUF+dkQVWcVrWkRAemrfgcQpn6VmdyQEO0q
-         4BNg==
-X-Gm-Message-State: AOAM530hzYFddXmr+u0PtbBneXPYwMCHV4LcrthS8hIXeKTRH4caiGOd
-        PdGw/24qZJOLSIUM1sVg2/Iw3QCWqX4Tx9jYfpw=
-X-Google-Smtp-Source: ABdhPJynvegPmhEjUi/stm1v/NRwCcvEqe4+RCpcxOCwnF//w8aRyIcHmBxFidm29bl0vBPsC1zhmU0XtHDcktPhkc0=
-X-Received: by 2002:a2e:b1d3:: with SMTP id e19mr3920584lja.6.1628906774714;
- Fri, 13 Aug 2021 19:06:14 -0700 (PDT)
+        id S237816AbhHNKar (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 14 Aug 2021 06:30:47 -0400
+Received: from elvis.franken.de ([193.175.24.41]:60421 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237454AbhHNKar (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 14 Aug 2021 06:30:47 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mEqvf-0000g0-00; Sat, 14 Aug 2021 12:30:15 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id D6FA9C07E5; Sat, 14 Aug 2021 12:30:01 +0200 (CEST)
+Date:   Sat, 14 Aug 2021 12:30:01 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Subject: Re: [PATCH] MIPS: simplify copy_user_high_page for MIPS64 w/o cache
+ alias
+Message-ID: <20210814103001.GA5735@alpha.franken.de>
+References: <20210807080429.3323711-1-huangpei@loongson.cn>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:380d:b029:132:4f79:3ded with HTTP; Fri, 13 Aug 2021
- 19:06:14 -0700 (PDT)
-Reply-To: deedeepaul@yandex.com
-From:   Deedee Paul <deedeepaul212@gmail.com>
-Date:   Sat, 14 Aug 2021 02:06:14 +0000
-Message-ID: <CADS-zP8AceijWYuKjjfFaC4WB2nM3FQqvpU1ob6Xb=P4w5FpkA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210807080429.3323711-1-huangpei@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Attention: Beneficiary,
+On Sat, Aug 07, 2021 at 04:04:29PM +0800, Huang Pei wrote:
+> Borrow from ARM64
+> 
+> MIPS64 CPU has enough direct mapped memory space to access all
+> physical memory. In case of no cache alias, bypass both k*map_atomic
+> and k*map_coherent for better real-time performance.
+> 
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> ---
+>  arch/mips/mm/init.c | 39 ++++++++++++++++++++++++++-------------
+>  1 file changed, 26 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
+> index 19347dc6bbf8..1f5bdd18ae7c 100644
+> --- a/arch/mips/mm/init.c
+> +++ b/arch/mips/mm/init.c
+> @@ -171,22 +171,35 @@ void copy_user_highpage(struct page *to, struct page *from,
+>  {
+>  	void *vfrom, *vto;
+>  
+> -	vto = kmap_atomic(to);
+> -	if (cpu_has_dc_aliases &&
+> -	    page_mapcount(from) && !Page_dcache_dirty(from)) {
+> -		vfrom = kmap_coherent(from, vaddr);
+> +	if (IS_ENABLED(CONFIG_64BIT) && !cpu_has_dc_aliases) {
+> +		vfrom = page_address(from);
+> +		vto   = page_address(to);
+>  		copy_page(vto, vfrom);
+> -		kunmap_coherent();
+> +		/*
+> +		 * even without cache alias, still need to maintain
+> +		 * coherence between icache and dcache
+> +		 */
+> +		if (!cpu_has_ic_fills_f_dc)
+> +			flush_data_cache_page((unsigned long)vto);
+> +
+>  	} else {
+> -		vfrom = kmap_atomic(from);
+> -		copy_page(vto, vfrom);
+> -		kunmap_atomic(vfrom);
+> +		vto = kmap_atomic(to);
+> +		if (cpu_has_dc_aliases &&
+> +				page_mapcount(from) && !Page_dcache_dirty(from)) {
 
-This is to officially inform you that we have been having meetings for
-the past weeks now which ended Two days ago with Mr. John W. Ashe,
-President of the 68th session of the UN General Assembly, Mr. David
-R.Malpass. the World Bank President and Hon. Mrs. Christine Laggard
-(IMF) Director General, in the meeting we talked about how to
-compensate Scam victim's people and all the people that were affected
-the most by this Coronavirus pandemic.
+please fix indentation and place page_mapping() to same column as
+cpu_has_dc_aliases()
 
-Your email address was successfully selected for this donation with others.
+> +			vfrom = kmap_coherent(from, vaddr);
+> +			copy_page(vto, vfrom);
+> +			kunmap_coherent();
+> +		} else {
+> +			vfrom = kmap_atomic(from);
+> +			copy_page(vto, vfrom);
+> +			kunmap_atomic(vfrom);
+> +		}
+> +		if ((!cpu_has_ic_fills_f_dc) ||
+> +				pages_do_alias((unsigned long)vto, vaddr & PAGE_MASK))
 
-The United Nations have agreed to compensate you with the sum of
-($150,000.00) One hundred and fifty thousand United States Dollars. We
-have arranged your payment through WORLD ATM MASTERCARD which is the
-latest instruction from the World Bank Group.
+same here
 
-For the collection of your WORLD ATM MASTERCARD contact our
-representative Rev. David Wood, send to him your contact address where
-you want your MASTERCARD to be sent to you, like
+> +			flush_data_cache_page((unsigned long)vto);
+> +		kunmap_atomic(vto);
+> +		/* Make sure this page is cleared on other CPU's too before using it */
 
-1. Your Full Name: .........
-2. Your Country and Your Delivery Home Address: ........
-3. Your Telephone: ..............
+this comment should stay in front of the smp_wmb()
 
-His e-mail address: (ddavidwood1@yandex.com) He is a Canadian (UN)
-representative Agent.
+>  	}
+> -	if ((!cpu_has_ic_fills_f_dc) ||
+> -	    pages_do_alias((unsigned long)vto, vaddr & PAGE_MASK))
+> -		flush_data_cache_page((unsigned long)vto);
+> -	kunmap_atomic(vto);
+> -	/* Make sure this page is cleared on other CPU's too before using it */
+>  	smp_wmb();
 
-Thanks.
-Tel: 1 513 452 4352.
-Mr. Michael M=C3=B8ller Director-General of the United Nations Office
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
