@@ -2,117 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1445B3EC204
-	for <lists+linux-mips@lfdr.de>; Sat, 14 Aug 2021 12:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D573EC2BF
+	for <lists+linux-mips@lfdr.de>; Sat, 14 Aug 2021 14:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237816AbhHNKar (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 14 Aug 2021 06:30:47 -0400
-Received: from elvis.franken.de ([193.175.24.41]:60421 "EHLO elvis.franken.de"
+        id S233116AbhHNM7F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 14 Aug 2021 08:59:05 -0400
+Received: from elvis.franken.de ([193.175.24.41]:60528 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237454AbhHNKar (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 14 Aug 2021 06:30:47 -0400
+        id S230523AbhHNM7F (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 14 Aug 2021 08:59:05 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mEqvf-0000g0-00; Sat, 14 Aug 2021 12:30:15 +0200
+        id 1mEtFD-0001ZR-01; Sat, 14 Aug 2021 14:58:35 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D6FA9C07E5; Sat, 14 Aug 2021 12:30:01 +0200 (CEST)
-Date:   Sat, 14 Aug 2021 12:30:01 +0200
+        id C8585C0814; Sat, 14 Aug 2021 14:46:22 +0200 (CEST)
+Date:   Sat, 14 Aug 2021 14:46:22 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: Re: [PATCH] MIPS: simplify copy_user_high_page for MIPS64 w/o cache
- alias
-Message-ID: <20210814103001.GA5735@alpha.franken.de>
-References: <20210807080429.3323711-1-huangpei@loongson.cn>
+To:     Marcin Chojnacki <marcinch7@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: mm: correct build errors for debug code in tlb-r3k
+Message-ID: <20210814124622.GA6450@alpha.franken.de>
+References: <20210813135434.1015906-1-marcinch7@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210807080429.3323711-1-huangpei@loongson.cn>
+In-Reply-To: <20210813135434.1015906-1-marcinch7@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Aug 07, 2021 at 04:04:29PM +0800, Huang Pei wrote:
-> Borrow from ARM64
+On Fri, Aug 13, 2021 at 03:54:33PM +0200, Marcin Chojnacki wrote:
+> tlb-r3k has debug code hidden under DEBUG_TLB define. This flag
+> is undefined by default which results in the code not being compiled.
+> If one would enable the flag, the file would not build because of
+> the code being not up to date with the rest of this file.
 > 
-> MIPS64 CPU has enough direct mapped memory space to access all
-> physical memory. In case of no cache alias, bypass both k*map_atomic
-> and k*map_coherent for better real-time performance.
+> This commit fixes the normally hidden debug code to bring it in line
+> with the rest of the file and make it build with the debug flag enabled.
 > 
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> Signed-off-by: Marcin Chojnacki <marcinch7@gmail.com>
 > ---
->  arch/mips/mm/init.c | 39 ++++++++++++++++++++++++++-------------
->  1 file changed, 26 insertions(+), 13 deletions(-)
+>  arch/mips/mm/tlb-r3k.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
 > 
-> diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
-> index 19347dc6bbf8..1f5bdd18ae7c 100644
-> --- a/arch/mips/mm/init.c
-> +++ b/arch/mips/mm/init.c
-> @@ -171,22 +171,35 @@ void copy_user_highpage(struct page *to, struct page *from,
->  {
->  	void *vfrom, *vto;
+> diff --git a/arch/mips/mm/tlb-r3k.c b/arch/mips/mm/tlb-r3k.c
+> index a36622ebe..ca53f3366 100644
+> --- a/arch/mips/mm/tlb-r3k.c
+> +++ b/arch/mips/mm/tlb-r3k.c
+> @@ -77,7 +77,7 @@ void local_flush_tlb_range(struct vm_area_struct *vma, unsigned long start,
+>  		unsigned long size, flags;
 >  
-> -	vto = kmap_atomic(to);
-> -	if (cpu_has_dc_aliases &&
-> -	    page_mapcount(from) && !Page_dcache_dirty(from)) {
-> -		vfrom = kmap_coherent(from, vaddr);
-> +	if (IS_ENABLED(CONFIG_64BIT) && !cpu_has_dc_aliases) {
-> +		vfrom = page_address(from);
-> +		vto   = page_address(to);
->  		copy_page(vto, vfrom);
-> -		kunmap_coherent();
-> +		/*
-> +		 * even without cache alias, still need to maintain
-> +		 * coherence between icache and dcache
-> +		 */
-> +		if (!cpu_has_ic_fills_f_dc)
-> +			flush_data_cache_page((unsigned long)vto);
-> +
->  	} else {
-> -		vfrom = kmap_atomic(from);
-> -		copy_page(vto, vfrom);
-> -		kunmap_atomic(vfrom);
-> +		vto = kmap_atomic(to);
-> +		if (cpu_has_dc_aliases &&
-> +				page_mapcount(from) && !Page_dcache_dirty(from)) {
+>  #ifdef DEBUG_TLB
+> -		printk("[tlbrange<%lu,0x%08lx,0x%08lx>]",
+> +		printk("[tlbrange<%llu,0x%08lx,0x%08lx>]",
+>  			cpu_context(cpu, mm) & asid_mask, start, end);
+>  #endif
 
-please fix indentation and place page_mapping() to same column as
-cpu_has_dc_aliases()
+running checkpatch over your patch gives me
 
-> +			vfrom = kmap_coherent(from, vaddr);
-> +			copy_page(vto, vfrom);
-> +			kunmap_coherent();
-> +		} else {
-> +			vfrom = kmap_atomic(from);
-> +			copy_page(vto, vfrom);
-> +			kunmap_atomic(vfrom);
-> +		}
-> +		if ((!cpu_has_ic_fills_f_dc) ||
-> +				pages_do_alias((unsigned long)vto, vaddr & PAGE_MASK))
+WARNING: printk() should include KERN_<LEVEL> facility level
+#29: FILE: arch/mips/mm/tlb-r3k.c:80:
++		printk("[tlbrange<%llu,0x%08lx,0x%08lx>]",
 
-same here
 
-> +			flush_data_cache_page((unsigned long)vto);
-> +		kunmap_atomic(vto);
-> +		/* Make sure this page is cleared on other CPU's too before using it */
-
-this comment should stay in front of the smp_wmb()
-
->  	}
-> -	if ((!cpu_has_ic_fills_f_dc) ||
-> -	    pages_do_alias((unsigned long)vto, vaddr & PAGE_MASK))
-> -		flush_data_cache_page((unsigned long)vto);
-> -	kunmap_atomic(vto);
-> -	/* Make sure this page is cleared on other CPU's too before using it */
->  	smp_wmb();
+can you fix that as well ? Maybe be even  replacing printk with
+pr_debug 
 
 Thomas.
 
