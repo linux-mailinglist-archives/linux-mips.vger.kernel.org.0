@@ -2,67 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC623EC507
-	for <lists+linux-mips@lfdr.de>; Sat, 14 Aug 2021 22:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3382E3EC9F0
+	for <lists+linux-mips@lfdr.de>; Sun, 15 Aug 2021 17:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbhHNUdp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 14 Aug 2021 16:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbhHNUdp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 14 Aug 2021 16:33:45 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A340C061764;
-        Sat, 14 Aug 2021 13:33:16 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id c129-20020a1c35870000b02902e6b6135279so7614455wma.0;
-        Sat, 14 Aug 2021 13:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=E+b4K5O9ZzudpXierzrILoNTAmbC3it/2IQzBLA6YvYnV6R1l+qWfsm9YoXy+GfvKt
-         gAO/fDHHM6oCG8qYKGvEka5MFojDRXXA4E6poLrj9SUua/baE2c+aOfKv//U/xGGNJVO
-         JvKdD1nE4/zuwtHjXbFc8SM9TVSDRQ0LtqpdnKYvDNlZnlf8A4qIlL/OqX3Eb0/KMhl4
-         1CscM01suWm6hlXnHJmRJIeTSM325bu16VIq2+rprDNxHMTMhpiSFpJpy0VpJsdKR6Ze
-         p3960hktHz2iFpT8rGL3Q5okHXDUsr2uq+/SX8yfwO/ezXjA+NGsDkEUjBqNexa2KEz4
-         Gp/A==
+        id S232412AbhHOPZg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 15 Aug 2021 11:25:36 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:39620 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229603AbhHOPZg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 15 Aug 2021 11:25:36 -0400
+Received: by mail-ot1-f48.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so1057537otf.6;
+        Sun, 15 Aug 2021 08:25:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=SPzn8Ic7+f9RjyLFsi+g3BrZJI/FARgtfRuUjGCWJn7DI8lHPQFGmByL0BPqq00ql8
-         v3YBcYaFzNLVInP1uCQA8DgatBzhbFwSN2tecfHq7QGFyz+bMFrIpgl3wgJ/2n82ic6r
-         FqCjJ90fLs1C5Wtmc9DgIzxX40VeZuykiYVJguJG3BkNZsU4gn0F26YkFraPHQxRwtXV
-         EL5zuzbvQd4VVNy7cqhZJxIbvMt/JN+YahILcSMihDyA/VTKzBszlDvKpZqmFc1nhDrS
-         odAGQjkgzMuNGzVJxvcMHyvC7WOzGxKxHb4AFRw+gcPgHQiXuacq7zALEwQY+rDkENjl
-         NWZg==
-X-Gm-Message-State: AOAM530ZqXcpMSOA0TJgEsFs14lCbbJZAqQrETugSyPq3KkgJpjL95F7
-        aJx5vv590nTwYb/X1UT8k7k=
-X-Google-Smtp-Source: ABdhPJw0BY3y+nunbTaB9kulaRhYn+lqhQVcGiMWEN009Vp3bk4L1ITHu3VUN1ZkJDatugFKvJ6omg==
-X-Received: by 2002:a7b:c74c:: with SMTP id w12mr8141673wmk.113.1628973195170;
-        Sat, 14 Aug 2021 13:33:15 -0700 (PDT)
-Received: from [192.168.1.70] ([102.64.221.122])
-        by smtp.gmail.com with ESMTPSA id e17sm5604100wrs.78.2021.08.14.13.33.10
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sat, 14 Aug 2021 13:33:14 -0700 (PDT)
-Message-ID: <6118288a.1c69fb81.4ddf7.f232@mx.google.com>
-From:   Vanina curth <curtisvani0028@gmail.com>
-X-Google-Original-From: Vanina curth
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ekgt3OAtYmB5Rrl1lZKK9+oa72a0Us/2FQEAMO/EQak=;
+        b=nx7ht6GXvngZvY5EaLytK+E3shHTaI+pvIm5G0uk/RrQupL7M0RPgUvNudJHzWh/KZ
+         +olF3xnvqRQvCbLjn4kC7dWnd+ih4Ml7i0huglwEPr6QCLVBfi/CPbhggoR5PbkRJVxF
+         yMgq0Hkkm2e0Zzv2dip0+u3qfZ/oX+9gBr/FXdiPBnUx885C4inAhmsEEDUduKulHzPm
+         1Omsbklx1enhMz7RF4IooaQo4TLvBZLVQtm4n7A88TEz1Mu69NIS1tdrM7yJxy1IrY7N
+         DSNd5gDL0hmxXL+9/hDoyLWRpnQatktnTFfqe1iVwUpEUpH/qZBsIbzfBMl9MvC4HJYd
+         mFDA==
+X-Gm-Message-State: AOAM531/RuDEGi5cf6NnPjrfTmsWIDHyLlMWzsccaBQNEZH+a79s+Znj
+        PLL8uUCAls+BDhl7t7rggw==
+X-Google-Smtp-Source: ABdhPJzjr4gT4FE0xwAVG4uG4LG0+RSUbEqBTWj+LfaNdV32tQZ0vqtZTO/Ia6yG79/x3EO0MD/S6w==
+X-Received: by 2002:a9d:6306:: with SMTP id q6mr9594009otk.290.1629041105852;
+        Sun, 15 Aug 2021 08:25:05 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id p8sm1717971otk.22.2021.08.15.08.25.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Aug 2021 08:25:05 -0700 (PDT)
+Received: (nullmailer pid 3767739 invoked by uid 1000);
+        Sun, 15 Aug 2021 15:25:03 -0000
+Date:   Sun, 15 Aug 2021 10:25:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kexec@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/9] Add generic support for kdump DT properties
+Message-ID: <YRkxzx/1XM3r64Ee@robh.at.kernel.org>
+References: <cover.1628670468.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Sir,
-To:     Recipients <Vanina@vger.kernel.org>
-Date:   Sat, 14 Aug 2021 20:33:00 +0000
-Reply-To: curtisvani9008@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1628670468.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-How are you? I'm Vanina. I'm interested to know you and I would like to kno=
-w more about you and establish relationship with you. i will wait for your =
-response. thank you.
+On Wed, Aug 11, 2021 at 10:50:58AM +0200, Geert Uytterhoeven wrote:
+> 	Hi all,
+> 
+> This patch series adds generic support for parsing DT properties related
+> to crash dump kernels ("linux,elfcorehdr" and "linux,elfcorehdr" under
+> the "/chosen" node), makes use of it on arm32, and performs a few
+> cleanups.  It is an evolution of the combination of [1] and [2].
+
+The DT bits look fine to me. How do you expect this to be merged? I'm 
+happy to take it if arch maintainers can ack it.
+
+> 
+> The series consists of 6 parts:
+>   1. Patch 1 prepares architecture-specific code (needed for MIPS only)
+>      to avoid duplicating elf core header reservation later.
+>   2. Patch 2 prepares the visibility of variables used to hold
+>      information retrieved from the DT properties.
+>   3. Patches 3-5 add support to the FDT core for handling the
+>      properties.
+>      This can co-exist safely with architecture-specific handling, until
+>      the latter has been removed.
+
+Looks like patch 5 doesn't have any dependencies with the series?
+
+>   4. Patch 6 removes the non-standard handling of "linux,elfcorehdr" on
+>      riscv.
+
+I thought this should be applied for 5.14?
+
+>   5. Patches 7-8 convert arm64 to use the generic handling instead of
+>      its own implementation.
+>   6. Patch 9 adds support for kdump properties to arm32.
+>      The corresponding patch for kexec-tools is "[PATCH] arm: kdump: Add
+>      DT properties to crash dump kernel's DTB"[3], which is still valid.
+
+This one can be applied on its own, right?
+
+Rob
