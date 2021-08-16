@@ -2,43 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3382E3EC9F0
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Aug 2021 17:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C080B3ECE27
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Aug 2021 07:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbhHOPZg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 15 Aug 2021 11:25:36 -0400
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:39620 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbhHOPZg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 15 Aug 2021 11:25:36 -0400
-Received: by mail-ot1-f48.google.com with SMTP id m7-20020a9d4c87000000b0051875f56b95so1057537otf.6;
-        Sun, 15 Aug 2021 08:25:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ekgt3OAtYmB5Rrl1lZKK9+oa72a0Us/2FQEAMO/EQak=;
-        b=nx7ht6GXvngZvY5EaLytK+E3shHTaI+pvIm5G0uk/RrQupL7M0RPgUvNudJHzWh/KZ
-         +olF3xnvqRQvCbLjn4kC7dWnd+ih4Ml7i0huglwEPr6QCLVBfi/CPbhggoR5PbkRJVxF
-         yMgq0Hkkm2e0Zzv2dip0+u3qfZ/oX+9gBr/FXdiPBnUx885C4inAhmsEEDUduKulHzPm
-         1Omsbklx1enhMz7RF4IooaQo4TLvBZLVQtm4n7A88TEz1Mu69NIS1tdrM7yJxy1IrY7N
-         DSNd5gDL0hmxXL+9/hDoyLWRpnQatktnTFfqe1iVwUpEUpH/qZBsIbzfBMl9MvC4HJYd
-         mFDA==
-X-Gm-Message-State: AOAM531/RuDEGi5cf6NnPjrfTmsWIDHyLlMWzsccaBQNEZH+a79s+Znj
-        PLL8uUCAls+BDhl7t7rggw==
-X-Google-Smtp-Source: ABdhPJzjr4gT4FE0xwAVG4uG4LG0+RSUbEqBTWj+LfaNdV32tQZ0vqtZTO/Ia6yG79/x3EO0MD/S6w==
-X-Received: by 2002:a9d:6306:: with SMTP id q6mr9594009otk.290.1629041105852;
-        Sun, 15 Aug 2021 08:25:05 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id p8sm1717971otk.22.2021.08.15.08.25.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Aug 2021 08:25:05 -0700 (PDT)
-Received: (nullmailer pid 3767739 invoked by uid 1000);
-        Sun, 15 Aug 2021 15:25:03 -0000
-Date:   Sun, 15 Aug 2021 10:25:03 -0500
-From:   Rob Herring <robh@kernel.org>
+        id S233087AbhHPFwy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 16 Aug 2021 01:52:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36428 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231680AbhHPFwx (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 16 Aug 2021 01:52:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A884A600CC;
+        Mon, 16 Aug 2021 05:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629093142;
+        bh=A6XKGIIAGrCO5lr+EGtJFLRD0uO5DuHaL25253B/0cs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i0ZWxkzqk1lluWmumf696hHuneR81LxxFZwzuz6zcNGNz2uWu8eVpQgTKcpPmZqj5
+         /AtGznPbKq0lL/ikkV7hit2eI87siYUwoTWUXOXgzNC3OF/WrX1BumfBDpGDVn6T1g
+         xWoPeQNXsSH781LLNcBIR5zGByncT4MSL2m4vtR1Jztv2bFt1sqcGe7ddekuvryAMK
+         fKTXmr7VAVwKt15KAiMkWixahE8wF4NRQrMqP4RZSclYSPUt6WzqU3jwjnnUXwMjlJ
+         pUT7vbAI/rpzvVTmYGoaf4IvoxZtrMDqZNrmwda+Qn1L7e/cy6bmDqiTIfwRmIJ06i
+         3XiqiOoVCj5Ng==
+Date:   Mon, 16 Aug 2021 08:52:12 +0300
+From:   Mike Rapoport <rppt@kernel.org>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Russell King <linux@armlinux.org.uk>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
         Nicolas Pitre <nico@fluxnic.net>,
         Ard Biesheuvel <ardb@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -51,57 +40,64 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Frank Rowand <frowand.list@gmail.com>,
         Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>, devicetree@vger.kernel.org,
+        Vivek Goyal <vgoyal@redhat.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-riscv@lists.infradead.org, kexec@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/9] Add generic support for kdump DT properties
-Message-ID: <YRkxzx/1XM3r64Ee@robh.at.kernel.org>
+Subject: Re: [PATCH v5 1/9] MIPS: Avoid future duplicate elf core header
+ reservation
+Message-ID: <YRn9DHlB/pdNPJyP@kernel.org>
 References: <cover.1628670468.git.geert+renesas@glider.be>
+ <92b6718f5618d5469f67b48fbea189cca0c12f4b.1628670468.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1628670468.git.geert+renesas@glider.be>
+In-Reply-To: <92b6718f5618d5469f67b48fbea189cca0c12f4b.1628670468.git.geert+renesas@glider.be>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Aug 11, 2021 at 10:50:58AM +0200, Geert Uytterhoeven wrote:
-> 	Hi all,
+Hi Geert,
+
+On Wed, Aug 11, 2021 at 10:50:59AM +0200, Geert Uytterhoeven wrote:
+> Prepare for early_init_fdt_scan_reserved_mem() reserving the memory
+> occupied by an elf core header described in the device tree.
+> As arch_mem_init() calls early_init_fdt_scan_reserved_mem() before
+> mips_reserve_vmcore(), the latter needs to check if the memory has
+> already been reserved before.
+
+Doing memblock_reserve() for the same region is usually fine, did you
+encounter any issues without this patch?
+ 
+> Note that mips_reserve_vmcore() cannot just be removed, as not all MIPS
+> systems use DT.
 > 
-> This patch series adds generic support for parsing DT properties related
-> to crash dump kernels ("linux,elfcorehdr" and "linux,elfcorehdr" under
-> the "/chosen" node), makes use of it on arm32, and performs a few
-> cleanups.  It is an evolution of the combination of [1] and [2].
-
-The DT bits look fine to me. How do you expect this to be merged? I'm 
-happy to take it if arch maintainers can ack it.
-
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> v5:
+>   - New.
+> ---
+>  arch/mips/kernel/setup.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> The series consists of 6 parts:
->   1. Patch 1 prepares architecture-specific code (needed for MIPS only)
->      to avoid duplicating elf core header reservation later.
->   2. Patch 2 prepares the visibility of variables used to hold
->      information retrieved from the DT properties.
->   3. Patches 3-5 add support to the FDT core for handling the
->      properties.
->      This can co-exist safely with architecture-specific handling, until
->      the latter has been removed.
+> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+> index 23a140327a0bac1b..4693add05743d78b 100644
+> --- a/arch/mips/kernel/setup.c
+> +++ b/arch/mips/kernel/setup.c
+> @@ -429,7 +429,8 @@ static void __init mips_reserve_vmcore(void)
+>  	pr_info("Reserving %ldKB of memory at %ldKB for kdump\n",
+>  		(unsigned long)elfcorehdr_size >> 10, (unsigned long)elfcorehdr_addr >> 10);
+>  
+> -	memblock_reserve(elfcorehdr_addr, elfcorehdr_size);
+> +	if (!memblock_is_region_reserved(elfcorehdr_addr, elfcorehdr_size)
+> +		memblock_reserve(elfcorehdr_addr, elfcorehdr_size);
+>  #endif
+>  }
+>  
+> -- 
+> 2.25.1
+> 
 
-Looks like patch 5 doesn't have any dependencies with the series?
-
->   4. Patch 6 removes the non-standard handling of "linux,elfcorehdr" on
->      riscv.
-
-I thought this should be applied for 5.14?
-
->   5. Patches 7-8 convert arm64 to use the generic handling instead of
->      its own implementation.
->   6. Patch 9 adds support for kdump properties to arm32.
->      The corresponding patch for kexec-tools is "[PATCH] arm: kdump: Add
->      DT properties to crash dump kernel's DTB"[3], which is still valid.
-
-This one can be applied on its own, right?
-
-Rob
+-- 
+Sincerely yours,
+Mike.
