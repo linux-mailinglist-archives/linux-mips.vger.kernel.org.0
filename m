@@ -2,67 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FF23EEDAA
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Aug 2021 15:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 885253EF068
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Aug 2021 18:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236488AbhHQNrp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 17 Aug 2021 09:47:45 -0400
-Received: from angie.orcam.me.uk ([78.133.224.34]:33062 "EHLO
-        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235092AbhHQNrp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Aug 2021 09:47:45 -0400
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id EC45192009C; Tue, 17 Aug 2021 15:47:10 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id E657F92009B;
-        Tue, 17 Aug 2021 15:47:10 +0200 (CEST)
-Date:   Tue, 17 Aug 2021 15:47:10 +0200 (CEST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Ralf Baechle <ralf@linux-mips.org>
-cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Paul Burton <paulburton@kernel.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: build failure of mips decstation_r4k_defconfig with
- binutils-2_37
-In-Reply-To: <YRuxrfYxahPbHmXl@linux-mips.org>
-Message-ID: <alpine.DEB.2.21.2108171536240.45958@angie.orcam.me.uk>
-References: <YRujeISiIjKF5eAi@debian> <YRuxrfYxahPbHmXl@linux-mips.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S231393AbhHQQuC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Aug 2021 12:50:02 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:31329 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231494AbhHQQuA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Aug 2021 12:50:00 -0400
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 93559240007;
+        Tue, 17 Aug 2021 16:49:25 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: maps: remove dead MTD map driver for PMC-Sierra MSP boards
+Date:   Tue, 17 Aug 2021 18:49:25 +0200
+Message-Id: <20210817164925.109210-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210817104531.12675-1-lukas.bulwahn@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'60d0607998d6080db7af1d5bd8c9391f766fe697'
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 17 Aug 2021, Ralf Baechle wrote:
-
-> > While I was testing v5.4.142-rc2 I noticed mips build of
-> > decstation_r4k_defconfig fails with binutils-2_37. The error is:
-> > 
-> > arch/mips/dec/prom/locore.S: Assembler messages:
-> > arch/mips/dec/prom/locore.S:29: Error: opcode not supported on this
-> > processor: r4600 (mips3) `rfe'
-> > 
-> > I have also reported this at https://sourceware.org/bugzilla/show_bug.cgi?id=28241
+On Tue, 2021-08-17 at 10:45:31 UTC, Lukas Bulwahn wrote:
+> Commit 1b00767fd8e1 ("MIPS: Remove PMC MSP71xx platform") removes the
+> config PMC_MSP in ./arch/mips/Kconfig.
 > 
-> It would appear gas got more anal about ISA checking for the RFE instructions
-> which did only exist in MIPS I and II; MIPS III and later use ERET for
-> returning from an exception.
+> Hence, since then, the corresponding MTD map driver for PMC-Sierra MSP
+> boards is dead code. Remove this dead driver.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
- Yes, I made such a change when I discovered the mess around coprocessor 
-instructions in binutils earlier this year.  Eighteen patches total to 
-straighten it out.  Some instructions were misassembled even, and no 
-proper subsetting was made, so you could come with a nonsensical mixture 
-when disassembling.  And RFE was disassembled as `c0 0x10' regardless of 
-the ISA chosen.
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-> It should be fixable by simply putting gas into mips1 mode.  Can you test
-> below patch?
-
- But it's missing the point, as I noted in the other message.  I've been 
-too busy with higher priority stuff to get to a proper fix right away (I 
-thought I was the last one using the DECstation, and especially with the 
-top of the tree binutils).
-
-  Maciej
+Miquel
