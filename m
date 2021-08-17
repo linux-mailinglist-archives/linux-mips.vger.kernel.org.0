@@ -2,120 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DCA3EE4A0
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Aug 2021 04:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADE73EE633
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Aug 2021 07:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbhHQCz5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 16 Aug 2021 22:55:57 -0400
-Received: from smtpbg128.qq.com ([106.55.201.39]:26685 "EHLO smtpbg587.qq.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233634AbhHQCz5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 16 Aug 2021 22:55:57 -0400
-X-QQ-mid: bizesmtp46t1629168851t8n9yung
-Received: from localhost.localdomain (unknown [182.148.12.53])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Tue, 17 Aug 2021 10:54:08 +0800 (CST)
-X-QQ-SSF: 0100000000200080B000B00A0000000
-X-QQ-FEAT: E4g7lKGTFIA4x5jhveGo8SRp7qCU/eN5I3W6cw7KVN1q3rjUlTdibvkFuE9os
-        5X4ZXCdnUnBoedEyf+T0sGQhpRxHyS4md7j93R6c77aSD/oONxUI7WF/tVl7gqyFYjJkSI7
-        2AgZN6tHQ7qH1JgSN+PoV8KHzx4FGcBdF3WOD99zrCv45vPMsvyngGnrAcx8vW8jQJbfstM
-        e33ck8opyV+k45NrZpH+02r/JxgkkmpF2WxmudEtguCPrdo4bYBcBSeUJ1DqLbAlbEV/RrJ
-        9ME+iDmkAbzqvpfpWudKIQ42Y6tKCXd9v7obK4kBGlAk4kEVQ5/iYaihNS97Af5Wx+2A==
-X-QQ-GoodBg: 0
-From:   Huilong Deng <denghuilong@cdjrlc.com>
-To:     tsbogend@alpha.franken.de, chenhuacai@kernel.org,
-        aleksandar.qemu.devel@gmail.com
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huilong Deng <denghuilong@cdjrlc.com>
-Subject: [PATCH] MIPS: Return true/false (not 1/0) from bool functions
-Date:   Tue, 17 Aug 2021 10:53:38 +0800
-Message-Id: <20210817025338.3552-1-denghuilong@cdjrlc.com>
-X-Mailer: git-send-email 2.32.0
+        id S237947AbhHQFWN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 17 Aug 2021 01:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237824AbhHQFWM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 17 Aug 2021 01:22:12 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A268C061764;
+        Mon, 16 Aug 2021 22:21:40 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id x12so26725136wrr.11;
+        Mon, 16 Aug 2021 22:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gmPeJ9SRmD1Y407UAO7a6oCnsD4FV+lP8C3zd8UDDQ0=;
+        b=DeDvjE0QvzrL9BqkSo+4q17iV3wCTRBPrLKDpswth7ozNXijzro04ud4iUeFjJ+I3R
+         6wLnKVgHUtjNt/MPYdoPurrDoq510p/rcimQp3weuoOcMl6hWsBb4KtyjMI4mb7qxw+a
+         kVbdmBgcU4ANB5PY8CZElozwy5muhVItxiDJhkpossnJ+fyqbQparBrFVwMnQMQPZgSM
+         q0y/QXP38B282GNqTjlJGdlFNU94CpQIT2KsEVhZQ3vBSgkQG9lMdebs+FjmfNWoPC+4
+         i8HRv+ft/XUf2NN6UspRojSl+dqDdD1C1iGKYFM8OU4wlWMU6RSD3ef/2GdurAyTYHwI
+         nfeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gmPeJ9SRmD1Y407UAO7a6oCnsD4FV+lP8C3zd8UDDQ0=;
+        b=g7keGcnZ6qvartFFdtg6BQfPrvz7utSeoRtQa/3XlqHp16n+S/jU9P1Awm2to14lDP
+         UbLCRhfgYn+iireKuBs+1IYlD7R04ZQS4kgc1/iE0s1Wh0ru1U+FTkxMhvz6QfC0SCCy
+         KrLYroVQ4DdT1sNbhIqCOeJQhbHOYbjyX7BmVFUCzAJyqhWrKO/ScZScUv8BsLxViero
+         to093EUMsYttigicjC9YWrafn2grw/IbU/59GhY4T/hqmqfhbuHapd+eOZcCZ8l6Ou8f
+         BSt1Y+QKr+UhBpTYZbRVlqy7m0QmIkIcAW2b8AJdAZOiFgJx/tC4Rct2R2soq6YMxLzs
+         NLUw==
+X-Gm-Message-State: AOAM531ICpA64A888Cs4hscHxct51NbeaxL8OWJw2YOT35qsRND+gr2M
+        Jxx36e/Rl8p47GgsYmKZdLsWGuiezD8T0alpi0c=
+X-Google-Smtp-Source: ABdhPJxuB9CebbDZj0HLfsO/DoIJ0qw3ZssKK0n1vBn6bZyTvDiUirchfy/IAUSB886QSguuJKj2VHNwL0mhFgdt0To=
+X-Received: by 2002:a5d:55cd:: with SMTP id i13mr1660589wrw.315.1629177698661;
+ Mon, 16 Aug 2021 22:21:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam5
+References: <20210816105326.8050-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20210816105326.8050-1-lukas.bulwahn@gmail.com>
+From:   Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date:   Tue, 17 Aug 2021 10:51:25 +0530
+Message-ID: <CA+NV+VmVzc-4ShL8hZ7JPUHFQsNs+GWSOW4_+FmWZyucEGT1sw@mail.gmail.com>
+Subject: Re: [PATCH v2] MAINTAINERS: adjust PISTACHIO SOC SUPPORT after its retirement
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-./arch/mips/kernel/uprobes.c:261:8-9: WARNING: return of 0/1 in function
-'arch_uprobe_skip_sstep' with return type bool
-./arch/mips/kernel/uprobes.c:78:10-11: WARNING: return of 0/1 in
-function 'is_trap_insn' with return type bool
-./arch/mips/kvm/mmu.c:489:9-10: WARNING: return of 0/1 in function
-'kvm_test_age_gfn' with return type bool
-./arch/mips/kvm/mmu.c:445:8-9: WARNING: return of 0/1 in function
-'kvm_unmap_gfn_range' with return type bool
+On Mon, Aug 16, 2021 at 4:23 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+>
+> Commit 104f942b2832 ("MIPS: Retire MACH_PISTACHIO") removes
+> ./arch/mips/pistachio/ and ./arch/mips/configs/pistachio_defconfig, but
+> misses to adjust the corresponding section PISTACHIO SOC SUPPORT
+> in MAINTAINERS.
+>
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
+>
+>   warning: no file matches    F:    arch/mips/configs/pistachio*_defconfig
+>   warning: no file matches    F:    arch/mips/pistachio/
+>
+> As James Hartley is not reachable with the provided email address, the
+> remaining dtsi file, arch/mips/boot/dts/img/pistachio.dtsi, must be
+> maintained by its only user pistachio_marduk.dts, which is part of MARDUK
+> (CREATOR CI40) DEVICE TREE SUPPORT.
+>
+> Add maintenance of pistachio.dtsi to that section and drop the PISTACHIO
+> SOC SUPPORT after its retirement.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Signed-off-by: Huilong Deng <denghuilong@cdjrlc.com>
----
- arch/mips/kernel/uprobes.c | 10 +++++-----
- arch/mips/kvm/mmu.c        |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Acked-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
 
-diff --git a/arch/mips/kernel/uprobes.c b/arch/mips/kernel/uprobes.c
-index 6dbe4eab0a0e..9db2a6db5f62 100644
---- a/arch/mips/kernel/uprobes.c
-+++ b/arch/mips/kernel/uprobes.c
-@@ -75,7 +75,7 @@ bool is_trap_insn(uprobe_opcode_t *insn)
- 		case tlt_op:
- 		case tltu_op:
- 		case tne_op:
--			return 1;
-+			return true;
- 		}
- 		break;
- 
-@@ -87,12 +87,12 @@ bool is_trap_insn(uprobe_opcode_t *insn)
- 		case tlti_op:
- 		case tltiu_op:
- 		case tnei_op:
--			return 1;
-+			return true;
- 		}
- 		break;
- 	}
- 
--	return 0;
-+	return false;
- }
- 
- #define UPROBE_TRAP_NR	ULONG_MAX
-@@ -254,9 +254,9 @@ unsigned long uprobe_get_swbp_addr(struct pt_regs *regs)
-  * See if the instruction can be emulated.
-  * Returns true if instruction was emulated, false otherwise.
-  *
-- * For now we always emulate so this function just returns 0.
-+ * For now we always emulate so this function just returns false.
-  */
- bool arch_uprobe_skip_sstep(struct arch_uprobe *auprobe, struct pt_regs *regs)
- {
--	return 0;
-+	return false;
- }
-diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
-index 6d1f68cf4edf..1bfd1b501d82 100644
---- a/arch/mips/kvm/mmu.c
-+++ b/arch/mips/kvm/mmu.c
-@@ -442,7 +442,7 @@ static int kvm_mips_mkold_gpa_pt(struct kvm *kvm, gfn_t start_gfn,
- bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
- {
- 	kvm_mips_flush_gpa_pt(kvm, range->start, range->end);
--	return 1;
-+	return true;
- }
- 
- bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-@@ -486,7 +486,7 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
- 
- 	if (!gpa_pte)
--		return 0;
-+		return false;
- 	return pte_young(*gpa_pte);
- }
- 
--- 
-2.32.0
-
+Thanks,
+Rahul
+> ---
+> applies cleanly on next-20210816
+>
+> Jiaxun, Rahul, please ack.
+> Thomas, please pick this minor non-urgent clean-up patch on mips-next.
+>
+>  MAINTAINERS | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1a2d3ee2711e..968008105fe7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11088,7 +11088,7 @@ MARDUK (CREATOR CI40) DEVICE TREE SUPPORT
+>  M:     Rahul Bedarkar <rahulbedarkar89@gmail.com>
+>  L:     linux-mips@vger.kernel.org
+>  S:     Maintained
+> -F:     arch/mips/boot/dts/img/pistachio_marduk.dts
+> +F:     arch/mips/boot/dts/img/pistachio*
+>
+>  MARVELL 88E6XXX ETHERNET SWITCH FABRIC DRIVER
+>  M:     Andrew Lunn <andrew@lunn.ch>
+> @@ -14797,14 +14797,6 @@ S:     Maintained
+>  W:     http://www.st.com/spear
+>  F:     drivers/pinctrl/spear/
+>
+> -PISTACHIO SOC SUPPORT
+> -M:     James Hartley <james.hartley@sondrel.com>
+> -L:     linux-mips@vger.kernel.org
+> -S:     Odd Fixes
+> -F:     arch/mips/boot/dts/img/pistachio*
+> -F:     arch/mips/configs/pistachio*_defconfig
+> -F:     arch/mips/pistachio/
+> -
+>  PKTCDVD DRIVER
+>  M:     linux-block@vger.kernel.org
+>  S:     Orphan
+> --
+> 2.26.2
+>
