@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE21B3EFD7F
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Aug 2021 09:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799F53EFD85
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Aug 2021 09:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239137AbhHRHMc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Aug 2021 03:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S238963AbhHRHMr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 18 Aug 2021 03:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238923AbhHRHMW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Aug 2021 03:12:22 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4733BC061764;
-        Wed, 18 Aug 2021 00:11:48 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id k5-20020a05600c1c85b02902e699a4d20cso1116844wms.2;
-        Wed, 18 Aug 2021 00:11:48 -0700 (PDT)
+        with ESMTP id S239108AbhHRHM0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Aug 2021 03:12:26 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9127DC06179A;
+        Wed, 18 Aug 2021 00:11:51 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id x12so1824185wrr.11;
+        Wed, 18 Aug 2021 00:11:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Jx/CrfRtgZg0fhLWPEZELhCRotSUzUbzYQJoKW1l1OI=;
-        b=KQSPrIpPfwd0cJf81dUNYjJ4aF50uf3aTuQ1KaRApqzTNh1vazqp5Lftw6empRmWk8
-         66gRP/Rea58sd8gngP1jqnug2mhyBeSLQ0cwWlazW2y1gYF3WSSOWbfNuPLClW2Q+KGK
-         IelTiav85/wZKwlnwHh0HnbAl7DiabMLsXQyzBEXNBfMcvUwoYQ3fjhYF6xDpX71VXqZ
-         QK5LoLHpAtdEb9gW7ROX8p1oPbjGDtXJboaoIRt5Q5LJ+0s9ygG/+Sm2vK/XgEE3Xz3q
-         9a5n+TA9av/OT15PFLt4xuhT/hnZ/bLwl93lieFK/aNl94vV2ZYlGc72PXBdHJjMUsXM
-         uaAQ==
+        bh=FUltDGbcXfm3L3aKEFjmaGZSqXkkHLKLtJ13isiVEoQ=;
+        b=dLfHj03e0E8HEqiG5P2c9osIlABLNIaht2LMk0gC92MgsC5sQkRq2g+g2TzOWFi0UX
+         6W7P9P+CW1XG2af32Dbv5QhIBdqFaqjeb1SssG+kj4rwMSe74Dxs8xfmlp6AEKweRioN
+         /A6mtcB3u5vVRW8GRRaU95w5uAumtPCo52FL3C7aiE/mGrUXXaty6JLRVDngV0VdFB4I
+         kOTlTdthYkCMzB9XecExfdah1/gdV6VFfRrjfsDZ8k31/eMY9CgqZGQaA0775RHZqNRj
+         RU1elpQvYamRCbiqkDyOf9bUqKSN6/8q40MfbnPtN+A2jbUSmxzhSCgZd+RZo2uyCYhJ
+         vkpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Jx/CrfRtgZg0fhLWPEZELhCRotSUzUbzYQJoKW1l1OI=;
-        b=BgKU8+PL6Ev/q8WnIISsYrYIlMunLLoOObcgxtRuOwEbHIFbO6k/ymKZu7wbZF695Z
-         j7lksHyWy1YuY/zZBXeDckHwuh5fGkDjkVgpE6GsA/pQu66YGcwt1QhFB8R2KuLu1rLW
-         8BYxsy5gceh/p6r4DTIM6G9UrENXumLz4N+2Ig6HUGlrQX3LSyM1pqEtIuwKLwLKQmyZ
-         mo1pov+wualy9Z6rwVYwDb6xSMaKZcTmCzkwKZUR3cw7guy1oa5qubjr5yQvdGzx4lLh
-         q+dqg/HL3x1t6///2zZ7bMBa1Ha8d5IZyee3P0fB4Yy2A/vT0w5Y4rkzUWya2UnXZOWQ
-         ywjA==
-X-Gm-Message-State: AOAM530R5RkYcYOJAXneb44EA0FGiWms4yXVb+ozLvl3ZjbHkvJWTgu4
-        b2/dVlLVD/pcTyo1lt4zeaQ=
-X-Google-Smtp-Source: ABdhPJw1vjCsrfwuBPcFn4nxAXgXJcrIqOv7tPsxX7mC+ZKDglmmjLXZZ06BbJPpyMVRZV6jui8i1Q==
-X-Received: by 2002:a7b:c350:: with SMTP id l16mr7020495wmj.151.1629270706863;
-        Wed, 18 Aug 2021 00:11:46 -0700 (PDT)
+        bh=FUltDGbcXfm3L3aKEFjmaGZSqXkkHLKLtJ13isiVEoQ=;
+        b=ahH0ykYLTTPAhaVQJ9ZLGdLY50P7SUU6QOUSaEYCXttC+RpAhbnnh/ARKQtsr6Hjjk
+         QgGo1AByc7CUiBAQSXF5038vNk9VfxBRN4Qt0ObCmqyT+1Woec99gPjeGPqRz81jOfEO
+         ca36vO/fyGCORrZHxTnzdCKdqGEaOgCc+8ZucIX10+HoslWhJQHcZl8uq5DJrbj4327t
+         X95iDv5fbdnxQrgHc62LyXSomtXmBtyPUgyshuVggSf+/063y7fomN9jhoF9BGxlAFAr
+         Fl9nleXWIN/Jdbxpd1+EpdBs/oBjp+YNtG2B3VyrGRbTPvQK3JlLI5WGTn3QdrsqmeNG
+         YHNQ==
+X-Gm-Message-State: AOAM532cb6vqcfQTvo5JOKxenclLw/uliQYjV93T0/XdpThp1a44bwLg
+        Rma2Pdz46K142Q49oUKZTvQ=
+X-Google-Smtp-Source: ABdhPJyfWLzgLWSk53JT1d3llQfEeYHOYhA95fVRuSVdzS94w2Pos6wRnvQPxVc9MUuS5mNxbC7VqQ==
+X-Received: by 2002:a5d:61c1:: with SMTP id q1mr8658881wrv.87.1629270710074;
+        Wed, 18 Aug 2021 00:11:50 -0700 (PDT)
 Received: from localhost.localdomain (arl-84-90-178-246.netvisao.pt. [84.90.178.246])
-        by smtp.gmail.com with ESMTPSA id r10sm4925729wrp.28.2021.08.18.00.11.45
+        by smtp.gmail.com with ESMTPSA id r10sm4925729wrp.28.2021.08.18.00.11.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Aug 2021 00:11:46 -0700 (PDT)
+        Wed, 18 Aug 2021 00:11:49 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -57,9 +57,9 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
         kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 2/3] usb: host: remove line for obsolete config USB_HWA_HCD
-Date:   Wed, 18 Aug 2021 09:11:36 +0200
-Message-Id: <20210818071137.22711-3-lukas.bulwahn@gmail.com>
+Subject: [PATCH 3/3] usb: remove reference to deleted config STB03xxx
+Date:   Wed, 18 Aug 2021 09:11:37 +0200
+Message-Id: <20210818071137.22711-4-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210818071137.22711-1-lukas.bulwahn@gmail.com>
 References: <20210818071137.22711-1-lukas.bulwahn@gmail.com>
@@ -69,33 +69,34 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Commit 71ed79b0e4be ("USB: Move wusbcore and UWB to staging as it is
-obsolete") misses to adjust some part in ./drivers/usb/host/Makefile.
+Commit 7583b63c343c ("powerpc/40x: Remove STB03xxx") removes the config
+STB03xxx, but left a reference in ./drivers/usb/Kconfig behind.
 
 Hence, ./scripts/checkkconfigsymbols.py warns:
 
-USB_HWA_HCD
-Referencing files: drivers/usb/Makefile
+STB03xxx
+Referencing files: drivers/usb/Kconfig
 
-Remove the missing piece of this code removal.
+Remove this reference to the deleted config.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- drivers/usb/Makefile | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/usb/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/Makefile b/drivers/usb/Makefile
-index 3e2cc95b7b0b..643edf5fe18c 100644
---- a/drivers/usb/Makefile
-+++ b/drivers/usb/Makefile
-@@ -31,7 +31,6 @@ obj-$(CONFIG_USB_SL811_HCD)	+= host/
- obj-$(CONFIG_USB_ISP1362_HCD)	+= host/
- obj-$(CONFIG_USB_U132_HCD)	+= host/
- obj-$(CONFIG_USB_R8A66597_HCD)	+= host/
--obj-$(CONFIG_USB_HWA_HCD)	+= host/
- obj-$(CONFIG_USB_FSL_USB2)	+= host/
- obj-$(CONFIG_USB_FOTG210_HCD)	+= host/
- obj-$(CONFIG_USB_MAX3421_HCD)	+= host/
+diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
+index 26475b409b53..578a439e71b5 100644
+--- a/drivers/usb/Kconfig
++++ b/drivers/usb/Kconfig
+@@ -11,7 +11,7 @@ config USB_OHCI_BIG_ENDIAN_MMIO
+ 
+ config USB_OHCI_LITTLE_ENDIAN
+ 	bool
+-	default n if STB03xxx || PPC_MPC52xx
++	default n if PPC_MPC52xx
+ 	default y
+ 
+ config USB_EHCI_BIG_ENDIAN_MMIO
 -- 
 2.26.2
 
