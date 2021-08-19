@@ -2,19 +2,19 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 245723F1661
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Aug 2021 11:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307763F1667
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Aug 2021 11:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237404AbhHSJim convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 19 Aug 2021 05:38:42 -0400
-Received: from aposti.net ([89.234.176.197]:42596 "EHLO aposti.net"
+        id S237587AbhHSJju convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 19 Aug 2021 05:39:50 -0400
+Received: from aposti.net ([89.234.176.197]:42636 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233957AbhHSJil (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 19 Aug 2021 05:38:41 -0400
-Date:   Thu, 19 Aug 2021 11:37:53 +0200
+        id S237540AbhHSJju (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 19 Aug 2021 05:39:50 -0400
+Date:   Thu, 19 Aug 2021 11:39:05 +0200
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v7 02/11] clk: Ingenic: Adjust cgu code to make it
- compatible with I2S PLL.
+Subject: Re: [PATCH v7 04/11] clk: Ingenic: Fix problem of MAC clock in
+ Ingenic X1000 and X1830.
 To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
 Cc:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
         linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -22,10 +22,10 @@ Cc:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
         rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
         jun.jiang@ingenic.com, sernia.zhou@foxmail.com
-Message-Id: <5RY2YQ.VQN2WB38KM14@crapouillou.net>
-In-Reply-To: <1627119286-125821-3-git-send-email-zhouyanjie@wanyeetech.com>
+Message-Id: <5TY2YQ.FMFB4RRIWORV1@crapouillou.net>
+In-Reply-To: <1627119286-125821-5-git-send-email-zhouyanjie@wanyeetech.com>
 References: <1627119286-125821-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1627119286-125821-3-git-send-email-zhouyanjie@wanyeetech.com>
+        <1627119286-125821-5-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8BIT
@@ -35,279 +35,118 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Zhou,
 
-Le sam., juil. 24 2021 at 17:34:37 +0800, 周琰杰 (Zhou Yanjie) 
+Le sam., juil. 24 2021 at 17:34:39 +0800, 周琰杰 (Zhou Yanjie) 
 <zhouyanjie@wanyeetech.com> a écrit :
-> I2S PLL is different from the APLL/MPLL, which have no OD bits,
-> no stable bit, but have parent clock selection bits, therefore,
-> it is necessary to modify the CGU PLL correlation code to make
-> it compatible with I2S PLL.
+> X1000 and X1830 have two MAC related clocks, one is MACPHY, which is
+> controlled by MACCDR register, the other is MAC, which is controlled
+> by the MAC bit in the CLKGR register (with CLK_AHB2 as the parent).
+> The original driver mistakenly mixed the two clocks together.
 > 
 > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 
-Could you split this commit into three:
-- one commit to support PLLs with no OD bit,
-- one commit to support PLLs with no stable bit,
-- one commit to support setting the parents of PLLs.
-
-> ---
-> 
-> Notes:
->     v5:
->     New patch.
-> 
->     v5->v6:
->     Change the type of stable_bit from u8 to s8, because a negative 
-> value will appear
->     when the stable_bit bit does not exist.
->     Reported-by: kernel test robot <lkp@intel.com>
-> 
->     v6->v7:
->     No change.
-> 
->  drivers/clk/ingenic/cgu.c | 118 
-> ++++++++++++++++++++++++++++++++++++++++------
->  drivers/clk/ingenic/cgu.h |  10 +++-
->  2 files changed, 111 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-> index 266c759..391bf50 100644
-> --- a/drivers/clk/ingenic/cgu.c
-> +++ b/drivers/clk/ingenic/cgu.c
-> @@ -76,6 +76,85 @@ ingenic_cgu_gate_set(struct ingenic_cgu *cgu,
->   * PLL operations
->   */
-> 
-> +static u8 ingenic_pll_get_parent(struct clk_hw *hw)
-> +{
-> +	struct ingenic_clk *ingenic_clk = to_ingenic_clk(hw);
-> +	const struct ingenic_cgu_clk_info *clk_info = 
-> to_clk_info(ingenic_clk);
-> +	struct ingenic_cgu *cgu = ingenic_clk->cgu;
-> +	const struct ingenic_cgu_pll_info *pll_info;
-> +	u32 reg;
-> +	u8 i, hw_idx, idx = 0;
-> +
-> +	BUG_ON(clk_info->type != CGU_CLK_PLL);
-> +	pll_info = &clk_info->pll;
-> +
-> +	if (pll_info->mux_bits <= 0)
-> +		return 1;
-> +
-> +	reg = readl(cgu->base + pll_info->reg);
-> +	hw_idx = (reg >> pll_info->mux_shift) &
-> +		 GENMASK(pll_info->mux_bits - 1, 0);
-> +
-> +	/*
-> +	 * Convert the hardware index to the parent index by skipping
-> +	 * over any -1's in the parents array.
-> +	 */
-> +	for (i = 0; i < hw_idx; i++) {
-> +		if (clk_info->parents[i] != -1)
-> +			idx++;
-> +	}
-> +
-> +	return idx;
-> +}
-> +
-> +static int ingenic_pll_set_parent(struct clk_hw *hw, u8 idx)
-> +{
-> +	struct ingenic_clk *ingenic_clk = to_ingenic_clk(hw);
-> +	const struct ingenic_cgu_clk_info *clk_info = 
-> to_clk_info(ingenic_clk);
-> +	struct ingenic_cgu *cgu = ingenic_clk->cgu;
-> +	const struct ingenic_cgu_pll_info *pll_info;
-> +	unsigned long flags;
-> +	u32 reg;
-> +	u8 curr_idx, hw_idx, num_poss;
-> +
-> +	BUG_ON(clk_info->type != CGU_CLK_PLL);
-> +	pll_info = &clk_info->pll;
-> +
-> +	if (pll_info->mux_bits <= 0)
-> +		return 0;
-> +
-> +	/*
-> +	 * Convert the parent index to the hardware index by adding
-> +	 * 1 for any -1 in the parents array preceding the given
-> +	 * index. That is, we want the index of idx'th entry in
-> +	 * clk_info->parents which does not equal -1.
-> +	 */
-> +	hw_idx = curr_idx = 0;
-> +	num_poss = 1 << pll_info->mux_bits;
-> +	for (; hw_idx < num_poss; hw_idx++) {
-> +		if (clk_info->parents[hw_idx] == -1)
-> +			continue;
-> +		if (curr_idx == idx)
-> +			break;
-> +		curr_idx++;
-> +	}
-> +
-> +	/* idx should always be a valid parent */
-> +	BUG_ON(curr_idx != idx);
-> +
-> +	spin_lock_irqsave(&cgu->lock, flags);
-> +
-> +	/* write the register */
-> +	reg = readl(cgu->base + pll_info->reg);
-> +	reg &= ~(GENMASK(pll_info->mux_bits - 1, 0) << pll_info->mux_shift);
-> +	reg |= hw_idx << pll_info->mux_shift;
-> +	writel(reg, cgu->base + pll_info->reg);
-> +
-> +	spin_unlock_irqrestore(&cgu->lock, flags);
-> +
-> +	return 0;
-> +}
-> +
->  static unsigned long
->  ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
->  {
-> @@ -96,8 +175,20 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, 
-> unsigned long parent_rate)
->  	m += pll_info->m_offset;
->  	n = (ctl >> pll_info->n_shift) & GENMASK(pll_info->n_bits - 1, 0);
->  	n += pll_info->n_offset;
-> -	od_enc = ctl >> pll_info->od_shift;
-> -	od_enc &= GENMASK(pll_info->od_bits - 1, 0);
-> +
-> +	if (pll_info->od_encoding) {
-> +		od_enc = ctl >> pll_info->od_shift;
-> +		od_enc &= GENMASK(pll_info->od_bits - 1, 0);
-> +
-> +		for (od = 0; od < pll_info->od_max; od++) {
-> +			if (pll_info->od_encoding[od] == od_enc)
-> +				break;
-> +		}
-> +		BUG_ON(od == pll_info->od_max);
-> +		od++;
-> +	} else {
-> +		od = 1;
-> +	}
-> 
->  	if (pll_info->bypass_bit >= 0) {
->  		ctl = readl(cgu->base + pll_info->bypass_reg);
-> @@ -108,15 +199,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, 
-> unsigned long parent_rate)
->  			return parent_rate;
->  	}
-> 
-> -	for (od = 0; od < pll_info->od_max; od++) {
-> -		if (pll_info->od_encoding[od] == od_enc)
-> -			break;
-> -	}
-> -	BUG_ON(od == pll_info->od_max);
-> -	od++;
-> -
-> -	return div_u64((u64)parent_rate * m * pll_info->rate_multiplier,
-> -		n * od);
-> +	return div_u64((u64)parent_rate * m * pll_info->rate_multiplier, n 
-> * od);
->  }
-> 
->  static void
-> @@ -215,13 +298,15 @@ ingenic_pll_set_rate(struct clk_hw *hw, 
-> unsigned long req_rate,
->  	ctl &= ~(GENMASK(pll_info->n_bits - 1, 0) << pll_info->n_shift);
->  	ctl |= (n - pll_info->n_offset) << pll_info->n_shift;
-> 
-> -	ctl &= ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
-> -	ctl |= pll_info->od_encoding[od - 1] << pll_info->od_shift;
-> +	if (pll_info->od_encoding) {
-> +		ctl &= ~(GENMASK(pll_info->od_bits - 1, 0) << pll_info->od_shift);
-> +		ctl |= pll_info->od_encoding[od - 1] << pll_info->od_shift;
-> +	}
-> 
->  	writel(ctl, cgu->base + pll_info->reg);
-> 
->  	/* If the PLL is enabled, verify that it's stable */
-> -	if (ctl & BIT(pll_info->enable_bit))
-> +	if ((pll_info->stable_bit >= 0) && (ctl & 
-> BIT(pll_info->enable_bit)))
->  		ret = ingenic_pll_check_stable(cgu, pll_info);
-> 
->  	spin_unlock_irqrestore(&cgu->lock, flags);
-> @@ -292,6 +377,9 @@ static int ingenic_pll_is_enabled(struct clk_hw 
-> *hw)
->  }
-> 
->  static const struct clk_ops ingenic_pll_ops = {
-> +	.get_parent = ingenic_pll_get_parent,
-> +	.set_parent = ingenic_pll_set_parent,
-
-If you move the "pll" field of struct ingenic_cgu_clk_info to the 
-nameless "struct" that follows it, you will then be able to use the 
-other fields as well. That means that you'll be able to use 
-ingenic_clk_get_parent() / ingenic_clk_set_parent() instead of 
-duplicating code.
-
-> +
->  	.recalc_rate = ingenic_pll_recalc_rate,
->  	.round_rate = ingenic_pll_round_rate,
->  	.set_rate = ingenic_pll_set_rate,
-> @@ -672,7 +760,7 @@ static int ingenic_register_clock(struct 
-> ingenic_cgu *cgu, unsigned idx)
->  		clk_init.flags |= CLK_SET_RATE_PARENT;
->  	}
-> 
-> -	if (caps & (CGU_CLK_MUX | CGU_CLK_CUSTOM)) {
-> +	if (caps & (CGU_CLK_PLL | CGU_CLK_MUX | CGU_CLK_CUSTOM)) {
-
-I tend to disagree with this - clocks that support parenting should use 
-the CGU_CLK_MUX flag. I know it conflicts with CGU_CLK_PLL right now, 
-but with the change I suggested above, your clock should be able to use 
-.type = CGU_CLK_PLL | CGU_CLK_MUX.
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
 Cheers,
 -Paul
 
->  		clk_init.num_parents = 0;
+> ---
 > 
->  		if (caps & CGU_CLK_MUX)
-> diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
-> index bfc2b9c..30d575d 100644
-> --- a/drivers/clk/ingenic/cgu.h
-> +++ b/drivers/clk/ingenic/cgu.h
-> @@ -18,6 +18,10 @@
->   * struct ingenic_cgu_pll_info - information about a PLL
->   * @reg: the offset of the PLL's control register within the CGU
->   * @rate_multiplier: the multiplier needed by pll rate calculation
-> + * @mux_shift: the number of bits to shift the mux value by (ie. the
-> + *           index of the lowest bit of the mux value in the I2S 
-> PLL's
-> + *           control register)
-> + * @mux_bits: the size of the mux field in bits
->   * @m_shift: the number of bits to shift the multiplier value by 
-> (ie. the
->   *           index of the lowest bit of the multiplier value in the 
-> PLL's
->   *           control register)
-> @@ -42,19 +46,21 @@
->   * @bypass_bit: the index of the bypass bit in the PLL control 
-> register, or
->   *              -1 if there is no bypass bit
->   * @enable_bit: the index of the enable bit in the PLL control 
-> register
-> - * @stable_bit: the index of the stable bit in the PLL control 
-> register
-> + * @stable_bit: the index of the stable bit in the PLL control 
-> register, or
-> + *              -1 if there is no stable bit
->   */
->  struct ingenic_cgu_pll_info {
->  	unsigned reg;
->  	unsigned rate_multiplier;
->  	const s8 *od_encoding;
-> +	u8 mux_shift, mux_bits;
->  	u8 m_shift, m_bits, m_offset;
->  	u8 n_shift, n_bits, n_offset;
->  	u8 od_shift, od_bits, od_max;
->  	unsigned bypass_reg;
->  	s8 bypass_bit;
->  	u8 enable_bit;
-> -	u8 stable_bit;
-> +	s8 stable_bit;
->  	void (*calc_m_n_od)(const struct ingenic_cgu_pll_info *pll_info,
->  			    unsigned long rate, unsigned long parent_rate,
->  			    unsigned int *m, unsigned int *n, unsigned int *od);
+> Notes:
+>     v1->v2:
+>     1.Add MACPHY and I2S for X1000, and add MACPHY for X1830.
+>     2.Add Paul Cercueil's Reviewed-by and Rob Herring's Acked-by.
+> 
+>     v2->v3:
+>     No change.
+> 
+>     v3->v4:
+>     No change.
+> 
+>     v4->v5:
+>     Add CIM, AIC, DMIC for X1000, and add CIM, AIC, DMIC, I2S for 
+> X1830.
+> 
+>     v5->v6:
+>     No change.
+> 
+>     v6->v7:
+>     No change.
+> 
+>  drivers/clk/ingenic/x1000-cgu.c | 11 ++++++++---
+>  drivers/clk/ingenic/x1830-cgu.c | 11 ++++++++---
+>  2 files changed, 16 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/clk/ingenic/x1000-cgu.c 
+> b/drivers/clk/ingenic/x1000-cgu.c
+> index 9aa20b5..53e5fe0 100644
+> --- a/drivers/clk/ingenic/x1000-cgu.c
+> +++ b/drivers/clk/ingenic/x1000-cgu.c
+> @@ -296,12 +296,11 @@ static const struct ingenic_cgu_clk_info 
+> x1000_cgu_clocks[] = {
+>  		.gate = { CGU_REG_CLKGR, 31 },
+>  	},
+> 
+> -	[X1000_CLK_MAC] = {
+> -		"mac", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
+> +	[X1000_CLK_MACPHY] = {
+> +		"mac_phy", CGU_CLK_MUX | CGU_CLK_DIV,
+>  		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
+>  		.mux = { CGU_REG_MACCDR, 31, 1 },
+>  		.div = { CGU_REG_MACCDR, 0, 1, 8, 29, 28, 27 },
+> -		.gate = { CGU_REG_CLKGR, 25 },
+>  	},
+> 
+>  	[X1000_CLK_LCD] = {
+> @@ -452,6 +451,12 @@ static const struct ingenic_cgu_clk_info 
+> x1000_cgu_clocks[] = {
+>  		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
+>  		.gate = { CGU_REG_CLKGR, 21 },
+>  	},
+> +
+> +	[X1000_CLK_MAC] = {
+> +		"mac", CGU_CLK_GATE,
+> +		.parents = { X1000_CLK_AHB2 },
+> +		.gate = { CGU_REG_CLKGR, 25 },
+> +	},
+>  };
+> 
+>  static void __init x1000_cgu_init(struct device_node *np)
+> diff --git a/drivers/clk/ingenic/x1830-cgu.c 
+> b/drivers/clk/ingenic/x1830-cgu.c
+> index 950aee2..59342bc 100644
+> --- a/drivers/clk/ingenic/x1830-cgu.c
+> +++ b/drivers/clk/ingenic/x1830-cgu.c
+> @@ -270,13 +270,12 @@ static const struct ingenic_cgu_clk_info 
+> x1830_cgu_clocks[] = {
+>  		.gate = { CGU_REG_CLKGR0, 31 },
+>  	},
+> 
+> -	[X1830_CLK_MAC] = {
+> -		"mac", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
+> +	[X1830_CLK_MACPHY] = {
+> +		"mac_phy", CGU_CLK_MUX | CGU_CLK_DIV,
+>  		.parents = { X1830_CLK_SCLKA, X1830_CLK_MPLL,
+>  					 X1830_CLK_VPLL, X1830_CLK_EPLL },
+>  		.mux = { CGU_REG_MACCDR, 30, 2 },
+>  		.div = { CGU_REG_MACCDR, 0, 1, 8, 29, 28, 27 },
+> -		.gate = { CGU_REG_CLKGR1, 4 },
+>  	},
+> 
+>  	[X1830_CLK_LCD] = {
+> @@ -428,6 +427,12 @@ static const struct ingenic_cgu_clk_info 
+> x1830_cgu_clocks[] = {
+>  		.gate = { CGU_REG_CLKGR1, 1 },
+>  	},
+> 
+> +	[X1830_CLK_MAC] = {
+> +		"mac", CGU_CLK_GATE,
+> +		.parents = { X1830_CLK_AHB2 },
+> +		.gate = { CGU_REG_CLKGR1, 4 },
+> +	},
+> +
+>  	[X1830_CLK_OST] = {
+>  		"ost", CGU_CLK_GATE,
+>  		.parents = { X1830_CLK_EXCLK, -1, -1, -1 },
 > --
 > 2.7.4
 > 
