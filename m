@@ -2,77 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2EB3F0EDE
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Aug 2021 01:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A49C3F13BB
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Aug 2021 08:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235168AbhHRX6O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 18 Aug 2021 19:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235116AbhHRX6N (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 18 Aug 2021 19:58:13 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF7CC061764
-        for <linux-mips@vger.kernel.org>; Wed, 18 Aug 2021 16:57:38 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id w6so5940615oiv.11
-        for <linux-mips@vger.kernel.org>; Wed, 18 Aug 2021 16:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z9/ir4kG5DGbUoClzGjcJHyuuKDLfkXunjWUuDr0TFw=;
-        b=DQL46Mz7PcoNkt64PZsOpg81G4xjzjJYT8KO68YqoxZMVTKMwsSIn5JkDoyotdEo9F
-         q+N0Jrm85LsqVz4RaJmJ6qKkXRzNfoSkRR9vciir35KXbW4dzCO2juLPC+xrOyhhSChf
-         4/yc8LleeBMvBww212Iud2A75NftzK3gDSpMVo/iwCFndlG0ok1BCsLvh8POD4ibNhgO
-         DUI5nubH4ci2E5AsxST0QwuDj9XCOZaV8DvAd85olmZy+J/gsWYN8ogtiujGE6rCGaLK
-         QsAu9HNXOf//GAlJm/D1fXmrPpY/hE/O7j5n70bl0fTuDDRW16lePaC3MCG22gh48700
-         vtFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z9/ir4kG5DGbUoClzGjcJHyuuKDLfkXunjWUuDr0TFw=;
-        b=ktTXgw4qHJO8XWaLqmFhWu7uB4gKjnr/IHbnQSsWp5sDmSPWwXw+m5Z4/2snsktWCg
-         2/UWslwyU2pO1g9u3Pv26mNxv/5O/HjGmLeCzVPHcbWh1xK0Qm/uI9IuqtBtr1T6Ixwt
-         Tv8gHhgHro443nR58j0aCJmdaCde5Cf0xA3f2XLSzRONfc8oBV2QYpAe4IPwuZdU1tl1
-         etpxUIc+Btbs1rEu12RDy704ZmTgm6ArSQZ+cVcEuak/WlhKEXapu8F0TnKpU2g4+Q6q
-         2yQOleEZVT8ATBvaLHd5IWMch8x2Q1OtmZ2qItvk2FMuF6mgYXKSM3rHzyqtvgekwmqI
-         qimg==
-X-Gm-Message-State: AOAM532ceytFAT8awlZF6uw5zFtTINLn1ilxvn65T/jw7BHxWFiUQKMz
-        MBS8lc6Zbkg7wgPKTEEBchULRXmCitFyDwXH2aQ=
-X-Google-Smtp-Source: ABdhPJz2n2Bt0IX6vHgaz4ZbAVzVEQbzaACI4HRiEbhUS254FqOl8sQ2xBaozrndHl8xwU3Hy71v1P8VXj6Oe9KBsms=
-X-Received: by 2002:a05:6808:286:: with SMTP id z6mr562655oic.48.1629331057932;
- Wed, 18 Aug 2021 16:57:37 -0700 (PDT)
+        id S231518AbhHSGpL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 19 Aug 2021 02:45:11 -0400
+Received: from out28-193.mail.aliyun.com ([115.124.28.193]:48218 "EHLO
+        out28-193.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230483AbhHSGpK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 19 Aug 2021 02:45:10 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09123356|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0210625-0.000612203-0.978325;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047208;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.L2mzdyl_1629355470;
+Received: from 192.168.88.131(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.L2mzdyl_1629355470)
+          by smtp.aliyun-inc.com(10.147.41.121);
+          Thu, 19 Aug 2021 14:44:31 +0800
+Subject: Re: [PATCH v7 00/11] Add new clocks and fix bugs for Ingenic SoCs.
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+To:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
+        paul@crapouillou.net
+Cc:     linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
+        jun.jiang@ingenic.com, sernia.zhou@foxmail.com
+References: <1627119286-125821-1-git-send-email-zhouyanjie@wanyeetech.com>
+Message-ID: <892b4671-462d-d0da-a2d0-2c140b519b26@wanyeetech.com>
+Date:   Thu, 19 Aug 2021 14:44:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Received: by 2002:a4a:88ca:0:0:0:0:0 with HTTP; Wed, 18 Aug 2021 16:57:37
- -0700 (PDT)
-Reply-To: mrs.nicole111@gmail.com
-From:   Mrs Nicole Benoite Marois <brightotabor1@gmail.com>
-Date:   Wed, 18 Aug 2021 16:57:37 -0700
-Message-ID: <CALNwcOGFBBv0y_abBoXWYN_CuSZoUY8L3TYWGgtDK4GOs9CM=g@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1627119286-125821-1-git-send-email-zhouyanjie@wanyeetech.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dear Beloved
+Hi,
 
-I am Mrs Nicole Benoite Marois and i have been suffering from ovarian
-cancer disease and the doctor says that i have just few days to leave.
-I am from (Paris) France but based in Africa Burkina Faso since eight
-years ago as a business woman dealing with gold exportation
 
-Now that i am about to end the race like this, without any family
-members and no child. I have $3 Million US DOLLARS in Africa
-Development Bank (ADB) Burkina Faso.
+A gentle ping :)
 
-I also have $4.5 Million US Dollars at Eco-Bank here in Burkina Faso
-and i instructed the bank to transfer the fund to you as foreigner
-that will apply to the bank after i have gone, that they should
-release the fund to him/her,but you will assure me that you will take
-50% of the fund and give 50% to the orphanages home in your country
-for my heart to rest.
 
-Yours fairly friend,
-Mrs Nicole Benoite Marois.
+On 2021/7/24 下午5:34, 周琰杰 (Zhou Yanjie) wrote:
+> v4->v5:
+> 1.modify the CGU PLL correlation code to make it compatible with I2S PLL.
+> 2.Change X1000's I2S clock to CGU_CLK_PLL as Paul Cercueil's suggestion.
+> 3.Add documentation for JZ4775 and X2000 bindings.
+> 4.Add JZ4775 and X2000 clock bindings.
+> 5.Add CGU driver for JZ4775 and X2000.
+>
+> v5->v6:
+> Change the type of stable_bit from u8 to s8, because a negative value will
+> appear when the stable_bit bit does not exist.
+>
+> v6->v7:
+> 1.Add Rob Herring's Acked-by.
+> 2.Change to dual license.
+>
+> 周琰杰 (Zhou Yanjie) (11):
+>    clk: JZ4780: Add function for disable the second core.
+>    clk: Ingenic: Adjust cgu code to make it compatible with I2S PLL.
+>    dt-bindings: clock: Add missing clocks for Ingenic SoCs.
+>    clk: Ingenic: Fix problem of MAC clock in Ingenic X1000 and X1830.
+>    clk: Ingenic: Add missing clocks for Ingenic SoCs.
+>    clk: Ingenic: Clean up and reformat the code.
+>    dt-bindings: clock: Add documentation for JZ4775 and X2000 bindings.
+>    dt-bindings: clock: Add JZ4775 clock bindings.
+>    dt-bindings: clock: Add X2000 clock bindings.
+>    clk: Ingenic: Add CGU driver for JZ4775.
+>    clk: Ingenic: Add CGU driver for X2000.
+>
+>   .../devicetree/bindings/clock/ingenic,cgu.yaml     |   4 +
+>   drivers/clk/ingenic/Kconfig                        |  20 +
+>   drivers/clk/ingenic/Makefile                       |   2 +
+>   drivers/clk/ingenic/cgu.c                          | 118 ++-
+>   drivers/clk/ingenic/cgu.h                          |  10 +-
+>   drivers/clk/ingenic/jz4725b-cgu.c                  |  49 +-
+>   drivers/clk/ingenic/jz4740-cgu.c                   |  49 +-
+>   drivers/clk/ingenic/jz4760-cgu.c                   | 106 ++-
+>   drivers/clk/ingenic/jz4770-cgu.c                   |  83 +--
+>   drivers/clk/ingenic/jz4775-cgu.c                   | 572 +++++++++++++++
+>   drivers/clk/ingenic/jz4780-cgu.c                   | 149 ++--
+>   drivers/clk/ingenic/x1000-cgu.c                    | 210 ++++--
+>   drivers/clk/ingenic/x1830-cgu.c                    | 210 ++++--
+>   drivers/clk/ingenic/x2000-cgu.c                    | 790 +++++++++++++++++++++
+>   include/dt-bindings/clock/jz4775-cgu.h             |  59 ++
+>   include/dt-bindings/clock/x1000-cgu.h              |   5 +
+>   include/dt-bindings/clock/x1830-cgu.h              |   5 +
+>   include/dt-bindings/clock/x2000-cgu.h              |  89 +++
+>   18 files changed, 2210 insertions(+), 320 deletions(-)
+>   create mode 100644 drivers/clk/ingenic/jz4775-cgu.c
+>   create mode 100644 drivers/clk/ingenic/x2000-cgu.c
+>   create mode 100644 include/dt-bindings/clock/jz4775-cgu.h
+>   create mode 100644 include/dt-bindings/clock/x2000-cgu.h
+>
