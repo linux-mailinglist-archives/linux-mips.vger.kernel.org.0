@@ -2,54 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AA73F23D3
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Aug 2021 01:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5BF3F33D7
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Aug 2021 20:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237031AbhHSXtS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 19 Aug 2021 19:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236732AbhHSXtN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 19 Aug 2021 19:49:13 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066ADC061760
-        for <linux-mips@vger.kernel.org>; Thu, 19 Aug 2021 16:48:36 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id a5so4920058plh.5
-        for <linux-mips@vger.kernel.org>; Thu, 19 Aug 2021 16:48:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=peyh3WLA8DgwuaakoXbly04TuP2J4HXY0owEUug9y1c=;
-        b=BbFJLtvxbxBG+7picsXObo5Qj8iquJ+C6Q7w5pe27YupZ7+zDXLN540+QU8HPzkPh2
-         WwzvQTknLR7mJUL2ZtsslkF86UhNT3PUimzJd1W/xc0YsfWgxj0uNN/X65pRaldPuQy1
-         Svz/l9I2+rXfrKEmbGry3ew82Uw0db0pKDxq9ukmqwtSMFXcHcAuMrcqlCqOeGH1V/uC
-         AqRS5aTXg3eyxy84gMMrOJhW6Ac+BzpVGDyg6q+eRN+OlPt5iJkRzEHzotLklvgBWCCO
-         ThS3AjXFs8AEz4pcXFmbRPSyBU/T0LhtGGlVC0DabZEeUTxAm2SIBNQHSE15qMVZvLr/
-         ceIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=peyh3WLA8DgwuaakoXbly04TuP2J4HXY0owEUug9y1c=;
-        b=VCQCX5gOo2rtigNxQputQgK80Q+Qg9BmjKdWMt2OzDJJNHNQxxaVLRMc6oLYrwWLaO
-         up7ZcrjBVWrzYN9FalOkB5QaL/+Q0KkETBBa8UGPBQ/+QKmd3zI4yqK8bS/B8hx+n1Ig
-         Em3GHED+mfWaxrYJaWrvFPJ+mjpOQxWgEKr2qi5L/0P7uv5/Ode/RBQcRTIEXzIt9Tu2
-         yDq70r0dfLE+Q8TFXWPHxR/1wsFNiIcWEPR9t5C8AWinI/KAExfV/KIsQxUgBGkNn/NZ
-         KiaEDZg0kyoO6ebB6yatLNALazZsPTfqMuwA5X1jlXODJSItrs/TrizuFykcOBlWUd8O
-         Q6dQ==
-X-Gm-Message-State: AOAM533q7xI3CPjDViwA/kLPLB5Bcnk1gB7oOBMQI3J+SFz7ChmqEox+
-        Je62EpY3PhUDe8grzgkDoJRM2Q==
-X-Google-Smtp-Source: ABdhPJwX9PVK0tEzKb91C/ktX1nj3RcgHWNnmrdk1FjTlt3T+0IB78U5SgxuhlVnRMNmyLPH0lN5vw==
-X-Received: by 2002:a17:90b:80c:: with SMTP id bk12mr1415764pjb.134.1629416916083;
-        Thu, 19 Aug 2021 16:48:36 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a4sm4880315pfk.0.2021.08.19.16.48.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Aug 2021 16:48:35 -0700 (PDT)
-Date:   Thu, 19 Aug 2021 23:48:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+        id S237743AbhHTScX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 20 Aug 2021 14:32:23 -0400
+Received: from mail.efficios.com ([167.114.26.124]:34946 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237277AbhHTScW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 20 Aug 2021 14:32:22 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 1AC0B37ECEE;
+        Fri, 20 Aug 2021 14:31:43 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id kkYr13An0u20; Fri, 20 Aug 2021 14:31:38 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 88B7737EF3D;
+        Fri, 20 Aug 2021 14:31:38 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 88B7737EF3D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1629484298;
+        bh=rcXcxanfB6QYZhHo4b7EbXJ6cIL6JRW1zubXgC7Qst4=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=X4Je8ormAn0YaA6FlkV1/U8Tl59mByp1mWAIToyIQma9hFegqTueeXe6R/TVChI/E
+         0nOZb1vTCAMapORr4Chx/N31Lj/dN2PDXIbl0wz4lBKPddFZnhKp0IYd1UT6iJrdA5
+         Sd+GFUUFRAgQSz/n2usWwRTNPJ5yj6eHon7Hg5qRU3ie5/iWZbhaSiD0S4jY73XHJZ
+         fbulqoP0HfYCA/L9kAQKGcawUG/fWz+/M+z+nE53KmXoQ+iydSUnVFMvGwkllwl/Vu
+         lV+X3jPatZos15gbSLySJGS9WD9gr0qevh4fI/ZX8A2L7p+brg2l4MIljseex/R7cZ
+         ZDeYUH2f6XKAA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id IM83p2M2TmSm; Fri, 20 Aug 2021 14:31:38 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 6426637EF39;
+        Fri, 20 Aug 2021 14:31:38 -0400 (EDT)
+Date:   Fri, 20 Aug 2021 14:31:38 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Sean Christopherson <seanjc@google.com>
 Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
@@ -69,104 +60,143 @@ Cc:     "Russell King, ARM Linux" <linux@armlinux.org.uk>,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         linux-csky <linux-csky@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
+        linux-mips <linux-mips@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390@vger.kernel.org, KVM list <kvm@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
         linux-kselftest <linux-kselftest@vger.kernel.org>,
         Peter Foley <pefoley@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 1/5] KVM: rseq: Update rseq when processing NOTIFY_RESUME
- on xfer to KVM guest
-Message-ID: <YR7tzZ98XC6OV2vu@google.com>
-References: <20210818001210.4073390-1-seanjc@google.com>
- <20210818001210.4073390-2-seanjc@google.com>
- <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
+Message-ID: <407716135.20250.1629484298288.JavaMail.zimbra@efficios.com>
+In-Reply-To: <YR7qXvnI/AQM10gU@google.com>
+References: <20210818001210.4073390-1-seanjc@google.com> <20210818001210.4073390-5-seanjc@google.com> <1540548616.19739.1629409956315.JavaMail.zimbra@efficios.com> <YR7qXvnI/AQM10gU@google.com>
+Subject: Re: [PATCH 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
+ detect task migration bugs
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1673583543.19718.1629409152244.JavaMail.zimbra@efficios.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF90 (Linux)/8.8.15_GA_4059)
+Thread-Topic: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs
+Thread-Index: E5JNfmxU00VeJZRF4swNzJN5Z7I5gQ==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 19, 2021, Mathieu Desnoyers wrote:
-> ----- On Aug 17, 2021, at 8:12 PM, Sean Christopherson seanjc@google.com wrote:
-> > @@ -250,7 +250,7 @@ static int rseq_ip_fixup(struct pt_regs *regs)
-> > 	 * If not nested over a rseq critical section, restart is useless.
-> > 	 * Clear the rseq_cs pointer and return.
-> > 	 */
-> > -	if (!in_rseq_cs(ip, &rseq_cs))
-> > +	if (!regs || !in_rseq_cs(ip, &rseq_cs))
-> 
-> I think clearing the thread's rseq_cs unconditionally here when regs is NULL
-> is not the behavior we want when this is called from xfer_to_guest_mode_work.
-> 
-> If we have a scenario where userspace ends up calling this ioctl(KVM_RUN)
-> from within a rseq c.s., we really want a CONFIG_DEBUG_RSEQ=y kernel to
-> kill this application in the rseq_syscall handler when exiting back to usermode
-> when the ioctl eventually returns.
-> 
-> However, clearing the thread's rseq_cs will prevent this from happening.
-> 
-> So I would favor an approach where we simply do:
-> 
-> if (!regs)
->      return 0;
-> 
-> Immediately at the beginning of rseq_ip_fixup, before getting the instruction
-> pointer, so effectively skip all side-effects of the ip fixup code. Indeed, it
-> is not relevant to do any fixup here, because it is nested in a ioctl system
-> call.
-> 
-> Effectively, this would preserve the SIGSEGV behavior when this ioctl is
-> erroneously called by user-space from a rseq critical section.
+----- On Aug 19, 2021, at 7:33 PM, Sean Christopherson seanjc@google.com wrote:
 
-Ha, that's effectively what I implemented first, but I changed it because of the
-comment in clear_rseq_cs() that says:
-
-  The rseq_cs field is set to NULL on preemption or signal delivery ... as well
-  as well as on top of code outside of the rseq assembly block.
-
-Which makes it sound like something might rely on clearing rseq_cs?
-
-Ah, or is it the case that rseq_cs is non-NULL if and only if userspace is in an
-rseq critical section, and because syscalls in critical sections are illegal, by
-definition clearing rseq_cs is a nop unless userspace is misbehaving.
-
-If that's true, what about explicitly checking that at NOTIFY_RESUME?  Or is it
-not worth the extra code to detect an error that will likely be caught anyways?
-
-diff --git a/kernel/rseq.c b/kernel/rseq.c
-index 35f7bd0fced0..28b8342290b0 100644
---- a/kernel/rseq.c
-+++ b/kernel/rseq.c
-@@ -282,6 +282,13 @@ void __rseq_handle_notify_resume(struct ksignal *ksig, struct pt_regs *regs)
-
-        if (unlikely(t->flags & PF_EXITING))
-                return;
-+       if (!regs) {
-+#ifdef CONFIG_DEBUG_RSEQ
-+               if (t->rseq && rseq_get_rseq_cs(t, &rseq_cs))
-+                       goto error;
-+#endif
-+               return;
-+       }
-        ret = rseq_ip_fixup(regs);
-        if (unlikely(ret < 0))
-                goto error;
-
-> Thanks for looking into this !
+> On Thu, Aug 19, 2021, Mathieu Desnoyers wrote:
+>> ----- On Aug 17, 2021, at 8:12 PM, Sean Christopherson seanjc@google.com wrote:
+>> 
+>> > Add a test to verify an rseq's CPU ID is updated correctly if the task is
+>> > migrated while the kernel is handling KVM_RUN.  This is a regression test
+>> > for a bug introduced by commit 72c3c0fe54a3 ("x86/kvm: Use generic xfer
+>> > to guest work function"), where TIF_NOTIFY_RESUME would be cleared by KVM
+>> > without updating rseq, leading to a stale CPU ID and other badness.
+>> > 
+>> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+>> > ---
+>> 
+>> [...]
+>> 
+>> > +	while (!done) {
+>> > +		vcpu_run(vm, VCPU_ID);
+>> > +		TEST_ASSERT(get_ucall(vm, VCPU_ID, NULL) == UCALL_SYNC,
+>> > +			    "Guest failed?");
+>> > +
+>> > +		cpu = sched_getcpu();
+>> > +		rseq_cpu = READ_ONCE(__rseq.cpu_id);
+>> > +
+>> > +		/*
+>> > +		 * Verify rseq's CPU matches sched's CPU, and that sched's CPU
+>> > +		 * is stable.  This doesn't handle the case where the task is
+>> > +		 * migrated between sched_getcpu() and reading rseq, and again
+>> > +		 * between reading rseq and sched_getcpu(), but in practice no
+>> > +		 * false positives have been observed, while on the other hand
+>> > +		 * blocking migration while this thread reads CPUs messes with
+>> > +		 * the timing and prevents hitting failures on a buggy kernel.
+>> > +		 */
+>> 
+>> I think you could get a stable cpu id between sched_getcpu and __rseq_abi.cpu_id
+>> if you add a pthread mutex to protect:
+>> 
+>> sched_getcpu and __rseq_abi.cpu_id  reads
+>> 
+>> vs
+>> 
+>> sched_setaffinity calls within the migration thread.
+>> 
+>> Thoughts ?
 > 
-> Mathieu
+> I tried that and couldn't reproduce the bug.  That's what I attempted to call
+> out
+> in the blurb "blocking migration while this thread reads CPUs ... prevents
+> hitting
+> failures on a buggy kernel".
 > 
-> > 		return clear_rseq_cs(t);
-> > 	ret = rseq_need_restart(t, rseq_cs.flags);
-> > 	if (ret <= 0)
-> > --
-> > 2.33.0.rc1.237.g0d66db33f3-goog
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+> I considered adding arbitrary delays around the mutex to try and hit the bug,
+> but
+> I was worried that even if I got it "working" for this bug, the test would be
+> too
+> tailored to this bug and potentially miss future regression.  Letting the two
+> threads run wild seemed like it would provide the best coverage, at the cost of
+> potentially causing to false failures.
+
+OK, so your point is that using mutual exclusion to ensure stability of the cpu id
+changes the timings too much, to a point where the issues don't reproduce. I understand
+that this mutex ties the migration thread timings to the vcpu thread's use of the mutex,
+which will reduce timings randomness, which is unwanted here.
+
+I still really hate flakiness in tests, because then people stop caring when they
+fail once in a while. And with the nature of rseq, a once-in-a-while failure is a
+big deal. Let's see if we can use other tricks to ensure stability of the cpu id
+without changing timings too much.
+
+One idea would be to use a seqcount lock. But even if we use that, I'm concerned that
+the very long writer critical section calling sched_setaffinity would need to be
+alternated with a sleep to ensure the read-side progresses. The sleep delay could be
+relatively small compared to the duration of the sched_setaffinity call, e.g. ratio
+1:10.
+
+static volatile uint64_t seqcnt;
+
+The thread responsible for setting the affinity would do something like:
+
+for (;;) {
+  atomic_inc_seq_cst(&seqcnt);
+  sched_setaffinity(..., n++ % nr_cpus);
+  atomic_inc_seq_cst(&seqcnt);
+  usleep(1);  /* this is where read-side is allowed to progress. */
+}
+
+And the thread reading the rseq cpu id and calling sched_getcpu():
+
+uint64_t snapshot;
+
+do {
+  snapshot = atomic_load(&seqcnt) & ~1; /* force retry if odd */
+  smp_rmb();
+  cpu = sched_getcpu();
+  rseq_cpu = READ_ONCE(__rseq.cpu_id);
+  smp_rmb();
+} while (snapshot != atomic_load(&seqcnt));
+
+So the reader retry the cpu id reads whenever sched_setaffinity is being
+called by the migration thread, and whenever it is preempted for more
+than one migration thread loop.
+
+That should achieve our goal of providing cpu id stability without significantly
+changing the timings of the migration thread, given that it never blocks waiting
+for the reader.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
