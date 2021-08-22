@@ -2,61 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C91F3F39DC
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Aug 2021 11:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4EB3F3D49
+	for <lists+linux-mips@lfdr.de>; Sun, 22 Aug 2021 05:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbhHUJ0A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 21 Aug 2021 05:26:00 -0400
-Received: from elvis.franken.de ([193.175.24.41]:41935 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233306AbhHUJZ7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 21 Aug 2021 05:25:59 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mHNFe-0005Uw-03; Sat, 21 Aug 2021 11:25:18 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id D26F9C086C; Sat, 21 Aug 2021 10:42:05 +0200 (CEST)
-Date:   Sat, 21 Aug 2021 10:42:05 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH devicetree 2/2] MIPS: mscc: ocelot: mark the phy-mode for
- internal PHY ports
-Message-ID: <20210821084205.GD3555@alpha.franken.de>
-References: <20210819170416.2252210-1-vladimir.oltean@nxp.com>
- <20210819170416.2252210-2-vladimir.oltean@nxp.com>
+        id S232207AbhHVDhe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 21 Aug 2021 23:37:34 -0400
+Received: from cmccmta1.chinamobile.com ([221.176.66.79]:7364 "EHLO
+        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232192AbhHVDhe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 21 Aug 2021 23:37:34 -0400
+X-Greylist: delayed 548 seconds by postgrey-1.27 at vger.kernel.org; Sat, 21 Aug 2021 23:37:32 EDT
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.5]) by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee26121c42b7db-f2047; Sun, 22 Aug 2021 11:27:41 +0800 (CST)
+X-RM-TRANSID: 2ee26121c42b7db-f2047
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[112.22.250.151])
+        by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee36121c429ec8-65203;
+        Sun, 22 Aug 2021 11:27:41 +0800 (CST)
+X-RM-TRANSID: 2ee36121c429ec8-65203
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     gregkh@linuxfoundation.org, paul@crapouillou.net,
+        jirislaby@kernel.org, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux@prisktech.co.nz
+Cc:     linux-mips@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>
+Subject: [PATCH 0/3] serial: Use of_device_get_match_data
+Date:   Sun, 22 Aug 2021 11:28:03 +0800
+Message-Id: <20210822032806.3256-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210819170416.2252210-2-vladimir.oltean@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 19, 2021 at 08:04:16PM +0300, Vladimir Oltean wrote:
-> The ocelot driver was converted to phylink, and that expects a valid
-> phy_interface_t. Without a phy-mode, of_get_phy_mode returns
-> PHY_INTERFACE_MODE_NA, which is not ideal because phylink rejects that.
-> 
-> The ocelot driver was patched to treat PHY_INTERFACE_MODE_NA as
-> PHY_INTERFACE_MODE_INTERNAL to work with the broken DT blobs, but we
-> should fix the device trees and specify the phy-mode too.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
->  arch/mips/boot/dts/mscc/ocelot_pcb120.dts | 4 ++++
->  arch/mips/boot/dts/mscc/ocelot_pcb123.dts | 4 ++++
->  2 files changed, 8 insertions(+)
+Hi all:
 
-applied to mips-next.
+This patch series replace 'of_match_device' with
+'of_device_get_match_data', to make code cleaner and better.
 
-Thomas.
+Thanks
+
+Tang Bin (3):
+  serial: 8250_ingenic: Use of_device_get_match_data
+  serial: tegra: Use of_device_get_match_data
+  serial: vt8500: Use of_device_get_match_data
+
+ drivers/tty/serial/8250/8250_ingenic.c | 6 ++----
+ drivers/tty/serial/serial-tegra.c      | 6 ++----
+ drivers/tty/serial/vt8500_serial.c     | 7 ++-----
+ 3 files changed, 6 insertions(+), 13 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.20.1.windows.1
+
+
+
