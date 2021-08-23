@@ -2,122 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 989F23F4D4C
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Aug 2021 17:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD8D3F4E90
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Aug 2021 18:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbhHWPVP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Aug 2021 11:21:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231324AbhHWPVO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 23 Aug 2021 11:21:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B9C6061406;
-        Mon, 23 Aug 2021 15:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629732031;
-        bh=qreQnG9EH+SLqs9cxYafKtRpnrXgjkJipzrUHxRm8AI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RGjW/286CluzlorhZhA12uBlEH3uhRoRK1S/j3K064/Shsa1wyggzEKZ+qBLhJnq4
-         gRNV2wTAu/HjHiWh2f8lDroX68ilJ+YROIaiewKam0s1N8A50OJJWefyUImpM5E2eF
-         23BcN2czeN9GNVN/lCJogN+4552M5+pHKvniKKEJEUx8otTEcVGWHyeI3OR3rj1qMi
-         Hi+i0DsYD+9xTYJ7MrtjEFxhLsW1VCy64kf+eN2MBlr4L1PcNpyAXM2UcO+pR7vBQY
-         FLye4cqCOX/Qx8AxadC/oQ1G2/s7ZAxLxG8DqtLBtsk0QFfiMvLtb9egfLJszfwr1w
-         PQAw/Rb0cjfWQ==
-Date:   Mon, 23 Aug 2021 18:20:20 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        kexec@lists.infradead.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 1/9] MIPS: Avoid future duplicate elf core header
- reservation
-Message-ID: <YSO8tJxbuADEeL7I@kernel.org>
-References: <cover.1628670468.git.geert+renesas@glider.be>
- <92b6718f5618d5469f67b48fbea189cca0c12f4b.1628670468.git.geert+renesas@glider.be>
- <YRn9DHlB/pdNPJyP@kernel.org>
- <CAMuHMdVdqR7gw+2O2v=qv_BB=+X2wEXN9jXV=np=jRayadwj7g@mail.gmail.com>
- <YSOeGzowhV/R9QS/@kernel.org>
- <CAL_JsqLMv4fKebJEOv=7UXvy_qqut0N42psS-PSgRMU-qhiFLQ@mail.gmail.com>
+        id S230174AbhHWQjx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Aug 2021 12:39:53 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:50534 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S230226AbhHWQju (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 23 Aug 2021 12:39:50 -0400
+Received: from ld50.lan (unknown [101.88.30.186])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id D897A60091;
+        Tue, 24 Aug 2021 00:31:46 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1629736307; bh=V6RSRR90Ws4Iuhqs3uHJEng/UiOCuLvgTuY18AE6/2U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aJpnNDCZiSmdCnYl4YO84XMFJJKaEDihBxaiw+jneGZMwPyoGvvnz38lrB0JjH2/s
+         K086/cVTJh5dVDI/FzbaCi+1Y23b0+DhuKtB60PNwxQEjyg1TZfIoeyVT8SUKgZbEQ
+         COPLpT+T14V2w5zDs54oTlEQ5Y8HRoiCyNwQJQPI=
+From:   WANG Xuerui <git@xen0n.name>
+To:     linux-rtc@vger.kernel.org
+Cc:     WANG Xuerui <git@xen0n.name>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH RESEND v5 0/6] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+Date:   Tue, 24 Aug 2021 00:31:36 +0800
+Message-Id: <20210823163142.586529-1-git@xen0n.name>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqLMv4fKebJEOv=7UXvy_qqut0N42psS-PSgRMU-qhiFLQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 23, 2021 at 09:44:55AM -0500, Rob Herring wrote:
-> On Mon, Aug 23, 2021 at 8:10 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > On Mon, Aug 23, 2021 at 12:17:50PM +0200, Geert Uytterhoeven wrote:
-> > > Hi Mike,
-> > >
-> > > On Mon, Aug 16, 2021 at 7:52 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > > > On Wed, Aug 11, 2021 at 10:50:59AM +0200, Geert Uytterhoeven wrote:
-> > > > > Prepare for early_init_fdt_scan_reserved_mem() reserving the memory
-> > > > > occupied by an elf core header described in the device tree.
-> > > > > As arch_mem_init() calls early_init_fdt_scan_reserved_mem() before
-> > > > > mips_reserve_vmcore(), the latter needs to check if the memory has
-> > > > > already been reserved before.
-> > > >
-> > > > Doing memblock_reserve() for the same region is usually fine, did you
-> > > > encounter any issues without this patch?
-> > >
-> > > Does it also work if the same region is part of an earlier larger
-> > > reservation?  I am no memblock expert, so I don't know.
-> > > I didn't run into any issues, as my MIPS platform is non-DT, but I
-> > > assume arch/arm64/mm/init.c:reserve_elfcorehdr() had the check for
-> > > a reason.
-> >
-> > The memory will be reserved regardless of the earlier reservation, the
-> > issue may appear when the reservations are made for different purpose. E.g.
-> > if there was crash kernel allocation before the reservation of elfcorehdr.
-> >
-> > The check in such case will prevent the second reservation, but, at least
-> > in arch/arm64/mm/init.c:reserve_elfcorehdr() it does not seem to prevent
-> > different users of the overlapping regions to step on each others toes.
-> 
-> If the kernel has been passed in overlapping regions, is there
-> anything you can do other than hope to get a message out?
+I'm resending the series after waiting for seven rc's without any response;
+did I overlook any submission procedure? Rebased against current rtc-next
+and tweaked Cc's for this submission, though.
 
-Nothing really. I've been thinking about adding flags to memblock.reserved
-to at least distinguish firmware regions from the kernel allocations, but I
-never got to that.
- 
-> > Moreover, arm64::reserve_elfcorehdr() seems buggy to me, because of there
-> > is only a partial overlap of the elfcorehdr with the previous reservation,
-> > the non-overlapping part of elfcorehdr won't get reserved at all.
-> 
-> What do you suggest as the arm64 version is not the common version?
+This is all compiled and tested on a 3A4000 box, as usual. 3A3000+7A and
+2K systems are tested previously, and these should not be affected. (To
+Loongson employees reading this: please test on your rigs and give
+feedback, for getting this done before the next merge window!)
 
-I'm not really familiar with crash dump internals, so I don't know if
-resetting elfcorehdr_addr to ELFCORE_ADDR_ERR is a good idea. I think at
-least arm64::reserve_elfcorehdr() should reserve the entire elfcorehdr area
-regardless of the overlap. Otherwise it might get overwritten by a random
-memblock_alloc().
+While we're at it, I'd like to know which tree should this series go in via;
+is it rtc-next or mips-next? I'd prefer mips-next, since the last 4 patches
+all deal with MIPS things.
 
-> Rob
 
+Original cover letter:
+
+This patch series adds support for the RTC module found on various
+Loongson systems with the Loongson-2K SoC or the LS7A bridge chip.
+The driver is rewritten from an out-of-tree version to meet mainline
+standards. I write kernel code as a hobby, though, so there might still
+be overlooked issues. Any suggestions are welcome.
+
+v5:
+- Minor changes per Nobuhiro-san's review
+  - Simplified one register-write-and-return
+  - Explicitly depend on OF, remove of_match_ptr usage for now
+- Tested on Loongson-3A4000; 2K should work too because there's no
+  functional change either
+
+v4:
+- Rebased on top of next-20210628
+- Added Jiaxun's Tested-by tag for Loongson-2K; no functional changes
+- Addressed all review comments from v3
+  - Rewritten field operations with FIELD_GET/FIELD_PREP
+  - Removed all error logs
+  - Removed unnecessary spinlocking (RTC core already protects against
+    concurrent device file operations)
+
+v3:
+- Fixed compile error not discovered after rebase (blame sleep
+  deprivation)
+- Tested on Loongson-3A4000 and Loongson-2K
+
+v2:
+- Rebased on top of latest linux-next
+- Updated Huacai's e-mail address to the kernel.org one
+- Added collected tags
+- Added adaptation for newly upstreamed Loongson-2K platforms
+
+WANG Xuerui (6):
+  rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+  dt-bindings: rtc: Add bindings for LS2X RTC
+  MIPS: Loongson64: DTS: Add RTC support to LS7A
+  MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
+  MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+  MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
+
+ .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |   5 +
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   5 +
+ arch/mips/configs/loongson2k_defconfig        |   1 +
+ arch/mips/configs/loongson3_defconfig         |   1 +
+ drivers/rtc/Kconfig                           |  11 ++
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ls2x.c                        | 180 ++++++++++++++++++
+ 8 files changed, 206 insertions(+)
+ create mode 100644 drivers/rtc/rtc-ls2x.c
+
+
+base-commit: 8158da6a33f2656c2a98c30eb9185a44e215a6b6
 -- 
-Sincerely yours,
-Mike.
+2.33.0
+
