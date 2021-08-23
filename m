@@ -2,47 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B86E73F4C8F
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Aug 2021 16:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069B33F4CAA
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Aug 2021 16:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbhHWOpv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Aug 2021 10:45:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40750 "EHLO mail.kernel.org"
+        id S230384AbhHWOxV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 23 Aug 2021 10:53:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42010 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230186AbhHWOpv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 23 Aug 2021 10:45:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9140F613CF;
-        Mon, 23 Aug 2021 14:45:08 +0000 (UTC)
+        id S230166AbhHWOxU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 23 Aug 2021 10:53:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C04F6613B3;
+        Mon, 23 Aug 2021 14:52:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629729908;
-        bh=HS2M+wkDtx/G0MZSg6+SDwYSA3teAsEDvrv+10PPD1A=;
+        s=k20201202; t=1629730353;
+        bh=95kSV68n0dpCCRUmMY5PPrmt84oo0wFMRjTfsjZdteg=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qPKYxgfB9GVNO/ci0L6xILxIQPPJGBHIQJy4YMnj0Zw7zF7wGjfzynHM07q/hdtFJ
-         fzjZSr+FNFIn8DCHJscN7WHtmTm/qhJneZMJJj08w7k3nJ838qAJNWc+vVoaXF87+1
-         iNcj8INOwKrfvditV+DxlUtQ8DX4lAbEXz/sDy2ACAgKAp+HvHvaZhS0+UZJN4VgMH
-         GPAZlRaNM4E4saszqP0w189j7NDctQFAvm5aZhrYjAQHhd9mTXKAONYbcAz4L1fskn
-         IpHuinmaVCOcnYZwI5rcTj2KMKe0BjZ4hk50UN58HZdjfm9uvmn9CsDQYSUqstrZ9J
-         Jky99juD8VeBQ==
-Received: by mail-ej1-f48.google.com with SMTP id n27so5597739eja.5;
-        Mon, 23 Aug 2021 07:45:08 -0700 (PDT)
-X-Gm-Message-State: AOAM531MEUyxgeIaj9j3I1BTJ5VtAo4c/J7JBjNhCaINJBEdNIN8GKY6
-        xQU8a+/9cjlRVYzvnRkmHTosyJU97M90Mk4fTw==
-X-Google-Smtp-Source: ABdhPJxGMCnkZ6Wg5JPxtvBTf03t6XhofzKZ3GpTAEgQlSG7jl4bDW3CMJL9Gl4hxiY+ePwWhCIra0pqlfZDMAM51Ag=
-X-Received: by 2002:a17:907:b06:: with SMTP id h6mr3650075ejl.130.1629729907110;
- Mon, 23 Aug 2021 07:45:07 -0700 (PDT)
+        b=Ik7GtlWL3XwZ6jqLY8wD2dMPkqgIADw9+NOe1Mw5Y9wL8Ob1L1ZWO55L8QppisdbM
+         jRutPdbSED+7HzgxY5p7UqIxkqo7sV3d+DokWvYAnWL07BEyC6Co5Qyn55QZoRMLNa
+         feDAaHy5RcNjkEFxYgjtQM24FqzUXGPPhI1lwyANIWvlbXDR0xTPGuHBMXDJx1ovKK
+         Ly93dRR3jtoGZCR271SrqRHy4l1rU1KxApzZdoQZ+kyslZfHy+Bz5iEQ39/1tHo8j2
+         Jx6GXTFn1SWeGIZtN1/iHz73LBrRrTzlzKHXoCaTx7/RZljk1jUt/UeXL1SUD8itXh
+         narNQBH53/f5Q==
+Received: by mail-ed1-f52.google.com with SMTP id d6so26634310edt.7;
+        Mon, 23 Aug 2021 07:52:33 -0700 (PDT)
+X-Gm-Message-State: AOAM532vHeMvIfdzF9sj4RHXO24ywLE1doEPn6/YAII4j9NC/PUlxWz4
+        GQAjz0govhh+3VJBf8s9t3tQDYVUQlMoUtE0Dg==
+X-Google-Smtp-Source: ABdhPJy1bCMbL4YGtSLOxVSdg1ups6Ob2RljDGjUf8dlwlp/X6+ZF3IAe5w4+7XIcmdRLOHvmaJrv6lkF74HB0qCbkE=
+X-Received: by 2002:aa7:c487:: with SMTP id m7mr18233689edq.62.1629730352256;
+ Mon, 23 Aug 2021 07:52:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1628670468.git.geert+renesas@glider.be> <92b6718f5618d5469f67b48fbea189cca0c12f4b.1628670468.git.geert+renesas@glider.be>
- <YRn9DHlB/pdNPJyP@kernel.org> <CAMuHMdVdqR7gw+2O2v=qv_BB=+X2wEXN9jXV=np=jRayadwj7g@mail.gmail.com>
- <YSOeGzowhV/R9QS/@kernel.org>
-In-Reply-To: <YSOeGzowhV/R9QS/@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 23 Aug 2021 09:44:55 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLMv4fKebJEOv=7UXvy_qqut0N42psS-PSgRMU-qhiFLQ@mail.gmail.com>
-Message-ID: <CAL_JsqLMv4fKebJEOv=7UXvy_qqut0N42psS-PSgRMU-qhiFLQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] MIPS: Avoid future duplicate elf core header reservation
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Russell King <linux@armlinux.org.uk>,
+References: <cover.1628670468.git.geert+renesas@glider.be> <YRkxzx/1XM3r64Ee@robh.at.kernel.org>
+ <CAMuHMdXs0+7K4N0mg6qX6X1cr_8dBr_HdTahdfORMk76wCJcEA@mail.gmail.com>
+In-Reply-To: <CAMuHMdXs0+7K4N0mg6qX6X1cr_8dBr_HdTahdfORMk76wCJcEA@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 23 Aug 2021 09:52:20 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqK63hoEMafLP+5eeQR1qrhOO76J4KEQG_By6QnLfhF=dw@mail.gmail.com>
+Message-ID: <CAL_JsqK63hoEMafLP+5eeQR1qrhOO76J4KEQG_By6QnLfhF=dw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/9] Add generic support for kdump DT properties
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
         Nicolas Pitre <nico@fluxnic.net>,
         Ard Biesheuvel <ardb@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -56,6 +54,7 @@ Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
         Vivek Goyal <vgoyal@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
@@ -69,43 +68,47 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 23, 2021 at 8:10 AM Mike Rapoport <rppt@kernel.org> wrote:
+On Mon, Aug 23, 2021 at 5:13 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> On Mon, Aug 23, 2021 at 12:17:50PM +0200, Geert Uytterhoeven wrote:
-> > Hi Mike,
+> Hi Rob,
+>
+> On Sun, Aug 15, 2021 at 5:25 PM Rob Herring <robh@kernel.org> wrote:
+> > On Wed, Aug 11, 2021 at 10:50:58AM +0200, Geert Uytterhoeven wrote:
+> > > This patch series adds generic support for parsing DT properties related
+> > > to crash dump kernels ("linux,elfcorehdr" and "linux,elfcorehdr" under
+> > > the "/chosen" node), makes use of it on arm32, and performs a few
+> > > cleanups.  It is an evolution of the combination of [1] and [2].
 > >
-> > On Mon, Aug 16, 2021 at 7:52 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > > On Wed, Aug 11, 2021 at 10:50:59AM +0200, Geert Uytterhoeven wrote:
-> > > > Prepare for early_init_fdt_scan_reserved_mem() reserving the memory
-> > > > occupied by an elf core header described in the device tree.
-> > > > As arch_mem_init() calls early_init_fdt_scan_reserved_mem() before
-> > > > mips_reserve_vmcore(), the latter needs to check if the memory has
-> > > > already been reserved before.
-> > >
-> > > Doing memblock_reserve() for the same region is usually fine, did you
-> > > encounter any issues without this patch?
+> > The DT bits look fine to me. How do you expect this to be merged? I'm
+> > happy to take it if arch maintainers can ack it.
+>
+> I had hoped you could take the series...
+
+My current thought is I'll take 2-5, 7 and 8 given that's what I have
+acks for and the others can be applied independently.
+
+> > > The series consists of 6 parts:
+> > >   1. Patch 1 prepares architecture-specific code (needed for MIPS only)
+> > >      to avoid duplicating elf core header reservation later.
+> > >   2. Patch 2 prepares the visibility of variables used to hold
+> > >      information retrieved from the DT properties.
+> > >   3. Patches 3-5 add support to the FDT core for handling the
+> > >      properties.
+> > >      This can co-exist safely with architecture-specific handling, until
+> > >      the latter has been removed.
 > >
-> > Does it also work if the same region is part of an earlier larger
-> > reservation?  I am no memblock expert, so I don't know.
-> > I didn't run into any issues, as my MIPS platform is non-DT, but I
-> > assume arch/arm64/mm/init.c:reserve_elfcorehdr() had the check for
-> > a reason.
+> > Looks like patch 5 doesn't have any dependencies with the series?
 >
-> The memory will be reserved regardless of the earlier reservation, the
-> issue may appear when the reservations are made for different purpose. E.g.
-> if there was crash kernel allocation before the reservation of elfcorehdr.
+> Indeed. So you can take it independently.
 >
-> The check in such case will prevent the second reservation, but, at least
-> in arch/arm64/mm/init.c:reserve_elfcorehdr() it does not seem to prevent
-> different users of the overlapping regions to step on each others toes.
+> > >   4. Patch 6 removes the non-standard handling of "linux,elfcorehdr" on
+> > >      riscv.
+> >
+> > I thought this should be applied for 5.14?
+>
+> Me too, but unfortunately that hasn't happened yet...
 
-If the kernel has been passed in overlapping regions, is there
-anything you can do other than hope to get a message out?
-
-> Moreover, arm64::reserve_elfcorehdr() seems buggy to me, because of there
-> is only a partial overlap of the elfcorehdr with the previous reservation,
-> the non-overlapping part of elfcorehdr won't get reserved at all.
-
-What do you suggest as the arm64 version is not the common version?
+Buried in the middle of this series is not going to encourage it to be
+picked up as a fix.
 
 Rob
