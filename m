@@ -2,110 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF983F583D
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Aug 2021 08:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2A33F58BA
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Aug 2021 09:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbhHXGbY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Aug 2021 02:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        id S234570AbhHXHMa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Aug 2021 03:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbhHXGa5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Aug 2021 02:30:57 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862D7C061575;
-        Mon, 23 Aug 2021 23:30:13 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id bk29so16271431qkb.8;
-        Mon, 23 Aug 2021 23:30:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Qa42kkQ9ajBIIDAtBEb3QCCg71G0gIBRoGk4BSfMNXU=;
-        b=pfXDfXg7kZHUeaP6ZkAZCvKTRPC2cN8s2nHbLjqTSX0uih6MN+VPjzAZzxUjCqlLkf
-         wHHx6R+E8/qflQWQjI/rNfKTS4D1xEGFaN2gYZ21iC+lc/O8fiee1rEwxfIpxqnW0PhJ
-         Jax6IoVsNzUHMElLLH6qiCCRkHAc2YS8XU9n4txI5j2ieojxViwx0Jgx3aiztnJ07Vcd
-         WLxRdm8B7SQrMN25SEfEPHNr7kNkYLqgbmrHdRTWmWEkM/5N8xPEQVmXLpkGE/PeSmxx
-         rgW9vHkSRAyELRfO7fCpvxE82s/fzxLaC+SoKXOebEKOefxTqE8OcUScvTw/ydQJoLGB
-         xPWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Qa42kkQ9ajBIIDAtBEb3QCCg71G0gIBRoGk4BSfMNXU=;
-        b=fBdOJWFEjJVgFgMqDPdWEsiaS+681sK/5hjfUWQNLj0eRkJNk5x+WtYzZw9UWef19p
-         Q226K75pUUAw8TTK33BcKpF5+Y6fOTHdu8Tf9Mi6SplV5EXZPPnTTfFze93I6oEV6KUf
-         Pt8TbyDmNEBbI50mG3NWAKfzsSXRBDDiD3gjnG/15E4mViDko/kosLs7vJqPBlon0Rgf
-         CyD6JafYyi5FLb6beHNOSj2nmA+M4syJfOwsObm/Ymon9d/B8JTlmuharJX9wmSdFSmH
-         Vasdfg47O/QBprN8mUa5KsVgujXaLr5zMY/yT652CfhDtScytbtZmcpVMEM1evqlCVvG
-         ivLg==
-X-Gm-Message-State: AOAM530grcWavp5IELugta5QAShoRstTJ2q5711hLnpVeoF9OyBtE27a
-        b/cndK5Lw9p9iBbaXg9DkkE=
-X-Google-Smtp-Source: ABdhPJwxXhJ7soGE8uNcix17QSkpHFmzf7SRB2lLa9n1ktjqapKk7sZJ4WEu8W7PH39zaoD1gAgtrA==
-X-Received: by 2002:a37:de15:: with SMTP id h21mr24944625qkj.124.1629786612822;
-        Mon, 23 Aug 2021 23:30:12 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id x29sm7503670qtv.74.2021.08.23.23.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Aug 2021 23:30:12 -0700 (PDT)
-From:   CGEL <cgel.zte@gmail.com>
-X-Google-Original-From: CGEL <deng.changcheng@zte.com.cn>
-To:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jing Yangyang <jing.yangyang@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] mips:mmu: fix boolreturn.cocci warnings
-Date:   Mon, 23 Aug 2021 23:30:04 -0700
-Message-Id: <20210824063004.59604-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229823AbhHXHMa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Aug 2021 03:12:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC81C061575;
+        Tue, 24 Aug 2021 00:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yyOWKyVgFnzXQH7hUCU2sLB3yDJPcTOpVipPjz3CdkE=; b=vhbSFZGCSzrdVnS1l48yczaF9K
+        SvGLI6rQMV0CT4xfqBFA1Ef8Ep6dM6q2xMdXaRx9S+pjQv+qRWNTnYsJWFL8YUyXFnmmGXijIOv/u
+        PmjJy+0bZz71DBJ/UkUMV+6BfLJLvi+0cQKLjAPOl4yUvzdEyDBluDRFXDs9PGsu260PN6t8h9BWS
+        H1PEQ3FThNCcxhmfejfOihqbEbqvN5Tz9D5EG6yz3rmvyIp8Jq/WE/Lfa1HosWUPEttO8bNdoTMb3
+        MEPPz3NaNDAKI3Hj8hsdNgFtMUO4QPPaCM8IM8adV5zMNm5tB0B7013DPglF0teZ/nW4MFAZoW9MB
+        bODkw5sg==;
+Received: from hch by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mIQXL-00Ah6e-Fc; Tue, 24 Aug 2021 07:08:07 +0000
+Date:   Tue, 24 Aug 2021 08:07:55 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
+Message-ID: <YSSay4zGjLaNMOh1@infradead.org>
+References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210805005218.2912076-12-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20210823195409-mutt-send-email-mst@kernel.org>
+ <26a3cce5-ddf7-cbe6-a41e-58a2aea48f78@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <26a3cce5-ddf7-cbe6-a41e-58a2aea48f78@linux.intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Jing Yangyang <jing.yangyang@zte.com.cn>
+On Mon, Aug 23, 2021 at 05:30:54PM -0700, Kuppuswamy, Sathyanarayanan wrote:
+> 
+> 
+> On 8/23/21 4:56 PM, Michael S. Tsirkin wrote:
+> > > Add a new variant of pci_iomap for mapping all PCI resources
+> > > of a devices as shared memory with a hypervisor in a confidential
+> > > guest.
+> > > 
+> > > Signed-off-by: Andi Kleen<ak@linux.intel.com>
+> > > Signed-off-by: Kuppuswamy Sathyanarayanan<sathyanarayanan.kuppuswamy@linux.intel.com>
+> > I'm a bit puzzled by this part. So why should the guest*not*  map
+> > pci memory as shared? And if the answer is never (as it seems to be)
+> > then why not just make regular pci_iomap DTRT?
+> 
+> It is in the context of confidential guest (where VMM is un-trusted). So
+> we don't want to make all PCI resource as shared. It should be allowed
+> only for hardened drivers/devices.
 
-./arch/mips/kvm/mmu.c:489:9-10:WARNING: return of 0/1 in function
-'kvm_test_age_gfn' with return type bool
-./arch/mips/kvm/mmu.c:445:8-9  WARNING: return of 0/1 in function
-'kvm_unmap_gfn_range' with return type bool
-
-Return statements in functions returning bool should use true/false
-instead of 1/0.
-
-Generated by: scripts/coccinelle/misc/boolreturn.cocci
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jing Yangyang <jing.yangyang@zte.com.cn>
----
- arch/mips/kvm/mmu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
-index 6d1f68c..1bfd1b5 100644
---- a/arch/mips/kvm/mmu.c
-+++ b/arch/mips/kvm/mmu.c
-@@ -442,7 +442,7 @@ static int kvm_mips_mkold_gpa_pt(struct kvm *kvm, gfn_t start_gfn,
- bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
- {
- 	kvm_mips_flush_gpa_pt(kvm, range->start, range->end);
--	return 1;
-+	return true;
- }
- 
- bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-@@ -486,7 +486,7 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- 	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
- 
- 	if (!gpa_pte)
--		return 0;
-+		return false;
- 	return pte_young(*gpa_pte);
- }
- 
--- 
-1.8.3.1
-
-
+Well, assuming the host can do any damage when mapped shared that also
+means not mapping it shared will completely break the drivers.
