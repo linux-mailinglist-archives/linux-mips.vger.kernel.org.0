@@ -2,153 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 794593F5B38
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Aug 2021 11:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0CA3F5D70
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Aug 2021 13:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235813AbhHXJsA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Aug 2021 05:48:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32374 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235743AbhHXJr7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 24 Aug 2021 05:47:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1629798435;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=byOliS/hAlH982j95uoj9FjiMsaJUQkzdYQOZKOZeFM=;
-        b=EpSjaKaORit2KBe35XMrcFltkhci8RVMV7pN97m/XqxyihAXn2G+tohwnWuAezzH4bp48M
-        efD8nrjBZJ6yjreif7/fjD3rTeTWH11Tav+ryGfZYH2nwH71eP7mowc9EipQYYwbSrgdrl
-        bEd+dJo0mtOfCZWeq1ubGE6hNpUgYI4=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-433-E-MTgk1qO_2X_JaNIyfYSQ-1; Tue, 24 Aug 2021 05:47:14 -0400
-X-MC-Unique: E-MTgk1qO_2X_JaNIyfYSQ-1
-Received: by mail-ed1-f69.google.com with SMTP id x24-20020aa7dad8000000b003bed477317eso10317648eds.18
-        for <linux-mips@vger.kernel.org>; Tue, 24 Aug 2021 02:47:14 -0700 (PDT)
+        id S236966AbhHXL4a (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Aug 2021 07:56:30 -0400
+Received: from mail-vk1-f180.google.com ([209.85.221.180]:38515 "EHLO
+        mail-vk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236939AbhHXL4a (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Aug 2021 07:56:30 -0400
+Received: by mail-vk1-f180.google.com with SMTP id k124so5429729vke.5;
+        Tue, 24 Aug 2021 04:55:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=byOliS/hAlH982j95uoj9FjiMsaJUQkzdYQOZKOZeFM=;
-        b=fSgy6dhdQqCb07gm5Vu4/1eNgbPLs85JNQ7Fj+x5Qxg4aoSg65WFYzHcivWvFang+L
-         k+cMn6Xt4rExSqNdkhwCz3DwMkj5+/GFSvEcOzMLelUvkHYEPqz5ZcKMeQWgkulsrF55
-         4tYSPv28/zU2+4bh1EJ5Vz+uqZJ8Qepy8Ugr84Fs2QN9824UOPolK7ClM6lGqacODZmJ
-         y6EoFps0UClSLKJ20k+/8BcCOtbX4F/qnagCMpK0goUiJJ2vB24VdsX16eIPgaSG55/B
-         d3HePKumkaQX4glIuWMdOeC4vlADkryvcwtbb0OWeWVub5sUa1e6IPlF+Ktydtm1zw2V
-         60rA==
-X-Gm-Message-State: AOAM530kWTRi0WPl8MfeEJKfE7Npp0sj30AaDERC6f7izlkobvtPtk8+
-        dOfystz5HmZPrYhQ+LfETID1oMSb3F4xofZqDW00nBkM2LqVG0LvVYV3FwoeMJXRX2cMDUnx818
-        UxjvQoSIgrevIM6JG8ZIBbw==
-X-Received: by 2002:a17:906:3542:: with SMTP id s2mr40413069eja.379.1629798433283;
-        Tue, 24 Aug 2021 02:47:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyUO88Sc9irEBtMZmBbVQ8WcILdFFNEosAjyt1865+nkRLAobkOu3Zuf3KEOK5TLE4bRYLW2A==
-X-Received: by 2002:a17:906:3542:: with SMTP id s2mr40413054eja.379.1629798433111;
-        Tue, 24 Aug 2021 02:47:13 -0700 (PDT)
-Received: from redhat.com ([2.55.137.225])
-        by smtp.gmail.com with ESMTPSA id b18sm2800522ejl.90.2021.08.24.02.47.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Aug 2021 02:47:12 -0700 (PDT)
-Date:   Tue, 24 Aug 2021 05:47:03 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-Message-ID: <20210824053830-mutt-send-email-mst@kernel.org>
-References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210805005218.2912076-12-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210823195409-mutt-send-email-mst@kernel.org>
- <26a3cce5-ddf7-cbe6-a41e-58a2aea48f78@linux.intel.com>
- <CAPcyv4iJVQKJ3bVwZhD08c8GNEP0jW2gx=H504NXcYK5o2t01A@mail.gmail.com>
- <d992b5af-8d57-6aa6-bd49-8e2b8d832b19@linux.intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XfgeSNPVMKWrfXyFj8jprqwXpb9tNGH+Wb+KqyJb9gQ=;
+        b=qVrNOE423FmYdfxN0qo2eJSQWhpI1/CVIypQCppLZoegkSnd5BPdxw9qStKAWLHkFT
+         z3A0Y+bq6viWu47pUgeDgrl4fMXeIjPue4SwC8JTlemJ4/HTiH+pf2JQMOiKivPL4cso
+         6+NODu3x3pOJJKBR8T322l/FFvaJ+D4zCiMshz6hHU407xUxcIqQ3DbJ6/QkP0c55BBS
+         Vcjff+o8+wNYc+g82IUQyzqCT6w8kEWXWzQsjtvyYW9vjpiPshm1vOhu9nnOn9VIWAzT
+         uUsR5hbGJULSHNMeu9mFNlkGyVEJIk8X9DmDO9cjMXjjfbpXeljnBY0XanRZvRWpmEX8
+         xXlg==
+X-Gm-Message-State: AOAM531DskKYgEU9UJCtUfmp1c0BJrTukI2jcwsF0s4PZdgoNzNxWJnk
+        f3j6SxJ6Wpit11UHTErUwR9AS2Q/hVR5AB31ki4=
+X-Google-Smtp-Source: ABdhPJyF2wRPCJa9TS8UTuYi45dG+oebI6qeiCjlOVZk/DVs/Dyj3ugAf0SqlejD7IoDmVPYRh8sFRN0eHUzW9fAJ6o=
+X-Received: by 2002:a05:6122:809:: with SMTP id 9mr295247vkj.4.1629806145488;
+ Tue, 24 Aug 2021 04:55:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d992b5af-8d57-6aa6-bd49-8e2b8d832b19@linux.intel.com>
+References: <cover.1628670468.git.geert+renesas@glider.be> <YRkxzx/1XM3r64Ee@robh.at.kernel.org>
+ <CAMuHMdXs0+7K4N0mg6qX6X1cr_8dBr_HdTahdfORMk76wCJcEA@mail.gmail.com> <CAL_JsqK63hoEMafLP+5eeQR1qrhOO76J4KEQG_By6QnLfhF=dw@mail.gmail.com>
+In-Reply-To: <CAL_JsqK63hoEMafLP+5eeQR1qrhOO76J4KEQG_By6QnLfhF=dw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 24 Aug 2021 13:55:34 +0200
+Message-ID: <CAMuHMdVNi4bh0Kp43BrVVKD8YY5ac4yi9=W3QZmw=stmwwtuiQ@mail.gmail.com>
+Subject: Re: [PATCH v5 0/9] Add generic support for kdump DT properties
+To:     Rob Herring <robh@kernel.org>, Russell King <linux@armlinux.org.uk>
+Cc:     Nicolas Pitre <nico@fluxnic.net>, Ard Biesheuvel <ardb@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        kexec@lists.infradead.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Aug 23, 2021 at 07:14:18PM -0700, Andi Kleen wrote:
-> 
-> On 8/23/2021 6:04 PM, Dan Williams wrote:
-> > On Mon, Aug 23, 2021 at 5:31 PM Kuppuswamy, Sathyanarayanan
-> > <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
-> > > 
-> > > 
-> > > On 8/23/21 4:56 PM, Michael S. Tsirkin wrote:
-> > > > > Add a new variant of pci_iomap for mapping all PCI resources
-> > > > > of a devices as shared memory with a hypervisor in a confidential
-> > > > > guest.
-> > > > > 
-> > > > > Signed-off-by: Andi Kleen<ak@linux.intel.com>
-> > > > > Signed-off-by: Kuppuswamy Sathyanarayanan<sathyanarayanan.kuppuswamy@linux.intel.com>
-> > > > I'm a bit puzzled by this part. So why should the guest*not*  map
-> > > > pci memory as shared? And if the answer is never (as it seems to be)
-> > > > then why not just make regular pci_iomap DTRT?
-> > > It is in the context of confidential guest (where VMM is un-trusted). So
-> > > we don't want to make all PCI resource as shared. It should be allowed
-> > > only for hardened drivers/devices.
-> > That's confusing, isn't device authorization what keeps unaudited
-> > drivers from loading against untrusted devices? I'm feeling like
-> > Michael that this should be a detail that drivers need not care about
-> > explicitly, in which case it does not need to be exported because the
-> > detail can be buried in lower levels.
-> 
-> We originally made it default (similar to AMD), but it during code audit we
-> found a lot of drivers who do ioremap early outside the probe function.
-> Since it would be difficult to change them all we made it opt-in, which
-> ensures that only drivers that have been enabled can talk with the host at
-> all and can't be attacked. That made the problem of hardening all these
-> drivers a lot more practical.
-> 
-> Currently we only really need virtio and MSI-X shared, so for changing two
-> places in the tree you avoid a lot of headache elsewhere.
-> 
-> Note there is still a command line option to override if you want to allow
-> and load other drivers.
-> 
-> -Andi
+On Mon, Aug 23, 2021 at 4:52 PM Rob Herring <robh@kernel.org> wrote:
+> On Mon, Aug 23, 2021 at 5:13 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Sun, Aug 15, 2021 at 5:25 PM Rob Herring <robh@kernel.org> wrote:
+> > > On Wed, Aug 11, 2021 at 10:50:58AM +0200, Geert Uytterhoeven wrote:
+> > > > This patch series adds generic support for parsing DT properties related
+> > > > to crash dump kernels ("linux,elfcorehdr" and "linux,elfcorehdr" under
+> > > > the "/chosen" node), makes use of it on arm32, and performs a few
+> > > > cleanups.  It is an evolution of the combination of [1] and [2].
+> > >
+> > > The DT bits look fine to me. How do you expect this to be merged? I'm
+> > > happy to take it if arch maintainers can ack it.
+> >
+> > I had hoped you could take the series...
+>
+> My current thought is I'll take 2-5, 7 and 8 given that's what I have
+> acks for and the others can be applied independently.
 
-I see. Hmm. It's a bit of a random thing to do it at the map time
-though. E.g. DMA is all handled transparently behind the DMA API.
-Hardening is much more than just replacing map with map_shared
-and I suspect what you will end up with is basically
-vendors replacing map with map shared to make things work
-for their users and washing their hands.
+Note that Palmer did ack patch 6, so you can include it.
 
-I would say an explicit flag in the driver that says "hardened"
-and refusing to init a non hardened one would be better.
+Russell: any thoughts about patch 9?
+
+Thanks!
+
+> > > > The series consists of 6 parts:
+> > > >   1. Patch 1 prepares architecture-specific code (needed for MIPS only)
+> > > >      to avoid duplicating elf core header reservation later.
+> > > >   2. Patch 2 prepares the visibility of variables used to hold
+> > > >      information retrieved from the DT properties.
+> > > >   3. Patches 3-5 add support to the FDT core for handling the
+> > > >      properties.
+> > > >      This can co-exist safely with architecture-specific handling, until
+> > > >      the latter has been removed.
+> > >
+> > > Looks like patch 5 doesn't have any dependencies with the series?
+> >
+> > Indeed. So you can take it independently.
+> >
+> > > >   4. Patch 6 removes the non-standard handling of "linux,elfcorehdr" on
+> > > >      riscv.
+> > >
+> > > I thought this should be applied for 5.14?
+> >
+> > Me too, but unfortunately that hasn't happened yet...
+>
+> Buried in the middle of this series is not going to encourage it to be
+> picked up as a fix.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-MST
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
