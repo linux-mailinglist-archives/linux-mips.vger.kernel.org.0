@@ -2,111 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D70BB3F55BC
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Aug 2021 04:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF983F583D
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Aug 2021 08:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbhHXCPF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 23 Aug 2021 22:15:05 -0400
-Received: from mga11.intel.com ([192.55.52.93]:9375 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233145AbhHXCPE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 23 Aug 2021 22:15:04 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10085"; a="214093547"
-X-IronPort-AV: E=Sophos;i="5.84,346,1620716400"; 
-   d="scan'208";a="214093547"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2021 19:14:20 -0700
-X-IronPort-AV: E=Sophos;i="5.84,346,1620716400"; 
-   d="scan'208";a="425944647"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.255.228.210]) ([10.255.228.210])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2021 19:14:19 -0700
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-To:     Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org
-References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210805005218.2912076-12-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210823195409-mutt-send-email-mst@kernel.org>
- <26a3cce5-ddf7-cbe6-a41e-58a2aea48f78@linux.intel.com>
- <CAPcyv4iJVQKJ3bVwZhD08c8GNEP0jW2gx=H504NXcYK5o2t01A@mail.gmail.com>
-From:   Andi Kleen <ak@linux.intel.com>
-Message-ID: <d992b5af-8d57-6aa6-bd49-8e2b8d832b19@linux.intel.com>
-Date:   Mon, 23 Aug 2021 19:14:18 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S232105AbhHXGbY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Aug 2021 02:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230389AbhHXGa5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Aug 2021 02:30:57 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862D7C061575;
+        Mon, 23 Aug 2021 23:30:13 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id bk29so16271431qkb.8;
+        Mon, 23 Aug 2021 23:30:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qa42kkQ9ajBIIDAtBEb3QCCg71G0gIBRoGk4BSfMNXU=;
+        b=pfXDfXg7kZHUeaP6ZkAZCvKTRPC2cN8s2nHbLjqTSX0uih6MN+VPjzAZzxUjCqlLkf
+         wHHx6R+E8/qflQWQjI/rNfKTS4D1xEGFaN2gYZ21iC+lc/O8fiee1rEwxfIpxqnW0PhJ
+         Jax6IoVsNzUHMElLLH6qiCCRkHAc2YS8XU9n4txI5j2ieojxViwx0Jgx3aiztnJ07Vcd
+         WLxRdm8B7SQrMN25SEfEPHNr7kNkYLqgbmrHdRTWmWEkM/5N8xPEQVmXLpkGE/PeSmxx
+         rgW9vHkSRAyELRfO7fCpvxE82s/fzxLaC+SoKXOebEKOefxTqE8OcUScvTw/ydQJoLGB
+         xPWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qa42kkQ9ajBIIDAtBEb3QCCg71G0gIBRoGk4BSfMNXU=;
+        b=fBdOJWFEjJVgFgMqDPdWEsiaS+681sK/5hjfUWQNLj0eRkJNk5x+WtYzZw9UWef19p
+         Q226K75pUUAw8TTK33BcKpF5+Y6fOTHdu8Tf9Mi6SplV5EXZPPnTTfFze93I6oEV6KUf
+         Pt8TbyDmNEBbI50mG3NWAKfzsSXRBDDiD3gjnG/15E4mViDko/kosLs7vJqPBlon0Rgf
+         CyD6JafYyi5FLb6beHNOSj2nmA+M4syJfOwsObm/Ymon9d/B8JTlmuharJX9wmSdFSmH
+         Vasdfg47O/QBprN8mUa5KsVgujXaLr5zMY/yT652CfhDtScytbtZmcpVMEM1evqlCVvG
+         ivLg==
+X-Gm-Message-State: AOAM530grcWavp5IELugta5QAShoRstTJ2q5711hLnpVeoF9OyBtE27a
+        b/cndK5Lw9p9iBbaXg9DkkE=
+X-Google-Smtp-Source: ABdhPJwxXhJ7soGE8uNcix17QSkpHFmzf7SRB2lLa9n1ktjqapKk7sZJ4WEu8W7PH39zaoD1gAgtrA==
+X-Received: by 2002:a37:de15:: with SMTP id h21mr24944625qkj.124.1629786612822;
+        Mon, 23 Aug 2021 23:30:12 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id x29sm7503670qtv.74.2021.08.23.23.30.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Aug 2021 23:30:12 -0700 (PDT)
+From:   CGEL <cgel.zte@gmail.com>
+X-Google-Original-From: CGEL <deng.changcheng@zte.com.cn>
+To:     Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jing Yangyang <jing.yangyang@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] mips:mmu: fix boolreturn.cocci warnings
+Date:   Mon, 23 Aug 2021 23:30:04 -0700
+Message-Id: <20210824063004.59604-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAPcyv4iJVQKJ3bVwZhD08c8GNEP0jW2gx=H504NXcYK5o2t01A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Jing Yangyang <jing.yangyang@zte.com.cn>
 
-On 8/23/2021 6:04 PM, Dan Williams wrote:
-> On Mon, Aug 23, 2021 at 5:31 PM Kuppuswamy, Sathyanarayanan
-> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->>
->>
->> On 8/23/21 4:56 PM, Michael S. Tsirkin wrote:
->>>> Add a new variant of pci_iomap for mapping all PCI resources
->>>> of a devices as shared memory with a hypervisor in a confidential
->>>> guest.
->>>>
->>>> Signed-off-by: Andi Kleen<ak@linux.intel.com>
->>>> Signed-off-by: Kuppuswamy Sathyanarayanan<sathyanarayanan.kuppuswamy@linux.intel.com>
->>> I'm a bit puzzled by this part. So why should the guest*not*  map
->>> pci memory as shared? And if the answer is never (as it seems to be)
->>> then why not just make regular pci_iomap DTRT?
->> It is in the context of confidential guest (where VMM is un-trusted). So
->> we don't want to make all PCI resource as shared. It should be allowed
->> only for hardened drivers/devices.
-> That's confusing, isn't device authorization what keeps unaudited
-> drivers from loading against untrusted devices? I'm feeling like
-> Michael that this should be a detail that drivers need not care about
-> explicitly, in which case it does not need to be exported because the
-> detail can be buried in lower levels.
+./arch/mips/kvm/mmu.c:489:9-10:WARNING: return of 0/1 in function
+'kvm_test_age_gfn' with return type bool
+./arch/mips/kvm/mmu.c:445:8-9  WARNING: return of 0/1 in function
+'kvm_unmap_gfn_range' with return type bool
 
-We originally made it default (similar to AMD), but it during code audit 
-we found a lot of drivers who do ioremap early outside the probe 
-function. Since it would be difficult to change them all we made it 
-opt-in, which ensures that only drivers that have been enabled can talk 
-with the host at all and can't be attacked. That made the problem of 
-hardening all these drivers a lot more practical.
+Return statements in functions returning bool should use true/false
+instead of 1/0.
 
-Currently we only really need virtio and MSI-X shared, so for changing 
-two places in the tree you avoid a lot of headache elsewhere.
+Generated by: scripts/coccinelle/misc/boolreturn.cocci
 
-Note there is still a command line option to override if you want to 
-allow and load other drivers.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jing Yangyang <jing.yangyang@zte.com.cn>
+---
+ arch/mips/kvm/mmu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--Andi
+diff --git a/arch/mips/kvm/mmu.c b/arch/mips/kvm/mmu.c
+index 6d1f68c..1bfd1b5 100644
+--- a/arch/mips/kvm/mmu.c
++++ b/arch/mips/kvm/mmu.c
+@@ -442,7 +442,7 @@ static int kvm_mips_mkold_gpa_pt(struct kvm *kvm, gfn_t start_gfn,
+ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+ 	kvm_mips_flush_gpa_pt(kvm, range->start, range->end);
+-	return 1;
++	return true;
+ }
+ 
+ bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+@@ -486,7 +486,7 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ 	pte_t *gpa_pte = kvm_mips_pte_for_gpa(kvm, NULL, gpa);
+ 
+ 	if (!gpa_pte)
+-		return 0;
++		return false;
+ 	return pte_young(*gpa_pte);
+ }
+ 
+-- 
+1.8.3.1
+
 
