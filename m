@@ -2,98 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D7E3F6BC8
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Aug 2021 00:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A6F3F6DDD
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Aug 2021 05:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbhHXWoq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Aug 2021 18:44:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47204 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229521AbhHXWop (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 24 Aug 2021 18:44:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D14436128A;
-        Tue, 24 Aug 2021 22:44:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629845040;
-        bh=GgSuJcA7bFVt0ybi6Nstz+q4perrXRwFyg1qNEVRquI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h4gUMoR83nNHBimPYa4n0QIaQsGIEytgWZNSyfSz1bflJqll4RhsvGUslsQigPdA9
-         8CeSKHimEOZWKLQKwjnwEV0bIVvQ8+Eg+tQ9wH8ReOFKdplBPaIWkQlkltPRJKzJ8L
-         bsGNt9RHDyJWiigV48oj0dMLczAstQkX6MSk+pXXges1I7bmngT8isYnSdFrzhBYmB
-         ceqsdyyL+fwbiKdQjvZPODWYSOf+lxuu7zR0ZW0RUuwIjtegXcBa2Tp2A+OQQ5O4+g
-         AYsnW1ZBs5dVJiV4suHW0KZXSE0lftTrLm9nMIsnHaPzE/RRPgbseKjesczF8aUv9l
-         lv95pJLArZogg==
-Received: by mail-ej1-f46.google.com with SMTP id x11so47617222ejv.0;
-        Tue, 24 Aug 2021 15:44:00 -0700 (PDT)
-X-Gm-Message-State: AOAM533rB1ldh/K9cvJ6IiC69Vf3OwQivKb/zRapilKwGY+u5bA5XIKL
-        h1NMM3q6NMQpdB1v3/x5nbKxtOHr6jr5o6tV1Q==
-X-Google-Smtp-Source: ABdhPJyUY2L4QJTbPsFYD+ikQSi/9Dj0VJmplebp6jADpQGcDDA3Pj3knpdqSPXaTaP34wTa4JhBo1wA1Rnk6ojOk9E=
-X-Received: by 2002:a17:906:b4d:: with SMTP id v13mr12333564ejg.468.1629845039486;
- Tue, 24 Aug 2021 15:43:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1628670468.git.geert+renesas@glider.be> <YRkxzx/1XM3r64Ee@robh.at.kernel.org>
- <CAMuHMdXs0+7K4N0mg6qX6X1cr_8dBr_HdTahdfORMk76wCJcEA@mail.gmail.com>
- <CAL_JsqK63hoEMafLP+5eeQR1qrhOO76J4KEQG_By6QnLfhF=dw@mail.gmail.com> <CAMuHMdVNi4bh0Kp43BrVVKD8YY5ac4yi9=W3QZmw=stmwwtuiQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdVNi4bh0Kp43BrVVKD8YY5ac4yi9=W3QZmw=stmwwtuiQ@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 24 Aug 2021 17:43:48 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL_D85DWrbOEghNqbqdMaCabSJ5X7zKKJjn2uoB7=XN6g@mail.gmail.com>
-Message-ID: <CAL_JsqL_D85DWrbOEghNqbqdMaCabSJ5X7zKKJjn2uoB7=XN6g@mail.gmail.com>
-Subject: Re: [PATCH v5 0/9] Add generic support for kdump DT properties
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Nicolas Pitre <nico@fluxnic.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        kexec@lists.infradead.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S238802AbhHYDuh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 24 Aug 2021 23:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238510AbhHYDuY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Aug 2021 23:50:24 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F90C061764
+        for <linux-mips@vger.kernel.org>; Tue, 24 Aug 2021 20:49:38 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id b9so9147038plx.2
+        for <linux-mips@vger.kernel.org>; Tue, 24 Aug 2021 20:49:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CbvF3gcMl15CsJvEJlvAwV4jg0kS7/1c0/243X9NmVQ=;
+        b=nS8Xfv5Np514ewOr71qM5OVYQ4om375+9iia5AAYDaK3OM+hzJenuJr7dAU5cYremk
+         lMJSdk/H6gRuWyoAZ38Dxo4xTOwzwlYBTQ7mHvrJGvY2eRlpd9btrTwCc/T4R+lnp2Oz
+         tfjjB9XYA84IA+sxs7E0+0bjR3ImZY/NCblTCqWV1vz8ngiUx+QRlaWbVMisVRWW3rOO
+         yK85Pgi7JMY0nVAg9WrPZrM52PG/5lW+DmvVcQIgBTfNfdcKCdUHJCl4J+hHtwrGzLzq
+         JQXK/nMftIjnNhxqPt/IHdPMmbV0SixoX/iiQ7rUV+IDNkS5Y0uflbsJwBJg2KghrkLe
+         Gahg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=CbvF3gcMl15CsJvEJlvAwV4jg0kS7/1c0/243X9NmVQ=;
+        b=iiVp9lVocsEFPdMXdvdpx+sV91uWK1vC7Mtrhqz+n6DoRB81xIevbnwofdCwcfoobu
+         xUTa3LgMHNoBGrGT7vmFwGg6DWCKKUDiV3jcp7Tz2VDqVGlFkrfF9jovmGjQjlebovqd
+         W81+5R36nEpLpnlsarLJ95JlWdb4UvMX7CSRsZ0P4o9ulu+XADxzPaqSxlksBX3a9Z2S
+         db0gcCyJJ0TKBXa/mSqVi1nwYECSxZgWCpLfrEUMMgB8w7DEfcuftbYRmCqRGQPlx4mg
+         cSPsxbs5qo3dYaCs9ut+yuk1dovbaOvsSeuYEqMdvNQUY8RpEzfWvDRfeNrCSUxgVKes
+         VANw==
+X-Gm-Message-State: AOAM533Z5ICAZF/F+/zgEqNfpGvpfNfjK5IA4+YgWYSK7TwPpe71JA2W
+        9DcB3DtiC860pQujz3iSufduQA==
+X-Google-Smtp-Source: ABdhPJyuW0xG5fzwlVnm+V74njUWhK4iHoDYuJqptloS8iraqWcj5+LzzcKnLTPVDHS2p7IwfcePKA==
+X-Received: by 2002:a17:90a:428f:: with SMTP id p15mr8241589pjg.75.1629863378109;
+        Tue, 24 Aug 2021 20:49:38 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id q21sm23393107pgk.71.2021.08.24.20.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Aug 2021 20:49:37 -0700 (PDT)
+Date:   Tue, 24 Aug 2021 20:49:37 -0700 (PDT)
+X-Google-Original-Date: Tue, 24 Aug 2021 20:42:18 PDT (-0700)
+Subject:     Re: [PATCH 2/3] trace: refactor TRACE_IRQFLAGS_SUPPORT in Kconfig
+In-Reply-To: <20210731052233.4703-2-masahiroy@kernel.org>
+CC:     rostedt@goodmis.org, mingo@redhat.com, masahiroy@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, ardb@kernel.org, bp@alien8.de,
+        linus.walleij@linaro.org, ley.foon.tan@intel.com, x86@kernel.org,
+        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
+        anshuman.khandual@arm.com, nickhu@andestech.com,
+        tglx@linutronix.de, rppt@kernel.org, geert@linux-m68k.org,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        linux-riscv@lists.infradead.org, yifeifz2@illinois.edu,
+        green.hu@gmail.com, monstr@monstr.eu, deller@gmx.de,
+        linux-sh@vger.kernel.org, vgupta@synopsys.com,
+        u.kleine-koenig@pengutronix.de, guoren@kernel.org,
+        samitolvanen@google.com, richard@nod.at, borntraeger@de.ibm.com,
+        dalias@libc.org, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        jdike@addtoit.com, jcmvbkbc@gmail.com,
+        linux-hexagon@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        hpa@zytor.com, will@kernel.org, tsbogend@alpha.franken.de,
+        stefan.kristiansson@saunalahti.fi, linux-s390@vger.kernel.org,
+        ysato@users.sourceforge.jp, James.Bottomley@HansenPartnership.com,
+        linux-um@lists.infradead.org, andreyknvl@gmail.com,
+        frederic@kernel.org, npiggin@gmail.com, benh@kernel.crashing.org,
+        bcain@codeaurora.org, linux-csky@vger.kernel.org, shorne@gmail.com,
+        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>, chris@zankel.net,
+        gor@linux.ibm.com, linux-snps-arc@lists.infradead.org,
+        jonas@southpole.se, linux-parisc@vger.kernel.org,
+        keescook@chromium.org, krzysztof.kozlowski@canonical.com,
+        colin.king@canonical.com, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, deanbo422@gmail.com,
+        anton.ivanov@cambridgegreys.com, akpm@linux-foundation.org,
+        mpe@ellerman.id.au, paulus@samba.org, mark.rutland@arm.com,
+        viresh.kumar@linaro.org, linuxppc-dev@lists.ozlabs.org,
+        openrisc@lists.librecores.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     masahiroy@kernel.org
+Message-ID: <mhng-fae2ea79-c261-4e5d-8eae-21e60810a957@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 24, 2021 at 6:55 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Fri, 30 Jul 2021 22:22:32 PDT (-0700), masahiroy@kernel.org wrote:
+> Make architectures select TRACE_IRQFLAGS_SUPPORT instead of
+> having many defines.
 >
-> On Mon, Aug 23, 2021 at 4:52 PM Rob Herring <robh@kernel.org> wrote:
-> > On Mon, Aug 23, 2021 at 5:13 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Sun, Aug 15, 2021 at 5:25 PM Rob Herring <robh@kernel.org> wrote:
-> > > > On Wed, Aug 11, 2021 at 10:50:58AM +0200, Geert Uytterhoeven wrote:
-> > > > > This patch series adds generic support for parsing DT properties related
-> > > > > to crash dump kernels ("linux,elfcorehdr" and "linux,elfcorehdr" under
-> > > > > the "/chosen" node), makes use of it on arm32, and performs a few
-> > > > > cleanups.  It is an evolution of the combination of [1] and [2].
-> > > >
-> > > > The DT bits look fine to me. How do you expect this to be merged? I'm
-> > > > happy to take it if arch maintainers can ack it.
-> > >
-> > > I had hoped you could take the series...
-> >
-> > My current thought is I'll take 2-5, 7 and 8 given that's what I have
-> > acks for and the others can be applied independently.
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 >
-> Note that Palmer did ack patch 6, so you can include it.
+>  arch/riscv/Kconfig            | 4 +---
 
-Right, but Palmer should have taken it if it's for 5.14.
+Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
 
-Anyways, I've now applied patches 2-8. If we want to improve the
-handling over what arm64 code did as discussed, I think that's a
-separate patch anyways.
-
-Rob
+Thanks!
