@@ -2,87 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 613603F6DE1
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Aug 2021 05:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997553F77C4
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Aug 2021 16:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238510AbhHYDui (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 24 Aug 2021 23:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237863AbhHYDue (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 24 Aug 2021 23:50:34 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F43BC0617AE
-        for <linux-mips@vger.kernel.org>; Tue, 24 Aug 2021 20:49:40 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id f11-20020a17090aa78b00b0018e98a7cddaso3800327pjq.4
-        for <linux-mips@vger.kernel.org>; Tue, 24 Aug 2021 20:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9sHfdiClg+ir79cDPtKTL0W793DnT07IRwQSqAPFHp4=;
-        b=SNHYHGi1ywjzqrjN4Vr5b6iNJuFzuwLqCq5u/T+Vfl6bT/nVDfak3HIZ/5zzUaXBLx
-         qHXc5HMhjunz5Tcci8T3BtPjccUPo9lQag2yq3MXOA8dzmHpPURkp4Phyb+NMOiA8uHu
-         mAk3iNIjgmeySpy814cH9pbwf2U7WobmCunvxbey2Y5JK954SHN6j+FOB7BhcUUV6fy6
-         b2YKJhK2R6UhdDgyj6KV0/AwH80guc1lwrwNI99/pqR9LOlSlx+tvHE2KYpVFMgq+70x
-         D/65PWFVp2fnw4Ly+nACy81jTlmetYbczposURZHXwCv83wJ8N9j9QIOFTbcm721nckF
-         YnBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=9sHfdiClg+ir79cDPtKTL0W793DnT07IRwQSqAPFHp4=;
-        b=OUHKrs/yczOYLg0gOKL/WSPg77Y9Yg32hCFcIsh8AI6N0hza6GXZ1r6ubSlrwIntn7
-         GrnsVTjDhuyeNzhKtmutud5jCdq2aC7uBsKuADuoH1kkX5nUkrSYa5LRWkZFExnBQ9rP
-         IZpAYVk6mivNXxdE8uV5yPZrnQmvLMDM4I+f1tvd6r28RGa8FYaYTF4FmQT5qwiwdd0p
-         5Io1p3Sm/n5/HcNgfM3cskSuQNB4fS/6yv8Bt/oOgLbo1M/eYyHw7gGAxY/zQaLuAmmk
-         mKg9jcmUYI27vOgujZvJgo6pS7VnAn3vkelowqqc/HSgRV+7ihoekc/661mR6GCzVJcZ
-         UHhQ==
-X-Gm-Message-State: AOAM53124vjz4TynDewncJBryy9eZipxhj8BRrAZ7Q/30QTcEMJA+FMp
-        wWEniV1+8ZiSG//IwFQezjqk/Q==
-X-Google-Smtp-Source: ABdhPJxItrgE+EVFUgM4xk5y1cyovfSflBdGl/ZTQWYSibONNZyb8WQmjv4eJYMsWeIsNWXL/FrN5w==
-X-Received: by 2002:a17:902:9008:b0:12d:8258:e07c with SMTP id a8-20020a170902900800b0012d8258e07cmr36851163plp.42.1629863379987;
-        Tue, 24 Aug 2021 20:49:39 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id x26sm20744756pfm.77.2021.08.24.20.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Aug 2021 20:49:39 -0700 (PDT)
-Date:   Tue, 24 Aug 2021 20:49:39 -0700 (PDT)
-X-Google-Original-Date: Tue, 24 Aug 2021 20:43:54 PDT (-0700)
-Subject:     Re: [PATCH] arch: vdso: remove if-conditionals of $(c-gettimeofday-y)
-In-Reply-To: <20210731055733.12332-1-masahiroy@kernel.org>
-CC:     luto@kernel.org, tglx@linutronix.de, vincenzo.frascino@arm.com,
-        linux-kernel@vger.kernel.org, masahiroy@kernel.org,
-        will@kernel.org, tsbogend@alpha.franken.de, mpe@ellerman.id.au,
-        catalin.marinas@arm.com, benh@kernel.crashing.org,
-        linux-mips@vger.kernel.org, paulus@samba.org,
-        linux-riscv@lists.infradead.org, aou@eecs.berkeley.edu,
-        linuxppc-dev@lists.ozlabs.org, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     masahiroy@kernel.org
-Message-ID: <mhng-2a609a54-0d13-4fb3-9966-086357936773@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S240500AbhHYOxX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 Aug 2021 10:53:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54138 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240395AbhHYOxW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 25 Aug 2021 10:53:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36A4E610CD;
+        Wed, 25 Aug 2021 14:52:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629903156;
+        bh=JavDwpgii8kF2lXyvHOwR8IF/SUWfOr82rbSiTe1nco=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=etlal+X6PK/iyyE+nCKJqe8xvh6sOY35Jz8lqksr6gEQVCToh4OokpBhqzSLN+EQd
+         CbpLIssWEQtnZPMe70kfBxZJeme2Vw5EfXhChn/2RVE74/XOQ0ogJdDJbJSxQ6B6tW
+         NpWtwQV/bKLoQqX4+aw+rClsxeZQuTcMptgtwqLJE9cPhKmxBAMOvE9u1TAbpbyusm
+         2r/bieajK+y11XHoHy7rRrWGS+kpuVvgAm5FMOgzMz/YOJ/ryEgttZaNO+A2gFqSgV
+         gSDOXXqDHEGwZCzB6XgcGfNipfy8ECvl8ldyO/Fs4RX/PiHXnplmt9Ddb5SbfOzVkW
+         H7gyI/GMyzCTg==
+Date:   Wed, 25 Aug 2021 09:52:35 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Rajat Jain <rajatja@google.com>
+Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
+Message-ID: <20210825145235.GA3565590@bjorn-Precision-5520>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb8c6f96-2597-bb80-bd08-7958405e1bf5@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 30 Jul 2021 22:57:33 PDT (-0700), masahiroy@kernel.org wrote:
-> arm, arm64, mips, powerpc always select GENERIC_GETTIMEOFDAY, hence
-> $(gettimeofday-y) never becomes empty.
->
-> riscv conditionally selects GENERIC_GETTIMEOFDAY when MMU=y && 64BIT=y,
-> but arch/riscv/kernel/vdso/vgettimeofday.o is built only under that
-> condition. So, you can always define CFLAGS_vgettimeofday.o
->
-> Remove all the meaningless conditionals.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  arch/riscv/kernel/vdso/Makefile     |  5 +----
+On Tue, Aug 24, 2021 at 01:50:00PM -0700, Andi Kleen wrote:
+> 
+> On 8/24/2021 1:31 PM, Bjorn Helgaas wrote:
+> > On Tue, Aug 24, 2021 at 01:14:02PM -0700, Andi Kleen wrote:
+> > > On 8/24/2021 11:55 AM, Bjorn Helgaas wrote:
+> > > > [+cc Rajat; I still don't know what "shared memory with a hypervisor
+> > > > in a confidential guest" means,
+> > > A confidential guest is a guest which uses memory encryption to isolate
+> > > itself from the host. It doesn't trust the host. But it still needs to
+> > > communicate with the host for IO, so it has some special memory areas that
+> > > are explicitly marked shared. These are used to do IO with the host. All
+> > > their usage needs to be carefully hardened to avoid any security attacks on
+> > > the guest, that's why we want to limit this interaction only to a small set
+> > > of hardened drivers. For MMIO, the set is currently only virtio and MSI-X.
+> > Good material for the commit log next time around.  Thanks!
+> 
+> This is all in the patch intro too, which should make it into the merge
+> commits.
 
-Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+It's good if the cover letter makes into the merge commit log.
+
+It's probably just because my git foo is lacking, but merge commit
+logs don't seem as discoverable as the actual patch commit logs.  Five
+years from now, if I want to learn about pci_iomap_shared() history, I
+would "git log -p lib/pci_iomap.c" and search for it.  But I don't
+think I would see the merge commit then.
+
+Bjorn
