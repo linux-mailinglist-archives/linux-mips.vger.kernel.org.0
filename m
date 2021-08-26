@@ -2,96 +2,210 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 997553F77C4
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Aug 2021 16:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8A83F7F82
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Aug 2021 02:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240500AbhHYOxX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 25 Aug 2021 10:53:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54138 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240395AbhHYOxW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 25 Aug 2021 10:53:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36A4E610CD;
-        Wed, 25 Aug 2021 14:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629903156;
-        bh=JavDwpgii8kF2lXyvHOwR8IF/SUWfOr82rbSiTe1nco=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=etlal+X6PK/iyyE+nCKJqe8xvh6sOY35Jz8lqksr6gEQVCToh4OokpBhqzSLN+EQd
-         CbpLIssWEQtnZPMe70kfBxZJeme2Vw5EfXhChn/2RVE74/XOQ0ogJdDJbJSxQ6B6tW
-         NpWtwQV/bKLoQqX4+aw+rClsxeZQuTcMptgtwqLJE9cPhKmxBAMOvE9u1TAbpbyusm
-         2r/bieajK+y11XHoHy7rRrWGS+kpuVvgAm5FMOgzMz/YOJ/ryEgttZaNO+A2gFqSgV
-         gSDOXXqDHEGwZCzB6XgcGfNipfy8ECvl8ldyO/Fs4RX/PiHXnplmt9Ddb5SbfOzVkW
-         H7gyI/GMyzCTg==
-Date:   Wed, 25 Aug 2021 09:52:35 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        id S235469AbhHZAwq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 25 Aug 2021 20:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235074AbhHZAwp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 25 Aug 2021 20:52:45 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6D2C0613CF
+        for <linux-mips@vger.kernel.org>; Wed, 25 Aug 2021 17:51:59 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id t42so1153022pfg.12
+        for <linux-mips@vger.kernel.org>; Wed, 25 Aug 2021 17:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=f3PaRj0+UK3KiHBEQ/mOLHR7LbXNTGksF7paqU+Kuls=;
+        b=A6asxkjO+IhVOQFmhI2tBLQ24vNU4qbyC65KkjHK6YZEdFzhqDTuNOl/jUY0GY8BZk
+         sO21CWd5euGfV+luP8orfSSY/6R8H/lyogJvRGslTcBehiRZLI6fp4wTJHAZTkWW0Luj
+         236HN6iRo5IlditmnFRnNMm8X/Z+T2vuG5T/fkhA/TK8hHnA0ENvDZ7NczgztwdHw795
+         FBtREj4Nfnw/RApEMCNmyqeYph9H+5+VTpFwKCsOwANy6FK0VwyT/yA9+TXDqcqo4zbp
+         CBNvsaomjk9PSQ4KnFbCwLS1WZ5WBZeuC6vG5p684Rv340MRHtj/gV3n4AGPaCXS6GPY
+         fWYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f3PaRj0+UK3KiHBEQ/mOLHR7LbXNTGksF7paqU+Kuls=;
+        b=ujohPfeDOiruDrhd4Ha3hqpioVL6xqszKan0/q42j1xbmWlU2shnUvJXgPDk1lKyqS
+         elj4j6tjLxq0/epCqCyUCeSx+0Pg7C1ZA0OUQJjF3YLCOVmhgR4iPvet6ptAkYlsDxkC
+         LhTYR+c3Zw5odaFQwHBz+v3DIIj3DhPHRSzr4RbplV6lxdc7my1lbcQ2OkoAAekDT20h
+         /wEaE6d0wxhUSJbQCcPrMuo5xdOiCJheHRgwFXPUqvtgpB7HVkYEn8mUeJi5XzLjmmVK
+         frq0iZ2y+3WoxvaEZHQPN5OyKdgbFCXdgyZMdITnDQ+4+UnfQbNLiz9uhDwKcImuJec4
+         XEZg==
+X-Gm-Message-State: AOAM532XhpRlx3lmdc81oVlztLBOBNzf01ap2jYbiRKH5rR9nKA1/1FD
+        06QJbGWMsfDShMTdFV7ZV97Q+g==
+X-Google-Smtp-Source: ABdhPJz66WwJdot9pOGh7Q3Z/ZxgXoc0GykrLFcpNH6VM8KC5/c4zJUQuHeGGSWtTQv/EwVGtnL95A==
+X-Received: by 2002:a63:401:: with SMTP id 1mr926843pge.166.1629939118422;
+        Wed, 25 Aug 2021 17:51:58 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j21sm756334pfj.66.2021.08.25.17.51.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Aug 2021 17:51:57 -0700 (PDT)
+Date:   Thu, 26 Aug 2021 00:51:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Darren Hart <dvhart@infradead.org>,
+        "Russell King, ARM Linux" <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Rajat Jain <rajatja@google.com>
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-Message-ID: <20210825145235.GA3565590@bjorn-Precision-5520>
+        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-csky <linux-csky@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Peter Foley <pefoley@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
+ detect task migration bugs
+Message-ID: <YSblqrrpKcORzilX@google.com>
+References: <20210820225002.310652-1-seanjc@google.com>
+ <20210820225002.310652-5-seanjc@google.com>
+ <766990430.21713.1629731934069.JavaMail.zimbra@efficios.com>
+ <282257549.21721.1629732017655.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bb8c6f96-2597-bb80-bd08-7958405e1bf5@linux.intel.com>
+In-Reply-To: <282257549.21721.1629732017655.JavaMail.zimbra@efficios.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Aug 24, 2021 at 01:50:00PM -0700, Andi Kleen wrote:
+On Mon, Aug 23, 2021, Mathieu Desnoyers wrote:
+> [ re-send to Darren Hart ]
 > 
-> On 8/24/2021 1:31 PM, Bjorn Helgaas wrote:
-> > On Tue, Aug 24, 2021 at 01:14:02PM -0700, Andi Kleen wrote:
-> > > On 8/24/2021 11:55 AM, Bjorn Helgaas wrote:
-> > > > [+cc Rajat; I still don't know what "shared memory with a hypervisor
-> > > > in a confidential guest" means,
-> > > A confidential guest is a guest which uses memory encryption to isolate
-> > > itself from the host. It doesn't trust the host. But it still needs to
-> > > communicate with the host for IO, so it has some special memory areas that
-> > > are explicitly marked shared. These are used to do IO with the host. All
-> > > their usage needs to be carefully hardened to avoid any security attacks on
-> > > the guest, that's why we want to limit this interaction only to a small set
-> > > of hardened drivers. For MMIO, the set is currently only virtio and MSI-X.
-> > Good material for the commit log next time around.  Thanks!
+> ----- On Aug 23, 2021, at 11:18 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
 > 
-> This is all in the patch intro too, which should make it into the merge
-> commits.
+> > ----- On Aug 20, 2021, at 6:50 PM, Sean Christopherson seanjc@google.com wrote:
+> > 
+> >> Add a test to verify an rseq's CPU ID is updated correctly if the task is
+> >> migrated while the kernel is handling KVM_RUN.  This is a regression test
+> >> for a bug introduced by commit 72c3c0fe54a3 ("x86/kvm: Use generic xfer
+> >> to guest work function"), where TIF_NOTIFY_RESUME would be cleared by KVM
+> >> without updating rseq, leading to a stale CPU ID and other badness.
+> >> 
+> > 
+> > [...]
+> > 
+> > +#define RSEQ_SIG 0xdeadbeef
+> > 
+> > Is there any reason for defining a custom signature rather than including
+> > tools/testing/selftests/rseq/rseq.h ? This should take care of including
+> > the proper architecture header which will define the appropriate signature.
+> > 
+> > Arguably you don't define rseq critical sections in this test per se, but
+> > I'm wondering why the custom signature here.
 
-It's good if the cover letter makes into the merge commit log.
+Partly to avoid taking a dependency on rseq.h, and partly to try to call out that
+the test doesn't actually do any rseq critical sections.
 
-It's probably just because my git foo is lacking, but merge commit
-logs don't seem as discoverable as the actual patch commit logs.  Five
-years from now, if I want to learn about pci_iomap_shared() history, I
-would "git log -p lib/pci_iomap.c" and search for it.  But I don't
-think I would see the merge commit then.
+> > [...]
+> > 
+> >> +
+> >> +static void *migration_worker(void *ign)
+> >> +{
+> >> +	cpu_set_t allowed_mask;
+> >> +	int r, i, nr_cpus, cpu;
+> >> +
+> >> +	CPU_ZERO(&allowed_mask);
+> >> +
+> >> +	nr_cpus = CPU_COUNT(&possible_mask);
+> >> +
+> >> +	for (i = 0; i < 20000; i++) {
+> >> +		cpu = i % nr_cpus;
+> >> +		if (!CPU_ISSET(cpu, &possible_mask))
+> >> +			continue;
+> >> +
+> >> +		CPU_SET(cpu, &allowed_mask);
+> >> +
+> >> +		/*
+> >> +		 * Bump the sequence count twice to allow the reader to detect
+> >> +		 * that a migration may have occurred in between rseq and sched
+> >> +		 * CPU ID reads.  An odd sequence count indicates a migration
+> >> +		 * is in-progress, while a completely different count indicates
+> >> +		 * a migration occurred since the count was last read.
+> >> +		 */
+> >> +		atomic_inc(&seq_cnt);
+> > 
+> > So technically this atomic_inc contains the required barriers because the
+> > selftests implementation uses "__sync_add_and_fetch(&addr->val, 1)". But
+> > it's rather odd that the semantic differs from the kernel implementation in
+> > terms of memory barriers: the kernel implementation of atomic_inc
+> > guarantees no memory barriers, but this one happens to provide full
+> > barriers pretty much by accident (selftests futex/include/atomic.h
+> > documents no such guarantee).
 
-Bjorn
+Yeah, I got quite lost trying to figure out what atomics the test would actually
+end up with.
+
+> > If this full barrier guarantee is indeed provided by the selftests atomic.h
+> > header, I would really like a comment stating that in the atomic.h header
+> > so the carpet is not pulled from under our feet by a future optimization.
+> > 
+> > 
+> >> +		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
+> >> +		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
+> >> +			    errno, strerror(errno));
+> >> +		atomic_inc(&seq_cnt);
+> >> +
+> >> +		CPU_CLR(cpu, &allowed_mask);
+> >> +
+> >> +		/*
+> >> +		 * Let the read-side get back into KVM_RUN to improve the odds
+> >> +		 * of task migration coinciding with KVM's run loop.
+> > 
+> > This comment should be about increasing the odds of letting the seqlock
+> > read-side complete. Otherwise, the delay between the two back-to-back
+> > atomic_inc is so small that the seqlock read-side may never have time to
+> > complete the reading the rseq cpu id and the sched_getcpu() call, and can
+> > retry forever.
+
+Hmm, but that's not why there's a delay.  I'm not arguing that a livelock isn't
+possible (though that syscall would have to be screaming fast), but the primary
+motivation is very much to allow the read-side enough time to get back into KVM
+proper.
+
+To encounter the bug, TIF_NOTIFY_RESUME has to be recognized by KVM in its run
+loop, i.e. sched_setaffinity() must induce task migration after the read-side has
+invoked ioctl(KVM_RUN).
+
+> > I'm wondering if 1 microsecond is sufficient on other architectures as
+> > well.
+
+I'm definitely wondering that as well :-)
+
+> > One alternative way to make this depend less on the architecture's
+> > implementation of sched_getcpu (whether it's a vDSO, or goes through a
+> > syscall) would be to read the rseq cpu id and call sched_getcpu a few times
+> > (e.g. 3 times) in the migration thread rather than use usleep, and throw
+> > away the value read. This would ensure the delay is appropriate on all
+> > architectures.
+
+As above, I think an arbitrary delay is required regardless of how fast
+sched_getcpu() can execute.  One thought would be to do sched_getcpu() _and_
+usleep() to account for sched_getcpu() overhead and to satisfy the KVM_RUN part,
+but I don't know that that adds meaningful value.
+
+The real test is if someone could see if the bug repros on non-x86 hardware...
