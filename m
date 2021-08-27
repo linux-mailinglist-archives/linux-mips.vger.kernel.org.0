@@ -2,234 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7033F9128
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Aug 2021 01:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6DE3F927E
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Aug 2021 04:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243835AbhHZXzp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 26 Aug 2021 19:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
+        id S244069AbhH0CoZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 26 Aug 2021 22:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbhHZXzp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 Aug 2021 19:55:45 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26418C0613C1
-        for <linux-mips@vger.kernel.org>; Thu, 26 Aug 2021 16:54:57 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id u15so2764632plg.13
-        for <linux-mips@vger.kernel.org>; Thu, 26 Aug 2021 16:54:57 -0700 (PDT)
+        with ESMTP id S231607AbhH0CoY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 26 Aug 2021 22:44:24 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D77BC0613D9
+        for <linux-mips@vger.kernel.org>; Thu, 26 Aug 2021 19:43:36 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id g18so562144wrc.11
+        for <linux-mips@vger.kernel.org>; Thu, 26 Aug 2021 19:43:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dW8gFjFomOc5wOdjLD9Dz4jaY3La87NN9K39GXWQx+E=;
-        b=ItG8l0YBP+DbB+c2JE7Df+BDJmWlmM348qS2tn+o20n2CfRdWAMxuKeVWdApc9i/ph
-         SXx9VY/vjBKJ3otuIt73eO92WBuq2g3EeJrPGA1j+NIfwr3rwhzUL7XKr8ulfNJkTyAs
-         A/hdowTP0Ti4TQsIpZGrNAHfz/lIC0cgWPZ6lWsmT7TuDhNU3UrobkDJ2/YT8+DUskzz
-         HyZQgME2+z2UW9Kqa9640Z5XVMQ6hwklS3TQ+vcyW689vKbrce53AFsKL98ApNqD/w6b
-         XBODsFQkhS7SADidGdS4SqCHCuSJuloxnOtFCWTXqWXH7UgBlb+bA6idy73fwmLcWo99
-         dmPw==
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=oQICvEVdYwAUqNTzWpb8/l7kSvds45XXdlddo87uN1NJQXofX3ebHttVEzZReNjahL
+         3Kx/WAP+NTVh6RImZtFU7EKGlmBkRKEisOBYCmX2oIxO4bMKFfBPhMxckANR9U6csEGA
+         2JLFumqEzSBeli8e+LuUaG2BrNtLOQrVMGlyfg886jaYttJW2XvrEHVxVkeoCbr8txPa
+         AkNhhuU4NqQr+tGEZtonwKhZxM0FveqLUKfN8i243Fi2DJPgIYhBgP5iWEpDPb+bpOQ+
+         XRz0fTPtn2Tttrv6cDacJ3R3lGtdMc4Z6CiS4Ott/Yk7z7dlcz7crDD8UYGfUmNeqToY
+         sqJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dW8gFjFomOc5wOdjLD9Dz4jaY3La87NN9K39GXWQx+E=;
-        b=eM7Rl0ld0DysOJqFt1Ng5MTwdd2zH+uYUwerBU2NIyG6yMnMtrm9VFv6O4zSbiWTvO
-         KyLZE5M6BUuZuCYbl/8GANjlzQEPk6F/lFMneTU2M/RXeqLrIOxzdhF4E6EJ0+LTU7h2
-         /LMSJIf+YqUMrsISqPKWK2dCmaN4T4h+LRPBVV0FCmJB0sZ1ciYOkhJoDMvoBihrfn4e
-         B1Vus618T8oyQoUiVlFjIderGyXxgIHYemQ2rJxOpRGZyhREwnO2aUrCjB9kHLEdkOlx
-         GdIW++qBqrshaeLdD2+ImuDIpAxql0NcSLYsRiAn8CKgPhtqjDEOSb+M5Voo827sNV6N
-         gIlw==
-X-Gm-Message-State: AOAM530EATX5Xz47KBjtptH2VC4U6L19HVgIUPoXb4pQ1SzOQEYVyV7t
-        NeLcoLjqIRP00UANIuEyYL1dcw==
-X-Google-Smtp-Source: ABdhPJwzNqdZ7nV9Pm9TbIto/bocQMQl0ruPz+G7jXml1aOfc3KfC0ZbBEbJQskaU4OTATHvb0yPjg==
-X-Received: by 2002:a17:902:c643:b0:130:eab4:bd22 with SMTP id s3-20020a170902c64300b00130eab4bd22mr5672776pls.13.1630022096179;
-        Thu, 26 Aug 2021 16:54:56 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id r3sm3863725pff.119.2021.08.26.16.54.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Aug 2021 16:54:55 -0700 (PDT)
-Date:   Thu, 26 Aug 2021 23:54:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     dvhart <dvhart@infradead.org>,
-        "Russell King, ARM Linux" <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-csky <linux-csky@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
- detect task migration bugs
-Message-ID: <YSgpy8iXXXUQ+b/k@google.com>
-References: <20210820225002.310652-1-seanjc@google.com>
- <20210820225002.310652-5-seanjc@google.com>
- <766990430.21713.1629731934069.JavaMail.zimbra@efficios.com>
- <282257549.21721.1629732017655.JavaMail.zimbra@efficios.com>
- <YSblqrrpKcORzilX@google.com>
- <1700758714.29394.1630003332081.JavaMail.zimbra@efficios.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=JcCnNkxtHweN6ApEPCItRB3oqJyAr4ORMY/4f0Zly6Y=;
+        b=E+LgxINr5A+CXZ0MhO9pDcGxOhfB/ZbAENvaNlfPyZ5/sPCJ40nOMh/R72J2TmWh0m
+         0ewhqgNyYYqgvd7v0bw7q0fs2w7BLvolE7o6MPIFTWRLZOIEe8nspTppU8Q0S4IWMNoF
+         yrrbyCt/rt1f3h7sGuw66RKWMOLcTsvOPlT4vSod4s5LZqVh3BuuN6+V8IMAyc5D4vrG
+         68lj88DybMLO/EFLDqu69dAbOK+E4ABS4bSfqwANiMJFEqFOlg83swRf2VRBjPPmHPZX
+         hIA7vYEVpGAw5xK/o2t3HBeD93kXRS4zchND0wDGL1z2SkQp2gCHBknNOxYbU9N+edmc
+         DhBA==
+X-Gm-Message-State: AOAM5336LmYyB7UZw+ONH61R6cX7FhX0X48fRHArIhAJbkEuwpNRnBRN
+        9cfu6Ubw6SKdAh6hyO4No87pz+wfjwU64wMDuLg=
+X-Google-Smtp-Source: ABdhPJxxHn36mD9X7gnFi/vDQ/NT94z4Z9Y/VJNvZu6F0svpW3RYr67hK5dD71rLERqFPGnIUeVbU7wOTTr1I7D+6PY=
+X-Received: by 2002:adf:f984:: with SMTP id f4mr7452796wrr.331.1630032215135;
+ Thu, 26 Aug 2021 19:43:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1700758714.29394.1630003332081.JavaMail.zimbra@efficios.com>
+Received: by 2002:a1c:a341:0:0:0:0:0 with HTTP; Thu, 26 Aug 2021 19:43:34
+ -0700 (PDT)
+From:   johno williams <johnow614@gmail.com>
+Date:   Thu, 26 Aug 2021 14:43:34 -1200
+Message-ID: <CADzD+E34REXhgwwNE0=Cnh1Mo3Fs-9k6yKtyGEH7UqL8+FcxDQ@mail.gmail.com>
+Subject: CONFIRM YOUR DETAILS TO ENABLE US START,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Aug 26, 2021, Mathieu Desnoyers wrote:
-> ----- On Aug 25, 2021, at 8:51 PM, Sean Christopherson seanjc@google.com wrote:
-> >> >> +		r = sched_setaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> >> >> +		TEST_ASSERT(!r, "sched_setaffinity failed, errno = %d (%s)",
-> >> >> +			    errno, strerror(errno));
-> >> >> +		atomic_inc(&seq_cnt);
-> >> >> +
-> >> >> +		CPU_CLR(cpu, &allowed_mask);
-> >> >> +
-> >> >> +		/*
-> >> >> +		 * Let the read-side get back into KVM_RUN to improve the odds
-> >> >> +		 * of task migration coinciding with KVM's run loop.
-> >> > 
-> >> > This comment should be about increasing the odds of letting the seqlock
-> >> > read-side complete. Otherwise, the delay between the two back-to-back
-> >> > atomic_inc is so small that the seqlock read-side may never have time to
-> >> > complete the reading the rseq cpu id and the sched_getcpu() call, and can
-> >> > retry forever.
-> > 
-> > Hmm, but that's not why there's a delay.  I'm not arguing that a livelock isn't
-> > possible (though that syscall would have to be screaming fast),
-> 
-> I don't think we have the same understanding of the livelock scenario. AFAIU the livelock
-> would be caused by a too-small delay between the two consecutive atomic_inc() from one
-> loop iteration to the next compared to the time it takes to perform a read-side critical
-> section of the seqlock. Back-to-back atomic_inc can be performed very quickly, so I
-> doubt that the sched_getcpu implementation have good odds to be fast enough to complete
-> in that narrow window, leading to lots of read seqlock retry.
+Dear Beneficiary,
 
-Ooooh, yeah, brain fart on my side.  I was thinking of the two atomic_inc() in the
-same loop iteration and completely ignoring the next iteration.  Yes, I 100% agree
-that a delay to ensure forward progress is needed.  An assertion in main() that the
-reader complete at least some reasonable number of KVM_RUNs is also probably a good
-idea, e.g. to rule out a false pass due to the reader never making forward progress.
+Following your pending fund for years and the delay you imposed in
+receiving it,We have called back your fund to this office as directed
+by the Finance Office and we will be paying you directly through the
+BANK OF AMERICA.(BOA) NEW YORK BRANCH AND ALL YOU NEED NOW IS TO
+RE-CONFIRM YOUR BANKING DETAILS FOR THE TRANSFER IMMEDIATELY WITHOUT
+ANY FURTHER DELAY.
 
-FWIW, the do-while loop does make forward progress without a delay, but at ~50% 
-throughput, give or take.
+NOTE THAT WE WILL PAY ALL THE EXPENSES INVOLVED FOR YOU TO RECEIVE
+THIS FUND AND ALL WE NEED FROM YOU IS YOUR CO-OPERATION.
 
-> > but the primary motivation is very much to allow the read-side enough time
-> > to get back into KVM proper.
-> 
-> I'm puzzled by your statement. AFAIU, let's say we don't have the delay, then we
-> have:
-> 
-> migration thread                             KVM_RUN/read-side thread
-> -----------------------------------------------------------------------------------
->                                              - ioctl(KVM_RUN)
-> - atomic_inc_seq_cst(&seqcnt)
-> - sched_setaffinity
-> - atomic_inc_seq_cst(&seqcnt)
->                                              - a = atomic_load(&seqcnt) & ~1
->                                              - smp_rmb()
->                                              - b = LOAD_ONCE(__rseq_abi->cpu_id);
->                                              - sched_getcpu()
->                                              - smp_rmb()
->                                              - re-load seqcnt/compare (succeeds)
->                                                - Can only succeed if entire read-side happens while the seqcnt
->                                                  is in an even numbered state.
->                                              - if (a != b) abort()
->   /* no delay. Even counter state is very
->      short. */
-> - atomic_inc_seq_cst(&seqcnt)
->   /* Let's suppose the lack of delay causes the
->      setaffinity to complete too early compared
->      with KVM_RUN ioctl */
-> - sched_setaffinity
-> - atomic_inc_seq_cst(&seqcnt)
-> 
->   /* no delay. Even counter state is very
->      short. */
-> - atomic_inc_seq_cst(&seqcnt)
->   /* Then a setaffinity from a following
->      migration thread loop will run
->      concurrently with KVM_RUN */
->                                              - ioctl(KVM_RUN)
-> - sched_setaffinity
-> - atomic_inc_seq_cst(&seqcnt)
-> 
-> As pointed out here, if the first setaffinity runs too early compared with KVM_RUN,
-> a following setaffinity will run concurrently with it. However, the fact that 
-> the even counter state is very short may very well hurt progress of the read seqlock.
+Send your full details with Banking details to enable us commence the
+transfer process immediately through the BOA BANK IN NEW YORK,USA OR
+DO YOU WANT TO RECEIVE THIS FUND VIA ATM CARD ????????.
 
-*sigh*
-
-Several hours later, I think I finally have my head wrapped around everything.
-
-Due to the way the test is written and because of how KVM's run loop works,
-TIF_NOTIFY_RESUME or TIF_NEED_RESCHED effectively has to be set before KVM actually
-enters the guest, otherwise KVM will exit to userspace without touching the flag,
-i.e. it will be handled by the normal exit_to_user_mode_loop().
-
-Where I got lost was trying to figure out why I couldn't make the bug reproduce by
-causing the guest to exit to KVM, but not userspace, in which case KVM should
-easily trigger the problematic flow as the window for sched_getcpu() to collide
-with KVM would be enormous.  The reason I didn't go down this route for the
-"official" test is that, unless there's something clever I'm overlooking, it
-requires arch specific guest code, and ialso I don't know that forcing an exit
-would even be necessary/sufficient on other architectures.
-
-Anyways, I was trying to confirm that the bug was being hit without a delay, while
-still retaining the sequence retry in the test.  The test doesn't fail because the
-back-to-back atomic_inc() changes seqcnt too fast.  The read-side makes forward
-progress, but it never observes failure because the do-while loop only ever
-completes after another sched_setaffinity(), never after the one that collides
-with KVM because it takes too long to get out of ioctl(KVM_RUN) and back to the
-test.  I.e. the atomic_inc() in the next loop iteration (makes seq_cnt odd) always
-completes before the check, and so the check ends up spinning until another
-migration, which correctly updates rseq.  This was expected and didn't confuse me.
-
-What confused me is that I was trying to confirm the bug was being hit from within
-the kernel by confirming KVM observed TIF_NOTIFY_RESUME, but I misunderstood when
-TIF_NOTIFY_RESUME would get set.  KVM can observe TIF_NOTIFY_RESUME directly, but
-it's rare, and I suspect happens iff sched_setaffinity() hits the small window where
-it collides with KVM_RUN before KVM enters the guest.
-
-More commonly, the bug occurs when KVM sees TIF_NEED_RESCHED.  In that case, KVM
-calls xfer_to_guest_mode_work(), which does schedule() and _that_ sets
-TIF_NOTIFY_RESUME.  xfer_to_guest_mode_work() then mishandles TIF_NOTIFY_RESUME
-and the bug is hit, but my confirmation logic in KVM never fired.
-
-So there are effectively three reasons we want a delay:
-
-  1. To allow sched_setaffinity() to coincide with ioctl(KVM_RUN) before KVM can
-     enter the guest so that the guest doesn't need an arch-specific VM-Exit source.
-
-  2. To let ioctl(KVM_RUN) make its way back to the test before the next round
-     of migration.
-
-  3. To ensure the read-side can make forward progress, e.g. if sched_getcpu()
-     involves a syscall.
-
-
-After looking at KVM for arm64 and s390, #1 is a bit tenuous because x86 is the
-only arch that currently uses xfer_to_guest_mode_work(), i.e. the test could be
-tweaked to be overtly x86-specific.  But since a delay is needed for #2 and #3,
-I'd prefer to rely on it for #1 as well in the hopes that this test provides
-coverage for arm64 and/or s390 if they're ever converted to use the common
-xfer_to_guest_mode_work().
+John O.Williams.
