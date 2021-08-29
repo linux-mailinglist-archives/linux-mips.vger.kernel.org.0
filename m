@@ -2,95 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 882423FAB84
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Aug 2021 14:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FEE3FAC73
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Aug 2021 17:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235294AbhH2Mzi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 29 Aug 2021 08:55:38 -0400
-Received: from mengyan1223.wang ([89.208.246.23]:50802 "EHLO mengyan1223.wang"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235271AbhH2Mzh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 29 Aug 2021 08:55:37 -0400
-X-Greylist: delayed 330 seconds by postgrey-1.27 at vger.kernel.org; Sun, 29 Aug 2021 08:55:35 EDT
-Received: from localhost.localdomain (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@mengyan1223.wang)
-        by mengyan1223.wang (Postfix) with ESMTPSA id 6DEEE65A34;
-        Sun, 29 Aug 2021 08:49:11 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
-        s=mail; t=1630241352;
-        bh=4VT7HsleXnyApJ065hiHgYH7fPmSKGhjsjtBFnJBnfM=;
-        h=Subject:From:To:Cc:Date:From;
-        b=D2ZrwHnGztEQHojfa7/y/m3YPEfHzW2H1+IATuHJsWw/0wb5cQmgdE5QxZTFlMZ2O
-         Jtx0IXiQkh9lJ+ThDLXZZhe7/vyw+xD/84B8dKxUeG1VurVafV02pCdfBMzDNHekjD
-         jjIpMsgXGcJFe8AlTs5BQYfpaE3KX1qv81Rx4vYeDDwnpjig0wtgnQVvN7gpI0d5e7
-         Vj6deJSVJZxf63lvyLDr8yRauR/RBCNVkV0bMh90uvBVs3R4dfLhN3ftOwjrEVINV5
-         sUR26iZKn+Sg6w5uWOeuWsBJBt9H088uFckgvwo1HAsMOrgMKWhb/oLPSPSPeWIEgy
-         m8JFF6H/oYEjQ==
-Message-ID: <0b7c9431efb12c2d957fcc53ec8f0743725d61b3.camel@mengyan1223.wang>
-Subject: [PATCH] mips: remove reference to "newer Loongson-3"
-From:   Xi Ruoyao <xry111@mengyan1223.wang>
-To:     linux-mips@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 29 Aug 2021 20:49:09 +0800
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 
+        id S235536AbhH2PPd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Aug 2021 11:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231216AbhH2PPb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 29 Aug 2021 11:15:31 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDE6C061575;
+        Sun, 29 Aug 2021 08:14:39 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id 37so6325830uau.13;
+        Sun, 29 Aug 2021 08:14:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CE5DJ6I0bkqbGScS9NHu7P+t4w7mOT4FbVurC5+UIKw=;
+        b=K3bPJ2wK1Ok8UQJoPWFjDCOt5KkMvjpWTPPSd9kxvWAMw+Nj4rDoLHfDJ0fbbOkvAe
+         4nWdOKLhtdcPZjm+XVRqzhVjbwCgHFH0FfycB1Gsv5uYILSKGJE0shs1IWZnX9HaFC6l
+         OWsz/iqcv8ei2cQ5PyNRRBIPlu2plTUnUhSBIkpl+GCChA5MTPJ5WKlK7pO5bNWvE1oA
+         2DcsUGoMzwh+tnuO26O5hK34zvoPauqqO+VvOA6kP1gWWR2p1v1uwr7GcnXJjKzNn3DW
+         QNxECArl3/9SL9vmAn/KkS3O2NyXCf8vB1Ud3hiKMRxk9mQu0C7HUV8SrtQXFPyZKBc0
+         BjcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CE5DJ6I0bkqbGScS9NHu7P+t4w7mOT4FbVurC5+UIKw=;
+        b=tPnX25dCSzxEfD92vvtvoMaYnAF7owfIznkvzMFsqnEKfSPlHiVen4R6mhjp3BWaf6
+         bBuMNduXc4uu7E3II7LaBjhLJpoFZNykZ9WkLZnA4Ou86EUpyAQivyxrcpSrdF33Ysar
+         nxtVNP2n3cINppdYgsTRGrTNBDruiRx7ctU4Py4FHtRZQ7udYVl1oEbOhldKqxAxv8o+
+         nOI4aYEFLu4Ze3ilvXdQMoF7ZfvVdrZ3mnGQgW1dx42FrvtmzfVMIjY45DrwqQGfsujM
+         TJp/2qS9RpWePjB08n/jTSZRjWLyT87E9p178R0Qyz7Gj5zOaeEkmQC2NcoS8bzFooQT
+         VXug==
+X-Gm-Message-State: AOAM532edVovH8sOm5aSvqUgNJMmGEXuNxhRZ2tz56QyU9P89WBJgFYK
+        G3xGudMQVOMXlBYtHDhthJL/t/J6emcb0FfpoZg=
+X-Google-Smtp-Source: ABdhPJxNSz5alZOAE48+fiABe+l62fCRif3TJvSSlHYrT6MwKcd1hDeR6n/NQU69bkZyVPpmgdcFW9QTxYeo0z62LWY=
+X-Received: by 2002:ab0:26cd:: with SMTP id b13mr12684124uap.98.1630250078925;
+ Sun, 29 Aug 2021 08:14:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20210822161005.22467-1-sergio.paracuellos@gmail.com>
+ <20210822161005.22467-4-sergio.paracuellos@gmail.com> <YSip4/kMNOG4uYC3@kroah.com>
+In-Reply-To: <YSip4/kMNOG4uYC3@kroah.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sun, 29 Aug 2021 17:14:27 +0200
+Message-ID: <CAMhs-H_0ytYCoBLj9GJDjHSPPHLC6_oBsm-V9s4FjhE7NY8TCw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] staging: mt7621-pci: set end limit for 'ioport_resource'
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Newest Loongson-3 processors have moved to use LoongArch architecture.
-Sadly, the LL/SC issue is still existing on both latest Loongson-3
-processors using MIPS64 (Loongson-3A4000) and LoongArch
-(Loongson-3A5000).
+On Fri, Aug 27, 2021 at 11:01 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Aug 22, 2021 at 06:10:05PM +0200, Sergio Paracuellos wrote:
+> > We have increase IO_SPACE_LIMIT for ralink platform to get PCI IO resources
+> > properly handled using PCI core APIs. To align those changes with driver
+> > code we have to set 'ioport_resource' end limit to IO_SPACE_LIMIT to avoid
+> > errors.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-As it's very unlikely there will be new Loongson-3 processors using
-MIPS64, let's stop people from false hoping.
+Thanks. Since I am planning to move 'mt7621-pci' from staging to
+'drivers/pci/controller' and send v3 after the next merge window, I
+prefer this patch to go through the staging tree. For the other two I
+don't have any preference and it is ok for me to go through mips or
+pci trees. So, Bjorn and Thomas is up to you if you are ok with the
+changes.
 
-Signed-off-by: Xi Ruoyao <xry111@mengyan1223.wang>
-Cc: Huacai Chen <chenhuacai@kernel.org>
----
+Thanks in advance for your time.
 
-Huacai: how's the status of LL/SC issue on Loongson-2K?  If
-the issue exists on it as well, we can just force
-CPU_LOONGSON3_WORKAROUNDS when CONFIG_CPU_LOONGSON64 and
-CONFIG_SMP are both selected.
-
- arch/mips/Kconfig | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 6dfb27d531dd..ff5f344a371e 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -1433,19 +1433,14 @@ config LOONGSON3_ENHANCEMENT
- 	  new Loongson-3 machines only, please say 'Y' here.
- 
- config CPU_LOONGSON3_WORKAROUNDS
--	bool "Old Loongson-3 LLSC Workarounds"
-+	bool "Loongson-3 LLSC Workarounds"
- 	default y if SMP
- 	depends on CPU_LOONGSON64
- 	help
- 	  Loongson-3 processors have the llsc issues which require workarounds.
- 	  Without workarounds the system may hang unexpectedly.
- 
--	  Newer Loongson-3 will fix these issues and no workarounds are needed.
--	  The workarounds have no significant side effect on them but may
--	  decrease the performance of the system so this option should be
--	  disabled unless the kernel is intended to be run on old systems.
--
--	  If unsure, please say Y.
-+	  Say Y, unless you know what you are doing.
- 
- config CPU_LOONGSON3_CPUCFG_EMULATION
- 	bool "Emulate the CPUCFG instruction on older Loongson cores"
--- 
-2.33.0
-
-
+Best regards,
+    Sergio Paracuellos
