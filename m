@@ -2,110 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 907B73FA209
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Aug 2021 02:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8913FAB1D
+	for <lists+linux-mips@lfdr.de>; Sun, 29 Aug 2021 13:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbhH1AHW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 27 Aug 2021 20:07:22 -0400
-Received: from mail.efficios.com ([167.114.26.124]:47366 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbhH1AHP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 27 Aug 2021 20:07:15 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 334D2383D90;
-        Fri, 27 Aug 2021 20:06:25 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id dJnw97AVp-6J; Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id AABF53839D9;
-        Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com AABF53839D9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1630109180;
-        bh=aNbnUoaMo9qyJFeAmPDlGUugMe1xHV+lzHQym41zPgk=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=ibXqVy9zMTh8pzWhCDOoh0A6j0FvWS8eYDH852Q65ZQn7p1jJGIre5/cPOpdeIP+y
-         aA3o07Eg6BWPXmQhKAcL/ut69D3yBdvdejeJXIhzPTSWYfZet9c55De2zXu/+jv9qb
-         9rMBUNtRH3XFmY4l5818jP7JeOTnYOyaVW6g21SlH6hM5lnPmcjj7mBKimFhzIieoI
-         r/xa04WF8N3Rq/3K+SW2ss83aevuy6/MvU/Sy30Y15mPyUw7HSYrNN1GbX2+DRw0YH
-         7ZItjz+GSSq3DkuqubXPIjIIupZU9sNhSleF8+cDrSh10TSYD5CLywa6jmXG5NyjL6
-         CV8mJ14ojbACA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 9JJ04Y5MGhgL; Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 87F07383C99;
-        Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-Date:   Fri, 27 Aug 2021 20:06:20 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     dvhart <dvhart@infradead.org>,
-        "Russell King, ARM Linux" <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Heiko Carstens <hca@linux.ibm.com>, gor <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        paulmck <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, shuah <shuah@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-csky <linux-csky@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Ben Gardon <bgardon@google.com>
-Message-ID: <1054916754.30218.1630109180443.JavaMail.zimbra@efficios.com>
-In-Reply-To: <YSlz8h9SWgeuicak@google.com>
-References: <20210820225002.310652-1-seanjc@google.com> <766990430.21713.1629731934069.JavaMail.zimbra@efficios.com> <282257549.21721.1629732017655.JavaMail.zimbra@efficios.com> <YSblqrrpKcORzilX@google.com> <1700758714.29394.1630003332081.JavaMail.zimbra@efficios.com> <YSgpy8iXXXUQ+b/k@google.com> <339641531.29941.1630091374065.JavaMail.zimbra@efficios.com> <YSlz8h9SWgeuicak@google.com>
-Subject: Re: [PATCH v2 4/5] KVM: selftests: Add a test for KVM_RUN+rseq to
- detect task migration bugs
+        id S235171AbhH2Lhm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 29 Aug 2021 07:37:42 -0400
+Received: from elvis.franken.de ([193.175.24.41]:54440 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234987AbhH2Lhm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 29 Aug 2021 07:37:42 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mKJ7I-0006Zi-00; Sun, 29 Aug 2021 13:36:48 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id BECD2C086C; Sun, 29 Aug 2021 13:35:12 +0200 (CEST)
+Date:   Sun, 29 Aug 2021 13:35:12 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+        list@opendingux.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: ingenic: Unconditionally enable clock of CPU #0
+Message-ID: <20210829113512.GA4573@alpha.franken.de>
+References: <20210823173405.153323-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4101 (ZimbraWebClient - FF91 (Linux)/8.8.15_GA_4059)
-Thread-Topic: selftests: Add a test for KVM_RUN+rseq to detect task migration bugs
-Thread-Index: eu98ugrRMaO1Ldp5KUn1lSy5MLrp5Q==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210823173405.153323-1-paul@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
------ On Aug 27, 2021, at 7:23 PM, Sean Christopherson seanjc@google.com wrote:
-
-> On Fri, Aug 27, 2021, Mathieu Desnoyers wrote:
-[...]
->> Does it reproduce if we randomize the delay to have it picked randomly from 0us
->> to 100us (with 1us step) ? It would remove a lot of the needs for arch-specific
->> magic delay value.
+On Mon, Aug 23, 2021 at 06:34:05PM +0100, Paul Cercueil wrote:
+> Make sure that the PLL that feeds the CPU won't be stopped while the
+> kernel is running.
 > 
-> My less-than-scientific testing shows that it can reproduce at delays up to
-> ~500us,
-> but above ~10us the reproducibility starts to drop.  The bug still reproduces
-> reliably, it just takes more iterations, and obviously the test runs a bit
-> slower.
+> This fixes a problem on JZ4760 (and probably others) where under very
+> specific conditions, the main PLL would be turned OFF when the kernel
+> was shutting down, causing the shutdown process to fail.
 > 
-> Any objection to using a 1-10us delay, e.g. a simple usleep((i % 10) + 1)?
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  arch/mips/generic/board-ingenic.c | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
 
-Works for me, thanks!
+applied to mips-next.
 
-Mathieu
+Thomas.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
