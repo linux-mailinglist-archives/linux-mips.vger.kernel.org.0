@@ -2,115 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A1C3FB0B6
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Aug 2021 07:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A813FB366
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Aug 2021 11:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbhH3FMn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Aug 2021 01:12:43 -0400
-Received: from mga14.intel.com ([192.55.52.115]:7792 "EHLO mga14.intel.com"
+        id S236201AbhH3Jt6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 30 Aug 2021 05:49:58 -0400
+Received: from aposti.net ([89.234.176.197]:42038 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230191AbhH3FMm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Aug 2021 01:12:42 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10091"; a="217926786"
-X-IronPort-AV: E=Sophos;i="5.84,362,1620716400"; 
-   d="scan'208";a="217926786"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2021 22:11:48 -0700
-X-IronPort-AV: E=Sophos;i="5.84,362,1620716400"; 
-   d="scan'208";a="497257549"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.212.238.58]) ([10.212.238.58])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2021 22:11:47 -0700
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org
-References: <20210805005218.2912076-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210805005218.2912076-12-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20210823195409-mutt-send-email-mst@kernel.org>
- <26a3cce5-ddf7-cbe6-a41e-58a2aea48f78@linux.intel.com>
- <CAPcyv4iJVQKJ3bVwZhD08c8GNEP0jW2gx=H504NXcYK5o2t01A@mail.gmail.com>
- <d992b5af-8d57-6aa6-bd49-8e2b8d832b19@linux.intel.com>
- <20210824053830-mutt-send-email-mst@kernel.org>
- <d21a2a2d-4670-ba85-ce9a-fc8ea80ef1be@linux.intel.com>
- <20210829112105-mutt-send-email-mst@kernel.org>
- <09b340dd-c8a8-689c-4dad-4fe0e36d39ae@linux.intel.com>
- <20210829181635-mutt-send-email-mst@kernel.org>
-From:   Andi Kleen <ak@linux.intel.com>
-Message-ID: <3a88a255-a528-b00a-912b-e71198d5f58f@linux.intel.com>
-Date:   Sun, 29 Aug 2021 22:11:46 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S235733AbhH3Jt6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 30 Aug 2021 05:49:58 -0400
+Date:   Mon, 30 Aug 2021 10:48:52 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] dmaengine: jz4780: Set max number of SGs per burst
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Vinod Koul <vkoul@kernel.org>, linux-mips@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <GLCNYQ.LL8K0PVSTZ1W1@crapouillou.net>
+In-Reply-To: <20210829195805.148964-1-contact@artur-rojek.eu>
+References: <20210829195805.148964-1-contact@artur-rojek.eu>
 MIME-Version: 1.0
-In-Reply-To: <20210829181635-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi,
 
-On 8/29/2021 3:26 PM, Michael S. Tsirkin wrote:
-> On Sun, Aug 29, 2021 at 09:17:53AM -0700, Andi Kleen wrote:
->> Also I changing this single call really that bad? It's not that we changing
->> anything drastic here, just give the low level subsystem a better hint about
->> the intention. If you don't like the function name, could make it an
->> argument instead?
-> My point however is that the API should say that the
-> driver has been audited,
+Le dim., août 29 2021 at 21:58:05 +0200, Artur Rojek 
+<contact@artur-rojek.eu> a écrit :
+> Total amount of SG list entries executed in a single burst is limited 
+> by
+> the number of available DMA descriptors.
+> This information is useful for device drivers utilizing this DMA 
+> engine.
+> 
+> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
 
-We have that status in the struct device. If you want to tie the ioremap 
-to that we could define a ioremap_device() with a device argument and 
-decide based on that.
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 
-Or we can add _audited to the name. ioremap_shared_audited?
+Cheers,
+-Paul
 
-> not that the mapping has been
-> done in some special way. For example the mapping can be
-> in some kind of wrapper, not directly in the driver.
-> However you want the driver validated, not the wrapper.
->
-> Here's an idea:
+> ---
+>  drivers/dma/dma-jz4780.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
+> index ebee94dbd630..96701dedcac8 100644
+> --- a/drivers/dma/dma-jz4780.c
+> +++ b/drivers/dma/dma-jz4780.c
+> @@ -915,6 +915,7 @@ static int jz4780_dma_probe(struct 
+> platform_device *pdev)
+>  	dd->dst_addr_widths = JZ_DMA_BUSWIDTHS;
+>  	dd->directions = BIT(DMA_DEV_TO_MEM) | BIT(DMA_MEM_TO_DEV);
+>  	dd->residue_granularity = DMA_RESIDUE_GRANULARITY_BURST;
+> +	dd->max_sg_burst = JZ_DMA_MAX_DESC;
+> 
+>  	/*
+>  	 * Enable DMA controller, mark all channels as not programmable.
+> --
+> 2.33.0
+> 
 
-
-I don't think magic differences of API behavior based on some define are 
-a good idea.Â  That's easy to miss.
-
-That's a "COME FROM" in API design.
-
-Also it wouldn't handle the case that a driver has both private and 
-shared ioremaps, e.g. for BIOS structures.
-
-And we've been avoiding that drivers can self declare auditing, we've 
-been trying to have a separate centralized list so that it's easier to 
-enforce and avoids any cut'n'paste mistakes.
-
--Andi
 
