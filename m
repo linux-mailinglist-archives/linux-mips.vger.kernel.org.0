@@ -2,116 +2,133 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D65D43FBFEC
-	for <lists+linux-mips@lfdr.de>; Tue, 31 Aug 2021 02:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6FB3FC002
+	for <lists+linux-mips@lfdr.de>; Tue, 31 Aug 2021 02:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbhHaAYP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 30 Aug 2021 20:24:15 -0400
-Received: from mga18.intel.com ([134.134.136.126]:4596 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230523AbhHaAYO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 30 Aug 2021 20:24:14 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10092"; a="205506671"
-X-IronPort-AV: E=Sophos;i="5.84,364,1620716400"; 
-   d="scan'208";a="205506671"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 17:23:19 -0700
-X-IronPort-AV: E=Sophos;i="5.84,364,1620716400"; 
-   d="scan'208";a="540780855"
-Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.212.223.22]) ([10.212.223.22])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2021 17:23:18 -0700
-Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        id S234153AbhHaAeq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 30 Aug 2021 20:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230523AbhHaAep (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 30 Aug 2021 20:34:45 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F6EC06175F
+        for <linux-mips@vger.kernel.org>; Mon, 30 Aug 2021 17:33:51 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id f11-20020a17090aa78b00b0018e98a7cddaso1161257pjq.4
+        for <linux-mips@vger.kernel.org>; Mon, 30 Aug 2021 17:33:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TjFdVibCziMMV625QJ8En+pQePJGwxqOLzHHo+cR/2g=;
+        b=AzDcWKGtdHyMnoIEjzFPFQjRSRfN6cZcyUfqyg+1RFft/sQblgaz4y7UB0acXhUsAk
+         aYq77Xwd7EMjSfEApWR3a558fJLQOEbjXYD1SI5rTv8NJMwK07Xba20kndQ9K5z7nQNv
+         VqF6GPhvubvT3lLK/TsJYcG7uj5cuYcL5eVI8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TjFdVibCziMMV625QJ8En+pQePJGwxqOLzHHo+cR/2g=;
+        b=qvG2iabS9CnJpnVlRyqZBvAW5SldgF2kRRL9sGSQb7ZWUfvTtDluPHsnvJuryXnns3
+         WcgW4nbUawKRgFQPhXfCmQ3zrEbDrqsVlGgl29SGdhoTMha0e/pTx90Xw8oPh0In0JGt
+         sOKQLMPBgg46Od6CK75Ob422RBQEsu4SrtxUG/CgZu7IxrfsxiuViGPQmkIvx+T0zgq6
+         rmawR28BW4THcyRRPtJKUQ8qIxUC1nzRg/1j3RbNU4NrpB3UZycTn3JdSrDjBsGFW+/+
+         s7mRSX+Oj5GvA8yfhzkq0QdxWUs+hf1xyqEjh2c0HBhU0YTrAcQ3QEl4eoKc82Ya0WSx
+         GgZg==
+X-Gm-Message-State: AOAM531aMYSwQXyz8TDy5RbI3XsRBrPaZ2nI4gJ0H+3zMeTTR9yfeMB1
+        F2gYLBM4LPDYnThSlPYSTI3uDA==
+X-Google-Smtp-Source: ABdhPJxdbxW4ryHv5bhuf8dsnrqkWswjsDidSV0lyn6xogTwXPWUAw0uITGdywWoWH5lbvCpqEzDjw==
+X-Received: by 2002:a17:90a:bc47:: with SMTP id t7mr2025742pjv.19.1630370030908;
+        Mon, 30 Aug 2021 17:33:50 -0700 (PDT)
+Received: from google.com ([2409:10:2e40:5100:69ed:b45b:ceb5:e18b])
+        by smtp.gmail.com with ESMTPSA id q12sm15915318pfj.153.2021.08.30.17.33.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Aug 2021 17:33:50 -0700 (PDT)
+Date:   Tue, 31 Aug 2021 09:33:36 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org
-References: <20210823195409-mutt-send-email-mst@kernel.org>
- <26a3cce5-ddf7-cbe6-a41e-58a2aea48f78@linux.intel.com>
- <CAPcyv4iJVQKJ3bVwZhD08c8GNEP0jW2gx=H504NXcYK5o2t01A@mail.gmail.com>
- <d992b5af-8d57-6aa6-bd49-8e2b8d832b19@linux.intel.com>
- <20210824053830-mutt-send-email-mst@kernel.org>
- <d21a2a2d-4670-ba85-ce9a-fc8ea80ef1be@linux.intel.com>
- <20210829112105-mutt-send-email-mst@kernel.org>
- <09b340dd-c8a8-689c-4dad-4fe0e36d39ae@linux.intel.com>
- <20210829181635-mutt-send-email-mst@kernel.org>
- <3a88a255-a528-b00a-912b-e71198d5f58f@linux.intel.com>
- <20210830163723-mutt-send-email-mst@kernel.org>
-From:   Andi Kleen <ak@linux.intel.com>
-Message-ID: <69fc30f4-e3e2-add7-ec13-4db3b9cc0cbd@linux.intel.com>
-Date:   Mon, 30 Aug 2021 17:23:17 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Chengyang Fan <cy.fan@huawei.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Changbin Du <changbin.du@intel.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Cengiz Can <cengiz@kernel.wtf>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        kuldip dwivedi <kuldip.dwivedi@puresoftware.com>,
+        Wang Qing <wangqing@vivo.com>, Andrij Abyzov <aabyzov@slb.com>,
+        Johan Hovold <johan@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Claire Chang <tientzu@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Al Cooper <alcooperx@gmail.com>, linux-serial@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH printk v1 00/10] printk: introduce atomic consoles and
+ sync mode
+Message-ID: <YS144PMiCJnmoKE4@google.com>
+References: <20210803131301.5588-1-john.ogness@linutronix.de>
+ <YQwHwT2wYM1dJfVk@alley>
 MIME-Version: 1.0
-In-Reply-To: <20210830163723-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YQwHwT2wYM1dJfVk@alley>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On (21/08/05 17:47), Petr Mladek wrote:
+[..]
+> 3. After introducing console kthread(s):
+> 
+> 	int printk(...)
+> 	{
+> 		vprintk_store();
+> 		wake_consoles_via_irqwork();
+> 	}
+> 
+> 	+ in panic:
+> 
+> 	    + with atomic console like after this patchset?
+> 	    + without atomic consoles?
+> 
+> 	+ during early boot?
 
-On 8/30/2021 1:59 PM, Michael S. Tsirkin wrote:
->
->> Or we can add _audited to the name. ioremap_shared_audited?
-> But it's not the mapping that has to be done in handled special way.
-> It's any data we get from device, not all of it coming from IO, e.g.
-> there's DMA and interrupts that all have to be validated.
-> Wouldn't you say that what is really wanted is just not running
-> unaudited drivers in the first place?
-
-
-Yes.
-
-
->
->> And we've been avoiding that drivers can self declare auditing, we've been
->> trying to have a separate centralized list so that it's easier to enforce
->> and avoids any cut'n'paste mistakes.
->>
->> -Andi
-> Now I'm confused. What is proposed here seems to be basically that,
-> drivers need to declare auditing by replacing ioremap with
-> ioremap_shared.
-
-Auditing is declared on the device model level using a central allow list.
-
-But this cannot do anything to initcalls that run before probe, that's 
-why an extra level of defense of ioremap opt-in is useful. But it's not 
-the primary mechanism to declare a driver audited, that's the allow 
-list. The ioremap is just another mechanism to avoid having to touch a 
-lot of legacy drivers.
-
-If we agree on that then the original proposed semantics of 
-"ioremap_shared" may be acceptable?
-
--Andi
-
-
-
+I guess I'd also add netconsole to the list.
