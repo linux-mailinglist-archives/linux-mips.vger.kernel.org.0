@@ -2,164 +2,250 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B101F3FE33A
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Sep 2021 21:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C14493FE3A4
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Sep 2021 22:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344371AbhIATnO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Sep 2021 15:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S231605AbhIAUVd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Sep 2021 16:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344059AbhIATnO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Sep 2021 15:43:14 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263D4C061764
-        for <linux-mips@vger.kernel.org>; Wed,  1 Sep 2021 12:42:17 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id q3so318248plx.4
-        for <linux-mips@vger.kernel.org>; Wed, 01 Sep 2021 12:42:17 -0700 (PDT)
+        with ESMTP id S231268AbhIAUVZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Sep 2021 16:21:25 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A860DC061575
+        for <linux-mips@vger.kernel.org>; Wed,  1 Sep 2021 13:20:26 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y17so711698pfl.13
+        for <linux-mips@vger.kernel.org>; Wed, 01 Sep 2021 13:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ebtoOBcpDUULZo3w3apLL5azNq/Rs8U/WDJ70Gxq2+c=;
-        b=Cuw3iP3DHe4ruWxDUmqDdGVO9qUUiZh8jVAyKGsUJVKZ9zKPp1+3QV0L0cZVgtw5Ti
-         yJOoq9MicxKV1CkQQUJp4XaX5J0NQXrj6D8jX5M9y974nMxxTeo08nficzoeekMUDfWq
-         ygLCILeTd6AxvyVE2nHr9hwj/pnKah987/SJs=
+        bh=+u2QuOkRRMX/DqMZWfX/UVRQi9noRYZC06sr4Cz0Hp8=;
+        b=ZMMPana7L7vTDCgu/jp5FKD2Lrbrz0jK26GBO0aS5kFqX8ZWAwDd8LGVRgMmKIW4cy
+         pM4/1N42XKs3Esi1gnR1zGqKA++SzJlDvfQrVg5j28Z5B5k6XohhNOknkTV7aRkmINrK
+         CmPERtsKo0Rsb/rb2L17uz6Xg8W52l6oAnoOY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ebtoOBcpDUULZo3w3apLL5azNq/Rs8U/WDJ70Gxq2+c=;
-        b=OiLlHJtxXcecHZi2SnhvSHRmr1V4ut9UYcjNv9xL/f+3F1LdrCzzLFnHv/ML05B7V3
-         fBefml0xcM1TXhdSz1ks9R9rbYexQiUt+9PBBeEw2WVzYIsbU4os2WQTHTIHZQvqb5LY
-         z7Y/oVrojiHf3BdvpVbkpRPjqCwGRxEPyBrnJDZNQ0Oz4CiUXZN+nZPLmMCE5sdctMZm
-         oeVBHE3VvIcsX0zF0bTzReGF2sxjx8AhgVNqOn2IJxvFqPvacl8Dxa/V6AsVBZqytFII
-         BnCF/3NQrwJN0L0u+VPEGWT0IO9iemqWjTsoWNAeUR8V7vZVlKJs9hE/Z4IWjGTWhtch
-         tq5w==
-X-Gm-Message-State: AOAM531NoW2ooTwQoGm30DNRe6azk+Nsz6BipNufC79QpFGzxYrfNLUn
-        ea/MFAGTsRM5xzYILHF2Bg+xlQ==
-X-Google-Smtp-Source: ABdhPJxU+RdXvQh/l+SUjFFDn8PuEsKOiw0nZnztwkQ4vrsEm73j9Im+WTeCH6buWNcBduvbhXcjRw==
-X-Received: by 2002:a17:90b:1c05:: with SMTP id oc5mr1033960pjb.209.1630525336556;
-        Wed, 01 Sep 2021 12:42:16 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u22sm258609pfi.143.2021.09.01.12.42.15
+        bh=+u2QuOkRRMX/DqMZWfX/UVRQi9noRYZC06sr4Cz0Hp8=;
+        b=O597vxTRXmuez4Mw6+m4PgGdf1l+6cr3KBWUDVVQPJ6FhpPuYsP4iacwvQB5pTdYbV
+         PW35R9q+8h23JoHcpFSvLHrpspL87gLbWndjdp8VbU+Zsnoa2DrwWD4PsMy0sKY+UXG1
+         RR3K1CLsXl9MDvGyicYqUblQsB4CVz4zm01hsyeeKuHSvDjyZrtkiFSBPWpD9GU6ZiAE
+         estiM4ikVSebi6ardbz1hObO+IG3mVsYlHluhIjFnycBAznSwyEtSPNcIrGTDLF6igMX
+         yIgRfflI3BPuD/ztQW3w4TZKcVfhmO8IJTCiYQtLXLqaQir4tIVFKBeBxYm78D9rHTs7
+         y9eQ==
+X-Gm-Message-State: AOAM531GatajFl+w90wxIkRFfetzPMATpkoeTgZfhAjapWUya9pwepXM
+        ZrvNqbeHBOiuLRKWZVRTRHmHbg==
+X-Google-Smtp-Source: ABdhPJzep5JI+YTg6jYwfIvOqV7EJbMgqrs4tymTqpHRzn2sts2yu7nyKA3inirB5PAxwEJh4dOyVA==
+X-Received: by 2002:a65:6642:: with SMTP id z2mr790331pgv.240.1630527626154;
+        Wed, 01 Sep 2021 13:20:26 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:958b:b561:a735:e774])
+        by smtp.gmail.com with ESMTPSA id x15sm321178pfq.31.2021.09.01.13.20.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Sep 2021 12:42:15 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Juxin Gao <gaojuxin@loongson.cn>, linux-mips@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] MIPS: Modernize READ_IMPLIES_EXEC
-Date:   Wed,  1 Sep 2021 12:42:08 -0700
-Message-Id: <20210901194208.2420671-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 01 Sep 2021 13:20:25 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus W <linus.walleij@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Emil Velikov <emil.velikov@collabora.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lionel Debieve <lionel.debieve@st.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>,
+        Michael Walle <michael@walle.cc>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Nishanth Menon <nm@ti.com>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Olof Johansson <olof@lixom.net>,
+        Otavio Salvador <otavio@ossystems.com.br>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Razvan Stefanescu <razvan.stefanescu@microchip.com>,
+        Robert Richter <rric@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org,
+        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
+Subject: [PATCH v3 00/16] eDP: Support probing eDP panels dynamically instead of hardcoding
+Date:   Wed,  1 Sep 2021 13:19:18 -0700
+Message-Id: <20210901201934.1084250-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.33.0.259.gc128427fd7-goog
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3951; h=from:subject; bh=JgSNdSTf0XI8ictb5n4zr8brlJGAtynBafE+8Az2YUY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhL9eQd35WWsTd5cvtgscZgyjbIm3VRtVTBF2bLKo/ idf6BhCJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYS/XkAAKCRCJcvTf3G3AJgRtD/ 95cGzPJCdT2cbu2jeqL0Seg/TOzhe14oYZKcUtz2T0YKt/ZRNjvdnDIlbTgzWznrX30dfbHUdM6M4Q gRVkf18wD1diiVsnlFjIp4e5h5Zi98AkxsU3HsAEqX7ke1oBSKXmBNYrD+nFKdC7fQJCocGsQhhv7y pY+aox1wZkJcXxlms0BlkfMk2aBj3m8hbcAGJjrBtdWnVZ03L2OICWTo3o2y+AHbbtOr+xPSXI/Dn+ EdJzsqwJWR5WXJYH51KaOWwS0DsidIX1EmlBlxRlXHxgrXAI9OvNSlWEikOAMKMxIvdjvLk+ZVkj2B /gtn9H53cgoMZQSm5RelszQuullmt+HoFPUkpItBhIpb9Y3UcAc2jaDhoFjsy+jh7+FBd9IznLOU6q HjHRYOy3zTgUFsK/gSVej/8DPVRPPUElvtSuNYnmXzF2Q5tpP6JP3kClPQV49fDEIhsRPx2E/8VBt4 FisfBUD0J+xhyOoMdUTwm4Yt5BXEcT/P5xjNl3Avfng38iJ+P8+9h4+V8HYhffYT+dwBDTmOr/JIb7 6tm5w246Np6NVxfWaFvxihKiKyQU8kvDeyGp+dkiFzEyvrs4LPKOusO++PI/iSFCUQAPYpP9Q3i5VA 9qmw+deIu1AMnT8gX/6O3C20biTY8RDZzr+u8YdUF8tx2QK/Fdw5aT/Xfa6Q==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-I'm doing some thread necromancy of
-https://lore.kernel.org/lkml/202007081624.82FA0CC1EA@keescook/
+The goal of this patch series is to move away from hardcoding exact
+eDP panels in device tree files. As discussed in the various patches
+in this series (I'm not repeating everything here), most eDP panels
+are 99% probable and we can get that last 1% by allowing two "power
+up" delays to be specified in the device tree file and then using the
+panel ID (found in the EDID) to look up additional power sequencing
+delays for the panel.
 
-x86, arm64, and arm32 adjusted their READ_IMPLIES_EXEC logic to better
-align with the safer defaults and the interactions with other mappings,
-which I illustrated with this comment on x86:
+This patch series is the logical contiunation of a previous patch
+series where I proposed solving this problem by adding a
+board-specific compatible string [1]. In the discussion that followed
+it sounded like people were open to something like the solution
+proposed in this new series.
 
-/*
- * An executable for which elf_read_implies_exec() returns TRUE will
- * have the READ_IMPLIES_EXEC personality flag set automatically.
- *
- * The decision process for determining the results are:
- *
- *                 CPU: | lacks NX*  | has NX, ia32     | has NX, x86_64 |
- * ELF:                 |            |                  |                |
- * ---------------------|------------|------------------|----------------|
- * missing PT_GNU_STACK | exec-all   | exec-all         | exec-none      |
- * PT_GNU_STACK == RWX  | exec-stack | exec-stack       | exec-stack     |
- * PT_GNU_STACK == RW   | exec-none  | exec-none        | exec-none      |
- *
- *  exec-all  : all PROT_READ user mappings are executable, except when
- *              backed by files on a noexec-filesystem.
- *  exec-none : only PROT_EXEC user mappings are executable.
- *  exec-stack: only the stack and PROT_EXEC user mappings are
- *  executable.
- *
- *  *this column has no architectural effect: NX markings are ignored by
- *   hardware, but may have behavioral effects when "wants X" collides with
- *   "cannot be X" constraints in memory permission flags, as in
- *   https://lkml.kernel.org/r/20190418055759.GA3155@mellanox.com
- *
- */
+In version 2 I got rid of the idea that we could have a "fallback"
+compatible string that we'd use if we didn't recognize the ID in the
+EDID. This simplifies the bindings a lot and the implementation
+somewhat. As a result of not having a "fallback", though, I'm not
+confident in transitioning any existing boards over to this since
+we'll have to fallback to very conservative timings if we don't
+recognize the ID from the EDID and I can't guarantee that I've seen
+every panel that might have shipped on an existing product. The plan
+is to use "edp-panel" only on new boards or new revisions of old
+boards where we can guarantee that every EDID that ships out of the
+factory has an ID in the table.
 
-For MIPS, the "lacks NX" above is the "!cpu_has_rixi" check. On x86,
-we decided that the READ_IMPLIES_EXEC flag needed to reflect the
-expectations, not the architectural behavior due to bad interactions
-as noted above, as always returning "1" on non-NX hardware breaks
-some mappings.
+Version 3 of this series now splits out all eDP panels to their own
+driver and adds the generic eDP panel support to this new driver. I
+believe this is what Sam was looking for [2].
 
-The other part of the issue is "what does the MIPS toolchain do for
-PT_GNU_STACK?" The answer seems to be "by default, include PT_GNU_STACK,
-but mark it executable" (likely due to concerns over non-NX hardware):
+[1] https://lore.kernel.org/r/YFKQaXOmOwYyeqvM@google.com/
+[2] https://lore.kernel.org/r/YRTsFNTn%2FT8fLxyB@ravnborg.org/
 
-$ mipsel-linux-gnu-gcc -o hello_world hello_world.c
-$ llvm-readelf -lW hellow_world | grep GNU_STACK
-  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RWE 0x10
+Changes in v3:
+- Decode hex product ID w/ same endianness as everyone else.
+- ("Reorder logicpd_type_28...") patch new for v3.
+- Split eDP panels patch new for v3.
+- Move wayward panels patch new for v3.
+- ("Non-eDP panels don't need "HPD" handling") new for v3.
+- Split the delay structure out patch just on eDP now.
+- ("Better describe eDP panel delays") new for v3.
+- Fix "prepare_to_enable" patch new for v3.
+- ("Don't re-read the EDID every time") moved to eDP only patch.
+- Generic "edp-panel" handled by the eDP panel driver now.
+- Change init order to we power at the end.
+- Adjust endianness of product ID.
+- Fallback to conservative delays if panel not recognized.
+- Add Sharp LQ116M1JW10 to table.
+- Add AUO B116XAN06.1 to table.
+- Rename delays more generically so they can be reused.
 
-Given that older hardware doesn't support non-executable memory, it
-seems safe to make the "PT_GNU_STACK is absent" logic mean "assume
-non-executable", but this might break very old software running on
-modern MIPS. This situation matches the ia32-on-x86_64 logic x86
-uses (which assumes needing READ_IMPLIES_EXEC in that situation). But
-modern toolchains on modern MIPS hardware should follow a safer default
-(assume NX stack).
+Changes in v2:
+- No longer allow fallback to panel-simple.
+- Add "-ms" suffix to delays.
+- Don't support a "fallback" panel. Probed panels must be probed.
+- Not based on patch to copy "desc"--just allocate for probed panels.
+- Add "-ms" suffix to delays.
 
-A follow-up to this change would be to switch the MIPS toolchain to emit
-a non-executable PT_GNU_STACK, as this seems to be unneeded.
+Douglas Anderson (16):
+  dt-bindings: drm/panel-simple-edp: Introduce generic eDP panels
+  drm/edid: Break out reading block 0 of the EDID
+  drm/edid: Allow the querying/working with the panel ID from the EDID
+  drm/panel-simple: Reorder logicpd_type_28 / mitsubishi_aa070mc01
+  drm/panel-simple-edp: Split eDP panels out of panel-simple
+  ARM: configs: Everyone who had PANEL_SIMPLE now gets PANEL_SIMPLE_EDP
+  arm64: defconfig: Everyone who had PANEL_SIMPLE now gets
+    PANEL_SIMPLE_EDP
+  MIPS: configs: Everyone who had PANEL_SIMPLE now gets PANEL_SIMPLE_EDP
+  drm/panel-simple-edp: Move some wayward panels to the eDP driver
+  drm/panel-simple: Non-eDP panels don't need "HPD" handling
+  drm/panel-simple-edp: Split the delay structure out
+  drm/panel-simple-edp: Better describe eDP panel delays
+  drm/panel-simple-edp: hpd_reliable shouldn't be subtraced from
+    hpd_absent
+  drm/panel-simple-edp: Fix "prepare_to_enable" if panel doesn't handle
+    HPD
+  drm/panel-simple-edp: Don't re-read the EDID every time we power off
+    the panel
+  drm/panel-simple-edp: Implement generic "edp-panel"s probed by EDID
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Xuefeng Li <lixuefeng@loongson.cn>
-Cc: Juxin Gao <gaojuxin@loongson.cn>
-Cc: linux-mips@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/mips/kernel/elf.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ .../bindings/display/panel/panel-edp.yaml     |  188 ++
+ arch/arm/configs/at91_dt_defconfig            |    1 +
+ arch/arm/configs/exynos_defconfig             |    1 +
+ arch/arm/configs/imx_v6_v7_defconfig          |    1 +
+ arch/arm/configs/lpc32xx_defconfig            |    1 +
+ arch/arm/configs/multi_v5_defconfig           |    1 +
+ arch/arm/configs/multi_v7_defconfig           |    1 +
+ arch/arm/configs/omap2plus_defconfig          |    1 +
+ arch/arm/configs/qcom_defconfig               |    1 +
+ arch/arm/configs/realview_defconfig           |    1 +
+ arch/arm/configs/sama5_defconfig              |    1 +
+ arch/arm/configs/shmobile_defconfig           |    1 +
+ arch/arm/configs/sunxi_defconfig              |    1 +
+ arch/arm/configs/tegra_defconfig              |    1 +
+ arch/arm/configs/versatile_defconfig          |    1 +
+ arch/arm/configs/vexpress_defconfig           |    1 +
+ arch/arm64/configs/defconfig                  |    1 +
+ arch/mips/configs/qi_lb60_defconfig           |    1 +
+ arch/mips/configs/rs90_defconfig              |    1 +
+ drivers/gpu/drm/drm_edid.c                    |  121 +-
+ drivers/gpu/drm/panel/Kconfig                 |   16 +-
+ drivers/gpu/drm/panel/Makefile                |    1 +
+ drivers/gpu/drm/panel/panel-simple-edp.c      | 1895 +++++++++++++++++
+ drivers/gpu/drm/panel/panel-simple.c          | 1100 +---------
+ include/drm/drm_edid.h                        |   47 +
+ 25 files changed, 2293 insertions(+), 1093 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/panel-edp.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-simple-edp.c
 
-diff --git a/arch/mips/kernel/elf.c b/arch/mips/kernel/elf.c
-index 7b045d2a0b51..5582a4ca1e9e 100644
---- a/arch/mips/kernel/elf.c
-+++ b/arch/mips/kernel/elf.c
-@@ -328,16 +328,10 @@ void mips_set_personality_nan(struct arch_elf_state *state)
- 
- int mips_elf_read_implies_exec(void *elf_ex, int exstack)
- {
--	if (exstack != EXSTACK_DISABLE_X) {
--		/* The binary doesn't request a non-executable stack */
--		return 1;
--	}
--
--	if (!cpu_has_rixi) {
--		/* The CPU doesn't support non-executable memory */
--		return 1;
--	}
--
--	return 0;
-+	/*
-+	 * Set READ_IMPLIES_EXEC only on non-NX systems that
-+	 * do not request a specific state via PT_GNU_STACK.
-+	 */
-+	return (!cpu_has_rixi && exstack == EXSTACK_DEFAULT);
- }
- EXPORT_SYMBOL(mips_elf_read_implies_exec);
 -- 
-2.30.2
+2.33.0.259.gc128427fd7-goog
 
