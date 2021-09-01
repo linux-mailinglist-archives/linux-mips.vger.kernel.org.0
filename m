@@ -2,120 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D4C3FE3C5
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Sep 2021 22:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D843FE3FD
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Sep 2021 22:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245274AbhIAUVn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Sep 2021 16:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
+        id S231344AbhIAUbf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Sep 2021 16:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343812AbhIAUVk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Sep 2021 16:21:40 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406F4C0617AE
-        for <linux-mips@vger.kernel.org>; Wed,  1 Sep 2021 13:20:43 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 17so660840pgp.4
-        for <linux-mips@vger.kernel.org>; Wed, 01 Sep 2021 13:20:43 -0700 (PDT)
+        with ESMTP id S231298AbhIAUbc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Sep 2021 16:31:32 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FD8C0613CF
+        for <linux-mips@vger.kernel.org>; Wed,  1 Sep 2021 13:30:35 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 83-20020a251956000000b0059948f541cbso714745ybz.7
+        for <linux-mips@vger.kernel.org>; Wed, 01 Sep 2021 13:30:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WM1bi4Camo4x38t+lOpl/85fschHMfokf9rT4eUa3DY=;
-        b=f+ybnhpuTQ57f3nJIk1Jq6u2MAVamT1UtJdAKIxnQ768VSVBgqG6Rgpu/cw1Utc6sS
-         /bMn6sOsWMrckKWPdEB26mmvkyIodgTuwS/D48gj83/BMDRgnzcEwm2ggv/v4v6DHE2j
-         0GxUuSg95a57DDbsxzg/NLj/O5zWdfa38OmFs=
+        d=google.com; s=20161025;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=W1dxeMSnjrWamgGdUCD0sYJfSJN9IbPKQnQHF6ba9Zk=;
+        b=IQ3nzeVkBaQ3+GaVFpdDRiwa1F5iA/5Zp/cm/bF8X3UWxA4Toc92TTI+eIn+naxoj4
+         ET+Zt+Rvu2Fr2/xquoH0yyIu1XZMcmT6cboCyI5rR64pNT2lIrUM9xsZrqNNRFzptE9I
+         wsjHcW+VBGjjK0s1f/t7DFUqU3PrzpUZIO7H21qkNMgtq3NBIoSIXL8a6Wi2vk1qkqG1
+         BaUOcKIMQ08Iy5Y7BqvrFMwn+huvKoc2AWIhhSBz+VoHhzJ2fNfVJZIWBlgZKOH4ctt1
+         0w2Bp1svSX94Jl0zODWdtTreSksXnGqUiHiy/S7N6hf8RY5t4uNFQqLBoR2dt7fhnNYr
+         B6yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WM1bi4Camo4x38t+lOpl/85fschHMfokf9rT4eUa3DY=;
-        b=brM1Lxq499InLsUga6CfakPbBtT4KJOzoNUnCJMrlPRYZnAswBXWF8VLSZzll/OJpT
-         yeUlJN2Qc3Lr6XRponwmuTdqmg5Cjh9YCJyJ/tCQW8UQJq7j1S/fT8fqBomtqgJH5aPF
-         5ruxV6uux8QC7FIdG13z0lBGEHOODEZtMZyrrzTvoyv6D9IQxjc5X3plnmBP6xFKXpp6
-         yLTzhwUB3BXchWtuMmNTKUoVJTiTIK3GW8L98Nx/Cfk5K2kYQW9B4tPh40FaTcPNJwEv
-         vDYiqmf2rmHe5hE81vlExnzhRNw5mlrQaC7m/HtDsavk/yzrBm09vAs5uT79kbKBx5vG
-         uSQw==
-X-Gm-Message-State: AOAM533QrDSM/JK582QQFBtHUEyrNtdhogReaaddixI1PvumvjFd6yVc
-        rU9xSM6LMKlILVGKH4HO7+cM/Q==
-X-Google-Smtp-Source: ABdhPJydT+Tqv+gWUMHLSx9OUkDrer4gbLtZdgIdTopu2ejfGNW+Ki6l+q5vwHDM20EqiwpPRfWvug==
-X-Received: by 2002:a05:6a00:796:b0:3ed:989b:f0c3 with SMTP id g22-20020a056a00079600b003ed989bf0c3mr1117119pfu.9.1630527642834;
-        Wed, 01 Sep 2021 13:20:42 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:958b:b561:a735:e774])
-        by smtp.gmail.com with ESMTPSA id x15sm321178pfq.31.2021.09.01.13.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Sep 2021 13:20:42 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linus W <linus.walleij@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
-        Steev Klimaszewski <steev@kali.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=W1dxeMSnjrWamgGdUCD0sYJfSJN9IbPKQnQHF6ba9Zk=;
+        b=Xs8l+UjgZ0yMSmTbzAAgAOCLe0yTs3MNIrP97uNrsoCV3TtJjnGnHoUPqHdiyqkXUP
+         dVigMydBnYYu+z6QRarDnMwHDHtsQFh+gv+Uv2KkIeXSpvKxFk3G0gBU3L6SCJ4qVcLt
+         UxNCb1x8wFDtDS64X2AdmJi5q9w+1CwXPFO9GivsuwFjsnQAR4lsJSpcRZueH3KD2yEe
+         ubksDcUMizCTH/hlPB53i8OAgXCvX/L73poR0wEv6qX5WpnQ66bIyx2PWwP7muxZ4ZhI
+         VkYsGsjSVaWHZakaMOXhabskKeL3199+jul86Ume1LjxsjZrf80ujubE25IgNl/plbhE
+         eBYw==
+X-Gm-Message-State: AOAM531J7mdcVBZspH+LFsy2yr++0R3rrPoqxwy+b7/4WKLw2343dFM4
+        p5Rf5ihTHdbrkcPvuu7cI1INQHxAts0=
+X-Google-Smtp-Source: ABdhPJztMghe8pf2r0RN3BmnZkigpSEdqe6AO5tWh0SkJaCpcvF1MtRyRWIuMac/iI8RQmjvTQ8oDXGaxcw=
+X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:9935:5a5e:c7b6:e649])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:513:: with SMTP id
+ x19mr1875181ybs.90.1630528234743; Wed, 01 Sep 2021 13:30:34 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed,  1 Sep 2021 13:30:25 -0700
+Message-Id: <20210901203030.1292304-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
+Subject: [PATCH v3 0/5] KVM: rseq: Fix and a test for a KVM+rseq bug
+From:   Sean Christopherson <seanjc@google.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v3 08/16] MIPS: configs: Everyone who had PANEL_SIMPLE now gets PANEL_SIMPLE_EDP
-Date:   Wed,  1 Sep 2021 13:19:26 -0700
-Message-Id: <20210901131531.v3.8.Ic7a6e3f8dd4760a302c91320843be5a00206bd63@changeid>
-X-Mailer: git-send-email 2.33.0.259.gc128427fd7-goog
-In-Reply-To: <20210901201934.1084250-1-dianders@chromium.org>
-References: <20210901201934.1084250-1-dianders@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Peter Foley <pefoley@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In the patch ("drm/panel-simple-edp: Split eDP panels out of
-panel-simple") we split the PANEL_SIMPLE driver in 2. By default let's
-give everyone who had the old driver enabled the new driver too. If
-folks want to opt-out of one or the other they always can later.
+Patch 1 fixes a KVM+rseq bug where KVM's handling of TIF_NOTIFY_RESUME,
+e.g. for task migration, clears the flag without informing rseq and leads
+to stale data in userspace's rseq struct.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+Patch 2 is a cleanup to try and make future bugs less likely.  It's also
+a baby step towards moving and renaming tracehook_notify_resume() since
+it has nothing to do with tracing.
 
-(no changes since v1)
+Patch 3 is a fix/cleanup to stop overriding x86's unistd_{32,64}.h when
+the include path (intentionally) omits tools' uapi headers.  KVM's
+selftests do exactly that so that they can pick up the uapi headers from
+the installed kernel headers, and still use various tools/ headers that
+mirror kernel code, e.g. linux/types.h.  This allows the new test in
+patch 4 to reference __NR_rseq without having to manually define it.
 
- arch/mips/configs/qi_lb60_defconfig | 1 +
- arch/mips/configs/rs90_defconfig    | 1 +
- 2 files changed, 2 insertions(+)
+Patch 4 is a regression test for the KVM+rseq bug.
 
-diff --git a/arch/mips/configs/qi_lb60_defconfig b/arch/mips/configs/qi_lb60_defconfig
-index b4448d0876d5..3e99e223ea02 100644
---- a/arch/mips/configs/qi_lb60_defconfig
-+++ b/arch/mips/configs/qi_lb60_defconfig
-@@ -72,6 +72,7 @@ CONFIG_REGULATOR_FIXED_VOLTAGE=y
- CONFIG_DRM=y
- CONFIG_DRM_FBDEV_OVERALLOC=200
- CONFIG_DRM_PANEL_SIMPLE=y
-+CONFIG_DRM_PANEL_SIMPLE_EDP=y
- CONFIG_DRM_INGENIC=y
- CONFIG_BACKLIGHT_CLASS_DEVICE=y
- # CONFIG_VGA_CONSOLE is not set
-diff --git a/arch/mips/configs/rs90_defconfig b/arch/mips/configs/rs90_defconfig
-index 7ce3b814fdc8..42b4f621cbfa 100644
---- a/arch/mips/configs/rs90_defconfig
-+++ b/arch/mips/configs/rs90_defconfig
-@@ -94,6 +94,7 @@ CONFIG_REGULATOR_FIXED_VOLTAGE=y
- CONFIG_DRM=y
- CONFIG_DRM_FBDEV_OVERALLOC=300
- CONFIG_DRM_PANEL_SIMPLE=y
-+CONFIG_DRM_PANEL_SIMPLE_EDP=y
- CONFIG_DRM_INGENIC=y
- CONFIG_BACKLIGHT_CLASS_DEVICE=y
- CONFIG_BACKLIGHT_PWM=y
+Patch 5 is a cleanup made possible by patch 3.
+
+Based on commit 835d31d319d9 ("Merge tag 'media/v5.15-1' of ...").
+
+v3:
+  - Collect Ack/Review. [Mathieu, Ben]
+  - Add explicit smp_wmb() instead of relying on atomic_inc() to do a full
+    barrier. [Mathieu]
+  - Add lots and lots of comments in the selftest, especially around why
+    the migration thread needs a udelay(). [Mathieu]
+  - Delay between 1us and 10us to reduce the odds of having a hard
+    dependency on arch/kernel behavior.  [Mathieu]
+  - Dropped an s390 change in patch 2 after a rebase to upstream master.
+
+v2:
+  - https://lkml.kernel.org/r/20210820225002.310652-1-seanjc@google.com
+  - Don't touch rseq_cs when handling KVM case so that rseq_syscall() will
+    still detect a naughty userspace. [Mathieu]
+  - Use a sequence counter + retry in the test to ensure the process isn't
+    migrated between sched_getcpu() and reading rseq.cpu_id, i.e. to
+    avoid a flaky test. [Mathieu]
+  - Add Mathieu's ack for patch 2.
+  - Add more comments in the test.
+
+v1: https://lkml.kernel.org/r/20210818001210.4073390-1-seanjc@google.com
+
+Sean Christopherson (5):
+  KVM: rseq: Update rseq when processing NOTIFY_RESUME on xfer to KVM
+    guest
+  entry: rseq: Call rseq_handle_notify_resume() in
+    tracehook_notify_resume()
+  tools: Move x86 syscall number fallbacks to .../uapi/
+  KVM: selftests: Add a test for KVM_RUN+rseq to detect task migration
+    bugs
+  KVM: selftests: Remove __NR_userfaultfd syscall fallback
+
+ arch/arm/kernel/signal.c                      |   1 -
+ arch/arm64/kernel/signal.c                    |   1 -
+ arch/csky/kernel/signal.c                     |   4 +-
+ arch/mips/kernel/signal.c                     |   4 +-
+ arch/powerpc/kernel/signal.c                  |   4 +-
+ include/linux/tracehook.h                     |   2 +
+ kernel/entry/common.c                         |   4 +-
+ kernel/rseq.c                                 |  14 +-
+ .../x86/include/{ => uapi}/asm/unistd_32.h    |   0
+ .../x86/include/{ => uapi}/asm/unistd_64.h    |   3 -
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   3 +
+ tools/testing/selftests/kvm/rseq_test.c       | 236 ++++++++++++++++++
+ 13 files changed, 257 insertions(+), 20 deletions(-)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_32.h (100%)
+ rename tools/arch/x86/include/{ => uapi}/asm/unistd_64.h (83%)
+ create mode 100644 tools/testing/selftests/kvm/rseq_test.c
+
 -- 
-2.33.0.259.gc128427fd7-goog
+2.33.0.153.gba50c8fa24-goog
 
