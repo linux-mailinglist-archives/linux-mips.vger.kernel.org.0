@@ -2,112 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CC93FE414
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Sep 2021 22:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4143FE426
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Sep 2021 22:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243141AbhIAUcA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Sep 2021 16:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241091AbhIAUby (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Sep 2021 16:31:54 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D65DC0612A4
-        for <linux-mips@vger.kernel.org>; Wed,  1 Sep 2021 13:30:48 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id n14-20020a0c9d4e0000b0290354a5f8c800so875371qvf.17
-        for <linux-mips@vger.kernel.org>; Wed, 01 Sep 2021 13:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=6ZnGJJdv4n8mbt+RRpvBUW8D60FX4+hBHNzvuCZCTkM=;
-        b=d1pxFxqJMbf3szpeZg0swAOEez6wH0zflg3vAq4KGbMImJ4S+KcHkhLB2r/3ioVEjj
-         ZLhMOpEXMbzCd0IWl9AkSsBlcbzJmd/lYcIK62ZIhRKzL4NvbVpZZVPoNMVqdiHHbt4l
-         QbALEWkmHHyf/Sxszih3MXmSDzw28c9uX4Z6jqZP9TuQMex85DDMRFWrKHdddQ1LfBDG
-         HR2V+1v5QBtwvPNmJM7wbgXhZ/x0UcPvJa2o/Y/oXzQq4oHwW3F/hSIbY0H235BKyazb
-         jt7ElehpbA0TgSdQZQHpNpry8CrPH3K3ffwS8r087C919IqMkZVLjJpdsnXa0ZlxJf0O
-         /VMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=6ZnGJJdv4n8mbt+RRpvBUW8D60FX4+hBHNzvuCZCTkM=;
-        b=MApUlq9q8XFSTcFmBqCQ4DhRFjskaLPa/JBzZxDBgKrgbt0qJy7lFstgRZxDOeFIvp
-         aqD93ivTORyUBFro2fl0fajeSuebw5UcISXZDh0eH1uchqReueuX1Po53VWpgERDGPX0
-         3P9TBGsmxKTPUWxV4120vbVouscAWlTJDkHUX2js1N78wvctppAguIlBPN0XpVHzM3d0
-         npdszWljhsSHmwEJ7WPXtcUu2ooTgW3KPHkPo4SYs6zCHuP7dhCuiNs1pEmlnm3GjEJg
-         j19ytsfIADJpMGFBPCoFLkxW7aU2TCgO6G+AUWh32lxzO05lfCnyPx8jHUkxCaVMUz2X
-         Jipw==
-X-Gm-Message-State: AOAM533k9/mrDGS2KlxlLAIlRAPIHlx2o12vetA7aOKQbnjoMJFHeT2R
-        N5792kOJnjRPyi7BQk4PxfQFY3R/9uU=
-X-Google-Smtp-Source: ABdhPJwYmVdzRr+jSYE642JvpN+Oe5nX73xj03Cuo8ty9uFNk/pmfGvXKihV+8dOLi2D30iy1yma/XQrogE=
-X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:9935:5a5e:c7b6:e649])
- (user=seanjc job=sendgmr) by 2002:a05:6214:104d:: with SMTP id
- l13mr1694132qvr.13.1630528247381; Wed, 01 Sep 2021 13:30:47 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  1 Sep 2021 13:30:30 -0700
-In-Reply-To: <20210901203030.1292304-1-seanjc@google.com>
-Message-Id: <20210901203030.1292304-6-seanjc@google.com>
-Mime-Version: 1.0
-References: <20210901203030.1292304-1-seanjc@google.com>
-X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
-Subject: [PATCH v3 5/5] KVM: selftests: Remove __NR_userfaultfd syscall fallback
-From:   Sean Christopherson <seanjc@google.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        id S231256AbhIAUkS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 1 Sep 2021 16:40:18 -0400
+Received: from aposti.net ([89.234.176.197]:60424 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229653AbhIAUkS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 1 Sep 2021 16:40:18 -0400
+Date:   Wed, 01 Sep 2021 21:39:02 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v3 08/16] MIPS: configs: Everyone who had PANEL_SIMPLE now
+ gets PANEL_SIMPLE_EDP
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus W <linus.walleij@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Steev Klimaszewski <steev@kali.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Peter Foley <pefoley@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <21WRYQ.3FG7R58QMYBX2@crapouillou.net>
+In-Reply-To: <20210901131531.v3.8.Ic7a6e3f8dd4760a302c91320843be5a00206bd63@changeid>
+References: <20210901201934.1084250-1-dianders@chromium.org>
+        <20210901131531.v3.8.Ic7a6e3f8dd4760a302c91320843be5a00206bd63@changeid>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Revert the __NR_userfaultfd syscall fallback added for KVM selftests now
-that x86's unistd_{32,63}.h overrides are under uapi/ and thus not in
-KVM sefltests' search path, i.e. now that KVM gets x86 syscall numbers
-from the installed kernel headers.
+Hi Douglas,
 
-No functional change intended.
+Le mer., sept. 1 2021 at 13:19:26 -0700, Douglas Anderson 
+<dianders@chromium.org> a écrit :
+> In the patch ("drm/panel-simple-edp: Split eDP panels out of
+> panel-simple") we split the PANEL_SIMPLE driver in 2. By default let's
+> give everyone who had the old driver enabled the new driver too. If
+> folks want to opt-out of one or the other they always can later.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> 
+> (no changes since v1)
+> 
+>  arch/mips/configs/qi_lb60_defconfig | 1 +
+>  arch/mips/configs/rs90_defconfig    | 1 +
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/arch/x86/include/uapi/asm/unistd_64.h | 3 ---
- 1 file changed, 3 deletions(-)
+The SoCs on these two boards don't support eDP, you can drop this patch.
 
-diff --git a/tools/arch/x86/include/uapi/asm/unistd_64.h b/tools/arch/x86/include/uapi/asm/unistd_64.h
-index 4205ed4158bf..cb52a3a8b8fc 100644
---- a/tools/arch/x86/include/uapi/asm/unistd_64.h
-+++ b/tools/arch/x86/include/uapi/asm/unistd_64.h
-@@ -1,7 +1,4 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __NR_userfaultfd
--#define __NR_userfaultfd 282
--#endif
- #ifndef __NR_perf_event_open
- # define __NR_perf_event_open 298
- #endif
--- 
-2.33.0.153.gba50c8fa24-goog
+Cheers,
+-Paul
+
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/arch/mips/configs/qi_lb60_defconfig 
+> b/arch/mips/configs/qi_lb60_defconfig
+> index b4448d0876d5..3e99e223ea02 100644
+> --- a/arch/mips/configs/qi_lb60_defconfig
+> +++ b/arch/mips/configs/qi_lb60_defconfig
+> @@ -72,6 +72,7 @@ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+>  CONFIG_DRM=y
+>  CONFIG_DRM_FBDEV_OVERALLOC=200
+>  CONFIG_DRM_PANEL_SIMPLE=y
+> +CONFIG_DRM_PANEL_SIMPLE_EDP=y
+>  CONFIG_DRM_INGENIC=y
+>  CONFIG_BACKLIGHT_CLASS_DEVICE=y
+>  # CONFIG_VGA_CONSOLE is not set
+> diff --git a/arch/mips/configs/rs90_defconfig 
+> b/arch/mips/configs/rs90_defconfig
+> index 7ce3b814fdc8..42b4f621cbfa 100644
+> --- a/arch/mips/configs/rs90_defconfig
+> +++ b/arch/mips/configs/rs90_defconfig
+> @@ -94,6 +94,7 @@ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+>  CONFIG_DRM=y
+>  CONFIG_DRM_FBDEV_OVERALLOC=300
+>  CONFIG_DRM_PANEL_SIMPLE=y
+> +CONFIG_DRM_PANEL_SIMPLE_EDP=y
+>  CONFIG_DRM_INGENIC=y
+>  CONFIG_BACKLIGHT_CLASS_DEVICE=y
+>  CONFIG_BACKLIGHT_PWM=y
+> --
+> 2.33.0.259.gc128427fd7-goog
+> 
+
 
