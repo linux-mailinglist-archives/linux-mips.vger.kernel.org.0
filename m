@@ -2,73 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C963FD0C8
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Sep 2021 03:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF9A3FD591
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Sep 2021 10:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241625AbhIABhu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 31 Aug 2021 21:37:50 -0400
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:46635 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241334AbhIABhu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 31 Aug 2021 21:37:50 -0400
-Received: by mail-ot1-f49.google.com with SMTP id v33-20020a0568300921b0290517cd06302dso1556464ott.13;
-        Tue, 31 Aug 2021 18:36:54 -0700 (PDT)
+        id S243355AbhIAIde (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Sep 2021 04:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243305AbhIAId3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Sep 2021 04:33:29 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B72C0617A8;
+        Wed,  1 Sep 2021 01:32:33 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id f6so1775902vsr.3;
+        Wed, 01 Sep 2021 01:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FFaRP1UuxDW13517plUbe9/HTiYDgl1rSw/uI2xnuSQ=;
+        b=Ho0h4aSHFPPphMmh/O792jT0UZ8NNZWT06AwaQtrFbAmnbiANe+HfXvnI/lWBttOE/
+         TcOJ9KwITAHc72l5fdYl6Vy+aaOubNtRrdpVlURKl+y/f3LgCRMyHeCJa6aPewcGREnn
+         Ek32T6laGDEIZynkwBpj/TFzZhI6lRM4mmm5H4DU63L8SOBHIOcX5brGP3DWW1MhDSv2
+         D0T3hVmh5yexkr5CjTeFCscQ8xqkEz7j5jftir2cggWKRtDYhjo9UogQFC38hPgmInwo
+         rr3npkGB3GBnc00gXZE5/B4/xM6xQ+qufmihUCGuqA9s66p9AvYfliFvcklB7+BT1WQJ
+         AKmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K6Q92rldbSEVMRIxqN9wyFbHcFqx2uWROVuhDKiImNI=;
-        b=aox9msOcxz7vh2cTmw3xyofig49MKk4OiJnAJF4gXVbYgJiGavr1+BysTILlGa/Vyi
-         J6wW+lc0hRtEPOMSZtzpmt3cBHvQQ6krH9DSqA5V8TN7eTIwyNj01O2P3xtyWTnisTgd
-         YjAWlcLv+WuddAp9cMQAxrHksVUevlGKZMNHwjAK9EX5q0HMITcnwlZWAQqnf1D7G/WC
-         VJihJJIsLfnliPlY07t/ZtDR/m2j4xHII1ZZb8UmgtBWOHGKN2RpS+fgt7KswFy31mDI
-         XrkyA8vyFx4yqXe00qlbBKOFnxPzWFCVD4qUDyIyEoc0rOjeApsyF7NUzePBZYNitWkq
-         inQQ==
-X-Gm-Message-State: AOAM530aUnZEMX6RhmJqqkoY55NuWbsW/trTNbGRnRFcPXHSy9d/H7J6
-        SxFcYHqQlQCLEu57tkI1IQ==
-X-Google-Smtp-Source: ABdhPJyXYPxgNfEtS8lvgZghZ1WHpfQt5+K4269OgEWzqSpa5vCopRUcY6fthLYutxJZP9v2JujLIQ==
-X-Received: by 2002:a05:6830:1c69:: with SMTP id s9mr27667730otg.132.1630460213686;
-        Tue, 31 Aug 2021 18:36:53 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e11sm3998691oiw.18.2021.08.31.18.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Aug 2021 18:36:53 -0700 (PDT)
-Received: (nullmailer pid 1006825 invoked by uid 1000);
-        Wed, 01 Sep 2021 01:36:52 -0000
-Date:   Tue, 31 Aug 2021 20:36:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Mark Brown <broonie@kernel.org>, Pavel Nadein <pasha-net@narod.ru>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-mips@vger.kernel.org, Pavel Nadein <pavelnadein@gmail.com>
-Subject: Re: [5.16][PATCH 1/3] dt-bindings: spi: Document Ingenic SPI
- controller bindings
-Message-ID: <YS7ZNCHz2FC/X7QS@robh.at.kernel.org>
-References: <20210830230139.21476-1-contact@artur-rojek.eu>
- <20210830230139.21476-2-contact@artur-rojek.eu>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FFaRP1UuxDW13517plUbe9/HTiYDgl1rSw/uI2xnuSQ=;
+        b=SpFxSPm3JGNQznrU01B+Kcimzf5X1eWS4nGOdt6Ycp7YmXjHdafWV51TlOv1U4AcDI
+         ZL+XIeFOfbXfrwFL/qVS2k+dsfRSnIGSPT5qOTWk7+8GSX/FeorS8g0hXUkvyYWAv19+
+         fTWHbwoswYnk0DPwvvmsWGfSnXp0yoZgOp1341wI0dvJcOCYV1ZNc10lR3NMp9GyNlNb
+         F27ChEfGwudvY2RmRVYeoNzm/8O47MlXjVCVMMNmZJxcExP5V9CyJNHY6/RNU5Y6ni/l
+         bNtHwSWUiExe5JS23CUIR21BdK25sWaFaPAOAt75SGbV9SPfUQNVW+c05Y7ITp47orky
+         Vutw==
+X-Gm-Message-State: AOAM532Us3aqB8eq4usytHomV0+qorCWNa9deIh29ROB8djr3NYYK4SK
+        nqjpR74iV/ePSyq2fEpcvgUlRVMZUeY3QFZDhpuN93jB
+X-Google-Smtp-Source: ABdhPJyDxdr+N40boXPr0S5B9FteKVAqABWhVzBiTLCaQwkAAxJbRuxq87t/RCNfPEoZKY/UPSCPmWFYSmqu9MjRcLg=
+X-Received: by 2002:a67:8c07:: with SMTP id o7mr20790890vsd.31.1630485152463;
+ Wed, 01 Sep 2021 01:32:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210830230139.21476-2-contact@artur-rojek.eu>
+References: <20210406024911.2008046-1-chenhuacai@loongson.cn> <e55e632d-a138-a6ec-d545-299ab858a163@redhat.com>
+In-Reply-To: <e55e632d-a138-a6ec-d545-299ab858a163@redhat.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Wed, 1 Sep 2021 16:32:20 +0800
+Message-ID: <CAAhV-H6Bff1063FsoWOPCf-EGeiTPK1QL9NwYraA0=39z1uKrQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: MIPS: Remove a "set but not used" variable
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        kvm <kvm@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 31 Aug 2021 01:01:37 +0200, Artur Rojek wrote:
-> From: Paul Cercueil <paul@crapouillou.net>
-> 
-> Add a documentation file to describe the Device Tree bindings for the
-> SPI controller found in Ingenic SoCs.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  .../devicetree/bindings/spi/ingenic,spi.yaml  | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/ingenic,spi.yaml
-> 
+Hi, Paolo,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Fri, May 14, 2021 at 5:58 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 06/04/21 04:49, Huacai Chen wrote:
+> > This fix a build warning:
+> >
+> >     arch/mips/kvm/vz.c: In function '_kvm_vz_restore_htimer':
+> >>> arch/mips/kvm/vz.c:392:10: warning: variable 'freeze_time' set but not used [-Wunused-but-set-variable]
+> >       392 |  ktime_t freeze_time;
+> >           |          ^~~~~~~~~~~
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >   arch/mips/kvm/vz.c | 3 +--
+> >   1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/arch/mips/kvm/vz.c b/arch/mips/kvm/vz.c
+> > index d0d03bddbbba..e81dfdf7309e 100644
+> > --- a/arch/mips/kvm/vz.c
+> > +++ b/arch/mips/kvm/vz.c
+> > @@ -388,7 +388,6 @@ static void _kvm_vz_restore_htimer(struct kvm_vcpu *vcpu,
+> >                                  u32 compare, u32 cause)
+> >   {
+> >       u32 start_count, after_count;
+> > -     ktime_t freeze_time;
+> >       unsigned long flags;
+> >
+> >       /*
+> > @@ -396,7 +395,7 @@ static void _kvm_vz_restore_htimer(struct kvm_vcpu *vcpu,
+> >        * this with interrupts disabled to avoid latency.
+> >        */
+> >       local_irq_save(flags);
+> > -     freeze_time = kvm_mips_freeze_hrtimer(vcpu, &start_count);
+> > +     kvm_mips_freeze_hrtimer(vcpu, &start_count);
+> >       write_c0_gtoffset(start_count - read_c0_count());
+> >       local_irq_restore(flags);
+> >
+> >
+>
+> Queued, thanks.
+LKP reminds me again and again :)
+
+Huacai
+>
+> Paolo
+>
