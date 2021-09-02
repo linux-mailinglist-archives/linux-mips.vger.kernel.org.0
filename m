@@ -2,110 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5293FECCC
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Sep 2021 13:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861353FEDB9
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Sep 2021 14:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233846AbhIBLVF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Sep 2021 07:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S1344314AbhIBMZz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Sep 2021 08:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbhIBLVE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Sep 2021 07:21:04 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1975C061575;
-        Thu,  2 Sep 2021 04:20:05 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id 2so1161647qtw.1;
-        Thu, 02 Sep 2021 04:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M2rUgbLwypXDUhfyDjxmoAHRqVm5nElTvA2YszrcfF0=;
-        b=LZMbmqj2iCMHR8sDXy4iF4uZoQ4yJAumBT2erprCyab2RxBW7mCg9e7szRElWe7n7L
-         aoOI8CVoSmkrb5WLru+tDNZClYHMmJE8h+hJvGCsBmyvtr5wQGmtJrOQrvZzMMOAYvm3
-         M5jjdxqeykOzGETyRAKWklP789UYGWPCjMiXuTpP0SV7DoteNKB5JgKfhtRMgiZ5W+cu
-         l0LOlAaU7+ExzKooyX6tSa4IO7nbyNOLEGbOjk7Pcp0TxCG5Dc/W6jc/4cK4oYECSP70
-         J5J8s4YIjbMBLw9Hh8vhKiPEFNmC8xt2Lo6C0rO4H9jf9ESU1u9o6G8V5RtpPSSGQ3hv
-         U1PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M2rUgbLwypXDUhfyDjxmoAHRqVm5nElTvA2YszrcfF0=;
-        b=FRbRT1rdSAeEDnHuo3Cc/lSVitgMJEEl6RZ26cdeUY3YcOYlYm8Lb/pcVkCB+K6iGO
-         tN58XFf05CDsGOUnPu6LV5EmCf8Dd+OQ5n4CVZQ0MQLaXwHPYxCRh777vmTGeRg6rwIs
-         dL9dbl6Ww9SoVYxW77+/xJgJVtX3cMP2OSZIFRZUYRc2hNWOrD/s/7YyZOhHKGvhZnfE
-         t9tKqK/C6Yjn4Ab9aB0soBlGNEfQGSgZOAv4AqV7nPQQTW/cqlnbpIynxdbs7Km4iskt
-         hAb26R5fi94r0KB8raT6rwx+848rBWrLxzdmwesqDCTZkHGh6yF4GCvvZ06dz/wDNU45
-         2Jaw==
-X-Gm-Message-State: AOAM532wZjlP0sItuiR4Sp8EbnQs9KB3LiSX/kB8UBXgq2womXlLYB75
-        3QAWbR7JDHWZbnDy4gg1EfEo9rk5mdmAvQT1zB0=
-X-Google-Smtp-Source: ABdhPJwhNfinimEqrbvBqNoV5kt+KL2rxIpD4Ih1lDUaNUCd18uZPgAzdidqRhaeuxWc/coWCY9MupEdAdYuqYaZYiU=
-X-Received: by 2002:ac8:5ec8:: with SMTP id s8mr2447882qtx.26.1630581604692;
- Thu, 02 Sep 2021 04:20:04 -0700 (PDT)
+        with ESMTP id S1344228AbhIBMZz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Sep 2021 08:25:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A13C061757
+        for <linux-mips@vger.kernel.org>; Thu,  2 Sep 2021 05:24:56 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mLlm2-0007FX-Ph; Thu, 02 Sep 2021 14:24:54 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mLlm2-0001GM-9y; Thu, 02 Sep 2021 14:24:54 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh@kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, stable@kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>
+Subject: [PATCH v2] MIPS: Malta: fix alignment of the devicetree buffer
+Date:   Thu,  2 Sep 2021 14:24:53 +0200
+Message-Id: <20210902122453.4805-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210822161005.22467-1-sergio.paracuellos@gmail.com>
- <20210822161005.22467-4-sergio.paracuellos@gmail.com> <YSip4/kMNOG4uYC3@kroah.com>
- <CAMhs-H_0ytYCoBLj9GJDjHSPPHLC6_oBsm-V9s4FjhE7NY8TCw@mail.gmail.com>
- <YTCWR7oyLWgTDbQe@kroah.com> <CAMhs-H8U-crQHFVQj6j4Y5qs-S2NaW9trH8twKH8AwDR+AAYgg@mail.gmail.com>
- <20210902110835.GB7614@alpha.franken.de>
-In-Reply-To: <20210902110835.GB7614@alpha.franken.de>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 2 Sep 2021 13:19:53 +0200
-Message-ID: <CAMhs-H_1U=X25+q=wDnQ+FGbxXMx1vFpefEMJviFxOc7T0jwjA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] staging: mt7621-pci: set end limit for 'ioport_resource'
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 2, 2021 at 1:08 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Thu, Sep 02, 2021 at 12:15:12PM +0200, Sergio Paracuellos wrote:
-> > On Thu, Sep 2, 2021 at 11:15 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Sun, Aug 29, 2021 at 05:14:27PM +0200, Sergio Paracuellos wrote:
-> > > > On Fri, Aug 27, 2021 at 11:01 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > >
-> > > > > On Sun, Aug 22, 2021 at 06:10:05PM +0200, Sergio Paracuellos wrote:
-> > > > > > We have increase IO_SPACE_LIMIT for ralink platform to get PCI IO resources
-> > > > > > properly handled using PCI core APIs. To align those changes with driver
-> > > > > > code we have to set 'ioport_resource' end limit to IO_SPACE_LIMIT to avoid
-> > > > > > errors.
-> > > > > >
-> > > > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > >
-> > > > > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > >
-> > > > Thanks. Since I am planning to move 'mt7621-pci' from staging to
-> > > > 'drivers/pci/controller' and send v3 after the next merge window, I
-> > > > prefer this patch to go through the staging tree. For the other two I
-> > > > don't have any preference and it is ok for me to go through mips or
-> > > > pci trees. So, Bjorn and Thomas is up to you if you are ok with the
-> > > > changes.
-> > >
-> > > Yes, I would need acks for the other patches in the series if this is to
-> > > come through the staging tree.
-> >
-> > Yes, I know it. Let's wait for Thomas and Bjorn preference for those
-> > remaining two.
->
-> I've sent my acked-by for the MIPS patch.
+Starting with following patch MIPS Malta is not able to boot:
+| commit 79edff12060fe7772af08607eff50c0e2486c5ba
+| Author: Rob Herring <robh@kernel.org>
+| scripts/dtc: Update to upstream version v1.6.0-51-g183df9e9c2b9
 
-Thanks!
+The reason is the alignment test added to the fdt_ro_probe_(). To fix
+this issue, we need to make sure that fdt_buf is aligned.
 
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+Fixes: 79edff12060f ("scripts/dtc: Update to upstream version v1.6.0-51-g183df9e9c2b9")
+Cc: <stable@kernel.org> # v5.12+
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ arch/mips/mti-malta/malta-dtshim.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/mti-malta/malta-dtshim.c b/arch/mips/mti-malta/malta-dtshim.c
+index 0ddf03df6268..f451268f6c38 100644
+--- a/arch/mips/mti-malta/malta-dtshim.c
++++ b/arch/mips/mti-malta/malta-dtshim.c
+@@ -22,7 +22,7 @@
+ #define  ROCIT_CONFIG_GEN1_MEMMAP_SHIFT	8
+ #define  ROCIT_CONFIG_GEN1_MEMMAP_MASK	(0xf << 8)
+ 
+-static unsigned char fdt_buf[16 << 10] __initdata;
++static unsigned char fdt_buf[16 << 10] __initdata __aligned(8);
+ 
+ /* determined physical memory size, not overridden by command line args	 */
+ extern unsigned long physical_memsize;
+-- 
+2.30.2
+
