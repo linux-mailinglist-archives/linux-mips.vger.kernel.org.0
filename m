@@ -2,62 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C446F3FEB2E
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Sep 2021 11:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3792E3FEB13
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Sep 2021 11:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245489AbhIBJ2I (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Sep 2021 05:28:08 -0400
-Received: from elvis.franken.de ([193.175.24.41]:60767 "EHLO elvis.franken.de"
+        id S245246AbhIBJRU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Sep 2021 05:17:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44562 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245378AbhIBJ2H (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 2 Sep 2021 05:28:07 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mLizz-0001ZP-00; Thu, 02 Sep 2021 11:27:07 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id BF8E2C0955; Thu,  2 Sep 2021 11:03:24 +0200 (CEST)
-Date:   Thu, 2 Sep 2021 11:03:24 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Rob Herring <robh@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paulburton@kernel.org>
-Subject: Re: [PATCH v1] MIPS: Malta: fix alignment of the devicetree buffer
-Message-ID: <20210902090324.GA6429@alpha.franken.de>
-References: <20210902071951.28722-1-o.rempel@pengutronix.de>
+        id S245231AbhIBJQw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 2 Sep 2021 05:16:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ACCE860FE6;
+        Thu,  2 Sep 2021 09:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1630574154;
+        bh=dPw6G1yVOra8rqEBvFu7lWMDGR3IWQFgtT1jvbbgnNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=URutCE4KcIzFWRrXltEliCz1MNdQ7Hhhqk+ZzrDXLHKpoOzXyL5ugAk4AWL2vrzmd
+         v3zdkB0m8gN3PLf+MOuHkLNdXOMknoif29QRJKNEH8ktAmtVfKWm/IxEPQ9VhXx6Wu
+         kng2BzSy7Hqw1snV8Lg5Mx9PkHtUpQaINBGlx0WM=
+Date:   Thu, 2 Sep 2021 11:15:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] staging: mt7621-pci: set end limit for
+ 'ioport_resource'
+Message-ID: <YTCWR7oyLWgTDbQe@kroah.com>
+References: <20210822161005.22467-1-sergio.paracuellos@gmail.com>
+ <20210822161005.22467-4-sergio.paracuellos@gmail.com>
+ <YSip4/kMNOG4uYC3@kroah.com>
+ <CAMhs-H_0ytYCoBLj9GJDjHSPPHLC6_oBsm-V9s4FjhE7NY8TCw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210902071951.28722-1-o.rempel@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAMhs-H_0ytYCoBLj9GJDjHSPPHLC6_oBsm-V9s4FjhE7NY8TCw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 02, 2021 at 09:19:51AM +0200, Oleksij Rempel wrote:
-> Starting with following patch MIPS Malta is not able to boot:
-> | commit 79edff12060fe7772af08607eff50c0e2486c5ba
-> | Author: Rob Herring <robh@kernel.org>
-> | scripts/dtc: Update to upstream version v1.6.0-51-g183df9e9c2b9
+On Sun, Aug 29, 2021 at 05:14:27PM +0200, Sergio Paracuellos wrote:
+> On Fri, Aug 27, 2021 at 11:01 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Sun, Aug 22, 2021 at 06:10:05PM +0200, Sergio Paracuellos wrote:
+> > > We have increase IO_SPACE_LIMIT for ralink platform to get PCI IO resources
+> > > properly handled using PCI core APIs. To align those changes with driver
+> > > code we have to set 'ioport_resource' end limit to IO_SPACE_LIMIT to avoid
+> > > errors.
+> > >
+> > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> >
+> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > 
-> The reason is the alignment test added to the fdt_ro_probe_(). To fix
-> this issue, we need to make sure that fdt_buf is aligned.
-> 
-> Since the dtc patch was designed to uncover potential issue, I handle
-> initial MIPS Malta patch as initial bug.
-> 
-> Fixes: e81a8c7dabac ("MIPS: Malta: Setup RAM regions via DT")
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  arch/mips/mti-malta/malta-dtshim.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Thanks. Since I am planning to move 'mt7621-pci' from staging to
+> 'drivers/pci/controller' and send v3 after the next merge window, I
+> prefer this patch to go through the staging tree. For the other two I
+> don't have any preference and it is ok for me to go through mips or
+> pci trees. So, Bjorn and Thomas is up to you if you are ok with the
+> changes.
 
-applied to mips-next.
+Yes, I would need acks for the other patches in the series if this is to
+come through the staging tree.
 
-Thomas.
+thanks,
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+greg k-h
