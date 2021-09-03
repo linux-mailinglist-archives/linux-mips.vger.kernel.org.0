@@ -2,181 +2,348 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7809C3FF72D
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Sep 2021 00:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9092B3FFAF7
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Sep 2021 09:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347550AbhIBWeV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Sep 2021 18:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
+        id S1347822AbhICHTh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Sep 2021 03:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbhIBWeU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Sep 2021 18:34:20 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FD8C061575
-        for <linux-mips@vger.kernel.org>; Thu,  2 Sep 2021 15:33:21 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id v16so3415930ilo.10
-        for <linux-mips@vger.kernel.org>; Thu, 02 Sep 2021 15:33:21 -0700 (PDT)
+        with ESMTP id S1347793AbhICHTf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Sep 2021 03:19:35 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06963C061575;
+        Fri,  3 Sep 2021 00:18:36 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n4so2769584plh.9;
+        Fri, 03 Sep 2021 00:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vEOAhsHQM9G+tVvC78A/rhgecetN4byQdhrLLpo0P0g=;
-        b=LDmJnOglDM6SRfrqk879nlvltfZEhwju/ts9Exu/2rE0XB+Lj74aGi7ZCLry1NSj0f
-         btPQfuDa+Q2ntfjL+zK+k6leKrLg6ahv0/pjTn7Y3JJbbdq5v55q2XUGEdXr0VDSURWz
-         zo/R1rY1OagPqlvLvu4Emr9cTHgcwBCjlU/VE=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c0D1xIfH+uv2m4N0KicdiGqzvfByK5+0BL/Uz/f8k6w=;
+        b=htbqIZTxxz/18vVCgiyKbSVGNwBBR9kf2zEXweGE2ItRjvUH1jaE2+CxEiPnTqBhpF
+         xwvDcYTOntRThrq8XIMgCL0Bh6XG5LgRusnasQElHDGTGJLA3XT1iCaTyCNrQmUhy7rz
+         a1fmFtnVp8kax0tXDABsjrvoCZMenBu5b6l9GCDeM3cRV/zQqr/zkJv6PDqXYwF4i18T
+         XSeLFO4vZcC9/qhg8wr9DVvOio7dugRxrZCnYDwMqMkdDiinKBPYkoD4hEIchr1wuKrV
+         +4sZGwDv7AxHGbZ8aF78X3mrOdprV901JL9DuedIo8lrHzk0ZyJLnxn5a3906S0vEvPf
+         hOUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vEOAhsHQM9G+tVvC78A/rhgecetN4byQdhrLLpo0P0g=;
-        b=brk5Okg09kBihHvDkPLGAnq/20FRut7BVkbUxIB9LAwrhNXfl26A6hHVTpuUB7z0kt
-         6+Q9oXc/niYyAn0FbOtp9DFKTaIP/Ab94SYye3Zn4uzlI7yVVrD9IOVxoupSWZNnb6zk
-         HS/qdWDUgWcSxK2WRUwdtp4WPeRxDQifD/OkQ7otcygIaIcfkwBXq1ghu5HdtzpY4T2D
-         68Ip1XGksHyJ5TP9xa04HbqGhZi4KUTOP8H2UNJQ4guoGSjUsYDdhmpxeQiXGWo1bpzr
-         eSIkfZvdUmUAUGn3Rzb1SfWWmLmjJzpfKZr4rQiK6CokVozkaZOsO66cXqMmFTLfZHPx
-         JokQ==
-X-Gm-Message-State: AOAM533rouwlokjNHVNNdvMxQB8TVFzbklI+i0gya8NxygZmqMW6gVqm
-        8s8sG19SdmkqPiOZvtdTnV4rjDXSpJNrRQ==
-X-Google-Smtp-Source: ABdhPJxf/d8ncGM2bpcwd+gKoFXYyD2c/XE+0sHHUx70w5w9qrwXSe+dfVi6BTV8aGKQnx3jgDu6zA==
-X-Received: by 2002:a05:6e02:1c08:: with SMTP id l8mr345946ilh.134.1630622000525;
-        Thu, 02 Sep 2021 15:33:20 -0700 (PDT)
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com. [209.85.166.178])
-        by smtp.gmail.com with ESMTPSA id s18sm1618799ilp.83.2021.09.02.15.33.19
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Sep 2021 15:33:20 -0700 (PDT)
-Received: by mail-il1-f178.google.com with SMTP id r6so3402757ilt.13
-        for <linux-mips@vger.kernel.org>; Thu, 02 Sep 2021 15:33:19 -0700 (PDT)
-X-Received: by 2002:a92:cf4a:: with SMTP id c10mr329106ilr.269.1630621999435;
- Thu, 02 Sep 2021 15:33:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c0D1xIfH+uv2m4N0KicdiGqzvfByK5+0BL/Uz/f8k6w=;
+        b=Z3/ZqPDqW+wJwZk5NfXxRbTZczOv18T3GciLRV3/4dTG2CLRnQoO2C6qbHMBkW8FrH
+         ry1RkOYwTx8+WAA/WyhfEMsmpllqyADfjoQoWbXLiF15F9/8vIBo6YKjGgeFFUgWZH6b
+         xDrPDQkjdQ7ha/xOjLMHP9cTn2D8RzujGBf3JZY0a5hh4lCaUeRJGozuS8jj3ip9eUEU
+         sgubW8bVvbzJkWlu4U8hT2Q9uCAw8/HZ7mWGcHIF4lsiyHbBwsWlYV7I9gx1TIx0V3Sl
+         Qjy8VLhp8iKI1ypqt32zQQ8A+830CYnPeUAZdBpQ/bRQBcfAgKzjnj6RXYnImq3MCelk
+         /isA==
+X-Gm-Message-State: AOAM532oviBLgZxC7fNBPpwYHCiOJNcNmcHqZYbX4kZBhxquze8hXSWF
+        scId9Qj+igvc93Etd9URMm0=
+X-Google-Smtp-Source: ABdhPJwhON5HGu34e5mG195pWB/qTv2giM61S81StqPQsRCVjbnelF+OCqMDZ8dzV8xZKma8DsOqRQ==
+X-Received: by 2002:a17:90b:38c2:: with SMTP id nn2mr2442876pjb.158.1630653515429;
+        Fri, 03 Sep 2021 00:18:35 -0700 (PDT)
+Received: from ownia.. ([173.248.225.217])
+        by smtp.gmail.com with ESMTPSA id a78sm4346878pfa.95.2021.09.03.00.18.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Sep 2021 00:18:35 -0700 (PDT)
+From:   Weizhao Ouyang <o451686892@gmail.com>
+To:     rostedt@goodmis.org, mingo@redhat.com
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        nickhu@andestech.com, green.hu@gmail.com, deanbo422@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        borntraeger@de.ibm.com, ysato@users.sourceforge.jp,
+        dalias@libc.org, davem@davemloft.net, tglx@linutronix.de,
+        bp@alien8.de, x86@kernel.org, hpa@zytor.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, Weizhao Ouyang <o451686892@gmail.com>
+Subject: [PATCH] ftrace: Cleanup ftrace_dyn_arch_init()
+Date:   Fri,  3 Sep 2021 15:18:17 +0800
+Message-Id: <20210903071817.1162938-1-o451686892@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <CGME20210902221015eucas1p26fae8f6ba4c70087dc7b007a271dce4b@eucas1p2.samsung.com>
- <20210901201934.1084250-1-dianders@chromium.org> <b1b67791-69b7-a5c0-9e98-73bb82afaeaa@samsung.com>
-In-Reply-To: <b1b67791-69b7-a5c0-9e98-73bb82afaeaa@samsung.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 2 Sep 2021 15:33:07 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W+7gReePki1kgxwxMTXEeeCoaFm1C63EcV+YOP7kayGA@mail.gmail.com>
-Message-ID: <CAD=FV=W+7gReePki1kgxwxMTXEeeCoaFm1C63EcV+YOP7kayGA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/16] eDP: Support probing eDP panels dynamically
- instead of hardcoding
-To:     Andrzej Hajda <a.hajda@samsung.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Maxime Ripard <mripard@kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-sunxi@lists.linux.dev,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Most ARCHs use empty ftrace_dyn_arch_init(), introduce a weak common
+ftrace_dyn_arch_init() to cleanup them.
 
-On Thu, Sep 2, 2021 at 3:10 PM Andrzej Hajda <a.hajda@samsung.com> wrote:
->
-> Removed most CC: SMTP server protested.
+Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
+---
+ arch/arm/kernel/ftrace.c          | 5 -----
+ arch/arm64/kernel/ftrace.c        | 5 -----
+ arch/csky/kernel/ftrace.c         | 5 -----
+ arch/ia64/kernel/ftrace.c         | 6 ------
+ arch/microblaze/kernel/ftrace.c   | 5 -----
+ arch/mips/include/asm/ftrace.h    | 2 ++
+ arch/nds32/kernel/ftrace.c        | 5 -----
+ arch/parisc/kernel/ftrace.c       | 5 -----
+ arch/powerpc/include/asm/ftrace.h | 4 ++++
+ arch/riscv/kernel/ftrace.c        | 5 -----
+ arch/s390/kernel/ftrace.c         | 5 -----
+ arch/sh/kernel/ftrace.c           | 5 -----
+ arch/sparc/kernel/ftrace.c        | 5 -----
+ arch/x86/kernel/ftrace.c          | 5 -----
+ include/linux/ftrace.h            | 1 -
+ kernel/trace/ftrace.c             | 5 +++++
+ 16 files changed, 11 insertions(+), 62 deletions(-)
 
-Yeah, it was because of the dang defconfig patches. My general policy
-is to send the cover letter to everyone even if not everyone gets CCed
-on all patches, but it ended up as a lot... Speaking of which, I'd
-definitely be interested in your take on the defconfig topic:
+diff --git a/arch/arm/kernel/ftrace.c b/arch/arm/kernel/ftrace.c
+index 3c83b5d29697..a006585e1c09 100644
+--- a/arch/arm/kernel/ftrace.c
++++ b/arch/arm/kernel/ftrace.c
+@@ -193,11 +193,6 @@ int ftrace_make_nop(struct module *mod,
+ 
+ 	return ret;
+ }
+-
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+index 7f467bd9db7a..fc62dfe73f93 100644
+--- a/arch/arm64/kernel/ftrace.c
++++ b/arch/arm64/kernel/ftrace.c
+@@ -236,11 +236,6 @@ void arch_ftrace_update_code(int command)
+ 	command |= FTRACE_MAY_SLEEP;
+ 	ftrace_modify_all_code(command);
+ }
+-
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+diff --git a/arch/csky/kernel/ftrace.c b/arch/csky/kernel/ftrace.c
+index b4a7ec1517ff..50bfcf129078 100644
+--- a/arch/csky/kernel/ftrace.c
++++ b/arch/csky/kernel/ftrace.c
+@@ -133,11 +133,6 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
+ 				(unsigned long)func, true, true);
+ 	return ret;
+ }
+-
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+diff --git a/arch/ia64/kernel/ftrace.c b/arch/ia64/kernel/ftrace.c
+index b2ab2d58fb30..d6360fd404ab 100644
+--- a/arch/ia64/kernel/ftrace.c
++++ b/arch/ia64/kernel/ftrace.c
+@@ -194,9 +194,3 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
+ 	flush_icache_range(addr, addr + 16);
+ 	return 0;
+ }
+-
+-/* run from kstop_machine */
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+diff --git a/arch/microblaze/kernel/ftrace.c b/arch/microblaze/kernel/ftrace.c
+index 224eea40e1ee..188749d62709 100644
+--- a/arch/microblaze/kernel/ftrace.c
++++ b/arch/microblaze/kernel/ftrace.c
+@@ -163,11 +163,6 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ 	return ret;
+ }
+ 
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+-
+ int ftrace_update_ftrace_func(ftrace_func_t func)
+ {
+ 	unsigned long ip = (unsigned long)(&ftrace_call);
+diff --git a/arch/mips/include/asm/ftrace.h b/arch/mips/include/asm/ftrace.h
+index b463f2aa5a61..ed013e767390 100644
+--- a/arch/mips/include/asm/ftrace.h
++++ b/arch/mips/include/asm/ftrace.h
+@@ -76,6 +76,8 @@ do {						\
+ 
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
++int __init ftrace_dyn_arch_init(void);
++
+ static inline unsigned long ftrace_call_adjust(unsigned long addr)
+ {
+ 	return addr;
+diff --git a/arch/nds32/kernel/ftrace.c b/arch/nds32/kernel/ftrace.c
+index 0e23e3a8df6b..f0ef4842d191 100644
+--- a/arch/nds32/kernel/ftrace.c
++++ b/arch/nds32/kernel/ftrace.c
+@@ -84,11 +84,6 @@ void _ftrace_caller(unsigned long parent_ip)
+ 	/* restore all state needed by the compiler epilogue */
+ }
+ 
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+-
+ static unsigned long gen_sethi_insn(unsigned long addr)
+ {
+ 	unsigned long opcode = 0x46000000;
+diff --git a/arch/parisc/kernel/ftrace.c b/arch/parisc/kernel/ftrace.c
+index 0a1e75af5382..01581f715737 100644
+--- a/arch/parisc/kernel/ftrace.c
++++ b/arch/parisc/kernel/ftrace.c
+@@ -94,11 +94,6 @@ int ftrace_disable_ftrace_graph_caller(void)
+ #endif
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
+-
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+ int ftrace_update_ftrace_func(ftrace_func_t func)
+ {
+ 	return 0;
+diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/ftrace.h
+index debe8c4f7062..4db83cf4283f 100644
+--- a/arch/powerpc/include/asm/ftrace.h
++++ b/arch/powerpc/include/asm/ftrace.h
+@@ -61,6 +61,10 @@ struct dyn_arch_ftrace {
+ };
+ #endif /* __ASSEMBLY__ */
+ 
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
++int __init ftrace_dyn_arch_init(void);
++#endif
++
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+ #define ARCH_SUPPORTS_FTRACE_OPS 1
+ #endif
+diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+index 7f1e5203de88..4716f4cdc038 100644
+--- a/arch/riscv/kernel/ftrace.c
++++ b/arch/riscv/kernel/ftrace.c
+@@ -154,11 +154,6 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
+ 
+ 	return ret;
+ }
+-
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+ #endif
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
+index 0a464d328467..3fd80397ff52 100644
+--- a/arch/s390/kernel/ftrace.c
++++ b/arch/s390/kernel/ftrace.c
+@@ -262,11 +262,6 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
+ 	return 0;
+ }
+ 
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+-
+ void arch_ftrace_update_code(int command)
+ {
+ 	if (ftrace_shared_hotpatch_trampoline(NULL))
+diff --git a/arch/sh/kernel/ftrace.c b/arch/sh/kernel/ftrace.c
+index 295c43315bbe..930001bb8c6a 100644
+--- a/arch/sh/kernel/ftrace.c
++++ b/arch/sh/kernel/ftrace.c
+@@ -252,11 +252,6 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ 
+ 	return ftrace_modify_code(rec->ip, old, new);
+ }
+-
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+diff --git a/arch/sparc/kernel/ftrace.c b/arch/sparc/kernel/ftrace.c
+index 684b84ce397f..eaead3da8e03 100644
+--- a/arch/sparc/kernel/ftrace.c
++++ b/arch/sparc/kernel/ftrace.c
+@@ -82,11 +82,6 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
+ 	new = ftrace_call_replace(ip, (unsigned long)func);
+ 	return ftrace_modify_code(ip, old, new);
+ }
+-
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+ #endif
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 1b3ce3b4a2a2..23d221a9a3cd 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -252,11 +252,6 @@ void arch_ftrace_update_code(int command)
+ 	ftrace_modify_all_code(command);
+ }
+ 
+-int __init ftrace_dyn_arch_init(void)
+-{
+-	return 0;
+-}
+-
+ /* Currently only x86_64 supports dynamic trampolines */
+ #ifdef CONFIG_X86_64
+ 
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 832e65f06754..f1eca123d89d 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -573,7 +573,6 @@ ftrace_set_early_filter(struct ftrace_ops *ops, char *buf, int enable);
+ 
+ /* defined in arch */
+ extern int ftrace_ip_converted(unsigned long ip);
+-extern int ftrace_dyn_arch_init(void);
+ extern void ftrace_replace_code(int enable);
+ extern int ftrace_update_ftrace_func(ftrace_func_t func);
+ extern void ftrace_caller(void);
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 7efbc8aaf7f6..4c090323198d 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -6846,6 +6846,11 @@ void __init ftrace_free_init_mem(void)
+ 	ftrace_free_mem(NULL, start, end);
+ }
+ 
++int __init __weak ftrace_dyn_arch_init(void)
++{
++	return 0;
++}
++
+ void __init ftrace_init(void)
+ {
+ 	extern unsigned long __start_mcount_loc[];
+-- 
+2.30.2
 
-https://lore.kernel.org/r/CAD=FV=WPXAUyuAHb1jKx9F_aw+JGX4MWB3or=Eq5rXoKY=OQMw@mail.gmail.com
-
-Do you agree with Olof that I should set the "default" for the new
-config to be the same as the old config? It doesn't make sense going
-forward but it helps for anyone with old configs...
-
-
-> On 01.09.2021 22:19, Douglas Anderson wrote:
-> > The goal of this patch series is to move away from hardcoding exact
-> > eDP panels in device tree files. As discussed in the various patches
-> > in this series (I'm not repeating everything here), most eDP panels
-> > are 99% probable and we can get that last 1% by allowing two "power
-> > up" delays to be specified in the device tree file and then using the
-> > panel ID (found in the EDID) to look up additional power sequencing
-> > delays for the panel.
-> >
-> > This patch series is the logical contiunation of a previous patch
-> > series where I proposed solving this problem by adding a
-> > board-specific compatible string [1]. In the discussion that followed
-> > it sounded like people were open to something like the solution
-> > proposed in this new series.
-> >
-> > In version 2 I got rid of the idea that we could have a "fallback"
-> > compatible string that we'd use if we didn't recognize the ID in the
-> > EDID. This simplifies the bindings a lot and the implementation
-> > somewhat. As a result of not having a "fallback", though, I'm not
-> > confident in transitioning any existing boards over to this since
-> > we'll have to fallback to very conservative timings if we don't
-> > recognize the ID from the EDID and I can't guarantee that I've seen
-> > every panel that might have shipped on an existing product. The plan
-> > is to use "edp-panel" only on new boards or new revisions of old
-> > boards where we can guarantee that every EDID that ships out of the
-> > factory has an ID in the table.
-> >
-> > Version 3 of this series now splits out all eDP panels to their own
-> > driver and adds the generic eDP panel support to this new driver. I
-> > believe this is what Sam was looking for [2].
-> >
-> > [1] https://lore.kernel.org/r/YFKQaXOmOwYyeqvM@google.com/
-> > [2] https://lore.kernel.org/r/YRTsFNTn%2FT8fLxyB@ravnborg.org/
-> >
-> I like the idea - if something can be configured dynamically lets do it.
-> But I have few questions:
-> 1. Have you read different real panels id's? In many cases (MIPI DSI,
-> LVDS with EDID) manufacturers often forgot to set proper id fields. I do
-> not know how EDID's ids are reliable in case of edp panels.
-
-I have read several and (so far) they have been quite reliable but I
-will admit that I haven't done an exhaustive sample. I guess my answer
-to whether we can trust it is:
-
-a) Presumably you'd only use this new "edp-panel" compatible on
-systems whose panel IDs are known to be reliable. Old systems can keep
-determining the panel by compatible string. The two schemes can
-co-exist.
-
-b) As we start using this new scheme then there will be more
-validation of panel ID strings and, presumably, they will become more
-reliable.
-
-It is still true that ID conflicts could exist. A vendor could ship
-two different panels with the same ID and maybe nobody would notice
-because they weren't ever hooked up to the same board. In that case
-we'd have a question of what to do upstream. If this really happens
-then I suppose (worst case) we could use the device tree to help
-differentiate and each board could say that "panel ID <x> hooked up to
-this board is actually panel <y>". I hope we don't have to do that
-because it feels dirty, but at least it gives us _something_ if we get
-backed into a corner.
-
-
-> 2. You are working with edp panels - beside EDID they have DPCD which
-> contains things like IEEE_OUI and "Device Identification String", I
-> guess they could be also used for detecting panels, have you considered
-> it? I think DPCD Id should be assigned to EDP-Sink interface, and EDID
-> Id to the actual panel behind it. With this assumption one could
-> consider which timings should be property of which entity.
-
-This could be another way to help us if we're backed into a corner in
-the future. Right now the driver requires that you give access to a
-full eDP AUX bus to use the "generic eDP" panel support even though it
-currently only relies on the EDID, so it would be pretty easy to
-utilize this info in the future. So far the ID has been reliable for
-me though.
-
-
--Doug
