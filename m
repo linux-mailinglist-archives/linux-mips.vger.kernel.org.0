@@ -2,240 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F415C403632
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Sep 2021 10:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F804036E6
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Sep 2021 11:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348347AbhIHIhL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Sep 2021 04:37:11 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:51006 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348238AbhIHIhK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 8 Sep 2021 04:37:10 -0400
-Received: from localhost.localdomain (unknown [89.187.161.160])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9CxdObddThhl5ABAA--.1994S3;
-        Wed, 08 Sep 2021 16:35:56 +0800 (CST)
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        ambrosehua@gmail.com
-Cc:     Bibo Mao <maobibo@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-rt-users@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>
-Subject: [PATCH] MIPS: rework local_t operation on MIPS64
-Date:   Wed,  8 Sep 2021 16:35:31 +0800
-Message-Id: <20210908083531.922785-2-huangpei@loongson.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210908083531.922785-1-huangpei@loongson.cn>
-References: <20210908083531.922785-1-huangpei@loongson.cn>
+        id S1348765AbhIHJaF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Sep 2021 05:30:05 -0400
+Received: from elvis.franken.de ([193.175.24.41]:43016 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234476AbhIHJ3v (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 8 Sep 2021 05:29:51 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mNtsf-0006P0-00; Wed, 08 Sep 2021 11:28:33 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 42B00C0A9D; Wed,  8 Sep 2021 10:51:50 +0200 (CEST)
+Date:   Wed, 8 Sep 2021 10:51:50 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     =?utf-8?B?6ZmI6aOe5oms?= <chris.chenfeiyang@gmail.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, arnd@arndb.de,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        chenhuacai@kernel.org, Yanteng Si <siyanteng@loongson.cn>
+Subject: Re: [PATCH 1/2] mips: convert syscall to generic entry
+Message-ID: <20210908085150.GA5622@alpha.franken.de>
+References: <cover.1630929519.git.chenfeiyang@loongson.cn>
+ <ec14e242a73227bf5314bbc1b585919500e6fbc7.1630929519.git.chenfeiyang@loongson.cn>
+ <59feb382-a4ab-c94e-8f71-10ad0c0ceceb@flygoat.com>
+ <CACWXhKnA24KuJo33+OitPQVRRd3g_05DWRC2Dsnm7w8hVyKjNQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9CxdObddThhl5ABAA--.1994S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw45Ar15ZFWDKF4DtrWfuFg_yoW7Gr4DpF
-        srCan7KrWqvF43Ca4vyF4S9r13Wr4rGrWYkFyq9rWvy3Wjq3W8XrsakanYyrykXFZ5t3W8
-        GFW7uw15ZFnrA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUmlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUGwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280
-        aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzV
-        Aqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S
-        6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxw
-        ACI402YVCY1x02628vn2kIc2xKxwCY02Avz4vE1syl42xK82IYc2Ij64vIr41l4I8I3I0E
-        4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
-        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxU2RwZUUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+In-Reply-To: <CACWXhKnA24KuJo33+OitPQVRRd3g_05DWRC2Dsnm7w8hVyKjNQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+. Use daddu/dsubu for long int on MIPS64.
+On Wed, Sep 08, 2021 at 10:08:47AM +0800, 陈飞扬 wrote:
+> On Tue, 7 Sept 2021 at 21:49, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> >
+> >
+> > 在 2021/9/7 14:16, FreeFlyingSheep 写道:
+> > > From: Feiyang Chen <chenfeiyang@loongson.cn>
+> > >
+> > > Convert mips syscall to use the generic entry infrastructure from
+> > > kernel/entry/*.
+> > >
+> > > There are a few special things on mips:
+> > >
+> > > - There is one type of syscall on mips32 (scall32-o32) and three types
+> > > of syscalls on mips64 (scall64-o32, scall64-n32 and scall64-n64). Now
+> > > convert to C code to handle different types of syscalls.
+> > >
+> > > - For some special syscalls (e.g. fork, clone, clone3 and sysmips),
+> > > save_static_function() wrapper is used to save static registers. Now
+> > > SAVE_STATIC is used in handle_sys before calling do_syscall(), so the
+> > > save_static_function() wrapper can be removed.
+> > >
+> > > - For sigreturn/rt_sigreturn and sysmips, inline assembly is used to
+> > > jump to syscall_exit directly for skipping setting the error flag and
+> > > restoring all registers. Now use regs->regs[27] to mark whether to
+> > > handle the error flag and always restore all registers in handle_sys,
+> > > so these functions can return normally as other architecture.
+> >
+> > Hmm, that would give us overhead of register context on these syscalls.
+> >
+> > I guess it's worthy?
+> >
+> 
+> Hi, Jiaxun,
+> 
+> Saving and restoring registers against different system calls can be
+> difficult due to the use of generic entry.
+> To avoid a lot of duplicate code, I think the overhead is worth it.
 
-+. remove "asm/war.h" since R10000_LLSC_WAR became a config option
+could you please provide numbers for that ? This code still runs
+on low end MIPS CPUs for which overhead might mean a different
+ballpark than some highend Loongson CPUs.
 
-+. clean up, no function changed
+Thomas.
 
-Suggested-by:  "Maciej W. Rozycki" <macro@orcam.me.uk>
-Signed-off-by: Huang Pei <huangpei@loongson.cn>
----
- arch/mips/include/asm/asm.h   | 18 +++++++++++
- arch/mips/include/asm/llsc.h  |  4 +++
- arch/mips/include/asm/local.h | 60 ++++++++---------------------------
- 3 files changed, 35 insertions(+), 47 deletions(-)
-
-diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
-index 2f8ce94ebaaf..f3302b13d3e0 100644
---- a/arch/mips/include/asm/asm.h
-+++ b/arch/mips/include/asm/asm.h
-@@ -19,6 +19,7 @@
- 
- #include <asm/sgidefs.h>
- #include <asm/asm-eva.h>
-+#include <asm/isa-rev.h>
- 
- #ifndef __VDSO__
- /*
-@@ -211,6 +212,8 @@ symbol		=	value
- #define LONG_SUB	sub
- #define LONG_SUBU	subu
- #define LONG_L		lw
-+#define LONG_LL		ll
-+#define LONG_SC		sc
- #define LONG_S		sw
- #define LONG_SP		swp
- #define LONG_SLL	sll
-@@ -236,6 +239,8 @@ symbol		=	value
- #define LONG_SUB	dsub
- #define LONG_SUBU	dsubu
- #define LONG_L		ld
-+#define LONG_LL		lld
-+#define LONG_SC		scd
- #define LONG_S		sd
- #define LONG_SP		sdp
- #define LONG_SLL	dsll
-@@ -320,6 +325,19 @@ symbol		=	value
- 
- #define SSNOP		sll zero, zero, 1
- 
-+/*
-+ * Using a branch-likely instruction to check the result of an sc instruction
-+ * works around a bug present in R10000 CPUs prior to revision 3.0 that could
-+ * cause ll-sc sequences to execute non-atomically.
-+ */
-+#ifdef CONFIG_WAR_R10000_LLSC
-+# define SC_BEQZ	beqzl
-+#elif MIPS_ISA_REV >= 6
-+# define SC_BEQZ	beqzc
-+#else
-+# define SC_BEQZ	beqz
-+#endif
-+
- #ifdef CONFIG_SGI_IP28
- /* Inhibit speculative stores to volatile (e.g.DMA) or invalid addresses. */
- #include <asm/cacheops.h>
-diff --git a/arch/mips/include/asm/llsc.h b/arch/mips/include/asm/llsc.h
-index ec09fe5d6d6c..788e26ad7fca 100644
---- a/arch/mips/include/asm/llsc.h
-+++ b/arch/mips/include/asm/llsc.h
-@@ -16,11 +16,15 @@
- #define __SC		"sc	"
- #define __INS		"ins	"
- #define __EXT		"ext	"
-+#define __ADDU		"addu	"
-+#define __SUBU		"subu	"
- #elif _MIPS_SZLONG == 64
- #define __LL		"lld	"
- #define __SC		"scd	"
- #define __INS		"dins	"
- #define __EXT		"dext	"
-+#define __ADDU		"daddu	"
-+#define __SUBU		"dsubu	"
- #endif
- 
- /*
-diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
-index ecda7295ddcd..44b320583f04 100644
---- a/arch/mips/include/asm/local.h
-+++ b/arch/mips/include/asm/local.h
-@@ -7,7 +7,7 @@
- #include <linux/atomic.h>
- #include <asm/cmpxchg.h>
- #include <asm/compiler.h>
--#include <asm/war.h>
-+#include <asm/asm.h>
- 
- typedef struct
- {
-@@ -31,34 +31,17 @@ static __inline__ long local_add_return(long i, local_t * l)
- {
- 	unsigned long result;
- 
--	if (kernel_uses_llsc && IS_ENABLED(CONFIG_WAR_R10000_LLSC)) {
--		unsigned long temp;
--
--		__asm__ __volatile__(
--		"	.set	push					\n"
--		"	.set	arch=r4000				\n"
--			__SYNC(full, loongson3_war) "			\n"
--		"1:"	__LL	"%1, %2		# local_add_return	\n"
--		"	addu	%0, %1, %3				\n"
--			__SC	"%0, %2					\n"
--		"	beqzl	%0, 1b					\n"
--		"	addu	%0, %1, %3				\n"
--		"	.set	pop					\n"
--		: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
--		: "Ir" (i), "m" (l->a.counter)
--		: "memory");
--	} else if (kernel_uses_llsc) {
-+	if (kernel_uses_llsc) {
- 		unsigned long temp;
- 
- 		__asm__ __volatile__(
- 		"	.set	push					\n"
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
--			__SYNC(full, loongson3_war) "			\n"
--		"1:"	__LL	"%1, %2		# local_add_return	\n"
--		"	addu	%0, %1, %3				\n"
--			__SC	"%0, %2					\n"
--		"	beqz	%0, 1b					\n"
--		"	addu	%0, %1, %3				\n"
-+		"1:"	__stringify(LONG_LL)	"	%1, %2		\n"
-+		"	"__stringify(LONG_ADDU)	"	%0, %1, %3	\n"
-+		"	"__stringify(LONG_SC)	"	%0, %2		\n"
-+		"	"__stringify(SC_BEQZ)	"	%0, 1b		\n"
-+		"	"__stringify(LONG_ADDU)	"	%0, %1, %3	\n"
- 		"	.set	pop					\n"
- 		: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
- 		: "Ir" (i), "m" (l->a.counter)
-@@ -80,34 +63,17 @@ static __inline__ long local_sub_return(long i, local_t * l)
- {
- 	unsigned long result;
- 
--	if (kernel_uses_llsc && IS_ENABLED(CONFIG_WAR_R10000_LLSC)) {
--		unsigned long temp;
--
--		__asm__ __volatile__(
--		"	.set	push					\n"
--		"	.set	arch=r4000				\n"
--			__SYNC(full, loongson3_war) "			\n"
--		"1:"	__LL	"%1, %2		# local_sub_return	\n"
--		"	subu	%0, %1, %3				\n"
--			__SC	"%0, %2					\n"
--		"	beqzl	%0, 1b					\n"
--		"	subu	%0, %1, %3				\n"
--		"	.set	pop					\n"
--		: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
--		: "Ir" (i), "m" (l->a.counter)
--		: "memory");
--	} else if (kernel_uses_llsc) {
-+	if (kernel_uses_llsc) {
- 		unsigned long temp;
- 
- 		__asm__ __volatile__(
- 		"	.set	push					\n"
- 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
--			__SYNC(full, loongson3_war) "			\n"
--		"1:"	__LL	"%1, %2		# local_sub_return	\n"
--		"	subu	%0, %1, %3				\n"
--			__SC	"%0, %2					\n"
--		"	beqz	%0, 1b					\n"
--		"	subu	%0, %1, %3				\n"
-+		"1:"	__stringify(LONG_LL)	"	%1, %2		\n"
-+		"	"__stringify(LONG_SUBU)	"	%0, %1, %3	\n"
-+		"	"__stringify(LONG_SC)	"	%0, %2		\n"
-+		"	"__stringify(SC_BEQZ)	"	%0, 1b		\n"
-+		"	"__stringify(LONG_SUBU)	"	%0, %1, %3	\n"
- 		"	.set	pop					\n"
- 		: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
- 		: "Ir" (i), "m" (l->a.counter)
 -- 
-2.25.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
