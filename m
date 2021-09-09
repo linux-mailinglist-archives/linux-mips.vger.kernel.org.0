@@ -2,116 +2,186 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E6F405399
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Sep 2021 14:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94FB405886
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Sep 2021 16:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352940AbhIIMx3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Sep 2021 08:53:29 -0400
-Received: from out28-219.mail.aliyun.com ([115.124.28.219]:34042 "EHLO
-        out28-219.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbhIIMqp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Sep 2021 08:46:45 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07591903|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.149272-0.00519396-0.845534;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.LHrbZjk_1631191525;
-Received: from 192.168.10.152(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.LHrbZjk_1631191525)
-          by smtp.aliyun-inc.com(10.147.40.233);
-          Thu, 09 Sep 2021 20:45:26 +0800
-Subject: Re: [PATCH 1/2] mips: convert syscall to generic entry
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?UTF-8?B?6ZmI6aOe5oms?= <chris.chenfeiyang@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        arnd@arndb.de, Feiyang Chen <chenfeiyang@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        chenhuacai@kernel.org, Yanteng Si <siyanteng@loongson.cn>
-References: <cover.1630929519.git.chenfeiyang@loongson.cn>
- <ec14e242a73227bf5314bbc1b585919500e6fbc7.1630929519.git.chenfeiyang@loongson.cn>
- <59feb382-a4ab-c94e-8f71-10ad0c0ceceb@flygoat.com>
- <CACWXhKnA24KuJo33+OitPQVRRd3g_05DWRC2Dsnm7w8hVyKjNQ@mail.gmail.com>
- <20210908085150.GA5622@alpha.franken.de>
- <13d237ab-0ef3-772d-6f21-ff023781efcf@flygoat.com>
-From:   Zhou Yanjie <zhouyu@wanyeetech.com>
-Message-ID: <7e2c0db1-bf5a-8f16-bc43-81830a30045e@wanyeetech.com>
-Date:   Thu, 9 Sep 2021 20:45:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1349967AbhIIOFR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Sep 2021 10:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345121AbhIIOFC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Sep 2021 10:05:02 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28C3C0363C3
+        for <linux-mips@vger.kernel.org>; Thu,  9 Sep 2021 05:04:26 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id n5so2186565wro.12
+        for <linux-mips@vger.kernel.org>; Thu, 09 Sep 2021 05:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TGhvxcJ5e0tWwjSJNqM6XCMaaGd6Uf1B/o2F+QC2P2E=;
+        b=G9Aqk2QIyaP4NStdJlI2W+jYyFf2cxdEkKsatz7oGDFsfmYZi9tBWCduPA4+jE5p7U
+         BOuY6gqJjmyV8v5QQKYxDwuzwKGa/5XhOO/tgHUHlhmUEBmh3zMhoy6pH4jz/X3mqm+B
+         aiFLyQdZrtcHXPQq/wBywud/Lta/EdrBpbrZgbARYUg/fOO/ZsAxLyZc7yqfUK2jqcg3
+         720naMUmXaJh+2jyYDvtsgc7dQDFDjt/gHNTBax++79zSiiVG4xnl5N2SAU6gkjrhJJm
+         w9rVyMGtlv9iW1cuSRn5jzCsOgqZnJRO0L04W/ii+Is7cQG1OlyTaPAzvogxQD1BYjMN
+         IkgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TGhvxcJ5e0tWwjSJNqM6XCMaaGd6Uf1B/o2F+QC2P2E=;
+        b=N1L14FRjzsrJiKLbu9CrIuLWMXI5vEqHME+c4J+c1tXBUT/Bs3aYJh02vH0BgOL1Mt
+         UmFsp4TUVwKiZWWZ392gy4bC6fFY9Orx84NyYda9Ca2nPOmDqKnRMvoAh28Mm4TUnGhv
+         swl7HCndrmBr8VF4BXgTVBpKFKgKyQIF+Z4cvoYg+7zi/eKN9JMGuTIS3lzjzQ0sZP0l
+         Nos8hlhW5b9AyH4FWpo5LqJYY7R+wnt+FmGm3/Ss0XEtDoHSyIbLrpcylcMdonZHNGBZ
+         FzfB5zXfCOCy+9nO+/lONeZF7V5kR8b5pJIl08I/6AZb1Elg9kP0UKt3RHtO8Kx1siiG
+         0Raw==
+X-Gm-Message-State: AOAM533RJzZA+jNGftHJyW2l2WDce+SPf5doxN/r6/zS3k7uZn9qb8mA
+        XiOyptTCpTEd38w8VmjJwZUA4w==
+X-Google-Smtp-Source: ABdhPJwXFzB1KuSRyctCLMeToyBav6moCwvyVSJSQ2wA2Una7A66/qiHNzLd3gX+GGFxN1qUveWbMQ==
+X-Received: by 2002:adf:de8a:: with SMTP id w10mr3133483wrl.413.1631189065464;
+        Thu, 09 Sep 2021 05:04:25 -0700 (PDT)
+Received: from localhost.localdomain ([95.148.6.201])
+        by smtp.gmail.com with ESMTPSA id n66sm1437498wmn.2.2021.09.09.05.04.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Sep 2021 05:04:24 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Brian Cain <bcain@codeaurora.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Chris Zankel <chris@zankel.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Guo Ren <guoren@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jeff Dike <jdike@addtoit.com>, John Crispin <john@phrozen.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>, openrisc@lists.librecores.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rich Felker <dalias@libc.org>, sparclinux@vger.kernel.org,
+        Stafford Horne <shorne@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: [PATCH v2 0/3] power: reset: Convert Power-Off driver to tristate
+Date:   Thu,  9 Sep 2021 13:04:18 +0100
+Message-Id: <20210909120421.1313908-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.33.0.153.gba50c8fa24-goog
 MIME-Version: 1.0
-In-Reply-To: <13d237ab-0ef3-772d-6f21-ff023781efcf@flygoat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Provide support to compile the Power-Off driver as a module.
 
-On 2021/9/8 下午8:41, Jiaxun Yang wrote:
->
-> 在 2021/9/8 16:51, Thomas Bogendoerfer 写道:
->> On Wed, Sep 08, 2021 at 10:08:47AM +0800, 陈飞扬 wrote:
->>> On Tue, 7 Sept 2021 at 21:49, Jiaxun Yang <jiaxun.yang@flygoat.com> 
->>> wrote:
->>>>
->>>> 在 2021/9/7 14:16, FreeFlyingSheep 写道:
->>>>> From: Feiyang Chen <chenfeiyang@loongson.cn>
->>>>>
->>>>> Convert mips syscall to use the generic entry infrastructure from
->>>>> kernel/entry/*.
->>>>>
->>>>> There are a few special things on mips:
->>>>>
->>>>> - There is one type of syscall on mips32 (scall32-o32) and three 
->>>>> types
->>>>> of syscalls on mips64 (scall64-o32, scall64-n32 and scall64-n64). Now
->>>>> convert to C code to handle different types of syscalls.
->>>>>
->>>>> - For some special syscalls (e.g. fork, clone, clone3 and sysmips),
->>>>> save_static_function() wrapper is used to save static registers. Now
->>>>> SAVE_STATIC is used in handle_sys before calling do_syscall(), so the
->>>>> save_static_function() wrapper can be removed.
->>>>>
->>>>> - For sigreturn/rt_sigreturn and sysmips, inline assembly is used to
->>>>> jump to syscall_exit directly for skipping setting the error flag and
->>>>> restoring all registers. Now use regs->regs[27] to mark whether to
->>>>> handle the error flag and always restore all registers in handle_sys,
->>>>> so these functions can return normally as other architecture.
->>>> Hmm, that would give us overhead of register context on these 
->>>> syscalls.
->>>>
->>>> I guess it's worthy?
->>>>
->>> Hi, Jiaxun,
->>>
->>> Saving and restoring registers against different system calls can be
->>> difficult due to the use of generic entry.
->>> To avoid a lot of duplicate code, I think the overhead is worth it.
->> could you please provide numbers for that ? This code still runs
->> on low end MIPS CPUs for which overhead might mean a different
->> ballpark than some highend Loongson CPUs.
->
-> It shows ~3% regression for UnixBench on MT7621A (1004Kec).
->
-> + Yanjie could you help with a run on ingenic platform?
+v1 => v2:
+ - s/EXPORT_SYMBOL/EXPORT_SYMBOL_GPL/
+ 
+Elliot Berman (2):
+  reboot: Export reboot_mode
+  power: reset: Enable tristate on restart power-off driver
 
+Lee Jones (1):
+  arch: Export machine_restart() instances so they can be called from
+    modules
 
-Sure, I can help with JZ4775, JZ4780, X1000, X1830, X2000 from Ingenic, 
-and SF16A18, SF19A2890 from SiFlower.
+ arch/arc/kernel/reset.c            | 1 +
+ arch/arm/kernel/reboot.c           | 1 +
+ arch/arm64/kernel/process.c        | 1 +
+ arch/csky/kernel/power.c           | 1 +
+ arch/h8300/kernel/process.c        | 1 +
+ arch/hexagon/kernel/reset.c        | 1 +
+ arch/m68k/kernel/process.c         | 1 +
+ arch/microblaze/kernel/reset.c     | 1 +
+ arch/mips/kernel/reset.c           | 1 +
+ arch/mips/lantiq/falcon/reset.c    | 1 +
+ arch/mips/sgi-ip27/ip27-reset.c    | 1 +
+ arch/nds32/kernel/process.c        | 2 +-
+ arch/nios2/kernel/process.c        | 1 +
+ arch/openrisc/kernel/process.c     | 1 +
+ arch/parisc/kernel/process.c       | 1 +
+ arch/powerpc/kernel/setup-common.c | 1 +
+ arch/riscv/kernel/reset.c          | 1 +
+ arch/s390/kernel/setup.c           | 1 +
+ arch/sh/kernel/reboot.c            | 1 +
+ arch/sparc/kernel/process_32.c     | 1 +
+ arch/sparc/kernel/reboot.c         | 1 +
+ arch/um/kernel/reboot.c            | 1 +
+ arch/x86/kernel/reboot.c           | 1 +
+ arch/xtensa/kernel/setup.c         | 1 +
+ drivers/power/reset/Kconfig        | 2 +-
+ kernel/reboot.c                    | 2 ++
+ 26 files changed, 27 insertions(+), 2 deletions(-)
 
-+ Paul could you help with a run on JZ4760 and JZ4770?
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Brian Cain <bcain@codeaurora.org>
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Guo Ren <guoren@kernel.org>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: John Crispin <john@phrozen.org>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Ley Foon Tan <ley.foon.tan@intel.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-um@lists.infradead.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Michal Simek <monstr@monstr.eu>
+Cc: openrisc@lists.librecores.org
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Rich Felker <dalias@libc.org>
+Cc: sparclinux@vger.kernel.org
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: uclinux-h8-devel@lists.sourceforge.jp
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Vineet Gupta <vgupta@synopsys.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+-- 
+2.33.0.153.gba50c8fa24-goog
 
-+ Nikolaus could you help with a run on JZ4730?
-
-
-Thanks and best regards!
-
-
->
-> Thanks.
->
-> - Jiaxun
->
->>
->> Thomas.
->>
