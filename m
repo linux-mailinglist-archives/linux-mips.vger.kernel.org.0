@@ -2,276 +2,338 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A842840424E
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Sep 2021 02:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27ADF4043F8
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Sep 2021 05:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348475AbhIIAcf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Sep 2021 20:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234769AbhIIAce (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Sep 2021 20:32:34 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A05CC061575
-        for <linux-mips@vger.kernel.org>; Wed,  8 Sep 2021 17:31:25 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id bg1so2315570plb.13
-        for <linux-mips@vger.kernel.org>; Wed, 08 Sep 2021 17:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5TYYBxc50K8ZMZBZ7awprT/bOkKTiGesfrb7WFjJZ+A=;
-        b=KCg85QMP/OVnq6/fqe2waVZlGw1gFTsTbflgSC3G8O1iDp1IJHUm3MOwpZoQjxxDR7
-         Atw25rhjAEpmxxhj1rRyXedydjURMxf4JnVSadGKtWgcyetFjVG75upvVHgaoqHaOe7Q
-         i7ClThKtbyUxOILSABwytp3A6HENqxe+XgPEA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5TYYBxc50K8ZMZBZ7awprT/bOkKTiGesfrb7WFjJZ+A=;
-        b=wWufqoelX8GJ7G33sDJCZpSQ2FXeKLU+DFdOQFA8C+PfzxyCaFljAhyUNKsJ6GdEBG
-         MQ73DWisWzBAsh2wkm5M4oNseyPexXTGrs7UURiIHcNb6SQ2pCrQoMF3VcRfqRcz0cOr
-         vTBPGmmni30BJgdmJr/8Xg4A1UR0ZsAY5DT6gxmmG7ARM6XroAZAKQxeIlLT3DZ67Cho
-         yDaPcJ4kTiD/mc00vw5XShv88BWMmphDSEFUTR0EoIufYLvo1/MdWsRv8NrXCba/y/Ft
-         VC4Oq7RwxjH8anyOMvmzjwOSbZDVRDIJonaQrkVHtVJj0AKgRqgBwozyz6BkHlRhK92s
-         F8VQ==
-X-Gm-Message-State: AOAM5303gSnI8KUd1RP+IRMYCG87MzcyAYlQeYDPmm+4ZApTUsIg2q/X
-        qP2KsXSJzeJtoAxnxyTh2ews6xIcqPxM9A==
-X-Google-Smtp-Source: ABdhPJxg1mw/5scZiNKYmggHDK5XJV3x4wD5qlU4DcUHqBUrp61iKQ2ERAVWY+xuqnlBik7d7QHVDQ==
-X-Received: by 2002:a17:90b:1b4b:: with SMTP id nv11mr375498pjb.54.1631147484694;
-        Wed, 08 Sep 2021 17:31:24 -0700 (PDT)
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com. [209.85.215.179])
-        by smtp.gmail.com with ESMTPSA id u123sm63964pfb.123.2021.09.08.17.31.24
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Sep 2021 17:31:24 -0700 (PDT)
-Received: by mail-pg1-f179.google.com with SMTP id e7so42335pgk.2
-        for <linux-mips@vger.kernel.org>; Wed, 08 Sep 2021 17:31:24 -0700 (PDT)
-X-Received: by 2002:a05:6e02:214e:: with SMTP id d14mr150446ilv.142.1631147079713;
- Wed, 08 Sep 2021 17:24:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210901201934.1084250-1-dianders@chromium.org> <YTUSiHiCgihz1AcO@ravnborg.org>
-In-Reply-To: <YTUSiHiCgihz1AcO@ravnborg.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 8 Sep 2021 17:24:28 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U+dnyuGc9OuvMJpYWVx1x6yYQPJgi6fh+6Ne37+veedw@mail.gmail.com>
-Message-ID: <CAD=FV=U+dnyuGc9OuvMJpYWVx1x6yYQPJgi6fh+6Ne37+veedw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/16] eDP: Support probing eDP panels dynamically
- instead of hardcoding
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linus W <linus.walleij@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Steev Klimaszewski <steev@kali.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Emil Velikov <emil.velikov@collabora.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lionel Debieve <lionel.debieve@st.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        =?UTF-8?Q?Martin_J=C3=BCcker?= <martin.juecker@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Nishanth Menon <nm@ti.com>,
-        Olivier Moysan <olivier.moysan@st.com>,
-        Olof Johansson <olof@lixom.net>,
-        Otavio Salvador <otavio@ossystems.com.br>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Razvan Stefanescu <razvan.stefanescu@microchip.com>,
-        Robert Richter <rric@kernel.org>,
+        id S1350027AbhIIDeg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Sep 2021 23:34:36 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:57916 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235059AbhIIDeg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 8 Sep 2021 23:34:36 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxheVPgDlhDyYCAA--.9478S2;
+        Thu, 09 Sep 2021 11:32:32 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Shubham Bansal <illusionist.neo@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-sunxi@lists.linux.dev,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        =?UTF-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        naveen.n.rao@linux.ibm.com, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, bjorn@kernel.org,
+        davem@davemloft.net,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Paul Chaignon <paul@cilium.io>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: Change value of MAX_TAIL_CALL_CNT from 32 to 33
+Date:   Thu,  9 Sep 2021 11:32:30 +0800
+Message-Id: <1631158350-3661-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxheVPgDlhDyYCAA--.9478S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr13GF1ftFyfWF45Zr4kCrg_yoWftF1rpr
+        18twnakrWvqw15Aa4xKayUWw4UKF4vgF47KFn8CrWSyanFvr9rWr13Kw15ZFZ0vrW8Jw4r
+        WFZ0kr43C3WkXwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvKb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
+        xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr
+        0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Wrv_Gr1UMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x07bz4SrUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+In the current code, the actual max tail call count is 33 which is greater
+than MAX_TAIL_CALL_CNT (defined as 32), the actual limit is not consistent
+with the meaning of MAX_TAIL_CALL_CNT, there is some confusion and need to
+spend some time to think the reason at the first glance.
 
-On Sun, Sep 5, 2021 at 11:55 AM Sam Ravnborg <sam@ravnborg.org> wrote:
->
-> Hi Douglas,
->
-> On Wed, Sep 01, 2021 at 01:19:18PM -0700, Douglas Anderson wrote:
-> > The goal of this patch series is to move away from hardcoding exact
-> > eDP panels in device tree files. As discussed in the various patches
-> > in this series (I'm not repeating everything here), most eDP panels
-> > are 99% probable and we can get that last 1% by allowing two "power
-> > up" delays to be specified in the device tree file and then using the
-> > panel ID (found in the EDID) to look up additional power sequencing
-> > delays for the panel.
-> >
-> > This patch series is the logical contiunation of a previous patch
-> > series where I proposed solving this problem by adding a
-> > board-specific compatible string [1]. In the discussion that followed
-> > it sounded like people were open to something like the solution
-> > proposed in this new series.
-> >
-> > In version 2 I got rid of the idea that we could have a "fallback"
-> > compatible string that we'd use if we didn't recognize the ID in the
-> > EDID. This simplifies the bindings a lot and the implementation
-> > somewhat. As a result of not having a "fallback", though, I'm not
-> > confident in transitioning any existing boards over to this since
-> > we'll have to fallback to very conservative timings if we don't
-> > recognize the ID from the EDID and I can't guarantee that I've seen
-> > every panel that might have shipped on an existing product. The plan
-> > is to use "edp-panel" only on new boards or new revisions of old
-> > boards where we can guarantee that every EDID that ships out of the
-> > factory has an ID in the table.
-> >
-> > Version 3 of this series now splits out all eDP panels to their own
-> > driver and adds the generic eDP panel support to this new driver. I
-> > believe this is what Sam was looking for [2].
-> >
-> > [1] https://lore.kernel.org/r/YFKQaXOmOwYyeqvM@google.com/
-> > [2] https://lore.kernel.org/r/YRTsFNTn%2FT8fLxyB@ravnborg.org/
-> >
-> > Changes in v3:
-> > - Decode hex product ID w/ same endianness as everyone else.
-> > - ("Reorder logicpd_type_28...") patch new for v3.
-> > - Split eDP panels patch new for v3.
-> > - Move wayward panels patch new for v3.
-> > - ("Non-eDP panels don't need "HPD" handling") new for v3.
-> > - Split the delay structure out patch just on eDP now.
-> > - ("Better describe eDP panel delays") new for v3.
-> > - Fix "prepare_to_enable" patch new for v3.
-> > - ("Don't re-read the EDID every time") moved to eDP only patch.
-> > - Generic "edp-panel" handled by the eDP panel driver now.
-> > - Change init order to we power at the end.
-> > - Adjust endianness of product ID.
-> > - Fallback to conservative delays if panel not recognized.
-> > - Add Sharp LQ116M1JW10 to table.
-> > - Add AUO B116XAN06.1 to table.
-> > - Rename delays more generically so they can be reused.
-> >
-> > Changes in v2:
-> > - No longer allow fallback to panel-simple.
-> > - Add "-ms" suffix to delays.
-> > - Don't support a "fallback" panel. Probed panels must be probed.
-> > - Not based on patch to copy "desc"--just allocate for probed panels.
-> > - Add "-ms" suffix to delays.
-> >
-> > Douglas Anderson (16):
-> >   dt-bindings: drm/panel-simple-edp: Introduce generic eDP panels
-> >   drm/edid: Break out reading block 0 of the EDID
-> >   drm/edid: Allow the querying/working with the panel ID from the EDID
-> >   drm/panel-simple: Reorder logicpd_type_28 / mitsubishi_aa070mc01
-> >   drm/panel-simple-edp: Split eDP panels out of panel-simple
-> >   ARM: configs: Everyone who had PANEL_SIMPLE now gets PANEL_SIMPLE_EDP
-> >   arm64: defconfig: Everyone who had PANEL_SIMPLE now gets
-> >     PANEL_SIMPLE_EDP
-> >   MIPS: configs: Everyone who had PANEL_SIMPLE now gets PANEL_SIMPLE_EDP
-> >   drm/panel-simple-edp: Move some wayward panels to the eDP driver
-> >   drm/panel-simple: Non-eDP panels don't need "HPD" handling
-> >   drm/panel-simple-edp: Split the delay structure out
-> >   drm/panel-simple-edp: Better describe eDP panel delays
-> >   drm/panel-simple-edp: hpd_reliable shouldn't be subtraced from
-> >     hpd_absent
-> >   drm/panel-simple-edp: Fix "prepare_to_enable" if panel doesn't handle
-> >     HPD
-> >   drm/panel-simple-edp: Don't re-read the EDID every time we power off
-> >     the panel
-> >   drm/panel-simple-edp: Implement generic "edp-panel"s probed by EDID
->
-> Thanks for looking into this. I really like the outcome.
-> We have panel-simple that now (mostly) handle simple panels,
-> and thus all the eDP functionality is in a separate driver.
->
-> I have provided a few nits.
-> My only take on this is the naming - as we do not want to confuse
-> panel-simple and panel-edp I strongly suggest renaming the driver to
-> panel-edp.
+We can see the historical evolution from commit 04fd61ab36ec ("bpf: allow
+bpf programs to tail-call other bpf programs") and commit f9dabe016b63
+("bpf: Undo off-by-one in interpreter tail call count limit").
 
-Sure, I'll do that. I was trying to express the fact that the new
-"panel-edp" driver won't actually handle _all_ eDP panels, only the
-eDP panels that are (comparatively) simpler. For instance, I'm not
-planning to handle panel-samsung-atna33xc20.c in "panel-edp". I guess
-people will figure it out, though.
+In order to avoid changing existing behavior, the actual limit is 33 now,
+this is resonable.
 
+After commit 874be05f525e ("bpf, tests: Add tail call test suite"), we can
+see there exists failed testcase.
 
-> And then rename the corresponding Kconfig entry.
->
-> With these few changes all patches are:
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+On all archs when CONFIG_BPF_JIT_ALWAYS_ON is not set:
+ # echo 0 > /proc/sys/net/core/bpf_jit_enable
+ # modprobe test_bpf
+ # dmesg | grep -w FAIL
+ Tail call error path, max count reached jited:0 ret 34 != 33 FAIL
 
-Thanks, I'll add it to the patches. If there's anything major I need
-to change I'll give you a yell to make sure you see it.
+On some archs:
+ # echo 1 > /proc/sys/net/core/bpf_jit_enable
+ # modprobe test_bpf
+ # dmesg | grep -w FAIL
+ Tail call error path, max count reached jited:1 ret 34 != 33 FAIL
 
+So it is necessary to change the value of MAX_TAIL_CALL_CNT from 32 to 33,
+then do some small changes of the related code.
 
-> For bisectability I suggest to move the defconfig patches up before you
-> introduce the new Kconfig symbol. Or maybe they will be added via
-> another tree and then this is not possible to control
+With this patch, it does not change the current limit, MAX_TAIL_CALL_CNT
+can reflect the actual max tail call count, and the above failed testcase
+can be fixed.
 
-Yup, I'll do that. There was some question about the defconfig patch
-but they are hopefully cleared up now.
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/arm/net/bpf_jit_32.c         | 11 ++++++-----
+ arch/arm64/net/bpf_jit_comp.c     |  7 ++++---
+ arch/mips/net/ebpf_jit.c          |  4 ++--
+ arch/powerpc/net/bpf_jit_comp32.c |  4 ++--
+ arch/powerpc/net/bpf_jit_comp64.c | 12 ++++++------
+ arch/riscv/net/bpf_jit_comp32.c   |  4 ++--
+ arch/riscv/net/bpf_jit_comp64.c   |  4 ++--
+ arch/sparc/net/bpf_jit_comp_64.c  |  8 ++++----
+ include/linux/bpf.h               |  2 +-
+ kernel/bpf/core.c                 |  4 ++--
+ 10 files changed, 31 insertions(+), 29 deletions(-)
 
+diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+index a951276..39d9ae9 100644
+--- a/arch/arm/net/bpf_jit_32.c
++++ b/arch/arm/net/bpf_jit_32.c
+@@ -1180,18 +1180,19 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
+ 
+ 	/* tmp2[0] = array, tmp2[1] = index */
+ 
+-	/* if (tail_call_cnt > MAX_TAIL_CALL_CNT)
+-	 *	goto out;
++	/*
+ 	 * tail_call_cnt++;
++	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
++	 *	goto out;
+ 	 */
++	tc = arm_bpf_get_reg64(tcc, tmp, ctx);
++	emit(ARM_ADDS_I(tc[1], tc[1], 1), ctx);
++	emit(ARM_ADC_I(tc[0], tc[0], 0), ctx);
+ 	lo = (u32)MAX_TAIL_CALL_CNT;
+ 	hi = (u32)((u64)MAX_TAIL_CALL_CNT >> 32);
+-	tc = arm_bpf_get_reg64(tcc, tmp, ctx);
+ 	emit(ARM_CMP_I(tc[0], hi), ctx);
+ 	_emit(ARM_COND_EQ, ARM_CMP_I(tc[1], lo), ctx);
+ 	_emit(ARM_COND_HI, ARM_B(jmp_offset), ctx);
+-	emit(ARM_ADDS_I(tc[1], tc[1], 1), ctx);
+-	emit(ARM_ADC_I(tc[0], tc[0], 0), ctx);
+ 	arm_bpf_put_reg64(tcc, tmp, ctx);
+ 
+ 	/* prog = array->ptrs[index]
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 41c23f4..5d6c843 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -286,14 +286,15 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
+ 	emit(A64_CMP(0, r3, tmp), ctx);
+ 	emit(A64_B_(A64_COND_CS, jmp_offset), ctx);
+ 
+-	/* if (tail_call_cnt > MAX_TAIL_CALL_CNT)
+-	 *     goto out;
++	/*
+ 	 * tail_call_cnt++;
++	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
++	 *     goto out;
+ 	 */
++	emit(A64_ADD_I(1, tcc, tcc, 1), ctx);
+ 	emit_a64_mov_i64(tmp, MAX_TAIL_CALL_CNT, ctx);
+ 	emit(A64_CMP(1, tcc, tmp), ctx);
+ 	emit(A64_B_(A64_COND_HI, jmp_offset), ctx);
+-	emit(A64_ADD_I(1, tcc, tcc, 1), ctx);
+ 
+ 	/* prog = array->ptrs[index];
+ 	 * if (prog == NULL)
+diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
+index 3a73e93..029fc34 100644
+--- a/arch/mips/net/ebpf_jit.c
++++ b/arch/mips/net/ebpf_jit.c
+@@ -617,14 +617,14 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
+ 	b_off = b_imm(this_idx + 1, ctx);
+ 	emit_instr(ctx, bne, MIPS_R_AT, MIPS_R_ZERO, b_off);
+ 	/*
+-	 * if (TCC-- < 0)
++	 * if (--TCC < 0)
+ 	 *     goto out;
+ 	 */
+ 	/* Delay slot */
+ 	tcc_reg = (ctx->flags & EBPF_TCC_IN_V1) ? MIPS_R_V1 : MIPS_R_S4;
+ 	emit_instr(ctx, daddiu, MIPS_R_T5, tcc_reg, -1);
+ 	b_off = b_imm(this_idx + 1, ctx);
+-	emit_instr(ctx, bltz, tcc_reg, b_off);
++	emit_instr(ctx, bltz, MIPS_R_T5, b_off);
+ 	/*
+ 	 * prog = array->ptrs[index];
+ 	 * if (prog == NULL)
+diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+index beb12cb..b5585ad 100644
+--- a/arch/powerpc/net/bpf_jit_comp32.c
++++ b/arch/powerpc/net/bpf_jit_comp32.c
+@@ -221,12 +221,12 @@ static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32
+ 	PPC_BCC(COND_GE, out);
+ 
+ 	/*
++	 * tail_call_cnt++;
+ 	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
+ 	 *   goto out;
+ 	 */
+-	EMIT(PPC_RAW_CMPLWI(_R0, MAX_TAIL_CALL_CNT));
+-	/* tail_call_cnt++; */
+ 	EMIT(PPC_RAW_ADDIC(_R0, _R0, 1));
++	EMIT(PPC_RAW_CMPLWI(_R0, MAX_TAIL_CALL_CNT));
+ 	PPC_BCC(COND_GT, out);
+ 
+ 	/* prog = array->ptrs[index]; */
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index b87a63d..bb15cc4 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -227,6 +227,12 @@ static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32
+ 	PPC_BCC(COND_GE, out);
+ 
+ 	/*
++	 * tail_call_cnt++;
++	 */
++	EMIT(PPC_RAW_ADDI(b2p[TMP_REG_1], b2p[TMP_REG_1], 1));
++	PPC_BPF_STL(b2p[TMP_REG_1], 1, bpf_jit_stack_tailcallcnt(ctx));
++
++	/*
+ 	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
+ 	 *   goto out;
+ 	 */
+@@ -234,12 +240,6 @@ static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32
+ 	EMIT(PPC_RAW_CMPLWI(b2p[TMP_REG_1], MAX_TAIL_CALL_CNT));
+ 	PPC_BCC(COND_GT, out);
+ 
+-	/*
+-	 * tail_call_cnt++;
+-	 */
+-	EMIT(PPC_RAW_ADDI(b2p[TMP_REG_1], b2p[TMP_REG_1], 1));
+-	PPC_BPF_STL(b2p[TMP_REG_1], 1, bpf_jit_stack_tailcallcnt(ctx));
+-
+ 	/* prog = array->ptrs[index]; */
+ 	EMIT(PPC_RAW_MULI(b2p[TMP_REG_1], b2p_index, 8));
+ 	EMIT(PPC_RAW_ADD(b2p[TMP_REG_1], b2p[TMP_REG_1], b2p_bpf_array));
+diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
+index e649742..1608d94 100644
+--- a/arch/riscv/net/bpf_jit_comp32.c
++++ b/arch/riscv/net/bpf_jit_comp32.c
+@@ -800,12 +800,12 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
+ 
+ 	/*
+ 	 * temp_tcc = tcc - 1;
+-	 * if (tcc < 0)
++	 * if (temp_tcc < 0)
+ 	 *   goto out;
+ 	 */
+ 	emit(rv_addi(RV_REG_T1, RV_REG_TCC, -1), ctx);
+ 	off = ninsns_rvoff(tc_ninsn - (ctx->ninsns - start_insn));
+-	emit_bcc(BPF_JSLT, RV_REG_TCC, RV_REG_ZERO, off, ctx);
++	emit_bcc(BPF_JSLT, RV_REG_T1, RV_REG_ZERO, off, ctx);
+ 
+ 	/*
+ 	 * prog = array->ptrs[index];
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 3af4131..6e9ba83 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -311,12 +311,12 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
+ 	off = ninsns_rvoff(tc_ninsn - (ctx->ninsns - start_insn));
+ 	emit_branch(BPF_JGE, RV_REG_A2, RV_REG_T1, off, ctx);
+ 
+-	/* if (TCC-- < 0)
++	/* if (--TCC < 0)
+ 	 *     goto out;
+ 	 */
+ 	emit_addi(RV_REG_T1, tcc, -1, ctx);
+ 	off = ninsns_rvoff(tc_ninsn - (ctx->ninsns - start_insn));
+-	emit_branch(BPF_JSLT, tcc, RV_REG_ZERO, off, ctx);
++	emit_branch(BPF_JSLT, RV_REG_T1, RV_REG_ZERO, off, ctx);
+ 
+ 	/* prog = array->ptrs[index];
+ 	 * if (!prog)
+diff --git a/arch/sparc/net/bpf_jit_comp_64.c b/arch/sparc/net/bpf_jit_comp_64.c
+index 9a2f20c..50d914c 100644
+--- a/arch/sparc/net/bpf_jit_comp_64.c
++++ b/arch/sparc/net/bpf_jit_comp_64.c
+@@ -863,6 +863,10 @@ static void emit_tail_call(struct jit_ctx *ctx)
+ 	emit_branch(BGEU, ctx->idx, ctx->idx + OFFSET1, ctx);
+ 	emit_nop(ctx);
+ 
++	emit_alu_K(ADD, tmp, 1, ctx);
++	off = BPF_TAILCALL_CNT_SP_OFF;
++	emit(ST32 | IMMED | RS1(SP) | S13(off) | RD(tmp), ctx);
++
+ 	off = BPF_TAILCALL_CNT_SP_OFF;
+ 	emit(LD32 | IMMED | RS1(SP) | S13(off) | RD(tmp), ctx);
+ 	emit_cmpi(tmp, MAX_TAIL_CALL_CNT, ctx);
+@@ -870,10 +874,6 @@ static void emit_tail_call(struct jit_ctx *ctx)
+ 	emit_branch(BGU, ctx->idx, ctx->idx + OFFSET2, ctx);
+ 	emit_nop(ctx);
+ 
+-	emit_alu_K(ADD, tmp, 1, ctx);
+-	off = BPF_TAILCALL_CNT_SP_OFF;
+-	emit(ST32 | IMMED | RS1(SP) | S13(off) | RD(tmp), ctx);
+-
+ 	emit_alu3_K(SLL, bpf_index, 3, tmp, ctx);
+ 	emit_alu(ADD, bpf_array, tmp, ctx);
+ 	off = offsetof(struct bpf_array, ptrs);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f4c16f1..224cc7e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1046,7 +1046,7 @@ struct bpf_array {
+ };
+ 
+ #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
+-#define MAX_TAIL_CALL_CNT 32
++#define MAX_TAIL_CALL_CNT 33
+ 
+ #define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
+ 				 BPF_F_RDONLY_PROG |	\
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 9f4636d..8edb1c3 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1564,10 +1564,10 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 
+ 		if (unlikely(index >= array->map.max_entries))
+ 			goto out;
+-		if (unlikely(tail_call_cnt > MAX_TAIL_CALL_CNT))
+-			goto out;
+ 
+ 		tail_call_cnt++;
++		if (unlikely(tail_call_cnt > MAX_TAIL_CALL_CNT))
++			goto out;
+ 
+ 		prog = READ_ONCE(array->ptrs[index]);
+ 		if (!prog)
+-- 
+2.1.0
 
-> I assume you will apply the patches yourself.
-
-Sure, I can do that with your Ack. I'll also make sure that patches
-that Jani commented on get resolved.
-
-
--Doug
