@@ -2,38 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FEF840623F
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Sep 2021 02:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B499406242
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Sep 2021 02:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbhIJApC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Sep 2021 20:45:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47122 "EHLO mail.kernel.org"
+        id S230356AbhIJApH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Sep 2021 20:45:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232381AbhIJAVM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 Sep 2021 20:21:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D6B26610E9;
-        Fri, 10 Sep 2021 00:20:01 +0000 (UTC)
+        id S233897AbhIJAWD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Sep 2021 20:22:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EF86C611BF;
+        Fri, 10 Sep 2021 00:20:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631233202;
-        bh=qGLb3QTiSCz8SrUkiu5OPBBspFGjPc7B2rXYIOOeTyw=;
+        s=k20201202; t=1631233252;
+        bh=CJrES0oAwJTPIo0BiAy8EvkGblO9RDeUA9LmpITn31A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rx1LLeiuBuCVFp4yuvtdPP3F/Iiy8sFgfdu9VA26wpZULj1mi9dQ42K6KkAgDczQ6
-         AOd1mI3QQ3zzdlrRRADqwU8tqTvaT6cQn6b1ijJsP5B+xOfxMvLKiAKuU2sZTWu1dQ
-         SuzaOtddDGLaZahunOSSQ2dPusrOcrXWPRUrTHgjQyYkE+k9VtFoCpCMiASVyI7UVR
-         CVI5i5BB49LHBRmjfCFayX78ZLs0BKGaOwgjUpA2l4HvAMe45W1ykDiYclB/PsLxj3
-         7qeazaRm1fQX+uzJEuHZxgbCtTWMP8plD7zDBxqMqIw1EgmuVTmgBqr/+whD5YLTkl
-         MiZtCdjO11EQQ==
+        b=e0njwSwxCbq07wcrSaq7cbYAFc3RI63fAYMq8wBVqD2L59Ma7MJEMbNOCcc7uFY0r
+         0ofISncTLnxvN+djdHF3xuP4ZEF/cZiNFqDGpej6eUrlftMD9AiABi+tNzTwZceIsY
+         Wgbgjuz/DYyVZ9EOLC3k7fz7lLs/TVgBT5Zx8kESoz92ARoMihrnPYsha9Q4k+eqhP
+         3ditaP/b2CTfwpPYcx5kCoG1YXBfAEE/1RGqulEVAdxJ6ZTORGxxqkz61DtXyK3Hbh
+         qazN+sYjEX2GevC9oJnNWUl+6Xs+Z83r0OdQY4oPQkvrvviQr9uaKEiPuS7uqm8T2X
+         FjN856rXPa6Pw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paul Cercueil <paul@crapouillou.net>,
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 72/88] MIPS: ingenic: Unconditionally enable clock of CPU #0
-Date:   Thu,  9 Sep 2021 20:18:04 -0400
-Message-Id: <20210910001820.174272-72-sashal@kernel.org>
+        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 17/53] MIPS: loongson2ef: don't build serial.o unconditionally
+Date:   Thu,  9 Sep 2021 20:19:52 -0400
+Message-Id: <20210910002028.175174-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210910001820.174272-1-sashal@kernel.org>
-References: <20210910001820.174272-1-sashal@kernel.org>
+In-Reply-To: <20210910002028.175174-1-sashal@kernel.org>
+References: <20210910002028.175174-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,74 +44,62 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Cercueil <paul@crapouillou.net>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 71f8817c28e2e1e5549138e2aef68c2fd784e162 ]
+[ Upstream commit ad548993a66c498267695edd8b19a682be0e3a8b ]
 
-Make sure that the PLL that feeds the CPU won't be stopped while the
-kernel is running.
+LOONGSON_UART_BASE depends on EARLY_PRINTK || SERIAL_8250, but when
+neither of these Kconfig symbols is set, the kernel build has errors:
 
-This fixes a problem on JZ4760 (and probably others) where under very
-specific conditions, the main PLL would be turned OFF when the kernel
-was shutting down, causing the shutdown process to fail.
+../arch/mips/loongson2ef/common/serial.c: In function 'serial_init':
+../arch/mips/loongson2ef/common/serial.c:66:25: error: 'loongson_uart_base' undeclared (first use in this function)
+   66 |                         loongson_uart_base;
+../arch/mips/loongson2ef/common/serial.c:66:25: note: each undeclared identifier is reported only once for each function it appears in
+../arch/mips/loongson2ef/common/serial.c:68:41: error: '_loongson_uart_base' undeclared (first use in this function)
+   68 |                         (void __iomem *)_loongson_uart_base;
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Fix this by building serial.o only when one (or both) of these
+Kconfig symbols is enabled.
+
+Tested with:
+	(a) EARLY_PRINTK=y, SERIAL_8250 not set;
+	(b) EARLY_PRINTK=y, SERIAL_8250=y;
+	(c) EARLY_PRINTK=y, SERIAL_8250=m.
+	(d) EARLY_PRINTK not set, SERIAL_8250=y;
+	(e) EARLY_PRINTK not set, SERIAL_8250=m;
+	(f) EARLY_PRINTK not set, SERIAL_8250 not set.
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/generic/board-ingenic.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ arch/mips/loongson2ef/common/Makefile | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/generic/board-ingenic.c b/arch/mips/generic/board-ingenic.c
-index 0cec0bea13d6..11387a93867b 100644
---- a/arch/mips/generic/board-ingenic.c
-+++ b/arch/mips/generic/board-ingenic.c
-@@ -7,6 +7,8 @@
-  * Copyright (C) 2020 Paul Cercueil <paul@crapouillou.net>
-  */
+diff --git a/arch/mips/loongson2ef/common/Makefile b/arch/mips/loongson2ef/common/Makefile
+index d5ab3e543ea3..30ea8b5ca685 100644
+--- a/arch/mips/loongson2ef/common/Makefile
++++ b/arch/mips/loongson2ef/common/Makefile
+@@ -4,12 +4,14 @@
+ #
  
-+#include <linux/clk.h>
-+#include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_fdt.h>
- #include <linux/pm.h>
-@@ -108,10 +110,36 @@ static const struct platform_suspend_ops ingenic_pm_ops __maybe_unused = {
+ obj-y += setup.o init.o env.o time.o reset.o irq.o \
+-    bonito-irq.o mem.o machtype.o platform.o serial.o
++    bonito-irq.o mem.o machtype.o platform.o
+ obj-$(CONFIG_PCI) += pci.o
  
- static int __init ingenic_pm_init(void)
- {
-+	struct device_node *cpu_node;
-+	struct clk *cpu0_clk;
-+	int ret;
-+
- 	if (boot_cpu_type() == CPU_XBURST) {
- 		if (IS_ENABLED(CONFIG_PM_SLEEP))
- 			suspend_set_ops(&ingenic_pm_ops);
- 		_machine_halt = ingenic_halt;
-+
-+		/*
-+		 * Unconditionally enable the clock for the first CPU.
-+		 * This makes sure that the PLL that feeds the CPU won't be
-+		 * stopped while the kernel is running.
-+		 */
-+		cpu_node = of_get_cpu_node(0, NULL);
-+		if (!cpu_node) {
-+			pr_err("Unable to get CPU node\n");
-+		} else {
-+			cpu0_clk = of_clk_get(cpu_node, 0);
-+			if (IS_ERR(cpu0_clk)) {
-+				pr_err("Unable to get CPU0 clock\n");
-+				return PTR_ERR(cpu0_clk);
-+			}
-+
-+			ret = clk_prepare_enable(cpu0_clk);
-+			if (ret) {
-+				pr_err("Unable to enable CPU0 clock\n");
-+				return ret;
-+			}
-+		}
- 	}
+ #
+ # Serial port support
+ #
++obj-$(CONFIG_LOONGSON_UART_BASE) += serial.o
++obj-$(CONFIG_EARLY_PRINTK) += serial.o
+ obj-$(CONFIG_LOONGSON_UART_BASE) += uart_base.o
+ obj-$(CONFIG_LOONGSON_MC146818) += rtc.o
  
- 	return 0;
 -- 
 2.30.2
 
