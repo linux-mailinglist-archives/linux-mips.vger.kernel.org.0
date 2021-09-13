@@ -2,89 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 050B640896F
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Sep 2021 12:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FD8408A32
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Sep 2021 13:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239210AbhIMKzc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Sep 2021 06:55:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51150 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238681AbhIMKzb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 13 Sep 2021 06:55:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A1CE6103B;
-        Mon, 13 Sep 2021 10:54:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631530456;
-        bh=3SRhzTBiqP3IIrmIEDH1+61sWzXII/5uXbVi3rCBjN0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CBD90Xf9ehAWWcgw2ujqPuwldG7ZtQe2ChCYey8K4Yrpdt71xUyogfzhFXu8RfMGl
-         aS1IFPzUR2q2fjVe9MfOtnip2AE7WWISVY06NqXDR8DxgcMP8U7qHJPJwjQrLr4MNJ
-         pYD6jrZjRft61Hq51iXcR+p1+IJLiR/Ho8dhFgE0392axlZGZK0IQHHnMjH5hzgE/F
-         dsicF8XxY79QiunsWufOgJVgvfkfVJrmV9UnOTvbVA5RhU3jPz1s+mpOAHzn21Vc0J
-         5R8+G3GVLods03LmnR4bdM7CQ94qIoa9VoNWMFBAYzW+ztbGxSH2FEZyGLEc3dBdlG
-         QnRJ3BEcK/x9g==
-From:   Mark Brown <broonie@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Pavel Nadein <pavelnadein@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, Pavel Nadein <pasha-net@narod.ru>
-Subject: Re: [5.16][PATCH 0/3] Support for Ingenic JZ47xx SPI controller
-Date:   Mon, 13 Sep 2021 11:53:07 +0100
-Message-Id: <163153017121.45927.12831297849596169623.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210830230139.21476-1-contact@artur-rojek.eu>
-References: <20210830230139.21476-1-contact@artur-rojek.eu>
+        id S239489AbhIMLau (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Sep 2021 07:30:50 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:38985 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239238AbhIMLat (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 13 Sep 2021 07:30:49 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 2C1AB580EAE;
+        Mon, 13 Sep 2021 07:29:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 13 Sep 2021 07:29:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=fm3; bh=v
+        G78gf/CaL3bQ588C1vYpM4hPh0rNV78GelgrWxCew4=; b=nbmQms4KXSjCUv1Qx
+        JZFKc+nMSLjBXWTIJKcuFgg+LUSk47zQovp0C3tHIHs69sW/Z5eQPgiS5tTMJ2xM
+        J7NfQCJvOwOWFQj7zYAEIVcw152o49Fs+yp7VQhB0zDqzPhkhpP69rxxzLbrsQv3
+        TTAyaGQiMhPjlAzyUjdTzIcCzilQJDw9HqZz8vlDp2ZQ6TSGGRWYqPybLdyohNzq
+        9OEM4rW5xCB5AEJ75BdhUSuBdhjNFi2iqvJZTglLu5GfHT5qoe2GZYCWausB2kWv
+        I6Sz2RDvVzE0iP1Ch+XsPviaKTCe158p4A/BKiH/UnZHStcqBlhMIG7NdUliy7kT
+        /sadg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=vG78gf/CaL3bQ588C1vYpM4hPh0rNV78GelgrWxCe
+        w4=; b=J2/vaNmrgOg6ciQDe5lON1Cc253vj5wf0PPGnJSwle62hiJ/993AOflyL
+        jtlygr642r2PdjUgypDr7qfdyH1NA9saw7uNKSgswqdVlbng+p7c57jbZ6PXXFvp
+        ogdtEbCRHyNkOYc5li0A9s+UdF5pT8SulRyqtgYoRScz0zkmCRUDREuzyfLBy9gp
+        NH7vFJtYFI5pLUl01QgGeZRjGOJ6XvAQWP/6DHFDDoJku+w9vkfIb8TNb7pj4Iwd
+        2JGItIKwxud0+6gYr+yLBOt8ywnj7C4FGaOhUhfenblPBpNowFEZiAxyuzrj3beo
+        Z2L+z55adW/yiUaPk4S5CgnXtEbXg==
+X-ME-Sender: <xms:GzY_YSULUjx6-4Lt1QJHdHyfK_1yU_FOde-CimQAEm4KD-A2HVThKQ>
+    <xme:GzY_YekYBAme3KeZCAy8evvLnxsMMrHo0LCPrgy2ujChqtQ1y6g5yYKt-Zz9f372i
+    otBLv2FVKjDfv-lL5A>
+X-ME-Received: <xmr:GzY_YWZJTIF7HHu4ZnPWkMzUibG0dIBUTRhx6MY0DJyQFxyUCdc0BtRnMhSVs-4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudegjedgfeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
+    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:GzY_YZVQWPpL-nq9GH6FYPZWxR5X3yP6CzXFF9epyVbDZTpGaC18lA>
+    <xmx:GzY_Ycnxn6tOla4sV_jygFX8tjZcZBqbSd8R-UCgqCocH8GQaODxew>
+    <xmx:GzY_Yeckh3q7_uF2VNJvISNTvxDuN1v7hnrd75FLgFxRi9wnPSgSxg>
+    <xmx:HTY_YdBbj_H6hf6jn0zb_Yuc-D-dtRA5KjwGObYik1g2FErwlx9jsg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Sep 2021 07:29:30 -0400 (EDT)
+Message-ID: <6984ca2f-658f-cdf0-86a7-ccc57ace2622@flygoat.com>
+Date:   Mon, 13 Sep 2021 12:29:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH] MIPS: loongson64: configs: Update loongson3_defconfig
+To:     Wang Haojun <jiangliuer01@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Wang Haojun <wanghaojun@loongson.cn>,
+        Li Xuefeng <lixuefeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org
+References: <20210913092856.3204631-1-wanghaojun@loongson.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20210913092856.3204631-1-wanghaojun@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 31 Aug 2021 01:01:36 +0200, Artur Rojek wrote:
-> This patchset introduces support for SPI controllers found in the
-> Ingenic JZ47xx family of SoCs. Of particular note, this allows to
-> replace GPIO backed SPI on the MIPS Creator CI20 board.
-> 
-> Mark:
-> Checkpatch generates a `need consistent spacing around '*'` error on
-> this patchset, however I believe this is a false positive due to it
-> confusing a pointer with multiplication operator inside a macro.
-> 
-> [...]
 
-Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+在 2021/9/13 10:28, Wang Haojun 写道:
+> The Framebuffer CONFIG_FB needs to be explicitly selected or we
+> don't get any framebuffer anymore. DRM has stopped to select FB
+> after commit f611b1e7624ccdbd495c19e98056 ("drm: Avoid circular
+> dependencies for CONFIG_FB") because of circular dependency. So
+> we should enable it in the default config file, otherwise there
+> is no display before Xorg.
+>
+> Signed-off-by: Wang Haojun <wanghaojun@loongson.cn>
+> reviewed-by: Huacai Chen <chenhuacai@kernel.org>
+> reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-Thanks!
+Any readons for resending this patch?
 
-[1/3] dt-bindings: spi: Document Ingenic SPI controller bindings
-      commit: ff4daa7dd7e624a989dc882f7dcce6d8818b1036
-[2/3] SPI: add Ingenic JZ47xx driver.
-      commit: ae5f94cc00a7fdce830fd4bfe7a8c77ae7704666
-[3/3] MIPS: JZ4780: CI20: DTS: add SPI controller config
-      commit: 7b3fd8109b5d343b535e796328223b4f1c4aff5c
+Thanks.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+- Jiaxun
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> ---
+>   arch/mips/configs/loongson3_defconfig | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+> index f02101ff04b3..25ecd15bc952 100644
+> --- a/arch/mips/configs/loongson3_defconfig
+> +++ b/arch/mips/configs/loongson3_defconfig
+> @@ -282,6 +282,7 @@ CONFIG_DRM=y
+>   CONFIG_DRM_RADEON=m
+>   CONFIG_DRM_QXL=y
+>   CONFIG_DRM_VIRTIO_GPU=y
+> +CONFIG_FB=y
+>   CONFIG_FB_RADEON=y
+>   CONFIG_LCD_CLASS_DEVICE=y
+>   CONFIG_LCD_PLATFORM=m
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
