@@ -2,34 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEAF408394
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Sep 2021 06:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3436408395
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Sep 2021 06:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238429AbhIMEjM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Sep 2021 00:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237214AbhIMEjK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Sep 2021 00:39:10 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDDEC061574
-        for <linux-mips@vger.kernel.org>; Sun, 12 Sep 2021 21:37:55 -0700 (PDT)
+        id S229963AbhIMEnZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Sep 2021 00:43:25 -0400
+Received: from out0.migadu.com ([94.23.1.103]:16368 "EHLO out0.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229722AbhIMEnY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 13 Sep 2021 00:43:24 -0400
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1631507873;
+        t=1631508126;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding;
-        bh=hCN1RuCDgbRKHGlPoDxZyZTYqyMjI1Ya6JheLfLf6lU=;
-        b=vh1tUIf20Y8p8JiXvdXodr+E8PBwd4JJ+7mnLjsO3F95Q1gUI0b0mFBS2MOGjlDtO6oxPY
-        rOk40ICD9L9xJYJg/mBYRkXhqMV4W+eaHIpiOyrMWngxGQKlevaAL9KY/dZqoa49dzh4XK
-        PA4nA8ZJQUiKh5nB7sXAJVZinugohSc=
+        bh=fGKBxCK0qIA9IwjVuhdcF09CqepK7/bKFkb1ss+AiHE=;
+        b=WwanunWj0i+c5c3vXNgn+SvH08a1ddDIM5MpU8CvoYOGYVbqXyPDvZZm6L8aYyTHebrgMD
+        rM9rJIMWBApJS6rUP7D+NKOWhGgOc9se6XQSYITQAugfdzOmg+qEC6DJK/91P1fG7ElqtM
+        jlgvP53fjI76AiGLAAtQYOAsn6jlEns=
 From:   Jackie Liu <liu.yun@linux.dev>
 To:     tsbogend@alpha.franken.de
 Cc:     chenhc@lemote.com, linux-mips@vger.kernel.org, liu.yun@linux.dev
-Subject: [PATCH v2] MIPS: loongson64: make CPU_LOONGSON64 depends on MIPS_FP_SUPPORT
-Date:   Mon, 13 Sep 2021 12:37:27 +0800
-Message-Id: <20210913043727.549110-1-liu.yun@linux.dev>
+Subject: [PATCH v3] MIPS: loongson64: make CPU_LOONGSON64 depends on MIPS_FP_SUPPORT
+Date:   Mon, 13 Sep 2021 12:41:39 +0800
+Message-Id: <20210913044139.549459-1-liu.yun@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -54,9 +51,17 @@ arch/mips/loongson64/cop2-ex.c:283:38: error: ‘struct thread_struct’ has no 
 arch/mips/loongson64/cop2-ex.c:301:38: error: ‘struct thread_struct’ has no member named ‘fpu’
 
 Fixes: ef2f826c8f2f ("MIPS: Loongson-3: Enable the COP2 usage")
+Suggested-by: Huacai Chen <chenhc@lemote.com>
 Reported-by: k2ci robot <kernel-bot@kylinos.cn>
 Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+
 ---
+ v1->v2:
+ move MIPS_FP_SUPPORT from MACH_LOONGSON64 to CPU_LOONGSON64
+
+ v2->v3:
+ add Huacai Chen <chenhc@lemote.com>'s suggest label.
+
  arch/mips/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
