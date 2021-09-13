@@ -2,95 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D88408A82
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Sep 2021 13:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F8B40916B
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Sep 2021 16:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239700AbhIMLwB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Sep 2021 07:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239699AbhIMLvz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Sep 2021 07:51:55 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED418C061574
-        for <linux-mips@vger.kernel.org>; Mon, 13 Sep 2021 04:50:39 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id v123so8550333pfb.11
-        for <linux-mips@vger.kernel.org>; Mon, 13 Sep 2021 04:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1mHnLIBXGNUEZkqs59OKrFyHzl1NEWUd1+Arb1Qw33g=;
-        b=okVgUWHivzhRxkpWwY2Vo5haJ0OXh8mZxYpqgobphUDWx49SI4C9/d6tsUeOhWmpyY
-         RV6cKMqk6c2Zzvw8y9rU+HQ1uNav+0MYnjE4Ckov/4+romP6XI2JRPwL2Y8vJumCamxa
-         v476MNkbmDY0Pnc5zNmOcMzA1xH1+0Z520dDJRFmqIKcTpNKgnnm8HqblMVaJkBq3Mlz
-         7Jhct9Ttc7bBv5OuWz9TFTyI3R40bwsfOF/lhQvE3yrWjsCynIdZp+EmclZW2Cla7JKC
-         gF28R8rmoJFLf+NVeQXHcJX/6+2NJw57Kwp139DWEaktLKtd/MtNM42UL3KY2JCD6VCN
-         C5iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1mHnLIBXGNUEZkqs59OKrFyHzl1NEWUd1+Arb1Qw33g=;
-        b=vpuK3gkF9oinKK86GX+bu3gkj5NzQFgrUd2dr95uhgqw73wK3nmdnU0jruLmcKwkWD
-         mYpdJfzx0tGaW3baLImdHZVLCzt/pzKYWMpG/qvuC6Q//Tg/Fu2H9Yo7bRNsBhpYffGl
-         PUuDGO3FkjiIS5wzA001P+VlWc3k6YtyKBZ5fPK1r5ew34lTiuKRudL8XCeR3qK9m3dm
-         F/AJtfJPCOGhNYU/MooFkbU+rgWKu6vVPaIPlD/LoHphlsKsAK4xrtWylF7+TGsRnP0C
-         9X1HRa0j+A8V3LsjBxSpdBIPlN9+h3J8V70r9FMDXbVCcp0Vb/B48ELl8mNoUKmRMOjg
-         Lezw==
-X-Gm-Message-State: AOAM533qLseOZ8zcGOBzHLZ5/jn7ymLDVczqasrYGoOtygBNrdsmbfWA
-        orfJ6x1f2znDYbnYncuVShQ=
-X-Google-Smtp-Source: ABdhPJx9xgkTz8SHz6y0pn25tXOlff368haWF7Hl+w0zSvXDf56003vftN2IIr+W0JXJxjMo9xP6lA==
-X-Received: by 2002:a63:f80a:: with SMTP id n10mr10787418pgh.303.1631533839468;
-        Mon, 13 Sep 2021 04:50:39 -0700 (PDT)
-Received: from localhost.localdomain ([8.47.69.162])
-        by smtp.gmail.com with ESMTPSA id i1sm6797857pjs.31.2021.09.13.04.50.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Sep 2021 04:50:39 -0700 (PDT)
-From:   Wang Haojun <jiangliuer01@gmail.com>
-X-Google-Original-From: Wang Haojun <wanghaojun@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S1343637AbhIMOBU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Sep 2021 10:01:20 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:58060 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245106AbhIMN7I (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Sep 2021 09:59:08 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EC9A61FD84;
+        Mon, 13 Sep 2021 13:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1631541468; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=hH7Iy2pE2qXXycVl+pdgp/YjaWw0chbvKCaG1nR6wMw=;
+        b=rskVLjWzWO+SQgKM7whOVKZMJUU4eAWiaaJMkUHgZ4o7XtDWNqJkR0Wr4hdo3PNSaEbKzB
+        Exa6amYfD+QDBiQhuM+DEZysqjzQngjO3Q3MK8s9iFamZnSgC1AeJZJ+unDND6ZpNFUZSC
+        o24T08ZH8M+lcBm0flqCa3TxOm58Cks=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B52D13AB2;
+        Mon, 13 Sep 2021 13:57:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ucX7ANxYP2FMUwAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 13 Sep 2021 13:57:48 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Wang Haojun <wanghaojun@loongson.cn>,
-        Li Xuefeng <lixuefeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org
-Subject: [PATCH v2] MIPS: loongson64: Fix no screen display during boot-up
-Date:   Mon, 13 Sep 2021 19:49:45 +0800
-Message-Id: <20210913114945.3497762-1-wanghaojun@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH 0/2] kvm: fix KVM_MAX_VCPU_ID handling
+Date:   Mon, 13 Sep 2021 15:57:42 +0200
+Message-Id: <20210913135745.13944-1-jgross@suse.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The Framebuffer CONFIG_FB needs to be explicitly selected or we
-don't get any framebuffer anymore. DRM has stopped to select FB
-after commit f611b1e7624ccdbd495c19e98056 ("drm: Avoid circular
-dependencies for CONFIG_FB") because of circular dependency. So
-we should enable it in the default config file, otherwise there
-is no display before Xorg.
+Revert commit 76b4f357d0e7d8f6f00 which was based on wrong reasoning
+and rename KVM_MAX_VCPU_ID to KVM_MAX_VCPU_IDS in order to avoid the
+same issue in future.
 
-Signed-off-by: Wang Haojun <wanghaojun@loongson.cn>
-reviewed-by: Huacai Chen <chenhuacai@kernel.org>
-reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/configs/loongson3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Juergen Gross (2):
+  x86/kvm: revert commit 76b4f357d0e7d8f6f00
+  kvm: rename KVM_MAX_VCPU_ID to KVM_MAX_VCPU_IDS
 
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index f02101ff04b3..25ecd15bc952 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -282,6 +282,7 @@ CONFIG_DRM=y
- CONFIG_DRM_RADEON=m
- CONFIG_DRM_QXL=y
- CONFIG_DRM_VIRTIO_GPU=y
-+CONFIG_FB=y
- CONFIG_FB_RADEON=y
- CONFIG_LCD_CLASS_DEVICE=y
- CONFIG_LCD_PLATFORM=m
+ Documentation/virt/kvm/devices/xics.rst            | 2 +-
+ Documentation/virt/kvm/devices/xive.rst            | 2 +-
+ arch/mips/kvm/mips.c                               | 2 +-
+ arch/powerpc/include/asm/kvm_book3s.h              | 2 +-
+ arch/powerpc/include/asm/kvm_host.h                | 4 ++--
+ arch/powerpc/kvm/book3s_xive.c                     | 2 +-
+ arch/powerpc/kvm/powerpc.c                         | 2 +-
+ arch/x86/include/asm/kvm_host.h                    | 2 +-
+ arch/x86/kvm/ioapic.c                              | 2 +-
+ arch/x86/kvm/ioapic.h                              | 4 ++--
+ arch/x86/kvm/x86.c                                 | 2 +-
+ include/linux/kvm_host.h                           | 4 ++--
+ tools/testing/selftests/kvm/kvm_create_max_vcpus.c | 2 +-
+ virt/kvm/kvm_main.c                                | 2 +-
+ 14 files changed, 17 insertions(+), 17 deletions(-)
+
 -- 
-2.27.0
+2.26.2
 
