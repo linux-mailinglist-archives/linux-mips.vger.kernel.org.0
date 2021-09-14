@@ -2,155 +2,172 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1ED740AADB
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Sep 2021 11:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C1240ADDD
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Sep 2021 14:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbhINJb1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Sep 2021 05:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbhINJb1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Sep 2021 05:31:27 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23357C061574;
-        Tue, 14 Sep 2021 02:30:10 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id f65so11595629pfb.10;
-        Tue, 14 Sep 2021 02:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=XTjWIiEXl9oku1kTLwi9+pqlnMZMr1CiGdU7Q7ifRlE=;
-        b=O24NXUEn+Xi0N8/37yoJePSjWeb6kWoZNVMaj3l7DnMN2Luv2IyhG0B8T8FoZcoNbc
-         LI7otGZF7HO/xtbYyOjVMYy1pnYL/Tn2XZ90oH7lrVsX1FFCKbg7+F6WRC1/zMHfGgpn
-         JQarz7LA1qIduqH6ft6zkslcCac/x3m57uYLD8/v89EBiGD98qCkwHB8mwv5exVqGJ1l
-         ano+X3eHj9FIpc9wu/plcqext624NwhbImZZGie0D9H3tgE+tTSCJzG3uBD2CwPRtc/f
-         0pyxkFcBv9diMLwG89UQsoqZoCzZIfP7NCA0conOpBWViIqg6gYZvJN3qOnktQTRWhiB
-         kjUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XTjWIiEXl9oku1kTLwi9+pqlnMZMr1CiGdU7Q7ifRlE=;
-        b=RmU+KjPgYZKr/nfG9WHWVJFQfGWItSWqFdhYeUuwaUpO1USGh6Z4IjBWaKzIGs/w7h
-         lH8mzNkEvVDm2DJOmKApukVOhqQtB6KhECYjv8CvUjNmWuIdyf09LRrSoQFSFPjNOjkF
-         6ixNZz8aUtraUrWX6HdAI3xRqcr1+yx4gOO+36gMWEzk5xmkfExxignfcLrznEANrmfE
-         mg04olJ5obV8xrthMjjs3XL3WVo4ronp+nm+FaRUCgMgJqTrTe9Fg3O0IVyfUIRei5so
-         aQrZBG27KMIL2/MBBjuE+mg8htz+HvtLAse9WMLnCpsRTK77IqrRMWb3ej+++wPDds1c
-         y1Nw==
-X-Gm-Message-State: AOAM531LfLW4jSP12N4iuSRXLUT433R+TbNT8yWPMkH+86BD2oY/LGxJ
-        XW8vF0oIzXq1ATxJ152nWYJdWXsQNB6ECIWgmSA=
-X-Google-Smtp-Source: ABdhPJyGFjJFvY8LAqFYXYnURxFhVUaHrRJUH4Fje+MaSbpJ1+PdIQ7ZKa6ANfe86KXkMHoPm++hJrVmV/inGr7NOsU=
-X-Received: by 2002:a63:651:: with SMTP id 78mr14840469pgg.306.1631611808531;
- Tue, 14 Sep 2021 02:30:08 -0700 (PDT)
+        id S232617AbhINMia (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Sep 2021 08:38:30 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:42754 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232524AbhINMia (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Sep 2021 08:38:30 -0400
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn2tEl0BhhZgGAA--.14513S3;
+        Tue, 14 Sep 2021 20:36:22 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH bpf-next v2] bpf: Change value of MAX_TAIL_CALL_CNT from
+ 32 to 33
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        naveen.n.rao@linux.ibm.com, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, bjorn@kernel.org,
+        davem@davemloft.net,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Paul Chaignon <paul@cilium.io>
+References: <1631325361-9851-1-git-send-email-yangtiezhu@loongson.cn>
+ <0fb8d16f-67e7-7197-fce2-a4c17f1e5987@iogearbox.net>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org
+Message-ID: <9ad382ca-a254-f897-9ec6-c9b1920a6174@loongson.cn>
+Date:   Tue, 14 Sep 2021 20:36:20 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-References: <cover.1631583258.git.chenfeiyang@loongson.cn> <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
-In-Reply-To: <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
-From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
-Date:   Tue, 14 Sep 2021 17:30:14 +0800
-Message-ID: <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        arnd@arndb.de, Feiyang Chen <chenfeiyang@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        chenhuacai@kernel.org, Zhou Yanjie <zhouyu@wanyeetech.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <0fb8d16f-67e7-7197-fce2-a4c17f1e5987@iogearbox.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxn2tEl0BhhZgGAA--.14513S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxurW7Gw1DJw1UGw4xGFW3KFg_yoW5Ar43pr
+        WUJanakr4kXFyrC3ZrKa1xZay0vFZ8tryUGrWrK342yFn8Zrn5WF4xK3yFgF1UAryrta4F
+        9ayFkr95C3WkZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Gb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
+        c7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_Xr1l42xK82IYc2Ij64vIr41l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+        j40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
+        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5lsj5UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 14 Sept 2021 at 16:54, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+On 09/14/2021 03:30 PM, Daniel Borkmann wrote:
+> On 9/11/21 3:56 AM, Tiezhu Yang wrote:
+>>
+[...]
+>> With this patch, it does not change the current limit 33, 
+>> MAX_TAIL_CALL_CNT
+>> can reflect the actual max tail call count, the tailcall selftests 
+>> can work
+>> well, and also the above failed testcase in test_bpf can be fixed for 
+>> the
+>> interpreter (all archs) and the JIT (all archs except for x86).
+>>
+>>   # uname -m
+>>   x86_64
+>>   # echo 1 > /proc/sys/net/core/bpf_jit_enable
+>>   # modprobe test_bpf
+>>   # dmesg | grep -w FAIL
+>>   Tail call error path, max count reached jited:1 ret 33 != 34 FAIL
 >
->
->
-> =E5=9C=A8 2021/9/14 2:50, Feiyang Chen =E5=86=99=E9=81=93:
-> > Convert MIPS to use the generic entry infrastructure from
-> > kernel/entry/*.
-> >
-> > v2: Use regs->regs[27] to mark whether to restore all registers in
-> > handle_sys and enable IRQ stack.
-> Hi Feiyang,
->
-> Thanks for your patch, could you please expand how could this improve
-> the performance?
->
+> Could you also state in here which archs you have tested with this 
+> change? I
+> presume /every/ arch which has a JIT?
 
-Hi, Jiaxun,
+OK, will do it in v3.
+I have tested on x86 and mips.
 
-We always restore all registers in handle_sys in the v1 of the
-patchset. Since regs->regs[27] is marked where we need to restore all
-registers, now we simply use it as the return value of do_syscall to
-determine whether we can only restore partial registers in handle_sys.
-
-+       move    a0, sp
-+       jal     do_syscall
-+       beqz    v0, 1f                          # restore all registers?
-+       nop
-+
-+       .set    noat
-+       RESTORE_TEMP
-+       RESTORE_STATIC
-+       RESTORE_AT
-+1:     RESTORE_SOME
-+       RESTORE_SP_AND_RET
-+       .set    at
-
-Thanks,
-Feiyang
-
-> Thanks.
-> - Jiaxun
-> >
-> > Feiyang Chen (2):
-> >    MIPS: convert syscall to generic entry
-> >    MIPS: convert irq to generic entry
-> >
-> >   arch/mips/Kconfig                         |   1 +
-> >   arch/mips/include/asm/entry-common.h      |  13 ++
-> >   arch/mips/include/asm/irqflags.h          |  42 ----
-> >   arch/mips/include/asm/ptrace.h            |   8 +-
-> >   arch/mips/include/asm/sim.h               |  70 -------
-> >   arch/mips/include/asm/stackframe.h        |   8 +
-> >   arch/mips/include/asm/syscall.h           |   5 +
-> >   arch/mips/include/asm/thread_info.h       |  17 +-
-> >   arch/mips/include/uapi/asm/ptrace.h       |   7 +-
-> >   arch/mips/kernel/Makefile                 |  14 +-
-> >   arch/mips/kernel/entry.S                  | 143 +-------------
-> >   arch/mips/kernel/genex.S                  | 150 +++------------
-> >   arch/mips/kernel/head.S                   |   1 -
-> >   arch/mips/kernel/linux32.c                |   1 -
-> >   arch/mips/kernel/ptrace.c                 |  78 --------
-> >   arch/mips/kernel/r4k-bugs64.c             |  14 +-
-> >   arch/mips/kernel/scall.S                  | 136 +++++++++++++
-> >   arch/mips/kernel/scall32-o32.S            | 223 ---------------------
-> >   arch/mips/kernel/scall64-n32.S            | 107 ----------
-> >   arch/mips/kernel/scall64-n64.S            | 116 -----------
-> >   arch/mips/kernel/scall64-o32.S            | 221 ---------------------
-> >   arch/mips/kernel/signal.c                 |  59 +-----
-> >   arch/mips/kernel/signal_n32.c             |  15 +-
-> >   arch/mips/kernel/signal_o32.c             |  29 +--
-> >   arch/mips/kernel/syscall.c                | 148 +++++++++++---
-> >   arch/mips/kernel/syscalls/syscall_n32.tbl |   8 +-
-> >   arch/mips/kernel/syscalls/syscall_n64.tbl |   8 +-
-> >   arch/mips/kernel/syscalls/syscall_o32.tbl |   8 +-
-> >   arch/mips/kernel/traps.c                  | 225 ++++++++++++++++-----=
--
-> >   arch/mips/kernel/unaligned.c              |  19 +-
-> >   arch/mips/mm/c-octeon.c                   |  15 ++
-> >   arch/mips/mm/cex-oct.S                    |   8 +-
-> >   arch/mips/mm/fault.c                      |  12 +-
-> >   arch/mips/mm/tlbex-fault.S                |   7 +-
-> >   34 files changed, 594 insertions(+), 1342 deletions(-)
-> >   create mode 100644 arch/mips/include/asm/entry-common.h
-> >   delete mode 100644 arch/mips/include/asm/sim.h
-> >   create mode 100644 arch/mips/kernel/scall.S
-> >   delete mode 100644 arch/mips/kernel/scall32-o32.S
-> >   delete mode 100644 arch/mips/kernel/scall64-n32.S
-> >   delete mode 100644 arch/mips/kernel/scall64-n64.S
-> >   delete mode 100644 arch/mips/kernel/scall64-o32.S
-> >
 >
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>
+>> v2:
+>>    -- fix the typos in the commit message and update the commit message.
+>>    -- fix the failed tailcall selftests for x86 jit.
+>>       I am not quite sure the change on x86 is proper, with this change,
+>>       tailcall selftests passed, but tailcall limit test in test_bpf.ko
+>>       failed, I do not know the reason now, I think this is another 
+>> issue,
+>>       maybe someone more versed in x86 jit could take a look.
+>
+> There should be a series from Johan coming today with regards to 
+> test_bpf.ko
+> that will fix the "tail call error path, max count reached" test which 
+> had an
+> assumption in that R0 would always be valid for the fall-through and 
+> could be
+> passed to the bpf_exit insn whereas it is not guaranteed and verifier, 
+> for
+> example, forbids a subsequent access to R0 w/o reinit. For your 
+> testing, I
+> would suggested to recheck once this series is out.
+
+I will test the following patch on x86 and mips:
+
+[PATCH bpf v4 13/14] bpf/tests: Fix error in tail call limit tests
+
+[...]
+
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index 0fe6aac..74a9e61 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
+>> @@ -402,7 +402,7 @@ static int get_pop_bytes(bool *callee_regs_used)
+>>    * ... bpf_tail_call(void *ctx, struct bpf_array *array, u64 index) 
+>> ...
+>>    *   if (index >= array->map.max_entries)
+>>    *     goto out;
+>> - *   if (++tail_call_cnt > MAX_TAIL_CALL_CNT)
+>> + *   if (tail_call_cnt++ == MAX_TAIL_CALL_CNT)
+>
+> Why such inconsistency to e.g. above with arm64 case but also compared to
+> x86 32 bit which uses JAE? If so, we should cleanly follow the reference
+> implementation (== interpreter) _everywhere_ and _not_ introduce 
+> additional
+> variants/implementations across JITs.
+
+In order tokeep consistencyand make as few changes as possible,
+<javascript:void(0);>I will modify the check condition as follows:
+
+#define MAX_TAIL_CALL_CNT 33
+(1) for x86, arm64, ... (0 ~ 32)
+tcc = 0;
+if (tcc == MAX_TAIL_CALL_CNT)
+     goto out;
+tcc++;
+
+(2) for mips, riscv (33 ~ 1)
+tcc = MAX_TAIL_CALL_CNT;
+if (tcc == 0)
+     goto out;
+tcc--;
+
+[...]
+
