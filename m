@@ -2,77 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDDE40AA83
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Sep 2021 11:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1ED740AADB
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Sep 2021 11:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbhINJRV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Sep 2021 05:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S231154AbhINJb1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Sep 2021 05:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbhINJRU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Sep 2021 05:17:20 -0400
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01C5C061574
-        for <linux-mips@vger.kernel.org>; Tue, 14 Sep 2021 02:16:03 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:d46f:7eb5:4a37:9d14])
-        by xavier.telenet-ops.be with bizsmtp
-        id tlG12500n2aSKa101lG1wz; Tue, 14 Sep 2021 11:16:01 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mQ4Xp-004Qtl-2T; Tue, 14 Sep 2021 11:16:01 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mQ4Xo-0008ie-CV; Tue, 14 Sep 2021 11:16:00 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Rahul Bedarkar <rahulbedarkar89@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] reset: pistachio: Re-enable driver selection
-Date:   Tue, 14 Sep 2021 11:15:59 +0200
-Message-Id: <2c399e52540536df9c4006e46ef93fbccdde88db.1631610825.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229551AbhINJb1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Sep 2021 05:31:27 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23357C061574;
+        Tue, 14 Sep 2021 02:30:10 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id f65so11595629pfb.10;
+        Tue, 14 Sep 2021 02:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XTjWIiEXl9oku1kTLwi9+pqlnMZMr1CiGdU7Q7ifRlE=;
+        b=O24NXUEn+Xi0N8/37yoJePSjWeb6kWoZNVMaj3l7DnMN2Luv2IyhG0B8T8FoZcoNbc
+         LI7otGZF7HO/xtbYyOjVMYy1pnYL/Tn2XZ90oH7lrVsX1FFCKbg7+F6WRC1/zMHfGgpn
+         JQarz7LA1qIduqH6ft6zkslcCac/x3m57uYLD8/v89EBiGD98qCkwHB8mwv5exVqGJ1l
+         ano+X3eHj9FIpc9wu/plcqext624NwhbImZZGie0D9H3tgE+tTSCJzG3uBD2CwPRtc/f
+         0pyxkFcBv9diMLwG89UQsoqZoCzZIfP7NCA0conOpBWViIqg6gYZvJN3qOnktQTRWhiB
+         kjUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XTjWIiEXl9oku1kTLwi9+pqlnMZMr1CiGdU7Q7ifRlE=;
+        b=RmU+KjPgYZKr/nfG9WHWVJFQfGWItSWqFdhYeUuwaUpO1USGh6Z4IjBWaKzIGs/w7h
+         lH8mzNkEvVDm2DJOmKApukVOhqQtB6KhECYjv8CvUjNmWuIdyf09LRrSoQFSFPjNOjkF
+         6ixNZz8aUtraUrWX6HdAI3xRqcr1+yx4gOO+36gMWEzk5xmkfExxignfcLrznEANrmfE
+         mg04olJ5obV8xrthMjjs3XL3WVo4ronp+nm+FaRUCgMgJqTrTe9Fg3O0IVyfUIRei5so
+         aQrZBG27KMIL2/MBBjuE+mg8htz+HvtLAse9WMLnCpsRTK77IqrRMWb3ej+++wPDds1c
+         y1Nw==
+X-Gm-Message-State: AOAM531LfLW4jSP12N4iuSRXLUT433R+TbNT8yWPMkH+86BD2oY/LGxJ
+        XW8vF0oIzXq1ATxJ152nWYJdWXsQNB6ECIWgmSA=
+X-Google-Smtp-Source: ABdhPJyGFjJFvY8LAqFYXYnURxFhVUaHrRJUH4Fje+MaSbpJ1+PdIQ7ZKa6ANfe86KXkMHoPm++hJrVmV/inGr7NOsU=
+X-Received: by 2002:a63:651:: with SMTP id 78mr14840469pgg.306.1631611808531;
+ Tue, 14 Sep 2021 02:30:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1631583258.git.chenfeiyang@loongson.cn> <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
+In-Reply-To: <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
+From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
+Date:   Tue, 14 Sep 2021 17:30:14 +0800
+Message-ID: <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        arnd@arndb.de, Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        chenhuacai@kernel.org, Zhou Yanjie <zhouyu@wanyeetech.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After the retirement of MACH_PISTACHIO, the Pistachio Reset Driver is no
-longer auto-enabled when building a kernel for Pistachio systems.
-Worse, the driver cannot be enabled by the user at all (unless
-compile-testing), as the config symbol is invisible.
+On Tue, 14 Sept 2021 at 16:54, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>
+>
+>
+> =E5=9C=A8 2021/9/14 2:50, Feiyang Chen =E5=86=99=E9=81=93:
+> > Convert MIPS to use the generic entry infrastructure from
+> > kernel/entry/*.
+> >
+> > v2: Use regs->regs[27] to mark whether to restore all registers in
+> > handle_sys and enable IRQ stack.
+> Hi Feiyang,
+>
+> Thanks for your patch, could you please expand how could this improve
+> the performance?
+>
 
-Fix this partially by making the symbol visible again when compiling for
-MIPS, and dropping the useless default.  The user still has to enable
-the driver manually when building a kernel for Pistachio systems,
-though.
+Hi, Jiaxun,
 
-Fixes: 104f942b2832ab13 ("MIPS: Retire MACH_PISTACHIO")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/reset/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+We always restore all registers in handle_sys in the v1 of the
+patchset. Since regs->regs[27] is marked where we need to restore all
+registers, now we simply use it as the return value of do_syscall to
+determine whether we can only restore partial registers in handle_sys.
 
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index be799a5abf8a6edc..b0056ae5d463aedd 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -147,8 +147,8 @@ config RESET_OXNAS
- 	bool
- 
- config RESET_PISTACHIO
--	bool "Pistachio Reset Driver" if COMPILE_TEST
--	default MACH_PISTACHIO
-+	bool "Pistachio Reset Driver"
-+	depends on MIPS || COMPILE_TEST
- 	help
- 	  This enables the reset driver for ImgTec Pistachio SoCs.
- 
--- 
-2.25.1
++       move    a0, sp
++       jal     do_syscall
++       beqz    v0, 1f                          # restore all registers?
++       nop
++
++       .set    noat
++       RESTORE_TEMP
++       RESTORE_STATIC
++       RESTORE_AT
++1:     RESTORE_SOME
++       RESTORE_SP_AND_RET
++       .set    at
 
+Thanks,
+Feiyang
+
+> Thanks.
+> - Jiaxun
+> >
+> > Feiyang Chen (2):
+> >    MIPS: convert syscall to generic entry
+> >    MIPS: convert irq to generic entry
+> >
+> >   arch/mips/Kconfig                         |   1 +
+> >   arch/mips/include/asm/entry-common.h      |  13 ++
+> >   arch/mips/include/asm/irqflags.h          |  42 ----
+> >   arch/mips/include/asm/ptrace.h            |   8 +-
+> >   arch/mips/include/asm/sim.h               |  70 -------
+> >   arch/mips/include/asm/stackframe.h        |   8 +
+> >   arch/mips/include/asm/syscall.h           |   5 +
+> >   arch/mips/include/asm/thread_info.h       |  17 +-
+> >   arch/mips/include/uapi/asm/ptrace.h       |   7 +-
+> >   arch/mips/kernel/Makefile                 |  14 +-
+> >   arch/mips/kernel/entry.S                  | 143 +-------------
+> >   arch/mips/kernel/genex.S                  | 150 +++------------
+> >   arch/mips/kernel/head.S                   |   1 -
+> >   arch/mips/kernel/linux32.c                |   1 -
+> >   arch/mips/kernel/ptrace.c                 |  78 --------
+> >   arch/mips/kernel/r4k-bugs64.c             |  14 +-
+> >   arch/mips/kernel/scall.S                  | 136 +++++++++++++
+> >   arch/mips/kernel/scall32-o32.S            | 223 ---------------------
+> >   arch/mips/kernel/scall64-n32.S            | 107 ----------
+> >   arch/mips/kernel/scall64-n64.S            | 116 -----------
+> >   arch/mips/kernel/scall64-o32.S            | 221 ---------------------
+> >   arch/mips/kernel/signal.c                 |  59 +-----
+> >   arch/mips/kernel/signal_n32.c             |  15 +-
+> >   arch/mips/kernel/signal_o32.c             |  29 +--
+> >   arch/mips/kernel/syscall.c                | 148 +++++++++++---
+> >   arch/mips/kernel/syscalls/syscall_n32.tbl |   8 +-
+> >   arch/mips/kernel/syscalls/syscall_n64.tbl |   8 +-
+> >   arch/mips/kernel/syscalls/syscall_o32.tbl |   8 +-
+> >   arch/mips/kernel/traps.c                  | 225 ++++++++++++++++-----=
+-
+> >   arch/mips/kernel/unaligned.c              |  19 +-
+> >   arch/mips/mm/c-octeon.c                   |  15 ++
+> >   arch/mips/mm/cex-oct.S                    |   8 +-
+> >   arch/mips/mm/fault.c                      |  12 +-
+> >   arch/mips/mm/tlbex-fault.S                |   7 +-
+> >   34 files changed, 594 insertions(+), 1342 deletions(-)
+> >   create mode 100644 arch/mips/include/asm/entry-common.h
+> >   delete mode 100644 arch/mips/include/asm/sim.h
+> >   create mode 100644 arch/mips/kernel/scall.S
+> >   delete mode 100644 arch/mips/kernel/scall32-o32.S
+> >   delete mode 100644 arch/mips/kernel/scall64-n32.S
+> >   delete mode 100644 arch/mips/kernel/scall64-n64.S
+> >   delete mode 100644 arch/mips/kernel/scall64-o32.S
+> >
+>
