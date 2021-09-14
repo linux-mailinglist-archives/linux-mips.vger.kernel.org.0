@@ -2,172 +2,184 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C1240ADDD
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Sep 2021 14:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8692940B128
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Sep 2021 16:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbhINMia (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Sep 2021 08:38:30 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:42754 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232524AbhINMia (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Sep 2021 08:38:30 -0400
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn2tEl0BhhZgGAA--.14513S3;
-        Tue, 14 Sep 2021 20:36:22 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH bpf-next v2] bpf: Change value of MAX_TAIL_CALL_CNT from
- 32 to 33
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        naveen.n.rao@linux.ibm.com, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, bjorn@kernel.org,
-        davem@davemloft.net,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        Paul Chaignon <paul@cilium.io>
-References: <1631325361-9851-1-git-send-email-yangtiezhu@loongson.cn>
- <0fb8d16f-67e7-7197-fce2-a4c17f1e5987@iogearbox.net>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org
-Message-ID: <9ad382ca-a254-f897-9ec6-c9b1920a6174@loongson.cn>
-Date:   Tue, 14 Sep 2021 20:36:20 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S234216AbhINOkH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Sep 2021 10:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233968AbhINOkC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Sep 2021 10:40:02 -0400
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259D3C0613E3
+        for <linux-mips@vger.kernel.org>; Tue, 14 Sep 2021 07:38:43 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:d46f:7eb5:4a37:9d14])
+        by baptiste.telenet-ops.be with bizsmtp
+        id tqef2500J2aSKa101qefh2; Tue, 14 Sep 2021 16:38:41 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mQ9a2-004VGc-PF; Tue, 14 Sep 2021 16:38:38 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mQ9a2-0028xp-Bo; Tue, 14 Sep 2021 16:38:38 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Robin van der Gracht <robin@protonic.nl>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Burton <paulburton@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
+        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v6 00/19] auxdisplay: ht16k33: Add character display support
+Date:   Tue, 14 Sep 2021 16:38:16 +0200
+Message-Id: <20210914143835.511051-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <0fb8d16f-67e7-7197-fce2-a4c17f1e5987@iogearbox.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dxn2tEl0BhhZgGAA--.14513S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxurW7Gw1DJw1UGw4xGFW3KFg_yoW5Ar43pr
-        WUJanakr4kXFyrC3ZrKa1xZay0vFZ8tryUGrWrK342yFn8Zrn5WF4xK3yFgF1UAryrta4F
-        9ayFkr95C3WkZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Gb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-        c7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_Xr1l42xK82IYc2Ij64vIr41l4I8I3I
-        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-        GVWUWwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU5lsj5UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09/14/2021 03:30 PM, Daniel Borkmann wrote:
-> On 9/11/21 3:56 AM, Tiezhu Yang wrote:
->>
-[...]
->> With this patch, it does not change the current limit 33, 
->> MAX_TAIL_CALL_CNT
->> can reflect the actual max tail call count, the tailcall selftests 
->> can work
->> well, and also the above failed testcase in test_bpf can be fixed for 
->> the
->> interpreter (all archs) and the JIT (all archs except for x86).
->>
->>   # uname -m
->>   x86_64
->>   # echo 1 > /proc/sys/net/core/bpf_jit_enable
->>   # modprobe test_bpf
->>   # dmesg | grep -w FAIL
->>   Tail call error path, max count reached jited:1 ret 33 != 34 FAIL
->
-> Could you also state in here which archs you have tested with this 
-> change? I
-> presume /every/ arch which has a JIT?
+	Hi all,
 
-OK, will do it in v3.
-I have tested on x86 and mips.
+The Holtek HT16K33 LED controller is not only used for driving
+dot-matrix displays, but also for driving segment displays.
+The current auxdisplay driver is limited to dot-matrix displays, which
+are exposed as a frame buffer device.
 
->
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>
->> v2:
->>    -- fix the typos in the commit message and update the commit message.
->>    -- fix the failed tailcall selftests for x86 jit.
->>       I am not quite sure the change on x86 is proper, with this change,
->>       tailcall selftests passed, but tailcall limit test in test_bpf.ko
->>       failed, I do not know the reason now, I think this is another 
->> issue,
->>       maybe someone more versed in x86 jit could take a look.
->
-> There should be a series from Johan coming today with regards to 
-> test_bpf.ko
-> that will fix the "tail call error path, max count reached" test which 
-> had an
-> assumption in that R0 would always be valid for the fall-through and 
-> could be
-> passed to the bpf_exit insn whereas it is not guaranteed and verifier, 
-> for
-> example, forbids a subsequent access to R0 w/o reinit. For your 
-> testing, I
-> would suggested to recheck once this series is out.
+This patch series extends the driver to 4-digit 7-segment and quad
+14-segment alphanumeric displays, allowing the user to display and
+scroll text messages.
 
-I will test the following patch on x86 and mips:
+List of patches:
+  - Patch 1 provides font data for displaying ASCII characters on
+    14-segment displays,
+  - Patch 2 updates the HT16K33 DT bindings for segment displays,
+  - Patches 3-5 contain a bug fix and small improvements for the
+    Imagination Technologies ASCII LCD Display driver,
+  - Patch 6 extracts the character line display core support from the
+    Imagination Technologies ASCII LCD Display driver, for reuse,
+  - Patches 7-8 contain cleanups and improvements for the character line
+    display core driver,
+  - Patches 9-16 contain a bug fix, cleanups and improvements for the
+    HT16K33 driver, to prepare for segment display support,
+  - Patch 17 adds support for 7/14-segment displays to the HT16K33
+    driver,
+  - Patch 18 updates the HT16K33 DT bindings to document an LED subnode,
+  - Patch 19 adds segment display LED support to the HT16K33 driver,
+    to make use of hardware blinking, and to expose display color.
 
-[PATCH bpf v4 13/14] bpf/tests: Fix error in tail call limit tests
+Changes compared to v5[1]:
+  - Add Reviewed-by,
+  - Reorder operations in ht16k33_led_probe() to ease future conversion
+    to device properties.
 
-[...]
+Changes compared to v4[2]:
+  - Add Reviewed-by,
+  - Add missing select NEW_LEDS.
 
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 0fe6aac..74a9e61 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
->> @@ -402,7 +402,7 @@ static int get_pop_bytes(bool *callee_regs_used)
->>    * ... bpf_tail_call(void *ctx, struct bpf_array *array, u64 index) 
->> ...
->>    *   if (index >= array->map.max_entries)
->>    *     goto out;
->> - *   if (++tail_call_cnt > MAX_TAIL_CALL_CNT)
->> + *   if (tail_call_cnt++ == MAX_TAIL_CALL_CNT)
->
-> Why such inconsistency to e.g. above with arm64 case but also compared to
-> x86 32 bit which uses JAE? If so, we should cleanly follow the reference
-> implementation (== interpreter) _everywhere_ and _not_ introduce 
-> additional
-> variants/implementations across JITs.
+Changes compared to v3[3]:
+  - Combine compatible values for 7/14 segment displays into an enum,
+  - Add Reviewed-by,
+  - Add missing select LEDS_CLASS.
 
-In order tokeep consistencyand make as few changes as possible,
-<javascript:void(0);>I will modify the check condition as follows:
+Changes compared to v2[4]:
+  - Drop color property from display node,
+  - Use compat_only_sysfs_link_entry_to_kobj() instead of cooking our
+    own helper on top of kernfs_create_link(),
+  - Use "err" instead of "error" to be consistent with existing driver
+    naming style,
+  - Pass "dev" instead of "client" to ht16k33_fbdev_probe() and
+    ht16k33_seg_probe(),
+  - Drop local variable "node",
+  - Remove unneeded inclusion of <linux/leds.h> and <linux/of_device.h>,
+  - Document LED subnode,
+  - Remove unneeded C++ comment,
+  - Make the creation of the LED device dependent on the presence of the
+    "led" subnode in DT, so it can be used in dot-matrix mode too.
+  - Use led_init_data() and devm_led_classdev_register_ext() to retrieve
+    all LED properties from DT, instead of manual LED name construction
+    based on just the "color" property.
 
-#define MAX_TAIL_CALL_CNT 33
-(1) for x86, arm64, ... (0 ~ 32)
-tcc = 0;
-if (tcc == MAX_TAIL_CALL_CNT)
-     goto out;
-tcc++;
+Changes compared to v1[5]:
+  - Fix type of color to uint32,
+  - "refresh-rate-hz" is still required for dot-matrix displays.
+  - Move "select LINEDISP" for HT16K33 symbol to correct patch,
+  - Add backwards compatibility "message" symlink to img-ascii-lcd,
+  - Connect backlight to fbdev in ht16k33 dot-matrix mode,
+  - Set "err = -EINVAL" in switch() case that cannot happen,
+  - Use "auxdisplay" instead of DRIVER_NAME in LED name.
 
-(2) for mips, riscv (33 ~ 1)
-tcc = MAX_TAIL_CALL_CNT;
-if (tcc == 0)
-     goto out;
-tcc--;
+This series has been tested using an Adafruit 0.54" Quad Alphanumeric
+Red FeatherWing Display, connected to an OrangeCrab ECP5 FPGA board
+running a 64 MHz VexRiscv RISC-V softcore.
+7-segment display support is based purely on schematics, and has not
+been tested on actual hardware.  The changes to img-ascii-lcd.c are also
+untested, due to lack of hardware.
 
-[...]
+Thanks for applying!
 
+[1] "[PATCH v6 00/19] auxdisplay: ht16k33: Add character display support"
+    https://lore.kernel.org/r/0210811095759.1281480-1-geert@linux-m68k.org
+[2] "[PATCH v4 00/19] auxdisplay: ht16k33: Add character display support"
+    https://lore.kernel.org/r/20210727140459.3767788-1-geert@linux-m68k.org/
+[3] "[PATCH v3 00/19] auxdisplay: ht16k33: Add character display support"
+    https://lore.kernel.org/r/20210714151130.2531831-1-geert@linux-m68k.org/
+[4] "[PATCH v2 00/18] auxdisplay: ht16k33: Add character display support"
+    https://lore.kernel.org/r/20210625125902.1162428-1-geert@linux-m68k.org/
+[5] "[PATCH 00/17] auxdisplay: ht16k33: Add character display support"
+    https://lore.kernel.org/r/20210322144848.1065067-1-geert@linux-m68k.org/
+
+Geert Uytterhoeven (19):
+  uapi: Add <linux/map_to_14segment.h>
+  dt-bindings: auxdisplay: ht16k33: Document Adafruit segment displays
+  auxdisplay: img-ascii-lcd: Fix lock-up when displaying empty string
+  auxdisplay: img-ascii-lcd: Add helper variable dev
+  auxdisplay: img-ascii-lcd: Convert device attribute to sysfs_emit()
+  auxdisplay: Extract character line display core support
+  auxdisplay: linedisp: Use kmemdup_nul() helper
+  auxdisplay: linedisp: Add support for changing scroll rate
+  auxdisplay: ht16k33: Connect backlight to fbdev
+  auxdisplay: ht16k33: Use HT16K33_FB_SIZE in ht16k33_initialize()
+  auxdisplay: ht16k33: Remove unneeded error check in keypad probe()
+  auxdisplay: ht16k33: Convert to simple i2c probe function
+  auxdisplay: ht16k33: Add helper variable dev
+  auxdisplay: ht16k33: Move delayed work
+  auxdisplay: ht16k33: Extract ht16k33_brightness_set()
+  auxdisplay: ht16k33: Extract frame buffer probing
+  auxdisplay: ht16k33: Add support for segment displays
+  dt-bindings: auxdisplay: ht16k33: Document LED subnode
+  auxdisplay: ht16k33: Add LED support
+
+ .../bindings/auxdisplay/holtek,ht16k33.yaml   |  31 +-
+ drivers/auxdisplay/Kconfig                    |  10 +
+ drivers/auxdisplay/Makefile                   |   1 +
+ drivers/auxdisplay/ht16k33.c                  | 473 ++++++++++++++----
+ drivers/auxdisplay/img-ascii-lcd.c            | 205 ++------
+ drivers/auxdisplay/line-display.c             | 261 ++++++++++
+ drivers/auxdisplay/line-display.h             |  43 ++
+ include/uapi/linux/map_to_14segment.h         | 239 +++++++++
+ 8 files changed, 996 insertions(+), 267 deletions(-)
+ create mode 100644 drivers/auxdisplay/line-display.c
+ create mode 100644 drivers/auxdisplay/line-display.h
+ create mode 100644 include/uapi/linux/map_to_14segment.h
+
+-- 
+2.25.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
