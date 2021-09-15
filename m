@@ -2,82 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE08C40BD5F
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Sep 2021 03:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F83440BF50
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Sep 2021 07:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbhIOBwV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Sep 2021 21:52:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229489AbhIOBwV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 14 Sep 2021 21:52:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CDF8061211;
-        Wed, 15 Sep 2021 01:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631670662;
-        bh=z0W70Z4JOetSa7g8CfvjNwgRWC4qCwo9bmhv6sh9Bxs=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=DhJ6GOb1z9RF8MoKZiSnxeXdJKNkyxJ7YyiEn0qQubMzT9FZtSjTJUt/KUr+QwVKI
-         +frjDgFVeOdxWz9IZc7wervGNYWJ63gSfCERzcvLkSnA46r3ypahZL2U/4IHNXcntT
-         /DqRf5MOYuMRlQ77Uv0SNMsaDJzboDdlLxIhocqe0R7UgiEK7ZBy99L8v0w5K3bX72
-         sJ48QhBWhdiCuNKFPKWm/Qjfkv8EiwrcYFd4jtxEycZyiFEiLrwMg1PFndT/7dOiPM
-         zl0gJLYf7yi4Oohaksg8j8XTXXQSSgFUXRaPI/wIqRfum+bBu2e2ldXr9TpWz6n+3M
-         stAUSLvG5uH7w==
-Date:   Tue, 14 Sep 2021 18:51:01 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@sstabellini-ThinkPad-T480s
-To:     rm.skakun@gmail.com
-cc:     Jan Beulich <jbeulich@suse.com>,
-        Roman Skakun <rm.skakun@gmail.com>,
-        Andrii Anisov <andrii_anisov@epam.com>,
-        Roman Skakun <roman_skakun@epam.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Mike Rapoport <rppt@kernel.org>, Will Deacon <will@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        hch@lst.de
-Subject: Re: [PATCH] swiotlb: set IO TLB segment size via cmdline
-In-Reply-To: <20210914153046.GB815@lst.de>
-Message-ID: <alpine.DEB.2.21.2109141838290.21985@sstabellini-ThinkPad-T480s>
-References: <20210914151016.3174924-1-Roman_Skakun@epam.com> <7c04db79-7de1-93ff-0908-9bad60a287b9@suse.com> <20210914153046.GB815@lst.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S231277AbhIOFao (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Sep 2021 01:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230225AbhIOFan (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Sep 2021 01:30:43 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78184C061574;
+        Tue, 14 Sep 2021 22:29:25 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id g16so1874281wrb.3;
+        Tue, 14 Sep 2021 22:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jGiz7cGZSBsnkMFCSyIwQQF5a/ZVfXBNEv6VQRf8G5w=;
+        b=cGOHZjKrT2mePPo10UsxTr2e/gFrwMV7eqrgTso6V9afjr/JUH+T2VA2O7ra6ErJnp
+         2AObkZG1xwP2mV91wrkGOk+/w5cCTlBwMokVW5W7/bZDq+Pc5e2fp0it38YkHt0FGw9W
+         KJW3GoKx58F+m4Pf+SRmMoauNNpfE+o3InAocmhg7RgEkgegrPVeoNfJE4KjKCC59ig6
+         RcKbdoQxYPyQNWG6q55M8CdkEHZdZyFFNr28vld8BJt5agAOeBoO/+Fo5HN4F90vCUBE
+         jAp9o7NtwSJFc0q+3QZhw+9Ef1HYa9uXV6FBy88TGtY9qoZ5szJoXa7bQDTN3xDbptnA
+         NzBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jGiz7cGZSBsnkMFCSyIwQQF5a/ZVfXBNEv6VQRf8G5w=;
+        b=TZ81rmR9yJ9uuaxhDkvvOg1o9CJZPJv/KeoiNBbJzpwOAXkZrjePfEIQr9sLK8K2Bu
+         lA0g6TKmQA+dmjaC1YEEJeAhA9IdWSBxbYieerZkEXhr4l51wpIasQvHeVFvQLlvdkMP
+         2HM0InOnGnGIET/19bMcrChKzPzJsW51tGsIoa+GqlTr4yzAj2QdMttFIsTnBBKPwRkt
+         usrgwDRS8IFudjyWGflqyG0aizkefIQeCvMJlfB+hpp/K+Uo/jgjOnHMrEdDNATJM62/
+         1tH5AlSRmCSWZ8QAUPc4ExeAL1h8bmx5sYaroylmBCrbF2ajfuse/K4sm7a3vD1gU4IP
+         vnmw==
+X-Gm-Message-State: AOAM531/CQfdmS6RlhN9xiDJxbukXLdsaLhCKkhJd+lkexePitXuYGKg
+        4y20q1CnYC9YHL24Du6he+DkmdVU/+oZAH57iAU=
+X-Google-Smtp-Source: ABdhPJxtZiIEpuC0VWVlbYM6btwJHcRMOQz5/ROuXz+iez/yFBHeHJgGVL8MmVppC2vg6ttJxn+2ko9GWjlXtw7Tn7c=
+X-Received: by 2002:adf:fac7:: with SMTP id a7mr2757037wrs.341.1631683763866;
+ Tue, 14 Sep 2021 22:29:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <2c399e52540536df9c4006e46ef93fbccdde88db.1631610825.git.geert+renesas@glider.be>
+In-Reply-To: <2c399e52540536df9c4006e46ef93fbccdde88db.1631610825.git.geert+renesas@glider.be>
+From:   Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Date:   Wed, 15 Sep 2021 10:59:12 +0530
+Message-ID: <CA+NV+Vk-+MrCA4x7kVoVk0Ejr9Qv33PysQjLBzpXqOF4WNfTRw@mail.gmail.com>
+Subject: Re: [PATCH] reset: pistachio: Re-enable driver selection
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 14 Sep 2021, Christoph Hellwig wrote:
-> On Tue, Sep 14, 2021 at 05:29:07PM +0200, Jan Beulich wrote:
-> > I'm not convinced the swiotlb use describe there falls under "intended
-> > use" - mapping a 1280x720 framebuffer in a single chunk? (As an aside,
-> > the bottom of this page is also confusing, as following "Then we can
-> > confirm the modified swiotlb size in the boot log:" there is a log
-> > fragment showing the same original size of 64Mb.
-> 
-> It doesn't.  We also do not add hacks to the kernel for whacky out
-> of tree modules.
+On Tue, Sep 14, 2021 at 2:46 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> After the retirement of MACH_PISTACHIO, the Pistachio Reset Driver is no
+> longer auto-enabled when building a kernel for Pistachio systems.
+> Worse, the driver cannot be enabled by the user at all (unless
+> compile-testing), as the config symbol is invisible.
+>
+> Fix this partially by making the symbol visible again when compiling for
+> MIPS, and dropping the useless default.  The user still has to enable
+> the driver manually when building a kernel for Pistachio systems,
+> though.
+>
+> Fixes: 104f942b2832ab13 ("MIPS: Retire MACH_PISTACHIO")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Also, Option 1 listed in the webpage seems to be a lot better. Any
-reason you can't do that? Because that option both solves the problem
-and increases performance.
+Reviewed-by: Rahul Bedarkar <rahulbedarkar89@gmail.com>
+
+Thanks,
+Rahul
+
+> ---
+>  drivers/reset/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index be799a5abf8a6edc..b0056ae5d463aedd 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -147,8 +147,8 @@ config RESET_OXNAS
+>         bool
+>
+>  config RESET_PISTACHIO
+> -       bool "Pistachio Reset Driver" if COMPILE_TEST
+> -       default MACH_PISTACHIO
+> +       bool "Pistachio Reset Driver"
+> +       depends on MIPS || COMPILE_TEST
+>         help
+>           This enables the reset driver for ImgTec Pistachio SoCs.
+>
+> --
+> 2.25.1
+>
