@@ -2,80 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C046040BBBB
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Sep 2021 00:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE08C40BD5F
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Sep 2021 03:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235693AbhINWlm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Sep 2021 18:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235464AbhINWll (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Sep 2021 18:41:41 -0400
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07266C061574;
-        Tue, 14 Sep 2021 15:40:23 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [80.241.60.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4H8JFy3Q9mzQk4q;
-        Wed, 15 Sep 2021 00:40:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
-        t=1631659220;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gOanFGnzd70xddgIbFhvpYypTGbga6lbzZldRrxkK4U=;
-        b=KbcUIPaWx3ZU5tAfqJoFx1G6QLdASPBnllZc9tm+FtLw6NX26gymiW9Vx97iVKcK6T0AFo
-        iHXkqSNGPJEckM5PVb4/xKJ0E6XAKIG268hALmnBaAusbBF2rsucJqK2Ge5uVojit/TBun
-        jpEtcxZhFFyS6HNn1flUZM3zgsSdsd57bhkwN57D6yqe55paNiVLx+BAfY1yp2bImgTJIP
-        GrJ7Ib3vJvCAJ9plo99jxh5Wfw+wVMJgYLaXSUwMJ62YvCettsTgM5qPwv4NYEpWz8k4jq
-        puPsZ7JkzBepbY11rgamaWq7qfL08vCi17ZGhR5OFDKnG1QIpts/qRJrmsh2+A==
-Subject: Re: [PATCH net-next 4/8] MIPS: lantiq: dma: make the burst length
- configurable by the drivers
-To:     Aleksander Jan Bajkowski <olek2@wp.pl>, john@phrozen.org,
-        tsbogend@alpha.franken.de, maz@kernel.org, ralf@linux-mips.org,
-        ralph.hempel@lantiq.com, davem@davemloft.net, kuba@kernel.org,
-        robh+dt@kernel.org, dev@kresin.me, arnd@arndb.de, jgg@ziepe.ca,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210914212105.76186-1-olek2@wp.pl>
- <20210914212105.76186-4-olek2@wp.pl>
-From:   Hauke Mehrtens <hauke@hauke-m.de>
-Message-ID: <5ca6a683-47b2-cb4e-aa79-9005bd55465e@hauke-m.de>
-Date:   Wed, 15 Sep 2021 00:40:14 +0200
+        id S230423AbhIOBwV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Sep 2021 21:52:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41472 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229489AbhIOBwV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Sep 2021 21:52:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CDF8061211;
+        Wed, 15 Sep 2021 01:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631670662;
+        bh=z0W70Z4JOetSa7g8CfvjNwgRWC4qCwo9bmhv6sh9Bxs=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=DhJ6GOb1z9RF8MoKZiSnxeXdJKNkyxJ7YyiEn0qQubMzT9FZtSjTJUt/KUr+QwVKI
+         +frjDgFVeOdxWz9IZc7wervGNYWJ63gSfCERzcvLkSnA46r3ypahZL2U/4IHNXcntT
+         /DqRf5MOYuMRlQ77Uv0SNMsaDJzboDdlLxIhocqe0R7UgiEK7ZBy99L8v0w5K3bX72
+         sJ48QhBWhdiCuNKFPKWm/Qjfkv8EiwrcYFd4jtxEycZyiFEiLrwMg1PFndT/7dOiPM
+         zl0gJLYf7yi4Oohaksg8j8XTXXQSSgFUXRaPI/wIqRfum+bBu2e2ldXr9TpWz6n+3M
+         stAUSLvG5uH7w==
+Date:   Tue, 14 Sep 2021 18:51:01 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@sstabellini-ThinkPad-T480s
+To:     rm.skakun@gmail.com
+cc:     Jan Beulich <jbeulich@suse.com>,
+        Roman Skakun <rm.skakun@gmail.com>,
+        Andrii Anisov <andrii_anisov@epam.com>,
+        Roman Skakun <roman_skakun@epam.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Mike Rapoport <rppt@kernel.org>, Will Deacon <will@kernel.org>,
+        xen-devel@lists.xenproject.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        hch@lst.de
+Subject: Re: [PATCH] swiotlb: set IO TLB segment size via cmdline
+In-Reply-To: <20210914153046.GB815@lst.de>
+Message-ID: <alpine.DEB.2.21.2109141838290.21985@sstabellini-ThinkPad-T480s>
+References: <20210914151016.3174924-1-Roman_Skakun@epam.com> <7c04db79-7de1-93ff-0908-9bad60a287b9@suse.com> <20210914153046.GB815@lst.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20210914212105.76186-4-olek2@wp.pl>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 4274826F
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 9/14/21 11:21 PM, Aleksander Jan Bajkowski wrote:
-> Make the burst length configurable by the drivers.
+On Tue, 14 Sep 2021, Christoph Hellwig wrote:
+> On Tue, Sep 14, 2021 at 05:29:07PM +0200, Jan Beulich wrote:
+> > I'm not convinced the swiotlb use describe there falls under "intended
+> > use" - mapping a 1280x720 framebuffer in a single chunk? (As an aside,
+> > the bottom of this page is also confusing, as following "Then we can
+> > confirm the modified swiotlb size in the boot log:" there is a log
+> > fragment showing the same original size of 64Mb.
 > 
-> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> It doesn't.  We also do not add hacks to the kernel for whacky out
+> of tree modules.
 
-Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
-For all 4 "MIPS: lantiq: dma:" changes.
-
-> ---
->   .../include/asm/mach-lantiq/xway/xway_dma.h   |  2 +-
->   arch/mips/lantiq/xway/dma.c                   | 38 ++++++++++++++++---
->   2 files changed, 34 insertions(+), 6 deletions(-)
-> 
-
-The DMA changes are looking good.
-
-There is also a DMA API driver for this IP core now:
-https://elixir.bootlin.com/linux/v5.15-rc1/source/drivers/dma/lgm/lgm-dma.c
-I do not know if it works fully with these older MIPS SoCs.
-Changing the drivers to use the standard DMA API is a bigger change, 
-which could be done later.
-
-Hauke
+Also, Option 1 listed in the webpage seems to be a lot better. Any
+reason you can't do that? Because that option both solves the problem
+and increases performance.
