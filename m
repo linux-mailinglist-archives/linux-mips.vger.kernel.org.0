@@ -2,93 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F95413632
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Sep 2021 17:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71AA94136CD
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Sep 2021 17:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233873AbhIUP3k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Sep 2021 11:29:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57192 "EHLO mail.kernel.org"
+        id S234211AbhIUP7n (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Sep 2021 11:59:43 -0400
+Received: from elvis.franken.de ([193.175.24.41]:36245 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233821AbhIUP3j (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 21 Sep 2021 11:29:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B6F461186;
-        Tue, 21 Sep 2021 15:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1632238091;
-        bh=V87W35buudncgpwodJtfOSyNRpRSP2nRzOMxEHbJ6Ng=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L7kXW1QmwHxvxEyDZtTAHONgIrrW7Par9SVjEBp5YB40xjEL1gMnnl36EBn5rH9qw
-         9hVCEvyWoksbijklQ+hBS7Q9QpO5nO78wr2khcqC956vFkSd6bOzfQa6HpTK+6/2mW
-         3dkUDS1rlA0xkHMvEqqNSaJ+Wy+f4iIhJP62XIag=
-Date:   Tue, 21 Sep 2021 17:28:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] staging: mt7621-pci: set end limit for
- 'ioport_resource'
-Message-ID: <YUn6BmP/4EvFmawz@kroah.com>
-References: <20210822161005.22467-1-sergio.paracuellos@gmail.com>
- <20210822161005.22467-4-sergio.paracuellos@gmail.com>
- <YSip4/kMNOG4uYC3@kroah.com>
- <CAMhs-H_0ytYCoBLj9GJDjHSPPHLC6_oBsm-V9s4FjhE7NY8TCw@mail.gmail.com>
- <YTCWR7oyLWgTDbQe@kroah.com>
- <CAMhs-H8U-crQHFVQj6j4Y5qs-S2NaW9trH8twKH8AwDR+AAYgg@mail.gmail.com>
- <20210902110835.GB7614@alpha.franken.de>
- <CAMhs-H_1U=X25+q=wDnQ+FGbxXMx1vFpefEMJviFxOc7T0jwjA@mail.gmail.com>
+        id S234328AbhIUP7n (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 21 Sep 2021 11:59:43 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mSi9l-0007XJ-00; Tue, 21 Sep 2021 17:58:05 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id E90A8C1234; Tue, 21 Sep 2021 17:57:08 +0200 (CEST)
+Date:   Tue, 21 Sep 2021 17:57:08 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Feiyang Chen <chris.chenfeiyang@gmail.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, arnd@arndb.de,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        chenhuacai@kernel.org, Zhou Yanjie <zhouyu@wanyeetech.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
+Message-ID: <20210921155708.GA12237@alpha.franken.de>
+References: <cover.1631583258.git.chenfeiyang@loongson.cn>
+ <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
+ <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMhs-H_1U=X25+q=wDnQ+FGbxXMx1vFpefEMJviFxOc7T0jwjA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 02, 2021 at 01:19:53PM +0200, Sergio Paracuellos wrote:
-> On Thu, Sep 2, 2021 at 1:08 PM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
+On Tue, Sep 14, 2021 at 05:30:14PM +0800, Feiyang Chen wrote:
+> On Tue, 14 Sept 2021 at 16:54, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
 > >
-> > On Thu, Sep 02, 2021 at 12:15:12PM +0200, Sergio Paracuellos wrote:
-> > > On Thu, Sep 2, 2021 at 11:15 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Sun, Aug 29, 2021 at 05:14:27PM +0200, Sergio Paracuellos wrote:
-> > > > > On Fri, Aug 27, 2021 at 11:01 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > On Sun, Aug 22, 2021 at 06:10:05PM +0200, Sergio Paracuellos wrote:
-> > > > > > > We have increase IO_SPACE_LIMIT for ralink platform to get PCI IO resources
-> > > > > > > properly handled using PCI core APIs. To align those changes with driver
-> > > > > > > code we have to set 'ioport_resource' end limit to IO_SPACE_LIMIT to avoid
-> > > > > > > errors.
-> > > > > > >
-> > > > > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > > >
-> > > > > > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > >
-> > > > > Thanks. Since I am planning to move 'mt7621-pci' from staging to
-> > > > > 'drivers/pci/controller' and send v3 after the next merge window, I
-> > > > > prefer this patch to go through the staging tree. For the other two I
-> > > > > don't have any preference and it is ok for me to go through mips or
-> > > > > pci trees. So, Bjorn and Thomas is up to you if you are ok with the
-> > > > > changes.
-> > > >
-> > > > Yes, I would need acks for the other patches in the series if this is to
-> > > > come through the staging tree.
+> >
+> >
+> > 在 2021/9/14 2:50, Feiyang Chen 写道:
+> > > Convert MIPS to use the generic entry infrastructure from
+> > > kernel/entry/*.
 > > >
-> > > Yes, I know it. Let's wait for Thomas and Bjorn preference for those
-> > > remaining two.
+> > > v2: Use regs->regs[27] to mark whether to restore all registers in
+> > > handle_sys and enable IRQ stack.
+> > Hi Feiyang,
 > >
-> > I've sent my acked-by for the MIPS patch.
+> > Thanks for your patch, could you please expand how could this improve
+> > the performance?
+> >
 > 
-> Thanks!
+> Hi, Jiaxun,
+> 
+> We always restore all registers in handle_sys in the v1 of the
+> patchset. Since regs->regs[27] is marked where we need to restore all
+> registers, now we simply use it as the return value of do_syscall to
+> determine whether we can only restore partial registers in handle_sys.
 
-Ok, I took patches 1 and 3 in my tree now.  Please submit patch 2 to the
-PCI developers and maintainer, as that is up to them to take, not me.
+can people, who provided performance numbers for v1 do the same for v2 ?
 
-thanks,
+Thomas,
 
-greg k-h
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
