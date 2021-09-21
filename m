@@ -2,127 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41640410CD2
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Sep 2021 20:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C764134D1
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Sep 2021 15:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbhISSRb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 19 Sep 2021 14:17:31 -0400
-Received: from mx4.wp.pl ([212.77.101.11]:27103 "EHLO mx4.wp.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230508AbhISSRb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 19 Sep 2021 14:17:31 -0400
-Received: (wp-smtpd smtp.wp.pl 25582 invoked from network); 19 Sep 2021 20:16:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1632075360; bh=dJtM2Sa5+w2q6qeeWG9EfeAq3LLnqFx6o7OMnGapbrM=;
-          h=Subject:To:From;
-          b=DYYXpBESq3wTWM0U1nQ0jRh5b96tSfpQzTHOmDVRo3JrRGdjVX6e8q05LQraP2Tdl
-           4ZJArJqkAJYIouZ74h5EyRMDxYSmCuu9EUT9ddaqv40TFunpsu1yOffj87vfGdPQ6N
-           UlwFMKYSEoRNNHXusj7tl8YxsG0M+MME1FuD3WK4=
-Received: from ip-5-172-255-97.free.aero2.net.pl (HELO [100.83.197.37]) (olek2@wp.pl@[5.172.255.97])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <linux-kernel@vger.kernel.org>; 19 Sep 2021 20:16:00 +0200
-Subject: Re: [PATCH net-next 5/8] net: lantiq: configure the burst length in
- ethernet drivers
-To:     Hauke Mehrtens <hauke@hauke-m.de>, john@phrozen.org,
-        tsbogend@alpha.franken.de, maz@kernel.org, ralf@linux-mips.org,
-        ralph.hempel@lantiq.com, davem@davemloft.net, kuba@kernel.org,
-        robh+dt@kernel.org, dev@kresin.me, arnd@arndb.de, jgg@ziepe.ca,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210914212105.76186-1-olek2@wp.pl>
- <20210914212105.76186-5-olek2@wp.pl>
- <cdfd53e7-ea43-60a4-7150-11ad166ba2d1@hauke-m.de>
-From:   Aleksander Bajkowski <olek2@wp.pl>
-Message-ID: <98677485-0bdc-d628-6cc7-417c8ed1a334@wp.pl>
-Date:   Sun, 19 Sep 2021 20:16:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S233210AbhIUNuQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Sep 2021 09:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233114AbhIUNuP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Sep 2021 09:50:15 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382C0C061574
+        for <linux-mips@vger.kernel.org>; Tue, 21 Sep 2021 06:48:47 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id t10so75315598lfd.8
+        for <linux-mips@vger.kernel.org>; Tue, 21 Sep 2021 06:48:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=iUAIwUKg3oCRxp3j1GBfdYX+urUaObYGm8sncNFpHfk=;
+        b=e5lNLEOoEoO3gRx0S827aNPmf/3sndXuaErfGlC1WarcakyNeRInpxlXFCH614XGce
+         bSwTxAb7zVa2Ay2uxqKxQrE8ADoHXcpCDCieq9jmRQokXWNfnyzX+Ha53k8TBgcejFKg
+         tCt8kcwm1uVP5IBlwCXCtWfx44WpdxbsgWeB9agSG0/NG25dfI96l2/qDHFOLnJ2aQMH
+         ZLAfJz6rzgML++yGDdE3hotCoIAQHfPMPl/hAZeu+HchfT/zsnPX2qpb9biUHyNlx/ia
+         kADGzApanrafAGHZ6kXBG88s/WcuYcvAZOyVCUGuqJc3a66eevarY6cjgmtTmJDume1A
+         SXww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=iUAIwUKg3oCRxp3j1GBfdYX+urUaObYGm8sncNFpHfk=;
+        b=0Cb7IURsoQMZmGbdSVas3ao3iRnxpi0yQ+dMFIF/peFQL34vaOUq1avKXdBLprT5nJ
+         5lAG8x0HgKWIZu49T9XND7Mk5FUOSqfJekN3/PlwIMqbM52u/r9OVvpxyu9/FZmQ1og8
+         +cZNyK71JmKkaGsd2PKHYYevylZoREG8zty2u6vRssFC8RO8cnZiQSrQz2wlYsutuJ7k
+         LqezGPSqU6Ptk/5o+fkVtQ9Q83dzv+UJBqDiEgEla1/eLXycuhCukwhY2FuC//cB5myq
+         xgHmer+FoLyTyO9qji6euKlL4q89ob3ASz0MqgIDAqbaAZ0x+0paOFIPvau75RSZlJg7
+         ZYyQ==
+X-Gm-Message-State: AOAM533zWunazJuAK4sUPN7yF2Bmv9kyQf4SA9N7oIPXUQrmISSHA4H8
+        7wbfZJUdZsyUhhooo1b+RoW5eOMfaRx5+ACmz9sJfbWLXT6mxZyi
+X-Google-Smtp-Source: ABdhPJyNUmMPTKDaBprKCrpOEDbMIeLnbMhfnyK90ntptlcIQU+Yb0YMWComZloYCew5VcvYogk2ykO9y6SX40Gc77Y=
+X-Received: by 2002:ac2:4e14:: with SMTP id e20mr19401287lfr.565.1632232125427;
+ Tue, 21 Sep 2021 06:48:45 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <cdfd53e7-ea43-60a4-7150-11ad166ba2d1@hauke-m.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 94f05cca218d0575efc7ebaffd909b85
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000B [IfOE]                               
+Received: by 2002:a05:6504:12e6:0:0:0:0 with HTTP; Tue, 21 Sep 2021 06:48:44
+ -0700 (PDT)
+From:   Francis Kwame <franciskwame575@gmail.com>
+Date:   Tue, 21 Sep 2021 13:48:44 +0000
+Message-ID: <CANiRMRMynXfDPvJc4t+kC-LQ-KqDugNaDQPnrNFHUFyv1i9qyg@mail.gmail.com>
+Subject: Re: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Hauke,
+Good day,
 
-On 9/15/21 12:36 AM, Hauke Mehrtens wrote:
-> On 9/14/21 11:21 PM, Aleksander Jan Bajkowski wrote:
->> Configure the burst length in Ethernet drivers. This improves
->> Ethernet performance by 58%. According to the vendor BSP,
->> 8W burst length is supported by ar9 and newer SoCs.
->>
->> The NAT benchmark results on xRX200 (Down/Up):
->> * 2W: 330 Mb/s
->> * 4W: 432 Mb/s    372 Mb/s
->> * 8W: 520 Mb/s    389 Mb/s
->>
->> Tested on xRX200 and xRX330.
->>
->> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
->> ---
->>   drivers/net/ethernet/lantiq_etop.c   | 21 ++++++++++++++++++---
->>   drivers/net/ethernet/lantiq_xrx200.c | 21 ++++++++++++++++++---
->>   2 files changed, 36 insertions(+), 6 deletions(-)
->>
-> .....
->> diff --git a/drivers/net/ethernet/lantiq_xrx200.c b/drivers/net/ethernet/lantiq_xrx200.c
->> index fb78f17d734f..5d96248ce83b 100644
->> --- a/drivers/net/ethernet/lantiq_xrx200.c
->> +++ b/drivers/net/ethernet/lantiq_xrx200.c
->> @@ -71,6 +71,9 @@ struct xrx200_priv {
->>       struct net_device *net_dev;
->>       struct device *dev;
->>   +    int tx_burst_len;
->> +    int rx_burst_len;
->> +
->>       __iomem void *pmac_reg;
->>   };
->>   @@ -316,8 +319,8 @@ static netdev_tx_t xrx200_start_xmit(struct sk_buff *skb,
->>       if (unlikely(dma_mapping_error(priv->dev, mapping)))
->>           goto err_drop;
->>   -    /* dma needs to start on a 16 byte aligned address */
->> -    byte_offset = mapping % 16;
->> +    /* dma needs to start on a burst length value aligned address */
->> +    byte_offset = mapping % (priv->tx_burst_len * 4);
->>         desc->addr = mapping - byte_offset;
->>       /* Make sure the address is written before we give it to HW */
->> @@ -369,7 +372,7 @@ static int xrx200_dma_init(struct xrx200_priv *priv)
->>       int ret = 0;
->>       int i;
->>   -    ltq_dma_init_port(DMA_PORT_ETOP);
->> +    ltq_dma_init_port(DMA_PORT_ETOP, priv->tx_burst_len, rx_burst_len);
->>         ch_rx->dma.nr = XRX200_DMA_RX;
->>       ch_rx->dma.dev = priv->dev;
->> @@ -478,6 +481,18 @@ static int xrx200_probe(struct platform_device *pdev)
->>       if (err)
->>           eth_hw_addr_random(net_dev);
->>   +    err = device_property_read_u32(dev, "lantiq,tx-burst-length", &priv->tx_burst_len);
->> +    if (err < 0) {
->> +        dev_err(dev, "unable to read tx-burst-length property\n");
->> +        return err;
->> +    }
->> +
->> +    err = device_property_read_u32(dev, "lantiq,rx-burst-length", &priv->rx_burst_len);
->> +    if (err < 0) {
->> +        dev_err(dev, "unable to read rx-burst-length property\n");
->> +        return err;
->> +    }
->> +
-> 
-> I would prefer if you would hard code these values to 8 for the xrx200 driver. All SoCs with this IP block should support this.
-OK. I can hard code 8W burst length in the driver for xrx200. Burst length as a configurable parameter is really only needed in the lantiq_etop driver.
-> 
->>       /* bring up the dma engine and IP core */
->>       err = xrx200_dma_init(priv);
->>       if (err)
->>
-> 
-> Hauke
-Aleksander
+You are officially invited to inheritance claim belonging to your late relative.
+Permit me to give you the more information concerning his inheritance.
+
+Yours faithfully,
+
+-- 
+Francis Kwame. Esq
