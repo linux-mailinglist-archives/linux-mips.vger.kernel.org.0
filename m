@@ -2,255 +2,184 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F3A414090
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Sep 2021 06:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235674140EF
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Sep 2021 07:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbhIVEaC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Sep 2021 00:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
+        id S231734AbhIVFCJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Sep 2021 01:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbhIVEaB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Sep 2021 00:30:01 -0400
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56CCC061574;
-        Tue, 21 Sep 2021 21:28:31 -0700 (PDT)
-Received: by mail-vk1-xa29.google.com with SMTP id t186so633575vkd.3;
-        Tue, 21 Sep 2021 21:28:31 -0700 (PDT)
+        with ESMTP id S229495AbhIVFCJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Sep 2021 01:02:09 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7470C061574;
+        Tue, 21 Sep 2021 22:00:39 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id t8so3029556wrq.4;
+        Tue, 21 Sep 2021 22:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u4UIk4Pilqw5wQJ79b15Vtz6viVnEmz8IWNKN7xH5/A=;
-        b=GxO6Avk5nrRzuRl9UeNlNSW8Dy/MY3gQfcMa/jrgZvO4pVe/37N0NdNtvL0SYRo8zn
-         o8MdPdEhfgtnPmji2OD9bo4cvIhSM9HSOIHoZQ3WhGjLP4P0rm0mG2pEPE5Dk6bkqAUP
-         PW+ZuZnT9ZOUlc3uEZMlLxpYmdekYkJT6pR285zbMwYTHXyBM7dXgr6CES/SrFW270+H
-         69rHIztDtwjTjIcQvGq6MtFRWmfqZCiZmB0Y7uX9K30SHIyFn7r592FTIwtHC0zIrylD
-         3YD1bt1eLoWxsThgVC9/ZhVNnm1mzXoCdHYDseIYx4OXYzBsEai3+zF2WUo5tSkKuNhR
-         db5A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IHrQEFVF44k2fbyHAhZ+TFuZ8lKa2bQ16gGSgsPMKMM=;
+        b=c98+MPh8vMk8ZJAGwRqca+iKoMa6ZlyPZ76BZSvobl+F4fm1BWS719pLpdVL+HeWOL
+         8k2d9OjI+ojNEcU+uHjWjw1wAcRfQi4pPQqqNkxCIAx0+DxjulmRBSgpojZlXiwjWHCg
+         XqbR57H4znmYnlu94qRMHu5Vp2nZzAP5Nw+z983Z8Jzag5ENVLg4ZsTDh7LFfpMC8YYU
+         aPerwyHrNmRaCWec71vFQBq5WvsPQx4qGkXu5/fA5QL6rlt5qNgsXbvMOkpq/pKLmsm0
+         88+NpTc9CBdAecjMWdVVqAz3Exafjrvw/UgMi/cIy7hwoHolU9UFWvkvAXZuvE+KYhql
+         4X8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u4UIk4Pilqw5wQJ79b15Vtz6viVnEmz8IWNKN7xH5/A=;
-        b=hWJrERKR5xt7YAO9Xmz6YfqZ+WyArw5aqQohw+nyam56lTdVm0qHmJPKGYwLf+mHNF
-         gJxLVeusLo5i9mIbuTrN5/gR0KpWpbLTKI7DIv6A/c1CoTInlqZoouA7bQG3gHVlVGLz
-         xDfgnlncDh0fE8vFOeu1M9pdnisI64HyeS2u+zIuW7usM575UfoUab52Pk00A6k2nhkB
-         IH16e2NwRWpRpEM4grD0pOI3gL7IYpKcmckFuwqutr0B8e4nFPzc2Wq0CU3lRuZiallR
-         Xj15qja6C9UHirt0S/lp82VzsdfOAy60z1QO8n1+RjJVDetsWYqZJz9MO6FjJaprTgRf
-         2rYQ==
-X-Gm-Message-State: AOAM532EsLXPsjotRx/6wnZymeguM7qFs91Y6wEsjeOZHBPIPPpo7z+W
-        4I4enf//n/AcxPrGZ2w7wntrPh13TzOH3eqnz2H9oBc27Q0=
-X-Google-Smtp-Source: ABdhPJwaUfjrU8308Gp3efS8wJ9EVFQGyIsxCsUOlrl9Bu8Nn5QJuFB868XnCch+p7A+laLRLj1M4fTkdw1P15cEx1I=
-X-Received: by 2002:a1f:900c:: with SMTP id s12mr4658530vkd.1.1632284910803;
- Tue, 21 Sep 2021 21:28:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAMhs-H90yvbnPN26C7P_431cYqD4=8yrCUrxUY3L5k1GdsCeiQ@mail.gmail.com>
- <20210921193829.GA114725@bhelgaas>
-In-Reply-To: <20210921193829.GA114725@bhelgaas>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IHrQEFVF44k2fbyHAhZ+TFuZ8lKa2bQ16gGSgsPMKMM=;
+        b=QB62IaKRMCRIPXt1n8z5Ggq49mNNNZF1qHNIpsa1PhiVUCEbJOl5H3J/euVjQ2SQQg
+         JkaFmP4SNOLsm2RRP4NRpSn5YAs3sy/PloPAZT1tDSNEa61kfWgwK15PM+1kJzdAWj/f
+         lmW/FXniKVjh2pIP0r3Guck+XWCZOihLHx3Fu/9In42QMoJWPrZjjsv7ZhGXGJe8wXpb
+         nC1hQQFSO2BZV2jub+xVAfapGBWxDWcEFfje+tNm5fxBij2nOWCjPns26pccFzXUNSMS
+         nsTt+fBBJiAG0R7sU/lZ65BY29jGMJLYbUV5ElWaKYg6B9texGOjtOsMk+u/hSvVR578
+         g7ew==
+X-Gm-Message-State: AOAM530iP6goYDEV3WmQsrGSWjTuVTe44Muob4lj2zLBO3v3Ym3UOFMq
+        otEdlTBIRLA82ITeTPASRZpNdSMYKSA=
+X-Google-Smtp-Source: ABdhPJybsyt2COp8s5DQjMgQXvOz5y5bpce2gzIZGFWEAuludQO9Hc+BBjfSRaAoSV5nlQuVxCXSuA==
+X-Received: by 2002:a7b:c350:: with SMTP id l16mr7980429wmj.151.1632286837636;
+        Tue, 21 Sep 2021 22:00:37 -0700 (PDT)
+Received: from localhost.localdomain (252.red-83-54-181.dynamicip.rima-tde.net. [83.54.181.252])
+        by smtp.gmail.com with ESMTPSA id b187sm4811625wmd.33.2021.09.21.22.00.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 Sep 2021 22:00:37 -0700 (PDT)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 22 Sep 2021 06:28:19 +0200
-Message-ID: <CAMhs-H-OJyXs+QViJa5_O3wUGhoupmaW4qvVG8WGjxm1haRj9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] PCI: fix 'pci_remap_iospace' for architectures
- with PCI_IOBASE not defined
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+To:     linux-pci@vger.kernel.org
+Cc:     lorenzo.pieralisi@arm.com, john@phrozen.org,
+        devicetree@vger.kernel.org, tsbogend@alpha.franken.de,
+        bhelgaas@google.com, matthias.bgg@gmail.com,
+        gregkh@linuxfoundation.org, linux-mips@vger.kernel.org,
+        linux-staging@lists.linux.dev, neil@brown.name,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver
+Date:   Wed, 22 Sep 2021 07:00:32 +0200
+Message-Id: <20210922050035.18162-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Bjorn,
+MediaTek MT7621 PCIe subsys supports single Root complex (RC)
+with 3 Root Ports. Each Root Ports supports a Gen1 1-lane Link.
+Topology is as follows:
 
-On Tue, Sep 21, 2021 at 9:38 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> If you repost this, please update the subject line like:
->
->   PCI: of: Avoid pci_remap_iospace() when PCI_IOBASE not defined
->
-> On Tue, Sep 21, 2021 at 08:36:07PM +0200, Sergio Paracuellos wrote:
-> > On Tue, Sep 21, 2021 at 7:49 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > >
-> > > [+cc Liviu, Rob, Catalin, Arnd, since this warning was added by
-> > > 8b921acfeffd ("PCI: Add pci_remap_iospace() to map bus I/O resources"),
-> > > https://git.kernel.org/linus/8b921acfeffd]
-> > >
-> > > On Sun, Aug 22, 2021 at 06:10:04PM +0200, Sergio Paracuellos wrote:
-> > > > Request for I/O resources from device tree call 'pci_remap_iospace' from
-> > > > 'devm_pci_remap_iospace' which is also called from device tree function
-> > > > 'pci_parse_request_of_pci_ranges'. if PCI_IOBASE is not defined and I/O
-> > > > resources are requested the following warning appears:
->
-> s/'pci_remap_iospace'/pci_remap_iospace()/
-> s/'devm_pci_remap_iospace'/devm_pci_remap_iospace()/
-> s/'pci_parse_request_of_pci_ranges'/pci_parse_request_of_pci_ranges()/
-> s/if PCI_IOBASE/If PCI_IOBASE/
->
-> I think you can trim the stacktrace below and keep just this:
->
->   WARNING: CPU: 2 PID: 1 at ../drivers/pci/pci.c:4066 pci_remap_iospace+0x3c/0x54
->   This architecture does not support memory mapped I/O
->   mt7621-pci 1e140000.pcie: error -19: failed to map resource [io  0x1e160000-0x1e16ffff]
->
-> > > >
-> > > > ------------[ cut here ]------------
-> > > > WARNING: CPU: 2 PID: 1 at ../drivers/pci/pci.c:4066 pci_remap_iospace+0x3c/0x54
-> > > > This architecture does not support memory mapped I/O
-> > > > Modules linked in:
-> > > > CPU: 2 PID: 1 Comm: swapper/0 Not tainted 5.10.1+ #1228
-> > > > Stack : 00000000 00000000 807fa974 00000000 827ffa80 80066b48 80710000 0000000b
-> > > >         00000000 00000000 81c59aac 7d06ddec 80850000 00000001 81c59a40 7d06ddec
-> > > >         00000000 00000000 807c909c 81c598f0 00000001 81c59904 00000000 0000000a
-> > > >         203a6d6d 80708880 0000000f 70617773 80850000 00000000 00000000 807d0000
-> > > >         807ffecc 1e160000 00000001 00000200 00000000 8054e920 00000008 815e0008
-> > > >         ...
-> > > > Call Trace:
-> > > > [<80008efc>] show_stack+0x8c/0x130
-> > > > [<806e1674>] dump_stack+0x9c/0xc8
-> > > > [<80024a3c>] __warn+0xc0/0xe8
-> > > > [<80024ad0>] warn_slowpath_fmt+0x6c/0xbc
-> > > > [<80410ca8>] pci_remap_iospace+0x3c/0x54
-> > > > [<80410d20>] devm_pci_remap_iospace+0x58/0xa4
-> > > > [<8042019c>] devm_of_pci_bridge_init+0x4dc/0x55c
-> > > > [<80408de8>] devm_pci_alloc_host_bridge+0x78/0x88
-> > > > [<80424e44>] mt7621_pci_probe+0x68/0x9a4
-> > > > [<80464804>] platform_drv_probe+0x40/0x7c
-> > > > [<804628bc>] really_probe+0x2fc/0x4e4
-> > > > [<80463214>] device_driver_attach+0x4c/0x74
-> > > > [<80463384>] __driver_attach+0x148/0x150
-> > > > [<8046047c>] bus_for_each_dev+0x6c/0xb0
-> > > > [<804614dc>] bus_add_driver+0x1b4/0x1fc
-> > > > [<80463aa0>] driver_register+0xd0/0x110
-> > > > [<80001714>] do_one_initcall+0x84/0x1c0
-> > > > [<808e7fd0>] kernel_init_freeable+0x214/0x24c
-> > > > [<806e4164>] kernel_init+0x14/0x118
-> > > > [<80003358>] ret_from_kernel_thread+0x14/0x1c
-> > > >
-> > > > ---[ end trace 1c9d4412bd51b53c ]---
-> > > > mt7621-pci 1e140000.pcie: error -19: failed to map resource [io  0x1e160000-0x1e16ffff]
-> > > >
-> > > > Since there are architectures (like MIPS ralink) that can request I/O
-> > > > resources from device tree but have not mapeable I/O space and also PCI_IOBASE
-> > > > not defined, avoid this warning and just return zero to make the I/O ranges
-> > > > assignment work.
->
-> s/have not mapeable I/O space and also PCI_IOBASE not defined/
->   don't have mappable I/O space and therefore don't define PCI_IOBASE/
-> s/avoid this warning .../
->   avoid calling devm_pci_remap_iospace() in that case/
->
-> > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > ---
-> > > >  drivers/pci/pci.c | 12 ++++++------
-> > > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > > >
-> > > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > > > index aacf575c15cf..10bb2191f376 100644
-> > > > --- a/drivers/pci/pci.c
-> > > > +++ b/drivers/pci/pci.c
-> > > > @@ -4102,9 +4102,9 @@ unsigned long __weak pci_address_to_pio(phys_addr_t address)
-> > > >   * @phys_addr: physical address of range to be mapped
-> > > >   *
-> > > >   * Remap the memory mapped I/O space described by the @res and the CPU
-> > > > - * physical address @phys_addr into virtual address space.  Only
-> > > > - * architectures that have memory mapped IO functions defined (and the
-> > > > - * PCI_IOBASE value defined) should call this function.
-> > > > + * physical address @phys_addr into virtual address space. There
-> > > > + * are architectures that don't define PCI_IOBASE but can have not
-> > > > + * mapeable IO space. Return zero for those cases.
-> > > >   */
-> > > >  int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
-> > > >  {
-> > > > @@ -4122,10 +4122,10 @@ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
-> > > >  #else
-> > > >       /*
-> > > >        * This architecture does not have memory mapped I/O space,
-> > > > -      * so this function should never be called
-> > > > +      * but can have not mapeable I/O space, so just return ok
-> > > > +      * here.
-> > > >        */
-> > > > -     WARN_ONCE(1, "This architecture does not support memory mapped I/O\n");
-> > > > -     return -ENODEV;
-> > > > +     return 0;
-> > >
-> > > This doesn't seem right to me.  pci_remap_iospace() remaps
-> > > memory-mapped I/O space into virtual address space.
-> > >
-> > > If the architecture doesn't support that remapping, we shouldn't claim
-> > > that it succeeded.
-> > >
-> > > The analogous path for ACPI is in acpi_pci_root_remap_iospace(), where
-> > > we only call pci_remap_iospace() if PCI_IOBASE is defined.  Maybe we
-> > > should use the same approach here, i.e., add the corresonding #ifdef
-> > > in pci_parse_request_of_pci_ranges()?
-> >
-> > This approach you are talking here is what I did in v1 of this series
-> > [0] and you tell me to properly fix that in the 'pci_remap_iospace'.
->
 
-I have already send v3 of ths patch with all the changes in commit
-message and description that you are pointing out here, thanks:
+                          MT7621 PCIe HOST Topology
 
-https://lore.kernel.org/linux-pci/20210922042041.16326-1-sergio.paracuellos@gmail.com/T/#u
+                                   .-------.
+                                   |       |
+                                   |  CPU  |
+                                   |       |
+                                   '-------'
+                                       |
+                                       |
+                                       |
+                                       v
+                              .------------------.
+                  .-----------|  HOST/PCI Bridge |------------.
+                  |           '------------------'            |     Type1 
+         BUS0     |                     |                     |    Access 
+                  v                     v                     v    On Bus0
+          .-------------.        .-------------.       .-------------.
+          | VIRTUAL P2P |        | VIRTUAL P2P |       | VIRTUAL P2P |
+          |    BUS0     |        |    BUS0     |       |    BUS0     |
+          |    DEV0     |        |    DEV1     |       |    DEV2     |
+          '-------------'        '-------------'       '-------------'
+    Type0        |          Type0       |         Type0       |
+   Access   BUS1 |         Access   BUS2|        Access   BUS3|
+   On Bus1       v         On Bus2      v        On Bus3      v
+           .----------.           .----------.          .----------.
+           | Device 0 |           | Device 0 |          | Device 0 |
+           |  Func 0  |           |  Func 0  |          |  Func 0  |
+           '----------'           '----------'          '----------'
 
-> Hmm, sorry, you're absolutely right.
->
-> I guess I was thinking that pci_remap_iospace() was broken because it
-> returns -ENODEV when the arch can't remap I/O port space into virtual
-> memory space.  But that doesn't seem right.  If the arch literally
-> cannot do that remapping, why should pci_remap_iospace() return
-> success and basically pretend that it can?
+This driver has been very long time in staging and I have been cleaning
+it from its first versions where there was code kaos and PCI_LEGACY support.
+Original code came probably from openWRT based on mediatek's SDK code. There
+is no documentation at all about the mt7621 PCI subsystem.
+I have been cleaning it targeting mt7621 SoC which is the one I use in
+my GNUBee PC1 board and HiLink HLK-MT7621A evaluation board.
 
-No problem at all :). I also should have asked a bit more about why to
-fix things there since I thought initially it seemed to not be the
-right thing to do.
+Now I think is clean enough to be moved into 'drivers/pci/controller'.
+This driver is mips/ralink architecture and need 'mips_cps_numiocu()'
+to properly configure iocu regions for mips.
 
->
-> And the acpi_pci_root_remap_iospace() case is doing exactly the same
-> thing, and we live with the #ifdef there.  So I think I was just wrong
-> before, and we should make the DT case similar by adding the #ifdef
-> where you initially put it, in pci_parse_request_of_pci_ranges().
->
-> > Both of these v1 and v2 obviously end up in a working pci system for
-> > mt7621 ralink.
-> > Another option I guess would be to mark 'pci_remap_iospace' as weak
-> > and redefine the symbol for ralink but since it is only for one simple
-> > return zero maybe it makes no sense at all... Please, tell me the
-> > correct approach to properly fix this and make things work for this
-> > platform.
->
-> Making pci_remap_iospace() weak could work (and I think it was
-> originally that way), but seems overkill to me, unless you want a way
-> to make generic mips kernels that work both on ralink and other mips
-> platforms.
+This driver also uses already mainlined pci phy driver located in
+'drivers/phy/ralink/phy-mt7621-pci.c'. There are two instances of
+the phy being the first one dual ported for pci0 and pci1, and the
+second one not dual ported dedicated to pci2. Because of writing twice
+some phy registers of the dual-ported one sometimes become in not
+confident boot cycles we have to take care of this when device link
+is checked here in controller driver. We power on the dual ported-phy
+if there is something connected in pcie0 or pcie1. In the same manner
+we have to properly disable it only if nothing is connected in of both
+pcie0 and pcie1 slots.
 
-That is not the case and agree with you that seems overkill.
+This changes are rebased on the top of staging-next branch of staging
+tree for a clean git mv since last changes are always in that tree.
+Since this a git mv as I was told to do, include link to the last code
+here [0].
+
+Changes in v3:
+ - Add Rob's Reviewed-by for the bindings.
+ - Avoid custom 'of_pci_range_to_resource' in driver side since
+   PCI core APIs has been changed to properly support this architecture.
+ - Kconfig:
+   - Change from 'bool' to 'tristate'.
+   - Add phy's selection 'select PHY_MT7621_PCI'.
+   - Move PCI_DRIVERS_GENERIC selection to 'arch/mips' since its mips
+     internal stuff (change requested by Lorenzo in v2 review of this series).
+
+Changes in v2:
+ - Make one commit moving driver directly from staging into
+  'drivers/pci/controllers' instead of two commits making
+  one add and a later remove.
+ - Update binding documentation moving 'clocks', 'resets' and
+   'phys' properties to child root bridge nodes. 
+ - Update code to properly be able to use new bindings.
+ - Kconfig: add || (MIPS && COMPILE_TEST).
+ - Use {read/write}_relaxed versions.
+ - Use 'PCI_BASE_ADDRESS_0' instead of a custom definition.
+ - Avoid to set 'PCI_COMMAND_MASTER' and re-do functions
+   'mt7621_pcie_enable_ports' and 'mt7621_pcie_enable_port'.
 
 Thanks in advance for your time.
 
 Best regards,
-     Sergio Paracuellos
+    Sergio Paracuellos
 
->
-> > Thanks in advance for your time,
-> >      Sergio Paracuellos
-> >
-> > [0]: https://lore.kernel.org/linux-pci/20210807072409.9018-2-sergio.paracuellos@gmail.com/T/#m73c19c3b72fdf8c63e6d3fe8dc80aeee4e4adcaa
-> >
-> > >
-> > > >  #endif
-> > > >  }
-> > > >  EXPORT_SYMBOL(pci_remap_iospace);
-> > > > --
-> > > > 2.25.1
-> > > >
+[0]: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/tree/drivers/staging/mt7621-pci/pci-mt7621.c?h=staging-testing
+Sergio Paracuellos (3):
+  dt-bindings: mt7621-pci: PCIe binding documentation for MT7621 SoCs
+  PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver
+  MAINTAINERS: add myself as maintainer of the MT7621 PCI controller
+    driver
+
+ .../bindings/pci/mediatek,mt7621-pci.yaml     | 142 ++++++++++++++++++
+ MAINTAINERS                                   |   6 +
+ arch/mips/ralink/Kconfig                      |   3 +-
+ drivers/pci/controller/Kconfig                |   8 +
+ drivers/pci/controller/Makefile               |   1 +
+ .../controller}/pci-mt7621.c                  |   0
+ drivers/staging/Kconfig                       |   2 -
+ drivers/staging/Makefile                      |   1 -
+ drivers/staging/mt7621-pci/Kconfig            |   8 -
+ drivers/staging/mt7621-pci/Makefile           |   2 -
+ drivers/staging/mt7621-pci/TODO               |   4 -
+ .../mt7621-pci/mediatek,mt7621-pci.txt        | 104 -------------
+ 12 files changed, 159 insertions(+), 122 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pci/mediatek,mt7621-pci.yaml
+ rename drivers/{staging/mt7621-pci => pci/controller}/pci-mt7621.c (100%)
+ delete mode 100644 drivers/staging/mt7621-pci/Kconfig
+ delete mode 100644 drivers/staging/mt7621-pci/Makefile
+ delete mode 100644 drivers/staging/mt7621-pci/TODO
+ delete mode 100644 drivers/staging/mt7621-pci/mediatek,mt7621-pci.txt
+
+-- 
+2.25.1
