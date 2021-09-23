@@ -2,240 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7891F416602
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 21:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 525D841661F
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 21:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242933AbhIWTlE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 23 Sep 2021 15:41:04 -0400
-Received: from aposti.net ([89.234.176.197]:41302 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242796AbhIWTlD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 23 Sep 2021 15:41:03 -0400
-Date:   Thu, 23 Sep 2021 20:39:18 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 6/6] drm/ingenic: Attach bridge chain to encoders
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-mips <linux-mips@vger.kernel.org>, list@opendingux.net,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>
-Message-Id: <IXJWZQ.BZQ2M7FHYVJM@crapouillou.net>
-In-Reply-To: <ABE75744-46FE-4F37-A14C-D996F36B7B0E@goldelico.com>
-References: <20210922205555.496871-1-paul@crapouillou.net>
-        <20210922205555.496871-7-paul@crapouillou.net>
-        <32234186-1802-4FDF-801A-B14E48FB86D8@goldelico.com>
-        <RTPVZQ.WN90B9MHPMZ13@crapouillou.net>
-        <896D04E4-4058-474B-8BD2-7F21B1C754E4@goldelico.com>
-        <YUxIkdGcGnBhcT0y@pendragon.ideasonboard.com>
-        <3764505C-7CA9-40C4-8CFA-8B0F2361E6D5@goldelico.com>
-        <YUxQ9k/CDYz20rYo@pendragon.ideasonboard.com>
-        <B7C9EEE8-F999-4105-B805-1B32619A3847@goldelico.com>
-        <7U2WZQ.D8DTPCJ0ZPKO3@crapouillou.net>
-        <ABE75744-46FE-4F37-A14C-D996F36B7B0E@goldelico.com>
+        id S242977AbhIWTro (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Sep 2021 15:47:44 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10952 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242861AbhIWTrn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 23 Sep 2021 15:47:43 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18NJW36f031236;
+        Thu, 23 Sep 2021 15:45:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=OlfxwL5SxCQJGsEygNnP+Bd9S5CycoibyIwI1T9qbFQ=;
+ b=o2g9xUdg4iWokOSpifGukNkZK7jrG3PCnBFvuz4C7oP+gzjHDglARWvYTHBDYKWgrmUN
+ nywTanPgUpTOTd5/xMfhi1L+mJwrCvVoKxej3UCLp5sG7C25GVynwAmr4q0nxjw5T5YF
+ XfSS+haqO/MAAWW7EoLHEph+pIjpH8koxcOuzA2lkqyOwZ+Lt0jX5schDBGsmjxT7nCn
+ nj0KpCKZ1MAIxT1dHKe+ArroeI/VY7R10b19vbUGLmbRaxdWWrC+tHtvcRU2gpGyiZee
+ fQz965XLLMlLTgvc9SCxBhiIocufoeoMuCL9s+OrHLUbKOqWsHzC5EoSrMfU3XKh1xK9 Bg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3b8wkuupat-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Sep 2021 15:45:58 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18NJRuDe003688;
+        Thu, 23 Sep 2021 19:45:56 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3b7q6kd587-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Sep 2021 19:45:56 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18NJjrxv44106172
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Sep 2021 19:45:53 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A19734C04A;
+        Thu, 23 Sep 2021 19:45:53 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 903DC4C05A;
+        Thu, 23 Sep 2021 19:45:51 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.159.121])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 23 Sep 2021 19:45:51 +0000 (GMT)
+Date:   Thu, 23 Sep 2021 22:45:49 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        KVM list <kvm@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-usb@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH 0/3] memblock: cleanup memblock_free interface
+Message-ID: <YUzZberbgZE+7HEo@linux.ibm.com>
+References: <20210923074335.12583-1-rppt@kernel.org>
+ <CAHk-=wiJB8H5pZz-AKaSJ7ViRtdxQGJT7eOByp8DJx2OwZSYwA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiJB8H5pZz-AKaSJ7ViRtdxQGJT7eOByp8DJx2OwZSYwA@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NmcKtlYbna1qS7iyZ4wr-YnA7UP6mwwQ
+X-Proofpoint-ORIG-GUID: NmcKtlYbna1qS7iyZ4wr-YnA7UP6mwwQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-23_06,2021-09-23_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 suspectscore=0
+ mlxlogscore=691 adultscore=0 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2109200000
+ definitions=main-2109230115
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Linus,
 
+On Thu, Sep 23, 2021 at 09:01:46AM -0700, Linus Torvalds wrote:
+> On Thu, Sep 23, 2021 at 12:43 AM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> You need to be a LOT more careful.
+> 
+> From a trivial check - exactly because I looked at doing it with a
+> script, and decided it's not so easy - I found cases like this:
+> 
+> -               memblock_free(__pa(paca_ptrs) + new_ptrs_size,
+> +               memblock_free(paca_ptrs + new_ptrs_size,
+> 
+> which is COMPLETELY wrong.
 
-Le jeu., sept. 23 2021 at 20:52:23 +0200, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> Hi Paul,
-> 
->>  Am 23.09.2021 um 15:30 schrieb Paul Cercueil <paul@crapouillou.net>:
->> 
->>  Hi Nikolaus,
->> 
->>  Le jeu., sept. 23 2021 at 13:41:28 +0200, H. Nikolaus Schaller 
->> <hns@goldelico.com> a écrit :
->>>  Hi Laurent,
->>>  Ah, ok.
->>>  But then we still have issues.
->>>  Firstly I would assume that get_edid only works properly if it is 
->>> initialized
->>>  through dw_hdmi_connector_create().
->>>  Next, in the current code, passing DRM_BRIDGE_ATTACH_NO_CONNECTOR 
->>> to
->>>  dw_hdmi_bridge_attach() indeed does not call 
->>> dw_hdmi_connector_create()
->>>  but returns 0.
->>>  This patch 6/6 makes drm/ingenic unconditionally require a 
->>> connector
->>>  to be attached which is defined somewhere else (device tree e.g. 
->>> "connector-hdmi")
->>>  unrelated to dw-hdmi. Current upstream code for drm/ingenic does 
->>> not init/attach
->>>  such a connector on its own so it did work before.
->>>  I.e. I think we can't just use parts of dw-hdmi.
->> 
->>  The fact that Laurent is using dw-hdmi with 
->> DRM_BRIDGE_ATTACH_NO_CONNECTOR on Renesas makes me think that it's 
->> possible here as well. There's no reason why it shouldn't work with 
->> ingenic-drm.
-> 
-> That is interesting and Laurent can probably comment on differences 
-> between
-> his setup (I wasn't able to deduce what device you are referring to) 
-> and dw-hdmi.
-> 
-> For jz4780 we tried that first. I do not remember the exact reasons 
-> but we wasted
-> weeks trying to but failed to get it working. While the dw-hdmi 
-> connector simply works
-> on top of upstream and fails only if we apply your patch.
-> 
-> Another issue is how you want to tell connector-hdmi to use the extra 
-> i2c bus driver
-> for ddc which is not available directly as a standard i2c controller 
-> of the jz4780.
-> 
-> hdmi-connector.yaml defines:
-> 
->   ddc-i2c-bus:
-> 	description: phandle link to the I2C controller used for DDC EDID 
-> probing
-> 	$ref: /schemas/types.yaml#/definitions/phandle
-> 
-> So we would need some ddc-i2c-bus = <&i2c-controller-inside-the 
-> dw-hdmi>.
-> 
-> But that i2c-controller-inside-the dw-hdmi does not exist in device 
-> tree
-> and can not be added unless someone significantly rewrites dw-hdmi to
-> register and expose it as i2c controller.
+I did use a coccinelle script that's slightly more robust that a sed you've
+sent, but then I did a manual review, hence the two small patches with
+fixes. Indeed I missed this one, so to be on the safe side I'll rename only
+the obvious cases where coccinelle can be used reliably and leave all the
+rest as it's now. If somebody cares enough they can update it later.
+ 
+> And no, making the scripting just replace '__pa(x)' with '(void *)(x)'
 
-No, you don't need to do that at all. Just don't set the "ddc-i2c-bus" 
-property.
+These were actually manual and they are required for variables that
+used as virtual addresses but have unsigned long type, like e.g.
+initrd_start. So it's either __pa(x) or (void *).
 
->> 
->>  The ingenic-drm driver does not need to create any connector. The 
->> "connector-hdmi" is connected to dw-hdmi as the "next bridge" in the 
->> list.
-> 
-> Sure. It does not *create* a connector. It expects that it can safely 
-> call
-> drm_bridge_connector_init() to get a pointer to a newly created 
-> connector.
-> 
-> But if we use the dw-hdmi connector, there is no such connector and 
-> "next bridge".
-
-We don't want to use the dw-hdmi connector. Your "next bridge" is the 
-"hdmi-connector" that should be wired in DTS.
-
-> Or can you tell me how to make the dw-hdmi connector created by
-> dw_hdmi_connector_create() become the "next bridge" in the list for 
-> your driver?
-> But without significantly rewriting dw-hdmi.c (and testing).
-
-Wire it to the LCD node in DTS...
-
-See how we do it for the IT66121 driver:
-https://github.com/OpenDingux/linux/blob/jz-5.15/arch/mips/boot/dts/ingenic/rg350m.dts#L114-L134
-
->> 
->>>  If drm_bridge_attach() would return some errno if 
->>> DRM_BRIDGE_ATTACH_NO_CONNECTOR
->>>  is set, initialization in ingenic_drm_bind() would fail likewise 
->>> with "Unable to attach bridge".
->>>  So in any case dw-hdmi is broken by this drm/ingenic patch unless 
->>> someone
->>>  reworks it to make it compatible.
->> 
->>  Where would the errno be returned? Why would drm_bridge_attach() 
->> return an error code?
-> 
-> Currently dw_hdmi_bridge_attach() returns 0 if it is asked to support
-> DRM_BRIDGE_ATTACH_NO_CONNECTOR.
-> 
-> This is not treated as an error by drm_bridge_attach().
-> 
-> Here it could return an error (-ENOTSUPP?) instead, to allow for 
-> error handling
-> by its caller.
-
-And why would you do that? If you don't want to attach a connector, 
-then drm_bridge_attach() doesn't need to do much. So it's normal that 
-it returns zero.
-
-> But that raises an error message like "failed to attach bridge to 
-> encoder" and
-> the bridge is reset and detached.
-> 
->> 
->>>  Another issue is that dw_hdmi_connector_create() does not only do 
->>> dcd/edid
->>>  but appears to detects hot plug and does some special 
->>> initialization.
->>>  So we probably loose hotplug detect if we just use 
->>> drm_bridge_funcs.get_edid().
->> 
->>  There's drm_bridge_funcs.detect().
-> 
-> You mean in dw-hdmi? Yes, it calls dw_hdmi_bridge_detect() which 
-> calls dw_hdmi_detect().
-> This does some read_hpd.
-> 
-> Anyways, this does not solve the problem that with your drm/ingenic 
-> proposal the
-> dw-hdmi subsystem (hdmi + ddc) can no longer be initialized properly 
-> unless someone
-> fixes either.
-> 
-> So IMHO this should be treated as a significant blocking point for 
-> your patch
-> because it breaks something that is working upstream and there seems 
-> to be no
-> rationale to change it.
-> 
-> Your commit message just says:
-> "All the bridges are now attached with 
-> DRM_BRIDGE_ATTACH_NO_CONNECTOR."
-> but gives no reason why.
-> 
-> I fully understand that you want to change it and Laurent said that 
-> it will become
-> standard in the far future. Therefore I suggest to find a way that 
-> you can find out
-> if a connector has already been created by drm_bridge_attach() to 
-> stay compatible
-> with current upstream code.
-
-No, absolutely not. There is nothing upstream yet that can bind the 
-ingenic-drm driver with the dw-hdmi driver. This is your downstream 
-patch. I'm not breaking anything that's upstream, so there is no 
-blocking point.
-
-Besides, even with your downstream patch I don't see any reason why the 
-dw-hdmi driver wouldn't work with this patch, provided it's wired 
-properly, and you never did show a proof of failure either. You come up 
-with "possible points where it will fail" but these are based on your 
-assumptions on how the drivers should be working together, and I think 
-you somehow miss the whole picture.
-
-Start by wiring things properly, like in my previously linked DTS, and 
-*test*. If it fails, tell us where it fails. Because your "it doesn't 
-work" arguments have zero weight otherwise.
-
-If I can find some time this weekend I will test it myself.
-
-Cheers,
--Paul
-
-> I even want to help here but I don't know how to detect the inverse of
-> drm_connector_attach_encoder(), i.e. 
-> is_drm_encoder_attached_to_any_connector().
-> 
-> BR and thanks,
-> Nikolaus
-> 
-> 
-> 
-
-
+-- 
+Sincerely yours,
+Mike.
