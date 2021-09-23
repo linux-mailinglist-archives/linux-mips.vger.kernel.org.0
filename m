@@ -2,121 +2,240 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A33341631C
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 18:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7891F416602
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 21:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242376AbhIWQYl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Sep 2021 12:24:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42006 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242287AbhIWQYZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 23 Sep 2021 12:24:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632414173;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u6pqfNeOt8tL2GBP0sFXaQoAOnZO3+YJ2VkaCjJ0uXk=;
-        b=XdtjIdWErE8Z5lXHRAg1BgUF3cZ7I7FwDJ/JTqOUW91kFdvDcyquh8NgDlQ/HEKbMbo71N
-        /cu+F2cW4gyAkjGF5W4Ac47BQ20z9uovgOqNkIYg53vglbDub/h4HUIlFBiTg5SXX0nxrt
-        yRpxi17pBalI6JbTh+sbi9j2SnqcQ7Q=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-2-rWz0o2PhNI21gA83uu0K5w-1; Thu, 23 Sep 2021 12:21:47 -0400
-X-MC-Unique: rWz0o2PhNI21gA83uu0K5w-1
-Received: by mail-ed1-f69.google.com with SMTP id n5-20020a05640206c500b003cf53f7cef2so7294512edy.12
-        for <linux-mips@vger.kernel.org>; Thu, 23 Sep 2021 09:21:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=u6pqfNeOt8tL2GBP0sFXaQoAOnZO3+YJ2VkaCjJ0uXk=;
-        b=8EVL9Htr05ZhOWlNX5kqYVbDP6c7iIvWB9v+0aqp/gFlVDYsLwrbkJTByw2Adkwfv4
-         IzwBPBS8BuS2I5HJU7Bkt+PnLbB8PxE0eHzGi9qLTYx2Ao6W92HOMcRE9wyl0up8C9Lp
-         UBOXbNFycijk0s0LFZQAlDcWnsHR3QwPCvnMl7wPTvtan7JJp+e/q4QftH3bnJd+1rFd
-         Ft1Q/ac5yJsdumMCSL+q+fNQTXBcB02DiVpBxow69YH1hqfJy6Joj9rSvYSO7CCaYSBe
-         jlrCqCYsXdpKvoaRKzqh7+toDOPJRe6oC9lhnsVuXj4GRNIcaINsV/uArN1Go10TBsIQ
-         uiYQ==
-X-Gm-Message-State: AOAM530ZyrOqRaqd+eivGkhy6FK8IqZJzRwnloBLIF2PRH86qUIsoOsf
-        L5+oEPjJ8U/Det0jsBk+EfZADJC0ox1lfUfNTHaV2bvMouI0WVk6cQP6WIl9gtoB9KDsCP6S7wW
-        Ejnim3mL4vTkjXFXXU9UF5w==
-X-Received: by 2002:a50:fb06:: with SMTP id d6mr6462179edq.31.1632414106417;
-        Thu, 23 Sep 2021 09:21:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzrEzjHXWR+VYrKJT7i95j45MgVWMJnN/dFXr62alQzAy8bfphi2nG6GFcipGwzTPlE6aJKZg==
-X-Received: by 2002:a50:fb06:: with SMTP id d6mr6462153edq.31.1632414106210;
-        Thu, 23 Sep 2021 09:21:46 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id e13sm3352440eje.95.2021.09.23.09.21.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Sep 2021 09:21:45 -0700 (PDT)
-Subject: Re: [PATCH 0/2] kvm: fix KVM_MAX_VCPU_ID handling
-To:     Juergen Gross <jgross@suse.com>, kvm@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210913135745.13944-1-jgross@suse.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <75959861-6644-aa9a-5e81-a25f864d74ab@redhat.com>
-Date:   Thu, 23 Sep 2021 18:21:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S242933AbhIWTlE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 23 Sep 2021 15:41:04 -0400
+Received: from aposti.net ([89.234.176.197]:41302 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242796AbhIWTlD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 23 Sep 2021 15:41:03 -0400
+Date:   Thu, 23 Sep 2021 20:39:18 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v3 6/6] drm/ingenic: Attach bridge chain to encoders
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-mips <linux-mips@vger.kernel.org>, list@opendingux.net,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>
+Message-Id: <IXJWZQ.BZQ2M7FHYVJM@crapouillou.net>
+In-Reply-To: <ABE75744-46FE-4F37-A14C-D996F36B7B0E@goldelico.com>
+References: <20210922205555.496871-1-paul@crapouillou.net>
+        <20210922205555.496871-7-paul@crapouillou.net>
+        <32234186-1802-4FDF-801A-B14E48FB86D8@goldelico.com>
+        <RTPVZQ.WN90B9MHPMZ13@crapouillou.net>
+        <896D04E4-4058-474B-8BD2-7F21B1C754E4@goldelico.com>
+        <YUxIkdGcGnBhcT0y@pendragon.ideasonboard.com>
+        <3764505C-7CA9-40C4-8CFA-8B0F2361E6D5@goldelico.com>
+        <YUxQ9k/CDYz20rYo@pendragon.ideasonboard.com>
+        <B7C9EEE8-F999-4105-B805-1B32619A3847@goldelico.com>
+        <7U2WZQ.D8DTPCJ0ZPKO3@crapouillou.net>
+        <ABE75744-46FE-4F37-A14C-D996F36B7B0E@goldelico.com>
 MIME-Version: 1.0
-In-Reply-To: <20210913135745.13944-1-jgross@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 13/09/21 15:57, Juergen Gross wrote:
-> Revert commit 76b4f357d0e7d8f6f00 which was based on wrong reasoning
-> and rename KVM_MAX_VCPU_ID to KVM_MAX_VCPU_IDS in order to avoid the
-> same issue in future.
+
+
+Le jeu., sept. 23 2021 at 20:52:23 +0200, H. Nikolaus Schaller 
+<hns@goldelico.com> a écrit :
+> Hi Paul,
 > 
-> Juergen Gross (2):
->    x86/kvm: revert commit 76b4f357d0e7d8f6f00
->    kvm: rename KVM_MAX_VCPU_ID to KVM_MAX_VCPU_IDS
+>>  Am 23.09.2021 um 15:30 schrieb Paul Cercueil <paul@crapouillou.net>:
+>> 
+>>  Hi Nikolaus,
+>> 
+>>  Le jeu., sept. 23 2021 at 13:41:28 +0200, H. Nikolaus Schaller 
+>> <hns@goldelico.com> a écrit :
+>>>  Hi Laurent,
+>>>  Ah, ok.
+>>>  But then we still have issues.
+>>>  Firstly I would assume that get_edid only works properly if it is 
+>>> initialized
+>>>  through dw_hdmi_connector_create().
+>>>  Next, in the current code, passing DRM_BRIDGE_ATTACH_NO_CONNECTOR 
+>>> to
+>>>  dw_hdmi_bridge_attach() indeed does not call 
+>>> dw_hdmi_connector_create()
+>>>  but returns 0.
+>>>  This patch 6/6 makes drm/ingenic unconditionally require a 
+>>> connector
+>>>  to be attached which is defined somewhere else (device tree e.g. 
+>>> "connector-hdmi")
+>>>  unrelated to dw-hdmi. Current upstream code for drm/ingenic does 
+>>> not init/attach
+>>>  such a connector on its own so it did work before.
+>>>  I.e. I think we can't just use parts of dw-hdmi.
+>> 
+>>  The fact that Laurent is using dw-hdmi with 
+>> DRM_BRIDGE_ATTACH_NO_CONNECTOR on Renesas makes me think that it's 
+>> possible here as well. There's no reason why it shouldn't work with 
+>> ingenic-drm.
 > 
->   Documentation/virt/kvm/devices/xics.rst            | 2 +-
->   Documentation/virt/kvm/devices/xive.rst            | 2 +-
->   arch/mips/kvm/mips.c                               | 2 +-
->   arch/powerpc/include/asm/kvm_book3s.h              | 2 +-
->   arch/powerpc/include/asm/kvm_host.h                | 4 ++--
->   arch/powerpc/kvm/book3s_xive.c                     | 2 +-
->   arch/powerpc/kvm/powerpc.c                         | 2 +-
->   arch/x86/include/asm/kvm_host.h                    | 2 +-
->   arch/x86/kvm/ioapic.c                              | 2 +-
->   arch/x86/kvm/ioapic.h                              | 4 ++--
->   arch/x86/kvm/x86.c                                 | 2 +-
->   include/linux/kvm_host.h                           | 4 ++--
->   tools/testing/selftests/kvm/kvm_create_max_vcpus.c | 2 +-
->   virt/kvm/kvm_main.c                                | 2 +-
->   14 files changed, 17 insertions(+), 17 deletions(-)
+> That is interesting and Laurent can probably comment on differences 
+> between
+> his setup (I wasn't able to deduce what device you are referring to) 
+> and dw-hdmi.
+> 
+> For jz4780 we tried that first. I do not remember the exact reasons 
+> but we wasted
+> weeks trying to but failed to get it working. While the dw-hdmi 
+> connector simply works
+> on top of upstream and fails only if we apply your patch.
+> 
+> Another issue is how you want to tell connector-hdmi to use the extra 
+> i2c bus driver
+> for ddc which is not available directly as a standard i2c controller 
+> of the jz4780.
+> 
+> hdmi-connector.yaml defines:
+> 
+>   ddc-i2c-bus:
+> 	description: phandle link to the I2C controller used for DDC EDID 
+> probing
+> 	$ref: /schemas/types.yaml#/definitions/phandle
+> 
+> So we would need some ddc-i2c-bus = <&i2c-controller-inside-the 
+> dw-hdmi>.
+> 
+> But that i2c-controller-inside-the dw-hdmi does not exist in device 
+> tree
+> and can not be added unless someone significantly rewrites dw-hdmi to
+> register and expose it as i2c controller.
+
+No, you don't need to do that at all. Just don't set the "ddc-i2c-bus" 
+property.
+
+>> 
+>>  The ingenic-drm driver does not need to create any connector. The 
+>> "connector-hdmi" is connected to dw-hdmi as the "next bridge" in the 
+>> list.
+> 
+> Sure. It does not *create* a connector. It expects that it can safely 
+> call
+> drm_bridge_connector_init() to get a pointer to a newly created 
+> connector.
+> 
+> But if we use the dw-hdmi connector, there is no such connector and 
+> "next bridge".
+
+We don't want to use the dw-hdmi connector. Your "next bridge" is the 
+"hdmi-connector" that should be wired in DTS.
+
+> Or can you tell me how to make the dw-hdmi connector created by
+> dw_hdmi_connector_create() become the "next bridge" in the list for 
+> your driver?
+> But without significantly rewriting dw-hdmi.c (and testing).
+
+Wire it to the LCD node in DTS...
+
+See how we do it for the IT66121 driver:
+https://github.com/OpenDingux/linux/blob/jz-5.15/arch/mips/boot/dts/ingenic/rg350m.dts#L114-L134
+
+>> 
+>>>  If drm_bridge_attach() would return some errno if 
+>>> DRM_BRIDGE_ATTACH_NO_CONNECTOR
+>>>  is set, initialization in ingenic_drm_bind() would fail likewise 
+>>> with "Unable to attach bridge".
+>>>  So in any case dw-hdmi is broken by this drm/ingenic patch unless 
+>>> someone
+>>>  reworks it to make it compatible.
+>> 
+>>  Where would the errno be returned? Why would drm_bridge_attach() 
+>> return an error code?
+> 
+> Currently dw_hdmi_bridge_attach() returns 0 if it is asked to support
+> DRM_BRIDGE_ATTACH_NO_CONNECTOR.
+> 
+> This is not treated as an error by drm_bridge_attach().
+> 
+> Here it could return an error (-ENOTSUPP?) instead, to allow for 
+> error handling
+> by its caller.
+
+And why would you do that? If you don't want to attach a connector, 
+then drm_bridge_attach() doesn't need to do much. So it's normal that 
+it returns zero.
+
+> But that raises an error message like "failed to attach bridge to 
+> encoder" and
+> the bridge is reset and detached.
+> 
+>> 
+>>>  Another issue is that dw_hdmi_connector_create() does not only do 
+>>> dcd/edid
+>>>  but appears to detects hot plug and does some special 
+>>> initialization.
+>>>  So we probably loose hotplug detect if we just use 
+>>> drm_bridge_funcs.get_edid().
+>> 
+>>  There's drm_bridge_funcs.detect().
+> 
+> You mean in dw-hdmi? Yes, it calls dw_hdmi_bridge_detect() which 
+> calls dw_hdmi_detect().
+> This does some read_hpd.
+> 
+> Anyways, this does not solve the problem that with your drm/ingenic 
+> proposal the
+> dw-hdmi subsystem (hdmi + ddc) can no longer be initialized properly 
+> unless someone
+> fixes either.
+> 
+> So IMHO this should be treated as a significant blocking point for 
+> your patch
+> because it breaks something that is working upstream and there seems 
+> to be no
+> rationale to change it.
+> 
+> Your commit message just says:
+> "All the bridges are now attached with 
+> DRM_BRIDGE_ATTACH_NO_CONNECTOR."
+> but gives no reason why.
+> 
+> I fully understand that you want to change it and Laurent said that 
+> it will become
+> standard in the far future. Therefore I suggest to find a way that 
+> you can find out
+> if a connector has already been created by drm_bridge_attach() to 
+> stay compatible
+> with current upstream code.
+
+No, absolutely not. There is nothing upstream yet that can bind the 
+ingenic-drm driver with the dw-hdmi driver. This is your downstream 
+patch. I'm not breaking anything that's upstream, so there is no 
+blocking point.
+
+Besides, even with your downstream patch I don't see any reason why the 
+dw-hdmi driver wouldn't work with this patch, provided it's wired 
+properly, and you never did show a proof of failure either. You come up 
+with "possible points where it will fail" but these are based on your 
+assumptions on how the drivers should be working together, and I think 
+you somehow miss the whole picture.
+
+Start by wiring things properly, like in my previously linked DTS, and 
+*test*. If it fails, tell us where it fails. Because your "it doesn't 
+work" arguments have zero weight otherwise.
+
+If I can find some time this weekend I will test it myself.
+
+Cheers,
+-Paul
+
+> I even want to help here but I don't know how to detect the inverse of
+> drm_connector_attach_encoder(), i.e. 
+> is_drm_encoder_attached_to_any_connector().
+> 
+> BR and thanks,
+> Nikolaus
+> 
+> 
 > 
 
-Queued, thanks.
-
-Paolo
 
