@@ -2,133 +2,186 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DB4415B4D
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 11:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CEA415B87
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 11:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240226AbhIWJt1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Sep 2021 05:49:27 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:52743 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240175AbhIWJt0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 23 Sep 2021 05:49:26 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4HFVhS1HTcz9sTZ;
-        Thu, 23 Sep 2021 11:47:52 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id N2iojAvTUjrW; Thu, 23 Sep 2021 11:47:52 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4HFVhS0G8Vz9sTX;
-        Thu, 23 Sep 2021 11:47:52 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E65698B775;
-        Thu, 23 Sep 2021 11:47:51 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id HEg50hnqH7U5; Thu, 23 Sep 2021 11:47:51 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.200])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 224928B763;
-        Thu, 23 Sep 2021 11:47:50 +0200 (CEST)
-Subject: Re: [PATCH 3/3] memblock: cleanup memblock_free interface
-To:     Mike Rapoport <rppt@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     devicetree@vger.kernel.org, linux-efi@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
-        linux-usb@vger.kernel.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20210923074335.12583-1-rppt@kernel.org>
- <20210923074335.12583-4-rppt@kernel.org>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <1101e3c7-fcb7-a632-8e22-47f4a01ea02e@csgroup.eu>
-Date:   Thu, 23 Sep 2021 11:47:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210923074335.12583-4-rppt@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr-FR
-Content-Transfer-Encoding: 8bit
+        id S240240AbhIWJ5h (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Sep 2021 05:57:37 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.164]:33854 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240186AbhIWJ5g (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Sep 2021 05:57:36 -0400
+X-Greylist: delayed 14621 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Sep 2021 05:57:35 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632390957;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=IDa2WRPuoV8CULciRg09mSJXzbHkCaX4O0lSs6y9dGE=;
+    b=tkVfb50yJlQybJnTBzTJKcoVxEr+elg/cQMPH+u9N2TfkQZSpM09MifNmf9qLIMp1d
+    QM5l5mfYcDcYxQVtOj03xV9In2oybH5VcPjASz3gYjbdQyyNmmEg53t6L/BE9vBLr0Ey
+    Ii32vKYG44IxMYz/jARWiVOaBQJsIs/xxcIneYXgZREjvA47AS0FBfIsy/yZM1ZB8+Tl
+    01SrcL9tss2omRiicmfXYjlkpzGkM+cux0U6J98p8YKqHyMNgqaxGiUV+Eti3UO/6e+I
+    drqypRJaK7KpLoAQOB2Y9+IwNUkxKKIhuoNLljKM9JNJg3LoXRaZACwqElcM5UlGuD1X
+    9/wg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3iMUQeg=="
+X-RZG-CLASS-ID: mo00
+Received: from mbp-13-nikolaus.fritz.box
+    by smtp.strato.de (RZmta 47.33.8 SBL|AUTH)
+    with ESMTPSA id I01f74x8N9tvJPn
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Thu, 23 Sep 2021 11:55:57 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v3 6/6] drm/ingenic: Attach bridge chain to encoders
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <YUxIkdGcGnBhcT0y@pendragon.ideasonboard.com>
+Date:   Thu, 23 Sep 2021 11:55:56 +0200
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-mips <linux-mips@vger.kernel.org>, list@opendingux.net,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3764505C-7CA9-40C4-8CFA-8B0F2361E6D5@goldelico.com>
+References: <20210922205555.496871-1-paul@crapouillou.net>
+ <20210922205555.496871-7-paul@crapouillou.net>
+ <32234186-1802-4FDF-801A-B14E48FB86D8@goldelico.com>
+ <RTPVZQ.WN90B9MHPMZ13@crapouillou.net>
+ <896D04E4-4058-474B-8BD2-7F21B1C754E4@goldelico.com>
+ <YUxIkdGcGnBhcT0y@pendragon.ideasonboard.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Laurent,
 
+> Am 23.09.2021 um 11:27 schrieb Laurent Pinchart =
+<laurent.pinchart@ideasonboard.com>:
+>=20
+> Hi Nikolaus,
+>=20
+> On Thu, Sep 23, 2021 at 11:19:23AM +0200, H. Nikolaus Schaller wrote:
+>>=20
+>>>>> +		ret =3D drm_bridge_attach(encoder, &ib->bridge, NULL,
+>>>>> +					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+>>>>=20
+>>>> DRM_BRIDGE_ATTACH_NO_CONNECTOR makes it fundamentally incompatible
+>>>> with synopsys/dw_hdmi.c
+>>>> That driver checks for DRM_BRIDGE_ATTACH_NO_CONNECTOR being NOT =
+present,
+>>>> since it wants to register its own connector through =
+dw_hdmi_connector_create().
+>>>> It does it for a reason: the dw-hdmi is a multi-function driver =
+which does
+>>>> HDMI and DDC/EDID stuff in a single driver (because I/O registers =
+and power
+>>>> management seem to be shared).
+>>>=20
+>>> The IT66121 driver does all of that too, and does not need
+>>> DRM_BRIDGE_ATTACH_NO_CONNECTOR. The drm_bridge_funcs struct has
+>>> callbacks to handle cable detection and DDC stuff.
+>>>=20
+>>>> Since I do not see who could split this into a separate bridge and =
+a connector driver
+>>>> and test it on multiple SoC platforms (there are at least 3 or 4), =
+I think modifying
+>>>> the fundamentals of the dw-hdmi architecture just to get CI20 HDMI =
+working is not
+>>>> our turf.
+>>>=20
+>>> You could have a field in the dw-hdmi pdata structure, that would
+>>> instruct the driver whether or not it should use the new API. Ugly,
+>>> I know, and would probably duplicate a lot of code, but that would
+>>> allow other drivers to be updated at a later date.
+>>=20
+>> Yes, would be very ugly.
+>>=20
+>> But generally who has the knowledge (and time) to do this work?
+>> And has a working platform to test (jz4780 isn't a good development =
+environment)?
+>>=20
+>> The driver seems to have a turbulent history starting 2013 in =
+staging/imx and
+>> apparently it was generalized since then... Is Laurent currently =
+dw-hdmi maintainer?
+>=20
+> "Maintainer" would be an overstatement. I've worked on that driver in
+> the past, and I still use it, but don't have time to really maintain =
+it.
+> I've also been told that Synopsys required all patches for that driver
+> developed using documentation under NDA to be submitted internally to
+> them first before being published, so I decided to stop contributing
+> instead of agreeing with this insane process. There's public
+> documentation about the IP in some NXP reference manuals though, so it
+> should be possible to still move forward without abiding by this rule.
+>=20
+>>>> Therefore the code here should be able to detect if =
+drm_bridge_attach() already
+>>>> creates and attaches a connector and then skip the code below.
+>>>=20
+>>> Not that easy, unfortunately. On one side we have dw-hdmi which
+>>> checks that DRM_BRIDGE_ATTACH_NO_CONNECTOR is not set, and on the
+>>> other side we have other drivers like the IT66121 which will fail if
+>>> this flag is not set.
+>>=20
+>> Ok, I see. You have to handle contradicting cases here.
+>>=20
+>> Would it be possible to run it with DRM_BRIDGE_ATTACH_NO_CONNECTOR =
+first
+>> and retry if it fails without?
+>>=20
+>> But IMHO the return value (in error case) is not well defined. So =
+there
+>> must be a test if a connector has been created (I do not know how =
+this
+>> would work).
+>>=20
+>> Another suggestion: can you check if there is a downstream connector =
+defined in
+>> device tree (dw-hdmi does not need such a definition)?
+>> If not we call it with 0 and if there is one we call it with
+>> DRM_BRIDGE_ATTACH_NO_CONNECTOR and create one?
+>=20
+> I haven't followed the ful conversation, what the reason why
+> DRM_BRIDGE_ATTACH_NO_CONNECTOR can't always be use here ?
 
-Le 23/09/2021 à 09:43, Mike Rapoport a écrit :
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> For ages memblock_free() interface dealt with physical addresses even
-> despite the existence of memblock_alloc_xx() functions that return a
-> virtual pointer.
-> 
-> Introduce memblock_phys_free() for freeing physical ranges and repurpose
-> memblock_free() to free virtual pointers to make the following pairing
-> abundantly clear:
-> 
-> 	int memblock_phys_free(phys_addr_t base, phys_addr_t size);
-> 	phys_addr_t memblock_phys_alloc(phys_addr_t base, phys_addr_t size);
-> 
-> 	void *memblock_alloc(phys_addr_t size, phys_addr_t align);
-> 	void memblock_free(void *ptr, size_t size);
-> 
-> Replace intermediate memblock_free_ptr() with memblock_free() and drop
-> unnecessary aliases memblock_free_early() and memblock_free_early_nid().
-> 
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
+The synopsys driver creates its own connector through =
+dw_hdmi_connector_create()
+because the IP handles DDC/EDID directly.
 
-> diff --git a/arch/s390/kernel/smp.c b/arch/s390/kernel/smp.c
-> index 1a04e5bdf655..37826d8c4f74 100644
-> --- a/arch/s390/kernel/smp.c
-> +++ b/arch/s390/kernel/smp.c
-> @@ -723,7 +723,7 @@ void __init smp_save_dump_cpus(void)
->   			/* Get the CPU registers */
->   			smp_save_cpu_regs(sa, addr, is_boot_cpu, page);
->   	}
-> -	memblock_free(page, PAGE_SIZE);
-> +	memblock_phys_free(page, PAGE_SIZE);
->   	diag_amode31_ops.diag308_reset();
->   	pcpu_set_smt(0);
->   }
-> @@ -880,7 +880,7 @@ void __init smp_detect_cpus(void)
->   
->   	/* Add CPUs present at boot */
->   	__smp_rescan_cpus(info, true);
-> -	memblock_free_early((unsigned long)info, sizeof(*info));
-> +	memblock_free(info, sizeof(*info));
->   }
->   
->   /*
+Hence it checks for ! DRM_BRIDGE_ATTACH_NO_CONNECTOR which seems to be =
+the
+right thing to do on current platforms that use it.
 
-I'm a bit lost. IIUC memblock_free_early() and memblock_free() where 
-identical.
+For CI20/jz4780 we just add a specialisation of the generic dw-hdmi to
+make HDMI work.
 
-In the first hunk memblock_free() gets replaced by memblock_phys_free()
-In the second hunk memblock_free_early() gets replaced by memblock_free()
+Now this patch for drm/ingenic wants the opposite definition and create =
+its own
+connector. This fails even if we remove the check (then we have two =
+interfering
+connectors).
 
-I think it would be easier to follow if you could split it in several 
-patches:
-- First patch: Create memblock_phys_free() and change all relevant 
-memblock_free() to memblock_phys_free() - Or change memblock_free() to 
-memblock_phys_free() and make memblock_free() an alias of it.
-- Second patch: Make memblock_free_ptr() become memblock_free() and 
-change all remaining callers to the new semantics (IIUC 
-memblock_free(__pa(ptr)) becomes memblock_free(ptr) and make 
-memblock_free_ptr() an alias of memblock_free()
-- Fourth patch: Replace and drop memblock_free_ptr()
-- Fifth patch: Drop memblock_free_early() and memblock_free_early_nid() 
-(All users should have been upgraded to memblock_free_phys() in patch 1 
-or memblock_free() in patch 2)
+> We're moving
+> towards requiring DRM_BRIDGE_ATTACH_NO_CONNECTOR for all new code, so =
+it
+> will have to be done eventually.
 
-Christophe
+So from my view drm/ingenic wants to already enforce this rule and =
+breaks dw-hdmi.
+
+IMHO it should either handle this situation gracefully or include a fix =
+for
+dw-hdmi.c to keep it compatible.
+
+BR and thanks,
+Nikolaus
+
