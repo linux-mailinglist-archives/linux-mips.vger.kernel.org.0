@@ -2,143 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFC8415AEE
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 11:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDEB415B2E
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 11:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240126AbhIWJ3U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Sep 2021 05:29:20 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:36314 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240033AbhIWJ3U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Sep 2021 05:29:20 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A050E45E;
-        Thu, 23 Sep 2021 11:27:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1632389267;
-        bh=/QcPrPdb+9mOrS50q5XHhHdCQQeR/FnPHGocwLYF+HA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=diE3vzWicfqs3JDxJiVNMg/vFlQzdEV6hphiYqnbs0IIUt+Lnx3V+/LrhscnTfMP0
-         M5WFD8NCQYgtu0CessFs2PQfzg1JiAuxB6akOtPgh8EXhTS6Yv8G1huNj6PIvJeuMF
-         EPvmS/bguBjF93SwhS0Y9oRQMoUSDqT9PlAKM/GQ=
-Date:   Thu, 23 Sep 2021 12:27:45 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-mips <linux-mips@vger.kernel.org>, list@opendingux.net,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 6/6] drm/ingenic: Attach bridge chain to encoders
-Message-ID: <YUxIkdGcGnBhcT0y@pendragon.ideasonboard.com>
-References: <20210922205555.496871-1-paul@crapouillou.net>
- <20210922205555.496871-7-paul@crapouillou.net>
- <32234186-1802-4FDF-801A-B14E48FB86D8@goldelico.com>
- <RTPVZQ.WN90B9MHPMZ13@crapouillou.net>
- <896D04E4-4058-474B-8BD2-7F21B1C754E4@goldelico.com>
+        id S240129AbhIWJn5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Sep 2021 05:43:57 -0400
+Received: from elvis.franken.de ([193.175.24.41]:39102 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240221AbhIWJn5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 23 Sep 2021 05:43:57 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mTLFI-00072a-00; Thu, 23 Sep 2021 11:42:24 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 6B7CCC1279; Thu, 23 Sep 2021 11:35:22 +0200 (CEST)
+Date:   Thu, 23 Sep 2021 11:35:22 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jackie Liu <liu.yun@linux.dev>
+Cc:     chenhuacai@kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4] MIPS: loongson64: make CPU_LOONGSON64 depends on
+ MIPS_FP_SUPPORT
+Message-ID: <20210923093522.GA7289@alpha.franken.de>
+References: <20210913061908.550030-1-liu.yun@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <896D04E4-4058-474B-8BD2-7F21B1C754E4@goldelico.com>
+In-Reply-To: <20210913061908.550030-1-liu.yun@linux.dev>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus,
+On Mon, Sep 13, 2021 at 02:19:08PM +0800, Jackie Liu wrote:
+> From: Jackie Liu <liuyun01@kylinos.cn>
+> 
+> mach/loongson64 fails to build when the FPU support is disabled:
+> 
+> arch/mips/loongson64/cop2-ex.c:45:15: error: implicit declaration of function ‘__is_fpu_owner’; did you mean ‘is_fpu_owner’? [-Werror=implicit-function-declaration]
+> arch/mips/loongson64/cop2-ex.c:98:30: error: ‘struct thread_struct’ has no member named ‘fpu’
+> arch/mips/loongson64/cop2-ex.c:99:30: error: ‘struct thread_struct’ has no member named ‘fpu’
+> arch/mips/loongson64/cop2-ex.c:131:43: error: ‘struct thread_struct’ has no member named ‘fpu’
+> arch/mips/loongson64/cop2-ex.c:137:38: error: ‘struct thread_struct’ has no member named ‘fpu’
+> arch/mips/loongson64/cop2-ex.c:203:30: error: ‘struct thread_struct’ has no member named ‘fpu’
+> arch/mips/loongson64/cop2-ex.c:219:30: error: ‘struct thread_struct’ has no member named ‘fpu’
+> arch/mips/loongson64/cop2-ex.c:283:38: error: ‘struct thread_struct’ has no member named ‘fpu’
+> arch/mips/loongson64/cop2-ex.c:301:38: error: ‘struct thread_struct’ has no member named ‘fpu’
+> 
+> Fixes: ef2f826c8f2f ("MIPS: Loongson-3: Enable the COP2 usage")
+> Suggested-by: Huacai Chen <chenhuacai@kernel.org>
+> Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
+> Reported-by: k2ci robot <kernel-bot@kylinos.cn>
+> Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
+> ---
+>  v1->v2:
+>  move MIPS_FP_SUPPORT from MACH_LOONGSON64 to CPU_LOONGSON64
+> 
+>  v2->v3:
+>  add Huacai Chen <chenhc@lemote.com>'s suggest label.
+> 
+>  v3->v4:
+>  update Huacai Chen's email address.
+> 
+>  arch/mips/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-On Thu, Sep 23, 2021 at 11:19:23AM +0200, H. Nikolaus Schaller wrote:
-> > Am 23.09.2021 um 10:49 schrieb Paul Cercueil:
-> > Le jeu., sept. 23 2021 at 07:52:08 +0200, H. Nikolaus Schaller a écrit :
-> >> Hi Paul,
-> >> thanks for another update.
-> >> We have been delayed to rework the CI20 HDMI code on top of your series
-> >> but it basically works in some situations. There is for example a problem
-> >> if the EDID reports DRM_COLOR_FORMAT_YCRCB422 but it appears to be outside
-> >> of your series.
-> > 
-> > I think the SoC can output YCbCr as well, but I never tried to use it.
-> 
-> Maybe there is code missing or something else. We have not yet deeply researched.
-> Except that when ignoring DRM_COLOR_FORMAT_YCRCB422 capability it uses RGB
-> and works.
-> 
-> >>> +		ret = drm_bridge_attach(encoder, &ib->bridge, NULL,
-> >>> +					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-> >>
-> >> DRM_BRIDGE_ATTACH_NO_CONNECTOR makes it fundamentally incompatible
-> >> with synopsys/dw_hdmi.c
-> >> That driver checks for DRM_BRIDGE_ATTACH_NO_CONNECTOR being NOT present,
-> >> since it wants to register its own connector through dw_hdmi_connector_create().
-> >> It does it for a reason: the dw-hdmi is a multi-function driver which does
-> >> HDMI and DDC/EDID stuff in a single driver (because I/O registers and power
-> >> management seem to be shared).
-> > 
-> > The IT66121 driver does all of that too, and does not need
-> > DRM_BRIDGE_ATTACH_NO_CONNECTOR. The drm_bridge_funcs struct has
-> > callbacks to handle cable detection and DDC stuff.
-> > 
-> >> Since I do not see who could split this into a separate bridge and a connector driver
-> >> and test it on multiple SoC platforms (there are at least 3 or 4), I think modifying
-> >> the fundamentals of the dw-hdmi architecture just to get CI20 HDMI working is not
-> >> our turf.
-> > 
-> > You could have a field in the dw-hdmi pdata structure, that would
-> > instruct the driver whether or not it should use the new API. Ugly,
-> > I know, and would probably duplicate a lot of code, but that would
-> > allow other drivers to be updated at a later date.
-> 
-> Yes, would be very ugly.
-> 
-> But generally who has the knowledge (and time) to do this work?
-> And has a working platform to test (jz4780 isn't a good development environment)?
-> 
-> The driver seems to have a turbulent history starting 2013 in staging/imx and
-> apparently it was generalized since then... Is Laurent currently dw-hdmi maintainer?
+applied to mips-next.
 
-"Maintainer" would be an overstatement. I've worked on that driver in
-the past, and I still use it, but don't have time to really maintain it.
-I've also been told that Synopsys required all patches for that driver
-developed using documentation under NDA to be submitted internally to
-them first before being published, so I decided to stop contributing
-instead of agreeing with this insane process. There's public
-documentation about the IP in some NXP reference manuals though, so it
-should be possible to still move forward without abiding by this rule.
-
-> >> Therefore the code here should be able to detect if drm_bridge_attach() already
-> >> creates and attaches a connector and then skip the code below.
-> > 
-> > Not that easy, unfortunately. On one side we have dw-hdmi which
-> > checks that DRM_BRIDGE_ATTACH_NO_CONNECTOR is not set, and on the
-> > other side we have other drivers like the IT66121 which will fail if
-> > this flag is not set.
-> 
-> Ok, I see. You have to handle contradicting cases here.
-> 
-> Would it be possible to run it with DRM_BRIDGE_ATTACH_NO_CONNECTOR first
-> and retry if it fails without?
-> 
-> But IMHO the return value (in error case) is not well defined. So there
-> must be a test if a connector has been created (I do not know how this
-> would work).
-> 
-> Another suggestion: can you check if there is a downstream connector defined in
-> device tree (dw-hdmi does not need such a definition)?
-> If not we call it with 0 and if there is one we call it with
-> DRM_BRIDGE_ATTACH_NO_CONNECTOR and create one?
-
-I haven't followed the ful conversation, what the reason why
-DRM_BRIDGE_ATTACH_NO_CONNECTOR can't always be use here ? We're moving
-towards requiring DRM_BRIDGE_ATTACH_NO_CONNECTOR for all new code, so it
-will have to be done eventually.
-
-> Just some ideas how to solve without touching hdmi drivers.
-> 
-> BR and thanks,
-> Nikolaus
+Thomas.
 
 -- 
-Regards,
-
-Laurent Pinchart
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
