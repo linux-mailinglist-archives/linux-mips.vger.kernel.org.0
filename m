@@ -2,178 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58897416053
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 15:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6434416113
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Sep 2021 16:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241477AbhIWN4Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Sep 2021 09:56:25 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:32845 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231974AbhIWN4Y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 23 Sep 2021 09:56:24 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4HFc9P5sHPz9sV7;
-        Thu, 23 Sep 2021 15:54:49 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xdm1Ouzf8XXu; Thu, 23 Sep 2021 15:54:49 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4HFc9P4lm1z9sV4;
-        Thu, 23 Sep 2021 15:54:49 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8BA938B776;
-        Thu, 23 Sep 2021 15:54:49 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id i24VgXHaAF2s; Thu, 23 Sep 2021 15:54:49 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.200])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id ACF658B763;
-        Thu, 23 Sep 2021 15:54:47 +0200 (CEST)
-Subject: Re: [PATCH 3/3] memblock: cleanup memblock_free interface
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        devicetree@vger.kernel.org, linux-efi@vger.kernel.org,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20210923074335.12583-1-rppt@kernel.org>
- <20210923074335.12583-4-rppt@kernel.org>
- <1101e3c7-fcb7-a632-8e22-47f4a01ea02e@csgroup.eu>
- <YUxsgN/uolhn1Ok+@linux.ibm.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <96e3da9f-70ff-e5c0-ef2e-cf0b636e5695@csgroup.eu>
-Date:   Thu, 23 Sep 2021 15:54:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S241467AbhIWOez (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Sep 2021 10:34:55 -0400
+Received: from out28-50.mail.aliyun.com ([115.124.28.50]:47058 "EHLO
+        out28-50.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240652AbhIWOez (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Sep 2021 10:34:55 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.109725|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.0194584-0.00528737-0.975254;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047209;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.LP.lKLZ_1632407598;
+Received: from 192.168.88.131(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.LP.lKLZ_1632407598)
+          by smtp.aliyun-inc.com(10.147.40.200);
+          Thu, 23 Sep 2021 22:33:19 +0800
+Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Feiyang Chen <chris.chenfeiyang@gmail.com>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, arnd@arndb.de,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        chenhuacai@kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>
+References: <cover.1631583258.git.chenfeiyang@loongson.cn>
+ <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
+ <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
+ <20210921155708.GA12237@alpha.franken.de>
+From:   Zhou Yanjie <zhouyu@wanyeetech.com>
+Message-ID: <ef429f0f-7cc9-2625-3700-47dc459ee681@wanyeetech.com>
+Date:   Thu, 23 Sep 2021 22:33:18 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <YUxsgN/uolhn1Ok+@linux.ibm.com>
+In-Reply-To: <20210921155708.GA12237@alpha.franken.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr-FR
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Thomas,
 
-
-Le 23/09/2021 à 14:01, Mike Rapoport a écrit :
-> On Thu, Sep 23, 2021 at 11:47:48AM +0200, Christophe Leroy wrote:
+On 2021/9/21 下午11:57, Thomas Bogendoerfer wrote:
+> On Tue, Sep 14, 2021 at 05:30:14PM +0800, Feiyang Chen wrote:
+>> On Tue, 14 Sept 2021 at 16:54, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>>>
+>>>
+>>> 在 2021/9/14 2:50, Feiyang Chen 写道:
+>>>> Convert MIPS to use the generic entry infrastructure from
+>>>> kernel/entry/*.
+>>>>
+>>>> v2: Use regs->regs[27] to mark whether to restore all registers in
+>>>> handle_sys and enable IRQ stack.
+>>> Hi Feiyang,
+>>>
+>>> Thanks for your patch, could you please expand how could this improve
+>>> the performance?
+>>>
+>> Hi, Jiaxun,
 >>
->>
->> Le 23/09/2021 à 09:43, Mike Rapoport a écrit :
->>> From: Mike Rapoport <rppt@linux.ibm.com>
->>>
->>> For ages memblock_free() interface dealt with physical addresses even
->>> despite the existence of memblock_alloc_xx() functions that return a
->>> virtual pointer.
->>>
->>> Introduce memblock_phys_free() for freeing physical ranges and repurpose
->>> memblock_free() to free virtual pointers to make the following pairing
->>> abundantly clear:
->>>
->>> 	int memblock_phys_free(phys_addr_t base, phys_addr_t size);
->>> 	phys_addr_t memblock_phys_alloc(phys_addr_t base, phys_addr_t size);
->>>
->>> 	void *memblock_alloc(phys_addr_t size, phys_addr_t align);
->>> 	void memblock_free(void *ptr, size_t size);
->>>
->>> Replace intermediate memblock_free_ptr() with memblock_free() and drop
->>> unnecessary aliases memblock_free_early() and memblock_free_early_nid().
->>>
->>> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
->>> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
->>> ---
->>
->>> diff --git a/arch/s390/kernel/smp.c b/arch/s390/kernel/smp.c
->>> index 1a04e5bdf655..37826d8c4f74 100644
->>> --- a/arch/s390/kernel/smp.c
->>> +++ b/arch/s390/kernel/smp.c
->>> @@ -723,7 +723,7 @@ void __init smp_save_dump_cpus(void)
->>>    			/* Get the CPU registers */
->>>    			smp_save_cpu_regs(sa, addr, is_boot_cpu, page);
->>>    	}
->>> -	memblock_free(page, PAGE_SIZE);
->>> +	memblock_phys_free(page, PAGE_SIZE);
->>>    	diag_amode31_ops.diag308_reset();
->>>    	pcpu_set_smt(0);
->>>    }
->>> @@ -880,7 +880,7 @@ void __init smp_detect_cpus(void)
->>>    	/* Add CPUs present at boot */
->>>    	__smp_rescan_cpus(info, true);
->>> -	memblock_free_early((unsigned long)info, sizeof(*info));
->>> +	memblock_free(info, sizeof(*info));
->>>    }
->>>    /*
->>
->> I'm a bit lost. IIUC memblock_free_early() and memblock_free() where
->> identical.
-> 
-> Yes, they were, but all calls to memblock_free_early() were using
-> __pa(vaddr) because they had a virtual address at hand.
+>> We always restore all registers in handle_sys in the v1 of the
+>> patchset. Since regs->regs[27] is marked where we need to restore all
+>> registers, now we simply use it as the return value of do_syscall to
+>> determine whether we can only restore partial registers in handle_sys.
+> can people, who provided performance numbers for v1 do the same for v2 ?
 
-I'm still not following. In the above memblock_free_early() was taking 
-(unsigned long)info . Was it a bug ? It looks odd to hide bug fixes in 
-such a big patch, should that bug fix go in patch 2 ?
 
-> 
->> In the first hunk memblock_free() gets replaced by memblock_phys_free()
->> In the second hunk memblock_free_early() gets replaced by memblock_free()
-> 
-> In the first hunk the memory is allocated with memblock_phys_alloc() and we
-> have a physical range to free. In the second hunk the memory is allocated
-> with memblock_alloc() and we are freeing a virtual pointer.
->   
->> I think it would be easier to follow if you could split it in several
->> patches:
-> 
-> It was an explicit request from Linus to make it a single commit:
-> 
->    but the actual commit can and should be just a single commit that just
->    fixes 'memblock_free()' to have sane interfaces.
-> 
-> I don't feel strongly about splitting it (except my laziness really
-> objects), but I don't think doing the conversion in several steps worth the
-> churn.
+Sure, I will test the v2 in the next few days.
 
-The commit is quite big (55 files changed, approx 100 lines modified).
 
-If done in the right order the change should be minimal.
+Thanks and best regards!
 
-It is rather not-easy to follow and review when a function that was 
-existing (namely memblock_free() ) disappears and re-appears in the same 
-commit but to do something different.
 
-You do:
-- memblock_free() ==> memblock_phys_free()
-- memblock_free_ptr() ==> memblock_free()
-
-At least you could split in two patches, the advantage would be that 
-between first and second patch memblock() doesn't exist anymore so you 
-can check you really don't have anymore user.
-
-> 
->> - First patch: Create memblock_phys_free() and change all relevant
->> memblock_free() to memblock_phys_free() - Or change memblock_free() to
->> memblock_phys_free() and make memblock_free() an alias of it.
->> - Second patch: Make memblock_free_ptr() become memblock_free() and change
->> all remaining callers to the new semantics (IIUC memblock_free(__pa(ptr))
->> becomes memblock_free(ptr) and make memblock_free_ptr() an alias of
->> memblock_free()
->> - Fourth patch: Replace and drop memblock_free_ptr()
->> - Fifth patch: Drop memblock_free_early() and memblock_free_early_nid() (All
->> users should have been upgraded to memblock_free_phys() in patch 1 or
->> memblock_free() in patch 2)
->>
->> Christophe
-> 
+>
+> Thomas,
+>
