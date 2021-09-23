@@ -2,158 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38752416841
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 00:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF12E41689C
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 01:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243435AbhIWW6z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Sep 2021 18:58:55 -0400
-Received: from smtp2.de.opalstack.com ([139.162.136.213]:48228 "EHLO
-        smtp2.de.opalstack.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236363AbhIWW6y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Sep 2021 18:58:54 -0400
-X-Greylist: delayed 334 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Sep 2021 18:58:54 EDT
-Received: from jason.localnet (host-37-191-188-128.lynet.no [37.191.188.128])
-        by smtp2.de.opalstack.com (Postfix) with ESMTPSA id A004E129C6B;
-        Thu, 23 Sep 2021 22:51:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=boddie.org.uk;
-        s=dkim; t=1632437506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e4PZqbATcpFKvMSWvz2SaHStw0CXunL88V36uVDDWCY=;
-        b=OFTg1Ac2UZUlbgTsGydnHAY5uSE+xsua3v4Eu4kFF4WcjRbWYKciC02F+5A+g7dE2bNapz
-        Hao6cKqlHFp5+P6PBp3gBtnU8Bsnz0r48kzs6hX4DhqnbiPATRl3LslnOK09sxVH7NM5il
-        MaJLXl9igFrtG5dr0huIBpR37G8bPC0=
-From:   Paul Boddie <paul@boddie.org.uk>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-mips <linux-mips@vger.kernel.org>, list@opendingux.net,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 6/6] drm/ingenic: Attach bridge chain to encoders
-Date:   Fri, 24 Sep 2021 00:51:39 +0200
-Message-ID: <4366739.KZ8Jxz7LyS@jason>
-In-Reply-To: <B7B431EC-BC73-4B39-A03C-003347D8C239@goldelico.com>
-References: <20210922205555.496871-1-paul@crapouillou.net> <IXJWZQ.BZQ2M7FHYVJM@crapouillou.net> <B7B431EC-BC73-4B39-A03C-003347D8C239@goldelico.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-0.28
+        id S243589AbhIWXxl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 23 Sep 2021 19:53:41 -0400
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:45349 "EHLO
+        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240701AbhIWXxl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 23 Sep 2021 19:53:41 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.west.internal (Postfix) with ESMTP id 2E9F72B012E2;
+        Thu, 23 Sep 2021 19:52:08 -0400 (EDT)
+Received: from imap44 ([10.202.2.94])
+  by compute2.internal (MEProxy); Thu, 23 Sep 2021 19:52:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type:content-transfer-encoding; s=fm3; bh=v5nvr
+        /c1C/JJVmNNr0va2VihjkEqDsuPinNtEL20Fdc=; b=PN3PhQyrhimN59gLGDQV9
+        ANiT+SLLncPigslF+EAy2Zn/Tx42UkzGoiF69KBelRU4npjeszLYM00fa2WELfkL
+        SqojfcOMiP/MncB+gavSPOlVuWOBrsdYs1tfEBWDQRyptahAhxfiiBCfwiIJcxQU
+        ZJvY9/exfaEfInxUL0oRG4zKOKMXWljPVPa9TKwhw3z1tjxOLLdL9iFqCvi5B1oi
+        xfbbOTcNxDIQ0DzxTb1w3ZQnC9+O4hALTe99Utg7p4ucCqPQbcDW6WEO/3y3IMbb
+        eaJfn7Z+9zxFGB0cPzpCoEktCxM2TLrxHYkNsZi27j83u3MH22dM4lIAzQ5FIw+Z
+        Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=v5nvr/c1C/JJVmNNr0va2VihjkEqDsuPinNtEL20F
+        dc=; b=kqnF05pOr3bw7a5nr6W4nw7ziUQTbyaZdPED5SM/rUvrsiIPZnnMUsHwy
+        9QSiYS5dr0XwaLsGXbyQoXjWGp2Mg5OZLWP7umTr9o7C+ps0jZ/RCWlj/yse0diC
+        kVX9Ln03U6mJUlza/37k+nZx3Q3Xmh9VAWvMjo68Re2AdqZNGjoXVeT7FYXfSG5m
+        mOkqgSivjKU8XNTIPtQJBEd0vjU27jlga/+VCjvjWIr9jk9AkvqjbHYdnGdO67yM
+        0lN+B8IFJqVSmJVpEuyPtmg7N9FaKNpIWzzwcbqfj9im1L/GURGKLD97df8fq3HV
+        MQ1cGbAAx47KZX/r7aceGerJvMqdQ==
+X-ME-Sender: <xms:JRNNYQla6U3TgG6kPTxEZ5gMMR5R4jVth9b9kI39ypTWhO5-QmU8aw>
+    <xme:JRNNYf2HgekmJSsAzQtuysqxC40ljJKKKtQ3CjuduHcbkkXyf3iz6TXs8V1pP2gdo
+    pQ5K0YP3mjPZbePOJo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudejtddgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepfeetgeekveeftefhgfduheegvdeuuddvieefvddvlefh
+    feehkeetfeeukedtfeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:JRNNYeqM8IYHSAdhfq4eVoPxRSkYb9eYyOcMBUJEWnQvXUYQWsU6Vg>
+    <xmx:JRNNYcmnoas90TO5o7OvIp_CHG7109HlHZzkEM0wSVbeqa-9PWGvuw>
+    <xmx:JRNNYe3KIogSyRNp6MYQVd9YMJs6hEgtDA9_0Alad5VyJ74JUe6VWw>
+    <xmx:JxNNYcxMhFsWQDz8PXuGgkNW053t18SsCC4gBS0IxmgkY2tE-jvUls0KKBY>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8ECC5FA0AA5; Thu, 23 Sep 2021 19:52:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1303-gb2406efd75-fm-20210922.002-gb2406efd
+Mime-Version: 1.0
+Message-Id: <16d09c59-ba76-4dca-b9f2-bde502b96ecf@www.fastmail.com>
+In-Reply-To: <20210921155708.GA12237@alpha.franken.de>
+References: <cover.1631583258.git.chenfeiyang@loongson.cn>
+ <3907ec0f-42a0-ff4c-d4ea-63ad2a1516c2@flygoat.com>
+ <CACWXhK=YW6Kn9FO1JrU1mP_xxMnEF_ajkD6hou=4rpgR2hOM5w@mail.gmail.com>
+ <20210921155708.GA12237@alpha.franken.de>
+Date:   Fri, 24 Sep 2021 00:51:35 +0100
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        FreeFlyingSheep <chris.chenfeiyang@gmail.com>
+Cc:     "Thomas Gleixner" <tglx@linutronix.de>, peterz@infradead.org,
+        luto@kernel.org, "Arnd Bergmann" <arnd@arndb.de>,
+        "Feiyang Chen" <chenfeiyang@loongson.cn>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-arch@vger.kernel.org, "Huacai Chen" <chenhuacai@kernel.org>,
+        "Zhou Yanjie" <zhouyu@wanyeetech.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: Re: [PATCH v2 0/2] MIPS: convert to generic entry
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thursday, 23 September 2021 22:23:28 CEST H. Nikolaus Schaller wrote:
-> 
-> > Am 23.09.2021 um 21:39 schrieb Paul Cercueil <paul@crapouillou.net>:
-> > 
-> > Start by wiring things properly, like in my previously linked DTS, and
-> > *test*. If it fails, tell us where it fails.
+
+
+=E5=9C=A82021=E5=B9=B49=E6=9C=8821=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8B=E5=
+=8D=884:57=EF=BC=8CThomas Bogendoerfer=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Well, I tell where drm_bridge_attach fails with
-> DRM_BRIDGE_ATTACH_NO_CONNECTOR...
+> can people, who provided performance numbers for v1 do the same for v2=
+ ?
 
-I tried to piece together this entire discussion from the mailing list 
-archives, but there appear to be two approaches that "work", in that they 
-activate the LCD controller with the HDMI peripheral:
+Sorry I just move abroad (to UK) to seek higher education. Currently I d=
+on't have any MIPS device available so I won't be able to provide test r=
+esults as v1.
 
-1. Nikolaus's approach, which involves getting the Synopsys driver to create a 
-connector and then avoiding the call to drm_bridge_connector_init in the 
-Ingenic DRM driver.
+I'll try to get some MIPS devices soonish.
 
-2. My approach, which just involves changing the Synopsys driver to set the 
-bridge type in dw_hdmi_probe like this:
+Thanks.
 
-  hdmi->bridge.type = DRM_MODE_CONNECTOR_HDMIA;
+>
+> Thomas,
+>
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessa=
+rily a
+> good idea.                                                [ RFC1925, 2=
+.3 ]
 
-Otherwise, I don't see how the bridge's (struct drm_bridge) type will be set. 
-And this causes drm_bridge_connector_init to fail because it tests the bridge 
-type.
-
-Now, I just reintroduced the HDMI connector to the device tree as follows:
-
-        hdmi_connector {
-                compatible = "hdmi-connector";
-                label = "hdmi";
-
-                type = "a";
-
-                port {
-                        hdmi_connector_in: endpoint {
-                                remote-endpoint = <&dw_hdmi_out>;
-                        };
-                };
-        };
-
-And then I added a second port to the HDMI peripheral node as follows:
-
-                port@1 {
-                        reg = <1>;
-                        dw_hdmi_out: endpoint {
-                                remote-endpoint = <&hdmi_connector_in>;
-                        };
-                };
-
-And I removed any of the above hacks. What I observe, apart from an inactive 
-LCD controller (and ingenic-drm driver), is the following in /sys/devices/
-platform/10180000.hdmi/:
-
-consumer:platform:13050000.lcdc0
-consumer:platform:hdmi_connector
-
-Maybe I don't understand the significance of "consumer" here, but the LCD 
-controller and the HDMI connector obviously have rather different roles. Then 
-again, the device tree is defining bidirectional relationships, so maybe this 
-is how they manifest themselves.
-
-> > Because your "it doesn't work" arguments have zero weight otherwise.
-> 
-> I hope I still can find it. So I can't promise anything.
-> We have had it complete in DTS and added code to parse it.
-> It may have been wiped out by cleaning up patch series during rebase.
-
-I suppose the question is whether this is actually handled already. I would 
-have thought that either the DRM framework would be able to identify such 
-relationships in a generic way or that the Synopsys driver would need to do 
-so. This might actually be happening, given that the sysfs entries are there, 
-but I might also imagine that something extra would be required to set the 
-bridge type.
-
-I did start writing some code to look up a remote endpoint for the second 
-port, find the connector type, and then set it, but it was probably after 
-midnight on that occasion as well. Short-circuiting this little dance and 
-setting the bridge type indicated that this might ultimately be the right 
-approach, but it would probably also mean introducing a point of 
-specialisation to the Synopsys driver so that device-specific drivers can 
-define a function to set the connector type.
-
-Otherwise, I can't see the Synopsys driver working for devices like the 
-JZ4780, but then again, it seems that all the other devices seem to 
-incorporate the Synopsys functionality in a different way and do not need to 
-deal with connectors at all.
-
-> > If I can find some time this weekend I will test it myself.
-> 
-> You may be faster than me.
-
-So, when I wrote about approaches that "work", I can seemingly get the LCD 
-controller and HDMI peripheral registers set up to match a non-Linux 
-environment where I can demonstrate a functioning display, and yet I don't get 
-a valid signal in the Linux environment.
-
-Nikolaus can actually get HDMI output, but there may be other factors 
-introduced by the Linux environment that frustrate success for me, whereas my 
-non-Linux environment is much simpler and can reliably reproduce a successful 
-result.
-
-For me, running modetest yields plenty of information about encoders, 
-connectors (and the supported modes via the EDID, thanks to my HDMI-A hack), 
-CRTCs, and planes. But no framebuffers are reported.
-
-Paul
-
-
+--=20
+- Jiaxun
