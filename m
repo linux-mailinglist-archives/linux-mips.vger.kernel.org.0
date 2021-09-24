@@ -2,130 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A04FC417956
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 19:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DBA417CC9
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 23:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347491AbhIXRJH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Sep 2021 13:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S1346937AbhIXVNR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Sep 2021 17:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344944AbhIXRIx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 13:08:53 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D1AC061766;
-        Fri, 24 Sep 2021 10:07:14 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id t4so6972191plo.0;
-        Fri, 24 Sep 2021 10:07:14 -0700 (PDT)
+        with ESMTP id S233217AbhIXVNR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 17:13:17 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0FEC061571;
+        Fri, 24 Sep 2021 14:11:43 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id d21so31080612wra.12;
+        Fri, 24 Sep 2021 14:11:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cvv2iZxij6FWrFEEKivGkcFAPGtCwuGKeJ0S/lB+6EU=;
-        b=eY7PxDSo+innYXsmEeVZ1M879ZBBKPDcxIA7HrdKVgBTq/ryR5ec6Eb5ByJ6CMVWWk
-         axLyq1G9Odppw6jMwFnpuEoFasQvoiqyRE+e+9Z1/+BfQmtxBE0QZexGN8Bd3BaH8Td5
-         xZbkMArEFUMAnSSvGKvX3hflhkeZehH4uGzMuvezVzYfKfS6BM2FztS+lIkqEDDvp4ZR
-         5ewIfXGDIePcS3AWOz8qlh4nQ974X+tOtX61dCl0HfMtpCIVLDWBYVxUU+v2zPTaw+K8
-         WfC+TXBzDriWg0+ZuKmzTSoPEkimqphNoGsUjAJzkl9wWQVXJ8xN1GwVNCMcehMSWb2j
-         ah/w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/LLfpywbKszP2bCFo/hCnkAX4fqyNlZuYUmbLGHF/uY=;
+        b=Kl/3viQTKa7cB9cfk0k8J+xyePO6VyQJNN5FQhmDd98cp/FbqGQGnsp982mN2LmFFb
+         eu2o8l0iSlrMmxE5b6kKeTIGIsWZE9fdhjRpb4v/HXCJyu2JJlHNWIX9eJ5fQpmuih6f
+         uNk6J3P4AEB4BNWK5V7vPP48UPybkdRjk8+TR6WotVkGQvCiOjKDLox8QugUjqnQFDpr
+         tbdatdL1QSkJgajlve4kPS8LxSI1F0QSSkNXTXXMMXdIKdLntBc9Re9sMPegpLcmY7vj
+         D/QbhqxOTFlw0QTRndbjLjF8u/27HVbLXvePrV5Rehcnc43R96Chc5LHcfJlSI1Bcqdw
+         WObw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cvv2iZxij6FWrFEEKivGkcFAPGtCwuGKeJ0S/lB+6EU=;
-        b=bGQOKK890ZSQygRnBQrQeH3brIaD53FSrg3WcEUyLXhvMnHipLGfi5XnTUKs31dlk6
-         gGK/f8m+A29+p4dp7k+kRDYq6OUUO0wR3vvYokOa/2LyCLXQx5pfngJ6pm+9DUqRLxkK
-         yAJ0FmGCjXmHHXtMllvC+6Hbj24EvHCV/OuIEGbUJv5NCs5HpgXGxQqDUdj3vLf6whuF
-         x57UhivkKiTiPtKb6itMPPm85iRCfRZ6UZ1bmMrX557gTgQf5PiFm5dlxcsJB4Y2AddU
-         3OdGeHH63HZ966DMZq0Iwy1o0TTfU6XZNQ68jHt/enupFo/ddKCkhJ+OnzNbD17sdGw9
-         DG2A==
-X-Gm-Message-State: AOAM5328fwCkRPsYrtp9ZF7jEbC84pY7XZF0cTd+wdFboq/g4/ZuT3qn
-        J1QAfzWY2CDi7I19pz6TYUGXUz2/1BE=
-X-Google-Smtp-Source: ABdhPJzL+MvDPKqHl5Hx+/hujrgjmq9BtR78Dg+QhCGNwAs4BmCA7Wq9ztKm/O2zR7jvrKDo/0lfAw==
-X-Received: by 2002:a17:90b:1c0f:: with SMTP id oc15mr3519053pjb.1.1632503233477;
-        Fri, 24 Sep 2021 10:07:13 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k22sm9659312pfi.149.2021.09.24.10.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 10:07:13 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM
-        BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE...),
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
-        linux-sh@vger.kernel.org (open list:SUPERH),
-        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE)
-Subject: [PATCH 11/11] ARM: bcm: Removed forced select of interrupt controllers
-Date:   Fri, 24 Sep 2021 10:05:46 -0700
-Message-Id: <20210924170546.805663-12-f.fainelli@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/LLfpywbKszP2bCFo/hCnkAX4fqyNlZuYUmbLGHF/uY=;
+        b=LnNOkxkOmiUHksvPpF8Iri95eh40gDwayHZgm3BMeESHZ0Dx4oyZe1Tmxd47zwENUG
+         s2KWcMDXM4YcIOykk/ewuBY3holmdvgEYJy/RZ7b0l6jqRstCv6xtPF0vuYyrNgCT/qW
+         43EDSxeLVLk0k8bGqjVyp2n/HtOCTuCzaMYek0R+QUPKrP1+h/2OEtpwLZLrpm1wQF53
+         HR5EgYvFqsgYJlnnoKSg2qDPMALzEbHjP9YfFsas6TGr9VY9KJOzhR8o37YA9cOm8mnn
+         ur+Z907mhx1zvgPi9XHm0Zw9unQjABuxSoDSUn42P5HUx8FftbV8DzQ+IcXR1CW56keM
+         /7vw==
+X-Gm-Message-State: AOAM531l8fNI1xpTQ0iSP1qAGR+o6mQv6fBMLIIk3dLajdjFINSYuhKM
+        db/Lsx3CeKyFRUcKeA+CPlY=
+X-Google-Smtp-Source: ABdhPJxCVgnetbW0vJj42lLyrGreyKFsu1pv5Tum17phoNjsmDG53hZzPea/6tEicjZrmENDUwsHeQ==
+X-Received: by 2002:adf:e5c2:: with SMTP id a2mr13446809wrn.251.1632517902294;
+        Fri, 24 Sep 2021 14:11:42 -0700 (PDT)
+Received: from localhost.localdomain (252.red-83-54-181.dynamicip.rima-tde.net. [83.54.181.252])
+        by smtp.gmail.com with ESMTPSA id y64sm10344297wmc.38.2021.09.24.14.11.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 24 Sep 2021 14:11:41 -0700 (PDT)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     tsbogend@alpha.franken.de
+Cc:     robh@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+        Liviu.Dudau@arm.com, bhelgaas@google.com, matthias.bgg@gmail.com,
+        gregkh@linuxfoundation.org, linux-mips@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-staging@lists.linux.dev,
+        neil@brown.name, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] MIPS: ralink: fix PCI IO resources
+Date:   Fri, 24 Sep 2021 23:11:33 +0200
+Message-Id: <20210924211139.3477-1-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210924170546.805663-1-f.fainelli@gmail.com>
-References: <20210924170546.805663-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now that the various second level interrupt controllers have been moved
-to IRQCHIP_PLATFORM_DRIVER and they do default to ARCH_BRCMSTB and
-ARCH_BCM2835 where relevant, remove their forced selection from the
-machine entry to allow an user to build them as modules.
+MIPs ralink need a special tratement regarding the way it handles PCI IO
+resources. On MIPS I/O ports are memory mapped, so we access them using normal
+load/store instructions. MIPS 'plat_mem_setup()' function does a call to
+'set_io_port_base(KSEG1)'. There, variable 'mips_io_port_base'
+is set then using this address which is a virtual address to which all
+ports are being mapped. Ralink I/O space has a mapping of bus address
+equal to the window into the mmio space, with an offset of IO start range
+cpu address. This means that to have this working we need:
+- linux port numbers in the range 0-0xffff.
+- pci port numbers in the range 0-0xffff.
+- io_offset being zero.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- arch/arm/mach-bcm/Kconfig | 4 ----
- 1 file changed, 4 deletions(-)
+These means at the end to have bus address 0 mapped to IO range cpu address.
+We need a way of properly set 'mips_io_port_base' with a virtually mapped
+value of the IO cpu address.
 
-diff --git a/arch/arm/mach-bcm/Kconfig b/arch/arm/mach-bcm/Kconfig
-index 2890e61b2b46..bd3f82788ebc 100644
---- a/arch/arm/mach-bcm/Kconfig
-+++ b/arch/arm/mach-bcm/Kconfig
-@@ -161,7 +161,6 @@ config ARCH_BCM2835
- 	select ARM_TIMER_SP804
- 	select HAVE_ARM_ARCH_TIMER if ARCH_MULTI_V7
- 	select BCM2835_TIMER
--	select BRCMSTB_L2_IRQ
- 	select PINCTRL
- 	select PINCTRL_BCM2835
- 	select MFD_CORE
-@@ -209,9 +208,6 @@ config ARCH_BRCMSTB
- 	select ARM_GIC
- 	select ARM_ERRATA_798181 if SMP
- 	select HAVE_ARM_ARCH_TIMER
--	select BCM7038_L1_IRQ
--	select BRCMSTB_L2_IRQ
--	select BCM7120_L2_IRQ
- 	select ZONE_DMA if ARM_LPAE
- 	select SOC_BRCMSTB
- 	select SOC_BUS
+This series do the following approach:
+1) Revert two bad commit from a previous attempt of make this work [0].
+2) Set PCI_IOBASE to mips 'mips_io_port_base'.
+3) Allow architecture dependent 'pci_remap_iospace'.
+4) Implement 'pci_remap_iospace' for MIPS.
+5) Be sure IOBASE address for IO window is set with correct value.
+
+More context about this series appoach in this mail thread [1].
+
+Thanks in advance for your time.
+
+[0]: https://www.spinics.net/lists/kernel/msg4051474.html
+[1]: https://lkml.org/lkml/2021/9/22/6
+
+Sergio Paracuellos (6):
+  Revert "MIPS: ralink: don't define PC_IOBASE but increase
+    IO_SPACE_LIMIT"
+  Revert "staging: mt7621-pci: set end limit for 'ioport_resource'"
+  MIPS: ralink: set PCI_IOBASE to 'mips_io_port_base'
+  PCI: allow architecture specific implementation of pci_remap_iospace()
+  MIPS: implement architecture dependent 'pci_remap_iospace()'
+  staging: mt7621-pci: properly adjust base address for the IO window
+
+ arch/mips/include/asm/mach-ralink/spaces.h | 4 +++-
+ arch/mips/include/asm/pci.h                | 2 ++
+ arch/mips/pci/pci-generic.c                | 9 +++++++++
+ drivers/pci/pci.c                          | 2 ++
+ drivers/staging/mt7621-pci/pci-mt7621.c    | 4 +---
+ 5 files changed, 17 insertions(+), 4 deletions(-)
+
 -- 
 2.25.1
 
