@@ -2,96 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A72C417CD9
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 23:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F32417DDA
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 00:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348489AbhIXVN1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Sep 2021 17:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348520AbhIXVNX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 17:13:23 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB992C061760;
-        Fri, 24 Sep 2021 14:11:49 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id d21so31081110wra.12;
-        Fri, 24 Sep 2021 14:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iEHoU21DH841tx0qtRTz5FbDxLZko2mQ4Z33po9e6hg=;
-        b=ajfY7Ymmr+7cnGhJOtrjT2wVcAV/rxDc7B6NaEreAvLHCKzEacArwdGGhIes3F+dnH
-         754KCqC0DrJT4Guxwjfq02g08n5JTWpJhxggEebDGVe4iAJEWjBOKlTrwOnDoES05n1s
-         gi1tikCyks6F3pFbBEIqjzccnHxiruwRzYma9kwvIup0ywxIdtp2quLZwk+LOC4umEOm
-         SymSBx4WkYfbtbEfxyFHPvXb6wbWLlExxXEmIoZcwc8rZqUGz468JTdlL9hBX0JTlrQc
-         4ppqYtW2JKAPOpazd9Zhkcdy946u4ZpSArcYgW/WA42qqI1K3O/QFTayYuSRleMmNGOK
-         reUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iEHoU21DH841tx0qtRTz5FbDxLZko2mQ4Z33po9e6hg=;
-        b=wyQ2pw6A2ymruPQNM82snjBLoItxMBoAT2tuPIuo1WA6Hks6k8QzQqHUsVt+pp1os7
-         fKV7eLousH9wHqTzJi618VpcL6YVSLzgBpESNQm1Be6As9L3BcTptrrzVcSlv3P4Buyd
-         T7J08Y+COswCRrzgJ7mp9fkt5SYp9oWGjrb6OVs61gl125ErfvGZlzAvLaskMpF9kGnx
-         vrJlD6fNJ6Z8Wc5HKce8YcMiTz444xqeDq4TP8p5MwyVuiIsqteE5XHpCqt3hg02SQDa
-         bBgpGa1XmE3BGDbFblXecmNTrkMyXAgewTLCxdVkpcw26xFJsHl1aCywAf/+lU6KUT4X
-         PWgg==
-X-Gm-Message-State: AOAM530yMPocuLyX9/kyKA/dYsMuFbC/TcPQtWAAeeCsDMpQm5CUGmB/
-        b1PeLlf0BHKVU9tsa/luajI=
-X-Google-Smtp-Source: ABdhPJxlUEJPYCJsNzawytHIOiH/45imW9bnZmTk3fyUFhDaECmpAeFTIfch/BNrkh6Bn7sAykByHg==
-X-Received: by 2002:adf:a549:: with SMTP id j9mr2799424wrb.353.1632517908646;
-        Fri, 24 Sep 2021 14:11:48 -0700 (PDT)
-Received: from localhost.localdomain (252.red-83-54-181.dynamicip.rima-tde.net. [83.54.181.252])
-        by smtp.gmail.com with ESMTPSA id y64sm10344297wmc.38.2021.09.24.14.11.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 24 Sep 2021 14:11:48 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     tsbogend@alpha.franken.de
-Cc:     robh@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-        Liviu.Dudau@arm.com, bhelgaas@google.com, matthias.bgg@gmail.com,
-        gregkh@linuxfoundation.org, linux-mips@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-staging@lists.linux.dev,
-        neil@brown.name, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] staging: mt7621-pci: properly adjust base address for the IO window
-Date:   Fri, 24 Sep 2021 23:11:39 +0200
-Message-Id: <20210924211139.3477-7-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210924211139.3477-1-sergio.paracuellos@gmail.com>
-References: <20210924211139.3477-1-sergio.paracuellos@gmail.com>
+        id S1345257AbhIXWpT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Sep 2021 18:45:19 -0400
+Received: from mga03.intel.com ([134.134.136.65]:22795 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345228AbhIXWpR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 24 Sep 2021 18:45:17 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10117"; a="224233866"
+X-IronPort-AV: E=Sophos;i="5.85,321,1624345200"; 
+   d="scan'208";a="224233866"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2021 15:43:43 -0700
+X-IronPort-AV: E=Sophos;i="5.85,321,1624345200"; 
+   d="scan'208";a="704339730"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.251.20.113]) ([10.251.20.113])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2021 15:43:41 -0700
+Subject: Re: [PATCH v4 11/15] pci: Add pci_iomap_shared{,_range}
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org
+References: <20210824053830-mutt-send-email-mst@kernel.org>
+ <d21a2a2d-4670-ba85-ce9a-fc8ea80ef1be@linux.intel.com>
+ <20210829112105-mutt-send-email-mst@kernel.org>
+ <09b340dd-c8a8-689c-4dad-4fe0e36d39ae@linux.intel.com>
+ <20210829181635-mutt-send-email-mst@kernel.org>
+ <3a88a255-a528-b00a-912b-e71198d5f58f@linux.intel.com>
+ <20210830163723-mutt-send-email-mst@kernel.org>
+ <69fc30f4-e3e2-add7-ec13-4db3b9cc0cbd@linux.intel.com>
+ <20210910054044-mutt-send-email-mst@kernel.org>
+ <f672dc1c-5280-7bbc-7a56-7c7aab31725c@linux.intel.com>
+ <20210911195006-mutt-send-email-mst@kernel.org>
+From:   Andi Kleen <ak@linux.intel.com>
+Message-ID: <ad1e41d1-3f4e-8982-16ea-18a3b2c04019@linux.intel.com>
+Date:   Fri, 24 Sep 2021 15:43:40 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210911195006-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The value to adjust in the bridge register RALINK_PCI_IOBASE must take into
-account the raw value from DT, not only the translated linux port number.
-As long as io_offset is zero, the two are the same, but if you were to use
-multiple host bridge in the system, or pick a different bus address in DT,
-you can have a nonzero io_offset. At this means to take into account the
-bus address which is used to calculate this offset, substracting it from
-the IO resource start address.
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- drivers/staging/mt7621-pci/pci-mt7621.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>> Hmm, yes that's true. I guess we can make it default to opt-in for
+>> pci_iomap.
+>>
+>> It only really matters for device less ioremaps.
+> OK. And same thing for other things with device, such as
+> devm_platform_ioremap_resource.
+> If we agree on all that, this will basically remove virtio
+> changes from the picture ;)
 
-diff --git a/drivers/staging/mt7621-pci/pci-mt7621.c b/drivers/staging/mt7621-pci/pci-mt7621.c
-index 6acfc94a16e7..503cb1fca2e0 100644
---- a/drivers/staging/mt7621-pci/pci-mt7621.c
-+++ b/drivers/staging/mt7621-pci/pci-mt7621.c
-@@ -482,7 +482,7 @@ static int mt7621_pcie_enable_ports(struct pci_host_bridge *host)
- 
- 	/* Setup MEMWIN and IOWIN */
- 	pcie_write(pcie, 0xffffffff, RALINK_PCI_MEMBASE);
--	pcie_write(pcie, entry->res->start, RALINK_PCI_IOBASE);
-+	pcie_write(pcie, entry->res->start - entry->offset, RALINK_PCI_IOBASE);
- 
- 	list_for_each_entry(port, &pcie->ports, list) {
- 		if (port->enabled) {
--- 
-2.25.1
+Hi we revisited this now. One problem with removing the ioremap opt-in 
+is that it's still possible for drivers to get at devices without going 
+through probe. For example they can walk the PCI device list. Some 
+drivers do that for various reasons. So if we remove the opt-in we would 
+need to audit and possibly fix all that, which would be potentially a 
+lot of churn. That's why I think it's better to keep the opt-in.
+
+
+-Andi
+
 
