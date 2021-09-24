@@ -2,140 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C708417101
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 13:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8086941793C
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 19:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244764AbhIXLmL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Sep 2021 07:42:11 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:17247 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244321AbhIXLmK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 07:42:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632483617;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=x6aZQTYzEGnb3qjPGQGMoatLSWBGlhF56WQTTYF7HCM=;
-    b=k5afyNNuKDgUkD15EZHJ43ApUTjytd1FGXOe2OCSgSjvvanVhIGwHsLIOjO1UFuYeO
-    POAuPtu6uSyRiM4DqBFtl63h8ZhwGs22LFdCSbO3o9ow1nvRwArKLHHAUpXFH3dlNGpX
-    P8w+bFccP1sG0/XQ5tPwWWPZQdlBrOGGiPTTOjBj/dZOo5QV9KIQyMMkXw87q4BvtxZ3
-    f/SLODpR5P60dJ9DV/VWnYogQna5I0H8dUWK9drsyxC2LrUSgL6MY14xBkZtNb7/jjdU
-    C9P9SmDHXBJkgmXE+rBgOluu+xMPxgI7k11T9Ok++oedZ5oQC9ofS+MO6zNmjNx4zWlI
-    Auww==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw47uAyI="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.33.8 SBL|AUTH)
-    with ESMTPSA id I01f74x8OBeGOsI
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Fri, 24 Sep 2021 13:40:16 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v3 6/6] drm/ingenic: Attach bridge chain to encoders
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <B7B431EC-BC73-4B39-A03C-003347D8C239@goldelico.com>
-Date:   Fri, 24 Sep 2021 13:40:16 +0200
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-mips <linux-mips@vger.kernel.org>, list@opendingux.net,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B05E1F0C-223D-425C-AF1B-9175C4555F79@goldelico.com>
-References: <20210922205555.496871-1-paul@crapouillou.net>
- <20210922205555.496871-7-paul@crapouillou.net>
- <32234186-1802-4FDF-801A-B14E48FB86D8@goldelico.com>
- <RTPVZQ.WN90B9MHPMZ13@crapouillou.net>
- <896D04E4-4058-474B-8BD2-7F21B1C754E4@goldelico.com>
- <YUxIkdGcGnBhcT0y@pendragon.ideasonboard.com>
- <3764505C-7CA9-40C4-8CFA-8B0F2361E6D5@goldelico.com>
- <YUxQ9k/CDYz20rYo@pendragon.ideasonboard.com>
- <B7C9EEE8-F999-4105-B805-1B32619A3847@goldelico.com>
- <7U2WZQ.D8DTPCJ0ZPKO3@crapouillou.net>
- <ABE75744-46FE-4F37-A14C-D996F36B7B0E@goldelico.com>
- <IXJWZQ.BZQ2M7FHYVJM@crapouillou.net>
- <B7B431EC-BC73-4B39-A03C-003347D8C239@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        id S1343637AbhIXRI0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Sep 2021 13:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343589AbhIXRIZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 13:08:25 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D98C061571;
+        Fri, 24 Sep 2021 10:06:51 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id r7so6846656pjo.3;
+        Fri, 24 Sep 2021 10:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+YjwIWJI4WiAn9JNxOIpnfCCCasVO98funIc1i+sVZU=;
+        b=VnMUs10Z64fc5MnVVxLinqRw/2GxbPDll7a5uePijYe/MslkvCiW1ndNQj0FitH6lI
+         L4BBNv+3dOWei2NvatRDoERayU5wubGsmkCZeTa8k+lEl4Eri2rO1vA28nTfrGxqFZWQ
+         wJNltvIFRdXnF6ugGRn92SQujfIpiyym1qbFcSHH6hZnjZeVhsgjrKsLJlbLriarAEfr
+         7iZNHrh9/D2z+rUAwLojzjo2Ls+xk4brbjGBNjNyNLWIAaFbwhuRR0wzlpllm3YcMF0v
+         vyMyiq71nebQB3gE/F5+OYD4NN8ubVzAKu10oGqBK7T4Jxe+e42LpXvkSnSa/aDIZ3h0
+         W6FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+YjwIWJI4WiAn9JNxOIpnfCCCasVO98funIc1i+sVZU=;
+        b=fn9DWMy8k1pxcMY7GnWzoC1YMXzoXbcN8MOsX9vZ3dpiIPYr726P7VhxIRkScfQQox
+         SoHNk17bTapnFEdfpW3OJ7Khpygc9NUrpIeOBMZkHI0dlsUVsxr5PdgBGMvthD39h4/W
+         uE5nUcYuuudyCu/K40pq41Fdj5GyKOGYxXIfwx0kN6jwtvvcF1CXEAyBjryg8lTdx1fc
+         BFqVLW6/Zj8J5Xod8AWxO3DF/OWLvI84jfzt6HHV18Iiq+DxnP9K5YJ751j3s/wVW4Cb
+         +1Wzq/+Fpjz5sJkzBG/Yz0SrXPiGyiCob2Kus51BGl34Vf6GeAvlQCDQ64QlHvmGxVx0
+         xwEg==
+X-Gm-Message-State: AOAM533a4eb4VWWcrh4+SEw0FGCUUZdXIv5XLFxtHjFkgKA+W9i41xaa
+        TcTvx5R9BM+G7YBzYkKV0STD8o29dv8=
+X-Google-Smtp-Source: ABdhPJwf14SoPtN5f+4wd2sMqO/DEVoPO9wlvGAdbWPcx5dSdBoP8h9nyv5Dpp4gy1POcQWhFpxlBw==
+X-Received: by 2002:a17:902:ba8d:b0:13d:cb44:369c with SMTP id k13-20020a170902ba8d00b0013dcb44369cmr9981136pls.40.1632503211086;
+        Fri, 24 Sep 2021 10:06:51 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id k22sm9659312pfi.149.2021.09.24.10.06.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Sep 2021 10:06:50 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM
+        BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE...),
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
+        linux-sh@vger.kernel.org (open list:SUPERH),
+        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE)
+Subject: [PATCH 00/11] Modular Broadcom irqchip drivers
+Date:   Fri, 24 Sep 2021 10:05:35 -0700
+Message-Id: <20210924170546.805663-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+Hi Thomas, Marc,
 
-> Am 23.09.2021 um 22:23 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->=20
->=20
->> Because your "it doesn't work" arguments have zero weight otherwise.
->=20
-> I hope I still can find it. So I can't promise anything.
-> We have had it complete in DTS and added code to parse it.
-> It may have been wiped out by cleaning up patch series during rebase.
+This patch series aims at allowing the 3 interrupt controller drivers
+used on Broadcom STB platforms to be built as modules in order for those
+to be shipped in a GKI enabled system (Android).
 
-I was able to locate it and place it on top of your ingenic-drm-drv v3
-and our synopsys hdmi v3 [1] (+ unpublished work).
+The irq-bcm7038-l1 requires us to export a number of symbols, which is
+not great, but there are not obvious solutions other than adding
+accessor functions to get the same information.
 
-This [2] should save you a lot of time making dw-hdmi work on jz4780 at =
-all, so you can
-focus on our mistakes instead of starting from scratch.
+Assuming you are happy with the changes though, please do take the last
+two changes as well through your tree.
 
-Features:
-- based on v5.15-rc2
-- (the first two patches are LetuxOS and build system related and can be =
-ignored for this discussion)
-- contains some significant patch from drm-next not yet upstream
-- contains your v3 series as is
-- (initially) disables your DRM_BRIDGE_ATTACH_NO_CONNECTOR (is reverted =
-in the last patch)
-- adds synopsys stuff and DT schema
-- adds jz4780.dtsi and ci20.dts
-- adds ci20_defconfig
-- (adds some (optional) jz4780 specific features we likely do not need =
-now)
-- adds something to dw-hdmi to properly notify HPD
-- adds a hdmi-regulator so that HPD power can be turned on/off
-- (attempt to configure the dw-hdmi unwedge feature)
-- then we add the hdmi-connector to replace the dw-hdmi connector to =
-device tree
-- and finally re-enable DRM_BRIDGE_ATTACH_NO_CONNECTOR
+Thanks!
 
-The result is
-a) without the last patch I get a proper setup with framebuffer and =
-edid.
-Unfortunateley without any image on HDMI.
+Florian Fainelli (11):
+  arch: Export cpu_logical_map to modules
+  genirq: Export irq_to_desc() again to modules
+  genirq: Export irq_set_affinity_locked()
+  irqchip/irq-bcm7038-l1: Switch to IRQCHIP_PLATFORM_DRIVER
+  irqchip/irq-brcmstb-l2: Switch to IRQCHIP_PLATFORM_DRIVER
+  genirq: Export irq_gc_{unmask_enable,mask_disable}_reg
+  of/irq: Export of_irq_count to drivers
+  genirq: Export irq_gc_noop()
+  irqchip/irq-bcm7120-l2: Switch to IRQCHIP_PLATFORM_DRIVER
+  arm64: broadcom: Removed forced select of interrupt controllers
+  ARM: bcm: Removed forced select of interrupt controllers
 
-b) if last patch is included
-(so that DRM_BRIDGE_ATTACH_NO_CONNECTOR is required as by your [patch v3 =
-6/6] again)
-I get:
+ arch/arm/kernel/setup.c          |  1 +
+ arch/arm/mach-bcm/Kconfig        |  4 ----
+ arch/arm64/Kconfig.platforms     |  3 ---
+ arch/arm64/kernel/setup.c        |  1 +
+ arch/sh/kernel/smp.c             |  1 +
+ drivers/irqchip/Kconfig          | 12 +++++++++---
+ drivers/irqchip/irq-bcm7038-l1.c |  6 +++++-
+ drivers/irqchip/irq-bcm7120-l2.c | 11 ++++++-----
+ drivers/irqchip/irq-brcmstb-l2.c | 16 +++++++++-------
+ drivers/of/irq.c                 |  1 +
+ kernel/irq/generic-chip.c        |  3 +++
+ kernel/irq/irqdesc.c             |  2 --
+ kernel/irq/manage.c              |  1 +
+ 13 files changed, 37 insertions(+), 25 deletions(-)
 
-[    4.351200] [drm:drm_bridge_attach [drm]] *ERROR* failed to attach =
-bridge /hdmi@10180000 to encoder DPI-34: -22
-[    4.474346] [drm:drm_bridge_attach [drm]] *ERROR* failed to attach =
-bridge (null) to encoder DPI-34: -22
-[    4.562125] ingenic-drm 13050000.lcdc0: Unable to attach bridge
-[    4.568103] ingenic-drm: probe of 13050000.lcdc0 failed with error =
--22
+-- 
+2.25.1
 
-Maybe you can spot the bug in the code much quicker than we can.
-
-I do not know what Paul Boddie did differently if this initialization
-with connector-hdmi works for him and does not fail likewise.
-
-BR and thanks,
-Nikolaus
-
-
-[1]: =
-https://lore.kernel.org/linux-mips/8e873f17fcc9aeb326d99b7c2c8cd25b61dca6f=
-5.1628399442.git.hns@goldelico.com/T/
-[2]: =
-https://git.goldelico.com/?p=3Dletux-kernel.git;a=3Dshortlog;h=3Drefs/head=
-s/upstream%2Bjz4780%2Bhdmi-connector
