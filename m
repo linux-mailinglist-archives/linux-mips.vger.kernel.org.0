@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C23417944
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 19:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DE3417960
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 19:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344357AbhIXRIg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Sep 2021 13:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
+        id S1347539AbhIXRJK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Sep 2021 13:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235048AbhIXRI3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 13:08:29 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01478C061571;
-        Fri, 24 Sep 2021 10:06:56 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id k23so7437998pji.0;
-        Fri, 24 Sep 2021 10:06:55 -0700 (PDT)
+        with ESMTP id S235333AbhIXRIb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 13:08:31 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F423AC061613;
+        Fri, 24 Sep 2021 10:06:57 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id h3so10440488pgb.7;
+        Fri, 24 Sep 2021 10:06:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hAt2r11zGETPJhbWDBDQJtoDxq6DGq80xQa/wYZCvjA=;
-        b=lff3kYOYoDs+CCWEsvmA2HuIBTzYIpIEkFnWK3y6YbOXrnQPt5ILd19qTZJcBt/nL4
-         3/mVv54pKrWeCTmw/u7qzfheVmu/4i2Xujwt0nmX449fE2Wz+lrxjZxNpfNc3gO3KGnh
-         ywie+jUsQQmfK+dqLwz1nIclg89CvufeEo5qg5lA/FO2pIj+rM6G++frwAEp8sbvKQus
-         ygKptAaGjZaCIAkFrZKHR2PVRAMrWoT3p+7cnydkN/yQkIDs8KXvL7mxQutAbBolTEhd
-         6nBb5pDBJHwLQkNZL27kb8nWPEYVEfdnVr/OZ4pEMCrCVKZA+lIyeOEkvaV72mNF50yy
-         zyGA==
+        bh=fSt/2Dj/eenIaIrKzQI+svTjzoFaPyRPoy7PzUBgu/Q=;
+        b=PL8rk6aoND2MN3aHn1KJLrj+1n+Rs+ui8XwXbyU3+rvm2kBBqPT3fHzwBDg54gksSh
+         8Ny7BkgQL9nte2Yje47c4M0PK9m2agAkZ40jHr5ukre+ZCUVkgEASA9nt0Qe6v1IQHCv
+         ndBssQF4zOuPqaH1LcSjAgV285rFvFF5ms5mlqg+vcQD9ER2xaG+5Rj22plPNWmotS9G
+         +TCsH0qz4R7l/SfuKW0SDhqPCvuRLiLnswNB/G3fni3/V0fPDfa7/4nGQ3iKW8YZoNyl
+         sOR2nkcz5yAY65kthq/akRmE8QuNEbS372cPkj4ZFoUpJJoYx5tJaWaDojOE5X/Pm8r3
+         Uxig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hAt2r11zGETPJhbWDBDQJtoDxq6DGq80xQa/wYZCvjA=;
-        b=lQCi5ZetEpEZWthxJniSJHunl4+Lm/Qtr062IVGDW+umeEydLkYqMbxwPbPIlYye5o
-         gCRM6+2kb/Xx/LlHV2nwRlhPfKNxc3eDnBwN3jlJOR+P7X+/AAf9sC/0jt1M+tK2vYzB
-         55U/SW0RJtIQFvO04ainmx3AiviJH2AD5AULL3VjA0O6MJa9UlYK2J9Xna9FVNOv0WMH
-         v4sIS9cE8F6RoY+owCnNOXG7ZaIK1T4iGudDw0cSrqQAYep8mWZCimY9F8R6kgPoSJo4
-         LdPWoVqpm2B+tm+YkM7WY1X2EXUjBBgEB4YsNC91esnzkVphbtLUVltIifcxKqMKaG7H
-         s1cA==
-X-Gm-Message-State: AOAM532WUYCqAKbhHA9ZUVgtSKUzKXRb96QT9PP2fyXWVQ25e7FljXZf
-        WfAslNuc2Y6HpLVWu1WgTktrx4GEn70=
-X-Google-Smtp-Source: ABdhPJxLx4ndIFs8WwGMmBVw3tfDmXNvV2JZPukBeAlAI1kQMLB4cqYAWC7Ly9tK7SYz6iKQ2PHPPA==
-X-Received: by 2002:a17:902:b18b:b0:13a:354a:3e9d with SMTP id s11-20020a170902b18b00b0013a354a3e9dmr9944422plr.36.1632503215315;
-        Fri, 24 Sep 2021 10:06:55 -0700 (PDT)
+        bh=fSt/2Dj/eenIaIrKzQI+svTjzoFaPyRPoy7PzUBgu/Q=;
+        b=LMNvp14APXaiBIr6XHO1L8dmF7lJdrv6nD03JpzuVwB3T5VIt645R59zLCQ79D4N0Z
+         3Uupg70YgdrObIoPLsrNFsBmI5KQLHHG1n1U4u6hK40oK+JCsgGMV8Yd5BmEaDnEaO/7
+         QjnRDkjvqFmJWJXrfTuz8IZuDgefDy0I/AY1gyvQHeOy+Lf50Xn1FlBjX19EuybM09GS
+         r/pWJP1lwSd8Hk9B0ic2jMIlzf5V9XHwuZZG/GwXIodf791KTbzsJnxZPESRj3egezHO
+         hzGFik402PdM+A7LO0JQokwkJsIjQeeeTLdlUHdjZ3XT4Yyciu1CR/w8P84Q0ELeTYGr
+         1hNA==
+X-Gm-Message-State: AOAM532W0ZKhZ4M3m4Q/oYs+Te6IFCbSvWoHU4WR4IbAeVMi5roiFMAi
+        iaSGbqmK8P9pTSU3y1zka1nrnfxI1cY=
+X-Google-Smtp-Source: ABdhPJw9i/MXr3hPaw9fCxL4glXqdtYlk2E9G0McC+C7pit5nnMjKwn5fL2HUiGsbDopFLroVze4OA==
+X-Received: by 2002:a62:2f45:0:b0:44b:3961:2a21 with SMTP id v66-20020a622f45000000b0044b39612a21mr10176283pfv.82.1632503217306;
+        Fri, 24 Sep 2021 10:06:57 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k22sm9659312pfi.149.2021.09.24.10.06.53
+        by smtp.gmail.com with ESMTPSA id k22sm9659312pfi.149.2021.09.24.10.06.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 10:06:54 -0700 (PDT)
+        Fri, 24 Sep 2021 10:06:56 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -82,9 +82,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH 02/11] genirq: Export irq_to_desc() again to modules
-Date:   Fri, 24 Sep 2021 10:05:37 -0700
-Message-Id: <20210924170546.805663-3-f.fainelli@gmail.com>
+Subject: [PATCH 03/11] genirq: Export irq_set_affinity_locked()
+Date:   Fri, 24 Sep 2021 10:05:38 -0700
+Message-Id: <20210924170546.805663-4-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210924170546.805663-1-f.fainelli@gmail.com>
 References: <20210924170546.805663-1-f.fainelli@gmail.com>
@@ -94,34 +94,26 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In order to build drivers/irqchip/irq-bcm7038-l1.c as a module (for use
-in GKI), we need to export_to_desc() which is used in this snippet of
-code:
-
-	irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(virq)));
-
-This effectively reverts 64a1b95bb9fe ("genirq: Restrict export of
-irq_to_desc()").
+irq-bcm7038-l1 uses that symbol and we want to make it a loadable module
+in subsequent changes.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- kernel/irq/irqdesc.c | 2 --
- 1 file changed, 2 deletions(-)
+ kernel/irq/manage.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
-index 4e3c29bb603c..5bc231036042 100644
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -352,9 +352,7 @@ struct irq_desc *irq_to_desc(unsigned int irq)
- {
- 	return radix_tree_lookup(&irq_desc_tree, irq);
- }
--#ifdef CONFIG_KVM_BOOK3S_64_HV_MODULE
- EXPORT_SYMBOL_GPL(irq_to_desc);
--#endif
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index 7405e384e5ed..e0c573e5d249 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -369,6 +369,7 @@ int irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask,
  
- static void delete_irq_desc(unsigned int irq)
- {
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(irq_set_affinity_locked);
+ 
+ /**
+  * irq_update_affinity_desc - Update affinity management for an interrupt
 -- 
 2.25.1
 
