@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DE3417960
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 19:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE4341795B
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Sep 2021 19:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347539AbhIXRJK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Sep 2021 13:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        id S1347518AbhIXRJJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Sep 2021 13:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbhIXRIb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 13:08:31 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F423AC061613;
-        Fri, 24 Sep 2021 10:06:57 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id h3so10440488pgb.7;
-        Fri, 24 Sep 2021 10:06:57 -0700 (PDT)
+        with ESMTP id S1344328AbhIXRId (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 13:08:33 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CA2C06161E;
+        Fri, 24 Sep 2021 10:07:00 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id k23so7438109pji.0;
+        Fri, 24 Sep 2021 10:07:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fSt/2Dj/eenIaIrKzQI+svTjzoFaPyRPoy7PzUBgu/Q=;
-        b=PL8rk6aoND2MN3aHn1KJLrj+1n+Rs+ui8XwXbyU3+rvm2kBBqPT3fHzwBDg54gksSh
-         8Ny7BkgQL9nte2Yje47c4M0PK9m2agAkZ40jHr5ukre+ZCUVkgEASA9nt0Qe6v1IQHCv
-         ndBssQF4zOuPqaH1LcSjAgV285rFvFF5ms5mlqg+vcQD9ER2xaG+5Rj22plPNWmotS9G
-         +TCsH0qz4R7l/SfuKW0SDhqPCvuRLiLnswNB/G3fni3/V0fPDfa7/4nGQ3iKW8YZoNyl
-         sOR2nkcz5yAY65kthq/akRmE8QuNEbS372cPkj4ZFoUpJJoYx5tJaWaDojOE5X/Pm8r3
-         Uxig==
+        bh=NSYiGK57G6dx4SCVfIKz/VqfWjkODoJWY0CRhuUYqa0=;
+        b=VKf+KiXEVgf8y5ZxFuT4bIUicXOGoJMOD1tqP7Nc1TZB9ij6Vf3ruzCWNW02Hzhk/N
+         N9hwdbhuVXyxLnwo88cKBf4wGPMN7kec1codqL2+01H08g6a9cGNGQAJsW+WU0YDAGHX
+         PJRXz23RPN14hhMETRtsqPHUJNOgLCFv5kbGsXRHW8P8TJHxEzgcEpoOTxzeaZjdkxxr
+         ovziSoE7z7aenFOVUGdK2VT/SbMis2yPfHCCZzmbwV+26yUMeYOmwdbu4f1fuqas5rH6
+         gNzPNLjy5TgLMpnKQA8NXXaNyqpiRHxSekjgofPPjWSlHb8PpFL8PMEJrdnevC2TAAI6
+         nV2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fSt/2Dj/eenIaIrKzQI+svTjzoFaPyRPoy7PzUBgu/Q=;
-        b=LMNvp14APXaiBIr6XHO1L8dmF7lJdrv6nD03JpzuVwB3T5VIt645R59zLCQ79D4N0Z
-         3Uupg70YgdrObIoPLsrNFsBmI5KQLHHG1n1U4u6hK40oK+JCsgGMV8Yd5BmEaDnEaO/7
-         QjnRDkjvqFmJWJXrfTuz8IZuDgefDy0I/AY1gyvQHeOy+Lf50Xn1FlBjX19EuybM09GS
-         r/pWJP1lwSd8Hk9B0ic2jMIlzf5V9XHwuZZG/GwXIodf791KTbzsJnxZPESRj3egezHO
-         hzGFik402PdM+A7LO0JQokwkJsIjQeeeTLdlUHdjZ3XT4Yyciu1CR/w8P84Q0ELeTYGr
-         1hNA==
-X-Gm-Message-State: AOAM532W0ZKhZ4M3m4Q/oYs+Te6IFCbSvWoHU4WR4IbAeVMi5roiFMAi
-        iaSGbqmK8P9pTSU3y1zka1nrnfxI1cY=
-X-Google-Smtp-Source: ABdhPJw9i/MXr3hPaw9fCxL4glXqdtYlk2E9G0McC+C7pit5nnMjKwn5fL2HUiGsbDopFLroVze4OA==
-X-Received: by 2002:a62:2f45:0:b0:44b:3961:2a21 with SMTP id v66-20020a622f45000000b0044b39612a21mr10176283pfv.82.1632503217306;
-        Fri, 24 Sep 2021 10:06:57 -0700 (PDT)
+        bh=NSYiGK57G6dx4SCVfIKz/VqfWjkODoJWY0CRhuUYqa0=;
+        b=obuQVNcFSzIYxdbHU/ydk+FtMsrHpIkhNUjuK69ElMCK+C4cyWYlYQV5Sa5jXwDKwR
+         bML/RhCONhfe9+p8Pkkv3qRJ048WjpnwPT13FIkbB0Use5W7/0P1bf5B3+H7oR+wMh/U
+         M142lU+Pi76KfwLu78cX0UPHdVYTem7t5+n57nYovgIh29nHcvWMcc7bh/NxJEKbPmIw
+         jniczeW7gLvNDBtWigZsRWLVAej6EXgp7VANTi8SvX31gs34oIm5CEjOBTRsJpXllB67
+         oe/g9W1xqt53rFu5FNvbj71OOK40No4h6O9KA46lKcCVyn+H+o6QKgodtUyDgFxslXam
+         0Dig==
+X-Gm-Message-State: AOAM532ndsL25OVnwutfuqgcQ0vhD0jhowIYcMN7WHoeZHFAQeRstpOU
+        umQwACXb9jr5Rn1U6p0YGr31lETuC8Q=
+X-Google-Smtp-Source: ABdhPJxkKpI23LL6xymzcWOXEzd12oGL/wfBBT0Vy18Wbxbu4pOv4iGqWb2tl0gfdW0Hjh5sX8A5bw==
+X-Received: by 2002:a17:902:b717:b029:11a:fae3:ba7c with SMTP id d23-20020a170902b717b029011afae3ba7cmr10013612pls.28.1632503219371;
+        Fri, 24 Sep 2021 10:06:59 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k22sm9659312pfi.149.2021.09.24.10.06.55
+        by smtp.gmail.com with ESMTPSA id k22sm9659312pfi.149.2021.09.24.10.06.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Sep 2021 10:06:56 -0700 (PDT)
+        Fri, 24 Sep 2021 10:06:59 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -82,9 +82,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH 03/11] genirq: Export irq_set_affinity_locked()
-Date:   Fri, 24 Sep 2021 10:05:38 -0700
-Message-Id: <20210924170546.805663-4-f.fainelli@gmail.com>
+Subject: [PATCH 04/11] irqchip/irq-bcm7038-l1: Switch to IRQCHIP_PLATFORM_DRIVER
+Date:   Fri, 24 Sep 2021 10:05:39 -0700
+Message-Id: <20210924170546.805663-5-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210924170546.805663-1-f.fainelli@gmail.com>
 References: <20210924170546.805663-1-f.fainelli@gmail.com>
@@ -94,26 +94,46 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-irq-bcm7038-l1 uses that symbol and we want to make it a loadable module
-in subsequent changes.
+Allow the user selection and building of this interrupt controller
+driver as a module since it is used on ARM/ARM64 based systems as a
+second level interrupt controller hanging off the ARM GIC and is
+therefore loadable during boot.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- kernel/irq/manage.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/irqchip/Kconfig          | 4 +++-
+ drivers/irqchip/irq-bcm7038-l1.c | 6 +++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 7405e384e5ed..e0c573e5d249 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -369,6 +369,7 @@ int irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask,
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 4d5924e9f766..3022f6137096 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -115,7 +115,9 @@ config BCM6345_L1_IRQ
+ 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
  
+ config BCM7038_L1_IRQ
+-	bool
++	tristate "Broadcom STB 7038-style L1/L2 interrupt controller driver"
++	depends on ARCH_BRCMSTB || BMIPS_GENERIC
++	default ARCH_BRCMSTB || BMIPS_GENERIC
+ 	select GENERIC_IRQ_CHIP
+ 	select IRQ_DOMAIN
+ 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
+diff --git a/drivers/irqchip/irq-bcm7038-l1.c b/drivers/irqchip/irq-bcm7038-l1.c
+index a035c385ca7a..80e74cf3e165 100644
+--- a/drivers/irqchip/irq-bcm7038-l1.c
++++ b/drivers/irqchip/irq-bcm7038-l1.c
+@@ -484,4 +484,8 @@ static int __init bcm7038_l1_of_init(struct device_node *dn,
  	return ret;
  }
-+EXPORT_SYMBOL_GPL(irq_set_affinity_locked);
  
- /**
-  * irq_update_affinity_desc - Update affinity management for an interrupt
+-IRQCHIP_DECLARE(bcm7038_l1, "brcm,bcm7038-l1-intc", bcm7038_l1_of_init);
++IRQCHIP_PLATFORM_DRIVER_BEGIN(bcm7038_l1)
++IRQCHIP_MATCH("brcm,bcm7038-l1-intc", bcm7038_l1_of_init)
++IRQCHIP_PLATFORM_DRIVER_END(bcm7038_l1)
++MODULE_DESCRIPTION("Broadcom STB 7038-style L1/L2 interrupt controller");
++MODULE_LICENSE("GPL v2");
 -- 
 2.25.1
 
