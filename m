@@ -2,96 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA56418079
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 10:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CD434180DE
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 11:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232860AbhIYIsl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Sep 2021 04:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237067AbhIYIsg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Sep 2021 04:48:36 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF198C061604;
-        Sat, 25 Sep 2021 01:46:51 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id w29so34480134wra.8;
-        Sat, 25 Sep 2021 01:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iEHoU21DH841tx0qtRTz5FbDxLZko2mQ4Z33po9e6hg=;
-        b=PIJxllT69paC9PSPnGweRS7+dl4W6XwBhxX3NJEfjhKXs2OgetHWGsVMM+/xlYnpkJ
-         yE067R/ulXFWu0+Nb22zbtRi8id5cEPSI4UwX4hUP/vr8+fIKm0RSc1dshmlkRiEEO4e
-         a8Ev6kbxZ7iEMMiCbQvYroehkiSsHhWWckVb729l7AVvPOvm2uRGq7JtMYujgGJyM8xw
-         0JeGRmnCEqhmtxTCWUhlCgG3Qp4q4kP9jJT2zWwu/jNuV22dva3L3R04ETxhI8U4+Tzr
-         jurnDvW9kIcg4JM/zHGJQKU+WHZQcULwW9HWmexNR7JaaNFn+8vixbUKHUTkeYPeLUL1
-         7gVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iEHoU21DH841tx0qtRTz5FbDxLZko2mQ4Z33po9e6hg=;
-        b=u+83xcNnXrp8acai9DlI4z4py/ZFyDTC+b35STZYir4QapJJ9QLcbA0vPHRA3StBea
-         yYJv4/y+E9GtJm0L7be3VHMEQVHdzgfRaEg2L3laHCm6bHeP4ArBh9BXrm2BqmmOa3aA
-         hVuPHF/PI+CcTCYfHMP1RdeUinfUv8SqHeHbO9N+s46OPVTnsDNNmS+FJuFEnKUMq5HS
-         adsJk21DrV7ZqZkUygBmVe96dXTEoAkA61R1L49ISTEeA0Yt+LF5+0CuHPAvhWeznXyP
-         kDIC2p1q1dqfOQ94KM8slVVLC/aydcnAAgKqcynFHolGILU/+EhE5EYuBLzNfehwv6ov
-         T9Pw==
-X-Gm-Message-State: AOAM533g+ry+INIzLhtZXtKXQq6TchWmQ23GMK0LpOc3ltT1QH5o7uqC
-        U+Ve6eedn3/gd13QunONw68=
-X-Google-Smtp-Source: ABdhPJwbFGgQ4QqaYZwkc1R+U45nYpniQk1gbE3hEL7mfMPfDk8HqaaEUp/5WE47sL6izCrEYT8uVg==
-X-Received: by 2002:adf:eec3:: with SMTP id a3mr16448514wrp.276.1632559610460;
-        Sat, 25 Sep 2021 01:46:50 -0700 (PDT)
-Received: from localhost.localdomain (252.red-83-54-181.dynamicip.rima-tde.net. [83.54.181.252])
-        by smtp.gmail.com with ESMTPSA id y9sm17222997wmj.36.2021.09.25.01.46.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 25 Sep 2021 01:46:50 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     tsbogend@alpha.franken.de
-Cc:     robh@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-        Liviu.Dudau@arm.com, bhelgaas@google.com, matthias.bgg@gmail.com,
-        gregkh@linuxfoundation.org, linux-mips@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-staging@lists.linux.dev,
-        neil@brown.name, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] staging: mt7621-pci: properly adjust base address for the IO window
-Date:   Sat, 25 Sep 2021 10:46:41 +0200
-Message-Id: <20210925084642.5642-7-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210925084642.5642-1-sergio.paracuellos@gmail.com>
-References: <20210925084642.5642-1-sergio.paracuellos@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S240807AbhIYJwG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 Sep 2021 05:52:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58102 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240182AbhIYJv5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 25 Sep 2021 05:51:57 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 441BD61279;
+        Sat, 25 Sep 2021 09:50:08 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mU4Jq-00Cuoe-EB; Sat, 25 Sep 2021 10:50:06 +0100
+Date:   Sat, 25 Sep 2021 10:50:05 +0100
+Message-ID: <878rzlass2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH 07/14] KVM: Don't block+unblock when halt-polling is successful
+In-Reply-To: <20210925005528.1145584-8-seanjc@google.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+        <20210925005528.1145584-8-seanjc@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, pbonzini@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org, dmatlack@google.com, jingzhangos@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The value to adjust in the bridge register RALINK_PCI_IOBASE must take into
-account the raw value from DT, not only the translated linux port number.
-As long as io_offset is zero, the two are the same, but if you were to use
-multiple host bridge in the system, or pick a different bus address in DT,
-you can have a nonzero io_offset. At this means to take into account the
-bus address which is used to calculate this offset, substracting it from
-the IO resource start address.
+On Sat, 25 Sep 2021 01:55:21 +0100,
+Sean Christopherson <seanjc@google.com> wrote:
+> 
+> Invoke the arch hooks for block+unblock if and only if KVM actually
+> attempts to block the vCPU.  The only non-nop implementation is on arm64,
+> and if halt-polling is successful, there is no need for arm64 to put/load
+> the vGIC as KVM hasn't relinquished control of the vCPU in any way.
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- drivers/staging/mt7621-pci/pci-mt7621.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This doesn't mean that there is no requirement for any state
+change. The put/load on GICv4 is crucial for performance, and the VMCR
+resync is a correctness requirement.
 
-diff --git a/drivers/staging/mt7621-pci/pci-mt7621.c b/drivers/staging/mt7621-pci/pci-mt7621.c
-index 6acfc94a16e7..503cb1fca2e0 100644
---- a/drivers/staging/mt7621-pci/pci-mt7621.c
-+++ b/drivers/staging/mt7621-pci/pci-mt7621.c
-@@ -482,7 +482,7 @@ static int mt7621_pcie_enable_ports(struct pci_host_bridge *host)
- 
- 	/* Setup MEMWIN and IOWIN */
- 	pcie_write(pcie, 0xffffffff, RALINK_PCI_MEMBASE);
--	pcie_write(pcie, entry->res->start, RALINK_PCI_IOBASE);
-+	pcie_write(pcie, entry->res->start - entry->offset, RALINK_PCI_IOBASE);
- 
- 	list_for_each_entry(port, &pcie->ports, list) {
- 		if (port->enabled) {
+> 
+> The primary motivation is to allow future cleanup to split out "block"
+> from "halt", but this is also likely a small performance boost on arm64
+> when halt-polling is successful.
+> 
+> Adjust the post-block path to update "cur" after unblocking, i.e. include
+> vGIC load time in halt_wait_ns and halt_wait_hist, so that the behavior
+> is consistent.  Moving just the pre-block arch hook would result in only
+> the vGIC put latency being included in the halt_wait stats.  There is no
+> obvious evidence that one way or the other is correct, so just ensure KVM
+> is consistent.
+
+This effectively reverts 07ab0f8d9a12 ("KVM: Call
+kvm_arch_vcpu_blocking early into the blocking sequence"), which was a
+huge gain on arm64, not to mention a correctness fix.
+
+Without this, a GICv4 machine will always pay for the full poll
+penalty, going into schedule(), and only then get a doorbell interrupt
+signalling telling the kernel that there was an interrupt.
+
+On a non-GICv4 machine, it means that interrupts injected by another
+thread during the pooling will be evaluated with an outdated priority
+mask, which can result in either a spurious wake-up or a missed
+wake-up.
+
+If it means introducing a new set of {pre,post}-poll arch-specific
+hooks, so be it. But I don't think this change is acceptable as is.
+
+Thanks,
+
+	M.
+
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.
