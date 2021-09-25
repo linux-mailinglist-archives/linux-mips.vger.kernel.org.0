@@ -2,111 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 409834183C0
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 19:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A804183EF
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 20:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbhIYRr7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Sep 2021 13:47:59 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:42563 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbhIYRr7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Sep 2021 13:47:59 -0400
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N2m7O-1mrKnS16K4-0133dE; Sat, 25 Sep 2021 19:46:22 +0200
-Received: by mail-wr1-f51.google.com with SMTP id t8so37583160wri.1;
-        Sat, 25 Sep 2021 10:46:22 -0700 (PDT)
-X-Gm-Message-State: AOAM531LitsS4VfzUFhSsR5JRLxeKSPfuukWBhVIybQI6Jwal8b2JE0q
-        l/PyCNQTAdGFqzLkZnwc70PtPwLkQIvFPaoVhMY=
-X-Google-Smtp-Source: ABdhPJw4AC++CUgGftyBEQQ1PqMHK2UxvHDhOv0IVrP5JJG7i4nuvnhKaRpsibhTISXsdFjvIezzm7yDZOhM7MC91sk=
-X-Received: by 2002:a1c:23cb:: with SMTP id j194mr7846290wmj.1.1632591981794;
- Sat, 25 Sep 2021 10:46:21 -0700 (PDT)
+        id S229654AbhIYSKr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 Sep 2021 14:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229608AbhIYSKq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Sep 2021 14:10:46 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94098C061570;
+        Sat, 25 Sep 2021 11:09:11 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id r8so9016069uap.0;
+        Sat, 25 Sep 2021 11:09:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WXQl6xYHyo7VmGkogOZ2uCBbLxqiVuqGmz8mDC3PsVE=;
+        b=RyN3JIcFIRv5HcRDNmaJXs0sPVG3iaG8G4p6T/woxXGgGDJyMVky1Qb/UdpUe30KJp
+         +hwj4SYJX0Tw1JdrdDpGF/QUcAK+lytw0/3KVJ9fUqYtKMmkuOFVTog++LIeIaMjRxS7
+         MZyJiwfHQKgjw8GA1vEN/Hl+oWlY0zowHuq/qzYf3/OFMlDArg8wn5JMV5u42l16ffzp
+         0ABIgaTD7jLtYx9l8N0BMAGl1kORu+SiMXzfANpYHmATBYEk8Um3/gLgPVnsbWycguiI
+         3qNezo/MTSpomvZBgS72bkv5xg9MStyz0oYiGvuAtJn2HxHVPU1uFS29ywB9WDpIQE8z
+         kNzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WXQl6xYHyo7VmGkogOZ2uCBbLxqiVuqGmz8mDC3PsVE=;
+        b=riK0wT1tPyVChYuQ6rhtX+rgpdfYeG5I+r2C/nRX72xmRLResokX5gKU7T5/YT63uD
+         fASR0huV6CWB/0UXznM7UzAaAMfWabZj37hLHsI+X06wfpo8RkVef/HZzrOWo2CxEphe
+         37ydko7wlJ52YsVyARr4epg1rUv7ji7LCFvQkI+OHWIwqejWB4aYv4iLlZXipRW4lYAN
+         P6tpn3dlzz4qRM70tm0oU5DvRTqsTRHE39jLd6hvQl/C6ndUD60im2V+IW1vkKpsRx+d
+         e0XClttxJMZuDPYjI/PB9iQXGnBhmTbl+FQMz0KTKHKtN7h7Ba+aqyv6PHkXkQvly0Fm
+         G85A==
+X-Gm-Message-State: AOAM532For2f81c2ZytlWFLJ1Bh2dVsnqEdYNGeo5jYSM5Jl7UGG6/Mj
+        hI8LvXgp9Xf3d55VufcqPhz0bPAwGZOOcZYTczzW6dROKmY=
+X-Google-Smtp-Source: ABdhPJxwiExLM3hzBCAfYUgeYdy55lPTeSgDo0znsn0D+vbB/KiyL4ObpmWFiOfukFEJXqJwZjiYBdvVrKix1Is/cIc=
+X-Received: by 2002:ab0:538b:: with SMTP id k11mr11610115uaa.131.1632593350651;
+ Sat, 25 Sep 2021 11:09:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210924170546.805663-1-f.fainelli@gmail.com> <20210924170546.805663-11-f.fainelli@gmail.com>
- <87sfxsua9l.wl-maz@kernel.org>
-In-Reply-To: <87sfxsua9l.wl-maz@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 25 Sep 2021 19:46:05 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2yJwE3fbG5t41eN+N_vVzWdnDuDEi6vi32aRYX+mXX3g@mail.gmail.com>
-Message-ID: <CAK8P3a2yJwE3fbG5t41eN+N_vVzWdnDuDEi6vi32aRYX+mXX3g@mail.gmail.com>
-Subject: Re: [PATCH 10/11] arm64: broadcom: Removed forced select of interrupt controllers
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
+References: <20210924211139.3477-1-sergio.paracuellos@gmail.com>
+ <20210924211139.3477-6-sergio.paracuellos@gmail.com> <CAK8P3a3SpuioCVBfQpHFGuNQoXG7g8w9VL+V8rYd8Q80Od89HA@mail.gmail.com>
+In-Reply-To: <CAK8P3a3SpuioCVBfQpHFGuNQoXG7g8w9VL+V8rYd8Q80Od89HA@mail.gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sat, 25 Sep 2021 20:08:58 +0200
+Message-ID: <CAMhs-H8jF10NpTgCP=_FEaBcedTN75b6MoyrEVrrayJEAdufwA@mail.gmail.com>
+Subject: Re: [PATCH 5/6] MIPS: implement architecture dependent 'pci_remap_iospace()'
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
-        <linux-mips@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>
+        Liviu Dudau <Liviu.Dudau@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:rWH4hivfycKeWeQsl22K7IKMBeMDH7SwCpqK/AzeiSwpYSsopVz
- 79satCGijFSVwWBbPjMyCxhXEAd94DMowRiPP0q09AJ/d1WjsBCU/q32QClzKdBuUpwX1w8
- Ui/NTH2geziacN1RZtsCT+n6LDXzGMsmuW2gI6Yg/3vCgalbeGvyiNKwYByfabzIfaxXCez
- DtJMlwWUAfX8lH+OIjEYA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YgcIQgk0EWM=:6OmkmHeCeTvSksfKp/8jhs
- 0lQb7X6tgBdRlunafpzJ6OVOt+LkkDgiWdNiRr5qtH3fQuTgCr9t1YYzIWy8MzKGUJ7V7e2pH
- S/SbroPOhwwfLq/jyCU79KszPfh7q7MHXltbz3M63DiTHSC4pM9AGj8VfAiYw+ujaZ9M7rVXC
- H1pYx8xkIpBfXx5oVGRI3+pGENwEpNMw4J+J3ohQotmKPqE9KCYqEH/ANeBHjr9xd050DEYet
- ChhUz/4h8CI/fIZserY2GDCT3/U4a/bqcQL7oNpn7NktLlBUA7PBq6JMVe9w1okVsOqc29Q3l
- gH5+vxU978bh90rDHp1MJVvg8zQ4lgp7qPNfq75Ag34SZowHr8dr2dx+c/7r8W8x/VtgtJen4
- hokoAaqRcQgM0jAoW9Zj4eda/UoCfXaEpKdCu+JxTzl6j1EXtcX/dBDTgkKqg0GSWyMI67zCb
- 2GLgCA/iSDwZCM//kXPM/KgFDgYi8E2Ras3CyBAnTu65r0fz+1Pz5pNMK1H5WPR9fAM1d79gg
- dZOEB1BKvrS+pqWm9ugGhzEofqaSPUPwnPvjhxh0ts0ZQVI8P4HA9VTHdVRAUg+06xTFnV96I
- Fteso6+TDU53NIXvATt5n97UXstmEyGcIWa83/1ogM/xFQPXN/i3IKNh+xZ1ZGSKNkSiEftcN
- D4YsamW7E1Vc5CvBibPPqdyxHjzlzY4BWZ1HZbs6pJqaLgvtOS0lotoGOTNiRh4tqYmdNOoq/
- CuTkh8qrGEG9h0rQF5huCQMU1mXaNsrnniKnPaqDk40mi44jT64r3LClwcH5kZzbISSHQd7Gr
- j9EQ/8pH7MJ9eOljFOlqHovnfWuY7rLU9BASw7+OvAXZ6kEAnCgx+GLySMY76/Z6mbYpgIw7V
- 087CsAHCLpVcAJb9HYzQ==
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Sep 25, 2021 at 2:10 PM Marc Zyngier <maz@kernel.org> wrote:
-> On Fri, 24 Sep 2021 18:05:45 +0100, Florian Fainelli <f.fainelli@gmail.com> wrote:
+Hi Arnd,
+
+On Sat, Sep 25, 2021 at 7:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> How does the user know about that? People will build a kernel
-> selecting their platform, and find out it doesn't work. This seems
-> terribly counter-productive to me.
+> On Fri, Sep 24, 2021 at 11:11 PM Sergio Paracuellos
+> <sergio.paracuellos@gmail.com> wrote:
+> >
+> > To make PCI IO work we need to properly virtually map IO cpu physical address
+> > and set this virtual address as the address of the first PCI IO port which
+> > is set using function 'set_io_port_base()'.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-It's default-enabled on the platforms that need it, see one of the
-earlier patches.
+Thanks!
 
-Having the option to make it a loadable module is a definite benefit as
-far as I'm concerned, and I generally like the idea of having individually
-selectable symbols for consistency as that is what we have in other
-subsystems as well.
+>
+> > +int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+> > +{
+> > +       size_t size = (res->end - res->start) + 1;
+> > +       unsigned long vaddr = (unsigned long)ioremap(phys_addr, size);
+> > +
+> > +       set_io_port_base(vaddr);
+> > +       return 0;
+> > +}
+>
+> It might be good to check that res->start is zero here, otherwise
+> the io_port_base would be off. That could happen if you ever have more
+> than one bridge.
 
-Ideally I'd do away with all the 'select' statements for the platforms and
-only have them control dependencies as we do for most other subsystems.
-irqchip is one of the few exceptions here, though I understand the reason
-for having the most important drivers tied to the platform more closely.
+Do you mean something like the following?
 
-       Arnd
+int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+{
+    unsigned long vaddr;
+    size_t size;
+
+    if (res->start != 0) {
+         // Should I WARN_ONCE or just show an error/warning message??
+         WARN_ONCE(1, "resource start must be zero\n");
+         return -ENODEV;
+   }
+
+     size = (res->end - res->start) + 1;
+     vaddr = (unsigned long)ioremap(phys_addr, size);
+     return 0;
+}
+
+Thanks,
+    Sergio Paracuellos
+>
+>         Arnd
