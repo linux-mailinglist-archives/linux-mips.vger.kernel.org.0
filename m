@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BFC417EDA
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 02:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF79417EDE
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 02:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346325AbhIYA52 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Sep 2021 20:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        id S1346547AbhIYA5c (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Sep 2021 20:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346454AbhIYA5S (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 20:57:18 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5A2C061571
-        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:44 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id d81-20020a251d54000000b005b55772ca97so5771655ybd.19
-        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:44 -0700 (PDT)
+        with ESMTP id S1346485AbhIYA5V (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 20:57:21 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3104C061766
+        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:46 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id d9-20020ac86149000000b002a6d33107c5so13900458qtm.8
+        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=g5w58E3IGKbXWYSiPvVnlhcj+7GlkHG6CZrKZkT3vP0=;
-        b=I4e5kehhED/KRR7N2cidXMqEex8CTCjyKcS2GmlIqby43yZ8ILGKXc2f8gJK+B0Mak
-         qsHzsvvWsCOKQJyUk1JPfK+IGXjf6HCaHUL0FUfUcIrbIXa51o8WuFSJxvxfe1GsH4Uq
-         4wkMnXqEXE0T8fqaBiVS5RKDJvfyHZounlDt3fdqbzenS67IcSjNvXGEUIO65DT9UowY
-         0WWolyDLxEo23l06ilRvVvGf7N+Xj5mOiB69dEn6Jh/LGqqKzS/fLSd5iYeTHh7nJpAh
-         FQSoKxIi7LGL9zafzLlsSFp9qcFmRpB1uVn56AcQPu/0zXKKSrucn7vuTNN4MAZ8uLSx
-         Kfxw==
+        bh=wCDTOmCATHVhirkJj1e9UGRNdETjcfm809lLJpA1KZ0=;
+        b=NqlSHtDJsZY9ynz1iazGvEiDMeqk04glWuzCtUdaZ74/+oO9rjnWS76Uh5TCi8grB+
+         KwboA6njeSjTV+7uoE02X2FwYEkNPrLAm4qkXIZRVzJuxFafx32Mk5Xow/7WaARh1YAZ
+         aC51w8eW6QKpvfDfIdD1udB75TJ4xUgQM915d2jcceUTh/hDb7mbGAiLnwAyqt0Y+WNF
+         QpBy7FR47VOdDUwc186Fr9j28eODhANC/CUAjZvNZrR7fGsZs3zQzKM9xL4iXSTKlTtT
+         +D4Y310QHpvHJHW02qI33BojoXY3YB8cjH1EF1eQmiciixtCRe97iPAZe1mITqWJtBmk
+         YH1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=g5w58E3IGKbXWYSiPvVnlhcj+7GlkHG6CZrKZkT3vP0=;
-        b=FKgGSQAjqF0Q7ZSj399U1Q2lzTn+fXsa4mzvIiCWwLNcLgwcq1TaMoceZVOm1WcjUG
-         RxEtiK9FhdUYBwiCigNAf//iQDpFjKyopGitqnJVor9SwZASwNrSGGsFyfgVjZyyVEPn
-         UpZ+PsIKz3Fk19DNnNEqoCR6zAmpgQnyqwZj0/hEfkgODZ/HbQIywOSx+v7S8y4Cqjn5
-         0y9i6pobDO2TZqBqDlMstl60T7mdWwB1sLXaVwsVgQ/D69CqE82Fr78dn8CQmCUtiin3
-         CmJXYcRgyn1T8JuL/YuuzVqToEs1mTnkNK/EvIXoO9ctTcoJAcCDffi0zIyB0NTBwQ3i
-         fuqQ==
-X-Gm-Message-State: AOAM532S1yTPLorp7Kb0BSMnXb48Zrp3MQVmgtfCPHMtTHN1btrY+Qst
-        rWSwu0g0Yad6kjVe1quUCuFTf8C/blk=
-X-Google-Smtp-Source: ABdhPJyiTN53g148rAgVoj1ICII7m79WO7ugJdd/HLrJy3M0TecyAbb/0CT74AaOvmAyzC41vJkVDTyrGUg=
+        bh=wCDTOmCATHVhirkJj1e9UGRNdETjcfm809lLJpA1KZ0=;
+        b=aV/Z8x2oZIzuGBGfbwyOzdNYvEIKXz4rnpFneLo/D6LLh0UGahlyeaPrpBjS+LWAiV
+         ywyK8NMSsfjPTHARhwn7LF49bAAgdHyxFSlagy4JuL5/BmjXzia4SEXE7Ym8sj1Rxc4W
+         4qShge/USnIgqhiIEAee7MGEzx8ZoelPAyplgUy1tVryrQGu3j1CTxoY5pkwaO9N7db3
+         1z2QcOajK734ssJ3gzgYApKLH1HeYZNS4PG0Oe4j3LfpJXhbx5m2U4u1iAkJ4qJ5B9g+
+         AD3f3j8sRBjM3zN5tsWC1QHNKSHl7JWxWHaoJ5GzwMFPQTWLeujVYWbfY1zmDX3c4gGe
+         EpvQ==
+X-Gm-Message-State: AOAM532ooPL5fBki8CD6j8Fh33eyfb6O648xNhOPcvGDyJOAtP/rRjMj
+        IQl74/MrPxcWAqlpDR2m60FUw1xO1Qw=
+X-Google-Smtp-Source: ABdhPJwAe8cto2GGuy35+RfGF59+NomWHsqVgBAWIRGsvWVII07cOgInTsUOlV2E2ha1qSQ9QAXX81/NXqE=
 X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:4c72:89be:dba3:2bcb])
- (user=seanjc job=sendgmr) by 2002:a25:2789:: with SMTP id n131mr9633757ybn.440.1632531343946;
- Fri, 24 Sep 2021 17:55:43 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6214:1046:: with SMTP id
+ l6mr4932886qvr.6.1632531346015; Fri, 24 Sep 2021 17:55:46 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 24 Sep 2021 17:55:20 -0700
+Date:   Fri, 24 Sep 2021 17:55:21 -0700
 In-Reply-To: <20210925005528.1145584-1-seanjc@google.com>
-Message-Id: <20210925005528.1145584-7-seanjc@google.com>
+Message-Id: <20210925005528.1145584-8-seanjc@google.com>
 Mime-Version: 1.0
 References: <20210925005528.1145584-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
-Subject: [PATCH 06/14] KVM: Drop obsolete kvm_arch_vcpu_block_finish()
+Subject: [PATCH 07/14] KVM: Don't block+unblock when halt-polling is successful
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -80,109 +80,72 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Drop kvm_arch_vcpu_block_finish() now that all arch implementations are
-nops.
+Invoke the arch hooks for block+unblock if and only if KVM actually
+attempts to block the vCPU.  The only non-nop implementation is on arm64,
+and if halt-polling is successful, there is no need for arm64 to put/load
+the vGIC as KVM hasn't relinquished control of the vCPU in any way.
 
-No functional change intended.
+The primary motivation is to allow future cleanup to split out "block"
+from "halt", but this is also likely a small performance boost on arm64
+when halt-polling is successful.
 
+Adjust the post-block path to update "cur" after unblocking, i.e. include
+vGIC load time in halt_wait_ns and halt_wait_hist, so that the behavior
+is consistent.  Moving just the pre-block arch hook would result in only
+the vGIC put latency being included in the halt_wait stats.  There is no
+obvious evidence that one way or the other is correct, so just ensure KVM
+is consistent.
+
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: James Morse <james.morse@arm.com>
+Cc: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/arm64/include/asm/kvm_host.h   | 1 -
- arch/mips/include/asm/kvm_host.h    | 1 -
- arch/powerpc/include/asm/kvm_host.h | 1 -
- arch/s390/include/asm/kvm_host.h    | 2 --
- arch/s390/kvm/kvm-s390.c            | 5 -----
- arch/x86/include/asm/kvm_host.h     | 2 --
- virt/kvm/kvm_main.c                 | 1 -
- 7 files changed, 13 deletions(-)
+ virt/kvm/kvm_main.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index f8be56d5342b..4e0ad0fff540 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -716,7 +716,6 @@ void kvm_arm_vcpu_ptrauth_trap(struct kvm_vcpu *vcpu);
- static inline void kvm_arch_hardware_unsetup(void) {}
- static inline void kvm_arch_sync_events(struct kvm *kvm) {}
- static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
--static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
- 
- void kvm_arm_init_debug(void);
- void kvm_arm_vcpu_init_debug(struct kvm_vcpu *vcpu);
-diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
-index 696f6b009377..72b90d45a46e 100644
---- a/arch/mips/include/asm/kvm_host.h
-+++ b/arch/mips/include/asm/kvm_host.h
-@@ -897,7 +897,6 @@ static inline void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen) {}
- static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
- static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
- static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
--static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
- 
- #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
- int kvm_arch_flush_remote_tlb(struct kvm *kvm);
-diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
-index 59cb38b04ede..8a84448d77a6 100644
---- a/arch/powerpc/include/asm/kvm_host.h
-+++ b/arch/powerpc/include/asm/kvm_host.h
-@@ -864,6 +864,5 @@ static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
- static inline void kvm_arch_exit(void) {}
- static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
- static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
--static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
- 
- #endif /* __POWERPC_KVM_HOST_H__ */
-diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-index a604d51acfc8..a22c9266ea05 100644
---- a/arch/s390/include/asm/kvm_host.h
-+++ b/arch/s390/include/asm/kvm_host.h
-@@ -1010,6 +1010,4 @@ static inline void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
- static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
- static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
- 
--void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu);
--
- #endif
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 08ed68639a21..17fabb260c35 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -5080,11 +5080,6 @@ static inline unsigned long nonhyp_mask(int i)
- 	return 0x0000ffffffffffffUL >> (nonhyp_fai << 4);
- }
- 
--void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu)
--{
--
--}
--
- static int __init kvm_s390_init(void)
- {
- 	int i;
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 1e0e909b98b2..4e8c21083bdb 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1916,8 +1916,6 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
- 	static_call_cond(kvm_x86_vcpu_unblocking)(vcpu);
- }
- 
--static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
--
- static inline int kvm_cpu_get_apicid(int mps_cpu)
- {
- #ifdef CONFIG_X86_LOCAL_APIC
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 2ba22b68af3b..2015a1f532ce 100644
+index 2015a1f532ce..f96cda8312f3 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -3301,7 +3301,6 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+@@ -3232,8 +3232,6 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+ 	bool waited = false;
+ 	u64 block_ns;
+ 
+-	kvm_arch_vcpu_blocking(vcpu);
+-
+ 	start = cur = poll_end = ktime_get();
+ 	if (do_halt_poll) {
+ 		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
+@@ -3250,6 +3248,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+ 		} while (kvm_vcpu_can_poll(cur, stop));
  	}
  
- 	trace_kvm_vcpu_wakeup(block_ns, waited, vcpu_valid_wakeup(vcpu));
--	kvm_arch_vcpu_block_finish(vcpu);
- }
- EXPORT_SYMBOL_GPL(kvm_vcpu_block);
++	kvm_arch_vcpu_blocking(vcpu);
  
+ 	prepare_to_rcuwait(&vcpu->wait);
+ 	for (;;) {
+@@ -3262,6 +3261,9 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+ 		schedule();
+ 	}
+ 	finish_rcuwait(&vcpu->wait);
++
++	kvm_arch_vcpu_unblocking(vcpu);
++
+ 	cur = ktime_get();
+ 	if (waited) {
+ 		vcpu->stat.generic.halt_wait_ns +=
+@@ -3269,8 +3271,8 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+ 		KVM_STATS_LOG_HIST_UPDATE(vcpu->stat.generic.halt_wait_hist,
+ 				ktime_to_ns(cur) - ktime_to_ns(poll_end));
+ 	}
++
+ out:
+-	kvm_arch_vcpu_unblocking(vcpu);
+ 	block_ns = ktime_to_ns(cur) - ktime_to_ns(start);
+ 
+ 	/*
 -- 
 2.33.0.685.g46640cef36-goog
 
