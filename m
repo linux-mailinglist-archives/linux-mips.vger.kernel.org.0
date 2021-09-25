@@ -2,42 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E448C41848C
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 23:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B2E41849D
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 23:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbhIYVBl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Sep 2021 17:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S229975AbhIYVXR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 Sep 2021 17:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbhIYVBk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Sep 2021 17:01:40 -0400
+        with ESMTP id S229842AbhIYVXQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Sep 2021 17:23:16 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987BAC061570;
-        Sat, 25 Sep 2021 14:00:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02FAC061570;
+        Sat, 25 Sep 2021 14:21:40 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1632603603;
+        s=2020; t=1632604899;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=OqJbVc4PIkymdexYtCAgR5HPDd/Rii+ka465iyNfbT8=;
-        b=17gAUXwaAhZ2CO+nNGbNkCTPFMKm+VW1yCZuwdbvIQ2oukZjdFGnJwRYdxyYHh2YPixMzo
-        SAwQlb94yQKH+ydYtnfFtXHi1sf6FFgtr/Lx62zBgE3R3hj9agl8rmBpM7lmdLZ/BxuCvi
-        sE5Aht6E3ZS/pFaVVnWAbsH9thQxn1bZ0YYWF0D3zDUSDpdrvZncWPK8cr1nc9SuHz2Cg1
-        ToQQuEz7eA2JgkMb8DD6jubGmUN7zea4a7gs5lLHGGW2qdsXls6ySJAh3GohuyG6yqEb8m
-        /3AMGdvdU6ckvZOOdOQdEaAUQFDLXY9x0ewhndhQbLOqlvM+I5YjLR47igA+EQ==
+        bh=FC2izg75fJTteYJOOY6ytBStpF+HBmdWWfEDalx5dPI=;
+        b=zi0D8Pec3oIRsFEDPhIwdmHOrVY6LP42R44wotvWquExDYl68XwyZjr8YKRT2C/lMZPmrk
+        dt9/TA8UlxiMasgJo09ceeQc6M8OKaLT69Yl5M1z9CxhuciWbmtrBUnx6NOHkbazUKHCc3
+        +gkKwZyU7rIhasYeVkYNIBtaUfPbJmoiDqLsNNdltKUYLBPvVBfyJbiVSJzvKcFpN2qE03
+        os7AFbvHBI9QQmNvtBa9GZe15hLFyNhZXk/a0Xd13USTH4EJJ84GIfnbIdYLcRxqXTyh/z
+        HWHV7t6KKonadUpLzOOGpIdMJeXFcH3va/P7p+EUkuXObHF4ho3/9JsnYhIVdw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1632603603;
+        s=2020e; t=1632604899;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=OqJbVc4PIkymdexYtCAgR5HPDd/Rii+ka465iyNfbT8=;
-        b=/0Gpe0hIKdMNR/SsUg0H+azUWSxbSDChe7GSX5Xpfgqab86WMqTQ0i0YSmYRl5ZpcgLVP1
-        fNrzWdOWqpSyxIAg==
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
+        bh=FC2izg75fJTteYJOOY6ytBStpF+HBmdWWfEDalx5dPI=;
+        b=Pu7/xNkZmyrhNRUMgJdHgur9uaDO525VlERAI3Og3nK8N5yts54/hzguhnV1QeJaTTGDRK
+        8Z4O+ch55n12DLBg==
+To:     Marc Zyngier <maz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
@@ -45,7 +44,7 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Marc Zyngier <maz@kernel.org>,
+        Rich Felker <dalias@libc.org>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Ard Biesheuvel <ardb@kernel.org>,
@@ -68,34 +67,53 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         <linux-mips@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
         <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 02/11] genirq: Export irq_to_desc() again to modules
-In-Reply-To: <20210924170546.805663-3-f.fainelli@gmail.com>
+Subject: Re: [PATCH 03/11] genirq: Export irq_set_affinity_locked()
+In-Reply-To: <87tui8ub87.wl-maz@kernel.org>
 References: <20210924170546.805663-1-f.fainelli@gmail.com>
- <20210924170546.805663-3-f.fainelli@gmail.com>
-Date:   Sat, 25 Sep 2021 23:00:02 +0200
-Message-ID: <87wnn4cqwd.ffs@tglx>
+ <20210924170546.805663-4-f.fainelli@gmail.com>
+ <87tui8ub87.wl-maz@kernel.org>
+Date:   Sat, 25 Sep 2021 23:21:38 +0200
+Message-ID: <87tui8cpwd.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 24 2021 at 10:05, Florian Fainelli wrote:
-> In order to build drivers/irqchip/irq-bcm7038-l1.c as a module (for use
-> in GKI), we need to export_to_desc() which is used in this snippet of
-> code:
+On Sat, Sep 25 2021 at 12:48, Marc Zyngier wrote:
+> On Fri, 24 Sep 2021 18:05:38 +0100, Florian Fainelli <f.fainelli@gmail.com> wrote:
+>>  }
+>> +EXPORT_SYMBOL_GPL(irq_set_affinity_locked);
 >
-> 	irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(virq)));
+> This doesn't seem right.
 >
-> This effectively reverts 64a1b95bb9fe ("genirq: Restrict export of
-> irq_to_desc()").
+> This driver seem to try and move interrupts on its own when the CPU
+> goes down. Why can't it rely on the normal CPU hotplug infrastructure
+> to do so like all the other drivers (bar some Cavium driver that does
+> the same thing)?
+>
+> I'd rather you take this opportunity to move these drivers into the
+> 21st century, so that we can kill irq_cpu_offline() and co altogether.
 
-No. I'm not reexporting this. We've spent quite some time to prevent all
-kind of drivers for fiddle with irq descriptors and I'm not going
-to reopen that can of worms.
+I wanted to kill these callbacks years ago. Cavium has two variants of
+those offline/online callbacks:
 
-irq_get_irq_data() is exported and provides you what you need.
+ 1) octeon_irq_cpu_offline_ciu() which is doing the same as that BCM
+    driver. These really can go away. Just remove the callback and
+    everything just works.
+
+ 2) Two other variants to fiddle with chip internals, but those chips do
+    not have an irq_affinity() callback which makes it more interesting.
+
+    I don't see a proper way to solve that except for removing Cavium
+    alltogether, but once the BCM one is gone, we just can make this
+    muck depend on CAVIUM and be done with it. And I mean depend and not
+    select.
 
 Thanks,
 
         tglx
+
+
+
+    
