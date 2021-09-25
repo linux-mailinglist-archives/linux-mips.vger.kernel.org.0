@@ -2,57 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 366E5417EBE
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 02:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7D7417ECA
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 02:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346175AbhIYA5M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Sep 2021 20:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S1346257AbhIYA5N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Sep 2021 20:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345973AbhIYA5J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 20:57:09 -0400
+        with ESMTP id S1346178AbhIYA5M (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 20:57:12 -0400
 Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A19EC061571
-        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:36 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id a22-20020ac86116000000b002a1463f30ddso41467927qtm.17
-        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30210C061613
+        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:38 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id l22-20020ac87b36000000b002a6c575f419so27754982qtu.23
+        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=2ksHGqIX50byEw/B/i+4MAj6IHSuI0V9Re6S49u78QE=;
-        b=Cv4b8gw7+pQzNKHQ+8lMUi5KSfKwZImP0gbOdovtDY21Pa+DbRVpLf0FX3Ny/GtGV+
-         l0V69NsBIy1juCTYkrc+ZecGEpb/+2U0I7btvRRB/j7TbeGomRTqALuS7CRNK3ZK77rs
-         I8jAXLs2069h1QaDqdwGdc7NdArdNnk8SOx0Kbb5tZimbUbkp1AE++ltJXqt239HcPIt
-         7iiqQhvEA6upugk00ug/jEN4lU79fHpjgvTEj2CtM3woq//N0ZgH8t2jvtwzT+D/nuL5
-         Y0Urz5Yiku+Wb2J8tPb6U/TZ8fP2oxfPADDLSPy+boqaGEopEHKI+QAne2jnc9ignY3J
-         8/fA==
+        bh=1tsfKS32dF2lOop6Q8UszZBRwEC1JoDP5uy22kEXik0=;
+        b=tJRFGMXxcfK7pjn1+YX8rDDAthpdiwDmAlAoR2O4LLVHkl7MoFkfnuCmTDY6MHO1AC
+         aU5DlddWuaqvJAQ2CEADWDeGHvUIp0FI39I8iy3P4amF9cNUWQNgM57HmTykWDcy+8dY
+         Mvu71xxPYDUZ2+A3pWrg86E9wAuN+QDmT67xFTEgcecgyMJgcjVmXEjzTnAcaMkNUYaw
+         /ZRnegcxQxaUe1Qca+BGV3DDCVscs5r4gu+tlHzecUaMdV03kKXd/csNW6uPtiB/uByL
+         0CzeZSzGROfkTu8PuYQOHZZQRRU/J1vbhU3wMhBJTHe4WQm7fS0zEQ9aK+6AU0nSmeBC
+         32Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=2ksHGqIX50byEw/B/i+4MAj6IHSuI0V9Re6S49u78QE=;
-        b=cdB1Bg18Zoec+BKO4BGMnT8gwqNv+EF1Ckc1vfFlY2XCwA4PabFF1AYm30Ra8RN9tR
-         9PB6uAseHIYfqjGlFhYY+7d2C22nHvc612/Mjs1EevI9j2rZjVEc4QoMyYk89N0XFyrx
-         vQXfCXjck3BMTtER1mJFREMQ3/xOmgl6Uv1CS1xUfC98tZ6G1hldhnCAwrwfB9YvOnJH
-         tOGTq+b7d+wcrT4YMZk0BvSe1HQL5LepLzkgogcnb42R4MsjwPnmurb3Smmzo8DS4+f7
-         418uRxUxEpDbBtpHEulA+UXIb0IWskaiTW3Z4+UpXp3fvl+XIDxtgvxxQ4jyM3y826oi
-         EBSw==
-X-Gm-Message-State: AOAM533B6kxvnTrrtwx5v0L5a4NM6UutV7vcRcvpDfF/jUQ0O8brD3yt
-        sDbS38cJrAHK5F5YbYyzElFqYlFLMEs=
-X-Google-Smtp-Source: ABdhPJyoBfybYr+VTcT30KA/5NRI2oATafpveFnKITvJxQlG0tfUXjcoc8CvFJgJOt3i4NZOnBOTLU/4h4Y=
+        bh=1tsfKS32dF2lOop6Q8UszZBRwEC1JoDP5uy22kEXik0=;
+        b=nrTlGjiLkz6MSsgCvTH2uqO1NEmRM/REyZpdOiqmx6rhuIulYBB9AiRV7jJuCI0pKc
+         qACKuamvpVFt0hCHwIvOyEwvZDQU16ZGoqH98qnSI0ugYqvkXhitJAFxkOv58yiZDETa
+         v1xS65AYOl4sbYMpEokIR2eBbMX5hTfsaeYRNvihsNf+BTNSmWx7etzz8n2sUlDlUug7
+         2cxiS1vaQ2IVTvR5dssmWYfw4OOuyykv0h512Xd+qAZ2ZmLxDxyUTNc5mcxNbZGQ4XGX
+         9A5dfYpSJ961sJpxjE3xda2ZVdlFhOmjPELGuPPbYl8m8hGSNfOGqhI5Y0Wvv4uLnswB
+         Q33Q==
+X-Gm-Message-State: AOAM5320mpclKLuv4085poFFbgHvrOHW3/5gzuTP4qsblbsq/MKp7I7Z
+        dOGpcZ1XXeLgOebnewwvew6WA2L40uY=
+X-Google-Smtp-Source: ABdhPJwPQKNSl/89/W6mMga+Zk98xyYbngE63RzqoPcRph2DGAKR41ssH/CZTrknnPOD67N3xW0Inpq3BFE=
 X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:4c72:89be:dba3:2bcb])
- (user=seanjc job=sendgmr) by 2002:a05:6214:44e:: with SMTP id
- cc14mr13352413qvb.19.1632531335232; Fri, 24 Sep 2021 17:55:35 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6214:1593:: with SMTP id
+ m19mr13005135qvw.36.1632531337323; Fri, 24 Sep 2021 17:55:37 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 24 Sep 2021 17:55:16 -0700
+Date:   Fri, 24 Sep 2021 17:55:17 -0700
 In-Reply-To: <20210925005528.1145584-1-seanjc@google.com>
-Message-Id: <20210925005528.1145584-3-seanjc@google.com>
+Message-Id: <20210925005528.1145584-4-seanjc@google.com>
 Mime-Version: 1.0
 References: <20210925005528.1145584-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
-Subject: [PATCH 02/14] KVM: Update halt-polling stats if and only if
- halt-polling was attempted
+Subject: [PATCH 03/14] KVM: Refactor and document halt-polling stats update helper
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -81,49 +80,62 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Don't update halt-polling stats if halt-polling wasn't attempted.  This
-is a nop as @poll_ns is guaranteed to be '0' (poll_end == start), but it
-will allow a future patch to move the histogram stats into the helper to
-resolve a discrepancy in what is considered a "successful" halt-poll.
+Add a comment to document that halt-polling is considered successful even
+if the polling loop itself didn't detect a wake event, i.e. if a wake
+event was detect in the final kvm_vcpu_check_block().  Invert the param
+to the update helper so that the helper is a dumb function that is "told"
+whether or not polling was successful, as opposed to having it determinine
+success/failure based on blocking behavior.
+
+Opportunistically tweak the params to the update helper to reduce the
+line length for the call site so that it fits on a single line, and so
+that the prototype conforms to the more traditional kernel style.
 
 No functional change intended.
 
-Cc: David Matlack <dmatlack@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- virt/kvm/kvm_main.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ virt/kvm/kvm_main.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 768a4cbb26a6..8b33f5045b4d 100644
+index 8b33f5045b4d..12fe91a0a4c8 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -3214,6 +3214,7 @@ update_halt_poll_stats(struct kvm_vcpu *vcpu, u64 poll_ns, bool waited)
- void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+@@ -3199,13 +3199,15 @@ static int kvm_vcpu_check_block(struct kvm_vcpu *vcpu)
+ 	return ret;
+ }
+ 
+-static inline void
+-update_halt_poll_stats(struct kvm_vcpu *vcpu, u64 poll_ns, bool waited)
++static inline void update_halt_poll_stats(struct kvm_vcpu *vcpu, ktime_t start,
++					  ktime_t end, bool success)
  {
- 	bool halt_poll_allowed = !kvm_arch_no_poll(vcpu);
-+	bool do_halt_poll = halt_poll_allowed && vcpu->halt_poll_ns;
- 	ktime_t start, cur, poll_end;
- 	bool waited = false;
- 	u64 block_ns;
-@@ -3221,7 +3222,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
- 	kvm_arch_vcpu_blocking(vcpu);
+-	if (waited)
+-		vcpu->stat.generic.halt_poll_fail_ns += poll_ns;
+-	else
++	u64 poll_ns = ktime_to_ns(ktime_sub(end, start));
++
++	if (success)
+ 		vcpu->stat.generic.halt_poll_success_ns += poll_ns;
++	else
++		vcpu->stat.generic.halt_poll_fail_ns += poll_ns;
+ }
  
- 	start = cur = poll_end = ktime_get();
--	if (vcpu->halt_poll_ns && halt_poll_allowed) {
-+	if (do_halt_poll) {
- 		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
- 
- 		++vcpu->stat.generic.halt_attempted_poll;
-@@ -3273,8 +3274,9 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+ /*
+@@ -3274,9 +3276,13 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
  	kvm_arch_vcpu_unblocking(vcpu);
  	block_ns = ktime_to_ns(cur) - ktime_to_ns(start);
  
--	update_halt_poll_stats(
--		vcpu, ktime_to_ns(ktime_sub(poll_end, start)), waited);
-+	if (do_halt_poll)
-+		update_halt_poll_stats(
-+			vcpu, ktime_to_ns(ktime_sub(poll_end, start)), waited);
++	/*
++	 * Note, halt-polling is considered successful so long as the vCPU was
++	 * never actually scheduled out, i.e. even if the wake event arrived
++	 * after of the halt-polling loop itself, but before the full wait.
++	 */
+ 	if (do_halt_poll)
+-		update_halt_poll_stats(
+-			vcpu, ktime_to_ns(ktime_sub(poll_end, start)), waited);
++		update_halt_poll_stats(vcpu, start, poll_end, !waited);
  
  	if (halt_poll_allowed) {
  		if (!vcpu_valid_wakeup(vcpu)) {
