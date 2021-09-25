@@ -2,53 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC072417EB5
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 02:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB82E417EB7
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 02:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345914AbhIYA5G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 24 Sep 2021 20:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
+        id S1346091AbhIYA5J (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Sep 2021 20:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345113AbhIYA5F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 20:57:05 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61D6C0614ED
-        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:31 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 63-20020a250d42000000b0059dc43162c9so5798120ybn.23
-        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:31 -0700 (PDT)
+        with ESMTP id S1345918AbhIYA5H (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Sep 2021 20:57:07 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEF7C061571
+        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:33 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id e5-20020ac84905000000b002a69dc43859so41989233qtq.10
+        for <linux-mips@vger.kernel.org>; Fri, 24 Sep 2021 17:55:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=7raooij+tUym7W5s5WPrsLkrWPVticCVkKY3RWsiNDM=;
-        b=DXmlShHbjvZa1JvxxvOqKfYKe30mtQRur87j+123oY2dFsBNlIAv8O9qEBNpSOGVM0
-         b5Sl+lbCoTOZX+zxJ51FQGhzcy9kOU+kuN3HT7C+f5nB6pN5R9AkQ8rfnjTjbSc6y1L3
-         1xXBLePNa9IJaU5EZa6ilhTbqnfNBkXudDaPUTNvEb8RjoCOqehEtkbp9fcq+twCr1dj
-         7pQFp14KUjSeBu0Lomx7YgO5vlp+0uTYliIei7NH6p2gACqnEuNLOy869NtJ5XSjME8N
-         QoN0wBA2Bv2bcnfhLjSPkQbfYQGKsKIy45up5bnYKrvy1J3XDWY6xOjC4rNSR6s7vMuY
-         cddw==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=s8Ef8GFuvQfnF9BDar9o1LMsjHo/kVSjkp6RQOizXjk=;
+        b=G61LH4mFxuFNSPc8dYANo1eT4LoYTtllF8CmUigAVUwE47niN3IxCLvz7gdu3kXJ4p
+         ZQGRUPxd6lVd1pie3osAQPOxmbLJto1U72TFRKzU7SrEeLnRgNzwFM67EhN9OMHtfLK4
+         0P8CpLo4DBhmRIO3KNivDhM66x7e790LPKbt1kMUUoaEFJ8BrQ0kHU4SkwA9CnUG4ZvG
+         NOgccEjti04droRcKSejfuWWOI2KRU0PMG/o1TrFggkFEC3/F7K7dtkErqqSnuV7wQju
+         UsaZQRj+Ze+2OUu3FUTytK0ap4L7DtgKMjJqvpn6WamsAAvTkNWZ6Fzz7ReqK7CQj28q
+         kOig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=7raooij+tUym7W5s5WPrsLkrWPVticCVkKY3RWsiNDM=;
-        b=DrvfemyYdsoUvC1Due0sEKeazMXcZB+wm7MstzoWSsD6NjcFTza7R7xcnhcyTXeg07
-         yBcpSxt/unWScJ9jvXQKEuFZD9dR8g/1yg0AU9sf6YJqu8jC80JtLaNKnZoqPkREVwjp
-         d4kkMtNAx18yTkOt1C8v03gSSE8wflKlQMR35RJk8XMfpmLKsNU40WILBozd1uG102/d
-         Hg28A1wEJv18igQfJifPh3c/WhXBr3UPIG82FHKiUMrB88Pq5ZflYyP2ey3tx+dYPI0D
-         5uOWRMy6bNS/KiX5S0te4zsNXXEteUD908THYD/BHeL5C+nBDxu0QocJn+xLyLNzNuGr
-         LiUA==
-X-Gm-Message-State: AOAM533P9NTMP/Ywgb5CyKDV+wcx/m0YyQsd8nrqyuoeq1xi8oSAwKtX
-        axntavMxN/U/Vt4f+mhIARoLHeVRGLQ=
-X-Google-Smtp-Source: ABdhPJz8Y4bPpJ9bNnOFRpqK33tyNqeaLzwcsIjpAg9bIC4dVS+lANHryvRV962R2bWiwjuBZB41gPX4lxc=
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=s8Ef8GFuvQfnF9BDar9o1LMsjHo/kVSjkp6RQOizXjk=;
+        b=6QNgxWbA36h51AbAsau9jLt/bafViqCicFVTHc5CgmmpFBis7eqtybyiDYapbbV1tV
+         MPiQsLRca1pTqRNbGojiUyyAbEDRjRP5gCrPJGdJ4+0IO1HRPP6JQqfOGRCiGo+NIaXh
+         oI/e8ysC+5eou2s+xADaKfrVwtroFt7WKQm25a8KhXaUEKHuJnuFxZBL5h2RpCIMTfBz
+         NNGLEvanVlvSKtbbKJ5+9S4q5vllTGR8e/Y//e6w86EB1hh53Nvl3BbWF1fagyyNbCYK
+         m0+0xmJAKKFTkRBQHoTlWA5GbNs3ay3Y2+9aGLbIbOq1urrQjZKwWQ3bfHjXaEorqiix
+         s44A==
+X-Gm-Message-State: AOAM533n5TOv1bdcKD1/LgjLAe3GWs47sww5H2a5244ZXce/f/QNPfUN
+        SKYmFy8567lBZar/xkrUCoGFw6y+C6Y=
+X-Google-Smtp-Source: ABdhPJz4KlXw4aFKDakmak5VHFe0t/03Im2jas/e5lfzq06w+q+oBXLEOxDY5zwYzZ40nGkko5J4YoUheek=
 X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:4c72:89be:dba3:2bcb])
- (user=seanjc job=sendgmr) by 2002:a25:d482:: with SMTP id m124mr15615049ybf.73.1632531330879;
- Fri, 24 Sep 2021 17:55:30 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6214:2d1:: with SMTP id
+ g17mr13106407qvu.63.1632531332975; Fri, 24 Sep 2021 17:55:32 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 24 Sep 2021 17:55:14 -0700
-Message-Id: <20210925005528.1145584-1-seanjc@google.com>
+Date:   Fri, 24 Sep 2021 17:55:15 -0700
+In-Reply-To: <20210925005528.1145584-1-seanjc@google.com>
+Message-Id: <20210925005528.1145584-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20210925005528.1145584-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
-Subject: [PATCH 00/14] KVM: Halt-polling fixes, cleanups and a new stat
+Subject: [PATCH 01/14] KVM: s390: Ensure kvm_arch_no_poll() is read once when
+ blocking vCPU
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -77,100 +81,69 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The main purpose of this series is differentiate between "halt" and a more
-generic "block", where "halt" aligns with x86's HLT instruction, the
-halt-polling mechanisms, and associated stats, and "block" means any guest
-action that causes the vCPU to block/wait.
+Wrap s390's halt_poll_max_steal with READ_ONCE and snapshot the result of
+kvm_arch_no_poll() in kvm_vcpu_block() to avoid a mostly-theoretical,
+largely benign bug on s390 where the result of kvm_arch_no_poll() could
+change due to userspace modifying halt_poll_max_steal while the vCPU is
+blocking.  The bug is largely benign as it will either cause KVM to skip
+updating halt-polling times (no_poll toggles false=>true) or to update
+halt-polling times with a slightly flawed block_ns.
 
-This series arose out of a discussion over adding a stat to track if a
-vCPU is blocked/halted[*].  The TL;DR of the discussion is that x86 has
-several non-halt "wait" states, and arguably those states should not
-participate in halt-polling.  In practice, it really doesn't matter from
-a functionality perspective because there are typically so few occurences
-of the non-halt waits that they're in the noise compared to the number of
-actual HLTs, especially for a long-running VM.  So, my justification for
-the rename is that because it doesn't truly affect functionality, KVM
-might as well be technically correct and only use halt-polling for HLT.
+Note, READ_ONCE is unnecessary in the current code, add it in case the
+arch hook is ever inlined, and to provide a hint that userspace can
+change the param at will.
 
-The other annoyance this series addresses is that KVM mixes "halt" and
-"block", e.g. the existing function is kvm_vcpu_block(), but all the stats
-and the tracepoint use "halt".  Ideally, KVM would probably avoid "block"
-altogether as people often think of "blocked" as meaning the vCPU is
-blocked due to _host_ activity.  But I don't have a better alternative,
-e.g. "halt" is obviously taken, "wait" is equivalent to "halt" on arm64,
-"stop" has specific meaning on s390, etc...  I tried to address the host
-vs. guest issue by naming the new stat "blocking" instead of "blocked",
-e.g. to convey that the vCPU is "actively blocking" instead of "being
-blocked".
+Fixes: 8b905d28ee17 ("KVM: s390: provide kvm_arch_no_poll function")
+Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/s390/kvm/kvm-s390.c | 2 +-
+ virt/kvm/kvm_main.c      | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Patch 01 fixes a theoretical, benign s390 bug, and sets the stage for
-additional cleanups.
-
-Patches 02-04 reconcile discrepancies in when KVM considers halt-polling
-to be "successful".  Some stats consider it a success so long as KVM
-doesn't schedule() away, others consider it a success if and only if a
-wake event is detected in the halt-polling loop.
-
-Patches 05-06 are prep cleanup to split out the core "block" routine.
-
-Patch 07 is more prep, and should also be a small perf optimization for
-halt-polling on arm64.
-
-Patch 08 is x86 cleanup to free up the name kvm_vcpu_halt().
-
-Patches 09-10 rename the existing kvm_vcpu_block() to kvm_vcpu_halt(), and
-split out the core "block" routine to a new helper.
-
-Patches 11-12 are minor cleanups to avoid unnecessary ktime_get().
-
-Patches 13-14 convert non-HLT x86 flows to use kvm_vcpu_block().
-
-[*] https://lkml.kernel.org/r/20210817230508.142907-1-jingzhangos@google.com
-
-Jing Zhang (1):
-  KVM: stats: Add stat to detect if vcpu is currently blocking
-
-Sean Christopherson (13):
-  KVM: s390: Ensure kvm_arch_no_poll() is read once when blocking vCPU
-  KVM: Update halt-polling stats if and only if halt-polling was
-    attempted
-  KVM: Refactor and document halt-polling stats update helper
-  KVM: Reconcile discrepancies in halt-polling stats
-  KVM: s390: Clear valid_wakeup in kvm_s390_handle_wait(), not in arch
-    hook
-  KVM: Drop obsolete kvm_arch_vcpu_block_finish()
-  KVM: Don't block+unblock when halt-polling is successful
-  KVM: x86: Tweak halt emulation helper names to free up kvm_vcpu_halt()
-  KVM: Rename kvm_vcpu_block() => kvm_vcpu_halt()
-  KVM: Split out a kvm_vcpu_block() helper from kvm_vcpu_halt()
-  KVM: Don't redo ktime_get() when calculating halt-polling
-    stop/deadline
-  KVM: x86: Directly block (instead of "halting") UNINITIALIZED vCPUs
-  KVM: x86: Invoke kvm_vcpu_block() directly for non-HALTED wait states
-
- arch/arm64/include/asm/kvm_host.h   |   1 -
- arch/arm64/kvm/arch_timer.c         |   2 +-
- arch/arm64/kvm/handle_exit.c        |   4 +-
- arch/arm64/kvm/psci.c               |   2 +-
- arch/mips/include/asm/kvm_host.h    |   1 -
- arch/mips/kvm/emulate.c             |   2 +-
- arch/powerpc/include/asm/kvm_host.h |   1 -
- arch/powerpc/kvm/book3s_pr.c        |   2 +-
- arch/powerpc/kvm/book3s_pr_papr.c   |   2 +-
- arch/powerpc/kvm/booke.c            |   2 +-
- arch/powerpc/kvm/powerpc.c          |   2 +-
- arch/s390/include/asm/kvm_host.h    |   2 -
- arch/s390/kvm/interrupt.c           |   3 +-
- arch/s390/kvm/kvm-s390.c            |   7 +-
- arch/x86/include/asm/kvm_host.h     |   4 +-
- arch/x86/kvm/vmx/nested.c           |   2 +-
- arch/x86/kvm/vmx/vmx.c              |   4 +-
- arch/x86/kvm/x86.c                  |  25 ++++--
- include/linux/kvm_host.h            |   6 +-
- include/linux/kvm_types.h           |   1 +
- virt/kvm/kvm_main.c                 | 131 +++++++++++++++++-----------
- 21 files changed, 118 insertions(+), 88 deletions(-)
-
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 6a6dd5e1daf6..7cabe6778b1b 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -3446,7 +3446,7 @@ bool kvm_arch_no_poll(struct kvm_vcpu *vcpu)
+ {
+ 	/* do not poll with more than halt_poll_max_steal percent of steal time */
+ 	if (S390_lowcore.avg_steal_timer * 100 / (TICK_USEC << 12) >=
+-	    halt_poll_max_steal) {
++	    READ_ONCE(halt_poll_max_steal)) {
+ 		vcpu->stat.halt_no_poll_steal++;
+ 		return true;
+ 	}
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 191dac6b1bed..768a4cbb26a6 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -3213,6 +3213,7 @@ update_halt_poll_stats(struct kvm_vcpu *vcpu, u64 poll_ns, bool waited)
+  */
+ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+ {
++	bool halt_poll_allowed = !kvm_arch_no_poll(vcpu);
+ 	ktime_t start, cur, poll_end;
+ 	bool waited = false;
+ 	u64 block_ns;
+@@ -3220,7 +3221,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+ 	kvm_arch_vcpu_blocking(vcpu);
+ 
+ 	start = cur = poll_end = ktime_get();
+-	if (vcpu->halt_poll_ns && !kvm_arch_no_poll(vcpu)) {
++	if (vcpu->halt_poll_ns && halt_poll_allowed) {
+ 		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
+ 
+ 		++vcpu->stat.generic.halt_attempted_poll;
+@@ -3275,7 +3276,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+ 	update_halt_poll_stats(
+ 		vcpu, ktime_to_ns(ktime_sub(poll_end, start)), waited);
+ 
+-	if (!kvm_arch_no_poll(vcpu)) {
++	if (halt_poll_allowed) {
+ 		if (!vcpu_valid_wakeup(vcpu)) {
+ 			shrink_halt_poll_ns(vcpu);
+ 		} else if (vcpu->kvm->max_halt_poll_ns) {
 -- 
 2.33.0.685.g46640cef36-goog
 
