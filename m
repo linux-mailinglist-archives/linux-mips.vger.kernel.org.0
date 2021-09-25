@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 235974181BC
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 13:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC684181CD
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 14:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244656AbhIYLue (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Sep 2021 07:50:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36878 "EHLO mail.kernel.org"
+        id S237399AbhIYMLT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 Sep 2021 08:11:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232363AbhIYLud (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 25 Sep 2021 07:50:33 -0400
+        id S236977AbhIYMLT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 25 Sep 2021 08:11:19 -0400
 Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F20361051;
-        Sat, 25 Sep 2021 11:48:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BCC8E61260;
+        Sat, 25 Sep 2021 12:09:44 +0000 (UTC)
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1mU6Ar-00Cval-A0; Sat, 25 Sep 2021 12:48:57 +0100
-Date:   Sat, 25 Sep 2021 12:48:56 +0100
-Message-ID: <87tui8ub87.wl-maz@kernel.org>
+        id 1mU6Uw-00CvjL-Mv; Sat, 25 Sep 2021 13:09:42 +0100
+Date:   Sat, 25 Sep 2021 13:09:42 +0100
+Message-ID: <87sfxsua9l.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Florian Fainelli <f.fainelli@gmail.com>
 Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
@@ -56,10 +56,10 @@ Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
         linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: Re: [PATCH 03/11] genirq: Export irq_set_affinity_locked()
-In-Reply-To: <20210924170546.805663-4-f.fainelli@gmail.com>
+Subject: Re: [PATCH 10/11] arm64: broadcom: Removed forced select of interrupt controllers
+In-Reply-To: <20210924170546.805663-11-f.fainelli@gmail.com>
 References: <20210924170546.805663-1-f.fainelli@gmail.com>
-        <20210924170546.805663-4-f.fainelli@gmail.com>
+        <20210924170546.805663-11-f.fainelli@gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -73,41 +73,44 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 24 Sep 2021 18:05:38 +0100,
+On Fri, 24 Sep 2021 18:05:45 +0100,
 Florian Fainelli <f.fainelli@gmail.com> wrote:
 > 
-> irq-bcm7038-l1 uses that symbol and we want to make it a loadable module
-> in subsequent changes.
+> Now that the various second level interrupt controllers have been moved
+> to IRQCHIP_PLATFORM_DRIVER and they do default to ARCH_BRCMSTB and
+> ARCH_BCM2835 where relevant, remove their forced selection from the
+> machine entry to allow an user to build them as modules.
 > 
 > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  kernel/irq/manage.c | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm64/Kconfig.platforms | 3 ---
+>  1 file changed, 3 deletions(-)
 > 
-> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-> index 7405e384e5ed..e0c573e5d249 100644
-> --- a/kernel/irq/manage.c
-> +++ b/kernel/irq/manage.c
-> @@ -369,6 +369,7 @@ int irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask,
->  
->  	return ret;
->  }
-> +EXPORT_SYMBOL_GPL(irq_set_affinity_locked);
->  
->  /**
->   * irq_update_affinity_desc - Update affinity management for an interrupt
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index b0ce18d4cc98..2e9440f2da22 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -44,7 +44,6 @@ config ARCH_BCM2835
+>  	select ARM_AMBA
+>  	select ARM_GIC
+>  	select ARM_TIMER_SP804
+> -	select BRCMSTB_L2_IRQ
+>  	help
+>  	  This enables support for the Broadcom BCM2837 and BCM2711 SoC.
+>  	  These SoCs are used in the Raspberry Pi 3 and 4 devices.
+> @@ -82,8 +81,6 @@ config ARCH_BITMAIN
+>  config ARCH_BRCMSTB
+>  	bool "Broadcom Set-Top-Box SoCs"
+>  	select ARCH_HAS_RESET_CONTROLLER
+> -	select BCM7038_L1_IRQ
+> -	select BRCMSTB_L2_IRQ
+>  	select GENERIC_IRQ_CHIP
+>  	select PINCTRL
+>  	help
 
-This doesn't seem right.
-
-This driver seem to try and move interrupts on its own when the CPU
-goes down. Why can't it rely on the normal CPU hotplug infrastructure
-to do so like all the other drivers (bar some Cavium driver that does
-the same thing)?
-
-I'd rather you take this opportunity to move these drivers into the
-21st century, so that we can kill irq_cpu_offline() and co altogether.
-
-Thanks,
+How does the user know about that? People will build a kernel
+selecting their platform, and find out it doesn't work. This seems
+terribly counter-productive to me.
 
 	M.
 
