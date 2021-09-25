@@ -2,106 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD434180DE
-	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 11:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235974181BC
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Sep 2021 13:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240807AbhIYJwG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Sep 2021 05:52:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58102 "EHLO mail.kernel.org"
+        id S244656AbhIYLue (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 Sep 2021 07:50:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36878 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240182AbhIYJv5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 25 Sep 2021 05:51:57 -0400
+        id S232363AbhIYLud (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 25 Sep 2021 07:50:33 -0400
 Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 441BD61279;
-        Sat, 25 Sep 2021 09:50:08 +0000 (UTC)
-Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F20361051;
+        Sat, 25 Sep 2021 11:48:59 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1mU4Jq-00Cuoe-EB; Sat, 25 Sep 2021 10:50:06 +0100
-Date:   Sat, 25 Sep 2021 10:50:05 +0100
-Message-ID: <878rzlass2.wl-maz@kernel.org>
+        id 1mU6Ar-00Cval-A0; Sat, 25 Sep 2021 12:48:57 +0100
+Date:   Sat, 25 Sep 2021 12:48:56 +0100
+Message-ID: <87tui8ub87.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH 07/14] KVM: Don't block+unblock when halt-polling is successful
-In-Reply-To: <20210925005528.1145584-8-seanjc@google.com>
-References: <20210925005528.1145584-1-seanjc@google.com>
-        <20210925005528.1145584-8-seanjc@google.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM
+        BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE...),
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
+        linux-sh@vger.kernel.org (open list:SUPERH),
+        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE)
+Subject: Re: [PATCH 03/11] genirq: Export irq_set_affinity_locked()
+In-Reply-To: <20210924170546.805663-4-f.fainelli@gmail.com>
+References: <20210924170546.805663-1-f.fainelli@gmail.com>
+        <20210924170546.805663-4-f.fainelli@gmail.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: seanjc@google.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, pbonzini@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org, dmatlack@google.com, jingzhangos@google.com
+X-SA-Exim-Rcpt-To: f.fainelli@gmail.com, linux-kernel@vger.kernel.org, linux@armlinux.org.uk, rjui@broadcom.com, sbranden@broadcom.com, bcm-kernel-feedback-list@broadcom.com, catalin.marinas@arm.com, will@kernel.org, ysato@users.sourceforge.jp, dalias@libc.org, tglx@linutronix.de, robh+dt@kernel.org, frowand.list@gmail.com, ardb@kernel.org, rppt@kernel.org, linus.walleij@linaro.org, akpm@linux-foundation.org, geert+renesas@glider.be, arnd@arndb.de, linux@roeck-us.net, wangkefeng.wang@huawei.com, mark.rutland@arm.com, andreyknvl@gmail.com, anshuman.khandual@arm.com, valentin.schneider@arm.com, mingo@kernel.org, peterz@infradead.org, linux-arm-kernel@lists.infradead.org, linux-sh@vger.kernel.org, linux-mips@vger.kernel.org, devicetree@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 25 Sep 2021 01:55:21 +0100,
-Sean Christopherson <seanjc@google.com> wrote:
+On Fri, 24 Sep 2021 18:05:38 +0100,
+Florian Fainelli <f.fainelli@gmail.com> wrote:
 > 
-> Invoke the arch hooks for block+unblock if and only if KVM actually
-> attempts to block the vCPU.  The only non-nop implementation is on arm64,
-> and if halt-polling is successful, there is no need for arm64 to put/load
-> the vGIC as KVM hasn't relinquished control of the vCPU in any way.
-
-This doesn't mean that there is no requirement for any state
-change. The put/load on GICv4 is crucial for performance, and the VMCR
-resync is a correctness requirement.
-
+> irq-bcm7038-l1 uses that symbol and we want to make it a loadable module
+> in subsequent changes.
 > 
-> The primary motivation is to allow future cleanup to split out "block"
-> from "halt", but this is also likely a small performance boost on arm64
-> when halt-polling is successful.
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  kernel/irq/manage.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Adjust the post-block path to update "cur" after unblocking, i.e. include
-> vGIC load time in halt_wait_ns and halt_wait_hist, so that the behavior
-> is consistent.  Moving just the pre-block arch hook would result in only
-> the vGIC put latency being included in the halt_wait stats.  There is no
-> obvious evidence that one way or the other is correct, so just ensure KVM
-> is consistent.
+> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+> index 7405e384e5ed..e0c573e5d249 100644
+> --- a/kernel/irq/manage.c
+> +++ b/kernel/irq/manage.c
+> @@ -369,6 +369,7 @@ int irq_set_affinity_locked(struct irq_data *data, const struct cpumask *mask,
+>  
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL_GPL(irq_set_affinity_locked);
+>  
+>  /**
+>   * irq_update_affinity_desc - Update affinity management for an interrupt
 
-This effectively reverts 07ab0f8d9a12 ("KVM: Call
-kvm_arch_vcpu_blocking early into the blocking sequence"), which was a
-huge gain on arm64, not to mention a correctness fix.
+This doesn't seem right.
 
-Without this, a GICv4 machine will always pay for the full poll
-penalty, going into schedule(), and only then get a doorbell interrupt
-signalling telling the kernel that there was an interrupt.
+This driver seem to try and move interrupts on its own when the CPU
+goes down. Why can't it rely on the normal CPU hotplug infrastructure
+to do so like all the other drivers (bar some Cavium driver that does
+the same thing)?
 
-On a non-GICv4 machine, it means that interrupts injected by another
-thread during the pooling will be evaluated with an outdated priority
-mask, which can result in either a spurious wake-up or a missed
-wake-up.
-
-If it means introducing a new set of {pre,post}-poll arch-specific
-hooks, so be it. But I don't think this change is acceptable as is.
+I'd rather you take this opportunity to move these drivers into the
+21st century, so that we can kill irq_cpu_offline() and co altogether.
 
 Thanks,
 
