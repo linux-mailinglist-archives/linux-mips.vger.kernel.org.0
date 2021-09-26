@@ -2,205 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA364184DA
-	for <lists+linux-mips@lfdr.de>; Sun, 26 Sep 2021 00:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554F94185A4
+	for <lists+linux-mips@lfdr.de>; Sun, 26 Sep 2021 04:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbhIYWQ3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 25 Sep 2021 18:16:29 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:45861 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbhIYWQ3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Sep 2021 18:16:29 -0400
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 25091200002;
-        Sat, 25 Sep 2021 22:14:51 +0000 (UTC)
-Date:   Sun, 26 Sep 2021 00:14:51 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     WANG Xuerui <git@xen0n.name>
-Cc:     linux-rtc@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 1/6] rtc: ls2x: Add support for the
- Loongson-2K/LS7A RTC
-Message-ID: <YU+fW8ia4CaeYLFv@piout.net>
-References: <20210823163142.586529-1-git@xen0n.name>
- <20210823163142.586529-2-git@xen0n.name>
+        id S230313AbhIZCbH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 25 Sep 2021 22:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230232AbhIZCbH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 25 Sep 2021 22:31:07 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BCAC061570;
+        Sat, 25 Sep 2021 19:29:31 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id n6so713468qvp.7;
+        Sat, 25 Sep 2021 19:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=z5gGvq+sPOjmijgnv6IGTU1y1xAUZzPxE4ydSPm89wI=;
+        b=pWBDa67oP7+Zy1rAO7VzVsBBkg1FKBtEoWbcCcS5eaCnYctI8wz/YkUZNmaPGcMsjj
+         DGoOVRk3ASHmeJ+9PQ3YFBdyyrkeZXp/9dx/4T+AhM6zRNPFD0xZR0TdZ5nwXUJSsifF
+         RCtyyWy5lnSi6YkukxMC3wtKGEnukGxzXZMCjXqDno0jTEhzclPEr1wPL0Gm0Ix4gMpL
+         Bmiw9AvtxmHBGU/Idb68fG+scRIAbE2OcVxiBPzhkYZ6WTn1riMR2LX3t29EhKIIT7P6
+         t9RXDlTpGSXRLxOnXQHL+3ukpjWYp43zaBtGOVkJVaxlur8tsooV79+bx/Npg/jR9Q9A
+         JmJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=z5gGvq+sPOjmijgnv6IGTU1y1xAUZzPxE4ydSPm89wI=;
+        b=EvqOrSOb6SOK5cUMLNHQ2UN28MVEXmTCA7py2JXgKQpAeaVhzyt7jgep5K3VzHPral
+         Dc1C4JnKhCHEPAZGZzLwRIbFROaPt7Ykcm8Qc3y8L8zuR2LXpQllMA8qgim1jaxkXkoS
+         Eq8pvIDoIY8tshvP98YQJ3VKKJvieUMgthFxz1QbVPoZCas22RJjwdFlQGPnLpDz+p61
+         iL4fDOCi0VXxjzOnyxUnjpKjYE+SVHpu/oEwuuigiLtWeymrtVD0OSiawxmOambhp68Y
+         7gf5W8xvr6z4bPxSvNBtidu4N68fBkn39H+gQ2hH9KsSHEKMavLK1RM6MvmmMdSuG+Q3
+         8B6g==
+X-Gm-Message-State: AOAM530JvoDq6U/i4/0xXeILJrV2Q0wQyL2pviQ/dHZStLQCSPJ5qXN7
+        3ACar/FJV2EtAj8zfz9+DgY=
+X-Google-Smtp-Source: ABdhPJxcoD8U53lPCZUuFspLmbAByJce7sL+OLlDav50SvLTbxaH67h0m83LTJ3BlSjuic65Plaacw==
+X-Received: by 2002:a05:6214:490:: with SMTP id ay16mr17939059qvb.25.1632623370567;
+        Sat, 25 Sep 2021 19:29:30 -0700 (PDT)
+Received: from ?IPV6:2600:1700:dfe0:49f0:a90f:da5:ff6e:aa3e? ([2600:1700:dfe0:49f0:a90f:da5:ff6e:aa3e])
+        by smtp.gmail.com with ESMTPSA id l1sm8398038qti.94.2021.09.25.19.29.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Sep 2021 19:29:30 -0700 (PDT)
+Message-ID: <70fc7450-17e2-6ffd-01b7-297f93386cc6@gmail.com>
+Date:   Sat, 25 Sep 2021 19:29:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210823163142.586529-2-git@xen0n.name>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH 02/11] genirq: Export irq_to_desc() again to modules
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        <linux-mips@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>
+References: <20210924170546.805663-1-f.fainelli@gmail.com>
+ <20210924170546.805663-3-f.fainelli@gmail.com> <87wnn4cqwd.ffs@tglx>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <87wnn4cqwd.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
 
-On 24/08/2021 00:31:37+0800, WANG Xuerui wrote:
-> This RTC module is integrated into the Loongson-2K SoC and the LS7A
-> bridge chip. This version is almost entirely rewritten to make use of
-> current kernel API.
+
+On 9/25/2021 2:00 PM, Thomas Gleixner wrote:
+> On Fri, Sep 24 2021 at 10:05, Florian Fainelli wrote:
+>> In order to build drivers/irqchip/irq-bcm7038-l1.c as a module (for use
+>> in GKI), we need to export_to_desc() which is used in this snippet of
+>> code:
+>>
+>> 	irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(virq)));
+>>
+>> This effectively reverts 64a1b95bb9fe ("genirq: Restrict export of
+>> irq_to_desc()").
 > 
-> Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
-> Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # loongson2k
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> ---
->  drivers/rtc/Kconfig    |  11 +++
->  drivers/rtc/Makefile   |   1 +
->  drivers/rtc/rtc-ls2x.c | 180 +++++++++++++++++++++++++++++++++++++++++
-
-Note that I'm still concerned this duplicates rtc-ls1x.c
-
->  3 files changed, 192 insertions(+)
->  create mode 100644 drivers/rtc/rtc-ls2x.c
+> No. I'm not reexporting this. We've spent quite some time to prevent all
+> kind of drivers for fiddle with irq descriptors and I'm not going
+> to reopen that can of worms.
 > 
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index daff06707455..819f366b4d91 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1313,6 +1313,17 @@ config RTC_DRV_NTXEC
->  	  embedded controller found in certain e-book readers designed by the
->  	  original design manufacturer Netronix.
->  
-> +config RTC_DRV_LS2X
-> +	tristate "Loongson LS2X RTC"
-> +	depends on OF && MACH_LOONGSON64 || COMPILE_TEST
-> +	select REGMAP_MMIO
-> +	help
-> +	  If you say yes here you get support for the RTC on the Loongson-2K
-> +	  SoC and LS7A bridge, which first appeared on the Loongson-2H.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called rtc-ls2x.
-> +
->  comment "on-CPU RTC drivers"
->  
->  config RTC_DRV_ASM9260
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index 5ceeafe4d5b2..98e68484f519 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -83,6 +83,7 @@ obj-$(CONFIG_RTC_DRV_LOONGSON1)	+= rtc-ls1x.o
->  obj-$(CONFIG_RTC_DRV_LP8788)	+= rtc-lp8788.o
->  obj-$(CONFIG_RTC_DRV_LPC24XX)	+= rtc-lpc24xx.o
->  obj-$(CONFIG_RTC_DRV_LPC32XX)	+= rtc-lpc32xx.o
-> +obj-$(CONFIG_RTC_DRV_LS2X)	+= rtc-ls2x.o
->  obj-$(CONFIG_RTC_DRV_M41T80)	+= rtc-m41t80.o
->  obj-$(CONFIG_RTC_DRV_M41T93)	+= rtc-m41t93.o
->  obj-$(CONFIG_RTC_DRV_M41T94)	+= rtc-m41t94.o
-> diff --git a/drivers/rtc/rtc-ls2x.c b/drivers/rtc/rtc-ls2x.c
-> new file mode 100644
-> index 000000000000..58901323b219
-> --- /dev/null
-> +++ b/drivers/rtc/rtc-ls2x.c
-> @@ -0,0 +1,180 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Loongson-2K/7A RTC driver
-> + *
-> + * Based on the original out-of-tree Loongson-2H RTC driver for Linux 2.6.32,
-> + * by Shaozong Liu <liushaozong@loongson.cn>.
-> + *
-> + * Maintained out-of-tree by Huacai Chen <chenhuacai@kernel.org>.
-> + *
-> + * Rewritten for mainline by WANG Xuerui <git@xen0n.name>.
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/rtc.h>
-> +
-> +#define TOY_TRIM_REG   0x20
-> +#define TOY_WRITE0_REG 0x24
-> +#define TOY_WRITE1_REG 0x28
-> +#define TOY_READ0_REG  0x2c
-> +#define TOY_READ1_REG  0x30
-> +#define TOY_MATCH0_REG 0x34
-> +#define TOY_MATCH1_REG 0x38
-> +#define TOY_MATCH2_REG 0x3c
-> +#define RTC_CTRL_REG   0x40
-> +#define RTC_TRIM_REG   0x60
-> +#define RTC_WRITE0_REG 0x64
-> +#define RTC_READ0_REG  0x68
-> +#define RTC_MATCH0_REG 0x6c
-> +#define RTC_MATCH1_REG 0x70
-> +#define RTC_MATCH2_REG 0x74
-> +
-> +#define TOY_MON        GENMASK(31, 26)
-> +#define TOY_DAY        GENMASK(25, 21)
-> +#define TOY_HOUR       GENMASK(20, 16)
-> +#define TOY_MIN        GENMASK(15, 10)
-> +#define TOY_SEC        GENMASK(9, 4)
-> +#define TOY_MSEC       GENMASK(3, 0)
-> +
-> +struct ls2x_rtc_priv {
-> +	struct regmap *regmap;
-> +};
-> +
-> +static const struct regmap_config ls2x_rtc_regmap_config = {
-> +	.reg_bits = 32,
-> +	.val_bits = 32,
-> +	.reg_stride = 4,
-> +};
-> +
-> +struct ls2x_rtc_regs {
-> +	u32 reg0;
-> +	u32 reg1;
-> +};
-> +
-> +static inline void ls2x_rtc_regs_to_time(struct ls2x_rtc_regs *regs,
-> +					 struct rtc_time *tm)
-> +{
-> +	tm->tm_year = regs->reg1;
-> +	tm->tm_sec = FIELD_GET(TOY_SEC, regs->reg0);
-> +	tm->tm_min = FIELD_GET(TOY_MIN, regs->reg0);
-> +	tm->tm_hour = FIELD_GET(TOY_HOUR, regs->reg0);
-> +	tm->tm_mday = FIELD_GET(TOY_DAY, regs->reg0);
-> +	tm->tm_mon = FIELD_GET(TOY_MON, regs->reg0) - 1;
-> +}
-> +
-> +static inline void ls2x_rtc_time_to_regs(struct rtc_time *tm,
-> +					 struct ls2x_rtc_regs *regs)
-> +{
-> +	regs->reg0 = FIELD_PREP(TOY_SEC, tm->tm_sec);
-> +	regs->reg0 |= FIELD_PREP(TOY_MIN, tm->tm_min);
-> +	regs->reg0 |= FIELD_PREP(TOY_HOUR, tm->tm_hour);
-> +	regs->reg0 |= FIELD_PREP(TOY_DAY, tm->tm_mday);
-> +	regs->reg0 |= FIELD_PREP(TOY_MON, tm->tm_mon + 1);
-> +	regs->reg1 = tm->tm_year;
-> +}
-> +
-> +static int ls2x_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
-> +	struct ls2x_rtc_regs regs;
-> +	int ret;
-> +
-> +	ret = regmap_read(priv->regmap, TOY_READ1_REG, &regs.reg1);
-> +	if (unlikely(ret))
-> +		return ret;
-> +
-> +	ret = regmap_read(priv->regmap, TOY_READ0_REG, &regs.reg0);
-> +	if (unlikely(ret))
-> +		return ret;
-> +
+> irq_get_irq_data() is exported and provides you what you need.
 
-I'm actually wondering why you read first TOY_READ1_REG then
-TOY_READ0_REG. ls1x does the opposite and the ls1c datasheet I found
-doesn't mention any latching happening. So unless latching is done on
-TOY_READ1_REG, you could use regmap_bulk_read and simply avoid struct
-ls2x_rtc_regs.
-If there is no latching, you may need to read TOY_READ0_REG at least
-twice. Because TOY_READ1_REG only contains the year, it is an issue only
-on 31 of December and it will not be easy to reproduce.
-
-
+That is exactly what I was looking for and somehow missed it during my 
+search the other day, thanks!
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Florian
