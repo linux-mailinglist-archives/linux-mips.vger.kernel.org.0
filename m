@@ -2,385 +2,187 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 632844196ED
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 17:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C904196E3
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 16:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234999AbhI0PBi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Sep 2021 11:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S234967AbhI0PBd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Sep 2021 11:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234873AbhI0PBf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 11:01:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B02C061575;
-        Mon, 27 Sep 2021 07:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rRPnSHMNjWr/LgNqeMuSZ9rCL+qcsMUYrqWdoofu0OY=; b=ifO5NW+CifpntK2cYBf+i7cBDX
-        zA5+EQb1wUiRvbMcbBA/qY/11LqPIxKFzfg8ZVb+XsNuGmTy9xPBwRuw3d2EICaMGBgkbDX/qV7m0
-        ltofl3Zqcnf5y405ieK7IBLGKu03691ia5vHcoh2DLKV3k0vwP5UA2ex8ZKSqy25RT3ZaWFtjPxNF
-        dQ2I3FQk+vH3WGqSZhiMHt9d6UhR/iGdXuaYQ8bjAx1FozHGmP0hxmwkrJcl0IJFSJTHRCgeUL6ix
-        lwpXn/BGHX5GeuyajxI4tNWxYtnWKRd7GWy9D4NPpguG63Rj7t9XvLW1vwxdJZjaj9dexVCqzh8Cs
-        Y9WiF4aA==;
-Received: from hch by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mUs5B-009qzS-Cj; Mon, 27 Sep 2021 14:58:30 +0000
-Date:   Mon, 27 Sep 2021 15:58:17 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/mmap: Define index macros for protection_map[]
-Message-ID: <YVHcCZXmQ1yjINaf@infradead.org>
-References: <1632712920-8171-1-git-send-email-anshuman.khandual@arm.com>
+        with ESMTP id S234946AbhI0PBb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 11:01:31 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43729C06176A
+        for <linux-mips@vger.kernel.org>; Mon, 27 Sep 2021 07:59:53 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id m26so16131659pff.3
+        for <linux-mips@vger.kernel.org>; Mon, 27 Sep 2021 07:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8d5KqXA5Mi92PwzZc0N/pdrf/YfLC80LCsk313TOlF8=;
+        b=m7Sxwd73+QIO2WuPaGefD2VV92Ixlana/rvgLp3fywdfnLLEysnYWnlbrJZMSHvky2
+         P+dNFDKl+i/DMSPcDLNPjzckqkQLgh9pdU/c3JQwnIagXzSzhgOa+ncEZvwMUJLQWG1m
+         fybm6n4GY1o2I/TIIMUtFfjJTQU9KFbL0J/XoEro7oVzMh1zw+XmI5tRZQQeuZDe42Dg
+         Tmmp6oePrkChYyER1Tnna/qEz55zzNMH1ZMLBsrMQL84AaEtkyNXBlm2Xx+ZucKX/mXL
+         yMhzhoMAfnJyECqCajIjTuZBzhOpC4zX9voYjWadeZj+T2l75O1okb7Y4J7XHlu7WdkY
+         kHUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8d5KqXA5Mi92PwzZc0N/pdrf/YfLC80LCsk313TOlF8=;
+        b=QK80mNDVJPV8bSe9hXk+c2KD3P41+Pe0DVSqj6ZpgTIKWyRK+5KnFDpvdiaP0PKnjw
+         /YUl8w2HaxWsejA4MPYIohVQjGQ5zfh/ceA+89BJTlaLUjNj221W+WhMAKfVVWkTbBsq
+         3GiWM2m9E6P7Pw81A7wV8n2ZswfXE0dWOy8ced0BKP/kiVIa8SkzDSMJR/6FSj4+T7XC
+         hjTSg+9ZKDgRZPSza4MxGnvR1os4tSmFpv+mHw66U1K8RPM8sBkBs9IT+VTd6363V3yt
+         b5Zng8ZVYMfm7tK+RnSnDKff3oTG/w0D6dCsH+I/gBFcIIPY2jSBbCOxTextUQFgehKg
+         TXpQ==
+X-Gm-Message-State: AOAM532bGvK9DoSgcxHBabJSSO+07QAUxkrFtzL7IYIgUMcgNfYTBBW8
+        gAr/JczMSZtt9gwyi5VEoP/V7w==
+X-Google-Smtp-Source: ABdhPJyg70ia4mflauFBTnYYkPuZeGu0PUo7u3KrQoV6hyYnlf5Ujo4gsfK+PdoDvaYqAOyRoeDCGg==
+X-Received: by 2002:a63:e057:: with SMTP id n23mr107748pgj.183.1632754792472;
+        Mon, 27 Sep 2021 07:59:52 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n14sm19177569pgd.48.2021.09.27.07.59.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Sep 2021 07:59:51 -0700 (PDT)
+Date:   Mon, 27 Sep 2021 14:59:47 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jon Cargille <jcargill@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jing Zhang <jingzhangos@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: disabling halt polling broken? (was Re: [PATCH 00/14] KVM:
+ Halt-polling fixes, cleanups and a new stat)
+Message-ID: <YVHcY6y1GmvGJnMg@google.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+ <03f2f5ab-e809-2ba5-bd98-3393c3b843d2@de.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1632712920-8171-1-git-send-email-anshuman.khandual@arm.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <03f2f5ab-e809-2ba5-bd98-3393c3b843d2@de.ibm.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 08:52:00AM +0530, Anshuman Khandual wrote:
-> protection_map[] maps the lower four bits from vm_flags into platform page
-> protection mask. Default initialization (and possible re-initialization in
-> the platform) does not make it clear that these indices are just derived
-> from various vm_flags protections (VM_SHARED, VM_READ, VM_WRITE, VM_EXEC).
-> This defines macros for protection_map[] indices which concatenate various
-> vm_flag attributes, making it clear and explicit.
+On Mon, Sep 27, 2021, Christian Borntraeger wrote:
+> While looking into this series,
+> 
+> I realized that Davids patch
+> 
+> commit acd05785e48c01edb2c4f4d014d28478b5f19fb5
+> Author:     David Matlack <dmatlack@google.com>
+> AuthorDate: Fri Apr 17 15:14:46 2020 -0700
+> Commit:     Paolo Bonzini <pbonzini@redhat.com>
+> CommitDate: Fri Apr 24 12:53:17 2020 -0400
+> 
+>     kvm: add capability for halt polling
+> 
+> broke the possibility for an admin to disable halt polling for already running KVM guests.
+> In past times doing
+> echo 0 > /sys/module/kvm/parameters/halt_poll_ns
+> 
+> stopped polling system wide.
+> Now all KVM guests will use the halt_poll_ns value that was active during
+> startup - even those that do not use KVM_CAP_HALT_POLL.
+> 
+> I guess this was not intended?
 
-I dont think this is all that helpful.  The main issue here is that
-protection_map is a pointless obsfucation ad should be replaced with a
-simple switch statement provided by each architecture.  See the below
-WIP which just works for x86 and without pagetable debugging for where I
-think we should be going.
+Ouch.  I would go so far as to say that halt_poll_ns should be a hard limit on
+the capability.  What about having the per-VM variable track only the capability,
+and then use the module param to cap the max when doing adjustments?  E.g. add
+a variant of this early in the series?
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index ab83c22d274e7..70d8ae60a416f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -74,8 +74,8 @@ config X86
- 	select ARCH_HAS_EARLY_DEBUG		if KGDB
- 	select ARCH_HAS_ELF_RANDOMIZE
- 	select ARCH_HAS_FAST_MULTIPLIER
--	select ARCH_HAS_FILTER_PGPROT
- 	select ARCH_HAS_FORTIFY_SOURCE
-+	select ARCH_HAS_GET_PAGE_PROT
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_KCOV			if X86_64 && STACK_VALIDATION
- 	select ARCH_HAS_MEM_ENCRYPT
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 448cd01eb3ecb..a0cc70b056385 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -646,11 +646,6 @@ static inline pgprot_t pgprot_modify(pgprot_t oldprot, pgprot_t newprot)
- 
- #define canon_pgprot(p) __pgprot(massage_pgprot(p))
- 
--static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
--{
--	return canon_pgprot(prot);
--}
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 80f78daa6b8d..f50e4e31a0cf 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1078,8 +1078,6 @@ static struct kvm *kvm_create_vm(unsigned long type)
+                        goto out_err_no_arch_destroy_vm;
+        }
+
+-       kvm->max_halt_poll_ns = halt_poll_ns;
 -
- static inline int is_new_memtype_allowed(u64 paddr, unsigned long size,
- 					 enum page_cache_mode pcm,
- 					 enum page_cache_mode new_pcm)
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index 40497a9020c6e..1a9dd933088e6 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -228,25 +228,6 @@ enum page_cache_mode {
- 
- #endif	/* __ASSEMBLY__ */
- 
--/*         xwr */
--#define __P000	PAGE_NONE
--#define __P001	PAGE_READONLY
--#define __P010	PAGE_COPY
--#define __P011	PAGE_COPY
--#define __P100	PAGE_READONLY_EXEC
--#define __P101	PAGE_READONLY_EXEC
--#define __P110	PAGE_COPY_EXEC
--#define __P111	PAGE_COPY_EXEC
--
--#define __S000	PAGE_NONE
--#define __S001	PAGE_READONLY
--#define __S010	PAGE_SHARED
--#define __S011	PAGE_SHARED
--#define __S100	PAGE_READONLY_EXEC
--#define __S101	PAGE_READONLY_EXEC
--#define __S110	PAGE_SHARED_EXEC
--#define __S111	PAGE_SHARED_EXEC
--
- /*
-  * early identity mapping  pte attrib macros.
-  */
-diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
-index d4a8d0424bfbf..775dbd3aff736 100644
---- a/arch/x86/include/uapi/asm/mman.h
-+++ b/arch/x86/include/uapi/asm/mman.h
-@@ -5,20 +5,6 @@
- #define MAP_32BIT	0x40		/* only give out 32bit addresses */
- 
- #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
--/*
-- * Take the 4 protection key bits out of the vma->vm_flags
-- * value and turn them in to the bits that we can put in
-- * to a pte.
-- *
-- * Only override these if Protection Keys are available
-- * (which is only on 64-bit).
-- */
--#define arch_vm_get_page_prot(vm_flags)	__pgprot(	\
--		((vm_flags) & VM_PKEY_BIT0 ? _PAGE_PKEY_BIT0 : 0) |	\
--		((vm_flags) & VM_PKEY_BIT1 ? _PAGE_PKEY_BIT1 : 0) |	\
--		((vm_flags) & VM_PKEY_BIT2 ? _PAGE_PKEY_BIT2 : 0) |	\
--		((vm_flags) & VM_PKEY_BIT3 ? _PAGE_PKEY_BIT3 : 0))
--
- #define arch_calc_vm_prot_bits(prot, key) (		\
- 		((key) & 0x1 ? VM_PKEY_BIT0 : 0) |      \
- 		((key) & 0x2 ? VM_PKEY_BIT1 : 0) |      \
-diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
-index 5864219221ca8..b44806c5b3de8 100644
---- a/arch/x86/mm/Makefile
-+++ b/arch/x86/mm/Makefile
-@@ -16,8 +16,10 @@ CFLAGS_REMOVE_mem_encrypt.o		= -pg
- CFLAGS_REMOVE_mem_encrypt_identity.o	= -pg
- endif
- 
--obj-y				:=  init.o init_$(BITS).o fault.o ioremap.o extable.o mmap.o \
--				    pgtable.o physaddr.o setup_nx.o tlb.o cpu_entry_area.o maccess.o
-+obj-y				:=  init.o init_$(BITS).o fault.o ioremap.o \
-+				    extable.o mmap.o pgtable.o physaddr.o \
-+				    setup_nx.o tlb.o cpu_entry_area.o \
-+				    maccess.o pgprot.o
- 
- obj-y				+= pat/
- 
-diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-index ff08dc4636347..e1d1168ed25e8 100644
---- a/arch/x86/mm/mem_encrypt.c
-+++ b/arch/x86/mm/mem_encrypt.c
-@@ -189,10 +189,6 @@ void __init sme_early_init(void)
- 
- 	__supported_pte_mask = __sme_set(__supported_pte_mask);
- 
--	/* Update the protection map with memory encryption mask */
--	for (i = 0; i < ARRAY_SIZE(protection_map); i++)
--		protection_map[i] = pgprot_encrypted(protection_map[i]);
--
- 	if (sev_active())
- 		swiotlb_force = SWIOTLB_FORCE;
+        r = kvm_arch_init_vm(kvm, type);
+        if (r)
+                goto out_err_no_arch_destroy_vm;
+@@ -3136,7 +3134,8 @@ void kvm_sigset_deactivate(struct kvm_vcpu *vcpu)
+        sigemptyset(&current->real_blocked);
  }
-diff --git a/arch/x86/mm/pgprot.c b/arch/x86/mm/pgprot.c
-new file mode 100644
-index 0000000000000..4d8e9dbcce993
---- /dev/null
-+++ b/arch/x86/mm/pgprot.c
-@@ -0,0 +1,70 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/export.h>
-+#include <linux/mm.h>
-+#include <asm/pgtable.h>
-+
-+static inline pgprot_t __vm_get_page_prot(unsigned long vm_flags)
-+{
-+	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-+	case 0:
-+		return PAGE_NONE;
-+	case VM_READ:
-+		return PAGE_READONLY;
-+	case VM_WRITE:
-+		return PAGE_COPY;
-+	case VM_READ | VM_WRITE:
-+		return PAGE_COPY;
-+	case VM_EXEC:
-+	case VM_EXEC | VM_READ:
-+		return PAGE_READONLY_EXEC;
-+	case VM_EXEC | VM_WRITE:
-+	case VM_EXEC | VM_READ | VM_WRITE:
-+		return PAGE_COPY_EXEC;
-+	case VM_SHARED:
-+		return PAGE_NONE;
-+	case VM_SHARED | VM_READ:
-+		return PAGE_READONLY;
-+	case VM_SHARED | VM_WRITE:
-+	case VM_SHARED | VM_READ | VM_WRITE:
-+		return PAGE_SHARED;
-+	case VM_SHARED | VM_EXEC:
-+	case VM_SHARED | VM_READ | VM_EXEC:
-+		return PAGE_READONLY_EXEC;
-+	case VM_SHARED | VM_WRITE | VM_EXEC:
-+	case VM_SHARED | VM_READ | VM_WRITE | VM_EXEC:
-+		return PAGE_SHARED_EXEC;
-+	default:
-+		BUILD_BUG();
-+		return PAGE_NONE;
-+	}
-+}
-+
-+pgprot_t vm_get_page_prot(unsigned long vm_flags)
-+{
-+	unsigned long val = pgprot_val(__vm_get_page_prot(vm_flags));
-+
-+#ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
-+	/*
-+	 * Take the 4 protection key bits out of the vma->vm_flags value and
-+	 * turn them in to the bits that we can put in to a pte.
-+	 *
-+	 * Only override these if Protection Keys are available (which is only
-+	 * on 64-bit).
-+	 */
-+	if (vm_flags & VM_PKEY_BIT0)
-+		val |= _PAGE_PKEY_BIT0;
-+	if (vm_flags & VM_PKEY_BIT1)
-+		val |= _PAGE_PKEY_BIT1;
-+	if (vm_flags & VM_PKEY_BIT2)
-+		val |= _PAGE_PKEY_BIT2;
-+	if (vm_flags & VM_PKEY_BIT3)
-+		val |= _PAGE_PKEY_BIT3;
-+#endif
-+
-+	val = __sme_set(val);
-+	if (val & _PAGE_PRESENT)
-+		val &= __supported_pte_mask;
-+	return __pgprot(val);
-+}
-+EXPORT_SYMBOL(vm_get_page_prot);
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 73a52aba448f9..def17c5fb6afc 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -428,12 +428,6 @@ extern unsigned int kobjsize(const void *objp);
- #endif
- #define VM_FLAGS_CLEAR	(ARCH_VM_PKEY_FLAGS | VM_ARCH_CLEAR)
- 
--/*
-- * mapping from the currently active vm_flags protection bits (the
-- * low four bits) to a page protection mask..
-- */
--extern pgprot_t protection_map[16];
--
- /**
-  * enum fault_flag - Fault flag definitions.
-  * @FAULT_FLAG_WRITE: Fault was a write fault.
-diff --git a/mm/Kconfig b/mm/Kconfig
-index d16ba9249bc53..d9fa0bac189b4 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -894,6 +894,9 @@ config IO_MAPPING
- config SECRETMEM
- 	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
- 
-+config ARCH_HAS_GET_PAGE_PROT
-+	bool
-+
- source "mm/damon/Kconfig"
- 
- endmenu
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 88dcc5c252255..c6031dfcedd18 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -80,6 +80,7 @@ static void unmap_region(struct mm_struct *mm,
- 		struct vm_area_struct *vma, struct vm_area_struct *prev,
- 		unsigned long start, unsigned long end);
- 
-+#ifndef CONFIG_ARCH_HAS_GET_PAGE_PROT
- /* description of effects of mapping type and prot in current implementation.
-  * this is due to the limited x86 page protection hardware.  The expected
-  * behavior is in parens:
-@@ -100,11 +101,6 @@ static void unmap_region(struct mm_struct *mm,
-  *								w: (no) no
-  *								x: (yes) yes
-  */
--pgprot_t protection_map[16] __ro_after_init = {
--	__P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
--	__S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
--};
--
- #ifndef CONFIG_ARCH_HAS_FILTER_PGPROT
- static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
+
+-static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
++static void grow_halt_poll_ns(struct kvm_vcpu *vcpu,
++                             unsigned int max_halt_poll_ns)
  {
-@@ -112,15 +108,57 @@ static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
- }
- #endif
- 
-+static pgprot_t __vm_get_page_prot(unsigned long vm_flags)
-+{
-+	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-+	case 0:
-+		return __P000;
-+	case VM_READ:
-+		return __P001;
-+	case VM_WRITE:
-+		return __P010;
-+	case VM_READ | VM_WRITE:
-+		return __P011;
-+	case VM_EXEC:
-+		return __P100;
-+	case VM_EXEC | VM_READ:
-+		return __P101;
-+	case VM_EXEC | VM_WRITE:
-+		return __P110;
-+	case VM_EXEC | VM_READ | VM_WRITE:
-+		return __P111;
-+	case VM_SHARED:
-+		return __S000;
-+	case VM_SHARED | VM_READ:
-+		return __S001;
-+	case VM_SHARED | VM_WRITE:
-+		return __S010;
-+	case VM_SHARED | VM_READ | VM_WRITE:
-+		return __S011;
-+	case VM_SHARED | VM_EXEC:
-+		return __S100;
-+	case VM_SHARED | VM_READ | VM_EXEC:
-+		return __S101;
-+	case VM_SHARED | VM_WRITE | VM_EXEC:
-+		return __S110;
-+	case VM_SHARED | VM_READ | VM_WRITE | VM_EXEC:
-+		return __S111;
-+	default:
-+		BUG();
-+	}
-+}
+        unsigned int old, val, grow, grow_start;
+
+@@ -3150,8 +3149,8 @@ static void grow_halt_poll_ns(struct kvm_vcpu *vcpu)
+        if (val < grow_start)
+                val = grow_start;
+
+-       if (val > vcpu->kvm->max_halt_poll_ns)
+-               val = vcpu->kvm->max_halt_poll_ns;
++       if (val > max_halt_poll_ns)
++               val = max_halt_poll_ns;
+
+        vcpu->halt_poll_ns = val;
+ out:
+@@ -3261,6 +3260,7 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+ {
+        bool halt_poll_allowed = !kvm_arch_no_poll(vcpu);
+        bool do_halt_poll = halt_poll_allowed && vcpu->halt_poll_ns;
++       unsigned int max_halt_poll_ns;
+        ktime_t start, cur, poll_end;
+        bool waited = false;
+        u64 halt_ns;
+@@ -3304,19 +3304,25 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+                update_halt_poll_stats(vcpu, start, poll_end, !waited);
+
+        if (halt_poll_allowed) {
++               max_halt_poll_ns = vcpu->kvm->max_halt_poll_ns;
++               if (max_halt_poll_ns)
++                       max_halt_poll_ns = min(max_halt_poll_ns, halt_poll_ns);
++               else
++                       max_halt_poll_ns = halt_poll_ns;
 +
- pgprot_t vm_get_page_prot(unsigned long vm_flags)
- {
--	pgprot_t ret = __pgprot(pgprot_val(protection_map[vm_flags &
--				(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
--			pgprot_val(arch_vm_get_page_prot(vm_flags)));
-+	pgprot_t ret;
-+
-+	ret = __pgprot(pgprot_val(__vm_get_page_prot(vm_flags)) |
-+		       pgprot_val(arch_vm_get_page_prot(vm_flags)));
- 
- 	return arch_filter_pgprot(ret);
- }
- EXPORT_SYMBOL(vm_get_page_prot);
-+#endif /* CONFIG_ARCH_HAS_GET_PAGE_PROT */
- 
- static pgprot_t vm_pgprot_modify(pgprot_t oldprot, unsigned long vm_flags)
- {
-@@ -1660,10 +1698,9 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
- #endif /* __ARCH_WANT_SYS_OLD_MMAP */
- 
- /*
-- * Some shared mappings will want the pages marked read-only
-- * to track write events. If so, we'll downgrade vm_page_prot
-- * to the private version (using protection_map[] without the
-- * VM_SHARED bit).
-+ * Some shared mappings will want the pages marked read-only to track write
-+ * events.  If so, we'll downgrade vm_page_prot to the private version without
-+ * the VM_SHARED bit.
-  */
- int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
- {
+                if (!vcpu_valid_wakeup(vcpu)) {
+                        shrink_halt_poll_ns(vcpu);
+-               } else if (vcpu->kvm->max_halt_poll_ns) {
++               } else if (max_halt_poll_ns) {
+                        if (halt_ns <= vcpu->halt_poll_ns)
+                                ;
+                        /* we had a long block, shrink polling */
+                        else if (vcpu->halt_poll_ns &&
+-                                halt_ns > vcpu->kvm->max_halt_poll_ns)
++                                halt_ns > max_halt_poll_ns)
+                                shrink_halt_poll_ns(vcpu);
+                        /* we had a short halt and our poll time is too small */
+-                       else if (vcpu->halt_poll_ns < vcpu->kvm->max_halt_poll_ns &&
+-                                halt_ns < vcpu->kvm->max_halt_poll_ns)
+-                               grow_halt_poll_ns(vcpu);
++                       else if (vcpu->halt_poll_ns < max_halt_poll_ns &&
++                                halt_ns < max_halt_poll_ns)
++                               grow_halt_poll_ns(vcpu, max_halt_poll_ns);
+                } else {
+                        vcpu->halt_poll_ns = 0;
+                }
