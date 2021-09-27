@@ -2,111 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3564198C1
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 18:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1FE419973
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 18:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235261AbhI0QUT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Sep 2021 12:20:19 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:30080 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235424AbhI0QUT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 12:20:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632759506;
+        id S235528AbhI0Qq0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Sep 2021 12:46:26 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:25731 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235285AbhI0Qq0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 12:46:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632761070;
     s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=g2indfiR/jZDlYxjjZkEZkE7oAQ92vUodc4qSJ3YJjc=;
-    b=Yln5ZK7ecw/dpFPlXymVcHMiFw1FlovIo14amHEIdHeoDq9fy+5YJhD6PCdN3uyZxo
-    M08iDkxNZE/Sg7kBE/yygTD5XEB6p6IPzOhylmIn+IcWD9APBtpIGjD8YOXFdOyZa06/
-    +pPuA1v0pidTm+Ic4qAOd7IuE2woqAPQha5aibSmeFktDzebjH4hiCVT7nvKBO0e5N3o
-    m9IwxXLMPjeBrnBPRrkXHlmSxAAq40LRrOuvEbwm8j0KJ3lVb8HdYV2TNEwqA50G+xS/
-    xs1DxL1BZFIwL9YcGsP5dDXt0sb4EC40X56rb7F38i70APDmwZcRCauQeMzuMKnIepl1
-    TOLQ==
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=jRPgRBm1X+FuZv7hOzaWpG6lEhu0WS+NKYO9s9BLpfc=;
+    b=AG1GEOc6tKVfQEL1PmD3dkQnT6JWvNaRPm+CFRQvE1hmb86TRDfFstrkkRbgxkKfoE
+    2a3Y1vRvqkm4DmVOeSxVK69IrrQ0siyq+PAhrks0oNqq79F7wBT9rMEPrHEKGJHGjMvt
+    asgTJZ+P6pDyXwhIg4CvqsfIzu2Gjumdj+QcH+gVhw5yJtNaoPBvZ950F9Tua7oSUIh9
+    2cKO/+JB84mIslyRBv/WFMd9UHzcUUy9GuZIw4Yirh/iPkabFwwtRIGMNn1fY1zvudAz
+    op3OwSyRJaMijbIRvzqqPDOhpDUy6kknO5WCAKeLMsyaoGkAl+MMgyiAqlvfMtSvEk3V
+    lA/Q==
 Authentication-Results: strato.com;
     dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3i8QW3w=="
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1KHeBQyh+ITDDFrDb4="
 X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
+Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
-    with ESMTPSA id I01f74x8RGIQarb
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+    with ESMTPSA id I01f74x8RGiTav8
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Mon, 27 Sep 2021 18:18:26 +0200 (CEST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v3 6/6] drm/ingenic: Attach bridge chain to encoders
+    Mon, 27 Sep 2021 18:44:29 +0200 (CEST)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <L9900R.05DOH2MOR3V93@crapouillou.net>
-Date:   Mon, 27 Sep 2021 18:18:25 +0200
-Cc:     Paul Boddie <paul@boddie.org.uk>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        linux-mips <linux-mips@vger.kernel.org>, list@opendingux.net,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <044C92DA-EF88-4738-BF60-885906588408@goldelico.com>
-References: <20210922205555.496871-1-paul@crapouillou.net>
- <4366739.KZ8Jxz7LyS@jason> <EKJXZQ.6VJ0UDHV3T3W@crapouillou.net>
- <2094991.ScV2v2meXk@jason> <HU700R.NAHL5IU3NRE81@crapouillou.net>
- <96585ED9-B707-4AF1-8417-E03DE6414965@goldelico.com>
- <L9900R.05DOH2MOR3V93@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v4 00/10] MIPS: JZ4780 and CI20 HDMI
+Date:   Mon, 27 Sep 2021 18:44:18 +0200
+Message-Id: <cover.1632761067.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+- fix setting output_port = 1 (issue found by paul@crapouillou.net)
+- ci20.dts: convert to use hdmi-connector (by hns@goldelico.com)
+- add a hdmi-regulator to control +5V power (by hns@goldelico.com)
+- added a fix to dw-hdmi to call drm_kms_helper_hotplug_event on plugin event detection (by hns@goldelico.com)
+- always allocate extended descriptor but initialize only for jz4780 (by hns@goldelico.com)
+- updated to work on top of "[PATCH v3 0/6] drm/ingenic: Various improvements v3" (by paul@crapouillou.net)
+- rebased to v5.13-rc3
 
-> Am 25.09.2021 um 21:39 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
->=20
->=20
-> Le sam., sept. 25 2021 at 21:26:42 +0200, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->> Hi Paul,
->>> Am 25.09.2021 um 21:08 schrieb Paul Cercueil <paul@crapouillou.net>:
->>> Hi Paul & Nikolaus,
->>> If you spent some time debugging the issue
->> we did ...
->=20
-> By saying that you didn't debug,
+PATCH V3 2021-08-08 07:10:50:
+This series adds HDMI support for JZ4780 and CI20 board (and fixes one IPU related issue in registration error path)
+- [patch 1/8] switched from mode_fixup to atomic_check (suggested by robert.foss@linaro.org)
+  - the call to the dw-hdmi specialization is still called mode_fixup
+- [patch 3/8] diverse fixes for ingenic-drm-drv (suggested by paul@crapouillou.net)
+  - factor out some non-HDMI features of the jz4780 into a separate patch
+  - multiple fixes around max height
+  - do not change regmap config but a copy on stack
+  - define some constants
+  - factor out fixing of drm_init error path for IPU into separate patch
+  - use FIELD_PREP()
+- [patch 8/8] conversion to component framework dropped (suggested by Laurent.pinchart@ideasonboard.com and paul@crapouillou.net)
 
-We did - but sometimes you don't see the wood for the trees.
+PATCH V2 2021-08-05 16:08:05:
+This series adds HDMI support for JZ4780 and CI20 board
 
-> (null) means you're printing a NULL pointer. So I could see that =
-hdmi->next_bridge was NULL.
+V2:
+- code and commit messages revisited for checkpatch warnings
+- rebased on v5.14-rc4
+- include (failed, hence RFC 8/8) attempt to convert to component framework
+  (was suggested by Paul Cercueil <paul@crapouillou.net> a while ago)
 
-I remember we did find this, but did not understand that it should be =
-initialized by dw-hdmi.
-And because we though that dw-hdmi has it its own connector, it is ok =
-that way.
 
-> The place that sets it is dw_hdmi_parse_dt, which will return early =
-with code 0, before next_bridge is set, if plat_data->output_port =3D=3D =
-0, which was your case.
+H. Nikolaus Schaller (2):
+  drm/bridge: synopsis: Fix to properly handle HPD
+  MIPS: defconfig: CI20: configure for DRM_DW_HDMI_JZ4780
 
-Well, we were still at 5.14 when we did these initial attempts to use =
-hdmi-connector with synopsys.
-Back then, there was no dw_hdmi_parse_dt and no output_port.
+Paul Boddie (7):
+  drm/ingenic: Fix drm_init error path if IPU was registered
+  drm/ingenic: Add support for JZ4780 and HDMI output
+  drm/bridge: synopsis: Add mode_fixup and bridge timings support
+  drm/ingenic: Add dw-hdmi driver for jz4780
+  MIPS: DTS: jz4780: Account for Synopsys HDMI driver and LCD
+    controllers
+  MIPS: DTS: CI20: Add DT nodes for HDMI setup
+  drm/ingenic: add some jz4780 specific features
 
-IAW: we did not even have a chance to make it work on top of 5.14 the =
-hdmi-connector way. And were sucessful.
+Sam Ravnborg (1):
+  dt-bindings: display: Add ingenic,jz4780-dw-hdmi DT Schema
 
-I just noticed this when trying to backport the last puzzle piece...
+ .../bindings/display/ingenic-jz4780-hdmi.yaml |  85 +++++++++++
+ arch/mips/boot/dts/ingenic/ci20.dts           |  67 +++++++++
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        |  45 ++++++
+ arch/mips/configs/ci20_defconfig              |   6 +
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c     |   9 ++
+ drivers/gpu/drm/ingenic/Kconfig               |   9 ++
+ drivers/gpu/drm/ingenic/Makefile              |   1 +
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     | 135 ++++++++++++++++-
+ drivers/gpu/drm/ingenic/ingenic-drm.h         |  42 ++++++
+ drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c     | 142 ++++++++++++++++++
+ include/drm/bridge/dw_hdmi.h                  |   5 +
+ 11 files changed, 540 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+ create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
 
-Well, it is always difficult to hit a moving target.
-
-> Since your hdmi-connector is wired at port #1, then .output_port =
-should be 1 as well.
-
-Anyways it works now for 5.14.8 (our internal test) and 5.15-rc3.
-
-And v4 of the jz4780 hdmi stuff will follow.
-
-BR and thanks,
-Nikolaus
+-- 
+2.31.1
 
