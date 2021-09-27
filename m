@@ -2,250 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A53DA418DE7
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 05:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1968D418F83
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 08:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbhI0DWh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 26 Sep 2021 23:22:37 -0400
-Received: from foss.arm.com ([217.140.110.172]:41302 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230469AbhI0DWf (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 26 Sep 2021 23:22:35 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2779FD6E;
-        Sun, 26 Sep 2021 20:20:58 -0700 (PDT)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.73.35])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0DB483F7B4;
-        Sun, 26 Sep 2021 20:20:54 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/mmap: Define index macros for protection_map[]
-Date:   Mon, 27 Sep 2021 08:52:00 +0530
-Message-Id: <1632712920-8171-1-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
+        id S233172AbhI0G5H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Sep 2021 02:57:07 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10380 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233067AbhI0G5G (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 27 Sep 2021 02:57:06 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18R2iku9027135;
+        Mon, 27 Sep 2021 02:54:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Jiq7gvoz3pplZUufR4kw3kQJZqSIDso0Eiiy9V37bEM=;
+ b=VkEysG81hdqNPtmizeFNiqRMUtPhpslhfpZ7XwSUR8TlVvZjPFw874jOUgvVqAYlwML5
+ Mh7/4PtNOTYIQKIA8kffQU9p/V0+uh+5TVPm9vXf0HDixLV9M6pu/OYQ7j3oCwwbpxj+
+ gwORYMdTe9bIkRKFPZ6iLlFxilDinOZ5xwWQPgGN7P0cOExfLptyyURr6ECjcHhf11XD
+ i8bBDFJZfWoEKg2yZ1Ib7b/PNfBkxUYItXG8QZa0yAFH2xLMFEiHmoj/UeIYRr3v/jXb
+ InNrJk+G4WUP879bfIvCaL6Vlr/NBz9+lbY10Ec7osQxukaZzImGV1JXdjWKFAweRfv1 pQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bagv7v60d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Sep 2021 02:54:43 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18R60135023974;
+        Mon, 27 Sep 2021 02:54:42 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bagv7v5yq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Sep 2021 02:54:42 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18R6l9YC022190;
+        Mon, 27 Sep 2021 06:54:39 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma05fra.de.ibm.com with ESMTP id 3b9ud8rnj5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Sep 2021 06:54:39 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18R6sZUt52101612
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Sep 2021 06:54:35 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 648AD52050;
+        Mon, 27 Sep 2021 06:54:35 +0000 (GMT)
+Received: from li-43c5434c-23b8-11b2-a85c-c4958fb47a68.ibm.com (unknown [9.171.4.236])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id CF8525205F;
+        Mon, 27 Sep 2021 06:54:33 +0000 (GMT)
+Subject: Re: [PATCH 01/14] KVM: s390: Ensure kvm_arch_no_poll() is read once
+ when blocking vCPU
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+ <20210925005528.1145584-2-seanjc@google.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Message-ID: <01fa2462-6652-7206-5ef3-bacb3452b4c8@de.ibm.com>
+Date:   Mon, 27 Sep 2021 08:54:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20210925005528.1145584-2-seanjc@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LRqB5f6S9hbk17-RqSL7Lr4MRuKyWqHw
+X-Proofpoint-ORIG-GUID: EuLGaHU57XrzZa8qPJevhWzEyIkwBjOa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-27_01,2021-09-24_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 phishscore=0 adultscore=0
+ spamscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2109270042
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-protection_map[] maps the lower four bits from vm_flags into platform page
-protection mask. Default initialization (and possible re-initialization in
-the platform) does not make it clear that these indices are just derived
-from various vm_flags protections (VM_SHARED, VM_READ, VM_WRITE, VM_EXEC).
-This defines macros for protection_map[] indices which concatenate various
-vm_flag attributes, making it clear and explicit.
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mips@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v5.15-rc3 after the following patch.
 
-https://lore.kernel.org/all/20210924060821.1138281-1-guoren@kernel.org/
+Am 25.09.21 um 02:55 schrieb Sean Christopherson:
+> Wrap s390's halt_poll_max_steal with READ_ONCE and snapshot the result of
+> kvm_arch_no_poll() in kvm_vcpu_block() to avoid a mostly-theoretical,
+> largely benign bug on s390 where the result of kvm_arch_no_poll() could
+> change due to userspace modifying halt_poll_max_steal while the vCPU is
+> blocking.  The bug is largely benign as it will either cause KVM to skip
+> updating halt-polling times (no_poll toggles false=>true) or to update
+> halt-polling times with a slightly flawed block_ns.
+> 
+> Note, READ_ONCE is unnecessary in the current code, add it in case the
+> arch hook is ever inlined, and to provide a hint that userspace can
+> change the param at will.
+> 
+> Fixes: 8b905d28ee17 ("KVM: s390: provide kvm_arch_no_poll function")
+> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
- arch/mips/mm/cache.c    | 34 +++++++++++++++++-----------------
- arch/sparc/mm/init_64.c | 32 ++++++++++++++++----------------
- include/linux/mm.h      | 31 +++++++++++++++++++++++++++++++
- mm/debug_vm_pgtable.c   |  8 ++++----
- mm/mmap.c               | 18 ++++++++++++++++--
- 5 files changed, 84 insertions(+), 39 deletions(-)
+Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index 830ab91e574f..d0197cc1fb5a 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -161,24 +161,24 @@ EXPORT_SYMBOL(_page_cachable_default);
- 
- static inline void setup_protection_map(void)
- {
--	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[4]  = PM(_PAGE_PRESENT);
--	protection_map[5]  = PM(_PAGE_PRESENT);
--	protection_map[6]  = PM(_PAGE_PRESENT);
--	protection_map[7]  = PM(_PAGE_PRESENT);
--
--	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
-+	protection_map[PROTMAP_IDX_XXXX] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	protection_map[PROTMAP_IDX_XRXX] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	protection_map[PROTMAP_IDX_XXWX] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	protection_map[PROTMAP_IDX_XRWX] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	protection_map[PROTMAP_IDX_XXXE] = PM(_PAGE_PRESENT);
-+	protection_map[PROTMAP_IDX_XRXE] = PM(_PAGE_PRESENT);
-+	protection_map[PROTMAP_IDX_XXWE] = PM(_PAGE_PRESENT);
-+	protection_map[PROTMAP_IDX_XRWE] = PM(_PAGE_PRESENT);
-+
-+	protection_map[PROTMAP_IDX_SXXX] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	protection_map[PROTMAP_IDX_SRXX] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	protection_map[PROTMAP_IDX_SXWX] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
- 				_PAGE_NO_READ);
--	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
--	protection_map[12] = PM(_PAGE_PRESENT);
--	protection_map[13] = PM(_PAGE_PRESENT);
--	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
--	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
-+	protection_map[PROTMAP_IDX_SRWX] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
-+	protection_map[PROTMAP_IDX_SXXE] = PM(_PAGE_PRESENT);
-+	protection_map[PROTMAP_IDX_SRXE] = PM(_PAGE_PRESENT);
-+	protection_map[PROTMAP_IDX_SXWE] = PM(_PAGE_PRESENT | _PAGE_WRITE);
-+	protection_map[PROTMAP_IDX_SRWE] = PM(_PAGE_PRESENT | _PAGE_WRITE);
- }
- 
- #undef PM
-diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
-index 1b23639e2fcd..1a7fe97c8167 100644
---- a/arch/sparc/mm/init_64.c
-+++ b/arch/sparc/mm/init_64.c
-@@ -2642,22 +2642,22 @@ static void prot_init_common(unsigned long page_none,
- 	PAGE_COPY = __pgprot(page_copy);
- 	PAGE_SHARED = __pgprot(page_shared);
- 
--	protection_map[0x0] = __pgprot(page_none);
--	protection_map[0x1] = __pgprot(page_readonly & ~page_exec_bit);
--	protection_map[0x2] = __pgprot(page_copy & ~page_exec_bit);
--	protection_map[0x3] = __pgprot(page_copy & ~page_exec_bit);
--	protection_map[0x4] = __pgprot(page_readonly);
--	protection_map[0x5] = __pgprot(page_readonly);
--	protection_map[0x6] = __pgprot(page_copy);
--	protection_map[0x7] = __pgprot(page_copy);
--	protection_map[0x8] = __pgprot(page_none);
--	protection_map[0x9] = __pgprot(page_readonly & ~page_exec_bit);
--	protection_map[0xa] = __pgprot(page_shared & ~page_exec_bit);
--	protection_map[0xb] = __pgprot(page_shared & ~page_exec_bit);
--	protection_map[0xc] = __pgprot(page_readonly);
--	protection_map[0xd] = __pgprot(page_readonly);
--	protection_map[0xe] = __pgprot(page_shared);
--	protection_map[0xf] = __pgprot(page_shared);
-+	protection_map[PROTMAP_IDX_XXXX] = __pgprot(page_none);
-+	protection_map[PROTMAP_IDX_XRXX] = __pgprot(page_readonly & ~page_exec_bit);
-+	protection_map[PROTMAP_IDX_XXWX] = __pgprot(page_copy & ~page_exec_bit);
-+	protection_map[PROTMAP_IDX_XRWX] = __pgprot(page_copy & ~page_exec_bit);
-+	protection_map[PROTMAP_IDX_XXXE] = __pgprot(page_readonly);
-+	protection_map[PROTMAP_IDX_XRXE] = __pgprot(page_readonly);
-+	protection_map[PROTMAP_IDX_XXWE] = __pgprot(page_copy);
-+	protection_map[PROTMAP_IDX_XRWE] = __pgprot(page_copy);
-+	protection_map[PROTMAP_IDX_SXXX] = __pgprot(page_none);
-+	protection_map[PROTMAP_IDX_SRXX] = __pgprot(page_readonly & ~page_exec_bit);
-+	protection_map[PROTMAP_IDX_SXWX] = __pgprot(page_shared & ~page_exec_bit);
-+	protection_map[PROTMAP_IDX_SRWX] = __pgprot(page_shared & ~page_exec_bit);
-+	protection_map[PROTMAP_IDX_SXXE] = __pgprot(page_readonly);
-+	protection_map[PROTMAP_IDX_SRXE] = __pgprot(page_readonly);
-+	protection_map[PROTMAP_IDX_SXWE] = __pgprot(page_shared);
-+	protection_map[PROTMAP_IDX_SRWE] = __pgprot(page_shared);
- }
- 
- static void __init sun4u_pgprot_init(void)
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 73a52aba448f..4f99a49749a5 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -431,9 +431,40 @@ extern unsigned int kobjsize(const void *objp);
- /*
-  * mapping from the currently active vm_flags protection bits (the
-  * low four bits) to a page protection mask..
-+ *
-+ * VM_EXEC ---------------------|
-+ *                              |
-+ * VM_WRITE ---------------|    |
-+ *                         |    |
-+ * VM_READ -----------|    |    |
-+ *                    |    |    |
-+ * VM_SHARED ----|    |    |    |
-+ *               |    |    |    |
-+ *               v    v    v    v
-+ * PROTMAP_IDX_(S|X)(R|X)(W|X)(E|X)
-+ *
-+ * X - The protection flag is absent
-+ *
-  */
- extern pgprot_t protection_map[16];
- 
-+#define PROTMAP_IDX_XXXX (VM_NONE)
-+#define PROTMAP_IDX_XRXX (VM_READ)
-+#define PROTMAP_IDX_XXWX (VM_WRITE)
-+#define PROTMAP_IDX_XRWX (VM_READ | VM_WRITE)
-+#define PROTMAP_IDX_XXXE (VM_EXEC)
-+#define PROTMAP_IDX_XRXE (VM_READ | VM_EXEC)
-+#define PROTMAP_IDX_XXWE (VM_WRITE | VM_EXEC)
-+#define PROTMAP_IDX_XRWE (VM_READ | VM_WRITE | VM_EXEC)
-+#define PROTMAP_IDX_SXXX (VM_SHARED | VM_NONE)
-+#define PROTMAP_IDX_SRXX (VM_SHARED | VM_READ)
-+#define PROTMAP_IDX_SXWX (VM_SHARED | VM_WRITE)
-+#define PROTMAP_IDX_SRWX (VM_SHARED | VM_READ | VM_WRITE)
-+#define PROTMAP_IDX_SXXE (VM_SHARED | VM_EXEC)
-+#define PROTMAP_IDX_SRXE (VM_SHARED | VM_READ | VM_EXEC)
-+#define PROTMAP_IDX_SXWE (VM_SHARED | VM_WRITE | VM_EXEC)
-+#define PROTMAP_IDX_SRWE (VM_SHARED | VM_READ | VM_WRITE | VM_EXEC)
-+
- /**
-  * enum fault_flag - Fault flag definitions.
-  * @FAULT_FLAG_WRITE: Fault was a write fault.
-diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-index 228e3954b90c..2e01d0d395bb 100644
---- a/mm/debug_vm_pgtable.c
-+++ b/mm/debug_vm_pgtable.c
-@@ -1104,14 +1104,14 @@ static int __init init_args(struct pgtable_debug_args *args)
- 	/*
- 	 * Initialize the debugging data.
- 	 *
--	 * protection_map[0] (or even protection_map[8]) will help create
--	 * page table entries with PROT_NONE permission as required for
--	 * pxx_protnone_tests().
-+	 * protection_map[PROTMAP_IDX_XXXX] (or even protection_map[PROTMAP_IDX_SXXX])
-+	 * will help create page table entries with PROT_NONE permission as required
-+	 * for pxx_protnone_tests().
- 	 */
- 	memset(args, 0, sizeof(*args));
- 	args->vaddr              = get_random_vaddr();
- 	args->page_prot          = vm_get_page_prot(VMFLAGS);
--	args->page_prot_none     = protection_map[0];
-+	args->page_prot_none     = protection_map[PROTMAP_IDX_XXXX];
- 	args->is_contiguous_page = false;
- 	args->pud_pfn            = ULONG_MAX;
- 	args->pmd_pfn            = ULONG_MAX;
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 88dcc5c25225..d38bd4e305f9 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -101,8 +101,22 @@ static void unmap_region(struct mm_struct *mm,
-  *								x: (yes) yes
-  */
- pgprot_t protection_map[16] __ro_after_init = {
--	__P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
--	__S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
-+	[PROTMAP_IDX_XXXX] = __P000,
-+	[PROTMAP_IDX_XRXX] = __P001,
-+	[PROTMAP_IDX_XXWX] = __P010,
-+	[PROTMAP_IDX_XRWX] = __P011,
-+	[PROTMAP_IDX_XXXE] = __P100,
-+	[PROTMAP_IDX_XRXE] = __P101,
-+	[PROTMAP_IDX_XXWE] = __P110,
-+	[PROTMAP_IDX_XRWE] = __P111,
-+	[PROTMAP_IDX_SXXX] = __S000,
-+	[PROTMAP_IDX_SRXX] = __S001,
-+	[PROTMAP_IDX_SXWX] = __S010,
-+	[PROTMAP_IDX_SRWX] = __S011,
-+	[PROTMAP_IDX_SXXE] = __S100,
-+	[PROTMAP_IDX_SRXE] = __S101,
-+	[PROTMAP_IDX_SXWE] = __S110,
-+	[PROTMAP_IDX_SRWE] = __S111
- };
- 
- #ifndef CONFIG_ARCH_HAS_FILTER_PGPROT
--- 
-2.20.1
-
+> ---
+>   arch/s390/kvm/kvm-s390.c | 2 +-
+>   virt/kvm/kvm_main.c      | 5 +++--
+>   2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 6a6dd5e1daf6..7cabe6778b1b 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -3446,7 +3446,7 @@ bool kvm_arch_no_poll(struct kvm_vcpu *vcpu)
+>   {
+>   	/* do not poll with more than halt_poll_max_steal percent of steal time */
+>   	if (S390_lowcore.avg_steal_timer * 100 / (TICK_USEC << 12) >=
+> -	    halt_poll_max_steal) {
+> +	    READ_ONCE(halt_poll_max_steal)) {
+>   		vcpu->stat.halt_no_poll_steal++;
+>   		return true;
+>   	}
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 191dac6b1bed..768a4cbb26a6 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -3213,6 +3213,7 @@ update_halt_poll_stats(struct kvm_vcpu *vcpu, u64 poll_ns, bool waited)
+>    */
+>   void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+>   {
+> +	bool halt_poll_allowed = !kvm_arch_no_poll(vcpu);
+>   	ktime_t start, cur, poll_end;
+>   	bool waited = false;
+>   	u64 block_ns;
+> @@ -3220,7 +3221,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+>   	kvm_arch_vcpu_blocking(vcpu);
+>   
+>   	start = cur = poll_end = ktime_get();
+> -	if (vcpu->halt_poll_ns && !kvm_arch_no_poll(vcpu)) {
+> +	if (vcpu->halt_poll_ns && halt_poll_allowed) {
+>   		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
+>   
+>   		++vcpu->stat.generic.halt_attempted_poll;
+> @@ -3275,7 +3276,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+>   	update_halt_poll_stats(
+>   		vcpu, ktime_to_ns(ktime_sub(poll_end, start)), waited);
+>   
+> -	if (!kvm_arch_no_poll(vcpu)) {
+> +	if (halt_poll_allowed) {
+>   		if (!vcpu_valid_wakeup(vcpu)) {
+>   			shrink_halt_poll_ns(vcpu);
+>   		} else if (vcpu->kvm->max_halt_poll_ns) {
+> 
