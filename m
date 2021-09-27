@@ -2,90 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EB141979F
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 17:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3564198C1
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 18:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235097AbhI0PVk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Sep 2021 11:21:40 -0400
-Received: from mail-vk1-f179.google.com ([209.85.221.179]:42649 "EHLO
-        mail-vk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234972AbhI0PVk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 11:21:40 -0400
-Received: by mail-vk1-f179.google.com with SMTP id o204so7085589vko.9;
-        Mon, 27 Sep 2021 08:20:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F5wb4ZX9gwgasne0NhWUEprI9AwQOWamOuZRWGphiLM=;
-        b=kUVo7+CyhC5FEcruzclsk61G8fYYLZZzDxNpLfe1ksKxmnRk6BT2jy6oWTstcJOnra
-         LzvUAObgEM4qHTh+1cPS96ntwekqquZtDEU5r3eUoKbwwfYWtZQ8lJUBW93a5dg/uvbe
-         VQG377Z34yci1d09lhe4VPraD8MZmdIlltFM44M1R2DXYLKHLyuKhrvhS5nYufdZVKik
-         I7Jspz4N3xepn8OKvVbQ7yKzJ7IHFYB1Kc5zQX1nDbZp6rqNFCmTBgFxEt9TqqZcWXb7
-         MAGQVoblLwp4T1BYx8Xpz8uDgrSLFCew5OdqjRkzrSQAfCHO36d0SE3hgNgMyDNWyGrz
-         YQrg==
-X-Gm-Message-State: AOAM533y2j7ZQLsx8Rh/x/x8TduU0T0zWtL0Tktc3mJecbDmInTMhx2v
-        s1KEKASZZ/hxvectbuUEMA3wnnwojDMpxFDY0Mw=
-X-Google-Smtp-Source: ABdhPJxj2OeFkxklgcIGHyfFHROJ0kJKH8P7BoepnpioKOsPmd/3DG/ainzZgT/3Vd7Z0PN8a+SyRrxXemz3PM2L1AY=
-X-Received: by 2002:a1f:230c:: with SMTP id j12mr572707vkj.11.1632756001800;
- Mon, 27 Sep 2021 08:20:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210927150518.8607-1-david@redhat.com> <20210927150518.8607-3-david@redhat.com>
-In-Reply-To: <20210927150518.8607-3-david@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Sep 2021 17:19:50 +0200
-Message-ID: <CAMuHMdWuRtxwRCy-x63s9BkDKk+hkXhEfZYC5pmXomzCuDBrYg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/4] memblock: allow to specify flags with memblock_add_node()
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Jianyong Wu <Jianyong.Wu@arm.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        arcml <linux-snps-arc@lists.infradead.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, kexec@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        id S235261AbhI0QUT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Sep 2021 12:20:19 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:30080 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235424AbhI0QUT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 12:20:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632759506;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=g2indfiR/jZDlYxjjZkEZkE7oAQ92vUodc4qSJ3YJjc=;
+    b=Yln5ZK7ecw/dpFPlXymVcHMiFw1FlovIo14amHEIdHeoDq9fy+5YJhD6PCdN3uyZxo
+    M08iDkxNZE/Sg7kBE/yygTD5XEB6p6IPzOhylmIn+IcWD9APBtpIGjD8YOXFdOyZa06/
+    +pPuA1v0pidTm+Ic4qAOd7IuE2woqAPQha5aibSmeFktDzebjH4hiCVT7nvKBO0e5N3o
+    m9IwxXLMPjeBrnBPRrkXHlmSxAAq40LRrOuvEbwm8j0KJ3lVb8HdYV2TNEwqA50G+xS/
+    xs1DxL1BZFIwL9YcGsP5dDXt0sb4EC40X56rb7F38i70APDmwZcRCauQeMzuMKnIepl1
+    TOLQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3i8QW3w=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
+    with ESMTPSA id I01f74x8RGIQarb
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Mon, 27 Sep 2021 18:18:26 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v3 6/6] drm/ingenic: Attach bridge chain to encoders
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <L9900R.05DOH2MOR3V93@crapouillou.net>
+Date:   Mon, 27 Sep 2021 18:18:25 +0200
+Cc:     Paul Boddie <paul@boddie.org.uk>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-mips <linux-mips@vger.kernel.org>, list@opendingux.net,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <044C92DA-EF88-4738-BF60-885906588408@goldelico.com>
+References: <20210922205555.496871-1-paul@crapouillou.net>
+ <4366739.KZ8Jxz7LyS@jason> <EKJXZQ.6VJ0UDHV3T3W@crapouillou.net>
+ <2094991.ScV2v2meXk@jason> <HU700R.NAHL5IU3NRE81@crapouillou.net>
+ <96585ED9-B707-4AF1-8417-E03DE6414965@goldelico.com>
+ <L9900R.05DOH2MOR3V93@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 5:05 PM David Hildenbrand <david@redhat.com> wrote:
-> We want to specify flags when hotplugging memory. Let's prepare to pass
-> flags to memblock_add_node() by adjusting all existing users.
->
-> Note that when hotplugging memory the system is already up and running
-> and we don't want to add the memory first and apply flags later: it
-> should happen within one memblock call.
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+Hi Paul,
 
->  arch/m68k/mm/mcfmmu.c            | 3 ++-
->  arch/m68k/mm/motorola.c          | 6 ++++--
+> Am 25.09.2021 um 21:39 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+>=20
+>=20
+> Le sam., sept. 25 2021 at 21:26:42 +0200, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> Hi Paul,
+>>> Am 25.09.2021 um 21:08 schrieb Paul Cercueil <paul@crapouillou.net>:
+>>> Hi Paul & Nikolaus,
+>>> If you spent some time debugging the issue
+>> we did ...
+>=20
+> By saying that you didn't debug,
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+We did - but sometimes you don't see the wood for the trees.
 
-Gr{oetje,eeting}s,
+> (null) means you're printing a NULL pointer. So I could see that =
+hdmi->next_bridge was NULL.
 
-                        Geert
+I remember we did find this, but did not understand that it should be =
+initialized by dw-hdmi.
+And because we though that dw-hdmi has it its own connector, it is ok =
+that way.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> The place that sets it is dw_hdmi_parse_dt, which will return early =
+with code 0, before next_bridge is set, if plat_data->output_port =3D=3D =
+0, which was your case.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Well, we were still at 5.14 when we did these initial attempts to use =
+hdmi-connector with synopsys.
+Back then, there was no dw_hdmi_parse_dt and no output_port.
+
+IAW: we did not even have a chance to make it work on top of 5.14 the =
+hdmi-connector way. And were sucessful.
+
+I just noticed this when trying to backport the last puzzle piece...
+
+Well, it is always difficult to hit a moving target.
+
+> Since your hdmi-connector is wired at port #1, then .output_port =
+should be 1 as well.
+
+Anyways it works now for 5.14.8 (our internal test) and 5.15-rc3.
+
+And v4 of the jz4780 hdmi stuff will follow.
+
+BR and thanks,
+Nikolaus
+
