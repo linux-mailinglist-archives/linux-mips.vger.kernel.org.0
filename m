@@ -2,140 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8A14199CE
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 18:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA674199D5
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 19:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235486AbhI0RA7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Sep 2021 13:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235425AbhI0RA6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 13:00:58 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C886C061740
-        for <linux-mips@vger.kernel.org>; Mon, 27 Sep 2021 09:59:20 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id b15so79146029lfe.7
-        for <linux-mips@vger.kernel.org>; Mon, 27 Sep 2021 09:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=boyhOy7c3Zv3+YHD3yPMRV9jTZZHINKXKipnorJKcwg=;
-        b=EFsgbbFE2kAt7wByLaFcasmCsfVIgNxk/m8G/nDr+HQQCPZquhtvMBtAa+Duc5+kXQ
-         UtY1CeMLlZTD94anpjzQv4K2YgUm9xVsItVLuyYt7PzuN+o60dJjWiO6ZURLbhkP7mzD
-         l/1wphgAzzIFt+bnAvBUh1vmO0XgUCFQbkR5nyhNqwPHp4lRcD3QYQpAbbn7KH5W/ysv
-         OQmlCYcjYrF8BVfGjUkclx0OrNnd/IdHMhsMfPOv7/HS8Qxd6WyABtIhI1iDB0FR5uaE
-         W0Ua9w0Kzy0A9r7i69bL0pt1y0fFyfV6OwYtL3O/7ZJwWx+dXki0Z+PUBsXBMwLQP/I9
-         ShZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=boyhOy7c3Zv3+YHD3yPMRV9jTZZHINKXKipnorJKcwg=;
-        b=cVNFgpD44QCVVdXPRZPnBxvUAHWPg2tTg/REeWdRNW/A6mnO4C0GSiqerPx5yolwOq
-         PP3wV5HqJs4Q9ndvsVOlFqQV98g0PxVrb60ywKBIuOOAmgMd4uHndfCZ0i9Hl9tZXCNS
-         AJflQ9EKK2otFZ3toOm4PQuQyb6lweLGOMOLdUBxrKqHNm1Rh4XuQETr4Us/DcS5hiJx
-         TrdOY7A97BWhREIPob7xeDiugj+7TyUYCw67O8FbYwnyAh7p21/OSNH8RdfeJ+M3FcZP
-         NkOQK8GxeAchBJnDgvqsxBPMgYJFeuF1wzDg98XypSJS2ZEqikl04iJ6KeZlhlEnBPBQ
-         dPHw==
-X-Gm-Message-State: AOAM533ge5Ioyi8ux91XLZtyhbWuHR3ja0p34/3410eFapwkC9Lq0tX6
-        H8wZ64hUU6t6778HCq0EY14GU5Y+/F0lwb3jLnT2gQ==
-X-Google-Smtp-Source: ABdhPJyvrc2iIXbcC8YaiVkzYO41Psj9zevIrEPYYOmLf26TIPB4wujR7R6xkm6OJn238QJWJUKaISQGVYiRf4/ylng=
-X-Received: by 2002:a19:c349:: with SMTP id t70mr843112lff.102.1632761958145;
- Mon, 27 Sep 2021 09:59:18 -0700 (PDT)
+        id S235428AbhI0RCS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Sep 2021 13:02:18 -0400
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:52483 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235412AbhI0RCS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 27 Sep 2021 13:02:18 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 4CF5D5805AF;
+        Mon, 27 Sep 2021 13:00:39 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 27 Sep 2021 13:00:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=lhvhZkzEG2JTs8VXnXTsprv1HE/
+        2QmgnPUJAYjAh5Qo=; b=SxNSGu8Bb6ncOXI85FEF+4ZP09S3cTJQWPymQOFAKq/
+        bEhfBKMy809nda4QfY7Hzj8u57QNaHaNgS/RVJGVfvKHGDOfMbUJRnzX3MOrE9dP
+        mcJCmw68vUtZksPzPJa2SbwDAa+N5rJF73RHPM+uLLf5fpeuOPYy10DM+iicQrua
+        oGD7N4q8GowRE2xyZa8QOqhOxCfTznZW9WDCrI6GiTYcpFgzACU6j+Fqm+XhnFE1
+        Xb1+r2NPg6SmWMep52h6pNI/LMktPM7nUuRwSiLBerg3QJgiDtFZG1qQhwMG1kTB
+        /JH7qzxz0YSLcu8p+oh5Msw2ftHZtpt9nF/aO5sIuQw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=lhvhZk
+        zEG2JTs8VXnXTsprv1HE/2QmgnPUJAYjAh5Qo=; b=QzYKCp3StKXF6V37i8dO/h
+        GpcdLvyPDXhXhs2lOTyYM9vVbp4JnUGERXIlcNw3V/0wkBclQ5dd7IiHVCBnnLmG
+        gftZQ5+reTBA/zno9nLFw1IfRXwgwObWExDxhaTL64YZqLeJolzSZFNZJvMxgceY
+        r9gyVaz5nrnbvSdcUaHPhplgmkFm4g1iF2m3oqZ6iyy8BrssS+2o0HecGxc8iAhq
+        nlcYASFsjj0frfTlrV+crksK5oBWmMd6qO+yWR9pgAI66O9lHPfFONbdYUnQ88bN
+        hdgNq9zTFX1ed/cpkphNs63tX0nJ2YtZheVl+mqhCgntqMqJkh/5UjfJv7ZjItTA
+        ==
+X-ME-Sender: <xms:tPhRYdnt8mqxPQB5gXJwiFA2Uh_cC4SRe3bs4mZ-EKBNZPRe3cgtEQ>
+    <xme:tPhRYY1XIoWpoELixTJUAj-IfQ-NsY-3_UlNpQa_ORTb0GKi3rFtJaLtNNFcpwt0q
+    J_0HVDW0lbyaF1n9F0>
+X-ME-Received: <xmr:tPhRYTpNpH1jXWTyoW1jT-CEUmIWKTeAoLZ7SAh6I7yeeCOiC7Zi5pjy81bBrKGGynf1_f_na--u_-PQWR3TTRETlZLOg70loewfysDS>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudejkedguddtiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheei
+    heegudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:tPhRYdlpst71omb_PatUJw6rzOX0i48Z_JIxsKFltJK_SbGh-6_u3A>
+    <xmx:tPhRYb3LXxsoPsGKCR06BHNoECVRHfii8Bk7BI6rsp58HsvlAESzPg>
+    <xmx:tPhRYcsp-PHunl-savWy2Mfi3irZNgICHfotAF6ZfNVWk9mON-o5ow>
+    <xmx:t_hRYREYAgMww3McnfipLfvNxCXPUmt8SoGMiFVdRWelw-AnI0FA_A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Sep 2021 13:00:35 -0400 (EDT)
+Date:   Mon, 27 Sep 2021 19:00:34 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v4 05/10] drm/bridge: synopsis: Fix to properly handle HPD
+Message-ID: <20210927170034.mhv5r2r5gcojc7yn@gilmour>
+References: <cover.1632761067.git.hns@goldelico.com>
+ <dd2356790b774c7885afecc9d29783cb51a26e6d.1632761068.git.hns@goldelico.com>
 MIME-Version: 1.0
-References: <20210925005528.1145584-1-seanjc@google.com> <03f2f5ab-e809-2ba5-bd98-3393c3b843d2@de.ibm.com>
- <YVHcY6y1GmvGJnMg@google.com> <f37ab68c-61ce-b6fb-7a49-831bacfc7424@redhat.com>
- <43e42f5c-9d9f-9e8b-3a61-9a053a818250@de.ibm.com>
-In-Reply-To: <43e42f5c-9d9f-9e8b-3a61-9a053a818250@de.ibm.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 27 Sep 2021 09:58:51 -0700
-Message-ID: <CALzav=cxeYieTkKJhT0kFZOjdv6k5eCZXKWs=ZQGCJg0x-oFjQ@mail.gmail.com>
-Subject: Re: disabling halt polling broken? (was Re: [PATCH 00/14] KVM:
- Halt-polling fixes, cleanups and a new stat)
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jon Cargille <jcargill@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org,
-        KVMARM <kvmarm@lists.cs.columbia.edu>,
-        LinuxMIPS <linux-mips@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        KVMPPC <kvm-ppc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Janosch Frank <frankja@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="se5ukx3kudn4e4kq"
+Content-Disposition: inline
+In-Reply-To: <dd2356790b774c7885afecc9d29783cb51a26e6d.1632761068.git.hns@goldelico.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 8:17 AM Christian Borntraeger
-<borntraeger@de.ibm.com> wrote:
->
->
->
-> Am 27.09.21 um 17:03 schrieb Paolo Bonzini:
-> > On 27/09/21 16:59, Sean Christopherson wrote:
-> >>> commit acd05785e48c01edb2c4f4d014d28478b5f19fb5
-> >>> Author:     David Matlack<dmatlack@google.com>
-> >>> AuthorDate: Fri Apr 17 15:14:46 2020 -0700
-> >>> Commit:     Paolo Bonzini<pbonzini@redhat.com>
-> >>> CommitDate: Fri Apr 24 12:53:17 2020 -0400
-> >>>
-> >>>      kvm: add capability for halt polling
-> >>>
-> >>> broke the possibility for an admin to disable halt polling for already running KVM guests.
-> >>> In past times doing
-> >>> echo 0 > /sys/module/kvm/parameters/halt_poll_ns
-> >>>
-> >>> stopped polling system wide.
-> >>> Now all KVM guests will use the halt_poll_ns value that was active during
-> >>> startup - even those that do not use KVM_CAP_HALT_POLL.
-> >>>
-> >>> I guess this was not intended?
-> >
-> > No, but...
-> >
-> >> I would go so far as to say that halt_poll_ns should be a hard limit on
-> >> the capability
-> >
-> > ... this would not be a good idea I think.  Anything that wants to do a lot of polling can just do "for (;;)".
 
-I agree. It would also be a maintenance burden and subtle "gotcha" to
-have to increase halt_poll_ns anytime one wants to increase
-KVM_CAP_HALT_POLL.
+--se5ukx3kudn4e4kq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >
-> > So I think there are two possibilities that makes sense:
-> >
-> > * track what is using KVM_CAP_HALT_POLL, and make writes to halt_poll_ns follow that
->
-> what about using halt_poll_ns for those VMs that did not uses KVM_CAP_HALT_POLL and the private number for those that did.
+Hi,
 
-None of these options would cover Christian's original use-case
-though. (Write to module to disable halt-polling system-wide.)
+On Mon, Sep 27, 2021 at 06:44:23PM +0200, H. Nikolaus Schaller wrote:
+> It appears that dw-hdmi plugin detection is not properly
+> propagated unless we call drm_kms_helper_hotplug_event().
+>=20
+> Maybe drm_bridge_hpd_notify should have been setup to
+> call this.
+>=20
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/=
+bridge/synopsys/dw-hdmi.c
+> index f082e14320e1..edea04f80576 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -3018,6 +3018,8 @@ static irqreturn_t dw_hdmi_irq(int irq, void *dev_i=
+d)
+>  		if (hdmi->bridge.dev) {
+>  			drm_helper_hpd_irq_event(hdmi->bridge.dev);
+>  			drm_bridge_hpd_notify(&hdmi->bridge, status);
+> +
+> +			drm_kms_helper_hotplug_event(hdmi->bridge.dev);
 
-What about adding a writable "enable_halt_polling" module parameter
-that affects all VMs? Once that is in place we could also consider
-getting rid of halt_poll_ns entirely.
+drm_kms_helper_hotplug_event is already called from drm_helper_hpd_irq_event
 
-> >
-> > * just make halt_poll_ns read-only.
-> >
-> > Paolo
-> >
+Maxime
+
+--se5ukx3kudn4e4kq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYVH4sgAKCRDj7w1vZxhR
+xY1eAQCsr8ScTO4ZYd2hxMrGCf3WRCg49NwG234OHf/r7wmRSgD/RejL0pc3tJtY
+pEFsvdgbaEi9RAjgGHjqhF/oTfz1sw8=
+=Hrc4
+-----END PGP SIGNATURE-----
+
+--se5ukx3kudn4e4kq--
