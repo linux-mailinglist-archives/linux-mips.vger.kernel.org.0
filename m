@@ -2,99 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C837441974B
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 17:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6EB419789
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 17:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbhI0PIq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Sep 2021 11:08:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:28978 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234994AbhI0PIp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 27 Sep 2021 11:08:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632755227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H2YLjPWLjDxhksfVJJ0b+TgzS3sQ4uenpZKkXE6cLl8=;
-        b=Vuq9HxLgQlfj9bP7NfiSyHCmpHTUMswo7Ijerr+14A94Ln9wkpFBqxZEBlQjirzTHX0T/d
-        r4KL5Y0EAK1vuIv09zmr1VmIvGMzCm2RfXRCo0yf0ZF6KU/IgVAYuXVzncZWmeQy+UicuJ
-        0wjd0vXR85f6FqtqNqeZIbrSe0fcia8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-557-UQ_ZctL4P5KJFyYDbzY4lQ-1; Mon, 27 Sep 2021 11:07:06 -0400
-X-MC-Unique: UQ_ZctL4P5KJFyYDbzY4lQ-1
-Received: by mail-wm1-f72.google.com with SMTP id k5-20020a7bc3050000b02901e081f69d80so362946wmj.8
-        for <linux-mips@vger.kernel.org>; Mon, 27 Sep 2021 08:07:05 -0700 (PDT)
+        id S235046AbhI0PRh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Sep 2021 11:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235037AbhI0PRh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 11:17:37 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DE6C061740
+        for <linux-mips@vger.kernel.org>; Mon, 27 Sep 2021 08:15:59 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id t9so3950418pju.5
+        for <linux-mips@vger.kernel.org>; Mon, 27 Sep 2021 08:15:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=J1aK1o24WWHw6k8idRjv4JjH9S5sZVXgl07HpLc8Nnw=;
+        b=bQHxGWLkKAFfWjndxT1kv2LbZGzPIP4GMYqRTXgFhjFtycMwHf7oDbkLslbtR4pYd8
+         yoFlCQc2ltGwam4vhlmoS3oimleu3pwe0TB2wEbQSMXNmcuSL2fEXMGKRR6VGAEKa+zx
+         uBEyDrGhON68VlaGnkxqoD7VEINLMPpIUFZaO91NQhTftbZgCwvv8fSwFTGkn60+vb7M
+         tzXRg07NdSFlGR9MnkHpbvjCWdgeDDxSzPrXKbohkx6P3LAtIvvQcCO2/whyo9eVK5YX
+         lBKDG/n38SBu32xRrec0Hya+F6UV+98jAPrLz4eDF/C+dn9e2QJw1OXHZ3z9XcorwHMQ
+         JAPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=H2YLjPWLjDxhksfVJJ0b+TgzS3sQ4uenpZKkXE6cLl8=;
-        b=ei9UBFH26WQphFqFF3e44j8K28koR8pgb2ZwaoOi/YMjojfdy92WMxfz5ujNQV7BOD
-         712o9YElVQ1eA5PMA7G8+K+DVxnZ3leXEBhs0f6ZPdhRvz3/75rhKN721pf3p/L0bUjJ
-         dgsLOXoAiGoGLMP0ey9NsJaqRY7NOS6uH3HVp2wJ/K61NHz8Po7Kg9TrsSiqhbMxRp1a
-         rpD0r15Y+o/pa0QwOtWxSZvVulodZZNzQoF9dKDF2h2yJuxjWI7mDL1s7Kx7sPwJkWZL
-         eomZ5+iC4ccHW1/XFrqvJldVQL2fSTUmDmGGeWQ1MrZLwNTS5ArELV/Jg+8F7H9rIhgX
-         uC6A==
-X-Gm-Message-State: AOAM533kxAiUeciE3073xOyAO9QPzy4lv+R+PzQINPhM9N93nPTiA6AR
-        S7fJAygsmr03w/be+7NF3bgt4wKhGowdtXNH4hz7BrkYQ6EzQMbJHBwNx3M0AQO5yhn6ebDnMBT
-        V9EAL+6kD3ljj1FFqoyM8vg==
-X-Received: by 2002:a5d:590a:: with SMTP id v10mr361557wrd.87.1632755224887;
-        Mon, 27 Sep 2021 08:07:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyy5wlKXLyU5BWf9WD/reu/rSzNLdsCLGLJ2WCZuEX7Xkvd9O/Z0HH1Erkz7+dZr/KU55FrDA==
-X-Received: by 2002:a5d:590a:: with SMTP id v10mr361519wrd.87.1632755224672;
-        Mon, 27 Sep 2021 08:07:04 -0700 (PDT)
-Received: from [192.168.3.132] (p5b0c654d.dip0.t-ipconnect.de. [91.12.101.77])
-        by smtp.gmail.com with ESMTPSA id f9sm284908wmf.3.2021.09.27.08.07.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Sep 2021 08:07:04 -0700 (PDT)
-Subject: Re: [PATCH v1 0/4] mm/memory_hotplug: full support for
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Jianyong Wu <Jianyong.Wu@arm.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=J1aK1o24WWHw6k8idRjv4JjH9S5sZVXgl07HpLc8Nnw=;
+        b=t6imKNYzx2M4OuDUbm1irM8wHHzhs+KqQHG9wVmvA2PBNX+fIqQP9q0RGTCLqvySZT
+         wYj/Qx7kPDmFoyI5J0xWBBgMLAvBDXL9/pjEnIwW1A5OCIDIssSTe/Ic6yeHZVzMj2Jd
+         Sg0XggWH2NkNLdw/RudjExhB63tTYbgwkXqDVFZ1i0lGA1tK1BN0jW/NXzHwfWc8srmb
+         ZfAm1Y0UdGlrryYMtGOjXhMx9KN4Jz1EKqZlfk35in2OagPyBAwStJSUdgxmuHRLtFGc
+         dvW/uGgevRue3uMBj9x9lKbGJaopIcIl7yW/0oImQ9xTYU0d7/BEOOAmJNCRBPctWo5k
+         7OqQ==
+X-Gm-Message-State: AOAM532L++r3kqzuW+BJ3v97ISE+Hl0nDJA/cR2ctf7qwNkn1rqTyTPi
+        MHL6tw/4YKFg0fiXUpm00VlTXg==
+X-Google-Smtp-Source: ABdhPJyA6ONhd1Ga93hKwsqmjOKuFVk7/BNXzU8fonL5kd5O9SJ41kUDv10GPB3TNvNBUBEzEJ7IZA==
+X-Received: by 2002:a17:90a:4207:: with SMTP id o7mr523060pjg.192.1632755758626;
+        Mon, 27 Sep 2021 08:15:58 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id r23sm20063784pjo.3.2021.09.27.08.15.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Sep 2021 08:15:57 -0700 (PDT)
+Date:   Mon, 27 Sep 2021 15:15:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        David Matlack <dmatlack@google.com>,
+        Jon Cargille <jcargill@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jing Zhang <jingzhangos@google.com>,
+        Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-snps-arc@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-mm@kvack.org,
-        kexec@lists.infradead.org
-References: <20210927150518.8607-1-david@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Message-ID: <d7d4ec92-7b9c-f466-6d3c-cfdd162d1dbf@redhat.com>
-Date:   Mon, 27 Sep 2021 17:07:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: disabling halt polling broken? (was Re: [PATCH 00/14] KVM:
+ Halt-polling fixes, cleanups and a new stat)
+Message-ID: <YVHgKWiU9WWL9ACg@google.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+ <03f2f5ab-e809-2ba5-bd98-3393c3b843d2@de.ibm.com>
+ <YVHcY6y1GmvGJnMg@google.com>
+ <f37ab68c-61ce-b6fb-7a49-831bacfc7424@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20210927150518.8607-1-david@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f37ab68c-61ce-b6fb-7a49-831bacfc7424@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Intended subject was "[PATCH v1 0/4] mm/memory_hotplug: full support for 
-add_memory_driver_managed() with CONFIG_ARCH_KEEP_MEMBLOCK"
+On Mon, Sep 27, 2021, Paolo Bonzini wrote:
+> On 27/09/21 16:59, Sean Christopherson wrote:
+> > > commit acd05785e48c01edb2c4f4d014d28478b5f19fb5
+> > > Author:     David Matlack<dmatlack@google.com>
+> > > AuthorDate: Fri Apr 17 15:14:46 2020 -0700
+> > > Commit:     Paolo Bonzini<pbonzini@redhat.com>
+> > > CommitDate: Fri Apr 24 12:53:17 2020 -0400
+> > > 
+> > >      kvm: add capability for halt polling
+> > > 
+> > > broke the possibility for an admin to disable halt polling for already running KVM guests.
+> > > In past times doing
+> > > echo 0 > /sys/module/kvm/parameters/halt_poll_ns
+> > > 
+> > > stopped polling system wide.
+> > > Now all KVM guests will use the halt_poll_ns value that was active during
+> > > startup - even those that do not use KVM_CAP_HALT_POLL.
+> > > 
+> > > I guess this was not intended?
+> 
+> No, but...
+> 
+> > I would go so far as to say that halt_poll_ns should be a hard limit on
+> > the capability
+> 
+> ... this would not be a good idea I think.  Anything that wants to do a lot
+> of polling can just do "for (;;)".
 
--- 
-Thanks,
+Hmm, true, there is no danger to the system in having the capability override the
+module param.
 
-David / dhildenb
+> So I think there are two possibilities that makes sense:
+> 
+> * track what is using KVM_CAP_HALT_POLL, and make writes to halt_poll_ns
+> follow that
 
+I think this option makes more sense, making halt_poll_ns read-only is basically
+forcing users to switch to KVM_CAP_HALT_POLL.
+
+> * just make halt_poll_ns read-only.
+> 
+> Paolo
+>
