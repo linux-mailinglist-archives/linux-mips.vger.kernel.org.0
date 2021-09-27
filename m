@@ -2,33 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3AD419980
+	by mail.lfdr.de (Postfix) with ESMTP id C60BC419981
 	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 18:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235663AbhI0Qqc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Sep 2021 12:46:32 -0400
-Received: from mo4-p04-ob.smtp.rzone.de ([81.169.146.177]:33535 "EHLO
+        id S235668AbhI0Qqd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Sep 2021 12:46:33 -0400
+Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.121]:9001 "EHLO
         mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235614AbhI0Qqa (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 12:46:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632761076;
+        with ESMTP id S235609AbhI0Qq3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 12:46:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632761077;
     s=strato-dkim-0002; d=goldelico.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=H3NxTpI4pXBoo4dw/8ZdM/IDMISjQFk7ziraP3D1Awk=;
-    b=nTIlICPMlHJza5585/y4P0Bnb4NN9sam/hbk9AVpUzCxomnDNjdJBrhogcXogzPxmx
-    QBeUEWcNYMAR/SazJqwgv8vVurYi16kpq0O0eIaBZ/8S5Z3RNqsRt4U+4GiWY3A23A9n
-    ZwEfkkv1EHdSBWdUz8nUbTxLSQZTfpSQnCU+ZQdII9ZT5gQ2Fq1MVggudt+UI9tQUSki
-    cfZYX+/6R07Weyy0Grf+L9K/8RYlQT5n3yBdAkIEo7snF6Az6NdiTtWsuBXJrKBffV0P
-    LSfKKeyGYWVC46Wvg2ThLISeW+5yJjIntZ2GIuOI7+u3gJ7ehfyFrLGy21SCYnXttdul
-    Mavw==
+    bh=MjPbzlnN7hQVd9fKu80QDyXCXe1NuthcfXYQlRFTifk=;
+    b=DoULBN1+rTGvRqGNoU+PX+0BSJ9UA3Ll3Jv086e4itYKCh5IPl30qw3dpU2eGUOD1F
+    2sFxCOFgiXL3nglZGjasB6Z/4ZMEqLl6YmLc7T1UtVlO6AMGygGBqge9M8IskJJb7DSo
+    ThxvzbwGTrqa0Wdm6r0bS9G8ACECJEJMW5rIAMqb5AX1jtegdEmBhDYJl4JmUn9sBsJC
+    6wWAugTb+dsZpVLW1UwL/dnmtF/XjXubx1f9XzEF3RGn8YZRFg7iV+9rDp3Zlsz45q4l
+    Ju0Qy7xzSum3kwEvCFgJJjrqUWokjgUMhARg+dvGA0AWVibPxYmU+aRulNcAmfZp6Lek
+    up0Q==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1KHeBQyh+ITDDFrDb4="
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
-    with ESMTPSA id I01f74x8RGiaavH
+    with ESMTPSA id I01f74x8RGiaavI
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Mon, 27 Sep 2021 18:44:36 +0200 (CEST)
@@ -61,9 +61,9 @@ Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
         Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH v4 08/10] MIPS: DTS: CI20: Add DT nodes for HDMI setup
-Date:   Mon, 27 Sep 2021 18:44:26 +0200
-Message-Id: <b9c245a727349f9c6516f4418a8cb207246996f8.1632761068.git.hns@goldelico.com>
+Subject: [PATCH v4 09/10] MIPS: defconfig: CI20: configure for DRM_DW_HDMI_JZ4780
+Date:   Mon, 27 Sep 2021 18:44:27 +0200
+Message-Id: <99f62f7caf64ec7c196b29ec88d104c55e052174.1632761068.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1632761067.git.hns@goldelico.com>
 References: <cover.1632761067.git.hns@goldelico.com>
@@ -73,116 +73,32 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Paul Boddie <paul@boddie.org.uk>
+Enable CONFIG options as modules.
 
-We need to hook up
-* HDMI connector
-* HDMI power regulator
-* DDC pinmux
-* HDMI and LCDC endpoint connections
-
-Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/mips/boot/dts/ingenic/ci20.dts | 67 +++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ arch/mips/configs/ci20_defconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index a688809beebc..4776be35b14d 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -78,6 +78,18 @@ eth0_power: fixedregulator@0 {
- 		enable-active-high;
- 	};
- 
-+	hdmi_out: connector {
-+		compatible = "hdmi-connector";
-+		label = "HDMI OUT";
-+		type = "a";
-+
-+		port {
-+			hdmi_con: endpoint {
-+				remote-endpoint = <&dw_hdmi_out>;
-+			};
-+		};
-+	};
-+
- 	ir: ir {
- 		compatible = "gpio-ir-receiver";
- 		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
-@@ -102,6 +114,17 @@ otg_power: fixedregulator@2 {
- 		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
- 		enable-active-high;
- 	};
-+
-+	hdmi_power: fixedregulator@3 {
-+		compatible = "regulator-fixed";
-+
-+		regulator-name = "hdmi_power";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+
-+		gpio = <&gpa 25 GPIO_ACTIVE_LOW>;
-+		enable-active-high;
-+	};
- };
- 
- &ext {
-@@ -506,6 +529,12 @@ pins_i2c4: i2c4 {
- 		bias-disable;
- 	};
- 
-+	pins_hdmi_ddc: hdmi_ddc {
-+		function = "hdmi-ddc";
-+		groups = "hdmi-ddc";
-+		bias-disable;
-+	};
-+
- 	pins_nemc: nemc {
- 		function = "nemc";
- 		groups = "nemc-data", "nemc-cle-ale", "nemc-rd-we", "nemc-frd-fwe";
-@@ -536,3 +565,41 @@ pins_mmc1: mmc1 {
- 		bias-disable;
- 	};
- };
-+
-+&hdmi {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_hdmi_ddc>;
-+
-+	hdmi-5v-supply = <&hdmi_power>;
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+			dw_hdmi_in: endpoint {
-+				remote-endpoint = <&lcd_out>;
-+			};
-+		};
-+
-+		port@1 {
-+			reg = <1>;
-+			dw_hdmi_out: endpoint {
-+				remote-endpoint = <&hdmi_con>;
-+			};
-+		};
-+	};
-+};
-+
-+&lcdc0 {
-+	status = "okay";
-+
-+	port {
-+		lcd_out: endpoint {
-+			remote-endpoint = <&dw_hdmi_in>;
-+		};
-+	};
-+};
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index ab7ebb066834..9c9c649d385b 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -98,7 +98,13 @@ CONFIG_RC_DEVICES=y
+ CONFIG_IR_GPIO_CIR=m
+ CONFIG_IR_GPIO_TX=m
+ CONFIG_MEDIA_SUPPORT=m
++CONFIG_DRM=m
++CONFIG_DRM_INGENIC=m
++CONFIG_DRM_INGENIC_DW_HDMI=y
++CONFIG_DRM_DISPLAY_CONNECTOR=m
+ # CONFIG_VGA_CONSOLE is not set
++CONFIG_FB=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
+ # CONFIG_HID is not set
+ CONFIG_USB=y
+ CONFIG_USB_STORAGE=y
 -- 
 2.31.1
 
