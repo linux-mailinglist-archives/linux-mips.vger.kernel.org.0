@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CD141A579
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 04:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBFD41A57D
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 04:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238640AbhI1CbA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Sep 2021 22:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
+        id S238764AbhI1CbK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Sep 2021 22:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238650AbhI1Ca6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 22:30:58 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D2AC061575;
-        Mon, 27 Sep 2021 19:29:19 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 17so19626931pgp.4;
-        Mon, 27 Sep 2021 19:29:19 -0700 (PDT)
+        with ESMTP id S238650AbhI1CbK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 22:31:10 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8D6C061575;
+        Mon, 27 Sep 2021 19:29:31 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id h12so3505596pjj.1;
+        Mon, 27 Sep 2021 19:29:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3QThqxTZ5uzX8g3SWHj4WUPibxza6P9n5f90ZfsEf6I=;
-        b=Sc/fOiG5FBGWfD5Mpa7eQeAjpUOeeIAanPYOEnXV7MsFIytNZUAPeGAK2MGtkwMczA
-         nMW8dZ3yeNayGVC7uSbak+6ixei0Je+rr23F+J7R3qI4qhpTNcWcTp0LuhkF37OG979M
-         iabGp88RfBqq84xEfWA+p+SyCIyFGN+uAPz7WunxzeU6EVhSrsYOD+hDYpy6G4HnZTia
-         M3HEf30SrxwY+5+1AyAvgjgySCzfTY2CjiWSMcBXYFUE0GfDEV326E91R7hLr8DzbTOi
-         lZJbocsTYhEbCk+uLRG/nHGoupBmdDdxZ0ncVISl2DwZ7xA2G2aIKkX5fVgKM0eyq+4E
-         xOkQ==
+        bh=T+nuZjtMi8lifdnlhi4/+fNb2Wj4qKRZZKIw/UMDjOI=;
+        b=d6J2f0FeVpkXY5AhAWv6IeyoWbAJ1N7QPf4/aPgFI2+zScDU1JAV6BSHaPl1UxsVgg
+         9r3gmyD3pclxnSnqITasL9cdXveDnZajiiVWnrrOCpB8X742fqO8nnuVjisGO9xb800O
+         tV0+3MC243XX0u4+5cMXe5+70cPKAW8oxYHvTficTCRSuficZQVBsFR6xbk5Waj7CNwp
+         Fg22IceT2AQzkjp8w0s9YNZu4VvoJz8nn5epl2xVDkq0hrlEW46OlmsJmy/HuFjaoTy8
+         77sECY6n88P1UYhHfA9/zgkD8ohEDIVoVQCb/OpZirPmN7q1iwebCQ1WWT0Uu/8mqr5A
+         9xKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3QThqxTZ5uzX8g3SWHj4WUPibxza6P9n5f90ZfsEf6I=;
-        b=DHAfNDW5VOJ+l6xAzYYe7dj9PbTV5tgvAtKuG8HTaAmvaRV7Wjvg+MpFbxD7aA4+iX
-         WIRqIgQ/eDVc7IQ4/BmIUv7Zk48f3DHcS+6N4EGXdUtlHmFiUMi58nvHNz5+KegXrIlx
-         gGjOgD90tH/nd3bLrajePROqXnwTDx3qXHUlDIc1jJ9PqvNqpkZl6X3CTLEbpvX+moVI
-         4ZNXbd2d071+i2RDcvR+0Bp0WmKWUlubfDhQXivnPBPMb6u4kGmV8g2LFwx/NiQRh6Nn
-         uqIezBDm4OfZ1mVN6Vq9dwURln2u41cv+tNpJcXXyIHtRlEKydnnxqtEnpQRQY93cc+i
-         3o2A==
-X-Gm-Message-State: AOAM532iuB0WHBmqIm1g8Y4JJ/+n8C8HY+shEL4rmKrCoMIBnpo2xct6
-        xYJGDkS2IVXPJOR4bar64Pm1h95bz4M=
-X-Google-Smtp-Source: ABdhPJyP2VEu5OlJ0sDp5X5h65NyS9eQ9y1/4IxbmDdxSNduktAW9wMXSswYWVD1gjzruN8Ug7oIOw==
-X-Received: by 2002:a63:b341:: with SMTP id x1mr2420629pgt.69.1632796158534;
-        Mon, 27 Sep 2021 19:29:18 -0700 (PDT)
+        bh=T+nuZjtMi8lifdnlhi4/+fNb2Wj4qKRZZKIw/UMDjOI=;
+        b=4qRFU5E9aXgfnBES+PU59pPKfrVCkP7INdOY0ltFtPPHaimFODydEQOuEgONSSwHYJ
+         Hcw2/GaPGnXM+iPFcIwzrZcIMy4WE09rDm/sYOIh1DZjY8bXh63mTguFNor7/VqsxDMt
+         ZqEQeiVQ3Hj6kEZUKvhJVqX0b2zhGFVcK+24vbwtt0EUT5CKMpIPVhu6jcWZR0WIxnwk
+         5DmMCUWIAots5WoJZv2HZhPw2+hbn8OL5csExcNK9SWcFggyV/7o0rcUNd8AnYfgBvSY
+         S5r0xKyXd3mclIWgZUzN3XUnEq/0KehTWtDUkRxE47vDGHBps0cIcImzCcBW8syPVsCC
+         Sf5Q==
+X-Gm-Message-State: AOAM5334zfO1wLwA8X+bKIRwSHo3h+8uvfrxJNcnYjZVpELf34zW9awP
+        REFdNGZqTehp4Ek4/VFL3hYYWuKo43Q=
+X-Google-Smtp-Source: ABdhPJwfFa/cLXR6ZrxhszdYreZWklI52XpSp0IKqvnfcxbGm1yDHT78oie6L7f1lYIgfRojjYOSaA==
+X-Received: by 2002:a17:90a:a78e:: with SMTP id f14mr2526344pjq.235.1632796170728;
+        Mon, 27 Sep 2021 19:29:30 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k14sm633261pji.45.2021.09.27.19.29.06
+        by smtp.gmail.com with ESMTPSA id k14sm633261pji.45.2021.09.27.19.29.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Sep 2021 19:29:18 -0700 (PDT)
+        Mon, 27 Sep 2021 19:29:30 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -82,9 +82,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH v2 08/12] irqchip: Provide platform_device to of_irq_init_cb_t
-Date:   Mon, 27 Sep 2021 19:27:11 -0700
-Message-Id: <20210928022715.369160-9-f.fainelli@gmail.com>
+Subject: [PATCH v2 09/12] irqchip/irq-bcm7120-l2: Switch to IRQCHIP_PLATFORM_DRIVER
+Date:   Mon, 27 Sep 2021 19:27:12 -0700
+Message-Id: <20210928022715.369160-10-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210928022715.369160-1-f.fainelli@gmail.com>
 References: <20210928022715.369160-1-f.fainelli@gmail.com>
@@ -94,57 +94,94 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Provide the platform device mapping to the interrupt controller node to
-the of_irq_init_cb_t callback such that drivers can make use of it.
+Allow the user selection and building of this interrupt controller
+driver as a module since it is used on ARM/ARM64 based systems as a
+second level interrupt controller hanging off the ARM GIC and is
+therefore loadable during boot.
+
+To avoid using of_irq_count() which is not exported towards module,
+switch the driver to use the platform_device provided by the irqchip
+platform driver code and resolve the number of interrupts using
+platform_irq_count().
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/irqchip/irqchip.c | 2 +-
- drivers/of/irq.c          | 2 +-
- include/linux/of_irq.h    | 5 ++++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ drivers/irqchip/Kconfig          |  4 +++-
+ drivers/irqchip/irq-bcm7120-l2.c | 28 ++++++++++++++++------------
+ 2 files changed, 19 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/irqchip/irqchip.c b/drivers/irqchip/irqchip.c
-index 3570f0a588c4..289784eefd00 100644
---- a/drivers/irqchip/irqchip.c
-+++ b/drivers/irqchip/irqchip.c
-@@ -55,6 +55,6 @@ int platform_irqchip_probe(struct platform_device *pdev)
- 	if (par_np && !irq_find_matching_host(par_np, DOMAIN_BUS_ANY))
- 		return -EPROBE_DEFER;
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index dfe54bf9b35f..c7320bed5668 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -123,7 +123,9 @@ config BCM7038_L1_IRQ
+ 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
  
--	return irq_init_cb(np, par_np);
-+	return irq_init_cb(np, par_np, pdev);
+ config BCM7120_L2_IRQ
+-	bool
++	tristate "Broadcom STB 7120-style L2 interrupt controller driver"
++	depends on ARCH_BRCMSTB || BMIPS_GENERIC
++	default ARCH_BRCMSTB || BMIPS_GENERIC
+ 	select GENERIC_IRQ_CHIP
+ 	select IRQ_DOMAIN
+ 
+diff --git a/drivers/irqchip/irq-bcm7120-l2.c b/drivers/irqchip/irq-bcm7120-l2.c
+index f23d7651ea84..9b1edf7747fd 100644
+--- a/drivers/irqchip/irq-bcm7120-l2.c
++++ b/drivers/irqchip/irq-bcm7120-l2.c
+@@ -214,6 +214,7 @@ static int __init bcm7120_l2_intc_iomap_3380(struct device_node *dn,
+ 
+ static int __init bcm7120_l2_intc_probe(struct device_node *dn,
+ 				 struct device_node *parent,
++				 struct platform_device *pdev,
+ 				 int (*iomap_regs_fn)(struct device_node *,
+ 					struct bcm7120_l2_intc_data *),
+ 				 const char *intc_name)
+@@ -230,7 +231,7 @@ static int __init bcm7120_l2_intc_probe(struct device_node *dn,
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	data->num_parent_irqs = of_irq_count(dn);
++	data->num_parent_irqs = platform_irq_count(pdev);
+ 	if (data->num_parent_irqs <= 0) {
+ 		pr_err("invalid number of parent interrupts\n");
+ 		ret = -ENOMEM;
+@@ -334,21 +335,24 @@ static int __init bcm7120_l2_intc_probe(struct device_node *dn,
  }
- EXPORT_SYMBOL_GPL(platform_irqchip_probe);
-diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-index 352e14b007e7..18f3f5c00c87 100644
---- a/drivers/of/irq.c
-+++ b/drivers/of/irq.c
-@@ -538,7 +538,7 @@ void __init of_irq_init(const struct of_device_id *matches)
- 				 desc->dev,
- 				 desc->dev, desc->interrupt_parent);
- 			ret = desc->irq_init_cb(desc->dev,
--						desc->interrupt_parent);
-+						desc->interrupt_parent, NULL);
- 			if (ret) {
- 				of_node_clear_flag(desc->dev, OF_POPULATED);
- 				kfree(desc);
-diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
-index aaf219bd0354..89acc8b089f0 100644
---- a/include/linux/of_irq.h
-+++ b/include/linux/of_irq.h
-@@ -9,7 +9,10 @@
- #include <linux/ioport.h>
- #include <linux/of.h>
  
--typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *);
-+struct platform_device;
-+
-+typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *,
-+				struct platform_device *);
+ static int __init bcm7120_l2_intc_probe_7120(struct device_node *dn,
+-					     struct device_node *parent)
++					     struct device_node *parent,
++					     struct platform_device *pdev)
+ {
+-	return bcm7120_l2_intc_probe(dn, parent, bcm7120_l2_intc_iomap_7120,
+-				     "BCM7120 L2");
++	return bcm7120_l2_intc_probe(dn, parent, pdev,
++				     bcm7120_l2_intc_iomap_7120, "BCM7120 L2");
+ }
  
- /*
-  * Workarounds only applied to 32bit powermac machines
+ static int __init bcm7120_l2_intc_probe_3380(struct device_node *dn,
+-					     struct device_node *parent)
++					     struct device_node *parent,
++					     struct platform_device *pdev)
+ {
+-	return bcm7120_l2_intc_probe(dn, parent, bcm7120_l2_intc_iomap_3380,
+-				     "BCM3380 L2");
++	return bcm7120_l2_intc_probe(dn, parent, pdev,
++				     bcm7120_l2_intc_iomap_3380, "BCM3380 L2");
+ }
+ 
+-IRQCHIP_DECLARE(bcm7120_l2_intc, "brcm,bcm7120-l2-intc",
+-		bcm7120_l2_intc_probe_7120);
+-
+-IRQCHIP_DECLARE(bcm3380_l2_intc, "brcm,bcm3380-l2-intc",
+-		bcm7120_l2_intc_probe_3380);
++IRQCHIP_PLATFORM_DRIVER_BEGIN(bcm7120_l2)
++IRQCHIP_MATCH("brcm,bcm7120-l2-intc", bcm7120_l2_intc_probe_7120)
++IRQCHIP_MATCH("brcm,bcm3380-l2-intc", bcm7120_l2_intc_probe_3380)
++IRQCHIP_PLATFORM_DRIVER_END(bcm7120_l2)
++MODULE_DESCRIPTION("Broadcom STB 7120-style L2 interrupt controller driver");
++MODULE_LICENSE("GPL v2");
 -- 
 2.25.1
 
