@@ -2,298 +2,170 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C69B41AF97
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 15:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE1141B007
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 15:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240857AbhI1NEQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Sep 2021 09:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S240913AbhI1Nbc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 09:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240854AbhI1NEO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 09:04:14 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F22C061604
-        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 06:02:34 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id d207-20020a1c1dd8000000b00307e2d1ec1aso2693075wmd.5
-        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 06:02:34 -0700 (PDT)
+        with ESMTP id S240755AbhI1Nbb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 09:31:31 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6EDC061575
+        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 06:29:51 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id w1so23351322ilv.1
+        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 06:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tR2TQX+kVW0rYrRfEEQg7WRnq2clbEFfqF4BNcuxvaQ=;
-        b=xwh+oTfqAoZAVf+C975YtjHcHNtJ9zw8T+99kEppazEhQ9Vl5ssftS152FY6vNegm3
-         k+OsjszbH8DC4d1hsrvAoKjYC36oFCuQp+C+wkbUqFLSfXiDXuZBfNIJWzEOHW/gXMpg
-         ChxjbhiD2REH5LsuC4feYLP3d4Ud4fLZpSw+BfJ9A+tkuKExrb68TE/4z3LD+boJudXb
-         gtsjM0oG6dF3opnyolwkIayRbV9ziEAukPrsKo96OguWWzMnBZWzMfJBbDlgxwIvYh1c
-         I6gsf04tAnIIjJngzcxGbkmongAtMTuAgVeXyWdaSmdAcQ/TzA65csd+Z/Rj59DwQylO
-         lJhA==
+        d=ieee.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=KV5AEITggXzrcUqW0Pn0JDUCXvtzQQd7nfX6VcyNvh0=;
+        b=gsEil9aJ5ZOw0ASchzCW/AY/NlZwbg7FdvHHAbffANcuyVgNVj8F3r/I3y/OyqwIbk
+         QkY/gO8vfPAMQp75rG6vgEG7NkfLO4ZNSWbXrGEOjX3dKqow4MOof9p7GrAO13Ckl/VP
+         f8/C6WiPIW+rxE9R7UiZnONtD/dro2yaem2kM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=tR2TQX+kVW0rYrRfEEQg7WRnq2clbEFfqF4BNcuxvaQ=;
-        b=1EwDKrx6lijtQ+8vXXOO0eoyrnJ6QGHeVipTCquxiVYeeaejRrbtZ8Ycfim2EjLZ0X
-         /LhqGi14Tk0Q7eWxfc8sFqNvugWWj0ALK50olfjkyH3DSWqspHmU7ril3dHfW87hty9d
-         oyGdFQsJ/9tAkQySY1PfzK7yAIqFSxq296463ygN0+2XYQiXQOlud/nRNGgvo1zg+mPy
-         luHNFk9mlu6wPty/Y8vDoGgFKPf3u4O/wPo1DeCvhToc7f/7wBHvy21eNyPH4KGzCuvF
-         AP4c5DZPXcyBaeeB9llLOe6C03yez/C4rWJ4Yrp7OT1dazPZit1S383a0aOcBZ7BfuVA
-         WACw==
-X-Gm-Message-State: AOAM533heGU9A3yEgGfvD42lp3f1rDlCq0j/MfMDmOfrjgUEeDMFlf9k
-        +rdGqSkNwXNzqGoJq7VY9GJpYA==
-X-Google-Smtp-Source: ABdhPJxEbicmcy5wEkUCRews8l61o9FWFWXKUSbuqqlQ6A3D1PbsMXtnxpHP0J+Grnc6jP0i9g5enQ==
-X-Received: by 2002:a05:600c:40c4:: with SMTP id m4mr4619005wmh.64.1632834152799;
-        Tue, 28 Sep 2021 06:02:32 -0700 (PDT)
-Received: from ?IPv6:2001:861:44c0:66c0:af32:f180:8ede:d9da? ([2001:861:44c0:66c0:af32:f180:8ede:d9da])
-        by smtp.gmail.com with ESMTPSA id o7sm24611367wro.45.2021.09.28.06.02.31
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KV5AEITggXzrcUqW0Pn0JDUCXvtzQQd7nfX6VcyNvh0=;
+        b=JwnD0Ht/1u5ueAwqrtNO2ia0qoeRPAIyUHo18K3EkR94UrO4u5Zr74j4UgiviaGCs2
+         E0x90d+dafPXpln8iQ3zbamqpA16oBqt4gXgU9zQkH7z0HZ9ZAzVQwlw52ZVfAv1iCPO
+         vFC4kcumn3c6OzwFH4cVLEUznQ3UKQPVT1Pqb+nrc7hGCn6oht8LMb/38QzPw8ca/uDA
+         6sRiW3kkx93Atp8PH2vxm+jgZ0xqvSzqxjyrFndDNPJPvSLXk1sDFED3ude+eWcTjwKR
+         Tpizg9MInbXsslPsOsBy63Nucq3iotSWFMm1pzgau6BA4GVYmI+5z1QEKKaohQqPC6U3
+         HtzQ==
+X-Gm-Message-State: AOAM533dDPfnduEFMlM2cJ0ZTna33RxCwM4XpdLTS0MbRnKIDlhzNN/x
+        XIskbX1rb23987uEOwbjlMUQ1Q==
+X-Google-Smtp-Source: ABdhPJz3qmL3tZ3U3XkVDcDl9dtP+yn06EspPEdsou0GIPYBieCdKEZlaSYFieS9Yrw1uFrX87cOuw==
+X-Received: by 2002:a92:c744:: with SMTP id y4mr4108077ilp.288.1632835791399;
+        Tue, 28 Sep 2021 06:29:51 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id m13sm11831997ilh.45.2021.09.28.06.29.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Sep 2021 06:02:32 -0700 (PDT)
-Subject: Re: [PATCH v4 06/10] drm/ingenic: Add dw-hdmi driver for jz4780
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        Tue, 28 Sep 2021 06:29:50 -0700 (PDT)
+Subject: Re: [PATCH 2/2] [v2] qcom_scm: hide Kconfig symbol
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-References: <cover.1632761067.git.hns@goldelico.com>
- <cecd7ae2e21f6547f23c125b2f7767b0090277bc.1632761068.git.hns@goldelico.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <86c61519-697f-9ca8-4257-074173656c38@baylibre.com>
-Date:   Tue, 28 Sep 2021 15:02:30 +0200
+        Joerg Roedel <joro@8bytes.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alex Elder <elder@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, iommu@lists.linux-foundation.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20210928075216.4193128-1-arnd@kernel.org>
+ <20210928075216.4193128-2-arnd@kernel.org>
+From:   Alex Elder <elder@ieee.org>
+Message-ID: <19bbc40d-3f13-7e9d-72c0-5d206b016bb7@ieee.org>
+Date:   Tue, 28 Sep 2021 08:29:48 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <cecd7ae2e21f6547f23c125b2f7767b0090277bc.1632761068.git.hns@goldelico.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210928075216.4193128-2-arnd@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 27/09/2021 18:44, H. Nikolaus Schaller wrote:
-> From: Paul Boddie <paul@boddie.org.uk>
+On 9/28/21 2:50 AM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> A specialisation of the generic Synopsys HDMI driver is employed for JZ4780
-> HDMI support. This requires a new driver, plus device tree and configuration
-> modifications.
+> Now that SCM can be a loadable module, we have to add another
+> dependency to avoid link failures when ipa or adreno-gpu are
+> built-in:
 > 
-> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> aarch64-linux-ld: drivers/net/ipa/ipa_main.o: in function `ipa_probe':
+> ipa_main.c:(.text+0xfc4): undefined reference to `qcom_scm_is_available'
+> 
+> ld.lld: error: undefined symbol: qcom_scm_is_available
+>>>> referenced by adreno_gpu.c
+>>>>                gpu/drm/msm/adreno/adreno_gpu.o:(adreno_zap_shader_load) in archive drivers/built-in.a
+> 
+> This can happen when CONFIG_ARCH_QCOM is disabled and we don't select
+> QCOM_MDT_LOADER, but some other module selects QCOM_SCM. Ideally we'd
+> use a similar dependency here to what we have for QCOM_RPROC_COMMON,
+> but that causes dependency loops from other things selecting QCOM_SCM.
+> 
+> This appears to be an endless problem, so try something different this
+> time:
+> 
+>   - CONFIG_QCOM_SCM becomes a hidden symbol that nothing 'depends on'
+>     but that is simply selected by all of its users
+> 
+>   - All the stubs in include/linux/qcom_scm.h can go away
+> 
+>   - arm-smccc.h needs to provide a stub for __arm_smccc_smc() to
+>     allow compile-testing QCOM_SCM on all architectures.
+> 
+>   - To avoid a circular dependency chain involving RESET_CONTROLLER
+>     and PINCTRL_SUNXI, drop the 'select RESET_CONTROLLER' statement.
+>     According to my testing this still builds fine, and the QCOM
+>     platform selects this symbol already.
+> 
+> Acked-by: Kalle Valo <kvalo@codeaurora.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/gpu/drm/ingenic/Kconfig           |   9 ++
->  drivers/gpu/drm/ingenic/Makefile          |   1 +
->  drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 142 ++++++++++++++++++++++
->  3 files changed, 152 insertions(+)
->  create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> 
-> diff --git a/drivers/gpu/drm/ingenic/Kconfig b/drivers/gpu/drm/ingenic/Kconfig
-> index 3b57f8be007c..4c7d311fbeff 100644
-> --- a/drivers/gpu/drm/ingenic/Kconfig
-> +++ b/drivers/gpu/drm/ingenic/Kconfig
-> @@ -25,4 +25,13 @@ config DRM_INGENIC_IPU
->  
->  	  The Image Processing Unit (IPU) will appear as a second primary plane.
->  
-> +config DRM_INGENIC_DW_HDMI
-> +	bool "Ingenic specific support for Synopsys DW HDMI"
-> +	depends on MACH_JZ4780
-> +	select DRM_DW_HDMI
-> +	help
-> +	  Choose this option to enable Synopsys DesignWare HDMI based driver.
-> +	  If you want to enable HDMI on Ingenic JZ4780 based SoC, you should
-> +	  select this option..
-> +
->  endif
-> diff --git a/drivers/gpu/drm/ingenic/Makefile b/drivers/gpu/drm/ingenic/Makefile
-> index d313326bdddb..3db9888a6c04 100644
-> --- a/drivers/gpu/drm/ingenic/Makefile
-> +++ b/drivers/gpu/drm/ingenic/Makefile
-> @@ -1,3 +1,4 @@
->  obj-$(CONFIG_DRM_INGENIC) += ingenic-drm.o
->  ingenic-drm-y = ingenic-drm-drv.o
->  ingenic-drm-$(CONFIG_DRM_INGENIC_IPU) += ingenic-ipu.o
-> +ingenic-drm-$(CONFIG_DRM_INGENIC_DW_HDMI) += ingenic-dw-hdmi.o
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> new file mode 100644
-> index 000000000000..dd9c94ae842e
-> --- /dev/null
-> +++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> @@ -0,0 +1,142 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
-> + * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
-> + *
-> + * Derived from dw_hdmi-imx.c with i.MX portions removed.
-> + * Probe and remove operations derived from rcar_dw_hdmi.c.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <drm/bridge/dw_hdmi.h>
-> +#include <drm/drm_of.h>
-> +#include <drm/drm_print.h>
-> +
-> +static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] = {
-> +	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2, 0x0000 } } },
-> +	{ 92500000,  { { 0x0140, 0x0005 }, { 0x2141, 0x0005 }, { 0x4142, 0x0005 } } },
-> +	{ 148500000, { { 0x00a0, 0x000a }, { 0x20a1, 0x000a }, { 0x40a2, 0x000a } } },
-> +	{ 216000000, { { 0x00a0, 0x000a }, { 0x2001, 0x000f }, { 0x4002, 0x000f } } },
-> +	{ ~0UL,      { { 0x0000, 0x0000 }, { 0x0000, 0x0000 }, { 0x0000, 0x0000 } } }
-> +};
-> +
-> +static const struct dw_hdmi_curr_ctrl ingenic_cur_ctr[] = {
-> +	/*pixelclk     bpp8    bpp10   bpp12 */
-> +	{ 54000000,  { 0x091c, 0x091c, 0x06dc } },
-> +	{ 58400000,  { 0x091c, 0x06dc, 0x06dc } },
-> +	{ 72000000,  { 0x06dc, 0x06dc, 0x091c } },
-> +	{ 74250000,  { 0x06dc, 0x0b5c, 0x091c } },
-> +	{ 118800000, { 0x091c, 0x091c, 0x06dc } },
-> +	{ 216000000, { 0x06dc, 0x0b5c, 0x091c } },
-> +	{ ~0UL,      { 0x0000, 0x0000, 0x0000 } },
-> +};
-> +
-> +/*
-> + * Resistance term 133Ohm Cfg
-> + * PREEMP config 0.00
-> + * TX/CK level 10
-> + */
-> +static const struct dw_hdmi_phy_config ingenic_phy_config[] = {
-> +	/*pixelclk   symbol   term   vlev */
-> +	{ 216000000, 0x800d, 0x0005, 0x01ad},
-> +	{ ~0UL,      0x0000, 0x0000, 0x0000}
-> +};
-> +
-> +static enum drm_mode_status
-> +ingenic_dw_hdmi_mode_valid(struct dw_hdmi *hdmi, void *data,
-> +			   const struct drm_display_info *info,
-> +			   const struct drm_display_mode *mode)
-> +{
-> +	if (mode->clock < 13500)
-> +		return MODE_CLOCK_LOW;
-> +	/* FIXME: Hardware is capable of 270MHz, but setup data is missing. */
-> +	if (mode->clock > 216000)
-> +		return MODE_CLOCK_HIGH;
-> +
-> +	return MODE_OK;
-> +}
-> +
-> +static bool
-> +ingenic_dw_hdmi_mode_fixup(struct drm_bridge *bridge,
-> +			   const struct drm_display_mode *mode,
-> +			   struct drm_display_mode *adjusted_mode)
-> +{
-> +	adjusted_mode->flags |= (DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC);
-> +	adjusted_mode->flags &= ~(DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC);
-> +
-> +	return true;
-> +}
-> +
-> +static const struct drm_bridge_timings ingenic_dw_hdmi_timings = {
-> +	.input_bus_flags = DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE,
-> +};
+> Changes in v2:
+>    - drop the 'select RESET_CONTROLLER' line, rather than adding
+>      more of the same
+> ---
+>   drivers/firmware/Kconfig                |  5 +-
+>   drivers/gpu/drm/msm/Kconfig             |  4 +-
+>   drivers/iommu/Kconfig                   |  2 +-
+>   drivers/media/platform/Kconfig          |  2 +-
+>   drivers/mmc/host/Kconfig                |  2 +-
+>   drivers/net/ipa/Kconfig                 |  1 +
 
-These should go in the intermediate encoder bridge callbacks Paul introduces in his patch at [1].
+For drivers/net/ipa/Kconfig, looks good to me.
+Nice simplification.
 
-With that patch 4 can be dropped.
+Acked-by: Alex Elder <elder@linaro.org>
 
-[1] https://lore.kernel.org/r/20210922205555.496871-7-paul@crapouillou.net
-
-Neil
-
-> +
-> +static struct dw_hdmi_plat_data ingenic_dw_hdmi_plat_data = {
-> +	.mpll_cfg   = ingenic_mpll_cfg,
-> +	.cur_ctr    = ingenic_cur_ctr,
-> +	.phy_config = ingenic_phy_config,
-> +	.mode_valid = ingenic_dw_hdmi_mode_valid,
-> +	.mode_fixup = ingenic_dw_hdmi_mode_fixup,
-> +	.timings    = &ingenic_dw_hdmi_timings,
-> +	.output_port	= 1,
-> +};
-> +
-> +static const struct of_device_id ingenic_dw_hdmi_dt_ids[] = {
-> +	{ .compatible = "ingenic,jz4780-dw-hdmi" },
-> +	{ /* Sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
-> +
-> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
-> +{
-> +	struct dw_hdmi *hdmi;
-> +	struct regulator *regulator;
-> +	int ret;
-> +
-> +	hdmi = dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
-> +	if (IS_ERR(hdmi))
-> +		return PTR_ERR(hdmi);
-> +
-> +	platform_set_drvdata(pdev, hdmi);
-> +
-> +	regulator = devm_regulator_get_optional(&pdev->dev, "hdmi-5v");
-> +
-> +	if (IS_ERR(regulator)) {
-> +		ret = PTR_ERR(regulator);
-> +
-> +		DRM_DEV_ERROR(&pdev->dev, "failed to get hpd regulator: %s (%d)\n",
-> +			      "hdmi-5v", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = regulator_enable(regulator);
-> +	if (ret) {
-> +		DRM_DEV_ERROR(&pdev->dev, "Failed to enable hpd regulator: %d\n",
-> +			      ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int ingenic_dw_hdmi_remove(struct platform_device *pdev)
-> +{
-> +	struct dw_hdmi *hdmi = platform_get_drvdata(pdev);
-> +
-> +	dw_hdmi_remove(hdmi);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver ingenic_dw_hdmi_driver = {
-> +	.probe  = ingenic_dw_hdmi_probe,
-> +	.remove = ingenic_dw_hdmi_remove,
-> +	.driver = {
-> +		.name = "dw-hdmi-ingenic",
-> +		.of_match_table = ingenic_dw_hdmi_dt_ids,
-> +	},
-> +};
-> +
-> +struct platform_driver *ingenic_dw_hdmi_driver_ptr = &ingenic_dw_hdmi_driver;
+>   drivers/net/wireless/ath/ath10k/Kconfig |  2 +-
+>   drivers/pinctrl/qcom/Kconfig            |  3 +-
+>   include/linux/arm-smccc.h               | 10 ++++
+>   include/linux/qcom_scm.h                | 71 -------------------------
+>   10 files changed, 20 insertions(+), 82 deletions(-)
 > 
 
+. . .
