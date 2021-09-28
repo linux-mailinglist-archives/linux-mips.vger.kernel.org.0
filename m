@@ -2,125 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3A141B7AB
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 21:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9119D41B940
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 23:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242538AbhI1Th6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Sep 2021 15:37:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51702 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242535AbhI1Th5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Sep 2021 15:37:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BF3FA61131;
-        Tue, 28 Sep 2021 19:36:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632857777;
-        bh=/hPKLMPJTNrhU1SP0bMA34z2EYxtK4mD++/ujAwU6A4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h6eGGH0fk6/SkY3p+QaFpdTDka6h9KtK4CpJIjQVf8LiUKr8o+llRxPFcV7LkqV8M
-         Z3+hSITUMhBWOBM2/ITWO0IyxyiKGeDl607P7bOazNx5NQbndOq4lieEc+Wyw12tN8
-         JOgzDoGxiFUZDjfFNrLZI/af0nt8o+C8qPTkKeGO7Vy4ezfLCYV83GcDdeGAZvFLJD
-         nsaEh2q2AhB3eyn708Mfk0UpJq3UzrhLpjTcz80BwIrbgPIoogknndzNBguE5Y/kqL
-         e1nweHR9yTNeX6ZXkne0h52alGpPBYgo8VDGfJ/BdTfu8ejPsguJBhAbS/yE4lX/RY
-         N20xF3Twn9VIw==
-Received: by mail-ed1-f45.google.com with SMTP id r18so11548545edv.12;
-        Tue, 28 Sep 2021 12:36:17 -0700 (PDT)
-X-Gm-Message-State: AOAM532jdaDAcW49axkMVF+rx0kVtRbH+NvDM/6yM0rictaltYDnVGZU
-        V4E+64ttQcMKGd548XNSvnVCVdsFOOIIdB+SaA==
-X-Google-Smtp-Source: ABdhPJxkN1rAEe0u7at9IuCHUo7sUflpWJWdcsHHnqh3vlDJJdBMkZRw+1OPM2MmSyluZXfETP88gy0YMvDpRaQqOk4=
-X-Received: by 2002:a17:906:fa8a:: with SMTP id lt10mr8741415ejb.320.1632857776271;
- Tue, 28 Sep 2021 12:36:16 -0700 (PDT)
+        id S242928AbhI1V17 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 17:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242921AbhI1V16 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 17:27:58 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3810C061745
+        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 14:26:18 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id c4so31297pls.6
+        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 14:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=L4Z1qtd59VARXTo8mTMZfhpyo/YJa2yppwRF4l1omg8=;
+        b=rSq0scJL/ha88RRlXKX42Isqbw/cwS5kVIP0Rz8OfVzzn6D5kKDMweVE0Q4ktQSiMJ
+         FhxFPNTbhY9xS2vAGEQ+qB5gV/IMUC6h9JD8Smhm2ssJbOQpHIqEJKUl6mN0qk2Gvwz4
+         iqKk5TZe73g8eJV+2vJnrwoJvPJ1P6NI4t92YcMxTQruO4ZgcMdMIYBXrSN2yeCfPbAN
+         tFQ4GxwssW84Y1vg4LGpetlrhcF6FFA2L4YDutUNKomAAwAsIirg3JkaUm6HVKTrF3V4
+         BHRGBPVxBUQcMzwQWA2PNjc4/b6DItbdmvXb7Ajmp33ZzPOIr2q8iG4+IHZG+ueXE4Hc
+         nmmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L4Z1qtd59VARXTo8mTMZfhpyo/YJa2yppwRF4l1omg8=;
+        b=vKVOw/89+jsYlaDGqhLUjm2wtCa6tkUza55D5HIbPmiMFhhfsdWoeuvOezLiDpyo/p
+         6E5DUY8Qwa90tE1VdeNVZRekBQ3Z47T4x9fP+86Rv3wNvb4o+wXaBttfDQ14OlSt8vHK
+         c31x4+EO3Hvsb8TIJMeGTDLJgPPb+kRmd3ZeKXmGVJ1wOM0iYkNZhMfaV8hDk9I99CIX
+         z4xCgGyFSH+ZGKzW2/Xnq+DD4m1iV56CqrJWtpwyw9YnDMXhydPZF+Q3sbd7xpKeSjpW
+         72xkWGykRy/VCHLyKLfCC/CG5wz3v/stdeeH9ySXuUHnuzwpq2dYGkqAUiNR/IGgapAr
+         xLiw==
+X-Gm-Message-State: AOAM532/OVHBXDPpD21BUv0rE+KQ96zda5ALmZv5Yl2ka6ALKbGvwBH+
+        myVVoyPajpoggIC4JfxjJeSW7g==
+X-Google-Smtp-Source: ABdhPJyiNQfJ0RYEvCNSbQfmhva0TWeah3nt33T8BlFeMgmCPfbY0etgFPJGRuPzGjsIEt8CokHbDg==
+X-Received: by 2002:a17:902:a3c2:b0:13d:be85:43ca with SMTP id q2-20020a170902a3c200b0013dbe8543camr7239171plb.0.1632864378224;
+        Tue, 28 Sep 2021 14:26:18 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id j20sm109118pgb.2.2021.09.28.14.26.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Sep 2021 14:26:17 -0700 (PDT)
+Date:   Tue, 28 Sep 2021 21:26:13 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH 04/14] KVM: Reconcile discrepancies in halt-polling stats
+Message-ID: <YVOIdZhAe5Bqn4hc@google.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+ <20210925005528.1145584-5-seanjc@google.com>
 MIME-Version: 1.0
-References: <20210928182139.652896-1-f.fainelli@gmail.com> <20210928182139.652896-10-f.fainelli@gmail.com>
-In-Reply-To: <20210928182139.652896-10-f.fainelli@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 28 Sep 2021 14:36:04 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+Hcpj6CCM6hYFC5hpNfm9fcqZXDuyxR4vKn9hzRK-QiA@mail.gmail.com>
-Message-ID: <CAL_Jsq+Hcpj6CCM6hYFC5hpNfm9fcqZXDuyxR4vKn9hzRK-QiA@mail.gmail.com>
-Subject: Re: [PATCH v3 09/14] irqchip: Provide platform_device to of_irq_init_cb_t
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "moderated list:ARM SUB-ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210925005528.1145584-5-seanjc@google.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 1:22 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> Provide the platform device mapping to the interrupt controller node to
-> the of_irq_init_cb_t callback such that drivers can make use of it.
->
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+On Fri, Sep 24, 2021 at 05:55:18PM -0700, Sean Christopherson wrote:
+> Move the halt-polling "success" and histogram stats update into the
+> dedicated helper to fix a discrepancy where the success/fail "time" stats
+> consider polling successful so long as the wait is avoided, but the main
+> "success" and histogram stats consider polling successful if and only if
+> a wake event was detected by the halt-polling loop.
+> 
+> Move halt_attempted_poll to the helper as well so that all the stats are
+> updated in a single location.  While it's a bit odd to update the stat
+> well after the fact, practically speaking there's no meaningful advantage
+> to updating before polling.
+> 
+> Note, there is a functional change in addition to the success vs. fail
+> change.  The histogram updates previously called ktime_get() instead of
+> using "cur".  But that change is desirable as it means all the stats are
+> now updated with the same polling time, and avoids the extra ktime_get(),
+> which isn't expensive but isn't free either.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
 > ---
->  drivers/irqchip/irqchip.c | 2 +-
->  drivers/of/irq.c          | 2 +-
->  include/linux/of_irq.h    | 5 ++++-
->  3 files changed, 6 insertions(+), 3 deletions(-)
-
-Less invasive than I thought as we lose any function typing. Maybe at
-least the one platform driver, drivers/irqchip/qcom-pdc.c, should have
-its function parameters updated.
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
->
-> diff --git a/drivers/irqchip/irqchip.c b/drivers/irqchip/irqchip.c
-> index 3570f0a588c4..289784eefd00 100644
-> --- a/drivers/irqchip/irqchip.c
-> +++ b/drivers/irqchip/irqchip.c
-> @@ -55,6 +55,6 @@ int platform_irqchip_probe(struct platform_device *pdev)
->         if (par_np && !irq_find_matching_host(par_np, DOMAIN_BUS_ANY))
->                 return -EPROBE_DEFER;
->
-> -       return irq_init_cb(np, par_np);
-> +       return irq_init_cb(np, par_np, pdev);
->  }
->  EXPORT_SYMBOL_GPL(platform_irqchip_probe);
-> diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-> index 352e14b007e7..18f3f5c00c87 100644
-> --- a/drivers/of/irq.c
-> +++ b/drivers/of/irq.c
-> @@ -538,7 +538,7 @@ void __init of_irq_init(const struct of_device_id *matches)
->                                  desc->dev,
->                                  desc->dev, desc->interrupt_parent);
->                         ret = desc->irq_init_cb(desc->dev,
-> -                                               desc->interrupt_parent);
-> +                                               desc->interrupt_parent, NULL);
->                         if (ret) {
->                                 of_node_clear_flag(desc->dev, OF_POPULATED);
->                                 kfree(desc);
-> diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
-> index aaf219bd0354..89acc8b089f0 100644
-> --- a/include/linux/of_irq.h
-> +++ b/include/linux/of_irq.h
-> @@ -9,7 +9,10 @@
->  #include <linux/ioport.h>
->  #include <linux/of.h>
->
-> -typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *);
-> +struct platform_device;
+>  virt/kvm/kvm_main.c | 35 ++++++++++++++++-------------------
+>  1 file changed, 16 insertions(+), 19 deletions(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 12fe91a0a4c8..2ba22b68af3b 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -3202,12 +3202,23 @@ static int kvm_vcpu_check_block(struct kvm_vcpu *vcpu)
+>  static inline void update_halt_poll_stats(struct kvm_vcpu *vcpu, ktime_t start,
+>  					  ktime_t end, bool success)
+>  {
+> +	struct kvm_vcpu_stat_generic *stats = &vcpu->stat.generic;
+>  	u64 poll_ns = ktime_to_ns(ktime_sub(end, start));
+>  
+> -	if (success)
+> -		vcpu->stat.generic.halt_poll_success_ns += poll_ns;
+> -	else
+> -		vcpu->stat.generic.halt_poll_fail_ns += poll_ns;
+> +	++vcpu->stat.generic.halt_attempted_poll;
 > +
-> +typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *,
-> +                               struct platform_device *);
->
+> +	if (success) {
+> +		++vcpu->stat.generic.halt_successful_poll;
+> +
+> +		if (!vcpu_valid_wakeup(vcpu))
+> +			++vcpu->stat.generic.halt_poll_invalid;
+> +
+> +		stats->halt_poll_success_ns += poll_ns;
+> +		KVM_STATS_LOG_HIST_UPDATE(stats->halt_poll_success_hist, poll_ns);
+> +	} else {
+> +		stats->halt_poll_fail_ns += poll_ns;
+> +		KVM_STATS_LOG_HIST_UPDATE(stats->halt_poll_fail_hist, poll_ns);
+> +	}
+>  }
+>  
 >  /*
->   * Workarounds only applied to 32bit powermac machines
-> --
-> 2.25.1
->
+> @@ -3227,30 +3238,16 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+>  	if (do_halt_poll) {
+>  		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
+>  
+> -		++vcpu->stat.generic.halt_attempted_poll;
+>  		do {
+>  			/*
+>  			 * This sets KVM_REQ_UNHALT if an interrupt
+>  			 * arrives.
+>  			 */
+> -			if (kvm_vcpu_check_block(vcpu) < 0) {
+> -				++vcpu->stat.generic.halt_successful_poll;
+> -				if (!vcpu_valid_wakeup(vcpu))
+> -					++vcpu->stat.generic.halt_poll_invalid;
+> -
+> -				KVM_STATS_LOG_HIST_UPDATE(
+> -				      vcpu->stat.generic.halt_poll_success_hist,
+> -				      ktime_to_ns(ktime_get()) -
+> -				      ktime_to_ns(start));
+> +			if (kvm_vcpu_check_block(vcpu) < 0)
+>  				goto out;
+> -			}
+>  			cpu_relax();
+>  			poll_end = cur = ktime_get();
+>  		} while (kvm_vcpu_can_poll(cur, stop));
+> -
+> -		KVM_STATS_LOG_HIST_UPDATE(
+> -				vcpu->stat.generic.halt_poll_fail_hist,
+> -				ktime_to_ns(ktime_get()) - ktime_to_ns(start));
+>  	}
+>  
+>  
+> -- 
+> 2.33.0.685.g46640cef36-goog
+> 
