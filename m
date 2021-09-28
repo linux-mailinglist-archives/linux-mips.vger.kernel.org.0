@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A7141B5E1
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 20:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3B741B5E4
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 20:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242193AbhI1SYH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Sep 2021 14:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50318 "EHLO
+        id S242232AbhI1SYJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 14:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242178AbhI1SYG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 14:24:06 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EC5C06161C;
-        Tue, 28 Sep 2021 11:22:26 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id g184so22098927pgc.6;
-        Tue, 28 Sep 2021 11:22:26 -0700 (PDT)
+        with ESMTP id S242206AbhI1SYI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 14:24:08 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42404C06161C;
+        Tue, 28 Sep 2021 11:22:28 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y8so19619784pfa.7;
+        Tue, 28 Sep 2021 11:22:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=b+ZBi3anDomFQV4e/giygkqAUlU4kNEpUMbqtcbvyD0=;
-        b=e2HJ3c6ZwWUFLdevBMc1GkHSS88vwShLGGfOz/pbGGDRcNXpXWeNIxdt+84S8LZuLi
-         jtUY/y/e52uKXENcXcK55HHN+MaGQ2/vGbLiuWp21FdiogwKKk8aC7XoXAKlLeY//sid
-         yLL6LEGsYXE21szIxif2OOIB/qhfKUQSUAWTskCrG+PZSxPj3oiGl2vXE6vA2ov98buj
-         rHowgod9EL52ADB0YjUzw1/XK1G+z3ktB5/H5/u0qlwDkqcCDhaec5DZoLO+ATMCsRZH
-         z+IXaCe+o+TbPvy6Hk0xhJzq4PUcRj7QNG9T+5WP8PQ3qyINftNO+t8cKQWpUPabbsg3
-         5jIg==
+        bh=G1RiT4GRKPcXSkOjyrks/jOWZL3DTQpMJtRhCsgVjY8=;
+        b=DJQskZZ4po/z5W282K8NSiY/GLTaICYDm+aMHSuEiDYSmbTB3BATU5QOsexPRVblZh
+         ZCJgXBVB4g65DDxrBtUJwnwXNuxhJ6KB6QI4d0p6h0FAxBWsp1su4g9ZQhZIf1fpOVVU
+         kv+I7qlVpFsFnm1ITCr/04viuJxmu7RlnLOepmkaAIO4oTlIumxl3mwm0io75Rb8Ttcn
+         7W6BvZgg8QvPj2haenV1fq3yfNoYDmA5IR1ttIuqBx5YOtWkC4KJv5fGzR6ClxKoIIFS
+         3DdZPprqHsbT57s9YcLlZiqUIH1qDgz2soxZGTjlcQ4870QDuuBg6E0CibmOHty19GM7
+         qNFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=b+ZBi3anDomFQV4e/giygkqAUlU4kNEpUMbqtcbvyD0=;
-        b=rBOFwlV2BcTUXJcocT4p3lDQ/L0pg0+/0YvuENH55+OX4UG4mtysxCOJjEPRdSlvr/
-         OWmlpNhho6xheAEIfPwZe1q3dWx360cX5hW4Nvzdqb5Bn1KxMmqXxIQ1E9mdApJu8/ia
-         Wc34Lyzf+8SPQRN4BGhwhFUuyOK5pqgULQrb8L2z1jK84cNdBn8FWFpnJaXiDD4MsuYh
-         0NUqwbpsKYuH7/OWV4NqTFWN2v1z+Xh55FTDVMaePwggf/vB2p7SzIFOviDcRd3PRnc1
-         sYU0MveFnB8OY2zQWHrkv6BM+Tl8O8WoT2q9Bq8JQwTmb3AeLgiNkRLiVW0XRcZRS+oA
-         KYxQ==
-X-Gm-Message-State: AOAM533Py2QcOcDRl3HYTcKTRgtezp4oE7LBpmFrEeNZxJu2mupRbJeM
-        8zS55NodcobfwRszGd/yqK4Yhi/EPhQ=
-X-Google-Smtp-Source: ABdhPJzzSkYVoZXOkse0RijrGCPDHq4DWBO0lF4oSKo1mMeB4ZYLTmF2x0/q85KsvpG2ZNGSLmLZ0A==
-X-Received: by 2002:aa7:989e:0:b0:44b:2d81:8510 with SMTP id r30-20020aa7989e000000b0044b2d818510mr6929389pfl.55.1632853345920;
-        Tue, 28 Sep 2021 11:22:25 -0700 (PDT)
+        bh=G1RiT4GRKPcXSkOjyrks/jOWZL3DTQpMJtRhCsgVjY8=;
+        b=D6WZqhkQ0KYybhFAMcxXQkBQOCOMZ3Ut+VrMghA+xbkhwKC/CmGrK4FFlunPqCUU2B
+         xhmVSGcYjPsmRFB0WxBq8TYMtW93v5rmuWuCKsakUUEwmAfuZnhI/y/rPjzc6+CSonM2
+         D+vYvSmFfgOcFGz39t8wvAl2VUnVNgQeQJ5UXWXnTPfS2396QU41sgccoFV8zMz4UfFs
+         Ygr5GjWqxa6MV5EeBAl3MAEXzzb7mgPKoyogc7CKLLVOrbnN7vFZW426di3pnPlofrvs
+         KiGOhcLkYOgtdHLrVKWpSby11iieeEAyhicRhL0wE2+PfzGv+i8KNMUBooeD80dagPRZ
+         ptHA==
+X-Gm-Message-State: AOAM530EZLAgPR0APKaYgyieb1bo6ndNka1bh4wCaC56rdpc/YwFHVBm
+        8FzRBfiKInAFh64W1VqmXqnCEzHCDow=
+X-Google-Smtp-Source: ABdhPJwU+pmz/u0j54qGZGw+pklmbp0pUmxUzsiRS9pYuoRENNmRa1Na8U3PgjRc2FmlvaFYXVHf7g==
+X-Received: by 2002:a63:f80a:: with SMTP id n10mr5773602pgh.303.1632853347435;
+        Tue, 28 Sep 2021 11:22:27 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x19sm20855288pfn.105.2021.09.28.11.22.24
+        by smtp.gmail.com with ESMTPSA id x19sm20855288pfn.105.2021.09.28.11.22.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Sep 2021 11:22:25 -0700 (PDT)
+        Tue, 28 Sep 2021 11:22:27 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -66,9 +66,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         SUB-ARCHITECTURES), linux-mips@vger.kernel.org (open list:MIPS),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH v3 03/14] irqchip/irq-bcm7038-l1: Use irq_get_irq_data()
-Date:   Tue, 28 Sep 2021 11:21:28 -0700
-Message-Id: <20210928182139.652896-4-f.fainelli@gmail.com>
+Subject: [PATCH v3 04/14] irqchip/irq-bcm7038-l1: Gate use of CPU logical map to MIPS
+Date:   Tue, 28 Sep 2021 11:21:29 -0700
+Message-Id: <20210928182139.652896-5-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210928182139.652896-1-f.fainelli@gmail.com>
 References: <20210928182139.652896-1-f.fainelli@gmail.com>
@@ -78,30 +78,67 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Using irq_desc_get_irq_data(irq_to_desc()) to retrieve the irq_data
-structure from a virtual interrupt number is going to be problematic to
-make irq-bcm7038-l1 a module because irq_to_desc() is not exported, and
-there is no intent to export it to modules, see 64a1b95bb9fe ("genirq:
-Restrict export of irq_to_desc()").
+The use of the cpu_logical_map[] array is only relevant for MIPS based
+platform where this driver is used as a first level interrupt controller
+and contains multiple register groups to map with an associated CPU.
+
+On ARM/ARM64 based systems this interrupt controller is present and used
+as a second level interrupt controller hanging off the ARM GIC. That
+copy of the interrupt controller contains a single group, resulting in
+the intc->cpus[] array to be of size 1.
+
+Things happened to work in that case because we install that interrupt
+controller as a chained handler which does not allow it to be affine to
+any CPU but the boot CPU which happens to be 0, therefore we never
+de-reference past intc->cpus[] but with the current code in place, we do
+leave a chance of de-referencing the array past its bounds.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/irqchip/irq-bcm7038-l1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/irqchip/irq-bcm7038-l1.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/irqchip/irq-bcm7038-l1.c b/drivers/irqchip/irq-bcm7038-l1.c
-index 750156217c82..14caf32dc23e 100644
+index 14caf32dc23e..3c4e348c661e 100644
 --- a/drivers/irqchip/irq-bcm7038-l1.c
 +++ b/drivers/irqchip/irq-bcm7038-l1.c
-@@ -386,7 +386,7 @@ static int bcm7038_l1_map(struct irq_domain *d, unsigned int virq,
+@@ -28,9 +28,6 @@
+ #include <linux/irqchip.h>
+ #include <linux/irqchip/chained_irq.h>
+ #include <linux/syscore_ops.h>
+-#ifdef CONFIG_ARM
+-#include <asm/smp_plat.h>
+-#endif
  
- 	irq_set_chip_and_handler(virq, &bcm7038_l1_irq_chip, handle_level_irq);
- 	irq_set_chip_data(virq, d->host_data);
--	irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(virq)));
-+	irqd_set_single_target(irq_get_irq_data(virq));
- 	return 0;
- }
+ #define IRQS_PER_WORD		32
+ #define REG_BYTES_PER_IRQ_WORD	(sizeof(u32) * 4)
+@@ -127,7 +124,7 @@ static void bcm7038_l1_irq_handle(struct irq_desc *desc)
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	unsigned int idx;
  
+-#ifdef CONFIG_SMP
++#if defined(CONFIG_SMP) && defined(CONFIG_MIPS)
+ 	cpu = intc->cpus[cpu_logical_map(smp_processor_id())];
+ #else
+ 	cpu = intc->cpus[0];
+@@ -301,7 +298,7 @@ static int bcm7038_l1_suspend(void)
+ 	u32 val;
+ 
+ 	/* Wakeup interrupt should only come from the boot cpu */
+-#ifdef CONFIG_SMP
++#if defined(CONFIG_SMP) && defined(CONFIG_MIPS)
+ 	boot_cpu = cpu_logical_map(0);
+ #else
+ 	boot_cpu = 0;
+@@ -325,7 +322,7 @@ static void bcm7038_l1_resume(void)
+ 	struct bcm7038_l1_chip *intc;
+ 	int boot_cpu, word;
+ 
+-#ifdef CONFIG_SMP
++#if defined(CONFIG_SMP) && defined(CONFIG_MIPS)
+ 	boot_cpu = cpu_logical_map(0);
+ #else
+ 	boot_cpu = 0;
 -- 
 2.25.1
 
