@@ -2,45 +2,66 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41FA41AB51
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 11:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6956341AB9B
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 11:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239631AbhI1JBl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Sep 2021 05:01:41 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.81]:22910 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239623AbhI1JBl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 05:01:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632819587;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=QjkVh+X5B/D/wI3Y4vAzZ0HLzWUItUYeAwlzSj/mPtw=;
-    b=H+xHZGpgo4nwbiZaGdNmMbIH1wDRknHN2jiDKkGhh5kwNIfG2dqaA1RRezdIr7pEUp
-    cT5CSqnx+ZD6NdDXm8Ip+LBloPAUKi6SoLJVLRa34Jc7d/ZRpknXn7zeUBwTRQW9GHH3
-    GT6jAOdyG4PrrvN8UlYTvawrhJqKwtkBNTz8onQEEJhjAiLu9gScD+Oq1cQz6qKkqWr3
-    eW2YtP3UskemrlDpuaZd4B4wFw+4zx+kGxHbSzGb/lNz5EV/LU28SZcX7AEAodNzrNlb
-    Vec2NlhjzzmM0nxXg77gxHFs32hW/hOyIIPqNQzVXR/2G56MbvoBwpx9AmyqRZejr0St
-    Dbkg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43sT7Q="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
-    with ESMTPSA id I01f74x8S8xjd8m
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 28 Sep 2021 10:59:45 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v4 03/10] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
- DT Schema
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20210927170702.on243lp24fcfdhbj@gilmour>
-Date:   Tue, 28 Sep 2021 10:59:45 +0200
-Cc:     Paul Cercueil <paul@crapouillou.net>,
+        id S239765AbhI1JTv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 05:19:51 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:34513 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239043AbhI1JTv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Sep 2021 05:19:51 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 952F65805DD;
+        Tue, 28 Sep 2021 05:18:11 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 28 Sep 2021 05:18:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm1; bh=a
+        z58RAATejJOnuwYVDi925Y5L5Fz8v8ETOF1VVXfBFo=; b=mkFIkhnTkD262P8Bg
+        f1tIlQZrFdVw1cP7H9BBmWxTQF6b5mjae2413trvlP/CZ2NBr5+ZwX0UJ9OFzvBd
+        nLRBxRbHVwuH6MBwubzC7aMfSxToIM9Kc2hzDNrlKY83hA7OZ0FR3QOr7pD8HEOD
+        lbQbUfHn5qilrvRgkLn7zaEyAEBLeI+1goh90CzhK6ZzwT5OFQgDVoive+sovI0R
+        9jmNRcML0RqkfnQLc+igmQwPNQS8T6x6JD/jp0dndMvxtTL4F1NC1Ff5gKpIw+UV
+        fOsVHZrlSrCvqW7OKlnXCrtpJH+tLqqqSfK9hRdTrSKJbBSpMbNGtZ418RujdLA2
+        OLYNQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=az58RAATejJOnuwYVDi925Y5L5Fz8v8ETOF1VVXfB
+        Fo=; b=rfG7exEEIVLxzpRwK3TohfxlxFmByaAfXcABxwKjk67aN6Jwi188Ev45+
+        SNpsmsXpMlJaw4vOsIFn13seohtIiYdkYzCfjg3DHlGiNXMZpqWmKw33BfZeB6nX
+        o+JroOJd6jAdNjFFsUs6MgpnaVuyWrjAtz5If9JNu/3hDXCKsOWE/B+Qa2F2qh4x
+        kgcF/DDodk8eYLm7B6ChCa4NmpTBBVB0wPZIh6yLD/0/tHKHOr3xaZ+KV8tjv0fL
+        m6aXxOj5IRW78jf2a9JTNwGTy/PNhW2Fx2++OTjVfjJ3QyxDvpv5LJ8Wc1oYKJEu
+        vlGNno8kgehwScDbf/DZZQoBnAEdg==
+X-ME-Sender: <xms:0d1SYTSkOVGLaTDvKb7bSx3g2PLhUE1q4F-drfTVnz68Ey0e1rSUMQ>
+    <xme:0d1SYUy-9x6xkL7am5hURVJM8Mb2Tq1geK4s5kIB1bZ4BClHGkX50jyVmO1UQi5TE
+    bVX7I-XA2tZnMxappY>
+X-ME-Received: <xmr:0d1SYY2m5BFFrPgJgcPjBFltzmbxi-dP_QlaN0CxTZ7S1EG5jl3_8cQoHPpmDm4Eaw0V8SJkKDZZRB4H5YtGoOPPII4tqXsJ8-01krXH>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudektddguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpefgjeettdejgffgffdvteeutdehtdehgeehueetkeefgefhtdetjeekledu
+    gedvudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:0d1SYTAE3SAKplh0RD2GGlSKpV4rHmkxG7LZOYEClF6x0cxVUiXskw>
+    <xmx:0d1SYcisYUhRDUfxM9rvcjDqyCOI-MI_a2cF2_r136Jj9W8LmzMqyg>
+    <xmx:0d1SYXrdGMy-gaanmz3jc5nIhCC94IKt1aohdY-ZTBuDc2d4eloerw>
+    <xmx:091SYaN_G8DqT03oJb9VyCR2LGkFmLftcoQI0a0fZ2n9Cj8Ag5vmpg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Sep 2021 05:18:08 -0400 (EDT)
+Date:   Tue, 28 Sep 2021 11:18:07 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Sam Ravnborg <sam@ravnborg.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -56,7 +77,6 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
@@ -69,206 +89,143 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         <letux-kernel@openphoenux.org>, Jonas Karlman <jonas@kwiboo.se>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         Rob Herring <robh@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C529DB99-709A-4C24-B647-3A2004CBFE18@goldelico.com>
+Subject: Re: [PATCH v4 03/10] dt-bindings: display: Add
+ ingenic,jz4780-dw-hdmi DT Schema
+Message-ID: <20210928091807.xgqxemjizlobpcxy@gilmour>
 References: <cover.1632761067.git.hns@goldelico.com>
  <6c8b72a03703de54fa02b29c1a53c84ca0889e50.1632761067.git.hns@goldelico.com>
  <20210927170702.on243lp24fcfdhbj@gilmour>
-To:     Maxime Ripard <maxime@cerno.tech>, Sam Ravnborg <sam@ravnborg.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-X-Mailer: Apple Mail (2.3445.104.21)
+ <C529DB99-709A-4C24-B647-3A2004CBFE18@goldelico.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <C529DB99-709A-4C24-B647-3A2004CBFE18@goldelico.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-> Am 27.09.2021 um 19:07 schrieb maxime@cerno.tech:
+On Tue, Sep 28, 2021 at 10:59:45AM +0200, H. Nikolaus Schaller wrote:
+> >> +properties:
+> >> +  compatible:
+> >> +    items:
+> >> +      - const: ingenic,jz4780-dw-hdmi
+> >=20
+> > This can just be a const, there's no need for the items
 >=20
-> Hi,
+> Maybe starting with an enum is better if more compatible strings are to b=
+e added.
+
+it's still fairly easy to change if needed, there's no need to confuse
+anyone.
+
+> >=20
+> >> +  reg-io-width:
+> >> +    const: 4
+> >=20
+> > If it's fixed, why do you need it in the first place?
 >=20
-> On Mon, Sep 27, 2021 at 06:44:21PM +0200, H. Nikolaus Schaller wrote:
->> From: Sam Ravnborg <sam@ravnborg.org>
->>=20
->> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
->> Based on .txt binding from Zubair Lutfullah Kakakhel
->>=20
->> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> Cc: Rob Herring <robh@kernel.org>
->> Cc: devicetree@vger.kernel.org
->> ---
->> .../bindings/display/ingenic-jz4780-hdmi.yaml | 85 =
-+++++++++++++++++++
->> 1 file changed, 85 insertions(+)
->> create mode 100644 =
-Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
->>=20
->> diff --git =
-a/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml =
-b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
->> new file mode 100644
->> index 000000000000..5e60cdac4f63
->> --- /dev/null
->> +++ =
-b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
->> @@ -0,0 +1,85 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/ingenic-jz4780-hdmi.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
->> +
->> +maintainers:
->> +  - H. Nikolaus Schaller <hns@goldelico.com>
->> +
->> +description: |
->> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys =
-DesignWare HDMI 1.4
->> +  TX controller IP with accompanying PHY IP.
->> +
->> +allOf:
->> +  - $ref: panel/panel-common.yaml#
+> There is a fixed default of 1 if not specified.
+
+My point was more about why do you need to have that property at all?
+Can't you just drop it and assume that the register width is 32 bits if
+it's all you will ever run on?
+
+> >> +  clocks:
+> >> +    maxItems: 2
+> >> +    description: Clock specifiers for isrf and iahb clocks
+> >=20
+> > This can be defined as
+> >=20
+> > clocks:
+> >  items:
+> >    - description: isrf
+> >    - description: iahb
+> >=20
+> > A better description about what these clocks are would be nice as well
 >=20
-> Is it a panel though?
-
-Good question.=20
-
-Appears to have to be changed to
-
-  - $ref: bridge/synopsys,dw-hdmi.yaml#
-
+> Generally I see that this all is nowadays not independent of
 >=20
->> +properties:
->> +  compatible:
->> +    items:
->> +      - const: ingenic,jz4780-dw-hdmi
+> Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
 >=20
-> This can just be a const, there's no need for the items
+> where there is already a description.
 
-Maybe starting with an enum is better if more compatible strings are to =
-be added.
+Ok, good then
 
+> On the other hand every SoC specialization runs its own copy. e.g.
 >=20
->> +
->> +  reg:
->> +    maxItems: 1
->> +    description: the address & size of the LCD controller registers
+> Documentation/devicetree/bindings/display/imx/fsl,imx6-hdmi.yaml
+> Documentation/devicetree/bindings/display/rockchip/rockchip,dw-hdmi.yam
 >=20
-> There's no need for that description, it's obvious enough
-
-Indeed.
-
+> >=20
+> >> +  clock-names:
+> >> +    items:
+> >> +      - const: isfr
+> >=20
+> > Is it isfr or isrf?
 >=20
->> +  reg-io-width:
->> +    const: 4
+> isfr. Seems to be a typo in the description. See
+> bridge/synopsys,dw-hdmi.yaml#
 >=20
-> If it's fixed, why do you need it in the first place?
-
-There is a fixed default of 1 if not specified.
-
+> One question to the yaml specialists:
 >=20
->> +  interrupts:
->> +    maxItems: 1
->> +    description: Specifies the interrupt provided by parent
+> since ../bridge/synopsys,dw-hdmi.yaml# already defines this, do we
+> have to repeat? Or can we reduce to just the changes?
+
+If you add the ref you mentionned above, you don't have to repeat
+yourself indeed. You can just put clock-names: true
+
+> [I am still not familiar enough with the yaml stuff to understand if
+> it has sort of inheritance like device tree include files, so that you
+> just have to change relevant properties]
+
+Kind of, but not entirely. schemas are all applied separately, unlike DT
+includes that will just expand to one big DT. In practice, it means that
+your device must validate against all the schemas, not just the sum of
+them.
+
+For example, if you have a generic schema that has:
+
+properties:
+  compatible:
+    const: vendor,my-generic-compatible
+
+
+and your schema that extends the generic binding, with a ref to the
+generic one that has:
+
+properties:
+  compatible:
+    items:
+      - const: other-vendor,my-device-compatible
+      - const: vendor,my-generic-compatible
+
+
+It will still fail since the generic schema expects only a single
+compatible, whereas your device would have two.
+
+> >=20
+> >> +      - const: iahb
 >=20
-> There's no need for that description, it's obvious enough
-
-Indeed.
-
+> would it make sense to add additionalItems: false here?
 >=20
->> +  clocks:
->> +    maxItems: 2
->> +    description: Clock specifiers for isrf and iahb clocks
+> In the jz4780 case there are just two clocks while other specializations
+> use more and synopsys,dw-hdmi.yaml# defines additionalItems: true.
+
+If you want to refine the generic one, and it's all the clocks you ever
+expect then there's no need for additionalItems
+
+> >=20
+> >> +    description: An I2C interface if the internal DDC I2C driver is n=
+ot to be used
+> >> +  ports: true
+> >=20
+> > If there's a single port, you don't need ports
 >=20
-> This can be defined as
->=20
-> clocks:
->  items:
->    - description: isrf
->    - description: iahb
->=20
-> A better description about what these clocks are would be nice as well
+> There can be two ports - one for input from LCDC and one
+> for output (HDMI connector). But explicitly defining an output
+> port is optional to some extent (depending on driver structure).
 
-Generally I see that this all is nowadays not independent of
+This needs to be defined then (and port@0 made mandatory)
 
-Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-
-where there is already a description.
-
-On the other hand every SoC specialization runs its own copy. e.g.
-
-Documentation/devicetree/bindings/display/imx/fsl,imx6-hdmi.yaml
-Documentation/devicetree/bindings/display/rockchip/rockchip,dw-hdmi.yam
-
->=20
->> +  clock-names:
->> +    items:
->> +      - const: isfr
->=20
-> Is it isfr or isrf?
-
-isfr. Seems to be a typo in the description. See =
-bridge/synopsys,dw-hdmi.yaml#
-
-One question to the yaml specialists:
-
-since ../bridge/synopsys,dw-hdmi.yaml# already defines this, do we have =
-to repeat?
-Or can we reduce to just the changes?
-
-[I am still not familiar enough with the yaml stuff to understand if it =
-has sort
-of inheritance like device tree include files, so that you just have to =
-change
-relevant properties]
-
->=20
->> +      - const: iahb
-
-would it make sense to add additionalItems: false here?
-
-In the jz4780 case there are just two clocks while other specializations
-use more and synopsys,dw-hdmi.yaml# defines additionalItems: true.
-
->> +
->> +  hdmi-regulator: true
->> +    description: Optional regulator to provide +5V at the connector
->=20
-> regulators need to be suffixed by -supply
-
-My omission...
-
-And, it should be "hdmi-5v-supply" to match driver and device tree.
-
->=20
-> You also can just provide the description, you don't need the true =
-there
->=20
->> +  ddc-i2c-bus: true
->=20
-> ditto
-
-Ok
-
->=20
->> +    description: An I2C interface if the internal DDC I2C driver is =
-not to be used
->> +  ports: true
->=20
-> If there's a single port, you don't need ports
-
-There can be two ports - one for input from LCDC and one
-for output (HDMI connector). But explicitly defining an output
-port is optional to some extent (depending on driver structure).
-
->=20
-> You should also include /schemas/graph.yaml#/$defs/port-base
-
-Ok.
-
-BR and thanks,
-Nikolaus
-
+Maxime
