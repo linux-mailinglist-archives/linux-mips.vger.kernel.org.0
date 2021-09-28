@@ -2,138 +2,231 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC78441ABBA
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 11:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A34B41ABB5
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 11:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239897AbhI1J00 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Sep 2021 05:26:26 -0400
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:10400 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239708AbhI1J00 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Sep 2021 05:26:26 -0400
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18S8A28M025160;
-        Tue, 28 Sep 2021 04:24:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=9VqIQz/1HqDmwPai2TYqvrCqYupABpAsyUut7dZ736M=;
- b=pFLUqA3rP6s9vALO1j4rVtdJ880oQlmw2WpBASjERkcmuXEDpPkdh+ZRgwwaSlJs6zie
- Ku0jyFaBkG78xmZ+YdNpQYf9Y0IvyZersPlmkBZvWSk5BWHPJhkyUWaCc2DEq07T/x2t
- c9X+xgK1iGXLPaf9qxoQAdBob6A1fkXIHKS2EFEKp1kNeOZDMcvesRyq3z4j6MP2yVX3
- xnglaL2IGW9Vuej4mAqb/8jcF23TAbO2fBwKx/ExVJ6YnKlppjFEq0DcZBYWcSO/8Len
- K3JfFxKn7BFWETUi9snqgpJ5rk+cxe1A7HLWXdcPu3PJS1nxcAWPYrcKtx3NieBHHj6A Mw== 
-Received: from ediex01.ad.cirrus.com ([87.246.76.36])
-        by mx0a-001ae601.pphosted.com with ESMTP id 3bbgmygx4j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 28 Sep 2021 04:24:02 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Tue, 28 Sep
- 2021 10:24:00 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
- Transport; Tue, 28 Sep 2021 10:24:00 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 318DD11AF;
-        Tue, 28 Sep 2021 09:24:00 +0000 (UTC)
-Date:   Tue, 28 Sep 2021 09:24:00 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <linux-ia64@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 1/2] firmware: include drivers/firmware/Kconfig
- unconditionally
-Message-ID: <20210928092400.GH9223@ediswmail.ad.cirrus.com>
-References: <20210928075216.4193128-1-arnd@kernel.org>
- <20210928083751.GG9223@ediswmail.ad.cirrus.com>
- <CAK8P3a11c6eLRWKvQeSqvEicc9bMDeEEGV5fygTidoRzYf9KnQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a11c6eLRWKvQeSqvEicc9bMDeEEGV5fygTidoRzYf9KnQ@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: Pzx4P-PCvsYzz7bz1-hxMXEM9-0MDlJo
-X-Proofpoint-GUID: Pzx4P-PCvsYzz7bz1-hxMXEM9-0MDlJo
-X-Proofpoint-Spam-Reason: safe
+        id S239843AbhI1J0R (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 05:26:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55652 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239831AbhI1J0R (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Sep 2021 05:26:17 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D894961130;
+        Tue, 28 Sep 2021 09:24:37 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mV9Ln-00DSn8-QY; Tue, 28 Sep 2021 10:24:35 +0100
+Date:   Tue, 28 Sep 2021 10:24:34 +0100
+Message-ID: <87o88dt5m5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH 07/14] KVM: Don't block+unblock when halt-polling is successful
+In-Reply-To: <YVH/LjCqk/9PfDHn@google.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+        <20210925005528.1145584-8-seanjc@google.com>
+        <878rzlass2.wl-maz@kernel.org>
+        <80d90ee6-0d43-3735-5c26-be8c3d72d493@redhat.com>
+        <877df3btgb.wl-maz@kernel.org>
+        <YVH/LjCqk/9PfDHn@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, pbonzini@redhat.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org, dmatlack@google.com, jingzhangos@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 10:51:36AM +0200, Arnd Bergmann wrote:
-> On Tue, Sep 28, 2021 at 10:37 AM Charles Keepax
-> <ckeepax@opensource.cirrus.com> wrote:
-> > I guess the question might be where else would said code go?
-> > drivers/firmware seemed most obvious, all the other locations
-> > I can think of don't really make sense. Can't really put it a bus
-> > like spi/i2c etc. because we have parts on many buses. Can't
-> > really put it in a functional subsystem (audio/input etc.) since
-> > the whole idea was to try and get some independence from that so
-> > we don't have parts including subsystems they don't use. Could
-> > maybe put it in MFD, but no hard guarantee every part using it
-> > will be an MFD device and I am fairly confident Lee will feel it
-> > isn't MFD code as it doesn't relate to managing multiple devices.
-> > Only other option I can think of would be to make some sort of
-> > drivers/dsp or maybe drivers/cs_dsp, but not clear to me that is
-> > obviously better than using drivers/firmware.
+On Mon, 27 Sep 2021 18:28:14 +0100,
+Sean Christopherson <seanjc@google.com> wrote:
 > 
-> Other DSPs use the drivers/remoteproc/ subsystem, but that
-> is more for general-purpose DSPs that can load application
-> specific firmware rather than loading a single firmware blob
-> as you'd normally do with the request_firmware() style interface.
+> On Sun, Sep 26, 2021, Marc Zyngier wrote:
+> > On Sun, 26 Sep 2021 07:27:28 +0100,
+> > Paolo Bonzini <pbonzini@redhat.com> wrote:
+> > > 
+> > > On 25/09/21 11:50, Marc Zyngier wrote:
+> > > >> there is no need for arm64 to put/load
+> > > >> the vGIC as KVM hasn't relinquished control of the vCPU in any way.
+> > > > 
+> > > > This doesn't mean that there is no requirement for any state
+> > > > change. The put/load on GICv4 is crucial for performance, and the VMCR
+> > > > resync is a correctness requirement.
 > 
-> Not sure if that fits what you do. Can you point to a high-level
-> description of what this DSP does besides audio, and how
-> flexible it is? That might help find the right place for this.
+> Ah crud, I didn't blame that code beforehand, I simply assumed
+> kvm_arch_vcpu_blocking() was purely for the blocking/schedule()
+> sequence.  The comment in arm64's kvm_arch_vcpu_blocking() about
+> kvm_arch_vcpu_runnable() makes more sense now too.
+> 
+> > > I wouldn't even say it's crucial for performance: halt polling cannot
+> > > work and is a waste of time without (the current implementation of)
+> > > put/load.
+> > 
+> > Not quite. A non-V{LPI,SGI} could still be used as the a wake-up from
+> > WFI (which is the only reason we end-up on this path). Only LPIs (and
+> > SGIs on GICv4.1) can be directly injected, meaning that SPIs and PPIs
+> > still follow the standard SW injection model.
+> > 
+> > However, there is still the ICH_VMCR_EL2 requirement (to get the
+> > up-to-date priority mask and group enable bits) for SW-injected
+> > interrupt wake-up to work correctly, and I really don't want to save
+> > that one eagerly on each shallow exit.
+> 
+> IIUC, VMCR is resident in hardware while the guest is running, and
+> KVM needs to retrieve the VMCR when processing interrupts to
+> determine if a interrupt is above the priority threshold.  If that's
+> the case, then IMO handling the VMCR via an arch hook is
+> unnecessarily fragile, e.g. any generic call that leads to
+> kvm_arch_vcpu_runnable() needs to know that arm64 lazily retrieves a
+> guest register.
 
-Hm... wasn't aware of that one, we should probably investigate that
-a little more at this end. From a quick look, seems a bit more like
-it is designed for much larger more general purpose probably memory
-mapped DSPs. I guess our code is a little more firmware parsing
-and loading, and a bit less generic remote proceedure call stuff.
+Not quite. We only need to retrieve the VMCR if we are in a situation
+where we need to trigger a wake-up from WFI at the point where we have
+not done a vcpu_put() yet. All the other cases where the interrupt is
+injected are managed by the HW. And the only case where
+kvm_arch_vcpu_runnable() gets called is when blocking.
 
-I am not sure there is great deal available publically on the
-DSP core. It is talked about in a few of our datasheets, see
-section 4.4 in [1]. But a basic description might be it is a
-signal processing focused, very small DSP core. If can be loaded
-with different firmwares at runtime, and indeed might be doing say
-echo cancellation in one use-case, or always on voice detect in
-another. Functionally it is very unlikely to be used for anything
-besides signal processing inside the device it is in, since it is
-typically quite integrated with that hardware and will be sitting
-behind a slow bus, like I2C or SPI.
+I also don't get why a hook would be fragile, as long as it has well
+defined semantics.
 
-Current users are all audio, planning to upstream some haptics
-parts soon, with possible other uses in the future.
+> A better approach for VMCR would be to retrieve the value from
+> hardware on-demand, e.g. via a hook in vgic_get_vmcr(), so that it's all but
+> impossible to have bugs where KVM is working with a stale VMCR, e.g.
+> 
+> diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
+> index 48c6067fc5ec..0784de0c4080 100644
+> --- a/arch/arm64/kvm/vgic/vgic-mmio.c
+> +++ b/arch/arm64/kvm/vgic/vgic-mmio.c
+> @@ -828,6 +828,13 @@ void vgic_set_vmcr(struct kvm_vcpu *vcpu, struct vgic_vmcr *vmcr)
+>  
+>  void vgic_get_vmcr(struct kvm_vcpu *vcpu, struct vgic_vmcr *vmcr)
+>  {
+> +       if (!vcpu->...->vmcr_available) {
+> +               preempt_disable();
+> +               kvm_vgic_vmcr_sync(vcpu);
+> +               preempt_enable();
+> +               vcpu->...->vmcr_available = true;
+> +       }
+> +
 
-[1] https://statics.cirrus.com/pubs/proDatasheet/CS48L32_DS1219F4.pdf
+But most of the uses of vgic_get_vmcr() are in contexts where the vcpu
+isn't running at all (such as save/restore). It really only operates
+on the shadow state, and what you have above will only lead to state
+corruption.
 
-Thanks,
-Charles
+>         if (kvm_vgic_global_state.type == VGIC_V2)
+>                 vgic_v2_get_vmcr(vcpu, vmcr);
+>         else
+> 
+> 
+> Regarding vGIC v4, does KVM require it to be resident in hardware
+> while the vCPU is loaded?
+
+It is a requirement. Otherwise, we end-up with an inconsistent state
+between the delivery of doorbells and the state of the vgic. Also,
+reloading the GICv4 state can be pretty expensive (multiple MMIO
+accesses), which is why we really don't want to do that on the hot
+path (kvm_arch_vcpu_ioctl_run() *is* a hot path).
+
+> If not, then we could do something like
+> this, which would eliminate the arch hooks entirely if the VMCR is
+> handled as above.
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index fe102cd2e518..efc862c4d802 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -365,31 +365,6 @@ int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu)
+>         return kvm_timer_is_pending(vcpu);
+>  }
+> 
+> -void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu)
+> -{
+> -       /*
+> -        * If we're about to block (most likely because we've just hit a
+> -        * WFI), we need to sync back the state of the GIC CPU interface
+> -        * so that we have the latest PMR and group enables. This ensures
+> -        * that kvm_arch_vcpu_runnable has up-to-date data to decide
+> -        * whether we have pending interrupts.
+> -        *
+> -        * For the same reason, we want to tell GICv4 that we need
+> -        * doorbells to be signalled, should an interrupt become pending.
+> -        */
+> -       preempt_disable();
+> -       kvm_vgic_vmcr_sync(vcpu);
+> -       vgic_v4_put(vcpu, true);
+> -       preempt_enable();
+> -}
+> -
+> -void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
+> -{
+> -       preempt_disable();
+> -       vgic_v4_load(vcpu);
+> -       preempt_enable();
+> -}
+> -
+>  void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+>  {
+>         struct kvm_s2_mmu *mmu;
+> @@ -697,7 +672,6 @@ static void check_vcpu_requests(struct kvm_vcpu *vcpu)
+>                         /* The distributor enable bits were changed */
+>                         preempt_disable();
+>                         vgic_v4_put(vcpu, false);
+> -                       vgic_v4_load(vcpu);
+>                         preempt_enable();
+>                 }
+> 
+> @@ -813,6 +787,13 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+>                  */
+>                 preempt_disable();
+> 
+> +               /*
+> +                * Reload vGIC v4 if necessary, as it may be put on-demand so
+> +                * that KVM can detect directly injected interrupts, e.g. when
+> +                * determining if the vCPU is runnable due to a pending event.
+> +                */
+> +               vgic_v4_load(vcpu);
+
+You'd need to detect that a previous put has been done. But overall,
+it puts the complexity at the wrong place. WFI (aka kvm_vcpu_block) is
+the place where we want to handle this synchronisation, and not the
+run loop.
+
+Instead of having a well defined interface with the blocking code
+where we implement the required synchronisation, you spray the vgic
+crap all over, and it becomes much harder to reason about it. Guess
+what, I'm not keen on it.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
