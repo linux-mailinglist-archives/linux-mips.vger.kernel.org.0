@@ -2,150 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E51C41B6D2
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 21:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3A141B7AB
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 21:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242356AbhI1TDW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Sep 2021 15:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242253AbhI1TDW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 15:03:22 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49E1C061746
-        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 12:01:42 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id j14so14861070plx.4
-        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 12:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xt0gEcyOTVXB3cbfAORCeU0aPfpfHLNMXNfI9X69CVQ=;
-        b=P2WbyomAz9CC+YDhARNtEQPob4jnZ2g2oykK3Tx9s3ZzF3kIhs4M8u5I6nL6TYVoGq
-         rrOLmGGUE/wsUTWlv/vaHIT0qruIxiC5Hconls6bpVJIAswiiw3izm0NUdKLNEX/vTj1
-         hNuCFj8rB/KJEKNYPyTIjrwmUxsuMdqXz/A3MzGuI1a3Kwyq70MOLXcjCuAwjRmB7Dhb
-         kf47CJCAyIoWzJus9Q6TAK/lSg8ZsxvgmyTdZgT9A2DiUE772alKYF35OPb474XMP0BJ
-         1g92CPbM5JIG9MA0Bz7RxJUC/t1T7o89IaaifLPvH7z+3t2ti9exdaFi/jE6y9Sz0Jjp
-         UImg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xt0gEcyOTVXB3cbfAORCeU0aPfpfHLNMXNfI9X69CVQ=;
-        b=jnKfhpgLXofc6WTZ36HGxpXvSiUnNf1rDEInfyFPCJ2QdE3vrZB32D6crruGxkMlI/
-         2erGSFBKBIHgCgEjP7RtSFCDJp2v1ZPORsKxI4kMLn2CXAAz907L0XquyVcCo/V1HHCI
-         PkAS6b4fA/w5bR5+3dHQSvzV44JmlrMpUU+1O5ZKsN8bf4JckAdF9RNGV0jmcoX1eA+2
-         KWBerkFflM9dDidHZ79+0+qwY6wtm+FWvzO/HbJavHhxGMUFLWN1qxwAf3ozDNndBmKC
-         JSVX0Nbr8yc/zlNmGf/XUVVwMW33JrLY0fapyvVFd943X1pGoHfk/Hn/YwbSnNLnC07L
-         pgOA==
-X-Gm-Message-State: AOAM532g4TmB3GHv5YYa4x5BwwZ7gUrDzx54jiynTeyBRyJ0IuDdPetH
-        8JMuYTfuCTuOj4GpqsYjd5rNYg==
-X-Google-Smtp-Source: ABdhPJwN22eVEV+ILvTVZFxrClU0H39RaKFVj+LTEdtXecOP9yW45Z7Ldv9r7U41GdYk3WWGVE+ldw==
-X-Received: by 2002:a17:902:b909:b0:13a:2d8e:12bc with SMTP id bf9-20020a170902b90900b0013a2d8e12bcmr6453208plb.6.1632855701799;
-        Tue, 28 Sep 2021 12:01:41 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id j24sm20993011pfh.65.2021.09.28.12.01.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Sep 2021 12:01:41 -0700 (PDT)
-Date:   Tue, 28 Sep 2021 19:01:38 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH 03/14] KVM: Refactor and document halt-polling stats
- update helper
-Message-ID: <YVNmkuaUYwYvlbaY@google.com>
-References: <20210925005528.1145584-1-seanjc@google.com>
- <20210925005528.1145584-4-seanjc@google.com>
+        id S242538AbhI1Th6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 15:37:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51702 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242535AbhI1Th5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Sep 2021 15:37:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BF3FA61131;
+        Tue, 28 Sep 2021 19:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632857777;
+        bh=/hPKLMPJTNrhU1SP0bMA34z2EYxtK4mD++/ujAwU6A4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=h6eGGH0fk6/SkY3p+QaFpdTDka6h9KtK4CpJIjQVf8LiUKr8o+llRxPFcV7LkqV8M
+         Z3+hSITUMhBWOBM2/ITWO0IyxyiKGeDl607P7bOazNx5NQbndOq4lieEc+Wyw12tN8
+         JOgzDoGxiFUZDjfFNrLZI/af0nt8o+C8qPTkKeGO7Vy4ezfLCYV83GcDdeGAZvFLJD
+         nsaEh2q2AhB3eyn708Mfk0UpJq3UzrhLpjTcz80BwIrbgPIoogknndzNBguE5Y/kqL
+         e1nweHR9yTNeX6ZXkne0h52alGpPBYgo8VDGfJ/BdTfu8ejPsguJBhAbS/yE4lX/RY
+         N20xF3Twn9VIw==
+Received: by mail-ed1-f45.google.com with SMTP id r18so11548545edv.12;
+        Tue, 28 Sep 2021 12:36:17 -0700 (PDT)
+X-Gm-Message-State: AOAM532jdaDAcW49axkMVF+rx0kVtRbH+NvDM/6yM0rictaltYDnVGZU
+        V4E+64ttQcMKGd548XNSvnVCVdsFOOIIdB+SaA==
+X-Google-Smtp-Source: ABdhPJxkN1rAEe0u7at9IuCHUo7sUflpWJWdcsHHnqh3vlDJJdBMkZRw+1OPM2MmSyluZXfETP88gy0YMvDpRaQqOk4=
+X-Received: by 2002:a17:906:fa8a:: with SMTP id lt10mr8741415ejb.320.1632857776271;
+ Tue, 28 Sep 2021 12:36:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210925005528.1145584-4-seanjc@google.com>
+References: <20210928182139.652896-1-f.fainelli@gmail.com> <20210928182139.652896-10-f.fainelli@gmail.com>
+In-Reply-To: <20210928182139.652896-10-f.fainelli@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 28 Sep 2021 14:36:04 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+Hcpj6CCM6hYFC5hpNfm9fcqZXDuyxR4vKn9hzRK-QiA@mail.gmail.com>
+Message-ID: <CAL_Jsq+Hcpj6CCM6hYFC5hpNfm9fcqZXDuyxR4vKn9hzRK-QiA@mail.gmail.com>
+Subject: Re: [PATCH v3 09/14] irqchip: Provide platform_device to of_irq_init_cb_t
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "moderated list:ARM SUB-ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 05:55:17PM -0700, Sean Christopherson wrote:
-> Add a comment to document that halt-polling is considered successful even
-> if the polling loop itself didn't detect a wake event, i.e. if a wake
-> event was detect in the final kvm_vcpu_check_block().  Invert the param
-> to the update helper so that the helper is a dumb function that is "told"
-> whether or not polling was successful, as opposed to having it determinine
-> success/failure based on blocking behavior.
-> 
-> Opportunistically tweak the params to the update helper to reduce the
-> line length for the call site so that it fits on a single line, and so
-> that the prototype conforms to the more traditional kernel style.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-
-Reviewed-by: David Matlack <dmatlack@google.com>
-
+On Tue, Sep 28, 2021 at 1:22 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> Provide the platform device mapping to the interrupt controller node to
+> the of_irq_init_cb_t callback such that drivers can make use of it.
+>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  virt/kvm/kvm_main.c | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 8b33f5045b4d..12fe91a0a4c8 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -3199,13 +3199,15 @@ static int kvm_vcpu_check_block(struct kvm_vcpu *vcpu)
->  	return ret;
+>  drivers/irqchip/irqchip.c | 2 +-
+>  drivers/of/irq.c          | 2 +-
+>  include/linux/of_irq.h    | 5 ++++-
+>  3 files changed, 6 insertions(+), 3 deletions(-)
+
+Less invasive than I thought as we lose any function typing. Maybe at
+least the one platform driver, drivers/irqchip/qcom-pdc.c, should have
+its function parameters updated.
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+>
+> diff --git a/drivers/irqchip/irqchip.c b/drivers/irqchip/irqchip.c
+> index 3570f0a588c4..289784eefd00 100644
+> --- a/drivers/irqchip/irqchip.c
+> +++ b/drivers/irqchip/irqchip.c
+> @@ -55,6 +55,6 @@ int platform_irqchip_probe(struct platform_device *pdev)
+>         if (par_np && !irq_find_matching_host(par_np, DOMAIN_BUS_ANY))
+>                 return -EPROBE_DEFER;
+>
+> -       return irq_init_cb(np, par_np);
+> +       return irq_init_cb(np, par_np, pdev);
 >  }
->  
-> -static inline void
-> -update_halt_poll_stats(struct kvm_vcpu *vcpu, u64 poll_ns, bool waited)
-> +static inline void update_halt_poll_stats(struct kvm_vcpu *vcpu, ktime_t start,
-> +					  ktime_t end, bool success)
->  {
-> -	if (waited)
-> -		vcpu->stat.generic.halt_poll_fail_ns += poll_ns;
-> -	else
-> +	u64 poll_ns = ktime_to_ns(ktime_sub(end, start));
+>  EXPORT_SYMBOL_GPL(platform_irqchip_probe);
+> diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+> index 352e14b007e7..18f3f5c00c87 100644
+> --- a/drivers/of/irq.c
+> +++ b/drivers/of/irq.c
+> @@ -538,7 +538,7 @@ void __init of_irq_init(const struct of_device_id *matches)
+>                                  desc->dev,
+>                                  desc->dev, desc->interrupt_parent);
+>                         ret = desc->irq_init_cb(desc->dev,
+> -                                               desc->interrupt_parent);
+> +                                               desc->interrupt_parent, NULL);
+>                         if (ret) {
+>                                 of_node_clear_flag(desc->dev, OF_POPULATED);
+>                                 kfree(desc);
+> diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
+> index aaf219bd0354..89acc8b089f0 100644
+> --- a/include/linux/of_irq.h
+> +++ b/include/linux/of_irq.h
+> @@ -9,7 +9,10 @@
+>  #include <linux/ioport.h>
+>  #include <linux/of.h>
+>
+> -typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *);
+> +struct platform_device;
 > +
-> +	if (success)
->  		vcpu->stat.generic.halt_poll_success_ns += poll_ns;
-> +	else
-> +		vcpu->stat.generic.halt_poll_fail_ns += poll_ns;
->  }
->  
+> +typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *,
+> +                               struct platform_device *);
+>
 >  /*
-> @@ -3274,9 +3276,13 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
->  	kvm_arch_vcpu_unblocking(vcpu);
->  	block_ns = ktime_to_ns(cur) - ktime_to_ns(start);
->  
-> +	/*
-> +	 * Note, halt-polling is considered successful so long as the vCPU was
-> +	 * never actually scheduled out, i.e. even if the wake event arrived
-> +	 * after of the halt-polling loop itself, but before the full wait.
-> +	 */
->  	if (do_halt_poll)
-> -		update_halt_poll_stats(
-> -			vcpu, ktime_to_ns(ktime_sub(poll_end, start)), waited);
-> +		update_halt_poll_stats(vcpu, start, poll_end, !waited);
->  
->  	if (halt_poll_allowed) {
->  		if (!vcpu_valid_wakeup(vcpu)) {
-> -- 
-> 2.33.0.685.g46640cef36-goog
-> 
+>   * Workarounds only applied to 32bit powermac machines
+> --
+> 2.25.1
+>
