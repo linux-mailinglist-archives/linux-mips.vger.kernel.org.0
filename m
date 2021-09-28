@@ -2,133 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AE9419FD0
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Sep 2021 22:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B4841A50D
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 04:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236755AbhI0ULC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 27 Sep 2021 16:11:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59614 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236750AbhI0ULC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 27 Sep 2021 16:11:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C2F8F6103B;
-        Mon, 27 Sep 2021 20:09:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632773363;
-        bh=J4WKzNfsIiazj7H7fCzN53GkjN+q2BUUdv7RdPQ+jvs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iz+rXT9iurX/Sbwxr0JiSOuhKGhkSJ/ZvA9uw914KWJpvAANWwMdb/MtedCiS54lS
-         O4dVlseh6GqrUxg1YD+XyKKd+SwGAuj8FFf5ji70+pHdB4/pRrUxxo8jf8IudGCDtu
-         LtBnr3LkhDr5Hfzmbruf/81BbM7+KWYfUt9oMhE2sH/EqooPTEMF5VjZ5LXEAAh9hO
-         z2CiZ7lgLXGHXi7oXi2Td1tROFYJz/ERayeCuMoOF7473nW6Y0xZlsqx5Zblamfymm
-         5XKvXVyLbE8UF++l1RJyUg7RBYeHIXiU6vEP5mRK5UT5zlQq7jHKbA1wRxDbH0Wixx
-         nRXT2zqo1kryQ==
-Received: by mail-ed1-f41.google.com with SMTP id v18so38724181edc.11;
-        Mon, 27 Sep 2021 13:09:23 -0700 (PDT)
-X-Gm-Message-State: AOAM531QT4+7eR985DjBPxx7rdtJt9rzt0fInld5E3uodnIFioP8EpAR
-        i6/mC//ZFMbiFAx31iJcZp3aTs8w/7n66+C/PQ==
-X-Google-Smtp-Source: ABdhPJxbTiYP0k9mhq1FBUZhdcuB5HPJYzGx22XyKvmETyk5vs8udAVSQV3XRcc2g52kNbQN3yNH7Cekm4PkAhhcRnQ=
-X-Received: by 2002:a17:906:7217:: with SMTP id m23mr2177174ejk.466.1632773362346;
- Mon, 27 Sep 2021 13:09:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210924170546.805663-1-f.fainelli@gmail.com> <20210924170546.805663-8-f.fainelli@gmail.com>
- <CAL_JsqLSiCb7-tHW3VTOTdMt=qahAij77zF2us-CZqXYAi0jmg@mail.gmail.com>
- <b9bf844c-b6c0-9277-07e0-7592527ce4e4@gmail.com> <CAL_JsqLv+RrmtDPTuMxtjbqAbGvEeAY_oOE5GqrPdP9ZpNGzqw@mail.gmail.com>
- <ec13207a-08b4-cbc4-7f29-1ce25ce1ebd0@gmail.com>
-In-Reply-To: <ec13207a-08b4-cbc4-7f29-1ce25ce1ebd0@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 27 Sep 2021 15:09:10 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKyFeSn=6PiFHNZR7oTy9A5VdmD7U3=Za0qyofPB6aoMA@mail.gmail.com>
-Message-ID: <CAL_JsqKyFeSn=6PiFHNZR7oTy9A5VdmD7U3=Za0qyofPB6aoMA@mail.gmail.com>
-Subject: Re: [PATCH 07/11] of/irq: Export of_irq_count to drivers
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S238560AbhI1CDf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 27 Sep 2021 22:03:35 -0400
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:44699 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238559AbhI1CDf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 27 Sep 2021 22:03:35 -0400
+Received: by mail-ot1-f46.google.com with SMTP id h9-20020a9d2f09000000b005453f95356cso26986555otb.11;
+        Mon, 27 Sep 2021 19:01:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=J3oyr8Rc1kp36TSH+0CGDcud7uqcMHUrHD4DOkGCZTc=;
+        b=F2bBF3kM/ClPHsQ5nEhwvh7+CuicHY9Grss21Kwq7oCYRqwJa1aEEO3d6iQyi/R0Y+
+         2pyDA0ImPsyjWLgvF/qkr7T8hAkWRrLQaJgLDlNwaxYfx4qelj7pJdyQ43uv1P+9iPVr
+         QAUcZ+OpgTWG5zQMNDXtMdlR32+KQEmcsG7NzdzimAx6oqwb6VDSY4AmhbkKuUtVzIYO
+         puJ4MFJ6HqHYMHlPDlUbL3X0rAXTHU64Dpqt80B1A6o8i0xYrk8uUOMQMAJP/ESYUluh
+         kJrD+UbiuB1fvq+IO2Tj1e+gkNM5v1b9G4UPbZy4J70wLbeP916591RLQW231c+ciq+e
+         /5Aw==
+X-Gm-Message-State: AOAM532pdyhb+g8AjkkfSbi407xZc29wCudKzqjHw9+TgyYBF90GN7jH
+        EDOTBeik3GU5ZDzb7tuacQ==
+X-Google-Smtp-Source: ABdhPJxmofC2Pg+ifvC8EinsHpDoNqFoCiNiA1LchXO444Z1BqdHhhC6xPxR6t6jiRY0TbLveoQuhw==
+X-Received: by 2002:a05:6830:3190:: with SMTP id p16mr2821543ots.85.1632794516215;
+        Mon, 27 Sep 2021 19:01:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id f3sm4232725oij.6.2021.09.27.19.01.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Sep 2021 19:01:55 -0700 (PDT)
+Received: (nullmailer pid 84275 invoked by uid 1000);
+        Tue, 28 Sep 2021 02:01:54 -0000
+Date:   Mon, 27 Sep 2021 21:01:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     dri-devel@lists.freedesktop.org, Kees Cook <keescook@chromium.org>,
+        devicetree@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        letux-kernel@openphoenux.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-mips@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
-        <linux-mips@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>
+Subject: Re: [PATCH v4 03/10] dt-bindings: display: Add
+ ingenic,jz4780-dw-hdmi DT Schema
+Message-ID: <YVJ3khibGMFSdpN5@robh.at.kernel.org>
+References: <cover.1632761067.git.hns@goldelico.com>
+ <6c8b72a03703de54fa02b29c1a53c84ca0889e50.1632761067.git.hns@goldelico.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c8b72a03703de54fa02b29c1a53c84ca0889e50.1632761067.git.hns@goldelico.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Sep 27, 2021 at 2:49 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> On 9/27/21 12:43 PM, Rob Herring wrote:
-> > On Mon, Sep 27, 2021 at 2:28 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >>
-> >> On 9/27/21 12:08 PM, Rob Herring wrote:
-> >>> On Fri, Sep 24, 2021 at 12:07 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
-> >>>>
-> >>>> In order to build drivers/irqchip/irq-bcm7120-l2.c as a module, we will
-> >>>> need to have of_irq_count() exported to modules.
-> >>>>
-> >>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >>>> ---
-> >>>>  drivers/of/irq.c | 1 +
-> >>>>  1 file changed, 1 insertion(+)
-> >>>>
-> >>>> diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-> >>>> index 352e14b007e7..949b9d1f8729 100644
-> >>>> --- a/drivers/of/irq.c
-> >>>> +++ b/drivers/of/irq.c
-> >>>> @@ -440,6 +440,7 @@ int of_irq_count(struct device_node *dev)
-> >>>>
-> >>>>         return nr;
-> >>>>  }
-> >>>> +EXPORT_SYMBOL_GPL(of_irq_count);
-> >>>
-> >>> Please convert to use platform_irq_count() instead.
-> >>
-> >> That requires a platform_device to be passed to platform_irq_count(),
-> >> will that work even when the drivers remain built into the kernel and
-> >> get initialized early on?
-> >
-> > No, does your irqchip using this do both? Looks to me like it is
-> > always a platform_device.
->
-> On ARM/ARM64 not using GKI as well as MIPS, we would want the module to
-> be built into the kernel image, however when using GKI that driver would
-> become a module. How do you suggest reconciling both usages?
+On Mon, 27 Sep 2021 18:44:21 +0200, H. Nikolaus Schaller wrote:
+> From: Sam Ravnborg <sam@ravnborg.org>
+> 
+> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+> Based on .txt binding from Zubair Lutfullah Kakakhel
+> 
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> ---
+>  .../bindings/display/ingenic-jz4780-hdmi.yaml | 85 +++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+> 
 
-What's there to resolve? Every driver that works as a module can be
-built-in. Is there something special about irqchip drivers?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-The only issue I see here is platform_irqchip_probe() doesn't pass the
-platform_device pointer to the irq_init_cb function. There's 3 ways to
-fix that. Add a platform_device pointer to the init hook. That's a
-global change though. That's the right thing to do IMO. Or you can use
-of_find_device_by_node(). That's fairly expensive, but easy and
-isolated. You could also set device_node.data pointer to the
-platform_device, but ideally I'd like to get rid of that pointer as
-it's hardly used.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml:45:16: [error] syntax error: mapping values are not allowed here (syntax)
 
-Rob
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.example.dts'
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 45, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 120, in get_single_data
+    node = self.composer.get_single_node()
+  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 891, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
+  in "<unicode string>", line 45, column 16
+make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml:  mapping values are not allowed in this context
+  in "<unicode string>", line 45, column 16
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml: ignoring, error parsing file
+warning: no schema found in file: ./Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+make: *** [Makefile:1441: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1533471
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
