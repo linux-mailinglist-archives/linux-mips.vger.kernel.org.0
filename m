@@ -2,109 +2,273 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 824BB41AB37
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 10:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41FA41AB51
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 11:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239603AbhI1Ixo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Sep 2021 04:53:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38110 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235918AbhI1Ixn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Sep 2021 04:53:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 938BD60EFF;
-        Tue, 28 Sep 2021 08:52:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632819124;
-        bh=UDvkMYqTjLXd6+U2xicY7wOfUB5ZOkt+dHh/8rdOTlc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sp+D1FNLOcdt1meA7Rr+BxEbEFqmQxCcVADSWmOWCgQvkxGxnzrtZN/JFCRDhDKV5
-         gsJkfAUWvH5cAd1SEOZF3BFv/IXCKjQSwyfT+ZMueu2yirlJMvAEpoNAepeOPNuwgR
-         K+cDoejFnllxffAbJm1CcPf8ll9H2V+2xDDYtJnT2KhGUwZm/RQmdg4toxiT085iLp
-         mp7Mfnyfy3luZ1zDaBhYXIzMJ+fu0+jHjdWb95vM9OKMY3VvvQNQYO8oc5DshnxdyP
-         +KaEk92kD7+D+GNtOngxwW9q0M9Apgyya6EjOShLjafwf5fI709koK2dd/BhqVzbUW
-         G3xiUh1wKRNJw==
-Received: by mail-wm1-f50.google.com with SMTP id r11-20020a1c440b000000b0030cf0f01fbaso1478547wma.1;
-        Tue, 28 Sep 2021 01:52:04 -0700 (PDT)
-X-Gm-Message-State: AOAM533GZjjjmPsbE4KHSgFDWkHzxFtxlpHn7B9Vi9z/u1fowj33mPWB
-        z7O9qARn/G1N3+BZydimazUGf6l/mMtERI7Slyg=
-X-Google-Smtp-Source: ABdhPJw1EufysO2nBZfUTMJ2f+KmIJnZVJeIE5gSQnbkQLtCag7gFuUClKMRTlZ2vF3thR7qUDV3jWY2OpZi5LDCFI4=
-X-Received: by 2002:a1c:2357:: with SMTP id j84mr3498711wmj.1.1632819112401;
- Tue, 28 Sep 2021 01:51:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210928075216.4193128-1-arnd@kernel.org> <20210928083751.GG9223@ediswmail.ad.cirrus.com>
-In-Reply-To: <20210928083751.GG9223@ediswmail.ad.cirrus.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 28 Sep 2021 10:51:36 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a11c6eLRWKvQeSqvEicc9bMDeEEGV5fygTidoRzYf9KnQ@mail.gmail.com>
-Message-ID: <CAK8P3a11c6eLRWKvQeSqvEicc9bMDeEEGV5fygTidoRzYf9KnQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] firmware: include drivers/firmware/Kconfig unconditionally
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        id S239631AbhI1JBl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 05:01:41 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.81]:22910 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239623AbhI1JBl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 05:01:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632819587;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=QjkVh+X5B/D/wI3Y4vAzZ0HLzWUItUYeAwlzSj/mPtw=;
+    b=H+xHZGpgo4nwbiZaGdNmMbIH1wDRknHN2jiDKkGhh5kwNIfG2dqaA1RRezdIr7pEUp
+    cT5CSqnx+ZD6NdDXm8Ip+LBloPAUKi6SoLJVLRa34Jc7d/ZRpknXn7zeUBwTRQW9GHH3
+    GT6jAOdyG4PrrvN8UlYTvawrhJqKwtkBNTz8onQEEJhjAiLu9gScD+Oq1cQz6qKkqWr3
+    eW2YtP3UskemrlDpuaZd4B4wFw+4zx+kGxHbSzGb/lNz5EV/LU28SZcX7AEAodNzrNlb
+    Vec2NlhjzzmM0nxXg77gxHFs32hW/hOyIIPqNQzVXR/2G56MbvoBwpx9AmyqRZejr0St
+    Dbkg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43sT7Q="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
+    with ESMTPSA id I01f74x8S8xjd8m
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 28 Sep 2021 10:59:45 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v4 03/10] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
+ DT Schema
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <20210927170702.on243lp24fcfdhbj@gilmour>
+Date:   Tue, 28 Sep 2021 10:59:45 +0200
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Herring <robh@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C529DB99-709A-4C24-B647-3A2004CBFE18@goldelico.com>
+References: <cover.1632761067.git.hns@goldelico.com>
+ <6c8b72a03703de54fa02b29c1a53c84ca0889e50.1632761067.git.hns@goldelico.com>
+ <20210927170702.on243lp24fcfdhbj@gilmour>
+To:     Maxime Ripard <maxime@cerno.tech>, Sam Ravnborg <sam@ravnborg.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 10:37 AM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
->
-> Thanks for looking at this for us. I don't think we are greatly
-> attached to drivers/firmware as a location. Essentially, what we
-> have is some firmware parsing code that needs to be shared across
-> several devices, previously this was just in the sound subsystem as
-> all our parts were audio. We are going to shortly be upstreaming
-> some non-audio parts that use the same firmware infrastructure
-> and it didn't seem very sensible to have them including bits of
-> the audio subsystem.
->
-> I guess the question might be where else would said code go?
-> drivers/firmware seemed most obvious, all the other locations
-> I can think of don't really make sense. Can't really put it a bus
-> like spi/i2c etc. because we have parts on many buses. Can't
-> really put it in a functional subsystem (audio/input etc.) since
-> the whole idea was to try and get some independence from that so
-> we don't have parts including subsystems they don't use. Could
-> maybe put it in MFD, but no hard guarantee every part using it
-> will be an MFD device and I am fairly confident Lee will feel it
-> isn't MFD code as it doesn't relate to managing multiple devices.
-> Only other option I can think of would be to make some sort of
-> drivers/dsp or maybe drivers/cs_dsp, but not clear to me that is
-> obviously better than using drivers/firmware.
+Hi,
 
-Other DSPs use the drivers/remoteproc/ subsystem, but that
-is more for general-purpose DSPs that can load application
-specific firmware rather than loading a single firmware blob
-as you'd normally do with the request_firmware() style interface.
+> Am 27.09.2021 um 19:07 schrieb maxime@cerno.tech:
+>=20
+> Hi,
+>=20
+> On Mon, Sep 27, 2021 at 06:44:21PM +0200, H. Nikolaus Schaller wrote:
+>> From: Sam Ravnborg <sam@ravnborg.org>
+>>=20
+>> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+>> Based on .txt binding from Zubair Lutfullah Kakakhel
+>>=20
+>> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> Cc: Rob Herring <robh@kernel.org>
+>> Cc: devicetree@vger.kernel.org
+>> ---
+>> .../bindings/display/ingenic-jz4780-hdmi.yaml | 85 =
++++++++++++++++++++
+>> 1 file changed, 85 insertions(+)
+>> create mode 100644 =
+Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+>>=20
+>> diff --git =
+a/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml =
+b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+>> new file mode 100644
+>> index 000000000000..5e60cdac4f63
+>> --- /dev/null
+>> +++ =
+b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+>> @@ -0,0 +1,85 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/ingenic-jz4780-hdmi.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
+>> +
+>> +maintainers:
+>> +  - H. Nikolaus Schaller <hns@goldelico.com>
+>> +
+>> +description: |
+>> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys =
+DesignWare HDMI 1.4
+>> +  TX controller IP with accompanying PHY IP.
+>> +
+>> +allOf:
+>> +  - $ref: panel/panel-common.yaml#
+>=20
+> Is it a panel though?
 
-Not sure if that fits what you do. Can you point to a high-level
-description of what this DSP does besides audio, and how
-flexible it is? That might help find the right place for this.
+Good question.=20
 
-       Arnd
+Appears to have to be changed to
+
+  - $ref: bridge/synopsys,dw-hdmi.yaml#
+
+>=20
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - const: ingenic,jz4780-dw-hdmi
+>=20
+> This can just be a const, there's no need for the items
+
+Maybe starting with an enum is better if more compatible strings are to =
+be added.
+
+>=20
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +    description: the address & size of the LCD controller registers
+>=20
+> There's no need for that description, it's obvious enough
+
+Indeed.
+
+>=20
+>> +  reg-io-width:
+>> +    const: 4
+>=20
+> If it's fixed, why do you need it in the first place?
+
+There is a fixed default of 1 if not specified.
+
+>=20
+>> +  interrupts:
+>> +    maxItems: 1
+>> +    description: Specifies the interrupt provided by parent
+>=20
+> There's no need for that description, it's obvious enough
+
+Indeed.
+
+>=20
+>> +  clocks:
+>> +    maxItems: 2
+>> +    description: Clock specifiers for isrf and iahb clocks
+>=20
+> This can be defined as
+>=20
+> clocks:
+>  items:
+>    - description: isrf
+>    - description: iahb
+>=20
+> A better description about what these clocks are would be nice as well
+
+Generally I see that this all is nowadays not independent of
+
+Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+
+where there is already a description.
+
+On the other hand every SoC specialization runs its own copy. e.g.
+
+Documentation/devicetree/bindings/display/imx/fsl,imx6-hdmi.yaml
+Documentation/devicetree/bindings/display/rockchip/rockchip,dw-hdmi.yam
+
+>=20
+>> +  clock-names:
+>> +    items:
+>> +      - const: isfr
+>=20
+> Is it isfr or isrf?
+
+isfr. Seems to be a typo in the description. See =
+bridge/synopsys,dw-hdmi.yaml#
+
+One question to the yaml specialists:
+
+since ../bridge/synopsys,dw-hdmi.yaml# already defines this, do we have =
+to repeat?
+Or can we reduce to just the changes?
+
+[I am still not familiar enough with the yaml stuff to understand if it =
+has sort
+of inheritance like device tree include files, so that you just have to =
+change
+relevant properties]
+
+>=20
+>> +      - const: iahb
+
+would it make sense to add additionalItems: false here?
+
+In the jz4780 case there are just two clocks while other specializations
+use more and synopsys,dw-hdmi.yaml# defines additionalItems: true.
+
+>> +
+>> +  hdmi-regulator: true
+>> +    description: Optional regulator to provide +5V at the connector
+>=20
+> regulators need to be suffixed by -supply
+
+My omission...
+
+And, it should be "hdmi-5v-supply" to match driver and device tree.
+
+>=20
+> You also can just provide the description, you don't need the true =
+there
+>=20
+>> +  ddc-i2c-bus: true
+>=20
+> ditto
+
+Ok
+
+>=20
+>> +    description: An I2C interface if the internal DDC I2C driver is =
+not to be used
+>> +  ports: true
+>=20
+> If there's a single port, you don't need ports
+
+There can be two ports - one for input from LCDC and one
+for output (HDMI connector). But explicitly defining an output
+port is optional to some extent (depending on driver structure).
+
+>=20
+> You should also include /schemas/graph.yaml#/$defs/port-base
+
+Ok.
+
+BR and thanks,
+Nikolaus
+
