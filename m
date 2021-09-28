@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3B741B5E4
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 20:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFB141B5E7
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 20:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242232AbhI1SYJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Sep 2021 14:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
+        id S242241AbhI1SYX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 14:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242206AbhI1SYI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 14:24:08 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42404C06161C;
-        Tue, 28 Sep 2021 11:22:28 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y8so19619784pfa.7;
-        Tue, 28 Sep 2021 11:22:28 -0700 (PDT)
+        with ESMTP id S242221AbhI1SYQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 14:24:16 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC2AC061760;
+        Tue, 28 Sep 2021 11:22:30 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id on12-20020a17090b1d0c00b001997c60aa29so2418016pjb.1;
+        Tue, 28 Sep 2021 11:22:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=G1RiT4GRKPcXSkOjyrks/jOWZL3DTQpMJtRhCsgVjY8=;
-        b=DJQskZZ4po/z5W282K8NSiY/GLTaICYDm+aMHSuEiDYSmbTB3BATU5QOsexPRVblZh
-         ZCJgXBVB4g65DDxrBtUJwnwXNuxhJ6KB6QI4d0p6h0FAxBWsp1su4g9ZQhZIf1fpOVVU
-         kv+I7qlVpFsFnm1ITCr/04viuJxmu7RlnLOepmkaAIO4oTlIumxl3mwm0io75Rb8Ttcn
-         7W6BvZgg8QvPj2haenV1fq3yfNoYDmA5IR1ttIuqBx5YOtWkC4KJv5fGzR6ClxKoIIFS
-         3DdZPprqHsbT57s9YcLlZiqUIH1qDgz2soxZGTjlcQ4870QDuuBg6E0CibmOHty19GM7
-         qNFw==
+        bh=eUj8nxm+KdP0d5VfXzrEXZEp4lkprKHXeVwPIifh+Cg=;
+        b=qD8YIE+BkdzAFNGOB7KHL+DYnDRu1+7sEmigspq7FVo8oXRZHDeywVsv8gnhUacnYN
+         LVXAUfmAQV07f3AfPa731x2WzupM6SNCWPEhxzT3e9qN/mWvkS7hxhfcFk6KNroQckS3
+         buLAUKdJsdKP7HORWonhsRUn253xhugzeZKkaE1hKVeOnIhVoKAGkjhHqlC43whRYw+4
+         NHethsn+Ux7i/6ik+0dItg11IzTWTO2tU+hrSGiu+tFTkSqpogA0TxmnIw51xzAiJQE5
+         ScXEEf5W03m2dFpijKk8V2/QIAQdBDIAKDhX9Jhuoe9JLcqb4BMwYccOP9gYc2PSWF8A
+         zONw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=G1RiT4GRKPcXSkOjyrks/jOWZL3DTQpMJtRhCsgVjY8=;
-        b=D6WZqhkQ0KYybhFAMcxXQkBQOCOMZ3Ut+VrMghA+xbkhwKC/CmGrK4FFlunPqCUU2B
-         xhmVSGcYjPsmRFB0WxBq8TYMtW93v5rmuWuCKsakUUEwmAfuZnhI/y/rPjzc6+CSonM2
-         D+vYvSmFfgOcFGz39t8wvAl2VUnVNgQeQJ5UXWXnTPfS2396QU41sgccoFV8zMz4UfFs
-         Ygr5GjWqxa6MV5EeBAl3MAEXzzb7mgPKoyogc7CKLLVOrbnN7vFZW426di3pnPlofrvs
-         KiGOhcLkYOgtdHLrVKWpSby11iieeEAyhicRhL0wE2+PfzGv+i8KNMUBooeD80dagPRZ
-         ptHA==
-X-Gm-Message-State: AOAM530EZLAgPR0APKaYgyieb1bo6ndNka1bh4wCaC56rdpc/YwFHVBm
-        8FzRBfiKInAFh64W1VqmXqnCEzHCDow=
-X-Google-Smtp-Source: ABdhPJwU+pmz/u0j54qGZGw+pklmbp0pUmxUzsiRS9pYuoRENNmRa1Na8U3PgjRc2FmlvaFYXVHf7g==
-X-Received: by 2002:a63:f80a:: with SMTP id n10mr5773602pgh.303.1632853347435;
-        Tue, 28 Sep 2021 11:22:27 -0700 (PDT)
+        bh=eUj8nxm+KdP0d5VfXzrEXZEp4lkprKHXeVwPIifh+Cg=;
+        b=dCHt1ctNCbDRVIGx0WwAFHR/3ECkFbVUgV/2xCVTjD7wEIOdmdPgfiRqjX3u6XpCiF
+         FulUi80I80lWcWPojP66YF60T4+Ze6HC8NxNoTdO/6Q0UhvdPkUYLAb+X5EJOn92wlEh
+         Z59A68jJoSwDDfsd5Gt7DU/aLzOKW+u9RQ4CGRhe1+bNlx4Nhzgzyc9SX/4kLGVDFnD0
+         1YYvNvZDvrWSSOi8PXf8bk9LKCkE9/2ONGxOa33xatH1Yyuz8nuBHjdmPC1gej84xYU3
+         frQ/dEiWX62NO2szBGXTIobF078r5V8XWbZxjW8xwP1+646uC4hVYgdMRr5n2IcTIidL
+         ZkIQ==
+X-Gm-Message-State: AOAM531942/9yU23rs3qMS7TUWGcD20JmxCXvZsJQk359ShwAshn6zr0
+        5pslV2SSewvQQInui9C5AeHq+3J2i/k=
+X-Google-Smtp-Source: ABdhPJy/pQQ7Mj+GhyymDTLMDxeMtULxslY4O2cr9dQbQ39uecMIk8qCz6TsUHCvi/ylRxXjZrH3Wg==
+X-Received: by 2002:a17:903:22ce:b0:13b:9a00:f090 with SMTP id y14-20020a17090322ce00b0013b9a00f090mr6524626plg.11.1632853349182;
+        Tue, 28 Sep 2021 11:22:29 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x19sm20855288pfn.105.2021.09.28.11.22.26
+        by smtp.gmail.com with ESMTPSA id x19sm20855288pfn.105.2021.09.28.11.22.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Sep 2021 11:22:27 -0700 (PDT)
+        Tue, 28 Sep 2021 11:22:28 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -66,9 +66,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         SUB-ARCHITECTURES), linux-mips@vger.kernel.org (open list:MIPS),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH v3 04/14] irqchip/irq-bcm7038-l1: Gate use of CPU logical map to MIPS
-Date:   Tue, 28 Sep 2021 11:21:29 -0700
-Message-Id: <20210928182139.652896-5-f.fainelli@gmail.com>
+Subject: [PATCH v3 05/14] irqchip/irq-bcm7038-l1: Restrict affinity setting to MIPS
+Date:   Tue, 28 Sep 2021 11:21:30 -0700
+Message-Id: <20210928182139.652896-6-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210928182139.652896-1-f.fainelli@gmail.com>
 References: <20210928182139.652896-1-f.fainelli@gmail.com>
@@ -78,67 +78,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The use of the cpu_logical_map[] array is only relevant for MIPS based
-platform where this driver is used as a first level interrupt controller
-and contains multiple register groups to map with an associated CPU.
+Only MIPS based platforms using this interrupt controller as first level
+interrupt controller can actually change the affinity of interrupts by
+re-programming the affinity mask of the interrupt controller and use
+another word group to have another CPU process the interrupt.
 
-On ARM/ARM64 based systems this interrupt controller is present and used
-as a second level interrupt controller hanging off the ARM GIC. That
-copy of the interrupt controller contains a single group, resulting in
-the intc->cpus[] array to be of size 1.
-
-Things happened to work in that case because we install that interrupt
-controller as a chained handler which does not allow it to be affine to
-any CPU but the boot CPU which happens to be 0, therefore we never
-de-reference past intc->cpus[] but with the current code in place, we do
-leave a chance of de-referencing the array past its bounds.
+When this interrupt is used as a second level interrupt controller on
+ARM/ARM64 there is no way to change the interrupt affinity. This fixes a
+NULL pointer de-reference while trying to change the affinity since
+there is only a single word group in that case, and we would have been
+overruning the intc->cpus[] array.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/irqchip/irq-bcm7038-l1.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/irqchip/irq-bcm7038-l1.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/drivers/irqchip/irq-bcm7038-l1.c b/drivers/irqchip/irq-bcm7038-l1.c
-index 14caf32dc23e..3c4e348c661e 100644
+index 3c4e348c661e..357570dd8780 100644
 --- a/drivers/irqchip/irq-bcm7038-l1.c
 +++ b/drivers/irqchip/irq-bcm7038-l1.c
-@@ -28,9 +28,6 @@
- #include <linux/irqchip.h>
- #include <linux/irqchip/chained_irq.h>
- #include <linux/syscore_ops.h>
--#ifdef CONFIG_ARM
--#include <asm/smp_plat.h>
--#endif
+@@ -191,6 +191,7 @@ static void bcm7038_l1_mask(struct irq_data *d)
+ 	raw_spin_unlock_irqrestore(&intc->lock, flags);
+ }
  
- #define IRQS_PER_WORD		32
- #define REG_BYTES_PER_IRQ_WORD	(sizeof(u32) * 4)
-@@ -127,7 +124,7 @@ static void bcm7038_l1_irq_handle(struct irq_desc *desc)
- 	struct irq_chip *chip = irq_desc_get_chip(desc);
- 	unsigned int idx;
++#if defined(CONFIG_MIPS) && defined(CONFIG_SMP)
+ static int bcm7038_l1_set_affinity(struct irq_data *d,
+ 				   const struct cpumask *dest,
+ 				   bool force)
+@@ -217,6 +218,7 @@ static int bcm7038_l1_set_affinity(struct irq_data *d,
  
--#ifdef CONFIG_SMP
+ 	return 0;
+ }
++#endif
+ 
+ static int __init bcm7038_l1_init_one(struct device_node *dn,
+ 				      unsigned int idx,
+@@ -365,7 +367,9 @@ static struct irq_chip bcm7038_l1_irq_chip = {
+ 	.name			= "bcm7038-l1",
+ 	.irq_mask		= bcm7038_l1_mask,
+ 	.irq_unmask		= bcm7038_l1_unmask,
 +#if defined(CONFIG_SMP) && defined(CONFIG_MIPS)
- 	cpu = intc->cpus[cpu_logical_map(smp_processor_id())];
- #else
- 	cpu = intc->cpus[0];
-@@ -301,7 +298,7 @@ static int bcm7038_l1_suspend(void)
- 	u32 val;
- 
- 	/* Wakeup interrupt should only come from the boot cpu */
--#ifdef CONFIG_SMP
-+#if defined(CONFIG_SMP) && defined(CONFIG_MIPS)
- 	boot_cpu = cpu_logical_map(0);
- #else
- 	boot_cpu = 0;
-@@ -325,7 +322,7 @@ static void bcm7038_l1_resume(void)
- 	struct bcm7038_l1_chip *intc;
- 	int boot_cpu, word;
- 
--#ifdef CONFIG_SMP
-+#if defined(CONFIG_SMP) && defined(CONFIG_MIPS)
- 	boot_cpu = cpu_logical_map(0);
- #else
- 	boot_cpu = 0;
+ 	.irq_set_affinity	= bcm7038_l1_set_affinity,
++#endif
+ #ifdef CONFIG_PM_SLEEP
+ 	.irq_set_wake		= bcm7038_l1_set_wake,
+ #endif
 -- 
 2.25.1
 
