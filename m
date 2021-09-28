@@ -2,19 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A42341AC7F
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 11:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D985441AC9B
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Sep 2021 12:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240029AbhI1KA4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 28 Sep 2021 06:00:56 -0400
-Received: from aposti.net ([89.234.176.197]:54750 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239815AbhI1KAw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 28 Sep 2021 06:00:52 -0400
-Date:   Tue, 28 Sep 2021 10:58:58 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
+        id S240096AbhI1KIS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 06:08:18 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.171]:29697 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240063AbhI1KIR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 06:08:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632823591;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=DyJsQy6DBgEboRxYZDiRbGkfeA7thSMpO532KcupjQE=;
+    b=ajexmnBSbqidqvIr0mE4XgsuXEE30n2YlrUmM1vqtlXyOPNQGjfb+Wdkg3y6h4jWol
+    lDv7uxlRFc6R3+QYUTrI4q699N+JW1mkJff3BRqR5sJJ/UmCD9E7paGxkN4CxxWhHmwv
+    DzbMaVIlKSTMvzneDXhyA9c0rXkAeKGnBymrzDA56P4RPdUGtNvmJyV//QPb9bqo6FK6
+    tVBDeLmHHa+NnCGujT5JQDhuGTAPDF6MizjsF4EyLOJ9PMnpNNWJUxndKtJJdHWGhiXj
+    jtghRe/AFwjZMcUKOky1d6Igdldt6RlgmAHYZfio6Drz0QaQUX8xk7a7CgELkEuTIuhZ
+    dRHQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43sT7Q="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
+    with ESMTPSA id I01f74x8SA6TdXv
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 28 Sep 2021 12:06:29 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
 Subject: Re: [PATCH v4 10/10] drm/ingenic: add some jz4780 specific features
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <AE250R.2UXAKOURL8O52@crapouillou.net>
+Date:   Tue, 28 Sep 2021 12:06:28 +0200
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -40,165 +64,183 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org
-Message-Id: <AE250R.2UXAKOURL8O52@crapouillou.net>
-In-Reply-To: <8cbfba68ce45e10106eb322d622cb7ac64c0e4d4.1632761068.git.hns@goldelico.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E40D4D33-536F-4218-BEDD-C64539F15D40@goldelico.com>
 References: <cover.1632761067.git.hns@goldelico.com>
-        <8cbfba68ce45e10106eb322d622cb7ac64c0e4d4.1632761068.git.hns@goldelico.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+ <8cbfba68ce45e10106eb322d622cb7ac64c0e4d4.1632761068.git.hns@goldelico.com>
+ <AE250R.2UXAKOURL8O52@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Hi Paul,
 
-Le lun., sept. 27 2021 at 18:44:28 +0200, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> From: Paul Boddie <paul@boddie.org.uk>
-> 
-> The jz4780 has some features which need initialization
-> according to the vendor kernel.
-> 
-> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 39 
-> +++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
-> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> index e2df4b085905..605549b316b5 100644
-> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> @@ -66,6 +66,10 @@ struct jz_soc_info {
->  	bool needs_dev_clk;
->  	bool has_osd;
->  	bool map_noncoherent;
-> +	bool has_alpha;
-> +	bool has_pcfg;
-> +	bool has_recover;
-> +	bool has_rgbc;
->  	bool use_extended_hwdesc;
->  	unsigned int max_width, max_height;
->  	const u32 *formats_f0, *formats_f1;
-> @@ -732,6 +736,9 @@ static void 
-> ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
->  		    | JZ_LCD_CFG_SPL_DISABLE | JZ_LCD_CFG_REV_DISABLE;
->  	}
-> 
-> +	if (priv->soc_info->has_recover)
-> +		cfg |= JZ_LCD_CFG_RECOVER_FIFO_UNDERRUN;
-
-Did you actually test this? I know that in theory it sounds like 
-something we'd want, but unless there is a proven use for it, it's 
+> Am 28.09.2021 um 11:58 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi,
+>=20
+> Le lun., sept. 27 2021 at 18:44:28 +0200, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> From: Paul Boddie <paul@boddie.org.uk>
+>> The jz4780 has some features which need initialization
+>> according to the vendor kernel.
+>> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> ---
+>> drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 39 =
++++++++++++++++++++++++
+>> 1 file changed, 39 insertions(+)
+>> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c =
+b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>> index e2df4b085905..605549b316b5 100644
+>> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>> @@ -66,6 +66,10 @@ struct jz_soc_info {
+>> 	bool needs_dev_clk;
+>> 	bool has_osd;
+>> 	bool map_noncoherent;
+>> +	bool has_alpha;
+>> +	bool has_pcfg;
+>> +	bool has_recover;
+>> +	bool has_rgbc;
+>> 	bool use_extended_hwdesc;
+>> 	unsigned int max_width, max_height;
+>> 	const u32 *formats_f0, *formats_f1;
+>> @@ -732,6 +736,9 @@ static void =
+ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
+>> 		    | JZ_LCD_CFG_SPL_DISABLE | JZ_LCD_CFG_REV_DISABLE;
+>> 	}
+>> +	if (priv->soc_info->has_recover)
+>> +		cfg |=3D JZ_LCD_CFG_RECOVER_FIFO_UNDERRUN;
+>=20
+> Did you actually test this? I know that in theory it sounds like =
+something we'd want, but unless there is a proven use for it, it's =
 better to keep it disabled.
-
-> +
->  	/* set use of the 8-word descriptor and OSD foreground usage. */
->  	if (priv->soc_info->use_extended_hwdesc)
->  		cfg |= JZ_LCD_CFG_DESCRIPTOR_8;
-> @@ -1321,6 +1328,25 @@ static int ingenic_drm_bind(struct device 
-> *dev, bool has_components)
->  	if (soc_info->has_osd)
->  		regmap_set_bits(priv->map, JZ_REG_LCD_OSDC, JZ_LCD_OSDC_OSDEN);
-> 
-> +	if (soc_info->has_alpha)
-> +		regmap_set_bits(priv->map, JZ_REG_LCD_OSDC, JZ_LCD_OSDC_ALPHAEN);
-
-I remember you saying that OSD mode was not yet working on the JZ4780. 
+>=20
+>> +
+>> 	/* set use of the 8-word descriptor and OSD foreground usage. */
+>> 	if (priv->soc_info->use_extended_hwdesc)
+>> 		cfg |=3D JZ_LCD_CFG_DESCRIPTOR_8;
+>> @@ -1321,6 +1328,25 @@ static int ingenic_drm_bind(struct device =
+*dev, bool has_components)
+>> 	if (soc_info->has_osd)
+>> 		regmap_set_bits(priv->map, JZ_REG_LCD_OSDC, =
+JZ_LCD_OSDC_OSDEN);
+>> +	if (soc_info->has_alpha)
+>> +		regmap_set_bits(priv->map, JZ_REG_LCD_OSDC, =
+JZ_LCD_OSDC_ALPHAEN);
+>=20
+> I remember you saying that OSD mode was not yet working on the JZ4780. =
 So I can't see how you could have tested this.
 
-> +
-> +	/* Magic values from the vendor kernel for the priority thresholds. 
-> */
-> +	if (soc_info->has_pcfg)
-> +		regmap_write(priv->map, JZ_REG_LCD_PCFG,
-> +			     JZ_LCD_PCFG_PRI_MODE |
-> +			     JZ_LCD_PCFG_HP_BST_16 |
-> +			     (511 << JZ_LCD_PCFG_THRESHOLD2_OFFSET) |
-> +			     (400 << JZ_LCD_PCFG_THRESHOLD1_OFFSET) |
-> +			     (256 << JZ_LCD_PCFG_THRESHOLD0_OFFSET));
+Basically this is all stuff from the vendor kernel under the assumption =
+that they know better than everyone of us.
+On the other hand this whole patch is sort of optional and we know that =
+the basic milestone to get HDMI working
+is reached without it. So if you prefer we can drop it for the moment in =
+v5 and leave it for further analysis later.
 
-Unless you add a big comment that explains what these values do and why 
-we do want them, I don't want magic values in here. The fact that the 
-kernel vendor sets this doesn't mean it's needed and/or wanted.
+>=20
+>> +
+>> +	/* Magic values from the vendor kernel for the priority =
+thresholds. */
+>> +	if (soc_info->has_pcfg)
+>> +		regmap_write(priv->map, JZ_REG_LCD_PCFG,
+>> +			     JZ_LCD_PCFG_PRI_MODE |
+>> +			     JZ_LCD_PCFG_HP_BST_16 |
+>> +			     (511 << JZ_LCD_PCFG_THRESHOLD2_OFFSET) |
+>> +			     (400 << JZ_LCD_PCFG_THRESHOLD1_OFFSET) |
+>> +			     (256 << JZ_LCD_PCFG_THRESHOLD0_OFFSET));
+>=20
+> Unless you add a big comment that explains what these values do and =
+why we do want them, I don't want magic values in here. The fact that =
+the kernel vendor sets this doesn't mean it's needed and/or wanted.
 
-> +
-> +	/* RGB output control may be superfluous. */
-> +	if (soc_info->has_rgbc)
-> +		regmap_write(priv->map, JZ_REG_LCD_RGBC,
-> +			     JZ_LCD_RGBC_RGB_FORMAT_ENABLE |
-> +			     JZ_LCD_RGBC_ODD_RGB |
-> +			     JZ_LCD_RGBC_EVEN_RGB);
+Well, who has a contact within Ingenic?
 
-ingenic-drm only supports RGB output right now, so I guess the 
-RGB_FORMAT_ENABLE bit needs to be set in patch [2/10], otherwise patch 
-[2/10] cannot state that it adds support for the JZ4780, if it doesn't 
+>=20
+>> +
+>> +	/* RGB output control may be superfluous. */
+>> +	if (soc_info->has_rgbc)
+>> +		regmap_write(priv->map, JZ_REG_LCD_RGBC,
+>> +			     JZ_LCD_RGBC_RGB_FORMAT_ENABLE |
+>> +			     JZ_LCD_RGBC_ODD_RGB |
+>> +			     JZ_LCD_RGBC_EVEN_RGB);
+>=20
+> ingenic-drm only supports RGB output right now, so I guess the =
+RGB_FORMAT_ENABLE bit needs to be set in patch [2/10], otherwise patch =
+[2/10] cannot state that it adds support for the JZ4780, if it doesn't =
 actually work.
-
-The other two bits can be dropped, they are already set in 
+>=20
+> The other two bits can be dropped, they are already set in =
 ingenic_drm_encoder_atomic_mode_set().
 
-> +
->  	mutex_init(&priv->clk_mutex);
->  	priv->clock_nb.notifier_call = ingenic_drm_update_pixclk;
-> 
-> @@ -1484,6 +1510,9 @@ static const struct jz_soc_info jz4740_soc_info 
-> = {
->  	.needs_dev_clk = true,
->  	.has_osd = false,
->  	.map_noncoherent = false,
-> +	.has_pcfg = false,
-> +	.has_recover = false,
-> +	.has_rgbc = false,
->  	.max_width = 800,
->  	.max_height = 600,
->  	.formats_f1 = jz4740_formats,
-> @@ -1496,6 +1525,9 @@ static const struct jz_soc_info 
-> jz4725b_soc_info = {
->  	.needs_dev_clk = false,
->  	.has_osd = true,
->  	.map_noncoherent = false,
-> +	.has_pcfg = false,
-> +	.has_recover = false,
-> +	.has_rgbc = false,
+Ok.
 
-This is wrong, the JZ4725B and JZ4770 SoCs both have the RGBC register 
+>=20
+>> +
+>> 	mutex_init(&priv->clk_mutex);
+>> 	priv->clock_nb.notifier_call =3D ingenic_drm_update_pixclk;
+>> @@ -1484,6 +1510,9 @@ static const struct jz_soc_info jz4740_soc_info =
+=3D {
+>> 	.needs_dev_clk =3D true,
+>> 	.has_osd =3D false,
+>> 	.map_noncoherent =3D false,
+>> +	.has_pcfg =3D false,
+>> +	.has_recover =3D false,
+>> +	.has_rgbc =3D false,
+>> 	.max_width =3D 800,
+>> 	.max_height =3D 600,
+>> 	.formats_f1 =3D jz4740_formats,
+>> @@ -1496,6 +1525,9 @@ static const struct jz_soc_info =
+jz4725b_soc_info =3D {
+>> 	.needs_dev_clk =3D false,
+>> 	.has_osd =3D true,
+>> 	.map_noncoherent =3D false,
+>> +	.has_pcfg =3D false,
+>> +	.has_recover =3D false,
+>> +	.has_rgbc =3D false,
+>=20
+> This is wrong, the JZ4725B and JZ4770 SoCs both have the RGBC register =
 and the RECOVER bit.
 
-Cheers,
--Paul
+Ok, good to know! Will change.
 
->  	.max_width = 800,
->  	.max_height = 600,
->  	.formats_f1 = jz4725b_formats_f1,
-> @@ -1509,6 +1541,9 @@ static const struct jz_soc_info jz4770_soc_info 
-> = {
->  	.needs_dev_clk = false,
->  	.has_osd = true,
->  	.map_noncoherent = true,
-> +	.has_pcfg = false,
-> +	.has_recover = false,
-> +	.has_rgbc = false,
->  	.max_width = 1280,
->  	.max_height = 720,
->  	.formats_f1 = jz4770_formats_f1,
-> @@ -1521,6 +1556,10 @@ static const struct jz_soc_info 
-> jz4770_soc_info = {
->  static const struct jz_soc_info jz4780_soc_info = {
->  	.needs_dev_clk = true,
->  	.has_osd = true,
-> +	.has_alpha = true,
-> +	.has_pcfg = true,
-> +	.has_recover = true,
-> +	.has_rgbc = true,
->  	.use_extended_hwdesc = true,
->  	.max_width = 4096,
->  	.max_height = 2048,
-> --
-> 2.31.1
-> 
+BR and thanks,
+Nikolaus
 
+>=20
+> Cheers,
+> -Paul
+>=20
+>> 	.max_width =3D 800,
+>> 	.max_height =3D 600,
+>> 	.formats_f1 =3D jz4725b_formats_f1,
+>> @@ -1509,6 +1541,9 @@ static const struct jz_soc_info jz4770_soc_info =
+=3D {
+>> 	.needs_dev_clk =3D false,
+>> 	.has_osd =3D true,
+>> 	.map_noncoherent =3D true,
+>> +	.has_pcfg =3D false,
+>> +	.has_recover =3D false,
+>> +	.has_rgbc =3D false,
+>> 	.max_width =3D 1280,
+>> 	.max_height =3D 720,
+>> 	.formats_f1 =3D jz4770_formats_f1,
+>> @@ -1521,6 +1556,10 @@ static const struct jz_soc_info =
+jz4770_soc_info =3D {
+>> static const struct jz_soc_info jz4780_soc_info =3D {
+>> 	.needs_dev_clk =3D true,
+>> 	.has_osd =3D true,
+>> +	.has_alpha =3D true,
+>> +	.has_pcfg =3D true,
+>> +	.has_recover =3D true,
+>> +	.has_rgbc =3D true,
+>> 	.use_extended_hwdesc =3D true,
+>> 	.max_width =3D 4096,
+>> 	.max_height =3D 2048,
+>> --
+>> 2.31.1
 
