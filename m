@@ -2,126 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC4841B9FE
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Sep 2021 00:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5A141BCF9
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Sep 2021 04:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243068AbhI1WQk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Sep 2021 18:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243079AbhI1WQj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Sep 2021 18:16:39 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57616C061755
-        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 15:14:59 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id q23so206540pfs.9
-        for <linux-mips@vger.kernel.org>; Tue, 28 Sep 2021 15:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oDTEp4uXq7wouuQuWuPnWVQXCIo6P8LpvQajseAha48=;
-        b=BnufAkDaSqbvE0tuVagV8WXp+XHOA8rRfAQGH7v7vq47FtDaVwPb2gV3pg84col7Jn
-         wiWxSJtOhRHOZ1OnBfK1IusCBeqHNprdHmkCTk9hwy1TjpFLJ2o37qhbCK64RU58wR+/
-         NVNuIOjncjEgaNz1Aji8RAKlyT10kUNAthNYDNVDkepM7EAAeST1QgAUJgZz9JV6W8pQ
-         Ga3dyZRVb1TCTPcNFYt7tNYB7fChJLmzpTPIY1149VIXRC09i0vUfJF6BV+ql+c0RWWW
-         CLk/XS24h5X+HgfBHwpw+x6pOo0ByCwKeOnP2OHqWK6fByzx9dwNkhyWHGw0eQ1hWxHI
-         bubg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oDTEp4uXq7wouuQuWuPnWVQXCIo6P8LpvQajseAha48=;
-        b=qBDzInoABtO5rKj0r0DdbjeL9wnBWMHwAGf9vl7NmEJV9mJkbdt1e2xEgzCYTc76hb
-         YmfSAm82YQ5Oq+tnt4Q/vCRNxYostW+QixOQPIq4gp5X2evSPB4bNLghGI2zetXc/Ubb
-         nKW1OloPm2PyQwM26juLRyLnpSkAoUgRvSFkcrAbY0Pgx+BV6VrkwWtlGX4I+oOVb89G
-         3vUE9neot+XJs1nHFC0vc+2JlHQgi7Nf3MqoG5j5FM8A33gjb394nSNh8bExqbs8zvks
-         dkU5+we/CR0EyRQBVX0N7DcbrgMyHbO4SgDzK+xE1d51WWxXro4eC8+gUlYZntbAJfyW
-         Hl3Q==
-X-Gm-Message-State: AOAM531//BhYSlTosgdgCxzBi893uLM+hrS48cyUD64xiMykIuVgdw5u
-        HnpkF5w4oWTO3B7n4xU0WoVYhg==
-X-Google-Smtp-Source: ABdhPJxBJllV/6MHwH/O4bupLMykTY/L8aml4vOWRLyRzjZbQcPh2xbpVAvFMm0QwWZGt6UvJ4KliA==
-X-Received: by 2002:a62:dd0a:0:b0:44b:bd85:9387 with SMTP id w10-20020a62dd0a000000b0044bbd859387mr2015835pff.49.1632867298411;
-        Tue, 28 Sep 2021 15:14:58 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id d7sm142548pfq.43.2021.09.28.15.14.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Sep 2021 15:14:57 -0700 (PDT)
-Date:   Tue, 28 Sep 2021 22:14:54 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH 14/14] KVM: x86: Invoke kvm_vcpu_block() directly for
- non-HALTED wait states
-Message-ID: <YVOT3gj1ulBTNSw3@google.com>
-References: <20210925005528.1145584-1-seanjc@google.com>
- <20210925005528.1145584-15-seanjc@google.com>
+        id S229771AbhI2C6e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Sep 2021 22:58:34 -0400
+Received: from foss.arm.com ([217.140.110.172]:57194 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243733AbhI2C6d (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 28 Sep 2021 22:58:33 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDA65D6E;
+        Tue, 28 Sep 2021 19:56:51 -0700 (PDT)
+Received: from [192.168.0.130] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F15653F70D;
+        Tue, 28 Sep 2021 19:56:48 -0700 (PDT)
+Subject: Re: [PATCH] mm/mmap: Define index macros for protection_map[]
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-mm@kvack.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1632712920-8171-1-git-send-email-anshuman.khandual@arm.com>
+ <YVHcCZXmQ1yjINaf@infradead.org>
+ <f224c661-f8f0-3c4a-bad8-095209412dd4@arm.com>
+ <YVKdH4G5Alfwjkix@infradead.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <9051a597-0229-aaf2-9aad-42509b4f621d@arm.com>
+Date:   Wed, 29 Sep 2021 08:27:46 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210925005528.1145584-15-seanjc@google.com>
+In-Reply-To: <YVKdH4G5Alfwjkix@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Sep 24, 2021 at 05:55:28PM -0700, Sean Christopherson wrote:
-> Call kvm_vcpu_block() directly for all wait states except HALTED so that
-> kvm_vcpu_halt() is no longer a misnomer on x86.
-> 
-> Functionally, this means KVM will never attempt halt-polling or adjust
-> vcpu->halt_poll_ns for INIT_RECEIVED (a.k.a. Wait-For-SIPI (WFS)) or
-> AP_RESET_HOLD; UNINITIALIZED is handled in kvm_arch_vcpu_ioctl_run(),
-> and x86 doesn't use any other "wait" states.
-> 
-> As mentioned above, the motivation of this is purely so that "halt" isn't
-> overloaded on x86, e.g. in KVM's stats.  Skipping halt-polling for WFS
-> (and RESET_HOLD) has no meaningful effect on guest performance as there
-> are typically single-digit numbers of INIT-SIPI sequences per AP vCPU,
-> per boot, versus thousands of HLTs just to boot to console.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Reviewed-by: David Matlack <dmatlack@google.com>
 
-> ---
->  arch/x86/kvm/x86.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+On 9/28/21 10:12 AM, Christoph Hellwig wrote:
+> On Tue, Sep 28, 2021 at 08:24:43AM +0530, Anshuman Khandual wrote:
+>>> simple switch statement provided by each architecture.  See the below
+>>> WIP which just works for x86 and without pagetable debugging for where I
+>>> think we should be going.
+>>
+>> Sure, this will work as well but all platforms need to be changed at once.
+>> Is there any platform that would not subscribe ARCH_HAS_GET_PAGE_PROT and
+>> export its own vm_get_page_prot() ? AFAICS all platforms are required to
+>> export __PXXX and __SXXX elements currently.
+>>
+>> This seems to be a better idea than the current proposal. Probably all the
+>> vm_flags combinations, which will be used in those switch statements can be
+>> converted into macros just to improve readability. Are you planning to send
+>> this as a proper patch soon ?
 > 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index b444f9315766..a0f313c4bc49 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9893,7 +9893,10 @@ static inline int vcpu_block(struct kvm *kvm, struct kvm_vcpu *vcpu)
->  	if (!kvm_arch_vcpu_runnable(vcpu) &&
->  	    (!kvm_x86_ops.pre_block || static_call(kvm_x86_pre_block)(vcpu) == 0)) {
->  		srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
-> -		kvm_vcpu_halt(vcpu);
-> +		if (vcpu->arch.mp_state == KVM_MP_STATE_HALTED)
-> +			kvm_vcpu_halt(vcpu);
-> +		else
-> +			kvm_vcpu_block(vcpu);
->  		vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
->  
->  		if (kvm_x86_ops.post_block)
-> -- 
-> 2.33.0.685.g46640cef36-goog
+> This was just a quіck WIP patch.  If you have some spare time to tackle
+> it for real I'd sugget the following approach:
+
+Sure, will try and get this working.
+
+> 
+>  1) Remove the direct references to protection_map in debug_vm_pgtable.c
+>  2) add the ARCH_HAS_GET_PAGE_PROT symbol that lets architectures
+>     provide vm_get_page_prot itself and not define protection_map at all
+>     in this case
+>  3) convert all architectures that touch protection_map to provide
+>     vm_get_page_prot themselves
+>  4) mark protection_map static
+>  5) convert all architectures that provide arch_filter_pgprot and/or
+>     arch_vm_get_page_prot to provide vm_get_page_prot directly and
+>     remove those hooks
+>  6) remove the __S???/__P??? macros and the generic vm_get_page_prot
+>     after providing an arch implementation for every architecture.
+>     This can maybe simplified with a new generic version that directly
+>     looks at PAGE_* macros, but that will need further investigation
+>     first.
 > 
