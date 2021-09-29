@@ -2,117 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1C941C292
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Sep 2021 12:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613F541C583
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Sep 2021 15:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245430AbhI2KTZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Sep 2021 06:19:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49948 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245508AbhI2KTK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Sep 2021 06:19:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 596CC613CD;
-        Wed, 29 Sep 2021 10:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632910650;
-        bh=ApwjsuHkRLKIvYsUtPvCU+3a2n55yhVlsEyPpAqiq0Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c7UIdY1ptOrLLATvIT6DQbSfUmSx4SW/6eQVuBkuabAAD6uJYv4KiaePlAqUnYzIO
-         GWvJvq0km3JiPj6oi8WIpC7VAhVnopNtYfFQ5TfCQmqWH/jYFXW5/5nc9UXGqjZfMb
-         s4b9oUKpC2NR2W8UPrHHup6LTDl/yvXmNXhJnb4D4YqHdXiDvgoKL1VAUTAE/OzaT/
-         h7v+R1Nu8NrQgzctHkX8920rEm0HTH/b5a/VWhWRUhVBHJLYHe88ZnR+UOy/kHxHQm
-         KJlpI5M79mfgpL7cLLj6EGaYGvFx8zdBTlGWVrlYSSCCzBuvmaOxsoj8MrcBrikKei
-         DEg8ELCDAzEng==
-Date:   Wed, 29 Sep 2021 11:17:21 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S1344163AbhI2N1N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Sep 2021 09:27:13 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:20489 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242801AbhI2N1K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Sep 2021 09:27:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632921905;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=iXnkGBjUJ/lD8Seg+3/qoiXxZlA8cp27UXC2S8pwhhE=;
+    b=LKr/APoVDaPodsHvLUwFwZdabISWBDYx7ojmMJKUlP3z+sgzhD748oTXc2WmfcIoiZ
+    1szZPCEho16UYScbl2z+dDlVLQwqXiro/m9UeJtTKzO6e5vuakfdM2oPGCf1rh36vCwk
+    AoaYxSczLNmY5pj7K/B+m3lu2zaPLzL2ffYVRMAgE+LyvIDthiTtzCLvSD4hpIQJS7cp
+    npEX43lPiBRxLMr2D5WE80Tz2lsDwbaIplqLcFXRMG7wprx0EJmg5X4zaC72omlf/sRX
+    HQQSBtm844e+cumiuLExMB7MAD07ZvNcdTKDg6CXAjjMGAsXDPXwyX9iJ+TQfNV9AdXG
+    BheQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43qmio="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
+    with ESMTPSA id I01f74x8TDP3k6X
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 29 Sep 2021 15:25:03 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v4 02/10] drm/ingenic: Add support for JZ4780 and HDMI
+ output
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <17BF1D7A-2057-448B-9FD2-907DE0EFD281@goldelico.com>
+Date:   Wed, 29 Sep 2021 15:25:02 +0200
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 1/2] firmware: include drivers/firmware/Kconfig
- unconditionally
-Message-ID: <20210929101721.GC21057@willie-the-truck>
-References: <20210928075216.4193128-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210928075216.4193128-1-arnd@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3D436929-570A-43FA-A388-27A183ECF703@goldelico.com>
+References: <cover.1632761067.git.hns@goldelico.com>
+ <68cca888be1894ce45f1a93cfabeb5aa1f88c20a.1632761067.git.hns@goldelico.com>
+ <OA150R.JLKJBJP8V7FJ2@crapouillou.net>
+ <1E10A04A-4A78-4B47-B0FB-1E8C99456DA1@goldelico.com>
+ <17BF1D7A-2057-448B-9FD2-907DE0EFD281@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 09:50:26AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Compile-testing drivers that require access to a firmware layer
-> fails when that firmware symbol is unavailable. This happened
-> twice this week:
-> 
->  - My proposed to change to rework the QCOM_SCM firmware symbol
->    broke on ppc64 and others.
-> 
->  - The cs_dsp firmware patch added device specific firmware loader
->    into drivers/firmware, which broke on the same set of
->    architectures.
-> 
-> We should probably do the same thing for other subsystems as well,
-> but fix this one first as this is a dependency for other patches
-> getting merged.
-> 
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Cc: Simon Trimmer <simont@opensource.cirrus.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> Not sure how we'd want to merge this patch, if two other things
-> need it. I'd prefer to merge it along with the QCOM_SCM change
-> through the soc tree, but that leaves the cirrus firmware broken
-> unless we also merge it the same way (rather than through ASoC
-> as it is now).
-> 
-> Alternatively, we can try to find a different home for the Cirrus
-> firmware to decouple the two problems. I'd argue that it's actually
-> misplaced here, as drivers/firmware is meant for kernel code that
-> interfaces with system firmware, not for device drivers to load
-> their own firmware blobs from user space.
-> ---
->  arch/arm/Kconfig    | 2 --
->  arch/arm64/Kconfig  | 2 --
->  arch/ia64/Kconfig   | 2 --
->  arch/mips/Kconfig   | 2 --
->  arch/parisc/Kconfig | 2 --
->  arch/riscv/Kconfig  | 2 --
->  arch/x86/Kconfig    | 2 --
->  drivers/Kconfig     | 2 ++
->  8 files changed, 2 insertions(+), 14 deletions(-)
+Hi Paul,
 
-For arm64:
 
-Acked-by: Will Deacon <will@kernel.org>
+> Am 28.09.2021 um 14:06 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>=20
+> Hi Paul,
+>=20
+>> Am 28.09.2021 um 12:21 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>>=20
+>>>> @@ -1492,10 +1555,16 @@ static int ingenic_drm_init(void)
+>>>> {
+>>>> 	int err;
+>>>> +	if (IS_ENABLED(CONFIG_DRM_INGENIC_DW_HDMI)) {
+>>>> +		err =3D =
+platform_driver_register(ingenic_dw_hdmi_driver_ptr);
+>>>> +		if (err)
+>>>> +			return err;
+>>>> +	}
+>>>=20
+>>> I don't see why you need to register the ingenic-dw-hdmi driver =
+here. Just register it in the ingenic-dw-hdmi driver.
+>>=20
+>> Ok, I never though about this (as the code was not from me). We =
+apparently just followed the IPU code pattern (learning by example).
+>>=20
+>> It indeed looks not necessary and would also avoid the =
+ingenic_dw_hdmi_driver_ptr dependency.
+>>=20
+>> But: what is ingenic_ipu_driver_ptr then good for?
+>>=20
+>> If we can get rid of this as well, we can drop patch 1/10 =
+("drm/ingenic: Fix drm_init error path if IPU was registered") =
+completely.
+>=20
+> A quick test shows that it *is* required. At least if I configure =
+everything as modules.
+> But like you I can't explain why.
+>=20
+> Well, just a very rough idea (may be wrong): the bridge chain is not =
+like an i2c bus and
+> clients are not automatically loaded/probed if linked in the device =
+tree. Therefore the
+> consumer (ingenic_drm_drv) must register the "clients" like IPU and =
+HDMI.
 
-Will
+Any suggestion how to proceed here for v5?
+
+BR,
+Nikolaus
+
