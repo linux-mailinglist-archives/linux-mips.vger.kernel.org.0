@@ -2,131 +2,169 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 613F541C583
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Sep 2021 15:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AC341C67C
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Sep 2021 16:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344163AbhI2N1N (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Sep 2021 09:27:13 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:20489 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242801AbhI2N1K (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Sep 2021 09:27:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632921905;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=iXnkGBjUJ/lD8Seg+3/qoiXxZlA8cp27UXC2S8pwhhE=;
-    b=LKr/APoVDaPodsHvLUwFwZdabISWBDYx7ojmMJKUlP3z+sgzhD748oTXc2WmfcIoiZ
-    1szZPCEho16UYScbl2z+dDlVLQwqXiro/m9UeJtTKzO6e5vuakfdM2oPGCf1rh36vCwk
-    AoaYxSczLNmY5pj7K/B+m3lu2zaPLzL2ffYVRMAgE+LyvIDthiTtzCLvSD4hpIQJS7cp
-    npEX43lPiBRxLMr2D5WE80Tz2lsDwbaIplqLcFXRMG7wprx0EJmg5X4zaC72omlf/sRX
-    HQQSBtm844e+cumiuLExMB7MAD07ZvNcdTKDg6CXAjjMGAsXDPXwyX9iJ+TQfNV9AdXG
-    BheQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43qmio="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
-    with ESMTPSA id I01f74x8TDP3k6X
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 29 Sep 2021 15:25:03 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v4 02/10] drm/ingenic: Add support for JZ4780 and HDMI
- output
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <17BF1D7A-2057-448B-9FD2-907DE0EFD281@goldelico.com>
-Date:   Wed, 29 Sep 2021 15:25:02 +0200
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        id S1343853AbhI2ORR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Sep 2021 10:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343804AbhI2ORQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Sep 2021 10:17:16 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639ACC061760
+        for <linux-mips@vger.kernel.org>; Wed, 29 Sep 2021 07:15:35 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id j11-20020a9d190b000000b00546fac94456so3019668ota.6
+        for <linux-mips@vger.kernel.org>; Wed, 29 Sep 2021 07:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1bOpTf6Jukz1rQn04/kh8ik747nwWUC8rE65lhqO1Xs=;
+        b=MLodxKDCjbPbVfHqmbcLc+lFz7Fm4nAzcqoQdx/1K7UeQ8nwYJyY9ZgA2Viz20B1Wf
+         FHqkYzOZFhsSWsnJyzin379oB7znNmpJnokdu8kAnQKBU1z0UmsmeSGDtWoZuzX2X8Fk
+         lJYSuwZwGQW0BhwNYWdBnNh4lKmHhHBKx3X3b5X9fBrRGdWjm/MeGfr0jJAwCMhE6DoP
+         DNQv24J1CTfdOSXLezlSaN00GTfkp2rpHcNAxUNxpBKFHdL3jRSaTXs2geRHaYhVDMuO
+         0YTHrb/j5JJfDzPIkXN+WMGpSKYtRpZvvGBWdf+KOnDRFnVY8mBeUnh0VzB3NX56xC8u
+         e4Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1bOpTf6Jukz1rQn04/kh8ik747nwWUC8rE65lhqO1Xs=;
+        b=NA7Rno1YyoGY5IW5/8yp+yRU2ziaORMRPdBbR96mxkeQlPJzIta/ftAOPLyjykDVS2
+         tdO8E2mHc4bWXd39vhrMxtLPyaOHky4IlnmAJ49nXEEhvbQxez1eSiXpo4YtQFQR0prC
+         BXCnJn6AzqdoMt30+9hUOqi5u+0d3g1Ez8cxikRJu08O0EINTGZGI/ZKmkB9x4TTIjhF
+         IOoMjfie62iIQ+BQsnSH7y0YAGqinWcbGG0N30QVdIAH7twjWFRlGR/0RxW8DKt3bRfU
+         82khDXd0FrsS3Nzkmk/+G5S4MCAKli94Id9lHRQwRsOa8gLCVtApqPRguXccF3uF3Nhe
+         fJbw==
+X-Gm-Message-State: AOAM5322icquN/iwh5qj5vpF1DjfDaGOixGqkoQVIcDB7ERbvO8RH9yT
+        vu501CPwRlVQmbCL14LG0vDuzw==
+X-Google-Smtp-Source: ABdhPJy89LkTd283QjwrvqhgJMbYUlI7RUIpOdWGGkYh7mMYYiT+wqNtJ9odI5KEX39BP+qpFI+L7A==
+X-Received: by 2002:a05:6830:455:: with SMTP id d21mr228973otc.300.1632924934665;
+        Wed, 29 Sep 2021 07:15:34 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id s29sm468815otg.60.2021.09.29.07.15.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Sep 2021 07:15:34 -0700 (PDT)
+Date:   Wed, 29 Sep 2021 09:15:31 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <3D436929-570A-43FA-A388-27A183ECF703@goldelico.com>
-References: <cover.1632761067.git.hns@goldelico.com>
- <68cca888be1894ce45f1a93cfabeb5aa1f88c20a.1632761067.git.hns@goldelico.com>
- <OA150R.JLKJBJP8V7FJ2@crapouillou.net>
- <1E10A04A-4A78-4B47-B0FB-1E8C99456DA1@goldelico.com>
- <17BF1D7A-2057-448B-9FD2-907DE0EFD281@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 1/2] firmware: include drivers/firmware/Kconfig
+ unconditionally
+Message-ID: <YVR1A18fEAuFfCoj@yoga>
+References: <20210928075216.4193128-1-arnd@kernel.org>
+ <20210928083751.GG9223@ediswmail.ad.cirrus.com>
+ <CAK8P3a11c6eLRWKvQeSqvEicc9bMDeEEGV5fygTidoRzYf9KnQ@mail.gmail.com>
+ <20210928092400.GH9223@ediswmail.ad.cirrus.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210928092400.GH9223@ediswmail.ad.cirrus.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Tue 28 Sep 04:24 CDT 2021, Charles Keepax wrote:
+
+> On Tue, Sep 28, 2021 at 10:51:36AM +0200, Arnd Bergmann wrote:
+> > On Tue, Sep 28, 2021 at 10:37 AM Charles Keepax
+> > <ckeepax@opensource.cirrus.com> wrote:
+> > > I guess the question might be where else would said code go?
+> > > drivers/firmware seemed most obvious, all the other locations
+> > > I can think of don't really make sense. Can't really put it a bus
+> > > like spi/i2c etc. because we have parts on many buses. Can't
+> > > really put it in a functional subsystem (audio/input etc.) since
+> > > the whole idea was to try and get some independence from that so
+> > > we don't have parts including subsystems they don't use. Could
+> > > maybe put it in MFD, but no hard guarantee every part using it
+> > > will be an MFD device and I am fairly confident Lee will feel it
+> > > isn't MFD code as it doesn't relate to managing multiple devices.
+> > > Only other option I can think of would be to make some sort of
+> > > drivers/dsp or maybe drivers/cs_dsp, but not clear to me that is
+> > > obviously better than using drivers/firmware.
+> > 
+> > Other DSPs use the drivers/remoteproc/ subsystem, but that
+> > is more for general-purpose DSPs that can load application
+> > specific firmware rather than loading a single firmware blob
+> > as you'd normally do with the request_firmware() style interface.
+> > 
+> > Not sure if that fits what you do. Can you point to a high-level
+> > description of what this DSP does besides audio, and how
+> > flexible it is? That might help find the right place for this.
+> 
+> Hm... wasn't aware of that one, we should probably investigate that
+> a little more at this end. From a quick look, seems a bit more like
+> it is designed for much larger more general purpose probably memory
+> mapped DSPs. I guess our code is a little more firmware parsing
+> and loading, and a bit less generic remote proceedure call stuff.
+> 
+
+You're correct, remoteproc tends to situations where you have
+multi-function firmware; be it at a single point in time, or due to
+different firmware choices. Where you essentially boot some firmware on
+the remoteproc and from that instantiate one of more functional devices
+based on the loaded firmware.
+
+> I am not sure there is great deal available publically on the
+> DSP core. It is talked about in a few of our datasheets, see
+> section 4.4 in [1]. But a basic description might be it is a
+> signal processing focused, very small DSP core. If can be loaded
+> with different firmwares at runtime, and indeed might be doing say
+> echo cancellation in one use-case, or always on voice detect in
+> another. Functionally it is very unlikely to be used for anything
+> besides signal processing inside the device it is in, since it is
+> typically quite integrated with that hardware and will be sitting
+> behind a slow bus, like I2C or SPI.
+> 
+
+To me it sounds like the main difference compared to above is that you
+have a single function that owns and controls the DSP and implements
+that function - i.e. the audio driver probes, boots the DSP, if there's
+a problem the audio driver will handle it etc.
 
 
-> Am 28.09.2021 um 14:06 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->=20
-> Hi Paul,
->=20
->> Am 28.09.2021 um 12:21 schrieb H. Nikolaus Schaller =
-<hns@goldelico.com>:
->>=20
->>>> @@ -1492,10 +1555,16 @@ static int ingenic_drm_init(void)
->>>> {
->>>> 	int err;
->>>> +	if (IS_ENABLED(CONFIG_DRM_INGENIC_DW_HDMI)) {
->>>> +		err =3D =
-platform_driver_register(ingenic_dw_hdmi_driver_ptr);
->>>> +		if (err)
->>>> +			return err;
->>>> +	}
->>>=20
->>> I don't see why you need to register the ingenic-dw-hdmi driver =
-here. Just register it in the ingenic-dw-hdmi driver.
->>=20
->> Ok, I never though about this (as the code was not from me). We =
-apparently just followed the IPU code pattern (learning by example).
->>=20
->> It indeed looks not necessary and would also avoid the =
-ingenic_dw_hdmi_driver_ptr dependency.
->>=20
->> But: what is ingenic_ipu_driver_ptr then good for?
->>=20
->> If we can get rid of this as well, we can drop patch 1/10 =
-("drm/ingenic: Fix drm_init error path if IPU was registered") =
-completely.
->=20
-> A quick test shows that it *is* required. At least if I configure =
-everything as modules.
-> But like you I can't explain why.
->=20
-> Well, just a very rough idea (may be wrong): the bridge chain is not =
-like an i2c bus and
-> clients are not automatically loaded/probed if linked in the device =
-tree. Therefore the
-> consumer (ingenic_drm_drv) must register the "clients" like IPU and =
-HDMI.
+When it comes to firmware parsing, that might be a somewhat unrelated
+topic. E.g. in the Qualcomm case, the same customized ELF header is used
+in both for remoteproc devices and in function-specific devices. For
+this we extracted the relevant functions into a library of some common
+helpers, which can be found in drivers/soc/qcom/mdt_loader.c.
 
-Any suggestion how to proceed here for v5?
+Regards,
+Bjorn
 
-BR,
-Nikolaus
-
+> Current users are all audio, planning to upstream some haptics
+> parts soon, with possible other uses in the future.
+> 
+> [1] https://statics.cirrus.com/pubs/proDatasheet/CS48L32_DS1219F4.pdf
+> 
+> Thanks,
+> Charles
