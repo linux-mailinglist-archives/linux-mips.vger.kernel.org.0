@@ -2,20 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5E041C6AE
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Sep 2021 16:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7D341C706
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Sep 2021 16:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244873AbhI2Oce convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 29 Sep 2021 10:32:34 -0400
-Received: from aposti.net ([89.234.176.197]:43458 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245167AbhI2Oce (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 29 Sep 2021 10:32:34 -0400
-Date:   Wed, 29 Sep 2021 15:30:31 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
+        id S244764AbhI2OoD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Sep 2021 10:44:03 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:11554 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244630AbhI2OoD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Sep 2021 10:44:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1632926532;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=Rj5wPC+azbPBOEQyEt5RY3pzQQCBfq403oUX1dL3sm4=;
+    b=gPH4BJs8MqjMX2JVCsFF1BpAZiX4EfShZ1czC02Kv/8L5GkslP0h4qbXMb583yFClW
+    EDzGhKfmT5N96txqBDVDWv0n/J+pSY3UB+uWQiVa8wUNimefPakFLbiavsFCpaIH1Uyf
+    lRcqEQ9IoCxt7kRdfBu4ozNvlXIEjNLVpX+/0KfJ/SJFkgflYXrWyotwoLtw/Cafct9O
+    XCDaqKvlZ+HUHAFkJnHvAcCpsS62bxM9Vs8776psp/yy6fSe50vd+Hl2MpKu+deVszpn
+    WjrhGvDK6BFLTaavEcJTivgQvo6TMg5TOtzKzWgH0oGUdaKs5ZrBdYIaaOue/qwrSnLO
+    tOeA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43qmio="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
+    with ESMTPSA id I01f74x8TEgAkV0
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 29 Sep 2021 16:42:10 +0200 (CEST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
 Subject: Re: [PATCH v4 02/10] drm/ingenic: Add support for JZ4780 and HDMI
  output
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <VM970R.TLCBMNA67DOI2@crapouillou.net>
+Date:   Wed, 29 Sep 2021 16:42:10 +0200
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -41,79 +65,75 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org
-Message-Id: <VM970R.TLCBMNA67DOI2@crapouillou.net>
-In-Reply-To: <17BF1D7A-2057-448B-9FD2-907DE0EFD281@goldelico.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <1E592756-C57C-4C9B-BCF2-EC10DB6E3234@goldelico.com>
 References: <cover.1632761067.git.hns@goldelico.com>
-        <68cca888be1894ce45f1a93cfabeb5aa1f88c20a.1632761067.git.hns@goldelico.com>
-        <OA150R.JLKJBJP8V7FJ2@crapouillou.net>
-        <1E10A04A-4A78-4B47-B0FB-1E8C99456DA1@goldelico.com>
-        <17BF1D7A-2057-448B-9FD2-907DE0EFD281@goldelico.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+ <68cca888be1894ce45f1a93cfabeb5aa1f88c20a.1632761067.git.hns@goldelico.com>
+ <OA150R.JLKJBJP8V7FJ2@crapouillou.net>
+ <1E10A04A-4A78-4B47-B0FB-1E8C99456DA1@goldelico.com>
+ <17BF1D7A-2057-448B-9FD2-907DE0EFD281@goldelico.com>
+ <VM970R.TLCBMNA67DOI2@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+Hi Paul,
 
-Le mar., sept. 28 2021 at 14:06:03 +0200, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> Hi Paul,
-> 
->>  Am 28.09.2021 um 12:21 schrieb H. Nikolaus Schaller 
->> <hns@goldelico.com>:
->> 
->>>>  @@ -1492,10 +1555,16 @@ static int ingenic_drm_init(void)
->>>>  {
->>>>  	int err;
->>>>  +	if (IS_ENABLED(CONFIG_DRM_INGENIC_DW_HDMI)) {
->>>>  +		err = platform_driver_register(ingenic_dw_hdmi_driver_ptr);
->>>>  +		if (err)
->>>>  +			return err;
->>>>  +	}
->>> 
->>>  I don't see why you need to register the ingenic-dw-hdmi driver 
->>> here. Just register it in the ingenic-dw-hdmi driver.
->> 
->>  Ok, I never though about this (as the code was not from me). We 
->> apparently just followed the IPU code pattern (learning by example).
->> 
->>  It indeed looks not necessary and would also avoid the 
->> ingenic_dw_hdmi_driver_ptr dependency.
->> 
->>  But: what is ingenic_ipu_driver_ptr then good for?
->> 
+> Am 29.09.2021 um 16:30 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi,
+>=20
+> Le mar., sept. 28 2021 at 14:06:03 +0200, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> Hi Paul,
+>>> Am 28.09.2021 um 12:21 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>>>>> @@ -1492,10 +1555,16 @@ static int ingenic_drm_init(void)
+>>>>> {
+>>>>> 	int err;
+>>>>> +	if (IS_ENABLED(CONFIG_DRM_INGENIC_DW_HDMI)) {
+>>>>> +		err =3D =
+platform_driver_register(ingenic_dw_hdmi_driver_ptr);
+>>>>> +		if (err)
+>>>>> +			return err;
+>>>>> +	}
+>>>> I don't see why you need to register the ingenic-dw-hdmi driver =
+here. Just register it in the ingenic-dw-hdmi driver.
+>>> Ok, I never though about this (as the code was not from me). We =
+apparently just followed the IPU code pattern (learning by example).
+>>> It indeed looks not necessary and would also avoid the =
+ingenic_dw_hdmi_driver_ptr dependency.
+>>> But: what is ingenic_ipu_driver_ptr then good for?
+>=20
+> It's done this way because ingenic-drm-drv.c and ingenic-ipu.c are =
+both compiled within the same module ingenic-drm.
 
-It's done this way because ingenic-drm-drv.c and ingenic-ipu.c are both 
-compiled within the same module ingenic-drm.
+Ah, I see. Hadn't checked this.
 
-I'm not sure this is still required, maybe ingenic-ipu.c can be its own 
-module now.
+> I'm not sure this is still required, maybe ingenic-ipu.c can be its =
+own module now.
 
->> 
->>  If we can get rid of this as well, we can drop patch 1/10 
->> ("drm/ingenic: Fix drm_init error path if IPU was registered") 
->> completely.
-> 
-> A quick test shows that it *is* required. At least if I configure 
-> everything as modules.
-> But like you I can't explain why.
+What I have seen is that it has its own compatible record. So there =
+could be load-on-demand by DTS.
 
-Well, a quick test here shows that it is not required, at least when 
+>=20
+>>> If we can get rid of this as well, we can drop patch 1/10 =
+("drm/ingenic: Fix drm_init error path if IPU was registered") =
+completely.
+>> A quick test shows that it *is* required. At least if I configure =
+everything as modules.
+>> But like you I can't explain why.
+>=20
+> Well, a quick test here shows that it is not required, at least when =
 configuring with everything built-in.
 
--Paul
+IMHO the hdmi driver (module) should be loaded on demand. Not everyone =
+wants to have it.
 
-> Well, just a very rough idea (may be wrong): the bridge chain is not 
-> like an i2c bus and
-> clients are not automatically loaded/probed if linked in the device 
-> tree. Therefore the
-> consumer (ingenic_drm_drv) must register the "clients" like IPU and 
-> HDMI.
-> 
-> BR,
-> Nikolaus
-> 
+Well, that is the problem that needs to be solved...
 
+BR and thanks,
+Nikolaus
 
