@@ -2,390 +2,326 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C285341D836
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Sep 2021 12:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B963641DA0C
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Sep 2021 14:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350231AbhI3K65 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Sep 2021 06:58:57 -0400
-Received: from protonic.xs4all.nl ([83.163.252.89]:43930 "EHLO
-        protonic.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350206AbhI3K6y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Sep 2021 06:58:54 -0400
-Received: from fiber.protonic.nl (edge2.prtnl [192.168.1.170])
-        by sparta.prtnl (Postfix) with ESMTP id 70F2944A024E;
-        Thu, 30 Sep 2021 12:57:09 +0200 (CEST)
+        id S1351031AbhI3Mne (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Sep 2021 08:43:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43794 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350974AbhI3Mn3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Sep 2021 08:43:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B1BC7613D1;
+        Thu, 30 Sep 2021 12:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633005706;
+        bh=y6mNZhDNdBoK4I1OPhJ39lKruMgCceiXglnOLxrBycU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=PpXXwQ3Iltz/5vqYJc5Sr1EdoyPUVSIsS3PoiQxjXnT+91yple5g+F61b67nFhQk/
+         L/DulYNrQDLsNIlDbnjD91ERKQ1NNkmWQJZpOQ8V6Ohc52ILnmo6RZERmHwyJYCEk/
+         y/ablULiJlJhZbSeOP+kxwiOUymLhv4j/ZYKqCDwq7OP6nqSrlsadc9Yg/HHYBijup
+         ZAqa+Rma2CkLUgnsmKKwZeIKtNLrex1V6wj3rI3yW/Mllyi6XEgTxMMeGfXkGAf8yG
+         P0LQ1RxmRinnjrzQvSub+yWjlcay+gA+Gax7cWICxvoXjuKnpYHpJ+Xq5FUL2/0j5L
+         vpz5jxuIOs52Q==
+Subject: Re: [PATCH v3] MIPS: add support for buggy MT7621S core detection
+To:     Strontium <strntydog@gmail.com>, ilya.lipnitskiy@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        liwei391@huawei.com, macro@orcam.me.uk, nbd@nbd.name,
+        tsbogend@alpha.franken.de, yangtiezhu@loongson.cn
+References: <4d9e3b39-7caa-d372-5d7b-42dcec36fec7@kernel.org>
+ <07fc9510-148a-4ae9-e240-7d5402e0e2d7@gmail.com>
+From:   Greg Ungerer <gerg@kernel.org>
+Message-ID: <3cc110b0-42cc-d6e0-0404-c5dfc6cd9248@kernel.org>
+Date:   Thu, 30 Sep 2021 22:41:42 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Date:   Thu, 30 Sep 2021 12:57:09 +0200
-From:   Robin van der Gracht <robin@protonic.nl>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
-        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
-Subject: Re: [PATCH v6 19/19] auxdisplay: ht16k33: Add LED support
-Reply-To: robin@protonic.nl
-In-Reply-To: <20210914143835.511051-20-geert@linux-m68k.org>
-References: <20210914143835.511051-1-geert@linux-m68k.org>
- <20210914143835.511051-20-geert@linux-m68k.org>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <4602a8e681db4d0ebc43e4dafee8c28e@protonic.nl>
-X-Sender: robin@protonic.nl
-Organization: Protonic Holland
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+In-Reply-To: <07fc9510-148a-4ae9-e240-7d5402e0e2d7@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Geert,
+Hi Steven,
 
-On 2021-09-14 16:38, Geert Uytterhoeven wrote:
-> Instantiate a single LED based on the "led" subnode in DT.
-> This allows the user to control display brightness and blinking (backed
-> by hardware support) through the LED class API and triggers, and exposes
-> the display color.  The LED will be named
-> "auxdisplay:<color>:<function>".
+On 16/9/21 6:54 pm, Strontium wrote:
+> Hi Greg,
 > 
-> When running in dot-matrix mode and if no "led" subnode is found, the
-> driver falls back to the traditional backlight mode, to preserve
-> backwards compatibility.
+> I had trouble with this as well.  This line from the patch:
 > 
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Reviewed-by: Marek Behún <kabel@kernel.org>
-> ---
-> v6:
->   - Add Reviewed-by,
->   - Reorder operations in ht16k33_led_probe() to ease future conversion
->     to device properties,
+>> if (!(launch->flags & LAUNCH_FREADY))
 > 
-> v5:
->   - Add missing select NEW_LEDS,
-> 
-> v4:
->   - Add missing select LEDS_CLASS,
-> 
-> v3:
->   - Remove unneeded C++ comment,
->   - Use "err" instead of "error" to be consistent with existing driver
->     naming style,
->   - Make the creation of the LED device dependent on the presence of the
->     "led" subnode in DT, so it can be used in dot-matrix mode too.
->   - Use led_init_data() and devm_led_classdev_register_ext() to retrieve
->     all LED properties from DT, instead of manual LED name construction
->     based on just the "color" property,
-> 
-> v2:
->   - Use "auxdisplay" instead of DRIVER_NAME in LED name.
-> ---
->  drivers/auxdisplay/Kconfig   |   2 +
->  drivers/auxdisplay/ht16k33.c | 124 ++++++++++++++++++++++++++++++-----
->  2 files changed, 109 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/auxdisplay/Kconfig b/drivers/auxdisplay/Kconfig
-> index 42fc7b155de09dbc..e32ef7f9945d49b2 100644
-> --- a/drivers/auxdisplay/Kconfig
-> +++ b/drivers/auxdisplay/Kconfig
-> @@ -176,6 +176,8 @@ config HT16K33
->  	select FB_SYS_IMAGEBLIT
->  	select INPUT_MATRIXKMAP
->  	select FB_BACKLIGHT
-> +	select NEW_LEDS
-> +	select LEDS_CLASS
->  	select LINEDISP
->  	help
->  	  Say yes here to add support for Holtek HT16K33, RAM mapping 16*8
-> diff --git a/drivers/auxdisplay/ht16k33.c b/drivers/auxdisplay/ht16k33.c
-> index 3b555e119e326cec..89ee5b4b3dfccb68 100644
-> --- a/drivers/auxdisplay/ht16k33.c
-> +++ b/drivers/auxdisplay/ht16k33.c
-> @@ -18,6 +18,7 @@
->  #include <linux/backlight.h>
->  #include <linux/input.h>
->  #include <linux/input/matrix_keypad.h>
-> +#include <linux/leds.h>
->  #include <linux/workqueue.h>
->  #include <linux/mm.h>
-> 
-> @@ -34,6 +35,10 @@
-> 
->  #define REG_DISPLAY_SETUP		0x80
->  #define REG_DISPLAY_SETUP_ON		BIT(0)
-> +#define REG_DISPLAY_SETUP_BLINK_OFF	(0 << 1)
-> +#define REG_DISPLAY_SETUP_BLINK_2HZ	(1 << 1)
-> +#define REG_DISPLAY_SETUP_BLINK_1HZ	(2 << 1)
-> +#define REG_DISPLAY_SETUP_BLINK_0HZ5	(3 << 1)
-> 
->  #define REG_ROWINT_SET			0xA0
->  #define REG_ROWINT_SET_INT_EN		BIT(0)
-> @@ -94,12 +99,14 @@ struct ht16k33_seg {
->  struct ht16k33_priv {
->  	struct i2c_client *client;
->  	struct delayed_work work;
-> +	struct led_classdev led;
->  	struct ht16k33_keypad keypad;
->  	union {
->  		struct ht16k33_fbdev fbdev;
->  		struct ht16k33_seg seg;
->  	};
->  	enum display_type type;
-> +	uint8_t blink;
->  };
-> 
->  static const struct fb_fix_screeninfo ht16k33_fb_fix = {
-> @@ -158,7 +165,7 @@ static DEVICE_ATTR(map_seg14, 0644, map_seg_show, 
-> map_seg_store);
-> 
->  static int ht16k33_display_on(struct ht16k33_priv *priv)
->  {
-> -	uint8_t data = REG_DISPLAY_SETUP | REG_DISPLAY_SETUP_ON;
-> +	uint8_t data = REG_DISPLAY_SETUP | REG_DISPLAY_SETUP_ON | priv->blink;
-> 
->  	return i2c_smbus_write_byte(priv->client, data);
->  }
-> @@ -173,8 +180,10 @@ static int ht16k33_brightness_set(struct ht16k33_priv 
-> *priv,
->  {
->  	int err;
-> 
-> -	if (brightness == 0)
-> +	if (brightness == 0) {
-> +		priv->blink = REG_DISPLAY_SETUP_BLINK_OFF;
->  		return ht16k33_display_off(priv);
-> +	}
-> 
->  	err = ht16k33_display_on(priv);
->  	if (err)
-> @@ -184,6 +193,49 @@ static int ht16k33_brightness_set(struct ht16k33_priv 
-> *priv,
->  				    REG_BRIGHTNESS | (brightness - 1));
->  }
-> 
-> +static int ht16k33_brightness_set_blocking(struct led_classdev *led_cdev,
-> +					   enum led_brightness brightness)
-> +{
-> +	struct ht16k33_priv *priv = container_of(led_cdev, struct ht16k33_priv,
-> +						 led);
-> +
-> +	return ht16k33_brightness_set(priv, brightness);
-> +}
-> +
-> +static int ht16k33_blink_set(struct led_classdev *led_cdev,
-> +			     unsigned long *delay_on, unsigned long *delay_off)
-> +{
-> +	struct ht16k33_priv *priv = container_of(led_cdev, struct ht16k33_priv,
-> +						 led);
-> +	unsigned int delay;
-> +	uint8_t blink;
-> +	int err;
-> +
-> +	if (!*delay_on && !*delay_off) {
-> +		blink = REG_DISPLAY_SETUP_BLINK_1HZ;
-> +		delay = 1000;
-> +	} else if (*delay_on <= 750) {
-> +		blink = REG_DISPLAY_SETUP_BLINK_2HZ;
-> +		delay = 500;
-> +	} else if (*delay_on <= 1500) {
-> +		blink = REG_DISPLAY_SETUP_BLINK_1HZ;
-> +		delay = 1000;
-> +	} else {
-> +		blink = REG_DISPLAY_SETUP_BLINK_0HZ5;
-> +		delay = 2000;
-> +	}
-> +
-> +	err = i2c_smbus_write_byte(priv->client,
-> +				   REG_DISPLAY_SETUP | REG_DISPLAY_SETUP_ON |
-> +				   blink);
-> +	if (err)
-> +		return err;
-> +
-> +	priv->blink = blink;
-> +	*delay_on = *delay_off = delay;
-> +	return 0;
-> +}
-> +
->  static void ht16k33_fb_queue(struct ht16k33_priv *priv)
->  {
->  	struct ht16k33_fbdev *fbdev = &priv->fbdev;
-> @@ -425,6 +477,35 @@ static void ht16k33_seg14_update(struct work_struct 
-> *work)
->  	i2c_smbus_write_i2c_block_data(priv->client, 0, ARRAY_SIZE(buf), buf);
->  }
-> 
-> +static int ht16k33_led_probe(struct device *dev, struct led_classdev *led,
-> +			     unsigned int brightness)
-> +{
-> +	struct led_init_data init_data = {};
-> +	struct device_node *node;
-> +	int err;
-> +
-> +	/* The LED is optional */
-> +	node = of_get_child_by_name(dev->of_node, "led");
-> +	if (!node)
-> +		return 0;
-> +
-> +	init_data.fwnode = of_fwnode_handle(node);
-> +	init_data.devicename = "auxdisplay";
-> +	init_data.devname_mandatory = true;
-> +
-> +	led->brightness_set_blocking = ht16k33_brightness_set_blocking;
-> +	led->blink_set = ht16k33_blink_set;
-> +	led->flags = LED_CORE_SUSPENDRESUME;
-> +	led->brightness = brightness;
-> +	led->max_brightness = MAX_BRIGHTNESS;
+> is checking ram which I believe is supposed to be set by the bootloader.
+> On my platform it looked like the preloaded uboot wasn't setting that as
+> expected.
+> If you have control over your bootloader you can force this ram address
+> to be what the kernel wants, or you can do what i did, because i didn't
+> have that targets uboot src, and wedge before the kernel starts to force
+> the ram to the required state, like so:
 
-What do you think about adding a default trigger and making it 'backlight'?
+Well, my solution was to revert that patch locally :-)
 
-led->default_trigger = "blacklight";
-
-Or as an alternative, suggesting linux,default-trigger = "backlight" in the
-docs? Since the led class won't respond to blank events by just making it's
-function LED_FUNCTION_BACKLIGHT.
-
-led {
-	function = LED_FUNCTION_BACKLIGHT;
-	color = <LED_COLOR_ID_GREEN>;
-	linux,default-trigger = "backlight";
-};
-
-I noticed blanking is broken. The backlight device (or LED device with
-backlight trigger) doens't get notified when the framebuffer is blanked since
-the driver doesn't implement fb_blank.
-
-Right now:
-
-echo 1 > /sys/class/graphics/fb0/blank                                        
-                                                             |
-sh: write error: Invalid argument
-
-Due to: 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/video/fbdev/core/fbmem.c?h=v5.15-rc3#n1078
-
-Something like this fixes it.
-
-diff --git a/drivers/auxdisplay/ht16k33.c b/drivers/auxdisplay/ht16k33.c
-index 89ee5b4b3dfc..0883d5252c81 100644
---- a/drivers/auxdisplay/ht16k33.c
-+++ b/drivers/auxdisplay/ht16k33.c
-@@ -346,6 +346,15 @@ static int ht16k33_mmap(struct fb_info *info, struct 
-vm_area_struct *vma)
-         return vm_map_pages_zero(vma, &pages, 1);
-  }
-
-+/*
-+ * Blank events will be passed to the backlight device (or the LED device if
-+ * it's trigger is 'backlight') when we return 0 here.
-+ */
-+static int ht16k33_blank(int blank, struct fb_info *info)
-+{
-+       return 0;
-+}
-+
-  static const struct fb_ops ht16k33_fb_ops = {
-         .owner = THIS_MODULE,
-         .fb_read = fb_sys_read,
-@@ -354,6 +363,7 @@ static const struct fb_ops ht16k33_fb_ops = {
-         .fb_copyarea = sys_copyarea,
-         .fb_imageblit = sys_imageblit,
-         .fb_mmap = ht16k33_mmap,
-+       .fb_blank = ht16k33_blank,
-  };
-
-  /*
-
-Feel free to include (something like) this in the patch stack.
+But many people will not have control of or the desire to change
+their u-boot loader. I would have figured this ends up being a
+real regression for many (most?) users of this SoC.
 
 
-> +
-> +	err = devm_led_classdev_register_ext(dev, led, &init_data);
-> +	if (err)
-> +		dev_err(dev, "Failed to register LED\n");
+> #define CORE0_INITIAL_CPU_STATE (0xf00)
+> #define CORE_FL_OFFSET (0x1C)
+> #define FLAG_LAUNCH_FREADY (1)
+> 
+> #define WRITEREG(r, v) *(volatile uint32_t *)(r) = v
+> #define KSEG1ADDR(_x) (((_x)&0x1fffffff) | 0xa0000000)
+> 
+> void set_core(uint32_t core)
+> {
+>      uint32_t start = CORE0_INITIAL_CPU_STATE + (0x40 * core);
+>      WRITEREG(KSEG1ADDR(start + CORE_FL_OFFSET), FLAG_LAUNCH_FREADY);
+> }
+> 
+> void fix_cores(void) {
+>      // Fixes the flags for each core, just before running the kernel.
+>      // Means we don't have to patch the kernel check for valid CPU's.
+>      for (int i = 0; i < 4; i++) {
+>          set_core(i);
+>      }
+> }
+> 
+> It seems that memory section is supposed to set all the cores registers
+> before the kernel runs, but i never found it did anything except that 1
+> flag.
+> 
+> Obviously a better way would be to properly detect the number of cores
+> and not rely on the boot loader to set a flag in ram, I don't know if
+> that's even possible.
 
-You might want to call ht16k33_brightness_set(priv, brightness) here to get a
-know value into the display setup register (0x80).
+I can't help but think this commit is not a proper fix for this problem.
 
-Right now if I enable hardware blinking and (soft)reboot my board it keeps on
-blinking even after a re-probe.
+Regards
+Greg
 
-> +
-> +	return err;
-> +}
-> +
->  static int ht16k33_keypad_probe(struct i2c_client *client,
->  				struct ht16k33_keypad *keypad)
->  {
-> @@ -498,24 +579,28 @@ static int ht16k33_fbdev_probe(struct device *dev,
-> struct ht16k33_priv *priv,
->  			       uint32_t brightness)
->  {
->  	struct ht16k33_fbdev *fbdev = &priv->fbdev;
-> -	struct backlight_properties bl_props;
-> -	struct backlight_device *bl;
-> +	struct backlight_device *bl = NULL;
->  	int err;
-> 
-> -	/* Backlight */
-> -	memset(&bl_props, 0, sizeof(struct backlight_properties));
-> -	bl_props.type = BACKLIGHT_RAW;
-> -	bl_props.max_brightness = MAX_BRIGHTNESS;
-> +	if (!priv->led.dev) {
-> +		/* backwards compatibility with DT lacking an led subnode */
-> +		struct backlight_properties bl_props;
-> 
-> -	bl = devm_backlight_device_register(dev, DRIVER_NAME"-bl", dev, priv,
-> -					    &ht16k33_bl_ops, &bl_props);
-> -	if (IS_ERR(bl)) {
-> -		dev_err(dev, "failed to register backlight\n");
-> -		return PTR_ERR(bl);
-> -	}
-> +		memset(&bl_props, 0, sizeof(struct backlight_properties));
-> +		bl_props.type = BACKLIGHT_RAW;
-> +		bl_props.max_brightness = MAX_BRIGHTNESS;
-> +
-> +		bl = devm_backlight_device_register(dev, DRIVER_NAME"-bl", dev,
-> +						    priv, &ht16k33_bl_ops,
-> +						    &bl_props);
-> +		if (IS_ERR(bl)) {
-> +			dev_err(dev, "failed to register backlight\n");
-> +			return PTR_ERR(bl);
-> +		}
-> 
-> -	bl->props.brightness = brightness;
-> -	ht16k33_bl_update_status(bl);
-> +		bl->props.brightness = brightness;
-> +		ht16k33_bl_update_status(bl);
-> +	}
-> 
->  	/* Framebuffer (2 bytes per column) */
->  	BUILD_BUG_ON(PAGE_SIZE < HT16K33_FB_SIZE);
-> @@ -575,7 +660,7 @@ static int ht16k33_seg_probe(struct device *dev, struct
-> ht16k33_priv *priv,
->  	struct ht16k33_seg *seg = &priv->seg;
->  	int err;
-> 
-> -	err = ht16k33_brightness_set(priv, MAX_BRIGHTNESS);
-> +	err = ht16k33_brightness_set(priv, brightness);
 
-This looks like a bugfix for patch 17, maybe move this change there?
-
->  	if (err)
->  		return err;
+> Steven Johnson
 > 
-> @@ -653,6 +738,11 @@ static int ht16k33_probe(struct i2c_client *client)
->  		dft_brightness = MAX_BRIGHTNESS;
->  	}
+> On 16/9/21 09:56, Greg Ungerer wrote:
+>> Hi Ilya,
+>>
+>>> Most MT7621 SoCs have 2 cores, which is detected and supported properly
+>>> by CPS.
+>>>
+>>> Unfortunately, MT7621 SoC has a less common S variant with only one
+>>> core.
+>>> On MT7621S, GCR_CONFIG still reports 2 cores, which leads to hangs when
+>>> starting SMP. CPULAUNCH registers can be used in that case to detect the
+>>> absence of the second core and override the GCR_CONFIG PCORES field.
+>>>
+>>> Rework a long-standing OpenWrt patch to override the value of
+>>> mips_cps_numcores on single-core MT7621 systems.
+>>>
+>>> Tested on a dual-core MT7621 device (Ubiquiti ER-X) and a single-core
+>>> MT7621 device (Netgear R6220).
+>>
+>> This is breaking core detection on my MT7621 based platforms.
+>> I only get 2 cores detected now running 5.13. Reverting this change gives
+>> me 4 cores back.
+>>
+>>  From a fully working (pre-change) system I get:
+>>
+>> # cat /proc/cpuinfo
+>> system type        : MediaTek MT7621 ver:1 eco:3
+>> machine            : Digi EX15
+>> processor        : 0
+>> cpu model        : MIPS 1004Kc V2.15
+>> BogoMIPS        : 586.13
+>> wait instruction    : yes
+>> microsecond timers    : yes
+>> tlb_entries        : 32
+>> extra interrupt vector    : yes
+>> hardware watchpoint    : yes, count: 4, address/irw mask: [0x0ffc,
+>> 0x0ffc, 0x0ffb, 0x0ffb]
+>> isa            : mips1 mips2 mips32r1 mips32r2
+>> ASEs implemented    : mips16 dsp mt
+>> shadow register sets    : 1
+>> kscratch registers    : 0
+>> package            : 0
+>> core            : 0
+>> VPE            : 0
+>> VCED exceptions        : not available
+>> VCEI exceptions        : not available
+>>
+>> processor        : 1
+>> cpu model        : MIPS 1004Kc V2.15
+>> BogoMIPS        : 586.13
+>> wait instruction    : yes
+>> microsecond timers    : yes
+>> tlb_entries        : 32
+>> extra interrupt vector    : yes
+>> hardware watchpoint    : yes, count: 4, address/irw mask: [0x0ffc,
+>> 0x0ffc, 0x0ffb, 0x0ffb]
+>> isa            : mips1 mips2 mips32r1 mips32r2
+>> ASEs implemented    : mips16 dsp mt
+>> shadow register sets    : 1
+>> kscratch registers    : 0
+>> package            : 0
+>> core            : 0
+>> VPE            : 1
+>> VCED exceptions        : not available
+>> VCEI exceptions        : not available
+>>
+>> processor        : 2
+>> cpu model        : MIPS 1004Kc V2.15
+>> BogoMIPS        : 586.13
+>> wait instruction    : yes
+>> microsecond timers    : yes
+>> tlb_entries        : 32
+>> extra interrupt vector    : yes
+>> hardware watchpoint    : yes, count: 4, address/irw mask: [0x0ffc,
+>> 0x0ffc, 0x0ffb, 0x0ffb]
+>> isa            : mips1 mips2 mips32r1 mips32r2
+>> ASEs implemented    : mips16 dsp mt
+>> shadow register sets    : 1
+>> kscratch registers    : 0
+>> package            : 0
+>> core            : 1
+>> VPE            : 0
+>> VCED exceptions        : not available
+>> VCEI exceptions        : not available
+>>
+>> processor        : 3
+>> cpu model        : MIPS 1004Kc V2.15
+>> BogoMIPS        : 586.13
+>> wait instruction    : yes
+>> microsecond timers    : yes
+>> tlb_entries        : 32
+>> extra interrupt vector    : yes
+>> hardware watchpoint    : yes, count: 4, address/irw mask: [0x0ffc,
+>> 0x0ffc, 0x0ffb, 0x0ffb]
+>> isa            : mips1 mips2 mips32r1 mips32r2
+>> ASEs implemented    : mips16 dsp mt
+>> shadow register sets    : 1
+>> kscratch registers    : 0
+>> package            : 0
+>> core            : 1
+>> VPE            : 1
+>> VCED exceptions        : not available
+>> VCEI exceptions        : not available
+>>
+>>
+>> After this patch is applied:
+>>
+>> # cat /proc/cpuinfo
+>> system type        : MediaTek MT7621 ver:1 eco:3
+>> machine            : Digi EX15
+>> processor        : 0
+>> cpu model        : MIPS 1004Kc V2.15
+>> BogoMIPS        : 586.13
+>> wait instruction    : yes
+>> microsecond timers    : yes
+>> tlb_entries        : 32
+>> extra interrupt vector    : yes
+>> hardware watchpoint    : yes, count: 4, address/irw mask: [0x0ffc,
+>> 0x0ffc, 0x0ffb, 0x0ffb]
+>> isa            : mips1 mips2 mips32r1 mips32r2
+>> ASEs implemented    : mips16 dsp mt
+>> shadow register sets    : 1
+>> kscratch registers    : 0
+>> package            : 0
+>> core            : 0
+>> VPE            : 0
+>> VCED exceptions        : not available
+>> VCEI exceptions        : not available
+>>
+>> processor        : 1
+>> cpu model        : MIPS 1004Kc V2.15
+>> BogoMIPS        : 586.13
+>> wait instruction    : yes
+>> microsecond timers    : yes
+>> tlb_entries        : 32
+>> extra interrupt vector    : yes
+>> hardware watchpoint    : yes, count: 4, address/irw mask: [0x0ffc,
+>> 0x0ffc, 0x0ffb, 0x0ffb]
+>> isa            : mips1 mips2 mips32r1 mips32r2
+>> ASEs implemented    : mips16 dsp mt
+>> shadow register sets    : 1
+>> kscratch registers    : 0
+>> package            : 0
+>> core            : 0
+>> VPE            : 1
+>> VCED exceptions        : not available
+>> VCEI exceptions        : not available
+>>
+>> Any ideas?
+>>
+>> Regards
+>> Greg
+>>
+>>
+>>> Original 4.14 OpenWrt patch:
+>>> Link:
+>>> https://git.openwrt.org/?p=openwrt/openwrt.git;a=commitdiff;h=4cdbc90a376dd0555201c1434a2081e055e9ceb7
+>>> Current 5.10 OpenWrt patch:
+>>> Link:
+>>> https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/ramips/patches-5.10/320-mt7621-core-detect-hack.patch;h=c63f0f4c1ec742e24d8480e80553863744b58f6a;hb=10267e17299806f9885d086147878f6c492cb904
+>>>
+>>> Suggested-by: Felix Fietkau <nbd@nbd.name>
+>>> Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+>>> ---
+>>>   arch/mips/include/asm/mips-cps.h | 23 ++++++++++++++++++++++-
+>>>   1 file changed, 22 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/mips/include/asm/mips-cps.h
+>>> b/arch/mips/include/asm/mips-cps.h
+>>> index fd43d876892e..35fb8ee6dd33 100644
+>>> --- a/arch/mips/include/asm/mips-cps.h
+>>> +++ b/arch/mips/include/asm/mips-cps.h
+>>> @@ -10,6 +10,8 @@
+>>>   #include <linux/io.h>
+>>>   #include <linux/types.h>
+>>>   
+>>> +#include <asm/mips-boards/launch.h>
+>>> +
+>>>   extern unsigned long __cps_access_bad_size(void)
+>>>       __compiletime_error("Bad size for CPS accessor");
+>>>   
+>>> @@ -165,11 +167,30 @@ static inline uint64_t
+>>> mips_cps_cluster_config(unsigned int cluster)
+>>>    */
+>>>   static inline unsigned int mips_cps_numcores(unsigned int cluster)
+>>>   {
+>>> +    unsigned int ncores;
+>>> +
+>>>       if (!mips_cm_present())
+>>>           return 0;
+>>>   
+>>>       /* Add one before masking to handle 0xff indicating no cores */
+>>> -    return (mips_cps_cluster_config(cluster) + 1) &
+>>> CM_GCR_CONFIG_PCORES;
+>>> +    ncores = (mips_cps_cluster_config(cluster) + 1) &
+>>> CM_GCR_CONFIG_PCORES;
+>>> +
+>>> +    if (IS_ENABLED(CONFIG_SOC_MT7621)) {
+>>> +        struct cpulaunch *launch;
+>>> +
+>>> +        /*
+>>> +         * Ralink MT7621S SoC is single core, but the GCR_CONFIG method
+>>> +         * always reports 2 cores. Check the second core's
+>>> LAUNCH_FREADY
+>>> +         * flag to detect if the second core is missing. This method
+>>> +         * only works before the core has been started.
+>>> +         */
+>>> +        launch = (struct cpulaunch *)CKSEG0ADDR(CPULAUNCH);
+>>> +        launch += 2; /* MT7621 has 2 VPEs per core */
+>>> +        if (!(launch->flags & LAUNCH_FREADY))
+>>> +            ncores = 1;
+>>> +    }
+>>> +
+>>> +    return ncores;
+>>>   }
+>>>   
+>>>   /**
+>>> -- 
+>>> 2.31.1
+>>
 > 
-> +	/* LED */
-> +	err = ht16k33_led_probe(dev, &priv->led, dft_brightness);
-> +	if (err)
-> +		return err;
-> +
->  	/* Keypad */
->  	if (client->irq > 0) {
->  		err = ht16k33_keypad_probe(client, &priv->keypad);
-
-Gr{oetje,eeting}s,
-Robin
