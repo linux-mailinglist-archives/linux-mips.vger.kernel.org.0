@@ -2,100 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4DF41E3B5
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Oct 2021 00:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B4941E3FC
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Oct 2021 00:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346766AbhI3WMb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Sep 2021 18:12:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33016 "EHLO mail.kernel.org"
+        id S1343577AbhI3Wfj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Sep 2021 18:35:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230093AbhI3WMb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 30 Sep 2021 18:12:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 965D361390;
-        Thu, 30 Sep 2021 22:10:47 +0000 (UTC)
+        id S229759AbhI3Wfi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Sep 2021 18:35:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0EA8A61A63;
+        Thu, 30 Sep 2021 22:33:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633039847;
-        bh=IwzBemW+hy1M1ewr7atFO0cSMjKx7nF1iOUj3EQWXE8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VMFkm4a+fgdg4zYaCkaWnSOTeOZ8uAbKkitUxM0+m4BBfXT2b5oLMM7rDTLawyLAE
-         NhhBOznSRQz5yRbiTNsvbV6E0IU3T5qz407KpFRCdUtW5hyDqK4d2pDAOMg4JRadt6
-         KWrjYIXEm0KrNBVtP+JPzhB2VrG3+5vrqbM5hiSfUBy+07gwCIoejO0uW/sH7DYI6V
-         pgwC0QydyQR/hM9nqnvQyR6gIiVBVoszYMQd2xY8yoPecdNAhtt2AC8GtVh+C0O4VI
-         bPLArmwwdAbQbiLreQFVTZM6xuVy7lVHSRkS66W+8O7Twsm9hTlzsCUC2ioP79rEse
-         MlAOzYU2R7N3A==
-Date:   Thu, 30 Sep 2021 15:10:46 -0700
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Juergen Gross <jgross@suse.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        KVM list <kvm@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-usb@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v2 0/6] memblock: cleanup memblock_free interface
-Message-ID: <YVY15nd56j8x8udh@kernel.org>
-References: <20210930185031.18648-1-rppt@kernel.org>
- <CAHk-=wjS76My8aJLWJAHd-5GnMEVC1D+kV7DgtV9GjcbtqZdig@mail.gmail.com>
+        s=k20201202; t=1633041235;
+        bh=tbWf3k8o6Kty0/VGLPw0uDkT0kg0hb4J5EzgYuToWmc=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=GtSnQRK3Ce8FJbeaDg7RWU2j2/0kbmNBvabob93GbHbYi/LpE3W7vayp0diJ2wXIK
+         JsYCC2Bnm8iITthgMNo49pZ5WBlpX3doVxwspQ8sLLxGvNw5UujcGMCdHBbI5ceJV8
+         2nyL1zQ+5eBP8yoMmHvCx9XLFko9UP0BrZnA0xT92M+4maOSJCHYXfaET2UOaGjHkt
+         H9VZC8kaZzRRUCxCD8sNcizQ6D0Cel+OLKnQwsoe2M0/D69proYGEPGvCjNEZ4QNUS
+         zDF5B+2pxkghqekjhvcy4XdGF5RfO42T8KcNwNcU78MrcLQCqB6Gs931UD7Zlmpk6E
+         Z3ptEqupbwLKQ==
+Subject: Re: [PATCH] MIPS: Revert "add support for buggy MT7621S core
+ detection"
+To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Strontium <strntydog@gmail.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Felix Fietkau <nbd@nbd.name>
+References: <20210930165741.9662-1-ilya.lipnitskiy@gmail.com>
+From:   Greg Ungerer <gerg@kernel.org>
+Message-ID: <a932d65e-e515-9a6b-c1d8-23ac21049ecd@kernel.org>
+Date:   Fri, 1 Oct 2021 08:33:51 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjS76My8aJLWJAHd-5GnMEVC1D+kV7DgtV9GjcbtqZdig@mail.gmail.com>
+In-Reply-To: <20210930165741.9662-1-ilya.lipnitskiy@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 02:20:33PM -0700, Linus Torvalds wrote:
-> On Thu, Sep 30, 2021 at 11:50 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > The first patch is a cleanup of numa_distance allocation in arch_numa I've
-> > spotted during the conversion.
-> > The second patch is a fix for Xen memory freeing on some of the error
-> > paths.
-> 
-> Well, at least patch 2 looks like something that should go into 5.15
-> and be marked for stable.
-> 
-> Patch 1 looks like a trivial local cleanup, and could go in
-> immediately. Patch 4 might be in that same category.
-> 
-> The rest look like "next merge window" to me, since they are spread
-> out and neither bugfixes nor tiny localized cleanups (iow renaming
-> functions, global resulting search-and-replace things).
-> 
-> So my gut feel is that two (maybe three) of these patches should go in
-> asap, with three (maybe four) be left for 5.16.
-> 
-> IOW, not trat this as a single series.
-> 
-> Hmm?
 
-Yes, why not :)
-I'd keep patch 4 for the next merge window, does not look urgent to me.
+On 1/10/21 2:57 am, Ilya Lipnitskiy wrote:
+> This reverts commit 6decd1aad15f56b169217789630a0098b496de0e. CPULAUNCH
+> register is not set properly by some bootloaders, causing a regression
+> until a bootloader change is made, which is hard if not impossible on
+> some embedded devices. Revert the change until a more robust core
+> detection mechanism that works on MT7621S routers such as Netgear R6220
+> as well as platforms like Digi EX15 can be made.
+> 
+> Link: https://lore.kernel.org/lkml/4d9e3b39-7caa-d372-5d7b-42dcec36fec7@kernel.org
+> Fixes: 6decd1aad15f ("MIPS: add support for buggy MT7621S core detection")
+> Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
 
-Andrew, can you please take care of this or you'd prefer me resending
-everything separately?
- 
->              Linus
+Acked-by: Greg Ungerer <gerg@kernel.org>
 
--- 
-Sincerely yours,
-Mike.
+Thanks Ilya for taking care of this.
+
+Regards
+Greg
+
+
+> ---
+>   arch/mips/include/asm/mips-cps.h | 23 +----------------------
+>   1 file changed, 1 insertion(+), 22 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/mips-cps.h b/arch/mips/include/asm/mips-cps.h
+> index 35fb8ee6dd33..fd43d876892e 100644
+> --- a/arch/mips/include/asm/mips-cps.h
+> +++ b/arch/mips/include/asm/mips-cps.h
+> @@ -10,8 +10,6 @@
+>   #include <linux/io.h>
+>   #include <linux/types.h>
+>   
+> -#include <asm/mips-boards/launch.h>
+> -
+>   extern unsigned long __cps_access_bad_size(void)
+>   	__compiletime_error("Bad size for CPS accessor");
+>   
+> @@ -167,30 +165,11 @@ static inline uint64_t mips_cps_cluster_config(unsigned int cluster)
+>    */
+>   static inline unsigned int mips_cps_numcores(unsigned int cluster)
+>   {
+> -	unsigned int ncores;
+> -
+>   	if (!mips_cm_present())
+>   		return 0;
+>   
+>   	/* Add one before masking to handle 0xff indicating no cores */
+> -	ncores = (mips_cps_cluster_config(cluster) + 1) & CM_GCR_CONFIG_PCORES;
+> -
+> -	if (IS_ENABLED(CONFIG_SOC_MT7621)) {
+> -		struct cpulaunch *launch;
+> -
+> -		/*
+> -		 * Ralink MT7621S SoC is single core, but the GCR_CONFIG method
+> -		 * always reports 2 cores. Check the second core's LAUNCH_FREADY
+> -		 * flag to detect if the second core is missing. This method
+> -		 * only works before the core has been started.
+> -		 */
+> -		launch = (struct cpulaunch *)CKSEG0ADDR(CPULAUNCH);
+> -		launch += 2; /* MT7621 has 2 VPEs per core */
+> -		if (!(launch->flags & LAUNCH_FREADY))
+> -			ncores = 1;
+> -	}
+> -
+> -	return ncores;
+> +	return (mips_cps_cluster_config(cluster) + 1) & CM_GCR_CONFIG_PCORES;
+>   }
+>   
+>   /**
+> 
