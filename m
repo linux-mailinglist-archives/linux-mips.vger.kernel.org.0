@@ -2,134 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3668E41DFD8
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Sep 2021 19:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0E741E16A
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Sep 2021 20:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350116AbhI3RP5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Sep 2021 13:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349211AbhI3RP4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Sep 2021 13:15:56 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC7BC06176A;
-        Thu, 30 Sep 2021 10:14:13 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id g15so3209227vke.5;
-        Thu, 30 Sep 2021 10:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SGWIbMmsx7WG4yhXW+uZPfLvkXpXxKk0c7o0MXap4F8=;
-        b=Bm5cSAasty4inLGEN4knXf8rUTAiyHDdGHF/QG4Lcw8xYnyxb3W7e2syGWnuItvXtv
-         3O3zY+he3CHb1a87VnrpjfmKNjW08w6CHd8M3S1JIZi9UNA+CR/azL8fSeOnWAoxnLDl
-         evoxoRhoBcTeAj+uINAjhg0G4bqB9prrNF2xW67gH8H1QCYZQngrc12Gtc1ro8dyyA+j
-         JOdFUVI57VHWMCVWRsIzqQlYFv1IMPZj2aG1A00dkXfy8/aMNx4HcOZX1OtWM4nNu60G
-         8acGjJ4Ma2El98oIRmfG45ar4tYIkrTp0VJgC8AI42ytzMN1gtL3vfV7t6M/KW5fO5XL
-         j9NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SGWIbMmsx7WG4yhXW+uZPfLvkXpXxKk0c7o0MXap4F8=;
-        b=pd55lYdzTNIyzt99pmwAF2QitEEZeayXv2fPMeqlaCyg5pvlbHVA6Xjp5Bsau+cMVb
-         Uz4JS11ybFk3lirN5ccVUl2Xm4+ulirRQarx2ARO0kCtBAGF3mlYKDYqts8j83J+uit4
-         9SzWXd/WLZG1DBd9htZo++UMRXSuCWPUA3eBZmTc3xM74KuYThz76UaM/pfr89Zpg5D5
-         bO71IJkYJz9Kclk6QL2IO7CE7FpXey5tV7ynJIg63mbLJwnEuN2ZejVSIIDC1JmnRjLU
-         0EbWGvk6YmNoKgZMgdz11NBmQvWdAwUyv7KGlkoR5mTodPPR47SCvB6eY3kXFBpRPv5L
-         kaaA==
-X-Gm-Message-State: AOAM532MQ50g6lD9eZEImMw3ZGp4r4cM3Jsee8BkUkAQCW1zVQjqQ8fp
-        0sZwEUmsLMSrO1QWZTgRfkYeJ9g+ihmRMochmdQ=
-X-Google-Smtp-Source: ABdhPJy+fCOr4VeoHOBqxv9MkR25S/ByZRSnQvCyAgbv8mf1AbQXnluYiREOJNXTrKRFzv3OJBCTE6hElAKIYg+I9GA=
-X-Received: by 2002:a1f:5f4d:: with SMTP id t74mr4213433vkb.5.1633022052464;
- Thu, 30 Sep 2021 10:14:12 -0700 (PDT)
+        id S1344930AbhI3Sw3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Sep 2021 14:52:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40636 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344879AbhI3SwZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Sep 2021 14:52:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8244C61216;
+        Thu, 30 Sep 2021 18:50:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633027842;
+        bh=sHuklxRhVNrOUIGACjRjjFQjjWujtmMEebA4SOO7XVI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uHnQO7KnOuN+F6Kg/VYMCkYNZKP/FQuRQKsHlQ02RSvOU+Lsr6a/Ejf3NJuypnQ0r
+         wgcHaC0oqgL3wh/+Bjpr7enKokEpGkilkhAcBEHhE9uLRLhpb0YgHbs+X+j4bqDpV7
+         0AkfKl3RUdJBxJT+ECt+6aVhpjwQ315nbX0A7Nb4a9ZuqQ7VSnVENanCiGErOWceKw
+         TlOjeEhAK0IhpTcaKezOnHkaHC7hBR/4sk1qUNqqo7JqlIbR9UE+BEQUtaXKIMytSU
+         2kYuIhxuTpWdfCtUUQdGYdGcDoSXL5vM5e4zMX86OIlLp0nscaVxPuacUtXLN3LJw1
+         +kT+1vHV0j00g==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Juergen Gross <jgross@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
+        devicetree@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kasan-dev@googlegroups.com, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-efi@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
+        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org
+Subject: [PATCH v2 0/6] memblock: cleanup memblock_free interface
+Date:   Thu, 30 Sep 2021 21:50:25 +0300
+Message-Id: <20210930185031.18648-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20210930165741.9662-1-ilya.lipnitskiy@gmail.com>
-In-Reply-To: <20210930165741.9662-1-ilya.lipnitskiy@gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 30 Sep 2021 19:14:00 +0200
-Message-ID: <CAMhs-H_Tkp0FV4ruR95O2CzXrjj5nTw17aW4my-4xzeyqW8zLA@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Revert "add support for buggy MT7621S core detection"
-To:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Greg Ungerer <gerg@kernel.org>,
-        Strontium <strntydog@gmail.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Felix Fietkau <nbd@nbd.name>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 6:58 PM Ilya Lipnitskiy
-<ilya.lipnitskiy@gmail.com> wrote:
->
-> This reverts commit 6decd1aad15f56b169217789630a0098b496de0e. CPULAUNCH
-> register is not set properly by some bootloaders, causing a regression
-> until a bootloader change is made, which is hard if not impossible on
-> some embedded devices. Revert the change until a more robust core
-> detection mechanism that works on MT7621S routers such as Netgear R6220
-> as well as platforms like Digi EX15 can be made.
->
-> Link: https://lore.kernel.org/lkml/4d9e3b39-7caa-d372-5d7b-42dcec36fec7@kernel.org
-> Fixes: 6decd1aad15f ("MIPS: add support for buggy MT7621S core detection")
-> Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-> ---
->  arch/mips/include/asm/mips-cps.h | 23 +----------------------
->  1 file changed, 1 insertion(+), 22 deletions(-)
+From: Mike Rapoport <rppt@linux.ibm.com>
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Hi,
 
-Thanks,
-     Sergio Paracuellos
->
-> diff --git a/arch/mips/include/asm/mips-cps.h b/arch/mips/include/asm/mips-cps.h
-> index 35fb8ee6dd33..fd43d876892e 100644
-> --- a/arch/mips/include/asm/mips-cps.h
-> +++ b/arch/mips/include/asm/mips-cps.h
-> @@ -10,8 +10,6 @@
->  #include <linux/io.h>
->  #include <linux/types.h>
->
-> -#include <asm/mips-boards/launch.h>
-> -
->  extern unsigned long __cps_access_bad_size(void)
->         __compiletime_error("Bad size for CPS accessor");
->
-> @@ -167,30 +165,11 @@ static inline uint64_t mips_cps_cluster_config(unsigned int cluster)
->   */
->  static inline unsigned int mips_cps_numcores(unsigned int cluster)
->  {
-> -       unsigned int ncores;
-> -
->         if (!mips_cm_present())
->                 return 0;
->
->         /* Add one before masking to handle 0xff indicating no cores */
-> -       ncores = (mips_cps_cluster_config(cluster) + 1) & CM_GCR_CONFIG_PCORES;
-> -
-> -       if (IS_ENABLED(CONFIG_SOC_MT7621)) {
-> -               struct cpulaunch *launch;
-> -
-> -               /*
-> -                * Ralink MT7621S SoC is single core, but the GCR_CONFIG method
-> -                * always reports 2 cores. Check the second core's LAUNCH_FREADY
-> -                * flag to detect if the second core is missing. This method
-> -                * only works before the core has been started.
-> -                */
-> -               launch = (struct cpulaunch *)CKSEG0ADDR(CPULAUNCH);
-> -               launch += 2; /* MT7621 has 2 VPEs per core */
-> -               if (!(launch->flags & LAUNCH_FREADY))
-> -                       ncores = 1;
-> -       }
-> -
-> -       return ncores;
-> +       return (mips_cps_cluster_config(cluster) + 1) & CM_GCR_CONFIG_PCORES;
->  }
->
->  /**
-> --
-> 2.33.0
->
+Following the discussion on [1] this is the fix for memblock freeing APIs
+mismatch. 
+
+The first patch is a cleanup of numa_distance allocation in arch_numa I've
+spotted during the conversion.
+The second patch is a fix for Xen memory freeing on some of the error
+paths.
+
+I agree with Christophe that doing step by step makes the thing easier to
+review, so the patches 3-6 do the actual cleanup step by step.
+
+This time I used stricter coccinelle scripts so that only straightforward
+uses would get converted.
+
+There still a couple of (void *) castings for the cases when a virtual
+address has unsigned long type rather than a pointer type, like e.g
+initrd_start.
+
+Since scripts/get_maintainer.pl returned more than 100 addresses I've
+trimmed the distribution list only to the relevant lists.
+
+Juergen and Shahab, I didn't keep your Reviewed-by because the patches are
+a bit different this time.
+
+v2:
+* split changes into several patches
+* use stricter coccinelle scripts 
+
+[1] https://lore.kernel.org/all/CAHk-=wj9k4LZTz+svCxLYs5Y1=+yKrbAUArH1+ghyG3OLd8VVg@mail.gmail.com
+
+Mike Rapoport (6):
+  arch_numa: simplify numa_distance allocation
+  xen/x86: free_p2m_page: use memblock_free_ptr() to free a virtual pointer
+  memblock: drop memblock_free_early_nid() and memblock_free_early()
+  memblock: stop aliasing __memblock_free_late with memblock_free_late
+  memblock: rename memblock_free to memblock_phys_free
+  memblock: use memblock_free for freeing virtual pointers
+
+ arch/alpha/kernel/core_irongate.c         |  2 +-
+ arch/arc/mm/init.c                        |  2 +-
+ arch/arm/mach-hisi/platmcpm.c             |  2 +-
+ arch/arm/mm/init.c                        |  2 +-
+ arch/arm64/mm/mmu.c                       |  4 ++--
+ arch/mips/mm/init.c                       |  2 +-
+ arch/mips/sgi-ip30/ip30-setup.c           |  6 +++---
+ arch/powerpc/kernel/dt_cpu_ftrs.c         |  4 ++--
+ arch/powerpc/kernel/paca.c                |  8 ++++----
+ arch/powerpc/kernel/setup-common.c        |  2 +-
+ arch/powerpc/kernel/setup_64.c            |  2 +-
+ arch/powerpc/platforms/powernv/pci-ioda.c |  2 +-
+ arch/powerpc/platforms/pseries/svm.c      |  3 +--
+ arch/riscv/kernel/setup.c                 |  4 ++--
+ arch/s390/kernel/setup.c                  |  8 ++++----
+ arch/s390/kernel/smp.c                    |  4 ++--
+ arch/s390/kernel/uv.c                     |  2 +-
+ arch/s390/mm/kasan_init.c                 |  2 +-
+ arch/sh/boards/mach-ap325rxa/setup.c      |  2 +-
+ arch/sh/boards/mach-ecovec24/setup.c      |  4 ++--
+ arch/sh/boards/mach-kfr2r09/setup.c       |  2 +-
+ arch/sh/boards/mach-migor/setup.c         |  2 +-
+ arch/sh/boards/mach-se/7724/setup.c       |  4 ++--
+ arch/sparc/kernel/smp_64.c                |  2 +-
+ arch/um/kernel/mem.c                      |  2 +-
+ arch/x86/kernel/setup.c                   |  4 ++--
+ arch/x86/kernel/setup_percpu.c            |  2 +-
+ arch/x86/mm/init.c                        |  2 +-
+ arch/x86/mm/kasan_init_64.c               |  4 ++--
+ arch/x86/mm/numa.c                        |  2 +-
+ arch/x86/mm/numa_emulation.c              |  2 +-
+ arch/x86/xen/mmu_pv.c                     |  6 +++---
+ arch/x86/xen/p2m.c                        |  2 +-
+ arch/x86/xen/setup.c                      |  6 +++---
+ drivers/base/arch_numa.c                  | 10 ++++------
+ drivers/firmware/efi/memmap.c             |  2 +-
+ drivers/macintosh/smu.c                   |  2 +-
+ drivers/of/kexec.c                        |  3 +--
+ drivers/of/of_reserved_mem.c              |  5 +++--
+ drivers/s390/char/sclp_early.c            |  2 +-
+ drivers/usb/early/xhci-dbc.c              | 10 +++++-----
+ drivers/xen/swiotlb-xen.c                 |  2 +-
+ include/linux/memblock.h                  | 23 +++--------------------
+ init/initramfs.c                          |  2 +-
+ init/main.c                               |  2 +-
+ kernel/dma/swiotlb.c                      |  2 +-
+ kernel/printk/printk.c                    |  4 ++--
+ lib/bootconfig.c                          |  2 +-
+ lib/cpumask.c                             |  2 +-
+ mm/cma.c                                  |  2 +-
+ mm/memblock.c                             | 22 +++++++++++-----------
+ mm/memory_hotplug.c                       |  2 +-
+ mm/percpu.c                               |  8 ++++----
+ mm/sparse.c                               |  2 +-
+ 54 files changed, 99 insertions(+), 119 deletions(-)
+
+
+base-commit: 5816b3e6577eaa676ceb00a848f0fd65fe2adc29
+-- 
+2.28.0
+
