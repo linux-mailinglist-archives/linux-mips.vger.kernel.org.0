@@ -2,84 +2,333 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E6841D551
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Sep 2021 10:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C5441D674
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Sep 2021 11:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349097AbhI3ISH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 30 Sep 2021 04:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349063AbhI3ISE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 30 Sep 2021 04:18:04 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7173CC06176E
-        for <linux-mips@vger.kernel.org>; Thu, 30 Sep 2021 01:16:19 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id x27so21772333lfa.9
-        for <linux-mips@vger.kernel.org>; Thu, 30 Sep 2021 01:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vJO11LsW2aM7Rr48nxV2HlBaAxaKgP0N57VF7dIApLA=;
-        b=FH8OJMfk0bf/R1QdJ7yAeiWx3bDKr8sTjNDYFdUIXfl6AF0SIWDN0g6VDPi4/87BZ3
-         nwo7NrpceB+8YMODkBSlvDjz6TIXDtCxrXgovj5CFIjWHtC6lRnx49eix4PTci7XwdhN
-         dDd5SPqsSJhUo09A8ar7VAnSLgwqjFEGxv7agIsBbXt8/jz5NBcKHt5rpgPz2dMpHmcq
-         eGYR+j84onMFqwfUE4D/J2qmUsmJ8wQw8GjO0yvAZGY4b6ThGNhDM/yzUVUCYPbc013x
-         OAbL5dTccQ/soubqXk7YNPLYXcIzRZNO/6aPztrUqLHEOX5r11b/tnFWO/J7u/ELDinF
-         zcUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vJO11LsW2aM7Rr48nxV2HlBaAxaKgP0N57VF7dIApLA=;
-        b=J5F7jo3RivCuxIvjsI1CRNZk+ya9zVYifc37cqrU51bqR450KPCq0NO0FWaYJA8nvi
-         lX3VbiAspS8LaBJkwrIUmE7GeBDN5IYE0Zb2eT5bjamV98eORkH5q+o0QFvXhMS9gTn3
-         GN2thJrsZ/evWKRi7g/swnSAkXmrexdwV0iVdrIPfr3HrFp3XD4uxyOv/FIF45CvHdBY
-         zf7YR81mfSUrAmwBuAjyhlYZx6pY5mbUd+GT2OFUlz/2qOy1G5LTORTMf3Ww09cVYVAS
-         pkBH8JwvtgcJUHVJpy7yQfjRwBOnqQRlMqHDHNoKf5mdzmgJqHsWcWB3RL2xP7NcEsYF
-         Gm2g==
-X-Gm-Message-State: AOAM531VMOFFZq72AoNckVYI0k3nwMo2KWmtex1JEFfRP4eyGzSwh4zw
-        zXU/2Rhv6f/1r/mab34kK6TEkKnV2btRFyFyTl0=
-X-Google-Smtp-Source: ABdhPJylQfB1iIGLfMjXynsk8irZuT15HtycYtniVIx6BB02njLgQ7NpbDo41q39CFCpZUDfdND4rhV8JBzqvnm2Xu8=
-X-Received: by 2002:ac2:5101:: with SMTP id q1mr4416741lfb.284.1632989777644;
- Thu, 30 Sep 2021 01:16:17 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a2e:9b41:0:0:0:0:0 with HTTP; Thu, 30 Sep 2021 01:16:17
- -0700 (PDT)
-Reply-To: mgaddafi034@gmail.com
-From:   Aisha Gaddafi <mgaddafi034@gmail.com>
-Date:   Thu, 30 Sep 2021 01:16:17 -0700
-Message-ID: <CALjwqiSB2Mg3+tK81=7tkMiPzwWLx79F2O5tdxoAZ_RQ+wSb6Q@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1349443AbhI3JiG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 30 Sep 2021 05:38:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37340 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349446AbhI3JiG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 30 Sep 2021 05:38:06 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9958961278;
+        Thu, 30 Sep 2021 09:36:22 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mVsUG-00DweD-J2; Thu, 30 Sep 2021 10:36:20 +0100
+Date:   Thu, 30 Sep 2021 10:36:19 +0100
+Message-ID: <87czoqtnfw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH 07/14] KVM: Don't block+unblock when halt-polling is successful
+In-Reply-To: <YVNA+KTbLrxGQ6ML@google.com>
+References: <20210925005528.1145584-1-seanjc@google.com>
+        <20210925005528.1145584-8-seanjc@google.com>
+        <878rzlass2.wl-maz@kernel.org>
+        <80d90ee6-0d43-3735-5c26-be8c3d72d493@redhat.com>
+        <877df3btgb.wl-maz@kernel.org>
+        <YVH/LjCqk/9PfDHn@google.com>
+        <87o88dt5m5.wl-maz@kernel.org>
+        <YVNA+KTbLrxGQ6ML@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, pbonzini@redhat.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, paulus@ozlabs.org, borntraeger@de.ibm.com, frankja@linux.ibm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, linux-kernel@vger.kernel.org, dmatlack@google.com, jingzhangos@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh,
+On Tue, 28 Sep 2021 17:21:12 +0100,
+Sean Christopherson <seanjc@google.com> wrote:
+> 
+> On Tue, Sep 28, 2021, Marc Zyngier wrote:
+> > On Mon, 27 Sep 2021 18:28:14 +0100,
+> > Sean Christopherson <seanjc@google.com> wrote:
+> > > 
+> > > On Sun, Sep 26, 2021, Marc Zyngier wrote:
+> > > > On Sun, 26 Sep 2021 07:27:28 +0100,
+> > > > Paolo Bonzini <pbonzini@redhat.com> wrote:
+> > > > > 
+> > > > > On 25/09/21 11:50, Marc Zyngier wrote:
+> > > > > >> there is no need for arm64 to put/load
+> > > > > >> the vGIC as KVM hasn't relinquished control of the vCPU in any way.
+> > > > > > 
+> > > > > > This doesn't mean that there is no requirement for any state
+> > > > > > change. The put/load on GICv4 is crucial for performance, and the VMCR
+> > > > > > resync is a correctness requirement.
+> > > 
+> > > Ah crud, I didn't blame that code beforehand, I simply assumed
+> > > kvm_arch_vcpu_blocking() was purely for the blocking/schedule()
+> > > sequence.  The comment in arm64's kvm_arch_vcpu_blocking() about
+> > > kvm_arch_vcpu_runnable() makes more sense now too.
+> > > 
+> > > > > I wouldn't even say it's crucial for performance: halt polling cannot
+> > > > > work and is a waste of time without (the current implementation of)
+> > > > > put/load.
+> > > > 
+> > > > Not quite. A non-V{LPI,SGI} could still be used as the a wake-up from
+> > > > WFI (which is the only reason we end-up on this path). Only LPIs (and
+> > > > SGIs on GICv4.1) can be directly injected, meaning that SPIs and PPIs
+> > > > still follow the standard SW injection model.
+> > > > 
+> > > > However, there is still the ICH_VMCR_EL2 requirement (to get the
+> > > > up-to-date priority mask and group enable bits) for SW-injected
+> > > > interrupt wake-up to work correctly, and I really don't want to save
+> > > > that one eagerly on each shallow exit.
+> > > 
+> > > IIUC, VMCR is resident in hardware while the guest is running, and
+> > > KVM needs to retrieve the VMCR when processing interrupts to
+> > > determine if a interrupt is above the priority threshold.  If that's
+> > > the case, then IMO handling the VMCR via an arch hook is
+> > > unnecessarily fragile, e.g. any generic call that leads to
+> > > kvm_arch_vcpu_runnable() needs to know that arm64 lazily retrieves a
+> > > guest register.
+> > 
+> > Not quite. We only need to retrieve the VMCR if we are in a situation
+> > where we need to trigger a wake-up from WFI at the point where we have
+> > not done a vcpu_put() yet. All the other cases where the interrupt is
+> > injected are managed by the HW. And the only case where
+> > kvm_arch_vcpu_runnable() gets called is when blocking.
+> > 
+> > I also don't get why a hook would be fragile, as long as it has well
+> > defined semantics.
+> 
+> Generic KVM should not have to know that a seemingly benign arch hook,
+> kvm_arch_vcpu_runnable(), cannot be safely called without first calling another
+> arch hook.  E.g. I suspect there's a (benign?) race in kvm_vcpu_on_spin().  If
+> the loop is delayed between checking rcuwait_active() and vcpu_dy_runnable(),
+> and the target vCPU is awakened during that period, KVM can call
+> kvm_arch_vcpu_runnable() while the vCPU is running.
 
-hello dear
+Humph. Indeed, there is a potential gold-plated turd there.
 
-I came across your e-mail contact prior a private search while in need
-of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
+> It's kind of a counter-example to my below suggestion as putting the vGIC would
+> indeed lead to state corruption if the vCPU is running, but I would argue that
+> arm64 should override kvm_arch_dy_runnable() so that its correctness is guaranteed,
+> e.g. by not calling kvm_arch_vcpu_runnable() if the vCPU is already running.
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
+I'll work something out for that case.
 
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits.
+> > > A better approach for VMCR would be to retrieve the value from
+> > > hardware on-demand, e.g. via a hook in vgic_get_vmcr(), so that it's all but
+> > > impossible to have bugs where KVM is working with a stale VMCR, e.g.
+> > > 
+> > > diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
+> > > index 48c6067fc5ec..0784de0c4080 100644
+> > > --- a/arch/arm64/kvm/vgic/vgic-mmio.c
+> > > +++ b/arch/arm64/kvm/vgic/vgic-mmio.c
+> > > @@ -828,6 +828,13 @@ void vgic_set_vmcr(struct kvm_vcpu *vcpu, struct vgic_vmcr *vmcr)
+> > >  
+> > >  void vgic_get_vmcr(struct kvm_vcpu *vcpu, struct vgic_vmcr *vmcr)
+> > >  {
+> > > +       if (!vcpu->...->vmcr_available) {
+> > > +               preempt_disable();
+> > > +               kvm_vgic_vmcr_sync(vcpu);
+> > > +               preempt_enable();
+> > > +               vcpu->...->vmcr_available = true;
+> > > +       }
+> > > +
+> > 
+> > But most of the uses of vgic_get_vmcr() are in contexts where the vcpu
+> > isn't running at all (such as save/restore). It really only operates
+> > on the shadow state, and what you have above will only lead to state
+> > corruption.
+> 
+> Ignoring the kvm_arch_dy_runnable() case for the moment, how would
+> it lead to corruption?  The idea is that the 'vmcr_available' flag
+> would be cleared when the vCPU is run, i.e. it tracks whether or not
+> the shadow state may be stale.
 
-If you are willing to handle this project on my behalf kindly reply
-urgent to enable me provide you more information about the investment
+I guess that 'vmcr_available' would have to be initialised to 'true'
+at vcpu reset time so that the userspace side cannot trigger a read
+from the HW.
 
-Your Urgent Reply Will Be Appreciated with this emailaddress
-(mgaddafi034@gmail.com)
+> > >         if (kvm_vgic_global_state.type == VGIC_V2)
+> > >                 vgic_v2_get_vmcr(vcpu, vmcr);
+> > >         else
+> > > 
+> > > 
+> > > Regarding vGIC v4, does KVM require it to be resident in hardware
+> > > while the vCPU is loaded?
+> > 
+> > It is a requirement. Otherwise, we end-up with an inconsistent state
+> > between the delivery of doorbells and the state of the vgic.
+> 
+> For my own understanding, does KVM require it to be resident in
+> hardware while the vCPU is loaded but _not_ running?  What I don't
+> fully understand is how KVM can safely load/put the vCPU if that
+> true, i.e. wouldn't there always be a window for badness?
 
-Best Regards
-Mrs Aisha Al-Qaddafi
+No, that part is fine. It is when you start running the vcpu without
+the GICv4 context loaded that ugly stuff happens (get a doorbell that
+tells you to schedule the currently running vcpu, for example).
+
+> 
+> > Also, reloading the GICv4 state can be pretty expensive (multiple MMIO
+> > accesses), which is why we really don't want to do that on the hot path
+> > (kvm_arch_vcpu_ioctl_run() *is* a hot path).
+> 
+> I wasn't suggesting to reload GICv4 on every entry, it would only be reloaded
+> if it was put between vcpu_load() and entry to the guest.
+> 
+> > > If not, then we could do something like
+> > > this, which would eliminate the arch hooks entirely if the VMCR is
+> > > handled as above.
+> 
+> ...
+> 
+> > > @@ -813,6 +787,13 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+> > >                  */
+> > >                 preempt_disable();
+> > > 
+> > > +               /*
+> > > +                * Reload vGIC v4 if necessary, as it may be put on-demand so
+> > > +                * that KVM can detect directly injected interrupts, e.g. when
+> > > +                * determining if the vCPU is runnable due to a pending event.
+> > > +                */
+> > > +               vgic_v4_load(vcpu);
+> > 
+> > You'd need to detect that a previous put has been done.
+> 
+> Not that it will likely matter, but doesn't the its_vpe.resident
+> check automatically handle this?
+
+Sort of. I eventually want to get rid of this as it papers over all
+sort of sins. I introduced it exactly because of the nesting that
+vcpu_block triggers, but this is a bit of a layering violation between
+KVM and the underlying GICv4 driver.
+
+> 
+> > But overall, it puts the complexity at the wrong place. WFI (aka
+> > kvm_vcpu_block) is the place where we want to handle this synchronisation,
+> > and not the run loop.
+> > 
+> > Instead of having a well defined interface with the blocking code
+> > where we implement the required synchronisation, you spray the vgic
+> > crap all over, and it becomes much harder to reason about it. Guess
+> > what, I'm not keen on it.
+> 
+> My objection to the arch hooks is that, from generic KVM's
+> perspective, the direct dependency is not on blocking, it's on
+> calling kvm_arch_vcpu_runnable().  That's why I suggested handling
+> this by tracking whether or not the VMCR is up-to-date/stale, as it
+> allows generic KVM to safely call kvm_arch_vcpu_runnable() whenever
+> the vCPU is loaded.
+> 
+> I don't have a strong opinion on arm64 preferring the sync to be
+> specific to WFI, but if that's the case then IMO this should be
+> handled fully in arm64, e.g.  a patch like so (or with a wrapper
+> around the call to kvm_vcpu_block() if we want to guard against
+> future calls into generic KVM)
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index fe102cd2e518..312f3acd3ca3 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -367,27 +367,12 @@ int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu)
+> 
+>  void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu)
+>  {
+> -       /*
+> -        * If we're about to block (most likely because we've just hit a
+> -        * WFI), we need to sync back the state of the GIC CPU interface
+> -        * so that we have the latest PMR and group enables. This ensures
+> -        * that kvm_arch_vcpu_runnable has up-to-date data to decide
+> -        * whether we have pending interrupts.
+> -        *
+> -        * For the same reason, we want to tell GICv4 that we need
+> -        * doorbells to be signalled, should an interrupt become pending.
+> -        */
+> -       preempt_disable();
+> -       kvm_vgic_vmcr_sync(vcpu);
+> -       vgic_v4_put(vcpu, true);
+> -       preempt_enable();
+> +
+>  }
+> 
+>  void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
+>  {
+> -       preempt_disable();
+> -       vgic_v4_load(vcpu);
+> -       preempt_enable();
+> +
+>  }
+> 
+>  void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+> diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
+> index 275a27368a04..9870e824a27e 100644
+> --- a/arch/arm64/kvm/handle_exit.c
+> +++ b/arch/arm64/kvm/handle_exit.c
+> @@ -95,8 +95,28 @@ static int kvm_handle_wfx(struct kvm_vcpu *vcpu)
+>         } else {
+>                 trace_kvm_wfx_arm64(*vcpu_pc(vcpu), false);
+>                 vcpu->stat.wfi_exit_stat++;
+> +
+> +               /*
+> +                * Sync back the state of the GIC CPU interface so that we have
+> +                * the latest PMR and group enables. This ensures that
+> +                * kvm_arch_vcpu_runnable has up-to-date data to decide whether
+> +                * we have pending interrupts, e.g. when determining if the
+> +                * vCPU should block.
+> +                *
+> +                * For the same reason, we want to tell GICv4 that we need
+> +                * doorbells to be signalled, should an interrupt become pending.
+> +                */
+> +               preempt_disable();
+> +               kvm_vgic_vmcr_sync(vcpu);
+> +               vgic_v4_put(vcpu, true);
+> +               preempt_enable();
+> +
+>                 kvm_vcpu_block(vcpu);
+>                 kvm_clear_request(KVM_REQ_UNHALT, vcpu);
+> +
+> +               preempt_disable();
+> +               vgic_v4_load(vcpu);
+> +               preempt_enable();
+>         }
+> 
+>         kvm_incr_pc(vcpu);
+
+I actually largely prefer this approach, which is massively more
+readable than the current setup. Feel free to wrap that in your
+series.
+
+I'll also have a look at the vcpu_dy_runnable() asap.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
