@@ -2,142 +2,213 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CEE41EF10
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Oct 2021 16:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589EF41F188
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Oct 2021 17:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbhJAOFD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Oct 2021 10:05:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49366 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231824AbhJAOE7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 1 Oct 2021 10:04:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B184461439;
-        Fri,  1 Oct 2021 14:03:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633096994;
-        bh=j7RiikMVul/vm+Prmyx1rYn9xETi77NUVt/50phH7k0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JIchVvHkPwXFrApRkJNJ1jo9dQIfHa2T63ZG1i87FhM0l0ZvtL87mlGvplRQBraes
-         vyMIL4dKf6z0JSmVBUSKIGtpiCVW0zfnCqS9jOnbL2dAZNjae538ZVygnqS9nR+eLF
-         xHUU2hdOzmpySeLHR8g8uhJ86dXHlY3KzJVFj48iCHOSsm/sFJxKKMIWTwhwBE82+F
-         FzjRuTX/sl0Oc1bN9a0bDb8maV8TNilTngNHqHbDe+oFp/6kLeNtnncm2EB6xtvQPd
-         RxHjszo7Yuib1/P1V58ChVRmeUZKnKnZO6L+qjCn49PqGMSsJSfKE5Y6LZatW8Cmz/
-         K9IirY56cVdeg==
-Date:   Fri, 1 Oct 2021 07:03:13 -0700
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Jianyong Wu <Jianyong.Wu@arm.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-snps-arc@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-mm@kvack.org,
-        kexec@lists.infradead.org
-Subject: Re: [PATCH v1 3/4] memblock: add MEMBLOCK_DRIVER_MANAGED to mimic
- IORESOURCE_SYSRAM_DRIVER_MANAGED
-Message-ID: <YVcVIej0Wlyd9JAB@kernel.org>
-References: <20210927150518.8607-1-david@redhat.com>
- <20210927150518.8607-4-david@redhat.com>
- <YVSW3uuu7mIcJMm3@kernel.org>
- <830c1670-378b-0fb6-bd5e-208e545fa126@redhat.com>
- <YVYqdN7MFdzBlCVm@kernel.org>
- <0d6c86ba-076b-5d4b-33a8-da267f951a85@redhat.com>
+        id S231990AbhJAPxF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 1 Oct 2021 11:53:05 -0400
+Received: from mail-ua1-f51.google.com ([209.85.222.51]:37815 "EHLO
+        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231649AbhJAPxE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Oct 2021 11:53:04 -0400
+Received: by mail-ua1-f51.google.com with SMTP id t36so7006468uad.4;
+        Fri, 01 Oct 2021 08:51:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=V6QG7RVsPgL4MT7taFNIN3h9Vdu7FgpTMDBW2+9dAy4=;
+        b=7BnA7/BKelXoYxWK8iaAnS6yK1zR/K2UeEcIieD0HuVZDzmmHpNWuWD0+p/WMQn5zO
+         0o3P2pYBxATEpAw0PsG/kcug113d8V8cvcpNKwh/tzcx/5wiRsSvZoiA9WziVNJxMDYk
+         XoZ6gmV/i6ppNwnjN4y2cAgmPppHcSw6fsC/J2sEdfDQVL6nx69wEPjVU2CDsf/ID6f9
+         5bWAC90hkywi3Wfi9q1Na9f6trFJ+PAenh6GgdsXn5W37kaDRKdbK0eb3653pvTvx0Em
+         lFiFs8gz9jElGNwc36+qxh7cbBBYXFmnAWEmv0PiQpEwaWL3piF43XG3feD6s1aeN4dC
+         8Ijg==
+X-Gm-Message-State: AOAM531+5owAxqxQU0/RlnGdH32liuXwueZ5mM92fMX93t5+MQNb2UoN
+        30t+y/RfS8CoXG7PKIHzhgTSmqNf2PpV4bF3+R0=
+X-Google-Smtp-Source: ABdhPJxSLKh9AvpGnMkJMf+4rL5ey13Duasr9b9pl5UUVIbEI9s1F181091Vc8CdXHhLM8BddUTmHotIzJX01V/YUxw=
+X-Received: by 2002:ab0:16d4:: with SMTP id g20mr10998662uaf.114.1633103479588;
+ Fri, 01 Oct 2021 08:51:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d6c86ba-076b-5d4b-33a8-da267f951a85@redhat.com>
+References: <20210914143835.511051-1-geert@linux-m68k.org> <20210914143835.511051-20-geert@linux-m68k.org>
+ <4602a8e681db4d0ebc43e4dafee8c28e@protonic.nl>
+In-Reply-To: <4602a8e681db4d0ebc43e4dafee8c28e@protonic.nl>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 1 Oct 2021 17:51:08 +0200
+Message-ID: <CAMuHMdVOa8DAGJQpJ8AotARxfh9PvpskJJa6k48jE92-P+GLRA@mail.gmail.com>
+Subject: Re: [PATCH v6 19/19] auxdisplay: ht16k33: Add LED support
+To:     Robin van der Gracht <robin@protonic.nl>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 01, 2021 at 10:04:24AM +0200, David Hildenbrand wrote:
-> On 30.09.21 23:21, Mike Rapoport wrote:
-> > On Wed, Sep 29, 2021 at 06:54:01PM +0200, David Hildenbrand wrote:
-> > > On 29.09.21 18:39, Mike Rapoport wrote:
-> > > > Hi,
-> > > > 
-> > > > On Mon, Sep 27, 2021 at 05:05:17PM +0200, David Hildenbrand wrote:
-> > > > > Let's add a flag that corresponds to IORESOURCE_SYSRAM_DRIVER_MANAGED.
-> > > > > Similar to MEMBLOCK_HOTPLUG, most infrastructure has to treat such memory
-> > > > > like ordinary MEMBLOCK_NONE memory -- for example, when selecting memory
-> > > > > regions to add to the vmcore for dumping in the crashkernel via
-> > > > > for_each_mem_range().
-> > > > Can you please elaborate on the difference in semantics of MEMBLOCK_HOTPLUG
-> > > > and MEMBLOCK_DRIVER_MANAGED?
-> > > > Unless I'm missing something they both mark memory that can be unplugged
-> > > > anytime and so it should not be used in certain cases. Why is there a need
-> > > > for a new flag?
-> > > 
-> > > In the cover letter I have "Alternative B: Reuse MEMBLOCK_HOTPLUG.
-> > > MEMBLOCK_HOTPLUG serves a different purpose, though.", but looking into the
-> > > details it won't work as is.
-> > > 
-> > > MEMBLOCK_HOTPLUG is used to mark memory early during boot that can later get
-> > > hotunplugged again and should be placed into ZONE_MOVABLE if the
-> > > "movable_node" kernel parameter is set.
-> > > 
-> > > The confusing part is that we talk about "hotpluggable" but really mean
-> > > "hotunpluggable": the reason is that HW flags DIMM slots that can later be
-> > > hotplugged as "hotpluggable" even though there is already something
-> > > hotplugged.
-> > 
-> > MEMBLOCK_HOTPLUG name is indeed somewhat confusing, but still it's core
-> > meaning "this memory may be removed" which does not differ from what
-> > IORESOURCE_SYSRAM_DRIVER_MANAGED means.
-> > 
-> > MEMBLOCK_HOTPLUG regions are indeed placed into ZONE_MOVABLE, but more
-> > importantly, they are avoided when we allocate memory from memblock.
-> > 
-> > So, in my view, both flags mean that the memory may be removed and it
-> > should not be used for certain types of allocations.
-> 
-> The semantics are different:
-> 
-> MEMBLOCK_HOTPLUG: memory is indicated as "System RAM" in the
-> firmware-provided memory map and added to the system early during boot; we
-> want this memory to be managed by ZONE_MOVABLE with "movable_node" set on
-> the kernel command line, because only then we want it to be hotpluggable
-> again. kexec *has to* indicate this memory to the second kernel and can
-> place kexec-images on this memory. After memory hotunplug, kexec has to be
-> re-armed.
-> 
-> MEMBLOCK_DRIVER_MANAGED: memory is not indicated as System RAM" in the
-> firmware-provided memory map; this memory is always detected and added to
-> the system by a driver; memory might not actually be physically
-> hotunpluggable and the ZONE selection does not depend on "movable_core".
-> kexec *must not* indicate this memory to the second kernel and *must not*
-> place kexec-images on this memory.
+Hoi Robin,
 
-Ok, this clarifies.
-This explanation should be a part of the changelog. The sentences about the
-zone selection could be probably skipped, because they are less important
-for this case. E.g something like:
+On Thu, Sep 30, 2021 at 12:57 PM Robin van der Gracht <robin@protonic.nl> wrote:
+> On 2021-09-14 16:38, Geert Uytterhoeven wrote:
+> > Instantiate a single LED based on the "led" subnode in DT.
+> > This allows the user to control display brightness and blinking (backed
+> > by hardware support) through the LED class API and triggers, and exposes
+> > the display color.  The LED will be named
+> > "auxdisplay:<color>:<function>".
+> >
+> > When running in dot-matrix mode and if no "led" subnode is found, the
+> > driver falls back to the traditional backlight mode, to preserve
+> > backwards compatibility.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Reviewed-by: Marek Behún <kabel@kernel.org>
+> > ---
+> > v6:
+> >   - Add Reviewed-by,
+> >   - Reorder operations in ht16k33_led_probe() to ease future conversion
+> >     to device properties,
 
-MEMBLOCK_HOTPLUG: memory is indicated as "System RAM" in the
-firmware-provided memory map and added to the system early during boot;
-kexec *has to* indicate this memory to the second kernel and can place
-kexec-images on this memory. After memory hotunplug, kexec has to be
-re-armed.
+> > --- a/drivers/auxdisplay/ht16k33.c
+> > +++ b/drivers/auxdisplay/ht16k33.c
+> > @@ -425,6 +477,35 @@ static void ht16k33_seg14_update(struct work_struct
+> > *work)
+> >       i2c_smbus_write_i2c_block_data(priv->client, 0, ARRAY_SIZE(buf), buf);
+> >  }
+> >
+> > +static int ht16k33_led_probe(struct device *dev, struct led_classdev *led,
+> > +                          unsigned int brightness)
+> > +{
+> > +     struct led_init_data init_data = {};
+> > +     struct device_node *node;
+> > +     int err;
+> > +
+> > +     /* The LED is optional */
+> > +     node = of_get_child_by_name(dev->of_node, "led");
+> > +     if (!node)
+> > +             return 0;
+> > +
+> > +     init_data.fwnode = of_fwnode_handle(node);
+> > +     init_data.devicename = "auxdisplay";
+> > +     init_data.devname_mandatory = true;
+> > +
+> > +     led->brightness_set_blocking = ht16k33_brightness_set_blocking;
+> > +     led->blink_set = ht16k33_blink_set;
+> > +     led->flags = LED_CORE_SUSPENDRESUME;
+> > +     led->brightness = brightness;
+> > +     led->max_brightness = MAX_BRIGHTNESS;
+>
+> What do you think about adding a default trigger and making it 'backlight'?
+>
+> led->default_trigger = "blacklight";
+>
+> Or as an alternative, suggesting linux,default-trigger = "backlight" in the
+> docs? Since the led class won't respond to blank events by just making it's
+> function LED_FUNCTION_BACKLIGHT.
+>
+> led {
+>         function = LED_FUNCTION_BACKLIGHT;
+>         color = <LED_COLOR_ID_GREEN>;
+>         linux,default-trigger = "backlight";
+> };
 
-MEMBLOCK_DRIVER_MANAGED: memory is not indicated as "System RAM" in the
-firmware-provided memory map; this memory is always detected and added to
-the system by a driver; memory might not actually be physically
-hotunpluggable.  kexec *must not* indicate this memory to the second kernel
-and *must not* place kexec-images on this memory.
+The latter makes perfect sense to me.  Will do.
+
+> I noticed blanking is broken. The backlight device (or LED device with
+> backlight trigger) doens't get notified when the framebuffer is blanked since
+> the driver doesn't implement fb_blank.
+>
+> Right now:
+>
+> echo 1 > /sys/class/graphics/fb0/blank
+>                                                              |
+> sh: write error: Invalid argument
+>
+> Due to:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/video/fbdev/core/fbmem.c?h=v5.15-rc3#n1078
+
+That's a pre-existing problem, righ? ;-)
+
+> Something like this fixes it.
+>
+> diff --git a/drivers/auxdisplay/ht16k33.c b/drivers/auxdisplay/ht16k33.c
+> index 89ee5b4b3dfc..0883d5252c81 100644
+> --- a/drivers/auxdisplay/ht16k33.c
+> +++ b/drivers/auxdisplay/ht16k33.c
+> @@ -346,6 +346,15 @@ static int ht16k33_mmap(struct fb_info *info, struct
+> vm_area_struct *vma)
+>          return vm_map_pages_zero(vma, &pages, 1);
+>   }
+>
+> +/*
+> + * Blank events will be passed to the backlight device (or the LED device if
+> + * it's trigger is 'backlight') when we return 0 here.
+> + */
+> +static int ht16k33_blank(int blank, struct fb_info *info)
+> +{
+> +       return 0;
+> +}
+> +
+>   static const struct fb_ops ht16k33_fb_ops = {
+>          .owner = THIS_MODULE,
+>          .fb_read = fb_sys_read,
+> @@ -354,6 +363,7 @@ static const struct fb_ops ht16k33_fb_ops = {
+>          .fb_copyarea = sys_copyarea,
+>          .fb_imageblit = sys_imageblit,
+>          .fb_mmap = ht16k33_mmap,
+> +       .fb_blank = ht16k33_blank,
+>   };
+>
+>   /*
+>
+> Feel free to include (something like) this in the patch stack.
+
+Thanks, will do.
+
+> > +
+> > +     err = devm_led_classdev_register_ext(dev, led, &init_data);
+> > +     if (err)
+> > +             dev_err(dev, "Failed to register LED\n");
+>
+> You might want to call ht16k33_brightness_set(priv, brightness) here to get a
+> know value into the display setup register (0x80).
+>
+> Right now if I enable hardware blinking and (soft)reboot my board it keeps on
+> blinking even after a re-probe.
+
+I don't have that issue.
+Aha, ht16k33_seg_probe() calls ht16k33_brightness_set(), but
+ht16k33_fbdev_probe() doesn't.  The latter should do that, too,
+when not using backwards compatibility mode.
+
+> > @@ -575,7 +660,7 @@ static int ht16k33_seg_probe(struct device *dev, struct
+> > ht16k33_priv *priv,
+> >       struct ht16k33_seg *seg = &priv->seg;
+> >       int err;
+> >
+> > -     err = ht16k33_brightness_set(priv, MAX_BRIGHTNESS);
+> > +     err = ht16k33_brightness_set(priv, brightness);
+>
+> This looks like a bugfix for patch 17, maybe move this change there?
+
+Indeed. Bad rebase. Will move.
+
+Thanks a lot for your comments!
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Sincerely yours,
-Mike.
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
