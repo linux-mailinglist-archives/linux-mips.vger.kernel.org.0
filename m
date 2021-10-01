@@ -2,200 +2,213 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9646741E707
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Oct 2021 07:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D024D41E8AB
+	for <lists+linux-mips@lfdr.de>; Fri,  1 Oct 2021 10:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241548AbhJAFGK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 1 Oct 2021 01:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbhJAFGI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Oct 2021 01:06:08 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1123C06176A;
-        Thu, 30 Sep 2021 22:04:24 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id 20so5833799uaj.6;
-        Thu, 30 Sep 2021 22:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XaOKesWp0OQYYEyp6e9KKklUt8/dEShzcBRZOQsSIUk=;
-        b=nNAm5P2E/eeF6xIE8ulwnhpz4kaN6LPdu+EZcNYqdGsTe33WSVhXekrNiskMRmhVDv
-         o1B10s7g1BNSD+QHxpJErdM5zJV125jr8RJ8J4xknfNq5P9h7Zha9wvCAP7PxSGAMwFV
-         8Gkt7cjgkZ4xVnqOUMyZIKH4CH6LNNY6vYtAS+m6jnlWPq1uH/r4SiUXRZBn+3aT/vXZ
-         hNh60R7WxH7m0ENmAyH5usheFyL/aziYHQ9rW8VmA9kGRffvZekq+0P7+nUkF62wTNN+
-         Ovt+Rw72dHhiNLFdu0fWLZ1MKpBjHB/z+0lm7lNXbHJkpH4q1uTTvCgL8baTDs+xwCdK
-         YBiw==
+        id S1352665AbhJAIGT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 1 Oct 2021 04:06:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35503 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352693AbhJAIGN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 1 Oct 2021 04:06:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633075469;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RgbMOii1S0zNC4XfQSp0PtfslNwqAcBT4JkfYppI8hA=;
+        b=OZ6Odsr6/Ou3OkNozU8+KOTyK3nS0Ixrk9QX6f0E/girQLne3Z+Is9xiDp5fBS64UJ2QJJ
+        J4OiR8XSuD8Ofhr/lztxeuhyEpafS27NrC/m8PGg0/CKDxzMRvbGmAk6yFhT398jbFG9aF
+        ivsCi/lBKUrmOC2Mfqkvs81CXDQABHw=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-264-eldHW_mLMlOZHWxxSOLqoQ-1; Fri, 01 Oct 2021 04:04:28 -0400
+X-MC-Unique: eldHW_mLMlOZHWxxSOLqoQ-1
+Received: by mail-wm1-f72.google.com with SMTP id o11-20020a05600c378b00b0030d4f47013aso523074wmr.7
+        for <linux-mips@vger.kernel.org>; Fri, 01 Oct 2021 01:04:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XaOKesWp0OQYYEyp6e9KKklUt8/dEShzcBRZOQsSIUk=;
-        b=VwC7ea1ms6mBcd18WJefA5La7cYaDbSgSxVxfrrs4/d/hajuL+mXongsHrzH2PWkXt
-         IlAEQxU5PbNzfE6q79J3buzp/LzKjaX8xU8LEdkm/iZbbKkkbInzA6sbbnqqjkAqxd/D
-         AZ9UaJiJ1dZ8xU1c4Nv+04wYkTaxia2OtG13pCj/tdS3QXo0EqjNuyaezXx5LNiyZsNE
-         o4sGHqukTaGBLnZJQGeBso0NLzf+a1kXjxCOjzUjOTEAZtFBCNJyEAX+k5mLhT8uyXWD
-         TEsi3NXoDrTHLtnmC6osau/OawwrQsmX23yxwDU1Kwi1wc3taprEtpKN8aLzOPBbdpeE
-         fFOA==
-X-Gm-Message-State: AOAM533fnRh7+tMPK9NCn2pWDe5O/a9o6AF+nisqRJslgY2UseSSl9I4
-        b495VQtkKyI8QNF1c4rBaqhPh3mAgljrkyQ/GJk=
-X-Google-Smtp-Source: ABdhPJwEU+XQlNT5Gm297g7XPWr8NtvZDtNSLMIY4dnAsqmW07fudIAvS6rNdZjlmST65j+EncKPw/UiXqx6FM0/5eQ=
-X-Received: by 2002:ab0:538b:: with SMTP id k11mr8601171uaa.131.1633064663723;
- Thu, 30 Sep 2021 22:04:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <4d9e3b39-7caa-d372-5d7b-42dcec36fec7@kernel.org>
- <07fc9510-148a-4ae9-e240-7d5402e0e2d7@gmail.com> <3cc110b0-42cc-d6e0-0404-c5dfc6cd9248@kernel.org>
- <CAMhs-H9_wMHsgGbTBxa7_hx+02+VqeK4e_jVPUhWd7LfLRAaVA@mail.gmail.com>
- <CALCv0x1pChoPKC2nm_GSS3VypAQ6OgdzD00HrtniPksg9ebSmw@mail.gmail.com> <d1eb4cb4-6e9e-3f3c-8ca7-a84d03bb9f53@gmail.com>
-In-Reply-To: <d1eb4cb4-6e9e-3f3c-8ca7-a84d03bb9f53@gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 1 Oct 2021 07:04:12 +0200
-Message-ID: <CAMhs-H_M_weq5gKG5cNTeNT5NakovrXUm-mn3gjN8kR=aiQwSw@mail.gmail.com>
-Subject: Re: [PATCH v3] MIPS: add support for buggy MT7621S core detection
-To:     Strontium <strntydog@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Greg Ungerer <gerg@kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Wei Li <liwei391@huawei.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Felix Fietkau <nbd@nbd.name>,
+        h=x-gm-message-state:to:cc:references:from:organization:subject
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=RgbMOii1S0zNC4XfQSp0PtfslNwqAcBT4JkfYppI8hA=;
+        b=pt/220eK8lYOYTnjEcUX9VzTeibsK0tp+Hi/es/jomdRb46hulrMRVfjrhOsFtWUw4
+         bNWNl1yy9GtDZesm1C8zarKYLSPx0LUWc1ffY3Qs9/XHlIkwrJQB9nQWyzEej/z3EPvQ
+         Bs0PZjlQftZxhRo+fN5EiDITIXSR2L2PzNe6IS0UFHkDIzDG338c93yMrP9EiX5E2ZRv
+         doU/Vz3XmnZ36AeaUruaDf5bXc5kHnt9JXNWJWNecD+6/Oa2A5cIRi/bCZXjhdw2/9jP
+         OEpOPaLBd+Na8KoYQfvy6WBAiDl31gJEpk9sZPJkXX4EOjV52lq59iFHUsWV20xTPali
+         ju4g==
+X-Gm-Message-State: AOAM5323A00j/z/fJSqVrirD/s5NJ92qe3FdGtNELOMgpApGOvPqRwdn
+        LM3xetVMKVG0SW+oY6SZNU0Dm0z9ZcIO7FINpe8lZNwM0R/9Ob3lEhbHWZAF2glDtd4TjoVHsKh
+        ajLrKlZVKxmG46lGeru0d8Q==
+X-Received: by 2002:a1c:f310:: with SMTP id q16mr3156047wmq.145.1633075467036;
+        Fri, 01 Oct 2021 01:04:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy09IiCKfFi33tOU52HzJrT7VrbqrMf/P7p34oNrrEfUQJ/n90uGLajbxmxEo4tDXieDpGReQ==
+X-Received: by 2002:a1c:f310:: with SMTP id q16mr3156030wmq.145.1633075466790;
+        Fri, 01 Oct 2021 01:04:26 -0700 (PDT)
+Received: from [192.168.3.132] (p5b0c64da.dip0.t-ipconnect.de. [91.12.100.218])
+        by smtp.gmail.com with ESMTPSA id z17sm5132732wrr.49.2021.10.01.01.04.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Oct 2021 01:04:26 -0700 (PDT)
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Jianyong Wu <Jianyong.Wu@arm.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-snps-arc@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-mm@kvack.org,
+        kexec@lists.infradead.org
+References: <20210927150518.8607-1-david@redhat.com>
+ <20210927150518.8607-4-david@redhat.com> <YVSW3uuu7mIcJMm3@kernel.org>
+ <830c1670-378b-0fb6-bd5e-208e545fa126@redhat.com>
+ <YVYqdN7MFdzBlCVm@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 3/4] memblock: add MEMBLOCK_DRIVER_MANAGED to mimic
+ IORESOURCE_SYSRAM_DRIVER_MANAGED
+Message-ID: <0d6c86ba-076b-5d4b-33a8-da267f951a85@redhat.com>
+Date:   Fri, 1 Oct 2021 10:04:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <YVYqdN7MFdzBlCVm@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Steven,
+On 30.09.21 23:21, Mike Rapoport wrote:
+> On Wed, Sep 29, 2021 at 06:54:01PM +0200, David Hildenbrand wrote:
+>> On 29.09.21 18:39, Mike Rapoport wrote:
+>>> Hi,
+>>>
+>>> On Mon, Sep 27, 2021 at 05:05:17PM +0200, David Hildenbrand wrote:
+>>>> Let's add a flag that corresponds to IORESOURCE_SYSRAM_DRIVER_MANAGED.
+>>>> Similar to MEMBLOCK_HOTPLUG, most infrastructure has to treat such memory
+>>>> like ordinary MEMBLOCK_NONE memory -- for example, when selecting memory
+>>>> regions to add to the vmcore for dumping in the crashkernel via
+>>>> for_each_mem_range().
+>>> Can you please elaborate on the difference in semantics of MEMBLOCK_HOTPLUG
+>>> and MEMBLOCK_DRIVER_MANAGED?
+>>> Unless I'm missing something they both mark memory that can be unplugged
+>>> anytime and so it should not be used in certain cases. Why is there a need
+>>> for a new flag?
+>>
+>> In the cover letter I have "Alternative B: Reuse MEMBLOCK_HOTPLUG.
+>> MEMBLOCK_HOTPLUG serves a different purpose, though.", but looking into the
+>> details it won't work as is.
+>>
+>> MEMBLOCK_HOTPLUG is used to mark memory early during boot that can later get
+>> hotunplugged again and should be placed into ZONE_MOVABLE if the
+>> "movable_node" kernel parameter is set.
+>>
+>> The confusing part is that we talk about "hotpluggable" but really mean
+>> "hotunpluggable": the reason is that HW flags DIMM slots that can later be
+>> hotplugged as "hotpluggable" even though there is already something
+>> hotplugged.
+> 
+> MEMBLOCK_HOTPLUG name is indeed somewhat confusing, but still it's core
+> meaning "this memory may be removed" which does not differ from what
+> IORESOURCE_SYSRAM_DRIVER_MANAGED means.
+> 
+> MEMBLOCK_HOTPLUG regions are indeed placed into ZONE_MOVABLE, but more
+> importantly, they are avoided when we allocate memory from memblock.
+> 
+> So, in my view, both flags mean that the memory may be removed and it
+> should not be used for certain types of allocations.
 
-On Fri, Oct 1, 2021 at 4:02 AM Strontium <strntydog@gmail.com> wrote:
->
-> On 30/9/21 23:41, Ilya Lipnitskiy wrote:
-> > Hi Sergio, Greg, Steven,
-> >
-> > On Thu, Sep 30, 2021 at 6:35 AM Sergio Paracuellos
-> > <sergio.paracuellos@gmail.com> wrote:
-> >> Hi Greg,
-> >>
-> >> On Thu, Sep 30, 2021 at 3:13 PM Greg Ungerer <gerg@kernel.org> wrote:
-> >>> Hi Steven,
-> >>>
-> >>> On 16/9/21 6:54 pm, Strontium wrote:
-> >>>> Hi Greg,
-> >>>>
-> >>>> I had trouble with this as well.  This line from the patch:
-> >>>>
-> >>>>> if (!(launch->flags & LAUNCH_FREADY))
-> >>>> is checking ram which I believe is supposed to be set by the bootloader.
-> >>>> On my platform it looked like the preloaded uboot wasn't setting that as
-> >>>> expected.
-> >>>> If you have control over your bootloader you can force this ram address
-> >>>> to be what the kernel wants, or you can do what i did, because i didn't
-> >>>> have that targets uboot src, and wedge before the kernel starts to force
-> >>>> the ram to the required state, like so:
-> >>> Well, my solution was to revert that patch locally :-)
-> >>>
-> >>> But many people will not have control of or the desire to change
-> >>> their u-boot loader. I would have figured this ends up being a
-> >>> real regression for many (most?) users of this SoC.
-> >> Agree.
-> >>
-> >>>
-> >>>> #define CORE0_INITIAL_CPU_STATE (0xf00)
-> >>>> #define CORE_FL_OFFSET (0x1C)
-> >>>> #define FLAG_LAUNCH_FREADY (1)
-> >>>>
-> >>>> #define WRITEREG(r, v) *(volatile uint32_t *)(r) = v
-> >>>> #define KSEG1ADDR(_x) (((_x)&0x1fffffff) | 0xa0000000)
-> >>>>
-> >>>> void set_core(uint32_t core)
-> >>>> {
-> >>>>      uint32_t start = CORE0_INITIAL_CPU_STATE + (0x40 * core);
-> >>>>      WRITEREG(KSEG1ADDR(start + CORE_FL_OFFSET), FLAG_LAUNCH_FREADY);
-> >>>> }
-> >>>>
-> >>>> void fix_cores(void) {
-> >>>>      // Fixes the flags for each core, just before running the kernel.
-> >>>>      // Means we don't have to patch the kernel check for valid CPU's.
-> >>>>      for (int i = 0; i < 4; i++) {
-> >>>>          set_core(i);
-> >>>>      }
-> >>>> }
-> >>>>
-> >>>> It seems that memory section is supposed to set all the cores registers
-> >>>> before the kernel runs, but i never found it did anything except that 1
-> >>>> flag.
-> >>>>
-> >>>> Obviously a better way would be to properly detect the number of cores
-> >>>> and not rely on the boot loader to set a flag in ram, I don't know if
-> >>>> that's even possible.
-> >>> I can't help but think this commit is not a proper fix for this problem.
-> >> I also do think this commit should be reverted. Ilya, do you have a
-> >> strong opinion to maintain it instead?
-> > Not a strong opinion - I think we need a better fix that would work on
-> > the platform I tested with as well as Greg's. I'm okay with reverting
-> > it while trying to come up with said fix. Downstream projects, such as
-> > OpenWrt can keep this patch or apply it only when building for MT7621S
-> > targets until the detection logic is made more robust.
-> >
-> > Greg - if and when a proper fix is made, a test against your platform
-> > would help so we don't regress again in the future.
-> >
-> > Ilya
->
-> Hi Ilya, Sergio and Greg,
->
-> Could we, instead of checking data passed from the bootloader check
-> something set in the device tree?
->
-> For example currently `linux/drivers/staging/mt7621-dts/mt7621.dtsi`
-> defines:
->     cpus {
->         cpu@0 {
->             compatible = "mips,mips1004Kc";
->         };
->
->         cpu@1 {
->             compatible = "mips,mips1004Kc";
->         };
->     };
->
->
-> But that's not true for an mt7621s.  For this device, it should be defined:
->
->     cpus {
->         cpu@0 {
->             compatible = "mips,mips1004Kc";
->         };
->     };
->
->
-> And if it was, the code that detects the cpu cores could check this and
-> enable either the number of cores it probes, or the number of cpu's
-> defined by the device tree, whichever is the lesser.
->
-> Then Downstream just needs to properly set up the cpu in the device tree
-> for the effected targets and it should work.
->
-> If something like this is acceptable, I would be happy to propose a
-> patch along these lines for testing.
+The semantics are different:
 
-I guess this would become a new mt7621s.dts that only include the
-other original mt7621.dtsi and just overlay cpus. But I think we can
-check the register related with chip name and so on [0] and see if
-something is different in order to set 'soc' related code and
-attributes to checkable values. Check [1] and [2]. Ilya, maybe you can
-check whaever value is in there to see if the "S" stuff is different
-with other normal mt7621 chips?
+MEMBLOCK_HOTPLUG: memory is indicated as "System RAM" in the 
+firmware-provided memory map and added to the system early during boot; 
+we want this memory to be managed by ZONE_MOVABLE with "movable_node" 
+set on the kernel command line, because only then we want it to be 
+hotpluggable again. kexec *has to* indicate this memory to the second 
+kernel and can place kexec-images on this memory. After memory 
+hotunplug, kexec has to be re-armed.
 
-Best regards,
-     Sergio Paracuellos
+MEMBLOCK_DRIVER_MANAGED: memory is not indicated as System RAM" in the 
+firmware-provided memory map; this memory is always detected and added 
+to the system by a driver; memory might not actually be physically 
+hotunpluggable and the ZONE selection does not depend on "movable_core". 
+kexec *must not* indicate this memory to the second kernel and *must 
+not* place kexec-images on this memory.
 
-[0]: https://elixir.bootlin.com/linux/latest/source/arch/mips/include/asm/mach-ralink/mt7621.h#L15
-[1]: https://elixir.bootlin.com/linux/latest/source/arch/mips/ralink/mt7621.c#L86
-[2]: https://elixir.bootlin.com/linux/latest/source/arch/mips/ralink/mt7621.c#L59
 
->
-> Steven
+I would really advise against mixing concepts here.
+
+
+What we could do is indicate *all* hotplugged memory (not just 
+IORESOURCE_SYSRAM_DRIVER_MANAGED memory) as MEMBLOCK_HOTPLUG and make 
+MEMBLOCK_HOTPLUG less dependent on "movable_node".
+
+MEMBLOCK_HOTPLUG for early boot memory: with "movable_core", place it in 
+ZONE_MOVABLE. Even without "movable_core", don't place early kernel 
+allocations on this memory.
+MEMBLOCK_HOTPLUG for all memory: don't place kexec images or on this 
+memory, independent of "movable_core".
+
+
+memblock would then not contain the information "contained in 
+firmware-provided memory map" vs. "not contained in firmware-provided 
+memory map"; but I think right now it's not strictly required to have 
+that information if we'd go down that path.
+
+>   
+>> For example, ranges in the ACPI SRAT that are marked as
+>> ACPI_SRAT_MEM_HOT_PLUGGABLE will be marked MEMBLOCK_HOTPLUG early during
+>> boot (drivers/acpi/numa/srat.c:acpi_numa_memory_affinity_init()). Later, we
+>> use that information to size ZONE_MOVABLE
+>> (mm/page_alloc.c:find_zone_movable_pfns_for_nodes()). This will make sure
+>> that these "hotpluggable" DIMMs can later get hotunplugged.
+>>
+>> Also, see should_skip_region() how this relates to the "movable_node" kernel
+>> parameter:
+>>
+>> 	/* skip hotpluggable memory regions if needed */
+>> 	if (movable_node_is_enabled() && memblock_is_hotpluggable(m) &&
+>> 	    (flags & MEMBLOCK_HOTPLUG))
+>> 		return true;
+> 
+> Hmm, I think that the movable_node_is_enabled() check here is excessive,
+> but I suspect we cannot simply remove it without breaking anything.
+
+The reasoning is: without "movable_core" we don't want this memory to be 
+hotunpluggable; consequently, we don't care if we place kexec-images on 
+this memory. MEMBLOCK_HOTPLUG is currently only active with "movable_core".
+
+If we remove that check, we will always not place early kernel 
+allocations on that memory, even if we don't care about ZONE_MOVABLE.
+
+> 
+> I'll take a deeper look on the potential consequences.
+> 
+> BTW, is there anything that prevents putting kexec to hot-unplugable memory
+> that was cold-plugged on boot?
+
+I think it depends on how the platform handles hotunpluggable DIMMs or 
+hotunpluggable NUMA nodes. If the platform ends up indicates such memory 
+via MEMBLOCK_HOTPLUG, and "movable_core" is set, memory would be put 
+into ZONE_MOVABLE and kexec would not place kexec-images on that memory.
+
+-- 
+Thanks,
+
+David / dhildenb
+
