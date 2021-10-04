@@ -2,105 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F10FB4214BA
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Oct 2021 19:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FB34215D7
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Oct 2021 20:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235584AbhJDRF7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Oct 2021 13:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
+        id S236074AbhJDSC3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 4 Oct 2021 14:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbhJDRF7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Oct 2021 13:05:59 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E307C061745;
-        Mon,  4 Oct 2021 10:04:10 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id k23so1136780pji.0;
-        Mon, 04 Oct 2021 10:04:10 -0700 (PDT)
+        with ESMTP id S236103AbhJDSC3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Oct 2021 14:02:29 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DD1C061745;
+        Mon,  4 Oct 2021 11:00:40 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id w14so464495pll.2;
+        Mon, 04 Oct 2021 11:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KSk5l7mdzrJfPwPq7PQoSfM6i1dcNInCldcD7w5Rhdg=;
-        b=HGFVHIsP+6R7wNek89B8ROjD5hstgjgoRRaOyjwS+rFGdiVJR4bVDZIr37pdCr1W/2
-         POTGQZZ0OE1qFVt3G6N3de0DusfCSq35asGHmPmheySNYkxSrFRNfUupa1kijPRGkIsL
-         0BIwWFutc383PQI5ZmLcpcUukuc02k0LRz8kEgkPvmvbwiujTAUxTGlLh4p/KS1mLhVk
-         HdV6amOFNGB0MyM6d5XGm8EVj3q9aGwMiYy1Cp4jYJxJRoJIlINOS4jIJFOFQVaXO5hW
-         IgzkVqPA74KQhS9n3EmSSQeDMO2dztCsucVj0nvr5IemLBOIa5CJQW/P6+N0o/86kYEU
-         05kw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F/kZ/G80MyWYhdKVpqBk0C55lIN/V+L/Ury6/lN0H48=;
+        b=Iw7vxd3nbj0C1OKCrJ5xQgex0PG/Kc/CV2C7tPUsGeWawiJ+Az940Wzu2Uy5AmVN11
+         PYgVr1uisn3pGX1qacas8hTyKYIt8VOmZwZVG1gre/RBFwd13kU/cyjkN896O6+kWsOz
+         aqNCYiEUv+Mql1+gA+oauHx8b4gKZ+g+6JhBQ6JHyELV/qC0+trpinxN3/Si0Y/WpNZt
+         2otRHBRlasP0qjST8dSK+oXvQx3KF5hIWf8ATarS/AlOYRJtC3LVY4fzb8BFgrY3fyCZ
+         NIsIQLmwRkYPqoZj9GvQx7bJRDS0HPeBuGYOOlPlfaxJXhpXhK3AX18GgU/JfHwFGscp
+         c11Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=KSk5l7mdzrJfPwPq7PQoSfM6i1dcNInCldcD7w5Rhdg=;
-        b=1eb4+f0I30NQMY5nSfJmxrD2hvXehPCFLqZ/YU0mXH6HXCinTo1RGQmwll59AT6ycA
-         jQeNHlhN4BxMC4oVEUh9tjKoxj0VQIeiQ0HSLd3lpLq0uCSDpvlCjieh5IeJsUP16Z1c
-         XRl/jX6XhdVsj4iFV+3Q2GfQQ2XzRcTp7muo5/wX9hSceI1BTCDOLelVjUSbBFOb0B/9
-         m3nQFrlmPs5dpx2a/aUFfuNmbpDWfvusL4CWEy+8Ao+Uy6uvzXVl84xLuWsrKiDQMBIe
-         MdL14GSGCaWV1oCNXykJV1W24I6cCkKsjc5SkOMqrcuRNtDJgfNMpFiIGXlXX+V1L+K0
-         Rmeg==
-X-Gm-Message-State: AOAM530tn25GJhXXD+FnBiWgRf/IAdBDGb5FgrgboPCOzf/0UX3rvgBy
-        jgeJCqp2AcDmspfCx3efS67bukmjqe0=
-X-Google-Smtp-Source: ABdhPJyBBa5NckhrG5G/+VSSniHL/ROk9PH0Mj2W/GCzuQPGAcdVL4ZkZJerflFTZv1PzFVavFO87Q==
-X-Received: by 2002:a17:90a:86:: with SMTP id a6mr37401886pja.190.1633367049126;
-        Mon, 04 Oct 2021 10:04:09 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id z24sm15839126pgu.54.2021.10.04.10.04.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Oct 2021 10:04:08 -0700 (PDT)
-Subject: Re: [PATCH v3 00/14] Modular Broadcom irqchip drivers
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "moderated list:ARM SUB-ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>
-References: <20210928182139.652896-1-f.fainelli@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <c49d51d0-bb17-8e0d-4181-1eb93a2ae787@gmail.com>
-Date:   Mon, 4 Oct 2021 10:03:58 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        bh=F/kZ/G80MyWYhdKVpqBk0C55lIN/V+L/Ury6/lN0H48=;
+        b=RjMFsfANAT220KfibGYWZuCCW2mMx43YSJgSwuAnSJb5WBrC1ZDqbUWD2nTZxuRhxA
+         aK1FXFXLOJyMyPcPZY3hU1niOcdmg8wRt6LZOeb73ZtJ6bF3pxf9Jhh+8b66S2uMecwv
+         SK7FZx6voXOu83+932ivIMzmMg4M+K86H/CeQ8HkvWSvQAZblKKX3fzovl/s1xuPQM+e
+         WBj7I2CQUHAeAYmQJkS3c01t25Eve9Yt2tvFrBY1KkTIgVQqK8UlQ8a+5OsTuOaddhte
+         C2crFhe+ELdrg48o+49udEYLu1IVgbyhweEWzNKaGZ+RY5b1lPbtb1qwMarCkZvMRO5w
+         A1xg==
+X-Gm-Message-State: AOAM533SW3SDG9zDJOT2HIHnyigg+Dh30ypoBJKlgPdei7gvLxJKDE1a
+        bnJGYbvmTTc85EkjB5Zwos4=
+X-Google-Smtp-Source: ABdhPJyjTQaAGxBR0yMHdOdR1pG5uX4ZqXJGgnNSDIvUGtfqSnjkdKem5NcrSNhG6aWIO723rBkbDw==
+X-Received: by 2002:a17:90a:4306:: with SMTP id q6mr32152882pjg.17.1633370439363;
+        Mon, 04 Oct 2021 11:00:39 -0700 (PDT)
+Received: from localhost.localdomain ([2406:7400:63:e8f0:c2a7:3579:5fe8:31d9])
+        by smtp.gmail.com with ESMTPSA id z2sm3641004pfe.210.2021.10.04.11.00.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Oct 2021 11:00:38 -0700 (PDT)
+From:   Naveen Naidu <naveennaidu479@gmail.com>
+To:     bhelgaas@google.com, tsbogend@alpha.franken.de, ruscur@russell.cc,
+        oohall@gmail.com
+Cc:     Naveen Naidu <naveennaidu479@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 0/6] MIPS: OCTEON: Remove redundant AER code 
+Date:   Mon,  4 Oct 2021 23:29:26 +0530
+Message-Id: <cover.1633369560.git.naveennaidu479@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210928182139.652896-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 9/28/21 11:21 AM, Florian Fainelli wrote:
-> Hi Thomas, Marc,
-> 
-> This patch series aims at allowing the 3 interrupt controller drivers
-> used on Broadcom STB platforms to be built as modules in order for those
-> to be shipped in a GKI enabled system (Android).
-> 
-> The irq-bcm7038-l1 requires us to export a number of symbols, which is
-> not great, but there are not obvious solutions other than adding
-> accessor functions to get the same information.
-> 
-> Assuming you are happy with the changes though, please do take the last
-> two changes as well through your tree.
-> 
-> Thanks!
+e8635b484f64 ("MIPS: Add Cavium OCTEON PCI support.") added MIPS
+specific code to enable PCIe and AER error reporting (*irrespective
+of CONFIG_PCIEAER value*) because PCI core didn't do that at the time.
 
-I will be re-submitting a v4 with the Acked-by from Thomas on patch 1,
-and the Reviewed-by from Rob on patch 9 along with the update he
-proposed to the qcom-pdc driver. Finally, I will take Sergey's update as
-well on patch 14.
+But currently, the PCI core clears and enables the AER status registers.
+So it's redundant for octeon code to do so. This patch series removes
+the redundant code from the pci-octeon.c
+
+Currently, the correctable and uncorrectable AER mask registers are not
+set to their default value when AER service driver is loaded. This
+defect is also fixed in the "[PATCH 1/6]" in the series.
+
+Please note that "Patch 4/6" is dependent on "Patch 1/6".
+
+Thanks,
+Naveen Naidu
+
+Naveen Naidu (6):
+ [PATCH 1/6] PCI/AER: Enable COR/UNCOR error reporting in set_device_error_reporting()
+ [PATCH 2/6] MIPS: OCTEON: Remove redundant clearing of AER status registers
+ [PATCH 3/6] MIPS: OCTEON: Remove redundant enable of PCIe normal error reporting
+ [PATCH 4/6] MIPS: OCTEON: Remove redundant enable of COR/UNCOR error
+ [PATCH 5/6] MIPS: OCTEON: Remove redundant ECRC Generation Enable
+ [PATCH 6/6] MIPS: OCTEON: Remove redundant enable of RP error reporting
+
+ arch/mips/pci/pci-octeon.c | 50 --------------------------------------
+ drivers/pci/pcie/aer.c     | 13 +++++++++-
+ 2 files changed, 12 insertions(+), 51 deletions(-)
+
 -- 
-Florian
+2.25.1
+
