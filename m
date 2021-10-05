@@ -2,101 +2,435 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA84422F89
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Oct 2021 20:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F254231A8
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Oct 2021 22:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbhJESCS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Oct 2021 14:02:18 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:41807 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232869AbhJESCR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Oct 2021 14:02:17 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id A3B1358104F;
-        Tue,  5 Oct 2021 14:00:26 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 05 Oct 2021 14:00:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=fm3; bh=W
-        wKIRauzG1K4f0r8zZg//BwjfXC6szb332atZehFcLQ=; b=e6VyM8dEA0Erxneif
-        N5qK5rrQX2KKZVfeTVq9oUiaAi6Vq54vS3s/1DRr6x+2bTMzl+hl/c7saD+A0jTb
-        FRdw0zk+DqoqihB31dgqIAuvGLcBkScbpW9UfvwvjztfsuLiKK2I5OtBXXkhUs0Z
-        kljGJt6UggnnkqNJ4qeoGy3vGwRkdJ22RZ8NjlsZ6KfDL0Sjn9IqpbE024NqH2Y0
-        2MsD7XkjZZjyiyF83LkUW0+eBbLhmukQuOszNlkLGA6DOVabgj/CzvAw96NB7HlV
-        CYHh8WNw9CYSDegKM5IaSTGqOmtn0IDwLt7mHpmsTLtcdgsJL2QbSAm/LlV4NEN2
-        kTTVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=WwKIRauzG1K4f0r8zZg//BwjfXC6szb332atZehFc
-        LQ=; b=INLddzxTszqRjVJl3vlqiQAtAw7J6f1lPj/WMlaWB7X9f7rfALNQcGIRL
-        VzQSoXQ+GUGvUsDB77olL85yG6xILuFz7poZIj4DVz3HGw5ZzdYB1OCAnlR28UHl
-        YXbtSvM+Luo7gHXln8Ut5UFf50fwe5NPzIb+LaK93iKd+Mjzxi3EB9CsfWGofu5Z
-        77WHGPYj5/xOp1pgjcLp8ppXvo99ZeGzdLh+2ccFw+xeRKHiV/frNkoh+s1gBkgv
-        OOW3BMdU3ZZdGPjRtVwym52DMvbtBw1NuZloFBU7aTP9HXK/13LNOUhFSiDgOoHG
-        lCgwygcjgRLuyR2rTGhMILxjmf8pQ==
-X-ME-Sender: <xms:upJcYdS5XXFAuAEuIv0l4DxX-gzqLjSnosZy8UJcpO9y1JSSwsFAvQ>
-    <xme:upJcYWyzQukYzShHGDf1hm-xH0lLCByMWmm-HKxamgSbxZxwSkUjwy5I1ObsKDSp2
-    mBJLHM-US-Xvq29gzI>
-X-ME-Received: <xmr:upJcYS3FiUXt_c_UJkEbivMSdNucDy23kSBdWqv92dEer2jZt3Pguq69FIH0Beo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudelgedguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepheeiuddvvefhkeejfedttdekieethfdukedvieeuueelgfel
-    ieejgeehvdekudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:upJcYVDOLnPJYH2BYn_ZJchzJOR94JXiMHuX4HPAAnz_6KOW7qkJXA>
-    <xmx:upJcYWh8TebLJ9BDcpVMtZJNAeaXi2z0TfDiXVtTXxkOQvtRmGGGLA>
-    <xmx:upJcYZoEig34LFdh0WUKRd2NE1nDFY9gekBwtr4-rilZB2Id0e-dZA>
-    <xmx:upJcYaxpTMPv2ePBP4GKVEIt4WrFlLJwZWqkqBy9glCUHHsudhbrVg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 5 Oct 2021 14:00:24 -0400 (EDT)
-Message-ID: <e9e1c9e4-abc1-5fd9-637a-8a7205bbf4c6@flygoat.com>
-Date:   Tue, 5 Oct 2021 19:00:14 +0100
+        id S236085AbhJEUYp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 5 Oct 2021 16:24:45 -0400
+Received: from aposti.net ([89.234.176.197]:49478 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236016AbhJEUYm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 5 Oct 2021 16:24:42 -0400
+Date:   Tue, 05 Oct 2021 21:22:27 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v5 2/7] drm/ingenic: Add support for JZ4780 and HDMI
+ output
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Message-Id: <FXTI0R.3FZIJZ7UYSNQ@crapouillou.net>
+In-Reply-To: <2c7d0aa7d3ef480ebb996d37c27cbaa6f722728b.1633436959.git.hns@goldelico.com>
+References: <cover.1633436959.git.hns@goldelico.com>
+        <2c7d0aa7d3ef480ebb996d37c27cbaa6f722728b.1633436959.git.hns@goldelico.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.2
-Subject: Re: [PATCH 5/7] mips: bpf: Add JIT workarounds for CPU errata
-To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, paulburton@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        tsbogend@alpha.franken.de, chenhuacai@kernel.org,
-        yangtiezhu@loongson.cn, tony.ambardar@gmail.com,
-        bpf@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20211005165408.2305108-1-johan.almbladh@anyfinetworks.com>
- <20211005165408.2305108-6-johan.almbladh@anyfinetworks.com>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20211005165408.2305108-6-johan.almbladh@anyfinetworks.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Nikolaus,
 
-
-在 2021/10/5 17:54, Johan Almbladh 写道:
-> This patch adds workarounds for the following CPU errata to the MIPS
-> eBPF JIT, if enabled in the kernel configuration.
->
->    - R10000 ll/sc weak ordering
->    - Loongson-3 ll/sc weak ordering
->    - Loongson-2F jump hang
->
-> The Loongson-2F nop errata is implemented in uasm, which the JIT uses,
-> so no additional mitigations are needed for that.
->
-> Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-Thanks!
-
-- Jiaxun
+Le mar., oct. 5 2021 at 14:29:14 +0200, H. Nikolaus Schaller 
+<hns@goldelico.com> a �crit :
+> From: Paul Boddie <paul@boddie.org.uk>
+> 
+> Add support for the LCD controller present on JZ4780 SoCs.
+> This SoC uses 8-byte descriptors which extend the current
+> 4-byte descriptors used for other Ingenic SoCs.
+> 
+> Tested on MIPS Creator CI20 board.
+> 
+> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 > ---
->   
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 85 
+> +++++++++++++++++++++--
+>  drivers/gpu/drm/ingenic/ingenic-drm.h     | 42 +++++++++++
+>  2 files changed, 122 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
+> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> index f73522bdacaa..e2df4b085905 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -6,6 +6,7 @@
+> 
+>  #include "ingenic-drm.h"
+> 
+> +#include <linux/bitfield.h>
+>  #include <linux/component.h>
+>  #include <linux/clk.h>
+>  #include <linux/dma-mapping.h>
+> @@ -49,6 +50,11 @@ struct ingenic_dma_hwdesc {
+>  	u32 addr;
+>  	u32 id;
+>  	u32 cmd;
+> +	/* extended hw descriptor for jz4780 */
+> +	u32 offsize;
+> +	u32 pagewidth;
+> +	u32 cpos;
+> +	u32 dessize;
+>  } __aligned(16);
+> 
+>  struct ingenic_dma_hwdescs {
+> @@ -60,9 +66,11 @@ struct jz_soc_info {
+>  	bool needs_dev_clk;
+>  	bool has_osd;
+>  	bool map_noncoherent;
+> +	bool use_extended_hwdesc;
+>  	unsigned int max_width, max_height;
+>  	const u32 *formats_f0, *formats_f1;
+>  	unsigned int num_formats_f0, num_formats_f1;
+> +	unsigned int max_reg;
+>  };
+> 
+>  struct ingenic_drm_private_state {
+> @@ -168,12 +176,11 @@ static bool ingenic_drm_writeable_reg(struct 
+> device *dev, unsigned int reg)
+>  	}
+>  }
+> 
+> -static const struct regmap_config ingenic_drm_regmap_config = {
+> +static struct regmap_config ingenic_drm_regmap_config = {
+>  	.reg_bits = 32,
+>  	.val_bits = 32,
+>  	.reg_stride = 4,
+> 
+> -	.max_register = JZ_REG_LCD_SIZE1,
+>  	.writeable_reg = ingenic_drm_writeable_reg,
+>  };
+> 
+> @@ -663,6 +670,37 @@ static void 
+> ingenic_drm_plane_atomic_update(struct drm_plane *plane,
+>  		hwdesc->cmd = JZ_LCD_CMD_EOF_IRQ | (width * height * cpp / 4);
+>  		hwdesc->next = dma_hwdesc_addr(priv, next_id);
+> 
+> +		if (priv->soc_info->use_extended_hwdesc) {
+> +			hwdesc->cmd |= JZ_LCD_CMD_FRM_ENABLE;
+> +
+> +			/* Extended 8-byte descriptor */
+> +			hwdesc->cpos = 0;
+> +			hwdesc->offsize = 0;
+> +			hwdesc->pagewidth = 0;
+> +
+> +			switch (newstate->fb->format->format) {
+> +			case DRM_FORMAT_XRGB1555:
+> +				hwdesc->cpos |= JZ_LCD_CPOS_RGB555;
+> +				fallthrough;
+> +			case DRM_FORMAT_RGB565:
+> +				hwdesc->cpos |= JZ_LCD_CPOS_BPP_15_16;
+> +				break;
+> +			case DRM_FORMAT_XRGB8888:
+> +				hwdesc->cpos |= JZ_LCD_CPOS_BPP_18_24;
+> +				break;
+> +			}
+> +			hwdesc->cpos |= JZ_LCD_CPOS_PREMULTIPLY_LCD |
+> +					    (JZ_LCD_CPOS_COEFFICIENT_1_ALPHA1 <<
+> +					     JZ_LCD_CPOS_COEFFICIENT_OFFSET);
+
+Knowing that OSD mode doesn't really work with this patch, I doubt you 
+need to configure per-plane alpha blending.
+
+> +
+> +			hwdesc->dessize =
+> +				(0xff << JZ_LCD_DESSIZE_ALPHA_OFFSET) |
+
+Same here.
+
+> +				FIELD_PREP(JZ_LCD_DESSIZE_HEIGHT_MASK <<
+> +					   JZ_LCD_DESSIZE_HEIGHT_OFFSET, height - 1) |
+> +				FIELD_PREP(JZ_LCD_DESSIZE_WIDTH_MASK <<
+> +					   JZ_LCD_DESSIZE_WIDTH_OFFSET, width - 1);
+
+Better pre-shift your *_MASK macros (and use GENMASK() in them) and 
+remove the *_OFFSET macros.
+
+> +		}
+> +
+>  		if (drm_atomic_crtc_needs_modeset(crtc_state)) {
+>  			fourcc = newstate->fb->format->format;
+> 
+> @@ -694,6 +732,10 @@ static void 
+> ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
+>  		    | JZ_LCD_CFG_SPL_DISABLE | JZ_LCD_CFG_REV_DISABLE;
+>  	}
+> 
+> +	/* set use of the 8-word descriptor and OSD foreground usage. */
+
+I think you can remove this comment - this code doesn't actually set 
+OSD mode, but it does enable the use of the extended hardware 
+descriptor format, and I think it is already self-explanatory.
+
+> +	if (priv->soc_info->use_extended_hwdesc)
+> +		cfg |= JZ_LCD_CFG_DESCRIPTOR_8;
+> +
+>  	if (mode->flags & DRM_MODE_FLAG_NHSYNC)
+>  		cfg |= JZ_LCD_CFG_HSYNC_ACTIVE_LOW;
+>  	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
+> @@ -1010,6 +1052,7 @@ static int ingenic_drm_bind(struct device *dev, 
+> bool has_components)
+>  	struct drm_encoder *encoder;
+>  	struct ingenic_drm_bridge *ib;
+>  	struct drm_device *drm;
+> +	struct regmap_config regmap_config;
+>  	void __iomem *base;
+>  	long parent_rate;
+>  	unsigned int i, clone_mask = 0;
+> @@ -1063,8 +1106,10 @@ static int ingenic_drm_bind(struct device 
+> *dev, bool has_components)
+>  		return PTR_ERR(base);
+>  	}
+> 
+> +	regmap_config = ingenic_drm_regmap_config;
+> +	regmap_config.max_register = soc_info->max_reg;
+>  	priv->map = devm_regmap_init_mmio(dev, base,
+> -					  &ingenic_drm_regmap_config);
+> +					  &regmap_config);
+
+I remember saying to split this change into its own patch :)
+
+>  	if (IS_ERR(priv->map)) {
+>  		dev_err(dev, "Failed to create regmap\n");
+>  		return PTR_ERR(priv->map);
+> @@ -1274,7 +1319,7 @@ static int ingenic_drm_bind(struct device *dev, 
+> bool has_components)
+> 
+>  	/* Enable OSD if available */
+>  	if (soc_info->has_osd)
+> -		regmap_write(priv->map, JZ_REG_LCD_OSDC, JZ_LCD_OSDC_OSDEN);
+> +		regmap_set_bits(priv->map, JZ_REG_LCD_OSDC, JZ_LCD_OSDC_OSDEN);
+
+This change is unrelated to this patch, and I'm not even sure it's a 
+valid change. The driver shouldn't rely on previous register values.
+
+> 
+>  	mutex_init(&priv->clk_mutex);
+>  	priv->clock_nb.notifier_call = ingenic_drm_update_pixclk;
+> @@ -1444,6 +1489,7 @@ static const struct jz_soc_info jz4740_soc_info 
+> = {
+>  	.formats_f1 = jz4740_formats,
+>  	.num_formats_f1 = ARRAY_SIZE(jz4740_formats),
+>  	/* JZ4740 has only one plane */
+> +	.max_reg = JZ_REG_LCD_SIZE1,
+>  };
+> 
+>  static const struct jz_soc_info jz4725b_soc_info = {
+> @@ -1456,6 +1502,7 @@ static const struct jz_soc_info 
+> jz4725b_soc_info = {
+>  	.num_formats_f1 = ARRAY_SIZE(jz4725b_formats_f1),
+>  	.formats_f0 = jz4725b_formats_f0,
+>  	.num_formats_f0 = ARRAY_SIZE(jz4725b_formats_f0),
+> +	.max_reg = JZ_REG_LCD_SIZE1,
+>  };
+> 
+>  static const struct jz_soc_info jz4770_soc_info = {
+> @@ -1468,12 +1515,28 @@ static const struct jz_soc_info 
+> jz4770_soc_info = {
+>  	.num_formats_f1 = ARRAY_SIZE(jz4770_formats_f1),
+>  	.formats_f0 = jz4770_formats_f0,
+>  	.num_formats_f0 = ARRAY_SIZE(jz4770_formats_f0),
+> +	.max_reg = JZ_REG_LCD_SIZE1,
+> +};
+> +
+> +static const struct jz_soc_info jz4780_soc_info = {
+> +	.needs_dev_clk = true,
+> +	.has_osd = true,
+> +	.use_extended_hwdesc = true,
+> +	.max_width = 4096,
+> +	.max_height = 2048,
+> +	/* REVISIT: do we support formats different from jz4770? */
+
+ From a quick look at the PMs, it doesn't seem so.
+
+> +	.formats_f1 = jz4770_formats_f1,
+> +	.num_formats_f1 = ARRAY_SIZE(jz4770_formats_f1),
+> +	.formats_f0 = jz4770_formats_f0,
+> +	.num_formats_f0 = ARRAY_SIZE(jz4770_formats_f0),
+> +	.max_reg = JZ_REG_LCD_PCFG,
+>  };
+> 
+>  static const struct of_device_id ingenic_drm_of_match[] = {
+>  	{ .compatible = "ingenic,jz4740-lcd", .data = &jz4740_soc_info },
+>  	{ .compatible = "ingenic,jz4725b-lcd", .data = &jz4725b_soc_info },
+>  	{ .compatible = "ingenic,jz4770-lcd", .data = &jz4770_soc_info },
+> +	{ .compatible = "ingenic,jz4780-lcd", .data = &jz4780_soc_info },
+>  	{ /* sentinel */ },
+>  };
+>  MODULE_DEVICE_TABLE(of, ingenic_drm_of_match);
+> @@ -1492,10 +1555,16 @@ static int ingenic_drm_init(void)
+>  {
+>  	int err;
+> 
+> +	if (IS_ENABLED(CONFIG_DRM_INGENIC_DW_HDMI)) {
+> +		err = platform_driver_register(ingenic_dw_hdmi_driver_ptr);
+> +		if (err)
+> +			return err;
+> +	}
+
+As I said in your v4... You don't need to add this here. The 
+ingenic-dw-hdmi.c should take care of registering its driver.
+
+As for the overall change... I am a bit annoyed that this only supports 
+the F1 plane at the screen's resolution. Anything else (F1 plane at 
+specific coordinates, F0 plane alone, or F0+F1) does not work. I think 
+at least the F1 plane's position should be easy to do (just setting the 
+cpos field in the hwdesc).
+
+It is OK to leave the rest for later (I'm not asking you to do all 
+that). However it would be a good idea to add a check in 
+ingenic_drm_crtc_atomic_check(), which would return -EINVAL if anything 
+else than the working configuration is attempted.
+
+Cheers,
+-Paul
+
+> +
+>  	if (IS_ENABLED(CONFIG_DRM_INGENIC_IPU)) {
+>  		err = platform_driver_register(ingenic_ipu_driver_ptr);
+>  		if (err)
+> -			return err;
+> +			goto err_hdmi_unreg;
+>  	}
+> 
+>  	err = platform_driver_register(&ingenic_drm_driver);
+> @@ -1507,6 +1576,10 @@ static int ingenic_drm_init(void)
+>  err_ipu_unreg:
+>  	if (IS_ENABLED(CONFIG_DRM_INGENIC_IPU))
+>  		platform_driver_unregister(ingenic_ipu_driver_ptr);
+> +err_hdmi_unreg:
+> +	if (IS_ENABLED(CONFIG_DRM_INGENIC_DW_HDMI))
+> +		platform_driver_unregister(ingenic_dw_hdmi_driver_ptr);
+> +
+>  	return err;
+>  }
+>  module_init(ingenic_drm_init);
+> @@ -1515,6 +1588,8 @@ static void ingenic_drm_exit(void)
+>  {
+>  	platform_driver_unregister(&ingenic_drm_driver);
+> 
+> +	if (IS_ENABLED(CONFIG_DRM_INGENIC_DW_HDMI))
+> +		platform_driver_unregister(ingenic_dw_hdmi_driver_ptr);
+>  	if (IS_ENABLED(CONFIG_DRM_INGENIC_IPU))
+>  		platform_driver_unregister(ingenic_ipu_driver_ptr);
+>  }
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm.h 
+> b/drivers/gpu/drm/ingenic/ingenic-drm.h
+> index 22654ac1dde1..13dbc5d25c3b 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm.h
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm.h
+> @@ -44,8 +44,11 @@
+>  #define JZ_REG_LCD_XYP1				0x124
+>  #define JZ_REG_LCD_SIZE0			0x128
+>  #define JZ_REG_LCD_SIZE1			0x12c
+> +#define JZ_REG_LCD_PCFG				0x2c0
+> 
+>  #define JZ_LCD_CFG_SLCD				BIT(31)
+> +#define JZ_LCD_CFG_DESCRIPTOR_8			BIT(28)
+> +#define JZ_LCD_CFG_RECOVER_FIFO_UNDERRUN	BIT(25)
+>  #define JZ_LCD_CFG_PS_DISABLE			BIT(23)
+>  #define JZ_LCD_CFG_CLS_DISABLE			BIT(22)
+>  #define JZ_LCD_CFG_SPL_DISABLE			BIT(21)
+> @@ -63,6 +66,7 @@
+>  #define JZ_LCD_CFG_DE_ACTIVE_LOW		BIT(9)
+>  #define JZ_LCD_CFG_VSYNC_ACTIVE_LOW		BIT(8)
+>  #define JZ_LCD_CFG_18_BIT			BIT(7)
+> +#define JZ_LCD_CFG_24_BIT			BIT(6)
+>  #define JZ_LCD_CFG_PDW				(BIT(5) | BIT(4))
+> 
+>  #define JZ_LCD_CFG_MODE_GENERIC_16BIT		0
+> @@ -132,6 +136,7 @@
+>  #define JZ_LCD_CMD_SOF_IRQ			BIT(31)
+>  #define JZ_LCD_CMD_EOF_IRQ			BIT(30)
+>  #define JZ_LCD_CMD_ENABLE_PAL			BIT(28)
+> +#define JZ_LCD_CMD_FRM_ENABLE			BIT(26)
+> 
+>  #define JZ_LCD_SYNC_MASK			0x3ff
+> 
+> @@ -153,6 +158,7 @@
+>  #define JZ_LCD_RGBC_EVEN_BGR			(0x5 << 0)
+> 
+>  #define JZ_LCD_OSDC_OSDEN			BIT(0)
+> +#define JZ_LCD_OSDC_ALPHAEN			BIT(2)
+>  #define JZ_LCD_OSDC_F0EN			BIT(3)
+>  #define JZ_LCD_OSDC_F1EN			BIT(4)
+> 
+> @@ -176,6 +182,41 @@
+>  #define JZ_LCD_SIZE01_WIDTH_LSB			0
+>  #define JZ_LCD_SIZE01_HEIGHT_LSB		16
+> 
+> +#define JZ_LCD_DESSIZE_ALPHA_OFFSET		24
+> +#define JZ_LCD_DESSIZE_HEIGHT_OFFSET		12
+> +#define JZ_LCD_DESSIZE_WIDTH_OFFSET		0
+> +#define JZ_LCD_DESSIZE_HEIGHT_MASK		0xfff
+> +#define JZ_LCD_DESSIZE_WIDTH_MASK		0xfff
+> +
+> +/* TODO: 4,5 and 7 match the above BPP */
+> +#define JZ_LCD_CPOS_BPP_15_16			(4 << 27)
+> +#define JZ_LCD_CPOS_BPP_18_24			(5 << 27)
+> +#define JZ_LCD_CPOS_BPP_30			(7 << 27)
+> +#define JZ_LCD_CPOS_RGB555			BIT(30)
+> +#define JZ_LCD_CPOS_PREMULTIPLY_LCD		BIT(26)
+> +#define JZ_LCD_CPOS_COEFFICIENT_OFFSET		24
+> +#define JZ_LCD_CPOS_COEFFICIENT_0		0
+> +#define JZ_LCD_CPOS_COEFFICIENT_1		1
+> +#define JZ_LCD_CPOS_COEFFICIENT_ALPHA1		2
+> +#define JZ_LCD_CPOS_COEFFICIENT_1_ALPHA1	3
+> +
+> +#define JZ_LCD_RGBC_RGB_PADDING			BIT(15)
+> +#define JZ_LCD_RGBC_RGB_PADDING_FIRST		BIT(14)
+> +#define JZ_LCD_RGBC_422				BIT(8)
+> +#define JZ_LCD_RGBC_RGB_FORMAT_ENABLE		BIT(7)
+> +
+> +#define JZ_LCD_PCFG_PRI_MODE			BIT(31)
+> +#define JZ_LCD_PCFG_HP_BST_4			(0 << 28)
+> +#define JZ_LCD_PCFG_HP_BST_8			(1 << 28)
+> +#define JZ_LCD_PCFG_HP_BST_16			(2 << 28)
+> +#define JZ_LCD_PCFG_HP_BST_32			(3 << 28)
+> +#define JZ_LCD_PCFG_HP_BST_64			(4 << 28)
+> +#define JZ_LCD_PCFG_HP_BST_16_CONT		(5 << 28)
+> +#define JZ_LCD_PCFG_HP_BST_DISABLE		(7 << 28)
+> +#define JZ_LCD_PCFG_THRESHOLD2_OFFSET		18
+> +#define JZ_LCD_PCFG_THRESHOLD1_OFFSET		9
+> +#define JZ_LCD_PCFG_THRESHOLD0_OFFSET		0
+> +
+>  struct device;
+>  struct drm_plane;
+>  struct drm_plane_state;
+> @@ -187,5 +228,6 @@ void ingenic_drm_plane_disable(struct device 
+> *dev, struct drm_plane *plane);
+>  bool ingenic_drm_map_noncoherent(const struct device *dev);
+> 
+>  extern struct platform_driver *ingenic_ipu_driver_ptr;
+> +extern struct platform_driver *ingenic_dw_hdmi_driver_ptr;
+> 
+>  #endif /* DRIVERS_GPU_DRM_INGENIC_INGENIC_DRM_H */
+> --
+> 2.33.0
+> 
+
+
