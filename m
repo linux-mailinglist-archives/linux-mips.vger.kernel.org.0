@@ -2,125 +2,143 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BADB14223EB
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Oct 2021 12:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CEB422692
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Oct 2021 14:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbhJEKxv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Oct 2021 06:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233672AbhJEKxv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Oct 2021 06:53:51 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BA2C06161C;
-        Tue,  5 Oct 2021 03:52:01 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id d18so496537vsh.1;
-        Tue, 05 Oct 2021 03:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q+QFrqKGB0j7m6S9frhdYXSVQB6nI+oRzUWTBQ56AKc=;
-        b=hMo4pH7KAtaYW32hFVQn45VdK9FTXqt401Oc6ycqrAQRCl/6RuW4UhuwGhUeSZGpc1
-         R5BgZaiR6pOSwItCz1GvRGSbDQQexiFeAwpqewreiF1bahsdFfpl6rhDqrYQ5NKRF8b2
-         BfHY1aOuyNRXJmsjoVp3+7SMrwnfnHffNg2Gdv7cRumKfvQ1WYpVtNtGmFeaU8EsLN2T
-         WAoH2IKu2RpO3qhKXG4gV8qcbTvCMnabDt89+bH4Qr+auP5GeNxkdaXewpTpLAm68Wna
-         ccPeIX6H5W5N+Am5PUWfUvzPbXcTcKCYBpRR7ebNPnir9QkLEVhfVSUyI0YpOA47Dj3F
-         eTzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q+QFrqKGB0j7m6S9frhdYXSVQB6nI+oRzUWTBQ56AKc=;
-        b=fv9nN1R4F94hbOQ00DXk10fwO3hfUgmf2iw4czr0nxAja4d/zAohYFRIdn6L5jdYNE
-         5JA/QEP73ih4KjOpE+B2zAWy34LBa44ItsYFb5bCziMKrqxAAjPDT5VRn+ZY8go7ua4B
-         uQC/RIsvRy+43ZbcUdjUnHzyFkSDrOj7r6HeEkAHzNTKHhMDT7E6bKXFdoqyx9uf7QR0
-         nX0mwj72w0PtL6FhYOKz2hqu9xcSpLv3myxcldQb9qZzi10m3dq2XW8Y9d5aW1I1K5hg
-         J2V73kbctKDTf0EwZd9M2Hf/1vyC/gCsBB8o03oRGW2Z0pk+3rOGDEM/BfZ9YK2+7f9W
-         SnrQ==
-X-Gm-Message-State: AOAM530mAgxU2NvPG9lQGmkekrVPvY8pY0hU6gvqgBGYrTtier4eko+f
-        xfhVsamkTc1I+ksnEPdS9+bQhd8AwvjqlCWPQns=
-X-Google-Smtp-Source: ABdhPJwtV82P/rZoW/OgbX6bsC8jyoZ2nArcMJsVFUQINMfUERam1ukL/4J8XK4rPbjDxOEP0HGWPscydS36Ux35YHw=
-X-Received: by 2002:a67:f618:: with SMTP id k24mr17736934vso.48.1633431120157;
- Tue, 05 Oct 2021 03:52:00 -0700 (PDT)
+        id S234700AbhJEMba (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Oct 2021 08:31:30 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:29445 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234354AbhJEMb2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Oct 2021 08:31:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1633436962;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=ibQtZi26+9hNiOXyMaYmaTWmMOHUhba7MnqHV0neXR8=;
+    b=Go/bkihAWMxVBFqQxPnRKnjVtaNKZvvrn0z762dmE3BjU+zb1AuG6aac/6X4XY2UQY
+    ju/vsTKyN9SuiZJbJ4EqiXXtts/P+GXCh3Q952pa/DILtFz8WPMcK14obXepP6k1vJ/+
+    tbzos7whY2mGb6leRIcUGCrbvAJPA48b0qtiTwgQO8Xj3gZom5yfnlrKRNJd3XLV9Ij6
+    ob+WpCfxZTE/EIxycBz3t/B15B0ax6K6+sz5UJOPdrKMAZB6rZ5I4YQgy4fkqovFjrvU
+    iiuXoHJnc9M+vzkkHUqEhKwvF+BpTQ8uXY/4TSygAe/Ad069xBQXPZQ9mr4BA9jkxJt3
+    6baA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lByOdcKlH0"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.33.8 DYNA|AUTH)
+    with ESMTPSA id I01f74x95CTK50Z
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 5 Oct 2021 14:29:20 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v5 0/7] MIPS: JZ4780 and CI20 HDMI
+Date:   Tue,  5 Oct 2021 14:29:12 +0200
+Message-Id: <cover.1633436959.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
- <CAMhs-H9p4xmPO2F_byk4DQncTGZayW1HwAzrPn_W0eEW5UUn9A@mail.gmail.com> <YVwqpCbYzxUWm5LJ@kroah.com>
-In-Reply-To: <YVwqpCbYzxUWm5LJ@kroah.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 5 Oct 2021 12:51:48 +0200
-Message-ID: <CAMhs-H-YDg=q6sJhhawkqkfdLCj=EhcX8G-1WGH4K928ToLYLw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] MIPS: ralink: fix PCI IO resources
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Rob Herring <robh@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 5, 2021 at 12:36 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Sun, Oct 03, 2021 at 06:21:21PM +0200, Sergio Paracuellos wrote:
-> > Hi Greg,
-> >
-> > On Sat, Sep 25, 2021 at 10:32 PM Sergio Paracuellos
-> > <sergio.paracuellos@gmail.com> wrote:
-> > >
-> > > MIPs ralink need a special tratement regarding the way it handles PCI IO
-> > > resources. On MIPS I/O ports are memory mapped, so we access them using normal
-> > > load/store instructions. MIPS 'plat_mem_setup()' function does a call to
-> > > 'set_io_port_base(KSEG1)'. There, variable 'mips_io_port_base'
-> > > is set then using this address which is a virtual address to which all
-> > > ports are being mapped. Ralink I/O space has a mapping of bus address
-> > > equal to the window into the mmio space, with an offset of IO start range
-> > > cpu address. This means that to have this working we need:
-> > > - linux port numbers in the range 0-0xffff.
-> > > - pci port numbers in the range 0-0xffff.
-> > > - io_offset being zero.
-> > >
-> > > These means at the end to have bus address 0 mapped to IO range cpu address.
-> > > We need a way of properly set 'mips_io_port_base' with a virtually mapped
-> > > value of the IO cpu address.
-> > >
-> > > This series do the following approach:
-> > > 1) Revert two bad commit from a previous attempt of make this work [0].
-> > > 2) Set PCI_IOBASE to mips 'mips_io_port_base'.
-> > > 3) Allow architecture dependent 'pci_remap_iospace'.
-> > > 4) Implement 'pci_remap_iospace' for MIPS.
-> > > 5) Be sure IOBASE address for IO window is set with correct value.
-> > >
-> > > More context about this series appoach in this mail thread [1].
-> > >
-> > > Patches related with reverts are from this merge cycle so they are only
-> > > added to the staging git tree. So to have all stuff together I'd like to
-> > > get everybody Ack's to get all of this series through staging tree if
-> > > possible :).
-> > >
-> > > Thanks in advance for your time.
-> > >
-> > > Changes in v3:
-> > >  - Collect Arnd's Acked-by for the patches.
-> > >  - Be sure IO resource start address is zero and WARN_ONCE if it is not
-> > >    on MIPS pci_remap_iospace() patch. Also make use of 'resource_size'
-> > >    instead of do the logic explicitly again.
-> >
-> > I think nothing is missing to get this added through the staging tree.
->
-> Great, thanks for sticking with this, will go queue it up now.
+PATCH V5  2021-10-05 14:28:44:
+- dropped mode_fixup and timings support in dw-hdmi as it is no longer needed in this V5 (by hns@goldelico.com)
+- dropped "drm/ingenic: add some jz4780 specific features" (stimulated by paul@crapouillou.net)
+- fixed typo in commit subject: "synopsis" -> "synopsys" (by hns@goldelico.com)
+- swapped clocks in jz4780.dtsi to match synopsys,dw-hdmi.yaml (by hns@goldelico.com)
+- improved, simplified, fixed, dtbschecked ingenic-jz4780-hdmi.yaml and made dependent of bridge/synopsys,dw-hdmi.yaml (based on suggestions by maxime@cerno.tech)
+- fixed binding vs. driver&DTS use of hdmi-5v regulator (suggested by maxime@cerno.tech)
+- dropped "drm/bridge: synopsis: Fix to properly handle HPD" - was a no longer needed workaround for a previous version
+  (suggested by maxime@cerno.tech)
 
-Thanks!
+PATCH V4 2021-09-27 18:44:38:
+- fix setting output_port = 1 (issue found by paul@crapouillou.net)
+- ci20.dts: convert to use hdmi-connector (by hns@goldelico.com)
+- add a hdmi-regulator to control +5V power (by hns@goldelico.com)
+- added a fix to dw-hdmi to call drm_kms_helper_hotplug_event on plugin event detection (by hns@goldelico.com)
+- always allocate extended descriptor but initialize only for jz4780 (by hns@goldelico.com)
+- updated to work on top of "[PATCH v3 0/6] drm/ingenic: Various improvements v3" (by paul@crapouillou.net)
+- rebased to v5.13-rc3
 
-Best regards,
-    Sergio Paracuellos
+PATCH V3 2021-08-08 07:10:50:
+This series adds HDMI support for JZ4780 and CI20 board (and fixes one IPU related issue in registration error path)
+- [patch 1/8] switched from mode_fixup to atomic_check (suggested by robert.foss@linaro.org)
+  - the call to the dw-hdmi specialization is still called mode_fixup
+- [patch 3/8] diverse fixes for ingenic-drm-drv (suggested by paul@crapouillou.net)
+  - factor out some non-HDMI features of the jz4780 into a separate patch
+  - multiple fixes around max height
+  - do not change regmap config but a copy on stack
+  - define some constants
+  - factor out fixing of drm_init error path for IPU into separate patch
+  - use FIELD_PREP()
+- [patch 8/8] conversion to component framework dropped (suggested by Laurent.pinchart@ideasonboard.com and paul@crapouillou.net)
 
->
-> greg k-h
+PATCH V2 2021-08-05 16:08:05:
+This series adds HDMI support for JZ4780 and CI20 board
+
+V2:
+- code and commit messages revisited for checkpatch warnings
+- rebased on v5.14-rc4
+- include (failed, hence RFC 8/8) attempt to convert to component framework
+  (was suggested by Paul Cercueil <paul@crapouillou.net> a while ago)
+
+
+H. Nikolaus Schaller (1):
+  MIPS: defconfig: CI20: configure for DRM_DW_HDMI_JZ4780
+
+Paul Boddie (5):
+  drm/ingenic: Fix drm_init error path if IPU was registered
+  drm/ingenic: Add support for JZ4780 and HDMI output
+  drm/ingenic: Add dw-hdmi driver for jz4780
+  MIPS: DTS: jz4780: Account for Synopsys HDMI driver and LCD
+    controllers
+  MIPS: DTS: CI20: Add DT nodes for HDMI setup
+
+Sam Ravnborg (1):
+  dt-bindings: display: Add ingenic,jz4780-dw-hdmi DT Schema
+
+ .../bindings/display/ingenic-jz4780-hdmi.yaml |  79 +++++++++++
+ arch/mips/boot/dts/ingenic/ci20.dts           |  67 ++++++++++
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        |  45 +++++++
+ arch/mips/configs/ci20_defconfig              |   6 +
+ drivers/gpu/drm/ingenic/Kconfig               |   9 ++
+ drivers/gpu/drm/ingenic/Makefile              |   1 +
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  96 +++++++++++++-
+ drivers/gpu/drm/ingenic/ingenic-drm.h         |  42 ++++++
+ drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c     | 125 ++++++++++++++++++
+ 9 files changed, 464 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+ create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+
+-- 
+2.33.0
+
