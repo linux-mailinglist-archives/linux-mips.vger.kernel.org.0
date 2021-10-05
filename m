@@ -2,211 +2,243 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78737421797
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Oct 2021 21:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13314220AE
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Oct 2021 10:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238853AbhJDTdv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 4 Oct 2021 15:33:51 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:57138 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237989AbhJDTdu (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 4 Oct 2021 15:33:50 -0400
-Received: from mailhost.synopsys.com (badc-mailhost4.synopsys.com [10.192.0.82])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id DF4ADC0D86;
-        Mon,  4 Oct 2021 19:31:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1633375921; bh=zEyGwsNIYA7zSFFQiPBwHWfCcgDRbAbjsD5ezQG/Wd8=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=X2rBzLjYHJTjIwmG8mWUat2R0G6N/LET4VMhc6IVZE9vuwtyW+tCtdbgGcey7wzIo
-         UhiJv6OLAMMXz7c510qxkB7CCPt4mfjozNuH7CTGcKsbVevrvXOenY8qWxHF7e3eXd
-         8Ks+/Tx0qQA/nctSwHrPvjvUwE+BADo4V1sc4OZ6N9fjpyb0J/1GwEveF4zAGQOXZB
-         vfw/h9tLO3iZ1+RczgIkBCf3pi3QpV3yVfPI/+tyMNFk8/EP7mlFNHLLJerXGaeZmf
-         g1ocip6BmXJhk44/dtec/h3ompDI7k5dsvNN7C7FN0kFP/mssWehkkR1wEH8ihwHua
-         TIT2m3HyDWYyw==
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id B8290A005C;
-        Mon,  4 Oct 2021 19:31:49 +0000 (UTC)
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2040.outbound.protection.outlook.com [104.47.51.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 892D2800BA;
-        Mon,  4 Oct 2021 19:31:44 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=shahab@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="LlbBKh62";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JBM6mNNy+Y/6BAI8XrO4jRyNVMBFE7OwIsiALr8yYDwZdAokVGw278DmkdbGhIyY/k5TskDgv2tz42mzU+EKhCln4J0xyQ7snlMz8S7DNwFzWfws8rbWqtL/kIdJ1/U+jzpb0WyMtK3i2AntHDl24pwEaiDfJ3G/1Kfeb5NNSCaOE0gxvw6rxnvpzDEnkRbkq1EyePmRlezwTbhP9OKN25/GfLQmfQPIMxHNVIn+9XrRnaSQxlqcl8YMQkctwHT6bVoewZCzx7C3xdtybTFIy8buBLJdOlofyaeN25YONmi5c2z3P9MDwoux1EibDuPWnlZFsa1IQ2XuOHj76oyqLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zEyGwsNIYA7zSFFQiPBwHWfCcgDRbAbjsD5ezQG/Wd8=;
- b=AcpAlazCYq05RSc8BDyIWIyqY9zQXNmwFYdJHAGwmB3C2VYbhs8sISRZft5/qKuZpUOlws4U2RbtUYzJfsSxHQJwOWpFsNwZyBX+rJ7pY3sir9VF5bP5xg3kcXTwrVxAYVIDOOElv6By7YfxAOJ4hlUOim4u1ACmkCYuVuEqbE/3yzUNLbxd6OaBEE1KSwk412xLEBismTuCo0o/L+GqV+peH2/dAp+RIh5pFUiznLOciaLhqBlDHOa5MY01ejJ3W8aTUJv+gZkHqkInM2PidBgUvalBsst7LFqVsZxIbBTEiW7BhUWmYzmaT5vdcEuc6n1nzmpXXVgFNFEVkLt01g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zEyGwsNIYA7zSFFQiPBwHWfCcgDRbAbjsD5ezQG/Wd8=;
- b=LlbBKh62d4wkkQUTds7OIeTMrR40PlLGfN+wc53FQ0vdmjAOww6TMnPv/fsLddVqNg8jLUW9GXsfVhOH8StHkiPvT5JOoPdisbzGSAYXWzdvGXeo/0OGSfmleA5aoBvQnhocHMMgPyZfeDO7W7fY1RwbnCnbW3LYj72IVpYNtYE=
-Received: from CY4PR12MB1160.namprd12.prod.outlook.com (2603:10b6:903:38::12)
- by CY4PR1201MB0006.namprd12.prod.outlook.com (2603:10b6:903:d3::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4566.22; Mon, 4 Oct
- 2021 19:31:41 +0000
-Received: from CY4PR12MB1160.namprd12.prod.outlook.com
- ([fe80::2d3a:44fe:fd31:11e2]) by CY4PR12MB1160.namprd12.prod.outlook.com
- ([fe80::2d3a:44fe:fd31:11e2%7]) with mapi id 15.20.4566.022; Mon, 4 Oct 2021
- 19:31:41 +0000
-X-SNPS-Relay: synopsys.com
-From:   Shahab Vahedi <Shahab.Vahedi@synopsys.com>
-To:     David Hildenbrand <david@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Jianyong Wu <Jianyong.Wu@arm.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        id S232954AbhJEIbP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 5 Oct 2021 04:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232511AbhJEIbL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 5 Oct 2021 04:31:11 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23924C061745;
+        Tue,  5 Oct 2021 01:29:21 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id s11so19085606pgr.11;
+        Tue, 05 Oct 2021 01:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UWnkJg0QEkj6xABw2NUUpLpPCfmxz/9Lqn9/mlj5AV0=;
+        b=Y9M96YwEE9tKIi7rMyxBDdwU0uQMiIjT36ru1grpiF3tDRmp6yCCcc3c3rF3LpebVL
+         o5ZwMrWhXurwmpMuiG7WlpUAb5bj8eUCtPE/9+9YQibK1itBZLG+FCSkEkZa2Pux7pGn
+         NIZI8vUb2Gu9RmTv2C4y4Q29CeYIwj9HGZj6LAH10WjycfeeIVUFporMT72P2+tJsD0D
+         9Pi6B8hJYe1htHe5jaYnjrWDJ701Ai2r0PPOAXyR3GL73O0UG5yvAhhjEplnOeSjl6qF
+         Oj1x3s+P4JsjfxCHZO4WlASk9F51B1n0cXqYxzBjHrcCyDIXULM5UqXD0Bw4DFGhJmBX
+         7vjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UWnkJg0QEkj6xABw2NUUpLpPCfmxz/9Lqn9/mlj5AV0=;
+        b=YgdHGzi9c03CO0xqFdaGpq7F7jnuimD9AniXkX5NzULAh14+nzDlAVlOdbKwPdPNtZ
+         q5mn4Hw1ytOpRt2982u/97N5e13IaupJu8FDWhumO+7BOOgfOzyDfVAoK6BeVge53EVN
+         /Zk3+zPyE8qaMnIzqzE8ERFJlriOyJcC7MajhAPYP7fupMWEkLDEEMYOTV7IAejakrQI
+         OHYLt0U/ALcnfjWDyfDxlxk9oKM+B4e08h5TuEgHmrTyOOXDG+yBRTEel2eNGeaNMNmk
+         zdIP3oomGdJF/UaHx3ldAWTfSrODB9rTHm8hS8TY7jJ3UfwZDkNWChYBnVZLyts4ZkeS
+         FvVg==
+X-Gm-Message-State: AOAM530XtImyJZJvdmit1XRC5d6ezVEnl0Xe1zw7trU8LR6Sy1rI2f23
+        UYfG2syadtJonA44fCnv51UPRPS/oea3KQ==
+X-Google-Smtp-Source: ABdhPJwX0ynDZ2dLM82GAmlvjr38rFZTEJj87HnkWmbi/+DDPbllxmC8gaN33kGYb/5aCpioLEo7Qw==
+X-Received: by 2002:aa7:942e:0:b0:44b:e096:67bf with SMTP id y14-20020aa7942e000000b0044be09667bfmr29259825pfo.60.1633422560432;
+        Tue, 05 Oct 2021 01:29:20 -0700 (PDT)
+Received: from localhost.localdomain ([2001:470:e92d:10:78ba:4bcc:a59a:2284])
+        by smtp.gmail.com with ESMTPSA id a15sm4941257pfg.53.2021.10.05.01.29.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Oct 2021 01:29:19 -0700 (PDT)
+From:   Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Subject: Re: [PATCH v2 3/5] memblock: allow to specify flags with
- memblock_add_node()
-Thread-Topic: [PATCH v2 3/5] memblock: allow to specify flags with
- memblock_add_node()
-Thread-Index: AQHXuQNelMblMBraTEaZ+APAlAv8YKvDOx6A
-Date:   Mon, 4 Oct 2021 19:31:41 +0000
-Message-ID: <26257713-7e2e-f3bd-8d8e-73d664193f68@synopsys.com>
-References: <20211004093605.5830-1-david@redhat.com>
- <20211004093605.5830-4-david@redhat.com>
-In-Reply-To: <20211004093605.5830-4-david@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=synopsys.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 07592e0d-21b9-4a17-4791-08d9876d97cc
-x-ms-traffictypediagnostic: CY4PR1201MB0006:
-x-microsoft-antispam-prvs: <CY4PR1201MB0006A80A0596233B6076E9CFA6AE9@CY4PR1201MB0006.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3513;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XKwjlCj4PYqa2u3jmoHEFu4+ysSenRlapulB4ah6RNRhBe91NYZJ9iPi1uQyeZI+pf67s6vnOCmJzmkHHi0ndVpyzo7Jrz72C7wZpNzuh7s9/KFwU+MUf63rQwD946zAhE9UIMTPMpycZfVPGA8wmcN1WuKy7UoQjxZzg8KRxgT8EIDk8bmQSaxZzpGMIK+ST2FLs3yWZU1vl4hn7kR+GV0ZtDGVYr3CiiyPk6o5QgMHKDUTlSSRQy3ukOyHRkLICHmNKGl0WP0n/J/8Uj4Lsi/hYlBTTLA2ZPgT7ENbHFed6GhLaB+YVTY9E7cl9cXb+GQfaQJ5QteKU4ynO40Huvn8IK6oVbprcfQ0GY/5jnNDYoJ0+wgNqoZOQGIMsTBUIZ9mfWqs3Y9GkCdeaHXQkPh4mUNfXBuRa8pqDDSWYpGsvC7RmVenH2c0y0a1yahFQKF1d9cMlrNqmCTvQznBFCdjGCvMem9QSPgDrmikuES89k+h92sV2OaElf3uG6jMhe+KONDRzQ2V4p+sfaJ26TwJCbBRTCK22Qtse3aiTAWxyE1DflP0teHrMhci3A7W/qnz6dxCa+yhpRbIrSLWMAEwKzyY5sVLFEJkamhOcGETyhaRWPsfs/t9r/J2MSJcNSgMYFL07xMXEY1aOQK6ZBxHpxcdT5WZNHxKs8O1u9RNLeJ+1VmX7VWZg9CgjnNX16qgsoh13eBk3knc2Jl2Ajhxq6RLM8Knpz4Q6Q0GNxzqMAPSzTMEK7T7mq8DByZX
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1160.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(38070700005)(2616005)(316002)(86362001)(38100700002)(8936002)(110136005)(6506007)(8676002)(4326008)(122000001)(53546011)(71200400001)(6486002)(31696002)(36756003)(6512007)(83380400001)(2906002)(54906003)(31686004)(186003)(508600001)(66446008)(64756008)(66556008)(66476007)(66946007)(76116006)(7416002)(5660300002)(91956017)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WmozWlpoOWNISWhRN3JqUzZCUFRXSTZXRXB1WHFuWk5HdDU2WGxneElUOGhI?=
- =?utf-8?B?SlplaFlwSDc4dU91UUJkVndLY01FWGZrNGdOZTVpWTVzaUVaMVduWGYyNVpz?=
- =?utf-8?B?RHhGdm9IU3EzbVhTSE1aU0FWUTF3MWNCRWptWlRGVHJZM00yYkt6YWNVdm55?=
- =?utf-8?B?TksxcmhNWUZUMW9EUkd0Rk5JdkRwbGZ5eldyZlQ5TUZLU25WM1p2Yk5hSnJF?=
- =?utf-8?B?ZHZFcnlrQ0hGbmRCWm9kMDBYcmdyT0FVZEZlbTc2RFRqbEtvYk5SVkVIOTlt?=
- =?utf-8?B?WW5Jei96QkpsT1NUU2pjelJzU0JZUFU5SE84eDFNeTdROXNFTDF1Z05YTWcw?=
- =?utf-8?B?NTZyYmg4Z0JKd2draEhQZ3Q1RFJCdER5RFdEMnVHR1ZyQ2dUZExwSGgrNVh1?=
- =?utf-8?B?dWFMRUw3bDBUWncrYW1RczYyL3Jsd0pERlptVEtOeDlQUHpMMFlxdmZNbGls?=
- =?utf-8?B?SVJ2VVVXczJzdmZ2K0s4WjdYY3RnaUt2M0hLOEkrS3YyQTJkMGZEaDJ0RmJl?=
- =?utf-8?B?ZXhoYmQxR0VTNVlLUENHcTFSK2ZEZlQxb0luSGNlaENrVWZKaXBvd1N3aE5q?=
- =?utf-8?B?ZDFyaStYS2JIMU82Tkx6YUV1cUlWMm12eGNDY2cvZUs4eUlBai9QeTBBMm1u?=
- =?utf-8?B?VTJRa1V2Y1lmRkxRSGt1VWgwc2tsa25qMjNSVVIzZWRGL2FJVFh1VUF4OU5y?=
- =?utf-8?B?aTVFMWlOQkZvQnlHZyt6TXQ1aFVqS29NK1p3N2JmT05ma3lyd3BBRGpTVi9n?=
- =?utf-8?B?Ni9lTkNGNDVBU2NnRTdUWXVRbms4MFRkR2xocitsV0J6Tk40ZTBuVkQ3Mmdm?=
- =?utf-8?B?TzEwV1FhUS9PWlNoT2RQbGltV3c4WXBFdTF1VmowaFZvUEkrMnd0eTVEL3VV?=
- =?utf-8?B?NllCNXh2K1cxVEhKTlB2YUd2ZDNJZVdPYmNaZ21vbkJTclprQm5Zc1BTQzBy?=
- =?utf-8?B?ZWRJUHFxL1ZKaHNqN2IyK1ZaN1BDOFE2SkFwL2xFWUpaRXBzcDJHWXBUeWlK?=
- =?utf-8?B?S3lOVEwwWTlwUkZUa2wvb2RZSFE2TUVWSDIwNlBnWE9GYnJEazJHYUZZY1o3?=
- =?utf-8?B?bW1tQW5sVEF2bjgwTWx6czhTMUd4L3E3M00zZVdLQmxLcmxQbHRHZ1IxRVcz?=
- =?utf-8?B?eDVmbFovd255OWFySGg1V1J1ZHREUXNYWUJhSW0zT3VlMXU4azcwN0wxOFpU?=
- =?utf-8?B?TjJST1pHRW45SHFiMWxiQUJudUJSeTlIenRIYW1PakVmRnlVUUJIbmcvYzdL?=
- =?utf-8?B?WHcyNFNEckJreGJYMUVSb3RtRnVkZUltc2tMQWpxUWhURCt0anJVNGlmL1lP?=
- =?utf-8?B?ajRHQUh3bkpnQlRDRXVuVXlwOWE2dFl4OTJhc1ZqNjUwTnRsMEpiR1BaUnZo?=
- =?utf-8?B?a09STWE2L1FGTmxvYkc5NkR2U2xWZTRwNCs5U20zNEJNQkpOZ1Y0QWJIemp0?=
- =?utf-8?B?VExWMU5nTm9nNm5SbHNqTEYvWUhrMkd2V1drRDV5VTR2WVF6WnhVYWRBRkNs?=
- =?utf-8?B?R3Nna0lMRC8yNDlhL3hQZ3FuTzJzNnBiaDVUdEJRZU9pNTVVMk0wR3hqbThK?=
- =?utf-8?B?dkhYSjhIV0ZxZG1uWnhwMnpoL2RMSjE2NlQwc1Awd01uMjRqWHVZeGxxSk9k?=
- =?utf-8?B?OGRFS2ZuVTFtV0xDZ1VrbnArYlBoTnZ6aHZSVGZtME1HZldUdHd4U1dXK3B3?=
- =?utf-8?B?K2JMVzZLU1h1MDdrY0lWUm1rL3pKd2N4djRuZU95RGlqcUdvQy91MmVOREIx?=
- =?utf-8?Q?L1lM75pL4OoRSfrD+sgVdmpboQ94qbMsk5IpnDH?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E90DB24CCA06ED4AAE9B59099C8A674B@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Paul Burton <paulburton@kernel.org>
+Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-mips@vger.kernel.org,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Hassan Naveed <hnaveed@wavecomp.com>,
+        David Daney <ddaney@caviumnetworks.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Subject: [RFC PATCH bpf-next v2 00/16] MIPS: eBPF: refactor code, add MIPS32 JIT
+Date:   Tue,  5 Oct 2021 01:26:44 -0700
+Message-Id: <cover.1633392335.git.Tony.Ambardar@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1625970383.git.Tony.Ambardar@gmail.com>
+References: <cover.1625970383.git.Tony.Ambardar@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1160.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07592e0d-21b9-4a17-4791-08d9876d97cc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Oct 2021 19:31:41.6088
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ki4i9Sx92La4EjwgewKE+AMyPIXeJ74GBoaPK1rD6p4iayFa8mlSkMa8b6kFf7t7Zkl+K/3QIdS+1x3KzuRe2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0006
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-T24gMTAvNC8yMSAxMTozNiBBTSwgRGF2aWQgSGlsZGVuYnJhbmQgd3JvdGU6DQo+IFdlIHdhbnQg
-dG8gc3BlY2lmeSBmbGFncyB3aGVuIGhvdHBsdWdnaW5nIG1lbW9yeS4gTGV0J3MgcHJlcGFyZSB0
-byBwYXNzDQo+IGZsYWdzIHRvIG1lbWJsb2NrX2FkZF9ub2RlKCkgYnkgYWRqdXN0aW5nIGFsbCBl
-eGlzdGluZyB1c2Vycy4NCj4gDQo+IE5vdGUgdGhhdCB3aGVuIGhvdHBsdWdnaW5nIG1lbW9yeSB0
-aGUgc3lzdGVtIGlzIGFscmVhZHkgdXAgYW5kIHJ1bm5pbmcNCj4gYW5kIHdlIG1pZ2h0IGhhdmUg
-Y29uY3VycmVudCBtZW1ibG9jayB1c2VyczogZm9yIGV4YW1wbGUsIHdoaWxlIHdlJ3JlDQo+IGhv
-dHBsdWdnaW5nIG1lbW9yeSwga2V4ZWNfZmlsZSBjb2RlIG1pZ2h0IHNlYXJjaCBmb3Igc3VpdGFi
-bGUgbWVtb3J5DQo+IHJlZ2lvbnMgdG8gcGxhY2Uga2V4ZWMgaW1hZ2VzLiBJdCdzIGltcG9ydGFu
-dCB0byBhZGQgdGhlIG1lbW9yeSBkaXJlY3RseQ0KPiB0byBtZW1ibG9jayB2aWEgYSBzaW5nbGUg
-Y2FsbCB3aXRoIHRoZSByaWdodCBmbGFncywgaW5zdGVhZCBvZiBhZGRpbmcgdGhlDQo+IG1lbW9y
-eSBmaXJzdCBhbmQgYXBwbHkgZmxhZ3MgbGF0ZXI6IG90aGVyd2lzZSwgY29uY3VycmVudCBtZW1i
-bG9jayB1c2Vycw0KPiBtaWdodCB0ZW1wb3JhcmlseSBzdHVtYmxlIG92ZXIgbWVtYmxvY2tzIHdp
-dGggd3JvbmcgZmxhZ3MsIHdoaWNoIHdpbGwgYmUNCj4gaW1wb3J0YW50IGluIGEgZm9sbG93LXVw
-IHBhdGNoIHRoYXQgaW50cm9kdWNlcyBhIG5ldyBmbGFnIHRvIHByb3Blcmx5DQo+IGhhbmRsZSBh
-ZGRfbWVtb3J5X2RyaXZlcl9tYW5hZ2VkKCkuDQo+IA0KPiBBY2tlZC1ieTogR2VlcnQgVXl0dGVy
-aG9ldmVuIDxnZWVydEBsaW51eC1tNjhrLm9yZz4NCj4gQWNrZWQtYnk6IEhlaWtvIENhcnN0ZW5z
-IDxoY2FAbGludXguaWJtLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogRGF2aWQgSGlsZGVuYnJhbmQg
-PGRhdmlkQHJlZGhhdC5jb20+DQo+IC0tLQ0KPiAgYXJjaC9hcmMvbW0vaW5pdC5jICAgICAgICAg
-ICAgICAgfCA0ICsrLS0NCj4gIGFyY2gvaWE2NC9tbS9jb250aWcuYyAgICAgICAgICAgIHwgMiAr
-LQ0KPiAgYXJjaC9pYTY0L21tL2luaXQuYyAgICAgICAgICAgICAgfCAyICstDQo+ICBhcmNoL202
-OGsvbW0vbWNmbW11LmMgICAgICAgICAgICB8IDMgKystDQo+ICBhcmNoL202OGsvbW0vbW90b3Jv
-bGEuYyAgICAgICAgICB8IDYgKysrKy0tDQo+ICBhcmNoL21pcHMvbG9vbmdzb242NC9pbml0LmMg
-ICAgICB8IDQgKysrLQ0KPiAgYXJjaC9taXBzL3NnaS1pcDI3L2lwMjctbWVtb3J5LmMgfCAzICsr
-LQ0KPiAgYXJjaC9zMzkwL2tlcm5lbC9zZXR1cC5jICAgICAgICAgfCAzICsrLQ0KPiAgaW5jbHVk
-ZS9saW51eC9tZW1ibG9jay5oICAgICAgICAgfCAzICsrLQ0KPiAgaW5jbHVkZS9saW51eC9tbS5o
-ICAgICAgICAgICAgICAgfCAyICstDQo+ICBtbS9tZW1ibG9jay5jICAgICAgICAgICAgICAgICAg
-ICB8IDkgKysrKystLS0tDQo+ICBtbS9tZW1vcnlfaG90cGx1Zy5jICAgICAgICAgICAgICB8IDIg
-Ky0NCj4gIDEyIGZpbGVzIGNoYW5nZWQsIDI2IGluc2VydGlvbnMoKyksIDE3IGRlbGV0aW9ucygt
-KQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvYXJjL21tL2luaXQuYyBiL2FyY2gvYXJjL21tL2lu
-aXQuYw0KPiBpbmRleCA2OTllY2YxMTk2NDEuLjExMGViNjllOWJlZSAxMDA2NDQNCj4gLS0tIGEv
-YXJjaC9hcmMvbW0vaW5pdC5jDQo+ICsrKyBiL2FyY2gvYXJjL21tL2luaXQuYw0KPiBAQCAtNTks
-MTMgKzU5LDEzIEBAIHZvaWQgX19pbml0IGVhcmx5X2luaXRfZHRfYWRkX21lbW9yeV9hcmNoKHU2
-NCBiYXNlLCB1NjQgc2l6ZSkNCj4gIA0KPiAgCQlsb3dfbWVtX3N6ID0gc2l6ZTsNCj4gIAkJaW5f
-dXNlID0gMTsNCj4gLQkJbWVtYmxvY2tfYWRkX25vZGUoYmFzZSwgc2l6ZSwgMCk7DQo+ICsJCW1l
-bWJsb2NrX2FkZF9ub2RlKGJhc2UsIHNpemUsIDAsIE1FTUJMT0NLX05PTkUpOw0KPiAgCX0gZWxz
-ZSB7DQo+ICAjaWZkZWYgQ09ORklHX0hJR0hNRU0NCj4gIAkJaGlnaF9tZW1fc3RhcnQgPSBiYXNl
-Ow0KPiAgCQloaWdoX21lbV9zeiA9IHNpemU7DQo+ICAJCWluX3VzZSA9IDE7DQo+IC0JCW1lbWJs
-b2NrX2FkZF9ub2RlKGJhc2UsIHNpemUsIDEpOw0KPiArCQltZW1ibG9ja19hZGRfbm9kZShiYXNl
-LCBzaXplLCAxLCBNRU1CTE9DS19OT05FKTsNCj4gIAkJbWVtYmxvY2tfcmVzZXJ2ZShiYXNlLCBz
-aXplKTsNCj4gICNlbmRpZg0KDQphcmNoL2FyYyBwYXJ0OiBBY2tlZC1ieTogU2hhaGFiIFZhaGVk
-aSA8c2hhaGFiQHN5bm9wc3lzLmNvbT4NCg0KLS0gDQpTaGFoYWINCg==
+This patch series adds an eBPF JIT for MIPS32. The approach taken fixes and
+updates existing code to support MIPS64/MIPS32 systems, then refactors
+source into a common core and dependent MIPS64 JIT, and finally adds a
+MIPS32 eBPF JIT implementation using the common framework. This approach of
+developing MIPS64 and MIPS32 JITs in tandem has desirable benefits for
+consistency and long-term maintainability, and the iterative refactoring
+has helped identify several problems.
+
+
+Overview
+========
+
+The initial code updates and refactoring exposed a number of problems in
+the existing MIPS64 JIT, which are fixed in patches #1 to #9. Patch #10
+updates common code to support MIPS64/MIPS32 operation. Patch #12 separates
+the common core from the MIPS64 JIT code. Patches #13 and #14 add MIPS64
+support for BPF_ATOMIC and BPF_JMP32 insns. Patch #15 adds a needed MIPS32
+uasm opcode, while patch #16 adds the MIPS32 eBPF JIT.
+
+Updates to the common core notably include support for bpf2bpf calls and
+making tailcalls from BPF subprograms (e.g. patch #11). Some lower priority
+features such as MIPS R1 ISA support, direct kernel calls (e.g. for TCP
+congestion control experiments) and PROBE_MEM support have been omitted.
+
+On MIPS32, 64-bit BPF registers are mapped to 32-bit register pairs, and
+all 64-bit operations are built on 32-bit subregister ops. A few
+differences from the MIPS64 JIT include:
+
+  * BPF TAILCALL: counter stored on stack due to register pressure. 
+  * BPF_JMP | JSET | BPF_K: drop bbit insns only usable on MIPS64 Octeon
+
+Since MIPS32 does not include 64-bit div/mod or atomic opcodes, these BPF
+insns are implemented by directly calling the built-in kernel functions:
+(with thanks to Luke Nelson for posting similar code online)
+
+  * BPF_ATOMIC | BPF_DW | BPF_ADD (+BPF_FETCH)
+  * BPF_ATOMIC | BPF_DW | BPF_AND (+BPF_FETCH)
+  * BPF_ATOMIC | BPF_DW | BPF_XOR (+BPF_FETCH)
+  * BPF_ATOMIC | BPF_DW | BPF_OR  (+BPF_FETCH)
+  * BPF_ATOMIC | BPF_DW | BPF_XCHG
+  * BPF_ATOMIC | BPF_DW | BPF_CMPXCHG
+  * BPF_ALU64  | BPF_DIV | BPF_X
+  * BPF_ALU64  | BPF_DIV | BPF_K
+  * BPF_ALU64  | BPF_MOD | BPF_X
+  * BPF_ALU64  | BPF_MOD | BPF_K
+
+
+Testing
+=======
+
+Testing used LTS kernel 5.10.x and stable 5.13.x running on QEMU/OpenWRT.
+The test suite included the 'test_bpf' module, and 'test_verifier' and
+'test_progs' from kselftests.
+
+Using 'test_progs' from kselftests proved to be difficult in general
+since cross-compilation depends on libbpf/bpftool, which does not support
+cross-endian builds. A very hacked build was used, primarily for testing
+bpf2bpf calls and tailcalls.
+
+The matrix of test configurations executed for this series covered the
+expected register sizes, MIPS ISA releases, and JIT settings:
+
+  WORDSIZE={64-bit,32-bit} x ISA={R2,R6} x JIT={off,on,hardened}
+
+On MIPS32BE and MIPS32LE there was general parity between the results of
+interpreter vs. JIT-backed tests with respect to the numbers of PASSED,
+SKIPPED, and FAILED tests. The same was also true of MIPS64 retesting.
+
+For example, the results below on MIPS32 are typical. Note that skipped
+test 885 is a "scale" test which results in OOM on the QEMU malta MIPS32
+test systems used.
+
+  root@OpenWrt:~# sysctl net.core.bpf_jit_enable=1
+  root@OpenWrt:~# modprobe test_bpf
+  ...
+  test_bpf: Summary: 378 PASSED, 0 FAILED, [366/366 JIT'ed]
+  root@OpenWrt:~# ./test_verifier 0 884
+  ...
+  Summary: 1231 PASSED, 0 SKIPPED, 20 FAILED
+  root@OpenWrt:~# ./test_verifier 886 1184
+  ...
+  Summary: 459 PASSED, 1 SKIPPED, 2 FAILED
+  root@OpenWrt:~# ./test_progs -n 105,106
+  ...
+  105 subprogs:OK
+  106/1 tailcall_1:OK
+  106/2 tailcall_2:OK
+  106/3 tailcall_3:OK
+  106/4 tailcall_4:OK
+  106/5 tailcall_5:OK
+  106/6 tailcall_bpf2bpf_1:OK
+  106/7 tailcall_bpf2bpf_2:OK
+  106/8 tailcall_bpf2bpf_3:OK
+  106/9 tailcall_bpf2bpf_4:OK
+  106 tailcalls:OK
+  Summary: 2/9 PASSED, 0 SKIPPED, 0 FAILED
+
+
+All feedback and suggestions are much appreciated!
+
+---
+Change History:
+
+rfc v2:
+* Implement all BPF_ATOMIC ops. For MIPS32 BPF_DW insns, call built-in
+  64-bit kernel functions.
+* Add MIPS64 support for BPF_JMP32 conditionals.
+* Support making tailcalls from bpf2bpf functions.
+* Support bpf2bpf calls with an extra JIT pass to patch call addresses.
+* Add JIT support for bpf_line_info via bpf_prog_fill_jited_linfo().
+* Further code optimizations, cleanup and simplification.
+* Update kernel docs.
+
+rfc v1:
+* Initial code proposal, focused on consistency and maintainability for
+  both MIPS32/MIPS64.
+* Several MIPS64 bugfixes and factoring out common shareable code.
+* Addition of MIPS32 JIT, roughly matching MIPS64 capabilities.
+
+---
+Tony Ambardar (16):
+  MIPS: eBPF: support BPF_TAIL_CALL in JIT static analysis
+  MIPS: eBPF: mask 32-bit index for tail calls
+  MIPS: eBPF: fix BPF_ALU|ARSH handling in JIT static analysis
+  MIPS: eBPF: support BPF_JMP32 in JIT static analysis
+  MIPS: eBPF: fix system hang with verifier dead-code patching
+  MIPS: eBPF: fix JIT static analysis hang with bounded loops
+  MIPS: eBPF: fix MOD64 insn on R6 ISA
+  MIPS: eBPF: support long jump for BPF_JMP|EXIT
+  MIPS: eBPF: drop src_reg restriction in BPF_LD|BPF_DW|BPF_IMM
+  MIPS: eBPF: add core support for 32/64-bit systems
+  bpf: allow tailcalls in subprograms for MIPS64/MIPS32
+  MIPS: eBPF: refactor common 32/64-bit functions and headers
+  MIPS: eBPF64: support BPF_JMP32 conditionals
+  MIPS: eBPF64: implement all BPF_ATOMIC ops
+  MIPS: uasm: Enable muhu opcode for MIPS R6
+  MIPS: eBPF: add MIPS32 JIT
+
+ Documentation/admin-guide/sysctl/net.rst |    6 +-
+ Documentation/networking/filter.rst      |    6 +-
+ arch/mips/Kconfig                        |    4 +-
+ arch/mips/include/asm/uasm.h             |    1 +
+ arch/mips/mm/uasm-mips.c                 |    4 +-
+ arch/mips/mm/uasm.c                      |    3 +-
+ arch/mips/net/Makefile                   |    8 +-
+ arch/mips/net/ebpf_jit.c                 | 1938 ----------------------
+ arch/mips/net/ebpf_jit.h                 |  297 ++++
+ arch/mips/net/ebpf_jit_comp32.c          | 1398 ++++++++++++++++
+ arch/mips/net/ebpf_jit_comp64.c          | 1085 ++++++++++++
+ arch/mips/net/ebpf_jit_core.c            | 1193 +++++++++++++
+ arch/x86/net/bpf_jit_comp.c              |    6 +
+ include/linux/filter.h                   |    1 +
+ kernel/bpf/core.c                        |    6 +
+ kernel/bpf/verifier.c                    |    3 +-
+ 16 files changed, 4010 insertions(+), 1949 deletions(-)
+ delete mode 100644 arch/mips/net/ebpf_jit.c
+ create mode 100644 arch/mips/net/ebpf_jit.h
+ create mode 100644 arch/mips/net/ebpf_jit_comp32.c
+ create mode 100644 arch/mips/net/ebpf_jit_comp64.c
+ create mode 100644 arch/mips/net/ebpf_jit_core.c
+
+-- 
+2.25.1
+
