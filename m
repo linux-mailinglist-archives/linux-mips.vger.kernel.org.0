@@ -2,300 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C154A42351C
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Oct 2021 02:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECAC4239C4
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Oct 2021 10:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbhJFAiF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 5 Oct 2021 20:38:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36928 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237120AbhJFAiE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 5 Oct 2021 20:38:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 81C5A6128A;
-        Wed,  6 Oct 2021 00:36:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633480573;
-        bh=PwxAnmAxNnW0LkORB3c3YnoJI9QyHleuU4SqQmtBdp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bP1h1gk9sPFJUm3xaK7uv59ir96gb6n13GYWINDE3fVKwKprjlXytBJ9jognAQWgW
-         9e+Wv1tMBX/zZyPhX95ld8QzYAgqqkCKYrRDu+0G6NMGRn6jrzaufxOXE9zVlLRrnF
-         9VTBo53jIveX7p+RlmPMJG14+lmQEx7G65GBi7dyH/bZ88Bj9DgpR8mdwrRu6A2U0f
-         Je6MYYxh7x7SFKj3++qSshoF+0m13ywbg7CiX6WX9M3E3pCVJshV8tzhixl6g05sDD
-         YOiTMqVbUKqxwDOdPpK6aoh7FhJiYFz5w2WI1e/lyxBiedKhsKhGJLfT8eqTJABsmy
-         g1w9joe94EgwA==
-Date:   Tue, 5 Oct 2021 17:36:09 -0700
-From:   Mike Rapoport <rppt@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Jianyong Wu <Jianyong.Wu@arm.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        id S237729AbhJFIcZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 6 Oct 2021 04:32:25 -0400
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:7242 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237670AbhJFIcY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 6 Oct 2021 04:32:24 -0400
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1966TObt019907;
+        Wed, 6 Oct 2021 03:29:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=VYqS9ly4HxjYNM8Rb95ALzINC4C51eNq0bBG/A9hunw=;
+ b=o0LXPBg9O/lVVWpIotmtJzmIjT495DOgkYZo/xT0o0i+AqnVpPm5nRqb8f3PGAj/azpd
+ h0JZ2ctVu9fICGPR9SG2SJjA6HtyX4QQ5POth+QmzSNU/aFWEa/yo2lqqnQLbr2jrMD+
+ 4QQr6ELWHy6H0pnSSwQUSyHy9zkLeI9Rg6QinhB+SAW1Xtwp6Fhtw/y+lw2zJCwtkIcx
+ 08ZcykFEw6P4IvGY7ZAsHMXqN43Q+ZitP8gEI4RihERP7P4lgxtl2jhqNZdRnWoCdBqe
+ yjj/gzmuX3FFtBmBtG0nVFurJXrDAPkHnj/TDTPyJxd9kyQuYnZR38ZzUz/v04lA1dgm YQ== 
+Received: from ediex02.ad.cirrus.com ([87.246.76.36])
+        by mx0b-001ae601.pphosted.com with ESMTP id 3bgrreh1qv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 06 Oct 2021 03:29:27 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Wed, 6 Oct
+ 2021 09:29:25 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2242.12 via Frontend
+ Transport; Wed, 6 Oct 2021 09:29:25 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 47AB6B13;
+        Wed,  6 Oct 2021 08:29:25 +0000 (UTC)
+Date:   Wed, 6 Oct 2021 08:29:25 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-snps-arc@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-mm@kvack.org,
-        kexec@lists.infradead.org
-Subject: Re: [PATCH v2 3/5] memblock: allow to specify flags with
- memblock_add_node()
-Message-ID: <YVzvefCmvLZSZTcR@kernel.org>
-References: <20211004093605.5830-1-david@redhat.com>
- <20211004093605.5830-4-david@redhat.com>
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-parisc@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 1/2] firmware: include drivers/firmware/Kconfig
+ unconditionally
+Message-ID: <20211006082925.GK9223@ediswmail.ad.cirrus.com>
+References: <20210928075216.4193128-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20211004093605.5830-4-david@redhat.com>
+In-Reply-To: <20210928075216.4193128-1-arnd@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: cBaf488JNMuKplb9_5hsQVXi838DWVHi
+X-Proofpoint-GUID: cBaf488JNMuKplb9_5hsQVXi838DWVHi
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 04, 2021 at 11:36:03AM +0200, David Hildenbrand wrote:
-> We want to specify flags when hotplugging memory. Let's prepare to pass
-> flags to memblock_add_node() by adjusting all existing users.
+On Tue, Sep 28, 2021 at 09:50:26AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Note that when hotplugging memory the system is already up and running
-> and we might have concurrent memblock users: for example, while we're
-> hotplugging memory, kexec_file code might search for suitable memory
-> regions to place kexec images. It's important to add the memory directly
-> to memblock via a single call with the right flags, instead of adding the
-> memory first and apply flags later: otherwise, concurrent memblock users
-> might temporarily stumble over memblocks with wrong flags, which will be
-> important in a follow-up patch that introduces a new flag to properly
-> handle add_memory_driver_managed().
+> Compile-testing drivers that require access to a firmware layer
+> fails when that firmware symbol is unavailable. This happened
+> twice this week:
 > 
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Acked-by: Heiko Carstens <hca@linux.ibm.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-
-Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
-
+>  - My proposed to change to rework the QCOM_SCM firmware symbol
+>    broke on ppc64 and others.
+> 
+>  - The cs_dsp firmware patch added device specific firmware loader
+>    into drivers/firmware, which broke on the same set of
+>    architectures.
+> 
+> We should probably do the same thing for other subsystems as well,
+> but fix this one first as this is a dependency for other patches
+> getting merged.
+> 
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
+> Cc: Simon Trimmer <simont@opensource.cirrus.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  arch/arc/mm/init.c               | 4 ++--
->  arch/ia64/mm/contig.c            | 2 +-
->  arch/ia64/mm/init.c              | 2 +-
->  arch/m68k/mm/mcfmmu.c            | 3 ++-
->  arch/m68k/mm/motorola.c          | 6 ++++--
->  arch/mips/loongson64/init.c      | 4 +++-
->  arch/mips/sgi-ip27/ip27-memory.c | 3 ++-
->  arch/s390/kernel/setup.c         | 3 ++-
->  include/linux/memblock.h         | 3 ++-
->  include/linux/mm.h               | 2 +-
->  mm/memblock.c                    | 9 +++++----
->  mm/memory_hotplug.c              | 2 +-
->  12 files changed, 26 insertions(+), 17 deletions(-)
-> 
-> diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
-> index 699ecf119641..110eb69e9bee 100644
-> --- a/arch/arc/mm/init.c
-> +++ b/arch/arc/mm/init.c
-> @@ -59,13 +59,13 @@ void __init early_init_dt_add_memory_arch(u64 base, u64 size)
->  
->  		low_mem_sz = size;
->  		in_use = 1;
-> -		memblock_add_node(base, size, 0);
-> +		memblock_add_node(base, size, 0, MEMBLOCK_NONE);
->  	} else {
->  #ifdef CONFIG_HIGHMEM
->  		high_mem_start = base;
->  		high_mem_sz = size;
->  		in_use = 1;
-> -		memblock_add_node(base, size, 1);
-> +		memblock_add_node(base, size, 1, MEMBLOCK_NONE);
->  		memblock_reserve(base, size);
->  #endif
->  	}
-> diff --git a/arch/ia64/mm/contig.c b/arch/ia64/mm/contig.c
-> index 42e025cfbd08..24901d809301 100644
-> --- a/arch/ia64/mm/contig.c
-> +++ b/arch/ia64/mm/contig.c
-> @@ -153,7 +153,7 @@ find_memory (void)
->  	efi_memmap_walk(find_max_min_low_pfn, NULL);
->  	max_pfn = max_low_pfn;
->  
-> -	memblock_add_node(0, PFN_PHYS(max_low_pfn), 0);
-> +	memblock_add_node(0, PFN_PHYS(max_low_pfn), 0, MEMBLOCK_NONE);
->  
->  	find_initrd();
->  
-> diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
-> index 5c6da8d83c1a..5d165607bf35 100644
-> --- a/arch/ia64/mm/init.c
-> +++ b/arch/ia64/mm/init.c
-> @@ -378,7 +378,7 @@ int __init register_active_ranges(u64 start, u64 len, int nid)
->  #endif
->  
->  	if (start < end)
-> -		memblock_add_node(__pa(start), end - start, nid);
-> +		memblock_add_node(__pa(start), end - start, nid, MEMBLOCK_NONE);
->  	return 0;
->  }
->  
-> diff --git a/arch/m68k/mm/mcfmmu.c b/arch/m68k/mm/mcfmmu.c
-> index eac9dde65193..6f1f25125294 100644
-> --- a/arch/m68k/mm/mcfmmu.c
-> +++ b/arch/m68k/mm/mcfmmu.c
-> @@ -174,7 +174,8 @@ void __init cf_bootmem_alloc(void)
->  	m68k_memory[0].addr = _rambase;
->  	m68k_memory[0].size = _ramend - _rambase;
->  
-> -	memblock_add_node(m68k_memory[0].addr, m68k_memory[0].size, 0);
-> +	memblock_add_node(m68k_memory[0].addr, m68k_memory[0].size, 0,
-> +			  MEMBLOCK_NONE);
->  
->  	/* compute total pages in system */
->  	num_pages = PFN_DOWN(_ramend - _rambase);
-> diff --git a/arch/m68k/mm/motorola.c b/arch/m68k/mm/motorola.c
-> index 9f3f77785aa7..2b05bb2bac00 100644
-> --- a/arch/m68k/mm/motorola.c
-> +++ b/arch/m68k/mm/motorola.c
-> @@ -410,7 +410,8 @@ void __init paging_init(void)
->  
->  	min_addr = m68k_memory[0].addr;
->  	max_addr = min_addr + m68k_memory[0].size;
-> -	memblock_add_node(m68k_memory[0].addr, m68k_memory[0].size, 0);
-> +	memblock_add_node(m68k_memory[0].addr, m68k_memory[0].size, 0,
-> +			  MEMBLOCK_NONE);
->  	for (i = 1; i < m68k_num_memory;) {
->  		if (m68k_memory[i].addr < min_addr) {
->  			printk("Ignoring memory chunk at 0x%lx:0x%lx before the first chunk\n",
-> @@ -421,7 +422,8 @@ void __init paging_init(void)
->  				(m68k_num_memory - i) * sizeof(struct m68k_mem_info));
->  			continue;
->  		}
-> -		memblock_add_node(m68k_memory[i].addr, m68k_memory[i].size, i);
-> +		memblock_add_node(m68k_memory[i].addr, m68k_memory[i].size, i,
-> +				  MEMBLOCK_NONE);
->  		addr = m68k_memory[i].addr + m68k_memory[i].size;
->  		if (addr > max_addr)
->  			max_addr = addr;
-> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-> index 76e0a9636a0e..4ac5ba80bbf6 100644
-> --- a/arch/mips/loongson64/init.c
-> +++ b/arch/mips/loongson64/init.c
-> @@ -77,7 +77,9 @@ void __init szmem(unsigned int node)
->  				(u32)node_id, mem_type, mem_start, mem_size);
->  			pr_info("       start_pfn:0x%llx, end_pfn:0x%llx, num_physpages:0x%lx\n",
->  				start_pfn, end_pfn, num_physpages);
-> -			memblock_add_node(PFN_PHYS(start_pfn), PFN_PHYS(node_psize), node);
-> +			memblock_add_node(PFN_PHYS(start_pfn),
-> +					  PFN_PHYS(node_psize), node,
-> +					  MEMBLOCK_NONE);
->  			break;
->  		case SYSTEM_RAM_RESERVED:
->  			pr_info("Node%d: mem_type:%d, mem_start:0x%llx, mem_size:0x%llx MB\n",
-> diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-> index 6173684b5aaa..adc2faeecf7c 100644
-> --- a/arch/mips/sgi-ip27/ip27-memory.c
-> +++ b/arch/mips/sgi-ip27/ip27-memory.c
-> @@ -341,7 +341,8 @@ static void __init szmem(void)
->  				continue;
->  			}
->  			memblock_add_node(PFN_PHYS(slot_getbasepfn(node, slot)),
-> -					  PFN_PHYS(slot_psize), node);
-> +					  PFN_PHYS(slot_psize), node,
-> +					  MEMBLOCK_NONE);
->  		}
->  	}
->  }
-> diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-> index 67e5fff96ee0..f3943f15af6e 100644
-> --- a/arch/s390/kernel/setup.c
-> +++ b/arch/s390/kernel/setup.c
-> @@ -593,7 +593,8 @@ static void __init setup_resources(void)
->  	 * part of the System RAM resource.
->  	 */
->  	if (crashk_res.end) {
-> -		memblock_add_node(crashk_res.start, resource_size(&crashk_res), 0);
-> +		memblock_add_node(crashk_res.start, resource_size(&crashk_res),
-> +				  0, MEMBLOCK_NONE);
->  		memblock_reserve(crashk_res.start, resource_size(&crashk_res));
->  		insert_resource(&iomem_resource, &crashk_res);
->  	}
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index 4ee8dd2d63a7..2bc726e43a1b 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -104,7 +104,8 @@ static inline void memblock_discard(void) {}
->  #endif
->  
->  void memblock_allow_resize(void);
-> -int memblock_add_node(phys_addr_t base, phys_addr_t size, int nid);
-> +int memblock_add_node(phys_addr_t base, phys_addr_t size, int nid,
-> +		      enum memblock_flags flags);
->  int memblock_add(phys_addr_t base, phys_addr_t size);
->  int memblock_remove(phys_addr_t base, phys_addr_t size);
->  int memblock_free(phys_addr_t base, phys_addr_t size);
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 73a52aba448f..0117cb35b212 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2447,7 +2447,7 @@ static inline unsigned long get_num_physpages(void)
->   * unsigned long max_zone_pfns[MAX_NR_ZONES] = {max_dma, max_normal_pfn,
->   * 							 max_highmem_pfn};
->   * for_each_valid_physical_page_range()
-> - * 	memblock_add_node(base, size, nid)
-> + *	memblock_add_node(base, size, nid, MEMBLOCK_NONE)
->   * free_area_init(max_zone_pfns);
->   */
->  void free_area_init(unsigned long *max_zone_pfn);
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 184dcd2e5d99..47a56b223141 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -655,6 +655,7 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->   * @base: base address of the new region
->   * @size: size of the new region
->   * @nid: nid of the new region
-> + * @flags: flags of the new region
->   *
->   * Add new memblock region [@base, @base + @size) to the "memory"
->   * type. See memblock_add_range() description for mode details
-> @@ -663,14 +664,14 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->   * 0 on success, -errno on failure.
->   */
->  int __init_memblock memblock_add_node(phys_addr_t base, phys_addr_t size,
-> -				       int nid)
-> +				      int nid, enum memblock_flags flags)
->  {
->  	phys_addr_t end = base + size - 1;
->  
-> -	memblock_dbg("%s: [%pa-%pa] nid=%d %pS\n", __func__,
-> -		     &base, &end, nid, (void *)_RET_IP_);
-> +	memblock_dbg("%s: [%pa-%pa] nid=%d flags=%x %pS\n", __func__,
-> +		     &base, &end, nid, flags, (void *)_RET_IP_);
->  
-> -	return memblock_add_range(&memblock.memory, base, size, nid, 0);
-> +	return memblock_add_range(&memblock.memory, base, size, nid, flags);
->  }
->  
->  /**
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 917b3528636d..5f873e7f5b29 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1385,7 +1385,7 @@ int __ref add_memory_resource(int nid, struct resource *res, mhp_t mhp_flags)
->  	mem_hotplug_begin();
->  
->  	if (IS_ENABLED(CONFIG_ARCH_KEEP_MEMBLOCK)) {
-> -		ret = memblock_add_node(start, size, nid);
-> +		ret = memblock_add_node(start, size, nid, MEMBLOCK_NONE);
->  		if (ret)
->  			goto error_mem_hotplug_end;
->  	}
-> -- 
-> 2.31.1
-> 
 
--- 
-Sincerely yours,
-Mike.
+Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+
+Thanks,
+Charles
