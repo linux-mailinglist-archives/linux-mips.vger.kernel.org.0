@@ -2,86 +2,194 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6A7423FD9
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Oct 2021 16:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF51942562F
+	for <lists+linux-mips@lfdr.de>; Thu,  7 Oct 2021 17:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbhJFOMA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 6 Oct 2021 10:12:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60648 "EHLO mail.kernel.org"
+        id S242376AbhJGPMS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 7 Oct 2021 11:12:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59652 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231600AbhJFOMA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 6 Oct 2021 10:12:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id C444B6105A;
-        Wed,  6 Oct 2021 14:10:07 +0000 (UTC)
+        id S242275AbhJGPMR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 7 Oct 2021 11:12:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B0B26113E;
+        Thu,  7 Oct 2021 15:10:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633529407;
-        bh=Uc8Q20VnwsduTfwKM/OouKblxdsH43dSctysbxxvHgQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=deRmKfHTsAW50a/XcgivbYDC3eKZK2zTBYTBWI7vj6bYQ1l5r+1D0WQZk9I2ZmzIu
-         68kAL0+DGSy8PNa7q7lwxw++YWLayz7Osqu7LBeNxH83M9R4XOzB1H8gBS207Ek3Lj
-         ANYqC1hRbF2UutzL/G5tyinv2FPEYfHfc7qBDzgbJKFRWdnmAyCk1KL+I+j4Yb6ArL
-         M5skWTtmEjhRGm5il2NzIt62eO//Tay42z+Jsw0cO/BOCgxLpRf7ciFzPaF7kOhq8W
-         HBu2G1ErXbbGxoC9a2juSuMFj66ff9N4aM8RcLNHwzjJlawOk4ARKfuDsK5shA3/7D
-         yLOf5yxiSOJww==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B24C760971;
-        Wed,  6 Oct 2021 14:10:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1633619423;
+        bh=6XparVng5W/AReJHiKchmXlIe9lsC3Z91YzkLUlPNCg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uGBU3w5ZPcovOtfzM/FIsHTD7h3JxuPJygqvsc/Akx8WIgRCpgs3UgXZBZTV82I1O
+         pW+TIPVurN88xf3WvDzFDkgp4KUNa7HpHH0yruRMhNm5135jx5bqq+/CKSzQGvE9Do
+         ViwsXF7lFqxOsI6bHhr9Jy2jv4XcchqTsLVaQi+z5d/b1rYbgoS7hR41kw3y30v3an
+         GfXh2Vp3SSFv+/Ic2Yauk4D9evUCiGVqN10/ZzGkA3ER8QQimEVtKd0+OTGa/g7KUM
+         0ggiEgI2DrGim19ev5P6YtxGkOvCy0ZLC7gw6ICyGtfCMR5AINWv1keeKoUptUyCZ3
+         OdUDZ2/BTlnCQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH v2 1/2] firmware: include drivers/firmware/Kconfig unconditionally
+Date:   Thu,  7 Oct 2021 17:10:09 +0200
+Message-Id: <20211007151010.333516-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/7] A new eBPF JIT implementation for MIPS
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163352940772.9599.5939069697064558862.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Oct 2021 14:10:07 +0000
-References: <20211005165408.2305108-1-johan.almbladh@anyfinetworks.com>
-In-Reply-To: <20211005165408.2305108-1-johan.almbladh@anyfinetworks.com>
-To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        paulburton@kernel.org, kafai@fb.com, songliubraving@fb.com,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        tsbogend@alpha.franken.de, chenhuacai@kernel.org,
-        jiaxun.yang@flygoat.com, yangtiezhu@loongson.cn,
-        tony.ambardar@gmail.com, bpf@vger.kernel.org,
-        linux-mips@vger.kernel.org, netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello:
+From: Arnd Bergmann <arnd@arndb.de>
 
-This series was applied to bpf/bpf-next.git (refs/heads/master):
+Compile-testing drivers that require access to a firmware layer
+fails when that firmware symbol is unavailable. This happened
+twice this week:
 
-On Tue,  5 Oct 2021 18:54:01 +0200 you wrote:
-> This is an implementation of an eBPF JIT for MIPS I-V and MIPS32/64 r1-r6.
-> The new JIT is written from scratch, but uses the same overall structure
-> as other eBPF JITs.
-> 
-> Before, the MIPS JIT situation looked like this.
-> 
->   - 32-bit: MIPS32, cBPF-only, tests fail
->   - 64-bit: MIPS64r2-r6, eBPF, tests fail, incomplete eBPF ISA support
-> 
-> [...]
+ - My proposed to change to rework the QCOM_SCM firmware symbol
+   broke on ppc64 and others.
 
-Here is the summary with links:
-  - [1/7] MIPS: uasm: Enable muhu opcode for MIPS R6
-    https://git.kernel.org/bpf/bpf-next/c/52738ad51026
-  - [2/7] mips: uasm: Add workaround for Loongson-2F nop CPU errata
-    https://git.kernel.org/bpf/bpf-next/c/be0f00d5a246
-  - [3/7] mips: bpf: Add eBPF JIT for 32-bit MIPS
-    https://git.kernel.org/bpf/bpf-next/c/88dfe3f95766
-  - [4/7] mips: bpf: Add new eBPF JIT for 64-bit MIPS
-    https://git.kernel.org/bpf/bpf-next/c/42fb8eacf86e
-  - [5/7] mips: bpf: Add JIT workarounds for CPU errata
-    https://git.kernel.org/bpf/bpf-next/c/a1db4f358142
-  - [6/7] mips: bpf: Enable eBPF JITs
-    https://git.kernel.org/bpf/bpf-next/c/6675d4a60007
-  - [7/7] mips: bpf: Remove old BPF JIT implementations
-    https://git.kernel.org/bpf/bpf-next/c/06b339fe5450
+ - The cs_dsp firmware patch added device specific firmware loader
+   into drivers/firmware, which broke on the same set of
+   architectures.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+We should probably do the same thing for other subsystems as well,
+but fix this one first as this is a dependency for other patches
+getting merged.
 
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Acked-by: Will Deacon <will@kernel.org>
+Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: Simon Trimmer <simont@opensource.cirrus.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+No changes in v2, but it's now queued in my asm-generic
+tree for v5.15
+
+ arch/arm/Kconfig    | 2 --
+ arch/arm64/Kconfig  | 2 --
+ arch/ia64/Kconfig   | 2 --
+ arch/mips/Kconfig   | 2 --
+ arch/parisc/Kconfig | 2 --
+ arch/riscv/Kconfig  | 2 --
+ arch/x86/Kconfig    | 2 --
+ drivers/Kconfig     | 2 ++
+ 8 files changed, 2 insertions(+), 14 deletions(-)
+
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index fc196421b2ce..59baf6c132a7 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -1989,8 +1989,6 @@ config ARCH_HIBERNATION_POSSIBLE
+ 
+ endmenu
+ 
+-source "drivers/firmware/Kconfig"
+-
+ if CRYPTO
+ source "arch/arm/crypto/Kconfig"
+ endif
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 077f2ec4eeb2..407b4addea36 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1931,8 +1931,6 @@ source "drivers/cpufreq/Kconfig"
+ 
+ endmenu
+ 
+-source "drivers/firmware/Kconfig"
+-
+ source "drivers/acpi/Kconfig"
+ 
+ source "arch/arm64/kvm/Kconfig"
+diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+index 045792cde481..1e33666fa679 100644
+--- a/arch/ia64/Kconfig
++++ b/arch/ia64/Kconfig
+@@ -388,8 +388,6 @@ config CRASH_DUMP
+ 	  help
+ 	    Generate crash dump after being started by kexec.
+ 
+-source "drivers/firmware/Kconfig"
+-
+ endmenu
+ 
+ menu "Power management and ACPI options"
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 771ca53af06d..6b8f591c5054 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -3316,8 +3316,6 @@ source "drivers/cpuidle/Kconfig"
+ 
+ endmenu
+ 
+-source "drivers/firmware/Kconfig"
+-
+ source "arch/mips/kvm/Kconfig"
+ 
+ source "arch/mips/vdso/Kconfig"
+diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+index 4742b6f169b7..27a8b49af11f 100644
+--- a/arch/parisc/Kconfig
++++ b/arch/parisc/Kconfig
+@@ -384,6 +384,4 @@ config KEXEC_FILE
+ 
+ endmenu
+ 
+-source "drivers/firmware/Kconfig"
+-
+ source "drivers/parisc/Kconfig"
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c3f3fd583e04..8bc71ab143e3 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -561,5 +561,3 @@ menu "Power management options"
+ source "kernel/power/Kconfig"
+ 
+ endmenu
+-
+-source "drivers/firmware/Kconfig"
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 4e001bbbb425..4dca39744ee9 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2828,8 +2828,6 @@ config HAVE_ATOMIC_IOMAP
+ 	def_bool y
+ 	depends on X86_32
+ 
+-source "drivers/firmware/Kconfig"
+-
+ source "arch/x86/kvm/Kconfig"
+ 
+ source "arch/x86/Kconfig.assembler"
+diff --git a/drivers/Kconfig b/drivers/Kconfig
+index 30d2db37cc87..0d399ddaa185 100644
+--- a/drivers/Kconfig
++++ b/drivers/Kconfig
+@@ -17,6 +17,8 @@ source "drivers/bus/Kconfig"
+ 
+ source "drivers/connector/Kconfig"
+ 
++source "drivers/firmware/Kconfig"
++
+ source "drivers/gnss/Kconfig"
+ 
+ source "drivers/mtd/Kconfig"
+-- 
+2.29.2
 
