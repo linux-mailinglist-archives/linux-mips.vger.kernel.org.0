@@ -2,57 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37308427620
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Oct 2021 04:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D674F427625
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Oct 2021 04:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244658AbhJICQl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Oct 2021 22:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S244513AbhJICQn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Oct 2021 22:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244399AbhJICQN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Oct 2021 22:16:13 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC509C06177C
-        for <linux-mips@vger.kernel.org>; Fri,  8 Oct 2021 19:13:36 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id x15-20020a056902102f00b005ba71cd7dbfso4953962ybt.8
-        for <linux-mips@vger.kernel.org>; Fri, 08 Oct 2021 19:13:36 -0700 (PDT)
+        with ESMTP id S244455AbhJICQS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Oct 2021 22:16:18 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FADDC0613E5
+        for <linux-mips@vger.kernel.org>; Fri,  8 Oct 2021 19:13:39 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 124-20020a251182000000b005a027223ed9so14953279ybr.13
+        for <linux-mips@vger.kernel.org>; Fri, 08 Oct 2021 19:13:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=SdOYPzkyfZrBWx1GJeur2Vwb7zEvl7JYNbVbQ0SB2Gg=;
-        b=aUvGN/4AFgJcKIBF9LBWgDwhCHQZYEJ03JrconxIXHeAq0mSobvx5eFsN2IhEk7hMF
-         07jWDFM9e+ezgnVy0PqTHsU8wjkF0Sq/uHjyc0w84aIFVqAcJRuuc8LQH3WxNpDQiA8J
-         1gOwXo6k1Mjhlm2dzNYz4rr2omGOTIv9FMsD0TA3lqfU/1iEz7W8Tub84Aqukc87X1xM
-         piXJImDfP3oyBzKVi6TuZiCoM21cARPSFti7XJOcRw2PuPbisGedjpLV+YL9vQi2purC
-         N3om2H5mKJxeus7ZcbgIF+EPMNOHqwS7dYW8kbDAw9PWlIpsbYSk0g7cYENwS5oOjCiw
-         mX3Q==
+        bh=U1tiLVYe+uI6GynZ+KQaLRA7FrCZBu6OMUfWvRALpKY=;
+        b=a0dUiDnuPYQQeQR8jjKdumWe754GISZ9QQg3r88Y9DPMivvvQMFzh5ozOn9lgZsXNq
+         EANJ0517a1qk3IJoQbDKT/HbLrXOUwIqcNyu7+dfgeXxAYoz4kpH6adSQnkUxJfAgZaH
+         UPUzp5K5Wp61nwf9+BQC7R2+G4acKBHUtHtY2hEJqpIlphtwlmsMneENvaDHUPfYIfWA
+         ce641KOEb7G5/eE8IiwGpPr2d3hjmLvvlL+U/IoLXhsAHo2ay+SC7X4AbXIrGRjqgSKf
+         IvYRZoNRXUDoSssc3WxQQYPxSY6c1N4ujAzz18+PUihtVJsRky6YFUvr+8O4bpS4z7of
+         nYOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=SdOYPzkyfZrBWx1GJeur2Vwb7zEvl7JYNbVbQ0SB2Gg=;
-        b=3IDcZdiKbk4vw5WH/QRVmfaUwAJ53zRQbpHhKPmpTwHyVtSaWyRWidrsGfTL+HTCnf
-         SgIcZNqvHA2nq4HF30DR8HvcNlCBIG+1HHr+ix4hrmaTNZJacZtQvj5YU9m1sT5XfHT+
-         0UhZ1xXgZZajzW0dgx1uNnk+9LdYHgtjdVbdMHeewF5GDC9Ym7sB6NFl/2WW6A72jT4Y
-         HihLBYbuaoubNznRtTa21zYRbyRgnB5NH0dtkCIMe6UZvVIYbaRa5EpqTWCooAPHpx5L
-         Rx1QTj1cbNwfW4WocvQlpv+lFaNCCw0R6obzYt2xv4vKfi7r+/XeeYJRs8KEAwdOBoiG
-         DM4Q==
-X-Gm-Message-State: AOAM533qvDsfQtH3GeDvY2MVXdavpp1PCroxNs7+nbrnvVWng4By0PrG
-        rHjVota7TDaQuJArOAzqRU8qmw6seO8=
-X-Google-Smtp-Source: ABdhPJxYoBKdyJNsrFu59iAPxlEnyIVO9cffUZpeFin68SfrlNt2dK+2hwMzncpFoR3FTBopTnOtfheDhwY=
+        bh=U1tiLVYe+uI6GynZ+KQaLRA7FrCZBu6OMUfWvRALpKY=;
+        b=e6DvKCK48sAZohaIV7+rXr1c7izfpP9bL8BEILw2W2VJNsd7OSxiMVrLLbc8Kt8ILk
+         u0flP/iF1AKrKP+M1mxKWroJ4dGxuDKZhQNYzqxhw66DITgNXTts6yz9xlAj39ARWwMb
+         fljDNbZvHVrYjdjFZ5cdNZATerrnqR8ZErZnuiTmIaMHaGy8VpDJffwfjFw8WiwhIFuO
+         sh4qojTjR6SxTjuT41509OzQJ+e056GVhkQL1xJyJaS052k3ijEbGx7C0PzfhVfuGVjT
+         ReyS8V6bHrxmUIvLoitXr7ABAdw6C8N0lIOrbL/oiQkICqlpCTAZRoPs+oCAriUQwA/p
+         ce+Q==
+X-Gm-Message-State: AOAM530fTD6Mo+EB82aQbx0QePMJoVqBl410dqR0RvD9wk3pWUETgK2i
+        /Prgx6IAlI9vuxGbylruKx2kesQtTUg=
+X-Google-Smtp-Source: ABdhPJxgCS3VlMfHSnl5qi0AADkiPF1Y5hzLatGiCcOeklrDazrBVCyGloG341BJ/seTJPIOJhGhWWtHs4E=
 X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:e39b:6333:b001:cb])
- (user=seanjc job=sendgmr) by 2002:a25:6e06:: with SMTP id j6mr7636609ybc.311.1633745615988;
- Fri, 08 Oct 2021 19:13:35 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a5b:145:: with SMTP id c5mr7344586ybp.60.1633745618610;
+ Fri, 08 Oct 2021 19:13:38 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  8 Oct 2021 19:12:15 -0700
+Date:   Fri,  8 Oct 2021 19:12:16 -0700
 In-Reply-To: <20211009021236.4122790-1-seanjc@google.com>
-Message-Id: <20211009021236.4122790-23-seanjc@google.com>
+Message-Id: <20211009021236.4122790-24-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211009021236.4122790-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
-Subject: [PATCH v2 22/43] KVM: VMX: Drop unnecessary PI logic to handle
- impossible conditions
+Subject: [PATCH v2 23/43] KVM: VMX: Use boolean returns for Posted Interrupt
+ "test" helpers
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -88,61 +88,73 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Drop sanity checks on the validity of the previous pCPU when handling
-vCPU block/unlock for posted interrupts.  Barring a code bug or memory
-corruption, the sanity checks will never fire, and any code bug that does
-trip the WARN is all but guaranteed to completely break posted interrupts,
-i.e. should never get anywhere near production.
+Return bools instead of ints for the posted interrupt "test" helpers.
+The bit position of the flag being test does not matter to the callers,
+and is in fact lost by virtue of test_bit() itself returning a bool.
 
-This is the first of several steps toward eliminating kvm_vcpu.pre_cpu.
+Returning ints is potentially dangerous, e.g. "pi_test_on(pi_desc) == 1"
+is safe-ish because ON is bit 0 and thus any sane implementation of
+pi_test_on() will work, but for SN (bit 1), checking "== 1" would rely on
+pi_test_on() to return 0 or 1, a.k.a. bools, as opposed to 0 or 2 (the
+positive bit position).
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/posted_intr.c | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
+ arch/x86/kvm/vmx/posted_intr.c | 4 ++--
+ arch/x86/kvm/vmx/posted_intr.h | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-index 67cbe6ab8f66..6c2110d91b06 100644
+index 6c2110d91b06..1688f8dc535a 100644
 --- a/arch/x86/kvm/vmx/posted_intr.c
 +++ b/arch/x86/kvm/vmx/posted_intr.c
-@@ -118,12 +118,10 @@ static void __pi_post_block(struct kvm_vcpu *vcpu)
- 	} while (cmpxchg64(&pi_desc->control, old.control,
+@@ -185,7 +185,7 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
  			   new.control) != old.control);
  
--	if (!WARN_ON_ONCE(vcpu->pre_pcpu == -1)) {
--		spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
--		list_del(&vcpu->blocked_vcpu_list);
--		spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
--		vcpu->pre_pcpu = -1;
--	}
-+	spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
-+	list_del(&vcpu->blocked_vcpu_list);
-+	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
-+	vcpu->pre_pcpu = -1;
+ 	/* We should not block the vCPU if an interrupt is posted for it.  */
+-	if (pi_test_on(pi_desc) == 1)
++	if (pi_test_on(pi_desc))
+ 		__pi_post_block(vcpu);
+ 
+ 	local_irq_enable();
+@@ -216,7 +216,7 @@ void pi_wakeup_handler(void)
+ 			blocked_vcpu_list) {
+ 		struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
+ 
+-		if (pi_test_on(pi_desc) == 1)
++		if (pi_test_on(pi_desc))
+ 			kvm_vcpu_kick(vcpu);
+ 	}
+ 	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, cpu));
+diff --git a/arch/x86/kvm/vmx/posted_intr.h b/arch/x86/kvm/vmx/posted_intr.h
+index 7f7b2326caf5..36ae035f14aa 100644
+--- a/arch/x86/kvm/vmx/posted_intr.h
++++ b/arch/x86/kvm/vmx/posted_intr.h
+@@ -40,7 +40,7 @@ static inline bool pi_test_and_clear_on(struct pi_desc *pi_desc)
+ 			(unsigned long *)&pi_desc->control);
  }
  
- /*
-@@ -153,14 +151,12 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
+-static inline int pi_test_and_set_pir(int vector, struct pi_desc *pi_desc)
++static inline bool pi_test_and_set_pir(int vector, struct pi_desc *pi_desc)
+ {
+ 	return test_and_set_bit(vector, (unsigned long *)pi_desc->pir);
+ }
+@@ -74,13 +74,13 @@ static inline void pi_clear_sn(struct pi_desc *pi_desc)
+ 		(unsigned long *)&pi_desc->control);
+ }
  
- 	WARN_ON(irqs_disabled());
- 	local_irq_disable();
--	if (!WARN_ON_ONCE(vcpu->pre_pcpu != -1)) {
--		vcpu->pre_pcpu = vcpu->cpu;
--		spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
--		list_add_tail(&vcpu->blocked_vcpu_list,
--			      &per_cpu(blocked_vcpu_on_cpu,
--				       vcpu->pre_pcpu));
--		spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
--	}
-+
-+	vcpu->pre_pcpu = vcpu->cpu;
-+	spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
-+	list_add_tail(&vcpu->blocked_vcpu_list,
-+		      &per_cpu(blocked_vcpu_on_cpu, vcpu->pre_pcpu));
-+	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+-static inline int pi_test_on(struct pi_desc *pi_desc)
++static inline bool pi_test_on(struct pi_desc *pi_desc)
+ {
+ 	return test_bit(POSTED_INTR_ON,
+ 			(unsigned long *)&pi_desc->control);
+ }
  
- 	WARN(pi_desc->sn == 1,
- 	     "Posted Interrupt Suppress Notification set before blocking");
+-static inline int pi_test_sn(struct pi_desc *pi_desc)
++static inline bool pi_test_sn(struct pi_desc *pi_desc)
+ {
+ 	return test_bit(POSTED_INTR_SN,
+ 			(unsigned long *)&pi_desc->control);
 -- 
 2.33.0.882.g93a45727a2-goog
 
