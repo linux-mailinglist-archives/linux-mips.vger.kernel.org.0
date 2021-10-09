@@ -2,57 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D91E94275FE
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Oct 2021 04:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2BE427604
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Oct 2021 04:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244361AbhJICP4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Oct 2021 22:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S244465AbhJICQB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Oct 2021 22:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244363AbhJICPf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Oct 2021 22:15:35 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A983C061798
-        for <linux-mips@vger.kernel.org>; Fri,  8 Oct 2021 19:13:22 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id b5-20020a251b05000000b005b575f23711so15169579ybb.4
-        for <linux-mips@vger.kernel.org>; Fri, 08 Oct 2021 19:13:22 -0700 (PDT)
+        with ESMTP id S244469AbhJICPg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Oct 2021 22:15:36 -0400
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1BEC0617A6
+        for <linux-mips@vger.kernel.org>; Fri,  8 Oct 2021 19:13:24 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id gi5-20020a056214248500b00382f7a7c7e6so10251238qvb.21
+        for <linux-mips@vger.kernel.org>; Fri, 08 Oct 2021 19:13:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=iENfBAERukntPY2X5QGQTh9qzr8Td2a/eMmZN0gkPVI=;
-        b=DzCx6d3mDseqABvdcGbaVVyn1eWP9DyM0ptlZC0Av6M11xsmwM4hDygp2I9SRsOTlD
-         CaLslZ/5tpgFn7ZGK8Q+oAp/z+7Kry0ksTb1JHhzjTahq7Wh+o5eGwzQrJzYlowAOZ48
-         VNCB+jXgqhl1lAdIBlzi52PfjMMWOIp8/GrzMp+AjpBgmC/UstMbkG/AsaR/Zi/J2Jar
-         o4OtrA3m//aakuHjWV9VK3H1BLYWwyP3onVfEMCmc4KxgicKakfGDgJSztgcePWQk2I1
-         bTHWhpYvVB73G/ZnG29ntm8kUxVEF6vAxFCPnskmCGo64vtpSvX8eFpV4pMmLiFClOgf
-         jaMg==
+        bh=w/H4oIWp6aPNo76SoohcXjeRifcTKNkaEcXswmTfvS8=;
+        b=Awo1FqukPn/eCDkoZYrOLJ78QMIWErLo3T1JPAM+azHfyRwj0C0I0SMNEn5GIB2txU
+         M8xcuGBE4Pj+vf0eSl8CB+c5E5sQbuIMe89aP9EQE621aganA5V6HDgjMAcaBpBwJFVX
+         C3SGKwbSwf16LR8Vkae/cgYp5NG8CH1ijTNN50Rr4HoNERkD2EJxcY2vp85daVtbnuQv
+         ioYQxPegF+Cfcf+3bUPz5AVa6rlii3Hi3Y38Qqp1tDmmH+PsFzX9zPNBKfVsQyV5sVUN
+         4rGOba9XFbRiNbe1iaNvpJun8hhwygJEEzJPw9IjWbImWyRqKAUCmWW3EdcHL3Zmyd05
+         +drw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=iENfBAERukntPY2X5QGQTh9qzr8Td2a/eMmZN0gkPVI=;
-        b=iggQMvPpqFAiqZpVplSk033EDspqbEkxXN8Eeen61+0zAv6Sn5fBJ+hRIyRTW4DsaG
-         79fzhv94Pqe8YVxOUITdtq3QxLz1W+dykoMgueo856T3uxvogtH34H3IeO6XEm8NhmJh
-         8n1EyV/4BYpFywODTbCgycdsd55IXAwVQ2uSBZF5lIEpVncrOiookti8t2GIH2tzoogW
-         o5aYkV9ksSyGXVfKjZFwZTfZReN744uL2Ie+CyrgM4gZw3PAV2Rx1SjrtCPFCq7Zloaq
-         zvX0GKESyoEZXgQN8tDrppd62yizkB7x9ClUI2PIpMdaDFR1YvThJXLaEZpmHXl8kGSv
-         yQzw==
-X-Gm-Message-State: AOAM533QX3HAIs7eVgM9QmgXuhpl4pj75/SOKCUOn7HNLGZiikxIjfee
-        VZSZITfPIQlY34r4Odva6SM2hKfKlow=
-X-Google-Smtp-Source: ABdhPJzWNw6k/Tym0AlNYDL00dpB0fqVjcBxlLLKgA5wVnQqHXg+hyQOuiK3gpCLlIvGNpb1Xv6thLhfBP8=
+        bh=w/H4oIWp6aPNo76SoohcXjeRifcTKNkaEcXswmTfvS8=;
+        b=tXEDurWrTPdiErbQJrhv/k5DBRFkHvJOZGaNPT8eDGUoxTGPPsib2AHhVF6S+sDqIS
+         t7yvVOxU8YFugujTcH/8RGklAlfRrKFDZn0QqHI6e2ePOXNcu848OWxszvu96KgcqmXj
+         VD/0AWUl04QwRw6B+XVKx0R9ZjylYxZIK9eewNLcHOEoY68g+mMVt384+PIKut9NgYan
+         2RJpLKqq3bFqsLcE55FQDfxUTHFiGe1XfQ5lCWmSOBZZwaU7Gojz0jbqRziuKqrXQoc+
+         476HkpW+1yp+ONA3LGsAcbz7oNuOHTTrGngnI54G8HW7DRLSEI54ODqaQH2eA1EnhKDM
+         I/Bw==
+X-Gm-Message-State: AOAM530QU/VNMohIdtnOmJpOPOgeXdM/ilORP1zwOgMCY8RbrEnr4M6/
+        SPUS9tpjwm1MPiu07Z15igSq8qzoWIw=
+X-Google-Smtp-Source: ABdhPJxfQ527bwjQfHI3Ui/hfU27INsXtrHgzCKRUD4Jie98v/tpcQf1vSHG80RTY51lGOqh4HTdLuZNSsA=
 X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:e39b:6333:b001:cb])
- (user=seanjc job=sendgmr) by 2002:a25:bb93:: with SMTP id y19mr7661688ybg.266.1633745601224;
- Fri, 08 Oct 2021 19:13:21 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:ac8:4b57:: with SMTP id e23mr1849346qts.328.1633745603486;
+ Fri, 08 Oct 2021 19:13:23 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  8 Oct 2021 19:12:09 -0700
+Date:   Fri,  8 Oct 2021 19:12:10 -0700
 In-Reply-To: <20211009021236.4122790-1-seanjc@google.com>
-Message-Id: <20211009021236.4122790-17-seanjc@google.com>
+Message-Id: <20211009021236.4122790-18-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211009021236.4122790-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
-Subject: [PATCH v2 16/43] KVM: Don't redo ktime_get() when calculating
- halt-polling stop/deadline
+Subject: [PATCH v2 17/43] KVM: x86: Directly block (instead of "halting")
+ UNINITIALIZED vCPUs
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -88,34 +88,29 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Calculate the halt-polling "stop" time using "cur" instead of redoing
-ktime_get().  In the happy case where hardware correctly predicts
-do_halt_poll, "cur" is only a few cycles old.  And if the branch is
-mispredicted, arguably that extra latency should count toward the
-halt-polling time.
-
-In all likelihood, the numbers involved are in the noise and either
-approach is perfectly ok.
+Go directly to kvm_vcpu_block() when handling the case where userspace
+attempts to run an UNINITIALIZED vCPU.  The vCPU is not halted, nor is it
+likely that halt-polling will be successful in this case.
 
 Reviewed-by: David Matlack <dmatlack@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- virt/kvm/kvm_main.c | 2 +-
+ arch/x86/kvm/x86.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index a36ccdc93a72..481e8178b43d 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -3272,7 +3272,7 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
- 
- 	start = cur = poll_end = ktime_get();
- 	if (do_halt_poll) {
--		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
-+		ktime_t stop = ktime_add_ns(cur, vcpu->halt_poll_ns);
- 
- 		do {
- 			/*
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index e6c17bbed25c..cd51f100e906 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10133,7 +10133,7 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+ 			r = -EINTR;
+ 			goto out;
+ 		}
+-		kvm_vcpu_halt(vcpu);
++		kvm_vcpu_block(vcpu);
+ 		if (kvm_apic_accept_events(vcpu) < 0) {
+ 			r = 0;
+ 			goto out;
 -- 
 2.33.0.882.g93a45727a2-goog
 
