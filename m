@@ -2,57 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7190427636
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Oct 2021 04:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D3A427638
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Oct 2021 04:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244255AbhJICRi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 8 Oct 2021 22:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
+        id S244462AbhJICRj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 8 Oct 2021 22:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244376AbhJICRN (ORCPT
+        with ESMTP id S244391AbhJICRN (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Fri, 8 Oct 2021 22:17:13 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F49BC0613A4
-        for <linux-mips@vger.kernel.org>; Fri,  8 Oct 2021 19:13:49 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id h4-20020a05620a244400b004334ede5036so9805289qkn.13
-        for <linux-mips@vger.kernel.org>; Fri, 08 Oct 2021 19:13:49 -0700 (PDT)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825CEC0613A9
+        for <linux-mips@vger.kernel.org>; Fri,  8 Oct 2021 19:13:51 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id j193-20020a2523ca000000b005b789d71d9aso14935820ybj.21
+        for <linux-mips@vger.kernel.org>; Fri, 08 Oct 2021 19:13:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=wjQtX4Ec6wZvrLi6PMkrNqIQ2oyMcPdDf1m/MoA8d+0=;
-        b=Lnm/cjPXbd272GpMZC0UeDF+UHTqiJU1haGCknMr5AmNFQOxgzVQrkCrFXx8cCosZZ
-         vhad/H/bU6EtWHdiaGljqq6NEDe4jYwnagw1hmypkZVWw7KopTXWbIioXhrKeB9WZIoL
-         ReDT+1R5eLOhM0x5my19UH6pmlRFdnAMJjCjW90ue2a+3KqjCQ5KVltKsfzvFJct3Or4
-         f9Oft1KiecdRxszaICFl0MAY6x3TalLjCr4OG45jGmzTw8bdrlGkucMOEXd/i271jan6
-         0hz+LH0reRdSJS/sNXpSqjCOVK3W+uTEL9F4YDHRKI7A05LpPRMlHE+Kaw+W+rV3UGa5
-         UrVw==
+        bh=55YfyLhMwNaRUScBeXWYLQcHUBDZGdNHeb4QvoQSFyE=;
+        b=C9t4uCApsnS68i3KeThREaZe1Om+7Tp6CUDNf13J8E2BemfJEmkFtqcFwUAJufMVG0
+         3WOLQFovIcCgHqQjc76I/Bb0RIN+B8Z777pX6m6sLBFwdTtCa87oR4HWw8W6pADqeqG2
+         QgUYUEV3xUzi5O46w1OCtmTdfddkVtZfkufO6ZAREf4t4CTBbAXPgnb7eruajoxMEvZx
+         gCBjUgNPJ65sSMFZJJ8LojLsxPquqyHqOv0DC5H3uJyc2iDg6eA0A7oeegQMAdRUi/Aw
+         WUM3JuhaNVZIdEjfnGeX3lFU5I9xVxnDQhJTwRYwm4Q6N5wAp2zXvscnBr8P/79r34/t
+         9KlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=wjQtX4Ec6wZvrLi6PMkrNqIQ2oyMcPdDf1m/MoA8d+0=;
-        b=vF6hMyYvfdoeNc8EANEalwc0Tt7OEIvRi1FC6qI02RpTIXMWew9YjfDVZ7q2fvLO+j
-         82wHLPdJFoeYxw9c6LwSqxY04O4aJf7D+luhfXXHMAx4q2O2EDV6feG2ic+JbpV1OPA8
-         XTNt5Jdn0lq6vRFqOQ6IJCZSHPkkywYiKVc7bNRsXjDyO9X0bP9aSRhO2amymuZY5B1t
-         KwhV3738XgM3sfmnrRguul+012VFTaYOh9lCtaQz7ByScGRA4apSrUAs+iPiXHfHJUDW
-         3UgZDq0h+XXy+EAZLzk4XeZfEmDFw5vw0YydWLbh56o2N7PaBeOoxq76AAqEEFSmGaut
-         EQUA==
-X-Gm-Message-State: AOAM531hPvUE4/Xb6eaZTnQRgxrxsBuU6JELmdysqLH2hsuREwbqzEw3
-        5XXEl4UeuTs4Pdghhy0Is2S7isk01Hc=
-X-Google-Smtp-Source: ABdhPJzf4lH44KnogukwF+1XfgXVpbO4vnuwdh3pwX1cj7Z8+jmbGSLZhM6YPlZ7b6MhcrCUeQd2OdsxOQw=
+        bh=55YfyLhMwNaRUScBeXWYLQcHUBDZGdNHeb4QvoQSFyE=;
+        b=IU/854O8bwpoFtudHB8jKfwFpZKTQVwHTUmqg3WDlU8RGzbQbyiNeyKJwwzotlAgw8
+         w5uyFps/HWskx/LOrY2NTFIC94zJsSObElkOOUhz+PT/D8Vh4F5rSQK+K53bE0jaCdKI
+         P2ff6bDxEqLM+qaZJTX2LfK8HqmkqV6Vv2aZmZ5QuuhbXKMT1iqBmiuwrgY5KdS4xE6U
+         YBXVS1CLV7L8QhogHPuRM0xchoYxKZoCxiOH7BJQznU7wCNNBRfW1/h8u958rMQ9vgkT
+         uVnugxcdbUnGtjnztY5xMWZXETbuVIJq4SaTtqexXaGTPDInlehapdDgfjIZdoOiJO6j
+         k51w==
+X-Gm-Message-State: AOAM530oNalDZiLe0lZrgcslymBGkFuM/yAdl/HigPs0pRhErTAAHJdN
+        2CNDKQJ0GxkKPs8eDSmWXTbi9Be39OI=
+X-Google-Smtp-Source: ABdhPJxjSI94TgUwx52krVH0O+S/pIZKhRKzmwxzVW6y/1e67T6fOupN9aoHyYhZTK7KMTNPYcyhb6P2J28=
 X-Received: from seanjc798194.pdx.corp.google.com ([2620:15c:90:200:e39b:6333:b001:cb])
- (user=seanjc job=sendgmr) by 2002:ac8:6113:: with SMTP id a19mr1849269qtm.307.1633745628357;
- Fri, 08 Oct 2021 19:13:48 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a25:5545:: with SMTP id j66mr6891804ybb.288.1633745630724;
+ Fri, 08 Oct 2021 19:13:50 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  8 Oct 2021 19:12:20 -0700
+Date:   Fri,  8 Oct 2021 19:12:21 -0700
 In-Reply-To: <20211009021236.4122790-1-seanjc@google.com>
-Message-Id: <20211009021236.4122790-28-seanjc@google.com>
+Message-Id: <20211009021236.4122790-29-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211009021236.4122790-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.0.882.g93a45727a2-goog
-Subject: [PATCH v2 27/43] KVM: VMX: Move Posted Interrupt ndst computation out
- of write loop
+Subject: [PATCH v2 28/43] KVM: VMX: Remove vCPU from PI wakeup list before
+ updating PID.NV
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -88,66 +88,99 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hoist the CPU => APIC ID conversion for the Posted Interrupt descriptor
-out of the loop to write the descriptor, preemption is disabled so the
-CPU won't change, and if the APIC ID changes KVM has bigger problems.
+Remove the vCPU from the wakeup list before updating the notification
+vector in the posted interrupt post-block helper.  There is no need to
+wake the current vCPU as it is by definition not blocking.  Practically
+speaking this is a nop as it only shaves a few meager cycles in the
+unlikely case that the vCPU was migrated and the previous pCPU gets a
+wakeup IRQ right before PID.NV is updated.  The real motivation is to
+allow for more readable code in the future, when post-block is merged
+with vmx_vcpu_pi_load(), at which point removal from the list will be
+conditional on the old notification vector.
 
-No functional change intended.
+Opportunistically add comments to document why KVM has a per-CPU spinlock
+that, at first glance, appears to be taken only on the owning CPU.
+Explicitly call out that the spinlock must be taken with IRQs disabled, a
+detail that was "lost" when KVM switched from spin_lock_irqsave() to
+spin_lock(), with IRQs disabled for the entirety of the relevant path.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/posted_intr.c | 25 +++++++++++--------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+ arch/x86/kvm/vmx/posted_intr.c | 49 +++++++++++++++++++++++-----------
+ 1 file changed, 33 insertions(+), 16 deletions(-)
 
 diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-index fea343dcc011..2b2206339174 100644
+index 2b2206339174..901b7a5f7777 100644
 --- a/arch/x86/kvm/vmx/posted_intr.c
 +++ b/arch/x86/kvm/vmx/posted_intr.c
-@@ -51,17 +51,15 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
- 		goto after_clear_sn;
- 	}
+@@ -10,10 +10,22 @@
+ #include "vmx.h"
  
--	/* The full case.  */
-+	/* The full case.  Set the new destination and clear SN. */
-+	dest = cpu_physical_id(cpu);
-+	if (!x2apic_mode)
-+		dest = (dest << 8) & 0xFF00;
-+
- 	do {
- 		old.control = new.control = READ_ONCE(pi_desc->control);
+ /*
+- * We maintain a per-CPU linked-list of vCPU, so in wakeup_handler() we
+- * can find which vCPU should be waken up.
++ * Maintain a per-CPU list of vCPUs that need to be awakened by wakeup_handler()
++ * when a WAKEUP_VECTOR interrupted is posted.  vCPUs are added to the list when
++ * the vCPU is scheduled out and is blocking (e.g. in HLT) with IRQs enabled.
++ * The vCPUs posted interrupt descriptor is updated at the same time to set its
++ * notification vector to WAKEUP_VECTOR, so that posted interrupt from devices
++ * wake the target vCPUs.  vCPUs are removed from the list and the notification
++ * vector is reset when the vCPU is scheduled in.
+  */
+ static DEFINE_PER_CPU(struct list_head, blocked_vcpu_on_cpu);
++/*
++ * Protect the per-CPU list with a per-CPU spinlock to handle task migration.
++ * When a blocking vCPU is awakened _and_ migrated to a different pCPU, the
++ * ->sched_in() path will need to take the vCPU off the list of the _previous_
++ * CPU.  IRQs must be disabled when taking this lock, otherwise deadlock will
++ * occur if a wakeup IRQ arrives and attempts to acquire the lock.
++ */
+ static DEFINE_PER_CPU(spinlock_t, blocked_vcpu_on_cpu_lock);
  
--		dest = cpu_physical_id(cpu);
--
--		if (x2apic_mode)
--			new.ndst = dest;
--		else
--			new.ndst = (dest << 8) & 0xFF00;
--
-+		new.ndst = dest;
- 		new.sn = 0;
- 	} while (cmpxchg64(&pi_desc->control, old.control,
- 			   new.control) != old.control);
-@@ -103,15 +101,14 @@ static void __pi_post_block(struct kvm_vcpu *vcpu)
+ static inline struct pi_desc *vcpu_to_pi_desc(struct kvm_vcpu *vcpu)
+@@ -101,23 +113,28 @@ static void __pi_post_block(struct kvm_vcpu *vcpu)
  	WARN(pi_desc->nv != POSTED_INTR_WAKEUP_VECTOR,
  	     "Wakeup handler not enabled while the vCPU was blocking");
  
+-	dest = cpu_physical_id(vcpu->cpu);
+-	if (!x2apic_mode)
+-		dest = (dest << 8) & 0xFF00;
+-
+-	do {
+-		old.control = new.control = READ_ONCE(pi_desc->control);
+-
+-		new.ndst = dest;
+-
+-		/* set 'NV' to 'notification vector' */
+-		new.nv = POSTED_INTR_VECTOR;
+-	} while (cmpxchg64(&pi_desc->control, old.control,
+-			   new.control) != old.control);
+-
++	/*
++	 * Remove the vCPU from the wakeup list of the _previous_ pCPU, which
++	 * will not be the same as the current pCPU if the task was migrated.
++	 */
+ 	spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+ 	list_del(&vcpu->blocked_vcpu_list);
+ 	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
++
 +	dest = cpu_physical_id(vcpu->cpu);
 +	if (!x2apic_mode)
 +		dest = (dest << 8) & 0xFF00;
 +
- 	do {
- 		old.control = new.control = READ_ONCE(pi_desc->control);
- 
--		dest = cpu_physical_id(vcpu->cpu);
--
--		if (x2apic_mode)
--			new.ndst = dest;
--		else
--			new.ndst = (dest << 8) & 0xFF00;
++	do {
++		old.control = new.control = READ_ONCE(pi_desc->control);
++
 +		new.ndst = dest;
++
++		/* set 'NV' to 'notification vector' */
++		new.nv = POSTED_INTR_VECTOR;
++	} while (cmpxchg64(&pi_desc->control, old.control,
++			   new.control) != old.control);
++
+ 	vcpu->pre_pcpu = -1;
+ }
  
- 		/* set 'NV' to 'notification vector' */
- 		new.nv = POSTED_INTR_VECTOR;
 -- 
 2.33.0.882.g93a45727a2-goog
 
