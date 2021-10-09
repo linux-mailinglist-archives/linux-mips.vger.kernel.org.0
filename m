@@ -2,122 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE0D427956
-	for <lists+linux-mips@lfdr.de>; Sat,  9 Oct 2021 13:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7EA427CCB
+	for <lists+linux-mips@lfdr.de>; Sat,  9 Oct 2021 20:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbhJILGX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 9 Oct 2021 07:06:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26073 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231932AbhJILGV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 9 Oct 2021 07:06:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1633777464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lJ/2iCuZIJi8M6YSq3TSpepZV4prmg5N+D8TG37hfos=;
-        b=ArtvM8Nk242373TmJz/scmMFbPFmQ1GUmi52+U9dfWIjd41wnl5rCL4O1Qrwp9cCXpne8V
-        GKPNZ/EXKtEydEYAwiXGyI6QbOLKvBDM99zJJuOmWex3DHE6mVyd1yOm5fxk1Rm9snMxC/
-        EW47tNxx3hQnIO/dMEbJw2w9NEawTOc=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-129-naZzbqKyO-qIrbbTfu6IfA-1; Sat, 09 Oct 2021 07:04:23 -0400
-X-MC-Unique: naZzbqKyO-qIrbbTfu6IfA-1
-Received: by mail-ed1-f69.google.com with SMTP id l10-20020a056402230a00b003db6977b694so3145102eda.23
-        for <linux-mips@vger.kernel.org>; Sat, 09 Oct 2021 04:04:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lJ/2iCuZIJi8M6YSq3TSpepZV4prmg5N+D8TG37hfos=;
-        b=VoALwALDfl/iiEDlWUiB0sg/il+Hvdy2B1OJKC22NrYCVrEHJCcWRFG8RZqinMrJA2
-         Hli5a81ybEt11RgpV2ujwAzC76ivUxH8VjSmSSkTITmpfXBjfQ63TLaA0uKHMYJ+xZdU
-         dDkX8CMsaGN5jOVPseJq5GNn8wtDbGTjrD5QuxNQdyNr2JmBzAxJfLCHgagBDv7ewwti
-         +Sm2UMEmKX1qHx9Lt0wzQyK53qV0T/AcZ7G8XTCkUO1+wtrvIa/I2PfNWkXs+Csyv0FP
-         GLKnlvrZqPAvU+z7bdfAI4legjofrJq8Lu3t8ROd9X/FhQh9dx6eQBAd/X2yWM0B6D9V
-         sPVA==
-X-Gm-Message-State: AOAM531W//lojt4ASanBmPjigBJgn41bPSktYXtW0Dg9fn7S/lb4qLyR
-        QIsakGDWx8o7ajbTSlpE1EVkicmInxW2wgt9G7XmFrIAyl4h5ux1zkOJGf6J92al+RDQ9IzjQyQ
-        euOjYjp/Wx7BNnbkIVq688Q==
-X-Received: by 2002:a17:906:585a:: with SMTP id h26mr10966047ejs.31.1633777461692;
-        Sat, 09 Oct 2021 04:04:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwobA8ZxtLfM+i96qTUZJc2D6zqI9p4pA768qS/bvwYQXY5otl6Kxnqg/w4gwu0W8PjfTgg/g==
-X-Received: by 2002:a17:906:585a:: with SMTP id h26mr10965985ejs.31.1633777461334;
-        Sat, 09 Oct 2021 04:04:21 -0700 (PDT)
-Received: from redhat.com ([2.55.132.170])
-        by smtp.gmail.com with ESMTPSA id n22sm831106eja.120.2021.10.09.04.04.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Oct 2021 04:04:20 -0700 (PDT)
-Date:   Sat, 9 Oct 2021 07:04:10 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v5 16/16] x86/tdx: Add cmdline option to force use of
- ioremap_host_shared
-Message-ID: <20211009070132-mutt-send-email-mst@kernel.org>
-References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009003711.1390019-17-sathyanarayanan.kuppuswamy@linux.intel.com>
+        id S229675AbhJISwB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 9 Oct 2021 14:52:01 -0400
+Received: from aposti.net ([89.234.176.197]:46656 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229601AbhJISwA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 9 Oct 2021 14:52:00 -0400
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>
+Cc:     list@opendingux.net, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 0/3] mtd: Ingenic NAND fix for JZ4740
+Date:   Sat,  9 Oct 2021 20:49:49 +0200
+Message-Id: <20211009184952.24591-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211009003711.1390019-17-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 08, 2021 at 05:37:11PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> +	ioremap_force_shared= [X86_64, CCG]
-> +			Force the kernel to use shared memory mappings which do
-> +			not use ioremap_host_shared/pcimap_host_shared to opt-in
-> +			to shared mappings with the host. This feature is mainly
-> +			used by a confidential guest when enabling new drivers
-> +			without proper shared memory related changes. Please note
-> +			that this option might also allow other non explicitly
-> +			enabled drivers to interact with the host in confidential
-> +			guest, which could cause other security risks. This option
-> +			will also cause BIOS data structures to be shared with the
-> +			host, which might open security holes.
-> +
->  	io7=		[HW] IO7 for Marvel-based Alpha systems
->  			See comment before marvel_specify_io7 in
->  			arch/alpha/kernel/core_marvel.c.
+Hi,
 
-The connection is quite unfortunate IMHO.
-Can't there be an option
-that unbreaks drivers *without* opening up security holes by
-making BIOS shared?
+Looks like NAND support has been broken on the JZ4740 SoC for a while;
+it looks like it comes from the fact that the "hw_oob_first" mechanism
+was dropped from the NAND core and moved to the Davinci driver.
+
+It turns out the JZ4740 SoC needs it too; I didn't notice it when
+writing the new ingenic-nand driver (to replace the old jz4740-nand
+driver) most likely because my Device Tree had the "nand-ecc-mode" set
+to "hw_oob_first".
+
+I am not very sure about patch [1/3]; to me the original code does not
+make sense, and it didn't work out-of-the-box on the JZ4740 without it.
+By applying patch [1/3] the function nand_read_page_hwecc_oob_first()
+can be reused for the JZ4740 SoC as well. But I did not test patch [1/3]
+on Davinci.
+
+Cheers,
+-Paul
+
+Paul Cercueil (3):
+  mtd: rawnand/davinci: Don't calculate ECC when reading page
+  mtd: rawnand: Export nand_read_page_hwecc_oob_first()
+  mtd: rawnand/ingenic: JZ4740 needs 'oob_first' read page function
+
+ drivers/mtd/nand/raw/davinci_nand.c           | 73 +------------------
+ .../mtd/nand/raw/ingenic/ingenic_nand_drv.c   |  5 ++
+ drivers/mtd/nand/raw/nand_base.c              | 69 ++++++++++++++++++
+ include/linux/mtd/rawnand.h                   |  2 +
+ 4 files changed, 77 insertions(+), 72 deletions(-)
 
 -- 
-MST
+2.33.0
 
