@@ -2,55 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4E54282A5
-	for <lists+linux-mips@lfdr.de>; Sun, 10 Oct 2021 19:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E667A4282B8
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Oct 2021 19:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbhJJRck (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Oct 2021 13:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
+        id S231948AbhJJRvV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Oct 2021 13:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbhJJRck (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Oct 2021 13:32:40 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9E0C06161C
-        for <linux-mips@vger.kernel.org>; Sun, 10 Oct 2021 10:30:41 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id i84so33322968ybc.12
-        for <linux-mips@vger.kernel.org>; Sun, 10 Oct 2021 10:30:41 -0700 (PDT)
+        with ESMTP id S231134AbhJJRvV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 10 Oct 2021 13:51:21 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1FBC061570
+        for <linux-mips@vger.kernel.org>; Sun, 10 Oct 2021 10:49:22 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id v195so33583541ybb.0
+        for <linux-mips@vger.kernel.org>; Sun, 10 Oct 2021 10:49:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=x5ZjKsTtEg68L0kiGkt4LxgOXkimH+/pqF53AqKiKZQ=;
-        b=ipoQjOKZwOE7PQSN4YXQwnoGYQ+z2crmfDLF5WIwFdsg3/6MkCvp/W7Wp6ZqZE7wuo
-         nGSKuaAKG9OW2VEgKfWnY0DSuF4iI52mCBt1gBRWdFthEOl1PdRxO3H2Huo5aCLhzmxu
-         fVkrm35sRErkUmXrOi+JSiFTshKPLob3y1O7ZMiUsQO8p6ahUdSuSEeoM8xipzZjAFKi
-         hommd4/b7ihiMx6RnGbDIPnKmweJZlVlcZw49A6iPSYG+aDkJFvpv12ZKnnIt1YFg7XQ
-         F0HFqjMkZNnBAryZ1Rh8K3ZzI6v6fSyZHnkBwK5v0TbxSBnra/n5CcPMbZ55+JslYFWL
-         ZEmQ==
+        bh=0m0tVlWSXIOyQB2dgqv4j2n31BilYhoZPAwFWKrJU88=;
+        b=PsUvnSdUSAmqKwDzNq9WJnFPKcbpdmRh5/jw66XAt9hP/tWSJAb/4w/SNgIAPG5Aox
+         mX2G/aDq1B5rPRE46cQTRb2XuHG9e/SSVWq8F53f4DR0mkYuD9jP54/hCWXqUXQxI0Zf
+         pAcHnFJISheLru/OQ8lMIla4gFwGM5gL1R7J8H7bhKtQNeIbU5OS8k2xbFAqEvNyYkq9
+         gNdSwnxBTvz5lkNBP7Dsjn+NJVtuyUR28qOL1AmfDyi9eroRguVFqfbi9gZjfk9qXLmd
+         utsIGcSdYnV2MSanTe+6k1r61+/oFVTNB7smQDAR4XjowUMUmZgtO5J3dPU+BQVD5T6H
+         SWfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=x5ZjKsTtEg68L0kiGkt4LxgOXkimH+/pqF53AqKiKZQ=;
-        b=rvC2UJ6Mj9qjo1X+XF7unsBgmw1iuCq6ALhDXKf07I02mSQ7ca2B0HpsXNQGrXReZF
-         8jzjokLxWnz9VqugEgmG0YxgDi9uySuv29aSDcHpfNInroL6pYm2wK2cKlYdaoYHNKnX
-         6g5Mle3+WaN3bqEsvAz3r36GHgnQlLFHBU9itqOIE4WO8uyll5YmUeOT7HvnBM1A/1dh
-         HborxVUZxLrdLJ/tTFSxn6D4T0D8fVimCS0IEpjwza/eL7gq0AzoNuuzClOcCzcMT7WE
-         EA5XqSZUTzYLKmy3lOIo86t92RP3e7wiFQxSFfpAeDKeSDjsu8PSMHJZyc9F3XEYvp0R
-         NFjQ==
-X-Gm-Message-State: AOAM533m3BWZggcjZUCF0Yw4xH2JcXnRysSHilTMTDEEkToLCcQztdk9
-        j9MLdxfBWfRgN5WixenHaSRf+YTz0g15LEUgVg1kLJ8qPY09MA==
-X-Google-Smtp-Source: ABdhPJx8Fk4BpspxBCZ2m/Sp4AXxb8sK180DHkACb9ArP+uC+7grt/9YcUYABlz2722J3dAdk2nBKALi/OP5ZqpUj2U=
-X-Received: by 2002:a25:520b:: with SMTP id g11mr17619445ybb.268.1633887040541;
- Sun, 10 Oct 2021 10:30:40 -0700 (PDT)
+        bh=0m0tVlWSXIOyQB2dgqv4j2n31BilYhoZPAwFWKrJU88=;
+        b=tG02wGt+y5r/Aa8GZvmSZd601EvcokPDMvUkdWBh/3CrsjPiK8OOjXXGU9Ayy1owaY
+         3Q3R2+ZXLN+7iAYYXmvlCoDZRY13WN9w0fqok+4qzYo5t017HOGvWluN0FGEweIEz+0r
+         +gqfeEKyofBzsoqj5rpqxuvmPvcz3yq8dEFxcDqouGHoS9VLPV1947w2bGH6FgJaiTn6
+         D463r3BmzqmAIv/PaffyW+PhbdRP3GB/hgoCjGqVdYw42B5i6XaRPeEnNGq8wUOTXI8R
+         lIu1nl1NHG6484t9wzW0/21/4O/5hE8wqbJEJ41j2EMryIX6IIbC2O3z8GegN5Wunzqq
+         X40g==
+X-Gm-Message-State: AOAM532Cz9VhARx1eIHo9mvudIymqygg7054+9hAlDm8chZPYfhHsabk
+        8aUVBUwgKLuxZ2eUCnRmDBOVMbqFp554gRfQ/dexbg==
+X-Google-Smtp-Source: ABdhPJzkZnpQTV5Qp77PgEJ34HsJPqCmVi+ZOVVGOe/uHLDMUs6H/ZfgHJrleyk4/1QDC55+WeC+DLC/a9G2zdhlXUE=
+X-Received: by 2002:a25:c006:: with SMTP id c6mr16530910ybf.480.1633888161709;
+ Sun, 10 Oct 2021 10:49:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <1633777076-17256-1-git-send-email-yangtiezhu@loongson.cn> <1633777076-17256-3-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1633777076-17256-3-git-send-email-yangtiezhu@loongson.cn>
+References: <1633777076-17256-1-git-send-email-yangtiezhu@loongson.cn> <1633777076-17256-2-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1633777076-17256-2-git-send-email-yangtiezhu@loongson.cn>
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Sun, 10 Oct 2021 19:30:29 +0200
-Message-ID: <CAM1=_QTwdbYKqjG8hEsSOvJzi5GxmBieKZYtVUz_BvfEQt3RZg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] bpf, mips: Modify check condition about tail
- call count
+Date:   Sun, 10 Oct 2021 19:49:11 +0200
+Message-ID: <CAM1=_QT_vR5EZyt6kVVWHJi3rpervkiO4HRrpvRgh2sh6J7yrg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, mips: Clean up config options about JIT
 To:     Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -71,56 +70,57 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Sat, Oct 9, 2021 at 12:58 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> In emit_tail_call() of bpf_jit_comp32.c, "blez t2" (t2 <= 0) is not
-> consistent with the comment "t2 < 0", modify the check condition to
-> keep consistency.
+> The config options MIPS_CBPF_JIT and MIPS_EBPF_JIT are useless, remove
+> them in arch/mips/Kconfig, and then modify arch/mips/net/Makefile.
 >
 > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
->  arch/mips/net/bpf_jit_comp32.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  arch/mips/Kconfig      | 9 ---------
+>  arch/mips/net/Makefile | 6 +++---
+>  2 files changed, 3 insertions(+), 12 deletions(-)
 >
-> diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
-> index 9d7041a..b887c01 100644
-> --- a/arch/mips/net/bpf_jit_comp32.c
-> +++ b/arch/mips/net/bpf_jit_comp32.c
-> @@ -1312,12 +1312,12 @@ static int emit_tail_call(struct jit_context *ctx)
->         emit(ctx, sltu, t1, ind, t1);            /* t1 = ind < t1            */
->         emit(ctx, beqz, t1, get_offset(ctx, 1)); /* PC += off(1) if t1 == 0  */
->                                                  /* (next insn delay slot)   */
-> -       /* if (TCC-- <= 0) goto out */
-> +       /* if (--TCC < 0) goto out */
->         emit(ctx, lw, t2, ctx->stack_size, MIPS_R_SP);  /* t2 = *(SP + size) */
->         emit_load_delay(ctx);                     /* Load delay slot         */
-> -       emit(ctx, blez, t2, get_offset(ctx, 1));  /* PC += off(1) if t2 < 0  */
->         emit(ctx, addiu, t2, t2, -1);             /* t2-- (delay slot)       */
->         emit(ctx, sw, t2, ctx->stack_size, MIPS_R_SP);  /* *(SP + size) = t2 */
-> +       emit(ctx, bltz, t2, get_offset(ctx, 1));  /* PC += off(1) if t2 < 0  */
-
-If the comment is not consistent with the code, and the code is
-correct, why did you change the code? Have you seen the JIT fail on
-any of the tail call test cases?
-
-The current code works as intended. The t2 register is decremented in
-the branch delay slot of the blez. After your change, the the comment
-still says "delay slot", but it is no longer in the delay slot of a
-branch. Instead the next instruction emitted, not visible in the patch
-context, fills the delay slot of the bltz. In this case it probably is
-ok, but if that instruction is also a branch, the result would be
-unpredictable.
-
-I prefer to emit the delay slot instruction immediately after the
-branch is emitted when possible. If a branch and its delay slot is
-separated in the JIT logic, it makes the JIT more brittle IMO.
-
-Please keep the original logic, but update the blez comment so it is
-consistent with the code.
-
-
-
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 38468f4..9b03c78 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -1214,15 +1214,6 @@ config SYS_SUPPORTS_RELOCATABLE
+>           The platform must provide plat_get_fdt() if it selects CONFIG_USE_OF
+>           to allow access to command line and entropy sources.
 >
->         /* prog = ary->ptrs[ind] */
->         off = offsetof(struct bpf_array, ptrs);
+> -config MIPS_CBPF_JIT
+> -       def_bool y
+> -       depends on BPF_JIT && HAVE_CBPF_JIT
+> -
+> -config MIPS_EBPF_JIT
+> -       def_bool y
+> -       depends on BPF_JIT && HAVE_EBPF_JIT
+> -
+> -
+>  #
+>  # Endianness selection.  Sufficiently obscure so many users don't know what to
+>  # answer,so we try hard to limit the available choices.  Also the use of a
+> diff --git a/arch/mips/net/Makefile b/arch/mips/net/Makefile
+> index 95e8267..e3e6ae6 100644
+> --- a/arch/mips/net/Makefile
+> +++ b/arch/mips/net/Makefile
+> @@ -1,10 +1,10 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  # MIPS networking code
+>
+> -obj-$(CONFIG_MIPS_EBPF_JIT) += bpf_jit_comp.o
+> +obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o
+>
+>  ifeq ($(CONFIG_32BIT),y)
+> -        obj-$(CONFIG_MIPS_EBPF_JIT) += bpf_jit_comp32.o
+> +        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
+>  else
+> -        obj-$(CONFIG_MIPS_EBPF_JIT) += bpf_jit_comp64.o
+> +        obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
+>  endif
 > --
 > 2.1.0
 >
+
+Looks good to me.
+
+Acked-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
