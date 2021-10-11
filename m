@@ -2,83 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4A0428481
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Oct 2021 03:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153BD428533
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Oct 2021 04:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbhJKBVX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 10 Oct 2021 21:21:23 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34094 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231390AbhJKBVW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 10 Oct 2021 21:21:22 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP2oPkWNh8sYXAA--.22187S4;
-        Mon, 11 Oct 2021 09:19:14 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        id S233533AbhJKCl5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 10 Oct 2021 22:41:57 -0400
+Received: from mga17.intel.com ([192.55.52.151]:13178 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231578AbhJKCl4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 10 Oct 2021 22:41:56 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10133"; a="207592594"
+X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
+   d="scan'208";a="207592594"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 19:39:57 -0700
+X-IronPort-AV: E=Sophos;i="5.85,363,1624345200"; 
+   d="scan'208";a="459805979"
+Received: from akleen-mobl1.amr.corp.intel.com (HELO [10.209.83.75]) ([10.209.83.75])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2021 19:39:56 -0700
+Message-ID: <8c906de6-5efa-b87a-c800-6f07b98339d0@linux.intel.com>
+Date:   Sun, 10 Oct 2021 19:39:55 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v5 16/16] x86/tdx: Add cmdline option to force use of
+ ioremap_host_shared
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        Paul Burton <paulburton@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf-next v2 2/2] bpf, mips: Fix comment on tail call count limiting
-Date:   Mon, 11 Oct 2021 09:19:10 +0800
-Message-Id: <1633915150-13220-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1633915150-13220-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1633915150-13220-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxP2oPkWNh8sYXAA--.22187S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7XrW5CFWfGr1rAr13Xr4xZwb_yoWDXFcEqF
-        1Iyan7twnYqry5Aw43ur1rtFn5C345CF1xZFs29F42y390ya1rJFZYqry8Z3sxWr4qvrW5
-        Xr1kG34S9ayIgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbyAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXwA2048vs2IY02
-        0Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-        v20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-        kIc2xKxwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8
-        JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1V
-        AFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4
-        A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU
-        0xZFpf9x0JUZzVbUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009003711.1390019-17-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009070132-mutt-send-email-mst@kernel.org>
+From:   Andi Kleen <ak@linux.intel.com>
+In-Reply-To: <20211009070132-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In emit_tail_call() of bpf_jit_comp32.c, "blez t2" (t2 <= 0) is
-not consistent with the comment "t2 < 0", update the comment to
-keep consistency.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/net/bpf_jit_comp32.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> The connection is quite unfortunate IMHO.
+> Can't there be an option
+> that unbreaks drivers *without* opening up security holes by
+> making BIOS shared?
 
-diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
-index 9d7041a..bd996ed 100644
---- a/arch/mips/net/bpf_jit_comp32.c
-+++ b/arch/mips/net/bpf_jit_comp32.c
-@@ -1315,7 +1315,7 @@ static int emit_tail_call(struct jit_context *ctx)
- 	/* if (TCC-- <= 0) goto out */
- 	emit(ctx, lw, t2, ctx->stack_size, MIPS_R_SP);  /* t2 = *(SP + size) */
- 	emit_load_delay(ctx);                     /* Load delay slot         */
--	emit(ctx, blez, t2, get_offset(ctx, 1));  /* PC += off(1) if t2 < 0  */
-+	emit(ctx, blez, t2, get_offset(ctx, 1));  /* PC += off(1) if t2 <= 0 */
- 	emit(ctx, addiu, t2, t2, -1);             /* t2-- (delay slot)       */
- 	emit(ctx, sw, t2, ctx->stack_size, MIPS_R_SP);  /* *(SP + size) = t2 */
- 
--- 
-2.1.0
+That would require new low level APIs that distinguish both cases, and a 
+tree sweep.
+
+
+-Andi
 
