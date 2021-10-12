@@ -2,88 +2,150 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA06429D2B
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Oct 2021 07:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0475842A54E
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Oct 2021 15:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbhJLFh3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Oct 2021 01:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbhJLFh2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Oct 2021 01:37:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E8DC061570;
-        Mon, 11 Oct 2021 22:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BSSAC90BiE8gg+UZzsBqoP8nG2ttujvFSkUF5owSkxY=; b=MzXQA4NAznHV2pOmBegGNgm87K
-        oVvwG/zN+yRPIuuYShlDqNtJYhMRNhkmqMZWNbAGWU49/Nv/2aW0znA9f/78BPDOtCjiwwQ83WulP
-        TkiMflpjzdtJOgE6ux0vY80O5LkHY9rVp+YfZ6ERYdw9pl5b/phfUwwQuVO1nW524yrgR9bXDK52v
-        iQtcN1C4SwI2Vszu9JjLlNiMm+aYLX8nchJCdIvnJjMHdYZXD6DxxaeOfocpJDQv2kd3vaGZaz7xA
-        GdpMpGjxJoO6YOsVq7aZSRDvbAsE3E77p4d3rWhsorSBG3Ni1XElTYbf6rNlFf7ZzoRSfhDeAHUYF
-        e3s2gKcw==;
-Received: from hch by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1maANi-006Ezp-GU; Tue, 12 Oct 2021 05:31:43 +0000
-Date:   Tue, 12 Oct 2021 06:31:18 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        id S236798AbhJLNUV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Oct 2021 09:20:21 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:55852 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236778AbhJLNUT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Oct 2021 09:20:19 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1634044696;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ymITe80mWx73Jpl6DT0uZfy3o7gRcw0Jy8tyHcqTiE8=;
+        b=LgaA3Nn8D5eyiroiMjLQj1ZhZdlUPtCnf/rR857Hlvt8mv5RUmY61YF4hHBKRBYHLcuu/G
+        6ZMikcEqXcE1GnrbxQhKCF1VQSUMyNDrgz4BzLU5ZU/gCKIgNXI/RVbBa5c/Bsyfm3dVlF
+        KkixShZSQpIlWz6wfjm4YAuLCObFpbqbEyQ772cMxlT4bcbl/KCGQGRyHOp5rP+zitwk1S
+        N/Gagk6koDP600UMSZQhg4GWg5e0y4XRtS1TkWniBwAu2qlgrpk2hrvb8zbESXzX5SZVDk
+        vqnlzBJX/tqy1ZZbMMmue19hCFdLlAJbFqV9I8YFOl/o88Dx91/kw82WsZUwzg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1634044696;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ymITe80mWx73Jpl6DT0uZfy3o7gRcw0Jy8tyHcqTiE8=;
+        b=A1bEbvzkMZxpPWGXGbpmn5c5uilUbirjSJukgbchZ/6SfuWjbW6OVRmpiv2Pj4rCXaxU6r
+        +aou9YS2AQw3fBCw==
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v5 12/16] PCI: Add pci_iomap_host_shared(),
- pci_iomap_host_shared_range()
-Message-ID: <YWUdpik4SP/7QlbN@infradead.org>
-References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
- <YWPunfa+WK86Cgnv@infradead.org>
- <a070274e-6a3a-fb0a-68ff-d320d0729377@linux.intel.com>
- <20211011142956-mutt-send-email-mst@kernel.org>
+        linux-mips@vger.kernel.org
+Subject: Re: [GIT PULL] arm64 fixes for 5.15-rc5
+In-Reply-To: <CAHk-=wjTAJwMJZ-6PPxvdtDmkL0=pfRF77nJ5qWw2vbiTzT4nQ@mail.gmail.com>
+References: <YWCPyK+xotTgUMy/@arm.com>
+ <CAHk-=whWZ4OxfKQwKVrRc-E9=w-ygKdVFn_HcAMW-DW8SgranQ@mail.gmail.com>
+ <20211011104729.GB1421@C02TD0UTHF1T.local>
+ <CAHk-=wjTAJwMJZ-6PPxvdtDmkL0=pfRF77nJ5qWw2vbiTzT4nQ@mail.gmail.com>
+Date:   Tue, 12 Oct 2021 15:18:16 +0200
+Message-ID: <87czoacrfr.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211011142956-mutt-send-email-mst@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Oct 11, 2021 at 03:09:09PM -0400, Michael S. Tsirkin wrote:
-> The reason we have trouble is that it's not clear what does the API mean
-> outside the realm of TDX.
-> If we really, truly want an API that says "ioremap and it's a hardened
-> driver" then I guess ioremap_hardened_driver is what you want.
+Linus,
 
-Yes.  And why would be we ioremap the BIOS anyway?  It is not I/O memory
-in any of the senses we generally use ioremap for.
+On Mon, Oct 11 2021 at 12:54, Linus Torvalds wrote:
+> On Mon, Oct 11, 2021 at 3:47 AM Mark Rutland <mark.rutland@arm.com> wrote:
+> And so the reason I really hate that patch is that it introduces a new
+> "different architectures randomly and inexplicably do different
+> things, and the generic behavior is very different on arm64 than it is
+> elsewhere".
+>
+> That's just the worst kind of hack to me.
+>
+> And in this case, it's really *horribly* hard to see what the call
+> chain is. It all ends up being actively obfuscated and obscured
+> through that 'handle_arch_irq' function pointer, that is sometimes set
+> through set_handle_irq(), and sometimes set directly.
+>
+> I really think that if the rule is "we can't do accounting in
+> handle_domain_irq(), because it's too late for arm64", then the fix
+> really should be to just not do that.
+>
+> Move the irq_enter()/irq_exit() to the callers - quite possibly far up
+> the call chain to the root of it all, and just say "architecture code
+> needs to do this in the low-level code before calling
+> handle_arch_irq".
+
+That's where it belongs. It's mandatory to have it there for NOHZ_FULL
+to work correctly vs. instrumentation etc. I've pointed that out back
+then after we fed the X86 entry code into the mincer and added noinstr
+sections to keep tracers, BPF and kprobes away from it.
+
+Looking at the architectures which "support" that by selecting
+HAVE_CONTEXT_TRACKING:
+
+arch/arm/Kconfig:	select HAVE_CONTEXT_TRACKING
+arch/arm64/Kconfig:	select HAVE_CONTEXT_TRACKING
+arch/csky/Kconfig:	select HAVE_CONTEXT_TRACKING
+arch/mips/Kconfig:	select HAVE_CONTEXT_TRACKING
+arch/powerpc/Kconfig:	select HAVE_CONTEXT_TRACKING		if PPC64
+arch/riscv/Kconfig:	select HAVE_CONTEXT_TRACKING
+arch/sparc/Kconfig:	select HAVE_CONTEXT_TRACKING
+arch/x86/Kconfig:	select HAVE_CONTEXT_TRACKING		if X86_64
+
+S390 and X86 are (mostly) complete and use the generic entry code. S390
+does not even select HAVE_CONTEXT_TRACKING!
+
+PPC64 has done quite some work to fix that, but it looks not yet complete. 
+
+Mark is working on ARM64.
+
+There is some effort underway to convert MIPS over to generic entry.
+
+The rest needs all the fundamental architecture side changes.
+
+> Anyway, it _looks_ to me like the pattern is very simple:
+>
+> Step 1:
+>  - remove irq_enter/irq_exit from handle_domain_irq(), move it to all callers.
+>
+> This clearly doesn't change anything at all, but also doesn't fix the
+> problem you have. But it's easy to verify that the code is the same
+> before-and-after.
+>
+> Step 2 is the pattern matching step:
+>
+>  - if the caller of handle_domain_irq() ends up being a function that
+> is registered with set_handle_irq(), then we
+>    (a) remove the irq_enter/irq_exit from it
+>    (b) add it to the architectures that use handle_arch_irq.
+>    (c) make sure that if there are other callers of it (not through
+> handle_arch_irq) we move that irq_enter/irq_exit into them too
+>
+> I _suspect_ - but didn't check - that Step 2(c) doesn't actually
+> exist. But who knows.
+
+It only exists with chained handlers, but they do not need that at all
+because:
+
+        irq_enter()
+        arch_handle_irq()
+          handle_domain_irq()
+            chained_handler()
+              handle_domain_irq()
+
+which is still the same interrupt context and not a nested interrupt.
+
+> It really looks like there is a very tight connection between "uses
+> handle_domain_irq()" and "uses handle_arch_irq/set_handle_irq()". No?
+
+Looks like. That might conflict with the MIPS rework though. I don't
+know how far that came already. Cc'ed the MIPS people.
+
+Thanks,
+
+        tglx
