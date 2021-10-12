@@ -2,253 +2,239 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C52042A87B
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Oct 2021 17:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9424242AAFE
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Oct 2021 19:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237530AbhJLPmC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Oct 2021 11:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S232827AbhJLRpH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Oct 2021 13:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237462AbhJLPmB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Oct 2021 11:42:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC989C061570;
-        Tue, 12 Oct 2021 08:39:59 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1634053197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yq9pdM+pdjvFyxYq6vmMvIVLBnPdOuhx9oiz5uGo6UU=;
-        b=xitHgukXgKA2MBj8PCjURdDGoMTZH/BxUY7N7QC4gA7vKPdxi7JltDNhcp6mYCeafKOIJE
-        K4iRvrII0avJScGvUumRxPbtZPQt/6bXVggOfVop1/A332m71KVCBkOldJVWmRr9P2kVj3
-        1uUWpfHdkjfSpDrOpXcn+X4/c0xeE95wGbqZY9wuqJf6vZzk0L2+4dxJrx5zxOBM3EpcAP
-        9GOvR13XoCyTQtGUvVn+jCN9pejPewlu3GCEEIMwsOZcoz/enNJe4ZePT1lp8B2OzfpqVB
-        yo0FhQmqhwDVUdxfw+OgWebMATFqE8nc7PspPOH6xYORVjMee9rGXBtlR27Zpg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1634053197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yq9pdM+pdjvFyxYq6vmMvIVLBnPdOuhx9oiz5uGo6UU=;
-        b=bCBuDgsB4Kz2NnLkDj2Oy10PeA5fq9vy2jLWrl8/AL4sSoo+OUTH5CyNQ9tozjT6WQEE/g
-        YWWgUNvrQHHAOCDw==
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: Re: [GIT PULL] arm64 fixes for 5.15-rc5
-In-Reply-To: <20211012140243.GA41546@C02TD0UTHF1T.local>
-References: <YWCPyK+xotTgUMy/@arm.com>
- <CAHk-=whWZ4OxfKQwKVrRc-E9=w-ygKdVFn_HcAMW-DW8SgranQ@mail.gmail.com>
- <20211011104729.GB1421@C02TD0UTHF1T.local>
- <CAHk-=wjTAJwMJZ-6PPxvdtDmkL0=pfRF77nJ5qWw2vbiTzT4nQ@mail.gmail.com>
- <87czoacrfr.ffs@tglx> <20211012140243.GA41546@C02TD0UTHF1T.local>
-Date:   Tue, 12 Oct 2021 17:39:56 +0200
-Message-ID: <87mtneb6b7.ffs@tglx>
+        with ESMTP id S232802AbhJLRpG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Oct 2021 13:45:06 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B57C061749
+        for <linux-mips@vger.kernel.org>; Tue, 12 Oct 2021 10:43:04 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id g14so213575pfm.1
+        for <linux-mips@vger.kernel.org>; Tue, 12 Oct 2021 10:43:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c0eaXCym61eiyhGT8GrUnwQDVzwTszJGE9WWYZbnw/I=;
+        b=WxPZdN095KQgIlI5yU5qv0kDDUbBxKJaeY7ZC60bwwjCmldsE5dJp8xBjUlh2H3f7u
+         KDcadpUVFwub2imKyC31S7f+xXPYC3o0QZayMhGwBFND9QSSkipX+sNLN90JdelYcTQV
+         icggDdPWpuMAw4t03MeCBYYi/bC9qevHqZZYs+zUb+0aiQ7EAIJHrMdiFnYoTYu422eg
+         uJNegZaUShKK4Z3PYQkHuOa7SLoCwsbTusMRGb7Z+VqP1cY9TG6mW5XMlJLFBqIp0ND4
+         Qohcz53rKRmxnjn2Kc0dL0iebauPHDeU9Xe9+UkQrP37q/4ILF/V1eyPuoG9gexwZ1Jh
+         vFjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c0eaXCym61eiyhGT8GrUnwQDVzwTszJGE9WWYZbnw/I=;
+        b=V+SaDaNsS3ecXcmxfD+cJ0oPAFfjvKweGXw0R2yQuVItTBZ6fQVoepsNtMtLI0zlD1
+         otKTV/dzz5pBrG/cg3cRQbLGfCj1Fv15ZLo4bUbCKzq9Ls7j3yIj3X+MP6I/44MywuYi
+         2mBhkqGX79h283ua8MewbOeZEiqezJ56Yc29HSLFP3wSvwW+Q/lkhThjSZjp5Kej3DYB
+         e0xyutK+uwGLW+JI1NdtPZtkC52bk0D7lSJ2fiIrLgU0M0OAwkXY7/Ms904jnEnpwhBq
+         Ds0mj1Oz6htoO1TNJjH0ygZ4aUI/5xP3mkjmL0y0XaPj9xuGcnLvyPLXXfpF77ZhAJtv
+         GDuA==
+X-Gm-Message-State: AOAM531aeF1B1gDNmiHe+RJqi4VqiTA1S+lS7Jx1+iufB2zDPXlz/sYZ
+        5DNQP+I7PVjN0txiiEcU/amA3EQhuPoRGbJw3XAPcQ==
+X-Google-Smtp-Source: ABdhPJw1VjQ62MwbxnVetu2KFatM9kheWAJJfezTYytAXzbh88FOGY4hTcSMBpDz0J/dm4EaQSnWU4J67TnjFV+cb6o=
+X-Received: by 2002:a62:1b92:0:b0:3eb:3f92:724 with SMTP id
+ b140-20020a621b92000000b003eb3f920724mr33331175pfb.3.1634060583829; Tue, 12
+ Oct 2021 10:43:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009003711.1390019-13-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20211009053103-mutt-send-email-mst@kernel.org> <CAPcyv4hDhjRXYCX_aiOboLF0eaTo6VySbZDa5NQu2ed9Ty2Ekw@mail.gmail.com>
+ <0e6664ac-cbb2-96ff-0106-9301735c0836@linux.intel.com>
+In-Reply-To: <0e6664ac-cbb2-96ff-0106-9301735c0836@linux.intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 12 Oct 2021 10:42:52 -0700
+Message-ID: <CAPcyv4g0v0YHZ-okxf4wwVCYxHotxdKwsJpZGkoT+fhvvAJEFg@mail.gmail.com>
+Subject: Re: [PATCH v5 12/16] PCI: Add pci_iomap_host_shared(), pci_iomap_host_shared_range()
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        "Reshetova, Elena" <elena.reshetova@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 12 2021 at 15:02, Mark Rutland wrote:
-> On Tue, Oct 12, 2021 at 03:18:16PM +0200, Thomas Gleixner wrote:
->> On Mon, Oct 11 2021 at 12:54, Linus Torvalds wrote:
-> I'm happy with this in principle. The only reason we didn't go down that
-> route initially is because the callers are (typically) in the bowels of
-> arch asm or platform code, they all need to be fixed in one go to avoid
-> breaking anything, and it's a headache if we collide with any rework
-> (e.g. MIPS moving to generic entry).
-
-mips-next looks pretty empty vs. that.
-
->> > It really looks like there is a very tight connection between "uses
->> > handle_domain_irq()" and "uses handle_arch_irq/set_handle_irq()". No?
->> 
->> Looks like. That might conflict with the MIPS rework though. I don't
->> know how far that came already. Cc'ed the MIPS people.
+On Sun, Oct 10, 2021 at 3:11 PM Andi Kleen <ak@linux.intel.com> wrote:
 >
-> There's also a bunch of old platforms on arch/arm which have a
-> hard-coded handler (so not using handle_arch_irq/set_handle_irq()) which
-> calls handle_domain_irq() -- those can be fixed up.
+>
+> On 10/9/2021 1:39 PM, Dan Williams wrote:
+> > On Sat, Oct 9, 2021 at 2:53 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >> On Fri, Oct 08, 2021 at 05:37:07PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> >>> From: Andi Kleen <ak@linux.intel.com>
+> >>>
+> >>> For Confidential VM guests like TDX, the host is untrusted and hence
+> >>> the devices emulated by the host or any data coming from the host
+> >>> cannot be trusted. So the drivers that interact with the outside world
+> >>> have to be hardened by sharing memory with host on need basis
+> >>> with proper hardening fixes.
+> >>>
+> >>> For the PCI driver case, to share the memory with the host add
+> >>> pci_iomap_host_shared() and pci_iomap_host_shared_range() APIs.
+> >>>
+> >>> Signed-off-by: Andi Kleen <ak@linux.intel.com>
+> >>> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> >> So I proposed to make all pci mappings shared, eliminating the need
+> >> to patch drivers.
+> >>
+> >> To which Andi replied
+> >>          One problem with removing the ioremap opt-in is that
+> >>          it's still possible for drivers to get at devices without going through probe.
+> >>
+> >> To which Greg replied:
+> >> https://lore.kernel.org/all/YVXBNJ431YIWwZdQ@kroah.com/
+> >>          If there are in-kernel PCI drivers that do not do this, they need to be
+> >>          fixed today.
+> >>
+> >> Can you guys resolve the differences here?
+> > I agree with you and Greg here. If a driver is accessing hardware
+> > resources outside of the bind lifetime of one of the devices it
+> > supports, and in a way that neither modrobe-policy nor
+> > device-authorization -policy infrastructure can block, that sounds
+> > like a bug report.
+>
+> The 5.15 tree has something like ~2.4k IO accesses (including MMIO and
+> others) in init functions that also register drivers (thanks Elena for
+> the number)
+>
+> Some are probably old drivers that could be fixed, but it's quite a few
+> legitimate cases. For example for platform or ISA drivers that's the
+> only way they can be implemented because they often have no other
+> enumeration mechanism. For PCI drivers it's rarer, but also still can
+> happen. One example that comes to mind here is the x86 Intel uncore
+> drivers, which support a mix of MSR, ioremap and PCI config space
+> accesses all from the same driver. This particular example can (and
+> should be) fixed in other ways, but similar things also happen in other
+> drivers, and they're not all broken. Even for the broken ones they're
+> usually for some crufty old devices that has very few users, so it's
+> likely untestable in practice.
+>
+> My point is just that the ecosystem of devices that Linux supports is
+> messy enough that there are legitimate exceptions from the "First IO
+> only in probe call only" rule.
+>
+> And we can't just fix them all. Even if we could it would be hard to
+> maintain.
+>
+> Using a "firewall model" hooking into a few strategic points like we're
+> proposing here is much saner for everyone.
+>
+> Now we can argue about the details. Right now what we're proposing has
+> some redundancies: it has both a device model filter and low level
+> filter for ioremap (this patch and some others). The low level filter is
+> for catching issues that don't clearly fit into the
+> "enumeration<->probe" model. You could call that redundant, but I would
+> call it defense in depth or better safe than sorry. In theory it would
+> be enough to have the low level opt-in only, but that would have the
+> drawback that is something gets enumerated after all you would have all
+> kind of weird device driver failures and in some cases even killed
+> guests. So I think it makes sense to have
 
-If that turns out to be ugly, then somehting like the below might be
-less horrible as a stop gap.
+The "better safe-than-sorry" argument is hard to build consensus
+around. The spectre mitigations ran into similar problems where the
+community rightly wanted to see the details and instrument the
+problematic paths rather than blanket sprinkle lfence "just to be
+safe". In this case the rules about when a driver is suitably
+"hardened" are vague and the overlapping policy engines are confusing.
 
-Thanks,
+I'd rather see more concerted efforts focused/limited core changes
+rather than leaf driver changes until there is a clearer definition of
+hardened. I.e. instead of jumping to the assertion that fixing up
+these init-path vulnerabilities are too big to fix, dig to the next
+level to provide more evidence that per-driver opt-in is the only
+viable option.
 
-        tglx
----
+For example, how many of these problematic paths are built-in to the
+average kernel config? A strawman might be to add a sprinkling error
+exits in the module_init() of the problematic drivers, and only fail
+if the module is built-in, and let modprobe policy handle the rest.
 
---- a/arch/x86/xen/smp.c
-+++ b/arch/x86/xen/smp.c
-@@ -268,20 +268,16 @@ void xen_send_IPI_allbutself(int vector)
- 
- static irqreturn_t xen_call_function_interrupt(int irq, void *dev_id)
- {
--	irq_enter();
- 	generic_smp_call_function_interrupt();
- 	inc_irq_stat(irq_call_count);
--	irq_exit();
- 
- 	return IRQ_HANDLED;
- }
- 
- static irqreturn_t xen_call_function_single_interrupt(int irq, void *dev_id)
- {
--	irq_enter();
- 	generic_smp_call_function_single_interrupt();
- 	inc_irq_stat(irq_call_count);
--	irq_exit();
- 
- 	return IRQ_HANDLED;
- }
---- a/arch/x86/xen/smp_pv.c
-+++ b/arch/x86/xen/smp_pv.c
-@@ -458,10 +458,8 @@ static void xen_pv_stop_other_cpus(int w
- 
- static irqreturn_t xen_irq_work_interrupt(int irq, void *dev_id)
- {
--	irq_enter();
- 	irq_work_run();
- 	inc_irq_stat(apic_irq_work_irqs);
--	irq_exit();
- 
- 	return IRQ_HANDLED;
- }
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -33,6 +33,9 @@ config HOTPLUG_SMT
- config GENERIC_ENTRY
-        bool
- 
-+config ARCH_ENTRY_RCU_CLEAN
-+       bool
-+
- config KPROBES
- 	bool "Kprobes"
- 	depends on MODULES
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -66,6 +66,7 @@ config X86
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE if MEMORY_HOTPLUG
- 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if (PGTABLE_LEVELS > 2) && (X86_64 || X86_PAE)
- 	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
-+	select ARCH_ENTRY_RCU_CLEAN
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
- 	select ARCH_HAS_CACHE_LINE_SIZE
- 	select ARCH_HAS_DEBUG_VIRTUAL
---- a/kernel/irq/irqdesc.c
-+++ b/kernel/irq/irqdesc.c
-@@ -677,24 +677,13 @@ int generic_handle_domain_irq(struct irq
- EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
- 
- #ifdef CONFIG_HANDLE_DOMAIN_IRQ
--/**
-- * handle_domain_irq - Invoke the handler for a HW irq belonging to a domain,
-- *                     usually for a root interrupt controller
-- * @domain:	The domain where to perform the lookup
-- * @hwirq:	The HW irq number to convert to a logical one
-- * @regs:	Register file coming from the low-level handling code
-- *
-- * Returns:	0 on success, or -EINVAL if conversion has failed
-- */
--int handle_domain_irq(struct irq_domain *domain,
--		      unsigned int hwirq, struct pt_regs *regs)
-+static int __handle_domain_irq(struct irq_domain *domain,
-+			       unsigned int hwirq, struct pt_regs *regs)
- {
- 	struct pt_regs *old_regs = set_irq_regs(regs);
- 	struct irq_desc *desc;
- 	int ret = 0;
- 
--	irq_enter();
--
- 	/* The irqdomain code provides boundary checks */
- 	desc = irq_resolve_mapping(domain, hwirq);
- 	if (likely(desc))
-@@ -702,12 +691,41 @@ int handle_domain_irq(struct irq_domain
- 	else
- 		ret = -EINVAL;
- 
--	irq_exit();
- 	set_irq_regs(old_regs);
- 	return ret;
- }
- 
- /**
-+ * handle_domain_irq - Invoke the handler for a HW irq belonging to a domain,
-+ *                     usually for a root interrupt controller
-+ * @domain:	The domain where to perform the lookup
-+ * @hwirq:	The HW irq number to convert to a logical one
-+ * @regs:	Register file coming from the low-level handling code
-+ *
-+ * Returns:	0 on success, or -EINVAL if conversion has failed
-+ */
-+#ifdef CONFIG_ARCH_ENTRY_RCU_CLEAN
-+int handle_domain_irq(struct irq_domain *domain,
-+		      unsigned int hwirq, struct pt_regs *regs)
-+{
-+	__handle_domain_irq(domain, hwirq, regs);
-+}
-+#else
-+int handle_domain_irq(struct irq_domain *domain,
-+		      unsigned int hwirq, struct pt_regs *regs)
-+{
-+	/*
-+	 * irq_enter()/exit() has to be done in low level
-+	 * architecture code. Bandaid for not yet fixed
-+	 * architectures.
-+	 */
-+	irq_enter();
-+	__handle_domain_irq(domain, hwirq, regs);
-+	irq_exit();
-+}
-+#endif
-+
-+/**
-  * handle_domain_nmi - Invoke the handler for a HW irq belonging to a domain
-  * @domain:	The domain where to perform the lookup
-  * @hwirq:	The HW irq number to convert to a logical one
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -601,6 +601,7 @@ void irq_enter_rcu(void)
- 	account_hardirq_enter(current);
- }
- 
-+#ifndef ARCH_ENTRY_RCU_CLEAN
- /**
-  * irq_enter - Enter an interrupt context including RCU update
-  */
-@@ -609,6 +610,7 @@ void irq_enter(void)
- 	rcu_irq_enter();
- 	irq_enter_rcu();
- }
-+#endif
- 
- static inline void tick_irq_exit(void)
- {
-@@ -650,6 +652,7 @@ void irq_exit_rcu(void)
- 	lockdep_hardirq_exit();
- }
- 
-+#ifndef ARCH_ENTRY_RCU_CLEAN
- /**
-  * irq_exit - Exit an interrupt context, update RCU and lockdep
-  *
-@@ -662,6 +665,7 @@ void irq_exit(void)
- 	 /* must be last! */
- 	lockdep_hardirq_exit();
- }
-+#endif
- 
- /*
-  * This function must run with irqs disabled!
+>
+>
+> > Fix those drivers instead of sprinkling
+> > ioremap_shared in select places and with unclear rules about when a
+> > driver is allowed to do "shared" mappings.
+>
+> Only add it when the driver has been audited and hardened.
+>
+> But I agree we need on a documented process for this. I will work on
+> some documentation for a proposal. But essentially I think it should be
+> some variant of what Elena has outlined in her talk at Security Summit.
+>
+> https://static.sched.com/hosted_files/lssna2021/b6/LSS-HardeningLinuxGuestForCCC.pdf
+>
+> That is using extra auditing/scrutiny at review time, supported with
+> some static code analysis that points to the interaction points, and
+> code needs to be fuzzed explicitly.
+>
+> However short term it's only three virtio drivers, so this is not a
+> urgent problem.
+>
+> > Let the new
+> > device-authorization mechanism (with policy in userspace)
+>
+>
+> Default policy in user space just seems to be a bad idea here. Who
+> should know if a driver is hardened other than the kernel? Maintaining
+> the list somewhere else just doesn't make sense to me.
+
+I do not understand the maintenance burden correlation of where the
+policy is driven vs where the list is maintained? Even if I agreed
+with the contention that out-of-tree userspace would have a hard time
+tracking the "hardened" driver list there is still an in-tree
+userspace path to explore. E.g. perf maintains lists of things tightly
+coupled to the kernel, this authorized device list seems to be in the
+same category of data.
+
+> Also there is the more practical problem that some devices are needed
+> for booting. For example in TDX we can't print something to the console
+> with this mechanism, so you would never get any output before the
+> initrd. Just seems like a nightmare for debugging anything. There really
+> needs to be an authorization mechanism that works reasonably early.
+>
+> I can see a point of having user space overrides though, but we need to
+> have a sane kernel default that works early.
+
+Right, as I suggested [1], just enough early authorization to
+bootstrap/debug initramfs and then that can authorize the remainder.
+
+[1]: https://lore.kernel.org/all/CAPcyv4im4Tsj1SnxSWe=cAHBP1mQ=zgO-D81n2BpD+_HkpitbQ@mail.gmail.com/
