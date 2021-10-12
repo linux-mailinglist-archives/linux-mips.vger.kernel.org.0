@@ -2,160 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5213D42A6AC
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Oct 2021 16:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF4C42A7ED
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Oct 2021 17:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237040AbhJLOEz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Oct 2021 10:04:55 -0400
-Received: from foss.arm.com ([217.140.110.172]:44132 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237083AbhJLOEz (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 12 Oct 2021 10:04:55 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BB22ED1;
-        Tue, 12 Oct 2021 07:02:53 -0700 (PDT)
-Received: from C02TD0UTHF1T.local (unknown [10.57.22.33])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C90843F66F;
-        Tue, 12 Oct 2021 07:02:50 -0700 (PDT)
-Date:   Tue, 12 Oct 2021 15:02:43 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: Re: [GIT PULL] arm64 fixes for 5.15-rc5
-Message-ID: <20211012140243.GA41546@C02TD0UTHF1T.local>
-References: <YWCPyK+xotTgUMy/@arm.com>
- <CAHk-=whWZ4OxfKQwKVrRc-E9=w-ygKdVFn_HcAMW-DW8SgranQ@mail.gmail.com>
- <20211011104729.GB1421@C02TD0UTHF1T.local>
- <CAHk-=wjTAJwMJZ-6PPxvdtDmkL0=pfRF77nJ5qWw2vbiTzT4nQ@mail.gmail.com>
- <87czoacrfr.ffs@tglx>
+        id S232568AbhJLPKh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Oct 2021 11:10:37 -0400
+Received: from mail-ua1-f52.google.com ([209.85.222.52]:34553 "EHLO
+        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229565AbhJLPKh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Oct 2021 11:10:37 -0400
+Received: by mail-ua1-f52.google.com with SMTP id h4so19148134uaw.1;
+        Tue, 12 Oct 2021 08:08:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/XLXN3xuVJOPHw5HRsxgIv5QkrLOCu749y9xpxhKV0I=;
+        b=vhwsS8t3myfqtctpmEr/kYoGwR9fXtd4/EeW662Zm8QuRRx/KpifzFbmMPIU9Dqoga
+         8GJ4W6uE+cx3EGruvWA3gT1pII1ZJOiOmtFpaqBtZR/nLpCU5VMVzrQQkt088m1fsCzA
+         c2mNoPC6+vufjPZp1CkA6MFAPNKjDcPmCxVNYxg/E2/mqaYDysPI/d3BOXI/a6w4UFsp
+         oA4YJGHmTqSWt5TAPZ/c7Qx7gmgG33J8UOEXBXfackVxyO13Ihg/dMCVYmNBeVLsOwop
+         E8C0o1wXNYQC3QXNDDfXvOR/DEPpclMSgLICHzc2A/20BIt8I/HdmGwyjZ2Hxdr9ivKu
+         lzrQ==
+X-Gm-Message-State: AOAM5338ryK7zpD3fCwBT3pYf0o0Wi9V9z/2p2oksBFw1wON4ewCug/Q
+        HW3xVZI5UCGgusLznFBX5eWeNaSIGhxJOG7h0yw=
+X-Google-Smtp-Source: ABdhPJx2RXQoSzE3pVGjeyVKDiENolt+HF3oWRJaUKqTdpAr/yDbBfb7YrzLDlKtQtHEEvyxafjPhHIcAcktEVDfYpE=
+X-Received: by 2002:a67:cb0a:: with SMTP id b10mr31833215vsl.9.1634051314899;
+ Tue, 12 Oct 2021 08:08:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czoacrfr.ffs@tglx>
+References: <20210914143835.511051-1-geert@linux-m68k.org> <20210914143835.511051-20-geert@linux-m68k.org>
+ <4602a8e681db4d0ebc43e4dafee8c28e@protonic.nl> <CAMuHMdVOa8DAGJQpJ8AotARxfh9PvpskJJa6k48jE92-P+GLRA@mail.gmail.com>
+ <bc1632943ecbb7e244b87c285501f706@protonic.nl>
+In-Reply-To: <bc1632943ecbb7e244b87c285501f706@protonic.nl>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 12 Oct 2021 17:08:23 +0200
+Message-ID: <CAMuHMdUrSpvVKPmi3EXvyKnDrq48Z5jvRY-a1kEoGSt2kS8J_Q@mail.gmail.com>
+Subject: Re: [PATCH v6 19/19] auxdisplay: ht16k33: Add LED support
+To:     Robin van der Gracht <robin@protonic.nl>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Paul Burton <paulburton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Linus, Thomas,
+Hoi Robin,
 
-A couple of minor comments below -- I'll have a go at the rework Linus
-suggested and see what blows up.
+On Mon, Oct 4, 2021 at 10:26 AM Robin van der Gracht <robin@protonic.nl> wrote:
+> On 2021-10-01 17:51, Geert Uytterhoeven wrote:
+> > On Thu, Sep 30, 2021 at 12:57 PM Robin van der Gracht <robin@protonic.nl>
+> > wrote:
+> >> On 2021-09-14 16:38, Geert Uytterhoeven wrote:
+> >> > Instantiate a single LED based on the "led" subnode in DT.
+> >> > This allows the user to control display brightness and blinking (backed
+> >> > by hardware support) through the LED class API and triggers, and exposes
+> >> > the display color.  The LED will be named
+> >> > "auxdisplay:<color>:<function>".
+> >> >
+> >> > When running in dot-matrix mode and if no "led" subnode is found, the
+> >> > driver falls back to the traditional backlight mode, to preserve
+> >> > backwards compatibility.
+> >> >
+> >> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-On Tue, Oct 12, 2021 at 03:18:16PM +0200, Thomas Gleixner wrote:
-> On Mon, Oct 11 2021 at 12:54, Linus Torvalds wrote:
-> > On Mon, Oct 11, 2021 at 3:47 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> > And so the reason I really hate that patch is that it introduces a new
-> > "different architectures randomly and inexplicably do different
-> > things, and the generic behavior is very different on arm64 than it is
-> > elsewhere".
+> >> > +
+> >> > +     err = devm_led_classdev_register_ext(dev, led, &init_data);
+> >> > +     if (err)
+> >> > +             dev_err(dev, "Failed to register LED\n");
+> >>
+> >> You might want to call ht16k33_brightness_set(priv, brightness) here to get
+> >> a
+> >> know value into the display setup register (0x80).
+> >>
+> >> Right now if I enable hardware blinking and (soft)reboot my board it keeps
+> >> on
+> >> blinking even after a re-probe.
 > >
-> > That's just the worst kind of hack to me.
-> >
-> > And in this case, it's really *horribly* hard to see what the call
-> > chain is. It all ends up being actively obfuscated and obscured
-> > through that 'handle_arch_irq' function pointer, that is sometimes set
-> > through set_handle_irq(), and sometimes set directly.
-> >
-> > I really think that if the rule is "we can't do accounting in
-> > handle_domain_irq(), because it's too late for arm64", then the fix
-> > really should be to just not do that.
-> >
-> > Move the irq_enter()/irq_exit() to the callers - quite possibly far up
-> > the call chain to the root of it all, and just say "architecture code
-> > needs to do this in the low-level code before calling
-> > handle_arch_irq".
-> 
-> That's where it belongs. It's mandatory to have it there for NOHZ_FULL
-> to work correctly vs. instrumentation etc. I've pointed that out back
-> then after we fed the X86 entry code into the mincer and added noinstr
-> sections to keep tracers, BPF and kprobes away from it.
-> 
-> Looking at the architectures which "support" that by selecting
-> HAVE_CONTEXT_TRACKING:
-> 
-> arch/arm/Kconfig:	select HAVE_CONTEXT_TRACKING
-> arch/arm64/Kconfig:	select HAVE_CONTEXT_TRACKING
-> arch/csky/Kconfig:	select HAVE_CONTEXT_TRACKING
-> arch/mips/Kconfig:	select HAVE_CONTEXT_TRACKING
-> arch/powerpc/Kconfig:	select HAVE_CONTEXT_TRACKING		if PPC64
-> arch/riscv/Kconfig:	select HAVE_CONTEXT_TRACKING
-> arch/sparc/Kconfig:	select HAVE_CONTEXT_TRACKING
-> arch/x86/Kconfig:	select HAVE_CONTEXT_TRACKING		if X86_64
-> 
-> S390 and X86 are (mostly) complete and use the generic entry code. S390
-> does not even select HAVE_CONTEXT_TRACKING!
-> 
-> PPC64 has done quite some work to fix that, but it looks not yet complete. 
-> 
-> Mark is working on ARM64.
-> 
-> There is some effort underway to convert MIPS over to generic entry.
-> 
-> The rest needs all the fundamental architecture side changes.
-> 
-> > Anyway, it _looks_ to me like the pattern is very simple:
-> >
-> > Step 1:
-> >  - remove irq_enter/irq_exit from handle_domain_irq(), move it to all callers.
-> >
-> > This clearly doesn't change anything at all, but also doesn't fix the
-> > problem you have. But it's easy to verify that the code is the same
-> > before-and-after.
+> > I don't have that issue.
+> > Aha, ht16k33_seg_probe() calls ht16k33_brightness_set(), but
+> > ht16k33_fbdev_probe() doesn't.  The latter should do that, too,
+> > when not using backwards compatibility mode.
+>
+> Ack. I have hardware which uses the ht16k33 in dot matrix mode and I tested
+> both the backlight and led setup. I ran into this with the fbdev + led setup.
+>
+> I noticed ht16k33_bl_update_status() is called in ht16k33_fbdev_probe()
+> before the fbdev device is registered. Which is fine right now, but in theory
+> the fbdev blank state can influence the backlight setting (nitpick since
+> the fbdev device is unblanked by default).
+>
+> The point: Maybe ht16k33_brightness_set() (or ht16k33_bl_update_status() for
+> backlight device) should be called in one central place (i.e at the end of
+> the
+> main probe function).
 
-I'm happy with this in principle. The only reason we didn't go down that
-route initially is because the callers are (typically) in the bowels of
-arch asm or platform code, they all need to be fixed in one go to avoid
-breaking anything, and it's a headache if we collide with any rework
-(e.g. MIPS moving to generic entry).
+That would mean the main function need to know more about which mode
+is being used, so I think it's better to leave it to the individual display
+sub-drivers.
 
-As above, I'll have a go and see what blows up.
+Gr{oetje,eeting}s,
 
-It should be possible to have C wrappers for the common cases, and have
-the asm call that instead of branching directly to whichever irqchip
-handler handle_arch_irq points at.
+                        Geert
 
-> > Step 2 is the pattern matching step:
-> >
-> >  - if the caller of handle_domain_irq() ends up being a function that
-> > is registered with set_handle_irq(), then we
-> >    (a) remove the irq_enter/irq_exit from it
-> >    (b) add it to the architectures that use handle_arch_irq.
-> >    (c) make sure that if there are other callers of it (not through
-> > handle_arch_irq) we move that irq_enter/irq_exit into them too
-> >
-> > I _suspect_ - but didn't check - that Step 2(c) doesn't actually
-> > exist. But who knows.
-> 
-> It only exists with chained handlers, but they do not need that at all
-> because:
-> 
->         irq_enter()
->         arch_handle_irq()
->           handle_domain_irq()
->             chained_handler()
->               handle_domain_irq()
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-... and this is exactly the shape of case where we need to avoid the
-nested calls so as to not break RCU's view of nesting.
-
-> which is still the same interrupt context and not a nested interrupt.
-> > It really looks like there is a very tight connection between "uses
-> > handle_domain_irq()" and "uses handle_arch_irq/set_handle_irq()". No?
-> 
-> Looks like. That might conflict with the MIPS rework though. I don't
-> know how far that came already. Cc'ed the MIPS people.
-
-There's also a bunch of old platforms on arch/arm which have a
-hard-coded handler (so not using handle_arch_irq/set_handle_irq()) which
-calls handle_domain_irq() -- those can be fixed up.
-
-Thanks,
-Mark.
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
