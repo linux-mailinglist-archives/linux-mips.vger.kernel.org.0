@@ -2,119 +2,253 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF4C42A7ED
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Oct 2021 17:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C52042A87B
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Oct 2021 17:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbhJLPKh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Oct 2021 11:10:37 -0400
-Received: from mail-ua1-f52.google.com ([209.85.222.52]:34553 "EHLO
-        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbhJLPKh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Oct 2021 11:10:37 -0400
-Received: by mail-ua1-f52.google.com with SMTP id h4so19148134uaw.1;
-        Tue, 12 Oct 2021 08:08:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/XLXN3xuVJOPHw5HRsxgIv5QkrLOCu749y9xpxhKV0I=;
-        b=vhwsS8t3myfqtctpmEr/kYoGwR9fXtd4/EeW662Zm8QuRRx/KpifzFbmMPIU9Dqoga
-         8GJ4W6uE+cx3EGruvWA3gT1pII1ZJOiOmtFpaqBtZR/nLpCU5VMVzrQQkt088m1fsCzA
-         c2mNoPC6+vufjPZp1CkA6MFAPNKjDcPmCxVNYxg/E2/mqaYDysPI/d3BOXI/a6w4UFsp
-         oA4YJGHmTqSWt5TAPZ/c7Qx7gmgG33J8UOEXBXfackVxyO13Ihg/dMCVYmNBeVLsOwop
-         E8C0o1wXNYQC3QXNDDfXvOR/DEPpclMSgLICHzc2A/20BIt8I/HdmGwyjZ2Hxdr9ivKu
-         lzrQ==
-X-Gm-Message-State: AOAM5338ryK7zpD3fCwBT3pYf0o0Wi9V9z/2p2oksBFw1wON4ewCug/Q
-        HW3xVZI5UCGgusLznFBX5eWeNaSIGhxJOG7h0yw=
-X-Google-Smtp-Source: ABdhPJx2RXQoSzE3pVGjeyVKDiENolt+HF3oWRJaUKqTdpAr/yDbBfb7YrzLDlKtQtHEEvyxafjPhHIcAcktEVDfYpE=
-X-Received: by 2002:a67:cb0a:: with SMTP id b10mr31833215vsl.9.1634051314899;
- Tue, 12 Oct 2021 08:08:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210914143835.511051-1-geert@linux-m68k.org> <20210914143835.511051-20-geert@linux-m68k.org>
- <4602a8e681db4d0ebc43e4dafee8c28e@protonic.nl> <CAMuHMdVOa8DAGJQpJ8AotARxfh9PvpskJJa6k48jE92-P+GLRA@mail.gmail.com>
- <bc1632943ecbb7e244b87c285501f706@protonic.nl>
-In-Reply-To: <bc1632943ecbb7e244b87c285501f706@protonic.nl>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Oct 2021 17:08:23 +0200
-Message-ID: <CAMuHMdUrSpvVKPmi3EXvyKnDrq48Z5jvRY-a1kEoGSt2kS8J_Q@mail.gmail.com>
-Subject: Re: [PATCH v6 19/19] auxdisplay: ht16k33: Add LED support
-To:     Robin van der Gracht <robin@protonic.nl>
-Cc:     Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        id S237530AbhJLPmC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Oct 2021 11:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237462AbhJLPmB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 12 Oct 2021 11:42:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC989C061570;
+        Tue, 12 Oct 2021 08:39:59 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1634053197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yq9pdM+pdjvFyxYq6vmMvIVLBnPdOuhx9oiz5uGo6UU=;
+        b=xitHgukXgKA2MBj8PCjURdDGoMTZH/BxUY7N7QC4gA7vKPdxi7JltDNhcp6mYCeafKOIJE
+        K4iRvrII0avJScGvUumRxPbtZPQt/6bXVggOfVop1/A332m71KVCBkOldJVWmRr9P2kVj3
+        1uUWpfHdkjfSpDrOpXcn+X4/c0xeE95wGbqZY9wuqJf6vZzk0L2+4dxJrx5zxOBM3EpcAP
+        9GOvR13XoCyTQtGUvVn+jCN9pejPewlu3GCEEIMwsOZcoz/enNJe4ZePT1lp8B2OzfpqVB
+        yo0FhQmqhwDVUdxfw+OgWebMATFqE8nc7PspPOH6xYORVjMee9rGXBtlR27Zpg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1634053197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yq9pdM+pdjvFyxYq6vmMvIVLBnPdOuhx9oiz5uGo6UU=;
+        b=bCBuDgsB4Kz2NnLkDj2Oy10PeA5fq9vy2jLWrl8/AL4sSoo+OUTH5CyNQ9tozjT6WQEE/g
+        YWWgUNvrQHHAOCDw==
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: Re: [GIT PULL] arm64 fixes for 5.15-rc5
+In-Reply-To: <20211012140243.GA41546@C02TD0UTHF1T.local>
+References: <YWCPyK+xotTgUMy/@arm.com>
+ <CAHk-=whWZ4OxfKQwKVrRc-E9=w-ygKdVFn_HcAMW-DW8SgranQ@mail.gmail.com>
+ <20211011104729.GB1421@C02TD0UTHF1T.local>
+ <CAHk-=wjTAJwMJZ-6PPxvdtDmkL0=pfRF77nJ5qWw2vbiTzT4nQ@mail.gmail.com>
+ <87czoacrfr.ffs@tglx> <20211012140243.GA41546@C02TD0UTHF1T.local>
+Date:   Tue, 12 Oct 2021 17:39:56 +0200
+Message-ID: <87mtneb6b7.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hoi Robin,
+On Tue, Oct 12 2021 at 15:02, Mark Rutland wrote:
+> On Tue, Oct 12, 2021 at 03:18:16PM +0200, Thomas Gleixner wrote:
+>> On Mon, Oct 11 2021 at 12:54, Linus Torvalds wrote:
+> I'm happy with this in principle. The only reason we didn't go down that
+> route initially is because the callers are (typically) in the bowels of
+> arch asm or platform code, they all need to be fixed in one go to avoid
+> breaking anything, and it's a headache if we collide with any rework
+> (e.g. MIPS moving to generic entry).
 
-On Mon, Oct 4, 2021 at 10:26 AM Robin van der Gracht <robin@protonic.nl> wrote:
-> On 2021-10-01 17:51, Geert Uytterhoeven wrote:
-> > On Thu, Sep 30, 2021 at 12:57 PM Robin van der Gracht <robin@protonic.nl>
-> > wrote:
-> >> On 2021-09-14 16:38, Geert Uytterhoeven wrote:
-> >> > Instantiate a single LED based on the "led" subnode in DT.
-> >> > This allows the user to control display brightness and blinking (backed
-> >> > by hardware support) through the LED class API and triggers, and exposes
-> >> > the display color.  The LED will be named
-> >> > "auxdisplay:<color>:<function>".
-> >> >
-> >> > When running in dot-matrix mode and if no "led" subnode is found, the
-> >> > driver falls back to the traditional backlight mode, to preserve
-> >> > backwards compatibility.
-> >> >
-> >> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+mips-next looks pretty empty vs. that.
 
-> >> > +
-> >> > +     err = devm_led_classdev_register_ext(dev, led, &init_data);
-> >> > +     if (err)
-> >> > +             dev_err(dev, "Failed to register LED\n");
-> >>
-> >> You might want to call ht16k33_brightness_set(priv, brightness) here to get
-> >> a
-> >> know value into the display setup register (0x80).
-> >>
-> >> Right now if I enable hardware blinking and (soft)reboot my board it keeps
-> >> on
-> >> blinking even after a re-probe.
-> >
-> > I don't have that issue.
-> > Aha, ht16k33_seg_probe() calls ht16k33_brightness_set(), but
-> > ht16k33_fbdev_probe() doesn't.  The latter should do that, too,
-> > when not using backwards compatibility mode.
+>> > It really looks like there is a very tight connection between "uses
+>> > handle_domain_irq()" and "uses handle_arch_irq/set_handle_irq()". No?
+>> 
+>> Looks like. That might conflict with the MIPS rework though. I don't
+>> know how far that came already. Cc'ed the MIPS people.
 >
-> Ack. I have hardware which uses the ht16k33 in dot matrix mode and I tested
-> both the backlight and led setup. I ran into this with the fbdev + led setup.
->
-> I noticed ht16k33_bl_update_status() is called in ht16k33_fbdev_probe()
-> before the fbdev device is registered. Which is fine right now, but in theory
-> the fbdev blank state can influence the backlight setting (nitpick since
-> the fbdev device is unblanked by default).
->
-> The point: Maybe ht16k33_brightness_set() (or ht16k33_bl_update_status() for
-> backlight device) should be called in one central place (i.e at the end of
-> the
-> main probe function).
+> There's also a bunch of old platforms on arch/arm which have a
+> hard-coded handler (so not using handle_arch_irq/set_handle_irq()) which
+> calls handle_domain_irq() -- those can be fixed up.
 
-That would mean the main function need to know more about which mode
-is being used, so I think it's better to leave it to the individual display
-sub-drivers.
+If that turns out to be ugly, then somehting like the below might be
+less horrible as a stop gap.
 
-Gr{oetje,eeting}s,
+Thanks,
 
-                        Geert
+        tglx
+---
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--- a/arch/x86/xen/smp.c
++++ b/arch/x86/xen/smp.c
+@@ -268,20 +268,16 @@ void xen_send_IPI_allbutself(int vector)
+ 
+ static irqreturn_t xen_call_function_interrupt(int irq, void *dev_id)
+ {
+-	irq_enter();
+ 	generic_smp_call_function_interrupt();
+ 	inc_irq_stat(irq_call_count);
+-	irq_exit();
+ 
+ 	return IRQ_HANDLED;
+ }
+ 
+ static irqreturn_t xen_call_function_single_interrupt(int irq, void *dev_id)
+ {
+-	irq_enter();
+ 	generic_smp_call_function_single_interrupt();
+ 	inc_irq_stat(irq_call_count);
+-	irq_exit();
+ 
+ 	return IRQ_HANDLED;
+ }
+--- a/arch/x86/xen/smp_pv.c
++++ b/arch/x86/xen/smp_pv.c
+@@ -458,10 +458,8 @@ static void xen_pv_stop_other_cpus(int w
+ 
+ static irqreturn_t xen_irq_work_interrupt(int irq, void *dev_id)
+ {
+-	irq_enter();
+ 	irq_work_run();
+ 	inc_irq_stat(apic_irq_work_irqs);
+-	irq_exit();
+ 
+ 	return IRQ_HANDLED;
+ }
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -33,6 +33,9 @@ config HOTPLUG_SMT
+ config GENERIC_ENTRY
+        bool
+ 
++config ARCH_ENTRY_RCU_CLEAN
++       bool
++
+ config KPROBES
+ 	bool "Kprobes"
+ 	depends on MODULES
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -66,6 +66,7 @@ config X86
+ 	select ARCH_ENABLE_MEMORY_HOTREMOVE if MEMORY_HOTPLUG
+ 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if (PGTABLE_LEVELS > 2) && (X86_64 || X86_PAE)
+ 	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
++	select ARCH_ENTRY_RCU_CLEAN
+ 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
+ 	select ARCH_HAS_CACHE_LINE_SIZE
+ 	select ARCH_HAS_DEBUG_VIRTUAL
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -677,24 +677,13 @@ int generic_handle_domain_irq(struct irq
+ EXPORT_SYMBOL_GPL(generic_handle_domain_irq);
+ 
+ #ifdef CONFIG_HANDLE_DOMAIN_IRQ
+-/**
+- * handle_domain_irq - Invoke the handler for a HW irq belonging to a domain,
+- *                     usually for a root interrupt controller
+- * @domain:	The domain where to perform the lookup
+- * @hwirq:	The HW irq number to convert to a logical one
+- * @regs:	Register file coming from the low-level handling code
+- *
+- * Returns:	0 on success, or -EINVAL if conversion has failed
+- */
+-int handle_domain_irq(struct irq_domain *domain,
+-		      unsigned int hwirq, struct pt_regs *regs)
++static int __handle_domain_irq(struct irq_domain *domain,
++			       unsigned int hwirq, struct pt_regs *regs)
+ {
+ 	struct pt_regs *old_regs = set_irq_regs(regs);
+ 	struct irq_desc *desc;
+ 	int ret = 0;
+ 
+-	irq_enter();
+-
+ 	/* The irqdomain code provides boundary checks */
+ 	desc = irq_resolve_mapping(domain, hwirq);
+ 	if (likely(desc))
+@@ -702,12 +691,41 @@ int handle_domain_irq(struct irq_domain
+ 	else
+ 		ret = -EINVAL;
+ 
+-	irq_exit();
+ 	set_irq_regs(old_regs);
+ 	return ret;
+ }
+ 
+ /**
++ * handle_domain_irq - Invoke the handler for a HW irq belonging to a domain,
++ *                     usually for a root interrupt controller
++ * @domain:	The domain where to perform the lookup
++ * @hwirq:	The HW irq number to convert to a logical one
++ * @regs:	Register file coming from the low-level handling code
++ *
++ * Returns:	0 on success, or -EINVAL if conversion has failed
++ */
++#ifdef CONFIG_ARCH_ENTRY_RCU_CLEAN
++int handle_domain_irq(struct irq_domain *domain,
++		      unsigned int hwirq, struct pt_regs *regs)
++{
++	__handle_domain_irq(domain, hwirq, regs);
++}
++#else
++int handle_domain_irq(struct irq_domain *domain,
++		      unsigned int hwirq, struct pt_regs *regs)
++{
++	/*
++	 * irq_enter()/exit() has to be done in low level
++	 * architecture code. Bandaid for not yet fixed
++	 * architectures.
++	 */
++	irq_enter();
++	__handle_domain_irq(domain, hwirq, regs);
++	irq_exit();
++}
++#endif
++
++/**
+  * handle_domain_nmi - Invoke the handler for a HW irq belonging to a domain
+  * @domain:	The domain where to perform the lookup
+  * @hwirq:	The HW irq number to convert to a logical one
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -601,6 +601,7 @@ void irq_enter_rcu(void)
+ 	account_hardirq_enter(current);
+ }
+ 
++#ifndef ARCH_ENTRY_RCU_CLEAN
+ /**
+  * irq_enter - Enter an interrupt context including RCU update
+  */
+@@ -609,6 +610,7 @@ void irq_enter(void)
+ 	rcu_irq_enter();
+ 	irq_enter_rcu();
+ }
++#endif
+ 
+ static inline void tick_irq_exit(void)
+ {
+@@ -650,6 +652,7 @@ void irq_exit_rcu(void)
+ 	lockdep_hardirq_exit();
+ }
+ 
++#ifndef ARCH_ENTRY_RCU_CLEAN
+ /**
+  * irq_exit - Exit an interrupt context, update RCU and lockdep
+  *
+@@ -662,6 +665,7 @@ void irq_exit(void)
+ 	 /* must be last! */
+ 	lockdep_hardirq_exit();
+ }
++#endif
+ 
+ /*
+  * This function must run with irqs disabled!
