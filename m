@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C955B42B155
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Oct 2021 02:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A0C42B17C
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Oct 2021 02:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236540AbhJMA5t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 12 Oct 2021 20:57:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41106 "EHLO mail.kernel.org"
+        id S237568AbhJMA61 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 12 Oct 2021 20:58:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41270 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236543AbhJMA5d (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 12 Oct 2021 20:57:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3391160F21;
-        Wed, 13 Oct 2021 00:55:27 +0000 (UTC)
+        id S237316AbhJMA6E (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 12 Oct 2021 20:58:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BBD606101B;
+        Wed, 13 Oct 2021 00:55:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634086531;
-        bh=qob3YSuRTRWNBYe/OSS+OKzkEfCDeLdA7hbMed4XBzY=;
+        s=k20201202; t=1634086561;
+        bh=Id+lo8S98inx0VkSjzSpon/uiOSKyP7vBgn14eXMLQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pZyABUlFLPb7fXfRsra+fXsnHbDR4hhOFi+YccDD8ZOIloSIWweQGi8kviWVNTG2G
-         zRSkbGMyNGYFahhHpnwm9zaOuOdXU7ep+rRPg+gSomsIYnWL9zkIoSfwfKt7NEgnMP
-         aJEW7tYys8BjWx9Y3hcrAJ/83sz7v0XHhOLGhhdCHOnOGfTuWyyXswWEqfcyowsLMi
-         FdMR0nz5H+kihNhGPBws/pIclH7J935IBdG9CCG/y9vHpNkq2v+zA/rHe+S0+/NDnr
-         I+3slmNREKQx62XheiXYTcOPgz0kD8MoXe75erSmDtlW4unyAD4Txb6HCLmcDzfhzW
-         PYoMxINB8Cg7w==
+        b=gfl2QErIKnUHyotNIdCXlr+UEztBZuK8ml1yDrMvHIwpHVCApqeUQ+o9asci+P2ND
+         KMh2iPDZPVH06aPm4jLJFmm4VjhRzk3DIjeLztGvF1rmd8rBgzFGEHHU9oGlhpGWYE
+         UtKBP6sKcIj+hbXH/LlWTm8DenNqpgBWS+FnDhiDg78l81Le96MOJn/Id+QV4zQJau
+         +guWnqoXOoN2ZmZlPeYibLpudjHAMZ5R3UE3g/56JuTLpV/5f7bCmdaoonZDPuhiDn
+         iqTJXDd0HNKzDl4fyxWLSyvr7F9FjUMJ6E4PiotRTsXxcoYK06Uk/sS/X4AnwqOrLt
+         ZlreT7ooFYQkg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -37,22 +37,23 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         James.Bottomley@HansenPartnership.com, deller@gmx.de,
         paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, geert+renesas@glider.be,
-        linus.walleij@linaro.org, rmk+kernel@armlinux.org.uk,
+        bp@alien8.de, x86@kernel.org, linus.walleij@linaro.org,
+        geert+renesas@glider.be, rmk+kernel@armlinux.org.uk,
         akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        rppt@kernel.org, ardb@kernel.org, u.kleine-koenig@pengutronix.de,
-        lukas.bulwahn@gmail.com, mark.rutland@arm.com,
-        wangkefeng.wang@huawei.com, slyfox@gentoo.org, axboe@kernel.dk,
-        rientjes@google.com, dan.j.williams@intel.com,
-        gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.14 17/17] firmware: include drivers/firmware/Kconfig unconditionally
-Date:   Tue, 12 Oct 2021 20:54:41 -0400
-Message-Id: <20211013005441.699846-17-sashal@kernel.org>
+        mark.rutland@arm.com, ardb@kernel.org,
+        u.kleine-koenig@pengutronix.de, rppt@kernel.org,
+        lukas.bulwahn@gmail.com, wangkefeng.wang@huawei.com,
+        slyfox@gentoo.org, axboe@kernel.dk, ben.widawsky@intel.com,
+        dan.j.williams@intel.com, gregkh@linuxfoundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.10 11/11] firmware: include drivers/firmware/Kconfig unconditionally
+Date:   Tue, 12 Oct 2021 20:55:31 -0400
+Message-Id: <20211013005532.700190-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211013005441.699846-1-sashal@kernel.org>
-References: <20211013005441.699846-1-sashal@kernel.org>
+In-Reply-To: <20211013005532.700190-1-sashal@kernel.org>
+References: <20211013005532.700190-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -104,10 +105,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  8 files changed, 2 insertions(+), 14 deletions(-)
 
 diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 2fb7012c3246..1c6e03a350ca 100644
+index 002e0cf025f5..d4c6b95b24d7 100644
 --- a/arch/arm/Kconfig
 +++ b/arch/arm/Kconfig
-@@ -1994,8 +1994,6 @@ config ARCH_HIBERNATION_POSSIBLE
+@@ -2043,8 +2043,6 @@ config ARCH_HIBERNATION_POSSIBLE
  
  endmenu
  
@@ -117,10 +118,10 @@ index 2fb7012c3246..1c6e03a350ca 100644
  source "arch/arm/crypto/Kconfig"
  endif
 diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 62c3c1d2190f..01c682b8b8c7 100644
+index 5e5cf3af6351..f4809760a806 100644
 --- a/arch/arm64/Kconfig
 +++ b/arch/arm64/Kconfig
-@@ -1935,8 +1935,6 @@ source "drivers/cpufreq/Kconfig"
+@@ -1933,8 +1933,6 @@ source "drivers/cpufreq/Kconfig"
  
  endmenu
  
@@ -130,10 +131,10 @@ index 62c3c1d2190f..01c682b8b8c7 100644
  
  source "arch/arm64/kvm/Kconfig"
 diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index 4993c7ac7ff6..3f867225efc2 100644
+index 39b25a5a591b..e8014d2e36c0 100644
 --- a/arch/ia64/Kconfig
 +++ b/arch/ia64/Kconfig
-@@ -386,8 +386,6 @@ config CRASH_DUMP
+@@ -426,8 +426,6 @@ config CRASH_DUMP
  	  help
  	    Generate crash dump after being started by kexec.
  
@@ -143,10 +144,10 @@ index 4993c7ac7ff6..3f867225efc2 100644
  
  menu "Power management and ACPI options"
 diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 6dfb27d531dd..a193b1440f88 100644
+index 1a63f592034e..3bd3a01a2a2b 100644
 --- a/arch/mips/Kconfig
 +++ b/arch/mips/Kconfig
-@@ -3343,8 +3343,6 @@ source "drivers/cpuidle/Kconfig"
+@@ -3328,8 +3328,6 @@ source "drivers/cpuidle/Kconfig"
  
  endmenu
  
@@ -156,10 +157,10 @@ index 6dfb27d531dd..a193b1440f88 100644
  
  source "arch/mips/vdso/Kconfig"
 diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index 4f8c1fbf8f2f..f1c0ebd9d959 100644
+index 14f3252f2da0..ad13477fb40c 100644
 --- a/arch/parisc/Kconfig
 +++ b/arch/parisc/Kconfig
-@@ -385,6 +385,4 @@ config KEXEC_FILE
+@@ -378,6 +378,4 @@ config KEXEC_FILE
  
  endmenu
  
@@ -167,20 +168,20 @@ index 4f8c1fbf8f2f..f1c0ebd9d959 100644
 -
  source "drivers/parisc/Kconfig"
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 4f7b70ae7c31..b70e921af40d 100644
+index f7abd118d23d..fcb8e5da148e 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -558,5 +558,3 @@ menu "Power management options"
+@@ -428,5 +428,3 @@ menu "Power management options"
  source "kernel/power/Kconfig"
  
  endmenu
 -
 -source "drivers/firmware/Kconfig"
 diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 88fb922c23a0..ab3153ccecb9 100644
+index f3c8a8110f60..499f3cc1e62f 100644
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -2854,8 +2854,6 @@ config HAVE_ATOMIC_IOMAP
+@@ -2899,8 +2899,6 @@ config HAVE_ATOMIC_IOMAP
  	def_bool y
  	depends on X86_32
  
@@ -190,10 +191,10 @@ index 88fb922c23a0..ab3153ccecb9 100644
  
  source "arch/x86/Kconfig.assembler"
 diff --git a/drivers/Kconfig b/drivers/Kconfig
-index 8bad63417a50..1f96367b4d98 100644
+index dcecc9f6e33f..493ac7ffd8d0 100644
 --- a/drivers/Kconfig
 +++ b/drivers/Kconfig
-@@ -17,6 +17,8 @@ source "drivers/bus/Kconfig"
+@@ -16,6 +16,8 @@ source "drivers/bus/Kconfig"
  
  source "drivers/connector/Kconfig"
  
