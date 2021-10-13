@@ -2,52 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C234642B7CF
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Oct 2021 08:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B0442B82A
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Oct 2021 08:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238116AbhJMGry (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Oct 2021 02:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238066AbhJMGrw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Oct 2021 02:47:52 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37567C061753
-        for <linux-mips@vger.kernel.org>; Tue, 12 Oct 2021 23:45:49 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id c29so1604457pfp.2
-        for <linux-mips@vger.kernel.org>; Tue, 12 Oct 2021 23:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=w0j2Ihdi/0685L8FT6WteZp6O1hKULY2lNZfHOgIHSc=;
-        b=ZVG9fseiMJi5y7uNc0U//uB9qmTc4gJH0ueiRXhntI+xclAF1mY0ZabBN0HENHjmuQ
-         Wd2tZE7h7XcVk1DbOBPcKKRzFh73LE1iY97UMVdM/LDFC8CDxtoZ3SUXBlDw8iyhvu6V
-         muglMpS8KRkUeK+EwwJZIYurw/HXNEkgWVJds=
+        id S238181AbhJMHBU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Oct 2021 03:01:20 -0400
+Received: from mail-ua1-f42.google.com ([209.85.222.42]:46020 "EHLO
+        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229798AbhJMHBT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Oct 2021 03:01:19 -0400
+Received: by mail-ua1-f42.google.com with SMTP id 64so2466055uab.12;
+        Tue, 12 Oct 2021 23:59:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w0j2Ihdi/0685L8FT6WteZp6O1hKULY2lNZfHOgIHSc=;
-        b=c/+4oHETmC3XhZC9a/PqED248C1DRxDZOTCgjRn77Q8xFnGF3ba4ThqLLKWDjEZcQg
-         okBoVK2bVyj4YbuB5hYhb8nM1Rj63hg/DGDTx3w+b0sL11dUmfkYrCZrlwlSTyUb1fPo
-         F4Jah8dy0cyxqJ+Fvpfi58n2g3x3jigzaPmeXc75EDJ/FILRywlOD+vJHRzsjaIeESAM
-         44l4QnST1kDAMVL7Gip5CdapwDJ/khETyEixkNnT32MoztXAteymEPaMtGuwCJSCtJLm
-         ommM7qfIN20GXxUg/VjLyw/H0Ehoez3xhlJ1JVNuDg81MU7B8Fh0YBC0nboDrF1doDBc
-         IQ4Q==
-X-Gm-Message-State: AOAM530hDdL8SdpIkn6XXDYBbOwRyW1ziSSQoJWA/FE5tGndOcGGXM3u
-        94GuR10OogdAD6yJ595R+1iTYA==
-X-Google-Smtp-Source: ABdhPJyYGTFNE7wYL1tDchWsW1G14X62AMTEsDTHRuseDYe9oXvmyOMHWZK2W0kP1Mxrbkw9HEw8fw==
-X-Received: by 2002:a05:6a00:140e:b0:444:b077:51ef with SMTP id l14-20020a056a00140e00b00444b07751efmr31628811pfu.61.1634107548651;
-        Tue, 12 Oct 2021 23:45:48 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g11sm13397260pgn.41.2021.10.12.23.45.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Oct 2021 23:45:48 -0700 (PDT)
-Date:   Tue, 12 Oct 2021 23:45:47 -0700
-From:   Kees Cook <keescook@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vLmWoWym/1fKiJu7c9gpS1cDGT+57poTvw7kTscrC00=;
+        b=Gg+JGh/RyVv0o+fGhBa/WFOeEb2LNvd/qL4Tom37dhPYvviNUEwuLUQtdctYvsC2zO
+         dXxTr6BCjLALaPjwKnpYkaMsJEG4PS0aehh9MrByP4nyPyqJu3p81T/w9dqicVwv9yLp
+         dN18x6SzUIAsuKay+DiAAObgmB95M0qESd/IMJBkREfjiPfypsXJ+G0Kxg6DK8yLz6xr
+         t+zJTsY8hEJg60v2sBuClsciRjfkcXlxfQ/ML2jTqaE6MR7f9/EGOpsPW4sFtwMzSWRw
+         oRZew4j7Fk2Fo4n/N+blry6VUeqkJOXy7rC1NuLsBt936oXaxOQM1jLfSFadS4JA7FzP
+         CdgA==
+X-Gm-Message-State: AOAM5327PtGL95WWpRA6LPgNlrxRV6JY7GWmyYquyUn9e9UJz8ka6TBT
+        6JBxFIUJEgVv6akYZmd2u7CeD/PsniKn8S6JxRQ=
+X-Google-Smtp-Source: ABdhPJzwsQvQy07KzSSKF36slqOOCBmzhi7G4XFKh+MxO1aqVfgv6UylAsUlKqrZrwFEymqmWaysD4XtAMh8gSFAJlY=
+X-Received: by 2002:a67:d583:: with SMTP id m3mr36353545vsj.41.1634108355035;
+ Tue, 12 Oct 2021 23:59:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211013063622.548590-1-masahiroy@kernel.org> <20211013063622.548590-2-masahiroy@kernel.org>
+In-Reply-To: <20211013063622.548590-2-masahiroy@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 13 Oct 2021 08:59:03 +0200
+Message-ID: <CAMuHMdUQVpvvq=ZqjL97gV6AxS5eGm4mRS=gL4PPwWiBS-v5AA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kbuild: use more subdir- for visiting subdirectories
+ while cleaning
 To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+Cc:     linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Arnd Bergmann <arnd@arndb.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Borislav Petkov <bp@alien8.de>,
@@ -55,7 +47,6 @@ Cc:     linux-kbuild@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
         Chris Zankel <chris@zankel.net>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
         Greentime Hu <green.hu@gmail.com>, Guo Ren <guoren@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Heiko Carstens <hca@linux.ibm.com>,
@@ -65,6 +56,7 @@ Cc:     linux-kbuild@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
         Jonas Bonn <jonas@southpole.se>,
         Jonathan Corbet <corbet@lwn.net>,
         Julien Thierry <jthierry@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Ley Foon Tan <ley.foon.tan@intel.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -91,7 +83,7 @@ Cc:     linux-kbuild@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
         Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Vincent Chen <deanbo422@gmail.com>,
@@ -100,45 +92,55 @@ Cc:     linux-kbuild@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
         Will Deacon <will@kernel.org>,
         William Cohen <wcohen@redhat.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, openrisc@lists.librecores.org,
-        sparclinux@vger.kernel.org, uclinux-h8-devel@lists.sourceforge.jp,
-        x86@kernel.org
-Subject: Re: [PATCH 2/2] kbuild: use more subdir- for visiting subdirectories
- while cleaning
-Message-ID: <202110122345.4B8FE35AED@keescook>
-References: <20211013063622.548590-1-masahiroy@kernel.org>
- <20211013063622.548590-2-masahiroy@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211013063622.548590-2-masahiroy@kernel.org>
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 03:36:22PM +0900, Masahiro Yamada wrote:
+On Wed, Oct 13, 2021 at 8:43 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 > Documentation/kbuild/makefiles.rst suggests to use "archclean" for
 > cleaning arch/$(SRCARCH)/boot/.
-> 
+>
 > Since commit d92cc4d51643 ("kbuild: require all architectures to have
 > arch/$(SRCARCH)/Kbuild"), we can use the "subdir- += boot" trick for
 > all architectures. This can take advantage of the parallel option (-j)
 > for "make clean".
-> 
+>
 > I also cleaned up the comments. The "archdep" target does not exist.
-> 
+>
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I like the clean-up!
+>  arch/m68k/Makefile                 |  4 +---
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Kees Cook
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
