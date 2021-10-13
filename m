@@ -2,39 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2186542BAA2
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Oct 2021 10:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425CC42BACB
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Oct 2021 10:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238387AbhJMIkX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 13 Oct 2021 04:40:23 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:54755 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbhJMIkX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Oct 2021 04:40:23 -0400
-Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MTw02-1m9jDc1EHK-00R2xI; Wed, 13 Oct 2021 10:38:18 +0200
-Received: by mail-wr1-f45.google.com with SMTP id t2so5611840wrb.8;
-        Wed, 13 Oct 2021 01:38:18 -0700 (PDT)
-X-Gm-Message-State: AOAM532sIms2k2gL9BMiv8xID3CPh7cFSIveAH5Y8WyvdAWsIEGWyEgZ
-        iv9ehvy8A0i6G3ZX+hTnK+srXYjStOxauLLqUGU=
-X-Google-Smtp-Source: ABdhPJzERy7qzxbolOT39FrUcwqPdeh2fIURPv4ilmByKiguzqnvn/Xhapdln0hugnZ2cVo72Y7EAER3Sss3B8QKu2E=
-X-Received: by 2002:adf:a3da:: with SMTP id m26mr37292890wrb.336.1634114297720;
- Wed, 13 Oct 2021 01:38:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211013005532.700190-1-sashal@kernel.org> <20211013005532.700190-11-sashal@kernel.org>
- <YWZ1om+pLmV3atTd@kroah.com>
-In-Reply-To: <YWZ1om+pLmV3atTd@kroah.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 13 Oct 2021 10:38:01 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2AC9-ogoxi1q+NQyBqMwrFqSZtHvZVdJ9HF+OLB3O62g@mail.gmail.com>
-Message-ID: <CAK8P3a2AC9-ogoxi1q+NQyBqMwrFqSZtHvZVdJ9HF+OLB3O62g@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.10 11/11] firmware: include drivers/firmware/Kconfig
- unconditionally
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Sasha Levin <sashal@kernel.org>,
+        id S234231AbhJMItQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 13 Oct 2021 04:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234560AbhJMItN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 13 Oct 2021 04:49:13 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C42C061749
+        for <linux-mips@vger.kernel.org>; Wed, 13 Oct 2021 01:47:10 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1maZtW-0006Qy-0W; Wed, 13 Oct 2021 10:45:50 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1maZtK-0005Ho-C7; Wed, 13 Oct 2021 10:45:38 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1maZtK-0006xh-90; Wed, 13 Oct 2021 10:45:38 +0200
+Date:   Wed, 13 Oct 2021 10:45:38 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "# 3.4.x" <stable@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        "# 3.4.x" <stable@vger.kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Charles Keepax <ckeepax@opensource.cirrus.com>,
         Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
@@ -51,7 +49,7 @@ Cc:     Sasha Levin <sashal@kernel.org>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Russell King <rmk+kernel@armlinux.org.uk>,
@@ -59,8 +57,7 @@ Cc:     Sasha Levin <sashal@kernel.org>,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mike Rapoport <rppt@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Sergei Trofimovich <slyfox@gentoo.org>,
@@ -71,42 +68,67 @@ Cc:     Sasha Levin <sashal@kernel.org>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Parisc List <linux-parisc@vger.kernel.org>,
         linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:zhj9YlgIJvmAFu1sVCt9oWh31Lweh3k5LoV6efB6VHK7enEic5L
- 0lnGmkqqdJ+BqVVa49I3PMBcAU5O/W2dgpXbb3bx8ZBRCK3pFXKDFiXFDVt0BOHyVhhHo9W
- fVZLkHYBUtk8BWjH7XC6NZb8jNqAE70rJfVP11RuN0gte7xLck4Yt0toweqvM8zBtuvGkKX
- aCT663Pj+9ZvzG+rWL7Pw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cNkEPDcmdec=:Dn2SUKIhNPMW5NrVK4+yq3
- LoxGp86ovdWOWxU1h/l8RkVfDuwwKWW2l1meWQiyxmJdIJVHmU+mMpk/GxPcGaMoxPWbyaHRt
- UhVOwsJEVGZd7hQR2YFYS4QewnAbh7jLgOICYBit/xCpjG/Ux7YAK9WHxozkwTWuhG69fG9jk
- pqynODcbLH8kxolLq2JrVywRRNXN1wxtkgRwmdY2PyqRozOjSukXiQcJx3gpcVJeSonF2y+tS
- /jSgeMvKCk8ZGgLCTOXT8f64z1+9uFc4ZBrI67INehFfd3HSmK4xkttWlQjCmNSb4Iw728451
- wyZVGn2iXknQtPiJR5Hn1ihfxHHtkZeztZ/mCk0aagrZzREBKXdijqVATUh4Z2QZZIHHmOfQ1
- cW4IJ5WD3OpxcxY5u1nUHqY867j97yTjxaoZgRxwdj9ZG7w91GylgKf9oM/mhKW2cE5x160mS
- in5SYhz4kXcHBFTFSOt9l9Gv5XlQY8V4oapOH+wAGySPWlESLNHJEUnxQZiu3F4WPJLRrN1Jb
- Gnz9dIv8KSxtOGNPP1O04evz59eXObl2fyzfqcv81m3eDPNlcn9FHudA9DQ4e29aGeuPVraOv
- DW+nhPHzlMqTtZpS/foczN2MRZzDKASXXS+SoF7qzcyOzJ1khyuh4pdD47TfHCBtxzAqr4WIk
- p9QyRpWHUY3c4FYdiM2Wbp7FMIPrSTon7m10/hulJdCJJLBCa9r+zXa0xg/OKq6YJyxgiG8I2
- ULjP4gSNeElevnFOxzrgBnirhHycAiNstPuymr4CrXLd1AbX0FKeBi9t2vOpMXp9CXJ9fZKNI
- BIWP4Ip9XULklH9MHWfZDBC5FslZZIU5ClLJ+H8JpRg3j9IKXYidoHeoMDsYtENLNoKMscyyC
- h0ZzjXaMGXqKPCquwZAg==
+Subject: Re: [PATCH AUTOSEL 5.10 11/11] firmware: include
+ drivers/firmware/Kconfig unconditionally
+Message-ID: <20211013084538.vitv6u5ahds7arpw@pengutronix.de>
+References: <20211013005532.700190-1-sashal@kernel.org>
+ <20211013005532.700190-11-sashal@kernel.org>
+ <YWZ1om+pLmV3atTd@kroah.com>
+ <CAK8P3a2AC9-ogoxi1q+NQyBqMwrFqSZtHvZVdJ9HF+OLB3O62g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gkwcmkxhwgtfgtae"
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2AC9-ogoxi1q+NQyBqMwrFqSZtHvZVdJ9HF+OLB3O62g@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 7:58 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> On Tue, Oct 12, 2021 at 08:55:31PM -0400, Sasha Levin wrote:
->
-> This isn't for stable kernels, it should be dropped from all of your
-> AUTOSEL queues.
 
-Agreed. The second patch that depends on this does fix a (randconfig)
-build issue in stable kernels as well, but that patch is currently broken,
-and the two patches combined do feel a little too invasive for addressing
-such a minor issue in the stable kernels.
+--gkwcmkxhwgtfgtae
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If anyone runs into the QCOM_SCM link failures on stable kernels, I
-can come up with a more localized fix.
+On Wed, Oct 13, 2021 at 10:38:01AM +0200, Arnd Bergmann wrote:
+> On Wed, Oct 13, 2021 at 7:58 AM Greg KH <gregkh@linuxfoundation.org> wrot=
+e:
+> > On Tue, Oct 12, 2021 at 08:55:31PM -0400, Sasha Levin wrote:
+> >
+> > This isn't for stable kernels, it should be dropped from all of your
+> > AUTOSEL queues.
+>=20
+> Agreed. The second patch that depends on this does fix a (randconfig)
+> build issue in stable kernels as well, but that patch is currently broken,
 
-       Arnd
+Fixing randconfig issues isn't important for stable, is it? The target
+audience for 5.10.74 are people running a kernel between 5.10 and
+5.10.73, and those don't suffer from this type of build problem, right?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--gkwcmkxhwgtfgtae
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFmnK8ACgkQwfwUeK3K
+7And8Af+K7OLJ/QFBmWZbDMcrq5QGKfPWOm0ntnqP00EF6M9WuzDhXwYSRnkxrUL
+gB8rnQzNTAremhUgxxWWYf1b+jcy9McUcKiFrZFcFzI+Msu/lFoJs954A1A/LIwC
+gv2Yr2yfkJwro0nmnPonuaG6aBdO7hhuGbPcksgfQ822GDrckbS3WluAZcC3/j0O
+DzTBgBmlZEv7CdvM/DJbfxqV01oRg3C3zcn3tFY7c+3PUJs2oumNQRW6zfvUW1Bx
+NrWKG1K6REFzfJ1RJO8BBaK2qT7oEDecgCOrpsXClHm+08bxJ06CbZ3pcA2Qd9Kt
+40Yg+5KjHWr8vqioHLbH+w7bwi4d1w==
+=e2xG
+-----END PGP SIGNATURE-----
+
+--gkwcmkxhwgtfgtae--
