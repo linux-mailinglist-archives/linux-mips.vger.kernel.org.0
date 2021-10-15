@@ -2,80 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D02042E9A9
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Oct 2021 09:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F5842E9FF
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Oct 2021 09:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235803AbhJOHI7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Oct 2021 03:08:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235715AbhJOHI6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 Oct 2021 03:08:58 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9730560F9F;
-        Fri, 15 Oct 2021 07:06:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634281612;
-        bh=Wv6umrDOTPNcXNYUS5BV725vCMFwzb69mk7PA+DYPI4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Q6xWyLdwOBwHIsJzx/uItTmFWcCW3NxZkEQ7MlQpglXe1Keh3j5RyAM5H8m5KmPLD
-         RYq+RtgATVHq6zdWRn60DtWWl9bG153rgwIBG2HDEu8aRlEEW094W0iWFhHlrvD8/K
-         34ZFXDfThD2IsjlVk27KrjobWR47sP8oScN35U5kJSjGK1h9EneL+8Umy59JE59CXD
-         6yrNZlN6LYZCmw8wyjSDvob2J5/vx8WABoea9cZgo+2hd/PvMsxMXGf+lk0MaHvlf7
-         pCE4G5QpefhOuB2lcpNyK5sMhHyO4P/AQI+Sdzjg5A/f8BG474wAwZbn1uCuMS9W/6
-         6x8i1VXoOcbcw==
-Received: by mail-ua1-f54.google.com with SMTP id u5so16049855uao.13;
-        Fri, 15 Oct 2021 00:06:52 -0700 (PDT)
-X-Gm-Message-State: AOAM531rHbq1nX6Y3/7Yxkon1sBEi4pJVXCfZMKxkHgP17gnixlsBWD/
-        K89WD+/GZ1ERlh9enAmuMYDtspi1VMlbiPpE+tA=
-X-Google-Smtp-Source: ABdhPJyPMFIJA2qtBWnilm8SFmbsa/3mAw1rNIyXvIkLuWUf+8okzfbEx+f1QCpZkJs6LKVTokQvusJkrZ1SjPu3yy0=
-X-Received: by 2002:a67:c30b:: with SMTP id r11mr12529577vsj.20.1634281611645;
- Fri, 15 Oct 2021 00:06:51 -0700 (PDT)
+        id S235895AbhJOH1p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Oct 2021 03:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234392AbhJOH1p (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Oct 2021 03:27:45 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED5CC061570;
+        Fri, 15 Oct 2021 00:25:39 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id r2so7801611pgl.10;
+        Fri, 15 Oct 2021 00:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QkztVd7RJfuqxUOBKk+YDRUaI0H2x7WbBGD/f7b+t1w=;
+        b=Z9cR3eVlFmeG4xxsSQyvxeCSBmGkP/+c9AW3bTIFUjh+PDzXyfxC8vQF06xQk+7TT/
+         7H6GL2GDZxVQLvrf8i+hUA3m/Y1aUo1wRl43sJEoghojBGOq2XYJjmjPVRr4xodYpTA7
+         dN2PBHkMtUJbQc2F1YA5BWfb3oZpL39IkyNYauqW50sPAVEYN1IDrCu5cVfrEJbnMbMt
+         nzhCjigqVtFZ3NjoMq6ouhnVGKMp/V2eIXDiG4uQUend+1RZMRyxnOhxocc8lplB7V9U
+         hCdpD6Qa44g35mn+l/p8/v+pHAnMaWE088y1UbhzXgWtlhPapUE/OGmqdpAPT3CjJ57i
+         RJ6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QkztVd7RJfuqxUOBKk+YDRUaI0H2x7WbBGD/f7b+t1w=;
+        b=r3WxbFu2qGNTEudxcjzGu94QWEkCo36nRIcx8Rcti4erd6MfwAvYa3dvMk48nIBV/q
+         gg9FerjzGwsg09syt9gHGCT8ONPOzy9+SYGy1ZgOR1qHjPLrgi+n/6+nYnkNler5TXzb
+         NNojirGl5KvpOVbDaLOkic4TDrnI2aXwTv2DWBoHjMSWcW5pqh7iADRCrqRukN5OFIpL
+         +O79eG4C0awvWvsiq9O4Ml9lTm1SHq6TfptEvBJEDKhm+qNVFY3Uf2RfA4vHbN/GdrUM
+         W9kO08sPhYHf4V8uXJu72htiRjczJYW6Ty4nyPJsLH/+1IM/hUTleTj6JmZKTMwsiTbO
+         VJSw==
+X-Gm-Message-State: AOAM531PQFpFeep2Z3m/uErZEM8j33+ZtRUvM4eMjVBZ22eXRu53Gk61
+        eKrM4T87wTtnr0I6GK04tZg=
+X-Google-Smtp-Source: ABdhPJwziKbw9/4jfsU9dHOu2/83LgZYuNj2I+PuWLIEaggouAFkjP2Fygjt7bVm7p3sRcXMS773ag==
+X-Received: by 2002:aa7:9523:0:b0:44c:c171:9ae with SMTP id c3-20020aa79523000000b0044cc17109aemr10250669pfp.75.1634282738721;
+        Fri, 15 Oct 2021 00:25:38 -0700 (PDT)
+Received: from localhost.localdomain ([124.126.19.250])
+        by smtp.gmail.com with ESMTPSA id a12sm10547856pjq.16.2021.10.15.00.25.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Oct 2021 00:25:38 -0700 (PDT)
+From:   zhaoxiao <long870912@gmail.com>
+To:     chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tglx@linutronix.de,
+        maz@kernel.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhaoxiao <zhaoxiao@uniontech.com>
+Subject: [PATCH] irqchip/loongson-htvec:- Handle return value of ioremap.
+Date:   Fri, 15 Oct 2021 15:25:23 +0800
+Message-Id: <20211015072523.30615-1-long870912@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20211015070122.11467-1-wanjiabing@vivo.com>
-In-Reply-To: <20211015070122.11467-1-wanjiabing@vivo.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 15 Oct 2021 15:06:39 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5Uu9REzepwN7BA+g3jgzy-gd263OZjGU2z+b+Eh57bhw@mail.gmail.com>
-Message-ID: <CAAhV-H5Uu9REzepwN7BA+g3jgzy-gd263OZjGU2z+b+Eh57bhw@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Loongson64: Add of_node_put() before break
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, kael_w@yeah.net
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Reviewed-by: Huacai Chen <chenhuacai@kernel.org>
+From: zhaoxiao <zhaoxiao@uniontech.com>
 
-On Fri, Oct 15, 2021 at 3:01 PM Wan Jiabing <wanjiabing@vivo.com> wrote:
->
-> Fix following coccicheck warning:
-> ./arch/mips/loongson64/init.c:174:1-22: WARNING: Function
-> for_each_node_by_name should have of_node_put() before break
->
-> Early exits from for_each_node_by_name should decrement the
-> node reference counter.
->
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->  arch/mips/loongson64/init.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
-> index 4ac5ba80bbf6..ee8de1735b7c 100644
-> --- a/arch/mips/loongson64/init.c
-> +++ b/arch/mips/loongson64/init.c
-> @@ -179,6 +179,7 @@ static __init void reserve_pio_range(void)
->
->                 if (of_range_parser_init(&parser, np)) {
->                         pr_info("Failed to parse resources.\n");
-> +                       of_node_put(np);
->                         break;
->                 }
->
-> --
-> 2.20.1
->
+Here, If ioremap will fail. It will return NULL.Kernel can run into
+a NULL-pointer dereference. This error check will avoid NULL pointer
+dereference.
+
+Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+---
+ drivers/irqchip/irq-loongson-htvec.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/irqchip/irq-loongson-htvec.c b/drivers/irqchip/irq-loongson-htvec.c
+index 1cc0bceb4472..a36c20f44ec4 100644
+--- a/drivers/irqchip/irq-loongson-htvec.c
++++ b/drivers/irqchip/irq-loongson-htvec.c
+@@ -267,6 +267,8 @@ struct fwnode_handle *htvec_acpi_init(struct fwnode_handle *parent,
+ 
+ 	priv->num_parents = HTVEC_MAX_PARENT_IRQ;
+ 	priv->base = ioremap(acpi_htvec->address, acpi_htvec->size);
++	if (!priv->base)
++		goto free_priv;
+ 
+ 	/* Interrupt may come from any of the 8 interrupt lines */
+ 	for (i = 0; i < priv->num_parents; i++)
+@@ -307,6 +309,7 @@ struct fwnode_handle *htvec_acpi_init(struct fwnode_handle *parent,
+ iounmap_base:
+ 	iounmap(priv->base);
+ 	priv->domain_handle = NULL;
++free_priv:
+ 	kfree(priv);
+ 
+ 	return NULL;
+-- 
+2.20.1
+
