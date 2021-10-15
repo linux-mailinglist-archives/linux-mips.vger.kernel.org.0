@@ -2,99 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D7542E8BB
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Oct 2021 08:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AFD42E97E
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Oct 2021 08:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbhJOGRN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 15 Oct 2021 02:17:13 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:41383 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbhJOGRN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Oct 2021 02:17:13 -0400
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 19BBA100006;
-        Fri, 15 Oct 2021 06:15:03 +0000 (UTC)
-Date:   Fri, 15 Oct 2021 08:14:47 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>, list@opendingux.net,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 3/3] mtd: rawnand/ingenic: JZ4740 needs 'oob_first' read
- page function
-Message-ID: <20211015081447.25836fc7@xps13>
-In-Reply-To: <20211009184952.24591-4-paul@crapouillou.net>
-References: <20211009184952.24591-1-paul@crapouillou.net>
-        <20211009184952.24591-4-paul@crapouillou.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S235800AbhJOG7f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Oct 2021 02:59:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47609 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235790AbhJOG7e (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 Oct 2021 02:59:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634281048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XrPIV2fprNlCi1MFN3D9uad/uIU7Ev00FM5PU9k9D8g=;
+        b=GwGEbBaFXzzU9REDj1BMs3OjLs1HY0aJfHc/a+BJs6vuO0yix4OQclcAkiHiv1kYUhz722
+        xAFnGbVhG5my5OxhrPr3N3g1lTb8X+zidtpCKY67Q5trfQw/4cSbUyo/+jWUMFt9aJnieF
+        CKM+HW1fLTN7z2tsVptUIFJFqhBauno=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-72-nc2vyj3HPBan3QPQmlybgw-1; Fri, 15 Oct 2021 02:57:26 -0400
+X-MC-Unique: nc2vyj3HPBan3QPQmlybgw-1
+Received: by mail-ed1-f69.google.com with SMTP id u10-20020a50d94a000000b003dc51565894so685616edj.21
+        for <linux-mips@vger.kernel.org>; Thu, 14 Oct 2021 23:57:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XrPIV2fprNlCi1MFN3D9uad/uIU7Ev00FM5PU9k9D8g=;
+        b=TPETVmMQ8yLiCXxbY8OKPcrtZSxOwIT/Pepo/JBw60VVW/Tb98qedPnbGLwy9P7Zlo
+         BLWjdNpo8oDIzK1ah+Ts6toIhg1MWGmCQMzQGsuY6ayWKc55fC5PbFV3eESA0+//Aycy
+         jbnMjexxtDBPMYSo/jQUCTgJSBslyxZ0v/2cd71qf5Nxv9MangfE0sHRKmTWL2HacGrs
+         nSRDOloZf1QSsOYSoUFkP1ZdANc9nwVnmCrcPLM4xCNSho6sjRYXuSkCn4gj4Hvuk5ag
+         Wc1OZPIbaPQTMySGV6WhlPNNeIduGjQoeGp0hWH/fPQwt67jEs2SsKRS+q9MP0GC8e9N
+         g9eA==
+X-Gm-Message-State: AOAM531uiG7l6hQxOkiSjoBoSewxyCLbZNZQwk+KzopaYveSZObQSCM1
+        KjRjsjlOiqDQKJ0zjsD4bZ8CknbeR5NYmRc0aaBhQtSWcqyESFB/n5V8HW8EDxvSO4IvtBcakYD
+        dvT/JputBDsZO501xUtzMbQ==
+X-Received: by 2002:a05:6402:447:: with SMTP id p7mr15322756edw.261.1634281045397;
+        Thu, 14 Oct 2021 23:57:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw3wsrR7axiFHmfph2bLnxYqxO8ciYC1BIDrnzojSmvwa6tk0pkkVI5pGdF1DtDsbmx8LCmYQ==
+X-Received: by 2002:a05:6402:447:: with SMTP id p7mr15322726edw.261.1634281045218;
+        Thu, 14 Oct 2021 23:57:25 -0700 (PDT)
+Received: from redhat.com ([2.55.1.196])
+        by smtp.gmail.com with ESMTPSA id e11sm4094212edl.70.2021.10.14.23.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Oct 2021 23:57:24 -0700 (PDT)
+Date:   Fri, 15 Oct 2021 02:57:16 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter H Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v5 16/16] x86/tdx: Add cmdline option to force use of
+ ioremap_host_shared
+Message-ID: <20211015024923-mutt-send-email-mst@kernel.org>
+References: <20211009070132-mutt-send-email-mst@kernel.org>
+ <8c906de6-5efa-b87a-c800-6f07b98339d0@linux.intel.com>
+ <20211011075945-mutt-send-email-mst@kernel.org>
+ <9d0ac556-6a06-0f2e-c4ff-0c3ce742a382@linux.intel.com>
+ <20211011142330-mutt-send-email-mst@kernel.org>
+ <4fe8d60a-2522-f111-995c-dcbefd0d5e31@linux.intel.com>
+ <20211012165705-mutt-send-email-mst@kernel.org>
+ <c09c961d-f433-4a68-0b38-208ffe8b36c7@linux.intel.com>
+ <20211012171846-mutt-send-email-mst@kernel.org>
+ <c2ce5ad8-4df7-3a37-b235-8762a76b1fd3@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c2ce5ad8-4df7-3a37-b235-8762a76b1fd3@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
-
-paul@crapouillou.net wrote on Sat,  9 Oct 2021 20:49:52 +0200:
-
-> The ECC engine on the JZ4740 SoC requires the ECC data to be read before
-> the page; using the default page reading function does not work. Indeed,
-> the old JZ4740 NAND driver (removed in 5.4) did use the 'OOB first' flag
-> that existed back then.
+On Thu, Oct 14, 2021 at 10:50:59PM -0700, Andi Kleen wrote:
 > 
-> Use the newly created nand_read_page_hwecc_oob_first() to address this
-> issue.
+> > I thought you basically create an OperationRegion of SystemMemory type,
+> > and off you go. Maybe the OSPM in Linux is clever and protects
+> > some memory, I wouldn't know.
 > 
-> This issue was not found when the new ingenic-nand driver was developed,
-> most likely because the Device Tree used had the nand-ecc-mode set to
-> "hw_oob_first", which seems to not be supported anymore.
-
-I would rename both the boolean and the helper "*_access_oob_first"
-which seems more precise.
-
 > 
-> Cc: <stable@vger.kernel.org> # v5.2
-> Fixes: a0ac778eb82c ("mtd: rawnand: ingenic: Add support for the JZ4740")
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> I investigated this now, and it looks like acpi is using ioremap_cache(). We
+> can hook into that and force non sharing. It's probably safe to assume that
+> this is not used on real IO devices.
 > 
-> diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> index 0e9d426fe4f2..b18861bdcdc8 100644
-> --- a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> +++ b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> @@ -32,6 +32,7 @@ struct jz_soc_info {
->  	unsigned long addr_offset;
->  	unsigned long cmd_offset;
->  	const struct mtd_ooblayout_ops *oob_layout;
-> +	bool oob_first;
->  };
->  
->  struct ingenic_nand_cs {
-> @@ -240,6 +241,9 @@ static int ingenic_nand_attach_chip(struct nand_chip *chip)
->  	if (chip->bbt_options & NAND_BBT_USE_FLASH)
->  		chip->bbt_options |= NAND_BBT_NO_OOB;
->  
-> +	if (nfc->soc_info->oob_first)
-> +		chip->ecc.read_page = nand_read_page_hwecc_oob_first;
-> +
->  	/* For legacy reasons we use a different layout on the qi,lb60 board. */
->  	if (of_machine_is_compatible("qi,lb60"))
->  		mtd_set_ooblayout(mtd, &qi_lb60_ooblayout_ops);
-> @@ -534,6 +538,7 @@ static const struct jz_soc_info jz4740_soc_info = {
->  	.data_offset = 0x00000000,
->  	.cmd_offset = 0x00008000,
->  	.addr_offset = 0x00010000,
-> +	.oob_first = true,
->  };
->  
->  static const struct jz_soc_info jz4725b_soc_info = {
+> I think there are still some other BIOS mappings that use just plain
+> ioremap() though.
+> 
+> 
+> -Andi
 
+Hmm don't you mean the reverse? If you make ioremap shared then OS is
+protected from malicious ACPI? If you don't make it shared then
+malicious ACPI can poke at arbitrary OS memory.  Looks like making
+ioremap non shared by default is actually less safe than shared.
+Interesting.
 
-Thanks,
-Miquèl
+For BIOS I suspect there's no way around it, it needs to be
+audited since it's executable.
+
+-- 
+MST
+
