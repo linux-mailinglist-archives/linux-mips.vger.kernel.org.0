@@ -2,185 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC09142EDEF
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Oct 2021 11:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818D842F1AF
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Oct 2021 15:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234709AbhJOJq5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 15 Oct 2021 05:46:57 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:41717 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbhJOJq4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Oct 2021 05:46:56 -0400
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 73C691BF206;
-        Fri, 15 Oct 2021 09:44:47 +0000 (UTC)
-Date:   Fri, 15 Oct 2021 11:44:46 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>, list@opendingux.net,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 2/3] mtd: rawnand: Export
- nand_read_page_hwecc_oob_first()
-Message-ID: <20211015114446.6a939367@xps13>
-In-Reply-To: <CRI01R.KF0NPTKK5WYV1@crapouillou.net>
-References: <20211009184952.24591-1-paul@crapouillou.net>
-        <20211009184952.24591-3-paul@crapouillou.net>
-        <20211015081313.60018976@xps13>
-        <70G01R.2VROMW06O3O83@crapouillou.net>
-        <20211015105146.3d2fbd08@xps13>
-        <89I01R.QTBARVYLTBT02@crapouillou.net>
-        <20211015113515.7b10a2d5@xps13>
-        <CRI01R.KF0NPTKK5WYV1@crapouillou.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S235765AbhJONJB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Oct 2021 09:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235689AbhJONJB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 15 Oct 2021 09:09:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E09EC061570;
+        Fri, 15 Oct 2021 06:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GcG/LD4wXLRkh+mkTSYxktAgp6NtEFjg5wt7NUrIBQ8=; b=uayJR1a282ytfFfr7pGkZzKhEI
+        IluB/YpfG7Onwx7r1QjKfC1tsftLKfxav3VC38k67GpIyk/1ybeAGQUxvDR+zHqr8EKJVPlRZBA9/
+        /wpTA2a/mIgs+KwDypwHUlt5exYlO5YauSTxiForL6Zk2ddG+l9BfoSzKxtnDQxKPvn5PwybVyKMr
+        2sXVB6PGJ0CaomGm5OmpmwcYJjrxCbBh03Lz6TD+0UpZALAbk0Ks+Tm2EO0gwNMexvTrd+iVHfAOl
+        L1EzBGZvN5/X+htNwR68fjDLwpfpBBFno+c1d7bIoN6mV3eoharT65WSKmRRs2o1NAkDG7hXrV1hK
+        6PnwqnJg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mbMtI-0091pf-5y; Fri, 15 Oct 2021 13:05:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1918F300577;
+        Fri, 15 Oct 2021 15:04:50 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C9DB5212B43C0; Fri, 15 Oct 2021 15:04:50 +0200 (CEST)
+Date:   Fri, 15 Oct 2021 15:04:50 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     Barry Song <21cnbao@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, Aubrey Li <aubrey.li@linux.intel.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86 <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        YiFei Zhu <yifeifz2@illinois.edu>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Sergei Trofimovich <slyfox@gentoo.org>,
+        David Hildenbrand <david@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Chris Down <chris@chrisdown.name>,
+        Vipin Sharma <vipinsh@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Michal Hocko <mhocko@kernel.org>
+Subject: Re: [PATCH 2/2] sched: Centralize SCHED_{SMT, MC, CLUSTER}
+ definitions
+Message-ID: <YWl8cogsS2Lah1mk@hirez.programming.kicks-ass.net>
+References: <20211008115347.425234-1-valentin.schneider@arm.com>
+ <20211008115347.425234-3-valentin.schneider@arm.com>
+ <CAGsJ_4wqtcOdsFDzR98PFbjxRyTqzf7P3p3erup84SXESYonYw@mail.gmail.com>
+ <87bl3zlex8.mognet@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87bl3zlex8.mognet@arm.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Fri, Oct 08, 2021 at 04:22:27PM +0100, Valentin Schneider wrote:
 
-paul@crapouillou.net wrote on Fri, 15 Oct 2021 10:38:00 +0100:
-
-> Hi,
+> So x86 has it default yes, and a lot of others (e.g. arm64) have it default
+> no.
 > 
-> Le ven., oct. 15 2021 at 11:35:15 +0200, Miquel Raynal <miquel.raynal@bootlin.com> a écrit :
-> > Hi Paul,
-> >   
-> >>  >>  */  
-> >>  >>  >> >>   /* An ECC layout for using 4-bit ECC with small-page >> flash, >> storing  
-> >>  >>  >>  @@ -648,7 +580,7 @@ static int >> davinci_nand_attach_chip(struct >> >> nand_chip *chip)
-> >>  >>  >>   			} else if (chunks == 4 || chunks == 8) {
-> >>  >>  >>   				mtd_set_ooblayout(mtd,
-> >>  >>  >>   						  nand_get_large_page_ooblayout());
-> >>  >>  >>  -				chip->ecc.read_page = >> >> nand_davinci_read_page_hwecc_oob_first;
-> >>  >>  >>  +				chip->ecc.read_page = nand_read_page_hwecc_oob_first;
-> >>  >>  >>   			} else {
-> >>  >>  >>   				return -EIO;
-> >>  >>  >>   			}
-> >>  >>  >>  diff --git a/drivers/mtd/nand/raw/nand_base.c >> >> >> b/drivers/mtd/nand/raw/nand_base.c
-> >>  >>  >>  index 3d6c6e880520..cb5f343b9fa2 100644
-> >>  >>  >>  --- a/drivers/mtd/nand/raw/nand_base.c
-> >>  >>  >>  +++ b/drivers/mtd/nand/raw/nand_base.c
-> >>  >>  >>  @@ -3160,6 +3160,75 @@ static int >> nand_read_page_hwecc(struct >> >> nand_chip *chip, uint8_t *buf,
-> >>  >>  >>   	return max_bitflips;
-> >>  >>  >>   }  
-> >>  >>  >> >>  +/**  
-> >>  >>  >>  + * nand_read_page_hwecc_oob_first - Hardware ECC page read >> >> with ECC
-> >>  >>  >>  + *                                  data read from OOB area
-> >>  >>  >>  + * @chip: nand chip info structure
-> >>  >>  >>  + * @buf: buffer to store read data
-> >>  >>  >>  + * @oob_required: caller requires OOB data read to >> >> chip->oob_poi
-> >>  >>  >>  + * @page: page number to read
-> >>  >>  >>  + *
-> >>  >>  >>  + * Hardware ECC for large page chips, require OOB to be >> read >> >> first. For this  
-> >>  >>  >
-> >>  >>  > requires
-> >>  >>  >
-> >>  >>  > With this ECC configuration?
-> >>  >>  >  
-> >>  >>  >>  + * ECC mode, the write_page method is re-used from ECC_HW. >> >> These >> methods  
-> >>  >>  >
-> >>  >>  > I do not understand this sentence nor the next one about >> >> syndrome. I
-> >>  >>  > believe it is related to your engine and should not leak into >> the >> > core.
-> >>  >>  >  
-> >>  >>  >>  + * read/write ECC from the OOB area, unlike the >> >> ECC_HW_SYNDROME >> support with
-> >>  >>  >>  + * multiple ECC steps, follows the "infix ECC" scheme and >> >> >> reads/writes ECC from
-> >>  >>  >>  + * the data area, by overwriting the NAND manufacturer bad >> >> block >> markings.  
-> >>  >>  >
-> >>  >>  > That's a sentence I don't like. What do you mean exactly?
-> >>  >>  >
-> >>  >>  > What "Infix ECC" scheme is?
-> >>  >>  >
-> >>  >>  > Do you mean that unlike the syndrome  mode it *does not* >> >> overwrite the
-> >>  >>  > BBM ?  
-> >>  >> >>  I don't mean anything. I did not write that comment. I just >> moved >> the function verbatim with no changes. If something needs >> to be >> fixed, then it needs to be fixed before/after this patch.  
-> >>  >
-> >>  > Well, this comment should be adapted because as-is I don't think >> it's
-> >>  > wise to move it around.  
-> >> >>  OK.
-> >> >>  I think it says that BBM can be overwritten with this >> configuration, but that would be if the OOB layout covers the BBM >> area.  
-> > 
-> > If the ooblayout prevents the BBM to be smatched I'm fine and this
-> > sentence should disappear because it's misleading.
-> >   
-> >>  >> >>  >>  + */  
-> >>  >>  >>  +int nand_read_page_hwecc_oob_first(struct nand_chip *chip, >> >> uint8_t >> *buf,
-> >>  >>  >>  +				   int oob_required, int page)
-> >>  >>  >>  +{
-> >>  >>  >>  +	struct mtd_info *mtd = nand_to_mtd(chip);
-> >>  >>  >>  +	int i, eccsize = chip->ecc.size, ret;
-> >>  >>  >>  +	int eccbytes = chip->ecc.bytes;
-> >>  >>  >>  +	int eccsteps = chip->ecc.steps;
-> >>  >>  >>  +	uint8_t *p = buf;
-> >>  >>  >>  +	uint8_t *ecc_code = chip->ecc.code_buf;
-> >>  >>  >>  +	unsigned int max_bitflips = 0;
-> >>  >>  >>  +
-> >>  >>  >>  +	/* Read the OOB area first */
-> >>  >>  >>  +	ret = nand_read_oob_op(chip, page, 0, chip->oob_poi, >> >> >> mtd->oobsize);
-> >>  >>  >>  +	if (ret)
-> >>  >>  >>  +		return ret;
-> >>  >>  >>  +
-> >>  >>  >>  +	ret = nand_read_page_op(chip, page, 0, NULL, 0);  
-> >>  >>  >
-> >>  >>  > Definitely not, your are requesting the chip to do the >> read_page
-> >>  >>  > operation twice. You only need a nand_change_read_column I >> >> believe.  
-> >>  >> >>  Again, this code is just being moved around - don't shoot >> the >> messenger :)  
-> >>  >
-> >>  > haha
-> >>  >
-> >>  > Well, now you touch the core, so I need to be more careful, and >> the
-> >>  > code is definitely wrong, so even if we don't move that code off, >> you
-> >>  > definitely want to fix it in order to improve your performances.  
-> >> >>  I don't see the read_page being done twice?
-> >> >>  There's one read_oob, one read_page, then read_data in the loop.  
-> > 
-> > read_oob and read_page both end up sending READ0 and READSTART so
-> > they do request the chip to perform an internal read twice. You
-> > need this only once. The call to nand_read_page_op() should be a
-> > nand_change_read_column() with no data requested.  
+> IMO you don't gain much by disabling them. SCHED_MC and SCHED_CLUSTER only
+> control the presence of a sched_domain_topology_level - if it's useless it
+> gets degenerated at domain build time. Some valid reasons for not using
+> them is if the architecture defines its own topology table (e.g. powerpc
+> has CACHE and MC levels which are not gated behind any CONFIG).
 > 
-> OK.
+> SCHED_SMT has an impact on code generated in sched/core.c, but that is also
+> gated by a static key.
 > 
-> >   
-> >>  >>  >>   /**
-> >>  >>  >>    * nand_read_page_syndrome - [REPLACEABLE] hardware ECC >> >> syndrome >> based page read
-> >>  >>  >>    * @chip: nand chip info structure
-> >>  >>  >>  diff --git a/include/linux/mtd/rawnand.h >> >> >> b/include/linux/mtd/rawnand.h
-> >>  >>  >>  index b2f9dd3cbd69..5b88cd51fadb 100644
-> >>  >>  >>  --- a/include/linux/mtd/rawnand.h
-> >>  >>  >>  +++ b/include/linux/mtd/rawnand.h
-> >>  >>  >>  @@ -1539,6 +1539,8 @@ int nand_read_data_op(struct >> nand_chip >> *chip, >> void *buf, unsigned int len,
-> >>  >>  >>   		      bool force_8bit, bool check_only);
-> >>  >>  >>   int nand_write_data_op(struct nand_chip *chip, const void >> *buf,
-> >>  >>  >>   		       unsigned int len, bool force_8bit);
-> >>  >>  >>  +int nand_read_page_hwecc_oob_first(struct nand_chip *chip, >> >> uint8_t >> *buf,
-> >>  >>  >>  +				   int oob_required, int page);  
-> >>  >>  >
-> >>  >>  > You certainly want to add this symbol closer to the other >> >> read/write
-> >>  >>  > page helpers?  
-> >>  >> >>  Where would that be? The other read/write page helpers are >> all >> "static" so they don't appear in any header.  
-> >>  >
-> >>  > I believe we should keep this header local as long as there are no
-> >>  > other users.  
-> >> >>  I'll move it to internal.h then.  
-> > 
-> > Why do you want to put it there is there is only one user?  
-> 
-> But there are two users: davinci_nand.c and (with patch [3/3]) ingenic/ingenic_nand_drv.c.
+> So I'd say having them default yes is sensible. I'd even say we should
+> change the "If unsure say N here." to "Y".
 
-Oh right I missed that :)
+Right, so I tend to agree (and also that we should fix that Kconfig help
+text). But it would be very nice to have feedback from the affected arch
+maintainers.
 
-Then please add two preparation patches which:
-- fixes the comment (please reword it completely)
-- avoid the double reading
-
-And keep the location where you moved it (including the header) as-is.
-
-Thanks,
-Miquèl
