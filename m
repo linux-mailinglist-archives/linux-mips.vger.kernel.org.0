@@ -2,135 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AFD42E97E
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Oct 2021 08:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE5E42E99F
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Oct 2021 09:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235800AbhJOG7f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 15 Oct 2021 02:59:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47609 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235790AbhJOG7e (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 15 Oct 2021 02:59:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634281048;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XrPIV2fprNlCi1MFN3D9uad/uIU7Ev00FM5PU9k9D8g=;
-        b=GwGEbBaFXzzU9REDj1BMs3OjLs1HY0aJfHc/a+BJs6vuO0yix4OQclcAkiHiv1kYUhz722
-        xAFnGbVhG5my5OxhrPr3N3g1lTb8X+zidtpCKY67Q5trfQw/4cSbUyo/+jWUMFt9aJnieF
-        CKM+HW1fLTN7z2tsVptUIFJFqhBauno=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-72-nc2vyj3HPBan3QPQmlybgw-1; Fri, 15 Oct 2021 02:57:26 -0400
-X-MC-Unique: nc2vyj3HPBan3QPQmlybgw-1
-Received: by mail-ed1-f69.google.com with SMTP id u10-20020a50d94a000000b003dc51565894so685616edj.21
-        for <linux-mips@vger.kernel.org>; Thu, 14 Oct 2021 23:57:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XrPIV2fprNlCi1MFN3D9uad/uIU7Ev00FM5PU9k9D8g=;
-        b=TPETVmMQ8yLiCXxbY8OKPcrtZSxOwIT/Pepo/JBw60VVW/Tb98qedPnbGLwy9P7Zlo
-         BLWjdNpo8oDIzK1ah+Ts6toIhg1MWGmCQMzQGsuY6ayWKc55fC5PbFV3eESA0+//Aycy
-         jbnMjexxtDBPMYSo/jQUCTgJSBslyxZ0v/2cd71qf5Nxv9MangfE0sHRKmTWL2HacGrs
-         nSRDOloZf1QSsOYSoUFkP1ZdANc9nwVnmCrcPLM4xCNSho6sjRYXuSkCn4gj4Hvuk5ag
-         Wc1OZPIbaPQTMySGV6WhlPNNeIduGjQoeGp0hWH/fPQwt67jEs2SsKRS+q9MP0GC8e9N
-         g9eA==
-X-Gm-Message-State: AOAM531uiG7l6hQxOkiSjoBoSewxyCLbZNZQwk+KzopaYveSZObQSCM1
-        KjRjsjlOiqDQKJ0zjsD4bZ8CknbeR5NYmRc0aaBhQtSWcqyESFB/n5V8HW8EDxvSO4IvtBcakYD
-        dvT/JputBDsZO501xUtzMbQ==
-X-Received: by 2002:a05:6402:447:: with SMTP id p7mr15322756edw.261.1634281045397;
-        Thu, 14 Oct 2021 23:57:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw3wsrR7axiFHmfph2bLnxYqxO8ciYC1BIDrnzojSmvwa6tk0pkkVI5pGdF1DtDsbmx8LCmYQ==
-X-Received: by 2002:a05:6402:447:: with SMTP id p7mr15322726edw.261.1634281045218;
-        Thu, 14 Oct 2021 23:57:25 -0700 (PDT)
-Received: from redhat.com ([2.55.1.196])
-        by smtp.gmail.com with ESMTPSA id e11sm4094212edl.70.2021.10.14.23.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Oct 2021 23:57:24 -0700 (PDT)
-Date:   Fri, 15 Oct 2021 02:57:16 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
+        id S235837AbhJOHDu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 15 Oct 2021 03:03:50 -0400
+Received: from mail-eopbgr1310132.outbound.protection.outlook.com ([40.107.131.132]:40164
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234350AbhJOHDt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 15 Oct 2021 03:03:49 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RGao05piLLwLhH+e4xSFTCkilsnkr3NoES71AayjjUFCYEGl8TWphR0q0kHQWIdC3mOpOrdVssgEufNd4QNUn6DkUiMmhQTu6xyPjX+Hw8U3tEl8mJJ1KrGg3zqy6aJVhVco56SgCsjOVPh7ieHFGTMihBOGl4+TANGHeawq21gIVId2h3LGpIJI6SJ0g90atSGyHWJbQmLI0heWTnfXhU9FV+HiQWR+T3uGkSFb+2Rh4PwK+SHbJzsHm8PntxO8wCx6k2TfBgqbeTmKJ9KhLtsqo+t1rXDWN5VqflB7OKSiopEMQ03Sy2xPcV34014pQUsPrANatJlsymN9Rj27Vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iDXorQ8DhQGfAxMiwA8DdT0WSoJaiIQRmSJcNbk+DRs=;
+ b=IP3KvlmAv6yA+LGoqhieWyeaAPbhliW02VS0Bwc9RBLKRXfPP/HihZ6EmNBOV2WCBroyNG+7ZiaWdnHBw/TNwOkaCc23hUM6plkhVahqHc9v7ZUxuZk95mSX5GtWwQI7mQKlxtNcpuLQOHqxKEQ8lJ2vTTVJOlSgf9xSo3+e8ZUF2robEMXILaueFlz7psZ1x9AZL1tzG0NK4Uu0zozm19+Zpk6MypHFWEnPo9zCHJIyOxnR4PTqQ1LQQbVVsSQoQ0dhJYJgngudYH4nyRKipmP1QfDTcunzMWtAEUSfGGMhG22FoSoFwnG9s3D7RO9Si9meiRws1dwA8Datiu1YHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iDXorQ8DhQGfAxMiwA8DdT0WSoJaiIQRmSJcNbk+DRs=;
+ b=UTqQE0MoELffWPvCsy8ho9c0E6lUyi5INRruMVmp71bMeB2eZg5d7u+QkDWbg/9G3il0xehrc/RxtYCzk0/BMj9abLlS1CP11Wvu1RcFctFfVf6oV1Lj7vm8NVzuEQjmjJlflV5DgCOLYRtKKiZkeTERzmgzBiqS3sBiSKONXYc=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ SG2PR06MB2858.apcprd06.prod.outlook.com (2603:1096:4:1b::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4587.20; Fri, 15 Oct 2021 07:01:39 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::fc12:4e1b:cc77:6c0]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::fc12:4e1b:cc77:6c0%6]) with mapi id 15.20.4608.017; Fri, 15 Oct 2021
+ 07:01:39 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v5 16/16] x86/tdx: Add cmdline option to force use of
- ioremap_host_shared
-Message-ID: <20211015024923-mutt-send-email-mst@kernel.org>
-References: <20211009070132-mutt-send-email-mst@kernel.org>
- <8c906de6-5efa-b87a-c800-6f07b98339d0@linux.intel.com>
- <20211011075945-mutt-send-email-mst@kernel.org>
- <9d0ac556-6a06-0f2e-c4ff-0c3ce742a382@linux.intel.com>
- <20211011142330-mutt-send-email-mst@kernel.org>
- <4fe8d60a-2522-f111-995c-dcbefd0d5e31@linux.intel.com>
- <20211012165705-mutt-send-email-mst@kernel.org>
- <c09c961d-f433-4a68-0b38-208ffe8b36c7@linux.intel.com>
- <20211012171846-mutt-send-email-mst@kernel.org>
- <c2ce5ad8-4df7-3a37-b235-8762a76b1fd3@linux.intel.com>
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] MIPS: Loongson64: Add of_node_put() before break
+Date:   Fri, 15 Oct 2021 03:01:22 -0400
+Message-Id: <20211015070122.11467-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.20.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0177.apcprd02.prod.outlook.com
+ (2603:1096:201:21::13) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2ce5ad8-4df7-3a37-b235-8762a76b1fd3@linux.intel.com>
+Received: from localhost.localdomain (218.213.202.190) by HK2PR02CA0177.apcprd02.prod.outlook.com (2603:1096:201:21::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4608.15 via Frontend Transport; Fri, 15 Oct 2021 07:01:38 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9886da56-0379-48e5-e4e1-08d98fa9a28f
+X-MS-TrafficTypeDiagnostic: SG2PR06MB2858:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SG2PR06MB28584C7C7CC7523B4580A7D7ABB99@SG2PR06MB2858.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ArUWt8YF0zb9hAzSisued4S5mLZ3dwqanciHPH75wmkVM3goM3DpmqxoN3jRs7hbrU+qFWjPDL/kwgguBzDJkOEcFBoPrSOm592jPYRs80TOOyuANlIPQDND+OFJSpkXrI7cgDAbiBzlH92k/+ZpDF0JBpfk0oVXxwQAnh8DptiAEbLOtsxi8IaRKUkwz/9NsR/CSrI7nf2kPSD2ridY9D1PgmM/4aibYyRGkWs4ELagWibv/okLd5z3MHpvgrgux1YelI+18cD2pYlCpiX8yNPeI5gIUQKScsDC6GoZrVeFKOoR1ZXfRjM0XsLhsg/VdkcMn1VWilC1Il9qLZUGDiO6FNoPTcVvy0zcY6grbmM5b4vj7XnJP0IV6fXshZajzdVwaEKNo3dRZkoswB+BYM7coxLYbOuKugjnTxhLweMevFhYo92t/sC2UhDR1fLNHRdsqB3XstVsuTTF3pBAwfty2B6/0zy3HoFipnLjkGNhVHnIWI9+k8pKGtw4a7Ve535P4B7V2csEHiAIwra++wR/DxY6lJKJ2N+7yvxW+fnkgFvC3eI+1t9WhnGssQNgu8a8YTkJRtdxL8+mJ0Zir2TfdaCn899SoCERjqqmt4mJx6Jw3q12VQ2wvVbhA3j5E1D6f4Um4cJFWXFN0kli5bAmUwTqYYFxXOniQTvzvV5Z+A+TohHiMrgPi2tabPDeujUg7maidTSJg1S0ZYidFw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(86362001)(8676002)(6506007)(6512007)(5660300002)(956004)(52116002)(110136005)(2616005)(6666004)(83380400001)(26005)(508600001)(8936002)(4744005)(107886003)(66476007)(186003)(66946007)(38100700002)(4326008)(36756003)(66556008)(2906002)(1076003)(38350700002)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KJIILsV6mQPzJahQmeVvVTnXCAUQFDl5Xc85vWGcP7C6MKEvnkfYKH+cP9CY?=
+ =?us-ascii?Q?kcpc+UHT7UqS2aqH402+YUjongFybrZrd8Zjhtz/YY71k04DGXdEFTq/c4a0?=
+ =?us-ascii?Q?FGXS1Y1q5i/zJxIE4tQhUoZicneh2JosNOP+Fl7YWhtar12fUxqx01DOwVaG?=
+ =?us-ascii?Q?SokMoTZrxFIBUV+BCBpyA7IDZYWLCy2z9drp1PNGejcOiO+VTjjnQrh+vM7r?=
+ =?us-ascii?Q?jrZOeyg4CLsn0ZvAht/5X8L8Ki9FL4R6vUNT/AdVZFLul67j95hO6jtDDFd+?=
+ =?us-ascii?Q?48MnNe2YTz1EYadzXvvkAgnB4LVYkIBmvpfhTh7cxz4tyBsicESTrA2TRUDy?=
+ =?us-ascii?Q?bzNubH++4DGTnYswJ3DWAjDdhX3EAJNkf9WcFKSd5JzcHIPHCHhY5M6tyPJe?=
+ =?us-ascii?Q?i//V0z+63TRlDRlXJGbvcJ77SFC2q7p84H1w0PqKkcJqr87ybQz/0kZdiG8d?=
+ =?us-ascii?Q?+WldTKm5iQDeyzY463QzhTwFzkEFlCT49nbrrYImD8PDfsRB5l9HkxIroWmq?=
+ =?us-ascii?Q?DNzEwd8cFpL8Uch/tfcXxmPZ6ND8uVEp17T+uLDHZPpagoxZABkioX3GF/Vi?=
+ =?us-ascii?Q?ThTwYcSJ33YxUjmDF0iwPGXBsWM4hLvVqIvvrdSNbOY1JfFn5OlvVKGFJLCa?=
+ =?us-ascii?Q?G5MCTUvdOzHi3fXJGuLYSnoo1xbJVjb9f9yq5tbWvL07ODuexosdeJn2IaMG?=
+ =?us-ascii?Q?TOU3IBpibWtgaJC6Ey7Vuex+cNOnd7msGhydtlRUVT0lEWbZQeakDD+i2SvD?=
+ =?us-ascii?Q?9sbP0l0wlZbtxqezjXlT5nzzNS/Fk+gPnF7+xyVmr8s2CvY1VhNIoOkxn47A?=
+ =?us-ascii?Q?z3Bwh5iToAaK2F7VaZ1bKcB1q4SvQZd5Vb3JJtNEf9cKG7AO9aBjqam/Xffn?=
+ =?us-ascii?Q?UY+9CgJSpYvq+1EtLpYfNsJarinh6//n4ISZEYX7UCJoLpTJ7kUQtHwCkmB4?=
+ =?us-ascii?Q?lYf7qoQs6IIp0ZfMSjQV/tlG81vPb8+xGXkAzRZuZB9Wz8FDcz/pNrS7vHoz?=
+ =?us-ascii?Q?ho6WMjaabNAgJ0CEts0ScyI5y47QyeS/kQNLIeDj8pU6P4v7hiq5gNiY8zmf?=
+ =?us-ascii?Q?GuXwAA/50k87yFpVH7qfHmWC/fhXD48H6RG2Y4TQcgKkW0VpKq5v06ryXVTT?=
+ =?us-ascii?Q?0TN4otjHX0I3tZq5uc/RDuB9vvxayA644sm4U75dkBmy7sjVEQozNnorecXS?=
+ =?us-ascii?Q?J0Ngxi25zZ6+eZS8rAxjSqufDVaaX8WNRv3IBK0TxCMLmYLX2uR1uHYCif0l?=
+ =?us-ascii?Q?Ux/9lmFQI3eeO4gOfvQvXJk5S6510a7xyru6jDX+AuFssv+iJtYsmGOyKfff?=
+ =?us-ascii?Q?h7+k1u1MrFCFSWbhHDPKDmzH?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9886da56-0379-48e5-e4e1-08d98fa9a28f
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2021 07:01:39.1418
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rUkQmfCEqxkR3QpAjksl+5Nmc3whq1l3qLCyB99VV9R34fO5IAFUO3t3OTtAue2y9rTQ0JxGLxlbpbUSuxc48g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2858
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 14, 2021 at 10:50:59PM -0700, Andi Kleen wrote:
-> 
-> > I thought you basically create an OperationRegion of SystemMemory type,
-> > and off you go. Maybe the OSPM in Linux is clever and protects
-> > some memory, I wouldn't know.
-> 
-> 
-> I investigated this now, and it looks like acpi is using ioremap_cache(). We
-> can hook into that and force non sharing. It's probably safe to assume that
-> this is not used on real IO devices.
-> 
-> I think there are still some other BIOS mappings that use just plain
-> ioremap() though.
-> 
-> 
-> -Andi
+Fix following coccicheck warning:
+./arch/mips/loongson64/init.c:174:1-22: WARNING: Function
+for_each_node_by_name should have of_node_put() before break
 
-Hmm don't you mean the reverse? If you make ioremap shared then OS is
-protected from malicious ACPI? If you don't make it shared then
-malicious ACPI can poke at arbitrary OS memory.  Looks like making
-ioremap non shared by default is actually less safe than shared.
-Interesting.
+Early exits from for_each_node_by_name should decrement the
+node reference counter.
 
-For BIOS I suspect there's no way around it, it needs to be
-audited since it's executable.
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ arch/mips/loongson64/init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/arch/mips/loongson64/init.c b/arch/mips/loongson64/init.c
+index 4ac5ba80bbf6..ee8de1735b7c 100644
+--- a/arch/mips/loongson64/init.c
++++ b/arch/mips/loongson64/init.c
+@@ -179,6 +179,7 @@ static __init void reserve_pio_range(void)
+ 
+ 		if (of_range_parser_init(&parser, np)) {
+ 			pr_info("Failed to parse resources.\n");
++			of_node_put(np);
+ 			break;
+ 		}
+ 
 -- 
-MST
+2.20.1
 
