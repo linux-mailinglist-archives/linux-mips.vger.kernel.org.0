@@ -2,103 +2,205 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2315343411D
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 23:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18AA43414C
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Oct 2021 00:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbhJSWCA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Oct 2021 18:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbhJSWBm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 18:01:42 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E69AC0613E3;
-        Tue, 19 Oct 2021 14:59:24 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id g184so20631668pgc.6;
-        Tue, 19 Oct 2021 14:59:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2G1kdri23kWnlj1enPufIZN1leyxpMasJ2EyRU0acfw=;
-        b=Y5clh4hJuQyM8eC5A+hgiBCp367+x4gkBxd+43EC3gI8EhkdW9oupc9VprJN88A+SS
-         MXTHIQCNafVT3DbL2pCZSy3fiLeF0SEKKp0m6MVaa6nk70CD2U8zGmq/1cEi5NM/7I3X
-         DVM4WarHYUHHtzY263A4Kz2rszp3lsNoKs0v2rvv6hfDsyAFR7ILK2Ov1P81G/OXu7+n
-         UuW4Sa46ne3mVkOBB09KzfcE/ffd4WXtx3d1ugUwrqtf/VI+0bfPdTMw128tcJ4+X95R
-         a1/YA5eKCmN+kkII9t5ISBDNRfN5T4/yLr6NPGd1/mT3rgLbS5u860+VgdrpyHIxNta2
-         A1sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2G1kdri23kWnlj1enPufIZN1leyxpMasJ2EyRU0acfw=;
-        b=NXnCuJBOwvWguOJFx7y33gqrKsjkoonVytNu0mvAtTpbyVnxr/RJNBCe0FCseZ5toY
-         hSDlW4ntQatClg4+Ubguq2/DCNm0ZBXRK30e9Y/cruOKWMCYOK7GowOkUnNKfxl45qjg
-         rQBlSTBablsSuYAIynsRCvAq9KpgOPfXlMvTeOH6tj2D58xokiXQNeUkwo+X5gZ+R1tE
-         4V1MpWKUdyrkAMcttKrrNEPa6g55D0TrMPDvdAqtJOVRv60KwqLu4nLFe5wzBMOygtlo
-         ojxgnn5inxu5lUVtM5KHX1FS3Xeyq9dssgkEs83o3LH12TvgXtG/MuX7KSwP9/vJpOvR
-         iWlA==
-X-Gm-Message-State: AOAM531C2bzl/ZKkjDSWsq4PzxBbFwx3TbHYjdIqA+2kU86ylTPlVm8D
-        RkeuECv4ZTcz8wkkFdRhzjLkUYNkhWI=
-X-Google-Smtp-Source: ABdhPJxR3R8hw1YDkPeaq+1XWGII38BdkuxodKSXvnmpG9QGveZCyXnqmGNQGOxR6w5CknBLqcfbnA==
-X-Received: by 2002:a63:7514:: with SMTP id q20mr5138672pgc.232.1634680763731;
-        Tue, 19 Oct 2021 14:59:23 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id bf7sm139325pjb.14.2021.10.19.14.59.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Oct 2021 14:59:23 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
+        id S229817AbhJSW0T (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Oct 2021 18:26:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42212 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229632AbhJSW0S (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 19 Oct 2021 18:26:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7673A60FDA;
+        Tue, 19 Oct 2021 22:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634682245;
+        bh=MnWoQVQ2JyZGLbQ15UMwC70ak3+mkXZWPOhHgYpY6V4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GyBQOR+rltd+kgSCettTJMVhlwMnrnfmNPIChH6fmtumPnYUnAs59mUx4+hTq2nP4
+         0HRzxqkbPh2I6FLsFD70opThQXQngSUqE6oH1Z3qkA57XTeSMfNpE990JtagGkHpCK
+         jzixONAJVfoiYUqQ0C4YdSjEK5kaAQatl+bN37rr0Z7DqI5J5vceTWbpxdp6yq9rhb
+         aAgYCb1g+MFa3e8so5JwnmWhd5Lo1KL7HEPwE4q9Z8XTzybzGywTpf6LAGhqlNje0O
+         Sc9Qwwm48LfTfT6y1Bmou1ot+f6fnkwD5snL+L2dbYMVS3ZqTyxjH8yxVPbFHd+Pde
+         HkeTYniPGgv7A==
+Received: by mail-ed1-f42.google.com with SMTP id y12so20511883eda.4;
+        Tue, 19 Oct 2021 15:24:05 -0700 (PDT)
+X-Gm-Message-State: AOAM5334U6Ow2iRYVv6oFbw3sfOa2cyyMjDtqEzLA5Za3t1GCL0cMfqF
+        zjHtxN9FDrJdchnuhiIU64KqdvU3BkrsP8yCCg==
+X-Google-Smtp-Source: ABdhPJzbdHa3t+aQakxf8cVFAM0Vd3iXBqYEWUCpX0L3/NyEeN5SmxaiFvTKurE6FRSPRlVm700peFXIM+Krf4JmIls=
+X-Received: by 2002:a17:907:7d8b:: with SMTP id oz11mr41803746ejc.84.1634682243846;
+ Tue, 19 Oct 2021 15:24:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211009022023.3796472-1-f.fainelli@gmail.com>
+ <20211009022023.3796472-10-f.fainelli@gmail.com> <871r4gvggb.wl-maz@kernel.org>
+In-Reply-To: <871r4gvggb.wl-maz@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 19 Oct 2021 17:23:52 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+CWeFHsHHaAwbb940Zk1thU50gDGcqfO6NdgWQ2FPTWA@mail.gmail.com>
+Message-ID: <CAL_Jsq+CWeFHsHHaAwbb940Zk1thU50gDGcqfO6NdgWQ2FPTWA@mail.gmail.com>
+Subject: Re: [PATCH v4 09/14] irqchip: Provide platform_device to of_irq_init_cb_t
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM
-        BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE...),
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM
-        SUB-ARCHITECTURES), linux-mips@vger.kernel.org (open list:MIPS),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE)
-Subject: [PATCH v5 14/14] irqchip: Fix kernel-doc parameter typo for IRQCHIP_DECLARE
-Date:   Tue, 19 Oct 2021 14:58:55 -0700
-Message-Id: <20211019215855.1920099-15-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211019215855.1920099-1-f.fainelli@gmail.com>
-References: <20211019215855.1920099-1-f.fainelli@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        "moderated list:ARM SUB-ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The documentation refers to "compstr" when we have the parameter named
-"compat", fix the typo.
+ On Tue, Oct 19, 2021 at 4:43 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Sat, 09 Oct 2021 03:20:18 +0100,
+> Florian Fainelli <f.fainelli@gmail.com> wrote:
+> >
+> > Provide the platform device mapping to the interrupt controller node to
+> > the of_irq_init_cb_t callback such that drivers can make use of it.
+> >
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> > ---
+> >  drivers/irqchip/irqchip.c  | 2 +-
+> >  drivers/irqchip/qcom-pdc.c | 3 ++-
+> >  drivers/of/irq.c           | 2 +-
+> >  include/linux/of_irq.h     | 5 ++++-
+> >  4 files changed, 8 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/irqchip/irqchip.c b/drivers/irqchip/irqchip.c
+> > index 3570f0a588c4..289784eefd00 100644
+> > --- a/drivers/irqchip/irqchip.c
+> > +++ b/drivers/irqchip/irqchip.c
+> > @@ -55,6 +55,6 @@ int platform_irqchip_probe(struct platform_device *pd=
+ev)
+> >       if (par_np && !irq_find_matching_host(par_np, DOMAIN_BUS_ANY))
+> >               return -EPROBE_DEFER;
+> >
+> > -     return irq_init_cb(np, par_np);
+> > +     return irq_init_cb(np, par_np, pdev);
+> >  }
+> >  EXPORT_SYMBOL_GPL(platform_irqchip_probe);
+> > diff --git a/drivers/irqchip/qcom-pdc.c b/drivers/irqchip/qcom-pdc.c
+> > index 173e6520e06e..819a93360b96 100644
+> > --- a/drivers/irqchip/qcom-pdc.c
+> > +++ b/drivers/irqchip/qcom-pdc.c
+> > @@ -359,7 +359,8 @@ static int pdc_setup_pin_mapping(struct device_node=
+ *np)
+> >       return 0;
+> >  }
+> >
+> > -static int qcom_pdc_init(struct device_node *node, struct device_node =
+*parent)
+> > +static int qcom_pdc_init(struct device_node *node, struct device_node =
+*parent,
+> > +                      struct platform_device *pdev)
+> >  {
+> >       struct irq_domain *parent_domain, *pdc_domain, *pdc_gpio_domain;
+> >       int ret;
+> > diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+> > index 352e14b007e7..18f3f5c00c87 100644
+> > --- a/drivers/of/irq.c
+> > +++ b/drivers/of/irq.c
+> > @@ -538,7 +538,7 @@ void __init of_irq_init(const struct of_device_id *=
+matches)
+> >                                desc->dev,
+> >                                desc->dev, desc->interrupt_parent);
+> >                       ret =3D desc->irq_init_cb(desc->dev,
+> > -                                             desc->interrupt_parent);
+> > +                                             desc->interrupt_parent, N=
+ULL);
+> >                       if (ret) {
+> >                               of_node_clear_flag(desc->dev, OF_POPULATE=
+D);
+> >                               kfree(desc);
+> > diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
+> > index aaf219bd0354..89acc8b089f0 100644
+> > --- a/include/linux/of_irq.h
+> > +++ b/include/linux/of_irq.h
+> > @@ -9,7 +9,10 @@
+> >  #include <linux/ioport.h>
+> >  #include <linux/of.h>
+> >
+> > -typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_no=
+de *);
+> > +struct platform_device;
+> > +
+> > +typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_no=
+de *,
+> > +                             struct platform_device *);
+>
+> Having added some type-checking to the IRQCHIP_MATCH() #definery, I
+> end-up with warnings such as:
+>
+> In file included from ./include/linux/kernel.h:16,
+>                  from drivers/irqchip/irq-bcm7038-l1.c:12:
+> ./include/linux/minmax.h:20:28: warning: comparison of distinct pointer t=
+ypes lacks a cast
+>    20 |  (!!(sizeof((typeof(x) *)1 =3D=3D (typeof(y) *)1)))
+>       |                            ^~
+> ./include/linux/irqchip.h:41:2: note: in expansion of macro =E2=80=98__ty=
+pecheck=E2=80=99
+>    41 |  __typecheck(typecheck_irq_init_cb, fn) ? fn : fn
+>       |  ^~~~~~~~~~~
+> ./include/linux/irqchip.h:44:12: note: in expansion of macro =E2=80=98typ=
+echeck_irq_init_cb=E2=80=99
+>    44 |    .data =3D typecheck_irq_init_cb(fn), },
+>       |            ^~~~~~~~~~~~~~~~~~~~~
+> drivers/irqchip/irq-bcm7038-l1.c:459:1: note: in expansion of macro =E2=
+=80=98IRQCHIP_MATCH=E2=80=99
+>   459 | IRQCHIP_MATCH("brcm,bcm7038-l1-intc", bcm7038_l1_of_init)
+>       | ^~~~~~~~~~~~~
+>
+> Clearly, you didn't update the drivers you just converted to
+> IRQCHIP_MATCH(), and only fixed the QC driver.
+>
+> FWIW, I'm planning to take something like the hack below into the tree
+> to detect this sort of stuff early.
+>
+>         M.
+>
+> diff --git a/include/linux/irqchip.h b/include/linux/irqchip.h
+> index ccf32758ea85..146a9d80a6a2 100644
+> --- a/include/linux/irqchip.h
+> +++ b/include/linux/irqchip.h
+> @@ -33,7 +33,15 @@ extern int platform_irqchip_probe(struct platform_devi=
+ce *pdev);
+>  #define IRQCHIP_PLATFORM_DRIVER_BEGIN(drv_name) \
+>  static const struct of_device_id drv_name##_irqchip_match_table[] =3D {
+>
+> -#define IRQCHIP_MATCH(compat, fn) { .compatible =3D compat, .data =3D fn=
+ },
+> +/* Undefined on purpose */
+> +int typecheck_irq_init_cb(struct device_node *, struct device_node *,
+> +                         struct platform_device *);
+> +
+> +#define typecheck_irq_init_cb(fn)                                      \
+> +       __typecheck(typecheck_irq_init_cb, fn) ? fn : fn
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- include/linux/irqchip.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+That's nice! Shouldn't it also be used for IRQCHIP_DECLARE?
 
-diff --git a/include/linux/irqchip.h b/include/linux/irqchip.h
-index 67351aac65ef..ccf32758ea85 100644
---- a/include/linux/irqchip.h
-+++ b/include/linux/irqchip.h
-@@ -23,7 +23,7 @@
-  *
-  * @name: name that must be unique across all IRQCHIP_DECLARE of the
-  * same file.
-- * @compstr: compatible string of the irqchip driver
-+ * @compat: compatible string of the irqchip driver
-  * @fn: initialization function
-  */
- #define IRQCHIP_DECLARE(name, compat, fn) OF_DECLARE_2(irqchip, name, compat, fn)
--- 
-2.25.1
+> +#define IRQCHIP_MATCH(compat, fn) { .compatible =3D compat,      \
+> +                       .data =3D typecheck_irq_init_cb(fn), },
 
+I was going to say I wasn't really a fan of IRQCHIP_MATCH given it had
+nothing irqchip specific about it, but you fixed that now...
+
+>
+>  #define IRQCHIP_PLATFORM_DRIVER_END(drv_name)                          \
+>         {},                                                             \
+>
+> --
+> Without deviation from the norm, progress is not possible.
