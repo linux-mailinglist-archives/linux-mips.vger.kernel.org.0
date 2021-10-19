@@ -2,85 +2,103 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2803433CA2
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 18:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86DA433F0E
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 21:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbhJSQrK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Oct 2021 12:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
+        id S234361AbhJSTP0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Oct 2021 15:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbhJSQrJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 12:47:09 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2DFC06161C;
-        Tue, 19 Oct 2021 09:44:56 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id b188so16221203iof.8;
-        Tue, 19 Oct 2021 09:44:56 -0700 (PDT)
+        with ESMTP id S232717AbhJSTPZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 15:15:25 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA59C06161C;
+        Tue, 19 Oct 2021 12:13:12 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id ez7-20020a17090ae14700b001a132a1679bso682949pjb.0;
+        Tue, 19 Oct 2021 12:13:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m9fn5L6c5k5bZQVkLpvPb3DcbU31aZHyPs/0zFNYnKw=;
-        b=Qmc8AKuvYSGTXy1UfB1lkKw1L+FWpdGg2Hfm0XmOQHqKbWb+Uw/ybPukwBAYFg59In
-         drTwnh7LC3GXfBPHcoBfUjXF7MYNqy00J/EgwNMMtWvVQoo8RKI3SNpGBaRivhtFz3FE
-         X9xd/aly8rPbbPk7C4czUV7nZCQMFkVmn47+fO/kFtQ7L416n4FVdqK/Z4Yb53JkcOt9
-         gA2DxHPB5v9h+Vx/59Cc5Bm5aTiyAJZ2uuSbxbGVekbbT1LDOH5WzXkrnVhHvRIr9rC7
-         mGXm8AaihAP2VlfpgpH7nYiTRMCFXjnZQ3QeelO/cmZ+y6cgK1VTndw01/pPSCO14sDo
-         qymA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=p6qfnLTqVvQn91/sU15XDboI6/iazL8ZoptqJ7b7Amg=;
+        b=p7RhFcvWM69nE9OjK3HIYp+lNU5AE/rk3xrRqS8fPHXtlaDBuvlqsGboxOLLcZDo6b
+         2aD/jiE7NEzjlm5uY6ggDnlHYEHOBtrBAPNosPzKLXyRbP5b0Nv/5MoVpqWjORg4tXSc
+         6g26lAkbLMbYEy5JTKeWRzwDg8MB9TzxtTA64WZb8atIzN8Uyk8OH7PzEe1XLauH8caC
+         xNfypsEMkaIVA7+XwWCaUnqFx6rvLy9BRluuyILFsapACZ67s2qa2Smorot8uLjbqP9Q
+         ApwE0p+oVadEwCxqlPouFkTOlRZhTd8xvW/87q5ekuCBTbapJUt7oVGyaoq0hUikKgrb
+         YJ5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m9fn5L6c5k5bZQVkLpvPb3DcbU31aZHyPs/0zFNYnKw=;
-        b=jGD90NOisi306wwNsZbtOBh7EwKm4saXRW9ONY9rc4vspEJWsmPQ5jaNXcp/idNODy
-         p0l4TSWnUaAm/41dxfx/koVFStTtRsRCzXZiUCZZd9288F4tEwQZl3GMRKcBgBUNQufQ
-         zOqQ1jgO5fmujoTtmLW8D7Bg7v1T5hY8d7XDj/ZBDWEJ/sFjKnLE93ozOthNALIaaLOy
-         VXeIhUoF05QkzzTZ6ixd2nz4rNeyag39bAwD1lYYv65JK6nwfLanTtKHwALkq3pnM+Ou
-         xdGoXMN6+v4BQIvLiQfNBHi7CEKWryz+yjY9lJ/grdaymkDgJsFiKoi6OWvUHjB4AXYL
-         ONCQ==
-X-Gm-Message-State: AOAM533bJMKrePhDbxYZcGBCdUoyH0o/RSoEUwKFezYwCdUn0smDy0RS
-        PhE6uaUV5Cktrp81F3BBNmaewdvpH6bLKMtl0AM=
-X-Google-Smtp-Source: ABdhPJwZgjBGY3VH8kD4PIFTbQ7BW6MwBzb9/uTGndsGv78ts4EkogRu9XIq17it5wCIg9iUyhd6DkWedo6YwdQ/8ws=
-X-Received: by 2002:a05:6602:2d4e:: with SMTP id d14mr20346152iow.172.1634661896156;
- Tue, 19 Oct 2021 09:44:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211019144520.3613926-1-geert@linux-m68k.org>
-In-Reply-To: <20211019144520.3613926-1-geert@linux-m68k.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 19 Oct 2021 18:44:45 +0200
-Message-ID: <CANiq72=wnrwGbWygt2R_rsyKf3hq6vJUad4NDJwR4FeNFHZ55Q@mail.gmail.com>
-Subject: Re: [PATCH v8 00/21] auxdisplay: ht16k33: Add character display support
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Robin van der Gracht <robin@protonic.nl>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=p6qfnLTqVvQn91/sU15XDboI6/iazL8ZoptqJ7b7Amg=;
+        b=VsByszhbeMytF23g8kHUqLNSZb9LiArxdDKdiAC98wC3Eci1NGZ0OlydEAQ8eRfOpq
+         pXQWwDVX01jgIZZVFnL9ZjrmoFNYPpjKOe2x0SWXNrUV1jU4fZ5Ro6w10lcblYsvUD49
+         xZTov9f7vb0vXSZ4GPvIsJ6drBnSUebji5wguxu9Hbp88reQl1Jw5l0hiMqH1wFqcaHq
+         XZP4r1pJMDkOxWgKxf+rm7qRI1P5oiA7dBLqbqTPcInF0NORr4TC47EWx6bYNd7mymsG
+         lpXufWCQA4lXJom/nvuzJdvccDwoucGhNH1xat8Sxl/pGRrqHDiJS37rt2q7kePgJGFT
+         vBtg==
+X-Gm-Message-State: AOAM530PkbAgnv/Ia2w9SsYqvyilIrxiwuoZw113XOVGQwieZxjjudxU
+        NjskMyZlLnLVptMAq026FWNGX453wMw=
+X-Google-Smtp-Source: ABdhPJzOIfguzGQQYhF5KQ5A3DkNxG7mHIZvhAk8gisM2D1yKSxZCj/A22tJmtTBhfAJOTIFKQynDQ==
+X-Received: by 2002:a17:90b:4ac6:: with SMTP id mh6mr1863221pjb.230.1634670791164;
+        Tue, 19 Oct 2021 12:13:11 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id nn14sm3549882pjb.27.2021.10.19.12.13.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Oct 2021 12:13:10 -0700 (PDT)
+Subject: Re: [PATCH v4 00/14] Modular Broadcom irqchip drivers
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Frank Rowand <frowand.list@gmail.com>,
+        "moderated list:ARM SUB-ARCHITECTURES" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>
+References: <20211009022023.3796472-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <9f54089d-86de-cb47-d623-fb30bc9aed73@gmail.com>
+Date:   Tue, 19 Oct 2021 12:13:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211009022023.3796472-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Geert,
+On 10/8/21 7:20 PM, Florian Fainelli wrote:
+> Hi Thomas, Marc,
+> 
+> This patch series aims at allowing the 3 interrupt controller drivers
+> used on Broadcom STB platforms to be built as modules in order for those
+> to be shipped in a GKI enabled system (Android).
+> 
+> The irq-bcm7038-l1 requires us to export a number of symbols, which is
+> not great, but there are not obvious solutions other than adding
+> accessor functions to get the same information.
+> 
+> Assuming you are happy with the changes though, please do take the last
+> two changes as well through your tree.
+> 
+> Thanks!
 
-On Tue, Oct 19, 2021 at 4:45 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> The Holtek HT16K33 LED controller is not only used for driving
-> dot-matrix displays, but also for driving segment displays.
-> The current auxdisplay driver is limited to dot-matrix displays, which
-> are exposed as a frame buffer device.
->
-> This patch series extends the driver to 4-digit 7-segment and quad
-> 14-segment alphanumeric displays, allowing the user to display and
-> scroll text messages.
-
-Thanks for all your work on this. Unless somebody is against this, I
-will pick it up.
-
-Cheers,
-Miguel
+Does this look reasonable to you? If so, can you apply all of those
+patches through the irqchip tree? Thanks!
+-- 
+Florian
