@@ -2,55 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 453F84340FC
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 23:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE6E4340F4
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 23:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbhJSWBW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Oct 2021 18:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S229704AbhJSWBU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Oct 2021 18:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbhJSWBO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 18:01:14 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D78C061749;
-        Tue, 19 Oct 2021 14:59:01 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id q10-20020a17090a1b0a00b001a076a59640so2678340pjq.0;
-        Tue, 19 Oct 2021 14:59:01 -0700 (PDT)
+        with ESMTP id S229734AbhJSWBQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 18:01:16 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373B1C06174E;
+        Tue, 19 Oct 2021 14:59:03 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d5so1180412pfu.1;
+        Tue, 19 Oct 2021 14:59:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GdOGRI80K+wNQEjH3mPOPndE64P/y5ts/hX6lqyqGHE=;
-        b=FJbpe1ThVKgK6MS4bNq8xHuuagQlHijb/figYTP/jVqNMoEnokVQdeC0QWMDdB/dcE
-         3YNGiBzjQBM6Su6L10jQmpKPpNsDiaR0GdBKUZT4wjtPtpCJvqqSSq3lkyZn8oZxWg9i
-         JTrQ0k98O2grey5ucoE9e8cK5C97bNNWVzOWPFCDRznTERj+JJ9ia9AmKeNyk0eLIhEx
-         o3rVF8s1jiZ821ZQ02AdgpB7W8IfPeSgPHIo+GNudaAWiSAmV6c51LDhA0yt9vDYFCmO
-         cRt5z47xg+x3walWNaNG4BEUzHR2SR85ecpREzXvETG+t7Fm0q36R32knWNu+k8HVpi3
-         KD1A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Dv8ie/kzP99OSKx2zPfoLqRlI0izEadzKVnoX+2n0Ow=;
+        b=AY2Ha5MT0GGSiAQJtui4C9ngVrORBxADCZ2UfDcWMFG49K8fbexaNgX+wtRbjAPmOs
+         h1EEcZ3Vs5nGsU3lxyyBJQMwREZVYsbTP/YzlXMZWlzD5GbioJ60HLdgBxq2ORiyZHQE
+         4xyeZJ9jjQsOYUQ61XMmMS62pVe4SGhnSo6SPFOPxwphnh0bXAM/2XCi5hPWH7W7fV/a
+         FodWYf/Ikfz1FcNJecK5z/opptgGMCyXJvoGJlCnRQuG9Y9QYUO0RNppBhkS/g4Jf9TO
+         Zq4H8Ih541/TPH4MSdRSiP1RLwvGXN/GMeWW4RX/0QiH1IfwYTZumd/Vuclo5j+8ay3s
+         6QYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GdOGRI80K+wNQEjH3mPOPndE64P/y5ts/hX6lqyqGHE=;
-        b=z4BcMAIAsLOK8+XAcLtSZMVzvhblDbE1ojWp9OVMKfqqnYoEjj0ONN0GONyXFY+XND
-         +T6yXmQoYsrWUnrNpESAO1D2dpeAlFfNVlRPZN5hyWDxP6o1RNbcKOkMEL28mwTbCBo2
-         k9gsPU2QnVBbIHUV1uDhhyMqDfuxZ7aJ0H9PYsJ87d9tH84oxPeHW6Dh8QBwE6qNk9BM
-         Ln62sufnqwB3wPeOTDHSXuWHzWmIVvbt/DA+BMwgGvgYpKb13YeakA/V7tAbTgHgKYAL
-         w/n+7YQa0rABCB4qiVt7nqJuiA+3I8vrLhsoq4yMumG+LutMTXQ0l0GqgLALvVm++80w
-         tO2w==
-X-Gm-Message-State: AOAM532ASeOnJDxHXGwtq1oWUIMm9QlX1VFBh3Zx26oYPNyigp/M3TEs
-        oC79oz7mwEBsl9287lQS/7QWoMV48UA=
-X-Google-Smtp-Source: ABdhPJxk/TBEHPy4xHiREvckqvcnxHedFfzlc96UOB0+wIsECd+5WtpAEMkEndnF/MHz8xW5EVQbjw==
-X-Received: by 2002:a17:90a:307:: with SMTP id 7mr2755164pje.176.1634680740810;
-        Tue, 19 Oct 2021 14:59:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Dv8ie/kzP99OSKx2zPfoLqRlI0izEadzKVnoX+2n0Ow=;
+        b=V9ZiQnr/MUBobDdiZCH5HLxyOKzwqlk2y8TItDZnU7klB4/SOD0/m/blDEe3UsaTBx
+         7PUkTO48eDeyNMo9phOgzVe5RjaHklL/iwaSTxNmI5eemHYfGEZqSnyxmqRxGaWfdYHr
+         brkIv113LHD9EtXuNB0G7M4C8+BbOm4TGUDJO16gLnHcXHRW914gqPfk1Nq914DfEuoo
+         g5I1fLvY7Lr3O9lgMVsxbMv5augFKfcJStRyFwmUyGYhtUgVctRgUI6c1CBd5J7TnCR4
+         qS+JQcDN+92TBDUqKakQIIOQHg7UPmcfY989XtlKvqQrnXBlvB2Fbu35qWOk/iGH57+n
+         3IZA==
+X-Gm-Message-State: AOAM532/wXNuaml+4etJ8bzx9ZEl1bl3dBBsNfHGxsgFzZ6SbSTUIMWn
+        zycgFGSKwh0khUL3egoGNkZEc3oJ/P8=
+X-Google-Smtp-Source: ABdhPJxg80f3aU9s30YTITBpGuu/MH1V8WZnV8yB6ev7fGNeckIaO0jlPiUPY6LwoY00LNnGswTQWA==
+X-Received: by 2002:a05:6a00:1a8e:b0:44c:5f27:e971 with SMTP id e14-20020a056a001a8e00b0044c5f27e971mr2464454pfv.72.1634680742412;
+        Tue, 19 Oct 2021 14:59:02 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id bf7sm139325pjb.14.2021.10.19.14.58.59
+        by smtp.gmail.com with ESMTPSA id bf7sm139325pjb.14.2021.10.19.14.59.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Oct 2021 14:59:00 -0700 (PDT)
+        Tue, 19 Oct 2021 14:59:01 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
+        Rob Herring <robh@kernel.org>, Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM
         BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE...),
@@ -66,94 +66,85 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         SUB-ARCHITECTURES), linux-mips@vger.kernel.org (open list:MIPS),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH v5 00/14] Modular Broadcom irqchip drivers
-Date:   Tue, 19 Oct 2021 14:58:41 -0700
-Message-Id: <20211019215855.1920099-1-f.fainelli@gmail.com>
+Subject: [PATCH v5 01/14] irqchip: Provide platform_device to of_irq_init_cb_t
+Date:   Tue, 19 Oct 2021 14:58:42 -0700
+Message-Id: <20211019215855.1920099-2-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211019215855.1920099-1-f.fainelli@gmail.com>
+References: <20211019215855.1920099-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas, Marc,
+Provide the platform device mapping to the interrupt controller node to
+the of_irq_init_cb_t callback such that drivers can make use of it.
 
-This patch series aims at allowing the 3 interrupt controller drivers
-used on Broadcom STB platforms to be built as modules in order for those
-to be shipped in a GKI enabled system (Android).
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/irqchip/irqchip.c  | 2 +-
+ drivers/irqchip/qcom-pdc.c | 3 ++-
+ drivers/of/irq.c           | 2 +-
+ include/linux/of_irq.h     | 5 ++++-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
 
-The irq-bcm7038-l1 requires us to export a number of symbols, which is
-not great, but there are not obvious solutions other than adding
-accessor functions to get the same information.
-
-Assuming you are happy with the changes though, please do take the last
-two changes as well through your tree.
-
-Thanks!
-
-Changes in v5:
-
-- put patch #9 as the first one
-- add missing platform_device argument to the irq-bcm7038-l1 and
-  irq-brcmstb-l2 drivers (Marc)
-
-Changes in v4:
-
-- added Thomas' Acked-by for patch #1
-- added Rob's Reviewed-by for patch 9 and updated qcom-pdc.c as
-  suggested
-- s/argument/parameter/ in patch #14 as suggested by Sergey
-
-Changes in v3:
-
-- avoid the use of the cpu_logical_map array for platforms other than
-  MIPS
-- removed the bogus irq_set_affinity callback for platforms other than
-  MIPS
-- bring-back the export of irq_gc_noop() lost in the v2
-
-Changes in v2:
-
-- avoid using irq_to_desc() and use irq_get_irq_data() instead
-- re-order patches to avoid linking failure for irq-brcmstb-l2
-- removed the use of .irq_cpu_offline() and converted BMIPS to use
-  irq_migrate_all_off_this_cpu()
-- avoid exporting of_irq_count() and use a platform device passed
-  down from the irqchip platform driver registration code instead
-- added kernel-doc fix
-
-Florian Fainelli (14):
-  irqchip: Provide platform_device to of_irq_init_cb_t
-  MIPS: BMIPS: Remove use of irq_cpu_offline
-  irqchip/irq-bcm7038-l1: Remove .irq_cpu_offline()
-  irqchip/irq-bcm7038-l1: Use irq_get_irq_data()
-  irqchip/irq-bcm7038-l1: Gate use of CPU logical map to MIPS
-  irqchip/irq-bcm7038-l1: Restrict affinity setting to MIPS
-  irqchip/irq-bcm7038-l1: Switch to IRQCHIP_PLATFORM_DRIVER
-  genirq: Export irq_gc_{unmask_enable,mask_disable}_reg
-  irqchip/irq-brcmstb-l2: Switch to IRQCHIP_PLATFORM_DRIVER
-  genirq: Export irq_gc_noop()
-  irqchip/irq-bcm7120-l2: Switch to IRQCHIP_PLATFORM_DRIVER
-  arm64: broadcom: Removed forced select of interrupt controllers
-  ARM: bcm: Removed forced select of interrupt controllers
-  irqchip: Fix kernel-doc parameter typo for IRQCHIP_DECLARE
-
- arch/arm/mach-bcm/Kconfig        |  4 ---
- arch/arm64/Kconfig.platforms     |  3 --
- arch/mips/Kconfig                |  1 +
- arch/mips/kernel/smp-bmips.c     |  3 +-
- drivers/irqchip/Kconfig          | 12 ++++++--
- drivers/irqchip/irq-bcm7038-l1.c | 50 +++++++++-----------------------
- drivers/irqchip/irq-bcm7120-l2.c | 28 ++++++++++--------
- drivers/irqchip/irq-brcmstb-l2.c | 22 ++++++++------
- drivers/irqchip/irqchip.c        |  2 +-
- drivers/irqchip/qcom-pdc.c       |  3 +-
- drivers/of/irq.c                 |  2 +-
- include/linux/irqchip.h          |  2 +-
- include/linux/of_irq.h           |  5 +++-
- kernel/irq/generic-chip.c        |  3 ++
- 14 files changed, 66 insertions(+), 74 deletions(-)
-
+diff --git a/drivers/irqchip/irqchip.c b/drivers/irqchip/irqchip.c
+index 3570f0a588c4..289784eefd00 100644
+--- a/drivers/irqchip/irqchip.c
++++ b/drivers/irqchip/irqchip.c
+@@ -55,6 +55,6 @@ int platform_irqchip_probe(struct platform_device *pdev)
+ 	if (par_np && !irq_find_matching_host(par_np, DOMAIN_BUS_ANY))
+ 		return -EPROBE_DEFER;
+ 
+-	return irq_init_cb(np, par_np);
++	return irq_init_cb(np, par_np, pdev);
+ }
+ EXPORT_SYMBOL_GPL(platform_irqchip_probe);
+diff --git a/drivers/irqchip/qcom-pdc.c b/drivers/irqchip/qcom-pdc.c
+index 173e6520e06e..819a93360b96 100644
+--- a/drivers/irqchip/qcom-pdc.c
++++ b/drivers/irqchip/qcom-pdc.c
+@@ -359,7 +359,8 @@ static int pdc_setup_pin_mapping(struct device_node *np)
+ 	return 0;
+ }
+ 
+-static int qcom_pdc_init(struct device_node *node, struct device_node *parent)
++static int qcom_pdc_init(struct device_node *node, struct device_node *parent,
++			 struct platform_device *pdev)
+ {
+ 	struct irq_domain *parent_domain, *pdc_domain, *pdc_gpio_domain;
+ 	int ret;
+diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+index 352e14b007e7..18f3f5c00c87 100644
+--- a/drivers/of/irq.c
++++ b/drivers/of/irq.c
+@@ -538,7 +538,7 @@ void __init of_irq_init(const struct of_device_id *matches)
+ 				 desc->dev,
+ 				 desc->dev, desc->interrupt_parent);
+ 			ret = desc->irq_init_cb(desc->dev,
+-						desc->interrupt_parent);
++						desc->interrupt_parent, NULL);
+ 			if (ret) {
+ 				of_node_clear_flag(desc->dev, OF_POPULATED);
+ 				kfree(desc);
+diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
+index aaf219bd0354..89acc8b089f0 100644
+--- a/include/linux/of_irq.h
++++ b/include/linux/of_irq.h
+@@ -9,7 +9,10 @@
+ #include <linux/ioport.h>
+ #include <linux/of.h>
+ 
+-typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *);
++struct platform_device;
++
++typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *,
++				struct platform_device *);
+ 
+ /*
+  * Workarounds only applied to 32bit powermac machines
 -- 
 2.25.1
 
