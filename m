@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 085384340F8
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 23:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3984340FE
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 23:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbhJSWBW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Oct 2021 18:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
+        id S229851AbhJSWBX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Oct 2021 18:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbhJSWBU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 18:01:20 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789BCC061768;
-        Tue, 19 Oct 2021 14:59:06 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id v8so1145698pfu.11;
-        Tue, 19 Oct 2021 14:59:06 -0700 (PDT)
+        with ESMTP id S229728AbhJSWBV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 18:01:21 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD86C06161C;
+        Tue, 19 Oct 2021 14:59:08 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id w17so2832509plg.9;
+        Tue, 19 Oct 2021 14:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=knXL02VOmkFLU9YLWF/5g5SfaxjLRPWcMFGGkfQ2MJo=;
-        b=J+bh9w6aQV5iXo7J6TIa1ul0MoxIg7yVn5hvtsa5Q5IAo7h29Xhz+WFwGg0o2ja4JD
-         iUTXrKfNk2rmhsKYmfF1VB2gv3CohHuYRZkWpG1wFi2j3QRZ17vsb9z/lzC4rWZvPyAU
-         EID8cEcjJ/2HcKQ0SPyqe5S05W6eEnIQz4zU5GuKiCJ/BhQ8tEI9f19gdvqdBuRKKtLe
-         iDqHyEeN33YKQ2CU2DbV8/1N5flnMz3vmojbomEDvHXEbBQW2/gkCrlPOfqRv9MbaoIw
-         Y1Cq1Lw7Xu9A0ah5d43Ia/Hnw4OA1nhVmACgd1RaEmWQGMahfP30Udp2egS0xyXyseod
-         u25Q==
+        bh=b+ZBi3anDomFQV4e/giygkqAUlU4kNEpUMbqtcbvyD0=;
+        b=jn9QML4KK77DYsSugzmcoMS/1b2NGB1u/HjX5lJrHxBI1MzFsQ/UO85N3H7XNBP9Db
+         6sSnbegctLVAjR3i2QPHtgFSOFWqCb+xBs4954wAMB6Aul32aB+Yun15zcZQ/tF5LCo9
+         I/w8HoHhQnxa/7nRVfyy1uiod3qXVk4f3VyjQoQpP0NsdPxCJNEKgHe2P1FPNMdhOawG
+         CyRpHvAHruURxaLkvscPrng8VifYeMnB2ZZszM9Wax4GYvysMfeNB5Lf9yAlZ6TsVhzP
+         wHYdrcXtqldANQUZmAAVkFi1NfHqn7DgBRhZrK7nyjmXGWagNa3OHtOadRDTJkJ05hUQ
+         e9Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=knXL02VOmkFLU9YLWF/5g5SfaxjLRPWcMFGGkfQ2MJo=;
-        b=ZX2R95tdCYK/EFznJU8WWnrLkhtHWWiSiHMmtrNUZIFvQ5ZbBJI1oglFV1kWtbtT5m
-         otI4i34a/4OoZZrOtI4wCXBjcXtNfkpcGdWE6YgZ1jk5VohUaNulYUjTzuxXA3oHuEOr
-         uCzADcX+FhHddAMtkWvWfw0EpN7wEidtp9Wsryacn0028ON7UDU36YysnjBrjbbNZtmj
-         RYiQ1Qi0O0xCT/VjIc3B4ZeRsHZDCM42fos29hfglOnzWv9IQNeaCnsVHSGpqY2Xs63V
-         FsYqvuC7XckEisw0v1I3YiZO6gEVrnI6V0QDhQ+9NyD51xtvDtr7CjYAxkKBU3rfgETu
-         /W5w==
-X-Gm-Message-State: AOAM532DoaihWuWSUcl7wxr+EEc+d3+E0O+oxZ+dK8ChasYUcER36qTR
-        1yu8Swwl+IK5pRZKEvhpUF8RXiNsG7I=
-X-Google-Smtp-Source: ABdhPJy+NOsLn0raHM4ZDL83rHjFaSBpPTZAUubBRpBpGrD32O0ki56vb2RyQVDqxdAtAoZpE0tJTA==
-X-Received: by 2002:a62:7a8b:0:b0:44d:47e2:99bf with SMTP id v133-20020a627a8b000000b0044d47e299bfmr2305391pfc.64.1634680745695;
-        Tue, 19 Oct 2021 14:59:05 -0700 (PDT)
+        bh=b+ZBi3anDomFQV4e/giygkqAUlU4kNEpUMbqtcbvyD0=;
+        b=fBxUNhBV1KQ9tOVl6y3lWpyO+1G0ZFe8fbPEqNA74bt0xaIRXOEVydM39bMdpVXJH5
+         o4JPmaK/Kdp1PtK25c0UMMyBbg5TAECwGeywyHMFQX0XPuldrPH6+ATwsZ7aAbjW+ARl
+         oQzxp3ZEV17orc4/bAeiecZMP+Fkv5ESALm036IK/TNr2WxVdsooazEVOK0f3MMcaEdM
+         zdVlw8HTuK+poZR4FTafhvQXvmbnjMusjmU+9z7nPzXX6AIcY/Aog5qFoQgBFMMowM8K
+         ly+b6QYGuxHFWp9fLLZUKlHnxh/hNNyK9Kce/laQi7MqdKQFwzL5fxWpt0ERK+FXXLYo
+         hcAw==
+X-Gm-Message-State: AOAM5321xa4VJGT7kqZGBrhZC3I9pWSuk3A//e7oSP/rDxKFe4LsLZB1
+        wYn4yQz6lMygPwz9qlf5T7DblL1REB4=
+X-Google-Smtp-Source: ABdhPJw6vrFWYOXdAx+iTte/s/JqTgZ03LVQ6UZ7rk2h0Ha78jN26yD/7ThDWzeIPkjCe5yaxltnNg==
+X-Received: by 2002:a17:90a:f68a:: with SMTP id cl10mr2664896pjb.39.1634680747281;
+        Tue, 19 Oct 2021 14:59:07 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id bf7sm139325pjb.14.2021.10.19.14.59.04
+        by smtp.gmail.com with ESMTPSA id bf7sm139325pjb.14.2021.10.19.14.59.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Oct 2021 14:59:05 -0700 (PDT)
+        Tue, 19 Oct 2021 14:59:06 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -66,9 +66,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         SUB-ARCHITECTURES), linux-mips@vger.kernel.org (open list:MIPS),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH v5 03/14] irqchip/irq-bcm7038-l1: Remove .irq_cpu_offline()
-Date:   Tue, 19 Oct 2021 14:58:44 -0700
-Message-Id: <20211019215855.1920099-4-f.fainelli@gmail.com>
+Subject: [PATCH v5 04/14] irqchip/irq-bcm7038-l1: Use irq_get_irq_data()
+Date:   Tue, 19 Oct 2021 14:58:45 -0700
+Message-Id: <20211019215855.1920099-5-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211019215855.1920099-1-f.fainelli@gmail.com>
 References: <20211019215855.1920099-1-f.fainelli@gmail.com>
@@ -78,64 +78,30 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-With arch/mips/kernel/smp-bmips.c having been migrated away from
-irq_cpu_offline() and use irq_migrate_all_off_this_cpu() instead, we no
-longer need to implement an .irq_cpu_offline() callback. This is a
-necessary change to facilitate the building of this driver as a module.
+Using irq_desc_get_irq_data(irq_to_desc()) to retrieve the irq_data
+structure from a virtual interrupt number is going to be problematic to
+make irq-bcm7038-l1 a module because irq_to_desc() is not exported, and
+there is no intent to export it to modules, see 64a1b95bb9fe ("genirq:
+Restrict export of irq_to_desc()").
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/irqchip/irq-bcm7038-l1.c | 30 ------------------------------
- 1 file changed, 30 deletions(-)
+ drivers/irqchip/irq-bcm7038-l1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/irqchip/irq-bcm7038-l1.c b/drivers/irqchip/irq-bcm7038-l1.c
-index a035c385ca7a..750156217c82 100644
+index 750156217c82..14caf32dc23e 100644
 --- a/drivers/irqchip/irq-bcm7038-l1.c
 +++ b/drivers/irqchip/irq-bcm7038-l1.c
-@@ -221,33 +221,6 @@ static int bcm7038_l1_set_affinity(struct irq_data *d,
+@@ -386,7 +386,7 @@ static int bcm7038_l1_map(struct irq_domain *d, unsigned int virq,
+ 
+ 	irq_set_chip_and_handler(virq, &bcm7038_l1_irq_chip, handle_level_irq);
+ 	irq_set_chip_data(virq, d->host_data);
+-	irqd_set_single_target(irq_desc_get_irq_data(irq_to_desc(virq)));
++	irqd_set_single_target(irq_get_irq_data(virq));
  	return 0;
  }
  
--#ifdef CONFIG_SMP
--static void bcm7038_l1_cpu_offline(struct irq_data *d)
--{
--	struct cpumask *mask = irq_data_get_affinity_mask(d);
--	int cpu = smp_processor_id();
--	cpumask_t new_affinity;
--
--	/* This CPU was not on the affinity mask */
--	if (!cpumask_test_cpu(cpu, mask))
--		return;
--
--	if (cpumask_weight(mask) > 1) {
--		/*
--		 * Multiple CPU affinity, remove this CPU from the affinity
--		 * mask
--		 */
--		cpumask_copy(&new_affinity, mask);
--		cpumask_clear_cpu(cpu, &new_affinity);
--	} else {
--		/* Only CPU, put on the lowest online CPU */
--		cpumask_clear(&new_affinity);
--		cpumask_set_cpu(cpumask_first(cpu_online_mask), &new_affinity);
--	}
--	irq_set_affinity_locked(d, &new_affinity, false);
--}
--#endif
--
- static int __init bcm7038_l1_init_one(struct device_node *dn,
- 				      unsigned int idx,
- 				      struct bcm7038_l1_chip *intc)
-@@ -396,9 +369,6 @@ static struct irq_chip bcm7038_l1_irq_chip = {
- 	.irq_mask		= bcm7038_l1_mask,
- 	.irq_unmask		= bcm7038_l1_unmask,
- 	.irq_set_affinity	= bcm7038_l1_set_affinity,
--#ifdef CONFIG_SMP
--	.irq_cpu_offline	= bcm7038_l1_cpu_offline,
--#endif
- #ifdef CONFIG_PM_SLEEP
- 	.irq_set_wake		= bcm7038_l1_set_wake,
- #endif
 -- 
 2.25.1
 
