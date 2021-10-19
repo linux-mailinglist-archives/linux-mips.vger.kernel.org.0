@@ -2,73 +2,72 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE6E4340F4
+	by mail.lfdr.de (Postfix) with ESMTP id 90A884340F5
 	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 23:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbhJSWBU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Oct 2021 18:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S229822AbhJSWBV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Oct 2021 18:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbhJSWBQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 18:01:16 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373B1C06174E;
-        Tue, 19 Oct 2021 14:59:03 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d5so1180412pfu.1;
-        Tue, 19 Oct 2021 14:59:03 -0700 (PDT)
+        with ESMTP id S229750AbhJSWBS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 18:01:18 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB539C061765;
+        Tue, 19 Oct 2021 14:59:04 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id v20so14670141plo.7;
+        Tue, 19 Oct 2021 14:59:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Dv8ie/kzP99OSKx2zPfoLqRlI0izEadzKVnoX+2n0Ow=;
-        b=AY2Ha5MT0GGSiAQJtui4C9ngVrORBxADCZ2UfDcWMFG49K8fbexaNgX+wtRbjAPmOs
-         h1EEcZ3Vs5nGsU3lxyyBJQMwREZVYsbTP/YzlXMZWlzD5GbioJ60HLdgBxq2ORiyZHQE
-         4xyeZJ9jjQsOYUQ61XMmMS62pVe4SGhnSo6SPFOPxwphnh0bXAM/2XCi5hPWH7W7fV/a
-         FodWYf/Ikfz1FcNJecK5z/opptgGMCyXJvoGJlCnRQuG9Y9QYUO0RNppBhkS/g4Jf9TO
-         Zq4H8Ih541/TPH4MSdRSiP1RLwvGXN/GMeWW4RX/0QiH1IfwYTZumd/Vuclo5j+8ay3s
-         6QYw==
+        bh=znmARRiQVkqC85lKLifIrCv0U2JcIdQKNsLQ6jRH+xY=;
+        b=iOwxBK/TBiRJqvUSowWx2AA+29dqSDb4BJLm/ACFVY9kpVKPukdLQjJMjtIRG35jxz
+         li9haYYODUCYEVlrXFPfWq5ITUkWgQHXdOF4IinFTkAgyLiN1CSU7YjqdR7g7CMSkyUY
+         Z2KYctppGisktlOigbfAe6ufEkKiCWoHNj+v+UZOaRj4wrX0lKwRSG5+C36OAHSEAA20
+         ZCwTKxmNp9EZGUE/qpnKPULv7qAaCZr0ULSaJG5e4QgRgV7xpwUTF24lj65tawxl7gwt
+         /ibDDCQH75MwkpxuHLxILX4XTnoX79ea9fMsyoIAaftpYjDe1+aHy1P/hJj8yAih9yX/
+         NWOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Dv8ie/kzP99OSKx2zPfoLqRlI0izEadzKVnoX+2n0Ow=;
-        b=V9ZiQnr/MUBobDdiZCH5HLxyOKzwqlk2y8TItDZnU7klB4/SOD0/m/blDEe3UsaTBx
-         7PUkTO48eDeyNMo9phOgzVe5RjaHklL/iwaSTxNmI5eemHYfGEZqSnyxmqRxGaWfdYHr
-         brkIv113LHD9EtXuNB0G7M4C8+BbOm4TGUDJO16gLnHcXHRW914gqPfk1Nq914DfEuoo
-         g5I1fLvY7Lr3O9lgMVsxbMv5augFKfcJStRyFwmUyGYhtUgVctRgUI6c1CBd5J7TnCR4
-         qS+JQcDN+92TBDUqKakQIIOQHg7UPmcfY989XtlKvqQrnXBlvB2Fbu35qWOk/iGH57+n
-         3IZA==
-X-Gm-Message-State: AOAM532/wXNuaml+4etJ8bzx9ZEl1bl3dBBsNfHGxsgFzZ6SbSTUIMWn
-        zycgFGSKwh0khUL3egoGNkZEc3oJ/P8=
-X-Google-Smtp-Source: ABdhPJxg80f3aU9s30YTITBpGuu/MH1V8WZnV8yB6ev7fGNeckIaO0jlPiUPY6LwoY00LNnGswTQWA==
-X-Received: by 2002:a05:6a00:1a8e:b0:44c:5f27:e971 with SMTP id e14-20020a056a001a8e00b0044c5f27e971mr2464454pfv.72.1634680742412;
-        Tue, 19 Oct 2021 14:59:02 -0700 (PDT)
+        bh=znmARRiQVkqC85lKLifIrCv0U2JcIdQKNsLQ6jRH+xY=;
+        b=y5LOkbjIN7fOsmtXLxpgN+s9ksk7O4Fsl4EkZcGNI4ZV5phnHdf/S2L92M6TCfpUqS
+         dzvpEd23OgYVCb02Xy90GJ1DpwVGZlL+uBlMfrpHTbe2u+LgCrwtfn++Epdpx6T+oU25
+         zkjHWhH7xvsgdYurm/KD9RGyluXV7tH5gmrjH3sAfiMLizkKJtL53NHA1YROngXlwcxV
+         3aCzFuWWT7DsDoMcE6exQdQ/0U8j+rhmC2R7q4hpy+JzVn2Th1xJTBegRyRjzyves4sA
+         VmNcASENC6glqoD66lbyOd+Q1Xg2miLloKB4ERfOM/pA/Wvyp75pcNqu3mzhoMAJY12U
+         u5rQ==
+X-Gm-Message-State: AOAM533Lyo0r3OyTf2pDEQRHrsKYveetEH5i+YbYkzrFBPD0ZGBp1PpR
+        AeZIgsP+lo4MfEEUHhl2Uwfy58ISVRc=
+X-Google-Smtp-Source: ABdhPJwmPwkzadG3IzGXM+TH9X3zzcrVGu+ztbuKjc6ySuF3D88YvREs89DstisX7TitObSh959W+g==
+X-Received: by 2002:a17:90b:4a47:: with SMTP id lb7mr2655148pjb.192.1634680744128;
+        Tue, 19 Oct 2021 14:59:04 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id bf7sm139325pjb.14.2021.10.19.14.59.00
+        by smtp.gmail.com with ESMTPSA id bf7sm139325pjb.14.2021.10.19.14.59.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Oct 2021 14:59:01 -0700 (PDT)
+        Tue, 19 Oct 2021 14:59:03 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM
         BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE...),
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         linux-arm-kernel@lists.infradead.org (moderated list:ARM
         SUB-ARCHITECTURES), linux-mips@vger.kernel.org (open list:MIPS),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH v5 01/14] irqchip: Provide platform_device to of_irq_init_cb_t
-Date:   Tue, 19 Oct 2021 14:58:42 -0700
-Message-Id: <20211019215855.1920099-2-f.fainelli@gmail.com>
+Subject: [PATCH v5 02/14] MIPS: BMIPS: Remove use of irq_cpu_offline
+Date:   Tue, 19 Oct 2021 14:58:43 -0700
+Message-Id: <20211019215855.1920099-3-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211019215855.1920099-1-f.fainelli@gmail.com>
 References: <20211019215855.1920099-1-f.fainelli@gmail.com>
@@ -78,73 +77,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Provide the platform device mapping to the interrupt controller node to
-the of_irq_init_cb_t callback such that drivers can make use of it.
+irq_cpu_offline() is only used by MIPS and we should instead use
+irq_migrate_all_off_this_cpu(). This will be helpful in order to remove
+drivers/irqchip/irq-bcm7038-l1.c irq_cpu_offline callback which would
+have got in the way of making this driver modular.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/irqchip/irqchip.c  | 2 +-
- drivers/irqchip/qcom-pdc.c | 3 ++-
- drivers/of/irq.c           | 2 +-
- include/linux/of_irq.h     | 5 ++++-
- 4 files changed, 8 insertions(+), 4 deletions(-)
+ arch/mips/Kconfig            | 1 +
+ arch/mips/kernel/smp-bmips.c | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irqchip.c b/drivers/irqchip/irqchip.c
-index 3570f0a588c4..289784eefd00 100644
---- a/drivers/irqchip/irqchip.c
-+++ b/drivers/irqchip/irqchip.c
-@@ -55,6 +55,6 @@ int platform_irqchip_probe(struct platform_device *pdev)
- 	if (par_np && !irq_find_matching_host(par_np, DOMAIN_BUS_ANY))
- 		return -EPROBE_DEFER;
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 771ca53af06d..2c03b27cec02 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -1782,6 +1782,7 @@ config CPU_BMIPS
+ 	select CPU_HAS_PREFETCH
+ 	select CPU_SUPPORTS_CPUFREQ
+ 	select MIPS_EXTERNAL_TIMER
++	select GENERIC_IRQ_MIGRATION if HOTPLUG_CPU
+ 	help
+ 	  Support for BMIPS32/3300/4350/4380 and BMIPS5000 processors.
  
--	return irq_init_cb(np, par_np);
-+	return irq_init_cb(np, par_np, pdev);
- }
- EXPORT_SYMBOL_GPL(platform_irqchip_probe);
-diff --git a/drivers/irqchip/qcom-pdc.c b/drivers/irqchip/qcom-pdc.c
-index 173e6520e06e..819a93360b96 100644
---- a/drivers/irqchip/qcom-pdc.c
-+++ b/drivers/irqchip/qcom-pdc.c
-@@ -359,7 +359,8 @@ static int pdc_setup_pin_mapping(struct device_node *np)
- 	return 0;
- }
+diff --git a/arch/mips/kernel/smp-bmips.c b/arch/mips/kernel/smp-bmips.c
+index b6ef5f7312cf..f5d7bfa3472a 100644
+--- a/arch/mips/kernel/smp-bmips.c
++++ b/arch/mips/kernel/smp-bmips.c
+@@ -26,6 +26,7 @@
+ #include <linux/bug.h>
+ #include <linux/kernel.h>
+ #include <linux/kexec.h>
++#include <linux/irq.h>
  
--static int qcom_pdc_init(struct device_node *node, struct device_node *parent)
-+static int qcom_pdc_init(struct device_node *node, struct device_node *parent,
-+			 struct platform_device *pdev)
- {
- 	struct irq_domain *parent_domain, *pdc_domain, *pdc_gpio_domain;
- 	int ret;
-diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-index 352e14b007e7..18f3f5c00c87 100644
---- a/drivers/of/irq.c
-+++ b/drivers/of/irq.c
-@@ -538,7 +538,7 @@ void __init of_irq_init(const struct of_device_id *matches)
- 				 desc->dev,
- 				 desc->dev, desc->interrupt_parent);
- 			ret = desc->irq_init_cb(desc->dev,
--						desc->interrupt_parent);
-+						desc->interrupt_parent, NULL);
- 			if (ret) {
- 				of_node_clear_flag(desc->dev, OF_POPULATED);
- 				kfree(desc);
-diff --git a/include/linux/of_irq.h b/include/linux/of_irq.h
-index aaf219bd0354..89acc8b089f0 100644
---- a/include/linux/of_irq.h
-+++ b/include/linux/of_irq.h
-@@ -9,7 +9,10 @@
- #include <linux/ioport.h>
- #include <linux/of.h>
+ #include <asm/time.h>
+ #include <asm/processor.h>
+@@ -373,7 +374,7 @@ static int bmips_cpu_disable(void)
  
--typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *);
-+struct platform_device;
-+
-+typedef int (*of_irq_init_cb_t)(struct device_node *, struct device_node *,
-+				struct platform_device *);
+ 	set_cpu_online(cpu, false);
+ 	calculate_cpu_foreign_map();
+-	irq_cpu_offline();
++	irq_migrate_all_off_this_cpu();
+ 	clear_c0_status(IE_IRQ5);
  
- /*
-  * Workarounds only applied to 32bit powermac machines
+ 	local_flush_tlb_all();
 -- 
 2.25.1
 
