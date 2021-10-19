@@ -2,183 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0954338E6
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 16:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2803433CA2
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 18:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbhJSOsn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Oct 2021 10:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S233142AbhJSQrK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Oct 2021 12:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbhJSOsP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 10:48:15 -0400
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E56C06139D
-        for <linux-mips@vger.kernel.org>; Tue, 19 Oct 2021 07:45:34 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:b4c3:ba80:54db:46f])
-        by michel.telenet-ops.be with bizsmtp
-        id 7qlS2600r12AN0U06qlSRE; Tue, 19 Oct 2021 16:45:31 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mcqMo-006B4Y-IO; Tue, 19 Oct 2021 16:45:26 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mcqMo-00FACo-0j; Tue, 19 Oct 2021 16:45:26 +0200
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
+        with ESMTP id S229991AbhJSQrJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 12:47:09 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2DFC06161C;
+        Tue, 19 Oct 2021 09:44:56 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id b188so16221203iof.8;
+        Tue, 19 Oct 2021 09:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m9fn5L6c5k5bZQVkLpvPb3DcbU31aZHyPs/0zFNYnKw=;
+        b=Qmc8AKuvYSGTXy1UfB1lkKw1L+FWpdGg2Hfm0XmOQHqKbWb+Uw/ybPukwBAYFg59In
+         drTwnh7LC3GXfBPHcoBfUjXF7MYNqy00J/EgwNMMtWvVQoo8RKI3SNpGBaRivhtFz3FE
+         X9xd/aly8rPbbPk7C4czUV7nZCQMFkVmn47+fO/kFtQ7L416n4FVdqK/Z4Yb53JkcOt9
+         gA2DxHPB5v9h+Vx/59Cc5Bm5aTiyAJZ2uuSbxbGVekbbT1LDOH5WzXkrnVhHvRIr9rC7
+         mGXm8AaihAP2VlfpgpH7nYiTRMCFXjnZQ3QeelO/cmZ+y6cgK1VTndw01/pPSCO14sDo
+         qymA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m9fn5L6c5k5bZQVkLpvPb3DcbU31aZHyPs/0zFNYnKw=;
+        b=jGD90NOisi306wwNsZbtOBh7EwKm4saXRW9ONY9rc4vspEJWsmPQ5jaNXcp/idNODy
+         p0l4TSWnUaAm/41dxfx/koVFStTtRsRCzXZiUCZZd9288F4tEwQZl3GMRKcBgBUNQufQ
+         zOqQ1jgO5fmujoTtmLW8D7Bg7v1T5hY8d7XDj/ZBDWEJ/sFjKnLE93ozOthNALIaaLOy
+         VXeIhUoF05QkzzTZ6ixd2nz4rNeyag39bAwD1lYYv65JK6nwfLanTtKHwALkq3pnM+Ou
+         xdGoXMN6+v4BQIvLiQfNBHi7CEKWryz+yjY9lJ/grdaymkDgJsFiKoi6OWvUHjB4AXYL
+         ONCQ==
+X-Gm-Message-State: AOAM533bJMKrePhDbxYZcGBCdUoyH0o/RSoEUwKFezYwCdUn0smDy0RS
+        PhE6uaUV5Cktrp81F3BBNmaewdvpH6bLKMtl0AM=
+X-Google-Smtp-Source: ABdhPJwZgjBGY3VH8kD4PIFTbQ7BW6MwBzb9/uTGndsGv78ts4EkogRu9XIq17it5wCIg9iUyhd6DkWedo6YwdQ/8ws=
+X-Received: by 2002:a05:6602:2d4e:: with SMTP id d14mr20346152iow.172.1634661896156;
+ Tue, 19 Oct 2021 09:44:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211019144520.3613926-1-geert@linux-m68k.org>
+In-Reply-To: <20211019144520.3613926-1-geert@linux-m68k.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 19 Oct 2021 18:44:45 +0200
+Message-ID: <CANiq72=wnrwGbWygt2R_rsyKf3hq6vJUad4NDJwR4FeNFHZ55Q@mail.gmail.com>
+Subject: Re: [PATCH v8 00/21] auxdisplay: ht16k33: Add character display support
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Robin van der Gracht <robin@protonic.nl>,
         Rob Herring <robh+dt@kernel.org>,
         Paul Burton <paulburton@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
-        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v8 21/21] auxdisplay: ht16k33: Make use of device properties
-Date:   Tue, 19 Oct 2021 16:45:20 +0200
-Message-Id: <20211019144520.3613926-22-geert@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211019144520.3613926-1-geert@linux-m68k.org>
-References: <20211019144520.3613926-1-geert@linux-m68k.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The device property API allows drivers to gather device resources from
-different sources, such as ACPI, and lift the dependency on Device Tree.
-Convert the driver to unleash the power of the device property API.
+Hi Geert,
 
-Suggested-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Acked-by: Robin van der Gracht <robin@protonic.nl>
----
-v8:
-  - Add Acked-by,
+On Tue, Oct 19, 2021 at 4:45 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> The Holtek HT16K33 LED controller is not only used for driving
+> dot-matrix displays, but also for driving segment displays.
+> The current auxdisplay driver is limited to dot-matrix displays, which
+> are exposed as a frame buffer device.
+>
+> This patch series extends the driver to 4-digit 7-segment and quad
+> 14-segment alphanumeric displays, allowing the user to display and
+> scroll text messages.
 
-v7:
-  - Integrate into this series,
-  - Add Reviewed-by,
-  - Use device_property_read_bool() as replacement for
-    of_get_property(),
-  - Call matrix_keypad_parse_properties() instead of
-    matrix_keypad_parse_of_params().
----
- drivers/auxdisplay/Kconfig   |  2 +-
- drivers/auxdisplay/ht16k33.c | 27 ++++++++++++---------------
- 2 files changed, 13 insertions(+), 16 deletions(-)
+Thanks for all your work on this. Unless somebody is against this, I
+will pick it up.
 
-diff --git a/drivers/auxdisplay/Kconfig b/drivers/auxdisplay/Kconfig
-index e32ef7f9945d49b2..64012cda4d126707 100644
---- a/drivers/auxdisplay/Kconfig
-+++ b/drivers/auxdisplay/Kconfig
-@@ -169,7 +169,7 @@ config IMG_ASCII_LCD
- 
- config HT16K33
- 	tristate "Holtek Ht16K33 LED controller with keyscan"
--	depends on FB && OF && I2C && INPUT
-+	depends on FB && I2C && INPUT
- 	select FB_SYS_FOPS
- 	select FB_SYS_FILLRECT
- 	select FB_SYS_COPYAREA
-diff --git a/drivers/auxdisplay/ht16k33.c b/drivers/auxdisplay/ht16k33.c
-index aef3dc87dc9f5ed2..1134ae9f30de4baa 100644
---- a/drivers/auxdisplay/ht16k33.c
-+++ b/drivers/auxdisplay/ht16k33.c
-@@ -12,7 +12,7 @@
- #include <linux/module.h>
- #include <linux/interrupt.h>
- #include <linux/i2c.h>
--#include <linux/of.h>
-+#include <linux/property.h>
- #include <linux/fb.h>
- #include <linux/slab.h>
- #include <linux/backlight.h>
-@@ -491,15 +491,13 @@ static int ht16k33_led_probe(struct device *dev, struct led_classdev *led,
- 			     unsigned int brightness)
- {
- 	struct led_init_data init_data = {};
--	struct device_node *node;
- 	int err;
- 
- 	/* The LED is optional */
--	node = of_get_child_by_name(dev->of_node, "led");
--	if (!node)
-+	init_data.fwnode = device_get_named_child_node(dev, "led");
-+	if (!init_data.fwnode)
- 		return 0;
- 
--	init_data.fwnode = of_fwnode_handle(node);
- 	init_data.devicename = "auxdisplay";
- 	init_data.devname_mandatory = true;
- 
-@@ -520,7 +518,6 @@ static int ht16k33_keypad_probe(struct i2c_client *client,
- 				struct ht16k33_keypad *keypad)
- {
- 	struct device *dev = &client->dev;
--	struct device_node *node = dev->of_node;
- 	u32 rows = HT16K33_MATRIX_KEYPAD_MAX_ROWS;
- 	u32 cols = HT16K33_MATRIX_KEYPAD_MAX_COLS;
- 	int err;
-@@ -539,17 +536,17 @@ static int ht16k33_keypad_probe(struct i2c_client *client,
- 	keypad->dev->open = ht16k33_keypad_start;
- 	keypad->dev->close = ht16k33_keypad_stop;
- 
--	if (!of_get_property(node, "linux,no-autorepeat", NULL))
-+	if (!device_property_read_bool(dev, "linux,no-autorepeat"))
- 		__set_bit(EV_REP, keypad->dev->evbit);
- 
--	err = of_property_read_u32(node, "debounce-delay-ms",
--				   &keypad->debounce_ms);
-+	err = device_property_read_u32(dev, "debounce-delay-ms",
-+				       &keypad->debounce_ms);
- 	if (err) {
- 		dev_err(dev, "key debounce delay not specified\n");
- 		return err;
- 	}
- 
--	err = matrix_keypad_parse_of_params(dev, &rows, &cols);
-+	err = matrix_keypad_parse_properties(dev, &rows, &cols);
- 	if (err)
- 		return err;
- 	if (rows > HT16K33_MATRIX_KEYPAD_MAX_ROWS ||
-@@ -634,8 +631,8 @@ static int ht16k33_fbdev_probe(struct device *dev, struct ht16k33_priv *priv,
- 		goto err_fbdev_buffer;
- 	}
- 
--	err = of_property_read_u32(dev->of_node, "refresh-rate-hz",
--				   &fbdev->refresh_rate);
-+	err = device_property_read_u32(dev, "refresh-rate-hz",
-+				       &fbdev->refresh_rate);
- 	if (err) {
- 		dev_err(dev, "refresh rate not specified\n");
- 		goto err_fbdev_info;
-@@ -741,8 +738,8 @@ static int ht16k33_probe(struct i2c_client *client)
- 	if (err)
- 		return err;
- 
--	err = of_property_read_u32(dev->of_node, "default-brightness-level",
--				   &dft_brightness);
-+	err = device_property_read_u32(dev, "default-brightness-level",
-+				       &dft_brightness);
- 	if (err) {
- 		dft_brightness = MAX_BRIGHTNESS;
- 	} else if (dft_brightness > MAX_BRIGHTNESS) {
-@@ -830,7 +827,7 @@ static struct i2c_driver ht16k33_driver = {
- 	.remove		= ht16k33_remove,
- 	.driver		= {
- 		.name		= DRIVER_NAME,
--		.of_match_table	= of_match_ptr(ht16k33_of_match),
-+		.of_match_table	= ht16k33_of_match,
- 	},
- 	.id_table = ht16k33_i2c_match,
- };
--- 
-2.25.1
-
+Cheers,
+Miguel
