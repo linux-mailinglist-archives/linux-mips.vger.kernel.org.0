@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E3A43411A
+	by mail.lfdr.de (Postfix) with ESMTP id 744BC434119
 	for <lists+linux-mips@lfdr.de>; Tue, 19 Oct 2021 23:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbhJSWB6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 19 Oct 2021 18:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S230136AbhJSWB5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 19 Oct 2021 18:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbhJSWBi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 18:01:38 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601B3C061768;
-        Tue, 19 Oct 2021 14:59:21 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id gn3so1031946pjb.0;
-        Tue, 19 Oct 2021 14:59:21 -0700 (PDT)
+        with ESMTP id S230170AbhJSWBj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 19 Oct 2021 18:01:39 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC48C061779;
+        Tue, 19 Oct 2021 14:59:23 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id j190so13898408pgd.0;
+        Tue, 19 Oct 2021 14:59:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5ALk99V/yV50Q7B1PyIb1+nfNEsL1ZZBgIrsEIIgD/g=;
-        b=N46xaqCV1Ya66lu9pnPn3P2UGULweE5FkPxi51wwEsY3ca5TIRpTzowGIL9KK0CPBd
-         xTcD4xP4sWSF3N+YSRfzKX/zOJ0ASy5mWLUroMF6p+/7zzT/pCQZ5C4RyCEOQ3kWl0Fn
-         4QTFPTlqbPzsd1i+mpwFG3UJnuE+PKVvNMBurUUk4LXu/moYXJlxQ5IWkxS5SIwu3mV7
-         Fjmo6dmQRu1yWQpzxvONABKB6yssqySAklq9VFsXYW6R2anUHbMhpbttbKBqVvqlnXge
-         WTxNHYIqKjoGntVnE+LVUSQg0v1JKP5ZM0X2PG25/79y/iiz+Fi9bFDA0KhwfsLtnsGT
-         9s0Q==
+        bh=cvv2iZxij6FWrFEEKivGkcFAPGtCwuGKeJ0S/lB+6EU=;
+        b=puyoSqrav3ko0lxLZDxOgj+HF1tMBUhtqeS8ibOhQkHM6TZio2/uRT9KT/AchkliH3
+         ojpy87guSLAevK+3haRFgpyrMyenPSCxA/7CDUwQNDghnHe1BonrgUntG+wx2GlzwV/w
+         oFvg2SQa2sTNuLN0OS3TC4d3u9P4F1+jU/4NjMmAYds3xMymzYbZQUKXh08AQeHsIQH9
+         dV/8N7WeiA8dANrE6ZS4h4KRMuKbWSFgIchErMO0d7Hm/o+TRrcvYGkoyZTAvnJ5RpNP
+         0LlcwFaFC1omp4VwK4XmrfAMSm9glKW0hKMXS4zWp6DlQlGaNwhi7U2NTaQPz0k7a1mi
+         Y7nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5ALk99V/yV50Q7B1PyIb1+nfNEsL1ZZBgIrsEIIgD/g=;
-        b=BOpuWivj3DBoqftjIZDC7fAyfLs9/iCwYHKg6S3xs75BM4jstzCN4NoEnLaHETN/ch
-         VHmO9r1L2D1o7WmoDjIKR1CQclmF9FgKNlXpf8odOKBB1XxtPrpOTZP2Cf8oGicDLTMg
-         BrZ6NNRSROQHIIokA6v/7QErGq7i7hlOCeytUix5azYtJ+riCPiY0DwqYZ0X/ka0NLYI
-         BBqUuWgdY9anGfIjxY2SXFmWlMj5Zxhoz+hWcP2kyIe2TI3sfOCQL0N4S6XwIE6cJOCA
-         htbSqg0lVuIkSla4z7IZ/QKjKw4LC2G5DIzuOBieVKqcPS7fAAr/27CNVDZhAFTGcYRx
-         hTPQ==
-X-Gm-Message-State: AOAM531tYheukhHJBURbh5cH7FAsobpMJNsrjgBsod+MwjCCoXzWG2aZ
-        +OdZGRN9oRONCBRIGAfykDQuPAsgl0I=
-X-Google-Smtp-Source: ABdhPJzWpyM1C2qGr1nMlYAwXWIVZOv+GkHF0hDeN/rI0sLoSSxh4Qx7D4dUFc53gJhlcJ4NP6RBCQ==
-X-Received: by 2002:a17:90b:1a87:: with SMTP id ng7mr2823769pjb.69.1634680760605;
-        Tue, 19 Oct 2021 14:59:20 -0700 (PDT)
+        bh=cvv2iZxij6FWrFEEKivGkcFAPGtCwuGKeJ0S/lB+6EU=;
+        b=ZEq9yTEGBLinFIuy54638MDNDnm5jNx8YGgCw+skk+pbu9h9x+/Ny6VsEKh543LVq2
+         hbaUS5zDKXBVnG3Xm0HLPtnRDAUjpapzI3YioUk6aJBm2PWnc8Wd1o643zEnBW1YrhXe
+         mikGmeA/NZp3u1Vea4lLLU7t7gDnsNNzsrv1jkYweqoVBeztvdMRUypIK+Nip9aHo8f+
+         +HNRFxF2iGbLcVTMHBSiVHnMMSn2ys/b0i2SCfpgmRsC8zqeHqmSKq16H79/VRldf1br
+         BkD8ycEmCksxTd2S5h9zWKFPVN33Z4Ol4g5dyFjRldBme1gJC8U+NEd1NTex+mFx62bh
+         m3+A==
+X-Gm-Message-State: AOAM531hgb3CrESmh9QRhbCTgh7rHuMNdPYGz292wx57+8ypj/sLZhSU
+        qQGU//3EiSm2AROnYOBykj3v4x63Hv4=
+X-Google-Smtp-Source: ABdhPJxhzjt2b4JpAP5y08pLkv/ZLh6VuVP+HWQ9UgMTyxUq1vcrNg8BwCWVmSqBUvmU5OQowhuk1Q==
+X-Received: by 2002:a63:3d8c:: with SMTP id k134mr30384423pga.394.1634680762159;
+        Tue, 19 Oct 2021 14:59:22 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id bf7sm139325pjb.14.2021.10.19.14.59.19
+        by smtp.gmail.com with ESMTPSA id bf7sm139325pjb.14.2021.10.19.14.59.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Oct 2021 14:59:20 -0700 (PDT)
+        Tue, 19 Oct 2021 14:59:21 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -66,9 +66,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         SUB-ARCHITECTURES), linux-mips@vger.kernel.org (open list:MIPS),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH v5 12/14] arm64: broadcom: Removed forced select of interrupt controllers
-Date:   Tue, 19 Oct 2021 14:58:53 -0700
-Message-Id: <20211019215855.1920099-13-f.fainelli@gmail.com>
+Subject: [PATCH v5 13/14] ARM: bcm: Removed forced select of interrupt controllers
+Date:   Tue, 19 Oct 2021 14:58:54 -0700
+Message-Id: <20211019215855.1920099-14-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211019215855.1920099-1-f.fainelli@gmail.com>
 References: <20211019215855.1920099-1-f.fainelli@gmail.com>
@@ -85,30 +85,31 @@ machine entry to allow an user to build them as modules.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- arch/arm64/Kconfig.platforms | 3 ---
- 1 file changed, 3 deletions(-)
+ arch/arm/mach-bcm/Kconfig | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index b0ce18d4cc98..2e9440f2da22 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -44,7 +44,6 @@ config ARCH_BCM2835
- 	select ARM_AMBA
- 	select ARM_GIC
+diff --git a/arch/arm/mach-bcm/Kconfig b/arch/arm/mach-bcm/Kconfig
+index 2890e61b2b46..bd3f82788ebc 100644
+--- a/arch/arm/mach-bcm/Kconfig
++++ b/arch/arm/mach-bcm/Kconfig
+@@ -161,7 +161,6 @@ config ARCH_BCM2835
  	select ARM_TIMER_SP804
+ 	select HAVE_ARM_ARCH_TIMER if ARCH_MULTI_V7
+ 	select BCM2835_TIMER
 -	select BRCMSTB_L2_IRQ
- 	help
- 	  This enables support for the Broadcom BCM2837 and BCM2711 SoC.
- 	  These SoCs are used in the Raspberry Pi 3 and 4 devices.
-@@ -82,8 +81,6 @@ config ARCH_BITMAIN
- config ARCH_BRCMSTB
- 	bool "Broadcom Set-Top-Box SoCs"
- 	select ARCH_HAS_RESET_CONTROLLER
+ 	select PINCTRL
+ 	select PINCTRL_BCM2835
+ 	select MFD_CORE
+@@ -209,9 +208,6 @@ config ARCH_BRCMSTB
+ 	select ARM_GIC
+ 	select ARM_ERRATA_798181 if SMP
+ 	select HAVE_ARM_ARCH_TIMER
 -	select BCM7038_L1_IRQ
 -	select BRCMSTB_L2_IRQ
- 	select GENERIC_IRQ_CHIP
- 	select PINCTRL
- 	help
+-	select BCM7120_L2_IRQ
+ 	select ZONE_DMA if ARM_LPAE
+ 	select SOC_BRCMSTB
+ 	select SOC_BUS
 -- 
 2.25.1
 
