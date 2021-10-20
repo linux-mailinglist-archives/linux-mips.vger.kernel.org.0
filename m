@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 199EE435324
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Oct 2021 20:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BD8435327
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Oct 2021 20:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbhJTSxI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S231488AbhJTSxI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Wed, 20 Oct 2021 14:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbhJTSw6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Oct 2021 14:52:58 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37388C061769;
-        Wed, 20 Oct 2021 11:50:43 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 75so23349863pga.3;
-        Wed, 20 Oct 2021 11:50:43 -0700 (PDT)
+        with ESMTP id S231515AbhJTSw7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Oct 2021 14:52:59 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92577C06176C;
+        Wed, 20 Oct 2021 11:50:44 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id a15-20020a17090a688f00b001a132a1679bso1241498pjd.0;
+        Wed, 20 Oct 2021 11:50:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DgNlnw/X0eZIQ1orBNwNN4B1FWjS3NXzL3tygL/Zpc0=;
-        b=nclhbtnO1d3VUqCjuO6fbVBLJwRCFzgkiQCrv3xYB3HM5GTyWvBhu6RljQKGdK2pK5
-         FR176iIdQqTr2RIJHZjvYaiVc8DtqG8Kbl30nEEs5hFoUAMhNRAedi+tAgyIhIw2qHbY
-         Ah6th4TjmsOMkzx1p9m/a9z00gKcRY1FsArZ5GN/5oDFODb5uFWozEanMBUoZ6aKDxiG
-         zWu1j9qJbrdumFiOrnH9tMw8uQWqPs5UYM+hatVgL/rBcTBxkszxKOv81hdZ38ezJL2R
-         KPmZAnmi7K4LCsVXzYCCrxAcf2u+tMkzemWMSxWNfVLCrJrwvyHXKpP1nTOWgsGza8/k
-         DSuw==
+        bh=5ALk99V/yV50Q7B1PyIb1+nfNEsL1ZZBgIrsEIIgD/g=;
+        b=TAuk2jn374g9wQdgNFuqPGwkxrWxFwhaHobnKd4lOgCPnec6v0XmtlgNe6rlQtyrdC
+         2ftXib02gb7DZIk2M8PtapR9HLef3oOd0IJEHFucGGNPChuT/p2hhPOXgjZFTOWomB1g
+         B1AVSCTyz6rbXcabR45cOzgctfVPsEl7Q28NhWmivYdLRkGgQDzk472K8FZX2NIQ1GQU
+         Ev0kNPPo2OgF4xlEKpQIjZ7D1eKiNhrqdrNhdccacaSvasTLHVsV9feLR+EtE7AH59VA
+         1+XCdD2p1sauaUalTcGGQJWHKs+YT+RGf9l9vT6dK/FKWxIz+FHM2YXaObLMBlzllQ1B
+         CIpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DgNlnw/X0eZIQ1orBNwNN4B1FWjS3NXzL3tygL/Zpc0=;
-        b=LO2Er46BJlHPvKRrzLFe47v+6kjjbImxjxRqvPi3g1Wv1GrWBPsZpJ+ofu5FTLVYh+
-         4PiS8wV+LueSx08FoHVO3kEf5Om3OuvzeLjOFvFaT5sGkJcpGeUKt6AFMKTwm7rk9M9F
-         b3Rup9a6AQe4axqxvQpOC8Okq6SwZMkn0p1RAdoENDa9H7AIDZdkfvv7+Skxo7q1Pupu
-         fWT7l9JEh4of84Z3vmO2zUMRGPxXPN48MoQQnS3uKG5Mju5/J7R16/VleK16YicHzbMK
-         S6V+hOs0cIJF0MJXsf5PeV+5aqOFHhaj/mQl/h8u1VQRqnio4Lfmw4Pwh4puLz1OHpLH
-         /nGA==
-X-Gm-Message-State: AOAM531Thiqca4vaeZzKc8K8wMMm0xjkDALVvxVccN0rzrfA/k5ewIDa
-        SwlIxXaWXi68D60qTa+8K7QxK4MH4KQ=
-X-Google-Smtp-Source: ABdhPJxxYfaTpM34yX+EnA7h6FN0DD/aOb+FRn6t5KRFu0Tua/JQSghv55UaM3L5Rms0kPaDPlsd8A==
-X-Received: by 2002:a05:6a00:2389:b0:44d:6d57:a38e with SMTP id f9-20020a056a00238900b0044d6d57a38emr1053648pfc.50.1634755842459;
-        Wed, 20 Oct 2021 11:50:42 -0700 (PDT)
+        bh=5ALk99V/yV50Q7B1PyIb1+nfNEsL1ZZBgIrsEIIgD/g=;
+        b=q8SMO0bhSlzOVrO6e7QK3EobZOTG4Qe2qNk2+qUJvwn6gjbbORM007j8LfwiRjYrlZ
+         GWDoEVFAtUMoXVQZK+jGLpixP6MAQiXP1uc9K7unD5e+DGn3PZDoDstkdvi83JfHuuwN
+         MvzYqmA/zRVeRW7YPlDnkx0bU4NTc//WTYI1bDKOGZzMFkEbRzipZJb7r/gW3H0kdpPx
+         DLnN3iTSEvbF7ylEM7S3xAOMdZqfgshadQWx53747NvjRRHmNKkrwjU5xTDafZWI2KSR
+         CIjlL+9LgidM37LeknzZrLPmvsZ/nHmGWlSWvvAzE0SUZB1r3EUxQsYkI9jD9OH71p15
+         wL9Q==
+X-Gm-Message-State: AOAM533aFlv1D7sCtbluMT4VXvF78a+nQUrT+OpUNrkzkH6sXMCn1qU+
+        qW2wul1bZn1v9EcJNv6ajpEr4VNtRKU=
+X-Google-Smtp-Source: ABdhPJySfx8R9v6bRAeT2LsmOi1+1HftWXhsN+IeBm1YO/wLGEke5Ai/qDLYTcNwiRN0z4E4kH3hcQ==
+X-Received: by 2002:a17:902:d718:b0:13d:e2ec:1741 with SMTP id w24-20020a170902d71800b0013de2ec1741mr843381ply.38.1634755843773;
+        Wed, 20 Oct 2021 11:50:43 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id o127sm3267863pfb.216.2021.10.20.11.50.41
+        by smtp.gmail.com with ESMTPSA id o127sm3267863pfb.216.2021.10.20.11.50.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Oct 2021 11:50:41 -0700 (PDT)
+        Wed, 20 Oct 2021 11:50:43 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -66,9 +66,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         SUB-ARCHITECTURES), linux-mips@vger.kernel.org (open list:MIPS),
         devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
         DEVICE TREE)
-Subject: [PATCH v6 10/13] irqchip/irq-bcm7120-l2: Switch to IRQCHIP_PLATFORM_DRIVER
-Date:   Wed, 20 Oct 2021 11:48:56 -0700
-Message-Id: <20211020184859.2705451-11-f.fainelli@gmail.com>
+Subject: [PATCH v6 11/13] arm64: broadcom: Removed forced select of interrupt controllers
+Date:   Wed, 20 Oct 2021 11:48:57 -0700
+Message-Id: <20211020184859.2705451-12-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211020184859.2705451-1-f.fainelli@gmail.com>
 References: <20211020184859.2705451-1-f.fainelli@gmail.com>
@@ -78,87 +78,37 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Allow the user selection and building of this interrupt controller
-driver as a module since it is used on ARM/ARM64 based systems as a
-second level interrupt controller hanging off the ARM GIC and is
-therefore loadable during boot.
-
-To avoid using of_irq_count() which is not exported towards module,
-switch the driver to use the platform_device provided by the irqchip
-platform driver code and resolve the number of interrupts using
-platform_irq_count().
+Now that the various second level interrupt controllers have been moved
+to IRQCHIP_PLATFORM_DRIVER and they do default to ARCH_BRCMSTB and
+ARCH_BCM2835 where relevant, remove their forced selection from the
+machine entry to allow an user to build them as modules.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/irqchip/Kconfig          |  4 +++-
- drivers/irqchip/irq-bcm7120-l2.c | 21 +++++++++++++++------
- 2 files changed, 18 insertions(+), 7 deletions(-)
+ arch/arm64/Kconfig.platforms | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index dfe54bf9b35f..c7320bed5668 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -123,7 +123,9 @@ config BCM7038_L1_IRQ
- 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK
- 
- config BCM7120_L2_IRQ
--	bool
-+	tristate "Broadcom STB 7120-style L2 interrupt controller driver"
-+	depends on ARCH_BRCMSTB || BMIPS_GENERIC
-+	default ARCH_BRCMSTB || BMIPS_GENERIC
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index b0ce18d4cc98..2e9440f2da22 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -44,7 +44,6 @@ config ARCH_BCM2835
+ 	select ARM_AMBA
+ 	select ARM_GIC
+ 	select ARM_TIMER_SP804
+-	select BRCMSTB_L2_IRQ
+ 	help
+ 	  This enables support for the Broadcom BCM2837 and BCM2711 SoC.
+ 	  These SoCs are used in the Raspberry Pi 3 and 4 devices.
+@@ -82,8 +81,6 @@ config ARCH_BITMAIN
+ config ARCH_BRCMSTB
+ 	bool "Broadcom Set-Top-Box SoCs"
+ 	select ARCH_HAS_RESET_CONTROLLER
+-	select BCM7038_L1_IRQ
+-	select BRCMSTB_L2_IRQ
  	select GENERIC_IRQ_CHIP
- 	select IRQ_DOMAIN
- 
-diff --git a/drivers/irqchip/irq-bcm7120-l2.c b/drivers/irqchip/irq-bcm7120-l2.c
-index f23d7651ea84..d80e67a6aad2 100644
---- a/drivers/irqchip/irq-bcm7120-l2.c
-+++ b/drivers/irqchip/irq-bcm7120-l2.c
-@@ -220,6 +220,7 @@ static int __init bcm7120_l2_intc_probe(struct device_node *dn,
- {
- 	unsigned int clr = IRQ_NOREQUEST | IRQ_NOPROBE | IRQ_NOAUTOEN;
- 	struct bcm7120_l2_intc_data *data;
-+	struct platform_device *pdev;
- 	struct irq_chip_generic *gc;
- 	struct irq_chip_type *ct;
- 	int ret = 0;
-@@ -230,7 +231,13 @@ static int __init bcm7120_l2_intc_probe(struct device_node *dn,
- 	if (!data)
- 		return -ENOMEM;
- 
--	data->num_parent_irqs = of_irq_count(dn);
-+	pdev = of_find_device_by_node(dn);
-+	if (!pdev) {
-+		ret = -ENODEV;
-+		goto out_free_data;
-+	}
-+
-+	data->num_parent_irqs = platform_irq_count(pdev);
- 	if (data->num_parent_irqs <= 0) {
- 		pr_err("invalid number of parent interrupts\n");
- 		ret = -ENOMEM;
-@@ -329,6 +336,7 @@ static int __init bcm7120_l2_intc_probe(struct device_node *dn,
- 		if (data->map_base[idx])
- 			iounmap(data->map_base[idx]);
- 	}
-+out_free_data:
- 	kfree(data);
- 	return ret;
- }
-@@ -347,8 +355,9 @@ static int __init bcm7120_l2_intc_probe_3380(struct device_node *dn,
- 				     "BCM3380 L2");
- }
- 
--IRQCHIP_DECLARE(bcm7120_l2_intc, "brcm,bcm7120-l2-intc",
--		bcm7120_l2_intc_probe_7120);
--
--IRQCHIP_DECLARE(bcm3380_l2_intc, "brcm,bcm3380-l2-intc",
--		bcm7120_l2_intc_probe_3380);
-+IRQCHIP_PLATFORM_DRIVER_BEGIN(bcm7120_l2)
-+IRQCHIP_MATCH("brcm,bcm7120-l2-intc", bcm7120_l2_intc_probe_7120)
-+IRQCHIP_MATCH("brcm,bcm3380-l2-intc", bcm7120_l2_intc_probe_3380)
-+IRQCHIP_PLATFORM_DRIVER_END(bcm7120_l2)
-+MODULE_DESCRIPTION("Broadcom STB 7120-style L2 interrupt controller driver");
-+MODULE_LICENSE("GPL v2");
+ 	select PINCTRL
+ 	help
 -- 
 2.25.1
 
