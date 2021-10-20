@@ -2,180 +2,148 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D002435152
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Oct 2021 19:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D114351A4
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Oct 2021 19:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbhJTRew (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 20 Oct 2021 13:34:52 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:39418 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbhJTRew (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Oct 2021 13:34:52 -0400
-Received: from in01.mta.xmission.com ([166.70.13.51]:55338)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        id S231148AbhJTRrL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 20 Oct 2021 13:47:11 -0400
+Received: from out02.mta.xmission.com ([166.70.13.232]:40460 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230464AbhJTRrH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 20 Oct 2021 13:47:07 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52]:55052)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1mdFS2-00EuET-9k; Wed, 20 Oct 2021 11:32:30 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:47416 helo=email.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        id 1mdFe0-00GCwM-DG; Wed, 20 Oct 2021 11:44:52 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:47894 helo=localhost.localdomain)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1mdFS0-009qGU-Te; Wed, 20 Oct 2021 11:32:29 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     <linux-kernel@vger.kernel.org>
-Cc:     <linux-arch@vger.kernel.org>,
+        id 1mdFdz-001NdN-4w; Wed, 20 Oct 2021 11:44:51 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Oleg Nesterov <oleg@redhat.com>,
         Al Viro <viro@ZenIV.linux.org.uk>,
         Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        openrisc@lists.librecores.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        David Miller <davem@davemloft.net>, sparclinux@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Wed, 20 Oct 2021 12:32:20 -0500
-Message-ID: <87y26nmwkb.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org
+Date:   Wed, 20 Oct 2021 12:43:51 -0500
+Message-Id: <20211020174406.17889-5-ebiederm@xmission.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <87y26nmwkb.fsf@disp2133>
+References: <87y26nmwkb.fsf@disp2133>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mdFS0-009qGU-Te;;;mid=<87y26nmwkb.fsf@disp2133>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+QTFOF+6WLUwS/6b+bA87HzOEzbRhNKPA=
+Content-Transfer-Encoding: 8bit
+X-XM-SPF: eid=1mdFdz-001NdN-4w;;;mid=<20211020174406.17889-5-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18vAFcVjANIu4vDNha2bth++KrviZjJJPY=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,XMNoVowels autolearn=disabled version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: *****
+X-Spam-Status: No, score=5.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,TR_Symld_Words,TR_XM_SB_Phish,T_TM2_M_HEADER_IN_MSG,
+        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,T_TooManySym_04,
+        T_TooManySym_05,XMNoVowels,XMSubLong,XMSubPhish11,XM_B_SpammyWords
+        autolearn=disabled version=3.4.2
 X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4995]
+        *      [score: 0.5000]
+        *  0.7 XMSubLong Long Subject
         *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  1.5 TR_Symld_Words too many words that have symbols inside
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
         * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;<linux-kernel@vger.kernel.org>
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+        *  0.0 T_TooManySym_03 6+ unique symbols in subject
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
+        *  0.0 T_TooManySym_05 8+ unique symbols in subject
+        *  0.0 T_TooManySym_04 7+ unique symbols in subject
+        *  1.5 XMSubPhish11 Phishy Language Subject
+        *  0.0 TR_XM_SB_Phish Phishing flag in subject of message
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;linux-kernel@vger.kernel.org
 X-Spam-Relay-Country: 
-X-Spam-Timing: total 757 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 12 (1.5%), b_tie_ro: 10 (1.3%), parse: 1.10
-        (0.1%), extract_message_metadata: 4.5 (0.6%), get_uri_detail_list: 2.1
-        (0.3%), tests_pri_-1000: 7 (1.0%), tests_pri_-950: 1.30 (0.2%),
-        tests_pri_-900: 1.11 (0.1%), tests_pri_-90: 238 (31.4%), check_bayes:
-        237 (31.2%), b_tokenize: 14 (1.9%), b_tok_get_all: 12 (1.6%),
-        b_comp_prob: 2.9 (0.4%), b_tok_touch_all: 203 (26.8%), b_finish: 0.95
-        (0.1%), tests_pri_0: 469 (61.9%), check_dkim_signature: 0.62 (0.1%),
-        check_dkim_adsp: 2.9 (0.4%), poll_dns_idle: 0.98 (0.1%), tests_pri_10:
-        3.3 (0.4%), tests_pri_500: 11 (1.5%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 00/20] exit cleanups 
+X-Spam-Timing: total 645 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 14 (2.1%), b_tie_ro: 12 (1.9%), parse: 1.09
+        (0.2%), extract_message_metadata: 21 (3.2%), get_uri_detail_list: 2.7
+        (0.4%), tests_pri_-1000: 26 (4.1%), tests_pri_-950: 1.28 (0.2%),
+        tests_pri_-900: 1.01 (0.2%), tests_pri_-90: 187 (29.0%), check_bayes:
+        183 (28.4%), b_tokenize: 8 (1.2%), b_tok_get_all: 6 (1.0%),
+        b_comp_prob: 2.4 (0.4%), b_tok_touch_all: 163 (25.3%), b_finish: 0.93
+        (0.1%), tests_pri_0: 300 (46.5%), check_dkim_signature: 0.81 (0.1%),
+        check_dkim_adsp: 3.3 (0.5%), poll_dns_idle: 70 (10.8%), tests_pri_10:
+        3.0 (0.5%), tests_pri_500: 88 (13.6%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 05/20] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
 X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+When an instruction to save or restore a register from the stack fails
+in _save_fp_context or _restore_fp_context return with -EFAULT.  This
+change was made to r2300_fpu.S[1] but it looks like it got lost with
+the introduction of EX2[2].  This is also what the other implementation
+of _save_fp_context and _restore_fp_context in r4k_fpu.S does, and
+what is needed for the callers to be able to handle the error.
 
-While looking at some issues related to the exit path in the kernel I
-found several instances where the code is not using the existing
-abstractions properly.
+Furthermore calling do_exit(SIGSEGV) from bad_stack is wrong because
+it does not terminate the entire process it just terminates a single
+thread.
 
-This set of changes introduces force_fatal_sig a way of sending
-a signal and not allowing it to be caught, and corrects the
-misuse of the existing abstractions that I found.
+As the changed code was the only caller of arch/mips/kernel/syscall.c:bad_stack
+remove the problematic and now unused helper function.
 
-A lot of the misuse of the existing abstractions are silly things such
-as doing something after calling a no return function, rolling BUG by
-hand, doing more work than necessary to terminate a kernel thread, or
-calling do_exit(SIGKILL) instead of calling force_sig(SIGKILL).
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Maciej Rozycki <macro@orcam.me.uk>
+Cc: linux-mips@vger.kernel.org
+[1] 35938a00ba86 ("MIPS: Fix ISA I FP sigcontext access violation handling")
+[2] f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
+Fixes: f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ arch/mips/kernel/r2300_fpu.S | 4 ++--
+ arch/mips/kernel/syscall.c   | 9 ---------
+ 2 files changed, 2 insertions(+), 11 deletions(-)
 
-It is my plan after sending all of these changes out for review to place
-them in a topic branch for sending Linus.  Especially for the changes
-that depend upon the new helper force_fatal_sig this is important.
+diff --git a/arch/mips/kernel/r2300_fpu.S b/arch/mips/kernel/r2300_fpu.S
+index 12e58053544f..cbf6db98cfb3 100644
+--- a/arch/mips/kernel/r2300_fpu.S
++++ b/arch/mips/kernel/r2300_fpu.S
+@@ -29,8 +29,8 @@
+ #define EX2(a,b)						\
+ 9:	a,##b;							\
+ 	.section __ex_table,"a";				\
+-	PTR	9b,bad_stack;					\
+-	PTR	9b+4,bad_stack;					\
++	PTR	9b,fault;					\
++	PTR	9b+4,fault;					\
+ 	.previous
+ 
+ 	.set	mips1
+diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
+index 2afa3eef486a..5512cd586e6e 100644
+--- a/arch/mips/kernel/syscall.c
++++ b/arch/mips/kernel/syscall.c
+@@ -240,12 +240,3 @@ SYSCALL_DEFINE3(cachectl, char *, addr, int, nbytes, int, op)
+ {
+ 	return -ENOSYS;
+ }
+-
+-/*
+- * If we ever come here the user sp is bad.  Zap the process right away.
+- * Due to the bad stack signaling wouldn't work.
+- */
+-asmlinkage void bad_stack(void)
+-{
+-	do_exit(SIGSEGV);
+-}
+-- 
+2.20.1
 
-Eric W. Biederman (20):
-      exit/doublefault: Remove apparently bogus comment about rewind_stack_do_exit
-      exit: Remove calls of do_exit after noreturn versions of die
-      reboot: Remove the unreachable panic after do_exit in reboot(2)
-      signal/sparc32: Remove unreachable do_exit in do_sparc_fault
-      signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
-      signal/sh: Use force_sig(SIGKILL) instead of do_group_exit(SIGKILL)
-      signal/powerpc: On swapcontext failure force SIGSEGV
-      signal/sparc: In setup_tsb_params convert open coded BUG into BUG
-      signal/vm86_32: Replace open coded BUG_ON with an actual BUG_ON
-      signal/vm86_32: Properly send SIGSEGV when the vm86 state cannot be saved.
-      signal/s390: Use force_sigsegv in default_trap_handler
-      exit/kthread: Have kernel threads return instead of calling do_exit
-      signal: Implement force_fatal_sig
-      exit/syscall_user_dispatch: Send ordinary signals on failure
-      signal/sparc32: Exit with a fatal signal when try_to_clear_window_buffer fails
-      signal/sparc32: In setup_rt_frame and setup_fram use force_fatal_sig
-      signal/x86: In emulate_vsyscall force a signal instead of calling do_exit
-      exit/rtl8723bs: Replace the macro thread_exit with a simple return 0
-      exit/rtl8712: Replace the macro thread_exit with a simple return 0
-      exit/r8188eu: Replace the macro thread_exit with a simple return 0
-
- arch/mips/kernel/r2300_fpu.S                       |  4 ++--
- arch/mips/kernel/syscall.c                         |  9 --------
- arch/nds32/kernel/traps.c                          |  2 +-
- arch/nds32/mm/fault.c                              |  6 +----
- arch/openrisc/kernel/traps.c                       |  2 +-
- arch/openrisc/mm/fault.c                           |  4 +---
- arch/powerpc/kernel/signal_32.c                    |  6 +++--
- arch/powerpc/kernel/signal_64.c                    |  9 +++++---
- arch/s390/include/asm/kdebug.h                     |  2 +-
- arch/s390/kernel/dumpstack.c                       |  2 +-
- arch/s390/kernel/traps.c                           |  2 +-
- arch/s390/mm/fault.c                               |  2 --
- arch/sh/kernel/cpu/fpu.c                           | 10 +++++----
- arch/sh/kernel/traps.c                             |  2 +-
- arch/sh/mm/fault.c                                 |  2 --
- arch/sparc/kernel/signal_32.c                      |  4 ++--
- arch/sparc/kernel/windows.c                        |  6 +++--
- arch/sparc/mm/fault_32.c                           |  1 -
- arch/sparc/mm/tsb.c                                |  2 +-
- arch/x86/entry/vsyscall/vsyscall_64.c              |  3 ++-
- arch/x86/kernel/doublefault_32.c                   |  3 ---
- arch/x86/kernel/signal.c                           |  6 ++++-
- arch/x86/kernel/vm86_32.c                          |  8 +++----
- arch/xtensa/kernel/traps.c                         |  2 +-
- arch/xtensa/mm/fault.c                             |  3 +--
- drivers/firmware/stratix10-svc.c                   |  4 ++--
- drivers/soc/ti/wkup_m3_ipc.c                       |  2 +-
- drivers/staging/r8188eu/core/rtw_cmd.c             |  2 +-
- drivers/staging/r8188eu/core/rtw_mp.c              |  2 +-
- drivers/staging/r8188eu/include/osdep_service.h    |  2 --
- drivers/staging/rtl8712/osdep_service.h            |  1 -
- drivers/staging/rtl8712/rtl8712_cmd.c              |  2 +-
- drivers/staging/rtl8723bs/core/rtw_cmd.c           |  2 +-
- drivers/staging/rtl8723bs/core/rtw_xmit.c          |  2 +-
- drivers/staging/rtl8723bs/hal/rtl8723bs_xmit.c     |  2 +-
- .../rtl8723bs/include/osdep_service_linux.h        |  2 --
- fs/ocfs2/journal.c                                 |  5 +----
- include/linux/sched/signal.h                       |  1 +
- kernel/entry/syscall_user_dispatch.c               | 12 ++++++----
- kernel/kthread.c                                   |  2 +-
- kernel/reboot.c                                    |  1 -
- kernel/signal.c                                    | 26 ++++++++++++++--------
- net/batman-adv/tp_meter.c                          |  2 +-
- 43 files changed, 83 insertions(+), 91 deletions(-)
-
-Eric
