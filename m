@@ -2,94 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8094F436741
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Oct 2021 18:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CF04368A3
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Oct 2021 19:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbhJUQJI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Oct 2021 12:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbhJUQJI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Oct 2021 12:09:08 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F0BC061348
-        for <linux-mips@vger.kernel.org>; Thu, 21 Oct 2021 09:06:52 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id f21so758425plb.3
-        for <linux-mips@vger.kernel.org>; Thu, 21 Oct 2021 09:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=m3LNgj0O/EXMuPerErFfv8v3ZBKINoSF6egU7Q9+w6o=;
-        b=VluUCZI5Zb5BTknGwQTyQF+4e1x/d0hzfTejBQzID7EOo2c7LL2H55BJCJyzDqz+TY
-         eopKS0vvjh1ta40dEl/PecFKas4qyf0oFKD9A4UW7/OqH1mtSPUfkEMqv2oYbNmDH5et
-         RgtwwZtcSQXUO/559PvY3hzysWPdXVTGUMTfk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m3LNgj0O/EXMuPerErFfv8v3ZBKINoSF6egU7Q9+w6o=;
-        b=RRYBbCyy1JQKSAAzZqWgC+z7zz+NCG16QdtAX3z6uoc4AMmHCYaABh3HpAxMVp7MXJ
-         kU1pDkgsMCIfwy9iRMZBou9prM5psWj0s5KHwgffB89PZGRfm6rPUPVC8i2PS7QRtx1z
-         T6j4kDZaF2XFTLmOLvkdI9rys4VhOgYK1nITYRzCuCnuth/s0QCaCdGFFkuM6ZyaX3pt
-         AeO85qtRBpIfGgmZ99NgCEpsbu0YQ/qRYMHSeWvHrSZ1K10+kfv02spgf0u1TtIC24Ep
-         rYURyfSgS0HpcnxSIDTjS3SfVkkO0CA7zdb7Ca5KEayY9Q6kqfTqHMMlvKuIVo32xhFL
-         fyWw==
-X-Gm-Message-State: AOAM532vpxs7NlwAyOpbUZNZ2+dozqKdIz54p4A3kGvM7tg3Bv53C/px
-        94W9c6u0vLdJV/d6P5xhN30Q6Q==
-X-Google-Smtp-Source: ABdhPJxgGu/kN8JubYDrPPD2bRBuFYPLrSNply2C5Q8AmdkddFccWiBgO05LI4OoBiR/2Tp4xlB9MQ==
-X-Received: by 2002:a17:902:c94e:b0:13f:1b02:e539 with SMTP id i14-20020a170902c94e00b0013f1b02e539mr5894109pla.72.1634832411588;
-        Thu, 21 Oct 2021 09:06:51 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s2sm5721985pgd.13.2021.10.21.09.06.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 09:06:51 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 09:06:50 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 05/20] signal/mips: Update (_save|_restore)_fp_context to
- fail with -EFAULT
-Message-ID: <202110210906.AA70D50BA@keescook>
-References: <87y26nmwkb.fsf@disp2133>
- <20211020174406.17889-5-ebiederm@xmission.com>
+        id S231701AbhJURGo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Oct 2021 13:06:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36390 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229968AbhJURGm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 21 Oct 2021 13:06:42 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2572861037;
+        Thu, 21 Oct 2021 17:04:26 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mdbUN-000lAU-Vx; Thu, 21 Oct 2021 18:04:24 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, f.fainelli@gmail.com,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 0/3] genirq: Make irq_cpu_{on,off}line() an Octeon-special
+Date:   Thu, 21 Oct 2021 18:04:11 +0100
+Message-Id: <20211021170414.3341522-1-maz@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211020174406.17889-5-ebiederm@xmission.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de, fancer.lancer@gmail.com, chenhuacai@kernel.org, jiaxun.yang@flygoat.com, f.fainelli@gmail.com, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 12:43:51PM -0500, Eric W. Biederman wrote:
-> When an instruction to save or restore a register from the stack fails
-> in _save_fp_context or _restore_fp_context return with -EFAULT.  This
-> change was made to r2300_fpu.S[1] but it looks like it got lost with
-> the introduction of EX2[2].  This is also what the other implementation
-> of _save_fp_context and _restore_fp_context in r4k_fpu.S does, and
-> what is needed for the callers to be able to handle the error.
-> 
-> Furthermore calling do_exit(SIGSEGV) from bad_stack is wrong because
-> it does not terminate the entire process it just terminates a single
-> thread.
-> 
-> As the changed code was the only caller of arch/mips/kernel/syscall.c:bad_stack
-> remove the problematic and now unused helper function.
-> 
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Maciej Rozycki <macro@orcam.me.uk>
-> Cc: linux-mips@vger.kernel.org
-> [1] 35938a00ba86 ("MIPS: Fix ISA I FP sigcontext access violation handling")
-> [2] f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-> Fixes: f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Now that Florian has updated BMIPS to not rely on irq_cpu_offline [1],
+it is pretty tempting to totally get of this misfeature. We can't
+really do that because Octeon uses it like crazy, but the couple of
+other users are easy to convert.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Once this is done, these helpers are hidden behind a config symbol
+that depends on the Octeon platform being selected. When Octeon is
+finally removed from the tree, we'll be able to drop this as well.
+
+
+Marc Zyngier (3):
+  MIPS: loongson64: Drop call to irq_cpu_offline()
+  irqchip/mips-gic: Get rid of the reliance on irq_cpu_online()
+  genirq: Hide irq_cpu_{on,off}line() behind a deprecated option
+
+ arch/mips/loongson64/smp.c     |  1 -
+ drivers/irqchip/irq-mips-gic.c | 37 ++++++++++++++++++++++++----------
+ include/linux/irq.h            |  5 ++++-
+ kernel/irq/Kconfig             |  7 +++++++
+ kernel/irq/chip.c              |  2 ++
+ 5 files changed, 39 insertions(+), 13 deletions(-)
 
 -- 
-Kees Cook
+2.30.2
+
