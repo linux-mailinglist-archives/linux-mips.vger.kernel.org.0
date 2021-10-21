@@ -2,98 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF13435CF1
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Oct 2021 10:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D687435DD1
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Oct 2021 11:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbhJUIep convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 21 Oct 2021 04:34:45 -0400
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:45857 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbhJUIei (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Oct 2021 04:34:38 -0400
-Received: by mail-oi1-f180.google.com with SMTP id z126so12801547oiz.12;
-        Thu, 21 Oct 2021 01:32:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ceLayuoY70owN3NNsnQH6S+jy2K/HGM8B6O2q8i1GAk=;
-        b=YCr0yE2FgiqGaAqFS2CQf6iIuzKjkgSChItshZahMB8bH09SCBbqVTEhxPR2nEbABI
-         J28+vLs7F423PE22/SRg5MvHV82v84xUJa/lRuWT5cdmE+68risR3FGVG6u2tLx7bPVY
-         ts7UkiXatY3svnoOZRLY0diRcQmRaGh7sl0YshBJAyRT8RvTBjoAlrPscfL1H99z1Ah/
-         VL3dSpfxThB0tnTcpsHxCxuIKnoV0Z6WCttKGuhuirz3WC1IEz31OeNoQhQAKc5dZdy9
-         uZrcf0QPbThf2OkjtRXpD1rqKQRQXgu07R/l2c0Gmh4o9NgoBTZh48TYjfgUa6dMw5Hz
-         c/mA==
-X-Gm-Message-State: AOAM530LpmidWPEL43GrLudI1V3XbiGyrv6qsIjOtNmBnkhH4dtFbyS/
-        w+s5sA+bujyeZVNVWk8+iBtj1wQolWlmttu59Vg=
-X-Google-Smtp-Source: ABdhPJxII4gwyuuwZSE0+97ar6I7zWp2Jlu7LoTmQcOVpBv5Lkm+3ns6lcPNpIqYwJ3CoMM3pxGAXl0ujDP3wS4Hl9w=
-X-Received: by 2002:aca:eb82:: with SMTP id j124mr3578574oih.46.1634805141944;
- Thu, 21 Oct 2021 01:32:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <87y26nmwkb.fsf@disp2133> <877de7jrev.fsf@disp2133>
-In-Reply-To: <877de7jrev.fsf@disp2133>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Thu, 21 Oct 2021 10:32:10 +0200
-Message-ID: <CAAdtpL5+bjpy93DY5gf1ZM4k3BtP+JNJAUSSmvt8cq3shsJR4A@mail.gmail.com>
-Subject: Re: [PATCH 21/20] signal: Replace force_sigsegv(SIGSEGV) with force_fatal_sig(SIGSEGV)
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        openrisc@lists.librecores.org, Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        David Miller <davem@davemloft.net>, sparclinux@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Maciej Rozycki <macro@orcam.me.uk>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        id S231326AbhJUJZU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Oct 2021 05:25:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39314 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231308AbhJUJZU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 21 Oct 2021 05:25:20 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6EC2460E96;
+        Thu, 21 Oct 2021 09:23:04 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mdUHu-000f8R-Dd; Thu, 21 Oct 2021 10:23:02 +0100
+Date:   Thu, 21 Oct 2021 10:23:02 +0100
+Message-ID: <87sfwubukp.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     zhaoxiao <long870912@gmail.com>
+Cc:     chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tglx@linutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhaoxiao <zhaoxiao@uniontech.com>
+Subject: Re: [PATCH] irqchip/loongson-htvec:- Handle return value of ioremap.
+In-Reply-To: <20211015072523.30615-1-long870912@gmail.com>
+References: <20211015072523.30615-1-long870912@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: long870912@gmail.com, chenhuacai@kernel.org, jiaxun.yang@flygoat.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, zhaoxiao@uniontech.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 11:52 PM Eric W. Biederman
-<ebiederm@xmission.com> wrote:
->
->
-> Now that force_fatal_sig exists it is unnecessary and a bit confusing
-> to use force_sigsegv in cases where the simpler force_fatal_sig is
-> wanted.  So change every instance we can to make the code clearer.
->
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+On Fri, 15 Oct 2021 08:25:23 +0100,
+zhaoxiao <long870912@gmail.com> wrote:
+> 
+> From: zhaoxiao <zhaoxiao@uniontech.com>
+> 
+> Here, If ioremap will fail. It will return NULL.Kernel can run into
+> a NULL-pointer dereference. This error check will avoid NULL pointer
+> dereference.
+> 
+> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
 > ---
->  arch/arc/kernel/process.c       | 2 +-
->  arch/m68k/kernel/traps.c        | 2 +-
->  arch/powerpc/kernel/signal_32.c | 2 +-
->  arch/powerpc/kernel/signal_64.c | 4 ++--
->  arch/s390/kernel/traps.c        | 2 +-
->  arch/um/kernel/trap.c           | 2 +-
->  arch/x86/kernel/vm86_32.c       | 2 +-
->  fs/exec.c                       | 2 +-
->  8 files changed, 9 insertions(+), 9 deletions(-)
+>  drivers/irqchip/irq-loongson-htvec.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/irqchip/irq-loongson-htvec.c b/drivers/irqchip/irq-loongson-htvec.c
+> index 1cc0bceb4472..a36c20f44ec4 100644
+> --- a/drivers/irqchip/irq-loongson-htvec.c
+> +++ b/drivers/irqchip/irq-loongson-htvec.c
+> @@ -267,6 +267,8 @@ struct fwnode_handle *htvec_acpi_init(struct fwnode_handle *parent,
+>  
+>  	priv->num_parents = HTVEC_MAX_PARENT_IRQ;
+>  	priv->base = ioremap(acpi_htvec->address, acpi_htvec->size);
+> +	if (!priv->base)
+> +		goto free_priv;
+>  
+>  	/* Interrupt may come from any of the 8 interrupt lines */
+>  	for (i = 0; i < priv->num_parents; i++)
+> @@ -307,6 +309,7 @@ struct fwnode_handle *htvec_acpi_init(struct fwnode_handle *parent,
+>  iounmap_base:
+>  	iounmap(priv->base);
+>  	priv->domain_handle = NULL;
+> +free_priv:
+>  	kfree(priv);
+>  
+>  	return NULL;
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+I have no idea what code base this patch is against, but certainly not
+any upstream kernel. There is no trace of any ACPI support in this
+driver.
+
+Please only send patches that make sense for upstream.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
