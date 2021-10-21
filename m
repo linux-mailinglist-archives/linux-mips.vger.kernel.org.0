@@ -2,77 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F9E436D2B
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Oct 2021 23:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB11D436DCB
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Oct 2021 00:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbhJUWAB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 21 Oct 2021 18:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        id S229567AbhJUXAq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 21 Oct 2021 19:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbhJUV76 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Oct 2021 17:59:58 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C20DC061764;
-        Thu, 21 Oct 2021 14:57:42 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id e144so2877565iof.3;
-        Thu, 21 Oct 2021 14:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FSABqEeJqnZ+jHsFyMQarpYG+7kfHP3vDYD7ydi62K4=;
-        b=NXdJQknP22vd1IbihARiP2NGsuaMMJox6H+pm2qDtVHqiFFKhuUC5rAtBlWDposUm5
-         rhrGqRvxFRLR4o3uiZfjzkIq2d7t7UwwDw1GZNTu592VQ9/ChonuVp03Kp/i0/SJabam
-         hR62AVH5Svo1EM6E9XNzFSlhYnm2kyB3QCGRs633qMbfLhuZ8mLLvZal4R/GE1/v8mKB
-         N4vlzerklsRdBxNF8IjbChvfcdkNJZWsAHPWKxOQQZOiTy3QVRnxPIlcP4xHAZ4qjNic
-         XlkGXDfbS2QacNcXjP/IUoZ9dd/HqIzPX6mJuiCpJjEqavY6HbG95nTBdhJMl97Od2aN
-         YXKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FSABqEeJqnZ+jHsFyMQarpYG+7kfHP3vDYD7ydi62K4=;
-        b=Bq9fhv+5jr+3CuxxLYJHMxxx4r9fV/9itrNwVBnOFJNwGwRsM+UikQ+0/Yt9z/xgV3
-         Yhsmlqo2M+5UETS8IeP1NvhVzIY/l8RoSKksoqIGBrZ1pW9EJNogaTFITj9blB3Og1Rq
-         fwokuSp4kop1zYCec3rGYsPzxqPS/JqWpz9Kxso1Nl+H3gudjDm+tyXhCMMGWLesqH04
-         6mef2eE3UfPJM5CTiDotLX0wInVgerhS5xmHNhehcZ/UyalpT0C+L08pSQJGaJeQbApk
-         tX52TE0k87/pezYPDmLF+4Ccxl7/a2BtDm1bL1lcVHCHbnjicDrSrOLOrqM5PqQLKOGH
-         X4ZA==
-X-Gm-Message-State: AOAM532yHLU69oAgHy84Mez5kut43FFZT33XLha1GbNmZZM3mUSXD5HU
-        FJqfoix4RFjgWdXGRWa8OhSE7vb2dDFDa72BmdhTybl8
-X-Google-Smtp-Source: ABdhPJwMzz89zWyFY2+2O3HyK/5QOB5o5Wjo/F1dBspXx9rinoZSz9SFMAKPHnY5g15Sl37ZbOoHntsWTcG49ZVFhW4=
-X-Received: by 2002:a6b:8e52:: with SMTP id q79mr5859794iod.64.1634853461875;
- Thu, 21 Oct 2021 14:57:41 -0700 (PDT)
+        with ESMTP id S232060AbhJUXAq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 21 Oct 2021 19:00:46 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10172C061764;
+        Thu, 21 Oct 2021 15:58:26 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 4427692009C; Fri, 22 Oct 2021 00:58:23 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 3581692009B;
+        Fri, 22 Oct 2021 00:58:23 +0200 (CEST)
+Date:   Fri, 22 Oct 2021 00:58:23 +0200 (CEST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH v2] MIPS: Fix assembly error from MIPSr2 code used within
+ MIPS_ISA_ARCH_LEVEL
+Message-ID: <alpine.DEB.2.21.2110220001430.10706@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-References: <20211019144520.3613926-1-geert@linux-m68k.org> <CANiq72=wnrwGbWygt2R_rsyKf3hq6vJUad4NDJwR4FeNFHZ55Q@mail.gmail.com>
-In-Reply-To: <CANiq72=wnrwGbWygt2R_rsyKf3hq6vJUad4NDJwR4FeNFHZ55Q@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 21 Oct 2021 23:57:31 +0200
-Message-ID: <CANiq72mtsuiKmFFm37fuykrm7rqRTNgGBypiqp-+NUM99qx8GA@mail.gmail.com>
-Subject: Re: [PATCH v8 00/21] auxdisplay: ht16k33: Add character display support
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Marek Behun <marek.behun@nic.cz>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 19, 2021 at 6:44 PM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> Thanks for all your work on this. Unless somebody is against this, I
-> will pick it up.
+Fix assembly errors like:
 
-Applied, thanks!
+{standard input}: Assembler messages:
+{standard input}:287: Error: opcode not supported on this processor: mips3 (mips3) `dins $10,$7,32,32'
+{standard input}:680: Error: opcode not supported on this processor: mips3 (mips3) `dins $10,$7,32,32'
+{standard input}:1274: Error: opcode not supported on this processor: mips3 (mips3) `dins $12,$9,32,32'
+{standard input}:2175: Error: opcode not supported on this processor: mips3 (mips3) `dins $10,$7,32,32'
+make[1]: *** [scripts/Makefile.build:277: mm/highmem.o] Error 1
 
-Cheers,
-Miguel
+with code produced from `__cmpxchg64' for MIPS64r2 CPU configurations 
+using CONFIG_32BIT and CONFIG_PHYS_ADDR_T_64BIT.
+
+This is due to MIPS_ISA_ARCH_LEVEL downgrading the assembly architecture 
+to `r4000' i.e. MIPS III for MIPS64r2 configurations, while there is a 
+block of code containing a DINS MIPS64r2 instruction conditionalized on 
+MIPS_ISA_REV >= 2 within the scope of the downgrade.
+
+The assembly architecture override code pattern has been put there for 
+LL/SC instructions, so that code compiles for configurations that select 
+a processor to build for that does not support these instructions while 
+still providing run-time support for processors that do, dynamically 
+switched by non-constant `cpu_has_llsc'.  It went in with linux-mips.org 
+commit aac8aa7717a2 ("Enable a suitable ISA for the assembler around 
+ll/sc so that code builds even for processors that don't support the 
+instructions. Plus minor formatting fixes.") back in 2005.
+
+Fix the problem by wrapping these instructions along with the adjacent 
+SYNC instructions only, following the practice established with commit 
+cfd54de3b0e4 ("MIPS: Avoid move psuedo-instruction whilst using 
+MIPS_ISA_LEVEL") and commit 378ed6f0e3c5 ("MIPS: Avoid using .set mips0 
+to restore ISA").  Strictly speaking the SYNC instructions do not have 
+to be wrapped as they are only used as a Loongson3 erratum workaround, 
+so they will be enabled in the assembler by default, but do this so as 
+to keep code consistent with other places.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Fixes: c7e2d71dda7a ("MIPS: Fix set_pte() for Netlogic XLR using cmpxchg64()")
+Cc: stable@vger.kernel.org # v5.1+
+---
+So it's turned out I was right after all with v1, just did not correctly 
+remember the reason for the arrangement with an ISA override around LL/SC, 
+actually made by myself back in 2005.  Therefore here is a minor update to 
+v1 only, which was actually right except for a cosmetic issue around SYNC.
+
+And as I have thought major decluttering is due here.  What seemed a good 
+idea back in 2005 has never materialised and I think we don't really want 
+to support dynamic `cpu_has_llsc' anymore in 2021.  But let's leave it for 
+another occasion and fix the build error at hand only.
+
+Changes from v1:
+
+- Keep __SYNC references under MIPS_ISA_ARCH_LEVEL.
+
+- Expand change description.
+---
+ arch/mips/include/asm/cmpxchg.h |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+linux-mips-cmpxchg64-isa-arch-level.diff
+Index: linux-test/arch/mips/include/asm/cmpxchg.h
+===================================================================
+--- linux-test.orig/arch/mips/include/asm/cmpxchg.h
++++ linux-test/arch/mips/include/asm/cmpxchg.h
+@@ -249,6 +249,7 @@ static inline unsigned long __cmpxchg64(
+ 	/* Load 64 bits from ptr */
+ 	"	" __SYNC(full, loongson3_war) "		\n"
+ 	"1:	lld	%L0, %3		# __cmpxchg64	\n"
++	"	.set	pop				\n"
+ 	/*
+ 	 * Split the 64 bit value we loaded into the 2 registers that hold the
+ 	 * ret variable.
+@@ -276,12 +277,14 @@ static inline unsigned long __cmpxchg64(
+ 	"	or	%L1, %L1, $at			\n"
+ 	"	.set	at				\n"
+ #  endif
++	"	.set	push				\n"
++	"	.set	" MIPS_ISA_ARCH_LEVEL "		\n"
+ 	/* Attempt to store new at ptr */
+ 	"	scd	%L1, %2				\n"
+ 	/* If we failed, loop! */
+ 	"\t" __SC_BEQZ "%L1, 1b				\n"
+-	"	.set	pop				\n"
+ 	"2:	" __SYNC(full, loongson3_war) "		\n"
++	"	.set	pop				\n"
+ 	: "=&r"(ret),
+ 	  "=&r"(tmp),
+ 	  "=" GCC_OFF_SMALL_ASM() (*(unsigned long long *)ptr)
