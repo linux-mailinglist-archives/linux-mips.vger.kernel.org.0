@@ -2,113 +2,216 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E295437894
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Oct 2021 15:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7100437982
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Oct 2021 17:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbhJVOBs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Oct 2021 10:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
+        id S233278AbhJVPFW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 22 Oct 2021 11:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbhJVOBr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Oct 2021 10:01:47 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1317DC061764;
-        Fri, 22 Oct 2021 06:59:30 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id i24so847916lfj.13;
-        Fri, 22 Oct 2021 06:59:29 -0700 (PDT)
+        with ESMTP id S233265AbhJVPFV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Oct 2021 11:05:21 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE12C061767
+        for <linux-mips@vger.kernel.org>; Fri, 22 Oct 2021 08:03:04 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id d3so1353127wrh.8
+        for <linux-mips@vger.kernel.org>; Fri, 22 Oct 2021 08:03:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=r/XYzQj06TlWTxA1kKcI6lBOM9M4QsL12wnXXitW/rk=;
-        b=AqNMDhY2/584RrRisIDZh05BQb3tScvsSX4cYDYoyEORHJviHp+gFCMmGll/4icg9k
-         RQYy+/xK13UoZICKHzxL8hNEWs1XQMta4FLNkZmSzbj1QarQN0zEq1VKbme9/+iIVyOq
-         3Qw9YJq4S55v6AxmTKs/ZSfhtIM+9AMG0STKfeqw9GKbMUOCwuxkYwhFzSlRnGQZHiy3
-         ruAYgHTGwTbVH0nVaEeOMl35Zj7y1I4555cEeLjA9aN/LC3IgF9ODQZgr7Wf2nhKVHh2
-         IcFfIwXjzU4sSfBaOTbGtNr5uljHfb/LnLCaul8bkvrDORN31l+7QUtAADyuLYoHOFgk
-         2l/w==
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3OwTB01Y4l/+kVc73bUX9Z/iYlcMp8gV7w4ueFIx8Ew=;
+        b=wpSkuuN+E/3s4nGjBtt7p0E+89MzWCY9gMhvKz1Ef14MYys7krAIIthKGELpKTeuFk
+         EpEzaOOtyERbGHOhnsembwGIFJlYjt5HVbHDton9+1RHtWbxoaITSkLIz0Kt7EjjjC8J
+         pNe4gvOoH4qtoMDeBHIZ8ReIUfDiQFSikDCY6r/d/bJXnxJdRgd1/mU8m7NnyFK+1voW
+         82rIb+FkSGT7XfptFXc2QjTey0N78CVh1PNSnL5cCFi+3VBkogj6aoyqPL/MIUAiJc1K
+         s/W2WkxFBjsfrs4WJnOORyd83lN5UWWWljCUYFHNyaV9WATYUTXDNA563tvvjDAxqEF1
+         /uZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r/XYzQj06TlWTxA1kKcI6lBOM9M4QsL12wnXXitW/rk=;
-        b=btWUJCtMmjt2tAc2/cabVClGuCuiKqAy17IuYRQsIOZHoQTWMwLbRMzgvuSeMQ0ldT
-         uRSWcOwlLQ+Ro+r3e+WLRPiD5WI4jnwW0bFsCjslmxy+Q8Y224OpHz7M0rIbUZm0TNCY
-         r/yg+qOTXC6bvnYuEUfx7+v1KpjPfHbXGY/XA63kd1ymO/wBkKL9LqDPGf+gh3eiYUMp
-         kW4k7ZCsnC/SdcuGOlVRItrFTo8MteogWZidgTbcL25JtKuSGtpUM2QItkSzsSKTnXv5
-         O+yaj3MPhus52kEcq3gl/r5r++R54VV1PZ7rS8ezkU1H7w4XhZ8kuu46Jj2ahMIXewqr
-         dmWQ==
-X-Gm-Message-State: AOAM530By1iKO40oh5IHCh7wx/maZTfL4kpDmpPDkl50uFUKO5wo+oWj
-        PBskaUGuxcPNsD5pZAxnxN806WXZvi0=
-X-Google-Smtp-Source: ABdhPJzTsAN6pB62BlnAxQwOmYHzWK0D02hhiwkjJ2/++Bk5izTC+RUhBtn8Og/7LtwWhhZj0va52A==
-X-Received: by 2002:ac2:4c49:: with SMTP id o9mr12269402lfk.482.1634911168499;
-        Fri, 22 Oct 2021 06:59:28 -0700 (PDT)
-Received: from mobilestation ([95.79.132.211])
-        by smtp.gmail.com with ESMTPSA id e8sm739946lft.308.2021.10.22.06.59.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Oct 2021 06:59:28 -0700 (PDT)
-Date:   Fri, 22 Oct 2021 16:59:26 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, f.fainelli@gmail.com,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH 0/3] genirq: Make irq_cpu_{on,off}line() an Octeon-special
-Message-ID: <20211022135926.nlxdmuu6tfhrqlui@mobilestation>
-References: <20211021170414.3341522-1-maz@kernel.org>
- <20211022135353.ibze6z67xokbwkts@mobilestation>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3OwTB01Y4l/+kVc73bUX9Z/iYlcMp8gV7w4ueFIx8Ew=;
+        b=X8aAiUHTlmIEcNVnmRjm9bjvfhB7yZuTHTtIeU+UAm1NjqldBHPxGSpLpRHF+V7os7
+         KA/3wDPxrp1aeToSiPb2Bc50K/UAQ5Z1jLSLGQnO4sK1OplMDGT5ggR/ojcF4XYnR+/h
+         jUfCEgc1DXAMUD1EXyDxipJsrTRD6l16dB2nDShVcCUeTSCCZB2gOMkn7DcLAZY6d/qv
+         aNNJR8jg9YlZlzx2QjBajJAn0UOAZi+WohMzkAnTG8jqPnL3ZbeV+jQCBfsg1/hNK5PV
+         sD1or/2iLzNwKcEbWfPRFixrUKKoycgFB5w8WkHqpl8w0Xp3cvTMwWD4Mi8k+bpx3K2F
+         94uQ==
+X-Gm-Message-State: AOAM533IzBvlBXQzFKkbXat9hDKNuFYmTEaK1RBx0tHljP0zD+GnKDwl
+        KJ9/BFKAKzrfH2RooIw1dJCBorpu9CCT2G6XcFAwUg==
+X-Google-Smtp-Source: ABdhPJyp0dm3PoN0Wstx3HCArGjVpjcl9P3vKQZBf6Fq6JRJcyoPyekjhQzR4/Y3T+mdbjFmhbwZhgn3lvibDkD6Krc=
+X-Received: by 2002:a05:6000:1acc:: with SMTP id i12mr431822wry.249.1634914981152;
+ Fri, 22 Oct 2021 08:03:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211022135353.ibze6z67xokbwkts@mobilestation>
+References: <20211009021236.4122790-1-seanjc@google.com> <20211009021236.4122790-10-seanjc@google.com>
+In-Reply-To: <20211009021236.4122790-10-seanjc@google.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 22 Oct 2021 20:32:49 +0530
+Message-ID: <CAAhSdy1Wr6ODjDWd4V23Dh6M-V4LB1y1a+qwuxXe8CaZSgi9kw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/43] KVM: Drop obsolete kvm_arch_vcpu_block_finish()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        KVM General <kvm@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atish.patra@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        kvmarm@lists.cs.columbia.edu, Joerg Roedel <joro@8bytes.org>,
+        kvm-ppc@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Jim Mattson <jmattson@google.com>,
+        Cornelia Huck <cohuck@redhat.com>, linux-mips@vger.kernel.org,
+        kvm-riscv@lists.infradead.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 04:53:56PM +0300, Serge Semin wrote:
-> Hello Marc
-> 
-> On Thu, Oct 21, 2021 at 06:04:11PM +0100, Marc Zyngier wrote:
-> > Now that Florian has updated BMIPS to not rely on irq_cpu_offline [1],
-> > it is pretty tempting to totally get of this misfeature. We can't
-> > really do that because Octeon uses it like crazy, but the couple of
-> > other users are easy to convert.
-> > 
-> > Once this is done, these helpers are hidden behind a config symbol
-> > that depends on the Octeon platform being selected. When Octeon is
-> > finally removed from the tree, we'll be able to drop this as well.
-> 
-> The whole series has been tested in kernel 5.13 running on
-> Baikal-T1 SoC (2x P5600 cores) with MIPS GIC used as the clock source
-> and clock event device.
+On Sat, Oct 9, 2021 at 7:43 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Drop kvm_arch_vcpu_block_finish() now that all arch implementations are
+> nops.
+>
+> No functional change intended.
+>
+> Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
+> Reviewed-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-> Acked-by: Serge Semin <fancer.lancer@gmail.com>
+For KVM RISC-V:
+Acked-by: Anup Patel <anup.patel@wdc.com>
+Reviewed-by: Anup Patel <anup.patel@wdc.com>
 
-Ah, sorry. copy-pasted a wrong tag. Tested-by of course:
-Tested-by: Serge Semin <fancer.lancer@gmail.com>
+Regards,
+Anup
 
--Sergey
-
-> 
-> -Sergey
-> 
-> > 
-> > 
-> > Marc Zyngier (3):
-> >   MIPS: loongson64: Drop call to irq_cpu_offline()
-> >   irqchip/mips-gic: Get rid of the reliance on irq_cpu_online()
-> >   genirq: Hide irq_cpu_{on,off}line() behind a deprecated option
-> > 
-> >  arch/mips/loongson64/smp.c     |  1 -
-> >  drivers/irqchip/irq-mips-gic.c | 37 ++++++++++++++++++++++++----------
-> >  include/linux/irq.h            |  5 ++++-
-> >  kernel/irq/Kconfig             |  7 +++++++
-> >  kernel/irq/chip.c              |  2 ++
-> >  5 files changed, 39 insertions(+), 13 deletions(-)
-> > 
-> > -- 
-> > 2.30.2
-> > 
+> ---
+>  arch/arm64/include/asm/kvm_host.h   | 1 -
+>  arch/mips/include/asm/kvm_host.h    | 1 -
+>  arch/powerpc/include/asm/kvm_host.h | 1 -
+>  arch/riscv/include/asm/kvm_host.h   | 1 -
+>  arch/s390/include/asm/kvm_host.h    | 2 --
+>  arch/s390/kvm/kvm-s390.c            | 5 -----
+>  arch/x86/include/asm/kvm_host.h     | 2 --
+>  virt/kvm/kvm_main.c                 | 1 -
+>  8 files changed, 14 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 369c30e28301..fe4dec96d1c3 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -716,7 +716,6 @@ void kvm_arm_vcpu_ptrauth_trap(struct kvm_vcpu *vcpu);
+>  static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+> -static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
+>
+>  void kvm_arm_init_debug(void);
+>  void kvm_arm_vcpu_init_debug(struct kvm_vcpu *vcpu);
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index 696f6b009377..72b90d45a46e 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -897,7 +897,6 @@ static inline void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen) {}
+>  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+>  static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
+>  static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+> -static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
+>
+>  #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
+>  int kvm_arch_flush_remote_tlb(struct kvm *kvm);
+> diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
+> index 876c10803cda..4a195c161592 100644
+> --- a/arch/powerpc/include/asm/kvm_host.h
+> +++ b/arch/powerpc/include/asm/kvm_host.h
+> @@ -865,6 +865,5 @@ static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+>  static inline void kvm_arch_exit(void) {}
+>  static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
+>  static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+> -static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
+>
+>  #endif /* __POWERPC_KVM_HOST_H__ */
+> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> index d7e1696cd2ec..b3f0c3773603 100644
+> --- a/arch/riscv/include/asm/kvm_host.h
+> +++ b/arch/riscv/include/asm/kvm_host.h
+> @@ -209,7 +209,6 @@ struct kvm_vcpu_arch {
+>  static inline void kvm_arch_hardware_unsetup(void) {}
+>  static inline void kvm_arch_sync_events(struct kvm *kvm) {}
+>  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
+> -static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
+>
+>  #define KVM_ARCH_WANT_MMU_NOTIFIER
+>
+> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
+> index a604d51acfc8..a22c9266ea05 100644
+> --- a/arch/s390/include/asm/kvm_host.h
+> +++ b/arch/s390/include/asm/kvm_host.h
+> @@ -1010,6 +1010,4 @@ static inline void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
+>  static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
+>  static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
+>
+> -void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu);
+> -
+>  #endif
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 08ed68639a21..17fabb260c35 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -5080,11 +5080,6 @@ static inline unsigned long nonhyp_mask(int i)
+>         return 0x0000ffffffffffffUL >> (nonhyp_fai << 4);
+>  }
+>
+> -void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu)
+> -{
+> -
+> -}
+> -
+>  static int __init kvm_s390_init(void)
+>  {
+>         int i;
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 88f0326c184a..7aafc27ce7a9 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1926,8 +1926,6 @@ static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
+>         static_call_cond(kvm_x86_vcpu_unblocking)(vcpu);
+>  }
+>
+> -static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
+> -
+>  static inline int kvm_cpu_get_apicid(int mps_cpu)
+>  {
+>  #ifdef CONFIG_X86_LOCAL_APIC
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 1292c7876d3f..f90b3ed05628 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -3304,7 +3304,6 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+>         }
+>
+>         trace_kvm_vcpu_wakeup(block_ns, waited, vcpu_valid_wakeup(vcpu));
+> -       kvm_arch_vcpu_block_finish(vcpu);
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_vcpu_block);
+>
+> --
+> 2.33.0.882.g93a45727a2-goog
+>
+> _______________________________________________
+> kvmarm mailing list
+> kvmarm@lists.cs.columbia.edu
+> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
