@@ -2,90 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C828438151
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Oct 2021 03:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D22438418
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Oct 2021 17:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbhJWBtD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 22 Oct 2021 21:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S231519AbhJWPpO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 23 Oct 2021 11:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbhJWBtC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 22 Oct 2021 21:49:02 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C751C061764
-        for <linux-mips@vger.kernel.org>; Fri, 22 Oct 2021 18:46:44 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id q6so3535346iod.7
-        for <linux-mips@vger.kernel.org>; Fri, 22 Oct 2021 18:46:44 -0700 (PDT)
+        with ESMTP id S231165AbhJWPpM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 23 Oct 2021 11:45:12 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFED2C061227
+        for <linux-mips@vger.kernel.org>; Sat, 23 Oct 2021 08:42:52 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id d10so1879809wrb.1
+        for <linux-mips@vger.kernel.org>; Sat, 23 Oct 2021 08:42:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4trz9OXm39y9KgQDBqf5aPCATrUHsPHib60Qy9yey4Q=;
-        b=FgR2N7rU9X6o8frU+S7MeSZdqRkWVFXm39z6hK29t4N70YRasPn35E28zlSF6G+uyw
-         Rgm4MPxKH0MwdhQOfuu/k3k484ngabemJ/F2R6x/n95XCFjGqsEzWTKosypXPjZ8FGMn
-         h9VC5mA3bZ17PHB1drFqM2eDuosyFpDqI41aA0iyvEGmL6CQxy9bp7NDIBvJH+c7mL04
-         zL4Lhy+UlZN3ukZQ7noO0vBPfGvJolM/p4ZeOxgglJApMHFtAYZe9YOEFth4AY3q8lHq
-         I2YbrP6bZb8PedFuEHJREH9tALGGTsvz7cLH5t/jj4hfa1p6yKC6MsusSrG+d+n7QWNf
-         E76A==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
+        b=AYtLHgTG+6uRU7+ihCnpuOHko6pqohXhhQkkijOFNs1K9R3uZtGzQ5Q1/HW70ikQOH
+         to4qY+MneU8Wp5m/9lAfflx+y719nabfpikWCEUlEWf4TV2mCVtwTqCiU9WBe0/PueVA
+         Ai5uemlRsLruanwKtfzO+GeDcAbGf94MhP9fVYsSthGmJThkp9aXQloZUCc7KpPJDIe5
+         ZDHZUIMzc7AFUI4sZuF8c0yufIwBcSuY8XEdvjlaOTWtthy6nwfYJOAMZizkpVyMjWcI
+         yYcYAJzSYs4KyL2X7l5KUECXBatU7ZxHLxcDM7wHj0/uSurwobyzbl1doBaHD0t2U4Ok
+         8KFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4trz9OXm39y9KgQDBqf5aPCATrUHsPHib60Qy9yey4Q=;
-        b=ia7G9/R0RVdF5+6e+nO3aeucUt9YnN9PYkAMfdo8Mb36CHax+hzPO4WC+N16VUJBoC
-         Ky7brAePSMSY8pQUlf0c78v1kidWyQsyA3DsjhDMceoeSD7P46zmHDABRIWV1SwV0lRq
-         apkzr0tyWLgBZqaIxgoCD6COkaxvGTJ1fLQjQnW5lQgs2AqbXkP550M5PYyiwwujxKaR
-         qL/E3SOAH8mm9O0Rp8FZxcglDRT/ZSbsuMpqeCtertGRhj+fuMqbcfeJnotaI7R2Edf0
-         RYEowHcAP+DXIDNtTQXUmJcguU2MNOXT176Muzh5R6xnLr/zXdy7vWoAfIaUi+Ci+44U
-         TW2A==
-X-Gm-Message-State: AOAM530jLjV5JtydVb8Glkaim6r1nStDU6osO10D1XiTE9LW3pj6rVQ3
-        dIp7ae34GN/UICVwFKklhBp1nhqpo++K0Rs+x6A=
-X-Google-Smtp-Source: ABdhPJyhOEPH/Ngx1s2tWI/WxCj0DHFBFu/zKL/1c4zYy+IHdHAx8nh2WMWocTcmxVwCj9Ud0jIOaNz0AbwX1NkdIaw=
-X-Received: by 2002:a02:c65a:: with SMTP id k26mr2076899jan.29.1634953603774;
- Fri, 22 Oct 2021 18:46:43 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=F26I+cBcpyIkdxRfcHLvmvj+TTSmfbBclURHJNpWXCA=;
+        b=j9fYcEJpcsVvEjqWV/A5Ev0aELr2+jnlPEnkjzwubwqVARRgnG2RtBFoeXkebda8kF
+         OAoh0MDl3tVRdNf10Euz+otba4nqguJ+srEi6gZVvqEh6nx+sb35ypX1Fwze95TyOQek
+         Svdyj2p1HkMWjCwsjbPECQo+l+Sg+MnL6xQwXJ+uu6nmrJkH7qSZmqGjlXVVGzQYSU5O
+         VChP3y+arbm5+WRYocf2bGNN8tS+bxpi5yx2AZs3KPIsxGLRDgLtgMOiNr0iJMReuTlv
+         MZw6OWPNpysdhRKymkBRpkkS7d8xTX/GSu6y6wQ8PTz3QeVNj4g1UZjV5ywbyGjA05xf
+         xFjg==
+X-Gm-Message-State: AOAM532mXxsNVtFWUA9ueiclqp/GQvpKDRvzYkznRqiF340RYWCcgUSr
+        lZghef/zvDhVN2zOeVVzPH4ChU4rtlrN8IDfknE=
+X-Google-Smtp-Source: ABdhPJxbHWCQaA22XVwQFJLeK97z9oroWNyFUNBz/3teSSfazwM0svrL6URXAe5PADGpGE0jjZn5M2av0IBmVyuOXKg=
+X-Received: by 2002:adf:a411:: with SMTP id d17mr3075552wra.232.1635003770995;
+ Sat, 23 Oct 2021 08:42:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211022112708.962338-1-wanghaojun@loongson.cn> <20211022154544.GA11114@alpha.franken.de>
-In-Reply-To: <20211022154544.GA11114@alpha.franken.de>
-From:   =?UTF-8?B?5rGf5rWB5YS/?= <jiangliuer01@gmail.com>
-Date:   Sat, 23 Oct 2021 09:46:32 +0800
-Message-ID: <CAPhSAwtrkz9K_PvRm3viJ4HzZscwM1ZLWTLgY9MPtWYJhyNNKw@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Fix build error for brcmstb_gisb
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Wang Haojun <wanghaojun@loongson.cn>,
-        Li Xuefeng <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org
+Received: by 2002:a1c:a916:0:0:0:0:0 with HTTP; Sat, 23 Oct 2021 08:42:50
+ -0700 (PDT)
+Reply-To: martinafrancis01@gmail.com
+From:   martinafran42 <martinafran42@gmail.com>
+Date:   Sat, 23 Oct 2021 08:42:50 -0700
+Message-ID: <CAC1Op46rzf-95OpiL4YE=Lzvu2F7NstX11WdGagxm5dfjjFJ3w@mail.gmail.com>
+Subject: =?UTF-8?Q?Dobry_dzie=C5=84_moja_droga?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This was true before, But after 707a4cdf86e5d ("bus: brcmstb_gisb:
-Allow building as module") BRCMSTB_GISB_ARB can be a module  in
-linux-next.
+--=20
+Dobry dzie=C5=84 moja droga
+Jak si=C4=99 masz i twoja rodzina.
+Jestem pani Martina Francis, chora wdowa pisz=C4=85ca ze szpitalnego =C5=82=
+=C3=B3=C5=BCka
+bez dziecka. Kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, aby=C5=9Bcie dowiedz=
+ieli si=C4=99 o moim
+pragnieniu przekazania sumy (2 700 000,00 USD MILION=C3=93W USD), kt=C3=B3r=
+=C4=85
+odziedziczy=C5=82am po moim zmar=C5=82ym m=C4=99=C5=BCu na cele charytatywn=
+e, obecnie
+fundusz jest nadal w banku. Niedawno m=C3=B3j lekarz powiedzia=C5=82 mi, =
+=C5=BCe mam
+powa=C5=BCn=C4=85 chorob=C4=99 nowotworow=C4=85 i moje =C5=BCycie nie jest =
+ju=C5=BC gwarantowane,
+dlatego podejmuj=C4=99 t=C4=99 decyzj=C4=99..
 
-Thomas Bogendoerfer <tsbogend@alpha.franken.de> =E4=BA=8E2021=E5=B9=B410=E6=
-=9C=8822=E6=97=A5=E5=91=A8=E4=BA=94 =E4=B8=8B=E5=8D=8811:46=E5=86=99=E9=81=
-=93=EF=BC=9A
->
-> On Fri, Oct 22, 2021 at 07:27:08PM +0800, Wang Haojun wrote:
-> > The GISB bus error handler need board_be_handler, but this
-> > code cannot used it when BRCMSTB_GISB_ARB is a module.
-> >
-> > ERROR: modpost: "board_be_handler" [drivers/bus/brcmstb_gisb.ko] undefi=
-ned!
->
-> maybe I'm missing a patch but in mips-next tree
->
-> config BRCMSTB_GISB_ARB
->         bool "Broadcom STB GISB bus arbiter"
->
-> this can't be a module...
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+Chc=C4=99, aby=C5=9Bcie skorzystali z tego funduszu dla ludzi ubogich,
+maltretowanych dzieci, mniej uprzywilejowanych, ko=C5=9Bcio=C5=82=C3=B3w, s=
+ieroci=C5=84c=C3=B3w
+i cierpi=C4=85cych wd=C3=B3w w spo=C5=82ecze=C5=84stwie.
+
+Prosz=C4=99, wr=C3=B3=C4=87 do mnie natychmiast po przeczytaniu tej wiadomo=
+=C5=9Bci, aby
+uzyska=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3w dotycz=C4=85cych tej age=
+ndy humanitarnej.
+
+Niech B=C3=B3g ci=C4=99 b=C5=82ogos=C5=82awi, kiedy czekam na twoj=C4=85 od=
+powied=C5=BA.
+
+Twoja siostra.
+Pani Martina Francis.
