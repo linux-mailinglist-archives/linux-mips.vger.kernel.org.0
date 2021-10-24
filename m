@@ -2,69 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8945E4389E5
+	by mail.lfdr.de (Postfix) with ESMTP id D48684389E6
 	for <lists+linux-mips@lfdr.de>; Sun, 24 Oct 2021 17:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbhJXPju (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S231724AbhJXPju (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Sun, 24 Oct 2021 11:39:50 -0400
-Received: from elvis.franken.de ([193.175.24.41]:37604 "EHLO elvis.franken.de"
+Received: from elvis.franken.de ([193.175.24.41]:37601 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231534AbhJXPjs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        id S231699AbhJXPjs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
         Sun, 24 Oct 2021 11:39:48 -0400
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mefYp-0006bc-03; Sun, 24 Oct 2021 17:37:23 +0200
+        id 1mefYp-0006bc-04; Sun, 24 Oct 2021 17:37:23 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id EA281C265F; Sun, 24 Oct 2021 17:27:45 +0200 (CEST)
-Date:   Sun, 24 Oct 2021 17:27:45 +0200
+        id 34278C265F; Sun, 24 Oct 2021 17:28:46 +0200 (CEST)
+Date:   Sun, 24 Oct 2021 17:28:46 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 05/20] signal/mips: Update (_save|_restore)_fp_context to
- fail with -EFAULT
-Message-ID: <20211024152745.GD4721@alpha.franken.de>
-References: <87y26nmwkb.fsf@disp2133>
- <20211020174406.17889-5-ebiederm@xmission.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, f.fainelli@gmail.com,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 1/3] MIPS: loongson64: Drop call to irq_cpu_offline()
+Message-ID: <20211024152846.GE4721@alpha.franken.de>
+References: <20211021170414.3341522-1-maz@kernel.org>
+ <20211021170414.3341522-2-maz@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211020174406.17889-5-ebiederm@xmission.com>
+In-Reply-To: <20211021170414.3341522-2-maz@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 12:43:51PM -0500, Eric W. Biederman wrote:
-> When an instruction to save or restore a register from the stack fails
-> in _save_fp_context or _restore_fp_context return with -EFAULT.  This
-> change was made to r2300_fpu.S[1] but it looks like it got lost with
-> the introduction of EX2[2].  This is also what the other implementation
-> of _save_fp_context and _restore_fp_context in r4k_fpu.S does, and
-> what is needed for the callers to be able to handle the error.
+On Thu, Oct 21, 2021 at 06:04:12PM +0100, Marc Zyngier wrote:
+> Also loongson64 calls irq_cpu_offline(), none of its interrupt
+> controllers implement the .irq_cpu_offline callback.
 > 
-> Furthermore calling do_exit(SIGSEGV) from bad_stack is wrong because
-> it does not terminate the entire process it just terminates a single
-> thread.
+> It is thus obvious that this call only serves the dubious purpose
+> of wasting precious CPU cycles by iterating over all interrupts.
 > 
-> As the changed code was the only caller of arch/mips/kernel/syscall.c:bad_stack
-> remove the problematic and now unused helper function.
+> Get rid of the call altogether.
 > 
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Maciej Rozycki <macro@orcam.me.uk>
-> Cc: linux-mips@vger.kernel.org
-> [1] 35938a00ba86 ("MIPS: Fix ISA I FP sigcontext access violation handling")
-> [2] f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-> Fixes: f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
 > ---
->  arch/mips/kernel/r2300_fpu.S | 4 ++--
->  arch/mips/kernel/syscall.c   | 9 ---------
->  2 files changed, 2 insertions(+), 11 deletions(-)
+>  arch/mips/loongson64/smp.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+> index 09ebe84a17fe..660e1de4412a 100644
+> --- a/arch/mips/loongson64/smp.c
+> +++ b/arch/mips/loongson64/smp.c
+> @@ -550,7 +550,6 @@ static int loongson3_cpu_disable(void)
+>  	set_cpu_online(cpu, false);
+>  	calculate_cpu_foreign_map();
+>  	local_irq_save(flags);
+> -	irq_cpu_offline();
+>  	clear_c0_status(ST0_IM);
+>  	local_irq_restore(flags);
+>  	local_flush_tlb_all();
+> -- 
+> 2.30.2
 
 Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
