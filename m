@@ -2,109 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4035043A520
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Oct 2021 22:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBCD43A595
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Oct 2021 23:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233842AbhJYU6A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 Oct 2021 16:58:00 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:56310 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234566AbhJYU5q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Oct 2021 16:57:46 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52]:46434)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mf706-00AmGX-0a; Mon, 25 Oct 2021 14:55:22 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:39982 helo=email.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mf704-00CQtV-7C; Mon, 25 Oct 2021 14:55:21 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
+        id S234676AbhJYVPB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 Oct 2021 17:15:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43566 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234509AbhJYVPA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 25 Oct 2021 17:15:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C09BC61073;
+        Mon, 25 Oct 2021 21:12:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635196358;
+        bh=4MXuBNVzkrZP3yecgRjqdL1aeKI6T/KhfEayaMfhl5o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Jwx48/xdZTS5oCSdpphMARaOk5BXsy/YhtvgQK58CS0MIbpFO/7nVRXfsizhctVfR
+         DHn11NFtFXjfnu6kyDHuqPw89urntqir4r8uypb/5YKdemXm94z7eYj6keuXdeIE25
+         DXSNsPXSoB7zjCqOT+Et5sjq1DtzstEtlDWbAhhCErQsIOpLcJ/97usD3deU4+3YdK
+         MHURE3evLaqBPAtcbvjIeGjPfhVB6lKH0heav9dnl+Wot8LtpkTvQGZBBmEBQkPFve
+         wn8n9vsGs2dHq3cKEq4GbiUzVa6XVCu+uhZ6TeALJcplO2i1e8+vq8/HkoP4FAQIIy
+         2ot2MOyZdSGpQ==
+Date:   Mon, 25 Oct 2021 16:12:36 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        John Crispin <john@phrozen.org>, NeilBrown <neil@brown.name>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-References: <87y26nmwkb.fsf@disp2133>
-        <20211020174406.17889-5-ebiederm@xmission.com>
-        <alpine.DEB.2.21.2110240622100.45807@angie.orcam.me.uk>
-Date:   Mon, 25 Oct 2021 15:55:13 -0500
-In-Reply-To: <alpine.DEB.2.21.2110240622100.45807@angie.orcam.me.uk> (Maciej
-        W. Rozycki's message of "Sun, 24 Oct 2021 06:24:17 +0200 (CEST)")
-Message-ID: <87y26gx1se.fsf@disp2133>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v3 0/3] PCI: mt7621: Add MediaTek MT7621 PCIe host
+ controller driver
+Message-ID: <20211025211236.GA31293@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mf704-00CQtV-7C;;;mid=<87y26gx1se.fsf@disp2133>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+evW9omsIww1rKO9bifehdIM1qfwCNJao=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa01.xmission.com
-X-Spam-Level: *****
-X-Spam-Status: No, score=5.1 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,TR_XM_SB_Phish,T_TM2_M_HEADER_IN_MSG,
-        T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,T_TooManySym_04,
-        T_TooManySym_05,XMNoVowels,XMSubLong,XMSubPhish11 autolearn=disabled
-        version=3.4.2
-X-Spam-Virus: No
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.7 XMSubLong Long Subject
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_05 8+ unique symbols in subject
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.0 T_TooManySym_03 6+ unique symbols in subject
-        *  0.0 T_TooManySym_02 5+ unique symbols in subject
-        *  0.0 T_TooManySym_04 7+ unique symbols in subject
-        *  1.5 XMSubPhish11 Phishy Language Subject
-        *  0.0 TR_XM_SB_Phish Phishing flag in subject of message
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *****;"Maciej W. Rozycki" <macro@orcam.me.uk>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 564 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.4 (0.8%), b_tie_ro: 3.0 (0.5%), parse: 0.92
-        (0.2%), extract_message_metadata: 10 (1.8%), get_uri_detail_list: 0.94
-        (0.2%), tests_pri_-1000: 4.5 (0.8%), tests_pri_-950: 1.18 (0.2%),
-        tests_pri_-900: 0.80 (0.1%), tests_pri_-90: 99 (17.6%), check_bayes:
-        97 (17.2%), b_tokenize: 3.8 (0.7%), b_tok_get_all: 6 (1.0%),
-        b_comp_prob: 1.40 (0.2%), b_tok_touch_all: 83 (14.7%), b_finish: 0.87
-        (0.2%), tests_pri_0: 163 (28.9%), check_dkim_signature: 0.36 (0.1%),
-        check_dkim_adsp: 1.87 (0.3%), poll_dns_idle: 257 (45.5%),
-        tests_pri_10: 2.1 (0.4%), tests_pri_500: 275 (48.7%), rewrite_mail:
-        0.00 (0.0%)
-Subject: Re: [PATCH 05/20] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMhs-H90rD8aHJ+txDzFZ62Ej9_TY=BZMT+1058d=Pm_LfYwPA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-"Maciej W. Rozycki" <macro@orcam.me.uk> writes:
+On Fri, Oct 22, 2021 at 11:13:39AM +0200, Sergio Paracuellos wrote:
+> On Fri, Oct 22, 2021 at 10:35 AM Lorenzo Pieralisi
+> <lorenzo.pieralisi@arm.com> wrote:
+> >
+> > On Thu, Oct 21, 2021 at 09:23:35PM +0200, Sergio Paracuellos wrote:
+> > > On Thu, Oct 21, 2021 at 8:11 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > >
+> > > > On Thu, Oct 21, 2021 at 07:27:21PM +0200, Sergio Paracuellos wrote:
+> > > > > On Thu, Oct 21, 2021 at 5:52 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > Since this is a PCIe (not conventional PCI) controller, I
+> > > > > > vote for renaming these from:
+> > > > > >
+> > > > > >   PCI_MT7621
+> > > > > >   Documentation/devicetree/bindings/pci/mediatek,mt7621-pci.yaml
+> > > > > >   drivers/pci/controller/pci-mt7621.c
+> > > > > >
+> > > > > > to:
+> > > > > >
+> > > > > >   PCIE_MT7621
+> > > > > >   Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
+> > > > > >   drivers/pci/controller/pcie-mt7621.c
+> > > > > >
+> > > > > > We have a mix of these, with many of the early PCIe
+> > > > > > drivers being named "pci", but I think that was my mistake
+> > > > > > and there's no reason to continue it.
+> > > > >
+> > > > > I see.
+> > > > >
+> > > > > > I can do this locally unless somebody objects.
+> > > > >
+> > > > > I have no problem at all. Only one question. Do you mean to
+> > > > > change compatible string also, or only the name of the file?
+> > > > > Let me know if I have to do anything.
+> > > >
+> > > > I didn't change the compatible string, to avoid a DT
+> > > > incompatibility.  But I *did* change the Kconfig symbol to
+> > > > PCIE_MT7621, which could require changes to out-of-tree
+> > > > .configs.  I'm open to suggestions either way for both things.
+> > >
+> > > IMHO, I do think we should not worry about out-of-tree stuff at
+> > > all.
+> >
+> > For Kconfig I tend to agree. For DT I see some "bindings" in the
+> > staging tree are being deleted and published as official DT
+> > bindings with this patchset but I believe we still have to keep
+> > the compatible string backward compatibility regardless because
+> > there may be firmware out there using it.
+> 
+> The bindings txt file removed in staging with this patchset was also
+> added by me three years ago[0], and has been changing until the YAML
+> bindings are reviewed by Rob and driver updated accordly in this
+> patchset.
+>
+> OpenWRT maintains its own file[1] which I don't know is updated or
+> not according to the one in staging which I am pretending to
+> properly mainline for 5.17. But yes, I agree there might be firmware
+> out there using current compatible string.
+> 
+> [0]: Commit 5451e22618b8 ("staging: mt7621-pci: dt-bindings: add dt
+> bindings for mt7621 pcie controller")
+> [1]: https://github.com/openwrt/openwrt/blob/master/target/linux/ramips/dts/mt7621.dtsi
 
-> On Wed, 20 Oct 2021, Eric W. Biederman wrote:
->
->> When an instruction to save or restore a register from the stack fails
->> in _save_fp_context or _restore_fp_context return with -EFAULT.  This
->> change was made to r2300_fpu.S[1] but it looks like it got lost with
->> the introduction of EX2[2].  This is also what the other implementation
->> of _save_fp_context and _restore_fp_context in r4k_fpu.S does, and
->> what is needed for the callers to be able to handle the error.
->
->  Umm, right, good catch, thanks!  I think this ought to be backported.
->
-> Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
->
+OK, for now I left my rework as-is:
 
-I will add a CC stable.  So it can be backported after it is merged.
+  - changed CONFIG_PCI_MT7621 to CONFIG_PCIE_MT7621
+  - renamed mediatek,mt7621-pci.yaml to mediatek,mt7621-pcie.yaml
+  - renamed pci-mt7621.c to pcie-mt7621.c
+  - kept DT compatible string "mediatek,mt7621-pci" in .yaml and .c
 
-Eric
+I reason that the Kconfig and filename changes only affect people
+building kernels or DTs, but a compatible string change would force a
+DT update to be synchronized with a kernel update.
+
+Happy to change this if necessary.
+
+Bjorn
