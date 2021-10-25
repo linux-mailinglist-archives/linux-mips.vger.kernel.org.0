@@ -2,116 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC42B438D61
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Oct 2021 04:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF08443976B
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Oct 2021 15:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbhJYCOH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 24 Oct 2021 22:14:07 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34686 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231516AbhJYCOG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 24 Oct 2021 22:14:06 -0400
-Received: from localhost.localdomain (unknown [111.9.175.10])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Cx9OVXEnZhn5IfAA--.56913S3;
-        Mon, 25 Oct 2021 10:11:37 +0800 (CST)
-Subject: Re: [PATCH 4/4] MIPS: Add is_jr_ra_ins() to end the loop early
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-References: <1610454557-25867-1-git-send-email-hejinyang@loongson.cn>
- <1610454557-25867-5-git-send-email-hejinyang@loongson.cn>
- <alpine.DEB.2.21.2110232023171.38243@angie.orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Burton <paulburton@kernel.org>,
-        Jun-Ru Chang <jrjang@realtek.com>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <228e5765-6fe6-9cdc-4d37-2a0e4406ee8e@loongson.cn>
-Date:   Mon, 25 Oct 2021 10:11:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S231428AbhJYNYc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 Oct 2021 09:24:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32845 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230145AbhJYNYb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 25 Oct 2021 09:24:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635168129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=48+IikSlKyqTNmxyr4q4VEcqSYZJGRNhdXCK/IFcjJk=;
+        b=KE/riBNfAXvmdioUpEupdNXCo16fRq3CU6y433SjTnpscTb3trlrymitszXrkgp+SEiGpy
+        IGGDdOs7tgVpF7D1koLvgvjkFQKxcb+ae8BAvfZAtAiPQnnSY7t0w4DQ9M14UID9quLJ6O
+        qMkZ0+yPB8SV6/WH/73VfrMRwVbUjyY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-341-eDXD6gsfP7asdDRO3bTLbA-1; Mon, 25 Oct 2021 09:22:08 -0400
+X-MC-Unique: eDXD6gsfP7asdDRO3bTLbA-1
+Received: by mail-ed1-f70.google.com with SMTP id f21-20020a0564021e9500b003dd77985601so561965edf.9
+        for <linux-mips@vger.kernel.org>; Mon, 25 Oct 2021 06:22:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=48+IikSlKyqTNmxyr4q4VEcqSYZJGRNhdXCK/IFcjJk=;
+        b=Czv5kmWVOIOj9YVTgukc+k+KSt9tUXbjCzNGWPlwZfpZENRjQNVDIXQrznCcnB9Iqp
+         QD4T4vD8yl9sQHIOLRSkfB+ilHJiheIG2Ajukhp2zUfZN4YyjuaKzn69sGNLGf+5ADON
+         mRKqKyocyOTWObRHG9x3XnUQubg7RxPkbX9bREqeCNUBCJ+V8aPhfaX7Krj+18L2bv+u
+         bd2fPKd7ejddDO0UrzKtEeckbQyhzBRk13cIuq+bUK2/AIjC+uhYs8lO98/CI+GlwFaD
+         APTrOshlCGg0IWlk9dVy53c0k6o+xUoaBgS3Ak3VVNevrGvQaAWlJwraUwcNSy/Ydf0r
+         yoeg==
+X-Gm-Message-State: AOAM531uwI7scs5wEmnhYRQv/y7+7+deNtELNcgfTfuA1GXog+0KSG96
+        HwUMmA39QL9oPokbjioQGoB3tGW/gJb7auLXGSiYtuRPQd4+WDawEuhA4yeBK+wC9qHaWDuSbd1
+        phQ2+XDP9cibYGMamR/cSmw==
+X-Received: by 2002:a50:d783:: with SMTP id w3mr20253049edi.380.1635168126979;
+        Mon, 25 Oct 2021 06:22:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzfRKsXz9JGMpnMaISmnOtZN3rndX1G8rsIOCD7EyDtzp44dz76SyjuCafVUoIKeNPaL6dxIA==
+X-Received: by 2002:a50:d783:: with SMTP id w3mr20253015edi.380.1635168126752;
+        Mon, 25 Oct 2021 06:22:06 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id j15sm9152968edl.34.2021.10.25.06.22.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Oct 2021 06:22:06 -0700 (PDT)
+Message-ID: <e360d085-8fba-e8de-b65e-fc7a4e13ad7b@redhat.com>
+Date:   Mon, 25 Oct 2021 15:21:59 +0200
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.21.2110232023171.38243@angie.orcam.me.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH v2 02/43] KVM: SVM: Ensure target pCPU is read once when
+ signalling AVIC doorbell
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+ <20211009021236.4122790-3-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211009021236.4122790-3-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Cx9OVXEnZhn5IfAA--.56913S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF1kuryDKw1kKw1fWr4xXrb_yoW8uF4UpF
-        45A3Z8KrW8X34fK3sxtrWrXryYqrs5KwsxKFWxtrW0v3Z8Wr1xZrySyrs0k3y8Ar1Fk3W0
-        vF90vr1jkw1qv3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUklb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjc
-        xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU56c_DUUUU
-        U==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/24/2021 02:32 AM, Maciej W. Rozycki wrote:
+On 09/10/21 04:11, Sean Christopherson wrote:
+> +		 * point, which could result in signalling the wrong/previous
+> +		 * pCPU.  But if that happens the vCPU is guaranteed to do a
+> +		 * VMRUN (after being migrated) and thus will process pending
+> +		 * interrupts, i.e. a doorbell is not needed (and the spurious)
 
-> On Tue, 12 Jan 2021, Jinyang He wrote:
->
->> For those leaf functions, they are likely to have no stack operations.
->> Add is_jr_ra_ins() to determine whether jr ra has been touched before
->> the frame_size is found. Without this patch, the get frame_size operation
->> may be out of range and get the frame_size from the next nested function.
->>
->> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
->> ---
->>   arch/mips/kernel/process.c | 34 +++++++++++++++++++++++++++++++++-
->>   1 file changed, 33 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
->> index bef8f8d..9e6f194 100644
->> --- a/arch/mips/kernel/process.c
->> +++ b/arch/mips/kernel/process.c
->> @@ -205,6 +205,36 @@ struct mips_frame_info {
->>   #define J_TARGET(pc,target)	\
->>   		(((unsigned long)(pc) & 0xf0000000) | ((target) << 2))
->>   
->> +static inline int is_jr_ra_ins(union mips_instruction *ip)
->> +{
->> +#ifdef CONFIG_CPU_MICROMIPS
->> +	/*
->> +	 * jr16 ra
->> +	 * jr ra
->> +	 */
->> +	if (mm_insn_16bit(ip->word >> 16)) {
->> +		if (ip->mm16_r5_format.opcode == mm_pool16c_op &&
->> +		    ip->mm16_r5_format.rt == mm_jr16_op &&
->> +		    ip->mm16_r5_format.imm == 31)
->> +			return 1;
->> +		return 0;
->> +	}
->> +
->> +	if (ip->r_format.opcode == mm_pool32a_op &&
->> +	    ip->r_format.func == mm_pool32axf_op &&
->> +	    ((ip->u_format.uimmediate >> 6) & GENMASK(9,0)) == mm_jalr_op &&
->> +            ip->r_format.rs == 31)
->> +		return 1;
->> +	return 0;
->> +#else
->   Without looking into it much, this is likely missing the point, because
-> while technically inteed JR and JR16 can be used with $ra in microMIPS
-> machine code (there's JRS too), in reality either JRC or JRADDIUSP will.
->
->   [Wading through e-mail recovered from mid-Jan linux-mips.org crash.]
->
->    Maciej
+... one is harmless, I suppose.
 
-You are right, I missed the point. I have refered to microMIPS64
-Instruction Set. JRC and JRADDIUSP also can be used with $ra in
-microMIPS. I am not sure what compiler do at epilogue. But when
-we call $ra without saving $ra, it means return, I think.
-I will fix it later.
-
-Thanks,
-Jinyang.
+Paolo
 
