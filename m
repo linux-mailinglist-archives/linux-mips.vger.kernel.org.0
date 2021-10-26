@@ -2,29 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6508143B5D9
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Oct 2021 17:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D818D43B6A1
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Oct 2021 18:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237073AbhJZPnk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Oct 2021 11:43:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47404 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237087AbhJZPnc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 Oct 2021 11:43:32 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9634460EFF;
-        Tue, 26 Oct 2021 15:41:08 +0000 (UTC)
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mfOZW-001iWu-7f; Tue, 26 Oct 2021 16:41:06 +0100
-Date:   Tue, 26 Oct 2021 16:41:05 +0100
-Message-ID: <875ytjbxpq.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
+        id S236104AbhJZQOq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Oct 2021 12:14:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33276 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235165AbhJZQOp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 Oct 2021 12:14:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635264741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y/8qPSuga2nSdD4ObnPRjMzoPwBrPBTCysCx0s1aic4=;
+        b=HXeh27CV8hJRaETDK6hQOpnP45k3CVN3SmEZGClNq7UYeHDti1sMQE40Q9KP2PP6tyaQ2I
+        orJVQXxUk8U1XN2n6u+a3epp9C/dCkhT5MuzOp8x/Js6W5Za41+LrdIs+yGwZJjYq0362v
+        79f1/BmEa6EFyJMmnSf2RTCKnOJQnls=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-143-3-DjC_e1ML6PU2-6uY4-HQ-1; Tue, 26 Oct 2021 12:12:19 -0400
+X-MC-Unique: 3-DjC_e1ML6PU2-6uY4-HQ-1
+Received: by mail-ed1-f69.google.com with SMTP id d11-20020a50cd4b000000b003da63711a8aso10022859edj.20
+        for <linux-mips@vger.kernel.org>; Tue, 26 Oct 2021 09:12:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=y/8qPSuga2nSdD4ObnPRjMzoPwBrPBTCysCx0s1aic4=;
+        b=cB17mzForpFkM0+lmMA1aF9kCcwJzN/q66zAsMlULo3ZmJ94RL76AvIdFmdeyhH5mt
+         AKL/PDRzxVrbXF4CofLcadWXH2ge7WGA2xaR1JEZ9SyzU70UDjWTwzfNFlHTg0v4GfF7
+         owYUe6I00wGH6/y64qsxJumWRhTkLiIVR1aTVrgHypaQw4mBE2zQ25/9kF51QZUiA3SN
+         XhU8VtvXL6gdgzj4zqpE3Hgi4Ng3L9bdTUR0C7Xcw4PMKCfymLZlD3ym5N2/FA/xYnGU
+         SuTkIfMcFSTi1DNjguXybzq1Zydk0MWInZAQ9J9I7FngmD4OT2849ng5ucsqUQhBhsdr
+         IaFA==
+X-Gm-Message-State: AOAM532US9vA+8IDAUKa/78pNkgMyoWSpHqvlF8LgCHHz5HxXmfxczr1
+        EmtpwnLz6nAciAQE965UCPBJu0aYFg17HwcmDT76XgKxc+hvyktlaCEe1E0cGzbgyJ9k0iIAaV+
+        pRyhfEfPQnM3QX/URSG/Fsw==
+X-Received: by 2002:aa7:da84:: with SMTP id q4mr36991778eds.371.1635264738789;
+        Tue, 26 Oct 2021 09:12:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwASeQAxYa4SVxx7fzZJcK2OTnFNOTNNHLf+PErJyPRemx/Rf7LwxYWqAfn33dB1Qf24eGGDw==
+X-Received: by 2002:aa7:da84:: with SMTP id q4mr36991714eds.371.1635264738510;
+        Tue, 26 Oct 2021 09:12:18 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id n1sm4753815edf.45.2021.10.26.09.12.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Oct 2021 09:12:17 -0700 (PDT)
+Message-ID: <be1cf8c7-ed87-b8eb-1bca-0a6c7505d7f8@redhat.com>
+Date:   Tue, 26 Oct 2021 18:12:06 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH v2 10/43] KVM: arm64: Move vGIC v4 handling for WFI out
+ arch callback hook
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     Sean Christopherson <seanjc@google.com>,
         Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -53,76 +89,36 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         David Matlack <dmatlack@google.com>,
         Oliver Upton <oupton@google.com>,
         Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH v2 10/43] KVM: arm64: Move vGIC v4 handling for WFI out arch callback hook
-In-Reply-To: <9236e715-c471-e1c8-6117-6f37b908a6bd@redhat.com>
 References: <20211009021236.4122790-1-seanjc@google.com>
-        <20211009021236.4122790-11-seanjc@google.com>
-        <9236e715-c471-e1c8-6117-6f37b908a6bd@redhat.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: pbonzini@redhat.com, seanjc@google.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, paulus@ozlabs.org, anup.patel@wdc.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, borntraeger@de.ibm.com, frankja@linux.ibm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, atish.patra@wdc.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, dmatlack@google.com, oupton@google.com, jingzhangos@google.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+ <20211009021236.4122790-11-seanjc@google.com>
+ <9236e715-c471-e1c8-6117-6f37b908a6bd@redhat.com>
+ <875ytjbxpq.wl-maz@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <875ytjbxpq.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 25 Oct 2021 14:31:48 +0100,
-Paolo Bonzini <pbonzini@redhat.com> wrote:
-> 
-> On 09/10/21 04:12, Sean Christopherson wrote:
-> > Move the put and reload of the vGIC out of the block/unblock callbacks
-> > and into a dedicated WFI helper.  Functionally, this is nearly a nop as
-> > the block hook is called at the very beginning of kvm_vcpu_block(), and
-> > the only code in kvm_vcpu_block() after the unblock hook is to update the
-> > halt-polling controls, i.e. can only affect the next WFI.
-> > 
-> > Back when the arch (un)blocking hooks were added by commits 3217f7c25bca
-> > ("KVM: Add kvm_arch_vcpu_{un}blocking callbacks) and d35268da6687
-> > ("arm/arm64: KVM: arch_timer: Only schedule soft timer on vcpu_block"),
-> > the hooks were invoked only when KVM was about to "block", i.e. schedule
-> > out the vCPU.  The use case at the time was to schedule a timer in the
-> > host based on the earliest timer in the guest in order to wake the
-> > blocking vCPU when the emulated guest timer fired.  Commit accb99bcd0ca
-> > ("KVM: arm/arm64: Simplify bg_timer programming") reworked the timer
-> > logic to be even more precise, by waiting until the vCPU was actually
-> > scheduled out, and so move the timer logic from the (un)blocking hooks to
-> > vcpu_load/put.
-> > 
-> > In the meantime, the hooks gained usage for enabling vGIC v4 doorbells in
-> > commit df9ba95993b9 ("KVM: arm/arm64: GICv4: Use the doorbell interrupt
-> > as an unblocking source"), and added related logic for the VMCR in commit
-> > 5eeaf10eec39 ("KVM: arm/arm64: Sync ICH_VMCR_EL2 back when about to block").
-> > 
-> > Finally, commit 07ab0f8d9a12 ("KVM: Call kvm_arch_vcpu_blocking early
-> > into the blocking sequence") hoisted the (un)blocking hooks so that they
-> > wrapped KVM's halt-polling logic in addition to the core "block" logic.
-> > 
-> > In other words, the original need for arch hooks to take action _only_
-> > in the block path is long since gone.
-> > 
-> > Cc: Oliver Upton <oupton@google.com>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> 
-> This needs a word on why kvm_psci_vcpu_suspend does not need the
-> hooks.  Or it needs to be changed to also use kvm_vcpu_wfi in the PSCI
-> code, I don't know.
-> 
-> Marc, can you review and/or advise?
+On 26/10/21 17:41, Marc Zyngier wrote:
+>> This needs a word on why kvm_psci_vcpu_suspend does not need the
+>> hooks.  Or it needs to be changed to also use kvm_vcpu_wfi in the PSCI
+>> code, I don't know.
+>>
+>> Marc, can you review and/or advise?
+> I was looking at that over the weekend, and that's a pre-existing
+> bug. I would have addressed it independently, but it looks like you
+> already have queued the patch.
 
-I was looking at that over the weekend, and that's a pre-existing
-bug. I would have addressed it independently, but it looks like you
-already have queued the patch.
+I have "queued" it, but that's just my queue - it's not on kernel.org 
+and it's not going to be in 5.16, at least not in the first batch.
 
-I guess I'll have to revisit this once the whole thing lands
-somewhere.
+There's plenty of time for me to rebase on top of a fix, if you want to 
+send the fix through your kvm-arm pull request.  Just Cc me so that I 
+understand what's going on.
 
-	M.
+Thanks,
 
--- 
-Without deviation from the norm, progress is not possible.
+Paolo
+
