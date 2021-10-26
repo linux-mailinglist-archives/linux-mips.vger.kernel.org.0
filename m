@@ -2,113 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9D943B265
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Oct 2021 14:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA76743B4BA
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Oct 2021 16:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbhJZMcT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Oct 2021 08:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
+        id S236936AbhJZOud (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Oct 2021 10:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbhJZMcS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Oct 2021 08:32:18 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B15C061745;
-        Tue, 26 Oct 2021 05:29:54 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id w12so7130307edd.11;
-        Tue, 26 Oct 2021 05:29:54 -0700 (PDT)
+        with ESMTP id S236952AbhJZOub (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Oct 2021 10:50:31 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00318C061243
+        for <linux-mips@vger.kernel.org>; Tue, 26 Oct 2021 07:48:07 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id t5-20020a17090a4e4500b001a0a284fcc2so2487621pjl.2
+        for <linux-mips@vger.kernel.org>; Tue, 26 Oct 2021 07:48:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=95w+JIBxdk96vFyS997ptIswrw8erLoiU2nFptHB2Z4=;
-        b=U3BhOWCO7EE9x/zhlbhUZ9GuWsusB7VPV8wreSMY23LIw9s0HFjFo3fgjKH24xoDc6
-         0lcAo+sm/9Hb1iRd3LKl8yzR6lX9csqO1YwpSbGE7c0nOpK1zbJsGc0c0qtAjxgxXCz9
-         sNWpfikrThv7UUE/wCnjeW2ZxUPKJKPoZQtESIGCgQqoR8XZN6sciTCXc/z3Ssx5zq12
-         Guj8ui8XE/CjempXrda83s/7O31q9fFTrmAmbd1/jaoGHkl8L8SMyqNXOHQoVJtJU9t5
-         QzXzsAXl4GeOjHjFgVG4KBG5+5VqOoLJPAEFLfL42lcFdk36E89Vy+q0ighoCrd8+ma9
-         RpuA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=t+GavL7jaDIOLO9+HWOF0JpCL4n+9982OXgOJJO3B68=;
+        b=mMtlNqAGEx5moOXiuoulPA91tzGA7QXfJoC+FMrgS7kXKDaeQEPhlrtU0/6hIAVeF6
+         4XgOag3S8f64bxtieFkoj/CBTBoyg71uy6bYxr2fBQK7J8y0qvj3yp4nxsZiGo0ugwoy
+         chqWhQbdF2M/ss8dRD5cMeGRjF2i7TFbnWAE4XD/Gn+/ew4eCp8tBNWFi6mKqTjGiuSB
+         4K+eMtDT8TA09mAfuKwzPO/bGE/KLqBK8ggRwFAk21MDpCSdzSupIOVWDECUMDk9Gucp
+         WDZDdD8wswuh2DToiC42rEb1Gvw+Zc82wwd7L/2Pn0t+7EwhXqTAcJo8pcrg6fGfmqKg
+         9NUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=95w+JIBxdk96vFyS997ptIswrw8erLoiU2nFptHB2Z4=;
-        b=cyBcmRzgU3iW5o7AEKbHY1AfaIDAzQ774XWq2iAsKw9UdXOZeTXs1ZfcikXWiMUm07
-         RkkwqctOFLqbyLBK6h7EskRxGjYsGFCCUQjWbF7bwmCq2BLd8LUnNtndDVzzlikFPspl
-         AJ295sj7yBDHPOahXikg8lP+Br2Y5ZPanNwwkGYY0xnqrKyrdbeTj0MMQR1N2aaEwi2X
-         7RGtrkb8YGv4KYd4nvjXXPoVOLb3TmDYI7r4g4M7N/sGFabIDMKhfjiEYO8RqmSYsQ1K
-         R/XihmauOSYGtF5q3pBDbWhFWjpZGUVusuhYfFZPeR1s/+pyhR/r7vtjGMlduiyFHwlq
-         IDYg==
-X-Gm-Message-State: AOAM531EQzfWl+OgZt1A86xoTvPSE1003HVF9cVOC1j/gcWz0tPkShro
-        KqKMyEyQRtwDwUuOed0eMnDqTuELtWs5MyGXCpI=
-X-Google-Smtp-Source: ABdhPJzgzCatEBIyHH641b2+HxtvgsbEOOEdWaqIXEqWyDN3PlxYeazI2rGOOdImDvGopH6ZwTknOL9YLRd534JaPOk=
-X-Received: by 2002:a17:906:1601:: with SMTP id m1mr30164722ejd.117.1635251387825;
- Tue, 26 Oct 2021 05:29:47 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t+GavL7jaDIOLO9+HWOF0JpCL4n+9982OXgOJJO3B68=;
+        b=Ov8Llx7ObpK/t89H3gjUJzIPB5x175y6DVKwyLmBfc/7kG/I/OIhO4y26FdbP/IaUN
+         cVoAztJ8siwcylbr/65JXpmjdCjjgjO9poGCO4vGci3sgSQYxLvglOPXWEIiNHQgJp0C
+         TaJBEbA6djsVbHdrvfPUYKYCM1JbGRZXpxR/aZHgdvBe4sLkpaHl3gtMSRL917cFaKc5
+         6h+xWFhxbWPXfm2LncHbITddGFhOBalAgHs4KVyJdf5LaqRXUeJsF/1yZzCNYiZIy1mS
+         Oe7XU9/vXLJHB9WKFjzzdC0fuffatXKqegqadZBYHwjyaGBNrO4urwNj00P4JipZy/Iw
+         cN2Q==
+X-Gm-Message-State: AOAM531JlWyp39Y8WDZuHm2vgKobbj7/jNtccAgoALpv2HJlV/4qGdYn
+        yiZ/8yJKqxjOoeaAixthsIzpGA==
+X-Google-Smtp-Source: ABdhPJwehmwFySoaS1hi2p+T+LiAO8upF6izWYrpOOMtkZkPW5L2hiCqpK0gC/Rhqd0TA7qN0BGQqw==
+X-Received: by 2002:a17:902:e88a:b0:140:25a7:4a1b with SMTP id w10-20020a170902e88a00b0014025a74a1bmr22402882plg.67.1635259687236;
+        Tue, 26 Oct 2021 07:48:07 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id fy8sm186294pjb.47.2021.10.26.07.48.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Oct 2021 07:48:06 -0700 (PDT)
+Date:   Tue, 26 Oct 2021 14:48:02 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH v2 00/43] KVM: Halt-polling and x86 APICv overhaul
+Message-ID: <YXgVIvYhABnrP2Jo@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+ <04b1a72e-47b4-4bde-eb9e-ba36c156ff0d@de.ibm.com>
 MIME-Version: 1.0
-References: <20211026100432.1730393-1-arnd@kernel.org>
-In-Reply-To: <20211026100432.1730393-1-arnd@kernel.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 26 Oct 2021 05:29:36 -0700
-Message-ID: <CAMo8BfLskHzSW5FJUajAEvr6NRfvYhRRxKG4CQOFAQwtZtrRLg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] futex: ensure futex_atomic_cmpxchg_inatomic() is present
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Chris Zankel <chris@zankel.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <04b1a72e-47b4-4bde-eb9e-ba36c156ff0d@de.ibm.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 3:04 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The boot-time detection of futex_atomic_cmpxchg_inatomic()
-> has a bug on some 32-bit arm builds, and Thomas Gleixner
-> suggested that setting CONFIG_HAVE_FUTEX_CMPXCHG would
-> avoid the problem, as it is always present anyway.
->
-> Looking into which other architectures could do the same
-> showed that almost all architectures have it, the exceptions
-> being:
->
->  - some old 32-bit MIPS uniprocessor cores without ll/sc
->  - one xtensa variant with no SMP
->  - 32-bit SPARC when built for SMP
->
-> Fix MIPS And Xtensa by rearranging the generic code to let it be used
-> as a fallback.
->
-> For SPARC, the SMP definition just ends up turning off futex anyway,
-> so this can be done at Kconfig time instead. Note that sparc32
-> glibc requires the CASA instruction for its mutexes anyway,
-> which is only available when running on SPARCv9 or LEON CPUs,
-> but needs to be implemented in the sparc32 kernel for those.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/mips/include/asm/futex.h   | 29 ++++++++++++++++++-----------
->  arch/xtensa/include/asm/futex.h |  8 ++++++--
->  include/asm-generic/futex.h     | 31 +++++++++++--------------------
->  init/Kconfig                    |  1 +
->  4 files changed, 36 insertions(+), 33 deletions(-)
+On Tue, Oct 26, 2021, Christian Borntraeger wrote:
+> Am 09.10.21 um 04:11 schrieb Sean Christopherson:
+> > This is basically two series smushed into one.  The first "half" aims
+> > to differentiate between "halt" and a more generic "block", where "halt"
+> > aligns with x86's HLT instruction, the halt-polling mechanisms, and
+> > associated stats, and "block" means any guest action that causes the vCPU
+> > to block/wait.
+> > 
+> > The second "half" overhauls x86's APIC virtualization code (Posted
+> > Interrupts on Intel VMX, AVIC on AMD SVM) to do their updates in response
+> > to vCPU (un)blocking in the vcpu_load/put() paths, keying off of the
+> > vCPU's rcuwait status to determine when a blocking vCPU is being put and
+> > reloaded.  This idea comes from arm64's kvm_timer_vcpu_put(), which I
+> > stumbled across when diving into the history of arm64's (un)blocking hooks.
+> > 
+> > The x86 APICv overhaul allows for killing off several sets of hooks in
+> > common KVM and in x86 KVM (to the vendor code).  Moving everything to
+> > vcpu_put/load() also realizes nice cleanups, especially for the Posted
+> > Interrupt code, which required some impressive mental gymnastics to
+> > understand how vCPU task migration interacted with vCPU blocking.
+> > 
+> > Non-x86 folks, sorry for the noise.  I'm hoping the common parts can get
+> > applied without much fuss so that future versions can be x86-only.
+> > 
+> > v2:
+> >   - Collect reviews. [Christian, David]
+> >   - Add patch to move arm64 WFI functionality out of hooks. [Marc]
+> >   - Add RISC-V to the fun.
+> >   - Add all the APICv fun.
+> 
+> Have we actually followed up on the regression regarding halt_poll_ns=0 no longer disabling
+> polling for running systems?
 
-For xtensa:
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
-
--- 
-Thanks.
--- Max
+No, I have that conversation flagged but haven't gotten back to it.  I still like
+the idea of special casing halt_poll_ns=0 to override the capability.  I can send
+a proper patch for that unless there's a different/better idea?
