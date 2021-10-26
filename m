@@ -2,223 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D9E43B937
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Oct 2021 20:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4AC43B99C
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Oct 2021 20:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238118AbhJZSQa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Oct 2021 14:16:30 -0400
-Received: from aposti.net ([89.234.176.197]:40414 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238148AbhJZSQH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 26 Oct 2021 14:16:07 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "H . Nikolaus Schaller" <hns@goldelico.com>,
-        Paul Boddie <paul@boddie.org.uk>, list@opendingux.net,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [RESEND PATCH v3 6/6] drm/ingenic: Attach bridge chain to encoders
-Date:   Tue, 26 Oct 2021 19:12:40 +0100
-Message-Id: <20211026181240.213806-7-paul@crapouillou.net>
-In-Reply-To: <20211026181240.213806-1-paul@crapouillou.net>
-References: <20211026181240.213806-1-paul@crapouillou.net>
+        id S236805AbhJZSdV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 26 Oct 2021 14:33:21 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38966 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231232AbhJZSdL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 26 Oct 2021 14:33:11 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19QG1oc7035894;
+        Tue, 26 Oct 2021 18:30:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=kHQsUpw1VFu+TXvR3qH68hSJpP0tEJmquXEf/hWANuE=;
+ b=CPpIaKBG5Tl8Nl3RLSocczn2e8RIBD3cyDKfpQKhgmH3lYN567yvuqbL3znAzcpdm4ti
+ +sI2leQ/S1XFZfyR+1sYEKoec8tqsk19fXLH6BPQXoH+ldOrcrHkmaAZnr+JApFBwYRp
+ 4sjv/kz5ZsR18O/340unhMQKEZN4OkrBfeJPG5JSs5pALT1+muGdPkwwMcdDY6E4SGPm
+ YLpI7hwmH2WU7b1/5zY9Qeou3Mq+oGfct+1/1hv6Bsw7L8lO4x4xDZikTzHTcabU31Cx
+ SC4DHiMuIgtNdCgOl3wDEHJykcXDGttiQ8w+GW1b+HFudewIMM29Nhg9Qke/YVSLCgj3 xA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bx4kbhr58-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Oct 2021 18:30:05 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19QIBbd0034899;
+        Tue, 26 Oct 2021 18:30:05 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bx4kbhr3x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Oct 2021 18:30:04 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19QIHPAD028495;
+        Tue, 26 Oct 2021 18:30:02 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04fra.de.ibm.com with ESMTP id 3bx4f7fm39-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 26 Oct 2021 18:30:02 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19QITxnK51249440
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 26 Oct 2021 18:29:59 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 360B811C052;
+        Tue, 26 Oct 2021 18:29:59 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DC53C11C050;
+        Tue, 26 Oct 2021 18:29:57 +0000 (GMT)
+Received: from li-43c5434c-23b8-11b2-a85c-c4958fb47a68.ibm.com (unknown [9.171.78.157])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 26 Oct 2021 18:29:57 +0000 (GMT)
+Subject: Re: [PATCH v2 00/43] KVM: Halt-polling and x86 APICv overhaul
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+ <04b1a72e-47b4-4bde-eb9e-ba36c156ff0d@de.ibm.com>
+ <YXgVIvYhABnrP2Jo@google.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Message-ID: <a9c1e6ca-0257-4b69-84dd-49d3485f9565@de.ibm.com>
+Date:   Tue, 26 Oct 2021 20:29:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YXgVIvYhABnrP2Jo@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: JmDEkCgcD3-ZRJi2Qd_r_hCC449htTWY
+X-Proofpoint-GUID: 02zJ-KDhJ3N2JI7UDwO_ZOcNKnXzVG1F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-26_05,2021-10-26_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ spamscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 mlxscore=0
+ clxscore=1015 suspectscore=0 priorityscore=1501 bulkscore=0
+ mlxlogscore=966 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2110260100
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Attach a top-level bridge to each encoder, which will be used for
-negociating the bus format and flags.
 
-All the bridges are now attached with DRM_BRIDGE_ATTACH_NO_CONNECTOR.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 92 +++++++++++++++++------
- 1 file changed, 70 insertions(+), 22 deletions(-)
+Am 26.10.21 um 16:48 schrieb Sean Christopherson:
+> On Tue, Oct 26, 2021, Christian Borntraeger wrote:
+>> Am 09.10.21 um 04:11 schrieb Sean Christopherson:
+>>> This is basically two series smushed into one.  The first "half" aims
+>>> to differentiate between "halt" and a more generic "block", where "halt"
+>>> aligns with x86's HLT instruction, the halt-polling mechanisms, and
+>>> associated stats, and "block" means any guest action that causes the vCPU
+>>> to block/wait.
+>>>
+>>> The second "half" overhauls x86's APIC virtualization code (Posted
+>>> Interrupts on Intel VMX, AVIC on AMD SVM) to do their updates in response
+>>> to vCPU (un)blocking in the vcpu_load/put() paths, keying off of the
+>>> vCPU's rcuwait status to determine when a blocking vCPU is being put and
+>>> reloaded.  This idea comes from arm64's kvm_timer_vcpu_put(), which I
+>>> stumbled across when diving into the history of arm64's (un)blocking hooks.
+>>>
+>>> The x86 APICv overhaul allows for killing off several sets of hooks in
+>>> common KVM and in x86 KVM (to the vendor code).  Moving everything to
+>>> vcpu_put/load() also realizes nice cleanups, especially for the Posted
+>>> Interrupt code, which required some impressive mental gymnastics to
+>>> understand how vCPU task migration interacted with vCPU blocking.
+>>>
+>>> Non-x86 folks, sorry for the noise.  I'm hoping the common parts can get
+>>> applied without much fuss so that future versions can be x86-only.
+>>>
+>>> v2:
+>>>    - Collect reviews. [Christian, David]
+>>>    - Add patch to move arm64 WFI functionality out of hooks. [Marc]
+>>>    - Add RISC-V to the fun.
+>>>    - Add all the APICv fun.
+>>
+>> Have we actually followed up on the regression regarding halt_poll_ns=0 no longer disabling
+>> polling for running systems?
+> 
+> No, I have that conversation flagged but haven't gotten back to it.  I still like
+> the idea of special casing halt_poll_ns=0 to override the capability.  I can send
+> a proper patch for that unless there's a different/better idea?
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index a5e2880e07a1..a05a9fa6e115 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -21,6 +21,7 @@
- #include <drm/drm_atomic.h>
- #include <drm/drm_atomic_helper.h>
- #include <drm/drm_bridge.h>
-+#include <drm/drm_bridge_connector.h>
- #include <drm/drm_color_mgmt.h>
- #include <drm/drm_crtc.h>
- #include <drm/drm_crtc_helper.h>
-@@ -108,6 +109,19 @@ struct ingenic_drm {
- 	struct drm_private_obj private_obj;
- };
- 
-+struct ingenic_drm_bridge {
-+	struct drm_encoder encoder;
-+	struct drm_bridge bridge, *next_bridge;
-+
-+	struct drm_bus_cfg bus_cfg;
-+};
-+
-+static inline struct ingenic_drm_bridge *
-+to_ingenic_drm_bridge(struct drm_encoder *encoder)
-+{
-+	return container_of(encoder, struct ingenic_drm_bridge, encoder);
-+}
-+
- static inline struct ingenic_drm_private_state *
- to_ingenic_drm_priv_state(struct drm_private_state *state)
- {
-@@ -668,11 +682,10 @@ static void ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
- {
- 	struct ingenic_drm *priv = drm_device_get_priv(encoder->dev);
- 	struct drm_display_mode *mode = &crtc_state->adjusted_mode;
--	struct drm_connector *conn = conn_state->connector;
--	struct drm_display_info *info = &conn->display_info;
-+	struct ingenic_drm_bridge *bridge = to_ingenic_drm_bridge(encoder);
- 	unsigned int cfg, rgbcfg = 0;
- 
--	priv->panel_is_sharp = info->bus_flags & DRM_BUS_FLAG_SHARP_SIGNALS;
-+	priv->panel_is_sharp = bridge->bus_cfg.flags & DRM_BUS_FLAG_SHARP_SIGNALS;
- 
- 	if (priv->panel_is_sharp) {
- 		cfg = JZ_LCD_CFG_MODE_SPECIAL_TFT_1 | JZ_LCD_CFG_REV_POLARITY;
-@@ -685,19 +698,19 @@ static void ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
- 		cfg |= JZ_LCD_CFG_HSYNC_ACTIVE_LOW;
- 	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
- 		cfg |= JZ_LCD_CFG_VSYNC_ACTIVE_LOW;
--	if (info->bus_flags & DRM_BUS_FLAG_DE_LOW)
-+	if (bridge->bus_cfg.flags & DRM_BUS_FLAG_DE_LOW)
- 		cfg |= JZ_LCD_CFG_DE_ACTIVE_LOW;
--	if (info->bus_flags & DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)
-+	if (bridge->bus_cfg.flags & DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)
- 		cfg |= JZ_LCD_CFG_PCLK_FALLING_EDGE;
- 
- 	if (!priv->panel_is_sharp) {
--		if (conn->connector_type == DRM_MODE_CONNECTOR_TV) {
-+		if (conn_state->connector->connector_type == DRM_MODE_CONNECTOR_TV) {
- 			if (mode->flags & DRM_MODE_FLAG_INTERLACE)
- 				cfg |= JZ_LCD_CFG_MODE_TV_OUT_I;
- 			else
- 				cfg |= JZ_LCD_CFG_MODE_TV_OUT_P;
- 		} else {
--			switch (*info->bus_formats) {
-+			switch (bridge->bus_cfg.format) {
- 			case MEDIA_BUS_FMT_RGB565_1X16:
- 				cfg |= JZ_LCD_CFG_MODE_GENERIC_16BIT;
- 				break;
-@@ -723,20 +736,29 @@ static void ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
- 	regmap_write(priv->map, JZ_REG_LCD_RGBC, rgbcfg);
- }
- 
--static int ingenic_drm_encoder_atomic_check(struct drm_encoder *encoder,
--					    struct drm_crtc_state *crtc_state,
--					    struct drm_connector_state *conn_state)
-+static int ingenic_drm_bridge_attach(struct drm_bridge *bridge,
-+				     enum drm_bridge_attach_flags flags)
-+{
-+	struct ingenic_drm_bridge *ib = to_ingenic_drm_bridge(bridge->encoder);
-+
-+	return drm_bridge_attach(bridge->encoder, ib->next_bridge,
-+				 &ib->bridge, flags);
-+}
-+
-+static int ingenic_drm_bridge_atomic_check(struct drm_bridge *bridge,
-+					   struct drm_bridge_state *bridge_state,
-+					   struct drm_crtc_state *crtc_state,
-+					   struct drm_connector_state *conn_state)
- {
--	struct drm_display_info *info = &conn_state->connector->display_info;
- 	struct drm_display_mode *mode = &crtc_state->adjusted_mode;
-+	struct ingenic_drm_bridge *ib = to_ingenic_drm_bridge(bridge->encoder);
- 
--	if (info->num_bus_formats != 1)
--		return -EINVAL;
-+	ib->bus_cfg = bridge_state->output_bus_cfg;
- 
- 	if (conn_state->connector->connector_type == DRM_MODE_CONNECTOR_TV)
- 		return 0;
- 
--	switch (*info->bus_formats) {
-+	switch (bridge_state->output_bus_cfg.format) {
- 	case MEDIA_BUS_FMT_RGB888_3X8:
- 	case MEDIA_BUS_FMT_RGB888_3X8_DELTA:
- 		/*
-@@ -900,8 +922,16 @@ static const struct drm_crtc_helper_funcs ingenic_drm_crtc_helper_funcs = {
- };
- 
- static const struct drm_encoder_helper_funcs ingenic_drm_encoder_helper_funcs = {
--	.atomic_mode_set	= ingenic_drm_encoder_atomic_mode_set,
--	.atomic_check		= ingenic_drm_encoder_atomic_check,
-+	.atomic_mode_set        = ingenic_drm_encoder_atomic_mode_set,
-+};
-+
-+static const struct drm_bridge_funcs ingenic_drm_bridge_funcs = {
-+	.attach			= ingenic_drm_bridge_attach,
-+	.atomic_check		= ingenic_drm_bridge_atomic_check,
-+	.atomic_reset		= drm_atomic_helper_bridge_reset,
-+	.atomic_duplicate_state	= drm_atomic_helper_bridge_duplicate_state,
-+	.atomic_destroy_state	= drm_atomic_helper_bridge_destroy_state,
-+	.atomic_get_input_bus_fmts = drm_atomic_helper_bridge_propagate_bus_fmt,
- };
- 
- static const struct drm_mode_config_funcs ingenic_drm_mode_config_funcs = {
-@@ -976,7 +1006,9 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 	struct drm_plane *primary;
- 	struct drm_bridge *bridge;
- 	struct drm_panel *panel;
-+	struct drm_connector *connector;
- 	struct drm_encoder *encoder;
-+	struct ingenic_drm_bridge *ib;
- 	struct drm_device *drm;
- 	void __iomem *base;
- 	long parent_rate;
-@@ -1154,20 +1186,36 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 			bridge = devm_drm_panel_bridge_add_typed(dev, panel,
- 								 DRM_MODE_CONNECTOR_DPI);
- 
--		encoder = drmm_plain_encoder_alloc(drm, NULL, DRM_MODE_ENCODER_DPI, NULL);
--		if (IS_ERR(encoder)) {
--			ret = PTR_ERR(encoder);
-+		ib = drmm_encoder_alloc(drm, struct ingenic_drm_bridge, encoder,
-+					NULL, DRM_MODE_ENCODER_DPI, NULL);
-+		if (IS_ERR(ib)) {
-+			ret = PTR_ERR(ib);
- 			dev_err(dev, "Failed to init encoder: %d\n", ret);
- 			return ret;
- 		}
- 
--		encoder->possible_crtcs = 1;
-+		encoder = &ib->encoder;
-+		encoder->possible_crtcs = drm_crtc_mask(&priv->crtc);
- 
- 		drm_encoder_helper_add(encoder, &ingenic_drm_encoder_helper_funcs);
- 
--		ret = drm_bridge_attach(encoder, bridge, NULL, 0);
--		if (ret)
-+		ib->bridge.funcs = &ingenic_drm_bridge_funcs;
-+		ib->next_bridge = bridge;
-+
-+		ret = drm_bridge_attach(encoder, &ib->bridge, NULL,
-+					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-+		if (ret) {
-+			dev_err(dev, "Unable to attach bridge\n");
- 			return ret;
-+		}
-+
-+		connector = drm_bridge_connector_init(drm, encoder);
-+		if (IS_ERR(connector)) {
-+			dev_err(dev, "Unable to init connector\n");
-+			return PTR_ERR(connector);
-+		}
-+
-+		drm_connector_attach_encoder(connector, encoder);
- 	}
- 
- 	drm_for_each_encoder(encoder, drm) {
--- 
-2.33.0
+I think I would prefer a variant that uses the halt_poll_ns value AS IS for all
+guests that have not opted in the per guest feature.
+And then MAYBE have 0 as a special case to disable that also for the opted in
+VMs.
 
