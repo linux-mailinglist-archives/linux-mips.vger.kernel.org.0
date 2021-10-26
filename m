@@ -2,126 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBCD43A595
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Oct 2021 23:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC0643AA26
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Oct 2021 04:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234676AbhJYVPB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 25 Oct 2021 17:15:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43566 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234509AbhJYVPA (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 25 Oct 2021 17:15:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C09BC61073;
-        Mon, 25 Oct 2021 21:12:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635196358;
-        bh=4MXuBNVzkrZP3yecgRjqdL1aeKI6T/KhfEayaMfhl5o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Jwx48/xdZTS5oCSdpphMARaOk5BXsy/YhtvgQK58CS0MIbpFO/7nVRXfsizhctVfR
-         DHn11NFtFXjfnu6kyDHuqPw89urntqir4r8uypb/5YKdemXm94z7eYj6keuXdeIE25
-         DXSNsPXSoB7zjCqOT+Et5sjq1DtzstEtlDWbAhhCErQsIOpLcJ/97usD3deU4+3YdK
-         MHURE3evLaqBPAtcbvjIeGjPfhVB6lKH0heav9dnl+Wot8LtpkTvQGZBBmEBQkPFve
-         wn8n9vsGs2dHq3cKEq4GbiUzVa6XVCu+uhZ6TeALJcplO2i1e8+vq8/HkoP4FAQIIy
-         2ot2MOyZdSGpQ==
-Date:   Mon, 25 Oct 2021 16:12:36 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        John Crispin <john@phrozen.org>, NeilBrown <neil@brown.name>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v3 0/3] PCI: mt7621: Add MediaTek MT7621 PCIe host
- controller driver
-Message-ID: <20211025211236.GA31293@bhelgaas>
+        id S233478AbhJZCSr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 25 Oct 2021 22:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230216AbhJZCSq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 25 Oct 2021 22:18:46 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77341C061745;
+        Mon, 25 Oct 2021 19:16:23 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id w12-20020a056830410c00b0054e7ceecd88so17690403ott.2;
+        Mon, 25 Oct 2021 19:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=A8iUif2eNgpHekuQNdE5AFgKQxCSdofHA4N+VETV+Y4=;
+        b=CvStISCa6+AoSENJJEelhOiBpMDHCjsjRDIKukdc0bpGlztAi7lER2WEb/2XUcq8S3
+         sbXt3b+WYAK0dpZx6H02ktt3ixbqOXgnb+071f4VuxHhohRkpv3d7d4Wfu2A8Wi5iZsl
+         LHE0DXrpLl2+Y+/77h90uedAdyYd//sBNY73uVUk5r6XBPNEG/KNLr7F0jWPpclOmIBj
+         JZGIENqn0jd09wudJNQwnV9w1jRtOUhY41IvZK0DoPmba9alg8HEMzLjUqWMtZ9Tswpv
+         JQGwkyiUKgdloDRUTcTmMwc2OXGUDpVjNzpYA9emnOmgH/6DE5TCprqIucH577reHDGm
+         astg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=A8iUif2eNgpHekuQNdE5AFgKQxCSdofHA4N+VETV+Y4=;
+        b=EA3hu6Phb0UIojv0gzB9h+MS8FoRUW5cPdcEdVlD8eMZPubF4oF4vZmH3lrFCDAmBS
+         398yFrcWPytxC1LwEipYyULEpv+VfEVjn5LiCqcduPETljMS/tVo2Ofe+1f9jNwgfjO4
+         W4mc7mzB0DKxay35St3bqtVlTfaqXlyz/FNw4lXPKmq8cECaSMvZezowHGJH2vSjOaDd
+         J80l/6FpcgJo5qtKRNXXoDnoYo4fx9bh989cGVyK+gRKKug7RXlgnxM7POMDq0v5ssJ7
+         +RCAqB0U/DCF4wHVuneiuis4Ol7/pwwACge1RiQt5peL89yeUOqNW5WoKQ59KZlLihoY
+         V7zQ==
+X-Gm-Message-State: AOAM5312DqHozIkaZ/cmdPr6uVzt0Ph57pUZFaSZCMoSUy4ncyaX98jh
+        /CJnp2+hJu/cUufQFe6ZN0M=
+X-Google-Smtp-Source: ABdhPJwrMTIesm818UJHjrNjNrfLB+it7usctWXzoRSP7UMMFPj7pUlTdQED6RdX56thGXcFtyVLvg==
+X-Received: by 2002:a9d:60d9:: with SMTP id b25mr17104426otk.378.1635214582846;
+        Mon, 25 Oct 2021 19:16:22 -0700 (PDT)
+Received: from ?IPV6:2600:1700:dfe0:49f0:f0b4:bed7:bbf6:a2b1? ([2600:1700:dfe0:49f0:f0b4:bed7:bbf6:a2b1])
+        by smtp.gmail.com with ESMTPSA id e9sm4061908otr.25.2021.10.25.19.16.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Oct 2021 19:16:22 -0700 (PDT)
+Message-ID: <4a6a136b-9bbd-5703-9c8f-95ab1b9d64ec@gmail.com>
+Date:   Mon, 25 Oct 2021 19:16:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H90rD8aHJ+txDzFZ62Ej9_TY=BZMT+1058d=Pm_LfYwPA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH 1/3] MIPS: loongson64: Drop call to irq_cpu_offline()
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20211021170414.3341522-1-maz@kernel.org>
+ <20211021170414.3341522-2-maz@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20211021170414.3341522-2-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 11:13:39AM +0200, Sergio Paracuellos wrote:
-> On Fri, Oct 22, 2021 at 10:35 AM Lorenzo Pieralisi
-> <lorenzo.pieralisi@arm.com> wrote:
-> >
-> > On Thu, Oct 21, 2021 at 09:23:35PM +0200, Sergio Paracuellos wrote:
-> > > On Thu, Oct 21, 2021 at 8:11 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > >
-> > > > On Thu, Oct 21, 2021 at 07:27:21PM +0200, Sergio Paracuellos wrote:
-> > > > > On Thu, Oct 21, 2021 at 5:52 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > Since this is a PCIe (not conventional PCI) controller, I
-> > > > > > vote for renaming these from:
-> > > > > >
-> > > > > >   PCI_MT7621
-> > > > > >   Documentation/devicetree/bindings/pci/mediatek,mt7621-pci.yaml
-> > > > > >   drivers/pci/controller/pci-mt7621.c
-> > > > > >
-> > > > > > to:
-> > > > > >
-> > > > > >   PCIE_MT7621
-> > > > > >   Documentation/devicetree/bindings/pci/mediatek,mt7621-pcie.yaml
-> > > > > >   drivers/pci/controller/pcie-mt7621.c
-> > > > > >
-> > > > > > We have a mix of these, with many of the early PCIe
-> > > > > > drivers being named "pci", but I think that was my mistake
-> > > > > > and there's no reason to continue it.
-> > > > >
-> > > > > I see.
-> > > > >
-> > > > > > I can do this locally unless somebody objects.
-> > > > >
-> > > > > I have no problem at all. Only one question. Do you mean to
-> > > > > change compatible string also, or only the name of the file?
-> > > > > Let me know if I have to do anything.
-> > > >
-> > > > I didn't change the compatible string, to avoid a DT
-> > > > incompatibility.  But I *did* change the Kconfig symbol to
-> > > > PCIE_MT7621, which could require changes to out-of-tree
-> > > > .configs.  I'm open to suggestions either way for both things.
-> > >
-> > > IMHO, I do think we should not worry about out-of-tree stuff at
-> > > all.
-> >
-> > For Kconfig I tend to agree. For DT I see some "bindings" in the
-> > staging tree are being deleted and published as official DT
-> > bindings with this patchset but I believe we still have to keep
-> > the compatible string backward compatibility regardless because
-> > there may be firmware out there using it.
+
+
+On 10/21/2021 10:04 AM, Marc Zyngier wrote:
+> Also loongson64 calls irq_cpu_offline(), none of its interrupt
+> controllers implement the .irq_cpu_offline callback.
 > 
-> The bindings txt file removed in staging with this patchset was also
-> added by me three years ago[0], and has been changing until the YAML
-> bindings are reviewed by Rob and driver updated accordly in this
-> patchset.
->
-> OpenWRT maintains its own file[1] which I don't know is updated or
-> not according to the one in staging which I am pretending to
-> properly mainline for 5.17. But yes, I agree there might be firmware
-> out there using current compatible string.
+> It is thus obvious that this call only serves the dubious purpose
+> of wasting precious CPU cycles by iterating over all interrupts.
 > 
-> [0]: Commit 5451e22618b8 ("staging: mt7621-pci: dt-bindings: add dt
-> bindings for mt7621 pcie controller")
-> [1]: https://github.com/openwrt/openwrt/blob/master/target/linux/ramips/dts/mt7621.dtsi
+> Get rid of the call altogether.
+> 
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
 
-OK, for now I left my rework as-is:
-
-  - changed CONFIG_PCI_MT7621 to CONFIG_PCIE_MT7621
-  - renamed mediatek,mt7621-pci.yaml to mediatek,mt7621-pcie.yaml
-  - renamed pci-mt7621.c to pcie-mt7621.c
-  - kept DT compatible string "mediatek,mt7621-pci" in .yaml and .c
-
-I reason that the Kconfig and filename changes only affect people
-building kernels or DTs, but a compatible string change would force a
-DT update to be synchronized with a kernel update.
-
-Happy to change this if necessary.
-
-Bjorn
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+--
+Florian
