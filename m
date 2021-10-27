@@ -2,63 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8691143CDB8
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 17:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988EB43CDBF
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 17:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242775AbhJ0Pi6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Oct 2021 11:38:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28181 "EHLO
+        id S242805AbhJ0Pk0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Oct 2021 11:40:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39194 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238619AbhJ0Pi5 (ORCPT
+        by vger.kernel.org with ESMTP id S238674AbhJ0PkZ (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 Oct 2021 11:38:57 -0400
+        Wed, 27 Oct 2021 11:40:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635348991;
+        s=mimecast20190719; t=1635349080;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5uRyMZIN45jCj2VKDrWR2a9G78BQWuHGJKl7OtHJZ6k=;
-        b=e2dR+en+X1RDREBLLt64xZsmtbn2gJbApYWO5LX8Vut55CfpXVAk81mSZdLNxqHu/Ho85b
-        ubVa4Dq6esUrtQxHn2He/jDyHvGeNyRITA+GUK+2vIMqB8clziqaw2gtKhvjWKphvPlBXg
-        387CZYQIr/IItEkZlX7eLGEgp9R0xts=
+        bh=bSqxXsSY7PzPPy6E5Cy05Nx/OdmHcN1STcnBEYyHdIs=;
+        b=MbMxbXAupMhsOj7n1ORnzGUbt2FJk9mfhs1WY97br91xQhy2gI1grOuvQnxEp6LE0pzRZZ
+        1ueNqOMlSarkjIx3XpEKw+UEb5n1ek2asuexqFwukbmOUCbHmkd+mobwHsmwa1bWXKCwn1
+        2CRz2Zv9n8TOyxe7u0sslDWf0CgTm/E=
 Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
  [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-125-XtDXIaXoPZyLzQ29c-dRKQ-1; Wed, 27 Oct 2021 11:36:30 -0400
-X-MC-Unique: XtDXIaXoPZyLzQ29c-dRKQ-1
-Received: by mail-ed1-f72.google.com with SMTP id f21-20020a0564021e9500b003dd77985601so2701825edf.9
-        for <linux-mips@vger.kernel.org>; Wed, 27 Oct 2021 08:36:29 -0700 (PDT)
+ us-mta-355-ecKLpOb3N1mHAoJ415w9Tw-1; Wed, 27 Oct 2021 11:37:58 -0400
+X-MC-Unique: ecKLpOb3N1mHAoJ415w9Tw-1
+Received: by mail-ed1-f72.google.com with SMTP id m16-20020a056402431000b003dd2005af01so2712850edc.5
+        for <linux-mips@vger.kernel.org>; Wed, 27 Oct 2021 08:37:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=5uRyMZIN45jCj2VKDrWR2a9G78BQWuHGJKl7OtHJZ6k=;
-        b=DqpyHudcTE/pTcbY5xJdPW95idv+wPeRES2mIrIwVKhRXH0ES69TEF+/0dJITiAuP8
-         muMSnz7Hd3oVSnw/JFrN5eyyK7aHX2i6svWoqdvsUHkKOfwjtMDIfAuMHbmCN6ZzX1Nh
-         augKpTRQ4qSqF+zbIbNUeogfRvtwcL/LFpI837RbzYMDj7bI+3mMh6g5fYdkbsK5bS5Z
-         v8xdHuKzmgtjSzRvMm8DNe5mZhnQONh2eUp3/hfINGG1GdWsmDQer2QXxkMvuVPHPqZS
-         SAep9oCLog9XdYusfukP3oCTJaol3CrPpaA9I3qgrZOt6tClCVUu6ig7JN6/6qKFd4+B
-         SrkQ==
-X-Gm-Message-State: AOAM531lYasB5U/iTdpWCVtrat4Qp+e/wCm9vxBwRAWjy9XP2Fb3OQHt
-        GpnXChPEKSZT3PQXKKsePk/kDdX9t89iXdsEaee+rr/wJi31IM+Gz1Z64VrlohBsCgrwKFL2cBD
-        U6YmPpWoyE8ar8pRWKqtpkA==
-X-Received: by 2002:a17:907:72d4:: with SMTP id du20mr27123539ejc.324.1635348988871;
-        Wed, 27 Oct 2021 08:36:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwlnTQW53CgmXIn8to0kDTGFp7NuPe5vIqIt10aS0tdUzKBzxmlSrEKcMCaMlb8sNDTKtez8Q==
-X-Received: by 2002:a17:907:72d4:: with SMTP id du20mr27123484ejc.324.1635348988605;
-        Wed, 27 Oct 2021 08:36:28 -0700 (PDT)
+        bh=bSqxXsSY7PzPPy6E5Cy05Nx/OdmHcN1STcnBEYyHdIs=;
+        b=V9Ear7F+dMSYsjm7/WJfqYBsycCtdBjQ0aT0/YSiX0242kvMtljqzyww6yiy5ur105
+         quk0k64X7GKoSolaZVycaF/T+bsIjvr/iO9xC4LzSgNDDr+szHKH15MRKk1X494Z4rr3
+         3pAvgFBoYpFph0HbQgqzWv2EjnQHsdXLhnZ5DsYQlNfl61wP4SD4ab88AjQuXQo/WaIw
+         xcw++oP9P8nm7nY5YzNDs8tardOzFfCXnIuPUNgGVlXZLsJrl9YhEULuMSQBXc2eTZsf
+         8HdNVGWSFHDxg3zuN+ODOm48nF1KPz1KauY6ofFSGG69k5Q84MusO61rwhNRsI5nTTVC
+         +FJg==
+X-Gm-Message-State: AOAM5336qU3SH+EFkNC46w82jZtsj2KJzlMeiBXrT2XLDYlB32FukG1N
+        Dsfwml0J8hld1G8VpZTTIRQsqKe9EpSokXPgUj0jTWQR86BZ6Qh7BcVT490SdSTFAPO/B4FCMQR
+        EfJO2DIj0a/yaeKpRZzx4IA==
+X-Received: by 2002:a05:6402:520f:: with SMTP id s15mr19650588edd.376.1635349077546;
+        Wed, 27 Oct 2021 08:37:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxcV3ajcrSuCCBMr6jO83QbO8KNKYMvLx5Z90JLfoEGGYsQl7acheIlREFbLHWM9uSofWHX3A==
+X-Received: by 2002:a05:6402:520f:: with SMTP id s15mr19650552edd.376.1635349077353;
+        Wed, 27 Oct 2021 08:37:57 -0700 (PDT)
 Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.gmail.com with ESMTPSA id dx2sm110885ejb.125.2021.10.27.08.36.23
+        by smtp.gmail.com with ESMTPSA id h7sm218074edt.37.2021.10.27.08.37.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Oct 2021 08:36:26 -0700 (PDT)
-Message-ID: <185502d7-861e-fa5c-b225-419710fe77ed@redhat.com>
-Date:   Wed, 27 Oct 2021 17:36:18 +0200
+        Wed, 27 Oct 2021 08:37:56 -0700 (PDT)
+Message-ID: <5b8f554b-5bbc-e257-12d0-800ec82489d0@redhat.com>
+Date:   Wed, 27 Oct 2021 17:37:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.1.0
-Subject: Re: [PATCH v2 35/43] KVM: SVM: Signal AVIC doorbell iff vCPU is in
- guest mode
+Subject: Re: [PATCH v2 00/43] KVM: Halt-polling and x86 APICv overhaul
 Content-Language: en-US
 To:     Sean Christopherson <seanjc@google.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
@@ -89,32 +88,42 @@ Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Oliver Upton <oupton@google.com>,
         Jing Zhang <jingzhangos@google.com>
 References: <20211009021236.4122790-1-seanjc@google.com>
- <20211009021236.4122790-36-seanjc@google.com>
- <0333be2a-76d8-657a-6c82-3bb5c9ff2e3b@redhat.com>
- <YXlrEWmBohaDXmqL@google.com>
+ <614858dd-106c-64cc-04bc-f1887b2054d1@redhat.com>
+ <YXllGfrjPX1pVUx6@google.com>
+ <ecec4d7d-13dd-c992-6648-3624d7c14c24@redhat.com>
+ <YXlwH2vWILFS9QOG@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YXlrEWmBohaDXmqL@google.com>
+In-Reply-To: <YXlwH2vWILFS9QOG@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 27/10/21 17:06, Sean Christopherson wrote:
->> Does this still need to check the "running" flag?  That should be a strict
->> superset of vcpu->mode == IN_GUEST_MODE.
->
-> No.  Signalling the doorbell when "running" is set but the vCPU is not in the
-> guest is just an expensive nop.  So even if KVM were to rework its handling of
-> "running" to set the flag immediately before VMRUN and clear it immediately after,
-> keying off IN_GUEST_MODE and not "running" would not be wrong, just sub-optimal.
+On 27/10/21 17:28, Sean Christopherson wrote:
+> On Wed, Oct 27, 2021, Paolo Bonzini wrote:
+>> On 27/10/21 16:41, Sean Christopherson wrote:
+>>> The other thing I don't like about having the WARN in the loop is that it suggests
+>>> that something other than the vCPU can modify the NDST and SN fields, which is
+>>> wrong and confusing (for me).
+>>
+>> Yeah, I can agree with that.  Can you add it in a comment above the cmpxchg
+>> loop, it can be as simple as
+>>
+>> 	/* The processor can set ON concurrently.  */
+>>
+>> when you respin patch 21 and the rest of the series?
 > 
-> I doubt KVM will ever make the "running" flag super precise, because keeping the
-> flag set when the vCPU is loaded avoids VM-Exits on other vCPUs due to undelivered
-> IPIs.
+> I can definitely add a comment, but I think that comment is incorrect.
 
-Right, so should we drop the "if (running)" check in this patch, at the 
-same time as it's adding the IN_GUEST_MODE check?
+It's completely backwards indeed.  I first had "the hardware" and then 
+shut down my brain for a second to replace it.
+
+> So something like this?
+> 
+> 	/* ON can be set concurrently by a different vCPU or by hardware. */
+
+Yes, of course.
 
 Paolo
 
