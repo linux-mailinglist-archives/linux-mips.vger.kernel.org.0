@@ -2,41 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A5343CAD9
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 15:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C6043CBA9
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 16:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242196AbhJ0Nn2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Oct 2021 09:43:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29594 "EHLO
+        id S237672AbhJ0ONO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Oct 2021 10:13:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50958 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242194AbhJ0Nn1 (ORCPT
+        by vger.kernel.org with ESMTP id S235523AbhJ0ONN (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 Oct 2021 09:43:27 -0400
+        Wed, 27 Oct 2021 10:13:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635342061;
+        s=mimecast20190719; t=1635343848;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/no10Aa/zZ1ucVFb2s+gZiK3uB9pJ6W+0T89aCEE3wg=;
-        b=RNzq9IYdV4VMTBm8nPZjhJqZkJEifW4zngBPKy3tqVxbb0gocrFdj3CenZy3rh08FxyFZt
-        /h+tde7vyYdZeW2jb2l94kxMUrDsitUnZsdVLP9qmdo6GcS32Jj6R+6kPLtYqrTjN/qpVB
-        KrdHQ4sEt+KL2rNuM2Z14w60vJ96Elc=
+        bh=cVoa83Mt37o7LxzLcjDlhV+CHKfwNHfJj/XpdkZn+wM=;
+        b=NnzVwUEhtgr3TedfiSMqVp6NoruZnJVJi1PCKYRgq79ssWc8WI07JmLqTh8UT6MlbAoSxR
+        2arbjHMN/N8GUX/u42Z8Z6r+b+t9DwGuNuFtixke67oUc84zaBuX6I2S6pQkoNEKG8/UN5
+        i4+49O3ryuXck+AZQyv0B3lJieoP57Q=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-309-SCIw7oS_OWK-BwM7oLJx0w-1; Wed, 27 Oct 2021 09:40:58 -0400
-X-MC-Unique: SCIw7oS_OWK-BwM7oLJx0w-1
+ us-mta-450-HHU7zf4COr2mtmPfjcXavw-1; Wed, 27 Oct 2021 10:10:45 -0400
+X-MC-Unique: HHU7zf4COr2mtmPfjcXavw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2F7711966320;
-        Wed, 27 Oct 2021 13:40:54 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8A6B619251DC;
+        Wed, 27 Oct 2021 14:10:24 +0000 (UTC)
 Received: from starship (unknown [10.40.194.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4809F5DF35;
-        Wed, 27 Oct 2021 13:40:41 +0000 (UTC)
-Message-ID: <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
-Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
- successful
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C89B45DF36;
+        Wed, 27 Oct 2021 14:10:07 +0000 (UTC)
+Message-ID: <363479dd55760979da208cacf015a6f7fe2afd69.camel@redhat.com>
+Subject: Re: [PATCH v2 12/43] KVM: x86: Tweak halt emulation helper names to
+ free up kvm_vcpu_halt()
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Marc Zyngier <maz@kernel.org>,
@@ -68,10 +68,10 @@ Cc:     James Morse <james.morse@arm.com>,
         David Matlack <dmatlack@google.com>,
         Oliver Upton <oupton@google.com>,
         Jing Zhang <jingzhangos@google.com>
-Date:   Wed, 27 Oct 2021 16:40:40 +0300
-In-Reply-To: <20211009021236.4122790-12-seanjc@google.com>
+Date:   Wed, 27 Oct 2021 17:10:06 +0300
+In-Reply-To: <20211009021236.4122790-13-seanjc@google.com>
 References: <20211009021236.4122790-1-seanjc@google.com>
-         <20211009021236.4122790-12-seanjc@google.com>
+         <20211009021236.4122790-13-seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
@@ -82,79 +82,128 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
-> Invoke the arch hooks for block+unblock if and only if KVM actually
-> attempts to block the vCPU.  The only non-nop implementation is on x86,
-> specifically SVM's AVIC, and there is no need to put the AVIC prior to
-> halt-polling as KVM x86's kvm_vcpu_has_events() will scour the full vIRR
-> to find pending IRQs regardless of whether the AVIC is loaded/"running".
+> Rename a variety of HLT-related helpers to free up the function name
+> "kvm_vcpu_halt" for future use in generic KVM code, e.g. to differentiate
+> between "block" and "halt".
 > 
-> The primary motivation is to allow future cleanup to split out "block"
-> from "halt", but this is also likely a small performance boost on x86 SVM
-> when halt-polling is successful.
+> No functional change intended.
 > 
-> Adjust the post-block path to update "cur" after unblocking, i.e. include
-> AVIC load time in halt_wait_ns and halt_wait_hist, so that the behavior
-> is consistent.  Moving just the pre-block arch hook would result in only
-> the AVIC put latency being included in the halt_wait stats.  There is no
-> obvious evidence that one way or the other is correct, so just ensure KVM
-> is consistent.
-> 
-> Note, x86 has two separate paths for handling APICv with respect to vCPU
-> blocking.  VMX uses hooks in x86's vcpu_block(), while SVM uses the arch
-> hooks in kvm_vcpu_block().  Prior to this path, the two paths were more
-> or less functionally identical.  That is very much not the case after
-> this patch, as the hooks used by VMX _must_ fire before halt-polling.
-> x86's entire mess will be cleaned up in future patches.
-> 
+> Reviewed-by: David Matlack <dmatlack@google.com>
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  virt/kvm/kvm_main.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  arch/x86/include/asm/kvm_host.h |  2 +-
+>  arch/x86/kvm/vmx/nested.c       |  2 +-
+>  arch/x86/kvm/vmx/vmx.c          |  4 ++--
+>  arch/x86/kvm/x86.c              | 13 +++++++------
+>  4 files changed, 11 insertions(+), 10 deletions(-)
 > 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index f90b3ed05628..227f6bbe0716 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -3235,8 +3235,6 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
->  	bool waited = false;
->  	u64 block_ns;
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 7aafc27ce7a9..328103a520d3 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1689,7 +1689,7 @@ int kvm_emulate_monitor(struct kvm_vcpu *vcpu);
+>  int kvm_fast_pio(struct kvm_vcpu *vcpu, int size, unsigned short port, int in);
+>  int kvm_emulate_cpuid(struct kvm_vcpu *vcpu);
+>  int kvm_emulate_halt(struct kvm_vcpu *vcpu);
+> -int kvm_vcpu_halt(struct kvm_vcpu *vcpu);
+> +int kvm_emulate_halt_noskip(struct kvm_vcpu *vcpu);
+>  int kvm_emulate_ap_reset_hold(struct kvm_vcpu *vcpu);
+>  int kvm_emulate_wbinvd(struct kvm_vcpu *vcpu);
 >  
-> -	kvm_arch_vcpu_blocking(vcpu);
-> -
->  	start = cur = poll_end = ktime_get();
->  	if (do_halt_poll) {
->  		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
-> @@ -3253,6 +3251,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
->  		} while (kvm_vcpu_can_poll(cur, stop));
->  	}
->  
-> +	kvm_arch_vcpu_blocking(vcpu);
->  
->  	prepare_to_rcuwait(wait);
->  	for (;;) {
-> @@ -3265,6 +3264,9 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
->  		schedule();
->  	}
->  	finish_rcuwait(wait);
-> +
-> +	kvm_arch_vcpu_unblocking(vcpu);
-> +
->  	cur = ktime_get();
->  	if (waited) {
->  		vcpu->stat.generic.halt_wait_ns +=
-> @@ -3273,7 +3275,6 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
->  				ktime_to_ns(cur) - ktime_to_ns(poll_end));
->  	}
->  out:
-> -	kvm_arch_vcpu_unblocking(vcpu);
->  	block_ns = ktime_to_ns(cur) - ktime_to_ns(start);
->  
->  	/*
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index af1bbb73430a..d0237a441feb 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -3619,7 +3619,7 @@ static int nested_vmx_run(struct kvm_vcpu *vcpu, bool launch)
+>  		    !(nested_cpu_has(vmcs12, CPU_BASED_INTR_WINDOW_EXITING) &&
+>  		      (vmcs12->guest_rflags & X86_EFLAGS_IF))) {
+>  			vmx->nested.nested_run_pending = 0;
+> -			return kvm_vcpu_halt(vcpu);
+> +			return kvm_emulate_halt_noskip(vcpu);
+>  		}
+>  		break;
+>  	case GUEST_ACTIVITY_WAIT_SIPI:
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 1c8b2b6e7ed9..5517893f12fc 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -4741,7 +4741,7 @@ static int handle_rmode_exception(struct kvm_vcpu *vcpu,
+>  		if (kvm_emulate_instruction(vcpu, 0)) {
+>  			if (vcpu->arch.halt_request) {
+>  				vcpu->arch.halt_request = 0;
+> -				return kvm_vcpu_halt(vcpu);
+> +				return kvm_emulate_halt_noskip(vcpu);
 
-Makes sense.
+Could you elaborate on why you choose _noskip suffix? 
+ 
+As far as I see, kvm_vcpu_halt just calls __kvm_vcpu_halt with new VCPU run state/exit reason,
+which is used only when local apic is not in the kernel (which is these days not that
+supported configuration).
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
+Other user of __kvm_vcpu_halt is something SEV related.
+ 
 Best regards,
 	Maxim Levitsky
+
+
+>  			}
+>  			return 1;
+>  		}
+> @@ -5415,7 +5415,7 @@ static int handle_invalid_guest_state(struct kvm_vcpu *vcpu)
+>  
+>  		if (vcpu->arch.halt_request) {
+>  			vcpu->arch.halt_request = 0;
+> -			return kvm_vcpu_halt(vcpu);
+> +			return kvm_emulate_halt_noskip(vcpu);
+>  		}
+>  
+>  		/*
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 4a52a08707de..9c23ae1d483d 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -8649,7 +8649,7 @@ void kvm_arch_exit(void)
+>  #endif
+>  }
+>  
+> -static int __kvm_vcpu_halt(struct kvm_vcpu *vcpu, int state, int reason)
+> +static int __kvm_emulate_halt(struct kvm_vcpu *vcpu, int state, int reason)
+>  {
+>  	++vcpu->stat.halt_exits;
+>  	if (lapic_in_kernel(vcpu)) {
+> @@ -8661,11 +8661,11 @@ static int __kvm_vcpu_halt(struct kvm_vcpu *vcpu, int state, int reason)
+>  	}
+>  }
+>  
+> -int kvm_vcpu_halt(struct kvm_vcpu *vcpu)
+> +int kvm_emulate_halt_noskip(struct kvm_vcpu *vcpu)
+>  {
+> -	return __kvm_vcpu_halt(vcpu, KVM_MP_STATE_HALTED, KVM_EXIT_HLT);
+> +	return __kvm_emulate_halt(vcpu, KVM_MP_STATE_HALTED, KVM_EXIT_HLT);
+>  }
+> -EXPORT_SYMBOL_GPL(kvm_vcpu_halt);
+> +EXPORT_SYMBOL_GPL(kvm_emulate_halt_noskip);
+>  
+>  int kvm_emulate_halt(struct kvm_vcpu *vcpu)
+>  {
+> @@ -8674,7 +8674,7 @@ int kvm_emulate_halt(struct kvm_vcpu *vcpu)
+>  	 * TODO: we might be squashing a GUESTDBG_SINGLESTEP-triggered
+>  	 * KVM_EXIT_DEBUG here.
+>  	 */
+> -	return kvm_vcpu_halt(vcpu) && ret;
+> +	return kvm_emulate_halt_noskip(vcpu) && ret;
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_emulate_halt);
+>  
+> @@ -8682,7 +8682,8 @@ int kvm_emulate_ap_reset_hold(struct kvm_vcpu *vcpu)
+>  {
+>  	int ret = kvm_skip_emulated_instruction(vcpu);
+>  
+> -	return __kvm_vcpu_halt(vcpu, KVM_MP_STATE_AP_RESET_HOLD, KVM_EXIT_AP_RESET_HOLD) && ret;
+> +	return __kvm_emulate_halt(vcpu, KVM_MP_STATE_AP_RESET_HOLD,
+> +					KVM_EXIT_AP_RESET_HOLD) && ret;
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_emulate_ap_reset_hold);
+>  
+
 
