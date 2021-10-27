@@ -2,96 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E0C43B9F8
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Oct 2021 20:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E620843C6DA
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 11:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236813AbhJZSxA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 26 Oct 2021 14:53:00 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:20282 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236853AbhJZSw6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 26 Oct 2021 14:52:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1635274220;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=7ft8Vn6lPZYMUJ7yRwsizM95snAuobtCtLzV7BieLtc=;
-    b=VEeFuwU6xodp2KD9GwJYEFXdI8WK8H+EoJeJyq93OkvqxMux0LdEzq28FwuWs6Eye8
-    UCLVyE3y6a7pPyg/rUV9XqEs2hzlwNcwF+QlAf6E8sg4rMWXVDGLIOWC0OOdzYZyMzqI
-    cGFcWWLbbpXQt/4M2RIXtHFheVtBaCr5f3FC0MkyHIiw8tjZnCU3rz7O27RR3hJwHutT
-    MutBTYuH3GxjK8nYf78thTCgGPOToC46gZSeLanmMe20UoC6Mp8ypB8GOHy82ACtHGmH
-    L0kUOf+FEHzgQAIekjPLgG0hW5M69gYBczzg5/8sVYZHgpNjxl0ejz0lDZvScjKbnbof
-    SMHQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3i8J+"
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.34.1 SBL|AUTH)
-    with ESMTPSA id d01d1fx9QIoJynM
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 26 Oct 2021 20:50:19 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [RESEND PATCH v3 0/6] drm/ingenic: Various improvements v3
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <20211026181240.213806-1-paul@crapouillou.net>
-Date:   Tue, 26 Oct 2021 20:50:19 +0200
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Paul Boddie <paul@boddie.org.uk>, list@opendingux.net,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+        id S239019AbhJ0Jxt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Oct 2021 05:53:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24909 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235518AbhJ0Jxs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 27 Oct 2021 05:53:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635328282;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OLKZI82hmPisWACp/QMd/03BQs+RHKrDBliqptWWYzE=;
+        b=JlGCLXib6mP67nqrMVKEdro08E7es/nLdFS9D05/GNFiNHY9ph7aXU44AK/fU+Dc/IGRMP
+        s1/6NQ0khHHN6yWVIGN7Mar4ykVEAYFpyoZICsyvfOTvkwAwHCz3AOpA2RuUuWUi00+Ck7
+        WdpGR1IytQ8EAYqoQ3leHhSI7Y9SORs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-468-4gOjCQ60OwesHHSXcF-XSQ-1; Wed, 27 Oct 2021 05:51:19 -0400
+X-MC-Unique: 4gOjCQ60OwesHHSXcF-XSQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AD15980A5C0;
+        Wed, 27 Oct 2021 09:51:15 +0000 (UTC)
+Received: from starship (unknown [10.40.194.243])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 401B019D9F;
+        Wed, 27 Oct 2021 09:50:31 +0000 (UTC)
+Message-ID: <aa1656c01ea5d46dd22c66da4a5eaa27f58810a2.camel@redhat.com>
+Subject: Re: [PATCH v2 02/43] KVM: SVM: Ensure target pCPU is read once when
+ signalling AVIC doorbell
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Date:   Wed, 27 Oct 2021 12:50:30 +0300
+In-Reply-To: <20211009021236.4122790-3-seanjc@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+         <20211009021236.4122790-3-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Message-Id: <4CBF748C-DA58-4E8B-A6E4-A7CE653F2C52@goldelico.com>
-References: <20211026181240.213806-1-paul@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Fri, 2021-10-08 at 19:11 -0700, Sean Christopherson wrote:
+> Ensure vcpu->cpu is read once when signalling the AVIC doorbell.  If the
+> compiler rereads the field and the vCPU is migrated between the check and
+> writing the doorbell, KVM would signal the wrong physical CPU.
 
-> Am 26.10.2021 um 20:12 schrieb Paul Cercueil <paul@crapouillou.net>:
-> 
-> Hi,
-> 
-> I resend the V3 of my patchset for drm/ingenic, verbatim.
-> 
-> The previous submission of my V3 received a lot of replies, but none of
-> these replies were actually talking about the patches themselves.
+Since vcpu->cpu can change any moment anyway, adding READ_ONCE I think can't really fix anything
+but I do agree that it makes this more readable.
 
-Indeed. And since we have finally managed to add jz4780 HDMI support
-(I didn't find to work in the latest comments) on top of the series as is,
-please go ahead and add my
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-tested-by: Nikolaus Schaller <hns@goldelico.com>
 
-BR and thanks,
-Nikolaus
 
 > 
-> Cheers,
-> -Paul
+> Functionally, signalling the wrong CPU in this case is not an issue as
+> task migration means the vCPU has exited and will pick up any pending
+> interrupts on the next VMRUN.  Add the READ_ONCE() purely to clean up the
+> code.
 > 
+> Opportunistically add a comment explaining the task migration behavior,
+> and rename cpuid=>cpu to avoid conflating the CPU number with KVM's more
+> common usage of CPUID.
 > 
-> Paul Cercueil (6):
->  drm/ingenic: Simplify code by using hwdescs array
->  drm/ingenic: Add support for private objects
->  drm/ingenic: Move IPU scale settings to private state
->  drm/ingenic: Set DMA descriptor chain register when starting CRTC
->  drm/ingenic: Upload palette before frame
->  drm/ingenic: Attach bridge chain to encoders
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
 > 
-> drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 278 +++++++++++++++++-----
-> drivers/gpu/drm/ingenic/ingenic-ipu.c     | 127 ++++++++--
-> 2 files changed, 333 insertions(+), 72 deletions(-)
-> 
-> -- 
-> 2.33.0
-> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 8052d92069e0..208c5c71e827 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -675,10 +675,17 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+>  	smp_mb__after_atomic();
+>  
+>  	if (avic_vcpu_is_running(vcpu)) {
+> -		int cpuid = vcpu->cpu;
+> +		int cpu = READ_ONCE(vcpu->cpu);
+>  
+> -		if (cpuid != get_cpu())
+> -			wrmsrl(SVM_AVIC_DOORBELL, kvm_cpu_get_apicid(cpuid));
+> +		/*
+> +		 * Note, the vCPU could get migrated to a different pCPU at any
+> +		 * point, which could result in signalling the wrong/previous
+> +		 * pCPU.  But if that happens the vCPU is guaranteed to do a
+> +		 * VMRUN (after being migrated) and thus will process pending
+> +		 * interrupts, i.e. a doorbell is not needed (and the spurious)
+> +		 */
+> +		if (cpu != get_cpu())
+> +			wrmsrl(SVM_AVIC_DOORBELL, kvm_cpu_get_apicid(cpu));
+>  		put_cpu();
+>  	} else
+>  		kvm_vcpu_wake_up(vcpu);
+
 
