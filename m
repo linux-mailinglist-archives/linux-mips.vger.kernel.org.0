@@ -2,110 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C622B43C917
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 14:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A5343CAD9
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 15:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236325AbhJ0MCi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Oct 2021 08:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbhJ0MCg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Oct 2021 08:02:36 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2347FC061570;
-        Wed, 27 Oct 2021 05:00:11 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id o26so4415937uab.5;
-        Wed, 27 Oct 2021 05:00:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LpfMaUsIwWmMBkvjLoHELPmDG2TU2qiVaI7dHu5QUNU=;
-        b=nPO8Yf1eO5Rcpi9Rg+fqHDkOE3qCrqg76UASShd3TLYS9jY/l7yWkUMt5598ZE7XVr
-         1zwOJpBrFCFUz8ZTMNoJk6Gv5OgZedWkGRgHgfxapz3PioQFIJWoAcXK3c7xPdNJEFa1
-         xwteg19Hi82jiLFmWHxabGitdWttvuoyrX/GUp0Hu3dhIArJDYyGryYP1i+tSwVDOY75
-         DnvXCRnLle7IaiwZCUOP0+4HWMtWbAJaLPbdh6opU2nMxMyfRtUgu6/gu/jCTpSdZndL
-         LU9zYNAeJJnBXioS1IVE0PBquPgyy1zrV2UDuub13Lf1ORTfPy2fTpGKOIeRl+Q/SJuI
-         zYJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LpfMaUsIwWmMBkvjLoHELPmDG2TU2qiVaI7dHu5QUNU=;
-        b=uf3feNc8XbBjTz48w9zzL+THk6tEoSrjC3O8ntDfwAdaLhga87T5xLBlejaVnGy4rn
-         JgIgivvlOyB64aY++XfGLgIDvit4cKPfmAFMZ6KfHP3V2QI3ejj2GqK15cwEfkyv48ma
-         HgGiEblx8fVF6Kv+1pGVKPVRmAzfD6zvBRQfysmlLcbqfyXiiwiQj0/1HcWZ+tvSJ+cn
-         b+QnOWk/DyK4mnE6fkSFDR1Wt20DvrP9Oki9el9xTikkfI4Gypfykw9ZWWxXM2FAlqNn
-         rPGoP2U2c2fVfsJOC3kTpNtxXGnC+d/kLmY/bOBLnwL6HPTOmThRsVIURKc1geQdZxHp
-         PXnw==
-X-Gm-Message-State: AOAM531Y3Hde8rpTEKFKyZKd1m2J/l9CZdBpolgeZ7FvHCRiGq44EZEj
-        8PBmbFNDLiEX2Ti1ze85FMNK2Es7HQdsPbUvU5Y=
-X-Google-Smtp-Source: ABdhPJzBo2T3m7VvmKbxfyJ5pPb7UFwA97LM05HVmxPcVIqBFlRDZjw/G4ZpNQJm+qVT3XdfvF9O8AIFN05k38EmyUc=
-X-Received: by 2002:ab0:61c4:: with SMTP id m4mr13693262uan.66.1635336010157;
- Wed, 27 Oct 2021 05:00:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1635333327.git.siyanteng@loongson.cn> <50f5f509c15251fb10b0c87304d272e2c89841f0.1635333327.git.siyanteng@loongson.cn>
-In-Reply-To: <50f5f509c15251fb10b0c87304d272e2c89841f0.1635333327.git.siyanteng@loongson.cn>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 27 Oct 2021 13:59:58 +0200
-Message-ID: <CAMhs-H9MANfLThCC-m9Q5whAgRAbnzXjUpipQdnwRf0iqPwJuw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] PCI: mt7621: Add MODULE_* macros to MT7621 PCIe host
- controller driver
-To:     Yanteng Si <siyanteng01@gmail.com>
-Cc:     Yanteng Si <siyanteng@loongson.cn>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        chenhuacai@kernel.org, sterlingteng@gmail.com
+        id S242196AbhJ0Nn2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Oct 2021 09:43:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29594 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242194AbhJ0Nn1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 27 Oct 2021 09:43:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635342061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/no10Aa/zZ1ucVFb2s+gZiK3uB9pJ6W+0T89aCEE3wg=;
+        b=RNzq9IYdV4VMTBm8nPZjhJqZkJEifW4zngBPKy3tqVxbb0gocrFdj3CenZy3rh08FxyFZt
+        /h+tde7vyYdZeW2jb2l94kxMUrDsitUnZsdVLP9qmdo6GcS32Jj6R+6kPLtYqrTjN/qpVB
+        KrdHQ4sEt+KL2rNuM2Z14w60vJ96Elc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-309-SCIw7oS_OWK-BwM7oLJx0w-1; Wed, 27 Oct 2021 09:40:58 -0400
+X-MC-Unique: SCIw7oS_OWK-BwM7oLJx0w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2F7711966320;
+        Wed, 27 Oct 2021 13:40:54 +0000 (UTC)
+Received: from starship (unknown [10.40.194.243])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4809F5DF35;
+        Wed, 27 Oct 2021 13:40:41 +0000 (UTC)
+Message-ID: <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
+Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
+ successful
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Date:   Wed, 27 Oct 2021 16:40:40 +0300
+In-Reply-To: <20211009021236.4122790-12-seanjc@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+         <20211009021236.4122790-12-seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-On Wed, Oct 27, 2021 at 1:32 PM Yanteng Si <siyanteng01@gmail.com> wrote:
->
-> Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
-> the MT7621 PCIe host controller driver is built as a module but no MODULE_*() attributes
-> were specified, causing a build error due to missing license information.
->
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
->
-> Fix this by adding MODULE attributes to the driver.
->
-> Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
+> Invoke the arch hooks for block+unblock if and only if KVM actually
+> attempts to block the vCPU.  The only non-nop implementation is on x86,
+> specifically SVM's AVIC, and there is no need to put the AVIC prior to
+> halt-polling as KVM x86's kvm_vcpu_has_events() will scour the full vIRR
+> to find pending IRQs regardless of whether the AVIC is loaded/"running".
+> 
+> The primary motivation is to allow future cleanup to split out "block"
+> from "halt", but this is also likely a small performance boost on x86 SVM
+> when halt-polling is successful.
+> 
+> Adjust the post-block path to update "cur" after unblocking, i.e. include
+> AVIC load time in halt_wait_ns and halt_wait_hist, so that the behavior
+> is consistent.  Moving just the pre-block arch hook would result in only
+> the AVIC put latency being included in the halt_wait stats.  There is no
+> obvious evidence that one way or the other is correct, so just ensure KVM
+> is consistent.
+> 
+> Note, x86 has two separate paths for handling APICv with respect to vCPU
+> blocking.  VMX uses hooks in x86's vcpu_block(), while SVM uses the arch
+> hooks in kvm_vcpu_block().  Prior to this path, the two paths were more
+> or less functionally identical.  That is very much not the case after
+> this patch, as the hooks used by VMX _must_ fire before halt-polling.
+> x86's entire mess will be cleaned up in future patches.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  drivers/pci/controller/pcie-mt7621.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
-> index b60dfb45ef7b..668b737f86fb 100644
-> --- a/drivers/pci/controller/pcie-mt7621.c
-> +++ b/drivers/pci/controller/pcie-mt7621.c
-> @@ -598,3 +598,5 @@ static struct platform_driver mt7621_pci_driver = {
->         },
->  };
->  builtin_platform_driver(mt7621_pci_driver);
+>  virt/kvm/kvm_main.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index f90b3ed05628..227f6bbe0716 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -3235,8 +3235,6 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+>  	bool waited = false;
+>  	u64 block_ns;
+>  
+> -	kvm_arch_vcpu_blocking(vcpu);
+> -
+>  	start = cur = poll_end = ktime_get();
+>  	if (do_halt_poll) {
+>  		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
+> @@ -3253,6 +3251,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+>  		} while (kvm_vcpu_can_poll(cur, stop));
+>  	}
+>  
+> +	kvm_arch_vcpu_blocking(vcpu);
+>  
+>  	prepare_to_rcuwait(wait);
+>  	for (;;) {
+> @@ -3265,6 +3264,9 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+>  		schedule();
+>  	}
+>  	finish_rcuwait(wait);
 > +
-> +MODULE_LICENSE("GPL v2");
+> +	kvm_arch_vcpu_unblocking(vcpu);
+> +
+>  	cur = ktime_get();
+>  	if (waited) {
+>  		vcpu->stat.generic.halt_wait_ns +=
+> @@ -3273,7 +3275,6 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+>  				ktime_to_ns(cur) - ktime_to_ns(poll_end));
+>  	}
+>  out:
+> -	kvm_arch_vcpu_unblocking(vcpu);
+>  	block_ns = ktime_to_ns(cur) - ktime_to_ns(start);
+>  
+>  	/*
 
-I guess this is needed for COMPILE_TEST scenarios?
+Makes sense.
 
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-Thanks,
-    Sergio Paracuellos
+Best regards,
+	Maxim Levitsky
 
-> \ No newline at end of file
-> --
-> 2.27.0
->
