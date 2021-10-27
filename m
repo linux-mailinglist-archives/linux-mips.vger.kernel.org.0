@@ -2,54 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C751543CE4A
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 18:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD36843CE78
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 18:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238860AbhJ0QKp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Oct 2021 12:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242900AbhJ0QKl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Oct 2021 12:10:41 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914AEC061745
-        for <linux-mips@vger.kernel.org>; Wed, 27 Oct 2021 09:08:15 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id np13so2404767pjb.4
-        for <linux-mips@vger.kernel.org>; Wed, 27 Oct 2021 09:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nuCG2sDmKSazCUE8+q7TBUWWroJna3waN17Ediudyfo=;
-        b=WayoYs/G9RdOkLoLrW/BVqQ6VHPjU7g6BiG68joHyMmGiaL20yIAm/sjYdgZ0AcKJs
-         34UBgRu//I/mwxBVohule4Yths3kAXuGugB26iPsHfMV54dBZzCrAdfuAma3wIvwLeK6
-         5skY2C5JFSSaU21tpOr7VxrfykS9z8ABV/qEMvBoTKNuCyH2eBt8P1cnnpOyhrcPdGo+
-         3TUr8nLyCGNKiIm+cC1pm1SLzFfEEKhREJTeZJJEMdJpd9SDcl6sMun3hCIhWgt/3aha
-         W9nnj4Eu9amjlrLiAUIeygQ3FCEkFDEH7LYoF5wU+epaInjt/QY5/ndeDbqHbN0vOY3t
-         ydmw==
+        id S237981AbhJ0QRQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Oct 2021 12:17:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34736 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235723AbhJ0QRP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 27 Oct 2021 12:17:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635351289;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YJ1AvjILyDHE6A0xH65m+vjqkknvkqBvDuAHk95niU8=;
+        b=NNZezK5I92wtIcPstDA/xymm972gQZ9WtIC5LNxfA9/cKxuo+jbIJpAKxG+WhoLmdVV01i
+        NfPQgaZ9mJOfSB0HBcNLWZgEKlOhbZu9FMixihVNRp0ciu5gnbRZwRTQfUaUFD0slfDuBp
+        DgWNhhGjuOT8NzyXPJVCkv+W8CekUrs=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-174-Y2oOImP9NEiOL6SU7gR1uQ-1; Wed, 27 Oct 2021 12:14:48 -0400
+X-MC-Unique: Y2oOImP9NEiOL6SU7gR1uQ-1
+Received: by mail-ed1-f70.google.com with SMTP id u17-20020a50d511000000b003daa3828c13so2795923edi.12
+        for <linux-mips@vger.kernel.org>; Wed, 27 Oct 2021 09:14:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nuCG2sDmKSazCUE8+q7TBUWWroJna3waN17Ediudyfo=;
-        b=npJt8abnZz4bkjwOfI0lirBdAdGIbW/gbpii+A24wxO/+TDXqb8PYaqj9cLk8QjD9E
-         qTxpkSRpDfirsyzQTXGRqgCZylcP18htaGnpbFFMVhb4UJdo2O/hHaWrdff1vSsCg2tC
-         K7qjyKlkLG+G9U1teximidkhukUi/5V/9vPSPFV3iGlZTsN6sXIhgpA0uG0vazayevGk
-         SKcGfeC4erTxdML7GVvxJ76MKdQpOjUiAKGXIkBtUcum8UoetSJtekt02ILbGW7QfWRP
-         Quxn+1zwtSAY6ENX5URnJEcgPpLFqDHtg8B0jN/l8SNlVMTJayLRuHbkfY4NZ99OrFoP
-         usvg==
-X-Gm-Message-State: AOAM533sQpXopzLWZyqqdWV3cCj6SKKxdQ3pxdeABMQLEhKJT3mHbEem
-        xZ+6wrvsWJsekfLodMeFuQd7Tw==
-X-Google-Smtp-Source: ABdhPJyPOfADHe2BvEKrk8mpN6Tt9+dFmmc+qUaNZEHu6/XAOEzQt/0dcBcXvuMjJIUFdj/Jqau95A==
-X-Received: by 2002:a17:90b:3ecc:: with SMTP id rm12mr6856073pjb.48.1635350894901;
-        Wed, 27 Oct 2021 09:08:14 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id lb5sm205466pjb.11.2021.10.27.09.08.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 09:08:14 -0700 (PDT)
-Date:   Wed, 27 Oct 2021 16:08:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YJ1AvjILyDHE6A0xH65m+vjqkknvkqBvDuAHk95niU8=;
+        b=JLHnBVD1GN3UA7MGqBjl3Y+JmL79Fq25Xvn1CKz9FY5IrWVn4v9kCIViGJA9Ehlupa
+         +jzl1NpA2l5kvdoNwcfv7BQg4CfExvK3Oho3iNwFDPrx82cinUFeI+jOr1NyBjDKDHAC
+         buWe7CGYTs/nQkjrVWquMPyXnZctZ1lJMDKg6siAZMyOUHIB1FbjbAUpSRhtkelOwhXr
+         Y1kIG0JV8L4du1EevFZzkv5T8RfJdAeRCXECuplg2UjjhWFGMF4Z9NnVtyxCl9rY+2SS
+         APA4SEaj21lfWV57Gw0DnNFa01PRpNNSxCfTy43sZjDQbp6aZl2nWs2hmuYLbSrM2jrZ
+         zGNA==
+X-Gm-Message-State: AOAM5329DQ76RRleZC0Usy2VFYtuZ+2WpwkJI/nLmLi4h5rI4ipJo3UR
+        RltOsLXwUalHHgQ40ghv6UjYajhXRw7hNn4KqWmestWSqj2pdgHhOOttnH63Y/7zLhVti43EaYH
+        8w5UIRq/RHAvdhoYVr/AtWg==
+X-Received: by 2002:a17:907:16a7:: with SMTP id hc39mr22891318ejc.214.1635351287172;
+        Wed, 27 Oct 2021 09:14:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzO/QgQ5GMyh0vFS/oBYQIX6qwD3vL9k6RGrSUIXFucShmCvNWLSsmfmRBNY3o+Ac+4bg3ipQ==
+X-Received: by 2002:a17:907:16a7:: with SMTP id hc39mr22891269ejc.214.1635351286915;
+        Wed, 27 Oct 2021 09:14:46 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.gmail.com with ESMTPSA id sb30sm195562ejc.45.2021.10.27.09.14.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Oct 2021 09:14:46 -0700 (PDT)
+Message-ID: <d0746ea4-06e9-f65d-6e45-72b1b0dea29b@redhat.com>
+Date:   Wed, 27 Oct 2021 18:14:44 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.0
+Subject: Re: [PATCH v2 35/43] KVM: SVM: Signal AVIC doorbell iff vCPU is in
+ guest mode
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
 Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Paul Mackerras <paulus@ozlabs.org>,
@@ -77,48 +88,38 @@ Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         David Matlack <dmatlack@google.com>,
         Oliver Upton <oupton@google.com>,
         Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH v2 35/43] KVM: SVM: Signal AVIC doorbell iff vCPU is in
- guest mode
-Message-ID: <YXl5anv0Lyjx1cws@google.com>
 References: <20211009021236.4122790-1-seanjc@google.com>
  <20211009021236.4122790-36-seanjc@google.com>
  <0333be2a-76d8-657a-6c82-3bb5c9ff2e3b@redhat.com>
  <YXlrEWmBohaDXmqL@google.com>
  <185502d7-861e-fa5c-b225-419710fe77ed@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <185502d7-861e-fa5c-b225-419710fe77ed@redhat.com>
+ <YXl5anv0Lyjx1cws@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YXl5anv0Lyjx1cws@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 27, 2021, Paolo Bonzini wrote:
-> On 27/10/21 17:06, Sean Christopherson wrote:
-> > > Does this still need to check the "running" flag?  That should be a strict
-> > > superset of vcpu->mode == IN_GUEST_MODE.
-> > 
-> > No.  Signalling the doorbell when "running" is set but the vCPU is not in the
-> > guest is just an expensive nop.  So even if KVM were to rework its handling of
-> > "running" to set the flag immediately before VMRUN and clear it immediately after,
-> > keying off IN_GUEST_MODE and not "running" would not be wrong, just sub-optimal.
-> > 
-> > I doubt KVM will ever make the "running" flag super precise, because keeping the
-> > flag set when the vCPU is loaded avoids VM-Exits on other vCPUs due to undelivered
-> > IPIs.
+On 27/10/21 18:08, Sean Christopherson wrote:
+>> Right, so should we drop the "if (running)" check in this patch, at the same
+>> time as it's adding the IN_GUEST_MODE check?
+> LOL, I think we have a Three^WTwo Stooges routine going on.  This patch does
+> remove avic_vcpu_is_running() and replaces it with the vcpu->mode check.  Or am
+> I completely misunderstanding what your referring to?
 > 
-> Right, so should we drop the "if (running)" check in this patch, at the same
-> time as it's adding the IN_GUEST_MODE check?
+> -       if (avic_vcpu_is_running(vcpu)) {
+> +       /*
+> +        * Signal the doorbell to tell hardware to inject the IRQ if the vCPU
+> +        * is in the guest.  If the vCPU is not in the guest, hardware will
+> +        * automatically process AVIC interrupts at VMRUN.
+> +        */
+> +       if (vcpu->mode == IN_GUEST_MODE) {
+>                  int cpu = READ_ONCE(vcpu->cpu);
 
-LOL, I think we have a Three^WTwo Stooges routine going on.  This patch does
-remove avic_vcpu_is_running() and replaces it with the vcpu->mode check.  Or am
-I completely misunderstanding what your referring to?
+Nevermind, I confused svm_deliver_avic_intr with avic_kick_target_vcpus, 
+which anyway you are handling in patch 36.
 
--       if (avic_vcpu_is_running(vcpu)) {
-+       /*
-+        * Signal the doorbell to tell hardware to inject the IRQ if the vCPU
-+        * is in the guest.  If the vCPU is not in the guest, hardware will
-+        * automatically process AVIC interrupts at VMRUN.
-+        */
-+       if (vcpu->mode == IN_GUEST_MODE) {
-                int cpu = READ_ONCE(vcpu->cpu);
+Paolo
+
