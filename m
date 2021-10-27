@@ -2,140 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F03243D64D
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 00:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDD943D683
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 00:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbhJ0WMQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Oct 2021 18:12:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51386 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229441AbhJ0WMN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 Oct 2021 18:12:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635372586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vPTDsq9RY16fTCCoMhEcqKhkYxR/hT5AGgzHMhJ6ojY=;
-        b=IAMcVO2ZcNaowSZesQXSUgOlxjCPhD3/D2HXDPcFh1EopPVgQ9wn/KzZ5ozVodm9vqYUFk
-        TLB0aam8jfFrNaskFFG31AK/zseq6GosXpGUChclsiesCnNx+uv9OssMo6XO+h+p4p+Dyi
-        8CR1nGCKg1wkY2PNBXQg3WXk38p5uNQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-180-uzWUdI6kMTCTpeRpVtPXcA-1; Wed, 27 Oct 2021 18:09:45 -0400
-X-MC-Unique: uzWUdI6kMTCTpeRpVtPXcA-1
-Received: by mail-ed1-f69.google.com with SMTP id z20-20020a05640240d400b003dce046ab51so3631772edb.14
-        for <linux-mips@vger.kernel.org>; Wed, 27 Oct 2021 15:09:45 -0700 (PDT)
+        id S229486AbhJ0WYm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Oct 2021 18:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229437AbhJ0WYm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Oct 2021 18:24:42 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE13C061570;
+        Wed, 27 Oct 2021 15:22:16 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id v2-20020a05683018c200b0054e3acddd91so5766728ote.8;
+        Wed, 27 Oct 2021 15:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=9WxVcy2wshiQJIYQ7TvssmK1qx79YdAEglIn/7EOveI=;
+        b=BSlOwaXjGLFoLF2naxD+OkhVvsl9PTomwdJcEtlhwNTJW9h91kvoGx2RsDN4nBnb+7
+         v0X/uwoL7mc+fh9MM/sX2veCwSL70qH6jExuQ5f3twP8fxNogyXObJ/d1RUo9Xwbo0ot
+         SpaOFv7/nSbGhSyzcKHMd2QwAgCD0atcKO14ketkV15eZhoiPJk1Mu4TFSMRNuS+Ibqr
+         xnQEKauDte9EF77XCCh1Pofuvpl7GQrz7H3F3CpmGJ/A8dPaOzMWreTrPx8LW9KLCFvc
+         Yiui2rY0z2qKqZQl2JPO+YXlqPTjIpYSRaQrL0gwwZlooCr/jCZoV8KmfkAGCJHgxUig
+         a1ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vPTDsq9RY16fTCCoMhEcqKhkYxR/hT5AGgzHMhJ6ojY=;
-        b=3fN+YT7J9c2PGSK6kyC+KH9D+XR43gvCDIshJA5vQi7PUPIXNYb/ZdV6wnJb2cdhkZ
-         7YS8QAbpdzWgjrm1dc9aP4O78WHrQGMgI39jm7/JvE1WGJ44hdO0xov7ox9YUq/pzAcT
-         DHbvqu+1zMVk7tLuBqXZdlpfoO2umVlOsiVYiYdJ9IrehwevgMyq1XkvxPsrpzIS4Jja
-         60eJeuW+0FI5BJZLW33djwmEHHLdPTKep6Ez/27xvIQi8QqgA70KNDUlXQAHOy0aCLnz
-         4RUV7W3EN5YVKfz2DogYlXm5mQsbXkcGDs+3wBYalINNavyKzQ8Y8HYlz5kWvRw3UqMK
-         cMAg==
-X-Gm-Message-State: AOAM530FCaCAcwCOSWzb9Ctxi5amtt4pUTMkK64NqlmqkVwV7yWx9JFz
-        zFqTTs10gSRIDNNiIVFSz4JpApBdSBZfGNAaL81M8wzzsHhHWBKLmaa+4tRgCSSliLExYSKaHuH
-        7/FT5FLgTyYa50itGqnOhag==
-X-Received: by 2002:a17:906:3f95:: with SMTP id b21mr341843ejj.368.1635372584295;
-        Wed, 27 Oct 2021 15:09:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxoBx4vKjR30o+Kgjfdb4KsDUE6yjTUINxxdU8F5+6sRGk01DyvRy4bEl13EnJPgWSCV29mNQ==
-X-Received: by 2002:a17:906:3f95:: with SMTP id b21mr341810ejj.368.1635372584078;
-        Wed, 27 Oct 2021 15:09:44 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.gmail.com with ESMTPSA id a9sm675279edm.31.2021.10.27.15.09.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Oct 2021 15:09:43 -0700 (PDT)
-Message-ID: <fdf90c2f-81c8-513b-2e06-a90959f4cd89@redhat.com>
-Date:   Thu, 28 Oct 2021 00:09:25 +0200
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=9WxVcy2wshiQJIYQ7TvssmK1qx79YdAEglIn/7EOveI=;
+        b=yjLO6L2zx4/8NMz3Vm0rTjcEy4wiv2flT7EbuWpZvoZcYUNNRGOm4xIZYUMT3rp2Gr
+         qzQvfA3RRq4hH3QWdY82gZBc0KJYMGfvDX90EBCUC5cmeCxjC+XSMh+zg0or1HbPgExf
+         PjpfGuoW4H3RJD62ek2BNzP3IrJ5TIAz4wywYexvRmg6dxuptENP9VgNQ1NnWfru9l7l
+         IJvNufTNIpQM4/ztVcAFTZzs2kMZd50414B5JIYJdQG1QS3L/osvTTf8yUHcjk13+BiN
+         czyyYBszNkkkMxPd6hIH0FHeu9yBtM/h0SMF0SEbCquTCHMW2YByvvhW6rxHB5/pn1H3
+         LY8Q==
+X-Gm-Message-State: AOAM533RpaICZb3lBaLqmmDzp9opQO9qMJoQTD26PEgZebF5XMYv3UCq
+        cxvqhPpqbhVyMhoCJpt+UTY=
+X-Google-Smtp-Source: ABdhPJxprtTV2Lpl+aOIJ+Y8uqMJk1w1xuezGNSoKrWHUvrlkz2E/k0LkjUSMUtPVU5QTUVt9LreVA==
+X-Received: by 2002:a9d:ba5:: with SMTP id 34mr407059oth.108.1635373335526;
+        Wed, 27 Oct 2021 15:22:15 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bd39sm582689oib.2.2021.10.27.15.22.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 15:22:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 27 Oct 2021 15:22:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH 3/3] watchdog: bcm63xx_wdt: support BCM4908
+Message-ID: <20211027222213.GB342815@roeck-us.net>
+References: <20211027215531.9996-1-zajec5@gmail.com>
+ <20211027215531.9996-3-zajec5@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.0
-Subject: Re: [PATCH v2 39/43] KVM: VMX: Don't do full kick when triggering
- posted interrupt "fails"
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
- <20211009021236.4122790-40-seanjc@google.com>
- <335822ac-b98b-1eec-4911-34e4d0e99907@redhat.com>
- <YXl4mK7CyUBnPaQV@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YXl4mK7CyUBnPaQV@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211027215531.9996-3-zajec5@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 27/10/21 18:04, Sean Christopherson wrote:
->>> +		/*
->>> +		 * The smp_wmb() in kvm_make_request() pairs with the smp_mb_*()
->>> +		 * after setting vcpu->mode in vcpu_enter_guest(), thus the vCPU
->>> +		 * is guaranteed to see the event request if triggering a posted
->>> +		 * interrupt "fails" because vcpu->mode != IN_GUEST_MODE.
->>
->> What this smp_wmb() pair with, is the smp_mb__after_atomic in
->> kvm_check_request(KVM_REQ_EVENT, vcpu).
->
-> I don't think that's correct.  There is no kvm_check_request() in the relevant path.
-> kvm_vcpu_exit_request() uses kvm_request_pending(), which is just a READ_ONCE()
-> without a barrier.
+On Wed, Oct 27, 2021 at 11:55:31PM +0200, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> So far bcm63xx_wdt included support for Broadcom's watchdog block of old
+> MIPS devices only. It was also a fully platform (non-DT) driver.
+> 
+> The same block was recently found on BCM4908 with just a slightly
+> different registers layout. Extend this driver to support OF and add
+> support for per-chipset registers offsets.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 
-Ok, we are talking about two different set of barriers.  This is mine:
+Please convert the driver to use the watchdog subsystem first.
+Also, when doing so, please explain why you don't use the bcm7038
+driver instead, since it serves the same hardware interface and
+already supports the watchdog core.
 
-- smp_wmb() in kvm_make_request() pairs with the smp_mb__after_atomic() in
-kvm_check_request(); it ensures that everything before the request
-(in this case, pi_pending = true) is seen by inject_pending_event.
-
-- pi_test_and_set_on() orders the write to ON after the write to PIR,
-pairing with vmx_sync_pir_to_irr and ensuring that the bit in the PIR is
-seen.
-
-And this is yours:
-
-- pi_test_and_set_on() _also_ orders the write to ON before the read of
-vcpu->mode, pairing with vcpu_enter_guest()
-
-- kvm_make_request() however does _not_ order the write to
-vcpu->requests before the read of vcpu->mode, even though it's needed.
-Usually that's handled by kvm_vcpu_exiting_guest_mode(), but in this case
-vcpu->mode is read in kvm_vcpu_trigger_posted_interrupt.
-
-So vmx_deliver_nested_posted_interrupt() is missing a smp_mb__after_atomic().
-It's documentation only for x86, but still easily done in v3.
-
-Paolo
-
+Guenter
