@@ -2,177 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAC043C898
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 13:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4DF43C8A2
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Oct 2021 13:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241640AbhJ0Lci (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Oct 2021 07:32:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22819 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241634AbhJ0Lch (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 27 Oct 2021 07:32:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635334212;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6755i8Ev1p/V649+fKWbCguz7hafsCtx6KF7gf1uorY=;
-        b=TX/V5o7c9HZn0ZYo1Stbn5UuRW1GQ4TLUWo1UuB7pNERiGnFNu87TCgocVolnSwZws3Ly0
-        McB8kWSV8zufJ0S2j5l9cGSYABg9A2udHCTxhp7HgKb+bsB9vhLVkYGONA5Vah5BRrPu9j
-        lvJFsPddbHDevsHwOr3pgLk5y/5Y4Gk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-97-SCV0Ypy_PSae9_O3yFoh6Q-1; Wed, 27 Oct 2021 07:30:07 -0400
-X-MC-Unique: SCV0Ypy_PSae9_O3yFoh6Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B14A3100C66D;
-        Wed, 27 Oct 2021 11:30:03 +0000 (UTC)
-Received: from starship (unknown [10.40.194.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A291C101E591;
-        Wed, 27 Oct 2021 11:29:47 +0000 (UTC)
-Message-ID: <62231cec8a62db6bf2baba24cc55e0ec2515d0b1.camel@redhat.com>
-Subject: Re: [PATCH v2 07/43] KVM: Reconcile discrepancies in halt-polling
- stats
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Date:   Wed, 27 Oct 2021 14:29:46 +0300
-In-Reply-To: <20211009021236.4122790-8-seanjc@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
-         <20211009021236.4122790-8-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        id S239806AbhJ0Lei (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 27 Oct 2021 07:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230336AbhJ0Leh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Oct 2021 07:34:37 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4701C061570;
+        Wed, 27 Oct 2021 04:32:12 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id t201-20020a4a3ed2000000b002b8c98da3edso810125oot.8;
+        Wed, 27 Oct 2021 04:32:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PLuqEnTXe47rulVjhxN/gWoxn9OAXwjIoRJGGQuOV8g=;
+        b=h8Z8RlLV8LM+pMediEGJWDOLVHznhnkpCSQuXO1FYmE45rAzSX/f863SQmiaeghzNa
+         WhWV43HA6pPEupSoPRBFj9ifCmdlhY/P3Cc2D4ZyX3sOI/ZFFGJBlLAv71K/Tj1KD0Xz
+         8pVVqz5qi8ZIiRTsoL4dr3uAN/lveNATuxj0d0Xn/cSS+HxMjRbeImLDEyjdkstOIKtV
+         wZXuxmD++hsxEVivGZyst6WtMSs8bsMjEu6nX/h8FE1VrtcjuTcqS9nKPhfkxT/LUb7o
+         ZcjL+UkELp0YyOa4FnseLXRCr7IKhTz1rA571q8XfyUGHcXx/780tH2R5AWiFliCKW3L
+         NlPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PLuqEnTXe47rulVjhxN/gWoxn9OAXwjIoRJGGQuOV8g=;
+        b=sR5ODlflnithXiChwukSNWE/IXStky7mzireIcnOC4gwoDPvs/QC4vIFU02svFoA92
+         sOL5efb2ODRmKQ596K91OtNa2znUBopWDHQl8HglRdn4LUWwHeMYa0CLlM7PEub0RIPY
+         swhKQIJvckDSTj8lfTLTIRDEkV3GKL2aTtGr2i4w770rxseUuxKBk/qMe+4yv1ZswyJb
+         soIFHbstbb2EmwwEiiO8h2XLA/az/ZBlzLr6+RLeVfEctjpQaOnGkxE/AlGA0d/LSXjP
+         mI4x/VI/zM0ITgiov5GoYXyBsvkFQJgQjuWKrZ9Ps0ot/8dSZ1NN4icVxg9Fy98Jv+gT
+         e5dg==
+X-Gm-Message-State: AOAM530NAhLhtceKG3YgI7I/btmriRQtBVx/A5f2z9UxubNcasi668uP
+        rxm+tveJ+aXY1oqdezI4v1ahpTRBuyvUVQ==
+X-Google-Smtp-Source: ABdhPJyYBY1m3ap3FTqF0Co+JOPNyvzi6NT3ywXO6Cyx7Bb7muZ84qjTwTFjt/pXvvyQN/ioacabnw==
+X-Received: by 2002:a4a:e848:: with SMTP id j8mr3587427ooj.61.1635334331976;
+        Wed, 27 Oct 2021 04:32:11 -0700 (PDT)
+Received: from localhost.localdomain ([8.26.182.170])
+        by smtp.gmail.com with ESMTPSA id e23sm5430106oih.40.2021.10.27.04.32.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 04:32:11 -0700 (PDT)
+From:   Yanteng Si <siyanteng01@gmail.com>
+X-Google-Original-From: Yanteng Si <siyanteng@loongson.cn>
+To:     sergio.paracuellos@gmail.com
+Cc:     Yanteng Si <siyanteng@loongson.cn>, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, chenhuacai@kernel.org,
+        sterlingteng@gmail.com
+Subject: [PATCH 0/2] drivers/mt7621: Fix build error ERROR: modpost:
+Date:   Wed, 27 Oct 2021 19:31:38 +0800
+Message-Id: <cover.1635333327.git.siyanteng@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
-> Move the halt-polling "success" and histogram stats update into the
-> dedicated helper to fix a discrepancy where the success/fail "time" stats
-> consider polling successful so long as the wait is avoided, but the main
-> "success" and histogram stats consider polling successful if and only if
-> a wake event was detected by the halt-polling loop.
-> 
-> Move halt_attempted_poll to the helper as well so that all the stats are
-> updated in a single location.  While it's a bit odd to update the stat
-> well after the fact, practically speaking there's no meaningful advantage
-> to updating before polling.
-> 
-> Note, there is a functional change in addition to the success vs. fail
-> change.  The histogram updates previously called ktime_get() instead of
-> using "cur".  But that change is desirable as it means all the stats are
-> now updated with the same polling time, and avoids the extra ktime_get(),
-> which isn't expensive but isn't free either.
-> 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  virt/kvm/kvm_main.c | 35 ++++++++++++++++-------------------
->  1 file changed, 16 insertions(+), 19 deletions(-)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 4dfcd736b274..1292c7876d3f 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -3204,12 +3204,23 @@ static int kvm_vcpu_check_block(struct kvm_vcpu *vcpu)
->  static inline void update_halt_poll_stats(struct kvm_vcpu *vcpu, ktime_t start,
->  					  ktime_t end, bool success)
->  {
-> +	struct kvm_vcpu_stat_generic *stats = &vcpu->stat.generic;
->  	u64 poll_ns = ktime_to_ns(ktime_sub(end, start));
->  
-> -	if (success)
-> -		vcpu->stat.generic.halt_poll_success_ns += poll_ns;
-> -	else
-> -		vcpu->stat.generic.halt_poll_fail_ns += poll_ns;
-> +	++vcpu->stat.generic.halt_attempted_poll;
-> +
-> +	if (success) {
-> +		++vcpu->stat.generic.halt_successful_poll;
-> +
-> +		if (!vcpu_valid_wakeup(vcpu))
-> +			++vcpu->stat.generic.halt_poll_invalid;
-> +
-> +		stats->halt_poll_success_ns += poll_ns;
-> +		KVM_STATS_LOG_HIST_UPDATE(stats->halt_poll_success_hist, poll_ns);
-> +	} else {
-> +		stats->halt_poll_fail_ns += poll_ns;
-> +		KVM_STATS_LOG_HIST_UPDATE(stats->halt_poll_fail_hist, poll_ns);
-> +	}
->  }
->  
->  /*
-> @@ -3230,30 +3241,16 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
->  	if (do_halt_poll) {
->  		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
->  
-> -		++vcpu->stat.generic.halt_attempted_poll;
->  		do {
->  			/*
->  			 * This sets KVM_REQ_UNHALT if an interrupt
->  			 * arrives.
->  			 */
-> -			if (kvm_vcpu_check_block(vcpu) < 0) {
-> -				++vcpu->stat.generic.halt_successful_poll;
-> -				if (!vcpu_valid_wakeup(vcpu))
-> -					++vcpu->stat.generic.halt_poll_invalid;
-> -
-> -				KVM_STATS_LOG_HIST_UPDATE(
-> -				      vcpu->stat.generic.halt_poll_success_hist,
-> -				      ktime_to_ns(ktime_get()) -
-> -				      ktime_to_ns(start));
-> +			if (kvm_vcpu_check_block(vcpu) < 0)
->  				goto out;
-> -			}
->  			cpu_relax();
->  			poll_end = cur = ktime_get();
->  		} while (kvm_vcpu_can_poll(cur, stop));
-> -
-> -		KVM_STATS_LOG_HIST_UPDATE(
-> -				vcpu->stat.generic.halt_poll_fail_hist,
-> -				ktime_to_ns(ktime_get()) - ktime_to_ns(start));
->  	}
->  
->  
+Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
+the MT7621 PCIe host controller driver is built as a module but no MODULE_*() attributes
+were specified, causing a build error due to missing license information. At the same time,
+modpost complains once these drivers become modules.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
+ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
 
-Best regards,
-	Maxim Levitsky
+Let's just fix them.
 
+Yanteng Si (2):
+  PCI: mt7621: Add MODULE_* macros to MT7621 PCIe host controller driver
+  PCI: mt7621: Export mips_cm/cpc/gcr_* to modules
+
+ arch/mips/kernel/mips-cm.c           | 5 +++++
+ arch/mips/kernel/mips-cpc.c          | 1 +
+ drivers/pci/controller/pcie-mt7621.c | 2 ++
+ 3 files changed, 8 insertions(+)
+
+-- 
+2.27.0
 
