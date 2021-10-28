@@ -2,55 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0684E43E53F
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 17:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10CC43E562
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 17:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbhJ1Pgx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 11:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbhJ1Pgx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 11:36:53 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F244C061745
-        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 08:34:26 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r2so6705881pgl.10
-        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 08:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ObU0mLn8cgLGt35bHM9Ve7PBUotjGGEWKnNtAqnV8Y0=;
-        b=Dh2oRVWq7FNB4VxeeBx+DY+B7J6W36/D0YFmfA4JinPWULNj2JAyVIdGN5W95l+d90
-         4Uu/ZwJdWUivmqUAxVTynE14t1JCgr4B8VIlvCnfQRBjV/9sZBN9FbtVQViBrcsIkfKk
-         FKX6ULIrvBdeMPobrWIP7p55k83rg/EH2wU4GD4W9e2j7rIISQUbKASJH6T77kFM7m0Z
-         Qtlmy8wjfeMDEMJrWpV2K5PFqGDN6VxYLPZtUxrtHEs4QyogxcvUebO7UVfiBHutG04k
-         U0NkfKu6Je8Pt6shzy+xbyjZteg84KZAIk3v/fR91ZfKR/MAff+MA9k1aMrDIiCOqEqs
-         s/bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ObU0mLn8cgLGt35bHM9Ve7PBUotjGGEWKnNtAqnV8Y0=;
-        b=d9hkMlQzwwrCBu/xDRTWFncnDw+dw4e6E0chFBoJ+j6+TQa08iDGJyMG8Q21V9b6ru
-         65kWzQzThLK2Lp20dYyDWVzIypvxopVYdsV83ZRgWYjVQ7ayoWmt2KiljzWOYMzdpTVd
-         ZojD0/Cy+cxcF1tBzHIhlXH8kDoBcHimwHzVgqNrCEv0yd569R72sRS2F+fNMDxyqCpP
-         KCt+KVEhKpML9zRrbVGPhkvfXEZuXrEB0Xq3x/wf2GM1cFZkYm7fxC86Dj9xtIbz9pnA
-         HPLjQ1H3lkaQb7UPdv5cT3lpn2WMh3JauBWenFQgZnT/qc4RXg5gro87h4B8kC7bXmIN
-         AJvA==
-X-Gm-Message-State: AOAM5331KR0ABpL8gjF0xcm/O1YqlPZfunPPILo+L6s2yHdQ4LO0fPE0
-        V/E9+AnSmksN5FDB1vtwWjd3xQ==
-X-Google-Smtp-Source: ABdhPJz6jdrYVfnN/6E/mwaWkSEy+zhYc5xKvC8pKY4AVCJGv9Uh9d4/rKPGgqsum0tyEq6Ye9Z/qw==
-X-Received: by 2002:aa7:9427:0:b0:47c:3b8e:5253 with SMTP id y7-20020aa79427000000b0047c3b8e5253mr5166508pfo.69.1635435265242;
-        Thu, 28 Oct 2021 08:34:25 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p12sm4586055pfh.52.2021.10.28.08.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 08:34:24 -0700 (PDT)
-Date:   Thu, 28 Oct 2021 15:34:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        id S230325AbhJ1Psj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 11:48:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42279 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229946AbhJ1Psi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Oct 2021 11:48:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635435970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F4tMjT47BZ3DwbmAEWq81W0GAGbuRTe5m3IotIof8YU=;
+        b=BjqOJFROTIOhDmJkCsO6Exs79jec8AvAq0YcQV3+y6zihBb/DGdQas3lnaz5aNxZE2hqbK
+        WhObPml9ixi3GkAgkTvb2ovSasE+MsFT1a5iP4142pp+zyc0PR58hxt5QbukfE3NmyqktO
+        zLewA7VN5IUax5mM4WnTFZ7PBNDdWt8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-192-HPiuQd71NyeJUfJbOWNqdw-1; Thu, 28 Oct 2021 11:46:07 -0400
+X-MC-Unique: HPiuQd71NyeJUfJbOWNqdw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F02CB19251A0;
+        Thu, 28 Oct 2021 15:46:02 +0000 (UTC)
+Received: from starship (unknown [10.40.194.243])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9106C5DA61;
+        Thu, 28 Oct 2021 15:45:15 +0000 (UTC)
+Message-ID: <06ed37a510347fdc7c6f7ce46fd98ce5b9ff7554.camel@redhat.com>
+Subject: Re: [PATCH v2 32/43] KVM: VMX: Move preemption timer <=> hrtimer
+ dance to common x86
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Paul Mackerras <paulus@ozlabs.org>,
         Anup Patel <anup.patel@wdc.com>,
@@ -59,8 +49,8 @@ Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Atish Patra <atish.patra@wdc.com>,
@@ -78,67 +68,114 @@ Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         David Matlack <dmatlack@google.com>,
         Oliver Upton <oupton@google.com>,
         Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH v2 21/43] KVM: VMX: Clean up PI pre/post-block WARNs
-Message-ID: <YXrC/X6b+tgn6cJ9@google.com>
+Date:   Thu, 28 Oct 2021 18:45:14 +0300
+In-Reply-To: <20211009021236.4122790-33-seanjc@google.com>
 References: <20211009021236.4122790-1-seanjc@google.com>
- <20211009021236.4122790-22-seanjc@google.com>
- <6b2bdfad87e268e861b6cc331d25790dade8e27b.camel@redhat.com>
+         <20211009021236.4122790-33-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b2bdfad87e268e861b6cc331d25790dade8e27b.camel@redhat.com>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 28, 2021, Maxim Levitsky wrote:
-> On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
-> > Move the WARN sanity checks out of the PI descriptor update loop so as
-> > not to spam the kernel log if the condition is violated and the update
-> > takes multiple attempts due to another writer.  This also eliminates a
-> > few extra uops from the retry path.
-> > 
-> > Technically not checking every attempt could mean KVM will now fail to
-> > WARN in a scenario that would have failed before, but any such failure
-> > would be inherently racy as some other agent (CPU or device) would have
-> > to concurrent modify the PI descriptor.
-
-...
-
-> Don't know for sure if this is desired. I'll would just use WARN_ON_ONCE instead
-> if the warning spams the log.
+On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
+> Handle the switch to/from the hypervisor/software timer when a vCPU is
+> blocking in common x86 instead of in VMX.  Even though VMX is the only
+> user of a hypervisor timer, the logic and all functions involved are
+> generic x86 (unless future CPUs do something completely different and
+> implement a hypervisor timer that runs regardless of mode).
 > 
-> If there is a race I would rather want to catch it even if rare.
+> Handling the switch in common x86 will allow for the elimination of the
+> pre/post_blocks hooks, and also lets KVM switch back to the hypervisor
+> timer if and only if it was in use (without additional params).  Add a
+> comment explaining why the switch cannot be deferred to kvm_sched_out()
+> or kvm_vcpu_block().
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c |  6 +-----
+>  arch/x86/kvm/x86.c     | 21 +++++++++++++++++++++
+>  2 files changed, 22 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index b3bb2031a7ac..a24f19874716 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7464,16 +7464,12 @@ void vmx_update_cpu_dirty_logging(struct kvm_vcpu *vcpu)
+>  
+>  static int vmx_pre_block(struct kvm_vcpu *vcpu)
+>  {
+> -	if (kvm_lapic_hv_timer_in_use(vcpu))
+> -		kvm_lapic_switch_to_sw_timer(vcpu);
+> -
+>  	return 0;
+>  }
+>  
+>  static void vmx_post_block(struct kvm_vcpu *vcpu)
+>  {
+> -	if (kvm_x86_ops.set_hv_timer)
+> -		kvm_lapic_switch_to_hv_timer(vcpu);
+> +
+>  }
+>  
+>  static void vmx_setup_mce(struct kvm_vcpu *vcpu)
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index e0219acfd9cf..909e932a7ae7 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9896,8 +9896,21 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  
+>  static inline int vcpu_block(struct kvm *kvm, struct kvm_vcpu *vcpu)
+>  {
+> +	bool hv_timer;
+> +
+>  	if (!kvm_arch_vcpu_runnable(vcpu) &&
+>  	    (!kvm_x86_ops.pre_block || static_call(kvm_x86_pre_block)(vcpu) == 0)) {
+> +		/*
+> +		 * Switch to the software timer before halt-polling/blocking as
+> +		 * the guest's timer may be a break event for the vCPU, and the
+> +		 * hypervisor timer runs only when the CPU is in guest mode.
+> +		 * Switch before halt-polling so that KVM recognizes an expired
+> +		 * timer before blocking.
+> +		 */
 
-Paolo had similar concerns[*].  I copied the most relevant part of the discussion
-below, let me know if you object to the outcome.
+I didn't knew about this until now but it all makes sense. The comment is very good.
 
-Thanks for the reviews!
+> +		hv_timer = kvm_lapic_hv_timer_in_use(vcpu);
+> +		if (hv_timer)
+> +			kvm_lapic_switch_to_sw_timer(vcpu);
+> +
+>  		srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
+>  		if (vcpu->arch.mp_state == KVM_MP_STATE_HALTED)
+>  			kvm_vcpu_halt(vcpu);
+> @@ -9905,6 +9918,9 @@ static inline int vcpu_block(struct kvm *kvm, struct kvm_vcpu *vcpu)
+>  			kvm_vcpu_block(vcpu);
+>  		vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
+>  
+> +		if (hv_timer)
+> +			kvm_lapic_switch_to_hv_timer(vcpu);
+> +
+>  		if (kvm_x86_ops.post_block)
+>  			static_call(kvm_x86_post_block)(vcpu);
+>  
+> @@ -10136,6 +10152,11 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
+>  			r = -EINTR;
+>  			goto out;
+>  		}
+> +		/*
+> +		 * It should be impossible for the hypervisor timer to be in
+> +		 * use before KVM has ever run the vCPU.
+> +		 */
+> +		WARN_ON_ONCE(kvm_lapic_hv_timer_in_use(vcpu));
+>  		kvm_vcpu_block(vcpu);
+>  		if (kvm_apic_accept_events(vcpu) < 0) {
+>  			r = 0;
 
-[*] https://lore.kernel.org/all/YXllGfrjPX1pVUx6@google.com/T/#u
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-On Wed, Oct 27, 2021 at 8:38 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> On 27/10/21 17:28, Sean Christopherson wrote:
-> > On Wed, Oct 27, 2021, Paolo Bonzini wrote:
-> > > On 27/10/21 16:41, Sean Christopherson wrote:
-> > > > The other thing I don't like about having the WARN in the loop is that it suggests
-> > > > that something other than the vCPU can modify the NDST and SN fields, which is
-> > > > wrong and confusing (for me).
-> > >
-> > > Yeah, I can agree with that.  Can you add it in a comment above the cmpxchg
-> > > loop, it can be as simple as
-> > >
-> > > 	/* The processor can set ON concurrently.  */
-> > >
-> > > when you respin patch 21 and the rest of the series?
-> >
-> > I can definitely add a comment, but I think that comment is incorrect.
->
-> It's completely backwards indeed.  I first had "the hardware" and then
-> shut down my brain for a second to replace it.
->
-> > So something like this?
-> >
-> > 	/* ON can be set concurrently by a different vCPU or by hardware. */
->
-> Yes, of course.
+Best regards,
+	Maxim Levitsky
+
