@@ -2,108 +2,200 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DC143E0F2
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 14:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F337B43E156
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 14:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbhJ1M2O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 08:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbhJ1M2O (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 08:28:14 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B671C061570
-        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 05:25:47 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id y207so7962791oia.11
-        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 05:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GMyOY8PCFVVOZ0hPtDrkLyKK9NOPb8N56A+X2xapE7I=;
-        b=AqO/dMaFQGSrs33+DvthVPz/t77jxJ6Rj6URM4LLl43zjAhPbvcG758Mfi+E70edRn
-         edCdVI7X7M7TZgJL6Yc/NZOf4N2Fum+xNcdT4MGTSBSbNBnyW2tL1ayvR1qq9dVTDZjb
-         1L7rtTgV0aXzSNG2SnMiFtd0Ok7aeyzGe3kmLuMXe9KEnWwhUYUIGJdFzyUah2bfI4d+
-         nz4fnWw+XET3TUdLkBApmWz5e+I1+rpySIry6Rg6gQFSXTalobyUxPXbW3u+uf2yKDcA
-         cM7X0WfIN3B8LzRNphsLsj0a1uGmvut9PieT8AVaVGTiwHIIcPOozdzM33xRxCRu/OMf
-         Z8Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=GMyOY8PCFVVOZ0hPtDrkLyKK9NOPb8N56A+X2xapE7I=;
-        b=0sxfp/2QVIBkCZHdEZxN32qHHB5cGBl/2IVrXc30eQGSZ8XSHOQeS0YKND9cuU3xhO
-         iJydIgsUt6VXAX5juW/kx/RNgDA+nwVEJoZ/m8tqmneamZ780xLHR3lAjZFyqSfBjQAf
-         /A6wxwZlAxqdOVsOwPEt9fMM43WTeoFAuWZZMq85oM2tb49gPz0nnGNdKt5aTfQiTD6l
-         UJC6FhvMaLEz4KSYKNvvVCeVjz2rw203qZYgbZyRzD5dVomjsyeK4QwRLwchy7PAULV3
-         InMcDqQ0rj9Q+MWJ2BGLVvrRUui2dXYaHvWAU7AHnK77nenKdwxe7x/dGD6XLDcb0noW
-         jiBA==
-X-Gm-Message-State: AOAM532xDPMG4o7/HLSafs7VhGmV+qp4go3J3GPAYBTzl+k0fKzq3Ijq
-        WMfC+HDdJmCX3qYKc7hXsf5DdxI62DOZLw==
-X-Google-Smtp-Source: ABdhPJwul91JiUE3rW04Zeb1QoXVKrFw55bt2fsQ+/970ELGuJlGxW0ABfCIy6o6/k0+mfjsWieBzw==
-X-Received: by 2002:a05:6808:2115:: with SMTP id r21mr887973oiw.110.1635423946861;
-        Thu, 28 Oct 2021 05:25:46 -0700 (PDT)
-Received: from localhost.localdomain ([8.26.182.76])
-        by smtp.gmail.com with ESMTPSA id m23sm986486oom.34.2021.10.28.05.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 05:25:46 -0700 (PDT)
-From:   Wang Haojun <jiangliuer01@gmail.com>
-X-Google-Original-From: Wang Haojun <wanghaojun@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S230308AbhJ1M4E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 08:56:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33347 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230267AbhJ1M4D (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Oct 2021 08:56:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635425616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AzVqjh+2Lud5A9V6SBUfySTC7Jdhp9VKIE8pHEMoxEM=;
+        b=Haw4meDnnZiRNqepWdJFiqTa/PAiOvLV38FWXEXwIlArT5exwBdzbYcE1nm/SYMwkwnJbn
+        Ruv4+XnNWlHbMrY2qYwYy/lyn4TIq6WxuxbJqteBHV67OKIFlK7nuqtNeEApmcAEeQ2k7W
+        m/EJaZj3ddTXLnSZSkrsgaZt9w5ABmc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-212-ldzfqrMaMG-LB-zAjma-Rg-1; Thu, 28 Oct 2021 08:53:33 -0400
+X-MC-Unique: ldzfqrMaMG-LB-zAjma-Rg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E1F24802682;
+        Thu, 28 Oct 2021 12:53:28 +0000 (UTC)
+Received: from starship (unknown [10.40.194.243])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 03E025DA61;
+        Thu, 28 Oct 2021 12:53:12 +0000 (UTC)
+Message-ID: <558e7e4c36e649709837079a25c2f56fc5609fbe.camel@redhat.com>
+Subject: Re: [PATCH v2 28/43] KVM: VMX: Remove vCPU from PI wakeup list
+ before updating PID.NV
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
-        Wang Haojun <wanghaojun@loongson.cn>,
-        Li Xuefeng <lixuefeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: Wire up sys_futex_waitv syscall
-Date:   Thu, 28 Oct 2021 20:25:16 +0800
-Message-Id: <20211028122516.3850621-1-wanghaojun@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Date:   Thu, 28 Oct 2021 15:53:11 +0300
+In-Reply-To: <20211009021236.4122790-29-seanjc@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+         <20211009021236.4122790-29-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Wire up sys_futex_waitv syscall.
+On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
+> Remove the vCPU from the wakeup list before updating the notification
+> vector in the posted interrupt post-block helper.  There is no need to
+> wake the current vCPU as it is by definition not blocking.  Practically
+> speaking this is a nop as it only shaves a few meager cycles in the
+> unlikely case that the vCPU was migrated and the previous pCPU gets a
+> wakeup IRQ right before PID.NV is updated.  The real motivation is to
+> allow for more readable code in the future, when post-block is merged
+> with vmx_vcpu_pi_load(), at which point removal from the list will be
+> conditional on the old notification vector.
+> 
+> Opportunistically add comments to document why KVM has a per-CPU spinlock
+> that, at first glance, appears to be taken only on the owning CPU.
+> Explicitly call out that the spinlock must be taken with IRQs disabled, a
+> detail that was "lost" when KVM switched from spin_lock_irqsave() to
+> spin_lock(), with IRQs disabled for the entirety of the relevant path.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/posted_intr.c | 49 +++++++++++++++++++++++-----------
+>  1 file changed, 33 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+> index 2b2206339174..901b7a5f7777 100644
+> --- a/arch/x86/kvm/vmx/posted_intr.c
+> +++ b/arch/x86/kvm/vmx/posted_intr.c
+> @@ -10,10 +10,22 @@
+>  #include "vmx.h"
+>  
+>  /*
+> - * We maintain a per-CPU linked-list of vCPU, so in wakeup_handler() we
+> - * can find which vCPU should be waken up.
+> + * Maintain a per-CPU list of vCPUs that need to be awakened by wakeup_handler()
+Nit: While at it, it would be nice to rename this to pi_wakeup_hanlder() so that it can be more easilly
+found.
 
-Fix Build warning: #warning syscall futex_waitv not implemented [-Wcpp]
 
-syscall futex_waitv not implemented
+> + * when a WAKEUP_VECTOR interrupted is posted.  vCPUs are added to the list when
+> + * the vCPU is scheduled out and is blocking (e.g. in HLT) with IRQs enabled.
+s/interrupted/interrupt ?
 
-Signed-off-by: Wang Haojun <wanghaojun@loongson.cn>
----
- arch/mips/kernel/syscalls/syscall_n32.tbl | 1 +
- arch/mips/kernel/syscalls/syscall_n64.tbl | 1 +
- arch/mips/kernel/syscalls/syscall_o32.tbl | 1 +
- 3 files changed, 3 insertions(+)
+Isn't that comment incorrect? As I see, the PI hardware is setup to use the WAKEUP_VECTOR
+when vcpu blocks (in pi_pre_block) and then that vcpu is added to the list.
+The pi_wakeup_hanlder just goes over the list and wakes up all vcpus on the lsit.
 
-diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-index 70e32de2bcaa..72d02d363f36 100644
---- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-@@ -387,3 +387,4 @@
- 446	n32	landlock_restrict_self		sys_landlock_restrict_self
- # 447 reserved for memfd_secret
- 448	n32	process_mrelease		sys_process_mrelease
-+449	n32	futex_waitv			sys_futex_waitv
-diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-index 1ca7bc337932..e2c481fcede6 100644
---- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-@@ -363,3 +363,4 @@
- 446	n64	landlock_restrict_self		sys_landlock_restrict_self
- # 447 reserved for memfd_secret
- 448	n64	process_mrelease		sys_process_mrelease
-+449	n64	futex_waitv			sys_futex_waitv
-diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-index a61c35edaa74..3714c97b2643 100644
---- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-@@ -436,3 +436,4 @@
- 446	o32	landlock_restrict_self		sys_landlock_restrict_self
- # 447 reserved for memfd_secret
- 448	o32	process_mrelease		sys_process_mrelease
-+449	o32	futex_waitv			sys_futex_waitv
--- 
-2.27.0
+
+> + * The vCPUs posted interrupt descriptor is updated at the same time to set its
+> + * notification vector to WAKEUP_VECTOR, so that posted interrupt from devices
+> + * wake the target vCPUs.  vCPUs are removed from the list and the notification
+> + * vector is reset when the vCPU is scheduled in.
+>   */
+>  static DEFINE_PER_CPU(struct list_head, blocked_vcpu_on_cpu);
+Also while at it, why not to rename this to 'blocked_vcpu_list'?
+to explain that this is list of blocked vcpus. Its a per-cpu variable
+so 'on_cpu' suffix isn't needed IMHO.
+
+> +/*
+> + * Protect the per-CPU list with a per-CPU spinlock to handle task migration.
+> + * When a blocking vCPU is awakened _and_ migrated to a different pCPU, the
+> + * ->sched_in() path will need to take the vCPU off the list of the _previous_
+> + * CPU.  IRQs must be disabled when taking this lock, otherwise deadlock will
+> + * occur if a wakeup IRQ arrives and attempts to acquire the lock.
+> + */
+>  static DEFINE_PER_CPU(spinlock_t, blocked_vcpu_on_cpu_lock);
+>  
+>  static inline struct pi_desc *vcpu_to_pi_desc(struct kvm_vcpu *vcpu)
+> @@ -101,23 +113,28 @@ static void __pi_post_block(struct kvm_vcpu *vcpu)
+>  	WARN(pi_desc->nv != POSTED_INTR_WAKEUP_VECTOR,
+>  	     "Wakeup handler not enabled while the vCPU was blocking");
+>  
+> -	dest = cpu_physical_id(vcpu->cpu);
+> -	if (!x2apic_mode)
+> -		dest = (dest << 8) & 0xFF00;
+> -
+> -	do {
+> -		old.control = new.control = READ_ONCE(pi_desc->control);
+> -
+> -		new.ndst = dest;
+> -
+> -		/* set 'NV' to 'notification vector' */
+> -		new.nv = POSTED_INTR_VECTOR;
+> -	} while (cmpxchg64(&pi_desc->control, old.control,
+> -			   new.control) != old.control);
+> -
+> +	/*
+> +	 * Remove the vCPU from the wakeup list of the _previous_ pCPU, which
+> +	 * will not be the same as the current pCPU if the task was migrated.
+> +	 */
+>  	spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+>  	list_del(&vcpu->blocked_vcpu_list);
+>  	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+> +
+> +	dest = cpu_physical_id(vcpu->cpu);
+> +	if (!x2apic_mode)
+> +		dest = (dest << 8) & 0xFF00;
+It would be nice to have a function for this, this appears in this file twice.
+Maybe there is a function already somewhere?
+
+
+> +
+> +	do {
+> +		old.control = new.control = READ_ONCE(pi_desc->control);
+> +
+> +		new.ndst = dest;
+> +
+> +		/* set 'NV' to 'notification vector' */
+> +		new.nv = POSTED_INTR_VECTOR;
+> +	} while (cmpxchg64(&pi_desc->control, old.control,
+> +			   new.control) != old.control);
+> +
+>  	vcpu->pre_pcpu = -1;
+>  }
+>  
+
+Best regards,
+	Maxim Levitsky
+
 
