@@ -2,128 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF53E43E6B2
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 18:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF41843E6CD
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 19:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbhJ1RAO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 13:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
+        id S230451AbhJ1RJS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 13:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbhJ1RAO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 13:00:14 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32524C061570;
-        Thu, 28 Oct 2021 09:57:47 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 107-20020a9d0a74000000b00553bfb53348so9564842otg.0;
-        Thu, 28 Oct 2021 09:57:47 -0700 (PDT)
+        with ESMTP id S230164AbhJ1RJQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 13:09:16 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F47C061745
+        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 10:06:48 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id m21so6971745pgu.13
+        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 10:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0UK2vbdT0X4ap39M2tD9w4zH89c+ahlrON/2EDMLDT0=;
-        b=GSD8KHQW+MvVegzYztDKybCvE3H4frzOgorObGphuh88D+3iCZolajunPdhjLsF610
-         0LxDOsJzVCimX4sNeHdm0yZNetfrL11vDSLTbUrc07FvHUx50xbjmX2Npg4UwkcipjF1
-         fvKqiVpaDxjqsK5JQTQCuINSAezvRlErpu33z+HTXWr/h52eEshWhLN24TBwSg6MLXmA
-         260Ed/V1qeKwIgyD7TPRuCFnNn9CTZ0pbJiltrIKZArI0ATe2S3GJUrXle/F5yM/F8dO
-         yokc9wSWwI33KtsPlzub56hbXWvxfvbcC+fLWoy3FJDGdOKKvM08vwe9jsq4Mx8o3VC3
-         qtKA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5FMOUmei9Yd20y1XWjfcdbxiSsU6/CKiTZiNSpEJsLk=;
+        b=goNQkkMJXpMPhPYFdVULDytrjQcoVu2lfwn3WuXA8ZOWfVU/JBHyZvLlEiPgcloYqE
+         Jhz0+bgiXe/YWIVtHqD9uWlRDISXdiszKG8C5B2x8qq+87xgln6oUfJqk8Pl2O4vpYUv
+         aElTLuihNiGwbXbMGeTzi+TT9xRVMesWVtGd6b3dr0Gyg3Ld7XrPFh8WgKV/HqWCqye6
+         IN651B4/j+icyywyqYjZAUlmNgSWr91NVE2zYdE4jrE7wi4kHo7ce24TfGAFy44uEg6R
+         fWLCdqwL2dJ2VgUcEM+jrTRcLtG9T2m9NM5+w4j3OENqjzp/2Dbrk6u9v0EBK753yfNN
+         PvuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0UK2vbdT0X4ap39M2tD9w4zH89c+ahlrON/2EDMLDT0=;
-        b=T6a7o5Z5IUbkDjeNuRgAFcUbmLmonIfsOOIzk49+0Td6NKDrnMUcMzD4FWrXQb4ot9
-         AWA37UlRstSZG8P1cYdCkkUYh2dIBmfwkUIpXLHZ6uRbi3LI1x03j7LYEF87j5grwpH1
-         IO+outxNuBNfCuWpIKC8VtYvcaYpyGHv51DPdbVbh5PT5uDbCz0qaTM++LLQgXuFKILp
-         fUC/MVdWuzldedws7D5iYgaHkfxArfS197kUt41scEjiR/AfCBJm/YRpKlge8AgGRB9n
-         UZ0yzyxWLQ/9/k3pTlSnkRv2+EhIzieHhfz0OAt5Afb+V45YG9oZBvGwbfRaXJhUFldO
-         NVow==
-X-Gm-Message-State: AOAM533Ctar0OX0bus01eJOIGd9i9yLMpJ/r2fsvZR9Db25uONiZs3bW
-        nrsFl9Uo83axSC1cTKEXjbdCe2STGz0=
-X-Google-Smtp-Source: ABdhPJw/0L9Nzn89I9YK2ErLOHAi/8HUCBXzLV0+SaeVffHZ+pEKeTJV0TYLutalxJs8jgk1TgK1sQ==
-X-Received: by 2002:a9d:764c:: with SMTP id o12mr4459795otl.129.1635440266374;
-        Thu, 28 Oct 2021 09:57:46 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bn13sm1094836oib.37.2021.10.28.09.57.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Oct 2021 09:57:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20211028093059.32535-1-zajec5@gmail.com>
- <20211028093059.32535-3-zajec5@gmail.com>
- <f78d1573-4909-039d-8647-d4fc13205f47@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
-Message-ID: <ce6ccb22-a81c-336e-4b2e-44f9ad6de246@roeck-us.net>
-Date:   Thu, 28 Oct 2021 09:57:43 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5FMOUmei9Yd20y1XWjfcdbxiSsU6/CKiTZiNSpEJsLk=;
+        b=40m/OmwV6ZXwWS36f5kge/hvDsEONGPd79qVS6yQr4446gMbY7rxTw0wnfQcJyAtze
+         NttRZ9nYzu2S5/GTGd2H/OQA1RrMqGoH5Aff+QynDvdYsZE+ntcbUmgN09O2WOUCLeZh
+         7qzHu2D1Bws9375N1RGEexoEeDZcySHQhS7CCp1kYqh1Ig4zoXQNpgii9GisrbkSwN2H
+         GNJHy7zwAQWaJONo1t8kk4mRDmNN9Y67O/1QaYkclk6uexRR+4q5QzqQVrqnxNKAypzB
+         adW4qyWZvSkQqbV1aTj/S49OquSLW/z47rCmXlRs7b3UR1XaGZs7YcOhv10qGkgfb/n0
+         3H2w==
+X-Gm-Message-State: AOAM5305FqBPoVMG+XrLncRZp8bw7Gzrt/GcGT+WbNaqwDPrnozdj8pG
+        HGkrByL3a0JqFXrSbgpT+pH9+g==
+X-Google-Smtp-Source: ABdhPJyOg/bEAU+pflh7d3tXCNJNzQxKlLT5ImT9mzjP0dgOLJ0BibjbqbqYNusqXsDTdRjlGBu6iw==
+X-Received: by 2002:a05:6a00:181a:b0:47c:1057:52e with SMTP id y26-20020a056a00181a00b0047c1057052emr5549485pfa.76.1635440808097;
+        Thu, 28 Oct 2021 10:06:48 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y19sm4044516pfn.23.2021.10.28.10.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 10:06:47 -0700 (PDT)
+Date:   Thu, 28 Oct 2021 17:06:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH v2 35/43] KVM: SVM: Signal AVIC doorbell iff vCPU is in
+ guest mode
+Message-ID: <YXrYo9mtueDT0bnu@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+ <20211009021236.4122790-36-seanjc@google.com>
+ <b2ba4c4e6a9083f3fa0b9af4504f9f54e72ca24c.camel@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <f78d1573-4909-039d-8647-d4fc13205f47@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b2ba4c4e6a9083f3fa0b9af4504f9f54e72ca24c.camel@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10/28/21 9:29 AM, Florian Fainelli wrote:
-> On 10/28/21 2:30 AM, Rafał Miłecki wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->>
->> Hardware supported by this driver goes back to the old bcm63xx days. It
->> was then reused in BCM7038 and later also in BCM4908.
->>
->> Depending on SoC model registers layout differs a bit. This commit
->> introduces support for per-chipset registers offsets & adds BCM4908
->> layout.
->>
->> Later on BCM63xx SoCs support should be added too (probably as platform
->> devices due to missing DT). Eventually this driver should replace
->> bcm63xx_wdt.c.
->>
-Seems unrelated / irrelevant in this commit log, except maybe after '---'.
-
->> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->> ---
+On Thu, Oct 28, 2021, Maxim Levitsky wrote:
+> On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
+> > Signal the AVIC doorbell iff the vCPU is running in the guest.  If the vCPU
+> > is not IN_GUEST_MODE, it's guaranteed to pick up any pending IRQs on the
+> > next VMRUN, which unconditionally processes the vIRR.
+> > 
+> > Add comments to document the logic.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/svm/avic.c | 14 ++++++++++++--
+> >  1 file changed, 12 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> > index 208c5c71e827..cbf02e7e20d0 100644
+> > --- a/arch/x86/kvm/svm/avic.c
+> > +++ b/arch/x86/kvm/svm/avic.c
+> > @@ -674,7 +674,12 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+> >  	kvm_lapic_set_irr(vec, vcpu->arch.apic);
+> >  	smp_mb__after_atomic();
+> >  
+> > -	if (avic_vcpu_is_running(vcpu)) {
+> > +	/*
+> > +	 * Signal the doorbell to tell hardware to inject the IRQ if the vCPU
+> > +	 * is in the guest.  If the vCPU is not in the guest, hardware will
+> > +	 * automatically process AVIC interrupts at VMRUN.
+> > +	 */
+> > +	if (vcpu->mode == IN_GUEST_MODE) {
+> >  		int cpu = READ_ONCE(vcpu->cpu);
+> >  
+> >  		/*
+> > @@ -687,8 +692,13 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
+> >  		if (cpu != get_cpu())
+> >  			wrmsrl(SVM_AVIC_DOORBELL, kvm_cpu_get_apicid(cpu));
+> >  		put_cpu();
+> > -	} else
+> > +	} else {
+> > +		/*
+> > +		 * Wake the vCPU if it was blocking.  KVM will then detect the
+> > +		 * pending IRQ when checking if the vCPU has a wake event.
+> > +		 */
+> >  		kvm_vcpu_wake_up(vcpu);
+> > +	}
+> >  
+> >  	return 0;
+> >  }
 > 
-> [snip]
+> It makes sense indeed to avoid ringing the doorbell when the vCPU is not in
+> the guest mode.
 > 
->> +
->> +static const u16 bcm7038_wdt_regs_bcm4908[] = {
->> +	[BCM63XX_WDT_REG_DEFVAL]	= 0x28,
+> I do wonder if we want to call kvm_vcpu_wake_up always otherwise, as the vCPU
+> might be just outside of the guest mode and not scheduled out. I don't know
+> how expensive is kvm_vcpu_wake_up in this case.
 
-REG_DEFVAL is an odd name for this register. I can see that the
-bcm63xx driver uses it, but in reality it seems to be the timeout
-value, not some default value, only the bcm63xx driver doesn't
-seem to use it properly. I think REG_TIMEOUT or similar would
-be a much better name.
+IIUC, you're asking if we should do something like:
 
->> +	[BCM63XX_WDT_REG_CTL]		= 0x2c,
->> +	[BCM63XX_WDT_REG_SOFTRESET]	= 0x34,
+	if (vcpu->mode == IN_GUEST_MODE) {
+		<signal doorbell>
+	} else if (!is_vcpu_loaded(vcpu)) {
+		kvm_vcpu_wake_up();
+	}
+
+The answer is that kvm_vcpu_wake_up(), which is effectively rcuwait_wake_up(),
+is very cheap except for specific configurations that may or may not be valid for
+production[*].  Practically speaking, is_vcpu_loaded() doesn't exist and should
+never exist because it's inherently racy.  The closest we have would be
+
+	else if (vcpu != kvm_get_running_vcpu()) {
+		kvm_vcpu_wake_up();
+	}
+
+but that's extremely unlikely to be a net win because getting the current vCPU
+requires atomics to disable/re-enable preemption, especially if rcuwait_wake_up()
+is modified to avoid the rcu lock/unlock.
+
+TL;DR: rcuwait_wake_up() is cheap, and if it's too expensive, a better optimization
+would be to make it less expensive.
+
+[*] https://lkml.kernel.org/r/20211020110638.797389-1-pbonzini@redhat.com
+ 
+> Before this patch, the avic_vcpu_is_running would only be false when the vCPU
+> is scheduled out (e.g when vcpu_put was done on it)
 > 
-> I don't understand what you are doing here and why you are not
-> offsetting the "reg" property appropriately when you create your
-> bcm4908-wdt Device Tree node such that the base starts at 0, and the
-> existing driver becomes usable as-is. This does not make any sense to me
-> when it is obviously the simplest way to make the driver "accept" the
-> resource being passed.
+> Best regards,
+> 	Maxim Levitsky
 > 
-
-Agreed. This adds a lot of complexity that could be avoided.
-
-> I am going to send my patch series converting the bcm63xx_wdt.c driver
-> over to bcm7038_wdt.c, feel free to use or discard it.
-> 
-For my part I am very much looking forward to it.
-
-Guenter
