@@ -2,88 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D1143E29F
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 15:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292FE43E3E1
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 16:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbhJ1NxZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 09:53:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44350 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230429AbhJ1NxJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 Oct 2021 09:53:09 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S231239AbhJ1Oix (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 10:38:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23942 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230401AbhJ1Oix (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Oct 2021 10:38:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635431785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rIPy/P0MkwnX24RiVT8XHV56FyrWxedIt/Yy+pyq4E4=;
+        b=SMD62PWblhhSX3tgimyLNIpB0WRIOMAOHYQsaYHKx4YxY6WRgW7MgaKl5K04QM3eB+BQbI
+        k0iJmCkaKISRTbcw8khw3rq68sCs6If63Np0xpG5MhsvBTCWPutOgwQy+2Axy1UPAQeGQd
+        42ItOmFYMlP3kboAvnX4I921aL9wImc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-309-LuCRe9MpMnC4avaZ8uFX4w-1; Thu, 28 Oct 2021 10:36:24 -0400
+X-MC-Unique: LuCRe9MpMnC4avaZ8uFX4w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0D07B61038;
-        Thu, 28 Oct 2021 13:50:43 +0000 (UTC)
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mg5nl-002Dih-0o; Thu, 28 Oct 2021 14:50:41 +0100
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AE73C10A8E01;
+        Thu, 28 Oct 2021 14:36:19 +0000 (UTC)
+Received: from starship (unknown [10.40.194.243])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 18EDF100EA05;
+        Thu, 28 Oct 2021 14:36:03 +0000 (UTC)
+Message-ID: <33860db1f4951386347913d126ef7c8bc1655440.camel@redhat.com>
+Subject: Re: [PATCH v2 22/43] KVM: VMX: Drop unnecessary PI logic to handle
+ impossible conditions
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Date:   Thu, 28 Oct 2021 17:36:02 +0300
+In-Reply-To: <20211009021236.4122790-23-seanjc@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+         <20211009021236.4122790-23-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Date:   Thu, 28 Oct 2021 14:50:40 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        lkft-triage@lists.linaro.org
-Subject: Re: mips: irq.c:114:19: error: unused variable 'desc'
- [-Werror=unused-variable]
-In-Reply-To: <CA+G9fYtQCd4V9Y=qEGZeQw17TRNG1p_g9MKtYaWVo8QPua-Cug@mail.gmail.com>
-References: <CA+G9fYtQCd4V9Y=qEGZeQw17TRNG1p_g9MKtYaWVo8QPua-Cug@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <c65bccca4fa1345e18942ff66675296d@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: naresh.kamboju@linaro.org, linux-next@vger.kernel.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, mark.rutland@arm.com, tsbogend@alpha.franken.de, tglx@linutronix.de, sfr@canb.auug.org.au, lkft-triage@lists.linaro.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2021-10-28 12:47, Naresh Kamboju wrote:
-> Regression found on mips gcc-10 built with defconfig
-> Following build warnings / errors reported on linux next 20211027.
+On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
+> Drop sanity checks on the validity of the previous pCPU when handling
+> vCPU block/unlock for posted interrupts.  Barring a code bug or memory
+> corruption, the sanity checks will never fire, and any code bug that does
+> trip the WARN is all but guaranteed to completely break posted interrupts,
+> i.e. should never get anywhere near production.
 > 
-> The bisect tool pointing to the following commit
-> The first bad commit:
+> This is the first of several steps toward eliminating kvm_vcpu.pre_cpu.
 > 
-> commit 4cb6f4df976b288aa02bbb658d38e73d34d8231f
->   irq: mips: simplify do_domain_IRQ()
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/posted_intr.c | 24 ++++++++++--------------
+>  1 file changed, 10 insertions(+), 14 deletions(-)
 > 
-> metadata:
->     git_describe: next-20211027
->     git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->     git_short_log: ae5179317e79 (\"Add linux-next specific files for 
-> 20211027\")
->     target_arch: mips
->     toolchain: gcc-10
-> 
-> build error :
-> --------------
-> <stdin>:1559:2: warning: #warning syscall futex_waitv not implemented 
-> [-Wcpp]
-> arch/mips/kernel/irq.c: In function 'do_domain_IRQ':
-> arch/mips/kernel/irq.c:114:19: error: unused variable 'desc'
-> [-Werror=unused-variable]
->   struct irq_desc *desc;
->                    ^~~~
-> cc1: all warnings being treated as errors
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+> index 67cbe6ab8f66..6c2110d91b06 100644
+> --- a/arch/x86/kvm/vmx/posted_intr.c
+> +++ b/arch/x86/kvm/vmx/posted_intr.c
+> @@ -118,12 +118,10 @@ static void __pi_post_block(struct kvm_vcpu *vcpu)
+>  	} while (cmpxchg64(&pi_desc->control, old.control,
+>  			   new.control) != old.control);
+>  
+> -	if (!WARN_ON_ONCE(vcpu->pre_pcpu == -1)) {
+> -		spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+> -		list_del(&vcpu->blocked_vcpu_list);
+> -		spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+> -		vcpu->pre_pcpu = -1;
+> -	}
+> +	spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+> +	list_del(&vcpu->blocked_vcpu_list);
+> +	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+> +	vcpu->pre_pcpu = -1;
+>  }
+>  
+>  /*
+> @@ -153,14 +151,12 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
+>  
+>  	WARN_ON(irqs_disabled());
+>  	local_irq_disable();
+> -	if (!WARN_ON_ONCE(vcpu->pre_pcpu != -1)) {
+> -		vcpu->pre_pcpu = vcpu->cpu;
+> -		spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+> -		list_add_tail(&vcpu->blocked_vcpu_list,
+> -			      &per_cpu(blocked_vcpu_on_cpu,
+> -				       vcpu->pre_pcpu));
+> -		spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+> -	}
+> +
+> +	vcpu->pre_pcpu = vcpu->cpu;
+> +	spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+> +	list_add_tail(&vcpu->blocked_vcpu_list,
+> +		      &per_cpu(blocked_vcpu_on_cpu, vcpu->pre_pcpu));
+> +	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+>  
+>  	WARN(pi_desc->sn == 1,
+>  	     "Posted Interrupt Suppress Notification set before blocking");
 
-Already fixed as of 20211028095652.3503790-1-siyanteng@loongson.cn
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+
+
