@@ -2,238 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EC543DE2E
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 11:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4A843DE3C
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 11:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbhJ1J4C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 05:56:02 -0400
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:34581 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbhJ1J4A (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 05:56:00 -0400
-Received: by mail-ot1-f44.google.com with SMTP id t17-20020a056830083100b00553ced10177so7601568ots.1;
-        Thu, 28 Oct 2021 02:53:32 -0700 (PDT)
+        id S229809AbhJ1J7y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 05:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229775AbhJ1J7x (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 05:59:53 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F995C061570
+        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 02:57:25 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id m11so2735416oif.13
+        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 02:57:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=skVFEMOey3c9E4at7b7FVQSYZauKfLlM2hQLr2HIp8M=;
+        b=Y/5306iGJ25b1n+/kLS91Yk/aJ3qg/MUy9B57mWlWYG+q3b8hzX9Hii7p9GaJ/pI7m
+         RLwH8SwwcXj9Zs3ICRzbezPYOcP9uBhmjFJMqrkeTjihUKaWrSFFhi1+tNEiSh7LiQh3
+         O3VWyOcjRTlv4OKG36UHgH/u/9o349VJkJs4wWwko5SEv8L5ns/+h1VKUR0xm68Fki0q
+         5jmIo3HzCthxEXpdk1WUW2H0Lr0w3r8xHDsmRIafnsJwvJzly/9vGngxgMaOlmNVxPpo
+         VcoBgvwtSXbKt3UE+X8/D+EyoOINqSCQQKwoA9fY1MYsznZsMjqZHc2Lt5aZwp8+7rWz
+         PcHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uz31be5RzrXoa4uAxe1xyKZoIQd0wtsVVy1gZjyOGeo=;
-        b=jdFl/je3Je6T/jpCHs04XX6ITK/a6Yki3Je6sLTq60sPpv8KU3wjQzb7JSWZUuh8Ea
-         E1WhkuHpY/SLaMOFwPpIcpW+Xb3w8MOgphjjDRjOU6zRKQFs8LWQJUPrEduBRmASipAM
-         bPQUtTZoRe6qAUaZfPajlfft820o9J3COt+JFiSYvJxs2d4XftSLrXqkmtZ+12DcunbJ
-         R0+L1t0K7JjQ4QBEcwn3s7kcGoMHl0l1ysAYkvJ1fQYEdg6YvFOJgKQ+vtBH0LIbABle
-         Pi8Go4QlHquNyrdGZuRIvAtfYxXcaGp+h8VTW0DD1Xmtsuutpo61grFpw7QhkgzyqvZu
-         MFlQ==
-X-Gm-Message-State: AOAM532in2NVxr1p+JR32IP/S7/gtP+PmtkbO4WLA3C9ycT+YBthrKNW
-        o2W8Dkq0sIqWcv54+iwf4+qJ56qK90vujKrPxmc=
-X-Google-Smtp-Source: ABdhPJzOhFRTFEQQ+n5tEP/bBwTFb0889hJMVw20FWNyFAcerxAE3whFQ+5AhX1ip3T9ogNIhdu7wA8+/uN9VNCEoX8=
-X-Received: by 2002:a9d:65c1:: with SMTP id z1mr2411564oth.198.1635414812552;
- Thu, 28 Oct 2021 02:53:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=skVFEMOey3c9E4at7b7FVQSYZauKfLlM2hQLr2HIp8M=;
+        b=Rh58tT4qMll41H4iiWrmrWmnk/G27mkBPhD0cinFdxfe2gIen9GFZpCw3bGU2stlT1
+         6ncNWFpQ2sKtteZZxAwcgCpD9r/7HMmMRl0hbT8WwIOJLZ5F8mlKNlMFj11eYpyPyso7
+         GH3pErCl0oohr8OZ6h/muzkgQyU4JGTvDp5OB3NY1NwKsN00b+ZnvdABZQkuZ33xJlZc
+         oCwbmyhyj074OJ4s7KaJT5AYfrXz+b4LraUsrY1p4WCDefso/aPS7Bk7CWRRo8C3yT0W
+         OF7TyetsGpms+DqfPLV73IlkleG1WEe0YnYY/imj3tNswVw8ft5Z9TdVpE7fBnhu+W4V
+         J2mw==
+X-Gm-Message-State: AOAM533rCXOH14dDqtE6SU3FkdMG39qhkVAR/2CnzfSfpmgbsBc7fVYy
+        Q5ddiHr4YDmKEkgQXSLi8hk=
+X-Google-Smtp-Source: ABdhPJw4Ulj/HQLO1VnzkxGKoLib3lEvxzwteMsebyqTi6ft3r1YfeKb6ejgNF1NXBU21yIMisP7xg==
+X-Received: by 2002:aca:c156:: with SMTP id r83mr7684434oif.78.1635415045072;
+        Thu, 28 Oct 2021 02:57:25 -0700 (PDT)
+Received: from localhost.localdomain ([8.26.182.76])
+        by smtp.gmail.com with ESMTPSA id y10sm931444oti.40.2021.10.28.02.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Oct 2021 02:57:24 -0700 (PDT)
+From:   Yanteng Si <siyanteng01@gmail.com>
+X-Google-Original-From: Yanteng Si <siyanteng@loongson.cn>
+To:     tsbogend@alpha.franken.de
+Cc:     Yanteng Si <siyanteng@loongson.cn>, maz@kernel.org,
+        mark.rutland@arm.com, linux-mips@vger.kernel.org,
+        chenhuacai@kernel.org
+Subject: [PATCH] MIPS: irq: avoid an unused-variable error
+Date:   Thu, 28 Oct 2021 17:56:52 +0800
+Message-Id: <20211028095652.3503790-1-siyanteng@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20211027211715.12671-1-digetx@gmail.com> <20211027211715.12671-9-digetx@gmail.com>
-In-Reply-To: <20211027211715.12671-9-digetx@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Oct 2021 11:53:20 +0200
-Message-ID: <CAJZ5v0jMdSjmkswzu18LSxcNk+k92Oz5XFFXmu-h=W8aPP4Oig@mail.gmail.com>
-Subject: Re: [PATCH v2 08/45] kernel: Add combined power-off+restart handler
- call chain API
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
-        openbmc@lists.ozlabs.org,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 11:18 PM Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> SoC platforms often have multiple options of how to perform system's
-> power-off and restart operations. Meanwhile today's kernel is limited to
-> a single option. Add combined power-off+restart handler call chain API,
-> which is inspired by the restart API. The new API provides both power-off
-> and restart functionality.
->
-> The old pm_power_off method will be kept around till all users are
-> converted to the new API.
->
-> Current restart API will be replaced by the new unified API since
-> new API is its superset. The restart functionality of the power-handler
-> API is built upon the existing restart-notifier APIs.
->
-> In order to ease conversion to the new API, convenient helpers are added
-> for the common use-cases. They will reduce amount of boilerplate code and
-> remove global variables. These helpers preserve old behaviour for cases
-> where only one power-off handler is executed, this is what existing
-> drivers want, and thus, they could be easily converted to the new API.
-> Users of the new API should explicitly enable power-off chaining by
-> setting corresponding flag of the power_handler structure.
->
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  include/linux/reboot.h   | 176 +++++++++++-
->  kernel/power/hibernate.c |   2 +-
->  kernel/reboot.c          | 601 ++++++++++++++++++++++++++++++++++++++-
->  3 files changed, 768 insertions(+), 11 deletions(-)
->
-> diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-> index b7fa25726323..0ec835338c27 100644
-> --- a/include/linux/reboot.h
-> +++ b/include/linux/reboot.h
-> @@ -8,10 +8,16 @@
->
->  struct device;
->
-> -#define SYS_DOWN       0x0001  /* Notify of system down */
-> -#define SYS_RESTART    SYS_DOWN
-> -#define SYS_HALT       0x0002  /* Notify of system halt */
-> -#define SYS_POWER_OFF  0x0003  /* Notify of system power off */
-> +enum reboot_prepare_mode {
-> +       SYS_DOWN = 1,           /* Notify of system down */
-> +       SYS_RESTART = SYS_DOWN,
-> +       SYS_HALT,               /* Notify of system halt */
-> +       SYS_POWER_OFF,          /* Notify of system power off */
-> +};
-> +
-> +#define RESTART_PRIO_RESERVED          0
-> +#define RESTART_PRIO_DEFAULT           128
-> +#define RESTART_PRIO_HIGH              192
->
->  enum reboot_mode {
->         REBOOT_UNDEFINED = -1,
-> @@ -49,6 +55,167 @@ int register_restart_handler(struct notifier_block *);
->  int unregister_restart_handler(struct notifier_block *);
->  void do_kernel_restart(char *cmd);
->
-> +/*
-> + * Unified poweroff + restart API.
-> + */
-> +
-> +#define POWEROFF_PRIO_RESERVED         0
-> +#define POWEROFF_PRIO_PLATFORM         1
-> +#define POWEROFF_PRIO_DEFAULT          128
-> +#define POWEROFF_PRIO_HIGH             192
-> +#define POWEROFF_PRIO_FIRMWARE         224
-> +
-> +enum poweroff_mode {
-> +       POWEROFF_NORMAL = 0,
-> +       POWEROFF_PREPARE,
-> +};
-> +
-> +struct power_off_data {
-> +       void *cb_data;
-> +};
-> +
-> +struct power_off_prep_data {
-> +       void *cb_data;
-> +};
-> +
-> +struct restart_data {
-> +       void *cb_data;
-> +       const char *cmd;
-> +       enum reboot_mode mode;
-> +};
-> +
-> +struct reboot_prep_data {
-> +       void *cb_data;
-> +       const char *cmd;
-> +       enum reboot_prepare_mode mode;
-> +};
-> +
-> +struct power_handler_private_data {
-> +       struct notifier_block reboot_prep_nb;
-> +       struct notifier_block power_off_nb;
-> +       struct notifier_block restart_nb;
-> +       void (*trivial_power_off_cb)(void);
-> +       void (*simple_power_off_cb)(void *data);
-> +       void *simple_power_off_cb_data;
-> +       bool registered;
-> +};
-> +
-> +/**
-> + * struct power_handler - Machine power-off + restart handler
-> + *
-> + * Describes power-off and restart handlers which are invoked by kernel
-> + * to power off or restart this machine.  Supports prioritized chaining for
-> + * both restart and power-off handlers.  Callback's priority must be unique.
-> + * Intended to be used by device drivers that are responsible for restarting
-> + * and powering off hardware which kernel is running on.
-> + *
-> + * Struct power_handler can be static.  Members of this structure must not be
-> + * altered while handler is registered.
-> + *
-> + * Fill the structure members and pass it to register_power_handler().
-> + */
-> +struct power_handler {
+When CONFIG_IRQ_DOMAIN is set, there is a build error:
+arch/mips/kernel/irq.c:114:19: error: unused variable 'desc' [-Werror=unused-variable]
+  114 |  struct irq_desc *desc;
+      |                   ^~~~
 
-The name of this structure is too generic IMV.  There are many things
-that it might apply to in principle.
+This variable is alone at here, let's remove it.
 
-What about calling power_off_handler or sys_off_handler as it need not
-be about power at all?
+Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+---
+ arch/mips/kernel/irq.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/mips/kernel/irq.c b/arch/mips/kernel/irq.c
+index 1fee96ef8059..5e11582fe308 100644
+--- a/arch/mips/kernel/irq.c
++++ b/arch/mips/kernel/irq.c
+@@ -111,8 +111,6 @@ void __irq_entry do_IRQ(unsigned int irq)
+ #ifdef CONFIG_IRQ_DOMAIN
+ void __irq_entry do_domain_IRQ(struct irq_domain *domain, unsigned int hwirq)
+ {
+-	struct irq_desc *desc;
+-
+ 	irq_enter();
+ 	check_stack_overflow();
+ 	generic_handle_domain_irq(domain, hwirq);
+-- 
+2.27.0
+
