@@ -2,140 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA41B43E5DE
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 18:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8B243E61F
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 18:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbhJ1QPe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 12:15:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32796 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229985AbhJ1QPb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 Oct 2021 12:15:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635437584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MqVw0Z8vi7JjvCVtjxAexVsSznKzCGLBzzaPnc6KX/k=;
-        b=b5wX3zYsQHqT3a7Utpjtqf1A/oDAn48wO2AGQombk3ibWzgGRQVN8806xz9FTtX0+qNw3R
-        gW4acKO6ckewg799ThxjMuQYbxf7iv/jA4sGgmjBgpdRrQ+D5Sh3qrSUyp0WnelDKLWDkE
-        pci+/ucyR/8tFonM17/pxRe9JnxHITU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-238-R1OcEdtCNRy5fjOQqmfJWg-1; Thu, 28 Oct 2021 12:13:00 -0400
-X-MC-Unique: R1OcEdtCNRy5fjOQqmfJWg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 594BC112A0A3;
-        Thu, 28 Oct 2021 16:12:14 +0000 (UTC)
-Received: from starship (unknown [10.40.194.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BBDF84180;
-        Thu, 28 Oct 2021 16:12:05 +0000 (UTC)
-Message-ID: <b2ba4c4e6a9083f3fa0b9af4504f9f54e72ca24c.camel@redhat.com>
-Subject: Re: [PATCH v2 35/43] KVM: SVM: Signal AVIC doorbell iff vCPU is in
- guest mode
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Date:   Thu, 28 Oct 2021 19:12:04 +0300
-In-Reply-To: <20211009021236.4122790-36-seanjc@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
-         <20211009021236.4122790-36-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        id S230242AbhJ1QcR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 12:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230225AbhJ1QcQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 12:32:16 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2F5C061570;
+        Thu, 28 Oct 2021 09:29:49 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so1556245pjc.4;
+        Thu, 28 Oct 2021 09:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=iOMV47zPl+WXbviyBiqlGpEOAdHC+x+zs56ErTuovVc=;
+        b=pL7Bgh3tX9dNjUtKyckQRc2XeD6p6QKslnDUItLeTZ+KIFqI8imYlti7k6O002UtNI
+         CdcDCTnzq9rRBjKIDxAFjj6Xsy8/bxxfWQfGHFgpBflqJLWLbrEdtHFsIIXt7UYdDoTe
+         q+B5cRJwdfPB80P8oEEApP5ur4+xVl/sQoB7QtuA5S/UacVm+4A8EZglenAywIge6U2J
+         rx+HyUJ26dKdW/3Z/rDyElVfCdWslQc6dtyrqbE78OfRfmgS7AbQ2eavr41w9/zZ4ay8
+         QRBG85zDfRe2Z8QpsdQRpyk7W54V6xptNJUUSD+IgX7OYQqcVH2HZg/x5LNm8AFHr4FV
+         nSSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=iOMV47zPl+WXbviyBiqlGpEOAdHC+x+zs56ErTuovVc=;
+        b=lrsmagPccaF1wiUGmXBpnoKHvDSL12AzYnqBZY5QgvZpVx+cOgdPgAa7IrYNrI0S3T
+         dEdyNnpkrhVfOIAq6//1lqpT6p3JtHEGKEWN5co9mZoN9FAenOPXfrm8pQjscrSblwxs
+         BpNavOH+Pyo3jsBkVhDYpnU/Xpi0oq+iiiqZzP+Od84qklhYTuIdOqsLgquE2diTC9cS
+         VqWD1BWAHA5pjYeJUtIrOEpELy2ZTmplRb1Ds67vN1Glt8TiM+VlN8l2MyNIvd4CAOon
+         f/NFUicOJnMaAdygpy5d4LZKX8VudCKBIUYoHFphmIOaJNPgCnP6IxiDKDvF76/c1inA
+         zAyw==
+X-Gm-Message-State: AOAM531H8pFPMjRh/fUGCG35OE60CX+FDDCkbbgLjb2ItYrp/UUpMLXF
+        +AQghaHNUKtTXs4l2LkN3OY=
+X-Google-Smtp-Source: ABdhPJxbv77NUT6Q6Ou4dZoDsM+bgTIO25Un8DnF+mGPV5GA9+oGHexjWDC0g96hlAWDmoCYUuS6Hw==
+X-Received: by 2002:a17:90a:7e13:: with SMTP id i19mr5574766pjl.120.1635438589365;
+        Thu, 28 Oct 2021 09:29:49 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id mr2sm2411672pjb.25.2021.10.28.09.29.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Oct 2021 09:29:48 -0700 (PDT)
+Subject: Re: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20211028093059.32535-1-zajec5@gmail.com>
+ <20211028093059.32535-3-zajec5@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <f78d1573-4909-039d-8647-d4fc13205f47@gmail.com>
+Date:   Thu, 28 Oct 2021 09:29:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <20211028093059.32535-3-zajec5@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
-> Signal the AVIC doorbell iff the vCPU is running in the guest.  If the vCPU
-> is not IN_GUEST_MODE, it's guaranteed to pick up any pending IRQs on the
-> next VMRUN, which unconditionally processes the vIRR.
+On 10/28/21 2:30 AM, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Add comments to document the logic.
+> Hardware supported by this driver goes back to the old bcm63xx days. It
+> was then reused in BCM7038 and later also in BCM4908.
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Depending on SoC model registers layout differs a bit. This commit
+> introduces support for per-chipset registers offsets & adds BCM4908
+> layout.
+> 
+> Later on BCM63xx SoCs support should be added too (probably as platform
+> devices due to missing DT). Eventually this driver should replace
+> bcm63xx_wdt.c.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
->  arch/x86/kvm/svm/avic.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 208c5c71e827..cbf02e7e20d0 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -674,7 +674,12 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
->  	kvm_lapic_set_irr(vec, vcpu->arch.apic);
->  	smp_mb__after_atomic();
->  
-> -	if (avic_vcpu_is_running(vcpu)) {
-> +	/*
-> +	 * Signal the doorbell to tell hardware to inject the IRQ if the vCPU
-> +	 * is in the guest.  If the vCPU is not in the guest, hardware will
-> +	 * automatically process AVIC interrupts at VMRUN.
-> +	 */
-> +	if (vcpu->mode == IN_GUEST_MODE) {
->  		int cpu = READ_ONCE(vcpu->cpu);
->  
->  		/*
-> @@ -687,8 +692,13 @@ int svm_deliver_avic_intr(struct kvm_vcpu *vcpu, int vec)
->  		if (cpu != get_cpu())
->  			wrmsrl(SVM_AVIC_DOORBELL, kvm_cpu_get_apicid(cpu));
->  		put_cpu();
-> -	} else
-> +	} else {
-> +		/*
-> +		 * Wake the vCPU if it was blocking.  KVM will then detect the
-> +		 * pending IRQ when checking if the vCPU has a wake event.
-> +		 */
->  		kvm_vcpu_wake_up(vcpu);
-> +	}
->  
->  	return 0;
->  }
 
-It makes sense indeed to avoid ringing the doorbell when the vCPU is not in the guest mode.
+[snip]
 
-I do wonder if we want to call kvm_vcpu_wake_up always otherwise, as the vCPU might
-be just outside of the guest mode and not scheduled out. I don't know how expensive
-is kvm_vcpu_wake_up in this case.
+> +
+> +static const u16 bcm7038_wdt_regs_bcm4908[] = {
+> +	[BCM63XX_WDT_REG_DEFVAL]	= 0x28,
+> +	[BCM63XX_WDT_REG_CTL]		= 0x2c,
+> +	[BCM63XX_WDT_REG_SOFTRESET]	= 0x34,
 
-Before this patch, the avic_vcpu_is_running would only be false when the vCPU is scheduled out
-(e.g when vcpu_put was done on it)
+I don't understand what you are doing here and why you are not
+offsetting the "reg" property appropriately when you create your
+bcm4908-wdt Device Tree node such that the base starts at 0, and the
+existing driver becomes usable as-is. This does not make any sense to me
+when it is obviously the simplest way to make the driver "accept" the
+resource being passed.
 
-Best regards,
-	Maxim Levitsky
-
+I am going to send my patch series converting the bcm63xx_wdt.c driver
+over to bcm7038_wdt.c, feel free to use or discard it.
+-- 
+Florian
