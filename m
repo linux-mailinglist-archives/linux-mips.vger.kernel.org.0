@@ -2,180 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE92D43D90A
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 03:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F82B43DA12
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 06:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbhJ1CBM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 27 Oct 2021 22:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
+        id S229684AbhJ1EHy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 00:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbhJ1CBL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 27 Oct 2021 22:01:11 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7461EC061570;
-        Wed, 27 Oct 2021 18:58:45 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id g125so6149447oif.9;
-        Wed, 27 Oct 2021 18:58:45 -0700 (PDT)
+        with ESMTP id S229488AbhJ1EHy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 00:07:54 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF6AC061570;
+        Wed, 27 Oct 2021 21:05:25 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id l24-20020a9d1c98000000b00552a5c6b23cso6753645ota.9;
+        Wed, 27 Oct 2021 21:05:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7jA9hLIHv4laXHxexzSur1ceGmoR/SqF1PV4WEQNyWQ=;
-        b=Z54xrm2gRnEUeTcTgy6Nkyf1v5dmkb0fpPRP2+0t1b699lLzBQS98XejaLKV5HKgRm
-         H+f9/M1tAKy2S18OKxIGr2MbpPORPo5JIqUemrOPxZAKC/DcNypewcVe3VA5n9Wwhy7I
-         5rqSsOtVDqFdYsMUpcUfa9XA1Vg1RTSNdqUPAUpaj5l8HCvm23MnLkhV2S32ODoBRXNa
-         uhr3jtIr0ljqaNLH3c3HIZ3qoUfSFO8Ev4AI31BgJcwH6KC8baGgm/0nvd57THdQNwAa
-         RUgvVWzHCVAzbz4tJ2mJD8HoCRSSJL2FjiNuxU9CVbqnWtmrSq3TsrNOAqKI4IYJ+ipf
-         PIbw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JAFmGbzliFdK9YUpB9Pr3vqgYOv/hA15ip0ARBAHB14=;
+        b=C35/2Awskpi7sNIUy/6w5UofmU1anZCwUM80cB/vCG2/CefovGQ81gUT5vvZIyDwQ9
+         7xPfVeN1qtXyaLFSWnOO07fQpkIVjXDcQ++qr5HZuEcOhxPFKAcIM2LosLW8suU1RioL
+         jekV9t5MxCv2imE6VA/bSzlZ8JgY8T3LrpDc+o1ntSTNG1OHFJUw2rZziJCLaH8rUAYC
+         sGJ/RYuMDmYdAmKkovwp9N0mSAEE8UABBpO9WYb5TG23mfO8aG9Qe5lVur98yK6clk8V
+         W/lRi4ViEwlmbMurcCZii2sDailHkp8rhSpN+4ghEn8bAXqtslxbwpeTxup7TIQH7tRs
+         Ozpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7jA9hLIHv4laXHxexzSur1ceGmoR/SqF1PV4WEQNyWQ=;
-        b=Pg7F2cFkCIrBbE46iKzNWwUyTs1lO+5N2FuZ6T7dVGMp7EgY/UpTDypAlWnyQqgF7z
-         FWlJifS+cB8/gKsrXS4+BE0dcTCrXz90BYzOxPy7HptPxAq0gq5//16I1u+YGhwUm+05
-         QQS+MEHnEfZU9FBaTeoObDVSlAcwS6yWnt+bDekuRsfbJIFa/dxFRynGpk0I4P19u4KR
-         3tMZIJi1Gvai1nV+43gLKAjcWf0nYQmh7NVNXkm0/W6uSyy0aPi2M/86HfcoTsXfYbFr
-         ddM6itODOuFpLdx9pNBn3dUEdsByeDZvLs5stVhK98Z5Qc8hln+v94ZXUJ57E4PSsSx8
-         bmxw==
-X-Gm-Message-State: AOAM533PZfr6iHAgoXgEcwu4g5mZSx5NRU8OmVpolPiOyD87UooNsmV/
-        CHilTg7TqOr8sJcpa05DvSgWYv9mdIh2azNQ7dg=
-X-Google-Smtp-Source: ABdhPJzc4Eg531WD9FCIFPO/5/Z8QggwFWCwun14/4nZpu/HeSctOteECf6GvkujIih+6j1+vvTExofrv8BRz9dLyzo=
-X-Received: by 2002:a05:6808:f13:: with SMTP id m19mr6332500oiw.37.1635386324816;
- Wed, 27 Oct 2021 18:58:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1635333327.git.siyanteng@loongson.cn> <abead7ae64e1a0cc96a09647a5facf30d03381aa.1635333327.git.siyanteng@loongson.cn>
- <CAMhs-H8m0Un+njhw0nZKUrxzMxqfpj8YwGb==7GAoV=Kq-ey=w@mail.gmail.com>
-In-Reply-To: <CAMhs-H8m0Un+njhw0nZKUrxzMxqfpj8YwGb==7GAoV=Kq-ey=w@mail.gmail.com>
-From:   yanteng si <siyanteng01@gmail.com>
-Date:   Thu, 28 Oct 2021 09:58:32 +0800
-Message-ID: <CAEensMx+veP1rWUQ0XZkOjveHU9P+2L_RXGBTc_YtOg0YN6-jA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PCI: mt7621: Export mips_cm/cpc/gcr_* to modules
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Yanteng Si <siyanteng@loongson.cn>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JAFmGbzliFdK9YUpB9Pr3vqgYOv/hA15ip0ARBAHB14=;
+        b=RZv5nak1F4+H5j8+P1zdQV7CDO6q8tcjcZuxpDmTCmxnfOa/FehCIYH0aU6uxoR08r
+         ouh9eoH4mRHulXkrmy5/7MAKn1TXhO8U7Qvc4uN13msrsGyhxUKJgneK4UplFOdz7UBw
+         ZUlKrAe1ce43TWij1kqJVHdBcp3Wp6QhL8zImp3KPLsSrRYxTN/XE30cslTQja7LqqCI
+         y3BWne7OT/VH/RdMeJY8qFEoaNoDXinD8w/RiJqBkwAP1szIEOdmWqCjLRSvkZrPwISi
+         dotuaJ0RhZzHjGy23T+52pEYBpXmOeaBzDVKBF3G4QXG2Rp9SuqdW6nnK8eRM1G3LzDm
+         LC7A==
+X-Gm-Message-State: AOAM532qm/qT9I0+SRL+nyxyFVrBhJLE6OKtpDvPSAQM6MgGfnoCnDMT
+        3k/eLutf+zC5Fz6H1ItyLCg=
+X-Google-Smtp-Source: ABdhPJx4B5/4gp731H1f4QXFtngh+vXOd8jkpnUjaTWTt4quVnYpOJCHW3DbJdeqr7RLQ9eYEXjimw==
+X-Received: by 2002:a05:6830:1e95:: with SMTP id n21mr1482616otr.141.1635393924615;
+        Wed, 27 Oct 2021 21:05:24 -0700 (PDT)
+Received: from localhost.localdomain ([8.26.182.76])
+        by smtp.gmail.com with ESMTPSA id v13sm720310otn.41.2021.10.27.21.05.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 21:05:24 -0700 (PDT)
+From:   Yanteng Si <siyanteng01@gmail.com>
+X-Google-Original-From: Yanteng Si <siyanteng@loongson.cn>
+To:     tsbogend@alpha.franken.de, sergio.paracuellos@gmail.com,
+        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com
+Cc:     Yanteng Si <siyanteng@loongson.cn>, sfr@canb.auug.org.au,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, matthias.bgg@gmail.com,
+        p.zabel@pengutronix.de, linux-pci@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        sterling <sterlingteng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        chenhuacai@kernel.org, sterlingteng@gmail.com,
+        linux-next@vger.kernel.org
+Subject: [PATCH v2 0/3] MIPS: Fix build error ERROR: modpost:
+Date:   Thu, 28 Oct 2021 12:04:51 +0800
+Message-Id: <cover.1635390750.git.siyanteng@loongson.cn>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Sergio Paracuellos <sergio.paracuellos@gmail.com> =E4=BA=8E2021=E5=B9=B410=
-=E6=9C=8827=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=887:45=E5=86=99=E9=
-=81=93=EF=BC=9A
->
-> Hi,
->
-> On Wed, Oct 27, 2021 at 1:32 PM Yanteng Si <siyanteng01@gmail.com> wrote:
-> >
-> > modpost complains once these drivers become modules.
-> >
-> > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7=
-621.ko] undefined!
-> > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko]=
- undefined!
-> > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt762=
-1.ko] undefined!
-> > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] =
-undefined!
-> > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko]=
- undefined!
-> >
-> > Let's just export them.
-> >
-> > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> > ---
-> >  arch/mips/kernel/mips-cm.c  | 5 +++++
-> >  arch/mips/kernel/mips-cpc.c | 1 +
-> >  2 files changed, 6 insertions(+)
->
-> This PATCH has the prefix "PCI: mt7621: " but the changes here are all
-> mips kernel things. So I guess it is better to have "MIPS: cm/cpc:
-> export some missing symbols to be able to use them from driver code"
-OK,Thanks!
-> or something similar. I am not the best with words :).
-Me too. >_<
->
-> >
-> > diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-> > index 90f1c3df1f0e..b07f20323132 100644
-> > --- a/arch/mips/kernel/mips-cm.c
-> > +++ b/arch/mips/kernel/mips-cm.c
-> > @@ -12,8 +12,11 @@
-> >  #include <asm/mipsregs.h>
-> >
-> >  void __iomem *mips_gcr_base;
-> > +EXPORT_SYMBOL(mips_gcr_base);
->
-> EXPORT_SYMBOL_GPL?
-OK. Thanks!
->
-> > +
-> >  void __iomem *mips_cm_l2sync_base;
-> >  int mips_cm_is64;
-> > +EXPORT_SYMBOL(mips_cm_is64);
-> >
-> >  static char *cm2_tr[8] =3D {
-> >         "mem",  "gcr",  "gic",  "mmio",
-> > @@ -353,6 +356,7 @@ void mips_cm_lock_other(unsigned int cluster, unsig=
-ned int core,
-> >          */
-> >         mb();
-> >  }
-> > +EXPORT_SYMBOL(mips_cm_lock_other);
->
-> ditto.
-OK. Thanks!
->
-> >
-> >  void mips_cm_unlock_other(void)
-> >  {
-> > @@ -369,6 +373,7 @@ void mips_cm_unlock_other(void)
-> >
-> >         preempt_enable();
-> >  }
-> > +EXPORT_SYMBOL(mips_cm_unlock_other);
->
-> ditto.
-OK. Thanks!
->
-> >
-> >  void mips_cm_error_report(void)
-> >  {
-> > diff --git a/arch/mips/kernel/mips-cpc.c b/arch/mips/kernel/mips-cpc.c
-> > index 8d2535123f11..dfd3d58fd412 100644
-> > --- a/arch/mips/kernel/mips-cpc.c
-> > +++ b/arch/mips/kernel/mips-cpc.c
-> > @@ -13,6 +13,7 @@
-> >  #include <asm/mips-cps.h>
-> >
-> >  void __iomem *mips_cpc_base;
-> > +EXPORT_SYMBOL(mips_cpc_base);
->
-> ditto.
-OK. Thanks!
+v2:
 
-Thanks,
-yanteng
->
-> >
-> >  static DEFINE_PER_CPU_ALIGNED(spinlock_t, cpc_core_lock);
-> >
-> > --
-> > 2.27.0
-> >
->
-> Thanks,
->     Sergio Paracuellos
+* Pick Sevrgio's Acked-by tag to Patch 1/3;
+* Rewrite prefix;
+* Use EXPORT_SYMBOL_GPL();
+* Add haojun's patch into my thread and rewrite commit message.(Patch 3/3)
+
+note: These errors are generated in the *linux-next.git*.
+
+https://lore.kernel.org/linux-mips/cover.1635333327.git.siyanteng@loongson.cn/T/#t
+
+v1:
+
+Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
+the MT7621 PCIe host controller driver is built as a module but no MODULE_*() attributes
+were specified, causing a build error due to missing license information. At the same time,
+modpost complains once these drivers become modules.
+
+ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
+ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+
+Let's just fix them.
+
+Wang Haojun (1):
+  MIPS: Export board_be_handler to modules
+
+Yanteng Si (2):
+  MIPS: mt7621: Add MODULE_* macros to MT7621 PCIe host controller
+    driver
+  MIPS: Export mips_cm/cpc/gcr_* to modules
+
+ arch/mips/kernel/mips-cm.c           | 5 +++++
+ arch/mips/kernel/mips-cpc.c          | 1 +
+ arch/mips/kernel/traps.c             | 1 +
+ drivers/pci/controller/pcie-mt7621.c | 2 ++
+ 4 files changed, 9 insertions(+)
+
+-- 
+2.27.0
+
