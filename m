@@ -2,104 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE12443E037
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 13:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00B243E05C
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 13:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbhJ1Ltv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 07:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbhJ1Ltv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 07:49:51 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA90C061745
-        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 04:47:24 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id ee16so10656835edb.10
-        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 04:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=J1HSbTsrMEQI/U/YbiCc+5c6T/LW7ZVWAAUAlEL1IAU=;
-        b=tXvtIytz0bfa5k9zkzWy7Ha/EfUR3MVX60l2VSDubKCkCnNlfiYqRuqx3uCOCYUMCS
-         W4zgQEgXUnITXdLOvNRlLUQ5YN8n8ZUBRvQm7JH46dv6Zpp0P/w/41Qz9/5MSSZZl130
-         K72hGNV6R9h5Fc/y/LTNevvuC5QWnjYGTkRGkTy5FgEFUeKi2FS6oPtxq53XaBEOXVC0
-         cd5riiaDVwBwfAw8uvY6W6xju8fCDBr4mo3Lfz5BDLpx/PRA2fz5F1fZ2pidhekyoWXx
-         Yibq8o79m9fEjLCZZ+HA40MsXDBoeiH5DXe2aJ3KJupYomUvG/czS6x6A6g8THSBsfjN
-         x03Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=J1HSbTsrMEQI/U/YbiCc+5c6T/LW7ZVWAAUAlEL1IAU=;
-        b=X83V2T8gozBZT13QqAeePFTIAlvF+LdeAbKhe+BY6i90mveKpJqQQJLZGcLT+pk7bF
-         wj5neeF3+Yl7CeUTrEdcl/LA7KOi0aH7gVZLIbJv7sKwNvIcWP6khlgjrfdrqZw6ohab
-         4z96a2P8hLsP+EKcTB6GfiF4vt5PzjF8AFOX6xwlKS4HdaE7Ey1V6d/lHtTZKIOlaJFg
-         UsbOPZujNWbX/iBak3iwsCYPBRa276UTRN+270iJbqaLxea0xVXTZ20L391Ov8tZigOP
-         eX5cQ66aMchYy38QIcpsEpGgb5p9R0MgQ/Tw5eJF1994jQUVGqgMzVlcCUtnWJktfjGe
-         53Aw==
-X-Gm-Message-State: AOAM530szLLGckhFz/REkPjHQfP3bi4zKygaMOdgWhLmRHj5AYnEcwV2
-        pp6C5a6Pkb++wdiemF+VjyPU9KJOoYzsDPgOl9WgYE9Jv2aExg==
-X-Google-Smtp-Source: ABdhPJwMPU0JSbf9rgqPGZAT9qVbTZ/lKa7s54pyRcMY6qOJ5m6qoSgrhdrnYMiELxgogXz28FNpx2c5einX3a5y7bc=
-X-Received: by 2002:a17:906:c302:: with SMTP id s2mr4642505ejz.499.1635421642352;
- Thu, 28 Oct 2021 04:47:22 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 28 Oct 2021 17:17:11 +0530
-Message-ID: <CA+G9fYtQCd4V9Y=qEGZeQw17TRNG1p_g9MKtYaWVo8QPua-Cug@mail.gmail.com>
-Subject: mips: irq.c:114:19: error: unused variable 'desc' [-Werror=unused-variable]
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+        id S230226AbhJ1MB6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 08:01:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45218 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229578AbhJ1MBv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Oct 2021 08:01:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 17810610FC;
+        Thu, 28 Oct 2021 11:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635422364;
+        bh=6SRnBqGEu6kfrjY8F8AIxFOXpP3mk9uNLODc5pl6vYo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PF+p5k3fPcX4g7U/HaBJuzIJ4k5E0pNaC5AYSReMWdptL5C6nDTIJaIE7qlYNYlG6
+         n1n/PwUdpeEdECCRPixbjSlqTeevDW0OntTvozcAaeZnGpyg9v14UXE0Uy+uDhiwA4
+         opUKp2Rh8z49oq5/De4kzH0wt2Tq2fvNA7/+mgp+6zfuqvEwWijrNqLYLBlBZuMPRL
+         88N447RwKebi4Ez1WZLL28f9yHI1UOy8Ip53Ye3TTKmeO3nK2Kc7hLybqU9+9eT+Gw
+         dD6HWh7fPMZRMI/QpI/9KZ3rirsCMx4Hs00YhSbDpBEZNMfr2ZfvOMHA6ZLmKCwWDw
+         xkF14RX5nWTCw==
+Date:   Thu, 28 Oct 2021 12:59:08 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 24/45] regulator: pfuze100: Use
+ devm_register_power_handler()
+Message-ID: <YXqQjG+5Eshm9fl5@sirena.org.uk>
+References: <20211027211715.12671-1-digetx@gmail.com>
+ <20211027211715.12671-25-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Wle3PKA2/qG6+6Vj"
+Content-Disposition: inline
+In-Reply-To: <20211027211715.12671-25-digetx@gmail.com>
+X-Cookie: try again
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Regression found on mips gcc-10 built with defconfig
-Following build warnings / errors reported on linux next 20211027.
 
-The bisect tool pointing to the following commit
-The first bad commit:
+--Wle3PKA2/qG6+6Vj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-commit 4cb6f4df976b288aa02bbb658d38e73d34d8231f
-  irq: mips: simplify do_domain_IRQ()
+On Thu, Oct 28, 2021 at 12:16:54AM +0300, Dmitry Osipenko wrote:
 
-metadata:
-    git_describe: next-20211027
-    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-    git_short_log: ae5179317e79 (\"Add linux-next specific files for 20211027\")
-    target_arch: mips
-    toolchain: gcc-10
+> Use devm_register_power_handler() that replaces global pm_power_off_prepare
+> variable and allows to register multiple power-off handlers.
 
-build error :
---------------
-<stdin>:1559:2: warning: #warning syscall futex_waitv not implemented [-Wcpp]
-arch/mips/kernel/irq.c: In function 'do_domain_IRQ':
-arch/mips/kernel/irq.c:114:19: error: unused variable 'desc'
-[-Werror=unused-variable]
-  struct irq_desc *desc;
-                   ^~~~
-cc1: all warnings being treated as errors
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+--Wle3PKA2/qG6+6Vj
+Content-Type: application/pgp-signature; name="signature.asc"
 
-build link:
------------
-https://builds.tuxbuild.com/205S9XOzkonL7F3xvY8YUO2l1QT/build.log
+-----BEGIN PGP SIGNATURE-----
 
-build config:
--------------
-https://builds.tuxbuild.com/205S9XOzkonL7F3xvY8YUO2l1QT/config
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmF6kIwACgkQJNaLcl1U
+h9AyhAf+Nziuu181EjKis21sdValh/0I2qd5n6cZmpuLUeA7g6K6TyFH79y+tEkd
+Itu0nx35rsztyjl7+A8ECF9S9uJGD1N0o3cruhqU01R5Kloz9mrUDRii5R3Uh+fm
+wjXlm+iYDXdXIzRmM07WyWi8rUTpLrhHx7ogAb291MVxgxc1LqxOBAwk6hcvnDCB
+aLDZSKk0LT7/yHSU+s5sBmll+K1S09x+XUfo/7VEuf9WqctxN8t6DgnigNeg1sU1
+S3cmBREB1bkkqHuPWJhOyUeW6YyuYI8inCcpXRNtdydg4jwo5l2h16fE8e0db953
+VsD3Y2dmLQu1qKxLNZUqHCelyjTPow==
+=sNsl
+-----END PGP SIGNATURE-----
 
-# To install tuxmake on your system globally
-# sudo pip3 install -U tuxmake
-tuxmake --runtime podman --target-arch mips --toolchain gcc-10
---kconfig defconfig
-
---
-Linaro LKFT
-https://lkft.linaro.org
+--Wle3PKA2/qG6+6Vj--
