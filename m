@@ -2,134 +2,309 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0292E43DE44
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 11:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BEE43DE4A
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 11:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbhJ1KB7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 06:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbhJ1KB4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 06:01:56 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768FDC061570;
-        Thu, 28 Oct 2021 02:59:29 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id q13so10466161uaq.2;
-        Thu, 28 Oct 2021 02:59:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HGGQ7RqFpKeC9CxBW+k8kpLsGeNQocDgaLhurL7DcEI=;
-        b=WizV7VgtkLy3fe2e0o1pfzbFecHihzXI0Id4xUaMYbtMTOAMqXIFLdyS9M2duUuMz3
-         r4sFwt/CYjnK4bgu+1DyEQBwyR7Q70aPYhsqJjPF996z3shUdkBl967YF0ymWY+a448g
-         RTpxrT300XgMMtmHX6u+JD3WXsmClh4yO8nD24YFkfG5hM9kBja7+RxxEAHj7KT+s3in
-         OYXDsbbCrU723hxPx87IcrPx+np95xU3p5LQWXav9tDIgrBgEPuXZ2+tr8maaJwA2H51
-         q9DJ/uCnkinwqQzQ+hi9u5xE13GOCSClyqmv5hLl+X8gb6qnnZB59b1sNvh6/EGc+1+C
-         oNiw==
+        id S229993AbhJ1KCF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 06:02:05 -0400
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:34682 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229775AbhJ1KB6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 06:01:58 -0400
+Received: by mail-ot1-f47.google.com with SMTP id t17-20020a056830083100b00553ced10177so7617839ots.1;
+        Thu, 28 Oct 2021 02:59:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HGGQ7RqFpKeC9CxBW+k8kpLsGeNQocDgaLhurL7DcEI=;
-        b=OFuMP/0IEBFBNKjsTxECz80gpPGkucrPlVbjxnQXvITrVGboH5ZlZYLeu9y1lAj4Gl
-         x3MEaveCScFzIu9QZNlf7v3SwgZ2Wtz9untYK/rkD/jwOG7geiZNPMFSREgL46hWK9tQ
-         N4mGRuNMIJoHdaia8Wno3Cd53rJ058K7YqqsL7ZzsWOyp0DqqzDt7bjIbVL006dOWaXj
-         u4wEn2u7EWfMHcbPlj/NPtO0YI0m96mjXyjUUeLbWtQuV5uvUqkWnFQWYNEnu2fG6bus
-         Yx7TVonPiSmPCIfnG0qOABaJzP+9qMibkRCwBmoVXNbfcImd37EPwHfrO7VWhKjuQWNA
-         BY1Q==
-X-Gm-Message-State: AOAM531FhFcN0GS1Tgm/ASUMlI4vTuGaEW356E28Tj+mU2+QaZn0SJm+
-        nnmpoC0zpkxa51kRx31oxJaUF4C9e8GE+k94KLCNqIazttg=
-X-Google-Smtp-Source: ABdhPJzrE18emHRymB8uKvYxaQU2LsVWX8ihdn4v4ExoK4X3tzhQ0bdB6x4Z47vqjrm3sGQ67yZI4DOVVN9myD89gWE=
-X-Received: by 2002:ab0:3cab:: with SMTP id a43mr3208667uax.98.1635415168662;
- Thu, 28 Oct 2021 02:59:28 -0700 (PDT)
+        bh=YApfc+rtORQHprN7aKpnZNhl8TPl/VtOJQI8beQJmCY=;
+        b=ZISI/TqYdNfu8bZIXT5RgeyOfBmGr0yaEHq3Lee1O1i0DfKvqoibZzZzq0OWZ6IPNS
+         0HRJ9hu5TnXyshbdh4/4P1ZKND3MtQnb2KkOH4irWfXWORRALOa3EIyITdnA/fgQ/fjH
+         WCKr/uY1dRce5u5wrJ8U5/I19GIq+hkOo9wzt+0ipl79AOjuKXQuuPkAtn4NhW4riTm0
+         yBRqb18GtYUh8SLkJsK4mEJru3Up8assYiSmt/H+I+MO3TfMvAKZgRBVdRZb2d8D7Pr4
+         r8OuqYoOuNY1m+DiiJkUUjcx6Bfk6Y3sxnXELU0g1Q9PBaYTYaB5JM+7Eo95TEn4cWXL
+         DZvg==
+X-Gm-Message-State: AOAM532ufq8H7lkzA/GvA9s/yy+W/QcGd8FcDkkQcGuJoF7g46LIettU
+        xbMvrl0BdX9tnptHeAMgRe8wrFp8RgPc3VIeJlk=
+X-Google-Smtp-Source: ABdhPJzD4cm7tn60vkyopY5CUMxUc9huwAUhS0IgxTyGcJq7Km0Bm+8fuUNsdZomFIBYzzQsRecVralPmU+TS+34zNY=
+X-Received: by 2002:a9d:65c1:: with SMTP id z1mr2427957oth.198.1635415170827;
+ Thu, 28 Oct 2021 02:59:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1635390750.git.siyanteng@loongson.cn> <112fea0c8c1b65a762ac98412216239160721263.1635390750.git.siyanteng@loongson.cn>
- <CAMhs-H9LUQ6Km=sA992LH=+E0MbGuMf9YhM6w2HoyeqE0QbzJQ@mail.gmail.com>
- <20211028092318.GA6574@alpha.franken.de> <CAMhs-H_m=pz4jU_cY-A6PRjR3OYy2zKH0=HN=vFDF2XOk60xBg@mail.gmail.com>
-In-Reply-To: <CAMhs-H_m=pz4jU_cY-A6PRjR3OYy2zKH0=HN=vFDF2XOk60xBg@mail.gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 28 Oct 2021 11:59:17 +0200
-Message-ID: <CAMhs-H8HoO7dsfiTFaTRie1-DB-DF5st-gFmS=AF2tfHP_gsVw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
- able to use them from driver code
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Yanteng Si <siyanteng01@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+References: <20211027211715.12671-1-digetx@gmail.com> <20211027211715.12671-9-digetx@gmail.com>
+In-Reply-To: <20211027211715.12671-9-digetx@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 28 Oct 2021 11:59:18 +0200
+Message-ID: <CAJZ5v0gpu2ezMhWr=grg6M8aWAx58DQozbXHoZaiPqUaZxJi4Q@mail.gmail.com>
+Subject: Re: [PATCH v2 08/45] kernel: Add combined power-off+restart handler
+ call chain API
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        chenhuacai@kernel.org, sterlingteng@gmail.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
+        openbmc@lists.ozlabs.org,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
+On Wed, Oct 27, 2021 at 11:18 PM Dmitry Osipenko <digetx@gmail.com> wrote:
 >
-> Hi Thomas,
+> SoC platforms often have multiple options of how to perform system's
+> power-off and restart operations. Meanwhile today's kernel is limited to
+> a single option. Add combined power-off+restart handler call chain API,
+> which is inspired by the restart API. The new API provides both power-off
+> and restart functionality.
 >
-> On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> >
-> > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
-> > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
-> > > >
-> > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
-> > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
-> > > > drivers become modules.
-> > > >
-> > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > >
-> > > > Let's just export them.
-> > > >
-> > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> > > > ---
-> > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
-> > > >  arch/mips/kernel/mips-cpc.c | 1 +
-> > > >  2 files changed, 6 insertions(+)
-> > > >
-> > >
-> > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> >
-> > could we instead make the pcie-mt761 driver non modular ? Exporting
-> > all MIPS specific stuff for just making an essential driver modular
-> > doesn't IMHO make much sense.
+> The old pm_power_off method will be kept around till all users are
+> converted to the new API.
 >
-> The driver is modular because I have been advised other times that new
-> drivers should be able to be compiled as modules and we should avoid
-> using 'bool' in Kconfig for new drivers. That's the only reason. I am
-> also always including as 'y' the driver since for me not having pci in
-> my boards has no sense... I am ok in changing Kconfig to be 'bool'
-> instead of 'tristate', but I don't know what should be the correct
-> thing to do in this case. Thoughts?
+> Current restart API will be replaced by the new unified API since
+> new API is its superset. The restart functionality of the power-handler
+> API is built upon the existing restart-notifier APIs.
+>
+> In order to ease conversion to the new API, convenient helpers are added
+> for the common use-cases. They will reduce amount of boilerplate code and
+> remove global variables. These helpers preserve old behaviour for cases
+> where only one power-off handler is executed, this is what existing
+> drivers want, and thus, they could be easily converted to the new API.
+> Users of the new API should explicitly enable power-off chaining by
+> setting corresponding flag of the power_handler structure.
+>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  include/linux/reboot.h   | 176 +++++++++++-
+>  kernel/power/hibernate.c |   2 +-
+>  kernel/reboot.c          | 601 ++++++++++++++++++++++++++++++++++++++-
+>  3 files changed, 768 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/linux/reboot.h b/include/linux/reboot.h
+> index b7fa25726323..0ec835338c27 100644
+> --- a/include/linux/reboot.h
+> +++ b/include/linux/reboot.h
+> @@ -8,10 +8,16 @@
+>
+>  struct device;
+>
+> -#define SYS_DOWN       0x0001  /* Notify of system down */
+> -#define SYS_RESTART    SYS_DOWN
+> -#define SYS_HALT       0x0002  /* Notify of system halt */
+> -#define SYS_POWER_OFF  0x0003  /* Notify of system power off */
+> +enum reboot_prepare_mode {
+> +       SYS_DOWN = 1,           /* Notify of system down */
+> +       SYS_RESTART = SYS_DOWN,
+> +       SYS_HALT,               /* Notify of system halt */
+> +       SYS_POWER_OFF,          /* Notify of system power off */
+> +};
+> +
+> +#define RESTART_PRIO_RESERVED          0
+> +#define RESTART_PRIO_DEFAULT           128
+> +#define RESTART_PRIO_HIGH              192
+>
+>  enum reboot_mode {
+>         REBOOT_UNDEFINED = -1,
+> @@ -49,6 +55,167 @@ int register_restart_handler(struct notifier_block *);
+>  int unregister_restart_handler(struct notifier_block *);
+>  void do_kernel_restart(char *cmd);
+>
+> +/*
+> + * Unified poweroff + restart API.
+> + */
+> +
+> +#define POWEROFF_PRIO_RESERVED         0
+> +#define POWEROFF_PRIO_PLATFORM         1
+> +#define POWEROFF_PRIO_DEFAULT          128
+> +#define POWEROFF_PRIO_HIGH             192
+> +#define POWEROFF_PRIO_FIRMWARE         224
 
-I guess we also want the driver to at least be compile tested in
-'allmodconfig' and other similars...
+Also I'm wondering why these particular numbers were chosen, here and above?
 
->
-> Best regards,
->     Sergio Paracuellos
->
-> >
-> > Thomas.
-> >
-> > --
-> > Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> > good idea.                                                [ RFC1925, 2.3 ]
+> +
+> +enum poweroff_mode {
+> +       POWEROFF_NORMAL = 0,
+> +       POWEROFF_PREPARE,
+> +};
+> +
+> +struct power_off_data {
+> +       void *cb_data;
+> +};
+> +
+> +struct power_off_prep_data {
+> +       void *cb_data;
+> +};
+> +
+> +struct restart_data {
+> +       void *cb_data;
+> +       const char *cmd;
+> +       enum reboot_mode mode;
+> +};
+> +
+> +struct reboot_prep_data {
+> +       void *cb_data;
+> +       const char *cmd;
+> +       enum reboot_prepare_mode mode;
+> +};
+> +
+> +struct power_handler_private_data {
+> +       struct notifier_block reboot_prep_nb;
+> +       struct notifier_block power_off_nb;
+> +       struct notifier_block restart_nb;
+> +       void (*trivial_power_off_cb)(void);
+> +       void (*simple_power_off_cb)(void *data);
+> +       void *simple_power_off_cb_data;
+> +       bool registered;
+> +};
+> +
+> +/**
+> + * struct power_handler - Machine power-off + restart handler
+> + *
+> + * Describes power-off and restart handlers which are invoked by kernel
+> + * to power off or restart this machine.  Supports prioritized chaining for
+> + * both restart and power-off handlers.  Callback's priority must be unique.
+> + * Intended to be used by device drivers that are responsible for restarting
+> + * and powering off hardware which kernel is running on.
+> + *
+> + * Struct power_handler can be static.  Members of this structure must not be
+> + * altered while handler is registered.
+> + *
+> + * Fill the structure members and pass it to register_power_handler().
+> + */
+> +struct power_handler {
+> +       /**
+> +        * @cb_data:
+> +        *
+> +        * User data included in callback's argument.
+> +        */
+
+And here I would document the structure fields in the main kerneldoc
+comment above.
+
+As is, it is a bit hard to grasp the whole definition.
+
+> +       void *cb_data;
+> +
+> +       /**
+> +        * @power_off_cb:
+> +        *
+> +        * Callback that should turn off machine.  Inactive if NULL.
+> +        */
+> +       void (*power_off_cb)(struct power_off_data *data);
+> +
+> +       /**
+> +        * @power_off_prepare_cb:
+> +        *
+> +        * Power-off preparation callback.  All power-off preparation callbacks
+> +        * are invoked before @restart_cb.  Inactive if NULL.
+> +        */
+> +       void (*power_off_prepare_cb)(struct power_off_prep_data *data);
+> +
+> +       /**
+> +        * @power_off_priority:
+> +        *
+> +        * Power-off callback priority, must be unique.  Zero value is
+> +        * reassigned to default priority.  Inactive if @power_off_cb is NULL.
+> +        */
+> +       int power_off_priority;
+> +
+> +       /**
+> +        * @power_off_chaining_allowed:
+> +        *
+> +        * False if callbacks execution should stop when @power_off_cb fails
+> +        * to power off machine.  True if further lower priority power-off
+> +        * callback should be executed.
+> +        */
+> +       bool power_off_chaining_allowed;
+> +
+> +       /**
+> +        * @restart_cb:
+> +        *
+> +        * Callback that should reboot machine.  Inactive if NULL.
+> +        */
+> +       void (*restart_cb)(struct restart_data *data);
+> +
+> +       /**
+> +        * @restart_priority:
+> +        *
+> +        * Restart callback priority, must be unique.  Zero value is reassigned
+> +        * to default priority.  Inactive if @restart_cb is NULL.
+> +        */
+> +       int restart_priority;
+> +
+> +       /**
+> +        * @reboot_prepare_cb:
+> +        *
+> +        * Reboot preparation callback.  All reboot preparation callbacks are
+> +        * invoked before @restart_cb.  Inactive if NULL.
+> +        */
+> +       void (*reboot_prepare_cb)(struct reboot_prep_data *data);
+> +
+> +       /**
+> +        * @priv:
+> +        *
+> +        * Internal data.  Shouldn't be touched.
+> +        */
+> +       const struct power_handler_private_data priv;
+> +};
