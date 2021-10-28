@@ -2,309 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BEE43DE4A
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 11:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E840443DEC5
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 12:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbhJ1KCF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 06:02:05 -0400
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:34682 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbhJ1KB6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 06:01:58 -0400
-Received: by mail-ot1-f47.google.com with SMTP id t17-20020a056830083100b00553ced10177so7617839ots.1;
-        Thu, 28 Oct 2021 02:59:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YApfc+rtORQHprN7aKpnZNhl8TPl/VtOJQI8beQJmCY=;
-        b=ZISI/TqYdNfu8bZIXT5RgeyOfBmGr0yaEHq3Lee1O1i0DfKvqoibZzZzq0OWZ6IPNS
-         0HRJ9hu5TnXyshbdh4/4P1ZKND3MtQnb2KkOH4irWfXWORRALOa3EIyITdnA/fgQ/fjH
-         WCKr/uY1dRce5u5wrJ8U5/I19GIq+hkOo9wzt+0ipl79AOjuKXQuuPkAtn4NhW4riTm0
-         yBRqb18GtYUh8SLkJsK4mEJru3Up8assYiSmt/H+I+MO3TfMvAKZgRBVdRZb2d8D7Pr4
-         r8OuqYoOuNY1m+DiiJkUUjcx6Bfk6Y3sxnXELU0g1Q9PBaYTYaB5JM+7Eo95TEn4cWXL
-         DZvg==
-X-Gm-Message-State: AOAM532ufq8H7lkzA/GvA9s/yy+W/QcGd8FcDkkQcGuJoF7g46LIettU
-        xbMvrl0BdX9tnptHeAMgRe8wrFp8RgPc3VIeJlk=
-X-Google-Smtp-Source: ABdhPJzD4cm7tn60vkyopY5CUMxUc9huwAUhS0IgxTyGcJq7Km0Bm+8fuUNsdZomFIBYzzQsRecVralPmU+TS+34zNY=
-X-Received: by 2002:a9d:65c1:: with SMTP id z1mr2427957oth.198.1635415170827;
- Thu, 28 Oct 2021 02:59:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211027211715.12671-1-digetx@gmail.com> <20211027211715.12671-9-digetx@gmail.com>
-In-Reply-To: <20211027211715.12671-9-digetx@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Oct 2021 11:59:18 +0200
-Message-ID: <CAJZ5v0gpu2ezMhWr=grg6M8aWAx58DQozbXHoZaiPqUaZxJi4Q@mail.gmail.com>
-Subject: Re: [PATCH v2 08/45] kernel: Add combined power-off+restart handler
- call chain API
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
+        id S229850AbhJ1KXg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 06:23:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37171 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229974AbhJ1KXf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 28 Oct 2021 06:23:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635416468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WNjfMGWJgQRyrsFW4O+8W6gSms2YGqJfs44+x3miEeo=;
+        b=PYZXtyiTVQwdozDtRgnJY94yy4J4g9dVa4tsm7JzVPygADKddabVVwx6Zg6yojE74PJYzS
+        G2Zr35RoUyK866e+nP+LBedWF+tyz4oulJ1WW/IG1IIYmxs0wiXEfxMVGKxhA9e+IMFemT
+        lUCvO53j0lwMoUZAWiyLL35Ur3oM2eg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-268-0q32FwVmMIWh3L38BGVE8w-1; Thu, 28 Oct 2021 06:21:05 -0400
+X-MC-Unique: 0q32FwVmMIWh3L38BGVE8w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F27B7802682;
+        Thu, 28 Oct 2021 10:21:00 +0000 (UTC)
+Received: from starship (unknown [10.40.194.243])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B194417CE1;
+        Thu, 28 Oct 2021 10:20:21 +0000 (UTC)
+Message-ID: <6b2bdfad87e268e861b6cc331d25790dade8e27b.camel@redhat.com>
+Subject: Re: [PATCH v2 21/43] KVM: VMX: Clean up PI pre/post-block WARNs
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux OMAP Mailing List <linux-omap@vger.kernel.org>,
-        openbmc@lists.ozlabs.org,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Date:   Thu, 28 Oct 2021 13:20:20 +0300
+In-Reply-To: <20211009021236.4122790-22-seanjc@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+         <20211009021236.4122790-22-seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 11:18 PM Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> SoC platforms often have multiple options of how to perform system's
-> power-off and restart operations. Meanwhile today's kernel is limited to
-> a single option. Add combined power-off+restart handler call chain API,
-> which is inspired by the restart API. The new API provides both power-off
-> and restart functionality.
->
-> The old pm_power_off method will be kept around till all users are
-> converted to the new API.
->
-> Current restart API will be replaced by the new unified API since
-> new API is its superset. The restart functionality of the power-handler
-> API is built upon the existing restart-notifier APIs.
->
-> In order to ease conversion to the new API, convenient helpers are added
-> for the common use-cases. They will reduce amount of boilerplate code and
-> remove global variables. These helpers preserve old behaviour for cases
-> where only one power-off handler is executed, this is what existing
-> drivers want, and thus, they could be easily converted to the new API.
-> Users of the new API should explicitly enable power-off chaining by
-> setting corresponding flag of the power_handler structure.
->
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
+> Move the WARN sanity checks out of the PI descriptor update loop so as
+> not to spam the kernel log if the condition is violated and the update
+> takes multiple attempts due to another writer.  This also eliminates a
+> few extra uops from the retry path.
+> 
+> Technically not checking every attempt could mean KVM will now fail to
+> WARN in a scenario that would have failed before, but any such failure
+> would be inherently racy as some other agent (CPU or device) would have
+> to concurrent modify the PI descriptor.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  include/linux/reboot.h   | 176 +++++++++++-
->  kernel/power/hibernate.c |   2 +-
->  kernel/reboot.c          | 601 ++++++++++++++++++++++++++++++++++++++-
->  3 files changed, 768 insertions(+), 11 deletions(-)
->
-> diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-> index b7fa25726323..0ec835338c27 100644
-> --- a/include/linux/reboot.h
-> +++ b/include/linux/reboot.h
-> @@ -8,10 +8,16 @@
->
->  struct device;
->
-> -#define SYS_DOWN       0x0001  /* Notify of system down */
-> -#define SYS_RESTART    SYS_DOWN
-> -#define SYS_HALT       0x0002  /* Notify of system halt */
-> -#define SYS_POWER_OFF  0x0003  /* Notify of system power off */
-> +enum reboot_prepare_mode {
-> +       SYS_DOWN = 1,           /* Notify of system down */
-> +       SYS_RESTART = SYS_DOWN,
-> +       SYS_HALT,               /* Notify of system halt */
-> +       SYS_POWER_OFF,          /* Notify of system power off */
-> +};
+>  arch/x86/kvm/vmx/posted_intr.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+> index 351666c41bbc..67cbe6ab8f66 100644
+> --- a/arch/x86/kvm/vmx/posted_intr.c
+> +++ b/arch/x86/kvm/vmx/posted_intr.c
+> @@ -100,10 +100,11 @@ static void __pi_post_block(struct kvm_vcpu *vcpu)
+>  	struct pi_desc old, new;
+>  	unsigned int dest;
+>  
+> +	WARN(pi_desc->nv != POSTED_INTR_WAKEUP_VECTOR,
+> +	     "Wakeup handler not enabled while the vCPU was blocking");
 > +
-> +#define RESTART_PRIO_RESERVED          0
-> +#define RESTART_PRIO_DEFAULT           128
-> +#define RESTART_PRIO_HIGH              192
->
->  enum reboot_mode {
->         REBOOT_UNDEFINED = -1,
-> @@ -49,6 +55,167 @@ int register_restart_handler(struct notifier_block *);
->  int unregister_restart_handler(struct notifier_block *);
->  void do_kernel_restart(char *cmd);
->
-> +/*
-> + * Unified poweroff + restart API.
-> + */
+>  	do {
+>  		old.control = new.control = pi_desc->control;
+> -		WARN(old.nv != POSTED_INTR_WAKEUP_VECTOR,
+> -		     "Wakeup handler not enabled while the VCPU is blocked\n");
+>  
+>  		dest = cpu_physical_id(vcpu->cpu);
+>  
+> @@ -161,13 +162,12 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
+>  		spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
+>  	}
+>  
+> +	WARN(pi_desc->sn == 1,
+> +	     "Posted Interrupt Suppress Notification set before blocking");
 > +
-> +#define POWEROFF_PRIO_RESERVED         0
-> +#define POWEROFF_PRIO_PLATFORM         1
-> +#define POWEROFF_PRIO_DEFAULT          128
-> +#define POWEROFF_PRIO_HIGH             192
-> +#define POWEROFF_PRIO_FIRMWARE         224
+>  	do {
+>  		old.control = new.control = pi_desc->control;
+>  
+> -		WARN((pi_desc->sn == 1),
+> -		     "Warning: SN field of posted-interrupts "
+> -		     "is set before blocking\n");
+> -
+>  		/*
+>  		 * Since vCPU can be preempted during this process,
+>  		 * vcpu->cpu could be different with pre_pcpu, we
 
-Also I'm wondering why these particular numbers were chosen, here and above?
+Don't know for sure if this is desired. I'll would just use WARN_ON_ONCE instead
+if the warning spams the log.
 
-> +
-> +enum poweroff_mode {
-> +       POWEROFF_NORMAL = 0,
-> +       POWEROFF_PREPARE,
-> +};
-> +
-> +struct power_off_data {
-> +       void *cb_data;
-> +};
-> +
-> +struct power_off_prep_data {
-> +       void *cb_data;
-> +};
-> +
-> +struct restart_data {
-> +       void *cb_data;
-> +       const char *cmd;
-> +       enum reboot_mode mode;
-> +};
-> +
-> +struct reboot_prep_data {
-> +       void *cb_data;
-> +       const char *cmd;
-> +       enum reboot_prepare_mode mode;
-> +};
-> +
-> +struct power_handler_private_data {
-> +       struct notifier_block reboot_prep_nb;
-> +       struct notifier_block power_off_nb;
-> +       struct notifier_block restart_nb;
-> +       void (*trivial_power_off_cb)(void);
-> +       void (*simple_power_off_cb)(void *data);
-> +       void *simple_power_off_cb_data;
-> +       bool registered;
-> +};
-> +
-> +/**
-> + * struct power_handler - Machine power-off + restart handler
-> + *
-> + * Describes power-off and restart handlers which are invoked by kernel
-> + * to power off or restart this machine.  Supports prioritized chaining for
-> + * both restart and power-off handlers.  Callback's priority must be unique.
-> + * Intended to be used by device drivers that are responsible for restarting
-> + * and powering off hardware which kernel is running on.
-> + *
-> + * Struct power_handler can be static.  Members of this structure must not be
-> + * altered while handler is registered.
-> + *
-> + * Fill the structure members and pass it to register_power_handler().
-> + */
-> +struct power_handler {
-> +       /**
-> +        * @cb_data:
-> +        *
-> +        * User data included in callback's argument.
-> +        */
+If there is a race I would rather want to catch it even if rare.
 
-And here I would document the structure fields in the main kerneldoc
-comment above.
+Best regards,
+	Maxim Levitsky
 
-As is, it is a bit hard to grasp the whole definition.
-
-> +       void *cb_data;
-> +
-> +       /**
-> +        * @power_off_cb:
-> +        *
-> +        * Callback that should turn off machine.  Inactive if NULL.
-> +        */
-> +       void (*power_off_cb)(struct power_off_data *data);
-> +
-> +       /**
-> +        * @power_off_prepare_cb:
-> +        *
-> +        * Power-off preparation callback.  All power-off preparation callbacks
-> +        * are invoked before @restart_cb.  Inactive if NULL.
-> +        */
-> +       void (*power_off_prepare_cb)(struct power_off_prep_data *data);
-> +
-> +       /**
-> +        * @power_off_priority:
-> +        *
-> +        * Power-off callback priority, must be unique.  Zero value is
-> +        * reassigned to default priority.  Inactive if @power_off_cb is NULL.
-> +        */
-> +       int power_off_priority;
-> +
-> +       /**
-> +        * @power_off_chaining_allowed:
-> +        *
-> +        * False if callbacks execution should stop when @power_off_cb fails
-> +        * to power off machine.  True if further lower priority power-off
-> +        * callback should be executed.
-> +        */
-> +       bool power_off_chaining_allowed;
-> +
-> +       /**
-> +        * @restart_cb:
-> +        *
-> +        * Callback that should reboot machine.  Inactive if NULL.
-> +        */
-> +       void (*restart_cb)(struct restart_data *data);
-> +
-> +       /**
-> +        * @restart_priority:
-> +        *
-> +        * Restart callback priority, must be unique.  Zero value is reassigned
-> +        * to default priority.  Inactive if @restart_cb is NULL.
-> +        */
-> +       int restart_priority;
-> +
-> +       /**
-> +        * @reboot_prepare_cb:
-> +        *
-> +        * Reboot preparation callback.  All reboot preparation callbacks are
-> +        * invoked before @restart_cb.  Inactive if NULL.
-> +        */
-> +       void (*reboot_prepare_cb)(struct reboot_prep_data *data);
-> +
-> +       /**
-> +        * @priv:
-> +        *
-> +        * Internal data.  Shouldn't be touched.
-> +        */
-> +       const struct power_handler_private_data priv;
-> +};
