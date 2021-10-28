@@ -2,207 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B17F043E70B
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 19:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD9243E71D
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 19:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbhJ1RWI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 13:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        id S230174AbhJ1RZx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 13:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbhJ1RWH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 13:22:07 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746C3C061243
-        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 10:19:40 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id nn3-20020a17090b38c300b001a03bb6c4ebso5311324pjb.1
-        for <linux-mips@vger.kernel.org>; Thu, 28 Oct 2021 10:19:40 -0700 (PDT)
+        with ESMTP id S229610AbhJ1RZx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 13:25:53 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17132C061570;
+        Thu, 28 Oct 2021 10:23:26 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id e65so7064538pgc.5;
+        Thu, 28 Oct 2021 10:23:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=q4iJG3ZW7obL4DMmrtDt5ktj041PvD+dEvmTQN+uKyY=;
-        b=mnkWkJlsD3Efv+dhabg9XRW3VcAMBFLrAWU0a5kq4aSl4p3OkuIs64Ri3PE1R6G45W
-         WWX1srIjeyGp7bl0JwXP4EsqbWo0C7Rq7LlpprSwJJDhP6Z9C4BlGZ6pF0W6uFPVwJd6
-         newuZGIp7fi3S1LWbDnukcAYyKzMEUnwUDvBD8yhO2TaY/ppfXW+LzQN7N/3ahTyR+Xa
-         EoqLzmvlkN3t1dBGcUsabuqlQMThWwYqrYkPzmYbFq4TCGSH1FBWF6bLFrKhvfl+wIkg
-         myDgbOosQ39NTrE5GkyLOk3F2ofMqkvjX3mEfa4Ds01sxY6mlbwLLtW+SYgm0DJ0rLj4
-         pK7g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9e1Xo7aw+M7k34WE27Yf8eDHXFg2naV2DoHTGHxoMYY=;
+        b=LhWVSOB+0vWAj7uobQR5mF6TlnjP8kV3Kkv8Oo4cdHxvXdknr8iPLJ0N5JchZ+nGXd
+         Race4CilUmpnrhDXOcCpLuiraFIGczGXyQ3B65NCXNj01QiX2BieDXibQ9wyQNX+IGCp
+         vOS5r9KxeZsgN5fDmBICsChX3Afj40C48NQ8SViqJKcGXvj4n3rxG2I632Zq1aujwiEv
+         yGJtzbDh4PLAsTVb/BAPdMyYdzKA1JanWM8aRXkr2XXGqzd6hF+q34MPux9iAiqZ99ez
+         AidFeknBaY+IFXKBcPaZvodMdybNvLsJ99RQ5uDQBAizQZ18sQ1k1eVfgl7tPo+gK/Oo
+         GG0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q4iJG3ZW7obL4DMmrtDt5ktj041PvD+dEvmTQN+uKyY=;
-        b=Nz/KfGKmSDChS0j70Mw8xC2ZcKMim18i6UMiHu+jgOtv7ASYjlLvY7jxuU1+pT6usk
-         Rx61+3fGW96PnM5xqC8Epv06RhPnC5K6Vg94YYJjbCzcylu8deLcWq7Uqsw4e6rECXmQ
-         Zwc4z8AaTvijzUy0XeDjxP0T5qn+z6LvmBUE5Dv5pwHd382HnBnea17Sy259yjd+lp+3
-         zJekY+ZpDr9o9hEAMk+CCkewu3VG2DJ9TFx54IG/nwu4c2rK+w1K985OUw8zyQxOlbM6
-         HQYoiwIwQ7Q4xKtn0I6P3yU+uBlhbkwnNT/qto9CssgBelgAzveKHDS/YeL1QngQFPso
-         L3ig==
-X-Gm-Message-State: AOAM531tAjuzWpPBWLdNCH4Qjs42Jt3L7wzWiunDXyyRnIrJMhjSKF+8
-        uORRyO9CFYFo9J7PkYhyLD+y6Q==
-X-Google-Smtp-Source: ABdhPJybd062Z7dZdlv5Ua0y9WgXsZDlcpD/ngOKZtR+XtlO0zPIxbocuXwUccJIVKZ7ltOnF8e4MQ==
-X-Received: by 2002:a17:90a:b105:: with SMTP id z5mr5854314pjq.181.1635441579540;
-        Thu, 28 Oct 2021 10:19:39 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d24sm3945465pfn.62.2021.10.28.10.19.38
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9e1Xo7aw+M7k34WE27Yf8eDHXFg2naV2DoHTGHxoMYY=;
+        b=yBK03xKWwlDp3HbEOQNabwpJNQU0IhyN8+0cyaQtjdPPQ98a0KpvB9nN2mmNwFD3bJ
+         A02nmMlxfTxvZY+ZNg4ugeiNojRuZS8MnzCbbAmgzUfX4VzqVdw2SU9eQYMAVl6v1A7u
+         fqTktGBN3mfIzmGvjcH3nkczNi+2VGP80DtmBU1+u2bhAnPjPhj7gaurMn5uHCOKVN+S
+         vqCRDpmzmnJ/gQ0RuuLKDb7SYNw9wYFhsLbgbGpETiFHNAVKbxbar09KzW+bwx7wDXcw
+         mIyAHhs5mhUlwg6tTkaurdY6ipzPtJOlUTcldOKUbGNaRb/N1bHQzMbhGnirAVfG3qz0
+         r57Q==
+X-Gm-Message-State: AOAM530rxPDJ6hxVbMdzrmzWsOOtKlyc/xbpfm5zA0xEg5Pqs721rlMm
+        z/Srltip0gD3Vd8n2E2W1c7oGzOAadE=
+X-Google-Smtp-Source: ABdhPJxEg9u2nOUqi4OQ2NOzZkBvB//2rB+wFl9vcLgMHNf5ufODpkJl47L6ZBhN8oDkY4USMIP//w==
+X-Received: by 2002:a63:8541:: with SMTP id u62mr1670158pgd.279.1635441805160;
+        Thu, 28 Oct 2021 10:23:25 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id l20sm3222499pgo.67.2021.10.28.10.23.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 10:19:38 -0700 (PDT)
-Date:   Thu, 28 Oct 2021 17:19:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH v2 28/43] KVM: VMX: Remove vCPU from PI wakeup list
- before updating PID.NV
-Message-ID: <YXrbpvHG7YD0MNO2@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
- <20211009021236.4122790-29-seanjc@google.com>
- <558e7e4c36e649709837079a25c2f56fc5609fbe.camel@redhat.com>
+        Thu, 28 Oct 2021 10:23:24 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     rafal@milecki.pl, Florian Fainelli <f.fainelli@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM63XX ARM
+        ARCHITECTURE), Justin Chen <justinpopo6@gmail.com>,
+        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-mips@vger.kernel.org (open list:MIPS),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM63XX
+        ARM ARCHITECTURE)
+Subject: [PATCH 0/7] Removal of bcm63xx-wdt
+Date:   Thu, 28 Oct 2021 10:23:15 -0700
+Message-Id: <20211028172322.4021440-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <558e7e4c36e649709837079a25c2f56fc5609fbe.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 28, 2021, Maxim Levitsky wrote:
-> On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
-> > Remove the vCPU from the wakeup list before updating the notification
-> > vector in the posted interrupt post-block helper.  There is no need to
-> > wake the current vCPU as it is by definition not blocking.  Practically
-> > speaking this is a nop as it only shaves a few meager cycles in the
-> > unlikely case that the vCPU was migrated and the previous pCPU gets a
-> > wakeup IRQ right before PID.NV is updated.  The real motivation is to
-> > allow for more readable code in the future, when post-block is merged
-> > with vmx_vcpu_pi_load(), at which point removal from the list will be
-> > conditional on the old notification vector.
-> > 
-> > Opportunistically add comments to document why KVM has a per-CPU spinlock
-> > that, at first glance, appears to be taken only on the owning CPU.
-> > Explicitly call out that the spinlock must be taken with IRQs disabled, a
-> > detail that was "lost" when KVM switched from spin_lock_irqsave() to
-> > spin_lock(), with IRQs disabled for the entirety of the relevant path.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/kvm/vmx/posted_intr.c | 49 +++++++++++++++++++++++-----------
-> >  1 file changed, 33 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-> > index 2b2206339174..901b7a5f7777 100644
-> > --- a/arch/x86/kvm/vmx/posted_intr.c
-> > +++ b/arch/x86/kvm/vmx/posted_intr.c
-> > @@ -10,10 +10,22 @@
-> >  #include "vmx.h"
-> >  
-> >  /*
-> > - * We maintain a per-CPU linked-list of vCPU, so in wakeup_handler() we
-> > - * can find which vCPU should be waken up.
-> > + * Maintain a per-CPU list of vCPUs that need to be awakened by wakeup_handler()
-> Nit: While at it, it would be nice to rename this to pi_wakeup_hanlder() so
-> that it can be more easilly found.
+This patch series prepares the bcm7038_wdt driver to support its bcm63xx
+counter part, updates the MIPS BCM63xx platform code to provide the
+necessary information about the "periph" clock, and finally proceeds
+with removing the bcm63xx_wdt altogether.
 
-Ah, good catch.
+This was only compiled tested as I did not have a readily available
+BCM63xx system to test with.
 
-> > + * when a WAKEUP_VECTOR interrupted is posted.  vCPUs are added to the list when
-> > + * the vCPU is scheduled out and is blocking (e.g. in HLT) with IRQs enabled.
-> s/interrupted/interrupt ?
-> 
-> Isn't that comment incorrect? As I see, the PI hardware is setup to use the WAKEUP_VECTOR
-> when vcpu blocks (in pi_pre_block) and then that vcpu is added to the list.
-> The pi_wakeup_hanlder just goes over the list and wakes up all vcpus on the lsit.
+This should also help with adding support for BCM4908 which Rafal is
+working on.
 
-Doh, yes.  This patch is predicting the future.  The comment becomes correct as of 
+Florian Fainelli (6):
+  dt-bindings: watchdog: Add BCM6345 compatible to BCM7038 binding
+  watchdog: bcm7038_wdt: Support platform data configuration
+  watchdog: Allow building BCM7038_WDT for BCM63XX
+  watchdog: bcm7038_wdt: Add platform device id for bcm63xx-wdt
+  MIPS: BCM63XX: Provide platform data to watchdog device
+  watchdog: Remove BCM63XX_WDT
 
-  KVM: VMX: Handle PI wakeup shenanigans during vcpu_put/load
+Rafał Miłecki (1):
+  dt-bindings: watchdog: convert Broadcom's WDT to the json-schema
 
-but as of this patch the "scheduled out" piece doesn't hold true.
- 
-> > + * The vCPUs posted interrupt descriptor is updated at the same time to set its
-> > + * notification vector to WAKEUP_VECTOR, so that posted interrupt from devices
-> > + * wake the target vCPUs.  vCPUs are removed from the list and the notification
-> > + * vector is reset when the vCPU is scheduled in.
-> >   */
-> >  static DEFINE_PER_CPU(struct list_head, blocked_vcpu_on_cpu);
-> Also while at it, why not to rename this to 'blocked_vcpu_list'?
-> to explain that this is list of blocked vcpus. Its a per-cpu variable
-> so 'on_cpu' suffix isn't needed IMHO.
+ .../bindings/watchdog/brcm,bcm7038-wdt.txt    |  19 --
+ .../bindings/watchdog/brcm,bcm7038-wdt.yaml   |  40 +++
+ arch/mips/bcm63xx/dev-wdt.c                   |   8 +
+ drivers/watchdog/Kconfig                      |  15 +-
+ drivers/watchdog/Makefile                     |   1 -
+ drivers/watchdog/bcm63xx_wdt.c                | 315 ------------------
+ drivers/watchdog/bcm7038_wdt.c                |  15 +-
+ include/linux/platform_data/bcm7038_wdt.h     |   8 +
+ 8 files changed, 73 insertions(+), 348 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+ delete mode 100644 drivers/watchdog/bcm63xx_wdt.c
+ create mode 100644 include/linux/platform_data/bcm7038_wdt.h
 
-As you noted, addressed in a future patch.
+-- 
+2.25.1
 
-> > +/*
-> > + * Protect the per-CPU list with a per-CPU spinlock to handle task migration.
-> > + * When a blocking vCPU is awakened _and_ migrated to a different pCPU, the
-> > + * ->sched_in() path will need to take the vCPU off the list of the _previous_
-> > + * CPU.  IRQs must be disabled when taking this lock, otherwise deadlock will
-> > + * occur if a wakeup IRQ arrives and attempts to acquire the lock.
-> > + */
-> >  static DEFINE_PER_CPU(spinlock_t, blocked_vcpu_on_cpu_lock);
-> >  
-> >  static inline struct pi_desc *vcpu_to_pi_desc(struct kvm_vcpu *vcpu)
-> > @@ -101,23 +113,28 @@ static void __pi_post_block(struct kvm_vcpu *vcpu)
-> >  	WARN(pi_desc->nv != POSTED_INTR_WAKEUP_VECTOR,
-> >  	     "Wakeup handler not enabled while the vCPU was blocking");
-> >  
-> > -	dest = cpu_physical_id(vcpu->cpu);
-> > -	if (!x2apic_mode)
-> > -		dest = (dest << 8) & 0xFF00;
-> > -
-> > -	do {
-> > -		old.control = new.control = READ_ONCE(pi_desc->control);
-> > -
-> > -		new.ndst = dest;
-> > -
-> > -		/* set 'NV' to 'notification vector' */
-> > -		new.nv = POSTED_INTR_VECTOR;
-> > -	} while (cmpxchg64(&pi_desc->control, old.control,
-> > -			   new.control) != old.control);
-> > -
-> > +	/*
-> > +	 * Remove the vCPU from the wakeup list of the _previous_ pCPU, which
-> > +	 * will not be the same as the current pCPU if the task was migrated.
-> > +	 */
-> >  	spin_lock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
-> >  	list_del(&vcpu->blocked_vcpu_list);
-> >  	spin_unlock(&per_cpu(blocked_vcpu_on_cpu_lock, vcpu->pre_pcpu));
-> > +
-> > +	dest = cpu_physical_id(vcpu->cpu);
-> > +	if (!x2apic_mode)
-> > +		dest = (dest << 8) & 0xFF00;
-> It would be nice to have a function for this, this appears in this file twice.
-> Maybe there is a function already somewhere?
-
-The second instance does go away by the aforementioned:
-
-  KVM: VMX: Handle PI wakeup shenanigans during vcpu_put/load
-
-I'm inclined to say we don't want a helper because there should only ever be one
-path that changes PI.ndst.  But a comment would definitely help to explain the
-difference between xAPIC and x2APIC IDs.
