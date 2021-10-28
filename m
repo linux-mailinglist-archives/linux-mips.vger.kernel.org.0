@@ -2,108 +2,164 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D0243E9DB
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 22:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6FF43F1C9
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Oct 2021 23:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbhJ1Uu1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 16:50:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39110 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230451AbhJ1UuZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 28 Oct 2021 16:50:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3588D60F21;
-        Thu, 28 Oct 2021 20:47:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635454078;
-        bh=QIIErr9k/GQ8cPnA4NVe5+CaffoR9OvTQo8rGLm1sGY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=fyCHgBKRLWVUiE7jSBydUg2K5TvD7NRO2xtSrG9BOGKjyGkvnVFUPekPQ9kBvqcU9
-         uAd4vG+FZ9sZFYEt+di/4wC7U4RsxhdmFJ9FVX6hchKmjCf4ba6ked5MLI0S76Wtje
-         S4sAvfP2kCfIs/v5Y2Pt2gtLjvtYsLI2wY2xCtQ/mYNvRqSkaY7C08uFAc+TuF2G7X
-         OnSfuz6FoHMXF9giGvL3RZijUjIN7BfY9ofuzF55Ei+Yapbc1yO6/WxIRlmoR4ImwP
-         LHfIc5oHs6ck0Cn9k5Ai5cAthno++jwv8rElte0uKT6sGrDUqkRPg3P6cj0maPUraq
-         H/5JO/h9LwilA==
-Date:   Thu, 28 Oct 2021 15:47:56 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yanteng Si <siyanteng01@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        id S231464AbhJ1VfR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 28 Oct 2021 17:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231468AbhJ1VfJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 17:35:09 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229FEC061227;
+        Thu, 28 Oct 2021 14:32:42 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id l2so13056363lji.6;
+        Thu, 28 Oct 2021 14:32:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FNhb8m0Up8WrlODFU5XusWNjgw7FYM5tGcizMhHIPzY=;
+        b=USVIOuLFNftY9TSlAv8GQB7acWI1sWWXinRBTyt58drm2RaLh5La11nG4ixMTMewfR
+         mX32BgQ2N30EhppM8q0HGzyhqJFMUCJMnblCfs4t5KonQ44KE0wlYv2W8rFYqs4V2koj
+         XX371v1ONZUx01vnBeB6kBqd5XtkGxjVTj1e6iP0L3n7qnRFNsZrpRBj/O9TAqf3J13f
+         DVFT1FMABW5ltJOUpFKPkQHX+APbXjkM1X+NMw4LCmok7h64fUY8hoIatZpEbYmauo9R
+         3tzIe6iUnZRzMnNPnMBZ+KjZo2BGgmZ8KUvvaXZMV9Llm3C259zfQ4YRn+8CQPkkCOFN
+         RJzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FNhb8m0Up8WrlODFU5XusWNjgw7FYM5tGcizMhHIPzY=;
+        b=x1/SikoFEcrTbmPz93P/kN5wRqho0t39OVDAJv+OHPpejl3BDkhaQa+Q9zEimY+lTG
+         pkmzIEiDMujGUPeupqDWi3XMPXC96Px1Jxizh+kdbxxNsUO7bOtSnkm7FzjaSeDbR7tF
+         al46WibVXIEkI5bzTADQl/TbhehmBadMq/7qTE0YlWDMUetLZYpVygysz6pjV4tE1iIs
+         H2Vra42snnaOazZwAVdNz84+0KUKOu/7i+LOsK2rmMd1q04WGPxoXq66L7XX3/eWxPdu
+         OXFkwYpBBn8m8whifSIt3NH8bLkW+cFeJQJIABshOqUEDc3smi2IznpVKm0USjFTNCzs
+         RRww==
+X-Gm-Message-State: AOAM532nyuVTlKEcTJTTLcJNf+3yw3C5RkKuj29rxy1FGshrRdwapLvb
+        Zf8n43psf8yToj5DIHTaLofjTTmfMmI=
+X-Google-Smtp-Source: ABdhPJwcWGds1J/UVngHunSwfN7ztb9W9OVxlAX827dktWLGe1JrS01AY9nWnDg96vqg3wWMmL+l6Q==
+X-Received: by 2002:a2e:9b0e:: with SMTP id u14mr7220400lji.247.1635456760396;
+        Thu, 28 Oct 2021 14:32:40 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-44-18.dynamic.spd-mgts.ru. [46.138.44.18])
+        by smtp.googlemail.com with ESMTPSA id bi14sm474384lfb.290.2021.10.28.14.32.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Oct 2021 14:32:39 -0700 (PDT)
+Subject: Re: [PATCH v2 03/45] notifier: Add
+ atomic/blocking_notifier_has_unique_priority()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        chenhuacai@kernel.org, sterlingteng@gmail.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
- able to use them from driver code
-Message-ID: <20211028204756.GA293663@bhelgaas>
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20211027211715.12671-1-digetx@gmail.com>
+ <20211027211715.12671-4-digetx@gmail.com>
+ <YXqCz/utp2DFJJ45@smile.fi.intel.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <c5fb7590-03a7-0eea-4040-07472a5c9710@gmail.com>
+Date:   Fri, 29 Oct 2021 00:32:37 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H8HoO7dsfiTFaTRie1-DB-DF5st-gFmS=AF2tfHP_gsVw@mail.gmail.com>
+In-Reply-To: <YXqCz/utp2DFJJ45@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 11:59:17AM +0200, Sergio Paracuellos wrote:
-> On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
-> <sergio.paracuellos@gmail.com> wrote:
-> > On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
-> > > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
-> > > > >
-> > > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
-> > > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
-> > > > > drivers become modules.
-> > > > >
-> > > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > >
-> > > > > Let's just export them.
-> > > > >
-> > > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> > > > > ---
-> > > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
-> > > > >  arch/mips/kernel/mips-cpc.c | 1 +
-> > > > >  2 files changed, 6 insertions(+)
-> > > > >
-> > > >
-> > > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > >
-> > > could we instead make the pcie-mt761 driver non modular ? Exporting
-> > > all MIPS specific stuff for just making an essential driver modular
-> > > doesn't IMHO make much sense.
-> >
-> > The driver is modular because I have been advised other times that new
-> > drivers should be able to be compiled as modules and we should avoid
-> > using 'bool' in Kconfig for new drivers. That's the only reason. I am
-> > also always including as 'y' the driver since for me not having pci in
-> > my boards has no sense... I am ok in changing Kconfig to be 'bool'
-> > instead of 'tristate', but I don't know what should be the correct
-> > thing to do in this case. Thoughts?
+28.10.2021 14:00, Andy Shevchenko пишет:
+> On Thu, Oct 28, 2021 at 12:16:33AM +0300, Dmitry Osipenko wrote:
+>> Add atomic/blocking_notifier_has_unique_priority() helpers which return
+>> true if given handler has unique priority.
 > 
-> I guess we also want the driver to at least be compile tested in
-> 'allmodconfig' and other similars...
+> ...
+> 
+>> +/**
+>> + *	atomic_notifier_has_unique_priority - Checks whether notifier's priority is unique
+>> + *	@nh: Pointer to head of the atomic notifier chain
+>> + *	@n: Entry in notifier chain to check
+>> + *
+>> + *	Checks whether there is another notifier in the chain with the same priority.
+>> + *	Must be called in process context.
+>> + *
+>> + *	Returns true if priority is unique, false otherwise.
+> 
+> Why this indentation?
 
-Sounds like the systems that actually use this driver require it to be
-built-in, and the only benefit of exporting these symbols is that we
-would get better compile test coverage.
+This is the same doc-comment style used by this file in general. I
+haven't tried to invent anything new.
 
-If that's the case, I agree that it's better to just make it
-non-modular.
 
-Bjorn
+> ...
+> 
+>> +	/*
+>> +	 * This code gets used during boot-up, when task switching is
+>> +	 * not yet working and interrupts must remain disabled.  At
+> 
+> One space is enough.
+
+This comment is replicated multiple times over this source file. You can
+find it before each down_write(). I borrowed the text as-is, for
+consistency.
