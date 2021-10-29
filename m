@@ -2,201 +2,289 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BE544040D
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 22:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BDB44045B
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 22:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbhJ2UaD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Oct 2021 16:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbhJ2UaC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 16:30:02 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3AAC061570;
-        Fri, 29 Oct 2021 13:27:33 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id x3so20270342uar.13;
-        Fri, 29 Oct 2021 13:27:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pqg/kF25IE3Rne+C/OzkoLGPaIYkldAY8r8E8VHOCMA=;
-        b=bnMOeP9UKV5j22QqgzQ60gKvPozViwAWHg4/tjraTKdpHnyuDMwB68wc9gp5Mzampv
-         H28aMMbZzF0WVWPq6GIxpbRciQsA4Pwg1YJ3DfBAUHYT/WBpsmlKtsc/BhwsRonFv8PF
-         UDGxaIGhVWcH0JQR849iZC1e03Qo2oKGifWkRglByLwhwnhWxCtK5saCEP0aBgvl9XmO
-         jZth0xkPECgEOTElbaz9R0+CSi2E2tqak6OYIS6w8xE8b782fOG140liDyPxqpowDcaA
-         jGZX0QjpN2ku85KKLg6g+CxcRFFyPB9KIyMT+3/8gClycWB1XMyhM3N1Hd4W/9Z15obW
-         ccvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pqg/kF25IE3Rne+C/OzkoLGPaIYkldAY8r8E8VHOCMA=;
-        b=l6DoNdv1LSkiI3m9z9cwjgEJRhdDs5E6tGuPLw5TyqIKjrZS5SvPM9PAx61EWsRWFt
-         HUd+3Xst8yLEvlCHlDG5LQWcw6ZqvGUVuxGDBH38k4gPrIcVpNIEDoXMizvCypt2Lzny
-         QZvcRz22LJcrXDwUizA4Vjgu32R+74Yk0z9sf6pd400V0zKouwF6NPO4Jk6mpXIsDBo+
-         uqNEPbPFiI+wSPssh0raj02ZQhiGJ1ekI3gzsm4CW76Ni10iZyM0gApatOM9/6XZIMYU
-         gkil/Frv8ucIpJh7aNnIWecw3+5dCXpkrhcInKs0FTueDufRQ162BIFyiKRCGqy3abij
-         981A==
-X-Gm-Message-State: AOAM530EQqRjxkOJ/gkOcBTuAxOmR/iViVYWkaNYRU5rgXwoBj16pspT
-        RQmEctcevXW7vqKV7KAYe1glHS89S9SiqsSChO92IBsQ79U=
-X-Google-Smtp-Source: ABdhPJxjZ+rsnfCf4Vee/PqzdFgYnFMqI0aY1PJBX3qCSfi+7xTveWV5090iA5r7e+cIPovNX9bCIuRanUZJLTwfsh4=
-X-Received: by 2002:a05:6102:3ec3:: with SMTP id n3mr15004901vsv.48.1635539252506;
- Fri, 29 Oct 2021 13:27:32 -0700 (PDT)
+        id S231270AbhJ2UuX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 29 Oct 2021 16:50:23 -0400
+Received: from aposti.net ([89.234.176.197]:48552 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231401AbhJ2UuN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 29 Oct 2021 16:50:13 -0400
+Date:   Fri, 29 Oct 2021 21:47:32 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [RESEND PATCH v3 6/6] drm/ingenic: Attach bridge chain to
+ encoders
+To:     Christophe Branchereau <cbranchereau@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "H . Nikolaus Schaller" <hns@goldelico.com>,
+        Paul Boddie <paul@boddie.org.uk>, list@opendingux.net,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <83BR1R.9ZTLAX4CQC6H@crapouillou.net>
+In-Reply-To: <CAFsFa87SJqyZ=VgbNe=obv+jHNdVQQe0NN4R8w_V_HCitP4Nbg@mail.gmail.com>
+References: <20211026181240.213806-1-paul@crapouillou.net>
+        <20211026181240.213806-7-paul@crapouillou.net>
+        <CAFsFa87SJqyZ=VgbNe=obv+jHNdVQQe0NN4R8w_V_HCitP4Nbg@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAMhs-H8bjOkwfnYqdhWuwA8vt18naW3DABYN-EyW-gDB2cP7JA@mail.gmail.com>
- <20211029194751.GA349935@bhelgaas>
-In-Reply-To: <20211029194751.GA349935@bhelgaas>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 29 Oct 2021 22:27:20 +0200
-Message-ID: <CAMhs-H9ANAP6bsF3AgUTSnaNYxqhxETVwEcL7AC96pFc=WskOg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
- able to use them from driver code
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yanteng Si <siyanteng01@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        chenhuacai@kernel.org, sterlingteng@gmail.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 9:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, Oct 29, 2021 at 09:37:53PM +0200, Sergio Paracuellos wrote:
-> > On Fri, Oct 29, 2021 at 8:49 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Fri, Oct 29, 2021 at 07:28:47AM +0200, Sergio Paracuellos wrote:
-> > > > On Thu, Oct 28, 2021 at 10:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > On Thu, Oct 28, 2021 at 11:59:17AM +0200, Sergio Paracuellos wrote:
-> > > > > > On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
-> > > > > > <sergio.paracuellos@gmail.com> wrote:
-> > > > > > > On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
-> > > > > > > <tsbogend@alpha.franken.de> wrote:
-> > > > > > > > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
-> > > > > > > > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
-> > > > > > > > > >
-> > > > > > > > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
-> > > > > > > > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
-> > > > > > > > > > drivers become modules.
-> > > > > > > > > >
-> > > > > > > > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > >
-> > > > > > > > > > Let's just export them.
-> > > > > > > > > >
-> > > > > > > > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> > > > > > > > > > ---
-> > > > > > > > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
-> > > > > > > > > >  arch/mips/kernel/mips-cpc.c | 1 +
-> > > > > > > > > >  2 files changed, 6 insertions(+)
-> > > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > > > > >
-> > > > > > > > could we instead make the pcie-mt761 driver non modular ? Exporting
-> > > > > > > > all MIPS specific stuff for just making an essential driver modular
-> > > > > > > > doesn't IMHO make much sense.
-> > > > > > >
-> > > > > > > The driver is modular because I have been advised other times that new
-> > > > > > > drivers should be able to be compiled as modules and we should avoid
-> > > > > > > using 'bool' in Kconfig for new drivers. That's the only reason. I am
-> > > > > > > also always including as 'y' the driver since for me not having pci in
-> > > > > > > my boards has no sense... I am ok in changing Kconfig to be 'bool'
-> > > > > > > instead of 'tristate', but I don't know what should be the correct
-> > > > > > > thing to do in this case. Thoughts?
-> > > > > >
-> > > > > > I guess we also want the driver to at least be compile tested in
-> > > > > > 'allmodconfig' and other similars...15692a80d949
-> > > > >
-> > > > > Sounds like the systems that actually use this driver require it to be
-> > > > > built-in, and the only benefit of exporting these symbols is that we
-> > > > > would get better compile test coverage.
-> > > > >
-> > > > > If that's the case, I agree that it's better to just make it
-> > > > > non-modular.
-> > > >
-> > > > I agree and that was my reasoning for sending a patch to also convert
-> > > > to bool the phy driver that this PCIe controller uses. When the pull
-> > > > request was sent from Vinod to Greg, Greg refused to take it because
-> > > > of that commit and the commit was reverted and a new pull request was
-> > > > sent including this revert. This is commit 15692a80d949 ("phy: Revert
-> > > > "phy: ralink: Kconfig: convert mt7621-pci-phy into 'bool'""). Because
-> > > > of this I also changed the PCIe controller Kconfig from bool to
-> > > > tristate when I sent v3 of the series which at the end were the ones
-> > > > that was finally taken. There are also other ralink related symbols
-> > > > that have been exported to allow to compile other drivers as a
-> > > > modules, like the watchdog. See the commit fef532ea0cd8 ("MIPS:
-> > > > ralink: export rt_sysc_membase for rt2880_wdt.c"). So, as I said, I
-> > > > agree and I am using the driver as if it were a bool and also ralink
-> > > > systems normally require all drivers built-in, but I think we have to
-> > > > take into account also the "historical facts" here. In any case,
-> > > > Bjorn, let me know if you want me to send whatever patch might be
-> > > > needed.
-> > >
-> > > I didn't see the conversation with Greg, so I don't know the whole
-> > > story.
-> >
-> > Here it is: https://www.spinics.net/lists/kernel/msg3986821.html
-> >
-> > > For pcie-mt7621.c, it looks like the only problem is
-> > > setup_cm_memory_region(), which does a little coherency-related stuff.
-> > > If we could move that to arch/mips, we could still make this tristate.
-> >
-> > Yes, the only mips specific function used in the driver is
-> > 'setup_cm_memory_region()'.
-> >
-> > > One way might be to implement a pcibios_root_bridge_prepare() for mips
-> > > and put the setup_cm_memory_region() stuff in there.  It's not *ideal*
-> > > because that's a strong/weak function arrangement that doesn't allow
-> > > for multiple host bridges, but that's probably not an issue here.
-> > >
-> > > If we can't do that, I think making it bool is probably the right
-> > > answer, but it would be worth a brief comment in the commit log to
-> > > explain the issue.
-> >
-> > Do you mean to implement 'pcibios_root_bridge_prepare()' for MIPS
-> > ralink? I guess this means to parse device tree and so on only to get
-> > memory range addresses to be added to the MIPS I/O coherence regions
-> > to make things work and then re-parse it again in the driver to do the
-> > proper PCI setup... We end up in an arch generic driver but at the end
-> > this controller is only present in ralink MIPS, so I am not sure that
-> > implementing 'pcibios_root_bridge_prepare()' is worthy here... I can
-> > explore and try to implement it if you think that it really makes
-> > sense... but, IMHO if this is the case, just making it bool looks like
-> > the correct thing to do.
->
-> It should be trivial to put the contents of setup_cm_memory_region()
-> into a ralink function called pcibios_root_bridge_prepare().
->
-> pcibios_root_bridge_prepare() is called with the same "struct
-> pci_host_bridge *" argument as setup_cm_memory_region(), and it's
-> called slightly later, so the window resources are already set up, so
-> no DT parsing is required.  It looks like a simple move and rename to
-> me.
+Series applied, thanks!
 
-I see. Thanks Bjorn. I will try the approach during the weekend and
-report if it works.
+Cheers,
+-Paul
 
-Best regards,
-    Sergio Paracuellos
 
->
-> Bjorn
+Le ven., oct. 29 2021 at 18:55:50 +0200, Christophe Branchereau 
+<cbranchereau@gmail.com> a écrit :
+> Reviewed-by: Christophe Branchereau <cbranchereau@gmail.com>
+> 
+> On Tue, Oct 26, 2021 at 8:13 PM Paul Cercueil <paul@crapouillou.net> 
+> wrote:
+>> 
+>>  Attach a top-level bridge to each encoder, which will be used for
+>>  negociating the bus format and flags.
+>> 
+>>  All the bridges are now attached with 
+>> DRM_BRIDGE_ATTACH_NO_CONNECTOR.
+>> 
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>   drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 92 
+>> +++++++++++++++++------
+>>   1 file changed, 70 insertions(+), 22 deletions(-)
+>> 
+>>  diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
+>> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>>  index a5e2880e07a1..a05a9fa6e115 100644
+>>  --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>>  +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>>  @@ -21,6 +21,7 @@
+>>   #include <drm/drm_atomic.h>
+>>   #include <drm/drm_atomic_helper.h>
+>>   #include <drm/drm_bridge.h>
+>>  +#include <drm/drm_bridge_connector.h>
+>>   #include <drm/drm_color_mgmt.h>
+>>   #include <drm/drm_crtc.h>
+>>   #include <drm/drm_crtc_helper.h>
+>>  @@ -108,6 +109,19 @@ struct ingenic_drm {
+>>          struct drm_private_obj private_obj;
+>>   };
+>> 
+>>  +struct ingenic_drm_bridge {
+>>  +       struct drm_encoder encoder;
+>>  +       struct drm_bridge bridge, *next_bridge;
+>>  +
+>>  +       struct drm_bus_cfg bus_cfg;
+>>  +};
+>>  +
+>>  +static inline struct ingenic_drm_bridge *
+>>  +to_ingenic_drm_bridge(struct drm_encoder *encoder)
+>>  +{
+>>  +       return container_of(encoder, struct ingenic_drm_bridge, 
+>> encoder);
+>>  +}
+>>  +
+>>   static inline struct ingenic_drm_private_state *
+>>   to_ingenic_drm_priv_state(struct drm_private_state *state)
+>>   {
+>>  @@ -668,11 +682,10 @@ static void 
+>> ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
+>>   {
+>>          struct ingenic_drm *priv = 
+>> drm_device_get_priv(encoder->dev);
+>>          struct drm_display_mode *mode = &crtc_state->adjusted_mode;
+>>  -       struct drm_connector *conn = conn_state->connector;
+>>  -       struct drm_display_info *info = &conn->display_info;
+>>  +       struct ingenic_drm_bridge *bridge = 
+>> to_ingenic_drm_bridge(encoder);
+>>          unsigned int cfg, rgbcfg = 0;
+>> 
+>>  -       priv->panel_is_sharp = info->bus_flags & 
+>> DRM_BUS_FLAG_SHARP_SIGNALS;
+>>  +       priv->panel_is_sharp = bridge->bus_cfg.flags & 
+>> DRM_BUS_FLAG_SHARP_SIGNALS;
+>> 
+>>          if (priv->panel_is_sharp) {
+>>                  cfg = JZ_LCD_CFG_MODE_SPECIAL_TFT_1 | 
+>> JZ_LCD_CFG_REV_POLARITY;
+>>  @@ -685,19 +698,19 @@ static void 
+>> ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
+>>                  cfg |= JZ_LCD_CFG_HSYNC_ACTIVE_LOW;
+>>          if (mode->flags & DRM_MODE_FLAG_NVSYNC)
+>>                  cfg |= JZ_LCD_CFG_VSYNC_ACTIVE_LOW;
+>>  -       if (info->bus_flags & DRM_BUS_FLAG_DE_LOW)
+>>  +       if (bridge->bus_cfg.flags & DRM_BUS_FLAG_DE_LOW)
+>>                  cfg |= JZ_LCD_CFG_DE_ACTIVE_LOW;
+>>  -       if (info->bus_flags & DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)
+>>  +       if (bridge->bus_cfg.flags & 
+>> DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE)
+>>                  cfg |= JZ_LCD_CFG_PCLK_FALLING_EDGE;
+>> 
+>>          if (!priv->panel_is_sharp) {
+>>  -               if (conn->connector_type == DRM_MODE_CONNECTOR_TV) {
+>>  +               if (conn_state->connector->connector_type == 
+>> DRM_MODE_CONNECTOR_TV) {
+>>                          if (mode->flags & DRM_MODE_FLAG_INTERLACE)
+>>                                  cfg |= JZ_LCD_CFG_MODE_TV_OUT_I;
+>>                          else
+>>                                  cfg |= JZ_LCD_CFG_MODE_TV_OUT_P;
+>>                  } else {
+>>  -                       switch (*info->bus_formats) {
+>>  +                       switch (bridge->bus_cfg.format) {
+>>                          case MEDIA_BUS_FMT_RGB565_1X16:
+>>                                  cfg |= 
+>> JZ_LCD_CFG_MODE_GENERIC_16BIT;
+>>                                  break;
+>>  @@ -723,20 +736,29 @@ static void 
+>> ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
+>>          regmap_write(priv->map, JZ_REG_LCD_RGBC, rgbcfg);
+>>   }
+>> 
+>>  -static int ingenic_drm_encoder_atomic_check(struct drm_encoder 
+>> *encoder,
+>>  -                                           struct drm_crtc_state 
+>> *crtc_state,
+>>  -                                           struct 
+>> drm_connector_state *conn_state)
+>>  +static int ingenic_drm_bridge_attach(struct drm_bridge *bridge,
+>>  +                                    enum drm_bridge_attach_flags 
+>> flags)
+>>  +{
+>>  +       struct ingenic_drm_bridge *ib = 
+>> to_ingenic_drm_bridge(bridge->encoder);
+>>  +
+>>  +       return drm_bridge_attach(bridge->encoder, ib->next_bridge,
+>>  +                                &ib->bridge, flags);
+>>  +}
+>>  +
+>>  +static int ingenic_drm_bridge_atomic_check(struct drm_bridge 
+>> *bridge,
+>>  +                                          struct drm_bridge_state 
+>> *bridge_state,
+>>  +                                          struct drm_crtc_state 
+>> *crtc_state,
+>>  +                                          struct 
+>> drm_connector_state *conn_state)
+>>   {
+>>  -       struct drm_display_info *info = 
+>> &conn_state->connector->display_info;
+>>          struct drm_display_mode *mode = &crtc_state->adjusted_mode;
+>>  +       struct ingenic_drm_bridge *ib = 
+>> to_ingenic_drm_bridge(bridge->encoder);
+>> 
+>>  -       if (info->num_bus_formats != 1)
+>>  -               return -EINVAL;
+>>  +       ib->bus_cfg = bridge_state->output_bus_cfg;
+>> 
+>>          if (conn_state->connector->connector_type == 
+>> DRM_MODE_CONNECTOR_TV)
+>>                  return 0;
+>> 
+>>  -       switch (*info->bus_formats) {
+>>  +       switch (bridge_state->output_bus_cfg.format) {
+>>          case MEDIA_BUS_FMT_RGB888_3X8:
+>>          case MEDIA_BUS_FMT_RGB888_3X8_DELTA:
+>>                  /*
+>>  @@ -900,8 +922,16 @@ static const struct drm_crtc_helper_funcs 
+>> ingenic_drm_crtc_helper_funcs = {
+>>   };
+>> 
+>>   static const struct drm_encoder_helper_funcs 
+>> ingenic_drm_encoder_helper_funcs = {
+>>  -       .atomic_mode_set        = 
+>> ingenic_drm_encoder_atomic_mode_set,
+>>  -       .atomic_check           = ingenic_drm_encoder_atomic_check,
+>>  +       .atomic_mode_set        = 
+>> ingenic_drm_encoder_atomic_mode_set,
+>>  +};
+>>  +
+>>  +static const struct drm_bridge_funcs ingenic_drm_bridge_funcs = {
+>>  +       .attach                 = ingenic_drm_bridge_attach,
+>>  +       .atomic_check           = ingenic_drm_bridge_atomic_check,
+>>  +       .atomic_reset           = drm_atomic_helper_bridge_reset,
+>>  +       .atomic_duplicate_state = 
+>> drm_atomic_helper_bridge_duplicate_state,
+>>  +       .atomic_destroy_state   = 
+>> drm_atomic_helper_bridge_destroy_state,
+>>  +       .atomic_get_input_bus_fmts = 
+>> drm_atomic_helper_bridge_propagate_bus_fmt,
+>>   };
+>> 
+>>   static const struct drm_mode_config_funcs 
+>> ingenic_drm_mode_config_funcs = {
+>>  @@ -976,7 +1006,9 @@ static int ingenic_drm_bind(struct device 
+>> *dev, bool has_components)
+>>          struct drm_plane *primary;
+>>          struct drm_bridge *bridge;
+>>          struct drm_panel *panel;
+>>  +       struct drm_connector *connector;
+>>          struct drm_encoder *encoder;
+>>  +       struct ingenic_drm_bridge *ib;
+>>          struct drm_device *drm;
+>>          void __iomem *base;
+>>          long parent_rate;
+>>  @@ -1154,20 +1186,36 @@ static int ingenic_drm_bind(struct device 
+>> *dev, bool has_components)
+>>                          bridge = 
+>> devm_drm_panel_bridge_add_typed(dev, panel,
+>>                                                                   
+>> DRM_MODE_CONNECTOR_DPI);
+>> 
+>>  -               encoder = drmm_plain_encoder_alloc(drm, NULL, 
+>> DRM_MODE_ENCODER_DPI, NULL);
+>>  -               if (IS_ERR(encoder)) {
+>>  -                       ret = PTR_ERR(encoder);
+>>  +               ib = drmm_encoder_alloc(drm, struct 
+>> ingenic_drm_bridge, encoder,
+>>  +                                       NULL, DRM_MODE_ENCODER_DPI, 
+>> NULL);
+>>  +               if (IS_ERR(ib)) {
+>>  +                       ret = PTR_ERR(ib);
+>>                          dev_err(dev, "Failed to init encoder: 
+>> %d\n", ret);
+>>                          return ret;
+>>                  }
+>> 
+>>  -               encoder->possible_crtcs = 1;
+>>  +               encoder = &ib->encoder;
+>>  +               encoder->possible_crtcs = 
+>> drm_crtc_mask(&priv->crtc);
+>> 
+>>                  drm_encoder_helper_add(encoder, 
+>> &ingenic_drm_encoder_helper_funcs);
+>> 
+>>  -               ret = drm_bridge_attach(encoder, bridge, NULL, 0);
+>>  -               if (ret)
+>>  +               ib->bridge.funcs = &ingenic_drm_bridge_funcs;
+>>  +               ib->next_bridge = bridge;
+>>  +
+>>  +               ret = drm_bridge_attach(encoder, &ib->bridge, NULL,
+>>  +                                       
+>> DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+>>  +               if (ret) {
+>>  +                       dev_err(dev, "Unable to attach bridge\n");
+>>                          return ret;
+>>  +               }
+>>  +
+>>  +               connector = drm_bridge_connector_init(drm, encoder);
+>>  +               if (IS_ERR(connector)) {
+>>  +                       dev_err(dev, "Unable to init connector\n");
+>>  +                       return PTR_ERR(connector);
+>>  +               }
+>>  +
+>>  +               drm_connector_attach_encoder(connector, encoder);
+>>          }
+>> 
+>>          drm_for_each_encoder(encoder, drm) {
+>>  --
+>>  2.33.0
+>> 
+
+
