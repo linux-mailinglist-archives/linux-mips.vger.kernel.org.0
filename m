@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEEF440200
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 20:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA81440204
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 20:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbhJ2ShH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Oct 2021 14:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S230517AbhJ2ShK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Oct 2021 14:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbhJ2ShE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 14:37:04 -0400
+        with ESMTP id S230525AbhJ2ShG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 14:37:06 -0400
 Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51A4C061714;
-        Fri, 29 Oct 2021 11:34:34 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id q187so10727008pgq.2;
-        Fri, 29 Oct 2021 11:34:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E02BC06120C;
+        Fri, 29 Oct 2021 11:34:36 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id m21so10627934pgu.13;
+        Fri, 29 Oct 2021 11:34:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tJtWsMfTuWNkqI2KGHKeq26M8Pj/p0fEp+4EA8AivqU=;
-        b=PmtXvXUrkviPErP11aIP33MQVCpqkhT+eCHReaUp9R0QxL6WNqOIs435gjjQu2JNbb
-         AcVgykGbDC1ctyVi86WEbyDrNlSPzhlX5b5Ah7DAEUQOJQyrIhDBKQl4CQdHV52PmLZs
-         MsJuPJteWYM9Vkoo+Rt0NzBx1h7Oafavs8WbedW8FulUJ/WDfe8RBq/ZqYU7v37dY7w6
-         YOg9kG4lB4WEO3+x4HBf6oRYrmxPsMmecQodhNXdBCJF+NVWuEnDK7bBOwxrXCXq2pAX
-         7o9gPYwNZdLGIuozFLohZSIWJCBEloTioJIONJ+hgY4e11RjlbIi5uyOZ4YN3K4Z1MhU
-         Dv3A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=x8MeLTK/d7GnlqXrAXWg0WParJO9OxcW6hqMxpYGMbg=;
+        b=EP+8z/W9sU3u+MHqTlHda7Wtm68iwTwyQcuSW6BAJvPFRJESNT8mn54GHkgaBfzeqV
+         A/9X9qoZp5zpMNgOgZK9bfFwZKjvyQ9vwzduHepz33m6haFDNw+pPdkOrST2n1wQbGeV
+         nflqibu+Bgh25jC4u07LF25IP9irXitcz9PN+jfle5xQGUABx2nn8xV0C9XIJBVA1eGM
+         cspUJTcGeH8RwdIOrwb4jm92PLd3aeq/S0sNIIlO2Fl1rL54rVorBTI6LkcWk2C6GTfz
+         7kV65H3IL+TuIeMemvA2lQ3Pu18g3VGGzs/wN1Alu0I8W/8GSxEw3wr9OeHCtlofBREr
+         NJCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tJtWsMfTuWNkqI2KGHKeq26M8Pj/p0fEp+4EA8AivqU=;
-        b=6gk/SaWMUla/SpqiL6DWl21S4JKM9xiZsLaRgwEFcD0BJLgdmS2S0gbyc9rSDKdwxk
-         V9u1h3aEYMNkOGmJ2XOBQIlAuh/OJ56b/rWXd77PF1nSip3/q74ak85oVzimKU6ey/9m
-         SaKb+0sOLcnVvHEE9aY7Ilx19GnB4MMOata00MsPhg73zAK5xAoJa6C8/iIlOjPn80HC
-         fnQgsKMff97vZUshMsPNqRzok/zSkra8ycNOA8em8SsOi6o/Wz0+Tv9QB8BzhEdMGhlK
-         M0BS8KjYl9syptyjVCV/Qp6v58bneMxRpc23BOYjy5pDNnF0z19rj2hj6g2ubnhAeydj
-         7EGQ==
-X-Gm-Message-State: AOAM533C9D+W1L6FwSxkxRzKNf7r1j2Fbp9zUFfuC9rHCLZMHwEOUpIT
-        25LsRAW6pFaf+A0kugXDczFpIsNeAfU=
-X-Google-Smtp-Source: ABdhPJyA63CGQ+6Rq6cYF2fAjjzecxO/kapg7cC6XQXLjssTWVAfisDBgUfC9gbficAi34Z1a7NfhQ==
-X-Received: by 2002:a63:2aca:: with SMTP id q193mr9467525pgq.211.1635532473912;
-        Fri, 29 Oct 2021 11:34:33 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=x8MeLTK/d7GnlqXrAXWg0WParJO9OxcW6hqMxpYGMbg=;
+        b=e6XcCdahUbnU3VXtbwHeaIuft0zowCCHysHfxHLrYj30fCnEDpGz0XR1L1ok1yLQnE
+         MgTqJ+0z4wJfRybvD0ot6XCxdDo35JZhsWwG2mn1JiRaymfh4s4GmwindQUproESGcW9
+         1PRwAV2Y/Hj4wrd+b4nCAqkGrn+sY0PLHSADxOd8LsjmHRO0pdsU5WoVhsKJrnoauun1
+         xN82wqBChENlauKM4NWP3MSjY9C5/NWulqWcE/X8w0kpDUhU+CkTMs3aIJn3Wp4dypZM
+         N5c7PvKFTyORoizButqMjqxAwqGDPj79eTyFRZatyoV1ZLRLqj7cNQSG32JY9WzL5pvS
+         QOWw==
+X-Gm-Message-State: AOAM533bMAzDA+ykU2zM9RqXNQhItVfFoguywnbIbvNLZIlP8Azo2MA4
+        pGOrEgyxL8KXueibntu8axTWvC0wOq4=
+X-Google-Smtp-Source: ABdhPJwtN3rJYgxyv38V2DnuBEWKAl/IrMtV8We+wQG01E+R6w0948bihyxE5OuhWKgieW/YTHjGUw==
+X-Received: by 2002:a62:e707:0:b0:47b:e32f:8538 with SMTP id s7-20020a62e707000000b0047be32f8538mr12335462pfh.69.1635532475148;
+        Fri, 29 Oct 2021 11:34:35 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j15sm7730868pfh.35.2021.10.29.11.34.32
+        by smtp.gmail.com with ESMTPSA id j15sm7730868pfh.35.2021.10.29.11.34.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Oct 2021 11:34:33 -0700 (PDT)
+        Fri, 29 Oct 2021 11:34:34 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     rafal@milecki.pl, Florian Fainelli <f.fainelli@gmail.com>,
@@ -62,10 +62,12 @@ Cc:     rafal@milecki.pl, Florian Fainelli <f.fainelli@gmail.com>,
         linux-mips@vger.kernel.org (open list:MIPS),
         linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM63XX
         ARM ARCHITECTURE)
-Subject: [PATCH v2 0/7] Removal of bcm63xx-wdt
-Date:   Fri, 29 Oct 2021 11:34:23 -0700
-Message-Id: <20211029183430.4086765-1-f.fainelli@gmail.com>
+Subject: [PATCH v2 1/7] dt-bindings: watchdog: convert Broadcom's WDT to the json-schema
+Date:   Fri, 29 Oct 2021 11:34:24 -0700
+Message-Id: <20211029183430.4086765-2-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211029183430.4086765-1-f.fainelli@gmail.com>
+References: <20211029183430.4086765-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -73,47 +75,89 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This patch series prepares the bcm7038_wdt driver to support its bcm63xx
-counter part, updates the MIPS BCM63xx platform code to provide the
-necessary information about the "periph" clock, and finally proceeds
-with removing the bcm63xx_wdt altogether.
+From: Rafał Miłecki <rafal@milecki.pl>
 
-This was only compiled tested as I did not have a readily available
-BCM63xx system to test with.
+This helps validating DTS files.
 
-This should also help with adding support for BCM4908 which Rafal is
-working on.
-
-Changes in v2:
-
-- added Guenter's Reviewed-by where given
-- update binding patch to pass make dt_bindings_check (Rob)
-
-Florian Fainelli (6):
-  dt-bindings: watchdog: Add BCM6345 compatible to BCM7038 binding
-  watchdog: bcm7038_wdt: Support platform data configuration
-  watchdog: Allow building BCM7038_WDT for BCM63XX
-  watchdog: bcm7038_wdt: Add platform device id for bcm63xx-wdt
-  MIPS: BCM63XX: Provide platform data to watchdog device
-  watchdog: Remove BCM63XX_WDT
-
-Rafał Miłecki (1):
-  dt-bindings: watchdog: convert Broadcom's WDT to the json-schema
-
- .../bindings/watchdog/brcm,bcm7038-wdt.txt    |  19 --
- .../bindings/watchdog/brcm,bcm7038-wdt.yaml   |  41 +++
- arch/mips/bcm63xx/dev-wdt.c                   |   8 +
- drivers/watchdog/Kconfig                      |  15 +-
- drivers/watchdog/Makefile                     |   1 -
- drivers/watchdog/bcm63xx_wdt.c                | 315 ------------------
- drivers/watchdog/bcm7038_wdt.c                |  15 +-
- include/linux/platform_data/bcm7038_wdt.h     |   8 +
- 8 files changed, 74 insertions(+), 348 deletions(-)
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ .../bindings/watchdog/brcm,bcm7038-wdt.txt    | 19 ---------
+ .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 39 +++++++++++++++++++
+ 2 files changed, 39 insertions(+), 19 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
  create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
- delete mode 100644 drivers/watchdog/bcm63xx_wdt.c
- create mode 100644 include/linux/platform_data/bcm7038_wdt.h
 
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+deleted file mode 100644
+index 84122270be8f..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
++++ /dev/null
+@@ -1,19 +0,0 @@
+-BCM7038 Watchdog timer
+-
+-Required properties:
+-
+-- compatible : should be "brcm,bcm7038-wdt"
+-- reg : Specifies base physical address and size of the registers.
+-
+-Optional properties:
+-
+-- clocks: The clock running the watchdog. If no clock is found the
+-	  driver will default to 27000000 Hz.
+-
+-Example:
+-
+-watchdog@f040a7e8 {
+-	compatible = "brcm,bcm7038-wdt";
+-	clocks = <&upg_fixed>;
+-	reg = <0xf040a7e8 0x16>;
+-};
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+new file mode 100644
+index 000000000000..bbf2e91f9db7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+@@ -0,0 +1,39 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/brcm,bcm7038-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: BCM7038 watchdog timer
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++maintainers:
++  - Justin Chen <justinpopo6@gmail.com>
++  - Florian Fainelli <f.fainelli@gmail.com>
++
++properties:
++  compatible:
++    const: brcm,bcm7038-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    description: >
++      The clock running the watchdog. If no clock is found the driver will
++      default to 27000000 Hz.
++
++unevaluatedProperties: false
++
++required:
++  - reg
++
++examples:
++  - |
++    watchdog@f040a7e8 {
++      compatible = "brcm,bcm7038-wdt";
++      reg = <0xf040a7e8 0x16>;
++      clocks = <&upg_fixed>;
++    };
 -- 
 2.25.1
 
