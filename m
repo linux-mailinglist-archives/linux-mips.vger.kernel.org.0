@@ -2,174 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B41543FB21
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 12:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE69B43FB80
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 13:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbhJ2LCG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Oct 2021 07:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
+        id S231969AbhJ2Lli (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Oct 2021 07:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbhJ2LCF (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 07:02:05 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29AFC061745
-        for <linux-mips@vger.kernel.org>; Fri, 29 Oct 2021 03:59:36 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:20b9:ea2a:8e1c:8da1])
-        by baptiste.telenet-ops.be with bizsmtp
-        id BmzY2600c01kgUz01mzYHe; Fri, 29 Oct 2021 12:59:33 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mgPbg-008ir7-JA; Fri, 29 Oct 2021 12:59:32 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mgOeP-00FCmn-90; Fri, 29 Oct 2021 11:58:17 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Markos Chandras <markos.chandras@imgtec.com>,
-        Ralf Baechle <ralf@linux-mips.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] mips: cm: Convert to bitfield API to fix out-of-bounds access
-Date:   Fri, 29 Oct 2021 11:58:16 +0200
-Message-Id: <0471c545117c5fa05bd9c73005cda9b74608a61e.1635501373.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S232002AbhJ2Llg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 07:41:36 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B09CC061745;
+        Fri, 29 Oct 2021 04:39:08 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bi35so20465188lfb.9;
+        Fri, 29 Oct 2021 04:39:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=qJzklZpGj5IXKN74jgp5chH+GE9GUHfg2wVqbEJMfWc=;
+        b=JWQ80sVeiD8+A8HH6SUb9qpLmSibGoLqbpi4IzK8Pz9YuhmrlBR+eX0SvfUfbObWeU
+         lseL7LCw0EvwbFQHwrMBJ71bieM6gO/QUcHo4aJhQVSaO9gCYUiEvcInvo3XOMaYCnV7
+         1RJociLasj0B02ca0TR17ZyaXgihQmoxPm5zTPvfckaPykwAqVZY9yEd44jpb0j/5ULB
+         8/IuWoAxt1MIy/7dhRGgOT+20Q0H4KHQjvN7W+C10pUa+uNwmqFIs65ObwmTKccxvSGm
+         wYSyBYnViU5+ehcSTsk+kqD1L1RXJXYT4XptVxjqBuLesMV0YZL01iV1QhhF2c8TvPQC
+         ER/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qJzklZpGj5IXKN74jgp5chH+GE9GUHfg2wVqbEJMfWc=;
+        b=wC7vUyAyriOal5mv/roslOTvjqaPqV5DtmOJxj3hyMPpBjHodGuhfazJ5yAx6rpN3y
+         ZzLQUy4YSQCvr3MX4yu3mNGrKblQZ0tud8O3zFWNcTBck5Z/7xdW33RDfnotpk7p93of
+         cRwdiC40mHaYo2Lp63udrceFoxFtfgml3kX9bF68PgRX3D70ohvMhH/hQpQLytatKU+z
+         cubFtuj1dNtNGm10uOoqM0CGb4WbL6iFvC/VoXgxwPeLi0SByi8pFv83wa9fszrh9GzU
+         5f5id+hmBXvf+uF+dkwqjLiU0DC9O31k8X6xwgRjYPF5UKnU1oqV2U/d71xDXuvuFjH8
+         DkAQ==
+X-Gm-Message-State: AOAM531tPYgE2ssn5xIHXzfp6UCc9GbWDpJfP8IoK1QxlXo7Zx6As2ua
+        uBoMQKWyihD410Yk0j+FhPQ=
+X-Google-Smtp-Source: ABdhPJy5/b5lP4aTitbmcfJyxV+6UrNtq64C/L6kmlRQh+ReKmVLVbSqNKOwvG5PQq5w+6mczTkHLg==
+X-Received: by 2002:a05:6512:b01:: with SMTP id w1mr10026569lfu.508.1635507546409;
+        Fri, 29 Oct 2021 04:39:06 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id s26sm481858ljc.59.2021.10.29.04.39.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Oct 2021 04:39:05 -0700 (PDT)
+Message-ID: <9d57d026-19f3-e92d-4c02-d7e8e2c2bc25@gmail.com>
+Date:   Fri, 29 Oct 2021 13:39:02 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:94.0) Gecko/20100101
+ Thunderbird/94.0
+Subject: Re: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20211028093059.32535-1-zajec5@gmail.com>
+ <20211028093059.32535-3-zajec5@gmail.com>
+ <f78d1573-4909-039d-8647-d4fc13205f47@gmail.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <f78d1573-4909-039d-8647-d4fc13205f47@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-mips_cm_error_report() extracts the cause and other cause from the error
-register using shifts.  This works fine for the former, as it is stored
-in the top bits, and the shift will thus remove all non-related bits.
-However, the latter is stored in the bottom bits, hence thus needs masking
-to get rid of non-related bits.  Without such masking, using it as an
-index into the cm2_causes[] array will lead to an out-of-bounds access,
-probably causing a crash.
+[Rob: please kindly comment on this]
 
-Fix this by using FIELD_GET() instead.  Bite the bullet and convert all
-MIPS CM handling to the bitfield API, to improve readability and safety.
+On 28.10.2021 18:29, Florian Fainelli wrote:
+> On 10/28/21 2:30 AM, Rafał Miłecki wrote:
+>> From: Rafał Miłecki <rafal@milecki.pl>
+>>
+>> Hardware supported by this driver goes back to the old bcm63xx days. It
+>> was then reused in BCM7038 and later also in BCM4908.
+>>
+>> Depending on SoC model registers layout differs a bit. This commit
+>> introduces support for per-chipset registers offsets & adds BCM4908
+>> layout.
+>>
+>> Later on BCM63xx SoCs support should be added too (probably as platform
+>> devices due to missing DT). Eventually this driver should replace
+>> bcm63xx_wdt.c.
+>>
+>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+>> ---
+> 
+> [snip]
+> 
+>> +
+>> +static const u16 bcm7038_wdt_regs_bcm4908[] = {
+>> +	[BCM63XX_WDT_REG_DEFVAL]	= 0x28,
+>> +	[BCM63XX_WDT_REG_CTL]		= 0x2c,
+>> +	[BCM63XX_WDT_REG_SOFTRESET]	= 0x34,
+> 
+> I don't understand what you are doing here and why you are not
+> offsetting the "reg" property appropriately when you create your
+> bcm4908-wdt Device Tree node such that the base starts at 0, and the
+> existing driver becomes usable as-is. This does not make any sense to me
+> when it is obviously the simplest way to make the driver "accept" the
+> resource being passed.
 
-Fixes: 3885c2b463f6a236 ("MIPS: CM: Add support for reporting CM cache errors")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Compile-tested only, but assembler output before/after compared.
----
- arch/mips/include/asm/mips-cm.h | 12 ++++++------
- arch/mips/kernel/mips-cm.c      | 21 ++++++++++-----------
- 2 files changed, 16 insertions(+), 17 deletions(-)
+I believe that DT binding should cover the whole hardware block and
+describe it (here: use proper compatible to allow recognizing block
+variant).
 
-diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/mips-cm.h
-index aeae2effa123d7e2..23c67c0871b17c91 100644
---- a/arch/mips/include/asm/mips-cm.h
-+++ b/arch/mips/include/asm/mips-cm.h
-@@ -11,6 +11,7 @@
- #ifndef __MIPS_ASM_MIPS_CM_H__
- #define __MIPS_ASM_MIPS_CM_H__
- 
-+#include <linux/bitfield.h>
- #include <linux/bitops.h>
- #include <linux/errno.h>
- 
-@@ -153,8 +154,8 @@ GCR_ACCESSOR_RO(32, 0x030, rev)
- #define CM_GCR_REV_MINOR			GENMASK(7, 0)
- 
- #define CM_ENCODE_REV(major, minor) \
--		(((major) << __ffs(CM_GCR_REV_MAJOR)) | \
--		 ((minor) << __ffs(CM_GCR_REV_MINOR)))
-+		(FIELD_PREP(CM_GCR_REV_MAJOR, major) | \
-+		 FIELD_PREP(CM_GCR_REV_MINOR, minor))
- 
- #define CM_REV_CM2				CM_ENCODE_REV(6, 0)
- #define CM_REV_CM2_5				CM_ENCODE_REV(7, 0)
-@@ -362,10 +363,10 @@ static inline int mips_cm_revision(void)
- static inline unsigned int mips_cm_max_vp_width(void)
- {
- 	extern int smp_num_siblings;
--	uint32_t cfg;
- 
- 	if (mips_cm_revision() >= CM_REV_CM3)
--		return read_gcr_sys_config2() & CM_GCR_SYS_CONFIG2_MAXVPW;
-+		return FIELD_GET(CM_GCR_SYS_CONFIG2_MAXVPW,
-+				 read_gcr_sys_config2());
- 
- 	if (mips_cm_present()) {
- 		/*
-@@ -373,8 +374,7 @@ static inline unsigned int mips_cm_max_vp_width(void)
- 		 * number of VP(E)s, and if that ever changes then this will
- 		 * need revisiting.
- 		 */
--		cfg = read_gcr_cl_config() & CM_GCR_Cx_CONFIG_PVPE;
--		return (cfg >> __ffs(CM_GCR_Cx_CONFIG_PVPE)) + 1;
-+		return FIELD_GET(CM_GCR_Cx_CONFIG_PVPE, read_gcr_cl_config()) + 1;
- 	}
- 
- 	if (IS_ENABLED(CONFIG_SMP))
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index 90f1c3df1f0e495e..b4f7d950c84680d3 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -221,8 +221,7 @@ static void mips_cm_probe_l2sync(void)
- 	phys_addr_t addr;
- 
- 	/* L2-only sync was introduced with CM major revision 6 */
--	major_rev = (read_gcr_rev() & CM_GCR_REV_MAJOR) >>
--		__ffs(CM_GCR_REV_MAJOR);
-+	major_rev = FIELD_GET(CM_GCR_REV_MAJOR, read_gcr_rev());
- 	if (major_rev < 6)
- 		return;
- 
-@@ -306,13 +305,13 @@ void mips_cm_lock_other(unsigned int cluster, unsigned int core,
- 	preempt_disable();
- 
- 	if (cm_rev >= CM_REV_CM3) {
--		val = core << __ffs(CM3_GCR_Cx_OTHER_CORE);
--		val |= vp << __ffs(CM3_GCR_Cx_OTHER_VP);
-+		val = FIELD_PREP(CM3_GCR_Cx_OTHER_CORE, core) |
-+		      FIELD_PREP(CM3_GCR_Cx_OTHER_VP, vp);
- 
- 		if (cm_rev >= CM_REV_CM3_5) {
- 			val |= CM_GCR_Cx_OTHER_CLUSTER_EN;
--			val |= cluster << __ffs(CM_GCR_Cx_OTHER_CLUSTER);
--			val |= block << __ffs(CM_GCR_Cx_OTHER_BLOCK);
-+			val |= FIELD_PREP(CM_GCR_Cx_OTHER_CLUSTER, cluster);
-+			val |= FIELD_PREP(CM_GCR_Cx_OTHER_BLOCK, block);
- 		} else {
- 			WARN_ON(cluster != 0);
- 			WARN_ON(block != CM_GCR_Cx_OTHER_BLOCK_LOCAL);
-@@ -342,7 +341,7 @@ void mips_cm_lock_other(unsigned int cluster, unsigned int core,
- 		spin_lock_irqsave(&per_cpu(cm_core_lock, curr_core),
- 				  per_cpu(cm_core_lock_flags, curr_core));
- 
--		val = core << __ffs(CM_GCR_Cx_OTHER_CORENUM);
-+		val = FIELD_PREP(CM_GCR_Cx_OTHER_CORENUM, core);
- 	}
- 
- 	write_gcr_cl_other(val);
-@@ -386,8 +385,8 @@ void mips_cm_error_report(void)
- 	cm_other = read_gcr_error_mult();
- 
- 	if (revision < CM_REV_CM3) { /* CM2 */
--		cause = cm_error >> __ffs(CM_GCR_ERROR_CAUSE_ERRTYPE);
--		ocause = cm_other >> __ffs(CM_GCR_ERROR_MULT_ERR2ND);
-+		cause = FIELD_GET(CM_GCR_ERROR_CAUSE_ERRTYPE, cm_error);
-+		ocause = FIELD_GET(CM_GCR_ERROR_MULT_ERR2ND, cm_other);
- 
- 		if (!cause)
- 			return;
-@@ -445,8 +444,8 @@ void mips_cm_error_report(void)
- 		ulong core_id_bits, vp_id_bits, cmd_bits, cmd_group_bits;
- 		ulong cm3_cca_bits, mcp_bits, cm3_tr_bits, sched_bit;
- 
--		cause = cm_error >> __ffs64(CM3_GCR_ERROR_CAUSE_ERRTYPE);
--		ocause = cm_other >> __ffs(CM_GCR_ERROR_MULT_ERR2ND);
-+		cause = FIELD_GET(CM3_GCR_ERROR_CAUSE_ERRTYPE, cm_error);
-+		ocause = FIELD_GET(CM_GCR_ERROR_MULT_ERR2ND, cm_other);
- 
- 		if (!cause)
- 			return;
--- 
-2.25.1
+That's because (as far as I understand) DT should be used to describe
+hardware as closely as possible. I think it shouldn't be adjusted to
+make mapping match Linux's driver implementation.
 
+
+So if:
+1. Hardware block is mapped at 0xff800400
+2. It has interesting registers at 0xff800428 and 0xff80042c
+
+I think mapping should use:
+reg = <0xff800400 0x3c>;
+even if we don't use the first N registers.
+
+That way, at some point, you can extend Linux (or whatever) driver to
+use extra registers without reworking the whole binding. That's why I
+think we need to map whole hardware block & handle different registers
+layouts in a driver.
+
+
+Now, that is something I learnt from various DT discussions but I still
+may got it wrong. I'd like to ask Rob to comment on this.
+
+
+Let me also paste my summary of BCM4908's block I extracted from
+Broadcom's header:
+
+typedef struct Timer {
+	uint32	TimerCtl0;		/* 0x00 */
+	uint32	TimerCtl1;		/* 0x04 */
+	uint32	TimerCtl2;		/* 0x08 */
+	uint32	TimerCtl3;		/* 0x0c */
+	uint32	TimerCnt0;		/* 0x10 */
+	uint32	TimerCnt1;		/* 0x14 */
+	uint32	TimerCnt2;		/* 0x18 */
+	uint32	TimerCnt3;		/* 0x1c */
+	uint32	TimerMask;		/* 0x20 */
+	uint32	TimerInts;		/* 0x24 */
+	uint32	WatchDogDefCount;	/* 0x28 */
+	uint32	WatchDogCtl;		/* 0x2c */
+	uint32	WDResetCount;		/* 0x30 */
+	uint32	SoftRst;		/* 0x34 */
+	uint32	ResetStatus;		/* 0x38 */
+	uint32	ResetReason;		/* 0x3c */
+	uint32	spare[3];		/* 0x40-0x4b */
+};
