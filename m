@@ -2,157 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB78843F4E7
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 04:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782DB43F6A7
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 07:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbhJ2CSX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 28 Oct 2021 22:18:23 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:40583 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbhJ2CSW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 28 Oct 2021 22:18:22 -0400
-Received: by mail-ot1-f45.google.com with SMTP id 71-20020a9d034d000000b00553e24ce2b8so6805333otv.7;
-        Thu, 28 Oct 2021 19:15:54 -0700 (PDT)
+        id S231774AbhJ2Fb3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Oct 2021 01:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229504AbhJ2Fb2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 01:31:28 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8EAC061570;
+        Thu, 28 Oct 2021 22:29:00 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id h4so16073265uaw.1;
+        Thu, 28 Oct 2021 22:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3R02g5agze3gTm5Z45MrmlDDVJJ1SjhpJ9wVYHXfFVc=;
+        b=dAPzFHqY6a3yuq3WPaxBDLMqDiOOIvbGTScOjWeJ9qYjDnceFbeYAjHCjmG2cdtSt/
+         JF2Sh3MpKz+H0WgA2dhV0urNCpDT9IsQJaEkdOg1h6AfroREvG2h/J9t5qpr3xFV5Y6/
+         Luj+VxSUsDZk2KOXn+bmj0KnCRWv8z0BYM+ULkYivoL2izRIUAjmePHDr8IYa5njuX/t
+         +hzFigJBtBfggVl8QM4sriD8UiUWzEg8+z2AXzEVPvOUEdyEhbue8rLgopr/FYLUtVav
+         n2iBAoefklk9UzAs/gNG3stlyB85kiGCLNqjCfTEQ72igNsfST0LQEwdTDkeGpChJrEc
+         1MhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=MhaSmrBQtbkr94LNt4h9AKG7WEafonEBYR5HwoAlJj4=;
-        b=lZwor3BntJGQKEndhkySeNCanzidsLCCGyk+ylbNlnNmstKOq7KgTk1ca1HBsQQGfP
-         FBNDx0zkkarsW7kohHnEB030sNkTj8mwyOBzx9W+TncH9F9ragpsQFMfunOTFReDaYik
-         73hpW3qAvsdGprKBc/HrLHmdHQ8IdGGIkdbiVXr78HV+C5Ag4QYujSmleNymFqX1wiAh
-         Nu+NWa8sLjEcmcpgr72ZZ2Th1PFqus6LVw5TTV7QM8i2U5K1Y2EBiwLs/Zk5JBCcyAs3
-         fflhA5l2p4CGMYfvVsP0iB70CymeEuLY+q0lNivJ49pswSRg6/NwP61tJ9M+vsSeZySl
-         eA4w==
-X-Gm-Message-State: AOAM531zThi8RueCtwq7902Oxhj7JlLVKFm1q7TnABgrj9qkfG74UU3v
-        gcVC1227BbaagBRkCWzn9Q==
-X-Google-Smtp-Source: ABdhPJyG+qFnBhbco3mrdQyViSYz7rqmTLqsNjPQ1D0awRhHYjyg4z/RIbOckcnBQFDQHEifKWuygw==
-X-Received: by 2002:a05:6830:268f:: with SMTP id l15mr6470222otu.59.1635473754477;
-        Thu, 28 Oct 2021 19:15:54 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o2sm1503321otl.34.2021.10.28.19.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 19:15:53 -0700 (PDT)
-Received: (nullmailer pid 1025965 invoked by uid 1000);
-        Fri, 29 Oct 2021 02:15:52 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3R02g5agze3gTm5Z45MrmlDDVJJ1SjhpJ9wVYHXfFVc=;
+        b=d17Pn5xY+sVAIiEVp7vib4IWEemkhZMfbOmKA7sVfNKcUpUvnrMhOJAUiULEMw7wtK
+         Yc/OwCQLbot3GGx2sqqtUy0FsbcM7X3qBZqXtsphVu2Iwi+FVp1FRVDqU3capbc6Dr9a
+         rez107DE1PakswRzl3urvIyFSh/toH82GsXJAM/tUFz1Lbe92Y0wpqYZqxHLnGnIyOxt
+         Zn6JYepkGaXwxuTa/STWzQ7wDL9fUQgf5qRfxacIudLtnSoM6qAgAZw4Uripqx/gDWpS
+         LhZl0tIvw+zzHyGPFtWre5KUZTCPLlHG+CniXrLp05QpgM/NFSOD3aM3nPh7PF9RC4FV
+         KOPg==
+X-Gm-Message-State: AOAM531K2x5jq2hSfhQtbK6jcZme3lT6cT5Y0kK01jFECsIHeJwHGREh
+        SVSoCLaD/4ZB6CVeDnuJmopDXbCFTjH9EVttx8A=
+X-Google-Smtp-Source: ABdhPJxs1fI3cK3JY0LAlIQGqCHUDGWxH+wj3J2xlepe64o7dHGMQFS10+///IP4btkcLM3sItdX9v4WNeESaNXOQSs=
+X-Received: by 2002:a05:6102:3ec3:: with SMTP id n3mr9762236vsv.48.1635485338588;
+ Thu, 28 Oct 2021 22:28:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAMhs-H8HoO7dsfiTFaTRie1-DB-DF5st-gFmS=AF2tfHP_gsVw@mail.gmail.com>
+ <20211028204756.GA293663@bhelgaas>
+In-Reply-To: <20211028204756.GA293663@bhelgaas>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 29 Oct 2021 07:28:47 +0200
+Message-ID: <CAMhs-H_a0PqATB3kFO3dcFiq+reR+5z7FW27M=m2MnnYA48NYw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
+ able to use them from driver code
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yanteng Si <siyanteng01@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, rafal@milecki.pl,
-        Justin Chen <justinpopo6@gmail.com>,
-        linux-watchdog@vger.kernel.org
-In-Reply-To: <20211028172322.4021440-3-f.fainelli@gmail.com>
-References: <20211028172322.4021440-1-f.fainelli@gmail.com> <20211028172322.4021440-3-f.fainelli@gmail.com>
-Subject: Re: [PATCH 2/7] dt-bindings: watchdog: Add BCM6345 compatible to BCM7038 binding
-Date:   Thu, 28 Oct 2021 21:15:52 -0500
-Message-Id: <1635473752.980618.1025964.nullmailer@robh.at.kernel.org>
+        Yanteng Si <siyanteng@loongson.cn>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>, kw@linux.com,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        chenhuacai@kernel.org, sterlingteng@gmail.com,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 28 Oct 2021 10:23:17 -0700, Florian Fainelli wrote:
-> The BCM7038 watchdog binding is updated to include a "brcm,bcm6345-wdt"
-> compatible string which is the first instance of a DSL (BCM63xx) SoC
-> seeing the integration of such a watchdog timer block.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml         | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
+On Thu, Oct 28, 2021 at 10:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Thu, Oct 28, 2021 at 11:59:17AM +0200, Sergio Paracuellos wrote:
+> > On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
+> > <sergio.paracuellos@gmail.com> wrote:
+> > > On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
+> > > <tsbogend@alpha.franken.de> wrote:
+> > > > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
+> > > > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
+> > > > > >
+> > > > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
+> > > > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
+> > > > > > drivers become modules.
+> > > > > >
+> > > > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > >
+> > > > > > Let's just export them.
+> > > > > >
+> > > > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+> > > > > > ---
+> > > > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
+> > > > > >  arch/mips/kernel/mips-cpc.c | 1 +
+> > > > > >  2 files changed, 6 insertions(+)
+> > > > > >
+> > > > >
+> > > > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > > >
+> > > > could we instead make the pcie-mt761 driver non modular ? Exporting
+> > > > all MIPS specific stuff for just making an essential driver modular
+> > > > doesn't IMHO make much sense.
+> > >
+> > > The driver is modular because I have been advised other times that new
+> > > drivers should be able to be compiled as modules and we should avoid
+> > > using 'bool' in Kconfig for new drivers. That's the only reason. I am
+> > > also always including as 'y' the driver since for me not having pci in
+> > > my boards has no sense... I am ok in changing Kconfig to be 'bool'
+> > > instead of 'tristate', but I don't know what should be the correct
+> > > thing to do in this case. Thoughts?
+> >
+> > I guess we also want the driver to at least be compile tested in
+> > 'allmodconfig' and other similars...15692a80d949
+>
+> Sounds like the systems that actually use this driver require it to be
+> built-in, and the only benefit of exporting these symbols is that we
+> would get better compile test coverage.
+>
+> If that's the case, I agree that it's better to just make it
+> non-modular.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I agree and that was my reasoning for sending a patch to also convert
+to bool the phy driver that this PCIe controller uses. When the pull
+request was sent from Vinod to Greg, Greg refused to take it because
+of that commit and the commit was reverted and a new pull request was
+sent including this revert. This is commit 15692a80d949 ("phy: Revert
+"phy: ralink: Kconfig: convert mt7621-pci-phy into 'bool'""). Because
+of this I also changed the PCIe controller Kconfig from bool to
+tristate when I sent v3 of the series which at the end were the ones
+that was finally taken. There are also other ralink related symbols
+that have been exported to allow to compile other drivers as a
+modules, like the watchdog. See the commit fef532ea0cd8 ("MIPS:
+ralink: export rt_sysc_membase for rt2880_wdt.c"). So, as I said, I
+agree and I am using the driver as if it were a bool and also ralink
+systems normally require all drivers built-in, but I think we have to
+take into account also the "historical facts" here. In any case,
+Bjorn, let me know if you want me to send whatever patch might be
+needed.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml:19:5: [error] duplication of key "const" in mapping (key-duplicates)
+Best regards,
+    Sergio Paracuellos
 
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.example.dts'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 45, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 122, in get_single_data
-    return self.construct_document(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 132, in construct_document
-    for _dummy in generator:
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 722, in construct_yaml_map
-    value = self.construct_mapping(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 446, in construct_mapping
-    return BaseConstructor.construct_mapping(self, node, deep=deep)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 264, in construct_mapping
-    if self.check_mapping_key(node, key_node, mapping, key, value):
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 295, in check_mapping_key
-    raise DuplicateKeyError(*args)
-ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
-  in "<unicode string>", line 18, column 5
-found duplicate key "const" with value "brcm,bcm7038-wdt" (original value: "brcm,bcm6345-wdt")
-  in "<unicode string>", line 19, column 5
-
-To suppress this check see:
-    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-
-make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
-    testtree = dtschema.load(filename, line_number=line_number)
-  File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line 612, in load
-    return yaml.load(f.read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 122, in get_single_data
-    return self.construct_document(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 132, in construct_document
-    for _dummy in generator:
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 722, in construct_yaml_map
-    value = self.construct_mapping(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 446, in construct_mapping
-    return BaseConstructor.construct_mapping(self, node, deep=deep)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 264, in construct_mapping
-    if self.check_mapping_key(node, key_node, mapping, key, value):
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 295, in check_mapping_key
-    raise DuplicateKeyError(*args)
-ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
-  in "<unicode string>", line 18, column 5
-found duplicate key "const" with value "brcm,bcm7038-wdt" (original value: "brcm,bcm6345-wdt")
-  in "<unicode string>", line 19, column 5
-
-To suppress this check see:
-    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 67, in <module>
-    ret = check_doc(f)
-  File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
-    print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
-AttributeError: 'DuplicateKeyError' object has no attribute 'path'
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml: ignoring, error parsing file
-warning: no schema found in file: ./Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-make: *** [Makefile:1441: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1547626
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+>
+> Bjorn
