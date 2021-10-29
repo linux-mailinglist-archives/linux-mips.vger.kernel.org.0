@@ -2,153 +2,174 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 782DB43F6A7
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 07:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B41543FB21
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 12:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbhJ2Fb3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Oct 2021 01:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        id S231849AbhJ2LCG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Oct 2021 07:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbhJ2Fb2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 01:31:28 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8EAC061570;
-        Thu, 28 Oct 2021 22:29:00 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id h4so16073265uaw.1;
-        Thu, 28 Oct 2021 22:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3R02g5agze3gTm5Z45MrmlDDVJJ1SjhpJ9wVYHXfFVc=;
-        b=dAPzFHqY6a3yuq3WPaxBDLMqDiOOIvbGTScOjWeJ9qYjDnceFbeYAjHCjmG2cdtSt/
-         JF2Sh3MpKz+H0WgA2dhV0urNCpDT9IsQJaEkdOg1h6AfroREvG2h/J9t5qpr3xFV5Y6/
-         Luj+VxSUsDZk2KOXn+bmj0KnCRWv8z0BYM+ULkYivoL2izRIUAjmePHDr8IYa5njuX/t
-         +hzFigJBtBfggVl8QM4sriD8UiUWzEg8+z2AXzEVPvOUEdyEhbue8rLgopr/FYLUtVav
-         n2iBAoefklk9UzAs/gNG3stlyB85kiGCLNqjCfTEQ72igNsfST0LQEwdTDkeGpChJrEc
-         1MhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3R02g5agze3gTm5Z45MrmlDDVJJ1SjhpJ9wVYHXfFVc=;
-        b=d17Pn5xY+sVAIiEVp7vib4IWEemkhZMfbOmKA7sVfNKcUpUvnrMhOJAUiULEMw7wtK
-         Yc/OwCQLbot3GGx2sqqtUy0FsbcM7X3qBZqXtsphVu2Iwi+FVp1FRVDqU3capbc6Dr9a
-         rez107DE1PakswRzl3urvIyFSh/toH82GsXJAM/tUFz1Lbe92Y0wpqYZqxHLnGnIyOxt
-         Zn6JYepkGaXwxuTa/STWzQ7wDL9fUQgf5qRfxacIudLtnSoM6qAgAZw4Uripqx/gDWpS
-         LhZl0tIvw+zzHyGPFtWre5KUZTCPLlHG+CniXrLp05QpgM/NFSOD3aM3nPh7PF9RC4FV
-         KOPg==
-X-Gm-Message-State: AOAM531K2x5jq2hSfhQtbK6jcZme3lT6cT5Y0kK01jFECsIHeJwHGREh
-        SVSoCLaD/4ZB6CVeDnuJmopDXbCFTjH9EVttx8A=
-X-Google-Smtp-Source: ABdhPJxs1fI3cK3JY0LAlIQGqCHUDGWxH+wj3J2xlepe64o7dHGMQFS10+///IP4btkcLM3sItdX9v4WNeESaNXOQSs=
-X-Received: by 2002:a05:6102:3ec3:: with SMTP id n3mr9762236vsv.48.1635485338588;
- Thu, 28 Oct 2021 22:28:58 -0700 (PDT)
+        with ESMTP id S231740AbhJ2LCF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 07:02:05 -0400
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29AFC061745
+        for <linux-mips@vger.kernel.org>; Fri, 29 Oct 2021 03:59:36 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:20b9:ea2a:8e1c:8da1])
+        by baptiste.telenet-ops.be with bizsmtp
+        id BmzY2600c01kgUz01mzYHe; Fri, 29 Oct 2021 12:59:33 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mgPbg-008ir7-JA; Fri, 29 Oct 2021 12:59:32 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mgOeP-00FCmn-90; Fri, 29 Oct 2021 11:58:17 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Markos Chandras <markos.chandras@imgtec.com>,
+        Ralf Baechle <ralf@linux-mips.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] mips: cm: Convert to bitfield API to fix out-of-bounds access
+Date:   Fri, 29 Oct 2021 11:58:16 +0200
+Message-Id: <0471c545117c5fa05bd9c73005cda9b74608a61e.1635501373.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAMhs-H8HoO7dsfiTFaTRie1-DB-DF5st-gFmS=AF2tfHP_gsVw@mail.gmail.com>
- <20211028204756.GA293663@bhelgaas>
-In-Reply-To: <20211028204756.GA293663@bhelgaas>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 29 Oct 2021 07:28:47 +0200
-Message-ID: <CAMhs-H_a0PqATB3kFO3dcFiq+reR+5z7FW27M=m2MnnYA48NYw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
- able to use them from driver code
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yanteng Si <siyanteng01@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        chenhuacai@kernel.org, sterlingteng@gmail.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Oct 28, 2021 at 10:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Thu, Oct 28, 2021 at 11:59:17AM +0200, Sergio Paracuellos wrote:
-> > On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
-> > <sergio.paracuellos@gmail.com> wrote:
-> > > On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
-> > > <tsbogend@alpha.franken.de> wrote:
-> > > > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
-> > > > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
-> > > > > >
-> > > > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
-> > > > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
-> > > > > > drivers become modules.
-> > > > > >
-> > > > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > >
-> > > > > > Let's just export them.
-> > > > > >
-> > > > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> > > > > > ---
-> > > > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
-> > > > > >  arch/mips/kernel/mips-cpc.c | 1 +
-> > > > > >  2 files changed, 6 insertions(+)
-> > > > > >
-> > > > >
-> > > > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > >
-> > > > could we instead make the pcie-mt761 driver non modular ? Exporting
-> > > > all MIPS specific stuff for just making an essential driver modular
-> > > > doesn't IMHO make much sense.
-> > >
-> > > The driver is modular because I have been advised other times that new
-> > > drivers should be able to be compiled as modules and we should avoid
-> > > using 'bool' in Kconfig for new drivers. That's the only reason. I am
-> > > also always including as 'y' the driver since for me not having pci in
-> > > my boards has no sense... I am ok in changing Kconfig to be 'bool'
-> > > instead of 'tristate', but I don't know what should be the correct
-> > > thing to do in this case. Thoughts?
-> >
-> > I guess we also want the driver to at least be compile tested in
-> > 'allmodconfig' and other similars...15692a80d949
->
-> Sounds like the systems that actually use this driver require it to be
-> built-in, and the only benefit of exporting these symbols is that we
-> would get better compile test coverage.
->
-> If that's the case, I agree that it's better to just make it
-> non-modular.
+mips_cm_error_report() extracts the cause and other cause from the error
+register using shifts.  This works fine for the former, as it is stored
+in the top bits, and the shift will thus remove all non-related bits.
+However, the latter is stored in the bottom bits, hence thus needs masking
+to get rid of non-related bits.  Without such masking, using it as an
+index into the cm2_causes[] array will lead to an out-of-bounds access,
+probably causing a crash.
 
-I agree and that was my reasoning for sending a patch to also convert
-to bool the phy driver that this PCIe controller uses. When the pull
-request was sent from Vinod to Greg, Greg refused to take it because
-of that commit and the commit was reverted and a new pull request was
-sent including this revert. This is commit 15692a80d949 ("phy: Revert
-"phy: ralink: Kconfig: convert mt7621-pci-phy into 'bool'""). Because
-of this I also changed the PCIe controller Kconfig from bool to
-tristate when I sent v3 of the series which at the end were the ones
-that was finally taken. There are also other ralink related symbols
-that have been exported to allow to compile other drivers as a
-modules, like the watchdog. See the commit fef532ea0cd8 ("MIPS:
-ralink: export rt_sysc_membase for rt2880_wdt.c"). So, as I said, I
-agree and I am using the driver as if it were a bool and also ralink
-systems normally require all drivers built-in, but I think we have to
-take into account also the "historical facts" here. In any case,
-Bjorn, let me know if you want me to send whatever patch might be
-needed.
+Fix this by using FIELD_GET() instead.  Bite the bullet and convert all
+MIPS CM handling to the bitfield API, to improve readability and safety.
 
-Best regards,
-    Sergio Paracuellos
+Fixes: 3885c2b463f6a236 ("MIPS: CM: Add support for reporting CM cache errors")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Compile-tested only, but assembler output before/after compared.
+---
+ arch/mips/include/asm/mips-cm.h | 12 ++++++------
+ arch/mips/kernel/mips-cm.c      | 21 ++++++++++-----------
+ 2 files changed, 16 insertions(+), 17 deletions(-)
 
->
-> Bjorn
+diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/mips-cm.h
+index aeae2effa123d7e2..23c67c0871b17c91 100644
+--- a/arch/mips/include/asm/mips-cm.h
++++ b/arch/mips/include/asm/mips-cm.h
+@@ -11,6 +11,7 @@
+ #ifndef __MIPS_ASM_MIPS_CM_H__
+ #define __MIPS_ASM_MIPS_CM_H__
+ 
++#include <linux/bitfield.h>
+ #include <linux/bitops.h>
+ #include <linux/errno.h>
+ 
+@@ -153,8 +154,8 @@ GCR_ACCESSOR_RO(32, 0x030, rev)
+ #define CM_GCR_REV_MINOR			GENMASK(7, 0)
+ 
+ #define CM_ENCODE_REV(major, minor) \
+-		(((major) << __ffs(CM_GCR_REV_MAJOR)) | \
+-		 ((minor) << __ffs(CM_GCR_REV_MINOR)))
++		(FIELD_PREP(CM_GCR_REV_MAJOR, major) | \
++		 FIELD_PREP(CM_GCR_REV_MINOR, minor))
+ 
+ #define CM_REV_CM2				CM_ENCODE_REV(6, 0)
+ #define CM_REV_CM2_5				CM_ENCODE_REV(7, 0)
+@@ -362,10 +363,10 @@ static inline int mips_cm_revision(void)
+ static inline unsigned int mips_cm_max_vp_width(void)
+ {
+ 	extern int smp_num_siblings;
+-	uint32_t cfg;
+ 
+ 	if (mips_cm_revision() >= CM_REV_CM3)
+-		return read_gcr_sys_config2() & CM_GCR_SYS_CONFIG2_MAXVPW;
++		return FIELD_GET(CM_GCR_SYS_CONFIG2_MAXVPW,
++				 read_gcr_sys_config2());
+ 
+ 	if (mips_cm_present()) {
+ 		/*
+@@ -373,8 +374,7 @@ static inline unsigned int mips_cm_max_vp_width(void)
+ 		 * number of VP(E)s, and if that ever changes then this will
+ 		 * need revisiting.
+ 		 */
+-		cfg = read_gcr_cl_config() & CM_GCR_Cx_CONFIG_PVPE;
+-		return (cfg >> __ffs(CM_GCR_Cx_CONFIG_PVPE)) + 1;
++		return FIELD_GET(CM_GCR_Cx_CONFIG_PVPE, read_gcr_cl_config()) + 1;
+ 	}
+ 
+ 	if (IS_ENABLED(CONFIG_SMP))
+diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
+index 90f1c3df1f0e495e..b4f7d950c84680d3 100644
+--- a/arch/mips/kernel/mips-cm.c
++++ b/arch/mips/kernel/mips-cm.c
+@@ -221,8 +221,7 @@ static void mips_cm_probe_l2sync(void)
+ 	phys_addr_t addr;
+ 
+ 	/* L2-only sync was introduced with CM major revision 6 */
+-	major_rev = (read_gcr_rev() & CM_GCR_REV_MAJOR) >>
+-		__ffs(CM_GCR_REV_MAJOR);
++	major_rev = FIELD_GET(CM_GCR_REV_MAJOR, read_gcr_rev());
+ 	if (major_rev < 6)
+ 		return;
+ 
+@@ -306,13 +305,13 @@ void mips_cm_lock_other(unsigned int cluster, unsigned int core,
+ 	preempt_disable();
+ 
+ 	if (cm_rev >= CM_REV_CM3) {
+-		val = core << __ffs(CM3_GCR_Cx_OTHER_CORE);
+-		val |= vp << __ffs(CM3_GCR_Cx_OTHER_VP);
++		val = FIELD_PREP(CM3_GCR_Cx_OTHER_CORE, core) |
++		      FIELD_PREP(CM3_GCR_Cx_OTHER_VP, vp);
+ 
+ 		if (cm_rev >= CM_REV_CM3_5) {
+ 			val |= CM_GCR_Cx_OTHER_CLUSTER_EN;
+-			val |= cluster << __ffs(CM_GCR_Cx_OTHER_CLUSTER);
+-			val |= block << __ffs(CM_GCR_Cx_OTHER_BLOCK);
++			val |= FIELD_PREP(CM_GCR_Cx_OTHER_CLUSTER, cluster);
++			val |= FIELD_PREP(CM_GCR_Cx_OTHER_BLOCK, block);
+ 		} else {
+ 			WARN_ON(cluster != 0);
+ 			WARN_ON(block != CM_GCR_Cx_OTHER_BLOCK_LOCAL);
+@@ -342,7 +341,7 @@ void mips_cm_lock_other(unsigned int cluster, unsigned int core,
+ 		spin_lock_irqsave(&per_cpu(cm_core_lock, curr_core),
+ 				  per_cpu(cm_core_lock_flags, curr_core));
+ 
+-		val = core << __ffs(CM_GCR_Cx_OTHER_CORENUM);
++		val = FIELD_PREP(CM_GCR_Cx_OTHER_CORENUM, core);
+ 	}
+ 
+ 	write_gcr_cl_other(val);
+@@ -386,8 +385,8 @@ void mips_cm_error_report(void)
+ 	cm_other = read_gcr_error_mult();
+ 
+ 	if (revision < CM_REV_CM3) { /* CM2 */
+-		cause = cm_error >> __ffs(CM_GCR_ERROR_CAUSE_ERRTYPE);
+-		ocause = cm_other >> __ffs(CM_GCR_ERROR_MULT_ERR2ND);
++		cause = FIELD_GET(CM_GCR_ERROR_CAUSE_ERRTYPE, cm_error);
++		ocause = FIELD_GET(CM_GCR_ERROR_MULT_ERR2ND, cm_other);
+ 
+ 		if (!cause)
+ 			return;
+@@ -445,8 +444,8 @@ void mips_cm_error_report(void)
+ 		ulong core_id_bits, vp_id_bits, cmd_bits, cmd_group_bits;
+ 		ulong cm3_cca_bits, mcp_bits, cm3_tr_bits, sched_bit;
+ 
+-		cause = cm_error >> __ffs64(CM3_GCR_ERROR_CAUSE_ERRTYPE);
+-		ocause = cm_other >> __ffs(CM_GCR_ERROR_MULT_ERR2ND);
++		cause = FIELD_GET(CM3_GCR_ERROR_CAUSE_ERRTYPE, cm_error);
++		ocause = FIELD_GET(CM_GCR_ERROR_MULT_ERR2ND, cm_other);
+ 
+ 		if (!cause)
+ 			return;
+-- 
+2.25.1
+
