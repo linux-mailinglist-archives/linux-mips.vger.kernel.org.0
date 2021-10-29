@@ -2,61 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D914400C5
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 18:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DC9440166
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 19:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbhJ2Q6u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Oct 2021 12:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
+        id S230126AbhJ2RqP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Oct 2021 13:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbhJ2Q6t (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 12:58:49 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1210BC061570;
-        Fri, 29 Oct 2021 09:56:21 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id i13so12693933lfe.4;
-        Fri, 29 Oct 2021 09:56:20 -0700 (PDT)
+        with ESMTP id S230030AbhJ2RqO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 13:46:14 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E335BC061570;
+        Fri, 29 Oct 2021 10:43:45 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id k8so1349597oik.7;
+        Fri, 29 Oct 2021 10:43:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=TIWvEmA6S0hEGsxd95Qnjs7UTBzd6Hsx0TVASRvQ0hM=;
-        b=VpyWtXHsDP6xs3T24b8bG2Gb0jksaH2nqRTgXbGWnIGBDjYqO0XIC4AnS/vaWrArVG
-         slhdrhsbz7AxC5j85TpJ9ak/wvnAknUnbvXsu8TdpFKRwKX8iyWeLa5fwLlQypl6VLTC
-         A6Xzqhp3iLULhLMp2yvfRj82g7QzHwxT7+QQ+NbmO0DYZYSqXNe3sdQ7vINr2egUJchD
-         sw9I/1N+YUodh3jdkyLFGeuRnIkwUcUqDZ8Sh1phCPfFRe1+y6lbW9VDIZyB8dm1PT4T
-         y+UT3rsCKacK+Aqy1Sq6Q+7QDzeoaVPZMxXoacZp+az+Cdf3PIPEHrJX7q9z84B+mD1A
-         bw+w==
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FTkcYmcnvDVDfmqYNOsTg+b+QGCCyVr4hlpcZtSPOrQ=;
+        b=oGDyHdhFcwMN8OMqxQMJYnpurQ5JEeNVMbxMCSuGR6D1D7d148pxNFbo/tY6uypssX
+         sNQZ/yssDRRPinJECJh/8IorxcKG/VRt/L7KA6ei5WHhQ2nmu7bKSz+3Hd09QpJyVhdU
+         rzg9LCpSCNn6yFYGSwm6r3L1b4Es+M+ff01ezNqB/DD6bm0zmTcvuU6uCtXyYTuYsepT
+         5dBTQXlzr5gbHdKYEyn5MMsMtohpE7W6LJTFUIczZI7XtqAgWyxffdG5ihRH7mLMpNCw
+         0vPtzEVqC+X6NLX5ytxB7Xr3rWoV5rnVlyiEGUU6XoO2vONpoowDRVuYLuP2WpumXICc
+         oF5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TIWvEmA6S0hEGsxd95Qnjs7UTBzd6Hsx0TVASRvQ0hM=;
-        b=IbYfqbb5YDhnttsv9AMOKLPyRcFSOQujDAq9iZ3ChaC5nlqU42Xm7CtEedMS2+pN3t
-         HgHyra9VmR4+yEP1wFqDFTv2rqApQUWkFQ5xQ+62EzviNyzT/LY10EN300a7YwPt8Er1
-         UhDbV/kQxlU+c4NH4FVARxzN7XKW7UxV9DUpG2fja+5+s1Q75BQyeLHpEoEWNQ7tbJWu
-         tXiVxDM2TdMevwqXtTiWgWMs556dm1VAUnXk+6ToiFGpp+j6djMsj02LZ29gSVudFaHK
-         x5SUyWkRnbgJdVnTmE3St/1vhY7MX5nurkBL+dYRe3uhi+ZoL1TtV8OHC6SVkfKGB2qX
-         D8xA==
-X-Gm-Message-State: AOAM5332fVJPhNv24dIT3gxwB0fwsh8TI3v4sShhOyO9v5/0g8T9rkLX
-        JlCnNtXcrsU89thRVufIHBc=
-X-Google-Smtp-Source: ABdhPJzQ8KIDOQACbr9zq7NCP8qBbOhOUi2YsKK3t4X/cnIeaIiR518qFFGdD0WlYAfJSb1hmdFNnQ==
-X-Received: by 2002:a05:6512:2355:: with SMTP id p21mr10019278lfu.428.1635526579441;
-        Fri, 29 Oct 2021 09:56:19 -0700 (PDT)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id u14sm300817lfo.221.2021.10.29.09.56.17
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FTkcYmcnvDVDfmqYNOsTg+b+QGCCyVr4hlpcZtSPOrQ=;
+        b=LSOFfmN2fEqjHa13wBKmMaRvj4+UdczPjpk37oTaAuWtMYfoQqgT/1ut4fT/PO/viv
+         Cun/VYQgS6r7vHS+LOTDHRsSJyBMwoZBhn8zKBjfm/rS+t9RlxIkiH9jvB1Re7kmuqby
+         BqODYOmY9yv53Gxmuz6+SQrD+rzn09OTA17slAZsuRhCb1+liFycz824jz6mDVOEhAwD
+         m8zf9cjPgsrm/alHdbqcNVGU7FI7OxLVN36z5DfU2W1Tlqm5cg4X1x1W+5VSiBL33udB
+         F7B6JX3pBRnrwoJGvImEfoRG92YUSMDBwkSJMcSX+A/ptH+YA2Kuvqx1DHMKnLMfV7bB
+         IMYA==
+X-Gm-Message-State: AOAM533kT6SokEVAnHBAtdQTEhmAtetGq9YzaMFne5vKNVNH3bghqRF7
+        8DA/4HIgq2qqqrhE5cIrDFc=
+X-Google-Smtp-Source: ABdhPJzPjENVKzxG5XA4KtpqzFkHdaXPa/nygQKueAJoDVo2yvi7LjhDpgYdY81HwWPXj7YMnbLrkQ==
+X-Received: by 2002:aca:3e86:: with SMTP id l128mr14865109oia.120.1635529425253;
+        Fri, 29 Oct 2021 10:43:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e32sm1935914oow.30.2021.10.29.10.43.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Oct 2021 09:56:18 -0700 (PDT)
-Message-ID: <d16f78c4-ef20-54fc-6ee7-3b63ceb2fef1@gmail.com>
-Date:   Fri, 29 Oct 2021 18:56:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:94.0) Gecko/20100101
- Thunderbird/94.0
-Subject: Re: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
+        Fri, 29 Oct 2021 10:43:44 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
 To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh@kernel.org>
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
         bcm-kernel-feedback-list@broadcom.com,
         linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
@@ -68,15 +64,22 @@ References: <20211028093059.32535-1-zajec5@gmail.com>
  <9d57d026-19f3-e92d-4c02-d7e8e2c2bc25@gmail.com>
  <YXvxMHmx2i56sXdI@robh.at.kernel.org>
  <1df7e7cd-aa4c-c692-ff7f-8ee27780a6a9@gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
+Message-ID: <a14d1265-9e8f-6011-3f34-0881c0c49dd5@roeck-us.net>
+Date:   Fri, 29 Oct 2021 10:43:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
 In-Reply-To: <1df7e7cd-aa4c-c692-ff7f-8ee27780a6a9@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 29.10.2021 18:45, Florian Fainelli wrote:
+On 10/29/21 9:45 AM, Florian Fainelli wrote:
 > On 10/29/21 6:03 AM, Rob Herring wrote:
 >> On Fri, Oct 29, 2021 at 01:39:02PM +0200, Rafał Miłecki wrote:
 >>> [Rob: please kindly comment on this]
@@ -175,6 +178,42 @@ On 29.10.2021 18:45, Florian Fainelli wrote:
 > not see why having the watchdog driver not manage the *exact* subset of
 > the register space needed (starting at 0x28) is not being done.
 
-Sure, let's get this discussed before pushing my patches. I'm happy to
-have you and Rob involved here. Once we get into agreement we can decide
-how to proceed.
+Agreed, especially since other sub-devices of bcm4908 are alredy modeled
+this way. See arch/arm64/boot/dts/broadcom/bcm4908/bcm4908.dtsi.
+At this point, before accepting anything, I'll want to have an explanation
+how and why the watchdog interface is handled differently than, say,
+its reset controller. Also, I'd like to understand the memory region
+assigned to bcm7038, which happens to be something like:
+
+     compatible = "brcm,bcm7038-wdt";
+         reg = <0xf040a7e8 0x16>;
+
+because it seems unlikely that this is a chip subsystem that just happens
+to start at such an odd boundary. More specifically, I see in actual
+.dtsi files data such as:
+
+                 watchdog: watchdog@4066a8 {
+                         clocks = <&upg_clk>;
+                         compatible = "brcm,bcm7038-wdt";
+                         reg = <0x4066a8 0x14>;
+                         status = "disabled";
+                 };
+...
+                 timers: timer@406680 {
+                         compatible = "brcm,brcmstb-timers";
+                         reg = <0x406680 0x40>;
+                 };
+
+So there happen to be timers in the same region, and the offset
+between timer and watchdog registers is 0x28. Coincidentally, that
+just happens to be the extra offset defined in this patch for the
+bcm4908 watchdog. Really ? Sorry, this sounds very inconsistent
+and arbitrary to me.
+
+Overall, I suspect I'll have to see datasheets if we really end up
+having different offsets for each chip, because I'll want to confirm
+that the watchdog subsystem isn't treated differently than other
+subsystems, and that the offset calculations are appropriate and
+consistent across the different chips.
+
+Guenter
