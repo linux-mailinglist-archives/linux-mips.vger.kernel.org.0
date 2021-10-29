@@ -2,91 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4116E43FD40
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 15:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934CF43FCEE
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Oct 2021 15:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbhJ2NSQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 29 Oct 2021 09:18:16 -0400
-Received: from 15.mo550.mail-out.ovh.net ([188.165.38.232]:49521 "EHLO
-        15.mo550.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbhJ2NSO (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 09:18:14 -0400
-X-Greylist: delayed 2261 seconds by postgrey-1.27 at vger.kernel.org; Fri, 29 Oct 2021 09:18:14 EDT
-Received: from player770.ha.ovh.net (unknown [10.109.156.105])
-        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 0375A239A6
-        for <linux-mips@vger.kernel.org>; Fri, 29 Oct 2021 12:38:02 +0000 (UTC)
-Received: from RCM-web10.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player770.ha.ovh.net (Postfix) with ESMTPSA id 5DEA823DC6CDD;
-        Fri, 29 Oct 2021 12:37:51 +0000 (UTC)
-MIME-Version: 1.0
-Date:   Fri, 29 Oct 2021 14:37:51 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
+        id S231638AbhJ2NG0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 29 Oct 2021 09:06:26 -0400
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:34406 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231669AbhJ2NGP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 29 Oct 2021 09:06:15 -0400
+Received: by mail-ot1-f47.google.com with SMTP id t17-20020a056830083100b00553ced10177so13289081ots.1;
+        Fri, 29 Oct 2021 06:03:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GUgwMXhwSQTFzdsPOpVylcxzTUCtR44EYeKlhGLEh1U=;
+        b=e9IQStTn6RDzTvcK39e2aIpAVGaa7JP5UQAhQZT/ka2ptkASM/583BpLK5ia/WH5oj
+         kBp/uJVNYreA+BviTU43HYxBsfsUuix74j6wMdLoFF8qkec4h9tzOamZA4o7r07zKCOv
+         ghA4QGhfRevYt1YLfMnXeQ3CnysV+6hMShPjGH8RsVTR7Sfl01wmo5VyFkSWoQ81BUBU
+         iVC6yp5kLysJq0zChqGNqosvu1Y+B78cUEwsm5hNZyw26UgBxI5IO6CKhKtzNxDwiVqG
+         H7M/BtrCQo88qqWvBALEgpUa6ufljJEPYbFvQreJ8fNra0RKTw+t73nTMQzmQSIlRUg/
+         U1AQ==
+X-Gm-Message-State: AOAM532Id+7TukJxfzFebjMkTz0sj9PTaV6BKDonq1dRUysBpXQYyw4z
+        eK5RWK2BstNNTay7vVuchPSRLkilLw==
+X-Google-Smtp-Source: ABdhPJyIltRRP6sAabUPC3/q0WHhW9vBTKyllyRe/hBhVRmRd1KUvkdgCMdJyiyJnXk9pBKD+Sz75Q==
+X-Received: by 2002:a9d:4a8d:: with SMTP id i13mr8485328otf.180.1635512626347;
+        Fri, 29 Oct 2021 06:03:46 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 46sm1925284otf.49.2021.10.29.06.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Oct 2021 06:03:45 -0700 (PDT)
+Received: (nullmailer pid 2062293 invoked by uid 1000);
+        Fri, 29 Oct 2021 13:03:44 -0000
+Date:   Fri, 29 Oct 2021 08:03:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         bcm-kernel-feedback-list@broadcom.com,
-        Justin Chen <justinpopo6@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 5/7] watchdog: bcm7038_wdt: Add platform device id for
- bcm63xx-wdt
-In-Reply-To: <20211028172322.4021440-6-f.fainelli@gmail.com>
-References: <20211028172322.4021440-1-f.fainelli@gmail.com>
- <20211028172322.4021440-6-f.fainelli@gmail.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <02cb3c1a160854c92895d024e59a831b@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 16945356551679290136
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvtddrvdeghedgheduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggffhffvufgjfhgfkfigihgtgfesthejjhdttdervdenucfhrhhomheptfgrfhgrlhgpofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepveefvdetjeffueefkeeuuedvgefhgeegjefgvedvgeeiteduueeivdeltedthfetnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejtddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
+Message-ID: <YXvxMHmx2i56sXdI@robh.at.kernel.org>
+References: <20211028093059.32535-1-zajec5@gmail.com>
+ <20211028093059.32535-3-zajec5@gmail.com>
+ <f78d1573-4909-039d-8647-d4fc13205f47@gmail.com>
+ <9d57d026-19f3-e92d-4c02-d7e8e2c2bc25@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9d57d026-19f3-e92d-4c02-d7e8e2c2bc25@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2021-10-28 19:23, Florian Fainelli wrote:
-> In order to phase out bcm63xx_wdt and use bcm7038_wdt instead, 
-> introduce
-> a platform_device_id table that allows both names to be matched.
+On Fri, Oct 29, 2021 at 01:39:02PM +0200, Rafał Miłecki wrote:
+> [Rob: please kindly comment on this]
 > 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  drivers/watchdog/bcm7038_wdt.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> On 28.10.2021 18:29, Florian Fainelli wrote:
+> > On 10/28/21 2:30 AM, Rafał Miłecki wrote:
+> > > From: Rafał Miłecki <rafal@milecki.pl>
+> > > 
+> > > Hardware supported by this driver goes back to the old bcm63xx days. It
+> > > was then reused in BCM7038 and later also in BCM4908.
+> > > 
+> > > Depending on SoC model registers layout differs a bit. This commit
+> > > introduces support for per-chipset registers offsets & adds BCM4908
+> > > layout.
+> > > 
+> > > Later on BCM63xx SoCs support should be added too (probably as platform
+> > > devices due to missing DT). Eventually this driver should replace
+> > > bcm63xx_wdt.c.
+> > > 
+> > > Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> > > ---
+> > 
+> > [snip]
+> > 
+> > > +
+> > > +static const u16 bcm7038_wdt_regs_bcm4908[] = {
+> > > +	[BCM63XX_WDT_REG_DEFVAL]	= 0x28,
+> > > +	[BCM63XX_WDT_REG_CTL]		= 0x2c,
+> > > +	[BCM63XX_WDT_REG_SOFTRESET]	= 0x34,
+> > 
+> > I don't understand what you are doing here and why you are not
+> > offsetting the "reg" property appropriately when you create your
+> > bcm4908-wdt Device Tree node such that the base starts at 0, and the
+> > existing driver becomes usable as-is. This does not make any sense to me
+> > when it is obviously the simplest way to make the driver "accept" the
+> > resource being passed.
 > 
-> diff --git a/drivers/watchdog/bcm7038_wdt.c 
-> b/drivers/watchdog/bcm7038_wdt.c
-> index 506cd7ef9c77..2535f450e8a1 100644
-> --- a/drivers/watchdog/bcm7038_wdt.c
-> +++ b/drivers/watchdog/bcm7038_wdt.c
-> @@ -223,6 +223,13 @@ static const struct of_device_id 
-> bcm7038_wdt_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, bcm7038_wdt_match);
+> I believe that DT binding should cover the whole hardware block and
+> describe it (here: use proper compatible to allow recognizing block
+> variant).
 > 
-> +static const struct platform_device_id bcm7038_wdt_devtype[] = {
-> +	{ .name = "bcm7038-wdt" },
-> +	{ .name = "bcm63xx-wdt" },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(platform, bcm7038_wdt_devtype);
+> That's because (as far as I understand) DT should be used to describe
+> hardware as closely as possible. I think it shouldn't be adjusted to
+> make mapping match Linux's driver implementation.
+> 
+> 
+> So if:
+> 1. Hardware block is mapped at 0xff800400
+> 2. It has interesting registers at 0xff800428 and 0xff80042c
+> 
+> I think mapping should use:
+> reg = <0xff800400 0x3c>;
+> even if we don't use the first N registers.
+> 
+> That way, at some point, you can extend Linux (or whatever) driver to
+> use extra registers without reworking the whole binding. That's why I
+> think we need to map whole hardware block & handle different registers
+> layouts in a driver.
 
-Do we really want "bcm7038-wdt" here? I don't think it will ever be used
-as apparently BCM7038 uses DT.
+Yes, that's the correct thing to do.
 
-I'd also prefer to have Rob's comment on mapping blocks vs. mapping
-registers.
+The question is whether you'd need sub nodes for the other functions. 
+Folks tend to want to have sub nodes for convenience which isn't really 
+needed and then requires a DT update ('cause they add nodes as adding 
+drivers).
 
-If we were to map whole hardware blocks, we should have per-SoC
-bindings and handling registers layouts in a driver. Right now
-bcm63xx arch code maps selected part of hardware block that is
-meant to match driver's logic (offsets 0x00 and 0x04).
+Based on the registers, you really don't need sub nodes here.
+
+Rob
