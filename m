@@ -2,95 +2,162 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E263440EC0
-	for <lists+linux-mips@lfdr.de>; Sun, 31 Oct 2021 15:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C26CE440EE8
+	for <lists+linux-mips@lfdr.de>; Sun, 31 Oct 2021 15:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbhJaOSh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 31 Oct 2021 10:18:37 -0400
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:39650 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbhJaOSg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 31 Oct 2021 10:18:36 -0400
-Received: by mail-oi1-f180.google.com with SMTP id n11so13027298oig.6;
-        Sun, 31 Oct 2021 07:16:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=xC+QLTIobuHa0Z6oCpAsqleWAEnn6kGUDyvkKP96ljo=;
-        b=QT8AUMPSTi/P7BL/8wU/rIAZNARhRYDx0dPdVHEDtNunXmPxfj3n9SpBC4cSq7Ukrz
-         Lzjqss3kcroCEWjFR1uA5WBgeicl327D88rfZ4vRfhZ/yYThUHH46F/bpvCaMzTjAJqm
-         yanZmklbHMp3cyYA2ag+DhbErH8e/AEAup+Tk048zOn/O8MezTiSFqAuSp2/sMp7bMNj
-         wf6eYU4wp6qztnjLJcnaZM+qw+MblutJLUNVypgDzNMl0OW/7VNYcvoVGnegDZeR1LNY
-         8a5HNbpoIKSXVyDx/3jCrxIRDAWT16kzPS6hoQ32KTXTFLfZEQJJtMR9w8y1pPytrdga
-         C0ug==
-X-Gm-Message-State: AOAM533PDxGzJoZ8iF5qthNBuENHw5iMA0vWOxrPGgNd71/l0uvTKje0
-        JiZ4QynRKjwa8guKkO3EeA==
-X-Google-Smtp-Source: ABdhPJzefT/prrdJgYTE9ha1AUY+mLo2O1FCTNvTIM/vM02p0FQa4ro2FSPdNyMBSbCws/igy2KEsg==
-X-Received: by 2002:a05:6808:1187:: with SMTP id j7mr16179962oil.135.1635689764746;
-        Sun, 31 Oct 2021 07:16:04 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l12sm3432395otf.22.2021.10.31.07.16.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 31 Oct 2021 07:16:03 -0700 (PDT)
-Received: (nullmailer pid 2444173 invoked by uid 1000);
-        Sun, 31 Oct 2021 14:16:02 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Lee Jones <lee.jones@linaro.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Justin Chen <justinpopo6@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211029202505.7106-1-zajec5@gmail.com>
-References: <20211029202505.7106-1-zajec5@gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: convert Broadcom's WDT to the json-schema
-Date:   Sun, 31 Oct 2021 09:16:02 -0500
-Message-Id: <1635689762.721738.2444172.nullmailer@robh.at.kernel.org>
+        id S229792AbhJaOxu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 31 Oct 2021 10:53:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27639 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229745AbhJaOxt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 31 Oct 2021 10:53:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635691877;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JWkqObtzatE8ZqTA7P0n9xOaXL3kRPYh9u09IqRGd+c=;
+        b=YbfpCla095LLS2kGegcZiwxuYq9j+Z+VmuOqAnI8Mptjn005Re/0HVZKW3aNEr70O8U8cZ
+        qKIUvMxna6Y9wQRlXOzzjGvft+QuJrhLwpLuxvA4RkJDlbjz4kMmMAuZj1hxupfKC8KpcP
+        XDNFVySxYhX+kzotQgxq7XXiDbOtweE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-595-hgIuyZhQNzuaYxdMVVu2jQ-1; Sun, 31 Oct 2021 10:51:14 -0400
+X-MC-Unique: hgIuyZhQNzuaYxdMVVu2jQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C08418D6A25;
+        Sun, 31 Oct 2021 14:51:10 +0000 (UTC)
+Received: from starship (unknown [10.40.194.243])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 885E65F4E9;
+        Sun, 31 Oct 2021 14:50:40 +0000 (UTC)
+Message-ID: <ca017e53bfa81d96dc534e395ff35b6899607fd8.camel@redhat.com>
+Subject: Re: [PATCH v2 36/43] KVM: SVM: Don't bother checking for "running"
+ AVIC when kicking for IPIs
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Date:   Sun, 31 Oct 2021 16:50:39 +0200
+In-Reply-To: <20211009021236.4122790-37-seanjc@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+         <20211009021236.4122790-37-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 29 Oct 2021 22:25:04 +0200, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
+> Drop the avic_vcpu_is_running() check when waking vCPUs in response to a
+> VM-Exit due to incomplete IPI delivery.  The check isn't wrong per se, but
+> it's not 100% accurate in the sense that it doesn't guarantee that the vCPU
+> was one of the vCPUs that didn't receive the IPI.
 > 
-> This helps validating DTS files.
+> The check isn't required for correctness as blocking == !running in this
+> context.
 > 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> From a performance perspective, waking a live task is not expensive as the
+> only moderately costly operation is a locked operation to temporarily
+> disable preemption.  And if that is indeed a performance issue,
+> kvm_vcpu_is_blocking() would be a better check than poking into the AVIC.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  .../bindings/watchdog/brcm,bcm7038-wdt.txt    | 19 ---------
->  .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 40 +++++++++++++++++++
->  2 files changed, 40 insertions(+), 19 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+>  arch/x86/kvm/svm/avic.c | 15 +++++++++------
+>  arch/x86/kvm/svm/svm.h  | 11 -----------
+>  2 files changed, 9 insertions(+), 17 deletions(-)
 > 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index cbf02e7e20d0..b43b05610ade 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -295,13 +295,16 @@ static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
+>  	struct kvm_vcpu *vcpu;
+>  	int i;
+>  
+> +	/*
+> +	 * Wake any target vCPUs that are blocking, i.e. waiting for a wake
+> +	 * event.  There's no need to signal doorbells, as hardware has handled
+> +	 * vCPUs that were in guest at the time of the IPI, and vCPUs that have
+> +	 * since entered the guest will have processed pending IRQs at VMRUN.
+> +	 */
+>  	kvm_for_each_vcpu(i, vcpu, kvm) {
+> -		bool m = kvm_apic_match_dest(vcpu, source,
+> -					     icrl & APIC_SHORT_MASK,
+> -					     GET_APIC_DEST_FIELD(icrh),
+> -					     icrl & APIC_DEST_MASK);
+> -
+> -		if (m && !avic_vcpu_is_running(vcpu))
+> +		if (kvm_apic_match_dest(vcpu, source, icrl & APIC_SHORT_MASK,
+> +					GET_APIC_DEST_FIELD(icrh),
+> +					icrl & APIC_DEST_MASK))
+>  			kvm_vcpu_wake_up(vcpu);
+>  	}
+>  }
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index 0d7bbe548ac3..7f5b01bbee29 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -509,17 +509,6 @@ extern struct kvm_x86_nested_ops svm_nested_ops;
+>  
+>  #define VMCB_AVIC_APIC_BAR_MASK		0xFFFFFFFFFF000ULL
+>  
+> -static inline bool (struct kvm_vcpu *vcpu)
+> -{
+> -	struct vcpu_svm *svm = to_svm(vcpu);
+> -	u64 *entry = svm->avic_physical_id_cache;
+> -
+> -	if (!entry)
+> -		return false;
+> -
+> -	return (READ_ONCE(*entry) & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
+> -}
+> -
+>  int avic_ga_log_notifier(u32 ga_tag);
+>  void avic_vm_destroy(struct kvm *kvm);
+>  int avic_vm_init(struct kvm *kvm);
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-yamllint warnings/errors:
+I guess this makes sense to do, to get rid of the avic_vcpu_is_running.
+As you explained in previous patch, waking up a live task isn't that expensive,
+so let it be.
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/watchdog/brcm,bcm7038-wdt.yaml#
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1548262
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+Best regards,
+	Maxim Levitsky 
 
