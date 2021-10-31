@@ -2,45 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5EB440F78
-	for <lists+linux-mips@lfdr.de>; Sun, 31 Oct 2021 17:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A78D441126
+	for <lists+linux-mips@lfdr.de>; Sun, 31 Oct 2021 23:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbhJaQjC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 31 Oct 2021 12:39:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55466 "EHLO
+        id S230309AbhJaWSZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 31 Oct 2021 18:18:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27721 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229936AbhJaQi7 (ORCPT
+        by vger.kernel.org with ESMTP id S230025AbhJaWSY (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 31 Oct 2021 12:38:59 -0400
+        Sun, 31 Oct 2021 18:18:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635698187;
+        s=mimecast20190719; t=1635718552;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wVq22xC51kdx10I7Z3TCBhCOu+wtFrVAqIwjXEZRDFw=;
-        b=FqFC/2mvLIk5M8j4sToOuQuCOzUi/KBFbfwz6+Is79ey9TLaodSnhrwL2px0vOG5iEVwHW
-        iXlRRju94gurWe1mJB4+2jELjSHKCkICHEEr3Ae8wsYJSVRmNTzIUWJUVvNbEQYhVXQ4lU
-        lAYX9TM8KzjhIshrxIvHr6OMxuQmNxk=
+        bh=C+trWHtpu8oYBXENs5w3b/Qoz24VhlDIgpUGDh1mOJU=;
+        b=XHcPXesaDsG+RV8jNnEYgLvztUOo9bsp/bYIdgNPkTYIaOtkp4tX6lQTAsrfTeeoN/8VhQ
+        Y/6AIcnmE9wJDU1+Km8O9UBDOJnlvXp4hbNFz/j4ERq5T1ZKutGsxf2c4BRc8y8JgdC+uH
+        /6lLDOBUv8VpIEnLK7Q1w6bu5G+IYag=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-560-bwvTj_fDMiy7vbcMWXUZfg-1; Sun, 31 Oct 2021 12:36:22 -0400
-X-MC-Unique: bwvTj_fDMiy7vbcMWXUZfg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+ us-mta-192-WYECgU2fMxmEks3noiYjYA-1; Sun, 31 Oct 2021 18:15:48 -0400
+X-MC-Unique: WYECgU2fMxmEks3noiYjYA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A1F191808302;
-        Sun, 31 Oct 2021 16:36:18 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6428F801AE3;
+        Sun, 31 Oct 2021 22:15:45 +0000 (UTC)
 Received: from starship (unknown [10.40.194.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7EEC160BF4;
-        Sun, 31 Oct 2021 16:35:58 +0000 (UTC)
-Message-ID: <9addad02d861e20fc4e8a3c3efa983502ae2248c.camel@redhat.com>
-Subject: Re: [PATCH v2 38/43] KVM: Drop defunct kvm_arch_vcpu_(un)blocking()
- hooks
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 292202B0B8;
+        Sun, 31 Oct 2021 22:15:28 +0000 (UTC)
+Message-ID: <592a315a8932b03f601e4c22d5846e97bd4a1103.camel@redhat.com>
+Subject: Re: [PATCH v2 39/43] KVM: VMX: Don't do full kick when triggering
+ posted interrupt "fails"
 From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Paul Mackerras <paulus@ozlabs.org>,
         Anup Patel <anup.patel@wdc.com>,
@@ -49,8 +49,7 @@ To:     Sean Christopherson <seanjc@google.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
+        James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Atish Patra <atish.patra@wdc.com>,
@@ -68,175 +67,75 @@ Cc:     James Morse <james.morse@arm.com>,
         David Matlack <dmatlack@google.com>,
         Oliver Upton <oupton@google.com>,
         Jing Zhang <jingzhangos@google.com>
-Date:   Sun, 31 Oct 2021 18:35:57 +0200
-In-Reply-To: <20211009021236.4122790-39-seanjc@google.com>
+Date:   Mon, 01 Nov 2021 00:15:26 +0200
+In-Reply-To: <fdf90c2f-81c8-513b-2e06-a90959f4cd89@redhat.com>
 References: <20211009021236.4122790-1-seanjc@google.com>
-         <20211009021236.4122790-39-seanjc@google.com>
+         <20211009021236.4122790-40-seanjc@google.com>
+         <335822ac-b98b-1eec-4911-34e4d0e99907@redhat.com>
+         <YXl4mK7CyUBnPaQV@google.com>
+         <fdf90c2f-81c8-513b-2e06-a90959f4cd89@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
-> Remove kvm_arch_vcpu_(un)blocking() now that all implementations are nops.
+On Thu, 2021-10-28 at 00:09 +0200, Paolo Bonzini wrote:
+> On 27/10/21 18:04, Sean Christopherson wrote:
+> > > > +		/*
+> > > > +		 * The smp_wmb() in kvm_make_request() pairs with the smp_mb_*()
+> > > > +		 * after setting vcpu->mode in vcpu_enter_guest(), thus the vCPU
+> > > > +		 * is guaranteed to see the event request if triggering a posted
+> > > > +		 * interrupt "fails" because vcpu->mode != IN_GUEST_MODE.
+> > > 
+> > > What this smp_wmb() pair with, is the smp_mb__after_atomic in
+> > > kvm_check_request(KVM_REQ_EVENT, vcpu).
+> > 
+> > I don't think that's correct.  There is no kvm_check_request() in the relevant path.
+> > kvm_vcpu_exit_request() uses kvm_request_pending(), which is just a READ_ONCE()
+> > without a barrier.
 > 
-> No functional change intended.
+> Ok, we are talking about two different set of barriers.  This is mine:
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/arm64/kvm/arm.c                | 10 ----------
->  arch/mips/include/asm/kvm_host.h    |  2 --
->  arch/powerpc/include/asm/kvm_host.h |  2 --
->  arch/s390/include/asm/kvm_host.h    |  2 --
->  arch/x86/include/asm/kvm-x86-ops.h  |  2 --
->  arch/x86/include/asm/kvm_host.h     | 13 -------------
->  include/linux/kvm_host.h            |  2 --
->  virt/kvm/kvm_main.c                 |  4 ----
->  8 files changed, 37 deletions(-)
+> - smp_wmb() in kvm_make_request() pairs with the smp_mb__after_atomic() in
+> kvm_check_request(); it ensures that everything before the request
+> (in this case, pi_pending = true) is seen by inject_pending_event.
 > 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 9ff0e85a9f16..444d6f5a980a 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -357,16 +357,6 @@ int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu)
->  	return kvm_timer_is_pending(vcpu);
->  }
->  
-> -void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu)
-> -{
-> -
-> -}
-> -
-> -void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
-> -{
-> -
-> -}
-> -
->  void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
->  {
->  	struct kvm_s2_mmu *mmu;
-> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
-> index 72b90d45a46e..28110f71089b 100644
-> --- a/arch/mips/include/asm/kvm_host.h
-> +++ b/arch/mips/include/asm/kvm_host.h
-> @@ -895,8 +895,6 @@ static inline void kvm_arch_free_memslot(struct kvm *kvm,
->  					 struct kvm_memory_slot *slot) {}
->  static inline void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen) {}
->  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
-> -static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
-> -static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->  
->  #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLB
->  int kvm_arch_flush_remote_tlb(struct kvm *kvm);
-> diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/include/asm/kvm_host.h
-> index 4a195c161592..0dfee6866541 100644
-> --- a/arch/powerpc/include/asm/kvm_host.h
-> +++ b/arch/powerpc/include/asm/kvm_host.h
-> @@ -863,7 +863,5 @@ static inline void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen) {}
->  static inline void kvm_arch_flush_shadow_all(struct kvm *kvm) {}
->  static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
->  static inline void kvm_arch_exit(void) {}
-> -static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
-> -static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->  
->  #endif /* __POWERPC_KVM_HOST_H__ */
-> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
-> index a22c9266ea05..25ed4ec66f4a 100644
-> --- a/arch/s390/include/asm/kvm_host.h
-> +++ b/arch/s390/include/asm/kvm_host.h
-> @@ -1007,7 +1007,5 @@ static inline void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen) {}
->  static inline void kvm_arch_flush_shadow_all(struct kvm *kvm) {}
->  static inline void kvm_arch_flush_shadow_memslot(struct kvm *kvm,
->  		struct kvm_memory_slot *slot) {}
-> -static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
-> -static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->  
->  #endif
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index c2b007171abd..f2c38acdcad6 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -96,8 +96,6 @@ KVM_X86_OP(handle_exit_irqoff)
->  KVM_X86_OP_NULL(request_immediate_exit)
->  KVM_X86_OP(sched_in)
->  KVM_X86_OP_NULL(update_cpu_dirty_logging)
-> -KVM_X86_OP_NULL(vcpu_blocking)
-> -KVM_X86_OP_NULL(vcpu_unblocking)
->  KVM_X86_OP_NULL(update_pi_irte)
->  KVM_X86_OP_NULL(start_assignment)
->  KVM_X86_OP_NULL(apicv_post_state_restore)
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 76a8dddc1a48..bebd42926321 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1445,9 +1445,6 @@ struct kvm_x86_ops {
->  	const struct kvm_pmu_ops *pmu_ops;
->  	const struct kvm_x86_nested_ops *nested_ops;
->  
-> -	void (*vcpu_blocking)(struct kvm_vcpu *vcpu);
-> -	void (*vcpu_unblocking)(struct kvm_vcpu *vcpu);
-> -
->  	int (*update_pi_irte)(struct kvm *kvm, unsigned int host_irq,
->  			      uint32_t guest_irq, bool set);
->  	void (*start_assignment)(struct kvm *kvm);
-> @@ -1904,16 +1901,6 @@ static inline bool kvm_irq_is_postable(struct kvm_lapic_irq *irq)
->  		irq->delivery_mode == APIC_DM_LOWEST);
->  }
->  
-> -static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu)
-> -{
-> -	static_call_cond(kvm_x86_vcpu_blocking)(vcpu);
-> -}
-> -
-> -static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
-> -{
-> -	static_call_cond(kvm_x86_vcpu_unblocking)(vcpu);
-> -}
-> -
->  static inline int kvm_cpu_get_apicid(int mps_cpu)
->  {
->  #ifdef CONFIG_X86_LOCAL_APIC
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index c5961a361c73..6a84b020daa6 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -966,8 +966,6 @@ void kvm_sigset_deactivate(struct kvm_vcpu *vcpu);
->  
->  void kvm_vcpu_halt(struct kvm_vcpu *vcpu);
->  bool kvm_vcpu_block(struct kvm_vcpu *vcpu);
-> -void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu);
-> -void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu);
->  bool kvm_vcpu_wake_up(struct kvm_vcpu *vcpu);
->  void kvm_vcpu_kick(struct kvm_vcpu *vcpu);
->  int kvm_vcpu_yield_to(struct kvm_vcpu *target);
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index c1850b60f38b..96de905e26e4 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -3210,8 +3210,6 @@ bool kvm_vcpu_block(struct kvm_vcpu *vcpu)
->  
->  	vcpu->stat.generic.blocking = 1;
->  
-> -	kvm_arch_vcpu_blocking(vcpu);
-> -
->  	prepare_to_rcuwait(wait);
->  	for (;;) {
->  		set_current_state(TASK_INTERRUPTIBLE);
-> @@ -3224,8 +3222,6 @@ bool kvm_vcpu_block(struct kvm_vcpu *vcpu)
->  	}
->  	finish_rcuwait(wait);
->  
-> -	kvm_arch_vcpu_unblocking(vcpu);
-> -
->  	vcpu->stat.generic.blocking = 0;
->  
->  	return waited;
+> - pi_test_and_set_on() orders the write to ON after the write to PIR,
+> pairing with vmx_sync_pir_to_irr and ensuring that the bit in the PIR is
+> seen.
+> 
+> And this is yours:
+> 
+> - pi_test_and_set_on() _also_ orders the write to ON before the read of
+> vcpu->mode, pairing with vcpu_enter_guest()
+> 
+> - kvm_make_request() however does _not_ order the write to
+> vcpu->requests before the read of vcpu->mode, even though it's needed.
+> Usually that's handled by kvm_vcpu_exiting_guest_mode(), but in this case
+> vcpu->mode is read in kvm_vcpu_trigger_posted_interrupt.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Yes indeed, kvm_make_request() writes the vcpu->requests after the memory barrier,
+and then there is no barrier until reading of vcpu->mode in kvm_vcpu_trigger_posted_interrupt.
 
+> 
+> So vmx_deliver_nested_posted_interrupt() is missing a smp_mb__after_atomic().
+> It's documentation only for x86, but still easily done in v3.
+> 
+> Paolo
+> 
+
+I used this patch as a justification to read Paolo's excellent LWN series of articles on memory barriers,
+to refresh my knowledge of the memory barriers and understand the above analysis better.
+https://lwn.net/Articles/844224/
+ 
+I agree with the above, but this is something that is so easy to make a mistake
+that I can't be 100% sure.
+ 
+Best regards,
+	Maxim Levitsky
 
 
