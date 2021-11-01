@@ -2,145 +2,180 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED25441E1B
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Nov 2021 17:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05151441F4C
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Nov 2021 18:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbhKAQ3s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Nov 2021 12:29:48 -0400
-Received: from mail-bn7nam10on2062.outbound.protection.outlook.com ([40.107.92.62]:14592
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232066AbhKAQ3r (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 1 Nov 2021 12:29:47 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T593nXvRklWUzWk26eO2yga71asLobIAnHgG4RsFN9XQYlvC9hN2AaPSInjefTGjh+BO7NuN0hIsaRNbm05QQnXm5zD9RFxFW9NwiWexAZj2vmYh5Fa2SPQ4bJ301U04mogwpH37fP3PadCaBlrrRFyWlgj+WNJlkoiHdD1TEZTZd0H/9yGtYCc8G3F1nTL+0e2JWTJlUE0yD8MtAN9K2rDYNzCeeJCwNkeQrZ3YxIda1JP8gMC544iaxf1BNsxyjlArwO7wXL2mKmhoIguZPgIVSyolYOF7oX6PiYb9c9UNNz6aZj6kLTX54hOjTn9MPchOat8zFwjjuSJ78L58xA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oiKHJPudDRpjOXXBxugxm674l8UEZPNlv56plWQVYGo=;
- b=XQ377+Hsg/aWsYZ3lLJDvHYIb2O0WONtpmGxV+QMxdTQlyj9Agp7x71gqU4pHBk4ZoYLDtg+nRNnxpUSnR4yprT0qQ8RbBWvzf7NP8+4y21C9FQhfjMf6Wp7CDJ5XA/iRxhjvIqxDxKF1zVP3MDom7wl4nfFtQ1qkvVI3yWBSeUCXijP++kI681it+bBDpoitKU/IqL8XhIzS2T/9P0X+IoLzoyo1SCm8k/OLB4chu6Zb4stUIdM/Gw9FYgEb9mMmmVP+M2I/twTsdAvv3td/SprBFsGUMaDroMEMu2z/vpu/ews2f8LZlzeQq7ac2fPsBsazhpGSl1WLw3U9IKOow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oiKHJPudDRpjOXXBxugxm674l8UEZPNlv56plWQVYGo=;
- b=BRxbeC6C21irU3SMw7rPEgwgh9fZkbIfYxXONGUFxGiYUYnxFIH5ze5RH8onwPxt9hs71WIncMbTCJMjL217E2lcAcx8Cb8GJnYK9SagfzUtHMWITg//FqMinWJiFkg8NjGFz7C2BCS+alf+4LWnG9HmELwHqsOclHaMWmhJi0u9nEicL7vjVkV74QtgjyzL1o6FhXZ8/ScXrZR8qEAJwAXms0DPNKmcPS+FDHk5TRZ4AHzbQsr0dFMqHGuIS0uQXa3aYNstNWuubhWorJZcmblp3AVz0ThBV4tiKuNtviO6GLh1aiq4QfTA/aO4/DsmlSLCfVfW7CdYerAnmMz18w==
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nvidia.com;
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
- by BL1PR12MB5221.namprd12.prod.outlook.com (2603:10b6:208:30b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.14; Mon, 1 Nov
- 2021 16:27:12 +0000
-Received: from BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::e8af:232:915e:2f95]) by BL0PR12MB5506.namprd12.prod.outlook.com
- ([fe80::e8af:232:915e:2f95%8]) with mapi id 15.20.4649.019; Mon, 1 Nov 2021
- 16:27:12 +0000
-Date:   Mon, 1 Nov 2021 13:27:11 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: Marvell: Update PCIe fixup
-Message-ID: <20211101162711.GA2744544@nvidia.com>
-References: <20211101150405.14618-1-pali@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211101150405.14618-1-pali@kernel.org>
-X-ClientProxiedBy: MN2PR06CA0010.namprd06.prod.outlook.com
- (2603:10b6:208:23d::15) To BL0PR12MB5506.namprd12.prod.outlook.com
- (2603:10b6:208:1cb::22)
+        id S231423AbhKARbl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Nov 2021 13:31:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54212 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230246AbhKARbd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 1 Nov 2021 13:31:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B2AA6108F;
+        Mon,  1 Nov 2021 17:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635787739;
+        bh=2cJQ0z+eLg6oK6BPQeDhyJnQMwy8kofAHvVb19izHF4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=KmjWI6zQF6+Xx/MxkR5vHWVocTw2Xf4m1SqOOf8wv/J8BkEwEONNA+OVpiSXE03oW
+         4exKX9Wcaf/eK6gr8QsQ0hY0e/X92veHhmwxSciBq0avm7V65GyPUI+ZQw46pVKOpw
+         fHiyKSWBdt65MEO4p+3KicsKMUmMdfJn2hSi7teyJWvUUOuLpzXSkcXYMmfcTaqj4t
+         MspcEyj4V16VbIxnP7KfACunaD3g6Xr3yo8LPM+KvdamDbCFE3mhM0EPE2CAo90w9F
+         hYPGvp7+rUnslDzuYLgpVVMBdz27eQsrwDqmUrlA4ihhAB5aBT7jlSSvjWZFeDnReQ
+         +lEmBuaxC8A4Q==
+Received: by mail-ed1-f41.google.com with SMTP id g10so66497865edj.1;
+        Mon, 01 Nov 2021 10:28:59 -0700 (PDT)
+X-Gm-Message-State: AOAM5320GakIFIbl63nYct8clDRR+cOPL0rW5O4NVaNfj/E4w6YSKX55
+        O9mgDk5Zz5Z0LECEqMCZjSuHnyUqawa65dU6fQ==
+X-Google-Smtp-Source: ABdhPJzkwoHospvWPt75rQ9pj3Q9ByRQ+4JTXMeqeD/nsnG4kv3oJZ2NTVWtriGCZu4WdnuCkBVl/I7sTIJhXcJO/UY=
+X-Received: by 2002:a05:6402:84d:: with SMTP id b13mr43627187edz.6.1635787737776;
+ Mon, 01 Nov 2021 10:28:57 -0700 (PDT)
 MIME-Version: 1.0
-Received: from mlx.ziepe.ca (142.162.113.129) by MN2PR06CA0010.namprd06.prod.outlook.com (2603:10b6:208:23d::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.15 via Frontend Transport; Mon, 1 Nov 2021 16:27:12 +0000
-Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1mha9P-004XYX-Iy; Mon, 01 Nov 2021 13:27:11 -0300
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 81b9ea77-aef5-4429-34b3-08d99d54759b
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5221:
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5221B29A8F9C7EAAE604EE2EC28A9@BL1PR12MB5221.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JXafVqB6Es3sgecCphn+SRID4nNUiGuIfwU8h+IvxtBQb4k4GcnxKkSDPSa2s8CIiB2cP4l0uLp9SnJxMCF+1LIf1PuFE+3g5kAufP0LPsZdRqcbSyTyaYoJuwq5xMuvK/6LPwPpvTZM0+hErlCAdrIXndTIH61khkNW0EQFe9Jj7F2AzhGzMvQeDoVaek4WwkAm9YlEQRog97jlM24xzrDzUPl1/fDjcs9rickxvyEAkwYmh44WWrp/FSmBP40szTXRwGloJpsATfz1CbLRpND+ul4CViE+69EIKbXFq/ZyEa/h+qHugSKMw0DdV/wyRLzXM8is7URegHeQbIOqV4CD2Aciu3VebsS6/79GvaiNHo/O06uefoL/99gxZNOWKaL5meg4q5GryP2uuPYj6FxLDi8aiZ3hLzZNKRM8/9kox7IDnp3AEulCimVEbMQxrv0T2eObFaCAI03m5Ynazem30DPeGUfyKi4sr7w8vGM4eQ5HHYt8ZzOlMKejEqcjBZ8yQBWtOcGbzL1gW1t5VkH40a2oPU8OjXE94B0hSNAsma42szkblVFz4wFcvbrWWz/boijfGxkoImcnN+zjRnjgXifjXzQWgn2sdw4rx5PWX9J25w9UX4RqDPVZ5Ht59zpyLQ3FyBdxbkUX59ES6g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(33656002)(186003)(15650500001)(2906002)(66946007)(26005)(66574015)(86362001)(508600001)(66556008)(8676002)(426003)(66476007)(2616005)(38100700002)(8936002)(7416002)(36756003)(6916009)(1076003)(9786002)(5660300002)(4744005)(83380400001)(4326008)(316002)(54906003)(9746002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q3ErL0NPK0lLSE8zcVJUY3ZyclRIQUdEd2E3NGJ2aTdPVmpyVVdKaFJIVm8z?=
- =?utf-8?B?cWZPWGNCeFBtVXRxbE1vL2xYMGt0OXJEbTUxSDBWdVhJTjJleUNJTmZpYUJ4?=
- =?utf-8?B?Y2djeWg0MTdzWjUrUjlBaENyOXUwVWNPWVNtTCs5ZzJMUVdYQmpEU2FSakNk?=
- =?utf-8?B?WWVMTk9GRkZRVXBKVVdSckZSdnhJYlhCR0JQc0pmczdZeEdwYXl5bnFHRE9S?=
- =?utf-8?B?V0NaWFYrTlJ5UnZyTUtPVEI1aEJLU0F3bCtXTU1HcVV0NFF6Ykp5VGtuWWZl?=
- =?utf-8?B?RG9PQUFvNm1GZXdyVFU1VUdLS0RoZjFYQjNtREhNK24wUHEvcHF6YmJkVytK?=
- =?utf-8?B?cW43QUlUZEhLcHB0MlkzMlU0YnhCYW9sMTMrWHR3U2pxcnFvdkEyWEdPVjlj?=
- =?utf-8?B?dHMrWVpONCtsMWdUM3ROODJmZzUvQjFneU90d20xTSs0QkFnNEk5NmNPQTZp?=
- =?utf-8?B?eXoyTm1UZ2FxZndBSCtwbTY4R1NkTWVhMUlKdTB1aDVEQWQ2NGhlb1c4UWg5?=
- =?utf-8?B?dXcwQjBKb3lVbHZueGdzcmdGWVNXUGZCSUlVSVpUTmhjbzNwT0VEcGY4aXhq?=
- =?utf-8?B?cTMzL0tSNkZwOTZvUnU5OHF5dmtGU2JTdjM4ZmVoNDVIa2lqVzVBemNUakVs?=
- =?utf-8?B?bXlkOVNqczJvYjZFNlo4OU9lelhHcVZXTERBSzJTeEtuMjhBeU8vUUFZYWhR?=
- =?utf-8?B?QkNSOU5TdzJ2bHRHWkJta0J3ZldYRWg4V2E0VUFyWWdXRURYMjRKYWZ4UjRM?=
- =?utf-8?B?YzFXTStPVmpOKzkwdWFhb2MwaDNyTTROd1g1YUlwQ3VkbG1YSFlFenJ5Zjhy?=
- =?utf-8?B?Q0NqYXc4ajlnL3IxbGc0c2tMbmFVTXpURkZrbjNQSmVteHhiY0hxdHE4dzFE?=
- =?utf-8?B?bHFTSGN4ZEdoUXlEcTh4TmdMMGd6b0RyTW9RMnFpaGlNOFJFc0N0cHBsRXR2?=
- =?utf-8?B?dE5CcmJDR2hDNi9laUdqUWlUbVAzRnJsTFhsM0ZDZCtwWFNaaXpZMThaenhj?=
- =?utf-8?B?REEvNThTM3ZxenlrMis1QkxqTTZwZ2hOM29aaEduS1hEa3VZNGRHM0pOSXJj?=
- =?utf-8?B?RnhXZXBkMmdYUG53bWVudE5XQ2xidEF5cFZLaWtZczNid3RUN0paN0ZYVWlR?=
- =?utf-8?B?YVAxOXFYK0lldWZSSmxaanRjYkJNTlJNMUQxa1o4VE1GWFFkM040UnAxSnBC?=
- =?utf-8?B?T0dienoyc1FjMjdLZVB5YUJMV3VNQi9rZStzTzFrQ2NDcVBSVlF1eHl0VVlG?=
- =?utf-8?B?Nll2MmlyR3pHK0JRM2llVnFnME4rb1VPcjUyNGRiY3FzcWIvdFphcHRQWENR?=
- =?utf-8?B?QnJ6SWxTY2w0NUhCM2FyaVk0VFRjdkM1MmNZektEdHNFbWhFSzNXOWUwK09C?=
- =?utf-8?B?MEt1blFLRmpKQXU1QzFyQ1doTjlldjlKSStkMWx0WmVQR0VMWTI2NHlFMCtM?=
- =?utf-8?B?RmJWTkZqL0dad3FlQkx5Z2RxN0NocDhDdmxXdWFXSzlieVVUWWpKNWRjNmwz?=
- =?utf-8?B?aEJrZzlzTENNYzhvNml1OWdXVUNBdHRGcVdYSjZvR1QzK09GN2R5MHl0bXQy?=
- =?utf-8?B?TWRWLzZEVTVpWldEQ245cGhZMkJHUlNnbkxzZkxtMnJiMFNqWmtjN3hNQ3hy?=
- =?utf-8?B?RkR0bmRkNGt5bGplOTVoVDVKcjd4WmVES3dDOXZzK29mbFpkdE9nTDlkNWcz?=
- =?utf-8?B?UVI1ejdwbFBtZ1haS1FmTFdCdnpFckc0VXg3cTVEVm52NlAxUmZ1amZ2dHNz?=
- =?utf-8?B?TXJGSWtac2dCeVBEVVZrRktDdlhMZWZmQWZXa2pveDdEaDQxd3Y5a3Q5dm5k?=
- =?utf-8?B?QkwzWjJUMHViYTc3KzkyTmxiODNXVzJtOUdYUFFIMUc4QUJpTHdnRFpEVEph?=
- =?utf-8?B?ZmtHUWI1YnBQamxRR2t4Z29MZklja3QvSUs0MWk4QlUxTDU1R05XdTU4WVd5?=
- =?utf-8?B?OWpHR3hCeU9weFRhYmhwZmtuTGZwN1Z0TG1haU9OVi9mV1hZL1A4ZFdNdzNF?=
- =?utf-8?B?MlpyYkJ5V2pQck80WmFQSElRb21LcDgxNmk1TlBNbGEwekw0S2tLZzZmK1hJ?=
- =?utf-8?B?aFJ0d3I5c0NsT21jZFAxQzZHT0Rrak1lbFlFYWRLT1RUSVVsYm9EQytTU0x0?=
- =?utf-8?Q?IGJM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81b9ea77-aef5-4429-34b3-08d99d54759b
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2021 16:27:12.7168
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Q2geDuAx3On5StrbryBIVfEeKhydIfb7nIRkEibO4Ff2vi3OBsA9CoFiyKE5GUY3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5221
+References: <20211028093059.32535-1-zajec5@gmail.com> <20211028093059.32535-3-zajec5@gmail.com>
+ <f78d1573-4909-039d-8647-d4fc13205f47@gmail.com> <9d57d026-19f3-e92d-4c02-d7e8e2c2bc25@gmail.com>
+ <YXvxMHmx2i56sXdI@robh.at.kernel.org> <1df7e7cd-aa4c-c692-ff7f-8ee27780a6a9@gmail.com>
+In-Reply-To: <1df7e7cd-aa4c-c692-ff7f-8ee27780a6a9@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 1 Nov 2021 12:28:45 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+sXqhxriDCrpWXrWTFoTi6zqQATyPfqZ2d9-H-smC-Qg@mail.gmail.com>
+Message-ID: <CAL_Jsq+sXqhxriDCrpWXrWTFoTi6zqQATyPfqZ2d9-H-smC-Qg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        devicetree@vger.kernel.org,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 01, 2021 at 04:04:05PM +0100, Pali Rohár wrote:
-> - The code relies on rc_pci_fixup being called, which only happens
->   when CONFIG_PCI_QUIRKS is enabled, so add that to Kconfig. Omitting
->   this causes a booting failure with a non-obvious cause.
-> - Update rc_pci_fixup to set the class properly, copying the
->   more modern style from other places
-> - Correct the rc_pci_fixup comment
-> 
-> This patch just re-applies commit 1dc831bf53fd ("ARM: Kirkwood: Update
-> PCI-E fixup") for all other Marvell platforms which use same buggy PCIe
-> controller.
+On Fri, Oct 29, 2021 at 11:45 AM Florian Fainelli <f.fainelli@gmail.com> wr=
+ote:
+>
+> On 10/29/21 6:03 AM, Rob Herring wrote:
+> > On Fri, Oct 29, 2021 at 01:39:02PM +0200, Rafa=C5=82 Mi=C5=82ecki wrote=
+:
+> >> [Rob: please kindly comment on this]
+> >>
+> >> On 28.10.2021 18:29, Florian Fainelli wrote:
+> >>> On 10/28/21 2:30 AM, Rafa=C5=82 Mi=C5=82ecki wrote:
+> >>>> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> >>>>
+> >>>> Hardware supported by this driver goes back to the old bcm63xx days.=
+ It
+> >>>> was then reused in BCM7038 and later also in BCM4908.
+> >>>>
+> >>>> Depending on SoC model registers layout differs a bit. This commit
+> >>>> introduces support for per-chipset registers offsets & adds BCM4908
+> >>>> layout.
+> >>>>
+> >>>> Later on BCM63xx SoCs support should be added too (probably as platf=
+orm
+> >>>> devices due to missing DT). Eventually this driver should replace
+> >>>> bcm63xx_wdt.c.
+> >>>>
+> >>>> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> >>>> ---
+> >>>
+> >>> [snip]
+> >>>
+> >>>> +
+> >>>> +static const u16 bcm7038_wdt_regs_bcm4908[] =3D {
+> >>>> +  [BCM63XX_WDT_REG_DEFVAL]        =3D 0x28,
+> >>>> +  [BCM63XX_WDT_REG_CTL]           =3D 0x2c,
+> >>>> +  [BCM63XX_WDT_REG_SOFTRESET]     =3D 0x34,
+> >>>
+> >>> I don't understand what you are doing here and why you are not
+> >>> offsetting the "reg" property appropriately when you create your
+> >>> bcm4908-wdt Device Tree node such that the base starts at 0, and the
+> >>> existing driver becomes usable as-is. This does not make any sense to=
+ me
+> >>> when it is obviously the simplest way to make the driver "accept" the
+> >>> resource being passed.
+> >>
+> >> I believe that DT binding should cover the whole hardware block and
+> >> describe it (here: use proper compatible to allow recognizing block
+> >> variant).
+> >>
+> >> That's because (as far as I understand) DT should be used to describe
+> >> hardware as closely as possible. I think it shouldn't be adjusted to
+> >> make mapping match Linux's driver implementation.
+> >>
+> >>
+> >> So if:
+> >> 1. Hardware block is mapped at 0xff800400
+> >> 2. It has interesting registers at 0xff800428 and 0xff80042c
+> >>
+> >> I think mapping should use:
+> >> reg =3D <0xff800400 0x3c>;
+> >> even if we don't use the first N registers.
+> >>
+> >> That way, at some point, you can extend Linux (or whatever) driver to
+> >> use extra registers without reworking the whole binding. That's why I
+> >> think we need to map whole hardware block & handle different registers
+> >> layouts in a driver.
+> >
+> > Yes, that's the correct thing to do.
+>
+> So in the future if we happen to want to manage the hardware timers in
+> that block, they would be part of the watchdog driver? I am fairly sure
+> they won't be, so you will be creating a composite driver/MFD to
+> separate out the functions, more likely. So you might as well create
+> sub-nodes.
 
-I wonder if that code is even relevant any more since we started using
-CONFIG_PCI_MVEBU
+There is no requirement that an MFD have child nodes. They are done
+both ways. If you need some internal kernel restructuring, then I
+don't care (as DT maintainer).
 
-?
+We very commonly have a single node that's both clock and reset
+provider for example. It's primarily when the sub blocks consume
+different DT resources that you need sub-nodes.
 
-Really, these broken controllers should not be used "raw" but always
-via their special host bridge driver that fixes all the config space
-problems.
+> > The question is whether you'd need sub nodes for the other functions.
+> > Folks tend to want to have sub nodes for convenience which isn't really
+> > needed and then requires a DT update ('cause they add nodes as adding
+> > drivers).
+>
+> Sorry but not, this is getting completely ridiculous, the
 
-Jason
+Huh?
+
+>
+> >
+> > Based on the registers, you really don't need sub nodes here.
+>
+> I sort of disagree here, the watchdog is a part of a sundry timer block
+> here, but it is logically broken up into different parts and if if I
+> were to imagine how this would map into different drivers, I can easily
+> see that we would have:
+>
+> - a driver to manage the timer interrupt controller
+> - a driver to manage each of the 3 hardware timers, be they clockevent
+> or else
+> - a driver to manage the watchdog
+
+You know the h/w better than me. I was giving my opinion based only on
+the limited information presented.
+
+> The simplest way to get there, and also because these same timer blocks
+> are actually spread in other parts of STB chips just like the watchdog
+> is, but in a different layout where they stand on their own was the main
+> drive for defining the bcm7038_wdt binding the way it was.
+
+A sub-block reused in different blocks is a decent reason for sub-nodes.
+
+Most important for me is that the binding be complete and not have to
+change in an incompatible way in the future. The more detailed you
+make the binding, the harder it will be to get right. It's the same
+reason we moved away from doing a clock per node for clock trees. So,
+if you want child nodes, then you need to define all of them.
+
+Rob
