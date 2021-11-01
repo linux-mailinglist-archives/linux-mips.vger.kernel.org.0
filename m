@@ -2,180 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05151441F4C
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Nov 2021 18:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9B1441F74
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Nov 2021 18:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbhKARbl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 1 Nov 2021 13:31:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54212 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230246AbhKARbd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 1 Nov 2021 13:31:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B2AA6108F;
-        Mon,  1 Nov 2021 17:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635787739;
-        bh=2cJQ0z+eLg6oK6BPQeDhyJnQMwy8kofAHvVb19izHF4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KmjWI6zQF6+Xx/MxkR5vHWVocTw2Xf4m1SqOOf8wv/J8BkEwEONNA+OVpiSXE03oW
-         4exKX9Wcaf/eK6gr8QsQ0hY0e/X92veHhmwxSciBq0avm7V65GyPUI+ZQw46pVKOpw
-         fHiyKSWBdt65MEO4p+3KicsKMUmMdfJn2hSi7teyJWvUUOuLpzXSkcXYMmfcTaqj4t
-         MspcEyj4V16VbIxnP7KfACunaD3g6Xr3yo8LPM+KvdamDbCFE3mhM0EPE2CAo90w9F
-         hYPGvp7+rUnslDzuYLgpVVMBdz27eQsrwDqmUrlA4ihhAB5aBT7jlSSvjWZFeDnReQ
-         +lEmBuaxC8A4Q==
-Received: by mail-ed1-f41.google.com with SMTP id g10so66497865edj.1;
-        Mon, 01 Nov 2021 10:28:59 -0700 (PDT)
-X-Gm-Message-State: AOAM5320GakIFIbl63nYct8clDRR+cOPL0rW5O4NVaNfj/E4w6YSKX55
-        O9mgDk5Zz5Z0LECEqMCZjSuHnyUqawa65dU6fQ==
-X-Google-Smtp-Source: ABdhPJzkwoHospvWPt75rQ9pj3Q9ByRQ+4JTXMeqeD/nsnG4kv3oJZ2NTVWtriGCZu4WdnuCkBVl/I7sTIJhXcJO/UY=
-X-Received: by 2002:a05:6402:84d:: with SMTP id b13mr43627187edz.6.1635787737776;
- Mon, 01 Nov 2021 10:28:57 -0700 (PDT)
+        id S230438AbhKARoJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 1 Nov 2021 13:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229947AbhKARoH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 1 Nov 2021 13:44:07 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8A0C061714
+        for <linux-mips@vger.kernel.org>; Mon,  1 Nov 2021 10:41:34 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id x16-20020a17090a789000b001a69735b339so508634pjk.5
+        for <linux-mips@vger.kernel.org>; Mon, 01 Nov 2021 10:41:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rtTqRA7823rLhhDHR/FeABtCXlD+vQwUZXFhSKbl7nw=;
+        b=otcBvN/3IcuDrr15J0K5CvKDj9ic0jccTokbwB/sVPFst2f0LLD/XC7PPmPO9eJXRu
+         P2OBNUe1RlpO0zOo26l/3DPAdKxfcfvQY3tyTT+VRt2u50F02VgF8OTA49ToznF2ILGt
+         Yy6m85iKMGx1XCrOjugojlIHRrq3kXSGg8wFybO1VALqYGLus50IE17TDpBh8OqfqKK1
+         AAKVEsJcdEBK8202Jfb1yydMhJbNy9mJ8dChJ1pRBEEAKk0vwWevUCT/VxYAjLKOhhmx
+         ip94OeR4ZQJbCq2qfgBZUaSsgLQoBT6PDF+7fUOqfu8QIWy5qh2RFzJV0Hmhvl6+AMgp
+         M0Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rtTqRA7823rLhhDHR/FeABtCXlD+vQwUZXFhSKbl7nw=;
+        b=bOJRui//zeZy+qftajNegRIjeQ5WtKqvHXN+q4F3r6P9c6oluQxy8+ayjWcpw4jtw5
+         TfOYXjqvHj7fBMHvJIkpqakHYW1iM1uAuD30fauP/mFvQ5i4MffVVEfFboyUmyoEqv0W
+         Vbpl81L7xOHfT5jT8Cqat8PXfjHY2mwUZZqusj9N92frHnKb6Wuavr2K1yUaVSGK6GTW
+         Ljyy2568v6bRMPsEGmAw0e/uc7UoTSrvRlx3sBD5AU9AN0o8aDQCpSJeu1dqZsfNIB50
+         dkWzTIfF3I95C0t5ziT88b4QTgUDlQEygelEA0orfU4OBzPs4yTbc4P3H3J6ToKWdnZj
+         cwYQ==
+X-Gm-Message-State: AOAM533aBi0Y9aZJAreFX9gN5FfqxzVXPhEg40IT3YI/NINEKr5+X5eh
+        uqJCwZMKa4ek+I5+V4mky0kNcA==
+X-Google-Smtp-Source: ABdhPJyQ2rd8AtzfLKSk7pcRIWMkAF0QH30KhY5NHLgIkgccLRDTnxh33KsvfNWVKvhaR3vGZrvloQ==
+X-Received: by 2002:a17:90b:3ec6:: with SMTP id rm6mr365778pjb.27.1635788493615;
+        Mon, 01 Nov 2021 10:41:33 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id cv1sm86275pjb.48.2021.11.01.10.41.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Nov 2021 10:41:33 -0700 (PDT)
+Date:   Mon, 1 Nov 2021 17:41:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH v2 26/43] KVM: VMX: Read Posted Interrupt "control"
+ exactly once per loop iteration
+Message-ID: <YYAmyUZhmcSntUza@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+ <20211009021236.4122790-27-seanjc@google.com>
+ <b078cce30f86672d7d8f8eaa0adc47d24def24e2.camel@redhat.com>
+ <YXrH/ZZBOHrWHz4j@google.com>
+ <20a17d75855dfb9bd496466fcd9f14baab0b2bda.camel@redhat.com>
 MIME-Version: 1.0
-References: <20211028093059.32535-1-zajec5@gmail.com> <20211028093059.32535-3-zajec5@gmail.com>
- <f78d1573-4909-039d-8647-d4fc13205f47@gmail.com> <9d57d026-19f3-e92d-4c02-d7e8e2c2bc25@gmail.com>
- <YXvxMHmx2i56sXdI@robh.at.kernel.org> <1df7e7cd-aa4c-c692-ff7f-8ee27780a6a9@gmail.com>
-In-Reply-To: <1df7e7cd-aa4c-c692-ff7f-8ee27780a6a9@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 1 Nov 2021 12:28:45 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+sXqhxriDCrpWXrWTFoTi6zqQATyPfqZ2d9-H-smC-Qg@mail.gmail.com>
-Message-ID: <CAL_Jsq+sXqhxriDCrpWXrWTFoTi6zqQATyPfqZ2d9-H-smC-Qg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] watchdog: bcm7038_wdt: support BCM4908 SoC
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        devicetree@vger.kernel.org,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20a17d75855dfb9bd496466fcd9f14baab0b2bda.camel@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 11:45 AM Florian Fainelli <f.fainelli@gmail.com> wr=
-ote:
->
-> On 10/29/21 6:03 AM, Rob Herring wrote:
-> > On Fri, Oct 29, 2021 at 01:39:02PM +0200, Rafa=C5=82 Mi=C5=82ecki wrote=
-:
-> >> [Rob: please kindly comment on this]
-> >>
-> >> On 28.10.2021 18:29, Florian Fainelli wrote:
-> >>> On 10/28/21 2:30 AM, Rafa=C5=82 Mi=C5=82ecki wrote:
-> >>>> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-> >>>>
-> >>>> Hardware supported by this driver goes back to the old bcm63xx days.=
- It
-> >>>> was then reused in BCM7038 and later also in BCM4908.
-> >>>>
-> >>>> Depending on SoC model registers layout differs a bit. This commit
-> >>>> introduces support for per-chipset registers offsets & adds BCM4908
-> >>>> layout.
-> >>>>
-> >>>> Later on BCM63xx SoCs support should be added too (probably as platf=
-orm
-> >>>> devices due to missing DT). Eventually this driver should replace
-> >>>> bcm63xx_wdt.c.
-> >>>>
-> >>>> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-> >>>> ---
-> >>>
-> >>> [snip]
-> >>>
-> >>>> +
-> >>>> +static const u16 bcm7038_wdt_regs_bcm4908[] =3D {
-> >>>> +  [BCM63XX_WDT_REG_DEFVAL]        =3D 0x28,
-> >>>> +  [BCM63XX_WDT_REG_CTL]           =3D 0x2c,
-> >>>> +  [BCM63XX_WDT_REG_SOFTRESET]     =3D 0x34,
-> >>>
-> >>> I don't understand what you are doing here and why you are not
-> >>> offsetting the "reg" property appropriately when you create your
-> >>> bcm4908-wdt Device Tree node such that the base starts at 0, and the
-> >>> existing driver becomes usable as-is. This does not make any sense to=
- me
-> >>> when it is obviously the simplest way to make the driver "accept" the
-> >>> resource being passed.
-> >>
-> >> I believe that DT binding should cover the whole hardware block and
-> >> describe it (here: use proper compatible to allow recognizing block
-> >> variant).
-> >>
-> >> That's because (as far as I understand) DT should be used to describe
-> >> hardware as closely as possible. I think it shouldn't be adjusted to
-> >> make mapping match Linux's driver implementation.
-> >>
-> >>
-> >> So if:
-> >> 1. Hardware block is mapped at 0xff800400
-> >> 2. It has interesting registers at 0xff800428 and 0xff80042c
-> >>
-> >> I think mapping should use:
-> >> reg =3D <0xff800400 0x3c>;
-> >> even if we don't use the first N registers.
-> >>
-> >> That way, at some point, you can extend Linux (or whatever) driver to
-> >> use extra registers without reworking the whole binding. That's why I
-> >> think we need to map whole hardware block & handle different registers
-> >> layouts in a driver.
-> >
-> > Yes, that's the correct thing to do.
->
-> So in the future if we happen to want to manage the hardware timers in
-> that block, they would be part of the watchdog driver? I am fairly sure
-> they won't be, so you will be creating a composite driver/MFD to
-> separate out the functions, more likely. So you might as well create
-> sub-nodes.
+On Mon, Nov 01, 2021, Maxim Levitsky wrote:
+> On Thu, 2021-10-28 at 15:55 +0000, Sean Christopherson wrote:
+> > On Thu, Oct 28, 2021, Maxim Levitsky wrote:
+> > > On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
+> > > I wish there was a way to mark fields in a struct, as requiring 'READ_ONCE' on them
+> > > so that compiler would complain if this isn't done, or automatically use 'READ_ONCE'
+> > > logic.
+> > 
+> > Hmm, I think you could make an argument that ON and thus the whole "control"
+> > word should be volatile.  AFAICT, tagging just "on" as volatile actually works.
+> > There's even in a clause in Documentation/process/volatile-considered-harmful.rst
+> > that calls this out as a (potentially) legitimate use case.
+> > 
+> >   - Pointers to data structures in coherent memory which might be modified
+> >     by I/O devices can, sometimes, legitimately be volatile.
+> > 
+> > That said, I think I actually prefer forcing the use of READ_ONCE.  The descriptor
+> > requires more protections than what volatile provides, namely that all writes need
+> > to be atomic.  So given that volatile alone isn't sufficient, I'd prefer to have
+> > the code itself be more self-documenting.
+> 
+> I took a look at how READ_ONCE/WRITE_ONCE is implemented and indeed they use volatile
+> (the comment above __READ_ONCE is worth gold...), so there is a bit of contradiction:
+> 
+> volatile-considered-harmful.rst states not to mark struct members volatile since
+> you usually need more that than (very true often) and yet, I also heard that
+> READ_ONCE/WRITE_ONCE is very encouraged to be used to fields that are used in lockless
+> algorithms, even when not strictly needed,
+> so why not to just mark the field and then use it normally? I guess that
+> explicit READ_ONCE/WRITE_ONCE is much more readable/visible that a volatile
+> in some header file.
 
-There is no requirement that an MFD have child nodes. They are done
-both ways. If you need some internal kernel restructuring, then I
-don't care (as DT maintainer).
+Are you asking about this PI field in particular, or for any field in general?
 
-We very commonly have a single node that's both clock and reset
-provider for example. It's primarily when the sub blocks consume
-different DT resources that you need sub-nodes.
+In this particular case, visibility and documentation is really the only difference,
+functionally the result is the same.  But that's also very much related to why this
+case gets the exception listed above.  The "use it normally" part is also why I
+don't want to tag the field volatile since writing the field absolutely cannot be
+done "normally", it must be done atomically, and volatile doesn't capture that
+detail.
 
-> > The question is whether you'd need sub nodes for the other functions.
-> > Folks tend to want to have sub nodes for convenience which isn't really
-> > needed and then requires a DT update ('cause they add nodes as adding
-> > drivers).
->
-> Sorry but not, this is getting completely ridiculous, the
+If you're asking about fields in general, the "volatile is harmful" guideline is
+to deter usage of volatile for cases where the field/variable in question is not
+intrinsically volatile.  As the docs call out, using volatile in those cases often
+leads to worse code generation because the compiler is disallowed from optimizing
+accesses that are protected through other mechanisms.
 
-Huh?
-
->
-> >
-> > Based on the registers, you really don't need sub nodes here.
->
-> I sort of disagree here, the watchdog is a part of a sundry timer block
-> here, but it is logically broken up into different parts and if if I
-> were to imagine how this would map into different drivers, I can easily
-> see that we would have:
->
-> - a driver to manage the timer interrupt controller
-> - a driver to manage each of the 3 hardware timers, be they clockevent
-> or else
-> - a driver to manage the watchdog
-
-You know the h/w better than me. I was giving my opinion based only on
-the limited information presented.
-
-> The simplest way to get there, and also because these same timer blocks
-> are actually spread in other parts of STB chips just like the watchdog
-> is, but in a different layout where they stand on their own was the main
-> drive for defining the bcm7038_wdt binding the way it was.
-
-A sub-block reused in different blocks is a decent reason for sub-nodes.
-
-Most important for me is that the binding be complete and not have to
-change in an incompatible way in the future. The more detailed you
-make the binding, the harder it will be to get right. It's the same
-reason we moved away from doing a clock per node for clock trees. So,
-if you want child nodes, then you need to define all of them.
-
-Rob
+A good example in x86 KVM is the READ_ONCE(sp->unsync) in mmu_try_to_unsync_pages() to
+force the compiler to emit a load of sp->unsync after acquiring mmu_unsync_pages_lock.
+Tagging "unsync" as volatile is unnecessary since the vast majority of its usage is
+protected by holding a spinlock for write, and would prevent optimizing references in
+kvm_mmu_get_page() and other flows that are protected by mmu_lock in the legacy MMU.
