@@ -2,143 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7865C4429ED
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Nov 2021 09:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74034429C8
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Nov 2021 09:46:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbhKBI6F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 2 Nov 2021 04:58:05 -0400
-Received: from m15111.mail.126.com ([220.181.15.111]:39058 "EHLO
-        m15111.mail.126.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbhKBI6E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Nov 2021 04:58:04 -0400
-X-Greylist: delayed 1812 seconds by postgrey-1.27 at vger.kernel.org; Tue, 02 Nov 2021 04:58:04 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=yYK7j
-        4zSR3tU5Nj9zPzz1aeMvcwXiqLMsS3fqcTDIo0=; b=FyTEuFR5OddJJXvGzdYLC
-        hl/50cqBbzP5rucXIXGTH0R7PC3oLBn7067f7YYykbRQJwygiFfOa0aEdLfqFW0B
-        N/zMo0noiv0rc6Pe7A7QyUmbBMy9RLZLZDRQYQksd25Y5k2G57LCV1Z4DKvHjfp9
-        TK7mJ4l8y1/qjVfyLixPnE=
-Received: from pek-lpd-ccm5.wrs.com (unknown [60.247.85.82])
-        by smtp1 (Coremail) with SMTP id C8mowADX5XHI9YBh3wm5CQ--.38969S2;
-        Tue, 02 Nov 2021 16:24:53 +0800 (CST)
-From:   Zhaolong Zhang <zhangzl2013@126.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-mips@vger.kernel.org,
-        Zhaolong Zhang <zhangzl2013@126.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] mips: fix HUGETLB function without THP enabled
-Date:   Tue,  2 Nov 2021 16:24:37 +0800
-Message-Id: <20211102082437.3319235-1-zhangzl2013@126.com>
-X-Mailer: git-send-email 2.27.0
+        id S229778AbhKBItX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 2 Nov 2021 04:49:23 -0400
+Received: from elvis.franken.de ([193.175.24.41]:55619 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229720AbhKBItW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 2 Nov 2021 04:49:22 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mhpRK-0002yN-00; Tue, 02 Nov 2021 09:46:42 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id AEE3DC27BF; Tue,  2 Nov 2021 09:42:41 +0100 (CET)
+Date:   Tue, 2 Nov 2021 09:42:41 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: Marvell: Update PCIe fixup
+Message-ID: <20211102084241.GA6134@alpha.franken.de>
+References: <20211101150405.14618-1-pali@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8mowADX5XHI9YBh3wm5CQ--.38969S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZF4DKr15tw1rtr13Jry3XFb_yoW5CFy5pF
-        Z3AF48uw4UtFnrJay3trnYqry3Xr4kXayDtr17Ga1DX3WUKw40gF4vgw4avrn5XrWkZFWx
-        AFZ0gayj9rsrJw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UeMKtUUUUU=
-X-Originating-IP: [60.247.85.82]
-X-CM-SenderInfo: x2kd0wt2osiiat6rjloofrz/1tbiaRU-z1pEDpurlwAAs7
+In-Reply-To: <20211101150405.14618-1-pali@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-ltp test futex_wake04 without THP enabled leads to below bt:
-  [<ffffffff80a03728>] BUG+0x0/0x8
-  [<ffffffff80a0624c>] internal_get_user_pages_fast+0x81c/0x820
-  [<ffffffff8093ac18>] get_futex_key+0xa0/0x480
-  [<ffffffff8093b074>] futex_wait_setup+0x7c/0x1a8
-  [<ffffffff8093b2c0>] futex_wait+0x120/0x228
-  [<ffffffff8093dbe8>] do_futex+0x140/0xbd8
-  [<ffffffff8093e78c>] sys_futex+0x10c/0x1c0
-  [<ffffffff808703d0>] syscall_common+0x34/0x58
+On Mon, Nov 01, 2021 at 04:04:05PM +0100, Pali Rohár wrote:
+> - The code relies on rc_pci_fixup being called, which only happens
+>   when CONFIG_PCI_QUIRKS is enabled, so add that to Kconfig. Omitting
+>   this causes a booting failure with a non-obvious cause.
+> - Update rc_pci_fixup to set the class properly, copying the
+>   more modern style from other places
+> - Correct the rc_pci_fixup comment
+> 
+> This patch just re-applies commit 1dc831bf53fd ("ARM: Kirkwood: Update
+> PCI-E fixup") for all other Marvell platforms which use same buggy PCIe
+> controller.
+> [..]
 
-Move pmd_write() and pmd_page() from TRANSPARENT_HUGEPAGE scope to
-MIPS_HUGE_TLB_SUPPORT scope, because both THP and HUGETLB will need
-them.
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 771ca53af06d..c8d51bd20b84 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -346,6 +346,7 @@ config MIPS_COBALT
+>  	select CEVT_GT641XX
+>  	select DMA_NONCOHERENT
+>  	select FORCE_PCI
+> +	select PCI_QUIRKS
+>  	select I8253
+>  	select I8259
+>  	select IRQ_MIPS_CPU
 
-Signed-off-by: Zhaolong Zhang <zhangzl2013@126.com>
----
- arch/mips/include/asm/pgtable.h | 40 +++++++++++++++++----------------
- 1 file changed, 21 insertions(+), 19 deletions(-)
+this is enabled by default, via drivers/pci/Kconfig
 
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 804889b70965..1fcf4be5cd20 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -86,10 +86,12 @@ extern void paging_init(void);
-  */
- #define pmd_phys(pmd)		virt_to_phys((void *)pmd_val(pmd))
- 
-+#ifndef CONFIG_MIPS_HUGE_TLB_SUPPORT
- #define __pmd_page(pmd)		(pfn_to_page(pmd_phys(pmd) >> PAGE_SHIFT))
- #ifndef CONFIG_TRANSPARENT_HUGEPAGE
- #define pmd_page(pmd)		__pmd_page(pmd)
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE  */
-+#endif /* CONFIG_MIPS_HUGE_TLB_SUPPORT */
- 
- #define pmd_page_vaddr(pmd)	pmd_val(pmd)
- 
-@@ -416,6 +418,25 @@ static inline pte_t pte_mkhuge(pte_t pte)
- 	pte_val(pte) |= _PAGE_HUGE;
- 	return pte;
- }
-+
-+#define pmd_write pmd_write
-+static inline int pmd_write(pmd_t pmd)
-+{
-+	return !!(pmd_val(pmd) & _PAGE_WRITE);
-+}
-+
-+static inline unsigned long pmd_pfn(pmd_t pmd)
-+{
-+	return pmd_val(pmd) >> _PFN_SHIFT;
-+}
-+
-+static inline struct page *pmd_page(pmd_t pmd)
-+{
-+	if (pmd_val(pmd) & _PAGE_HUGE)
-+		return pfn_to_page(pmd_pfn(pmd));
-+
-+	return pfn_to_page(pmd_phys(pmd) >> PAGE_SHIFT);
-+}
- #endif /* CONFIG_MIPS_HUGE_TLB_SUPPORT */
- 
- #ifdef CONFIG_HAVE_ARCH_SOFT_DIRTY
-@@ -591,12 +612,6 @@ static inline pmd_t pmd_mkhuge(pmd_t pmd)
- extern void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 		       pmd_t *pmdp, pmd_t pmd);
- 
--#define pmd_write pmd_write
--static inline int pmd_write(pmd_t pmd)
--{
--	return !!(pmd_val(pmd) & _PAGE_WRITE);
--}
--
- static inline pmd_t pmd_wrprotect(pmd_t pmd)
- {
- 	pmd_val(pmd) &= ~(_PAGE_WRITE | _PAGE_SILENT_WRITE);
-@@ -677,19 +692,6 @@ static inline pmd_t pmd_clear_soft_dirty(pmd_t pmd)
- /* Extern to avoid header file madness */
- extern pmd_t mk_pmd(struct page *page, pgprot_t prot);
- 
--static inline unsigned long pmd_pfn(pmd_t pmd)
--{
--	return pmd_val(pmd) >> _PFN_SHIFT;
--}
--
--static inline struct page *pmd_page(pmd_t pmd)
--{
--	if (pmd_trans_huge(pmd))
--		return pfn_to_page(pmd_pfn(pmd));
--
--	return pfn_to_page(pmd_phys(pmd) >> PAGE_SHIFT);
--}
--
- static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
- {
- 	pmd_val(pmd) = (pmd_val(pmd) & (_PAGE_CHG_MASK | _PAGE_HUGE)) |
+config PCI_QUIRKS
+        default y
+        bool "Enable PCI quirk workarounds" if EXPERT
+        help
+          This enables workarounds for various PCI chipset bugs/quirks.
+          Disable this only if your target machine is unaffected by PCI
+          quirks.
+
+> diff --git a/arch/mips/pci/fixup-cobalt.c b/arch/mips/pci/fixup-cobalt.c
+> index 44be65c3e6bb..202f3a0bd97d 100644
+> --- a/arch/mips/pci/fixup-cobalt.c
+> +++ b/arch/mips/pci/fixup-cobalt.c
+> @@ -36,6 +36,12 @@
+>  #define VIA_COBALT_BRD_ID_REG  0x94
+>  #define VIA_COBALT_BRD_REG_to_ID(reg)	((unsigned char)(reg) >> 4)
+>  
+> +/*
+> + * The root complex has a hardwired class of PCI_CLASS_MEMORY_OTHER, when it
+> + * is operating as a root complex this needs to be switched to
+> + * PCI_CLASS_BRIDGE_HOST or Linux will errantly try to process the BAR's on
+> + * the device. Decoding setup is handled by the orion code.
+> + */
+>  static void qube_raq_galileo_early_fixup(struct pci_dev *dev)
+>  {
+>  	if (dev->devfn == PCI_DEVFN(0, 0) &&
+
+this is not a PCIe controller, so how is this patch related ?
+
+Thomas.
+
 -- 
-2.27.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
