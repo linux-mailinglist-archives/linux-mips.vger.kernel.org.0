@@ -2,159 +2,215 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A334A4432C7
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Nov 2021 17:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AB2443461
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Nov 2021 18:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbhKBQdO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 2 Nov 2021 12:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
+        id S233691AbhKBRON (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 2 Nov 2021 13:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234798AbhKBQKQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Nov 2021 12:10:16 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2ABC061203;
-        Tue,  2 Nov 2021 09:06:27 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 17so32630833ljq.0;
-        Tue, 02 Nov 2021 09:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5we+ngsabeSIgxk8EL0owZimFzpBYd2svuAuN0pJ4yE=;
-        b=WtRtW2Nmyd5DSdXZWaxLgDqKEf/VPM3+3pnx50sujC8E0ge5De48uNQpMaVy7FqHBx
-         LT565HDhRvPjASD9k5RlqBS3RNfGBZJYeLJhYO5DP8Z5wFNbPleEBs1x+XzZvVOu/fOo
-         O3hGsYgDWbAn13dRYImuGonhbpWQZd4H6qwOU7LaAMtJBQ56UnXONku0kmW21ozuPLjW
-         Bu6WLqS8mwRI14MfZ8xr85lkKdQ2lkpk5qEqdjrNc9OO/a7SjZ6SEmJEHPKwOO+Zfa7z
-         yRKl+whCiCGlF79jxCbV/W3SQlmLcgsi/0xIG5CkvjzswyHJqfZHnOYtlUQbBgIDb58P
-         1Mig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5we+ngsabeSIgxk8EL0owZimFzpBYd2svuAuN0pJ4yE=;
-        b=6sjBrXfszJ64kCuDlu6cUIrHRdkF5udR8G8fdVtlN0vZrgeneytrzL7NTI0N5F0oyn
-         J6ocEccRb1tORsxdxGhHBIHVnM/x7FyMi4edu0Y5RTMewqwcn6e8aDs5q70B79K057wk
-         47nR1Xg1YxFmkrCIwXhk5MJjdn/Lcx34PHxQyI/MOUWMBjALdx5nLORN0f2ekf2Bp7yy
-         0QBRcIcsTb3lgBt3XpIZSEDrGSM/9WCCSYLw7W76LtE04pFmW8MGHktkXhG9w+H3753+
-         EvsDnNToxH+OlyDpU+nBGHqUue92evNqFsQ32mketYi1v5e91O3y2uHEaLphXGZ4lxsR
-         HFiQ==
-X-Gm-Message-State: AOAM531hY7A9KdQ/OiTSIIAeYmE7jlcXPzWtX3+bFo+ji33UOTL7AQYv
-        MB+nWZM28M3bELeEKUacmksFEzqRnSs=
-X-Google-Smtp-Source: ABdhPJw8yJGezU5RdVmSwZoRkcyQObCFHZkbMgHpvZdlEGRwIuwDDqRWRIJ1u6r0z7FfDiwehDojBA==
-X-Received: by 2002:a2e:a587:: with SMTP id m7mr18156500ljp.330.1635869185832;
-        Tue, 02 Nov 2021 09:06:25 -0700 (PDT)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id t6sm1798895lji.109.2021.11.02.09.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Nov 2021 09:06:25 -0700 (PDT)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH V2 2/2] dt-bindings: mfd: add Broadcom's Timer-Watchdog block
-Date:   Tue,  2 Nov 2021 17:06:15 +0100
-Message-Id: <20211102160615.14672-2-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211102160615.14672-1-zajec5@gmail.com>
-References: <20211102160615.14672-1-zajec5@gmail.com>
+        with ESMTP id S230364AbhKBROJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Nov 2021 13:14:09 -0400
+X-Greylist: delayed 479 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 Nov 2021 10:11:34 PDT
+Received: from mout-u-204.mailbox.org (mout-u-204.mailbox.org [IPv6:2001:67c:2050:1::465:204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2254BC061714;
+        Tue,  2 Nov 2021 10:11:27 -0700 (PDT)
+Received: from smtp1.mailbox.org (unknown [91.198.250.123])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-u-204.mailbox.org (Postfix) with ESMTPS id 4HkGSW5PLRzQlDX;
+        Tue,  2 Nov 2021 18:03:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Subject: Re: [PATCH] PCI: Marvell: Update PCIe fixup
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211101150405.14618-1-pali@kernel.org>
+ <20211102084241.GA6134@alpha.franken.de>
+ <20211102090246.unmbruykfdjabfga@pali>
+ <20211102094700.GA7376@alpha.franken.de>
+ <20211102100034.rhcb3k2jvr6alm6y@pali>
+ <alpine.DEB.2.21.2111021210180.57165@angie.orcam.me.uk>
+ <20211102125843.sqsusis4krnmhorq@pali>
+ <alpine.DEB.2.21.2111021312160.57165@angie.orcam.me.uk>
+ <20211102144929.c5wt5pbl42ocrxly@pali> <20211102154831.xtrlgrmrizl5eidl@pali>
+From:   Stefan Roese <sr@denx.de>
+Message-ID: <aa580000-b4c6-2590-6196-48c10998320a@denx.de>
+Date:   Tue, 2 Nov 2021 18:03:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20211102154831.xtrlgrmrizl5eidl@pali>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: de-DE
 Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: F064618BF
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+On 02.11.21 16:48, Pali Rohár wrote:
+> On Tuesday 02 November 2021 15:49:29 Pali Rohár wrote:
+>> On Tuesday 02 November 2021 14:01:41 Maciej W. Rozycki wrote:
+>>> On Tue, 2 Nov 2021, Pali Rohár wrote:
+>>>
+>>>>>   None of the Galileo system controllers I came across had the class code
+>>>>> set incorrectly.
+>>>>
+>>>> In kernel there is quirk only for one device with id:
+>>>> PCI_VENDOR_ID_MARVELL (0x11ab) PCI_DEVICE_ID_MARVELL_GT64111 (0x4146)
+>>>>
+>>>> So for some reasons quirk is needed... Anyway, patch for this quirk just
+>>>> adds comment as there is no explanation for it. It does not modify quirk
+>>>> code.
+>>>>
+>>>> So it is possible that Marvell (or rather Galileo at that time) included
+>>>> some config space fixup in some products and 0x4146 did not have it.
+>>>> Just guessing... We can really only guess what could happen at that time
+>>>> 20 years ago...
+>>>
+>>>   Ah, there you go! -- sadly I don't seem to have a copy of the datasheet
+>>> for the GT-64111, but the GT-64115 has it[1]:
+>>>
+>>> Table 158: PCI Class Code and Revision ID, Offset: 0x008
+>>>   Bits  Field name Function                                     Initial Value
+>>>   7:0   RevID      Indicates the GT-64115 PCI Revision          0x01
+>>>                    number.
+>>>   15:8  Reserved   Read only.                                   0x0
+>>>   23:16 SubClass   Indicates the GT-64115 Subclass - Mem-       0x80
+>>>                    ory controller.
+>>>   31:24 BaseClass  Indicates the GT-64115 Base Class -          0x05
+>>>                    memory controller.
+>>>
+>>> and then:
+>>>
+>>> "Device and Vendor ID (0x000), Class Code and Revision ID (0x008), and
+>>> Header Type (0x00e) fields are read only from the PCI bus.  These fields
+>>> can be modified and read via the CPU bus."
+>>>
+>>> Likewise with the GT-64120[2]:
+>>>
+>>> Table 208: PCI_0 Class Code and Revision ID, Offset: 0x008 from PCI_0 or CPU; 0x088 from
+>>>             PCI_1
+>>>   Bits  Field name Function                                      Initial Value
+>>>   7:0   RevID      Indicates the GT-64120 PCI_0 revision number. 0x02
+>>>   15:8  Reserved   Read Only 0.                                  0x0
+>>>   23:16 SubClass   Indicates the GT-64120 Subclass               Depends on value
+>>>                    0x00 - Host Bridge Device.                    sampled at reset
+>>>                    0x80 - Memory Device.                         on BankSel[0]. See
+>>>                                                                  Table 44 on page
+>>>                                                                  11-1.
+>>>   31:24 BaseClass  Indicates the GT-64120 Base Class             Depends on value
+>>>                    0x06 - Bridge Device.                         sampled at reset
+>>>                    0x05 - Memory Device.                         on BankSel[0]. See
+>>>                                                                  Table 44 on page
+>>>                                                                  11-1.
+>>>
+>>> Table 209: PCI_1 Class Code and Revision ID, Offset: 0x088 from PCI_0 or CPU; 0x008 from
+>>>             PCI_1
+>>>   Bits  Field name Function                                      Initial Value
+>>>   31:0  Various    Same as for PCI_0 Class Code and Revision ID.
+>>>
+>>> and then also:
+>>>
+>>> "Device and Vendor ID (0x000), Class Code and Revision ID (0x008), and
+>>> Header Type (0x00e) fields are read only from the PCI bus.  These fields
+>>> can be modified and read via the CPU bus."
+>>>
+>>> -- so this is system-specific and an intended chip feature rather than an
+>>> erratum (or rather it is a system erratum if the reset strap or the boot
+>>> firmware has got it wrong).
+>>>
+>>>   The memory device class code is IIUC meant to be typically chosen when
+>>> the Galileo/Marvell device is used without the CPU interface, i.e. as a
+>>> PCI memory controller device only[3].
+> 
+> I have found on internet some copy of GT64111 datasheet ("GT-64111
+> System Controller for RC4640, RM523X and VR4300 CPUs", Galileo
+> Technology, Product Preview Revision 1.1, FEB 4, 1999) and in section
+> "17.15 PCI Configuration Registers" there is subsection "Class Code and
+> Revision ID, Offset: 0x008" with content:
+> 
+> Bits  Field name Function                                           Initial Value
+> 7:0   RevID      Indicates the GT-64111 Revision number.            0x10
+>                   GT-64111-P-0 = 0x10
+> 15:8  Reserved                                                      0x0
+> 23:16 SubClass   Indicates the GT-64111 Subclass (0x80 - other mem- 0x80
+>                   ory controller)
+> 31:24 BaseClass  Indicates the GT-64111 Base Class (0x5 - memory    0x05
+>                   controller).
+> 
+> And in section "6.5.3 PCI Autoconfiguration at RESET" is following
+> interesting information:
+> 
+> Eight PCI registers can be automatically loaded after Rst*.
+> Autoconfiguration mode is enabled by asserting the DMAReq[3]* LOW on
+> Rst*. Any PCI transactions targeted for the GT-64111 will be retried
+> while the loading of the PCI configuration registers is in process.
+> 
+> It is highly recommended that all PC applications utilize the PCI
+> Autoconfiguration at RESET feature. The autoload feature can be easily
+> implemented with a very low cost EPLD. Galileo provides sample EPLD
+> equations upon request. (You can always pull the EPLD off your final
+> product if you find there are no issues during testing.)
+> 
+> NOTE: The GT-64111’s default Class Code is 0x0580 (Memory Controller)
+> which is a change from the GT-64011.
+> 
+> The GT-64011 used the Class Code 0x0600 which denotes Host Bridge. Some
+> PCs refuse to configure host bridges if they are found plugged into a
+> PCI slot (ask the BIOS vendors why...). The “Memory Controller” Class
+> Code does not cause a problem for these non-compliant BIOSes, so we used
+> this as the default in the GT-64111. The Class Code can be reporgrammed
+> in both devices via autoload or CPU register writes.
+> 
+> The PCI register values are loaded from the ROM controlled by BootCS*
+> are shown in Table 21, below.
+> 
+> TABLE 21. PCI Registers Loaded at RESET
+> Register                        Offset Boot Device Address
+> Device and Vendor ID            0x000  0x1fffffe0
+> Class Code and Revision ID      0x008  0x1fffffe4
+> Subsystem Device and Vendor ID  0x02c  0x1fffffe8
+> Interrupt Pin and Line          0x03c  0x1fffffec
+> RAS[1:0]* Bank Size             0xc08  0x1ffffff0
+> RAS[3:2]* Bank Size             0xc0c  0x1ffffff4
+> CS[2:0]* Bank Size              0xc10  0x1ffffff8
+> CS[3]* & Boot CS* Bank Size     0xc14  0x1ffffffc
+> 
+> ===
+> 
+> So the conclusion is that there is also some RESET configuration via
+> BootCS (I have no idea what it is or was). And default value (when RESET
+> configuration is not used) is always "Memory controller" due to
+> existence of "broken PC BIOSes" (probably x86).
+> 
+> Hence the quirk for GT64111 in kernel is always needed. And Thomas
+> already confirmed in his pci hexdump that PCI Class code is set to
+> Memory Controller.
+> 
+> I hope that now this mystery of this GT64111 quirk is solved :-) I will
+> update patch with correct comment, why quirk is needed.
+> 
+> So due to the fact that 20 years ago there were broken x86 BIOSes which
+> did not like PCI devices with PCI Class code of Host Bridge, Marvell
+> changed default PCI Class code to Memory Controller and let it in this
+> state also for future PCIe-based ARM and AR64 SoCs for next 20 years.
+> Which generally leaded to broken PCIe support in mvebu SoCs. I have no
+> more comments about it... :-(
 
-It's a block implementing few time related functions depending on a
-(SoC specific) variant. At this point there is ready binding for a
-watchdog only. Work on remaining subblocks (e.g. "reg" based reboot) is
-in progress.
+If this is really the case, that all this was "copied" in such a bad
+design state into newer SoC's for that many years, which I don't doubt
+right now any more, then this is absolutely amazing and pretty sad IMHO.
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
-V2: Update $id, description, compatible, example & commit message
----
- .../devicetree/bindings/mfd/brcm,twd.yaml     | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+Pali, many thanks for being persistant enough to dig through this.
 
-diff --git a/Documentation/devicetree/bindings/mfd/brcm,twd.yaml b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
-new file mode 100644
-index 000000000000..ed167055be06
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/brcm,twd.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom's Timer-Watchdog (aka TWD)
-+
-+maintainers:
-+  - Rafał Miłecki <rafal@milecki.pl>
-+
-+description: |
-+  Broadcom has a Timer-Watchdog block used in multiple SoCs (e.g., BCM4908,
-+  BCM63xx, BCM7038). There are few variants available (they differ slightly in
-+  registers layout). This block consists of: timers, watchdog and optionally a
-+  software reset handler.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+        - brcm,bcm4908-twd
-+        - brcm,bcm7038-twd
-+      - const: brcm,twd
-+      - const: simple-mfd
-+      - const: syscon
-+
-+  reg:
-+    maxItems: 1
-+
-+  ranges: true
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 1
-+
-+patternProperties:
-+  '^watchdog@[a-f0-9]+$':
-+    $ref: /schemas/watchdog/brcm,bcm7038-wdt.yaml
-+
-+additionalProperties: false
-+
-+required:
-+  - reg
-+
-+examples:
-+  - |
-+    timer-mfd@ff800400 {
-+        compatible = "brcm,bcm4908-twd", "brcm,twd", "simple-mfd", "syscon";
-+        reg = <0xff800400 0x4c>;
-+        ranges = <0x00000000 0xff800400 0x4c>;
-+
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        watchdog@28 {
-+            compatible = "brcm,bcm7038-wdt";
-+            reg = <0x28 0x8>;
-+        };
-+    };
--- 
-2.31.1
-
+Thanks,
+Stefan
