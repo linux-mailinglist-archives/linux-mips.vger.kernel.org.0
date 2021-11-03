@@ -2,64 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C08EF4437CB
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Nov 2021 22:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A49C443B99
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Nov 2021 03:50:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbhKBVa2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 2 Nov 2021 17:30:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48750 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229981AbhKBVa1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 2 Nov 2021 17:30:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6DF6F604D2;
-        Tue,  2 Nov 2021 21:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635888472;
-        bh=Wdy+R+mhNQrwqZyp2s0QHiaEem3L8ynEcoMWp7hsjsg=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=c7UC/O2pppVm2DFxmC3eTWUy9CnD40XWqzw3HnUfoJwzbJjDZ2G8XPhw2iodF/qHc
-         DiKV1Ajsd2aXoksyunHeftD3bpLLRBj6H42iqHPoseaQg/F3p/nvVp821qtBKYb7V/
-         wqMLiwlm3FQ1nU8JSoT5l1Lu+vUBqoARN8d9hYYmetFAoWgx6tg31i4n3oRXLxpgl9
-         bn5jeUWQ1Pgrdx1FpeJBq9Tjzn6sX+aAnTsEea21VLHheK2GgR2xMmt+q6/FfjB6S4
-         24WcdyjLxuoNd/XJKvDvc/zyUh6gL5xnLdLkt+AU7LeHpT/m8XKvHeqOznJ8YmF7jF
-         LefKU6BEi6GOw==
-Content-Type: text/plain; charset="utf-8"
+        id S230008AbhKCCwe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 2 Nov 2021 22:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229844AbhKCCwe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 2 Nov 2021 22:52:34 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575D0C061714
+        for <linux-mips@vger.kernel.org>; Tue,  2 Nov 2021 19:49:58 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id u2so1680278oiu.12
+        for <linux-mips@vger.kernel.org>; Tue, 02 Nov 2021 19:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pk9sYOS+33gx/6YxsrMWiCUGpnQuP13swEJcLFFH5oE=;
+        b=A8V6LwAg6j5jxIKWhUoNg6PASIlDlmViKxT1fVSFfLtWHTp3M1iQBPU6sD4NJI7kJM
+         Wp2AsR9XVhDFm7JUEmC/PQBX0QVd0HkbfoLYAHG7A9j6krXmtdEx57qbIRLQ71ryifld
+         8cwLUGwxrMP12ifr5T8wsVeoJjyzKAFni0jvv0cibsmY3LPBZavnTMhcdkNx3tPt1Z7R
+         vTG6Wj0+2JCY2Ega8gFVRI5tSvmnBiQXbEXMEPl8O6ojFDjrmDLKhlXPD6gPUzyvafNJ
+         BO5Rnq4prWavXzB44BUTO2jX8lQVl1CLTfTlgt3iZm8QLre0HiacQxr0gh3L3i3c1rI2
+         tL6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pk9sYOS+33gx/6YxsrMWiCUGpnQuP13swEJcLFFH5oE=;
+        b=TCtt6MscPTs7Zkq0JRc8JsopB23cG19rybtBeNde8IbfnyjGJZkzOUDLFsDl49OOgt
+         FWVTkmT7IxGZqAOzS2rMqhe1QZ8RnKc7+/KIH48zEgztlVDnyJOlCeNMKxCd8Zbg1k2A
+         adgDN0UsXFfy3hKlysTZRrMgPtD0Xg13AsRY61yGoaQqk/J3QU0xhwSLnhHm0rlRl6Jk
+         vXbg9kSBEn6ecZyGGxa8D7z+xzquNaRj0PdVRBtRIw4QdETX10C8ZMXCSweh2IMLSkJY
+         bD+Enh4nRIAa+jXcrK4c5ORG8U+9S8+VYTcdmbt+1FRoBvK2dCJpaKtoXm0y6s/LGVd7
+         aAoQ==
+X-Gm-Message-State: AOAM533H8gv9iNheElGD7nFozyzMc7UpCknxFRiUkvZSG+xXCMtnwiNH
+        B7EqKRPAW5+KReG11DXK1x0=
+X-Google-Smtp-Source: ABdhPJyi9YLpEHpPXeLKfr87ndnsb60uG4i+fOkUvXYQ44OlN20ACVIbS5wLTAmyLpT9+R6ETfdueA==
+X-Received: by 2002:a05:6808:f8b:: with SMTP id o11mr8151343oiw.5.1635907797788;
+        Tue, 02 Nov 2021 19:49:57 -0700 (PDT)
+Received: from localhost.localdomain ([8.26.182.76])
+        by smtp.gmail.com with ESMTPSA id h7sm219751otn.11.2021.11.02.19.49.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Nov 2021 19:49:57 -0700 (PDT)
+From:   Wang Haojun <jiangliuer01@gmail.com>
+X-Google-Original-From: Wang Haojun <wanghaojun@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Wang Haojun <wanghaojun@loongson.cn>,
+        Li Xuefeng <lixuefeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org
+Subject: [PATCH] MIPS: syscalls: Wire up futex_waitv syscall
+Date:   Wed,  3 Nov 2021 10:49:17 +0800
+Message-Id: <20211103024917.3611276-1-wanghaojun@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211001172033.122329-1-paul@crapouillou.net>
-References: <20211001172033.122329-1-paul@crapouillou.net>
-Subject: Re: [PATCH] clk: ingenic: Fix bugs with divided dividers
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-mips@vger.kernel.org, list@opendingux.net,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>,
-        Artur Rojek <contact@artur-rojek.eu>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Date:   Tue, 02 Nov 2021 14:27:51 -0700
-Message-ID: <163588847120.2993099.5234069019391601753@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Paul Cercueil (2021-10-01 10:20:33)
-> Two fixes in one:
->=20
-> - In the "impose hardware constraints" block, the "logical" divider
->   value (aka. not translated to the hardware) was clamped to fit in the
->   register area, but this totally ignored the fact that the divider
->   value can itself have a fixed divider.
->=20
-> - The code that made sure that the divider value returned by the
->   function was a multiple of its own fixed divider could result in a
->   wrong value being calculated, because it was rounded down instead of
->   rounded up.
->=20
-> Fixes: 4afe2d1a6ed5 ("clk: ingenic: Allow divider value to be divided")
-> Co-developed-by: Artur Rojek <contact@artur-rojek.eu>
-> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
+Wire up the futex_waitv syscall.
 
-Applied to clk-next
+Fix Build warning: #warning syscall futex_waitv not implemented [-Wcpp]
+
+Signed-off-by: Wang Haojun <wanghaojun@loongson.cn>
+---
+ arch/mips/kernel/syscalls/syscall_n32.tbl | 1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl | 1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl | 1 +
+ 3 files changed, 3 insertions(+)
+
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index 70e32de2bcaa..e497492eb72f 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -387,3 +387,4 @@
+ 446	n32	landlock_restrict_self		sys_landlock_restrict_self
+ # 447 reserved for memfd_secret
+ 448	n32	process_mrelease		sys_process_mrelease
++448	n32	futex_waitv			sys_futex_waitv
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 1ca7bc337932..e2c481fcede6 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -363,3 +363,4 @@
+ 446	n64	landlock_restrict_self		sys_landlock_restrict_self
+ # 447 reserved for memfd_secret
+ 448	n64	process_mrelease		sys_process_mrelease
++449	n64	futex_waitv			sys_futex_waitv
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index a61c35edaa74..3714c97b2643 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -436,3 +436,4 @@
+ 446	o32	landlock_restrict_self		sys_landlock_restrict_self
+ # 447 reserved for memfd_secret
+ 448	o32	process_mrelease		sys_process_mrelease
++449	o32	futex_waitv			sys_futex_waitv
+-- 
+2.27.0
+
