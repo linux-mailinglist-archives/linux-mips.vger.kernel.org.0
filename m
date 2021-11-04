@@ -2,58 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1D9444C1C
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 01:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BDF444C1F
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 01:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbhKDA3w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Nov 2021 20:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S232905AbhKDA3x (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Nov 2021 20:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbhKDA2k (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Nov 2021 20:28:40 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFC0C061714
-        for <linux-mips@vger.kernel.org>; Wed,  3 Nov 2021 17:26:03 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id n22-20020a6563d6000000b0029261ffde9bso2347304pgv.22
-        for <linux-mips@vger.kernel.org>; Wed, 03 Nov 2021 17:26:03 -0700 (PDT)
+        with ESMTP id S233158AbhKDA2m (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Nov 2021 20:28:42 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570C3C06127A
+        for <linux-mips@vger.kernel.org>; Wed,  3 Nov 2021 17:26:05 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id y124-20020a623282000000b0047a09271e49so2330706pfy.16
+        for <linux-mips@vger.kernel.org>; Wed, 03 Nov 2021 17:26:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=uUiF2cCeyvLcomA71gNb8UtnumiDOcYwDfMiXjWen6E=;
-        b=oTQ7zxZOtJdIWwrRYuqPf1zjANoRXpGs4d18yx/1uFcULOqfGSPv/eGnnTHt2OaFXl
-         Fw2Ja9jpx42JTWA+4xQHXaSDJzaLjB39qn72mpFaq/+8Pgyy1WE+Sui5ukzf7K0T1tch
-         WQUzSIOcUqQ4RYGuYqINyp9t2Du3YpUpxuubgXkNzI9EfzqleZjWAUTMgOc4YeGCZQie
-         KXx3n4rodQ4x96mmNgtB9r6T1WA9dTicsSrUIx+if+mPJuWUWAF+djp3CD78xEHLczgf
-         /8ph947YIr/9EVIDN0A2sn1MabQLXDCtd3nrNdsi57mxIxM3VfxgHreQqgiovSN/aw02
-         N1Uw==
+        bh=E63+zcqes7aObPmDEJrvowSyb7WASC2+JFrjiGuoOMk=;
+        b=G1EofX3RvsgDocbJ2WdlZIxLPrRqCOY3yk9dCpHXn3BrotBTcINoCOIdoZtnGuqNkz
+         XjduJywdhEpzM76x4KoUTmOMqDWGTwqBcR9WlCLJ/Ixo7OZNiFzolIn6uGeuv97Lynv7
+         ddl94QsCyWYRP1cDpWTxGlOfLjkpa9JMyPhL71/QGQqzOCEiWBc8/ntYod6VDaOBqRIS
+         X353qmmShX/kJORUwjw2weuKuQNgd6XS84Jwff3SPGUNlABXgf8tKjegkYwWGGN3YZ/S
+         LGQAetSmsnJyG5LH2Wdt7/WsV81v8KEKNpq61Fts5PSRMZc9eqQNsC0W+vLYcBCTaqSh
+         tOqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=uUiF2cCeyvLcomA71gNb8UtnumiDOcYwDfMiXjWen6E=;
-        b=v33IssvurySJ0ljCXh6HDoMFEqrWYJFYkXsOoF56VA+ut70bKrLxG3g5OfLTTr68Dj
-         JEeObX3UUam4LQkgD03H19/8IJ46DMtZoElvEq64nMaESvPkYR9zOscSrSmrtsMfCdLQ
-         uBmn/oGPNp+mHoqFBxJ4NsYTz/RMS6HztaUS36vHrgmg2u8kpzl7oBunn3CtfUjIYvB/
-         GwJP0Rs4M5kjkFosrwun0DEE+9YPy3UNcSinBNKtAVpGd+A2Dm/HTglfrp9CnOb7rWbH
-         xqX7xhfeerJ76DfVEzo5gflm6NQvRD3vjIylu31+SWeDaPXbxiKkoDwmAhapWqBZvSrD
-         O/WA==
-X-Gm-Message-State: AOAM533N7yhplMH87DCM6dRmd/jJj2JITA59/8znZx5GdTEzx2RqGwK1
-        PUWQZfTB2HO+OS5jfE+V/xM9A0qRbNI=
-X-Google-Smtp-Source: ABdhPJzS1sKm1vihVbRPixin8ADPxwIwiRu+sSSO0iFE9jTmdDmiJb4scGZK4H9WqPr37m1ISOQPandeoog=
+        bh=E63+zcqes7aObPmDEJrvowSyb7WASC2+JFrjiGuoOMk=;
+        b=6OSv4JxFMNuSarek1mm6oID61JUQhZ21WfM/i/rwthnshwYMRxBs+B9JGwMRx9II0h
+         3Y0TE9yXu8sIcQtMGdKXag+TLQytdgpd5Yv+nX2yM8U0ceb/Lwogzq/4x58dlCOdCJrr
+         I4ujwkXLlNj1/68qZePUpvl2pgasTz+ERvpfLt6SKbCKpRA0KXDEWdIxQ5b6uBysuxGT
+         RRdzl7zPnbANu4vI3AHp2rHBO3u8pI3KOettrFp5P5QA4xNdXWuzqU6RFl3pRDkiWhBJ
+         +0nE022AKrZ3I+DTPqxjgHuaDCSz+a2m5xuUsED4G2TNDafZkPJX0SgXU7gHFjmcZajc
+         yrlA==
+X-Gm-Message-State: AOAM530W/GEutGUlKGMzMaKDPRo2hlY67muxJA3moGGjHMnjhaCFxycz
+        qTsNcij1E3cvhxbJmTs3xuTshyBrcNw=
+X-Google-Smtp-Source: ABdhPJyxb/nQ01mzKYX4m8bfp03Ule2nAlwfJSHz9a05yqoefRBI+SnT6XPXcdLf6g/xUstLGwYZnueYC+Q=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:2181:b0:44c:f4bc:2f74 with SMTP id
- h1-20020a056a00218100b0044cf4bc2f74mr47622932pfi.68.1635985562987; Wed, 03
- Nov 2021 17:26:02 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a62:1b8e:0:b0:44c:9318:f6e1 with SMTP id
+ b136-20020a621b8e000000b0044c9318f6e1mr48578653pfb.84.1635985564791; Wed, 03
+ Nov 2021 17:26:04 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  4 Nov 2021 00:25:04 +0000
+Date:   Thu,  4 Nov 2021 00:25:05 +0000
 In-Reply-To: <20211104002531.1176691-1-seanjc@google.com>
-Message-Id: <20211104002531.1176691-4-seanjc@google.com>
+Message-Id: <20211104002531.1176691-5-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211104002531.1176691-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
-Subject: [PATCH v5.5 03/30] KVM: Require total number of memslot pages to fit
- in an unsigned long
+Subject: [PATCH v5.5 04/30] KVM: Open code kvm_delete_memslot() into its only caller
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -88,101 +87,78 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Explicitly disallow creating more memslot pages than can fit in an
-unsigned long, KVM doesn't correctly handle a total number of memslot
-pages that doesn't fit in an unsigned long and remedying that would be a
-waste of time.
+Fold kvm_delete_memslot() into __kvm_set_memory_region() to free up the
+"kvm_delete_memslot()" name for use in a future helper.  The delete logic
+isn't so complex/long that it truly needs a helper, and it will be
+simplified a wee bit further in upcoming commits.
 
-For a 64-bit kernel, this is a nop as memslots are not allowed to overlap
-in the gfn address space.
-
-With a 32-bit kernel, userspace can at most address 3gb of virtual memory,
-whereas wrapping the total number of pages would require 4tb+ of guest
-physical memory.  Even with x86's second address space for SMM, userspace
-would need to alias all of guest memory more than one _thousand_ times.
-And on older x86 hardware with MAXPHYADDR < 43, the guest couldn't
-actually access any of those aliases even if userspace lied about
-guest.MAXPHYADDR.
-
-On 390 and arm64, this is a nop as they don't support 32-bit hosts.
-
-On x86, practically speaking this is simply acknowledging reality as the
-existing kvm_mmu_calculate_default_mmu_pages() assumes the total number
-of pages fits in an "unsigned long".
-
-On PPC, this is likely a nop as every flavor of PPC KVM assumes gfns (and
-gpas!) fit in unsigned long.  arch/powerpc/kvm/book3s_32_mmu_host.c goes
-a step further and fails the build if CONFIG_PTE_64BIT=y, which
-presumably means that it does't support 64-bit physical addresses.
-
-On MIPS, this is also likely a nop as the core MMU helpers assume gpas
-fit in unsigned long, e.g. see kvm_mips_##name##_pte.
-
-And finally, RISC-V is a "don't care" as it doesn't exist in any release,
-i.e. there is no established ABI to break.
+No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- include/linux/kvm_host.h |  1 +
- virt/kvm/kvm_main.c      | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+)
+ virt/kvm/kvm_main.c | 42 +++++++++++++++++-------------------------
+ 1 file changed, 17 insertions(+), 25 deletions(-)
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 60a35d9fe259..d8e92d4a78d8 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -551,6 +551,7 @@ struct kvm {
- 	 */
- 	struct mutex slots_arch_lock;
- 	struct mm_struct *mm; /* userspace tied to this vm */
-+	unsigned long nr_memslot_pages;
- 	struct kvm_memslots __rcu *memslots[KVM_ADDRESS_SPACE_NUM];
- 	struct kvm_vcpu *vcpus[KVM_MAX_VCPUS];
- 
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 83287730389f..264c4b16520b 100644
+index 264c4b16520b..6171ddb3e31c 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -1623,6 +1623,15 @@ static int kvm_set_memslot(struct kvm *kvm,
- 	update_memslots(slots, new, change);
- 	slots = install_new_memslots(kvm, as_id, slots);
+@@ -1653,29 +1653,6 @@ static int kvm_set_memslot(struct kvm *kvm,
+ 	return r;
+ }
  
-+	/*
-+	 * Update the total number of memslot pages before calling the arch
-+	 * hook so that architectures can consume the result directly.
-+	 */
-+	if (change == KVM_MR_DELETE)
-+		kvm->nr_memslot_pages -= old.npages;
-+	else if (change == KVM_MR_CREATE)
-+		kvm->nr_memslot_pages += new->npages;
-+
- 	kvm_arch_commit_memory_region(kvm, mem, &old, new, change);
+-static int kvm_delete_memslot(struct kvm *kvm,
+-			      const struct kvm_userspace_memory_region *mem,
+-			      struct kvm_memory_slot *old, int as_id)
+-{
+-	struct kvm_memory_slot new;
+-
+-	if (!old->npages)
+-		return -EINVAL;
+-
+-	if (WARN_ON_ONCE(kvm->nr_memslot_pages < old->npages))
+-		return -EIO;
+-
+-	memset(&new, 0, sizeof(new));
+-	new.id = old->id;
+-	/*
+-	 * This is only for debugging purpose; it should never be referenced
+-	 * for a removed memslot.
+-	 */
+-	new.as_id = as_id;
+-
+-	return kvm_set_memslot(kvm, mem, &new, as_id, KVM_MR_DELETE);
+-}
+-
+ /*
+  * Allocate some memory and give it an address in the guest physical address
+  * space.
+@@ -1732,8 +1709,23 @@ int __kvm_set_memory_region(struct kvm *kvm,
+ 		old.id = id;
+ 	}
  
- 	/* Free the old memslot's metadata.  Note, this is the full copy!!! */
-@@ -1653,6 +1662,9 @@ static int kvm_delete_memslot(struct kvm *kvm,
- 	if (!old->npages)
- 		return -EINVAL;
- 
-+	if (WARN_ON_ONCE(kvm->nr_memslot_pages < old->npages))
-+		return -EIO;
-+
- 	memset(&new, 0, sizeof(new));
- 	new.id = old->id;
- 	/*
-@@ -1736,6 +1748,13 @@ int __kvm_set_memory_region(struct kvm *kvm,
- 	if (!old.npages) {
- 		change = KVM_MR_CREATE;
- 		new.dirty_bitmap = NULL;
-+
-+		/*
-+		 * To simplify KVM internals, the total number of pages across
-+		 * all memslots must fit in an unsigned long.
-+		 */
-+		if ((kvm->nr_memslot_pages + new.npages) < kvm->nr_memslot_pages)
+-	if (!mem->memory_size)
+-		return kvm_delete_memslot(kvm, mem, &old, as_id);
++	if (!mem->memory_size) {
++		if (!old.npages)
 +			return -EINVAL;
- 	} else { /* Modify an existing slot. */
- 		if ((new.userspace_addr != old.userspace_addr) ||
- 		    (new.npages != old.npages) ||
++
++		if (WARN_ON_ONCE(kvm->nr_memslot_pages < old.npages))
++			return -EIO;
++
++		memset(&new, 0, sizeof(new));
++		new.id = id;
++		/*
++		 * This is only for debugging purpose; it should never be
++		 * referenced for a removed memslot.
++		 */
++		new.as_id = as_id;
++
++		return kvm_set_memslot(kvm, mem, &new, as_id, KVM_MR_DELETE);
++	}
+ 
+ 	new.as_id = as_id;
+ 	new.id = id;
 -- 
 2.33.1.1089.g2158813163f-goog
 
