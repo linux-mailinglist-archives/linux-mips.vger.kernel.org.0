@@ -2,58 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E0E444C29
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 01:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AED7444C2B
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 01:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbhKDA34 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Nov 2021 20:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S232942AbhKDA35 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Nov 2021 20:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbhKDA2t (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Nov 2021 20:28:49 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBE9C061203
-        for <linux-mips@vger.kernel.org>; Wed,  3 Nov 2021 17:26:12 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id g26-20020a63521a000000b0029524f04f5aso2404019pgb.5
-        for <linux-mips@vger.kernel.org>; Wed, 03 Nov 2021 17:26:12 -0700 (PDT)
+        with ESMTP id S233241AbhKDA2v (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Nov 2021 20:28:51 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD909C061714
+        for <linux-mips@vger.kernel.org>; Wed,  3 Nov 2021 17:26:14 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id b23-20020a170902d89700b001415444f5a6so1946704plz.7
+        for <linux-mips@vger.kernel.org>; Wed, 03 Nov 2021 17:26:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=tLQvwVMFuRU1rudmVd+Ot8DGDwWCKV2XWE4z9OvxcSI=;
-        b=aidjRg109rDQhcbEOaDvYUP/J6xeFiJXWQHPB/9inpIU47CGJj4EB+RwhcIG070Mie
-         lVHTfvEeNG2Brzpgw8EZNdAVeUVZ4nNqCUo0Ix5XLJ0H18oJo/2rFOKMzl6fWLSJY191
-         J6xXKGp+3siToXIqVebLKzjgDI+yAMnV78lg50hWKNPX/pVq2TrOflawSIczG+Lqobke
-         Z0ZzafsHPcdo8PEDuhw/rn2m58dsopFaT3sRkFsFmilo83Ii5s7nnixu4BD3y0cdffxJ
-         kzs8TJbXMv5IItYIkJSv/EhZBtHn1F5Yu5VOIhoRSGmVNkoq+MSSDwRM5budJwMaPSM5
-         i1ew==
+        bh=8x8y6LCkLptxfKHX5+pDaTNp73wBECOiN1YdxqMK+rA=;
+        b=Kwf8l4ALLidbOCnsA8IZb7EGVbQY2I/GyIc70v/xPgAN2uNZmJzzLzZJfwAX2uOOCO
+         bOK9U8USa/+T5EGJ5WM+xo1wGM21VgQud3S9i76kNITLTzwA0wNdnUr/fJDAgqhSvhap
+         Yw0ASqeY//wjIN0mhEQ3qwyRthBADSpw3C4ZFZ4+KorPOGjjv9GHHalj2Z0JVLcN7rKX
+         1aJXnhddEMDTeyAz0wqrWJZzkxWK24hOVug2NjMIF6/CfNf9YTCoQnGyCXWnO5Qwes4j
+         g5HbrauvOLkXEcvWsWbG0nodw7IIljy/H4UiUpBEQUah5lbLSlwy7/6wMiTLEuWxciTS
+         tAtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=tLQvwVMFuRU1rudmVd+Ot8DGDwWCKV2XWE4z9OvxcSI=;
-        b=Z5D+xQAZmEHqHxRMA0fPqZ3WqEhJE7/r9TdNRJP5r44AQicNds0/DD83oDbqNmy6Sm
-         NADJNlHIsR89PPI/iZWHhBIBSpzSUGAtvFsLSbdyty3bzOguV4mP1/T9WogXmPQnfeIA
-         pbCabgjah/6/BWEub9QCVMuVRYHCAPxxnlIK8542LPvWS/oMXsP/rM0GimKTezX75nT9
-         SCKQSES5Jr12A+0nbCUGDCA36Eh5853eEaI28DyJ6icGRRrFIjoKTMUQZ4WcOeAQf5yN
-         uUfMOqJ2HXpoDZqBxowGC4dFz6aR14vcLcGTsOoZmaC/4NdenbiIS2m/P0fXys82nNCt
-         RBCA==
-X-Gm-Message-State: AOAM5330TY2yvWumLmRqD2lo+N7qlOsUE2lSBTLRMEZUV1hVl1TgbrYT
-        c02kUCctZHvZAMjTVHrmkIrm94EucEw=
-X-Google-Smtp-Source: ABdhPJwCsMzZuRxv6iw0pTuYU4/wjVIfD1uNyeuH4Gna3eUrPsMPSwpB1c5wUSrPuzkGj84qqgXi63hO2s0=
+        bh=8x8y6LCkLptxfKHX5+pDaTNp73wBECOiN1YdxqMK+rA=;
+        b=rPV7o1ooOTKY3avXgNkpNfsIPHalYG8CTVVdUsAG/2JTeWzgy39v8GpW/xDrUKumNa
+         bwiaW73iJW+Go7sWypnxxIdyORWagDBis6tKWZysvL546kM2pmhs4dLGYZ9l8FG81WsQ
+         Sh4WkUOHy4ib8Kj6mkYGcygzh7X9BcNf4JAg8ZONYC+iveA5jvIlZTjeK0/luLCptt64
+         cIskedVUegE127eTEOeKkoTuoDRYPQDfCmh2RjWyE7i3m4V30aWh9/lB0YRK3ekR5uDL
+         pgK9WQN0w5x8p6NE+wWQ9JC4k40AEFa6f8utnF7kW6vp1If3wifwsIompnZWtG9ypBlS
+         Jnyw==
+X-Gm-Message-State: AOAM5332g2RKpLz5fmT/KFXPJiKSJ23JU0kafY8wmoivf+Y035TtreFk
+        NPvhe7KZvswsFLlUtnwheZK/7AkZgno=
+X-Google-Smtp-Source: ABdhPJxsJ29Wj32AtuAm6joDY8iQebT4Rnu7/phTa+MfeSdX22KfADwkK1eYIPGppvLFyQSyOgzQ6GfE4Fg=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1484:b0:48c:2e58:8d39 with SMTP id
- v4-20020a056a00148400b0048c2e588d39mr11085289pfu.13.1635985571770; Wed, 03
- Nov 2021 17:26:11 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:5285:: with SMTP id
+ w5mr261308pjh.1.1635985573544; Wed, 03 Nov 2021 17:26:13 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  4 Nov 2021 00:25:09 +0000
+Date:   Thu,  4 Nov 2021 00:25:10 +0000
 In-Reply-To: <20211104002531.1176691-1-seanjc@google.com>
-Message-Id: <20211104002531.1176691-9-seanjc@google.com>
+Message-Id: <20211104002531.1176691-10-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211104002531.1176691-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
-Subject: [PATCH v5.5 08/30] KVM: arm64: Use "new" memslot instead of userspace
- memory region
+Subject: [PATCH v5.5 09/30] KVM: MIPS: Drop pr_debug from memslot commit to
+ avoid using "mem"
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -88,61 +87,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Get the slot ID, hva, etc... from the "new" memslot instead of the
-userspace memory region when preparing/committing a memory region.  This
-will allow a future commit to drop @mem from the prepare/commit hooks
-once all architectures convert to using "new".
+Remove an old (circa 2012) kvm_debug from kvm_arch_commit_memory_region()
+to print basic information when committing a memslot change.  The primary
+motivation for removing the kvm_debug is to avoid using @mem, the user
+memory region, so that said param can be removed.
 
-Opportunistically wait to get the hva begin+end until after filtering out
-the DELETE case in anticipation of a future commit passing NULL for @new
-when deleting a memslot.
+Alternatively, the debug message could be converted to use @new, but that
+would require synthesizing select state to play nice with the DELETED
+case, which will pass NULL for @new in the future.  And there's no
+argument to be had for dumping generic information in an arch callback,
+i.e. if there's a good reason for the debug message, then it belongs in
+common KVM code where all architectures can benefit.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/arm64/kvm/mmu.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ arch/mips/kvm/mips.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index cc41eadfbbf4..21213cba7c47 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -1473,14 +1473,14 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
- 	 * allocated dirty_bitmap[], dirty pages will be tracked while the
- 	 * memory slot is write protected.
- 	 */
--	if (change != KVM_MR_DELETE && mem->flags & KVM_MEM_LOG_DIRTY_PAGES) {
-+	if (change != KVM_MR_DELETE && new->flags & KVM_MEM_LOG_DIRTY_PAGES) {
- 		/*
- 		 * If we're with initial-all-set, we don't need to write
- 		 * protect any pages because they're all reported as dirty.
- 		 * Huge pages and normal pages will be write protect gradually.
- 		 */
- 		if (!kvm_dirty_log_manual_protect_and_init_set(kvm)) {
--			kvm_mmu_wp_memory_region(kvm, mem->slot);
-+			kvm_mmu_wp_memory_region(kvm, new->id);
- 		}
- 	}
- }
-@@ -1491,8 +1491,7 @@ int kvm_arch_prepare_memory_region(struct kvm *kvm,
- 				   struct kvm_memory_slot *new,
- 				   enum kvm_mr_change change)
+diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+index 8c94cd4093af..b7aa8fa4a5fb 100644
+--- a/arch/mips/kvm/mips.c
++++ b/arch/mips/kvm/mips.c
+@@ -249,10 +249,6 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
  {
--	hva_t hva = mem->userspace_addr;
--	hva_t reg_end = hva + mem->memory_size;
-+	hva_t hva, reg_end;
- 	int ret = 0;
+ 	int needs_flush;
  
- 	if (change != KVM_MR_CREATE && change != KVM_MR_MOVE &&
-@@ -1506,6 +1505,9 @@ int kvm_arch_prepare_memory_region(struct kvm *kvm,
- 	if ((new->base_gfn + new->npages) > (kvm_phys_size(kvm) >> PAGE_SHIFT))
- 		return -EFAULT;
- 
-+	hva = new->userspace_addr;
-+	reg_end = hva + (new->npages << PAGE_SHIFT);
-+
- 	mmap_read_lock(current->mm);
+-	kvm_debug("%s: kvm: %p slot: %d, GPA: %llx, size: %llx, QVA: %llx\n",
+-		  __func__, kvm, mem->slot, mem->guest_phys_addr,
+-		  mem->memory_size, mem->userspace_addr);
+-
  	/*
- 	 * A memory region could potentially cover multiple VMAs, and any holes
+ 	 * If dirty page logging is enabled, write protect all pages in the slot
+ 	 * ready for dirty logging.
 -- 
 2.33.1.1089.g2158813163f-goog
 
