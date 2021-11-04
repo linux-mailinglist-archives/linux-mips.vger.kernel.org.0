@@ -2,56 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEF3444C44
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 01:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B050444C48
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 01:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbhKDAaM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Nov 2021 20:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
+        id S233411AbhKDAaN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Nov 2021 20:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233394AbhKDA3M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Nov 2021 20:29:12 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEA5C061205
-        for <linux-mips@vger.kernel.org>; Wed,  3 Nov 2021 17:26:35 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id r30-20020aa7989e000000b004812fdc343eso2344339pfl.9
-        for <linux-mips@vger.kernel.org>; Wed, 03 Nov 2021 17:26:35 -0700 (PDT)
+        with ESMTP id S233409AbhKDA3O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Nov 2021 20:29:14 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3BDC061203
+        for <linux-mips@vger.kernel.org>; Wed,  3 Nov 2021 17:26:37 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id m17-20020a170902db1100b001421cb34857so1661855plx.15
+        for <linux-mips@vger.kernel.org>; Wed, 03 Nov 2021 17:26:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=FUEi7KfqPphzymRQTGTbfOx/MaI4KzNKcipjuT8FVdY=;
-        b=dFLgxm0c72Sa9o7RZRhGakedthtd0rFQ9fxpUH7hzUonvUmaEHzTEnr9Z7QKN+CMp/
-         UnHWs+AkXOLJwNuZqSXK1TbkIXte514NBf/fueQC3NI4aiWd2h85ZQ55FxOM3E6EZZr8
-         49Ow/tJTyTy5Xhf5TSJTHjUY9Vrt2JWRXIpRq3jtBZ24fzBy9ywvoMoucypPleHtz7Bt
-         nyGl9zsi/YAZTSoy9L2rlvKnLcaek2cAGwNHMKjOBf2K1E/oRLqh2gz69UfhBmUXR2vR
-         bqL0iE5lPgi5OSkY6KeTt/6FnfFKdVm554W2sAwUPzX0qvPyOIEUQT5iY+zRVA9g6jW8
-         c+tA==
+        bh=z9H8IQzlDNgV44iopVPD/a5Trpa0ZdTpJckFcsIyzz0=;
+        b=YKpIJ4e4/wfganLDuC8K208Zpsp5JVcK50xnWQQTLSFM+X50LE78T6m87p5qT3DblR
+         Oqy3rk1VQsN1i/paB2gXcz5pvl+Jhd8ELjKdXAD0WmwFnDoXvIApQ5t8wATtH/xHBo3e
+         E3zgwsISbQWVPjz/S1RIgDi94l9z3MF9WBJMMJEtMbLYrCmw/M0/pklTGnCcvsIM1IzC
+         7p8hk9aIycQqutIs+/eYz7g/lbNHI/oVf07ie2vQl+tlRkiyfau6HsmDc9DeODVl5ybk
+         WJzJ95EFnzX+H5HwRah9xIveGt9v2x/cU0TbcVn1MuEYGyTz7eHSGiF0kmPeMBG8mGAx
+         hpBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=FUEi7KfqPphzymRQTGTbfOx/MaI4KzNKcipjuT8FVdY=;
-        b=WT+6fSeaq6QoNrPXcDtIB9BKxkuXCY3/o2JmFHYuVGJFpLGGfc+D7ROpNIfPHB5F35
-         1nwzH4yacV2N8ekqdg0sZmG+OFHAwYrUrKtQ9wPprH5H5BJ54pKxBhgW3NoRlUfnPFlJ
-         UuJXJdyeaJc1gHSm2s/VqkpsaKyoVT+8FnGYmkmWLiReFK9KoOpQ/SM/xLGMUTPU9PZm
-         mRBOg8kwPg6EcfcX3+SUD0g1VEFtjtrVUQgzS2SNO+d+o+9v3KeUQ7nQwutPx7QrEvXj
-         FDSf8nvTI8DIdVHbcdUDRoHug994xtXkkLEJ6RQn9ge2PQqc+68ZULTYzW5JAqs52LAk
-         C26g==
-X-Gm-Message-State: AOAM531J392viUQYN8pD+pSbmcZr5q27pRBiYWypk0arzPGYU9iPXZK+
-        wiQr4O+B7anhbse+wPF0G3v6ldi+1ws=
-X-Google-Smtp-Source: ABdhPJzI7wXfhmzIb07WZ6IKVyEUUmbTY3InZMh88rZP6YElu9I5y2TlNvxIb1UtjdEBVBmnF7+gpU4SBUM=
+        bh=z9H8IQzlDNgV44iopVPD/a5Trpa0ZdTpJckFcsIyzz0=;
+        b=VqrhmbQS1HcQiqk26e1JdoqRx28/ULu9douK6Qvv430I+OwZDUOJe234wBVSZ69L91
+         cK+57KV+2fW+7B2d+LWUkNyzNRD5r/2iZIIETvJFWR5o011xBVfrFBTpcsu9gKmZ9XNj
+         SYgfMdQKZI785XHFsngfE9hLxrSf1Qcmds9UsiXC6ExTL81vOe9loSNsf7ZUHsAX7FQI
+         o1ZgVOVTnLYAEZmyOh4Vxj3gmS+qnB2pGkZPA9Rqdg9CvhXmvR0K+oaJIRdInEBGUrpS
+         7hjDBDjFagrrCyulj96fjmcNhpdfMoFB1iHCRWiiGcTMslEnVf2WvovbsKhNLN4r4ZmF
+         4PLg==
+X-Gm-Message-State: AOAM53343hd9q88631uNxjiHNo8iKzi7iJWrVZ5hQgCNCQJ2wH8pT2dp
+        uMdDLYYKkeAr42DYJKs7yvohb4PXcTI=
+X-Google-Smtp-Source: ABdhPJzonurVPT2PlJyw4WaELXDlFkKjeT4hoSllYUuMDrNarwts75/W8wr8EQC45lWUJfQCoW+ypti7LUM=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:c3:: with SMTP id
- v3mr252447pjd.0.1635985594374; Wed, 03 Nov 2021 17:26:34 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:5285:: with SMTP id
+ w5mr261421pjh.1.1635985596589; Wed, 03 Nov 2021 17:26:36 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  4 Nov 2021 00:25:22 +0000
+Date:   Thu,  4 Nov 2021 00:25:23 +0000
 In-Reply-To: <20211104002531.1176691-1-seanjc@google.com>
-Message-Id: <20211104002531.1176691-22-seanjc@google.com>
+Message-Id: <20211104002531.1176691-23-seanjc@google.com>
 Mime-Version: 1.0
 References: <20211104002531.1176691-1-seanjc@google.com>
 X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
-Subject: [PATCH v5.5 21/30] KVM: Integrate gfn_to_memslot_approx() into search_memslots()
+Subject: [PATCH v5.5 22/30] KVM: Move WARN on invalid memslot index to update_memslots()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
@@ -88,181 +88,42 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
 
-s390 arch has gfn_to_memslot_approx() which is almost identical to
-search_memslots(), differing only in that in case the gfn falls in a hole
-one of the memslots bordering the hole is returned.
-
-Add this lookup mode as an option to search_memslots() so we don't have two
-almost identical functions for looking up a memslot by its gfn.
+Since kvm_memslot_move_forward() can theoretically return a negative
+memslot index even when kvm_memslot_move_backward() returned a positive one
+(and so did not WARN) let's just move the warning to the common code.
 
 Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-[sean: tweaked helper names to keep gfn_to_memslot_approx() in s390]
+Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/s390/kvm/kvm-s390.c | 45 +++++++---------------------------------
- include/linux/kvm_host.h | 35 ++++++++++++++++++++++++-------
- virt/kvm/kvm_main.c      |  2 +-
- 3 files changed, 36 insertions(+), 46 deletions(-)
+ virt/kvm/kvm_main.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index c4d0ed5f3400..4e032e176216 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -1941,41 +1941,6 @@ static long kvm_s390_set_skeys(struct kvm *kvm, struct kvm_s390_skeys *args)
- /* for consistency */
- #define KVM_S390_CMMA_SIZE_MAX ((u32)KVM_S390_SKEYS_MAX)
- 
--/*
-- * Similar to gfn_to_memslot, but returns the index of a memslot also when the
-- * address falls in a hole. In that case the index of one of the memslots
-- * bordering the hole is returned.
-- */
--static int gfn_to_memslot_approx(struct kvm_memslots *slots, gfn_t gfn)
--{
--	int start = 0, end = slots->used_slots;
--	int slot = atomic_read(&slots->last_used_slot);
--	struct kvm_memory_slot *memslots = slots->memslots;
--
--	if (gfn >= memslots[slot].base_gfn &&
--	    gfn < memslots[slot].base_gfn + memslots[slot].npages)
--		return slot;
--
--	while (start < end) {
--		slot = start + (end - start) / 2;
--
--		if (gfn >= memslots[slot].base_gfn)
--			end = slot;
--		else
--			start = slot + 1;
--	}
--
--	if (start >= slots->used_slots)
--		return slots->used_slots - 1;
--
--	if (gfn >= memslots[start].base_gfn &&
--	    gfn < memslots[start].base_gfn + memslots[start].npages) {
--		atomic_set(&slots->last_used_slot, start);
--	}
--
--	return start;
--}
--
- static int kvm_s390_peek_cmma(struct kvm *kvm, struct kvm_s390_cmma_log *args,
- 			      u8 *res, unsigned long bufsize)
- {
-@@ -1999,11 +1964,17 @@ static int kvm_s390_peek_cmma(struct kvm *kvm, struct kvm_s390_cmma_log *args,
- 	return 0;
- }
- 
-+static struct kvm_memory_slot *gfn_to_memslot_approx(struct kvm_memslots *slots,
-+						     gfn_t gfn)
-+{
-+	return ____gfn_to_memslot(slots, gfn, true);
-+}
-+
- static unsigned long kvm_s390_next_dirty_cmma(struct kvm_memslots *slots,
- 					      unsigned long cur_gfn)
- {
--	int slotidx = gfn_to_memslot_approx(slots, cur_gfn);
--	struct kvm_memory_slot *ms = slots->memslots + slotidx;
-+	struct kvm_memory_slot *ms = gfn_to_memslot_approx(slots, cur_gfn);
-+	int slotidx = ms - slots->memslots;
- 	unsigned long ofs = cur_gfn - ms->base_gfn;
- 
- 	if (ms->base_gfn + ms->npages <= cur_gfn) {
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 2ef946e94a73..9d46937a3a4e 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1230,10 +1230,14 @@ try_get_memslot(struct kvm_memslots *slots, int slot_index, gfn_t gfn)
-  * Returns a pointer to the memslot that contains gfn and records the index of
-  * the slot in index. Otherwise returns NULL.
-  *
-+ * With "approx" set returns the memslot also when the address falls
-+ * in a hole. In that case one of the memslots bordering the hole is
-+ * returned.
-+ *
-  * IMPORTANT: Slots are sorted from highest GFN to lowest GFN!
-  */
- static inline struct kvm_memory_slot *
--search_memslots(struct kvm_memslots *slots, gfn_t gfn, int *index)
-+search_memslots(struct kvm_memslots *slots, gfn_t gfn, int *index, bool approx)
- {
- 	int start = 0, end = slots->used_slots;
- 	struct kvm_memory_slot *memslots = slots->memslots;
-@@ -1251,22 +1255,26 @@ search_memslots(struct kvm_memslots *slots, gfn_t gfn, int *index)
- 			start = slot + 1;
- 	}
- 
-+	if (approx && start >= slots->used_slots) {
-+		*index = slots->used_slots - 1;
-+		return &memslots[slots->used_slots - 1];
-+	}
-+
- 	slot = try_get_memslot(slots, start, gfn);
- 	if (slot) {
- 		*index = start;
- 		return slot;
- 	}
-+	if (approx) {
-+		*index = start;
-+		return &memslots[start];
-+	}
- 
- 	return NULL;
- }
- 
--/*
-- * __gfn_to_memslot() and its descendants are here because it is called from
-- * non-modular code in arch/powerpc/kvm/book3s_64_vio{,_hv}.c. gfn_to_memslot()
-- * itself isn't here as an inline because that would bloat other code too much.
-- */
- static inline struct kvm_memory_slot *
--__gfn_to_memslot(struct kvm_memslots *slots, gfn_t gfn)
-+____gfn_to_memslot(struct kvm_memslots *slots, gfn_t gfn, bool approx)
- {
- 	struct kvm_memory_slot *slot;
- 	int slot_index = atomic_read(&slots->last_used_slot);
-@@ -1275,7 +1283,7 @@ __gfn_to_memslot(struct kvm_memslots *slots, gfn_t gfn)
- 	if (slot)
- 		return slot;
- 
--	slot = search_memslots(slots, gfn, &slot_index);
-+	slot = search_memslots(slots, gfn, &slot_index, approx);
- 	if (slot) {
- 		atomic_set(&slots->last_used_slot, slot_index);
- 		return slot;
-@@ -1284,6 +1292,17 @@ __gfn_to_memslot(struct kvm_memslots *slots, gfn_t gfn)
- 	return NULL;
- }
- 
-+/*
-+ * __gfn_to_memslot() and its descendants are here to allow arch code to inline
-+ * the lookups in hot paths.  gfn_to_memslot() itself isn't here as an inline
-+ * because that would bloat other code too much.
-+ */
-+static inline struct kvm_memory_slot *
-+__gfn_to_memslot(struct kvm_memslots *slots, gfn_t gfn)
-+{
-+	return ____gfn_to_memslot(slots, gfn, false);
-+}
-+
- static inline unsigned long
- __gfn_to_hva_memslot(const struct kvm_memory_slot *slot, gfn_t gfn)
- {
 diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index bbaa01afac43..a2d51ce957e1 100644
+index a2d51ce957e1..d45d574a5a2d 100644
 --- a/virt/kvm/kvm_main.c
 +++ b/virt/kvm/kvm_main.c
-@@ -2126,7 +2126,7 @@ struct kvm_memory_slot *kvm_vcpu_gfn_to_memslot(struct kvm_vcpu *vcpu, gfn_t gfn
- 	 * search_memslots() instead of __gfn_to_memslot() to avoid
- 	 * thrashing the VM-wide last_used_index in kvm_memslots.
- 	 */
--	slot = search_memslots(slots, gfn, &slot_index);
-+	slot = search_memslots(slots, gfn, &slot_index, false);
- 	if (slot) {
- 		vcpu->last_used_slot = slot_index;
- 		return slot;
+@@ -1307,8 +1307,7 @@ static inline int kvm_memslot_move_backward(struct kvm_memslots *slots,
+ 	struct kvm_memory_slot *mslots = slots->memslots;
+ 	int i;
+ 
+-	if (WARN_ON_ONCE(slots->id_to_index[memslot->id] == -1) ||
+-	    WARN_ON_ONCE(!slots->used_slots))
++	if (slots->id_to_index[memslot->id] == -1 || !slots->used_slots)
+ 		return -1;
+ 
+ 	/*
+@@ -1412,6 +1411,9 @@ static void update_memslots(struct kvm_memslots *slots,
+ 			i = kvm_memslot_move_backward(slots, memslot);
+ 		i = kvm_memslot_move_forward(slots, memslot, i);
+ 
++		if (WARN_ON_ONCE(i < 0))
++			return;
++
+ 		/*
+ 		 * Copy the memslot to its new position in memslots and update
+ 		 * its index accordingly.
 -- 
 2.33.1.1089.g2158813163f-goog
 
