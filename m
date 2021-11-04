@@ -2,459 +2,220 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E50C5444B67
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 00:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BB1444C15
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 01:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbhKCXRW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 3 Nov 2021 19:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S233679AbhKDA3u (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 3 Nov 2021 20:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbhKCXRN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Nov 2021 19:17:13 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83546C06120F;
-        Wed,  3 Nov 2021 16:14:29 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id x64so3946535pfd.6;
-        Wed, 03 Nov 2021 16:14:29 -0700 (PDT)
+        with ESMTP id S233105AbhKDA2g (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 3 Nov 2021 20:28:36 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B86DC061714
+        for <linux-mips@vger.kernel.org>; Wed,  3 Nov 2021 17:25:59 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id y124-20020a623282000000b0047a09271e49so2330556pfy.16
+        for <linux-mips@vger.kernel.org>; Wed, 03 Nov 2021 17:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zWHBIEcvoeupNEkr+7OvuNvuzEArssjhvYw0m7qAAEk=;
-        b=h1fxT2PIqk5MHEGIC1L9l5GqP4j2951iSrhTbrC4IzsJ0g/rSLJifK6HJlP7r8sOCv
-         0y+kUnnM6FwBUC1ilxgJiFLOccIYm8CPYX1ZhsQ99UlIZwJ+tpQYeG3Y46i1yuYhCRkC
-         79le6u9lZSgRH8zI9MlBrrgGCP59nhFn6Uq7i85VVlrg/Qkk6jDNItrENMTOdJPg3e27
-         r30PpKjTZcn6VKacwAN5XzMB0T5nsl7qNpAdA8qmPtCBtnT6pIHGR/ivM1bKl+bwTQzH
-         29rOfHTa7i/lj6GLbGKvZEAT00IB5vlzJqAxbAXm7UsjA5Sp9xl2WtRo3CtbXtABlLWP
-         0JJw==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=ANJRuFa6/N/mrCRTja+awZQkxH6czfCyQf64cMZwz24=;
+        b=WcXudEzcD22tH+HPG355uae4O/TbLzq7rMXZkNlJ48SpnvVzn/SR3sHk8XQtIKtfFy
+         48xyMqlSGgw1oTNAo0R/J1vgWG1e93UerRyqKUD5Qa2c4/ULYf5WGk93DChSYqJ9agNH
+         Fa9nJgKDtBpUeiYCj9euvUxsBrArkkfyhnSH1PJXr2Gl/88Cl0a4CGn9Y4iADsm2poc/
+         3MOL6YBHtOByIy6pf9yCo8zV4vME+dV5MfimvChSWTjN9iYTgoDtkS3nqw29fVsbEqKV
+         PJA6Jv6ck5l08RPLmQ8vK5IF61aQorHOz4MISeHyAQxK20Y0bx5AN/DrWmyFqvqM0FL4
+         ZOMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zWHBIEcvoeupNEkr+7OvuNvuzEArssjhvYw0m7qAAEk=;
-        b=ZD5EY0Aw4N8g2ohv+JchxRb0pp/M+XmgO9jJqKigAGrYS6YNWhXp35OhYP6XCDPs8o
-         wQWJ63V+BQ6UIna+scldSWk4Xigp4YPrsVQTtCyoQPWwQJrzRQ0A/S8lWb2vk12DroiW
-         mjYMldMV0aIhx+IiHK4+bItzFIl3l2FtGB9mFb+IBhDtkro919ToL/oRjMpS1yX4GqKV
-         9Pf+oF6ptK3CAt3J5OrsJ2v7cBBmCYau6/Gh/xcnrNvnFaTIYwtcuU53ipQh9biFFyN1
-         u6Rssp0hEeLJTFLs6YeDYBAjaXiYQqx1pXzTbKthkoUBx0aqRkpfaGpycmdQdTDIESKs
-         Ll0w==
-X-Gm-Message-State: AOAM531Zxbculj2Ban3EjMh+U0eCDZEGaXL4qGKPqRbccynT0bEQ65MN
-        bifYDLzRI6sUIY62AM5EuoS1wwSm2Og=
-X-Google-Smtp-Source: ABdhPJzTiBeo7W8E7Ia1g1nNcXjWvW+MDFVMxhiBhK6N2EW9E2ffiushHhJcn60x6ZskJU7F/tHiHw==
-X-Received: by 2002:a63:33cb:: with SMTP id z194mr35998525pgz.380.1635981263856;
-        Wed, 03 Nov 2021 16:14:23 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id p7sm2613549pgn.52.2021.11.03.16.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Nov 2021 16:14:23 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM63XX ARM
-        ARCHITECTURE), Justin Chen <justinpopo6@gmail.com>,
-        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-mips@vger.kernel.org (open list:MIPS),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM63XX
-        ARM ARCHITECTURE)
-Subject: [PATCH v3 7/7] watchdog: Remove BCM63XX_WDT
-Date:   Wed,  3 Nov 2021 16:13:27 -0700
-Message-Id: <20211103231327.385186-8-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211103231327.385186-1-f.fainelli@gmail.com>
-References: <20211103231327.385186-1-f.fainelli@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=ANJRuFa6/N/mrCRTja+awZQkxH6czfCyQf64cMZwz24=;
+        b=IDQmUV0s9yHewg+gyhDZz4izn4+krK/If/kAIVOI8ZD4lbKkfcLsufi6S+4fJSfTQN
+         HYWJ2+SyqqU4Q0xNcxl+MHpT9IhtWpqAfha2ZpkKXwCsHM3iTOKIoUSMA2iQ7QZE/tL9
+         FyMo3xn1wLQ5boR/c9GEHKeVeMm76f6uXv7bPO0TpI427rKXB6I2F/dwDnrV7WTdhn7k
+         8WoBaHstbPHTvEGElSIFAWi3KIbuDfGeEd4So0EzljRNbFpjsJuV+IXYr73bWCfnHRFg
+         2LG5pE81nIg6r6AfYUNpteNBKKgQ8uVIQwkV6ep/4EMbvidtF6mVOUNBcRHrVLi36ReB
+         nFLA==
+X-Gm-Message-State: AOAM532Bm1x+6Y4OkEkzrnLzyRmm4Tcvx3LT6xGW5xocHzDsxSi/kTue
+        gmMejG0LPtN8RydMAu7DzOP/mC6qaFc=
+X-Google-Smtp-Source: ABdhPJzlsKffFyG0Dw31UftnkkBVRPshFrq8ZrwsZvAX9gzLEmIDzXxmuc9EMVEJieZwGIMkD2hcP4GKkP4=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:5285:: with SMTP id
+ w5mr261213pjh.1.1635985558096; Wed, 03 Nov 2021 17:25:58 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Thu,  4 Nov 2021 00:25:01 +0000
+Message-Id: <20211104002531.1176691-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.1.1089.g2158813163f-goog
+Subject: [PATCH v5.5 00/30] KVM: Scalable memslots implementation
+From:   Sean Christopherson <seanjc@google.com>
+To:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now that we can utilize the BCM7038_WDT driver, remove that one which
-was not converted to the watchdog APIs. There are a couple of notable
-differences with how the bcm7038_wdt driver proceeds:
+This series is an iteration of Maciej's scalable memslots work.  It
+addresses most, but not all, of my feedback from v5, hence the "5.5"
+moniker.  Specifically, I did not touch the iteration over gfn and hva
+ranges as I would likely do more harm than good, especially in the gfn
+iterator.
 
-- bcm63xx_wdt would register with the ad-hoc BCM63xx hardware timer API,
-  but this would only be used in order to catch the interrupt *before* a
-  SoC reset and make the kernel "die"
+The core functionality of the series is unchanged from v5 (or at least,
+it should be).  Patches "Resolve memslot ID via a hash table" and "Keep
+memslots in tree-based structures" are heavily reworked (the latter in
+particular) to provide better continuity between patches and to avoid
+the swap() logic when working with the "inactive" set of memslots.  But
+again, the changes are intended to be purely cosmetic.
 
-- bcm6xx_wdt would register a software timer and kick it every second in
-  order to pet the watchdog, thus offering a two step watchdog process.
-  This is not something that is brought over to the bcm7038_wdt as it is
-  deemed unnecessary. If user-space cannot pet the watchdog, but a
-  kernel timer can, the system is still in a bad shape anyway.
+Paolo, ideally I'd like get to patch 03 (and therefore patch 02) into 5.16.
+The patch technically breaks backwards compatibility with 32-bit KVM, but
+I'm quite confident none of the existing 32-bit architectures can possibly
+work.  RISC-V is the one exception where it's not obvious that creating
+more guest memslot pages than can fit in an unsigned long won't fall on its
+face.  Since RISC-V is new in 5.16, I'd like to get that change in before
+RISC-V can gain any users doing bizarre things.
 
-bcm7038_wdt is simpler in its behavior and behaves as a standard
-watchdog driver and is not making use of any specific platform APIs,
-therefore making it more maintainable and extensible.
+s390 folks, please look closely at patch 11, "KVM: s390: Use "new" memslot
+instead of userspace memory region".  There's a subtle/weird functional
+change in there that I can't imagine would negatively affect userspace,
+but the end result is odd nonetheless.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/watchdog/Kconfig       |  10 --
- drivers/watchdog/Makefile      |   1 -
- drivers/watchdog/bcm63xx_wdt.c | 315 ---------------------------------
- 3 files changed, 326 deletions(-)
- delete mode 100644 drivers/watchdog/bcm63xx_wdt.c
+Claudio, I dropped your R-b from "KVM: Integrate gfn_to_memslot_approx()
+into search_memslots()" because I changed the code enough to break the s390
+build at least once :-)
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 24a775dd2bf1..acebf9caf6d1 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1709,16 +1709,6 @@ config OCTEON_WDT
- 	  from the first interrupt, it is then only poked when the
- 	  device is written.
+Patches 01 and 02 are bug fixes.
+
+Patch 03 is fix of sorts to require that the total number of pages across
+all memslots fit in an unsigned long.  The existing 32-bit KVM
+architectures don't correctly handle this case, and fixing those issues
+would quite gross and a waste of time.
+
+Patches 04-18 are cleanups throughout common KVM and all architectures
+to fix some warts in the memslot APIs that allow for a cleaner (IMO)
+of the tree-based memslots code.  They also prep for more improvements
+that are realized in the final patch.
+
+Patches 19-28 are the core of Maciej's scalable memslots work.
+
+Patches 29-30 take advantage of the tree-based memslots to avoid creating
+a dummy "new" memslot on the stack, which simplifies the MOVE case and
+aligns it with the other three memslot update cases.
+
+v5.5
+  * Add all the pre- and post-work cleanups.
+  * Rebase to kvm/queue, commit 0d7d84498fb4 ("KVM: x86: SGX must...")
+  * Name innermost helper ____gfn_to_memslot() instead of ...approx. [Sean]
+  * Rework hash list patch and all subsequent tree modifications to use
+    common kvm_memslot_replace() helper. [Sean]
+  * Rework tree-based approach to avoid swap() by always pulling the
+    invalid memslot tree on-demand, and by relying on precise variables
+    names and comments (for the invidual memslot pointers).
+
+v5:
+  * https://lkml.kernel.org/r/cover.1632171478.git.maciej.szmigiero@oracle.com
+  * Rebase onto v5.15-rc2 (torvalds/master),
+  * Fix 64-bit division of n_memslots_pages for 32-bit KVM,
+  * Collect Claudio's Reviewed-by tags for some of the patches.
+
+Early history can be found in the above lore link.
  
--config BCM63XX_WDT
--	tristate "Broadcom BCM63xx hardware watchdog"
--	depends on BCM63XX
--	help
--	  Watchdog driver for the built in watchdog hardware in Broadcom
--	  BCM63xx SoC.
--
--	  To compile this driver as a loadable module, choose M here.
--	  The module will be called bcm63xx_wdt.
--
- config BCM2835_WDT
- 	tristate "Broadcom BCM2835 hardware watchdog"
- 	depends on ARCH_BCM2835 || (OF && COMPILE_TEST)
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 1bd2d6f37c53..9811c4b1cd16 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -154,7 +154,6 @@ obj-$(CONFIG_XILINX_WATCHDOG) += of_xilinx_wdt.o
- # MIPS Architecture
- obj-$(CONFIG_ATH79_WDT) += ath79_wdt.o
- obj-$(CONFIG_BCM47XX_WDT) += bcm47xx_wdt.o
--obj-$(CONFIG_BCM63XX_WDT) += bcm63xx_wdt.o
- obj-$(CONFIG_RC32434_WDT) += rc32434_wdt.o
- obj-$(CONFIG_INDYDOG) += indydog.o
- obj-$(CONFIG_JZ4740_WDT) += jz4740_wdt.o
-diff --git a/drivers/watchdog/bcm63xx_wdt.c b/drivers/watchdog/bcm63xx_wdt.c
-deleted file mode 100644
-index 7cdb25363ea0..000000000000
---- a/drivers/watchdog/bcm63xx_wdt.c
-+++ /dev/null
-@@ -1,315 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0+
--/*
-- *  Broadcom BCM63xx SoC watchdog driver
-- *
-- *  Copyright (C) 2007, Miguel Gaio <miguel.gaio@efixo.com>
-- *  Copyright (C) 2008, Florian Fainelli <florian@openwrt.org>
-- *
-- */
--
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
--#include <linux/bitops.h>
--#include <linux/errno.h>
--#include <linux/fs.h>
--#include <linux/io.h>
--#include <linux/kernel.h>
--#include <linux/miscdevice.h>
--#include <linux/module.h>
--#include <linux/moduleparam.h>
--#include <linux/types.h>
--#include <linux/uaccess.h>
--#include <linux/watchdog.h>
--#include <linux/timer.h>
--#include <linux/jiffies.h>
--#include <linux/interrupt.h>
--#include <linux/ptrace.h>
--#include <linux/resource.h>
--#include <linux/platform_device.h>
--
--#include <bcm63xx_cpu.h>
--#include <bcm63xx_io.h>
--#include <bcm63xx_regs.h>
--#include <bcm63xx_timer.h>
--
--#define PFX KBUILD_MODNAME
--
--#define WDT_HZ		50000000 /* Fclk */
--#define WDT_DEFAULT_TIME	30      /* seconds */
--#define WDT_MAX_TIME		256     /* seconds */
--
--static struct {
--	void __iomem *regs;
--	struct timer_list timer;
--	unsigned long inuse;
--	atomic_t ticks;
--} bcm63xx_wdt_device;
--
--static int expect_close;
--
--static int wdt_time = WDT_DEFAULT_TIME;
--static bool nowayout = WATCHDOG_NOWAYOUT;
--module_param(nowayout, bool, 0);
--MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
--	__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
--
--/* HW functions */
--static void bcm63xx_wdt_hw_start(void)
--{
--	bcm_writel(0xfffffffe, bcm63xx_wdt_device.regs + WDT_DEFVAL_REG);
--	bcm_writel(WDT_START_1, bcm63xx_wdt_device.regs + WDT_CTL_REG);
--	bcm_writel(WDT_START_2, bcm63xx_wdt_device.regs + WDT_CTL_REG);
--}
--
--static void bcm63xx_wdt_hw_stop(void)
--{
--	bcm_writel(WDT_STOP_1, bcm63xx_wdt_device.regs + WDT_CTL_REG);
--	bcm_writel(WDT_STOP_2, bcm63xx_wdt_device.regs + WDT_CTL_REG);
--}
--
--static void bcm63xx_wdt_isr(void *data)
--{
--	struct pt_regs *regs = get_irq_regs();
--
--	die(PFX " fire", regs);
--}
--
--static void bcm63xx_timer_tick(struct timer_list *unused)
--{
--	if (!atomic_dec_and_test(&bcm63xx_wdt_device.ticks)) {
--		bcm63xx_wdt_hw_start();
--		mod_timer(&bcm63xx_wdt_device.timer, jiffies + HZ);
--	} else
--		pr_crit("watchdog will restart system\n");
--}
--
--static void bcm63xx_wdt_pet(void)
--{
--	atomic_set(&bcm63xx_wdt_device.ticks, wdt_time);
--}
--
--static void bcm63xx_wdt_start(void)
--{
--	bcm63xx_wdt_pet();
--	bcm63xx_timer_tick(0);
--}
--
--static void bcm63xx_wdt_pause(void)
--{
--	del_timer_sync(&bcm63xx_wdt_device.timer);
--	bcm63xx_wdt_hw_stop();
--}
--
--static int bcm63xx_wdt_settimeout(int new_time)
--{
--	if ((new_time <= 0) || (new_time > WDT_MAX_TIME))
--		return -EINVAL;
--
--	wdt_time = new_time;
--
--	return 0;
--}
--
--static int bcm63xx_wdt_open(struct inode *inode, struct file *file)
--{
--	if (test_and_set_bit(0, &bcm63xx_wdt_device.inuse))
--		return -EBUSY;
--
--	bcm63xx_wdt_start();
--	return stream_open(inode, file);
--}
--
--static int bcm63xx_wdt_release(struct inode *inode, struct file *file)
--{
--	if (expect_close == 42)
--		bcm63xx_wdt_pause();
--	else {
--		pr_crit("Unexpected close, not stopping watchdog!\n");
--		bcm63xx_wdt_start();
--	}
--	clear_bit(0, &bcm63xx_wdt_device.inuse);
--	expect_close = 0;
--	return 0;
--}
--
--static ssize_t bcm63xx_wdt_write(struct file *file, const char *data,
--				size_t len, loff_t *ppos)
--{
--	if (len) {
--		if (!nowayout) {
--			size_t i;
--
--			/* In case it was set long ago */
--			expect_close = 0;
--
--			for (i = 0; i != len; i++) {
--				char c;
--				if (get_user(c, data + i))
--					return -EFAULT;
--				if (c == 'V')
--					expect_close = 42;
--			}
--		}
--		bcm63xx_wdt_pet();
--	}
--	return len;
--}
--
--static struct watchdog_info bcm63xx_wdt_info = {
--	.identity       = PFX,
--	.options        = WDIOF_SETTIMEOUT |
--				WDIOF_KEEPALIVEPING |
--				WDIOF_MAGICCLOSE,
--};
--
--
--static long bcm63xx_wdt_ioctl(struct file *file, unsigned int cmd,
--				unsigned long arg)
--{
--	void __user *argp = (void __user *)arg;
--	int __user *p = argp;
--	int new_value, retval = -EINVAL;
--
--	switch (cmd) {
--	case WDIOC_GETSUPPORT:
--		return copy_to_user(argp, &bcm63xx_wdt_info,
--			sizeof(bcm63xx_wdt_info)) ? -EFAULT : 0;
--
--	case WDIOC_GETSTATUS:
--	case WDIOC_GETBOOTSTATUS:
--		return put_user(0, p);
--
--	case WDIOC_SETOPTIONS:
--		if (get_user(new_value, p))
--			return -EFAULT;
--
--		if (new_value & WDIOS_DISABLECARD) {
--			bcm63xx_wdt_pause();
--			retval = 0;
--		}
--		if (new_value & WDIOS_ENABLECARD) {
--			bcm63xx_wdt_start();
--			retval = 0;
--		}
--
--		return retval;
--
--	case WDIOC_KEEPALIVE:
--		bcm63xx_wdt_pet();
--		return 0;
--
--	case WDIOC_SETTIMEOUT:
--		if (get_user(new_value, p))
--			return -EFAULT;
--
--		if (bcm63xx_wdt_settimeout(new_value))
--			return -EINVAL;
--
--		bcm63xx_wdt_pet();
--
--	case WDIOC_GETTIMEOUT:
--		return put_user(wdt_time, p);
--
--	default:
--		return -ENOTTY;
--
--	}
--}
--
--static const struct file_operations bcm63xx_wdt_fops = {
--	.owner		= THIS_MODULE,
--	.llseek		= no_llseek,
--	.write		= bcm63xx_wdt_write,
--	.unlocked_ioctl	= bcm63xx_wdt_ioctl,
--	.compat_ioctl	= compat_ptr_ioctl,
--	.open		= bcm63xx_wdt_open,
--	.release	= bcm63xx_wdt_release,
--};
--
--static struct miscdevice bcm63xx_wdt_miscdev = {
--	.minor	= WATCHDOG_MINOR,
--	.name	= "watchdog",
--	.fops	= &bcm63xx_wdt_fops,
--};
--
--
--static int bcm63xx_wdt_probe(struct platform_device *pdev)
--{
--	int ret;
--	struct resource *r;
--
--	timer_setup(&bcm63xx_wdt_device.timer, bcm63xx_timer_tick, 0);
--
--	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r) {
--		dev_err(&pdev->dev, "failed to get resources\n");
--		return -ENODEV;
--	}
--
--	bcm63xx_wdt_device.regs = devm_ioremap(&pdev->dev, r->start,
--							resource_size(r));
--	if (!bcm63xx_wdt_device.regs) {
--		dev_err(&pdev->dev, "failed to remap I/O resources\n");
--		return -ENXIO;
--	}
--
--	ret = bcm63xx_timer_register(TIMER_WDT_ID, bcm63xx_wdt_isr, NULL);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "failed to register wdt timer isr\n");
--		return ret;
--	}
--
--	if (bcm63xx_wdt_settimeout(wdt_time)) {
--		bcm63xx_wdt_settimeout(WDT_DEFAULT_TIME);
--		dev_info(&pdev->dev,
--			": wdt_time value must be 1 <= wdt_time <= 256, using %d\n",
--			wdt_time);
--	}
--
--	ret = misc_register(&bcm63xx_wdt_miscdev);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "failed to register watchdog device\n");
--		goto unregister_timer;
--	}
--
--	dev_info(&pdev->dev, " started, timer margin: %d sec\n",
--						WDT_DEFAULT_TIME);
--
--	return 0;
--
--unregister_timer:
--	bcm63xx_timer_unregister(TIMER_WDT_ID);
--	return ret;
--}
--
--static int bcm63xx_wdt_remove(struct platform_device *pdev)
--{
--	if (!nowayout)
--		bcm63xx_wdt_pause();
--
--	misc_deregister(&bcm63xx_wdt_miscdev);
--	bcm63xx_timer_unregister(TIMER_WDT_ID);
--	return 0;
--}
--
--static void bcm63xx_wdt_shutdown(struct platform_device *pdev)
--{
--	bcm63xx_wdt_pause();
--}
--
--static struct platform_driver bcm63xx_wdt_driver = {
--	.probe	= bcm63xx_wdt_probe,
--	.remove = bcm63xx_wdt_remove,
--	.shutdown = bcm63xx_wdt_shutdown,
--	.driver = {
--		.name = "bcm63xx-wdt",
--	}
--};
--
--module_platform_driver(bcm63xx_wdt_driver);
--
--MODULE_AUTHOR("Miguel Gaio <miguel.gaio@efixo.com>");
--MODULE_AUTHOR("Florian Fainelli <florian@openwrt.org>");
--MODULE_DESCRIPTION("Driver for the Broadcom BCM63xx SoC watchdog");
--MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:bcm63xx-wdt");
+Maciej S. Szmigiero (10):
+  KVM: Resync only arch fields when slots_arch_lock gets reacquired
+  KVM: x86: Use nr_memslot_pages to avoid traversing the memslots array
+  KVM: Integrate gfn_to_memslot_approx() into search_memslots()
+  KVM: Move WARN on invalid memslot index to update_memslots()
+  KVM: Resolve memslot ID via a hash table instead of via a static array
+  KVM: Use interval tree to do fast hva lookup in memslots
+  KVM: s390: Introduce kvm_s390_get_gfn_end()
+  KVM: Keep memslots in tree-based structures instead of array-based
+    ones
+  KVM: Optimize gfn lookup in kvm_zap_gfn_range()
+  KVM: Optimize overlapping memslots check
+
+Sean Christopherson (20):
+  KVM: Ensure local memslot copies operate on up-to-date arch-specific
+    data
+  KVM: Disallow user memslot with size that exceeds "unsigned long"
+  KVM: Require total number of memslot pages to fit in an unsigned long
+  KVM: Open code kvm_delete_memslot() into its only caller
+  KVM: Use "new" memslot's address space ID instead of dedicated param
+  KVM: Let/force architectures to deal with arch specific memslot data
+  KVM: arm64: Use "new" memslot instead of userspace memory region
+  KVM: MIPS: Drop pr_debug from memslot commit to avoid using "mem"
+  KVM: PPC: Avoid referencing userspace memory region in memslot updates
+  KVM: s390: Use "new" memslot instead of userspace memory region
+  KVM: x86: Use "new" memslot instead of userspace memory region
+  KVM: RISC-V: Use "new" memslot instead of userspace memory region
+  KVM: Stop passing kvm_userspace_memory_region to arch memslot hooks
+  KVM: Use prepare/commit hooks to handle generic memslot metadata
+    updates
+  KVM: x86: Don't assume old/new memslots are non-NULL at memslot commit
+  KVM: s390: Skip gfn/size sanity checks on memslot DELETE or FLAGS_ONLY
+  KVM: Don't make a full copy of the old memslot in
+    __kvm_set_memory_region()
+  KVM: x86: Don't call kvm_mmu_change_mmu_pages() if the count hasn't
+    changed
+  KVM: Wait 'til the bitter end to initialize the "new" memslot
+  KVM: Dynamically allocate "new" memslots from the get-go
+
+ arch/arm64/kvm/Kconfig              |   1 +
+ arch/arm64/kvm/mmu.c                |  27 +-
+ arch/mips/kvm/Kconfig               |   1 +
+ arch/mips/kvm/mips.c                |   9 +-
+ arch/powerpc/include/asm/kvm_ppc.h  |  18 +-
+ arch/powerpc/kvm/Kconfig            |   1 +
+ arch/powerpc/kvm/book3s.c           |  14 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c |   4 +-
+ arch/powerpc/kvm/book3s_hv.c        |  28 +-
+ arch/powerpc/kvm/book3s_hv_nested.c |   4 +-
+ arch/powerpc/kvm/book3s_hv_uvmem.c  |  14 +-
+ arch/powerpc/kvm/book3s_pr.c        |  17 +-
+ arch/powerpc/kvm/booke.c            |   7 +-
+ arch/powerpc/kvm/powerpc.c          |   9 +-
+ arch/riscv/kvm/mmu.c                |  34 +-
+ arch/s390/kvm/Kconfig               |   1 +
+ arch/s390/kvm/kvm-s390.c            |  98 ++--
+ arch/s390/kvm/kvm-s390.h            |  14 +
+ arch/s390/kvm/pv.c                  |   4 +-
+ arch/x86/include/asm/kvm_host.h     |   1 -
+ arch/x86/kvm/Kconfig                |   1 +
+ arch/x86/kvm/debugfs.c              |   6 +-
+ arch/x86/kvm/mmu/mmu.c              |  39 +-
+ arch/x86/kvm/x86.c                  |  42 +-
+ include/linux/kvm_host.h            | 240 +++++---
+ virt/kvm/kvm_main.c                 | 868 ++++++++++++++++------------
+ 26 files changed, 855 insertions(+), 647 deletions(-)
+
 -- 
-2.25.1
+2.33.1.1089.g2158813163f-goog
 
