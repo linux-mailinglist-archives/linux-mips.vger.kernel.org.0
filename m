@@ -2,176 +2,242 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7376B4459DE
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 19:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93EA3445BA2
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Nov 2021 22:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234023AbhKDSmc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Nov 2021 14:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
+        id S231450AbhKDVau (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 4 Nov 2021 17:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbhKDSmc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Nov 2021 14:42:32 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0E4C061714;
-        Thu,  4 Nov 2021 11:39:54 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id d12so7301953oij.5;
-        Thu, 04 Nov 2021 11:39:54 -0700 (PDT)
+        with ESMTP id S232119AbhKDVau (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Nov 2021 17:30:50 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE55CC061205
+        for <linux-mips@vger.kernel.org>; Thu,  4 Nov 2021 14:28:11 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id v65so8545447ioe.5
+        for <linux-mips@vger.kernel.org>; Thu, 04 Nov 2021 14:28:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=y9Efx+J0DfgYNexjEZQcHJbnOqe+k5YWBbpHhhOQDTM=;
-        b=Wl/7qGL5cCeNtI9eWKQHiX0Kk+ZiVRNexsoF4RQfzyDvYZ0X4ZHLrjr0b44PrVRUk7
-         Tx0SYoWTFmUI7ikv0DAp83GyL8EA2oqKUzTdGeVi4po5bDZrqD3/jBepQaAs6cHHHiND
-         T0YQ2Yz/3NpNP4vxVqstDLBKAFTSdJ57bZ0/etr9bThL01tqX2IoYkOROYnvt0n2J7IY
-         COl1wxoVfcTDf528Nc49NPQYbko89GuAF/2ZvNUJwl9F96Wx0aVRnuygPUKlmgZq+5x5
-         tp+fXHA85KmecOZY8UPO8zyTrhUSwsX67NCgvaXCxWDea6lm17k3n16IKCShlKNogqyl
-         9CWw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kT59fOFXGdqG57cxSFiBCbx9dcYetqnRywW1gdZNmeY=;
+        b=gT4nzQq0x89i6Vp5dNWtSZrRbMe0W3qbbXwW9NXWgaRs8fYbXvHzdlEGUK48g0ajas
+         uHVv10bVNkjhWr3B3MYTi44+qGBwBfoBwhj+2jrlWAsr2slc13bc4BseaXy2AoLJs6t8
+         xRBsjkLiRiH+rEZC9bjYDRvB0cKfRmGxlddQQ74lKlIH3DSIbhZURrg/4JSes8eUaatv
+         4YcLz57IesgJy0I2f7nby9V0UuPZTikaQqcNEzddlw13/ibFXy00E0dEkzMok1oNoZqt
+         ZDIYGh1maMM5k3AvqVuUpAr6S+JkIrJwFta52d8TDhA2FBg5X1Xits9o/XjdmWUTRl4X
+         pAhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=y9Efx+J0DfgYNexjEZQcHJbnOqe+k5YWBbpHhhOQDTM=;
-        b=iAhaqLGBrdFjC4eREoKgJgTXOeVMdnP2l3cmJ2B7CcIodK5xKvH4AewevRXG94Z2UU
-         KqrIb5bgNgxataNSaY27J6VKpLgGZIWvmZQyWrpilapIsSRJs+trGNtxD0dRg9wC9gWN
-         5Vz6joadqLF+7T95xVvba/PfI5C6TYvCN74XmDcRiT3IBUYfljAD1cTmjAhlDz9jIeEY
-         1upQ1MVXtlisPQqQ6jS2OlB0gS7dYRfBxBuZUPebAzEIEnsYtWQRRH6dakZ2V328/bcx
-         wfXP6lsgJ+/AS8H6dizAw70Zslmfl9Vfn0CPPnb6GrispSsh93ggJlIYVMyVX8jcum1r
-         eN/A==
-X-Gm-Message-State: AOAM533xJyCgSzbVWzcIuNSzhrjgTwEDs3N/8PvIaGueDXqiBy12Ikpv
-        bh+L5NLR6W27AoQeGqNsGY0=
-X-Google-Smtp-Source: ABdhPJwVqQdcn5Wa5xbrJ8uTj6JC2mtBJeHifXkXNvXMry28cLMDi8b2qbKQiF+berR532peOHZ/Qw==
-X-Received: by 2002:aca:4405:: with SMTP id r5mr17698488oia.4.1636051192751;
-        Thu, 04 Nov 2021 11:39:52 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t12sm1807386oiw.39.2021.11.04.11.39.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Nov 2021 11:39:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v3 1/7] dt-bindings: watchdog: convert Broadcom's WDT to
- the json-schema
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "maintainer:BROADCOM BCM63XX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "moderated list:BROADCOM BCM63XX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20211103231327.385186-1-f.fainelli@gmail.com>
- <20211103231327.385186-2-f.fainelli@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <22e6f9b0-8d2e-14ee-12f1-0f911a72a467@roeck-us.net>
-Date:   Thu, 4 Nov 2021 11:39:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kT59fOFXGdqG57cxSFiBCbx9dcYetqnRywW1gdZNmeY=;
+        b=Ab9ru6B8dgAER058idEYt7Wv1+HoM5OJ94Q1RUv3SAHnxZMffjI1kknzQU/32F0ibX
+         HsXpzLyzInIDXMey/io+ArNUeaB+vVlzLhE487sAzR82m7DNE1uI0zlSq/3qK9u4yStU
+         6D6xYEy/etMeDs/98b/UUwTE4p5uBv7G2ZLemJ/p1se3ZEjjF6pVS/vHijVP2w8SWg14
+         C4Wlp02C0FtELPtEOcNZDIoF7bsX14c9cTsyBLvaJyB5CMNzloFZJoE4zC0ynmeo4Xhf
+         TQ+eQn4NzGW8aS2NhIxveI15o2HcleRXYqHlzQL6opDRjyOi2masiLcFoAYo2d+rTMOg
+         x9Fg==
+X-Gm-Message-State: AOAM533YagD4Luv6WBFggohI8bIeSQ/GGWz91gabRifdHl7D6s1SGaOU
+        4STzAWblsiJXaqMsbmt3EDr2W6JBW14rfNIJT7ymRg==
+X-Google-Smtp-Source: ABdhPJyMIoxuukzQc6rukS1CsN0VzOsX5g2manzJn1KGK69DmvdVJ1f5vqR2wNyFb/XiaX/LmgNI1ppfR5uwGseVoTo=
+X-Received: by 2002:a05:6602:1612:: with SMTP id x18mr282554iow.37.1636061290880;
+ Thu, 04 Nov 2021 14:28:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211103231327.385186-2-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211104002531.1176691-1-seanjc@google.com> <20211104002531.1176691-2-seanjc@google.com>
+In-Reply-To: <20211104002531.1176691-2-seanjc@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Thu, 4 Nov 2021 14:27:59 -0700
+Message-ID: <CANgfPd-uuPFjAHk5kVNom2Qs=UU_GX6CQ0xDLg1h_iL8t8S2aQ@mail.gmail.com>
+Subject: Re: [PATCH v5.5 01/30] KVM: Ensure local memslot copies operate on
+ up-to-date arch-specific data
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/3/21 4:13 PM, Florian Fainelli wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> This helps validating DTS files.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+On Wed, Nov 3, 2021 at 5:26 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> When modifying memslots, snapshot the "old" memslot and copy it to the
+> "new" memslot's arch data after (re)acquiring slots_arch_lock.  x86 can
+> change a memslot's arch data while memslot updates are in-progress so
+> long as it holds slots_arch_lock, thus snapshotting a memslot without
+> holding the lock can result in the consumption of stale data.
+>
+> Fixes: b10a038e84d1 ("KVM: mmu: Add slots_arch_lock for memslot arch fields")
+> Cc: stable@vger.kernel.org
+> Cc: Ben Gardon <bgardon@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->   .../bindings/watchdog/brcm,bcm7038-wdt.txt    | 19 ---------
->   .../bindings/watchdog/brcm,bcm7038-wdt.yaml   | 40 +++++++++++++++++++
->   2 files changed, 40 insertions(+), 19 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
->   create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
-> deleted file mode 100644
-> index 84122270be8f..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
-> +++ /dev/null
-> @@ -1,19 +0,0 @@
-> -BCM7038 Watchdog timer
-> -
-> -Required properties:
-> -
-> -- compatible : should be "brcm,bcm7038-wdt"
-> -- reg : Specifies base physical address and size of the registers.
-> -
-> -Optional properties:
-> -
-> -- clocks: The clock running the watchdog. If no clock is found the
-> -	  driver will default to 27000000 Hz.
-> -
-> -Example:
-> -
-> -watchdog@f040a7e8 {
-> -	compatible = "brcm,bcm7038-wdt";
-> -	clocks = <&upg_fixed>;
-> -	reg = <0xf040a7e8 0x16>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-> new file mode 100644
-> index 000000000000..69e5a1ef6a1f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/brcm,bcm63xx-wdt.yaml#
+>  virt/kvm/kvm_main.c | 47 ++++++++++++++++++++++++++++++---------------
+>  1 file changed, 31 insertions(+), 16 deletions(-)
+>
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 3f6d450355f0..99e69375c4c9 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1531,11 +1531,10 @@ static struct kvm_memslots *kvm_dup_memslots(struct kvm_memslots *old,
+>
+>  static int kvm_set_memslot(struct kvm *kvm,
+>                            const struct kvm_userspace_memory_region *mem,
+> -                          struct kvm_memory_slot *old,
+>                            struct kvm_memory_slot *new, int as_id,
+>                            enum kvm_mr_change change)
+>  {
+> -       struct kvm_memory_slot *slot;
+> +       struct kvm_memory_slot *slot, old;
+>         struct kvm_memslots *slots;
+>         int r;
+>
+> @@ -1566,7 +1565,7 @@ static int kvm_set_memslot(struct kvm *kvm,
+>                  * Note, the INVALID flag needs to be in the appropriate entry
+>                  * in the freshly allocated memslots, not in @old or @new.
+>                  */
+> -               slot = id_to_memslot(slots, old->id);
+> +               slot = id_to_memslot(slots, new->id);
 
-Looks like this requires
+Since new is guaranteed to have the same id as old (at least prior to
+this change) this is a no-op change, so no problem here.
+This could be a separate commit which would have no functional change
+but only worth extracting if you send a v2.
 
-s/63xx/7038/
+>                 slot->flags |= KVM_MEMSLOT_INVALID;
+>
+>                 /*
+> @@ -1597,6 +1596,26 @@ static int kvm_set_memslot(struct kvm *kvm,
+>                 kvm_copy_memslots(slots, __kvm_memslots(kvm, as_id));
+>         }
+>
+> +       /*
+> +        * Make a full copy of the old memslot, the pointer will become stale
+> +        * when the memslots are re-sorted by update_memslots(), and the old
+> +        * memslot needs to be referenced after calling update_memslots(), e.g.
+> +        * to free its resources and for arch specific behavior.  This needs to
+> +        * happen *after* (re)acquiring slots_arch_lock.
+> +        */
+> +       slot = id_to_memslot(slots, new->id);
+> +       if (slot) {
+> +               old = *slot;
+> +       } else {
+> +               WARN_ON_ONCE(change != KVM_MR_CREATE);
+> +               memset(&old, 0, sizeof(old));
+> +               old.id = new->id;
+> +               old.as_id = as_id;
+> +       }
+> +
+> +       /* Copy the arch-specific data, again after (re)acquiring slots_arch_lock. */
+> +       memcpy(&new->arch, &old.arch, sizeof(old.arch));
+> +
 
-Guenter
+Is new->arch not initialized before this function is called? Does this
+need to be here, or could it be moved above into the first branch of
+the if statement?
+Oh I see you removed the memset below and replaced it with this. I
+think this is fine, but it might be easier to reason about if we left
+the memset and moved the memcopy into the if.
+No point in doing a memcpy of zeros here.
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>         r = kvm_arch_prepare_memory_region(kvm, new, mem, change);
+>         if (r)
+>                 goto out_slots;
+> @@ -1604,14 +1623,18 @@ static int kvm_set_memslot(struct kvm *kvm,
+>         update_memslots(slots, new, change);
+>         slots = install_new_memslots(kvm, as_id, slots);
+>
+> -       kvm_arch_commit_memory_region(kvm, mem, old, new, change);
+> +       kvm_arch_commit_memory_region(kvm, mem, &old, new, change);
 > +
-> +title: BCM7038 watchdog timer
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-> +
-> +maintainers:
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +  - Justin Chen <justinpopo6@gmail.com>
-> +  - Rafał Miłecki <rafal@milecki.pl>
-> +
-> +properties:
-> +  compatible:
-> +    const: brcm,bcm7038-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: >
-> +      The clock running the watchdog. If no clock is found the driver will
-> +      default to 27000000 Hz.
-> +
-> +unevaluatedProperties: false
-> +
-> +required:
-> +  - reg
-> +
-> +examples:
-> +  - |
-> +    watchdog@f040a7e8 {
-> +      compatible = "brcm,bcm7038-wdt";
-> +      reg = <0xf040a7e8 0x16>;
-> +      clocks = <&upg_fixed>;
-> +    };
-> 
-
+> +       /* Free the old memslot's metadata.  Note, this is the full copy!!! */
+> +       if (change == KVM_MR_DELETE)
+> +               kvm_free_memslot(kvm, &old);
+>
+>         kvfree(slots);
+>         return 0;
+>
+>  out_slots:
+>         if (change == KVM_MR_DELETE || change == KVM_MR_MOVE) {
+> -               slot = id_to_memslot(slots, old->id);
+> +               slot = id_to_memslot(slots, new->id);
+>                 slot->flags &= ~KVM_MEMSLOT_INVALID;
+>                 slots = install_new_memslots(kvm, as_id, slots);
+>         } else {
+> @@ -1626,7 +1649,6 @@ static int kvm_delete_memslot(struct kvm *kvm,
+>                               struct kvm_memory_slot *old, int as_id)
+>  {
+>         struct kvm_memory_slot new;
+> -       int r;
+>
+>         if (!old->npages)
+>                 return -EINVAL;
+> @@ -1639,12 +1661,7 @@ static int kvm_delete_memslot(struct kvm *kvm,
+>          */
+>         new.as_id = as_id;
+>
+> -       r = kvm_set_memslot(kvm, mem, old, &new, as_id, KVM_MR_DELETE);
+> -       if (r)
+> -               return r;
+> -
+> -       kvm_free_memslot(kvm, old);
+> -       return 0;
+> +       return kvm_set_memslot(kvm, mem, &new, as_id, KVM_MR_DELETE);
+>  }
+>
+>  /*
+> @@ -1718,7 +1735,6 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>         if (!old.npages) {
+>                 change = KVM_MR_CREATE;
+>                 new.dirty_bitmap = NULL;
+> -               memset(&new.arch, 0, sizeof(new.arch));
+>         } else { /* Modify an existing slot. */
+>                 if ((new.userspace_addr != old.userspace_addr) ||
+>                     (new.npages != old.npages) ||
+> @@ -1732,9 +1748,8 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>                 else /* Nothing to change. */
+>                         return 0;
+>
+> -               /* Copy dirty_bitmap and arch from the current memslot. */
+> +               /* Copy dirty_bitmap from the current memslot. */
+>                 new.dirty_bitmap = old.dirty_bitmap;
+> -               memcpy(&new.arch, &old.arch, sizeof(new.arch));
+>         }
+>
+>         if ((change == KVM_MR_CREATE) || (change == KVM_MR_MOVE)) {
+> @@ -1760,7 +1775,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>                         bitmap_set(new.dirty_bitmap, 0, new.npages);
+>         }
+>
+> -       r = kvm_set_memslot(kvm, mem, &old, &new, as_id, change);
+> +       r = kvm_set_memslot(kvm, mem, &new, as_id, change);
+>         if (r)
+>                 goto out_bitmap;
+>
+> --
+> 2.33.1.1089.g2158813163f-goog
+>
