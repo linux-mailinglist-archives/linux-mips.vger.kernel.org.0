@@ -2,144 +2,255 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0083445E06
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 03:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0CF44608B
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 09:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbhKECpC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 4 Nov 2021 22:45:02 -0400
-Received: from condef-08.nifty.com ([202.248.20.73]:23154 "EHLO
-        condef-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbhKECpC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 4 Nov 2021 22:45:02 -0400
-Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-08.nifty.com with ESMTP id 1A52dRu1005979
-        for <linux-mips@vger.kernel.org>; Fri, 5 Nov 2021 11:39:27 +0900
-Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 1A52cTY8003626;
-        Fri, 5 Nov 2021 11:38:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 1A52cTY8003626
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1636079910;
-        bh=IeUZt4PsBFceCGs3eJLrGGs8MODnWGqCocnHEkQlICA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bRjA7etrT/McFMTQ7a3R9J31CzaeQWZ3qGtMr1hEuNoTelMJ+XB1noDBpfor3Ya6Z
-         D8dtEk8eTDfvBccU1a6R41gs9NqUU7GOp57wEUDNZdDZRusOofOfBKcdB0x0xBHV7W
-         5XncPglldZdSMF61sj4k4MutqFyIa5DCzE2YpLVleCcknrEU9mP/5s9vfaiPIO9+pE
-         eaDZi3QC7Ua/Fu2vpcqUWl493tiMTYHdO1upkXmiLjFrGSZkXYmyO+AoNa8hi1NAVa
-         vwXjPHym+H2p4g9pqQuBW1TydH6FfY4KvtrB+3U/h4PeChGdIACzimZ+6sEqgbyUQU
-         PyIen3hkf0prA==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Xingxing Su <suxingxing@loongson.cn>,
-        linux-kernel@vger.kernel.org, zhaoxiao <zhaoxiao@uniontech.com>
-Subject: [PATCH] mips: decompressor: do not copy source files while building
-Date:   Fri,  5 Nov 2021 11:38:14 +0900
-Message-Id: <20211105023815.85784-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S231808AbhKEIZn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Nov 2021 04:25:43 -0400
+Received: from elvis.franken.de ([193.175.24.41]:33304 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229884AbhKEIZk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Nov 2021 04:25:40 -0400
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1miuV1-0006UO-00; Fri, 05 Nov 2021 09:22:59 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id F4238C2972; Fri,  5 Nov 2021 09:22:52 +0100 (CET)
+Date:   Fri, 5 Nov 2021 09:22:52 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes for v5.16
+Message-ID: <20211105082252.GA6698@alpha.franken.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-As commit 7ae4a78daacf ("ARM: 8969/1: decompressor: simplify libfdt
-builds") stated, copying source files during the build time may not
-end up with as clean code as expected.
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
-Do similar for mips to clean up the Makefile and .gitignore.
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+are available in the Git repository at:
 
- arch/mips/boot/compressed/.gitignore   |  3 ---
- arch/mips/boot/compressed/Makefile     | 12 ------------
- arch/mips/boot/compressed/ashldi3.c    |  2 ++
- arch/mips/boot/compressed/bswapsi.c    |  2 ++
- arch/mips/boot/compressed/uart-ath79.c |  2 ++
- scripts/remove-stale-files             |  5 +++++
- 6 files changed, 11 insertions(+), 15 deletions(-)
- delete mode 100644 arch/mips/boot/compressed/.gitignore
- create mode 100644 arch/mips/boot/compressed/ashldi3.c
- create mode 100644 arch/mips/boot/compressed/bswapsi.c
- create mode 100644 arch/mips/boot/compressed/uart-ath79.c
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.16
 
-diff --git a/arch/mips/boot/compressed/.gitignore b/arch/mips/boot/compressed/.gitignore
-deleted file mode 100644
-index d358395614c9..000000000000
---- a/arch/mips/boot/compressed/.gitignore
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--ashldi3.c
--bswapsi.c
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index 3548b3b45269..e6584dab2360 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -50,20 +50,8 @@ vmlinuzobjs-$(CONFIG_MIPS_ALCHEMY)		   += $(obj)/uart-alchemy.o
- vmlinuzobjs-$(CONFIG_ATH79)			   += $(obj)/uart-ath79.o
- endif
- 
--extra-y += uart-ath79.c
--$(obj)/uart-ath79.c: $(srctree)/arch/mips/ath79/early_printk.c
--	$(call cmd,shipped)
--
- vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
- 
--extra-y += ashldi3.c
--$(obj)/ashldi3.c: $(obj)/%.c: $(srctree)/lib/%.c FORCE
--	$(call if_changed,shipped)
--
--extra-y += bswapsi.c
--$(obj)/bswapsi.c: $(obj)/%.c: $(srctree)/arch/mips/lib/%.c FORCE
--	$(call if_changed,shipped)
--
- targets := $(notdir $(vmlinuzobjs-y))
- 
- targets += vmlinux.bin
-diff --git a/arch/mips/boot/compressed/ashldi3.c b/arch/mips/boot/compressed/ashldi3.c
-new file mode 100644
-index 000000000000..f7bf6a7aae31
---- /dev/null
-+++ b/arch/mips/boot/compressed/ashldi3.c
-@@ -0,0 +1,2 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include "../../../../lib/ashldi3.c"
-diff --git a/arch/mips/boot/compressed/bswapsi.c b/arch/mips/boot/compressed/bswapsi.c
-new file mode 100644
-index 000000000000..fdb9c6476904
---- /dev/null
-+++ b/arch/mips/boot/compressed/bswapsi.c
-@@ -0,0 +1,2 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include "../../lib/bswapsi.c"
-diff --git a/arch/mips/boot/compressed/uart-ath79.c b/arch/mips/boot/compressed/uart-ath79.c
-new file mode 100644
-index 000000000000..d686820921be
---- /dev/null
-+++ b/arch/mips/boot/compressed/uart-ath79.c
-@@ -0,0 +1,2 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include "../../ath79/early_printk.c"
-diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
-index eb630ee287c3..c534fe1eac16 100755
---- a/scripts/remove-stale-files
-+++ b/scripts/remove-stale-files
-@@ -28,4 +28,9 @@ if [ -n "${building_out_of_srctree}" ]; then
- 	do
- 		rm -f arch/arm/boot/compressed/${f}
- 	done
-+
-+	for f in uart-ath79.c ashldi3.c bswapsi.c
-+	do
-+		rm -f arch/mips/boot/compressed/${f}
-+	done
- fi
+for you to fetch changes up to 36de23a4c5f0b61ceb4812b535422fa6c6e97447:
+
+  MIPS: Cobalt: Explain GT64111 early PCI fixup (2021-11-03 17:34:11 +0100)
+
+----------------------------------------------------------------
+- added printing of CPU options for /proc/cpuinfo
+- removed support for Netlogic SOCs
+- fixes and cleanup
+
+----------------------------------------------------------------
+Andy Shevchenko (2):
+      bcm47xx: Get rid of redundant 'else'
+      bcm47xx: Replace printk(KERN_ALERT ... pci_devname(dev)) with pci_alert()
+
+Bart Van Assche (1):
+      MIPS: sni: Fix the build
+
+Geert Uytterhoeven (1):
+      mips: cm: Convert to bitfield API to fix out-of-bounds access
+
+Hauke Mehrtens (1):
+      MIPS: kernel: proc: add CPU option reporting
+
+Ilya Lipnitskiy (2):
+      MIPS: kernel: proc: fix trivial style errors
+      MIPS: kernel: proc: use seq_puts instead of seq_printf
+
+Jackie Liu (1):
+      MIPS: loongson64: make CPU_LOONGSON64 depends on MIPS_FP_SUPPORT
+
+Maciej W. Rozycki (1):
+      MIPS: Fix assembly error from MIPSr2 code used within MIPS_ISA_ARCH_LEVEL
+
+Pali Rohár (1):
+      MIPS: Cobalt: Explain GT64111 early PCI fixup
+
+Paul Cercueil (1):
+      MIPS: Avoid macro redefinitions
+
+Thomas Bogendoerfer (2):
+      MIPS: octeon: Remove unused functions
+      MIPS: Remove NETLOGIC support
+
+Wan Jiabing (1):
+      MIPS: Loongson64: Add of_node_put() before break
+
+Wang Haojun (1):
+      MIPS: loongson64: Fix no screen display during boot-up
+
+Zhaolong Zhang (1):
+      mips: fix HUGETLB function without THP enabled
+
+ arch/mips/Kbuild.platforms                         |   1 -
+ arch/mips/Kconfig                                  |  92 +---
+ arch/mips/boot/compressed/uart-16550.c             |  12 -
+ arch/mips/boot/dts/Makefile                        |   1 -
+ arch/mips/boot/dts/netlogic/Makefile               |   8 -
+ arch/mips/boot/dts/netlogic/xlp_evp.dts            | 131 -----
+ arch/mips/boot/dts/netlogic/xlp_fvp.dts            | 131 -----
+ arch/mips/boot/dts/netlogic/xlp_gvp.dts            |  89 ----
+ arch/mips/boot/dts/netlogic/xlp_rvp.dts            |  89 ----
+ arch/mips/boot/dts/netlogic/xlp_svp.dts            | 131 -----
+ arch/mips/cavium-octeon/executive/cvmx-helper.c    |  10 -
+ arch/mips/cavium-octeon/executive/cvmx-pko.c       |  14 -
+ arch/mips/configs/loongson3_defconfig              |   1 +
+ arch/mips/configs/nlm_xlp_defconfig                | 557 --------------------
+ arch/mips/configs/nlm_xlr_defconfig                | 508 ------------------
+ arch/mips/include/asm/cmpxchg.h                    |   5 +-
+ arch/mips/include/asm/cop2.h                       |  11 -
+ arch/mips/include/asm/cpu-type.h                   |   8 -
+ arch/mips/include/asm/cpu.h                        |   2 +-
+ arch/mips/include/asm/ginvt.h                      |  11 +-
+ arch/mips/include/asm/hazards.h                    |   2 +-
+ .../include/asm/mach-loongson64/loongson_regs.h    |  12 +
+ .../asm/mach-netlogic/cpu-feature-overrides.h      |  57 --
+ arch/mips/include/asm/mach-netlogic/irq.h          |  17 -
+ arch/mips/include/asm/mach-netlogic/multi-node.h   |  74 ---
+ arch/mips/include/asm/mips-cm.h                    |  12 +-
+ arch/mips/include/asm/mipsregs.h                   | 190 ++++---
+ arch/mips/include/asm/msa.h                        |  34 +-
+ arch/mips/include/asm/netlogic/common.h            | 132 -----
+ arch/mips/include/asm/netlogic/haldefs.h           | 171 ------
+ arch/mips/include/asm/netlogic/interrupt.h         |  45 --
+ arch/mips/include/asm/netlogic/mips-extns.h        | 301 -----------
+ arch/mips/include/asm/netlogic/psb-bootinfo.h      |  95 ----
+ arch/mips/include/asm/netlogic/xlp-hal/bridge.h    | 186 -------
+ .../mips/include/asm/netlogic/xlp-hal/cpucontrol.h |  89 ----
+ arch/mips/include/asm/netlogic/xlp-hal/iomap.h     | 214 --------
+ arch/mips/include/asm/netlogic/xlp-hal/pcibus.h    | 113 ----
+ arch/mips/include/asm/netlogic/xlp-hal/pic.h       | 366 -------------
+ arch/mips/include/asm/netlogic/xlp-hal/sys.h       | 213 --------
+ arch/mips/include/asm/netlogic/xlp-hal/uart.h      | 192 -------
+ arch/mips/include/asm/netlogic/xlp-hal/xlp.h       | 119 -----
+ arch/mips/include/asm/netlogic/xlr/bridge.h        | 104 ----
+ arch/mips/include/asm/netlogic/xlr/flash.h         |  55 --
+ arch/mips/include/asm/netlogic/xlr/fmn.h           | 365 -------------
+ arch/mips/include/asm/netlogic/xlr/gpio.h          |  74 ---
+ arch/mips/include/asm/netlogic/xlr/iomap.h         | 109 ----
+ arch/mips/include/asm/netlogic/xlr/msidef.h        |  84 ---
+ arch/mips/include/asm/netlogic/xlr/pic.h           | 306 -----------
+ arch/mips/include/asm/netlogic/xlr/xlr.h           |  59 ---
+ arch/mips/include/asm/octeon/cvmx-helper.h         |   7 -
+ arch/mips/include/asm/octeon/cvmx-pko.h            |   1 -
+ arch/mips/include/asm/pgtable.h                    |  45 +-
+ arch/mips/include/asm/processor.h                  |  13 -
+ arch/mips/include/asm/vermagic.h                   |   4 -
+ arch/mips/kernel/cpu-probe.c                       |  84 ---
+ arch/mips/kernel/idle.c                            |   2 -
+ arch/mips/kernel/mips-cm.c                         |  21 +-
+ arch/mips/kernel/perf_event_mipsxx.c               |  86 ----
+ arch/mips/kernel/proc.c                            | 227 ++++++--
+ arch/mips/kvm/entry.c                              |   8 +-
+ arch/mips/loongson64/init.c                        |   1 +
+ arch/mips/mm/c-r4k.c                               |   2 -
+ arch/mips/mm/tlbex.c                               |   9 +-
+ arch/mips/netlogic/Kconfig                         |  86 ----
+ arch/mips/netlogic/Makefile                        |   4 -
+ arch/mips/netlogic/Platform                        |  16 -
+ arch/mips/netlogic/common/Makefile                 |   5 -
+ arch/mips/netlogic/common/earlycons.c              |  63 ---
+ arch/mips/netlogic/common/irq.c                    | 350 -------------
+ arch/mips/netlogic/common/reset.S                  | 299 -----------
+ arch/mips/netlogic/common/smp.c                    | 285 ----------
+ arch/mips/netlogic/common/smpboot.S                | 141 -----
+ arch/mips/netlogic/common/time.c                   | 110 ----
+ arch/mips/netlogic/xlp/Makefile                    |  11 -
+ arch/mips/netlogic/xlp/ahci-init-xlp2.c            | 390 --------------
+ arch/mips/netlogic/xlp/ahci-init.c                 | 209 --------
+ arch/mips/netlogic/xlp/cop2-ex.c                   | 121 -----
+ arch/mips/netlogic/xlp/dt.c                        |  95 ----
+ arch/mips/netlogic/xlp/nlm_hal.c                   | 508 ------------------
+ arch/mips/netlogic/xlp/setup.c                     | 174 -------
+ arch/mips/netlogic/xlp/usb-init-xlp2.c             | 288 -----------
+ arch/mips/netlogic/xlp/usb-init.c                  | 149 ------
+ arch/mips/netlogic/xlp/wakeup.c                    | 212 --------
+ arch/mips/netlogic/xlr/Makefile                    |   3 -
+ arch/mips/netlogic/xlr/fmn-config.c                | 296 -----------
+ arch/mips/netlogic/xlr/fmn.c                       | 199 -------
+ arch/mips/netlogic/xlr/platform-flash.c            | 216 --------
+ arch/mips/netlogic/xlr/platform.c                  | 250 ---------
+ arch/mips/netlogic/xlr/setup.c                     | 206 --------
+ arch/mips/netlogic/xlr/wakeup.c                    |  85 ---
+ arch/mips/pci/Makefile                             |   3 -
+ arch/mips/pci/fixup-cobalt.c                       |  15 +
+ arch/mips/pci/msi-xlp.c                            | 571 ---------------------
+ arch/mips/pci/pci-bcm47xx.c                        |  16 +-
+ arch/mips/pci/pci-xlp.c                            | 332 ------------
+ arch/mips/pci/pci-xlr.c                            | 368 -------------
+ arch/mips/sni/time.c                               |   4 +-
+ 97 files changed, 412 insertions(+), 11780 deletions(-)
+ delete mode 100644 arch/mips/boot/dts/netlogic/Makefile
+ delete mode 100644 arch/mips/boot/dts/netlogic/xlp_evp.dts
+ delete mode 100644 arch/mips/boot/dts/netlogic/xlp_fvp.dts
+ delete mode 100644 arch/mips/boot/dts/netlogic/xlp_gvp.dts
+ delete mode 100644 arch/mips/boot/dts/netlogic/xlp_rvp.dts
+ delete mode 100644 arch/mips/boot/dts/netlogic/xlp_svp.dts
+ delete mode 100644 arch/mips/configs/nlm_xlp_defconfig
+ delete mode 100644 arch/mips/configs/nlm_xlr_defconfig
+ delete mode 100644 arch/mips/include/asm/mach-netlogic/cpu-feature-overrides.h
+ delete mode 100644 arch/mips/include/asm/mach-netlogic/irq.h
+ delete mode 100644 arch/mips/include/asm/mach-netlogic/multi-node.h
+ delete mode 100644 arch/mips/include/asm/netlogic/common.h
+ delete mode 100644 arch/mips/include/asm/netlogic/haldefs.h
+ delete mode 100644 arch/mips/include/asm/netlogic/interrupt.h
+ delete mode 100644 arch/mips/include/asm/netlogic/mips-extns.h
+ delete mode 100644 arch/mips/include/asm/netlogic/psb-bootinfo.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/bridge.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/cpucontrol.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/iomap.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/pcibus.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/pic.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/sys.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/uart.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/xlp.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlr/bridge.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlr/flash.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlr/fmn.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlr/gpio.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlr/iomap.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlr/msidef.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlr/pic.h
+ delete mode 100644 arch/mips/include/asm/netlogic/xlr/xlr.h
+ delete mode 100644 arch/mips/netlogic/Kconfig
+ delete mode 100644 arch/mips/netlogic/Makefile
+ delete mode 100644 arch/mips/netlogic/Platform
+ delete mode 100644 arch/mips/netlogic/common/Makefile
+ delete mode 100644 arch/mips/netlogic/common/earlycons.c
+ delete mode 100644 arch/mips/netlogic/common/irq.c
+ delete mode 100644 arch/mips/netlogic/common/reset.S
+ delete mode 100644 arch/mips/netlogic/common/smp.c
+ delete mode 100644 arch/mips/netlogic/common/smpboot.S
+ delete mode 100644 arch/mips/netlogic/common/time.c
+ delete mode 100644 arch/mips/netlogic/xlp/Makefile
+ delete mode 100644 arch/mips/netlogic/xlp/ahci-init-xlp2.c
+ delete mode 100644 arch/mips/netlogic/xlp/ahci-init.c
+ delete mode 100644 arch/mips/netlogic/xlp/cop2-ex.c
+ delete mode 100644 arch/mips/netlogic/xlp/dt.c
+ delete mode 100644 arch/mips/netlogic/xlp/nlm_hal.c
+ delete mode 100644 arch/mips/netlogic/xlp/setup.c
+ delete mode 100644 arch/mips/netlogic/xlp/usb-init-xlp2.c
+ delete mode 100644 arch/mips/netlogic/xlp/usb-init.c
+ delete mode 100644 arch/mips/netlogic/xlp/wakeup.c
+ delete mode 100644 arch/mips/netlogic/xlr/Makefile
+ delete mode 100644 arch/mips/netlogic/xlr/fmn-config.c
+ delete mode 100644 arch/mips/netlogic/xlr/fmn.c
+ delete mode 100644 arch/mips/netlogic/xlr/platform-flash.c
+ delete mode 100644 arch/mips/netlogic/xlr/platform.c
+ delete mode 100644 arch/mips/netlogic/xlr/setup.c
+ delete mode 100644 arch/mips/netlogic/xlr/wakeup.c
+ delete mode 100644 arch/mips/pci/msi-xlp.c
+ delete mode 100644 arch/mips/pci/pci-xlp.c
+ delete mode 100644 arch/mips/pci/pci-xlr.c
 -- 
-2.30.2
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
