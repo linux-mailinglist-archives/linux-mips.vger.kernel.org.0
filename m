@@ -2,255 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0CF44608B
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 09:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59496446478
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 14:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbhKEIZn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Nov 2021 04:25:43 -0400
-Received: from elvis.franken.de ([193.175.24.41]:33304 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229884AbhKEIZk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 5 Nov 2021 04:25:40 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1miuV1-0006UO-00; Fri, 05 Nov 2021 09:22:59 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id F4238C2972; Fri,  5 Nov 2021 09:22:52 +0100 (CET)
-Date:   Fri, 5 Nov 2021 09:22:52 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v5.16
-Message-ID: <20211105082252.GA6698@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        id S232319AbhKEN4Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Nov 2021 09:56:24 -0400
+Received: from mail-eopbgr1300108.outbound.protection.outlook.com ([40.107.130.108]:7190
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232106AbhKEN4Y (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 5 Nov 2021 09:56:24 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f4WfJT74lgAIAaWKc5pj+OW5HIhnTmUDtfoBjIxaah+MmJKjSyKv4/HTDi6WyBazBpwCv0Lp0pGcUe67W8qQcCAorlVZaaGS/CuXXj/tPvhGLAabAqQWtEKlhod8dqIb10XMif/IPbOejOA7Y0trZEioXwFi1ltZ+6XWqolXWujJc1Oj8GuPTV8ASsOW0sRe+6A9UxNtj5py91lEqs6gJM8ME8/aN2ighzY2wSFlHpJGDTVcoBezSQT6k3zuXgFjYZ/5o8TTS0PHNZ5vvaOk9v+3GyoTXeVWNYRn/Kw9ooSUy8dh2y7HaEIc6V+E62DmfYw14zV8JABH8Zg1S7suCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CWSrYkfScE44YfMrxrQvTr1F9iCxpdHw+GzWCyzejs0=;
+ b=XJ7P0psadU1U6TjBgVwme9Se2nwG4nLDM9446wpCtz5GYRHuLX6wbP8scZ5UOVYh16rRaVAIvlYip+gzPO/oFY4O/gw0bnvRG08U4osYuyyk16JVNKjV6gGrNFi3Fknb6Tr39H1NIRkBJqRTB4grU/S+92WiMof3LgDR6jp18RxKPQxufEN4Y1uq0GfgdvBASXkCOF3u5KKCnEYiJyVundQJVg5Bz3TiCPvk2Lf4r1oVZtE4q5ztruI/WQqI5mMZ3lIyzjQCzpda8GtLyMOkpFMQcpymgrr2LIaPe8dBhwi3EtT7OevM1g/oIcFbGAMdYouZzwBJFUAsxqj77iH4sg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cipunited.com; dmarc=pass action=none
+ header.from=cipunited.com; dkim=pass header.d=cipunited.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cipunited.onmicrosoft.com; s=selector1-cipunited-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CWSrYkfScE44YfMrxrQvTr1F9iCxpdHw+GzWCyzejs0=;
+ b=IvJ0KtTtUtVkOS4DQxIq85maF364mGSCD/TOZ+Cp3ocf1z6MdKAE5mN28yoFaW0EUm94MLOUa3gaDoU19QR3WNPv8ehpWcOSCWxmq6TucjFhJ5UoetV04qzOnHT8sZIBR+VNrXtV4RvzcLHS5ORN31ExXxLU2Y6DOfKIqYVxqjE=
+Authentication-Results: alpha.franken.de; dkim=none (message not signed)
+ header.d=none;alpha.franken.de; dmarc=none action=none
+ header.from=cipunited.com;
+Received: from HKAPR04MB3956.apcprd04.prod.outlook.com (2603:1096:203:d5::13)
+ by HK0PR04MB2370.apcprd04.prod.outlook.com (2603:1096:203:4f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.10; Fri, 5 Nov
+ 2021 13:53:42 +0000
+Received: from HKAPR04MB3956.apcprd04.prod.outlook.com
+ ([fe80::4d0:36d8:f42d:4927]) by HKAPR04MB3956.apcprd04.prod.outlook.com
+ ([fe80::4d0:36d8:f42d:4927%9]) with mapi id 15.20.4669.013; Fri, 5 Nov 2021
+ 13:53:42 +0000
+From:   YunQiang Su <yunqiang.su@cipunited.com>
+To:     tsbogend@alpha.franken.de
+Cc:     paul@crapouillou.net, zhouyanjie@wanyeetech.com,
+        jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
+        YunQiang Su <yunqiang.su@cipunited.com>
+Subject: [RFC] MIPS: fix generic zboot support
+Date:   Fri,  5 Nov 2021 09:52:32 -0400
+Message-Id: <20211105135232.2128420-1-yunqiang.su@cipunited.com>
+X-Mailer: git-send-email 2.30.2
 Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR02CA0069.namprd02.prod.outlook.com
+ (2603:10b6:a03:54::46) To HKAPR04MB3956.apcprd04.prod.outlook.com
+ (2603:1096:203:d5::13)
+MIME-Version: 1.0
+Received: from localhost.localdomain (2001:da8:20f:4532:feda::b016) by BYAPR02CA0069.namprd02.prod.outlook.com (2603:10b6:a03:54::46) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.10 via Frontend Transport; Fri, 5 Nov 2021 13:53:38 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6370bdf1-c210-4df3-82e0-08d9a063ad27
+X-MS-TrafficTypeDiagnostic: HK0PR04MB2370:
+X-Microsoft-Antispam-PRVS: <HK0PR04MB23704F1417725E7D8284BB2FF28E9@HK0PR04MB2370.apcprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mlYf0p8XJ6zNawK1VEKKsgV89ubePJv9/zMG8mDo3drGukqxV9RcsbfihLReaHnK6g0gf0dOtxK8Tus20CSAuB1zWVz95h/2JWBz2F0FjGFAj5eSBjTQNb2eP1muvmAL71Yd6Q4ZPm25tlPsyyyXvFX4HQxYg+gaZcd7IA2dTa/kSTdw3ht655uupoUQlQ/BaYicOg3dzq1DOtgkvn4yu1MNFv/nyFS5mxSIRKZi0FspM71sGoxwhp7HuDHkjFnW8WKZkc0Gk/VzpewfPEf+/0cmFrKmi4McqBqsgZXpXOXDp+M58nvCuWIGdMmZUw4oO2yw9zfp7mb0m5cvaqHp+WTkLwi5LLKyYs3us2kB5p07Qpc5mW1Em3na4LhmEjaXvwN3JCb5LJiyzJqkAl6+jJdXxsvbE8HAeD7nCMhogOFjhYPu1x/mYJqXLwbgQfRl7lXGgYtkFKCDenTmmNx1e70KjCsLzIKL49oeuGgRzR29O68z+J+C+jqE0JRdM62qFAMJak29RKnj0wwLniY9hZZyXgzOm1AoEfLtv4fSJMlub6EAUPNwJcbYNoxgvMc0UUC4RqYNVFLmvifZtGQWIdw+bZfwI1ZrpRWNgtaDh4CBypMbIwdf9xmrxAzOk5zu6jWX1w9496DAG5QDJ/6jlmQuiMTHrFdXk1Obpi5SUxAP9e+fsvUC60ATecl95UOj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HKAPR04MB3956.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(136003)(346002)(39830400003)(396003)(366004)(36756003)(508600001)(38100700002)(186003)(8936002)(66946007)(66556008)(316002)(5660300002)(66476007)(6666004)(4326008)(1076003)(86362001)(2906002)(8676002)(2616005)(6916009)(6486002)(6512007)(83380400001)(107886003)(6506007)(52116002)(41533002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e/jjqG83+BYwj1iYKKVefq6B3tOKAfzjvzlLbzrelGb00Jiijx2oqor5OyyY?=
+ =?us-ascii?Q?vY8ieXZNOhRyQH4F8/OeTS2dKS8Ut9QT2doX0LvIhC5a3QfMq5WeNpKCsR2L?=
+ =?us-ascii?Q?X/WVQIfiu8UVY+u6wufv+U0KYJo2g/s8VL0cP2pnuNvkov47x4BsyRNnTHk6?=
+ =?us-ascii?Q?sYhDIX9ufRaNJZFRKAyq0X1VRFYItSEebwDTZ4NB6Xc1xSfYh7RChCALVre5?=
+ =?us-ascii?Q?p1jbEfZu9cF/Ca4hXa70n4z8wPS6oh5TVnpF0ns4YQJiqJw1wKYF+/GX3Rqa?=
+ =?us-ascii?Q?ri2EtwvPq64vKRn+fms44XX7mz3IgtY8jx7ORI0kKM6R5KleiEiegA6UXd79?=
+ =?us-ascii?Q?HaljkSfbUiFBkeZDIewzj/BlDe8pDf23mViMBwlCLL4b+82YroOy8Ht12PA9?=
+ =?us-ascii?Q?JamMsCgIkuSilQqL3Lr3Lx+lvI+D0n80Eh8T/pEY3JqJZgA8Z2YAHFWw7Wnv?=
+ =?us-ascii?Q?+WwWCfZzEFWy5M2mwEOWLpEYIAa2DOBLdb0sM858/pToOc/H+hvnxtMZupXY?=
+ =?us-ascii?Q?Ma1ca+bX0JiOp0fo9AvBbmbyBvmb5+2r8T0PbIjT2ibNV1Bw0xaXEM3lO67v?=
+ =?us-ascii?Q?bAOEnWP8qvi1KFaiHDUD1FUb6swiWf/HTs4iEvffmW1f7m38+GweE5fgq/Ch?=
+ =?us-ascii?Q?Mib7Emv+w2+6xq3DVhheriDDopBKvuxpC+R0lZNSnMO9mN7xaA50Jx+4/ZVn?=
+ =?us-ascii?Q?6gkGlH+L2kqFCj1/dKv2goMK42ddfi7E0aWVn7pFvOQjCXdycsxrUjqU4qyh?=
+ =?us-ascii?Q?44ryE074Lc4P3vnlxeeHNjATxaynpw2xZr8dklBEDXvkivGL2J3svkmw6fay?=
+ =?us-ascii?Q?RU8yWwm72gdl3cLJi+S7fJpFFrJHkQmr8OOgZOwuwb7YtVlVUipkPug4NSz8?=
+ =?us-ascii?Q?BMHKO/o7jevnagj+swTgBlCGwuEUoUDHMrDFliR83EOGNrUsPJCwtn8Ks+9H?=
+ =?us-ascii?Q?mQZjoINID7/1TbHzUO8YY04xdaYylYAxJp5vmKZEqyY4DjfqNhRKhJly5zQa?=
+ =?us-ascii?Q?8yXc4WKacxk3Yc03GFM1h08KrS1ouPn5Wc0vlofLzn7tjgClICpG5fD2Powx?=
+ =?us-ascii?Q?0CspniRvjv7ZBKqw1iLsiMChIyZL+CRVLzYrFX8JUQtwSEAtkEL/rwbz7cYB?=
+ =?us-ascii?Q?KPEuEDzvX0KD4S7WGFS33zQxKguDGvK63popKNUeSr8/3J+d8ZRz8Z3L5Y6E?=
+ =?us-ascii?Q?j440gl5S+Jpc1tV+lL5rsxspX6U6WMyeAIOQSgxmvPeId6rMP6wKXbk2u9s1?=
+ =?us-ascii?Q?/qWDP05j1iKkNPKbuGHYvmoixg1OOpSaX/3s/IKjEDEWgVIEmeA8KVeFViJU?=
+ =?us-ascii?Q?Olhrkzv/155xh5JPzWxaEwnwbE6GdMIeu/CDJHHWL5xH7UQjzLYSPaBRswAQ?=
+ =?us-ascii?Q?cToGTK3Ov3TnVuvRtSxgGlWOkAeMSzvJh3ogpyuuOzlUfrBE0wGjTCix6Swk?=
+ =?us-ascii?Q?FDf6DpGQ79lBfk19iRhm+VFKkY9fbvjcHwcEHbYIWrMoxTYT/u8+s65Vpeoa?=
+ =?us-ascii?Q?oNs2BRLuH5B0DA0v5wXWxB12nslK9WC/gLaHfx+xb8SUMfMeO2S1Mbfa6ZQC?=
+ =?us-ascii?Q?wbNatWUJt7Yp0DLKB2TVYdjNxdKrlzUp6jFeNnDsMpfTSeUtvxfnrKd8Od3+?=
+ =?us-ascii?Q?RCyqBk6SGOny0fjdSFirJ3wk8DHaS1pMTNzHQQz4sNZT7Ro1QPIdLbhXknpj?=
+ =?us-ascii?Q?zdo9rdA1LhJHAh7SaAgIVYc/fYulNN2wc+LPQ++17j8sEiOF?=
+X-OriginatorOrg: cipunited.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6370bdf1-c210-4df3-82e0-08d9a063ad27
+X-MS-Exchange-CrossTenant-AuthSource: HKAPR04MB3956.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2021 13:53:42.2455
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e31cf5b5-ee69-4d5f-9c69-edeeda2458c0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rqRJMBio+4WezK+Io2NyMHlQglv/0VlGB/F1IYs+F4dhrycnK22leogFNggTo5dCKj7w3zAWvP5PUFoDv/Cj03CGi5eP/Xq0h/QL7ccbHaE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR04MB2370
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
+There are 2 problems here:
+1. setting zload-y to 0xffffffff81000000 breaks booting on qemu -M boston.
+   Why it is set here? Any other platform needs this value?
+2. vmlinux.gz.itb should be appended to all-$(CONFIG_MIPS_GENERIC) instead
+   of replacing. Otherwise, no vmlinuz will be built.
+---
+ arch/mips/generic/Platform | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.16
-
-for you to fetch changes up to 36de23a4c5f0b61ceb4812b535422fa6c6e97447:
-
-  MIPS: Cobalt: Explain GT64111 early PCI fixup (2021-11-03 17:34:11 +0100)
-
-----------------------------------------------------------------
-- added printing of CPU options for /proc/cpuinfo
-- removed support for Netlogic SOCs
-- fixes and cleanup
-
-----------------------------------------------------------------
-Andy Shevchenko (2):
-      bcm47xx: Get rid of redundant 'else'
-      bcm47xx: Replace printk(KERN_ALERT ... pci_devname(dev)) with pci_alert()
-
-Bart Van Assche (1):
-      MIPS: sni: Fix the build
-
-Geert Uytterhoeven (1):
-      mips: cm: Convert to bitfield API to fix out-of-bounds access
-
-Hauke Mehrtens (1):
-      MIPS: kernel: proc: add CPU option reporting
-
-Ilya Lipnitskiy (2):
-      MIPS: kernel: proc: fix trivial style errors
-      MIPS: kernel: proc: use seq_puts instead of seq_printf
-
-Jackie Liu (1):
-      MIPS: loongson64: make CPU_LOONGSON64 depends on MIPS_FP_SUPPORT
-
-Maciej W. Rozycki (1):
-      MIPS: Fix assembly error from MIPSr2 code used within MIPS_ISA_ARCH_LEVEL
-
-Pali Rohár (1):
-      MIPS: Cobalt: Explain GT64111 early PCI fixup
-
-Paul Cercueil (1):
-      MIPS: Avoid macro redefinitions
-
-Thomas Bogendoerfer (2):
-      MIPS: octeon: Remove unused functions
-      MIPS: Remove NETLOGIC support
-
-Wan Jiabing (1):
-      MIPS: Loongson64: Add of_node_put() before break
-
-Wang Haojun (1):
-      MIPS: loongson64: Fix no screen display during boot-up
-
-Zhaolong Zhang (1):
-      mips: fix HUGETLB function without THP enabled
-
- arch/mips/Kbuild.platforms                         |   1 -
- arch/mips/Kconfig                                  |  92 +---
- arch/mips/boot/compressed/uart-16550.c             |  12 -
- arch/mips/boot/dts/Makefile                        |   1 -
- arch/mips/boot/dts/netlogic/Makefile               |   8 -
- arch/mips/boot/dts/netlogic/xlp_evp.dts            | 131 -----
- arch/mips/boot/dts/netlogic/xlp_fvp.dts            | 131 -----
- arch/mips/boot/dts/netlogic/xlp_gvp.dts            |  89 ----
- arch/mips/boot/dts/netlogic/xlp_rvp.dts            |  89 ----
- arch/mips/boot/dts/netlogic/xlp_svp.dts            | 131 -----
- arch/mips/cavium-octeon/executive/cvmx-helper.c    |  10 -
- arch/mips/cavium-octeon/executive/cvmx-pko.c       |  14 -
- arch/mips/configs/loongson3_defconfig              |   1 +
- arch/mips/configs/nlm_xlp_defconfig                | 557 --------------------
- arch/mips/configs/nlm_xlr_defconfig                | 508 ------------------
- arch/mips/include/asm/cmpxchg.h                    |   5 +-
- arch/mips/include/asm/cop2.h                       |  11 -
- arch/mips/include/asm/cpu-type.h                   |   8 -
- arch/mips/include/asm/cpu.h                        |   2 +-
- arch/mips/include/asm/ginvt.h                      |  11 +-
- arch/mips/include/asm/hazards.h                    |   2 +-
- .../include/asm/mach-loongson64/loongson_regs.h    |  12 +
- .../asm/mach-netlogic/cpu-feature-overrides.h      |  57 --
- arch/mips/include/asm/mach-netlogic/irq.h          |  17 -
- arch/mips/include/asm/mach-netlogic/multi-node.h   |  74 ---
- arch/mips/include/asm/mips-cm.h                    |  12 +-
- arch/mips/include/asm/mipsregs.h                   | 190 ++++---
- arch/mips/include/asm/msa.h                        |  34 +-
- arch/mips/include/asm/netlogic/common.h            | 132 -----
- arch/mips/include/asm/netlogic/haldefs.h           | 171 ------
- arch/mips/include/asm/netlogic/interrupt.h         |  45 --
- arch/mips/include/asm/netlogic/mips-extns.h        | 301 -----------
- arch/mips/include/asm/netlogic/psb-bootinfo.h      |  95 ----
- arch/mips/include/asm/netlogic/xlp-hal/bridge.h    | 186 -------
- .../mips/include/asm/netlogic/xlp-hal/cpucontrol.h |  89 ----
- arch/mips/include/asm/netlogic/xlp-hal/iomap.h     | 214 --------
- arch/mips/include/asm/netlogic/xlp-hal/pcibus.h    | 113 ----
- arch/mips/include/asm/netlogic/xlp-hal/pic.h       | 366 -------------
- arch/mips/include/asm/netlogic/xlp-hal/sys.h       | 213 --------
- arch/mips/include/asm/netlogic/xlp-hal/uart.h      | 192 -------
- arch/mips/include/asm/netlogic/xlp-hal/xlp.h       | 119 -----
- arch/mips/include/asm/netlogic/xlr/bridge.h        | 104 ----
- arch/mips/include/asm/netlogic/xlr/flash.h         |  55 --
- arch/mips/include/asm/netlogic/xlr/fmn.h           | 365 -------------
- arch/mips/include/asm/netlogic/xlr/gpio.h          |  74 ---
- arch/mips/include/asm/netlogic/xlr/iomap.h         | 109 ----
- arch/mips/include/asm/netlogic/xlr/msidef.h        |  84 ---
- arch/mips/include/asm/netlogic/xlr/pic.h           | 306 -----------
- arch/mips/include/asm/netlogic/xlr/xlr.h           |  59 ---
- arch/mips/include/asm/octeon/cvmx-helper.h         |   7 -
- arch/mips/include/asm/octeon/cvmx-pko.h            |   1 -
- arch/mips/include/asm/pgtable.h                    |  45 +-
- arch/mips/include/asm/processor.h                  |  13 -
- arch/mips/include/asm/vermagic.h                   |   4 -
- arch/mips/kernel/cpu-probe.c                       |  84 ---
- arch/mips/kernel/idle.c                            |   2 -
- arch/mips/kernel/mips-cm.c                         |  21 +-
- arch/mips/kernel/perf_event_mipsxx.c               |  86 ----
- arch/mips/kernel/proc.c                            | 227 ++++++--
- arch/mips/kvm/entry.c                              |   8 +-
- arch/mips/loongson64/init.c                        |   1 +
- arch/mips/mm/c-r4k.c                               |   2 -
- arch/mips/mm/tlbex.c                               |   9 +-
- arch/mips/netlogic/Kconfig                         |  86 ----
- arch/mips/netlogic/Makefile                        |   4 -
- arch/mips/netlogic/Platform                        |  16 -
- arch/mips/netlogic/common/Makefile                 |   5 -
- arch/mips/netlogic/common/earlycons.c              |  63 ---
- arch/mips/netlogic/common/irq.c                    | 350 -------------
- arch/mips/netlogic/common/reset.S                  | 299 -----------
- arch/mips/netlogic/common/smp.c                    | 285 ----------
- arch/mips/netlogic/common/smpboot.S                | 141 -----
- arch/mips/netlogic/common/time.c                   | 110 ----
- arch/mips/netlogic/xlp/Makefile                    |  11 -
- arch/mips/netlogic/xlp/ahci-init-xlp2.c            | 390 --------------
- arch/mips/netlogic/xlp/ahci-init.c                 | 209 --------
- arch/mips/netlogic/xlp/cop2-ex.c                   | 121 -----
- arch/mips/netlogic/xlp/dt.c                        |  95 ----
- arch/mips/netlogic/xlp/nlm_hal.c                   | 508 ------------------
- arch/mips/netlogic/xlp/setup.c                     | 174 -------
- arch/mips/netlogic/xlp/usb-init-xlp2.c             | 288 -----------
- arch/mips/netlogic/xlp/usb-init.c                  | 149 ------
- arch/mips/netlogic/xlp/wakeup.c                    | 212 --------
- arch/mips/netlogic/xlr/Makefile                    |   3 -
- arch/mips/netlogic/xlr/fmn-config.c                | 296 -----------
- arch/mips/netlogic/xlr/fmn.c                       | 199 -------
- arch/mips/netlogic/xlr/platform-flash.c            | 216 --------
- arch/mips/netlogic/xlr/platform.c                  | 250 ---------
- arch/mips/netlogic/xlr/setup.c                     | 206 --------
- arch/mips/netlogic/xlr/wakeup.c                    |  85 ---
- arch/mips/pci/Makefile                             |   3 -
- arch/mips/pci/fixup-cobalt.c                       |  15 +
- arch/mips/pci/msi-xlp.c                            | 571 ---------------------
- arch/mips/pci/pci-bcm47xx.c                        |  16 +-
- arch/mips/pci/pci-xlp.c                            | 332 ------------
- arch/mips/pci/pci-xlr.c                            | 368 -------------
- arch/mips/sni/time.c                               |   4 +-
- 97 files changed, 412 insertions(+), 11780 deletions(-)
- delete mode 100644 arch/mips/boot/dts/netlogic/Makefile
- delete mode 100644 arch/mips/boot/dts/netlogic/xlp_evp.dts
- delete mode 100644 arch/mips/boot/dts/netlogic/xlp_fvp.dts
- delete mode 100644 arch/mips/boot/dts/netlogic/xlp_gvp.dts
- delete mode 100644 arch/mips/boot/dts/netlogic/xlp_rvp.dts
- delete mode 100644 arch/mips/boot/dts/netlogic/xlp_svp.dts
- delete mode 100644 arch/mips/configs/nlm_xlp_defconfig
- delete mode 100644 arch/mips/configs/nlm_xlr_defconfig
- delete mode 100644 arch/mips/include/asm/mach-netlogic/cpu-feature-overrides.h
- delete mode 100644 arch/mips/include/asm/mach-netlogic/irq.h
- delete mode 100644 arch/mips/include/asm/mach-netlogic/multi-node.h
- delete mode 100644 arch/mips/include/asm/netlogic/common.h
- delete mode 100644 arch/mips/include/asm/netlogic/haldefs.h
- delete mode 100644 arch/mips/include/asm/netlogic/interrupt.h
- delete mode 100644 arch/mips/include/asm/netlogic/mips-extns.h
- delete mode 100644 arch/mips/include/asm/netlogic/psb-bootinfo.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/bridge.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/cpucontrol.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/iomap.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/pcibus.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/pic.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/sys.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/uart.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlp-hal/xlp.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlr/bridge.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlr/flash.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlr/fmn.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlr/gpio.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlr/iomap.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlr/msidef.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlr/pic.h
- delete mode 100644 arch/mips/include/asm/netlogic/xlr/xlr.h
- delete mode 100644 arch/mips/netlogic/Kconfig
- delete mode 100644 arch/mips/netlogic/Makefile
- delete mode 100644 arch/mips/netlogic/Platform
- delete mode 100644 arch/mips/netlogic/common/Makefile
- delete mode 100644 arch/mips/netlogic/common/earlycons.c
- delete mode 100644 arch/mips/netlogic/common/irq.c
- delete mode 100644 arch/mips/netlogic/common/reset.S
- delete mode 100644 arch/mips/netlogic/common/smp.c
- delete mode 100644 arch/mips/netlogic/common/smpboot.S
- delete mode 100644 arch/mips/netlogic/common/time.c
- delete mode 100644 arch/mips/netlogic/xlp/Makefile
- delete mode 100644 arch/mips/netlogic/xlp/ahci-init-xlp2.c
- delete mode 100644 arch/mips/netlogic/xlp/ahci-init.c
- delete mode 100644 arch/mips/netlogic/xlp/cop2-ex.c
- delete mode 100644 arch/mips/netlogic/xlp/dt.c
- delete mode 100644 arch/mips/netlogic/xlp/nlm_hal.c
- delete mode 100644 arch/mips/netlogic/xlp/setup.c
- delete mode 100644 arch/mips/netlogic/xlp/usb-init-xlp2.c
- delete mode 100644 arch/mips/netlogic/xlp/usb-init.c
- delete mode 100644 arch/mips/netlogic/xlp/wakeup.c
- delete mode 100644 arch/mips/netlogic/xlr/Makefile
- delete mode 100644 arch/mips/netlogic/xlr/fmn-config.c
- delete mode 100644 arch/mips/netlogic/xlr/fmn.c
- delete mode 100644 arch/mips/netlogic/xlr/platform-flash.c
- delete mode 100644 arch/mips/netlogic/xlr/platform.c
- delete mode 100644 arch/mips/netlogic/xlr/setup.c
- delete mode 100644 arch/mips/netlogic/xlr/wakeup.c
- delete mode 100644 arch/mips/pci/msi-xlp.c
- delete mode 100644 arch/mips/pci/pci-xlp.c
- delete mode 100644 arch/mips/pci/pci-xlr.c
+diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
+index e1abc113b409..0c03623f3897 100644
+--- a/arch/mips/generic/Platform
++++ b/arch/mips/generic/Platform
+@@ -13,8 +13,7 @@ cflags-$(CONFIG_MACH_INGENIC_SOC)	+= -I$(srctree)/arch/mips/include/asm/mach-ing
+ cflags-$(CONFIG_MIPS_GENERIC)	+= -I$(srctree)/arch/mips/include/asm/mach-generic
+ 
+ load-$(CONFIG_MIPS_GENERIC)	+= 0xffffffff80100000
+-zload-$(CONFIG_MIPS_GENERIC)	+= 0xffffffff81000000
+-all-$(CONFIG_MIPS_GENERIC)	:= vmlinux.gz.itb
++all-$(CONFIG_MIPS_GENERIC)	+= vmlinux.gz.itb
+ 
+ its-y					:= vmlinux.its.S
+ its-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= board-boston.its.S
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.30.2
+
