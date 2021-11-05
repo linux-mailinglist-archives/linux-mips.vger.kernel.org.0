@@ -2,57 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D18446619
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 16:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9972446630
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 16:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbhKEPrc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Nov 2021 11:47:32 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:55230
+        id S232936AbhKEPse (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Nov 2021 11:48:34 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:55352
         "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231425AbhKEPrc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Nov 2021 11:47:32 -0400
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
+        by vger.kernel.org with ESMTP id S232864AbhKEPsd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Nov 2021 11:48:33 -0400
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com [209.85.208.200])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A5DF840027
-        for <linux-mips@vger.kernel.org>; Fri,  5 Nov 2021 15:44:51 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 735253FFE2
+        for <linux-mips@vger.kernel.org>; Fri,  5 Nov 2021 15:45:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1636127091;
-        bh=jHLHivxStKmmA/vK1gxbQJ1JTHvdFc1nwcxGtaT2GSQ=;
+        s=20210705; t=1636127153;
+        bh=RNobqhWtnsfIoxXaYIoZpBxYqqusSLJy7zau+vw4CD8=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=i98P3f/1FmYQhfMC0neDZ5FaDm8x4MUKV8uKBR0obkpcAOGBvMxFlL/46DFzOY1Sq
-         Tdei5sSMMYGIOl+d4F7Jh05sq3sJf9Qmf840irPerxAdmtlvAzoxdpeJ/BiGXGRpRP
-         R1mX0n8fSxYC+gGnW55eMyMXiWNlPoLk65D6J/MpjD5OcK3QTWxXJNxJrb9ODcbuVa
-         epIGpQnpnyMwHN03SZqR400c5NgyK/xaFC4x4QCIZHUbpUZLlmnr+D8LqWkmlHkFfs
-         qWD6S3QOTkbg7b9bDs5LdgKf+RJ3b2xSyWAeFlfGHTyuUGgRxVBZVVfC3KZXBBQKc1
-         0YwnuvxlPR0rQ==
-Received: by mail-lj1-f198.google.com with SMTP id s18-20020a2e98d2000000b00218ab148976so1334500ljj.2
-        for <linux-mips@vger.kernel.org>; Fri, 05 Nov 2021 08:44:51 -0700 (PDT)
+        b=TZu1bZFfonmNRtp+lLLb27l2nbvyrUrt+aU96cVtuvRVa1qFwVcU64Hf72LaEZ8Ul
+         lLNcoNWtED/y3QgX/7zgftL2+ArdH/bpS9DAQqr3d6lLtxtCpQwmvlrMWf97A3obeP
+         YYaHzJ8hXFMHp9Yp6aDMO/kImkpmYQJ09Kn/3hozbb3OkWSIyzV4BniUsuZPUnIV2C
+         IQbb3lvVCMwRwSYLLmYk+k2VcSaEXw+J9QpVrImK1gaxgxvg3mR/+YB9iZAIL3dbZ4
+         Sr6ehwYlUCOsX4OOVXg3eGxgIMBvw2zyaVyKdLaq9yjuI+iakBnrpbwQtMGP2B79ln
+         fqyAmcVEuPGyg==
+Received: by mail-lj1-f200.google.com with SMTP id f17-20020a2e9751000000b00211a1367c68so3203261ljj.16
+        for <linux-mips@vger.kernel.org>; Fri, 05 Nov 2021 08:45:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jHLHivxStKmmA/vK1gxbQJ1JTHvdFc1nwcxGtaT2GSQ=;
-        b=CaM3xqD+hp5QY7j61htnosmEDrUr3hCnoexpULIeRRuUnVC1c9qk7OXSh40hXxj6cY
-         X67QuKgjQqEVfdGmF/weZiVBqwyo49RY1SWDUdE6/VBlg3ie7ht3EEtRQ4m2jeTjXvGv
-         /hF4rtJEIKbFhZao1ko2uTLZ8+J4Z6ZBtocdHAlEUcj6l1En6PJPz8sdPs4HkQH2bOlX
-         ZIqtoA6gQ9MeqsvUmQTHMO/vD9YIBKHYAbX2qN9E2xu27KtIlQ5Sw67g4YPN2qGyatnd
-         wMYwf046j2hoQd68uaBNgLHmtHSDaelaFZfKxg6zPBnaTArHEkFnfTtd3hjLUzohi2+p
-         kA0A==
-X-Gm-Message-State: AOAM530WSWV7u3LUhmfcxEBOAfF5tvqukK+w1yzduUcxNkprNrQHp5p0
-        NK297XAcipP1XdkWyV7306QbY1FteKI0rCK0NtvRlwdHHapSCQkjBnmSZt3Yz7oLx7j/ideAqrX
-        7DWpDtFZRYq28n00k7EXN4Ipn4oEySan/qI1dCY8=
-X-Received: by 2002:adf:fb44:: with SMTP id c4mr71913809wrs.179.1636127080662;
-        Fri, 05 Nov 2021 08:44:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwubhhFLZ1HPTor4i3ntryLRhJH9bsSukDKTrsUDEYR79CovJvijb9h2VluKlN2+0XYoTfgRg==
-X-Received: by 2002:adf:fb44:: with SMTP id c4mr71913748wrs.179.1636127080324;
-        Fri, 05 Nov 2021 08:44:40 -0700 (PDT)
+        bh=RNobqhWtnsfIoxXaYIoZpBxYqqusSLJy7zau+vw4CD8=;
+        b=gLnJpwngJnTn+aPCFHuyjVc3GngNApbHPDTkvt0OBvbIjkp6vJmvttRpc4Gc+yKkXt
+         3h6zTN0ONicXTEJcRnuDNVRUpa6g8b14WboSF597m8cjwZ3LSJ/GTer1t/XWPILUuXS/
+         tWHyefPi9VP1Lg+naxx5WWlokRHdEgug8XgXc7o6QXPNgvlw+wg51NamIEI63TTReIWC
+         LpYnenyCHlczQa+aKhPIV8s++F6aHu4kMsP+U2wMhCKV0KlX45sloNHRDKperQZTW0To
+         oRyDwqIuWHFOEcmDncNBxir29jRGk18Ni7WiYHMhNvpgYL4erLAKXkoWpkQKfpL9va3F
+         MBHQ==
+X-Gm-Message-State: AOAM531XRCixNXVMECBnvk9nbwugrNF/zlq6PtdeiJbmVZnVlmgE5y/I
+        OdoJpUUzLupfXMhCxTKDjSCjs8uI5ZmPft8+eiOOH/aqK+TJhF40bMK3O6Qu/tv26bBsQrX77Ul
+        tHv/i313qjccG55SDZ3QjDe8pesEbGFSJph3JjbQ=
+X-Received: by 2002:a05:6000:248:: with SMTP id m8mr55189848wrz.404.1636127142091;
+        Fri, 05 Nov 2021 08:45:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwZywTZdfrBqjkrXUHT6HtmWD9YVAJ3iwmoe2pIrt2a1HLvL+5pBL/kHDbOZs7Oh5iYcqB87Q==
+X-Received: by 2002:a05:6000:248:: with SMTP id m8mr55189804wrz.404.1636127141914;
+        Fri, 05 Nov 2021 08:45:41 -0700 (PDT)
 Received: from localhost.localdomain (lfbn-lyo-1-470-249.w2-7.abo.wanadoo.fr. [2.7.60.249])
-        by smtp.gmail.com with ESMTPSA id l11sm8178812wrp.61.2021.11.05.08.44.39
+        by smtp.gmail.com with ESMTPSA id z5sm15339353wmp.26.2021.11.05.08.45.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Nov 2021 08:44:40 -0700 (PDT)
+        Fri, 05 Nov 2021 08:45:41 -0700 (PDT)
 From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
 To:     Steve French <sfrench@samba.org>, Jonathan Corbet <corbet@lwn.net>,
         David Howells <dhowells@redhat.com>,
@@ -80,9 +80,9 @@ To:     Steve French <sfrench@samba.org>, Jonathan Corbet <corbet@lwn.net>,
         linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
         linux-power@fi.rohmeurope.com
 Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Subject: [PATCH 1/7] Documentation, arch: Remove leftovers from fscache/cachefiles histograms
-Date:   Fri,  5 Nov 2021 16:43:28 +0100
-Message-Id: <20211105154334.1841927-2-alexandre.ghiti@canonical.com>
+Subject: [PATCH 2/7] Documentation, arch: Remove leftovers from raw device
+Date:   Fri,  5 Nov 2021 16:43:29 +0100
+Message-Id: <20211105154334.1841927-3-alexandre.ghiti@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211105154334.1841927-1-alexandre.ghiti@canonical.com>
 References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com>
@@ -92,158 +92,86 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-A few references to the fscache and cachefiles histograms were left in
-the Documentation and some arch defconfigs: remove them since those
-configs do not exist anymore.
+Raw device interface was removed so remove all references to configs
+related to it.
 
-Fixes: 6ae9bd8bb037("fscache, cachefiles: Remove the histogram stuff")
+Fixes: 603e4922f1c8 ("remove the raw driver")
 Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 ---
- .../filesystems/caching/cachefiles.rst        | 34 -------------------
- Documentation/filesystems/caching/fscache.rst | 34 ++-----------------
- arch/arm/configs/axm55xx_defconfig            |  2 --
- arch/mips/configs/nlm_xlp_defconfig           |  1 -
- arch/mips/configs/nlm_xlr_defconfig           |  1 -
- 5 files changed, 2 insertions(+), 70 deletions(-)
+ Documentation/admin-guide/devices.txt  | 8 +-------
+ arch/arm/configs/spear13xx_defconfig   | 1 -
+ arch/arm/configs/spear3xx_defconfig    | 1 -
+ arch/arm/configs/spear6xx_defconfig    | 1 -
+ arch/powerpc/configs/pseries_defconfig | 1 -
+ 5 files changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/Documentation/filesystems/caching/cachefiles.rst b/Documentation/filesystems/caching/cachefiles.rst
-index e58bc1fd312a..e59861458029 100644
---- a/Documentation/filesystems/caching/cachefiles.rst
-+++ b/Documentation/filesystems/caching/cachefiles.rst
-@@ -424,40 +424,6 @@ for CacheFiles to run in a context of a specific security label, or to create
- files and directories with another security label.
+diff --git a/Documentation/admin-guide/devices.txt b/Documentation/admin-guide/devices.txt
+index 922c23bb4372..c07dc0ee860e 100644
+--- a/Documentation/admin-guide/devices.txt
++++ b/Documentation/admin-guide/devices.txt
+@@ -2339,13 +2339,7 @@
+ 		disks (see major number 3) except that the limit on
+ 		partitions is 31.
  
+- 162 char	Raw block device interface
+-		  0 = /dev/rawctl	Raw I/O control device
+-		  1 = /dev/raw/raw1	First raw I/O device
+-		  2 = /dev/raw/raw2	Second raw I/O device
+-		    ...
+-		 max minor number of raw device is set by kernel config
+-		 MAX_RAW_DEVS or raw module parameter 'max_raw_devs'
++ 162 char	Used for (now removed) raw block device interface
  
--Statistical Information
--=======================
--
--If FS-Cache is compiled with the following option enabled::
--
--	CONFIG_CACHEFILES_HISTOGRAM=y
--
--then it will gather certain statistics and display them through a proc file.
--
-- /proc/fs/cachefiles/histogram
--
--     ::
--
--	cat /proc/fs/cachefiles/histogram
--	JIFS  SECS  LOOKUPS   MKDIRS    CREATES
--	===== ===== ========= ========= =========
--
--     This shows the breakdown of the number of times each amount of time
--     between 0 jiffies and HZ-1 jiffies a variety of tasks took to run.  The
--     columns are as follows:
--
--	=======		=======================================================
--	COLUMN		TIME MEASUREMENT
--	=======		=======================================================
--	LOOKUPS		Length of time to perform a lookup on the backing fs
--	MKDIRS		Length of time to perform a mkdir on the backing fs
--	CREATES		Length of time to perform a create on the backing fs
--	=======		=======================================================
--
--     Each row shows the number of events that took a particular range of times.
--     Each step is 1 jiffy in size.  The JIFS column indicates the particular
--     jiffy range covered, and the SECS field the equivalent number of seconds.
--
--
- Debugging
- =========
+  163 char
  
-diff --git a/Documentation/filesystems/caching/fscache.rst b/Documentation/filesystems/caching/fscache.rst
-index 70de86922b6a..66e31a6d1070 100644
---- a/Documentation/filesystems/caching/fscache.rst
-+++ b/Documentation/filesystems/caching/fscache.rst
-@@ -201,10 +201,9 @@ Statistical Information
- If FS-Cache is compiled with the following options enabled::
- 
- 	CONFIG_FSCACHE_STATS=y
--	CONFIG_FSCACHE_HISTOGRAM=y
- 
--then it will gather certain statistics and display them through a number of
--proc files.
-+then it will gather certain statistics and display them through the following
-+proc file.
- 
- /proc/fs/fscache/stats
- ----------------------
-@@ -413,35 +412,6 @@ proc files.
- 
- 
- 
--/proc/fs/fscache/histogram
----------------------------
--
--     ::
--
--	cat /proc/fs/fscache/histogram
--	JIFS  SECS  OBJ INST  OP RUNS   OBJ RUNS  RETRV DLY RETRIEVLS
--	===== ===== ========= ========= ========= ========= =========
--
--     This shows the breakdown of the number of times each amount of time
--     between 0 jiffies and HZ-1 jiffies a variety of tasks took to run.  The
--     columns are as follows:
--
--	=========	=======================================================
--	COLUMN		TIME MEASUREMENT
--	=========	=======================================================
--	OBJ INST	Length of time to instantiate an object
--	OP RUNS		Length of time a call to process an operation took
--	OBJ RUNS	Length of time a call to process an object event took
--	RETRV DLY	Time between an requesting a read and lookup completing
--	RETRIEVLS	Time between beginning and end of a retrieval
--	=========	=======================================================
--
--     Each row shows the number of events that took a particular range of times.
--     Each step is 1 jiffy in size.  The JIFS column indicates the particular
--     jiffy range covered, and the SECS field the equivalent number of seconds.
--
--
--
- Object List
- ===========
- 
-diff --git a/arch/arm/configs/axm55xx_defconfig b/arch/arm/configs/axm55xx_defconfig
-index 46075216ee6d..b36e0b347d1f 100644
---- a/arch/arm/configs/axm55xx_defconfig
-+++ b/arch/arm/configs/axm55xx_defconfig
-@@ -204,11 +204,9 @@ CONFIG_FUSE_FS=y
- CONFIG_CUSE=y
- CONFIG_FSCACHE=y
- CONFIG_FSCACHE_STATS=y
--CONFIG_FSCACHE_HISTOGRAM=y
- CONFIG_FSCACHE_DEBUG=y
- CONFIG_FSCACHE_OBJECT_LIST=y
- CONFIG_CACHEFILES=y
--CONFIG_CACHEFILES_HISTOGRAM=y
- CONFIG_ISO9660_FS=y
- CONFIG_UDF_FS=y
- CONFIG_MSDOS_FS=y
-diff --git a/arch/mips/configs/nlm_xlp_defconfig b/arch/mips/configs/nlm_xlp_defconfig
-index 32c290611723..c97f00ece828 100644
---- a/arch/mips/configs/nlm_xlp_defconfig
-+++ b/arch/mips/configs/nlm_xlp_defconfig
-@@ -420,7 +420,6 @@ CONFIG_FUSE_FS=y
- CONFIG_CUSE=m
- CONFIG_FSCACHE=m
- CONFIG_FSCACHE_STATS=y
--CONFIG_FSCACHE_HISTOGRAM=y
- CONFIG_CACHEFILES=m
- CONFIG_ISO9660_FS=m
- CONFIG_JOLIET=y
-diff --git a/arch/mips/configs/nlm_xlr_defconfig b/arch/mips/configs/nlm_xlr_defconfig
-index bf9b9244929e..60ea102783d9 100644
---- a/arch/mips/configs/nlm_xlr_defconfig
-+++ b/arch/mips/configs/nlm_xlr_defconfig
-@@ -372,7 +372,6 @@ CONFIG_FUSE_FS=y
- CONFIG_CUSE=m
- CONFIG_FSCACHE=m
- CONFIG_FSCACHE_STATS=y
--CONFIG_FSCACHE_HISTOGRAM=y
- CONFIG_CACHEFILES=m
- CONFIG_ISO9660_FS=m
- CONFIG_JOLIET=y
+diff --git a/arch/arm/configs/spear13xx_defconfig b/arch/arm/configs/spear13xx_defconfig
+index 3b206a31902f..065553326b39 100644
+--- a/arch/arm/configs/spear13xx_defconfig
++++ b/arch/arm/configs/spear13xx_defconfig
+@@ -61,7 +61,6 @@ CONFIG_SERIAL_AMBA_PL011=y
+ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ # CONFIG_HW_RANDOM is not set
+ CONFIG_RAW_DRIVER=y
+-CONFIG_MAX_RAW_DEVS=8192
+ CONFIG_I2C=y
+ CONFIG_I2C_DESIGNWARE_PLATFORM=y
+ CONFIG_SPI=y
+diff --git a/arch/arm/configs/spear3xx_defconfig b/arch/arm/configs/spear3xx_defconfig
+index fc5f71c765ed..afca722d6605 100644
+--- a/arch/arm/configs/spear3xx_defconfig
++++ b/arch/arm/configs/spear3xx_defconfig
+@@ -41,7 +41,6 @@ CONFIG_SERIAL_AMBA_PL011=y
+ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ # CONFIG_HW_RANDOM is not set
+ CONFIG_RAW_DRIVER=y
+-CONFIG_MAX_RAW_DEVS=8192
+ CONFIG_I2C=y
+ CONFIG_I2C_DESIGNWARE_PLATFORM=y
+ CONFIG_SPI=y
+diff --git a/arch/arm/configs/spear6xx_defconfig b/arch/arm/configs/spear6xx_defconfig
+index 52a56b8ce6a7..bc32c02cb86b 100644
+--- a/arch/arm/configs/spear6xx_defconfig
++++ b/arch/arm/configs/spear6xx_defconfig
+@@ -36,7 +36,6 @@ CONFIG_INPUT_FF_MEMLESS=y
+ CONFIG_SERIAL_AMBA_PL011=y
+ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+ CONFIG_RAW_DRIVER=y
+-CONFIG_MAX_RAW_DEVS=8192
+ CONFIG_I2C=y
+ CONFIG_I2C_DESIGNWARE_PLATFORM=y
+ CONFIG_SPI=y
+diff --git a/arch/powerpc/configs/pseries_defconfig b/arch/powerpc/configs/pseries_defconfig
+index b183629f1bcf..d0494fbb4961 100644
+--- a/arch/powerpc/configs/pseries_defconfig
++++ b/arch/powerpc/configs/pseries_defconfig
+@@ -190,7 +190,6 @@ CONFIG_HVCS=m
+ CONFIG_VIRTIO_CONSOLE=m
+ CONFIG_IBM_BSR=m
+ CONFIG_RAW_DRIVER=y
+-CONFIG_MAX_RAW_DEVS=1024
+ CONFIG_I2C_CHARDEV=y
+ CONFIG_FB=y
+ CONFIG_FIRMWARE_EDID=y
 -- 
 2.32.0
 
