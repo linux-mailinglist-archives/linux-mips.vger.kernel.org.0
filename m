@@ -2,317 +2,294 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3B2446954
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 20:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B097F446962
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 21:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbhKETzX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Nov 2021 15:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        id S232700AbhKEUE1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Nov 2021 16:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbhKETzX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Nov 2021 15:55:23 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BC6C061714;
-        Fri,  5 Nov 2021 12:52:43 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id p8so7870373pgh.11;
-        Fri, 05 Nov 2021 12:52:43 -0700 (PDT)
+        with ESMTP id S232987AbhKEUE0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Nov 2021 16:04:26 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980E8C061714;
+        Fri,  5 Nov 2021 13:01:46 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id l7-20020a0568302b0700b0055ae988dcc8so11512541otv.12;
+        Fri, 05 Nov 2021 13:01:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZQdM0FjDLNp4zlaEgvDZy/XXFTR4OGKY2F6Xds6H3oI=;
-        b=erIKF2HQi589UpApQTAZCOL5IHDmWHZjDPx4iTN371TERSxCRKM1rWX/4UR7JWdbls
-         bMwq8O0Lcto15eAajnDvZmD0sXdpAKMNFJJktzAH4YIWPvAzBiJneM6nRUyOgSX2zv4+
-         quNblzMPBdIoBTYZLnKy8yM218Q3KLWXm/GkCsUAIfZpGAeJ4UqOgBmhrbWAYnIJhnpF
-         dSgSgiTPdz/vSMeilZuF2KgsgmZWKCmtYphXq/KgXwELNYYT7wSXgZcarjn3+r0jtqVz
-         meyTFA/oV4t8rw5oROSi3AJq8dEwApLmb6dKBK6kxgvIAa4A7Xkz/1l2i3Mn64BWicED
-         JByw==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=E3GGoaENtxZIZKlG1U2DtXVJrfqX+pzqBSgrE8xPUys=;
+        b=hkPTqca//83an18spPLduOa513Zu2eeW5PksZ+JcXlmemBpnvc+RFseS52S03Fq4eH
+         DNVgtiR55E/s7or7kfgyjaJSDzEfvPcCaovkzZ07D/ib3/zjNMw6wlPcoLEA4Q2gijDj
+         Mn5iLAv/aMCYT6UbnQOXmNqsW2BeyOsH9olUP3i/Gg158R/DD2DEU+1wjJkVpYh66MSl
+         kSFoOhYY4yd7UU81H0kqrC6rXXWZOwghRxfZQJmQu/tKwKhXvXXlan5jQY4YW6S26cz7
+         et9PSIEqXrhKxQnqcnlKngNYX+nJ/i5N99p+u3SysxQGwMOLog/E3Zkj/4zbPFqc6SeE
+         gM/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZQdM0FjDLNp4zlaEgvDZy/XXFTR4OGKY2F6Xds6H3oI=;
-        b=vzvmGSpvCjP5ESCUUnBT2aWlUu/LVGbYTbGqS7zIbTLyKrUCLwttfpJQSaTDN3bK7d
-         YiU07njpIfSrXWI7O1QaNn1x2JL9j0F4HRIoWDHmcx0vIQ/v8eAphImDWCtocMg6w4e+
-         UXlndimhzdwuncXG6S3N4Ct32Xv/QVsjzNTV121dcdO9P0eZ9njnuURcO8zOHJNjg1ah
-         ISFNzJLN6Gi9aAYL9uMmb+d5UYVqbSWdWYrH0h2yZJnROZirDrG2b+dL41diRYwGJ6wm
-         o68XQlHAnbxAU04bpGAqdfYM2DlFHIlipqUUff2DdmOnVeegglbknI30zdoP+6ZjJUrt
-         4fyg==
-X-Gm-Message-State: AOAM532Ef+9pCFfhGANprG4bQe6bn8N/ZBE+P72ei0wZRA1BngWOODfA
-        EXRCtUO1KMTx2bJ6B3h57ip/W3lhIdU=
-X-Google-Smtp-Source: ABdhPJzaA8APiZgGMTWpz++/TZZ0MPsZA393UTjEtNq+P27FdJBD3j1bFVIXXd5oVlCANuQfigZtlw==
-X-Received: by 2002:a63:a01a:: with SMTP id r26mr45486892pge.88.1636141962195;
-        Fri, 05 Nov 2021 12:52:42 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s11sm7901398pfd.182.2021.11.05.12.52.41
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition;
+        bh=E3GGoaENtxZIZKlG1U2DtXVJrfqX+pzqBSgrE8xPUys=;
+        b=7w9GPWn5wMWcjQW8FuIGCJwWP+ha66K4LJKSGjkptaW/aMthApi4i/Laop5o/3Yw6J
+         OFTIyrse6UIp+s0FhdAfIHnae5j+dlzs0+ZeD71AKNfzsAGofKxZJXciJPSCSKHR6ze7
+         vnEq7phDVUf2BSP+dKJuzX2oF/O9ueWhJAfdMDPPV+qMIHU847cp7aS9W/VqulR7EvIA
+         IANh5RvaDA1NVE9K0ZbXmpUgZinX7IytvHoGuwL+uNo1aXKQ8kECyml02loZpkKTmTD+
+         XLOwZYHoN/94sqXFO10pW/KRz59wnTx6E2T/ZqWS8nwVeFQIe5RmfrmjF+j+bkruiLoh
+         Y7DQ==
+X-Gm-Message-State: AOAM532PEpzFmOz80LNF9eDjGtA2+bPs8VumUdb8p0uGGHPqSyv13qj6
+        ALQrUPUnmWG/e6EIFfHr0Ok=
+X-Google-Smtp-Source: ABdhPJxo+e+KfQ92DMsSrz8t/uAnxutWWP3lv6A8acG+Fy2G1sUmtgajR90FwbCWLOy/uQV+W3MOnQ==
+X-Received: by 2002:a05:6830:3113:: with SMTP id b19mr34929101ots.383.1636142505961;
+        Fri, 05 Nov 2021 13:01:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k24sm2647422oou.18.2021.11.05.13.01.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Nov 2021 12:52:41 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     jim2101024@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        Fri, 05 Nov 2021 13:01:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 5 Nov 2021 13:01:43 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] MIPS: Update bmips_stb_defconfig
-Date:   Fri,  5 Nov 2021 12:52:39 -0700
-Message-Id: <20211105195240.1400898-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] MIPS: Allow modules to set board_be_handler
+Message-ID: <20211105200143.GA1875983@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Align the bmips_stb_defconfig with its downstream version at:
-https://github.com/Broadcom/stblinux-4.1/blob/master/linux/arch/mips/configs/bmips_stb_defconfig
-to be slightly more useful and include support for all of these options:
+On Fri, Nov 05, 2021 at 10:30:47AM -0700, Florian Fainelli wrote:
+> After making the brcmstb_gisb driver modular with 707a4cdf86e5 ("bus:
+> brcmstb_gisb: Allow building as module") Guenter reported that mips
+> allmodconfig failed to link because board_be_handler was referenced.
+> 
+> Thomas indicated that if we were to continue making the brcmstb_gisb
+> driver modular for MIPS we would need to introduce a function that
+> allows setting the board_be_handler and export that function towards
+> modules.
+> 
+> This is what is being done here: board_be_handler is made static and is
+> now settable with a mips_set_be_handler() function which is exported.
+> 
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Fixes: 707a4cdf86e5 ("bus: brcmstb_gisb: Allow building as module")
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-- latest Broadcom STB drivers
-- support for high resolution timers
-- cpufreq
-- function tracers
-- extending command line from DTB
-- task lockup detector
-- strong stack protector support
-- IP auto-configuration
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- arch/mips/configs/bmips_stb_defconfig | 155 ++++++++++++++++++++++++--
- 1 file changed, 147 insertions(+), 8 deletions(-)
-
-diff --git a/arch/mips/configs/bmips_stb_defconfig b/arch/mips/configs/bmips_stb_defconfig
-index 625bd2d7e685..5956fb95c19f 100644
---- a/arch/mips/configs/bmips_stb_defconfig
-+++ b/arch/mips/configs/bmips_stb_defconfig
-@@ -1,6 +1,7 @@
- # CONFIG_LOCALVERSION_AUTO is not set
- # CONFIG_SWAP is not set
- CONFIG_NO_HZ=y
-+CONFIG_HZ=1000
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
- # CONFIG_VM_EVENT_COUNTERS is not set
-@@ -8,17 +9,34 @@ CONFIG_EXPERT=y
- CONFIG_BMIPS_GENERIC=y
- CONFIG_CPU_LITTLE_ENDIAN=y
- CONFIG_HIGHMEM=y
-+CONFIG_HIGH_RES_TIMERS=y
- CONFIG_SMP=y
- CONFIG_NR_CPUS=4
-+CONFIG_CC_STACKPROTECTOR_STRONG=y
- # CONFIG_SECCOMP is not set
- CONFIG_MIPS_O32_FP64_SUPPORT=y
-+# CONFIG_RD_GZIP is not set
-+# CONFIG_RD_BZIP2 is not set
-+# CONFIG_RD_LZMA is not set
-+CONFIG_RD_XZ=y
-+# CONFIG_RD_LZO is not set
-+# CONFIG_RD_LZ4 is not set
-+# CONFIG_IOSCHED_DEADLINE is not set
-+# CONFIG_IOSCHED_CFQ is not set
-+CONFIG_PCI=y
-+CONFIG_PCI_MSI=y
-+CONFIG_PCIEASPM_POWERSAVE=y
-+CONFIG_PCIEPORTBUS=y
-+CONFIG_PCIE_BRCMSTB=y
- CONFIG_CPU_FREQ=y
- CONFIG_CPU_FREQ_STAT=y
-+CONFIG_CPU_FREQ_STAT_DETAILS=y
-+CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
-+CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
- CONFIG_CPU_FREQ_GOV_POWERSAVE=y
- CONFIG_CPU_FREQ_GOV_USERSPACE=y
- CONFIG_CPU_FREQ_GOV_ONDEMAND=y
- CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
--CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
- CONFIG_BMIPS_CPUFREQ=y
- # CONFIG_BLK_DEV_BSG is not set
- CONFIG_NET=y
-@@ -32,32 +50,99 @@ CONFIG_INET=y
- # CONFIG_INET_DIAG is not set
- CONFIG_CFG80211=y
- CONFIG_NL80211_TESTMODE=y
-+CONFIG_WIRELESS=y
- CONFIG_MAC80211=y
-+CONFIG_NL80211=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- # CONFIG_STANDALONE is not set
- # CONFIG_PREVENT_FIRMWARE_BUILD is not set
-+CONFIG_BRCMSTB_GISB_ARB=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_FORCE_LOAD=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_IP_PNP_RARP=y
-+CONFIG_IP_MROUTE=y
-+CONFIG_IP_PIMSM_V1=y
-+CONFIG_IP_PIMSM_V2=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+CONFIG_INET_UDP_DIAG=y
-+CONFIG_TCP_CONG_ADVANCED=y
-+CONFIG_TCP_CONG_BIC=y
-+# CONFIG_TCP_CONG_WESTWOOD is not set
-+# CONFIG_TCP_CONG_HTCP is not set
-+# CONFIG_IPV6 is not set
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_NETFILTER=y
-+CONFIG_NETFILTER_XTABLES=y
-+CONFIG_BRIDGE=y
-+CONFIG_BRIDGE_NETFILTER=m
-+CONFIG_BRIDGE_NF_EBTABLES=m
-+CONFIG_BRIDGE_EBT_BROUTE=m
-+CONFIG_NET_DSA=y
-+CONFIG_NET_SWITCHDEV=y
-+CONFIG_DMA_CMA=y
-+CONFIG_CMA_ALIGNMENT=12
-+CONFIG_SPI=y
-+CONFIG_SPI_BRCMSTB=y
- CONFIG_MTD=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_BLOCK=y
- CONFIG_MTD_CFI=y
-+CONFIG_MTD_JEDECPROBE=y
- CONFIG_MTD_CFI_INTELEXT=y
- CONFIG_MTD_CFI_AMDSTD=y
--CONFIG_MTD_PHYSMAP=y
-+CONFIG_MTD_CFI_STAA=y
-+CONFIG_MTD_ROM=y
-+CONFIG_MTD_ABSENT=y
-+CONFIG_MTD_PHYSMAP_OF=y
-+CONFIG_MTD_M25P80=y
-+CONFIG_MTD_NAND=y
-+CONFIG_MTD_NAND_BRCMNAND=y
-+CONFIG_MTD_SPI_NOR=y
-+# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-+CONFIG_MTD_UBI=y
-+CONFIG_MTD_UBI_GLUEBI=y
-+CONFIG_PROC_DEVICETREE=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_SIZE=8192
- # CONFIG_BLK_DEV is not set
- CONFIG_SCSI=y
- CONFIG_BLK_DEV_SD=y
-+CONFIG_CHR_DEV_SG=y
-+CONFIG_SCSI_MULTI_LUN=y
- # CONFIG_SCSI_LOWLEVEL is not set
- CONFIG_NETDEVICES=y
-+CONFIG_VLAN_8021Q=y
-+CONFIG_MACVLAN=y
- CONFIG_BCMGENET=y
- CONFIG_USB_USBNET=y
--# CONFIG_INPUT is not set
-+CONFIG_INPUT_EVDEV=y
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+CONFIG_INPUT_MISC=y
-+CONFIG_INPUT_UINPUT=y
- # CONFIG_SERIO is not set
--# CONFIG_VT is not set
-+CONFIG_VT=y
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+# CONFIG_DEVKMEM is not set
- CONFIG_SERIAL_8250=y
- # CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_SERIAL_OF_PLATFORM=y
- # CONFIG_HW_RANDOM is not set
- CONFIG_POWER_RESET=y
-+CONFIG_POWER_RESET_BRCMSTB=y
- CONFIG_POWER_RESET_SYSCON=y
- CONFIG_POWER_SUPPLY=y
- # CONFIG_HWMON is not set
-@@ -69,22 +154,76 @@ CONFIG_USB_OHCI_HCD=y
- CONFIG_USB_OHCI_HCD_PLATFORM=y
- CONFIG_USB_STORAGE=y
- CONFIG_SOC_BRCMSTB=y
-+CONFIG_MMC=y
-+CONFIG_MMC_BLOCK_MINORS=16
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
- CONFIG_EXT4_FS=y
- CONFIG_EXT4_FS_POSIX_ACL=y
- CONFIG_EXT4_FS_SECURITY=y
- # CONFIG_DNOTIFY is not set
-+CONFIG_PROC_KCORE=y
-+CONFIG_CIFS=y
-+CONFIG_JBD2_DEBUG=y
- CONFIG_FUSE_FS=y
-+CONFIG_FHANDLE=y
-+CONFIG_CGROUPS=y
-+CONFIG_CUSE=y
-+CONFIG_ISO9660_FS=y
-+CONFIG_JOLIET=y
-+CONFIG_ZISOFS=y
-+CONFIG_UDF_FS=y
-+CONFIG_MSDOS_FS=y
- CONFIG_VFAT_FS=y
--CONFIG_PROC_KCORE=y
- CONFIG_TMPFS=y
-+CONFIG_JFFS2_FS=y
-+CONFIG_UBIFS_FS=y
-+CONFIG_SQUASHFS=y
-+CONFIG_SQUASHFS_LZO=y
-+CONFIG_SQUASHFS_XZ=y
- CONFIG_NFS_FS=y
--CONFIG_CIFS=y
-+CONFIG_NFS_V3_ACL=y
-+CONFIG_NFS_V4=y
-+CONFIG_NFS_V4_1=y
-+CONFIG_NFS_V4_2=y
-+CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=y
--CONFIG_NLS_ASCII=y
- CONFIG_NLS_ISO8859_1=y
--# CONFIG_CRYPTO_HW is not set
- CONFIG_PRINTK_TIME=y
-+CONFIG_DYNAMIC_DEBUG=y
-+# CONFIG_DEBUG_INFO is not set
-+# CONFIG_DEBUG_INFO_REDUCED is not set
- CONFIG_DEBUG_FS=y
- CONFIG_MAGIC_SYSRQ=y
-+CONFIG_LOCKUP_DETECTOR=y
-+CONFIG_DEBUG_USER=y
- CONFIG_CMDLINE_BOOL=y
- CONFIG_CMDLINE="earlycon"
-+# CONFIG_MIPS_CMDLINE_FROM_DTB is not set
-+CONFIG_MIPS_CMDLINE_DTB_EXTEND=y
-+# CONFIG_MIPS_CMDLINE_FROM_BOOTLOADER is not set
-+# CONFIG_CRYPTO_HW is not set
-+CONFIG_DT_BCM974XX=y
-+CONFIG_FW_CFE=y
-+CONFIG_ATA=y
-+CONFIG_SATA_AHCI_PLATFORM=y
-+CONFIG_AHCI_BRCMSTB=y
-+CONFIG_GENERIC_PHY=y
-+CONFIG_GPIOLIB=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_PHY_BRCM_USB=y
-+CONFIG_PHY_BRCM_SATA=y
-+CONFIG_PM_RUNTIME=y
-+CONFIG_PM_DEBUG=y
-+CONFIG_SYSVIPC=y
-+CONFIG_FUNCTION_GRAPH_TRACER=y
-+CONFIG_DYNAMIC_FTRACE=y
-+CONFIG_FUNCTION_TRACER=y
-+CONFIG_FUNCTION_PROFILER=y
-+CONFIG_IRQSOFF_TRACER=y
-+CONFIG_SCHED_TRACER=y
-+CONFIG_BLK_DEV_IO_TRACE=y
-+CONFIG_FTRACE_SYSCALLS=y
-+CONFIG_TRACER_SNAPSHOT=y
-+CONFIG_TRACER_SNAPSHOT_PER_CPU_SWAP=y
-+CONFIG_STACK_TRACER=y
--- 
-2.25.1
-
+> ---
+>  arch/mips/dec/setup.c                 | 6 +++---
+>  arch/mips/include/asm/traps.h         | 2 +-
+>  arch/mips/kernel/traps.c              | 8 +++++++-
+>  arch/mips/sgi-ip22/ip22-berr.c        | 2 +-
+>  arch/mips/sgi-ip22/ip28-berr.c        | 2 +-
+>  arch/mips/sgi-ip27/ip27-berr.c        | 2 +-
+>  arch/mips/sgi-ip32/ip32-berr.c        | 2 +-
+>  arch/mips/sibyte/swarm/setup.c        | 2 +-
+>  arch/mips/txx9/generic/setup_tx4927.c | 2 +-
+>  arch/mips/txx9/generic/setup_tx4938.c | 2 +-
+>  arch/mips/txx9/generic/setup_tx4939.c | 2 +-
+>  drivers/bus/brcmstb_gisb.c            | 2 +-
+>  12 files changed, 20 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
+> index eaad0ed4b523..a8a30bb1dee8 100644
+> --- a/arch/mips/dec/setup.c
+> +++ b/arch/mips/dec/setup.c
+> @@ -117,21 +117,21 @@ static void __init dec_be_init(void)
+>  {
+>  	switch (mips_machtype) {
+>  	case MACH_DS23100:	/* DS2100/DS3100 Pmin/Pmax */
+> -		board_be_handler = dec_kn01_be_handler;
+> +		mips_set_be_handler(dec_kn01_be_handler);
+>  		busirq_handler = dec_kn01_be_interrupt;
+>  		busirq_flags |= IRQF_SHARED;
+>  		dec_kn01_be_init();
+>  		break;
+>  	case MACH_DS5000_1XX:	/* DS5000/1xx 3min */
+>  	case MACH_DS5000_XX:	/* DS5000/xx Maxine */
+> -		board_be_handler = dec_kn02xa_be_handler;
+> +		mips_set_be_handler(dec_kn02xa_be_handler);
+>  		busirq_handler = dec_kn02xa_be_interrupt;
+>  		dec_kn02xa_be_init();
+>  		break;
+>  	case MACH_DS5000_200:	/* DS5000/200 3max */
+>  	case MACH_DS5000_2X0:	/* DS5000/240 3max+ */
+>  	case MACH_DS5900:	/* DS5900 bigmax */
+> -		board_be_handler = dec_ecc_be_handler;
+> +		mips_set_be_handler(dec_ecc_be_handler);
+>  		busirq_handler = dec_ecc_be_interrupt;
+>  		dec_ecc_be_init();
+>  		break;
+> diff --git a/arch/mips/include/asm/traps.h b/arch/mips/include/asm/traps.h
+> index b710e76c9c65..15cde638b407 100644
+> --- a/arch/mips/include/asm/traps.h
+> +++ b/arch/mips/include/asm/traps.h
+> @@ -15,7 +15,7 @@
+>  #define MIPS_BE_FATAL	2		/* treat as an unrecoverable error */
+>  
+>  extern void (*board_be_init)(void);
+> -extern int (*board_be_handler)(struct pt_regs *regs, int is_fixup);
+> +void mips_set_be_handler(int (*handler)(struct pt_regs *reg, int is_fixup));
+>  
+>  extern void (*board_nmi_handler_setup)(void);
+>  extern void (*board_ejtag_handler_setup)(void);
+> diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
+> index 6f07362de5ce..d26b0fb8ea06 100644
+> --- a/arch/mips/kernel/traps.c
+> +++ b/arch/mips/kernel/traps.c
+> @@ -103,13 +103,19 @@ extern asmlinkage void handle_reserved(void);
+>  extern void tlb_do_page_fault_0(void);
+>  
+>  void (*board_be_init)(void);
+> -int (*board_be_handler)(struct pt_regs *regs, int is_fixup);
+> +static int (*board_be_handler)(struct pt_regs *regs, int is_fixup);
+>  void (*board_nmi_handler_setup)(void);
+>  void (*board_ejtag_handler_setup)(void);
+>  void (*board_bind_eic_interrupt)(int irq, int regset);
+>  void (*board_ebase_setup)(void);
+>  void(*board_cache_error_setup)(void);
+>  
+> +void mips_set_be_handler(int (*handler)(struct pt_regs *regs, int is_fixup))
+> +{
+> +	board_be_handler = handler;
+> +}
+> +EXPORT_SYMBOL_GPL(mips_set_be_handler);
+> +
+>  static void show_raw_backtrace(unsigned long reg29, const char *loglvl,
+>  			       bool user)
+>  {
+> diff --git a/arch/mips/sgi-ip22/ip22-berr.c b/arch/mips/sgi-ip22/ip22-berr.c
+> index dc0110a607a5..afe8a61078e4 100644
+> --- a/arch/mips/sgi-ip22/ip22-berr.c
+> +++ b/arch/mips/sgi-ip22/ip22-berr.c
+> @@ -112,5 +112,5 @@ static int ip22_be_handler(struct pt_regs *regs, int is_fixup)
+>  
+>  void __init ip22_be_init(void)
+>  {
+> -	board_be_handler = ip22_be_handler;
+> +	mips_set_be_handler(ip22_be_handler);
+>  }
+> diff --git a/arch/mips/sgi-ip22/ip28-berr.c b/arch/mips/sgi-ip22/ip28-berr.c
+> index c61362d9ea95..16ca470deb80 100644
+> --- a/arch/mips/sgi-ip22/ip28-berr.c
+> +++ b/arch/mips/sgi-ip22/ip28-berr.c
+> @@ -468,7 +468,7 @@ static int ip28_be_handler(struct pt_regs *regs, int is_fixup)
+>  
+>  void __init ip22_be_init(void)
+>  {
+> -	board_be_handler = ip28_be_handler;
+> +	mips_set_be_handler(ip28_be_handler);
+>  }
+>  
+>  int ip28_show_be_info(struct seq_file *m)
+> diff --git a/arch/mips/sgi-ip27/ip27-berr.c b/arch/mips/sgi-ip27/ip27-berr.c
+> index 5a38ae6bdfa9..923a63a51cda 100644
+> --- a/arch/mips/sgi-ip27/ip27-berr.c
+> +++ b/arch/mips/sgi-ip27/ip27-berr.c
+> @@ -85,7 +85,7 @@ void __init ip27_be_init(void)
+>  	int cpu = LOCAL_HUB_L(PI_CPU_NUM);
+>  	int cpuoff = cpu << 8;
+>  
+> -	board_be_handler = ip27_be_handler;
+> +	mips_set_be_handler(ip27_be_handler);
+>  
+>  	LOCAL_HUB_S(PI_ERR_INT_PEND,
+>  		    cpu ? PI_ERR_CLEAR_ALL_B : PI_ERR_CLEAR_ALL_A);
+> diff --git a/arch/mips/sgi-ip32/ip32-berr.c b/arch/mips/sgi-ip32/ip32-berr.c
+> index c860f95ab7ed..478b63b4c808 100644
+> --- a/arch/mips/sgi-ip32/ip32-berr.c
+> +++ b/arch/mips/sgi-ip32/ip32-berr.c
+> @@ -34,5 +34,5 @@ static int ip32_be_handler(struct pt_regs *regs, int is_fixup)
+>  
+>  void __init ip32_be_init(void)
+>  {
+> -	board_be_handler = ip32_be_handler;
+> +	mips_set_be_handler(ip32_be_handler);
+>  }
+> diff --git a/arch/mips/sibyte/swarm/setup.c b/arch/mips/sibyte/swarm/setup.c
+> index f07b15dd1c1a..72a31eeeebba 100644
+> --- a/arch/mips/sibyte/swarm/setup.c
+> +++ b/arch/mips/sibyte/swarm/setup.c
+> @@ -122,7 +122,7 @@ void __init plat_mem_setup(void)
+>  #error invalid SiByte board configuration
+>  #endif
+>  
+> -	board_be_handler = swarm_be_handler;
+> +	mips_set_be_handler(swarm_be_handler);
+>  
+>  	if (xicor_probe())
+>  		swarm_rtc_type = RTC_XICOR;
+> diff --git a/arch/mips/txx9/generic/setup_tx4927.c b/arch/mips/txx9/generic/setup_tx4927.c
+> index 46e9c4101386..63f9725b2eb0 100644
+> --- a/arch/mips/txx9/generic/setup_tx4927.c
+> +++ b/arch/mips/txx9/generic/setup_tx4927.c
+> @@ -80,7 +80,7 @@ static int tx4927_be_handler(struct pt_regs *regs, int is_fixup)
+>  }
+>  static void __init tx4927_be_init(void)
+>  {
+> -	board_be_handler = tx4927_be_handler;
+> +	mips_set_be_handler(tx4927_be_handler);
+>  }
+>  
+>  static struct resource tx4927_sdram_resource[4];
+> diff --git a/arch/mips/txx9/generic/setup_tx4938.c b/arch/mips/txx9/generic/setup_tx4938.c
+> index 17395d5d15ca..ba646548c5f6 100644
+> --- a/arch/mips/txx9/generic/setup_tx4938.c
+> +++ b/arch/mips/txx9/generic/setup_tx4938.c
+> @@ -82,7 +82,7 @@ static int tx4938_be_handler(struct pt_regs *regs, int is_fixup)
+>  }
+>  static void __init tx4938_be_init(void)
+>  {
+> -	board_be_handler = tx4938_be_handler;
+> +	mips_set_be_handler(tx4938_be_handler);
+>  }
+>  
+>  static struct resource tx4938_sdram_resource[4];
+> diff --git a/arch/mips/txx9/generic/setup_tx4939.c b/arch/mips/txx9/generic/setup_tx4939.c
+> index bf8a3cdababf..f5f59b7401a3 100644
+> --- a/arch/mips/txx9/generic/setup_tx4939.c
+> +++ b/arch/mips/txx9/generic/setup_tx4939.c
+> @@ -86,7 +86,7 @@ static int tx4939_be_handler(struct pt_regs *regs, int is_fixup)
+>  }
+>  static void __init tx4939_be_init(void)
+>  {
+> -	board_be_handler = tx4939_be_handler;
+> +	mips_set_be_handler(tx4939_be_handler);
+>  }
+>  
+>  static struct resource tx4939_sdram_resource[4];
+> diff --git a/drivers/bus/brcmstb_gisb.c b/drivers/bus/brcmstb_gisb.c
+> index 4c2f7d61cb9b..183d5cc37d42 100644
+> --- a/drivers/bus/brcmstb_gisb.c
+> +++ b/drivers/bus/brcmstb_gisb.c
+> @@ -485,7 +485,7 @@ static int __init brcmstb_gisb_arb_probe(struct platform_device *pdev)
+>  	list_add_tail(&gdev->next, &brcmstb_gisb_arb_device_list);
+>  
+>  #ifdef CONFIG_MIPS
+> -	board_be_handler = brcmstb_bus_error_handler;
+> +	mips_set_be_handler(brcmstb_bus_error_handler);
+>  #endif
+>  
+>  	if (list_is_singular(&brcmstb_gisb_arb_device_list)) {
+> -- 
+> 2.25.1
+> 
