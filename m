@@ -2,124 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 992F644655D
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 16:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4E64465EF
+	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 16:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbhKEPDr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Nov 2021 11:03:47 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:59699 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233343AbhKEPDq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Nov 2021 11:03:46 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 674B55C00D7;
-        Fri,  5 Nov 2021 11:01:06 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute5.internal (MEProxy); Fri, 05 Nov 2021 11:01:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type:content-transfer-encoding; s=fm3; bh=ehL1g
-        zFbBjq4Q2vBSFeRR/LxySahDQvmoLp6hP4TUZg=; b=FsNXY3grYTVN75hP0mFRi
-        i428F1279b+PKB0Tzi82/awVFnRB3yN9fWMVkykqVZgl3iqm5BnX9KeCshZHjswc
-        3ktkB2VN8YyFUdT3oI5FsFrURelN+b1HWRGWpHZFvvRY1cyjVtxSxaMAc9VHpNBW
-        ToLaeLDIRr2UyyEQTEJaGilp4uYILfzNkmpyv5PLMdaDgT2KoeKbkp769T3BaaQO
-        DDIo8oUvZDzNr9jwSnsDUeAhPFN7jyjsxoxIOS5TjnaVVYaOTsz3LOSJb1kBFLZd
-        xgUOFoNa5bhQji/aVad+kMjVsjw/UzOiGM19eeQsUbu8v3vmAP5gyapWAc/JHaq6
-        w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=ehL1gzFbBjq4Q2vBSFeRR/LxySahDQvmoLp6hP4TU
-        Zg=; b=O7NTr6m1xEeRu6MMzdDRUvZYbbA0knfcgHjHPGOdg6XmI8AQFQtxVdJ4m
-        BPrMfS2xrgbIOCaBbe3I70+9YebWfw+nXjXI/kGIeeVVWgTiGy4Gxq3BMAJddANh
-        qeidOphOTEYkvC93wwBcs8pHGrAjthSgEow0aDQhhpjkFGIoOFzfA5nCDPc8OUZ1
-        9clS/QxZZAay+9KqAg+yLXypfVVY73aVeXx+hWwkjXCXScu6k1FaVacN3s1UHg9H
-        a/uMzuNjePgtslKHq0yrasKdSuqPFNVogrHAmdJLI6xCdnPMLCJbN7jSc8nO3w9Z
-        gopI/dTMJuOHrj2bJyfn/kNncvu5Q==
-X-ME-Sender: <xms:MEeFYQ2he_W6wq7peS95G8cnYaK_-fbrzy3kUZjtICK2rcSFcwMGog>
-    <xme:MEeFYbFcR55Z0v6ZdgG5aKpLNLg85J6LUz8m2qgDtXtdktBfgGYnTBowS6keYrKII
-    WcadUzQVMe_1pA9v9c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrtdeigdeilecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdflihgr
-    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeefteegkeevfeethffgudehgedvueduvdeifedvvdelhfef
-    heekteefueektdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:MEeFYY7VNWo_ICzrBO9357diUg1dp3uyrmrvFXsTE5UFqA_qchsV6g>
-    <xmx:MEeFYZ3tlN5uKMA7n1bW-KxdZFeTNYx19fP11MtLDYjfKHhumwcPJQ>
-    <xmx:MEeFYTH-4wG6E4CGFESrUl4wLIQbVDVvF7hmPM_rre6hUv6yGI3ZYw>
-    <xmx:MkeFYYRAJMJvRcBKfeATF-0lI1lTwGE8DIUwRXKhgaZBdJ9ZY6tZVw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 92491FA0AA6; Fri,  5 Nov 2021 11:01:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-1369-gd055fb5e7c-fm-20211018.002-gd055fb5e
-Mime-Version: 1.0
-Message-Id: <fa79ed7c-2587-4829-a35d-f6fbb28046ab@www.fastmail.com>
-In-Reply-To: <20211105135232.2128420-1-yunqiang.su@cipunited.com>
-References: <20211105135232.2128420-1-yunqiang.su@cipunited.com>
-Date:   Fri, 05 Nov 2021 15:00:43 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "YunQiang Su" <yunqiang.su@cipunited.com>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc:     "Paul Cercueil" <paul@crapouillou.net>, zhouyanjie@wanyeetech.com,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [RFC] MIPS: fix generic zboot support
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S231466AbhKEPox (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Nov 2021 11:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230386AbhKEPox (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Nov 2021 11:44:53 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF08CC061714;
+        Fri,  5 Nov 2021 08:42:13 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id g184so8698015pgc.6;
+        Fri, 05 Nov 2021 08:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lXIaObu/Py4YZyLKzOZro9KF/nVIU+g+Q8GM5ida1Og=;
+        b=XNVoRkmMDXWP2ANhka/BFf4FjRXl1SRhdPt1FFrrPKTpXiaCQ1wdOf2LQSf8OQMeSk
+         90DTYRAfXMYcIJ+RVyFpNoY6IPfN55z9JnXRFU2v/FoOx8SvIH/5EcgzTWnWgDdsaJaG
+         +5XBkdlA1z9EWDR6iJBQfd3i24hGRhxWk2R3kG3VkuSAlH4zWIaEhaE2LL+xvL1VvxA+
+         lElWvnJpDmw73fGVhwMKeX3TEtSl68zbnM7FKDeGP4TivBDwS5i0+fOmjAW2jimoU0lZ
+         vwSNcnwot6I3N5uiWTtBX4BOqoPpAp8NO0y099/LKcXWwbi6LdOzEVBkMmrUya/0eqLq
+         /7rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lXIaObu/Py4YZyLKzOZro9KF/nVIU+g+Q8GM5ida1Og=;
+        b=QywbjkD8RVo7IlTx+/j1oCUzhI4eNNjz4HZKHj/JGgVgxT9JXqPawiqtV5PyxUi7K/
+         LzJ7dkktSOX8dmO0OPPvtMG31yWKMUc555joprWNoZk/mLF8fbdFBuEdEBFpmouisIl3
+         sRhK6+lcswOlMOy0SMioRGaOFRGlET/7UFB7uRzdLyz5oA4OrAqv+ClxCU1iNCnYXNZM
+         RXJK1aNiV+2BSvlr35V95NZFsAl5WgD0i8qFprXny47JMnCV65gTO2KVzpX1mX8mm2Pf
+         W2Xh3URXa/GUNxlp3+e99Q1WPsl1C9rls5nq3kFWallokEOB2yobCI2aJsOJw4/bWJAC
+         QVsw==
+X-Gm-Message-State: AOAM531gDAeY07PYFQk12ECWuE0rP7GsDXJhEr8ruPrUiV9oalUpVPdM
+        ja6w+G474khB5VDk8GvgnK0rMAoAW9w=
+X-Google-Smtp-Source: ABdhPJykX0UAphaHVjTEhNy4GJmQz5vOgJ6x+INBsZhC+3Q1qOF4lXnHzRifX5Xli1w3v4tUbt6ZGQ==
+X-Received: by 2002:a05:6a00:150d:b0:47c:1d28:4ef5 with SMTP id q13-20020a056a00150d00b0047c1d284ef5mr59893304pfu.6.1636126932868;
+        Fri, 05 Nov 2021 08:42:12 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id b8sm7547097pfi.103.2021.11.05.08.42.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Nov 2021 08:42:12 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM63XX ARM
+        ARCHITECTURE), Justin Chen <justinpopo6@gmail.com>,
+        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-mips@vger.kernel.org (open list:MIPS),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM63XX
+        ARM ARCHITECTURE)
+Subject: [PATCH v4 0/7] Removal of bcm63xx-wdt
+Date:   Fri,  5 Nov 2021 08:42:01 -0700
+Message-Id: <20211105154208.614260-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+This patch series prepares the bcm7038_wdt driver to support its bcm63xx
+counter part, updates the MIPS BCM63xx platform code to provide the
+necessary information about the "periph" clock, and finally proceeds
+with removing the bcm63xx_wdt altogether.
+
+This was only compiled tested as I did not have a readily available
+BCM63xx system to test with.
+
+This should also help with adding support for BCM4908 which Rafal is
+working on.
+
+Changes in v4:
+- fixed binding patch (Rob, Guenter)
+- updated Kconfig description title to mention BCM63xx
+
+Changes in v3:
+
+- added Guenter's and Thomas' tags to patch 6
+- added missing initialization of id_table
+- use Rafal's latest binding patch
+
+Changes in v2:
+
+- added Guenter's Reviewed-by where given
+- update binding patch to pass make dt_bindings_check (Rob)
 
 
-=E5=9C=A82021=E5=B9=B411=E6=9C=885=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =E4=
-=B8=8B=E5=8D=881:52=EF=BC=8CYunQiang Su=E5=86=99=E9=81=93=EF=BC=9A
-> There are 2 problems here:
-> 1. setting zload-y to 0xffffffff81000000 breaks booting on qemu -M bos=
-ton.
->    Why it is set here? Any other platform needs this value?
+Florian Fainelli (6):
+  dt-bindings: watchdog: Add BCM6345 compatible to BCM7038 binding
+  watchdog: bcm7038_wdt: Support platform data configuration
+  watchdog: Allow building BCM7038_WDT for BCM63XX
+  watchdog: bcm7038_wdt: Add platform device id for bcm63xx-wdt
+  MIPS: BCM63XX: Provide platform data to watchdog device
+  watchdog: Remove BCM63XX_WDT
 
-Actually we have arch/mips/boot/compressed/calc_vmlinuz_load_addr.c to c=
-alculate zload address.
-It will append zloader after the vmlinux so I'm not sure why we have to =
-specify a address here.
-Especially for generic kernel.
+Rafał Miłecki (1):
+  dt-bindings: watchdog: convert Broadcom's WDT to the json-schema
 
-> 2. vmlinux.gz.itb should be appended to all-$(CONFIG_MIPS_GENERIC) ins=
-tead
->    of replacing. Otherwise, no vmlinuz will be built.
+ .../bindings/watchdog/brcm,bcm7038-wdt.txt    |  19 --
+ .../bindings/watchdog/brcm,bcm7038-wdt.yaml   |  42 +++
+ arch/mips/bcm63xx/dev-wdt.c                   |   8 +
+ drivers/watchdog/Kconfig                      |  17 +-
+ drivers/watchdog/Makefile                     |   1 -
+ drivers/watchdog/bcm63xx_wdt.c                | 315 ------------------
+ drivers/watchdog/bcm7038_wdt.c                |  16 +-
+ include/linux/platform_data/bcm7038_wdt.h     |   8 +
+ 8 files changed, 77 insertions(+), 349 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+ delete mode 100644 drivers/watchdog/bcm63xx_wdt.c
+ create mode 100644 include/linux/platform_data/bcm7038_wdt.h
 
-Ack.
+-- 
+2.25.1
 
-Thanks.
-
-- Jiaxun
-
-> ---
->  arch/mips/generic/Platform | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
-> index e1abc113b409..0c03623f3897 100644
-> --- a/arch/mips/generic/Platform
-> +++ b/arch/mips/generic/Platform
-> @@ -13,8 +13,7 @@ cflags-$(CONFIG_MACH_INGENIC_SOC)	+=3D=20
-> -I$(srctree)/arch/mips/include/asm/mach-ing
->  cflags-$(CONFIG_MIPS_GENERIC)	+=3D=20
-> -I$(srctree)/arch/mips/include/asm/mach-generic
->=20
->  load-$(CONFIG_MIPS_GENERIC)	+=3D 0xffffffff80100000
-> -zload-$(CONFIG_MIPS_GENERIC)	+=3D 0xffffffff81000000
-> -all-$(CONFIG_MIPS_GENERIC)	:=3D vmlinux.gz.itb
-> +all-$(CONFIG_MIPS_GENERIC)	+=3D vmlinux.gz.itb
->=20
->  its-y					:=3D vmlinux.its.S
->  its-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+=3D board-boston.its.S
-> --=20
-> 2.30.2
-
---=20
-- Jiaxun
