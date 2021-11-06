@@ -2,186 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D33B4446ACF
-	for <lists+linux-mips@lfdr.de>; Fri,  5 Nov 2021 23:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871C2446C20
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Nov 2021 03:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbhKEWOf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 5 Nov 2021 18:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
+        id S232109AbhKFDBJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 5 Nov 2021 23:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbhKEWOe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Nov 2021 18:14:34 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB02C061208
-        for <linux-mips@vger.kernel.org>; Fri,  5 Nov 2021 15:11:54 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id f8so11851826plo.12
-        for <linux-mips@vger.kernel.org>; Fri, 05 Nov 2021 15:11:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=aRWHdkO4dgpMyzRiXJIktqcg8FedigSvLDnV+7jJnn4=;
-        b=Nsce8GFJmQXR6UHyWFvn08hSzEM7iGBG5ByWUwahEd+E5Oi5y5F5s5kXfuHSA3O8jH
-         0g5rwgrhkqsbTuBAi4kvic7gFjNdoyFwoUSX8NEPZug00B5rwPZd4+X7iOkq2V2UNQCg
-         4rqo5zho64yPY0krZNwheBUWot15iJ+bFG7h7eXJT9vcCF4cqaJPv0sLz4uV4zywUa65
-         hJJubI8n/+Mp1bb8fun+E7+Q8ZtJ3oj/5S/LLu87HovDhA3dnSnFuml2XJUQYnS/WCAX
-         wdSAo7BO/xFKbTMNu3iGHg1PZXJCss3+1AStP69KCnVFVKOBZDFqHgHpzOsOp/1t0hjM
-         cQkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=aRWHdkO4dgpMyzRiXJIktqcg8FedigSvLDnV+7jJnn4=;
-        b=5F3yipxWfgjadzfqZxYoFBPXALKBWhIfMSW0S9SxHn99nsvmgI7PTM8SCSFymHgmIy
-         QmF6H9D4amGN10yePxYKnTfXTdCZhD4cjp0cDQYlTegQg9BsM/BW1LWQogeFz19ueNkF
-         4AMbrQhE87LnT7vJ4OAhgp3LFSJdqJmLa56PINjspRGDBtQtPI34B7PqnlZcgUVNqOFG
-         C5xuSv3UnRrJfiYy13y/m1booMGxOXf1qxYL0fodimxx+ciKN+Q2wZJg3wie/St+Yfkk
-         DvvyyOLvGJpOi9VeHK+2yibZr7tOyfi4Dgu0QRZZG23roNa8ScrvDgvqaMFG21oxMaI6
-         Lb3g==
-X-Gm-Message-State: AOAM530blxTg/gak5wULer7SStbV3bM4zFPIypIqzjjaWoFrlpVx56O4
-        Jvp4EJQfedOgskojenE0tkRnIA==
-X-Google-Smtp-Source: ABdhPJyVKs/T2QwL39fgWmZUlOvRz4SLMTN3hO5qCDkrTrsDVvK6eCTxiKcLCJLtAK4yipcbA0ThcQ==
-X-Received: by 2002:a17:90a:134f:: with SMTP id y15mr33461963pjf.158.1636150313440;
-        Fri, 05 Nov 2021 15:11:53 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p15sm4391051pjh.1.2021.11.05.15.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Nov 2021 15:11:52 -0700 (PDT)
-Date:   Fri, 5 Nov 2021 22:11:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Richard Henderson <rth@twiddle.net>,
+        with ESMTP id S231664AbhKFDBI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 5 Nov 2021 23:01:08 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A99CC061570;
+        Fri,  5 Nov 2021 19:58:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=qQH0nBTUcxXKHal9giqwqa8esN9py6mZ5ZFCCMzF95g=; b=tRW2HvXoPmpAAdwHky8fw3NQvF
+        JvKO3zhkGEc1/bYt0BZBpOdIV2JYL+KOdyWW3fnnJqnahOyWgjObo+IGUoX9oqcJzMuEVOb+B9emS
+        1+xeMl5QDfZrthTjmPtRMAi+5JiK6DhY3SsCKhv3TzKyL8kEhgh9TK7Ixy8uJKvJH+8yF2Rtr1bPL
+        h6OGRWPNbHERYT3OhDln71jKbJsAYRD2D/wyWU6swfM7pUFtlpsRV+G90baKkP0Ee1Vwc2LMT9o5K
+        iDCp41uuJVaD6xKQZerRjXa1xMmeYX4BgVpS68V73V/WgMCg0dTCv4pMkkskeRtbFMfbJuP5aVdC2
+        H+GDOyDA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mjBuS-00CbKs-4g; Sat, 06 Nov 2021 02:58:24 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        James E J Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter H Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v5 03/16] x86/tdx: Exclude Shared bit from physical_mask
-Message-ID: <YYWsJFP31vpCAVFg@google.com>
-References: <20211009003711.1390019-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20211009003711.1390019-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        Paul Burton <paulburton@kernel.org>,
+        Maxime Bizon <mbizon@freebox.fr>,
+        Ralf Baechle <ralf@linux-mips.org>
+Subject: [RFC PATCH] mips: BCM63XX: select CPU_SUPPORTS_32BIT_KERNEL
+Date:   Fri,  5 Nov 2021 19:58:23 -0700
+Message-Id: <20211106025823.32437-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211009003711.1390019-4-sathyanarayanan.kuppuswamy@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Oct 08, 2021, Kuppuswamy Sathyanarayanan wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> 
-> Just like MKTME, TDX reassigns bits of the physical address for
-> metadata.  MKTME used several bits for an encryption KeyID. TDX
-> uses a single bit in guests to communicate whether a physical page
-> should be protected by TDX as private memory (bit set to 0) or
-> unprotected and shared with the VMM (bit set to 1).
-> 
-> Add a helper, tdx_shared_mask() to generate the mask.  The processor
-> enumerates its physical address width to include the shared bit, which
-> means it gets included in __PHYSICAL_MASK by default.
 
-This is incorrect.  The shared bit _may_ be a legal PA bit, but AIUI it's not a
-hard requirement.
+Several header files need info on CONFIG_32BIT or CONFIG_64BIT,
+but kconfig symbol BCM63XX does not provide that info. This leads
+to many build errors, e.g.:
 
-> Remove the shared mask from 'physical_mask' since any bits in
-> tdx_shared_mask() are not used for physical addresses in page table
-> entries.
+   arch/mips/include/asm/page.h:196:13: error: use of undeclared identifier 'CAC_BASE'
+           return x - PAGE_OFFSET + PHYS_OFFSET;
+   arch/mips/include/asm/mach-generic/spaces.h:91:23: note: expanded from macro 'PAGE_OFFSET'
+   #define PAGE_OFFSET             (CAC_BASE + PHYS_OFFSET)
+   arch/mips/include/asm/io.h:134:28: error: use of undeclared identifier 'CAC_BASE'
+           return (void *)(address + PAGE_OFFSET - PHYS_OFFSET);
+   arch/mips/include/asm/mach-generic/spaces.h:91:23: note: expanded from macro 'PAGE_OFFSET'
+   #define PAGE_OFFSET             (CAC_BASE + PHYS_OFFSET)
 
-...
+arch/mips/include/asm/uaccess.h:82:10: error: use of undeclared identifier '__UA_LIMIT'
+           return (__UA_LIMIT & (addr | (addr + size) | __ua_size(size))) == 0;
 
-> @@ -94,6 +100,9 @@ static void tdx_get_info(void)
->  
->  	td_info.gpa_width = out.rcx & GENMASK(5, 0);
->  	td_info.attributes = out.rdx;
-> +
-> +	/* Exclude Shared bit from the __PHYSICAL_MASK */
-> +	physical_mask &= ~tdx_shared_mask();
 
-This is insufficient, though it's not really the fault of this patch, the specs
-themselves botch this whole thing.
+Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: linux-mips@vger.kernel.org
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Maxime Bizon <mbizon@freebox.fr>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+---
+Note: I did see a bunch of build errors like this one:
+../arch/mips/kernel/r4k_fpu.S:217: Error: opcode not supported on this processor: mips1 (mips1) `ldc1 $f24,192($4)'
+but I'm hoping/guessing that this is due to not having a proper compiler
+for the BCM63xx target.
 
-The TDX Module spec explicitly states that GPAs above GPAW are considered reserved.
+ arch/mips/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-    10.11.1. GPAW-Relate EPT Violations
-    GPA bits higher than the SHARED bit are considered reserved and must be 0.
-    Address translation with any of the reserved bits set to 1 cause a #PF with
-    PFEC (Page Fault Error Code) RSVD bit set.
-
-But this is contradicted by the architectural extensions spec, which states that
-a GPA that satisfies MAXPA >= GPA > GPAW "can" cause an EPT violation, not #PF.
-Note, this section also appears to have a bug, as it states that GPA bit 47 is
-both the SHARED bit and reserved.  I assume that blurb is intended to clarify
-that bit 47 _would_ be reserved if it weren't the SHARED bit, but because it's
-the shared bit it's ok to access.
-
-    1.4.2
-    Guest Physical Address Translation
-    If the CPU's maximum physical-address width (MAXPA) is 52 and the guest physical
-    address width is configured to be 48, accesses with GPA bits 51:48 not all being
-    0 can cause an EPT-violation, where such EPT-violations are not mutated to #VE,
-    even if the “EPT-violations #VE” execution control is 1.
-
-    If the CPU's physical-address width (MAXPA) is less than 48 and the SHARED bit
-    is configured to be in bit position 47, GPA bit 47 would be reserved, and GPA
-       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    
-    bits 46:MAXPA would be reserved. On such CPUs, setting bits 51:48 or bits
-    46:MAXPA in any paging structure can cause a reserved bit page fault on access.
-
-The Module spec also calls out that the effective GPA is not to be confused with
-MAXPA, which combined with the above blurb about MAXPA < GPAW, suggests that MAXPA
-is enumerated separately by design so that the guest doesn't incorrectly think
-46:MAXPA are usable.  But that is problematic for the case where MAXPA > GPAW.
-
-    The effective GPA width (in bits) for this TD (do not confuse with MAXPA).
-    SHARED bit is at GPA bit GPAW-1.
-
-I can't find the exact reference, but the TDX module always passes through host's
-MAXPHYADDR.  As it pertains to this patch, just doing
-
-	physical_mask &= ~tdx_shared_mask()
-
-means that a guest running with GPAW=0 and MAXPHYADDR>48 will have a discontiguous
-physical_mask, and could access "reserved" memory.  If the VMM defines legal memory
-with bits [MAXPHYADDR:48]!=0, explosions may ensue.  That's arguably a VMM bug, but
-given that the VMM is untrusted I think the guest should be paranoid when handling
-the SHARED bit.  I also don't know that the kernel will play nice with a discontiguous
-mask.
-
-Specs aside, unless Intel makes a hardware change to treat GPAW as guest.MAXPHYADDR,
-or the TDX Module emulates on EPT violations to inject #PF(RSVD) when appropriate,
-this mess isn't going to be truly fixed from the guest perspective.
-
-So, IMO all bits >= GPAW should be cleared, and the kernel should warn and/or
-refuse to boot if the host has defined legal memory in that range.
-
-FWIW, from a VMM perspective, I'm pretty sure the only sane approach is to force
-GPAW=1, a.k.a. SHARED bit == 51, if host.MAXPHYADDR>=49.  But on the guest side,
-I think we should be paranoid.
+--- linux-next-20211105.orig/arch/mips/Kconfig
++++ linux-next-20211105/arch/mips/Kconfig
+@@ -329,6 +329,7 @@ config BCM63XX
+ 	select SYNC_R4K
+ 	select DMA_NONCOHERENT
+ 	select IRQ_MIPS_CPU
++	select CPU_SUPPORTS_32BIT_KERNEL
+ 	select SYS_SUPPORTS_32BIT_KERNEL
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+ 	select SYS_HAS_EARLY_PRINTK
