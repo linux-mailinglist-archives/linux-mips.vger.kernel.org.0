@@ -2,86 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF9B446C65
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Nov 2021 05:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C5A446D92
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Nov 2021 12:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbhKFExS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 6 Nov 2021 00:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233713AbhKFExR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 6 Nov 2021 00:53:17 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C30C06120A
-        for <linux-mips@vger.kernel.org>; Fri,  5 Nov 2021 21:50:36 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 207so145086ljf.10
-        for <linux-mips@vger.kernel.org>; Fri, 05 Nov 2021 21:50:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=xRc3IHUizmviQEjT/aA/BX2eK4NRIQ6MOKbVgrtXYgk=;
-        b=Bz9kgxF17Lnqk0Ix9PMFDztCPNNSJZzr/kDW4M3zHPBOIlINv/F6eMTSj0NmyE77Pl
-         vnflYw0jg5XvnYF5t0r/fvwT08XMvM34qT3/qirZSZhrCgOMgcwfQXmAmPitxms0aEtH
-         zb2Q1WlA1+SvDeSyD+I0MmEgyRqr/+/qwBfGqXOClYlpbHA2EGuSyD7Pqczb1sUQr/2G
-         YKJgCyZkeuFfkpT2HX4yMG9uM61Dr3wOCYL9qN5paDo6uapqLWs8x/fQbVkJlBy1TcfC
-         2cxr5VmhV7/rIlT6PZr5XyVEMHhTaMgPCTTTVkHWjOthcxHkir21UejX2Ez8Pk9UrGqm
-         vhfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=xRc3IHUizmviQEjT/aA/BX2eK4NRIQ6MOKbVgrtXYgk=;
-        b=ZaHG+EoZmCWuHiMC3Jg1tQtkXdntp6ZcyZg7gjsFWnzMMdOWQYscdJT8y1UNE/iRpf
-         QIVpMNtyarJ1ibPjYE3OvN/4BDC8hopPHMXcWVJP0TKFoNwJLwtGrQTLATC2U1Sz8dik
-         EfNHjzD6c0sUifvubgE0NvACZtozNoNhj4pqY1b+XzQwDMPcihyuL5PmBUp+W1f0D68z
-         4/qF1YuafxL2IBZIdsj70+vPgjzrf9nmmXljZaeMCRPF/czbJ3TmZCLmynYwbYLqIGel
-         XAN35fzll371PtQkMKwmpOBNsMd2Lb0DcpaJqN3K2c43xMuj+kuQi59M7aZP+gD5OnMb
-         Uf4g==
-X-Gm-Message-State: AOAM531s9hJvsaHXMd4CJ6r35/lZyavvva0vhnfIxTr2xKI2W1CRPTVr
-        GqyBefU4EOFu5w+SH1vMPtsenn3FjZ30eiv50fE=
-X-Google-Smtp-Source: ABdhPJyMFRUwC8RdVFE+gcH/VVgEzXz5JxWgYAZS5wZkHSr7EebKKS4wGOkrP8jerHPiizGc8rXWn55/7ZUpyk4ySWg=
-X-Received: by 2002:a05:651c:513:: with SMTP id o19mr41423328ljp.108.1636174234264;
- Fri, 05 Nov 2021 21:50:34 -0700 (PDT)
-MIME-Version: 1.0
-Reply-To: godwinppter@gmail.com
-Sender: nataichalinossa01@gmail.com
-Received: by 2002:a05:6512:15a8:0:0:0:0 with HTTP; Fri, 5 Nov 2021 21:50:33
- -0700 (PDT)
-From:   Godwin Pete <godwinnpeter@gmail.com>
-Date:   Sat, 6 Nov 2021 05:50:33 +0100
-X-Google-Sender-Auth: yNjWOIAxIc0cloJ0dtqvmtOGC7M
-Message-ID: <CAAkWb02W7bLoR7ZGR5xji_veLbXBDJDHX=HbO4wAgyapr39sgg@mail.gmail.com>
-Subject: It's my pleasure to inform you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S233272AbhKFLUf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 6 Nov 2021 07:20:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34242 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229500AbhKFLUc (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 6 Nov 2021 07:20:32 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BD2F160ED5;
+        Sat,  6 Nov 2021 11:17:50 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mjJhk-003oLQ-Fj; Sat, 06 Nov 2021 11:17:48 +0000
+Date:   Sat, 06 Nov 2021 11:17:41 +0000
+Message-ID: <87o86xednu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linuxppc-dev@lists.ozlabs.org,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        kernel-team@android.com
+Subject: Re: [PATCH 1/5] KVM: Move wiping of the kvm->vcpus array to common code
+In-Reply-To: <YYWQHBwD4nBLo9qi@google.com>
+References: <20211105192101.3862492-1-maz@kernel.org>
+        <20211105192101.3862492-2-maz@kernel.org>
+        <YYWQHBwD4nBLo9qi@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, kvm@vger.kernel.org, linux-mips@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, anup.patel@wdc.com, atish.patra@wdc.com, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com, pbonzini@redhat.com, jgross@suse.com, npiggin@gmail.com, paulus@samba.org, mpe@ellerman.id.au, james.morse@arm.com, suzuki.poulose@arm.com, alexandru.elisei@arm.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+On Fri, 05 Nov 2021 20:12:12 +0000,
+Sean Christopherson <seanjc@google.com> wrote:
+> 
+> On Fri, Nov 05, 2021, Marc Zyngier wrote:
+> > All architectures have similar loops iterating over the vcpus,
+> > freeing one vcpu at a time, and eventually wiping the reference
+> > off the vcpus array. They are also inconsistently taking
+> > the kvm->lock mutex when wiping the references from the array.
+> 
+> ...
+> 
+> > +void kvm_destroy_vcpus(struct kvm *kvm)
+> > +{
+> > +	unsigned int i;
+> > +	struct kvm_vcpu *vcpu;
+> > +
+> > +	kvm_for_each_vcpu(i, vcpu, kvm)
+> > +		kvm_vcpu_destroy(vcpu);
+> > +
+> > +	mutex_lock(&kvm->lock);
+> 
+> But why is kvm->lock taken here?  Unless I'm overlooking an arch,
+> everyone calls this from kvm_arch_destroy_vm(), in which case this
+> is the only remaining reference to @kvm.  And if there's some magic
+> path for which that's not true, I don't see how it can possibly be
+> safe to call kvm_vcpu_destroy() without holding kvm->lock, or how
+> this would guarantee that all vCPUs have actually been destroyed
+> before nullifying the array.
 
-How are you doing? I am very happy to inform you about my success. I'm
-currently out of the country for an investment with part of my share,
-after completing the transfer with an Indian business man. But i will
-visit your country, next year, after the completion of my project.
-Please, contact my secretary to send you the (ATM) card which I've
-already credited with the sum of ($500,000.00). Just contact her to
-help you in receiving the (ATM) card. I've explained everything to her
-before my trip. This is what I can do for you because, you couldn't
-help in the transfer, but for the fact that you're the person whom
-I've contacted initially, for the transfer. I decided to give this
-($500,000.00) as a compensation for being contacted initially for the
-transfer. I always try to make the difference, in dealing with people
-any time I come in contact with them. I'm also trying to show that I'm
-quite a different person from others whose may have a different
-purpose within them. I believe that you will render some help to me
-when I, will visit your country, for another investment there. So
-contact my secretary for the card, Her contact are as follows,
+I asked myself the same question two years ago, and couldn't really
+understand the requirement. However, x86 does just that, so I
+preserved the behaviour.
 
-Full name: Mrs, Jovita Dumuije,
-Country: Burkina Faso
-Email: jovitadumuije@gmail.com
+If you too believe that this is just wrong, I'm happy to drop the
+locking altogether. If that breaks someone's flow, they'll shout soon
+enough.
 
-Thanks, and hope for a good corporation with you in future.
+Thanks,
 
-Godwin Peter,
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
