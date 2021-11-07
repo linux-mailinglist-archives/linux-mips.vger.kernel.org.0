@@ -2,76 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F06694473C0
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Nov 2021 17:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0517644740D
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Nov 2021 17:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234210AbhKGQZ7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Nov 2021 11:25:59 -0500
-Received: from condef-10.nifty.com ([202.248.20.75]:58973 "EHLO
-        condef-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbhKGQZ7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Nov 2021 11:25:59 -0500
-Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-10.nifty.com with ESMTP id 1A7GKdLd000845
-        for <linux-mips@vger.kernel.org>; Mon, 8 Nov 2021 01:20:40 +0900
-Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 1A7GJdco018789;
-        Mon, 8 Nov 2021 01:19:40 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 1A7GJdco018789
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1636301980;
-        bh=Ia5nRSFeHj6vuVeol5rcoB9Th6hH+WhF8mEQNkaxAjY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dDK0SVTkj2j/DKFFJpe6NecOPbWEQQQ3zitlty16bFz3cneWvfCc4koyvdz/cTXYM
-         RmGuA3QeQthyb1pTUtYErEAh878SDx7YFNQ44Yd6Zdt0lwwhBmwO7WsaLcjSHosVY2
-         0UgjqVpjay7wAEzpCk0HaMZ6obMQn1cr5Fjt1fn/K2i42ffFwfg7DQyzQDVIe9h8+P
-         h0G7whinLfw+B6HA1kL0cqlatiqBsscAohwS4/dcy3nqwoMB2oQVAbJHPV6jq5Xu/M
-         ijqC6ABzga70vFcoxxY4ldHKW62ZPEYpo5rl0QROrTJdrykN7N5b1+IP8Mr2Lo3VAq
-         qAbQeIGYnlvVg==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-mips@linux-mips.org
-Cc:     clang-built-linux@googlegroups.com,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        zhaoxiao <zhaoxiao@uniontech.com>
-Subject: [PATCH] MIPS: VDSO: remove -nostdlib compiler flag
-Date:   Mon,  8 Nov 2021 01:19:38 +0900
-Message-Id: <20211107161938.323485-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S235876AbhKGQxC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Nov 2021 11:53:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235057AbhKGQxC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Nov 2021 11:53:02 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D944C061746
+        for <linux-mips@vger.kernel.org>; Sun,  7 Nov 2021 08:50:19 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id y1so14219979plk.10
+        for <linux-mips@vger.kernel.org>; Sun, 07 Nov 2021 08:50:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
+        b=CGgoC4BsgHelzytn+/VTrKwS3n0T68QEW7GeWdpL8zfErEA81MOI4RL138iNx/cHCC
+         3mOCWFKMwLBKqHyI1x8QZIxdZmn/T2z7wxCAL1QJSDwY+yMd/5vpY5vZsY6UEO3VfUIk
+         NmE02Lf+f1FnTMQjl4bIN7/MkullBrFIYleaUA1lhngjIcmWGropAefRtmKn85kF4AjF
+         9REnU8D8TvvsrxnzIdJuHntvDW0z4R21EhRUYYG9p+p2KSbQQtyOBLs4eMyycwEMv9DU
+         iYxtgVtsDfraOGEV3mHhUsdsFHn4Oc6mkCc25JbUs6k1jHra7jUoaikUuMgz3yZaGGWB
+         oWWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=3KhLtwCKP93j3EcWq+BGTsAWsp8Oi4eBuXX0Ov40ah8=;
+        b=ws0hhbFp/LYDbiQrniyBjk/vj+sXdLKbo6opH4vfGZR8fhOG6WFOcFFl34b2JtxS1p
+         WKA9xHORrhwyrpLNY/44XCJFQ+qPTWUFvZGtaYR+4TAto3DFZ71iBSQa8ywMsAMaha03
+         dRH70NomvjDvaEdpbOaaViSWfgzoqWpIAIT4QNWyYhC6cx2vlrKq7P58OFnaSWIEfSb+
+         FUmnzGTlM30KXyBcI7Ud+riDHJeAPITN0yigi45SVLt4kJ4jX+15R1+Pa8GDg4JAQHrB
+         oZsMvqVtd7dpl8uprXjmmn7fJnhvpzXBpdD45k7Hc67fptejk93Srh7C15mTgKEPYPVb
+         L9NA==
+X-Gm-Message-State: AOAM531qVh3EO5crW3sptjrnIVb5327HkFk/hjtJ8CAsIFVuo0z+q4Va
+        g4yuITrgglB9yiXttsEXOLny/4VyFjev2Z0sLdw=
+X-Google-Smtp-Source: ABdhPJwRzqzdXmZqk+E0BGOtRSVuotVxv3vktjD61tF3yrYnFRN7LmPJ9X2Sktepu1Y4J0ZwltgXDIouReyvwFUOa3w=
+X-Received: by 2002:a17:902:d2ce:b0:141:f710:922 with SMTP id
+ n14-20020a170902d2ce00b00141f7100922mr42873278plc.7.1636303818711; Sun, 07
+ Nov 2021 08:50:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:4a14:0:0:0:0 with HTTP; Sun, 7 Nov 2021 08:50:18
+ -0800 (PST)
+Reply-To: amabenchambers00@gmail.com
+From:   Amadou Benjamin <ousmanekarim54@gmail.com>
+Date:   Sun, 7 Nov 2021 08:50:18 -0800
+Message-ID: <CAJFAt4ZtDp1d-Lyr-uxqQ9skQkUswz-oAXSiT_oB13J29FH1QQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The -nostdlib option requests the compiler to not use the standard
-system startup files or libraries when linking. It is effective only
-when $(CC) is used as a linker driver.
-
-Since commit 2ff906994b6c ("MIPS: VDSO: Use $(LD) instead of $(CC) to
-link VDSO"), $(LD) is directly used, hence -nostdlib is unneeded.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- arch/mips/vdso/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 1b2ea34c3d3b..d65f55f67e19 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -57,7 +57,7 @@ endif
- 
- # VDSO linker flags.
- ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
--	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
-+	$(filter -E%,$(KBUILD_CFLAGS)) -shared \
- 	-G 0 --eh-frame-hdr --hash-style=sysv --build-id=sha1 -T
- 
- CFLAGS_REMOVE_vdso.o = $(CC_FLAGS_FTRACE)
 -- 
-2.30.2
+Hello good day.
 
+I am Barrister Amadou Benjamin by name, with due respect, I am
+contacting you to help get the deposit 10.5 million Dollars, my late
+client Engineer Vasiliy left in his Bank before his sudden death on
+April 21, 2007, to avoid confiscation by Lloyds bank. Please write me
+back through this email (amabenchambers00@gmail.com)for more
+information about this transaction or send me your private email to
+Contact you myself.
+
+Sincerely,
+Barrister Amadou Benjamin Esq
