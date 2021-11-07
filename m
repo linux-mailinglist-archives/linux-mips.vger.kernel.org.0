@@ -2,309 +2,214 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBF64471F8
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Nov 2021 08:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB315447316
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Nov 2021 14:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbhKGHDw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Nov 2021 02:03:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbhKGHDv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Nov 2021 02:03:51 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14307C061570;
-        Sun,  7 Nov 2021 00:01:09 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id ay21so25270510uab.12;
-        Sun, 07 Nov 2021 00:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1p3werd8fOKFjaMUpR218qBHBT1eQhIqxUYzhLG8tEE=;
-        b=mfEirIun8I+ExEzo3CAxdLvGgAahkxJQbMD4oCzuPPzMk8sGGwtTStjB6O6c7x94p4
-         0FMI7I0tJZpZvtGoWpoRe+GZdJuiRjpSlPaEr9lfXGPLgkFrqIsTh/9j6aWXd5FGoHbS
-         NzPSJPQyV5Ye263HVj7Onv7lht6Zq8EfbngvZmYKca9wWFzLfTrIZjZ6/+yzlxjgskiw
-         fd76iGtzmUHEnQnce8EVv8PlyCvu4nEliOxV6U0TyBIWgMLr0WeSkrZ2hcqoq5d0HZz7
-         B/U+SidoN3E+94RQnwZYWdlUDKCnG9nVLYpVulZw8LUvxZAtKyIWedhz1dMdea9DC22H
-         OyLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1p3werd8fOKFjaMUpR218qBHBT1eQhIqxUYzhLG8tEE=;
-        b=AJ8vguT6dj2JjGyMFfhxLSBPRMXgEM9r/exOx5dldk83zLjCyqRsk8oPVb/DhVZDwK
-         8AwDZz7Hmaj3I9GOS6kQiqOcqcODWrAkKAjW3cZE5mYwF6c2S0nhxGfLt8sJJWkbgOD2
-         4sW9Ss+Eat9XZs+oREReACFC2hzmBYM+R12vjQ6V6zQ1ZLASJ8wQ0eKoQZ9mSyd+oSVY
-         c5UJpZDzRiSGwTVH3HaAYfuOz9eCCMsDrOv1Xd0RzeImC1vbr+eGQTE6Q+rY7IFHe6EG
-         BihgkMQYPVj4si9nVSUx1a5F6twoMiHJZu7rktheVmCB4DWNYN2PpH1D+mt4Sna2FWas
-         B62A==
-X-Gm-Message-State: AOAM533cA5Knr9a17g5Pfbh4N1zxLbCKous0EJ8E12I+vBvKbdv+zhPO
-        SBzNRdwKKvcIyE7zqnyk91WC60FNYRqfFcwjHkA=
-X-Google-Smtp-Source: ABdhPJwg1SV13qsIr9lkmVFZiGCAiZW5U7QWfvSWCjQLjE5xSmegVv/inVqp+7VJddEztl6VhRng/GrB5yVGcBNjE2o=
-X-Received: by 2002:a05:6102:e0d:: with SMTP id o13mr73176158vst.13.1636268468014;
- Sun, 07 Nov 2021 00:01:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAMhs-H8bjOkwfnYqdhWuwA8vt18naW3DABYN-EyW-gDB2cP7JA@mail.gmail.com>
- <20211029194751.GA349935@bhelgaas> <CAMhs-H9ANAP6bsF3AgUTSnaNYxqhxETVwEcL7AC96pFc=WskOg@mail.gmail.com>
- <CAMhs-H-Ugqr91rceuArjJFG=H9GyX0W5G5xqWzRdUMBjutoxfA@mail.gmail.com> <CAMhs-H8KmubYpXRxexKo0ahh11p6wU3EwbLQvKVzBACeB8cq7A@mail.gmail.com>
-In-Reply-To: <CAMhs-H8KmubYpXRxexKo0ahh11p6wU3EwbLQvKVzBACeB8cq7A@mail.gmail.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Sun, 7 Nov 2021 08:00:56 +0100
-Message-ID: <CAMhs-H8ShoaYiFOOzJaGC68nZz=V365RXN_Kjuj=fPFENGJiiw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
- able to use them from driver code
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yanteng Si <siyanteng01@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, kw@linux.com,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        chenhuacai@kernel.org, sterlingteng@gmail.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S233214AbhKGNqh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Nov 2021 08:46:37 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:35022 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231136AbhKGNqg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Nov 2021 08:46:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1636292614;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=79hC0l2s6WO9Mv6jwtdx8V5lNoZ0vuIrVGBldC3amTE=;
+    b=GpFLSPBJHHaKr/oD8UMsijKF9i/1KY40pfy/qputjd/4CkMo3vzuHDKmxbRlOdjyjK
+    fYC4g+JgRj6qnrd43Xsq4OePQeMlSZ8pcBGxsUUfDXLOuMCjV/wwde7D/YU3fc1a2XXu
+    BKRZDT4NVBvp/d6lLCNeZdsHJWQZwDzDwO54KKwcvknDtpRQOOmKV2B50xs5fr5pdaSE
+    5yOunl6AAk+frFHe7J0is3har7yuDLvT4PAaNi26HhBpf9TyKdKyQ9jxpbzlK2iW4cac
+    J9Ao298nyLGg2yFN/HvfphYEzMP5WyqY9ZMrh/0mmxfzKFU9k2DY3XfKqT7Q4q7Ta32j
+    hzYQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3jcR+"
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.34.1 DYNA|AUTH)
+    with ESMTPSA id 902c63xA7DhXFoA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Sun, 7 Nov 2021 14:43:33 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v5 3/7] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
+ DT Schema
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <8XUI0R.KDQ64KIMI9BU@crapouillou.net>
+Date:   Sun, 7 Nov 2021 14:43:33 +0100
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Herring <robh@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D45DF9B7-8175-43EE-9D55-DA131DCB4FA4@goldelico.com>
+References: <cover.1633436959.git.hns@goldelico.com>
+ <518d5db83e84e3f0326854c5afb53a92e7ae4e41.1633436959.git.hns@goldelico.com>
+ <8XUI0R.KDQ64KIMI9BU@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Bjorn,
+Hi,
 
-On Sat, Oct 30, 2021 at 7:38 AM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
->
-> On Sat, Oct 30, 2021 at 7:21 AM Sergio Paracuellos
-> <sergio.paracuellos@gmail.com> wrote:
-> >
-> > Hi Bjorn,
-> >
-> > On Fri, Oct 29, 2021 at 10:27 PM Sergio Paracuellos
-> > <sergio.paracuellos@gmail.com> wrote:
-> > >
-> > > On Fri, Oct 29, 2021 at 9:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > >
-> > > > On Fri, Oct 29, 2021 at 09:37:53PM +0200, Sergio Paracuellos wrote:
-> > > > > On Fri, Oct 29, 2021 at 8:49 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > On Fri, Oct 29, 2021 at 07:28:47AM +0200, Sergio Paracuellos wrote:
-> > > > > > > On Thu, Oct 28, 2021 at 10:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > > On Thu, Oct 28, 2021 at 11:59:17AM +0200, Sergio Paracuellos wrote:
-> > > > > > > > > On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
-> > > > > > > > > <sergio.paracuellos@gmail.com> wrote:
-> > > > > > > > > > On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
-> > > > > > > > > > <tsbogend@alpha.franken.de> wrote:
-> > > > > > > > > > > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
-> > > > > > > > > > > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
-> > > > > > > > > > > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
-> > > > > > > > > > > > > drivers become modules.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > > > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > > > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > > > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > > > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Let's just export them.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
-> > > > > > > > > > > > > ---
-> > > > > > > > > > > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
-> > > > > > > > > > > > >  arch/mips/kernel/mips-cpc.c | 1 +
-> > > > > > > > > > > > >  2 files changed, 6 insertions(+)
-> > > > > > > > > > > > >
-> > > > > > > > > > > >
-> > > > > > > > > > > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > > > > > > > >
-> > > > > > > > > > > could we instead make the pcie-mt761 driver non modular ? Exporting
-> > > > > > > > > > > all MIPS specific stuff for just making an essential driver modular
-> > > > > > > > > > > doesn't IMHO make much sense.
-> > > > > > > > > >
-> > > > > > > > > > The driver is modular because I have been advised other times that new
-> > > > > > > > > > drivers should be able to be compiled as modules and we should avoid
-> > > > > > > > > > using 'bool' in Kconfig for new drivers. That's the only reason. I am
-> > > > > > > > > > also always including as 'y' the driver since for me not having pci in
-> > > > > > > > > > my boards has no sense... I am ok in changing Kconfig to be 'bool'
-> > > > > > > > > > instead of 'tristate', but I don't know what should be the correct
-> > > > > > > > > > thing to do in this case. Thoughts?
-> > > > > > > > >
-> > > > > > > > > I guess we also want the driver to at least be compile tested in
-> > > > > > > > > 'allmodconfig' and other similars...15692a80d949
-> > > > > > > >
-> > > > > > > > Sounds like the systems that actually use this driver require it to be
-> > > > > > > > built-in, and the only benefit of exporting these symbols is that we
-> > > > > > > > would get better compile test coverage.
-> > > > > > > >
-> > > > > > > > If that's the case, I agree that it's better to just make it
-> > > > > > > > non-modular.
-> > > > > > >
-> > > > > > > I agree and that was my reasoning for sending a patch to also convert
-> > > > > > > to bool the phy driver that this PCIe controller uses. When the pull
-> > > > > > > request was sent from Vinod to Greg, Greg refused to take it because
-> > > > > > > of that commit and the commit was reverted and a new pull request was
-> > > > > > > sent including this revert. This is commit 15692a80d949 ("phy: Revert
-> > > > > > > "phy: ralink: Kconfig: convert mt7621-pci-phy into 'bool'""). Because
-> > > > > > > of this I also changed the PCIe controller Kconfig from bool to
-> > > > > > > tristate when I sent v3 of the series which at the end were the ones
-> > > > > > > that was finally taken. There are also other ralink related symbols
-> > > > > > > that have been exported to allow to compile other drivers as a
-> > > > > > > modules, like the watchdog. See the commit fef532ea0cd8 ("MIPS:
-> > > > > > > ralink: export rt_sysc_membase for rt2880_wdt.c"). So, as I said, I
-> > > > > > > agree and I am using the driver as if it were a bool and also ralink
-> > > > > > > systems normally require all drivers built-in, but I think we have to
-> > > > > > > take into account also the "historical facts" here. In any case,
-> > > > > > > Bjorn, let me know if you want me to send whatever patch might be
-> > > > > > > needed.
-> > > > > >
-> > > > > > I didn't see the conversation with Greg, so I don't know the whole
-> > > > > > story.
-> > > > >
-> > > > > Here it is: https://www.spinics.net/lists/kernel/msg3986821.html
-> > > > >
-> > > > > > For pcie-mt7621.c, it looks like the only problem is
-> > > > > > setup_cm_memory_region(), which does a little coherency-related stuff.
-> > > > > > If we could move that to arch/mips, we could still make this tristate.
-> > > > >
-> > > > > Yes, the only mips specific function used in the driver is
-> > > > > 'setup_cm_memory_region()'.
-> > > > >
-> > > > > > One way might be to implement a pcibios_root_bridge_prepare() for mips
-> > > > > > and put the setup_cm_memory_region() stuff in there.  It's not *ideal*
-> > > > > > because that's a strong/weak function arrangement that doesn't allow
-> > > > > > for multiple host bridges, but that's probably not an issue here.
-> > > > > >
-> > > > > > If we can't do that, I think making it bool is probably the right
-> > > > > > answer, but it would be worth a brief comment in the commit log to
-> > > > > > explain the issue.
-> > > > >
-> > > > > Do you mean to implement 'pcibios_root_bridge_prepare()' for MIPS
-> > > > > ralink? I guess this means to parse device tree and so on only to get
-> > > > > memory range addresses to be added to the MIPS I/O coherence regions
-> > > > > to make things work and then re-parse it again in the driver to do the
-> > > > > proper PCI setup... We end up in an arch generic driver but at the end
-> > > > > this controller is only present in ralink MIPS, so I am not sure that
-> > > > > implementing 'pcibios_root_bridge_prepare()' is worthy here... I can
-> > > > > explore and try to implement it if you think that it really makes
-> > > > > sense... but, IMHO if this is the case, just making it bool looks like
-> > > > > the correct thing to do.
-> > > >
-> > > > It should be trivial to put the contents of setup_cm_memory_region()
-> > > > into a ralink function called pcibios_root_bridge_prepare().
-> > > >
-> > > > pcibios_root_bridge_prepare() is called with the same "struct
-> > > > pci_host_bridge *" argument as setup_cm_memory_region(), and it's
-> > > > called slightly later, so the window resources are already set up, so
-> > > > no DT parsing is required.  It looks like a simple move and rename to
-> > > > me.
-> > >
-> > > I see. Thanks Bjorn. I will try the approach during the weekend and
-> > > report if it works.
-> >
-> > I have tested the change from 'setup_cm_memory_region()' code into
-> > 'pcibios_root_bridge_prepare()' just by moving and renaming it from
-> > the PCIe controller code. The function is properly being called.
-> > However, it looks like at that point, windows are not setup yet (no
-> > windows present at all in bridge->windows) so the system is not able
-> > to get the IORESOURCE_MEM resource to set up the IO coherency unit and
-> > the PCI failed to start:
-> >
-> > [   16.785359] mt7621-pci 1e140000.pcie: host bridge /pcie@1e140000 ranges:
-> > [   16.798719] mt7621-pci 1e140000.pcie:   No bus range found for
-> > /pcie@1e140000, using [bus 00-ff]
-> > [   16.816248] mt7621-pci 1e140000.pcie:      MEM
-> > 0x0060000000..0x006fffffff -> 0x0060000000
-> > [   16.861310] mt7621-pci 1e140000.pcie:       IO
-> > 0x001e160000..0x001e16ffff -> 0x0000000000
-> > [   17.179230] mt7621-pci 1e140000.pcie: PCIE0 enabled
-> > [   17.188954] mt7621-pci 1e140000.pcie: PCIE1 enabled
-> > [   17.198678] mt7621-pci 1e140000.pcie: PCIE2 enabled
-> > [   17.208415] Cannot get memory resource
-> > [   17.215884] mt7621-pci 1e140000.pcie: Scanning root bridge failed
-> > [   17.228454] mt7621-pci: probe of 1e140000.pcie failed with error -22
-> >
-> > FWIW, when the function is called, I have also tried to set up
-> > hardcoded addresses. Doing that the IO coherency unit was properly set
-> > up and PCI properly worked (expected). So, using this
-> > 'pcibios_root_bridge_prepare()' funcion looks like a possible way to
-> > go but we need the addresses properly being passed into the function.
-> > I've also tried to list 'bridge->dma_ranges' and get resources from
-> > there instead of using the not already setup 'bridge->windows'. There
-> > is nothing inside that list also. 'bridge->bus->resources' is also
-> > empty... Am I missing something? I was expecting the bridge passed
-> > around to be the same that was in PCIe controller code, and it seems
-> > it is (I printed the bridge pointer itself in driver code before
-> > calling 'mt7621_pcie_register_host()' and in
-> > 'pcibios_root_bridge_prepare()' at the begging of the function and the
-> > pointer is the same) but windows and other stuff are not already
-> > present there...
->
-> Looking into [0] it looks like resources are temporarily removed from
-> the list just before call 'pcibios_root_bridge_prepare()'. Hence the
-> behaviour I am seeing when trying to get them...
->
-> [0]: https://elixir.bootlin.com/linux/latest/source/drivers/pci/probe.c#L915
+> Am 05.10.2021 um 22:43 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+> Le mar., oct. 5 2021 at 14:29:15 +0200, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> From: Sam Ravnborg <sam@ravnborg.org>
+>> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+>> Based on .txt binding from Zubair Lutfullah Kakakhel
+>> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> Cc: Rob Herring <robh@kernel.org>
+>> Cc: devicetree@vger.kernel.org
+>> ---
+>> .../bindings/display/ingenic-jz4780-hdmi.yaml | 79 =
++++++++++++++++++++
+>> 1 file changed, 79 insertions(+)
+>> create mode 100644 =
+Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+>> diff --git =
+a/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml =
+b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+>> new file mode 100644
+>> index 000000000000..5bcb342da86f
+>> --- /dev/null
+>> +++ =
+b/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+>> @@ -0,0 +1,79 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/ingenic-jz4780-hdmi.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
+>> +
+>> +maintainers:
+>> +  - H. Nikolaus Schaller <hns@goldelico.com>
+>> +
+>> +description: |
+>> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys =
+DesignWare HDMI 1.4
+>> +  TX controller IP with accompanying PHY IP.
+>=20
+> My dmesg disagrees:
+> dw-hdmi-ingenic 10180000.hdmi: Detected HDMI TX controller v1.31a with =
+HDCP (DWC HDMI 3D TX PHY)
 
-Can you explain to me, why are resources temporarily removed from the
-'bridge->windows' list?
+mine as well.
 
-Would moving that list split to be done after
-'pcibios_root_bridge_prepare()' is called a possibility?
+>=20
+> Or am I comparing apples to oranges?
 
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 4289030b0fff..2132df91ad8b 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -891,8 +891,6 @@ static int pci_register_host_bridge(struct
-pci_host_bridge *bridge)
+There is a document called "JZ4780 High Efficiency Engine for Mobile =
+Device"
+(JZ4780_PB.pdf) which says
 
-        bridge->bus = bus;
+"24-bit parallel/serial TFT interface, HDMI 1.4a interface, LVDS =
+interface"
 
--       /* Temporarily move resources off the list */
--       list_splice_init(&bridge->windows, &resources);
-        bus->sysdata = bridge->sysdata;
-        bus->msi = bridge->msi;
-        bus->ops = bridge->ops;
-@@ -916,6 +914,8 @@ static int pci_register_host_bridge(struct
-pci_host_bridge *bridge)
-        if (err)
-                goto free;
+And the data sheet ("JZ4780 Mobile Application Processor Data Sheet ") =
+says: "Support HDMI 1.4a Interface"
 
-+       /* Temporarily move resources off the list */
-+       list_splice_init(&bridge->windows, &resources);
-        err = device_add(&bridge->dev);
-        if (err) {
-                put_device(&bridge->dev);
+Finally, the programming manual also says "Support HDMI 1.4a Interface".
 
-Obviously doing this works and windows are passed into mips ralink
-specific 'pcibios_root_bridge_prepare()' and the PCIe subsystem is
-properly working.
+So what is correct?
 
-The advantages I see to this approach are that doing in this way lets us to:
-- Remove specific mips code from the driver controller.
-- Allow the driver to be compile tested for any architecture.
+dmesg may return something else. E.g. silicon revision 1.31a
+while the interface is HDMI protocol revision 1.4a compatible?
 
-And the changes would be the following patches:
-1) Small 'drivers/pci/probe.c' change.
-2) Move mips specific code into 'arch/mips/ralink/mt76721.c' (since
-other mips ralink stuff haven't got IO coherency units) to be inside
-'pcibios_root_bridge_prepare()'.
-3) Add MODULE_LICENSE macro to the PCIe controller driver to avoid
-complaints when the driver is compiled as a module .
-4) Update PCIe controller driver's Kconfig to avoid MIPS COMPILE_TEST
-conditional and completely enable it for COMPILE_TEST.
+Trying to find something about "hdmi 1.31a" did only lead to some
+"Synopsys' HAPS-51 eval platform" [1].
 
-When you have time, please, let me know your thoughts about this.
+Looking at HDMI standards [2] I can only find HDMI 1.3 and 1.3a but no =
+HDMI 1.31a.
 
-Thanks in advance for your time.
+[1] =
+https://www.digital-cp.com/hdcp-products/haps51-hdmi-tx-platform-dwc-hdmi-=
+tx-controller-131a-ea-hdmi-3d-tx-phy-tsmc40g-ip
+[2] https://en.wikipedia.org/wiki/HDMI#Version_1.3
 
-Best regards,
-    Sergio Paracuellos
+Well it may also be some Synopsys-internal designation 1.31a referring =
+so something
+newer than HDMI 1.3a which became the HDMI 1.4 standard (released June =
+2009)...
+
+Whom should we believe? What the chip tells or what the data sheet and =
+programming
+manual says?
+
+I tend to keep confusion low and stay with "HDMI 1.4" in the bindings =
+because
+there is no offical "HDMI 1.31a" standard. And HDMI 1.4 was already some =
+years old
+when the jz4780 was released. So it is likely that the chip =
+identification just
+returns 1.31a (maybe Ingenic licenced an interim release VHDL) although =
+the standard
+was later officially named 1.4a.
+
+>=20
+>> +
+>> +allOf:
+>> +  - $ref: bridge/synopsys,dw-hdmi.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: ingenic,jz4780-dw-hdmi
+>> +
+>> +  reg-io-width:
+>> +    const: 4
+>> +
+>> +  clocks:
+>> +    maxItems: 2
+>> +
+>> +  hdmi-5v-supply:
+>> +    description: Optional regulator to provide +5V at the connector
+>> +
+>> +  ddc-i2c-bus:
+>> +    description: An I2C interface if the internal DDC I2C driver is =
+not to be used
+>=20
+> This property is used within =
+(drivers/gpu/drm/bridge/synopsys/dw-hdmi.c); I think it would make sense =
+to move it to bridge/synopsys,dw-hdmi.yaml.
+
+It is indeed more general and not jz4780 specific. I'll move it for v6.
+
+BR and thanks,
+Nikolaus
+
