@@ -2,258 +2,309 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2E3447081
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Nov 2021 21:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBF64471F8
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Nov 2021 08:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbhKFU7Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 6 Nov 2021 16:59:25 -0400
-Received: from mout.gmx.net ([212.227.17.20]:45699 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229723AbhKFU7X (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 6 Nov 2021 16:59:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1636232056;
-        bh=Mwd00qb2ZiJx72AR8VOZy+k9pKeasCOoFRxt9I1uV2U=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=C0sCrT8yqXlZxZN/D8t3r5AoxwhULAsJ8jy0NerNyYtNdbWgnqBYX9Y6CiU9MHxYu
-         zquWuU6nUJY+jyfB4yNiyLcx1VtjpHa5bjIspLTdTbHxN0xolbUGlTJ6HhUeKdKZyT
-         nslIEB0sT9+3bcpa5ZRh7JRv4jOvvxznOxhoRVuE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([87.79.195.52]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MOA3F-1n7sEw3p2f-00OWCa; Sat, 06
- Nov 2021 21:54:16 +0100
-Date:   Sat, 6 Nov 2021 21:54:06 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 27/45] mfd: ntxec: Use devm_register_power_handler()
-Message-ID: <YYbqlmOM95q7Hbjo@latitude>
-References: <20211027211715.12671-1-digetx@gmail.com>
- <20211027211715.12671-28-digetx@gmail.com>
+        id S229878AbhKGHDw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Nov 2021 02:03:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229803AbhKGHDv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Nov 2021 02:03:51 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14307C061570;
+        Sun,  7 Nov 2021 00:01:09 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id ay21so25270510uab.12;
+        Sun, 07 Nov 2021 00:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1p3werd8fOKFjaMUpR218qBHBT1eQhIqxUYzhLG8tEE=;
+        b=mfEirIun8I+ExEzo3CAxdLvGgAahkxJQbMD4oCzuPPzMk8sGGwtTStjB6O6c7x94p4
+         0FMI7I0tJZpZvtGoWpoRe+GZdJuiRjpSlPaEr9lfXGPLgkFrqIsTh/9j6aWXd5FGoHbS
+         NzPSJPQyV5Ye263HVj7Onv7lht6Zq8EfbngvZmYKca9wWFzLfTrIZjZ6/+yzlxjgskiw
+         fd76iGtzmUHEnQnce8EVv8PlyCvu4nEliOxV6U0TyBIWgMLr0WeSkrZ2hcqoq5d0HZz7
+         B/U+SidoN3E+94RQnwZYWdlUDKCnG9nVLYpVulZw8LUvxZAtKyIWedhz1dMdea9DC22H
+         OyLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1p3werd8fOKFjaMUpR218qBHBT1eQhIqxUYzhLG8tEE=;
+        b=AJ8vguT6dj2JjGyMFfhxLSBPRMXgEM9r/exOx5dldk83zLjCyqRsk8oPVb/DhVZDwK
+         8AwDZz7Hmaj3I9GOS6kQiqOcqcODWrAkKAjW3cZE5mYwF6c2S0nhxGfLt8sJJWkbgOD2
+         4sW9Ss+Eat9XZs+oREReACFC2hzmBYM+R12vjQ6V6zQ1ZLASJ8wQ0eKoQZ9mSyd+oSVY
+         c5UJpZDzRiSGwTVH3HaAYfuOz9eCCMsDrOv1Xd0RzeImC1vbr+eGQTE6Q+rY7IFHe6EG
+         BihgkMQYPVj4si9nVSUx1a5F6twoMiHJZu7rktheVmCB4DWNYN2PpH1D+mt4Sna2FWas
+         B62A==
+X-Gm-Message-State: AOAM533cA5Knr9a17g5Pfbh4N1zxLbCKous0EJ8E12I+vBvKbdv+zhPO
+        SBzNRdwKKvcIyE7zqnyk91WC60FNYRqfFcwjHkA=
+X-Google-Smtp-Source: ABdhPJwg1SV13qsIr9lkmVFZiGCAiZW5U7QWfvSWCjQLjE5xSmegVv/inVqp+7VJddEztl6VhRng/GrB5yVGcBNjE2o=
+X-Received: by 2002:a05:6102:e0d:: with SMTP id o13mr73176158vst.13.1636268468014;
+ Sun, 07 Nov 2021 00:01:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EIEte5+tjVxDHmE6"
-Content-Disposition: inline
-In-Reply-To: <20211027211715.12671-28-digetx@gmail.com>
-X-Provags-ID: V03:K1:SVFlmtuvvynO7MrtDzObaEyN/WaPcv8tOsGAlIRvdbuKBKDAEQ/
- nVePqR5eYOMd9xdpGO5unEqHbls4MbMcwDHHiD/2xW054xRTDPzVuInIGVNwfhVnOpuaRe4
- ac8qzmvsisWAHTSwATyyh2lQM4j3GTT+YgfTlnX+xnTkWWDcDQ1QJM/FLNOUp2gu+vKNebi
- 4PIdlh56euOWziRZzNIlQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:u5Fne7zv3PE=:dNBEMEjx9T9adiFRODtMYS
- bP1c0hzh59ZKklI1R2cCTJxmTQB45y+QzZX2y0PFbg7yQDeDmSxw52obaEhQa1OdTD86QHXVu
- bbxucMZOIMSbjbLPCif24qpNcHVpf4XClB+BVAEEUwNoQd2u+UA3qLozpzzQZNC8E146erRcl
- EAKHMtg1jl5nUIbs95J8LLOgltdAEihA4JrPrtzt7z304ULnl8JDCKZ1GtxLnSmRKL2GPNjji
- BW4Wh4ednr1BPkh3V5pGtcs7sYJeT+fCg9+1Ao3TSUyI/IMvOamAK8fVGMSOSa8NHso9PeZQG
- p+/g7H+fY7krRTHyMZXbNHeGC6zFFjT+rzUWo+KzQQxtKMn72KqFsaG2rKGpecWbyuM0yrSA3
- xhBNrwHcineUl3uAIRxEl8UFkkXss6eAsh3Q7PLKHNXtaR46/z4OumfDtDC9mwHJVuXp9n3KM
- M7BF+sRUvasT/1Hjw3WGpiUE/z6upYRlSC4e82UllEXyFN6W5gyX4r9kjFZV6JMJQR4UbuEW1
- 4g31iHAtTXNZxCvREA7FhQCKM9rtiy8KysUGnceOt3v+aXNzH7SzuQRyJ9+2MgAUQhI7LT2+v
- VClVfxb0rprv/xqBe8DR8WZ7vcK3mCHHlNMCIkYs+6FCITYMw1DHU+CCMKRJej3SCQwR1LGqj
- hUPkhNKbB6PRt/vk+6c77kVWLHqNnHOCN73BdRo6Txp4mZxNOEbbazHi+tZW5jEpWLgiTWfNM
- nvxwa10sJSG8hWu5gGN/aF40RAay1aoGu/k5TA+el84toB3VY6ini0lBJUlrb8M4zbzR9pa9/
- Pm44sh1ruNP7AzMnsBiAzzZX6lqJDAsa+TO5YVhuM9bbKS9hD1KoschPm0B4aJf++t2+ahC/M
- b/QH4Oe5cluIsKILSHGZSoRrX9sqCtW26taTpZQSEsbNePGKbzsw8Oa3lejuRZ+LJbcUK2xLt
- ttQpHqsFbUZlBFAYwpFpRbcNm/+LQLWVCLIU9Rk9O9c0hSOeoGw2PLPC+aL/hsmQVrqlLI/F5
- NAfMG2YBy//Wmh7LL2E3535/ea8r6g8I6Rr7Y4YuBRiuLWpoBhkDI8ZJxuoe0BuQmictlfruZ
- QdH3qyP8a6Ex3I=
+References: <CAMhs-H8bjOkwfnYqdhWuwA8vt18naW3DABYN-EyW-gDB2cP7JA@mail.gmail.com>
+ <20211029194751.GA349935@bhelgaas> <CAMhs-H9ANAP6bsF3AgUTSnaNYxqhxETVwEcL7AC96pFc=WskOg@mail.gmail.com>
+ <CAMhs-H-Ugqr91rceuArjJFG=H9GyX0W5G5xqWzRdUMBjutoxfA@mail.gmail.com> <CAMhs-H8KmubYpXRxexKo0ahh11p6wU3EwbLQvKVzBACeB8cq7A@mail.gmail.com>
+In-Reply-To: <CAMhs-H8KmubYpXRxexKo0ahh11p6wU3EwbLQvKVzBACeB8cq7A@mail.gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Sun, 7 Nov 2021 08:00:56 +0100
+Message-ID: <CAMhs-H8ShoaYiFOOzJaGC68nZz=V365RXN_Kjuj=fPFENGJiiw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] MIPS: cm/cpc: export some missing symbols to be
+ able to use them from driver code
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yanteng Si <siyanteng01@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>, kw@linux.com,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        chenhuacai@kernel.org, sterlingteng@gmail.com,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Bjorn,
 
---EIEte5+tjVxDHmE6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, Oct 30, 2021 at 7:38 AM Sergio Paracuellos
+<sergio.paracuellos@gmail.com> wrote:
+>
+> On Sat, Oct 30, 2021 at 7:21 AM Sergio Paracuellos
+> <sergio.paracuellos@gmail.com> wrote:
+> >
+> > Hi Bjorn,
+> >
+> > On Fri, Oct 29, 2021 at 10:27 PM Sergio Paracuellos
+> > <sergio.paracuellos@gmail.com> wrote:
+> > >
+> > > On Fri, Oct 29, 2021 at 9:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > >
+> > > > On Fri, Oct 29, 2021 at 09:37:53PM +0200, Sergio Paracuellos wrote:
+> > > > > On Fri, Oct 29, 2021 at 8:49 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > On Fri, Oct 29, 2021 at 07:28:47AM +0200, Sergio Paracuellos wrote:
+> > > > > > > On Thu, Oct 28, 2021 at 10:47 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > > On Thu, Oct 28, 2021 at 11:59:17AM +0200, Sergio Paracuellos wrote:
+> > > > > > > > > On Thu, Oct 28, 2021 at 11:34 AM Sergio Paracuellos
+> > > > > > > > > <sergio.paracuellos@gmail.com> wrote:
+> > > > > > > > > > On Thu, Oct 28, 2021 at 11:24 AM Thomas Bogendoerfer
+> > > > > > > > > > <tsbogend@alpha.franken.de> wrote:
+> > > > > > > > > > > On Thu, Oct 28, 2021 at 06:11:18AM +0200, Sergio Paracuellos wrote:
+> > > > > > > > > > > > On Thu, Oct 28, 2021 at 6:05 AM Yanteng Si <siyanteng01@gmail.com> wrote:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Since commit 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
+> > > > > > > > > > > > > the MT7621 PCIe host controller driver is built as a module but modpost complains once these
+> > > > > > > > > > > > > drivers become modules.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > > > > > > > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > > > > > > > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > > > > > > > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > > > > > > > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Let's just export them.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+> > > > > > > > > > > > > ---
+> > > > > > > > > > > > >  arch/mips/kernel/mips-cm.c  | 5 +++++
+> > > > > > > > > > > > >  arch/mips/kernel/mips-cpc.c | 1 +
+> > > > > > > > > > > > >  2 files changed, 6 insertions(+)
+> > > > > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > > > > > > > > > >
+> > > > > > > > > > > could we instead make the pcie-mt761 driver non modular ? Exporting
+> > > > > > > > > > > all MIPS specific stuff for just making an essential driver modular
+> > > > > > > > > > > doesn't IMHO make much sense.
+> > > > > > > > > >
+> > > > > > > > > > The driver is modular because I have been advised other times that new
+> > > > > > > > > > drivers should be able to be compiled as modules and we should avoid
+> > > > > > > > > > using 'bool' in Kconfig for new drivers. That's the only reason. I am
+> > > > > > > > > > also always including as 'y' the driver since for me not having pci in
+> > > > > > > > > > my boards has no sense... I am ok in changing Kconfig to be 'bool'
+> > > > > > > > > > instead of 'tristate', but I don't know what should be the correct
+> > > > > > > > > > thing to do in this case. Thoughts?
+> > > > > > > > >
+> > > > > > > > > I guess we also want the driver to at least be compile tested in
+> > > > > > > > > 'allmodconfig' and other similars...15692a80d949
+> > > > > > > >
+> > > > > > > > Sounds like the systems that actually use this driver require it to be
+> > > > > > > > built-in, and the only benefit of exporting these symbols is that we
+> > > > > > > > would get better compile test coverage.
+> > > > > > > >
+> > > > > > > > If that's the case, I agree that it's better to just make it
+> > > > > > > > non-modular.
+> > > > > > >
+> > > > > > > I agree and that was my reasoning for sending a patch to also convert
+> > > > > > > to bool the phy driver that this PCIe controller uses. When the pull
+> > > > > > > request was sent from Vinod to Greg, Greg refused to take it because
+> > > > > > > of that commit and the commit was reverted and a new pull request was
+> > > > > > > sent including this revert. This is commit 15692a80d949 ("phy: Revert
+> > > > > > > "phy: ralink: Kconfig: convert mt7621-pci-phy into 'bool'""). Because
+> > > > > > > of this I also changed the PCIe controller Kconfig from bool to
+> > > > > > > tristate when I sent v3 of the series which at the end were the ones
+> > > > > > > that was finally taken. There are also other ralink related symbols
+> > > > > > > that have been exported to allow to compile other drivers as a
+> > > > > > > modules, like the watchdog. See the commit fef532ea0cd8 ("MIPS:
+> > > > > > > ralink: export rt_sysc_membase for rt2880_wdt.c"). So, as I said, I
+> > > > > > > agree and I am using the driver as if it were a bool and also ralink
+> > > > > > > systems normally require all drivers built-in, but I think we have to
+> > > > > > > take into account also the "historical facts" here. In any case,
+> > > > > > > Bjorn, let me know if you want me to send whatever patch might be
+> > > > > > > needed.
+> > > > > >
+> > > > > > I didn't see the conversation with Greg, so I don't know the whole
+> > > > > > story.
+> > > > >
+> > > > > Here it is: https://www.spinics.net/lists/kernel/msg3986821.html
+> > > > >
+> > > > > > For pcie-mt7621.c, it looks like the only problem is
+> > > > > > setup_cm_memory_region(), which does a little coherency-related stuff.
+> > > > > > If we could move that to arch/mips, we could still make this tristate.
+> > > > >
+> > > > > Yes, the only mips specific function used in the driver is
+> > > > > 'setup_cm_memory_region()'.
+> > > > >
+> > > > > > One way might be to implement a pcibios_root_bridge_prepare() for mips
+> > > > > > and put the setup_cm_memory_region() stuff in there.  It's not *ideal*
+> > > > > > because that's a strong/weak function arrangement that doesn't allow
+> > > > > > for multiple host bridges, but that's probably not an issue here.
+> > > > > >
+> > > > > > If we can't do that, I think making it bool is probably the right
+> > > > > > answer, but it would be worth a brief comment in the commit log to
+> > > > > > explain the issue.
+> > > > >
+> > > > > Do you mean to implement 'pcibios_root_bridge_prepare()' for MIPS
+> > > > > ralink? I guess this means to parse device tree and so on only to get
+> > > > > memory range addresses to be added to the MIPS I/O coherence regions
+> > > > > to make things work and then re-parse it again in the driver to do the
+> > > > > proper PCI setup... We end up in an arch generic driver but at the end
+> > > > > this controller is only present in ralink MIPS, so I am not sure that
+> > > > > implementing 'pcibios_root_bridge_prepare()' is worthy here... I can
+> > > > > explore and try to implement it if you think that it really makes
+> > > > > sense... but, IMHO if this is the case, just making it bool looks like
+> > > > > the correct thing to do.
+> > > >
+> > > > It should be trivial to put the contents of setup_cm_memory_region()
+> > > > into a ralink function called pcibios_root_bridge_prepare().
+> > > >
+> > > > pcibios_root_bridge_prepare() is called with the same "struct
+> > > > pci_host_bridge *" argument as setup_cm_memory_region(), and it's
+> > > > called slightly later, so the window resources are already set up, so
+> > > > no DT parsing is required.  It looks like a simple move and rename to
+> > > > me.
+> > >
+> > > I see. Thanks Bjorn. I will try the approach during the weekend and
+> > > report if it works.
+> >
+> > I have tested the change from 'setup_cm_memory_region()' code into
+> > 'pcibios_root_bridge_prepare()' just by moving and renaming it from
+> > the PCIe controller code. The function is properly being called.
+> > However, it looks like at that point, windows are not setup yet (no
+> > windows present at all in bridge->windows) so the system is not able
+> > to get the IORESOURCE_MEM resource to set up the IO coherency unit and
+> > the PCI failed to start:
+> >
+> > [   16.785359] mt7621-pci 1e140000.pcie: host bridge /pcie@1e140000 ranges:
+> > [   16.798719] mt7621-pci 1e140000.pcie:   No bus range found for
+> > /pcie@1e140000, using [bus 00-ff]
+> > [   16.816248] mt7621-pci 1e140000.pcie:      MEM
+> > 0x0060000000..0x006fffffff -> 0x0060000000
+> > [   16.861310] mt7621-pci 1e140000.pcie:       IO
+> > 0x001e160000..0x001e16ffff -> 0x0000000000
+> > [   17.179230] mt7621-pci 1e140000.pcie: PCIE0 enabled
+> > [   17.188954] mt7621-pci 1e140000.pcie: PCIE1 enabled
+> > [   17.198678] mt7621-pci 1e140000.pcie: PCIE2 enabled
+> > [   17.208415] Cannot get memory resource
+> > [   17.215884] mt7621-pci 1e140000.pcie: Scanning root bridge failed
+> > [   17.228454] mt7621-pci: probe of 1e140000.pcie failed with error -22
+> >
+> > FWIW, when the function is called, I have also tried to set up
+> > hardcoded addresses. Doing that the IO coherency unit was properly set
+> > up and PCI properly worked (expected). So, using this
+> > 'pcibios_root_bridge_prepare()' funcion looks like a possible way to
+> > go but we need the addresses properly being passed into the function.
+> > I've also tried to list 'bridge->dma_ranges' and get resources from
+> > there instead of using the not already setup 'bridge->windows'. There
+> > is nothing inside that list also. 'bridge->bus->resources' is also
+> > empty... Am I missing something? I was expecting the bridge passed
+> > around to be the same that was in PCIe controller code, and it seems
+> > it is (I printed the bridge pointer itself in driver code before
+> > calling 'mt7621_pcie_register_host()' and in
+> > 'pcibios_root_bridge_prepare()' at the begging of the function and the
+> > pointer is the same) but windows and other stuff are not already
+> > present there...
+>
+> Looking into [0] it looks like resources are temporarily removed from
+> the list just before call 'pcibios_root_bridge_prepare()'. Hence the
+> behaviour I am seeing when trying to get them...
+>
+> [0]: https://elixir.bootlin.com/linux/latest/source/drivers/pci/probe.c#L915
 
-Hi,
+Can you explain to me, why are resources temporarily removed from the
+'bridge->windows' list?
 
-On Thu, Oct 28, 2021 at 12:16:57AM +0300, Dmitry Osipenko wrote:
-> Use devm_register_power_handler() that replaces global pm_power_off
-> variable and allows to register multiple power-off handlers. It also
-> provides restart-handler support, i.e. all in one API.
->=20
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
+Would moving that list split to be done after
+'pcibios_root_bridge_prepare()' is called a possibility?
 
-When I boot with (most of) this patchset applied, I get the warning at
-kernel/reboot.c:187:
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 4289030b0fff..2132df91ad8b 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -891,8 +891,6 @@ static int pci_register_host_bridge(struct
+pci_host_bridge *bridge)
 
-	/*
-	 * Handler must have unique priority. Otherwise call order is
-	 * determined by registration order, which is unreliable.
-	 */
-	WARN_ON(!atomic_notifier_has_unique_priority(&restart_handler_list, nb));
+        bridge->bus = bus;
 
-As the NTXEC driver doesn't specify a priority, I think this is an issue
-to be fixed elsewhere.
+-       /* Temporarily move resources off the list */
+-       list_splice_init(&bridge->windows, &resources);
+        bus->sysdata = bridge->sysdata;
+        bus->msi = bridge->msi;
+        bus->ops = bridge->ops;
+@@ -916,6 +914,8 @@ static int pci_register_host_bridge(struct
+pci_host_bridge *bridge)
+        if (err)
+                goto free;
 
-Other than that, it works and looks good, as far as I can tell.
++       /* Temporarily move resources off the list */
++       list_splice_init(&bridge->windows, &resources);
+        err = device_add(&bridge->dev);
+        if (err) {
+                put_device(&bridge->dev);
 
+Obviously doing this works and windows are passed into mips ralink
+specific 'pcibios_root_bridge_prepare()' and the PCIe subsystem is
+properly working.
 
-For this patch:
+The advantages I see to this approach are that doing in this way lets us to:
+- Remove specific mips code from the driver controller.
+- Allow the driver to be compile tested for any architecture.
 
-Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-Tested-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+And the changes would be the following patches:
+1) Small 'drivers/pci/probe.c' change.
+2) Move mips specific code into 'arch/mips/ralink/mt76721.c' (since
+other mips ralink stuff haven't got IO coherency units) to be inside
+'pcibios_root_bridge_prepare()'.
+3) Add MODULE_LICENSE macro to the PCIe controller driver to avoid
+complaints when the driver is compiled as a module .
+4) Update PCIe controller driver's Kconfig to avoid MIPS COMPILE_TEST
+conditional and completely enable it for COMPILE_TEST.
 
+When you have time, please, let me know your thoughts about this.
+
+Thanks in advance for your time.
 
 Best regards,
-Jonathan
----
-
-Full Oops log:
-
-[    3.523294] ------------[ cut here ]------------
-[    3.528193] WARNING: CPU: 0 PID: 1 at kernel/reboot.c:187 register_resta=
-rt_handler+0x4c/0x58
-[    3.536975] Modules linked in:
-[    3.540312] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-00021-gcb24=
-c628b307 #622
-[    3.548214] Hardware name: Freescale i.MX50 (Device Tree Support)
-[    3.554357] [<c0111540>] (unwind_backtrace) from [<c010cdd0>] (show_stac=
-k+0x10/0x14)
-[    3.562183] [<c010cdd0>] (show_stack) from [<c0bf240c>] (dump_stack_lvl+=
-0x58/0x70)
-[    3.569824] [<c0bf240c>] (dump_stack_lvl) from [<c0127604>] (__warn+0xd4=
-/0x154)
-[    3.577191] [<c0127604>] (__warn) from [<c0bec844>] (warn_slowpath_fmt+0=
-x74/0xa8)
-[    3.584727] [<c0bec844>] (warn_slowpath_fmt) from [<c01593c8>] (register=
-_restart_handler+0x4c/0x58)
-[    3.593823] [<c01593c8>] (register_restart_handler) from [<c08676c8>] (_=
-_watchdog_register_device+0x13c/0x27c)
-[    3.603889] [<c08676c8>] (__watchdog_register_device) from [<c0867868>] =
-(watchdog_register_device+0x60/0xb4)
-[    3.613764] [<c0867868>] (watchdog_register_device) from [<c08678f8>] (d=
-evm_watchdog_register_device+0x3c/0x84)
-[    3.623898] [<c08678f8>] (devm_watchdog_register_device) from [<c1146454=
->] (imx2_wdt_probe+0x254/0x2ac)
-[    3.633346] [<c1146454>] (imx2_wdt_probe) from [<c06feb74>] (platform_pr=
-obe+0x58/0xb8)
-[    3.641314] [<c06feb74>] (platform_probe) from [<c06fb2f8>] (call_driver=
-_probe+0x24/0x108)
-[    3.649636] [<c06fb2f8>] (call_driver_probe) from [<c06fbe08>] (really_p=
-robe.part.0+0xa8/0x358)
-[    3.658384] [<c06fbe08>] (really_probe.part.0) from [<c06fc1c4>] (__driv=
-er_probe_device+0x94/0x208)
-[    3.667470] [<c06fc1c4>] (__driver_probe_device) from [<c06fc368>] (driv=
-er_probe_device+0x30/0xc8)
-[    3.676468] [<c06fc368>] (driver_probe_device) from [<c06fcb0c>] (__driv=
-er_attach+0xe0/0x1c4)
-[    3.685032] [<c06fcb0c>] (__driver_attach) from [<c06f9a20>] (bus_for_ea=
-ch_dev+0x74/0xc0)
-[    3.693253] [<c06f9a20>] (bus_for_each_dev) from [<c06faeb8>] (bus_add_d=
-river+0x100/0x208)
-[    3.701563] [<c06faeb8>] (bus_add_driver) from [<c06fd8a0>] (driver_regi=
-ster+0x88/0x118)
-[    3.709696] [<c06fd8a0>] (driver_register) from [<c06fe920>] (__platform=
-_driver_probe+0x44/0xdc)
-[    3.718522] [<c06fe920>] (__platform_driver_probe) from [<c01022ac>] (do=
-_one_initcall+0x78/0x388)
-[    3.727444] [<c01022ac>] (do_one_initcall) from [<c1101708>] (do_initcal=
-ls+0xcc/0x110)
-[    3.735413] [<c1101708>] (do_initcalls) from [<c110198c>] (kernel_init_f=
-reeable+0x1ec/0x250)
-[    3.743896] [<c110198c>] (kernel_init_freeable) from [<c0bfe724>] (kerne=
-l_init+0x10/0x128)
-[    3.752224] [<c0bfe724>] (kernel_init) from [<c010011c>] (ret_from_fork+=
-0x14/0x38)
-[    3.759844] Exception stack(0xc40adfb0 to 0xc40adff8)
-[    3.764933] dfa0:                                     00000000 00000000 =
-00000000 00000000
-[    3.773143] dfc0: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    3.781351] dfe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    3.788347] irq event stamp: 143613
-[    3.792102] hardirqs last  enabled at (143623): [<c01a3ebc>] __up_consol=
-e_sem+0x50/0x60
-[    3.800397] hardirqs last disabled at (143632): [<c01a3ea8>] __up_consol=
-e_sem+0x3c/0x60
-[    3.808491] softirqs last  enabled at (143612): [<c0101518>] __do_softir=
-q+0x2f8/0x5b0
-[    3.816591] softirqs last disabled at (143603): [<c01307dc>] __irq_exit_=
-rcu+0x160/0x1d8
-[    3.825014] ---[ end trace 7f6709d2c89774b4 ]---
-
---EIEte5+tjVxDHmE6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmGG624ACgkQCDBEmo7z
-X9s6ChAAk6BAeo5fWoSSZHjjpn6ATqjK8ym6Qwe2EuauLkxbrtHK3OsbljBzCdtj
-p4LUnHOvUjWpnlBRfbbZSXKo5B0LxFtUhe/Cz9IDICft4K2DmOExc+xY9zQNcjMO
-rNIxDh4Q8qUdWv4c4B3p812s36yVKoaAGT6XHR9ISWOWmTWq/SNXiFetn9KdMaRs
-INw4aNL0grB717V8ucg5RtEOcrLEHRPf6Rv0b6yhfRdBQGx5XCatsdkofBcM9Rlr
-ECVr+SDk6hoMvPgqbnK3hh1fU0MGiDoyHN/+PhdW5k71EoqynneLlz1xhU4P1TAQ
-4leH70X0lvTJSlpZ+dWkgVGkGzE8LtrjCwhCzZvf+UKqhKf4VWp9LInkiRU2mEaN
-ZGeaNLEL/oEE2nHZuWuW8imYr/WoYQKyZX+rG/g+aViMxom4/RC/IF5GFWxInCgi
-IBVFSiKxJOwKvKHZrsiJsk+zqcmb1TRObyYd0ecsOPD413IWwnFIl6502QRQolJH
-UvdIANNtt2/XORmBBNNGCQtZJ82srfxBpn9jzBtCZu03m4RymWvURbqbIx7mAiz0
-6nj5cArubiCB8WOnOcCmsgHzLZDzN2SAy5UFxsELy67LUXWjsGMG++sHbkDuaiji
-/h71rvx5wmakG7quyBIQDCUtxgSMJL73yZA4N8UsQABCsmnNXgE=
-=jBJI
------END PGP SIGNATURE-----
-
---EIEte5+tjVxDHmE6--
+    Sergio Paracuellos
