@@ -2,188 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49871447E4B
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 11:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D93447ED7
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 12:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238772AbhKHKzQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Nov 2021 05:55:16 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:22113 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238707AbhKHKzP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Nov 2021 05:55:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1636368743;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=f/r1eAU7KrXxztQXZTXHCi0ApvqFCqBOCfYtrmaL1xY=;
-    b=gUx3dm5ooAMb8mpK2BYmZ1D/Xx/Kr68W0ZyIxRU3Bu57OWOFSJYrTR4sXnH8oVcUVg
-    WxtwvZXZWeOvkqKpPRlzwivKorKgAd+PJvmoqo2tnWHbZYqngpjNq8CL61HT3rdyHDqd
-    dJ9eejg05X50GVv0CbQoy29+bkPil7ilDjep8GaT7xczllJ+hQXf57xPp0Ul970mc8T1
-    pB36IYsn67s2+b/NW81/1WWbL96pwp0bD5oJxiDpPRIQmrr3edPEb4G34D2jUATizhJe
-    9o3ULt4duFoaOAFo5/q46zerHy30M+hx63d0zfKcmkffcHjp+mqEjOva3dyQ25XCNxpz
-    kO2A==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3gMZ+"
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.34.1 DYNA|AUTH)
-    with ESMTPSA id 902c63xA8AqLIYt
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Mon, 8 Nov 2021 11:52:21 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v5 2/7] drm/ingenic: Add support for JZ4780 and HDMI
- output
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <HQY82R.69JHJIC64HDO1@crapouillou.net>
-Date:   Mon, 8 Nov 2021 11:52:20 +0100
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        id S239238AbhKHL1t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Nov 2021 06:27:49 -0500
+Received: from mout.gmx.net ([212.227.17.22]:41875 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239220AbhKHL1r (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Nov 2021 06:27:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1636370563;
+        bh=K79wqPStqcTfK5nLIvxLt2yDFN8raIwyDHqiPgY+PHc=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Iil8zKbQDwR3Nlg+ymOUpymQS9X1Mc+jbLXtA+yVF4SDdcwftUD6iVyibZ6wTz7fb
+         Qc0Hcteal9dThlbJ/iNZLRdm5NTkZeKDClDySSPytppBB80v28nV6u18LsDpLiHQir
+         Ny1SVC50YGwrAIYi9pHquhjsrGZ1aixItLj5nI/g=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MBDj4-1msKD70Bvq-00CkHo; Mon, 08
+ Nov 2021 12:22:43 +0100
+Date:   Mon, 8 Nov 2021 12:22:32 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2E32F572-72D0-44E7-A700-AF8A2D37BFDA@goldelico.com>
-References: <cover.1633436959.git.hns@goldelico.com>
- <2c7d0aa7d3ef480ebb996d37c27cbaa6f722728b.1633436959.git.hns@goldelico.com>
- <FXTI0R.3FZIJZ7UYSNQ@crapouillou.net>
- <7CEBB741-2218-40A7-9800-B3A154895274@goldelico.com>
- <Q6U72R.9HY4TXLC6RWV2@crapouillou.net>
- <229EBE4C-6555-41DE-962F-D82798AEC650@goldelico.com>
- <HQY82R.69JHJIC64HDO1@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        Andrew Morton <akpm@linux-foundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>, Tony Lindgren <tony@atomide.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 27/45] mfd: ntxec: Use devm_register_power_handler()
+Message-ID: <YYkIeBSCFka9yrqC@latitude>
+References: <20211027211715.12671-1-digetx@gmail.com>
+ <20211027211715.12671-28-digetx@gmail.com>
+ <YYbqlmOM95q7Hbjo@latitude>
+ <be0c74c6-05a9-cad5-c285-6626d05f8860@gmail.com>
+ <9a22c22d-94b1-f519-27a2-ae0b8bbf6e99@roeck-us.net>
+ <658cf796-e3b1-f816-1e15-9e9e08b8ade0@gmail.com>
+ <5a17fee3-4214-c2b9-abc1-ab9d6071591b@roeck-us.net>
+ <c0b52994-51f5-806b-b07e-3e70d8217ffc@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SrzUzzmYivmDpJiW"
+Content-Disposition: inline
+In-Reply-To: <c0b52994-51f5-806b-b07e-3e70d8217ffc@gmail.com>
+X-Provags-ID: V03:K1:7qbQ+qoRzv7lpS+bZXlBkiHc8d3ndyzVjxZiUEx4fWU8LOwR4tV
+ sJ6wX31cULMNt4suZs8Fc9nNWwTvT28rf28Ux8jItr0YArRnxNHgajX8j3pR27WJ8X4+rN1
+ P6mwBUOnAtBBxh5xjfJsjiXu6SboLYbT6DrsS8jQkTim87V5oSocZwSYV15yBIZybWDcxi2
+ yhhXSfTVo1fjkR9G3NiNg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yjkPkKMrbPg=:X1ZiIBM9wmN7jnP9s16Cfb
+ sBqYerCPdYu35MyKm/gIqDt8Gw/FOK/47i1VNVZ2GZyzu2N+w6bq5umB4vcv2LdlVvVXasJFU
+ hHItgn4p2+gcrIXW8dm47/l7t1HQaw7UgtUqyeXqDu69ghAqCYZXx0eX60EUrsUOpoEgYDyVn
+ oP9a1XYVWqB1j9J0R0WURMEfCLIEiPQoq7Rbx4EPDsJbUZtdggotJ5Zu652F4YThXYIsp6IMf
+ gllsRU1HwQ6JjxuK8cXPPYaD+LLKehorJRlrq+y8qXUM6ylWXrOoGKNZLGsZkAONax4WYMqIW
+ d3FGkGXLV4f+esApgI7PsCMvrwTK22lrWu5ViPmU4x2nHZP+ZTPAZuJtgSimwyu20amazZwYK
+ Z4vpwY5CSzJZCDfMI5DZ0Ptk/Ztz1Q6g/A3jF9otZwKjtdDGI+4EVCvameWf3xn488EZ8v6YU
+ At13Fas5vppLSoa/xpMWgEaXqdhRWW3BWFKDkwwIzAy8iepAVZKdxWuiNZ5V838e4pssIjwOP
+ b9I/WUoeoSIjaVUx2uwI4jdditk+sE4UWUM/0QolX7ispKs/G3XyXxRQRgZ6B7X3V60FM1FjB
+ RAlEp0a5931lWVr5xqZfoR1dAUpRgm1O9Vjh40HLSfiunbwWOc0bQ0ONdbOPoSLykjVMQhxlP
+ xtpeZidtvOHYL9oWOJQZIFjHLJGmJNbSfzBBXrzNQMUN8I0KHFPgGMy1RqdguPf3PUJKELugu
+ Nk3jRxSbdt395Sseo31kU92jjNpYb9PTuVNaM1aWS4Q4yTc9cIXxk1+LRFP9bIgg/V6iwob0M
+ 2xQWxNH/EiCfUWEHwJvuTGBqhgThj/glAo/CZxZAe/L3n3D6849ukZO9fYf8H8Nk2y5a5UHWh
+ pvbdLd9gXcXQ6r/K+x80Dm4oeeZ7NvEbfgA19DwbuESar56ohW+JqsXIhz3AyR62ShQOe3+FE
+ 5fRkZdNNItdvlDY7CkW9kJ0ItIF7cQw1aNvt9OvV6ho/I2LuKv3w1ibUywvt8uxjpQ795s++f
+ LtodIi5u3n67HADZypUokVR2nausSwp0lMroUVKyNyJ3Q2D2RhV5rxgHndlU1/Jjw3Lcz380m
+ nnoGWxFp59yGiw=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
 
->> Am 08.11.2021 um 10:37 schrieb Paul Cercueil <paul@crapouillou.net>:
->>=20
->> Well, it was atomic: "add jz4780+hdmi functionality" or not. Now we =
-separate into "preparation for adding jz4780" and "really adding". Yes, =
-you can split atoms into quarks...
->=20
-> And that's how it should be done. Lots of small atomic patches are =
-much easier to review than a few big patches.
+--SrzUzzmYivmDpJiW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I doubt that in this case especially as it has nothing to do with =
-jz4780...
+On Sun, Nov 07, 2021 at 08:42:33PM +0300, Dmitry Osipenko wrote:
+[...]
+> EC drivers tend to use higher priority in general. Jonathan, could you
+> please confirm that NTXEC driver is a more preferable restart method
+> than the watchdog?
 
-But I have a proposal for a better solution at the end of this mail.
-
->>> Note that you can do even better, set the .max_register field =
-according to the memory resource you get from DTS. Have a look at the =
-pinctrl driver which does exactly this.
->> That is an interesting idea. Although I don't see where
->> =
-https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/pinctrl-ing=
-enic.c#L4171
->> does make use of the memory resource from DTS. It just reads two =
-values from the ingenic_chip_info instead of one I do read from =
-soc_info.
->=20
-> It overrides the .max_register from a static regmap_config instance.
-
-To be precise: it overrides .max_register of a copy of a static =
-regmap_config instance (which has .max_register =3D 0).
-
-> You can do the same,
-
-We already do the same...
-
-> calculating the .max_register from the memory resource you get from =
-DT.
-
-I can't see any code in pinctrl-ingenic.c getting the memory resource =
-that from DT. It calculates it from the ingenic_chip_info tables inside =
-the driver code but not DT.
-
-> I'm sure you guys can figure it out.
-
-Ah, we have to figure out. You are not sure yourself how to do it? And =
-it is *not* exactly like the pinctrl driver (already) does? Please give =
-precise directions in reviews and not vague research homework. Our time =
-is also valuable. Sorry if I review your reviews...
-
-Anyways I think you roughly intend (untested):
-
-	struct resource *r;
-
-	r =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-	regmap_config.max_register =3D r.end - r.start;
-
-But I wonder how that could work at all (despite adding code execution =
-time) with:
-
-e.g. jz4770.dtsi:
-
-	lcd: lcd-controller@13050000 {
-		compatible =3D "ingenic,jz4770-lcd";
-		reg =3D <0x13050000 0x300>;
-
-or jz4725b.dtsi:
-
-	lcd: lcd-controller@13050000 {
-		compatible =3D "ingenic,jz4725b-lcd";
-		reg =3D <0x13050000 0x1000>;
-
-So max_register becomes 0x300 or 0x1000 but not
-
-#define JZ_REG_LCD_SIZE1	0x12c
-	.max_reg =3D JZ_REG_LCD_SIZE1,
-
-And therefore wastes a lot of regmap memory.
-
-Do you want this? DTS should not be reduced (DTS should be kept as =
-stable as possible), since the reg property describes address mapping - =
-not how many bytes are really used by registers or how big a cache =
-should be allocated (cache allocation size requirements are not hardware =
-description).
+Yes. The original firmware uses the NTXEC to restart, and it works well,
+so I do think it's preferable.
 
 
-But here are good news:
+Best regards,
+Jonathan
 
-I have a simpler and less invasive proposal. We keep the =
-devm_regmap_init_mmio code as is and just increase its .max_register =
-from JZ_REG_LCD_SIZE1 to JZ_REG_LCD_PCFG when introducing the jz4780. =
-This wastes a handful bytes for all non-jz4780 chips but less than using =
-the DTS memory region size. And is less code (no entry in soc_info =
-tables, no modifyable copy) and faster code execution than all other =
-proposals.
+--SrzUzzmYivmDpJiW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This is then just a single-line change when introducing the jz4780. And =
-no "preparation for adding jz4780" patch is needed at all. No patch to =
-split out for separate review.
+-----BEGIN PGP SIGNATURE-----
 
-Let's go this way to get it eventually finalized. Ok?
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmGJCE4ACgkQCDBEmo7z
+X9vVoBAAyZoJJUbTWWKI6c/HY4wq3sRDukultq5nSNIOH4RAFsTFD2FbiBB7LDaG
+v/9oOqoTUDuR3AkaHFnk5+h5gLRqeePoH1KU8fa7bc7NPatTUVt54SqhQSRfUfrF
++0eRt3WHt2lZpZjaY8kj/vz5AkubzCmwVqSKoLUdCW/qi+UphZHp75E2XXypK/o3
+dt1dmPA1D0pXB1WdwLSZjtCn5lIOucdssKLl1UyXQzFmuKBPkjOcuuQqwm5Ietoz
+T4EEl/js2iIbui0e5ml9611nZoTLhVYMkxRcLi7gRHWTn9NmVzzJdubJH6Ajwp8E
+M9TOi2NtYbSk+pGvTwawfKaw+aROUuKqGOGc+9TFeu+V5pCMAIZ1wybNExZph5jp
+/o58QQUdszFwjMq7A4zdXSufKug8CpsYILhtcSx57wtGJ/OW7ZDtmX679x4jAvgX
+XeMWuW8x08UFauDBHsvw9aIIgKg7ZlJ+bQ5WdgtsiuXrZEEbTNbW1kjbKAvHS9dP
+o3MB/Lbi/rN/448ImnHtShmihh7ug6s+oUDbW6wFzCFvcfLbOs/Sfz35f5wNTHQW
+ReNPRgH+pTvzZvulDdrSA6GAnH8mfFE7IkC/3BP6BJE28ug1GvJrRtvylwp29ZW/
+Qu0z+FCaFjPu5yOr8rspC9YUdGolKnMg1msMwjgbe58vH9+EDDQ=
+=fkgc
+-----END PGP SIGNATURE-----
 
-BR and thanks,
-Nikolaus
-
+--SrzUzzmYivmDpJiW--
