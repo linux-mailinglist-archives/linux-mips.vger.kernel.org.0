@@ -2,222 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A82F449B13
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 18:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1952449B70
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 19:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236102AbhKHRwo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 8 Nov 2021 12:52:44 -0500
-Received: from aposti.net ([89.234.176.197]:46824 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235575AbhKHRwo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Nov 2021 12:52:44 -0500
-Date:   Mon, 08 Nov 2021 17:49:39 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v5 2/7] drm/ingenic: Add support for JZ4780 and HDMI
- output
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Message-Id: <RIL92R.MLAZ6CTO865E1@crapouillou.net>
-In-Reply-To: <2F8A88BC-2696-491B-9C01-7D07A3B3670A@goldelico.com>
-References: <cover.1633436959.git.hns@goldelico.com>
-        <2c7d0aa7d3ef480ebb996d37c27cbaa6f722728b.1633436959.git.hns@goldelico.com>
-        <FXTI0R.3FZIJZ7UYSNQ@crapouillou.net>
-        <7CEBB741-2218-40A7-9800-B3A154895274@goldelico.com>
-        <Q6U72R.9HY4TXLC6RWV2@crapouillou.net>
-        <229EBE4C-6555-41DE-962F-D82798AEC650@goldelico.com>
-        <HQY82R.69JHJIC64HDO1@crapouillou.net>
-        <2E32F572-72D0-44E7-A700-AF8A2D37BFDA@goldelico.com>
-        <ZA692R.GHQL6RBCLFB12@crapouillou.net>
-        <D0809E59-DCB5-46CE-BE5E-D2A5D2ECA6F0@goldelico.com>
-        <BVH92R.0VU3IKPQTLX9@crapouillou.net>
-        <2F8A88BC-2696-491B-9C01-7D07A3B3670A@goldelico.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+        id S234944AbhKHSLd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Nov 2021 13:11:33 -0500
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:41105 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234936AbhKHSLa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Nov 2021 13:11:30 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5DE8B5C01A9;
+        Mon,  8 Nov 2021 13:08:44 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute5.internal (MEProxy); Mon, 08 Nov 2021 13:08:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type:content-transfer-encoding; s=fm3; bh=cVK9r
+        n0NXklEu8aUhPMPKLcgBsQr2U1/Wf7WRhNcyzg=; b=mSc7MJcaojZSDJML65ue1
+        qc7zU6S6mx9joJOGyqGyLJlWrYLepqsn7kyvg/nUEQvqKVLR43hDTx3WIsR1aANL
+        tEGeh8+oJDdhxKJgfLXYCg2lG5jFBEm0EQLZwgQ2nboAtYvIlFDB71hHgF5bZecV
+        d0K0pTG3rWqT7LF72JrCyjvHECA6pKrWlVzlgZjg4hvBtgdNzKf670rbmtowQF5k
+        h6XyfhiH2ePRv9kBOSX2dlfYTyWzLaXl61yyD2uyhykP0YMAjzH+zSXgjEcc9zUA
+        EZUW5r7sX9d2IHu/wuQukYVyAn3n+t+AlEWuL3liNRTbT0otjwm6WDR8v1o2pVBe
+        Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=cVK9rn0NXklEu8aUhPMPKLcgBsQr2U1/Wf7WRhNcy
+        zg=; b=nf0ofWO8g1aSKj/MCTguNg2huyoj1IuTvos9SDX49Vw6b2gaT3JxbHbUy
+        JUFR64GGG9IIasiIJ6D7y3b4Bg4/AXBcc+lPAK2+xquRxuFPTSP78Bjd65jGasYs
+        dC8Mga9ict1VThcqrwP3cdXMpsTm2MQUYLUmVr2kaNdsN5Cq91Bts8f2wqZF/9AN
+        uhK38u2UVwKrl0gygCN/Ca3BnjwlndreaHYewB8JNnyfcf4aqSDyoSlQa/4fcH1T
+        WOfiU9+/cZ1ed0d1V7yutfNvgobTPdq6Gh8wXBXrQMoNbfw03qyhx8MS38PArJNn
+        R/zHMeBuABPg0qyhJEBPOrCxc/2cA==
+X-ME-Sender: <xms:q2eJYbfgNdrLas9wG-zURB5vLs88wSfifCTyL1YSkOvYwKoPAvKTIQ>
+    <xme:q2eJYRM0f3MUWa7icObEBS46bFWEAhi9SjFOCQwx0Xg0GXadGmOWAUzFbLlLqJ0gf
+    OcYpjMZujfI0dDhH00>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddruddvgddutdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepfeetgeekveeftefhgfduheegvdeuuddvieefvddvlefh
+    feehkeetfeeukedtfeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:q2eJYUiW1uiaD8ObK8s7jZ1vcl87AqFEEAMVLT-yTqCdrkJiFfkA2g>
+    <xmx:q2eJYc8Ypi1X99F2pkCX58jfsMpCRdvCpRevrJxZjG5c6IkbGt6zMg>
+    <xmx:q2eJYXtOGkf_GcwTt_OTij0z4L0THHLDyqM_aDN7ZIx_JDteCkXlqg>
+    <xmx:rGeJYQ6QtPqX-tcgsg55ZcNLgEkOXSh1rd-ZiCG1I7378IkW0-CZlg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 38B06FA0AA6; Mon,  8 Nov 2021 13:08:43 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-1369-gd055fb5e7c-fm-20211018.002-gd055fb5e
+Mime-Version: 1.0
+Message-Id: <3318eca2-1e08-4465-b0d4-0860423e8542@www.fastmail.com>
+In-Reply-To: <2JZ82R.JILSE46R0P2T1@crapouillou.net>
+References: <20211105135232.2128420-1-yunqiang.su@cipunited.com>
+ <2JZ82R.JILSE46R0P2T1@crapouillou.net>
+Date:   Mon, 08 Nov 2021 18:08:21 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Paul Cercueil" <paul@crapouillou.net>,
+        "YunQiang Su" <yunqiang.su@cipunited.com>
+Cc:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        zhouyanjie@wanyeetech.com,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [RFC] MIPS: fix generic zboot support
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-Le lun., nov. 8 2021 at 18:22:58 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> Hi Paul,
-> 
->>  Am 08.11.2021 um 17:30 schrieb Paul Cercueil <paul@crapouillou.net>:
->> 
->>  Hi,
->> 
->>  Le lun., nov. 8 2021 at 16:29:11 +0100, H. Nikolaus Schaller 
->> <hns@goldelico.com> a écrit :
->>>  Bnjour Paul,
->>>>  Am 08.11.2021 um 13:20 schrieb Paul Cercueil 
->>>> <paul@crapouillou.net>:
->>>>  Hi,
->>>>>  e.g. jz4770.dtsi:
->>>>>  	lcd: lcd-controller@13050000 {
->>>>>  		compatible = "ingenic,jz4770-lcd";
->>>>>  		reg = <0x13050000 0x300>;
->>>>>  or jz4725b.dtsi:
->>>>>  	lcd: lcd-controller@13050000 {
->>>>>  		compatible = "ingenic,jz4725b-lcd";
->>>>>  		reg = <0x13050000 0x1000>;
->>>>>  So max_register becomes 0x300 or 0x1000 but not
->>>>>  #define JZ_REG_LCD_SIZE1	0x12c
->>>>>  	.max_reg = JZ_REG_LCD_SIZE1,
->>>>>  And therefore wastes a lot of regmap memory.
->>>>  "regmap memory"? ...
->>>  regmap allocates memory for its cache. Usually the total amount 
->>> specified in the reg property.
->> 
->>  We are not using any register cache here.
->> 
->>>>>  Do you want this? DTS should not be reduced (DTS should be kept 
->>>>> as stable as possible), since the reg property describes address 
->>>>> mapping - not how many bytes are really used by registers or how 
->>>>> big a cache should be allocated (cache allocation size 
->>>>> requirements are not hardware description).
->>>>  The DTS should list the address and size of the register area. If 
->>>> your last register is at address 0x12c and there's nothing above, 
->>>> then the size in DTS should be 0x130.
->>>  If I look into some .dtsi it is sometimes that way but sometimes 
->>> not. There seems to be no consistent rule.
->>>  So does this mean you allow me to modify jz4740.dtsi, jz4770.dtsi 
->>> and jz4725b.dtsi as well (as mentioned above: this is beyond the 
->>> scope of my project)?
->> 
->>  You could update them if you wanted to, but there is no need to do 
->> it here.
-> 
-> Hm. Then we are changing the .max_register initialization to a much 
-> bigger value.
-> 
->> 
->>>>>  But here are good news:
->>>>>  I have a simpler and less invasive proposal. We keep the 
->>>>> devm_regmap_init_mmio code as is and just increase its 
->>>>> .max_register from JZ_REG_LCD_SIZE1 to JZ_REG_LCD_PCFG when 
->>>>> introducing the jz4780. This wastes a handful bytes for all 
->>>>> non-jz4780 chips but less than using the DTS memory region size. 
->>>>> And is less code (no entry in soc_info tables, no modifyable 
->>>>> copy) and faster code execution than all other proposals.
->>>>>  This is then just a single-line change when introducing the 
->>>>> jz4780. And no "preparation for adding jz4780" patch is needed at 
->>>>> all. No patch to split out for separate review.
->>>>>  Let's go this way to get it eventually finalized. Ok?
->>>>  No.
->>>  Look friend, if you explain your "no" and what is wrong with my 
->>> arguments, it helps to understand your decisions and learn 
->>> something from them. A plain "no" does not help anyone.
->> 
->>  I answered just "no" because I felt like I explained already what I 
->> wanted to see in the previous email.
->> 
->>  By using a huge number as the .max_register, we do *not* waste 
->> additional memory. Computing the value of the .max_register field 
->> does not add any overhead, either.
->> 
->>  The .max_register is only used for boundary checking. To make sure 
->> that you're not calling regmap_write() with an invalid register. 
->> That's all there is to it.
-> 
-> Ah, now I understand our disconnect. So far I have used regmaps 
-> mainly for i2c devices and there is caching to avoid redundant i2c 
-> traffic...
-> 
-> So I just assumed wrongly that the regmap driver also allocates some 
-> buffer/cache here. Although it does not initialize .cache_type 
-> (default: REGCACHE_NONE).
-> 
->> 
->>>  So to summarize: if you prefer something which I consider worse, 
->>> it is ok for me... In the end you are right - you are the 
->>> maintainer, not me. So you have to live with your proposals.
->>>  Therefore, I have prepared new variants so you can choose which 
->>> one is easier to maintain for you.
->>>  Note that they are both preparing for full jz4780-lcdc/hdmi 
->>> support but in very different ways:
->>>  Variant 1 already adds some jz4780 stuff while Variant 2 just 
->>> prepares for it.
->>>  Variant 2 is not tested (except to compile). So it needs some 
->>> Tested-by: from someone with access to hardware. IMHO it is more 
->>> invasive.
->>>  And don't forget: DTB could be in ROM or be provided by a separate 
->>> bootloader... So we should not change it too often (I had such 
->>> discussions some years ago with maintainers when I thought it is 
->>> easier to change DTS instead of code).
->>>  Variant 3 would be to not separate this. As proposed in [PATCH v5 
->>> 2/7].
->>>  (Finally, a Variant 3b would be to combine the simple change from 
->>> Variant 1 with Variant 3).
->>>  So what is your choice?
->> 
->>  Variant 4: the variant #2 without the changes to the DTSI files.
-> 
-> Hm. If there is no cache and we can safely remove tight boundary 
-> checking (by JZ_REG_LCD_SIZE1) for jz4725/40/70 (by not fixing DTSI) 
-> why do we still need the max_register calculation from DTSI 
-> specifically for jz4780 and at all?
-
-It's better to have the .max_register actually set to the proper value. 
-Then reading the registers from debugfs (/sys/kernel/debug/regmap/) 
-will print the actual list of registers without bogus values. If 
-.max_register is set too high, it will end up reading outside the 
-registers area. On Ingenic SoCs such reads just return 0, but on some 
-other SoCs it can lock up the system.
-
-So the best way forward is to have .max_register computed from the 
-register area's size, and fix the DTSI with the proper sizes. Since 
-your JZ4780 code needs to update .max_register anyway it's a good 
-moment to add this patch, and the DTSI files can be fixed later (by me 
-or whoever is up to the task).
-
-Fixing the DTS is not a problem in any way, btw. We just need to ensure 
-that the drivers still work with old DTB files, which will be the case 
-here.
-
--Paul
-
-> So what about:
-> 
-> Variant 5: set .max_register = 0x1800, i.e. "big enough for everyone" 
-> (includes z4780 gamma and vee registers) + no DTSI changes (+ no 
-> jz4780 register constants like Variant 1)
-> 
-> + no DTSI changes
-> + no calculation from DTSI needed
-> + single separate patch to prepare for jz4780 but not included in 
-> jz4780 patch
-> 
-> BR and thanks,
-> Nikolaus
-> 
-> 
 
 
+=E5=9C=A82021=E5=B9=B411=E6=9C=888=E6=97=A5=E5=8D=81=E4=B8=80=E6=9C=88 =E4=
+=B8=8A=E5=8D=889:54=EF=BC=8CPaul Cercueil=E5=86=99=E9=81=93=EF=BC=9A
+> Hi,
+>
+> Le ven., nov. 5 2021 at 09:52:32 -0400, YunQiang Su=20
+> <yunqiang.su@cipunited.com> a =C3=A9crit :
+>> There are 2 problems here:
+>> 1. setting zload-y to 0xffffffff81000000 breaks booting on qemu -M=20
+>> boston.
+>>    Why it is set here? Any other platform needs this value?
+>
+> Is there another place where it should be set?
+>
+> With this patch applied, kernels won't boot anymore on Ingenic boards.
+>
+>> 2. vmlinux.gz.itb should be appended to all-$(CONFIG_MIPS_GENERIC)=20
+>> instead
+>>    of replacing. Otherwise, no vmlinuz will be built.
+>
+> I build vmlinuz all the time, and never needed this patch.
+
+It's because we doesn't use itb on ingenic ;-)
+
+Thanks
+- Jiaxun
+
+>
+> Cheers,
+> -Paul
+>
+>> ---
+>>  arch/mips/generic/Platform | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>=20
+>> diff --git a/arch/mips/generic/Platform b/arch/mips/generic/Platform
+>> index e1abc113b409..0c03623f3897 100644
+>> --- a/arch/mips/generic/Platform
+>> +++ b/arch/mips/generic/Platform
+>> @@ -13,8 +13,7 @@ cflags-$(CONFIG_MACH_INGENIC_SOC)	+=3D=20
+>> -I$(srctree)/arch/mips/include/asm/mach-ing
+>>  cflags-$(CONFIG_MIPS_GENERIC)	+=3D=20
+>> -I$(srctree)/arch/mips/include/asm/mach-generic
+>>=20
+>>  load-$(CONFIG_MIPS_GENERIC)	+=3D 0xffffffff80100000
+>> -zload-$(CONFIG_MIPS_GENERIC)	+=3D 0xffffffff81000000
+>> -all-$(CONFIG_MIPS_GENERIC)	:=3D vmlinux.gz.itb
+>> +all-$(CONFIG_MIPS_GENERIC)	+=3D vmlinux.gz.itb
+>>=20
+>>  its-y					:=3D vmlinux.its.S
+>>  its-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+=3D board-boston.its.S
+>> --
+>> 2.30.2
+>>
+
+--=20
+- Jiaxun
