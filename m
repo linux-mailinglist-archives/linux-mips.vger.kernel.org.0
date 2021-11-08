@@ -2,147 +2,158 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B76E44802A
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 14:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 747034480E4
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 15:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239884AbhKHNWr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Nov 2021 08:22:47 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60016 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239888AbhKHNWq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Nov 2021 08:22:46 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A8D0W5g012144;
-        Mon, 8 Nov 2021 13:19:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=K9foN8Lvj5O8jm4NUPzsOuC7zoZaxFx6joxD5/38mz0=;
- b=nDZG+wDsmMWAb1T5z+R7YQEfhI8VRjOVHHEeuGsT+a3kuXp1uDXubXWRS8zuWRq+DlNx
- kP14MAwL8J5q9mFla538n4u//TVm0tBkLg3IEH3b7JAmcl0hUlXWawBQPEyWEqUqlif6
- /pGHrb+m7VzYdNXH6OdiiHNnKstb+ajUWhpAnqbgcSmz7fWQDFW1N/oVUxQiEtloYkJd
- 3aCqndwTzF+1PpUl61bpVYSOqiKCHtX59MnyP6EXQM700ucQn2jtI4HeJxhfg70E2x+3
- BznNoSxRF2V3sDLjb8+aVxsFZtBGS0YCKog2r27h4TmoaT+jUx0qDYo1r0Xj0aNCxoJZ Gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3c641sj7hp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Nov 2021 13:19:24 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1A8Bw7UQ005024;
-        Mon, 8 Nov 2021 13:19:23 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3c641sj7gm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Nov 2021 13:19:22 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1A8DDlcL007476;
-        Mon, 8 Nov 2021 13:19:19 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3c5hb9xbt8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 Nov 2021 13:19:19 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1A8DJGSH53674486
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 8 Nov 2021 13:19:16 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4D88242059;
-        Mon,  8 Nov 2021 13:19:16 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2A11B42041;
-        Mon,  8 Nov 2021 13:19:15 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.11.147])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  8 Nov 2021 13:19:15 +0000 (GMT)
-Date:   Mon, 8 Nov 2021 13:13:48 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linuxppc-dev@lists.ozlabs.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        kernel-team@android.com
-Subject: Re: [PATCH 3/5] KVM: s390: Use kvm_get_vcpu() instead of open-coded
- access
-Message-ID: <20211108131348.7710f10a@p-imbrenda>
-In-Reply-To: <20211105192101.3862492-4-maz@kernel.org>
-References: <20211105192101.3862492-1-maz@kernel.org>
-        <20211105192101.3862492-4-maz@kernel.org>
-Organization: IBM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S240232AbhKHOKH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 8 Nov 2021 09:10:07 -0500
+Received: from mail-ua1-f54.google.com ([209.85.222.54]:34507 "EHLO
+        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240246AbhKHOKC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Nov 2021 09:10:02 -0500
+Received: by mail-ua1-f54.google.com with SMTP id b3so31739471uam.1;
+        Mon, 08 Nov 2021 06:07:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=srssYsTsVb5ivMDmTAt6Y7lXgP/lHHGiJX97jzZpFII=;
+        b=lT7Q627YXwAYYti9TyWmhNrAwxF37ER+DnnHvi8ZOaxozyOw/rwlQ66wlApkNuyNN0
+         l/36WyzNYJX7UwsJU1aMV3bW5Sz7j/IP33Z/kZbh3aJA6GtHX+o7tNp9p+l7GF4QkKIB
+         sjbbINID3WCsCkZrFWfMUwfrp9PjYh6onoNzXUnoEQ/95F5HYU5n5UHmTstBfe0urn4h
+         1SE5gPNj3Pc2mvjTTyE8StQTFs4/Z7quYn3ZeZl33bFkXJAPxUlQqv23fQ05cU4PyTMU
+         am1ot2b90FgHRA4kFfiBdu8fFSdh6YxyoBpITiqz4ORJJJdFb9hLqYTU1fxm5MWEErbR
+         0b5Q==
+X-Gm-Message-State: AOAM531VcfMwSWKNLwI/Nir0vc2ScGiGBGnffpEeKxm2KOJGi6tJeJ4f
+        ZdyVgO2KwEjymrO3gMZbXCXik2FZgi7ZJAl7
+X-Google-Smtp-Source: ABdhPJx9G54VGw4oc23XJRelgp9dkMEtXydk+uvqLajllgER83nLii76Q7zBboH+kgBjAPFdw36B5A==
+X-Received: by 2002:ab0:3e3:: with SMTP id 90mr185644uau.102.1636380435783;
+        Mon, 08 Nov 2021 06:07:15 -0800 (PST)
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com. [209.85.221.171])
+        by smtp.gmail.com with ESMTPSA id c11sm3226781vsh.22.2021.11.08.06.07.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Nov 2021 06:07:14 -0800 (PST)
+Received: by mail-vk1-f171.google.com with SMTP id a129so8254621vkb.8;
+        Mon, 08 Nov 2021 06:07:14 -0800 (PST)
+X-Received: by 2002:a05:6122:1350:: with SMTP id f16mr21288847vkp.26.1636380434409;
+ Mon, 08 Nov 2021 06:07:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2Tpsr6ax-14v0tvGNWvY_Xz22aRe4-xQ
-X-Proofpoint-ORIG-GUID: AyI-d3SVtgl34O6n5RGX5d0X8rNJXf0F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-08_05,2021-11-08_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- bulkscore=0 clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111080082
+References: <20211108101157.15189-1-bp@alien8.de> <20211108101157.15189-43-bp@alien8.de>
+In-Reply-To: <20211108101157.15189-43-bp@alien8.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 8 Nov 2021 15:07:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com>
+Message-ID: <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com>
+Subject: Re: [PATCH v0 42/42] notifier: Return an error when callback is
+ already registered
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-edac@vger.kernel.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        xen-devel@lists.xenproject.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri,  5 Nov 2021 19:20:59 +0000
-Marc Zyngier <maz@kernel.org> wrote:
+Hi Borislav,
 
-> As we are about to change the way vcpus are allocated, mandate
-> the use of kvm_get_vcpu() instead of open-coding the access.
-> 
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
+On Mon, Nov 8, 2021 at 11:13 AM Borislav Petkov <bp@alien8.de> wrote:
+> From: Borislav Petkov <bp@suse.de>
+>
+> The notifier registration routine doesn't return a proper error value
+> when a callback has already been registered, leading people to track
+> whether that registration has happened at the call site:
+>
+>   https://lore.kernel.org/amd-gfx/20210512013058.6827-1-mukul.joshi@amd.com/
+>
+> Which is unnecessary.
+>
+> Return -EEXIST to signal that case so that callers can act accordingly.
+> Enforce callers to check the return value, leading to loud screaming
+> during build:
+>
+>   arch/x86/kernel/cpu/mce/core.c: In function ‘mce_register_decode_chain’:
+>   arch/x86/kernel/cpu/mce/core.c:167:2: error: ignoring return value of \
+>    ‘blocking_notifier_chain_register’, declared with attribute warn_unused_result [-Werror=unused-result]
+>     blocking_notifier_chain_register(&x86_mce_decoder_chain, nb);
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Drop the WARN too, while at it.
+>
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
 
-makes sense
+Thanks for your patch!
 
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> --- a/include/linux/notifier.h
+> +++ b/include/linux/notifier.h
+> @@ -141,13 +141,13 @@ extern void srcu_init_notifier_head(struct srcu_notifier_head *nh);
+>
+>  #ifdef __KERNEL__
+>
+> -extern int atomic_notifier_chain_register(struct atomic_notifier_head *nh,
+> +extern int __must_check atomic_notifier_chain_register(struct atomic_notifier_head *nh,
+>                 struct notifier_block *nb);
+> -extern int blocking_notifier_chain_register(struct blocking_notifier_head *nh,
+> +extern int __must_check blocking_notifier_chain_register(struct blocking_notifier_head *nh,
+>                 struct notifier_block *nb);
+> -extern int raw_notifier_chain_register(struct raw_notifier_head *nh,
+> +extern int __must_check raw_notifier_chain_register(struct raw_notifier_head *nh,
+>                 struct notifier_block *nb);
+> -extern int srcu_notifier_chain_register(struct srcu_notifier_head *nh,
+> +extern int __must_check srcu_notifier_chain_register(struct srcu_notifier_head *nh,
+>                 struct notifier_block *nb);
 
-> ---
->  arch/s390/kvm/kvm-s390.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 7af53b8788fa..4a0f62b03964 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -4572,7 +4572,7 @@ int kvm_s390_vcpu_start(struct kvm_vcpu *vcpu)
->  	}
->  
->  	for (i = 0; i < online_vcpus; i++) {
-> -		if (!is_vcpu_stopped(vcpu->kvm->vcpus[i]))
-> +		if (!is_vcpu_stopped(kvm_get_vcpu(vcpu->kvm, i)))
->  			started_vcpus++;
->  	}
->  
-> @@ -4634,9 +4634,11 @@ int kvm_s390_vcpu_stop(struct kvm_vcpu *vcpu)
->  	__disable_ibs_on_vcpu(vcpu);
->  
->  	for (i = 0; i < online_vcpus; i++) {
-> -		if (!is_vcpu_stopped(vcpu->kvm->vcpus[i])) {
-> +		struct kvm_vcpu *tmp = kvm_get_vcpu(vcpu->kvm, i);
-> +
-> +		if (!is_vcpu_stopped(tmp)) {
->  			started_vcpus++;
-> -			started_vcpu = vcpu->kvm->vcpus[i];
-> +			started_vcpu = tmp;
->  		}
->  	}
->  
+I think the addition of __must_check is overkill, leading to the
+addition of useless error checks and message printing.  Many callers
+call this where it cannot fail, and where nothing can be done in the
+very unlikely event that the call would ever start to fail.
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
