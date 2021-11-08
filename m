@@ -2,125 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB843449C01
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 19:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA55449C5D
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 20:24:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236209AbhKHS42 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 8 Nov 2021 13:56:28 -0500
-Received: from aposti.net ([89.234.176.197]:33428 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236093AbhKHS42 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 8 Nov 2021 13:56:28 -0500
-Date:   Mon, 08 Nov 2021 18:53:24 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v5 2/7] drm/ingenic: Add support for JZ4780 and HDMI
- output
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S237223AbhKHT1b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Nov 2021 14:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236881AbhKHT1b (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Nov 2021 14:27:31 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71E4C061570;
+        Mon,  8 Nov 2021 11:24:46 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso722619pjb.0;
+        Mon, 08 Nov 2021 11:24:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FCDEdClF4vdMDgnBHsoSmjaYIHWGF2A+Z4xn3NG9v1w=;
+        b=HCGysrxXl1ER4zmhl9YPJJYdawYbs7ddTxFQ0i49WPW3BToO6e7u6gD9auVUC2BEdt
+         YAM7o2kX2jCvLVUxtAcABc412VYQKt3026QiR6bxbaMoI7JUeA7lV1TpCbq2mT4evb+b
+         1N8BxMo/m5qxnJjQ9dnuj83io3qhoQXOpL17rlxHOfK/DxqlHpQ3xK0/ooboogoLlnya
+         NurgKyRMkcQLXBAOmrGDItL5vLAMtdIGK2DkewWJNa83nf+VI0wPAeuE5W1S9h9Y/rSp
+         2+ciCXYako7tirgvyZcraaBXAId5SSMlXNalhHlGYc14OmSuIkc84DES61ma4mIRKpAU
+         Yc9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FCDEdClF4vdMDgnBHsoSmjaYIHWGF2A+Z4xn3NG9v1w=;
+        b=DdPQ8qxLVG2QUUGNuC05khb3ucw7d+Ky/9sVhNVoHD2+Mpa9cMxmBzTnxAuuJbGmtg
+         iVeDrdmK2Zh6/h4E3aw5FEJwdPCnJihi0fPrPRFD9LIjqxJfifwu6cqhdneu2GCFpoyS
+         rDI2W+83fT0rDnWu6j7TNqQj8CnNqGLodb6G4FjowlOzmiHhCnZWH+oIGIHp/NFd3dTr
+         /SWhPX98qW3LnoeORUzFDyxRKUz0aqIFOf167dkAeI2vqsScAont+KD+1cHD23yf5mSZ
+         Nc4cJcFG/mwn3ndR1j5CM/mkW+yITsy0T2Z4bZG+n8MNmBQWfm7diFeX2Mu1jXw99Nwg
+         l9aw==
+X-Gm-Message-State: AOAM533IOip4F8qjtcIy85WnP6SuM6u6phwMkgEH7vu8zEXXsCR7a4UG
+        7ZjnS0YsefYDlJuPdHubB5RU0PlLe4w=
+X-Google-Smtp-Source: ABdhPJypWm5RLBYiHwy6o/qZj4b0PqtVUzKvqqbYsQ4+OemIaz797fo+lfzOlXhjxcebcO0el2mwLA==
+X-Received: by 2002:a17:902:b28b:b0:142:4abc:ac20 with SMTP id u11-20020a170902b28b00b001424abcac20mr1396214plr.88.1636399485869;
+        Mon, 08 Nov 2021 11:24:45 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id m3sm17573242pfk.190.2021.11.08.11.24.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Nov 2021 11:24:45 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-pci@vger.kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Message-Id: <0HO92R.RF221XL59J3I1@crapouillou.net>
-In-Reply-To: <ACEFD0BB-1FCF-4EEB-A40F-1F2543A05BF4@goldelico.com>
-References: <cover.1633436959.git.hns@goldelico.com>
-        <2c7d0aa7d3ef480ebb996d37c27cbaa6f722728b.1633436959.git.hns@goldelico.com>
-        <FXTI0R.3FZIJZ7UYSNQ@crapouillou.net>
-        <7CEBB741-2218-40A7-9800-B3A154895274@goldelico.com>
-        <Q6U72R.9HY4TXLC6RWV2@crapouillou.net>
-        <229EBE4C-6555-41DE-962F-D82798AEC650@goldelico.com>
-        <HQY82R.69JHJIC64HDO1@crapouillou.net>
-        <2E32F572-72D0-44E7-A700-AF8A2D37BFDA@goldelico.com>
-        <ZA692R.GHQL6RBCLFB12@crapouillou.net>
-        <D0809E59-DCB5-46CE-BE5E-D2A5D2ECA6F0@goldelico.com>
-        <BVH92R.0VU3IKPQTLX9@crapouillou.net>
-        <2F8A88BC-2696-491B-9C01-7D07A3B3670A@goldelico.com>
-        <RIL92R.MLAZ6CTO865E1@crapouillou.net>
-        <ACEFD0BB-1FCF-4EEB-A40F-1F2543A05BF4@goldelico.com>
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-mips@vger.kernel.org (open list:MIPS),
+        linux-kernel@vger.kernel.org (open list),
+        Jim Quinlan <jim2101024@gmail.com>
+Subject: [PATCH 0/2] Enable PCIE_BRCMSTB on MIPS
+Date:   Mon,  8 Nov 2021 11:24:30 -0800
+Message-Id: <20211108192432.1589507-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus,
+This patch series allows building the PCIE_BRCMSTB driver for
+BMIPS_GENERIC. This is preliminary work to actually adding support for
+PCIe host bridge changes to the 7425/29/35 MIPS-based SoCs.
 
-Le lun., nov. 8 2021 at 19:33:48 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> Hi Paul,
-> 
->>  Am 08.11.2021 um 18:49 schrieb Paul Cercueil <paul@crapouillou.net>:
->> 
->>>>  Variant 4: the variant #2 without the changes to the DTSI files.
->>>  Hm. If there is no cache and we can safely remove tight boundary 
->>> checking (by JZ_REG_LCD_SIZE1) for jz4725/40/70 (by not fixing 
->>> DTSI) why do we still need the max_register calculation from DTSI 
->>> specifically for jz4780 and at all?
->> 
->>  It's better to have the .max_register actually set to the proper 
->> value. Then reading the registers from debugfs 
->> (/sys/kernel/debug/regmap/) will print the actual list of registers 
->> without bogus values. If .max_register is set too high, it will end 
->> up reading outside the registers area.
-> 
-> Ok, that is a good reason to convince me.
-> 
->>  On Ingenic SoCs such reads just return 0, but on some other SoCs it 
->> can lock up the system.
-> 
-> Yes, I know some of these...
-> 
->>  So the best way forward is to have .max_register computed from the 
->> register area's size, and fix the DTSI with the proper sizes. Since 
->> your JZ4780 code needs to update .max_register anyway it's a good 
->> moment to add this patch, and the DTSI files can be fixed later (by 
->> me or whoever is up to the task).
-> 
-> Well, it would already be part of my Variant #2 (untested). So I 
-> could simply split it up further and you can test the pure dtsi 
-> changes and apply them later or modify if that makes problems. Saves 
-> you a little work. BTW: the jz4740 seems to have even less registers 
-> (last register seems to be LCDCMD1 @ 0x1305005C).
+The two patches are largely independent, though it might make more sense
+to merge them via the PCI drivers tree?
 
-Sure, if you want. Send the DTSI patch(es) separate from this patchset 
-then.
+Florian Fainelli (2):
+  MIPS: BMIPS: Enable PCI Kconfig
+  PCI: brcmstb: Allow building for BMIPS_GENERIC
 
->> 
->>  Fixing the DTS is not a problem in any way, btw. We just need to 
->> ensure that the drivers still work with old DTB files, which will be 
->> the case here.
-> 
-> Yes, that is right since the new values are smaller than the 
-> originals.
-> 
-> Ok, then let's do it that way.
+ arch/mips/Kconfig              | 2 ++
+ drivers/pci/controller/Kconfig | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-Great. Waiting for your v6 then.
-
-Cheers,
--Paul
-
+-- 
+2.25.1
 
