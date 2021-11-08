@@ -2,97 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F140449C63
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 20:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52318449D6F
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 21:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237311AbhKHT1g (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Nov 2021 14:27:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237274AbhKHT1d (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Nov 2021 14:27:33 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEB4C061570;
-        Mon,  8 Nov 2021 11:24:49 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id gb13-20020a17090b060d00b001a674e2c4a8so683639pjb.4;
-        Mon, 08 Nov 2021 11:24:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KjOZTPQcvz2Ej/nInPoBz2bFdjF7rfN41XOQujZZQow=;
-        b=WrcP6KsVG7dWdD8AbJgaaMq7W7XxkJordouYWRSGf/N/xqSQmTLrDkW5EGL5PrmTd9
-         U+srJG0LSfUdyJC4FXzyGulhGCIFi/ZBdXR3qciqMM9FRQ14lv19yM5jHmi/608IZHRi
-         +NXZrwTeuAJ9lYCpRzxtioM981fqGcse3SdTHySeZMeuKBqpbXLI/xduG1cSDry0L3oD
-         6Hn91shlEZAvg7UKegLeMXZNCuJ2FvnOxiuHJGzlVL/te9bxRyx9bSWl8RHdALEmzqaV
-         Rh/qS2BwiXTipChUafUWO+hasas58NhRjpevwc9B3zgm4lK4gW/Qm+mxnBvGIEWP9K8H
-         HqLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KjOZTPQcvz2Ej/nInPoBz2bFdjF7rfN41XOQujZZQow=;
-        b=US4RUTmLThbturBEj6uQ3Mdthy0BZqbRawvQXaW4M0mOI7e+V1u7/28Pg5ldLFQDev
-         i5G9dxFUyVivkGjlZcIwZvbZIxX2BJEE70f/lPC/ZodHJFApvCoSTn3tR4RqxGp6gRVe
-         ucVyPYDUMIiiPCysoffWyfL5w/RAU5GolZpAWl2CmNGuiOrIAdouzhKjTg0FXFuGCxzD
-         5p/Qm5HMAtyNrAqOpMFsK2QhrvLvpH3/4YVLGwxwUSfu6OGA3tP10MgYq21cJFyattS0
-         zP81i9dFYf2fiJqfNFQDXDG3ldfjIVPIr9Pxup1FDfx1Vsdxs2L0fYZ/ROCh402+hN5G
-         GePQ==
-X-Gm-Message-State: AOAM530PmI1qXo4/R4S66ZL8Emwmcdfgz9HvlnZ/RPhFmpFvb1/vYNNV
-        ZyJJcW00tJ5YBsGWGhk/5gS9NqXgKio=
-X-Google-Smtp-Source: ABdhPJxGdPTj9Zr1FUCcTAgsUXoWb+YSFFAhwky7pkUZhWZEer5lpKzPnigO9zFKkM2MdC7vDdeppA==
-X-Received: by 2002:a17:902:b7c8:b0:141:9ddb:33e7 with SMTP id v8-20020a170902b7c800b001419ddb33e7mr1391113plz.60.1636399488246;
-        Mon, 08 Nov 2021 11:24:48 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id m3sm17573242pfk.190.2021.11.08.11.24.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Nov 2021 11:24:47 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-pci@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-mips@vger.kernel.org (open list:MIPS),
-        linux-kernel@vger.kernel.org (open list),
-        Jim Quinlan <jim2101024@gmail.com>
-Subject: [PATCH 2/2] PCI: brcmstb: Allow building for BMIPS_GENERIC
-Date:   Mon,  8 Nov 2021 11:24:32 -0800
-Message-Id: <20211108192432.1589507-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211108192432.1589507-1-f.fainelli@gmail.com>
-References: <20211108192432.1589507-1-f.fainelli@gmail.com>
+        id S238240AbhKHVCQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Nov 2021 16:02:16 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:46597 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S238163AbhKHVCN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Nov 2021 16:02:13 -0500
+Received: (qmail 1679175 invoked by uid 1000); 8 Nov 2021 15:59:26 -0500
+Date:   Mon, 8 Nov 2021 15:59:26 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        intel-gvt-dev@lists.freedesktop.org,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-edac@vger.kernel.org,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        linux-hyperv@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-leds <linux-leds@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "open list:REMOTE PROCESSOR \(REMOTEPROC\) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-staging@lists.linux.dev,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT \(xtensa\)" 
+        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v0 42/42] notifier: Return an error when callback is
+ already registered
+Message-ID: <20211108205926.GA1678880@rowland.harvard.edu>
+References: <20211108101157.15189-1-bp@alien8.de>
+ <20211108101157.15189-43-bp@alien8.de>
+ <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com>
+ <YYkyUEqcsOwQMb1S@zn.tnic>
+ <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
+ <YYlJQYLiIrhjwOmT@zn.tnic>
+ <CAMuHMdXHikGrmUzuq0WG5JRHUUE=5zsaVCTF+e4TiHpM5tc5kA@mail.gmail.com>
+ <YYlOmd0AeA8DSluD@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YYlOmd0AeA8DSluD@zn.tnic>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-BMIPS_GENERIC denotes support for the MIPS-based Broadcom STB platforms
-which this driver can support.
+On Mon, Nov 08, 2021 at 05:21:45PM +0100, Borislav Petkov wrote:
+> On Mon, Nov 08, 2021 at 05:12:16PM +0100, Geert Uytterhoeven wrote:
+> > Returning void is the other extreme ;-)
+> > 
+> > There are 3 levels (ignoring BUG_ON()/panic () inside the callee):
+> >   1. Return void: no one can check success or failure,
+> >   2. Return an error code: up to the caller to decide,
+> >   3. Return a __must_check error code: every caller must check.
+> > 
+> > I'm in favor of 2, as there are several places where it cannot fail.
+> 
+> Makes sense to me. I'll do that in the next iteration.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/pci/controller/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Is there really any reason for returning an error code?  For example, is 
+it anticipated that at some point in the future these registration calls 
+might fail?
 
-diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-index e917bb3652bb..93b141110537 100644
---- a/drivers/pci/controller/Kconfig
-+++ b/drivers/pci/controller/Kconfig
-@@ -270,7 +270,8 @@ config VMD
- 
- config PCIE_BRCMSTB
- 	tristate "Broadcom Brcmstb PCIe host controller"
--	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCM4908 || COMPILE_TEST
-+	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCM4908 || \
-+		   BMIPS_GENERIC || COMPILE_TEST
- 	depends on OF
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	default ARCH_BRCMSTB
--- 
-2.25.1
+Currently, the only reason for failing to register a notifier callback 
+is because the callback is already registered.  In a sense this isn't 
+even an actual failure -- after the registration returns the callback 
+_will_ still be registered.
 
+So if the call can never really fail, why bother with a return code?  
+Especially since the caller can't do anything with such a code value.
+
+Given the current state of affairs, I vote in favor of 1 (plus a WARN or 
+something similar to generate a stack dump in the callee, since double 
+registration really is a bug).
+
+Alan Stern
