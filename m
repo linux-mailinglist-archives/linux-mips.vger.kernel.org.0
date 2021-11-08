@@ -2,325 +2,284 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A074475A5
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Nov 2021 21:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 147DC447719
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 01:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235479AbhKGU2j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 7 Nov 2021 15:28:39 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.169]:19362 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234694AbhKGU2i (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Nov 2021 15:28:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1636316741;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=hWGYBtbSOYpUPcr68S4nB4rIlk2qQH3hPQ1EQ+UHgA4=;
-    b=ii9l0DpedHRyR0g++qxHW3DgqcDcGK3p/ERGbAXLh2jFzz3DCj+k9JR787Z7LsfgeU
-    YHQt1W1XuH3YphqUA03Lwg6kB9jP9NcLVjdyYkVhl2tMLqQ0ebcZGkO5Fgp8aXcXW/JQ
-    KJ/esTbIqWYxFY9Wkc4COH1vrCHiiWNHe/JGWc/Rvnut0XjR6uiPNMZkCmJsy2MwjKTC
-    TLMN3SObwJKD+28hRoogaHNHT2XFdO4ec90w9fbN8cykhSKn/AYjzuavSAiF9iObow0i
-    KxZux72FvHH5Rvc/yG8DNJ8r35cIoS7/goJiLK7ZLp3wvlAp6wI3Egq7rBZ3VowG89G1
-    uHCA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3jcR+"
-X-RZG-CLASS-ID: mo00
-Received: from mbp-13-nikolaus.fritz.box
-    by smtp.strato.de (RZmta 47.34.1 DYNA|AUTH)
-    with ESMTPSA id 902c63xA7KPcGJP
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sun, 7 Nov 2021 21:25:38 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v5 2/7] drm/ingenic: Add support for JZ4780 and HDMI
- output
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <Q6U72R.9HY4TXLC6RWV2@crapouillou.net>
-Date:   Sun, 7 Nov 2021 21:25:38 +0100
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S236841AbhKHAud (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 7 Nov 2021 19:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236119AbhKHAuc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 7 Nov 2021 19:50:32 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC1BC061570;
+        Sun,  7 Nov 2021 16:47:48 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id t11so26203839ljh.6;
+        Sun, 07 Nov 2021 16:47:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+AnGTim9m4rf1XLwn/ELN0sZCzuOcJdLe86U7paP+yQ=;
+        b=ni13262nQh3GX0h+BPQyrs85JRUzaWz8PTTW1ehXiMuJGu1Ze+O6oA+cTLQeD5Hu4S
+         aIUejstQov0r9q7FmiaLuF+gYTZL3eYolS1kQprSozhbudB00Wpmvyv/Ibx+kYr/f2ol
+         fpa+emXtKS+ULegWlJMkpBsUqNU+LUnr8b2Ielf6GYvhamqJqJ4iU+26oqIvJYLhTmiz
+         7/d5EU2cOI+EmtDwT6uDZVFvp+RGANCxJ+fUlUfDE+cPDc1mzk9RG3KztMGzfZYfJS0H
+         L2NeIRkXoa3/MmqxU00dVJoI3pTMIH9pcEYdrlibnl51ATyPLSbW9nEf5TJH1P9UDiFh
+         SjJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+AnGTim9m4rf1XLwn/ELN0sZCzuOcJdLe86U7paP+yQ=;
+        b=OR1FGYuzjh1DD/NO3DDhkVP+fNoiAEUdndNyGaU0hAtev+RUo/GUQB8GYSVu9f+Wj+
+         6BU588o47ORNoDrv2WKBNx+++2hAH5tkH0rvILYNC8WgxB27yro0ZzNYSwRReXB36dv2
+         L+G6zz2/IBhdFFIzGJhkU7K3JY3IAA7D5wfoQ3ekF5/nuTqywc+DC95B2w/HnuqVdA4o
+         KqGorxj549h8AmU9VXaTqAluhxbUArG/Nf3iIj+34FfxIJ2+SvKR7vEPIvDdsDZH4BOD
+         PrE2t59DUA3hR3I/h8yL436VIC4+gddRrNNVkSBzwqoqqheMTKrXHY/XYkS+gvbQGFDe
+         988g==
+X-Gm-Message-State: AOAM531Y2v8oUJdrcQ4PhHKLAGYdhLt/T8O6dflGhsOsuVjQe30gTYk6
+        DedXkDmhfqMImQ6PwHTJXfI=
+X-Google-Smtp-Source: ABdhPJygsbd62AYwVWr/FbjY9E+4XNsUMriRPDZTTc6CoomG/9GH2yuj3/kx3X6KSzqjBHkqxGUtsg==
+X-Received: by 2002:a2e:391b:: with SMTP id g27mr79531744lja.126.1636332467262;
+        Sun, 07 Nov 2021 16:47:47 -0800 (PST)
+Received: from localhost.localdomain (79-139-188-96.dynamic.spd-mgts.ru. [79.139.188.96])
+        by smtp.gmail.com with ESMTPSA id p17sm1625266lfu.209.2021.11.07.16.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Nov 2021 16:47:46 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <229EBE4C-6555-41DE-962F-D82798AEC650@goldelico.com>
-References: <cover.1633436959.git.hns@goldelico.com>
- <2c7d0aa7d3ef480ebb996d37c27cbaa6f722728b.1633436959.git.hns@goldelico.com>
- <FXTI0R.3FZIJZ7UYSNQ@crapouillou.net>
- <7CEBB741-2218-40A7-9800-B3A154895274@goldelico.com>
- <Q6U72R.9HY4TXLC6RWV2@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v3 00/25] Introduce power-off+restart call chain API
+Date:   Mon,  8 Nov 2021 03:44:59 +0300
+Message-Id: <20211108004524.29465-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+Problem
+-------
 
-> Am 07.11.2021 um 20:01 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Nikolaus,
->=20
-> Le dim., nov. 7 2021 at 14:41:18 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->> Hi Paul,
->> sorry for the delay in getting back to this, but I was distracted by =
-more urgent topics.
->>> Am 05.10.2021 um 22:22 schrieb Paul Cercueil <paul@crapouillou.net>:
->>> Hi Nikolaus,
->>> Le mar., oct. 5 2021 at 14:29:14 +0200, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->>>> From: Paul Boddie <paul@boddie.org.uk>
->>>> Add support for the LCD controller present on JZ4780 SoCs.
->>>> This SoC uses 8-byte descriptors which extend the current
->>>> 4-byte descriptors used for other Ingenic SoCs.
->>>> Tested on MIPS Creator CI20 board.
->>>> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
->>>> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
->>>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->>>> ---
->>>> drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 85 =
-+++++++++++++++++++++--
->>>> drivers/gpu/drm/ingenic/ingenic-drm.h     | 42 +++++++++++
->>>> 2 files changed, 122 insertions(+), 5 deletions(-)
->>>> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c =
-b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
->>>> index f73522bdacaa..e2df4b085905 100644
->>>> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
->>>> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
->>>> @@ -6,6 +6,7 @@
->>>> 			case DRM_FORMAT_XRGB8888:
->>>> +				hwdesc->cpos |=3D JZ_LCD_CPOS_BPP_18_24;
->>>> +				break;
->>>> +			}
->>>> +			hwdesc->cpos |=3D JZ_LCD_CPOS_PREMULTIPLY_LCD |
->>>> +					    =
-(JZ_LCD_CPOS_COEFFICIENT_1_ALPHA1 <<
->>>> +					     =
-JZ_LCD_CPOS_COEFFICIENT_OFFSET);
->>> Knowing that OSD mode doesn't really work with this patch, I doubt =
-you need to configure per-plane alpha blending.
->> Well, we can not omit setting some CPOS_COEFFICIENT different from 0.
->> This would mean to multiply all values with 0, i.e. gives a black =
-screen.
->> So at least we have to apply JZ_LCD_CPOS_COEFFICIENT_1.
->> JZ_LCD_CPOS_PREMULTIPLY_LCD is not relevant in the non-alpha case.
->=20
-> hwdesc->cpos =3D JZ_LCD_CPOS_COEFFICIENT_1 << =
-JZ_LCD_CPOS_COEFFICIENT_OFFSET;
+SoC devices require power-off call chaining functionality from kernel.
+We have a widely used restart chaining provided by restart notifier API,
+but nothing for power-off.
 
-Exactly what I wrote and did test.
+Solution
+--------
 
->=20
-> That's enough to get an image.
+Introduce new API that provides both restart and power-off call chains.
 
-Fine that we can agree on that.
+Why combine restart with power-off? Because drivers often do both.
+More practical to have API that provides both under the same roof.
 
->=20
->> But then, why not do it right from the beginning?
->=20
-> Because there's no way to test alpha blending without getting the =
-overlay plane to work first.
->=20
->>> 	}
->>> +	regmap_config =3D ingenic_drm_regmap_config;
->>> +	regmap_config.max_register =3D soc_info->max_reg;
->>> 	priv->map =3D devm_regmap_init_mmio(dev, base,
->>> -					  &ingenic_drm_regmap_config);
->>> +					  &regmap_config);
->>> I remember saying to split this change into its own patch :)
->> Yes, I remember as well, but it does not make sense to me.
->> A first patch would introduce regmap_config. This needs =
-soc_info->max_reg
->> to be defined as a struct component.
->> This requires all soc_info to be updated for all SoC (w/o =
-jz4780_soc_info
->> in this first patch because it has not been added yet) to a constant =
-(!)
->> JZ_REG_LCD_SIZE1.
->> And the second patch would then add jz4780_soc_info and set its =
-max_reg to
->> a different value.
->=20
-> Correct, that's how it should be.
+The new API is designed with simplicity and extensibility in mind.
+It's built upon the existing restart and reboot APIs. The simplicity
+is in new helper functions that are convenient for drivers. The
+extensibility is in the design that doesn't hardcode callback
+arguments, making easy to add new parameters and remove old.
 
-Well, if you prefer separating things that are deeply related into two =
-commits...
+This is a third attempt to introduce the new API. First was made by
+Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+In fact the work didn't stop and recently arm_pm_restart() was removed
+from v5.14 kernel, which was a part of preparatory work started by
+Guenter Roeck. I took into account experience and ideas from the
+previous attempts, extended and polished them.
 
->=20
-> Note that you can do even better, set the .max_register field =
-according to the memory resource you get from DTS. Have a look at the =
-pinctrl driver which does exactly this.
+Adoption plan
+-------------
 
-That is an interesting idea. Although I don't see where
+This patchset introduces the new API. It also converts multiple drivers
+and arch code to the new API to demonstrate how it all looks in practice.
 
-=
-https://elixir.bootlin.com/linux/latest/source/drivers/pinctrl/pinctrl-ing=
-enic.c#L4171
+The plan is:
 
-does make use of the memory resource from DTS. It just reads two values =
-from the ingenic_chip_info instead of one I do read from soc_info.
+1. Merge new API (patches 1-8). This API will co-exist with the old APIs.
 
-If you see it I'd prefer to leave this patch to you (as it is not jz4780 =
-related except that jz4780 needs it to be in place) and then I can =
-simply make use of it for adding jz4780+hdmi.
+2. Convert arch code to do_kernel_power_off() (patches 9-21).
 
->=20
->> IMHO, such a separate first patch has no benefit independent from =
-adding
->> jz4780 support, as far as I can see.
->> If your fear issues with bisectability:
->> - code has been tested
->> - if this fails, bisect will still point to this patch, where it is =
-easy to locate
->=20
-> It's not about bisectability. One functional change per patch, and =
-patches should be as atomic as possible.
+3. Convert drivers and platform code to the new API.
 
-Well, it was atomic: "add jz4780+hdmi functionality" or not. Now we =
-separate into "preparation for adding jz4780" and "really adding". Yes, =
-you can split atoms into quarks...
+4. Remove obsolete pm_power_off and pm_power_off_prepare variables.
 
-BTW: without adding jz4780_soc_info there is not even a functional =
-change. Just the constant is made dependent on the .compatible entry. =
-And since it is initialized to the same constant value in all cases, it =
-is still a constant. A very very clever compiler could find out that =
-regmap_config.max_register =3D soc_info->max_reg is a NOOP and produce =
-the same code as before by avoiding the copy operation of regmap_config =
-=3D ingenic_drm_regmap_config.
+5. Make restart-notifier API private to kernel/reboot.c once no users left.
 
->=20
->> So I leave it in v6 unsplitted.
->>>> 	if (IS_ERR(priv->map)) {
->>>> 		dev_err(dev, "Failed to create regmap\n");
->>>> 		return PTR_ERR(priv->map);
->>>> @@ -1274,7 +1319,7 @@ static int ingenic_drm_bind(struct device =
-*dev, bool has_components)
->>>> 	/* Enable OSD if available */
->>>> 	if (soc_info->has_osd)
->>>> -		regmap_write(priv->map, JZ_REG_LCD_OSDC, =
-JZ_LCD_OSDC_OSDEN);
->>>> +		regmap_set_bits(priv->map, JZ_REG_LCD_OSDC, =
-JZ_LCD_OSDC_OSDEN);
->>> This change is unrelated to this patch, and I'm not even sure it's a =
-valid change. The driver shouldn't rely on previous register values.
->> I think I already commented that I think the driver should also not =
-reset
->> previous register values to zero.
->=20
-> You did comment this, yes, but I don't agree. The driver *should* =
-reset the registers to zero. It should *not* have to rely on whatever =
-was configured before.
->=20
-> Even if I did agree, this is a functional change unrelated to JZ4780 =
-support, so it would have to be splitted to its own patch.
+It's fully implemented here:
 
-Well it is in preparation of setting more bits that are only available =
-for the jz4780.
+[1] https://github.com/grate-driver/linux/commits/sys-off-handler
 
-But it will be splitted into its own patch for other reasons - if we =
-ever make osd working...
+For now I'm sending only the first 25 base patches out of ~180. It's
+preferable to squash 1-2, partially 3 and 4 points of the plan into a
+single patchset to ease and speed up applying of the rest of the patches.
+Majority of drivers and platform patches depend on the base, hence they
+will come later (and per subsystem), once base will land.
 
->=20
->> If I counted correctly this register has 18 bits which seem to =
-include
->> some interrupt masks (which could be initialized somewhere else) and =
-we
->> write a constant 0x1.
->> Of course most other bits are clearly OSD related (alpha blending),
->> i.e. they can have any value (incl. 0) if OSD is disabled. But here =
-we
->> enable it. I think there may be missing some setting for the other =
-bits.
->> So are you sure, that we can unconditionally reset *all* bits
->> except JZ_LCD_OSDC_OSDEN for the jz4780?
->> Well I have no experience with OSD being enabled at all. I.e. I have =
-no
->> test scenario.
->> So we can leave it out in v6.
+All [1] patches are compile-tested. Tegra and x86 ACPI patches are tested
+on hardware. The remaining should be covered by unit tests (unpublished).
 
-So we agree as here well.
+Results
+-------
 
->>>>=20
->>>> +	}
->>> As I said in your v4... You don't need to add this here. The =
-ingenic-dw-hdmi.c should take care of registering its driver.
->> Well, I can not identify any difference in code structure to the IPU =
-code.
->> The Makefile (after our patch) looks like:
->> obj-$(CONFIG_DRM_INGENIC) +=3D ingenic-drm.o
->> ingenic-drm-y =3D ingenic-drm-drv.o
->> ingenic-drm-$(CONFIG_DRM_INGENIC_IPU) +=3D ingenic-ipu.o
->> ingenic-drm-$(CONFIG_DRM_INGENIC_DW_HDMI) +=3D ingenic-dw-hdmi.o
->> which means that ingenic-dw-hdmi.o is also compiled into ingenic-drm,
->> like ingenic-drm-drv.o and ingenic-ipu.o - if CONFIGured. If not, =
-there
->> are these IS_ENABLED() tests to guard against compiler errors.
->> Is there any technical reason to request a driver structure and =
-registration
->> different from IPU here?
->=20
-> There is no reason to have ingenic-dw-hdmi built into the ingenic-drm =
-module. It should be a separate module.
->=20
->> Why not having ingenic-ipu.c taking care of registering its driver as =
-well?
->=20
-> IIRC ingenic-ipu.c was built into the ingenic-drm at the beginning =
-because of circular dependencies between the IPU and main DRM driver. I =
-think ingenic-ipu.c could be its own module now. That's something I will =
-test soon.
+1. Devices can be powered off properly.
 
-Ok, that was the piece of information I was missing. I always thought =
-that the way IPU is integrated is the best one and there is some special =
-requirement. And it shows how we should do it.
+2. Global variables are removed from drivers.
 
-So I'll wait until I see your proposal for IPU.
+3. Global pm_power_off and pm_power_off_prepare callback variables are
+removed once all users are converted to the new API. The latter callback
+is removed by patch #25 of this series.
 
->=20
->> As soon as this is clarified, I can post a v6.
->> Hm. I am not familiar with how ingenic_drm_crtc_atomic_check()
->> would be notified about planes. Which configuration parameters
->> should be checked for?
->=20
-> You know that the &ingenic_drm->f0 plane cannot be used (right now), =
-so in ingenic_drm_plane_atomic_check() just:
->=20
-> if (plane =3D=3D &priv->f0 && crtc)
->   return -EINVAL;
+4. Ambiguous call chain ordering is prohibited. See patch #5 which adds
+verification of restart handlers priorities, ensuring that they are unique.
 
-Ok, that is simple to add. Prepared for v6.
+Changelog:
 
-So v6 is to be postponed by the patch for setting up =
-regmap_config.max_register and the separation of the IPU driver so that =
-it does not interfere.
+v3: - Renamed power_handler to sys_off_handler as was suggested by
+      Rafael Wysocki.
 
-BR and thanks for all comments,
-Nikolaus
+    - Improved doc-comments as was suggested by Rafael Wysocki. Added more
+      doc-comments.
+
+    - Implemented full set of 180 patches which convert whole kernel in
+      accordance to the plan, see link [1] above. Slightly adjusted API to
+      better suit for the remaining converted drivers.
+
+      * Added unregister_sys_off_handler() that is handy for a couple old
+        platform drivers.
+
+      * Dropped devm_register_trivial_restart_handler(), 'simple' variant
+        is enough to have.
+
+    - Improved "Add atomic/blocking_notifier_has_unique_priority()" patch,
+      as was suggested by Andy Shevchenko. Also replaced down_write() with
+      down_read() and factored out common notifier_has_unique_priority().
+
+    - Added stop_chain field to struct restart_data and reboot_prep_data
+      after discovering couple drivers wanting that feature.
+
+    - Added acks that were given to v2.
+
+v2: - Replaced standalone power-off call chain demo-API with the combined
+      power-off+restart API because this is what drivers want. It's a more
+      comprehensive solution.
+
+    - Converted multiple drivers and arch code to the new API. Suggested by
+      Andy Shevchenko. I skimmed through the rest of drivers, verifying that
+      new API suits them. The rest of the drivers will be converted once we
+      will settle on the new API, otherwise will be too many patches here.
+
+    - v2 API doesn't expose notifier to users and require handlers to
+      have unique priority. Suggested by Guenter Roeck.
+
+    - v2 API has power-off chaining disabled by default and require
+      drivers to explicitly opt-in to the chaining. This preserves old
+      behaviour for existing drivers once they are converted to the new
+      API.
+
+Dmitry Osipenko (25):
+  notifier: Remove extern annotation from function prototypes
+  notifier: Add blocking_notifier_call_chain_is_empty()
+  notifier: Add atomic/blocking_notifier_has_unique_priority()
+  reboot: Correct typo in a comment
+  reboot: Warn if restart handler has duplicated priority
+  reboot: Warn if unregister_restart_handler() fails
+  reboot: Remove extern annotation from function prototypes
+  kernel: Add combined power-off+restart handler call chain API
+  ARM: Use do_kernel_power_off()
+  csky: Use do_kernel_power_off()
+  riscv: Use do_kernel_power_off()
+  arm64: Use do_kernel_power_off()
+  parisc: Use do_kernel_power_off()
+  xen/x86: Use do_kernel_power_off()
+  sh: Use do_kernel_power_off()
+  x86: Use do_kernel_power_off()
+  ia64: Use do_kernel_power_off()
+  mips: Use do_kernel_power_off()
+  nds32: Use do_kernel_power_off()
+  powerpc: Use do_kernel_power_off()
+  m68k: Switch to new sys-off handler API
+  memory: emif: Use kernel_can_power_off()
+  ACPI: power: Switch to sys-off handler API
+  regulator: pfuze100: Use devm_register_sys_off_handler()
+  reboot: Remove pm_power_off_prepare()
+
+ arch/arm/kernel/reboot.c               |   4 +-
+ arch/arm64/kernel/process.c            |   3 +-
+ arch/csky/kernel/power.c               |   6 +-
+ arch/ia64/kernel/process.c             |   4 +-
+ arch/m68k/emu/natfeat.c                |   3 +-
+ arch/m68k/include/asm/machdep.h        |   1 -
+ arch/m68k/kernel/process.c             |   5 +-
+ arch/m68k/kernel/setup_mm.c            |   1 -
+ arch/m68k/kernel/setup_no.c            |   1 -
+ arch/m68k/mac/config.c                 |   4 +-
+ arch/mips/kernel/reset.c               |   3 +-
+ arch/nds32/kernel/process.c            |   3 +-
+ arch/parisc/kernel/process.c           |   4 +-
+ arch/powerpc/kernel/setup-common.c     |   4 +-
+ arch/powerpc/xmon/xmon.c               |   3 +-
+ arch/riscv/kernel/reset.c              |  12 +-
+ arch/sh/kernel/reboot.c                |   3 +-
+ arch/x86/kernel/reboot.c               |   4 +-
+ arch/x86/xen/enlighten_pv.c            |   4 +-
+ drivers/acpi/sleep.c                   |  25 +-
+ drivers/memory/emif.c                  |   2 +-
+ drivers/regulator/pfuze100-regulator.c |  38 +-
+ include/linux/notifier.h               |  37 +-
+ include/linux/pm.h                     |   1 -
+ include/linux/reboot.h                 | 305 ++++++++++++--
+ kernel/notifier.c                      |  83 ++++
+ kernel/power/hibernate.c               |   2 +-
+ kernel/reboot.c                        | 556 ++++++++++++++++++++++++-
+ 28 files changed, 985 insertions(+), 136 deletions(-)
+
+-- 
+2.33.1
 
