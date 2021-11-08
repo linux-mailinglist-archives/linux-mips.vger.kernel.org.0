@@ -2,122 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 129E1449DDF
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Nov 2021 22:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354A944A047
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Nov 2021 02:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239986AbhKHVWY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 8 Nov 2021 16:22:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239990AbhKHVVk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 8 Nov 2021 16:21:40 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F44C061570;
-        Mon,  8 Nov 2021 13:18:55 -0800 (PST)
-Received: from zn.tnic (p200300ec2f3311007827e440708b1099.dip0.t-ipconnect.de [IPv6:2003:ec:2f33:1100:7827:e440:708b:1099])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E3BE71EC051F;
-        Mon,  8 Nov 2021 22:18:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1636406333;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=AU7V4fSHGUK4yNvIX3QFWGgL2mpvsQwlJrzk1EYTZE4=;
-        b=HI4wHVqdPFUaTmLfTawRP0YuILjCSvy0XvR7UY6GhjpkLZ7Jcpensq3GPz/wKuSVQPh/ah
-        JjfisFcmsOLL77YybjTfUcF4SOtfsMptjoCY2iNpL/QAVX8IlmhT4tll2zqUciAF4fFC2q
-        GhOxoJIWWV9UKbtfg9ziQ2wDV7UERPU=
-Date:   Mon, 8 Nov 2021 22:18:47 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        intel-gvt-dev@lists.freedesktop.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-edac@vger.kernel.org,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        linux-hyperv@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-leds <linux-leds@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-staging@lists.linux.dev,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux <sparclinux@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v0 42/42] notifier: Return an error when callback is
- already registered
-Message-ID: <YYmUN69Y7z9xITas@zn.tnic>
-References: <20211108101157.15189-1-bp@alien8.de>
- <20211108101157.15189-43-bp@alien8.de>
- <CAMuHMdWH+txiSP_d7Jc4f_bU8Lf9iWpT4E3o5o7BJr-YdA6-VA@mail.gmail.com>
- <YYkyUEqcsOwQMb1S@zn.tnic>
- <CAMuHMdXiBEQyEXJagSfpH44hxVA2t0sDH7B7YubLGHrb2MJLLA@mail.gmail.com>
- <YYlJQYLiIrhjwOmT@zn.tnic>
- <CAMuHMdXHikGrmUzuq0WG5JRHUUE=5zsaVCTF+e4TiHpM5tc5kA@mail.gmail.com>
- <YYlOmd0AeA8DSluD@zn.tnic>
- <20211108205926.GA1678880@rowland.harvard.edu>
+        id S241525AbhKIBCx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 8 Nov 2021 20:02:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58984 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237261AbhKIBCr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 8 Nov 2021 20:02:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 894A96134F;
+        Tue,  9 Nov 2021 01:00:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636419602;
+        bh=5TaTadUUlRIm99JBWT3Hg8pPrx4O+pzJ82CGst/LFJc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=P7tAlUaHYHQhfjXF6PB1BM3oGjkZN9kXfhbNeoBQeOmkXyppPs+1NWa3t8Gvv6iXq
+         AV4xLvOrVWv9UOoL6A2TXkvc0GNAclHG52Sbw8H5lUbsXirX8Dz3VacI2V+u1/Tb+e
+         A9cNw/bLuj4NE+INnsNjd2LJpBMWFk3y2H19pGdA9ROOwyFQsfYyuqBrboBFpG0Pny
+         hGJVK8naysvHqVFc96WRTfrBpGFp5By8znzgOw6r9jsW3qzl7Gto7iws8FEWJ3S7Rf
+         HaSpffWOQAhoi7FcVvB2ccRnCeD1H9W2hvgcXPLac1wDpem0y7cpBgQtauJiNO0AQM
+         z6Y1eYiX40LgA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Aleksander Jan Bajkowski <olek2@wp.pl>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, john@phrozen.org,
+        tsbogend@alpha.franken.de, maz@kernel.org, hauke@hauke-m.de,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 012/146] MIPS: lantiq: dma: add small delay after reset
+Date:   Mon,  8 Nov 2021 12:42:39 -0500
+Message-Id: <20211108174453.1187052-12-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211108174453.1187052-1-sashal@kernel.org>
+References: <20211108174453.1187052-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211108205926.GA1678880@rowland.harvard.edu>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 08, 2021 at 03:59:26PM -0500, Alan Stern wrote:
-> Is there really any reason for returning an error code?  For example, is 
-> it anticipated that at some point in the future these registration calls 
-> might fail?
-> 
-> Currently, the only reason for failing...
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
 
-Right, I believe with not making it return void we're leaving the door
-open for some, *hypothetical* future return values if we decide we need
-to return them too, at some point.
+[ Upstream commit c12aa581f6d5e80c3c3675ab26a52c2b3b62f76e ]
 
-Yes, I can't think of another fact to state besides that the callback
-was already registered or return success but who knows what we wanna do
-in the future...
+Reading the DMA registers immediately after the reset causes
+Data Bus Error. Adding a small delay fixes this issue.
 
-And so if we change them all to void now, I think it'll be a lot more
-churn to switch back to returning a non-void value and having the
-callers who choose to handle that value, do so again.
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/lantiq/xway/dma.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-So, long story short, keeping the retval - albeit not very useful right
-now - is probably easier.
-
-I hope I'm making some sense here.
-
+diff --git a/arch/mips/lantiq/xway/dma.c b/arch/mips/lantiq/xway/dma.c
+index 63dccb2ed08b2..2784715933d13 100644
+--- a/arch/mips/lantiq/xway/dma.c
++++ b/arch/mips/lantiq/xway/dma.c
+@@ -11,6 +11,7 @@
+ #include <linux/export.h>
+ #include <linux/spinlock.h>
+ #include <linux/clk.h>
++#include <linux/delay.h>
+ #include <linux/err.h>
+ #include <linux/of.h>
+ 
+@@ -222,6 +223,8 @@ ltq_dma_init(struct platform_device *pdev)
+ 	clk_enable(clk);
+ 	ltq_dma_w32_mask(0, DMA_RESET, LTQ_DMA_CTRL);
+ 
++	usleep_range(1, 10);
++
+ 	/* disable all interrupts */
+ 	ltq_dma_w32(0, LTQ_DMA_IRNEN);
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.33.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
