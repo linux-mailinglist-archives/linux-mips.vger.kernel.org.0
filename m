@@ -2,39 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE84E44B7A1
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Nov 2021 23:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DE544B80D
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Nov 2021 23:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344839AbhKIWgN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Nov 2021 17:36:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56626 "EHLO mail.kernel.org"
+        id S240788AbhKIWkD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Nov 2021 17:40:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59994 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345503AbhKIWeL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:34:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 62F3C61AAC;
-        Tue,  9 Nov 2021 22:22:05 +0000 (UTC)
+        id S1345518AbhKIWiC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 9 Nov 2021 17:38:02 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7662C61A03;
+        Tue,  9 Nov 2021 22:23:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496526;
-        bh=mhSzMwWW4rI8F89tcktNvyzwyOgUJFo1iiLUthPJbbQ=;
+        s=k20201202; t=1636496581;
+        bh=geWwvt+WcT0Vr9beU/Rq9/kGpE1RZ0NSTymtca8vwFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fKSaNeYBckCyIbs4EzBKkJ49ljkwwJ7/BwcuWdWzkUXXhybzd/kzP77vI1w46XeDn
-         JpfuvB/IYp7z9ceCpgJbtxll3B4LTlCyYS6GPV8mq79+S8bGt+V1LN4jXTMgY9OGVv
-         1vo9zWk76sP4pwHZZLSOPfGnmxPL8HshpX6r58qHlJaQX2u6xXZd4fC8LS7Di/obQ0
-         E1NYRvXdNOv09uNwaVQygP9GB71lidZ1F1ZkcWfjsnGPD+fPskDlknmAXxSuMLnNvr
-         40rbz4x6BzuabNuZoiyR6NxkrgeXVvOhaofaf6FPfBIrQ979wPsuXaqQzrJZHCsj1r
-         bPlO+iDiWtbAw==
+        b=mH8zz9amUgpvy4JcFWo7+3MQ8TBBOyETutTYH283NCWCFTLh6ubiyxW9l9LhMyUZd
+         Z/GqQPu3oRSwexk46zvitCaVR8+5q+LyYkaJft6gL/S5lBPo4fvflnBWT4as3ToZpE
+         d6YHBB7w3giy8S8JDov3gapEkTJDT1mgKUTIP52yFIzayhuBrCmmY1UZ59uG1aJMkx
+         W9fIx0cWUgERmvr6+0ZDZrJCRUsuEmOURt1l0ZurJ/CNQI9LWlsviWRSzqZWcoqdTm
+         UEMgsZHA2K4W9aZI1WOGki+sLAfIbvUmjhs7276BIhietqdifFNUaja+LbDglGsrho
+         5goDGJKvA237w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Bart Van Assche <bvanassche@acm.org>, linux-mips@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, Ralf@vger.kernel.org,
         linux-mips@linux-mips.org
-Subject: [PATCH AUTOSEL 5.10 39/50] MIPS: sni: Fix the build
-Date:   Tue,  9 Nov 2021 17:20:52 -0500
-Message-Id: <20211109222103.1234885-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 24/30] MIPS: sni: Fix the build
+Date:   Tue,  9 Nov 2021 17:22:18 -0500
+Message-Id: <20211109222224.1235388-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109222103.1234885-1-sashal@kernel.org>
-References: <20211109222103.1234885-1-sashal@kernel.org>
+In-Reply-To: <20211109222224.1235388-1-sashal@kernel.org>
+References: <20211109222224.1235388-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -67,7 +67,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/sni/time.c b/arch/mips/sni/time.c
-index 240bb68ec2478..ff3ba7e778901 100644
+index dbace1f3e1a97..745ceb945fc50 100644
 --- a/arch/mips/sni/time.c
 +++ b/arch/mips/sni/time.c
 @@ -18,14 +18,14 @@ static int a20r_set_periodic(struct clock_event_device *evt)
