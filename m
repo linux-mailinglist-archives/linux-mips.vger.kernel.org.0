@@ -2,45 +2,46 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F2544B0E7
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Nov 2021 17:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DA744B0F4
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Nov 2021 17:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237901AbhKIQQN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Nov 2021 11:16:13 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:46678 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbhKIQQN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Nov 2021 11:16:13 -0500
-Received: by mail-ot1-f41.google.com with SMTP id b5-20020a9d60c5000000b0055c6349ff22so20839020otk.13;
-        Tue, 09 Nov 2021 08:13:27 -0800 (PST)
+        id S239468AbhKIQTI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Nov 2021 11:19:08 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:42639 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230334AbhKIQTH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Nov 2021 11:19:07 -0500
+Received: by mail-ot1-f51.google.com with SMTP id g91-20020a9d12e4000000b0055ae68cfc3dso28869300otg.9;
+        Tue, 09 Nov 2021 08:16:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=YgF8jamzpaIqMaFLxvpOOV3SnWcjJD7TEwGpydEes34=;
-        b=GYqnqAYzZpJcVcYiClS2sGkfVTdkOdFnv8gKdxStXbaylmWtB5gLAP/M3ekX08Nizk
-         mMxE4eQKPdzUVDy/ZYXu7GCDmYcpI/qN2uD0Ww0/h7QpNLrsjMT7tj1CX35aNXSaWMsL
-         IY6a8vrGcxIZok6SbPXo355VZohacViVnAeh0AKj1a/uV42LzuMtF4PfHU7usCv0dRGX
-         drCckWBphKUlM7g12a9VWrxynJ+AnXX+mIfF1ewVTYIxxLNH/mt9UyPEs6YkW+g+6aKZ
-         PxiSwXycIeoZPp52R0G2qBgjF+HOP6xZKI+piLIsrvZuEiavi0IutbgCxUYJKfDh7ufz
-         yKAQ==
-X-Gm-Message-State: AOAM530FdPTpHh1cOm/6EKFfWi5pdb9U62KA8w5Hv8GNnRtVEmwaV54e
-        1YATMKr9cyJxaumiE9IhMA==
-X-Google-Smtp-Source: ABdhPJw/yWunLCyUQLHrVmXuyciqvxSoPlfSe6RdxkCF+MQQamQlv3jX7e/z8xk3JRyyTluAFicEEg==
-X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr6722755oti.269.1636474406773;
-        Tue, 09 Nov 2021 08:13:26 -0800 (PST)
+        bh=jdrgxIgEzKrmMk735DkPidLrZORkq7ypaLQEh4/MLAg=;
+        b=vFSjgq6ifpIC91fN9cgOOcsrq9Nc4TvNV2cl9fwTmCf2/rZSibyvr3J1iOgNiFVtnS
+         3bclhX/jFRVOYeJn8PT3WekcLU2P4X6Pp+gGFgbhJo+GETP5hMtpBaW2rYNs+85F69zS
+         peEQ9sJCl31+4G2OY8UDi35jYH+jlPYZnMzPTJtkZcnK9ClP1h2N0KEWzz6TarB6wcv7
+         NCYU8zbwA876qKmZx1GedOBxJM3h1U/KMBrV5BtE9CC0A0QT693byCQR1NK3EkslLRa2
+         tYP8yJISeb97KBgHodqIj+oZqFlxlLWDtEQHJFxk04H1/PippIPr3nc0KEbetKjcHGUd
+         2i+Q==
+X-Gm-Message-State: AOAM530vTxCsOfC9Gbm9VpT2c0JrdfAjNt78LQabtSBmLMIdWahuQTUM
+        5kEacTtzmo6fH1GOf44brjr3RvkYaw==
+X-Google-Smtp-Source: ABdhPJx5paQeA7EMGcTnVq36aOpDr1x3ukMEDilCqgp63O7QfuU8otNG1WVqDiSL9yguQi6genpGYA==
+X-Received: by 2002:a05:6830:1e6d:: with SMTP id m13mr6952498otr.304.1636474581451;
+        Tue, 09 Nov 2021 08:16:21 -0800 (PST)
 Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id bf17sm3833953oib.27.2021.11.09.08.13.25
+        by smtp.googlemail.com with ESMTPSA id m12sm4146662ots.59.2021.11.09.08.16.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Nov 2021 08:13:26 -0800 (PST)
+        Tue, 09 Nov 2021 08:16:20 -0800 (PST)
 From:   Rob Herring <robh@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
+To:     Wolfram Sang <wsa@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: [PATCH] spi: xlp: Remove Netlogic XLP variants
-Date:   Tue,  9 Nov 2021 10:13:25 -0600
-Message-Id: <20211109161325.2203564-1-robh@kernel.org>
+        linux-mips@vger.kernel.org, George Cherian <gcherian@marvell.com>,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH 1/2] i2c: Remove Netlogic XLP variant
+Date:   Tue,  9 Nov 2021 10:16:18 -0600
+Message-Id: <20211109161619.2206494-1-robh@kernel.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,66 +55,56 @@ Cavium ThunderX2. Remove the Netlogic variant and DT support.
 
 For simplicity, the existing kconfig name is retained.
 
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org
+Cc: George Cherian <gcherian@marvell.com>
+Cc: linux-i2c@vger.kernel.org
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/spi/Kconfig   | 11 +++++------
- drivers/spi/spi-xlp.c |  8 --------
- 2 files changed, 5 insertions(+), 14 deletions(-)
+ drivers/i2c/busses/Kconfig      | 6 +++---
+ drivers/i2c/busses/i2c-xlp9xx.c | 7 -------
+ 2 files changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 596705d24400..b2a8821971e1 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -974,14 +974,13 @@ config SPI_XILINX
- 	  Or for the DS570, see "XPS Serial Peripheral Interface (SPI) (v2.00b)"
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index dce392839017..e9dd1640ffde 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -1170,11 +1170,11 @@ config I2C_XLR
+ 	  will be called i2c-xlr.
  
- config SPI_XLP
--	tristate "Netlogic XLP SPI controller driver"
+ config I2C_XLP9XX
+-	tristate "XLP9XX I2C support"
 -	depends on CPU_XLP || ARCH_THUNDER2 || COMPILE_TEST
-+	tristate "Cavium ThunderX2 SPI controller driver"
++	tristate "Cavium ThunderX2 I2C support"
 +	depends on ARCH_THUNDER2 || COMPILE_TEST
  	help
--	  Enable support for the SPI controller on the Netlogic XLP SoCs.
--	  Currently supported XLP variants are XLP8XX, XLP3XX, XLP2XX, XLP9XX
--	  and XLP5XX.
-+	  Enable support for the SPI controller on the Cavium ThunderX2.
-+	  (Originally on Netlogic XLP SoCs.)
+ 	  This driver enables support for the on-chip I2C interface of
+-	  the Broadcom XLP9xx/XLP5xx MIPS and Vulcan ARM64 processors.
++	  the Cavium ThunderX2 processors. (Originally on Netlogic XLP SoCs.)
  
--	  If you have a Netlogic XLP platform say Y here.
-+	  If you have a Cavium ThunderX2 platform say Y here.
- 	  If unsure, say N.
+ 	  This driver can also be built as a module.  If so, the module will
+ 	  be called i2c-xlp9xx.
+diff --git a/drivers/i2c/busses/i2c-xlp9xx.c b/drivers/i2c/busses/i2c-xlp9xx.c
+index 6d24dc385522..4e3b11c0f732 100644
+--- a/drivers/i2c/busses/i2c-xlp9xx.c
++++ b/drivers/i2c/busses/i2c-xlp9xx.c
+@@ -572,12 +572,6 @@ static int xlp9xx_i2c_remove(struct platform_device *pdev)
+ 	return 0;
+ }
  
- config SPI_XTENSA_XTFPGA
-diff --git a/drivers/spi/spi-xlp.c b/drivers/spi/spi-xlp.c
-index 797ac0ea8fa3..e5707fe5c8f1 100644
---- a/drivers/spi/spi-xlp.c
-+++ b/drivers/spi/spi-xlp.c
-@@ -9,7 +9,6 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/spi/spi.h>
--#include <linux/of.h>
- #include <linux/interrupt.h>
- 
- /* SPI Configuration Register */
-@@ -436,17 +435,10 @@ static const struct acpi_device_id xlp_spi_acpi_match[] = {
- MODULE_DEVICE_TABLE(acpi, xlp_spi_acpi_match);
- #endif
- 
--static const struct of_device_id xlp_spi_dt_id[] = {
--	{ .compatible = "netlogic,xlp832-spi" },
--	{ },
+-static const struct of_device_id xlp9xx_i2c_of_match[] = {
+-	{ .compatible = "netlogic,xlp980-i2c", },
+-	{ /* sentinel */ },
 -};
--MODULE_DEVICE_TABLE(of, xlp_spi_dt_id);
+-MODULE_DEVICE_TABLE(of, xlp9xx_i2c_of_match);
 -
- static struct platform_driver xlp_spi_driver = {
- 	.probe	= xlp_spi_probe,
+ #ifdef CONFIG_ACPI
+ static const struct acpi_device_id xlp9xx_i2c_acpi_ids[] = {
+ 	{"BRCM9007", 0},
+@@ -592,7 +586,6 @@ static struct platform_driver xlp9xx_i2c_driver = {
+ 	.remove = xlp9xx_i2c_remove,
  	.driver = {
- 		.name	= "xlp-spi",
--		.of_match_table = xlp_spi_dt_id,
- 		.acpi_match_table = ACPI_PTR(xlp_spi_acpi_match),
+ 		.name = "xlp9xx-i2c",
+-		.of_match_table = xlp9xx_i2c_of_match,
+ 		.acpi_match_table = ACPI_PTR(xlp9xx_i2c_acpi_ids),
  	},
  };
 -- 
