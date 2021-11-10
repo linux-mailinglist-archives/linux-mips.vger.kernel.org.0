@@ -2,44 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA99F44BA63
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Nov 2021 03:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B501144BA8B
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Nov 2021 04:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbhKJCky (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Nov 2021 21:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S229717AbhKJDMg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Nov 2021 22:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbhKJCky (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Nov 2021 21:40:54 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1234::107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C53C061764;
-        Tue,  9 Nov 2021 18:38:07 -0800 (PST)
+        with ESMTP id S229445AbhKJDMf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Nov 2021 22:12:35 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEA2C061764;
+        Tue,  9 Nov 2021 19:09:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=QxQo/h2U23gdGIw9R8NukNTSdxsKwkzTqfGEtO3iS/U=; b=zd0WO8dX9x+6YrHZ0ZMnDqCZMi
-        6NqKBopFWlDG5V3Hy4XuIZHQHUaJXHtumanXUkGeNIb4XCdrJyNdhktwY1RzIetuDJ4t6csAKGyvP
-        GzUmDTX/9mMRO2YlHsumOwYOXqj5AMDOImPQFix+nFjIkbJzT/saGKZV/wy2xmN7DmcEd73SbJWM/
-        qasTvYfSlwGb+9vTYzUqXsQnJvSB0p/E2Of8AAZt3LdhszSnBqam11Oh0g6thYaFL9nbi7g64SPSm
-        eYzpoqPMM65sjwv9nkWaFfCrvJakZphzpJpgn27fc2UZ6SZpXbzkXuLMkn6Vm9GxEKGyItDdb55vz
-        wvuFGj4w==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=merlin.infradead.org)
-        by merlin.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mkdUu-008qVu-BO; Wed, 10 Nov 2021 02:38:03 +0000
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=FXmVtpJ4dtKVVY4Mzvp+Ukjb6evX82LYRB501Bqkq0c=; b=3RJHmjtQjn3v0nTHExO3JOmsfn
+        /ce32uqK+QMm84FiS1Hz8U5/qXQGExx5MM3CIs1qilylAgmNGW8mTBvR6eWSEIR6B5P4ySvOWT0ba
+        F8xQNrdxBlkiT/bx1SQWOCAmWomn0FNTBB5GkuRcukMx3it/OhpG5NfDRYW7qWbQTPY4RakyOlH+r
+        Qi0Qsq85H2E8toxhKASnU1B69q2KPNP9uADj4JWdHUqiCFvVIJZ3mQFPCp7E50sCIUeTTYnvu3AFy
+        6M5czQXxZsUpszHphS//ZqBpgCAFQZ8O6aJDmAPoFgRdaz2lzqpO3C8uPCuUgrcZoyipBQvj6Wdph
+        3JFO3g7A==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mkdzf-004N91-MW; Wed, 10 Nov 2021 03:09:47 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         kernel test robot <lkp@intel.com>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-mips@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2] iio/adc: ingenic: fix (MIPS) ingenic-adc build errors
-Date:   Tue,  9 Nov 2021 18:37:55 -0800
-Message-Id: <20211110023755.27176-1-rdunlap@infradead.org>
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH] MIPS: boot/compressed/: add __bswapdi2() to target for ZSTD decompression
+Date:   Tue,  9 Nov 2021 19:09:44 -0800
+Message-Id: <20211110030944.6733-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,47 +44,46 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-MIPS does not always provide clk*() interfaces and there are no
-always-present stubs for them, so depending on "MIPS || COMPILE_TEST"
-is not strong enough to prevent build errors.
+For MIPS pre-boot, when CONFIG_KERNEL_ZSTD=y, the decompressor
+function uses __bswapdi2(), so this object file should be added to
+the target object file.
 
-Likewise MACH_INGENIC_SOC || COMPILE_TEST is not strong enough
-since if only COMPILE_TEST=y (with some other MIPS MACH_ or CPU or
-BOARD setting), there are still the same build errors.
+Fixes these build errors:
 
-It looks like depending on MACH_INGENIC is the only thing that is
-sufficient here in order to prevent build errors.
+mips-linux-ld: arch/mips/boot/compressed/decompress.o: in function `xxh64':
+decompress.c:(.text+0x8be0): undefined reference to `__bswapdi2'
+mips-linux-ld: decompress.c:(.text+0x8c78): undefined reference to `__bswapdi2'
+mips-linux-ld: decompress.c:(.text+0x8d04): undefined reference to `__bswapdi2'
+mips-linux-ld: arch/mips/boot/compressed/decompress.o:decompress.c:(.text+0xa010): more undefined references to `__bswapdi2' follow
 
-mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4770_adc_init_clk_div':
-ingenic-adc.c:(.text+0xe4): undefined reference to `clk_get_parent'
-mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4725b_adc_init_clk_div':
-ingenic-adc.c:(.text+0x1b8): undefined reference to `clk_get_parent'
-
-Fixes: 1a78daea107d ("IIO: add Ingenic JZ47xx ADC driver.")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Reported-by: kernel test robot <lkp@intel.com>
-Cc: Artur Rojek <contact@artur-rojek.eu>
-Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc: linux-mips@vger.kernel.org
-Cc: Jonathan Cameron <jic23@kernel.org>
-Cc: Lars-Peter Clausen <lars@metafoo.de>
-Cc: linux-iio@vger.kernel.org
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
-v2: use MACH_INGENIC instead of MACH_INGENIC_SOC (thanks, Paul)
+ arch/mips/boot/compressed/Makefile |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
- drivers/iio/adc/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- linux-next-20211105.orig/drivers/iio/adc/Kconfig
-+++ linux-next-20211105/drivers/iio/adc/Kconfig
-@@ -501,7 +501,7 @@ config INA2XX_ADC
+--- linux-next-20211109.orig/arch/mips/boot/compressed/Makefile
++++ linux-next-20211109/arch/mips/boot/compressed/Makefile
+@@ -56,6 +56,8 @@ $(obj)/uart-ath79.c: $(srctree)/arch/mip
  
- config INGENIC_ADC
- 	tristate "Ingenic JZ47xx SoCs ADC driver"
--	depends on MIPS || COMPILE_TEST
-+	depends on MACH_INGENIC
- 	select IIO_BUFFER
- 	help
- 	  Say yes here to build support for the Ingenic JZ47xx SoCs ADC unit.
+ vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
+ 
++vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o
++
+ extra-y += ashldi3.c
+ $(obj)/ashldi3.c: $(obj)/%.c: $(srctree)/lib/%.c FORCE
+ 	$(call if_changed,shipped)
+@@ -64,6 +66,10 @@ extra-y += bswapsi.c
+ $(obj)/bswapsi.c: $(obj)/%.c: $(srctree)/arch/mips/lib/%.c FORCE
+ 	$(call if_changed,shipped)
+ 
++extra-y += bswapdi.c
++$(obj)/bswapdi.c: $(obj)/%.c: $(srctree)/arch/mips/lib/%.c FORCE
++	$(call if_changed,shipped)
++
+ targets := $(notdir $(vmlinuzobjs-y))
+ 
+ targets += vmlinux.bin
