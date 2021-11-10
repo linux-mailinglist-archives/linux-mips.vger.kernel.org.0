@@ -2,130 +2,97 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 405C044C93E
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Nov 2021 20:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C6744CDC7
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Nov 2021 00:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233056AbhKJTqz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Nov 2021 14:46:55 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.120]:24898 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbhKJTqq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Nov 2021 14:46:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1636573421;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=mweKDB38C/8OHt9hFW44/Ruk/hqUHQMgsP/iIfhDGmA=;
-    b=lq+YOzdhyYjWuCRqBXsbXFQ2GGCab0sdEVU+5Rs+pTP9V/cgjThqBOFgpq19m9eAus
-    ufKJO4OtLxANiuLIYHSM8Zh5XLEtB/zaYvJaLdZ0i4yg8BpimTC60OqCzTgVpF4xi+XO
-    8nr+UYQAMtp0wIplxDHwxlk2GbzymKmU5aXCPfF1gEJXn2NkFI8qy3D94vh7ZJGCi9gA
-    5mwd9yHDVeSysfqsm9NvBuAnZmnmhYdUxPGQO65N+oR+7brnFRBNAUh+FlSFvh9kRlCp
-    +tWGgajnifc+XtFUx6LkABZ2X2OEmHLf3YsddJJdW6igmumv7DAWF8t+EHrgrpcb3TPu
-    lrfA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lByOdfLlf0"
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 47.34.5 DYNA|AUTH)
-    with ESMTPSA id Y02aa4xAAJhf5Lz
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 10 Nov 2021 20:43:41 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S234167AbhKJX2b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Nov 2021 18:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233964AbhKJX23 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Nov 2021 18:28:29 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C75C061766;
+        Wed, 10 Nov 2021 15:25:41 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id i5so6757192wrb.2;
+        Wed, 10 Nov 2021 15:25:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v/V7ixtvM0wJB1Jk1MWAaJATghrtxgTP4T3O07Mrdu8=;
+        b=LILZhyChTSUnQFuhxiecQFf7BFCwtIEeMMhAGYGeU3TiqOPt2MBkeFcD2biuRKK/s2
+         nmKapnBpB3NFuRxSWLC/OOtIZhF1jiUxgqTXeHPhD1IUTTxEBFvuyizRc8P/I8CoTZmJ
+         41FSIgvVFJelikXD8K2GXOGQ0QTnza5onqn2b3rc0uzFIPoYf2VfDePflmLgLl6/i7bz
+         3ikCGyCrQU4WnWwXBSnsD9kc3Od2H8TueEJAVgsphQl4ji5VIpxYz4PFqgrkNU9njHxq
+         F1eIvXU/h9ijIzRI0aA8Fev3QTv82aEAY6BFSRACuSZKaoZsU97vIpYtGW1JhvpXb1hh
+         mjNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v/V7ixtvM0wJB1Jk1MWAaJATghrtxgTP4T3O07Mrdu8=;
+        b=HjOYzIjAOthQIezFC9ECKxYbo4XAfUlGxBz/KZKkPynGHtKrS7THFMWfjWgbLdnLAZ
+         3zLC5YFNMOvn8Rt1rGux2OtqKm1qDcQSN6HWwnKcBo/UUcsuPjhSQ6sK6+SZbHn7a4nU
+         c+WMoJCEUouTYgJ/V6F3X5vFYAY5o5iE2WiFtOfAmxBBE3kUFQGI0s3lY/xBMAZ2bvzi
+         CwcTkov6XYrz9q61kwSWjWQSGHIxGYj2F25SgjSxs0qiD6L+IGBKo5v3E1VFi1Y40hd/
+         g22DjSAcYpUCd5q2BYoboH6nOgAvM/6/PvRBBp30DSh/w5r9p4PflbbYCkwmB6UoxoHN
+         Kt9g==
+X-Gm-Message-State: AOAM533tivCCB6lE9GouNCPk3bcje4c/bbnOvEar/Av0Txvwb3WztRQf
+        iextg8xpekG32w==
+X-Google-Smtp-Source: ABdhPJyn1HgNoM2PuLTIIsBKun1kehkVMuJbkmEmNTpqdSvwCz/414bbsmxAE/9bo0LnPKqrDbA0Gg==
+X-Received: by 2002:a5d:4107:: with SMTP id l7mr3355393wrp.209.1636586740056;
+        Wed, 10 Nov 2021 15:25:40 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l4sm1118662wrv.94.2021.11.10.15.25.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Nov 2021 15:25:39 -0800 (PST)
+From:   Colin Ian King <colin.i.king@googlemail.com>
+X-Google-Original-From: Colin Ian King <colin.i.king@gmail.com>
+To:     Paul Burton <paulburton@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v6 8/8] [RFC] MIPS: DTS: Ingenic: adjust register size to available registers
-Date:   Wed, 10 Nov 2021 20:43:33 +0100
-Message-Id: <4bc9868be04dd273cab05c55b027a30474209340.1636573413.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <cover.1636573413.git.hns@goldelico.com>
-References: <cover.1636573413.git.hns@goldelico.com>
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: generic/yamon-dt: fix uninitialized variable error
+Date:   Wed, 10 Nov 2021 23:25:38 +0000
+Message-Id: <20211110232538.1372250-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After getting the regmap size from the device tree we should
-reduce the ranges to the really available registers. This
-allows to read only existing registers from the debug fs
-and makes the regmap check out-of-bounds access.
+From: Colin Ian King <colin.king@canonical.com>
 
-For the jz4780 we have done this already.
+In the case where fw_getenv returns an error when fetching values
+for ememsizea and memsize then variable phys_memsize is not assigned
+a variable and will be uninitialized on a zero check of phys_memsize.
+Fix this by initializing phys_memsize to zero.
 
-Suggested-for: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Cleans up cppcheck error:
+arch/mips/generic/yamon-dt.c:100:7: error: Uninitialized variable: phys_memsize [uninitvar]
+
+Fixes: f41d2430bbd6 ("MIPS: generic/yamon-dt: Support > 256MB of RAM")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- arch/mips/boot/dts/ingenic/jz4725b.dtsi | 2 +-
- arch/mips/boot/dts/ingenic/jz4740.dtsi  | 2 +-
- arch/mips/boot/dts/ingenic/jz4770.dtsi  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/generic/yamon-dt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4725b.dtsi b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-index a1f0b71c92237..7f6cbde43f89e 100644
---- a/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-@@ -321,7 +321,7 @@ udc: usb@13040000 {
- 
- 	lcd: lcd-controller@13050000 {
- 		compatible = "ingenic,jz4725b-lcd";
--		reg = <0x13050000 0x1000>;
-+		reg = <0x13050000 0x130>; /* tbc */
- 
- 		interrupt-parent = <&intc>;
- 		interrupts = <31>;
-diff --git a/arch/mips/boot/dts/ingenic/jz4740.dtsi b/arch/mips/boot/dts/ingenic/jz4740.dtsi
-index c1afdfdaa8a38..0126e4cf19507 100644
---- a/arch/mips/boot/dts/ingenic/jz4740.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4740.dtsi
-@@ -323,7 +323,7 @@ udc: usb@13040000 {
- 
- 	lcd: lcd-controller@13050000 {
- 		compatible = "ingenic,jz4740-lcd";
--		reg = <0x13050000 0x1000>;
-+		reg = <0x13050000 0x60>; /* LCDCMD1+4 */
- 
- 		interrupt-parent = <&intc>;
- 		interrupts = <30>;
-diff --git a/arch/mips/boot/dts/ingenic/jz4770.dtsi b/arch/mips/boot/dts/ingenic/jz4770.dtsi
-index 05c00b93088e9..4f85abab68d50 100644
---- a/arch/mips/boot/dts/ingenic/jz4770.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4770.dtsi
-@@ -399,7 +399,7 @@ gpu: gpu@13040000 {
- 
- 	lcd: lcd-controller@13050000 {
- 		compatible = "ingenic,jz4770-lcd";
--		reg = <0x13050000 0x300>;
-+		reg = <0x13050000 0x130>; /* tbc */
- 
- 		interrupt-parent = <&intc>;
- 		interrupts = <31>;
+diff --git a/arch/mips/generic/yamon-dt.c b/arch/mips/generic/yamon-dt.c
+index a3aa22c77cad..a07a5edbcda7 100644
+--- a/arch/mips/generic/yamon-dt.c
++++ b/arch/mips/generic/yamon-dt.c
+@@ -75,7 +75,7 @@ static unsigned int __init gen_fdt_mem_array(
+ __init int yamon_dt_append_memory(void *fdt,
+ 				  const struct yamon_mem_region *regions)
+ {
+-	unsigned long phys_memsize, memsize;
++	unsigned long phys_memsize = 0, memsize;
+ 	__be32 mem_array[2 * MAX_MEM_ARRAY_ENTRIES];
+ 	unsigned int mem_entries;
+ 	int i, err, mem_off;
 -- 
-2.33.0
+2.32.0
 
