@@ -2,88 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B501144BA8B
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Nov 2021 04:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A4844BAA7
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Nov 2021 04:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbhKJDMg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Nov 2021 22:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbhKJDMf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 9 Nov 2021 22:12:35 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEA2C061764;
-        Tue,  9 Nov 2021 19:09:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=FXmVtpJ4dtKVVY4Mzvp+Ukjb6evX82LYRB501Bqkq0c=; b=3RJHmjtQjn3v0nTHExO3JOmsfn
-        /ce32uqK+QMm84FiS1Hz8U5/qXQGExx5MM3CIs1qilylAgmNGW8mTBvR6eWSEIR6B5P4ySvOWT0ba
-        F8xQNrdxBlkiT/bx1SQWOCAmWomn0FNTBB5GkuRcukMx3it/OhpG5NfDRYW7qWbQTPY4RakyOlH+r
-        Qi0Qsq85H2E8toxhKASnU1B69q2KPNP9uADj4JWdHUqiCFvVIJZ3mQFPCp7E50sCIUeTTYnvu3AFy
-        6M5czQXxZsUpszHphS//ZqBpgCAFQZ8O6aJDmAPoFgRdaz2lzqpO3C8uPCuUgrcZoyipBQvj6Wdph
-        3JFO3g7A==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mkdzf-004N91-MW; Wed, 10 Nov 2021 03:09:47 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S230244AbhKJDhu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Nov 2021 22:37:50 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:33858 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229963AbhKJDhu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 9 Nov 2021 22:37:50 -0500
+Received: from openarena.loongson.cn (unknown [10.20.41.56])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb9PbPYth0MQBAA--.4086S2;
+        Wed, 10 Nov 2021 11:34:51 +0800 (CST)
+From:   suijingfeng <suijingfeng@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH] MIPS: boot/compressed/: add __bswapdi2() to target for ZSTD decompression
-Date:   Tue,  9 Nov 2021 19:09:44 -0800
-Message-Id: <20211110030944.6733-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        David Airlie <airlied@linux.ie>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mips/loongson64: seperate wbflush_loongson out of setup.c
+Date:   Wed, 10 Nov 2021 11:34:51 +0800
+Message-Id: <20211110033451.326093-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxb9PbPYth0MQBAA--.4086S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr4UZrWkWFWrZr17WrW8Crg_yoWrXr1fpw
+        sYkan5Gr48Zr17Ars3CryUZr45Za95GFs7XF42vFyUZasFq34jvrn3KryrJrWDXry0qayr
+        u34UWrZ8uFy7CaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVCm-wCF04k20xvY
+        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcDDGUUUUU
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-For MIPS pre-boot, when CONFIG_KERNEL_ZSTD=y, the decompressor
-function uses __bswapdi2(), so this object file should be added to
-the target object file.
+ 1) .set pop is enough, so remove redundant .set mips0
 
-Fixes these build errors:
+ 2) loongson's cpu spec call the write buffers as store fill buffer,
+    it is implemented in ls3a4000, ls3a3000, ls2k1000 etc cpus.
+    wbflush is mean to empty data gathered in the write buffers within
+    the CPU, however the system is still bootable and works normally
+    if we deselect CPU_HAS_WB. This patch provided a convenient way
+    to bypass __wbflush by removing CPU_HAS_WB in arch/mips/Kconfig.
 
-mips-linux-ld: arch/mips/boot/compressed/decompress.o: in function `xxh64':
-decompress.c:(.text+0x8be0): undefined reference to `__bswapdi2'
-mips-linux-ld: decompress.c:(.text+0x8c78): undefined reference to `__bswapdi2'
-mips-linux-ld: decompress.c:(.text+0x8d04): undefined reference to `__bswapdi2'
-mips-linux-ld: arch/mips/boot/compressed/decompress.o:decompress.c:(.text+0xa010): more undefined references to `__bswapdi2' follow
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
+Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
 ---
- arch/mips/boot/compressed/Makefile |    6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/mips/loongson64/Makefile  |  1 +
+ arch/mips/loongson64/setup.c   | 17 -----------------
+ arch/mips/loongson64/smp.c     |  6 +++---
+ arch/mips/loongson64/wbflush.c | 26 ++++++++++++++++++++++++++
+ 4 files changed, 30 insertions(+), 20 deletions(-)
+ create mode 100644 arch/mips/loongson64/wbflush.c
 
---- linux-next-20211109.orig/arch/mips/boot/compressed/Makefile
-+++ linux-next-20211109/arch/mips/boot/compressed/Makefile
-@@ -56,6 +56,8 @@ $(obj)/uart-ath79.c: $(srctree)/arch/mip
+diff --git a/arch/mips/loongson64/Makefile b/arch/mips/loongson64/Makefile
+index e806280bbb85..ad00d92c2871 100644
+--- a/arch/mips/loongson64/Makefile
++++ b/arch/mips/loongson64/Makefile
+@@ -12,3 +12,4 @@ obj-$(CONFIG_SUSPEND) += pm.o
+ obj-$(CONFIG_PCI_QUIRKS) += vbios_quirk.o
+ obj-$(CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION) += cpucfg-emul.o
+ obj-$(CONFIG_SYSFS) += boardinfo.o
++obj-$(CONFIG_CPU_HAS_WB) += wbflush.o
+diff --git a/arch/mips/loongson64/setup.c b/arch/mips/loongson64/setup.c
+index 6fe3ffffcaa6..cb10d14da433 100644
+--- a/arch/mips/loongson64/setup.c
++++ b/arch/mips/loongson64/setup.c
+@@ -3,10 +3,7 @@
+  * Copyright (C) 2007 Lemote Inc. & Institute of Computing Technology
+  * Author: Fuxin Zhang, zhangfx@lemote.com
+  */
+-#include <linux/export.h>
+ #include <linux/init.h>
+-
+-#include <asm/wbflush.h>
+ #include <asm/bootinfo.h>
+ #include <linux/libfdt.h>
+ #include <linux/of_fdt.h>
+@@ -17,20 +14,6 @@
  
- vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
+ void *loongson_fdt_blob;
  
-+vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o
+-static void wbflush_loongson(void)
+-{
+-	asm(".set\tpush\n\t"
+-	    ".set\tnoreorder\n\t"
+-	    ".set mips3\n\t"
+-	    "sync\n\t"
+-	    "nop\n\t"
+-	    ".set\tpop\n\t"
+-	    ".set mips0\n\t");
+-}
+-
+-void (*__wbflush)(void) = wbflush_loongson;
+-EXPORT_SYMBOL(__wbflush);
+-
+ void __init plat_mem_setup(void)
+ {
+ 	if (loongson_fdt_blob)
+diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+index 09ebe84a17fe..4a938a29bfb2 100644
+--- a/arch/mips/loongson64/smp.c
++++ b/arch/mips/loongson64/smp.c
+@@ -42,13 +42,13 @@ static uint32_t core0_c0count[NR_CPUS];
+ #define loongson3_ipi_write32(action, addr)	\
+ 	do {					\
+ 		writel(action, addr);		\
+-		__wbflush();			\
++		__sync();			\
+ 	} while (0)
+ /* write a 64bit value to ipi register */
+ #define loongson3_ipi_write64(action, addr)	\
+ 	do {					\
+ 		writeq(action, addr);		\
+-		__wbflush();			\
++		__sync();			\
+ 	} while (0)
+ 
+ static u32 (*ipi_read_clear)(int cpu);
+@@ -418,7 +418,7 @@ static irqreturn_t loongson3_ipi_interrupt(int irq, void *dev_id)
+ 		c0count = c0count ? c0count : 1;
+ 		for (i = 1; i < nr_cpu_ids; i++)
+ 			core0_c0count[i] = c0count;
+-		__wbflush(); /* Let others see the result ASAP */
++		__sync(); /* Let others see the result ASAP */
+ 	}
+ 
+ 	return IRQ_HANDLED;
+diff --git a/arch/mips/loongson64/wbflush.c b/arch/mips/loongson64/wbflush.c
+new file mode 100644
+index 000000000000..7127e43d44e6
+--- /dev/null
++++ b/arch/mips/loongson64/wbflush.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2007 Lemote Inc. & Institute of Computing Technology
++ * Author: Fuxin Zhang, zhangfx@lemote.com
++ */
++#include <linux/export.h>
++#include <linux/init.h>
++#include <asm/wbflush.h>
++#include <asm/sync.h>
 +
- extra-y += ashldi3.c
- $(obj)/ashldi3.c: $(obj)/%.c: $(srctree)/lib/%.c FORCE
- 	$(call if_changed,shipped)
-@@ -64,6 +66,10 @@ extra-y += bswapsi.c
- $(obj)/bswapsi.c: $(obj)/%.c: $(srctree)/arch/mips/lib/%.c FORCE
- 	$(call if_changed,shipped)
- 
-+extra-y += bswapdi.c
-+$(obj)/bswapdi.c: $(obj)/%.c: $(srctree)/arch/mips/lib/%.c FORCE
-+	$(call if_changed,shipped)
++#ifdef CONFIG_CPU_HAS_WB
 +
- targets := $(notdir $(vmlinuzobjs-y))
- 
- targets += vmlinux.bin
++static void wbflush_loongson(void)
++{
++	asm(".set push\n\t"
++	    ".set noreorder\n\t"
++	    ".set mips64r2\n\t"
++	    "sync\n\t"
++	    "nop\n\t"
++	    ".set pop\n\t");
++}
++
++void (*__wbflush)(void) = wbflush_loongson;
++EXPORT_SYMBOL(__wbflush);
++
++#endif
+-- 
+2.25.1
+
