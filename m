@@ -2,50 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A4844BAA7
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Nov 2021 04:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF1844BABC
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Nov 2021 04:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbhKJDhu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 9 Nov 2021 22:37:50 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:33858 "EHLO loongson.cn"
+        id S230167AbhKJD5r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 9 Nov 2021 22:57:47 -0500
+Received: from ptr.189.cn ([183.61.185.101]:11369 "EHLO 189.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229963AbhKJDhu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 9 Nov 2021 22:37:50 -0500
-Received: from openarena.loongson.cn (unknown [10.20.41.56])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxb9PbPYth0MQBAA--.4086S2;
-        Wed, 10 Nov 2021 11:34:51 +0800 (CST)
-From:   suijingfeng <suijingfeng@loongson.cn>
+        id S229963AbhKJD5r (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 9 Nov 2021 22:57:47 -0500
+X-Greylist: delayed 467 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Nov 2021 22:57:46 EST
+HMM_SOURCE_IP: 10.64.8.31:45218.1712933027
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id BC86410013F;
+        Wed, 10 Nov 2021 11:47:06 +0800 (CST)
+Received: from  ([14.17.101.176])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 2d4330556833488a80fac8471e799c55 for chenhuacai@kernel.org;
+        Wed, 10 Nov 2021 11:47:06 CST
+X-Transaction-ID: 2d4330556833488a80fac8471e799c55
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 14.17.101.176
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
 To:     Huacai Chen <chenhuacai@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         David Airlie <airlied@linux.ie>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        suijingfeng <suijingfeng@loongson.cn>
 Subject: [PATCH] mips/loongson64: seperate wbflush_loongson out of setup.c
-Date:   Wed, 10 Nov 2021 11:34:51 +0800
-Message-Id: <20211110033451.326093-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+Date:   Wed, 10 Nov 2021 11:46:53 +0800
+Message-Id: <20211110034653.2404-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxb9PbPYth0MQBAA--.4086S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXr4UZrWkWFWrZr17WrW8Crg_yoWrXr1fpw
-        sYkan5Gr48Zr17Ars3CryUZr45Za95GFs7XF42vFyUZasFq34jvrn3KryrJrWDXry0qayr
-        u34UWrZ8uFy7CaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVCm-wCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcDDGUUUUU
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
+
+From: suijingfeng <suijingfeng@loongson.cn>
 
  1) .set pop is enough, so remove redundant .set mips0
 
