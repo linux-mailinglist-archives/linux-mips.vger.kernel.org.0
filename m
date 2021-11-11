@@ -2,87 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A229D44D537
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Nov 2021 11:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8BA44D8B1
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Nov 2021 15:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbhKKKqD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 Nov 2021 05:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbhKKKqD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Nov 2021 05:46:03 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A97BC061766
-        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 02:43:14 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id 207so11024779ljf.10
-        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 02:43:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TdlEntx/bV7G4AsDiF3jxVAMPp4OZ6W0+ZvfFXAAPeA=;
-        b=UQmAR8AaEOEO5IFxI5xvWs5axVFnXhyxAWqF45ZUq1KigIU8fMEOGu15URAtyLO1en
-         J48qehtV9Rf9uuIhNdx11JTFGd+eoP4jK3Z6Er4do1DomGn2mNiiMaUXXtljOqLzvi69
-         a35J8yH6GiAvVFYQ9lhMtU8Nh3GS63Bd9IOHb+k32kNTHELJxVOzDW+hQGxxFpwxGqvx
-         RMceCsEs8M/gId5BARlR4CKhojsKGnqo79Sxn9tlRSYki4YlVlq663ghCwo6DM9+q61p
-         FL1Zb74/JeVO7PpJhFmY2wRwp/cyo6QHDJD+xEEtLZNhn/zMEI2OD7vC5d4iALpd7Igy
-         LdLQ==
+        id S231614AbhKKPAV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 Nov 2021 10:00:21 -0500
+Received: from mail-oi1-f173.google.com ([209.85.167.173]:43860 "EHLO
+        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230177AbhKKPAS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Nov 2021 10:00:18 -0500
+Received: by mail-oi1-f173.google.com with SMTP id o4so11993075oia.10;
+        Thu, 11 Nov 2021 06:57:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TdlEntx/bV7G4AsDiF3jxVAMPp4OZ6W0+ZvfFXAAPeA=;
-        b=qO2REeT0ASZniORzB7lo7rEda9bRcWXPtfbUxob1uToG2wy67SP3WEv2qsqHPlQEiT
-         PMBQDm5Uj/t3APxhl6IQAlZSiQ+FTItrMJlaFhaUj+OqLEp62wm5aXQFKXrNlRdpjiDV
-         c3vc/CK4KQJM7+Sj9kl0N+gQivwQ9fO3j3XIoK2tRsgPhMZaUBDEix+AKZbjfrgTqztq
-         zy1aMvllw1vYdtx//SACXVqY6LU4NqMWqDzaBrZngYScGlFcRiAxDUzZ4se94fFfZIQI
-         QZTMNYWleh5TisGstxtnevKUUX7AptBvTS/RTjJ6Pq/Wp7XFVIl0qjwx2wA/pw28giNh
-         F1sw==
-X-Gm-Message-State: AOAM531EzK9STBKQTEWLYR29XaBxDmd0M9smIAc4cpjOTxTgWT0IykMG
-        peoGCA/GxOpYZQiWNEQQMvp9ZZZLUKVoa4doatyEFuq9NJs=
-X-Google-Smtp-Source: ABdhPJyTKwk0+lRBSGsuh9JXonXwvjBKNZrb6BcCyMKZMcMNGTSqI+8+wA5L2ltjbDUfGvq4ekLwAo9jUI6tJJwT9Lk=
-X-Received: by 2002:a2e:a404:: with SMTP id p4mr5989126ljn.78.1636627392657;
- Thu, 11 Nov 2021 02:43:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20211109161253.2202108-1-robh@kernel.org>
-In-Reply-To: <20211109161253.2202108-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 Nov 2021 11:43:01 +0100
-Message-ID: <CACRpkda1+86GgvCJEehg9CGS78Q10FJ3ZHzdmHpYHrY7tAwkwA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: xlp: Remove Netlogic XLP variants
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=qNEjXj/HNgs612CxAaN/7ARospzmOAVl901gKnKjQak=;
+        b=agx4kR2N42ii7BrWCYeLhZB/Lc27yIGBhp+LkFP32xzdzlCwNzuAjsFTd6IMVNikVP
+         PVreo8LU/0QkIZeI743xIg6B9V2q3uwnH8P1duwhmmX5ljwZeTA+meLMmlDoo1FS37tX
+         GAqkpOPPumzmYzVRy7898E0xxxsopmcnd35pFxjp0qh35dFRNNmCSr5V3dbmEZ09uKcN
+         cM2bXjm28orj+x+xJMpVa0jfbMVamja5TUv+OPzQXjV3415pMh2jgwJp03AOvYRWX5Rr
+         2d8Y6FdDeFRNa1XwIkPh9Duc2ygWWHQrpF8dq/p6OLpUCdW/Nlu+AsyYoFApkKBDExGl
+         SDsA==
+X-Gm-Message-State: AOAM5312JPnPyyxHxGqWsj9K9Qx0ep3rPJPYEnsSmWooafVyhDCQZL1t
+        UCH++jTjqJwjK0Blg0DxdA==
+X-Google-Smtp-Source: ABdhPJwLcneflSvlTMqVQa7wx8N++jT4UqWGoLvdDyD7I/PEJOPtmHneR0Q6RSCyi4LFQ9/yRsBRiw==
+X-Received: by 2002:a54:4616:: with SMTP id p22mr19795772oip.96.1636642649070;
+        Thu, 11 Nov 2021 06:57:29 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id 187sm680123oig.19.2021.11.11.06.57.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Nov 2021 06:57:28 -0800 (PST)
+Received: (nullmailer pid 3774080 invoked by uid 1000);
+        Thu, 11 Nov 2021 14:57:26 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        David Airlie <airlied@linux.ie>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-mips@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        devicetree@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>,
+        Kees Cook <keescook@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        letux-kernel@openphoenux.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
+        Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <70f2abb5277369721cb352eb50daa407bee3fd04.1636573413.git.hns@goldelico.com>
+References: <cover.1636573413.git.hns@goldelico.com> <70f2abb5277369721cb352eb50daa407bee3fd04.1636573413.git.hns@goldelico.com>
+Subject: Re: [PATCH v6 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi DT Schema
+Date:   Thu, 11 Nov 2021 08:57:26 -0600
+Message-Id: <1636642646.871896.3774079.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Nov 9, 2021 at 5:12 PM Rob Herring <robh@kernel.org> wrote:
+On Wed, 10 Nov 2021 20:43:28 +0100, H. Nikolaus Schaller wrote:
+> From: Sam Ravnborg <sam@ravnborg.org>
+> 
+> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+> Based on .txt binding from Zubair Lutfullah Kakakhel
+> 
+> We also add add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
+> 
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> ---
+>  .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
+>  .../bindings/display/ingenic-jz4780-hdmi.yaml | 76 +++++++++++++++++++
+>  2 files changed, 79 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+> 
 
-> Netlogic XLP was removed in commit 95b8a5e0111a ("MIPS: Remove NETLOGIC
-> support"). With those gone, the single platform left to support is
-> Cavium ThunderX2. Remove all the Netlogic variants and DT support.
->
-> For simplicity, the existing kconfig name is retained.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: linux-gpio@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml:36:5: [warning] wrong indentation: expected 2 but found 4 (indentation)
 
-A question:
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.example.dt.yaml: hdmi@10180000: 'clock-names', 'ddc-i2c-bus', 'interrupt-parent', 'interrupts', 'reg' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
 
+doc reference errors (make refcheckdocs):
 
-> @@ -373,7 +263,7 @@ static int xlp_gpio_probe(struct platform_device *pdev)
->         gc->label = dev_name(&pdev->dev);
->         gc->base = 0;
+See https://patchwork.ozlabs.org/patch/1553577
 
-Can we also set this to -1 and use dynamic GPIO base allocation?
-(Can be a separate patch.)
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-Yours,
-Linus Walleij
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
