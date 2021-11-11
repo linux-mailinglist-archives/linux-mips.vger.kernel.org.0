@@ -2,217 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3786E44D02F
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Nov 2021 03:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6462044D099
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Nov 2021 05:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbhKKDCX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 10 Nov 2021 22:02:23 -0500
-Received: from conssluserg-05.nifty.com ([210.131.2.90]:28855 "EHLO
-        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbhKKDCX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Nov 2021 22:02:23 -0500
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 1AB2xAYZ005831;
-        Thu, 11 Nov 2021 11:59:10 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 1AB2xAYZ005831
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1636599551;
-        bh=z0kB6LXNhmoFy9ipy8qdQdgFQI7I8hxlYJKZeDtbeX0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GqNpCfwpuL9hxmApUERiBwppYyLlgSrj4gNSZ+RLG4IsaU4wvFhS8tu3KH2LmTW6B
-         NvOHLDZids8ttXMZjv8H4yU+fYyveWKgd5yDF08EyM+dUUWV0sOoYTyzYaxY08WXOj
-         hJMrxx+uE9DzfqaZAzTWIeadofFj030z/PN18mhxxkBtm+/43ssB7wk6b3nymqacbD
-         X4YATk0fIIOfQE2CnEoXGCH/kmvQd1fjUSj86VvJJ8XWL1obkEX5tTAaFYneEYAxHn
-         saXdreb1/0Lt/NfYwIE1viwenN2EP7xhLH0VCGhEY32hZq9yOEQBHMuFARF9YjhsHJ
-         vI2m1C3t1zD9A==
-X-Nifty-SrcIP: [209.85.215.169]
-Received: by mail-pg1-f169.google.com with SMTP id g184so3934552pgc.6;
-        Wed, 10 Nov 2021 18:59:10 -0800 (PST)
-X-Gm-Message-State: AOAM532fXTqriu2qzT7nuYXWjZ2S1EtABnQkyDk0DFu1jM/A3jwZQvqC
-        QNYf+7ZTLPXE8wzUk3BWfMuiHPZsz572aMnKxpY=
-X-Google-Smtp-Source: ABdhPJzBE5dIDpx0gL6kF9s1HWpu5Wj3UbNAuOGC1zwRtfZw4rt4drO6fwnNTFaYfKqh//3XhMz37c7gKS+XF6F6JWY=
-X-Received: by 2002:a05:6a00:1411:b0:4a0:3472:e438 with SMTP id
- l17-20020a056a00141100b004a03472e438mr3729520pfu.68.1636599550010; Wed, 10
- Nov 2021 18:59:10 -0800 (PST)
+        id S231169AbhKKEJX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 10 Nov 2021 23:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231185AbhKKEJT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 10 Nov 2021 23:09:19 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E2EC061766;
+        Wed, 10 Nov 2021 20:06:23 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id j2so4649815qkl.7;
+        Wed, 10 Nov 2021 20:06:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OLcFQVtD+zrg7PXIBfRA8cAQH7T7V2/4cfVGtfrxAq8=;
+        b=lS36aFbkIRhJuC6Cd/AAaIIRXR6DpEI+MiQBTh+HAqDGQ7SJt2kOk9H7OefPb7ebNK
+         3aaMIjZ2VlWMsGo6UecehmNcDjgJPL0cuqd0Umndtlo7lzpVLJosTFKfQ5jLQmWN+gWR
+         Jr5xvZvaie2aDWnjNWXbAbJGgix5rr9ARnzYKIC+eLHLu1eICDbrqm5BMAU1FSKAGoDN
+         49GzgVLS1AtMP3yl2OZ0HlByk+DJfaIP8+CSdmBdJiTSYsNiET6sL5V9FzCrGaRLtDUg
+         DNpaMHeGFR8f41ArSJvrUf5szRHojZN4RxBZV/DP/lerAQFp9+r2/Xy1TUACK3rmOSMW
+         l+9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OLcFQVtD+zrg7PXIBfRA8cAQH7T7V2/4cfVGtfrxAq8=;
+        b=WqgjKERpBcPonVVBQE9V/P66ZXnnR2iJAKlkitGeay/F2ngxMBtnsaQ5LkZUAipn1K
+         z42dIb0plTjDtDPd5ATEvilYT3mE9EY8lS8UHLdQIrDo+civqykkFjI2RP1mtECHMG9H
+         8loV0DXxvmEonIfrpUO7h9/twFcZAX4EWcbqs5WhhyJX471ccGTkgw87YWPGymvzI9up
+         VcTn51GQuxS0/yuMGTNJPGqsneqNpTKiLTuuFEwvxLmzJpR7apKn80U2jNeAFYF8eez5
+         1vxA8i5dSvB+10FwnoZi4AsL/sUhYWq3NpW4cLk51inmj4KcVU1gHdhIkHnXH2u1kdn5
+         pjzw==
+X-Gm-Message-State: AOAM530Dn7/7g7oanpf5udQSVBKRWSW51PX6GUlJtEI3racWK74UeOR4
+        V5e8VGBNniLPHgTgJUeKLz0=
+X-Google-Smtp-Source: ABdhPJwy1jkciX4+znRvqnHrGi5juDKLXSdn6bNl6om1ZBoExEpt68bOz9etkvnkVJVIPj1CjWlbwA==
+X-Received: by 2002:a37:5804:: with SMTP id m4mr3775483qkb.137.1636603582779;
+        Wed, 10 Nov 2021 20:06:22 -0800 (PST)
+Received: from [192.168.43.249] (mobile-166-172-188-236.mycingular.net. [166.172.188.236])
+        by smtp.gmail.com with ESMTPSA id p5sm1084681qtw.69.2021.11.10.20.06.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Nov 2021 20:06:22 -0800 (PST)
+Subject: Re: [PATCH/RFC] of: Shrink struct of_device_id
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <ef59d6fd3b2201b912d5eaa7f7a037d8f9adb744.1636561068.git.geert+renesas@glider.be>
+From:   Frank Rowand <frowand.list@gmail.com>
+Message-ID: <9e20f1b0-3fc4-920a-dff4-1227f72207cf@gmail.com>
+Date:   Wed, 10 Nov 2021 23:06:20 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211105023815.85784-1-masahiroy@kernel.org> <20211110084927.GA5976@alpha.franken.de>
- <CAK7LNASKBJ6BT+PD7=KhGZ6wPfY7maEaj5g0rtkEhfmfxjxWuA@mail.gmail.com> <20211110185218.GB13827@alpha.franken.de>
-In-Reply-To: <20211110185218.GB13827@alpha.franken.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 11 Nov 2021 11:58:32 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQV9w58=WF6wWeEgAWAPB4ZiAfDx+G7WY6gQd_jvXTq+g@mail.gmail.com>
-Message-ID: <CAK7LNAQV9w58=WF6wWeEgAWAPB4ZiAfDx+G7WY6gQd_jvXTq+g@mail.gmail.com>
-Subject: Re: [PATCH] mips: decompressor: do not copy source files while building
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Xingxing Su <suxingxing@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        zhaoxiao <zhaoxiao@uniontech.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <ef59d6fd3b2201b912d5eaa7f7a037d8f9adb744.1636561068.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 3:52 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Thu, Nov 11, 2021 at 02:02:32AM +0900, Masahiro Yamada wrote:
-> > On Wed, Nov 10, 2021 at 5:56 PM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > >
-> > > On Fri, Nov 05, 2021 at 11:38:14AM +0900, Masahiro Yamada wrote:
-> > > > As commit 7ae4a78daacf ("ARM: 8969/1: decompressor: simplify libfdt
-> > > > builds") stated, copying source files during the build time may not
-> > > > end up with as clean code as expected.
-> > > >
-> > > > Do similar for mips to clean up the Makefile and .gitignore.
-> > > >
-> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > > ---
-> > > >
-> > > >  arch/mips/boot/compressed/.gitignore   |  3 ---
-> > > >  arch/mips/boot/compressed/Makefile     | 12 ------------
-> > > >  arch/mips/boot/compressed/ashldi3.c    |  2 ++
-> > > >  arch/mips/boot/compressed/bswapsi.c    |  2 ++
-> > > >  arch/mips/boot/compressed/uart-ath79.c |  2 ++
-> > > >  scripts/remove-stale-files             |  5 +++++
-> > > >  6 files changed, 11 insertions(+), 15 deletions(-)
-> > > >  delete mode 100644 arch/mips/boot/compressed/.gitignore
-> > > >  create mode 100644 arch/mips/boot/compressed/ashldi3.c
-> > > >  create mode 100644 arch/mips/boot/compressed/bswapsi.c
-> > > >  create mode 100644 arch/mips/boot/compressed/uart-ath79.c
-> > > >
-> > > > diff --git a/arch/mips/boot/compressed/.gitignore b/arch/mips/boot/compressed/.gitignore
-> > > > deleted file mode 100644
-> > > > index d358395614c9..000000000000
-> > > > --- a/arch/mips/boot/compressed/.gitignore
-> > > > +++ /dev/null
-> > > > @@ -1,3 +0,0 @@
-> > > > -# SPDX-License-Identifier: GPL-2.0-only
-> > > > -ashldi3.c
-> > > > -bswapsi.c
-> > > > diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-> > > > index 3548b3b45269..e6584dab2360 100644
-> > > > --- a/arch/mips/boot/compressed/Makefile
-> > > > +++ b/arch/mips/boot/compressed/Makefile
-> > > > @@ -50,20 +50,8 @@ vmlinuzobjs-$(CONFIG_MIPS_ALCHEMY)            += $(obj)/uart-alchemy.o
-> > > >  vmlinuzobjs-$(CONFIG_ATH79)                     += $(obj)/uart-ath79.o
-> > > >  endif
-> > > >
-> > > > -extra-y += uart-ath79.c
-> > > > -$(obj)/uart-ath79.c: $(srctree)/arch/mips/ath79/early_printk.c
-> > > > -     $(call cmd,shipped)
-> > > > -
-> > > >  vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
-> > > >
-> > > > -extra-y += ashldi3.c
-> > > > -$(obj)/ashldi3.c: $(obj)/%.c: $(srctree)/lib/%.c FORCE
-> > > > -     $(call if_changed,shipped)
-> > > > -
-> > > > -extra-y += bswapsi.c
-> > > > -$(obj)/bswapsi.c: $(obj)/%.c: $(srctree)/arch/mips/lib/%.c FORCE
-> > > > -     $(call if_changed,shipped)
-> > > > -
-> > > >  targets := $(notdir $(vmlinuzobjs-y))
-> > > >
-> > > >  targets += vmlinux.bin
-> > > > diff --git a/arch/mips/boot/compressed/ashldi3.c b/arch/mips/boot/compressed/ashldi3.c
-> > > > new file mode 100644
-> > > > index 000000000000..f7bf6a7aae31
-> > > > --- /dev/null
-> > > > +++ b/arch/mips/boot/compressed/ashldi3.c
-> > > > @@ -0,0 +1,2 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +#include "../../../../lib/ashldi3.c"
-> > > > diff --git a/arch/mips/boot/compressed/bswapsi.c b/arch/mips/boot/compressed/bswapsi.c
-> > > > new file mode 100644
-> > > > index 000000000000..fdb9c6476904
-> > > > --- /dev/null
-> > > > +++ b/arch/mips/boot/compressed/bswapsi.c
-> > > > @@ -0,0 +1,2 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +#include "../../lib/bswapsi.c"
-> > > > diff --git a/arch/mips/boot/compressed/uart-ath79.c b/arch/mips/boot/compressed/uart-ath79.c
-> > > > new file mode 100644
-> > > > index 000000000000..d686820921be
-> > > > --- /dev/null
-> > > > +++ b/arch/mips/boot/compressed/uart-ath79.c
-> > > > @@ -0,0 +1,2 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +#include "../../ath79/early_printk.c"
-> > > > diff --git a/scripts/remove-stale-files b/scripts/remove-stale-files
-> > > > index eb630ee287c3..c534fe1eac16 100755
-> > > > --- a/scripts/remove-stale-files
-> > > > +++ b/scripts/remove-stale-files
-> > > > @@ -28,4 +28,9 @@ if [ -n "${building_out_of_srctree}" ]; then
-> > > >       do
-> > > >               rm -f arch/arm/boot/compressed/${f}
-> > > >       done
-> > > > +
-> > > > +     for f in uart-ath79.c ashldi3.c bswapsi.c
-> > > > +     do
-> > > > +             rm -f arch/mips/boot/compressed/${f}
-> > > > +     done
-> > >
-> > > hmm, isn't this the wrong action now that these files have been added
-> > > to git ?
-> > >
-> > > Thomas.
-> >
-> >
-> > Please note that the entire code block is enclosed by:
-> >
-> > if [ -n "${building_out_of_srctree}" ]; then
-> >            ...
-> > fi
-> >
-> >
-> > "building_out_of_srctree" is set when you are doing
-> > out-of-tree build  (O=<output-dir>).
-> >
-> > So, only the generated files are removed.
->
-> but there aren't copied/generated any longer or I'm missing someting ?
+Hi Geert,
 
+On 11/10/21 11:23 AM, Geert Uytterhoeven wrote:
+> Currently struct of_device_id is 196 (32-bit) or 200 (64-bit) bytes
+> large.  It contains fixed-size strings for a name, a type, and a
+> compatible value, but the first two are barely used.
+> OF device ID tables contain multiple entries, plus an empty sentinel
+> entry.
+> 
+> Statistics for my current kernel source tree:
+>   - 4487 tables with 16836 entries (3367200 bytes)
+>   - 176 names (average 6.7 max 23 chars)
+>   - 66 types (average 5.1 max 21 chars)
+>   - 12192 compatible values (average 18.0 max 45 chars)
+> Taking into account the minimum needed size to store the strings, only
+> 6.9% of the allocated space is used...
 
-People do "git pull" without cleaning the tree.
-(and we should not require users to do "make clean")
+I like the idea of using less memory (and thank you for the above data!),
+but I do not like the implementation, which reduces the size (of name at
+least - I didn't check each field) to less than what the standard allows.
 
+I have an idea of another way to accomplish the same goal, but I need to
+dig a bit to make sure I'm not shooting myself in the foot.
 
-[1]  ashldi3.c and bswapsi.c will be remaining
-      in the build directory, which were generated
-      by an older commit
+-Frank
 
-[2] ashldi3.c and bswapsi.c will be added to the
-     source tree when people pull this commit
+> 
+> Reduce kernel size by reducing the sizes of the fixed strings by one
+> half.
+> 
+> This reduces the size of an ARM multi_v7_defconfig kernel by ca. 400
+> KiB.  For a typical kernel supporting a single board, you can expect to
+> save 50-100 KiB.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> Notes:
+>   - While gcc complains if the non-NUL characters in a string do not fit
+>     in the available space, it does not complain if there is no space to
+>     store the string's NUL-terminator.  However, that should be caught
+>     during testing, as the affected entry won't ever match.  The kernel
+>     won't crash, as such strings will still be terminated by the
+>     sentinel in the table.
+> 
+>   - We could save even more by converting the strings from fixed-size
+>     arrays to pointers, at the expense of making it harder to mark
+>     entries __init.  Given most drivers support binding and unbinding
+>     and thus cannot use __init for of_device_id tables, perhaps that's
+>     the way to go?
+> 
+> Thanks for your comments!
+> ---
+>  include/linux/mod_devicetable.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+> index ae2e75d15b219920..2bb2558d52d30d2b 100644
+> --- a/include/linux/mod_devicetable.h
+> +++ b/include/linux/mod_devicetable.h
+> @@ -266,9 +266,9 @@ struct sdw_device_id {
+>   * Struct used for matching a device
+>   */
+>  struct of_device_id {
+> -	char	name[32];
+> -	char	type[32];
+> -	char	compatible[128];
+> +	char	name[24];
+> +	char	type[24];
+> +	char	compatible[48];
+>  	const void *data;
+>  };
+>  
+> 
 
-
-
-[1] takes precedence over [2].
-
-So, old files will be compiled. This is a problem.
-
-That's why I am removing [1] for O= builds.
-
-
-
-
->
-> Anyway I've applied your patch to mips-next with changes to also cover
->
-> https://patchwork.kernel.org/project/linux-mips/patch/20211110030944.6733-1-rdunlap@infradead.org/
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
-
-
-
--- 
-Best Regards
-Masahiro Yamada
