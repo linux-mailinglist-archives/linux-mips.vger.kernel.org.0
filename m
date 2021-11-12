@@ -2,105 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D8D44E839
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 15:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EFE44E929
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 15:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbhKLONn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 12 Nov 2021 09:13:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23016 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234959AbhKLONn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 12 Nov 2021 09:13:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1636726252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WG8PFqpRKxCavfbVvSUmpH7cc2ZZWGSAwL7C9wQeDCQ=;
-        b=iVO/jZumYpSVk4Y8U3AmTuGLAtEeCq8pfY4bTlRo2wjoMzlOhS3krPGRkavHuEhSL9WAQ1
-        pamw75+0YeDCgidv0AIOlqGtWcSB3JjgiCdM7l9JSjeA/+db0vE8Z69m7pK4pa1nmqa3tS
-        Q4seLqvn/FtnI5EOzGHeQZ19ie4sswM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-590-vtSOMdmQMPC3jGlwUWxpGg-1; Fri, 12 Nov 2021 09:10:49 -0500
-X-MC-Unique: vtSOMdmQMPC3jGlwUWxpGg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9B07E871817;
-        Fri, 12 Nov 2021 14:10:46 +0000 (UTC)
-Received: from [10.39.193.118] (unknown [10.39.193.118])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB60218A50;
-        Fri, 12 Nov 2021 14:10:42 +0000 (UTC)
-Message-ID: <ad3534bc-fe3a-55f5-b022-4dbec5f29798@redhat.com>
-Date:   Fri, 12 Nov 2021 15:10:41 +0100
+        id S235153AbhKLOup (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 12 Nov 2021 09:50:45 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:40606 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235087AbhKLOuo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Nov 2021 09:50:44 -0500
+Received: by mail-ot1-f54.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so6188430otj.7;
+        Fri, 12 Nov 2021 06:47:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MqpVUsLYNqsJjO4ImeTejjx8SUZnfDjbhJPSiiUyJOQ=;
+        b=A1p7E+UYgvNA54JZTL1hP/+5/+sFOb/b2Fk0QJ/RLnZzUU0iWjaEZU56xUIOP4BVUX
+         XUx1NKwBk3bN45K7/NRWrD4V5Eidlr14V/RrKdWsa0ReBYJPO+oShdGZYzX4beeO4fvI
+         Kje0iB5JKToZBtuYnjVZ5qYRB0VhbA3lv+DVDb0KxInI1g4gxSTaY7GJFO5qr9cRB/Hw
+         Tb9shpKUAKKq4pG/WrUzQFQZ1uttrS0SNKv1fY+M8pe7Ika9U//D7rmg5QSojxftLwOg
+         dgMKSF07HFmWSlHodjeC9oi9K40VNZmsgseQtmKWDkGdey7FlzwN4IIpaYzoarCH/ZNo
+         mPUg==
+X-Gm-Message-State: AOAM530EBSYF6+HZUMEYAkAoGg+hRv1nySj2zKVKjAtOQLmtz/NA2gRZ
+        uy/7qQGYk9Ldwi67b6NPTA==
+X-Google-Smtp-Source: ABdhPJzDQAhXlkjwRvi5urW+7d003gcUAFjnSG2AHX4B3iXy467gNUrRe93n1Idba1w8d58aLwaeMw==
+X-Received: by 2002:a9d:326:: with SMTP id 35mr11139198otv.41.1636728473571;
+        Fri, 12 Nov 2021 06:47:53 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id g26sm1280650ots.25.2021.11.12.06.47.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Nov 2021 06:47:52 -0800 (PST)
+Received: (nullmailer pid 2736205 invoked by uid 1000);
+        Fri, 12 Nov 2021 14:47:46 -0000
+Date:   Fri, 12 Nov 2021 08:47:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        David Airlie <airlied@linux.ie>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-mips@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Brown <broonie@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        devicetree@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>,
+        Kees Cook <keescook@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        letux-kernel@openphoenux.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
+        Harry Wentland <harry.wentland@amd.com>
+Subject: Re: [PATCH v6 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
+ DT Schema
+Message-ID: <YY5+kgNRlKHIGPlO@robh.at.kernel.org>
+References: <cover.1636573413.git.hns@goldelico.com>
+ <70f2abb5277369721cb352eb50daa407bee3fd04.1636573413.git.hns@goldelico.com>
+ <1636642646.871896.3774079.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 1/5] KVM: arm64: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Eduardo Habkost <ehabkost@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, kvm-ppc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211111162746.100598-1-vkuznets@redhat.com>
- <20211111162746.100598-2-vkuznets@redhat.com>
- <a5cdff6878b7157587e92ebe4d5af362@kernel.org> <875ysxg0s1.fsf@redhat.com>
- <87k0hd8obo.wl-maz@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <87k0hd8obo.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1636642646.871896.3774079.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/12/21 15:02, Marc Zyngier wrote:
->> I'd like KVM to be consistent across architectures and have the same
->> (similar) meaning for KVM_CAP_NR_VCPUS.
-> Sure, but this is a pretty useless piece of information anyway. As
-> Andrew pointed out, the information is available somewhere else, and
-> all we need to do is to cap it to the number of supported vcpus, which
-> is effectively a KVM limitation.
+On Thu, Nov 11, 2021 at 08:57:26AM -0600, Rob Herring wrote:
+> On Wed, 10 Nov 2021 20:43:28 +0100, H. Nikolaus Schaller wrote:
+> > From: Sam Ravnborg <sam@ravnborg.org>
+> > 
+> > Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+> > Based on .txt binding from Zubair Lutfullah Kakakhel
+> > 
+> > We also add add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
+> > 
+> > Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> > Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> > Cc: Rob Herring <robh@kernel.org>
+> > Cc: devicetree@vger.kernel.org
+> > ---
+> >  .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
+> >  .../bindings/display/ingenic-jz4780-hdmi.yaml | 76 +++++++++++++++++++
+
+This goes in display/bridge/. And use compatible string for the file 
+name: ingenic,jz4780-hdmi.yaml
+
+> >  2 files changed, 79 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
+> > 
 > 
-> Also, we are talking about representing the architecture to userspace.
-> No amount of massaging is going to make an arm64 box look like an x86.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml:36:5: [warning] wrong indentation: expected 2 but found 4 (indentation)
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.example.dt.yaml: hdmi@10180000: 'clock-names', 'ddc-i2c-bus', 'interrupt-parent', 'interrupts', 'reg' do not match any of the regexes: 'pinctrl-[0-9]+'
+> 	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/ingenic-jz4780-hdmi.yaml
 
-Not sure what you mean?  The API is about providing a piece of 
-information independent of the architecture, while catering for a ppc 
-weirdness.  Yes it's mostly useless if you don't care about ppc, but 
-it's not about making arm64 look like x86 or ppc; it's about not having 
-to special case ppc in userspace.
+I think you need to use 'unevaluatedPropertes' instead of 
+'additionalProperties' if you are getting these properties from 
+synopsys,dw-hdmi.yaml.
 
-If anything, if KVM_CAP_NR_VCPUS returns the same for kvm and !kvm, then 
-*that* is making an arm64 box look like an x86.  On ARM the max vCPUs 
-depends on VM's GIC configuration, so KVM_CAP_NR_VCPUS should take that 
-into account.  Or KVM_CAP_NR_VCPUS should have been only for !kvm; but 
-the ship for that has sailed.
-
-Paolo
-
->>> which I'm keen on avoiding. I'd rather have the kvm and !kvm cases
->>> return the same thing.
->> Forgive me my (ARM?) ignorance but what would it be then? If we go for
->> min(num_online_cpus(), kvm_arm_default_max_vcpus()) in both cases, cat
->> this can still go above KVM_CAP_MAX_VCPUS after vGIC is created?
-> "min(num_online_cpus(), kvm_arm_default_max_vcpus())" is probably the
-> right thing in all cases. Yes, KVM_CAP_NR_VCPUS will keep reporting
-> more than the VM can actually support. But that's why we have
-> KVM_CAP_MAX_VCPUS, which tells you now many vcpus you can create for a
-> given configuration.
-
+Rob
