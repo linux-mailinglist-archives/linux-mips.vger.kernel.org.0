@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AF644EFA5
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 23:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1954144EFAB
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 23:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235900AbhKLWtk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 12 Nov 2021 17:49:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        id S235908AbhKLWtp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 12 Nov 2021 17:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236040AbhKLWth (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Nov 2021 17:49:37 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648A3C061767;
-        Fri, 12 Nov 2021 14:46:46 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 136so4566553pgc.0;
-        Fri, 12 Nov 2021 14:46:46 -0800 (PST)
+        with ESMTP id S236052AbhKLWti (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Nov 2021 17:49:38 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1C5C0613F5;
+        Fri, 12 Nov 2021 14:46:47 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id t5-20020a17090a4e4500b001a0a284fcc2so8324127pjl.2;
+        Fri, 12 Nov 2021 14:46:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XKmhYvw9V304NfvgcggX4aoYAGA8Osycb2EP7vxgFHs=;
-        b=Iuq6wCyTfUr6cDPh9xSDWHYxfzD8ueDkal9urCKtY8u07t7+X4ystYUqc1q4IIkBjN
-         nXAx5E1LH2lc3lkdcNYij+VR4lAeWMUqOQWsQsdS4P91NEtCc/2zYE7wS0/YgghzWFrw
-         SPnVizTtEgppIEFuS0nf8onKnHCB+aFbBcSHTCdgGO04pNKudVitcEvLex0ZG7+WGf8U
-         62YHijJeVk1PPvZsU7Dp96ZoGIRWtoEmErJ5AXLaV2bo6EeQHvBuqHYJsPWdP5Jm4vq1
-         9nR3ciPeRFQnR74jQRwK17tDZMFo1Ut12jOHhKHpf98QSK+QZ5NGxpDYlUte74wYTehf
-         wW7A==
+        bh=S94ZmIDNbR8JM2YMz6OlEqOmqcwIJH7y0fh6ZVlIVsQ=;
+        b=OM6XOf5hWr2D5bJKa9xIdGPgfJ/wfHAhF5GW3mWj6qfDVF4FeHyye5D4k88rGzgc4H
+         39dPf0eKew71/uhYteVkUNIlNo36k4m608WAZjerNT3ViYvp8Ao9t11j1LylXc3M87KG
+         nY975Z7PMwidrZ6Pp/X+GQm8Nx/c/XbySKgEkuHFQgw9ty/t09saO/i8+UoCdW+HIY2e
+         oH6EX3m3a2O6ZX4P3qqV2dQVM76HmBQhkZJA4o+Zw53xXdo1HOy6Ey4ZXhcSRhw0/ZRj
+         1BTV+Jt4Z0iuJvthAORUP1Wf+8yjLaWhYUVKBDHBXizASEOXMQtnbbHWjYKmbUkmrina
+         K8Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XKmhYvw9V304NfvgcggX4aoYAGA8Osycb2EP7vxgFHs=;
-        b=BOLkHS0BpmYEppKTAyzGOsW8EppL2qAMLqqdCzYWuQtpir8DwwD2QVgt3BRRss5qz+
-         8D1hK9eqIQAkviSe2+IdmkI9jH1niY85oqRQWKiRTV1hqkAcWDNZ7Tzi9aBjTk+nJD56
-         3ddEhloVNCL6a8FwNoZeZlhgEOsfBLW2SKfLRiKyocglPiYoSiGeBfMWxd8WHhKnjrgK
-         KnaCijNZRyR7+wtBFQTBU9unmdYi/foADVZ3M/l5l+/v20SjobucR5HSNsaf78wb91uH
-         QP2eXxEe0N6pwMekmPpwf0IQ5rDD2fqgNsdzHE22m5XDUOI+PsfnV1r2u3a5rgpewH9X
-         iCtQ==
-X-Gm-Message-State: AOAM533xEm9jVsEgVy0ZicM4UtWyj+23cBHgwEKm4PGj15VCP+3c8ne9
-        SHwMDuMhi9MSpeAjzt6UyllGwWF+kfw=
-X-Google-Smtp-Source: ABdhPJzNUEaHOpCJSG98CaJIWfdCSLJi1SJEA4K31EYRAEdYAbtynIQSzGIdew1CyJtGM/tW/wWU8w==
-X-Received: by 2002:aa7:8151:0:b0:480:9d40:8e38 with SMTP id d17-20020aa78151000000b004809d408e38mr16631708pfn.72.1636757205656;
-        Fri, 12 Nov 2021 14:46:45 -0800 (PST)
+        bh=S94ZmIDNbR8JM2YMz6OlEqOmqcwIJH7y0fh6ZVlIVsQ=;
+        b=VNegyDsQSorFtbm0FsFcEPkuGcT7ogZXoAPP4qRRfUQ6uVen4yiQt3ZAlB3QJTNFoi
+         owpCPUjkRgicfl58JOD3x8kqh2Mk3hb2ZxvzaH99i9IiMzIXPNt4wXzOjdSnttq5xt4a
+         5iaoTSNSDVbkWSM+HhLVp32zUllYcM+c7ubw+HkWzNm7gjJIIgFqUZkjSVZsnGf7ZDLE
+         3JmH/yc9zXjtQVI+NwJerJqrsit2Us4FLF1z10F+gqVhrEqoWGVketd/IwWrs1a6wODQ
+         dzbh4SSamEshcKz1jHk3VpOfMaU6CmttdMTlcK/EiU5Cr6eakg59aAo2LcLKuhzrJkrr
+         xMGA==
+X-Gm-Message-State: AOAM533pyd1uabZ8LZHguMv3v4EBIBxuAhckIM/vGUDdkq6yaxahe7Ve
+        dy3xJOR84tw4EK7KduBvfxZ7+gLGc9o=
+X-Google-Smtp-Source: ABdhPJxjNRFyodytAdEAoxVQBOTuJ3dbe2y3zrt9uQEtSkMS1mXEcyi+CPAQFv95Bh0GVaKPrRVcqg==
+X-Received: by 2002:a17:903:2352:b0:142:76bc:de3b with SMTP id c18-20020a170903235200b0014276bcde3bmr12012450plh.36.1636757206809;
+        Fri, 12 Nov 2021 14:46:46 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k14sm5647004pga.65.2021.11.12.14.46.44
+        by smtp.gmail.com with ESMTPSA id k14sm5647004pga.65.2021.11.12.14.46.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Nov 2021 14:46:45 -0800 (PST)
+        Fri, 12 Nov 2021 14:46:46 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         Guenter Roeck <linux@roeck-us.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM63XX ARM
         ARCHITECTURE), Justin Chen <justinpopo6@gmail.com>,
         linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
@@ -62,9 +62,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-mips@vger.kernel.org (open list:MIPS),
         linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM63XX
         ARM ARCHITECTURE)
-Subject: [PATCH v5 5/7] watchdog: bcm7038_wdt: Add platform device id for bcm63xx-wdt
-Date:   Fri, 12 Nov 2021 14:46:34 -0800
-Message-Id: <20211112224636.395101-6-f.fainelli@gmail.com>
+Subject: [PATCH v5 6/7] MIPS: BCM63XX: Provide platform data to watchdog device
+Date:   Fri, 12 Nov 2021 14:46:35 -0800
+Message-Id: <20211112224636.395101-7-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211112224636.395101-1-f.fainelli@gmail.com>
 References: <20211112224636.395101-1-f.fainelli@gmail.com>
@@ -74,35 +74,48 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In order to phase out bcm63xx_wdt and use bcm7038_wdt instead, introduce
-a platform_device_id table that allows both names to be matched.
+In order to utilize the bcm7038_wdt.c driver which needs to know the
+clock name to obtain, pass it via platform data using the
+bcm7038_wdt_platform_data structure.
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/watchdog/bcm7038_wdt.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/mips/bcm63xx/dev-wdt.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/watchdog/bcm7038_wdt.c b/drivers/watchdog/bcm7038_wdt.c
-index 506cd7ef9c77..8656a137e9a4 100644
---- a/drivers/watchdog/bcm7038_wdt.c
-+++ b/drivers/watchdog/bcm7038_wdt.c
-@@ -223,8 +223,15 @@ static const struct of_device_id bcm7038_wdt_match[] = {
- };
- MODULE_DEVICE_TABLE(of, bcm7038_wdt_match);
+diff --git a/arch/mips/bcm63xx/dev-wdt.c b/arch/mips/bcm63xx/dev-wdt.c
+index 2a2346a99bcb..42130914a3c2 100644
+--- a/arch/mips/bcm63xx/dev-wdt.c
++++ b/arch/mips/bcm63xx/dev-wdt.c
+@@ -9,6 +9,7 @@
+ #include <linux/init.h>
+ #include <linux/kernel.h>
+ #include <linux/platform_device.h>
++#include <linux/platform_data/bcm7038_wdt.h>
+ #include <bcm63xx_cpu.h>
  
-+static const struct platform_device_id bcm7038_wdt_devtype[] = {
-+	{ .name = "bcm63xx-wdt" },
-+	{ /* sentinel */ },
+ static struct resource wdt_resources[] = {
+@@ -19,11 +20,18 @@ static struct resource wdt_resources[] = {
+ 	},
+ };
+ 
++static struct bcm7038_wdt_platform_data bcm63xx_wdt_pdata = {
++	.clk_name	= "periph",
 +};
-+MODULE_DEVICE_TABLE(platform, bcm7038_wdt_devtype);
 +
- static struct platform_driver bcm7038_wdt_driver = {
- 	.probe		= bcm7038_wdt_probe,
-+	.id_table	= bcm7038_wdt_devtype,
- 	.driver		= {
- 		.name		= "bcm7038-wdt",
- 		.of_match_table	= bcm7038_wdt_match,
+ static struct platform_device bcm63xx_wdt_device = {
+ 	.name		= "bcm63xx-wdt",
+ 	.id		= -1,
+ 	.num_resources	= ARRAY_SIZE(wdt_resources),
+ 	.resource	= wdt_resources,
++	.dev		= {
++		.platform_data = &bcm63xx_wdt_pdata,
++	},
+ };
+ 
+ int __init bcm63xx_wdt_register(void)
 -- 
 2.25.1
 
