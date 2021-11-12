@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1154D44DF80
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 02:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3929F44DF89
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 02:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234625AbhKLBGr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 Nov 2021 20:06:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
+        id S234672AbhKLBIX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 Nov 2021 20:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbhKLBGr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Nov 2021 20:06:47 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B52C061767
-        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 17:03:57 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id o4so7030507pfp.13
-        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 17:03:57 -0800 (PST)
+        with ESMTP id S234661AbhKLBIW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Nov 2021 20:08:22 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E47C0613F5
+        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 17:05:32 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id e65so6618084pgc.5
+        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 17:05:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=OqiUBkPNwVtm2ZpjSEzoYhMNAp4tNbVTba3KEv6WN8w=;
-        b=pc7ejE9G9f2/DNPzPS7XIXvJtmGfBaF2LxIzkZwFvEfuQOri3Y1155wjk7xjt2PNCJ
-         kE24TIPjCcGgUSYiX3UWCA1DBdTKkT1C74bahVgNb9tmSS/hJEwGE9hxKY7yJMJ5/gnk
-         kd+TrPPKr0MuJqBAypaAOFEn7+cRqbZm+iMfctLBeivKDevpGMITf+s6vQitBcPNGTgw
-         /amQnFMW1BnWMyjEaECoc/twxm/ddAt9qLXsEQJ21ZE/S+ANAhdIOkrMWTDwWGDr9sqH
-         T2DNYEPOqsm0H4/svC1i15A5EDGrV+fHlrcxZdbN2PUtjvWHGe4Hnq190TEFtTm6CJzc
-         ynvA==
+        bh=qIP3115D8X5svI1diQgiEcs//yqAqweVaUHfcv0HJnk=;
+        b=gf554YHamci0DjUeVoZGJM9DOyXF+0SyUupZIF5IPY2cI9p2DatJ2USEjqu0xXifqV
+         edjai3eTEtZQ8kQGbZs7d7Z7C15ddHZCGcYL3l3HeGlZRfffhdcwYAuRyJSd5gETgxWT
+         yLNteK8tM4CfxpX7aPSWrcYkn7XhezHyrLOvS/D7LuUOUaU64FC3UuIcMReDTB79mTES
+         QgRrs4WD82tMKsnnw7WDZ1CrEmW96jd/E14dYVs3INUpTy+GkkmVW2cT4+YCL5cjsCPL
+         +tIV730AkW1ZKhOoB0H06e8044D6Lc1J08cwloc48Jw1uNWmresmiA1nxkB4w8of5HB5
+         mVBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=OqiUBkPNwVtm2ZpjSEzoYhMNAp4tNbVTba3KEv6WN8w=;
-        b=phfCXfKwkF17V1BPKnlGei5AKseeeua8E8C7BP6NmwO6SItNFzJXSwU7uUjMRF6bD+
-         phOL4q3b9bP2YxRDUOmmP3agAfzB6GoXs0fFbw/9XAiGsXOQ8ErzxyaEBEhdj68KEp9Z
-         RwTozrHSq+3SZjdnrByGjTQF7qI6U/+fsYLyw70gvq3b2QMTEJ18wWCU57GS6/KGCfKv
-         0JjjKwlRGoaBi9SCfycV63oPQHmfluN9jvLtfyKDxI6hViJc5yyXwuUG8veXaAfSoRz3
-         9y0QEFNabWHEwUWP3f/M47deCtjQt9WI8BzEHuNt/buwTQKiZIHcvuyInRrBwZD13Emu
-         6HbA==
-X-Gm-Message-State: AOAM5324HLUU4KIURKnxTfgC0or5sHz/paLmIz72jqvu52ACbgfn9JgO
-        +Q6tUWrVcG408OM08Ko2VpfllA==
-X-Google-Smtp-Source: ABdhPJxMgoJUa9ek+o+tvzW6z5WeFQCDZekoSsl946lRj2FCOsMM6fcE3+3c50Ng/MtZ8Re7BsLCDg==
-X-Received: by 2002:a63:1441:: with SMTP id 1mr7559189pgu.66.1636679035969;
-        Thu, 11 Nov 2021 17:03:55 -0800 (PST)
+        bh=qIP3115D8X5svI1diQgiEcs//yqAqweVaUHfcv0HJnk=;
+        b=pK7+QevZe9lB+InYlbGoDjSLxeBKtfK+W9cKxU+8F/6N2Kjup93MKCMT99mRcevVUt
+         h9VuKyLbzmxXZn3rd2O5htiN1CVKvCoiEkNPBYczHos6m0By5FapuUHg2279B4Z90g9E
+         VAyBrlGcqzvIcjj7O+z/Y29JoZfNKtRMSdLOI29PETTIuEF2CPgbbOz14XKOuNqd6VnR
+         ZEeHosvB6fH8ndv2CulGDhtiELscSq3ztED5QD1EKX5MisXG2RqX90BjikDf+HI1OJen
+         YtTYm4q2VpWl5N5gaVZNZhNyAscIsC4uGOnvBglXCPFzXFgFBPRXUA5uPQGTwTkeqqr3
+         dDHA==
+X-Gm-Message-State: AOAM533QgKMh4oRxoP3oKdQy2XNzHm20CdMWu5KWhvCWdkc78vDbvJn3
+        dKBZ9TUFo2/FxOEkD4o13OWS5A==
+X-Google-Smtp-Source: ABdhPJx45D4HU2DqXINd3JCy7/gtFEnfRNSJTdzRC106LwgioqW5s9+ZH9bnEHC0LBIDe1RslUxzZw==
+X-Received: by 2002:a63:8048:: with SMTP id j69mr7469829pgd.111.1636679131571;
+        Thu, 11 Nov 2021 17:05:31 -0800 (PST)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t13sm4096818pfl.214.2021.11.11.17.03.55
+        by smtp.gmail.com with ESMTPSA id b9sm3251946pgf.15.2021.11.11.17.05.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Nov 2021 17:03:55 -0800 (PST)
-Date:   Fri, 12 Nov 2021 01:03:51 +0000
+        Thu, 11 Nov 2021 17:05:30 -0800 (PST)
+Date:   Fri, 12 Nov 2021 01:05:27 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 Cc:     James Morse <james.morse@arm.com>,
@@ -76,75 +76,59 @@ Cc:     James Morse <james.morse@arm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v5.5 23/30] KVM: Resolve memslot ID via a hash table
- instead of via a static array
-Message-ID: <YY29d7Vb6aiv93mu@google.com>
+Subject: Re: [PATCH v5.5 24/30] KVM: Use interval tree to do fast hva lookup
+ in memslots
+Message-ID: <YY2919Td8f+F4EDr@google.com>
 References: <20211104002531.1176691-1-seanjc@google.com>
- <20211104002531.1176691-24-seanjc@google.com>
- <f0b364ed-bf9e-5de9-0449-6d7ba3682405@oracle.com>
+ <20211104002531.1176691-25-seanjc@google.com>
+ <d76707b5-8710-b1a6-0cc6-defdaf9e37b7@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f0b364ed-bf9e-5de9-0449-6d7ba3682405@oracle.com>
+In-Reply-To: <d76707b5-8710-b1a6-0cc6-defdaf9e37b7@oracle.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Fri, Nov 12, 2021, Maciej S. Szmigiero wrote:
 > On 04.11.2021 01:25, Sean Christopherson wrote:
-> > From: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> > 
-> > Memslot ID to the corresponding memslot mappings are currently kept as
-> > indices in static id_to_index array.
-> > The size of this array depends on the maximum allowed memslot count
-> > (regardless of the number of memslots actually in use).
-> > 
-> > This has become especially problematic recently, when memslot count cap was
-> > removed, so the maximum count is now full 32k memslots - the maximum
-> > allowed by the current KVM API.
-> > 
-> > Keeping these IDs in a hash table (instead of an array) avoids this
-> > problem.
-> > 
-> > Resolving a memslot ID to the actual memslot (instead of its index) will
-> > also enable transitioning away from an array-based implementation of the
-> > whole memslots structure in a later commit.
-> > 
-> > Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> > Co-developed-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >   include/linux/kvm_host.h | 16 +++----
-> >   virt/kvm/kvm_main.c      | 96 +++++++++++++++++++++++++++++++---------
-> >   2 files changed, 84 insertions(+), 28 deletions(-)
-> > 
-> (..)
-> > @@ -1259,17 +1257,49 @@ static int kvm_alloc_dirty_bitmap(struct kvm_memory_slot *memslot)
-> >   	return 0;
-> >   }
-> > +static void kvm_replace_memslot(struct kvm_memslots *slots,
-> > +				struct kvm_memory_slot *old,
-> > +				struct kvm_memory_slot *new)
-> > +{
+> > @@ -1262,22 +1274,32 @@ static void kvm_replace_memslot(struct kvm_memslots *slots,
+> >   				struct kvm_memory_slot *new)
+> >   {
+> >   	/*
+> > -	 * Remove the old memslot from the hash list, copying the node data
+> > -	 * would corrupt the list.
+> > +	 * Remove the old memslot from the hash list and interval tree, copying
+> > +	 * the node data would corrupt the structures.
+> >   	 */
+> >   	if (old) {
+> >   		hash_del(&old->id_node);
+> > +		interval_tree_remove(&old->hva_node, &slots->hva_tree);
+> >   		if (!new)
+> >   			return;
+> >   	}
+> > -	/* Copy the source *data*, not the pointer, to the destination. */
+> > -	if (old)
 > > +	/*
-> > +	 * Remove the old memslot from the hash list, copying the node data
-> > +	 * would corrupt the list.
+> > +	 * Copy the source *data*, not the pointer, to the destination.  If
+> > +	 * @old is NULL, initialize @new's hva range.
 > > +	 */
 > > +	if (old) {
-> > +		hash_del(&old->id_node);
-> > +
-> > +		if (!new)
-> > +			return;
-> > +	}
-> > +
-> > +	/* Copy the source *data*, not the pointer, to the destination. */
-> > +	if (old)
-> > +		*new = *old;
+> >   		*new = *old;
+> > +	} else if (new) {
 > 
-> This way of writing it (that, is re-checking whether "old" is not-NULL)
-> suggests that it could have been set to NULL inside the previous block
-> (since the last check), which isn't true.
+> Unnecessary check - if "new" is NULL then the code will crash anyway
+> accessing this pointer unconditionally...
+> 
+> > +		new->hva_node.start = new->userspace_addr;
+> > +		new->hva_node.last = new->userspace_addr +
+> > +				     (new->npages << PAGE_SHIFT) - 1;
+> > +	}
+> >   	/* (Re)Add the new memslot. */
+> >   	hash_add(slots->id_hash, &new->id_node, new->id);
+> > +	interval_tree_insert(&new->hva_node, &slots->hva_tree);
+> 
+> ...in these two lines above.
 
-Yeah, I think I was trying to minimize the logic delta in future patches, but
-looking back at the diffs, that didn't pan out.  I've no objection to folding
-the two together.
+Yep, definitely worthless.  I think this was another "plan for the future" idea
+that didn't actually add value.
