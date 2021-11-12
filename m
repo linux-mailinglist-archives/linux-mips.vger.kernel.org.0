@@ -2,68 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3138A44DEC1
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 00:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E0644DF55
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 01:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbhKKX5O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 Nov 2021 18:57:14 -0500
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:3404 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234507AbhKKX5M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 11 Nov 2021 18:57:12 -0500
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ABL0kiE015490;
-        Thu, 11 Nov 2021 23:53:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : subject : to :
- cc : references : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=883xBD/ihbbKgrvxwcqQpMp87eJMnWmZjp/dnSjCn7E=;
- b=zb1+D2k9w//noh44Q6iJA1bh5+CMBMg+hX4GZIWtap+GcUv6xQQcGY5562lYKR7EaOdW
- zowctfBtbP/qgGvp+18tuEujnLNRiAfPnpT/7TQjnC68QV6SK+HIyrh8gyXwZLD9o3o8
- x52hWkUcwCK3gFpeJv3ODNI/JmaVmPRu3y9QNhqGwxD57XR8xXYYZws2hKYZraJNKBim
- nnk7fHagxB0bbsj7z1vEBDXsCCKh8obOVhFSAYz+CIfRUYxQfGbfHayvJBeT0VmxEPE6
- uyF4Fton7+E4GrBIXRA5PhndqVzk+01Vtrpudd2u4ZUztbXn4H/8w/9eAxHId1D6/tTG sQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3c7yq7nt1f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Nov 2021 23:53:42 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1ABNonOj143714;
-        Thu, 11 Nov 2021 23:53:41 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
-        by userp3020.oracle.com with ESMTP id 3c63fwthxw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Nov 2021 23:53:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SSbZCDht2PBtGeHl8GWD+6lsYCh1m0gNjRQ3y2ZFvgyncIWN3PNxzOsXVS8RFE7yF4g3RC4G6RRgOs1BUXsFAXFmM7xJl8nQAxLKlPbSelP0zhQazw9b5D9mJmnMUNOukBUcHSqQDSVWEV3pb74NFRLzb/fHHlHLFTkmh1X8Ncq6i4AA5y9C4rypPkl/8uioS/UUtzQKQS55gUoyWo6XZmlTtQHiopEl1bOuykR/HYJHzMb/7thQFMGr0H8fK6symKNVNQl7Oz/MabI/KLs0fo/PgJhrIsUowKTkPfBdtIscb4AdiYQw2PUm905bYmF6DEg1FgK0LRsWRt6Ta/b4rQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=883xBD/ihbbKgrvxwcqQpMp87eJMnWmZjp/dnSjCn7E=;
- b=fk7qoWnDbxydHuMrkiIaRuIfdttHfArby4c5IoqcZmrchWWNGy25V1FeLk1GAa3U9WornvnUQIL514rui1JOjxrCuVQDr6jYCFvzytpFYlGbCwt5VuXsSVbycuFKkuaJfnZIU4kC0t/fmziYWQLrdURsRVdeCzHShQrJTDINMb2HikYGW25NZou2Ep6zCL4K7JsxD0Nr1r+PV5mboBFaeam9xUWWK5gK8ca1paPu7b2CHDaMzMU7lLnGs+D0sfa3t63GZUs46bEjemJLvBKdOInK8WUMlOOmBL1TMyMOqqQwvMk3Mdu1PJaz5ifAX+PWNpaioYSgUtou6IQOalq7xA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        id S234638AbhKLAx7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 Nov 2021 19:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234630AbhKLAx6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Nov 2021 19:53:58 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C53C06127A
+        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 16:51:08 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id n8so7127178plf.4
+        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 16:51:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=883xBD/ihbbKgrvxwcqQpMp87eJMnWmZjp/dnSjCn7E=;
- b=Y58OFnFlBHk2BjjG9xOQ+Wkxb4TUsyKe8U4xq65EFtwxjnYcEV/H9pM+78/k6rUad/ojvzE0anCzp8cORH4PKvZfE3/klsLl3ytvElf3suO293xK938dGbaPXAvjmwdgmFtU7XyxRDjWHzcI4g1q92OPU4m0h/oq/43yuKUPhkE=
-Authentication-Results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=oracle.com;
-Received: from CH2PR10MB4008.namprd10.prod.outlook.com (2603:10b6:610:c::22)
- by CH0PR10MB4938.namprd10.prod.outlook.com (2603:10b6:610:c4::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.11; Thu, 11 Nov
- 2021 23:53:38 +0000
-Received: from CH2PR10MB4008.namprd10.prod.outlook.com
- ([fe80::74b8:818d:18e5:e6c6]) by CH2PR10MB4008.namprd10.prod.outlook.com
- ([fe80::74b8:818d:18e5:e6c6%6]) with mapi id 15.20.4669.016; Thu, 11 Nov 2021
- 23:53:38 +0000
-From:   "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-Subject: Re: [PATCH v5.5 00/30] KVM: Scalable memslots implementation
-To:     Sean Christopherson <seanjc@google.com>
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7VoEwbSPzrTyOh3w99mGEcK1Otv61yXE8VpDyQ7XU/Q=;
+        b=aR0iTUNTxKf6faFpqVLtDxLZ+Z93VjgfuMSy8Y9h3wnwVUTL/oHfhEOsrg0V7yOdYT
+         7fq8GTKIKG9OH6zETAjAXEzMtYxKZ4n8vzmgKUi//wtyVazuE6xgdlSVa2YM1WXEZK7o
+         ckgTdbQk1CrwriNKigDb1ZxyhMDgLtfKnE3RIVuAKQjcg2mMhNzjvwVYycKmLb0GnSZ1
+         GYcRaJBvetbHNGisq5tuHOigfRUZHZConfP9luv9GZtaibkXsyjw/cHwj8DSAwBW3aaZ
+         7VyKPKnacS2ZdpG3N5SRXdGPcXpnFm1QD3uLEDYX71FQ35qKY9q+/DI/dPGPqFGBB6ib
+         ajeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7VoEwbSPzrTyOh3w99mGEcK1Otv61yXE8VpDyQ7XU/Q=;
+        b=fBcE8AGj+ZalTVALzxzE3C47mx8r1reSWi9JsN8Lpl3IJ/RpfKN7cpvcTvigunGFZQ
+         Oh9+LBi7B2h3aHexlV1XWMDIY0SRRGdzpyNdS6hP5DhVWAvvreB0pyYWHGMAx4FK9LJ2
+         4azENcRor92Adg659KQKvZK1HVMhnpBVJxTAAyo+Za1ORy01t7UFMRrTx6jzzBUYx+54
+         t4K6p8YgbGfoYfZ04Q7Nal92ey3QjXva4YiVSOgBrSSvPwNqhYLgrf+Lt7NWQlE34nBi
+         dlQnrxjYzV2Vd3qHYwInBdfcop1BTxZInZmOvOHIImaFfUoVRssJPOfV5/4+duML7Kka
+         VPBw==
+X-Gm-Message-State: AOAM532vszamoSvGEWrLTHBa5tB30k0qXn4hZKtG6LVZwJcFuqGiZKx0
+        UJAQYVRTdsGcHjsPKRJpq92glQ==
+X-Google-Smtp-Source: ABdhPJxC4jGH9js/28DTzQpRvZ4IBLyKiJDKoUfHaiXaxCscmtOSb6+KYszrts8CNNHGQNLMJ/jO0g==
+X-Received: by 2002:a17:90a:c58f:: with SMTP id l15mr12870593pjt.168.1636678268099;
+        Thu, 11 Nov 2021 16:51:08 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s21sm4279773pfk.3.2021.11.11.16.51.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Nov 2021 16:51:07 -0800 (PST)
+Date:   Fri, 12 Nov 2021 00:51:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 Cc:     James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -90,119 +76,88 @@ Cc:     James Morse <james.morse@arm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
         Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v5.5 26/30] KVM: Keep memslots in tree-based structures
+ instead of array-based ones
+Message-ID: <YY26dxv2kM3m2H7Z@google.com>
 References: <20211104002531.1176691-1-seanjc@google.com>
- <cb4f5d6e-9535-dd57-d8ee-3b593a81f3a6@oracle.com>
- <YYnNA5lZNXXdX/ig@google.com>
-Message-ID: <f3bc3bfc-37c3-bbfd-25b4-ef0a72e534ba@oracle.com>
-Date:   Fri, 12 Nov 2021 00:53:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-In-Reply-To: <YYnNA5lZNXXdX/ig@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6PR0202CA0042.eurprd02.prod.outlook.com
- (2603:10a6:20b:3a::19) To CH2PR10MB4008.namprd10.prod.outlook.com
- (2603:10b6:610:c::22)
+ <20211104002531.1176691-27-seanjc@google.com>
+ <5f5c80ce-9189-def3-9c50-d5a504925253@oracle.com>
 MIME-Version: 1.0
-Received: from [172.20.10.2] (37.248.219.146) by AM6PR0202CA0042.eurprd02.prod.outlook.com (2603:10a6:20b:3a::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4669.11 via Frontend Transport; Thu, 11 Nov 2021 23:53:32 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4c1800e9-ba52-46f9-d908-08d9a56e7b3e
-X-MS-TrafficTypeDiagnostic: CH0PR10MB4938:
-X-Microsoft-Antispam-PRVS: <CH0PR10MB49385F981B74133E932D36FAFF949@CH0PR10MB4938.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5Px/GRps/nTCCR4Dge/vd7jZsPJ4DwTc7yH//vBeCNyIpWZKBI2vNIa5nl6KVr71nzEkO0PBzXr0rJpGmBWtyJuLSZ26IYejF2JpqbC2XSfSsMTkQH9TE5GKU9YPuYubcMpz3Mci7tSdAEyy8Ckedczz0LwTxn5ynK9CJejHmumByYlbKN4xRECSAINvQU2qIBZbUmktucn68+EVK86U3q7oZrMiZTvKf+p5KUF9ACpcZRS+qIwx8sWM7igfINQEkzOxiq1mTTb3Bvj5ppQjgJKecED6PH/Cd5zUAt1NQgHSHAlpBX9FqMC6tfJXaz78rLjbFEkM0EGuAj+YLfkLJREC7guDrTUez+A7bxPdGQXXxtISvQCQWzKt3HYd3F3ZiDT5tfyvSEc3GpDwxLfaHCfJuJjnys/4ljm0v4tpw12wiY5jWv1s/Z+tiNRnFKIbNvBcQaMvhvx6ENa2g3pr+S6dBsTg5p8tlhUl0bu7ye+0b77MDiC7ouarRWnIDQOb3uVbMyehoRUd/Z1/a0cAtWsJPprKi2UnXuio3OsJ1/YKTSRcxCTECBRHzCY3WITT4FAAptf6S3tUz/nY049zXQv9gbyOJrM1FWC9+0hbyb1tUnwEybu+skBvGdi4SqnR5wpBfdjrvA3KykMdxvns9wNuOjy7Zy7oZLOkWYgNNYBCfnhUBd8orn+SLOlxF5Yt2mR16uSl1JacbeycbuLjTEnad5VykjxKGb2VBbSE5E8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4008.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(53546011)(86362001)(36756003)(8676002)(6666004)(16576012)(5660300002)(2906002)(316002)(38100700002)(956004)(83380400001)(6486002)(508600001)(7406005)(4326008)(31686004)(26005)(2616005)(8936002)(6916009)(186003)(31696002)(54906003)(66476007)(66556008)(7416002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MzZTcG5hK1FnU1VxSTUwcjk2SWxhc2RNNFRrQ1oxMkQzOW9zdzQ3aW54WDRt?=
- =?utf-8?B?RnUyRTBBTnpZNHpoektvUzhNUWpZTy9OMFk2eC9meks5YzkrdkY1NDVxUHlP?=
- =?utf-8?B?QitvL3NDTlZPNThpQTRDQnlPbS9LcjBEV2lZQU9WWlRpaysxOENxc0h1Z1dL?=
- =?utf-8?B?WXFWMUdBZm02Q3pOMlJTSVJVRHREcnZrSlZjQml2N1N4NVQxanBpdkJxVlZ2?=
- =?utf-8?B?T1pQLzhaWnZJdXZXVksvUkxKY2lKa29JckxLWklyY0hrb2VsTElMOVNEWmRr?=
- =?utf-8?B?VDNaRS9tWnRyRjZhRDlIbS9NbEZtWkMvZ1hOby9FZE9COHdnWDZyd3RERzVG?=
- =?utf-8?B?dG0zUUhDUjkrc2lJTlNab0p6N1VaeWNlWHBCS24vTTRGeHNsRU1pd2pjNkFi?=
- =?utf-8?B?S0MvVlc4RUp1bE95d0lJcVJRTTBnN0JIeUs2YW4xcUl6aXJYU3V5K3JhT1hv?=
- =?utf-8?B?QUtXL1pKemRrUGJVdXZWdWRLMllLQUdqbGdVTyswcmRpS2k1NnJEUWNzMWQy?=
- =?utf-8?B?bWZIWWt1dGRwSS9SNm5uNHFGN0tvclp0aHd5eE56aXVHL2ZiemhpRDJqTDda?=
- =?utf-8?B?eVd4YlpSMUc2Rm43MmozajdBbTJwbVUzM2s5RkhDMVZpK3NwdnVPSXdoZ2Fo?=
- =?utf-8?B?cFJiSlVROWFQK2JRZXJES3pEOUxBcFhTUXBEdVR0V29EcnpoU29JekF1RlRh?=
- =?utf-8?B?eXRja2JYYXVGQktPZTBhd1h4WlpzMDR0QTRCK1FJcnNoOVNRRHlhT2lDMVVZ?=
- =?utf-8?B?ZTMrZUV4Vy93K0R1QURsaktMY1l5VnlmUkNzaWdKdUxtMXovOE96MjhlUnJM?=
- =?utf-8?B?YVlaSUxSTG93QlZqWUN5UkhQWEdJQXA1Nk1oUEhBcXgzbjFoQW8rcEtHbWs4?=
- =?utf-8?B?c0hybVYwVnJDTmx2MUVqTks3Ykg4YUVDMVRJRkwxZHpTb0doRlV0REZhTVJN?=
- =?utf-8?B?Zmhna2VNZVVXZWVseDUxbitXc0xKckJMODFDNUtSOTNlemlJVXpxcVNaYjV6?=
- =?utf-8?B?S2E3VU5iUW9kek5DN3czTW1BVlQ5TXhJMlYrRnNXNmZLQ0FOcnAyVzRsZUkw?=
- =?utf-8?B?SXZseXRBdm82Tm9sREFrOVZ1ZWZEL2JpZzBvWWV6TWpodDBoWmVkRXV5US8x?=
- =?utf-8?B?azdvRENFcER3bVhEcHY1ZkpNUzFXeXlKMXZ4Z3c5aEdpejl2R0UzTEtYM2Vx?=
- =?utf-8?B?TVpPdzNxMmpma3hRL1l1NlRmWURqRzBEV3dFU2RJblVYSUc3UWhxTHdWd0Fp?=
- =?utf-8?B?aTE3eWJjR2tiNnhIZjB6RXZMQkpHaWYxYXNEZEVDTTk2eFRiZmJIK3hnbHJ5?=
- =?utf-8?B?WGZwQ01OK1JFRi9kVkRTbEs3Q1JsTjY4OTl1Zyt2OXdXaEZmelRiVHkrR0dR?=
- =?utf-8?B?U0hVdGRYNXl0QVJKSlJVdVNXMktMZ3RQdlU3MHByWWw2a3o5ajZyQ1ZrUFoy?=
- =?utf-8?B?V3N2NUVGbVpTWVVEQlYyQ1ZCaE9EWlUyOHpFSGFueTV4Mkt2UnhYQkloQko1?=
- =?utf-8?B?dUJ1amxMV1BRaWxueUVBREhFZnJJK2ppQk5RbUhGRkM5ZG9pOGRuVno4ZXlR?=
- =?utf-8?B?dmFnanpuZkNta2psMG0zSHEwaGR4QkJLbzJ0SGlxZVgzdVdKTVhhY1h6S3ZP?=
- =?utf-8?B?K2JyTWkwOExmRng4U0lIQ2N6WjdETlhTbkM2a3dZc0dtVGM1ejNjbDE1bDcw?=
- =?utf-8?B?SUFEcHY0S2dPUngzYkVnOFVVTFU5eVVTV2RVcVpxRERITzhoODl5UElpeHlV?=
- =?utf-8?B?S04rb1JRWUFlVUFKSFVNR0wwdCs0Y1YwNmpFdEpFUm1qQXJJZS9Ea0RJSXZE?=
- =?utf-8?B?NTN3Y0ZPMS8xVlJQbVVvSEhuTWFGQWdwU09RMlNOMzVjRFpveXJ6WmFxR1Yx?=
- =?utf-8?B?SUpTMjJDOVdrODY5Qmw4ZUpoaVB1VXA2NmhGODVuZlhtM3J2MkR1cUdGb2p6?=
- =?utf-8?B?RWZIU09yQWF0MWNjemhTVTNiTXNvTXJ4dytVVm44dVJyaFZrd3VUbzhaQlRm?=
- =?utf-8?B?K3lHTVRaTnY1aVBKUDNxOXh3eFpWd3JndkZFUGZuOElOeHVtUEJpMm9KOEhs?=
- =?utf-8?B?RHJJR3gzTXhYNC9UMndRNWJqUW1Zek9yeFQxbnhEaGNYLzFWQ0xnZWtlMTlz?=
- =?utf-8?B?N0txL1VTa1oyOExOM2lpT0svUWIwUXRUYXZ3VlJxdjZpend6S3dsZHg5OVhZ?=
- =?utf-8?B?TnFlS3N1N2ZNS1RsbHJ0aFZQSXZXcGQrb3A4a0xibmdCRG9VUk9Id24vVEdv?=
- =?utf-8?B?eHRFRTZqZmpTV1RURnRhVTYzcnpBPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c1800e9-ba52-46f9-d908-08d9a56e7b3e
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4008.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2021 23:53:38.3387
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Jvqnoe+QG8zqEFHExkEA4QNwAIYcW2RZKQU/7XZtalMVvnk4dWhTGqKA847ewg2GZrSmC+2+TwMyNsXR4CVwo/lieFkKdL24KAQNBlB9mMg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB4938
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10165 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 mlxscore=0
- bulkscore=0 phishscore=0 suspectscore=0 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2111110121
-X-Proofpoint-GUID: EnCa112P2k9mAM_mwzLcoUmdfrvHPwk-
-X-Proofpoint-ORIG-GUID: EnCa112P2k9mAM_mwzLcoUmdfrvHPwk-
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f5c80ce-9189-def3-9c50-d5a504925253@oracle.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 09.11.2021 02:21, Sean Christopherson wrote:
-> On Tue, Nov 09, 2021, Maciej S. Szmigiero wrote:
->> On 04.11.2021 01:25, Sean Christopherson wrote:
->> By the way, do you want your patches and my non-invasive patches (patches
->> below number 23) merged without waiting for the rest of the series to be
->> fully ready?
->>
->> This way there is less risk of conflicting changes to KVM being merged
->> in meantime while we are still discussing the remaining patches.
->> Or worse - changes that don't conflict but subtly break some assumptions
->> that the code relies on.
->>
->> For this reason I am strongly for merging them independently from the
->> more invasive parts.
+On Fri, Nov 12, 2021, Maciej S. Szmigiero wrote:
+> On 04.11.2021 01:25, Sean Christopherson wrote:
+> > -	/*
+> > -	 * Remove the old memslot from the hash list and interval tree, copying
+> > -	 * the node data would corrupt the structures.
+> > -	 */
+> > +	int as_id = kvm_memslots_get_as_id(old, new);
+> > +	struct kvm_memslots *slots = kvm_get_inactive_memslots(kvm, as_id);
+> > +	int idx = slots->node_idx;
+> > +
+> >   	if (old) {
+> > -		hash_del(&old->id_node);
+> > -		interval_tree_remove(&old->hva_node, &slots->hva_tree);
+> > +		hash_del(&old->id_node[idx]);
+> > +		interval_tree_remove(&old->hva_node[idx], &slots->hva_tree);
+> > -		if (!new)
+> > +		if ((long)old == atomic_long_read(&slots->last_used_slot))
+> > +			atomic_long_set(&slots->last_used_slot, (long)new);
 > 
-> Merging them as soon as they're ready would also be my preference.  That said,
-> I'm hoping we can get the entire implemenation queued up for 5.17 sooner than
-> later.  I'll do my best to respond quickly to try and make that happen.
+> Open-coding cmpxchg() is way less readable than a direct call.
+
+Doh, I meant to call this out and/or add a comment.
+
+My objection to cmpxchg() is that it implies atomicity is required (the kernel's
+version adds the lock), which is very much not the case.  So this isn't strictly
+an open-coded version of cmpxchg().
+
+> The open-coded version also compiles on x86 to multiple instructions with
+> a branch, instead of just a single instruction.
+
+Yeah.  The lock can't be contended, so that part of cmpxchg is a non-issue.  But
+that's also why I don't love using cmpxchg.
+
+I don't have a strong preference, I just got briefly confused by the atomicity part.
+
+> > +static void kvm_invalidate_memslot(struct kvm *kvm,
+> > +				   struct kvm_memory_slot *old,
+> > +				   struct kvm_memory_slot *working_slot)
+> > +{
+> > +	/*
+> > +	 * Mark the current slot INVALID.  As with all memslot modifications,
+> > +	 * this must be done on an unreachable slot to avoid modifying the
+> > +	 * current slot in the active tree.
+> > +	 */
+> > +	kvm_copy_memslot(working_slot, old);
+> > +	working_slot->flags |= KVM_MEMSLOT_INVALID;
+> > +	kvm_replace_memslot(kvm, old, working_slot);
+> > +
+> > +	/*
+> > +	 * Activate the slot that is now marked INVALID, but don't propagate
+> > +	 * the slot to the now inactive slots. The slot is either going to be
+> > +	 * deleted or recreated as a new slot.
+> > +	 */
+> > +	kvm_swap_active_memslots(kvm, old->as_id);
+> > +
+> > +	/*
+> > +	 * From this point no new shadow pages pointing to a deleted, or moved,
+> > +	 * memslot will be created.  Validation of sp->gfn happens in:
+> > +	 *	- gfn_to_hva (kvm_read_guest, gfn_to_pfn)
+> > +	 *	- kvm_is_visible_gfn (mmu_check_root)
+> > +	 */
+> > +	kvm_arch_flush_shadow_memslot(kvm, old);
 > 
+> This should flush the currently active slot (that is, "working_slot",
+> not "old") to not introduce a behavior change with respect to the existing
+> code.
+> 
+> That's also what the previous version of this patch set did.
 
-Finished going through all the patches, with small nits they do make sense
-to me - thanks Sean.
-
-I will prepare an updated (and tested!) next version of this patch set,
-however this may take about two+ weeks as I have other, more urgent work
-to do right now.
-
-Thanks,
-Maciej
+Eww.  I would much prefer to "fix" the existing code in a prep patch.  It shouldn't
+matter, but arch code really should not get passed an INVALID slot.
