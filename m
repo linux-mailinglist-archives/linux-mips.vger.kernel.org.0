@@ -2,52 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3929F44DF89
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 02:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D40644DFC8
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 02:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbhKLBIX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 11 Nov 2021 20:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S231919AbhKLBfh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 11 Nov 2021 20:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbhKLBIW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Nov 2021 20:08:22 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E47C0613F5
-        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 17:05:32 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id e65so6618084pgc.5
-        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 17:05:32 -0800 (PST)
+        with ESMTP id S230360AbhKLBfg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 11 Nov 2021 20:35:36 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC22C061767
+        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 17:32:47 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id k4so7142110plx.8
+        for <linux-mips@vger.kernel.org>; Thu, 11 Nov 2021 17:32:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=qIP3115D8X5svI1diQgiEcs//yqAqweVaUHfcv0HJnk=;
-        b=gf554YHamci0DjUeVoZGJM9DOyXF+0SyUupZIF5IPY2cI9p2DatJ2USEjqu0xXifqV
-         edjai3eTEtZQ8kQGbZs7d7Z7C15ddHZCGcYL3l3HeGlZRfffhdcwYAuRyJSd5gETgxWT
-         yLNteK8tM4CfxpX7aPSWrcYkn7XhezHyrLOvS/D7LuUOUaU64FC3UuIcMReDTB79mTES
-         QgRrs4WD82tMKsnnw7WDZ1CrEmW96jd/E14dYVs3INUpTy+GkkmVW2cT4+YCL5cjsCPL
-         +tIV730AkW1ZKhOoB0H06e8044D6Lc1J08cwloc48Jw1uNWmresmiA1nxkB4w8of5HB5
-         mVBA==
+        bh=AL90QSnlPxXv5tLufZ1zlq7KjJ0D5BExWrjps1t+29s=;
+        b=bxpxOXkH1/gRoN3q2sIlqLWqnDgG6G2HCxNOF6DiM0eebPtdUrVaLZdwTKm30XXIKf
+         pciYCCAraDj6+N5ub88aiEU9Sqc+gEEP0tH18UnSplfqeJqpp5zQ3lSTaSygRoGg4fg+
+         tll+ejzFsotRKGLbtXHvALciCIt5yeW9ml8k89oDq6DTTLGsUACfArDWOsNIoY0iXp96
+         kikQ0fngC+TPH3Kllv27OAwe5xRNf7EWJvcamUReZttXO7TYV+21eZVF7m1gQCC7oZ3B
+         biwzTph5R1rTPbnijCWDmekT3qmBDk8AlH8GBjflmk5suuX4JZkxLi8aoALrZ9ZHJtW7
+         R2tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=qIP3115D8X5svI1diQgiEcs//yqAqweVaUHfcv0HJnk=;
-        b=pK7+QevZe9lB+InYlbGoDjSLxeBKtfK+W9cKxU+8F/6N2Kjup93MKCMT99mRcevVUt
-         h9VuKyLbzmxXZn3rd2O5htiN1CVKvCoiEkNPBYczHos6m0By5FapuUHg2279B4Z90g9E
-         VAyBrlGcqzvIcjj7O+z/Y29JoZfNKtRMSdLOI29PETTIuEF2CPgbbOz14XKOuNqd6VnR
-         ZEeHosvB6fH8ndv2CulGDhtiELscSq3ztED5QD1EKX5MisXG2RqX90BjikDf+HI1OJen
-         YtTYm4q2VpWl5N5gaVZNZhNyAscIsC4uGOnvBglXCPFzXFgFBPRXUA5uPQGTwTkeqqr3
-         dDHA==
-X-Gm-Message-State: AOAM533QgKMh4oRxoP3oKdQy2XNzHm20CdMWu5KWhvCWdkc78vDbvJn3
-        dKBZ9TUFo2/FxOEkD4o13OWS5A==
-X-Google-Smtp-Source: ABdhPJx45D4HU2DqXINd3JCy7/gtFEnfRNSJTdzRC106LwgioqW5s9+ZH9bnEHC0LBIDe1RslUxzZw==
-X-Received: by 2002:a63:8048:: with SMTP id j69mr7469829pgd.111.1636679131571;
-        Thu, 11 Nov 2021 17:05:31 -0800 (PST)
+        bh=AL90QSnlPxXv5tLufZ1zlq7KjJ0D5BExWrjps1t+29s=;
+        b=6cxVwrtlEC215WWn8KC3PZXnPbTL0XE8jlrwloISiOECgpiiuvpMwsxZ8HKstkx1Li
+         QOpobVIBG0/F11dQ2jVBdaPrLU56XW93YIxHhJDqKFvG+K1KfD15wW0YpPJw9xCCyDAO
+         UcqMmqew/Dtk7PCNRPAeY57aC/fvA7wwzZBs1xs+LVd+X/XhrTDLoCLYYNKJAt3qq6nk
+         HQbDQqqyi45LJHbdeBRN599aqhVKoN5Be6gGlnag5O/x1uzjv0oYATixSG62dmtvhyR/
+         lIUG/wvEWp5WAQ75IKq5XI9Y3H8JS30/AzKXg4khSlAKE37enlH/1LxK5kKJXrOcWd5k
+         UXug==
+X-Gm-Message-State: AOAM532CcjOa9p4EeZwMs0c54NXwwz9R/mUQhcRJ/boskjBmDS8InPh6
+        gtlFTpgJ0zc21uSP3ZKjJZ2RyQ==
+X-Google-Smtp-Source: ABdhPJy7r4nQtcrRS0vLIHiQ7JwTdkVyJqAYi43992L2uT2O4NHn7Evm+9JHhEIz/lSq4u0UiWyh1A==
+X-Received: by 2002:a17:90a:17a5:: with SMTP id q34mr31238939pja.122.1636680766291;
+        Thu, 11 Nov 2021 17:32:46 -0800 (PST)
 Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b9sm3251946pgf.15.2021.11.11.17.05.30
+        by smtp.gmail.com with ESMTPSA id p23sm9227849pjg.55.2021.11.11.17.32.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Nov 2021 17:05:30 -0800 (PST)
-Date:   Fri, 12 Nov 2021 01:05:27 +0000
+        Thu, 11 Nov 2021 17:32:45 -0800 (PST)
+Date:   Fri, 12 Nov 2021 01:32:41 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 Cc:     James Morse <james.morse@arm.com>,
@@ -65,8 +65,9 @@ Cc:     James Morse <james.morse@arm.com>,
         linux-mips@vger.kernel.org, kvm@vger.kernel.org,
         kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ben Gardon <bgardon@google.com>,
         Huacai Chen <chenhuacai@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Paul Mackerras <paulus@ozlabs.org>,
         Anup Patel <anup.patel@wdc.com>,
@@ -76,59 +77,80 @@ Cc:     James Morse <james.morse@arm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v5.5 24/30] KVM: Use interval tree to do fast hva lookup
- in memslots
-Message-ID: <YY2919Td8f+F4EDr@google.com>
+Subject: Re: [PATCH v5.5 30/30] KVM: Dynamically allocate "new" memslots from
+ the get-go
+Message-ID: <YY3EOeHVvgOKHNnt@google.com>
 References: <20211104002531.1176691-1-seanjc@google.com>
- <20211104002531.1176691-25-seanjc@google.com>
- <d76707b5-8710-b1a6-0cc6-defdaf9e37b7@oracle.com>
+ <20211104002531.1176691-31-seanjc@google.com>
+ <fee75f86-26b0-2dbe-770a-8ecf5cc9e178@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d76707b5-8710-b1a6-0cc6-defdaf9e37b7@oracle.com>
+In-Reply-To: <fee75f86-26b0-2dbe-770a-8ecf5cc9e178@oracle.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Fri, Nov 12, 2021, Maciej S. Szmigiero wrote:
 > On 04.11.2021 01:25, Sean Christopherson wrote:
-> > @@ -1262,22 +1274,32 @@ static void kvm_replace_memslot(struct kvm_memslots *slots,
-> >   				struct kvm_memory_slot *new)
-> >   {
-> >   	/*
-> > -	 * Remove the old memslot from the hash list, copying the node data
-> > -	 * would corrupt the list.
-> > +	 * Remove the old memslot from the hash list and interval tree, copying
-> > +	 * the node data would corrupt the structures.
-> >   	 */
-> >   	if (old) {
-> >   		hash_del(&old->id_node);
-> > +		interval_tree_remove(&old->hva_node, &slots->hva_tree);
-> >   		if (!new)
-> >   			return;
-> >   	}
-> > -	/* Copy the source *data*, not the pointer, to the destination. */
-> > -	if (old)
-> > +	/*
-> > +	 * Copy the source *data*, not the pointer, to the destination.  If
-> > +	 * @old is NULL, initialize @new's hva range.
-> > +	 */
-> > +	if (old) {
-> >   		*new = *old;
-> > +	} else if (new) {
+> > Allocate the "new" memslot for !DELETE memslot updates straight away
+> > instead of filling an intermediate on-stack object and forcing
+> > kvm_set_memslot() to juggle the allocation and do weird things like reuse
+> > the old memslot object in MOVE.
+> > 
+> > In the MOVE case, this results in an "extra" memslot allocation due to
+> > allocating both the "new" slot and the "invalid" slot, but that's a
+> > temporary and not-huge allocation, and MOVE is a relatively rare memslot
+> > operation.
+> > 
+> > Regarding MOVE, drop the open-coded management of the gfn tree with a
+> > call to kvm_replace_memslot(), which already handles the case where
+> > new->base_gfn != old->base_gfn.  This is made possible by virtue of not
+> > having to copy the "new" memslot data after erasing the old memslot from
+> > the gfn tree.  Using kvm_replace_memslot(), and more specifically not
+> > reusing the old memslot, means the MOVE case now does hva tree and hash
+> > list updates, but that's a small price to pay for simplifying the code
+> > and making MOVE align with all the other flavors of updates.  The "extra"
+> > updates are firmly in the noise from a performance perspective, e.g. the
+> > "move (in)active area" selfttests show a (very, very) slight improvement.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
 > 
-> Unnecessary check - if "new" is NULL then the code will crash anyway
-> accessing this pointer unconditionally...
+> Reviewed-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
 > 
-> > +		new->hva_node.start = new->userspace_addr;
-> > +		new->hva_node.last = new->userspace_addr +
-> > +				     (new->npages << PAGE_SHIFT) - 1;
-> > +	}
-> >   	/* (Re)Add the new memslot. */
-> >   	hash_add(slots->id_hash, &new->id_node, new->id);
-> > +	interval_tree_insert(&new->hva_node, &slots->hva_tree);
+> For a new patch set version when the "main" commit is rewritten anyway
+> (I mean the one titled "Keep memslots in tree-based structures instead of
+> array-based ones") it makes sense to integrate changes like these into
+> such modified main commit.
 > 
-> ...in these two lines above.
+> This way a full algorithm / logic check for all the supported memslot
+> operations needs to be done only once instead of having to be done
+> multiple times for all these intermediate forms of the code (as this is
+> a quite time-consuming job to do properly).
+> 
+> I think it only makes sense to separate non-functional changes (like
+> renaming of variables, comment rewording, open-coding a helper, etc.)
+> into their own patches for ease of reviewing.
 
-Yep, definitely worthless.  I think this was another "plan for the future" idea
-that didn't actually add value.
+I agree that validating intermediate stages is time-consuming and can be
+frustrating, but that doesn't diminish the value of intermediate patches.  I do
+tend to lean too far towards slicing and dicing, but I am quite confident that
+I've come out ahead in terms of time spent validating smaller patches versus
+time saved because bisection could pinpoint the exact problem.
+
+E.g. in this patch, arch code can now see a NULL @new.  That's _supposed_ to be a
+non-functional change, but it would be all too easy to have missed a path in the
+prep work where an arch accesses @new without first checking it for NULL (or DELETE).
+If such a bug were to escape review, then bisection would point at this patch, not
+the mega patch that completely reworked the core memslots behavior.
+
+And IIRC, I actually botched the prior "bitter end" patch and initially missed a
+new.npages => npages conversion.  Again, no functional change _intended_, but one
+of the main reasons for doing small(er) intermediate patches is precisely so that
+any unintended behavior stands out and is easier to debug/triage.
+
+> Or if the main commit was unchanged from the last reviewed version so
+> actual changes in the new version will stand out.
+> 
+> Thanks,
+> Maciej
