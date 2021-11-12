@@ -2,103 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7288B44EBEF
-	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 18:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695D244ED62
+	for <lists+linux-mips@lfdr.de>; Fri, 12 Nov 2021 20:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbhKLR1w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 12 Nov 2021 12:27:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233404AbhKLR1v (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 12 Nov 2021 12:27:51 -0500
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 08CA760F93;
-        Fri, 12 Nov 2021 17:24:57 +0000 (UTC)
-Date:   Fri, 12 Nov 2021 17:29:42 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-mips@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v2] iio/adc: ingenic: fix (MIPS) ingenic-adc build
- errors
-Message-ID: <20211112172942.04553027@jic23-huawei>
-In-Reply-To: <20211110023755.27176-1-rdunlap@infradead.org>
-References: <20211110023755.27176-1-rdunlap@infradead.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
+        id S232526AbhKLTlr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 12 Nov 2021 14:41:47 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:46910 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230101AbhKLTlq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 12 Nov 2021 14:41:46 -0500
+Received: by mail-oi1-f176.google.com with SMTP id s139so19714934oie.13;
+        Fri, 12 Nov 2021 11:38:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=qAZHfyWnmCfvgr8D21qxD2guTWMUKbQ6N/3+eAIuaOs=;
+        b=728Yq4T9xyYY5jlbzwoLctix/Nw5lPn+Lm4qFzMGHMaXVnGks0q3btWI3j9iOCCk/8
+         GVrTh40T3WwQpQBtaxZQBTm2568loEVX2gFswf7wbPKyybYJmJM/tL5BQXlnZxXpP8MH
+         Us/YPysX3cX3IAneGDIjpHxtlKcyJ56re1sCGrQGdQVlLwfprvfFvXy7o/Q//xyTurC6
+         pQzl8k8b56HZbx22pKhg4nHAor/tI8HYXr9YqBXvFOMou8TrmCf5Y18mYlI8XZXczROr
+         7EJX1QDJmXb96QwFjnejFaiANz06pSuh+wn5GTVI6OgX0nBa/UvvoHVR8ygiAq3nQbGF
+         Oo/w==
+X-Gm-Message-State: AOAM533pNXl90dN2bU+pjjs0nu4m9w7bIirta0h32SzwnnmdjBtNICgy
+        Qe0j0wyLsR1wAHQKDwAUVA==
+X-Google-Smtp-Source: ABdhPJwaYFhUy+7cFhoLxnliRVH2YXrCxGg4o8dXc1XtfE0fFoDJbIfDC41E6PUkLRkqvnn2hdql/A==
+X-Received: by 2002:a05:6808:120e:: with SMTP id a14mr15682125oil.63.1636745935365;
+        Fri, 12 Nov 2021 11:38:55 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e28sm1559665oiy.10.2021.11.12.11.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Nov 2021 11:38:54 -0800 (PST)
+Received: (nullmailer pid 3239457 invoked by uid 1000);
+        Fri, 12 Nov 2021 19:38:53 -0000
+Date:   Fri, 12 Nov 2021 13:38:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V2 2/2] dt-bindings: mfd: add Broadcom's Timer-Watchdog
+ block
+Message-ID: <YY7CzWtWATAZH5As@robh.at.kernel.org>
+References: <20211102160615.14672-1-zajec5@gmail.com>
+ <20211102160615.14672-2-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211102160615.14672-2-zajec5@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue,  9 Nov 2021 18:37:55 -0800
-Randy Dunlap <rdunlap@infradead.org> wrote:
-
-> MIPS does not always provide clk*() interfaces and there are no
-> always-present stubs for them, so depending on "MIPS || COMPILE_TEST"
-> is not strong enough to prevent build errors.
+On Tue, Nov 02, 2021 at 05:06:15PM +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Likewise MACH_INGENIC_SOC || COMPILE_TEST is not strong enough
-> since if only COMPILE_TEST=y (with some other MIPS MACH_ or CPU or
-> BOARD setting), there are still the same build errors.
+> It's a block implementing few time related functions depending on a
+> (SoC specific) variant. At this point there is ready binding for a
+> watchdog only. Work on remaining subblocks (e.g. "reg" based reboot) is
+> in progress.
 > 
-> It looks like depending on MACH_INGENIC is the only thing that is
-> sufficient here in order to prevent build errors.
-> 
-> mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4770_adc_init_clk_div':
-> ingenic-adc.c:(.text+0xe4): undefined reference to `clk_get_parent'
-> mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4725b_adc_init_clk_div':
-> ingenic-adc.c:(.text+0x1b8): undefined reference to `clk_get_parent'
-> 
-> Fixes: 1a78daea107d ("IIO: add Ingenic JZ47xx ADC driver.")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Artur Rojek <contact@artur-rojek.eu>
-> Cc: Paul Cercueil <paul@crapouillou.net>
-> Cc: linux-mips@vger.kernel.org
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: linux-iio@vger.kernel.org
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-I'm a bit confused.  There are stubs in include/linux/clk.h for these.
-Why do those not apply here? Are these platforms built with CONFIG_CLK but
-don't provide all the functions?
-
-That sounds highly error prone and rather defeats the object of the
-stubs.  Could we either provide the missing stubs, or solve this some other
-way.  I'm not keen to massively cut the build coverage this driver is getting
-by dropping COMPILE_TEST if there is any route to avoid doing so.
-
-Based on the guess than any platform with clks must be able to turn them on
-I grepped for int clk_enable() and there seem to be only two possiblities
-bcm63xx and lantiq as sources of the build breakage.
-
-Jonathan
-
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
-> v2: use MACH_INGENIC instead of MACH_INGENIC_SOC (thanks, Paul)
+> V2: Update $id, description, compatible, example & commit message
+> ---
+>  .../devicetree/bindings/mfd/brcm,twd.yaml     | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/brcm,twd.yaml
 > 
->  drivers/iio/adc/Kconfig |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- linux-next-20211105.orig/drivers/iio/adc/Kconfig
-> +++ linux-next-20211105/drivers/iio/adc/Kconfig
-> @@ -501,7 +501,7 @@ config INA2XX_ADC
->  
->  config INGENIC_ADC
->  	tristate "Ingenic JZ47xx SoCs ADC driver"
-> -	depends on MIPS || COMPILE_TEST
-> +	depends on MACH_INGENIC
->  	select IIO_BUFFER
->  	help
->  	  Say yes here to build support for the Ingenic JZ47xx SoCs ADC unit.
+> diff --git a/Documentation/devicetree/bindings/mfd/brcm,twd.yaml b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+> new file mode 100644
+> index 000000000000..ed167055be06
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/brcm,twd.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom's Timer-Watchdog (aka TWD)
+> +
+> +maintainers:
+> +  - Rafał Miłecki <rafal@milecki.pl>
+> +
+> +description: |
+> +  Broadcom has a Timer-Watchdog block used in multiple SoCs (e.g., BCM4908,
+> +  BCM63xx, BCM7038). There are few variants available (they differ slightly in
+> +  registers layout). This block consists of: timers, watchdog and optionally a
+> +  software reset handler.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +        - brcm,bcm4908-twd
+> +        - brcm,bcm7038-twd
+> +      - const: brcm,twd
 
+I don't think you need this given you don't expect to have a driver for 
+this other than syscon driver.
+
+> +      - const: simple-mfd
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ranges: true
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +patternProperties:
+> +  '^watchdog@[a-f0-9]+$':
+> +    $ref: /schemas/watchdog/brcm,bcm7038-wdt.yaml
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    timer-mfd@ff800400 {
+> +        compatible = "brcm,bcm4908-twd", "brcm,twd", "simple-mfd", "syscon";
+> +        reg = <0xff800400 0x4c>;
+> +        ranges = <0x00000000 0xff800400 0x4c>;
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        watchdog@28 {
+> +            compatible = "brcm,bcm7038-wdt";
+> +            reg = <0x28 0x8>;
+> +        };
+> +    };
+> -- 
+> 2.31.1
+> 
+> 
