@@ -2,229 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5164509F8
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 17:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 025B8450F79
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 19:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbhKOQtc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 11:49:32 -0500
-Received: from mout.gmx.net ([212.227.17.21]:59235 "EHLO mout.gmx.net"
+        id S241974AbhKOSbr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 13:31:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36922 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231845AbhKOQtX (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Nov 2021 11:49:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1636994693;
-        bh=7X7opVIFUZ9gt0W6u/76B1ZJuHVq3lm9XgLe9rJcqwk=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=ZNp1vsR/IplK0McopUH6C9jjdWtYM8pRYTQT99IpfdIkJP6hIuJ3Bav6Jp/Fsql+W
-         pLeR4/Z2W5PlvaQlcoPw4WL++4hpx8bykreafnukKnhlmV8BRQXi+yt9oC9xkdHG47
-         Egny6rJ6PkZPUuAGgL1D6QlCFuBICxSP/3OxGkDo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.172.2]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MulmF-1mUiZj3MMl-00rlU4; Mon, 15
- Nov 2021 17:44:52 +0100
-Message-ID: <fcdead1c-2e26-b8ca-9914-4b3718d8f6d4@gmx.de>
-Date:   Mon, 15 Nov 2021 17:44:46 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: Build regressions/improvements in v5.16-rc1
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Nick Terrell <terrelln@fb.com>, Rob Clark <robdclark@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Anton Altaparmakov <anton@tuxera.com>,
+        id S240903AbhKOS3p (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Nov 2021 13:29:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D3B4632CD;
+        Mon, 15 Nov 2021 17:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1636999107;
+        bh=eajIuobfbs5aY/C3Q8dSjCf3Ko6DnXwHvuvfvoHM2uc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ASRDF39NbzY837ZH1cVAk0fsAjb3pDY4JDu6DxGHFirFNgq+CR2Ip5tRS7sjfR2HB
+         7qqRiyet5WchPBIYVeSKoRF5bBTiGlIFsyTAjDkwsYH3C9aNbz4vpVIWqVtIV2fB62
+         hvIMPHQKub1pPws/lsPiOWwFOejhGkJWF3Zquwuw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Hector Martin <marcan@marcan.st>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-ntfs-dev@lists.sourceforge.net,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
-References: <20211115155105.3797527-1-geert@linux-m68k.org>
- <CAMuHMdUCsyUxaEf1Lz7+jMnur4ECwK+JoXQqmOCkRKqXdb1hTQ@mail.gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <CAMuHMdUCsyUxaEf1Lz7+jMnur4ECwK+JoXQqmOCkRKqXdb1hTQ@mail.gmail.com>
+        Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: [PATCH 5.14 145/849] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
+Date:   Mon, 15 Nov 2021 17:53:48 +0100
+Message-Id: <20211115165425.046019795@linuxfoundation.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211115165419.961798833@linuxfoundation.org>
+References: <20211115165419.961798833@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:5BKtXEDuts0Z1GbTQQwbacSZ6Qy1U07fZEMQSQLpuPBBQDGFGvS
- jgmRgNw/0/YxGtzSDq/AyZLFtskYKCywXQ3lO2wtd3EGePe4Ixvqqh7DUZZeoRxCsQMl6GA
- by16J3GCpzXn/Msq8wegCjeZkFLZeq3tCjI3WXTxmaGR5bFXZPJKjDTbupJilCqt5Bs35DE
- Rw+BaHR8OgV3ewoQytQig==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b77E2Nv2HWU=:1iEuQwORGxqm+Wxgophchs
- kJUQQ6hBkiYPbKA0OD9YByp1bHssWrVkeWRGKN5pykYEH3l7dN0ijgUMSWJcN0GfQUbeMrT1b
- YaGdtm1k4/pCbjVfG0S149Z9y49SItZL4ZWtdlVE+CRAqawiC7KOmFHtqeN0Y3JmBhRIOjqfA
- uwpF6echOB0lej0vS99fwoOz3DbzQCS0D+iIZnjK/55BLHi1EdS59b+xe3FYn1MbOzW1sOTXh
- U2NPD4g+VaVZuUlI+pmHPQ4wNk3aQQ/0v2vADxHoqHF8G6ISUZLs6qLqK4AmJFA1E1A4aLtz/
- 7huNRwSazAtuaLdZpRe6Qeys5FuaWNHQLsONPwXczWfhlS5ZxxU4znt96t19rKNnOB44icruu
- FpfCnxAIbKLuFgiiE4TBO4D3tcK6iDuh4gsXT/0L9E/QB26kjEtSHA3QP7ACtzqYu1Bdzxu0+
- neK0u+MJdKV7sSNcTbjG+E0D8+rAJZz5NjcCzEg57aRJ+O5YgbDkAoaLXcR3+ihlZml9NHl8I
- nyqs3iFoo+U5FZS6xEAjtRTd3kjOJpcutf95kWK5s5mTRo34ItK4k/Ad0JVdO0Qk94Gly7dd3
- EPRvkD3IvjVdIAoJ1rGqrCJLxNWP9OskTwtxtnvl4HqpjswTECMXMjjUHePuirpU/wbanGDjZ
- gLkqWwbit6L+/MF8j/WgH0uEf54Q4Ym1PEHqdoCmTAevhGPZZD49/diYSKX8c4baXWRjKyRYu
- jCjMhrQJFRiCXP70cHBPZPB5ov1LUhDv5uzdeyGBDdFbsha0M6M8zmtIj9jngXvAp7jjclHY2
- Q4keWlRsrozLDEB86NArf/fA+BNKh5UekNeLQ1k9csmoAntQei+GfSJl/SL76lPfgp0jAHfUg
- TvygG2oE3WZk43TGud0mvrvuC5RIjSTvIVbkSX5eI/GUxeqOuV5DaO80y8DDA1+oswXNTMVJ9
- VPSs3miXxGYDwZ+8z0E8DZ8Q1eG6CZDbs4b5ClRtuiPMJX76ARaXEeTlPpAffiH/ptsUKt03s
- zF15t5hKeMRpsZJ9fldqE2/ud15ANfqT6CXGMZfxXhHhIa0Hc9jQPkvTp1cVZRTJtChK318IW
- JWFtnZlRQXGilk=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/15/21 17:12, Geert Uytterhoeven wrote:
-> On Mon, Nov 15, 2021 at 4:54 PM Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
->> Below is the list of build error/warning regressions/improvements in
->> v5.16-rc1[1] compared to v5.15[2].
->>
->> Summarized:
->>   - build errors: +20/-13
->>   - build warnings: +3/-28
->>
->> Happy fixing! ;-)
->>
->> Thanks to the linux-next team for providing the build service.
->>
->> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/fa55b7dcdc43c=
-1aa1ba12bca9d2dd4318c2a0dbf/ (all 90 configs)
->> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/8bb7eca972ad5=
-31c9b149c0a51ab43a417385813/ (all 90 configs)
->>
->>
->> *** ERRORS ***
->>
->> 20 error regressions:
->>   + /kisskb/src/arch/parisc/include/asm/jump_label.h: error: expected '=
-:' before '__stringify':  =3D> 33:4, 18:4
->>   + /kisskb/src/arch/parisc/include/asm/jump_label.h: error: label 'l_y=
-es' defined but not used [-Werror=3Dunused-label]:  =3D> 38:1, 23:1
->
->     due to static_branch_likely() in crypto/api.c
->
-> parisc-allmodconfig
+From: Eric W. Biederman <ebiederm@xmission.com>
 
-fixed now in the parisc for-next git tree.
+commit 95bf9d646c3c3f95cb0be7e703b371db8da5be68 upstream.
 
+When an instruction to save or restore a register from the stack fails
+in _save_fp_context or _restore_fp_context return with -EFAULT.  This
+change was made to r2300_fpu.S[1] but it looks like it got lost with
+the introduction of EX2[2].  This is also what the other implementation
+of _save_fp_context and _restore_fp_context in r4k_fpu.S does, and
+what is needed for the callers to be able to handle the error.
 
->>   + /kisskb/src/drivers/gpu/drm/msm/msm_drv.h: error: "COND" redefined =
-[-Werror]:  =3D> 531
->>   + /kisskb/src/lib/zstd/compress/zstd_double_fast.c: error: the frame =
-size of 3252 bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=
-=3D]:  =3D> 47:1
->>   + /kisskb/src/lib/zstd/compress/zstd_double_fast.c: error: the frame =
-size of 3360 bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=
-=3D]:  =3D> 499:1
->>   + /kisskb/src/lib/zstd/compress/zstd_double_fast.c: error: the frame =
-size of 5344 bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=
-=3D]:  =3D> 334:1
->>   + /kisskb/src/lib/zstd/compress/zstd_double_fast.c: error: the frame =
-size of 5380 bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=
-=3D]:  =3D> 354:1
->>   + /kisskb/src/lib/zstd/compress/zstd_fast.c: error: the frame size of=
- 1824 bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=3D]:  =
-=3D> 372:1
->>   + /kisskb/src/lib/zstd/compress/zstd_fast.c: error: the frame size of=
- 2224 bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=3D]:  =
-=3D> 204:1
->>   + /kisskb/src/lib/zstd/compress/zstd_fast.c: error: the frame size of=
- 3800 bytes is larger than 1536 bytes [-Werror=3Dframe-larger-than=3D]:  =
-=3D> 476:1
->
-> parisc-allmodconfig
+Furthermore calling do_exit(SIGSEGV) from bad_stack is wrong because
+it does not terminate the entire process it just terminates a single
+thread.
 
-parisc needs much bigger frame sizes, so I'm not astonished here.
-During the v5.15 cycl I increased it to 1536 (from 1280), so I'm simply te=
-mpted to
-increase it this time to 4096, unless someone has a better idea....
+As the changed code was the only caller of arch/mips/kernel/syscall.c:bad_stack
+remove the problematic and now unused helper function.
 
->>   + /kisskb/src/fs/ntfs/aops.c: error: the frame size of 2240 bytes is =
-larger than 2048 bytes [-Werror=3Dframe-larger-than=3D]:  =3D> 1311:1
->>   + /kisskb/src/fs/ntfs/aops.c: error: the frame size of 2304 bytes is =
-larger than 2048 bytes [-Werror=3Dframe-larger-than=3D]:  =3D> 1311:1
->>   + /kisskb/src/fs/ntfs/aops.c: error: the frame size of 2320 bytes is =
-larger than 2048 bytes [-Werror=3Dframe-larger-than=3D]:  =3D> 1311:1
->
-> powerpc-allmodconfig
->
->>   + /kisskb/src/include/linux/compiler_types.h: error: call to '__compi=
-letime_assert_366' declared with attribute error: FIELD_PREP: value too la=
-rge for the field:  =3D> 335:38
->
->     in drivers/pinctrl/pinctrl-apple-gpio.c
->
-> arm64-allmodconfig (gcc8)
->
->>   + /kisskb/src/include/linux/fortify-string.h: error: call to '__read_=
-overflow' declared with attribute error: detected read beyond size of obje=
-ct (1st parameter):  =3D> 263:25, 277:17
->
->     in lib/test_kasan.c
->
-> s390-all{mod,yes}config
-> arm64-allmodconfig (gcc11)
->
->>   + error: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.=
-ko] undefined!:  =3D> N/A
->>   + error: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-m=
-t7621.ko] undefined!:  =3D> N/A
->>   + error: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie=
--mt7621.ko] undefined!:  =3D> N/A
->>   + error: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621=
-.ko] undefined!:  =3D> N/A
->>   + error: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621=
-.ko] undefined!:  =3D> N/A
->
-> mips-allmodconfig
->
->> 3 warning regressions:
->>   + <stdin>: warning: #warning syscall futex_waitv not implemented [-Wc=
-pp]:  =3D> 1559:2
->
-> powerpc, m68k, mips, s390, parisc (and probably more)
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Maciej Rozycki <macro@orcam.me.uk>
+Cc: linux-mips@vger.kernel.org
+[1] 35938a00ba86 ("MIPS: Fix ISA I FP sigcontext access violation handling")
+[2] f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
+Cc: stable@vger.kernel.org
+Fixes: f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
+Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Link: https://lkml.kernel.org/r/20211020174406.17889-5-ebiederm@xmission.com
+Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/mips/kernel/r2300_fpu.S |    4 ++--
+ arch/mips/kernel/syscall.c   |    9 ---------
+ 2 files changed, 2 insertions(+), 11 deletions(-)
 
-Will someone update all of them at once?
+--- a/arch/mips/kernel/r2300_fpu.S
++++ b/arch/mips/kernel/r2300_fpu.S
+@@ -29,8 +29,8 @@
+ #define EX2(a,b)						\
+ 9:	a,##b;							\
+ 	.section __ex_table,"a";				\
+-	PTR	9b,bad_stack;					\
+-	PTR	9b+4,bad_stack;					\
++	PTR	9b,fault;					\
++	PTR	9b+4,fault;					\
+ 	.previous
+ 
+ 	.set	mips1
+--- a/arch/mips/kernel/syscall.c
++++ b/arch/mips/kernel/syscall.c
+@@ -240,12 +240,3 @@ SYSCALL_DEFINE3(cachectl, char *, addr,
+ {
+ 	return -ENOSYS;
+ }
+-
+-/*
+- * If we ever come here the user sp is bad.  Zap the process right away.
+- * Due to the bad stack signaling wouldn't work.
+- */
+-asmlinkage void bad_stack(void)
+-{
+-	do_exit(SIGSEGV);
+-}
 
-
-
-
-Helge
-
-
->>   + arch/m68k/configs/multi_defconfig: warning: symbol value 'm' invali=
-d for MCTP:  =3D> 322
->>   + arch/m68k/configs/sun3_defconfig: warning: symbol value 'm' invalid=
- for MCTP:  =3D> 295
->
-> Yeah, that happens when symbols are changed from tristate to bool...
-> Will be fixed in 5.17-rc1, with the next defconfig refresh.
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m=
-68k.org
->
-> In personal conversations with technical people, I call myself a hacker.=
- But
-> when I'm talking to journalists I just say "programmer" or something lik=
-e that.
->                                 -- Linus Torvalds
->
 
