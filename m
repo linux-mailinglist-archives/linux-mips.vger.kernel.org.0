@@ -2,84 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0742245061C
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 14:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FC945065B
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 15:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbhKON7M convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 15 Nov 2021 08:59:12 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:52651 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbhKON7M (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Nov 2021 08:59:12 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M4JiJ-1mmta92BST-000I5W; Mon, 15 Nov 2021 14:56:12 +0100
-Received: by mail-wr1-f51.google.com with SMTP id u1so30887459wru.13;
-        Mon, 15 Nov 2021 05:56:12 -0800 (PST)
-X-Gm-Message-State: AOAM5319m8vghGPTjZGBTb6s6MI+Eh6K4M3/BjL28kuf3UgbdHBGRyt5
-        QNDNGKcHTDB94iVtF5+ZSWQACARgEhOFtwxitmQ=
-X-Google-Smtp-Source: ABdhPJwZu1Y0NQaJduThy0FATNKQ7q57R8j31tpZxHMuJRrVI5TgHIDpuqzbH7XhZV1NVo7L4AeuZOFUGvZ90zQokAs=
-X-Received: by 2002:adf:d1c2:: with SMTP id b2mr47933601wrd.369.1636984572170;
- Mon, 15 Nov 2021 05:56:12 -0800 (PST)
+        id S231728AbhKOON2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 09:13:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33430 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232132AbhKOONG (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Nov 2021 09:13:06 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id BC66361C4F;
+        Mon, 15 Nov 2021 14:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636985408;
+        bh=xwJZkdktg0NLCh5xmpdvC5ijjldRWG2/4GMbefs3CkA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AW08DENHCHgUs0fVDIvYiibD9nRbeDbD4x0UBCzd+PLdDULFzWp/ejR6Tg5S2sQOD
+         YJlVZ69TVzwJ7WQymZ6Sj7NOYYSgVVmN/useNXMrsYsP1DTzo+5yWKuaaJuwwVU0tk
+         u19p919GB+jRirRdEwvAU3mpgjr9hSn7Uoi09Hyc1rl1TSH+FmzfVtKFvTL+mfMkaT
+         tVRiy01sXx2X3nxcmpzdfpO7sbNN00Yogy0UFyXyd3vl51qDXdPIxDy4lqwcAsRzrh
+         jmu4wo+WftQe4q4OIPz4Ub7zoagQXj0olPrjhN/D2T3QqYzp3mFOjRZzAa/eevEDAE
+         1vYrLTLovV3Lw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 9D54D6095A;
+        Mon, 15 Nov 2021 14:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211115070809.15529-1-sergio.paracuellos@gmail.com>
- <20211115070809.15529-5-sergio.paracuellos@gmail.com> <YZJWM33dXqW1BsuV@rocinante>
- <CAK8P3a0A9xAcwDLFbUk--X2+7gFpOL7HJw-9Sk8KZxfoidcxuw@mail.gmail.com> <CAMhs-H9ox3qeAKCN7ug1BxJArmvjDBSqgubOvr_tK1hasPNs3A@mail.gmail.com>
-In-Reply-To: <CAMhs-H9ox3qeAKCN7ug1BxJArmvjDBSqgubOvr_tK1hasPNs3A@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 15 Nov 2021 14:55:56 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2-C1zo81hHcua6d7+XE8Gm=s6h0JTR9Q71DbDU9f2WwA@mail.gmail.com>
-Message-ID: <CAK8P3a2-C1zo81hHcua6d7+XE8Gm=s6h0JTR9Q71DbDU9f2WwA@mail.gmail.com>
-Subject: Re: [PATCH 4/5] PCI: mt7621: Add missing 'MODULE_LICENSE()' definition
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:wb8B/5taonV8CMaacygLepBOELSZjLqzcgYsoB/1BAukZjP9EjL
- 2drXOxYrtTbMH7gwoKdRgcAxzYs2DsKzLj7fey1I+TVc5d0cTG5H2agR5lpgFUwyYOCwp82
- tjYfqpe74j/zRyPODutwGJZdGfMIhRu9Qm9KM0HMAoTWfepDyx5QFnR/rPJYXi/QgxqYlR9
- gPp8wHwY3nI0JietAreHA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2aQuj2BncJE=:WQ9r1Cjeg/6FpsXaSyXKMs
- hN2i4azc5OwbArKFJ95gGrAUGSna6BpZIjxETqTz94FhnDkxLsZtq7Tq5VVRf6s783UqsO0cn
- FgIc/GFBk6UTB1NVoRqEUF6NNIdWr9h0QqyRl/ceAxCv/fi3JUCzrc6uFrTQ51NgFIESlOe1F
- +rrVYewgP39ASKviGP7bEg/5AiMQkZ10nxDOIQQBFxrfi6bJSzqeqJm8+aCJio1ujKapNci3I
- t8SLDJpWYHT8KSrrZlkWUiqnDwpgYT15uFrBonYb71uglgwcPdt1ZieYMtxU/TGdWeX36/+oI
- zLB4yxOYLCs7z6Hs/BQaCitpRYBzI7bIUOG+i+fdSPCV2cufHSFnv0b+DBLBPcbDbANJ+h2Fm
- T5AUJ+SNlGtm8gC0OFsX5L5BcTj92gfXvRLX+ovVTamvsaFhKts5FSjVmzf3Frnv6iUfY57OA
- QOTSYg4zJgquHM1xE/LCEaiL6aGyyScdiUTMoFcLU+hFsm5Ryyjh2K8KSATwuxCXxKtrakAjQ
- GA1GSTQ1MfYk2hUMGZuPDw0cpZAsE9itp9gV8ei8Qe8m7M8BieaB21sa7jTU0Ct6MgXhgxPyC
- i3WSly7eLOmW+kt36gjTm11ULf9DuciwlYohVIZ8xlLfSOCAzS/XuEz1FzNph8DWyR9TeRVUn
- TpAPbHH9pNGXy5XuPo6azY2GxvkQp+9TAF+LVJZohGXDufmVckFJK4PP7+3kzOlVc+a5lWUgJ
- j/TiWjmjzKyEGUrJu82+C9fm5FeWyxRbzJ/c+0a3wxpj4H3rzbe3p5Ls8qIFsJ1vF5ezzgkz9
- IGDHJLRUPEAGcpZAzg4Svo3PftsVwrzZ2C8lMEtugh8GQnQGZE=
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH -net] net: ethernet: lantiq_etop: fix build errors/warnings
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163698540863.13805.40510360412441123.git-patchwork-notify@kernel.org>
+Date:   Mon, 15 Nov 2021 14:10:08 +0000
+References: <20211115010229.15933-1-rdunlap@infradead.org>
+In-Reply-To: <20211115010229.15933-1-rdunlap@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     netdev@vger.kernel.org, lkp@intel.com, olek2@wp.pl,
+        hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
+        john@phrozen.org, linux-mips@vger.kernel.org, ralf@linux-mips.org,
+        michael.opdenacker@bootlin.com
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 2:51 PM Sergio Paracuellos
-<sergio.paracuellos@gmail.com> wrote:
-> On Mon, Nov 15, 2021 at 2:00 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Mon, Nov 15, 2021 at 1:44 PM Krzysztof Wilczyński <kw@linux.com> wrote:
-> > This is often use for PCI drivers, but after Rob reworked this code a while
-> > back, it should actually be possible to reliably remove and reload PCI
-> > host bridge drivers, and it would be good to eventually lift the restriction
-> > here as well.
->
-> I see. Thanks for letting me know. I will search for a way to
-> accomplish this but that will be a different patch series.
+Hello:
 
-Right, that is what I meant. I don't think it will be difficult, but
-there is no point
-intermixing it with your current work.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-       Arnd
+On Sun, 14 Nov 2021 17:02:29 -0800 you wrote:
+> Fix build error and warnings reported by kernel test robot:
+> 
+> drivers/net/ethernet/lantiq_etop.c: In function 'ltq_etop_probe':
+> drivers/net/ethernet/lantiq_etop.c:673:15: error: implicit declaration of function 'device_property_read_u32' [-Werror=implicit-function-declaration]
+>      673 |         err = device_property_read_u32(&pdev->dev, "lantiq,tx-burst-length", &priv->tx_burst_len);
+> 
+>    drivers/net/ethernet/lantiq_etop.c: At top level:
+>    drivers/net/ethernet/lantiq_etop.c:730:1: warning: no previous prototype for 'init_ltq_etop' [-Wmissing-prototypes]
+>      730 | init_ltq_etop(void)
+> 
+> [...]
+
+Here is the summary with links:
+  - [-net] net: ethernet: lantiq_etop: fix build errors/warnings
+    https://git.kernel.org/netdev/net/c/e97b21e94652
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
