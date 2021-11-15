@@ -2,105 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 474F244FCE4
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 03:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1B344FDD8
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 05:18:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236219AbhKOCNa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 Nov 2021 21:13:30 -0500
-Received: from mail-oo1-f45.google.com ([209.85.161.45]:44648 "EHLO
-        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236191AbhKOCN3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Nov 2021 21:13:29 -0500
-Received: by mail-oo1-f45.google.com with SMTP id t9-20020a4a8589000000b002c5c4d19723so1081941ooh.11;
-        Sun, 14 Nov 2021 18:10:34 -0800 (PST)
+        id S230315AbhKOEV1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 Nov 2021 23:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230293AbhKOEVW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Nov 2021 23:21:22 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52310C061746;
+        Sun, 14 Nov 2021 20:18:22 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id y8so7892245plg.1;
+        Sun, 14 Nov 2021 20:18:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zv3FZFDa9f+2j3PeejvbeVmRdaCyODNvuYwLOlYEPkM=;
+        b=VXb5K929vEMzj97pDzs0PXiXFoZ8Km6hWj5/BkCXmV+HpHBXDsS9luWik3RIl33fv+
+         XMjh/bxKik+zjF+z/gGmJqrDiVeI3/Y+3BYZU38gojmlNL9g8gDosNnlip9ysesmyy9/
+         G3qkk3A0i1SSlLVV6VVb+EwD/jIa3wVkA5rba4Qxexax1SAiWiB4/g4FWkQCs7RHSIkf
+         tzg15ZOQtpfldLPV0u5T+js8Y/EbXxU0xNHXrfECXZ4Z0kjfg3YT7kl6q97JnnUZZJ5T
+         08HBGfv1Cy5PhV6ArmunI7YmTXbQkjDkwFCzUF/cR7vS4uKF+i3Ll64+I8AOwfHqC7Ox
+         cnjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=EcWazStHMBzkeUqUKg871NcAh5km8nD2bxzBNAKhSts=;
-        b=sjEr3aPBiEvX5PP+vKYRuTZ2OcFTeZazHUHB/o3jmv3xIBJ0zTsbIZWRWbg9DnvgXr
-         NzhDuvQ2KWCkGqYXd99Ssyw6fqEIJNDMMgNgCGFdj/VxUH1j5DPTIFRl5tPytEpGr4xo
-         poYyClwpDlqxz3Hq/G3OEwfJqyPZ6l/JhnuaeuOXJ1xWIkghA6eRVDs/tNJTKtsjWncZ
-         RFcC4VJKQN8hnCrHcgx86SajoVSOW6GhJ2BJEyr+HEBerj3MgEMdgRA4fSkVt9ErCZmW
-         Zk7HbvKXvU6hgQ9DiMScfJlKmDNX35tfan9wfTeolGU/YS9ci3YyCCXQup4SAnp13/kd
-         yYwg==
-X-Gm-Message-State: AOAM530RqRxEQk2xYpShYk2MDHo18tVAaatn3sQ8x2KQBV2NaYKDG/jr
-        2vDreYTpyOnSEBVyHrRZYk+eBXnYXw==
-X-Google-Smtp-Source: ABdhPJyQC8PXrpS/2xNBLC9mcCg4j3oZwxmowhchO5VctfLmSSbKl9dqq5AzmhwQB31Tgnq9HhS7Gw==
-X-Received: by 2002:a4a:da1a:: with SMTP id e26mr3719912oou.79.1636942234563;
-        Sun, 14 Nov 2021 18:10:34 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l2sm2731307otl.61.2021.11.14.18.10.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 18:10:34 -0800 (PST)
-Received: (nullmailer pid 3712867 invoked by uid 1000);
-        Mon, 15 Nov 2021 02:10:32 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Justin Chen <justinpopo6@gmail.com>,
-        =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zv3FZFDa9f+2j3PeejvbeVmRdaCyODNvuYwLOlYEPkM=;
+        b=F8q1gLq/50N56bsRNi16cH03yRjQ2TdexSMCCM02ve9v8Pwz1/pc+T5KIfYaOhAifE
+         QVQXVMEHCS/d1Lmx36jeBZD8hsnbXrtRsXelGIy4VvypHAPFXFy96y/mruGwO2ic6Zro
+         kp78CiWbSKhE8Dj6iu7MCG8QTnCa2ek+QKdC/l3y3OTfyklP+FHCov2Ar2OyR6+7ZlWd
+         YwfAzu3fjSisr5Cqe9MkieVD0nBR59hvE5WLz4MKgsdzT1WJDxPzJb8h0yeURO5w1Sm+
+         RYX4DVlvfuUnZ35i1k6ziWAHBuCTJ4vmvQ8Z3mI+4jeWNN7SpTZZX9vD6HT4ak5D8jYt
+         U36g==
+X-Gm-Message-State: AOAM533LBUmn5mjqDvvV2RaPBttfdRiF6Bek04nHRK0krkQ3EFgSqTeg
+        paYnd0nL2M6ND6P3E9XID1M=
+X-Google-Smtp-Source: ABdhPJyto7ZuVYw/P5Z2853eYUZdPudgQAGiqtwBJhcvb+A6ObKAhxXUpKmYl/AmKMBe4XVQNdgmpA==
+X-Received: by 2002:a17:902:d2cf:b0:141:b347:df9d with SMTP id n15-20020a170902d2cf00b00141b347df9dmr32090970plc.37.1636949901748;
+        Sun, 14 Nov 2021 20:18:21 -0800 (PST)
+Received: from ?IPV6:2600:8802:600:10b:e5cf:8396:baa0:58f1? ([2600:8802:600:10b:e5cf:8396:baa0:58f1])
+        by smtp.gmail.com with ESMTPSA id q6sm10304260pgn.42.2021.11.14.20.18.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 Nov 2021 20:18:20 -0800 (PST)
+Message-ID: <b6f5515e-ca60-d0cc-7970-b7ae853c820c@gmail.com>
+Date:   Sun, 14 Nov 2021 20:18:20 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4] mips: bcm63xx: add support for clk_get_parent()
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-mips@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
         bcm-kernel-feedback-list@broadcom.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20211113114645.27360-2-zajec5@gmail.com>
-References: <20211113114645.27360-1-zajec5@gmail.com> <20211113114645.27360-2-zajec5@gmail.com>
-Subject: Re: [PATCH V4 2/2] dt-bindings: mfd: add Broadcom's Timer-Watchdog block
-Date:   Sun, 14 Nov 2021 20:10:32 -0600
-Message-Id: <1636942232.944025.3712866.nullmailer@robh.at.kernel.org>
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <20211115004218.13034-1-rdunlap@infradead.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20211115004218.13034-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 13 Nov 2021 12:46:45 +0100, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+
+
+On 11/14/2021 4:42 PM, Randy Dunlap wrote:
+> BCM63XX selects HAVE_LEGACY_CLK but does not provide/support
+> clk_get_parent(), so add a simple implementation of that
+> function so that callers of it will build without errors.
 > 
-> It's a block implementing few time related functions depending on a
-> (SoC specific) variant. At this point there is ready binding for a
-> watchdog only. Work on remaining subblocks (e.g. "reg" based reboot) is
-> in progress.
+> Fixes these build errors:
 > 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V2: Update $id, description, compatible, example & commit message
-> V3: Drop "brcm,twd" from compatible list per Rob's review
-> ---
->  .../devicetree/bindings/mfd/brcm,twd.yaml     | 61 +++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/brcm,twd.yaml
+> mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4770_adc_init_clk_div':
+> ingenic-adc.c:(.text+0xe4): undefined reference to `clk_get_parent'
+> mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4725b_adc_init_clk_div':
+> ingenic-adc.c:(.text+0x1b8): undefined reference to `clk_get_parent'
 > 
+> Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs." )
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Cc: Artur Rojek <contact@artur-rojek.eu>
+> Cc: Paul Cercueil <paul@crapouillou.net>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: linux-iio@vger.kernel.org
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: bcm-kernel-feedback-list@broadcom.com
+> Cc: Jonas Gorski <jonas.gorski@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/watchdog/brcm,bcm7038-wdt.yaml'
-xargs: dt-doc-validate: exited with status 255; aborting
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/mfd/brcm,twd.example.dt.yaml'
-Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/watchdog/brcm,bcm7038-wdt.yaml'
-make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/mfd/brcm,twd.example.dt.yaml] Error 255
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1441: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1554679
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
