@@ -2,59 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBC444FC8D
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 01:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AFD44FC90
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 01:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbhKOAUt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 14 Nov 2021 19:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
+        id S230391AbhKOAVl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 14 Nov 2021 19:21:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbhKOAUt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Nov 2021 19:20:49 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CB3C061746
-        for <linux-mips@vger.kernel.org>; Sun, 14 Nov 2021 16:17:53 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 200so13064215pga.1
-        for <linux-mips@vger.kernel.org>; Sun, 14 Nov 2021 16:17:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pO0oMlxqmqlgKUInfbvJ+y5OIN260V5OfL8NH0Ouhk4=;
-        b=DiDYFdhU97zn2TkQBajVe1jMAaHvC9nYBNx1T58wEnDrcUe0pU+QnNIv/dX7zluDvz
-         e4hb9caVT7cQRr2SdxAIVv5g1FJz7cMdrLoZZz+FlY4cS1UymG2DTAW5lpIq/c+Z3c4j
-         JIDRn9810neko3Pe9GEoAPhA1gG+X/LpjlqzEvRcvhwCwRK/0E2xvrzKKEYuq1W5DWTd
-         iBi/r8Ly0dpWgofHyKrevnfpjT20GjoPAwqxKpiaXzY5m1LF3AiAQyp+dPte0apPxYb8
-         oorf0Leu247iIPxVRdk5Sv1P+DdUbYiSaervy9zegH3hkOQCBi86mFCTPbuTgKy1EgTX
-         6eCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pO0oMlxqmqlgKUInfbvJ+y5OIN260V5OfL8NH0Ouhk4=;
-        b=TxzHLaqeeD8V883NIG8MVNf24RtMMt3TBZTvp90oVAIJP73PQaA2iKpsB0D1qW6g1L
-         XaI2ceOrpr/od2jH73BMKohqPZQnsvcwDMb9YPbTJjeCBwqcBiJKsyRnCajXDqlqU0dK
-         SiLYl+lvJFZZzvlB2wg6f0Y7Gc6GjTl7axfMg1zpC5j40UTwoO6TzUJ92ldWJCmzi4CF
-         hAq6ZZb1dg6COvmRi42cLDjz+62FCx2CBClN0rTdpUmnB02vkp8HGgUoA1oBQjPgEVF7
-         /7XPQ283E9fdMdovLFOECREcenFovwMKN2RlHelyAHuaeb9LNcyrwhpBPCvVOmqqZ+Pp
-         VY9Q==
-X-Gm-Message-State: AOAM530SHgBVfCK46W+U2D4qvWdiB8Sqf+sXMr6cPUSIkyQPC9CeiJGk
-        JX+A31rhBNicblm6sv2RaHL6kBqC9lEJ7Bmhb/w=
-X-Google-Smtp-Source: ABdhPJw1XxWv7sxLshVCNuvTYQkm3swcEMHuKOuNRLDvIs9qrSEA7/F6CteyHhm3Hr75xFHpgXjpFcRZtIh4OHEjiMs=
-X-Received: by 2002:a65:53cd:: with SMTP id z13mr21637665pgr.209.1636935472696;
- Sun, 14 Nov 2021 16:17:52 -0800 (PST)
+        with ESMTP id S229507AbhKOAVe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 14 Nov 2021 19:21:34 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1534EC061746;
+        Sun, 14 Nov 2021 16:18:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=n7f9L6nx97YdTMJtP7Ls20RES49EFohNDqW95oBsSWY=; b=Zxi1+EIOrcK/rOWj+FPvb2vDUw
+        CD/VANxP1wj4zu0JsIkcSS3zU9l3wHT7wPtYamN00RJiOtOKcBsPhsmImjKbWYlFizhj4E7t8XDeH
+        sVS3ihLgkt2rzRgX/CNcN5OE6huxfg5JJnm+QPl211tN72lnFbpOV3XP5k5aEIIm0RH2ZRKwjX7cq
+        gb53nGqNv8aQMco8wVnSwKA+WsaAeXIOYHFS0HNQI3Q708aZg2d1X9Y5sB+T92Zf/W8gnmNMfWvsD
+        1fmldmozejTswRVPzssydImLc3S4zUBGXz8hQKJwnYZj7OduV2hjGLy6fqKbvjcgftqd52A9OVsYF
+        tMt8UdTw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mmPhl-00EBWr-60; Mon, 15 Nov 2021 00:18:37 +0000
+Subject: Re: [PATCH v3] mips: bcm63xx: add support for clk_get_parent()
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>
+References: <20211114163444.21669-1-rdunlap@infradead.org>
+ <CAHp75Veeppry=SHk0NUxpHVKbefCgRqDvi+PFJCiCABDSYg-HQ@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <9429af8f-a301-9f51-68a0-2e42013e6e8f@infradead.org>
+Date:   Sun, 14 Nov 2021 16:18:35 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Received: by 2002:a17:90b:3ec7:0:0:0:0 with HTTP; Sun, 14 Nov 2021 16:17:52
- -0800 (PST)
-Reply-To: fionahill.usa@hotmail.com
-From:   Fiona Hill <arafaeloxford@gmail.com>
-Date:   Sun, 14 Nov 2021 16:17:52 -0800
-Message-ID: <CAM=40BLWbaU1drsiTnDH00dBYdAGBuoOcV7PVFnvpS9ysa-fGg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAHp75Veeppry=SHk0NUxpHVKbefCgRqDvi+PFJCiCABDSYg-HQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 11/14/21 8:40 AM, Andy Shevchenko wrote:
+> On Sun, Nov 14, 2021 at 6:34 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> BCM63XX selects HAVE_LEGACY_CLK but does not provide/support
+>> clk_get_parent(), so add a simple implementation of that
+>> function so that callers of it will build without errors.
+>>
+>> Fixes these build errors:
+>>
+>> mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4770_adc_init_clk_div':
+>> ingenic-adc.c:(.text+0xe4): undefined reference to `clk_get_parent'
+>> mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4725b_adc_init_clk_div':
+>> ingenic-adc.c:(.text+0x1b8): undefined reference to `clk_get_parent'
+> 
+> Some nit-picks below.
+> Otherwise looks good to me,
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+> Suggested-by?
+
+Yes, I'll add Russell for that.
+
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Cc: Artur Rojek <contact@artur-rojek.eu>
+>> Cc: Paul Cercueil <paul@crapouillou.net>
+>> Cc: linux-mips@vger.kernel.org
+>> Cc: Jonathan Cameron <jic23@kernel.org>
+>> Cc: Lars-Peter Clausen <lars@metafoo.de>
+>> Cc: linux-iio@vger.kernel.org
+>> Cc: Florian Fainelli <f.fainelli@gmail.com>
+>> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> Cc: Russell King <linux@armlinux.org.uk>
+>> Cc: bcm-kernel-feedback-list@broadcom.com
+>> Cc: Jonas Gorski <jonas.gorski@gmail.com>
+>> ---
+>> v1 and v2 were:
+>> [PATCH] iio/adc: ingenic: fix (MIPS) ingenic-adc build errors
+> 
+>> Fixes: 1a78daea107d ("IIO: add Ingenic JZ47xx ADC driver.")
+> 
+> Not sure why it's here. What does (the location of) this tag mean?
+
+Yesterday I didn't see what Fixes: tag I should use,
+but after looking again, it looks like I should use
+Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs."
+
+
+> 
+>>   arch/mips/bcm63xx/clk.c |    7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> --- linux-next-20211112.orig/arch/mips/bcm63xx/clk.c
+>> +++ linux-next-20211112/arch/mips/bcm63xx/clk.c
+>> @@ -381,6 +381,13 @@ void clk_disable(struct clk *clk)
+>>
+>>   EXPORT_SYMBOL(clk_disable);
+>>
+>> +struct clk *clk_get_parent(struct clk *clk)
+>> +{
+>> +       return NULL;
+>> +}
+> 
+>> +
+> 
+> Perhaps it's not needed even if the rest have it (I mean blank line).
+
+Sure, I'll drop it. It was for file consistency,
+but it's not a big deal either way.
+
+>> +EXPORT_SYMBOL(clk_get_parent);
+>> +
+>>   unsigned long clk_get_rate(struct clk *clk)
+>>   {
+>>          if (!clk)
+> 
+
+Thanks.
 -- 
-Hi, please with honesty did you receive my message i send to you?
+~Randy
