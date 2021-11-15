@@ -2,61 +2,61 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F544450444
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 13:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E860D450479
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 13:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbhKOMUQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 07:20:16 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11238 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231329AbhKOMUB (ORCPT
+        id S230507AbhKOMh7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 07:37:59 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:61462 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230438AbhKOMh4 (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Nov 2021 07:20:01 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AFAxUCu022822;
-        Mon, 15 Nov 2021 12:16:18 GMT
+        Mon, 15 Nov 2021 07:37:56 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AFBrtdq011652;
+        Mon, 15 Nov 2021 12:34:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  subject : to : cc : references : from : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=pp1;
- bh=FGzXDLCIzbaoG6sA4ktZGlkzV+djpIiRQi2B3Z+NZpU=;
- b=VkmEBZBwPQVnrCbrtLJb8LuBfFST5QxmvLrYBaM72yIcJNpUAlxoqB+W1Gq1748d2HFm
- 2zdB31SnbilqF1+4UBGMFY2+14xwMPfy5oGyW/zIJb9uBGlkXWZ1F3d3c55WYUZYv4d6
- i4r5BTucQ1+7dHZBCnx/FB7zB6oNuzgxiE0ZpB0ClRIXL0vDf85TPvX2I0JEkhWrc0lM
- ub8VOO17c5lsBAandpfVJ07IxsLkWsFcc5nPByXLXcozU2JnYJSc5Lfevpuq8dkEPdaQ
- a3v0oqKymdSBjCInG7CRu/LeRk1s2S6iwQWKhr/JGatmWJ2rbt6kZ5s0x3k605lsK4/U eQ== 
+ bh=iY1Col5FMwaQrAzLqIT+kCvknRgj+GHBiwaP932CpAc=;
+ b=rHm01J9/yZtsmLfgZWnmsAXOyv63fwmQu1nqKqVaZlS5njoWrYRB+hOWtRj2Q4zgX3iJ
+ KbHu6bkbviPkKCNV3rZCPKXpd/qhIqKCAJ3xqrihYkCuYSvLcrCHeW5fkwzbf/b2O6nk
+ ci+a50UTTB+kf0KxKePW3kBsMXDSO8WWnVmc7Gl+uY5n9RbydndMz7JdfMYBF6S6pWbC
+ asEE8oJ3tp6R90J06aKYMEwlc3FKXQQMaRPxakufQawFkceGX6aTveYZG31Q8Pvn2zQ9
+ APDMX22OYR3NE7AKukdevwffNueZNTjR3EQiFbWRkgfUWtH3faMIlNIpr3lW2h7Jo8it Yg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cbcw1ce98-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cbq348tva-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Nov 2021 12:16:18 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AFC0I4n005497;
-        Mon, 15 Nov 2021 12:16:17 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cbcw1ce8g-1
+        Mon, 15 Nov 2021 12:34:04 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AFBsE1K016059;
+        Mon, 15 Nov 2021 12:34:03 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cbq348tup-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Nov 2021 12:16:17 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AFCDkOB002455;
-        Mon, 15 Nov 2021 12:16:14 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3ca509mh6b-1
+        Mon, 15 Nov 2021 12:34:03 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AFCJ8oN002492;
+        Mon, 15 Nov 2021 12:34:01 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3ca509cqq3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Nov 2021 12:16:14 +0000
+        Mon, 15 Nov 2021 12:34:01 +0000
 Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AFC9Lml64815552
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AFCXwha27787704
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Nov 2021 12:09:21 GMT
+        Mon, 15 Nov 2021 12:33:58 GMT
 Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2429F42049;
-        Mon, 15 Nov 2021 12:16:12 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 53F7E4204D;
+        Mon, 15 Nov 2021 12:33:58 +0000 (GMT)
 Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3E5E442042;
-        Mon, 15 Nov 2021 12:16:11 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 72B9D4205F;
+        Mon, 15 Nov 2021 12:33:57 +0000 (GMT)
 Received: from [9.171.56.111] (unknown [9.171.56.111])
         by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 15 Nov 2021 12:16:11 +0000 (GMT)
-Message-ID: <b581f056-e7ea-befa-8c13-50644105c042@de.ibm.com>
-Date:   Mon, 15 Nov 2021 13:16:10 +0100
+        Mon, 15 Nov 2021 12:33:57 +0000 (GMT)
+Message-ID: <ecd55383-7089-b3cd-30cc-3f9feb7eadb4@de.ibm.com>
+Date:   Mon, 15 Nov 2021 13:33:56 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
 Subject: Re: [PATCH 0/5] KVM: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS and
@@ -83,19 +83,19 @@ From:   Christian Borntraeger <borntraeger@de.ibm.com>
 In-Reply-To: <4a3c7be7-12fa-6e47-64eb-02e6c5be5dbc@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4GM4n7HdUC8wY57Y8aQbGHZR4IYkcALh
-X-Proofpoint-ORIG-GUID: 8BYV8Df_CMNWb7XWAnYRT1TEmZU4UwBJ
+X-Proofpoint-ORIG-GUID: F_7VLECjtzfz58UlopgCykV9hLKIwLBB
+X-Proofpoint-GUID: Xk7vY1f_lcFudvzcJVI-5_sBZtDokgNi
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-15_10,2021-11-15_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- priorityscore=1501 malwarescore=0 spamscore=0 bulkscore=0 mlxlogscore=999
- phishscore=0 mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2111150067
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111150070
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -116,25 +116,5 @@ Am 11.11.21 um 17:32 schrieb Paolo Bonzini:
 > 
 > Christian, can you look at this for s390?  Returning a fixed value seems wrong for KVM_CAP_NR_VCPUS.
 
-will do. (Sorry I was OOO the last days).
-> 
-> Thanks,
-> 
-> Paolo
-> 
->> Vitaly Kuznetsov (5):
->>    KVM: arm64: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
->>    KVM: MIPS: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
->>    KVM: PPC: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
->>    KVM: RISC-V: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
->>    KVM: x86: Drop arbitraty KVM_SOFT_MAX_VCPUS
->>
->>   arch/arm64/kvm/arm.c            | 7 ++++++-
->>   arch/mips/kvm/mips.c            | 2 +-
->>   arch/powerpc/kvm/powerpc.c      | 4 ++--
->>   arch/riscv/kvm/vm.c             | 2 +-
->>   arch/x86/include/asm/kvm_host.h | 1 -
->>   arch/x86/kvm/x86.c              | 2 +-
->>   6 files changed, 11 insertions(+), 7 deletions(-)
->>
-> 
+If we talk about recommended number, then num_online_cpus() also seems to make sense on s390 so
+if you change that for s390 as well I can ACK this.
