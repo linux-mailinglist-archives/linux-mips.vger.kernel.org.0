@@ -2,87 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A92452385
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 02:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF554522B9
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 02:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352752AbhKPB05 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 20:26:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243864AbhKOTIK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Nov 2021 14:08:10 -0500
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD438C06EDE1;
-        Mon, 15 Nov 2021 09:58:21 -0800 (PST)
-Received: from [2a04:4540:1401:b700:606b:3eee:8c1b:a587]
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <john@phrozen.org>)
-        id 1mmgF6-0005a6-Ay; Mon, 15 Nov 2021 18:58:08 +0100
-Message-ID: <4342c4de-b516-8992-a3f3-4eea7ff4de40@phrozen.org>
-Date:   Mon, 15 Nov 2021 18:58:07 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.1
-Subject: Re: [PATCH] mips: lantiq: add support for clk_get_parent()
-Content-Language: en-GB
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-mips@vger.kernel.org,
+        id S1353121AbhKPBPw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 15 Nov 2021 20:15:52 -0500
+Received: from aposti.net ([89.234.176.197]:54220 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244269AbhKOTMW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Nov 2021 14:12:22 -0500
+Date:   Mon, 15 Nov 2021 19:09:07 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v6 1/8] drm/ingenic: prepare ingenic drm for later
+ addition of JZ4780
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20211115012051.16302-1-rdunlap@infradead.org>
-From:   John Crispin <john@phrozen.org>
-In-Reply-To: <20211115012051.16302-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Message-Id: <7VNM2R.1CHJIFHQDLSS@crapouillou.net>
+In-Reply-To: <122791473d61add6992310cec267ffde2607a2df.1636573413.git.hns@goldelico.com>
+References: <cover.1636573413.git.hns@goldelico.com>
+        <122791473d61add6992310cec267ffde2607a2df.1636573413.git.hns@goldelico.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Nikolaus,
+
+I will look at the patches in depth in the coming days.
 
 
-On 15.11.21 02:20, Randy Dunlap wrote:
-> Provide a simple implementation of clk_get_parent() in the
-> lantiq subarch so that callers of it will build without errors.
+Le mer., nov. 10 2021 at 20:43:26 +0100, H. Nikolaus Schaller 
+<hns@goldelico.com> a écrit :
+> This changes the way the regmap is allocated to prepare for the
+> later addition of the JZ4780 which has more registers and bits
+> than the others.
 > 
-> Fixes this build error:
-> ERROR: modpost: "clk_get_parent" [drivers/iio/adc/ingenic-adc.ko] undefined!
+> Therefore we make the regmap as big as the reg property in
+> the device tree tells.
 > 
-> Fixes: 171bb2f19ed6 ("MIPS: Lantiq: Add initial support for Lantiq SoCs")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> Cc: linux-mips@vger.kernel.org
-> Cc: John Crispin <john@phrozen.org>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: linux-iio@vger.kernel.org
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-Acked-by: John Crispin <john@phrozen.org>
-
-// we added the same fix for mips/ralink a while back
-
+> Suggested-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 > ---
->   arch/mips/lantiq/clk.c |    6 ++++++
->   1 file changed, 6 insertions(+)
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 > 
-> --- linux-next-20211112.orig/arch/mips/lantiq/clk.c
-> +++ linux-next-20211112/arch/mips/lantiq/clk.c
-> @@ -158,6 +158,12 @@ void clk_deactivate(struct clk *clk)
->   }
->   EXPORT_SYMBOL(clk_deactivate);
->   
-> +struct clk *clk_get_parent(struct clk *clk)
-> +{
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL(clk_get_parent);
-> +
->   static inline u32 get_counter_resolution(void)
->   {
->   	u32 res;
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
+> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> index 462bc0f35f1bf..4abfe5b094174 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -173,7 +173,6 @@ static const struct regmap_config 
+> ingenic_drm_regmap_config = {
+>  	.val_bits = 32,
+>  	.reg_stride = 4,
 > 
+> -	.max_register = JZ_REG_LCD_SIZE1,
+>  	.writeable_reg = ingenic_drm_writeable_reg,
+>  };
+> 
+> @@ -1011,6 +1010,8 @@ static int ingenic_drm_bind(struct device *dev, 
+> bool has_components)
+>  	struct ingenic_drm_bridge *ib;
+>  	struct drm_device *drm;
+>  	void __iomem *base;
+> +	struct resource *res;
+> +	struct regmap_config regmap_config;
+>  	long parent_rate;
+>  	unsigned int i, clone_mask = 0;
+>  	int ret, irq;
+> @@ -1056,14 +1057,16 @@ static int ingenic_drm_bind(struct device 
+> *dev, bool has_components)
+>  	drm->mode_config.funcs = &ingenic_drm_mode_config_funcs;
+>  	drm->mode_config.helper_private = &ingenic_drm_mode_config_helpers;
+> 
+> -	base = devm_platform_ioremap_resource(pdev, 0);
+> +	base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>  	if (IS_ERR(base)) {
+>  		dev_err(dev, "Failed to get memory resource\n");
+>  		return PTR_ERR(base);
+>  	}
+> 
+> +	regmap_config = ingenic_drm_regmap_config;
+> +	regmap_config.max_register = res->end - res->start - 4;
+
+Just a quick feedback here: I just tested and it's actually just 
+(res->end - res->start), otherwise the last register of the memory area 
+set in DT is inaccessible.
+
+Cheers,
+-Paul
+
+>  	priv->map = devm_regmap_init_mmio(dev, base,
+> -					  &ingenic_drm_regmap_config);
+> +					  &regmap_config);
+>  	if (IS_ERR(priv->map)) {
+>  		dev_err(dev, "Failed to create regmap\n");
+>  		return PTR_ERR(priv->map);
+> --
+> 2.33.0
+> 
+
+
