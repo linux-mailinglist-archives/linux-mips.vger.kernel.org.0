@@ -2,119 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E860D450479
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 13:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1494504AB
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 13:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbhKOMh7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 07:37:59 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:61462 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230438AbhKOMh4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Nov 2021 07:37:56 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AFBrtdq011652;
-        Mon, 15 Nov 2021 12:34:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=iY1Col5FMwaQrAzLqIT+kCvknRgj+GHBiwaP932CpAc=;
- b=rHm01J9/yZtsmLfgZWnmsAXOyv63fwmQu1nqKqVaZlS5njoWrYRB+hOWtRj2Q4zgX3iJ
- KbHu6bkbviPkKCNV3rZCPKXpd/qhIqKCAJ3xqrihYkCuYSvLcrCHeW5fkwzbf/b2O6nk
- ci+a50UTTB+kf0KxKePW3kBsMXDSO8WWnVmc7Gl+uY5n9RbydndMz7JdfMYBF6S6pWbC
- asEE8oJ3tp6R90J06aKYMEwlc3FKXQQMaRPxakufQawFkceGX6aTveYZG31Q8Pvn2zQ9
- APDMX22OYR3NE7AKukdevwffNueZNTjR3EQiFbWRkgfUWtH3faMIlNIpr3lW2h7Jo8it Yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cbq348tva-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Nov 2021 12:34:04 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AFBsE1K016059;
-        Mon, 15 Nov 2021 12:34:03 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cbq348tup-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Nov 2021 12:34:03 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AFCJ8oN002492;
-        Mon, 15 Nov 2021 12:34:01 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3ca509cqq3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Nov 2021 12:34:01 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AFCXwha27787704
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 Nov 2021 12:33:58 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53F7E4204D;
-        Mon, 15 Nov 2021 12:33:58 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 72B9D4205F;
-        Mon, 15 Nov 2021 12:33:57 +0000 (GMT)
-Received: from [9.171.56.111] (unknown [9.171.56.111])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 15 Nov 2021 12:33:57 +0000 (GMT)
-Message-ID: <ecd55383-7089-b3cd-30cc-3f9feb7eadb4@de.ibm.com>
-Date:   Mon, 15 Nov 2021 13:33:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 0/5] KVM: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS and
- re-purpose it on x86
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Eduardo Habkost <ehabkost@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, kvm-ppc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211111162746.100598-1-vkuznets@redhat.com>
- <4a3c7be7-12fa-6e47-64eb-02e6c5be5dbc@redhat.com>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-In-Reply-To: <4a3c7be7-12fa-6e47-64eb-02e6c5be5dbc@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: F_7VLECjtzfz58UlopgCykV9hLKIwLBB
-X-Proofpoint-GUID: Xk7vY1f_lcFudvzcJVI-5_sBZtDokgNi
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S231523AbhKOMro (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 07:47:44 -0500
+Received: from mail-pj1-f43.google.com ([209.85.216.43]:37841 "EHLO
+        mail-pj1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231495AbhKOMrn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Nov 2021 07:47:43 -0500
+Received: by mail-pj1-f43.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so3675193pjb.2;
+        Mon, 15 Nov 2021 04:44:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=9iZuL33ceXpCXCfFWKi42NsB/3gZo7JPTPdXREUwvAE=;
+        b=jZXkWJbsFtL7fiGVs/LL02iNu8Lt+nBTDmlfbJjq6wC7H97AJ6aMzjPb2/EB310gof
+         5lKdKFi+TUSbxk1lcOz5t6HYYF4m0eeDnb4o5mX8+llz3uhIFb9E3ccBOU25WWYlVdUx
+         r5EDQCRNNRJ2dPEbQXcnKm+yzIeA+tpvcHxzP2lAo2My1sA7ynMB6bRISaUC9ZVcu4hG
+         cVA3Jrez5ssmaVDLarZeDX+OFepVPym0+izBb3bIZnfVxpl/Z8C6bAwuAFOuSOEYEQx7
+         vZGdxyB2iaot7mcj4VWrtxBaJXB3Aqm4j2XTB+qw6hoBMFVT82ApFuaEgMG8mA59sb+U
+         peUw==
+X-Gm-Message-State: AOAM533HF6pcpJKez+rrfrBhDNCcaAgtZ8Ke4mQF2OSEAuB3rcb2/Oim
+        30Odl3ticQ3fRIu6OgZjMVFgRVHLnOnrug==
+X-Google-Smtp-Source: ABdhPJzzNaZ29/peuDxBxii07epiJMKFleZTMMebqA97wN0IYLgpKA+OGvEuM2D4GfCchMrReRbZ6Q==
+X-Received: by 2002:a17:90b:155:: with SMTP id em21mr65286839pjb.12.1636980287501;
+        Mon, 15 Nov 2021 04:44:47 -0800 (PST)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id j22sm9774869pfj.130.2021.11.15.04.44.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Nov 2021 04:44:46 -0800 (PST)
+Date:   Mon, 15 Nov 2021 13:44:35 +0100
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        lorenzo.pieralisi@arm.com, bhelgaas@google.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, Yanteng Si <siyanteng@loongson.cn>
+Subject: Re: [PATCH 4/5] PCI: mt7621: Add missing 'MODULE_LICENSE()'
+ definition
+Message-ID: <YZJWM33dXqW1BsuV@rocinante>
+References: <20211115070809.15529-1-sergio.paracuellos@gmail.com>
+ <20211115070809.15529-5-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-15_10,2021-11-15_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- impostorscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111150070
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211115070809.15529-5-sergio.paracuellos@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Am 11.11.21 um 17:32 schrieb Paolo Bonzini:
-> On 11/11/21 17:27, Vitaly Kuznetsov wrote:
->> This is a comtinuation of "KVM: x86: Drop arbitraty KVM_SOFT_MAX_VCPUS"
->> (https://lore.kernel.org/kvm/20211111134733.86601-1-vkuznets@redhat.com/)
->> work.
->>
->> 1) Enforce KVM_CAP_NR_VCPUS <= KVM_CAP_MAX_VCPUS rule on all
->>   architectures. [Sean Christopherson]
->> 2) Make KVM_CAP_NR_VCPUS return num_online_cpus() and not an arbitrary
->>   value of '710' on x86.
->>
->> Everything but x86 was only 'eyeball tested', the change is trivial
->> but sorry in advance if I screwed up)
-> 
-> Christian, can you look at this for s390?  Returning a fixed value seems wrong for KVM_CAP_NR_VCPUS.
+Hi Sergio and Yanteng,
 
-If we talk about recommended number, then num_online_cpus() also seems to make sense on s390 so
-if you change that for s390 as well I can ACK this.
+Thank you for taking care of this!
+
+> MT7620 PCIe host controller driver can be built as a module but there is no
+> 'MODULE_LICENSE()' specified in code, causing a build error due to missing
+> license information.
+> 
+> ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
+> 
+> Fix this by adding 'MODULE_LICENSE()' to the driver.
+> 
+> Fixes: 2bdd5238e756 ("PCI: mt7621: Add MediaTek MT7621 PCIe host controller driver")
+> Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>  drivers/pci/controller/pcie-mt7621.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
+> index 9cf541f5de9c..a120a61ede07 100644
+> --- a/drivers/pci/controller/pcie-mt7621.c
+> +++ b/drivers/pci/controller/pcie-mt7621.c
+> @@ -561,3 +561,5 @@ static struct platform_driver mt7621_pci_driver = {
+>  	},
+>  };
+>  builtin_platform_driver(mt7621_pci_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+
+A question here about the builtin_platform_driver() use in this driver,
+especially since it's set as tristate in Kconfig, thus I am not sure if
+using builtin_platform_driver() over module_platform_driver() is correct?
+
+Unless this is more because you need to reply on device_initcall() for the
+driver to properly initialise?
+
+Otherwise,
+
+Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+
+	Krzysztof
