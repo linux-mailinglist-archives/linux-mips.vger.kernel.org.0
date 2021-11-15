@@ -2,68 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF9A4516FD
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 22:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A450451DC2
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 01:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243716AbhKOV4z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 16:56:55 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]:33605 "EHLO
-        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240642AbhKOVzf (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Nov 2021 16:55:35 -0500
-Received: by mail-wr1-f51.google.com with SMTP id d24so33521123wra.0;
-        Mon, 15 Nov 2021 13:52:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q4hThK6GtsjlHOOGJI35jdUIgOrD1OAb5h6Q7wdYkbo=;
-        b=3PhbRvAZBlrAUQdySf4SGgXopnO1o/oSUGDrIxWqct3P6PqaXi+DPaICiIG8IyD8Z9
-         IppyMHbup0xhfp5S0yTdQso2xT8icPgBSCWp2l4odrPt2/IzVvEIS8L1lfCoM8MiVGS0
-         N/sMlZhm/noclImN9fUkaQoF4u6Ohs7lyzrlRCzKQujtbqn0aW5XBdMScWEe1a8AfU1a
-         uNASU4HyZsJmf449m/xsdeIugYnnfBQZZh7vdlJ9aVfmtq2ZA3fssgjJjKHtPVqRaNHh
-         c50LrKUVHhay3c75uOfQuYabJargQvhJsx/c5gPVpSRg4j22CftZ0vYw5fFrcB4THZEU
-         iUtg==
-X-Gm-Message-State: AOAM530S/FMWagm60/g8bOf3C2HEFsHXX9MLEsRy6lOJv9PEelXqNkWy
-        OEYEb9ggjy34R0nL3711du8=
-X-Google-Smtp-Source: ABdhPJzv/re4V8SK3JuGe8MMrGr8JNmFWJFjReinOnLwVfMsMMVTxs39AnrMkpP5Mqeo+GbasCOeLg==
-X-Received: by 2002:a5d:47a9:: with SMTP id 9mr2993644wrb.42.1637013156020;
-        Mon, 15 Nov 2021 13:52:36 -0800 (PST)
-Received: from rocinante ([95.155.85.46])
-        by smtp.gmail.com with ESMTPSA id y6sm16477263wrh.18.2021.11.15.13.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 13:52:35 -0800 (PST)
-Date:   Mon, 15 Nov 2021 22:52:34 +0100
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
-        tsbogend@alpha.franken.de, john@phrozen.org,
-        lorenzo.pieralisi@arm.com, bhelgaas@google.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, Yanteng Si <siyanteng@loongson.cn>
-Subject: Re: [PATCH 4/5] PCI: mt7621: Add missing 'MODULE_LICENSE()'
- definition
-Message-ID: <YZLWojulc9La5gvr@rocinante>
-References: <20211115070809.15529-1-sergio.paracuellos@gmail.com>
- <20211115070809.15529-5-sergio.paracuellos@gmail.com>
+        id S1344517AbhKPAeF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 19:34:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45402 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345113AbhKOT0e (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Nov 2021 14:26:34 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 060A1604D1;
+        Mon, 15 Nov 2021 19:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637004071;
+        bh=+MNd2K34GfmPk64cwTdXCuxqzUoEccPFFBMKwNKvMlY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=rYDbvjRnpUBy99XFwq8T0C8FdyrqdFFRTvl0+bPODoPb72QoZdZT1rGPnahDbG4b7
+         Vpb/EI78RhMYhh0CJCeyBvE2G++Y7efSzM3s8kp2/pe7vqB4Mn1Rl75IZJ0jQH/TaY
+         zVLLqzH6KbVOWyjAFnVojh2CbQCskQVVbn8hNNIfN4rA+NS+Zy82khnWVI01S/o858
+         wAAU4T+MiPwOVLtZj+dYG6SXuXSHY1gBDdtdH7LYLqtEwXFdZwFcTPpfFtn72+lquw
+         h69Nvqtf4CLThu7dx0dkj+JenXb/CvYD7wBZc/WPqLPrQU3XPJNADSKz+0Gaz0avHg
+         BINpWGs4EUVGg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211109161325.2203564-1-robh@kernel.org>
+References: <20211109161325.2203564-1-robh@kernel.org>
+Subject: Re: [PATCH] spi: xlp: Remove Netlogic XLP variants
+Message-Id: <163700406969.683472.16319570545022971002.b4-ty@kernel.org>
+Date:   Mon, 15 Nov 2021 19:21:09 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211115070809.15529-5-sergio.paracuellos@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
-
-[...]
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
+On Tue, 9 Nov 2021 10:13:25 -0600, Rob Herring wrote:
+> Netlogic XLP was removed in commit 95b8a5e0111a ("MIPS: Remove NETLOGIC
+> support"). With those gone, the single platform left to support is
+> Cavium ThunderX2. Remove the Netlogic variant and DT support.
 > 
-> Fix this by adding 'MODULE_LICENSE()' to the driver.
+> For simplicity, the existing kconfig name is retained.
+> 
+> 
+> [...]
 
-To add for posterity, should someone stumble upon this in the future.  Lack
-of MODULE_LICENSE() used to be a warning, but that has been changed quite
-recently in the following commit:
+Applied to
 
-  commit 1d6cd3929360 ("modpost: turn missing MODULE_LICENSE() into error")
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-	Krzysztof
+Thanks!
+
+[1/1] spi: xlp: Remove Netlogic XLP variants
+      commit: f7d344f2188c9f16e434cadf2a954b5d40365c14
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
