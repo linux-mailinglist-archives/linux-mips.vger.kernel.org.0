@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 025B8450F79
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 19:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925EE450D04
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 18:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241974AbhKOSbr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 13:31:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36922 "EHLO mail.kernel.org"
+        id S237396AbhKORrs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 12:47:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58628 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240903AbhKOS3p (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Nov 2021 13:29:45 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D3B4632CD;
-        Mon, 15 Nov 2021 17:58:26 +0000 (UTC)
+        id S238743AbhKORpS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Nov 2021 12:45:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C1E466330C;
+        Mon, 15 Nov 2021 17:29:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1636999107;
+        s=korg; t=1636997359;
         bh=eajIuobfbs5aY/C3Q8dSjCf3Ko6DnXwHvuvfvoHM2uc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ASRDF39NbzY837ZH1cVAk0fsAjb3pDY4JDu6DxGHFirFNgq+CR2Ip5tRS7sjfR2HB
-         7qqRiyet5WchPBIYVeSKoRF5bBTiGlIFsyTAjDkwsYH3C9aNbz4vpVIWqVtIV2fB62
-         hvIMPHQKub1pPws/lsPiOWwFOejhGkJWF3Zquwuw=
+        b=XZ4tnqUN/jap32w0dYvd2W0N0gffZ3D6jXv3LkYk2iIvQb1q+ZsCRgQrHhRINuhBg
+         BIt8neNFCMsUSklgPNtVS7f4e5bOGy2gDnjrMLLhRPQSPGGiaLdHPk6NFsRkg17cjo
+         D5sP//xpdZz7ytrDEMi3tXWKjfAaOTsT0tjpJrlM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -27,12 +27,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
         "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.14 145/849] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
-Date:   Mon, 15 Nov 2021 17:53:48 +0100
-Message-Id: <20211115165425.046019795@linuxfoundation.org>
+Subject: [PATCH 5.10 120/575] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
+Date:   Mon, 15 Nov 2021 17:57:25 +0100
+Message-Id: <20211115165347.837820916@linuxfoundation.org>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211115165419.961798833@linuxfoundation.org>
-References: <20211115165419.961798833@linuxfoundation.org>
+In-Reply-To: <20211115165343.579890274@linuxfoundation.org>
+References: <20211115165343.579890274@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
