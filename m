@@ -2,107 +2,87 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E63864521C7
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 02:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A92452385
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 02:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349202AbhKPBGs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 20:06:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44604 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245396AbhKOTU2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Nov 2021 14:20:28 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC2C7611AF;
-        Mon, 15 Nov 2021 18:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637001229;
-        bh=eajIuobfbs5aY/C3Q8dSjCf3Ko6DnXwHvuvfvoHM2uc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zJwDbcXCW7/90TZJuEdGf90Rg2Ye7LasEuLwf4MhAB2L2aqGg4pzl4UyrbULBtJfr
-         /YDz2bvuEsvRXe9dWACNyeoHEfpilet1EtXL0MjlmSghXk02oxAvkuTL2TbTk4cxeD
-         bPG8tsKmG1HMgNWIjON4V1wv8l//oWxku6cW4qbg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.15 110/917] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
-Date:   Mon, 15 Nov 2021 17:53:25 +0100
-Message-Id: <20211115165432.484048342@linuxfoundation.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211115165428.722074685@linuxfoundation.org>
-References: <20211115165428.722074685@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1352752AbhKPB05 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 20:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243864AbhKOTIK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Nov 2021 14:08:10 -0500
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD438C06EDE1;
+        Mon, 15 Nov 2021 09:58:21 -0800 (PST)
+Received: from [2a04:4540:1401:b700:606b:3eee:8c1b:a587]
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <john@phrozen.org>)
+        id 1mmgF6-0005a6-Ay; Mon, 15 Nov 2021 18:58:08 +0100
+Message-ID: <4342c4de-b516-8992-a3f3-4eea7ff4de40@phrozen.org>
+Date:   Mon, 15 Nov 2021 18:58:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.2.1
+Subject: Re: [PATCH] mips: lantiq: add support for clk_get_parent()
+Content-Language: en-GB
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20211115012051.16302-1-rdunlap@infradead.org>
+From:   John Crispin <john@phrozen.org>
+In-Reply-To: <20211115012051.16302-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
-
-commit 95bf9d646c3c3f95cb0be7e703b371db8da5be68 upstream.
-
-When an instruction to save or restore a register from the stack fails
-in _save_fp_context or _restore_fp_context return with -EFAULT.  This
-change was made to r2300_fpu.S[1] but it looks like it got lost with
-the introduction of EX2[2].  This is also what the other implementation
-of _save_fp_context and _restore_fp_context in r4k_fpu.S does, and
-what is needed for the callers to be able to handle the error.
-
-Furthermore calling do_exit(SIGSEGV) from bad_stack is wrong because
-it does not terminate the entire process it just terminates a single
-thread.
-
-As the changed code was the only caller of arch/mips/kernel/syscall.c:bad_stack
-remove the problematic and now unused helper function.
-
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Maciej Rozycki <macro@orcam.me.uk>
-Cc: linux-mips@vger.kernel.org
-[1] 35938a00ba86 ("MIPS: Fix ISA I FP sigcontext access violation handling")
-[2] f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-Cc: stable@vger.kernel.org
-Fixes: f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Link: https://lkml.kernel.org/r/20211020174406.17889-5-ebiederm@xmission.com
-Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/mips/kernel/r2300_fpu.S |    4 ++--
- arch/mips/kernel/syscall.c   |    9 ---------
- 2 files changed, 2 insertions(+), 11 deletions(-)
-
---- a/arch/mips/kernel/r2300_fpu.S
-+++ b/arch/mips/kernel/r2300_fpu.S
-@@ -29,8 +29,8 @@
- #define EX2(a,b)						\
- 9:	a,##b;							\
- 	.section __ex_table,"a";				\
--	PTR	9b,bad_stack;					\
--	PTR	9b+4,bad_stack;					\
-+	PTR	9b,fault;					\
-+	PTR	9b+4,fault;					\
- 	.previous
- 
- 	.set	mips1
---- a/arch/mips/kernel/syscall.c
-+++ b/arch/mips/kernel/syscall.c
-@@ -240,12 +240,3 @@ SYSCALL_DEFINE3(cachectl, char *, addr,
- {
- 	return -ENOSYS;
- }
--
--/*
-- * If we ever come here the user sp is bad.  Zap the process right away.
-- * Due to the bad stack signaling wouldn't work.
-- */
--asmlinkage void bad_stack(void)
--{
--	do_exit(SIGSEGV);
--}
 
 
+On 15.11.21 02:20, Randy Dunlap wrote:
+> Provide a simple implementation of clk_get_parent() in the
+> lantiq subarch so that callers of it will build without errors.
+> 
+> Fixes this build error:
+> ERROR: modpost: "clk_get_parent" [drivers/iio/adc/ingenic-adc.ko] undefined!
+> 
+> Fixes: 171bb2f19ed6 ("MIPS: Lantiq: Add initial support for Lantiq SoCs")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Cc: linux-mips@vger.kernel.org
+> Cc: John Crispin <john@phrozen.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: linux-iio@vger.kernel.org
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+Acked-by: John Crispin <john@phrozen.org>
+
+// we added the same fix for mips/ralink a while back
+
+> ---
+>   arch/mips/lantiq/clk.c |    6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> --- linux-next-20211112.orig/arch/mips/lantiq/clk.c
+> +++ linux-next-20211112/arch/mips/lantiq/clk.c
+> @@ -158,6 +158,12 @@ void clk_deactivate(struct clk *clk)
+>   }
+>   EXPORT_SYMBOL(clk_deactivate);
+>   
+> +struct clk *clk_get_parent(struct clk *clk)
+> +{
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL(clk_get_parent);
+> +
+>   static inline u32 get_counter_resolution(void)
+>   {
+>   	u32 res;
+> 
