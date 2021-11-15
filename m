@@ -2,204 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D6645155A
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 21:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C364516F5
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 22:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbhKOUhb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 15 Nov 2021 15:37:31 -0500
-Received: from aposti.net ([89.234.176.197]:56316 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245298AbhKOTUC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Nov 2021 14:20:02 -0500
-Date:   Mon, 15 Nov 2021 19:16:51 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v6 6/8] MIPS: DTS: CI20: Add DT nodes for HDMI setup
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Message-Id: <38OM2R.QJECEBEZVSXU@crapouillou.net>
-In-Reply-To: <141a4ea23dc19629fea983093348d9dfaedb1cae.1636573413.git.hns@goldelico.com>
-References: <cover.1636573413.git.hns@goldelico.com>
-        <141a4ea23dc19629fea983093348d9dfaedb1cae.1636573413.git.hns@goldelico.com>
+        id S1345095AbhKOV4Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 16:56:24 -0500
+Received: from mail-wm1-f46.google.com ([209.85.128.46]:50873 "EHLO
+        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352023AbhKOVxr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Nov 2021 16:53:47 -0500
+Received: by mail-wm1-f46.google.com with SMTP id 133so15233208wme.0;
+        Mon, 15 Nov 2021 13:50:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Zpo2FcY0JFle+1sWMVU6xVo7WBKafm0rx46PVS7H5Og=;
+        b=p1H5TsPszo6J0RWUpcwlqL2joGIRol38ZJPQ/mGnJLTHAqYX7XWW8+DLff+CAaK8he
+         ap5bQTYPdw5i8DzsY92gMEoPmu0K4sdQOy7zvmiX8lkI97QrKgwb77XtKT0AsVQF+c+c
+         rGgvTU/f5UkPCq4l1ljjJ+jo5WrgRadfytV7iPuKCAUcWXz2GcCwCGDgqGgOMzzQy/D/
+         I22rszVBHDJS7XrzbaXhtF5xTvrFTT05KvVHA5QHeSO7MktXxGEqw/3QMAUA3zSC9ETV
+         qeT8nkYDKnh5r6Y+KpFBBZtg9YuN0CSNIcJLmgDUz1TFyVnet1Ilwbj5EPgTIFq86kIU
+         IwNA==
+X-Gm-Message-State: AOAM5300WNFfUZvKA1Ro4q6Hxtgg43KbYVGEV1Djb5B1EvCToKNm8OZg
+        1yS5oScHw5OPMNhwTVLVHAE=
+X-Google-Smtp-Source: ABdhPJww7K1XBBi0PWxrQOFVuk8+zAGeety4qxeCcVFbci3CpQiU5u5cW5CXl2Fvmnjj75pJDUzBmA==
+X-Received: by 2002:a05:600c:299:: with SMTP id 25mr15075288wmk.77.1637013050094;
+        Mon, 15 Nov 2021 13:50:50 -0800 (PST)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id q84sm887283wme.3.2021.11.15.13.50.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Nov 2021 13:50:49 -0800 (PST)
+Date:   Mon, 15 Nov 2021 22:50:48 +0100
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>
+Subject: Re: [PATCH 4/5] PCI: mt7621: Add missing 'MODULE_LICENSE()'
+ definition
+Message-ID: <YZLWOFGFs4g6gh5l@rocinante>
+References: <20211115070809.15529-1-sergio.paracuellos@gmail.com>
+ <20211115070809.15529-5-sergio.paracuellos@gmail.com>
+ <YZJWM33dXqW1BsuV@rocinante>
+ <CAK8P3a0A9xAcwDLFbUk--X2+7gFpOL7HJw-9Sk8KZxfoidcxuw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a0A9xAcwDLFbUk--X2+7gFpOL7HJw-9Sk8KZxfoidcxuw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus, Thomas,
+Hi Arnd,
 
-Le mer., nov. 10 2021 at 20:43:31 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> From: Paul Boddie <paul@boddie.org.uk>
+[...]
+> > >  builtin_platform_driver(mt7621_pci_driver);
+> > > +
+> > > +MODULE_LICENSE("GPL v2");
+> >
+> > A question here about the builtin_platform_driver() use in this driver,
+> > especially since it's set as tristate in Kconfig, thus I am not sure if
+> > using builtin_platform_driver() over module_platform_driver() is correct?
+> >
+> > Unless this is more because you need to reply on device_initcall() for the
+> > driver to properly initialise?
 > 
-> We need to hook up
-> * HDMI connector
-> * HDMI power regulator
-> * JZ4780_CLK_HDMI @ 27 MHz
-> * DDC pinmux
-> * HDMI and LCDC endpoint connections
+> builtin_platform_driver() does the right thing for loadable modules that
+> have no module-unload and are not intended to be removable.
 > 
-> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
->  arch/mips/boot/dts/ingenic/ci20.dts | 73 
-> +++++++++++++++++++++++++++--
->  1 file changed, 70 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts 
-> b/arch/mips/boot/dts/ingenic/ci20.dts
-> index a688809beebca..a62557bede565 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -78,6 +78,18 @@ eth0_power: fixedregulator@0 {
->  		enable-active-high;
->  	};
-> 
-> +	hdmi_out: connector {
-> +		compatible = "hdmi-connector";
-> +		label = "HDMI OUT";
-> +		type = "a";
-> +
-> +		port {
-> +			hdmi_con: endpoint {
-> +				remote-endpoint = <&dw_hdmi_out>;
-> +			};
-> +		};
-> +	};
-> +
->  	ir: ir {
->  		compatible = "gpio-ir-receiver";
->  		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
-> @@ -102,6 +114,17 @@ otg_power: fixedregulator@2 {
->  		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
->  		enable-active-high;
->  	};
-> +
-> +	hdmi_power: fixedregulator@3 {
-> +		compatible = "regulator-fixed";
-> +
-> +		regulator-name = "hdmi_power";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +
-> +		gpio = <&gpa 25 GPIO_ACTIVE_LOW>;
+> This is often use for PCI drivers, but after Rob reworked this code a while
+> back, it should actually be possible to reliably remove and reload PCI
+> host bridge drivers, and it would be good to eventually lift the restriction
+> here as well.
 
-Just use 0 instead of GPIO_ACTIVE_LOW, since the flag is simply ignored 
-(I know the other regulators do use it, but I'll clean that up soon).
+Thank you for letting me know.  Much appreciated.  I assumed in the past
+that with tristate in Kconfig the module_platform_driver() would be the
+preferred route.
 
-> +		enable-active-high;
-> +	};
->  };
-> 
->  &ext {
-> @@ -113,9 +136,9 @@ &cgu {
->  	 * Use the 32.768 kHz oscillator as the parent of the RTC for a 
-> higher
->  	 * precision.
->  	 */
-> -	assigned-clocks = <&cgu JZ4780_CLK_OTGPHY>, <&cgu JZ4780_CLK_RTC>;
-> -	assigned-clock-parents = <0>, <&cgu JZ4780_CLK_RTCLK>;
-> -	assigned-clock-rates = <48000000>;
-> +	assigned-clocks = <&cgu JZ4780_CLK_OTGPHY>, <&cgu JZ4780_CLK_RTC>, 
-> <&cgu JZ4780_CLK_HDMI>;
-> +	assigned-clock-parents = <0>, <&cgu JZ4780_CLK_RTCLK>, <0>;
-> +	assigned-clock-rates = <48000000>, <0>, <27000000>;
-
-So drm-misc-next is based on a slightly older version (not v5.16-rc1 
-yet), and these lines changed in linux master.
-
-I think it would make sense to merge the DT changes (+ doc) into the 
-MIPS tree, and the driver changes into drm-misc-next.
-
-@Thomas: Is that OK for you?
-
-Cheers,
--Paul
-
->  };
-> 
->  &tcu {
-> @@ -506,6 +529,12 @@ pins_i2c4: i2c4 {
->  		bias-disable;
->  	};
-> 
-> +	pins_hdmi_ddc: hdmi_ddc {
-> +		function = "hdmi-ddc";
-> +		groups = "hdmi-ddc";
-> +		bias-disable;
-> +	};
-> +
->  	pins_nemc: nemc {
->  		function = "nemc";
->  		groups = "nemc-data", "nemc-cle-ale", "nemc-rd-we", "nemc-frd-fwe";
-> @@ -536,3 +565,41 @@ pins_mmc1: mmc1 {
->  		bias-disable;
->  	};
->  };
-> +
-> +&hdmi {
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pins_hdmi_ddc>;
-> +
-> +	hdmi-5v-supply = <&hdmi_power>;
-> +
-> +	ports {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		port@0 {
-> +			reg = <0>;
-> +			dw_hdmi_in: endpoint {
-> +				remote-endpoint = <&lcd_out>;
-> +			};
-> +		};
-> +
-> +		port@1 {
-> +			reg = <1>;
-> +			dw_hdmi_out: endpoint {
-> +				remote-endpoint = <&hdmi_con>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&lcdc0 {
-> +	status = "okay";
-> +
-> +	port {
-> +		lcd_out: endpoint {
-> +			remote-endpoint = <&dw_hdmi_in>;
-> +		};
-> +	};
-> +};
-> --
-> 2.33.0
-> 
-
-
+	Krzysztof
