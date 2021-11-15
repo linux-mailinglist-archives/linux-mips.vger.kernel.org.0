@@ -2,78 +2,107 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A450451DC2
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 01:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E63864521C7
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 02:04:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344517AbhKPAeF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 19:34:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45402 "EHLO mail.kernel.org"
+        id S1349202AbhKPBGs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 20:06:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44604 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345113AbhKOT0e (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Nov 2021 14:26:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 060A1604D1;
-        Mon, 15 Nov 2021 19:21:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637004071;
-        bh=+MNd2K34GfmPk64cwTdXCuxqzUoEccPFFBMKwNKvMlY=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rYDbvjRnpUBy99XFwq8T0C8FdyrqdFFRTvl0+bPODoPb72QoZdZT1rGPnahDbG4b7
-         Vpb/EI78RhMYhh0CJCeyBvE2G++Y7efSzM3s8kp2/pe7vqB4Mn1Rl75IZJ0jQH/TaY
-         zVLLqzH6KbVOWyjAFnVojh2CbQCskQVVbn8hNNIfN4rA+NS+Zy82khnWVI01S/o858
-         wAAU4T+MiPwOVLtZj+dYG6SXuXSHY1gBDdtdH7LYLqtEwXFdZwFcTPpfFtn72+lquw
-         h69Nvqtf4CLThu7dx0dkj+JenXb/CvYD7wBZc/WPqLPrQU3XPJNADSKz+0Gaz0avHg
-         BINpWGs4EUVGg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-mips@vger.kernel.org,
+        id S245396AbhKOTU2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 15 Nov 2021 14:20:28 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AC2C7611AF;
+        Mon, 15 Nov 2021 18:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1637001229;
+        bh=eajIuobfbs5aY/C3Q8dSjCf3Ko6DnXwHvuvfvoHM2uc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zJwDbcXCW7/90TZJuEdGf90Rg2Ye7LasEuLwf4MhAB2L2aqGg4pzl4UyrbULBtJfr
+         /YDz2bvuEsvRXe9dWACNyeoHEfpilet1EtXL0MjlmSghXk02oxAvkuTL2TbTk4cxeD
+         bPG8tsKmG1HMgNWIjON4V1wv8l//oWxku6cW4qbg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211109161325.2203564-1-robh@kernel.org>
-References: <20211109161325.2203564-1-robh@kernel.org>
-Subject: Re: [PATCH] spi: xlp: Remove Netlogic XLP variants
-Message-Id: <163700406969.683472.16319570545022971002.b4-ty@kernel.org>
-Date:   Mon, 15 Nov 2021 19:21:09 +0000
+        Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: [PATCH 5.15 110/917] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
+Date:   Mon, 15 Nov 2021 17:53:25 +0100
+Message-Id: <20211115165432.484048342@linuxfoundation.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211115165428.722074685@linuxfoundation.org>
+References: <20211115165428.722074685@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 9 Nov 2021 10:13:25 -0600, Rob Herring wrote:
-> Netlogic XLP was removed in commit 95b8a5e0111a ("MIPS: Remove NETLOGIC
-> support"). With those gone, the single platform left to support is
-> Cavium ThunderX2. Remove the Netlogic variant and DT support.
-> 
-> For simplicity, the existing kconfig name is retained.
-> 
-> 
-> [...]
+From: Eric W. Biederman <ebiederm@xmission.com>
 
-Applied to
+commit 95bf9d646c3c3f95cb0be7e703b371db8da5be68 upstream.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+When an instruction to save or restore a register from the stack fails
+in _save_fp_context or _restore_fp_context return with -EFAULT.  This
+change was made to r2300_fpu.S[1] but it looks like it got lost with
+the introduction of EX2[2].  This is also what the other implementation
+of _save_fp_context and _restore_fp_context in r4k_fpu.S does, and
+what is needed for the callers to be able to handle the error.
 
-Thanks!
+Furthermore calling do_exit(SIGSEGV) from bad_stack is wrong because
+it does not terminate the entire process it just terminates a single
+thread.
 
-[1/1] spi: xlp: Remove Netlogic XLP variants
-      commit: f7d344f2188c9f16e434cadf2a954b5d40365c14
+As the changed code was the only caller of arch/mips/kernel/syscall.c:bad_stack
+remove the problematic and now unused helper function.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Maciej Rozycki <macro@orcam.me.uk>
+Cc: linux-mips@vger.kernel.org
+[1] 35938a00ba86 ("MIPS: Fix ISA I FP sigcontext access violation handling")
+[2] f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
+Cc: stable@vger.kernel.org
+Fixes: f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
+Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Link: https://lkml.kernel.org/r/20211020174406.17889-5-ebiederm@xmission.com
+Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/mips/kernel/r2300_fpu.S |    4 ++--
+ arch/mips/kernel/syscall.c   |    9 ---------
+ 2 files changed, 2 insertions(+), 11 deletions(-)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--- a/arch/mips/kernel/r2300_fpu.S
++++ b/arch/mips/kernel/r2300_fpu.S
+@@ -29,8 +29,8 @@
+ #define EX2(a,b)						\
+ 9:	a,##b;							\
+ 	.section __ex_table,"a";				\
+-	PTR	9b,bad_stack;					\
+-	PTR	9b+4,bad_stack;					\
++	PTR	9b,fault;					\
++	PTR	9b+4,fault;					\
+ 	.previous
+ 
+ 	.set	mips1
+--- a/arch/mips/kernel/syscall.c
++++ b/arch/mips/kernel/syscall.c
+@@ -240,12 +240,3 @@ SYSCALL_DEFINE3(cachectl, char *, addr,
+ {
+ 	return -ENOSYS;
+ }
+-
+-/*
+- * If we ever come here the user sp is bad.  Zap the process right away.
+- * Due to the bad stack signaling wouldn't work.
+- */
+-asmlinkage void bad_stack(void)
+-{
+-	do_exit(SIGSEGV);
+-}
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
