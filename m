@@ -2,107 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD98450AF9
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 18:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A449450D69
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Nov 2021 18:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbhKORQb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 12:16:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46816 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236910AbhKORO7 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 15 Nov 2021 12:14:59 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0CA6D63252;
-        Mon, 15 Nov 2021 17:11:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1636996295;
-        bh=FvTzF9DjUkBZjUTMZVXzAJbL0QtGY3f3UU4HluLDkV8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IOb4FLgezELxHlViQDnO4uoN7DDXSbJCuCSLfIDOs1Q6SaqdJsxE3T4yZiVPhYRHV
-         7L2xpO5ODedf9C4FjT3TwoHSaKKj1FbmIc0ZH51d5kTwTayToR23vLaha065l48Bjl
-         tnaIlw7BJRz19OiVOI4XkiDifeNXGzGZHlCbhcTo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.4 087/355] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
-Date:   Mon, 15 Nov 2021 18:00:11 +0100
-Message-Id: <20211115165316.617906069@linuxfoundation.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211115165313.549179499@linuxfoundation.org>
-References: <20211115165313.549179499@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S232338AbhKOR5U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 15 Nov 2021 12:57:20 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4097 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239176AbhKORyx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Nov 2021 12:54:53 -0500
+Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4HtGrD5MLtz67VcZ;
+        Tue, 16 Nov 2021 01:48:12 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 15 Nov 2021 18:51:54 +0100
+Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 15 Nov
+ 2021 17:51:53 +0000
+Date:   Mon, 15 Nov 2021 17:51:52 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        <linux-mips@vger.kernel.org>, John Crispin <john@phrozen.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        <linux-iio@vger.kernel.org>, Russell King <linux@armlinux.org.uk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH] mips: lantiq: add support for clk_get_parent()
+Message-ID: <20211115175152.000030d6@Huawei.com>
+In-Reply-To: <20211115012051.16302-1-rdunlap@infradead.org>
+References: <20211115012051.16302-1-rdunlap@infradead.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.41]
+X-ClientProxiedBy: lhreml733-chm.china.huawei.com (10.201.108.84) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+On Sun, 14 Nov 2021 17:20:51 -0800
+Randy Dunlap <rdunlap@infradead.org> wrote:
 
-commit 95bf9d646c3c3f95cb0be7e703b371db8da5be68 upstream.
+> Provide a simple implementation of clk_get_parent() in the
+> lantiq subarch so that callers of it will build without errors.
+> 
+> Fixes this build error:
+> ERROR: modpost: "clk_get_parent" [drivers/iio/adc/ingenic-adc.ko] undefined!
+> 
+> Fixes: 171bb2f19ed6 ("MIPS: Lantiq: Add initial support for Lantiq SoCs")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Cc: linux-mips@vger.kernel.org
+> Cc: John Crispin <john@phrozen.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: linux-iio@vger.kernel.org
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-When an instruction to save or restore a register from the stack fails
-in _save_fp_context or _restore_fp_context return with -EFAULT.  This
-change was made to r2300_fpu.S[1] but it looks like it got lost with
-the introduction of EX2[2].  This is also what the other implementation
-of _save_fp_context and _restore_fp_context in r4k_fpu.S does, and
-what is needed for the callers to be able to handle the error.
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Furthermore calling do_exit(SIGSEGV) from bad_stack is wrong because
-it does not terminate the entire process it just terminates a single
-thread.
+Thanks for tidying this up.
 
-As the changed code was the only caller of arch/mips/kernel/syscall.c:bad_stack
-remove the problematic and now unused helper function.
+Jonathan
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Maciej Rozycki <macro@orcam.me.uk>
-Cc: linux-mips@vger.kernel.org
-[1] 35938a00ba86 ("MIPS: Fix ISA I FP sigcontext access violation handling")
-[2] f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-Cc: stable@vger.kernel.org
-Fixes: f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Link: https://lkml.kernel.org/r/20211020174406.17889-5-ebiederm@xmission.com
-Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- arch/mips/kernel/r2300_fpu.S |    4 ++--
- arch/mips/kernel/syscall.c   |    9 ---------
- 2 files changed, 2 insertions(+), 11 deletions(-)
-
---- a/arch/mips/kernel/r2300_fpu.S
-+++ b/arch/mips/kernel/r2300_fpu.S
-@@ -29,8 +29,8 @@
- #define EX2(a,b)						\
- 9:	a,##b;							\
- 	.section __ex_table,"a";				\
--	PTR	9b,bad_stack;					\
--	PTR	9b+4,bad_stack;					\
-+	PTR	9b,fault;					\
-+	PTR	9b+4,fault;					\
- 	.previous
- 
- 	.set	mips1
---- a/arch/mips/kernel/syscall.c
-+++ b/arch/mips/kernel/syscall.c
-@@ -239,12 +239,3 @@ SYSCALL_DEFINE3(cachectl, char *, addr,
- {
- 	return -ENOSYS;
- }
--
--/*
-- * If we ever come here the user sp is bad.  Zap the process right away.
-- * Due to the bad stack signaling wouldn't work.
-- */
--asmlinkage void bad_stack(void)
--{
--	do_exit(SIGSEGV);
--}
-
+> ---
+>  arch/mips/lantiq/clk.c |    6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> --- linux-next-20211112.orig/arch/mips/lantiq/clk.c
+> +++ linux-next-20211112/arch/mips/lantiq/clk.c
+> @@ -158,6 +158,12 @@ void clk_deactivate(struct clk *clk)
+>  }
+>  EXPORT_SYMBOL(clk_deactivate);
+>  
+> +struct clk *clk_get_parent(struct clk *clk)
+> +{
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL(clk_get_parent);
+> +
+>  static inline u32 get_counter_resolution(void)
+>  {
+>  	u32 res;
 
