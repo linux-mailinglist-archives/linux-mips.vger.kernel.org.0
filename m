@@ -2,72 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B0A452D3E
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 09:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A95452D42
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 09:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbhKPI6B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Nov 2021 03:58:01 -0500
-Received: from elvis.franken.de ([193.175.24.41]:52940 "EHLO elvis.franken.de"
+        id S232628AbhKPI6C (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Nov 2021 03:58:02 -0500
+Received: from elvis.franken.de ([193.175.24.41]:52966 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232490AbhKPI55 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Nov 2021 03:57:57 -0500
+        id S232602AbhKPI6B (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Nov 2021 03:58:01 -0500
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mmuF0-0006gG-00; Tue, 16 Nov 2021 09:54:58 +0100
+        id 1mmuF0-0006gG-01; Tue, 16 Nov 2021 09:54:58 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E2328C2D9B; Tue, 16 Nov 2021 09:45:46 +0100 (CET)
-Date:   Tue, 16 Nov 2021 09:45:46 +0100
+        id 0775BC2D9C; Tue, 16 Nov 2021 09:46:21 +0100 (CET)
+Date:   Tue, 16 Nov 2021 09:46:20 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Colin Ian King <colin.i.king@googlemail.com>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>, linux-mips@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][V2] MIPS: generic/yamon-dt: fix uninitialized variable
- error
-Message-ID: <20211116084546.GA21168@alpha.franken.de>
-References: <20211110232824.1372368-1-colin.i.king@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-mips@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v4] mips: bcm63xx: add support for clk_get_parent()
+Message-ID: <20211116084620.GB21168@alpha.franken.de>
+References: <20211115004218.13034-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211110232824.1372368-1-colin.i.king@gmail.com>
+In-Reply-To: <20211115004218.13034-1-rdunlap@infradead.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 11:28:24PM +0000, Colin Ian King wrote:
-> In the case where fw_getenv returns an error when fetching values
-> for ememsizea and memsize then variable phys_memsize is not assigned
-> a variable and will be uninitialized on a zero check of phys_memsize.
-> Fix this by initializing phys_memsize to zero.
+On Sun, Nov 14, 2021 at 04:42:18PM -0800, Randy Dunlap wrote:
+> BCM63XX selects HAVE_LEGACY_CLK but does not provide/support
+> clk_get_parent(), so add a simple implementation of that
+> function so that callers of it will build without errors.
 > 
-> Cleans up cppcheck error:
-> arch/mips/generic/yamon-dt.c:100:7: error: Uninitialized variable: phys_memsize [uninitvar]
+> Fixes these build errors:
 > 
-> Fixes: f41d2430bbd6 ("MIPS: generic/yamon-dt: Support > 256MB of RAM")
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4770_adc_init_clk_div':
+> ingenic-adc.c:(.text+0xe4): undefined reference to `clk_get_parent'
+> mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4725b_adc_init_clk_div':
+> ingenic-adc.c:(.text+0x1b8): undefined reference to `clk_get_parent'
+> 
+> Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs." )
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Cc: Artur Rojek <contact@artur-rojek.eu>
+> Cc: Paul Cercueil <paul@crapouillou.net>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: linux-iio@vger.kernel.org
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: bcm-kernel-feedback-list@broadcom.com
+> Cc: Jonas Gorski <jonas.gorski@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > ---
-> V2: Use correct email address in SoB.
-> ---
->  arch/mips/generic/yamon-dt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v1 and v2 were:
+> [PATCH] iio/adc: ingenic: fix (MIPS) ingenic-adc build errors
+>   (limiting this driver to MACH_INGENIC in Kconfig)
+> v3: add clk_get_parent() to arch/mips/bcm63xx/clk.c
+> v4:
+>   add Fixes:, Suggested-by:, Reviewed-by: Acked-by:
+>   drop blank line between function and EXPORT_SYMBOL(); (Andy)
 > 
-> diff --git a/arch/mips/generic/yamon-dt.c b/arch/mips/generic/yamon-dt.c
-> index a3aa22c77cad..a07a5edbcda7 100644
-> --- a/arch/mips/generic/yamon-dt.c
-> +++ b/arch/mips/generic/yamon-dt.c
-> @@ -75,7 +75,7 @@ static unsigned int __init gen_fdt_mem_array(
->  __init int yamon_dt_append_memory(void *fdt,
->  				  const struct yamon_mem_region *regions)
+>  arch/mips/bcm63xx/clk.c |    7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> --- linux-next-20211112.orig/arch/mips/bcm63xx/clk.c
+> +++ linux-next-20211112/arch/mips/bcm63xx/clk.c
+> @@ -381,6 +381,12 @@ void clk_disable(struct clk *clk)
+>  
+>  EXPORT_SYMBOL(clk_disable);
+>  
+> +struct clk *clk_get_parent(struct clk *clk)
+> +{
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL(clk_get_parent);
+> +
+>  unsigned long clk_get_rate(struct clk *clk)
 >  {
-> -	unsigned long phys_memsize, memsize;
-> +	unsigned long phys_memsize = 0, memsize;
->  	__be32 mem_array[2 * MAX_MEM_ARRAY_ENTRIES];
->  	unsigned int mem_entries;
->  	int i, err, mem_off;
-> -- 
-> 2.32.0
+>  	if (!clk)
 
 applied to mips-fixes.
 
