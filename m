@@ -2,122 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD79D452C77
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 09:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32DD452C89
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 09:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbhKPINz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Nov 2021 03:13:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbhKPINy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Nov 2021 03:13:54 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF395C061766;
-        Tue, 16 Nov 2021 00:10:57 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id k4so16685944plx.8;
-        Tue, 16 Nov 2021 00:10:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sVF1j1riPLy6CiHf7Z/coZrdiXLUZDzW4iowCSsOhKI=;
-        b=INqq9H5dqsEk/jRcaasvw9uXTrxFMrp95lYHFDIsrVBHEjEJuHsOYKaR82pANM92VG
-         Z+45dczdE1wCS/XnVEUaGFfPCBjuuHm/YgV2SSJxFrCaj7hWjUPQURcrXR1/SzE7SN3n
-         tPYdXaMMyxTW9GaC+4QA3avTNZMpuM3uC+3xVcEv24qT1myYRwyyjGlOnxp01QV6B1GK
-         aDsOo8FdNzsYL786rqHv1wk3eodv8mtJgTxR8lTgf2o4u9hmQl49CBAS4AmBfe3Ogkq0
-         14B5PiQBSQT5YEkugBwb9jbAdUNzVCyqzQjUT7OdNsoP2yV9dOPuh6f2uqmNSovAxMMk
-         QBQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sVF1j1riPLy6CiHf7Z/coZrdiXLUZDzW4iowCSsOhKI=;
-        b=TeL2UgDIM/zL9KuNnwaTWr19wsb2jn+OXdr1h9FgbcOXBU7Fjq4+0Jcke5BJE2vVug
-         htYdai6XYuiPKQ4YkHsx5xqlwBmvJe7yKA6gScPrJ1ha5sLot5QndXMVINpJK4czAmtv
-         oniG8uXdeOTy/Bc3SA0yJqtWCo3p5GC1F4c/ColngYOc2jpkTeYiZSJy77uj+hZRKupz
-         rx59bbJNoyjHiG2i/nvHdF8nmhMIj8rA7xmUpn/OtN7k6oWikO3VAnO37zqrzs5kDVlX
-         AIDBUjU2ZbCgtSC5Kl7UTlM0gWoBq1QNgWRHOxM5VPYA6rZlwzKWzHzhGrzNce+fiH+C
-         w9QA==
-X-Gm-Message-State: AOAM532r98ae75Ae3U3fwZ19jS1HwxNVNPrHJM+i2y+HiC06DfRMvMrU
-        di8UjH8eVy5v+O+wmAExU7s=
-X-Google-Smtp-Source: ABdhPJyw/6bLsZPO3CF+fFTEQgnjDSlqJm3q2jM7lUlzLUTSQpV1Yur/WRXr9NdwNSGBAVmodr4mkg==
-X-Received: by 2002:a17:90b:1650:: with SMTP id il16mr74109918pjb.83.1637050256911;
-        Tue, 16 Nov 2021 00:10:56 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id t4sm18903667pfj.13.2021.11.16.00.10.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 00:10:56 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.guojin@zte.com.cn
-To:     tsbogend@alpha.franken.de
-Cc:     ye.guojin@zte.com.cn, yangyingliang@huawei.com,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] MIPS: OCTEON: add put_device() after of_find_device_by_node()
-Date:   Tue, 16 Nov 2021 08:10:51 +0000
-Message-Id: <20211116081051.155750-1-ye.guojin@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        id S231651AbhKPITM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Nov 2021 03:19:12 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:47244 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231405AbhKPITM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Nov 2021 03:19:12 -0500
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AG7KZHF024383;
+        Tue, 16 Nov 2021 08:15:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=CfrWYVK/WWUx2FkE6O2ernHb54WT2Dsdlt0HTCGPt+w=;
+ b=f0TBohjdWu+iuJrqMrr3R+j6zBNzfqH8j7EEQO7V49x7A5Pll0a6HHEijwy/4eZuLrFF
+ BRG1zq9QewkxR7PY0vPizivDqBVB5z/vmi7CeXawPgV8W/+NyMraum4+4EL5L9CB/0Cn
+ vqSJl8S6UVr9bF790zrEpVgBMEM2e7zZM3e0OPBsW378Js0iJBKmQCex5bVPzHItEyzl
+ 0kUGt8FgsE5FX2e+9nZPgGPCqPsiguv8V8dBj9k60QN3JLBf678bdC1CaDVgGIeBPugb
+ BwJzbTdm1liutRvChFPAxtost/N44Cs2Qh5ozJqgYILooTJ5aWLsY2Y/HWWqGHPh8Ki1 ZA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cc4j2mu6r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Nov 2021 08:15:51 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AG7c4OW006712;
+        Tue, 16 Nov 2021 08:15:51 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cc4j2mu5p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Nov 2021 08:15:51 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AG8C17h001896;
+        Tue, 16 Nov 2021 08:15:48 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ca50avrcx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Nov 2021 08:15:48 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AG8FirP4522606
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Nov 2021 08:15:44 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AC33E52054;
+        Tue, 16 Nov 2021 08:15:44 +0000 (GMT)
+Received: from [9.171.18.51] (unknown [9.171.18.51])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 588DA52051;
+        Tue, 16 Nov 2021 08:15:43 +0000 (GMT)
+Message-ID: <d7547cab-88d6-18a9-8307-bf2cc5d61163@de.ibm.com>
+Date:   Tue, 16 Nov 2021 09:15:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 0/5] KVM: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS and
+ re-purpose it on x86
+Content-Language: en-US
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Eduardo Habkost <ehabkost@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, kvm-ppc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+References: <20211111162746.100598-1-vkuznets@redhat.com>
+ <4a3c7be7-12fa-6e47-64eb-02e6c5be5dbc@redhat.com>
+ <ecd55383-7089-b3cd-30cc-3f9feb7eadb4@de.ibm.com> <877dd9pfri.fsf@redhat.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+In-Reply-To: <877dd9pfri.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LcLtdeI1wcxvnUw1x1mtWpHDxGmneBxm
+X-Proofpoint-ORIG-GUID: q5QSO4swu95OL1X3UIEGk2E0NE9OQf1Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-15_16,2021-11-15_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 phishscore=0 malwarescore=0
+ mlxscore=0 mlxlogscore=999 suspectscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111160041
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Ye Guojin <ye.guojin@zte.com.cn>
 
-This was found by coccicheck:
-./arch/mips/cavium-octeon/octeon-platform.c, 332, 1-7, ERROR missing
-put_device; call of_find_device_by_node on line 324, but without a
-corresponding object release within this function.
-./arch/mips/cavium-octeon/octeon-platform.c, 395, 1-7, ERROR missing
-put_device; call of_find_device_by_node on line 387, but without a
-corresponding object release within this function.
-./arch/mips/cavium-octeon/octeon-usb.c, 512, 3-9, ERROR missing
-put_device; call of_find_device_by_node on line 515, but without a
-corresponding object release within this function.
-./arch/mips/cavium-octeon/octeon-usb.c, 543, 1-7, ERROR missing
-put_device; call of_find_device_by_node on line 515, but without a
-corresponding object release within this function.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Ye Guojin <ye.guojin@zte.com.cn>
----
- arch/mips/cavium-octeon/octeon-platform.c | 2 ++
- arch/mips/cavium-octeon/octeon-usb.c      | 1 +
- 2 files changed, 3 insertions(+)
+Am 15.11.21 um 17:04 schrieb Vitaly Kuznetsov:
+[...]
+> or cap KVM_CAP_MAX_VCPUS value with num_online_cpus(), e.g.
+> 
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 6a6dd5e1daf6..1cfe36f6432e 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -585,6 +585,8 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>                          r = KVM_MAX_VCPUS;
+>                  else if (sclp.has_esca && sclp.has_64bscao)
+>                          r = KVM_S390_ESCA_CPU_SLOTS;
+> +               if (ext == KVM_CAP_NR_VCPUS)
+> +                       r = min_t(unsigned int, num_online_cpus(), r);
+>                  break;
+>          case KVM_CAP_S390_COW:
+>                  r = MACHINE_HAS_ESOP;
 
-diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
-index d56e9b9d2e43..a994022e32c9 100644
---- a/arch/mips/cavium-octeon/octeon-platform.c
-+++ b/arch/mips/cavium-octeon/octeon-platform.c
-@@ -328,6 +328,7 @@ static int __init octeon_ehci_device_init(void)
- 
- 	pd->dev.platform_data = &octeon_ehci_pdata;
- 	octeon_ehci_hw_start(&pd->dev);
-+	put_device(&pd->dev);
- 
- 	return ret;
- }
-@@ -391,6 +392,7 @@ static int __init octeon_ohci_device_init(void)
- 
- 	pd->dev.platform_data = &octeon_ohci_pdata;
- 	octeon_ohci_hw_start(&pd->dev);
-+	put_device(&pd->dev);
- 
- 	return ret;
- }
-diff --git a/arch/mips/cavium-octeon/octeon-usb.c b/arch/mips/cavium-octeon/octeon-usb.c
-index 6e4d3619137a..4df919d26b08 100644
---- a/arch/mips/cavium-octeon/octeon-usb.c
-+++ b/arch/mips/cavium-octeon/octeon-usb.c
-@@ -537,6 +537,7 @@ static int __init dwc3_octeon_device_init(void)
- 			devm_iounmap(&pdev->dev, base);
- 			devm_release_mem_region(&pdev->dev, res->start,
- 						resource_size(res));
-+			put_device(&pdev->dev);
- 		}
- 	} while (node != NULL);
- 
--- 
-2.25.1
+Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
 
+
+I think this is the better variant. Thanks.
