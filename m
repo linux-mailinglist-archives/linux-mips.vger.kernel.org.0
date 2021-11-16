@@ -2,91 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB78453691
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 16:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4344536CA
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 17:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238683AbhKPQC1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Nov 2021 11:02:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50388 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232792AbhKPQBw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Nov 2021 11:01:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637078334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FUd95vU2iSWhtX+C2mcdhQw7Dtmpee6Qjpm6zn3irQ4=;
-        b=TLgCQDgIl5hCCb6fq9rSLPmVuMmhQpOB/6MjGNc6a4nroTg+YPDc7FfVZSjwNoZ7Nou5jv
-        Yp/kV3qqtfJjhNyV6s+K8zkfKUY16B40ZX5t66iNy9Zz+0Mph2tJlWQuTfLedgwTExFumy
-        65Y5SKwvZHJJqzBlVKrKR4lH5fh6Rr0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-175-DnLZkEu7Obyh6mlLOa--nA-1; Tue, 16 Nov 2021 10:58:48 -0500
-X-MC-Unique: DnLZkEu7Obyh6mlLOa--nA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S238752AbhKPQHk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Nov 2021 11:07:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33854 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238658AbhKPQHJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Nov 2021 11:07:09 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8857E824F8B;
-        Tue, 16 Nov 2021 15:58:45 +0000 (UTC)
-Received: from [10.39.192.245] (unknown [10.39.192.245])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D581314104;
-        Tue, 16 Nov 2021 15:58:37 +0000 (UTC)
-Message-ID: <ca25cf55-dcc8-9df4-a286-3c65a26803cd@redhat.com>
-Date:   Tue, 16 Nov 2021 16:58:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 1/5] KVM: arm64: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Eduardo Habkost <ehabkost@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 82F2761504;
+        Tue, 16 Nov 2021 16:04:11 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mn0wL-005sTB-FV; Tue, 16 Nov 2021 16:04:09 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linuxppc-dev@lists.ozlabs.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Anup Patel <anup.patel@wdc.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, kvm-ppc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211111162746.100598-1-vkuznets@redhat.com>
- <20211111162746.100598-2-vkuznets@redhat.com>
- <a5cdff6878b7157587e92ebe4d5af362@kernel.org> <875ysxg0s1.fsf@redhat.com>
- <87k0hd8obo.wl-maz@kernel.org>
- <ad3534bc-fe3a-55f5-b022-4dbec5f29798@redhat.com> <87y25onsj6.fsf@redhat.com>
- <875yss859c.wl-maz@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <875yss859c.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        kernel-team@android.com
+Subject: [PATCH v2 0/7] KVM: Turn the vcpu array into an xarray
+Date:   Tue, 16 Nov 2021 16:03:56 +0000
+Message-Id: <20211116160403.4074052-1-maz@kernel.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kvm@vger.kernel.org, linux-mips@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linuxppc-dev@lists.ozlabs.org, pbonzini@redhat.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, anup.patel@wdc.com, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com, jgross@suse.com, npiggin@gmail.com, seanjc@google.com, paulus@samba.org, mpe@ellerman.id.au, f4bug@amsat.org, james.morse@arm.com, suzuki.poulose@arm.com, alexandru.elisei@arm.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/16/21 16:55, Marc Zyngier wrote:
->> - Always kvm_arm_default_max_vcpus to make the output independent on 'if
->>   (kvm)'.
-> This. Between two useless numbers, I prefer the one that doesn't
-> introduce any userspace visible changes.
+The kvm structure is pretty large. A large portion of it is the vcpu
+array, which is 4kB on arm64 with 512 vcpu, double that on x86-64.  Of
+course, hardly anyone runs VMs this big, so this is often a net waste
+of memory and cache locality.
 
-Fair enough, I'm not going to override you---but please add a comment 
-that says
+A possible approach is to turn the fixed-size array into an xarray,
+which results in a net code deletion after a bit of cleanup.
 
-	/*
-	 * arm64 treats KVM_CAP_NR_CPUS different from all other
-	 * architectures, as it does not bound it to num_online_cpus().
-	 * It should not matter much because this is just an advisory
-	 * value.
-	 */
+* From v1:
+  - Rebased on v5.16-rc1
+  - Dropped the dubious locking on teardown
+  - Converted kvm_for_each_vcpu() to xa_for_each_range(), together with
+    an invasive change converting the index to an unsigned long
 
-or something like that.
+Marc Zyngier (7):
+  KVM: Move wiping of the kvm->vcpus array to common code
+  KVM: mips: Use kvm_get_vcpu() instead of open-coded access
+  KVM: s390: Use kvm_get_vcpu() instead of open-coded access
+  KVM: x86: Use kvm_get_vcpu() instead of open-coded access
+  KVM: Convert the kvm->vcpus array to a xarray
+  KVM: Use 'unsigned long' as kvm_for_each_vcpu()'s index
+  KVM: Convert kvm_for_each_vcpu() to using xa_for_each_range()
 
-Paolo
+ arch/arm64/kvm/arch_timer.c           |  8 ++---
+ arch/arm64/kvm/arm.c                  | 16 +++------
+ arch/arm64/kvm/pmu-emul.c             |  2 +-
+ arch/arm64/kvm/psci.c                 |  6 ++--
+ arch/arm64/kvm/reset.c                |  2 +-
+ arch/arm64/kvm/vgic/vgic-init.c       | 10 +++---
+ arch/arm64/kvm/vgic/vgic-kvm-device.c |  2 +-
+ arch/arm64/kvm/vgic/vgic-mmio-v2.c    |  3 +-
+ arch/arm64/kvm/vgic/vgic-mmio-v3.c    |  7 ++--
+ arch/arm64/kvm/vgic/vgic-v3.c         |  4 +--
+ arch/arm64/kvm/vgic/vgic-v4.c         |  5 +--
+ arch/arm64/kvm/vgic/vgic.c            |  2 +-
+ arch/mips/kvm/loongson_ipi.c          |  4 +--
+ arch/mips/kvm/mips.c                  | 23 ++-----------
+ arch/powerpc/kvm/book3s_32_mmu.c      |  2 +-
+ arch/powerpc/kvm/book3s_64_mmu.c      |  2 +-
+ arch/powerpc/kvm/book3s_hv.c          |  8 ++---
+ arch/powerpc/kvm/book3s_pr.c          |  2 +-
+ arch/powerpc/kvm/book3s_xics.c        |  6 ++--
+ arch/powerpc/kvm/book3s_xics.h        |  2 +-
+ arch/powerpc/kvm/book3s_xive.c        | 15 +++++----
+ arch/powerpc/kvm/book3s_xive.h        |  4 +--
+ arch/powerpc/kvm/book3s_xive_native.c |  8 ++---
+ arch/powerpc/kvm/e500_emulate.c       |  2 +-
+ arch/powerpc/kvm/powerpc.c            | 10 +-----
+ arch/riscv/kvm/vcpu_sbi.c             |  2 +-
+ arch/riscv/kvm/vm.c                   | 10 +-----
+ arch/riscv/kvm/vmid.c                 |  2 +-
+ arch/s390/kvm/interrupt.c             |  2 +-
+ arch/s390/kvm/kvm-s390.c              | 47 ++++++++++-----------------
+ arch/s390/kvm/kvm-s390.h              |  4 +--
+ arch/x86/kvm/hyperv.c                 |  7 ++--
+ arch/x86/kvm/i8254.c                  |  2 +-
+ arch/x86/kvm/i8259.c                  |  5 +--
+ arch/x86/kvm/ioapic.c                 |  4 +--
+ arch/x86/kvm/irq_comm.c               |  7 ++--
+ arch/x86/kvm/kvm_onhyperv.c           |  3 +-
+ arch/x86/kvm/lapic.c                  |  6 ++--
+ arch/x86/kvm/svm/avic.c               |  2 +-
+ arch/x86/kvm/svm/sev.c                |  3 +-
+ arch/x86/kvm/vmx/posted_intr.c        |  2 +-
+ arch/x86/kvm/x86.c                    | 30 +++++++----------
+ include/linux/kvm_host.h              | 17 +++++-----
+ virt/kvm/kvm_main.c                   | 41 ++++++++++++++++-------
+ 44 files changed, 158 insertions(+), 193 deletions(-)
+
+-- 
+2.30.2
 
