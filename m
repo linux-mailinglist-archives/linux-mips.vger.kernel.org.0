@@ -2,119 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EABFE4532D1
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 14:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53566453327
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 14:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbhKPN0h (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Nov 2021 08:26:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51306 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236712AbhKPN01 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Nov 2021 08:26:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637069010;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7QB9Djd7unSuWFppJ6ryGSoufF2SRnNHGOPyI0tESn4=;
-        b=ZIstAnW0E0rBi5YPmzUSbyRKpnq0DuO6PR50Jh4JD3q9SQe/gbMGDETnNGnz20QqQ7PKKd
-        6kLe4ilGFg11hvIySMDKfQ88SS7dHDVNQTQcFU6i/jqtJpfB9fYTj10LmjIGH7yr0JoyvK
-        vf7oU3SyUiZQX2B1YsEZQD29hSCh41c=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-123-dgqYZVXINryS8GPOsA_UjQ-1; Tue, 16 Nov 2021 08:23:29 -0500
-X-MC-Unique: dgqYZVXINryS8GPOsA_UjQ-1
-Received: by mail-wm1-f69.google.com with SMTP id v62-20020a1cac41000000b0033719a1a714so1404764wme.6
-        for <linux-mips@vger.kernel.org>; Tue, 16 Nov 2021 05:23:28 -0800 (PST)
+        id S236828AbhKPNuk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Nov 2021 08:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236817AbhKPNuj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Nov 2021 08:50:39 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E76C061746
+        for <linux-mips@vger.kernel.org>; Tue, 16 Nov 2021 05:47:42 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id d11so43425668ljg.8
+        for <linux-mips@vger.kernel.org>; Tue, 16 Nov 2021 05:47:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SBsWmq+eSNqSrsYsyWCWH6gXGL5bAwqHKbMciEKnQI0=;
+        b=k+JGR5u3TneTC9JnH7CUxqVwUMSVaSw20fAGTlGyqmJrFguUbiIOxF/MifLeYcNjff
+         JaPnxBm6C/3CwMAaS4ev1I77XC0nN9GZxaikugFB9+DnfTqk/Cw5aDtUvg4JFsmi/pan
+         OYT6Dqgu3GRStn4kZ8hsNc9Uw6dQyc9PpqFag0oQpy8lO1ffpRQ46hqzDhuFbTjUYtL/
+         1Kc7Ai1LQKKJW/pwwJaPrPnlV53KJ8zhag+Rwku0HMEXbJlJ0PdFGkH/XuTpP+/ISQ+D
+         MbJoLj8MsAktWUuu4YbwEdnjA81AWRlUrJEkwn4gArJkJ3i3RybetNEiRLydcDT//eXn
+         xILw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=7QB9Djd7unSuWFppJ6ryGSoufF2SRnNHGOPyI0tESn4=;
-        b=WqSg80JWbR/CwiZznKPWPRNtL/cmFuEO78jslhuAyVsZ3FWcCFa+wZE0mGCMRpQI2Z
-         RT8wsvTapE9PN8Rh6CcHrX5rYLLuoUzJ+HExb8F/0Zr/qfFJzttufz1Mk4BuJwBkYPVg
-         qsfKfF8TRG7AKbT1mLQRMsr8No6y8A3OrU+rV5QSPTxj1BtFVISPhdolIdCIsR+qiE1r
-         P+Kd8KVeXsRUVl9/Iko5jk72ehjXMFtCeNIjsi9mJzRi+bg5l/SwFGd6OOPG0FeW69+j
-         YytqIUWuHWEb/KKBzqnQBKAty2T6+9fLDY3PtAPQjjwkY9zdR87ySD4+ybqCW91WvBPs
-         7BWg==
-X-Gm-Message-State: AOAM532PyDX//Jh7YalBtgnB5NAk0beTGBxiV9eQP8VecUhl6HEOpIYU
-        UU/sE8KsEQe3kIMTXr7gcShWgNyCpr6IoK3cLZMaOjlhPFDftd0pWsbCdDgs9QYbN9kdkTVZiId
-        KQHCZDmL+yv8AAgVFYkP1Mw==
-X-Received: by 2002:adf:fd90:: with SMTP id d16mr9035257wrr.385.1637069007874;
-        Tue, 16 Nov 2021 05:23:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJypb9wLmwBU+C8U60E20ALWxdPmsGCyP6NgX66fxkM73bNsY5mStZduwVGh4q0guawc8+jIEQ==
-X-Received: by 2002:adf:fd90:: with SMTP id d16mr9035209wrr.385.1637069007612;
-        Tue, 16 Nov 2021 05:23:27 -0800 (PST)
-Received: from fedora (g-server-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id n7sm17311363wro.68.2021.11.16.05.23.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Nov 2021 05:23:27 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Eduardo Habkost <ehabkost@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, kvm-ppc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] KVM: arm64: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
-In-Reply-To: <ad3534bc-fe3a-55f5-b022-4dbec5f29798@redhat.com>
-References: <20211111162746.100598-1-vkuznets@redhat.com>
- <20211111162746.100598-2-vkuznets@redhat.com>
- <a5cdff6878b7157587e92ebe4d5af362@kernel.org> <875ysxg0s1.fsf@redhat.com>
- <87k0hd8obo.wl-maz@kernel.org>
- <ad3534bc-fe3a-55f5-b022-4dbec5f29798@redhat.com>
-Date:   Tue, 16 Nov 2021 14:23:25 +0100
-Message-ID: <87y25onsj6.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SBsWmq+eSNqSrsYsyWCWH6gXGL5bAwqHKbMciEKnQI0=;
+        b=SWWy6Cp9sCJxFbw66/XuXFIPMn4i2XO/D59+2YkkocNAKgXIE77cZ495+GXdEhWcbC
+         ciPM8VcjmtdBEMcRKNjEnsKIl/Z11uZ0AmSetIqp2cERQMbdGknYY8u3MIW9yQr9KfP9
+         NJKWBsMrGPYa+p+DWq0BxcTkPXtVHTTfCe/qlHHyQ6fyxAqSqOJbeYWUbQGhj5jnQQmH
+         JX6fR60F2FZ1HmdtNoskOeHLGxQ3DuA98Ebgzxu1p1Q1Ly4BftuSPnzkJNT6baypQN8h
+         DOYe2H6G1eTPMq/jtp/JXkmZbggKuPy1OVzYIXb1dn4yeJlOO7l3ELBnXFxr6MihhnbQ
+         vxgg==
+X-Gm-Message-State: AOAM532IKNHAwaroR9m5uVKSqYV3M2JvFMysral79kS1O16RXq0UtGJq
+        mgRrPh5ibEG3LVzvdDx7pKsjX9KyXwVtSe6HgQs=
+X-Google-Smtp-Source: ABdhPJwRSE6nxBqVWoTkCFjWCaGBvuRmqdHgSpB4bqHOHySa2vn0uYh4yOA5iilE8E22mbup60OB39fX0r4mEzmRTMs=
+X-Received: by 2002:a2e:3917:: with SMTP id g23mr7247613lja.417.1637070460552;
+ Tue, 16 Nov 2021 05:47:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+Received: by 2002:a05:6520:35ac:b0:14d:8e0a:2fca with HTTP; Tue, 16 Nov 2021
+ 05:47:39 -0800 (PST)
+Reply-To: mrsaishagaddafi3@gmail.com
+From:   Mrs Aisha Al-Gaddafi <w1e1ndy@gmail.com>
+Date:   Tue, 16 Nov 2021 05:47:39 -0800
+Message-ID: <CADc39_wYKAGc_rgPkAdgz5bD0VWpfopPOG2vLH9AeWFTYQ_saA@mail.gmail.com>
+Subject: Your Urgent Reply Will Be Appreciated
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Paolo Bonzini <pbonzini@redhat.com> writes:
+Hi Dear Friend,
 
-> On 11/12/21 15:02, Marc Zyngier wrote:
->>> I'd like KVM to be consistent across architectures and have the same
->>> (similar) meaning for KVM_CAP_NR_VCPUS.
->> Sure, but this is a pretty useless piece of information anyway. As
->> Andrew pointed out, the information is available somewhere else, and
->> all we need to do is to cap it to the number of supported vcpus, which
->> is effectively a KVM limitation.
->> 
->> Also, we are talking about representing the architecture to userspace.
->> No amount of massaging is going to make an arm64 box look like an x86.
->
-> Not sure what you mean?  The API is about providing a piece of 
-> information independent of the architecture, while catering for a ppc 
-> weirdness.  Yes it's mostly useless if you don't care about ppc, but 
-> it's not about making arm64 look like x86 or ppc; it's about not having 
-> to special case ppc in userspace.
->
-> If anything, if KVM_CAP_NR_VCPUS returns the same for kvm and !kvm, then 
-> *that* is making an arm64 box look like an x86.  On ARM the max vCPUs 
-> depends on VM's GIC configuration, so KVM_CAP_NR_VCPUS should take that 
-> into account.
+I am sending my greetings to you from the Sultanate of Oman,
+In the capital city of Muscat.
 
-(I'm about to send v2 as we have s390 sorted out.)
+I came across your e-mail contact prior a private search while in need
+of your assistance. I am Aisha Al- Gaddafi, the only biological
+Daughter of Former President of Libya Col. Muammar Al-Gaddafi. Am a
+single Mother and a Widow with three Children.
 
-So what do we decide about ARM? 
-- Current approach (kvm->arch.max_vcpus/kvm_arm_default_max_vcpus()
- depending on 'if (kvm)') - that would be my preference.
-- Always kvm_arm_default_max_vcpus to make the output independent on 'if
- (kvm)'.
-- keep the status quo (drop the patch).
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
 
-Please advise)
+I am willing to negotiate investment/business profit sharing ratio
+with you base on the future investment earning profits.If you are
+willing to handle this project on my behalf kindly reply urgent to
+enable me provide you more information about the investment funds.
 
--- 
-Vitaly
-
+Your Urgent Reply Will Be Appreciated
+Best Regards
+Mrs Aisha Al-Gaddafi
