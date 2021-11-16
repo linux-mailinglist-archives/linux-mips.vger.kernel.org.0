@@ -2,117 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6304528CE
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 04:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FF2452A6C
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 07:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbhKPD5H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 15 Nov 2021 22:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
+        id S229614AbhKPGWJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Nov 2021 01:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235878AbhKPD5F (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 15 Nov 2021 22:57:05 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAB2C0337DE
-        for <linux-mips@vger.kernel.org>; Mon, 15 Nov 2021 16:35:15 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id h24so14299745pjq.2
-        for <linux-mips@vger.kernel.org>; Mon, 15 Nov 2021 16:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6YrJDwz5lHylUrRKBiCCXn7XIadwbTCaDNmr8F8Qv+s=;
-        b=kRgsOovbagRO/7210nSyOKEBlmhfA5hNYfPQV4k7lydus9N2uNl5Vt0UygZC7jGLy1
-         CcSKdAOPN7CAjIaxG2Nk7LhNoTdTNyUIV57l7UZ/U0TQtm7n+dBKTmv+GCqWpklKxw86
-         72xq1Tvc+lxHwltemgeZ72MdiUZIJVqjFa0RI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6YrJDwz5lHylUrRKBiCCXn7XIadwbTCaDNmr8F8Qv+s=;
-        b=wzrUI7YOD6NFR2oVDN5oAsETaNhUXQj+sv9SPXPNmcNariTBSuQAYzbZQ77DzdNnHG
-         nPeiZ7Y9kAOMCHSyWc4vy5e5Qdd72BPwaSPwFyy3GWQ0fTRoc4tPK08NPXzb72niifDK
-         vjaZGRH/PZix0L+6uMFfWndNmkeJuGwBvYyaT/3L56mdCrHjFh3DWsqyUBGiwtaDKkpJ
-         TkSuBwpG8qKkyW7m5w0FLtAZ7bNBcOAhafZndJqoejJOUFa6NUcqiQ8YHa5OJkUrYa7r
-         SoLc7b12FTFCLBKVLCWj3t1PDzyxqZAPzhnMBVnEhUd1BSXTmLSdSZF1FMVMTLKi90gI
-         KXQw==
-X-Gm-Message-State: AOAM530ptmzBRahrl4bMT6zHOhBqBVu+ojy04NOtJJBmffYZ0vBwcffm
-        0WVNgjETEslBUEvP1Xd6soczeg==
-X-Google-Smtp-Source: ABdhPJy9iYaBB3Pj/LejC8q7/hsST+5gxO7ABIHhxz3+lYk9ZK6BkrL6e9tXPNM1m5lGV6jB9/FWOw==
-X-Received: by 2002:a17:90a:c398:: with SMTP id h24mr3495024pjt.73.1637022914921;
-        Mon, 15 Nov 2021 16:35:14 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s21sm16292860pfk.3.2021.11.15.16.35.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 16:35:14 -0800 (PST)
-Date:   Mon, 15 Nov 2021 16:35:14 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nick Terrell <terrelln@fb.com>,
-        Rob Clark <robdclark@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Hector Martin <marcan@marcan.st>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-ntfs-dev@lists.sourceforge.net,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        with ESMTP id S229556AbhKPGWF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Nov 2021 01:22:05 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C97C061570;
+        Mon, 15 Nov 2021 22:19:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=EKgG66ARKxFbtEWhySU2fts+AXN60Ss5cND4ObF59oU=; b=MJbfwhxG7geoGD7gz/OpwSSJ87
+        0TJUlIHEsrerTTZRWAdZH0GVKCnP32/cYKepvOx73+3wUi5JSa9zmALP+1I6KSnRe3AlOlLm7WriJ
+        mXNSwHlBKFdfSf5qBFCTny46t6rmL1WBn7jFnUUQJU5Fbk9DyNIG0ipwkQ1xTI+xq0hvkmi19lLv7
+        Vu/MPtErH9TK1AIeHCypG4fwoO0x96mgv0P+TVBVovBSWdp8XpXW/EYP9Q8rD3c0lj3rfIqM9dhfh
+        9uZUsVJ1fkZt6/OOqX5wzWuNm+q1b5STaZFnJYdGjmLcOAwW6GVRYQ8kLjjlcLlJqm7aV1XHUREwg
+        b7+fTD8Q==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mmroB-000Mz2-Ro; Tue, 16 Nov 2021 06:19:07 +0000
+Subject: Re: [PATCH v4] mips: bcm63xx: add support for clk_get_parent()
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Subject: Re: Build regressions/improvements in v5.16-rc1
-Message-ID: <202111151633.DE719CE@keescook>
-References: <20211115155105.3797527-1-geert@linux-m68k.org>
- <CAMuHMdUCsyUxaEf1Lz7+jMnur4ECwK+JoXQqmOCkRKqXdb1hTQ@mail.gmail.com>
- <YZKOce4XhAU49+Yn@elver.google.com>
+        linux-iio <linux-iio@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>
+References: <20211115004218.13034-1-rdunlap@infradead.org>
+ <CAHp75Vegc9bskv6DccJCBe1aYjB3mmqQHRbtD0vvYf_oxKi3eg@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <39073f85-495d-3657-dc28-ff53d262bd86@infradead.org>
+Date:   Mon, 15 Nov 2021 22:19:07 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YZKOce4XhAU49+Yn@elver.google.com>
+In-Reply-To: <CAHp75Vegc9bskv6DccJCBe1aYjB3mmqQHRbtD0vvYf_oxKi3eg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 05:44:33PM +0100, Marco Elver wrote:
-> On Mon, Nov 15, 2021 at 05:12PM +0100, Geert Uytterhoeven wrote:
-> [...]
-> > >   + /kisskb/src/include/linux/fortify-string.h: error: call to '__read_overflow' declared with attribute error: detected read beyond size of object (1st parameter):  => 263:25, 277:17
-> > 
-> >     in lib/test_kasan.c
-> > 
-> > s390-all{mod,yes}config
-> > arm64-allmodconfig (gcc11)
+On 11/15/21 2:56 AM, Andy Shevchenko wrote:
+> On Mon, Nov 15, 2021 at 2:42 AM Randy Dunlap <rdunlap@infradead.org> wrote:
 > 
-> Kees, wasn't that what [1] was meant to fix?
-> [1] https://lkml.kernel.org/r/20211006181544.1670992-1-keescook@chromium.org
+> Just couple of side notes on the same topic (dropped people from Cc,
+> just MLs are left):
+> 
+>> Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> 
+>> Cc: Jonathan Cameron <jic23@kernel.org>
+> 
+>> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> Cc: Russell King <linux@armlinux.org.uk>
+> 
+>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> 
+> 1/ `git format-patch`/`git send-email` will create the Cc list from
+> all known tags, hence no need to repeat people in Cc.
+> 2/ Consider to use --cc and --to to avoid burden on the git history
+> (sometimes people want to see it on mobile devices).
+> 
+> For myself I wrote the script [1] to give me some smartness. Maybe you
+> can find some ideas inside its implementation.
+> 
+> [1]: https://github.com/andy-shev/home-bin-tools/blob/master/ge2maintainer.sh
 
-Ah, I found it:
+OK, I'll look into that.
 
-http://kisskb.ellerman.id.au/kisskb/buildresult/14660585/log/
-
-it's actually:
-
-    inlined from 'kasan_memcmp' at /kisskb/src/lib/test_kasan.c:897:2:
-
-and
-
-    inlined from 'kasan_memchr' at /kisskb/src/lib/test_kasan.c:872:2:
-
-I can send a patch doing the same as what [1] does for these cases too.
-
+Thanks.
 -- 
-Kees Cook
+~Randy
