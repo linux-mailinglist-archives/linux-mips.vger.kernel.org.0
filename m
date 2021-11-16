@@ -2,31 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB3D45367B
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 16:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB78453691
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 16:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238315AbhKPP6m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Nov 2021 10:58:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58408 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238671AbhKPP6L (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Nov 2021 10:58:11 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S238683AbhKPQC1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Nov 2021 11:02:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50388 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232792AbhKPQBw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Nov 2021 11:01:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637078334;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FUd95vU2iSWhtX+C2mcdhQw7Dtmpee6Qjpm6zn3irQ4=;
+        b=TLgCQDgIl5hCCb6fq9rSLPmVuMmhQpOB/6MjGNc6a4nroTg+YPDc7FfVZSjwNoZ7Nou5jv
+        Yp/kV3qqtfJjhNyV6s+K8zkfKUY16B40ZX5t66iNy9Zz+0Mph2tJlWQuTfLedgwTExFumy
+        65Y5SKwvZHJJqzBlVKrKR4lH5fh6Rr0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-175-DnLZkEu7Obyh6mlLOa--nA-1; Tue, 16 Nov 2021 10:58:48 -0500
+X-MC-Unique: DnLZkEu7Obyh6mlLOa--nA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC8B061929;
-        Tue, 16 Nov 2021 15:55:13 +0000 (UTC)
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mn0nf-005sK1-QH; Tue, 16 Nov 2021 15:55:11 +0000
-Date:   Tue, 16 Nov 2021 15:55:11 +0000
-Message-ID: <875yss859c.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8857E824F8B;
+        Tue, 16 Nov 2021 15:58:45 +0000 (UTC)
+Received: from [10.39.192.245] (unknown [10.39.192.245])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D581314104;
+        Tue, 16 Nov 2021 15:58:37 +0000 (UTC)
+Message-ID: <ca25cf55-dcc8-9df4-a286-3c65a26803cd@redhat.com>
+Date:   Tue, 16 Nov 2021 16:58:36 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/5] KVM: arm64: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         Jim Mattson <jmattson@google.com>,
         Eduardo Habkost <ehabkost@redhat.com>,
@@ -38,70 +55,38 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         Michael Ellerman <mpe@ellerman.id.au>, kvm-ppc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] KVM: arm64: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
-In-Reply-To: <87y25onsj6.fsf@redhat.com>
 References: <20211111162746.100598-1-vkuznets@redhat.com>
-        <20211111162746.100598-2-vkuznets@redhat.com>
-        <a5cdff6878b7157587e92ebe4d5af362@kernel.org>
-        <875ysxg0s1.fsf@redhat.com>
-        <87k0hd8obo.wl-maz@kernel.org>
-        <ad3534bc-fe3a-55f5-b022-4dbec5f29798@redhat.com>
-        <87y25onsj6.fsf@redhat.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: vkuznets@redhat.com, pbonzini@redhat.com, kvm@vger.kernel.org, seanjc@google.com, wanpengli@tencent.com, jmattson@google.com, ehabkost@redhat.com, drjones@redhat.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, anup.patel@wdc.com, paulus@ozlabs.org, mpe@ellerman.id.au, kvm-ppc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+ <20211111162746.100598-2-vkuznets@redhat.com>
+ <a5cdff6878b7157587e92ebe4d5af362@kernel.org> <875ysxg0s1.fsf@redhat.com>
+ <87k0hd8obo.wl-maz@kernel.org>
+ <ad3534bc-fe3a-55f5-b022-4dbec5f29798@redhat.com> <87y25onsj6.fsf@redhat.com>
+ <875yss859c.wl-maz@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <875yss859c.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 16 Nov 2021 13:23:25 +0000,
-Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
-> 
-> Paolo Bonzini <pbonzini@redhat.com> writes:
-> 
-> > On 11/12/21 15:02, Marc Zyngier wrote:
-> >>> I'd like KVM to be consistent across architectures and have the same
-> >>> (similar) meaning for KVM_CAP_NR_VCPUS.
-> >> Sure, but this is a pretty useless piece of information anyway. As
-> >> Andrew pointed out, the information is available somewhere else, and
-> >> all we need to do is to cap it to the number of supported vcpus, which
-> >> is effectively a KVM limitation.
-> >> 
-> >> Also, we are talking about representing the architecture to userspace.
-> >> No amount of massaging is going to make an arm64 box look like an x86.
-> >
-> > Not sure what you mean?  The API is about providing a piece of 
-> > information independent of the architecture, while catering for a ppc 
-> > weirdness.  Yes it's mostly useless if you don't care about ppc, but 
-> > it's not about making arm64 look like x86 or ppc; it's about not having 
-> > to special case ppc in userspace.
-> >
-> > If anything, if KVM_CAP_NR_VCPUS returns the same for kvm and !kvm, then 
-> > *that* is making an arm64 box look like an x86.  On ARM the max vCPUs 
-> > depends on VM's GIC configuration, so KVM_CAP_NR_VCPUS should take that 
-> > into account.
-> 
-> (I'm about to send v2 as we have s390 sorted out.)
-> 
-> So what do we decide about ARM? 
+On 11/16/21 16:55, Marc Zyngier wrote:
+>> - Always kvm_arm_default_max_vcpus to make the output independent on 'if
+>>   (kvm)'.
+> This. Between two useless numbers, I prefer the one that doesn't
+> introduce any userspace visible changes.
 
-[...]
+Fair enough, I'm not going to override you---but please add a comment 
+that says
 
-> - Always kvm_arm_default_max_vcpus to make the output independent on 'if
->  (kvm)'.
+	/*
+	 * arm64 treats KVM_CAP_NR_CPUS different from all other
+	 * architectures, as it does not bound it to num_online_cpus().
+	 * It should not matter much because this is just an advisory
+	 * value.
+	 */
 
-This. Between two useless numbers, I prefer the one that doesn't
-introduce any userspace visible changes.
+or something like that.
 
-Thanks,
+Paolo
 
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
