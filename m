@@ -2,85 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D10DE452D3D
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 09:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D2C452D57
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 09:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbhKPI6A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Nov 2021 03:58:00 -0500
-Received: from elvis.franken.de ([193.175.24.41]:52950 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232506AbhKPI55 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Nov 2021 03:57:57 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mmuF0-0006gG-03; Tue, 16 Nov 2021 09:54:58 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id EB53EC2D9C; Tue, 16 Nov 2021 09:47:12 +0100 (CET)
-Date:   Tue, 16 Nov 2021 09:47:12 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Wang Haojun <jiangliuer01@gmail.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Wang Haojun <wanghaojun@loongson.cn>,
-        Li Xuefeng <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: syscalls: Wire up futex_waitv syscall
-Message-ID: <20211116084712.GD21168@alpha.franken.de>
-References: <20211103025521.3615671-1-wanghaojun@loongson.cn>
+        id S232576AbhKPI7e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Nov 2021 03:59:34 -0500
+Received: from mail.bizjoindeal.pl ([80.211.97.164]:53686 "EHLO
+        mail.bizjoindeal.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232727AbhKPI7Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 16 Nov 2021 03:59:25 -0500
+Received: by mail.bizjoindeal.pl (Postfix, from userid 1001)
+        id CCE30A29AC; Tue, 16 Nov 2021 08:51:13 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bizjoindeal.pl;
+        s=mail; t=1637052674;
+        bh=JZuQ1fK7zFtz2oeUB7Xfid9vb7kUywdmDd2OluR8ywA=;
+        h=Date:From:To:Subject:From;
+        b=vUo/g8dlGsk8dUVpSokeFGKnsBPi2hb0dcizLYGkemFk1VjI8+wvC47J15zupv9vn
+         8P556bUhMB7qwfMhzD3ks2bj03InrMKgrBoLMKklwhm3vblLSW7Y7YxaBQjFIcemIk
+         P7aa39gHlYh1m0Fzr1qVgaELgU+qCXX/h4YNK3RUmk54Xw+G/HbQnKkGFXWkaYIHJ5
+         u2K+svItuy6H4ENAH4VQV30H1mlfjIb97dJnJrT9Y7qepSS4lbNjTaA86GePyewPUa
+         wsxuVNpn+dHOsMevLkrfUCxNsDOLWaeqbE23a25D0nB3mpv6yUvvn6YYvIixKJUyGN
+         Xp/qnKFsUPCYA==
+Received: by mail.bizjoindeal.pl for <linux-mips@vger.kernel.org>; Tue, 16 Nov 2021 08:51:12 GMT
+Message-ID: <20211116074500-0.1.60.f0ks.0.nzfno72qqo@bizjoindeal.pl>
+Date:   Tue, 16 Nov 2021 08:51:12 GMT
+From:   "Dorian Kwiatkowski" <dorian.kwiatkowski@bizjoindeal.pl>
+To:     <linux-mips@vger.kernel.org>
+Subject: Fotowoltaika dla firm
+X-Mailer: mail.bizjoindeal.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211103025521.3615671-1-wanghaojun@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 03, 2021 at 10:55:21AM +0800, Wang Haojun wrote:
-> Wire up the futex_waitv syscall.
-> 
-> Fix Build warning: #warning syscall futex_waitv not implemented [-Wcpp]
-> 
-> Signed-off-by: Wang Haojun <wanghaojun@loongson.cn>
-> ---
->  arch/mips/kernel/syscalls/syscall_n32.tbl | 1 +
->  arch/mips/kernel/syscalls/syscall_n64.tbl | 1 +
->  arch/mips/kernel/syscalls/syscall_o32.tbl | 1 +
->  3 files changed, 3 insertions(+)
-> 
-> diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> index 70e32de2bcaa..e497492eb72f 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> @@ -387,3 +387,4 @@
->  446	n32	landlock_restrict_self		sys_landlock_restrict_self
->  # 447 reserved for memfd_secret
->  448	n32	process_mrelease		sys_process_mrelease
-> +449	n32	futex_waitv			sys_futex_waitv
-> diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> index 1ca7bc337932..e2c481fcede6 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> @@ -363,3 +363,4 @@
->  446	n64	landlock_restrict_self		sys_landlock_restrict_self
->  # 447 reserved for memfd_secret
->  448	n64	process_mrelease		sys_process_mrelease
-> +449	n64	futex_waitv			sys_futex_waitv
-> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> index a61c35edaa74..3714c97b2643 100644
-> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> @@ -436,3 +436,4 @@
->  446	o32	landlock_restrict_self		sys_landlock_restrict_self
->  # 447 reserved for memfd_secret
->  448	o32	process_mrelease		sys_process_mrelease
-> +449	o32	futex_waitv			sys_futex_waitv
-> -- 
-> 2.27.0
+Dzie=C5=84 dobry,
 
-applied to mips-fixes.
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC dostrzegam mo=C5=BC=
+liwo=C5=9B=C4=87 redukcji op=C5=82at za pr=C4=85d.
 
-Thomas.
+Odpowiednio dobrana instalacja fotowoltaiczna to rozwi=C4=85zanie, kt=C3=B3=
+re pozwala wygenerowa=C4=87 spore oszcz=C4=99dno=C5=9Bci w skali roku.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Chcia=C5=82bym porozmawia=C4=87 z Pa=C5=84stwem o tego typu rozwi=C4=85za=
+niu, a tak=C5=BCe przedstawi=C4=87 wst=C4=99pne kalkulacje.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani?
+
+Pozdrawiam,
+Dorian Kwiatkowski
