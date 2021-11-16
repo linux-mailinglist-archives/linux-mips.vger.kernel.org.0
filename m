@@ -2,89 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9AA453625
-	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 16:43:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA32453662
+	for <lists+linux-mips@lfdr.de>; Tue, 16 Nov 2021 16:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238410AbhKPPos (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 16 Nov 2021 10:44:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50948 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238631AbhKPPnw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 16 Nov 2021 10:43:52 -0500
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S238505AbhKPPyE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 16 Nov 2021 10:54:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35719 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238553AbhKPPxy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 16 Nov 2021 10:53:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637077857;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YptFOrP2nGZgxL0dz3Uz+MV2Fy+UJLC/xUWIe94Zh90=;
+        b=LPelSyupXiBaw5GJnbQkcCT1pfgLxk4KfsyqAOX5OJMnZySnbxQykAW11IZuAeUk2XAZ1G
+        28OjaoOetiJkZ+67UATuE9u4xduIFk0PLkhV7rsEpttJi38s/8owzj3xTuUBpVJyKgyWS/
+        +mN2Jf904ZuXt5G6fRFYsl1yBqmz048=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-581-IOu4GPwSPZ2JF_vyWL4whw-1; Tue, 16 Nov 2021 10:50:53 -0500
+X-MC-Unique: IOu4GPwSPZ2JF_vyWL4whw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D1BF160F38;
-        Tue, 16 Nov 2021 15:40:53 +0000 (UTC)
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1mn0Zn-005s77-F7; Tue, 16 Nov 2021 15:40:51 +0000
-Date:   Tue, 16 Nov 2021 15:40:50 +0000
-Message-ID: <877dd885x9.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linuxppc-dev@lists.ozlabs.org,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1F1B815721;
+        Tue, 16 Nov 2021 15:50:51 +0000 (UTC)
+Received: from [10.39.192.245] (unknown [10.39.192.245])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DA1605D6BA;
+        Tue, 16 Nov 2021 15:50:24 +0000 (UTC)
+Message-ID: <ebfa56a6-d444-e82e-bf0d-946765c7f8ae@redhat.com>
+Date:   Tue, 16 Nov 2021 16:50:23 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 1/5] KVM: arm64: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
+Content-Language: en-US
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Eduardo Habkost <ehabkost@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
         Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Anup Patel <anup.patel@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        kernel-team@android.com
-Subject: Re: [PATCH 0/5] KVM: Turn the vcpu array into an xarray
-In-Reply-To: <dd5292e5-7387-9797-2d74-6a3350cbe4f5@redhat.com>
-References: <20211105192101.3862492-1-maz@kernel.org>
-        <dd5292e5-7387-9797-2d74-6a3350cbe4f5@redhat.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: pbonzini@redhat.com, kvm@vger.kernel.org, linux-mips@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linuxppc-dev@lists.ozlabs.org, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, anup.patel@wdc.com, atish.patra@wdc.com, borntraeger@de.ibm.com, frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com, jgross@suse.com, npiggin@gmail.com, seanjc@google.com, paulus@samba.org, mpe@ellerman.id.au, james.morse@arm.com, suzuki.poulose@arm.com, alexandru.elisei@arm.com, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        Paul Mackerras <paulus@ozlabs.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, kvm-ppc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211111162746.100598-1-vkuznets@redhat.com>
+ <20211111162746.100598-2-vkuznets@redhat.com>
+ <a5cdff6878b7157587e92ebe4d5af362@kernel.org> <875ysxg0s1.fsf@redhat.com>
+ <87k0hd8obo.wl-maz@kernel.org>
+ <ad3534bc-fe3a-55f5-b022-4dbec5f29798@redhat.com> <87y25onsj6.fsf@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <87y25onsj6.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 16 Nov 2021 15:03:40 +0000,
-Paolo Bonzini <pbonzini@redhat.com> wrote:
+On 11/16/21 14:23, Vitaly Kuznetsov wrote:
+> (I'm about to send v2 as we have s390 sorted out.)
 > 
-> On 11/5/21 20:20, Marc Zyngier wrote:
-> > The kvm structure is pretty large. A large portion of it is the vcpu
-> > array, which is 4kB on x86_64 and arm64 as they deal with 512 vcpu
-> > VMs. Of course, hardly anyone runs VMs this big, so this is often a
-> > net waste of memory and cache locality.
-> > 
-> > A possible approach is to turn the fixed-size array into an xarray,
-> > which results in a net code deletion after a bit of cleanup.
-> > 
-> > This series is on top of the current linux/master as it touches the
-> > RISC-V implementation. Only tested on arm64.
-> 
-> Queued, only locally until I get a review for my replacement of patch
-> 4 (see
-> https://lore.kernel.org/kvm/20211116142205.719375-1-pbonzini@redhat.com/T/).
+> So what do we decide about ARM?
+> - Current approach (kvm->arch.max_vcpus/kvm_arm_default_max_vcpus()
+>   depending on 'if (kvm)') - that would be my preference.
 
-In which case, let me send a v2 with the changes that we discussed
-with Sean. It will still have my version of patch 4, but that's
-nothing you can't fix.
+That would be mine too.
 
-	M.
+Paolo
 
--- 
-Without deviation from the norm, progress is not possible.
+> - Always kvm_arm_default_max_vcpus to make the output independent on 'if
+>   (kvm)'.
+> - keep the status quo (drop the patch).
+
