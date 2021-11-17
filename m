@@ -2,111 +2,116 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFB6454696
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 13:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9B94547BA
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 14:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236914AbhKQMvc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Nov 2021 07:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S233863AbhKQNvU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Nov 2021 08:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236872AbhKQMvb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Nov 2021 07:51:31 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4213C061570;
-        Wed, 17 Nov 2021 04:48:32 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id p2so5544638uad.11;
-        Wed, 17 Nov 2021 04:48:32 -0800 (PST)
+        with ESMTP id S233343AbhKQNvT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Nov 2021 08:51:19 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18D3C061570;
+        Wed, 17 Nov 2021 05:48:20 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id u74so6486362oie.8;
+        Wed, 17 Nov 2021 05:48:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C9ZeoZcuM1SFs0ycmV8j+Ly+rX5e3huJuu4Pm4Ap/7E=;
-        b=cDMCcPD0iSAiG8zkz1Qjy09UlUjlXYc07J57n5MLgD2rZ5o0ZBIb4gROWlQXntoP6X
-         fDmfYtFGq+QaIc7LbDhzaQHq9efIiUkbWxblT2lbgaPsQqjib/dGeJnUdwnJSL/7T7Rl
-         a53w8M+FB/gp5MVZGukOwXgqQYrEOIT9WWAcIruCUTdhsBBQyugGn03MC5mLnuLRMmAK
-         EGnbVYd+V3aQd5Ugr/NQiUHuS41jPKYjt4PjjFzVDK0Jya7pZlya8xi4SqNXXFx78XCF
-         cAYSXGCHFZNltcw6WpvxSaN/TxaW0bd70TsGN4ye7JkAWTiZIT7Ol6+L4Lym2a0CuMZW
-         beyA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3mebJzVN9HcHpEGD2QX+VgGKB5YKEkPOK0FE0bHbIP4=;
+        b=ci5T3FUt/5hepMHdWVA9TlN0kHsoEBg9Vuu4c4np1oHUeGbDY6oLySQ0wPwudmQSpg
+         TcAtZSgCt3/rrd3PgXWAr53eBVmr8KS+4STKC5xKEwXOAB0wmn28SNrE0/wKsSMhyHyK
+         xQb9pzBK5rfACmZwLjseiNpNPTdOV34we6Wf+c+yXndonV/S3uG6qlQi6Bvt0VsEfZHp
+         gdhXweRSP/v8XcJOzlbI0IsSM1IQRXzHKBEYq8WEHM1+HCl04MVvlOeyiPVENiPs5jnz
+         B+0sJku2BNgCOs0GUl3R/OrcP+wb8vvu9HSaVLyI7BGEYxCVN4dx9K93V7CCCl7Mrim7
+         rnKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C9ZeoZcuM1SFs0ycmV8j+Ly+rX5e3huJuu4Pm4Ap/7E=;
-        b=eV2sMFWzUnQowva1gzAZaMYge2UUgXWdQ8tV8lX1b+7bjAjl63386ut/2j9IueeXho
-         YBqlOlTJ/wP9ZP8hJ7X3ZYwf9nLTeQAph29VyT24WUntecs3R8BfDA5LCl5bbAQflswb
-         stZWuvSoaNmhOeLRCuB80dIpUkmwytpghLPUrVfAMzb1c8AkMajIYNE5lSqXi/BRjpN3
-         KJbPawaE32tO1WcXO9nrCfJ+yN41BGVdJioY8Os8HVka2pUnXW0p0b8srtQOfijdsDUr
-         3ev8oNGjKR2Xct9GaiKyX/ONMBoHoBcHNCpesHF0ar8L+TRuUhJZ7ZT5pcD5RCc3eO0h
-         7FWg==
-X-Gm-Message-State: AOAM531qySxRPUJKxrCV0pUeH6x4o1wkYIV8cola5hITd8jehWJh3ND0
-        h/k+6a46lAabAY6ursKRzfvU5M8LwXRA2N9K3qQ=
-X-Google-Smtp-Source: ABdhPJxXCcMsvAYMIJ6kUEI1Et7ijT/DNk5p7WaE2MPC0BwC177Ktar5VCPS7gdhcTdjefP7Tyebx6idpP5iAZ/YyO8=
-X-Received: by 2002:a05:6102:3a11:: with SMTP id b17mr68559905vsu.28.1637153312056;
- Wed, 17 Nov 2021 04:48:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20211115070809.15529-1-sergio.paracuellos@gmail.com> <20211117124120.GA9336@alpha.franken.de>
-In-Reply-To: <20211117124120.GA9336@alpha.franken.de>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Wed, 17 Nov 2021 13:48:20 +0100
-Message-ID: <CAMhs-H_V03ZE8AkdccrmUb+48HDhbDM5i-9G-hhnuHwRq20H3A@mail.gmail.com>
-Subject: Re: [PATCH 0/5] PCI: mt7621: remove specific MIPS code from driver
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=3mebJzVN9HcHpEGD2QX+VgGKB5YKEkPOK0FE0bHbIP4=;
+        b=6Tr3RwE94H6UsvnBrHZcX7Qhz2UkuFk9hePPCHunnWtx0u1XlpPX5xtNMWzhPefKEl
+         NzaoZco9p3tSQipIfSqbF4SWmcsWuz/kyK8/8lwjVjXWSI8+b5srH857GnifbG6VNj4t
+         LcvtdUmXPIcCSEzMnCB7EyDgrmvqpU++SjMqVrz8T8UUh6n+8Sdv2ZIc3hhWvrNKPaQC
+         xPNflEG0wD5x1NZw+VjvB0QUaNgB404C8C0TlUFVXLHw0It522iOlqul1TBO4Un8JF18
+         /geGWOmCjd+uOWjvtIYP2TTtm7puXaICNuGrea6n/CS5qgZIIj3EQjbGw6l40SHeVkM0
+         il8A==
+X-Gm-Message-State: AOAM532jBbU4IlxPrkxW1Pg3tPBmBSepLCVpNT2gZjVVsaoBx0AfFMSH
+        FPyGc6bcI3wRWaawAWA9Be0=
+X-Google-Smtp-Source: ABdhPJwWNtGrgxl6HdtyBfu5X9p0ZKyR8nj0IVJIWojeaK1jDLmxky4nGpBSFHz5fJKRASzIoYqilw==
+X-Received: by 2002:aca:2412:: with SMTP id n18mr14113342oic.119.1637156900323;
+        Wed, 17 Nov 2021 05:48:20 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w71sm4550911oiw.6.2021.11.17.05.48.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Nov 2021 05:48:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 17 Nov 2021 05:48:18 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "maintainer:BROADCOM BCM63XX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         "open list:MIPS" <linux-mips@vger.kernel.org>,
-        John Crispin <john@phrozen.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "moderated list:BROADCOM BCM63XX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v5 2/7] dt-bindings: watchdog: Add BCM6345 compatible to
+ BCM7038 binding
+Message-ID: <20211117134818.GA2724345@roeck-us.net>
+References: <20211112224636.395101-1-f.fainelli@gmail.com>
+ <20211112224636.395101-3-f.fainelli@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211112224636.395101-3-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 1:41 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Mon, Nov 15, 2021 at 08:08:04AM +0100, Sergio Paracuellos wrote:
-> > Hi all,
-> >
-> > MIPS specific code can be removed from driver and put into ralink mt7621
-> > instead which is a more accurate place to do this. To make this possible
-> > we need to have access to 'bridge->windows' in 'pcibios_root_bridge_prepare()'
-> > which has been implemented for ralink mt7621 platform (there is no real
-> > need to implement this for any other platforms since those ones haven't got
-> > I/O coherency units). This also allow us to properly enable this driver to
-> > completely be enabled for COMPILE_TEST. This patchset appoarch:
-> > - Move windows list splice in 'pci_register_host_bridge()' after function
-> >   'pcibios_root_bridge_prepare()' is called.
-> > - Implement 'pcibios_root_bridge_prepare()' for ralink mt7621.
-> > - Avoid custom MIPs code in pcie-mt7621 driver.
-> > - Add missing 'MODULE_LICENSE()' to pcie-mt7621 driver to avoid compile test
-> >   module compilation to complain (already sent patch from Yanteng Si that
-> >   I have rewrite commit message and long description a bit.
-> > - Remove MIPS conditional code from Kconfig.
-> >
-> > This patchset also fix some errors reported by Kernel Test Robot about
-> > implicit mips functions used in driver code and fix errors in driver when
-> > is compiled as a module [1] (mips:allmodconfig).
-> >
-> > There was an ongoing discussion about this here [0] but I preferred to send
-> > my proposal for better review and understanding:
->
-> so what's the plan with this patchset ? Going in as fix, probably via
-> pci tree ? Or is material for next release ? If the latter can we first
-> fix the allmodconfig by making the Kconfig symbol bool ?
+On Fri, Nov 12, 2021 at 02:46:31PM -0800, Florian Fainelli wrote:
+> The BCM7038 watchdog binding is updated to include a "brcm,bcm6345-wdt"
+> compatible string which is the first instance of a DSL (BCM63xx) SoC
+> seeing the integration of such a watchdog timer block.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-If the approach is considered valid I guess it should go as a fix to
-avoid changing first to 'bool' the Kconfig symbol. If it is not a
-valid approach I will send patches with a possible new requested
-approach or just making the symbol bool and adding specific mips
-includes to driver code to avoid mips implicit functions errors.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Best regards,
-    Sergio Paracuellos
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
+> ---
+>  .../devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml      | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> index ed6210666ead..a926809352b8 100644
+> --- a/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/watchdog/brcm,bcm7038-wdt.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: BCM7038 watchdog timer
+> +title: BCM63xx and BCM7038 watchdog timer
+>  
+>  allOf:
+>    - $ref: "watchdog.yaml#"
+> @@ -16,7 +16,9 @@ maintainers:
+>  
+>  properties:
+>    compatible:
+> -    const: brcm,bcm7038-wdt
+> +    enum:
+> +      - brcm,bcm6345-wdt
+> +      - brcm,bcm7038-wdt
+>  
+>    reg:
+>      maxItems: 1
