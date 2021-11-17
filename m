@@ -2,113 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBC8455149
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Nov 2021 00:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC171455158
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Nov 2021 00:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241707AbhKQXyI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Nov 2021 18:54:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbhKQXxz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Nov 2021 18:53:55 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C040C0613B9;
-        Wed, 17 Nov 2021 15:50:56 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Hvfnf5QFsz4xdN;
-        Thu, 18 Nov 2021 10:50:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1637193050;
-        bh=Y6qLtvD8c83vsgFlioCTxBI91MBKkMrwNyHMmx3iNJk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Jv/ugO0GdH1f2QhPzft9Sxm/ntmhVoKfvBJTCvlmQ6WmIVLJ2Ps9uD42n8dNSGkkg
-         wfYndhQTxnNrANlIOxL6l6FdkPbh71djkG3LkipwOlTpsCGCbCaOcYQGn2Fy/ejEeW
-         6kpY8zvN0vfn1DhWVYqTQ5DveIe5yaDoKLSrEg0QCzmfKLpl94IdHDQDBLvD9L4j3v
-         KRtHU+3QH9SXZqUmFBx38dz1SrkWHBs5XGhAkKOmtAXIL5Wbj2db2XwIZWrAlZEIOH
-         05iVEr2HKDWNdtuOaS94KFmS0qEHie53/jVZ5Zr8m5snbbknqPu11gE31EKwHUouyn
-         P9oDRQBt23RFQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        "jmattson @ google . com" <jmattson@google.com>,
-        "wanpengli @ tencent . com" <wanpengli@tencent.com>,
-        "seanjc @ google . com" <seanjc@google.com>,
-        "vkuznets @ redhat . com" <vkuznets@redhat.com>,
-        "mtosatti @ redhat . com" <mtosatti@redhat.com>,
-        "joro @ 8bytes . org" <joro@8bytes.org>, karahmed@amazon.com,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 06/12] KVM: powerpc: Use Makefile.kvm for common files
-In-Reply-To: <20211117174003.297096-7-dwmw2@infradead.org>
-References: <20211117174003.297096-1-dwmw2@infradead.org>
- <20211117174003.297096-7-dwmw2@infradead.org>
-Date:   Thu, 18 Nov 2021 10:50:44 +1100
-Message-ID: <871r3emje3.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S241721AbhKRABS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Nov 2021 19:01:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59226 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241731AbhKRABH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 17 Nov 2021 19:01:07 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 6429961ABF;
+        Wed, 17 Nov 2021 23:58:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637193488;
+        bh=lmfdFZ9wsWSSzqTt51z/Mge8gvN0Q0StiIMq2hqs1uo=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=PJxgqrTJRKDRuuI1icgLpIb3hd3kFtsDxd5gzMRl/wt9p/RPLYYIk6R+k0LrZSkHb
+         GTLXOl8pDzQMBXceIcaYlrb53SaNeKAQUW9U2n8dF41tiwRfe2ZGcXQUVk/g1/OtWo
+         sZcw6bACognY2kB+iTAFNy8QzUScOiOAeCmeIggLNxBIxmiiLOo7EaM2+oot381uXu
+         fNA76NnRvyoxlMiBb/sjvetr0Oh5h5ECVY4Moku3X5py75b17KB1Eulrq1w9G8CnVX
+         dwyU5XgXhga5zFxY1CW1jvMU04xZuPqf+1uh7VwsQQhyU1jScVymeMaPIDLbsdGKo4
+         cYylMthK60Uqw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5402A600E6;
+        Wed, 17 Nov 2021 23:58:08 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v5.16
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211117221136.GA16740@alpha.franken.de>
+References: <20211117221136.GA16740@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211117221136.GA16740@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.16_1
+X-PR-Tracked-Commit-Id: fc1aabb088860d6cf9dd03612b7a6f0de91ccac2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3fa595481b3b33105d7e0480710591edb2bd8dcb
+Message-Id: <163719348828.8069.16173664396744279220.pr-tracker-bot@kernel.org>
+Date:   Wed, 17 Nov 2021 23:58:08 +0000
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-David Woodhouse <dwmw2@infradead.org> writes:
-> From: David Woodhouse <dwmw@amazon.co.uk>
->
-> It's all fairly baroque but in the end, I don't think there's any reason
-> for $(KVM)/irqchip.o to have been handled differently, as they all end
-> up in $(kvm-y) in the end anyway, regardless of whether they get there
-> via $(common-objs-y) and the CPU-specific object lists.
->
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> ---
->  arch/powerpc/kvm/Makefile | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
->
-> diff --git a/arch/powerpc/kvm/Makefile b/arch/powerpc/kvm/Makefile
-> index 583c14ef596e..245f59118413 100644
-> --- a/arch/powerpc/kvm/Makefile
-> +++ b/arch/powerpc/kvm/Makefile
-> @@ -4,11 +4,8 @@
->  #
->  
->  ccflags-y := -Ivirt/kvm -Iarch/powerpc/kvm
-> -KVM := ../../../virt/kvm
->  
-> -common-objs-y = $(KVM)/kvm_main.o $(KVM)/eventfd.o $(KVM)/binary_stats.o
-> -common-objs-$(CONFIG_KVM_VFIO) += $(KVM)/vfio.o
-> -common-objs-$(CONFIG_KVM_MMIO) += $(KVM)/coalesced_mmio.o
-> +include $(srctree)/virt/kvm/Makefile.kvm
->  
->  common-objs-y += powerpc.o emulate_loadstore.o
->  obj-$(CONFIG_KVM_EXIT_TIMING) += timing.o
-> @@ -125,7 +122,6 @@ kvm-book3s_32-objs := \
->  kvm-objs-$(CONFIG_KVM_BOOK3S_32) := $(kvm-book3s_32-objs)
->  
->  kvm-objs-$(CONFIG_KVM_MPIC) += mpic.o
-> -kvm-objs-$(CONFIG_HAVE_KVM_IRQ_ROUTING) += $(KVM)/irqchip.o
->  
->  kvm-objs := $(kvm-objs-m) $(kvm-objs-y)
+The pull request you sent on Wed, 17 Nov 2021 23:11:36 +0100:
 
-Looks OK to me. The extra objects built in Makefile.kvm are all behind
-CONFIG symbols we don't enable.
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.16_1
 
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3fa595481b3b33105d7e0480710591edb2bd8dcb
 
-cheers
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
