@@ -2,144 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A294541DE
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 08:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9154541E5
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 08:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbhKQHdk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Nov 2021 02:33:40 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:44214 "EHLO
+        id S233731AbhKQHhC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Nov 2021 02:37:02 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45590 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233408AbhKQHdi (ORCPT
+        by vger.kernel.org with ESMTP id S233035AbhKQHhC (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 17 Nov 2021 02:33:38 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AH5CXHa019264;
-        Wed, 17 Nov 2021 07:29:53 GMT
+        Wed, 17 Nov 2021 02:37:02 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AH6hMBb017494;
+        Wed, 17 Nov 2021 07:33:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=pp1;
- bh=6aUyWvGs2d2xIZAvoepVwnYdUm6nHahA0QpsvQPs9WA=;
- b=YA2EofTIX0WTWep6ZB6L5Eeoflkzjwi6qw7KBMzLNBn9tkpm1f35Ir9BOa0up3ryyJDW
- isfjTWagd/XFGvMOeR/WZAA7ff15KRD7q5OECprxC29i/fP60+1FW5jxnvcnz/r+7YbD
- sHj1nJWob/v/yfV4fsMZdWSapOghYi/mzkTQhHtAqVGB7SWPZkSV6XT0+y5kzuINdNZ9
- XgLgCUnpAIplCJjLGipi0s3Lkvrrd6Kt6y5iUKqxbTA838Ko3F90DLiyXhmtfrsQUMxE
- 7PzNi6U5jniw9Vyj3d8FRv+lx0rMrBuzivFAwDskJu8Mf5sQ9tjKj7yquesKzT3iAg+n Ew== 
+ bh=I3EcY84twXfrMekuCamB7WgEyxKzbqONJCNvTdgnLQQ=;
+ b=j9HZH264vdn31DLBVPmwBmpnRCnL/BhvqZVkj8bfeb046Eu5QXtV/gg/6M3suGPYBhMj
+ 3srjNk4G8ZKpDsowRtAlfInq5ceJ2jkEZmDsHxlXewHHmesTwGYZMEn45WiSBhPbRIcR
+ b3TS8IH7ZiWNUto0RmTQksq5IxpTk77NBr8tS2o0hZdreu0OA999wCtQVSJrbb06NY//
+ N8yZlODGYRolfaFHZCw0AbUzPGqLkm0PffftY72lA5h2vCTPzRDWs63do3OU5EvQl16O
+ ITF0Z9OiUkJdezDP4cOODZ4dtfUscockEOFVQVUxrgi5bO7b1fsr2YcwydRTrhZk05zz Hg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ccucwtnn5-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ccvqgs06h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Nov 2021 07:29:53 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AH6fDc0018891;
-        Wed, 17 Nov 2021 07:29:52 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ccucwtnmc-1
+        Wed, 17 Nov 2021 07:33:45 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AH7OPeG007326;
+        Wed, 17 Nov 2021 07:33:45 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ccvqgs05j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Nov 2021 07:29:52 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AH7MkbU026793;
-        Wed, 17 Nov 2021 07:29:49 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3ca50a5jy7-1
+        Wed, 17 Nov 2021 07:33:44 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AH7NBTU022020;
+        Wed, 17 Nov 2021 07:33:42 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 3ca50a70js-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Nov 2021 07:29:49 +0000
+        Wed, 17 Nov 2021 07:33:42 +0000
 Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AH7MnYx59113860
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AH7QjsS62849506
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Nov 2021 07:22:49 GMT
+        Wed, 17 Nov 2021 07:26:45 GMT
 Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE501AE045;
-        Wed, 17 Nov 2021 07:29:46 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id C86B6AE05D;
+        Wed, 17 Nov 2021 07:33:39 +0000 (GMT)
 Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8EA7AE057;
-        Wed, 17 Nov 2021 07:29:45 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 9E7E6AE058;
+        Wed, 17 Nov 2021 07:33:38 +0000 (GMT)
 Received: from [9.171.32.217] (unknown [9.171.32.217])
         by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 17 Nov 2021 07:29:45 +0000 (GMT)
-Message-ID: <2fcab5d3-fee1-a211-aaf5-a2569b5a7ed8@de.ibm.com>
-Date:   Wed, 17 Nov 2021 08:29:45 +0100
+        Wed, 17 Nov 2021 07:33:38 +0000 (GMT)
+Message-ID: <df5a43bb-3944-6fbb-a98f-94c46db867f8@linux.ibm.com>
+Date:   Wed, 17 Nov 2021 08:33:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
-Subject: Re: [PATCH 3/7] KVM: s390: Use Makefile.kvm for common files
+Subject: Re: [PATCH v2 5/6] KVM: s390: Cap KVM_CAP_NR_VCPUS by
+ num_online_cpus()
 Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        "jmattson @ google . com" <jmattson@google.com>,
-        "wanpengli @ tencent . com" <wanpengli@tencent.com>,
-        "seanjc @ google . com" <seanjc@google.com>,
-        "vkuznets @ redhat . com" <vkuznets@redhat.com>,
-        "mtosatti @ redhat . com" <mtosatti@redhat.com>,
-        "joro @ 8bytes . org" <joro@8bytes.org>, karahmed@amazon.com,
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Eduardo Habkost <ehabkost@redhat.com>,
         Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
         Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Anup Patel <anup.patel@wdc.com>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-s390@vger.kernel.org
-References: <5047c2591310e503491850ef683f251395247d50.camel@infradead.org>
- <20211116115051.119956-1-dwmw2@infradead.org>
- <20211116115051.119956-3-dwmw2@infradead.org>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-In-Reply-To: <20211116115051.119956-3-dwmw2@infradead.org>
+        Janosch Frank <frankja@linux.ibm.com>, kvm-ppc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211116163443.88707-1-vkuznets@redhat.com>
+ <20211116163443.88707-6-vkuznets@redhat.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20211116163443.88707-6-vkuznets@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aUsuyE-YVW6NNV1mmm64oovIwEx-v71q
-X-Proofpoint-ORIG-GUID: oQF21GtcP3exrUxbnxHVvurGZD_FqBc6
+X-Proofpoint-GUID: tTITRuQ12V0bu5W-JKkzWTvAG6mXeues
+X-Proofpoint-ORIG-GUID: 71uWVThZWuKvbBrnvpkAL1quj_aMigex
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-17_02,2021-11-16_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 impostorscore=0 priorityscore=1501
- mlxscore=0 phishscore=0 mlxlogscore=999 malwarescore=0 clxscore=1011
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111170033
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 mlxlogscore=999
+ priorityscore=1501 clxscore=1011 impostorscore=0 mlxscore=0 spamscore=0
+ adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111170034
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-Am 16.11.21 um 12:50 schrieb David Woodhouse:
-> From: David Woodhouse <dwmw@amazon.co.uk>
+Am 16.11.21 um 17:34 schrieb Vitaly Kuznetsov:
+> KVM_CAP_NR_VCPUS is a legacy advisory value which on other architectures
+> return num_online_cpus() caped by KVM_CAP_NR_VCPUS or something else
+> (ppc and arm64 are special cases). On s390, KVM_CAP_NR_VCPUS returns
+> the same as KVM_CAP_MAX_VCPUS and this may turn out to be a bad
+> 'advice'. Switch s390 to returning caped num_online_cpus() too.
 > 
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
 
-Looks good.
-Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
+you can also add
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
 
+(yes I am changing my default address, but the other should continue to work)
+
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 > ---
->   arch/s390/kvm/Makefile | 6 ++----
->   1 file changed, 2 insertions(+), 4 deletions(-)
+>   arch/s390/kvm/kvm-s390.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/s390/kvm/Makefile b/arch/s390/kvm/Makefile
-> index b3aaadc60ead..e4f50453cf7f 100644
-> --- a/arch/s390/kvm/Makefile
-> +++ b/arch/s390/kvm/Makefile
-> @@ -3,13 +3,11 @@
->   #
->   # Copyright IBM Corp. 2008
->   
-> -KVM := ../../../virt/kvm
-> -common-objs = $(KVM)/kvm_main.o $(KVM)/eventfd.o  $(KVM)/async_pf.o \
-> -	      $(KVM)/irqchip.o $(KVM)/vfio.o $(KVM)/binary_stats.o
-> +include $(srctree)/virt/kvm/Makefile.kvm
->   
->   ccflags-y := -Ivirt/kvm -Iarch/s390/kvm
->   
-> -kvm-objs := $(common-objs) kvm-s390.o intercept.o interrupt.o priv.o sigp.o
-> +kvm-objs := kvm-s390.o intercept.o interrupt.o priv.o sigp.o
->   kvm-objs += diag.o gaccess.o guestdbg.o vsie.o pv.o
->   
->   obj-$(CONFIG_KVM) += kvm.o
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 6a6dd5e1daf6..1cfe36f6432e 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -585,6 +585,8 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   			r = KVM_MAX_VCPUS;
+>   		else if (sclp.has_esca && sclp.has_64bscao)
+>   			r = KVM_S390_ESCA_CPU_SLOTS;
+> +		if (ext == KVM_CAP_NR_VCPUS)
+> +			r = min_t(unsigned int, num_online_cpus(), r);
+>   		break;
+>   	case KVM_CAP_S390_COW:
+>   		r = MACHINE_HAS_ESOP;
 > 
