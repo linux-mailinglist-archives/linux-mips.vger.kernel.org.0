@@ -2,102 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A13E3454630
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 13:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6348454680
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 13:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234767AbhKQMPL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Nov 2021 07:15:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45505 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233472AbhKQMPK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 17 Nov 2021 07:15:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637151131;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qW1Ag/nVqux59E+nwE+CUidv8LwOpqfdLxGb0nVtHYk=;
-        b=GkIN2pnUp42j1fC0liUR6f8gnyLzEVgHJ6hFK47gxN7n8tvsCsROpV2kNj6x/lro6rt4qX
-        3vJYu03CkHdo0PLmPwGOAtYvEXHBPKsGgwhiHA7ewjoMYCYIiZ0bMcf5+WNHqiRwftXIB9
-        aMkZhdhD9lzGTWd6fV6AbovJ5AHKAfw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-215-pNbwtZJUMga-oNgrbu54tA-1; Wed, 17 Nov 2021 07:12:08 -0500
-X-MC-Unique: pNbwtZJUMga-oNgrbu54tA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2C4B88030D2;
-        Wed, 17 Nov 2021 12:12:06 +0000 (UTC)
-Received: from [10.39.192.245] (unknown [10.39.192.245])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AA24C60C0F;
-        Wed, 17 Nov 2021 12:12:01 +0000 (UTC)
-Message-ID: <7cd420c0-4fe5-7c37-5eb8-da82b277ff60@redhat.com>
-Date:   Wed, 17 Nov 2021 13:12:00 +0100
+        id S233191AbhKQMo2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Nov 2021 07:44:28 -0500
+Received: from elvis.franken.de ([193.175.24.41]:54983 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230247AbhKQMo1 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 17 Nov 2021 07:44:27 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mnKFj-0000oO-00; Wed, 17 Nov 2021 13:41:27 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id AF7F9C2DFA; Wed, 17 Nov 2021 13:41:20 +0100 (CET)
+Date:   Wed, 17 Nov 2021 13:41:20 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
+        john@phrozen.org, lorenzo.pieralisi@arm.com, bhelgaas@google.com,
+        arnd@arndb.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] PCI: mt7621: remove specific MIPS code from driver
+Message-ID: <20211117124120.GA9336@alpha.franken.de>
+References: <20211115070809.15529-1-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 6/6] KVM: x86: Drop arbitraty KVM_SOFT_MAX_VCPUS
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Eduardo Habkost <ehabkost@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>, kvm-ppc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211116163443.88707-1-vkuznets@redhat.com>
- <20211116163443.88707-7-vkuznets@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211116163443.88707-7-vkuznets@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211115070809.15529-1-sergio.paracuellos@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/16/21 17:34, Vitaly Kuznetsov wrote:
-> KVM_CAP_NR_VCPUS is used to get the "recommended" maximum number of
-> VCPUs and arm64/mips/riscv report num_online_cpus(). Powerpc reports
-> either num_online_cpus() or num_present_cpus(), s390 has multiple
-> constants depending on hardware features. On x86, KVM reports an
-> arbitrary value of '710' which is supposed to be the maximum tested
-> value but it's possible to test all KVM_MAX_VCPUS even when there are
-> less physical CPUs available.
+On Mon, Nov 15, 2021 at 08:08:04AM +0100, Sergio Paracuellos wrote:
+> Hi all,
 > 
-> Drop the arbitrary '710' value and return num_online_cpus() on x86 as
-> well. The recommendation will match other architectures and will mean
-> 'no CPU overcommit'.
+> MIPS specific code can be removed from driver and put into ralink mt7621
+> instead which is a more accurate place to do this. To make this possible
+> we need to have access to 'bridge->windows' in 'pcibios_root_bridge_prepare()'
+> which has been implemented for ralink mt7621 platform (there is no real 
+> need to implement this for any other platforms since those ones haven't got
+> I/O coherency units). This also allow us to properly enable this driver to
+> completely be enabled for COMPILE_TEST. This patchset appoarch:
+> - Move windows list splice in 'pci_register_host_bridge()' after function 
+>   'pcibios_root_bridge_prepare()' is called.
+> - Implement 'pcibios_root_bridge_prepare()' for ralink mt7621.
+> - Avoid custom MIPs code in pcie-mt7621 driver.
+> - Add missing 'MODULE_LICENSE()' to pcie-mt7621 driver to avoid compile test 
+>   module compilation to complain (already sent patch from Yanteng Si that
+>   I have rewrite commit message and long description a bit.
+> - Remove MIPS conditional code from Kconfig.
 > 
-> For reference, QEMU only queries KVM_CAP_NR_VCPUS to print a warning
-> when the requested vCPU number exceeds it. The static limit of '710'
-> is quite weird as smaller systems with just a few physical CPUs should
-> certainly "recommend" less.
+> This patchset also fix some errors reported by Kernel Test Robot about
+> implicit mips functions used in driver code and fix errors in driver when
+> is compiled as a module [1] (mips:allmodconfig).
 > 
-> Suggested-by: Eduardo Habkost<ehabkost@redhat.com>
-> Signed-off-by: Vitaly Kuznetsov<vkuznets@redhat.com>
+> There was an ongoing discussion about this here [0] but I preferred to send
+> my proposal for better review and understanding:
 
-Given that KVM_SOFT_MAX_VCPUS has already been dropped in 5.16, I 
-changed the commit message to
+so what's the plan with this patchset ? Going in as fix, probably via
+pci tree ? Or is material for next release ? If the latter can we first
+fix the allmodconfig by making the Kconfig symbol bool ?
 
-     KVM: x86: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
+Thomas.
 
-     It doesn't make sense to return the recommended maximum number of
-     vCPUs which exceeds the maximum possible number of vCPUs.
-
-Paolo
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
