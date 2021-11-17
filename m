@@ -2,119 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 353F94542AA
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 09:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 785A0454343
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 10:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234542AbhKQIdq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 17 Nov 2021 03:33:46 -0500
-Received: from mail-qt1-f169.google.com ([209.85.160.169]:34729 "EHLO
-        mail-qt1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbhKQIdp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Nov 2021 03:33:45 -0500
-Received: by mail-qt1-f169.google.com with SMTP id o17so1924109qtk.1;
-        Wed, 17 Nov 2021 00:30:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pLki4VXVNEgH7BpAr7thCy6liKqtc8dZxgXibG/LDtU=;
-        b=IUpfMS2Qsw+4vmn7I+udpusUuBdphjjcAJKehe7ijbqvhkYnwm6cTNdca+Cm0+0ma0
-         xHD7AGKnQOaEiCs6xqSWURkkNCEsyjFfW5BS+qXXbqRwqmicLNGkp26r99JMfFSCO/3k
-         0bWFazjujRDAHYFZe81Zf9uHbmyFG8cifydbv07Sd9hppAYW34M6QwmE5KICuNyBOc1b
-         uaRJUYDVmVWNYnHKQUaNc9sX2Jn2J5I6VMJVbOUUi0zfxBoozVHwbFXJ/iQhxxdP0nJI
-         UUZ2M0IUONMJ7yEaDyGm9GjG4M1JgiuAegMgBQl0bzAe7JH80skTE+4MB5PXQv0AtrMH
-         PE+w==
-X-Gm-Message-State: AOAM533Gmfbt9PLCNrSukClwWshSIsB1Zv0j1Rff2FGOwSGUU7Ob7m8A
-        uDSnap65Q1tmO3hQD/OtlyUl2r4Dhpxyxg==
-X-Google-Smtp-Source: ABdhPJwoFVUouk9QlvygqIYHdaUI5uPa2eT+UDuhCZpvADfGS5ohUE9j9fFTF1CGKB45SU6JCVVhbA==
-X-Received: by 2002:a05:622a:178c:: with SMTP id s12mr14701908qtk.156.1637137846345;
-        Wed, 17 Nov 2021 00:30:46 -0800 (PST)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id j20sm5550905qtj.43.2021.11.17.00.30.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Nov 2021 00:30:46 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id n2so746118yba.2;
-        Wed, 17 Nov 2021 00:30:46 -0800 (PST)
-X-Received: by 2002:a9f:2431:: with SMTP id 46mr20823663uaq.114.1637137464301;
- Wed, 17 Nov 2021 00:24:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20211115155105.3797527-1-geert@linux-m68k.org>
- <CAMuHMdUCsyUxaEf1Lz7+jMnur4ECwK+JoXQqmOCkRKqXdb1hTQ@mail.gmail.com>
- <fcdead1c-2e26-b8ca-9914-4b3718d8f6d4@gmx.de> <480CE37B-FE60-44EE-B9D2-59A88FDFE809@fb.com>
- <78b2d093-e06c-ba04-9890-69f948bfb937@infradead.org> <B57193D6-1FD4-45D3-8045-8D2DE691E24E@fb.com>
-In-Reply-To: <B57193D6-1FD4-45D3-8045-8D2DE691E24E@fb.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 17 Nov 2021 09:24:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWgGz5FSidaGpp8YRRSnJfwdP4-wOkXdVx+mydXnMAXHQ@mail.gmail.com>
-Message-ID: <CAMuHMdWgGz5FSidaGpp8YRRSnJfwdP4-wOkXdVx+mydXnMAXHQ@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v5.16-rc1
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Helge Deller <deller@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Anton Altaparmakov <anton@tuxera.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Stan Skowronek <stan@corellium.com>,
-        Hector Martin <marcan@marcan.st>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "linux-ntfs-dev@lists.sourceforge.net" 
-        <linux-ntfs-dev@lists.sourceforge.net>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        id S232280AbhKQJHD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 17 Nov 2021 04:07:03 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:43260 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230064AbhKQJHB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 17 Nov 2021 04:07:01 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxmuRUxZRhitQAAA--.4743S2;
+        Wed, 17 Nov 2021 17:03:16 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Do not define pci_remap_iospace() under MACH_LOONGSON64
+Date:   Wed, 17 Nov 2021 17:03:15 +0800
+Message-Id: <1637139795-3032-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxmuRUxZRhitQAAA--.4743S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw4DCF45WFW8AFyUAry3XFb_yoW5tw4kpF
+        sIvwn7Gr4rCr45AFWUJry5Jr98XFZ0yay3tF18JrnxZF1DuryUJr1xtF1I9ryDJFWUtayx
+        XF4v9r4jqF1Yyw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUOo7ZUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nick,
+After commit 9f76779f2418 ("MIPS: implement architecture-specific
+'pci_remap_iospace()'"), there exists the following warning on the
+Loongson64 platform:
 
-On Wed, Nov 17, 2021 at 3:20 AM Nick Terrell <terrelln@fb.com> wrote:
-> > On Nov 16, 2021, at 6:05 PM, Randy Dunlap <rdunlap@infradead.org> wrote:
-> > On 11/16/21 5:59 PM, Nick Terrell wrote:
-> >> I’ll send the PR to Linus tomorrow. I’ve been informed that it
-> >> isn't strictly necessary to send the patches to the mailing list
-> >> for bug fixes, but its already done, so I’ll wait and see if there
-> >> is any feedback.
-> >
-> > IMO several (or many more) people would disagree with that.
-> >
-> > "strictly?"  OK, it's probably possible that almost any patch
-> > could be merged without being on a mailing list, but it's not
-> > desirable (except in the case of "security" patches).
->
-> Good to know! Thanks for the advice, I wasn’t really sure what
-> the best practice is for sending patches to your own tree, as I
-> didn't see anything about it in the maintainer guide.
+    loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff -> 0x0000020000
+    loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff -> 0x0040000000
+    ------------[ cut here ]------------
+    WARNING: CPU: 2 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x84/0x90
+    resource start address is not zero
+    ...
+    Call Trace:
+    [<ffffffff8020dc78>] show_stack+0x40/0x120
+    [<ffffffff80cf4a0c>] dump_stack_lvl+0x58/0x74
+    [<ffffffff8023a0b0>] __warn+0xe0/0x110
+    [<ffffffff80cee02c>] warn_slowpath_fmt+0xa4/0xd0
+    [<ffffffff80cecf24>] pci_remap_iospace+0x84/0x90
+    [<ffffffff807f9864>] devm_pci_remap_iospace+0x5c/0xb8
+    [<ffffffff808121b0>] devm_of_pci_bridge_init+0x178/0x1f8
+    [<ffffffff807f4000>] devm_pci_alloc_host_bridge+0x78/0x98
+    [<ffffffff80819454>] loongson_pci_probe+0x34/0x160
+    [<ffffffff809203cc>] platform_probe+0x6c/0xe0
+    [<ffffffff8091d5d4>] really_probe+0xbc/0x340
+    [<ffffffff8091d8f0>] __driver_probe_device+0x98/0x110
+    [<ffffffff8091d9b8>] driver_probe_device+0x50/0x118
+    [<ffffffff8091dea0>] __driver_attach+0x80/0x118
+    [<ffffffff8091b280>] bus_for_each_dev+0x80/0xc8
+    [<ffffffff8091c6d8>] bus_add_driver+0x130/0x210
+    [<ffffffff8091ead4>] driver_register+0x8c/0x150
+    [<ffffffff80200a8c>] do_one_initcall+0x54/0x288
+    [<ffffffff811a5320>] kernel_init_freeable+0x27c/0x2e4
+    [<ffffffff80cfc380>] kernel_init+0x2c/0x134
+    [<ffffffff80205a2c>] ret_from_kernel_thread+0x14/0x1c
+    ---[ end trace e4a0efe10aa5cce6 ]---
+    loongson-pci 1a000000.pci: error -19: failed to map resource [io  0x20000-0x3ffff]
 
-All patches must be sent to public mailing lists for review.
-You might get away with not doing that for a simple and trivial fix,
-but be prepared to end up on people's "special" lists if you did get
-it wrong.
+We can see that the resource start address is 0x0000020000, because
+the ISA Bridge used the zero address which is defined in the dts file
+arch/mips/boot/dts/loongson/ls7a-pch.dtsi:
 
-We are Legion. We do not forgive. We do not forget ;-)
+    ISA Bridge: /bus@10000000/isa@18000000
+    IO 0x0000000018000000..0x000000001801ffff  ->  0x0000000000000000
 
-Gr{oetje,eeting}s,
+The architecture-independent function pci_remap_iospace() works well
+for Loongson64, so just do not define architecture-specific function
+pci_remap_iospace() under MACH_LOONGSON64.
 
-                        Geert
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/include/asm/pci.h | 2 ++
+ arch/mips/pci/pci-generic.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+index 421231f..5d647cb 100644
+--- a/arch/mips/include/asm/pci.h
++++ b/arch/mips/include/asm/pci.h
+@@ -21,8 +21,10 @@
+ #include <linux/of.h>
+ 
+ #ifdef CONFIG_PCI_DRIVERS_GENERIC
++#ifndef CONFIG_MACH_LOONGSON64
+ #define pci_remap_iospace pci_remap_iospace
+ #endif
++#endif
+ 
+ #ifdef CONFIG_PCI_DRIVERS_LEGACY
+ 
+diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
+index 18eb8a4..6f18071 100644
+--- a/arch/mips/pci/pci-generic.c
++++ b/arch/mips/pci/pci-generic.c
+@@ -47,6 +47,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
+ 	pci_read_bridge_bases(bus);
+ }
+ 
++#ifndef CONFIG_MACH_LOONGSON64
+ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+ {
+ 	unsigned long vaddr;
+@@ -60,3 +61,4 @@ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+ 	set_io_port_base(vaddr);
+ 	return 0;
+ }
++#endif
+-- 
+2.1.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
