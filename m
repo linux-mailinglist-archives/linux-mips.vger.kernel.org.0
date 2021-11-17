@@ -2,135 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9154541E5
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 08:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353F94542AA
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Nov 2021 09:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbhKQHhC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Nov 2021 02:37:02 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45590 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233035AbhKQHhC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 17 Nov 2021 02:37:02 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AH6hMBb017494;
-        Wed, 17 Nov 2021 07:33:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=I3EcY84twXfrMekuCamB7WgEyxKzbqONJCNvTdgnLQQ=;
- b=j9HZH264vdn31DLBVPmwBmpnRCnL/BhvqZVkj8bfeb046Eu5QXtV/gg/6M3suGPYBhMj
- 3srjNk4G8ZKpDsowRtAlfInq5ceJ2jkEZmDsHxlXewHHmesTwGYZMEn45WiSBhPbRIcR
- b3TS8IH7ZiWNUto0RmTQksq5IxpTk77NBr8tS2o0hZdreu0OA999wCtQVSJrbb06NY//
- N8yZlODGYRolfaFHZCw0AbUzPGqLkm0PffftY72lA5h2vCTPzRDWs63do3OU5EvQl16O
- ITF0Z9OiUkJdezDP4cOODZ4dtfUscockEOFVQVUxrgi5bO7b1fsr2YcwydRTrhZk05zz Hg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ccvqgs06h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Nov 2021 07:33:45 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AH7OPeG007326;
-        Wed, 17 Nov 2021 07:33:45 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ccvqgs05j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Nov 2021 07:33:44 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AH7NBTU022020;
-        Wed, 17 Nov 2021 07:33:42 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ca50a70js-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 Nov 2021 07:33:42 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AH7QjsS62849506
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Nov 2021 07:26:45 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C86B6AE05D;
-        Wed, 17 Nov 2021 07:33:39 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9E7E6AE058;
-        Wed, 17 Nov 2021 07:33:38 +0000 (GMT)
-Received: from [9.171.32.217] (unknown [9.171.32.217])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 17 Nov 2021 07:33:38 +0000 (GMT)
-Message-ID: <df5a43bb-3944-6fbb-a98f-94c46db867f8@linux.ibm.com>
-Date:   Wed, 17 Nov 2021 08:33:38 +0100
+        id S234542AbhKQIdq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 17 Nov 2021 03:33:46 -0500
+Received: from mail-qt1-f169.google.com ([209.85.160.169]:34729 "EHLO
+        mail-qt1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229944AbhKQIdp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 17 Nov 2021 03:33:45 -0500
+Received: by mail-qt1-f169.google.com with SMTP id o17so1924109qtk.1;
+        Wed, 17 Nov 2021 00:30:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pLki4VXVNEgH7BpAr7thCy6liKqtc8dZxgXibG/LDtU=;
+        b=IUpfMS2Qsw+4vmn7I+udpusUuBdphjjcAJKehe7ijbqvhkYnwm6cTNdca+Cm0+0ma0
+         xHD7AGKnQOaEiCs6xqSWURkkNCEsyjFfW5BS+qXXbqRwqmicLNGkp26r99JMfFSCO/3k
+         0bWFazjujRDAHYFZe81Zf9uHbmyFG8cifydbv07Sd9hppAYW34M6QwmE5KICuNyBOc1b
+         uaRJUYDVmVWNYnHKQUaNc9sX2Jn2J5I6VMJVbOUUi0zfxBoozVHwbFXJ/iQhxxdP0nJI
+         UUZ2M0IUONMJ7yEaDyGm9GjG4M1JgiuAegMgBQl0bzAe7JH80skTE+4MB5PXQv0AtrMH
+         PE+w==
+X-Gm-Message-State: AOAM533Gmfbt9PLCNrSukClwWshSIsB1Zv0j1Rff2FGOwSGUU7Ob7m8A
+        uDSnap65Q1tmO3hQD/OtlyUl2r4Dhpxyxg==
+X-Google-Smtp-Source: ABdhPJwoFVUouk9QlvygqIYHdaUI5uPa2eT+UDuhCZpvADfGS5ohUE9j9fFTF1CGKB45SU6JCVVhbA==
+X-Received: by 2002:a05:622a:178c:: with SMTP id s12mr14701908qtk.156.1637137846345;
+        Wed, 17 Nov 2021 00:30:46 -0800 (PST)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id j20sm5550905qtj.43.2021.11.17.00.30.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Nov 2021 00:30:46 -0800 (PST)
+Received: by mail-yb1-f170.google.com with SMTP id n2so746118yba.2;
+        Wed, 17 Nov 2021 00:30:46 -0800 (PST)
+X-Received: by 2002:a9f:2431:: with SMTP id 46mr20823663uaq.114.1637137464301;
+ Wed, 17 Nov 2021 00:24:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 5/6] KVM: s390: Cap KVM_CAP_NR_VCPUS by
- num_online_cpus()
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Eduardo Habkost <ehabkost@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Janosch Frank <frankja@linux.ibm.com>, kvm-ppc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211116163443.88707-1-vkuznets@redhat.com>
- <20211116163443.88707-6-vkuznets@redhat.com>
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <20211116163443.88707-6-vkuznets@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tTITRuQ12V0bu5W-JKkzWTvAG6mXeues
-X-Proofpoint-ORIG-GUID: 71uWVThZWuKvbBrnvpkAL1quj_aMigex
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-17_02,2021-11-16_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 bulkscore=0 mlxlogscore=999
- priorityscore=1501 clxscore=1011 impostorscore=0 mlxscore=0 spamscore=0
- adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2111170034
+References: <20211115155105.3797527-1-geert@linux-m68k.org>
+ <CAMuHMdUCsyUxaEf1Lz7+jMnur4ECwK+JoXQqmOCkRKqXdb1hTQ@mail.gmail.com>
+ <fcdead1c-2e26-b8ca-9914-4b3718d8f6d4@gmx.de> <480CE37B-FE60-44EE-B9D2-59A88FDFE809@fb.com>
+ <78b2d093-e06c-ba04-9890-69f948bfb937@infradead.org> <B57193D6-1FD4-45D3-8045-8D2DE691E24E@fb.com>
+In-Reply-To: <B57193D6-1FD4-45D3-8045-8D2DE691E24E@fb.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 17 Nov 2021 09:24:12 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWgGz5FSidaGpp8YRRSnJfwdP4-wOkXdVx+mydXnMAXHQ@mail.gmail.com>
+Message-ID: <CAMuHMdWgGz5FSidaGpp8YRRSnJfwdP4-wOkXdVx+mydXnMAXHQ@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v5.16-rc1
+To:     Nick Terrell <terrelln@fb.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, Helge Deller <deller@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Stan Skowronek <stan@corellium.com>,
+        Hector Martin <marcan@marcan.st>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "linux-ntfs-dev@lists.sourceforge.net" 
+        <linux-ntfs-dev@lists.sourceforge.net>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Am 16.11.21 um 17:34 schrieb Vitaly Kuznetsov:
-> KVM_CAP_NR_VCPUS is a legacy advisory value which on other architectures
-> return num_online_cpus() caped by KVM_CAP_NR_VCPUS or something else
-> (ppc and arm64 are special cases). On s390, KVM_CAP_NR_VCPUS returns
-> the same as KVM_CAP_MAX_VCPUS and this may turn out to be a bad
-> 'advice'. Switch s390 to returning caped num_online_cpus() too.
-> 
-> Acked-by: Christian Borntraeger <borntraeger@de.ibm.com>
+Hi Nick,
 
-you can also add
-Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+On Wed, Nov 17, 2021 at 3:20 AM Nick Terrell <terrelln@fb.com> wrote:
+> > On Nov 16, 2021, at 6:05 PM, Randy Dunlap <rdunlap@infradead.org> wrote:
+> > On 11/16/21 5:59 PM, Nick Terrell wrote:
+> >> I’ll send the PR to Linus tomorrow. I’ve been informed that it
+> >> isn't strictly necessary to send the patches to the mailing list
+> >> for bug fixes, but its already done, so I’ll wait and see if there
+> >> is any feedback.
+> >
+> > IMO several (or many more) people would disagree with that.
+> >
+> > "strictly?"  OK, it's probably possible that almost any patch
+> > could be merged without being on a mailing list, but it's not
+> > desirable (except in the case of "security" patches).
+>
+> Good to know! Thanks for the advice, I wasn’t really sure what
+> the best practice is for sending patches to your own tree, as I
+> didn't see anything about it in the maintainer guide.
 
-(yes I am changing my default address, but the other should continue to work)
+All patches must be sent to public mailing lists for review.
+You might get away with not doing that for a simple and trivial fix,
+but be prepared to end up on people's "special" lists if you did get
+it wrong.
 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->   arch/s390/kvm/kvm-s390.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 6a6dd5e1daf6..1cfe36f6432e 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -585,6 +585,8 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   			r = KVM_MAX_VCPUS;
->   		else if (sclp.has_esca && sclp.has_64bscao)
->   			r = KVM_S390_ESCA_CPU_SLOTS;
-> +		if (ext == KVM_CAP_NR_VCPUS)
-> +			r = min_t(unsigned int, num_online_cpus(), r);
->   		break;
->   	case KVM_CAP_S390_COW:
->   		r = MACHINE_HAS_ESOP;
-> 
+We are Legion. We do not forgive. We do not forget ;-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
