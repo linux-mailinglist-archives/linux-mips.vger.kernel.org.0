@@ -2,134 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9524563AA
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Nov 2021 20:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61CF4565D4
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Nov 2021 23:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbhKRTuC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 18 Nov 2021 14:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbhKRTuC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Nov 2021 14:50:02 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA17AC061574
-        for <linux-mips@vger.kernel.org>; Thu, 18 Nov 2021 11:47:01 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso6699987pjb.2
-        for <linux-mips@vger.kernel.org>; Thu, 18 Nov 2021 11:47:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=etzXRtUGTr8lCEC3N+zBz9sC9KLaK/1vTaoNub+XSrA=;
-        b=TJltHTqmUDTIgL1P24a20gD79MoRsYyT+oWNI7Zk1KCB0kxMW9nay123E+ZoFctpYI
-         aiNnMLJVER0OaOWjGQFAAodEb7XssAPkbTv3HZ/7Xvc56U/KwoqRQGvrj5PKP0bcKR4k
-         2vvhP28esD9If7TAFeNjBviDlcYadmbYqHQK4EKbmvqKoyyDe2mAxq3N83OoFp8cHZvs
-         tW/44+HbAaU7BnQeov5HYKclsNsjLoArhh5d8PMaS08emGsC4hW0iBqIihQVo007XCgE
-         f+/05PLBrEHbV7h1EwSp8E42irdKiOdyzv/mpEc9ne+Zn3+nJLJHbZQwUjsMNM99uGwK
-         D+nQ==
+        id S232536AbhKRWsQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Nov 2021 17:48:16 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:35610 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232460AbhKRWsP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 18 Nov 2021 17:48:15 -0500
+Received: by mail-oi1-f181.google.com with SMTP id m6so17679317oim.2;
+        Thu, 18 Nov 2021 14:45:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=etzXRtUGTr8lCEC3N+zBz9sC9KLaK/1vTaoNub+XSrA=;
-        b=R5Dflp6lLA4S/HU7Mt2lxTaj37Hk3ZDgUYUO9Eu6J1iVDUzX+hGe2HQ7O2cSxgNVmJ
-         Qr2u2CMzhw9RYdpjr4HiTaBl9PCX62E80hPdFrXW2+kw5wZhpqynGlLQdFpVO6tAzGaS
-         xgaw1/OGPGfgr0NUFnj9Tnm0K2BBa/679H1EuD+ZmGTHUOWJm8Mpqd86cP4XnUIrmlo5
-         Zqm7dDNlx6O+bcWXlG3PHYodMp7RkXWO9aN+Ue+r89LhLOXkQK2ooTzr2xf/6w0/VLKD
-         hGoO1sJFTbiUksoUl/SJuIN/OlHOoXzwxTQyJyR+2zGhW4qV0o8kN7JDITEZ6lYsU6+q
-         pfgw==
-X-Gm-Message-State: AOAM530HYiIYE103RmuYvpoyVYMhOSniAheimk2WAVpiXDwTMjGmxtkN
-        248h3stt4t24fxz9EFkbHKm81g==
-X-Google-Smtp-Source: ABdhPJw2jmwgTmZEgqtXJQ8BT+0frIfcOwv6QQsFYGUkgZtQBdhdiIC61pVtTpnGW9Ux3cY+6emP4Q==
-X-Received: by 2002:a17:90b:4d09:: with SMTP id mw9mr13604040pjb.238.1637264821320;
-        Thu, 18 Nov 2021 11:47:01 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t40sm435895pfg.107.2021.11.18.11.46.59
+        bh=H1SS+0H0PjpsXS0zy4N6RiTgJsErytrpSg6Bdnmca1Q=;
+        b=08gfUFT0tFkqq12uOi8PuCQfSn5ijIXcL8SaPFyVkD1GJSMKzk7w76Vt/3UktwgEXg
+         XwS7+ZUKIWTZzdhyrigEdYoDQaTSYhvoMBSYI0I1mh/b+IQYMZ1YgDLzbyu+eIZm2P0e
+         sW8FE0Fp6BYIMBvgme/T/Ae07eTj6kzpYHdk8IdwoT2Ig47N8E5/rna06WLUxrBLLkci
+         SdkiYKeBizNzpzmsUEvF4iUwFltRdIzLqTZJlWuc00zQKfRja+0WH3VxoGwQ9A1yOdNE
+         Ki870uJ4uuY0ORWBH9tMlWX1kGjuow5BVzkgvW8qh6qwGMqWPL4gIRvJ2WH67tBt39Ar
+         HYYA==
+X-Gm-Message-State: AOAM531tjkhh0b3L106mGL8X1pXxKZsQqVsDWhSEcTbttH3XUU8D9Vca
+        Hsyn1EjTW9niD+HFnwmQNw==
+X-Google-Smtp-Source: ABdhPJyTk374MO6gTLPWQfR9cC01JJ7y0X11rCSopQI0oasLMzQHD9V7PyGo+b/QWKjBFj+6sdRs6g==
+X-Received: by 2002:a05:6808:1644:: with SMTP id az4mr569659oib.86.1637275514743;
+        Thu, 18 Nov 2021 14:45:14 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id u40sm322644oiw.56.2021.11.18.14.45.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 11:46:59 -0800 (PST)
-Date:   Thu, 18 Nov 2021 19:46:56 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Joao Martins <joao.m.martins@oracle.com>,
-        "jmattson @ google . com" <jmattson@google.com>,
-        "wanpengli @ tencent . com" <wanpengli@tencent.com>,
-        "vkuznets @ redhat . com" <vkuznets@redhat.com>,
-        "mtosatti @ redhat . com" <mtosatti@redhat.com>,
-        "joro @ 8bytes . org" <joro@8bytes.org>, karahmed@amazon.com,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 08/12] KVM: Propagate vcpu explicitly to
- mark_page_dirty_in_slot()
-Message-ID: <YZatsB3oadj6dgb8@google.com>
-References: <20211117174003.297096-1-dwmw2@infradead.org>
- <20211117174003.297096-9-dwmw2@infradead.org>
- <85d9fec17f32c3eb9e100e56b91af050.squirrel@twosheds.infradead.org>
- <4c48546b-eb4a-dff7-cc38-5df54f73f5d4@redhat.com>
- <20b5952e76c54a3a5dfe5a898e3b835404ac6fb1.camel@infradead.org>
- <YZaeL5YztL3p1nLM@google.com>
- <YZagjzYUsixbFre9@google.com>
- <35AEC3FD-B46A-451D-B7D5-4B1BDD5407BD@infradead.org>
+        Thu, 18 Nov 2021 14:45:13 -0800 (PST)
+Received: (nullmailer pid 1899744 invoked by uid 1000);
+        Thu, 18 Nov 2021 22:45:12 -0000
+Date:   Thu, 18 Nov 2021 16:45:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-watchdog@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH V4 RESEND 2/2] dt-bindings: mfd: add Broadcom's
+ Timer-Watchdog block
+Message-ID: <YZbXePINGyUMGEaD@robh.at.kernel.org>
+References: <20211115055354.6089-1-zajec5@gmail.com>
+ <20211115055354.6089-2-zajec5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <35AEC3FD-B46A-451D-B7D5-4B1BDD5407BD@infradead.org>
+In-Reply-To: <20211115055354.6089-2-zajec5@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 18, 2021, David Woodhouse wrote:
+On Mon, 15 Nov 2021 06:53:54 +0100, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
+> It's a block implementing few time related functions depending on a
+> (SoC specific) variant. At this point there is ready binding for a
+> watchdog only. Work on remaining subblocks (e.g. "reg" based reboot) is
+> in progress.
 > 
-> On 18 November 2021 18:50:55 GMT, Sean Christopherson <seanjc@google.com> wrote:
-> >On Thu, Nov 18, 2021, Sean Christopherson wrote:
-> >> On Thu, Nov 18, 2021, David Woodhouse wrote:
-> >> > That leaves the one in TDP MMU handle_changed_spte_dirty_log() which
-> >> > AFAICT can trigger the same crash seen by butt3rflyh4ck — can't that
-> >> > happen from a thread where kvm_get_running_vcpu() is NULL too? For that
-> >> > one I'm not sure.
-> >> 
-> >> I think could be trigger in the TDP MMU via kvm_mmu_notifier_release()
-> >> -> kvm_mmu_zap_all(), e.g. if the userspace VMM exits while dirty logging is
-> >> enabled.  That should be easy to (dis)prove via a selftest.
-> >
-> >Scratch that, the dirty log update is guarded by the new_spte being present, so
-> >zapping of any kind won't trigger it.
-> >
-> >Currently, I believe the only path that would create a present SPTE without an
-> >active vCPU is mmu_notifer.change_pte, but that squeaks by because its required
-> >to be wrapped with invalidate_range_{start,end}(MMU_NOTIFY_CLEAR), and KVM zaps
-> >in that situation.
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> V2: Update $id, description, compatible, example & commit message
+> V3: Drop "brcm,twd" from compatible list per Rob's review
+> RESEND: Patchwork lost 1/2, marc.info lost 2/2
+> ---
+>  .../devicetree/bindings/mfd/brcm,twd.yaml     | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/brcm,twd.yaml
 > 
-> Is it sufficient to have *an* active vCPU?  What if a VMM has threads for
-> active vCPUs but is doing mmap/munmap on a *different* thread? Does that not
-> suffer the same crash?
 
-It is sufficient for the current physical CPU to have an active vCPU, which is
-generally guaranteed in the MMU code because, with a few exceptions, populating
-SPTEs is done in vCPU context.
-
-mmap() will never directly trigger SPTE creation, KVM first requires a vCPU to
-fault on the new address.  munmap() is a pure zap flow, i.e. won't create a
-present SPTE and trigger the writeback of the dirty bit.
-
-That's also why I dislike using kvm_get_running_vcpu(); when it's needed, there's
-a valid vCPU from the caller, but it deliberately gets dropped and indirectly
-picked back up.
+Reviewed-by: Rob Herring <robh@kernel.org>
