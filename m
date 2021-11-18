@@ -2,59 +2,219 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC171455158
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Nov 2021 00:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B830455808
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Nov 2021 10:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241721AbhKRABS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 17 Nov 2021 19:01:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59226 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241731AbhKRABH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 17 Nov 2021 19:01:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 6429961ABF;
-        Wed, 17 Nov 2021 23:58:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637193488;
-        bh=lmfdFZ9wsWSSzqTt51z/Mge8gvN0Q0StiIMq2hqs1uo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=PJxgqrTJRKDRuuI1icgLpIb3hd3kFtsDxd5gzMRl/wt9p/RPLYYIk6R+k0LrZSkHb
-         GTLXOl8pDzQMBXceIcaYlrb53SaNeKAQUW9U2n8dF41tiwRfe2ZGcXQUVk/g1/OtWo
-         sZcw6bACognY2kB+iTAFNy8QzUScOiOAeCmeIggLNxBIxmiiLOo7EaM2+oot381uXu
-         fNA76NnRvyoxlMiBb/sjvetr0Oh5h5ECVY4Moku3X5py75b17KB1Eulrq1w9G8CnVX
-         dwyU5XgXhga5zFxY1CW1jvMU04xZuPqf+1uh7VwsQQhyU1jScVymeMaPIDLbsdGKo4
-         cYylMthK60Uqw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 5402A600E6;
-        Wed, 17 Nov 2021 23:58:08 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v5.16
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211117221136.GA16740@alpha.franken.de>
-References: <20211117221136.GA16740@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211117221136.GA16740@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.16_1
-X-PR-Tracked-Commit-Id: fc1aabb088860d6cf9dd03612b7a6f0de91ccac2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3fa595481b3b33105d7e0480710591edb2bd8dcb
-Message-Id: <163719348828.8069.16173664396744279220.pr-tracker-bot@kernel.org>
-Date:   Wed, 17 Nov 2021 23:58:08 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S243527AbhKRJdp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 18 Nov 2021 04:33:45 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:48746 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243402AbhKRJdk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 18 Nov 2021 04:33:40 -0500
+Received: from localhost.localdomain (unknown [111.9.175.10])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxbuQeHZZhYxcAAA--.269S2;
+        Thu, 18 Nov 2021 17:30:14 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH 1/4] MIPS: rework local_t operation on MIPS64
+Date:   Thu, 18 Nov 2021 17:30:02 +0800
+Message-Id: <20211118093005.3121-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxbuQeHZZhYxcAAA--.269S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw45Zr1DurykKF1ktw1UWrg_yoWrurWUpF
+        srCan7KrWqvF4fA3Z7ZF4Svr13Wr4rGrWYkFyqvrWvy3W0q3W8Zrs3KanYyrykZFZ8X3W8
+        XFW7ur15Z3ZrA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkF7I0En4kS14v26r126r1DMxkIecxEwVAFwVW8uwCF04k20xvY0x0EwI
+        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
+        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+        6cxKx2IYs7xG6r4j6FyUMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUyxRDUUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Wed, 17 Nov 2021 23:11:36 +0100:
++. Use daddu/dsubu for long int on MIPS64.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.16_1
++. remove "asm/war.h" since R10000_LLSC_WAR became a config option
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3fa595481b3b33105d7e0480710591edb2bd8dcb
++. clean up, no function changed
 
-Thank you!
+Suggested-by:  "Maciej W. Rozycki" <macro@orcam.me.uk>
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+---
+ arch/mips/include/asm/asm.h   | 18 ++++++++++
+ arch/mips/include/asm/local.h | 62 +++++++++--------------------------
+ 2 files changed, 33 insertions(+), 47 deletions(-)
 
+diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
+index 2f8ce94ebaaf..f3302b13d3e0 100644
+--- a/arch/mips/include/asm/asm.h
++++ b/arch/mips/include/asm/asm.h
+@@ -19,6 +19,7 @@
+ 
+ #include <asm/sgidefs.h>
+ #include <asm/asm-eva.h>
++#include <asm/isa-rev.h>
+ 
+ #ifndef __VDSO__
+ /*
+@@ -211,6 +212,8 @@ symbol		=	value
+ #define LONG_SUB	sub
+ #define LONG_SUBU	subu
+ #define LONG_L		lw
++#define LONG_LL		ll
++#define LONG_SC		sc
+ #define LONG_S		sw
+ #define LONG_SP		swp
+ #define LONG_SLL	sll
+@@ -236,6 +239,8 @@ symbol		=	value
+ #define LONG_SUB	dsub
+ #define LONG_SUBU	dsubu
+ #define LONG_L		ld
++#define LONG_LL		lld
++#define LONG_SC		scd
+ #define LONG_S		sd
+ #define LONG_SP		sdp
+ #define LONG_SLL	dsll
+@@ -320,6 +325,19 @@ symbol		=	value
+ 
+ #define SSNOP		sll zero, zero, 1
+ 
++/*
++ * Using a branch-likely instruction to check the result of an sc instruction
++ * works around a bug present in R10000 CPUs prior to revision 3.0 that could
++ * cause ll-sc sequences to execute non-atomically.
++ */
++#ifdef CONFIG_WAR_R10000_LLSC
++# define SC_BEQZ	beqzl
++#elif MIPS_ISA_REV >= 6
++# define SC_BEQZ	beqzc
++#else
++# define SC_BEQZ	beqz
++#endif
++
+ #ifdef CONFIG_SGI_IP28
+ /* Inhibit speculative stores to volatile (e.g.DMA) or invalid addresses. */
+ #include <asm/cacheops.h>
+diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
+index ecda7295ddcd..c1e109357110 100644
+--- a/arch/mips/include/asm/local.h
++++ b/arch/mips/include/asm/local.h
+@@ -7,7 +7,7 @@
+ #include <linux/atomic.h>
+ #include <asm/cmpxchg.h>
+ #include <asm/compiler.h>
+-#include <asm/war.h>
++#include <asm/asm.h>
+ 
+ typedef struct
+ {
+@@ -31,34 +31,18 @@ static __inline__ long local_add_return(long i, local_t * l)
+ {
+ 	unsigned long result;
+ 
+-	if (kernel_uses_llsc && IS_ENABLED(CONFIG_WAR_R10000_LLSC)) {
+-		unsigned long temp;
+-
+-		__asm__ __volatile__(
+-		"	.set	push					\n"
+-		"	.set	arch=r4000				\n"
+-			__SYNC(full, loongson3_war) "			\n"
+-		"1:"	__LL	"%1, %2		# local_add_return	\n"
+-		"	addu	%0, %1, %3				\n"
+-			__SC	"%0, %2					\n"
+-		"	beqzl	%0, 1b					\n"
+-		"	addu	%0, %1, %3				\n"
+-		"	.set	pop					\n"
+-		: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
+-		: "Ir" (i), "m" (l->a.counter)
+-		: "memory");
+-	} else if (kernel_uses_llsc) {
++	if (kernel_uses_llsc) {
+ 		unsigned long temp;
+ 
+ 		__asm__ __volatile__(
+ 		"	.set	push					\n"
+ 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
+-			__SYNC(full, loongson3_war) "			\n"
+-		"1:"	__LL	"%1, %2		# local_add_return	\n"
+-		"	addu	%0, %1, %3				\n"
+-			__SC	"%0, %2					\n"
+-		"	beqz	%0, 1b					\n"
+-		"	addu	%0, %1, %3				\n"
++			__SYNC(full, loongson3_war) "                   \n"
++		"1:"	__stringify(LONG_LL)	"	%1, %2		\n"
++		"	"__stringify(LONG_ADDU)	"	%0, %1, %3	\n"
++		"	"__stringify(LONG_SC)	"	%0, %2		\n"
++		"	"__stringify(SC_BEQZ)	"	%0, 1b		\n"
++		"	"__stringify(LONG_ADDU)	"	%0, %1, %3	\n"
+ 		"	.set	pop					\n"
+ 		: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
+ 		: "Ir" (i), "m" (l->a.counter)
+@@ -80,34 +64,18 @@ static __inline__ long local_sub_return(long i, local_t * l)
+ {
+ 	unsigned long result;
+ 
+-	if (kernel_uses_llsc && IS_ENABLED(CONFIG_WAR_R10000_LLSC)) {
+-		unsigned long temp;
+-
+-		__asm__ __volatile__(
+-		"	.set	push					\n"
+-		"	.set	arch=r4000				\n"
+-			__SYNC(full, loongson3_war) "			\n"
+-		"1:"	__LL	"%1, %2		# local_sub_return	\n"
+-		"	subu	%0, %1, %3				\n"
+-			__SC	"%0, %2					\n"
+-		"	beqzl	%0, 1b					\n"
+-		"	subu	%0, %1, %3				\n"
+-		"	.set	pop					\n"
+-		: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
+-		: "Ir" (i), "m" (l->a.counter)
+-		: "memory");
+-	} else if (kernel_uses_llsc) {
++	if (kernel_uses_llsc) {
+ 		unsigned long temp;
+ 
+ 		__asm__ __volatile__(
+ 		"	.set	push					\n"
+ 		"	.set	"MIPS_ISA_ARCH_LEVEL"			\n"
+-			__SYNC(full, loongson3_war) "			\n"
+-		"1:"	__LL	"%1, %2		# local_sub_return	\n"
+-		"	subu	%0, %1, %3				\n"
+-			__SC	"%0, %2					\n"
+-		"	beqz	%0, 1b					\n"
+-		"	subu	%0, %1, %3				\n"
++			__SYNC(full, loongson3_war) "                   \n"
++		"1:"	__stringify(LONG_LL)	"	%1, %2		\n"
++		"	"__stringify(LONG_SUBU)	"	%0, %1, %3	\n"
++		"	"__stringify(LONG_SC)	"	%0, %2		\n"
++		"	"__stringify(SC_BEQZ)	"	%0, 1b		\n"
++		"	"__stringify(LONG_SUBU)	"	%0, %1, %3	\n"
+ 		"	.set	pop					\n"
+ 		: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
+ 		: "Ir" (i), "m" (l->a.counter)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.20.1
+
