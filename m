@@ -2,96 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3464578D8
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Nov 2021 23:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DD3457979
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Nov 2021 00:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbhKSWh2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Nov 2021 17:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233083AbhKSWh2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Nov 2021 17:37:28 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBB9C061574;
-        Fri, 19 Nov 2021 14:34:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=pEv7n/rwp4AbqdGgl0buYp4REzvZ/H86NZ3L+eGWaUs=; b=QHLAKw5h/vhKbPQHB+6GH9lr4e
-        dXMMka2g4LHxukNMqiFN4UQjnnkRYTfNxdIjHqOM0pGLoccq7YnkyUZbMOwZiEx1XSJCISQdSFbNM
-        KzMEVUyeo+Y4FLwL28a6+nBvnGpvQiUq2xVMISIYArMRXnk7SWdtQX/GSZUeseqw8q1kFtNbyoL/a
-        yNHn3o6076/8fT4HJ7zDnuhfvHI7iYLFkLxHWrhMY+hf5MztIpVdwJnOf+rI3U6pyDMofzRpKA/jw
-        wLifB2AEIrUa//Chd8lFvmfkOh15VFFi7RG2B2LmaN8NrM8Dl04pn1AxIqRE4EGAEqd+n62ERReOM
-        rqMKH/aA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1moCSd-00Bhfs-Mg; Fri, 19 Nov 2021 22:34:23 +0000
-Subject: Re: [PATCH] MIPS: boot/compressed/: add __ashldi3 to target for ZSTD
- compression
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        list@opendingux.net
-References: <20211119175052.401771-1-paul@crapouillou.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <5ae0b5d2-3e99-1cf1-d1b7-2f92f0ec0cfa@infradead.org>
-Date:   Fri, 19 Nov 2021 14:34:23 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S234542AbhKSXXV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Nov 2021 18:23:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52350 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230351AbhKSXXV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 19 Nov 2021 18:23:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 780DF61B04;
+        Fri, 19 Nov 2021 23:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637364018;
+        bh=fI3IY92kN4g5zKp0563/0ygFQsUxH+aYssnQOt7mNZM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WYTOz3LqwChP05T/Za3QBIa04oUWpTxf0P9IaO3gjkMLTk72YPIrv4KRuSJDwrPm1
+         PB4fIHZyJqgdKfX30vLMj3Alh/e/Rjle4ZAIksH3qtTaU5yUEK0h/tSUxPUAq/6eDP
+         S7U9JYyFoSE0myh1aJWX5Ec83hBIhViwZt/pMtzinP+Y1YtuT8Y1p+zg6N2HeYGAd4
+         9tSn9gJnos3e9FGwGZzbLDoIrmV4rz0Q+vGtwuaSyUgLsZeVBkhtrZvmrFrOUe+7VO
+         HGuuDn4FhpnNs+vxDlIHyneO58+yf3r2FSRknPS6CnMwBlmKgkgNZmBFtdmpq/gg7D
+         zvjccNswhXIyg==
+Date:   Fri, 19 Nov 2021 17:20:17 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        lorenzo.pieralisi@arm.com, bhelgaas@google.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: [PATCH 1/5] PCI: let 'pcibios_root_bridge_prepare()' access to
+ 'bridge->windows'
+Message-ID: <20211119232017.GA1981034@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <20211119175052.401771-1-paul@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211115070809.15529-2-sergio.paracuellos@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/19/21 9:50 AM, Paul Cercueil wrote:
-> Just like before with __bswapdi2(), for MIPS pre-boot when
-> CONFIG_KERNEL_ZSTD=y the decompressor function will use __ashldi3(), so
-> the object file should be added to the target object file.
-> 
-> Fixes these build errors:
-> 
-> mipsel-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_buildDTable_internal':
-> decompress.c:(.text.FSE_buildDTable_internal+0x48): undefined reference to `__ashldi3'
-> mipsel-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_decompress_wksp_body_default':
-> decompress.c:(.text.FSE_decompress_wksp_body_default+0xa8): undefined reference to `__ashldi3'
-> mipsel-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_getFrameHeader_advanced':
-> decompress.c:(.text.ZSTD_getFrameHeader_advanced+0x134): undefined reference to `__ashldi3'
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+[+cc Thierry]
 
-I haven't seen this build error but the patch looks
-fine to me.
+In subject,
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+  PCI: Let pcibios_root_bridge_prepare() access bridge->windows
 
-Thanks.
-
+On Mon, Nov 15, 2021 at 08:08:05AM +0100, Sergio Paracuellos wrote:
+> When function 'pci_register_host_bridge()' is called, 'bridge->windows' are
+> already available. However this windows are being moved temporarily from
+> there. To let 'pcibios_root_bridge_prepare()' to have access to this windows
+> move this windows movement after call this function. This is interesting for
+> MIPS ralink mt7621 platform to be able to properly set I/O coherence units
+> with this information and avoid custom MIPs code in generic PCIe controller
+> drivers.
+>
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 > ---
->   arch/mips/boot/compressed/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/pci/probe.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-> index 2861a05c2e0c..f27cf31b4140 100644
-> --- a/arch/mips/boot/compressed/Makefile
-> +++ b/arch/mips/boot/compressed/Makefile
-> @@ -52,7 +52,7 @@ endif
->   
->   vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
->   
-> -vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o
-> +vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o
->   
->   targets := $(notdir $(vmlinuzobjs-y))
->   
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 087d3658f75c..372a70efccc6 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -898,8 +898,6 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+>  
+>  	bridge->bus = bus;
+>  
+> -	/* Temporarily move resources off the list */
+> -	list_splice_init(&bridge->windows, &resources);
+
+Arnd added this with 37d6a0a6f470 ("PCI: Add
+pci_register_host_bridge() interface") [1].
+
+I can't remember why this was done, but we did go to some trouble to
+move things around, so there must have been a good reason.
+
+Arnd or Thierry, do you remember?
+
+>  	bus->sysdata = bridge->sysdata;
+>  	bus->ops = bridge->ops;
+>  	bus->number = bus->busn_res.start = bridge->busnr;
+> @@ -925,6 +923,8 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+>  	if (err)
+>  		goto free;
+>  
+> +	/* Temporarily move resources off the list */
+> +	list_splice_init(&bridge->windows, &resources);
+>  	err = device_add(&bridge->dev);
+>  	if (err) {
+>  		put_device(&bridge->dev);
+> -- 
+> 2.33.0
 > 
 
-
--- 
-~Randy
+[1] https://git.kernel.org/linus/37d6a0a6f470
