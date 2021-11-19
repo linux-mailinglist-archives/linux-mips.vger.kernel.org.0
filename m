@@ -2,32 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6420456CDC
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Nov 2021 10:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F03456D52
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Nov 2021 11:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbhKSKBt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Nov 2021 05:01:49 -0500
-Received: from mga04.intel.com ([192.55.52.120]:17003 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229974AbhKSKBs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 19 Nov 2021 05:01:48 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10172"; a="233110022"
-X-IronPort-AV: E=Sophos;i="5.87,247,1631602800"; 
-   d="scan'208";a="233110022"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2021 01:58:47 -0800
-X-IronPort-AV: E=Sophos;i="5.87,247,1631602800"; 
-   d="scan'208";a="568845492"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2021 01:58:31 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mo0cr-008Uqj-60;
-        Fri, 19 Nov 2021 11:56:09 +0200
-Date:   Fri, 19 Nov 2021 11:56:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Calvin Zhang <calvinzhang.cool@gmail.com>
-Cc:     Vineet Gupta <vgupta@kernel.org>,
+        id S234634AbhKSKdR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Nov 2021 05:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234698AbhKSKdQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Nov 2021 05:33:16 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AADC061574;
+        Fri, 19 Nov 2021 02:30:14 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso8458683pjb.2;
+        Fri, 19 Nov 2021 02:30:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mI6KtEpWF619oecwW9ziIW9hw+HsMKzn28OULpWVurc=;
+        b=KPFYp17Oy/uF3pbSIvlZbA7tgtmLiBC3HIruVIaKeBTx1ALHk1wBHI9RWH4Y/TRiM2
+         hAq35CyJOhqjAvnIz+XnfBNiKxqvsUzF8MUMqrbb+qoLapa3GCOHgXxaI6x9Km0AlL0K
+         2wG7B8CCYpBSr+ZNFswMkvUZagoAlzcdTSS//NHNiGf8CdixgEqb6uKPGS2QpTEgcUAp
+         yArb+GP+Q+XhbKyaqKWupK7SJqNy6AAI7qZH/W5TKcSo7ZV4POw8PNPyAsvkQzKhD740
+         EiMIWTjA0fXMyULJynwnTQN6Kgk/iWbRQ1iPpWyGjz39JFmP0lOhp61wqe2NJVi1cPEy
+         0utQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mI6KtEpWF619oecwW9ziIW9hw+HsMKzn28OULpWVurc=;
+        b=cwJLLMTNvO00pR8CmpzKLxJqptfILtE6FW5yGdDI0ZRZTJJenCalNdDJU5iby6fS2P
+         8cbiiThNbuoAPpccyaMgu9A661i7Pk0J4auSTIZbYyH/D/Y8cD0J5sILDq+ZpeVkeCPf
+         Tv6BjX84TrRErPblCgGAKs6y4SKRHT0pb1cfK5wjlzu7haBVUJaa4X/XNvA2dMQyYS85
+         GESe94zF9ZltHuQOkq2aHro8mSTePyeaeJ2CQX9zeqGi9PGsrGSSqcPjBP3cmXJ06wjz
+         ZtPAsi1JK0GVDUHh17YSpTKP1iS+Edhrg9Sjllw/0TuTRf15HNp+cIvD4GVRVedme74j
+         x7tA==
+X-Gm-Message-State: AOAM532UK6twORoNzF7EqMqkgQ99eW0G6y4MyRvi1i8JzOpPf0bcBSza
+        +EWGuWxl9rhVjhYDyMMUcEU=
+X-Google-Smtp-Source: ABdhPJwCL45zphX6sAUQpCTH2XR0MI6TO3LxQucz8xUZnsL94laUGiXdLG1KlgE2xhwPB5DYkk54PQ==
+X-Received: by 2002:a17:902:bc85:b0:143:954e:8548 with SMTP id bb5-20020a170902bc8500b00143954e8548mr73204786plb.82.1637317814262;
+        Fri, 19 Nov 2021 02:30:14 -0800 (PST)
+Received: from localhost ([103.99.179.247])
+        by smtp.gmail.com with ESMTPSA id u22sm2537834pfk.148.2021.11.19.02.30.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Nov 2021 02:30:14 -0800 (PST)
+Date:   Fri, 19 Nov 2021 18:30:09 +0800
+From:   Calvin Zhang <calvinzhang.cool@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Calvin Zhang <calvinzhang.cool@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
@@ -98,45 +122,52 @@ Cc:     Vineet Gupta <vgupta@kernel.org>,
         linux-xtensa@linux-xtensa.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH 2/2] of: reserved_mem: Remove reserved regions count
  restriction
-Message-ID: <YZd0uEWNH6Def3+8@smile.fi.intel.com>
+Message-ID: <YZd8sc6E0bgNA9ag@debian>
 References: <20211119075844.2902592-1-calvinzhang.cool@gmail.com>
  <20211119075844.2902592-3-calvinzhang.cool@gmail.com>
+ <YZd0uEWNH6Def3+8@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211119075844.2902592-3-calvinzhang.cool@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <YZd0uEWNH6Def3+8@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 03:58:19PM +0800, Calvin Zhang wrote:
-> Change to allocate reserved_mems dynamically. Static reserved regions
-> must be reserved before any memblock allocations. The reserved_mems
-> array couldn't be allocated until memblock and linear mapping are ready.
-> 
-> So move the allocation and initialization of records and reserved memory
-> from early_init_fdt_scan_reserved_mem() to of_reserved_mem_init().
-
->  arch/arc/mm/init.c                 |  3 ++
->  arch/arm/kernel/setup.c            |  2 +
->  arch/arm64/kernel/setup.c          |  3 ++
->  arch/csky/kernel/setup.c           |  3 ++
->  arch/h8300/kernel/setup.c          |  2 +
->  arch/mips/kernel/setup.c           |  3 ++
->  arch/nds32/kernel/setup.c          |  3 ++
->  arch/nios2/kernel/setup.c          |  2 +
->  arch/openrisc/kernel/setup.c       |  3 ++
->  arch/powerpc/kernel/setup-common.c |  3 ++
->  arch/riscv/kernel/setup.c          |  2 +
->  arch/sh/kernel/setup.c             |  3 ++
->  arch/xtensa/kernel/setup.c         |  2 +
-
-Isn't x86 missed? Is it on purpose?
-Would be nice to have this in the commit message or fixed accordingly.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+On Fri, Nov 19, 2021 at 11:56:08AM +0200, Andy Shevchenko wrote:
+>On Fri, Nov 19, 2021 at 03:58:19PM +0800, Calvin Zhang wrote:
+>> Change to allocate reserved_mems dynamically. Static reserved regions
+>> must be reserved before any memblock allocations. The reserved_mems
+>> array couldn't be allocated until memblock and linear mapping are ready.
+>> 
+>> So move the allocation and initialization of records and reserved memory
+>> from early_init_fdt_scan_reserved_mem() to of_reserved_mem_init().
+>
+>>  arch/arc/mm/init.c                 |  3 ++
+>>  arch/arm/kernel/setup.c            |  2 +
+>>  arch/arm64/kernel/setup.c          |  3 ++
+>>  arch/csky/kernel/setup.c           |  3 ++
+>>  arch/h8300/kernel/setup.c          |  2 +
+>>  arch/mips/kernel/setup.c           |  3 ++
+>>  arch/nds32/kernel/setup.c          |  3 ++
+>>  arch/nios2/kernel/setup.c          |  2 +
+>>  arch/openrisc/kernel/setup.c       |  3 ++
+>>  arch/powerpc/kernel/setup-common.c |  3 ++
+>>  arch/riscv/kernel/setup.c          |  2 +
+>>  arch/sh/kernel/setup.c             |  3 ++
+>>  arch/xtensa/kernel/setup.c         |  2 +
+>
+>Isn't x86 missed? Is it on purpose?
+>Would be nice to have this in the commit message or fixed accordingly.
+AFAIK, x86 doesn't reserve memory through "/reserved-memory" node until now.
+Actually, I got the arch list from callers of
+early_init_fdt_scan_reserved_mem().
+>
+>-- 
+>With Best Regards,
+>Andy Shevchenko
+>
+>
+>
+Thanks,
+Calvin
