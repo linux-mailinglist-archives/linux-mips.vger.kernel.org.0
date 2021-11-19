@@ -2,573 +2,241 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E99456B3E
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Nov 2021 09:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4F7456C46
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Nov 2021 10:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbhKSIFV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 19 Nov 2021 03:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
+        id S234094AbhKSJ0w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 19 Nov 2021 04:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbhKSIFU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Nov 2021 03:05:20 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13434C061574;
-        Fri, 19 Nov 2021 00:02:19 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so8132322pjb.5;
-        Fri, 19 Nov 2021 00:02:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qOCx5sFVE+zhsZMFm7VYYi5j9KabUFYLGScDeGkNxio=;
-        b=nzW89fNZIaeGG7iFC/anmbyYxdYeiIPsY0WyiJL9dBOt/8uw3ODbBglPEFVbBiYTFV
-         0pv6LksmsP2oSI7akfzeUVVDy20WgJ8k3Rv/wn0P8mO0aNHHtrwk7Uq1DAm2tz0pk8FA
-         pyHsLEzmZnvO6aptkJL6vJeOlrnGVjQ8DlD967ddxsYJ1T8QRmI3cN0eGcPyOLxdkh7J
-         JFWJebETXfh0MEmv7iOioLeT+GLXWL8dQGOU7S+PWH74qRoFtdGbVE6oXI0KrvG0FTVd
-         +teDlDj3djGGS3rhXtJn8bFeiCJlF9gtWq6C9oZE6cyVc4LO5QXagcnEvn69nlQBAycU
-         pkgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qOCx5sFVE+zhsZMFm7VYYi5j9KabUFYLGScDeGkNxio=;
-        b=Or/zsPK1wi4mdi+WX5LKyzzasmMEHIcWIqCQKbMDRBf/PeHPN81krtUEJOsuHgyd0E
-         5tVYqtGbcva+TjH/xHuS1nahHgLTaq8fstDFFsFW6UMJ9QD6V465XAvTCYtNzht820sy
-         KBXmCBDxNnbVtz6CX0JeSpZLLWCeHug0GrXvRzlu+IkZjHegOnFqVOvREfxR+4NjbYj/
-         0gtYdGtSxhaT9fIzakg3WXquwjl6bdrPFbd2m4J00BExm8NY+RY5xDhFy/ZC4VcCD7zT
-         XtlWmq3u2zkbM8HhfcTasrKrqZehscvqk3uKDn/1qVjzZ+5RctQcbgRsHyr5GCT6kyDk
-         hI8A==
-X-Gm-Message-State: AOAM532oKIz0FRaE+V5g9pGocBw7DJZNHsHUEr8VJLCYsSItqk1LBQMh
-        ko0y81YlL7dQX5HR2rb9PN0=
-X-Google-Smtp-Source: ABdhPJxD8TG96sq1MtTt8E+2ENWTqJbXT9h5ZtPUFFHaIxmjzzibkl/E4Joc49HUY6kx/0RfviZh7Q==
-X-Received: by 2002:a17:902:f209:b0:141:99d1:7cef with SMTP id m9-20020a170902f20900b0014199d17cefmr75711457plc.70.1637308938491;
-        Fri, 19 Nov 2021 00:02:18 -0800 (PST)
-Received: from localhost.localdomain ([103.99.179.247])
-        by smtp.gmail.com with ESMTPSA id o6sm1791259pfh.70.2021.11.19.00.01.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 00:02:18 -0800 (PST)
-From:   Calvin Zhang <calvinzhang.cool@gmail.com>
-To:     Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
+        with ESMTP id S232838AbhKSJ0w (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 19 Nov 2021 04:26:52 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039DFC061574;
+        Fri, 19 Nov 2021 01:23:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=s69dtZTPtWdn4nuXhO5u8qh8vqOiDAUWW2VvLvwoldU=; b=wNvYamDoPaQC8pMtQwoV7gojWQ
+        suDorKgPjTpvmHWDm7SHcr3n74C4FV7ACFp3L0p1jYwLc+3f24tcVugZzVrols+ZR3t/8DsMGIKlf
+        IKzoprKdVpWE8uhGnvCTrRhQcxc/xnV4nmufR1j916s+egIWWDdtPxBVkqJg1rcNsZ5b4YKj5+ARf
+        T4RACuqeGJWqt0LqzR+S6xyS8pR7311g6WBVdOBCnHBwUcuSxiwnn93PNrp9Y73cxDnY60z7/ZvM+
+        +S1RzC5LJe1B8MmbOzszDpl/ZRGaxUk44TjGIa1hxBmZlxkyAj5IqUwujOISgKuh3i0xSHQ7nVWtp
+        iEsLbg4Q==;
+Received: from [2001:8b0:10b:1:4a2a:e3ff:fe14:8625] (helo=u3832b3a9db3152.ant.amazon.com)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mo07L-009xIr-Us; Fri, 19 Nov 2021 09:23:36 +0000
+Message-ID: <0d8cd126fb15488ae1b523f799fe749f02c4cc8c.camel@infradead.org>
+Subject: Re: [PATCH v3 08/12] KVM: Propagate vcpu explicitly to
+ mark_page_dirty_in_slot()
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm <kvm@vger.kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        "jmattson @ google . com" <jmattson@google.com>,
+        "wanpengli @ tencent . com" <wanpengli@tencent.com>,
+        "vkuznets @ redhat . com" <vkuznets@redhat.com>,
+        "mtosatti @ redhat . com" <mtosatti@redhat.com>,
+        "joro @ 8bytes . org" <joro@8bytes.org>, karahmed@amazon.com,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rich Felker <dalias@libc.org>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Vladimir Isaev <isaev@synopsys.com>,
-        Calvin Zhang <calvinzhang.cool@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marc Zyngier <maz@kernel.org>,
-        David Brazdil <dbrazdil@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Souptick Joarder <jrdr.linux@gmail.com>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Mauri Sandberg <sandberg@mailfence.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Andreas Oetken <andreas.oetken@siemens.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Ganesh Goudar <ganeshgr@linux.ibm.com>,
-        Markus Elfring <elfring@users.sourceforge.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Atish Patra <atish.patra@wdc.com>,
         Anup Patel <anup.patel@wdc.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Vitaly Wool <vitaly.wool@konsulko.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Rob Herring <robh@kernel.org>,
-        Zhang Yunkai <zhang.yunkai@zte.com.cn>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, devicetree@vger.kernel.org
-Subject: [PATCH 2/2] of: reserved_mem: Remove reserved regions count restriction
-Date:   Fri, 19 Nov 2021 15:58:19 +0800
-Message-Id: <20211119075844.2902592-3-calvinzhang.cool@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211119075844.2902592-1-calvinzhang.cool@gmail.com>
-References: <20211119075844.2902592-1-calvinzhang.cool@gmail.com>
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-s390@vger.kernel.org
+Date:   Fri, 19 Nov 2021 09:23:29 +0000
+In-Reply-To: <YZatsB3oadj6dgb8@google.com>
+References: <20211117174003.297096-1-dwmw2@infradead.org>
+         <20211117174003.297096-9-dwmw2@infradead.org>
+         <85d9fec17f32c3eb9e100e56b91af050.squirrel@twosheds.infradead.org>
+         <4c48546b-eb4a-dff7-cc38-5df54f73f5d4@redhat.com>
+         <20b5952e76c54a3a5dfe5a898e3b835404ac6fb1.camel@infradead.org>
+         <YZaeL5YztL3p1nLM@google.com> <YZagjzYUsixbFre9@google.com>
+         <35AEC3FD-B46A-451D-B7D5-4B1BDD5407BD@infradead.org>
+         <YZatsB3oadj6dgb8@google.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-xmDH/MHbX/vObHZ+w1qZ"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Change to allocate reserved_mems dynamically. Static reserved regions
-must be reserved before any memblock allocations. The reserved_mems
-array couldn't be allocated until memblock and linear mapping are ready.
 
-So move the allocation and initialization of records and reserved memory
-from early_init_fdt_scan_reserved_mem() to of_reserved_mem_init().
+--=-xmDH/MHbX/vObHZ+w1qZ
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Calvin Zhang <calvinzhang.cool@gmail.com>
----
- arch/arc/mm/init.c                 |  3 ++
- arch/arm/kernel/setup.c            |  2 +
- arch/arm64/kernel/setup.c          |  3 ++
- arch/csky/kernel/setup.c           |  3 ++
- arch/h8300/kernel/setup.c          |  2 +
- arch/mips/kernel/setup.c           |  3 ++
- arch/nds32/kernel/setup.c          |  3 ++
- arch/nios2/kernel/setup.c          |  2 +
- arch/openrisc/kernel/setup.c       |  3 ++
- arch/powerpc/kernel/setup-common.c |  3 ++
- arch/riscv/kernel/setup.c          |  2 +
- arch/sh/kernel/setup.c             |  3 ++
- arch/xtensa/kernel/setup.c         |  2 +
- drivers/of/fdt.c                   |  1 -
- drivers/of/of_reserved_mem.c       | 66 ++++++++++++++++++++----------
- 15 files changed, 79 insertions(+), 22 deletions(-)
+On Thu, 2021-11-18 at 19:46 +0000, Sean Christopherson wrote:
+> It is sufficient for the current physical CPU to have an active vCPU, whi=
+ch is
+> generally guaranteed in the MMU code because, with a few exceptions, popu=
+lating
+> SPTEs is done in vCPU context.
+>=20
+> mmap() will never directly trigger SPTE creation, KVM first requires a vC=
+PU to
+> fault on the new address.  munmap() is a pure zap flow, i.e. won't create=
+ a
+> present SPTE and trigger the writeback of the dirty bit.
 
-diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
-index ce4e939a7f07..a75f0e693f37 100644
---- a/arch/arc/mm/init.c
-+++ b/arch/arc/mm/init.c
-@@ -10,6 +10,7 @@
- #include <linux/initrd.h>
- #endif
- #include <linux/of_fdt.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/swap.h>
- #include <linux/module.h>
- #include <linux/highmem.h>
-@@ -165,6 +166,8 @@ void __init setup_arch_memory(void)
- 
- #endif /* CONFIG_HIGHMEM */
- 
-+	of_reserved_mem_init();
-+
- 	free_area_init(max_zone_pfn);
- }
- 
-diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
-index 284a80c0b6e1..e76737effbf4 100644
---- a/arch/arm/kernel/setup.c
-+++ b/arch/arm/kernel/setup.c
-@@ -20,6 +20,7 @@
- #include <linux/kexec.h>
- #include <linux/libfdt.h>
- #include <linux/of_fdt.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/cpu.h>
- #include <linux/interrupt.h>
- #include <linux/smp.h>
-@@ -1153,6 +1154,7 @@ void __init setup_arch(char **cmdline_p)
- 	early_ioremap_reset();
- 
- 	paging_init(mdesc);
-+	of_reserved_mem_init();
- 	kasan_init();
- 	request_standard_resources(mdesc);
- 
-diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
-index be5f85b0a24d..4624e5193d6e 100644
---- a/arch/arm64/kernel/setup.c
-+++ b/arch/arm64/kernel/setup.c
-@@ -27,6 +27,7 @@
- #include <linux/proc_fs.h>
- #include <linux/memblock.h>
- #include <linux/of_fdt.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/efi.h>
- #include <linux/psci.h>
- #include <linux/sched/task.h>
-@@ -339,6 +340,8 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
- 
- 	paging_init();
- 
-+	of_reserved_mem_init();
-+
- 	acpi_table_upgrade();
- 
- 	/* Parse the ACPI tables for possible boot-time configuration */
-diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
-index c64e7be2045b..40878906644d 100644
---- a/arch/csky/kernel/setup.c
-+++ b/arch/csky/kernel/setup.c
-@@ -6,6 +6,7 @@
- #include <linux/initrd.h>
- #include <linux/of.h>
- #include <linux/of_fdt.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/start_kernel.h>
- #include <linux/dma-map-ops.h>
- #include <linux/screen_info.h>
-@@ -64,6 +65,8 @@ static void __init csky_memblock_init(void)
- #endif
- 	memblock_set_current_limit(PFN_PHYS(max_low_pfn));
- 
-+	of_reserved_mem_init();
-+
- 	dma_contiguous_reserve(0);
- 
- 	free_area_init(max_zone_pfn);
-diff --git a/arch/h8300/kernel/setup.c b/arch/h8300/kernel/setup.c
-index 61091a76eb7e..0f0ec72a260e 100644
---- a/arch/h8300/kernel/setup.c
-+++ b/arch/h8300/kernel/setup.c
-@@ -24,6 +24,7 @@
- #include <linux/of.h>
- #include <linux/of_fdt.h>
- #include <linux/of_address.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/clk-provider.h>
- #include <linux/memblock.h>
- #include <linux/screen_info.h>
-@@ -87,6 +88,7 @@ static void __init bootmem_init(void)
- 
- 	early_init_fdt_reserve_self();
- 	early_init_fdt_scan_reserved_mem();
-+	of_reserved_mem_init();
- 
- 	memblock_dump_all();
- }
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index f979adfd4fc2..053a10d80cb9 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -27,6 +27,7 @@
- #include <linux/dma-map-ops.h>
- #include <linux/decompress/generic.h>
- #include <linux/of_fdt.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/dmi.h>
- #include <linux/crash_dump.h>
- 
-@@ -776,6 +777,8 @@ void __init setup_arch(char **cmdline_p)
- 	cpu_cache_init();
- 	paging_init();
- 
-+	of_reserved_mem_init();
-+
- 	memblock_dump_all();
- }
- 
-diff --git a/arch/nds32/kernel/setup.c b/arch/nds32/kernel/setup.c
-index b3d34d646652..1054804526c5 100644
---- a/arch/nds32/kernel/setup.c
-+++ b/arch/nds32/kernel/setup.c
-@@ -10,6 +10,7 @@
- #include <linux/dma-mapping.h>
- #include <linux/of_fdt.h>
- #include <linux/of_platform.h>
-+#include <linux/of_reserved_mem.h>
- #include <asm/setup.h>
- #include <asm/sections.h>
- #include <asm/proc-fns.h>
-@@ -301,6 +302,8 @@ void __init setup_arch(char **cmdline_p)
- 	/* paging_init() sets up the MMU and marks all pages as reserved */
- 	paging_init();
- 
-+	of_reserved_mem_init();
-+
- 	/* invalidate all TLB entries because the new mapping is created */
- 	__nds32__tlbop_flua();
- 
-diff --git a/arch/nios2/kernel/setup.c b/arch/nios2/kernel/setup.c
-index 40bc8fb75e0b..7e40e90bc3cd 100644
---- a/arch/nios2/kernel/setup.c
-+++ b/arch/nios2/kernel/setup.c
-@@ -19,6 +19,7 @@
- #include <linux/memblock.h>
- #include <linux/initrd.h>
- #include <linux/of_fdt.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/screen_info.h>
- 
- #include <asm/mmu_context.h>
-@@ -173,6 +174,7 @@ void __init setup_arch(char **cmdline_p)
- 
- 	early_init_fdt_reserve_self();
- 	early_init_fdt_scan_reserved_mem();
-+	of_reserved_mem_init();
- 
- 	unflatten_and_copy_device_tree();
- 
-diff --git a/arch/openrisc/kernel/setup.c b/arch/openrisc/kernel/setup.c
-index 0cd04d936a7a..6830bd110ac4 100644
---- a/arch/openrisc/kernel/setup.c
-+++ b/arch/openrisc/kernel/setup.c
-@@ -32,6 +32,7 @@
- #include <linux/initrd.h>
- #include <linux/of_fdt.h>
- #include <linux/of.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/device.h>
- 
- #include <asm/sections.h>
-@@ -299,6 +300,8 @@ void __init setup_arch(char **cmdline_p)
- 	/* paging_init() sets up the MMU and marks all pages as reserved */
- 	paging_init();
- 
-+	of_reserved_mem_init();
-+
- 	*cmdline_p = boot_command_line;
- 
- 	printk(KERN_INFO "OpenRISC Linux -- http://openrisc.io\n");
-diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
-index 4f1322b65760..1902b4472991 100644
---- a/arch/powerpc/kernel/setup-common.c
-+++ b/arch/powerpc/kernel/setup-common.c
-@@ -31,6 +31,7 @@
- #include <linux/percpu.h>
- #include <linux/memblock.h>
- #include <linux/of_platform.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/hugetlb.h>
- #include <linux/pgtable.h>
- #include <asm/io.h>
-@@ -840,6 +841,8 @@ void __init setup_arch(char **cmdline_p)
- 	/* Set a half-reasonable default so udelay does something sensible */
- 	loops_per_jiffy = 500000000 / HZ;
- 
-+	of_reserved_mem_init();
-+
- 	/* Unflatten the device-tree passed by prom_init or kexec */
- 	unflatten_device_tree();
- 
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index b42bfdc67482..e3a211cdf5e1 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -16,6 +16,7 @@
- #include <linux/screen_info.h>
- #include <linux/of_fdt.h>
- #include <linux/of_platform.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/sched/task.h>
- #include <linux/smp.h>
- #include <linux/efi.h>
-@@ -273,6 +274,7 @@ void __init setup_arch(char **cmdline_p)
- 
- 	efi_init();
- 	paging_init();
-+	of_reserved_mem_init();
- #if IS_ENABLED(CONFIG_BUILTIN_DTB)
- 	unflatten_and_copy_device_tree();
- #else
-diff --git a/arch/sh/kernel/setup.c b/arch/sh/kernel/setup.c
-index 1fcb6659822a..51e85a17c202 100644
---- a/arch/sh/kernel/setup.c
-+++ b/arch/sh/kernel/setup.c
-@@ -31,6 +31,7 @@
- #include <linux/memblock.h>
- #include <linux/of.h>
- #include <linux/of_fdt.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/uaccess.h>
- #include <uapi/linux/mount.h>
- #include <asm/io.h>
-@@ -326,6 +327,8 @@ void __init setup_arch(char **cmdline_p)
- 	/* Let earlyprintk output early console messages */
- 	sh_early_platform_driver_probe("earlyprintk", 1, 1);
- 
-+	of_reserved_mem_init();
-+
- #ifdef CONFIG_OF_FLATTREE
- #ifdef CONFIG_USE_BUILTIN_DTB
- 	unflatten_and_copy_device_tree();
-diff --git a/arch/xtensa/kernel/setup.c b/arch/xtensa/kernel/setup.c
-index 8db20cfb44ab..527d425490fd 100644
---- a/arch/xtensa/kernel/setup.c
-+++ b/arch/xtensa/kernel/setup.c
-@@ -25,6 +25,7 @@
- #include <linux/cpu.h>
- #include <linux/of.h>
- #include <linux/of_fdt.h>
-+#include <linux/of_reserved_mem.h>
- 
- #if defined(CONFIG_VGA_CONSOLE) || defined(CONFIG_DUMMY_CONSOLE)
- # include <linux/console.h>
-@@ -356,6 +357,7 @@ void __init setup_arch(char **cmdline_p)
- 	parse_early_param();
- 	bootmem_init();
- 	kasan_init();
-+	of_reserved_mem_init();
- 	unflatten_and_copy_device_tree();
- 
- #ifdef CONFIG_SMP
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 445af4e69300..715ce8ec6ac6 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -540,7 +540,6 @@ void __init early_init_fdt_scan_reserved_mem(void)
- 	}
- 
- 	fdt_scan_reserved_mem();
--	of_reserved_mem_init();
- 	fdt_reserve_elfcorehdr();
- }
- 
-diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
-index 784cfc5cd251..6dc22a1ad472 100644
---- a/drivers/of/of_reserved_mem.c
-+++ b/drivers/of/of_reserved_mem.c
-@@ -26,9 +26,8 @@
- 
- #include "of_private.h"
- 
--#define MAX_RESERVED_REGIONS	64
--static struct reserved_mem reserved_mems[MAX_RESERVED_REGIONS];
--static int reserved_mem_count;
-+static struct reserved_mem *reserved_mems;
-+static int reserved_mem_count, reserved_mem_max_count;
- 
- static int __init early_init_dt_alloc_reserved_memory_arch(phys_addr_t size,
- 	phys_addr_t align, phys_addr_t start, phys_addr_t end, bool nomap,
-@@ -62,7 +61,7 @@ static void __init fdt_reserved_mem_save_node(unsigned long node, const char *un
- {
- 	struct reserved_mem *rmem = &reserved_mems[reserved_mem_count];
- 
--	if (reserved_mem_count == ARRAY_SIZE(reserved_mems)) {
-+	if (reserved_mem_count == reserved_mem_max_count) {
- 		pr_err("not enough space for all defined regions.\n");
- 		return;
- 	}
-@@ -200,13 +199,12 @@ static int __init __reserved_mem_check_root(unsigned long node)
-  * __reserved_mem_reserve_reg() - reserve all memory described in 'reg' property
-  */
- static int __init __reserved_mem_reserve_reg(unsigned long node,
--					     const char *uname)
-+					     const char *uname, bool reserve_only)
- {
- 	int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
- 	phys_addr_t base, size;
- 	int len;
- 	const __be32 *prop;
--	int first = 1;
- 	bool nomap;
- 
- 	prop = of_get_flat_dt_prop(node, "reg", &len);
-@@ -225,30 +223,35 @@ static int __init __reserved_mem_reserve_reg(unsigned long node,
- 		base = dt_mem_next_cell(dt_root_addr_cells, &prop);
- 		size = dt_mem_next_cell(dt_root_size_cells, &prop);
- 
--		if (size &&
--		    early_init_dt_reserve_memory_arch(base, size, nomap) == 0)
--			pr_debug("Reserved memory: reserved region for node '%s': base %pa, size %lu MiB\n",
--				uname, &base, (unsigned long)(size / SZ_1M));
--		else
--			pr_info("Reserved memory: failed to reserve memory for node '%s': base %pa, size %lu MiB\n",
--				uname, &base, (unsigned long)(size / SZ_1M));
--
--		len -= t_len;
--		if (first) {
-+		if (reserve_only) {
-+			if (size &&
-+				early_init_dt_reserve_memory_arch(base, size, nomap) == 0)
-+				pr_debug("Reserved memory: reserved region for node '%s': base %pa, size %lu MiB\n",
-+					uname, &base, (unsigned long)(size / SZ_1M));
-+			else
-+				pr_info("Reserved memory: failed to reserve memory for node '%s': base %pa, size %lu MiB\n",
-+					uname, &base, (unsigned long)(size / SZ_1M));
-+		} else {
- 			fdt_reserved_mem_save_node(node, uname, base, size);
--			first = 0;
-+			break;
- 		}
-+		len -= t_len;
- 	}
- 	return 0;
- }
- 
- /*
-- * fdt_scan_reserved_mem() - scan a single FDT node for reserved memory
-+ * fdt_scan_reserved_mem() - scan /reserved-memory node
-+ *
-+ * Get the max count of regions in the first pass. Early allocator is
-+ * not fully available yet. Store information of reserved region to
-+ * reserved_mems array in the second pass.
-  */
- int __init fdt_scan_reserved_mem(void)
- {
--	int node, child;
-+	int node, child, regions = 0;
- 	const void *fdt = initial_boot_params;
-+	static bool first = true;
- 
- 	node = fdt_path_offset(fdt, "/reserved-memory");
- 	if (node < 0)
-@@ -266,12 +269,19 @@ int __init fdt_scan_reserved_mem(void)
- 		if (!of_fdt_device_is_available(fdt, child))
- 			continue;
- 
-+		regions++;
- 		uname = fdt_get_name(fdt, child, NULL);
- 
--		err = __reserved_mem_reserve_reg(child, uname);
--		if (err == -ENOENT && of_get_flat_dt_prop(child, "size", NULL))
-+		err = __reserved_mem_reserve_reg(child, uname, first);
-+		if (err == -ENOENT && of_get_flat_dt_prop(child, "size", NULL) && !first)
- 			fdt_reserved_mem_save_node(child, uname, 0, 0);
- 	}
-+
-+	if (first) {
-+		reserved_mem_max_count = regions;
-+		first = false;
-+	}
-+
- 	return 0;
- }
- 
-@@ -358,6 +368,20 @@ void __init of_reserved_mem_init(void)
- {
- 	int i;
- 
-+	if (!reserved_mem_max_count)
-+		return;
-+
-+	reserved_mems = memblock_alloc(
-+			sizeof(struct reserved_mem) * reserved_mem_max_count,
-+			SMP_CACHE_BYTES);
-+	if (!reserved_mems) {
-+		reserved_mem_max_count = 0;
-+		pr_err("failed to allocate reserved_mems array.\n");
-+		return;
-+	}
-+
-+	fdt_scan_reserved_mem();
-+
- 	/* check for overlapping reserved regions */
- 	__rmem_check_for_overlap();
- 
--- 
-2.30.2
+OK, thanks.
+
+> That's also why I dislike using kvm_get_running_vcpu(); when it's needed,=
+ there's
+> a valid vCPU from the caller, but it deliberately gets dropped and indire=
+ctly
+> picked back up.
+
+Yeah. So as things stand we have a kvm_write_guest() function which
+takes a 'struct kvm *', as well as a kvm_vcpu_write_guest() function
+which takes a 'struct kvm_vcpu *'.
+
+But it is verboten to *use* the kvm_write_guest() or mark_page_dirty()
+functions unless you actually *do* have an active vCPU. Do so, and the
+kernel might just crash; not even a graceful failure mode.
+
+That's a fairly awful bear trap that has now caught me *twice*. I'm
+kind of amused that in all my hairy inline asm and pinning and crap for
+guest memory access, the thing that's been *broken* is where I just
+used the *existing* kvm_write_wall_clock() which does the simple
+kvm_write_guest() thing.
+
+I think at the very least perhaps we should do something like this in
+mark_page_dirty_in_slot():
+
+ WARN_ON_ONCE(!kvm_get_running_vcpu() || kvm_get_running_vcpu()->kvm !=3D k=
+vm);
+
+(For illustration only; I'd actually use a local vcpu variable *and*
+pass that vcpu to kvm_dirty_ring_get())
+
+On propagating the caller's vcpu through and killing off the non-vCPU
+versions of the functions, I'm torn... because even if we insist on *a*
+vCPU being passed, it might be *the* vCPU, and that's just setting a
+more subtle trap (which would have bitten my GPC invalidate code, for
+example).
+
+There are other more complex approaches like adding an extra ring, with
+spinlocks, for the 'not from a vCPU' cases. But I think that's
+overkill.
+
+
+
+
+
+
+
+--=-xmDH/MHbX/vObHZ+w1qZ
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCECow
+ggUcMIIEBKADAgECAhEA4rtJSHkq7AnpxKUY8ZlYZjANBgkqhkiG9w0BAQsFADCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EwHhcNMTkwMTAyMDAwMDAwWhcNMjIwMTAxMjM1
+OTU5WjAkMSIwIAYJKoZIhvcNAQkBFhNkd213MkBpbmZyYWRlYWQub3JnMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAsv3wObLTCbUA7GJqKj9vHGf+Fa+tpkO+ZRVve9EpNsMsfXhvFpb8
+RgL8vD+L133wK6csYoDU7zKiAo92FMUWaY1Hy6HqvVr9oevfTV3xhB5rQO1RHJoAfkvhy+wpjo7Q
+cXuzkOpibq2YurVStHAiGqAOMGMXhcVGqPuGhcVcVzVUjsvEzAV9Po9K2rpZ52FE4rDkpDK1pBK+
+uOAyOkgIg/cD8Kugav5tyapydeWMZRJQH1vMQ6OVT24CyAn2yXm2NgTQMS1mpzStP2ioPtTnszIQ
+Ih7ASVzhV6csHb8Yrkx8mgllOyrt9Y2kWRRJFm/FPRNEurOeNV6lnYAXOymVJwIDAQABo4IB0zCC
+Ac8wHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFLfuNf820LvaT4AK
+xrGK3EKx1DE7MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAeBgNVHREEFzAVgRNkd213MkBpbmZy
+YWRlYWQub3JnMA0GCSqGSIb3DQEBCwUAA4IBAQALbSykFusvvVkSIWttcEeifOGGKs7Wx2f5f45b
+nv2ghcxK5URjUvCnJhg+soxOMoQLG6+nbhzzb2rLTdRVGbvjZH0fOOzq0LShq0EXsqnJbbuwJhK+
+PnBtqX5O23PMHutP1l88AtVN+Rb72oSvnD+dK6708JqqUx2MAFLMevrhJRXLjKb2Mm+/8XBpEw+B
+7DisN4TMlLB/d55WnT9UPNHmQ+3KFL7QrTO8hYExkU849g58Dn3Nw3oCbMUgny81ocrLlB2Z5fFG
+Qu1AdNiBA+kg/UxzyJZpFbKfCITd5yX49bOriL692aMVDyqUvh8fP+T99PqorH4cIJP6OxSTdxKM
+MIIFHDCCBASgAwIBAgIRAOK7SUh5KuwJ6cSlGPGZWGYwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTE5MDEwMjAwMDAwMFoXDTIyMDEwMTIz
+NTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCASIwDQYJKoZIhvcN
+AQEBBQADggEPADCCAQoCggEBALL98Dmy0wm1AOxiaio/bxxn/hWvraZDvmUVb3vRKTbDLH14bxaW
+/EYC/Lw/i9d98CunLGKA1O8yogKPdhTFFmmNR8uh6r1a/aHr301d8YQea0DtURyaAH5L4cvsKY6O
+0HF7s5DqYm6tmLq1UrRwIhqgDjBjF4XFRqj7hoXFXFc1VI7LxMwFfT6PStq6WedhROKw5KQytaQS
+vrjgMjpICIP3A/CroGr+bcmqcnXljGUSUB9bzEOjlU9uAsgJ9sl5tjYE0DEtZqc0rT9oqD7U57My
+ECIewElc4VenLB2/GK5MfJoJZTsq7fWNpFkUSRZvxT0TRLqznjVepZ2AFzsplScCAwEAAaOCAdMw
+ggHPMB8GA1UdIwQYMBaAFIKvbIz4xf6WYXzoHz0rcUhexIvAMB0GA1UdDgQWBBS37jX/NtC72k+A
+CsaxitxCsdQxOzAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAdBgNVHSUEFjAUBggrBgEF
+BQcDBAYIKwYBBQUHAwIwRgYDVR0gBD8wPTA7BgwrBgEEAbIxAQIBAwUwKzApBggrBgEFBQcCARYd
+aHR0cHM6Ly9zZWN1cmUuY29tb2RvLm5ldC9DUFMwWgYDVR0fBFMwUTBPoE2gS4ZJaHR0cDovL2Ny
+bC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFp
+bENBLmNybDCBiwYIKwYBBQUHAQEEfzB9MFUGCCsGAQUFBzAChklodHRwOi8vY3J0LmNvbW9kb2Nh
+LmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3J0MCQG
+CCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAC20spBbrL71ZEiFrbXBHonzhhirO1sdn+X+O
+W579oIXMSuVEY1LwpyYYPrKMTjKECxuvp24c829qy03UVRm742R9Hzjs6tC0oatBF7KpyW27sCYS
+vj5wbal+TttzzB7rT9ZfPALVTfkW+9qEr5w/nSuu9PCaqlMdjABSzHr64SUVy4ym9jJvv/FwaRMP
+gew4rDeEzJSwf3eeVp0/VDzR5kPtyhS+0K0zvIWBMZFPOPYOfA59zcN6AmzFIJ8vNaHKy5QdmeXx
+RkLtQHTYgQPpIP1Mc8iWaRWynwiE3ecl+PWzq4i+vdmjFQ8qlL4fHz/k/fT6qKx+HCCT+jsUk3cS
+jDCCBeYwggPOoAMCAQICEGqb4Tg7/ytrnwHV2binUlYwDQYJKoZIhvcNAQEMBQAwgYUxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMSswKQYDVQQDEyJDT01PRE8gUlNBIENlcnRpZmljYXRp
+b24gQXV0aG9yaXR5MB4XDTEzMDExMDAwMDAwMFoXDTI4MDEwOTIzNTk1OVowgZcxCzAJBgNVBAYT
+AkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNV
+BAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAvrOeV6wodnVAFsc4A5jTxhh2IVDzJXkLTLWg0X06WD6cpzEup/Y0dtmEatrQPTRI5Or1u6zf
++bGBSyD9aH95dDSmeny1nxdlYCeXIoymMv6pQHJGNcIDpFDIMypVpVSRsivlJTRENf+RKwrB6vcf
+WlP8dSsE3Rfywq09N0ZfxcBa39V0wsGtkGWC+eQKiz4pBZYKjrc5NOpG9qrxpZxyb4o4yNNwTqza
+aPpGRqXB7IMjtf7tTmU2jqPMLxFNe1VXj9XB1rHvbRikw8lBoNoSWY66nJN/VCJv5ym6Q0mdCbDK
+CMPybTjoNCQuelc0IAaO4nLUXk0BOSxSxt8kCvsUtQIDAQABo4IBPDCCATgwHwYDVR0jBBgwFoAU
+u69+Aj36pvE8hI6t7jiY7NkyMtQwHQYDVR0OBBYEFIKvbIz4xf6WYXzoHz0rcUhexIvAMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0gADBMBgNVHR8E
+RTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9u
+QXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29t
+b2RvY2EuY29tL0NPTU9ET1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2Nz
+cC5jb21vZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAHhcsoEoNE887l9Wzp+XVuyPomsX9vP2
+SQgG1NgvNc3fQP7TcePo7EIMERoh42awGGsma65u/ITse2hKZHzT0CBxhuhb6txM1n/y78e/4ZOs
+0j8CGpfb+SJA3GaBQ+394k+z3ZByWPQedXLL1OdK8aRINTsjk/H5Ns77zwbjOKkDamxlpZ4TKSDM
+KVmU/PUWNMKSTvtlenlxBhh7ETrN543j/Q6qqgCWgWuMAXijnRglp9fyadqGOncjZjaaSOGTTFB+
+E2pvOUtY+hPebuPtTbq7vODqzCM6ryEhNhzf+enm0zlpXK7q332nXttNtjv7VFNYG+I31gnMrwfH
+M5tdhYF/8v5UY5g2xANPECTQdu9vWPoqNSGDt87b3gXb1AiGGaI06vzgkejL580ul+9hz9D0S0U4
+jkhJiA7EuTecP/CFtR72uYRBcunwwH3fciPjviDDAI9SnC/2aPY8ydehzuZutLbZdRJ5PDEJM/1t
+yZR2niOYihZ+FCbtf3D9mB12D4ln9icgc7CwaxpNSCPt8i/GqK2HsOgkL3VYnwtx7cJUmpvVdZ4o
+gnzgXtgtdk3ShrtOS1iAN2ZBXFiRmjVzmehoMof06r1xub+85hFQzVxZx5/bRaTKTlL8YXLI8nAb
+R9HWdFqzcOoB/hxfEyIQpx9/s81rgzdEZOofSlZHynoSMYIDyjCCA8YCAQEwga0wgZcxCzAJBgNV
+BAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAY
+BgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0wOwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRo
+ZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA4rtJSHkq7AnpxKUY8ZlYZjANBglghkgB
+ZQMEAgEFAKCCAe0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEx
+MTE5MDkyMzI5WjAvBgkqhkiG9w0BCQQxIgQgYBPnOfezXAI1Dz5ZIzzHmzK6Tix24bzqjA6w6fcr
+80Qwgb4GCSsGAQQBgjcQBDGBsDCBrTCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIg
+TWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQx
+PTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
+aWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMIHABgsqhkiG9w0BCRACCzGBsKCBrTCBlzELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgG
+A1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNVBAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEQDiu0lIeSrsCenEpRjxmVhmMA0GCSqGSIb3
+DQEBAQUABIIBAJkAuuqmZfjnN/z7/Qz5/AZcufBNujk/j0m6tIbcYwlAehdBCuQoYVIqOdYqbyz1
+j6fr1kqYb8L/RbwbgbkGiaQYVr1zCihUxCRhod1IrxwSFxuzE5ZscqSey9Pe+hj2FLdpzmWGisZI
+ask6dQLyY3fuDrojgJlZ3eExbuKAOyfNPpfI6hH8VU5LpGnLpy/w+17wiIAmKKMpmbmDtlDbf5mc
+dS6b3vAEoIxJcxHNUK/1rUzA6/4QmzBo8ZgzbbTEgfV+/1X4QUTPQwYshqMjEF9wf0U5a7DDXjjo
++60jAPWFapK41pjV4W5WnC1FUB/3N0An+J85h5+5dEgqx4dNyRsAAAAAAAA=
+
+
+--=-xmDH/MHbX/vObHZ+w1qZ--
 
