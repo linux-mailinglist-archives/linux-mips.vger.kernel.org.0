@@ -2,103 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCBC4589F7
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Nov 2021 08:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F5C458C27
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Nov 2021 11:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238832AbhKVHoj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Nov 2021 02:44:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232870AbhKVHoe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 22 Nov 2021 02:44:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E74860E96;
-        Mon, 22 Nov 2021 07:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637566877;
-        bh=LvPHFzOeLqsay8wVm6ou1s6YcS6M7oKO3oa1ezBZ9Hw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BpPhTRNJGw5EhiVUs0VvbvRSCr6LAzptLuoEGjdmAtJjcGLERdZGV4lEFc9233pO+
-         jaQh8df6wlqSU4A0CL30h6VXZ5sD4HujS12DGol7cnqXaeDHPerKQvUAvhg/tq7IKo
-         0j9pIS4VX3iSPWi3Y3kJZr9BPJ28CQ328MRnvPwMl6k7QPW24NbjtQ9FHcm8dzGcMn
-         vSVkHLwo+VCUTayw5kfMIejTwtWma+95RjQSkyo8ohI65MsxsxxpzBLWgXnDLs1iZI
-         RAqxWQyYEb8Ji62l68y9/pT+ki9o3r2f38n+eS2pnJv8VhxmLPAHbvXUsjo8ntXkd2
-         s5bygdWGABXwA==
-Date:   Mon, 22 Nov 2021 08:41:13 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        George Cherian <gcherian@marvell.com>,
-        Mark Brown <broonie@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove Netlogic bindings
-Message-ID: <YZtJme/3TEOxBVl3@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        George Cherian <gcherian@marvell.com>,
-        Mark Brown <broonie@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org
-References: <20211109161707.2209170-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="XZBCKHgU11ItvwWY"
-Content-Disposition: inline
-In-Reply-To: <20211109161707.2209170-1-robh@kernel.org>
+        id S238838AbhKVKUx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 22 Nov 2021 05:20:53 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:33114 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236312AbhKVKUw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 22 Nov 2021 05:20:52 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxZ+hCbpthlxkAAA--.616S2;
+        Mon, 22 Nov 2021 18:17:38 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Fix using smp_processor_id() in preemptible in show_cpuinfo()
+Date:   Mon, 22 Nov 2021 18:17:37 +0800
+Message-Id: <1637576257-11590-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9AxZ+hCbpthlxkAAA--.616S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF47JF1Dur17Zr47ZryftFb_yoW8CFy3pa
+        y7ArW8tr4UWw4DJa4rJrZagryrXFs8Za4IkayxJ3y3Za15WF1DXrnaqF4xuFyqgr4rta1I
+        gF9FqF4Yga48ZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VAC
+        jcxG62k0Y48FwI0_Jr0_Gr1lYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
+        YI8I648v4I1lc2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JU38n5UUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+There exists the following issue under DEBUG_PREEMPT:
 
---XZBCKHgU11ItvwWY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+ BUG: using smp_processor_id() in preemptible [00000000] code: systemd/1
+ caller is show_cpuinfo+0x460/0xea0
+ ...
+ Call Trace:
+ [<ffffffff8020f0dc>] show_stack+0x94/0x128
+ [<ffffffff80e6cab4>] dump_stack_lvl+0x94/0xd8
+ [<ffffffff80e74c5c>] check_preemption_disabled+0x104/0x110
+ [<ffffffff802209c8>] show_cpuinfo+0x460/0xea0
+ [<ffffffff80539d54>] seq_read_iter+0xfc/0x4f8
+ [<ffffffff804fcc10>] new_sync_read+0x110/0x1b8
+ [<ffffffff804ff57c>] vfs_read+0x1b4/0x1d0
+ [<ffffffff804ffb18>] ksys_read+0xd0/0x110
+ [<ffffffff8021c090>] syscall_common+0x34/0x58
 
-On Tue, Nov 09, 2021 at 10:17:07AM -0600, Rob Herring wrote:
-> Support for Netlogic was removed in commit 95b8a5e0111a ("MIPS: Remove
-> NETLOGIC support"). Remove the now unused bindings.
->=20
-> The GPIO binding also includes "brcm,vulcan-gpio", but it appears to be
-> unused as well as Broadcom Vulkan became Cavium ThunderX2 which is ACPI
-> based.
->=20
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: George Cherian <gcherian@marvell.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: linux-spi@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+We can see the following call trace:
+ show_cpuinfo()
+   cpu_has_fpu
+     current_cpu_data
+       smp_processor_id()
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+ $ addr2line -f -e vmlinux 0xffffffff802209c8
+ show_cpuinfo
+ arch/mips/kernel/proc.c:188
 
---XZBCKHgU11ItvwWY
-Content-Type: application/pgp-signature; name="signature.asc"
+ $ head -188 arch/mips/kernel/proc.c | tail -1
+	 if (cpu_has_fpu)
 
------BEGIN PGP SIGNATURE-----
+ arch/mips/include/asm/cpu-features.h
+ #  define cpu_has_fpu		(current_cpu_data.options & MIPS_CPU_FPU)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGbSZkACgkQFA3kzBSg
-KbbFTQ//WZUp3eYt6NdLKHHEYSr3OSZTJUWKoTi9oPPq2qjKowqcKE8I3bNPqdq+
-OEXvxEQKCe008GcFByplZitwmV/zGJSJBgjUgnnEfwo+QTPcYEzb7waEJgEur4wu
-xUni8WlOkzxpfq7c6pgQN5h2VgzOz+Fe1uLVcoyZzlm4Jdwo7HlOsNLpysuQaeyg
-xp5LYHGHTjlCgt6XCtJnpGTpsiITQMY7aH+lU+yFDUdhIpsEq95kIbR4+OsTlodS
-BQvz/q5bl4GS6g/SalnAkWNrz+dr0VVT9M0J18o7LNsJTXb2cByYBWuLDmHyfi1i
-X2vB2mdn865u/3GAi67wpGXxZ1ZVS79UesPsfvzVBWPrp2hUp7cztV3PQhFGPfGw
-EzfbzldiUyS43IRdhUwbScz5DentHg5UnPwHtcEU/Usvojy8D5O2h7Pai8heI5F/
-9Jig2zKzHRQsaOItyea2eVQZlSAUxSIm0YY8B91LPCcrGF5fvNbx6tT4JDf+1W5I
-q3cY1dUTIBbrCCu1to/UAqsDRMwUEdoJanfILL2r9pLThKr9xS5nSF2qQmDx5gwB
-DgLg9R9AQ/zKTV9HW9MbNA6hKM8ECiiNdGEbH2eQlSLN84dAEJj1SO7jCJqc62DG
-nn5fNwuw1veaFttwNuvhfJFSRHrGfAlyQTZhQmcx9ofaWOFXm38=
-=Rl8m
------END PGP SIGNATURE-----
+ arch/mips/include/asm/cpu-info.h
+ #define current_cpu_data cpu_data[smp_processor_id()]
 
---XZBCKHgU11ItvwWY--
+Based on the above analysis, fix the issue by disabling preemption
+around cpu_has_fpu in show_cpuinfo().
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/mips/kernel/proc.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
+index 376a6e2..c6c2661 100644
+--- a/arch/mips/kernel/proc.c
++++ b/arch/mips/kernel/proc.c
+@@ -185,8 +185,10 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+ 		seq_puts(m, " tx39_cache");
+ 	if (cpu_has_octeon_cache)
+ 		seq_puts(m, " octeon_cache");
++	preempt_disable();
+ 	if (cpu_has_fpu)
+ 		seq_puts(m, " fpu");
++	preempt_enable();
+ 	if (cpu_has_32fpr)
+ 		seq_puts(m, " 32fpr");
+ 	if (cpu_has_cache_cdex_p)
+-- 
+2.1.0
+
