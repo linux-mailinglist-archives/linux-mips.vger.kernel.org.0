@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E60145AD02
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Nov 2021 21:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 318ED45AD14
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Nov 2021 21:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbhKWUJR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 23 Nov 2021 15:09:17 -0500
-Received: from aposti.net ([89.234.176.197]:36522 "EHLO aposti.net"
+        id S239420AbhKWUNa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 23 Nov 2021 15:13:30 -0500
+Received: from aposti.net ([89.234.176.197]:37796 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229959AbhKWUJR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Nov 2021 15:09:17 -0500
-Date:   Tue, 23 Nov 2021 20:05:40 +0000
+        id S236228AbhKWUN3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 23 Nov 2021 15:13:29 -0500
+Date:   Tue, 23 Nov 2021 20:10:00 +0000
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v8 4/8] drm/ingenic: Add dw-hdmi driver for jz4780
+Subject: Re: [PATCH v8 6/8] MIPS: DTS: CI20: Add DT nodes for HDMI setup
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -39,10 +39,10 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org
-Message-Id: <GTJ13R.RSQAWZX83DUZ2@crapouillou.net>
-In-Reply-To: <64c6ab288d4d7159f633c860f1b23b3395491ae1.1637691240.git.hns@goldelico.com>
+Message-Id: <O0K13R.TIL3JBQ5L8TO1@crapouillou.net>
+In-Reply-To: <d62023e0872e9b393db736f4a0ecf04b3fc1c91b.1637691240.git.hns@goldelico.com>
 References: <cover.1637691240.git.hns@goldelico.com>
-        <64c6ab288d4d7159f633c860f1b23b3395491ae1.1637691240.git.hns@goldelico.com>
+        <d62023e0872e9b393db736f4a0ecf04b3fc1c91b.1637691240.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: 8BIT
@@ -52,220 +52,156 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Nikolaus,
 
-I keep seeing a few things, sorry.
-
-
-Le mar., nov. 23 2021 at 19:13:57 +0100, H. Nikolaus Schaller 
+Le mar., nov. 23 2021 at 19:13:59 +0100, H. Nikolaus Schaller 
 <hns@goldelico.com> a écrit :
 > From: Paul Boddie <paul@boddie.org.uk>
 > 
-> A specialisation of the generic Synopsys HDMI driver is employed for
-> JZ4780 HDMI support. This requires a new driver, plus device tree and
-> configuration modifications.
-> 
-> Here we add Kconfig DRM_INGENIC_DW_HDMI, Makefile and driver code.
+> We need to hook up
+> * HDMI connector
+> * HDMI power regulator
+> * JZ4780_CLK_HDMI @ 27 MHz
+> * DDC pinmux
+> * HDMI and LCDC endpoint connections
 > 
 > Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 > Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 > ---
->  drivers/gpu/drm/ingenic/Kconfig           |   9 ++
->  drivers/gpu/drm/ingenic/Makefile          |   1 +
->  drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 129 
-> ++++++++++++++++++++++
->  3 files changed, 139 insertions(+)
->  create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+>  arch/mips/boot/dts/ingenic/ci20.dts | 83 
+> +++++++++++++++++++++++++++--
+>  1 file changed, 80 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/ingenic/Kconfig 
-> b/drivers/gpu/drm/ingenic/Kconfig
-> index 3b57f8be007c4..4efc709d77b0a 100644
-> --- a/drivers/gpu/drm/ingenic/Kconfig
-> +++ b/drivers/gpu/drm/ingenic/Kconfig
-> @@ -25,4 +25,13 @@ config DRM_INGENIC_IPU
+> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts 
+> b/arch/mips/boot/dts/ingenic/ci20.dts
+> index b249a4f0f6b62..15cf03670693f 100644
+> --- a/arch/mips/boot/dts/ingenic/ci20.dts
+> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
+> @@ -78,6 +78,18 @@ eth0_power: fixedregulator@0 {
+>  		enable-active-high;
+>  	};
 > 
->  	  The Image Processing Unit (IPU) will appear as a second primary 
-> plane.
+> +	hdmi_out: connector {
+> +		compatible = "hdmi-connector";
+> +		label = "HDMI OUT";
+> +		type = "a";
+> +
+> +		port {
+> +			hdmi_con: endpoint {
+> +				remote-endpoint = <&dw_hdmi_out>;
+> +			};
+> +		};
+> +	};
+> +
+>  	ir: ir {
+>  		compatible = "gpio-ir-receiver";
+>  		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
+> @@ -102,6 +114,17 @@ otg_power: fixedregulator@2 {
+>  		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
+>  		enable-active-high;
+>  	};
+> +
+> +	hdmi_power: fixedregulator@3 {
+> +		compatible = "regulator-fixed";
+> +
+> +		regulator-name = "hdmi_power";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +
+> +		gpio = <&gpa 25 0>;
+> +		enable-active-high;
+> +	};
+>  };
 > 
-> +config DRM_INGENIC_DW_HDMI
-> +	tristate "Ingenic specific support for Synopsys DW HDMI"
-> +	depends on MACH_JZ4780
-> +	select DRM_DW_HDMI
-> +	help
-> +	  Choose this option to enable Synopsys DesignWare HDMI based 
-> driver.
-> +	  If you want to enable HDMI on Ingenic JZ4780 based SoC, you should
-> +	  select this option..
-> +
->  endif
-> diff --git a/drivers/gpu/drm/ingenic/Makefile 
-> b/drivers/gpu/drm/ingenic/Makefile
-> index d313326bdddbb..f10cc1c5a5f22 100644
-> --- a/drivers/gpu/drm/ingenic/Makefile
-> +++ b/drivers/gpu/drm/ingenic/Makefile
-> @@ -1,3 +1,4 @@
->  obj-$(CONFIG_DRM_INGENIC) += ingenic-drm.o
->  ingenic-drm-y = ingenic-drm-drv.o
->  ingenic-drm-$(CONFIG_DRM_INGENIC_IPU) += ingenic-ipu.o
-> +obj-$(CONFIG_DRM_INGENIC_DW_HDMI) += ingenic-dw-hdmi.o
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c 
-> b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> new file mode 100644
-> index 0000000000000..c14890d6b9826
-> --- /dev/null
-> +++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> @@ -0,0 +1,129 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
-> + * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
-> + *
-> + * Derived from dw_hdmi-imx.c with i.MX portions removed.
-> + * Probe and remove operations derived from rcar_dw_hdmi.c.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <drm/bridge/dw_hdmi.h>
-> +#include <drm/drm_of.h>
-> +#include <drm/drm_print.h>
-> +
-> +static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] = {
-> +	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2, 
-> 0x0000 } } },
-> +	{ 92500000,  { { 0x0140, 0x0005 }, { 0x2141, 0x0005 }, { 0x4142, 
-> 0x0005 } } },
-> +	{ 148500000, { { 0x00a0, 0x000a }, { 0x20a1, 0x000a }, { 0x40a2, 
-> 0x000a } } },
-> +	{ 216000000, { { 0x00a0, 0x000a }, { 0x2001, 0x000f }, { 0x4002, 
-> 0x000f } } },
-> +	{ ~0UL,      { { 0x0000, 0x0000 }, { 0x0000, 0x0000 }, { 0x0000, 
-> 0x0000 } } }
-> +};
-> +
-> +static const struct dw_hdmi_curr_ctrl ingenic_cur_ctr[] = {
-> +	/*pixelclk     bpp8    bpp10   bpp12 */
-> +	{ 54000000,  { 0x091c, 0x091c, 0x06dc } },
-> +	{ 58400000,  { 0x091c, 0x06dc, 0x06dc } },
-> +	{ 72000000,  { 0x06dc, 0x06dc, 0x091c } },
-> +	{ 74250000,  { 0x06dc, 0x0b5c, 0x091c } },
-> +	{ 118800000, { 0x091c, 0x091c, 0x06dc } },
-> +	{ 216000000, { 0x06dc, 0x0b5c, 0x091c } },
-> +	{ ~0UL,      { 0x0000, 0x0000, 0x0000 } },
-> +};
-> +
-> +/*
-> + * Resistance term 133Ohm Cfg
-> + * PREEMP config 0.00
-> + * TX/CK level 10
-> + */
-> +static const struct dw_hdmi_phy_config ingenic_phy_config[] = {
-> +	/*pixelclk   symbol   term   vlev */
-> +	{ 216000000, 0x800d, 0x0005, 0x01ad},
-> +	{ ~0UL,      0x0000, 0x0000, 0x0000}
-> +};
-> +
-> +static enum drm_mode_status
-> +ingenic_dw_hdmi_mode_valid(struct dw_hdmi *hdmi, void *data,
-> +			   const struct drm_display_info *info,
-> +			   const struct drm_display_mode *mode)
-> +{
-> +	if (mode->clock < 13500)
-> +		return MODE_CLOCK_LOW;
-> +	/* FIXME: Hardware is capable of 270MHz, but setup data is missing. 
-> */
-> +	if (mode->clock > 216000)
-> +		return MODE_CLOCK_HIGH;
-> +
-> +	return MODE_OK;
-> +}
-> +
-> +static struct dw_hdmi_plat_data ingenic_dw_hdmi_plat_data = {
-> +	.mpll_cfg   = ingenic_mpll_cfg,
-> +	.cur_ctr    = ingenic_cur_ctr,
-> +	.phy_config = ingenic_phy_config,
-> +	.mode_valid = ingenic_dw_hdmi_mode_valid,
-> +	.output_port	= 1,
-> +};
-> +
-> +static const struct of_device_id ingenic_dw_hdmi_dt_ids[] = {
-> +	{ .compatible = "ingenic,jz4780-dw-hdmi" },
-> +	{ /* Sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
-> +
-> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
-> +{
-> +	struct dw_hdmi *hdmi;
-> +	struct regulator *regulator;
-> +	int ret;
-> +
-> +	hdmi = dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
-> +	if (IS_ERR(hdmi))
-> +		return PTR_ERR(hdmi);
-> +
-> +	platform_set_drvdata(pdev, hdmi);
-> +
-> +	regulator = devm_regulator_get_optional(&pdev->dev, "hdmi-5v");
-> +
+>  &ext {
+> @@ -114,11 +137,13 @@ &cgu {
+>  	 * precision.
+>  	 */
+>  	assigned-clocks = <&cgu JZ4780_CLK_OTGPHY>, <&cgu JZ4780_CLK_RTC>,
+> -			  <&cgu JZ4780_CLK_SSIPLL>, <&cgu JZ4780_CLK_SSI>;
+> +			  <&cgu JZ4780_CLK_SSIPLL>, <&cgu JZ4780_CLK_SSI>,
+> +			  <&cgu JZ4780_CLK_HDMI>;
+>  	assigned-clock-parents = <0>, <&cgu JZ4780_CLK_RTCLK>,
+>  				 <&cgu JZ4780_CLK_MPLL>,
+> -				 <&cgu JZ4780_CLK_SSIPLL>;
+> -	assigned-clock-rates = <48000000>, <0>, <54000000>;
+> +				 <&cgu JZ4780_CLK_SSIPLL>,
+> +				 <0>;
 
-Nit - you can remove this blank line.
+Nit - you can remove the last <0>, it will be the default.
 
-> +	if (IS_ERR(regulator)) {
-> +		ret = PTR_ERR(regulator);
+> +	assigned-clock-rates = <48000000>, <0>, <54000000>, <0>, <27000000>;
+>  };
+> 
+>  &tcu {
+> @@ -509,6 +534,19 @@ pins_i2c4: i2c4 {
+>  		bias-disable;
+>  	};
+> 
+> +	pins_hdmi_ddc: hdmi_ddc {
+> +		function = "hdmi-ddc";
+> +		groups = "hdmi-ddc";
+> +		bias-disable;
+> +	};
 > +
-> +		DRM_DEV_ERROR(&pdev->dev, "failed to get hpd regulator: %s (%d)\n",
-> +			      "hdmi-5v", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = regulator_enable(regulator);
+> +	/* switch to PF25 as gpio driving DDC_SDA low */
+> +	pins_hdmi_ddc_unwedge: hdmi_ddc {
+> +		function = "hdmi-ddc";
+> +		groups = "hdmi-ddc";
+> +		bias-disable;
+> +	};
 
-You used devm_regulator_get_optional(), so you are not guaranteed to 
-obtain anything; your "regulator" variable might be a NULL pointer, so 
-you can't just call regulator_enable() without checking it first.
-
-> +	if (ret) {
-> +		DRM_DEV_ERROR(&pdev->dev, "Failed to enable hpd regulator: %d\n",
-> +			      ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int ingenic_dw_hdmi_remove(struct platform_device *pdev)
-> +{
-> +	struct dw_hdmi *hdmi = platform_get_drvdata(pdev);
-> +
-> +	dw_hdmi_remove(hdmi);
-
-You probably should disable the regulator (if not NULL) here.
-
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver ingenic_dw_hdmi_driver = {
-> +	.probe  = ingenic_dw_hdmi_probe,
-> +	.remove = ingenic_dw_hdmi_remove,
-> +	.driver = {
-> +		.name = "dw-hdmi-ingenic",
-> +		.of_match_table = ingenic_dw_hdmi_dt_ids,
-> +	},
-> +};
-> +
-
-Nit - remove this blank line too.
+Your pins_hdmi_ddc and pins_hdmi_ddc_unwedge are the exact same? You 
+could just use the former and pass it to both pinctrl-0 and pinctrl-1.
 
 Cheers,
 -Paul
 
-> +module_platform_driver(ingenic_dw_hdmi_driver);
 > +
-> +MODULE_DESCRIPTION("JZ4780 Specific DW-HDMI Driver Extension");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:dwhdmi-ingenic");
+>  	pins_nemc: nemc {
+>  		function = "nemc";
+>  		groups = "nemc-data", "nemc-cle-ale", "nemc-rd-we", "nemc-frd-fwe";
+> @@ -539,3 +577,42 @@ pins_mmc1: mmc1 {
+>  		bias-disable;
+>  	};
+>  };
+> +
+> +&hdmi {
+> +	status = "okay";
+> +
+> +	pinctrl-names = "default", "unwedge";
+> +	pinctrl-0 = <&pins_hdmi_ddc>;
+> +	pinctrl-1 = <&pins_hdmi_ddc_unwedge>;
+> +
+> +	hdmi-5v-supply = <&hdmi_power>;
+> +
+> +	ports {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		port@0 {
+> +			reg = <0>;
+> +			dw_hdmi_in: endpoint {
+> +				remote-endpoint = <&lcd_out>;
+> +			};
+> +		};
+> +
+> +		port@1 {
+> +			reg = <1>;
+> +			dw_hdmi_out: endpoint {
+> +				remote-endpoint = <&hdmi_con>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&lcdc0 {
+> +	status = "okay";
+> +
+> +	port {
+> +		lcd_out: endpoint {
+> +			remote-endpoint = <&dw_hdmi_in>;
+> +		};
+> +	};
+> +};
 > --
 > 2.33.0
 > 
