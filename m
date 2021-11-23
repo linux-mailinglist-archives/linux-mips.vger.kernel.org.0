@@ -2,76 +2,170 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CB145A86D
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Nov 2021 17:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E9245AA5D
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Nov 2021 18:46:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239323AbhKWQlR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Nov 2021 11:41:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45552 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238906AbhKWQkk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Nov 2021 11:40:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A6FF460FE3;
-        Tue, 23 Nov 2021 16:37:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637685452;
-        bh=WKFuSZs7TvQ0plzPL1JN89aERWNX28JCoIhsqX/IAsY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b3KT4T8tnR974WoHzuy2bHlzjCpEsapfz7sJCAaS+8zROOIUWM6qRtSmEYVhfWpkE
-         A50asATh3Oy8u2HRuSlt0XUZjCY7jLgslklX6IP3vhMaCf3XC9Hr/57YIpSAuI6+gL
-         WB78/Sya/HKRPEhp4r58htskH4/m32GNtDIMsY5NyhWulRyD9ZQvjJMgcba41G6/vy
-         GFidxjsBbxVErNLU0Hox3BGKiJrRxBKLCbppkzS5rtUkKDVE+i+GIJ1pZb02CfOuLP
-         JOdGEmduIRNuuSRzIuVyO7s/w4Ibiq4ZiG5ftyG9RtVJ1mEmILCqpMwJ/SCevUlVpG
-         8l+lEMEwga+mA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, chenhuacai@kernel.org,
-        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH MANUALSEL 4.14 3/3] KVM: MIPS: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
-Date:   Tue, 23 Nov 2021 11:37:24 -0500
-Message-Id: <20211123163725.289694-3-sashal@kernel.org>
+        id S239430AbhKWRtw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Nov 2021 12:49:52 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.169]:31890 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233738AbhKWRtu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Nov 2021 12:49:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1637689585;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=1kp1WMmPJZcNEz9qw8dDhEvO5OWqK1xcrr8tx9qQAO0=;
+    b=HQmYyrSce61xwPA/v1fZixLCDtBRBlRJP0YHcG2Tfin/ohVQ813HWdgxMs7CimJEKa
+    9KuFO+TuPJOuowA3wBSVCkDCFrPxxR+3ZtqQMa5QLlPJSCwF6UzsRWK+n//nJuzB0s0U
+    FFpoW84ZPEuQLDmE7xibLiSaKBrk/NIWaftQUQyXPhtF5zyKFlraCeNy+HtAYFLNOn02
+    I6G9UDpxap0CuTW5owyomQN8bE+1BR7QCH9QpI1A02LKxLCCJCk9BmC9TxpbUXSpIDOv
+    +Ybk6N+F6sBGyWhCgt5urO3fNqNZj0xyFUAVLWlB5YuFRJudDM6YD0EHvRNU31foTHiE
+    8nKw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lByOdcKVX0"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.34.6 DYNA|AUTH)
+    with ESMTPSA id g09b5fxANHkO7fl
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 23 Nov 2021 18:46:24 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v7 0/8] MIPS: JZ4780 and CI20 HDMI
+Date:   Tue, 23 Nov 2021 18:46:15 +0100
+Message-Id: <cover.1637689583.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211123163725.289694-1-sashal@kernel.org>
-References: <20211123163725.289694-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+PATCH V7 2021-11-23 18:46:23:
+- changed gpio polarity of hdmi_power to 0 (suggested by paul@crapouillou.net)
+- fixed LCD1 irq number (bug found by paul@crapouillou.net)
+- removed "- 4" for calculating max_register (suggested by paul@crapouillou.net)
+- use unevaluatedPropertes instead of additionalProperties (suggested by robh@kernel.org)
+- moved and renamed ingenic,jz4780-hdmi.yaml (suggested by robh@kernel.org)
+- adjusted assigned-clocks changes to upstream which added some for SSI (by hns@goldelico.com)
+- rebased and tested with v5.16-rc2 + patch set drm/ingenic by paul@crapouillou.net (by hns@goldelico.com)
 
-[ Upstream commit 57a2e13ebdda8b65602b44ec8b80e385603eb84c ]
+PATCH V6 2021-11-10 20:43:33:
+- changed CONFIG_DRM_INGENIC_DW_HDMI to "m" (by hns@goldelico.com)
+- made ingenic-dw-hdmi an independent platform driver which can be compiled as module
+  and removed error patch fixes for IPU (suggested by paul@crapouillou.net)
+- moved assigned-clocks from jz4780.dtsi to ci20.dts (suggested by paul@crapouillou.net)
+- fixed reg property in jz4780.dtsi to cover all registers incl. gamma and vee (by hns@goldelico.com)
+- added a base patch to calculate regmap size from DTS reg property (requested by paul@crapouillou.net)
+- restored resetting all bits except one in LCDOSDC (requested by paul@crapouillou.net)
+- clarified setting of cpos (suggested by paul@crapouillou.net)
+- moved bindings definition for ddc-i2c-bus (suggested by paul@crapouillou.net)
+- simplified mask definitions for JZ_LCD_DESSIZE (requested by paul@crapouillou.net)
+- removed setting alpha premultiplication (suggested by paul@crapouillou.net)
+- removed some comments (suggested by paul@crapouillou.net)
 
-It doesn't make sense to return the recommended maximum number of
-vCPUs which exceeds the maximum possible number of vCPUs.
+PATCH V5 2021-10-05 14:28:44:
+- dropped mode_fixup and timings support in dw-hdmi as it is no longer needed in this V5 (by hns@goldelico.com)
+- dropped "drm/ingenic: add some jz4780 specific features" (stimulated by paul@crapouillou.net)
+- fixed typo in commit subject: "synopsis" -> "synopsys" (by hns@goldelico.com)
+- swapped clocks in jz4780.dtsi to match synopsys,dw-hdmi.yaml (by hns@goldelico.com)
+- improved, simplified, fixed, dtbschecked ingenic-jz4780-hdmi.yaml and made dependent of bridge/synopsys,dw-hdmi.yaml (based on suggestions by maxime@cerno.tech)
+- fixed binding vs. driver&DTS use of hdmi-5v regulator (suggested by maxime@cerno.tech)
+- dropped "drm/bridge: synopsis: Fix to properly handle HPD" - was a no longer needed workaround for a previous version
+  (suggested by maxime@cerno.tech)
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20211116163443.88707-3-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/kvm/mips.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+PATCH V4 2021-09-27 18:44:38:
+- fix setting output_port = 1 (issue found by paul@crapouillou.net)
+- ci20.dts: convert to use hdmi-connector (by hns@goldelico.com)
+- add a hdmi-regulator to control +5V power (by hns@goldelico.com)
+- added a fix to dw-hdmi to call drm_kms_helper_hotplug_event on plugin event detection (by hns@goldelico.com)
+- always allocate extended descriptor but initialize only for jz4780 (by hns@goldelico.com)
+- updated to work on top of "[PATCH v3 0/6] drm/ingenic: Various improvements v3" (by paul@crapouillou.net)
+- rebased to v5.13-rc3
 
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index 8614225e92eb5..8733585385dee 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -1075,7 +1075,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 		r = 1;
- 		break;
- 	case KVM_CAP_NR_VCPUS:
--		r = num_online_cpus();
-+		r = min_t(unsigned int, num_online_cpus(), KVM_MAX_VCPUS);
- 		break;
- 	case KVM_CAP_MAX_VCPUS:
- 		r = KVM_MAX_VCPUS;
+PATCH V3 2021-08-08 07:10:50:
+This series adds HDMI support for JZ4780 and CI20 board (and fixes one IPU related issue in registration error path)
+- [patch 1/8] switched from mode_fixup to atomic_check (suggested by robert.foss@linaro.org)
+  - the call to the dw-hdmi specialization is still called mode_fixup
+- [patch 3/8] diverse fixes for ingenic-drm-drv (suggested by paul@crapouillou.net)
+  - factor out some non-HDMI features of the jz4780 into a separate patch
+  - multiple fixes around max height
+  - do not change regmap config but a copy on stack
+  - define some constants
+  - factor out fixing of drm_init error path for IPU into separate patch
+  - use FIELD_PREP()
+- [patch 8/8] conversion to component framework dropped (suggested by Laurent.pinchart@ideasonboard.com and paul@crapouillou.net)
+
+PATCH V2 2021-08-05 16:08:05:
+- code and commit messages revisited for checkpatch warnings
+- rebased on v5.14-rc4
+- include (failed, hence RFC 8/8) attempt to convert to component framework
+  (was suggested by Paul Cercueil <paul@crapouillou.net> a while ago)
+
+This series adds HDMI support for JZ4780 and CI20 board
+
+
+
+H. Nikolaus Schaller (3):
+  drm/ingenic: prepare ingenic drm for later addition of JZ4780
+  MIPS: defconfig: CI20: configure for DRM_DW_HDMI_JZ4780
+  [RFC] MIPS: DTS: Ingenic: adjust register size to available registers
+
+Paul Boddie (4):
+  drm/ingenic: Add support for JZ4780 and HDMI output
+  drm/ingenic: Add dw-hdmi driver for jz4780
+  MIPS: DTS: jz4780: Account for Synopsys HDMI driver and LCD
+    controllers
+  MIPS: DTS: CI20: Add DT nodes for HDMI setup
+
+Sam Ravnborg (1):
+  dt-bindings: display: Add ingenic,jz4780-dw-hdmi DT Schema
+
+ .../display/bridge/ingenic,jz4780-hdmi.yaml   |  76 +++++++++++
+ .../display/bridge/synopsys,dw-hdmi.yaml      |   3 +
+ arch/mips/boot/dts/ingenic/ci20.dts           |  83 ++++++++++-
+ arch/mips/boot/dts/ingenic/jz4725b.dtsi       |   2 +-
+ arch/mips/boot/dts/ingenic/jz4740.dtsi        |   2 +-
+ arch/mips/boot/dts/ingenic/jz4770.dtsi        |   2 +-
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        |  40 ++++++
+ arch/mips/configs/ci20_defconfig              |   6 +
+ drivers/gpu/drm/ingenic/Kconfig               |   9 ++
+ drivers/gpu/drm/ingenic/Makefile              |   1 +
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  62 ++++++++-
+ drivers/gpu/drm/ingenic/ingenic-drm.h         |  38 ++++++
+ drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c     | 129 ++++++++++++++++++
+ 13 files changed, 444 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+ create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+
 -- 
 2.33.0
 
