@@ -2,27 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8784345A841
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Nov 2021 17:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED46945A852
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Nov 2021 17:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238582AbhKWQk3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Nov 2021 11:40:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45382 "EHLO mail.kernel.org"
+        id S239131AbhKWQku (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Nov 2021 11:40:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45626 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239056AbhKWQkJ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Nov 2021 11:40:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2AFA160F9D;
-        Tue, 23 Nov 2021 16:37:00 +0000 (UTC)
+        id S236983AbhKWQkY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 23 Nov 2021 11:40:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 13D4160FE7;
+        Tue, 23 Nov 2021 16:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637685421;
-        bh=wg1+qoZwMZ1ugjh9SupO3B+TeYWJfMTyzf+nxJSJ/fc=;
+        s=k20201202; t=1637685435;
+        bh=+2nW/cKUU85rDaInywuytDhd30VkHQrYkOcr8URVJ6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T3u33jRuPOphyVLJMuYFDW30B2kVS0dIXqOWZL9BqcySLsNKhQyEjvcs5xKLGEfIE
-         XxmeIhUiBASDWsbZ4zvZpVZ3HfLtGN4u8SG4nrtV8LQFcobLjC5sj8YxpF6rKrsGb2
-         kK0XtLR86bJz8UVCpvPWxvIrNF/Wcaw20IwstcpYY5vAkUUzHDohp5J8mZvJhXcXDi
-         nLxB5szCmWvxycRtpw8KB0Q/rKCMOijX8UMsJqEjcKoFA0WJdFEz90wIE+1MrACxRI
-         k0kVwhG0DeyCoMICLspGZV3pEGc9vPhePtZY2o4nbxOPHAbPqGoUNdGQGojjGDsnVp
-         NIqP/opcMb5dQ==
+        b=Ems+nProHdyY2oJSWznvKTkIVsMCsucDi3d8Vl6UaodQ9BWP9z/aZeOfu8L6CnmaN
+         5CaeCRDrQH+h5mHnMuaic2ecsNXu/Gt28E8A7reypbLB6IuLo6JOyi6XoXfp2om+69
+         SjepYcxaBbanDw1k1kvJ1O4FZCbIZccfnHh1TaRDpZmZBc5QY9LFULo7GWK4O2tgf2
+         Mp97zWREB8w6xM5rZ93heW0Nsu0Ovi5Ab4JTJOtWSVXYHw1H5S5uw5Jd0Y/zBnM8pQ
+         e9zfn6HsRQgK/+7YjLrwju16jYa4s45ICnt1wVkKYDL12u/BZNSyAEAH8DnkrfPGqv
+         H1qi+6l2tBV4w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -30,12 +30,12 @@ Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
         Sasha Levin <sashal@kernel.org>, chenhuacai@kernel.org,
         aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
         linux-mips@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH MANUALSEL 5.10 4/5] KVM: MIPS: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
-Date:   Tue, 23 Nov 2021 11:36:48 -0500
-Message-Id: <20211123163652.289483-4-sashal@kernel.org>
+Subject: [PATCH MANUALSEL 5.4 4/4] KVM: MIPS: Cap KVM_CAP_NR_VCPUS by KVM_CAP_MAX_VCPUS
+Date:   Tue, 23 Nov 2021 11:37:03 -0500
+Message-Id: <20211123163706.289562-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211123163652.289483-1-sashal@kernel.org>
-References: <20211123163652.289483-1-sashal@kernel.org>
+In-Reply-To: <20211123163706.289562-1-sashal@kernel.org>
+References: <20211123163706.289562-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,10 +60,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index 3d6a7f5827b17..a9f1f37009850 100644
+index b22a3565e1330..f5ea5700b2e5c 100644
 --- a/arch/mips/kvm/mips.c
 +++ b/arch/mips/kvm/mips.c
-@@ -1074,7 +1074,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+@@ -1109,7 +1109,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
  		r = 1;
  		break;
  	case KVM_CAP_NR_VCPUS:
