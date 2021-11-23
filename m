@@ -2,83 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D30D34591BC
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Nov 2021 16:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6BB459D11
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Nov 2021 08:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240070AbhKVP5S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 22 Nov 2021 10:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240085AbhKVP5Q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 22 Nov 2021 10:57:16 -0500
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A1EC061714
-        for <linux-mips@vger.kernel.org>; Mon, 22 Nov 2021 07:54:09 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:e4da:38c:79e9:48bf])
-        by andre.telenet-ops.be with bizsmtp
-        id MTu82600i4yPVd601Tu8P6; Mon, 22 Nov 2021 16:54:09 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mpBdw-00EL2i-KM; Mon, 22 Nov 2021 16:54:08 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mpBdv-00HGsc-NS; Mon, 22 Nov 2021 16:54:07 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
+        id S234416AbhKWHxb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Nov 2021 02:53:31 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:52064 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234411AbhKWHxa (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 23 Nov 2021 02:53:30 -0500
+Received: from localhost.localdomain (unknown [111.9.175.10])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxF+genZxh3IgAAA--.1089S2;
+        Tue, 23 Nov 2021 15:49:56 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] irqchip/mips-gic: Use bitfield helpers
-Date:   Mon, 22 Nov 2021 16:54:07 +0100
-Message-Id: <74f9d126961a90d3e311b92a54870eaac5b3ae57.1637593297.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <a1445d3abb45cfc95cb1b03180fd53caf122035b.1637593297.git.geert+renesas@glider.be>
-References: <a1445d3abb45cfc95cb1b03180fd53caf122035b.1637593297.git.geert+renesas@glider.be>
+        ambrosehua@gmail.com
+Cc:     Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V2]: bugfix
+Date:   Tue, 23 Nov 2021 15:49:21 +0800
+Message-Id: <20211123074927.12461-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9AxF+genZxh3IgAAA--.1089S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYx7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v
+        4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use the FIELD_GET() helper, instead of open-coding the same operation.
+V2:
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Compile-tested only.
++. fix warning message when building "slip" and "hamradio"
 
-See "[PATCH 00/17] Non-const bitfield helper conversions"
-(https://lore.kernel.org/r/cover.1637592133.git.geert+renesas@glider.be)
-for background and more conversions.
----
- drivers/irqchip/irq-mips-gic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
++. Indexed cache instruction CAN NOT handle cache alias, just remove the
+detection for "cpu_has_dc_alias" 
 
-diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index d02b05a067d950a0..ff89b36267dd4955 100644
---- a/drivers/irqchip/irq-mips-gic.c
-+++ b/drivers/irqchip/irq-mips-gic.c
-@@ -9,6 +9,7 @@
- 
- #define pr_fmt(fmt) "irq-mips-gic: " fmt
- 
-+#include <linux/bitfield.h>
- #include <linux/bitmap.h>
- #include <linux/clocksource.h>
- #include <linux/cpuhotplug.h>
-@@ -735,8 +736,7 @@ static int __init gic_of_init(struct device_node *node,
- 	mips_gic_base = ioremap(gic_base, gic_len);
- 
- 	gicconfig = read_gic_config();
--	gic_shared_intrs = gicconfig & GIC_CONFIG_NUMINTERRUPTS;
--	gic_shared_intrs >>= __ffs(GIC_CONFIG_NUMINTERRUPTS);
-+	gic_shared_intrs = FIELD_GET(GIC_CONFIG_NUMINTERRUPTS, gicconfig);
- 	gic_shared_intrs = (gic_shared_intrs + 1) * 8;
- 
- 	if (cpu_has_veic) {
--- 
-2.25.1
++. improve commit message
+
 
