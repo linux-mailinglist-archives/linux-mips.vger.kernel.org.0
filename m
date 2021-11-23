@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 318ED45AD14
-	for <lists+linux-mips@lfdr.de>; Tue, 23 Nov 2021 21:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A5545AD1D
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Nov 2021 21:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239420AbhKWUNa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Tue, 23 Nov 2021 15:13:30 -0500
-Received: from aposti.net ([89.234.176.197]:37796 "EHLO aposti.net"
+        id S238400AbhKWUPs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 23 Nov 2021 15:15:48 -0500
+Received: from aposti.net ([89.234.176.197]:38310 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236228AbhKWUN3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 23 Nov 2021 15:13:29 -0500
-Date:   Tue, 23 Nov 2021 20:10:00 +0000
+        id S236464AbhKWUPs (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 23 Nov 2021 15:15:48 -0500
+Date:   Tue, 23 Nov 2021 20:12:19 +0000
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v8 6/8] MIPS: DTS: CI20: Add DT nodes for HDMI setup
+Subject: Re: [PATCH v8 0/8] MIPS: JZ4780 and CI20 HDMI
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -39,10 +39,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org
-Message-Id: <O0K13R.TIL3JBQ5L8TO1@crapouillou.net>
-In-Reply-To: <d62023e0872e9b393db736f4a0ecf04b3fc1c91b.1637691240.git.hns@goldelico.com>
+Message-Id: <J4K13R.CGVJ0IY95LC51@crapouillou.net>
+In-Reply-To: <cover.1637691240.git.hns@goldelico.com>
 References: <cover.1637691240.git.hns@goldelico.com>
-        <d62023e0872e9b393db736f4a0ecf04b3fc1c91b.1637691240.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: 8BIT
@@ -52,156 +51,153 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Nikolaus,
 
-Le mar., nov. 23 2021 at 19:13:59 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> From: Paul Boddie <paul@boddie.org.uk>
-> 
-> We need to hook up
-> * HDMI connector
-> * HDMI power regulator
-> * JZ4780_CLK_HDMI @ 27 MHz
-> * DDC pinmux
-> * HDMI and LCDC endpoint connections
-> 
-> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
->  arch/mips/boot/dts/ingenic/ci20.dts | 83 
-> +++++++++++++++++++++++++++--
->  1 file changed, 80 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts 
-> b/arch/mips/boot/dts/ingenic/ci20.dts
-> index b249a4f0f6b62..15cf03670693f 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -78,6 +78,18 @@ eth0_power: fixedregulator@0 {
->  		enable-active-high;
->  	};
-> 
-> +	hdmi_out: connector {
-> +		compatible = "hdmi-connector";
-> +		label = "HDMI OUT";
-> +		type = "a";
-> +
-> +		port {
-> +			hdmi_con: endpoint {
-> +				remote-endpoint = <&dw_hdmi_out>;
-> +			};
-> +		};
-> +	};
-> +
->  	ir: ir {
->  		compatible = "gpio-ir-receiver";
->  		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
-> @@ -102,6 +114,17 @@ otg_power: fixedregulator@2 {
->  		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
->  		enable-active-high;
->  	};
-> +
-> +	hdmi_power: fixedregulator@3 {
-> +		compatible = "regulator-fixed";
-> +
-> +		regulator-name = "hdmi_power";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +
-> +		gpio = <&gpa 25 0>;
-> +		enable-active-high;
-> +	};
->  };
-> 
->  &ext {
-> @@ -114,11 +137,13 @@ &cgu {
->  	 * precision.
->  	 */
->  	assigned-clocks = <&cgu JZ4780_CLK_OTGPHY>, <&cgu JZ4780_CLK_RTC>,
-> -			  <&cgu JZ4780_CLK_SSIPLL>, <&cgu JZ4780_CLK_SSI>;
-> +			  <&cgu JZ4780_CLK_SSIPLL>, <&cgu JZ4780_CLK_SSI>,
-> +			  <&cgu JZ4780_CLK_HDMI>;
->  	assigned-clock-parents = <0>, <&cgu JZ4780_CLK_RTCLK>,
->  				 <&cgu JZ4780_CLK_MPLL>,
-> -				 <&cgu JZ4780_CLK_SSIPLL>;
-> -	assigned-clock-rates = <48000000>, <0>, <54000000>;
-> +				 <&cgu JZ4780_CLK_SSIPLL>,
-> +				 <0>;
-
-Nit - you can remove the last <0>, it will be the default.
-
-> +	assigned-clock-rates = <48000000>, <0>, <54000000>, <0>, <27000000>;
->  };
-> 
->  &tcu {
-> @@ -509,6 +534,19 @@ pins_i2c4: i2c4 {
->  		bias-disable;
->  	};
-> 
-> +	pins_hdmi_ddc: hdmi_ddc {
-> +		function = "hdmi-ddc";
-> +		groups = "hdmi-ddc";
-> +		bias-disable;
-> +	};
-> +
-> +	/* switch to PF25 as gpio driving DDC_SDA low */
-> +	pins_hdmi_ddc_unwedge: hdmi_ddc {
-> +		function = "hdmi-ddc";
-> +		groups = "hdmi-ddc";
-> +		bias-disable;
-> +	};
-
-Your pins_hdmi_ddc and pins_hdmi_ddc_unwedge are the exact same? You 
-could just use the former and pass it to both pinctrl-0 and pinctrl-1.
+I think if you can fix the last few things I commented on, and I get an 
+ACK from Rob for the Device Tree related patches, then it will be ready 
+to merge.
 
 Cheers,
 -Paul
 
-> +
->  	pins_nemc: nemc {
->  		function = "nemc";
->  		groups = "nemc-data", "nemc-cle-ale", "nemc-rd-we", "nemc-frd-fwe";
-> @@ -539,3 +577,42 @@ pins_mmc1: mmc1 {
->  		bias-disable;
->  	};
->  };
-> +
-> +&hdmi {
-> +	status = "okay";
-> +
-> +	pinctrl-names = "default", "unwedge";
-> +	pinctrl-0 = <&pins_hdmi_ddc>;
-> +	pinctrl-1 = <&pins_hdmi_ddc_unwedge>;
-> +
-> +	hdmi-5v-supply = <&hdmi_power>;
-> +
-> +	ports {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		port@0 {
-> +			reg = <0>;
-> +			dw_hdmi_in: endpoint {
-> +				remote-endpoint = <&lcd_out>;
-> +			};
-> +		};
-> +
-> +		port@1 {
-> +			reg = <1>;
-> +			dw_hdmi_out: endpoint {
-> +				remote-endpoint = <&hdmi_con>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&lcdc0 {
-> +	status = "okay";
-> +
-> +	port {
-> +		lcd_out: endpoint {
-> +			remote-endpoint = <&dw_hdmi_in>;
-> +		};
-> +	};
-> +};
+
+Le mar., nov. 23 2021 at 19:13:53 +0100, H. Nikolaus Schaller 
+<hns@goldelico.com> a écrit :
+> PATCH V8 2021-11-23 19:14:00:
+> - fix a bad editing result from patch 2/8 (found by 
+> paul@crapouillou.net)
+> 
+> PATCH V7 2021-11-23 18:46:23:
+> - changed gpio polarity of hdmi_power to 0 (suggested by 
+> paul@crapouillou.net)
+> - fixed LCD1 irq number (bug found by paul@crapouillou.net)
+> - removed "- 4" for calculating max_register (suggested by 
+> paul@crapouillou.net)
+> - use unevaluatedPropertes instead of additionalProperties (suggested 
+> by robh@kernel.org)
+> - moved and renamed ingenic,jz4780-hdmi.yaml (suggested by 
+> robh@kernel.org)
+> - adjusted assigned-clocks changes to upstream which added some for 
+> SSI (by hns@goldelico.com)
+> - rebased and tested with v5.16-rc2 + patch set drm/ingenic by 
+> paul@crapouillou.net (by hns@goldelico.com)
+> 
+> PATCH V6 2021-11-10 20:43:33:
+> - changed CONFIG_DRM_INGENIC_DW_HDMI to "m" (by hns@goldelico.com)
+> - made ingenic-dw-hdmi an independent platform driver which can be 
+> compiled as module
+>   and removed error patch fixes for IPU (suggested by 
+> paul@crapouillou.net)
+> - moved assigned-clocks from jz4780.dtsi to ci20.dts (suggested by 
+> paul@crapouillou.net)
+> - fixed reg property in jz4780.dtsi to cover all registers incl. 
+> gamma and vee (by hns@goldelico.com)
+> - added a base patch to calculate regmap size from DTS reg property 
+> (requested by paul@crapouillou.net)
+> - restored resetting all bits except one in LCDOSDC (requested by 
+> paul@crapouillou.net)
+> - clarified setting of cpos (suggested by paul@crapouillou.net)
+> - moved bindings definition for ddc-i2c-bus (suggested by 
+> paul@crapouillou.net)
+> - simplified mask definitions for JZ_LCD_DESSIZE (requested by 
+> paul@crapouillou.net)
+> - removed setting alpha premultiplication (suggested by 
+> paul@crapouillou.net)
+> - removed some comments (suggested by paul@crapouillou.net)
+> 
+> PATCH V5 2021-10-05 14:28:44:
+> - dropped mode_fixup and timings support in dw-hdmi as it is no 
+> longer needed in this V5 (by hns@goldelico.com)
+> - dropped "drm/ingenic: add some jz4780 specific features" 
+> (stimulated by paul@crapouillou.net)
+> - fixed typo in commit subject: "synopsis" -> "synopsys" (by 
+> hns@goldelico.com)
+> - swapped clocks in jz4780.dtsi to match synopsys,dw-hdmi.yaml (by 
+> hns@goldelico.com)
+> - improved, simplified, fixed, dtbschecked ingenic-jz4780-hdmi.yaml 
+> and made dependent of bridge/synopsys,dw-hdmi.yaml (based on 
+> suggestions by maxime@cerno.tech)
+> - fixed binding vs. driver&DTS use of hdmi-5v regulator (suggested by 
+> maxime@cerno.tech)
+> - dropped "drm/bridge: synopsis: Fix to properly handle HPD" - was a 
+> no longer needed workaround for a previous version
+>   (suggested by maxime@cerno.tech)
+> 
+> PATCH V4 2021-09-27 18:44:38:
+> - fix setting output_port = 1 (issue found by paul@crapouillou.net)
+> - ci20.dts: convert to use hdmi-connector (by hns@goldelico.com)
+> - add a hdmi-regulator to control +5V power (by hns@goldelico.com)
+> - added a fix to dw-hdmi to call drm_kms_helper_hotplug_event on 
+> plugin event detection (by hns@goldelico.com)
+> - always allocate extended descriptor but initialize only for jz4780 
+> (by hns@goldelico.com)
+> - updated to work on top of "[PATCH v3 0/6] drm/ingenic: Various 
+> improvements v3" (by paul@crapouillou.net)
+> - rebased to v5.13-rc3
+> 
+> PATCH V3 2021-08-08 07:10:50:
+> This series adds HDMI support for JZ4780 and CI20 board (and fixes 
+> one IPU related issue in registration error path)
+> - [patch 1/8] switched from mode_fixup to atomic_check (suggested by 
+> robert.foss@linaro.org)
+>   - the call to the dw-hdmi specialization is still called mode_fixup
+> - [patch 3/8] diverse fixes for ingenic-drm-drv (suggested by 
+> paul@crapouillou.net)
+>   - factor out some non-HDMI features of the jz4780 into a separate 
+> patch
+>   - multiple fixes around max height
+>   - do not change regmap config but a copy on stack
+>   - define some constants
+>   - factor out fixing of drm_init error path for IPU into separate 
+> patch
+>   - use FIELD_PREP()
+> - [patch 8/8] conversion to component framework dropped (suggested by 
+> Laurent.pinchart@ideasonboard.com and paul@crapouillou.net)
+> 
+> PATCH V2 2021-08-05 16:08:05:
+> - code and commit messages revisited for checkpatch warnings
+> - rebased on v5.14-rc4
+> - include (failed, hence RFC 8/8) attempt to convert to component 
+> framework
+>   (was suggested by Paul Cercueil <paul@crapouillou.net> a while ago)
+> 
+> This series adds HDMI support for JZ4780 and CI20 board
+> 
+> 
+> 
+> H. Nikolaus Schaller (3):
+>   drm/ingenic: prepare ingenic drm for later addition of JZ4780
+>   MIPS: defconfig: CI20: configure for DRM_DW_HDMI_JZ4780
+>   [RFC] MIPS: DTS: Ingenic: adjust register size to available 
+> registers
+> 
+> Paul Boddie (4):
+>   drm/ingenic: Add support for JZ4780 and HDMI output
+>   drm/ingenic: Add dw-hdmi driver for jz4780
+>   MIPS: DTS: jz4780: Account for Synopsys HDMI driver and LCD
+>     controllers
+>   MIPS: DTS: CI20: Add DT nodes for HDMI setup
+> 
+> Sam Ravnborg (1):
+>   dt-bindings: display: Add ingenic,jz4780-dw-hdmi DT Schema
+> 
+>  .../display/bridge/ingenic,jz4780-hdmi.yaml   |  76 +++++++++++
+>  .../display/bridge/synopsys,dw-hdmi.yaml      |   3 +
+>  arch/mips/boot/dts/ingenic/ci20.dts           |  83 ++++++++++-
+>  arch/mips/boot/dts/ingenic/jz4725b.dtsi       |   2 +-
+>  arch/mips/boot/dts/ingenic/jz4740.dtsi        |   2 +-
+>  arch/mips/boot/dts/ingenic/jz4770.dtsi        |   2 +-
+>  arch/mips/boot/dts/ingenic/jz4780.dtsi        |  40 ++++++
+>  arch/mips/configs/ci20_defconfig              |   6 +
+>  drivers/gpu/drm/ingenic/Kconfig               |   9 ++
+>  drivers/gpu/drm/ingenic/Makefile              |   1 +
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  62 ++++++++-
+>  drivers/gpu/drm/ingenic/ingenic-drm.h         |  38 ++++++
+>  drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c     | 129 
+> ++++++++++++++++++
+>  13 files changed, 444 insertions(+), 9 deletions(-)
+>  create mode 100644 
+> Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+>  create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> 
 > --
 > 2.33.0
 > 
