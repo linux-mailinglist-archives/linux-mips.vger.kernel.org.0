@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1EB45BF60
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 13:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAAD45BCBA
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 13:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344320AbhKXM52 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 07:57:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32872 "EHLO mail.kernel.org"
+        id S244234AbhKXMcA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 07:32:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44540 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346008AbhKXMz0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Nov 2021 07:55:26 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B5FD461547;
-        Wed, 24 Nov 2021 12:31:56 +0000 (UTC)
+        id S1344084AbhKXMa2 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Nov 2021 07:30:28 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B37E560240;
+        Wed, 24 Nov 2021 12:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637757117;
-        bh=vN2naKVRYhRCg2dj5JfNdtQB/BzF9gyfbPAmRHli8CI=;
+        s=korg; t=1637756332;
+        bh=KBBIBhEHEYoNBE6xqmrxaNTxUXviafPn9GuKMSAPz/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1Fb5HRql3A49PAtzMQ0vTCYbKQdn+oFucLo299BmMWf+C+qzmcbthfMxg9mF/Ooc0
-         zrUzcBF1h7MHxv5tjUYTsTmmy7Vx+dA37J3kHMjeoePZYp6vaBM5hekJnTco7DlUZ6
-         NKSzIi80XJMYjBBJxDKjmQAdzqziVEmosbfmR5m4=
+        b=mYIJimGdYP6VRWu2oUUFOpZqbM5Xll5CfjsqTsEWCQZgHMoYaslvzTR9UnRwK3rH6
+         Tl+v0bg/FMZ+wTnH4ldJplEAMzSqfSwrkHEB2R1+d73z4+BNC7fyMg1KBua0sNQwMa
+         nHH400HLQTWsSKdCO3bxWRSQHxUHunm2MtlhQjRs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -27,12 +27,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
         "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 4.19 064/323] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
-Date:   Wed, 24 Nov 2021 12:54:14 +0100
-Message-Id: <20211124115721.021574461@linuxfoundation.org>
+Subject: [PATCH 4.14 050/251] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
+Date:   Wed, 24 Nov 2021 12:54:52 +0100
+Message-Id: <20211124115711.983161552@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211124115718.822024889@linuxfoundation.org>
-References: <20211124115718.822024889@linuxfoundation.org>
+In-Reply-To: <20211124115710.214900256@linuxfoundation.org>
+References: <20211124115710.214900256@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -91,7 +91,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	.set	mips1
 --- a/arch/mips/kernel/syscall.c
 +++ b/arch/mips/kernel/syscall.c
-@@ -235,12 +235,3 @@ SYSCALL_DEFINE3(cachectl, char *, addr,
+@@ -233,12 +233,3 @@ SYSCALL_DEFINE3(cachectl, char *, addr,
  {
  	return -ENOSYS;
  }
