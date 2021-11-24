@@ -2,37 +2,48 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E0B45BE8C
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 13:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E091B45BC35
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 13:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345438AbhKXMsF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 07:48:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50510 "EHLO mail.kernel.org"
+        id S243327AbhKXM0p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 07:26:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42172 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345037AbhKXMqD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Nov 2021 07:46:03 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7144D61440;
-        Wed, 24 Nov 2021 12:26:54 +0000 (UTC)
+        id S245204AbhKXMYp (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Nov 2021 07:24:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F39A361212;
+        Wed, 24 Nov 2021 12:15:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637756814;
-        bh=T8Xd1nsfnBiyD8c1nofywRIz1BrHf431p4/cAfcbR4s=;
+        s=korg; t=1637756132;
+        bh=RhoA94I73Mc3zr+GgW0KUPpLbuIVtcYNDaZLZBT097k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qGqeq54jPuainWkcTgGb7Zo2OQyMS4zjxMD2Ctfrij/inoYqZnrHW5DHsHH05y0ki
-         dNm9KrHxDrRzVMwskGj8Y4qdN1XXDG61+UIA46OMWLMqHTvYKVNUsc4SnUqynebZiv
-         Ccom3cQ+y06rv9LCfsiuepptViZR6qraRWL9Conk=
+        b=EV3R13Tyu70V6PnO2jGxRN6L/wl0FFJcy5cnxHaGeELBBLDhMnnElmBhPvmShwItx
+         Fe/5x1oVNms8foRSkNbh1kilTcXGicbXJ6v5HsouKdbTiW7sbeChTs02OMPg/bKBEl
+         ld/0eyVrzpFJDLnsUX9Xuue9woQyfrNxMclNda+Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-mips@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-mips@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 209/251] MIPS: sni: Fix the build
-Date:   Wed, 24 Nov 2021 12:57:31 +0100
-Message-Id: <20211124115717.532836596@linuxfoundation.org>
+Subject: [PATCH 4.9 183/207] mips: bcm63xx: add support for clk_get_parent()
+Date:   Wed, 24 Nov 2021 12:57:34 +0100
+Message-Id: <20211124115709.895922051@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211124115710.214900256@linuxfoundation.org>
-References: <20211124115710.214900256@linuxfoundation.org>
+In-Reply-To: <20211124115703.941380739@linuxfoundation.org>
+References: <20211124115703.941380739@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -41,49 +52,63 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit c91cf42f61dc77b289784ea7b15a8531defa41c0 ]
+[ Upstream commit e8f67482e5a4bc8d0b65d606d08cb60ee123b468 ]
 
-This patch fixes the following gcc 10 build error:
+BCM63XX selects HAVE_LEGACY_CLK but does not provide/support
+clk_get_parent(), so add a simple implementation of that
+function so that callers of it will build without errors.
 
-arch/mips/sni/time.c: In function ‘a20r_set_periodic’:
-arch/mips/sni/time.c:15:26: error: unsigned conversion from ‘int’ to ‘u8’ {aka ‘volatile unsigned char’} changes value from ‘576’ to ‘64’ [-Werror=overflow]
-   15 | #define SNI_COUNTER0_DIV ((SNI_CLOCK_TICK_RATE / SNI_COUNTER2_DIV) / HZ)
-      |                          ^
-arch/mips/sni/time.c:21:45: note: in expansion of macro ‘SNI_COUNTER0_DIV’
-   21 |  *(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV;
-      |                                             ^~~~~~~~~~~~~~~~
+Fixes these build errors:
 
+mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4770_adc_init_clk_div':
+ingenic-adc.c:(.text+0xe4): undefined reference to `clk_get_parent'
+mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4725b_adc_init_clk_div':
+ingenic-adc.c:(.text+0x1b8): undefined reference to `clk_get_parent'
+
+Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs." )
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Cc: Artur Rojek <contact@artur-rojek.eu>
+Cc: Paul Cercueil <paul@crapouillou.net>
 Cc: linux-mips@vger.kernel.org
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Cc: Jonathan Cameron <jic23@kernel.org>
+Cc: Lars-Peter Clausen <lars@metafoo.de>
+Cc: linux-iio@vger.kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: Jonas Gorski <jonas.gorski@gmail.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/sni/time.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/mips/bcm63xx/clk.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/mips/sni/time.c b/arch/mips/sni/time.c
-index 0eb7d1e8821be..d741e24a21879 100644
---- a/arch/mips/sni/time.c
-+++ b/arch/mips/sni/time.c
-@@ -18,14 +18,14 @@ static int a20r_set_periodic(struct clock_event_device *evt)
- {
- 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 12) = 0x34;
- 	wmb();
--	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV;
-+	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV & 0xff;
- 	wmb();
- 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV >> 8;
- 	wmb();
+diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
+index b49fc9cb9cad2..4f375050ab8e9 100644
+--- a/arch/mips/bcm63xx/clk.c
++++ b/arch/mips/bcm63xx/clk.c
+@@ -336,6 +336,12 @@ void clk_disable(struct clk *clk)
  
- 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 12) = 0xb4;
- 	wmb();
--	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 8) = SNI_COUNTER2_DIV;
-+	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 8) = SNI_COUNTER2_DIV & 0xff;
- 	wmb();
- 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 8) = SNI_COUNTER2_DIV >> 8;
- 	wmb();
+ EXPORT_SYMBOL(clk_disable);
+ 
++struct clk *clk_get_parent(struct clk *clk)
++{
++	return NULL;
++}
++EXPORT_SYMBOL(clk_get_parent);
++
+ unsigned long clk_get_rate(struct clk *clk)
+ {
+ 	return clk->rate;
 -- 
 2.33.0
 
