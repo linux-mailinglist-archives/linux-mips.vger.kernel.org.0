@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C604F45C1CD
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 14:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE6045C125
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 14:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348954AbhKXNWI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 08:22:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43570 "EHLO mail.kernel.org"
+        id S1347022AbhKXNPS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 08:15:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51816 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347802AbhKXNT6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Nov 2021 08:19:58 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B6C1661AEF;
-        Wed, 24 Nov 2021 12:46:39 +0000 (UTC)
+        id S1348456AbhKXNNN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Nov 2021 08:13:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3E47861A8A;
+        Wed, 24 Nov 2021 12:42:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637758000;
+        s=korg; t=1637757775;
         bh=geWwvt+WcT0Vr9beU/Rq9/kGpE1RZ0NSTymtca8vwFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v2cpPy6vvb05kdR5lylwSrd02eIY0eDHK5nq48pyyxRecEwHwCX+XI7m0QSkGVV8n
-         WM66bhrKj5N3RZ70MlDlKZP3Ss/ggj0z9lwvrMY0khJT2D1v3g2nxBQsFC057IuhXs
-         YunXbKedUIQCJVc8tna75huJCPONA9MCBtzD4a6I=
+        b=XYLtaYpK7/TeRto7WCsMCMme85HzhOErK86I3/cnM4zTjf9smYXiz+tEBEkTtnyXH
+         GDzKl8h3I5U79ojVylbG/rHSNmHEtl4qQpVQ7g/jE6afse6WdNhWqs+7pNYNeALU79
+         C7SHH7Zl/oe4Oufe9VP+54JHPvQLc3s4tCnfZPoA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -27,12 +27,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bart Van Assche <bvanassche@acm.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 023/100] MIPS: sni: Fix the build
-Date:   Wed, 24 Nov 2021 12:57:39 +0100
-Message-Id: <20211124115655.609219359@linuxfoundation.org>
+Subject: [PATCH 4.19 273/323] MIPS: sni: Fix the build
+Date:   Wed, 24 Nov 2021 12:57:43 +0100
+Message-Id: <20211124115728.101427761@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211124115654.849735859@linuxfoundation.org>
-References: <20211124115654.849735859@linuxfoundation.org>
+In-Reply-To: <20211124115718.822024889@linuxfoundation.org>
+References: <20211124115718.822024889@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
