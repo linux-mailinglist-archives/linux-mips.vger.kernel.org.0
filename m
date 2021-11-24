@@ -2,45 +2,44 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB45C45CA0F
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 17:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFA745CA5C
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 17:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242320AbhKXQdf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 11:33:35 -0500
-Received: from mo4-p03-ob.smtp.rzone.de ([81.169.146.172]:20586 "EHLO
-        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbhKXQde (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Nov 2021 11:33:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1637771406;
+        id S241782AbhKXQvf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 11:51:35 -0500
+Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.121]:26100 "EHLO
+        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238391AbhKXQve (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Nov 2021 11:51:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1637772497;
     s=strato-dkim-0002; d=goldelico.com;
     h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
     From:Subject:Sender;
-    bh=x/yheI97VKaHNQMVbMflabvGwLK6kwR6cdJb58J0b+M=;
-    b=X5qgWtSV2Jv39KDkxgjm++dWI+CIo/cr+nLfLTFbLP74KBTp5lE6t/INRuv8CvNwoL
-    HUpmqcyOPyH/UfMRrphBjTwYQsdoK5Ak0haFOIMqh2LfQyUO1J92va/zuFUgEdMIOtRz
-    ZpRr/rUuR98OZX/DV/eHdahBtzI8R/dlmpulgwIxTf2umATJrYIWpbMVBZ2sOw4dcKAC
-    TwbduGyrpLQ01vofifqm6/7Igbopmp+GorjDiBEptOCEGi5204TIk3nijGKYfEkfZb+l
-    cnya5LbSRhx91IEfwEHyBoirO+oKW1V7UzRKBGRgokeNXbjOg6xSx6+wgyJXF1LNEiID
-    fy3A==
+    bh=icc13YC5mHwE0XQvAD6VEy3MsLwt9uSPlxq+Nx/D1H4=;
+    b=YUnGh4OjkMKYt7K5BhVP0dlBbNqMmnci+MORTJkKXQ6y7MlxZrjR9JjuoNqdipnaK9
+    nqemSaP1pvW/Cbw77TFiM5LPFoHXE7mjs2/b9LwrH565ebcmWMWr2qMaGNVKvE1w711S
+    cL0LYlqGbUhunijvOfMhhcxgDtGnHHThxXQvMzVvT98VN5f+NZHBB7AUtRvzOwOWp4oB
+    ewEBmbOCTaJ9iwRyirRd5Ep0V7+ry1cEVl8jZJ3sohImjJw/q5zY+RXR3SG2ErxXD1cR
+    Fj9jVhE6K0ntaf4UqxEVEloyda/mdLwW6rk1XJmmlScC+kDdWtsj2u+sfZiOtVts4pl/
+    8InQ==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3jsN+"
 X-RZG-CLASS-ID: mo00
 Received: from imac.fritz.box
     by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
-    with ESMTPSA id e05ed8xAOGU53om
+    with ESMTPSA id e05ed8xAOGmG3vt
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
         (Client did not present a certificate);
-    Wed, 24 Nov 2021 17:30:05 +0100 (CET)
+    Wed, 24 Nov 2021 17:48:16 +0100 (CET)
 Content-Type: text/plain;
-        charset=utf-8
+        charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v8 6/8] MIPS: DTS: CI20: Add DT nodes for HDMI setup
+Subject: Re: [PATCH v8 0/8] MIPS: JZ4780 and CI20 HDMI
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <CAMuHMdWO3yosf5eyTPpydVuT3pwvuw9Q=2BUxq+rxPjE3iSnrw@mail.gmail.com>
-Date:   Wed, 24 Nov 2021 17:30:05 +0100
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
+In-Reply-To: <B6B358E8-4395-442F-A353-396D8DC54C66@goldelico.com>
+Date:   Wed, 24 Nov 2021 17:48:16 +0100
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -60,75 +59,51 @@ Cc:     Paul Cercueil <paul@crapouillou.net>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
-        DRI Development <dri-devel@lists.freedesktop.org>
+        dri-devel@lists.freedesktop.org
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <B622D2B5-D631-43F3-9D50-2B41681C78AB@goldelico.com>
+Message-Id: <A0913ACC-5803-4FF7-AF96-CE8CB3F9F323@goldelico.com>
 References: <cover.1637691240.git.hns@goldelico.com>
- <d62023e0872e9b393db736f4a0ecf04b3fc1c91b.1637691240.git.hns@goldelico.com>
- <O0K13R.TIL3JBQ5L8TO1@crapouillou.net>
- <04F0ED7C-3D18-4CCF-8F10-E0A36B0E4F4B@goldelico.com>
- <CAMuHMdWO3yosf5eyTPpydVuT3pwvuw9Q=2BUxq+rxPjE3iSnrw@mail.gmail.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+ <J4K13R.CGVJ0IY95LC51@crapouillou.net>
+ <B6B358E8-4395-442F-A353-396D8DC54C66@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>
 X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Geert,
+Hi Paul,
 
-> Am 24.11.2021 um 17:21 schrieb Geert Uytterhoeven =
-<geert@linux-m68k.org>:
+> Am 23.11.2021 um 21:44 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
 >=20
-> Hi Nikolaus,
+> Hi Paul,
 >=20
-> On Wed, Nov 24, 2021 at 5:19 PM H. Nikolaus Schaller =
-<hns@goldelico.com> wrote:
->>> Am 23.11.2021 um 21:10 schrieb Paul Cercueil <paul@crapouillou.net>:
->>> Le mar., nov. 23 2021 at 19:13:59 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->>>> +    assigned-clock-rates =3D <48000000>, <0>, <54000000>, <0>, =
-<27000000>;
->>>> };
->>>> &tcu {
->>>> @@ -509,6 +534,19 @@ pins_i2c4: i2c4 {
->>>>             bias-disable;
->>>>     };
->>>> +    pins_hdmi_ddc: hdmi_ddc {
->>>> +            function =3D "hdmi-ddc";
->>>> +            groups =3D "hdmi-ddc";
->>>> +            bias-disable;
->>>> +    };
->>>> +
->>>> +    /* switch to PF25 as gpio driving DDC_SDA low */
->>>> +    pins_hdmi_ddc_unwedge: hdmi_ddc {
->>>> +            function =3D "hdmi-ddc";
->>>> +            groups =3D "hdmi-ddc";
->>>> +            bias-disable;
->>>> +    };
->>>=20
->>> Your pins_hdmi_ddc and pins_hdmi_ddc_unwedge are the exact same? You =
-could just use the former and pass it to both pinctrl-0 and pinctrl-1.
+>> Am 23.11.2021 um 21:12 schrieb Paul Cercueil <paul@crapouillou.net>:
 >>=20
->> This was forgotten to remove. We do not make use of the unwedge =
-feature because I could not find out how to use pinctrl to switch this =
-to gpio25 and drive it low.
+>> Hi Nikolaus,
+>>=20
+>> I think if you can fix the last few things I commented on, and I get =
+an ACK from Rob for the Device Tree related patches, then it will be =
+ready to merge.
 >=20
-> Using gpio-hog?
+> Fine! Especially for finding the NULL regulator risk.
+>=20
+> Will do in the next days.
+> For the unwedge pinmux I have to check if we need it at all.
 
-well, AFAIR it activates the gpio permanently and is a propery of the =
-gpio controller and not of pinmux.
-The driver assumes it can use pinmux state switching to drive the =
-DDC_SDA line low on demand.
+No. It is only needed by the driver to take care of for a special =
+potential hardware hickup.
+The current code does nothing and I have removed it and everything still =
+works as
+before.
 
-Since it is unlikely that we need it at all (and we have no test case =
-that it works) I think we simply can leave
-this driver feature unused unless we get a test case.
+There remains only one question for a v9: can we store the (single) =
+regulator reference
+in a static variable or should we define a struct and allocate memory in =
+patch 4/8?
 
 BR and thanks,
 Nikolaus
