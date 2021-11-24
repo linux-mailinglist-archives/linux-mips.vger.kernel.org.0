@@ -2,24 +2,24 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 587E245C140
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 14:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0757F45C23D
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 14:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347887AbhKXNPz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 08:15:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52064 "EHLO mail.kernel.org"
+        id S1346484AbhKXN0h (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 08:26:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48368 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348708AbhKXNN4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Nov 2021 08:13:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8224F6125F;
-        Wed, 24 Nov 2021 12:43:31 +0000 (UTC)
+        id S1348715AbhKXNYk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Nov 2021 08:24:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E4C1460F5B;
+        Wed, 24 Nov 2021 12:48:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637757812;
-        bh=QMe+54krMbbMLr1Hq0geTPP2d3FOMaCn/cdNKH3LI7E=;
+        s=korg; t=1637758132;
+        bh=LnsjCsiDjV+3Z6nJ8J0l4++nkVSPwyLidA/IJqTgKxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fHJNNAElT+6+IkJ3z5FmBci4jrBaX3/THryd+JFfCuIW+DFSPeS0+WWYCaQoGRJaQ
-         C7mSdC1bRRn0lBa60/Q1wjp2dirosNh3PTqYt9sKeew+JD+t3nk9/5NkdVWAEVQ+G0
-         s3Z9q9NiDw/YkgAIHXvPhJLicQE8l8IcZ60R7c+4=
+        b=GAxqCew/tBAOTD7HctKlmi15egJMbEtymiZrIiHFcR+H4NVLlFwvfS4AcUNsO9jiP
+         YMF8a2/nC5UhkqG275grki5YlCbx2KvFzQi3Yk15aWyMsgxN/P9E34HG5oB0vwGCEH
+         Jn5OhOkRhFNDaQIcCBxCUgREE77VRhq/Nt72368M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -32,12 +32,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Maxime Bizon <mbizon@freebox.fr>,
         Ralf Baechle <ralf@linux-mips.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 284/323] mips: BCM63XX: ensure that CPU_SUPPORTS_32BIT_KERNEL is set
-Date:   Wed, 24 Nov 2021 12:57:54 +0100
-Message-Id: <20211124115728.483024177@linuxfoundation.org>
+Subject: [PATCH 5.4 039/100] mips: BCM63XX: ensure that CPU_SUPPORTS_32BIT_KERNEL is set
+Date:   Wed, 24 Nov 2021 12:57:55 +0100
+Message-Id: <20211124115656.149393330@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211124115718.822024889@linuxfoundation.org>
-References: <20211124115718.822024889@linuxfoundation.org>
+In-Reply-To: <20211124115654.849735859@linuxfoundation.org>
+References: <20211124115654.849735859@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -89,10 +89,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index fb8554c41e803..e513528be3ad7 100644
+index 041d34975ea2c..9749818eed6d6 100644
 --- a/arch/mips/Kconfig
 +++ b/arch/mips/Kconfig
-@@ -285,6 +285,9 @@ config BCM63XX
+@@ -294,6 +294,9 @@ config BCM63XX
  	select SYS_SUPPORTS_32BIT_KERNEL
  	select SYS_SUPPORTS_BIG_ENDIAN
  	select SYS_HAS_EARLY_PRINTK
