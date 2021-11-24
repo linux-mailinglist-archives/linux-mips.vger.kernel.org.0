@@ -2,63 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0C945BDBD
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 13:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1693845C479
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 14:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345097AbhKXMki (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 07:40:38 -0500
-Received: from mxout03.lancloud.ru ([45.84.86.113]:38328 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344677AbhKXMig (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Nov 2021 07:38:36 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru C40D120EE924
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Message-ID: <157fe249-d404-5f16-18ab-130103483ccf@omp.ru>
-Date:   Wed, 24 Nov 2021 15:35:15 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 4/4] MIPS: loongson64: fix FTLB configuration
-Content-Language: en-US
-To:     Huang Pei <huangpei@loongson.cn>,
+        id S1351456AbhKXNtY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 08:49:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40208 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242935AbhKXNq5 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Nov 2021 08:46:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 373F163346;
+        Wed, 24 Nov 2021 13:01:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1637758877;
+        bh=mhSzMwWW4rI8F89tcktNvyzwyOgUJFo1iiLUthPJbbQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CB0mDBNh/NCPX1ZAtEq1IVhBnh5k+zagKehR13EgWiOrtn2NkAFns3VsNKaZfmGPf
+         deCJM/OSvB/uYjlq20/NrcBFGJ4IQOAjrJy6ckYEo8AnXU9N8JTyJlBM0cFJotQTHb
+         aP9p6h+uLNyqIIZeRt1lQhgIB4bf01rF1Ie3Hy9Y=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-mips@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <ambrosehua@gmail.com>
-CC:     Bibo Mao <maobibo@loongson.cn>, <linux-mips@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <20211124101241.10196-1-huangpei@loongson.cn>
- <20211124101241.10196-5-huangpei@loongson.cn>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20211124101241.10196-5-huangpei@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 060/279] MIPS: sni: Fix the build
+Date:   Wed, 24 Nov 2021 12:55:47 +0100
+Message-Id: <20211124115720.786352485@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.0
+In-Reply-To: <20211124115718.776172708@linuxfoundation.org>
+References: <20211124115718.776172708@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 24.11.2021 13:12, Huang Pei wrote:
+From: Bart Van Assche <bvanassche@acm.org>
 
-> Commit "da1bd29742b1" ("MIPS: Loongson64: Probe CPU features via
+[ Upstream commit c91cf42f61dc77b289784ea7b15a8531defa41c0 ]
 
-    Sorry for more nitpicking... "" not needed around the SHA1 ID. Hadn't I 
-told you it should look the same as in the Fixes: tag?
+This patch fixes the following gcc 10 build error:
 
-> CPUCFG") makes 'set_ftlb_enable' called under c->cputype unset,
-> which leaves FTLB disabled on BOTH 3A2000 and 3A3000
-> 
-> Fixes: da1bd29742b1 ("MIPS: Loongson64: Probe CPU features via CPUCFG")
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-[...]
+arch/mips/sni/time.c: In function ‘a20r_set_periodic’:
+arch/mips/sni/time.c:15:26: error: unsigned conversion from ‘int’ to ‘u8’ {aka ‘volatile unsigned char’} changes value from ‘576’ to ‘64’ [-Werror=overflow]
+   15 | #define SNI_COUNTER0_DIV ((SNI_CLOCK_TICK_RATE / SNI_COUNTER2_DIV) / HZ)
+      |                          ^
+arch/mips/sni/time.c:21:45: note: in expansion of macro ‘SNI_COUNTER0_DIV’
+   21 |  *(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV;
+      |                                             ^~~~~~~~~~~~~~~~
 
-MBR, Sergey
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/sni/time.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/sni/time.c b/arch/mips/sni/time.c
+index 240bb68ec2478..ff3ba7e778901 100644
+--- a/arch/mips/sni/time.c
++++ b/arch/mips/sni/time.c
+@@ -18,14 +18,14 @@ static int a20r_set_periodic(struct clock_event_device *evt)
+ {
+ 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 12) = 0x34;
+ 	wmb();
+-	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV;
++	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV & 0xff;
+ 	wmb();
+ 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV >> 8;
+ 	wmb();
+ 
+ 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 12) = 0xb4;
+ 	wmb();
+-	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 8) = SNI_COUNTER2_DIV;
++	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 8) = SNI_COUNTER2_DIV & 0xff;
+ 	wmb();
+ 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 8) = SNI_COUNTER2_DIV >> 8;
+ 	wmb();
+-- 
+2.33.0
+
+
+
