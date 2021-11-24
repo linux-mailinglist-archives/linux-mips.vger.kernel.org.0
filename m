@@ -2,63 +2,132 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D96445AFCC
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 00:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E334645B256
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 03:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbhKWXNm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Nov 2021 18:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbhKWXNl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Nov 2021 18:13:41 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335C7C061714
-        for <linux-mips@vger.kernel.org>; Tue, 23 Nov 2021 15:10:33 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id x32so1681143ybi.12
-        for <linux-mips@vger.kernel.org>; Tue, 23 Nov 2021 15:10:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=8YefciyY8ODsLHs6dnysg1GoDMAPCTtNvXqSnG3+7jU=;
-        b=HPzeF5d9IsAW8NNs70u7O5h3NSzTe/2fs+AxzOStQVNCPzecWmYFem527N6R/YoiTa
-         2vdVVUtgeFEoUbkOHqRzMdSjdxM8xIjPNujv6iXvA4CMggP3tpMnKAjRpX5ZH+/82z4a
-         ce1ssNfOjcX7vfsZKKHsXdO/DrXEFfyK7GdcgWxRqlhA7/lwOo+HCx72Tjt3L++APqnt
-         qfjdJie/k80hXoGG08FiThGFf1AJHgQ6qt5qmiBzPFJ574NCRtL+51qFEY/AMuWRRuIY
-         uhSnaIv6Wdc0605By9dpx48esK0XHRHefqMVGaYJNIR6gPb4mtOtvgR6dmrePXfOLlkY
-         +NOg==
+        id S240094AbhKXDCf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Nov 2021 22:02:35 -0500
+Received: from mail-il1-f172.google.com ([209.85.166.172]:34408 "EHLO
+        mail-il1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240073AbhKXDCe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Nov 2021 22:02:34 -0500
+Received: by mail-il1-f172.google.com with SMTP id i9so1105210ilu.1;
+        Tue, 23 Nov 2021 18:59:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=8YefciyY8ODsLHs6dnysg1GoDMAPCTtNvXqSnG3+7jU=;
-        b=xBQXkua9JdHpzwdODoebkZ6oGN5JVb5MV6SVetB//Z+DBzyB8d2dcV4DSwBdynw71I
-         2p8FBl++SdKI+w8etFUK70PVUzL5BKzZHgV0HZwSbPdXj64njNcW5Crw1CBBXh2jL3cm
-         APjJnJ2RnoLtU0IjK8Bdj4nuCYlrb0OyzZxvRN6TeyBb6dBjwziRAUfRlYhkuMOtyc7L
-         oIm/exaHpU0LkEKZGQknVjbiYL/1dSHDV+4/5QMjpp5ThzwXkZD58gLfHIXXDbdWOj6L
-         rG7/fGPG+vf+/zJR0o0x5I2/MXu8KXw4Y31v74jgwXO4CY2HsoZyd+bH/sNfrxF9echN
-         oQnA==
-X-Gm-Message-State: AOAM530wIL1qzxZvEk4iEa+ICtWNnGw49gUJdmCIyPmEV8zDtWjt7Xxq
-        G5zLXITsibZif3fDsY+6fZi7ZanGkNclmR7yKhs=
-X-Google-Smtp-Source: ABdhPJxcDzh4pVSSW+jClQ1hMPu0DSz9Izwub/62vuLzS9H1trPUkGOG7p+K3Mf1qnlb2zFXLxLnlDPTx3KceIExlCw=
-X-Received: by 2002:a25:cec1:: with SMTP id x184mr10785214ybe.455.1637709032432;
- Tue, 23 Nov 2021 15:10:32 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:7110:35a8:b0:102:6d2:8e94 with HTTP; Tue, 23 Nov 2021
- 15:10:32 -0800 (PST)
-Reply-To: frankiebilla@gmail.com
-In-Reply-To: <CA+fkpfesaKt0LrKTN2mBoBukTjXHmLMo5ptm-LwNqGxMTjBoLA@mail.gmail.com>
-References: <CA+fkpffFzBhuxRhOMM5X_Jte8b0FK2WMyQ5o=TpAN32P1GSFmg@mail.gmail.com>
- <CA+fkpff7Hw9RjJf7zwmFhhU5_KySmJa76VMOtjYUgBN_Q=2yXA@mail.gmail.com> <CA+fkpfesaKt0LrKTN2mBoBukTjXHmLMo5ptm-LwNqGxMTjBoLA@mail.gmail.com>
-From:   robertskevin <kindnesschibuenyim@gmail.com>
-Date:   Tue, 23 Nov 2021 15:10:32 -0800
-Message-ID: <CA+fkpfe4hOD_dq8erGruJ5-NcpBKq1tgyv+SCXY=RsZ_7EkubA@mail.gmail.com>
-Subject: Very confidential
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=+gtitLZL9HaFjBnuPU8p8wXrV+klALlrvYaIvtVGr1Y=;
+        b=cYDJL8G38so23QzibdEquW3xzB3iVnK4+6kTDlhC2TaGwUdbgVPRbPIFEYZ6LVAAwp
+         MuYcnKJU2ZYUTDAYJecAeFhfu929G3+vQ0RjYVYHRR1HJ4U5Bu1+qttAcrS4U0+ShXhZ
+         89UW7l7wAQVBbG6dR3OEdUnRt0Ig4yaT5P55TVkSvQjqkzR1hf/vFlkQ62nChsIjWSG/
+         j+2+ymzB8wN1cdoELyVGJRDLB6HyhrSLAf/GMfcJ2uvsRmML3F2NNB97+xE2U6o5EMzI
+         it1s6PyZR8eaQFuon6RT3A1YeqtiIxRTkuxrBHi8LDcMqgrddzN16ORvPEAlAUDshse0
+         qwuQ==
+X-Gm-Message-State: AOAM531S1UjNZuzM0o6SavjuY2cqap92KMW5nx2SQvlJN4Dq4ocRDIHZ
+        wQUR3qRUZcQKxlLiFiebhw==
+X-Google-Smtp-Source: ABdhPJzWFPJVuLsBwNvWGvgriFboFDA1jNooS4EMQoSZqSMvlnmGGtbVzE1Y5g9KLh7fDXTK9fj/ug==
+X-Received: by 2002:a92:d643:: with SMTP id x3mr10412541ilp.107.1637722765084;
+        Tue, 23 Nov 2021 18:59:25 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id l9sm8990629ilh.82.2021.11.23.18.59.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Nov 2021 18:59:24 -0800 (PST)
+Received: (nullmailer pid 888169 invoked by uid 1000);
+        Wed, 24 Nov 2021 02:59:21 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     linux-mips@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        letux-kernel@openphoenux.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Kees Cook <keescook@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org
+In-Reply-To: <f97179a630e7d0fc739a118e2b321e1a6432876b.1637691240.git.hns@goldelico.com>
+References: <cover.1637691240.git.hns@goldelico.com> <f97179a630e7d0fc739a118e2b321e1a6432876b.1637691240.git.hns@goldelico.com>
+Subject: Re: [PATCH v8 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi DT Schema
+Date:   Tue, 23 Nov 2021 19:59:21 -0700
+Message-Id: <1637722761.010276.888168.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello dear, I wish to discuss about Late pilot Lewis Tonkinson
-investment  project. Reply for more details, Regards.
+On Tue, 23 Nov 2021 19:13:56 +0100, H. Nikolaus Schaller wrote:
+> From: Sam Ravnborg <sam@ravnborg.org>
+> 
+> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+> Based on .txt binding from Zubair Lutfullah Kakakhel
+> 
+> We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
+> 
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> ---
+>  .../display/bridge/ingenic,jz4780-hdmi.yaml   | 76 +++++++++++++++++++
+>  .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
+>  2 files changed, 79 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml:36:5: [warning] wrong indentation: expected 2 but found 4 (indentation)
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml: 'unevaluatedPropertes' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select']
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml: 'oneOf' conditional failed, one must be fixed:
+	'unevaluatedProperties' is a required property
+	'additionalProperties' is a required property
+	hint: A schema with a "$ref" to another schema either can define all properties used and use "additionalProperties" or can use "unevaluatedProperties"
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/bridge/bridge/synopsys,dw-hdmi.yaml'
+xargs: dt-doc-validate: exited with status 255; aborting
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml: ignoring, error in schema: 
+warning: no schema found in file: ./Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.example.dts:19:18: fatal error: dt-bindings/clock/jz4780-cgu.h: No such file or directory
+   19 |         #include <dt-bindings/clock/jz4780-cgu.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1413: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1558736
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
