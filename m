@@ -2,132 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E334645B256
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 03:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EBD45B2AF
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 04:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240094AbhKXDCf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 23 Nov 2021 22:02:35 -0500
-Received: from mail-il1-f172.google.com ([209.85.166.172]:34408 "EHLO
-        mail-il1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240073AbhKXDCe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 23 Nov 2021 22:02:34 -0500
-Received: by mail-il1-f172.google.com with SMTP id i9so1105210ilu.1;
-        Tue, 23 Nov 2021 18:59:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=+gtitLZL9HaFjBnuPU8p8wXrV+klALlrvYaIvtVGr1Y=;
-        b=cYDJL8G38so23QzibdEquW3xzB3iVnK4+6kTDlhC2TaGwUdbgVPRbPIFEYZ6LVAAwp
-         MuYcnKJU2ZYUTDAYJecAeFhfu929G3+vQ0RjYVYHRR1HJ4U5Bu1+qttAcrS4U0+ShXhZ
-         89UW7l7wAQVBbG6dR3OEdUnRt0Ig4yaT5P55TVkSvQjqkzR1hf/vFlkQ62nChsIjWSG/
-         j+2+ymzB8wN1cdoELyVGJRDLB6HyhrSLAf/GMfcJ2uvsRmML3F2NNB97+xE2U6o5EMzI
-         it1s6PyZR8eaQFuon6RT3A1YeqtiIxRTkuxrBHi8LDcMqgrddzN16ORvPEAlAUDshse0
-         qwuQ==
-X-Gm-Message-State: AOAM531S1UjNZuzM0o6SavjuY2cqap92KMW5nx2SQvlJN4Dq4ocRDIHZ
-        wQUR3qRUZcQKxlLiFiebhw==
-X-Google-Smtp-Source: ABdhPJzWFPJVuLsBwNvWGvgriFboFDA1jNooS4EMQoSZqSMvlnmGGtbVzE1Y5g9KLh7fDXTK9fj/ug==
-X-Received: by 2002:a92:d643:: with SMTP id x3mr10412541ilp.107.1637722765084;
-        Tue, 23 Nov 2021 18:59:25 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id l9sm8990629ilh.82.2021.11.23.18.59.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Nov 2021 18:59:24 -0800 (PST)
-Received: (nullmailer pid 888169 invoked by uid 1000);
-        Wed, 24 Nov 2021 02:59:21 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     linux-mips@vger.kernel.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        letux-kernel@openphoenux.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kees Cook <keescook@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org
-In-Reply-To: <f97179a630e7d0fc739a118e2b321e1a6432876b.1637691240.git.hns@goldelico.com>
-References: <cover.1637691240.git.hns@goldelico.com> <f97179a630e7d0fc739a118e2b321e1a6432876b.1637691240.git.hns@goldelico.com>
-Subject: Re: [PATCH v8 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi DT Schema
-Date:   Tue, 23 Nov 2021 19:59:21 -0700
-Message-Id: <1637722761.010276.888168.nullmailer@robh.at.kernel.org>
+        id S240276AbhKXDfL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 23 Nov 2021 22:35:11 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:54756 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239950AbhKXDfL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 23 Nov 2021 22:35:11 -0500
+Received: from loongson-pc (unknown [111.9.175.10])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxN+gdsp1hiNgAAA--.1811S2;
+        Wed, 24 Nov 2021 11:31:48 +0800 (CST)
+Date:   Wed, 24 Nov 2021 11:31:41 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH V2]: bugfix
+Message-ID: <20211124033141.3pgfa2g32mud2tac@loongson-pc>
+References: <20211123074927.12461-1-huangpei@loongson.cn>
+ <20211123085648.GA5995@alpha.franken.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211123085648.GA5995@alpha.franken.de>
+User-Agent: NeoMutt/20180716
+X-CM-TRANSID: AQAAf9AxN+gdsp1hiNgAAA--.1811S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrArW5GFyfCF1xtr4UKw4xXrb_yoWxXFX_Wr
+        1qkrnrZayvvr1Iy34j9ry2gFyIq3W8u3ykXasxXr4agF13uFW5Gr98W3s3Zw47J347tr15
+        Ar1Fyw1fAF9xWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoO
+        J5UUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, 23 Nov 2021 19:13:56 +0100, H. Nikolaus Schaller wrote:
-> From: Sam Ravnborg <sam@ravnborg.org>
+On Tue, Nov 23, 2021 at 09:56:48AM +0100, Thomas Bogendoerfer wrote:
+> On Tue, Nov 23, 2021 at 03:49:21PM +0800, Huang Pei wrote:
+> > V2:
+> > 
+> > +. fix warning message when building "slip" and "hamradio"
+> > 
+> > +. Indexed cache instruction CAN NOT handle cache alias, just remove the
+> > detection for "cpu_has_dc_alias" 
+> > 
+> > +. improve commit message
+> > 
 > 
-> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
-> Based on .txt binding from Zubair Lutfullah Kakakhel
+> please don't mix MIPS fixes with other independent driver updates in one
+> series.
 > 
-> We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
+> Thomas.
 > 
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> ---
->  .../display/bridge/ingenic,jz4780-hdmi.yaml   | 76 +++++++++++++++++++
->  .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
->  2 files changed, 79 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml:36:5: [warning] wrong indentation: expected 2 but found 4 (indentation)
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml: 'unevaluatedPropertes' is not one of ['$id', '$schema', 'title', 'description', 'examples', 'required', 'allOf', 'anyOf', 'oneOf', 'definitions', '$defs', 'additionalProperties', 'dependencies', 'dependentRequired', 'dependentSchemas', 'patternProperties', 'properties', 'if', 'then', 'else', 'unevaluatedProperties', 'deprecated', 'maintainers', 'select']
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml: 'oneOf' conditional failed, one must be fixed:
-	'unevaluatedProperties' is a required property
-	'additionalProperties' is a required property
-	hint: A schema with a "$ref" to another schema either can define all properties used and use "additionalProperties" or can use "unevaluatedProperties"
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/bridge/bridge/synopsys,dw-hdmi.yaml'
-xargs: dt-doc-validate: exited with status 255; aborting
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml: ignoring, error in schema: 
-warning: no schema found in file: ./Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.example.dts:19:18: fatal error: dt-bindings/clock/jz4780-cgu.h: No such file or directory
-   19 |         #include <dt-bindings/clock/jz4780-cgu.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:373: Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1413: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1558736
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+OK, these two patches is accepeted by netdev upstream, I will remove
+them in V3
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
 
