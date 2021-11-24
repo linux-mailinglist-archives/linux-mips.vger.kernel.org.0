@@ -2,97 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D641B45BE97
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 13:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0C945BDBD
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 13:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245356AbhKXMtW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 07:49:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51002 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344357AbhKXMqg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Nov 2021 07:46:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F20E60551;
-        Wed, 24 Nov 2021 12:27:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637756839;
-        bh=lOINc8zJAMoX3k8oG/uZ9gevZh0lJ56ObrmXG8BE5yU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HuYYNzFiU86xgBfUXzHXgdMuPVoc2U537empZA2TX8WxkqSKaoO3k4wSOybE5ctuz
-         DlcRtOkSO0WObhKcK0RtVYIgf84IqO+KH+ytvEfXY/TtNorHiS7HGMjj+ZegFFAvx1
-         Vhm0zzJsLPM1WjfUGilZUxPMTNQZHRrDIokA6Dxs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        linux-mips@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 225/251] mips: lantiq: add support for clk_get_parent()
-Date:   Wed, 24 Nov 2021 12:57:47 +0100
-Message-Id: <20211124115718.115065439@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211124115710.214900256@linuxfoundation.org>
-References: <20211124115710.214900256@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1345097AbhKXMki (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 07:40:38 -0500
+Received: from mxout03.lancloud.ru ([45.84.86.113]:38328 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344677AbhKXMig (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Nov 2021 07:38:36 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru C40D120EE924
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Message-ID: <157fe249-d404-5f16-18ab-130103483ccf@omp.ru>
+Date:   Wed, 24 Nov 2021 15:35:15 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 4/4] MIPS: loongson64: fix FTLB configuration
+Content-Language: en-US
+To:     Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <ambrosehua@gmail.com>
+CC:     Bibo Mao <maobibo@loongson.cn>, <linux-mips@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <20211124101241.10196-1-huangpei@loongson.cn>
+ <20211124101241.10196-5-huangpei@loongson.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <20211124101241.10196-5-huangpei@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On 24.11.2021 13:12, Huang Pei wrote:
 
-[ Upstream commit fc1aabb088860d6cf9dd03612b7a6f0de91ccac2 ]
+> Commit "da1bd29742b1" ("MIPS: Loongson64: Probe CPU features via
 
-Provide a simple implementation of clk_get_parent() in the
-lantiq subarch so that callers of it will build without errors.
+    Sorry for more nitpicking... "" not needed around the SHA1 ID. Hadn't I 
+told you it should look the same as in the Fixes: tag?
 
-Fixes this build error:
-ERROR: modpost: "clk_get_parent" [drivers/iio/adc/ingenic-adc.ko] undefined!
+> CPUCFG") makes 'set_ftlb_enable' called under c->cputype unset,
+> which leaves FTLB disabled on BOTH 3A2000 and 3A3000
+> 
+> Fixes: da1bd29742b1 ("MIPS: Loongson64: Probe CPU features via CPUCFG")
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+[...]
 
-Fixes: 171bb2f19ed6 ("MIPS: Lantiq: Add initial support for Lantiq SoCs")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Cc: linux-mips@vger.kernel.org
-Cc: John Crispin <john@phrozen.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Jonathan Cameron <jic23@kernel.org>
-Cc: linux-iio@vger.kernel.org
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Acked-by: John Crispin <john@phrozen.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/lantiq/clk.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/mips/lantiq/clk.c b/arch/mips/lantiq/clk.c
-index a263d1b751ffe..a8e309dcd38d7 100644
---- a/arch/mips/lantiq/clk.c
-+++ b/arch/mips/lantiq/clk.c
-@@ -160,6 +160,12 @@ void clk_deactivate(struct clk *clk)
- }
- EXPORT_SYMBOL(clk_deactivate);
- 
-+struct clk *clk_get_parent(struct clk *clk)
-+{
-+	return NULL;
-+}
-+EXPORT_SYMBOL(clk_get_parent);
-+
- static inline u32 get_counter_resolution(void)
- {
- 	u32 res;
--- 
-2.33.0
-
-
-
+MBR, Sergey
