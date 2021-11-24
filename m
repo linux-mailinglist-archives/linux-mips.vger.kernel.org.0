@@ -2,37 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 960EF45BAF2
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 13:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575D945BA7A
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 13:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242782AbhKXMPb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 07:15:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39084 "EHLO mail.kernel.org"
+        id S236390AbhKXMLb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 07:11:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34104 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243571AbhKXMOL (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 24 Nov 2021 07:14:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 04C15610E9;
-        Wed, 24 Nov 2021 12:09:10 +0000 (UTC)
+        id S241644AbhKXMJq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 24 Nov 2021 07:09:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5053D610A8;
+        Wed, 24 Nov 2021 12:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637755751;
-        bh=wsel/oPhDrlbelfIGtth+R89IrUdAAlfnvbGN9q1wmc=;
+        s=korg; t=1637755533;
+        bh=iM3CgcmJpYI1BYV4arFIc7UHGjgyPXrZXuVgO3cUedw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ufdNECRoX7AzEcQIe/pQge/9eZssRnrSKQzVDgcUZya9xhdjEpLfSdL69QpxRDmui
-         +l8nwIOuUYBEZqs+X8aCrHsujEZgnuei67VLGWyy9iYACS65gb2dNK1uzfZfCbRFWd
-         BYNUhQhHZ4/Fr7TfQsx6xugIXKeOmod6jQQ3qfwQ=
+        b=qkAFHh8K5+4QtB+a7ys57lqerI0uo7e4qtf52j0osVbCKvQKW0/6OT/5W5s8qkv2Q
+         J4nTsj93Y6PUvezP0KexrSiAoZbj6cITF5csm55wG4k+K3NclyeAK3IrUECfS0KQRf
+         KXUBxk5zzE05ZqVYrAkZWJZW9bhKhXLwbnK8cpK4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
+        stable@vger.kernel.org, linux-mips@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Maciej Rozycki <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 4.9 043/207] signal/mips: Update (_save|_restore)_fp_context to fail with -EFAULT
-Date:   Wed, 24 Nov 2021 12:55:14 +0100
-Message-Id: <20211124115705.332785434@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.4 123/162] MIPS: sni: Fix the build
+Date:   Wed, 24 Nov 2021 12:57:06 +0100
+Message-Id: <20211124115702.286177563@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211124115703.941380739@linuxfoundation.org>
-References: <20211124115703.941380739@linuxfoundation.org>
+In-Reply-To: <20211124115658.328640564@linuxfoundation.org>
+References: <20211124115658.328640564@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -41,68 +41,51 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-commit 95bf9d646c3c3f95cb0be7e703b371db8da5be68 upstream.
+[ Upstream commit c91cf42f61dc77b289784ea7b15a8531defa41c0 ]
 
-When an instruction to save or restore a register from the stack fails
-in _save_fp_context or _restore_fp_context return with -EFAULT.  This
-change was made to r2300_fpu.S[1] but it looks like it got lost with
-the introduction of EX2[2].  This is also what the other implementation
-of _save_fp_context and _restore_fp_context in r4k_fpu.S does, and
-what is needed for the callers to be able to handle the error.
+This patch fixes the following gcc 10 build error:
 
-Furthermore calling do_exit(SIGSEGV) from bad_stack is wrong because
-it does not terminate the entire process it just terminates a single
-thread.
+arch/mips/sni/time.c: In function ‘a20r_set_periodic’:
+arch/mips/sni/time.c:15:26: error: unsigned conversion from ‘int’ to ‘u8’ {aka ‘volatile unsigned char’} changes value from ‘576’ to ‘64’ [-Werror=overflow]
+   15 | #define SNI_COUNTER0_DIV ((SNI_CLOCK_TICK_RATE / SNI_COUNTER2_DIV) / HZ)
+      |                          ^
+arch/mips/sni/time.c:21:45: note: in expansion of macro ‘SNI_COUNTER0_DIV’
+   21 |  *(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV;
+      |                                             ^~~~~~~~~~~~~~~~
 
-As the changed code was the only caller of arch/mips/kernel/syscall.c:bad_stack
-remove the problematic and now unused helper function.
-
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Maciej Rozycki <macro@orcam.me.uk>
 Cc: linux-mips@vger.kernel.org
-[1] 35938a00ba86 ("MIPS: Fix ISA I FP sigcontext access violation handling")
-[2] f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-Cc: stable@vger.kernel.org
-Fixes: f92722dc4545 ("MIPS: Correct MIPS I FP sigcontext layout")
-Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Link: https://lkml.kernel.org/r/20211020174406.17889-5-ebiederm@xmission.com
-Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/r2300_fpu.S |    4 ++--
- arch/mips/kernel/syscall.c   |    9 ---------
- 2 files changed, 2 insertions(+), 11 deletions(-)
+ arch/mips/sni/time.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/mips/kernel/r2300_fpu.S
-+++ b/arch/mips/kernel/r2300_fpu.S
-@@ -27,8 +27,8 @@
- #define EX2(a,b)						\
- 9:	a,##b;							\
- 	.section __ex_table,"a";				\
--	PTR	9b,bad_stack;					\
--	PTR	9b+4,bad_stack;					\
-+	PTR	9b,fault;					\
-+	PTR	9b+4,fault;					\
- 	.previous
- 
- 	.set	noreorder
---- a/arch/mips/kernel/syscall.c
-+++ b/arch/mips/kernel/syscall.c
-@@ -244,12 +244,3 @@ SYSCALL_DEFINE3(cachectl, char *, addr,
+diff --git a/arch/mips/sni/time.c b/arch/mips/sni/time.c
+index fb4b3520cdc61..d72dd0d2ff595 100644
+--- a/arch/mips/sni/time.c
++++ b/arch/mips/sni/time.c
+@@ -18,14 +18,14 @@ static int a20r_set_periodic(struct clock_event_device *evt)
  {
- 	return -ENOSYS;
- }
--
--/*
-- * If we ever come here the user sp is bad.  Zap the process right away.
-- * Due to the bad stack signaling wouldn't work.
-- */
--asmlinkage void bad_stack(void)
--{
--	do_exit(SIGSEGV);
--}
+ 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 12) = 0x34;
+ 	wmb();
+-	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV;
++	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV & 0xff;
+ 	wmb();
+ 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 0) = SNI_COUNTER0_DIV >> 8;
+ 	wmb();
+ 
+ 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 12) = 0xb4;
+ 	wmb();
+-	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 8) = SNI_COUNTER2_DIV;
++	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 8) = SNI_COUNTER2_DIV & 0xff;
+ 	wmb();
+ 	*(volatile u8 *)(A20R_PT_CLOCK_BASE + 8) = SNI_COUNTER2_DIV >> 8;
+ 	wmb();
+-- 
+2.33.0
+
 
 
