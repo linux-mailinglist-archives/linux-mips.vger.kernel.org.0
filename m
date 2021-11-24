@@ -2,173 +2,225 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EC645C9C5
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 17:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF30745C9D0
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 17:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236723AbhKXQXj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 11:23:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240415AbhKXQXi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Nov 2021 11:23:38 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DB4C061574;
-        Wed, 24 Nov 2021 08:20:28 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id a2so3100028qtx.11;
-        Wed, 24 Nov 2021 08:20:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dKSHcD2L7MEpKjgBx687tkeDg+zn24Hg4tSJQGNG32g=;
-        b=fwKIDI2Kl+1QpA9/1afom/fGaUxF0aCa6ADGmjUT6fMJ4H+PC8WyVE/Bz3wEtNuzFC
-         UpRMd/sQZ+EK7pOFDrXehxxQ/vZviU12FwQe+WxntBKGFZWse4Dc0kWM4xt+nkAfAYPV
-         A/xoDLI7PGkxQuE2Vym4jzCw/lPWul4TkvOqXaFLbYvnvGS1aLyUokpqW35l2qt/yWIn
-         0AOZRJxHJLVfAy2nY+n/TzBE9H2SMThMJkvXQ8x4jHZ4cWqQv+02LI8IOHXVQ4wIBwn5
-         OQHC+CX7xgcB+zDdrAbNTMd/59M9EE3yTqwgz9NRVoS8jSHBdguTxZAl9JKhyDz6v11G
-         QvpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dKSHcD2L7MEpKjgBx687tkeDg+zn24Hg4tSJQGNG32g=;
-        b=WGm9+6n4/zFiTDe7Uf9mfzPiupORvGK21jvTHOncVVCUtfCfnclRQe29zl0ejxW78f
-         hV8f6U9bXi/DwVbbICDAr0iZjNUVvjKahNcoxO06zuTQ0Uf9vcfwgTQzmq4X6TbVPuqo
-         S6n4depKms8JssqOnjW1xAPEg2OKpTanWccIi2E6XeEIkfdl5no8lM72wwxeENkBV2DR
-         t6eXgCZeuSasj5vEZg9jBDkxz7Lzs4XkM6XjT/UXUW0PWd5WdrTKXXJ1NrXQcIAGYkZa
-         3BK1fFXF6/PKf0conq2Hi2l1TBN665hGT/0n2hi/5UeVy3ZsPrnWkverRWrEjb+9la6M
-         GLzg==
-X-Gm-Message-State: AOAM5316+7NgwrfOEUDg8k0FxVuGhSFsXvPKUswhpN6wkgFQkhLjS+ZG
-        DX4AXgLqptj4HQM6ioowoZk=
-X-Google-Smtp-Source: ABdhPJxR53g3ek4r/8Dto6m4CgA9TyEXSP+yOeqxlgmWy3LvWS0UWGQJzLkxpaLPJixl3iWzsyygqQ==
-X-Received: by 2002:ac8:5e12:: with SMTP id h18mr8718523qtx.143.1637770827734;
-        Wed, 24 Nov 2021 08:20:27 -0800 (PST)
-Received: from [192.168.1.140] ([65.35.200.237])
-        by smtp.gmail.com with ESMTPSA id g123sm71088qkf.108.2021.11.24.08.20.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Nov 2021 08:20:27 -0800 (PST)
-Subject: Re: [PATCH 2/3] of/fdt: Rework early_init_dt_scan_root() to call
- directly
-To:     Rob Herring <robh@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        John Crispin <john@phrozen.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <20211118181213.1433346-1-robh@kernel.org>
- <20211118181213.1433346-3-robh@kernel.org>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <13f402bb-933d-a5e0-4f45-24e5f5b3b1f1@gmail.com>
-Date:   Wed, 24 Nov 2021 11:20:24 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <20211118181213.1433346-3-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S236636AbhKXQYd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 11:24:33 -0500
+Received: from mo4-p03-ob.smtp.rzone.de ([85.215.255.103]:32183 "EHLO
+        mo4-p03-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236375AbhKXQYc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Nov 2021 11:24:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1637770874;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=A8cl5XMYTCID9CkBz3Mux6j+IoiYxHqGzWidm31N1Uk=;
+    b=DxsSqehZRUB94idDDA/Wmti1v2ZWN1ZaURuYxeoJjnp7qKAfFqQm27XLQ2W5PKqxa9
+    lHHbHLN7+3eK42COQtzdMpQPP/Q143cT1OCBbjyqiTFWGjIy3FsURRAznmOt1iFsZlUU
+    giYd+WgG/klJslJk+K4tUTp5aPr1lw6Jyh0BNcGtsZsOUDFlWg05fCWN/wDApYsOZ9Cv
+    AlL5Z8oWsFaDsYhiOhTCgj7x/FaYWJMTDvSucT3UoMOUm+Infz3NWFnT/SKV0Z64TI8B
+    Y/SQ2Wwtmc48Te7s9AjowRwObtKi6a+m9eqK/Ta4ntivkx8sfQ1pa8Yy7Lc3nZo71IYB
+    VgwQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3jsN+"
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
+    with ESMTPSA id e05ed8xAOGLE3lP
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 24 Nov 2021 17:21:14 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v8 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
+ DT Schema
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <QHK23R.B5XN10D1VV2O1@crapouillou.net>
+Date:   Wed, 24 Nov 2021 17:21:13 +0100
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Herring <robh@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A16256C4-C48C-4308-B99B-ACE85A2978E2@goldelico.com>
+References: <cover.1637691240.git.hns@goldelico.com>
+ <f97179a630e7d0fc739a118e2b321e1a6432876b.1637691240.git.hns@goldelico.com>
+ <QHK23R.B5XN10D1VV2O1@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/18/21 1:12 PM, Rob Herring wrote:
-> Use of the of_scan_flat_dt() function predates libfdt and is discouraged
-> as libfdt provides a nicer set of APIs. Rework early_init_dt_scan_root()
-> to be called directly and use libfdt.
-> 
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  arch/powerpc/kernel/prom.c |  4 ++--
->  drivers/of/fdt.c           | 14 +++++++-------
->  include/linux/of_fdt.h     |  3 +--
->  3 files changed, 10 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> index c6c398ccd98a..6e1a106f02eb 100644
-> --- a/arch/powerpc/kernel/prom.c
-> +++ b/arch/powerpc/kernel/prom.c
-> @@ -748,7 +748,7 @@ void __init early_init_devtree(void *params)
->  	of_scan_flat_dt(early_init_dt_scan_chosen_ppc, boot_command_line);
->  
->  	/* Scan memory nodes and rebuild MEMBLOCKs */
-> -	of_scan_flat_dt(early_init_dt_scan_root, NULL);
-> +	early_init_dt_scan_root();
->  	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
->  
->  	parse_early_param();
-> @@ -857,7 +857,7 @@ void __init early_get_first_memblock_info(void *params, phys_addr_t *size)
->  	 * mess the memblock.
->  	 */
->  	add_mem_to_memblock = 0;
-> -	of_scan_flat_dt(early_init_dt_scan_root, NULL);
-> +	early_init_dt_scan_root();
->  	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
->  	add_mem_to_memblock = 1;
->  
-> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> index 1f1705f76263..5e216555fe4f 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -1042,13 +1042,14 @@ int __init early_init_dt_scan_chosen_stdout(void)
->  /*
->   * early_init_dt_scan_root - fetch the top level address and size cells
->   */
-> -int __init early_init_dt_scan_root(unsigned long node, const char *uname,
-> -				   int depth, void *data)
-> +int __init early_init_dt_scan_root(void)
->  {
->  	const __be32 *prop;
-> +	const void *fdt = initial_boot_params;
-> +	int node = fdt_path_offset(fdt, "/");
->  
-> -	if (depth != 0)
-> -		return 0;
-> +	if (node < 0)
-> +		return -ENODEV;
->  
->  	dt_root_size_cells = OF_ROOT_NODE_SIZE_CELLS_DEFAULT;
->  	dt_root_addr_cells = OF_ROOT_NODE_ADDR_CELLS_DEFAULT;
-> @@ -1063,8 +1064,7 @@ int __init early_init_dt_scan_root(unsigned long node, const char *uname,
->  		dt_root_addr_cells = be32_to_cpup(prop);
->  	pr_debug("dt_root_addr_cells = %x\n", dt_root_addr_cells);
->  
-> -	/* break now */
-> -	return 1;
-> +	return 0;
->  }
->  
->  u64 __init dt_mem_next_cell(int s, const __be32 **cellp)
-> @@ -1263,7 +1263,7 @@ void __init early_init_dt_scan_nodes(void)
->  	int rc;
->  
->  	/* Initialize {size,address}-cells info */
-> -	of_scan_flat_dt(early_init_dt_scan_root, NULL);
-> +	early_init_dt_scan_root();
->  
->  	/* Retrieve various information from the /chosen node */
->  	rc = early_init_dt_scan_chosen(boot_command_line);
-> diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
-> index 654722235df6..df3d31926c3c 100644
-> --- a/include/linux/of_fdt.h
-> +++ b/include/linux/of_fdt.h
-> @@ -68,8 +68,7 @@ extern void early_init_dt_add_memory_arch(u64 base, u64 size);
->  extern u64 dt_mem_next_cell(int s, const __be32 **cellp);
->  
->  /* Early flat tree scan hooks */
-> -extern int early_init_dt_scan_root(unsigned long node, const char *uname,
-> -				   int depth, void *data);
-> +extern int early_init_dt_scan_root(void);
->  
->  extern bool early_init_dt_scan(void *params);
->  extern bool early_init_dt_verify(void *params);
-> 
+Hi Rob and Paul,
 
-Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+> Am 24.11.2021 um 10:17 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+> Le mar., nov. 23 2021 at 19:13:56 +0100, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> From: Sam Ravnborg <sam@ravnborg.org>
+>> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+>> Based on .txt binding from Zubair Lutfullah Kakakhel
+>> We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
+>> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> Cc: Rob Herring <robh@kernel.org>
+>> Cc: devicetree@vger.kernel.org
+>> ---
+>> .../display/bridge/ingenic,jz4780-hdmi.yaml   | 76 =
++++++++++++++++++++
+>> .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
+>> 2 files changed, 79 insertions(+)
+>> create mode 100644 =
+Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+>> diff --git =
+a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yam=
+l =
+b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yam=
+l
+>> new file mode 100644
+>> index 0000000000000..190ca4521b1d0
+>> --- /dev/null
+>> +++ =
+b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yam=
+l
+>> @@ -0,0 +1,76 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/bridge/ingenic,jz4780-hdmi.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
+>> +
+>> +maintainers:
+>> +  - H. Nikolaus Schaller <hns@goldelico.com>
+>> +
+>> +description: |
+>> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys =
+DesignWare HDMI 1.4
+>> +  TX controller IP with accompanying PHY IP.
+>> +
+>> +allOf:
+>> +  - $ref: bridge/synopsys,dw-hdmi.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: ingenic,jz4780-dw-hdmi
+>> +
+>> +  reg-io-width:
+>> +    const: 4
+>> +
+>> +  clocks:
+>> +    maxItems: 2
+>> +
+>> +  hdmi-5v-supply:
+>> +    description: Optional regulator to provide +5V at the connector
+>> +
+>> +  ports:
+>> +    $ref: /schemas/graph.yaml#/properties/ports
+>> +
+>> +required:
+>> +    - compatible
+>> +    - clocks
+>> +    - clock-names
+>> +    - ports
+>> +    - reg-io-width
+>> +
+>> +unevaluatedPropertes: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/clock/jz4780-cgu.h>
+>=20
+> This include was moved in 5.16-rc1 to =
+<dt-bindings/clock/ingenic,jz4780-cgu.h>.
+
+I see!
+
+>=20
+> Cheers,
+> -Paul
+>=20
+>> +
+>> +    hdmi: hdmi@10180000 {
+>> +        compatible =3D "ingenic,jz4780-dw-hdmi";
+>> +        reg =3D <0x10180000 0x8000>;
+>> +        reg-io-width =3D <4>;
+>> +        ddc-i2c-bus =3D <&i2c4>;
+>> +        interrupt-parent =3D <&intc>;
+>> +        interrupts =3D <3>;
+>> +        clocks =3D <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
+>> +        clock-names =3D "iahb", "isfr";
+>> +
+>> +        ports {
+>> +            #address-cells =3D <1>;
+>> +            #size-cells =3D <0>;
+>> +            hdmi_in: port@0 {
+>> +                reg =3D <0>;
+>> +                dw_hdmi_in: endpoint {
+>> +                    remote-endpoint =3D <&jz4780_lcd_out>;
+>> +                };
+>> +            };
+>> +            hdmi_out: port@1 {
+>> +                reg =3D <1>;
+>> +                dw_hdmi_out: endpoint {
+>> +                    remote-endpoint =3D <&hdmi_con>;
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +...
+>> diff --git =
+a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml =
+b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+>> index 9be44a682e67a..9cbeabaee0968 100644
+>> --- =
+a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+>> +++ =
+b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+>> @@ -50,6 +50,9 @@ properties:
+>>   interrupts:
+>>     maxItems: 1
+>> +  ddc-i2c-bus:
+>> +    description: An I2C interface if the internal DDC I2C driver is =
+not to be used
+>> +
+>> additionalProperties: true
+>> ...
+>> --
+>> 2.33.0
+>=20
+>=20
+
