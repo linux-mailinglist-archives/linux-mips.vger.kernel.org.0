@@ -2,33 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD3E45CF0B
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 22:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4D245CEFC
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Nov 2021 22:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343956AbhKXVcs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 24 Nov 2021 16:32:48 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.121]:24801 "EHLO
+        id S1345139AbhKXVcv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 24 Nov 2021 16:32:51 -0500
+Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.123]:9000 "EHLO
         mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344039AbhKXVcp (ORCPT
+        with ESMTP id S1344055AbhKXVcp (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Wed, 24 Nov 2021 16:32:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1637789359;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1637789360;
     s=strato-dkim-0002; d=goldelico.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=HSbMnkEe2Jt2W3AUERTK6EItFoNAV8MtSmNWsrhpnPI=;
-    b=aAcdMpWmp75Ubv53CkkdqSLWoAEpwE8yD+igFoapZ7JgCS6K7eByq2ZCQOWT11us9q
-    1Opjb/UOs6KeugmO818Aa33eBVDyv/uUUvxl7h2rf15T5WnT5a/mBRxLtfKbXrkWcqIT
-    RIRRUHdzahBcZxHJGwZTxcjHp70YDfPiwLoulsR6TOkFxJwm8uqwkFfldJVm4IGodws/
-    7XUMKc69ngVFnUfVfjc7QvnlsTlPIARnC9hK0qHebgx80Rlb+d4YdqgAcxGdDz/kS73y
-    AhX5RL/y7cnV4W1zXuVYLtJKC9Fh/jlIii5go8RVTfOQVtERiu2wEcnnf0JNt4CU/mGv
-    4FIg==
+    bh=CCzoD26r5WYLfaWl8adjwn/dam2pLbSIK+t8rP3qAZQ=;
+    b=cXdz3DwpNA6z2XHDJX06svq7n8S3+1gNNDnwFD11n79SSDH79tKv0+ySUSz+f+CwHI
+    N9S58fCE07KlCo5l4xiFTyxKRKe1Fo9TFCt47tLu1X4o44E421pooxkj0IJMNNSPNZUQ
+    IkwB2zJlXb/XfslMulA6PbFgP2RYbQOEKlLhc/5I9df/12Xn8a5K/cXS6Wt2CYmk8er9
+    OY2Wuv8op7hEmDSXStUKAdL7kIm5Fw5rKOOzdq8opslIFDV3dpKGxeWahBSWoURa+nRc
+    hrM1TtAsq8cNINhf2tJE+WU28Ey8Q+1eYFO+14sV+BfBgro7m5KwWgA2g79Au0g92C1F
+    La4g==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1KHeBQyh+ITDDRsZQ=="
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
-    with ESMTPSA id e05ed8xAOLTJ5Av
+    with ESMTPSA id e05ed8xAOLTJ5Aw
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Wed, 24 Nov 2021 22:29:19 +0100 (CET)
@@ -60,9 +60,9 @@ Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
         Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH v9 5/8] MIPS: DTS: jz4780: Account for Synopsys HDMI driver and LCD controllers
-Date:   Wed, 24 Nov 2021 22:29:11 +0100
-Message-Id: <3011e592c8a581f25672dc9fcb3040b2318ad9ce.1637789354.git.hns@goldelico.com>
+Subject: [PATCH v9 6/8] MIPS: DTS: CI20: Add DT nodes for HDMI setup
+Date:   Wed, 24 Nov 2021 22:29:12 +0100
+Message-Id: <e041579e170c38fd4544b3439b23c1a116264ab5.1637789354.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1637789354.git.hns@goldelico.com>
 References: <cover.1637789354.git.hns@goldelico.com>
@@ -74,69 +74,130 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 From: Paul Boddie <paul@boddie.org.uk>
 
-A specialisation of the generic Synopsys HDMI driver is employed for
-JZ4780 HDMI support. This requires a new driver, plus device tree and
-configuration modifications.
-
-Here we add jz4780 device tree setup.
+We need to hook up
+* HDMI connector
+* HDMI power regulator
+* JZ4780_CLK_HDMI @ 27 MHz
+* DDC pinmux
+* HDMI and LCDC endpoint connections
 
 Signed-off-by: Paul Boddie <paul@boddie.org.uk>
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/mips/boot/dts/ingenic/jz4780.dtsi | 40 ++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ arch/mips/boot/dts/ingenic/ci20.dts | 72 ++++++++++++++++++++++++++++-
+ 1 file changed, 70 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-index b0a4e2e019c36..3f9ea47a10cd2 100644
---- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-@@ -444,6 +444,46 @@ i2c4: i2c@10054000 {
- 		status = "disabled";
+diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+index b249a4f0f6b62..3e336b3dbb109 100644
+--- a/arch/mips/boot/dts/ingenic/ci20.dts
++++ b/arch/mips/boot/dts/ingenic/ci20.dts
+@@ -78,6 +78,18 @@ eth0_power: fixedregulator@0 {
+ 		enable-active-high;
  	};
  
-+	hdmi: hdmi@10180000 {
-+		compatible = "ingenic,jz4780-dw-hdmi";
-+		reg = <0x10180000 0x8000>;
-+		reg-io-width = <4>;
++	hdmi_out: connector {
++		compatible = "hdmi-connector";
++		label = "HDMI OUT";
++		type = "a";
 +
-+		clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
-+		clock-names = "iahb", "isfr";
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <3>;
-+
-+		status = "disabled";
++		port {
++			hdmi_con: endpoint {
++				remote-endpoint = <&dw_hdmi_out>;
++			};
++		};
 +	};
 +
-+	lcdc0: lcdc0@13050000 {
-+		compatible = "ingenic,jz4780-lcd";
-+		reg = <0x13050000 0x1800>;
+ 	ir: ir {
+ 		compatible = "gpio-ir-receiver";
+ 		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
+@@ -102,6 +114,17 @@ otg_power: fixedregulator@2 {
+ 		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
+ 		enable-active-high;
+ 	};
 +
-+		clocks = <&cgu JZ4780_CLK_TVE>, <&cgu JZ4780_CLK_LCD0PIXCLK>;
-+		clock-names = "lcd", "lcd_pclk";
++	hdmi_power: fixedregulator@3 {
++		compatible = "regulator-fixed";
 +
-+		interrupt-parent = <&intc>;
-+		interrupts = <31>;
++		regulator-name = "hdmi_power";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
 +
-+		status = "disabled";
++		gpio = <&gpa 25 0>;
++		enable-active-high;
++	};
+ };
+ 
+ &ext {
+@@ -114,11 +137,12 @@ &cgu {
+ 	 * precision.
+ 	 */
+ 	assigned-clocks = <&cgu JZ4780_CLK_OTGPHY>, <&cgu JZ4780_CLK_RTC>,
+-			  <&cgu JZ4780_CLK_SSIPLL>, <&cgu JZ4780_CLK_SSI>;
++			  <&cgu JZ4780_CLK_SSIPLL>, <&cgu JZ4780_CLK_SSI>,
++			  <&cgu JZ4780_CLK_HDMI>;
+ 	assigned-clock-parents = <0>, <&cgu JZ4780_CLK_RTCLK>,
+ 				 <&cgu JZ4780_CLK_MPLL>,
+ 				 <&cgu JZ4780_CLK_SSIPLL>;
+-	assigned-clock-rates = <48000000>, <0>, <54000000>;
++	assigned-clock-rates = <48000000>, <0>, <54000000>, <0>, <27000000>;
+ };
+ 
+ &tcu {
+@@ -509,6 +533,12 @@ pins_i2c4: i2c4 {
+ 		bias-disable;
+ 	};
+ 
++	pins_hdmi_ddc: hdmi_ddc {
++		function = "hdmi-ddc";
++		groups = "hdmi-ddc";
++		bias-disable;
 +	};
 +
-+	lcdc1: lcdc1@130a0000 {
-+		compatible = "ingenic,jz4780-lcd";
-+		reg = <0x130a0000 0x1800>;
+ 	pins_nemc: nemc {
+ 		function = "nemc";
+ 		groups = "nemc-data", "nemc-cle-ale", "nemc-rd-we", "nemc-frd-fwe";
+@@ -539,3 +569,41 @@ pins_mmc1: mmc1 {
+ 		bias-disable;
+ 	};
+ };
 +
-+		clocks = <&cgu JZ4780_CLK_TVE>, <&cgu JZ4780_CLK_LCD1PIXCLK>;
-+		clock-names = "lcd", "lcd_pclk";
++&hdmi {
++	status = "okay";
 +
-+		interrupt-parent = <&intc>;
-+		interrupts = <23>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pins_hdmi_ddc>;
 +
-+		status = "disabled";
++	hdmi-5v-supply = <&hdmi_power>;
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++			dw_hdmi_in: endpoint {
++				remote-endpoint = <&lcd_out>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++			dw_hdmi_out: endpoint {
++				remote-endpoint = <&hdmi_con>;
++			};
++		};
 +	};
++};
 +
- 	nemc: nemc@13410000 {
- 		compatible = "ingenic,jz4780-nemc", "simple-mfd";
- 		reg = <0x13410000 0x10000>;
++&lcdc0 {
++	status = "okay";
++
++	port {
++		lcd_out: endpoint {
++			remote-endpoint = <&dw_hdmi_in>;
++		};
++	};
++};
 -- 
 2.33.0
 
