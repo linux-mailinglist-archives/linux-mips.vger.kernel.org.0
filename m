@@ -2,178 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD48145E672
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Nov 2021 04:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B893D45EBA5
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Nov 2021 11:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbhKZDSo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Nov 2021 22:18:44 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:56978 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237669AbhKZDQo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 25 Nov 2021 22:16:44 -0500
-Received: from loongson-pc (unknown [111.9.175.10])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxmsnPUKBhTQQAAA--.2S2;
-        Fri, 26 Nov 2021 11:13:25 +0800 (CST)
-Date:   Fri, 26 Nov 2021 11:13:19 +0800
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH 4/4] MIPS: loongson64: fix FTLB configuration
-Message-ID: <20211126031319.kfhemh73dyq4rkra@loongson-pc>
-References: <20211125105949.27147-1-huangpei@loongson.cn>
- <20211125105949.27147-5-huangpei@loongson.cn>
- <20211125155527.GC11524@alpha.franken.de>
+        id S1376717AbhKZKea (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Nov 2021 05:34:30 -0500
+Received: from mga09.intel.com ([134.134.136.24]:30486 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239294AbhKZKca (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 26 Nov 2021 05:32:30 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="235465911"
+X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
+   d="scan'208";a="235465911"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 02:23:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,265,1631602800"; 
+   d="scan'208";a="555029775"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Nov 2021 02:23:44 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 4C746120; Fri, 26 Nov 2021 12:23:48 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software nodes
+Date:   Fri, 26 Nov 2021 12:23:39 +0200
+Message-Id: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211125155527.GC11524@alpha.franken.de>
-User-Agent: NeoMutt/20180716
-X-CM-TRANSID: AQAAf9AxmsnPUKBhTQQAAA--.2S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF47WF4ftFy5XFyxZryDGFg_yoW5tr43pr
-        ySkwsFyr4jyrWUAas7Jr48Jry2qr1UJrn5Cr4qgry8A345Ar1UXr18Kw4fWry7ZryxX3W8
-        tF929FyY9rnrXrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
-        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoO
-        J5UUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 04:55:28PM +0100, Thomas Bogendoerfer wrote:
-> On Thu, Nov 25, 2021 at 06:59:49PM +0800, Huang Pei wrote:
-> > It turns out that 'decode_configs' -> 'set_ftlb_enable' is called under
-> > c->cputype unset, which leaves FTLB disabled on BOTH 3A2000 and 3A3000
-> > 
-> > Fix it by calling "decode_configs" after c->cputype is initialized
-> > 
-> > Fixes: da1bd29742b1 ("MIPS: Loongson64: Probe CPU features via CPUCFG")
-> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > ---
-> >  arch/mips/kernel/cpu-probe.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> > index ac0e2cfc6d57..24a529c6c4be 100644
-> > --- a/arch/mips/kernel/cpu-probe.c
-> > +++ b/arch/mips/kernel/cpu-probe.c
-> > @@ -1734,8 +1734,6 @@ static inline void decode_cpucfg(struct cpuinfo_mips *c)
-> >  
-> >  static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
-> >  {
-> > -	decode_configs(c);
-> > -
-> >  	/* All Loongson processors covered here define ExcCode 16 as GSExc. */
-> >  	c->options |= MIPS_CPU_GSEXCEX;
-> >  
-> > @@ -1796,6 +1794,8 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
-> >  		panic("Unknown Loongson Processor ID!");
-> >  		break;
-> >  	}
-> > +
-> > +	decode_configs(c);
-> >  }
-> >  #else
-> >  static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu) { }
-> > -- 
-> > 2.20.1
-> 
-> applied to mips-fixes.
-> 
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
-Hi, Thomas,
+In order to get rid of legacy platform data in AT25 driver,
+convert its users to use software nodes.
 
-What about PATCH 1/4, without it, kernel/trace/ring_buffer.i using
-local_add_return, like this 
---------------------------------------------------------------------------------
-    __asm__ __volatile__(
-	"     .set    push                                    \n"
-	"     .set    ""arch=r4000""                  \n"
-	".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set mips64r2;.rept 1; sync 
-	0x00; .endr; .set pop; .else; ; .endif" "\n"
-	"1:" "lld     " "%1, %2               # local_add_return\n"
-	"     addu    %0, %1, %3				\n"
-	"scd " "%0, %2						\n"
-	"     beqz    %0, 1b					\n"
-	"     addu    %0, %1, %3				\n"
-	"     .set    pop
-	\n"
-	: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
-	: "Ir" (i), "m" (l->a.counter)
-	: "memory");
-} else if (1) {
-  unsigned long temp;
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/mips/include/asm/txx9/spi.h    |  4 ++--
+ arch/mips/txx9/generic/spi_eeprom.c | 32 +++++++++++++++++------------
+ arch/mips/txx9/rbtx4938/setup.c     |  6 +++---
+ 3 files changed, 24 insertions(+), 18 deletions(-)
 
-    __asm__ __volatile__(
-	    "     .set    push                                    \n"
-	    "     .set    ""arch=r4000""                  \n"
-	    ".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set
-	    mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ;
-	    .endif" "                    \n"
-	    "1:" "lld     " "%1, %2               # local_add_return
-	    \n"
-	    "     addu    %0, %1, %3                              \n"
-	    "scd " "%0, %2
-	    \n"
-	    "     beqz    %0, 1b
-	    \n"
-	    "     addu    %0, %1, %3
-	    \n"
-	    "     .set    pop
-	    \n"
-	    : "=&r" (result), "=&r" (temp), "=m"
-	    (l->a.counter)
-	    : "Ir" (i), "m" (l->a.counter)
-	    : "memory");
-
---------------------------------------------------------------------------------
-it is wrong here, "lld" + "addu"
-
-with it, like this 
---------------------------------------------------------------------------------
- if (1) {
-  unsigned long temp;
-
-  __asm__ __volatile__(
-	  "     .set    push                                    \n"
-	  "     .set    ""arch=r4000""                  \n"
-	   ".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set mips64r2;
-	.rept 1; sync 0x00; .endr; .set pop; .else; ; .endif" "
-	\n"
-	  "1:" "lld" "  %1, %2          \n"
-	  "     ""daddu" "      %0, %1, %3      \n"
-	  "     ""scd" "        %0, %2          \n"
-	  "     ""beqz" "       %0, 1b          \n"
-	  "     ""daddu" "      %0, %1, %3      \n"
-	  "     .set    pop                                     \n"
-	  : "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
-	  : "Ir" (i), "m" (l->a.counter)
-	  : "memory");
- } else {
-
-MIPS64 needs "lld + daddu"
-
-and PATCH 2, any comment?
-
+diff --git a/arch/mips/include/asm/txx9/spi.h b/arch/mips/include/asm/txx9/spi.h
+index 0d727f354557..1ca87a516b81 100644
+--- a/arch/mips/include/asm/txx9/spi.h
++++ b/arch/mips/include/asm/txx9/spi.h
+@@ -16,11 +16,11 @@
+ #include <linux/errno.h>
  
+ #ifdef CONFIG_SPI
+-int spi_eeprom_register(int busid, int chipid, int size);
++int spi_eeprom_register(int busid, int chipid);
+ int spi_eeprom_read(int busid, int chipid,
+ 		    int address, unsigned char *buf, int len);
+ #else
+-static inline int spi_eeprom_register(int busid, int chipid, int size)
++static inline int spi_eeprom_register(int busid, int chipid)
+ {
+ 	return -ENODEV;
+ }
+diff --git a/arch/mips/txx9/generic/spi_eeprom.c b/arch/mips/txx9/generic/spi_eeprom.c
+index d833dd2c9b55..cb4b4d47437e 100644
+--- a/arch/mips/txx9/generic/spi_eeprom.c
++++ b/arch/mips/txx9/generic/spi_eeprom.c
+@@ -9,18 +9,32 @@
+  *
+  * Support for TX4938 in 2.6 - Manish Lachwani (mlachwani@mvista.com)
+  */
++#include <linux/device.h>
++#include <linux/export.h>
+ #include <linux/init.h>
++#include <linux/property.h>
+ #include <linux/slab.h>
+-#include <linux/export.h>
+-#include <linux/device.h>
++
+ #include <linux/spi/spi.h>
+-#include <linux/spi/eeprom.h>
++
+ #include <asm/txx9/spi.h>
+ 
++#define AT250X0_SIZE		128
+ #define AT250X0_PAGE_SIZE	8
+ 
++static const struct property_entry spi_eeprom_properties[] = {
++	PROPERTY_ENTRY_U32("size", AT250X0_SIZE),
++	PROPERTY_ENTRY_U32("pagesize", AT250X0_PAGE_SIZE),
++	PROPERTY_ENTRY_U32("address-width", 8),
++	{ }
++};
++
++static const struct software_node spi_eeprom_node = {
++	.properties = spi_eeprom_properties,
++};
++
+ /* register board information for at25 driver */
+-int __init spi_eeprom_register(int busid, int chipid, int size)
++int __init spi_eeprom_register(int busid, int chipid)
+ {
+ 	struct spi_board_info info = {
+ 		.modalias = "at25",
+@@ -28,16 +42,8 @@ int __init spi_eeprom_register(int busid, int chipid, int size)
+ 		.bus_num = busid,
+ 		.chip_select = chipid,
+ 		/* Mode 0: High-Active, Sample-Then-Shift */
++		.swnode = &spi_eeprom_node,
+ 	};
+-	struct spi_eeprom *eeprom;
+-	eeprom = kzalloc(sizeof(*eeprom), GFP_KERNEL);
+-	if (!eeprom)
+-		return -ENOMEM;
+-	strcpy(eeprom->name, "at250x0");
+-	eeprom->byte_len = size;
+-	eeprom->page_size = AT250X0_PAGE_SIZE;
+-	eeprom->flags = EE_ADDR1;
+-	info.platform_data = eeprom;
+ 	return spi_register_board_info(&info, 1);
+ }
+ 
+diff --git a/arch/mips/txx9/rbtx4938/setup.c b/arch/mips/txx9/rbtx4938/setup.c
+index e68eb2e7ce0c..136af1cace75 100644
+--- a/arch/mips/txx9/rbtx4938/setup.c
++++ b/arch/mips/txx9/rbtx4938/setup.c
+@@ -283,9 +283,9 @@ static int __init rbtx4938_spi_init(void)
+ 		.mode = SPI_MODE_1 | SPI_CS_HIGH,
+ 	};
+ 	spi_register_board_info(&srtc_info, 1);
+-	spi_eeprom_register(SPI_BUSNO, SEEPROM1_CS, 128);
+-	spi_eeprom_register(SPI_BUSNO, 16 + SEEPROM2_CS, 128);
+-	spi_eeprom_register(SPI_BUSNO, 16 + SEEPROM3_CS, 128);
++	spi_eeprom_register(SPI_BUSNO,  0 + SEEPROM1_CS);
++	spi_eeprom_register(SPI_BUSNO, 16 + SEEPROM2_CS);
++	spi_eeprom_register(SPI_BUSNO, 16 + SEEPROM3_CS);
+ 	gpio_request(16 + SRTC_CS, "rtc-rs5c348");
+ 	gpio_direction_output(16 + SRTC_CS, 0);
+ 	gpio_request(SEEPROM1_CS, "seeprom1");
+-- 
+2.33.0
 
