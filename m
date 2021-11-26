@@ -2,83 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F65945EE11
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Nov 2021 13:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6098B45F013
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Nov 2021 15:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353107AbhKZMjK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Nov 2021 07:39:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45389 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1377063AbhKZMhJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 26 Nov 2021 07:37:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637930037;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VPzVgc0AYP+sKhBkiolAFzffLls+sRar8XWgazVePtA=;
-        b=WD3Mw0tTVQ5GpDSlQewA62FEaVliiY2PNT2H0bPa4QVHl1ncbBKlKbFp7qThesrEx65L4H
-        VDzNVwRaj/MyBv6JGuT2+zueUEHGSKsULDlotGcz94dlTfxrlH9hsyWVLOYkHh0minnYsx
-        neWiCWbReor072FA/2TLA77YMofYDyE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-494-lecbiigyPvSggTsjaZoCPA-1; Fri, 26 Nov 2021 07:33:53 -0500
-X-MC-Unique: lecbiigyPvSggTsjaZoCPA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4AAA81CCB7;
-        Fri, 26 Nov 2021 12:33:51 +0000 (UTC)
-Received: from [10.39.195.16] (unknown [10.39.195.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 467C55D6B1;
-        Fri, 26 Nov 2021 12:33:40 +0000 (UTC)
-Message-ID: <086c9553-6ba1-411b-43db-b51670798938@redhat.com>
-Date:   Fri, 26 Nov 2021 13:33:39 +0100
+        id S1377796AbhKZOqV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Nov 2021 09:46:21 -0500
+Received: from mga06.intel.com ([134.134.136.31]:13942 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349336AbhKZOoV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 26 Nov 2021 09:44:21 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="296474562"
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="296474562"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 06:41:07 -0800
+X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
+   d="scan'208";a="599022304"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 06:41:03 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mqcPN-00AoIi-3u;
+        Fri, 26 Nov 2021 16:41:01 +0200
+Date:   Fri, 26 Nov 2021 16:41:00 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software
+ nodes
+Message-ID: <YaDx/MaMuajAEp1H@smile.fi.intel.com>
+References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
+ <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
+ <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5.5 00/30] KVM: Scalable memslots implementation
-Content-Language: en-US
-To:     "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>
-References: <20211104002531.1176691-1-seanjc@google.com>
- <cb4f5d6e-9535-dd57-d8ee-3b593a81f3a6@oracle.com>
- <YYnNA5lZNXXdX/ig@google.com>
- <f3bc3bfc-37c3-bbfd-25b4-ef0a72e534ba@oracle.com>
- <5129f02d-7c0e-8e88-797f-95e8d968df88@oracle.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <5129f02d-7c0e-8e88-797f-95e8d968df88@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/23/21 15:42, Maciej S. Szmigiero wrote:
-> Paolo,
-> 
-> I see that you have merged the whole series to kvm/queue, even though it
-> still needed some changes and, most importantly, a good round of testing.
-> 
-> Does this mean you want all these changes as a separate patch set on top
-> of the already-merged series?
+On Fri, Nov 26, 2021 at 01:16:22PM +0100, Geert Uytterhoeven wrote:
+> On Fri, Nov 26, 2021 at 11:58 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Fri, Nov 26, 2021 at 11:23 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
 
-Hi Maciej,
+...
 
-you can squash your changes and post a v6.
+> Probably all of this can be removed, given the SPI controller driver
+> itself was removed in commit 74523a5dae0c96d6 ("spi: txx9: Remove
+> driver")?
 
-Paolo
+Even better! Let Thomas speak on this.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
