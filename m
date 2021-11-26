@@ -2,92 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7345945EDC3
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Nov 2021 13:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F65945EE11
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Nov 2021 13:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350484AbhKZMVt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Nov 2021 07:21:49 -0500
-Received: from mail-ua1-f54.google.com ([209.85.222.54]:43930 "EHLO
-        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbhKZMTs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Nov 2021 07:19:48 -0500
-Received: by mail-ua1-f54.google.com with SMTP id j14so18108425uan.10;
-        Fri, 26 Nov 2021 04:16:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fVY0B9BtMXaBtpILjROtuDjtr53gY8EF4uMezskcBFc=;
-        b=KFcUFcpREb5qpOXxAlLlV20urryq1sSs6d5yG2RH81c2ESmXoVzrgv7G0XNdT9ICWF
-         FJNdZNYtx5q2Nbwol7Nty26ZQGRHw8Dtp2Nn0N1FBAHIYA3EvohljchI9Mf5l5c9Rwqc
-         SLZ2IoaXe7cmChsUdiimVypfx9/YxLE7a9M6GF/H4JZOvgGRt+nLgVYm27NdWtBhMysd
-         U3coF35CTlLlVD5t8Ph7WgO5OlwLVMos0tfVp062Tj7iWx5skscd6qdkSUWC50T66NEc
-         MMWPo3fMSDRiLb0yID5gVPBZRZ2r1yzoQ6tltO41HbGApXDPOJYYKgWFMLnHoxstfavO
-         R1MQ==
-X-Gm-Message-State: AOAM5321XlT8kVNz7M0t8mnlYz6S385TVoaXQVZucXj69hzcBJA+iu2o
-        fpjJlcMBU6zwO4RWY2fEDamWIlngahN+4Q==
-X-Google-Smtp-Source: ABdhPJyNavhsQ1vEtLz86/P5+gdmerMjW863K94ykYlv2wZd3+sa9P1iezt68OcNHZrwCB+PC5iVVQ==
-X-Received: by 2002:a05:6102:304a:: with SMTP id w10mr15825011vsa.32.1637928994579;
-        Fri, 26 Nov 2021 04:16:34 -0800 (PST)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id l24sm3362505vkk.37.2021.11.26.04.16.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Nov 2021 04:16:34 -0800 (PST)
-Received: by mail-ua1-f52.google.com with SMTP id l24so18242520uak.2;
-        Fri, 26 Nov 2021 04:16:34 -0800 (PST)
-X-Received: by 2002:a05:6102:3232:: with SMTP id x18mr16372830vsf.38.1637928993786;
- Fri, 26 Nov 2021 04:16:33 -0800 (PST)
+        id S1353107AbhKZMjK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 26 Nov 2021 07:39:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45389 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1377063AbhKZMhJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 26 Nov 2021 07:37:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637930037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VPzVgc0AYP+sKhBkiolAFzffLls+sRar8XWgazVePtA=;
+        b=WD3Mw0tTVQ5GpDSlQewA62FEaVliiY2PNT2H0bPa4QVHl1ncbBKlKbFp7qThesrEx65L4H
+        VDzNVwRaj/MyBv6JGuT2+zueUEHGSKsULDlotGcz94dlTfxrlH9hsyWVLOYkHh0minnYsx
+        neWiCWbReor072FA/2TLA77YMofYDyE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-494-lecbiigyPvSggTsjaZoCPA-1; Fri, 26 Nov 2021 07:33:53 -0500
+X-MC-Unique: lecbiigyPvSggTsjaZoCPA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4AAA81CCB7;
+        Fri, 26 Nov 2021 12:33:51 +0000 (UTC)
+Received: from [10.39.195.16] (unknown [10.39.195.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 467C55D6B1;
+        Fri, 26 Nov 2021 12:33:40 +0000 (UTC)
+Message-ID: <086c9553-6ba1-411b-43db-b51670798938@redhat.com>
+Date:   Fri, 26 Nov 2021 13:33:39 +0100
 MIME-Version: 1.0
-References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com> <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
-In-Reply-To: <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 26 Nov 2021 13:16:22 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
-Message-ID: <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software nodes
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v5.5 00/30] KVM: Scalable memslots implementation
+Content-Language: en-US
+To:     "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+References: <20211104002531.1176691-1-seanjc@google.com>
+ <cb4f5d6e-9535-dd57-d8ee-3b593a81f3a6@oracle.com>
+ <YYnNA5lZNXXdX/ig@google.com>
+ <f3bc3bfc-37c3-bbfd-25b4-ef0a72e534ba@oracle.com>
+ <5129f02d-7c0e-8e88-797f-95e8d968df88@oracle.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <5129f02d-7c0e-8e88-797f-95e8d968df88@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arnd,
+On 11/23/21 15:42, Maciej S. Szmigiero wrote:
+> Paolo,
+> 
+> I see that you have merged the whole series to kvm/queue, even though it
+> still needed some changes and, most importantly, a good round of testing.
+> 
+> Does this mean you want all these changes as a separate patch set on top
+> of the already-merged series?
 
-On Fri, Nov 26, 2021 at 11:58 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Fri, Nov 26, 2021 at 11:23 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > In order to get rid of legacy platform data in AT25 driver,
-> > convert its users to use software nodes.
-> >
-> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> This looks good to me, thanks for cleaning this up! I think Geert has this
-> hardware, adding him to Cc in case he wants to give it a spin.
+Hi Maciej,
 
-The SPI controller is only present on TX4938, not on TX4927, so it is
-unused on my rbtx4927 board.
+you can squash your changes and post a v6.
 
-> >  arch/mips/include/asm/txx9/spi.h    |  4 ++--
-> >  arch/mips/txx9/generic/spi_eeprom.c | 32 +++++++++++++++++------------
-> >  arch/mips/txx9/rbtx4938/setup.c     |  6 +++---
-> >  3 files changed, 24 insertions(+), 18 deletions(-)
+Paolo
 
-Probably all of this can be removed, given the SPI controller driver
-itself was removed in commit 74523a5dae0c96d6 ("spi: txx9: Remove
-driver")?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
