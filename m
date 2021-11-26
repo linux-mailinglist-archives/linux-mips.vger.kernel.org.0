@@ -2,108 +2,178 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3F845E432
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Nov 2021 02:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD48145E672
+	for <lists+linux-mips@lfdr.de>; Fri, 26 Nov 2021 04:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357603AbhKZB5p (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 25 Nov 2021 20:57:45 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:35570 "EHLO loongson.cn"
+        id S235461AbhKZDSo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 25 Nov 2021 22:18:44 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:56978 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1357502AbhKZBzn (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 25 Nov 2021 20:55:43 -0500
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_9PSPaBh1ooBAA--.6419S4;
-        Fri, 26 Nov 2021 09:52:19 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v9 3/3] dt-bindings: mips: Add Loongson-2K1000 reset support
-Date:   Fri, 26 Nov 2021 09:52:16 +0800
-Message-Id: <20211126015216.26605-3-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20211126015216.26605-1-zhangqing@loongson.cn>
-References: <20211126015216.26605-1-zhangqing@loongson.cn>
+        id S237669AbhKZDQo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 25 Nov 2021 22:16:44 -0500
+Received: from loongson-pc (unknown [111.9.175.10])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxmsnPUKBhTQQAAA--.2S2;
+        Fri, 26 Nov 2021 11:13:25 +0800 (CST)
+Date:   Fri, 26 Nov 2021 11:13:19 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH 4/4] MIPS: loongson64: fix FTLB configuration
+Message-ID: <20211126031319.kfhemh73dyq4rkra@loongson-pc>
+References: <20211125105949.27147-1-huangpei@loongson.cn>
+ <20211125105949.27147-5-huangpei@loongson.cn>
+ <20211125155527.GC11524@alpha.franken.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dx_9PSPaBh1ooBAA--.6419S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF15Xw13Zr1rtF1kCr1xXwb_yoW8XF4rpF
-        nxC3W7Kr4F9F13uws3KFy8Aw1rZr9aya4xXF47tr1Dtwn8Ga1Yvw1ak3Z8ZF17GF18XFWU
-        XFZ7urWUKa42kw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB2b7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2
-        jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64
-        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm
-        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6w4l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIg18DUUUU
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211125155527.GC11524@alpha.franken.de>
+User-Agent: NeoMutt/20180716
+X-CM-TRANSID: AQAAf9AxmsnPUKBhTQQAAA--.2S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF47WF4ftFy5XFyxZryDGFg_yoW5tr43pr
+        ySkwsFyr4jyrWUAas7Jr48Jry2qr1UJrn5Cr4qgry8A345Ar1UXr18Kw4fWry7ZryxX3W8
+        tF929FyY9rnrXrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        W0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoO
+        J5UUUUU
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Switch the DT binding to a YAML schema to enable the DT validation.
+On Thu, Nov 25, 2021 at 04:55:28PM +0100, Thomas Bogendoerfer wrote:
+> On Thu, Nov 25, 2021 at 06:59:49PM +0800, Huang Pei wrote:
+> > It turns out that 'decode_configs' -> 'set_ftlb_enable' is called under
+> > c->cputype unset, which leaves FTLB disabled on BOTH 3A2000 and 3A3000
+> > 
+> > Fix it by calling "decode_configs" after c->cputype is initialized
+> > 
+> > Fixes: da1bd29742b1 ("MIPS: Loongson64: Probe CPU features via CPUCFG")
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > ---
+> >  arch/mips/kernel/cpu-probe.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+> > index ac0e2cfc6d57..24a529c6c4be 100644
+> > --- a/arch/mips/kernel/cpu-probe.c
+> > +++ b/arch/mips/kernel/cpu-probe.c
+> > @@ -1734,8 +1734,6 @@ static inline void decode_cpucfg(struct cpuinfo_mips *c)
+> >  
+> >  static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+> >  {
+> > -	decode_configs(c);
+> > -
+> >  	/* All Loongson processors covered here define ExcCode 16 as GSExc. */
+> >  	c->options |= MIPS_CPU_GSEXCEX;
+> >  
+> > @@ -1796,6 +1794,8 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+> >  		panic("Unknown Loongson Processor ID!");
+> >  		break;
+> >  	}
+> > +
+> > +	decode_configs(c);
+> >  }
+> >  #else
+> >  static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu) { }
+> > -- 
+> > 2.20.1
+> 
+> applied to mips-fixes.
+> 
+> Thomas.
+> 
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
+Hi, Thomas,
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
-v8-v9:
-only modify 'make DT_CHECKER_FLAGS=-m dt_binding_check' warnings/errors
----
- .../bindings/mips/loongson/ls2k-reset.yaml    | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml
+What about PATCH 1/4, without it, kernel/trace/ring_buffer.i using
+local_add_return, like this 
+--------------------------------------------------------------------------------
+    __asm__ __volatile__(
+	"     .set    push                                    \n"
+	"     .set    ""arch=r4000""                  \n"
+	".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set mips64r2;.rept 1; sync 
+	0x00; .endr; .set pop; .else; ; .endif" "\n"
+	"1:" "lld     " "%1, %2               # local_add_return\n"
+	"     addu    %0, %1, %3				\n"
+	"scd " "%0, %2						\n"
+	"     beqz    %0, 1b					\n"
+	"     addu    %0, %1, %3				\n"
+	"     .set    pop
+	\n"
+	: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
+	: "Ir" (i), "m" (l->a.counter)
+	: "memory");
+} else if (1) {
+  unsigned long temp;
 
-diff --git a/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml b/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml
-new file mode 100644
-index 0000000000000..20b5836efd90a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mips/loongson/ls2k-reset.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/mips/loongson/ls2k-reset.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Loongson 2K1000 PM Controller
-+
-+maintainers:
-+  - Qing Zhang <zhangqing@loongson.cn>
-+
-+description: |
-+  This controller can be found in Loongson-2K1000 Soc systems.
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-pm
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    bus {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+        pm: reset-controller@1fe07000 {
-+            compatible = "loongson,ls2k-pm";
-+            reg = <0 0x1fe07000 0 0x422>;
-+        };
-+    };
-+...
--- 
-2.31.0
+    __asm__ __volatile__(
+	    "     .set    push                                    \n"
+	    "     .set    ""arch=r4000""                  \n"
+	    ".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set
+	    mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ;
+	    .endif" "                    \n"
+	    "1:" "lld     " "%1, %2               # local_add_return
+	    \n"
+	    "     addu    %0, %1, %3                              \n"
+	    "scd " "%0, %2
+	    \n"
+	    "     beqz    %0, 1b
+	    \n"
+	    "     addu    %0, %1, %3
+	    \n"
+	    "     .set    pop
+	    \n"
+	    : "=&r" (result), "=&r" (temp), "=m"
+	    (l->a.counter)
+	    : "Ir" (i), "m" (l->a.counter)
+	    : "memory");
+
+--------------------------------------------------------------------------------
+it is wrong here, "lld" + "addu"
+
+with it, like this 
+--------------------------------------------------------------------------------
+ if (1) {
+  unsigned long temp;
+
+  __asm__ __volatile__(
+	  "     .set    push                                    \n"
+	  "     .set    ""arch=r4000""                  \n"
+	   ".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set mips64r2;
+	.rept 1; sync 0x00; .endr; .set pop; .else; ; .endif" "
+	\n"
+	  "1:" "lld" "  %1, %2          \n"
+	  "     ""daddu" "      %0, %1, %3      \n"
+	  "     ""scd" "        %0, %2          \n"
+	  "     ""beqz" "       %0, 1b          \n"
+	  "     ""daddu" "      %0, %1, %3      \n"
+	  "     .set    pop                                     \n"
+	  : "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
+	  : "Ir" (i), "m" (l->a.counter)
+	  : "memory");
+ } else {
+
+MIPS64 needs "lld + daddu"
+
+and PATCH 2, any comment?
+
+ 
 
