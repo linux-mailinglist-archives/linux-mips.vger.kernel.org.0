@@ -2,81 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A250145FAEB
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Nov 2021 02:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C488E45FDBE
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Nov 2021 10:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350595AbhK0BfR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 26 Nov 2021 20:35:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:55832 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351315AbhK0BdQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 26 Nov 2021 20:33:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F91DB829B0;
-        Sat, 27 Nov 2021 01:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F51C53FC1;
-        Sat, 27 Nov 2021 01:29:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637976598;
-        bh=7AWEXiGxKVo0rxNDO4Gv6765Xqx7YOoQNOOTEkYt5ck=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ZrMFgaq6NFixSl9xJq9wHuGHgt0TQ3RCTqELC328nzVGzSru6ElAxtdRiUoI5NB1R
-         tRfNSq1XelnckovGNfEe0au0rfS2/n/6EwLJ0yDieAo/SsG3Yk0bh2s4fdbEQPxryH
-         3Jypruss4lfBfOk/rHiJQNFYp+AihDkd5/w8yfMuuv/rbXhuJm/e4JWfzrWLqCxxIv
-         nteKI5SWy/B9s9RWY3XAitTm+7P/3D+1GjfQvh3QjFy4WXgejGQFU4xZAnoqN6S/Lx
-         R9QEw0ESwUXRngkVrs3gpjcGe7JEO+AeqCP/Kor5Gjpmvg6wdj7shnaznQXtHR3Rnt
-         H/4rD6VPk8bYQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        list@opendingux.net, linux-mips@vger.kernel.org
-In-Reply-To: <20211125232543.117074-1-paul@crapouillou.net>
-References: <20211125232543.117074-1-paul@crapouillou.net>
-Subject: Re: [PATCH] ASoC: codecs/jz4770: Add missing gain control after DAC/ADC mixer
-Message-Id: <163797659699.2987942.6238411233460719577.b4-ty@kernel.org>
-Date:   Sat, 27 Nov 2021 01:29:56 +0000
+        id S1353319AbhK0Jso (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 27 Nov 2021 04:48:44 -0500
+Received: from elvis.franken.de ([193.175.24.41]:44842 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353395AbhK0Jqo (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 27 Nov 2021 04:46:44 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mquEz-0004ZM-00; Sat, 27 Nov 2021 10:43:29 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 2C7B9C2F83; Sat, 27 Nov 2021 10:43:17 +0100 (CET)
+Date:   Sat, 27 Nov 2021 10:43:17 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     torvalds@linux-foundation.org
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes for v5.16
+Message-ID: <20211127094317.GA6302@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 25 Nov 2021 23:25:43 +0000, Paul Cercueil wrote:
-> The capture and playback paths both have a configurable gain after their
-> respective mixer, which can be set from -31 dB to 0 dB in 32 steps.
-> 
-> 
+The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
 
-Applied to
+  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+are available in the Git repository at:
 
-Thanks!
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_5.16_2
 
-[1/1] ASoC: codecs/jz4770: Add missing gain control after DAC/ADC mixer
-      commit: 0b189395945dc59d327c1e0588d144ce439dfa55
+for you to fetch changes up to 41ce097f714401e6ad8f3f5eb30d7f91b0b5e495:
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+  MIPS: use 3-level pgtable for 64KB page size on MIPS_VA_BITS_48 (2021-11-25 16:52:11 +0100)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+----------------------------------------------------------------
+- build fix for ZSTD enabled configs
+- fix for preempt warning
+- fix for loongson FTLB detection
+- fix for page table level selection
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+----------------------------------------------------------------
+Huang Pei (2):
+      MIPS: loongson64: fix FTLB configuration
+      MIPS: use 3-level pgtable for 64KB page size on MIPS_VA_BITS_48
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Paul Cercueil (1):
+      MIPS: boot/compressed/: add __ashldi3 to target for ZSTD compression
 
-Thanks,
-Mark
+Tiezhu Yang (1):
+      MIPS: Fix using smp_processor_id() in preemptible in show_cpuinfo()
+
+ arch/mips/Kconfig                  | 2 +-
+ arch/mips/boot/compressed/Makefile | 2 +-
+ arch/mips/kernel/cpu-probe.c       | 4 ++--
+ arch/mips/kernel/proc.c            | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
