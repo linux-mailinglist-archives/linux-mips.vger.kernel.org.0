@@ -2,278 +2,164 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFF94605DB
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Nov 2021 12:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E150C4607F3
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Nov 2021 18:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347800AbhK1LUX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Nov 2021 06:20:23 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:52140 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352445AbhK1LSW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Nov 2021 06:18:22 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 90C781FCA1;
-        Sun, 28 Nov 2021 11:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638098105; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Anljq+Wlt67ghjUgtowz33uZJuiJE7LcFFdumpYBPbQ=;
-        b=cORDoLhhTv6Pvy/wEYOeaj0+noo8dvDMluC1ZpBarB3cAbHI40UN/1iHjN3bWBhVP0aizH
-        /NMFWg6oCo5x8lgfMjsJuECexWXZtoh9byc1oggFWKSu02kWt9gazsZhgX4El5PzIxK+as
-        2rxhxJh+CmJik0qb7yx5+btjpldJ70o=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ADEFE133D1;
-        Sun, 28 Nov 2021 11:15:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KhNhKLhko2FZUgAAMHmgww
-        (envelope-from <jgross@suse.com>); Sun, 28 Nov 2021 11:15:04 +0000
-Subject: Re: [patch 00/22] genirq/msi, PCI/MSI: Spring cleaning - Part 1
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
+        id S1347150AbhK1RVl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Nov 2021 12:21:41 -0500
+Received: from smtprelay0209.hostedemail.com ([216.40.44.209]:52266 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236142AbhK1RTl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 28 Nov 2021 12:19:41 -0500
+X-Greylist: delayed 460 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Nov 2021 12:19:40 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave08.hostedemail.com (Postfix) with ESMTP id 862BB182D5121;
+        Sun, 28 Nov 2021 17:10:46 +0000 (UTC)
+Received: from omf04.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id D5832182CED2A;
+        Sun, 28 Nov 2021 17:08:43 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 5EF1EA00041C;
+        Sun, 28 Nov 2021 17:07:48 +0000 (UTC)
+Message-ID: <8f389151c39a8a5b6b31d5238cb680305225d9f2.camel@perches.com>
+Subject: Re: [PATCH 7/9] lib/cpumask: add
+ num_{possible,present,active}_cpus_{eq,gt,le}
+From:   Joe Perches <joe@perches.com>
+To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Dennis Zhou <dennis@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-References: <20211126222700.862407977@linutronix.de>
-From:   Juergen Gross <jgross@suse.com>
-Message-ID: <2b96282e-aa7e-f864-a4fe-a1211605b0d3@suse.com>
-Date:   Sun, 28 Nov 2021 12:15:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Guo Ren <guoren@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
+        Mark Gross <markgross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Roy Pledge <Roy.Pledge@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Date:   Sun, 28 Nov 2021 09:07:52 -0800
+In-Reply-To: <20211128035704.270739-8-yury.norov@gmail.com>
+References: <20211128035704.270739-1-yury.norov@gmail.com>
+         <20211128035704.270739-8-yury.norov@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1 
 MIME-Version: 1.0
-In-Reply-To: <20211126222700.862407977@linutronix.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="Scpk3SAl3oj2hcLchcXspItyFiWaZIboV"
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: umd6ft7bscstit6mcsb41shstont4bff
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 5EF1EA00041C
+X-Spam-Status: No, score=1.60
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+NoJl8n1YyBqeqY0nk94+uRiGfczHPVi8=
+X-HE-Tag: 1638119268-113142
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Scpk3SAl3oj2hcLchcXspItyFiWaZIboV
-Content-Type: multipart/mixed; boundary="XcilTgwO7ykUk5wJYdiDkIub8q5tPTxBW";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
- Alex Williamson <alex.williamson@redhat.com>,
- Kevin Tian <kevin.tian@intel.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Megha Dey <megha.dey@intel.com>, Ashok Raj <ashok.raj@intel.com>,
- linux-pci@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
- Paul Mackerras <paulus@samba.org>,
- Benjamin Herrenschmidt <benh@kernel.crashing.org>,
- linuxppc-dev@lists.ozlabs.org,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, sparclinux@vger.kernel.org,
- x86@kernel.org, xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
- Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
- Christian Borntraeger <borntraeger@de.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>
-Message-ID: <2b96282e-aa7e-f864-a4fe-a1211605b0d3@suse.com>
-Subject: Re: [patch 00/22] genirq/msi, PCI/MSI: Spring cleaning - Part 1
-References: <20211126222700.862407977@linutronix.de>
-In-Reply-To: <20211126222700.862407977@linutronix.de>
+On Sat, 2021-11-27 at 19:57 -0800, Yury Norov wrote:
+> Add num_{possible,present,active}_cpus_{eq,gt,le} and replace num_*_cpus()
+> with one of new functions where appropriate. This allows num_*_cpus_*()
+> to return earlier depending on the condition.
+[]
+> diff --git a/arch/arc/kernel/smp.c b/arch/arc/kernel/smp.c
+[]
+> @@ -103,7 +103,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+>  	 * if platform didn't set the present map already, do it now
+>  	 * boot cpu is set to present already by init/main.c
+>  	 */
+> -	if (num_present_cpus() <= 1)
+> +	if (num_present_cpus_le(2))
+>  		init_cpu_present(cpu_possible_mask);
 
---XcilTgwO7ykUk5wJYdiDkIub8q5tPTxBW
-Content-Type: multipart/mixed;
- boundary="------------6139348637D6BA4177E1F3E2"
-Content-Language: en-US
+?  is this supposed to be 2 or 1
 
-This is a multi-part message in MIME format.
---------------6139348637D6BA4177E1F3E2
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+> diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
+[]
+> @@ -593,7 +593,7 @@ static int __init pcc_cpufreq_init(void)
+>  		return ret;
+>  	}
+>  
+> -	if (num_present_cpus() > 4) {
+> +	if (num_present_cpus_gt(4)) {
+>  		pcc_cpufreq_driver.flags |= CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING;
+>  		pr_err("%s: Too many CPUs, dynamic performance scaling disabled\n",
+>  		       __func__);
 
-On 27.11.21 02:18, Thomas Gleixner wrote:
-> The [PCI] MSI code has gained quite some warts over time. A recent
-> discussion unearthed a shortcoming: the lack of support for expanding
-> PCI/MSI-X vectors after initialization of MSI-X.
->=20
-> PCI/MSI-X has no requirement to setup all vectors when MSI-X is enabled=
- in
-> the device. The non-used vectors have just to be masked in the vector
-> table. For PCI/MSI this is not possible because the number of vectors
-> cannot be changed after initialization.
->=20
-> The PCI/MSI code, but also the core MSI irq domain code are built aroun=
-d
-> the assumption that all required vectors are installed at initializatio=
-n
-> time and freed when the device is shut down by the driver.
->=20
-> Supporting dynamic expansion at least for MSI-X is important for VFIO s=
-o
-> that the host side interrupts for passthrough devices can be installed =
-on
-> demand.
->=20
-> This is the first part of a large (total 101 patches) series which
-> refactors the [PCI]MSI infrastructure to make runtime expansion of MSI-=
-X
-> vectors possible. The last part (10 patches) provide this functionality=
-=2E
->=20
-> The first part is mostly a cleanup which consolidates code, moves the P=
-CI
-> MSI code into a separate directory and splits it up into several parts.=
-
->=20
-> No functional change intended except for patch 2/N which changes the
-> behaviour of pci_get_vector()/affinity() to get rid of the assumption t=
-hat
-> the provided index is the "index" into the descriptor list instead of u=
-sing
-> it as the actual MSI[X] index as seen by the hardware. This would break=
-
-> users of sparse allocated MSI-X entries, but non of them use these
-> functions.
->=20
-> This series is based on 5.16-rc2 and also available via git:
->=20
->       git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-=
-v1-part-1
-
-Tested with Xen (PV dom0, PV guest, PVH guest, HVM guest).
-
-You can add my:
-
-Tested-by: Juergen Gross <jgross@suse.com>
+It looks as if the present variants should be using the same values
+so the _le test above with 1 changed to 2 looks odd.
 
 
-Juergen
-
---------------6139348637D6BA4177E1F3E2
-Content-Type: application/pgp-keys;
- name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Transfer-Encoding: quoted-printable
-Content-Description: OpenPGP public key
-Content-Disposition: attachment;
- filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOBy=
-cWx
-w3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJvedYm8O=
-f8Z
-d621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y=
-9bf
-IhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xq=
-G7/
-377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR=
-3Jv
-c3MgPGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDA=
-QIe
-AQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4FUGNQH2lvWAUy+dnyT=
-hpw
-dtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3TyevpB0CA3dbBQp0OW0fgCetToGIQrg0=
-MbD
-1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbv=
-oPH
-Z8SlM4KWm8rG+lIkGurqqu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v=
-5QL
-+qHI3EIPtyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVyZ=
-2Vu
-IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJCAcDAgEGFQgCC=
-QoL
-BBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4RF7HoZhPVPogNVbC4YA6lW7Dr=
-Wf0
-teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz78X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC=
-/nu
-AFVGy+67q2DH8As3KPu0344TBDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0Lh=
-ITT
-d9jLzdDad1pQSToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLm=
-XBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkMnQfvUewRz=
-80h
-SnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMBAgAjBQJTjHDXAhsDBwsJC=
-AcD
-AgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJn=
-FOX
-gMLdBQgBlVPO3/D9R8LtF9DBAFPNhlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1=
-jnD
-kfJZr6jrbjgyoZHiw/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0=
-N51
-N5JfVRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwPOoE+l=
-otu
-fe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK/1xMI3/+8jbO0tsn1=
-tqS
-EUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuZGU+wsB5BBMBAgAjBQJTjHDrA=
-hsD
-BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3=
-g3O
-ZUEBmDHVVbqMtzwlmNC4k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5=
-dM7
-wRqzgJpJwK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu5=
-D+j
-LRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzBTNh30FVKK1Evm=
-V2x
-AKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37IoN1EblHI//x/e2AaIHpzK5h88N=
-Eaw
-QsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpW=
-nHI
-s98ndPUDpnoxWQugJ6MpMncr0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZR=
-wgn
-BC5mVM6JjQ5xDk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNV=
-bVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mmwe0icXKLk=
-pEd
-IXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0Iv3OOImwTEe4co3c1mwARA=
-QAB
-wsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMvQ/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEw=
-Tbe
-8YFsw2V/Buv6Z4Mysln3nQK5ZadD534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1=
-vJz
-Q1fOU8lYFpZXTXIHb+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8=
-VGi
-wXvTyJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqcsuylW=
-svi
-uGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5BjR/i1DG86lem3iBDX=
-zXs
-ZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------6139348637D6BA4177E1F3E2--
-
---XcilTgwO7ykUk5wJYdiDkIub8q5tPTxBW--
-
---Scpk3SAl3oj2hcLchcXspItyFiWaZIboV
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmGjZLgFAwAAAAAACgkQsN6d1ii/Ey99
-Ygf/TuyiJBY2+ZjWsQqU5ZSGT6YuYXhwPE+B8wmVLs7GMwz8vn9KaHJK68c79Ma6+or1pJ8bVeV1
-/9/UXhj0i0p0EDWRpXfe20DMCw5VKZCXioTzX7sOsjqjNtkWbhml32Gvaa7P9vqUd+FGPfbQ9l/r
-ndcLPROZz4/7Hp3R8++nRJRU65ZU8gxeNrkjOS8NeYVs2Def36ry9X/HLky5ka/bBgEmWLH7JwlS
-d9q6tmhtlbUeUbXIMLhayLFAV4ZJ6jgCCgEWa1Bvu4eh3B9OUNr4pmbuglY6gQL/nk02uR3VtyZ1
-5Pyefgqkl9M3bzJPAvspvOGs0qAxZC0k1GntQmQkBg==
-=mphy
------END PGP SIGNATURE-----
-
---Scpk3SAl3oj2hcLchcXspItyFiWaZIboV--
