@@ -2,132 +2,217 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B485460A7A
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Nov 2021 22:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0468460A93
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Nov 2021 23:18:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240395AbhK1V7U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Nov 2021 16:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241848AbhK1V5T (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Nov 2021 16:57:19 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9D1C06175B;
-        Sun, 28 Nov 2021 13:54:02 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id n12so39474234lfe.1;
-        Sun, 28 Nov 2021 13:54:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6vgwLT/ouzyM4jlzEumPwuoC7gyZzE5j02z7WHT5gL0=;
-        b=Ve2rGzh1LJA0+OcOlbbQ73O4vszbugE425G36NIT/LJkRhFMX190Vmwf9Z1u+DozQy
-         nt7KBoHLP6NcqsCJJVf/XMiWi1msgC02rhfjLu8CKl0SI+0RrFvUKjFjlZH7bdfHOiEX
-         jvvRM0yX0DY0N616Cr6USUXBiFSTo4izfqBOoNpjwV+G+cH1cFHUwmonpjoWJX8Ppl5i
-         8dEUJUKATxCUbOfS4VM/cGGt6HuPu0povTPAj3Y6GTkQG70Ogmn5eg+CfWVBj+3pxNr6
-         ReZIvwRQlO/G/fnEj5DP0/liBCD4UXfZ78eAcvQevgGY/DQsBvKDeMEPHSEvbIQ59N2I
-         efCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6vgwLT/ouzyM4jlzEumPwuoC7gyZzE5j02z7WHT5gL0=;
-        b=ziRflBiVwFZSaAlbPoGqY8FhQyG7DXue76KAUNbpCzp4nMTqkCYU7b2DiJZDfOQvyQ
-         EUhwthAedPcegzOwaEXIiJaaJhEUY23fwj9KDy+YoXTr74Bc48JRNvRYnqpgGU6O6+De
-         UHPApL0vALkrWahTpUFed5miIYZ1EZ0czdjnrt+KIxj17W2dpB7dBtH0GXxzQ9m69d6P
-         ueGs1cPS8W2lJUOgKLnCkLYhDsWgpbk/IyqbsO9nmyjhDBO+QScn9VHpALm+BhOilfoM
-         CsVFvlJx5bjh8JFqoXh5+QtHh4pl7/jS6iapH3EkI1wCVCbyFurxE9kbNOqxx398eaS6
-         E2gg==
-X-Gm-Message-State: AOAM532ENsuO63MSlmzo/fR2l4E+yUSca2m46+WlTBJvcHmy+8ulR7BF
-        s96nP4NYcsx1KQTvMAunnvNgJ/BTXIU=
-X-Google-Smtp-Source: ABdhPJxrac6Czjs8U2D2QGSscJN4jhlYtGpRqd/e7TNYLEXAP/IVggs/yFEWoCFlClXMagpvBwvrwg==
-X-Received: by 2002:a05:6512:3c82:: with SMTP id h2mr44786433lfv.128.1638136440658;
-        Sun, 28 Nov 2021 13:54:00 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id w15sm1168884ljo.97.2021.11.28.13.53.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Nov 2021 13:54:00 -0800 (PST)
-Subject: Re: [PATCH v4 08/25] kernel: Add combined power-off+restart handler
- call chain API
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
+        id S231842AbhK1WVz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Nov 2021 17:21:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57438 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235522AbhK1WTv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 28 Nov 2021 17:19:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638137795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4dDgSQ/8TweS/kg7WcZSSnDUpsnRjzcTHNmiNwKkyh0=;
+        b=WxKffYfOMdXC5FtNi2eXxIBzhs0IAPHTv8Cd++T83xRInsz1E24OEpnYpH15n+tMa3H+gv
+        MV8EGJ7UxG3/6U7iuSMnk4UJlacPpWATqLINExvNGoiephY9d6MTi3YbHugSCU0JdRouoc
+        qX4rTaGTBQhhRIdf08Yf/G9JwJyXXX4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-95-8nKb2QCzNQClj-d059dZtw-1; Sun, 28 Nov 2021 17:16:29 -0500
+X-MC-Unique: 8nKb2QCzNQClj-d059dZtw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 935911808322;
+        Sun, 28 Nov 2021 22:16:24 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B8E810016F2;
+        Sun, 28 Nov 2021 22:16:02 +0000 (UTC)
+Message-ID: <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
+Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
+ successful
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20211126180101.27818-1-digetx@gmail.com>
- <20211126180101.27818-9-digetx@gmail.com> <YaLQqks8cB0vWp6Q@qmqm.qmqm.pl>
- <9213569e-0f40-0df1-4710-8dab564e12d6@gmail.com>
- <YaPx0kY7poGpwCL9@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <1fa2d9d5-f5f6-77f5-adf6-827921acce49@gmail.com>
-Date:   Mon, 29 Nov 2021 00:53:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Date:   Mon, 29 Nov 2021 00:16:01 +0200
+In-Reply-To: <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+         <20211009021236.4122790-12-seanjc@google.com>
+         <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-In-Reply-To: <YaPx0kY7poGpwCL9@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-29.11.2021 00:17, Michał Mirosław пишет:
->> I'm having trouble with parsing this comment. Could you please try to
->> rephrase it? I don't see how you could check whether power-off handler
->> is available if you'll mix all handlers together.
-> If notify_call_chain() would be fixed to return NOTIFY_OK if any call
-> returned NOTIFY_OK, then this would be a clear way to gather the
-> answer if any of the handlers will attempt the final action (reboot or
-> power off).
+On Wed, 2021-10-27 at 16:40 +0300, Maxim Levitsky wrote:
+> On Fri, 2021-10-08 at 19:12 -0700, Sean Christopherson wrote:
+> > Invoke the arch hooks for block+unblock if and only if KVM actually
+> > attempts to block the vCPU.  The only non-nop implementation is on x86,
+> > specifically SVM's AVIC, and there is no need to put the AVIC prior to
+> > halt-polling as KVM x86's kvm_vcpu_has_events() will scour the full vIRR
+> > to find pending IRQs regardless of whether the AVIC is loaded/"running".
+> > 
+> > The primary motivation is to allow future cleanup to split out "block"
+> > from "halt", but this is also likely a small performance boost on x86 SVM
+> > when halt-polling is successful.
+> > 
+> > Adjust the post-block path to update "cur" after unblocking, i.e. include
+> > AVIC load time in halt_wait_ns and halt_wait_hist, so that the behavior
+> > is consistent.  Moving just the pre-block arch hook would result in only
+> > the AVIC put latency being included in the halt_wait stats.  There is no
+> > obvious evidence that one way or the other is correct, so just ensure KVM
+> > is consistent.
+> > 
+> > Note, x86 has two separate paths for handling APICv with respect to vCPU
+> > blocking.  VMX uses hooks in x86's vcpu_block(), while SVM uses the arch
+> > hooks in kvm_vcpu_block().  Prior to this path, the two paths were more
+> > or less functionally identical.  That is very much not the case after
+> > this patch, as the hooks used by VMX _must_ fire before halt-polling.
+> > x86's entire mess will be cleaned up in future patches.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  virt/kvm/kvm_main.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index f90b3ed05628..227f6bbe0716 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -3235,8 +3235,6 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+> >  	bool waited = false;
+> >  	u64 block_ns;
+> >  
+> > -	kvm_arch_vcpu_blocking(vcpu);
+> > -
+> >  	start = cur = poll_end = ktime_get();
+> >  	if (do_halt_poll) {
+> >  		ktime_t stop = ktime_add_ns(ktime_get(), vcpu->halt_poll_ns);
+> > @@ -3253,6 +3251,7 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+> >  		} while (kvm_vcpu_can_poll(cur, stop));
+> >  	}
+> >  
+> > +	kvm_arch_vcpu_blocking(vcpu);
+> >  
+> >  	prepare_to_rcuwait(wait);
+> >  	for (;;) {
+> > @@ -3265,6 +3264,9 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+> >  		schedule();
+> >  	}
+> >  	finish_rcuwait(wait);
+> > +
+> > +	kvm_arch_vcpu_unblocking(vcpu);
+> > +
+> >  	cur = ktime_get();
+> >  	if (waited) {
+> >  		vcpu->stat.generic.halt_wait_ns +=
+> > @@ -3273,7 +3275,6 @@ void kvm_vcpu_block(struct kvm_vcpu *vcpu)
+> >  				ktime_to_ns(cur) - ktime_to_ns(poll_end));
+> >  	}
+> >  out:
+> > -	kvm_arch_vcpu_unblocking(vcpu);
+> >  	block_ns = ktime_to_ns(cur) - ktime_to_ns(start);
+> >  
+> >  	/*
 > 
+> Makes sense.
+> 
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> 
+> Best regards,
+> 	Maxim Levitsky
 
-Could you please show a code snippet that implements your suggestion?
+
+So...
+
+Last week I decided to study a bit how AVIC behaves when vCPUs are not 100% running
+(aka no cpu_pm=on), to mostly understand their so-called 'GA log' thing.
+ 
+(This thing is that when you tell the IOMMU that a vCPU is not running,
+the IOMMU starts logging all incoming passed-through interrupts to a ring buffer,
+and raises its own interrupt, which’s handler is supposed to wake up the VM's vCPU.)
+ 
+That led to me discovering that AMD's IOMMU is totally busted after a suspend/resume cycle,
+fixing which took me few days (and most of the time I worried that it's some sort of a BIOS bug which nobody would fix,
+as the IOMMU interrupt delivery was totally busted after resume, sometimes even power cycle didn't help
+to revive it - phew...). 
+Luckily I did fix it, and patches are waiting for the review upstream.
+(https://www.spinics.net/lists/kernel/msg4153488.html)
+ 
+ 
+Another thing I discovered that this patch series totally breaks my VMs, without cpu_pm=on
+The whole series (I didn't yet bisect it) makes even my fedora32 VM be very laggy, almost unusable,
+and it only has one passed-through device, a nic).
+ 
+If I apply though only the patch series up to this patch, my fedora VM seems to work fine, but
+my windows VM still locks up hard when I run 'LatencyTop' in it, which doesn't happen without this patch.
+ 
+ 
+So far the symptoms I see is that on VCPU 0, ISR has quite high interrupt (0xe1 last time I seen it),
+TPR and PPR are 0xe0 (although I have seen TPR to have different values), and IRR has plenty of interrupts
+with lower priority. The VM seems to be stuck in this case. As if its EOI got lost or something is preventing
+the IRQ handler from issuing EOI.
+ 
+LatencyTop does install some form of a kernel driver which likely does meddle with interrupts (maybe it sends lots of self IPIs?).
+ 
+100% reproducible as soon as I start monitoring with LatencyTop.
+ 
+ 
+Without this patch it works (or if disabling halt polling),
+ 
+but I still did manage to lockup the VM few times still, after lot of random clicking/starting up various apps while LatencyTop was running,
+etc, but in this case when I dump local apic via qemu's hmp interface the VM instantly revives, which might be either same bug
+which got amplified by this patch or something else.
+That was tested on the pure 5.15.0 kernel without any patches.
+ 
+It is possible that this is a bug in LatencyTop that just got exposed by different timing.
+ 
+The windows VM does have GPU and few USB controllers passed to it, and without them, in pure VM mode, as I call it,
+the LatencyTop seems to work.
+ 
+
+Tomorrow I'll give it a more formal investigation.
+ 
+Best regards,
+	Maxim Levitsky
+
+
