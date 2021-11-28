@@ -2,25 +2,31 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE4746084E
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Nov 2021 19:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0C9460860
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Nov 2021 19:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359045AbhK1SDy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Nov 2021 13:03:54 -0500
-Received: from smtprelay0168.hostedemail.com ([216.40.44.168]:42148 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1358717AbhK1SBx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 28 Nov 2021 13:01:53 -0500
-Received: from omf09.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 991EA101DBDB6;
-        Sun, 28 Nov 2021 17:58:34 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id A8CC6E0003E9;
-        Sun, 28 Nov 2021 17:57:35 +0000 (UTC)
-Message-ID: <3e76ba158acaf414c982c95285ad5054fea7cd4f.camel@perches.com>
-Subject: Re: [PATCH 7/9] lib/cpumask: add
- num_{possible,present,active}_cpus_{eq,gt,le}
-From:   Joe Perches <joe@perches.com>
+        id S1358736AbhK1SJP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Nov 2021 13:09:15 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:52591 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231344AbhK1SHN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 28 Nov 2021 13:07:13 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4J2GZ84l0lzGX;
+        Sun, 28 Nov 2021 19:03:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1638122634; bh=sEqOa0ZEPEWEUlBRSLFAiVwd6iLDymwK+DV3juGIkQI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c8BMIb6Ys1MM9jtnUFS+OzCZESND169gxM1+qoGuDHQxJkjYTnLg1dYXL65SLSeBD
+         OptKwwF3f6jjeAWkz8hKGEIpBsOyA7AZLbEyI0Ul8i9xig/dKvGR9NZ6kh+Ny2ulTW
+         NSMm5sqIVijexkgrukA2T59koDDkGancK18mcZt702hpU7mgoZQDDZbSDYgNkFc9BO
+         VIw8ONHFtRVbVnzFi4YPF5fViRQnoyL8aNWKj0ctBrm3IfLQEgZY5IGVCfNRdmPFM4
+         VnIE/zolNmZ9Tr6q4VJbIye3TlVbgURGaBOqFwsRQiEoMGrVw4g28fuRp3xh+IiOQd
+         dpDJSAp182XbQ==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.3 at mail
+Date:   Sun, 28 Nov 2021 19:03:41 +0100
+From:   mirq-test@rere.qmqm.pl
 To:     Yury Norov <yury.norov@gmail.com>
 Cc:     linux-kernel@vger.kernel.org,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
@@ -45,7 +51,7 @@ Cc:     linux-kernel@vger.kernel.org,
         Daniel Vetter <daniel@ffwll.ch>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         David Airlie <airlied@linux.ie>,
-        David Laight <David.Laight@ACULAB.COM>,
+        David Laight <David.Laight@aculab.com>,
         Dennis Zhou <dennis@kernel.org>,
         Dinh Nguyen <dinguyen@kernel.org>,
         Geetha sowjanya <gakula@marvell.com>,
@@ -108,48 +114,86 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Date:   Sun, 28 Nov 2021 09:57:41 -0800
-In-Reply-To: <20211128174320.GA304543@lapt>
+Subject: Re: [PATCH 0/9] lib/bitmap: optimize bitmap_weight() usage
+Message-ID: <YaPEfZ0t9UFGwpml@qmqm.qmqm.pl>
 References: <20211128035704.270739-1-yury.norov@gmail.com>
-         <20211128035704.270739-8-yury.norov@gmail.com>
-         <8f389151c39a8a5b6b31d5238cb680305225d9f2.camel@perches.com>
-         <20211128174320.GA304543@lapt>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.33
-X-Stat-Signature: dxps35jgdkfac6qsmj9i1wzczrakfui8
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: A8CC6E0003E9
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19MP3rv506VCPcDGFODNyKX4EmAMaIjwdw=
-X-HE-Tag: 1638122255-377930
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211128035704.270739-1-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 2021-11-28 at 09:43 -0800, Yury Norov wrote:
-> On Sun, Nov 28, 2021 at 09:07:52AM -0800, Joe Perches wrote:
-> > On Sat, 2021-11-27 at 19:57 -0800, Yury Norov wrote:
-> > > Add num_{possible,present,active}_cpus_{eq,gt,le} and replace num_*_cpus()
-> > > with one of new functions where appropriate. This allows num_*_cpus_*()
-> > > to return earlier depending on the condition.
-> > []
-> > > diff --git a/arch/arc/kernel/smp.c b/arch/arc/kernel/smp.c
-> > []
-> > > @@ -103,7 +103,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
-> > >  	 * if platform didn't set the present map already, do it now
-> > >  	 * boot cpu is set to present already by init/main.c
-> > >  	 */
-> > > -	if (num_present_cpus() <= 1)
-> > > +	if (num_present_cpus_le(2))
-> > >  		init_cpu_present(cpu_possible_mask);
-> > 
-> > ?  is this supposed to be 2 or 1
+On Sat, Nov 27, 2021 at 07:56:55PM -0800, Yury Norov wrote:
+> In many cases people use bitmap_weight()-based functions like this:
 > 
-> X <= 1 is the equivalent of X < 2.
+> 	if (num_present_cpus() > 1)
+> 		do_something();
+> 
+> This may take considerable amount of time on many-cpus machines because
+> num_present_cpus() will traverse every word of underlying cpumask
+> unconditionally.
+> 
+> We can significantly improve on it for many real cases if stop traversing
+> the mask as soon as we count present cpus to any number greater than 1:
+> 
+> 	if (num_present_cpus_gt(1))
+> 		do_something();
+> 
+> To implement this idea, the series adds bitmap_weight_{eq,gt,le}
+> functions together with corresponding wrappers in cpumask and nodemask.
 
-True. The call though is _le not _lt
+Having slept on it I have more structured thoughts:
 
+First, I like substituting bitmap_empty/full where possible - I think
+the change stands on its own, so could be split and sent as is.
 
+I don't like the proposed API very much. One problem is that it hides
+the comparison operator and makes call sites less readable:
+
+	bitmap_weight(...) > N
+
+becomes:
+
+	bitmap_weight_gt(..., N)
+
+and:
+	bitmap_weight(...) <= N
+
+becomes:
+
+	bitmap_weight_lt(..., N+1)
+or:
+	!bitmap_weight_gt(..., N)
+
+I'd rather see something resembling memcmp() API that's known enough
+to be easier to grasp. For above examples:
+
+	bitmap_weight_cmp(..., N) > 0
+	bitmap_weight_cmp(..., N) <= 0
+	...
+
+This would also make the implementation easier in not having to
+copy and paste the code three times. Could also use a simple
+optimization reducing code size:
+
+#include <linux/overflow.h>
+
+int bitmap_weight_cmp(long *bits, size_t nbits, size_t cmp)
+{
+	for (size_t i = 0; i < nbits / BITS_PER_LONG; ++i, ++bits)
+		if (check_sub_overflow(cmp, popcount(*bits), &cmp))
+			return 1;
+
+	nbits %= BITS_PER_LONG;
+	if (nbits && check_sub_overflow(cmp,
+			popcount(*bits & GENMASK(nbits)), &cmp))
+		return 1;
+
+	return cmp ? -1 : 0;
+}
+
+Best Regards
+Micha³ Miros³aw
