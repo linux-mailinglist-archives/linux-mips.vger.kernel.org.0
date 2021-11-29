@@ -2,119 +2,76 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8825A461246
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Nov 2021 11:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290E14613E2
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Nov 2021 12:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbhK2K1F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Nov 2021 05:27:05 -0500
-Received: from elvis.franken.de ([193.175.24.41]:48508 "EHLO elvis.franken.de"
+        id S242304AbhK2LeR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Nov 2021 06:34:17 -0500
+Received: from mga17.intel.com ([192.55.52.151]:33743 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232498AbhK2KZF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:25:05 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mrdmz-0004dt-00; Mon, 29 Nov 2021 11:21:37 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 5E79DC2F89; Mon, 29 Nov 2021 11:21:16 +0100 (CET)
-Date:   Mon, 29 Nov 2021 11:21:16 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        linux-mips@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        Juergen Gross <jgross@suse.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: Re: [patch 09/22] MIPS: Octeon: Use arch_setup_msi_irq()
-Message-ID: <20211129102116.GA6158@alpha.franken.de>
-References: <20211126222700.862407977@linutronix.de>
- <20211126223824.618089023@linutronix.de>
+        id S236392AbhK2LcR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 29 Nov 2021 06:32:17 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="216644486"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="216644486"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 03:28:59 -0800
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="476663912"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 03:28:57 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mreq9-00BhiZ-6O;
+        Mon, 29 Nov 2021 13:28:57 +0200
+Date:   Mon, 29 Nov 2021 13:28:56 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software
+ nodes
+Message-ID: <YaS5ePueppEHb5AN@smile.fi.intel.com>
+References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
+ <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
+ <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
+ <YaDx/MaMuajAEp1H@smile.fi.intel.com>
+ <20211126173707.GA13686@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211126223824.618089023@linutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211126173707.GA13686@alpha.franken.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 02:18:48AM +0100, Thomas Gleixner wrote:
-> The core code provides the same loop code except for the MSI-X reject. Move
-> that to arch_setup_msi_irq() and remove the duplicated code.
+On Fri, Nov 26, 2021 at 06:37:07PM +0100, Thomas Bogendoerfer wrote:
+> On Fri, Nov 26, 2021 at 04:41:00PM +0200, Andy Shevchenko wrote:
+> > On Fri, Nov 26, 2021 at 01:16:22PM +0100, Geert Uytterhoeven wrote:
+> > > On Fri, Nov 26, 2021 at 11:58 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > On Fri, Nov 26, 2021 at 11:23 AM Andy Shevchenko
+> > > > <andriy.shevchenko@linux.intel.com> wrote:
+> > 
+> > ...
+> > 
+> > > Probably all of this can be removed, given the SPI controller driver
+> > > itself was removed in commit 74523a5dae0c96d6 ("spi: txx9: Remove
+> > > driver")?
+> > 
+> > Even better! Let Thomas speak on this.
 > 
-> No functional change.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
-> ---
->  arch/mips/pci/msi-octeon.c |   32 +++-----------------------------
->  1 file changed, 3 insertions(+), 29 deletions(-)
-> 
-> --- a/arch/mips/pci/msi-octeon.c
-> +++ b/arch/mips/pci/msi-octeon.c
-> @@ -68,6 +68,9 @@ int arch_setup_msi_irq(struct pci_dev *d
->  	u64 search_mask;
->  	int index;
->  
-> +	if (desc->pci.msi_attrib.is_msix)
-> +		return -EINVAL;
-> +
->  	/*
->  	 * Read the MSI config to figure out how many IRQs this device
->  	 * wants.  Most devices only want 1, which will give
-> @@ -182,35 +185,6 @@ int arch_setup_msi_irq(struct pci_dev *d
->  	return 0;
->  }
->  
-> -int arch_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
-> -{
-> -	struct msi_desc *entry;
-> -	int ret;
-> -
-> -	/*
-> -	 * MSI-X is not supported.
-> -	 */
-> -	if (type == PCI_CAP_ID_MSIX)
-> -		return -EINVAL;
-> -
-> -	/*
-> -	 * If an architecture wants to support multiple MSI, it needs to
-> -	 * override arch_setup_msi_irqs()
-> -	 */
-> -	if (type == PCI_CAP_ID_MSI && nvec > 1)
-> -		return 1;
-> -
-> -	for_each_pci_msi_entry(entry, dev) {
-> -		ret = arch_setup_msi_irq(dev, entry);
-> -		if (ret < 0)
-> -			return ret;
-> -		if (ret > 0)
-> -			return -ENOSPC;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  /**
->   * Called when a device no longer needs its MSI interrupts. All
->   * MSI interrupts for the device are freed.
+> let's remove it then.
 
-Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Okay, who will send a patch?
+
+P.S. I'm not a MIPS expert, I feel I'm not the right person to do,
+but I can try my best.
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+With Best Regards,
+Andy Shevchenko
+
+
