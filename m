@@ -2,65 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87929462513
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Nov 2021 23:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC43B46273F
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Nov 2021 23:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232893AbhK2WfT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Nov 2021 17:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
+        id S236296AbhK2XBm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Nov 2021 18:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233429AbhK2We5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Nov 2021 17:34:57 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A23AC0D8C9F;
-        Mon, 29 Nov 2021 09:55:23 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id y12so75379205eda.12;
-        Mon, 29 Nov 2021 09:55:23 -0800 (PST)
+        with ESMTP id S235774AbhK2XAw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Nov 2021 18:00:52 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F380C1EB41A
+        for <linux-mips@vger.kernel.org>; Mon, 29 Nov 2021 10:55:19 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so15046878pjb.1
+        for <linux-mips@vger.kernel.org>; Mon, 29 Nov 2021 10:55:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jo8G3WIFnCXJv/Wl58UbY8LXKhGKq56nydp8ornyGvw=;
-        b=AjLExKPDvZxJIAf93isJIQG5owoNwi20rpmLOoVH2+s0ZWunJFmYMjECqAXAa31ExM
-         qP4APhy58+cgNzSgs7CZp9bi9ZLfh1Um4f0T4CPKtFMqEQtoIPcbCG5ECCW+4/RpN3qP
-         1k3CIsFPt6dBLkWzV5yOedKG0phAVvwwuaHgAci5hCbOZz8Yy6GMFp/NPR+R+K6sin3x
-         5VGYrAKTVs66DntrIpjFBpn/bDtGwX2tdoIaZvud6hNaP1K0MD3EhI9p5XlWWUFTNrfc
-         xT0cVpHPnGNOA0p342OPsO0F8T5HlLM3fktULYfIDujE1Zx4qHlH1POPSzpbzwUrncLW
-         GVzQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TYbgQqCpCmOsVo/Ud6S4W0dWbGKnEHCC/sbfSrxRU2Q=;
+        b=V9NdrM9IGQ8TORtVAjZzUck1RI7UtY24/5ryhbIDx46VwTLIEKKddxeNbMrV6TQpIl
+         KTCIPozOyBw/wCgOEJPsKU3C9LENDNILuHldgqEm6W55x2AEOVy9zbC+oB0Q8kNXcib2
+         utENfqKkezcYzZnD0pmUAjWeJ/cGQai7wseSy0Tb7+ezAyGs24Tiec69FywheOS97WPw
+         hiOKPwklIAtqAAVwW+TVa82nOI4oJHItJIs2sHILKArSIy33/Br5zlJSRUemG17TIymQ
+         2z90v41HGfafPsWOqjYsVFIk8gpVXUcAMJTfJevG+nopt2huTRvy9U+7v5siSDcfSs81
+         05ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jo8G3WIFnCXJv/Wl58UbY8LXKhGKq56nydp8ornyGvw=;
-        b=Y3UxfDcyF0qmMRjjjgfWddyCmOiRu+ZT1p2bTtgeMAAJkOoiobR8rD9fohvAfJnxS1
-         Bqec1RGf7kRxXc5TRZ7EJ760OaL8ihF4rOCauHkujCJoJOFICbA0RpeCnkZiMNe2oYaQ
-         DJh1pbsxu+nIpeK4cJqokrJBpDuI4C7yCsEmhWonbfIKXFXI224eCUFnN+K2Acolclgl
-         pbTDiuuGRui6c8p/zvDRJFTYLw9NPIgS2DMTO431tQIeEiYArjJGg1/EkTqmOMHabTtJ
-         amdk25LoWunXBdQFGw+O9iyvhmYHWI22+t227+3KpP/EMbs5OO7s6qprELVMRcv4kwfu
-         IZUg==
-X-Gm-Message-State: AOAM530fct9t3JvZKws23sziAm7FyIez+WJYIOzco3ea/dOw5/XjniCr
-        W4G0dlTNAWDx4c0PD2RFYS0=
-X-Google-Smtp-Source: ABdhPJzV0Hp7Xr2kSqyy1FejCYUnhDh4xLCC02qQtKZ+cbHbGKkW71ueP1pw91X6C27D1KEW8+5Gvw==
-X-Received: by 2002:a17:907:68e:: with SMTP id wn14mr62415481ejb.258.1638208522107;
-        Mon, 29 Nov 2021 09:55:22 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id og38sm7559529ejc.5.2021.11.29.09.55.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 09:55:21 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <ba8341d6-7ee7-1af1-1385-0a9226bbf952@redhat.com>
-Date:   Mon, 29 Nov 2021 18:55:19 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
- successful
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TYbgQqCpCmOsVo/Ud6S4W0dWbGKnEHCC/sbfSrxRU2Q=;
+        b=GomaujY/aMVp/a/DoZWa6wum6GntvC34tcbNrBf8PTl8aHe1c2ZRRJoOSn2yievw0l
+         M9pJnH5vD4fx7P3hO5guY27YqVMkuCeL3hilyiUhyyPncfW+TrAr9T60zksEu9oy4OzU
+         6AqJR2b5eeTFibW2nPAFP9hpy1BdtEAi4FGI0X9gpuadH3K86WSwCIdmCsrspQB5Muju
+         8xseWUdKTeU0RW3QcZToDsdPzGb3X/DPSkT7aa4Pfkz+ZB9jc+AtSEsaUxQdSL9ydZWl
+         5iD3wRpKrPvo+K6sx0NBjFBY2k1le01HrN9RhYjPDIPqJjmoShN4hZ+Dmnp/beqwQVU/
+         4JtQ==
+X-Gm-Message-State: AOAM532sR/AgaQ5ca84TYy65vSSYDv5Vjip051H7Z4/cMqznjHg5MA2A
+        DJQrPJQ8JJ0IqqC+saUhLb5zoA==
+X-Google-Smtp-Source: ABdhPJzGwlSa9NgpBenMt4CKt9Ftf4k4qsHL0lT0KjuZVEYivrfeFPAQn3AoVSiAs1eAB5ezweh9DQ==
+X-Received: by 2002:a17:90b:2251:: with SMTP id hk17mr189639pjb.31.1638212118683;
+        Mon, 29 Nov 2021 10:55:18 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id d17sm17979027pfj.215.2021.11.29.10.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 10:55:18 -0800 (PST)
+Date:   Mon, 29 Nov 2021 18:55:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
         Paul Mackerras <paulus@ozlabs.org>,
         Anup Patel <anup.patel@wdc.com>,
@@ -87,27 +79,48 @@ Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
         David Matlack <dmatlack@google.com>,
         Oliver Upton <oupton@google.com>,
         Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
+ successful
+Message-ID: <YaUiEquKYi5eqWC0@google.com>
 References: <20211009021236.4122790-1-seanjc@google.com>
  <20211009021236.4122790-12-seanjc@google.com>
  <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
  <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
  <YaUNBfJh35WXMV0M@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YaUNBfJh35WXMV0M@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <496c2fc6-26b0-9b5d-32f4-2f9e9dd6a064@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <496c2fc6-26b0-9b5d-32f4-2f9e9dd6a064@redhat.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/29/21 18:25, Sean Christopherson wrote:
->> If I apply though only the patch series up to this patch, my fedora VM seems
->> to work fine, but my windows VM still locks up hard when I run 'LatencyTop'
->> in it, which doesn't happen without this patch.
+On Mon, Nov 29, 2021, Paolo Bonzini wrote:
+> On 11/29/21 18:25, Sean Christopherson wrote:
+> > If a posted interrupt arrives after KVM has done its final search through the vIRR,
+> > but before avic_update_iommu_vcpu_affinity() is called, the posted interrupt will
+> > be set in the vIRR without triggering a host IRQ to wake the vCPU via the GA log.
+> > 
+> > I.e. KVM is missing an equivalent to VMX's posted interrupt check for an outstanding
+> > notification after switching to the wakeup vector.
 > 
-> Buy "run 'LatencyTop' in it", do you mean running something in the Windows guest?
-> The only search results I can find for LatencyTop are Linux specific.
+> BTW Maxim reported that it can break even without assigned devices.
+> 
+> > For now, the least awful approach is sadly to keep the vcpu_(un)blocking() hooks.
+> 
+> I agree that the hooks cannot be dropped but the bug is reproducible with
+> this patch, where the hooks are still there.
 
-I think it's LatencyMon, https://www.resplendence.com/latencymon.
+...
 
-Paolo
+> Still it does seem to be a race that happens when IS_RUNNING=true but
+> vcpu->mode == OUTSIDE_GUEST_MODE.  This patch makes the race easier to
+> trigger because it moves IS_RUNNING=false later.
+
+Oh!  Any chance the bug only repros with preemption enabled?  That would explain
+why I don't see problems, I'm pretty sure I've only run AVIC with a PREEMPT=n.
+
+svm_vcpu_{un}blocking() are called with preemption enabled, and avic_set_running()
+passes in vcpu->cpu.  If the vCPU is preempted and scheduled in on a different CPU,
+avic_vcpu_load() will overwrite the vCPU's entry with the wrong CPU info.
