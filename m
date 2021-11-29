@@ -2,72 +2,124 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFECA460ED3
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Nov 2021 07:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547A2460FAB
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Nov 2021 08:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350484AbhK2Gon (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Nov 2021 01:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238716AbhK2Gmm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Nov 2021 01:42:42 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E755C061574;
-        Sun, 28 Nov 2021 22:39:25 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id f186so39269041ybg.2;
-        Sun, 28 Nov 2021 22:39:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=B6yKYPwr/LM20VGnd+7UYABkSSnQvOILrOCDqr/PwxE=;
-        b=oUwGo+yHYn0UvXAR8F7SfTAYTI/JPc9AqrRqfdaFltqBnRTb5qmksF85JBE1ARa9pb
-         K5ZeQrW8YwuE6oj7G61M7NPI6UM1fAo4Mh95eCPMvib/NF8Y36AHrlSrsUNahiEl3LKg
-         89nv5PoPD/qtepMHUkQJDDj9wRnOZ4hPdYL8EnnUV06MZQaCQ0MIdYdil548DKkb7lo6
-         z3Dt/WDiT+UoVqjAvZShK8Tb7+KG+ab0oJL26lRAV1345bLgKWjHk3XslfvLJzkVaSOb
-         HZhqsaZtbMgYVzqfkT34a4iPTqxpX7QyKQLxLhDBmlQATiPt+N/BNM2MGfs+sHsT72hj
-         ZbnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=B6yKYPwr/LM20VGnd+7UYABkSSnQvOILrOCDqr/PwxE=;
-        b=QygGp5LLIaaPul61QpYputusH4KLWhNGwm5tVIyPHlebtLgf9P7ejO0LmuTbBAHJCU
-         YHiQFkHpQLIEedrgVZsYr6Nh7gd6RJXOARev8z40UAx38nVScUYH7h50nce/QVAfwknz
-         ujrnA+zh8CNKEclfxtP5lNLJE+0ToMb2D0BsKv0DrJNGDfnnDqFcQtUxorgqe5h1j6TB
-         otvgmOnL2DQoLq7N/tkbiPhLHbkD4AJm+WFP1LW878eUNJCtmy1cPZ46FwlaMQr/9xT5
-         Q/hkARRoIb2AVYd/7d8jVJoKumiK0YLAHK0tY4JZOiUz9uQ6/NRhO+RDIrlSMCviaRIU
-         SNSQ==
-X-Gm-Message-State: AOAM531PLB1De79tmBo9qBbgnSYBEutleJJ1M3YO84ukG/fjgbOCq+R3
-        FFadl5H6kc7tGMmB+3rFGy629lQk7T0RXILraadBk5GP7JA=
-X-Google-Smtp-Source: ABdhPJwsvmBAKHvBiarhsddSdnsJ5UOWtbfKkp/pdkROcfBQM000fltN4XDXGW3xJqQe2QajZ4/HKiaTq7ccGHL5RLI=
-X-Received: by 2002:a25:4253:: with SMTP id p80mr32449552yba.312.1638167964657;
- Sun, 28 Nov 2021 22:39:24 -0800 (PST)
+        id S234304AbhK2ICj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 29 Nov 2021 03:02:39 -0500
+Received: from 10.mo548.mail-out.ovh.net ([46.105.77.235]:50999 "EHLO
+        10.mo548.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240167AbhK2IAj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Nov 2021 03:00:39 -0500
+X-Greylist: delayed 560 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Nov 2021 03:00:38 EST
+Received: from mxplan5.mail.ovh.net (unknown [10.108.20.7])
+        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id D10AB2064C;
+        Mon, 29 Nov 2021 07:33:34 +0000 (UTC)
+Received: from kaod.org (37.59.142.103) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 29 Nov
+ 2021 08:33:33 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-103G0058ffb0110-7673-40ee-a51a-c9a65a45fa89,
+                    3279756C2EB34864E332BB908A933B747C53BE44) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <b1a6d267-c7b4-c4b9-ab0e-f5cc32bfe9bf@kaod.org>
+Date:   Mon, 29 Nov 2021 08:33:33 +0100
 MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Mon, 29 Nov 2021 07:39:13 +0100
-Message-ID: <CAKXUXMyEqSsA1Xez+6nbdQTqbKJZFUVGtzG6Xb2aDDcTHCe8sg@mail.gmail.com>
-Subject: Reference to non-existing symbol WAR_R10000 in arch/mips/net/bpf_jit_comp.h
-To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [patch 05/22] genirq/msi: Fixup includes
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     <linux-hyperv@vger.kernel.org>, Paul Mackerras <paulus@samba.org>,
+        <sparclinux@vger.kernel.org>, Wei Liu <wei.liu@kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
+        <x86@kernel.org>, Christian Borntraeger <borntraeger@de.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>, <linux-pci@vger.kernel.org>,
+        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Juergen Gross <jgross@suse.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+References: <20211126222700.862407977@linutronix.de>
+ <20211126223824.382273262@linutronix.de>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20211126223824.382273262@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.103]
+X-ClientProxiedBy: DAG1EX2.mxp5.local (172.16.2.2) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 67cb6c92-6833-4394-901b-34c8b386eb6d
+X-Ovh-Tracer-Id: 9389442276353674140
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrheekgdegjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeigedvffekgeeftedutddttdevudeihfegudffkeeitdekkeetkefhffelveelleenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhg
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dear Johan,
+On 11/27/21 02:18, Thomas Gleixner wrote:
+> Remove the kobject.h include from msi.h as it's not required and add a
+> sysfs.h include to the core code instead.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-In arch/mips/net/bpf_jit_comp.h and introduced with commit commit
-72570224bb8f ("mips, bpf: Add JIT workarounds for CPU errata"), there
-is an ifdef that refers to a non-existing symbol WAR_R10000. Did you
-intend to refer to WAR_R10000_LLSC instead?
 
-This issue was identified with the script ./scripts/checkkconfigsymbols.py.
+This patch breaks compile on powerpc :
 
-Best regards,
+   CC      arch/powerpc/kernel/msi.o
+In file included from ../arch/powerpc/kernel/msi.c:7:
+../include/linux/msi.h:410:65: error: ‘struct cpumask’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+   410 | int msi_domain_set_affinity(struct irq_data *data, const struct cpumask *mask,
+       |                                                                 ^~~~~~~
+cc1: all warnings being treated as errors
 
-Lukas
+Below is fix you can merge in patch 5.
+
+Thanks,
+
+C.
+
+--- a/include/linux/msi.h
++++ b/include/linux/msi.h
+@@ -2,6 +2,7 @@
+  #ifndef LINUX_MSI_H
+  #define LINUX_MSI_H
+  
++#include <linux/cpumask.h>
+  #include <linux/list.h>
+  #include <asm/msi.h>
+
+> ---
+>   include/linux/msi.h |    1 -
+>   kernel/irq/msi.c    |    1 +
+>   2 files changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/include/linux/msi.h
+> +++ b/include/linux/msi.h
+> @@ -2,7 +2,6 @@
+>   #ifndef LINUX_MSI_H
+>   #define LINUX_MSI_H
+>   
+> -#include <linux/kobject.h>
+>   #include <linux/list.h>
+>   #include <asm/msi.h>
+>   
+> --- a/kernel/irq/msi.c
+> +++ b/kernel/irq/msi.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/irqdomain.h>
+>   #include <linux/msi.h>
+>   #include <linux/slab.h>
+> +#include <linux/sysfs.h>
+>   #include <linux/pci.h>
+>   
+>   #include "internals.h"
+> 
+
