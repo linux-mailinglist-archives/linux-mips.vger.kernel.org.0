@@ -2,178 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 710F7460B3A
-	for <lists+linux-mips@lfdr.de>; Mon, 29 Nov 2021 00:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0A7460BA3
+	for <lists+linux-mips@lfdr.de>; Mon, 29 Nov 2021 01:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359488AbhK1Xls (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 28 Nov 2021 18:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241220AbhK1Xjr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 28 Nov 2021 18:39:47 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898A5C06174A;
-        Sun, 28 Nov 2021 15:36:30 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id 193so20935202qkh.10;
-        Sun, 28 Nov 2021 15:36:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+pvPLMMOaG75eXeO+MYWVtFy7p98nfe1U4iD6DUFgqs=;
-        b=FqHxiwrQ7QYivLGpovhQrNQCHUCj7LxMV2WH4G2Ujzkjgck5ZuLpYg6YmyS5/pcjd8
-         PioI6TsqEy6uPfhoz8wEavEgHnpCryLeBpBEb8dr5G6s12WteiFVLQFxrBR47EVsTB3X
-         ndIWwpq8YabRGonzz7m7f+N7UJXzBMp2vfRHxXo9M1u6ZB6qiEh6DrJAZ2z7gRkAQ5sC
-         IqRPeZsbgWqH6z7gZV/iyVzYOISv9QQ48jjOTsL+5HMXkolOWVbHK0gj+h+Ra3+OPnrQ
-         HZwGnjmshXRb1nFHqTfVME98Ezv2622Zg9Ol7LGc837jR3cjnZ1W8PCl/MaA7m1eTWjV
-         ggTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+pvPLMMOaG75eXeO+MYWVtFy7p98nfe1U4iD6DUFgqs=;
-        b=7aCKBvnO39Y1LuXAjf4CAl3P3dr+n5iUSl7lBKO5t77W1Le21lLr7YvRw5FaPKHmiq
-         ShOcyu57BVIRMNdlGnbI7HN6yV8DB/P0OlwZIZSm0MdLTk/GO/V3xwjg10HglkSYi5Pe
-         KrwAAOWXjINFeJyw7pAJvUpSmV+8tZGvKFTlXrPIHi044KxyTJK2kYrHPdVS+PzBJxmJ
-         pbWzbRIiqHJKtcgqWhXjLSdGtZNNl/WztchxAiPoYIaXMWhM8IZ5xaQK8EkvKC6k4Sv1
-         Ur5vhoAmKInmDomlj15CoBqvBDVzl9Cdf/xXZmiMwTzxKaN+tsRQDozr7sbd7WLF+IzA
-         jhGg==
-X-Gm-Message-State: AOAM533px3vhgBpnIVbCj0cROWTiO3A0pfax9x4pTNf3EOCzzykhbySL
-        8xS7jW+rvn1ISeyXYMYWOKs=
-X-Google-Smtp-Source: ABdhPJwjz8dPYMt9os+urjypBO3KPO0n0aAUmhuhKTUddMw0/hFm/BxjybZbsejId+j0oxfauAhjwQ==
-X-Received: by 2002:a05:620a:4491:: with SMTP id x17mr26762094qkp.528.1638142589577;
-        Sun, 28 Nov 2021 15:36:29 -0800 (PST)
-Received: from localhost ([66.216.211.25])
-        by smtp.gmail.com with ESMTPSA id h19sm8013261qth.63.2021.11.28.15.36.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 15:36:28 -0800 (PST)
-Date:   Sun, 28 Nov 2021 15:36:27 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Andy Shevchenko <andy@infradead.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@fb.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Lameter <cl@linux.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Dennis Zhou <dennis@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ian Rogers <irogers@google.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>, kvm@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        id S237523AbhK2AcO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 28 Nov 2021 19:32:14 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:5612 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232018AbhK2AaN (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 28 Nov 2021 19:30:13 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4J2R463HYCz9Y;
+        Mon, 29 Nov 2021 01:26:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1638145614; bh=rYhG1/gOEGdeEm/s8Gt8rEBk1iF8QMIsgq7S9tytKm0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CbL6Dkr0hp6+eWfnOkswWvW2NOKJ79Uh6/l2ZCnK5kWTiOO50iqx187Rg4dryYZZY
+         bxYRz4m9fgWtZVh11lmgMaMMzocpKUJUWIlke/44DEMmzJJm4vDOSxFAyf1Gq25nhd
+         1THlT17c8aj7yKXukSvNxOS2rqgVH1j/XRMa1p7Hswrcs4jJdmmxtpOwmRnm9PweUg
+         dgln8/6i94ET+XVFAx+2l6pzk4WNbL+PWxg255szxizJhOsvQ3eK1ntEQbcIyPN3HU
+         KJwCs9dJC+yqQftWDNSkBS/r4FvpiW2ousq8It65okWyLREqQTSJR+N2Sf4mDmjtBp
+         iZvEDATRHwtcA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.3 at mail
+Date:   Mon, 29 Nov 2021 01:26:42 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Russell King <linux@armlinux.org.uk>,
-        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Petr Mladek <pmladek@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Roy Pledge <Roy.Pledge@nxp.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tejun Heo <tj@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH 0/9] lib/bitmap: optimize bitmap_weight() usage
-Message-ID: <20211128233627.GA323159@lapt>
-References: <20211128035704.270739-1-yury.norov@gmail.com>
- <1638096766.3elxdzb8ly.astroid@bobo.none>
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v4 05/25] reboot: Warn if restart handler has duplicated
+ priority
+Message-ID: <YaQeQgbW+CjEdsqG@qmqm.qmqm.pl>
+References: <20211126180101.27818-1-digetx@gmail.com>
+ <20211126180101.27818-6-digetx@gmail.com>
+ <YaLNOJTM+lVq+YNS@qmqm.qmqm.pl>
+ <033ddf2a-6223-1a82-ec64-30f17c891f67@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1638096766.3elxdzb8ly.astroid@bobo.none>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <033ddf2a-6223-1a82-ec64-30f17c891f67@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 09:08:41PM +1000, Nicholas Piggin wrote:
-> Excerpts from Yury Norov's message of November 28, 2021 1:56 pm:
-> > In many cases people use bitmap_weight()-based functions like this:
+On Mon, Nov 29, 2021 at 12:06:19AM +0300, Dmitry Osipenko wrote:
+> 28.11.2021 03:28, Michał Mirosław пишет:
+> > On Fri, Nov 26, 2021 at 09:00:41PM +0300, Dmitry Osipenko wrote:
+> >> Add sanity check which ensures that there are no two restart handlers
+> >> registered with the same priority. Normally it's a direct sign of a
+> >> problem if two handlers use the same priority.
 > > 
-> > 	if (num_present_cpus() > 1)
-> > 		do_something();
-> > 
-> > This may take considerable amount of time on many-cpus machines because
-> > num_present_cpus() will traverse every word of underlying cpumask
-> > unconditionally.
-> > 
-> > We can significantly improve on it for many real cases if stop traversing
-> > the mask as soon as we count present cpus to any number greater than 1:
-> > 
-> > 	if (num_present_cpus_gt(1))
-> > 		do_something();
-> > 
-> > To implement this idea, the series adds bitmap_weight_{eq,gt,le}
-> > functions together with corresponding wrappers in cpumask and nodemask.
+> > The patch doesn't ensure the property that there are no duplicated-priority
+> > entries on the chain.
 > 
-> There would be no change to callers if you maintain counters like what
-> is done for num_online_cpus() today. Maybe some fixes to arch code that
-> does not use set_cpu_possible() etc APIs required, but AFAIKS it would
-> be better to fix such cases anyway.
+> It's not the exact point of this patch.
+> 
+> > I'd rather see a atomic_notifier_chain_register_unique() that returns
+> > -EBUSY or something istead of adding an entry with duplicate priority.
+> > That way it would need only one list traversal unless you want to
+> > register the duplicate anyway (then you would call the older
+> > atomic_notifier_chain_register() after reporting the error).
+> 
+> The point of this patch is to warn developers about the problem that
+> needs to be fixed. We already have such troubling drivers in mainline.
+> 
+> It's not critical to register different handlers with a duplicated
+> priorities, but such cases really need to be corrected. We shouldn't
+> break users' machines during transition to the new API, meanwhile
+> developers should take action of fixing theirs drivers.
+> 
+> > (Or you could return > 0 when a duplicate is registered in
+> > atomic_notifier_chain_register() if the callers are prepared
+> > for that. I don't really like this way, though.)
+> 
+> I had a similar thought at some point before and decided that I'm not in
+> favor of this approach. It's nicer to have a dedicated function that
+> verifies the uniqueness, IMO.
 
-Thanks, Nick. I'll try to do this.
+I don't like the part that it traverses the list second time to check
+the uniqueness. But actually you could avoid that if
+notifier_chain_register() would always add equal-priority entries in
+reverse order:
+
+ static int notifier_chain_register(struct notifier_block **nl,
+ 		struct notifier_block *n)
+ {
+ 	while ((*nl) != NULL) {
+ 		if (unlikely((*nl) == n)) {
+ 			WARN(1, "double register detected");
+ 			return 0;
+ 		}
+-		if (n->priority > (*nl)->priority)
++		if (n->priority >= (*nl)->priority)
+ 			break;
+ 		nl = &((*nl)->next);
+ 	}
+ 	n->next = *nl;
+ 	rcu_assign_pointer(*nl, n);
+ 	return 0;
+ }
+
+Then the check for uniqueness after adding would be:
+
+ WARN(nb->next && nb->priority == nb->next->priority);
+
+Best Regards
+Michał Mirosław
