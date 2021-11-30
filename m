@@ -2,85 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6714635ED
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 14:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBCE4637AA
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 15:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241828AbhK3OAx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Nov 2021 09:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbhK3OAx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 09:00:53 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5C0C061574
-        for <linux-mips@vger.kernel.org>; Tue, 30 Nov 2021 05:57:32 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id e136so52754212ybc.4
-        for <linux-mips@vger.kernel.org>; Tue, 30 Nov 2021 05:57:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i8mC6OqW0NDo60h/ey+ips1XwWpcV67dhd9iu/BhDz0=;
-        b=WRlEVbKlNULbDO6M6gbl896ndTKr+un9IDkTKhxYx3kDhMjanE6bsjMsPGAzq97Hs9
-         crYTXwAvhcyMq0NWjblhRU+XgfOOV8KfhaRjJK5IdAOTnu2vDmQtmO7FOn8mSBDsKa4m
-         YW5rnK8qkBbukBswLIUOA56UjHBAV5lJj+siep6KiR6wcCMAEFsdlxJxGMWoJ0cU2ZeO
-         EpGx1VdKsIXJbD+GHuwD4rtflOshZHkR4BLyyawq8g2S9UDZi/AWRB+14W+nxsqaUXTR
-         /EoGaAHK0pdgbtQ6FUYKHkvKvtWBroMuvCqWmhqPx5vLQF26e030cQ3Su0fjv+eMkVZZ
-         jovQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i8mC6OqW0NDo60h/ey+ips1XwWpcV67dhd9iu/BhDz0=;
-        b=eZ3PsZ2M1jZ8R5daH4AW/dWM7RYHj4rpoi/oFZ7pb7hy+F4iEloKO13iQ03Jz87Z+L
-         BlwBGF3l+pKmk87nZ7ypjYh5hkM2R/UI2vIwnmWemJFfBMXX7/2ftGbry3kWI43b1K4g
-         4fOZoHUcnGzl3tzhG1g8LMw7J33LbWH0Kuk2xeRcXIflNu/rtEj66nLd4HHQiSSbAcU2
-         e2wq7F8Xb+xOJG03CpX5wF8AxYJkR+QKYRSLtm1KYmgzLx5HDc7ZPY+ky55+/brxAGkl
-         Bn0RZPPO6K0S4p+mj466QcVYtGl95lD+9Ze1DynTDnImG+mwzYIErT/zr3ItzuFFVWCl
-         Laew==
-X-Gm-Message-State: AOAM530ziAR+BtuuCcQQHnaZ5Eq0fPOViVe7u1b5nVDe4aBTaHWRSzaF
-        PBii41xtspz8T5dOa7E7DyqszGK027F3ffnQD96ZLg==
-X-Google-Smtp-Source: ABdhPJy/BtczKyJzappms/4cO8+1NIBYpHuseK0gvuukRHbl9fVIpSbl33dqQ/eIMS4vDHBMIe0jGEVN1VclOswS83I=
-X-Received: by 2002:a25:94d:: with SMTP id u13mr14311330ybm.723.1638280651971;
- Tue, 30 Nov 2021 05:57:31 -0800 (PST)
-MIME-Version: 1.0
-References: <CAKXUXMyEqSsA1Xez+6nbdQTqbKJZFUVGtzG6Xb2aDDcTHCe8sg@mail.gmail.com>
-In-Reply-To: <CAKXUXMyEqSsA1Xez+6nbdQTqbKJZFUVGtzG6Xb2aDDcTHCe8sg@mail.gmail.com>
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Tue, 30 Nov 2021 14:57:21 +0100
-Message-ID: <CAM1=_QQBfO_RQuYFrhdvZeM+KbY+5w=YVHTfb-zZQsN4fiBMcw@mail.gmail.com>
-Subject: Re: Reference to non-existing symbol WAR_R10000 in arch/mips/net/bpf_jit_comp.h
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
+        id S234177AbhK3Oza (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Nov 2021 09:55:30 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47362 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242757AbhK3Oxb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 09:53:31 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE439B81A25;
+        Tue, 30 Nov 2021 14:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD5CC5832A;
+        Tue, 30 Nov 2021 14:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638283810;
+        bh=TxDUDD+NY1vlTmpxRejy48pXmN0PgBZt689ynrVMYc0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GfxPvqkXCL1S/5RfcTVy7YEGKpJvJ5IOdRVjNxjwqhaAjdo2/DweEXnAgkOWtavrf
+         0NotKw5Pj/zvzGwAZQN1RfOPunXZimaeKVesjIj1vwqtvmMh0VCQC5bdoyfdp4RV+Z
+         ED2ueklgNKpQGylDVMKSNb6KKJSQ6DbiyK0O4UEJvmSpGwBdbcpY8LAkVB7I8dcBlH
+         jnGMzi6weFzMZcY26jSBmuQmqrNcacjf5FzcYSFLAVAplYmeDc5ZUJ+WdUQmbu2jrn
+         h0PxJgg0yjlX3KqPcaXxhlQFKd8MujMmRs3Dujof02V0fc0kHZNCBtlVhG2h1VvGOX
+         ejkL5LHS+P2NQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sasha Levin <sashal@kernel.org>, arnd@arndb.de,
+        masahiroy@kernel.org, suxingxing@loongson.cn, alobakin@pm.me,
+        zhaoxiao@uniontech.com, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 62/68] MIPS: boot/compressed/: add __ashldi3 to target for ZSTD compression
+Date:   Tue, 30 Nov 2021 09:46:58 -0500
+Message-Id: <20211130144707.944580-62-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211130144707.944580-1-sashal@kernel.org>
+References: <20211130144707.944580-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Lukas,
+From: Paul Cercueil <paul@crapouillou.net>
 
-On Mon, Nov 29, 2021 at 7:39 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> Dear Johan,
->
-> In arch/mips/net/bpf_jit_comp.h and introduced with commit commit
-> 72570224bb8f ("mips, bpf: Add JIT workarounds for CPU errata"), there
-> is an ifdef that refers to a non-existing symbol WAR_R10000. Did you
-> intend to refer to WAR_R10000_LLSC instead?
+[ Upstream commit fbf3bce458214bb971d3d571515b3b129eac290b ]
 
-You are right, that is a typo. I will prepare a patch with a fix.
+Just like before with __bswapdi2(), for MIPS pre-boot when
+CONFIG_KERNEL_ZSTD=y the decompressor function will use __ashldi3(), so
+the object file should be added to the target object file.
 
-Thanks for catching!
-Johan
+Fixes these build errors:
 
->
-> This issue was identified with the script ./scripts/checkkconfigsymbols.py.
->
-> Best regards,
->> Lukas
+mipsel-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_buildDTable_internal':
+decompress.c:(.text.FSE_buildDTable_internal+0x48): undefined reference to `__ashldi3'
+mipsel-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_decompress_wksp_body_default':
+decompress.c:(.text.FSE_decompress_wksp_body_default+0xa8): undefined reference to `__ashldi3'
+mipsel-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_getFrameHeader_advanced':
+decompress.c:(.text.ZSTD_getFrameHeader_advanced+0x134): undefined reference to `__ashldi3'
+
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/boot/compressed/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index 9112bdb86be45..f53510d2f6296 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -56,7 +56,7 @@ $(obj)/uart-ath79.c: $(srctree)/arch/mips/ath79/early_printk.c
+ 
+ vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
+ 
+-vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o
++vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o
+ 
+ extra-y += ashldi3.c
+ $(obj)/ashldi3.c: $(obj)/%.c: $(srctree)/lib/%.c FORCE
+-- 
+2.33.0
+
