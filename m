@@ -2,150 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E431A463B39
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 17:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F3E463B47
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 17:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243697AbhK3QLy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Nov 2021 11:11:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S244006AbhK3QNv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Nov 2021 11:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243677AbhK3QLZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 11:11:25 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61182C061757;
-        Tue, 30 Nov 2021 08:07:49 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso19937380wms.3;
-        Tue, 30 Nov 2021 08:07:49 -0800 (PST)
+        with ESMTP id S244036AbhK3QMP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 11:12:15 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B34C06175D
+        for <linux-mips@vger.kernel.org>; Tue, 30 Nov 2021 08:08:34 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id e3so88958197edu.4
+        for <linux-mips@vger.kernel.org>; Tue, 30 Nov 2021 08:08:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3a/iKsjufsiAbrGQuBxVCPIZkwax7Upszpd7LsuYfCk=;
-        b=ZI1KOydZ+qECl1hqlo+ZNsiRXNRPZ13T8K4/YJ6MoYcN5dN+LuRV3/IQ1KEUDcU0Vw
-         Vjwuujw+ZbUsGVxN5Eebh9Z/n26MQhlQ8ehFqn4X/Hvewkjsw0COQl31001ZyKeNY6Mz
-         nuTJWwgKAs8576y3o//cH27vL1awmnJNNBybZbxu9KQow1/gfFg/9iui3rvWtw7fesoJ
-         uB58hek4VV+WXZz0jg3T4XAAPkiLiwUG82CWXZnawo+wiwrKp8M/XU1sqUquvCA81ibB
-         cUgcgGRDa/rJerB9C4tYdPDW2u0xS9fOOZeboK+o+lFF3SNVDw/1NfjIHFtj7/tD9ggY
-         AZhw==
+        bh=NV4WFdl9vBrhP2G53aXnoMRhF2dXodBjxt5U+Ip4rB8=;
+        b=3xXPyB7Aiqx8xLJUoSqpNUON61nAzQudWtkcNRdkzXXAkALyBAGFebMzRqkXDIcjZV
+         uXv/m6Ky/8SGSgypXscEVH2EvLeOazslUCWDoJcUcjW7L4RrV5k8ItPGUgHwRbHSyi53
+         09vLub7QE+lfu8d83rp77Jh+P+sY7baLryo+WxDOtgBVgb6QW7jJYCvfrY2HW4zLt6X2
+         lsvxX6G5JMkWwmDrXVSa5+Hcs0szuWiTf1llLI6z9sKrUt/26j3IViKxI+ltDaCaMCsO
+         fGa37Ng7yD34YgBj3faMz1nQ4hh5uvmBWNy7DEWsXmq2mw4X2ag40bsPBhmEsZEBXCZy
+         X8fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=3a/iKsjufsiAbrGQuBxVCPIZkwax7Upszpd7LsuYfCk=;
-        b=iGKGBL2bKj0s0qj+KzC1NpusPpvVp+EHB+cA1KEchyQMPLH7OHCYwwDc8VPUDoLZ2a
-         8ngwre1MCAYxB6OkOHgxOzkQREba1F4WVDJ9arvG/N0nEJxigfM9JD7K3RSsA18bWOk3
-         tzzVzIcvWxPSHlBOFTu9EnNHTuTzv7WZ2d8YPWzb5vUlQOpcqK61dIC7VUd/NFfVo07e
-         oCiJLIunN1ZUOugMQ4AVkku+Mj1QuiaBcSyifBTKo00ciIzoPznbxdTDrdDrXcFtnx19
-         sO4WsVE6j+Z9oN61k84LGzpsc60tP49jDm0uuihQBYeZw6vv10ByHJDE/GBRLewZhCWg
-         zeMg==
-X-Gm-Message-State: AOAM5320CuEJNaoLdDl4AssCgYNASqKactXgSa6CzY0NiorueH9y6CSM
-        QsqWPrqMM+cs/T5Y+xdDa+k=
-X-Google-Smtp-Source: ABdhPJx5Dhy4cMIe37LwwIVlRqxg9qfG8bQ1tYjpplU8k4zyM3CqmxKNVQMvmem1SJ3HAhFFd8xyTQ==
-X-Received: by 2002:a05:600c:3489:: with SMTP id a9mr411960wmq.120.1638288467956;
-        Tue, 30 Nov 2021 08:07:47 -0800 (PST)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id m36sm3269698wms.25.2021.11.30.08.07.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 08:07:47 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <3f5adff7-f321-0688-c817-84975ebd3d14@redhat.com>
-Date:   Tue, 30 Nov 2021 17:07:36 +0100
+        bh=NV4WFdl9vBrhP2G53aXnoMRhF2dXodBjxt5U+Ip4rB8=;
+        b=p2Ymt87/HZ8R3cgkEOC02guchhgwttId5WSKZnpTI5+hnxm6DsJV6emGNRDdzDwo47
+         prkG5GmBkNQ7nG7wOYj7pliu40BsxBGLC03zmP6/HlDt6kRTCdgO0KAhTsgtyADN8PTV
+         GpqoTZRsDwCT5K8rM/riQQcDg5JkI5BWvr+1jrhKfeBmLEX1uWkClAlpNM7ykkseugAi
+         QUNbHMCgOfZCQOWpM0Fhppx0A+mOZqkJASD/GowJgw5MAr28gp8Nn9ifkuXqGgTjEmrr
+         bTffW2KNxmEChi69zsJMdTMfGP4SlEO0ctxo+24bmBgdbXIrsCUrJBQyIX5NW5MMsqZK
+         2z4g==
+X-Gm-Message-State: AOAM533rO/+v8N6HZH1VTpEjRnk409LqTe53A/LVMEwvrE8Xq4nfpGfS
+        wYwevr2susWkjKP4Dx0r9UCFig==
+X-Google-Smtp-Source: ABdhPJxwwpemHUMHlxQMBA2L2tu2lgif0I249zRDyuDD08yGDvZYidCZDnnksXYGSN6B9KPfkl4fEQ==
+X-Received: by 2002:aa7:db8f:: with SMTP id u15mr84418812edt.47.1638288513259;
+        Tue, 30 Nov 2021 08:08:33 -0800 (PST)
+Received: from anpc2.lan ([62.119.107.74])
+        by smtp.gmail.com with ESMTPSA id sa3sm9301336ejc.113.2021.11.30.08.08.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 08:08:32 -0800 (PST)
+From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        paulburton@kernel.org
+Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        tsbogend@alpha.franken.de, bpf@vger.kernel.org,
+        linux-mips@vger.kernel.org, netdev@vger.kernel.org,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH bpf] mips, bpf: Fix reference to non-existing Kconfig symbol
+Date:   Tue, 30 Nov 2021 17:08:24 +0100
+Message-Id: <20211130160824.3781635-1-johan.almbladh@anyfinetworks.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 10/43] KVM: arm64: Move vGIC v4 handling for WFI out
- arch callback hook
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
- <20211009021236.4122790-11-seanjc@google.com>
- <9236e715-c471-e1c8-6117-6f37b908a6bd@redhat.com>
- <875ytjbxpq.wl-maz@kernel.org>
- <be1cf8c7-ed87-b8eb-1bca-0a6c7505d7f8@redhat.com>
- <3490c50e-50d2-f906-3383-b87e14b14fab@redhat.com>
- <4826a7e2dbecc5d57323d18d725d6d69@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <4826a7e2dbecc5d57323d18d725d6d69@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 11/30/21 13:04, Marc Zyngier wrote:
->>>
->>> I have "queued" it, but that's just my queue - it's not on kernel.org 
->>> and it's not going to be in 5.16, at least not in the first batch.
->>>
->>> There's plenty of time for me to rebase on top of a fix, if you want 
->>> to send the fix through your kvm-arm pull request.  Just Cc me so 
->>> that I understand what's going on.
->>
->> Since a month has passed and I didn't see anything related in the
->> KVM-ARM pull requests, I am going to queue this patch.  Any conflicts
->> can be resolved through a kvmarm->kvm merge of either a topic branch
->> or a tag that is destined to 5.16.
-> 
-> Can you at least spell out *when* this will land?
+The Kconfig symbol for R10000 ll/sc errata workaround in the MIPS JIT was
+misspelled, causing the workaround to not take effect when enabled.
 
-It will be in kvm/next as soon as I finish running tests on it, which 
-may take a couple more days because I'm updating my machines to newer 
-operating systems.
+Fixes: 72570224bb8f ("mips, bpf: Add JIT workarounds for CPU errata")
+Reported-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+---
+ arch/mips/net/bpf_jit_comp.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> There is, in general, a certain lack of clarity about what you are queuing,
-> where you are queuing it, and what release it targets.
+diff --git a/arch/mips/net/bpf_jit_comp.h b/arch/mips/net/bpf_jit_comp.h
+index 6f3a7b07294b..a37fe20818eb 100644
+--- a/arch/mips/net/bpf_jit_comp.h
++++ b/arch/mips/net/bpf_jit_comp.h
+@@ -98,7 +98,7 @@ do {								\
+ #define emit(...) __emit(__VA_ARGS__)
+ 
+ /* Workaround for R10000 ll/sc errata */
+-#ifdef CONFIG_WAR_R10000
++#ifdef CONFIG_WAR_R10000_LLSC
+ #define LLSC_beqz	beqzl
+ #else
+ #define LLSC_beqz	beqz
+-- 
+2.30.2
 
-Ok, thanks for the suggestion.  Generally speaking:
-
-- kvm/master is stuff that is merged and will be in the next -rc, right 
-now 5.16-rc4.  It shouldn't ever rewind (though it may happen, it is rare)
-
-- kvm/next is stuff that is merged and will be in the next merge window, 
-right now 5.17.  It also shouldn't rewind.
-
-- kvm/queue is stuff that the submitter shouldn't care about, and that 
-other people should only care about to check for conflicts.  When I say 
-I "queued" a patch it goes in kvm/queue, and there's time to remove it 
-if something breaks.
-
-Regarding this series:
-
-- I am queuing it up to this patch
-
-- I am queuing it to kvm/next, meaning it targets 5.17
-
-- it looks like the next one (11/43) triggers a known AMD errata, so I'm 
-holding on the rest until we understand if it actually does, and if so 
-if AMD AVIC is doomed.  For the time being, it will stay in kvm/queue.
-
-Paolo
