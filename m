@@ -2,132 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9B5462D21
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 07:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7029462FBD
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 10:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238827AbhK3G44 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Nov 2021 01:56:56 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:28194 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232051AbhK3G44 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 01:56:56 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J3CYk04yNz8vg4;
-        Tue, 30 Nov 2021 14:51:38 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 30 Nov 2021 14:53:35 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Tue, 30 Nov 2021 14:53:34 +0800
-Message-ID: <617f11ad-3033-473f-162e-cb7ecd67a78a@huawei.com>
-Date:   Tue, 30 Nov 2021 14:53:33 +0800
+        id S236266AbhK3Jgw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Nov 2021 04:36:52 -0500
+Received: from elvis.franken.de ([193.175.24.41]:50764 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235138AbhK3Jgw (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 30 Nov 2021 04:36:52 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mrzVz-00063t-00; Tue, 30 Nov 2021 10:33:31 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 1216FC2FF1; Tue, 30 Nov 2021 10:32:52 +0100 (CET)
+Date:   Tue, 30 Nov 2021 10:32:51 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: TXx9: Let MACH_TX49XX select BOOT_ELF32
+Message-ID: <20211130093251.GA9308@alpha.franken.de>
+References: <de47b857667a73d205b20d419f4aebaa2a885484.1638210176.git.geert@linux-m68k.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH RFC 0/4] mm: percpu: Cleanup percpu first chunk funciton
-Content-Language: en-US
-To:     Dennis Zhou <dennis@kernel.org>
-CC:     <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <tj@kernel.org>,
-        <gregkh@linuxfoundation.org>, <cl@linux.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <tsbogend@alpha.franken.de>, <mpe@ellerman.id.au>,
-        <benh@kernel.crashing.org>, <paulus@samba.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <davem@davemloft.net>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-ia64@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-        <sparclinux@vger.kernel.org>, <x86@kernel.org>
-References: <20211121093557.139034-1-wangkefeng.wang@huawei.com>
- <YaVaTwjiZmWz8PKY@fedora>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <YaVaTwjiZmWz8PKY@fedora>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme705-chm.china.huawei.com (10.1.199.101) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de47b857667a73d205b20d419f4aebaa2a885484.1638210176.git.geert@linux-m68k.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, Nov 29, 2021 at 07:57:14PM +0100, Geert Uytterhoeven wrote:
+> Some bootloaders (e.g. VxWorks 5.5 System Boot) on TX49 systems do not
+> support loading 64-bit kernel images.  Work around this by selecting
+> BOOT_ELF32, to support running both 32-bit ("vmlinux" with
+> CONFIG_32BIT=y) and 64-bit ("vmlinux.32" with CONFIG_64BIT=y) Linux
+> kernels on TX49 devices with such a boot loader.
+> 
+> Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+> Tested on RBTX4927, running a Debian jessie 32-bit mipsel nfsroot userland, and
+> some 32-bit and 64-bit test binaries.
+> ---
+>  arch/mips/txx9/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/mips/txx9/Kconfig b/arch/mips/txx9/Kconfig
+> index 85c4c121c71f72d9..00f6fc446abeefe8 100644
+> --- a/arch/mips/txx9/Kconfig
+> +++ b/arch/mips/txx9/Kconfig
+> @@ -6,6 +6,7 @@ config MACH_TX39XX
+>  
+>  config MACH_TX49XX
+>  	bool
+> +	select BOOT_ELF32
+>  	select MACH_TXX9
+>  	select CEVT_R4K
+>  	select CSRC_R4K
+> -- 
+> 2.25.1
 
-On 2021/11/30 6:55, Dennis Zhou wrote:
-> Hello,
->
-> On Sun, Nov 21, 2021 at 05:35:53PM +0800, Kefeng Wang wrote:
->> When support page mapping percpu first chunk allocator on arm64, we
->> found there are lots of duplicated codes in percpu embed/page first
->> chunk allocator. This patchset is aimed to cleanup them and should
->> no funciton change, only test on arm64.
->>
->> Kefeng Wang (4):
->>    mm: percpu: Generalize percpu related config
->>    mm: percpu: Add pcpu_fc_cpu_to_node_fn_t typedef
->>    mm: percpu: Add generic pcpu_fc_alloc/free funciton
->>    mm: percpu: Add generic pcpu_populate_pte() function
->>
->>   arch/arm64/Kconfig             |  20 +----
->>   arch/ia64/Kconfig              |   9 +--
->>   arch/mips/Kconfig              |  10 +--
->>   arch/mips/mm/init.c            |  14 +---
->>   arch/powerpc/Kconfig           |  17 +---
->>   arch/powerpc/kernel/setup_64.c |  92 +--------------------
->>   arch/riscv/Kconfig             |  10 +--
->>   arch/sparc/Kconfig             |  12 +--
->>   arch/sparc/kernel/smp_64.c     | 105 +-----------------------
->>   arch/x86/Kconfig               |  17 +---
->>   arch/x86/kernel/setup_percpu.c |  66 ++-------------
->>   drivers/base/arch_numa.c       |  68 +---------------
->>   include/linux/percpu.h         |  13 +--
->>   mm/Kconfig                     |  12 +++
->>   mm/percpu.c                    | 143 +++++++++++++++++++++++++--------
->>   15 files changed, 165 insertions(+), 443 deletions(-)
->>
->> -- 
->> 2.26.2
->>
-> I've made a few comments. I think this will be a little bit of a
-> challenge to get through due to it touching so many architectures. For
-> ease, it probably makes sense to run it through mny tree, but we'll need
-> explicit acks as I mentioned.
->
-> I like getting rid of the pcpu_alloc_bootmem()/pcpu_free_bootmem()
-> functions. However, let's keep the implementation identical to x86.
-ok , will change patch3 in v2
->
->
-> I don't think we should get rid of the populate_pte_fn(). I'm not
-> comfortable changing x86's implementation. Simply offer a NULL, and if
-> NULL use the default.
+applied to mips-next.
 
-As replied in patch4, we use __weak method, and x86's implementation is
+Thomas.
 
-not changed in patch4, is this ok?
-
->
-> Do you have a tree that intel pulls? I suggest cleaning up the patches
-> and pushing to a remote branch that they pick up. That would have caught
-> the mips typo. Send a PR creating a file in [1] for your branch, github
-> is fine. Basic validation needs to be done before I can pick this up
-> too on more than arm64.
-
-Ok, x86/arm64/riscv are tested, but I don't has ppc/mips/sparc compliler.
-
-I will try to push new version into github and test by lkp.
-
-Thanks.
-
->
-> [1] https://github.com/intel/lkp-tests/tree/master/repo/linux
->
-> Thanks,
-> Dennis
-> .
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
