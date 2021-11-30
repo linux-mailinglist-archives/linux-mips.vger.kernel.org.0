@@ -2,181 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AAD4628E3
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 01:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29054462CB1
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 07:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbhK3ALd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 29 Nov 2021 19:11:33 -0500
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:39509 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232246AbhK3ALc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 29 Nov 2021 19:11:32 -0500
-Received: by mail-ot1-f54.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso27813312ots.6;
-        Mon, 29 Nov 2021 16:08:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D8pPDA8BhqYxJlGll70Jfs/EV2c/vlH3kHLgmxR36Bk=;
-        b=rWLe9jssgGiqIjfQXsquA8EriPxUGdczEjaWZg5mJ1/9W+nv3kwc+056ww7gJQb3kJ
-         zZZF5Et7Wdnm70x7VGLlWHaNLWC8aUHy1XESRLjgGGLndLgw/yE/ZEJBeG1sM8Z5KV+o
-         +2JN+7CPKJ9ZRcYsoQraaeVfqPLxWsVURyDU72KD+W2QE7jaLrj+kT666AjW6Qdx7C5C
-         OTRs1XhHe5J7qnvJ31q+0CypiAXt6xGGfBtM/oJnfhQWTjbodAOu56fqkKUb9GF6SK2K
-         sjdNB7t0sqkPSDgZsmCEKjzEXyyiGk8zLEaamBJIkk3Y75Gn9SyWqWdDH/asm2aGUazL
-         PvOg==
-X-Gm-Message-State: AOAM530N2rKLF8F131l4vNfM7/NQhJJzjB7GAO4IgRW9EfMM5DoSe5ag
-        OiWTJ2ubvlehyI9+yeh47Q==
-X-Google-Smtp-Source: ABdhPJwHdVFEp5hd/T8aXyXLlCP6k0CfP+fpF2T3r+PJoHiG4EwmK+ob5JSJ6nKmQgmurmZ684PLSA==
-X-Received: by 2002:a9d:4702:: with SMTP id a2mr47864106otf.262.1638230893962;
-        Mon, 29 Nov 2021 16:08:13 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bi20sm3422829oib.29.2021.11.29.16.08.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 16:08:13 -0800 (PST)
-Received: (nullmailer pid 864351 invoked by uid 1000);
-        Tue, 30 Nov 2021 00:08:10 -0000
-Date:   Mon, 29 Nov 2021 18:08:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Calvin Zhang <calvinzhang.cool@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rich Felker <dalias@libc.org>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Vladimir Isaev <isaev@synopsys.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        "Kirill A. Shutemov" <kirill.shtuemov@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marc Zyngier <maz@kernel.org>,
-        David Brazdil <dbrazdil@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Souptick Joarder <jrdr.linux@gmail.com>,
-        Jinyang He <hejinyang@loongson.cn>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Andreas Oetken <andreas.oetken@siemens.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Zhang Yunkai <zhang.yunkai@zte.com.cn>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Markus Elfring <elfring@users.sourceforge.net>,
-        Ganesh Goudar <ganeshgr@linux.ibm.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauri Sandberg <sandberg@mailfence.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        uclinux-h8-devel@lists.sourceforge.jp, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/2] of: remove reserved regions count restriction
-Message-ID: <YaVrahm+ysoQRGKe@robh.at.kernel.org>
-References: <20211119075844.2902592-1-calvinzhang.cool@gmail.com>
- <YZnqo3oA7srQik4N@kernel.org>
+        id S232512AbhK3GZb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Nov 2021 01:25:31 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:27317 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231671AbhK3GZb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 01:25:31 -0500
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J3Bvb1MkNzbjFD;
+        Tue, 30 Nov 2021 14:22:03 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 14:22:09 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 14:22:08 +0800
+Message-ID: <35e4a4cb-29f2-2de6-6350-1358d4968a54@huawei.com>
+Date:   Tue, 30 Nov 2021 14:22:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YZnqo3oA7srQik4N@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH RFC 1/4] mm: percpu: Generalize percpu related config
+Content-Language: en-US
+To:     Dennis Zhou <dennis@kernel.org>
+CC:     <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <tj@kernel.org>,
+        <gregkh@linuxfoundation.org>, <cl@linux.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <tsbogend@alpha.franken.de>, <mpe@ellerman.id.au>,
+        <benh@kernel.crashing.org>, <paulus@samba.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <davem@davemloft.net>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-ia64@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <sparclinux@vger.kernel.org>, <x86@kernel.org>
+References: <20211121093557.139034-1-wangkefeng.wang@huawei.com>
+ <20211121093557.139034-2-wangkefeng.wang@huawei.com>
+ <YaVV38QSn6LEBKH/@fedora>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <YaVV38QSn6LEBKH/@fedora>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme710-chm.china.huawei.com (10.1.199.106) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Nov 21, 2021 at 08:43:47AM +0200, Mike Rapoport wrote:
-> On Fri, Nov 19, 2021 at 03:58:17PM +0800, Calvin Zhang wrote:
-> > The count of reserved regions in /reserved-memory was limited because
-> > the struct reserved_mem array was defined statically. This series sorts
-> > out reserved memory code and allocates that array from early allocator.
-> > 
-> > Note: reserved region with fixed location must be reserved before any
-> > memory allocation. While struct reserved_mem array should be allocated
-> > after allocator is activated. We make early_init_fdt_scan_reserved_mem()
-> > do reservation only and add another call to initialize reserved memory.
-> > So arch code have to change for it.
-> 
-> I think much simpler would be to use the same constant for sizing
-> memblock.reserved and reserved_mem arrays.
 
-Do those arrays get shrunk? Or do we waste the memory forever?
+On 2021/11/30 6:36, Dennis Zhou wrote:
+> Hello,
+>
+> On Sun, Nov 21, 2021 at 05:35:54PM +0800, Kefeng Wang wrote:
+>> The HAVE_SETUP_PER_CPU_AREA/NEED_PER_CPU_EMBED_FIRST_CHUNK/
+>> NEED_PER_CPU_PAGE_FIRST_CHUNK/USE_PERCPU_NUMA_NODE_ID configs,
+>> which has duplicate definitions on platforms that subscribe it.
+>>
+>> Move them into mm, drop these redundant definitions and instead
+>> just select it on applicable platforms.
+>>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> ---
+>>   arch/arm64/Kconfig   | 20 ++++----------------
+>>   arch/ia64/Kconfig    |  9 ++-------
+>>   arch/mips/Kconfig    | 10 ++--------
+>>   arch/powerpc/Kconfig | 17 ++++-------------
+>>   arch/riscv/Kconfig   | 10 ++--------
+>>   arch/sparc/Kconfig   | 12 +++---------
+>>   arch/x86/Kconfig     | 17 ++++-------------
+>>   mm/Kconfig           | 12 ++++++++++++
+>>   8 files changed, 33 insertions(+), 74 deletions(-)
+...
+>>
+> This makes sense and looks good. A series like this is a little tricky.
+> The latter patches change the contracts so it'd be easiest to run it
+> through my tree. We'd need to get explicit acks from each arch
+> maintainer to make sure they're fine with this.
 
-Maybe we can copy and shrink the initial array? Though I suspect struct 
-reserved_mem pointers have already been given out.
+Got it, I will resend without RFC and hope to get ACKs from related arch 
+maintainers.
 
-> 
-> If there is too much reserved regions in the device tree, reserving them in
-> memblock will fail anyway because memblock also starts with static array
-> for memblock.reserved, so doing one pass with memblock_reserve() and
-> another to set up reserved_mem wouldn't help anyway.
-> 
-> > I'm only familiar with arm and arm64 architectures. Approvals from arch
-> > maintainers are required. Thank you all.
-> > 
-> > Calvin Zhang (2):
-> >   of: Sort reserved_mem related code
-> >   of: reserved_mem: Remove reserved regions count restriction
-> > 
-> >  arch/arc/mm/init.c                 |   3 +
-> >  arch/arm/kernel/setup.c            |   2 +
-> >  arch/arm64/kernel/setup.c          |   3 +
-> >  arch/csky/kernel/setup.c           |   3 +
-> >  arch/h8300/kernel/setup.c          |   2 +
-> >  arch/mips/kernel/setup.c           |   3 +
-> >  arch/nds32/kernel/setup.c          |   3 +
-> >  arch/nios2/kernel/setup.c          |   2 +
-> >  arch/openrisc/kernel/setup.c       |   3 +
-> >  arch/powerpc/kernel/setup-common.c |   3 +
-> >  arch/riscv/kernel/setup.c          |   2 +
-> >  arch/sh/kernel/setup.c             |   3 +
-> >  arch/xtensa/kernel/setup.c         |   2 +
-> >  drivers/of/fdt.c                   | 107 +---------------
-> >  drivers/of/of_private.h            |  12 +-
-> >  drivers/of/of_reserved_mem.c       | 189 ++++++++++++++++++++++++-----
-> >  include/linux/of_reserved_mem.h    |   4 +
-> >  17 files changed, 207 insertions(+), 139 deletions(-)
-> > 
-> > -- 
-> > 2.30.2
-> > 
-> 
-> -- 
-> Sincerely yours,
-> Mike.
-> 
+
+>
+> Thanks,
+> Dennis
+> .
