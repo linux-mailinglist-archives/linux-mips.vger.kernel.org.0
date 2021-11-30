@@ -2,200 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A58FD4632A2
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 12:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F07004633C5
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 13:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240878AbhK3Lpg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Nov 2021 06:45:36 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:56456 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238396AbhK3Lpg (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:45:36 -0500
-Received: from loongson-pc (unknown [111.9.175.10])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx_8oNDqZh_sABAA--.1548S2;
-        Tue, 30 Nov 2021 19:42:06 +0800 (CST)
-Date:   Tue, 30 Nov 2021 19:42:05 +0800
-From:   Huang Pei <huangpei@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH 4/4] MIPS: loongson64: fix FTLB configuration
-Message-ID: <20211130114204.l2vvn7de337mznp3@loongson-pc>
-References: <20211125105949.27147-1-huangpei@loongson.cn>
- <20211125105949.27147-5-huangpei@loongson.cn>
- <20211125155527.GC11524@alpha.franken.de>
- <20211126031319.kfhemh73dyq4rkra@loongson-pc>
- <20211130103448.GA9643@alpha.franken.de>
+        id S241236AbhK3MIO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Nov 2021 07:08:14 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34340 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241212AbhK3MIO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 07:08:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3BF64CE18FE;
+        Tue, 30 Nov 2021 12:04:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66BB0C53FC7;
+        Tue, 30 Nov 2021 12:04:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638273891;
+        bh=XZV+A03r+U14NNevxoQ+VNb6roKLqHnitP/KB5VE1bU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZlVLLcdQtjmMpvoqZ3crREGG4Tx9/cX7mlIGiOZd6h9BzUwUxvGRirVIKaUOaxjYT
+         j5gtsnHmy3Pom8gpoKBLdTa9+zq0ksimfkkU+GFV8UpMhBa78nezSi2q5jNEQwAhWJ
+         xq4G0RHYn2hCaCVVjpP6TiYxrQmuhlZ9TN3UAYwPmlw/EHu8tPf53sycoGgXFr8+3e
+         p50fi7NH3GxciImqpxsMc5nV7QmRHXLcBYfxtqsN348RGG9ktb9N6rfUlFESziCNeM
+         iyjgvu0+fxThDkF7ypznoZv3ZG7ohR4/74jaqNLB+4LCg4pB1MEHTAlZtTjNGF/jPM
+         yrr//SJISMS0w==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ms1sP-008rkT-FI; Tue, 30 Nov 2021 12:04:49 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130103448.GA9643@alpha.franken.de>
-User-Agent: NeoMutt/20180716
-X-CM-TRANSID: AQAAf9Dx_8oNDqZh_sABAA--.1548S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrW5Zry3Xw4UZF45CFykZrb_yoW7Jw13pr
-        y3Ka12yr4DZryUC34qqr18Jryjk347JFWkWr1DXry8AF90vF15XryrGws5ury7Z34ftw18
-        tF4IgFy3ur1DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoO
-        J5UUUUU
-X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
+Date:   Tue, 30 Nov 2021 12:04:49 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Subject: Re: [PATCH v2 10/43] KVM: arm64: Move vGIC v4 handling for WFI out
+ arch callback hook
+In-Reply-To: <3490c50e-50d2-f906-3383-b87e14b14fab@redhat.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+ <20211009021236.4122790-11-seanjc@google.com>
+ <9236e715-c471-e1c8-6117-6f37b908a6bd@redhat.com>
+ <875ytjbxpq.wl-maz@kernel.org>
+ <be1cf8c7-ed87-b8eb-1bca-0a6c7505d7f8@redhat.com>
+ <3490c50e-50d2-f906-3383-b87e14b14fab@redhat.com>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <4826a7e2dbecc5d57323d18d725d6d69@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, seanjc@google.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, paulus@ozlabs.org, anup.patel@wdc.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, borntraeger@de.ibm.com, frankja@linux.ibm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, atish.patra@wdc.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, dmatlack@google.com, oupton@google.com, jingzhangos@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:34:48AM +0100, Thomas Bogendoerfer wrote:
-> On Fri, Nov 26, 2021 at 11:13:19AM +0800, Huang Pei wrote:
-> > On Thu, Nov 25, 2021 at 04:55:28PM +0100, Thomas Bogendoerfer wrote:
-> > > On Thu, Nov 25, 2021 at 06:59:49PM +0800, Huang Pei wrote:
-> > > > It turns out that 'decode_configs' -> 'set_ftlb_enable' is called under
-> > > > c->cputype unset, which leaves FTLB disabled on BOTH 3A2000 and 3A3000
-> > > > 
-> > > > Fix it by calling "decode_configs" after c->cputype is initialized
-> > > > 
-> > > > Fixes: da1bd29742b1 ("MIPS: Loongson64: Probe CPU features via CPUCFG")
-> > > > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > > > ---
-> > > >  arch/mips/kernel/cpu-probe.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> > > > index ac0e2cfc6d57..24a529c6c4be 100644
-> > > > --- a/arch/mips/kernel/cpu-probe.c
-> > > > +++ b/arch/mips/kernel/cpu-probe.c
-> > > > @@ -1734,8 +1734,6 @@ static inline void decode_cpucfg(struct cpuinfo_mips *c)
-> > > >  
-> > > >  static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
-> > > >  {
-> > > > -	decode_configs(c);
-> > > > -
-> > > >  	/* All Loongson processors covered here define ExcCode 16 as GSExc. */
-> > > >  	c->options |= MIPS_CPU_GSEXCEX;
-> > > >  
-> > > > @@ -1796,6 +1794,8 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
-> > > >  		panic("Unknown Loongson Processor ID!");
-> > > >  		break;
-> > > >  	}
-> > > > +
-> > > > +	decode_configs(c);
-> > > >  }
-> > > >  #else
-> > > >  static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu) { }
-> > > > -- 
-> > > > 2.20.1
-> > > 
-> > > applied to mips-fixes.
-> > > 
-> > > Thomas.
-> > > 
-> > > -- 
-> > > Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> > > good idea.                                                [ RFC1925, 2.3 ]
-> > Hi, Thomas,
-> > 
-> > What about PATCH 1/4, without it, kernel/trace/ring_buffer.i using
-> > local_add_return, like this 
-> > --------------------------------------------------------------------------------
-> >     __asm__ __volatile__(
-> > 	"     .set    push                                    \n"
-> > 	"     .set    ""arch=r4000""                  \n"
-> > 	".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set mips64r2;.rept 1; sync 
-> > 	0x00; .endr; .set pop; .else; ; .endif" "\n"
-> > 	"1:" "lld     " "%1, %2               # local_add_return\n"
-> > 	"     addu    %0, %1, %3				\n"
-> > 	"scd " "%0, %2						\n"
-> > 	"     beqz    %0, 1b					\n"
-> > 	"     addu    %0, %1, %3				\n"
-> > 	"     .set    pop
-> > 	\n"
-> > 	: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
-> > 	: "Ir" (i), "m" (l->a.counter)
-> > 	: "memory");
-> > } else if (1) {
-> >   unsigned long temp;
-> > 
-> >     __asm__ __volatile__(
-> > 	    "     .set    push                                    \n"
-> > 	    "     .set    ""arch=r4000""                  \n"
-> > 	    ".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set
-> > 	    mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ;
-> > 	    .endif" "                    \n"
-> > 	    "1:" "lld     " "%1, %2               # local_add_return
-> > 	    \n"
-> > 	    "     addu    %0, %1, %3                              \n"
-> > 	    "scd " "%0, %2
-> > 	    \n"
-> > 	    "     beqz    %0, 1b
-> > 	    \n"
-> > 	    "     addu    %0, %1, %3
-> > 	    \n"
-> > 	    "     .set    pop
-> > 	    \n"
-> > 	    : "=&r" (result), "=&r" (temp), "=m"
-> > 	    (l->a.counter)
-> > 	    : "Ir" (i), "m" (l->a.counter)
-> > 	    : "memory");
-> > 
-> > --------------------------------------------------------------------------------
-> > it is wrong here, "lld" + "addu"
+On 2021-11-30 11:39, Paolo Bonzini wrote:
+> On 10/26/21 18:12, Paolo Bonzini wrote:
+>> On 26/10/21 17:41, Marc Zyngier wrote:
+>>>> This needs a word on why kvm_psci_vcpu_suspend does not need the
+>>>> hooks.  Or it needs to be changed to also use kvm_vcpu_wfi in the 
+>>>> PSCI
+>>>> code, I don't know.
+>>>> 
+>>>> Marc, can you review and/or advise?
+>>> I was looking at that over the weekend, and that's a pre-existing
+>>> bug. I would have addressed it independently, but it looks like you
+>>> already have queued the patch.
+>> 
+>> I have "queued" it, but that's just my queue - it's not on kernel.org 
+>> and it's not going to be in 5.16, at least not in the first batch.
+>> 
+>> There's plenty of time for me to rebase on top of a fix, if you want 
+>> to send the fix through your kvm-arm pull request.  Just Cc me so that 
+>> I understand what's going on.
 > 
-> it fixes something, but I didn't see the impact from the commit message.
-> Because there is no Fixes tag, I haven't applied it tomips-fixes.
-> 
-Sorry, this bug is introduced by 7232311ef14c274d88871212a07557f18f4140d1
-> And
-> 
-> +#elif MIPS_ISA_REV >= 6
-> +# define SC_BEQZ	beqzc
-> 
-> why are you doing this ?
-This copies from arch/mips/include/asm/llsc.h, I had another patch which
-remove llsc.h. I do not want add that patch into bugfix;
+> Since a month has passed and I didn't see anything related in the
+> KVM-ARM pull requests, I am going to queue this patch.  Any conflicts
+> can be resolved through a kvmarm->kvm merge of either a topic branch
+> or a tag that is destined to 5.16.
 
-> > and PATCH 2, any comment?
-> 
-> parameter page already contains the virtual address of the page to
-> flush, so there is nothing to fix. I'm not 100% about the cache
-> nature of all TX39 core, so leaving the check for cpu_has_dc_aliases
-> in place is the safer bet. And this platform is nearly dead, so I'm
-> sure sure whether this sort of cosemtics is needed.
-> 
-Based on the comment, I can see TX39 want to bypass TLB by Indexed Cache
-Operation,  because with KSEG0 address, Indexed Cache Operation does not 
-pass through TLB; But there are two limitation:
+Can you at least spell out *when* this will land?
 
-+. KSEG0 only cover first 512MB physical address, so do not support 
-High Memory, if not using KSEG0 address ,then it passes through TLB, which
-is not intended;
+There is, in general, a certain lack of clarity about what you are 
+queuing,
+where you are queuing it, and what release it targets.
 
-+. Indexed Cache Operation can overkill cache line with same cache index
-from different way, but it can not kill Cache Alias, since Cache Alias
-actually has different cache index;
+Thanks,
 
-From datasheet of TX39xx, I know the R3900 core of TX39 series has only
-4KB direct-mapped Icache and 2KB two-way Dcache, so it has no Cache 
-Alias under 4KB page size, and I can assume it does not support memory
-beyond 512MB based on Kconfig of TX39, AKA no High Memory;
-
-Above all, I think it is OK to both use KSEG0 address and remove cpu_has_dc_alias 
-
-> Thomas.
-> 
-> -- 
-> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> good idea.                                                [ RFC1925, 2.3 ]
-
+         M.
+-- 
+Jazz is not dead. It just smells funny...
