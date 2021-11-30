@@ -2,129 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF24E464021
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 22:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0ECF4640BE
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 22:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240746AbhK3Vae (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Nov 2021 16:30:34 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.120]:25969 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240628AbhK3Vab (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 16:30:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638307610;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=15Nkk1H/19ZCPCTvtDzkEK7DIJe2pfI1c9+1syWWzcY=;
-    b=sWy8vEmk7nvIyRSKht61OFnVDjFYQ0EMK24N/NxRjVWRSH+eBSKfkyHe6f8Ci8Bcu6
-    KYh87pSY37ee1g9hK97Q4LbTGgDX1/kmyNk7r7f58jP8dD+vtij21CDvaLcm4t/+toK1
-    WeUGE2n/yoVhryQvnKgLjY3tEXkUIVXOPZwJAoWlO4qmh5QWtTpA7HA+DqxdrqXjnLH9
-    Z6Yjg/cTrO9Oe/1eXWjzvbvaJsgC8VtgilkCBY3eI0ZpsY7h9ikyd353ppH7k768np2p
-    fwvfIpvr7Uzn3DUX3QMVnwRcAi/DDFtEQflPQ5TRLUWL63KhtSCcsI+/WZYUNCBxvOTg
-    ZWcA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1KHeBQyh+ITDDJuCr4="
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
-    with ESMTPSA id e05ed8xAULQnToD
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 30 Nov 2021 22:26:49 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v10 8/8] [RFC] MIPS: DTS: Ingenic: adjust register size to available registers
-Date:   Tue, 30 Nov 2021 22:26:41 +0100
-Message-Id: <ead6d476378e134837443ac245ccd112c0c59b64.1638307601.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <cover.1638307601.git.hns@goldelico.com>
-References: <cover.1638307601.git.hns@goldelico.com>
+        id S233931AbhK3Vxl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Nov 2021 16:53:41 -0500
+Received: from 6.mo552.mail-out.ovh.net ([188.165.49.222]:35409 "EHLO
+        6.mo552.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344765AbhK3Vv5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 16:51:57 -0500
+Received: from mxplan5.mail.ovh.net (unknown [10.109.143.123])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 0AD47216DE;
+        Tue, 30 Nov 2021 21:48:24 +0000 (UTC)
+Received: from kaod.org (37.59.142.99) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 30 Nov
+ 2021 22:48:23 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-99G00338e8fa02-b36d-46a2-a9ce-03d85f7b4222,
+                    1FE831E2BDC1BE20692CF32662DF656E64B35270) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 90.11.56.15
+Message-ID: <524d9b84-caa8-dd6f-bb5e-9fc906d279c0@kaod.org>
+Date:   Tue, 30 Nov 2021 22:48:22 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [patch 05/22] genirq/msi: Fixup includes
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     <linux-hyperv@vger.kernel.org>, Paul Mackerras <paulus@samba.org>,
+        <sparclinux@vger.kernel.org>, Wei Liu <wei.liu@kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
+        <x86@kernel.org>, Christian Borntraeger <borntraeger@de.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>, <linux-pci@vger.kernel.org>,
+        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+References: <20211126222700.862407977@linutronix.de>
+ <20211126223824.382273262@linutronix.de>
+ <b1a6d267-c7b4-c4b9-ab0e-f5cc32bfe9bf@kaod.org> <87tufud4m3.ffs@tglx>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <87tufud4m3.ffs@tglx>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.99]
+X-ClientProxiedBy: DAG3EX2.mxp5.local (172.16.2.22) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 16c7449c-9f55-435d-bf3c-7f66bf2ab8fd
+X-Ovh-Tracer-Id: 11252243670229552028
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddriedugdduheehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepjeekvdfgudevkeefkeeltdejteekvdegffegudetgeettdffjeefheekfeelffdtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddrleelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhrtghpthhtoheplhhinhhugihpphgtqdguvghvsehlihhsthhsrdhoiihlrggsshdrohhrgh
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After getting the regmap size from the device tree we should
-reduce the ranges to the really available registers. This
-allows to read only existing registers from the debug fs
-and makes the regmap check out-of-bounds access.
+On 11/29/21 22:38, Thomas Gleixner wrote:
+> Cedric,
+> 
+> On Mon, Nov 29 2021 at 08:33, Cédric Le Goater wrote:
+>> On 11/27/21 02:18, Thomas Gleixner wrote:
+>>> Remove the kobject.h include from msi.h as it's not required and add a
+>>> sysfs.h include to the core code instead.
+>>>
+>>> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+>>
+>>
+>> This patch breaks compile on powerpc :
+>>
+>>     CC      arch/powerpc/kernel/msi.o
+>> In file included from ../arch/powerpc/kernel/msi.c:7:
+>> ../include/linux/msi.h:410:65: error: ‘struct cpumask’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+>>     410 | int msi_domain_set_affinity(struct irq_data *data, const struct cpumask *mask,
+>>         |                                                                 ^~~~~~~
+>> cc1: all warnings being treated as errors
+>>
+>> Below is fix you can merge in patch 5.
+> 
+> thanks for having a look. I fixed up this and other fallout and pushed out an
+> updated series (all 4 parts) to:
+> 
+>          git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel msi
 
-For the jz4780 we have done this already.
+pSeries fails to allocate MSIs starting with this patch :
 
-Suggested-for: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- arch/mips/boot/dts/ingenic/jz4725b.dtsi | 2 +-
- arch/mips/boot/dts/ingenic/jz4740.dtsi  | 2 +-
- arch/mips/boot/dts/ingenic/jz4770.dtsi  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+  [PATCH 049/101] powerpc/pseries/msi: Let core code check for contiguous ...
 
-diff --git a/arch/mips/boot/dts/ingenic/jz4725b.dtsi b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-index 0c6a5a4266f43..e9e48022f6316 100644
---- a/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
-@@ -321,7 +321,7 @@ udc: usb@13040000 {
- 
- 	lcd: lcd-controller@13050000 {
- 		compatible = "ingenic,jz4725b-lcd";
--		reg = <0x13050000 0x1000>;
-+		reg = <0x13050000 0x130>; /* tbc */
- 
- 		interrupt-parent = <&intc>;
- 		interrupts = <31>;
-diff --git a/arch/mips/boot/dts/ingenic/jz4740.dtsi b/arch/mips/boot/dts/ingenic/jz4740.dtsi
-index 772542e1f266a..7f76cba03a089 100644
---- a/arch/mips/boot/dts/ingenic/jz4740.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4740.dtsi
-@@ -323,7 +323,7 @@ udc: usb@13040000 {
- 
- 	lcd: lcd-controller@13050000 {
- 		compatible = "ingenic,jz4740-lcd";
--		reg = <0x13050000 0x1000>;
-+		reg = <0x13050000 0x60>; /* LCDCMD1+4 */
- 
- 		interrupt-parent = <&intc>;
- 		interrupts = <30>;
-diff --git a/arch/mips/boot/dts/ingenic/jz4770.dtsi b/arch/mips/boot/dts/ingenic/jz4770.dtsi
-index dfe74328ae5dc..bda0a3a86ed5f 100644
---- a/arch/mips/boot/dts/ingenic/jz4770.dtsi
-+++ b/arch/mips/boot/dts/ingenic/jz4770.dtsi
-@@ -399,7 +399,7 @@ gpu: gpu@13040000 {
- 
- 	lcd: lcd-controller@13050000 {
- 		compatible = "ingenic,jz4770-lcd";
--		reg = <0x13050000 0x300>;
-+		reg = <0x13050000 0x130>; /* tbc */
- 
- 		interrupt-parent = <&intc>;
- 		interrupts = <31>;
--- 
-2.33.0
+I will dig in later on.
 
+C.
