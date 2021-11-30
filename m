@@ -2,139 +2,156 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 962BD463DA9
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 19:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B40463FB0
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 22:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbhK3SX1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Nov 2021 13:23:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239565AbhK3SXR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 13:23:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6F3C061574;
-        Tue, 30 Nov 2021 10:19:58 -0800 (PST)
+        id S1343899AbhK3VLi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Nov 2021 16:11:38 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:50962 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235904AbhK3VLf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 16:11:35 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79993B81BBE;
-        Tue, 30 Nov 2021 18:19:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EB6C53FC7;
-        Tue, 30 Nov 2021 18:19:55 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C5101CE1C4F;
+        Tue, 30 Nov 2021 21:08:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78438C53FC7;
+        Tue, 30 Nov 2021 21:07:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638296395;
-        bh=Rg3X5WgEx/fu1vO7MTLJTKOCZa6PxvqcsrwTHphDJDI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=i9FRLvgj2xYrkiwZdLPpY85Fjd6ZvT5+FmwmpPxuUtFK4QNsRJhQU8B+M80/mMbEJ
-         eVLQQqRbZgJBtxNq5289CGCrLodfzfGEXyrOUGSgyiLPJJuoVUsEkqNkH3JwAFgRvm
-         GGV6Z7P5+HN77l28Bpsk1fIQQNyumFBWcvDubcX8gxv7Fyq6mZYv7qsguxqC2kFozs
-         htzdXGmYz1azXmkFiMYJ+M00zXnJyTOT47NERz3vDatUbikeS0R8tiilXVV06eXOGp
-         93/ftkaxSSgw7FlwZjxF+gj/UTRQtTNl6ANpL36vjQ1G1oiKviDRmYoNj6V30VMIl6
-         TrMILntbTqsVw==
-Received: by mail-ed1-f42.google.com with SMTP id y12so90512342eda.12;
-        Tue, 30 Nov 2021 10:19:55 -0800 (PST)
-X-Gm-Message-State: AOAM533UqO3GNaR2ADrYMcpgDBqTshAvtqah8VN+fic8gmim3Gwoho+h
-        UV7HprmqxvD9m8o9ZXixHDVPPu6whCPluXK1jA==
-X-Google-Smtp-Source: ABdhPJzlzmKd9f1PSVWhZws80WIcbDQrGSGIeTyLxWwF+f3fDK1WoMt3xMdzMHMCPFI2ghaCJdwDEwf+RBBhN7lbrhs=
-X-Received: by 2002:a17:907:a411:: with SMTP id sg17mr867105ejc.84.1638296393423;
- Tue, 30 Nov 2021 10:19:53 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1637789354.git.hns@goldelico.com> <d678e785d95487202ac0660eb66796e9fb5beb50.1637789354.git.hns@goldelico.com>
- <1637875562.255498.2858308.nullmailer@robh.at.kernel.org> <A72D034E-EDBC-44F5-82DF-9EEBC5EC7E0B@goldelico.com>
-In-Reply-To: <A72D034E-EDBC-44F5-82DF-9EEBC5EC7E0B@goldelico.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 30 Nov 2021 12:19:41 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ_E_USDuK3kEDKm9TsNsRdpcGNEjz==sKFS-Tv5KYCkA@mail.gmail.com>
-Message-ID: <CAL_JsqJ_E_USDuK3kEDKm9TsNsRdpcGNEjz==sKFS-Tv5KYCkA@mail.gmail.com>
-Subject: Re: [PATCH v9 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
- DT Schema
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Paul Boddie <paul@boddie.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Mark Brown <broonie@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
+        s=k20201202; t=1638306491;
+        bh=CGQDQlRxlHpJq0xzSuKQi7AU9OYm37j7CJ7xfuMMlQY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MQT0554slXBNgzV6dz6ATkc3EGBq02EcnyIjFHm4NC/TQW+Ti/5+ZwpYdUyXTQSX0
+         FP/Mg9FHX1WkJdgEmvH+Sjh6chDp0qa4rdvwceLtLU4mrx9YqTjWtdVLiOuUAqqTr9
+         JxBBF8wiCf2msoHxAESTMHrwoozuA53LUQYu0nChlx4mPkmdPvsjcuZz6ld/73Q1EP
+         49cP1v8fZ5yU4pp+jiMhNoi6TZsD6QEaZ+s7211uBewrAF+q/t4jJF4C5l0VvizKZK
+         UqaJcABTKX49+eBLI8ebfD/p5ZMIh9Z6ly7YavV63rHaytjZkBuc5OrtUPGVxLkKwd
+         8IDw15RIkFr7Q==
+Date:   Tue, 30 Nov 2021 23:07:40 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Calvin Zhang <calvinzhang.cool@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonas Karlman <jonas@kwiboo.se>
-Content-Type: text/plain; charset="UTF-8"
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rich Felker <dalias@libc.org>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Vladimir Isaev <isaev@synopsys.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        "Kirill A. Shutemov" <kirill.shtuemov@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marc Zyngier <maz@kernel.org>,
+        David Brazdil <dbrazdil@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
+        Jinyang He <hejinyang@loongson.cn>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Andreas Oetken <andreas.oetken@siemens.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Zhang Yunkai <zhang.yunkai@zte.com.cn>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Markus Elfring <elfring@users.sourceforge.net>,
+        Ganesh Goudar <ganeshgr@linux.ibm.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauri Sandberg <sandberg@mailfence.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/2] of: remove reserved regions count restriction
+Message-ID: <YaaSnJ2Meo5mEKDN@kernel.org>
+References: <20211119075844.2902592-1-calvinzhang.cool@gmail.com>
+ <YZnqo3oA7srQik4N@kernel.org>
+ <YaVrahm+ysoQRGKe@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaVrahm+ysoQRGKe@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:03 AM H. Nikolaus Schaller <hns@goldelico.com> wrote:
->
-> Hi Rob,
->
-> > Am 25.11.2021 um 22:26 schrieb Rob Herring <robh@kernel.org>:
-> >
-> > On Wed, 24 Nov 2021 22:29:09 +0100, H. Nikolaus Schaller wrote:
-> >> From: Sam Ravnborg <sam@ravnborg.org>
-> >>
-> >> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
-> >> Based on .txt binding from Zubair Lutfullah Kakakhel
-> >>
-> >> We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
-> >>
-> >> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> >> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> >> Cc: Rob Herring <robh@kernel.org>
-> >> Cc: devicetree@vger.kernel.org
-> >> ---
-> >> .../display/bridge/ingenic,jz4780-hdmi.yaml   | 76 +++++++++++++++++++
-> >> .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
-> >> 2 files changed, 79 insertions(+)
-> >> create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> >>
-> >
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >
-> > yamllint warnings/errors:
-> >
-> > dtschema/dtc warnings/errors:
-> > Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/bridge/bridge/synopsys,dw-hdmi.yaml'
->
-> I wasn't able to fix that.
->
-> If I change
->
->  allOf:
-> -  - $ref: bridge/synopsys,dw-hdmi.yaml#
-> +  - $ref: synopsys,dw-hdmi.yaml#
+On Mon, Nov 29, 2021 at 06:08:10PM -0600, Rob Herring wrote:
+> On Sun, Nov 21, 2021 at 08:43:47AM +0200, Mike Rapoport wrote:
+> > On Fri, Nov 19, 2021 at 03:58:17PM +0800, Calvin Zhang wrote:
+> > > The count of reserved regions in /reserved-memory was limited because
+> > > the struct reserved_mem array was defined statically. This series sorts
+> > > out reserved memory code and allocates that array from early allocator.
+> > > 
+> > > Note: reserved region with fixed location must be reserved before any
+> > > memory allocation. While struct reserved_mem array should be allocated
+> > > after allocator is activated. We make early_init_fdt_scan_reserved_mem()
+> > > do reservation only and add another call to initialize reserved memory.
+> > > So arch code have to change for it.
+> > 
+> > I think much simpler would be to use the same constant for sizing
+> > memblock.reserved and reserved_mem arrays.
+> 
+> Do those arrays get shrunk? Or do we waste the memory forever?
 
-That is correct.
+Memblock arrays don't get shrunk, but they are __init unless an architecture
+chose to keep them after boot, but most architectures that use device tree
+actually keep memblock structures.
+ 
+> Maybe we can copy and shrink the initial array? Though I suspect struct 
+> reserved_mem pointers have already been given out.
 
->
-> then make dt_binding_check still reports:
->
-> Unknown file referenced: [Errno 2] No such file or directory: '/Users/hns/Library/Python/3.7/lib/python/site-packages/dtschema/schemas/bridge/synopsys,dw-hdmi.yaml'
+I'm not sure. It seems that reserved_mem pointers are given out at initcall
+time and AFAIU the reserved_mem array is created somewhere around
+setup_arch(). So maybe it's possible to copy and shrink the initial array.
+ 
+> > 
+> > If there is too much reserved regions in the device tree, reserving them in
+> > memblock will fail anyway because memblock also starts with static array
+> > for memblock.reserved, so doing one pass with memblock_reserve() and
+> > another to set up reserved_mem wouldn't help anyway.
+> > 
+> > > I'm only familiar with arm and arm64 architectures. Approvals from arch
+> > > maintainers are required. Thank you all.
 
-The $id is wrong:
-
-$id: http://devicetree.org/schemas/bridge/ingenic,jz4780-hdmi.yaml#
-
-The path should be:
-http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
-
-Rob
+-- 
+Sincerely yours,
+Mike.
