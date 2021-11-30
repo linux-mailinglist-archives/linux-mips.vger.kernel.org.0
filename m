@@ -2,159 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C1B46311F
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 11:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 781D8463289
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Nov 2021 12:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbhK3KiY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 30 Nov 2021 05:38:24 -0500
-Received: from elvis.franken.de ([193.175.24.41]:50871 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234136AbhK3KiU (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:38:20 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1ms0TT-0006Wd-00; Tue, 30 Nov 2021 11:34:59 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 793F5C4DE4; Tue, 30 Nov 2021 11:34:48 +0100 (CET)
-Date:   Tue, 30 Nov 2021 11:34:48 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
-        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH 4/4] MIPS: loongson64: fix FTLB configuration
-Message-ID: <20211130103448.GA9643@alpha.franken.de>
-References: <20211125105949.27147-1-huangpei@loongson.cn>
- <20211125105949.27147-5-huangpei@loongson.cn>
- <20211125155527.GC11524@alpha.franken.de>
- <20211126031319.kfhemh73dyq4rkra@loongson-pc>
+        id S240837AbhK3Lmr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 30 Nov 2021 06:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240794AbhK3Lmp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 30 Nov 2021 06:42:45 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33CCC061574;
+        Tue, 30 Nov 2021 03:39:25 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id l25so85213600eda.11;
+        Tue, 30 Nov 2021 03:39:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=yGHiGFZ+rE1fvnI8baTnrP2jm+L8strqrdJ5iul7hp0=;
+        b=c6P0wlF3uxLM9zmSs2xQkvwdYDteITQrAo0DrsrznSF9sEOH28QP1fFa6xhItTgTpS
+         KkU6+3vbY7zvYbaGplUg6NAOHI1i7wZaB3YsPHKiJwSv7fAraYSJOmBsIPcxDa1GRc0A
+         PiiJWBQEcwSH6cUNsH7cKZjAdxgXOazBahtafC3Gs9rh9Srzhdp4SMH53zgHkiQE4Got
+         FG3pFo/MwoBD/bEwOxiDmocGqSzd1aaMmn3Q9da/d+qNqxzu9ZAjjXwyK04+bd+g1kuu
+         faXB8tkRVfsTXc+ZCCEjhbpUn7X9sEvfPMvPv6y6fB24K84rc8fMZl0EoSsfLlnsoaMi
+         6+Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=yGHiGFZ+rE1fvnI8baTnrP2jm+L8strqrdJ5iul7hp0=;
+        b=bJy6NaXQDh8ADM4mg/f3KrhI2h6hI8fQ/SibQuRqj93AqLrM4BFNfoLXnLUt57miJn
+         AGSSKlJNdRpR4RS8eZD9wahB07qkNHjSH2bOYoqKcbQ5Wka1ioc+4UFRvx9vWvYM9KEO
+         ++BoqJpUVBx/jfbED7RG8m/QYNNNRRJ1jAQnSlXDOwaClnG8BasQomzDAFTfyFRLQebL
+         g1I7f8hmW7UbvHdAZq5feMglLAEMk1iTodWuKXL7gbaQdBCapJlxJXlPD+PmP3CHhwjF
+         rr8Uo5UObnqyhZmWZmyDtA2BLM0DiXiyL0tMFLmBkrgJQrmuqQk2W+NUo/NHQblB6a8D
+         zKsw==
+X-Gm-Message-State: AOAM532nuLURkpatoS9eCqvjAQ/Pr9FVpH9VK4vP2Swex00tufDvtNL/
+        Z2r1l70J8+0hSAt+0CkJ7iY=
+X-Google-Smtp-Source: ABdhPJzBmlKlxbZEZjGdZkld9KClqoQPE65iifbnAftOVfFURI+3gCywK4yL4F/szmL3PzOccPRpRg==
+X-Received: by 2002:a17:906:6a1a:: with SMTP id qw26mr67292465ejc.489.1638272364301;
+        Tue, 30 Nov 2021 03:39:24 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id m22sm11049796eda.97.2021.11.30.03.39.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 03:39:23 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <3490c50e-50d2-f906-3383-b87e14b14fab@redhat.com>
+Date:   Tue, 30 Nov 2021 12:39:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126031319.kfhemh73dyq4rkra@loongson-pc>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 10/43] KVM: arm64: Move vGIC v4 handling for WFI out
+ arch callback hook
+Content-Language: en-US
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+ <20211009021236.4122790-11-seanjc@google.com>
+ <9236e715-c471-e1c8-6117-6f37b908a6bd@redhat.com>
+ <875ytjbxpq.wl-maz@kernel.org>
+ <be1cf8c7-ed87-b8eb-1bca-0a6c7505d7f8@redhat.com>
+In-Reply-To: <be1cf8c7-ed87-b8eb-1bca-0a6c7505d7f8@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 11:13:19AM +0800, Huang Pei wrote:
-> On Thu, Nov 25, 2021 at 04:55:28PM +0100, Thomas Bogendoerfer wrote:
-> > On Thu, Nov 25, 2021 at 06:59:49PM +0800, Huang Pei wrote:
-> > > It turns out that 'decode_configs' -> 'set_ftlb_enable' is called under
-> > > c->cputype unset, which leaves FTLB disabled on BOTH 3A2000 and 3A3000
-> > > 
-> > > Fix it by calling "decode_configs" after c->cputype is initialized
-> > > 
-> > > Fixes: da1bd29742b1 ("MIPS: Loongson64: Probe CPU features via CPUCFG")
-> > > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> > > ---
-> > >  arch/mips/kernel/cpu-probe.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> > > index ac0e2cfc6d57..24a529c6c4be 100644
-> > > --- a/arch/mips/kernel/cpu-probe.c
-> > > +++ b/arch/mips/kernel/cpu-probe.c
-> > > @@ -1734,8 +1734,6 @@ static inline void decode_cpucfg(struct cpuinfo_mips *c)
-> > >  
-> > >  static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
-> > >  {
-> > > -	decode_configs(c);
-> > > -
-> > >  	/* All Loongson processors covered here define ExcCode 16 as GSExc. */
-> > >  	c->options |= MIPS_CPU_GSEXCEX;
-> > >  
-> > > @@ -1796,6 +1794,8 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
-> > >  		panic("Unknown Loongson Processor ID!");
-> > >  		break;
-> > >  	}
-> > > +
-> > > +	decode_configs(c);
-> > >  }
-> > >  #else
-> > >  static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu) { }
-> > > -- 
-> > > 2.20.1
-> > 
-> > applied to mips-fixes.
-> > 
-> > Thomas.
-> > 
-> > -- 
-> > Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-> > good idea.                                                [ RFC1925, 2.3 ]
-> Hi, Thomas,
+On 10/26/21 18:12, Paolo Bonzini wrote:
+> On 26/10/21 17:41, Marc Zyngier wrote:
+>>> This needs a word on why kvm_psci_vcpu_suspend does not need the
+>>> hooks.  Or it needs to be changed to also use kvm_vcpu_wfi in the PSCI
+>>> code, I don't know.
+>>>
+>>> Marc, can you review and/or advise?
+>> I was looking at that over the weekend, and that's a pre-existing
+>> bug. I would have addressed it independently, but it looks like you
+>> already have queued the patch.
 > 
-> What about PATCH 1/4, without it, kernel/trace/ring_buffer.i using
-> local_add_return, like this 
-> --------------------------------------------------------------------------------
->     __asm__ __volatile__(
-> 	"     .set    push                                    \n"
-> 	"     .set    ""arch=r4000""                  \n"
-> 	".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set mips64r2;.rept 1; sync 
-> 	0x00; .endr; .set pop; .else; ; .endif" "\n"
-> 	"1:" "lld     " "%1, %2               # local_add_return\n"
-> 	"     addu    %0, %1, %3				\n"
-> 	"scd " "%0, %2						\n"
-> 	"     beqz    %0, 1b					\n"
-> 	"     addu    %0, %1, %3				\n"
-> 	"     .set    pop
-> 	\n"
-> 	: "=&r" (result), "=&r" (temp), "=m" (l->a.counter)
-> 	: "Ir" (i), "m" (l->a.counter)
-> 	: "memory");
-> } else if (1) {
->   unsigned long temp;
+> I have "queued" it, but that's just my queue - it's not on kernel.org 
+> and it's not going to be in 5.16, at least not in the first batch.
 > 
->     __asm__ __volatile__(
-> 	    "     .set    push                                    \n"
-> 	    "     .set    ""arch=r4000""                  \n"
-> 	    ".if (( 0x00 ) != -1) && ( (1 << 31) ); .set push; .set
-> 	    mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ;
-> 	    .endif" "                    \n"
-> 	    "1:" "lld     " "%1, %2               # local_add_return
-> 	    \n"
-> 	    "     addu    %0, %1, %3                              \n"
-> 	    "scd " "%0, %2
-> 	    \n"
-> 	    "     beqz    %0, 1b
-> 	    \n"
-> 	    "     addu    %0, %1, %3
-> 	    \n"
-> 	    "     .set    pop
-> 	    \n"
-> 	    : "=&r" (result), "=&r" (temp), "=m"
-> 	    (l->a.counter)
-> 	    : "Ir" (i), "m" (l->a.counter)
-> 	    : "memory");
-> 
-> --------------------------------------------------------------------------------
-> it is wrong here, "lld" + "addu"
+> There's plenty of time for me to rebase on top of a fix, if you want to 
+> send the fix through your kvm-arm pull request.  Just Cc me so that I 
+> understand what's going on.
 
-it fixes something, but I didn't see the impact from the commit message.
-Because there is no Fixes tag, I haven't applied it tomips-fixes.
+Since a month has passed and I didn't see anything related in the 
+KVM-ARM pull requests, I am going to queue this patch.  Any conflicts 
+can be resolved through a kvmarm->kvm merge of either a topic branch or 
+a tag that is destined to 5.16.
 
-And
+Paolo
 
-+#elif MIPS_ISA_REV >= 6
-+# define SC_BEQZ	beqzc
-
-why are you doing this ?
-
-> and PATCH 2, any comment?
-
-parameter page already contains the virtual address of the page to
-flush, so there is nothing to fix. I'm not 100% about the cache
-nature of all TX39 core, so leaving the check for cpu_has_dc_aliases
-in place is the safer bet. And this platform is nearly dead, so I'm
-sure sure whether this sort of cosemtics is needed.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
