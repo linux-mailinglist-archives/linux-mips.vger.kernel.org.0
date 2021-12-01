@@ -2,97 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CEA464D12
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 12:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D81464E1E
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 13:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348976AbhLALix (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Dec 2021 06:38:53 -0500
-Received: from ptr.189.cn ([183.61.185.103]:11455 "EHLO 189.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S243427AbhLALiu (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:38:50 -0500
-HMM_SOURCE_IP: 10.64.8.41:58200.40093229
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 3D07D100212;
-        Wed,  1 Dec 2021 19:35:24 +0800 (CST)
-Received: from  ([14.17.101.176])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 3123c9ccac30420ba190d8df854b0e53 for l.stach@pengutronix.de;
-        Wed, 01 Dec 2021 19:35:27 CST
-X-Transaction-ID: 3123c9ccac30420ba190d8df854b0e53
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 14.17.101.176
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Xiaochuan Mao <maoxiaochuan@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2 3/3] mips: loongson64: enable etnaviv drm driver on ls2k1000 and ls3a4000
-Date:   Wed,  1 Dec 2021 19:35:02 +0800
-Message-Id: <20211201113502.3168-3-15330273260@189.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211201113502.3168-1-15330273260@189.cn>
-References: <20211201113502.3168-1-15330273260@189.cn>
+        id S1347891AbhLAMpe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Dec 2021 07:45:34 -0500
+Received: from mail-ua1-f44.google.com ([209.85.222.44]:45651 "EHLO
+        mail-ua1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234846AbhLAMpe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 07:45:34 -0500
+Received: by mail-ua1-f44.google.com with SMTP id ay21so48600243uab.12;
+        Wed, 01 Dec 2021 04:42:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=La75mYyicBSHo3/PwvSDeXoIi9UyxaqT15CWxLOFL3w=;
+        b=F1cebL+Ga93tvzsHPxEqCVJDd8+7YM6LpmkrnuZ3T5K8DuyvLzhqsJ2QIcJKwH93p9
+         KUulN6ZoYbp8uw5zVRlEc2cSg+N5VeOf6UHvmNKrWhW1UXQcsALu4txfwrIzC0Dn3aza
+         H9Uhn6EpAtP5tl+8ZOEKUgDiUax1plsUAYTvZzGFbIyWICXIWDk0t27ORTD1nD+tdAIY
+         WsapAExRJYUhNrw9yG7AnHUpgr61yjXZY+IkK/7NG+NaiLB0o25JoWJ5CCgQmn6MD/fx
+         cMhmJgTyh17aKmYTauHX2Hb3TMxK0gm1Qz7O+uScNoFEyKqlfqHW7aPPa9SsKZxdYqij
+         8xyQ==
+X-Gm-Message-State: AOAM533lrkClo+q2wjVFJCv1x9AThToUfnOIOUS9FXowo9l4XjEc1YJN
+        5GNztRowwx9zgiVnXG5Rts9MjcsG0gkv+Q==
+X-Google-Smtp-Source: ABdhPJzw6iO7kSgcumAKwYFFxTR8dSed+ewB5kLOHIHB3MZCtL1t1Fk0EAa/IvAep9yYvYFT0Ezo1w==
+X-Received: by 2002:ab0:224e:: with SMTP id z14mr6970453uan.97.1638362533253;
+        Wed, 01 Dec 2021 04:42:13 -0800 (PST)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
+        by smtp.gmail.com with ESMTPSA id r20sm11690923vkq.15.2021.12.01.04.42.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 04:42:13 -0800 (PST)
+Received: by mail-ua1-f47.google.com with SMTP id y5so48607072ual.7;
+        Wed, 01 Dec 2021 04:42:13 -0800 (PST)
+X-Received: by 2002:a67:c106:: with SMTP id d6mr6580166vsj.77.1638362532976;
+ Wed, 01 Dec 2021 04:42:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211130164558.85584-1-tsbogend@alpha.franken.de>
+In-Reply-To: <20211130164558.85584-1-tsbogend@alpha.franken.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 1 Dec 2021 13:42:01 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUqKcnpDeKFaKs4sx_9UpeQYyfVrSDyqYf6MxFbdr64Gg@mail.gmail.com>
+Message-ID: <CAMuHMdUqKcnpDeKFaKs4sx_9UpeQYyfVrSDyqYf6MxFbdr64Gg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] MIPS: TXX9: Remove rbtx4938 board support
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: suijingfeng <suijingfeng@loongson.cn>
+Hi Thomas,
 
-  v2: merge the last two trival patches into one patch.
+On Tue, Nov 30, 2021 at 5:46 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+> No active MIPS user own this board, so let's remove it.
+>
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
-Signed-off-by: Sui Jingfeng <15330273260@189.cn>
----
- arch/mips/configs/loongson2k_defconfig | 1 +
- arch/mips/configs/loongson3_defconfig  | 1 +
- 2 files changed, 2 insertions(+)
+Thanks for your patch!
 
-diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
-index e948ca487e2d..194f39d07332 100644
---- a/arch/mips/configs/loongson2k_defconfig
-+++ b/arch/mips/configs/loongson2k_defconfig
-@@ -243,6 +243,7 @@ CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_DRM=y
- CONFIG_DRM_RADEON=y
-+CONFIG_DRM_ETNAVIV=m
- CONFIG_FB_RADEON=y
- CONFIG_LCD_CLASS_DEVICE=y
- CONFIG_LCD_PLATFORM=m
-diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
-index 25ecd15bc952..65987c5abe83 100644
---- a/arch/mips/configs/loongson3_defconfig
-+++ b/arch/mips/configs/loongson3_defconfig
-@@ -280,6 +280,7 @@ CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
- CONFIG_DRM=y
- CONFIG_DRM_RADEON=m
-+CONFIG_DRM_ETNAVIV=m
- CONFIG_DRM_QXL=y
- CONFIG_DRM_VIRTIO_GPU=y
- CONFIG_FB=y
--- 
-2.20.1
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
+My rbtx4927 still works fine afterwards, so
+Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
