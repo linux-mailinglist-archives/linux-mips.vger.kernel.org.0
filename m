@@ -2,70 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE3E464E72
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 14:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630D2464E77
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 14:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234325AbhLANI0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Dec 2021 08:08:26 -0500
-Received: from mail-vk1-f177.google.com ([209.85.221.177]:39659 "EHLO
-        mail-vk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbhLANI0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 08:08:26 -0500
-Received: by mail-vk1-f177.google.com with SMTP id 84so16032419vkc.6;
-        Wed, 01 Dec 2021 05:05:05 -0800 (PST)
+        id S1349466AbhLANKH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Dec 2021 08:10:07 -0500
+Received: from mail-ua1-f54.google.com ([209.85.222.54]:47090 "EHLO
+        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349470AbhLANKC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 08:10:02 -0500
+Received: by mail-ua1-f54.google.com with SMTP id az37so48764900uab.13;
+        Wed, 01 Dec 2021 05:06:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pSCANc5akMVyARPAGU2DAriDgbQMxgmWTdFVSgsUOA4=;
-        b=TiDmxyrjuuJUZ6U815+QoUFbOixl8UJt/4YlSu0alkhZ8CbaS9FPZjMvIJF29CRqA/
-         u3UtRVxxDOMAu4zeWMEqI5lmsl8JLln2Q6Mjv0FbvqsZiqFYd4O3elIlDXYTRwjzvfHN
-         51nlrValFNAHsnHY9tngyE97II3hhg4qiQbuYcX5zWlaDDVZnpAW6GSunf3jxxXPKm4l
-         13lpEaPNbpXrUDcp8X/y3lAuDmi7LkwRCLiCmmZFzVWHTIr9eU9zitKTt/VYJxx8iDd/
-         R/KlFSovnNSi0dIIMcAPO/8tjotBP+1RiWDHIHS5IH7+Ccl0uKx2tLNdMjg/57URuEpr
-         22eA==
-X-Gm-Message-State: AOAM531oESAG0RbRgWbsfa59hgsAfh/gNU0M7gQxJGubIZ2zlHJsW3Yh
-        A+j6MNrP60cRLE33esnlrgdN7lwDvzvl1Q==
-X-Google-Smtp-Source: ABdhPJzPxPmlSSLGPOF1dc/lppCsx+DKKnHvZO4roiWaVzoXO60uk3/UVUpfzekAdXeKV7ems1E1Fw==
-X-Received: by 2002:a1f:c9c2:: with SMTP id z185mr7880917vkf.26.1638363904846;
-        Wed, 01 Dec 2021 05:05:04 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id g16sm11970987vsp.18.2021.12.01.05.05.04
+        bh=AgwbFm5gkjwOtodlhi0zJJvcgS/i7V2fCpFuxG8kd94=;
+        b=Jyvtm+6VZ1RGnb/UF5Vm2HvEcmFtsdfMZ5s5FZuwhPAzmzps3fGeV6/BftmLs8sXHV
+         s71tVkjgsFI4KTQJ/aqj9HiPbS3UNdPmEBViSTgCGx/BHPdUGkywaSbrUThizp07XUpS
+         FkHGwSaUj7YmL3DX9shMazC+URsI488X6vW7p1nOw5MDWr3vLdB/MK4egkaap+kjSQqL
+         LmAsGMoSG7VFgjN90qy9AyiSdiwGdoxjfBLXe47doiU6OA4TO6fXn+YFzu0oE5NbJq8e
+         DUGF4orm2PJCcltkYMeDiltd3h2HdMed3W8UCocM3HTv18220QBKFfMUtTs3+DSSjFGs
+         n6Rg==
+X-Gm-Message-State: AOAM533oN2GyOETqR8O6IEJF/qy5pqkmZe7W6uOaG2wiZ8fPXU9RHXd0
+        tBPwlTEgMseey0amVJNGlokDFNcsxguS1w==
+X-Google-Smtp-Source: ABdhPJzq0/vFLXekmqPdt2QkRJrW/G+np5DNNGqURV3YxjfADxXe/vodZVtnBIWxOE6mWhETKhsm6w==
+X-Received: by 2002:a67:bb11:: with SMTP id m17mr6696201vsn.5.1638364000316;
+        Wed, 01 Dec 2021 05:06:40 -0800 (PST)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id 15sm11833419vkj.49.2021.12.01.05.06.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 05:05:04 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id p2so48691436uad.11;
-        Wed, 01 Dec 2021 05:05:04 -0800 (PST)
-X-Received: by 2002:a05:6102:e10:: with SMTP id o16mr6795674vst.5.1638363904281;
- Wed, 01 Dec 2021 05:05:04 -0800 (PST)
+        Wed, 01 Dec 2021 05:06:40 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id r15so48823383uao.3;
+        Wed, 01 Dec 2021 05:06:39 -0800 (PST)
+X-Received: by 2002:a05:6102:c89:: with SMTP id f9mr7151505vst.68.1638363999694;
+ Wed, 01 Dec 2021 05:06:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20211130164558.85584-1-tsbogend@alpha.franken.de> <20211130164558.85584-2-tsbogend@alpha.franken.de>
-In-Reply-To: <20211130164558.85584-2-tsbogend@alpha.franken.de>
+References: <20211130164558.85584-1-tsbogend@alpha.franken.de> <20211130164558.85584-3-tsbogend@alpha.franken.de>
+In-Reply-To: <20211130164558.85584-3-tsbogend@alpha.franken.de>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 1 Dec 2021 14:04:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUO-99bQPdLoLSPzDZ1KzT1_rS6eXEejEH4tf+XAtCgvw@mail.gmail.com>
-Message-ID: <CAMuHMdUO-99bQPdLoLSPzDZ1KzT1_rS6eXEejEH4tf+XAtCgvw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] MIPS: TXX9: Remove rbtx4939 board support
+Date:   Wed, 1 Dec 2021 14:06:28 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXr1bT3U_XKvHKowfQwaW6-4XevYngoNzQFu-bYwdMP_A@mail.gmail.com>
+Message-ID: <CAMuHMdXr1bT3U_XKvHKowfQwaW6-4XevYngoNzQFu-bYwdMP_A@mail.gmail.com>
+Subject: Re: [PATCH 3/3] MIPS: TXX9: Remove TX4939 SoC support
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
         MTD Maling List <linux-mtd@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Thomas,
+
 On Tue, Nov 30, 2021 at 5:46 PM Thomas Bogendoerfer
 <tsbogend@alpha.franken.de> wrote:
-> No active MIPS user own this board, so let's remove it.
+> After removal of RBTX4939 board support remove code for the TX4939 SoC.
 >
 > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
 Thanks for your patch!
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  arch/mips/pci/Makefile                |   1 -
+>  arch/mips/pci/pci-tx4939.c            | 107 -----
+>  arch/mips/txx9/Kconfig                |   8 -
+>  arch/mips/txx9/generic/Makefile       |   1 -
+>  arch/mips/txx9/generic/irq_tx4939.c   | 216 ----------
+>  arch/mips/txx9/generic/setup_tx4939.c | 568 --------------------------
+>  drivers/char/hw_random/Kconfig        |  13 -
+>  drivers/char/hw_random/Makefile       |   1 -
+>  drivers/char/hw_random/tx4939-rng.c   | 157 -------
+>  drivers/mtd/nand/raw/Kconfig          |   2 +-
+>  10 files changed, 1 insertion(+), 1073 deletions(-)
+>  delete mode 100644 arch/mips/pci/pci-tx4939.c
+>  delete mode 100644 arch/mips/txx9/generic/irq_tx4939.c
+>  delete mode 100644 arch/mips/txx9/generic/setup_tx4939.c
+>  delete mode 100644 drivers/char/hw_random/tx4939-rng.c
+
+You forgot to remove arch/mips/include/asm/txx9/tx4939.h.
 
 My rbtx4927 still works fine afterwards, so
 Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
