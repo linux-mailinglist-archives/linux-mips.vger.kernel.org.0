@@ -2,90 +2,137 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE5346589F
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 22:52:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EEB4658FA
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 23:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353255AbhLAVzW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Dec 2021 16:55:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
+        id S1353480AbhLAWUc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Dec 2021 17:20:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353206AbhLAVzE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 16:55:04 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3FCC061756;
-        Wed,  1 Dec 2021 13:51:36 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o19-20020a1c7513000000b0033a93202467so2170077wmc.2;
-        Wed, 01 Dec 2021 13:51:36 -0800 (PST)
+        with ESMTP id S242357AbhLAWUc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 17:20:32 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8375CC061574;
+        Wed,  1 Dec 2021 14:17:10 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id bk14so51601258oib.7;
+        Wed, 01 Dec 2021 14:17:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RaIl7xQSoXsxAYdLKywvcuTT4Blwc6PXsDlGAUvpoKY=;
-        b=Vj/NKn43nd8bESAwtHAudpnpTXDWLx0rOLw71QiY2Ci0KdOZ0wO9EqdBz+niamJIKc
-         lOATqAmTW1L+f4zVIbRtC8o0deS/CHm5o4YEeDd23YZrDeugg8gx4QDSlSKjpL4btdV6
-         zu6rYNDZ0Fuw4ikKwxPrYuCksRUhmi7V+GJFWBIUqfWj86pV20ERuzbGs5QGGqwhzifP
-         QrUeXaiPsknbo5hraf7IWzRIYJxjU+BEF0O3xXJm/gUJgkRNepICYzWf404JAPgVNDG1
-         qlLtsyJgMAxEXO0e+FtqRAUiG6TBo7njyoBxfv3Pz1IlwKIg6KSaq74RSK0d/vn2zGK9
-         Lo5w==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=UZD+wACY3SAuTXTUljVln3laEvcK5M7PHpyfxljx+Jk=;
+        b=AFp0DZrbg+kL+LwrvONlq6K9FDEB8l4aqulKDEq9wkZYI1E3lFkReWCc4n8My8QcOV
+         FK5pStCUOz5JLp7w22iP6i+uL/Ci4JMR0VjMeNKUlj7Lbb8k3ukrWMgpiUUVxdfTTEh3
+         4v0vwPCtSo8PzDZN+xvuS3AWguRN/2N5QUCoCf9ffXnO02Sb7bW4my+rFvzJRvVBOCnn
+         IxA/THxjH/ytSTKJPvX3pH+4GpYDri3PxrtG3M9qeID9eYn9a82SiLaT8jrLXp2bPJYU
+         ll6jVQjBIV4khOG/hQI4u01oXbo9HFh48Mwg4tSGWxHHf/nqzgwGD4WhcZN5CyGwObdT
+         UKGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RaIl7xQSoXsxAYdLKywvcuTT4Blwc6PXsDlGAUvpoKY=;
-        b=sWbYgyl04HccYAMKvA417dNo5oY6mw8JikNZHbzuturitIUEq/MapA1aNVtVK79gQa
-         olZD/0CUf9RQNehELQi+HBVzrJhw5u386TxzpFfl1MORlHV5Fpww3IhqPkpXUCZ3NWba
-         34aipeOE4kOZ2bTfpj/Xry8lG8DvqDjoAUzm3AKSKapK10ys2MdPcEOYgOMKoLpPQmdj
-         CFyqad02OaOBtTY2rfIf/PHLxrec+091uHJonX7RDWHYvfcxlgzXd5JMzU8YnUYwgZHt
-         KMFDyJQcpTrPJImUo/1x3FaWSIEUWgtL7954c5STmzoOhjrl+yglygKhT9kanLpCmJGs
-         Gb8g==
-X-Gm-Message-State: AOAM530/HqMiPoMsr8Q9CY+LH8fIiHw5u1xWiJGoEKrCrPkI52AgeXOg
-        bCP8wl3vud0msrVlA5zbGq0ls7vQR9U=
-X-Google-Smtp-Source: ABdhPJyhgRaVIDmlqKXjN6DihVN0a0iVYb5bKJ6jNsc9qvyWz0kQXtXSqPG2vzDclnEscJiqFM+yoQ==
-X-Received: by 2002:a05:600c:b43:: with SMTP id k3mr1033589wmr.159.1638395495199;
-        Wed, 01 Dec 2021 13:51:35 -0800 (PST)
-Received: from localhost.localdomain (252.red-83-54-181.dynamicip.rima-tde.net. [83.54.181.252])
-        by smtp.gmail.com with ESMTPSA id c10sm877879wrb.81.2021.12.01.13.51.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Dec 2021 13:51:34 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-pci@vger.kernel.org
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UZD+wACY3SAuTXTUljVln3laEvcK5M7PHpyfxljx+Jk=;
+        b=c0F+jup9q9/PC1Qxcm3Bw92EntGmylqwY2vUZhAfHPMasFIuntSyZBXG9mTWXVofDr
+         S6zjvh5D7ET8YmAN4MuxgVT9L2XEj6V2Q0EpepeVGtX2RSjQbBBMFNnjRmwKzGkDF3Qc
+         8+u1VqildEtGW+fWhdCmtXz3+6DFcFr08NfVcZLV6oF7p9e7lMTey/rSWjQG1bY7Qmw5
+         Y79Cje4kaFVAK6AuhLp1RnJIHCyUK7ZePQH6vPS2KVU0kK8AjGzWg8MawWbEU1NvrF4q
+         544ICB5FgUsCGcdh5+EiPhhTOZ6VnjQF4WjMFLhhmPNaHIzVYes2kRcgg2tLhKKstIpN
+         yi4g==
+X-Gm-Message-State: AOAM531uMk8dqXZXZb8PEsO7lG6vYLFkYLBEcAO5CH9ZiEqWUInsOlPu
+        VG7jmy8M6hcSZ+W47DlskeUz9dCmiz8=
+X-Google-Smtp-Source: ABdhPJy/Ko5RmZFfrSdHWpJGy3yrJjyfbKqIy4l3ek0avXdcJzN5Kt1mcKgyyxew4PMN97s50heykw==
+X-Received: by 2002:a05:6808:1403:: with SMTP id w3mr1054161oiv.80.1638397029652;
+        Wed, 01 Dec 2021 14:17:09 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e3sm382044otk.71.2021.12.01.14.17.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 14:17:09 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v2 2/5] MIPS: ralink: implement
+ 'pcibios_root_bridge_prepare()'
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-pci@vger.kernel.org
 Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
         lorenzo.pieralisi@arm.com, bhelgaas@google.com, arnd@arndb.de,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] PCI: mt7621: Kconfig: Allow COMPILE_TEST for all arches
-Date:   Wed,  1 Dec 2021 22:51:27 +0100
-Message-Id: <20211201215127.23550-6-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211201215127.23550-1-sergio.paracuellos@gmail.com>
+        linux-kernel@vger.kernel.org
 References: <20211201215127.23550-1-sergio.paracuellos@gmail.com>
+ <20211201215127.23550-3-sergio.paracuellos@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <d243a90d-25b2-a65f-b69d-af7497db8742@roeck-us.net>
+Date:   Wed, 1 Dec 2021 14:17:07 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211201215127.23550-3-sergio.paracuellos@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Since all MIPS specific code has been moved from the controller driver side
-there is no more stoppers to enable the driver to be completely enable for
-'COMPILE_TEST'. Hence, remove MIPS conditional statement.
+On 12/1/21 1:51 PM, Sergio Paracuellos wrote:
+> PCI core code call 'pcibios_root_bridge_prepare()' function inside function
+> 'pci_register_host_bridge()'. This point is very good way to properly enter
+> into this MIPS ralink specific code to properly setup I/O coherency units
+> with PCI memory addresses.
+> 
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>   arch/mips/ralink/mt7621.c | 30 ++++++++++++++++++++++++++++++
+>   1 file changed, 30 insertions(+)
+> 
+> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
+> index bd71f5b14238..7649416c1cd7 100644
+> --- a/arch/mips/ralink/mt7621.c
+> +++ b/arch/mips/ralink/mt7621.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/slab.h>
+>   #include <linux/sys_soc.h>
+>   #include <linux/memblock.h>
+> +#include <linux/pci.h>
+>   
+>   #include <asm/bootinfo.h>
+>   #include <asm/mipsregs.h>
+> @@ -22,6 +23,35 @@
+>   
+>   static void *detect_magic __initdata = detect_memory_region;
+>   
+> +int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
+> +{
+> +	struct resource_entry *entry;
+> +	resource_size_t mask;
+> +
+> +	entry = resource_list_first_type(&bridge->windows, IORESOURCE_MEM);
+> +	if (!entry) {
+> +		pr_err("Cannot get memory resource\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (mips_cps_numiocu(0)) {
+> +		/*
+> +		 * FIXME: hardware doesn't accept mask values with 1s after
+> +		 * 0s (e.g. 0xffef), so it would be great to warn if that's
+> +		 * about to happen
+> +		 */ > +		mask = ~(entry->res->end - entry->res->start);
+> +
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- drivers/pci/controller/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Try something like this:
+		WARN_ON((mask != ~0UL && BIT(ffz(mask)) - 1 != mask);
 
-diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-index 93b141110537..18d41d2b0392 100644
---- a/drivers/pci/controller/Kconfig
-+++ b/drivers/pci/controller/Kconfig
-@@ -333,7 +333,7 @@ config PCIE_APPLE
- 
- config PCIE_MT7621
- 	tristate "MediaTek MT7621 PCIe Controller"
--	depends on (RALINK && SOC_MT7621) || (MIPS && COMPILE_TEST)
-+	depends on (RALINK && SOC_MT7621) || COMPILE_TEST
- 	select PHY_MT7621_PCI
- 	default SOC_MT7621
- 	help
--- 
-2.33.0
+> +		write_gcr_reg1_base(entry->res->start);
+> +		write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
+> +		pr_info("PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
+> +			(unsigned long long)read_gcr_reg1_base(),
+> +			(unsigned long long)read_gcr_reg1_mask());
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   phys_addr_t mips_cpc_default_phys_base(void)
+>   {
+>   	panic("Cannot detect cpc address");
+> 
 
