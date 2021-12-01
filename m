@@ -2,130 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B105E465834
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 22:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7CF465895
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 22:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235884AbhLAVQE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Dec 2021 16:16:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S1353197AbhLAVy4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Dec 2021 16:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbhLAVQB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 16:16:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE86C061574;
-        Wed,  1 Dec 2021 13:12:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25A3EB82137;
-        Wed,  1 Dec 2021 21:12:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 864ADC53FAD;
-        Wed,  1 Dec 2021 21:12:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638393157;
-        bh=weR7DSWQIKqO4WPQpQqKqGFcuCYo8x3XUhLSP/EHQK4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=JNdasUmMTcDCPq5S/47tyL2s4HVZG8g7P0WVjWozWqGG0fn7nYUkyFHRB4d3r1PZ2
-         XjjQtnCouXXk88j+hby9dNOwwcPBgGoqkqKo3cryAX05sC8NEfmtx9/Nk2SEgLUq/d
-         VuIDyFNwqEKM/2FJF2GE0urovVHgp7SKVQ9g6arvtwAY1UCd+jVBWyJ4RjLHM5NsZg
-         YphlE7dXnbqd6yC4K+Nb9DfUBRYCe7NefKkoZDrsWMMEhh41+hoPC9qb9S4c79R3n/
-         RNbauI5EmDBEEhZphouk0MeXOqrsSMuHwFrWzEmTTq+QsUtfhH6nh3kqQY8Mv4XdtT
-         VFh6fNCGhoQqg==
-Date:   Wed, 1 Dec 2021 15:12:36 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        John Crispin <john@phrozen.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/5] PCI: let 'pcibios_root_bridge_prepare()' access to
- 'bridge->windows'
-Message-ID: <20211201211236.GA2841879@bhelgaas>
+        with ESMTP id S234733AbhLAVyy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 16:54:54 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9AAC061574;
+        Wed,  1 Dec 2021 13:51:31 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id j3so55361172wrp.1;
+        Wed, 01 Dec 2021 13:51:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DX2ga5YEZ7pQITxRdnzgB23jvyNbXnpWAo2XxfRd5Kw=;
+        b=mxoOLflFLSRdalRBq5p0dGpppQigio+qYm6bH+Losq6tiUZsIMm0kP9SjU4ZyeEmJU
+         Huo8ApFO4FDudVBhgegU66gzREWq5EfArgFIwai0UA7nQKa0f4P+OnzNeyz3ccZq0v9K
+         VbjVj6aqcE9oDqqpoPQDr8vnDTS+lFwXUeV+6KO5bilAQ2L8JjlnEtgNQo7ADELavPPi
+         5tvi+68dxALZyuFtYiEDcbu8ncVpK+GKb1YKF5IV27TCZiTjFMoV4KipADiBbhjFJPWF
+         FntPYQm3ljFoUMRTX0+YKy/lxvix8eModMpUthry/DvzYQRFBgOIHIyFKZVLIUv0gNky
+         3fNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DX2ga5YEZ7pQITxRdnzgB23jvyNbXnpWAo2XxfRd5Kw=;
+        b=7yOwekpVmEN643uKYWk7VE9BgA9HoxFCsNjSUQ7UirAAcNxPYLbdcoHtI1gJKAb6gX
+         S3BJPgIysZKrseG45HWQPz9Ol6KFeUCzWjyKuE40PjlY82FzER/5kCAI+gyU2lZ5gqGR
+         2Pd0Utj8JRqOUrK9X2Aw3eBixx9y2Lgt/2mkrUTS+ivV1Ex4Q+1eQf0JX8MJ4ijiHNyk
+         XsPDJJwUUnh0KFuMfcj+Q3GW2Sud2Vj+ifKdMNl4O2ri3ZUFhku4uW7eD7rXbxaVqJur
+         pfU6WsVhy/FhrGTn9Is2CGTzL1CLcN7xWUJKF2Kkv72DJ8R7U9KJAurOC1uhpjzxGRAS
+         fTPQ==
+X-Gm-Message-State: AOAM533A1nX6GZb/p35LsKOT4+RP+JzzSCJji9pt6pYZdR0kB9uFrIzv
+        Hvf8anwCGiTS7bsBo6KwwpD9C+Bv78U=
+X-Google-Smtp-Source: ABdhPJzQqTLzBm2R/MWnDF1D8Q8zLBQiaLSj0iDpJEMAmByCh1OoG3TgFkFL8/A3GTrf/U67l3FxPA==
+X-Received: by 2002:adf:d844:: with SMTP id k4mr9851656wrl.622.1638395490242;
+        Wed, 01 Dec 2021 13:51:30 -0800 (PST)
+Received: from localhost.localdomain (252.red-83-54-181.dynamicip.rima-tde.net. [83.54.181.252])
+        by smtp.gmail.com with ESMTPSA id c10sm877879wrb.81.2021.12.01.13.51.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 01 Dec 2021 13:51:29 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-pci@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
+        lorenzo.pieralisi@arm.com, bhelgaas@google.com, arnd@arndb.de,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] PCI: mt7621: Remove specific MIPS code from driver
+Date:   Wed,  1 Dec 2021 22:51:22 +0100
+Message-Id: <20211201215127.23550-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H-NkL4=hcVfBvT0ZeBOfg8bmPYv1urJ1JVWtcA2tbtfjA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-[+cc Guenter from other thread:
-https://lore.kernel.org/r/20211129015909.GA921717@roeck-us.net]
+Hi all,
 
-On Wed, Dec 01, 2021 at 09:56:22PM +0100, Sergio Paracuellos wrote:
-> On Wed, Dec 1, 2021 at 9:24 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, Nov 19, 2021 at 05:20:17PM -0600, Bjorn Helgaas wrote:
-> > > [+cc Thierry]
-> > >
-> > > In subject,
-> > >
-> > >   PCI: Let pcibios_root_bridge_prepare() access bridge->windows
-> > >
-> > > On Mon, Nov 15, 2021 at 08:08:05AM +0100, Sergio Paracuellos wrote:
-> > > > When function 'pci_register_host_bridge()' is called, 'bridge->windows' are
-> > > > already available. However this windows are being moved temporarily from
-> > > > there. To let 'pcibios_root_bridge_prepare()' to have access to this windows
-> > > > move this windows movement after call this function. This is interesting for
-> > > > MIPS ralink mt7621 platform to be able to properly set I/O coherence units
-> > > > with this information and avoid custom MIPs code in generic PCIe controller
-> > > > drivers.
-> > > >
-> > > > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > > > ---
-> > > >  drivers/pci/probe.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> > > > index 087d3658f75c..372a70efccc6 100644
-> > > > --- a/drivers/pci/probe.c
-> > > > +++ b/drivers/pci/probe.c
-> > > > @@ -898,8 +898,6 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
-> > > >
-> > > >     bridge->bus = bus;
-> > > >
-> > > > -   /* Temporarily move resources off the list */
-> > > > -   list_splice_init(&bridge->windows, &resources);
-> > >
-> > > Arnd added this with 37d6a0a6f470 ("PCI: Add
-> > > pci_register_host_bridge() interface") [1].
-> > >
-> > > I can't remember why this was done, but we did go to some trouble to
-> > > move things around, so there must have been a good reason.
-> > >
-> > > Arnd or Thierry, do you remember?
-> >
-> > Nobody seems to remember, so I think we should go ahead and make this
-> > change after the usual due diligence (audit the code between the old
-> > site and the new site to look for any uses of bridge->windows).
-> 
-> It seems any user of the pcibios_root_bridge_prepare() does nothing
-> with 'bridge->windows'. But I don't get the point of passing around a
-> complete bridge pointer if windows are temporarily removed from there.
-> That is an incomplete bridge and after parsing  windows from dts are
-> supposed to be there... What do you mean with 'audit the code between
-> the old and new site'?
+MIPS specific code can be removed from driver and put into ralink mt7621
+instead which is a more accurate place to do this. To make this possible
+we need to have access to 'bridge->windows' in 'pcibios_root_bridge_prepare()'
+which has been implemented for ralink mt7621 platform (there is no real
+need to implement this for any other platforms since those ones haven't got
+I/O coherency units). This also allow us to properly enable this driver to
+completely be enabled for COMPILE_TEST. This patchset appoarch:
+- Move windows list splice in 'pci_register_host_bridge()' after function
+  'pcibios_root_bridge_prepare()' is called.
+- Implement 'pcibios_root_bridge_prepare()' for ralink mt7621.
+- Avoid custom MIPs code in pcie-mt7621 driver.
+- Add missing 'MODULE_LICENSE()' to pcie-mt7621 driver to avoid compile test
+  module compilation to complain (already sent patch from Yanteng Si that
+  I have rewrite commit message and long description a bit.
+- Remove MIPS conditional code from Kconfig.
 
-I mean "look at all the code that is run between the old site and the
-new site to make sure that none of that code depends on
-bridge->windows being temporarily emptied."
+This patchset also fix some errors reported by Kernel Test Robot about
+implicit mips functions used in driver code and fix errors in driver when
+is compiled as a module [1] (mips:allmodconfig).
 
-> > I think this would be material for v5.17.
-> 
-> Do you prefer me to parse dts again inside
-> pcibios_root_bridge_prepare() for ralink mt7621?. Not real sense since
-> 'windows' should be already there, but it would be a way to get this
-> patchset added for v5.16. Something like (not tested yet but it should
-> work):
+There was an ongoing discussion about this here [0] but I preferred to send
+my proposal for better review and understanding.
 
-This is definitely too big for v5.16, regardless of which way you go.
-For v5.16, the only thing that's practical is to avoid building as a
-module.  It'd be *nice* if it could be built as a module, but it is
-not a requirement.
+Changes in v2:
+ - Collect Acked-by from Arnd Bergmann for PATCH 1.
+ - Collect Reviewed-by from Krzysztof Wilczyński for PATCH 4.
+ - Adjust some patches commit subject and message as pointed out by Bjorn in review of v1 of the series[2]. 
 
-Bjorn
+This patchset is the good way of properly compile driver as a module removing
+all MIPS specific code into arch ralink mt7621 place. To avoid mips:allmodconfig reported
+problems for v5.16 the following patch has been sent [3]. This patch should be reverted
+for properly add this series.
+
+[0]: https://lore.kernel.org/linux-mips/CAMhs-H8ShoaYiFOOzJaGC68nZz=V365RXN_Kjuj=fPFENGJiiw@mail.gmail.com/T/#t
+[1]: https://lkml.org/lkml/2021/11/14/436
+[2]: https://lore.kernel.org/r/20211115070809.15529-1-sergio.paracuellos@gmail.com
+[3]: https://lore.kernel.org/linux-pci/20211201214343.23307-1-sergio.paracuellos@gmail.com/T/#u
+
+Thanks in advance for your time.
+
+Best regards,
+   Sergio Paracuellos
+
+Sergio Paracuellos (5):
+  PCI: Let pcibios_root_bridge_prepare() access to 'bridge->windows'
+  MIPS: ralink: implement 'pcibios_root_bridge_prepare()'
+  PCI: mt7621: Avoid custom MIPS code in driver code
+  PCI: mt7621: Add missing 'MODULE_LICENSE()' definition
+  PCI: mt7621: Kconfig: Allow COMPILE_TEST for all arches
+
+ arch/mips/ralink/mt7621.c            | 30 +++++++++++++++++++++
+ drivers/pci/controller/Kconfig       |  2 +-
+ drivers/pci/controller/pcie-mt7621.c | 39 ++--------------------------
+ drivers/pci/probe.c                  |  4 +--
+ 4 files changed, 35 insertions(+), 40 deletions(-)
+
+-- 
+2.33.0
+
