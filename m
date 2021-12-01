@@ -2,44 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A98FF464FF1
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 15:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE774650F9
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 16:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242760AbhLAOjY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Dec 2021 09:39:24 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:22728 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350163AbhLAOhD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 09:37:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638369206;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=gDqNSwOY4krNXyZJKC9cA8DBCihhfe+kQxeeBXbUBDM=;
-    b=TfZuFK7agOXamEYkB331yuxjVMDwyGsNTY8R0Li9/tuv7nXqulBYXsJv2tlVUyYlQM
-    W94ccGIt4GcPDz3A4IwNOafPlCVGhQ54ZJ6wIda3FkhtRXdVm0H3fnWVg8MGYYwGT9MZ
-    dsJj76pnYPTAsaJu8BQkOkWVvOqJxhn78qiRhP654LUjf7b8PpGx+EnCXYQlMOCtspMv
-    2xLfEVo5igd9WxRUFZopnEwq3s0bZJ4Xc6VplGnA41Cuc15OCNX+35dtZ9kOzKQmO003
-    IPpM5rMjgYvOHLFugSaLRZY0+4mtgMrFhHE8HgwuZ0W6gLG5OcL3JPnrm2fKuIM/59dH
-    wwWA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43u22M="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.34.10 SBL|AUTH)
-    with ESMTPSA id e05ed8xB1EXPXiK
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 1 Dec 2021 15:33:25 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v10 4/8] drm/ingenic: Add dw-hdmi driver for jz4780
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <EDWF3R.CMVWMJL42OH9@crapouillou.net>
-Date:   Wed, 1 Dec 2021 15:33:24 +0100
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        id S230306AbhLAPNv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Dec 2021 10:13:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34856 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229933AbhLAPNu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 10:13:50 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04BEAB81F6E;
+        Wed,  1 Dec 2021 15:10:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445F5C53FAD;
+        Wed,  1 Dec 2021 15:10:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638371427;
+        bh=FCqeRLXF2VMVm3yt6gJHFdWgv9xL0KxQlSQpzBtnUxI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qdEk9dF+fvXqeKr+VVHH5Au1zNimX1ep8FxHJ1E1JMAXY2xRds2J25uXy0ENwvMpp
+         0RAF6YJqUNx62zt/pqgvGssVjewJdtSaganLOg/zrjch7AGAWZovWZMcOCSVF4/g6P
+         +YF6PKux0eA0DYuWRFeKi6dAb350HthWM8LOMeu5aUV28FMdn7UVcyg2nS7JE6HGZu
+         uWgmjgUzJjQafFy9xG9u2euT8VCMnq3f72xtcowDFosOnJGvAozVAhtYS+/+TFBUSb
+         Vn4wcmKCM+kySmw2KS8miSxmadTNv4V+/+5hX9aPcjXfevjbmT+qvYd4T/AlGFELNg
+         cU4hrX00KPkWA==
+Date:   Wed, 1 Dec 2021 15:10:19 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -62,106 +55,102 @@ Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org,
         Ezequiel Garcia <ezequiel@collabora.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <58C550A4-A21E-47BA-8BAE-00B927DC7A2E@goldelico.com>
+Subject: Re: [PATCH v10 4/8] drm/ingenic: Add dw-hdmi driver for jz4780
+Message-ID: <YaeQW/akoLE6SpEi@sirena.org.uk>
+Mail-Followup-To: "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
 References: <cover.1638307601.git.hns@goldelico.com>
  <4daf0c5dbed2c47c97003ab8de0a7dbd2a335dc3.1638307601.git.hns@goldelico.com>
- <LKTF3R.YREPOCHOSMQN2@crapouillou.net> <Yad69aTXcGixXvy3@sirena.org.uk>
+ <LKTF3R.YREPOCHOSMQN2@crapouillou.net>
+ <Yad69aTXcGixXvy3@sirena.org.uk>
  <46070A95-0FA9-43F9-A9A9-52A7B58B88F5@goldelico.com>
  <EDWF3R.CMVWMJL42OH9@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
+ <58C550A4-A21E-47BA-8BAE-00B927DC7A2E@goldelico.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uxl0m5XHgmPX4QRQ"
+Content-Disposition: inline
+In-Reply-To: <58C550A4-A21E-47BA-8BAE-00B927DC7A2E@goldelico.com>
+X-Cookie: All true wisdom is found on T-shirts.
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
 
-> Am 01.12.2021 um 15:03 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi Nikolaus, Mark,
->=20
-> Le mer., d=C3=A9c. 1 2021 at 14:51:51 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->> Hi,
->>> Am 01.12.2021 um 14:39 schrieb Mark Brown <broonie@kernel.org>:
->>> On Wed, Dec 01, 2021 at 01:02:45PM +0000, Paul Cercueil wrote:
->>>> Le mar., nov. 30 2021 at 22:26:37 +0100, H. Nikolaus Schaller
->>>>> +	regulator =3D devm_regulator_get_optional(&pdev->dev, =
-"hdmi-5v");
->>>>> +	if (IS_ERR(regulator)) {
->>>>> +		ret =3D PTR_ERR(regulator);
->>> Why is this using _optional()?  This should only be done when the =
-supply
->>> can be physically absent
->> There can be +5V for HDMI but without a regulator that is visible to =
-or controllable
->> by the driver.
->=20
-> There is always a power supply though. Either a controllable one =
-(through e.g. a GPIO), or it's just connected to the mains +5V; the pin =
-is never left floating. In the second case, in DTS the "hdmi-5v" would =
-be connected to some 5v regulator, even if it's just a dummy VCC-5V =
-regulator. So Mark has a point.
->=20
->> So hdmi-5v can be simply missing in DTS in which case the driver does =
-not need to
->> care about. The driver just can't turn it on or off.
->=20
-> Please make it mandatory in DTS then, and use devm_regulator_get() in =
-the driver.
+--uxl0m5XHgmPX4QRQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Well, I just wonder why the elegant devm_regulator_get_optional() exists =
-at all
-and seems to be used in ca. 80 places.
+On Wed, Dec 01, 2021 at 03:33:24PM +0100, H. Nikolaus Schaller wrote:
+> > Am 01.12.2021 um 15:03 schrieb Paul Cercueil <paul@crapouillou.net>:
 
-And if it is not allowed, why some DTS should be forced to add not =
-physically existing dummy-regulators.
-AFAIR drivers should implement functionality defined by DTS but not the =
-other way round: enforce DTS style.
-BTW: there is no +5 mains dummy regulator defined in ci20.dts.
+> > Please make it mandatory in DTS then, and use devm_regulator_get() in the driver.
 
-What I fear is that if we always have to define the mains +5V (which is =
-for example not
-defined in ci20.dts), which rules stops us from asking to add a =
-dummy-regulator from 110/230V to +5V as well.
-In last consequence, it seems as if we have to describe all dummy =
-regulators from the power plant to our hdmi-5v :)
+> Well, I just wonder why the elegant devm_regulator_get_optional() exists at all
+> and seems to be used in ca. 80 places.
 
-Since I always follow the KISS principle I tend to leave out what is not =
-relevant...
+Frankly because half of them are broken usages like this since people
+seem determined to have the most fragile error handling they can :/
+There are valid use cases for it, with things like SD cards where some
+supplies are genuinely optional and simply constrain what features are
+available if they're omitted from the design.  You also see some devices
+with the ability to replace internal regulators with external ones.
 
-Of course adding a dummy regulator to the DTS allows to avoid the NULL =
-pointer test
-in the driver code.
+> And if it is not allowed, why some DTS should be forced to add not physically existing dummy-regulators.
 
-Anyways, you are maintainers :)
+Again, if the supply can be physically absent that is a sensible use
+case but that means completely absent, not just not software
+controllable.  We can represent fixed voltage regulators just fine.
 
-So should I spin a v11 for the series or just this patch or how should =
-we do it?
+> AFAIR drivers should implement functionality defined by DTS but not the other way round: enforce DTS style.
+> BTW: there is no +5 mains dummy regulator defined in ci20.dts.
 
-BR and thanks,
-Nikolaus
+It wouldn't be the first time a DTS were incomplete, and I'm sure it
+won't be the last.
 
->=20
-> Cheers,
-> -Paul
->=20
->>> (in which case I'd expect to see special
->>> handling).
->> The special case is to not enable/disable the regulator if it does =
-not exist
->> and assume that there is hardware providing it otherwise (the driver =
-can't know
->> that except by using get_optional). This is done by the code below
->>>>> +	if (IS_ERR(regulator)) {
->> ...
->>> +	if (!regulator)
->>> +		return 0;
->>> +	ret =3D regulator_enable(regulator);
->> ...
->> BR and thanks,
->> Nikolaus
->=20
->=20
+> What I fear is that if we always have to define the mains +5V (which is for example not
+> defined in ci20.dts), which rules stops us from asking to add a dummy-regulator from 110/230V to +5V as well.
 
+It is good practice to specify the full tree of supplies all the way to
+the main supply rail of the board, this ensures that if we need the
+information for something we've got it (even if that thing is just that
+we've got to the root of the tree).  There's potential applications in
+battery supplied devices for managing very low power situations.
+
+--uxl0m5XHgmPX4QRQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGnkFoACgkQJNaLcl1U
+h9A32gf/ZYHl/RIiCZDvdUvGhhXUQ5m3dke8DEbkuGwIbHOYqQDdVOpbI+NpTIMu
+vmWcV7LpARb1R1Mst3T9J8O7p5STJUJulPLzFGsARuhjMeLE2z9+oyaocNmgXEfQ
+54NPwbUWho0pcNd+GCtvoPzRiAMMkCxBrH2exwosdTPDYpF0gIOdpuSZ3YJXRsWU
+eeni01wlGuXgswuy3SiXBc2nkmb0cNAPZlfxtdDvBoiDuR2zkIkSumfBuEeDvSvq
+1rg+fYGi6vrNgTsbEnrfLaDB1GS5xzqdQryJizNS48arBhTalMrKXP0CVmfEYOc8
+Edqu+7QgOTmmsAHtTGtymBAt2WnBUg==
+=ZCY4
+-----END PGP SIGNATURE-----
+
+--uxl0m5XHgmPX4QRQ--
