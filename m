@@ -2,103 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 630D2464E77
-	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 14:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502B8464EAC
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Dec 2021 14:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349466AbhLANKH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 1 Dec 2021 08:10:07 -0500
-Received: from mail-ua1-f54.google.com ([209.85.222.54]:47090 "EHLO
-        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349470AbhLANKC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 08:10:02 -0500
-Received: by mail-ua1-f54.google.com with SMTP id az37so48764900uab.13;
-        Wed, 01 Dec 2021 05:06:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AgwbFm5gkjwOtodlhi0zJJvcgS/i7V2fCpFuxG8kd94=;
-        b=Jyvtm+6VZ1RGnb/UF5Vm2HvEcmFtsdfMZ5s5FZuwhPAzmzps3fGeV6/BftmLs8sXHV
-         s71tVkjgsFI4KTQJ/aqj9HiPbS3UNdPmEBViSTgCGx/BHPdUGkywaSbrUThizp07XUpS
-         FkHGwSaUj7YmL3DX9shMazC+URsI488X6vW7p1nOw5MDWr3vLdB/MK4egkaap+kjSQqL
-         LmAsGMoSG7VFgjN90qy9AyiSdiwGdoxjfBLXe47doiU6OA4TO6fXn+YFzu0oE5NbJq8e
-         DUGF4orm2PJCcltkYMeDiltd3h2HdMed3W8UCocM3HTv18220QBKFfMUtTs3+DSSjFGs
-         n6Rg==
-X-Gm-Message-State: AOAM533oN2GyOETqR8O6IEJF/qy5pqkmZe7W6uOaG2wiZ8fPXU9RHXd0
-        tBPwlTEgMseey0amVJNGlokDFNcsxguS1w==
-X-Google-Smtp-Source: ABdhPJzq0/vFLXekmqPdt2QkRJrW/G+np5DNNGqURV3YxjfADxXe/vodZVtnBIWxOE6mWhETKhsm6w==
-X-Received: by 2002:a67:bb11:: with SMTP id m17mr6696201vsn.5.1638364000316;
-        Wed, 01 Dec 2021 05:06:40 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id 15sm11833419vkj.49.2021.12.01.05.06.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 05:06:40 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id r15so48823383uao.3;
-        Wed, 01 Dec 2021 05:06:39 -0800 (PST)
-X-Received: by 2002:a05:6102:c89:: with SMTP id f9mr7151505vst.68.1638363999694;
- Wed, 01 Dec 2021 05:06:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20211130164558.85584-1-tsbogend@alpha.franken.de> <20211130164558.85584-3-tsbogend@alpha.franken.de>
-In-Reply-To: <20211130164558.85584-3-tsbogend@alpha.franken.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 1 Dec 2021 14:06:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXr1bT3U_XKvHKowfQwaW6-4XevYngoNzQFu-bYwdMP_A@mail.gmail.com>
-Message-ID: <CAMuHMdXr1bT3U_XKvHKowfQwaW6-4XevYngoNzQFu-bYwdMP_A@mail.gmail.com>
-Subject: Re: [PATCH 3/3] MIPS: TXX9: Remove TX4939 SoC support
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        id S244269AbhLANVf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 1 Dec 2021 08:21:35 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:12496 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234027AbhLANVe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 1 Dec 2021 08:21:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638364685;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=4c3epF2ScffUjNFE7pqyVEAU/QWj/7JeeA6yeKVR/Xw=;
+    b=ed5XJ6A0DHDOixvsBEnMCR/tZI4nrM6770k+bAgJ/0JHUnyN+x7zhyk/nrEGbiiBE4
+    +00amMPfU8SLs0KhySY3C6FHXQLohYA51L3nFcggRaxRoQ2FB7FUZzEWXaH8wn+cmH0x
+    PI4l4kQ2BBVPKL30u7py2gHXByEAyDlhFRpdcQbyShx+Jop3mq7nHsG/WFULSxnNck0W
+    rojwHKwQdYNG2wSegzNxoep9lnttsWGoJircnP7KFGKRgQnwlk9/ksXXLDwxaMlsOass
+    8MAkSsL6jm8JyJ5NMhSqLoBXCjc596a7MMhRZm4L6JCdIm8lvYaOLl94w4DOiW1EuKgM
+    PotA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43u22M="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.34.10 SBL|AUTH)
+    with ESMTPSA id e05ed8xB1DI4XDF
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 1 Dec 2021 14:18:04 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v10 4/8] drm/ingenic: Add dw-hdmi driver for jz4780
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <LKTF3R.YREPOCHOSMQN2@crapouillou.net>
+Date:   Wed, 1 Dec 2021 14:18:02 +0100
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F852C647-7368-4BC1-A3C6-CE40F5A757F9@goldelico.com>
+References: <cover.1638307601.git.hns@goldelico.com>
+ <4daf0c5dbed2c47c97003ab8de0a7dbd2a335dc3.1638307601.git.hns@goldelico.com>
+ <LKTF3R.YREPOCHOSMQN2@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Thomas,
+Hi Paul,
 
-On Tue, Nov 30, 2021 at 5:46 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
-> After removal of RBTX4939 board support remove code for the TX4939 SoC.
->
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Thanks for your patch!
+> Am 01.12.2021 um 14:02 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+> Le mar., nov. 30 2021 at 22:26:37 +0100, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> From: Paul Boddie <paul@boddie.org.uk>
+>> A specialisation of the generic Synopsys HDMI driver is employed for
+>> JZ4780 HDMI support. This requires a new driver, plus device tree and
+>> configuration modifications.
+>> Here we add Kconfig DRM_INGENIC_DW_HDMI, Makefile and driver code.
+>> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+>> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> ---
+>> drivers/gpu/drm/ingenic/Kconfig           |   9 ++
+>> drivers/gpu/drm/ingenic/Makefile          |   1 +
+>> drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 138 =
+++++++++++++++++++++++
+>> 3 files changed, 148 insertions(+)
+>> create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+>> diff --git a/drivers/gpu/drm/ingenic/Kconfig =
+b/drivers/gpu/drm/ingenic/Kconfig
+>> index 3b57f8be007c4..4efc709d77b0a 100644
+>> --- a/drivers/gpu/drm/ingenic/Kconfig
+>> +++ b/drivers/gpu/drm/ingenic/Kconfig
+>>=20
 
-> ---
->  arch/mips/pci/Makefile                |   1 -
->  arch/mips/pci/pci-tx4939.c            | 107 -----
->  arch/mips/txx9/Kconfig                |   8 -
->  arch/mips/txx9/generic/Makefile       |   1 -
->  arch/mips/txx9/generic/irq_tx4939.c   | 216 ----------
->  arch/mips/txx9/generic/setup_tx4939.c | 568 --------------------------
->  drivers/char/hw_random/Kconfig        |  13 -
->  drivers/char/hw_random/Makefile       |   1 -
->  drivers/char/hw_random/tx4939-rng.c   | 157 -------
->  drivers/mtd/nand/raw/Kconfig          |   2 +-
->  10 files changed, 1 insertion(+), 1073 deletions(-)
->  delete mode 100644 arch/mips/pci/pci-tx4939.c
->  delete mode 100644 arch/mips/txx9/generic/irq_tx4939.c
->  delete mode 100644 arch/mips/txx9/generic/setup_tx4939.c
->  delete mode 100644 drivers/char/hw_random/tx4939-rng.c
 
-You forgot to remove arch/mips/include/asm/txx9/tx4939.h.
+>> +	}
+>> +
+>> +	if (!regulator)
+>> +		return 0;
+>=20
+> Blank line here.
 
-My rbtx4927 still works fine afterwards, so
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+It is one of these cases where checkpatch doesn't complain although it =
+should be improved...
 
-Gr{oetje,eeting}s,
+>=20
+> But I can add it myself when applying.
 
-                        Geert
+Yes, please. So that we are not wasting mailing list bandwidth...
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> I'll just wait for Rob's ack first.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Indeed. Fortunately he had the right hint how to fix 3/8 quickly.
+
+BR and thanks,
+NIkolaus
+
