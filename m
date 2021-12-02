@@ -2,155 +2,161 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5487846630B
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Dec 2021 13:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBE8466482
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Dec 2021 14:29:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346510AbhLBMHL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Dec 2021 07:07:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48196 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241781AbhLBMHK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Dec 2021 07:07:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638446628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1MmQTgpkeNH8NgIgmQ2Fco6xIavJapp91aJzsxvOixU=;
-        b=JaJ17aZSmLxVrbT8+tmvX9yyEv3hWTp+Huy2Tam6ELfoTTxgjINv6l9m6dVciBN0V5111D
-        SOgy6wiD8meR86vHdaLAQ7jPFG/TSh7ET8cYze8qVmpEMhW428mSrgopiL8ERVix7N9oyh
-        aO2Om+5WpqcSwhxQVbxfi5gjzw2goks=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-464-faQPh16CNsuypEtT6k4wfA-1; Thu, 02 Dec 2021 07:03:40 -0500
-X-MC-Unique: faQPh16CNsuypEtT6k4wfA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 93E5E81CCB6;
-        Thu,  2 Dec 2021 12:03:36 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 551DF60622;
-        Thu,  2 Dec 2021 12:02:58 +0000 (UTC)
-Message-ID: <3adb566de918fe2fcc7a8abe7dba5f2c9d292d66.camel@redhat.com>
-Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
- successful
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Date:   Thu, 02 Dec 2021 14:02:56 +0200
-In-Reply-To: <YaUNBfJh35WXMV0M@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
-         <20211009021236.4122790-12-seanjc@google.com>
-         <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
-         <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
-         <YaUNBfJh35WXMV0M@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        id S1358246AbhLBNct (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Dec 2021 08:32:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358213AbhLBNcr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Dec 2021 08:32:47 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEF2C06174A
+        for <linux-mips@vger.kernel.org>; Thu,  2 Dec 2021 05:29:24 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id y12so115905053eda.12
+        for <linux-mips@vger.kernel.org>; Thu, 02 Dec 2021 05:29:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=eeWMTaetwSCl+1Gux4Y+6ccJE7U0astjY10X/txA5Pk=;
+        b=Xnwc+IWWy7SBWNxusBlLRqTfoxrgn05jnDfYFPqXXQNA+R7laDEK/hY0ZHmzXK4+rF
+         xguHIL8QLWQoBSkbtyMsU2lNISNPThIX3UpnQnH1L9D/uaHzKJ4ceX7X0Mn3TjMjYj3B
+         UKRkL3Ao+uKWyCeR3Dq5MGwCin86B5V/DYGgZBQM/XCuMOE9yiJ/Uqp5oohUQgJ3ZgGH
+         ZA8LJ4/kGzVgzEnzPnw5gWWBoyO5/FgvOpyKldP3oCbgNGMeTJfqcvD2QzSzbQWALCIm
+         9GfpGIE6Q3c9a4lxi9a8ibI6UnBmcpu/ERivXTquCibua/gfCKVNYaEro6EzpFehfOZE
+         56Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=eeWMTaetwSCl+1Gux4Y+6ccJE7U0astjY10X/txA5Pk=;
+        b=0I3b0rRvkVQpU4wEvSotrp3C8NY/AxDQLwbOthlqbW0BKh+S6ZWrUGzhTT7eO7V5qn
+         GIcJf+ud7i4NeJFs48ABKKRpRJoKnBszN/lLRzsT5FZrIElT7iKh/0kKECJDc6tjs7eT
+         WQIjgwGLUrBRr9VSSvBmDyEI6MRt411HT1EeFkmQ+v/MvI0CMxWVPp5G333h8x4U2K09
+         AL27BnrBaZcr9865ZoHAZasQyF/7vK+z2SyHl2wg569rpElChE2uqQBt1B4WOGZ2SOaD
+         MIUQJZg7oqXIPUQuw4/2cJked6L8UeffWP1InJfquLb78nMlNqKW1ZjufcMKGWDSS3Ij
+         mwOg==
+X-Gm-Message-State: AOAM530W3BCCft1qOksCBKWUyrHPzvqyRqyZTJNs0TEwPj9przQVBCN2
+        E1F1pEekHfupGQIsTJj4XGP3dl8KYKd4ZDHzpr/FbQ==
+X-Google-Smtp-Source: ABdhPJygEmkY/ykQ8nrkRIuJkUgYfNy+8KlJGKbNa1o7DdDpLvqYB87MtMJX6llY3wUr6bsYlJjuyV7g1oYdb7Zxz68=
+X-Received: by 2002:a17:907:7f8c:: with SMTP id qk12mr15232079ejc.169.1638451756985;
+ Thu, 02 Dec 2021 05:29:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 2 Dec 2021 18:59:05 +0530
+Message-ID: <CA+G9fYv-os1goBNae4RSk2Gt9vdg53j3MPyAbmKPAoBdn5z7nA@mail.gmail.com>
+Subject: [Next] futex.h:89:9: error: implicit declaration of function 'arch_futex_atomic_op_inuser_local'
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 2021-11-29 at 17:25 +0000, Sean Christopherson wrote:
-> On Mon, Nov 29, 2021, Maxim Levitsky wrote:
-> > (This thing is that when you tell the IOMMU that a vCPU is not running,
-> > Another thing I discovered that this patch series totally breaks my VMs,
-> > without cpu_pm=on The whole series (I didn't yet bisect it) makes even my
-> > fedora32 VM be very laggy, almost unusable, and it only has one
-> > passed-through device, a nic).
-> 
-> Grrrr, the complete lack of comments in the KVM code and the separate paths for
-> VMX vs SVM when handling HLT with APICv make this all way for difficult to
-> understand than it should be.
-> 
-> The hangs are likely due to:
-> 
->   KVM: SVM: Unconditionally mark AVIC as running on vCPU load (with APICv)
+While building Linux next 20211202 tag for sh with gcc-10
+following warnings / errors noticed.
 
-Yes, the other hang I told about which makes all my VMs very laggy, almost impossible
-to use is because of the above patch, but since I reproduced it now again without
-any passed-through device, I also blame the cpu errata on this.
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
+In file included from /builds/linux/kernel/futex/futex.h:12,
+                 from /builds/linux/kernel/futex/core.c:41:
+/builds/linux/arch/mips/include/asm/futex.h: In function
+'arch_futex_atomic_op_inuser':
+/builds/linux/arch/mips/include/asm/futex.h:89:9: error: implicit
+declaration of function 'arch_futex_atomic_op_inuser_local'; did you
+mean 'futex_atomic_op_inuser_local'?
+[-Werror=implicit-function-declaration]
+   89 |   ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/builds/linux/arch/mips/include/asm/futex.h:89:9: note: in definition
+of macro '__futex_atomic_op'
+   89 |   ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /builds/linux/kernel/futex/futex.h:12,
+                 from /builds/linux/kernel/futex/core.c:41:
+/builds/linux/arch/mips/include/asm/futex.h:23:39: error: invalid
+storage class for function 'futex_atomic_cmpxchg_inatomic'
+   23 | #define futex_atomic_cmpxchg_inatomic futex_atomic_cmpxchg_inatomic
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/builds/linux/arch/mips/include/asm/futex.h:133:1: note: in expansion
+of macro 'futex_atomic_cmpxchg_inatomic'
+  133 | futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /builds/linux/kernel/futex/futex.h:12,
+                 from /builds/linux/kernel/futex/core.c:41:
+/builds/linux/arch/mips/include/asm/futex.h:132:1: warning: ISO C90
+forbids mixed declarations and code [-Wdeclaration-after-statement]
+  132 | static inline int
+      | ^~~~~~
+In file included from /builds/linux/kernel/futex/core.c:41:
+/builds/linux/kernel/futex/futex.h:33:20: error: invalid storage class
+for function 'should_fail_futex'
+   33 | static inline bool should_fail_futex(bool fshared)
+      |                    ^~~~~~~~~~~~~~~~~
+/builds/linux/kernel/futex/futex.h:134:19: error: invalid storage
+class for function 'futex_match'
+  134 | static inline int futex_match(union futex_key *key1, union
+futex_key *key2)
+      |                   ^~~~~~~~~~~
+/builds/linux/kernel/futex/futex.h:169:20: error: invalid storage
+class for function 'futex_queue'
+  169 | static inline void futex_queue(struct futex_q *q, struct
+futex_hash_bucket *hb)
+      |                    ^~~~~~~~~~~
+/builds/linux/kernel/futex/futex.h:183:20: error: invalid storage
+class for function 'futex_hb_waiters_inc'
+  183 | static inline void futex_hb_waiters_inc(struct futex_hash_bucket *hb)
+      |                    ^~~~~~~~~~~~~~~~~~~~
+/builds/linux/kernel/futex/futex.h:198:20: error: invalid storage
+class for function 'futex_hb_waiters_dec'
+  198 | static inline void futex_hb_waiters_dec(struct futex_hash_bucket *hb)
+      |                    ^~~~~~~~~~~~~~~~~~~~
+/builds/linux/kernel/futex/futex.h:205:19: error: invalid storage
+class for function 'futex_hb_waiters_pending'
+  205 | static inline int futex_hb_waiters_pending(struct futex_hash_bucket *hb)
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~
+/builds/linux/kernel/futex/futex.h:238:1: error: invalid storage class
+for function 'double_lock_hb'
+  238 | double_lock_hb(struct futex_hash_bucket *hb1, struct
+futex_hash_bucket *hb2)
+      | ^~~~~~~~~~~~~~
+/builds/linux/kernel/futex/futex.h:249:1: error: invalid storage class
+for function 'double_unlock_hb'
+  249 | double_unlock_hb(struct futex_hash_bucket *hb1, struct
+futex_hash_bucket *hb2)
+      | ^~~~~~~~~~~~~~~~
 
-Best regards,
-	Maxim Levitsky
+
+Build config:
+https://builds.tuxbuild.com/21igw2PcUSaVeHzl1QOiAUEwpkt/config
 
 
-> 
-> If a posted interrupt arrives after KVM has done its final search through the vIRR,
-> but before avic_update_iommu_vcpu_affinity() is called, the posted interrupt will
-> be set in the vIRR without triggering a host IRQ to wake the vCPU via the GA log.
-> 
-> I.e. KVM is missing an equivalent to VMX's posted interrupt check for an outstanding
-> notification after switching to the wakeup vector.
-> 
-> For now, the least awful approach is sadly to keep the vcpu_(un)blocking() hooks.
-> Unlike VMX's PI support, there's no fast check for an interrupt being posted (KVM
-> would have to rewalk the vIRR), no easy to signal the current CPU to do wakeup (I
-> don't think KVM even has access to the IRQ used by the owning IOMMU), and there's
-> no simplification of load/put code.
-> 
-> If the scheduler were changed to support waking in the sched_out path, then I'd be
-> more inclined to handle this in avic_vcpu_put() by rewalking the vIRR one final
-> time, but for now it's not worth it.
-> 
-> > If I apply though only the patch series up to this patch, my fedora VM seems
-> > to work fine, but my windows VM still locks up hard when I run 'LatencyTop'
-> > in it, which doesn't happen without this patch.
-> 
-> Buy "run 'LatencyTop' in it", do you mean running something in the Windows guest?
-> The only search results I can find for LatencyTop are Linux specific.
-> 
-> > So far the symptoms I see is that on VCPU 0, ISR has quite high interrupt
-> > (0xe1 last time I seen it), TPR and PPR are 0xe0 (although I have seen TPR to
-> > have different values), and IRR has plenty of interrupts with lower priority.
-> > The VM seems to be stuck in this case. As if its EOI got lost or something is
-> > preventing the IRQ handler from issuing EOI.
-> >  
-> > LatencyTop does install some form of a kernel driver which likely does meddle
-> > with interrupts (maybe it sends lots of self IPIs?).
-> >  
-> > 100% reproducible as soon as I start monitoring with LatencyTop.
-> >  
-> > Without this patch it works (or if disabling halt polling),
-> 
-> Huh.  I assume everything works if you disable halt polling _without_ this patch
-> applied?
-> 
-> If so, that implies that successful halt polling without mucking with vCPU IOMMU
-> affinity is somehow problematic.  I can't think of any relevant side effects other
-> than timing.
-> 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+meta data:
+-----------
+    git describe: next-20211202
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+    git_sha: 9606f9efb1cec7f8f5912326f182fbfbcad34382
+    git_short_log: 9606f9efb1ce (\"Add linux-next specific files for 20211202\")
+    target_arch: mips
+    toolchain: gcc-10
 
 
+steps to reproduce:
+tuxmake --runtime podman --target-arch mips --toolchain gcc-10
+--kconfig ar7_defconfig
+
+https://builds.tuxbuild.com/21igw2PcUSaVeHzl1QOiAUEwpkt/tuxmake_reproducer.sh
+
+--
+Linaro LKFT
+https://lkft.linaro.org
