@@ -2,222 +2,189 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D3F4668C6
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Dec 2021 18:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608E54669DC
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Dec 2021 19:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359823AbhLBRFY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Dec 2021 12:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347861AbhLBRFX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Dec 2021 12:05:23 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FDEC06174A;
-        Thu,  2 Dec 2021 09:02:01 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id bj13so431386oib.4;
-        Thu, 02 Dec 2021 09:02:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=00/E42FjoqEqAzMF9xc1DVwSebesIQL9IMmpKLjE84c=;
-        b=gfJVq4GwgkeDrP+HqL4heNSY666jU+P5mBcshHCGxHx2R+fyuHoLS/oy80rH2k/Nmp
-         s0kJZ5HT5WhWPZr5DzdDeUeMoJPCDtsD1fSFqVdXL0aLFilYWO4jzLxeFyzlY5XAvF1N
-         ZjBUpo9hcPPoRd0T5cHS6efYKTNpMn8t1D4C0iL6r9DEG1qX9QQfxds/J8diiqdpCYtU
-         KngHJD4eNLEBAsI5wW6ST7b0KBUFv3TRBwDlRl/2nLix7o52z/U3j2ElsNbjgq/Pr4Ee
-         67fadfazvHpHxjnAIHtcL0iIhn7fDCdd9+yqLdIG3dtrhwOuCUgZNIjmIIKL5iIaTyFQ
-         1sGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=00/E42FjoqEqAzMF9xc1DVwSebesIQL9IMmpKLjE84c=;
-        b=DuWTiN62q2Y/Vou0GREpF33nuMrP0hZuII9e4Ar58AB4fFEmq8hXbLL7wLKIoaDLtO
-         PAQwbpGm9yTh5pAhctNqhqdQgtMsyMt6iwYxMdm4C7Gx+6F0PF8MDXQCkQYLXgEIPhMt
-         oWIbIK+gV6B2dQVpAOsS+xKePCDEzaG1L/qS4o6883cofS0zaA3LL3OrbPQZcZG5ZBop
-         6Q8AZZV+brsif9UvYBcFtKF26bz0/y/G/tyybbPqtPmIo7B3+aIj2A+yJ9u11j/3OE4O
-         +Wlz8Af9dGUVV/B5HD/GkXvlcOQqT3ERw2H0Cdy+U/tSSXd/qEWJVSdgD+UuTnzsTxeJ
-         pVFA==
-X-Gm-Message-State: AOAM531h31BfQjPM54BX4vfHNCmjHolze5Tjv2GANZ7CVcbPZd5zbG3S
-        PzbjW4v34NvUJSDg8aH0O112eVBxVTQ=
-X-Google-Smtp-Source: ABdhPJyhCaV/BceC8DU6uzkJq3wZ2XFPKuCodlaG1Y9Z0h1ebjhFspN3yW/iNgJwkBp4KrpUD+8nfQ==
-X-Received: by 2002:a05:6808:8c9:: with SMTP id k9mr5357601oij.147.1638464519988;
-        Thu, 02 Dec 2021 09:01:59 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i3sm92967ooq.39.2021.12.02.09.01.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 09:01:59 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        id S1376656AbhLBSnj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Dec 2021 13:43:39 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:21393 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376361AbhLBSne (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Dec 2021 13:43:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638470395;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=4HGfi0XhUJZdAVbaQKiJmrb2N5VRTNJsQmR+uCd/NTM=;
+    b=SWnh16s9mQPLH164GGBZVPOoSUdqo4TfdMW3484qQlbu4W1nOA+gOejPsmYoI9TNkN
+    1pjKVJuJPbnuXnjynaqHqTsYeU1piYr//ozZ1irLcOyVSd8imkNmLnrm2+su127TcwsX
+    OXFPPv+68gUgTkim2mWzd1Eqmp3vVr98kUWodFzB8dthhMJzMOpkoNHaoWfoPXP14Lcz
+    LBOpl414pJXnu/iuENg6KkAlUFI4Wn1FM8nFPG1TvfyVdBm+bvzMrg4aRQQj4pryW19x
+    f4KOGJ75dS1QqUM8HAV4EB58p+6M2xlvbnsnKbylubrYomDARTYFBJcjeQJUiQqmf/Mj
+    EVBg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lByOdcK1X0"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
+    with ESMTPSA id e05ed8xB2IdreZB
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 2 Dec 2021 19:39:53 +0100 (CET)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20211201215127.23550-1-sergio.paracuellos@gmail.com>
- <20211201215127.23550-3-sergio.paracuellos@gmail.com>
- <d243a90d-25b2-a65f-b69d-af7497db8742@roeck-us.net>
- <CAMhs-H_i7aFeqf4EBtzdL0SKgKrseZGpVU-ytvangpeCMVTmFw@mail.gmail.com>
- <9401e88b-de5a-dd2a-7e82-f3657ea86e8f@roeck-us.net>
- <CAMhs-H8vw48RkpFz+rqvoPqDPpkaHdn60j6SdbDJHTNTTp7Fcg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/5] MIPS: ralink: implement
- 'pcibios_root_bridge_prepare()'
-Message-ID: <c70584d5-8efd-6b3e-aab5-c8161f39931b@roeck-us.net>
-Date:   Thu, 2 Dec 2021 09:01:56 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>
+Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v11 0/8] MIPS: JZ4780 and CI20 HDMI
+Date:   Thu,  2 Dec 2021 19:39:45 +0100
+Message-Id: <cover.1638470392.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <CAMhs-H8vw48RkpFz+rqvoPqDPpkaHdn60j6SdbDJHTNTTp7Fcg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/2/21 7:50 AM, Sergio Paracuellos wrote:
-> Hi Guenter,
-> 
-> On Thu, Dec 2, 2021 at 4:06 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 12/2/21 12:29 AM, Sergio Paracuellos wrote:
->>> Hi Guenter,
->>>
->>> On Wed, Dec 1, 2021 at 11:17 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>>>
->>>> On 12/1/21 1:51 PM, Sergio Paracuellos wrote:
->>>>> PCI core code call 'pcibios_root_bridge_prepare()' function inside function
->>>>> 'pci_register_host_bridge()'. This point is very good way to properly enter
->>>>> into this MIPS ralink specific code to properly setup I/O coherency units
->>>>> with PCI memory addresses.
->>>>>
->>>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->>>>> ---
->>>>>     arch/mips/ralink/mt7621.c | 30 ++++++++++++++++++++++++++++++
->>>>>     1 file changed, 30 insertions(+)
->>>>>
->>>>> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
->>>>> index bd71f5b14238..7649416c1cd7 100644
->>>>> --- a/arch/mips/ralink/mt7621.c
->>>>> +++ b/arch/mips/ralink/mt7621.c
->>>>> @@ -10,6 +10,7 @@
->>>>>     #include <linux/slab.h>
->>>>>     #include <linux/sys_soc.h>
->>>>>     #include <linux/memblock.h>
->>>>> +#include <linux/pci.h>
->>>>>
->>>>>     #include <asm/bootinfo.h>
->>>>>     #include <asm/mipsregs.h>
->>>>> @@ -22,6 +23,35 @@
->>>>>
->>>>>     static void *detect_magic __initdata = detect_memory_region;
->>>>>
->>>>> +int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
->>>>> +{
->>>>> +     struct resource_entry *entry;
->>>>> +     resource_size_t mask;
->>>>> +
->>>>> +     entry = resource_list_first_type(&bridge->windows, IORESOURCE_MEM);
->>>>> +     if (!entry) {
->>>>> +             pr_err("Cannot get memory resource\n");
->>>>> +             return -EINVAL;
->>>>> +     }
->>>>> +
->>>>> +     if (mips_cps_numiocu(0)) {
->>>>> +             /*
->>>>> +              * FIXME: hardware doesn't accept mask values with 1s after
->>>>> +              * 0s (e.g. 0xffef), so it would be great to warn if that's
->>>>> +              * about to happen
->>>>> +              */ > +         mask = ~(entry->res->end - entry->res->start);
->>>>> +
->>>>
->>>> Try something like this:
->>>>                   WARN_ON((mask != ~0UL && BIT(ffz(mask)) - 1 != mask);
->>>
->>> Thanks for the tip. The following works for me:
->>>
->>>                     WARN_ON(mask != ~0UL && ~(BIT(__ffs(mask)) - 1) != mask);
->>
->> Are you sure ? __ffs() returns the first bit set, which isn't useful
->> for this test.
-> 
-> My mask is calculated as follows:
->   mask = ~(entry->res->end - entry->res->start);
-> 
-> Where for normal memory resource:
->   - entry->res->end = 0x6fffffff;
->   - entry->res->start = 0x60000000;
-> 
-> So I end up with a mask: 0xf0000000.
-> 
-> So applying ~(BIT(__ffs(mask)) - 1) I get a good '0xf0000000' for this
-> particular case which looks correct.
-> 
-> Suppose an invalid case with the mask being 0xffef0000.
-> 
-> Applying ~(BIT(__ffs(mask)) - 1) will be 0xffff0000 which will trigger
-> the WARN_ON since 0xffff0000 != 0xffef0000
-> 
-> So I think this is correct... Am I missing something?
-> 
+PATCH V11 2021-12-02 19:39:52:
+- patch 4/8: change devm_regulator_get_optional to devm_regulator_get and
+             remove NULL check (requested by broonie@kernel.org)
+- patch 3/8: make hdmi-5v-supply required (requested by broonie@kernel.org)
 
-Your description says "hardware doesn't accept mask values with 1s after 0s
-(e.g. 0xffef)". 0xf0000000 has 1s after 0s.
+PATCH V10 2021-11-30 22:26:41:
+- patch 3/8: fix $id and $ref paths (found by robh@kernel.org)
 
-Your version works (I think) as long as the upper mask bits are all 1s.
-It will fail, for example, if the mask value is 0xf000000 and
-sizeof(long) == 8. Your test is the equivalent of "no mask value
-with 0s after 1s", assuming that sizeof(resource_size_t) == sizeof(long).
-As far as I can see with test code, it fails if sizeof(resource_size_t)
-!= sizeof(long). Also, it returns an error if mask == 0. I guess that is
-a corner case, but it would be interesting to know if it is theoretically
-valid.
+PATCH V9 2021-11-24 22:29:14:
+- patch 6/8: remove optional <0> for assigned-clocks and unintentionally included "unwedge" setup (found by paul@crapouillou.net)
+- patch 4/8: some cosmetics
+             make regulator enable/disable only if not NULL (found by paul@crapouillou.net)
+             simplify/fix error handling and driver cleanup on remove (proposed by paul@crapouillou.net)
+- patch 3/8: fix #include path in example (found by paul@crapouillou.net)
+             fix missing "i" in unevaluatedProperties (found by robh@kernel.org)
+             fix 4 spaces indentation for required: property (found by robh@kernel.org)
 
-I _think_ the following works even if sizeof(resource_size_t) != sizeof(long).
+PATCH V8 2021-11-23 19:14:00:
+- fix a bad editing result from patch 2/8 (found by paul@crapouillou.net)
 
-	WARN_ON(mask && BIT(ffz(~mask)) - 1 != ~mask);
+PATCH V7 2021-11-23 18:46:23:
+- changed gpio polarity of hdmi_power to 0 (suggested by paul@crapouillou.net)
+- fixed LCD1 irq number (bug found by paul@crapouillou.net)
+- removed "- 4" for calculating max_register (suggested by paul@crapouillou.net)
+- use unevaluatedPropertes instead of additionalProperties (suggested by robh@kernel.org)
+- moved and renamed ingenic,jz4780-hdmi.yaml (suggested by robh@kernel.org)
+- adjusted assigned-clocks changes to upstream which added some for SSI (by hns@goldelico.com)
+- rebased and tested with v5.16-rc2 + patch set drm/ingenic by paul@crapouillou.net (by hns@goldelico.com)
 
-or, alternatively, something like
+PATCH V6 2021-11-10 20:43:33:
+- changed CONFIG_DRM_INGENIC_DW_HDMI to "m" (by hns@goldelico.com)
+- made ingenic-dw-hdmi an independent platform driver which can be compiled as module
+  and removed error patch fixes for IPU (suggested by paul@crapouillou.net)
+- moved assigned-clocks from jz4780.dtsi to ci20.dts (suggested by paul@crapouillou.net)
+- fixed reg property in jz4780.dtsi to cover all registers incl. gamma and vee (by hns@goldelico.com)
+- added a base patch to calculate regmap size from DTS reg property (requested by paul@crapouillou.net)
+- restored resetting all bits except one in LCDOSDC (requested by paul@crapouillou.net)
+- clarified setting of cpos (suggested by paul@crapouillou.net)
+- moved bindings definition for ddc-i2c-bus (suggested by paul@crapouillou.net)
+- simplified mask definitions for JZ_LCD_DESSIZE (requested by paul@crapouillou.net)
+- removed setting alpha premultiplication (suggested by paul@crapouillou.net)
+- removed some comments (suggested by paul@crapouillou.net)
 
-	mask2 = entry->res->end - entry->res->start;
-	mask = ~mask2;
-	WARN_ON(mask && BIT(ffz(mask2)) - 1 != mask2);
+PATCH V5 2021-10-05 14:28:44:
+- dropped mode_fixup and timings support in dw-hdmi as it is no longer needed in this V5 (by hns@goldelico.com)
+- dropped "drm/ingenic: add some jz4780 specific features" (stimulated by paul@crapouillou.net)
+- fixed typo in commit subject: "synopsis" -> "synopsys" (by hns@goldelico.com)
+- swapped clocks in jz4780.dtsi to match synopsys,dw-hdmi.yaml (by hns@goldelico.com)
+- improved, simplified, fixed, dtbschecked ingenic-jz4780-hdmi.yaml and made dependent of bridge/synopsys,dw-hdmi.yaml (based on suggestions by maxime@cerno.tech)
+- fixed binding vs. driver&DTS use of hdmi-5v regulator (suggested by maxime@cerno.tech)
+- dropped "drm/bridge: synopsis: Fix to properly handle HPD" - was a no longer needed workaround for a previous version
+  (suggested by maxime@cerno.tech)
 
-though that looks a bit weird.
+PATCH V4 2021-09-27 18:44:38:
+- fix setting output_port = 1 (issue found by paul@crapouillou.net)
+- ci20.dts: convert to use hdmi-connector (by hns@goldelico.com)
+- add a hdmi-regulator to control +5V power (by hns@goldelico.com)
+- added a fix to dw-hdmi to call drm_kms_helper_hotplug_event on plugin event detection (by hns@goldelico.com)
+- always allocate extended descriptor but initialize only for jz4780 (by hns@goldelico.com)
+- updated to work on top of "[PATCH v3 0/6] drm/ingenic: Various improvements v3" (by paul@crapouillou.net)
+- rebased to v5.13-rc3
 
-Thanks,
-Guenter
+PATCH V3 2021-08-08 07:10:50:
+This series adds HDMI support for JZ4780 and CI20 board (and fixes one IPU related issue in registration error path)
+- [patch 1/8] switched from mode_fixup to atomic_check (suggested by robert.foss@linaro.org)
+  - the call to the dw-hdmi specialization is still called mode_fixup
+- [patch 3/8] diverse fixes for ingenic-drm-drv (suggested by paul@crapouillou.net)
+  - factor out some non-HDMI features of the jz4780 into a separate patch
+  - multiple fixes around max height
+  - do not change regmap config but a copy on stack
+  - define some constants
+  - factor out fixing of drm_init error path for IPU into separate patch
+  - use FIELD_PREP()
+- [patch 8/8] conversion to component framework dropped (suggested by Laurent.pinchart@ideasonboard.com and paul@crapouillou.net)
 
-> Thanks,
->      Sergio Paracuellos
->>
->> Guenter
->>
->>>
->>> I will send this as a different patch, though.
->>>
->>> Best regards,
->>>       Sergio Paracuellos
->>>
->>>>
->>>>> +             write_gcr_reg1_base(entry->res->start);
->>>>> +             write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
->>>>> +             pr_info("PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
->>>>> +                     (unsigned long long)read_gcr_reg1_base(),
->>>>> +                     (unsigned long long)read_gcr_reg1_mask());
->>>>> +     }
->>>>> +
->>>>> +     return 0;
->>>>> +}
->>>>> +
->>>>>     phys_addr_t mips_cpc_default_phys_base(void)
->>>>>     {
->>>>>         panic("Cannot detect cpc address");
->>>>>
->>>>
->>
+PATCH V2 2021-08-05 16:08:05:
+- code and commit messages revisited for checkpatch warnings
+- rebased on v5.14-rc4
+- include (failed, hence RFC 8/8) attempt to convert to component framework
+  (was suggested by Paul Cercueil <paul@crapouillou.net> a while ago)
+
+This series adds HDMI support for JZ4780 and CI20 board
+
+
+
+H. Nikolaus Schaller (3):
+  drm/ingenic: prepare ingenic drm for later addition of JZ4780
+  MIPS: defconfig: CI20: configure for DRM_DW_HDMI_JZ4780
+  [RFC] MIPS: DTS: Ingenic: adjust register size to available registers
+
+Paul Boddie (4):
+  drm/ingenic: Add support for JZ4780 and HDMI output
+  drm/ingenic: Add dw-hdmi driver for jz4780
+  MIPS: DTS: jz4780: Account for Synopsys HDMI driver and LCD
+    controllers
+  MIPS: DTS: CI20: Add DT nodes for HDMI setup
+
+Sam Ravnborg (1):
+  dt-bindings: display: Add ingenic,jz4780-dw-hdmi DT Schema
+
+ .../display/bridge/ingenic,jz4780-hdmi.yaml   |  78 ++++++++++
+ .../display/bridge/synopsys,dw-hdmi.yaml      |   3 +
+ arch/mips/boot/dts/ingenic/ci20.dts           |  72 +++++++++-
+ arch/mips/boot/dts/ingenic/jz4725b.dtsi       |   2 +-
+ arch/mips/boot/dts/ingenic/jz4740.dtsi        |   2 +-
+ arch/mips/boot/dts/ingenic/jz4770.dtsi        |   2 +-
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        |  40 ++++++
+ arch/mips/configs/ci20_defconfig              |   6 +
+ drivers/gpu/drm/ingenic/Kconfig               |   9 ++
+ drivers/gpu/drm/ingenic/Makefile              |   1 +
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  62 +++++++-
+ drivers/gpu/drm/ingenic/ingenic-drm.h         |  38 +++++
+ drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c     | 136 ++++++++++++++++++
+ 13 files changed, 443 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+ create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+
+-- 
+2.33.0
 
