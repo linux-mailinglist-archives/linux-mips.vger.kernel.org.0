@@ -2,86 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E53F64664B4
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Dec 2021 14:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6159B466559
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Dec 2021 15:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358323AbhLBNv6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 2 Dec 2021 08:51:58 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:55901 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237001AbhLBNv4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Dec 2021 08:51:56 -0500
-Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MWzXd-1n41vd1UjZ-00XK8B; Thu, 02 Dec 2021 14:48:32 +0100
-Received: by mail-wm1-f49.google.com with SMTP id y196so23038888wmc.3;
-        Thu, 02 Dec 2021 05:48:32 -0800 (PST)
-X-Gm-Message-State: AOAM531WFus+GU0YNQXpzkBIydpLux8j5ubioOYdo8stMoYEkQvcDtD8
-        rA7/1iCZN4jdICOqfBVkMGITxcPWIEktX7rosh8=
-X-Google-Smtp-Source: ABdhPJz9IhZ0SVMn3gjv/EngarNH+BlhwpEhHG7fhKJMeyCvpco00ZNxUe6dzFexrgEIlOWKzQmzHfW+SeJnlSw5c/0=
-X-Received: by 2002:a1c:770e:: with SMTP id t14mr6353478wmi.173.1638452911927;
- Thu, 02 Dec 2021 05:48:31 -0800 (PST)
-MIME-Version: 1.0
-References: <CA+G9fYv-os1goBNae4RSk2Gt9vdg53j3MPyAbmKPAoBdn5z7nA@mail.gmail.com>
-In-Reply-To: <CA+G9fYv-os1goBNae4RSk2Gt9vdg53j3MPyAbmKPAoBdn5z7nA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 2 Dec 2021 14:48:15 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1DxAhMU_LhdPE_8ndPJUoXv8a3OvDGPCuPB4w6o+rjEg@mail.gmail.com>
-Message-ID: <CAK8P3a1DxAhMU_LhdPE_8ndPJUoXv8a3OvDGPCuPB4w6o+rjEg@mail.gmail.com>
-Subject: Re: [Next] futex.h:89:9: error: implicit declaration of function 'arch_futex_atomic_op_inuser_local'
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
+        id S1358608AbhLBOjz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 2 Dec 2021 09:39:55 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:45848 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358563AbhLBOjy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 2 Dec 2021 09:39:54 -0500
+Received: by mail-wr1-f48.google.com with SMTP id o13so59961757wrs.12;
+        Thu, 02 Dec 2021 06:36:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Xh3pKbxTnj8e62DOcRXknPoUROM+BODLvzmQyRbbH8s=;
+        b=kTkJUVvm9rv0ZQUG43Neiaz+fGYCC6wrwa+G2jsjDLt1kflpkMapVaCbF5vFdTw2d1
+         dqNvDO38lAR4Keuj9rpfqoQtW0bPlhN5hUEnAr12/y73p/iSoZPLr7aoR+LgAS1K+Dk7
+         E/d69xGAiAj3nJVkhRo18Jm/iXykMeFahZxqcb3B4DL/i3B+T1Glg/j9cwmCrZAaupQa
+         HGMhFkOuP34wWNBpTGWwUglIoCxe1UD0lJCkdhRSOTY6dKnzBfvV5OcD3nW55JY9Ls/v
+         JBy63CA5FYQEfrQEzTkzT2kttEs+XBC0NGWzxwJRg9Xw6u71n4ysGOoTJx7v+rJqEVoH
+         zwSA==
+X-Gm-Message-State: AOAM532KvjUuChezdZQSDkJGPDuk9oUA1E4GZ7CFxciQlG2rB/ps2oRi
+        eTfhzoOx+k2ORBAyS5bDTtY/1qNFOyM=
+X-Google-Smtp-Source: ABdhPJwNpcGjwNKyiVWqPz1WBsz/Qi/GLv2M+5yPM20JS1pf2ye6xEbrzai84zM0oO2HmmRa7dC8TQ==
+X-Received: by 2002:adf:fb0c:: with SMTP id c12mr15988721wrr.614.1638455790749;
+        Thu, 02 Dec 2021 06:36:30 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id q4sm2636132wrs.56.2021.12.02.06.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 06:36:29 -0800 (PST)
+Date:   Thu, 2 Dec 2021 14:36:28 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Wei Liu <wei.liu@kernel.org>,
+        x86@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:FO2loLDDUaW6FSD1ht29xx61m53ACTGrYz9P8frxnAwC0tvrnCd
- PH3aWIMik6+1if7FvDcnQBCcfn2xHCrHKeMkCIn1eRbzE6LgtELYFXnfkhiVYBdVGga8ODR
- u+2018wGaXMOAFuSFxsODhW/79G0naCm2RYeX/SS0uiwSppypvRssyPykwhXAvWM9Jc1QBa
- FDChlopWoqvYh+Pnupr8g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kmSZRRHABuQ=:BautNYfF9TuI4vzPQWly9z
- Gi+Kp05n+LndLe7TxozoeVlA/hrrMgdO0YvYQf9J+mITgXJ32tNuh5CXUjW5bHS13bP3rperd
- oB62Y047Qr0StqkMHYgFEnT0Ke5I4ZL10bALm5irn8W+s47/iaH/PHbzlObqmhpsFs/g1nWpE
- X/zdNV/1vgu2Fq84DkJli6CUAHrGrgXuGJfWsWo+yI+iWzCMYo6sGj1RJEo87oMAGST82qjby
- bPOq6ooSvH7oWpXGlQuIDmh6tfUWbCHXx0jK2GMx3pDtQyzdossB40Ifc3ZkKmE0/TXbQQNfC
- IQIczrSB8GmA4JqPw3Va2CWjZ50r0g91jmTwUY/W7DLrgLdmXEp+hfozqczY+g7IyUW5URpoX
- SyuYaia/kniUhWxrgU6RUGHdsXSZ5udbOOYjtwOn/KHiuqShu1LPwJutFkwRmGEME9GW9WuYP
- pOCmOo/udzTNaxRJPoHyPvKPTJW8F6n05zMdzPekyr8IG/Qp7OXGZrRp0mK7HZsq8ciqeeIum
- YAsOiJkoKyvIJoHelsiayAvcRXy92Xc3/WZ/IFX7c0Q/RwEmreK2p9t9ESBL86o46Oz9LHrYi
- guCafVlHXQN24vtas4U8AjpwpMgtLMyW7aYPma2ezJdTw2kfv/4bCr7AXHJ4B06gOzACN5ApQ
- DY8Wtd8WYt+y9P4E+7eHwle7aEPDIH6i6Ax0jbUrCQ5JPxXhZHwyuRuf0DftbEsnWrfI=
+        linux-mips@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        ath11k@lists.infradead.org, Juergen Gross <jgross@suse.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [patch 11/22] x86/hyperv: Refactor hv_msi_domain_free_irqs()
+Message-ID: <20211202143628.dgiikgujigylogoz@liuwe-devbox-debian-v2>
+References: <20211126222700.862407977@linutronix.de>
+ <20211126223824.737214551@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211126223824.737214551@linutronix.de>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 2:29 PM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> While building Linux next 20211202 tag for sh with gcc-10
-> following warnings / errors noticed.
->
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
-> CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
-> 'HOSTCC=sccache gcc'
-> In file included from /builds/linux/kernel/futex/futex.h:12,
->                  from /builds/linux/kernel/futex/core.c:41:
-> /builds/linux/arch/mips/include/asm/futex.h: In function
-> 'arch_futex_atomic_op_inuser':
-> /builds/linux/arch/mips/include/asm/futex.h:89:9: error: implicit
-> declaration of function 'arch_futex_atomic_op_inuser_local'; did you
-> mean 'futex_atomic_op_inuser_local'?
-> [-Werror=implicit-function-declaration]
->    89 |   ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
->       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Sat, Nov 27, 2021 at 02:18:51AM +0100, Thomas Gleixner wrote:
+> No point in looking up things over and over. Just look up the associated
+> irq data and work from there.
+> 
+> No functional change.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Again? How many ways are there I can mess this up? It looks like
-I managed to introduce a different typo here from the one I already fixed
-for m68k. I'll make sure I test build all architectures before sending the
-next fixup then.
-
-        Arnd
+Acked-by: Wei Liu <wei.liu@kernel.org>
