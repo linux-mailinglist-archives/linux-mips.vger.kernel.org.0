@@ -2,102 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE61246755D
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Dec 2021 11:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9E2467D93
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Dec 2021 19:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380123AbhLCKqv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Dec 2021 05:46:51 -0500
-Received: from foss.arm.com ([217.140.110.172]:47032 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1380100AbhLCKqr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 3 Dec 2021 05:46:47 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B6CDE1597;
-        Fri,  3 Dec 2021 02:43:23 -0800 (PST)
-Received: from a077416.arm.com (unknown [10.163.33.180])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6E1283F5A1;
-        Fri,  3 Dec 2021 02:43:20 -0800 (PST)
-From:   Amit Daniel Kachhap <amit.kachhap@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kexec <kexec@lists.infradead.org>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips <linux-mips@vger.kernel.org>
-Subject: [RFC PATCH 08/14] mips/crash_dump: Use the new interface copy_oldmem_page_buf
-Date:   Fri,  3 Dec 2021 16:12:25 +0530
-Message-Id: <20211203104231.17597-9-amit.kachhap@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211203104231.17597-1-amit.kachhap@arm.com>
-References: <20211203104231.17597-1-amit.kachhap@arm.com>
+        id S229963AbhLCS6L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Dec 2021 13:58:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53098 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229825AbhLCS6L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Dec 2021 13:58:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BD5362CAA;
+        Fri,  3 Dec 2021 18:54:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC384C53FCE;
+        Fri,  3 Dec 2021 18:54:41 +0000 (UTC)
+Date:   Fri, 3 Dec 2021 18:54:38 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     dennis@kernel.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, tj@kernel.org,
+        gregkh@linuxfoundation.org, cl@linux.com, will@kernel.org,
+        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, davem@davemloft.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH RFC 1/4] mm: percpu: Generalize percpu related config
+Message-ID: <Yapn7veWrVvWpskW@arm.com>
+References: <20211121093557.139034-1-wangkefeng.wang@huawei.com>
+ <20211121093557.139034-2-wangkefeng.wang@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211121093557.139034-2-wangkefeng.wang@huawei.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The current interface copy_oldmem_page() passes user pointer without
-__user annotation and hence does unnecessary user/kernel pointer
-conversions during its implementation.
+On Sun, Nov 21, 2021 at 05:35:54PM +0800, Kefeng Wang wrote:
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index c4207cf9bb17..4ff73299f8a9 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1135,6 +1135,10 @@ config NUMA
+>  	select GENERIC_ARCH_NUMA
+>  	select ACPI_NUMA if ACPI
+>  	select OF_NUMA
+> +	select HAVE_SETUP_PER_CPU_AREA
+> +	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+> +	select NEED_PER_CPU_PAGE_FIRST_CHUNK
+> +	select USE_PERCPU_NUMA_NODE_ID
+>  	help
+>  	  Enable NUMA (Non-Uniform Memory Access) support.
+>  
+> @@ -1151,22 +1155,6 @@ config NODES_SHIFT
+>  	  Specify the maximum number of NUMA Nodes available on the target
+>  	  system.  Increases memory reserved to accommodate various tables.
+>  
+> -config USE_PERCPU_NUMA_NODE_ID
+> -	def_bool y
+> -	depends on NUMA
+> -
+> -config HAVE_SETUP_PER_CPU_AREA
+> -	def_bool y
+> -	depends on NUMA
+> -
+> -config NEED_PER_CPU_EMBED_FIRST_CHUNK
+> -	def_bool y
+> -	depends on NUMA
+> -
+> -config NEED_PER_CPU_PAGE_FIRST_CHUNK
+> -	def_bool y
+> -	depends on NUMA
+> -
+>  source "kernel/Kconfig.hz"
+>  
+>  config ARCH_SPARSEMEM_ENABLE
 
-Use the interface copy_oldmem_page_buf() to avoid this issue.
+For arm64:
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips <linux-mips@vger.kernel.org>
-Signed-off-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
----
- arch/mips/kernel/crash_dump.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/arch/mips/kernel/crash_dump.c b/arch/mips/kernel/crash_dump.c
-index 2e50f55185a6..f2406b868a27 100644
---- a/arch/mips/kernel/crash_dump.c
-+++ b/arch/mips/kernel/crash_dump.c
-@@ -3,20 +3,20 @@
- #include <linux/crash_dump.h>
- 
- /**
-- * copy_oldmem_page - copy one page from "oldmem"
-+ * copy_oldmem_page_buf - copy one page from "oldmem"
-  * @pfn: page frame number to be copied
-- * @buf: target memory address for the copy; this can be in kernel address
-- *	space or user address space (see @userbuf)
-+ * @ubuf: target user memory pointer for the copy; use copy_to_user() if this
-+ * pointer is not NULL
-+ * @kbuf: target kernel memory pointer for the copy; use memcpy() if this
-+ * pointer is not NULL
-  * @csize: number of bytes to copy
-  * @offset: offset in bytes into the page (based on pfn) to begin the copy
-- * @userbuf: if set, @buf is in user address space, use copy_to_user(),
-- *	otherwise @buf is in kernel address space, use memcpy().
-  *
-- * Copy a page from "oldmem". For this page, there is no pte mapped
-- * in the current kernel.
-+ * Copy a page from "oldmem" into buffer pointed by either @ubuf or @kbuf. For
-+ * this page, there is no pte mapped in the current kernel.
-  */
--ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
--			 size_t csize, unsigned long offset, int userbuf)
-+ssize_t copy_oldmem_page_buf(unsigned long pfn, char __user *ubuf, char *kbuf,
-+			     size_t csize, unsigned long offset)
- {
- 	void  *vaddr;
- 
-@@ -25,10 +25,10 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
- 
- 	vaddr = kmap_local_pfn(pfn);
- 
--	if (!userbuf) {
--		memcpy(buf, vaddr + offset, csize);
-+	if (kbuf) {
-+		memcpy(kbuf, vaddr + offset, csize);
- 	} else {
--		if (copy_to_user(buf, vaddr + offset, csize))
-+		if (copy_to_user(ubuf, vaddr + offset, csize))
- 			csize = -EFAULT;
- 	}
- 
--- 
-2.17.1
-
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
