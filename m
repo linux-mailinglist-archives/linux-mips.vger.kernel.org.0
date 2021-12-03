@@ -2,137 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9656746731B
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Dec 2021 09:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE61246755D
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Dec 2021 11:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379124AbhLCIMC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 3 Dec 2021 03:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351103AbhLCIMB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 3 Dec 2021 03:12:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2072EC06173E;
-        Fri,  3 Dec 2021 00:08:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B45AF62963;
-        Fri,  3 Dec 2021 08:08:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C601EC53FC7;
-        Fri,  3 Dec 2021 08:08:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638518917;
-        bh=KxH7ZGxVJfrcf6JYVcVHtDcyryoNErHSgyXmxhiT11I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MM898awN9WfEXhnii4ChAHzhExx0NwP6S7X/fowg1zrBLgziKiv7K2aD+Zr+zJF1I
-         zfjWXTsOQ8/UBbdibW6PV0Q9dklH2IcWgHzRAAl4I9302qbCj+qO7e4G8wLy/ndeQd
-         Ht/8JbdQMDYn2ftCsGZ8asGmKeBAlC/Y0+gyr12A02k010jd5YkyLxBt/04HwjuQZq
-         r2oH42a3lBuZR6LrbCPexQPX/gEr+09oehLCuxC4Q3Th5nrfmv8o7/latrhqak28oV
-         671QzCH/v+KWjKg2O278qIYQU+Wke88Ur/MpXcwxrbWg11RxVH3skXf4shpXYlxIvy
-         FuRBk9avNtuSw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-mips@vger.kernel.org,
+        id S1380123AbhLCKqv (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 3 Dec 2021 05:46:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:47032 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1380100AbhLCKqr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 3 Dec 2021 05:46:47 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B6CDE1597;
+        Fri,  3 Dec 2021 02:43:23 -0800 (PST)
+Received: from a077416.arm.com (unknown [10.163.33.180])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6E1283F5A1;
+        Fri,  3 Dec 2021 02:43:20 -0800 (PST)
+From:   Amit Daniel Kachhap <amit.kachhap@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kexec <kexec@lists.infradead.org>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-xtensa@linux-xtensa.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH] futex: Fix additional regressions
-Date:   Fri,  3 Dec 2021 09:07:56 +0100
-Message-Id: <20211203080823.2938839-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-mips <linux-mips@vger.kernel.org>
+Subject: [RFC PATCH 08/14] mips/crash_dump: Use the new interface copy_oldmem_page_buf
+Date:   Fri,  3 Dec 2021 16:12:25 +0530
+Message-Id: <20211203104231.17597-9-amit.kachhap@arm.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20211203104231.17597-1-amit.kachhap@arm.com>
+References: <20211203104231.17597-1-amit.kachhap@arm.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+The current interface copy_oldmem_page() passes user pointer without
+__user annotation and hence does unnecessary user/kernel pointer
+conversions during its implementation.
 
-Naresh reported another architecture that was broken by the same typo
-that I already fixed for three architectures: mips also refers to the
-futex_atomic_op_inuser_local() function by the wrong name and runs into
-a missing closing '}' as well.
+Use the interface copy_oldmem_page_buf() to avoid this issue.
 
-Going through the source tree I found that I also had the same typo in the
-documentation as well as the xtensa code, both of which ended up escaping
-the regression testing so far. In the case of xtensa, it appears that
-the broken code path is only used when building for platforms that are
-not supported by the default gcc configuration, so they are impossible
-to test for with my setup.
-
-After going through these more carefully and fixing up the typos, I
-build-tested all architectures again to ensure I'm not introducing a
-new regression or missing one more obvious issue with my series.
-
-Fixes: 4e0d84634445 ("futex: Fix sparc32/m68k/nds32 build regression")
-Fixes: 3f2bedabb62c ("futex: Ensure futex_atomic_cmpxchg_inatomic() is present")
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: linux-mips@vger.kernel.org
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-xtensa@linux-xtensa.org
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-mips <linux-mips@vger.kernel.org>
+Signed-off-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
 ---
- arch/mips/include/asm/futex.h   | 6 +++---
- arch/xtensa/include/asm/futex.h | 2 +-
- include/asm-generic/futex.h     | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ arch/mips/kernel/crash_dump.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.h
-index 9287110cb06d..8612a7e42d78 100644
---- a/arch/mips/include/asm/futex.h
-+++ b/arch/mips/include/asm/futex.h
-@@ -86,9 +86,9 @@
- 		: "memory");						\
- 	} else {							\
- 		/* fallback for non-SMP */				\
--		ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
--							uaddr);	\
--	}
-+		ret = futex_atomic_op_inuser_local(op, oparg, oval, uaddr);	\
-+	}								\
-+}
- 
- static inline int
- arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
-diff --git a/arch/xtensa/include/asm/futex.h b/arch/xtensa/include/asm/futex.h
-index fe8f31575ab1..a6f7d7ab5950 100644
---- a/arch/xtensa/include/asm/futex.h
-+++ b/arch/xtensa/include/asm/futex.h
-@@ -109,7 +109,7 @@ static inline int arch_futex_atomic_op_inuser(int op, int oparg, int *oval,
- 
- 	return ret;
- #else
--	return arch_futex_atomic_op_inuser_local(op, oparg, oval, uaddr);
-+	return futex_atomic_op_inuser_local(op, oparg, oval, uaddr);
- #endif
- }
- 
-diff --git a/include/asm-generic/futex.h b/include/asm-generic/futex.h
-index 66d6843bfd02..2a19215baae5 100644
---- a/include/asm-generic/futex.h
-+++ b/include/asm-generic/futex.h
-@@ -21,7 +21,7 @@
- #endif
+diff --git a/arch/mips/kernel/crash_dump.c b/arch/mips/kernel/crash_dump.c
+index 2e50f55185a6..f2406b868a27 100644
+--- a/arch/mips/kernel/crash_dump.c
++++ b/arch/mips/kernel/crash_dump.c
+@@ -3,20 +3,20 @@
+ #include <linux/crash_dump.h>
  
  /**
-- * arch_futex_atomic_op_inuser_local() - Atomic arithmetic operation with constant
-+ * futex_atomic_op_inuser_local() - Atomic arithmetic operation with constant
-  *			  argument and comparison of the previous
-  *			  futex value with another constant.
+- * copy_oldmem_page - copy one page from "oldmem"
++ * copy_oldmem_page_buf - copy one page from "oldmem"
+  * @pfn: page frame number to be copied
+- * @buf: target memory address for the copy; this can be in kernel address
+- *	space or user address space (see @userbuf)
++ * @ubuf: target user memory pointer for the copy; use copy_to_user() if this
++ * pointer is not NULL
++ * @kbuf: target kernel memory pointer for the copy; use memcpy() if this
++ * pointer is not NULL
+  * @csize: number of bytes to copy
+  * @offset: offset in bytes into the page (based on pfn) to begin the copy
+- * @userbuf: if set, @buf is in user address space, use copy_to_user(),
+- *	otherwise @buf is in kernel address space, use memcpy().
   *
+- * Copy a page from "oldmem". For this page, there is no pte mapped
+- * in the current kernel.
++ * Copy a page from "oldmem" into buffer pointed by either @ubuf or @kbuf. For
++ * this page, there is no pte mapped in the current kernel.
+  */
+-ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
+-			 size_t csize, unsigned long offset, int userbuf)
++ssize_t copy_oldmem_page_buf(unsigned long pfn, char __user *ubuf, char *kbuf,
++			     size_t csize, unsigned long offset)
+ {
+ 	void  *vaddr;
+ 
+@@ -25,10 +25,10 @@ ssize_t copy_oldmem_page(unsigned long pfn, char *buf,
+ 
+ 	vaddr = kmap_local_pfn(pfn);
+ 
+-	if (!userbuf) {
+-		memcpy(buf, vaddr + offset, csize);
++	if (kbuf) {
++		memcpy(kbuf, vaddr + offset, csize);
+ 	} else {
+-		if (copy_to_user(buf, vaddr + offset, csize))
++		if (copy_to_user(ubuf, vaddr + offset, csize))
+ 			csize = -EFAULT;
+ 	}
+ 
 -- 
-2.29.2
+2.17.1
 
