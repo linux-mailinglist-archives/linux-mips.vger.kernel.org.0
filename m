@@ -2,210 +2,368 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C293468927
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Dec 2021 05:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F16468A77
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Dec 2021 12:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbhLEErF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 4 Dec 2021 23:47:05 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:54312 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231550AbhLEErF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 4 Dec 2021 23:47:05 -0500
-Received: by ajax-webmail-mail.loongson.cn (Coremail) ; Sun, 5 Dec 2021
- 12:43:31 +0800 (GMT+08:00)
-X-Originating-IP: [10.20.41.56]
-Date:   Sun, 5 Dec 2021 12:43:31 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?6ZqL5pmv5bOw?= <suijingfeng@loongson.cn>
-To:     "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-Cc:     "Huacai Chen" <chenhuacai@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] mips/loongson64: using __fast_iob implement
- __wbflush() instead of sync
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.10a build 20191018(4c4f6d15)
- Copyright (c) 2002-2021 www.mailtech.cn .loongson.cn
-In-Reply-To: <eae2a82b-2e81-4224-a551-90ec8d5882b0@www.fastmail.com>
+        id S233097AbhLELVj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 5 Dec 2021 06:21:39 -0500
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:42399 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233086AbhLELVj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 5 Dec 2021 06:21:39 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id D8D9332003C0;
+        Sun,  5 Dec 2021 06:18:11 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute5.internal (MEProxy); Sun, 05 Dec 2021 06:18:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type:content-transfer-encoding; s=fm3; bh=LxSkG
+        ZtzcYOwK3Wg6V5aRu/uic48z3swIacO01DWYDo=; b=aBeKyha+lkxob5OJASEys
+        cEpWqNvuK+3g7sq6IqpS/KRSu/p6CLowc9uS+Siy0toIb8poVJHBH22912sEMcnS
+        AZXWIJbFFjeNzTj3IeClaJHmPQ9yfoIBvcUyxL4YNH62VRJDfAcE5yQZOaf0NxQu
+        lWxqIgf5eL2HxSPXtcwv7LVSNFCTybhJ7CXukzz2ErM1cjovlODSEAvgMTteeK0k
+        Tc5f8U9TsVTC12PQGzJDSYYnA+3urtREtAPcTkVFgui4Wjdx/q55tKfLLAOJYmsF
+        /zbBC213cPd9FRkjZQFUyo3yZfrnUYXfo9TYNDoI+KlcNvi80Zu2K2PBkewc6jZW
+        g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=LxSkGZtzcYOwK3Wg6V5aRu/uic48z3swIacO01DWY
+        Do=; b=df5+rN/dKLo8fStVLIn9h+eGF/mRGlMwsSpmJF8RH+xeeImg/avilHdXE
+        J+I4wwOiGOAqWojdufyGNeEQUptyStBM9YL2GuWS5FI4eZy8MeHgVY48G8G6Tt0D
+        JcA211LkQTBOJ/r5yqCWC/0sYOewCLoOjgFIPrUyTqBdwynhs8uTnaxLLoUr7Ffv
+        ItB6Ysv5wt53WyEslPfjlUf1Mxeiug7ae9/Y/lvePrRkbe2wp9pCL564OA9joDCF
+        TAviKvMGnDnSFVS48GKz0uT7f66bKaXZvpMPOVkSxEKywe0lxkvDXKliVztty2mC
+        J1ukaCFsANmMaOFAYcOYILE/ug1JA==
+X-ME-Sender: <xms:8p-sYac9eEU9k3ioKwOr9wo4gXFXjz6A3I3nEzMiPQ6Ix6A4bqcDDg>
+    <xme:8p-sYUNmgIvMYR-acGO-kP12mRen4RtVTTlXIbkzrCLf8SSpHgdUz5r6geTGrNvVM
+    Bwy8jUVbe4X-rfgxPc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjedugddvhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdflihgr
+    gihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeelteduleffvdegvdfgvddvvdehfeehffethfdvgffhheev
+    uefhteetteduheegfeenucffohhmrghinhepuhhvrgdrvghsnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhl
+    hihgohgrthdrtghomh
+X-ME-Proxy: <xmx:8p-sYbgUsBg9g3C7-X3IlPSw9-TsGD1eqhC0tY4Uuxfl1pvyLiLGoA>
+    <xmx:8p-sYX-OGaQAxZlDVMc3QcSP9Cfo4NYMONs_Si6afGy990Vvjn2eiw>
+    <xmx:8p-sYWuKP5Cv8MPTKC8fGDyY6V9Og6y3Pb84YjpET354UeH8m6Y4cQ>
+    <xmx:85-sYf5Za0L3H04jRRIpuTREQBdFUdYFKBidvoSEmPXfmzSZ9vy7uw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id ADAC7FA0AA6; Sun,  5 Dec 2021 06:18:10 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
+Mime-Version: 1.0
+Message-Id: <3c32dc38-2c19-4108-b111-59d45d974252@www.fastmail.com>
+In-Reply-To: <168ff668.a3c5.17d88da8d21.Coremail.suijingfeng@loongson.cn>
 References: <20211204120051.376260-1-suijingfeng@loongson.cn>
  <eae2a82b-2e81-4224-a551-90ec8d5882b0@www.fastmail.com>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: z7IbLmZvb3Rlcl90eHQ9ODQzNTo2MTI=
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <827cba.a3c7.17d88e7794f.Coremail.suijingfeng@loongson.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: AQAAf9Dxf8tzQ6xhq_wCAA--.2228W
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/1tbiAQAGC13QvOaivQACsG
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+ <168ff668.a3c5.17d88da8d21.Coremail.suijingfeng@loongson.cn>
+Date:   Sun, 05 Dec 2021 11:17:49 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     suijingfeng <suijingfeng@loongson.cn>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips/loongson64: using __fast_iob implement __wbflush() instead of
+ sync
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-IEhpIEppYXh1biwKCgpJJ20gbm90IHRvd2FyZCB0byAgbG9vbmdzb24gY3B1J3MgYmFycmllcnMs
-IGJ1dCB0aGUgc2VtYW50aWMgb2Ygd2JmbHVzaCgpLgoKQW5kIGl0IGlzIG5vdCBuZWNlc3Nhcnkg
-dGhlIHNhZmVzdCB3YXk6CgoKYmVmb3JlIGFwcGx5aW5nIHRoaXMgcGF0Y2gsICB3YmZsdXNoKCkg
-d2lsbCBiZSBleHBhbmRlZCB0byBkb3VibGUgX19zeW5jKCksCgppZiBfX3N5bmMoKSBjYW4gZW1w
-dHkgdGhlIHVuY2FjaGVkIHN0b3JlIGJ1ZmZlciwgIHNpbmdsZSBvbmUgaXMgZW5vdWdoLgoKQWZ0
-ZXIgYXBwbHkgdGhpcyBwYXRjaCwgd2JmbHVzaCgpIHdpbGwgYmUgZXhwYW5kZWQgdG8gYSBfX3N5
-bmMoKSBmb2xsb3dlZCBieSBhICBfX2Zhc3RfaW9iKCk7Cgp0aGlzIGlzIG1vcmUgc2FmZSB0aGFu
-IHlvdXIncyB2ZXJzaW9uIHdoaWNoIGJsaW5kbHkgY29weSBjb2RlIGZyb20gbG9vbmdzb24yZWYv
-Y29tbW9uL3NldHVwLmMuCgpOb3RlLCBVbmNhY2hlZCBBY2NlbGVyYXRlZCBjYWNoZSBtb2RlIGlz
-IG9ubHkgaW1wbGVtZW50ZWQgYWZ0ZXIgbHMzYTIwMDAuCgoKU2VlIE1pcHMgUnVuIFNheToKCk1v
-c3Qgd3JpdGUgcXVldWVzIGNhbiBiZSBlbXB0aWVkIG91dCBieSBwZXJmb3JtaW5nIGFuIHVuY2Fj
-aGVkIHN0b3JlIHRvCgphbnkgbG9jYXRpb24gYW5kIHRoZW4gcGVyZm9ybWluZyBhbiBvcGVyYXRp
-b24gdGhhdCByZWFkcyB0aGUgc2FtZSBkYXRhIGJhY2suCgpQdXQgYSBzeW5jIGluc3RydWN0aW9u
-IGJldHdlZW4gdGhlIHdyaXRlIGFuZCB0aGUgcmVhZCwgYW5kIHRoYXQgc2hvdWxkIGJlIGVmZmVj
-dGl2ZQoKb24gYW55IHN5c3RlbSBjb21wbGlhbnQgd2l0aCBNSVBTMzIvNjQuCgpBIHdyaXRlIHF1
-ZXVlIGNlcnRhaW5seSBjYW4ndCBwZXJtaXQgdGhlIHJlYWQgdG8gb3ZlcnRha2UgdGhlIHdyaXRl
-LCBpdCB3b3VsZCByZXR1cm4gc3RhbGUgZGF0YS4KClRoaXMgaXMgZWZmZWN0aXZlLCBidXQgbm90
-IG5lY2Vzc2FyaWx5IGVm76yBY2llbnQ7IHlvdSBjYW4gbWluaW1pemUgdGhlIG92ZXJoZWFkCgpi
-eSBsb2FkaW5nIGZyb20gdGhlIGZhc3Rlc3QgbWVtb3J5IGF2YWlsYWJsZS4gUGVyaGFwcyB5b3Vy
-IHN5c3RlbSBvZmZlcnMKCnNvbWV0aGluZyBzeXN0ZW0tc3BlY2nvrIFjIGJ1dCBmYXN0ZXIuIAoK
-CkFnYWluLCB3YmZsdXNoIGlzIG1lYW4gdG8gZW1wdHkgZGF0YSBnYXRoZXJlZCBpbiB0aGUgdW5j
-YWNoZSBzdG9yZSBidWZmZXJzIHdpdGhpbiB0aGUgQ1BVLgoKX193YmZsdXNoKCkgaXMgb25seSBt
-ZWFuIHRvIGJlIHVzZWQgaW50ZXJuYWxseSwgd2JmbHVzaCgpIHNob3VsZCBiZSB1c2VkIG91dHNp
-ZGUgb2Ygd2JmbHVzaC5oLgoKYnkgc2VwYXJhdGUgX193YmZsdXNoIG91dCBvZiBzZXR1cC5jLCB0
-aGUgY29kZSBpcyBtb3JlIG1vZHVsYXJpdHkuIGl0IGFsbG93IHlvdSAgdG8gZGVzZWxlY3QKCkNQ
-VV9IQVNfV0IgZWFzaWx5IGFuZCBzYXkgd2hhdCB3aWxsIGhhcHBlbi4KCgpBY3R1YWxseSBub3Ro
-aW5nIHN0cmFuZ2UgaXMgaGFwcGVuLCBiZWNhdXNlICB1bmNhY2hlZCBhY2NlbGVyYXRlZCBjYWNo
-ZSBtb2RlIGRvZXMgbm90CgpnZXQgdXNlZCBpbiB1cHN0cmVhbSBrZXJuZWwuCgoKJmd0OyAtLS0t
-LU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KJmd0OyBGcm9tOiAiSmlheHVuIFlhbmciIDxqaWF4dW4u
-eWFuZ0BmbHlnb2F0LmNvbT4KJmd0OyBTZW50IFRpbWU6IDIwMjEtMTItMDQgMjA6MzI6MzcgKFNh
-dHVyZGF5KQomZ3Q7IFRvOiBzdWlqaW5nZmVuZyA8c3VpamluZ2ZlbmdAbG9vbmdzb24uY24+LCAi
-SHVhY2FpIENoZW4iIDxjaGVuaHVhY2FpQGtlcm5lbC5vcmc+LCAiVGhvbWFzIEJvZ2VuZG9lcmZl
-ciIgPHRzYm9nZW5kQGFscGhhLmZyYW5rZW4uZGU+CiZndDsgQ2M6ICJsaW51eC1taXBzQHZnZXIu
-a2VybmVsLm9yZyIgPGxpbnV4LW1pcHNAdmdlci5rZXJuZWwub3JnPiwgbGludXgta2VybmVsQHZn
-ZXIua2VybmVsLm9yZwomZ3Q7IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIG1pcHMvbG9vbmdzb242NDog
-dXNpbmcgX19mYXN0X2lvYiBpbXBsZW1lbnQgX193YmZsdXNoKCkgaW5zdGVhZCBvZiBzeW5jCiZn
-dDsgCiZndDsgSGkgSmluZ2ZlbmcsCiZndDsgSSdkIHN1Z2dlc3QgeW91IG5vdCB0byBtZXNzIHdp
-dGggYmFycmllcnMgb24gTG9vbmdzb24uCiZndDsgSXQncyBhIGhlbGwuCiZndDsgCiZndDsgQWxz
-byBMb29uZ3NvbiBoYWQgY2hhbmdlZCBzZW1hbnRpY3Mgb2Ygc3luYy9zeW5jaSBtYW55IHRpbWVz
-LgomZ3Q7IFRoZXkgZ290IHJlZGVmaW5lZCBhbmQgc3dhcHBlZC4gU28gdGhlIHByZXNlbnQgd2F5
-IGlzIGp1c3QgdGhlIHNhZmVzdCB3YXkuCiZndDsgCiZndDsgVGhhbmtzLgomZ3Q7IAomZ3Q7IC0g
-SmlheHVuCiZndDsgCiZndDsg5ZyoMjAyMeW5tDEy5pyINOaXpeWNgeS6jOaciCDkuIvljYgxMjow
-MO+8jHN1aWppbmdmZW5n5YaZ6YGT77yaCiZndDsgJmd0OyAxKSBsb29uZ3NvbidzIGNwdShsczNh
-MzAwMCwgbHMzYTQwMDAsIGxzM2E1MDAwKSBoYXZlIHVuY2FjaGUgc3RvcmUgYnVmZmVycwomZ3Q7
-ICZndDsgICAgIHdoaWNoIGlzIGZvciB1bmNhY2hlIGFjY2xlcmF0aW9uLgomZ3Q7ICZndDsKJmd0
-OyAmZ3Q7ICAgICBVbmNhY2hlZCBBY2NlbGVyYXRlZCBpcyB0aGUgbmFtZSB1bmRlciB3aGljaCB0
-aGUgUjEwMDAwIGludHJvZHVjZWQKJmd0OyAmZ3Q7ICAgICBhIGNhY2hlIG1vZGUgdGhhdCB1c2Vz
-IHRoZSBDUFUncyB3cml0ZSBidWZmZXIgdG8gY29tYmluZSB3cml0ZXMKJmd0OyAmZ3Q7ICAgICBi
-dXQgdGhhdCBvdGhlcndpc2UgaXMgdW5jYWNoZWQuCiZndDsgJmd0OwomZ3Q7ICZndDsgICAgIHdi
-Zmx1c2ggaXMgbWVhbiB0byBlbXB0eSBkYXRhIGdhdGhlcmVkIGluIHRoZSB1bmNhY2hlIHN0b3Jl
-IGJ1ZmZlcnMKJmd0OyAmZ3Q7ICAgICB3aXRoaW4gdGhlIENQVS4KJmd0OyAmZ3Q7CiZndDsgJmd0
-OyAgMikgVGhlIFNZTkMgaW5zdHJ1Y3Rpb24gaW4gUjEwMDAwCiZndDsgJmd0OwomZ3Q7ICZndDsg
-ICAgIEEgU1lOQyBpbnN0cnVjdGlvbiBpcyBub3QgcHJldmVudGVkIGZyb20gZ3JhZHVhdGluZyBp
-ZiB0aGUgdW5jYWNoZWQKJmd0OyAmZ3Q7ICAgICBidWZmZXIgY29udGFpbnMgYW55IHVuY2FjaGVk
-IGFjY2VsZXJhdGVkIHN0b3Jlc1sxXS4KJmd0OyAmZ3Q7CiZndDsgJmd0OyAgMykgd2JmbHVzaCgp
-IGltcGxlbWVudGF0aW9uIG9mIElEVCBDUFUuCiZndDsgJmd0OwomZ3Q7ICZndDsgICAgIElEVCBD
-UFVzIGVuZm9yY2Ugc3RyaWN0IHdyaXRlIHByaW9yaXR5IChhbGwgcGVuZGluZyB3cml0ZXMgcmV0
-aXJlZAomZ3Q7ICZndDsgICAgIHRvIG1lbW9yeSBiZWZvcmUgbWFpbiBtZW1vcnkgaXMgcmVhZCku
-IFRodXMsIGltcGxlbWVudGluZyB3YmZsdXNoKCkKJmd0OyAmZ3Q7ICAgICBpcyBhcyBzaW1wbGUg
-YXMgaW1wbGVtZW50aW5nIGFuIHVuY2FjaGVkIGxvYWQuCiZndDsgJmd0OwomZ3Q7ICZndDsgICAg
-IGZvciBsb29uZ3NvbidzIGNwdSwgX193YmZsdXNoIHNob3VsZCBhbHNvIGJlIGltcGxlbWVudGVk
-IHdpdGgKJmd0OyAmZ3Q7ICAgICBfX2Zhc3RfaW9iIG5vdCBzeW5jLgomZ3Q7ICZndDsKJmd0OyAm
-Z3Q7CiZndDsgJmd0OyBTaWduZWQtb2ZmLWJ5OiBzdWlqaW5nZmVuZyA8c3VpamluZ2ZlbmdAbG9v
-bmdzb24uY24+CiZndDsgJmd0OyAtLS0KJmd0OyAmZ3Q7ICBhcmNoL21pcHMvbG9vbmdzb242NC9N
-YWtlZmlsZSAgfCAgMSArCiZndDsgJmd0OyAgYXJjaC9taXBzL2xvb25nc29uNjQvc2V0dXAuYyAg
-IHwgMTcgLS0tLS0tLS0tLS0tLS0tLS0KJmd0OyAmZ3Q7ICBhcmNoL21pcHMvbG9vbmdzb242NC9z
-bXAuYyAgICAgfCAgNiArKystLS0KJmd0OyAmZ3Q7ICBhcmNoL21pcHMvbG9vbmdzb242NC93YmZs
-dXNoLmMgfCAyOCArKysrKysrKysrKysrKysrKysrKysrKysrKysrCiZndDsgJmd0OyAgNCBmaWxl
-cyBjaGFuZ2VkLCAzMiBpbnNlcnRpb25zKCspLCAyMCBkZWxldGlvbnMoLSkKJmd0OyAmZ3Q7ICBj
-cmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9taXBzL2xvb25nc29uNjQvd2JmbHVzaC5jCiZndDsgJmd0
-OwomZ3Q7ICZndDsgZGlmZiAtLWdpdCBhL2FyY2gvbWlwcy9sb29uZ3NvbjY0L01ha2VmaWxlIGIv
-YXJjaC9taXBzL2xvb25nc29uNjQvTWFrZWZpbGUKJmd0OyAmZ3Q7IGluZGV4IGU4MDYyODBiYmI4
-NS4uYWQwMGQ5MmMyODcxIDEwMDY0NAomZ3Q7ICZndDsgLS0tIGEvYXJjaC9taXBzL2xvb25nc29u
-NjQvTWFrZWZpbGUKJmd0OyAmZ3Q7ICsrKyBiL2FyY2gvbWlwcy9sb29uZ3NvbjY0L01ha2VmaWxl
-CiZndDsgJmd0OyBAQCAtMTIsMyArMTIsNCBAQCBvYmotJChDT05GSUdfU1VTUEVORCkgKz0gcG0u
-bwomZ3Q7ICZndDsgIG9iai0kKENPTkZJR19QQ0lfUVVJUktTKSArPSB2Ymlvc19xdWlyay5vCiZn
-dDsgJmd0OyAgb2JqLSQoQ09ORklHX0NQVV9MT09OR1NPTjNfQ1BVQ0ZHX0VNVUxBVElPTikgKz0g
-Y3B1Y2ZnLWVtdWwubwomZ3Q7ICZndDsgIG9iai0kKENPTkZJR19TWVNGUykgKz0gYm9hcmRpbmZv
-Lm8KJmd0OyAmZ3Q7ICtvYmotJChDT05GSUdfQ1BVX0hBU19XQikgKz0gd2JmbHVzaC5vCiZndDsg
-Jmd0OyBkaWZmIC0tZ2l0IGEvYXJjaC9taXBzL2xvb25nc29uNjQvc2V0dXAuYyBiL2FyY2gvbWlw
-cy9sb29uZ3NvbjY0L3NldHVwLmMKJmd0OyAmZ3Q7IGluZGV4IDZmZTNmZmZmY2FhNi4uY2IxMGQx
-NGRhNDMzIDEwMDY0NAomZ3Q7ICZndDsgLS0tIGEvYXJjaC9taXBzL2xvb25nc29uNjQvc2V0dXAu
-YwomZ3Q7ICZndDsgKysrIGIvYXJjaC9taXBzL2xvb25nc29uNjQvc2V0dXAuYwomZ3Q7ICZndDsg
-QEAgLTMsMTAgKzMsNyBAQAomZ3Q7ICZndDsgICAqIENvcHlyaWdodCAoQykgMjAwNyBMZW1vdGUg
-SW5jLiAmYW1wOyBJbnN0aXR1dGUgb2YgQ29tcHV0aW5nIFRlY2hub2xvZ3kKJmd0OyAmZ3Q7ICAg
-KiBBdXRob3I6IEZ1eGluIFpoYW5nLCB6aGFuZ2Z4QGxlbW90ZS5jb20KJmd0OyAmZ3Q7ICAgKi8K
-Jmd0OyAmZ3Q7IC0jaW5jbHVkZSA8bGludXggZXhwb3J0Lmg9IiI+CiZndDsgJmd0OyAgI2luY2x1
-ZGUgPGxpbnV4IGluaXQuaD0iIj4KJmd0OyAmZ3Q7IC0KJmd0OyAmZ3Q7IC0jaW5jbHVkZSA8YXNt
-IHdiZmx1c2guaD0iIj4KJmd0OyAmZ3Q7ICAjaW5jbHVkZSA8YXNtIGJvb3RpbmZvLmg9IiI+CiZn
-dDsgJmd0OyAgI2luY2x1ZGUgPGxpbnV4IGxpYmZkdC5oPSIiPgomZ3Q7ICZndDsgICNpbmNsdWRl
-IDxsaW51eCBvZl9mZHQuaD0iIj4KJmd0OyAmZ3Q7IEBAIC0xNywyMCArMTQsNiBAQAomZ3Q7ICZn
-dDsgCiZndDsgJmd0OyAgdm9pZCAqbG9vbmdzb25fZmR0X2Jsb2I7CiZndDsgJmd0OyAKJmd0OyAm
-Z3Q7IC1zdGF0aWMgdm9pZCB3YmZsdXNoX2xvb25nc29uKHZvaWQpCiZndDsgJmd0OyAtewomZ3Q7
-ICZndDsgLQlhc20oIi5zZXRcdHB1c2hcblx0IgomZ3Q7ICZndDsgLQkgICAgIi5zZXRcdG5vcmVv
-cmRlclxuXHQiCiZndDsgJmd0OyAtCSAgICAiLnNldCBtaXBzM1xuXHQiCiZndDsgJmd0OyAtCSAg
-ICAic3luY1xuXHQiCiZndDsgJmd0OyAtCSAgICAibm9wXG5cdCIKJmd0OyAmZ3Q7IC0JICAgICIu
-c2V0XHRwb3Bcblx0IgomZ3Q7ICZndDsgLQkgICAgIi5zZXQgbWlwczBcblx0Iik7CiZndDsgJmd0
-OyAtfQomZ3Q7ICZndDsgLQomZ3Q7ICZndDsgLXZvaWQgKCpfX3diZmx1c2gpKHZvaWQpID0gd2Jm
-bHVzaF9sb29uZ3NvbjsKJmd0OyAmZ3Q7IC1FWFBPUlRfU1lNQk9MKF9fd2JmbHVzaCk7CiZndDsg
-Jmd0OyAtCiZndDsgJmd0OyAgdm9pZCBfX2luaXQgcGxhdF9tZW1fc2V0dXAodm9pZCkKJmd0OyAm
-Z3Q7ICB7CiZndDsgJmd0OyAgCWlmIChsb29uZ3Nvbl9mZHRfYmxvYikKJmd0OyAmZ3Q7IGRpZmYg
-LS1naXQgYS9hcmNoL21pcHMvbG9vbmdzb242NC9zbXAuYyBiL2FyY2gvbWlwcy9sb29uZ3NvbjY0
-L3NtcC5jCiZndDsgJmd0OyBpbmRleCA2NjBlMWRlNDQxMmEuLjBkOWYyNDljOTVmOSAxMDA2NDQK
-Jmd0OyAmZ3Q7IC0tLSBhL2FyY2gvbWlwcy9sb29uZ3NvbjY0L3NtcC5jCiZndDsgJmd0OyArKysg
-Yi9hcmNoL21pcHMvbG9vbmdzb242NC9zbXAuYwomZ3Q7ICZndDsgQEAgLTQyLDEzICs0MiwxMyBA
-QCBzdGF0aWMgdWludDMyX3QgY29yZTBfYzBjb3VudFtOUl9DUFVTXTsKJmd0OyAmZ3Q7ICAjZGVm
-aW5lIGxvb25nc29uM19pcGlfd3JpdGUzMihhY3Rpb24sIGFkZHIpCVwKJmd0OyAmZ3Q7ICAJZG8g
-ewkJCQkJXAomZ3Q7ICZndDsgIAkJd3JpdGVsKGFjdGlvbiwgYWRkcik7CQlcCiZndDsgJmd0OyAt
-CQlfX3diZmx1c2goKTsJCQlcCiZndDsgJmd0OyArCQl3YmZsdXNoKCk7CQkJXAomZ3Q7ICZndDsg
-IAl9IHdoaWxlICgwKQomZ3Q7ICZndDsgIC8qIHdyaXRlIGEgNjRiaXQgdmFsdWUgdG8gaXBpIHJl
-Z2lzdGVyICovCiZndDsgJmd0OyAgI2RlZmluZSBsb29uZ3NvbjNfaXBpX3dyaXRlNjQoYWN0aW9u
-LCBhZGRyKQlcCiZndDsgJmd0OyAgCWRvIHsJCQkJCVwKJmd0OyAmZ3Q7ICAJCXdyaXRlcShhY3Rp
-b24sIGFkZHIpOwkJXAomZ3Q7ICZndDsgLQkJX193YmZsdXNoKCk7CQkJXAomZ3Q7ICZndDsgKwkJ
-d2JmbHVzaCgpOwkJCVwKJmd0OyAmZ3Q7ICAJfSB3aGlsZSAoMCkKJmd0OyAmZ3Q7IAomZ3Q7ICZn
-dDsgIHN0YXRpYyB1MzIgKCppcGlfcmVhZF9jbGVhcikoaW50IGNwdSk7CiZndDsgJmd0OyBAQCAt
-NDE4LDcgKzQxOCw3IEBAIHN0YXRpYyBpcnFyZXR1cm5fdCBsb29uZ3NvbjNfaXBpX2ludGVycnVw
-dChpbnQgaXJxLCAKJmd0OyAmZ3Q7IHZvaWQgKmRldl9pZCkKJmd0OyAmZ3Q7ICAJCWMwY291bnQg
-PSBjMGNvdW50ID8gYzBjb3VudCA6IDE7CiZndDsgJmd0OyAgCQlmb3IgKGkgPSAxOyBpICZsdDsg
-bnJfY3B1X2lkczsgaSsrKQomZ3Q7ICZndDsgIAkJCWNvcmUwX2MwY291bnRbaV0gPSBjMGNvdW50
-OwomZ3Q7ICZndDsgLQkJX193YmZsdXNoKCk7IC8qIExldCBvdGhlcnMgc2VlIHRoZSByZXN1bHQg
-QVNBUCAqLwomZ3Q7ICZndDsgKwkJd2JmbHVzaCgpOyAvKiBMZXQgb3RoZXJzIHNlZSB0aGUgcmVz
-dWx0IEFTQVAgKi8KJmd0OyAmZ3Q7ICAJfQomZ3Q7ICZndDsgCiZndDsgJmd0OyAgCXJldHVybiBJ
-UlFfSEFORExFRDsKJmd0OyAmZ3Q7IGRpZmYgLS1naXQgYS9hcmNoL21pcHMvbG9vbmdzb242NC93
-YmZsdXNoLmMgYi9hcmNoL21pcHMvbG9vbmdzb242NC93YmZsdXNoLmMKJmd0OyAmZ3Q7IG5ldyBm
-aWxlIG1vZGUgMTAwNjQ0CiZndDsgJmd0OyBpbmRleCAwMDAwMDAwMDAwMDAuLjQ5ZjBlNGM1MzE5
-NgomZ3Q7ICZndDsgLS0tIC9kZXYvbnVsbAomZ3Q7ICZndDsgKysrIGIvYXJjaC9taXBzL2xvb25n
-c29uNjQvd2JmbHVzaC5jCiZndDsgJmd0OyBAQCAtMCwwICsxLDI4IEBACiZndDsgJmd0OyArLy8g
-U1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb3ItbGF0ZXIKJmd0OyAmZ3Q7ICsvKgom
-Z3Q7ICZndDsgKyAqIFRoaXMgZmlsZSBpcyBzdWJqZWN0IHRvIHRoZSB0ZXJtcyBhbmQgY29uZGl0
-aW9ucyBvZiB0aGUgR05VIEdlbmVyYWwgUHVibGljCiZndDsgJmd0OyArICogTGljZW5zZS4gIFNl
-ZSB0aGUgZmlsZSAiQ09QWUlORyIgaW4gdGhlIG1haW4gZGlyZWN0b3J5IG9mIHRoaXMgYXJjaGl2
-ZQomZ3Q7ICZndDsgKyAqIGZvciBtb3JlIGRldGFpbHMuCiZndDsgJmd0OyArICoKJmd0OyAmZ3Q7
-ICsgKiBDb3B5cmlnaHQgKEMpIDIwMjEgc3VpamluZ2ZlbmdAbG9vbmdzb24uY24KJmd0OyAmZ3Q7
-ICsgKi8KJmd0OyAmZ3Q7ICsjaW5jbHVkZSA8bGludXggZXhwb3J0Lmg9IiI+CiZndDsgJmd0OyAr
-I2luY2x1ZGUgPGxpbnV4IGluaXQuaD0iIj4KJmd0OyAmZ3Q7ICsjaW5jbHVkZSA8YXNtIHdiZmx1
-c2guaD0iIj4KJmd0OyAmZ3Q7ICsjaW5jbHVkZSA8YXNtIGJhcnJpZXIuaD0iIj4KJmd0OyAmZ3Q7
-ICsKJmd0OyAmZ3Q7ICsjaWZkZWYgQ09ORklHX0NQVV9IQVNfV0IKJmd0OyAmZ3Q7ICsKJmd0OyAm
-Z3Q7ICsvKgomZ3Q7ICZndDsgKyAqIEkvTyBBU0lDIHN5c3RlbXMgdXNlIGEgc3RhbmRhcmQgd3Jp
-dGViYWNrIGJ1ZmZlciB0aGF0IGdldHMgZmx1c2hlZAomZ3Q7ICZndDsgKyAqIHVwb24gYW4gdW5j
-YWNoZWQgcmVhZC4KJmd0OyAmZ3Q7ICsgKi8KJmd0OyAmZ3Q7ICtzdGF0aWMgdm9pZCB3YmZsdXNo
-X21pcHModm9pZCkKJmd0OyAmZ3Q7ICt7CiZndDsgJmd0OyArCV9fZmFzdF9pb2IoKTsKJmd0OyAm
-Z3Q7ICt9CiZndDsgJmd0OyArCiZndDsgJmd0OyArdm9pZCAoKl9fd2JmbHVzaCkodm9pZCkgPSB3
-YmZsdXNoX21pcHM7CiZndDsgJmd0OyArRVhQT1JUX1NZTUJPTChfX3diZmx1c2gpOwomZ3Q7ICZn
-dDsgKwomZ3Q7ICZndDsgKyNlbmRpZgomZ3Q7ICZndDsgLS0gCiZndDsgJmd0OyAyLjI1LjEKJmd0
-OyAKJmd0OyAtLSAKJmd0OyAtIEppYXh1bgo8L2FzbT48L2FzbT48L2xpbnV4PjwvbGludXg+PC9s
-aW51eD48L2xpbnV4PjwvYXNtPjwvYXNtPjwvbGludXg+PC9saW51eD48L3N1aWppbmdmZW5nQGxv
-b25nc29uLmNuPjwvbGludXgtbWlwc0B2Z2VyLmtlcm5lbC5vcmc+PC90c2JvZ2VuZEBhbHBoYS5m
-cmFua2VuLmRlPjwvY2hlbmh1YWNhaUBrZXJuZWwub3JnPjwvc3VpamluZ2ZlbmdAbG9vbmdzb24u
-Y24+PC9qaWF4dW4ueWFuZ0BmbHlnb2F0LmNvbT4NCg0K5pys6YKu5Lu25Y+K5YW26ZmE5Lu25ZCr
-5pyJ6b6Z6Iqv5Lit56eR55qE5ZWG5Lia56eY5a+G5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R6YCB57uZ
-5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq5Lq65oiW576k57uE44CC56aB5q2i5Lu75L2V5YW2
-5LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So77yI5YyF5ous5L2G5LiN6ZmQ5LqO5YWo6YOo5oiW
-6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi25oiW5pWj5Y+R77yJ5pys6YKu5Lu25Y+K5YW26ZmE5Lu2
-5Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ5pS25pys6YKu5Lu277yM6K+35oKo56uL5Y2z55S1
-6K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq65bm25Yig6Zmk5pys6YKu5Lu244CCIA0KVGhpcyBl
-bWFpbCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9u
-IGZyb20gTG9vbmdzb24gVGVjaG5vbG9neSAsIHdoaWNoIGlzIGludGVuZGVkIG9ubHkgZm9yIHRo
-ZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFkZHJlc3MgaXMgbGlzdGVkIGFib3ZlLiBBbnkgdXNl
-IG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaGVyZWluIGluIGFueSB3YXkgKGluY2x1ZGlu
-ZywgYnV0IG5vdCBsaW1pdGVkIHRvLCB0b3RhbCBvciBwYXJ0aWFsIGRpc2Nsb3N1cmUsIHJlcHJv
-ZHVjdGlvbiBvciBkaXNzZW1pbmF0aW9uKSBieSBwZXJzb25zIG90aGVyIHRoYW4gdGhlIGludGVu
-ZGVkIHJlY2lwaWVudChzKSBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGVtYWls
-IGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcGhvbmUgb3IgZW1haWwgaW1t
-ZWRpYXRlbHkgYW5kIGRlbGV0ZSBpdC4g
+Actually I tried the same thing years a ago and it breaks some driver on=
+ 3A2000....
+
+Write Buffer is not limited to UCA buffer but also some write gathering =
+buffer like store fill buffer. On Loongson they're write back is tied to=
+ memory barrier.
+
+
+Thanks.
+
+- Jiaxun
+
+=E5=9C=A82021=E5=B9=B412=E6=9C=885=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =E4=
+=B8=8A=E5=8D=884:29=EF=BC=8C=E9=9A=8B=E6=99=AF=E5=B3=B0=E5=86=99=E9=81=93=
+=EF=BC=9A
+> Hi Jiaxun,=20
+>
+> I'm not toward to  loongson cpu's barriers, but the semantic of wbflus=
+h().=20
+>
+> And it is not necessary the safest way:=20
+>
+>
+>
+> before applying this patch,  wbflush() will be expanded to double __sy=
+nc(),=20
+>
+> if __sync() can empty the uncached store buffer,  single one is enough=
+.=20
+>
+> After apply this patch, wbflush() will be expanded to a __sync()=20
+> followed by a  __fast_iob();=20
+>
+> this is more safe than your's version which blindly copy code from=20
+> loongson2ef/common/setup.c.=20
+>
+> Note, Uncached Accelerated cache mode is only implemented after ls3a20=
+00.=20
+>
+>
+>
+> Again, *wbflush is mean to empty data gathered in the uncache store=20
+> buffers within the CPU*.=20
+>
+> __wbflush() is only mean to be used internally, wbflush() should be=20
+> used outside of wbflush.h.=20
+>
+> by separate __wbflush out of setup.c, the code is more modularity. it=20
+> allow you  to deselect=20
+>
+> CPU_HAS_WB easily and see what will happen.=20
+>
+>
+>
+> Actually nothing strange is happen, because  uncached accelerated cach=
+e=20
+> mode does not=20
+>
+> get used in upstream kernel.=20
+>
+>
+>
+> See Mips Run Say:=20
+>
+> Most write queues can be emptied out by performing an uncached store t=
+o=20
+>
+> any location and then performing an operation that reads the same data=
+ back.=20
+>
+> Put a sync instruction between the write and the read, and that should=20
+> be effective=20
+>
+> on any system compliant with MIPS32/64.=20
+>
+> A write queue certainly can't permit the read to overtake the write, i=
+t=20
+> would return stale data.=20
+>
+> This is effective, but not necessarily ef=EF=AC=81cient; you can minim=
+ize the overhead=20
+>
+> by loading from the fastest memory available. Perhaps your system offe=
+rs=20
+>
+> something system speci=EF=AC=81c but faster.=20
+>
+>
+>
+> On 2021/12/4 =E4=B8=8B=E5=8D=888:32, Jiaxun Yang wrote:
+>> Hi Jingfeng,
+>> I'd suggest you not to mess with barriers on Loongson.
+>> It's a hell.
+>>=20
+>> Also Loongson had changed semantics of sync/synci many times.
+>> They got redefined and swapped. So the present way is just the safest=
+ way.
+>>=20
+>> Thanks.
+>>=20
+>> - Jiaxun
+>>=20
+>> =E5=9C=A82021=E5=B9=B412=E6=9C=884=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88=
+ =E4=B8=8B=E5=8D=8812:00=EF=BC=8Csuijingfeng=E5=86=99=E9=81=93=EF=BC=9A
+>>> 1) loongson's cpu(ls3a3000, ls3a4000, ls3a5000) have uncache store b=
+uffers
+>>>     which is for uncache accleration.
+>>>=20
+>>>     Uncached Accelerated is the name under which the R10000 introduc=
+ed
+>>>     a cache mode that uses the CPU's write buffer to combine writes
+>>>     but that otherwise is uncached.
+>>>=20
+>>>     wbflush is mean to empty data gathered in the uncache store buff=
+ers
+>>>     within the CPU.
+>>>=20
+>>>  2) The SYNC instruction in R10000
+>>>=20
+>>>     A SYNC instruction is not prevented from graduating if the uncac=
+hed
+>>>     buffer contains any uncached accelerated stores[1].
+>>>=20
+>>>  3) wbflush() implementation of IDT CPU.
+>>>=20
+>>>     IDT CPUs enforce strict write priority (all pending writes retir=
+ed
+>>>     to memory before main memory is read). Thus, implementing wbflus=
+h()
+>>>     is as simple as implementing an uncached load.
+>>>=20
+>>>     for loongson's cpu, __wbflush should also be implemented with
+>>>     __fast_iob not sync.
+>>>=20
+>>> [1] https://www.ele.uva.es/~jesman/BigSeti/ftp/Microprocesadores/MIP=
+S/t5.ver.2.0.book.pdf Signed-off-by: suijingfeng <suijingfeng@loongson.c=
+n> ---
+>>>  arch/mips/loongson64/Makefile  |  1 +
+>>>  arch/mips/loongson64/setup.c   | 17 -----------------
+>>>  arch/mips/loongson64/smp.c     |  6 +++---
+>>>  arch/mips/loongson64/wbflush.c | 28 ++++++++++++++++++++++++++++
+>>>  4 files changed, 32 insertions(+), 20 deletions(-)
+>>>  create mode 100644 arch/mips/loongson64/wbflush.c
+>>>=20
+>>> diff --git a/arch/mips/loongson64/Makefile b/arch/mips/loongson64/Ma=
+kefile
+>>> index e806280bbb85..ad00d92c2871 100644
+>>> --- a/arch/mips/loongson64/Makefile
+>>> +++ b/arch/mips/loongson64/Makefile
+>>> @@ -12,3 +12,4 @@ obj-$(CONFIG_SUSPEND) +=3D pm.o
+>>>  obj-$(CONFIG_PCI_QUIRKS) +=3D vbios_quirk.o
+>>>  obj-$(CONFIG_CPU_LOONGSON3_CPUCFG_EMULATION) +=3D cpucfg-emul.o
+>>>  obj-$(CONFIG_SYSFS) +=3D boardinfo.o
+>>> +obj-$(CONFIG_CPU_HAS_WB) +=3D wbflush.o
+>>> diff --git a/arch/mips/loongson64/setup.c b/arch/mips/loongson64/set=
+up.c
+>>> index 6fe3ffffcaa6..cb10d14da433 100644
+>>> --- a/arch/mips/loongson64/setup.c
+>>> +++ b/arch/mips/loongson64/setup.c
+>>> @@ -3,10 +3,7 @@
+>>>   * Copyright (C) 2007 Lemote Inc. & Institute of Computing Technolo=
+gy
+>>>   * Author: Fuxin Zhang, zhangfx@lemote.com */
+>>> -#include <linux/export.h>
+>>>  #include <linux/init.h>
+>>> -
+>>> -#include <asm/wbflush.h>
+>>>  #include <asm/bootinfo.h>
+>>>  #include <linux/libfdt.h>
+>>>  #include <linux/of_fdt.h>
+>>> @@ -17,20 +14,6 @@
+>>>=20
+>>>  void *loongson_fdt_blob;
+>>>=20
+>>> -static void wbflush_loongson(void)
+>>> -{
+>>> -	asm(".set\tpush\n\t"
+>>> -	    ".set\tnoreorder\n\t"
+>>> -	    ".set mips3\n\t"
+>>> -	    "sync\n\t"
+>>> -	    "nop\n\t"
+>>> -	    ".set\tpop\n\t"
+>>> -	    ".set mips0\n\t");
+>>> -}
+>>> -
+>>> -void (*__wbflush)(void) =3D wbflush_loongson;
+>>> -EXPORT_SYMBOL(__wbflush);
+>>> -
+>>>  void __init plat_mem_setup(void)
+>>>  {
+>>>  	if (loongson_fdt_blob)
+>>> diff --git a/arch/mips/loongson64/smp.c b/arch/mips/loongson64/smp.c
+>>> index 660e1de4412a..0d9f249c95f9 100644
+>>> --- a/arch/mips/loongson64/smp.c
+>>> +++ b/arch/mips/loongson64/smp.c
+>>> @@ -42,13 +42,13 @@ static uint32_t core0_c0count[NR_CPUS];
+>>>  #define loongson3_ipi_write32(action, addr)	\
+>>>  	do {					\
+>>>  		writel(action, addr);		\
+>>> -		__wbflush();			\
+>>> +		wbflush();			\
+>>>  	} while (0)
+>>>  /* write a 64bit value to ipi register */
+>>>  #define loongson3_ipi_write64(action, addr)	\
+>>>  	do {					\
+>>>  		writeq(action, addr);		\
+>>> -		__wbflush();			\
+>>> +		wbflush();			\
+>>>  	} while (0)
+>>>=20
+>>>  static u32 (*ipi_read_clear)(int cpu);
+>>> @@ -418,7 +418,7 @@ static irqreturn_t loongson3_ipi_interrupt(int i=
+rq,=20
+>>> void *dev_id)
+>>>  		c0count =3D c0count ? c0count : 1;
+>>>  		for (i =3D 1; i < nr_cpu_ids; i++)
+>>>  			core0_c0count[i] =3D c0count;
+>>> -		__wbflush(); /* Let others see the result ASAP */
+>>> +		wbflush(); /* Let others see the result ASAP */
+>>>  	}
+>>>=20
+>>>  	return IRQ_HANDLED;
+>>> diff --git a/arch/mips/loongson64/wbflush.c b/arch/mips/loongson64/w=
+bflush.c
+>>> new file mode 100644
+>>> index 000000000000..49f0e4c53196
+>>> --- /dev/null
+>>> +++ b/arch/mips/loongson64/wbflush.c
+>>> @@ -0,0 +1,28 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>>> +/*
+>>> + * This file is subject to the terms and conditions of the GNU Gene=
+ral Public
+>>> + * License.  See the file "COPYING" in the main directory of this a=
+rchive
+>>> + * for more details.
+>>> + *
+>>> + * Copyright (C) 2021 suijingfeng@loongson.cn + */
+>>> +#include <linux/export.h>
+>>> +#include <linux/init.h>
+>>> +#include <asm/wbflush.h>
+>>> +#include <asm/barrier.h>
+>>> +
+>>> +#ifdef CONFIG_CPU_HAS_WB
+>>> +
+>>> +/*
+>>> + * I/O ASIC systems use a standard writeback buffer that gets flush=
+ed
+>>> + * upon an uncached read.
+>>> + */
+>>> +static void wbflush_mips(void)
+>>> +{
+>>> +	__fast_iob();
+>>> +}
+>>> +
+>>> +void (*__wbflush)(void) =3D wbflush_mips;
+>>> +EXPORT_SYMBOL(__wbflush);
+>>> +
+>>> +#endif
+>>> --=20
+>>> 2.25.1
+>
+>
+> *=E6=9C=AC=E9=82=AE=E4=BB=B6=E5=8F=8A=E5=85=B6=E9=99=84=E4=BB=B6=E5=90=
+=AB=E6=9C=89=E9=BE=99=E8=8A=AF=E4=B8=AD=E7=A7=91=E7=9A=84=E5=95=86=E4=B8=
+=9A=E7=A7=98=E5=AF=86=E4=BF=A1=E6=81=AF=EF=BC=8C=E4=BB=85=E9=99=90=E4=BA=
+=8E=E5=8F=91=E9=80=81=E7=BB=99=E4=B8=8A=E9=9D=A2=E5=9C=B0=E5=9D=80=E4=B8=
+=AD=E5=88=97=E5=87=BA=E7=9A=84=E4=B8=AA=E4=BA=BA=E6=88=96=E7=BE=A4=E7=BB=
+=84=E3=80=82=E7=A6=81=E6=AD=A2=E4=BB=BB=E4=BD=95=E5=85=B6=E4=BB=96=E4=BA=
+=BA=E4=BB=A5=E4=BB=BB=E4=BD=95=E5=BD=A2=E5=BC=8F=E4=BD=BF=E7=94=A8=EF=BC=
+=88=E5=8C=85=E6=8B=AC=E4=BD=86=E4=B8=8D=E9=99=90=E4=BA=8E=E5=85=A8=E9=83=
+=A8=E6=88=96=E9=83=A8=E5=88=86=E5=9C=B0=E6=B3=84=E9=9C=B2=E3=80=81=E5=A4=
+=8D=E5=88=B6=E6=88=96=E6=95=A3=E5=8F=91=EF=BC=89=E6=9C=AC=E9=82=AE=E4=BB=
+=B6=E5=8F=8A=E5=85=B6=E9=99=84=E4=BB=B6=E4=B8=AD=E7=9A=84=E4=BF=A1=E6=81=
+=AF=E3=80=82=E5=A6=82=E6=9E=9C=E6=82=A8=E9=94=99=E6=94=B6=E6=9C=AC=E9=82=
+=AE=E4=BB=B6=EF=BC=8C=E8=AF=B7=E6=82=A8=E7=AB=8B=E5=8D=B3=E7=94=B5=E8=AF=
+=9D=E6=88=96=E9=82=AE=E4=BB=B6=E9=80=9A=E7=9F=A5=E5=8F=91=E4=BB=B6=E4=BA=
+=BA=E5=B9=B6=E5=88=A0=E9=99=A4=E6=9C=AC=E9=82=AE=E4=BB=B6=E3=80=82=20
+> This email and its attachments contain confidential information from=20
+> Loongson Technology , which is intended only for the person or entity=20
+> whose address is listed above. Any use of the information contained=20
+> herein in any way (including, but not limited to, total or partial=20
+> disclosure, reproduction or dissemination) by persons other than the=20
+> intended recipient(s) is prohibited. If you receive this email in=20
+> error, please notify the sender by phone or email immediately and=20
+> delete it. *
+
+--=20
+- Jiaxun
