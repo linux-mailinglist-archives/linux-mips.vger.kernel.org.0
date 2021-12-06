@@ -2,187 +2,130 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0B346A36E
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Dec 2021 18:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5010D46A53B
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Dec 2021 19:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245751AbhLFRrZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Dec 2021 12:47:25 -0500
-Received: from aposti.net ([89.234.176.197]:59760 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239205AbhLFRrZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 6 Dec 2021 12:47:25 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     list@opendingux.net, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 6/6] dmaengine: jz4780: Support bidirectional I/O on one channel
-Date:   Mon,  6 Dec 2021 17:42:59 +0000
-Message-Id: <20211206174259.68133-7-paul@crapouillou.net>
-In-Reply-To: <20211206174259.68133-1-paul@crapouillou.net>
-References: <20211206174259.68133-1-paul@crapouillou.net>
+        id S1347949AbhLFS7Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Dec 2021 13:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348048AbhLFS7X (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Dec 2021 13:59:23 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761E7C0613F8
+        for <linux-mips@vger.kernel.org>; Mon,  6 Dec 2021 10:55:54 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id i5so24512746wrb.2
+        for <linux-mips@vger.kernel.org>; Mon, 06 Dec 2021 10:55:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=c7JO9Dj0O0LDeoTihsch4OXOMF3QUV6Izzupq0mmt1s=;
+        b=MHA4Ri/WcwFC5ZfudOp6IS43arM5CcM/eMRLq+JM6JXx0OUffB+/sBx98C9JiklXik
+         KCxPXZ/nefyMknUA7FnO24lyHqeZP+DbJ/j/GgKyLsNM+n34txEAGoiXQbBBmKr98nqP
+         CworzmJjAFUOcGVmPCVp1WlDZQLrkoLp5F25ErI2RRzKj1GDvyFw4jPUEaV/KjeipYfx
+         W42qjQ8VcE6brsfbvQuJbGogaJ+Dvb8IypClInB5ZQGIbMh7p9Sn8qu+5UCnwqWm11sN
+         nimNjhXWIZq4OYW+Ataj/SXi2X+aYe/0+zsK9qShsrDaQhblqTbaDTLJzXXrWaaSaEkm
+         uCTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=c7JO9Dj0O0LDeoTihsch4OXOMF3QUV6Izzupq0mmt1s=;
+        b=YFkDc8i5/beftQgnOjbXJnsjk47N7Fi2FHUV44th8xspzJJtT6g7WhlxWvFxaWyXyc
+         cq1SGTPgHHO/VNL8Lx5K56cPF34dQevK99Y4OaAXMZ7HKbut0BA5DVyl4Ycf+71NKjiI
+         +4W3slF7U2/mWvLtvlHNgqmpp7e6ytX0NdJEXH97vXQQ38LkfwldcqasOxkLwnvB7LKt
+         d3tkF8QcI3i28CejCHtUCThavilbYlKofSY+12AORQl2BU+NjNzgYZgjoeYbdPmmabNh
+         g84xreOwDDZcUvKplOtfClPiQpqaoQkpIbICbeoPWRxpp6Qj/1rvxq7J+hJ+CYXip+Uo
+         jIVg==
+X-Gm-Message-State: AOAM532dA/40WSAQpzSBbAg/OJChbh4a1JKikMppA/sGMK+b7wEPDwIo
+        JmZPAhEYBWmnLHWMQmF1j2A28w==
+X-Google-Smtp-Source: ABdhPJwdSc7QWeoPK3ekFd+pcsQektg4yOANVuN/d4htXpRTnQDxSO0CP2vPMSHCtlM/1PqkluTacQ==
+X-Received: by 2002:a5d:6e82:: with SMTP id k2mr45168678wrz.147.1638816952866;
+        Mon, 06 Dec 2021 10:55:52 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id t8sm12305359wrv.30.2021.12.06.10.55.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 10:55:52 -0800 (PST)
+Date:   Mon, 6 Dec 2021 18:55:50 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH V4 RESEND 1/2] dt-bindings: watchdog: convert Broadcom's
+ WDT to the json-schema
+Message-ID: <Ya5ctkIU+jNzDfBc@google.com>
+References: <20211115055354.6089-1-zajec5@gmail.com>
+ <78eba629-b0cf-e1db-df73-2b33fb0b4929@gmail.com>
+ <Ya3NaVKf1NRc8rrx@google.com>
+ <89b9512d-2e5e-c23a-d1f2-62172c8f68f7@gmail.com>
+ <Ya3SU6U6YT6mlFu8@google.com>
+ <f5745952-9e3c-ed7a-cced-ce42d3da2276@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <f5745952-9e3c-ed7a-cced-ce42d3da2276@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-For some devices with only half-duplex capabilities, it doesn't make
-much sense to use one DMA channel per direction, as both channels will
-never be active at the same time.
+On Mon, 06 Dec 2021, Florian Fainelli wrote:
 
-Add support for bidirectional I/O on DMA channels. The client drivers
-can then request a "tx-rx" DMA channel which will be used for both
-directions.
+> On 12/6/21 1:05 AM, Lee Jones wrote:
+> > On Mon, 06 Dec 2021, Rafał Miłecki wrote:
+> > 
+> >> On 06.12.2021 09:44, Lee Jones wrote:
+> >>> On Mon, 06 Dec 2021, Rafał Miłecki wrote:
+> >>>> On 15.11.2021 06:53, Rafał Miłecki wrote:
+> >>>>> From: Rafał Miłecki <rafal@milecki.pl>
+> >>>>>
+> >>>>> This helps validating DTS files.
+> >>>>>
+> >>>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> >>>>> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> >>>>> Reviewed-by: Rob Herring <robh@kernel.org>
+> >>>>
+> >>>> I'm not familiar with handling multi-subsystem patchsets (here: watchdog
+> >>>> & MFD).
+> >>>>
+> >>>> Please kindly let me know: how to proceed with this patchset now to get
+> >>>> it queued for Linus?
+> >>>
+> >>> What is the requirement for these to be merged together?
+> >>
+> >> If you merge 2/2 without 1/2 then people running "make dt_binding_check"
+> >> may see 1 extra warning until both patches meet in Linus's tree.
+> >>
+> >> So it all comes to how much you care about amount of warnings produced
+> >> by "dt_binding_check".
+> > 
+> > In -next, I don't, but I know Rob gets excited about it.
+> > 
+> > Rob, what is your final word on this?  Is it a forced requirement for
+> > all interconnected document changes to go in together?
+> 
+> The first patch is queued up in Guenter's watchdog tree here:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/commit/?h=watchdog-next&id=a5b2ebc8f6e67b5c81023e8bde6b19ff48ffdb02
+> 
+> and will be submitted to Wim shortly I believe, so I suppose we should
+> take patch #2 via Guenter and Wim's tree as well logically.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/dma/dma-jz4780.c | 48 ++++++++++++++++++++++++++--------------
- 1 file changed, 32 insertions(+), 16 deletions(-)
+If that happens, I would like a PR to an immutable branch.
 
-diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-index c8c4bbd57d14..fc513eb2b289 100644
---- a/drivers/dma/dma-jz4780.c
-+++ b/drivers/dma/dma-jz4780.c
-@@ -122,6 +122,7 @@ struct jz4780_dma_desc {
- 	dma_addr_t desc_phys;
- 	unsigned int count;
- 	enum dma_transaction_type type;
-+	u32 transfer_type;
- 	u32 status;
- };
- 
-@@ -130,7 +131,7 @@ struct jz4780_dma_chan {
- 	unsigned int id;
- 	struct dma_pool *desc_pool;
- 
--	u32 transfer_type;
-+	u32 transfer_type_tx, transfer_type_rx;
- 	u32 transfer_shift;
- 	struct dma_slave_config	config;
- 
-@@ -157,7 +158,7 @@ struct jz4780_dma_dev {
- };
- 
- struct jz4780_dma_filter_data {
--	u32 transfer_type;
-+	u32 transfer_type_tx, transfer_type_rx;
- 	int channel;
- };
- 
-@@ -226,9 +227,10 @@ static inline void jz4780_dma_chan_disable(struct jz4780_dma_dev *jzdma,
- 		jz4780_dma_ctrl_writel(jzdma, JZ_DMA_REG_DCKEC, BIT(chn));
- }
- 
--static struct jz4780_dma_desc *jz4780_dma_desc_alloc(
--	struct jz4780_dma_chan *jzchan, unsigned int count,
--	enum dma_transaction_type type)
-+static struct jz4780_dma_desc *
-+jz4780_dma_desc_alloc(struct jz4780_dma_chan *jzchan, unsigned int count,
-+		      enum dma_transaction_type type,
-+		      enum dma_transfer_direction direction)
- {
- 	struct jz4780_dma_desc *desc;
- 
-@@ -248,6 +250,12 @@ static struct jz4780_dma_desc *jz4780_dma_desc_alloc(
- 
- 	desc->count = count;
- 	desc->type = type;
-+
-+	if (direction == DMA_DEV_TO_MEM)
-+		desc->transfer_type = jzchan->transfer_type_rx;
-+	else
-+		desc->transfer_type = jzchan->transfer_type_tx;
-+
- 	return desc;
- }
- 
-@@ -361,7 +369,7 @@ static struct dma_async_tx_descriptor *jz4780_dma_prep_slave_sg(
- 	unsigned int i;
- 	int err;
- 
--	desc = jz4780_dma_desc_alloc(jzchan, sg_len, DMA_SLAVE);
-+	desc = jz4780_dma_desc_alloc(jzchan, sg_len, DMA_SLAVE, direction);
- 	if (!desc)
- 		return NULL;
- 
-@@ -410,7 +418,7 @@ static struct dma_async_tx_descriptor *jz4780_dma_prep_dma_cyclic(
- 
- 	periods = buf_len / period_len;
- 
--	desc = jz4780_dma_desc_alloc(jzchan, periods, DMA_CYCLIC);
-+	desc = jz4780_dma_desc_alloc(jzchan, periods, DMA_CYCLIC, direction);
- 	if (!desc)
- 		return NULL;
- 
-@@ -455,14 +463,14 @@ static struct dma_async_tx_descriptor *jz4780_dma_prep_dma_memcpy(
- 	struct jz4780_dma_desc *desc;
- 	u32 tsz;
- 
--	desc = jz4780_dma_desc_alloc(jzchan, 1, DMA_MEMCPY);
-+	desc = jz4780_dma_desc_alloc(jzchan, 1, DMA_MEMCPY, 0);
- 	if (!desc)
- 		return NULL;
- 
- 	tsz = jz4780_dma_transfer_size(jzchan, dest | src | len,
- 				       &jzchan->transfer_shift);
- 
--	jzchan->transfer_type = JZ_DMA_DRT_AUTO;
-+	desc->transfer_type = JZ_DMA_DRT_AUTO;
- 
- 	desc->desc[0].dsa = src;
- 	desc->desc[0].dta = dest;
-@@ -528,7 +536,7 @@ static void jz4780_dma_begin(struct jz4780_dma_chan *jzchan)
- 
- 	/* Set transfer type. */
- 	jz4780_dma_chn_writel(jzdma, jzchan->id, JZ_DMA_REG_DRT,
--			      jzchan->transfer_type);
-+			      jzchan->desc->transfer_type);
- 
- 	/*
- 	 * Set the transfer count. This is redundant for a descriptor-driven
-@@ -788,7 +796,8 @@ static bool jz4780_dma_filter_fn(struct dma_chan *chan, void *param)
- 		return false;
- 	}
- 
--	jzchan->transfer_type = data->transfer_type;
-+	jzchan->transfer_type_tx = data->transfer_type_tx;
-+	jzchan->transfer_type_rx = data->transfer_type_rx;
- 
- 	return true;
- }
-@@ -800,11 +809,17 @@ static struct dma_chan *jz4780_of_dma_xlate(struct of_phandle_args *dma_spec,
- 	dma_cap_mask_t mask = jzdma->dma_device.cap_mask;
- 	struct jz4780_dma_filter_data data;
- 
--	if (dma_spec->args_count != 2)
-+	if (dma_spec->args_count == 2) {
-+		data.transfer_type_tx = dma_spec->args[0];
-+		data.transfer_type_rx = dma_spec->args[0];
-+		data.channel = dma_spec->args[1];
-+	} else if (dma_spec->args_count == 3) {
-+		data.transfer_type_tx = dma_spec->args[0];
-+		data.transfer_type_rx = dma_spec->args[1];
-+		data.channel = dma_spec->args[2];
-+	} else {
- 		return NULL;
--
--	data.transfer_type = dma_spec->args[0];
--	data.channel = dma_spec->args[1];
-+	}
- 
- 	if (data.channel > -1) {
- 		if (data.channel >= jzdma->soc_data->nb_channels) {
-@@ -822,7 +837,8 @@ static struct dma_chan *jz4780_of_dma_xlate(struct of_phandle_args *dma_spec,
- 			return NULL;
- 		}
- 
--		jzdma->chan[data.channel].transfer_type = data.transfer_type;
-+		jzdma->chan[data.channel].transfer_type_tx = data.transfer_type_tx;
-+		jzdma->chan[data.channel].transfer_type_rx = data.transfer_type_rx;
- 
- 		return dma_get_slave_channel(
- 			&jzdma->chan[data.channel].vchan.chan);
 -- 
-2.33.0
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
