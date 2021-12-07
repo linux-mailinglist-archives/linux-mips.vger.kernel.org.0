@@ -2,128 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5EE46C23B
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 19:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BC546C4D0
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 21:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbhLGSDm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Dec 2021 13:03:42 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58426 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240264AbhLGSDm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 13:03:42 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4F09CCE1B1D;
-        Tue,  7 Dec 2021 18:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF552C341C3;
-        Tue,  7 Dec 2021 18:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638900008;
-        bh=aKg6nSmYDNEZA50nS90q2gIS47iA/LbgPSILNYZJWOc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=K7+UDhhcc0dBOU7MqY4SBN3EJksBg2IH6U9FEexlBdqMfhrUTWOJx4e/fSnE7hxAx
-         6/bDkGw1uxCK4vJ2A8333tMo6owkRiBZ9Hpyb5xJHUvCLRoFBDxjkdDvW9GyMu9+9d
-         wBrGthjDEgRyimNqrM9giAOchoDuHBh/rs/ErnYG+ygWADuuovrFzNOythJL9uMSqj
-         GZPD5Z2E/uYB1+UWrApVfeh3co+Zu9Qs3pOmH9jBeA/BA2C5ptlBMJno+6gtWhmb0N
-         QYXnw4rjHmlgdsa8ri4LbIuXKXvAhDsAQul8v1sJprPFrJchMDLdlQi3AHR7HPXUeG
-         NWKC2Zr7uF37w==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Subject: [PATCH] MIPS: Loongson2ef: Remove unnecessary {as,cc}-option calls
-Date:   Tue,  7 Dec 2021 10:59:51 -0700
-Message-Id: <20211207175951.135400-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        id S241421AbhLGUp4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Dec 2021 15:45:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241414AbhLGUpz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 15:45:55 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D545FC061574;
+        Tue,  7 Dec 2021 12:42:24 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638909743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8kdDUloupcZ7zsHm8ipSzMG1KhDz+bCCecRfNXSnpkg=;
+        b=myOlC5dgE3khI7L8VZJuvb0AqNwW72GyeFELcD1PBbXUtZ68+3HHkLJ6B3AHqyMzsf2WT8
+        +ujqWMGHpaY4rsmjld2a82Vj5AIv9LECzrGlZmnD/32El3mdYogpJBXD830FzxpM64lfFA
+        4umcD+gxjhc1TVxDz7X7+HSKF/BzRb/G2QPcgdTOuekTL5TVuB7tk2FDJgZvBY12rIApXt
+        6/cKg45LVQbCHkJ50Jh/VwMaNydeam+MMtnO87aLsvswM8Dg0b8u1s2wEbGXeG0S5d8b8M
+        gpLncVriJOZxdr/S+hNQBS9u1GXShwEAVsplRx5hkczW+cMOAp/ZAeGaDzJRnQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638909743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8kdDUloupcZ7zsHm8ipSzMG1KhDz+bCCecRfNXSnpkg=;
+        b=0V4XVUsOsvnU+9Fv3Fb95pdvdCgo/+dE0Mo+fVtsflMeNE/VXjrD4Tr1l/AitQqcrCl0wJ
+        KhJ9aDeINWrmG3AA==
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
+ worked
+In-Reply-To: <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org>
+References: <20211206210147.872865823@linutronix.de>
+ <20211206210223.872249537@linutronix.de>
+ <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
+ <87ilw0odel.fsf@mpe.ellerman.id.au>
+ <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org>
+Date:   Tue, 07 Dec 2021 21:42:22 +0100
+Message-ID: <8735n42lld.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-When building with LLVM's integrated assembler, the build errors because
-it does not implement -mfix-loongson2f-{jump,nop}:
+Cedric,
 
-arch/mips/loongson2ef/Platform:36: *** only binutils >= 2.20.2 have needed option -mfix-loongson2f-nop.  Stop.
+On Tue, Dec 07 2021 at 16:50, C=C3=A9dric Le Goater wrote:
+> On 12/7/21 12:36, Michael Ellerman wrote:
+>>=20
+>> This patch should drop those selects I guess. Can you send an
+>> incremental diff for Thomas to squash in?
+>
+> Sure.
+>
+>> Removing all the tendrils in various device tree files will probably
+>> require some archaeology, and it should be perfectly safe to leave those
+>> in the tree with the driver gone. So I think we can do that as a
+>> subsequent patch, rather than in this series.
+>
+> Here are the changes. Compiled tested with ppc40x and ppc44x defconfigs.
 
-The error is a little misleading because binutils are not being used in
-this case.
+< Lots of patch skipped />
+> @@ -141,7 +138,6 @@ config REDWOOD
+>   	select FORCE_PCI
+>   	select PPC4xx_PCI_EXPRESS
+>   	select PCI_MSI
+> -	select PPC4xx_MSI
+>   	help
+>   	  This option enables support for the AMCC PPC460SX Redwood board.
 
-To clear this up, remove the as-option calls because binutils 2.23 is
-the minimum supported version for building the kernel. At the same time,
-remove the cc-option calls for the '-march=' flags, as GCC 5.1.0 is the
-minimum supported version.
+While that is incremental it certainly is worth a patch on it's
+own. Could you add a proper changelog and an SOB please?
 
-This change will not fix the LLVM build for CONFIG_CPU_LOONGSON2{E,F},
-as it does not implement the loongson2{e,f} march arguments (nor r4600,
-so it will error prior to this change) nor the assembler flags mentioned
-above but it will make the errors more obvious.
+Thanks,
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1529
-Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-This dependency on certain toolchain flags should probably be moved into
-Kconfig at some point so that users cannot select configurations that
-they do not have support for so that their builds do not error. However,
-from a brief survey, there is not a clean way to codify these
-dependencies at the moment because the CPU configs are selected by the
-individual machines that implement them, meaning that the dependencies
-would need to be added to all the machine configs (as 'select ...'
-overrides 'depends on ...'), which is outside the scope of this patch.
-Furthermore, one could argue that it is better for the user to get a big
-error when they are missing support for something, rather than the
-configs getting disabled silently, especially if they are critical to
-the machine.
-
- arch/mips/loongson2ef/Platform | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
-
-diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
-index ae023b9a1c51..50e659aca543 100644
---- a/arch/mips/loongson2ef/Platform
-+++ b/arch/mips/loongson2ef/Platform
-@@ -2,12 +2,9 @@
- # Loongson Processors' Support
- #
- 
--# Only gcc >= 4.4 have Loongson specific support
- cflags-$(CONFIG_CPU_LOONGSON2EF)	+= -Wa,--trap
--cflags-$(CONFIG_CPU_LOONGSON2E) += \
--	$(call cc-option,-march=loongson2e,-march=r4600)
--cflags-$(CONFIG_CPU_LOONGSON2F) += \
--	$(call cc-option,-march=loongson2f,-march=r4600)
-+cflags-$(CONFIG_CPU_LOONGSON2E) += -march=loongson2e
-+cflags-$(CONFIG_CPU_LOONGSON2F) += -march=loongson2f
- #
- # Some versions of binutils, not currently mainline as of 2019/02/04, support
- # an -mfix-loongson3-llsc flag which emits a sync prior to each ll instruction
-@@ -32,16 +29,8 @@ cflags-$(CONFIG_CPU_LOONGSON2EF)	+= $(call as-option,-Wa$(comma)-mno-fix-loongso
- 
- # Enable the workarounds for Loongson2f
- ifdef CONFIG_CPU_LOONGSON2F_WORKAROUNDS
--  ifeq ($(call as-option,-Wa$(comma)-mfix-loongson2f-nop,),)
--    $(error only binutils >= 2.20.2 have needed option -mfix-loongson2f-nop)
--  else
--    cflags-$(CONFIG_CPU_NOP_WORKAROUNDS) += -Wa$(comma)-mfix-loongson2f-nop
--  endif
--  ifeq ($(call as-option,-Wa$(comma)-mfix-loongson2f-jump,),)
--    $(error only binutils >= 2.20.2 have needed option -mfix-loongson2f-jump)
--  else
--    cflags-$(CONFIG_CPU_JUMP_WORKAROUNDS) += -Wa$(comma)-mfix-loongson2f-jump
--  endif
-+cflags-$(CONFIG_CPU_NOP_WORKAROUNDS) += -Wa,-mfix-loongson2f-nop
-+cflags-$(CONFIG_CPU_JUMP_WORKAROUNDS) += -Wa,-mfix-loongson2f-jump
- endif
- 
- # Some -march= flags enable MMI instructions, and GCC complains about that
-
-base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
--- 
-2.34.1
-
+        tglx
