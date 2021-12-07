@@ -2,143 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FACC46ABF8
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Dec 2021 23:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB39D46AEF4
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 01:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357885AbhLFWdG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 6 Dec 2021 17:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358032AbhLFWcA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 6 Dec 2021 17:32:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A50C0698C2;
-        Mon,  6 Dec 2021 14:28:02 -0800 (PST)
-Message-ID: <20211206210225.101336873@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638829681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=DA21nVmLDiBI7abTCMjgj20KY6xV+oZ7nL3Tb95GpzU=;
-        b=tUgqDZDZ/EiCdKplAETvDx9zP2J7lXVbAOyLOoBuYDH6TGhvuPG60E8xxxj2easlDQNPkn
-        zTUdmJbnIRjdW2jZn22BV2YC4f0v6JUg4B85PNY0gmnqpQ/sN1zmKIaFOZKwqGTNC8Cwta
-        Zuzg0fNd26HEMDHArMjtG0lzJFq888jFDvle1JTBYdcc+inM3sPjBJytAfcyCtrn23O2UA
-        KEo+a2AtJrT7M4ZyZw3GWFzmCrk8w7SJ8if/eriSWmpCeXjmWpgB3652GOnCNeZesHt7bK
-        srYzZDxpjI6VQFY1vaT/mjtrbyNnxnAjKtFj8+UQL1Hs+wIUbfpLlFZD9d5QMQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638829681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=DA21nVmLDiBI7abTCMjgj20KY6xV+oZ7nL3Tb95GpzU=;
-        b=MCrfZbg73639x4t4CYmepEMeEst8qlRnGzxNB/5IvDcEPSsvluAaurSvCLQW1KB8HRZ02F
-        1dXwMChHv9TjP5Cw==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [patch V2 23/23] PCI/MSI: Move descriptor counting on allocation fail
- to the legacy code
-References: <20211206210147.872865823@linutronix.de>
+        id S1378171AbhLGAYm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 6 Dec 2021 19:24:42 -0500
+Received: from aposti.net ([89.234.176.197]:52430 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1378150AbhLGAYm (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 6 Dec 2021 19:24:42 -0500
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 0/5] Rework pm_ptr() and *_PM_OPS macros
+Date:   Tue,  7 Dec 2021 00:20:57 +0000
+Message-Id: <20211207002102.26414-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon,  6 Dec 2021 23:28:00 +0100 (CET)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The irqdomain code already returns the information. Move the loop to the
-legacy code.
+Hi,
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
----
- drivers/pci/msi/legacy.c |   20 +++++++++++++++++++-
- drivers/pci/msi/msi.c    |   19 +------------------
- 2 files changed, 20 insertions(+), 19 deletions(-)
+This patchset reworks the pm_ptr() macro I introduced a few versions
+ago, so that it is not conditionally defined.
 
---- a/drivers/pci/msi/legacy.c
-+++ b/drivers/pci/msi/legacy.c
-@@ -50,9 +50,27 @@ void __weak arch_teardown_msi_irqs(struc
- 	}
- }
- 
-+static int pci_msi_setup_check_result(struct pci_dev *dev, int type, int ret)
-+{
-+	struct msi_desc *entry;
-+	int avail = 0;
-+
-+	if (type != PCI_CAP_ID_MSIX || ret >= 0)
-+		return ret;
-+
-+	/* Scan the MSI descriptors for successfully allocated ones. */
-+	for_each_pci_msi_entry(entry, dev) {
-+		if (entry->irq != 0)
-+			avail++;
-+	}
-+	return avail ? avail : ret;
-+}
-+
- int pci_msi_legacy_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
- {
--	return arch_setup_msi_irqs(dev, nvec, type);
-+	int ret = arch_setup_msi_irqs(dev, nvec, type);
-+
-+	return pci_msi_setup_check_result(dev, type, ret);
- }
- 
- void pci_msi_legacy_teardown_msi_irqs(struct pci_dev *dev)
---- a/drivers/pci/msi/msi.c
-+++ b/drivers/pci/msi/msi.c
-@@ -609,7 +609,7 @@ static int msix_capability_init(struct p
- 
- 	ret = pci_msi_setup_msi_irqs(dev, nvec, PCI_CAP_ID_MSIX);
- 	if (ret)
--		goto out_avail;
-+		goto out_free;
- 
- 	/* Check if all MSI entries honor device restrictions */
- 	ret = msi_verify_entries(dev);
-@@ -634,23 +634,6 @@ static int msix_capability_init(struct p
- 	pcibios_free_irq(dev);
- 	return 0;
- 
--out_avail:
--	if (ret < 0) {
--		/*
--		 * If we had some success, report the number of IRQs
--		 * we succeeded in setting up.
--		 */
--		struct msi_desc *entry;
--		int avail = 0;
--
--		for_each_pci_msi_entry(entry, dev) {
--			if (entry->irq != 0)
--				avail++;
--		}
--		if (avail != 0)
--			ret = avail;
--	}
--
- out_free:
- 	free_msi_irqs(dev);
- 
+It applies the same treatment to the *_PM_OPS macros. Instead of
+modifying the existing ones, which would mean a 2000+ patch bomb, this
+patchset introduce two new macros to replace the now deprecated
+UNIVERSAL_DEV_PM_OPS() and SIMPLE_DEV_PM_OPS().
+
+The point of all of this, is to progressively switch from a code model
+where PM callbacks are all protected behind CONFIG_PM guards, to a code
+model where PM callbacks are always seen by the compiler, but discarded
+if not used.
+
+Patch [4/5] and [5/5] are just examples to illustrate the use of the new
+macros. As such they don't really have to be merged at the same time as
+the rest and can be delayed until a subsystem-wide patchset is proposed.
+
+- Patch [4/5] modifies a driver that already used the pm_ptr() macro,
+  but had to use the __maybe_unused flag to avoid compiler warnings;
+- Patch [5/5] modifies a driver that used a #ifdef CONFIG_PM guard
+  around its suspend/resume functions.
+
+Paul Cercueil (5):
+  r8169: Avoid misuse of pm_ptr() macro
+  PM: core: Redefine pm_ptr() macro
+  PM: core: Add new *_PM_OPS macros, deprecate old ones
+  mmc: jz4740: Use the new PM macros
+  mmc: mxc: Use the new PM macros
+
+ drivers/mmc/host/jz4740_mmc.c             |  8 +--
+ drivers/mmc/host/mxcmmc.c                 |  6 +-
+ drivers/net/ethernet/realtek/r8169_main.c |  4 +-
+ include/linux/pm.h                        | 80 +++++++++++++++--------
+ 4 files changed, 60 insertions(+), 38 deletions(-)
+
+-- 
+2.33.0
 
