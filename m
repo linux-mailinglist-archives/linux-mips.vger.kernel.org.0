@@ -2,115 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF40746BA27
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 12:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E0D46BD58
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 15:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235733AbhLGLjh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Dec 2021 06:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S233232AbhLGOSG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Dec 2021 09:18:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbhLGLjg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 06:39:36 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C4EC061574;
-        Tue,  7 Dec 2021 03:36:06 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J7dXf3dSsz4xYy;
-        Tue,  7 Dec 2021 22:36:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1638876964;
-        bh=lTsXMkBa68SdK2mCmwfpSshAWpT0dRMMMq4RDsTmMUc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=BMwzDWkPEIYhXynBVAirAw4gLvuuvW+w979j7Yqtpl/UPXPORphUfbt+jK+l0pabP
-         GTehyWDzuL/CjvtZ3vJKYoj5rsJPb1bnDWny7P2YlVPjCcML69cHmHBNG0AIDWe7Gz
-         7IRiJMIJ4Kb9b5hGDoNDnHaxCTClNUWIJdKvD1WISOHxae57UeEHW0ELnQ3BY1ByPF
-         1oPzO4gyeKDsiFe+zukx8HTbH7jtndcbjgt+u2Img9ev7FSfwZJM9PLRYWX7kshjFe
-         JBwE+rXxecauzokxEZQ57uU9ynC6VsB3Nd14q1sEiH2ivRH0Hx8EhFL3DwxqA8pymw
-         p3ZiZsIoOoIIQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
- worked
-In-Reply-To: <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
-References: <20211206210147.872865823@linutronix.de>
- <20211206210223.872249537@linutronix.de>
- <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
-Date:   Tue, 07 Dec 2021 22:36:02 +1100
-Message-ID: <87ilw0odel.fsf@mpe.ellerman.id.au>
+        with ESMTP id S232213AbhLGOSF (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 09:18:05 -0500
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400F6C061574
+        for <linux-mips@vger.kernel.org>; Tue,  7 Dec 2021 06:14:35 -0800 (PST)
+Received: by mail-io1-xd41.google.com with SMTP id z26so17228535iod.10
+        for <linux-mips@vger.kernel.org>; Tue, 07 Dec 2021 06:14:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
+        b=jV2/i/6i+n/kNXewUeEjMCesDk47r+BVPeCiNyht0XbzwPPb4VJF155VW5ctrkqAFV
+         +3EAWv7BQSGz+cYOWp92UjrQsHdmSxhixsD+B9Yxdqa7bb4BRL0bmGU6hRlcdWd3lJzk
+         P37HK9xkh5bLikkQ1W8hgINAL9CpbdzM7e2+Q315+H4iOPR/+8A4xRvNpd3S1qqC4OEY
+         I1bJMCB5eK+xTE6dJLJ6s2srUttnIawhXTuWuFs/FctsAS3pBYaCSSpmSFmRwICs01lT
+         FEny4BXlepmcSu3SKkpQlGPyl5629UzRgGw+wBFk1TnuFOgpWLtrseipYF9itMJpNAh+
+         uxBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=vIF0HCtULT8/Hj4oEOKhM3wVM2dbK4vAQWbMA06NHEs=;
+        b=ZBtfGv2/AZOXKJuHuqWMvhkHDoQ58ATCfLBdjYsqYzVr6MlW+h1FgLb3prESfgZzYl
+         lTF2bYwZHYheMW4uJt0KL/FGyXOFd0ebOY9fC562HpfmNQ0lIElZmCzfd5RZkm6Ep1iu
+         RFE52JTK9SQA6abTeiI92bbZC9YyNWVYtbpyGQbjaZTTAPYGVG0ymRBKLkwlYVUiY2Z/
+         L5zglh3w2Igl01H1BlZJ9XfBfKrYGX0WBf7Iqd+PmUCHsTObisilYzHgvEmabfRLqwOj
+         P/nwkx33A/0Txsq1hHRcfgAYxAJ2uSMsSP044rx/JzMmr9nuufYO4Al6m4B5WiYvrxBX
+         0pkg==
+X-Gm-Message-State: AOAM532Ej2lraPUOLGDP0ZVqZkWhelBqj4XTZ2Bc+EYwFAn2ZhMqcc4a
+        TiB/5iw3mG4CM0j43F6Al8l4m9w5SmShbjGmCh8=
+X-Google-Smtp-Source: ABdhPJwPFkidi7fm2q/0i9u8gK9DSquHLD5mO2MFSdjh19o2OASslKpbXsJunUQvdyOiLdm3jMrsWlexwHh7CVx8QAg=
+X-Received: by 2002:a05:6638:381b:: with SMTP id i27mr26348095jav.138.1638886474608;
+ Tue, 07 Dec 2021 06:14:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Reply-To: salkavar2@gmail.com
+Sender: mrmaxwellkojo@gmail.com
+Received: by 2002:a05:6638:210f:0:0:0:0 with HTTP; Tue, 7 Dec 2021 06:14:34
+ -0800 (PST)
+From:   "Mr.Sal kavar" <salkavar2@gmail.com>
+Date:   Tue, 7 Dec 2021 15:14:34 +0100
+X-Google-Sender-Auth: uMPprGL_bO8PITDVp-gPK8b5fLM
+Message-ID: <CAKYa8HZk6a9EuDYqa6KMqHqOUZ5=GD4MdwpHK04MTjYKcj+afQ@mail.gmail.com>
+Subject: Yours Faithful,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-C=C3=A9dric Le Goater <clg@kaod.org> writes:
-> Hello Thomas,
->
-> On 12/6/21 23:27, Thomas Gleixner wrote:
->> This code is broken since day one. ppc4xx_setup_msi_irqs() has the
->> following gems:
->>=20
->>   1) The handling of the result of msi_bitmap_alloc_hwirqs() is complete=
-ly
->>      broken:
->>=20=20=20=20=20=20
->>      When the result is greater than or equal 0 (bitmap allocation
->>      successful) then the loop terminates and the function returns 0
->>      (success) despite not having installed an interrupt.
->>=20
->>      When the result is less than 0 (bitmap allocation fails), it prints=
- an
->>      error message and continues to "work" with that error code which wo=
-uld
->>      eventually end up in the MSI message data.
->>=20
->>   2) On every invocation the file global pp4xx_msi::msi_virqs bitmap is
->>      allocated thereby leaking the previous one.
->>=20
->> IOW, this has never worked and for more than 10 years nobody cared. Remo=
-ve
->> the gunk.
->>=20
->> Fixes: 3fb7933850fa ("powerpc/4xx: Adding PCIe MSI support")
->
-> Shouldn't we remove all of it ? including the updates in the device trees
-> and the Kconfig changes under :
->
-> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
-> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
-> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
-> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
-> arch/powerpc/platforms/40x/Kconfig:	select PPC4xx_MSI
+I assume you and your family are in good health. I am the foreign
+operations Manager
 
-This patch should drop those selects I guess. Can you send an
-incremental diff for Thomas to squash in?
+This being a wide world in which it can be difficult to make new
+acquaintances and because it is virtually impossible to know who is
+trustworthy and who can be believed, i have decided to repose
+confidence in you after much fasting and prayer. It is only because of
+this that I have decided to confide in you and to share with you this
+confidential business.
 
-Removing all the tendrils in various device tree files will probably
-require some archaeology, and it should be perfectly safe to leave those
-in the tree with the driver gone. So I think we can do that as a
-subsequent patch, rather than in this series.
+overdue and unclaimed sum of $15.5m, (Fifteen Million Five Hundred
+Thousand Dollars Only) when the account holder suddenly passed on, he
+left no beneficiary who would be entitled to the receipt of this fund.
+For this reason, I have found it expedient to transfer this fund to a
+trustworthy individual with capacity to act as foreign business
+partner.
 
-cheers
+Thus i humbly request your assistance to claim this fund. Upon the
+transfer of this fund in your account, you will take 45% as your share
+from the total fund, 10% will be shared to Charity Organizations in
+both country and 45% will be for me.
+
+Yours Faithful,
+Mr.Sal Kavar.
