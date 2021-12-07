@@ -2,144 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EA246B85A
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 11:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF40746BA27
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 12:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234666AbhLGKH3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Dec 2021 05:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
+        id S235733AbhLGLjh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Dec 2021 06:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234637AbhLGKHY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 05:07:24 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9682FC061748
-        for <linux-mips@vger.kernel.org>; Tue,  7 Dec 2021 02:03:53 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id d9so28330118wrw.4
-        for <linux-mips@vger.kernel.org>; Tue, 07 Dec 2021 02:03:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=YMXGNl+2STyhxzO3HVuriZuNvccL7QLCPDwSy26sqQI=;
-        b=k31XRrWxV+zeine2/5ZK0CSlMZrpZRSLjBrKRrd8jyX0X4uWq2r9UvB5dRWfBQf8ZY
-         60uqwiAb3a3oYm+p7qxcQ7aduV8SnLgOx1HUnTV8eE9g1Nd+mkxjXE66XXF32SYBW8PS
-         Nwc75fKd6Eb9Ce5MgSETVlJwiCiQ5YXCmLiaIk0QQ1arktl/WSEeDcw56Vn7PH5R9ywW
-         ROWWsBa+UqXhS4rvSsg0hnhYU8w0L0RN3N3dWzcdv5K9bVQQufsrhHViiBZdYAQS5cCU
-         +1U20lxpF4xmGkGuX1tIix41TwCTY6HP/iEAowkXqiy9dHhe7i/0YDkIl64Dnzlft/ZL
-         aTvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=YMXGNl+2STyhxzO3HVuriZuNvccL7QLCPDwSy26sqQI=;
-        b=NvWlsfOJDIS6WIsSTZUf6pZiXnCqTJ267yNdoRB2wyDjNajQK4ypzF4ucIv27xlPkm
-         HMXItsSyBYxx+2ou/WJSgehi8Jipv/DjMiHzGaFejtlGXugMNBnfLT9l9OW3yijun4DO
-         UGapCGok4swRlYSAf2eLmKg763VL9cOOeI29H8YMjQ/IWubq+p00/CfYBuLOvNlQirqX
-         ObYESiWbC4itebwpv4bJYcoa4RDR0OwRSGr0tvE0hxGVsjl6RGm0iDll8ZKTza9aJp2H
-         hNFzeun2dyQLG1ETqR0IsLgVhMp51z5pw9wg5M2eottuN7fGiYttCHiWWUGaY+VloBiW
-         MvNw==
-X-Gm-Message-State: AOAM531eML3vvjYiBC14hM3BQnfM9J55hFcO2YhlnBkSJoNasWRTqWU0
-        lJcDquqcDgPkE7NDi6JNGpSjXQ==
-X-Google-Smtp-Source: ABdhPJwYUZnANnjuqYc9L3SYbaNbTuNKVK7/vPDMWrjfEVPdCx7HOqfB+V2StymL2HCWR8V0Rk3J5A==
-X-Received: by 2002:a5d:588b:: with SMTP id n11mr49739256wrf.344.1638871432163;
-        Tue, 07 Dec 2021 02:03:52 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id c1sm13827383wrt.14.2021.12.07.02.03.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Dec 2021 02:03:51 -0800 (PST)
-Date:   Tue, 7 Dec 2021 10:03:49 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Justin Chen <justinpopo6@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V4 RESEND 1/2] dt-bindings: watchdog: convert Broadcom's
- WDT to the json-schema
-Message-ID: <Ya8xhUR5GbTxVE8w@google.com>
-References: <Ya3NaVKf1NRc8rrx@google.com>
- <89b9512d-2e5e-c23a-d1f2-62172c8f68f7@gmail.com>
- <Ya3SU6U6YT6mlFu8@google.com>
- <f5745952-9e3c-ed7a-cced-ce42d3da2276@gmail.com>
- <Ya5ctkIU+jNzDfBc@google.com>
- <f4af4971-7047-80c9-69ae-e6587979ecd5@roeck-us.net>
- <e1fa1683-a0a6-8ee0-9da5-8e97dd9c820a@gmail.com>
- <432664af-5660-aaad-bf75-81e4d61cb078@roeck-us.net>
- <46a88b40-6d92-727c-7adc-5723921d08e3@gmail.com>
- <20211206195115.GC3759192@roeck-us.net>
+        with ESMTP id S229733AbhLGLjg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 06:39:36 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C4EC061574;
+        Tue,  7 Dec 2021 03:36:06 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J7dXf3dSsz4xYy;
+        Tue,  7 Dec 2021 22:36:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1638876964;
+        bh=lTsXMkBa68SdK2mCmwfpSshAWpT0dRMMMq4RDsTmMUc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=BMwzDWkPEIYhXynBVAirAw4gLvuuvW+w979j7Yqtpl/UPXPORphUfbt+jK+l0pabP
+         GTehyWDzuL/CjvtZ3vJKYoj5rsJPb1bnDWny7P2YlVPjCcML69cHmHBNG0AIDWe7Gz
+         7IRiJMIJ4Kb9b5hGDoNDnHaxCTClNUWIJdKvD1WISOHxae57UeEHW0ELnQ3BY1ByPF
+         1oPzO4gyeKDsiFe+zukx8HTbH7jtndcbjgt+u2Img9ev7FSfwZJM9PLRYWX7kshjFe
+         JBwE+rXxecauzokxEZQ57uU9ynC6VsB3Nd14q1sEiH2ivRH0Hx8EhFL3DwxqA8pymw
+         p3ZiZsIoOoIIQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org, Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
+ worked
+In-Reply-To: <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
+References: <20211206210147.872865823@linutronix.de>
+ <20211206210223.872249537@linutronix.de>
+ <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
+Date:   Tue, 07 Dec 2021 22:36:02 +1100
+Message-ID: <87ilw0odel.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211206195115.GC3759192@roeck-us.net>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Florian Fainelli wrote:
-> I don't see why you should be creating an immutable branch for Lee and
-> not simply merge Rafal's "[PATCH V4 RESEND 2/2] dt-bindings: mfd: add
-> Broadcom's Timer-Watchdog block" patch with Lee's ack directly. This is
-> a new file, so I don't see how it would create conflicts as long as we
-> don't pile up changes on top.
+C=C3=A9dric Le Goater <clg@kaod.org> writes:
+> Hello Thomas,
+>
+> On 12/6/21 23:27, Thomas Gleixner wrote:
+>> This code is broken since day one. ppc4xx_setup_msi_irqs() has the
+>> following gems:
+>>=20
+>>   1) The handling of the result of msi_bitmap_alloc_hwirqs() is complete=
+ly
+>>      broken:
+>>=20=20=20=20=20=20
+>>      When the result is greater than or equal 0 (bitmap allocation
+>>      successful) then the loop terminates and the function returns 0
+>>      (success) despite not having installed an interrupt.
+>>=20
+>>      When the result is less than 0 (bitmap allocation fails), it prints=
+ an
+>>      error message and continues to "work" with that error code which wo=
+uld
+>>      eventually end up in the MSI message data.
+>>=20
+>>   2) On every invocation the file global pp4xx_msi::msi_virqs bitmap is
+>>      allocated thereby leaking the previous one.
+>>=20
+>> IOW, this has never worked and for more than 10 years nobody cared. Remo=
+ve
+>> the gunk.
+>>=20
+>> Fixes: 3fb7933850fa ("powerpc/4xx: Adding PCIe MSI support")
+>
+> Shouldn't we remove all of it ? including the updates in the device trees
+> and the Kconfig changes under :
+>
+> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
+> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
+> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
+> arch/powerpc/platforms/44x/Kconfig:	select PPC4xx_MSI
+> arch/powerpc/platforms/40x/Kconfig:	select PPC4xx_MSI
 
-Rafał Miłecki wrote:
-> would that be OK for you to simply ack 2/2? So Guenter can pick my
-> patch without the whole immutable branch & PR thing?                   
+This patch should drop those selects I guess. Can you send an
+incremental diff for Thomas to squash in?
 
-Guenter Roeck wrote:
-> I don't entirely see the point of that complexity for dt changes,    
-> but whatever. Since my tree is not the official watchdog-next tree,  
-> that means I can not take the entire series (which goes way beyond   
-> the dt changes and also drops the bcm63xx driver). Unless I hear     
-> otherwise, I'll drop the series from my tree for the time being      
-> and wait for the dt changes to be sorted out.                        
+Removing all the tendrils in various device tree files will probably
+require some archaeology, and it should be perfectly safe to leave those
+in the tree with the driver gone. So I think we can do that as a
+subsequent patch, rather than in this series.
 
-If Rob wants `dt_binding_check` to run cleanly in -next, we have to
-treat the DT documentation in the same manner we do for real code
-when build dependencies exist between patches.  Simply sucking them up
-through a single repo is just dandy until subsequent changes are
-required, which unfortunately is often the case.
-
-Being the Maintainer of MFD, which is often the centre point of
-cross-subsystems patch sets, I've been bitten by this too many times.
-Hence my hesitancy to 'just Ack it and be done'.
-
-I've been pushing back on the requirement for clean `dt_binding_check`
-runs in -next for a while and would much prefer to treat it the same
-way we do `checkpatch.pl`, whereby a clean run is not a hard
-requirement.  Instead it is used as one of many tools to check for
-inconsistencies prior to submission (as possibly against patch-sets
-once they are posted onto the list).  However, just as we see false
-positives in `checkpatch.pl` we should see them in `dt_binding_check`
-where patches have simply been applied into different trees and may
-lag each other by a week or two.
-
-> It sounded to me like Lee wanted an immutable branch for that
-
-Not exactly, I said:
-
-  "> Suppose we should take patch #2 via [Watchdog] as well.
-
-   If that happens, I would like a PR to an immutable branch."
-
-The alternative is that I take the patch and provide an immutable
-branch to you, which I am in a position to do.
-
-Of course all of this hassle just goes away if the clean
-`dt_binding_check` run on -next requirement is laxed and we can just
-take our own patches without fear of wrath.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+cheers
