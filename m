@@ -2,100 +2,155 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBCB46C140
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 18:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9C746C153
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 18:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbhLGRFw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Dec 2021 12:05:52 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:39294 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbhLGRFw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 12:05:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5461CCE1C68;
-        Tue,  7 Dec 2021 17:02:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B23EBC341C1;
-        Tue,  7 Dec 2021 17:02:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638896538;
-        bh=PTyVD4AriAGKQA+5iIODko/4ioAXDlqcrMXsIBsg+C0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MVZYNEW3USXJKFwgQiIDe+jvocKBEUS8l5jg+VKL6ONZ/9FONPY7FSww5lWcwC+8i
-         Znp39ltDQgDx2BtJEz67HGxY4fv0VswTs/J8vHYM1RgioiKl2yqjDbPk6JvhEzoRVP
-         fYG40Sd6DBzoBJZ+H/O6yQrapvB9eUjazfsxRUzmUFDXByfWfmqbyx3OKfpqgcq8rU
-         Kz8HIeQt5XO0s+bSB7JOzcUCGy7s55yW8v8AkbgCog+LyycpCFnebQEbsWpLXjlam0
-         SpMhtHVQCFgGd8rhTvmdXRJ5awzTJBo85x9PqUG1hO/qlQ5x7NxJvI9RFcdaBCw3cZ
-         obKiVk2i/BTGA==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Subject: [PATCH] MIPS: Loongson64: Use three arguments for slti
-Date:   Tue,  7 Dec 2021 10:01:29 -0700
-Message-Id: <20211207170129.578089-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        id S239769AbhLGRJ4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Dec 2021 12:09:56 -0500
+Received: from elvis.franken.de ([193.175.24.41]:35282 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234465AbhLGRJ4 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 7 Dec 2021 12:09:56 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mudv5-0003op-00; Tue, 07 Dec 2021 18:06:23 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 6EC63C4DFD; Tue,  7 Dec 2021 18:06:03 +0100 (CET)
+Date:   Tue, 7 Dec 2021 18:06:03 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Do not define pci_remap_iospace() under
+ MACH_LOONGSON64
+Message-ID: <20211207170603.GA20028@alpha.franken.de>
+References: <1637139795-3032-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1637139795-3032-1-git-send-email-yangtiezhu@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-LLVM's integrated assembler does not support 'stli <reg>, <imm>':
+On Wed, Nov 17, 2021 at 05:03:15PM +0800, Tiezhu Yang wrote:
+> After commit 9f76779f2418 ("MIPS: implement architecture-specific
+> 'pci_remap_iospace()'"), there exists the following warning on the
+> Loongson64 platform:
+> 
+>     loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff -> 0x0000020000
+>     loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff -> 0x0040000000
+>     ------------[ cut here ]------------
+>     WARNING: CPU: 2 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x84/0x90
+>     resource start address is not zero
+>     ...
+>     Call Trace:
+>     [<ffffffff8020dc78>] show_stack+0x40/0x120
+>     [<ffffffff80cf4a0c>] dump_stack_lvl+0x58/0x74
+>     [<ffffffff8023a0b0>] __warn+0xe0/0x110
+>     [<ffffffff80cee02c>] warn_slowpath_fmt+0xa4/0xd0
+>     [<ffffffff80cecf24>] pci_remap_iospace+0x84/0x90
+>     [<ffffffff807f9864>] devm_pci_remap_iospace+0x5c/0xb8
+>     [<ffffffff808121b0>] devm_of_pci_bridge_init+0x178/0x1f8
+>     [<ffffffff807f4000>] devm_pci_alloc_host_bridge+0x78/0x98
+>     [<ffffffff80819454>] loongson_pci_probe+0x34/0x160
+>     [<ffffffff809203cc>] platform_probe+0x6c/0xe0
+>     [<ffffffff8091d5d4>] really_probe+0xbc/0x340
+>     [<ffffffff8091d8f0>] __driver_probe_device+0x98/0x110
+>     [<ffffffff8091d9b8>] driver_probe_device+0x50/0x118
+>     [<ffffffff8091dea0>] __driver_attach+0x80/0x118
+>     [<ffffffff8091b280>] bus_for_each_dev+0x80/0xc8
+>     [<ffffffff8091c6d8>] bus_add_driver+0x130/0x210
+>     [<ffffffff8091ead4>] driver_register+0x8c/0x150
+>     [<ffffffff80200a8c>] do_one_initcall+0x54/0x288
+>     [<ffffffff811a5320>] kernel_init_freeable+0x27c/0x2e4
+>     [<ffffffff80cfc380>] kernel_init+0x2c/0x134
+>     [<ffffffff80205a2c>] ret_from_kernel_thread+0x14/0x1c
+>     ---[ end trace e4a0efe10aa5cce6 ]---
+>     loongson-pci 1a000000.pci: error -19: failed to map resource [io  0x20000-0x3ffff]
+> 
+> We can see that the resource start address is 0x0000020000, because
+> the ISA Bridge used the zero address which is defined in the dts file
+> arch/mips/boot/dts/loongson/ls7a-pch.dtsi:
+> 
+>     ISA Bridge: /bus@10000000/isa@18000000
+>     IO 0x0000000018000000..0x000000001801ffff  ->  0x0000000000000000
+> 
+> The architecture-independent function pci_remap_iospace() works well
+> for Loongson64, so just do not define architecture-specific function
+> pci_remap_iospace() under MACH_LOONGSON64.
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/mips/include/asm/pci.h | 2 ++
+>  arch/mips/pci/pci-generic.c | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+> index 421231f..5d647cb 100644
+> --- a/arch/mips/include/asm/pci.h
+> +++ b/arch/mips/include/asm/pci.h
+> @@ -21,8 +21,10 @@
+>  #include <linux/of.h>
+>  
+>  #ifdef CONFIG_PCI_DRIVERS_GENERIC
+> +#ifndef CONFIG_MACH_LOONGSON64
+>  #define pci_remap_iospace pci_remap_iospace
+>  #endif
+> +#endif
 
-<instantiation>:16:12: error: invalid operand for instruction
- slti $12, (0x6300 | 0x0008)
-           ^
-arch/mips/kernel/head.S:86:2: note: while in macro instantiation
- kernel_entry_setup # cpu specific setup
- ^
-<instantiation>:16:12: error: invalid operand for instruction
- slti $12, (0x6300 | 0x0008)
-           ^
-arch/mips/kernel/head.S:150:2: note: while in macro instantiation
- smp_slave_setup
- ^
+I prefer a version without new CONFIG_MACH_LOONGSON64 ifdefery. Something
+like:
 
-To increase compatibility with LLVM's integrated assembler, use the full
-form of 'stli <reg>, <reg>, <imm>', which matches the rest of
-arch/mips/. This does not result in any change for GNU as.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1526
-Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/mips/include/asm/mach-loongson64/kernel-entry-init.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
+index 05d14c21c417..f7af11ea2d61 100644
+--- a/arch/mips/include/asm/mach-ralink/spaces.h
++++ b/arch/mips/include/asm/mach-ralink/spaces.h
+@@ -6,5 +6,7 @@
+ #define PCI_IOSIZE	SZ_64K
+ #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
+ 
++#define pci_remap_iospace pci_remap_iospace
++
+ #include <asm/mach-generic/spaces.h>
+ #endif
+diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
+index 421231f55935..9ffc8192adae 100644
+--- a/arch/mips/include/asm/pci.h
++++ b/arch/mips/include/asm/pci.h
+@@ -20,10 +20,6 @@
+ #include <linux/list.h>
+ #include <linux/of.h>
+ 
+-#ifdef CONFIG_PCI_DRIVERS_GENERIC
+-#define pci_remap_iospace pci_remap_iospace
+-#endif
+-
+ #ifdef CONFIG_PCI_DRIVERS_LEGACY
+ 
+ /*
+diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
+index 18eb8a453a86..d2d68bac3d25 100644
+--- a/arch/mips/pci/pci-generic.c
++++ b/arch/mips/pci/pci-generic.c
+@@ -47,6 +47,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
+ 	pci_read_bridge_bases(bus);
+ }
+ 
++#ifdef pci_remap_iospace
+ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+ {
+ 	unsigned long vaddr;
+@@ -60,3 +61,4 @@ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+ 	set_io_port_base(vaddr);
+ 	return 0;
+ }
++#endif
 
-diff --git a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-index 13373c5144f8..efb41b351974 100644
---- a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-+++ b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
-@@ -32,7 +32,7 @@
- 	nop
- 	/* Loongson-3A R2/R3 */
- 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
--	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
-+	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
- 	bnez	t0, 2f
- 	nop
- 1:
-@@ -63,7 +63,7 @@
- 	nop
- 	/* Loongson-3A R2/R3 */
- 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
--	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
-+	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
- 	bnez	t0, 2f
- 	nop
- 1:
+Thomas.
 
-base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
 -- 
-2.34.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
