@@ -2,59 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC21546C0B6
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 17:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBCB46C140
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 18:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234945AbhLGQdD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Dec 2021 11:33:03 -0500
-Received: from elvis.franken.de ([193.175.24.41]:35240 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229531AbhLGQdD (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 7 Dec 2021 11:33:03 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mudLO-0003YB-01
-        for linux-mips@vger.kernel.org; Tue, 07 Dec 2021 17:29:30 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 087AAC4DFD; Tue,  7 Dec 2021 17:29:20 +0100 (CET)
-Date:   Tue, 7 Dec 2021 17:29:19 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org
-Subject: Loongson3 PCI/EHCI
-Message-ID: <20211207162919.GB19327@alpha.franken.de>
+        id S229910AbhLGRFw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Dec 2021 12:05:52 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39294 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229852AbhLGRFw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 12:05:52 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5461CCE1C68;
+        Tue,  7 Dec 2021 17:02:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B23EBC341C1;
+        Tue,  7 Dec 2021 17:02:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638896538;
+        bh=PTyVD4AriAGKQA+5iIODko/4ioAXDlqcrMXsIBsg+C0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MVZYNEW3USXJKFwgQiIDe+jvocKBEUS8l5jg+VKL6ONZ/9FONPY7FSww5lWcwC+8i
+         Znp39ltDQgDx2BtJEz67HGxY4fv0VswTs/J8vHYM1RgioiKl2yqjDbPk6JvhEzoRVP
+         fYG40Sd6DBzoBJZ+H/O6yQrapvB9eUjazfsxRUzmUFDXByfWfmqbyx3OKfpqgcq8rU
+         Kz8HIeQt5XO0s+bSB7JOzcUCGy7s55yW8v8AkbgCog+LyycpCFnebQEbsWpLXjlam0
+         SpMhtHVQCFgGd8rhTvmdXRJ5awzTJBo85x9PqUG1hO/qlQ5x7NxJvI9RFcdaBCw3cZ
+         obKiVk2i/BTGA==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
+        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
+Subject: [PATCH] MIPS: Loongson64: Use three arguments for slti
+Date:   Tue,  7 Dec 2021 10:01:29 -0700
+Message-Id: <20211207170129.578089-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+LLVM's integrated assembler does not support 'stli <reg>, <imm>':
 
-I'm getting lots of
+<instantiation>:16:12: error: invalid operand for instruction
+ slti $12, (0x6300 | 0x0008)
+           ^
+arch/mips/kernel/head.S:86:2: note: while in macro instantiation
+ kernel_entry_setup # cpu specific setup
+ ^
+<instantiation>:16:12: error: invalid operand for instruction
+ slti $12, (0x6300 | 0x0008)
+           ^
+arch/mips/kernel/head.S:150:2: note: while in macro instantiation
+ smp_slave_setup
+ ^
 
-[    2.940587] pci 0000:00:04.1: EHCI: unrecognized capability ff
-[    2.946478] pci 0000:00:04.1: EHCI: unrecognized capability ff
-[    2.952374] pci 0000:00:04.1: EHCI: unrecognized capability ff
-[    2.958270] pci 0000:00:04.1: EHCI: unrecognized capability ff
-[    2.964166] pci 0000:00:04.1: EHCI: unrecognized capability ff
-[    2.970062] pci 0000:00:04.1: EHCI: unrecognized capability ff
+To increase compatibility with LLVM's integrated assembler, use the full
+form of 'stli <reg>, <reg>, <imm>', which matches the rest of
+arch/mips/. This does not result in any change for GNU as.
 
-while booting on a Loongson-3A R4 (Loongson-3A4000) @ 1800MHz system.
-What I'm missing ? 
+Link: https://github.com/ClangBuiltLinux/linux/issues/1526
+Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/mips/include/asm/mach-loongson64/kernel-entry-init.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I'm also seeing
+diff --git a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+index 13373c5144f8..efb41b351974 100644
+--- a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
++++ b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+@@ -32,7 +32,7 @@
+ 	nop
+ 	/* Loongson-3A R2/R3 */
+ 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
+-	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
++	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
+ 	bnez	t0, 2f
+ 	nop
+ 1:
+@@ -63,7 +63,7 @@
+ 	nop
+ 	/* Loongson-3A R2/R3 */
+ 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
+-	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
++	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
+ 	bnez	t0, 2f
+ 	nop
+ 1:
 
-[    1.222546] pci_bus 0000:00: 2-byte config write to 0000:00:00.0 offset 0x4 m
-ay corrupt adjacent RW1C bits
-[    1.232314] pci_bus 0000:00: 2-byte config write to 0000:00:00.0 offset 0x4 m
-ay corrupt adjacent RW1C bits
-
-which look suspicous...
-
-Thomas.
-
+base-commit: 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.34.1
+
