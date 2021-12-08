@@ -2,109 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7790246D138
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Dec 2021 11:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB94146D2AB
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Dec 2021 12:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbhLHKsR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Dec 2021 05:48:17 -0500
-Received: from smtpout1.mo529.mail-out.ovh.net ([178.32.125.2]:40335 "EHLO
-        smtpout1.mo529.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229481AbhLHKsR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Dec 2021 05:48:17 -0500
-X-Greylist: delayed 68074 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Dec 2021 05:48:17 EST
-Received: from mxplan5.mail.ovh.net (unknown [10.109.156.35])
-        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 4A0F4D092F09;
-        Wed,  8 Dec 2021 11:44:42 +0100 (CET)
-Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 8 Dec
- 2021 11:44:40 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-96R001f5056120-68a4-4c0a-bc06-f617410d6d7e,
-                    EB01F339838E5AA67C986A6C3251B49097B81903) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 86.201.172.254
-Message-ID: <e92f2bb3-b5e1-c870-8151-3917a789a640@kaod.org>
-Date:   Wed, 8 Dec 2021 11:44:39 +0100
+        id S229713AbhLHLqo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Dec 2021 06:46:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229533AbhLHLqo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Dec 2021 06:46:44 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AF5C061746;
+        Wed,  8 Dec 2021 03:43:12 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id j2so5234940ybg.9;
+        Wed, 08 Dec 2021 03:43:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=yxEFrVGam1sH5uNwQrNFOpjDTgkpMFeb4dI2bKRqm0Y=;
+        b=A0s3eARuEODnrLhT3UvzFmjX8sqVBkKGSat580Iq/1mX4g4mssIb7gs5XGVNUGannP
+         haXL1kmg/3AMygEQh08dIdhTKYlNEerhD7jhHUrTprdG8PewPgjmFj6N+MzJy2fRozaj
+         FO1kNoepHiivA/C0Fhtc17bDHONQ1muaURSlPREJ1FI1QkX84scNKp0R3sCOKwcwikv0
+         kmQjHcnP9zx3WuhHkI4lEcm3zOS6WSGGXglkly1fXhNg48PDAWcOJ028F12vGv4GHiV4
+         yzNOvNVAuvG9u3Q4y77WRUV1p0mk7phKMRSfS+9yQ3WxWKZZFipIY+ldREczkF3jfNou
+         sR1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=yxEFrVGam1sH5uNwQrNFOpjDTgkpMFeb4dI2bKRqm0Y=;
+        b=f5rq7mJtxYIjkG18yxk0K4TLIF4T3wn1MsuB6r2g5fZq2VpeyggPqf1sez8OkIYS6/
+         lW3mEcGWrrpAIxDpJWhjLmXigYnPkOuv4128qVE3SAsesN/cK0hT5e8dyn/ypfw795Em
+         J8qKcJHCXdiel7DtbvHTKZVSw3tQ30APgVeMFzSOnwYT9KM570WXWPqkikXSLLDqfCUo
+         8w+rC1eKxCtps0OJYtDrqz2yxtioLGNhRNqESfRNgzFB1m1evWKrH1b+nB7HOS6yjb4Y
+         qgyCdwjI2W564qYscH/IhS1Bnh7IPNfGK0JYNBs4ysEGFNpfXV3RYqpfrJNVuCap7pyL
+         C2ng==
+X-Gm-Message-State: AOAM5339T/erO/SHtjF4zzk07U4MqBk24i75n1UUqFSGC4OEMIWTM9ar
+        qSTQPdZh8L/uFe5aBTTZHANsz0lv9QWjshuCIdA=
+X-Google-Smtp-Source: ABdhPJwb1vD2AoI706KIsAuB2qTkjFZlaI1PpyFx73w2I0GqMxaxKPdy36W2Z1Sz/zNVdof5oihAhrKkfeKpdpPeqlE=
+X-Received: by 2002:a25:3b04:: with SMTP id i4mr54456082yba.767.1638963791908;
+ Wed, 08 Dec 2021 03:43:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
- worked
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        <linuxppc-dev@lists.ozlabs.org>, Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-mips@vger.kernel.org>, Kalle Valo <kvalo@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <sparclinux@vger.kernel.org>, <x86@kernel.org>,
-        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
-        Wei Liu <wei.liu@kernel.org>, <linux-hyperv@vger.kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-References: <20211206210147.872865823@linutronix.de>
- <20211206210223.872249537@linutronix.de>
- <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
- <87ilw0odel.fsf@mpe.ellerman.id.au>
- <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org> <8735n42lld.ffs@tglx>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <8735n42lld.ffs@tglx>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.96]
-X-ClientProxiedBy: DAG4EX1.mxp5.local (172.16.2.31) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: d54a9dd7-eba7-4e7f-a7a0-0dc7c43fc796
-X-Ovh-Tracer-Id: 10131410315672259365
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrjeekgddulecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeuveelvdejteegteefieevfeetffefvddvieekteevleefgeelgfeutedvfedvfeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehhtggrsehlihhnuhigrdhisghmrdgtohhm
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Wed, 8 Dec 2021 12:43:00 +0100
+Message-ID: <CAKXUXMyip-Ojt-uOsjU-LnajM+cV4EcAf6ABNoAus+t2fAizDg@mail.gmail.com>
+Subject: config CPU_SUPPORTS_HUGEPAGES refers to the non-existing symbol ARCH_PHYS_ADDR_T_64BIT
+To:     Daniel Silsby <dansilsby@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Paul Burton <paul.burton@mips.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/7/21 21:42, Thomas Gleixner wrote:
-> Cedric,
-> 
-> On Tue, Dec 07 2021 at 16:50, Cédric Le Goater wrote:
->> On 12/7/21 12:36, Michael Ellerman wrote:
->>>
->>> This patch should drop those selects I guess. Can you send an
->>> incremental diff for Thomas to squash in?
->>
->> Sure.
->>
->>> Removing all the tendrils in various device tree files will probably
->>> require some archaeology, and it should be perfectly safe to leave those
->>> in the tree with the driver gone. So I think we can do that as a
->>> subsequent patch, rather than in this series.
->>
->> Here are the changes. Compiled tested with ppc40x and ppc44x defconfigs.
-> 
-> < Lots of patch skipped />
->> @@ -141,7 +138,6 @@ config REDWOOD
->>    	select FORCE_PCI
->>    	select PPC4xx_PCI_EXPRESS
->>    	select PCI_MSI
->> -	select PPC4xx_MSI
->>    	help
->>    	  This option enables support for the AMCC PPC460SX Redwood board.
-> 
-> While that is incremental it certainly is worth a patch on it's
-> own. Could you add a proper changelog and an SOB please?
+Dear Daniel, dear Paul, dear Thomas,
 
-Here you are.
+In commit d4a451d5fc84 ("arch: remove the ARCH_PHYS_ADDR_T_64BIT
+config symbol") from April 2018, the config ARCH_PHYS_ADDR_T_64BIT was
+removed and all instances of that config were refactored
+appropriately. Since then, it is recommended to use the config
+PHYS_ADDR_T_64BIT instead.
 
-  https://github.com/legoater/linux/commit/75d2764b11fe8f6d8bf50d60a3feb599ce27b16d
+Then in June 2019, commit 171543e75272 ("MIPS: Disallow
+CPU_SUPPORTS_HUGEPAGES for XPA,EVA") introduces the expression
+"!(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))" for config
+CPU_SUPPORTS_HUGEPAGES, which refers to the non-existing symbol
+ARCH_PHYS_ADDR_T_64BIT.
 
-Thanks,
+In this expression, the symbol ARCH_PHYS_ADDR_T_64BIT always evaluates
+to false. So, the expression is effectively "!(32BIT && EVA)" right
+now.
 
-C.
+Now, it is a bit unclear what is intended here, especially since it
+was not noticed to be wrong for the last two years:
+
+- The commit is buggy, but nobody noticed it so far. It was intended
+to refer to PHYS_ADDR_T_64BIT. We need to provide a fix that changes
+the semantics by referring to the intended Kconfig symbol.
+
+- The commit is just a bit unclean and that is why nobody noticed. The
+reference to ARCH_PHYS_ADDR_T_64BIT can be dropped. We can provide a
+clean-up patch that preserves the current semantics.
+
+Once the situation for that commit and its intention is clear, I am
+happy to provide the suitable patch.
+
+Best regards,
+
+Lukas
