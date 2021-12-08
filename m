@@ -2,145 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6525146C5E8
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Dec 2021 22:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0752646CA37
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Dec 2021 02:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbhLGVGT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 7 Dec 2021 16:06:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:53224 "EHLO
+        id S242904AbhLHBxW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 7 Dec 2021 20:53:22 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45812 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbhLGVGN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 16:06:13 -0500
+        with ESMTP id S243074AbhLHBxV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 7 Dec 2021 20:53:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEC16B81E7D;
-        Tue,  7 Dec 2021 21:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF0FC341C1;
-        Tue,  7 Dec 2021 21:02:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7180B81F24
+        for <linux-mips@vger.kernel.org>; Wed,  8 Dec 2021 01:49:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AC2C341C5
+        for <linux-mips@vger.kernel.org>; Wed,  8 Dec 2021 01:49:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638910959;
-        bh=xQoYzuJZBtazlb9l9/rEZFpq4l8ZITO51ml+vNgPc6M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=e153nty81BUAPS50lzOeG3i/XMpm26Pk8TGxhpDoheH+aGOAhJjiCObFncc/cOH46
-         OXARkgcqJJlGa0F/Bsl/N/Hr8iyx5YBElDJEc4KBNNajc4emj6cdjk7cQoxzm32rM6
-         wS8QDvcYSbelmRSilLFSFpzwM4nEMGo1OciLG1fy1ib0RAXNhpEhAgwC7XOVLwtEMg
-         hUh+UVjgpZDPJcdCSkYndl3E5r7GBkkzKgk8s3NaLe/CmCRfbyieQFOca/oFRIERXj
-         HKyqHP6oyciLgO6YSOX23lsQkoLBX7Z1J+QJANGpc3FC3xvrJLcihkCi836KsOw4gQ
-         4SgZq/E6VBAOQ==
-Date:   Tue, 7 Dec 2021 15:02:38 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Cedric Le Goater <clg@kaod.org>,
-        Juergen Gross <jgross@suse.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
-        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: Re: [patch V2 23/23] PCI/MSI: Move descriptor counting on allocation
- fail to the legacy code
-Message-ID: <20211207210238.GA77554@bhelgaas>
+        s=k20201202; t=1638928188;
+        bh=i4KySOyMMRll2HmfVdr0ne/7foHzDjllo+7rdrRGQOA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=o6+ne1ucwghe93OnznVctqK75lyZ5pvmv2HuHufncSN9KSS8utuFro5fmV0EHRrYW
+         aBLFx45nC96ogRxejeiVCojKuay0wruEhXp3ep9aG6R6HHvRnyIMvNGYmo3rFzVQ0k
+         wk3pk4TYEusbFJVD/ItZs2C1hvT5A8yrhsCzyA2dyWs774Blb/tFvXMCHNsx9wHu0J
+         Ws3K5dYJ2IrDicdyOT3z/RX0opXvSP4ueIA3zE56oumH1BEmYdc2F64r380zZ3Yu+Q
+         I5WpOXM4W2e16QFiZXjSSI/CNfmUwYTWL/YFvtRRyY5yFUpQp+t8BC4vvW65XmYwZh
+         94g12BtkOz6/Q==
+Received: by mail-vk1-f176.google.com with SMTP id 84so621159vkc.6
+        for <linux-mips@vger.kernel.org>; Tue, 07 Dec 2021 17:49:48 -0800 (PST)
+X-Gm-Message-State: AOAM533UbtqNSbhe8HR/g5zpVWMHrGZBQ4GRHyApifoNyg8ugz/O07iK
+        0ypKuNHOXWx8e65qn/qxMWcHm3cHVEyQhrCSJGE=
+X-Google-Smtp-Source: ABdhPJyoLcKQXBZMQhn6JyUCVs/5LFuUlc3Za2VKIG5si2erVIugzirYrebO6y7hDZtVlNphXHRaesvoYJkYWCPWHrk=
+X-Received: by 2002:a05:6122:178b:: with SMTP id o11mr58270015vkf.17.1638928187738;
+ Tue, 07 Dec 2021 17:49:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211206210225.101336873@linutronix.de>
+References: <20211207162919.GB19327@alpha.franken.de>
+In-Reply-To: <20211207162919.GB19327@alpha.franken.de>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 8 Dec 2021 09:49:35 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4pdPZqnF0-YuM8f9TKHsezjSvLhviNTsZ2TkSisgrxdg@mail.gmail.com>
+Message-ID: <CAAhV-H4pdPZqnF0-YuM8f9TKHsezjSvLhviNTsZ2TkSisgrxdg@mail.gmail.com>
+Subject: Re: Loongson3 PCI/EHCI
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 06, 2021 at 11:28:00PM +0100, Thomas Gleixner wrote:
-> The irqdomain code already returns the information. Move the loop to the
-> legacy code.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Tested-by: Juergen Gross <jgross@suse.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Hi, Thomas,
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+On Wed, Dec 8, 2021 at 8:58 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> Hi,
+>
+> I'm getting lots of
+>
+> [    2.940587] pci 0000:00:04.1: EHCI: unrecognized capability ff
+> [    2.946478] pci 0000:00:04.1: EHCI: unrecognized capability ff
+> [    2.952374] pci 0000:00:04.1: EHCI: unrecognized capability ff
+> [    2.958270] pci 0000:00:04.1: EHCI: unrecognized capability ff
+> [    2.964166] pci 0000:00:04.1: EHCI: unrecognized capability ff
+> [    2.970062] pci 0000:00:04.1: EHCI: unrecognized capability ff
+>
+> while booting on a Loongson-3A R4 (Loongson-3A4000) @ 1800MHz system.
+> What I'm missing ?
+This is a hardware issue of LS7A bridge.
 
-> ---
->  drivers/pci/msi/legacy.c |   20 +++++++++++++++++++-
->  drivers/pci/msi/msi.c    |   19 +------------------
->  2 files changed, 20 insertions(+), 19 deletions(-)
-> 
-> --- a/drivers/pci/msi/legacy.c
-> +++ b/drivers/pci/msi/legacy.c
-> @@ -50,9 +50,27 @@ void __weak arch_teardown_msi_irqs(struc
->  	}
->  }
->  
-> +static int pci_msi_setup_check_result(struct pci_dev *dev, int type, int ret)
-> +{
-> +	struct msi_desc *entry;
-> +	int avail = 0;
-> +
-> +	if (type != PCI_CAP_ID_MSIX || ret >= 0)
-> +		return ret;
-> +
-> +	/* Scan the MSI descriptors for successfully allocated ones. */
-> +	for_each_pci_msi_entry(entry, dev) {
-> +		if (entry->irq != 0)
-> +			avail++;
-> +	}
-> +	return avail ? avail : ret;
-> +}
-> +
->  int pci_msi_legacy_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
->  {
-> -	return arch_setup_msi_irqs(dev, nvec, type);
-> +	int ret = arch_setup_msi_irqs(dev, nvec, type);
-> +
-> +	return pci_msi_setup_check_result(dev, type, ret);
->  }
->  
->  void pci_msi_legacy_teardown_msi_irqs(struct pci_dev *dev)
-> --- a/drivers/pci/msi/msi.c
-> +++ b/drivers/pci/msi/msi.c
-> @@ -609,7 +609,7 @@ static int msix_capability_init(struct p
->  
->  	ret = pci_msi_setup_msi_irqs(dev, nvec, PCI_CAP_ID_MSIX);
->  	if (ret)
-> -		goto out_avail;
-> +		goto out_free;
->  
->  	/* Check if all MSI entries honor device restrictions */
->  	ret = msi_verify_entries(dev);
-> @@ -634,23 +634,6 @@ static int msix_capability_init(struct p
->  	pcibios_free_irq(dev);
->  	return 0;
->  
-> -out_avail:
-> -	if (ret < 0) {
-> -		/*
-> -		 * If we had some success, report the number of IRQs
-> -		 * we succeeded in setting up.
-> -		 */
-> -		struct msi_desc *entry;
-> -		int avail = 0;
-> -
-> -		for_each_pci_msi_entry(entry, dev) {
-> -			if (entry->irq != 0)
-> -				avail++;
-> -		}
-> -		if (avail != 0)
-> -			ret = avail;
-> -	}
-> -
->  out_free:
->  	free_msi_irqs(dev);
->  
-> 
+>
+> I'm also seeing
+>
+> [    1.222546] pci_bus 0000:00: 2-byte config write to 0000:00:00.0 offset 0x4 m
+> ay corrupt adjacent RW1C bits
+> [    1.232314] pci_bus 0000:00: 2-byte config write to 0000:00:00.0 offset 0x4 m
+> ay corrupt adjacent RW1C bits
+>
+> which look suspicous...
+This can be avoid and I have send a patch, but hasn't accepted yet.
+https://lore.kernel.org/linux-pci/20211011074604.854340-2-chenhuacai@loongson.cn/T/#u
+
+Huacai
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
