@@ -2,146 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC0646D010
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Dec 2021 10:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7790246D138
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Dec 2021 11:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbhLHJa5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 8 Dec 2021 04:30:57 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:43036 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229528AbhLHJay (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 8 Dec 2021 04:30:54 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxWsl3erBhhK0EAA--.10593S2;
-        Wed, 08 Dec 2021 17:27:19 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] MIPS: Only define pci_remap_iospace() for Ralink
-Date:   Wed,  8 Dec 2021 17:27:19 +0800
-Message-Id: <1638955639-3584-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9AxWsl3erBhhK0EAA--.10593S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw4DCF45WFW8AFyUAry3XFb_yoWrWw1fpF
-        sIvwn7Gr4rur15Cay7Ary5Jrn8Xa1qkay3try8twn0vF1q9ry7Jrs7tF18CryDJFWvqFWx
-        WFZ2gr4jqF4qyaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFWl
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUO-BMDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        id S231889AbhLHKsR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 8 Dec 2021 05:48:17 -0500
+Received: from smtpout1.mo529.mail-out.ovh.net ([178.32.125.2]:40335 "EHLO
+        smtpout1.mo529.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229481AbhLHKsR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 8 Dec 2021 05:48:17 -0500
+X-Greylist: delayed 68074 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Dec 2021 05:48:17 EST
+Received: from mxplan5.mail.ovh.net (unknown [10.109.156.35])
+        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 4A0F4D092F09;
+        Wed,  8 Dec 2021 11:44:42 +0100 (CET)
+Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 8 Dec
+ 2021 11:44:40 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-96R001f5056120-68a4-4c0a-bc06-f617410d6d7e,
+                    EB01F339838E5AA67C986A6C3251B49097B81903) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 86.201.172.254
+Message-ID: <e92f2bb3-b5e1-c870-8151-3917a789a640@kaod.org>
+Date:   Wed, 8 Dec 2021 11:44:39 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [patch V2 01/23] powerpc/4xx: Remove MSI support which never
+ worked
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, <linux-pci@vger.kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        <linuxppc-dev@lists.ozlabs.org>, Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-mips@vger.kernel.org>, Kalle Valo <kvalo@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <sparclinux@vger.kernel.org>, <x86@kernel.org>,
+        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
+        Wei Liu <wei.liu@kernel.org>, <linux-hyperv@vger.kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+References: <20211206210147.872865823@linutronix.de>
+ <20211206210223.872249537@linutronix.de>
+ <8d1e9d2b-fbe9-2e15-6df6-03028902791a@kaod.org>
+ <87ilw0odel.fsf@mpe.ellerman.id.au>
+ <27f22e0e-8f84-a6d7-704b-d9eddc642d74@kaod.org> <8735n42lld.ffs@tglx>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <8735n42lld.ffs@tglx>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.96]
+X-ClientProxiedBy: DAG4EX1.mxp5.local (172.16.2.31) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: d54a9dd7-eba7-4e7f-a7a0-0dc7c43fc796
+X-Ovh-Tracer-Id: 10131410315672259365
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrjeekgddulecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeuveelvdejteegteefieevfeetffefvddvieekteevleefgeelgfeutedvfedvfeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehhtggrsehlihhnuhigrdhisghmrdgtohhm
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After commit 9f76779f2418 ("MIPS: implement architecture-specific
-'pci_remap_iospace()'"), there exists the following warning on the
-Loongson64 platform:
+On 12/7/21 21:42, Thomas Gleixner wrote:
+> Cedric,
+> 
+> On Tue, Dec 07 2021 at 16:50, Cédric Le Goater wrote:
+>> On 12/7/21 12:36, Michael Ellerman wrote:
+>>>
+>>> This patch should drop those selects I guess. Can you send an
+>>> incremental diff for Thomas to squash in?
+>>
+>> Sure.
+>>
+>>> Removing all the tendrils in various device tree files will probably
+>>> require some archaeology, and it should be perfectly safe to leave those
+>>> in the tree with the driver gone. So I think we can do that as a
+>>> subsequent patch, rather than in this series.
+>>
+>> Here are the changes. Compiled tested with ppc40x and ppc44x defconfigs.
+> 
+> < Lots of patch skipped />
+>> @@ -141,7 +138,6 @@ config REDWOOD
+>>    	select FORCE_PCI
+>>    	select PPC4xx_PCI_EXPRESS
+>>    	select PCI_MSI
+>> -	select PPC4xx_MSI
+>>    	help
+>>    	  This option enables support for the AMCC PPC460SX Redwood board.
+> 
+> While that is incremental it certainly is worth a patch on it's
+> own. Could you add a proper changelog and an SOB please?
 
-    loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff -> 0x0000020000
-    loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff -> 0x0040000000
-    ------------[ cut here ]------------
-    WARNING: CPU: 2 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x84/0x90
-    resource start address is not zero
-    ...
-    Call Trace:
-    [<ffffffff8020dc78>] show_stack+0x40/0x120
-    [<ffffffff80cf4a0c>] dump_stack_lvl+0x58/0x74
-    [<ffffffff8023a0b0>] __warn+0xe0/0x110
-    [<ffffffff80cee02c>] warn_slowpath_fmt+0xa4/0xd0
-    [<ffffffff80cecf24>] pci_remap_iospace+0x84/0x90
-    [<ffffffff807f9864>] devm_pci_remap_iospace+0x5c/0xb8
-    [<ffffffff808121b0>] devm_of_pci_bridge_init+0x178/0x1f8
-    [<ffffffff807f4000>] devm_pci_alloc_host_bridge+0x78/0x98
-    [<ffffffff80819454>] loongson_pci_probe+0x34/0x160
-    [<ffffffff809203cc>] platform_probe+0x6c/0xe0
-    [<ffffffff8091d5d4>] really_probe+0xbc/0x340
-    [<ffffffff8091d8f0>] __driver_probe_device+0x98/0x110
-    [<ffffffff8091d9b8>] driver_probe_device+0x50/0x118
-    [<ffffffff8091dea0>] __driver_attach+0x80/0x118
-    [<ffffffff8091b280>] bus_for_each_dev+0x80/0xc8
-    [<ffffffff8091c6d8>] bus_add_driver+0x130/0x210
-    [<ffffffff8091ead4>] driver_register+0x8c/0x150
-    [<ffffffff80200a8c>] do_one_initcall+0x54/0x288
-    [<ffffffff811a5320>] kernel_init_freeable+0x27c/0x2e4
-    [<ffffffff80cfc380>] kernel_init+0x2c/0x134
-    [<ffffffff80205a2c>] ret_from_kernel_thread+0x14/0x1c
-    ---[ end trace e4a0efe10aa5cce6 ]---
-    loongson-pci 1a000000.pci: error -19: failed to map resource [io  0x20000-0x3ffff]
+Here you are.
 
-We can see that the resource start address is 0x0000020000, because
-the ISA Bridge used the zero address which is defined in the dts file
-arch/mips/boot/dts/loongson/ls7a-pch.dtsi:
+  https://github.com/legoater/linux/commit/75d2764b11fe8f6d8bf50d60a3feb599ce27b16d
 
-    ISA Bridge: /bus@10000000/isa@18000000
-    IO 0x0000000018000000..0x000000001801ffff  ->  0x0000000000000000
+Thanks,
 
-Based on the above analysis, the architecture-specific pci_remap_iospace()
-is not suitable for Loongson64, we should only define pci_remap_iospace()
-for Ralink on MIPS based on the commit background.
-
-Suggested-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/include/asm/mach-ralink/spaces.h | 2 ++
- arch/mips/include/asm/pci.h                | 4 ----
- arch/mips/pci/pci-generic.c                | 2 ++
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/mips/include/asm/mach-ralink/spaces.h b/arch/mips/include/asm/mach-ralink/spaces.h
-index 05d14c2..f7af11e 100644
---- a/arch/mips/include/asm/mach-ralink/spaces.h
-+++ b/arch/mips/include/asm/mach-ralink/spaces.h
-@@ -6,5 +6,7 @@
- #define PCI_IOSIZE	SZ_64K
- #define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
- 
-+#define pci_remap_iospace pci_remap_iospace
-+
- #include <asm/mach-generic/spaces.h>
- #endif
-diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
-index 421231f..9ffc819 100644
---- a/arch/mips/include/asm/pci.h
-+++ b/arch/mips/include/asm/pci.h
-@@ -20,10 +20,6 @@
- #include <linux/list.h>
- #include <linux/of.h>
- 
--#ifdef CONFIG_PCI_DRIVERS_GENERIC
--#define pci_remap_iospace pci_remap_iospace
--#endif
--
- #ifdef CONFIG_PCI_DRIVERS_LEGACY
- 
- /*
-diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
-index 18eb8a4..d2d68bac 100644
---- a/arch/mips/pci/pci-generic.c
-+++ b/arch/mips/pci/pci-generic.c
-@@ -47,6 +47,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
- 	pci_read_bridge_bases(bus);
- }
- 
-+#ifdef pci_remap_iospace
- int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
- {
- 	unsigned long vaddr;
-@@ -60,3 +61,4 @@ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
- 	set_io_port_base(vaddr);
- 	return 0;
- }
-+#endif
--- 
-2.1.0
-
+C.
