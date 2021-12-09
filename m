@@ -2,140 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3288E46E3CF
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Dec 2021 09:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB4E46E581
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Dec 2021 10:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbhLIIOc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Dec 2021 03:14:32 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:57592 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232443AbhLIIOc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Dec 2021 03:14:32 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3DC661FD2A;
-        Thu,  9 Dec 2021 08:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1639037458; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hhA80F4SBwYxc5rPeZmiTk9517hUMWB4FuXx1eDegWw=;
-        b=p+unAu5+76b+IbLDtBDNTBIsnywdGOK6cktRZx6BCqcFKgTng+9j8n2uX0WmdxBM8IBFZa
-        MQTW1uaR748NVhSV2kT6DaN14NmVegJU67V0tpq8DjMzML1uXf0D+F7oka/RNeVCkgqyLY
-        YAuk7XI4v/IRJdmBKqBeo+FZiruecmg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1639037458;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hhA80F4SBwYxc5rPeZmiTk9517hUMWB4FuXx1eDegWw=;
-        b=8bA96r0YWBgWINzKgIHhGxoefwd1cydpIN28k6l6KjGIFENlAaC3nCUS9cdakBxIkY2cnc
-        eICrpIp2rVp/ZSDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0818713CA9;
-        Thu,  9 Dec 2021 08:10:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T7TgABK6sWF5QgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 09 Dec 2021 08:10:58 +0000
-Message-ID: <339e74fb-0270-20f4-37af-31c25c03586d@suse.de>
-Date:   Thu, 9 Dec 2021 09:10:57 +0100
+        id S231706AbhLIJ3k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Dec 2021 04:29:40 -0500
+Received: from elvis.franken.de ([193.175.24.41]:38009 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233327AbhLIJ3k (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Dec 2021 04:29:40 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mvFgg-0001er-00; Thu, 09 Dec 2021 10:26:02 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 05554C4E11; Thu,  9 Dec 2021 10:21:08 +0100 (CET)
+Date:   Thu, 9 Dec 2021 10:21:08 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: Do not define pci_remap_iospace() under
+ MACH_LOONGSON64
+Message-ID: <20211209092108.GA6981@alpha.franken.de>
+References: <1637139795-3032-1-git-send-email-yangtiezhu@loongson.cn>
+ <20211207170603.GA20028@alpha.franken.de>
+ <CAMhs-H-3FRV2hDKbRR=A2M2fsaengTtTBF7HxCnrtGi=fziK-A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drm/ingenic: fix error code in
- ingenic_drm_gem_create_object()
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kernel-janitors@vger.kernel.org
-References: <20211118111522.GD1147@kili>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20211118111522.GD1147@kili>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------GWt8OvBYWoCzUnv8z5rePWn9"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMhs-H-3FRV2hDKbRR=A2M2fsaengTtTBF7HxCnrtGi=fziK-A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------GWt8OvBYWoCzUnv8z5rePWn9
-Content-Type: multipart/mixed; boundary="------------1ZdJCGDDgzX2xxi5I0Ot5pSb";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Dan Carpenter <dan.carpenter@oracle.com>,
- Paul Cercueil <paul@crapouillou.net>
-Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
- linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
- kernel-janitors@vger.kernel.org
-Message-ID: <339e74fb-0270-20f4-37af-31c25c03586d@suse.de>
-Subject: Re: [PATCH] drm/ingenic: fix error code in
- ingenic_drm_gem_create_object()
-References: <20211118111522.GD1147@kili>
-In-Reply-To: <20211118111522.GD1147@kili>
+On Wed, Dec 08, 2021 at 02:47:56PM +0100, Sergio Paracuellos wrote:
+> > -#endif
+> > -
+> >  #ifdef CONFIG_PCI_DRIVERS_LEGACY
+> >
+> >  /*
+> > diff --git a/arch/mips/pci/pci-generic.c b/arch/mips/pci/pci-generic.c
+> > index 18eb8a453a86..d2d68bac3d25 100644
+> > --- a/arch/mips/pci/pci-generic.c
+> > +++ b/arch/mips/pci/pci-generic.c
+> > @@ -47,6 +47,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
+> >         pci_read_bridge_bases(bus);
+> >  }
+> >
+> > +#ifdef pci_remap_iospace
+> >  int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+> >  {
+> >         unsigned long vaddr;
+> > @@ -60,3 +61,4 @@ int pci_remap_iospace(const struct resource *res, phys_addr_t phys_addr)
+> >         set_io_port_base(vaddr);
+> >         return 0;
+> >  }
+> > +#endif
+> 
+> I agree this is cleaner than the CONFIG_MACH_LOONGSON64 ifdef stuff. I
+> have tested this changes in mt7621 ralink platform and all seem to
+> work, so in case you want to include this, feel free to add my:
 
---------------1ZdJCGDDgzX2xxi5I0Ot5pSb
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+thank you for testing.
 
-RllJIHRoaXMgaXNzdWUgd2FzIGZpeGVkIGJ5IFsxXS4gUGxlYXNlIGRvbid0IG1lcmdlLg0K
-DQpbMV0gDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMTExMzAwOTUy
-NTUuMjY3MTAtMS10emltbWVybWFubkBzdXNlLmRlLw0KDQpBbSAxOC4xMS4yMSB1bSAxMjox
-NSBzY2hyaWViIERhbiBDYXJwZW50ZXI6DQo+IFRoZSAtPmdlbV9jcmVhdGVfb2JqZWN0KCkg
-ZnVuY3Rpb24gcG9pbnRlcnMgYXJlIHN1cHBvc2VkIHRvIHJldHVybiBOVUxMDQo+IG9uIGVy
-cm9yLiAgVGhpcyBmdW5jdGlvbiByZXR1cm5zIGFuIGVycm9yIHBvaW50ZXIgYnV0IG5vbmUg
-b2YgdGhlDQo+IGNhbGxlcnMgZXhwZWN0IHRoYXQgc28gaXQgd2lsbCBsZWFkIHRvIGFuIE9v
-cHMuICBTZWUgZHJtX2dlbV92cmFtX2NyZWF0ZSgpDQo+IGZvciBleGFtcGxlIG9mIGl0IGNo
-ZWNrcyBmb3IgTlVMTCBidXQgYW4gZXJyb3IgcG9pbnRlciB3b3VsZCBsZWFkIHRvIGENCj4g
-Y3Jhc2guDQo+IA0KPiBGaXhlczogNGE3OTFjYjZkMzRmICgiZHJtL2luZ2VuaWM6IEFkZCBv
-cHRpb24gdG8gYWxsb2MgY2FjaGVkIEdFTSBidWZmZXJzIikNCj4gU2lnbmVkLW9mZi1ieTog
-RGFuIENhcnBlbnRlciA8ZGFuLmNhcnBlbnRlckBvcmFjbGUuY29tPg0KPiAtLS0NCj4gICBk
-cml2ZXJzL2dwdS9kcm0vaW5nZW5pYy9pbmdlbmljLWRybS1kcnYuYyB8IDIgKy0NCj4gICAx
-IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vaW5nZW5pYy9pbmdlbmljLWRybS1kcnYuYyBi
-L2RyaXZlcnMvZ3B1L2RybS9pbmdlbmljL2luZ2VuaWMtZHJtLWRydi5jDQo+IGluZGV4IGE1
-ZGYxYzhkMzRjZC4uZWI3MjY2YTBiMDM3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9k
-cm0vaW5nZW5pYy9pbmdlbmljLWRybS1kcnYuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0v
-aW5nZW5pYy9pbmdlbmljLWRybS1kcnYuYw0KPiBAQCAtNzU3LDcgKzc1Nyw3IEBAIGluZ2Vu
-aWNfZHJtX2dlbV9jcmVhdGVfb2JqZWN0KHN0cnVjdCBkcm1fZGV2aWNlICpkcm0sIHNpemVf
-dCBzaXplKQ0KPiAgIA0KPiAgIAlvYmogPSBremFsbG9jKHNpemVvZigqb2JqKSwgR0ZQX0tF
-Uk5FTCk7DQo+ICAgCWlmICghb2JqKQ0KPiAtCQlyZXR1cm4gRVJSX1BUUigtRU5PTUVNKTsN
-Cj4gKwkJcmV0dXJuIE5VTEw7DQo+ICAgDQo+ICAgCW9iai0+bWFwX25vbmNvaGVyZW50ID0g
-cHJpdi0+c29jX2luZm8tPm1hcF9ub25jb2hlcmVudDsNCj4gICANCj4gDQoNCi0tIA0KVGhv
-bWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdh
-cmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5i
-ZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8
-aHJlcjogSXZvIFRvdGV2DQo=
+> Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> 
+> Thomas, if you prefer me to send this as a more formal PATCH, please
+> let me know.
 
---------------1ZdJCGDDgzX2xxi5I0Ot5pSb--
+Thiezhu already did, I'll add your tags the new patch.
 
---------------GWt8OvBYWoCzUnv8z5rePWn9
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Thomas.
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGxuhEFAwAAAAAACgkQlh/E3EQov+DF
-XA/9GjPqYNaLL9g9pcvU1z9VfPodGlzbYHaZ6T9GTjO9ELA9XfXKomblRUqxjvm6LU6J1cgDb0tC
-ZrPooUCsqIywLgKpKyXkNa/PqnDppENUbTXo6+KSmCzNJ0c5cc5ymz0zueof0vA6yTTngqqz4jGp
-esfIXn1vgG+s/3ylKqH45sSxTQr2+sn59SFq+xnQH70T3IUTVc2zDYll4uvNWTF0HETwewEUSueS
-Q46yXMTJ6diAb3gBi2rWivWEApopFlmqglx+6wGeiQaccchuSkX6fLDh+hOBlZ0rVRp2PABT9bK0
-ofT0BTmCCUSS/frJGXdsDPdbP0yP0Ji3sGa+ATsgnTXvcTyvdqgp7wOF/h/JoFnTNJfKWY+/ajqh
-YiIBoUAasCE7P9nlX4oqARmEZa1JkIZu6c8anSMCe5R6N2K7oYxfjpLpN9SExTXVAxIs3Jlfswvm
-lQrFeYm29IhYdFkouUyDPaNgEPs8sTT8DmYJhpseTjTUg+O6dQowrKrzEEIZtds3UaBkTxsc6H1H
-1Ske4jsHqg80Q1Gk2nDGMJbExmOKs77MZ5u/R1FabXyh5CcLUXh/90hsotUIb6pJQ8goLecCXJRc
-/2VkzhJ7Kil/o4RMCdW8+eb9oCLCRE7Nh0tL0xeX9+nIcDYlRQ0ItSj7359wWQVq45PnhDkW+ONf
-skM=
-=vNOz
------END PGP SIGNATURE-----
-
---------------GWt8OvBYWoCzUnv8z5rePWn9--
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
