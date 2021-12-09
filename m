@@ -2,77 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9177246E72A
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Dec 2021 11:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CEA46E780
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Dec 2021 12:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbhLILCM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Dec 2021 06:02:12 -0500
-Received: from elvis.franken.de ([193.175.24.41]:38158 "EHLO elvis.franken.de"
+        id S236588AbhLILZj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 9 Dec 2021 06:25:39 -0500
+Received: from aposti.net ([89.234.176.197]:55020 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236300AbhLILCM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 Dec 2021 06:02:12 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mvH8G-0002Qu-00; Thu, 09 Dec 2021 11:58:36 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 83D15C4E1E; Thu,  9 Dec 2021 11:51:13 +0100 (CET)
-Date:   Thu, 9 Dec 2021 11:51:13 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        id S231765AbhLILZi (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Dec 2021 06:25:38 -0500
+Date:   Thu, 09 Dec 2021 11:21:53 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: config CPU_SUPPORTS_HUGEPAGES refers to the non-existing symbol
+ ARCH_PHYS_ADDR_T_64BIT
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Daniel Silsby <dansilsby@gmail.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        BROADCOM NVRAM DRIVER <linux-mips@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software
- nodes
-Message-ID: <20211209105113.GA8982@alpha.franken.de>
-References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
- <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
- <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
- <20211129122052.GA7921@alpha.franken.de>
- <CAMuHMdWbvpzZCs4HOXErbVYQTiQAB0syuiR6Wd7=sTA2vFpXzw@mail.gmail.com>
- <YbDtiC5CJJGSL/9C@smile.fi.intel.com>
- <20211208220759.GA6406@alpha.franken.de>
- <YbHWcvrYXiS5sCm1@smile.fi.intel.com>
+Message-Id: <H8IU3R.H5QVNRA077PT@crapouillou.net>
+In-Reply-To: <CAKXUXMyip-Ojt-uOsjU-LnajM+cV4EcAf6ABNoAus+t2fAizDg@mail.gmail.com>
+References: <CAKXUXMyip-Ojt-uOsjU-LnajM+cV4EcAf6ABNoAus+t2fAizDg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YbHWcvrYXiS5sCm1@smile.fi.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 12:12:02PM +0200, Andy Shevchenko wrote:
-> On Wed, Dec 08, 2021 at 11:07:59PM +0100, Thomas Bogendoerfer wrote:
-> > On Wed, Dec 08, 2021 at 07:38:16PM +0200, Andy Shevchenko wrote:
-> > > On Mon, Nov 29, 2021 at 01:30:17PM +0100, Geert Uytterhoeven wrote:
-> > > > On Mon, Nov 29, 2021 at 1:21 PM Thomas Bogendoerfer
-> > > > <tsbogend@alpha.franken.de> wrote:
-> > > > > On Fri, Nov 26, 2021 at 01:16:22PM +0100, Geert Uytterhoeven wrote:
-> 
-> ...
-> 
-> > > > > are you ok with completly removing rbtx4938 support ? Can I rbtx4939
-> > > > > board support, too ?
-> > > > 
-> > > > Fine for me, I only have rbtx4927.
-> > > 
-> > > Is there any news? I still see my patch well applied against latest Linux Next.
-> > > If the removal is going to be postponed, consider applying this patch then. So
-> > > we may move forward.
-> > 
-> > https://lore.kernel.org/all/20211130164558.85584-1-tsbogend@alpha.franken.de/
-> > 
-> > The second patch in that series touches drivers/mtd so I'm waiting for
-> > a Acked-by. But I could apply the first patch...
-> 
-> Yes, please!
+Hi Lukas,
 
-I've applied it, should show up in linux-next soon.
+Le mer., déc. 8 2021 at 12:43:00 +0100, Lukas Bulwahn 
+<lukas.bulwahn@gmail.com> a écrit :
+> Dear Daniel, dear Paul, dear Thomas,
+> 
+> In commit d4a451d5fc84 ("arch: remove the ARCH_PHYS_ADDR_T_64BIT
+> config symbol") from April 2018, the config ARCH_PHYS_ADDR_T_64BIT was
+> removed and all instances of that config were refactored
+> appropriately. Since then, it is recommended to use the config
+> PHYS_ADDR_T_64BIT instead.
+> 
+> Then in June 2019, commit 171543e75272 ("MIPS: Disallow
+> CPU_SUPPORTS_HUGEPAGES for XPA,EVA") introduces the expression
+> "!(32BIT && (ARCH_PHYS_ADDR_T_64BIT || EVA))" for config
+> CPU_SUPPORTS_HUGEPAGES, which refers to the non-existing symbol
+> ARCH_PHYS_ADDR_T_64BIT.
+> 
+> In this expression, the symbol ARCH_PHYS_ADDR_T_64BIT always evaluates
+> to false. So, the expression is effectively "!(32BIT && EVA)" right
+> now.
+> 
+> Now, it is a bit unclear what is intended here, especially since it
+> was not noticed to be wrong for the last two years:
+> 
+> - The commit is buggy, but nobody noticed it so far. It was intended
+> to refer to PHYS_ADDR_T_64BIT. We need to provide a fix that changes
+> the semantics by referring to the intended Kconfig symbol.
 
-Thomas.
+It should be PHYS_ADDR_T_64BIT, yes.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+> - The commit is just a bit unclean and that is why nobody noticed. The
+> reference to ARCH_PHYS_ADDR_T_64BIT can be dropped. We can provide a
+> clean-up patch that preserves the current semantics.
+
+AFAIK hugepages still don't work as-is on 32-bit as we are running out 
+of available bits in PTEs. I do have hugepages enabled on a kernel 
+build, but I have to manually disable ARCH_HAS_PTE_SPECIAL and 
+CPU_HAS_RIXI to free up space. This is annoying but not something that 
+can be fixed easily.
+
+-Paul
+
+> Once the situation for that commit and its intention is clear, I am
+> happy to provide the suitable patch.
+> 
+> Best regards,
+> 
+> Lukas
+
+
