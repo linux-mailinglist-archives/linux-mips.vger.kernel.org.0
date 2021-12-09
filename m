@@ -2,68 +2,140 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 391DD46E387
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Dec 2021 08:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3288E46E3CF
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Dec 2021 09:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbhLIH6V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Dec 2021 02:58:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbhLIH6U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Dec 2021 02:58:20 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F588C061746
-        for <linux-mips@vger.kernel.org>; Wed,  8 Dec 2021 23:54:47 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id e3so16713288edu.4
-        for <linux-mips@vger.kernel.org>; Wed, 08 Dec 2021 23:54:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UXZtwM0lWDeGy5nge6H1IgLYqHbHbRiSBEY8ZBnX2uI=;
-        b=PLL7c7h/VI6LSeSi9OgbuIm78a4PLCHMUdPdhVVUa+0FTo6+dfMkkonFU8r2jlL26c
-         nzsXF4+BvPR4LN2gclZ4Dpzl4t0vuH6iuxv5V6Co3qObHCLcyQUOxDTzZYz7ndjxQZhS
-         lmgttdfR9heSOBggf2FOVPf55NkslKzUSqPTfvNrG1lHzVDJZWQZGE1I2N66Os2z8tVk
-         6n/wpWZjJQfGefrS7LJDD2CZNZbScXwWrZ9E06+89A2sYnfRXcZxrs25ug2qFMHfwy8O
-         jvOmcrmBJMm6RRfXV5rJC9cExMXfw8HUxmzfCEX2JjFWt+dXNADi84CUdHWwnEIaX47e
-         RcUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=UXZtwM0lWDeGy5nge6H1IgLYqHbHbRiSBEY8ZBnX2uI=;
-        b=Pyrz4q2sPJWO6v8N32R3dGL0oIT7L2CPiGPl2AtexJiDWJSjwbtcxPkx/h8Gl4qECe
-         8LUKJjWJ+HktEXvIJur7c/sIkYs0o1UKvu6R6D/nLjsr5Z+B7wLpRttlPnem+XKfGvCD
-         h+7at9axpjgjt02MedLzSGb2Jjf+/E86jf37gUWfrz9mriMec+sn4xP/Np52ambTqC8a
-         WUaCOQVmhokwc/Gr37vlS3GmRe6gZPn6XIPkH7E1Hw83p9HKkDyao5Gp+/WPrJW5DzLd
-         CDl+CHdw6mOTlfffJ8OXaJoEzMucrl1DdgqrHjTYNjtkpSoWTcx3Frggo/WGCglI7q7n
-         +VtQ==
-X-Gm-Message-State: AOAM533ss/VsM7zIoI+tUvLM/9e1CT4RbAAL8ZjIsg6ORm6am61/YFO6
-        NCSWpa6RxZmDjvAy8Hd+8wpqUKygfB52fNQdzRs=
-X-Google-Smtp-Source: ABdhPJw3bWDhklz476tlBcbGGKcA/9OWZAOTtrrX5n8cZHwfi8SySnFHZxRldRyOFXzIHQ4SFosBu5rGWdJ9RLGO5zo=
-X-Received: by 2002:a50:f18a:: with SMTP id x10mr26443389edl.193.1639036486035;
- Wed, 08 Dec 2021 23:54:46 -0800 (PST)
+        id S234403AbhLIIOc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Dec 2021 03:14:32 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:57592 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232443AbhLIIOc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 9 Dec 2021 03:14:32 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3DC661FD2A;
+        Thu,  9 Dec 2021 08:10:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1639037458; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hhA80F4SBwYxc5rPeZmiTk9517hUMWB4FuXx1eDegWw=;
+        b=p+unAu5+76b+IbLDtBDNTBIsnywdGOK6cktRZx6BCqcFKgTng+9j8n2uX0WmdxBM8IBFZa
+        MQTW1uaR748NVhSV2kT6DaN14NmVegJU67V0tpq8DjMzML1uXf0D+F7oka/RNeVCkgqyLY
+        YAuk7XI4v/IRJdmBKqBeo+FZiruecmg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1639037458;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hhA80F4SBwYxc5rPeZmiTk9517hUMWB4FuXx1eDegWw=;
+        b=8bA96r0YWBgWINzKgIHhGxoefwd1cydpIN28k6l6KjGIFENlAaC3nCUS9cdakBxIkY2cnc
+        eICrpIp2rVp/ZSDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0818713CA9;
+        Thu,  9 Dec 2021 08:10:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id T7TgABK6sWF5QgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 09 Dec 2021 08:10:58 +0000
+Message-ID: <339e74fb-0270-20f4-37af-31c25c03586d@suse.de>
+Date:   Thu, 9 Dec 2021 09:10:57 +0100
 MIME-Version: 1.0
-Received: by 2002:a54:2901:0:0:0:0:0 with HTTP; Wed, 8 Dec 2021 23:54:45 -0800 (PST)
-Reply-To: dwilliamssdavid@gmail.com
-From:   "Mr.David Williams" <wolley11william@gmail.com>
-Date:   Thu, 9 Dec 2021 08:54:45 +0100
-Message-ID: <CAGa5T0_ptLrEB0YGhEa_+LG32f3pnvJ62ZjovMU=FGgwoAjK7Q@mail.gmail.com>
-Subject: Did you authorize Mr. Liu Kong Nam
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] drm/ingenic: fix error code in
+ ingenic_drm_gem_create_object()
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Paul Cercueil <paul@crapouillou.net>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kernel-janitors@vger.kernel.org
+References: <20211118111522.GD1147@kili>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20211118111522.GD1147@kili>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------GWt8OvBYWoCzUnv8z5rePWn9"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello ,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------GWt8OvBYWoCzUnv8z5rePWn9
+Content-Type: multipart/mixed; boundary="------------1ZdJCGDDgzX2xxi5I0Ot5pSb";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Dan Carpenter <dan.carpenter@oracle.com>,
+ Paul Cercueil <paul@crapouillou.net>
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+ linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ kernel-janitors@vger.kernel.org
+Message-ID: <339e74fb-0270-20f4-37af-31c25c03586d@suse.de>
+Subject: Re: [PATCH] drm/ingenic: fix error code in
+ ingenic_drm_gem_create_object()
+References: <20211118111522.GD1147@kili>
+In-Reply-To: <20211118111522.GD1147@kili>
 
-Did you authorize Mr. Liu Kong Nam of Kemuning Ray Street
-NO.8,Tomang.Jakarta, Indonesia to pay the pending wire transfer
-activation charges and claim your WORLD BANK/IMF compensation payment
-the sum of Seven million two hundred thousand US dollars?.
+--------------1ZdJCGDDgzX2xxi5I0Ot5pSb
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Get back to me with your details.
+RllJIHRoaXMgaXNzdWUgd2FzIGZpeGVkIGJ5IFsxXS4gUGxlYXNlIGRvbid0IG1lcmdlLg0K
+DQpbMV0gDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMTExMzAwOTUy
+NTUuMjY3MTAtMS10emltbWVybWFubkBzdXNlLmRlLw0KDQpBbSAxOC4xMS4yMSB1bSAxMjox
+NSBzY2hyaWViIERhbiBDYXJwZW50ZXI6DQo+IFRoZSAtPmdlbV9jcmVhdGVfb2JqZWN0KCkg
+ZnVuY3Rpb24gcG9pbnRlcnMgYXJlIHN1cHBvc2VkIHRvIHJldHVybiBOVUxMDQo+IG9uIGVy
+cm9yLiAgVGhpcyBmdW5jdGlvbiByZXR1cm5zIGFuIGVycm9yIHBvaW50ZXIgYnV0IG5vbmUg
+b2YgdGhlDQo+IGNhbGxlcnMgZXhwZWN0IHRoYXQgc28gaXQgd2lsbCBsZWFkIHRvIGFuIE9v
+cHMuICBTZWUgZHJtX2dlbV92cmFtX2NyZWF0ZSgpDQo+IGZvciBleGFtcGxlIG9mIGl0IGNo
+ZWNrcyBmb3IgTlVMTCBidXQgYW4gZXJyb3IgcG9pbnRlciB3b3VsZCBsZWFkIHRvIGENCj4g
+Y3Jhc2guDQo+IA0KPiBGaXhlczogNGE3OTFjYjZkMzRmICgiZHJtL2luZ2VuaWM6IEFkZCBv
+cHRpb24gdG8gYWxsb2MgY2FjaGVkIEdFTSBidWZmZXJzIikNCj4gU2lnbmVkLW9mZi1ieTog
+RGFuIENhcnBlbnRlciA8ZGFuLmNhcnBlbnRlckBvcmFjbGUuY29tPg0KPiAtLS0NCj4gICBk
+cml2ZXJzL2dwdS9kcm0vaW5nZW5pYy9pbmdlbmljLWRybS1kcnYuYyB8IDIgKy0NCj4gICAx
+IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vaW5nZW5pYy9pbmdlbmljLWRybS1kcnYuYyBi
+L2RyaXZlcnMvZ3B1L2RybS9pbmdlbmljL2luZ2VuaWMtZHJtLWRydi5jDQo+IGluZGV4IGE1
+ZGYxYzhkMzRjZC4uZWI3MjY2YTBiMDM3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9k
+cm0vaW5nZW5pYy9pbmdlbmljLWRybS1kcnYuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0v
+aW5nZW5pYy9pbmdlbmljLWRybS1kcnYuYw0KPiBAQCAtNzU3LDcgKzc1Nyw3IEBAIGluZ2Vu
+aWNfZHJtX2dlbV9jcmVhdGVfb2JqZWN0KHN0cnVjdCBkcm1fZGV2aWNlICpkcm0sIHNpemVf
+dCBzaXplKQ0KPiAgIA0KPiAgIAlvYmogPSBremFsbG9jKHNpemVvZigqb2JqKSwgR0ZQX0tF
+Uk5FTCk7DQo+ICAgCWlmICghb2JqKQ0KPiAtCQlyZXR1cm4gRVJSX1BUUigtRU5PTUVNKTsN
+Cj4gKwkJcmV0dXJuIE5VTEw7DQo+ICAgDQo+ICAgCW9iai0+bWFwX25vbmNvaGVyZW50ID0g
+cHJpdi0+c29jX2luZm8tPm1hcF9ub25jb2hlcmVudDsNCj4gICANCj4gDQoNCi0tIA0KVGhv
+bWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdh
+cmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5i
+ZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8
+aHJlcjogSXZvIFRvdGV2DQo=
 
-Regards
-Mr. David Williams
-E-Mail: ( williamsmrdavid60@gmail.com )
+--------------1ZdJCGDDgzX2xxi5I0Ot5pSb--
+
+--------------GWt8OvBYWoCzUnv8z5rePWn9
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGxuhEFAwAAAAAACgkQlh/E3EQov+DF
+XA/9GjPqYNaLL9g9pcvU1z9VfPodGlzbYHaZ6T9GTjO9ELA9XfXKomblRUqxjvm6LU6J1cgDb0tC
+ZrPooUCsqIywLgKpKyXkNa/PqnDppENUbTXo6+KSmCzNJ0c5cc5ymz0zueof0vA6yTTngqqz4jGp
+esfIXn1vgG+s/3ylKqH45sSxTQr2+sn59SFq+xnQH70T3IUTVc2zDYll4uvNWTF0HETwewEUSueS
+Q46yXMTJ6diAb3gBi2rWivWEApopFlmqglx+6wGeiQaccchuSkX6fLDh+hOBlZ0rVRp2PABT9bK0
+ofT0BTmCCUSS/frJGXdsDPdbP0yP0Ji3sGa+ATsgnTXvcTyvdqgp7wOF/h/JoFnTNJfKWY+/ajqh
+YiIBoUAasCE7P9nlX4oqARmEZa1JkIZu6c8anSMCe5R6N2K7oYxfjpLpN9SExTXVAxIs3Jlfswvm
+lQrFeYm29IhYdFkouUyDPaNgEPs8sTT8DmYJhpseTjTUg+O6dQowrKrzEEIZtds3UaBkTxsc6H1H
+1Ske4jsHqg80Q1Gk2nDGMJbExmOKs77MZ5u/R1FabXyh5CcLUXh/90hsotUIb6pJQ8goLecCXJRc
+/2VkzhJ7Kil/o4RMCdW8+eb9oCLCRE7Nh0tL0xeX9+nIcDYlRQ0ItSj7359wWQVq45PnhDkW+ONf
+skM=
+=vNOz
+-----END PGP SIGNATURE-----
+
+--------------GWt8OvBYWoCzUnv8z5rePWn9--
