@@ -2,154 +2,216 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA76470BAD
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 21:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE0A470BC2
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 21:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242776AbhLJUUL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Dec 2021 15:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234979AbhLJUUJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Dec 2021 15:20:09 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1BFC0617A1;
-        Fri, 10 Dec 2021 12:16:34 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id l22so20022448lfg.7;
-        Fri, 10 Dec 2021 12:16:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3TjXmEXDJ/+bmC4Ps/ax4TtRHBZzHR+/4MLS5Bo5vyY=;
-        b=pA5gJzqpb6DuYCThgFEy/8I55Q/DWCaUg3a+PUCGAi7titTHPZavt9HNjzNTaNOdtA
-         W9bvYLeTFtb26OuFlSespYNsQjEuRbN74aib6efdQf4sRvk0jZOXEyR7Ry1SlPtvny3V
-         dHFm88kS0utx46N/B1V95jCju3EdX/3tioPOW0AUjL07+k8WzDTAaYKBNQJxB0pggImt
-         zxKY302IiWihQZ6zPY6n4S1ZYz2akRfe0TTR5ci41YrCJJyH8fb1pqNG9DRsK91AXeR3
-         4OlRlbRYehYwacP4ScBqgyVswzojoT/ol0CB6bk5gTERql84YP9I/T1kujCvte5MFcNM
-         x95w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3TjXmEXDJ/+bmC4Ps/ax4TtRHBZzHR+/4MLS5Bo5vyY=;
-        b=Z5E4HwNMYLLTdBmn8mNTFzzPDV6OmszU6ADD7WYc0CmUjohhIsXZHhioXuT7G4v4J+
-         v711hHi8OWaYIOzfPpQONluZYFWoGkOWFIVbuWStC1qKlnlCeGSOg7Sf4Syk0yqfk/By
-         Eb/7K9IM10/HIb6ondKHyeo//uP87oooICuBf7sKFXdpppYHStx7blbMAKfzHq7vN+y4
-         Djkzam3+DVV2ljUxI4J6Rz+WUmuxQjz/mdXIsnlzyeUT8533gyhGT8om8q5PUMr5Dwhi
-         xqwK/aoW/SdKWhykVtG645rYKLYc0Kj1sXpg2JnoKMHe/i2uz35DuxFLJzw4jXd6kxt4
-         KM1w==
-X-Gm-Message-State: AOAM530aCh6insR5DZasI1/ehhHZ8aar+QI+dJq/YoqY7tAC5Oym8LMv
-        4ntSwcR2cbdYbuPpH62GAQALanUtGUM=
-X-Google-Smtp-Source: ABdhPJwE5tZeH/HHL0CnlLb6JayzZfWyUFquo/I1vHYJYjJlUN8IQfec3+fnfy4fMkF6dVQvXojbFQ==
-X-Received: by 2002:a05:6512:2292:: with SMTP id f18mr14265704lfu.18.1639167392050;
-        Fri, 10 Dec 2021 12:16:32 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id z23sm409427ljn.23.2021.12.10.12.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 12:16:31 -0800 (PST)
-Subject: Re: [PATCH v4 03/25] notifier: Add
- atomic/blocking_notifier_has_unique_priority()
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
+        id S1344166AbhLJUWk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 10 Dec 2021 15:22:40 -0500
+Received: from aposti.net ([89.234.176.197]:46794 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234163AbhLJUWh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 10 Dec 2021 15:22:37 -0500
+Date:   Fri, 10 Dec 2021 20:18:43 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v11 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
+ DT Schema
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20211126180101.27818-1-digetx@gmail.com>
- <20211126180101.27818-4-digetx@gmail.com>
- <CAJZ5v0jTJ3f7oUUR690PGaPJsxA8yzua9XDa8MONBHMzHnDfOQ@mail.gmail.com>
- <e6ff1cea-a168-1cb0-25c5-fb16c681cf4a@gmail.com>
- <CAJZ5v0gwnY07vg71_NB8RDWyv84FtMsmx7UTDd8TkUd7vFzc6A@mail.gmail.com>
- <fd158245-aa9a-2e48-0145-004f30005a66@gmail.com>
-Message-ID: <218e67e2-1d8c-5727-3862-8884d74aa63e@gmail.com>
-Date:   Fri, 10 Dec 2021 23:16:29 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
+Message-Id: <7R1X3R.HSAT8MYJAY6M2@crapouillou.net>
+In-Reply-To: <YbOF/pwib/VXoqkx@robh.at.kernel.org>
+References: <cover.1638470392.git.hns@goldelico.com>
+        <ac147196cd7744a7d50cf25197fe08bf9e81f88a.1638470392.git.hns@goldelico.com>
+        <YbOF/pwib/VXoqkx@robh.at.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <fd158245-aa9a-2e48-0145-004f30005a66@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-10.12.2021 22:33, Dmitry Osipenko пишет:
->> Not really, they only prevent the race from occurring while
->> notifier_has_unique_priority() is running.
->>
->> If anyone depends on this check for correctness, they need to lock the
->> rwsem, do the check, do the thing depending on the check while holding
->> the rwsem and then release the rwsem.  Otherwise it is racy.
->>
-> It's fine that it's a bit "racy" since in the context of this series. We
-> always do the check after adding new entry, so it's not a problem.
-> 
-> There are two options:
-> 
-> 1. Use blocking_notifier_has_unique_priority() like it's done in this
-> patchset. Remove it after all drivers are converted to the new API and
-> add blocking_notifier_chain_register_unique().
-> 
-> 2. Add blocking_notifier_chain_register_unique(), but don't let it fail
-> the registration of non-unique entries until all drivers are converted
-> to the new API.
+Hi Nikolaus,
 
-There is third, perhaps the best option:
+Le ven., d�c. 10 2021 at 10:53:18 -0600, Rob Herring <robh@kernel.org> 
+a �crit :
+> On Thu, Dec 02, 2021 at 07:39:48PM +0100, H. Nikolaus Schaller wrote:
+>>  From: Sam Ravnborg <sam@ravnborg.org>
+>> 
+>>  Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+>>  Based on .txt binding from Zubair Lutfullah Kakakhel
+>> 
+>>  We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
+>> 
+>>  Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+>>  Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>>  Cc: Rob Herring <robh@kernel.org>
+>>  Cc: devicetree@vger.kernel.org
+>>  ---
+>>   .../display/bridge/ingenic,jz4780-hdmi.yaml   | 78 
+>> +++++++++++++++++++
+>>   .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
+>>   2 files changed, 81 insertions(+)
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+>> 
+>>  diff --git 
+>> a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml 
+>> b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+>>  new file mode 100644
+>>  index 0000000000000..49ae1130efded
+>>  --- /dev/null
+>>  +++ 
+>> b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+>>  @@ -0,0 +1,78 @@
+>>  +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>  +%YAML 1.2
+>>  +---
+>>  +$id: 
+>> http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
+>>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>  +
+>>  +title: Bindings for Ingenic JZ4780 HDMI Transmitter
+>>  +
+>>  +maintainers:
+>>  +  - H. Nikolaus Schaller <hns@goldelico.com>
+>>  +
+>>  +description: |
+>>  +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys 
+>> DesignWare HDMI 1.4
+>>  +  TX controller IP with accompanying PHY IP.
+>>  +
+>>  +allOf:
+>>  +  - $ref: synopsys,dw-hdmi.yaml#
+>>  +
+>>  +properties:
+>>  +  compatible:
+>>  +    const: ingenic,jz4780-dw-hdmi
+>>  +
+>>  +  reg-io-width:
+>>  +    const: 4
+>>  +
+>>  +  clocks:
+>>  +    maxItems: 2
+>>  +
+>>  +  hdmi-5v-supply:
+>>  +    description: regulator to provide +5V at the connector
+> 
+> Being part of the connector, that belongs in a connector node.
 
-3. Add blocking_notifier_chain_register_unique() and fall back to
-blocking_notifier_chain_register() if unique fails, do it until all
-drivers are converted to the new API.
+I believe that means adding .atomic_{enable,disable} callbacks to the 
+display-connector bridge (drivers/gpu/drm/bridge/display-connector.c) 
+which would enable/disable the regulator.
+
+Unless it messes up with e.g. cable detection (which I believe requires 
+the regulator to be enabled), in that case unconditionally enable it in 
+the connector's probe function.
+
+>>  +
+>>  +  ports:
+>>  +    $ref: /schemas/graph.yaml#/properties/ports
+> 
+> You need to define what each 'port' node is.
+
+Have a look at 
+Documentation/devicetree/bindings/display/ingenic,lcd.yaml for an 
+example on how to do this.
+
+>>  +
+>>  +required:
+>>  +  - compatible
+>>  +  - clocks
+>>  +  - clock-names
+>>  +  - hdmi-5v-supply
+>>  +  - ports
+>>  +  - reg-io-width
+>>  +
+>>  +unevaluatedProperties: false
+>>  +
+>>  +examples:
+>>  +  - |
+>>  +    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
+>>  +
+>>  +    hdmi: hdmi@10180000 {
+>>  +        compatible = "ingenic,jz4780-dw-hdmi";
+>>  +        reg = <0x10180000 0x8000>;
+>>  +        reg-io-width = <4>;
+>>  +        ddc-i2c-bus = <&i2c4>;
+>>  +        interrupt-parent = <&intc>;
+>>  +        interrupts = <3>;
+>>  +        clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
+>>  +        clock-names = "iahb", "isfr";
+>>  +        hdmi-5v-supply = <&hdmi_power>;
+>>  +
+>>  +        ports {
+>>  +            #address-cells = <1>;
+>>  +            #size-cells = <0>;
+>>  +            hdmi_in: port@0 {
+>>  +                reg = <0>;
+>>  +                dw_hdmi_in: endpoint {
+>>  +                    remote-endpoint = <&jz4780_lcd_out>;
+>>  +                };
+>>  +            };
+>>  +            hdmi_out: port@1 {
+>>  +                reg = <1>;
+>>  +                dw_hdmi_out: endpoint {
+>>  +                    remote-endpoint = <&hdmi_con>;
+>>  +                };
+>>  +            };
+>>  +        };
+>>  +    };
+>>  +
+>>  +...
+>>  diff --git 
+>> a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml 
+>> b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+>>  index 9be44a682e67a..9cbeabaee0968 100644
+>>  --- 
+>> a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+>>  +++ 
+>> b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
+>>  @@ -50,6 +50,9 @@ properties:
+>>     interrupts:
+>>       maxItems: 1
+>> 
+>>  +  ddc-i2c-bus:
+>>  +    description: An I2C interface if the internal DDC I2C driver 
+>> is not to be used
+> 
+> That too is already defined to be part of the connector node.
+
+Just remove the property then, since you don't use it in the ci20 
+bindings.
+
+Cheers,
+-Paul
+
+>>  +
+>>   additionalProperties: true
+>> 
+>>   ...
+>>  --
+>>  2.33.0
+>> 
+>> 
+
+
