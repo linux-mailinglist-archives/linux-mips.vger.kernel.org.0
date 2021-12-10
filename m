@@ -2,204 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E8147066D
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 17:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5950F470690
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 17:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244237AbhLJQ5F (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Dec 2021 11:57:05 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:41851 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbhLJQ44 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Dec 2021 11:56:56 -0500
-Received: by mail-ot1-f41.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so10199925otl.8;
-        Fri, 10 Dec 2021 08:53:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f2wp1hAWgrRC49VCftrTow4JceyJ/E3jGWRhqUONy3E=;
-        b=wnVZ7aE/7pzWydFTFjv8IPgHP+7V7/g4LZWukrtFscqm8ufs6bsz/HRXdGpDZdUGVG
-         CfN78XYK97ECTZpbkxCdXLnp2j9Qbe+nYyCu+icb/xBM54Xm9to1YKUwfXEfk+/krTX1
-         /rmlIU+mJxnG7Ya+6W8G3y9o4kTfDog3AhjsXZFg5MafDD/tlqfJPTH06qXqmFs3k4/Q
-         u/5Lxns6aXKxjIQ340es7y45ZqOBnqiG9+0KpcsZMHp4BPMMsP4KMMigTDZhku3ZQUJg
-         +U6j8de+oqs08HRLw0MIUwc6fHw87r0RWTcwhIGCqeXqhbTb49zWbKNizAkFwrM24H7W
-         WZBQ==
-X-Gm-Message-State: AOAM530DDPi7fRMw2stmN6LnBDm5hk+3iPQZZ2GLc7qdjz6Ptfiy5SFG
-        yNBEvnKUhSobmQZ6Br2IcQ==
-X-Google-Smtp-Source: ABdhPJxhzRUkJAKFVqmngli/4xluAGV/SNq6SdpzNQU9xFUHh/yAnJa6IWohu6L2xwq0z1bo5kLV7A==
-X-Received: by 2002:a9d:6d98:: with SMTP id x24mr11507597otp.371.1639155200962;
-        Fri, 10 Dec 2021 08:53:20 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id f9sm587878oto.56.2021.12.10.08.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 08:53:20 -0800 (PST)
-Received: (nullmailer pid 1513473 invoked by uid 1000);
-        Fri, 10 Dec 2021 16:53:18 -0000
-Date:   Fri, 10 Dec 2021 10:53:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v11 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
- DT Schema
-Message-ID: <YbOF/pwib/VXoqkx@robh.at.kernel.org>
-References: <cover.1638470392.git.hns@goldelico.com>
- <ac147196cd7744a7d50cf25197fe08bf9e81f88a.1638470392.git.hns@goldelico.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac147196cd7744a7d50cf25197fe08bf9e81f88a.1638470392.git.hns@goldelico.com>
+        id S235972AbhLJRCo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Dec 2021 12:02:44 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34994 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235987AbhLJRCo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Dec 2021 12:02:44 -0500
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 141D5CE2C1E;
+        Fri, 10 Dec 2021 16:59:07 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0827A60C4B;
+        Fri, 10 Dec 2021 16:59:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1639155545;
+        bh=kRdyzfTbRlA8Q6o9ozYIflNqTTqb1/yyQ+Zhl1bc2hI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qehFagygXXv8bbpl27U/7B/DcP1tIA/U/cWnuj39slg4mxEcbhuXFsss1NddlzBIE
+         6PkBZYce8BgviUP9YWNtqY/WCPQTLOyw84eVboaBBjEOQla5+S27wj9ObPzqFGeOTI
+         VhCCu+m1sjz5CsY/rSDNoqZ/fnHwKR72obNaOkn8=
+Date:   Fri, 10 Dec 2021 08:59:03 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        x86@kernel.org, linux-fsdevel@vger.kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] kdump: vmcore: move copy_to() from vmcore.c to
+ uaccess.h
+Message-Id: <20211210085903.e7820815e738d7dc6da06050@linux-foundation.org>
+In-Reply-To: <1639143361-17773-2-git-send-email-yangtiezhu@loongson.cn>
+References: <1639143361-17773-1-git-send-email-yangtiezhu@loongson.cn>
+        <1639143361-17773-2-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 07:39:48PM +0100, H. Nikolaus Schaller wrote:
-> From: Sam Ravnborg <sam@ravnborg.org>
-> 
-> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
-> Based on .txt binding from Zubair Lutfullah Kakakhel
-> 
-> We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
-> 
-> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> ---
->  .../display/bridge/ingenic,jz4780-hdmi.yaml   | 78 +++++++++++++++++++
->  .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
->  2 files changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> new file mode 100644
-> index 0000000000000..49ae1130efded
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bindings for Ingenic JZ4780 HDMI Transmitter
-> +
-> +maintainers:
-> +  - H. Nikolaus Schaller <hns@goldelico.com>
-> +
-> +description: |
-> +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys DesignWare HDMI 1.4
-> +  TX controller IP with accompanying PHY IP.
-> +
-> +allOf:
-> +  - $ref: synopsys,dw-hdmi.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: ingenic,jz4780-dw-hdmi
-> +
-> +  reg-io-width:
-> +    const: 4
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  hdmi-5v-supply:
-> +    description: regulator to provide +5V at the connector
+On Fri, 10 Dec 2021 21:36:00 +0800 Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 
-Being part of the connector, that belongs in a connector node.
-
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-
-You need to define what each 'port' node is.
-
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - hdmi-5v-supply
-> +  - ports
-> +  - reg-io-width
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
-> +
-> +    hdmi: hdmi@10180000 {
-> +        compatible = "ingenic,jz4780-dw-hdmi";
-> +        reg = <0x10180000 0x8000>;
-> +        reg-io-width = <4>;
-> +        ddc-i2c-bus = <&i2c4>;
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <3>;
-> +        clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
-> +        clock-names = "iahb", "isfr";
-> +        hdmi-5v-supply = <&hdmi_power>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            hdmi_in: port@0 {
-> +                reg = <0>;
-> +                dw_hdmi_in: endpoint {
-> +                    remote-endpoint = <&jz4780_lcd_out>;
-> +                };
-> +            };
-> +            hdmi_out: port@1 {
-> +                reg = <1>;
-> +                dw_hdmi_out: endpoint {
-> +                    remote-endpoint = <&hdmi_con>;
-> +                };
-> +            };
-> +        };
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> index 9be44a682e67a..9cbeabaee0968 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
-> @@ -50,6 +50,9 @@ properties:
->    interrupts:
->      maxItems: 1
+> In arch/*/kernel/crash_dump*.c, there exist similar code about
+> copy_oldmem_page(), move copy_to() from vmcore.c to uaccess.h,
+> and then we can use copy_to() to simplify the related code.
+> 
+> ...
+>
+> --- a/fs/proc/vmcore.c
+> +++ b/fs/proc/vmcore.c
+> @@ -238,20 +238,6 @@ copy_oldmem_page_encrypted(unsigned long pfn, char *buf, size_t csize,
+>  	return copy_oldmem_page(pfn, buf, csize, offset, userbuf);
+>  }
 >  
-> +  ddc-i2c-bus:
-> +    description: An I2C interface if the internal DDC I2C driver is not to be used
-
-That too is already defined to be part of the connector node.
-
-> +
->  additionalProperties: true
+> -/*
+> - * Copy to either kernel or user space
+> - */
+> -static int copy_to(void *target, void *src, size_t size, int userbuf)
+> -{
+> -	if (userbuf) {
+> -		if (copy_to_user((char __user *) target, src, size))
+> -			return -EFAULT;
+> -	} else {
+> -		memcpy(target, src, size);
+> -	}
+> -	return 0;
+> -}
+> -
+>  #ifdef CONFIG_PROC_VMCORE_DEVICE_DUMP
+>  static int vmcoredd_copy_dumps(void *dst, u64 start, size_t size, int userbuf)
+>  {
+> diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+> index ac03940..4a6c3e4 100644
+> --- a/include/linux/uaccess.h
+> +++ b/include/linux/uaccess.h
+> @@ -201,6 +201,20 @@ copy_to_user(void __user *to, const void *from, unsigned long n)
+>  	return n;
+>  }
 >  
->  ...
-> -- 
-> 2.33.0
-> 
-> 
+> +/*
+> + * Copy to either kernel or user space
+> + */
+> +static inline int copy_to(void *target, void *src, size_t size, int userbuf)
+> +{
+> +	if (userbuf) {
+> +		if (copy_to_user((char __user *) target, src, size))
+> +			return -EFAULT;
+> +	} else {
+> +		memcpy(target, src, size);
+> +	}
+> +	return 0;
+> +}
+> +
+
+Ordinarily I'd say "this is too large to be inlined".  But the function
+has only a single callsite per architecture so inlining it won't cause
+bloat at present.
+
+But hopefully copy_to() will get additional callers in the future, in
+which case it shouldn't be inlined.  So I'm thinking it would be best
+to start out with this as a regular non-inlined function, in
+lib/usercopy.c.
+
+Also, copy_to() is a very poor name for a globally-visible helper
+function.  Better would be copy_to_user_or_kernel(), although that's
+perhaps a bit long.
+
+And the `userbuf' arg should have type bool, yes?
+
