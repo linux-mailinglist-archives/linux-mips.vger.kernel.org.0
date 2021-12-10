@@ -2,18 +2,18 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0147646F9A7
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 04:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229D446F9BF
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 05:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236425AbhLJDoF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 9 Dec 2021 22:44:05 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:40384 "EHLO loongson.cn"
+        id S229993AbhLJEIr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 9 Dec 2021 23:08:47 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:46276 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231314AbhLJDoF (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 9 Dec 2021 22:44:05 -0500
+        id S229605AbhLJEIr (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 9 Dec 2021 23:08:47 -0500
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxSskizLJhOrkFAA--.12951S2;
-        Fri, 10 Dec 2021 11:40:18 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axmsjy0bJhv7oFAA--.12411S2;
+        Fri, 10 Dec 2021 12:05:06 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     Jason Self <jason@bluehome.net>,
@@ -21,26 +21,26 @@ Cc:     Jason Self <jason@bluehome.net>,
         Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>,
         Nathan Chancellor <nathan@kernel.org>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Makefile: Remove "ifdef need-compiler" for Kbuild.platforms
-Date:   Fri, 10 Dec 2021 11:40:18 +0800
-Message-Id: <1639107618-31672-1-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH v2] MIPS: Makefile: Remove "ifdef need-compiler" for Kbuild.platforms
+Date:   Fri, 10 Dec 2021 12:05:05 +0800
+Message-Id: <1639109105-1545-1-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9AxSskizLJhOrkFAA--.12951S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFWkXF4UJF13ZryDXw4DXFb_yoW3trX_K3
-        9Fk3W0kw1rXrn3W3y2qw45Wryqy398Crn5CwnxXrnxXa45ta1kGFWkKa48JF4rXr4v9r4r
-        tFyfZFnrCr92gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: AQAAf9Axmsjy0bJhv7oFAA--.12411S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GFWkXF4UJF13Zr18Zw47urg_yoWfAFc_Kr
+        WIk3W8C34rXrn3W3y2qw1UXryjy398Grn3CwnxXrnxXa45t3WkGFWkJa48JF4rZr4q9r4r
+        tFWfZFnrCr92gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUb2kYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
         6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
         8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8GwCF04k2
-        0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU0FdgtUUUUU==
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r45MxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0OTmDUUUUU==
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
@@ -48,12 +48,16 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 After commit 13ceb48bc19c ("MIPS: Loongson2ef: Remove unnecessary
 {as,cc}-option calls"), no need to use "ifdef need-compiler" for
-Kbuild.platforms, because the casue of the build issue mentioned
+Kbuild.platforms, because the cause of the build issue mentioned
 in commit 0706f74f719e ("MIPS: fix *-pkg builds for loongson2ef
 platform") has been disappeared, so just remove it.
 
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
+
+v2: fix the typo "casue" --> "cause" in the commit message,
+    sorry for that.
+
  arch/mips/Makefile | 2 --
  1 file changed, 2 deletions(-)
 
