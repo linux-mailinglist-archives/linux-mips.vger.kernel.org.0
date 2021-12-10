@@ -2,85 +2,115 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31166470587
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 17:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E774705FC
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 17:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240822AbhLJQ0X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 10 Dec 2021 11:26:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41240 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236537AbhLJQ0W (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Dec 2021 11:26:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7303B82885;
-        Fri, 10 Dec 2021 16:22:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05A68C341C5;
-        Fri, 10 Dec 2021 16:22:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639153365;
-        bh=PbLCcPA38TnLub5MYZK5kD4lVEh3c4nd65q06WYr6+E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Kn+QbjeRay1QTZL2AK4BPYDnFHI5WDsUIR106opn8rfVa4HL0YfkR2eG/a6Nheoc8
-         kNAvua1Ms/yDn8swaKsBgonkL2XpKp5q0JdwDqM8ZXCMJr/bzOojTicuwVItWKnH8f
-         TpDBuVweT8Vk+ciombgzuV7HOoQvEGb0ZlO4bawPa7DsmHkJN0u7Ha1oIb36IYKtJK
-         KOAy5aHM0t373nv8dPxXzI775xMvSXd6eYAYJWHY1xZjHW2/B3drGrgJ4ygHnBPpju
-         Sr6y2ApCz0uagUyKw8uJP+d5mym4+OF/Ehxr9jyw1jkS1+uFixe8sJOC1YsfF1Ze8W
-         sytjOEjlj/QJw==
-Date:   Fri, 10 Dec 2021 09:22:40 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jason Self <jason@bluehome.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: Makefile: Remove "ifdef need-compiler" for
- Kbuild.platforms
-Message-ID: <YbN+0NrHmsFKfNWP@archlinux-ax161>
-References: <1639109105-1545-1-git-send-email-yangtiezhu@loongson.cn>
+        id S243789AbhLJQnx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Dec 2021 11:43:53 -0500
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:26812 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234718AbhLJQnx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 10 Dec 2021 11:43:53 -0500
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 1BAGdmG1011961;
+        Sat, 11 Dec 2021 01:39:49 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 1BAGdmG1011961
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1639154389;
+        bh=caU8WhgZKRFWbo5uPLG/+Ze9EYTB2SiCAV0Fr4H7pbA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NrBH93NPgc3ghFl/6P9XwrSooRwpgx7QXvn4qAECm2Bzyis0hWSdJCVWMyCBa1/tK
+         8zsvabnAv2zf9JYgTaFLWeuxZFFwwhzaUcOLaD/gPB5WkDX8vIEI94Wj4j9pstoteF
+         08OnnPYBux6eWIi6eUbRd4Y7QD2cnNYxmocZ9U4pqetaP8wS+kDd5oiOfH/TFQE0JJ
+         1NXzsJgmtI8jumNzdo9VPlTjdKmWv2v4POX8UFEB5/MxruVpE5A7OQM4K7gi5ECWHs
+         W+PsED3JBCtEF7qQcNX8SVrN/mVJLpb3rQB0y87MukX5UiO0/WI84+cfJm3jowtWEY
+         CMH9z2v+yBeLA==
+X-Nifty-SrcIP: [209.85.210.177]
+Received: by mail-pf1-f177.google.com with SMTP id r130so8967122pfc.1;
+        Fri, 10 Dec 2021 08:39:49 -0800 (PST)
+X-Gm-Message-State: AOAM533/ehQzpu6ErTb+8dX+5ag6bCkafgKCqIKqC0QvqM8Al7J2fWZ0
+        Qi8aIVcKBEd5bSaro6CZTMwe62A2Fc4XwQ3gy6k=
+X-Google-Smtp-Source: ABdhPJwvfNn9BqNf97UTkmviipxc3LJ75wiXmN5UlSDYGjAR4mHL8PCi5GM3yle/LQaeoX/jo4MouSU+1PtnpdKk/hQ=
+X-Received: by 2002:a65:430a:: with SMTP id j10mr40213077pgq.126.1639154388222;
+ Fri, 10 Dec 2021 08:39:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1639109105-1545-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1639109105-1545-1-git-send-email-yangtiezhu@loongson.cn> <YbN+0NrHmsFKfNWP@archlinux-ax161>
+In-Reply-To: <YbN+0NrHmsFKfNWP@archlinux-ax161>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 11 Dec 2021 01:39:10 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS7=qYs7NdDRY+4Dz5Zt0tLDo-W-EMcx+9TaNazNVcX=Q@mail.gmail.com>
+Message-ID: <CAK7LNAS7=qYs7NdDRY+4Dz5Zt0tLDo-W-EMcx+9TaNazNVcX=Q@mail.gmail.com>
+Subject: Re: [PATCH v2] MIPS: Makefile: Remove "ifdef need-compiler" for Kbuild.platforms
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Jason Self <jason@bluehome.net>,
+        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 12:05:05PM +0800, Tiezhu Yang wrote:
-> After commit 13ceb48bc19c ("MIPS: Loongson2ef: Remove unnecessary
-> {as,cc}-option calls"), no need to use "ifdef need-compiler" for
-> Kbuild.platforms, because the cause of the build issue mentioned
-> in commit 0706f74f719e ("MIPS: fix *-pkg builds for loongson2ef
-> platform") has been disappeared, so just remove it.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+On Sat, Dec 11, 2021 at 1:22 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Fri, Dec 10, 2021 at 12:05:05PM +0800, Tiezhu Yang wrote:
+> > After commit 13ceb48bc19c ("MIPS: Loongson2ef: Remove unnecessary
+> > {as,cc}-option calls"), no need to use "ifdef need-compiler" for
+> > Kbuild.platforms, because the cause of the build issue mentioned
+> > in commit 0706f74f719e ("MIPS: fix *-pkg builds for loongson2ef
+> > platform") has been disappeared, so just remove it.
+> >
+> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> > ---
+> >
+> > v2: fix the typo "casue" --> "cause" in the commit message,
+> >     sorry for that.
+> >
+> >  arch/mips/Makefile | 2 --
+> >  1 file changed, 2 deletions(-)
+> >
+> > diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> > index ace7f03..e036fc0 100644
+> > --- a/arch/mips/Makefile
+> > +++ b/arch/mips/Makefile
+> > @@ -253,9 +253,7 @@ endif
+> >  #
+> >  # Board-dependent options and extra files
+> >  #
+> > -ifdef need-compiler
+> >  include $(srctree)/arch/mips/Kbuild.platforms
+> > -endif
+> >
+> >  ifdef CONFIG_PHYSICAL_START
+> >  load-y                                       = $(CONFIG_PHYSICAL_START)
+> > --
+> > 2.1.0
+> >
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-> ---
-> 
-> v2: fix the typo "casue" --> "cause" in the commit message,
->     sorry for that.
-> 
->  arch/mips/Makefile | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> index ace7f03..e036fc0 100644
-> --- a/arch/mips/Makefile
-> +++ b/arch/mips/Makefile
-> @@ -253,9 +253,7 @@ endif
->  #
->  # Board-dependent options and extra files
->  #
-> -ifdef need-compiler
->  include $(srctree)/arch/mips/Kbuild.platforms
-> -endif
->  
->  ifdef CONFIG_PHYSICAL_START
->  load-y					= $(CONFIG_PHYSICAL_START)
-> -- 
-> 2.1.0
-> 
+Nathan's patch cleaned up  arch/mips/loognson2ef/Platform,
+but I still see similar code in arch/mips/sgi-ip22/Platform.
+
+
+ifdef CONFIG_SGI_IP28
+  ifeq ($(call cc-option-yn,-march=r10000 -mr10k-cache-barrier=store), n)
+      $(error gcc doesn't support needed option -mr10k-cache-barrier=store)
+  endif
+endif
+
+
+Doesn't this cause a failure of *-pkg builds for sgi-ip22 platform?
+
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
