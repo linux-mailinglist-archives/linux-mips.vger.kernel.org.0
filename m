@@ -2,216 +2,129 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE0A470BC2
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 21:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB6E470BF0
+	for <lists+linux-mips@lfdr.de>; Fri, 10 Dec 2021 21:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344166AbhLJUWk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 10 Dec 2021 15:22:40 -0500
-Received: from aposti.net ([89.234.176.197]:46794 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234163AbhLJUWh (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:22:37 -0500
-Date:   Fri, 10 Dec 2021 20:18:43 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v11 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
- DT Schema
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Message-Id: <7R1X3R.HSAT8MYJAY6M2@crapouillou.net>
-In-Reply-To: <YbOF/pwib/VXoqkx@robh.at.kernel.org>
-References: <cover.1638470392.git.hns@goldelico.com>
-        <ac147196cd7744a7d50cf25197fe08bf9e81f88a.1638470392.git.hns@goldelico.com>
-        <YbOF/pwib/VXoqkx@robh.at.kernel.org>
+        id S243035AbhLJUmq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 10 Dec 2021 15:42:46 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39070
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242886AbhLJUmq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 10 Dec 2021 15:42:46 -0500
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DE7FD405F6
+        for <linux-mips@vger.kernel.org>; Fri, 10 Dec 2021 20:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639168749;
+        bh=5yoGUr7pzPnZBDOdChvpH3bNEBPR4tkHUNd2RR7JJH4=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=ntew18tapMkwviBqOAHUgN7wKEru2Qs3ehxrwg6SCEaB4k+eTgdgQ85onGty/6UD9
+         DAOXJVn1zWSw489ET1LfbzrwxU3OXmmZ7i49EgfsQQZyv7i51Bax8TNLjZohc55Tvw
+         7KXmdH2UlO+t4jF3rauIi9itN3mgwLffrWNzKSf1zfxYh1ekCAMOrZTcjy0G8q3txT
+         56dJeJZoap0IkngrM7xWIeUVGtQyM+UnFREyn7xtY6ElLZE6OA5G8UAY9yAcBZ+8GA
+         BXx8k/AS1AImSeY4GRq4T/e8b9BvynsSjxstZtKehFy7alk0AoPFzkU9YwgYbDT7Rf
+         DIspDNlQ1DK7g==
+Received: by mail-lj1-f199.google.com with SMTP id h18-20020a05651c159200b0021cf7c089d0so3346400ljq.21
+        for <linux-mips@vger.kernel.org>; Fri, 10 Dec 2021 12:39:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5yoGUr7pzPnZBDOdChvpH3bNEBPR4tkHUNd2RR7JJH4=;
+        b=1+t2NNQlPUErBmcobvn4k4uEFldK7OpT3C0nqTbR+zrRD+oC2AJZLDqKj+DuEtSSyt
+         67/2zfk3/UMOS5O4qkZ4uISsg4fncMjPEwcwHgcEkylvuwpusbkiO8TrONI3H/GdXEX2
+         6tWhYX4mLZGRFNbSVnavUDVhC0wnIE5AmxZ0s/potMsuTX+aQiEVWcR/is+4hjbNkaww
+         TvaJJ1+sBTFoaGTksQ0upJhk8eqAYHPmVZgPK/AV6OgI1nLWhhxHDV+8Mqfplljr30zd
+         4diHDSvyv5fPYzEKl+gHGaImM9SO6rLnijZHE+aQYLSRaLz2+3dKiAl2MZFLVipoHEZ2
+         Uueg==
+X-Gm-Message-State: AOAM530WnebeeCi9o38vZdVaPpY2LkFQcR1LfV4klSigE0MI0mg8ByyP
+        sQlfiGlDY97TjvE4kALktaXkj8Etaq6n8G/1B8MC+lozpTvDo2cTVZRPicdnbkuSuMWLfw6mcYb
+        a9Wd8CHvPyVwAHmMPTnMdIdUoVXGh31YKL+tVkQESIFxCx1P1adbSrsc=
+X-Received: by 2002:a05:6402:274c:: with SMTP id z12mr43261391edd.294.1639168738738;
+        Fri, 10 Dec 2021 12:38:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxgA236x/yjx6TWkXOleXezvnEgrIAVa1yzBQb8Ze+JaO9/0KXgBOBtxlFprZiSdLFnjBlcdw/PZl80G6UL+y4=
+X-Received: by 2002:a05:6402:274c:: with SMTP id z12mr43261361edd.294.1639168738589;
+ Fri, 10 Dec 2021 12:38:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com> <CAK8P3a2AnLJgGNBFvjUQqXd-Az9vjgE7yJQXGDwCav5E0btSsg@mail.gmail.com>
+In-Reply-To: <CAK8P3a2AnLJgGNBFvjUQqXd-Az9vjgE7yJQXGDwCav5E0btSsg@mail.gmail.com>
+From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Date:   Fri, 10 Dec 2021 21:38:47 +0100
+Message-ID: <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com>
+Subject: Re: [PATCH 0/7] Cleanup after removal of configs
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Steve French <sfrench@samba.org>, Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-cachefs@redhat.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-power@fi.rohmeurope.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus,
+On Fri, Nov 5, 2021 at 4:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Nov 5, 2021 at 4:43 PM Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+> >
+> > While bumping from 5.13 to 5.15, I found that a few deleted configs had
+> > left some pieces here and there: this patchset cleans that.
+> >
+> > Alexandre Ghiti (7):
+> >   Documentation, arch: Remove leftovers from fscache/cachefiles
+> >     histograms
+> >   Documentation, arch: Remove leftovers from raw device
+> >   Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
+> >   arch: Remove leftovers from mandatory file locking
+> >   Documentation, arch, fs: Remove leftovers from fscache object list
+> >   include: mfd: Remove leftovers from bd70528 watchdog
+> >   arch: Remove leftovers from prism54 wireless driver
+>
+> Looks all good to me, thanks a lot for the cleanup!
+>
+> For arch/arm/configs:
+>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+>
+> assuming this goes through someone else's tree. Let me know if you need me
+> to pick up the patches in the asm-generic tree for cross-architecture work.
 
-Le ven., déc. 10 2021 at 10:53:18 -0600, Rob Herring <robh@kernel.org> 
-a écrit :
-> On Thu, Dec 02, 2021 at 07:39:48PM +0100, H. Nikolaus Schaller wrote:
->>  From: Sam Ravnborg <sam@ravnborg.org>
->> 
->>  Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
->>  Based on .txt binding from Zubair Lutfullah Kakakhel
->> 
->>  We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
->> 
->>  Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
->>  Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->>  Cc: Rob Herring <robh@kernel.org>
->>  Cc: devicetree@vger.kernel.org
->>  ---
->>   .../display/bridge/ingenic,jz4780-hdmi.yaml   | 78 
->> +++++++++++++++++++
->>   .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
->>   2 files changed, 81 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
->> 
->>  diff --git 
->> a/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml 
->> b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
->>  new file mode 100644
->>  index 0000000000000..49ae1130efded
->>  --- /dev/null
->>  +++ 
->> b/Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
->>  @@ -0,0 +1,78 @@
->>  +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>  +%YAML 1.2
->>  +---
->>  +$id: 
->> http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
->>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>  +
->>  +title: Bindings for Ingenic JZ4780 HDMI Transmitter
->>  +
->>  +maintainers:
->>  +  - H. Nikolaus Schaller <hns@goldelico.com>
->>  +
->>  +description: |
->>  +  The HDMI Transmitter in the Ingenic JZ4780 is a Synopsys 
->> DesignWare HDMI 1.4
->>  +  TX controller IP with accompanying PHY IP.
->>  +
->>  +allOf:
->>  +  - $ref: synopsys,dw-hdmi.yaml#
->>  +
->>  +properties:
->>  +  compatible:
->>  +    const: ingenic,jz4780-dw-hdmi
->>  +
->>  +  reg-io-width:
->>  +    const: 4
->>  +
->>  +  clocks:
->>  +    maxItems: 2
->>  +
->>  +  hdmi-5v-supply:
->>  +    description: regulator to provide +5V at the connector
-> 
-> Being part of the connector, that belongs in a connector node.
+Arnd, do you mind taking the whole series except patch 6 ("include:
+mfd: Remove leftovers from bd70528 watchdog") as this will be handled
+separately. I can ask Jonathan for the doc patches if needed.
 
-I believe that means adding .atomic_{enable,disable} callbacks to the 
-display-connector bridge (drivers/gpu/drm/bridge/display-connector.c) 
-which would enable/disable the regulator.
+Thanks,
 
-Unless it messes up with e.g. cable detection (which I believe requires 
-the regulator to be enabled), in that case unconditionally enable it in 
-the connector's probe function.
+Alex
 
->>  +
->>  +  ports:
->>  +    $ref: /schemas/graph.yaml#/properties/ports
-> 
-> You need to define what each 'port' node is.
-
-Have a look at 
-Documentation/devicetree/bindings/display/ingenic,lcd.yaml for an 
-example on how to do this.
-
->>  +
->>  +required:
->>  +  - compatible
->>  +  - clocks
->>  +  - clock-names
->>  +  - hdmi-5v-supply
->>  +  - ports
->>  +  - reg-io-width
->>  +
->>  +unevaluatedProperties: false
->>  +
->>  +examples:
->>  +  - |
->>  +    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
->>  +
->>  +    hdmi: hdmi@10180000 {
->>  +        compatible = "ingenic,jz4780-dw-hdmi";
->>  +        reg = <0x10180000 0x8000>;
->>  +        reg-io-width = <4>;
->>  +        ddc-i2c-bus = <&i2c4>;
->>  +        interrupt-parent = <&intc>;
->>  +        interrupts = <3>;
->>  +        clocks = <&cgu JZ4780_CLK_AHB0>, <&cgu JZ4780_CLK_HDMI>;
->>  +        clock-names = "iahb", "isfr";
->>  +        hdmi-5v-supply = <&hdmi_power>;
->>  +
->>  +        ports {
->>  +            #address-cells = <1>;
->>  +            #size-cells = <0>;
->>  +            hdmi_in: port@0 {
->>  +                reg = <0>;
->>  +                dw_hdmi_in: endpoint {
->>  +                    remote-endpoint = <&jz4780_lcd_out>;
->>  +                };
->>  +            };
->>  +            hdmi_out: port@1 {
->>  +                reg = <1>;
->>  +                dw_hdmi_out: endpoint {
->>  +                    remote-endpoint = <&hdmi_con>;
->>  +                };
->>  +            };
->>  +        };
->>  +    };
->>  +
->>  +...
->>  diff --git 
->> a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml 
->> b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
->>  index 9be44a682e67a..9cbeabaee0968 100644
->>  --- 
->> a/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
->>  +++ 
->> b/Documentation/devicetree/bindings/display/bridge/synopsys,dw-hdmi.yaml
->>  @@ -50,6 +50,9 @@ properties:
->>     interrupts:
->>       maxItems: 1
->> 
->>  +  ddc-i2c-bus:
->>  +    description: An I2C interface if the internal DDC I2C driver 
->> is not to be used
-> 
-> That too is already defined to be part of the connector node.
-
-Just remove the property then, since you don't use it in the ci20 
-bindings.
-
-Cheers,
--Paul
-
->>  +
->>   additionalProperties: true
->> 
->>   ...
->>  --
->>  2.33.0
->> 
->> 
-
-
+>
+>          Arnd
