@@ -2,55 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AB9471441
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Dec 2021 15:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20EDD47151A
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Dec 2021 18:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbhLKOoJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sat, 11 Dec 2021 09:44:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbhLKOoJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 11 Dec 2021 09:44:09 -0500
-X-Greylist: delayed 21475 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 11 Dec 2021 06:44:08 PST
-Received: from cloud.aegeanpacific.com (cloud.aegeanpacific.com [IPv6:2001:4800:7817:101:fcd6:f89b:ff05:445e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9BCFC061714;
-        Sat, 11 Dec 2021 06:44:08 -0800 (PST)
-Received: from 127.0.0.1 (unknown [162.242.144.192])
-        by cloud.aegeanpacific.com (Postfix) with SMTP id 01C283AF7C;
-        Sat, 11 Dec 2021 00:51:56 +0000 (UTC)
-Message-ID: <0401B7E4EF3B15A67A7F368E5A571BC6@rgvgrandes.com>
-Reply-To: "Erin Booth" <fscspmd@yeah.net>
-From:   "Erin Booth" <info@rgvgrandes.com>
-Subject: US$750,000.00 financial settlement to you, Ref: FS/CP2/PY10.
-Date:   Mon, 6 Sep 2021 12:34:47 -0800
-Organization: @
+        id S230383AbhLKRxv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sat, 11 Dec 2021 12:53:51 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:42792 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229724AbhLKRxu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 11 Dec 2021 12:53:50 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-14-gpculCQTMuGutzfqbGQ0WA-1; Sat, 11 Dec 2021 17:53:47 +0000
+X-MC-Unique: gpculCQTMuGutzfqbGQ0WA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Sat, 11 Dec 2021 17:53:46 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Sat, 11 Dec 2021 17:53:46 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Tiezhu Yang' <yangtiezhu@loongson.cn>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: RE: [PATCH v2 0/2] kdump: simplify code
+Thread-Topic: [PATCH v2 0/2] kdump: simplify code
+Thread-Index: AQHX7j/jzYqw5kMpA0qY43nH0kUm2Kwtku5w
+Date:   Sat, 11 Dec 2021 17:53:46 +0000
+Message-ID: <0c5cb37139af4f3e85cc2c5115d7d006@AcuMS.aculab.com>
+References: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain;
-        format=flowed;
-        charset="windows-1251";
-        reply-type=original
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2900.5931
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.6157
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Ref No: FS/CP2/PY10.
+From: Tiezhu Yang
+> Sent: 11 December 2021 03:33
+> 
+> v2:
+>   -- add copy_to_user_or_kernel() in lib/usercopy.c
+>   -- define userbuf as bool type
 
-Good Morning,
+Instead of having a flag to indicate whether the buffer is user or kernel,
+would it be better to have two separate buffer pointers.
+One for a user space buffer, the other for a kernel space buffer.
+Exactly one of the buffers should always be NULL.
 
-We are not sure you received our previous message but once again we wish to use this medium to officially congratulate and inform you that you have been selected to receive a financial compensation amount of US$750,000.00, with Ref No. FS/CP2/PY10.
+That way the flag is never incorrectly set.
 
-For details to immediately receive your US$750,000.00, kindly send your TELEPHONE number  by email, to our payment director, Caroline Morgan, using the below contact information:
+	David
 
-Name: Caroline Morgan
-E-Mail: fscspmd@yeah.net 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-PLEASE NOTE: For prompt attention, all correspondence should directly be sent to Caroline Morgan by email (fscspmd@yeah.net) and must have the above stated reference number: FS/CP2/PY10, sent along with your telephone number.
-
-Yours faithfully, 
-Financial Services, UK
