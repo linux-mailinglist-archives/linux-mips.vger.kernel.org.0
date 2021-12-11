@@ -2,64 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 525B34712F8
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Dec 2021 09:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE224712FE
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Dec 2021 09:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbhLKIvt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 11 Dec 2021 03:51:49 -0500
-Received: from smtpbg126.qq.com ([106.55.201.22]:57189 "EHLO smtpbg587.qq.com"
+        id S229614AbhLKIyt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 11 Dec 2021 03:54:49 -0500
+Received: from smtpbg128.qq.com ([106.55.201.39]:61225 "EHLO smtpbg587.qq.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229764AbhLKIvt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 11 Dec 2021 03:51:49 -0500
-X-QQ-mid: bizesmtp42t1639212696trxqxjbd
+        id S229591AbhLKIyt (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 11 Dec 2021 03:54:49 -0500
+X-QQ-mid: bizesmtp45t1639212874ty89mzkk
 Received: from localhost.localdomain (unknown [182.132.179.213])
         by esmtp6.qq.com (ESMTP) with 
-        id ; Sat, 11 Dec 2021 16:51:35 +0800 (CST)
+        id ; Sat, 11 Dec 2021 16:54:32 +0800 (CST)
 X-QQ-SSF: 01000000008000D0H000B00A0000000
-X-QQ-FEAT: LXTjUhoj8YP3VATQczryXFkrDWl9oLJYyVuZGuMdcD4O6jC5PCng9Wadb9DMB
-        v4YV0a77TAfqPKPN00kuMxjxDmyLn0D3ULIz+kqZ2MJQ66UqeNfsmPN7OhDsW5robt0gZA2
-        vh3wJ39LeY39m9UX+ShPuvGChT1k/MUcIxdVzHEEW8tDg0nGXdQrYcfHV0oCMLbrcSCgHQG
-        XyDJNGFANcVx/mUSFYlr8P4/Mr8qhBZ1YQm7JAhzrdNElTorG/DEPc085nk9BEPkmVHViPG
-        Vsu5GcnmpyGGYKRNY9lERkkZa0/xjWjdHKBlDUJ2EfJ7pIyJKjF3ebmXr6zp6zKsQoWbEov
-        XfniABFXINqXZHN/woxrvIVJqaw5w==
+X-QQ-FEAT: /m5psauyXMdc21/HPztZ5Q2TUiQSmnN8VbR8AsXyLxOcy2mQlgQ3WJAYucPAM
+        /aDHCTZYNbTFS1i7QgXrsshyRWrBnnnAsArQQ+0HvNyP1MHSUUPvO+rECwHluN7Id/DoBs4
+        4c17UQafkAnodkRTh+IoP1sqEqeO/O+DOVAlE3HEzd+Ejl//f/+8dfThODSoN4F3zPUbI92
+        zgLRQODsa/C2o5LqArYsHK7FI7SeNwjcHjJngFwTvL3cIsqWe8XSQ/Jr2AOBfSpw3QC5O+N
+        saISXuR5FnOC+kf+mI/VcB9c9Z9q5Z68wduO2rg2MNIPZcYE44sd5YO0AtAENYeA273dPIe
+        GltCDb7PwTwvCaqIdqeVCOvFEGw9umhdRPSTIHS
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
 To:     tsbogend@alpha.franken.de
-Cc:     rdunlap@infradead.org, wangborong@cdjrlc.com,
+Cc:     john@phrozen.org, wangborong@cdjrlc.com,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Fix typo in a comment
-Date:   Sat, 11 Dec 2021 16:51:32 +0800
-Message-Id: <20211211085132.224082-1-wangborong@cdjrlc.com>
+Subject: [PATCH] MIPS: lantiq: Fix typo in a comment
+Date:   Sat, 11 Dec 2021 16:54:18 +0800
+Message-Id: <20211211085418.228537-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam2
+Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam5
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The double `the' in the comment in line 344 is repeated. Remove one
+The double `if' in the comment in line 144 is repeated. Remove one
 of them from the comment.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- arch/mips/mm/c-octeon.c | 2 +-
+ arch/mips/lantiq/falcon/sysctrl.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/mm/c-octeon.c b/arch/mips/mm/c-octeon.c
-index 490322b01f91..737870d8fd94 100644
---- a/arch/mips/mm/c-octeon.c
-+++ b/arch/mips/mm/c-octeon.c
-@@ -341,7 +341,7 @@ asmlinkage void cache_parity_error_octeon_recoverable(void)
- }
+diff --git a/arch/mips/lantiq/falcon/sysctrl.c b/arch/mips/lantiq/falcon/sysctrl.c
+index 42222f849bd2..64726c670ca6 100644
+--- a/arch/mips/lantiq/falcon/sysctrl.c
++++ b/arch/mips/lantiq/falcon/sysctrl.c
+@@ -141,7 +141,7 @@ static void falcon_gpe_enable(void)
+ 	unsigned int freq;
+ 	unsigned int status;
  
- /*
-- * Called when the the exception is not recoverable
-+ * Called when the exception is not recoverable
-  */
- 
- asmlinkage void cache_parity_error_octeon_non_recoverable(void)
+-	/* if if the clock is already enabled */
++	/* if the clock is already enabled */
+ 	status = sysctl_r32(SYSCTL_SYS1, SYS1_INFRAC);
+ 	if (status & (1 << (GPPC_OFFSET + 1)))
+ 		return;
 -- 
 2.34.1
 
