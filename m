@@ -2,148 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7882C472C8B
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Dec 2021 13:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 766C9472CCF
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Dec 2021 14:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236936AbhLMMrC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Dec 2021 07:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S237164AbhLMNH1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Dec 2021 08:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236983AbhLMMq7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Dec 2021 07:46:59 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC04C061574;
-        Mon, 13 Dec 2021 04:46:58 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JCLqg21XHz4xQs;
-        Mon, 13 Dec 2021 23:46:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1639399616;
-        bh=W5VnYCvz7/mlHDYZbPhaQ5CNO1ZBQOxPjLpWHYJP0oo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=FCYCETjAr0YAA0gTNjmpVVzSxElRjWZqAR1vlrvWLoAb7OiEpV7Mbp4Mnr7gQq4DX
-         Wtz0UJAt5d7bOKGQDXQT/bHJY4mhZPa2nAYEFaeR/DAWO2NeblIfVhGCVFkklHxN4g
-         JU8ToWI6dxI7oWuYorKFyadjdIAqoFQ1Sv7visIsjjFaMmAvnt4JjGoiDflRDXIJo2
-         Dh03DlQSGX9PkelFfqk88s5EAdyduc8VKFJW7CSqJUbPQObr5w9RjqjtftGLAnEkMJ
-         PtFUPSpkOjCetftc0sGd7fOtjnc7xTkpmBoWzd93b93LxlEz6P9sErMcB62uSXUX55
-         UGXkIkz3yUahA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Rob Herring <robh@kernel.org>, John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2] of/fdt: Rework early_init_dt_scan_memory() to call
- directly
-In-Reply-To: <20211208155839.4084795-1-robh@kernel.org>
-References: <20211208155839.4084795-1-robh@kernel.org>
-Date:   Mon, 13 Dec 2021 23:46:51 +1100
-Message-ID: <87fsqwn03o.fsf@mpe.ellerman.id.au>
+        with ESMTP id S237158AbhLMNH0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Dec 2021 08:07:26 -0500
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5218C061748
+        for <linux-mips@vger.kernel.org>; Mon, 13 Dec 2021 05:07:26 -0800 (PST)
+Received: by mail-il1-x141.google.com with SMTP id r2so14885692ilb.10
+        for <linux-mips@vger.kernel.org>; Mon, 13 Dec 2021 05:07:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=TEUjHHMvC5z6kpB1pX6Iw/elzpLI0ipaRFzRCUbdkuk=;
+        b=TOwAFakGwqMG7fGm6tfa6o675bDxFx0iXNkpipkKSG3xxj5siCaLvlNmSzJeZ6ZIdP
+         qU7qP4nh/0YlIEoQh02ocTaxUAH3Yr5cRS9lzUFCx2m1DwYUH0cQgi2uHyQNjRXN8ZBd
+         vZtLKQHmgyZOoKIzFRH4UBXgdUX/jt35uLTfraAmCw72T6pu2W/qSLBGa6vq62edyVB4
+         lysmwnT6z2nhhdw66iqkWnDSN3m08IiJmwt/OopLVrPkR6O2RKYFRnv0UdIfKK8qgOQn
+         1BDTiPJuPBkQbSHfsBsLZXFkhgyNFOuNFJajlzSF0kwmXp2LdBLj12C2vKnBvFQaUwUK
+         LBsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=TEUjHHMvC5z6kpB1pX6Iw/elzpLI0ipaRFzRCUbdkuk=;
+        b=quRbo5L7kTZ/jLlhl66QfHiNXjTqV8ODII0X6b+YeYcPyvNCTcL13HrJw8COqvn4TE
+         AQyw4f/FcSGjcfcyqNx+ibPYp/QPWEbpanLuHDlIU7JpQKjrKiHR/QABN03Q7u3Vnelp
+         tvrZCZuGQMQj/pcm7Ua8cJsR1F/5jtxA+wwaZS7HZ/aOak4jyrj5ASjA24Fl4pvk1QwW
+         8l4QRGyr0W3a5cxP5unHowdkthz1smLHEUjsZNTyXeVQhSyhhq72KgrcOtJQx3nOoXdl
+         ikDeVcVkYHqTOf1XxofMDnPhhbBAMIei/3GWUPmM2k9/l5iQHYdy3fzWZG9adiy74EDM
+         TETw==
+X-Gm-Message-State: AOAM530/oJJoyQqMS1WwTAm326JCG5dJBLqjb1V5QiBhgopQbXS/vitO
+        ifGbtwKybJI1ZruCzglTrR3BfgA26l55iyMeigY=
+X-Google-Smtp-Source: ABdhPJzWad6VB3nHB83QhNHJrsxmquYgLQdac2P0aDpmRh+iVQA1z1lChkmZTAT8MkQajNmBK90LXqAj9DeqxZnjc/U=
+X-Received: by 2002:a05:6e02:1a07:: with SMTP id s7mr35692611ild.50.1639400845611;
+ Mon, 13 Dec 2021 05:07:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+Received: by 2002:a92:340f:0:0:0:0:0 with HTTP; Mon, 13 Dec 2021 05:07:25
+ -0800 (PST)
+Reply-To: lambertjeffery86@gmail.com
+From:   Jeffery Lambert <jadielferreiradeoliveira7@gmail.com>
+Date:   Mon, 13 Dec 2021 05:07:25 -0800
+Message-ID: <CAA+CPT8896F1MfEvwqaBdB5+dJ6eLq5Hs8jXAG3=qhNznkogVw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Rob Herring <robh@kernel.org> writes:
-> Use of the of_scan_flat_dt() function predates libfdt and is discouraged
-> as libfdt provides a nicer set of APIs. Rework
-> early_init_dt_scan_memory() to be called directly and use libfdt.
-...
-> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> index 6e1a106f02eb..63762a3b75e8 100644
-> --- a/arch/powerpc/kernel/prom.c
-> +++ b/arch/powerpc/kernel/prom.c
-> @@ -532,19 +532,19 @@ static int  __init early_init_drmem_lmb(struct drmem_lmb *lmb,
->  }
->  #endif /* CONFIG_PPC_PSERIES */
->  
-> -static int __init early_init_dt_scan_memory_ppc(unsigned long node,
-> -						const char *uname,
-> -						int depth, void *data)
-> +static int __init early_init_dt_scan_memory_ppc(void)
->  {
->  #ifdef CONFIG_PPC_PSERIES
-> -	if (depth == 1 &&
-> -	    strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
-> +	const void *fdt = initial_boot_params;
-> +	int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
-> +
-> +	if (node > 0) {
->  		walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
->  		return 0;
->  	}
->  #endif
->  	
-> -	return early_init_dt_scan_memory(node, uname, depth, data);
-> +	return early_init_dt_scan_memory();
->  }
->  
->  /*
-> @@ -749,7 +749,7 @@ void __init early_init_devtree(void *params)
->  
->  	/* Scan memory nodes and rebuild MEMBLOCKs */
->  	early_init_dt_scan_root();
-> -	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
-> +	early_init_dt_scan_memory_ppc();
->  
->  	parse_early_param();
->  
-> @@ -858,7 +858,7 @@ void __init early_get_first_memblock_info(void *params, phys_addr_t *size)
->  	 */
->  	add_mem_to_memblock = 0;
->  	early_init_dt_scan_root();
-> -	of_scan_flat_dt(early_init_dt_scan_memory_ppc, NULL);
-> +	early_init_dt_scan_memory_ppc();
->  	add_mem_to_memblock = 1;
->  
->  	if (size)
+--=20
+Good day,
 
 
-This blows up one of my machines with:
-
-  [    0.000000][    T0] printk: bootconsole [udbg0] enabled
-   -> early_setup(), dt_ptr: 0x1ec90000
-  [    0.000000][    T0] ------------[ cut here ]------------
-  [    0.000000][    T0] kernel BUG at arch/powerpc/mm/book3s64/hash_utils.c:2117!
-  [    0.000000][    T0] Oops: Exception in kernel mode, sig: 5 [#1]
-  [    0.000000][    T0] LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA
-  [    0.000000][    T0] Modules linked in:
-  [    0.000000][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 5.16.0-rc4-00073-g81291383ffde-dirty #69
-  [    0.000000][    T0] NIP:  c0000000000924d8 LR: c000000002009764 CTR: c0000000000924d0
-  [    0.000000][    T0] REGS: c000000002833bc0 TRAP: 0700   Not tainted  (5.16.0-rc4-00073-g81291383ffde-dirty)
-  [    0.000000][    T0] MSR:  8000000000021003 <SF,ME,RI,LE>  CR: 24000244  XER: 20000001
-  [    0.000000][    T0] CFAR: 0000000000000730 IRQMASK: 1
-  [    0.000000][    T0] GPR00: c000000002009764 c000000002833e60 c000000002834100 ffffffffffffffff
-  [    0.000000][    T0] GPR04: 0000000000000000 c000000002080866 0000000000000000 0000000000000000
-  [    0.000000][    T0] GPR08: c000000002080864 0000000000000001 c0000000028d4100 c000000000ffe598
-  [    0.000000][    T0] GPR12: c0000000000924d0 c000000002082200 0000000000000000 0000000000000000
-  [    0.000000][    T0] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
-  [    0.000000][    T0] GPR20: 0000000000000001 0000000010004604 0000000000000000 0000000010004bfc
-  [    0.000000][    T0] GPR24: 0000000000000000 c000000000000000 0000000002970000 c00000000008a480
-  [    0.000000][    T0] GPR28: c0000000028e19f8 c00000001ec90000 c000000002865af8 000000001ec90000
-  [    0.000000][    T0] NIP [c0000000000924d8] hash__setup_initial_memory_limit+0x18/0x110
-  [    0.000000][    T0] LR [c000000002009764] early_init_devtree+0x13c/0x4ec
-  [    0.000000][    T0] Call Trace:
-  [    0.000000][    T0] [c000000002833e60] [c0000000020096fc] early_init_devtree+0xd4/0x4ec (unreliable)
-  [    0.000000][    T0] [c000000002833f10] [c00000000200b008] early_setup+0xc8/0x22c
-  [    0.000000][    T0] [c000000002833f90] [000000000000d368] 0xd368
-  [    0.000000][    T0] Instruction dump:
-  [    0.000000][    T0] 4bffff0c eaa10028 4bffff44 60000000 60000000 60420000 3c4c027a 38421c40
-  [    0.000000][    T0] 7c0802a6 4bfe2e5d 3123ffff 7d291910 <0b090000> 3d220003 392919f8 e9290000
-  [    0.000000][    T0] random: get_random_bytes called from oops_exit+0x54/0xa0 with crng_init=0
-  [    0.000000][    T0] ---[ end trace 0000000000000000 ]---
+This is a personal email directed to you and I request that it=E2=80=99s be=
+en
+treated as such. I got your email from online directory; I would need
+your assistance in re-profiling funds belonging to my late client who
+shares similar surnames with you. Contact me for more detailed
+information at (lambertjeffery86@gmail.com).
 
 
-It's complaining about memstart_addr being 0, which implies
-early_init_dt_add_memory_arch() was never called.
 
-Will try and get some more debug tomorrow.
+Regards,
 
-cheers
 
+
+Jeffery Lambert ESQ
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+This e-mail contains legally privileged and confidential information
+intended for the individual or entity named in the message. If the
+reader of this message is not the intended recipient, or the agent
+responsible to deliver it to the intended recipient, you are hereby
+notified that any review, disseminating or copying of this
+communication is strictly prohibited.
