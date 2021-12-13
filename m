@@ -2,56 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 934764722AD
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Dec 2021 09:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7954722B6
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Dec 2021 09:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbhLMI2U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Dec 2021 03:28:20 -0500
-Received: from verein.lst.de ([213.95.11.211]:46712 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232936AbhLMI2F (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 13 Dec 2021 03:28:05 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id DB2A168BFE; Mon, 13 Dec 2021 09:28:02 +0100 (CET)
-Date:   Mon, 13 Dec 2021 09:28:02 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Christoph Hellwig <hch@lst.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 3/4] MIPS: bmips: Remove obsolete DMA mapping support
-Message-ID: <20211213082802.GE21462@lst.de>
-References: <20211209204726.6676-1-jim2101024@gmail.com> <20211209204726.6676-4-jim2101024@gmail.com> <92db2bfe-4bf2-60c0-3483-01fa59723517@gmail.com>
+        id S229897AbhLMIaj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 13 Dec 2021 03:30:39 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:21712 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231831AbhLMIaj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 13 Dec 2021 03:30:39 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-48-uEn-QkNbO3KqUuXVw7bKDg-1; Mon, 13 Dec 2021 08:30:34 +0000
+X-MC-Unique: uEn-QkNbO3KqUuXVw7bKDg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Mon, 13 Dec 2021 08:30:33 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Mon, 13 Dec 2021 08:30:33 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Matthew Wilcox' <willy@infradead.org>
+CC:     'Tiezhu Yang' <yangtiezhu@loongson.cn>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: RE: [PATCH v2 0/2] kdump: simplify code
+Thread-Topic: [PATCH v2 0/2] kdump: simplify code
+Thread-Index: AQHX7j/jzYqw5kMpA0qY43nH0kUm2Kwtku5wgAEsrYCAAVr28A==
+Date:   Mon, 13 Dec 2021 08:30:33 +0000
+Message-ID: <b7a75ae9253445af81ff2fedd5268af4@AcuMS.aculab.com>
+References: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
+ <0c5cb37139af4f3e85cc2c5115d7d006@AcuMS.aculab.com>
+ <YbXhVxRJfjvKw++W@casper.infradead.org>
+In-Reply-To: <YbXhVxRJfjvKw++W@casper.infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <92db2bfe-4bf2-60c0-3483-01fa59723517@gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 09, 2021 at 01:31:39PM -0800, Florian Fainelli wrote:
-> On 12/9/21 12:47 PM, Jim Quinlan wrote:
-> > The code in 'arch/mips/bmips/dma.c' performed DMA mapping for inbound
-> > regions.  This mapping was and is required for the Broadcom STB PCIe
-> > controller HW.  This code is removed as the current 'struct device' has a
-> > @dma_range_map field which performs the same functionality by processing
-> > the "dma-ranges" DT property.
-> > 
-> > Subsequently, ARCH_HAS_PHYS_TO_DMA is now unset since the dma_to_phys()
-> > and phys_to_dma() functions are removed.
-> > 
-> > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+From: Matthew Wilcox
+> Sent: 12 December 2021 11:48
 > 
-> CC Christoph so he can do the happy dance, thanks!
+> On Sat, Dec 11, 2021 at 05:53:46PM +0000, David Laight wrote:
+> > From: Tiezhu Yang
+> > > Sent: 11 December 2021 03:33
+> > >
+> > > v2:
+> > >   -- add copy_to_user_or_kernel() in lib/usercopy.c
+> > >   -- define userbuf as bool type
+> >
+> > Instead of having a flag to indicate whether the buffer is user or kernel,
+> > would it be better to have two separate buffer pointers.
+> > One for a user space buffer, the other for a kernel space buffer.
+> > Exactly one of the buffers should always be NULL.
+> 
+> No.  You should be using an iov_iter instead.  See
+> https://lore.kernel.org/all/Ya4bdB0UBJCZhUSo@casper.infradead.org/
+> for a start on this.
 
-No actual patch content in this mail so I can't comment about the
-substance, but removing another ARCH_HAS_PHYS_TO_DMA instance is always
-awesome.
+iov_iter gets horribly expensive...
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
