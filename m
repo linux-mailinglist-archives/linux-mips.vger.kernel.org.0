@@ -2,62 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA7C472102
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Dec 2021 07:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 934764722AD
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Dec 2021 09:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbhLMGWl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Dec 2021 01:22:41 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:60358 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbhLMGWk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Dec 2021 01:22:40 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D908FCE0DDA;
-        Mon, 13 Dec 2021 06:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232EFC00446;
-        Mon, 13 Dec 2021 06:22:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639376557;
-        bh=lXQk8DuzTcWO7+mYniXCjQRwf3MAXuhib/Ultl23U/Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RF9r/PY36KFBoA6phg62nsHrctdXgAZw/+VyoRobtOWdVWZmPna2IfsVivf/eeH2S
-         8XD7RStCk5xoQYds2ZXdwajgpccJGnZyFOeSDRGqQcXMJY6PXr1EJFD/2xReyHSXAg
-         2dVihIqFAj19Su+f0NKg57tWX3Ntf5W/c277KQMRWvdk26Yjd4iuuimHI5opjEDDgH
-         DX6xUiCDngaY1vd7iNbir1qee0Er9jVNJvBD6it/BVkykekoGnoOJPWpaiM/s7ENow
-         FIiAZ76i9xYJ4ZoD9j1A+vzxa1mSx1uy5QekIUOPjSZ/WeqD7deHK+kUpMeOjHu2+X
-         Ax/QPOmbo2vaQ==
-Date:   Mon, 13 Dec 2021 11:52:32 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Rob Herring <robh+dt@kernel.org>, list@opendingux.net,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] dmaengine: jz4780: Driver updates v2
-Message-ID: <YbbmqI6MHSwZTfIc@matsya>
-References: <20211206174259.68133-1-paul@crapouillou.net>
+        id S230237AbhLMI2U (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Dec 2021 03:28:20 -0500
+Received: from verein.lst.de ([213.95.11.211]:46712 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232936AbhLMI2F (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 13 Dec 2021 03:28:05 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id DB2A168BFE; Mon, 13 Dec 2021 09:28:02 +0100 (CET)
+Date:   Mon, 13 Dec 2021 09:28:02 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Christoph Hellwig <hch@lst.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 3/4] MIPS: bmips: Remove obsolete DMA mapping support
+Message-ID: <20211213082802.GE21462@lst.de>
+References: <20211209204726.6676-1-jim2101024@gmail.com> <20211209204726.6676-4-jim2101024@gmail.com> <92db2bfe-4bf2-60c0-3483-01fa59723517@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211206174259.68133-1-paul@crapouillou.net>
+In-Reply-To: <92db2bfe-4bf2-60c0-3483-01fa59723517@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 06-12-21, 17:42, Paul Cercueil wrote:
-> Hi Vinod,
+On Thu, Dec 09, 2021 at 01:31:39PM -0800, Florian Fainelli wrote:
+> On 12/9/21 12:47 PM, Jim Quinlan wrote:
+> > The code in 'arch/mips/bmips/dma.c' performed DMA mapping for inbound
+> > regions.  This mapping was and is required for the Broadcom STB PCIe
+> > controller HW.  This code is removed as the current 'struct device' has a
+> > @dma_range_map field which performs the same functionality by processing
+> > the "dma-ranges" DT property.
+> > 
+> > Subsequently, ARCH_HAS_PHYS_TO_DMA is now unset since the dma_to_phys()
+> > and phys_to_dma() functions are removed.
+> > 
+> > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
 > 
-> A small set of updates to the dma-jz4780 driver.
-> 
-> It adds support for the MDMA/BDMA engines in the JZ4760(B) and JZ4770
-> SoCs, which are just regular cores with less channels.
-> 
-> It also adds support for bidirectional channels, so that devices that
-> only do half-duplex transfers can request a single DMA channel for both
-> directions.
+> CC Christoph so he can do the happy dance, thanks!
 
-Applied, thanks
-
--- 
-~Vinod
+No actual patch content in this mail so I can't comment about the
+substance, but removing another ARCH_HAS_PHYS_TO_DMA instance is always
+awesome.
