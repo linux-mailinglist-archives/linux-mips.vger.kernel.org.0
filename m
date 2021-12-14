@@ -2,151 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD343474155
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 12:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C8A474271
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 13:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233510AbhLNLS2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Dec 2021 06:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S233923AbhLNMZi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Dec 2021 07:25:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbhLNLS2 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 06:18:28 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF2EC061574;
-        Tue, 14 Dec 2021 03:18:27 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JCwq11xYBz4xPw;
-        Tue, 14 Dec 2021 22:18:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1639480702;
-        bh=JkHhmAZ1NigU2RvvhMuaItAKWghROfy9nEo/On2PQa8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ncUXHFoM4iG4FsToTcGgVSlxrlTPrcsbVkQQE6BgD/h1twByADVlLw69s0K4fc8er
-         w5koZXpw0PUgqdYeC8XJoCtX0Ywjya0/ax9ego1o+XCtQTbBJvdCa30cvSxXNrDmNT
-         r8ReFRa4z7jYoij18LldV3u1cIL3RzFNOhqq23k9SmajeCxjP3GNmZfmbn9q92A7hp
-         kODuYZ+k8Wo3Hvit1tQOLZ2krTqAC7xw7UrkdYxiXfjRF4u46IeI+E88aWI4M09+aD
-         oInHcrXZlCrP/5dLvfgD4/rCOr4ZGY0h4HfH5I1gF9xb2L/mCIn8QJ6YK6IlnV2oZA
-         ZqbMI5mYOrnqg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Rob Herring <robh@kernel.org>
-Cc:     John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2] of/fdt: Rework early_init_dt_scan_memory() to call
- directly
-In-Reply-To: <CAL_JsqLpq7fx0pyQiJFa0P5C3JXijiVe_fr84x9RML1aDJ7vDQ@mail.gmail.com>
-References: <20211208155839.4084795-1-robh@kernel.org>
- <87fsqwn03o.fsf@mpe.ellerman.id.au>
- <CAL_JsqLpq7fx0pyQiJFa0P5C3JXijiVe_fr84x9RML1aDJ7vDQ@mail.gmail.com>
-Date:   Tue, 14 Dec 2021 22:18:19 +1100
-Message-ID: <877dc7mo3o.fsf@mpe.ellerman.id.au>
+        with ESMTP id S233925AbhLNMZi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 07:25:38 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022C8C06173F;
+        Tue, 14 Dec 2021 04:25:38 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id f9so45750326ybq.10;
+        Tue, 14 Dec 2021 04:25:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=70ZpaJ3uo3igzKMIt1y9JPalUaB8ti9cw7hSBNZ1J7U=;
+        b=Gyzwa0v8wxz9jWlKX7+iVKGnsGbFmzgzc0C+17ffhE36858qFiNgKlXo/4adfIK81V
+         UMBoTjjB6CnGp3Rb1okXF1SUxduz7ExssOKZd5lryE5RMNV5sGSEkiRU6HhNToPPjRwo
+         MVcj/4e4x+3wLJwY4bkCFqdkQk/CJd+P0WGI/X5znVvkceKBu5QhxA9ufL4MeVSKDSWr
+         eT85VzgnjuyHZaUNrtv4WcYFFuiHE2doclV3DM+OhJeuNr4RGrl6Z0f9KatLnQjaqF7T
+         rDmX6irH803fnyGqz0AIfK6+xYaqHN2StQPsGZTHaCWJPgrfXRMu83esN4ETq5ZV2/Ku
+         ZS4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=70ZpaJ3uo3igzKMIt1y9JPalUaB8ti9cw7hSBNZ1J7U=;
+        b=luUngNRO9uJtBB+mDir7FiuuRwb9x+4hZvVEYJaW2oYaR9q83jwQ8/UoB9HG0hx8oW
+         aCIHB0bRwfnzltvoRD+R4U4wGPqVVYpbyI8YJfOZleVHOU2OszVzQzEoEyqNFQUtRAdZ
+         AlX88FxCMZeBNgVTbQ4BEwSzUgvc9pOUsq/V2oLrM2clHhqnAuzv+k6D9QVkkFd+KbKt
+         bcoygFFcwy1aBo0cXuYKImq5TBvEufeJjA94R+83Z1zBhiZ4Zhr2Uro9i4zKHdnWFQr9
+         0yiAt13Htd1vhwLwMqhsaiojUmCG3Zz4XywYEZgGuVIsKGIgS7GGVSUByJIo6EHFDVFh
+         4PqQ==
+X-Gm-Message-State: AOAM533ZL5Db3v5s1G+6tURJJUCMX6MhhFiyrbvvpMjrPT+AzkRjwNES
+        noOL18AUE4FGzGQvwId7N0LP200qgKG8W9pkhkA=
+X-Google-Smtp-Source: ABdhPJz+4V+tcLba303QzieS/yi2HpD3kWyd6W3ZqI+OTfrwA3EfIuCCEhaE9jk3B3hQ+zZzBCRPYa6wpqKdPc2r730=
+X-Received: by 2002:a25:cad5:: with SMTP id a204mr5608187ybg.234.1639484737157;
+ Tue, 14 Dec 2021 04:25:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20211213111642.11317-1-lukas.bulwahn@gmail.com>
+ <20211213111642.11317-2-lukas.bulwahn@gmail.com> <cd01c62484faa9a5b364020c5c8985e3ea7fa643.camel@svanheule.net>
+In-Reply-To: <cd01c62484faa9a5b364020c5c8985e3ea7fa643.camel@svanheule.net>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Tue, 14 Dec 2021 13:25:26 +0100
+Message-ID: <CAKXUXMxQ_rCt0CQxKm7ym44vuMTT1cgnzSCdZZQN--DPwayG6Q@mail.gmail.com>
+Subject: Re: [PATCH 1/9] mips: drop selecting the non-existing config SYS_HAS_EARLY_PRINTK_8250
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Bert Vermeulen <bert@biot.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Daniel Silsby <dansilsby@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Rob Herring <robh@kernel.org> writes:
-> On Mon, Dec 13, 2021 at 6:47 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
->> Rob Herring <robh@kernel.org> writes:
->> > Use of the of_scan_flat_dt() function predates libfdt and is discouraged
->> > as libfdt provides a nicer set of APIs. Rework
->> > early_init_dt_scan_memory() to be called directly and use libfdt.
->> ...
->> > diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
->> > index 6e1a106f02eb..63762a3b75e8 100644
->> > --- a/arch/powerpc/kernel/prom.c
->> > +++ b/arch/powerpc/kernel/prom.c
->> > @@ -532,19 +532,19 @@ static int  __init early_init_drmem_lmb(struct drmem_lmb *lmb,
->> >  }
->> >  #endif /* CONFIG_PPC_PSERIES */
->> >
->> > -static int __init early_init_dt_scan_memory_ppc(unsigned long node,
->> > -                                             const char *uname,
->> > -                                             int depth, void *data)
->> > +static int __init early_init_dt_scan_memory_ppc(void)
->> >  {
->> >  #ifdef CONFIG_PPC_PSERIES
->> > -     if (depth == 1 &&
->> > -         strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
->> > +     const void *fdt = initial_boot_params;
->> > +     int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
->> > +
->> > +     if (node > 0) {
->> >               walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
->> >               return 0;
->> >       }
-
-It's that return that is the problem.
-
-Now that early_init_dt_scan_memory_ppc() is only called once, that
-return causes us to skip scanning regular memory nodes if there is an
-"ibm,dynamic-reconfiguration-memory" property present.
-
-So the fix is just:
-
-diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-index 1098de3b172f..125661e5fcf3 100644
---- a/arch/powerpc/kernel/prom.c
-+++ b/arch/powerpc/kernel/prom.c
-@@ -538,10 +538,8 @@ static int __init early_init_dt_scan_memory_ppc(void)
- 	const void *fdt = initial_boot_params;
- 	int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
- 
--	if (node > 0) {
-+	if (node > 0)
- 		walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
--		return 0;
--	}
- #endif
- 	
- 	return early_init_dt_scan_memory();
-
-
-> The only thing I see is now there is an assumption that 'memory' nodes
-> are off the root node only. Before they could be anywhere.
-
-I don't know of any machines where that would be a problem. But given
-all the wild and wonderful device trees out there, who really knows :)
-
-Maybe we should continue to allow memory nodes to be anywhere, and print
-a warning for any that aren't at the root. Then if no one reports any
-hits for the warning we could switch to only allowing them at the root?
-
-cheers
-
-
-> index a835c458f50a..97d7607625ec 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -1083,16 +1083,13 @@ int __init early_init_dt_scan_memory(void)
->         int node;
->         const void *fdt = initial_boot_params;
+On Mon, Dec 13, 2021 at 7:52 PM Sander Vanheule <sander@svanheule.net> wrote:
 >
-> -       fdt_for_each_subnode(node, fdt, 0) {
-> -               const char *type = of_get_flat_dt_prop(node, "device_type", NULL);
-> +       for (node = fdt_node_offset_by_prop_value(fdt, -1, "device_type", "memory", 6);
-> +            node != -FDT_ERR_NOTFOUND;
-> +            node = fdt_node_offset_by_prop_value(fdt, node, "device_type", "memory", 6)) {
->                 const __be32 *reg, *endp;
->                 int l;
->                 bool hotpluggable;
+> Hi Lukas,
 >
-> -               /* We are scanning "memory" nodes only */
-> -               if (type == NULL || strcmp(type, "memory") != 0)
-> -                       continue;
-> -
->                 reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
->                 if (reg == NULL)
->                         reg = of_get_flat_dt_prop(node, "reg", &l);
+> Thanks for the patch!
 >
-> Rob
+> On Mon, 2021-12-13 at 12:16 +0100, Lukas Bulwahn wrote:
+> > Commit 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic
+> > MIPS system") introduces config MACH_REALTEK_RTL, which selects the
+> > non-existing config SYS_HAS_EARLY_PRINTK_8250.
+> >
+> > As the MACH_REALTEK_RTL config also selects SYS_HAS_EARLY_PRINTK and
+> > USE_GENERIC_EARLY_PRINTK_8250, an early printk with 8250 should be covered.
+> > Probably SYS_HAS_EARLY_PRINTK_8250 is just some left-over from an early
+> > draft version of this commit.
+> >
+> > Drop selecting the non-existing config SYS_HAS_EARLY_PRINTK_8250.
+> >
+> > Fixes: 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS system")
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> >  arch/mips/Kconfig | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> > index 00951bfdbab0..c89ce68d9580 100644
+> > --- a/arch/mips/Kconfig
+> > +++ b/arch/mips/Kconfig
+> > @@ -640,7 +640,6 @@ config MACH_REALTEK_RTL
+> >         select SYS_SUPPORTS_MULTITHREADING
+> >         select SYS_SUPPORTS_VPE_LOADER
+> >         select SYS_HAS_EARLY_PRINTK
+> > -       select SYS_HAS_EARLY_PRINTK_8250
+> >         select USE_GENERIC_EARLY_PRINTK_8250
+> >         select BOOT_RAW
+> >         select PINCTRL
+>
+> MACH_REALTEK_RTL doesn't actually call setup_8250_early_printk_port(). That means
+> USE_GENERIC_EARLY_PRINTK_8250 is also not needed. Being MIPS_GENERIC, that additionaly
+> means SYS_HAS_EARLY_PRINTK doesn't need to be selected.
+>
+> I only recently found the MIPS_GENERIC "early" console therefore doesn't actually work,
+> but we use the "ns16550a" earlycon console instead. So feel free to also drop the other
+> two other EARLY_PRINTK symbols, if you think this is in-scope for this patch. Otherwise I
+> can submit a separate patch later.
+>
+> In any case:
+> Acked-by: Sander Vanheule <sander@svanheule.net>
+>
+
+I am fine either way. Thomas, also feel free to just drop this patch
+in the series and take the full clean-up patch from Sander.
+
+Lukas
