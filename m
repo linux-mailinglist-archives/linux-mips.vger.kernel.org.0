@@ -2,123 +2,104 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C8A474271
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 13:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B04A747433E
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 14:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233923AbhLNMZi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Dec 2021 07:25:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
+        id S234282AbhLNNPC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Dec 2021 08:15:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbhLNMZi (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 07:25:38 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022C8C06173F;
-        Tue, 14 Dec 2021 04:25:38 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id f9so45750326ybq.10;
-        Tue, 14 Dec 2021 04:25:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=70ZpaJ3uo3igzKMIt1y9JPalUaB8ti9cw7hSBNZ1J7U=;
-        b=Gyzwa0v8wxz9jWlKX7+iVKGnsGbFmzgzc0C+17ffhE36858qFiNgKlXo/4adfIK81V
-         UMBoTjjB6CnGp3Rb1okXF1SUxduz7ExssOKZd5lryE5RMNV5sGSEkiRU6HhNToPPjRwo
-         MVcj/4e4x+3wLJwY4bkCFqdkQk/CJd+P0WGI/X5znVvkceKBu5QhxA9ufL4MeVSKDSWr
-         eT85VzgnjuyHZaUNrtv4WcYFFuiHE2doclV3DM+OhJeuNr4RGrl6Z0f9KatLnQjaqF7T
-         rDmX6irH803fnyGqz0AIfK6+xYaqHN2StQPsGZTHaCWJPgrfXRMu83esN4ETq5ZV2/Ku
-         ZS4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=70ZpaJ3uo3igzKMIt1y9JPalUaB8ti9cw7hSBNZ1J7U=;
-        b=luUngNRO9uJtBB+mDir7FiuuRwb9x+4hZvVEYJaW2oYaR9q83jwQ8/UoB9HG0hx8oW
-         aCIHB0bRwfnzltvoRD+R4U4wGPqVVYpbyI8YJfOZleVHOU2OszVzQzEoEyqNFQUtRAdZ
-         AlX88FxCMZeBNgVTbQ4BEwSzUgvc9pOUsq/V2oLrM2clHhqnAuzv+k6D9QVkkFd+KbKt
-         bcoygFFcwy1aBo0cXuYKImq5TBvEufeJjA94R+83Z1zBhiZ4Zhr2Uro9i4zKHdnWFQr9
-         0yiAt13Htd1vhwLwMqhsaiojUmCG3Zz4XywYEZgGuVIsKGIgS7GGVSUByJIo6EHFDVFh
-         4PqQ==
-X-Gm-Message-State: AOAM533ZL5Db3v5s1G+6tURJJUCMX6MhhFiyrbvvpMjrPT+AzkRjwNES
-        noOL18AUE4FGzGQvwId7N0LP200qgKG8W9pkhkA=
-X-Google-Smtp-Source: ABdhPJz+4V+tcLba303QzieS/yi2HpD3kWyd6W3ZqI+OTfrwA3EfIuCCEhaE9jk3B3hQ+zZzBCRPYa6wpqKdPc2r730=
-X-Received: by 2002:a25:cad5:: with SMTP id a204mr5608187ybg.234.1639484737157;
- Tue, 14 Dec 2021 04:25:37 -0800 (PST)
+        with ESMTP id S231987AbhLNNPC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 08:15:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAE5C061574;
+        Tue, 14 Dec 2021 05:15:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+SjuTfMdZX234WsFLTKgVuTlJHNKJQ6+73Q7tXhFwCc=; b=XK2cZMDZBs7uBis/aCOTIfy5Id
+        Woqbhfb9Jy/KCZQKrZRNKBni0OPi2vhjbBCFXVTZZwdfNF56JsdsQ62OYcF94p2H7RI22o/MO9Gze
+        79MLQCmvpO5GoJH/Wc3U5bT1kFBO7szsOivwVrpgEe7O/dPOSpHXg5RQnCMxsxVg4sEL5yLxKaGaN
+        o2+DlolygGwKfZqa8tJ/Igl2vUcTDqbbAeBp3a6cbU7DI3cqvUrdvjVUunJvazeyk7h1+n8aLITmy
+        mHMZsUktXu9JXz8kjVqgNxu5akRJTqIaRWUcQM0R8KY9P3voRZitjZtMGV0nZpFi23pCL7fHt8sO7
+        e7KFAFsQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mx7do-00DjQw-6u; Tue, 14 Dec 2021 13:14:48 +0000
+Date:   Tue, 14 Dec 2021 13:14:48 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v2 0/2] kdump: simplify code
+Message-ID: <YbiYyDRW9aB9jFMD@casper.infradead.org>
+References: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
+ <0c5cb37139af4f3e85cc2c5115d7d006@AcuMS.aculab.com>
+ <YbXhVxRJfjvKw++W@casper.infradead.org>
+ <b7a75ae9253445af81ff2fedd5268af4@AcuMS.aculab.com>
+ <YbdcKK3Cq6ITTg/l@casper.infradead.org>
+ <36440c0f-8b8a-c401-684f-6f54ce9c061e@loongson.cn>
 MIME-Version: 1.0
-References: <20211213111642.11317-1-lukas.bulwahn@gmail.com>
- <20211213111642.11317-2-lukas.bulwahn@gmail.com> <cd01c62484faa9a5b364020c5c8985e3ea7fa643.camel@svanheule.net>
-In-Reply-To: <cd01c62484faa9a5b364020c5c8985e3ea7fa643.camel@svanheule.net>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 14 Dec 2021 13:25:26 +0100
-Message-ID: <CAKXUXMxQ_rCt0CQxKm7ym44vuMTT1cgnzSCdZZQN--DPwayG6Q@mail.gmail.com>
-Subject: Re: [PATCH 1/9] mips: drop selecting the non-existing config SYS_HAS_EARLY_PRINTK_8250
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Bert Vermeulen <bert@biot.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Daniel Silsby <dansilsby@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <36440c0f-8b8a-c401-684f-6f54ce9c061e@loongson.cn>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 7:52 PM Sander Vanheule <sander@svanheule.net> wrote:
->
-> Hi Lukas,
->
-> Thanks for the patch!
->
-> On Mon, 2021-12-13 at 12:16 +0100, Lukas Bulwahn wrote:
-> > Commit 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic
-> > MIPS system") introduces config MACH_REALTEK_RTL, which selects the
-> > non-existing config SYS_HAS_EARLY_PRINTK_8250.
-> >
-> > As the MACH_REALTEK_RTL config also selects SYS_HAS_EARLY_PRINTK and
-> > USE_GENERIC_EARLY_PRINTK_8250, an early printk with 8250 should be covered.
-> > Probably SYS_HAS_EARLY_PRINTK_8250 is just some left-over from an early
-> > draft version of this commit.
-> >
-> > Drop selecting the non-existing config SYS_HAS_EARLY_PRINTK_8250.
-> >
-> > Fixes: 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS system")
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > ---
-> >  arch/mips/Kconfig | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> > index 00951bfdbab0..c89ce68d9580 100644
-> > --- a/arch/mips/Kconfig
-> > +++ b/arch/mips/Kconfig
-> > @@ -640,7 +640,6 @@ config MACH_REALTEK_RTL
-> >         select SYS_SUPPORTS_MULTITHREADING
-> >         select SYS_SUPPORTS_VPE_LOADER
-> >         select SYS_HAS_EARLY_PRINTK
-> > -       select SYS_HAS_EARLY_PRINTK_8250
-> >         select USE_GENERIC_EARLY_PRINTK_8250
-> >         select BOOT_RAW
-> >         select PINCTRL
->
-> MACH_REALTEK_RTL doesn't actually call setup_8250_early_printk_port(). That means
-> USE_GENERIC_EARLY_PRINTK_8250 is also not needed. Being MIPS_GENERIC, that additionaly
-> means SYS_HAS_EARLY_PRINTK doesn't need to be selected.
->
-> I only recently found the MIPS_GENERIC "early" console therefore doesn't actually work,
-> but we use the "ns16550a" earlycon console instead. So feel free to also drop the other
-> two other EARLY_PRINTK symbols, if you think this is in-scope for this patch. Otherwise I
-> can submit a separate patch later.
->
-> In any case:
-> Acked-by: Sander Vanheule <sander@svanheule.net>
->
+On Tue, Dec 14, 2021 at 06:03:11PM +0800, Tiezhu Yang wrote:
+> On 12/13/2021 10:43 PM, Matthew Wilcox wrote:
+> > On Mon, Dec 13, 2021 at 08:30:33AM +0000, David Laight wrote:
+> > > From: Matthew Wilcox
+> > > > Sent: 12 December 2021 11:48
+> > > > 
+> > > > On Sat, Dec 11, 2021 at 05:53:46PM +0000, David Laight wrote:
+> > > > > From: Tiezhu Yang
+> > > > > > Sent: 11 December 2021 03:33
+> > > > > > 
+> > > > > > v2:
+> > > > > >   -- add copy_to_user_or_kernel() in lib/usercopy.c
+> > > > > >   -- define userbuf as bool type
+> > > > > 
+> > > > > Instead of having a flag to indicate whether the buffer is user or kernel,
+> > > > > would it be better to have two separate buffer pointers.
+> > > > > One for a user space buffer, the other for a kernel space buffer.
+> > > > > Exactly one of the buffers should always be NULL.
+> > > > 
+> > > > No.  You should be using an iov_iter instead.  See
+> > > > https://lore.kernel.org/all/Ya4bdB0UBJCZhUSo@casper.infradead.org/
+> > > > for a start on this.
+> > > 
+> > > iov_iter gets horribly expensive...
+> > 
+> > Oh, right.  Reading the kcore is a high-performance path, my mistake.
+> > 
+> 
+> Hi,
+> 
+> Thank you for your discussions.
+> 
+> The intention of this patchset is to simplify the related code with no
+> functional changes and no side effects.
+> 
+> At this moment, if you are OK, I will send v3 used with inline function
+> copy_to_user_or_kernel() to keep it simple, maybe other more changes can
+> be done in the future if no any side effect.
 
-I am fine either way. Thomas, also feel free to just drop this patch
-in the series and take the full clean-up patch from Sander.
-
-Lukas
+That would be pointless.  I already sent a series to remove this,
+which you were cc'd on.
