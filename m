@@ -2,87 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 672C3474A80
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 19:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0B7474A82
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 19:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234161AbhLNSKF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Dec 2021 13:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234145AbhLNSKE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 13:10:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB011C061574;
-        Tue, 14 Dec 2021 10:10:04 -0800 (PST)
+        id S234054AbhLNSLR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Dec 2021 13:11:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60236 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232235AbhLNSLQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 13:11:16 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80E17B81BF7;
-        Tue, 14 Dec 2021 18:10:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C46C3C34600;
-        Tue, 14 Dec 2021 18:10:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91981B816C3;
+        Tue, 14 Dec 2021 18:11:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB656C34604;
+        Tue, 14 Dec 2021 18:11:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639505402;
-        bh=SERQS1Iphdy72qEnbrPAj6PSYIpJdhFgGJyK9pnOnRY=;
+        s=k20201202; t=1639505474;
+        bh=npqiSJQC8npMD2xZMDOWUY8IvRks07YDNszBOT2tffE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mR0s+hcKl8IRgGh5JAGwwjWWXyVG+Ya9TSuD7oyIvrOdE9y0T0BPsKLOIoVACANmj
-         +vij9i7luyFnNflu0Ehkr9mLx13U2nqIu4FcNs9WwL9Kkh892PDNjediPTVmys4kUx
-         Ve2an3O+UdiDTxGIn+6e28oB9ly4RkHNdgBXynEM/UBHQkrn8ZyMyIO/wQHLs7vE7m
-         9vIwaMQv3csy8Qo9jGHSFBHNlcd8E7+JUj8q8OwzSNI1LdaHMHOUSJaw7X+0v6qwHq
-         0yKubkvNa96k70B6HsVzjOUAZJayaaHGcbNAqkcsO1XyABylgdnxk+YHnCI4usuC2c
-         CYVnIhpARGxwA==
-Date:   Tue, 14 Dec 2021 11:09:58 -0700
+        b=DkKxvy5k5HIVTn3ULiDE2tqAfwttoqYsxQB82yD4aO3JWTJIHe7wrOMifO7PzhnoU
+         xv6UhrG6S8EH/THgtfIc1I1NzJ7pqp0SU/xYdR/tVMcnfyR60mcGRp8kasKe1zGTGE
+         +quP60gOcaYH4KSv1s4TfLVC0OWnxRlQuUVDa1JMp59FbCUF3wHEU0XOvd/bmGt55B
+         quwetdsEz0mY9jd+9hCIo3a9r1MO1LjpL7jJzt9wj6o06UIAyC5S7RORxJVtsjGxKU
+         HsUMnr9kZfTVpNCZMsS32/VW687hhEFJzyH6GXQuh+x2jxOFJAWuUJxnRqzM4QVlHZ
+         CONI4Y6jjZluw==
+Date:   Tue, 14 Dec 2021 11:11:10 -0700
 From:   Nathan Chancellor <nathan@kernel.org>
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Nick Desaulniers <ndesaulniers@google.com>,
         list@opendingux.net, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3] MIPS: Add support for LTO
-Message-ID: <Ybjd9qQvYG4pFJYH@archlinux-ax161>
+Subject: Re: [PATCH 0/3] MIPS: Add support for LTO
+Message-ID: <YbjePln35WuOX+31@archlinux-ax161>
 References: <20211213224914.1501303-1-paul@crapouillou.net>
- <20211213224914.1501303-4-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211213224914.1501303-4-paul@crapouillou.net>
+In-Reply-To: <20211213224914.1501303-1-paul@crapouillou.net>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:49:14PM +0000, Paul Cercueil wrote:
-> Allow CONFIG_LTO_CLANG to be enabled. The ThinLTO variant is not yet
-> supported.
+On Mon, Dec 13, 2021 at 10:49:11PM +0000, Paul Cercueil wrote:
+> Hi,
 > 
-> While this option allows to build a LTO'd kernel, the result kernel file
-> ends up being *bigger* than the non-LTO variant (about 3.6 MiB with LTO
-> vs. 3.1 MiB without with a ZSTD-compressed kernel).
-
-I believe this happens because the linker is able to inline more, which
-should make the code faster but makes it larger. I believe we limit the
-inlining threshold so that it is not too bad but maybe that could be
-further tuned.
-
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  arch/mips/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+> With this set of patches, it becomes possible to build a LTO'd kernel
+> with LLVM/Clang on MIPS.
 > 
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 0215dc1529e9..6987db8d5f64 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -22,6 +22,7 @@ config MIPS
->  	select ARCH_USE_QUEUED_RWLOCKS
->  	select ARCH_USE_QUEUED_SPINLOCKS
->  	select ARCH_SUPPORTS_HUGETLBFS if CPU_SUPPORTS_HUGEPAGES
-> +	select ARCH_SUPPORTS_LTO_CLANG if CPU_LITTLE_ENDIAN
->  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
->  	select ARCH_WANT_IPC_PARSE_VERSION
->  	select ARCH_WANT_LD_ORPHAN_WARN
+> This was tested on a Ingenic JZ4770 based system. It requires the
+> linking step of the vmlinuz.bin to be done with binutils' LD instead of
+> LLVM's ld.lld [1], but the vmlinuz ELF itself can be completely built
+> with LLVM.
+
+The patches seem fine to me but it might be nice to have this fixed up
+before the series is merged so that everything just works when this
+configuration is selected. I have added some thoughts on the GitHub
+issue.
+
+> Strangely, the LTO'd kernel is bigger in size (3.6 MiB vs. 3.1 MiB
+> without LTO), which might be completely normal and I just have wrong
+> expectations.
+> 
+> Cheers,
+> -Paul
+> 
+> [1]: https://github.com/ClangBuiltLinux/linux/issues/1333
+> 
+> Paul Cercueil (3):
+>   MIPS: boot/compressed: Disable abicalls
+>   MIPS: boot/compressed: Build without LTO
+>   MIPS: Add support for LTO
+> 
+>  arch/mips/Kconfig                  | 1 +
+>  arch/mips/boot/compressed/Makefile | 7 +++++--
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+> 
 > -- 
 > 2.33.0
 > 
