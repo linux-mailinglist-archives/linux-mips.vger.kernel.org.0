@@ -2,45 +2,45 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32317473A35
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 02:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E40E473A37
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 02:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239113AbhLNBbZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 13 Dec 2021 20:31:25 -0500
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:52685 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244584AbhLNBbZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Dec 2021 20:31:25 -0500
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 1BE1V1gt014402;
-        Tue, 14 Dec 2021 10:31:02 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 1BE1V1gt014402
+        id S239217AbhLNBcT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 13 Dec 2021 20:32:19 -0500
+Received: from conssluserg-05.nifty.com ([210.131.2.90]:63809 "EHLO
+        conssluserg-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238136AbhLNBcS (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 13 Dec 2021 20:32:18 -0500
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 1BE1W5QR006203;
+        Tue, 14 Dec 2021 10:32:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 1BE1W5QR006203
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1639445462;
-        bh=BA+hozWttsM8tsnUju1/2aEcOIMvETD7LE+T7t2SPXY=;
+        s=dec2015msa; t=1639445526;
+        bh=YecfyrVuHcIj3JIfIPxpAE7z9z7J8Agwmei6SxsRfcc=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=esuUTVNJ0kuNEHzHV7y66IIkJbBbECElmaJn0f023zUONCcYao2NCh2Eg5jSMfM9Y
-         g2NbFmMVzHSVviDWX9X+FI0FjR8bC2L2bjAyZutcPtesePHXRwetoshyj+aLjOHABj
-         C7twxawcmXXl9Y8uCKSXHcK7miTWlM3E7k8T6z+azptsqib4O9gOzy+clfDYlkRnPs
-         Eu40os33/FiBh1HKOvi+JiUlLrQMqnxSqbss69h3cwCvwqjXRpkk7HzndbFw5x5oom
-         OxNUGunWI5vcs29MPuXSl4MwSF00yqWeMC3rcjeAYpekaCwnYy9xtmF9gp36FVOv+m
-         spO7prbn0z/ZA==
-X-Nifty-SrcIP: [209.85.214.169]
-Received: by mail-pl1-f169.google.com with SMTP id n8so12458441plf.4;
-        Mon, 13 Dec 2021 17:31:01 -0800 (PST)
-X-Gm-Message-State: AOAM533eM99X43q6UwYsPhxjj33JgmZYJdURodl7KSD0gsekbL6zg5Qa
-        3U87THXVYHmio4ZIsLmrM/BNIsmf3d9J5Tuvo18=
-X-Google-Smtp-Source: ABdhPJzObfb+Px/FBK5aGrleXwTMeRdIa96UEfxA+A+1m3hQp08NvBGYOjUnfFAQZNBM8149HzTlO/mtqbMWsuorYZc=
-X-Received: by 2002:a17:90a:3942:: with SMTP id n2mr2013829pjf.77.1639445460963;
- Mon, 13 Dec 2021 17:31:00 -0800 (PST)
+        b=gglte5PICyRgxRnjQPRZYg05NI0HLeQIQ6xYTOYocMjUX63AEf0iiVFCUFUzXD+LP
+         cMHOTuGpQE3YwPDnTo/AfEUjKOwdZM6aLUWuZdCaY1UTXC2zgbhf9lb5PZuq6TLikj
+         im3kMhZTEhC/SBM7HmNp3Wi9b9t62fdS7Ndc8N8Jz/fQ/RW9q15b68betND7oozize
+         lafA0S6nvIxVJhlVQcDmw504Eq1TNubweUL8Tewmx8mZWmThDynvGaWdqGgdhg92P9
+         B+u91RK9pjlFlyS7W964y7IUNGrkwH5to5pYYUFXEsl0Sr6qbM5mbuO1k4f8BEGKgd
+         U7//uW2p59oWA==
+X-Nifty-SrcIP: [209.85.214.174]
+Received: by mail-pl1-f174.google.com with SMTP id z6so12460097plk.6;
+        Mon, 13 Dec 2021 17:32:06 -0800 (PST)
+X-Gm-Message-State: AOAM532KAlBugtuo9EwUq4TwuRQY9HNEhNZw0Uo0jYYlPDynbgN8TeRy
+        lNeQ1VC75S8gkaRNyT7OC9CuCQ/XQtLVYltIzOo=
+X-Google-Smtp-Source: ABdhPJyWu3SMDBUYUoXFNZPEQBudlfvrZxRUn6rw5S9zluOZN5NAVz3k+6YSdlOfL1WNyN5vkeUWiWFVs0mHRV4Am5Q=
+X-Received: by 2002:a17:90a:fb43:: with SMTP id iq3mr2079208pjb.144.1639445525497;
+ Mon, 13 Dec 2021 17:32:05 -0800 (PST)
 MIME-Version: 1.0
-References: <1639389477-17586-1-git-send-email-yangtiezhu@loongson.cn> <1639389477-17586-2-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1639389477-17586-2-git-send-email-yangtiezhu@loongson.cn>
+References: <1639389477-17586-1-git-send-email-yangtiezhu@loongson.cn> <1639389477-17586-3-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1639389477-17586-3-git-send-email-yangtiezhu@loongson.cn>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 14 Dec 2021 10:30:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQNJv3Z7iM1vjc4vL=JbzBzT7GHq-p+DAkGVV+_bdvNBQ@mail.gmail.com>
-Message-ID: <CAK7LNAQNJv3Z7iM1vjc4vL=JbzBzT7GHq-p+DAkGVV+_bdvNBQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] MIPS: SGI-IP22: Remove unnecessary check of GCC option
+Date:   Tue, 14 Dec 2021 10:31:26 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASgJ4TOrPx87yi+VtXMBHC=g2hFSS9HuEE7Qo8HUfJfCg@mail.gmail.com>
+Message-ID: <CAK7LNASgJ4TOrPx87yi+VtXMBHC=g2hFSS9HuEE7Qo8HUfJfCg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] MIPS: Makefile: Remove "ifdef need-compiler" for Kbuild.platforms
 To:     Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Jason Self <jason@bluehome.net>,
@@ -56,62 +56,36 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Mon, Dec 13, 2021 at 6:58 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> According to the document "Minimal requirements to compile the Kernel [1],
+> After commit 13ceb48bc19c ("MIPS: Loongson2ef: Remove unnecessary
+> {as,cc}-option calls"), no need to use "ifdef need-compiler" for
+> Kbuild.platforms, because the cause of the build issue mentioned
+> in commit 0706f74f719e ("MIPS: fix *-pkg builds for loongson2ef
+> platform") has been disappeared, so just remove it.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
 
-
-[1] is the kernel document, so you do not need to refer to the URL.
-
-You can say:
-
- According to Documentation/process/changes.rst, ...
-
-
-
-https://www.kernel.org/doc/html/latest is the moving target.
-If you get access to this URL some years later, the min GCC
-version may not be 5.1
-
-
-
-Other than the nit,
 
 Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
 
-
-
-> the minimal version of GCC is 5.1, -mr10k-cache-barrier=store is supported
-> with GCC 5.1 [2], so just remove the unnecessary check to fix the build
-> error [3]:
+>  arch/mips/Makefile | 2 --
+>  1 file changed, 2 deletions(-)
 >
->   arch/mips/sgi-ip22/Platform:28: *** gcc doesn't support needed option -mr10k-cache-barrier=store.  Stop.
->
-> [1] https://www.kernel.org/doc/html/latest/process/changes.html
-> [2] https://gcc.gnu.org/onlinedocs/gcc-5.1.0/gcc/MIPS-Options.html
-> [3] https://github.com/ClangBuiltLinux/linux/issues/1543
->
-> Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
-> Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/mips/sgi-ip22/Platform | 5 -----
->  1 file changed, 5 deletions(-)
->
-> diff --git a/arch/mips/sgi-ip22/Platform b/arch/mips/sgi-ip22/Platform
-> index 62fa30b..a4c46e3 100644
-> --- a/arch/mips/sgi-ip22/Platform
-> +++ b/arch/mips/sgi-ip22/Platform
-> @@ -23,10 +23,5 @@ endif
->  # be 16kb aligned or the handling of the current variable will break.
->  # Simplified: what IP22 does at 128MB+ in ksegN, IP28 does at 512MB+ in xkphys
+> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+> index ace7f03..e036fc0 100644
+> --- a/arch/mips/Makefile
+> +++ b/arch/mips/Makefile
+> @@ -253,9 +253,7 @@ endif
 >  #
-> -ifdef CONFIG_SGI_IP28
-> -  ifeq ($(call cc-option-yn,-march=r10000 -mr10k-cache-barrier=store), n)
-> -      $(error gcc doesn't support needed option -mr10k-cache-barrier=store)
-> -  endif
+>  # Board-dependent options and extra files
+>  #
+> -ifdef need-compiler
+>  include $(srctree)/arch/mips/Kbuild.platforms
 > -endif
->  cflags-$(CONFIG_SGI_IP28)      += -mr10k-cache-barrier=store -I$(srctree)/arch/mips/include/asm/mach-ip28
->  load-$(CONFIG_SGI_IP28)                += 0xa800000020004000
+>
+>  ifdef CONFIG_PHYSICAL_START
+>  load-y                                 = $(CONFIG_PHYSICAL_START)
 > --
 > 2.1.0
 >
