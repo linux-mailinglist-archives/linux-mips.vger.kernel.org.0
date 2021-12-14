@@ -2,85 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0B7474A82
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 19:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2BA474B8B
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 20:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbhLNSLR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Dec 2021 13:11:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60236 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232235AbhLNSLQ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 13:11:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91981B816C3;
-        Tue, 14 Dec 2021 18:11:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB656C34604;
-        Tue, 14 Dec 2021 18:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639505474;
-        bh=npqiSJQC8npMD2xZMDOWUY8IvRks07YDNszBOT2tffE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DkKxvy5k5HIVTn3ULiDE2tqAfwttoqYsxQB82yD4aO3JWTJIHe7wrOMifO7PzhnoU
-         xv6UhrG6S8EH/THgtfIc1I1NzJ7pqp0SU/xYdR/tVMcnfyR60mcGRp8kasKe1zGTGE
-         +quP60gOcaYH4KSv1s4TfLVC0OWnxRlQuUVDa1JMp59FbCUF3wHEU0XOvd/bmGt55B
-         quwetdsEz0mY9jd+9hCIo3a9r1MO1LjpL7jJzt9wj6o06UIAyC5S7RORxJVtsjGxKU
-         HsUMnr9kZfTVpNCZMsS32/VW687hhEFJzyH6GXQuh+x2jxOFJAWuUJxnRqzM4QVlHZ
-         CONI4Y6jjZluw==
-Date:   Tue, 14 Dec 2021 11:11:10 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
+        id S232356AbhLNTJS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Tue, 14 Dec 2021 14:09:18 -0500
+Received: from aposti.net ([89.234.176.197]:52218 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237319AbhLNTJR (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 14 Dec 2021 14:09:17 -0500
+Date:   Tue, 14 Dec 2021 19:09:06 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/3] MIPS: boot/compressed: Disable abicalls
+To:     Nathan Chancellor <nathan@kernel.org>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Nick Desaulniers <ndesaulniers@google.com>,
         list@opendingux.net, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 0/3] MIPS: Add support for LTO
-Message-ID: <YbjePln35WuOX+31@archlinux-ax161>
+Message-Id: <67D44R.5C6XHAZPCYVU3@crapouillou.net>
+In-Reply-To: <YbjdQfrC+EjeJjRV@archlinux-ax161>
 References: <20211213224914.1501303-1-paul@crapouillou.net>
+        <20211213224914.1501303-2-paul@crapouillou.net>
+        <YbjdQfrC+EjeJjRV@archlinux-ax161>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211213224914.1501303-1-paul@crapouillou.net>
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 10:49:11PM +0000, Paul Cercueil wrote:
-> Hi,
-> 
-> With this set of patches, it becomes possible to build a LTO'd kernel
-> with LLVM/Clang on MIPS.
-> 
-> This was tested on a Ingenic JZ4770 based system. It requires the
-> linking step of the vmlinuz.bin to be done with binutils' LD instead of
-> LLVM's ld.lld [1], but the vmlinuz ELF itself can be completely built
-> with LLVM.
+Hi Nathan,
 
-The patches seem fine to me but it might be nice to have this fixed up
-before the series is merged so that everything just works when this
-configuration is selected. I have added some thoughts on the GitHub
-issue.
+Le mar., déc. 14 2021 at 11:06:57 -0700, Nathan Chancellor 
+<nathan@kernel.org> a écrit :
+> On Mon, Dec 13, 2021 at 10:49:12PM +0000, Paul Cercueil wrote:
+>>  Avoid complaints from Clang/LLVM by building the decompress program 
+>> with
+>>  -mno-abicalls.
+> 
+> What is the message?
 
-> Strangely, the LTO'd kernel is bigger in size (3.6 MiB vs. 3.1 MiB
-> without LTO), which might be completely normal and I just have wrong
-> expectations.
+ld.lld: warning: lto.tmp: linking abicalls code with non-abicalls code 
+arch/mips/kernel/head.o
+
+Cheers,
+-Paul
+
 > 
-> Cheers,
-> -Paul
-> 
-> [1]: https://github.com/ClangBuiltLinux/linux/issues/1333
-> 
-> Paul Cercueil (3):
->   MIPS: boot/compressed: Disable abicalls
->   MIPS: boot/compressed: Build without LTO
->   MIPS: Add support for LTO
-> 
->  arch/mips/Kconfig                  | 1 +
->  arch/mips/boot/compressed/Makefile | 7 +++++--
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.33.0
-> 
-> 
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>   arch/mips/boot/compressed/Makefile | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>> 
+>>  diff --git a/arch/mips/boot/compressed/Makefile 
+>> b/arch/mips/boot/compressed/Makefile
+>>  index f27cf31b4140..4c9ecfbb0ef4 100644
+>>  --- a/arch/mips/boot/compressed/Makefile
+>>  +++ b/arch/mips/boot/compressed/Makefile
+>>  @@ -27,10 +27,10 @@ ifdef CONFIG_CPU_LOONGSON64
+>>   KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) 
+>> -march=mips64r2
+>>   endif
+>> 
+>>  -KBUILD_CFLAGS := $(KBUILD_CFLAGS) -D__KERNEL__ -D__DISABLE_EXPORTS 
+>> \
+>>  +KBUILD_CFLAGS := $(KBUILD_CFLAGS) -mno-abicalls -D__KERNEL__ 
+>> -D__DISABLE_EXPORTS \
+>>   	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) 
+>> -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
+>> 
+>>  -KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+>>  +KBUILD_AFLAGS := $(KBUILD_AFLAGS) -mno-abicalls -D__ASSEMBLY__ \
+>>   	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
+>>   	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
+>> 
+>>  --
+>>  2.33.0
+>> 
+>> 
+
+
