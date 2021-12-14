@@ -2,104 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B04A747433E
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 14:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1250C47455A
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 15:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbhLNNPC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Dec 2021 08:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbhLNNPC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 08:15:02 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAE5C061574;
-        Tue, 14 Dec 2021 05:15:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+SjuTfMdZX234WsFLTKgVuTlJHNKJQ6+73Q7tXhFwCc=; b=XK2cZMDZBs7uBis/aCOTIfy5Id
-        Woqbhfb9Jy/KCZQKrZRNKBni0OPi2vhjbBCFXVTZZwdfNF56JsdsQ62OYcF94p2H7RI22o/MO9Gze
-        79MLQCmvpO5GoJH/Wc3U5bT1kFBO7szsOivwVrpgEe7O/dPOSpHXg5RQnCMxsxVg4sEL5yLxKaGaN
-        o2+DlolygGwKfZqa8tJ/Igl2vUcTDqbbAeBp3a6cbU7DI3cqvUrdvjVUunJvazeyk7h1+n8aLITmy
-        mHMZsUktXu9JXz8kjVqgNxu5akRJTqIaRWUcQM0R8KY9P3voRZitjZtMGV0nZpFi23pCL7fHt8sO7
-        e7KFAFsQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mx7do-00DjQw-6u; Tue, 14 Dec 2021 13:14:48 +0000
-Date:   Tue, 14 Dec 2021 13:14:48 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Dave Young <dyoung@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v2 0/2] kdump: simplify code
-Message-ID: <YbiYyDRW9aB9jFMD@casper.infradead.org>
-References: <1639193588-7027-1-git-send-email-yangtiezhu@loongson.cn>
- <0c5cb37139af4f3e85cc2c5115d7d006@AcuMS.aculab.com>
- <YbXhVxRJfjvKw++W@casper.infradead.org>
- <b7a75ae9253445af81ff2fedd5268af4@AcuMS.aculab.com>
- <YbdcKK3Cq6ITTg/l@casper.infradead.org>
- <36440c0f-8b8a-c401-684f-6f54ce9c061e@loongson.cn>
+        id S232734AbhLNOkU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Dec 2021 09:40:20 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50974 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230514AbhLNOkT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 09:40:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DDF6B819E7;
+        Tue, 14 Dec 2021 14:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB65DC34605;
+        Tue, 14 Dec 2021 14:40:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639492817;
+        bh=ZsV7vgxPngHOT7KypBEabGUnzoS988RDkMy+GfbQz5k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DEk9lHeW4hwiaZLjPTt7Uc1cptM17Ov0+NsM6bhU4LiI//GPvobyXJoBCiW9S4dF/
+         OReBLXH4E90RJYGzpp/+tJ9ERkzS7RFhDYW2ME6QjJuoUNis7M+4XpD7r0pg5z8Nmx
+         cKcnofKDQhYytgZBnUQ49vx4/PCZh+xekN9naH1FqLdx9G0sh26AFfh8LwEZzGltbl
+         ETFEJfnkFVhWU5+bdgUz3314Eahw+5wMST9UXEdQSPqMU0kcDMsUidpADbC4y1i9ht
+         2UA6ByU0F+OuHVYfpGQmKk63vajy5tyctQoCyq7ckY6+kySqHgV/1ZehWyRdaj/zS0
+         HWmEi/IJCNzaA==
+Received: by mail-ed1-f42.google.com with SMTP id v1so64156056edx.2;
+        Tue, 14 Dec 2021 06:40:16 -0800 (PST)
+X-Gm-Message-State: AOAM531vLnxzkKlZh2jcMkxKKIM2wcznwKgQmX059FMPoGDI+E8z2o8f
+        F90jL1azuvrScpUpIEyf0upyPqNAuL2C31p42w==
+X-Google-Smtp-Source: ABdhPJzb2kFsttfkp1wodLWs1+u9g7X0Osm0q69CwVTGT2N2fa1Xsg4NpUSIZpuN1tuA7JavfOna2VbIWMjOqcHj4o8=
+X-Received: by 2002:a17:907:9256:: with SMTP id kb22mr5778005ejb.423.1639492814393;
+ Tue, 14 Dec 2021 06:40:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <36440c0f-8b8a-c401-684f-6f54ce9c061e@loongson.cn>
+References: <20211208155839.4084795-1-robh@kernel.org> <87fsqwn03o.fsf@mpe.ellerman.id.au>
+ <CAL_JsqLpq7fx0pyQiJFa0P5C3JXijiVe_fr84x9RML1aDJ7vDQ@mail.gmail.com> <877dc7mo3o.fsf@mpe.ellerman.id.au>
+In-Reply-To: <877dc7mo3o.fsf@mpe.ellerman.id.au>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 14 Dec 2021 08:40:02 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKbaRgivZMxEj6Mjdny2LNeSA1GQyDW-nQe7E2irPc-Fw@mail.gmail.com>
+Message-ID: <CAL_JsqKbaRgivZMxEj6Mjdny2LNeSA1GQyDW-nQe7E2irPc-Fw@mail.gmail.com>
+Subject: Re: [PATCH v2] of/fdt: Rework early_init_dt_scan_memory() to call directly
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 06:03:11PM +0800, Tiezhu Yang wrote:
-> On 12/13/2021 10:43 PM, Matthew Wilcox wrote:
-> > On Mon, Dec 13, 2021 at 08:30:33AM +0000, David Laight wrote:
-> > > From: Matthew Wilcox
-> > > > Sent: 12 December 2021 11:48
-> > > > 
-> > > > On Sat, Dec 11, 2021 at 05:53:46PM +0000, David Laight wrote:
-> > > > > From: Tiezhu Yang
-> > > > > > Sent: 11 December 2021 03:33
-> > > > > > 
-> > > > > > v2:
-> > > > > >   -- add copy_to_user_or_kernel() in lib/usercopy.c
-> > > > > >   -- define userbuf as bool type
-> > > > > 
-> > > > > Instead of having a flag to indicate whether the buffer is user or kernel,
-> > > > > would it be better to have two separate buffer pointers.
-> > > > > One for a user space buffer, the other for a kernel space buffer.
-> > > > > Exactly one of the buffers should always be NULL.
-> > > > 
-> > > > No.  You should be using an iov_iter instead.  See
-> > > > https://lore.kernel.org/all/Ya4bdB0UBJCZhUSo@casper.infradead.org/
-> > > > for a start on this.
-> > > 
-> > > iov_iter gets horribly expensive...
-> > 
-> > Oh, right.  Reading the kcore is a high-performance path, my mistake.
-> > 
-> 
-> Hi,
-> 
-> Thank you for your discussions.
-> 
-> The intention of this patchset is to simplify the related code with no
-> functional changes and no side effects.
-> 
-> At this moment, if you are OK, I will send v3 used with inline function
-> copy_to_user_or_kernel() to keep it simple, maybe other more changes can
-> be done in the future if no any side effect.
+On Tue, Dec 14, 2021 at 5:18 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> Rob Herring <robh@kernel.org> writes:
+> > On Mon, Dec 13, 2021 at 6:47 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
+> >> Rob Herring <robh@kernel.org> writes:
+> >> > Use of the of_scan_flat_dt() function predates libfdt and is discouraged
+> >> > as libfdt provides a nicer set of APIs. Rework
+> >> > early_init_dt_scan_memory() to be called directly and use libfdt.
+> >> ...
+> >> > diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+> >> > index 6e1a106f02eb..63762a3b75e8 100644
+> >> > --- a/arch/powerpc/kernel/prom.c
+> >> > +++ b/arch/powerpc/kernel/prom.c
+> >> > @@ -532,19 +532,19 @@ static int  __init early_init_drmem_lmb(struct drmem_lmb *lmb,
+> >> >  }
+> >> >  #endif /* CONFIG_PPC_PSERIES */
+> >> >
+> >> > -static int __init early_init_dt_scan_memory_ppc(unsigned long node,
+> >> > -                                             const char *uname,
+> >> > -                                             int depth, void *data)
+> >> > +static int __init early_init_dt_scan_memory_ppc(void)
+> >> >  {
+> >> >  #ifdef CONFIG_PPC_PSERIES
+> >> > -     if (depth == 1 &&
+> >> > -         strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
+> >> > +     const void *fdt = initial_boot_params;
+> >> > +     int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
+> >> > +
+> >> > +     if (node > 0) {
+> >> >               walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
+> >> >               return 0;
+> >> >       }
+>
+> It's that return that is the problem.
+>
+> Now that early_init_dt_scan_memory_ppc() is only called once, that
+> return causes us to skip scanning regular memory nodes if there is an
+> "ibm,dynamic-reconfiguration-memory" property present.
+>
+> So the fix is just:
+>
+> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
+> index 1098de3b172f..125661e5fcf3 100644
+> --- a/arch/powerpc/kernel/prom.c
+> +++ b/arch/powerpc/kernel/prom.c
+> @@ -538,10 +538,8 @@ static int __init early_init_dt_scan_memory_ppc(void)
+>         const void *fdt = initial_boot_params;
+>         int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
+>
+> -       if (node > 0) {
+> +       if (node > 0)
+>                 walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
+> -               return 0;
+> -       }
+>  #endif
+>
+>         return early_init_dt_scan_memory();
 
-That would be pointless.  I already sent a series to remove this,
-which you were cc'd on.
+Thanks! I've rolled that in.
+
+> > The only thing I see is now there is an assumption that 'memory' nodes
+> > are off the root node only. Before they could be anywhere.
+>
+> I don't know of any machines where that would be a problem. But given
+> all the wild and wonderful device trees out there, who really knows :)
+>
+> Maybe we should continue to allow memory nodes to be anywhere, and print
+> a warning for any that aren't at the root. Then if no one reports any
+> hits for the warning we could switch to only allowing them at the root?
+
+I really doubt there's any case. I just have the least visibility into
+what IBM DTs look like. I checked some old DT files I have and also
+u-boot only supports off the root node.
+
+
+Rob
