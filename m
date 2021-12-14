@@ -2,136 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1250C47455A
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 15:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85679474A69
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 19:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbhLNOkU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Dec 2021 09:40:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50974 "EHLO
+        id S236880AbhLNSHF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Dec 2021 13:07:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58382 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbhLNOkT (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 09:40:19 -0500
+        with ESMTP id S230037AbhLNSHE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 13:07:04 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DDF6B819E7;
-        Tue, 14 Dec 2021 14:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB65DC34605;
-        Tue, 14 Dec 2021 14:40:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87BF4B81C1D;
+        Tue, 14 Dec 2021 18:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA269C34600;
+        Tue, 14 Dec 2021 18:07:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639492817;
-        bh=ZsV7vgxPngHOT7KypBEabGUnzoS988RDkMy+GfbQz5k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DEk9lHeW4hwiaZLjPTt7Uc1cptM17Ov0+NsM6bhU4LiI//GPvobyXJoBCiW9S4dF/
-         OReBLXH4E90RJYGzpp/+tJ9ERkzS7RFhDYW2ME6QjJuoUNis7M+4XpD7r0pg5z8Nmx
-         cKcnofKDQhYytgZBnUQ49vx4/PCZh+xekN9naH1FqLdx9G0sh26AFfh8LwEZzGltbl
-         ETFEJfnkFVhWU5+bdgUz3314Eahw+5wMST9UXEdQSPqMU0kcDMsUidpADbC4y1i9ht
-         2UA6ByU0F+OuHVYfpGQmKk63vajy5tyctQoCyq7ckY6+kySqHgV/1ZehWyRdaj/zS0
-         HWmEi/IJCNzaA==
-Received: by mail-ed1-f42.google.com with SMTP id v1so64156056edx.2;
-        Tue, 14 Dec 2021 06:40:16 -0800 (PST)
-X-Gm-Message-State: AOAM531vLnxzkKlZh2jcMkxKKIM2wcznwKgQmX059FMPoGDI+E8z2o8f
-        F90jL1azuvrScpUpIEyf0upyPqNAuL2C31p42w==
-X-Google-Smtp-Source: ABdhPJzb2kFsttfkp1wodLWs1+u9g7X0Osm0q69CwVTGT2N2fa1Xsg4NpUSIZpuN1tuA7JavfOna2VbIWMjOqcHj4o8=
-X-Received: by 2002:a17:907:9256:: with SMTP id kb22mr5778005ejb.423.1639492814393;
- Tue, 14 Dec 2021 06:40:14 -0800 (PST)
+        s=k20201202; t=1639505222;
+        bh=snNZ5pvPEda5tFxSouYZVnEaCsqOGiTLHoqkbWDbHoM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UPwdcSIvb+tbW2yjr2HxlxXZphPHU7vJrgigYJHCznVVtc/edMZB5cDk1IahTI5CG
+         jVrwdsKkYZ+O05tmiXg5dgdfQXqIE7y07l1HxTfBA2tzQJOdFPsB7W+BSeL1L0JmWk
+         AdUSwRABkptmESSmqOYaA9nwH/Fac0oPXUMYVQTLjrNbQl9sskhyqTdOBYo/Q6vXmZ
+         HceHa/VSOozj9CLOyBHQ9dIKM9ToTnFhSbTgBKgPf+QHKg6so3MKR7Ldq9rEU84/GJ
+         nlK9n8WFvJpeIK3U/yMxrm6RLiSwqk0KhOvR4G29Od4ICajP4/dJiXKXoX6VxnJfcN
+         kzI05BRWP2Nnw==
+Date:   Tue, 14 Dec 2021 11:06:57 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        list@opendingux.net, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/3] MIPS: boot/compressed: Disable abicalls
+Message-ID: <YbjdQfrC+EjeJjRV@archlinux-ax161>
+References: <20211213224914.1501303-1-paul@crapouillou.net>
+ <20211213224914.1501303-2-paul@crapouillou.net>
 MIME-Version: 1.0
-References: <20211208155839.4084795-1-robh@kernel.org> <87fsqwn03o.fsf@mpe.ellerman.id.au>
- <CAL_JsqLpq7fx0pyQiJFa0P5C3JXijiVe_fr84x9RML1aDJ7vDQ@mail.gmail.com> <877dc7mo3o.fsf@mpe.ellerman.id.au>
-In-Reply-To: <877dc7mo3o.fsf@mpe.ellerman.id.au>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 14 Dec 2021 08:40:02 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKbaRgivZMxEj6Mjdny2LNeSA1GQyDW-nQe7E2irPc-Fw@mail.gmail.com>
-Message-ID: <CAL_JsqKbaRgivZMxEj6Mjdny2LNeSA1GQyDW-nQe7E2irPc-Fw@mail.gmail.com>
-Subject: Re: [PATCH v2] of/fdt: Rework early_init_dt_scan_memory() to call directly
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211213224914.1501303-2-paul@crapouillou.net>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 5:18 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> Rob Herring <robh@kernel.org> writes:
-> > On Mon, Dec 13, 2021 at 6:47 AM Michael Ellerman <mpe@ellerman.id.au> wrote:
-> >> Rob Herring <robh@kernel.org> writes:
-> >> > Use of the of_scan_flat_dt() function predates libfdt and is discouraged
-> >> > as libfdt provides a nicer set of APIs. Rework
-> >> > early_init_dt_scan_memory() to be called directly and use libfdt.
-> >> ...
-> >> > diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> >> > index 6e1a106f02eb..63762a3b75e8 100644
-> >> > --- a/arch/powerpc/kernel/prom.c
-> >> > +++ b/arch/powerpc/kernel/prom.c
-> >> > @@ -532,19 +532,19 @@ static int  __init early_init_drmem_lmb(struct drmem_lmb *lmb,
-> >> >  }
-> >> >  #endif /* CONFIG_PPC_PSERIES */
-> >> >
-> >> > -static int __init early_init_dt_scan_memory_ppc(unsigned long node,
-> >> > -                                             const char *uname,
-> >> > -                                             int depth, void *data)
-> >> > +static int __init early_init_dt_scan_memory_ppc(void)
-> >> >  {
-> >> >  #ifdef CONFIG_PPC_PSERIES
-> >> > -     if (depth == 1 &&
-> >> > -         strcmp(uname, "ibm,dynamic-reconfiguration-memory") == 0) {
-> >> > +     const void *fdt = initial_boot_params;
-> >> > +     int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
-> >> > +
-> >> > +     if (node > 0) {
-> >> >               walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
-> >> >               return 0;
-> >> >       }
->
-> It's that return that is the problem.
->
-> Now that early_init_dt_scan_memory_ppc() is only called once, that
-> return causes us to skip scanning regular memory nodes if there is an
-> "ibm,dynamic-reconfiguration-memory" property present.
->
-> So the fix is just:
->
-> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> index 1098de3b172f..125661e5fcf3 100644
-> --- a/arch/powerpc/kernel/prom.c
-> +++ b/arch/powerpc/kernel/prom.c
-> @@ -538,10 +538,8 @@ static int __init early_init_dt_scan_memory_ppc(void)
->         const void *fdt = initial_boot_params;
->         int node = fdt_path_offset(fdt, "/ibm,dynamic-reconfiguration-memory");
->
-> -       if (node > 0) {
-> +       if (node > 0)
->                 walk_drmem_lmbs_early(node, NULL, early_init_drmem_lmb);
-> -               return 0;
-> -       }
->  #endif
->
->         return early_init_dt_scan_memory();
+On Mon, Dec 13, 2021 at 10:49:12PM +0000, Paul Cercueil wrote:
+> Avoid complaints from Clang/LLVM by building the decompress program with
+> -mno-abicalls.
 
-Thanks! I've rolled that in.
+What is the message?
 
-> > The only thing I see is now there is an assumption that 'memory' nodes
-> > are off the root node only. Before they could be anywhere.
->
-> I don't know of any machines where that would be a problem. But given
-> all the wild and wonderful device trees out there, who really knows :)
->
-> Maybe we should continue to allow memory nodes to be anywhere, and print
-> a warning for any that aren't at the root. Then if no one reports any
-> hits for the warning we could switch to only allowing them at the root?
-
-I really doubt there's any case. I just have the least visibility into
-what IBM DTs look like. I checked some old DT files I have and also
-u-boot only supports off the root node.
-
-
-Rob
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  arch/mips/boot/compressed/Makefile | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+> index f27cf31b4140..4c9ecfbb0ef4 100644
+> --- a/arch/mips/boot/compressed/Makefile
+> +++ b/arch/mips/boot/compressed/Makefile
+> @@ -27,10 +27,10 @@ ifdef CONFIG_CPU_LOONGSON64
+>  KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) -march=mips64r2
+>  endif
+>  
+> -KBUILD_CFLAGS := $(KBUILD_CFLAGS) -D__KERNEL__ -D__DISABLE_EXPORTS \
+> +KBUILD_CFLAGS := $(KBUILD_CFLAGS) -mno-abicalls -D__KERNEL__ -D__DISABLE_EXPORTS \
+>  	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
+>  
+> -KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+> +KBUILD_AFLAGS := $(KBUILD_AFLAGS) -mno-abicalls -D__ASSEMBLY__ \
+>  	-DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) \
+>  	-DKERNEL_ENTRY=$(VMLINUX_ENTRY_ADDRESS)
+>  
+> -- 
+> 2.33.0
+> 
+> 
