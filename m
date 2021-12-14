@@ -2,54 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CDE474C31
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 20:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C808474C3B
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Dec 2021 20:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237487AbhLNTnm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 14 Dec 2021 14:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        id S237505AbhLNTqI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 14 Dec 2021 14:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237486AbhLNTnm (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 14:43:42 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D38C06173E
-        for <linux-mips@vger.kernel.org>; Tue, 14 Dec 2021 11:43:41 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id b1so38796350lfs.13
-        for <linux-mips@vger.kernel.org>; Tue, 14 Dec 2021 11:43:41 -0800 (PST)
+        with ESMTP id S231657AbhLNTqI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 14 Dec 2021 14:46:08 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA66CC061574
+        for <linux-mips@vger.kernel.org>; Tue, 14 Dec 2021 11:46:07 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id bn20so29967576ljb.8
+        for <linux-mips@vger.kernel.org>; Tue, 14 Dec 2021 11:46:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=/WNtdOExba0UareLlKons7fVsJWCyGRdBiOkJewabLU=;
-        b=qP9k2WtsLwhadv7Z98sXBcbuVgdLVZLF1yEoSBINi3s2x/zcZdiBiWTBshsR0ZCvHp
-         sWf3vM7oxiubP1xPpjtywPgHffA5ufiabkRBoqEB8MAQHzYqxCuCSg2zOvnsFrvPQqaY
-         yz1bSnDT9cBMlgT4wqhZ0CwoWxu1C11xIoXk1/KmX8xHN6hKV9RJ7i7VI2b3Of6PneW9
-         5FiwZmfjQZvJ5aX2o/r1fV9SMdFFFBAZqJB/c7pk1yBSC85m69rttz0tbIgeCM9rGen4
-         gwWRLYlf4F5c+AGEuxRNnNT5HNgHtZ3Mnjxz9JzmwtxrzR9PrNH8d7XMvIkvpIZJKWyB
-         F/iw==
+        bh=h0rTzffy35/5abt9w3+JNjuxLlxaRoxP3g+y8dZlZ1c=;
+        b=Dlq1h6n6Nvy+Cx6orR+qAeWjN4UhGYRKo8AEJONU4Tl7IgPIn8A8bJVM4adjeHLG4o
+         kFxaUYmqDuUNKExMHNZTQJyi80oZ17YmubLHrwMoCK/kYhPSIE9RSCSjVM+OGhDWOof0
+         pgmONlQeQRIDyaZdfCQZ7bUCFiM99gbxQk/1p5vOeREwMpl3j0h7eDliXN9MgN7iO5Rv
+         EWTyISbHCSBIQXoRj2ENRUSIPYykjbIx2OdgASRMr3ieT9d6I8FKOaNe83Kg8UUCzK/a
+         OoY3PAtj5LYrfwBd+XQ5KAw6mLHP1qq4eXzYeRlYHEb98BmQxHQp28hMhpmvtutsK78q
+         orZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/WNtdOExba0UareLlKons7fVsJWCyGRdBiOkJewabLU=;
-        b=yfU+WwDDvOjxdnwnoeeGW0l2AY3KaSGp8BbquZIQpPiMKz3iNPDMGncEbfhfQcZEGM
-         XjWAeofNJvog7T+vs6R3OT7Uyz7YbpYZGRsHCYhuFNz9FfrHnXkwrgmEWgfvljfZ+dvW
-         rkroMS/BgxREKWeaGnIFvKY1McarZRjurUJu0RKQXThxz12rp4ZMZ12KL1xW0X51gszz
-         NpyWxSS/hxTHcdjc3sfbWaPu+VDiFoVnCsi7CKGiDZ3EVihc6eyMGtIdg1Fw6AYKteqJ
-         BED3Hu7XHRQqLO9uxTWtu8HJOQy9LtomVxox4HBbLs9ZVCJzjX+TbmU2KU1+y7D2uhy5
-         Tanw==
-X-Gm-Message-State: AOAM533QfvOt6i25ujsa13U+YQiavTktgPgmCR1PZMngr4/jSJ7IR23O
-        1m6uZFRUfruGV3azS61gv6ksiYLqqDjGe0/Z5Ogv3w==
-X-Google-Smtp-Source: ABdhPJynoNYKno0o5Fc6TQq4M/7CoCk7fH7s/cK99AIXq3P6Mr1V2cvRGwyXL+wfaPmWTd+SLmaQp7RNHm0IJSN51FY=
-X-Received: by 2002:a05:6512:b1f:: with SMTP id w31mr6648969lfu.240.1639511019704;
- Tue, 14 Dec 2021 11:43:39 -0800 (PST)
+        bh=h0rTzffy35/5abt9w3+JNjuxLlxaRoxP3g+y8dZlZ1c=;
+        b=TZ19B21TIIVRYpb2Rs3BY6S4hIhv7ItRXZWKCvoNqULqVH30ncBBpXA/RhkRq04j7U
+         /PUWA3kDHf01OmTNEx2ns0kHkb98u05Yl+A/TBQtB+y1DMvA0xhLbyfu52LrXW75aKl+
+         hjMUzLG2Z23baBnkw8Hg2wlQdCraM1kLZrMrR5tzUcVLFkGPPcdkyTV+oeKTWdEa6eZP
+         tCi7b8d2/AnwdZzcLFNWaMbnadFphJdK9L+MuzkdI6/YH5dQCK6J15yzjpklxNZElt2m
+         dwnTgfwO3T+3XfABZdKh+Sbrudcky10Ppo+N7EFN5RX1N+geE+OHFPAEOSuXouDs+Gcs
+         vxtQ==
+X-Gm-Message-State: AOAM533a3QuLMNz51Co25EfWLIH4vPyPEl3P1Ae2Ap5jJVdIA2oOnFgb
+        exRxwEsijrJ5azEgq6hDR7sIEr3niuKT+nyRLN0BLw==
+X-Google-Smtp-Source: ABdhPJwGoGeLABVrt6BVPXO09ywkaWM8/03cuPwfU8AEYwOvgEoW4yq37S2fOhcW1EQgpnfA50ZiAqNLEEQ7cliL6qY=
+X-Received: by 2002:a2e:7a06:: with SMTP id v6mr6802646ljc.198.1639511165825;
+ Tue, 14 Dec 2021 11:46:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20211213224914.1501303-1-paul@crapouillou.net> <20211213224914.1501303-3-paul@crapouillou.net>
-In-Reply-To: <20211213224914.1501303-3-paul@crapouillou.net>
+References: <20211213224914.1501303-1-paul@crapouillou.net> <20211213224914.1501303-4-paul@crapouillou.net>
+In-Reply-To: <20211213224914.1501303-4-paul@crapouillou.net>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 14 Dec 2021 11:43:28 -0800
-Message-ID: <CAKwvOdm3x7pot9+DgujUrO795ip_nxd_LGtoAuePRzc=td90jQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] MIPS: boot/compressed: Build without LTO
+Date:   Tue, 14 Dec 2021 11:45:54 -0800
+Message-ID: <CAKwvOd=GRFJd63CN43RsCTg3_sJ3j2Ak4JNve-N+rtuksz-wMg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] MIPS: Add support for LTO
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Nathan Chancellor <nathan@kernel.org>, list@opendingux.net,
@@ -62,55 +62,39 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Mon, Dec 13, 2021 at 2:49 PM Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> We need a valid ELF object for dummy.o, so that objcopy can insert the
-> vmlinuz payload.
+> Allow CONFIG_LTO_CLANG to be enabled. The ThinLTO variant is not yet
+> supported.
 >
-> Therefore, we must build the decompresser program without LTO, otherwise
-> dummy.o will be LLVM bytecode instead of a ELF object file.
+> While this option allows to build a LTO'd kernel, the result kernel file
+> ends up being *bigger* than the non-LTO variant (about 3.6 MiB with LTO
+> vs. 3.1 MiB without with a ZSTD-compressed kernel).
 
-While the below may work and follows the pattern observed in
-drivers/firmware/efi/libstub/Makefile
-43:KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+LGTM but I think there's more work to be done first based on my
+comments on the earlier patches.
 
-I can't help but wonder whether we should instead be doing something like:
-arch/x86/power/Makefile
-9:CFLAGS_REMOVE_cpu.o := $(CC_FLAGS_LTO)
-scripts/mod/Makefile
-3:CFLAGS_REMOVE_empty.o += $(CC_FLAGS_LTO)
-drivers/misc/lkdtm/Makefile
-19:CFLAGS_REMOVE_rodata.o               += $(CC_FLAGS_LTO)
+In particular, we should be able to boot the result and not have to
+modify any Makefiles outside of the series to get it to link.
 
-but for dummy.o?  ie.
-CFLAGS_REMOVE_dummy.o += $(CC_FLAGS_LTO)
-
-Can you please try that rather than disabling LTO for a large subset of files?
-
->
-> Building the decompresser with LTO wouldn't make much sense anyway,
-> unlike building the vmlinuz itself with LTO.
-
-Why not? We do it for x86 and arm64 AFAICT.
+Good to know we're close though!  Don't give up!
 
 >
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  arch/mips/boot/compressed/Makefile | 3 +++
->  1 file changed, 3 insertions(+)
+>  arch/mips/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-> index 4c9ecfbb0ef4..2d01c50fb0b1 100644
-> --- a/arch/mips/boot/compressed/Makefile
-> +++ b/arch/mips/boot/compressed/Makefile
-> @@ -27,6 +27,9 @@ ifdef CONFIG_CPU_LOONGSON64
->  KBUILD_CFLAGS := $(filter-out -march=loongson3a, $(KBUILD_CFLAGS)) -march=mips64r2
->  endif
->
-> +# Disable LTO
-> +KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
-> +
->  KBUILD_CFLAGS := $(KBUILD_CFLAGS) -mno-abicalls -D__KERNEL__ -D__DISABLE_EXPORTS \
->         -DBOOT_HEAP_SIZE=$(BOOT_HEAP_SIZE) -D"VMLINUX_LOAD_ADDRESS_ULL=$(VMLINUX_LOAD_ADDRESS)ull"
->
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 0215dc1529e9..6987db8d5f64 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -22,6 +22,7 @@ config MIPS
+>         select ARCH_USE_QUEUED_RWLOCKS
+>         select ARCH_USE_QUEUED_SPINLOCKS
+>         select ARCH_SUPPORTS_HUGETLBFS if CPU_SUPPORTS_HUGEPAGES
+> +       select ARCH_SUPPORTS_LTO_CLANG if CPU_LITTLE_ENDIAN
+>         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+>         select ARCH_WANT_IPC_PARSE_VERSION
+>         select ARCH_WANT_LD_ORPHAN_WARN
 > --
 > 2.33.0
 >
