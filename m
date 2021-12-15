@@ -2,74 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8303476229
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Dec 2021 20:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA17D47629B
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Dec 2021 21:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233326AbhLOTuc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Dec 2021 14:50:32 -0500
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:34417 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbhLOTub (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Dec 2021 14:50:31 -0500
-Received: by mail-oo1-f49.google.com with SMTP id b1-20020a4a8101000000b002c659ab1342so6233479oog.1;
-        Wed, 15 Dec 2021 11:50:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vOnL6FtlkEPq4JwJbq4ZntR2PTCXZJH8UTvwELdoNOI=;
-        b=PdHc5bn37ERxno8DvjE2ID71906Sq+Pggl6mpuuO3bZ0XWEQAUqdmzXqY2JHNGhfuF
-         Vp1lQy+aUenTnuutKIDkKlyb9F8ffJuenbnDHGJ8Ybek4z8wS4iNydNL6gt80x5O1E4+
-         0dZkgE37MExkos3c5RkxoZP/WzpaC7UXkS4u18oWUVUcPOyOuQmIJ2lMsOV+aRkJiKFC
-         XDpxOv7oo7J+9uIljenKpvtPNsm0AUkQlNID/pBJdxUxrR87YwQki5nlvgX8UcQLi525
-         WDijWSNSyq7hj9A1J8lLIiVMSy2jJmXQ1K3WGVqKYqprcNggI+j5/GIt+Hj3DOEFl1+A
-         sABQ==
-X-Gm-Message-State: AOAM530syD1T0+Bmo9CJ2Fu3iKnB6cj079Q6LUv/NO90Gi7300rIiAp0
-        sFfUV4RNR+v6uWZLHVi6ow==
-X-Google-Smtp-Source: ABdhPJymhdbBzWTF6GqA7YjnSBH3BeiC4soK970pMrTFbTWw6FjPOrFhAxHrJr10lC2NEeX3H8uwYQ==
-X-Received: by 2002:a05:6820:30b:: with SMTP id l11mr8624417ooe.32.1639597830554;
-        Wed, 15 Dec 2021 11:50:30 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t3sm609157otk.44.2021.12.15.11.50.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 11:50:29 -0800 (PST)
-Received: (nullmailer pid 1724400 invoked by uid 1000);
-        Wed, 15 Dec 2021 19:50:28 -0000
-Date:   Wed, 15 Dec 2021 13:50:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, Kevin Cernekee <cernekee@gmail.com>,
-        linux-mips@vger.kernel.org,
-        Saenz Julienne <nsaenzjulienne@suse.de>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, james.quinlan@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v1 1/4] dt-bindings: PCI: Add compatible string for
- Brcmstb 74[23]5 MIPs SOCs
-Message-ID: <YbpHBJurUaoT4pZD@robh.at.kernel.org>
-References: <20211209204726.6676-1-jim2101024@gmail.com>
- <20211209204726.6676-2-jim2101024@gmail.com>
+        id S234269AbhLOUGL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Dec 2021 15:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229623AbhLOUGL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Dec 2021 15:06:11 -0500
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF255C061574
+        for <linux-mips@vger.kernel.org>; Wed, 15 Dec 2021 12:06:10 -0800 (PST)
+Received: from mars.. (unknown [IPv6:2a02:a03f:eafe:c901:b1b8:ded9:465d:f19c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id EBE1E28197F;
+        Wed, 15 Dec 2021 21:06:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1639598768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zwXkMI5QETfIiv404UlgcSE+x8gNpXVjO5/v4Qt9sqo=;
+        b=uMeUOkmOtAy1nAl2/DmXaM4kwAmebrFxqPggKHrbCxz6FQ4YMt0Fkn+P+R/+xfmT9wgkU/
+        oezCn+/1ssp3EXwuyiQHVVnQRQIxMIJbK4ZO6R/i5LysAwfE/B8RuhSJcdZf50vF3Cy5Se
+        PBeZceK0A+++lLR0keT58CVs5m3nQ8KA2/282U4jqqy+WNctgVrg1RvKb4jFdJ9QNNH04Z
+        VXt32O1K+/7CSiF329+2iJNfIlqOhlIJrEh1oMOlA1OP637CMhXE+Ex895SklgJTzsB0rP
+        W+t36g1n/n9S0vLw2FvZTeNV/1rGOEg0UrI0T2rqPdBgP3zDAPw7sgI2gph1SA==
+From:   Sander Vanheule <sander@svanheule.net>
+To:     linux-mips@vger.kernel.org
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org,
+        Sander Vanheule <sander@svanheule.net>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Bert Vermeulen <bert@biot.com>
+Subject: [PATCH] MIPS: drop selected EARLY_PRINTK configs for MACH_REALTEK_RTL
+Date:   Wed, 15 Dec 2021 21:06:02 +0100
+Message-Id: <20211215200602.6546-1-sander@svanheule.net>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211209204726.6676-2-jim2101024@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 09 Dec 2021 15:47:22 -0500, Jim Quinlan wrote:
-> The Broadcom STB Arm and MIPs SOCs use the same PCIe controller
-> HW, although the MIPs version is older.
-> 
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> ---
->  Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+MACH_REALTEK_RTL declares that the system supports early printk , but
+this is not actually implemented as intended. The system is left with a
+non-functional early0 console because the setup_8250_early_printk_port()
+call provided for MIPS_GENERIC is never used to set this up. Generic
+ns16550a earlycon works, so devices should use that for early output.
+This means that SYS_HAS_EARLY_PRINTK and USE_GENERIC_EARLY_PRINTK_8250
+do not need to be selected.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Additionally, as reported by Lukas Bulwahn, the selected symbol
+SYS_HAS_EARLY_PRINTK_8250 does not actually exist, so should also be
+dropped.
+
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc: Bert Vermeulen <bert@biot.com>
+Signed-off-by: Sander Vanheule <sander@svanheule.net>
+---
+ arch/mips/Kconfig | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 63eb66a22691..9a3a2330fc69 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -642,9 +642,6 @@ config MACH_REALTEK_RTL
+ 	select SYS_SUPPORTS_MIPS16
+ 	select SYS_SUPPORTS_MULTITHREADING
+ 	select SYS_SUPPORTS_VPE_LOADER
+-	select SYS_HAS_EARLY_PRINTK
+-	select SYS_HAS_EARLY_PRINTK_8250
+-	select USE_GENERIC_EARLY_PRINTK_8250
+ 	select BOOT_RAW
+ 	select PINCTRL
+ 	select USE_OF
+-- 
+2.33.1
+
