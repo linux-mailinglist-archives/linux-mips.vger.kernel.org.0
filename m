@@ -2,131 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C06C34762FE
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Dec 2021 21:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DBE4764DB
+	for <lists+linux-mips@lfdr.de>; Wed, 15 Dec 2021 22:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235434AbhLOURQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Dec 2021 15:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbhLOURP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Dec 2021 15:17:15 -0500
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0340EC061401
-        for <linux-mips@vger.kernel.org>; Wed, 15 Dec 2021 12:17:14 -0800 (PST)
-Received: from [IPv6:2a02:a03f:eafe:c901:b1b8:ded9:465d:f19c] (unknown [IPv6:2a02:a03f:eafe:c901:b1b8:ded9:465d:f19c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id E7B7628198D;
-        Wed, 15 Dec 2021 21:17:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1639599433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nvnfDiVPncy0UCcN3nNJYwL++VMY6OLiJYafN2vAPhY=;
-        b=dS6+jsOF+ZT4iWI+7TABURR61lP531BZOvVyyTKx5pArdOwFQiSLi5JDU91Aez41qH5Pog
-        ZlGRUfnvYfGo1fKX/AmbVv17kMVlOrKLk/yKi0x6WiDQTgrAH/ADhjJ1Zrx5g3k/tQ75i7
-        VR+5ma0mAfDB/IRPEaPzFdlWcYk6GQlRnrxkmSi8C8R6DI0CW0Jb4OLzMx9b5hLEpilO52
-        GlPpomSzz5pEzQPewbuRxqIXIQJJWPSCFLDLX3IEg65UPeavAo7RL4v7tvUB8yw1yMuUH6
-        7w8lyjPbLYKaaEEbOP5kdZaBZRvfgVvrVx2yv/Z/Cu6rUpsb+dnQStZeRPSsHg==
-Message-ID: <0ba66064ba998f613e209f928ea459ca166a830b.camel@svanheule.net>
-Subject: Re: [PATCH 1/9] mips: drop selecting the non-existing config
- SYS_HAS_EARLY_PRINTK_8250
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Bert Vermeulen <bert@biot.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Daniel Silsby <dansilsby@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Date:   Wed, 15 Dec 2021 21:17:11 +0100
-In-Reply-To: <CAKXUXMxQ_rCt0CQxKm7ym44vuMTT1cgnzSCdZZQN--DPwayG6Q@mail.gmail.com>
-References: <20211213111642.11317-1-lukas.bulwahn@gmail.com>
-         <20211213111642.11317-2-lukas.bulwahn@gmail.com>
-         <cd01c62484faa9a5b364020c5c8985e3ea7fa643.camel@svanheule.net>
-         <CAKXUXMxQ_rCt0CQxKm7ym44vuMTT1cgnzSCdZZQN--DPwayG6Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        id S230030AbhLOVtm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Dec 2021 16:49:42 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:57705 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229957AbhLOVtl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Dec 2021 16:49:41 -0500
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MdeKd-1mOpV42v2n-00ZhgC; Wed, 15 Dec 2021 22:49:39 +0100
+Received: by mail-wr1-f51.google.com with SMTP id t9so40561711wrx.7;
+        Wed, 15 Dec 2021 13:49:39 -0800 (PST)
+X-Gm-Message-State: AOAM5303tLyEPqp+DZ1578ZBUv0l3AaCo/05okCaN1m84A3lHkG1tIqw
+        gK/D+e5EuNSxXoCwBGrO8BAOqfdEiWyFcr8Yzm4=
+X-Google-Smtp-Source: ABdhPJyI4sFfqi3WV9r3gOmk1U//npIrS4nf8wBAkc7GviXMWmaD3dsHGyhZUXFZ+uysDsSwkLsuIqVlj3CoEC95hIQ=
+X-Received: by 2002:a5d:530e:: with SMTP id e14mr6188596wrv.12.1639604979240;
+ Wed, 15 Dec 2021 13:49:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com>
+ <CAK8P3a2AnLJgGNBFvjUQqXd-Az9vjgE7yJQXGDwCav5E0btSsg@mail.gmail.com> <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com>
+In-Reply-To: <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 15 Dec 2021 22:49:23 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
+Message-ID: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
+Subject: Re: [PATCH 0/7] Cleanup after removal of configs
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Steve French <sfrench@samba.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-cachefs@redhat.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-power@fi.rohmeurope.com
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Io+rAnOukRGsESnCj52tUXFsPjVCtRLppZBZmKntlAeVeXpSrHi
+ qcxK9k04dshwgrWQYiw878XedRH47AsrLy4n/gdfxwlX7u2EYvjqUjIKEXIjY0tuCEb4D4b
+ LwE4dKpbjXgggXVUh7oHMARa5sG2Nx8fzgjtBBQhJLpcxn/XzSdD2djB3j6dwZlyKw7hv1G
+ drYUyPNFv42Qoql8UBrlg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:c07D+hGrL+w=:9x8C/icw8ntMTFqTZrSJrn
+ 6fyDDf4A/Q11iHr55nqwsGbPmkNrTebx43qkhrG1kKn+QweoG2MdgmEAMiSPsM0a18L18+Aur
+ rWclUKaX1DLwnkMvBTMNEBclBZYir8NYTvXSxZkzrJqynEv8CDsIwVEO73ysx3dkU79TaUJqq
+ ZGIEJjiEnuGE16rReyAdFECgxf6LmiGPDDLM/iBKdx9uO4BQGoXW18Cr/4+W/93SFzg8KuPCl
+ 4cO5C618BYZCT/TM34l2u/+7s0zYwWnnG5DneRm5zATDIaOpzQmASCntR1+q10bQ5shpFWfQ9
+ 349jAEyhYcUS51FiqkwWtW9U8nugU7PtrsLIOoJvF9O6RLHenDq4UhSZ+4wLl69agk/IGFwdY
+ e1pmV61H6prVazhtH0IJav8Tq+SlZA9eEL9ciwmNKDoqBq2UMGDU6NsiVlBC5IBfmFFwwW6vp
+ KnJgdSRkvw5StV8PRak8JngW4z38sMAssrPaLhMZnB58ohEI8vyai/WrofA3ZMAhqSXdUVHVW
+ MA94AVgnaRrqkS4aBiCwQXpehyyIGYzmaYvHQ5t5Rmcze8cs9pcwXtBm5NMjHJ7zQZh/sjcvD
+ 3VDHt9JKKeJ+17u9vpzBc/CqU/JYO47NgWL88LV8n1MafnwPo9YqI9ttnCx66ln9cZui2m3f0
+ bGWS9lZmArQRHp8q2TygJ//o8TTWVCEP5dbnuH3rBp3ln7RSib74/2lkOGLR1fuMQcLY=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Lukas,
+On Fri, Dec 10, 2021 at 9:38 PM Alexandre Ghiti
+<alexandre.ghiti@canonical.com> wrote:
+>
+> On Fri, Nov 5, 2021 at 4:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Fri, Nov 5, 2021 at 4:43 PM Alexandre Ghiti
+> > <alexandre.ghiti@canonical.com> wrote:
+> > >
+> > > While bumping from 5.13 to 5.15, I found that a few deleted configs had
+> > > left some pieces here and there: this patchset cleans that.
+> > >
+> > > Alexandre Ghiti (7):
+> > >   Documentation, arch: Remove leftovers from fscache/cachefiles
+> > >     histograms
+> > >   Documentation, arch: Remove leftovers from raw device
+> > >   Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
+> > >   arch: Remove leftovers from mandatory file locking
+> > >   Documentation, arch, fs: Remove leftovers from fscache object list
+> > >   include: mfd: Remove leftovers from bd70528 watchdog
+> > >   arch: Remove leftovers from prism54 wireless driver
+> >
+> > Looks all good to me, thanks a lot for the cleanup!
+> >
+> > For arch/arm/configs:
+> >
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> >
+> > assuming this goes through someone else's tree. Let me know if you need me
+> > to pick up the patches in the asm-generic tree for cross-architecture work.
+>
+> Arnd, do you mind taking the whole series except patch 6 ("include:
+> mfd: Remove leftovers from bd70528 watchdog") as this will be handled
+> separately. I can ask Jonathan for the doc patches if needed.
 
-On Tue, 2021-12-14 at 13:25 +0100, Lukas Bulwahn wrote:
-> On Mon, Dec 13, 2021 at 7:52 PM Sander Vanheule <sander@svanheule.net> wrote:
-> > 
-> > Hi Lukas,
-> > 
-> > Thanks for the patch!
-> > 
-> > On Mon, 2021-12-13 at 12:16 +0100, Lukas Bulwahn wrote:
-> > > Commit 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic
-> > > MIPS system") introduces config MACH_REALTEK_RTL, which selects the
-> > > non-existing config SYS_HAS_EARLY_PRINTK_8250.
-> > > 
-> > > As the MACH_REALTEK_RTL config also selects SYS_HAS_EARLY_PRINTK and
-> > > USE_GENERIC_EARLY_PRINTK_8250, an early printk with 8250 should be covered.
-> > > Probably SYS_HAS_EARLY_PRINTK_8250 is just some left-over from an early
-> > > draft version of this commit.
-> > > 
-> > > Drop selecting the non-existing config SYS_HAS_EARLY_PRINTK_8250.
-> > > 
-> > > Fixes: 4042147a0cc6 ("MIPS: Add Realtek RTL838x/RTL839x support as generic MIPS
-> > > system")
-> > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > > ---
-> > >  arch/mips/Kconfig | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > > 
-> > > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> > > index 00951bfdbab0..c89ce68d9580 100644
-> > > --- a/arch/mips/Kconfig
-> > > +++ b/arch/mips/Kconfig
-> > > @@ -640,7 +640,6 @@ config MACH_REALTEK_RTL
-> > >         select SYS_SUPPORTS_MULTITHREADING
-> > >         select SYS_SUPPORTS_VPE_LOADER
-> > >         select SYS_HAS_EARLY_PRINTK
-> > > -       select SYS_HAS_EARLY_PRINTK_8250
-> > >         select USE_GENERIC_EARLY_PRINTK_8250
-> > >         select BOOT_RAW
-> > >         select PINCTRL
-> > 
-> > MACH_REALTEK_RTL doesn't actually call setup_8250_early_printk_port(). That means
-> > USE_GENERIC_EARLY_PRINTK_8250 is also not needed. Being MIPS_GENERIC, that
-> > additionaly
-> > means SYS_HAS_EARLY_PRINTK doesn't need to be selected.
-> > 
-> > I only recently found the MIPS_GENERIC "early" console therefore doesn't actually
-> > work,
-> > but we use the "ns16550a" earlycon console instead. So feel free to also drop the
-> > other
-> > two other EARLY_PRINTK symbols, if you think this is in-scope for this patch.
-> > Otherwise I
-> > can submit a separate patch later.
-> > 
-> > In any case:
-> > Acked-by: Sander Vanheule <sander@svanheule.net>
-> > 
-> 
-> I am fine either way. Thomas, also feel free to just drop this patch
-> in the series and take the full clean-up patch from Sander.
+I tried to apply them, but only three of the patches applied cleanly. Can you
+resend them based on v5.16-rc1?
 
-I've submitted my clean-up patch for all three configs, so I guess this patch is now
-superseded.
-
-Best,
-Sander
-
+        Arnd
