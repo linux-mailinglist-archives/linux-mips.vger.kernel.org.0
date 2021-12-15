@@ -2,120 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DBE4764DB
-	for <lists+linux-mips@lfdr.de>; Wed, 15 Dec 2021 22:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA2C476660
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 00:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbhLOVtm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Dec 2021 16:49:42 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:57705 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbhLOVtl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Dec 2021 16:49:41 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MdeKd-1mOpV42v2n-00ZhgC; Wed, 15 Dec 2021 22:49:39 +0100
-Received: by mail-wr1-f51.google.com with SMTP id t9so40561711wrx.7;
-        Wed, 15 Dec 2021 13:49:39 -0800 (PST)
-X-Gm-Message-State: AOAM5303tLyEPqp+DZ1578ZBUv0l3AaCo/05okCaN1m84A3lHkG1tIqw
-        gK/D+e5EuNSxXoCwBGrO8BAOqfdEiWyFcr8Yzm4=
-X-Google-Smtp-Source: ABdhPJyI4sFfqi3WV9r3gOmk1U//npIrS4nf8wBAkc7GviXMWmaD3dsHGyhZUXFZ+uysDsSwkLsuIqVlj3CoEC95hIQ=
-X-Received: by 2002:a5d:530e:: with SMTP id e14mr6188596wrv.12.1639604979240;
- Wed, 15 Dec 2021 13:49:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com>
- <CAK8P3a2AnLJgGNBFvjUQqXd-Az9vjgE7yJQXGDwCav5E0btSsg@mail.gmail.com> <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com>
-In-Reply-To: <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 15 Dec 2021 22:49:23 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
-Message-ID: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Cleanup after removal of configs
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Steve French <sfrench@samba.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Howells <dhowells@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jeff Layton <jlayton@kernel.org>,
+        id S231819AbhLOXQ2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 15 Dec 2021 18:16:28 -0500
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:46832 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231739AbhLOXQ1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Dec 2021 18:16:27 -0500
+Received: by mail-ot1-f46.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so26723473oto.13;
+        Wed, 15 Dec 2021 15:16:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+NJojSfoVwMgJb/Ja90KiUetfn1vdOAgMVEPVsedxn4=;
+        b=q97GoWmyAzRaPDgA42DeTcGXaAbrgaabtUfcupEFIQl8do7mvhJeuxGC1Tqii9GT1S
+         RFCX5LLjhjV1hkT5PcBiwvQqnWjaQ6GD1hjwY8jRkAntpUxcdIniCmqUR7ZRCyJX05pt
+         CTo8kvXmqDRKq11R+/v26483Zj1GcuNbkG7MWCIZHOwxhygOULtxkvdh70aCjq6W3lZE
+         HFT4hhQuNE68qLbkFpMmVr0UaH3OfQ/ZHHLSyK6j1rk4/PoNnyw0ZSQqvygsR2sQtxAe
+         l/QATmuwEI49hRfmGWqZQFJzS5V605lERUsywrCG95JAu+54Q0arDNpKRSSP+wBsP+8L
+         pTlQ==
+X-Gm-Message-State: AOAM533GMAneZtImqgVWpuND4V6/563k7qi2AM+j7XmT6HSwCzciUvv2
+        xRe/Pm36pbdZfZ/I+UwMtw==
+X-Google-Smtp-Source: ABdhPJxe1D9MH0CKZ4DycjsHFTIJBOoLIjt6AIVTztF3s4fwJK0Y3vM/K0Wz5DMCsalknmREVSwMng==
+X-Received: by 2002:a05:6830:2707:: with SMTP id j7mr10302445otu.354.1639610186803;
+        Wed, 15 Dec 2021 15:16:26 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id g7sm740166oon.27.2021.12.15.15.16.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Dec 2021 15:16:26 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>, Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-cachefs@redhat.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-power@fi.rohmeurope.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Io+rAnOukRGsESnCj52tUXFsPjVCtRLppZBZmKntlAeVeXpSrHi
- qcxK9k04dshwgrWQYiw878XedRH47AsrLy4n/gdfxwlX7u2EYvjqUjIKEXIjY0tuCEb4D4b
- LwE4dKpbjXgggXVUh7oHMARa5sG2Nx8fzgjtBBQhJLpcxn/XzSdD2djB3j6dwZlyKw7hv1G
- drYUyPNFv42Qoql8UBrlg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:c07D+hGrL+w=:9x8C/icw8ntMTFqTZrSJrn
- 6fyDDf4A/Q11iHr55nqwsGbPmkNrTebx43qkhrG1kKn+QweoG2MdgmEAMiSPsM0a18L18+Aur
- rWclUKaX1DLwnkMvBTMNEBclBZYir8NYTvXSxZkzrJqynEv8CDsIwVEO73ysx3dkU79TaUJqq
- ZGIEJjiEnuGE16rReyAdFECgxf6LmiGPDDLM/iBKdx9uO4BQGoXW18Cr/4+W/93SFzg8KuPCl
- 4cO5C618BYZCT/TM34l2u/+7s0zYwWnnG5DneRm5zATDIaOpzQmASCntR1+q10bQ5shpFWfQ9
- 349jAEyhYcUS51FiqkwWtW9U8nugU7PtrsLIOoJvF9O6RLHenDq4UhSZ+4wLl69agk/IGFwdY
- e1pmV61H6prVazhtH0IJav8Tq+SlZA9eEL9ciwmNKDoqBq2UMGDU6NsiVlBC5IBfmFFwwW6vp
- KnJgdSRkvw5StV8PRak8JngW4z38sMAssrPaLhMZnB58ohEI8vyai/WrofA3ZMAhqSXdUVHVW
- MA94AVgnaRrqkS4aBiCwQXpehyyIGYzmaYvHQ5t5Rmcze8cs9pcwXtBm5NMjHJ7zQZh/sjcvD
- 3VDHt9JKKeJ+17u9vpzBc/CqU/JYO47NgWL88LV8n1MafnwPo9YqI9ttnCx66ln9cZui2m3f0
- bGWS9lZmArQRHp8q2TygJ//o8TTWVCEP5dbnuH3rBp3ln7RSib74/2lkOGLR1fuMQcLY=
+        Paul Cercueil <paul@crapouillou.net>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: [PATCH 2/2] usb: musb: Set the DT node on the child device
+Date:   Wed, 15 Dec 2021 17:07:57 -0600
+Message-Id: <20211215230756.2009115-3-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211215230756.2009115-1-robh@kernel.org>
+References: <20211215230756.2009115-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 9:38 PM Alexandre Ghiti
-<alexandre.ghiti@canonical.com> wrote:
->
-> On Fri, Nov 5, 2021 at 4:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Fri, Nov 5, 2021 at 4:43 PM Alexandre Ghiti
-> > <alexandre.ghiti@canonical.com> wrote:
-> > >
-> > > While bumping from 5.13 to 5.15, I found that a few deleted configs had
-> > > left some pieces here and there: this patchset cleans that.
-> > >
-> > > Alexandre Ghiti (7):
-> > >   Documentation, arch: Remove leftovers from fscache/cachefiles
-> > >     histograms
-> > >   Documentation, arch: Remove leftovers from raw device
-> > >   Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
-> > >   arch: Remove leftovers from mandatory file locking
-> > >   Documentation, arch, fs: Remove leftovers from fscache object list
-> > >   include: mfd: Remove leftovers from bd70528 watchdog
-> > >   arch: Remove leftovers from prism54 wireless driver
-> >
-> > Looks all good to me, thanks a lot for the cleanup!
-> >
-> > For arch/arm/configs:
-> >
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> >
-> > assuming this goes through someone else's tree. Let me know if you need me
-> > to pick up the patches in the asm-generic tree for cross-architecture work.
->
-> Arnd, do you mind taking the whole series except patch 6 ("include:
-> mfd: Remove leftovers from bd70528 watchdog") as this will be handled
-> separately. I can ask Jonathan for the doc patches if needed.
+The musb glue drivers just copy the glue resources to the musb child device.
+Instead, set the musb child device's DT node pointer to the parent device's
+node so that platform_get_irq_byname() can find the resources in the DT.
+This removes the need for statically populating the IRQ resources from the
+DT which has been deprecated for some time.
 
-I tried to apply them, but only three of the patches applied cleanly. Can you
-resend them based on v5.16-rc1?
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/usb/musb/am35x.c    | 2 ++
+ drivers/usb/musb/da8xx.c    | 2 ++
+ drivers/usb/musb/jz4740.c   | 1 +
+ drivers/usb/musb/mediatek.c | 2 ++
+ drivers/usb/musb/omap2430.c | 1 +
+ drivers/usb/musb/ux500.c    | 1 +
+ 6 files changed, 9 insertions(+)
 
-        Arnd
+diff --git a/drivers/usb/musb/am35x.c b/drivers/usb/musb/am35x.c
+index 660641ab1545..bf2c0fa6cb32 100644
+--- a/drivers/usb/musb/am35x.c
++++ b/drivers/usb/musb/am35x.c
+@@ -500,6 +500,8 @@ static int am35x_probe(struct platform_device *pdev)
+ 	pinfo.num_res = pdev->num_resources;
+ 	pinfo.data = pdata;
+ 	pinfo.size_data = sizeof(*pdata);
++	pinfo.fwnode = of_fwnode_handle(pdev->dev.of_node);
++	pinfo.of_node_reused = true;
+ 
+ 	glue->musb = musb = platform_device_register_full(&pinfo);
+ 	if (IS_ERR(musb)) {
+diff --git a/drivers/usb/musb/da8xx.c b/drivers/usb/musb/da8xx.c
+index e4e0195131da..fd4ae2dd24e5 100644
+--- a/drivers/usb/musb/da8xx.c
++++ b/drivers/usb/musb/da8xx.c
+@@ -563,6 +563,8 @@ static int da8xx_probe(struct platform_device *pdev)
+ 	pinfo.num_res = pdev->num_resources;
+ 	pinfo.data = pdata;
+ 	pinfo.size_data = sizeof(*pdata);
++	pinfo.fwnode = of_fwnode_handle(np);
++	pinfo.of_node_reused = true;
+ 
+ 	glue->musb = platform_device_register_full(&pinfo);
+ 	ret = PTR_ERR_OR_ZERO(glue->musb);
+diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+index 5b7d576bf6ee..417c30bff9ca 100644
+--- a/drivers/usb/musb/jz4740.c
++++ b/drivers/usb/musb/jz4740.c
+@@ -231,6 +231,7 @@ static int jz4740_probe(struct platform_device *pdev)
+ 	musb->dev.parent		= dev;
+ 	musb->dev.dma_mask		= &musb->dev.coherent_dma_mask;
+ 	musb->dev.coherent_dma_mask	= DMA_BIT_MASK(32);
++	device_set_of_node_from_dev(&musb->dev, dev);
+ 
+ 	glue->pdev			= musb;
+ 	glue->clk			= clk;
+diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
+index f5d97eb84cb5..1aeb34dbe24f 100644
+--- a/drivers/usb/musb/mediatek.c
++++ b/drivers/usb/musb/mediatek.c
+@@ -538,6 +538,8 @@ static int mtk_musb_probe(struct platform_device *pdev)
+ 	pinfo.num_res = pdev->num_resources;
+ 	pinfo.data = pdata;
+ 	pinfo.size_data = sizeof(*pdata);
++	pinfo.fwnode = of_fwnode_handle(np);
++	pinfo.of_node_reused = true;
+ 
+ 	glue->musb_pdev = platform_device_register_full(&pinfo);
+ 	if (IS_ERR(glue->musb_pdev)) {
+diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
+index d2b7e613eb34..7d4d0713f4f0 100644
+--- a/drivers/usb/musb/omap2430.c
++++ b/drivers/usb/musb/omap2430.c
+@@ -327,6 +327,7 @@ static int omap2430_probe(struct platform_device *pdev)
+ 	musb->dev.parent		= &pdev->dev;
+ 	musb->dev.dma_mask		= &omap2430_dmamask;
+ 	musb->dev.coherent_dma_mask	= omap2430_dmamask;
++	device_set_of_node_from_dev(&musb->dev, &pdev->dev);
+ 
+ 	glue->dev			= &pdev->dev;
+ 	glue->musb			= musb;
+diff --git a/drivers/usb/musb/ux500.c b/drivers/usb/musb/ux500.c
+index 9bce19b5ffd7..8ea62c344328 100644
+--- a/drivers/usb/musb/ux500.c
++++ b/drivers/usb/musb/ux500.c
+@@ -262,6 +262,7 @@ static int ux500_probe(struct platform_device *pdev)
+ 	musb->dev.parent		= &pdev->dev;
+ 	musb->dev.dma_mask		= &pdev->dev.coherent_dma_mask;
+ 	musb->dev.coherent_dma_mask	= pdev->dev.coherent_dma_mask;
++	device_set_of_node_from_dev(&musb->dev, &pdev->dev);
+ 
+ 	glue->dev			= &pdev->dev;
+ 	glue->musb			= musb;
+-- 
+2.32.0
+
