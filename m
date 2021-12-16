@@ -2,38 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AE7477445
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 15:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4D5477479
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 15:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234935AbhLPOTH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 16 Dec 2021 09:19:07 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:60973 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbhLPOTH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Dec 2021 09:19:07 -0500
-Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MCsDe-1mp6Aj1WF6-008vRY; Thu, 16 Dec 2021 15:19:05 +0100
-Received: by mail-wr1-f49.google.com with SMTP id e5so11065576wrc.5;
-        Thu, 16 Dec 2021 06:19:05 -0800 (PST)
-X-Gm-Message-State: AOAM532Og1NAamdQ4IykJsrGX5en4sWA919JvtSJzq74nhr5o0GvmUir
-        dHY5M61u632Bkn2nif7CbB9QpMIFr4KpamBoBJc=
-X-Google-Smtp-Source: ABdhPJxmplO/8wUtDmbZb8q9bqy7ZOfHV5yg368TQTzX4lBN+OEsoFiUjwpCE3vTs4ls9wlTx+wNiOOu6o9NNRcFeqQ=
-X-Received: by 2002:a05:6000:52:: with SMTP id k18mr9356273wrx.192.1639664344795;
- Thu, 16 Dec 2021 06:19:04 -0800 (PST)
+        id S237973AbhLPO1i (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Dec 2021 09:27:38 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:58229 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237962AbhLPO1h (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Dec 2021 09:27:37 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id C6BB25801B1;
+        Thu, 16 Dec 2021 09:27:36 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 16 Dec 2021 09:27:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=fm3; bh=e
+        H8d2go/nfWuWo9QuPJJYgW84fuf/WnGhiZoEnjq2TY=; b=mHs4vauY9BCdthoIr
+        WNPl3jzocY8TRPIgqI+qXBvpsji+BU6Q8UMGuaH2RzdQG8iIHoSCDVi34mzoF107
+        Sf8GlZh/znPaCdXTPQIUU1lbP2sG3wTQvoA6ZLMwdz3/8FAwC0brO1JcZseRmIEH
+        JjRlCUI30rD8eD6j5FOeIKwJdqcCNp+hLhbEcClvC/6ZRw/JFkLI2erKiBOPgnLC
+        Y5r5g96otTKLNIUwG3NeE0VpuCeMEQCBom2kcuKFDcQHt6Raj+9NT1bXGsFP7OcH
+        4t9Unkq1wrCnh3zT+uYD+BABuVgQ9n+ssN6xoxbjPCjCwXQa667acI8aMWbcOHHS
+        IwbbA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=eH8d2go/nfWuWo9QuPJJYgW84fuf/WnGhiZoEnjq2
+        TY=; b=HF9ft757/j6oWnGM4/ZD8FmjWb2F3Jg9cRK+pQ+GD3V4owlornwv4DZrt
+        a+9rcgpPC161VtE0f09qItUDE+VzGc2U2hr9eSKAHMgZGvk7Zls9wQOfuGtbp7vU
+        bun5pJq5bXdK1P9Z6JbB3KQUrovY+Rai3rRFvmAP0hYGdLj6+lh/ly2YiQujxs/d
+        wxKA+rPePMxwM3/8OcDFRBfPFrxetxoRLr7gkbfT48P+iCtAeoqJ28nygbhvgcjp
+        o700haoeZq+iAD3LwCW1ZAkARSv4YB8l3y2d6zJC/OUAvpntqb+n6x6rgAXD/T1U
+        HJ4XXzxa+CAMsgvhH0UZv82y5tQLQ==
+X-ME-Sender: <xms:2Ey7YRLuL2uUO-f_NQv1mVA1qVkrpPpDvW1cx5VEEjgJWVjjWDVKWg>
+    <xme:2Ey7YdKl2g_7hLcIGkFye-tt_muu1xS0y4UsKxYEAjdUuD9dkC58CD5jWvSP9DF0v
+    RwlOGlsiVtKj7S-sAU>
+X-ME-Received: <xmr:2Ey7YZueCyLgqKO6XKcdkDdSEtq-8vIS8XPa4jRXge0pQ6eemNrbcDpsZRTqB8I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleeggdeihecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepheeiuddvvefhkeejfedttdekieethfdukedvieeuueelgfelieej
+    geehvdekudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:2Ey7YSY2OdVXeYenGKDXtZY2MJKzBjnqPSUbHAs0FdpPor-zRh2zvg>
+    <xmx:2Ey7YYb2TUu-2ap8XIrjfR9RJU3PmCRTaPz4W3cdyusQSDUQ_0Zd5w>
+    <xmx:2Ey7YWD3HBTCX2u0oew_7Z9CoEjUqJdTAXHOOEOU_wkFktAz_jFgzg>
+    <xmx:2Ey7YYqfn2CFD3Ch0PDU-mDQZz7JdSVUUwfbqUuyVgtggpERbq64hQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 16 Dec 2021 09:27:34 -0500 (EST)
+Message-ID: <88d1835f-cee5-0fb2-f7de-7fc06e8e671d@flygoat.com>
+Date:   Thu, 16 Dec 2021 14:27:34 +0000
 MIME-Version: 1.0
-References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
- <20210925203224.10419-6-sergio.paracuellos@gmail.com> <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
- <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com> <CAK8P3a2i6eW8JunE_6h6OTCa51eHfPahQQhaGHGWePX+r4ybww@mail.gmail.com>
- <bfdfb7b3-1322-573d-eddc-1d337c4616e6@flygoat.com>
-In-Reply-To: <bfdfb7b3-1322-573d-eddc-1d337c4616e6@flygoat.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 16 Dec 2021 15:18:49 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2iQhxckn0MfLyLpKmyKN_MwAJ0t2yh6DLsS0MvdreYNA@mail.gmail.com>
-Message-ID: <CAK8P3a2iQhxckn0MfLyLpKmyKN_MwAJ0t2yh6DLsS0MvdreYNA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific 'pci_remap_iospace()'
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Xi Ruoyao <xry111@mengyan1223.wang>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific
+ 'pci_remap_iospace()'
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Xi Ruoyao <xry111@mengyan1223.wang>,
         Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Rob Herring <robh@kernel.org>,
@@ -46,52 +77,60 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Xi Ruoyao <xry111@mengyan1223.wang>,
         linux-pci <linux-pci@vger.kernel.org>,
         linux-staging@lists.linux.dev, NeilBrown <neil@brown.name>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:IgD0XB8DIUQjREsvuF1C3HD3944VUT61B2OriSnVMbiFXOdkvap
- O1lFdYUXI7kaNNJMBs5ZtyZHev1LquHSgazOunDmIgdwooZ8FOabTNhviJpzn22oMbsh7ga
- VVSOzehekRPVU1ka/2LvuUIFyd5YuBwuHQySwRtbWoBe3xLMwcQOnXW5AG+kZX3PIDA/IYT
- NqkgirYoJpAoN2Rmkj9mA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lDzxYfROAWU=:V6SAkS6NSz6czEHRo1NFM5
- zbjpP9ugIGMv1E9M3UMxd5h3U6u2E3INp75GevJKkI1k/BnSRBvuPQp1TVQShMu6tPjgvqwkl
- Meyriy3oznMWAfJEPJPF+WO8MmUxS4ObmkoDSPANtquK8/PwOTaY1AAeLOqf/Wy4C6/er9JYy
- A+K/kSllzzRWMgh0KEAERE42kAz/JrNGqvJbAZBXI0wGClFrM9wOPmp579BFFG+8iNUwwWlPP
- 4tQREkhLITgAmWg8FGgLpLenuuppNvx7LBKzKrXZHvO494/4VkNKkzKF8ZCrQKo2egOEEUtNU
- AQdI5PfG+J2xIOC+yEo71xW7v28uP8vkTkdu2C5f3pLNWj3F4TANAfTZjxDzYFW5g7e6fHVgq
- ONACbz6HJN/y7WGxRiOtTTQxg+0zzUCWhNeep5D1Ott12q5GgwdkUXSjKkXSNA41wgGofV1X4
- qAXRE1ybP43WGnishkx+WeMKZ4NwJDL3OAqQSVclinp79bxWRmNzgexSVM5bNg1cWlxO7B2fo
- Ve4RNfQtvFlWp7RZKebYJabTSdu3jvAden6RRutoiFzDeYMwNZpzyRiMqXd2HPIoZeWniqjXB
- EEMVCNimWGDP+MBw1nfRwHph0f8hSI6+ERToDZiQkCMZhBgMZ+KvEDz7GQtfvFw9sQA5nn6f4
- 7DGoa71ER1og0ReN/c4q23ttyLUk2ZtaXeuB7qCkSpJpI2HkMRHgAytLRiAQXuzfyYEFZURUZ
- 9MWb7XzknP4mPQx3mzTZVG6EbPhsGJH0NCdZtCBNXimulHGkfFMjqqRX+/uE+Sh3x3s+70SZ9
- Gn2/eFbWhgG1O4DDc+crRCuyvhlfbH5CR9lVIXVXFtT+1lTLSg=
+References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
+ <20210925203224.10419-6-sergio.paracuellos@gmail.com>
+ <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
+ <6ee31420-ef67-471e-a924-a0158b4a9428@www.fastmail.com>
+ <CAK8P3a2i6eW8JunE_6h6OTCa51eHfPahQQhaGHGWePX+r4ybww@mail.gmail.com>
+ <bfdfb7b3-1322-573d-eddc-1d337c4616e6@flygoat.com>
+ <CAK8P3a2iQhxckn0MfLyLpKmyKN_MwAJ0t2yh6DLsS0MvdreYNA@mail.gmail.com>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <CAK8P3a2iQhxckn0MfLyLpKmyKN_MwAJ0t2yh6DLsS0MvdreYNA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 3:14 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> 在 2021/12/16 13:50, Arnd Bergmann 写道:
-> > On Thu, Dec 16, 2021 at 2:07 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
-> >> 在2021年12月16日十二月 上午11:44，Xi Ruoyao写道：
-> >> Another way could be keeping a linked list about PIO->PHYS mapping instead of using the single io_port_base variable.
-> > I think that would add a lot of complexity that isn't needed here. Not
-> > sure if all MIPS CPUs
-> > can do it, but the approach used on Arm is what fits in best with the
-> > PCI drivers, these
-> > reserve a virtual address range for the ports, and ioremap the
-> > physical addresses into
-> > the PIO range according to the mapping.
->
-> Yes, the Arm way was my previous approach when introducing PCI IO map
-> for Loongson.
->
-> It got refactored by this patch as TLB entries are expensive on MIPS,
-> also the size of IO range doesn't always fits a page.
 
-Are PIO accesses common enough that the TLB entry makes a difference?
-I would imagine that on most systems with a PCI bus, there is not even
-a single device that exposes an I/O resource, and even on those devices that
-do, the kernel drivers tend to pick MMIO whenever both are available.
 
-      Arnd
+在 2021/12/16 14:18, Arnd Bergmann 写道:
+> On Thu, Dec 16, 2021 at 3:14 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>> 在 2021/12/16 13:50, Arnd Bergmann 写道:
+>>> On Thu, Dec 16, 2021 at 2:07 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+>>>> 在2021年12月16日十二月 上午11:44，Xi Ruoyao写道：
+>>>> Another way could be keeping a linked list about PIO->PHYS mapping instead of using the single io_port_base variable.
+>>> I think that would add a lot of complexity that isn't needed here. Not
+>>> sure if all MIPS CPUs
+>>> can do it, but the approach used on Arm is what fits in best with the
+>>> PCI drivers, these
+>>> reserve a virtual address range for the ports, and ioremap the
+>>> physical addresses into
+>>> the PIO range according to the mapping.
+>> Yes, the Arm way was my previous approach when introducing PCI IO map
+>> for Loongson.
+>>
+>> It got refactored by this patch as TLB entries are expensive on MIPS,
+>> also the size of IO range doesn't always fits a page.
+> Are PIO accesses common enough that the TLB entry makes a difference?
+> I would imagine that on most systems with a PCI bus, there is not even
+> a single device that exposes an I/O resource, and even on those devices that
+> do, the kernel drivers tend to pick MMIO whenever both are available.
+
+Actually that was claimed by the author of this patch :-)
+I can understand the point. As he is working on a ramips system utlizes 
+1004Kec,
+which has only 32 TLB entries, saving a entry can give considerable 
+improvement.
+
+For Loongson as we have legacy i8042/i8259 which can only be accessed via
+PIO, the access is very common.
+
+For other systems I guess it's not that common.
+
+Thanks.
+
+
+>
+>        Arnd
+- Jiaxun
