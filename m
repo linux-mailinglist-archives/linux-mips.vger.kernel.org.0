@@ -2,79 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 711B2476967
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 06:20:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEE2476BF1
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 09:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbhLPFT7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Dec 2021 00:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233679AbhLPFT7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Dec 2021 00:19:59 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A20C061574;
-        Wed, 15 Dec 2021 21:19:59 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JF0mX3yRdz4xhj;
-        Thu, 16 Dec 2021 16:19:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1639631998;
-        bh=89BoGkjv1/HzkkQE/bALGUK22iLzNs4QmxP+8+6F9lQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=fR1h5KV87GTW7GjPfIVIyQIG9Hug7SXkcc/qxR5eFG4yTs67E+JDDpf78OTHurZrV
-         8XIvepCjiX6jKw/iZg6f9fWShGbP1iICRp5DCm6aNV0npZKQRBTHMiT6VQ0AwKHBU8
-         wFqfgvkpGvjDoe12fZ1xG3s5G1Hlf3bAlR4LDAoUHAFUtNBtjHCxWJ9T04w9U/tW7t
-         m96KyolUOhTyi9nUPd8ag4mV9MGbn1TUaeR6PPD15bNskmc50vUGk32nI4Ba8/zlGw
-         scCMQo6dIgepMohRRxw8WyC4KopzFw012GHOQxR+zls4bhxCWsL/VRZgDjjZKe1/d4
-         f02UJxh1tADTw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Rob Herring <robh@kernel.org>, John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Frank Rowand <frank.rowand@sony.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4] of/fdt: Rework early_init_dt_scan_memory() to call
- directly
-In-Reply-To: <20211215150102.1303588-1-robh@kernel.org>
-References: <20211215150102.1303588-1-robh@kernel.org>
-Date:   Thu, 16 Dec 2021 16:19:56 +1100
-Message-ID: <87r1adktxf.fsf@mpe.ellerman.id.au>
+        id S229698AbhLPI3w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Dec 2021 03:29:52 -0500
+Received: from mxout02.lancloud.ru ([45.84.86.82]:44344 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229612AbhLPI3w (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Dec 2021 03:29:52 -0500
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 4B89022F24EA
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Message-ID: <f6e65422-c007-d682-a6ea-698b41d4a9b7@omp.ru>
+Date:   Thu, 16 Dec 2021 11:29:38 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/4] MIPS: tx39: adjust tx39_flush_cache_page
+Content-Language: en-US
+To:     Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <ambrosehua@gmail.com>
+CC:     Bibo Mao <maobibo@loongson.cn>, <linux-mips@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <20211215084500.24444-1-huangpei@loongson.cn>
+ <20211215084500.24444-3-huangpei@loongson.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <20211215084500.24444-3-huangpei@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Rob Herring <robh@kernel.org> writes:
-> Use of the of_scan_flat_dt() function predates libfdt and is discouraged
-> as libfdt provides a nicer set of APIs. Rework
-> early_init_dt_scan_memory() to be called directly and use libfdt.
->
-> Cc: John Crispin <john@phrozen.org>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: linux-mips@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Frank Rowand <frank.rowand@sony.com>
-> Link: https://lore.kernel.org/r/20211208155839.4084795-1-robh@kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hello!
+
+On 15.12.2021 11:44, Huang Pei wrote:
+
+> Indexed cache operation actually uses KSEG0/CKSEG0 (AKA physical
+> address, see INDEX_BASE in arch/mips/include/asm/r4kcache.h) to
+> index cache line, so it CAN NOT handle cache alias(cache alias
+> is first introduced into MIPS by R4000, indexing cache line with
+> virtual address).
+> 
+> It is said, on "32-Bit TX System TX39 Family TMPR3911/3912", P86,
+> 
+> •Translation Look-aside Buffer (TLB) (4 Kbyte Page size, 32 Entries)
+> •4Kbyte instruction cache (I-cache)
+> 	•16 bytes (4 words) per line (256 lines total)
+> 	•physical address tag per cache line
+> 	•single valid bit per cache line
+> 	•direct-mapped
+> •1 Kbyte data cache (D-cache)
+> 	•4bytes (1 word) per line (128 lines total)
+> 	•physical address tag per cache line
+> 	•write-through
+> 	•two-way set associate
+> 
+> We can assume there is NO cache alias on TX39's R3900 core
+> 
+> Anyway, remove checking for cpu_has_dc_aliases, since tx39_*indexed
+> can not index cache alias, nor there is cache alias on R3900
+> 
+> More info about TX3911/3912, see
+> https://pdf1.alldatasheet.com/datasheet-pdf/view/211951/TOSHIBA/TMPR
+> 3912.html
+> 
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
 > ---
-> v4:
->  - Revert the changes to search for memory nodes at any level which were
->    accidentally committed.
+>   arch/mips/mm/c-tx39.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/mm/c-tx39.c b/arch/mips/mm/c-tx39.c
+> index 03dfbb40ec73..c2ecdde0371d 100644
+> --- a/arch/mips/mm/c-tx39.c
+> +++ b/arch/mips/mm/c-tx39.c
+> @@ -207,11 +207,12 @@ static void tx39_flush_cache_page(struct vm_area_struct *vma, unsigned long page
+>   	/*
+>   	 * Do indexed flush, too much work to get the (possible) TLB refills
+>   	 * to work correctly.
+> +	 *
 
-Sorry for the mix up, this version works for me.
+    Why?
 
-Tested-by: Michael Ellerman <mpe@ellerman.id.au>
+[...]
 
-cheers
+MBR, Sergey
