@@ -2,101 +2,145 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEE2476BF1
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 09:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A790B476DA0
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 10:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbhLPI3w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Dec 2021 03:29:52 -0500
-Received: from mxout02.lancloud.ru ([45.84.86.82]:44344 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbhLPI3w (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Dec 2021 03:29:52 -0500
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 4B89022F24EA
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Message-ID: <f6e65422-c007-d682-a6ea-698b41d4a9b7@omp.ru>
-Date:   Thu, 16 Dec 2021 11:29:38 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 2/4] MIPS: tx39: adjust tx39_flush_cache_page
-Content-Language: en-US
-To:     Huang Pei <huangpei@loongson.cn>,
+        id S232987AbhLPJo4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Dec 2021 04:44:56 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:50852
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235531AbhLPJo4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Dec 2021 04:44:56 -0500
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4747D40265
+        for <linux-mips@vger.kernel.org>; Thu, 16 Dec 2021 09:44:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639647894;
+        bh=QTOsClZwyZOKWiOCdpIZ53KKqBtgpNixsjVEw+qtuPg=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=jofQGy9bxDhJovnAmriRtPsAeBWkfMI11f5mRC7BakbypG5tYhyMznhrHR3LE5pqc
+         LvcB1mZr6JrhyMrjF31cK7PhZWHEXWMbOFjsCtZwGdH89bt5EfS33X0obUPPRN3AIE
+         pJ2QOilO4hotMLCVmNFbfHB3iXM8em0zqvCZaRTnaC/dA0A1Sv3cbybcW4mtJqZ+Xt
+         U973jDeYd8sPU2R3tOZSdQ7+jCxvEIa3ZdZvw2efPM3f1agyrJUVFxxYffDx/af8vc
+         zry+5WwIhzQesrVT4F3rBWAfov/4HkmLNjCWhMvvfldl1/1FE3IzhSl9JxDMrrA6De
+         keYn/E0DF8j4Q==
+Received: by mail-wm1-f71.google.com with SMTP id 205-20020a1c00d6000000b003335d1384f1so1032679wma.3
+        for <linux-mips@vger.kernel.org>; Thu, 16 Dec 2021 01:44:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QTOsClZwyZOKWiOCdpIZ53KKqBtgpNixsjVEw+qtuPg=;
+        b=HxTT/DMAjJBU76rigQx9HWP3JCDrLYICqTr5mXdwZYnOzlzuFMeskv935zGmKHeUcz
+         2nlpnDCm5+0tAEgnD7Aqzn5zsoG6kyUDZO1tMoJJlQM0e847m1jyAU0DqAhhCB6W3EXs
+         RVs6EgEmhfjpGwQZB7pGmv78dzw2x5GwlF+a9pyj2QRdmjxu3iQKLAHVYBiRxOzIvyny
+         cg+Xxqfgz5tSL2ieG6re/PxD21XXu/ODOwFKAn04xev9F5hXBJZ3gzDFUYPmQeR1+Sas
+         cI3i/Kwc6R/GB6gvx+jPivBA48NIOWyNlk8Nbb0fjPES8MtV0ADUvZ9B/5pYVTd7kFpm
+         MS3g==
+X-Gm-Message-State: AOAM530VcGV1qoMZk4WODc5ansEPyV/mIa+FpOCgW1Xk7ToK/U4gaqr3
+        2lEsAGt+4bB3XuIKaXVLkKtXmmkwnV56saiVOnsoBSuJEOodFVwVlCWvNteNZNff+zv6VWL31i2
+        EQXecz2tsOE/tWOsr1I4hSH25QYQuH2JHNlfuwdo=
+X-Received: by 2002:a5d:650f:: with SMTP id x15mr646228wru.57.1639647893946;
+        Thu, 16 Dec 2021 01:44:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxZMiPMQ+W+qW8IbAibX8DdTl4xnrovvGfEQoGvcsc6W8MrweFtPS/7ET8ki9T9yPPhmGQd1g==
+X-Received: by 2002:a5d:650f:: with SMTP id x15mr646199wru.57.1639647893659;
+        Thu, 16 Dec 2021 01:44:53 -0800 (PST)
+Received: from alex.home (lfbn-gre-1-195-1.w90-112.abo.wanadoo.fr. [90.112.158.1])
+        by smtp.gmail.com with ESMTPSA id h4sm4313251wrf.93.2021.12.16.01.44.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 01:44:53 -0800 (PST)
+From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
+To:     Steve French <sfrench@samba.org>, Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <ambrosehua@gmail.com>
-CC:     Bibo Mao <maobibo@loongson.cn>, <linux-mips@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Li Xuefeng <lixuefeng@loongson.cn>,
-        Yang Tiezhu <yangtiezhu@loongson.cn>,
-        Gao Juxin <gaojuxin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <20211215084500.24444-1-huangpei@loongson.cn>
- <20211215084500.24444-3-huangpei@loongson.cn>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-In-Reply-To: <20211215084500.24444-3-huangpei@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-cachefs@redhat.com,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        linux-power@fi.rohmeurope.com
+Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Subject: [PATCH v2 0/6] Cleanup after removal of configs
+Date:   Thu, 16 Dec 2021 10:44:20 +0100
+Message-Id: <20211216094426.2083802-1-alexandre.ghiti@canonical.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+While bumping from 5.13 to 5.15, I found that a few deleted configs had
+left some pieces here and there: this patchset cleans that.
 
-On 15.12.2021 11:44, Huang Pei wrote:
+Changes in v2:
+- Rebase on top of v5.16-rc1
+- Removed patch 6 since Matti said he would take care of that
+- Added AB, RB
 
-> Indexed cache operation actually uses KSEG0/CKSEG0 (AKA physical
-> address, see INDEX_BASE in arch/mips/include/asm/r4kcache.h) to
-> index cache line, so it CAN NOT handle cache alias(cache alias
-> is first introduced into MIPS by R4000, indexing cache line with
-> virtual address).
-> 
-> It is said, on "32-Bit TX System TX39 Family TMPR3911/3912", P86,
-> 
-> •Translation Look-aside Buffer (TLB) (4 Kbyte Page size, 32 Entries)
-> •4Kbyte instruction cache (I-cache)
-> 	•16 bytes (4 words) per line (256 lines total)
-> 	•physical address tag per cache line
-> 	•single valid bit per cache line
-> 	•direct-mapped
-> •1 Kbyte data cache (D-cache)
-> 	•4bytes (1 word) per line (128 lines total)
-> 	•physical address tag per cache line
-> 	•write-through
-> 	•two-way set associate
-> 
-> We can assume there is NO cache alias on TX39's R3900 core
-> 
-> Anyway, remove checking for cpu_has_dc_aliases, since tx39_*indexed
-> can not index cache alias, nor there is cache alias on R3900
-> 
-> More info about TX3911/3912, see
-> https://pdf1.alldatasheet.com/datasheet-pdf/view/211951/TOSHIBA/TMPR
-> 3912.html
-> 
-> Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->   arch/mips/mm/c-tx39.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/mm/c-tx39.c b/arch/mips/mm/c-tx39.c
-> index 03dfbb40ec73..c2ecdde0371d 100644
-> --- a/arch/mips/mm/c-tx39.c
-> +++ b/arch/mips/mm/c-tx39.c
-> @@ -207,11 +207,12 @@ static void tx39_flush_cache_page(struct vm_area_struct *vma, unsigned long page
->   	/*
->   	 * Do indexed flush, too much work to get the (possible) TLB refills
->   	 * to work correctly.
-> +	 *
+Alexandre Ghiti (6):
+  Documentation, arch: Remove leftovers from fscache/cachefiles
+    histograms
+  Documentation, arch: Remove leftovers from raw device
+  Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
+  arch: Remove leftovers from mandatory file locking
+  Documentation, arch, fs: Remove leftovers from fscache object list
+  arch: Remove leftovers from prism54 wireless driver
 
-    Why?
+ Documentation/admin-guide/cifs/usage.rst      |   7 +-
+ Documentation/admin-guide/devices.txt         |   8 +-
+ .../filesystems/caching/cachefiles.rst        |  34 -----
+ Documentation/filesystems/caching/fscache.rst | 123 +-----------------
+ arch/arm/configs/axm55xx_defconfig            |   3 -
+ arch/arm/configs/cm_x300_defconfig            |   1 -
+ arch/arm/configs/ezx_defconfig                |   1 -
+ arch/arm/configs/imote2_defconfig             |   1 -
+ arch/arm/configs/nhk8815_defconfig            |   1 -
+ arch/arm/configs/pxa_defconfig                |   1 -
+ arch/arm/configs/spear13xx_defconfig          |   1 -
+ arch/arm/configs/spear3xx_defconfig           |   1 -
+ arch/arm/configs/spear6xx_defconfig           |   1 -
+ arch/mips/configs/decstation_64_defconfig     |   1 -
+ arch/mips/configs/decstation_defconfig        |   1 -
+ arch/mips/configs/decstation_r4k_defconfig    |   1 -
+ arch/mips/configs/fuloong2e_defconfig         |   1 -
+ arch/mips/configs/ip27_defconfig              |   1 -
+ arch/mips/configs/malta_defconfig             |   1 -
+ arch/mips/configs/malta_kvm_defconfig         |   1 -
+ arch/mips/configs/malta_qemu_32r6_defconfig   |   1 -
+ arch/mips/configs/maltaaprp_defconfig         |   1 -
+ arch/mips/configs/maltasmvp_defconfig         |   1 -
+ arch/mips/configs/maltasmvp_eva_defconfig     |   1 -
+ arch/mips/configs/maltaup_defconfig           |   1 -
+ arch/mips/configs/maltaup_xpa_defconfig       |   1 -
+ arch/powerpc/configs/pmac32_defconfig         |   1 -
+ arch/powerpc/configs/ppc6xx_defconfig         |   1 -
+ arch/powerpc/configs/pseries_defconfig        |   1 -
+ arch/sh/configs/titan_defconfig               |   1 -
+ fs/fscache/object.c                           |   3 -
+ fs/fscache/proc.c                             |  12 --
+ 32 files changed, 6 insertions(+), 209 deletions(-)
 
-[...]
+-- 
+2.32.0
 
-MBR, Sergey
