@@ -2,88 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F1F47721D
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 13:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B57477250
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 13:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236917AbhLPMrV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Dec 2021 07:47:21 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:55828 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236916AbhLPMrT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Dec 2021 07:47:19 -0500
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx2ZZANbth3HABAA--.3145S3;
-        Thu, 16 Dec 2021 20:46:57 +0800 (CST)
-Subject: Re: [PATCH v3 5/6] MIPS: implement architecture-specific
- 'pci_remap_iospace()'
-To:     Xi Ruoyao <xry111@mengyan1223.wang>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        tsbogend@alpha.franken.de
-References: <20210925203224.10419-1-sergio.paracuellos@gmail.com>
- <20210925203224.10419-6-sergio.paracuellos@gmail.com>
- <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
-Cc:     robh@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-        Liviu.Dudau@arm.com, bhelgaas@google.com, matthias.bgg@gmail.com,
-        gregkh@linuxfoundation.org, linux-mips@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-staging@lists.linux.dev,
-        neil@brown.name, linux-kernel@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <16146bda-317b-0f4e-d5eb-7dd0583f559f@loongson.cn>
-Date:   Thu, 16 Dec 2021 20:46:56 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S237029AbhLPM4X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Dec 2021 07:56:23 -0500
+Received: from elvis.franken.de ([193.175.24.41]:50496 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237016AbhLPM4W (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 16 Dec 2021 07:56:22 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mxqJ3-0000kq-00; Thu, 16 Dec 2021 13:56:21 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 5829CC08B1; Thu, 16 Dec 2021 13:49:48 +0100 (CET)
+Date:   Thu, 16 Dec 2021 13:49:48 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH 1/4] MIPS: fix local_{add,sub}_return on MIPS64
+Message-ID: <20211216124948.GA12930@alpha.franken.de>
+References: <20211215084500.24444-1-huangpei@loongson.cn>
+ <20211215084500.24444-2-huangpei@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <67687e579e633d42dc501cfb6746c1cb9f600112.camel@mengyan1223.wang>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9Dx2ZZANbth3HABAA--.3145S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xr1fKF1UtF47Gr1kXFWrZrb_yoWkAFX_AF
-        WkKa18Ww4UJr43Gr13trnxuryjva43AFyUAw1kta1Svrn3C3WDG3W0vrWqvw15XrsxGFZr
-        Gan5Gw1kA3W7KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb-AYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
-        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0
-        cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-        c7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_Xr1l42xK82IYc2Ij64vIr41l4I8I3I
-        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-        GVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
-        rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jrqXQUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211215084500.24444-2-huangpei@loongson.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/16/2021 07:44 PM, Xi Ruoyao wrote:
-> On Sat, 2021-09-25 at 22:32 +0200, Sergio Paracuellos wrote:
->> To make PCI IO work we need to properly virtually map IO cpu physical address
->> and set this virtual address as the address of the first PCI IO port which
->> is set using function 'set_io_port_base()'.
->>
->> Acked-by: Arnd Bergmann <arnd@arndb.de>
->> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->
-> Hi,
->
-> the change is causing a WARNING on loongson64g-4core-ls7a:
->
-> [    0.105781] loongson-pci 1a000000.pci:       IO 0x0018020000..0x001803ffff ->
->  0x0000020000
-> [    0.105792] loongson-pci 1a000000.pci:      MEM 0x0040000000..0x007fffffff ->
->  0x0040000000
-> [    0.105801] ------------[ cut here ]------------
-> [    0.105804] WARNING: CPU: 0 PID: 1 at arch/mips/pci/pci-generic.c:55 pci_remap_iospace+0x80/0x88
-> [    0.105815] resource start address is not zero
->
-> I'm not sure how to fix this one.
->
+On Wed, Dec 15, 2021 at 04:44:57PM +0800, Huang Pei wrote:
+> Use "daddu/dsubu" for long int on MIPS64 instead of "addu/subu"
+> 
+> Fixes: 7232311ef14c ("local_t: mips extension")
+> Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> ---
+>  arch/mips/include/asm/llsc.h  | 4 ++++
+>  arch/mips/include/asm/local.h | 8 ++++----
+>  2 files changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/llsc.h b/arch/mips/include/asm/llsc.h
+> index ec09fe5d6d6c..8cc28177c37f 100644
+> --- a/arch/mips/include/asm/llsc.h
+> +++ b/arch/mips/include/asm/llsc.h
+> @@ -14,10 +14,14 @@
+>  #if _MIPS_SZLONG == 32
+>  #define __LL		"ll	"
+>  #define __SC		"sc	"
+> +#define __ADDU		"addu	"
+> +#define __SUBU		"subu	"
+>  #define __INS		"ins	"
+>  #define __EXT		"ext	"
+>  #elif _MIPS_SZLONG == 64
+>  #define __LL		"lld	"
+> +#define __ADDU		"daddu	"
+> +#define __SUBU		"dsubu	"
+>  #define __SC		"scd	"
+>  #define __INS		"dins	"
+>  #define __EXT		"dext	"
 
-MIPS: Only define pci_remap_iospace() for Ralink
+maybe I wasn't clear enough, I don't want your orginal fix, but use
+fix patch using __stringify(LONG_ADDU)/__stringify(LONG_SUBU).
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?h=mips-fixes&id=09d97da660ff77df20984496aa0abcd6b88819f2
+Thomas.
 
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
