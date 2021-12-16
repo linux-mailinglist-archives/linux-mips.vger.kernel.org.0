@@ -2,118 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F49147761D
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 16:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559F547774A
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 17:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237310AbhLPPjd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Dec 2021 10:39:33 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.169]:17557 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbhLPPjc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Dec 2021 10:39:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1639669158;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=MHu1HtjYmw4nq41J5OgWRHpWBkTI68HMrnU4IC1AtA0=;
-    b=onlP5l5ytXGnJJ63PvK9x46J7sm6dURpQbUvN4SRBm6d2GS8X6JFsySWjJB4WO/9iE
-    9oj/e3gstuZp91ymTat8rucIGnW+X6yv+mnE1gQXEaPXGHBvppi4dmF6He0QL29e+/oU
-    oBEGwGW4frb7pQK5CokP0bXmG2U0nQy0NhkZ3gUPDToLWwTeEisKnIYehdlAnwVtpgW8
-    vbW6ppmu+VLEda7cQEKZ6HJ/wiCNZ3UBXj3jLolrFLmexeRfU5ecWvT/TVB3016KeGE7
-    KaRFcVPW27/8IGReJE8n66tlff0Bq5ZW2Forifwbpm2qgDqa3z6QMiyaz2GG5hDywOUP
-    4UPg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3iMMUrw=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.35.3 DYNA|AUTH)
-    with ESMTPSA id 404833xBGFdHF8Z
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Thu, 16 Dec 2021 16:39:17 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v11 0/8] MIPS: JZ4780 and CI20 HDMI
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <H5S74R.5BG9EDZORI63@crapouillou.net>
-Date:   Thu, 16 Dec 2021 16:39:16 +0100
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, Jonas Karlman <jonas@kwiboo.se>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <638E4C90-BF5A-4DE8-A8E3-BE81B454CF63@goldelico.com>
-References: <cover.1638470392.git.hns@goldelico.com>
- <H5S74R.5BG9EDZORI63@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-X-Mailer: Apple Mail (2.3445.104.21)
+        id S231213AbhLPQLl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Dec 2021 11:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229905AbhLPQLl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Dec 2021 11:11:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08692C061574;
+        Thu, 16 Dec 2021 08:11:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46C71B824BA;
+        Thu, 16 Dec 2021 16:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C00C3C36AE0;
+        Thu, 16 Dec 2021 16:11:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639671098;
+        bh=fhSrIE9HXnpLAePIPe5kX88KewxwOd5SeCeH2Agq+dU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MxPgKfBmLudM/C0tGXdUpYGFcXulZRtvH4bY8gKjELG40F6EE+p83JMh+hP6MrmzD
+         qHKHMj7lKzKKYs/RQK7N025FBjy3JRisluccE4aGJqFMwrTNajV6hlmmqd3ZEf4pIX
+         GhOyh4RxeUDkc/sY7FAt+LaaoXw3lznMCwIKkV4AJQSJX8GcAha9AP+Aln/sQ8CgmC
+         9iAZ6S7wmcXdRjTxpRDjcXmLCYJNQlhrrFQvWpDi0KJHUglzCObJZwTC7jjNZuWH1b
+         0K6nV8BqxnfaoSNyxebAh2JpWDQzMJMxsja+QUaLH4akTyQKa8EavUj3Vea+VdERGM
+         0TzhpKJi/XbvQ==
+Date:   Thu, 16 Dec 2021 09:11:33 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Adrian Schmutzler <freifunk@adrianschmutzler.de>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Octeon: Fix build errors using clang
+Message-ID: <YbtlNT7WUi3b8Dqh@archlinux-ax161>
+References: <20211216095014.11918-1-tianjia.zhang@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216095014.11918-1-tianjia.zhang@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul and Thomas,
-thanks for already applying some of the patches of this series!
+On Thu, Dec 16, 2021 at 05:50:14PM +0800, Tianjia Zhang wrote:
+> A large number of the following errors is reported when compiling
+> with clang:
+> 
+>   cvmx-bootinfo.h:326:3: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
+>                   ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NULL)
+>                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
+>           case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>                          ~~~^~~~
+>   cvmx-bootinfo.h:326:3: note: use array indexing to silence this warning
+>   cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
+>           case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
+>                           ^
+> 
+> Follow the prompts to use the address operator '&' to fix this error.
+> 
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 
-> Am 16.12.2021 um 16:24 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi,
->=20
-> Patches 1 and 2 added to drm-misc-next.
->=20
-> I'll pick the rest when the regulator situation is sorted out.
->=20
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-I had started working on the regulator and while testing and trying to =
-read the EDID
-something has damaged my monitor so that it does no longer report proper =
-EDID information
-(for the second time, so that I can't pledge for another warrany =
-repair). Maybe controlling
-+5V for this specific monitor must be done very carefully and in a =
-specific sequence...
-
-So I will need some more days for building a more robust test setup and =
-doing verification
-of the driver. Well I have other monitors, but this was the cheapest one =
-and available
-for such experiments :)
-
-Generally the idea is to replace the regulator with a ddc-en-gpios =
-property of the connector.
-
-Unfortunately it does not work to control it by atomic enable/disable in =
-the connector driver
-(it is not called at all). So I have been working on an approach =
-following the concept how
-drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c does it.
-
-Sorry for the delay, but a V12 will come.
-
-BR and thanks,
-Nikolaus
-
+> ---
+>  arch/mips/include/asm/octeon/cvmx-bootinfo.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/octeon/cvmx-bootinfo.h b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
+> index 0e6bf220db61..6c61e0a63924 100644
+> --- a/arch/mips/include/asm/octeon/cvmx-bootinfo.h
+> +++ b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
+> @@ -318,7 +318,7 @@ enum cvmx_chip_types_enum {
+>  
+>  /* Functions to return string based on type */
+>  #define ENUM_BRD_TYPE_CASE(x) \
+> -	case x: return(#x + 16);	/* Skip CVMX_BOARD_TYPE_ */
+> +	case x: return (&#x[16]);	/* Skip CVMX_BOARD_TYPE_ */
+>  static inline const char *cvmx_board_type_to_string(enum
+>  						    cvmx_board_types_enum type)
+>  {
+> @@ -410,7 +410,7 @@ static inline const char *cvmx_board_type_to_string(enum
+>  }
+>  
+>  #define ENUM_CHIP_TYPE_CASE(x) \
+> -	case x: return(#x + 15);	/* Skip CVMX_CHIP_TYPE */
+> +	case x: return (&#x[15]);	/* Skip CVMX_CHIP_TYPE */
+>  static inline const char *cvmx_chip_type_to_string(enum
+>  						   cvmx_chip_types_enum type)
+>  {
+> -- 
+> 2.32.0
+> 
