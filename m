@@ -2,149 +2,79 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA2C476660
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 00:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711B2476967
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 06:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbhLOXQ2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 15 Dec 2021 18:16:28 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:46832 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbhLOXQ1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 15 Dec 2021 18:16:27 -0500
-Received: by mail-ot1-f46.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so26723473oto.13;
-        Wed, 15 Dec 2021 15:16:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+NJojSfoVwMgJb/Ja90KiUetfn1vdOAgMVEPVsedxn4=;
-        b=q97GoWmyAzRaPDgA42DeTcGXaAbrgaabtUfcupEFIQl8do7mvhJeuxGC1Tqii9GT1S
-         RFCX5LLjhjV1hkT5PcBiwvQqnWjaQ6GD1hjwY8jRkAntpUxcdIniCmqUR7ZRCyJX05pt
-         CTo8kvXmqDRKq11R+/v26483Zj1GcuNbkG7MWCIZHOwxhygOULtxkvdh70aCjq6W3lZE
-         HFT4hhQuNE68qLbkFpMmVr0UaH3OfQ/ZHHLSyK6j1rk4/PoNnyw0ZSQqvygsR2sQtxAe
-         l/QATmuwEI49hRfmGWqZQFJzS5V605lERUsywrCG95JAu+54Q0arDNpKRSSP+wBsP+8L
-         pTlQ==
-X-Gm-Message-State: AOAM533GMAneZtImqgVWpuND4V6/563k7qi2AM+j7XmT6HSwCzciUvv2
-        xRe/Pm36pbdZfZ/I+UwMtw==
-X-Google-Smtp-Source: ABdhPJxe1D9MH0CKZ4DycjsHFTIJBOoLIjt6AIVTztF3s4fwJK0Y3vM/K0Wz5DMCsalknmREVSwMng==
-X-Received: by 2002:a05:6830:2707:: with SMTP id j7mr10302445otu.354.1639610186803;
-        Wed, 15 Dec 2021 15:16:26 -0800 (PST)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id g7sm740166oon.27.2021.12.15.15.16.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 15:16:26 -0800 (PST)
-From:   Rob Herring <robh@kernel.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH 2/2] usb: musb: Set the DT node on the child device
-Date:   Wed, 15 Dec 2021 17:07:57 -0600
-Message-Id: <20211215230756.2009115-3-robh@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211215230756.2009115-1-robh@kernel.org>
-References: <20211215230756.2009115-1-robh@kernel.org>
+        id S233693AbhLPFT7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Dec 2021 00:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233679AbhLPFT7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Dec 2021 00:19:59 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A20C061574;
+        Wed, 15 Dec 2021 21:19:59 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JF0mX3yRdz4xhj;
+        Thu, 16 Dec 2021 16:19:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1639631998;
+        bh=89BoGkjv1/HzkkQE/bALGUK22iLzNs4QmxP+8+6F9lQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=fR1h5KV87GTW7GjPfIVIyQIG9Hug7SXkcc/qxR5eFG4yTs67E+JDDpf78OTHurZrV
+         8XIvepCjiX6jKw/iZg6f9fWShGbP1iICRp5DCm6aNV0npZKQRBTHMiT6VQ0AwKHBU8
+         wFqfgvkpGvjDoe12fZ1xG3s5G1Hlf3bAlR4LDAoUHAFUtNBtjHCxWJ9T04w9U/tW7t
+         m96KyolUOhTyi9nUPd8ag4mV9MGbn1TUaeR6PPD15bNskmc50vUGk32nI4Ba8/zlGw
+         scCMQo6dIgepMohRRxw8WyC4KopzFw012GHOQxR+zls4bhxCWsL/VRZgDjjZKe1/d4
+         f02UJxh1tADTw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Rob Herring <robh@kernel.org>, John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Frank Rowand <frank.rowand@sony.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4] of/fdt: Rework early_init_dt_scan_memory() to call
+ directly
+In-Reply-To: <20211215150102.1303588-1-robh@kernel.org>
+References: <20211215150102.1303588-1-robh@kernel.org>
+Date:   Thu, 16 Dec 2021 16:19:56 +1100
+Message-ID: <87r1adktxf.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The musb glue drivers just copy the glue resources to the musb child device.
-Instead, set the musb child device's DT node pointer to the parent device's
-node so that platform_get_irq_byname() can find the resources in the DT.
-This removes the need for statically populating the IRQ resources from the
-DT which has been deprecated for some time.
+Rob Herring <robh@kernel.org> writes:
+> Use of the of_scan_flat_dt() function predates libfdt and is discouraged
+> as libfdt provides a nicer set of APIs. Rework
+> early_init_dt_scan_memory() to be called directly and use libfdt.
+>
+> Cc: John Crispin <john@phrozen.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: linux-mips@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Frank Rowand <frank.rowand@sony.com>
+> Link: https://lore.kernel.org/r/20211208155839.4084795-1-robh@kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v4:
+>  - Revert the changes to search for memory nodes at any level which were
+>    accidentally committed.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- drivers/usb/musb/am35x.c    | 2 ++
- drivers/usb/musb/da8xx.c    | 2 ++
- drivers/usb/musb/jz4740.c   | 1 +
- drivers/usb/musb/mediatek.c | 2 ++
- drivers/usb/musb/omap2430.c | 1 +
- drivers/usb/musb/ux500.c    | 1 +
- 6 files changed, 9 insertions(+)
+Sorry for the mix up, this version works for me.
 
-diff --git a/drivers/usb/musb/am35x.c b/drivers/usb/musb/am35x.c
-index 660641ab1545..bf2c0fa6cb32 100644
---- a/drivers/usb/musb/am35x.c
-+++ b/drivers/usb/musb/am35x.c
-@@ -500,6 +500,8 @@ static int am35x_probe(struct platform_device *pdev)
- 	pinfo.num_res = pdev->num_resources;
- 	pinfo.data = pdata;
- 	pinfo.size_data = sizeof(*pdata);
-+	pinfo.fwnode = of_fwnode_handle(pdev->dev.of_node);
-+	pinfo.of_node_reused = true;
- 
- 	glue->musb = musb = platform_device_register_full(&pinfo);
- 	if (IS_ERR(musb)) {
-diff --git a/drivers/usb/musb/da8xx.c b/drivers/usb/musb/da8xx.c
-index e4e0195131da..fd4ae2dd24e5 100644
---- a/drivers/usb/musb/da8xx.c
-+++ b/drivers/usb/musb/da8xx.c
-@@ -563,6 +563,8 @@ static int da8xx_probe(struct platform_device *pdev)
- 	pinfo.num_res = pdev->num_resources;
- 	pinfo.data = pdata;
- 	pinfo.size_data = sizeof(*pdata);
-+	pinfo.fwnode = of_fwnode_handle(np);
-+	pinfo.of_node_reused = true;
- 
- 	glue->musb = platform_device_register_full(&pinfo);
- 	ret = PTR_ERR_OR_ZERO(glue->musb);
-diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-index 5b7d576bf6ee..417c30bff9ca 100644
---- a/drivers/usb/musb/jz4740.c
-+++ b/drivers/usb/musb/jz4740.c
-@@ -231,6 +231,7 @@ static int jz4740_probe(struct platform_device *pdev)
- 	musb->dev.parent		= dev;
- 	musb->dev.dma_mask		= &musb->dev.coherent_dma_mask;
- 	musb->dev.coherent_dma_mask	= DMA_BIT_MASK(32);
-+	device_set_of_node_from_dev(&musb->dev, dev);
- 
- 	glue->pdev			= musb;
- 	glue->clk			= clk;
-diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
-index f5d97eb84cb5..1aeb34dbe24f 100644
---- a/drivers/usb/musb/mediatek.c
-+++ b/drivers/usb/musb/mediatek.c
-@@ -538,6 +538,8 @@ static int mtk_musb_probe(struct platform_device *pdev)
- 	pinfo.num_res = pdev->num_resources;
- 	pinfo.data = pdata;
- 	pinfo.size_data = sizeof(*pdata);
-+	pinfo.fwnode = of_fwnode_handle(np);
-+	pinfo.of_node_reused = true;
- 
- 	glue->musb_pdev = platform_device_register_full(&pinfo);
- 	if (IS_ERR(glue->musb_pdev)) {
-diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
-index d2b7e613eb34..7d4d0713f4f0 100644
---- a/drivers/usb/musb/omap2430.c
-+++ b/drivers/usb/musb/omap2430.c
-@@ -327,6 +327,7 @@ static int omap2430_probe(struct platform_device *pdev)
- 	musb->dev.parent		= &pdev->dev;
- 	musb->dev.dma_mask		= &omap2430_dmamask;
- 	musb->dev.coherent_dma_mask	= omap2430_dmamask;
-+	device_set_of_node_from_dev(&musb->dev, &pdev->dev);
- 
- 	glue->dev			= &pdev->dev;
- 	glue->musb			= musb;
-diff --git a/drivers/usb/musb/ux500.c b/drivers/usb/musb/ux500.c
-index 9bce19b5ffd7..8ea62c344328 100644
---- a/drivers/usb/musb/ux500.c
-+++ b/drivers/usb/musb/ux500.c
-@@ -262,6 +262,7 @@ static int ux500_probe(struct platform_device *pdev)
- 	musb->dev.parent		= &pdev->dev;
- 	musb->dev.dma_mask		= &pdev->dev.coherent_dma_mask;
- 	musb->dev.coherent_dma_mask	= pdev->dev.coherent_dma_mask;
-+	device_set_of_node_from_dev(&musb->dev, &pdev->dev);
- 
- 	glue->dev			= &pdev->dev;
- 	glue->musb			= musb;
--- 
-2.32.0
+Tested-by: Michael Ellerman <mpe@ellerman.id.au>
 
+cheers
