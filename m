@@ -2,80 +2,141 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67624476E3B
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 10:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D98476E7B
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 11:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbhLPJuU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Dec 2021 04:50:20 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:48373 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231377AbhLPJuT (ORCPT
+        id S235613AbhLPKFc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 16 Dec 2021 05:05:32 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:51134
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233628AbhLPKFb (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:50:19 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R891e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V-ntWHj_1639648215;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V-ntWHj_1639648215)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 16 Dec 2021 17:50:16 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Adrian Schmutzler <freifunk@adrianschmutzler.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH] MIPS: Octeon: Fix build errors using clang
-Date:   Thu, 16 Dec 2021 17:50:14 +0800
-Message-Id: <20211216095014.11918-1-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 16 Dec 2021 05:05:31 -0500
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 085D53F209
+        for <linux-mips@vger.kernel.org>; Thu, 16 Dec 2021 10:05:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1639649130;
+        bh=iEjFNSHMwi4aeXpe7cQghYno80kPHKULcTC4SGtg0Js=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=sQlCXDkHyyfpPGofjCMUtFw2SsLAVDnrnr/gISSdvLsK8qiFt2TvzkP2xscHxyifA
+         M6vl3sB3NeWDqPjJvOwQJcpg/ffx0cDO7WrDF1ETPFsIjP6m/rsAoJcaVBpJ6iU/qA
+         VLuS3kO1l3lEw4hHnBggRSmVoydaVE4YGHzE0kRvZXB7cezyMXl8Xg+PozwZRg8UlG
+         Ojrp439VUuhFhvMowYle2ZjkPmnPcV92Bkt+N1LVGIuxSg0cRsazzrml5eNcayreLd
+         yhtYk7mjWdOUcJ3PViUQgllOYzu8XhDJAaNNSslvuF4AL+PjjR2SldldlexKdPHvVH
+         JTv6gx0aiBIdA==
+Received: by mail-ed1-f72.google.com with SMTP id w17-20020a056402269100b003f7ed57f96bso3823704edd.16
+        for <linux-mips@vger.kernel.org>; Thu, 16 Dec 2021 02:05:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iEjFNSHMwi4aeXpe7cQghYno80kPHKULcTC4SGtg0Js=;
+        b=YbbSZ+3mnMMhE/dhsVfWOIlNmd0QD618auh0PIqDJ3kf3wC53JaQOnO3/l4LPZPYa0
+         u3z601+e9xSzz5661AZikC9ox0vtvH1sjgnsT02jAmUy56gjEBFl0P/bpVnqM0Kxp2DB
+         6A7EfLJeWYHy1TJ+RiocvE96jCJkWHNNql5lvEshlLIkjtC/o5AFNQxDWYDWVzz/G2ST
+         pT3x1CGnRNH5oNMd5jHPrCGMeFS6TEMu3YULmLNCSOdNtW0fpJaan/vcmOwFXS/FicoT
+         DfLufgmps/yMkl9smH/JqcIbaJitHnOBJT1T0Xq/EsFGAz2fWXkDULBUfMfhzZioIykR
+         HWwQ==
+X-Gm-Message-State: AOAM531h5Xa1ox/w1TaHhXOibU/dUlqMsl0PWqGGag5VzKd2TRskaVsb
+        gL5gJdwu6iLBvZKJqrxgtWQznAwhT87bKcBfYTVhjqSC8vrQxe8/oHI7msEtWiGX3X+7Hgfl4Ue
+        Sv4FWo4FHyAyu0gGjhDRo5BpVCgrFe/58upeK/E77/CWJ9iukEc06fAM=
+X-Received: by 2002:a17:906:48d:: with SMTP id f13mr1328919eja.178.1639649129058;
+        Thu, 16 Dec 2021 02:05:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw4csYse2ts0CIc+GNT8hFD4S36DkgIwbzgfyBzIjr+nwEiJtuY5m75c6D7//m27d8UIPSjBoFZUfOIoRMOvGc=
+X-Received: by 2002:a17:906:48d:: with SMTP id f13mr1328883eja.178.1639649128845;
+ Thu, 16 Dec 2021 02:05:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211105154334.1841927-1-alexandre.ghiti@canonical.com>
+ <CAK8P3a2AnLJgGNBFvjUQqXd-Az9vjgE7yJQXGDwCav5E0btSsg@mail.gmail.com>
+ <CA+zEjCtajRJhs8zSdR_oFBOO3P5FWWZJ3L6N-GK+JnUjdymTiA@mail.gmail.com> <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a3aJJYcONV9JMcn47=mW4P4kvYFdwnTdyZfRqeo+eGndQ@mail.gmail.com>
+From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Date:   Thu, 16 Dec 2021 11:05:18 +0100
+Message-ID: <CA+zEjCu9KmTMpvXkFqgHX0C1jNZKquZU4owZKaJ_-o4+M_7ACg@mail.gmail.com>
+Subject: Re: [PATCH 0/7] Cleanup after removal of configs
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Steve French <sfrench@samba.org>, Jonathan Corbet <corbet@lwn.net>,
+        David Howells <dhowells@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-cachefs@redhat.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-power@fi.rohmeurope.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-A large number of the following errors is reported when compiling
-with clang:
+On Wed, Dec 15, 2021 at 10:49 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Dec 10, 2021 at 9:38 PM Alexandre Ghiti
+> <alexandre.ghiti@canonical.com> wrote:
+> >
+> > On Fri, Nov 5, 2021 at 4:56 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > >
+> > > On Fri, Nov 5, 2021 at 4:43 PM Alexandre Ghiti
+> > > <alexandre.ghiti@canonical.com> wrote:
+> > > >
+> > > > While bumping from 5.13 to 5.15, I found that a few deleted configs had
+> > > > left some pieces here and there: this patchset cleans that.
+> > > >
+> > > > Alexandre Ghiti (7):
+> > > >   Documentation, arch: Remove leftovers from fscache/cachefiles
+> > > >     histograms
+> > > >   Documentation, arch: Remove leftovers from raw device
+> > > >   Documentation, arch: Remove leftovers from CIFS_WEAK_PW_HASH
+> > > >   arch: Remove leftovers from mandatory file locking
+> > > >   Documentation, arch, fs: Remove leftovers from fscache object list
+> > > >   include: mfd: Remove leftovers from bd70528 watchdog
+> > > >   arch: Remove leftovers from prism54 wireless driver
+> > >
+> > > Looks all good to me, thanks a lot for the cleanup!
+> > >
+> > > For arch/arm/configs:
+> > >
+> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> > >
+> > > assuming this goes through someone else's tree. Let me know if you need me
+> > > to pick up the patches in the asm-generic tree for cross-architecture work.
+> >
+> > Arnd, do you mind taking the whole series except patch 6 ("include:
+> > mfd: Remove leftovers from bd70528 watchdog") as this will be handled
+> > separately. I can ask Jonathan for the doc patches if needed.
+>
+> I tried to apply them, but only three of the patches applied cleanly. Can you
+> resend them based on v5.16-rc1?
 
-  cvmx-bootinfo.h:326:3: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
-                  ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NULL)
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
-          case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
-                         ~~~^~~~
-  cvmx-bootinfo.h:326:3: note: use array indexing to silence this warning
-  cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
-          case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
-                          ^
+Sure, I have just sent the v2.
 
-Follow the prompts to use the address operator '&' to fix this error.
+Thanks,
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- arch/mips/include/asm/octeon/cvmx-bootinfo.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Alex
 
-diff --git a/arch/mips/include/asm/octeon/cvmx-bootinfo.h b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
-index 0e6bf220db61..6c61e0a63924 100644
---- a/arch/mips/include/asm/octeon/cvmx-bootinfo.h
-+++ b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
-@@ -318,7 +318,7 @@ enum cvmx_chip_types_enum {
- 
- /* Functions to return string based on type */
- #define ENUM_BRD_TYPE_CASE(x) \
--	case x: return(#x + 16);	/* Skip CVMX_BOARD_TYPE_ */
-+	case x: return (&#x[16]);	/* Skip CVMX_BOARD_TYPE_ */
- static inline const char *cvmx_board_type_to_string(enum
- 						    cvmx_board_types_enum type)
- {
-@@ -410,7 +410,7 @@ static inline const char *cvmx_board_type_to_string(enum
- }
- 
- #define ENUM_CHIP_TYPE_CASE(x) \
--	case x: return(#x + 15);	/* Skip CVMX_CHIP_TYPE */
-+	case x: return (&#x[15]);	/* Skip CVMX_CHIP_TYPE */
- static inline const char *cvmx_chip_type_to_string(enum
- 						   cvmx_chip_types_enum type)
- {
--- 
-2.32.0
-
+>
+>         Arnd
