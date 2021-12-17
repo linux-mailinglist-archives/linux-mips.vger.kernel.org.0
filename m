@@ -2,82 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC64479019
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Dec 2021 16:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8328E47929E
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Dec 2021 18:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbhLQPlD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Dec 2021 10:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S239419AbhLQRQ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Dec 2021 12:16:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234756AbhLQPlC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Dec 2021 10:41:02 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E291C061748
-        for <linux-mips@vger.kernel.org>; Fri, 17 Dec 2021 07:41:02 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id bg2-20020a05600c3c8200b0034565c2be15so4356522wmb.0
-        for <linux-mips@vger.kernel.org>; Fri, 17 Dec 2021 07:41:02 -0800 (PST)
+        with ESMTP id S239760AbhLQRQ6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Dec 2021 12:16:58 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBC0C061401
+        for <linux-mips@vger.kernel.org>; Fri, 17 Dec 2021 09:16:57 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id l22so6021754lfg.7
+        for <linux-mips@vger.kernel.org>; Fri, 17 Dec 2021 09:16:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xQrYULKok+hL+AIRGJuG9CojAZcnV9Xr+it7yxQJVlY=;
-        b=ljOQPBXgp9Smquj8Ng29odlWvElKpDTqPPRQidAvnJdl86g5nPxdxVOZaobu1aloU+
-         BxF5ZdXve/fC4OuYzbHgAUFAehuKXONKOPKgrIHUWfGLCcOJX/U/gOYdmBq6WyLeERdT
-         ozYUTpfSpt07FF5ffiTm4B7CQSEO1ZBiQTa06KV8GgCOIdCJFutYQjrAan6yxWHvjBqu
-         s3jFIVsLoZ/IZoqi6JKr/nIv3vj8GNx282V5ptrp/uJp9JZwAiAOsq6cpABPaCV7OhgW
-         cmo1ALjk+DwDVXAHtO3FpoIc4cmbInE/sdkNMZBNe1A/Dl1L5RcE6GwljTHvXJv+iTxY
-         +fzg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iVGRXJjXTkNbcWgM3Rtn/6//+8cggz0t1cCkyrwrD6E=;
+        b=NoFJLqJSh74xV0bvIGodtdU6myPwjLF70BlRz3/lsUs8ymeVI3TX0mW2+g2CbLfFH2
+         cMZpyQ8cJXTqfikJpsNjpTY8NKpoDtQ6tbZvFPqpvzLB/8TABVDbxuzQkIDLrXLFzsAf
+         LAfOhf4eXOIT2VY2t2w8dAmsw0w0SRzwb73eiKCIIlerc9QRfSGnZV2WoqRehN+f8UxJ
+         uqHGeEjQy3R5DIXecq1XiiV1fiAoq80ccCTwetxyKBLo9G5BT4ryA9XZEfInDJLXZP84
+         waME57Iu66TjWNfCLrCunB0IcKZxzoZ1+ty2Sni8so9u7ZUkp7YgdnRgV1d7s7aj25RC
+         yJpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xQrYULKok+hL+AIRGJuG9CojAZcnV9Xr+it7yxQJVlY=;
-        b=6q0Ugbj6mbll3yjw6MZ8xKTN+JG9hQBubqF2kn1cRv7LyAoYZmlMJJXZ/w65tDJ4sC
-         GJY9GPEVuehZAn9OBfXi4XxmNd5d0lTyxfL2TiKVYpEgL0knzvKGnGPmNw6PMzpKrp1S
-         iLJbJPx17t0kCViFjw9uASIk3IBJMzCMjwAiV4R8yEPFs/DBFiutVWm+IwGrjm45e4EF
-         zl5EaB04TSrYXJR9HhcL8gjqPuo+k0ByaKf6t/9smhHhN7sivDIlW/lxY3zZEZWt9FEa
-         CHPfk1DNGZl6vdtsdpFRn/nNFxZZy17Q19BiTz+4vuzi1EvWGLviiw+QKxvGGljQ2Dwm
-         o/Aw==
-X-Gm-Message-State: AOAM531lgzlUaa4Szdvj2/KD2sWj+Qm705w50OKQo8+pLyX+bHdW/Icy
-        8FF1wqy16Q62zv7bDND2Vb9Jnl2e8Fkg6Zz2ug8=
-X-Google-Smtp-Source: ABdhPJxfsjQgHDN6hfp0UDJtilGfevXXUtMuuj2tGJDfuwC3m9wsAQWz0ZAPQHNXJPjD271t7JZ3GM4XtKA/wSbdlVU=
-X-Received: by 2002:a7b:c256:: with SMTP id b22mr9903656wmj.176.1639755660466;
- Fri, 17 Dec 2021 07:41:00 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iVGRXJjXTkNbcWgM3Rtn/6//+8cggz0t1cCkyrwrD6E=;
+        b=UOKPHqrhkBzoDvNqEakhto4bEy2QKfNC6eH5heIyvjmNSn19es2OyZoFmgEHtvCOR8
+         3Wn27kzpjAlESlumz4p+yJTZZHeGmECV8KvIPnEiNsZj2xodp9GKEDvr6DeQuMJrwp2O
+         IIYFvPOXWI4MWtuAeLFcKDWmynYXzR0FLhN+zxu1jB+0/EATSvuU0CNgafPXDAcoNQ+n
+         0MH4Gb33qz2WKNnzKIvyWZf2kTo30KVlz2Sz8B96RY2FcDYRuT58AoiWoffl9BaBy9mY
+         4GNNkBLCuLRBPXiVgct65urhYUxuiyc69RVgDyN95ptdl6qs7l+8JvHwygAf5tB+kUm+
+         eCyQ==
+X-Gm-Message-State: AOAM533JAZxeX+j1Uh1NVUKTHG5P5/QDNZAp17PqR+bZg1GcejmKiFUt
+        +nPI9gtmF2WLr8REdqw8KLdyw1kOrICUhN/2Ngwjow==
+X-Google-Smtp-Source: ABdhPJysvotVxooftGCVk/xDAJQ/AsjHsAYvT9wKfIRHe1I+TbfogcpumOtlivME3YTupY0NEGqA9TacfUf0YlHyD+Q=
+X-Received: by 2002:a05:6512:310e:: with SMTP id n14mr3660165lfb.167.1639761415733;
+ Fri, 17 Dec 2021 09:16:55 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a5d:5284:0:0:0:0:0 with HTTP; Fri, 17 Dec 2021 07:41:00
- -0800 (PST)
-Reply-To: mrsaishag45@gmail.com
-From:   Mrs Aisha Al-Qaddafi <mrsaishag88@gmail.com>
-Date:   Fri, 17 Dec 2021 07:41:00 -0800
-Message-ID: <CAFGDMRtKGyZiiTfzULTKo4ohvL3kRgZ2x9vYGqnnjd75dhsEEw@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
+References: <20211207002102.26414-1-paul@crapouillou.net> <CAK8P3a3xfuFN+0Gb694R_W2tpC7PfFEFcpsAyPdanqZ6FpVoxQ@mail.gmail.com>
+ <CAJZ5v0jifFWLJgjJywGrjWgE9ZQkjD03rQDHw+4YL-VzkfL1Hg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jifFWLJgjJywGrjWgE9ZQkjD03rQDHw+4YL-VzkfL1Hg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 17 Dec 2021 18:16:19 +0100
+Message-ID: <CAPDyKFpfWZsw+7aZdQVsCsTxoEfUqpkZM6Ozfr5COQNNaqhLhA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Rework pm_ptr() and *_PM_OPS macros
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>, list@opendingux.net,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dear Friend,
+On Fri, 17 Dec 2021 at 16:07, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Dec 7, 2021 at 10:22 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Tue, Dec 7, 2021 at 1:20 AM Paul Cercueil <paul@crapouillou.net> wrote:
+> > >
+> > > This patchset reworks the pm_ptr() macro I introduced a few versions
+> > > ago, so that it is not conditionally defined.
+> > >
+> > > It applies the same treatment to the *_PM_OPS macros. Instead of
+> > > modifying the existing ones, which would mean a 2000+ patch bomb, this
+> > > patchset introduce two new macros to replace the now deprecated
+> > > UNIVERSAL_DEV_PM_OPS() and SIMPLE_DEV_PM_OPS().
+> > >
+> > > The point of all of this, is to progressively switch from a code model
+> > > where PM callbacks are all protected behind CONFIG_PM guards, to a code
+> > > model where PM callbacks are always seen by the compiler, but discarded
+> > > if not used.
+> > >
+> > > Patch [4/5] and [5/5] are just examples to illustrate the use of the new
+> > > macros. As such they don't really have to be merged at the same time as
+> > > the rest and can be delayed until a subsystem-wide patchset is proposed.
+> > >
+> > > - Patch [4/5] modifies a driver that already used the pm_ptr() macro,
+> > >   but had to use the __maybe_unused flag to avoid compiler warnings;
+> > > - Patch [5/5] modifies a driver that used a #ifdef CONFIG_PM guard
+> > >   around its suspend/resume functions.
+> >
+> > This is fantastic, I love the new naming and it should provide a great path
+> > towards converting all drivers eventually. I've added the patches to
+> > my randconfig test build box to see if something breaks, but otherwise
+> > I think these are ready to get into linux-next, at least patches 1-3,
+> > so subsystem
+> > maintainers can start queuing up the conversion patches once the
+> > initial set is merged.
+> >
+> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Patches [0-3/5] applied as 5.17 material.
+>
+> The mmc patches need ACKs, but I can take them too.
 
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
+Sure, please add my ack for them!
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
-
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply
-urgently to enable me to provide you more information about the
-investment funds.
-
-Your Urgent Reply Will Be Appreciated
-
-Best Regards
-Mrs Aisha Al-Qaddafi
+Kind regards
+Uffe
