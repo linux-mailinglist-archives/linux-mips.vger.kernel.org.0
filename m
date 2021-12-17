@@ -2,100 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 559F547774A
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Dec 2021 17:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C33D478F03
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Dec 2021 16:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbhLPQLl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 16 Dec 2021 11:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbhLPQLl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 16 Dec 2021 11:11:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08692C061574;
-        Thu, 16 Dec 2021 08:11:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46C71B824BA;
-        Thu, 16 Dec 2021 16:11:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C00C3C36AE0;
-        Thu, 16 Dec 2021 16:11:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639671098;
-        bh=fhSrIE9HXnpLAePIPe5kX88KewxwOd5SeCeH2Agq+dU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MxPgKfBmLudM/C0tGXdUpYGFcXulZRtvH4bY8gKjELG40F6EE+p83JMh+hP6MrmzD
-         qHKHMj7lKzKKYs/RQK7N025FBjy3JRisluccE4aGJqFMwrTNajV6hlmmqd3ZEf4pIX
-         GhOyh4RxeUDkc/sY7FAt+LaaoXw3lznMCwIKkV4AJQSJX8GcAha9AP+Aln/sQ8CgmC
-         9iAZ6S7wmcXdRjTxpRDjcXmLCYJNQlhrrFQvWpDi0KJHUglzCObJZwTC7jjNZuWH1b
-         0K6nV8BqxnfaoSNyxebAh2JpWDQzMJMxsja+QUaLH4akTyQKa8EavUj3Vea+VdERGM
-         0TzhpKJi/XbvQ==
-Date:   Thu, 16 Dec 2021 09:11:33 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Adrian Schmutzler <freifunk@adrianschmutzler.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Octeon: Fix build errors using clang
-Message-ID: <YbtlNT7WUi3b8Dqh@archlinux-ax161>
-References: <20211216095014.11918-1-tianjia.zhang@linux.alibaba.com>
+        id S237860AbhLQPHq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Dec 2021 10:07:46 -0500
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:36836 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237855AbhLQPHq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Dec 2021 10:07:46 -0500
+Received: by mail-oi1-f174.google.com with SMTP id t23so4021160oiw.3;
+        Fri, 17 Dec 2021 07:07:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MbOJyx0ICqsDBsXqhrfTxawCvgzjFoYCCHF95Prip3E=;
+        b=RiDhcJMb78rRzBLmIxbP5OkQydXAjBA72RxB29xIUOpt1mXMykSZn6mCckNHkEwzPS
+         GQL6J66SU4X75b91WK8HeCgtaez2TjJ/UHOwXgM9pWI9r465Fa3ngUdKo7Wgi10hP/OH
+         KJKPS7UFIlQcHRrzfuY0NEinyMSUZQ4kUMv9Rw/X+E83fK1vnoWLi6Pu7FLYakRTLL3C
+         BlLNslq2d/KjdxmHx9U2FPiiNCiTmyBwaWNqAoGuUzEf3PshovvpbkdmYUvlYQ+5a8f2
+         2adkXUHo7sCIdUmoOv95OLzz5PSm9jMQfaHByvrunQRggT5jh50ikMh0pnensDt8ZShN
+         fxvA==
+X-Gm-Message-State: AOAM530SqCgXXA5nr1fq7vrgA/2WPyVOdewp9Kb/pm94JEkEV166MCzs
+        vLzRjXV0adm3p+Usa3xEiZNIL3DAIZukZfGc5vE=
+X-Google-Smtp-Source: ABdhPJzIcKm353itWUd26MvND37q/kv/4/a54huG34fc7b6KcS+FdmapZEPP8pthrG9sJ/xgldU8kp89r2g0YypaCFQ=
+X-Received: by 2002:aca:eb0b:: with SMTP id j11mr8185991oih.51.1639753665410;
+ Fri, 17 Dec 2021 07:07:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216095014.11918-1-tianjia.zhang@linux.alibaba.com>
+References: <20211207002102.26414-1-paul@crapouillou.net> <CAK8P3a3xfuFN+0Gb694R_W2tpC7PfFEFcpsAyPdanqZ6FpVoxQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a3xfuFN+0Gb694R_W2tpC7PfFEFcpsAyPdanqZ6FpVoxQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 17 Dec 2021 16:07:34 +0100
+Message-ID: <CAJZ5v0jifFWLJgjJywGrjWgE9ZQkjD03rQDHw+4YL-VzkfL1Hg@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Rework pm_ptr() and *_PM_OPS macros
+To:     Arnd Bergmann <arnd@arndb.de>, Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>, list@opendingux.net,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 05:50:14PM +0800, Tianjia Zhang wrote:
-> A large number of the following errors is reported when compiling
-> with clang:
-> 
->   cvmx-bootinfo.h:326:3: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
->                   ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NULL)
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
->           case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                          ~~~^~~~
->   cvmx-bootinfo.h:326:3: note: use array indexing to silence this warning
->   cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
->           case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ^
-> 
-> Follow the prompts to use the address operator '&' to fix this error.
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+On Tue, Dec 7, 2021 at 10:22 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Dec 7, 2021 at 1:20 AM Paul Cercueil <paul@crapouillou.net> wrote:
+> >
+> > This patchset reworks the pm_ptr() macro I introduced a few versions
+> > ago, so that it is not conditionally defined.
+> >
+> > It applies the same treatment to the *_PM_OPS macros. Instead of
+> > modifying the existing ones, which would mean a 2000+ patch bomb, this
+> > patchset introduce two new macros to replace the now deprecated
+> > UNIVERSAL_DEV_PM_OPS() and SIMPLE_DEV_PM_OPS().
+> >
+> > The point of all of this, is to progressively switch from a code model
+> > where PM callbacks are all protected behind CONFIG_PM guards, to a code
+> > model where PM callbacks are always seen by the compiler, but discarded
+> > if not used.
+> >
+> > Patch [4/5] and [5/5] are just examples to illustrate the use of the new
+> > macros. As such they don't really have to be merged at the same time as
+> > the rest and can be delayed until a subsystem-wide patchset is proposed.
+> >
+> > - Patch [4/5] modifies a driver that already used the pm_ptr() macro,
+> >   but had to use the __maybe_unused flag to avoid compiler warnings;
+> > - Patch [5/5] modifies a driver that used a #ifdef CONFIG_PM guard
+> >   around its suspend/resume functions.
+>
+> This is fantastic, I love the new naming and it should provide a great path
+> towards converting all drivers eventually. I've added the patches to
+> my randconfig test build box to see if something breaks, but otherwise
+> I think these are ready to get into linux-next, at least patches 1-3,
+> so subsystem
+> maintainers can start queuing up the conversion patches once the
+> initial set is merged.
+>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Patches [0-3/5] applied as 5.17 material.
 
-> ---
->  arch/mips/include/asm/octeon/cvmx-bootinfo.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/octeon/cvmx-bootinfo.h b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
-> index 0e6bf220db61..6c61e0a63924 100644
-> --- a/arch/mips/include/asm/octeon/cvmx-bootinfo.h
-> +++ b/arch/mips/include/asm/octeon/cvmx-bootinfo.h
-> @@ -318,7 +318,7 @@ enum cvmx_chip_types_enum {
->  
->  /* Functions to return string based on type */
->  #define ENUM_BRD_TYPE_CASE(x) \
-> -	case x: return(#x + 16);	/* Skip CVMX_BOARD_TYPE_ */
-> +	case x: return (&#x[16]);	/* Skip CVMX_BOARD_TYPE_ */
->  static inline const char *cvmx_board_type_to_string(enum
->  						    cvmx_board_types_enum type)
->  {
-> @@ -410,7 +410,7 @@ static inline const char *cvmx_board_type_to_string(enum
->  }
->  
->  #define ENUM_CHIP_TYPE_CASE(x) \
-> -	case x: return(#x + 15);	/* Skip CVMX_CHIP_TYPE */
-> +	case x: return (&#x[15]);	/* Skip CVMX_CHIP_TYPE */
->  static inline const char *cvmx_chip_type_to_string(enum
->  						   cvmx_chip_types_enum type)
->  {
-> -- 
-> 2.32.0
-> 
+The mmc patches need ACKs, but I can take them too.
