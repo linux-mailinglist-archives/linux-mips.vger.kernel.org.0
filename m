@@ -2,148 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF9D47985A
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Dec 2021 04:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F789479860
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Dec 2021 04:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbhLRDXS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 17 Dec 2021 22:23:18 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:50020 "EHLO loongson.cn"
+        id S231845AbhLRDX1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Dec 2021 22:23:27 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:50074 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229580AbhLRDXS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 17 Dec 2021 22:23:18 -0500
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxnN0eVL1hYvUBAA--.8171S5;
-        Sat, 18 Dec 2021 11:23:12 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+        id S231789AbhLRDXZ (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 17 Dec 2021 22:23:25 -0500
+Received: from loongson-pc (unknown [111.9.175.10])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxjN0gVL1hY_UBAA--.4493S2;
+        Sat, 18 Dec 2021 11:23:14 +0800 (CST)
+Date:   Sat, 18 Dec 2021 11:23:12 +0800
+From:   Huang Pei <huangpei@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] MIPS: signal: Remove unnecessary DEBUG_SIG related code
-Date:   Sat, 18 Dec 2021 11:23:09 +0800
-Message-Id: <1639797789-3001-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1639797789-3001-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1639797789-3001-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9BxnN0eVL1hYvUBAA--.8171S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFy8Gw1rXFyrZr4DArW7CFg_yoW5tw4kpF
-        4jka4kGrZFqw1DuFyDX3sYgryfAr98Cw129F4qka4rZa4SqF1rJF9aq3Wqvr1YvrykWF1f
-        KFWYva12yws5AaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBS14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gr4l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
-        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMI
-        IF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUUUDGDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+Cc:     ambrosehua@gmail.com, Bibo Mao <maobibo@loongson.cn>,
+        linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH 1/4] MIPS: fix local_{add,sub}_return on MIPS64
+Message-ID: <20211218032312.4lwoo2moxptw2hcq@loongson-pc>
+References: <20211215084500.24444-1-huangpei@loongson.cn>
+ <20211215084500.24444-2-huangpei@loongson.cn>
+ <20211216124948.GA12930@alpha.franken.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211216124948.GA12930@alpha.franken.de>
+User-Agent: NeoMutt/20180716
+X-CM-TRANSID: AQAAf9BxjN0gVL1hY_UBAA--.4493S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFy5Gw15Zryrtr1rKr4kWFg_yoW8GFW8pF
+        srAa4vkF4UWFW5C348KFn3KF43K395Kr40gFyjgrWvyFy7Xrn5Ww109r45GrykWw48ta48
+        Wrs5X3Z5Zryay37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+        UUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Since DEBUG_SIG is not defined on MIPS, so DEBUGP() is an empty function.
-Additionally, it is unacceptable to printk message in the normal path of
-signal handling, the system can not work well if DEBUG_SIG is defined, so
-just remove the related code.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/kernel/signal-common.h | 8 --------
- arch/mips/kernel/signal.c        | 7 -------
- arch/mips/kernel/signal_n32.c    | 4 ----
- arch/mips/kernel/signal_o32.c    | 8 --------
- 4 files changed, 27 deletions(-)
-
-diff --git a/arch/mips/kernel/signal-common.h b/arch/mips/kernel/signal-common.h
-index f50d484..f70135f 100644
---- a/arch/mips/kernel/signal-common.h
-+++ b/arch/mips/kernel/signal-common.h
-@@ -11,14 +11,6 @@
- #ifndef __SIGNAL_COMMON_H
- #define __SIGNAL_COMMON_H
- 
--/* #define DEBUG_SIG */
--
--#ifdef DEBUG_SIG
--#  define DEBUGP(fmt, args...) printk("%s: " fmt, __func__, ##args)
--#else
--#  define DEBUGP(fmt, args...)
--#endif
--
- /*
-  * Determine which stack to use..
-  */
-diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
-index 4cd3969..feb0cba 100644
---- a/arch/mips/kernel/signal.c
-+++ b/arch/mips/kernel/signal.c
-@@ -743,9 +743,6 @@ static int setup_frame(void *sig_return, struct ksignal *ksig,
- 	regs->regs[31] = (unsigned long) sig_return;
- 	regs->cp0_epc = regs->regs[25] = (unsigned long) ksig->ka.sa.sa_handler;
- 
--	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
--	       current->comm, current->pid,
--	       frame, regs->cp0_epc, regs->regs[31]);
- 	return 0;
- }
- #endif
-@@ -803,10 +800,6 @@ static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
- 	regs->regs[31] = (unsigned long) sig_return;
- 	regs->cp0_epc = regs->regs[25] = (unsigned long) ksig->ka.sa.sa_handler;
- 
--	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
--	       current->comm, current->pid,
--	       frame, regs->cp0_epc, regs->regs[31]);
--
- 	return 0;
- }
- 
-diff --git a/arch/mips/kernel/signal_n32.c b/arch/mips/kernel/signal_n32.c
-index 7bd00fa..d0e3f74 100644
---- a/arch/mips/kernel/signal_n32.c
-+++ b/arch/mips/kernel/signal_n32.c
-@@ -130,10 +130,6 @@ static int setup_rt_frame_n32(void *sig_return, struct ksignal *ksig,
- 	regs->regs[31] = (unsigned long) sig_return;
- 	regs->cp0_epc = regs->regs[25] = (unsigned long) ksig->ka.sa.sa_handler;
- 
--	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
--	       current->comm, current->pid,
--	       frame, regs->cp0_epc, regs->regs[31]);
--
- 	return 0;
- }
- 
-diff --git a/arch/mips/kernel/signal_o32.c b/arch/mips/kernel/signal_o32.c
-index 299a7a2..3691f74 100644
---- a/arch/mips/kernel/signal_o32.c
-+++ b/arch/mips/kernel/signal_o32.c
-@@ -144,10 +144,6 @@ static int setup_frame_32(void *sig_return, struct ksignal *ksig,
- 	regs->regs[31] = (unsigned long) sig_return;
- 	regs->cp0_epc = regs->regs[25] = (unsigned long) ksig->ka.sa.sa_handler;
- 
--	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
--	       current->comm, current->pid,
--	       frame, regs->cp0_epc, regs->regs[31]);
--
- 	return 0;
- }
- 
-@@ -230,10 +226,6 @@ static int setup_rt_frame_32(void *sig_return, struct ksignal *ksig,
- 	regs->regs[31] = (unsigned long) sig_return;
- 	regs->cp0_epc = regs->regs[25] = (unsigned long) ksig->ka.sa.sa_handler;
- 
--	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
--	       current->comm, current->pid,
--	       frame, regs->cp0_epc, regs->regs[31]);
--
- 	return 0;
- }
- 
--- 
-2.1.0
+On Thu, Dec 16, 2021 at 01:49:48PM +0100, Thomas Bogendoerfer wrote:
+> On Wed, Dec 15, 2021 at 04:44:57PM +0800, Huang Pei wrote:
+> > Use "daddu/dsubu" for long int on MIPS64 instead of "addu/subu"
+> > 
+> > Fixes: 7232311ef14c ("local_t: mips extension")
+> > Signed-off-by: Huang Pei <huangpei@loongson.cn>
+> > ---
+> >  arch/mips/include/asm/llsc.h  | 4 ++++
+> >  arch/mips/include/asm/local.h | 8 ++++----
+> >  2 files changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/mips/include/asm/llsc.h b/arch/mips/include/asm/llsc.h
+> > index ec09fe5d6d6c..8cc28177c37f 100644
+> > --- a/arch/mips/include/asm/llsc.h
+> > +++ b/arch/mips/include/asm/llsc.h
+> > @@ -14,10 +14,14 @@
+> >  #if _MIPS_SZLONG == 32
+> >  #define __LL		"ll	"
+> >  #define __SC		"sc	"
+> > +#define __ADDU		"addu	"
+> > +#define __SUBU		"subu	"
+> >  #define __INS		"ins	"
+> >  #define __EXT		"ext	"
+> >  #elif _MIPS_SZLONG == 64
+> >  #define __LL		"lld	"
+> > +#define __ADDU		"daddu	"
+> > +#define __SUBU		"dsubu	"
+> >  #define __SC		"scd	"
+> >  #define __INS		"dins	"
+> >  #define __EXT		"dext	"
+> 
+> maybe I wasn't clear enough, I don't want your orginal fix, but use
+> fix patch using __stringify(LONG_ADDU)/__stringify(LONG_SUBU).
+> 
+> Thomas.
+> 
+My point is to keep code style in consistency. If you insist, you can
+fix it by yourself. It is ok, I don't mind.
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
 
