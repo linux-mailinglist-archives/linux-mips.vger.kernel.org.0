@@ -2,96 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCBA479A23
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Dec 2021 11:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75547479B28
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Dec 2021 15:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbhLRKF0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 18 Dec 2021 05:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbhLRKF0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 18 Dec 2021 05:05:26 -0500
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0429C061574
-        for <linux-mips@vger.kernel.org>; Sat, 18 Dec 2021 02:05:25 -0800 (PST)
-Received: from terra.local.svanheule.net (unknown [IPv6:2a02:a03f:eafe:c901:e9c7:274f:a8f6:5f25])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id C72FC282FBC;
-        Sat, 18 Dec 2021 11:05:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1639821923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H2SKZv6WDFCLBPFkqaOhYWcJOAHmG0CfGPXMaenmT9I=;
-        b=t2oZ9oVSOkAO/ti0EEg6BCyib0jP8RMYivk8MpZ+RRLk1ZiL0JnewS2ND31Um/1SKooqSM
-        ZXBE1EkHxzBwptJStCP2YjYiMX1JI1PeJi316NW9sn3hUsfwPqXExdHfFvmmW+rAS89rpe
-        M4GDGVZnaIBqrwqCQiDV3s6G18Ria8dqFFqdBr66kziPjk5lSHtkHGuvBx/D7O3I8nKDnW
-        z/VcQxrkSNC4mWivDxXQ7SMzLzFqit94bVSVuqm/1tJGqtJVkgAMvcz2Ca6HQ4WHJtaDjS
-        Y6dw8S6DDlOQKO8xtulnYCtLNCKXvPTTMhKt1YjwGgvcUhGA2fwpDovylpS9sw==
-From:   Sander Vanheule <sander@svanheule.net>
-To:     linux-mips@vger.kernel.org
-Cc:     INAGAKI Hiroshi <musashino.open@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org,
-        Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH v2 2/2] MIPS: generic: enable SMP on SMVP systems
-Date:   Sat, 18 Dec 2021 11:05:11 +0100
-Message-Id: <20211218100511.42508-3-sander@svanheule.net>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211218100511.42508-1-sander@svanheule.net>
-References: <20211218100511.42508-1-sander@svanheule.net>
+        id S233319AbhLROIO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 18 Dec 2021 09:08:14 -0500
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:48259 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230185AbhLROIN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 18 Dec 2021 09:08:13 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id EB4CE5C00B5;
+        Sat, 18 Dec 2021 09:08:12 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sat, 18 Dec 2021 09:08:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=y
+        G8E8NafU5nFfy3ppS+9sVq5TWWnS/0M4pY+VrrpzF4=; b=VcsMVtoFnsKXCdUFu
+        VOgN0gHbj8AYPRWn68vBjW6RFnhTHUoyy1jNboHZE3vN4zZmoZicF3JVPoZpHI6h
+        KSZTqFZSXaBK6WF1J/hfVPwAqMs6kW9F34Suf9YRBjcHCsx2RoEcwcex/9cno1If
+        ZTG4kvtAhH+jFmqMWTEqypK4fmDXFZXKHnHENNXsb/Jhc6Z8bzdciTF7Ml3pu9f8
+        rAvX7mqChwQMyCRlytjfkU0neTewIIjqvdAEAt92xX5SagJzSpsij+jnWwtnxq0T
+        k4CBAw5dnICPtirpHApqWslrkvPwH2Dr/CXBFH48ROHUMDO3F/dlDYDR8BDBExSd
+        gJb5Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=yG8E8NafU5nFfy3ppS+9sVq5TWWnS/0M4pY+Vrrpz
+        F4=; b=CjD+CcfCEWvNzE6BIrdPXXqh/OLjKPyT4gKX3KC6S9V79FyURipl1yDLe
+        nnzBi5TkhtRnRZ7iVXyLqmNC1c1UrFvQjGEp+20aCEUFAnb33sSn9cq0MLoRVSE7
+        Z1ybnUfFAs5w4arKa+XzcTHkLKpD19tn5zCvTxd267075XKQl2rH6ThTjhjYPjm3
+        duZEDzUbMpGu/ncbmKKYFon/Bn9d8FeSh1ZHGspendA+xL58GqgiKmPzCsfyZcvY
+        LO9Ik/xjHPgVyvXpSuT3XjZdszAlH3oCy81MIyIUulmSkPMRWq6eJ5wA9d4ppzkb
+        derCRkdcW0anVcfACVt3GrefiwItA==
+X-ME-Sender: <xms:TOu9YVkEtO-lifxOCEQmSR5yBdYFnROU3OGNvnztWaQcC8TUnNWzQw>
+    <xme:TOu9YQ3sj0OcisxVGEqfZL_PWP5dlQmM_2vG4zEu6jP0cqnge-Rmr3McsWVjkJjVl
+    5GBKVZZGdQRUtZiqJQ>
+X-ME-Received: <xmr:TOu9YbqHt-t_RtqfvWH4MhbZwZjs1C2phvLydLROMRChw5SmniNcDNUQcd2FfPk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrleekgdehlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepheeiuddvvefhkeejfedttdekieethfdukedvieeuueelgfelieej
+    geehvdekudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:TOu9YVlScfH0jXOfjDh1HVPROtenM-Nlkkzl4K9L_Ypt3xdPSzXwtw>
+    <xmx:TOu9YT3Ki_GDwrnQF4HkGivb_pFtMUsw45YmOBBBEPTcaOCcLxb8yg>
+    <xmx:TOu9YUuGWkfe_0SUBF0T68PxS_E3iuwSLfQEQSx39-at5ah6DAy0zA>
+    <xmx:TOu9YUxKk09vpYgG3JX6t1vzZAKns-GoD0Gc544tHLt-chgbw5Sp4A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 18 Dec 2021 09:08:11 -0500 (EST)
+Message-ID: <a04357b6-c762-ebbe-e983-ee2890b97be9@flygoat.com>
+Date:   Sat, 18 Dec 2021 14:08:10 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH 2/3] MIPS: signal: Return immediately if call fails
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1639797789-3001-1-git-send-email-yangtiezhu@loongson.cn>
+ <1639797789-3001-3-git-send-email-yangtiezhu@loongson.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <1639797789-3001-3-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In addition to CPS SMP setups, also try to initialise MT SMP setups with
-multiple VPEs per CPU core. CMP SMP support is not provided as it is
-considered deprecated.
 
-Additionally, rework the code by dropping the err variable and make it
-similar to how other platforms perform this initialisation.
 
-Co-developed-by: INAGAKI Hiroshi <musashino.open@gmail.com>
-Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
-Signed-off-by: Sander Vanheule <sander@svanheule.net>
----
- arch/mips/generic/init.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+在 2021/12/18 3:23, Tiezhu Yang 写道:
+> When debug sigaltstack(), copy_siginfo_to_user() fails first in
+> setup_rt_frame() if the alternate signal stack is too small, so
+> it should return immediately if call fails, no need to call the
+> following functions.
 
-diff --git a/arch/mips/generic/init.c b/arch/mips/generic/init.c
-index 1842cddd8356..1d712eac1617 100644
---- a/arch/mips/generic/init.c
-+++ b/arch/mips/generic/init.c
-@@ -110,14 +110,15 @@ void __init plat_mem_setup(void)
- 
- void __init device_tree_init(void)
- {
--	int err;
--
- 	unflatten_and_copy_device_tree();
- 	mips_cpc_probe();
- 
--	err = register_cps_smp_ops();
--	if (err)
--		err = register_up_smp_ops();
-+	if (!register_cps_smp_ops())
-+		return;
-+	if (!register_vsmp_smp_ops())
-+		return;
-+
-+	register_up_smp_ops();
- }
- 
- int __init apply_mips_fdt_fixups(void *fdt_out, size_t fdt_out_size,
--- 
-2.33.1
+Hi Tiezhu,
+
+Thanks for your patch.
+If we are doing so I see no reason for keeping the err variable.
+Just
+
+if (copy_siginfo_to_user(&frame->rs_info, &ksig->info))
+     return -EFAULT;
+
+seems much more clear.
+
+Thanks.
+
+- Jiaxun
+
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>   arch/mips/kernel/signal.c | 25 +++++++++++++++++++------
+>   1 file changed, 19 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
+> index c1632e8..4cd3969 100644
+> --- a/arch/mips/kernel/signal.c
+> +++ b/arch/mips/kernel/signal.c
+> @@ -761,15 +761,28 @@ static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
+>   		return -EFAULT;
+>   
+>   	/* Create siginfo.  */
+> -	err |= copy_siginfo_to_user(&frame->rs_info, &ksig->info);
+> +	err = copy_siginfo_to_user(&frame->rs_info, &ksig->info);
+> +	if (err)
+> +		return -EFAULT;
+>   
+>   	/* Create the ucontext.	 */
+> -	err |= __put_user(0, &frame->rs_uc.uc_flags);
+> -	err |= __put_user(NULL, &frame->rs_uc.uc_link);
+> -	err |= __save_altstack(&frame->rs_uc.uc_stack, regs->regs[29]);
+> -	err |= setup_sigcontext(regs, &frame->rs_uc.uc_mcontext);
+> -	err |= __copy_to_user(&frame->rs_uc.uc_sigmask, set, sizeof(*set));
+> +	err = __put_user(0, &frame->rs_uc.uc_flags);
+> +	if (err)
+> +		return -EFAULT;
+> +
+> +	err = __put_user(NULL, &frame->rs_uc.uc_link);
+> +	if (err)
+> +		return -EFAULT;
+> +
+> +	err = __save_altstack(&frame->rs_uc.uc_stack, regs->regs[29]);
+> +	if (err)
+> +		return -EFAULT;
+> +
+> +	err = setup_sigcontext(regs, &frame->rs_uc.uc_mcontext);
+> +	if (err)
+> +		return -EFAULT;
+>   
+> +	err = __copy_to_user(&frame->rs_uc.uc_sigmask, set, sizeof(*set));
+>   	if (err)
+>   		return -EFAULT;
+>   
 
