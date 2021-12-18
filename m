@@ -2,75 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 894B84797B1
-	for <lists+linux-mips@lfdr.de>; Sat, 18 Dec 2021 00:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E0047985C
+	for <lists+linux-mips@lfdr.de>; Sat, 18 Dec 2021 04:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbhLQX7H convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 17 Dec 2021 18:59:07 -0500
-Received: from mail-yb1-f176.google.com ([209.85.219.176]:39759 "EHLO
-        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbhLQX7H (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 17 Dec 2021 18:59:07 -0500
-Received: by mail-yb1-f176.google.com with SMTP id v203so10835219ybe.6;
-        Fri, 17 Dec 2021 15:59:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4F0gHTidMS+I/Mh8I+yQ11CWW3YbgxApHH85yQIIp/o=;
-        b=eLCR+YHqVJcHrBj0baXHo2a/wAtMnXC99VJzA+NeeOvU4Vbw/jW+YEmu82C/8uYvzA
-         kVmJtiWqPX6oySbKBK6HR0O9vjScvB7Q2Cmrc47vKTmzfV3q5VeETFcAZGBuWEtD5GgT
-         ou1fg/z7eMlnxtXxPEZlhYpn9rs3X29N0c2Fh9LfkyS28f3s8GqtwyXyva0ltQt19q1z
-         J8AWT6uG34bOWE62e/Dq/4qwp+ZhK4JMy4XrQhuRtLEGCZxDjKMqRRCIEBFVKX4PK0KC
-         HNDtbT52ZYN3so+n1iFfuD5CpFAV7Lqqv91xNTODKOEtTr69aSZqa1wX4/4kN193Z8qY
-         CgCQ==
-X-Gm-Message-State: AOAM530Qo/lzsvAlZXr+hyJQwAWTG3hcleEmGk2W/4nxrrAvCV0XDyJX
-        WfbNQvOsSkaXln82bfGolByXVHvhArVwQ0PshCkWTRZ/6nI=
-X-Google-Smtp-Source: ABdhPJwMtgJn9avrIgj5yxzhDON6+NfjkmC1bO6Wq9jC1fgXNPnyGvbiq9KKoqpSqD1lI64vDQ9LQMXw6ENvXywigAY=
-X-Received: by 2002:a25:54e:: with SMTP id 75mr7025346ybf.393.1639785546754;
- Fri, 17 Dec 2021 15:59:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20211216095014.11918-1-tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <20211216095014.11918-1-tianjia.zhang@linux.alibaba.com>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Sat, 18 Dec 2021 00:58:55 +0100
-Message-ID: <CAAdtpL5DbW4mdv2xtXCx3rpx+TKTdSLRZDOMj8o-ofsaQZnEwg@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Octeon: Fix build errors using clang
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Adrian Schmutzler <freifunk@adrianschmutzler.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        id S231823AbhLRDXT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 17 Dec 2021 22:23:19 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:50022 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231789AbhLRDXS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 17 Dec 2021 22:23:18 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxnN0eVL1hYvUBAA--.8171S2;
+        Sat, 18 Dec 2021 11:23:11 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] MIPS: signal: Modify some code
+Date:   Sat, 18 Dec 2021 11:23:06 +0800
+Message-Id: <1639797789-3001-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9BxnN0eVL1hYvUBAA--.8171S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYY7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280
+        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyT
+        uYvjfU84SoDUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 5:11 PM Tianjia Zhang
-<tianjia.zhang@linux.alibaba.com> wrote:
->
-> A large number of the following errors is reported when compiling
-> with clang:
->
->   cvmx-bootinfo.h:326:3: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
->                   ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NULL)
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
->           case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                          ~~~^~~~
->   cvmx-bootinfo.h:326:3: note: use array indexing to silence this warning
->   cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
->           case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ^
->
-> Follow the prompts to use the address operator '&' to fix this error.
->
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  arch/mips/include/asm/octeon/cvmx-bootinfo.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Tiezhu Yang (3):
+  MIPS: signal: Protect against sigaltstack wraparound
+  MIPS: signal: Return immediately if call fails
+  MIPS: signal: Remove unnecessary DEBUG_SIG related code
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+ arch/mips/kernel/signal-common.h |  8 --------
+ arch/mips/kernel/signal.c        | 39 ++++++++++++++++++++++++++-------------
+ arch/mips/kernel/signal_n32.c    |  4 ----
+ arch/mips/kernel/signal_o32.c    |  8 --------
+ 4 files changed, 26 insertions(+), 33 deletions(-)
+
+-- 
+2.1.0
+
