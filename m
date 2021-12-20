@@ -2,105 +2,163 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C3347A6EC
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Dec 2021 10:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4192547B160
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Dec 2021 17:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbhLTJXq (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Dec 2021 04:23:46 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:52249 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231521AbhLTJXd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Dec 2021 04:23:33 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---0V.B9zcn_1639992206;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V.B9zcn_1639992206)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 20 Dec 2021 17:23:27 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
+        id S237458AbhLTQlI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Dec 2021 11:41:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60774 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233061AbhLTQlG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Dec 2021 11:41:06 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A788761219;
+        Mon, 20 Dec 2021 16:41:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8EC6C36AE2;
+        Mon, 20 Dec 2021 16:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1640018465;
+        bh=TuP185pT5gdSlNtfNfQ+Kye5lOB+euhTli9+HNxshOM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=enGWQQJij7Gn5KXQIvc6DgLGhW8TsmstPvfbBL0Frpv76daIROB5Wk6RyCml6X1M0
+         INr/wU0RVuAcWcOkPbgbi5U7MaR0NTk6+o3rhiyEe0vywSW27g/jS59FjbvlDzhRr3
+         ovNt3nB3npaxHStYKaqE8ptag4HrP8L17DKCvcbQ=
+Date:   Mon, 20 Dec 2021 17:41:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        David Laight <David.Laight@aculab.com>,
+        Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Guo Ren <guoren@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
         Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH 5/5] crypto: s390/sha512 - Use macros instead of direct IV numbers
-Date:   Mon, 20 Dec 2021 17:23:18 +0800
-Message-Id: <20211220092318.5793-6-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211220092318.5793-1-tianjia.zhang@linux.alibaba.com>
-References: <20211220092318.5793-1-tianjia.zhang@linux.alibaba.com>
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
+        Joe Perches <joe@perches.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
+        Mark Gross <markgross@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 08/17] all: replace bitmap_weight with
+ bitmap_weight_{eq,gt,ge,lt,le} where appropriate
+Message-ID: <YcCyHvr1f+Z8M9M1@kroah.com>
+References: <20211218212014.1315894-1-yury.norov@gmail.com>
+ <20211218212014.1315894-9-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211218212014.1315894-9-yury.norov@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In the init functions of sha512 and sha384, the initial hash value
-use macros instead of numbers.
+On Sat, Dec 18, 2021 at 01:20:04PM -0800, Yury Norov wrote:
+> Kernel code calls bitmap_weight() to compare the weight of bitmap with
+> a given number. We can do it more efficiently with bitmap_weight_{eq, ...}
+> because conditional bitmap_weight may stop traversing the bitmap earlier,
+> as soon as condition is met.
+> 
+> This patch replaces bitmap_weight with conditional versions where possible,
+> except for small bitmaps which size is not configurable and  known at
+> constant time. In that case conditional version of bitmap_weight would not
+> benefit due to small_const_nbits() optimization; but readability may
+> suffer.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c                 |  2 +-
+>  drivers/iio/dummy/iio_simple_dummy_buffer.c            |  4 ++--
+>  drivers/iio/industrialio-trigger.c                     |  2 +-
+>  drivers/memstick/core/ms_block.c                       |  4 ++--
+>  drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c         |  2 +-
+>  .../net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c  |  2 +-
+>  .../net/ethernet/marvell/octeontx2/nic/otx2_flows.c    |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/cmd.c               | 10 +++-------
+>  drivers/net/ethernet/mellanox/mlx4/eq.c                |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/fw.c                |  4 ++--
+>  drivers/net/ethernet/mellanox/mlx4/main.c              |  2 +-
+>  drivers/perf/thunderx2_pmu.c                           |  4 ++--
+>  drivers/staging/media/tegra-video/vi.c                 |  2 +-
+>  13 files changed, 21 insertions(+), 25 deletions(-)
 
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
----
- arch/s390/crypto/sha512_s390.c | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+"all" is not how to submit changes to the kernel.  Please break them up
+into subsystem-specific patches, and send them after your core changes
+are accepted.
 
-diff --git a/arch/s390/crypto/sha512_s390.c b/arch/s390/crypto/sha512_s390.c
-index 29a6bd404c59..43ce4956df73 100644
---- a/arch/s390/crypto/sha512_s390.c
-+++ b/arch/s390/crypto/sha512_s390.c
-@@ -22,14 +22,14 @@ static int sha512_init(struct shash_desc *desc)
- {
- 	struct s390_sha_ctx *ctx = shash_desc_ctx(desc);
- 
--	*(__u64 *)&ctx->state[0] = 0x6a09e667f3bcc908ULL;
--	*(__u64 *)&ctx->state[2] = 0xbb67ae8584caa73bULL;
--	*(__u64 *)&ctx->state[4] = 0x3c6ef372fe94f82bULL;
--	*(__u64 *)&ctx->state[6] = 0xa54ff53a5f1d36f1ULL;
--	*(__u64 *)&ctx->state[8] = 0x510e527fade682d1ULL;
--	*(__u64 *)&ctx->state[10] = 0x9b05688c2b3e6c1fULL;
--	*(__u64 *)&ctx->state[12] = 0x1f83d9abfb41bd6bULL;
--	*(__u64 *)&ctx->state[14] = 0x5be0cd19137e2179ULL;
-+	*(__u64 *)&ctx->state[0] = SHA512_H0;
-+	*(__u64 *)&ctx->state[2] = SHA512_H1;
-+	*(__u64 *)&ctx->state[4] = SHA512_H2;
-+	*(__u64 *)&ctx->state[6] = SHA512_H3;
-+	*(__u64 *)&ctx->state[8] = SHA512_H4;
-+	*(__u64 *)&ctx->state[10] = SHA512_H5;
-+	*(__u64 *)&ctx->state[12] = SHA512_H6;
-+	*(__u64 *)&ctx->state[14] = SHA512_H7;
- 	ctx->count = 0;
- 	ctx->func = CPACF_KIMD_SHA_512;
- 
-@@ -87,14 +87,14 @@ static int sha384_init(struct shash_desc *desc)
- {
- 	struct s390_sha_ctx *ctx = shash_desc_ctx(desc);
- 
--	*(__u64 *)&ctx->state[0] = 0xcbbb9d5dc1059ed8ULL;
--	*(__u64 *)&ctx->state[2] = 0x629a292a367cd507ULL;
--	*(__u64 *)&ctx->state[4] = 0x9159015a3070dd17ULL;
--	*(__u64 *)&ctx->state[6] = 0x152fecd8f70e5939ULL;
--	*(__u64 *)&ctx->state[8] = 0x67332667ffc00b31ULL;
--	*(__u64 *)&ctx->state[10] = 0x8eb44a8768581511ULL;
--	*(__u64 *)&ctx->state[12] = 0xdb0c2e0d64f98fa7ULL;
--	*(__u64 *)&ctx->state[14] = 0x47b5481dbefa4fa4ULL;
-+	*(__u64 *)&ctx->state[0] = SHA384_H0;
-+	*(__u64 *)&ctx->state[2] = SHA384_H1;
-+	*(__u64 *)&ctx->state[4] = SHA384_H2;
-+	*(__u64 *)&ctx->state[6] = SHA384_H3;
-+	*(__u64 *)&ctx->state[8] = SHA384_H4;
-+	*(__u64 *)&ctx->state[10] = SHA384_H5;
-+	*(__u64 *)&ctx->state[12] = SHA384_H6;
-+	*(__u64 *)&ctx->state[14] = SHA384_H7;
- 	ctx->count = 0;
- 	ctx->func = CPACF_KIMD_SHA_512;
- 
--- 
-2.32.0
+good luck!
 
+greg k-h
