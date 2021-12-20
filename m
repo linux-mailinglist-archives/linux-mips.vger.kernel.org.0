@@ -2,163 +2,211 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4192547B160
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Dec 2021 17:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 903B647B30B
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Dec 2021 19:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237458AbhLTQlI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Dec 2021 11:41:08 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60774 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233061AbhLTQlG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Dec 2021 11:41:06 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A788761219;
-        Mon, 20 Dec 2021 16:41:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8EC6C36AE2;
-        Mon, 20 Dec 2021 16:41:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1640018465;
-        bh=TuP185pT5gdSlNtfNfQ+Kye5lOB+euhTli9+HNxshOM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=enGWQQJij7Gn5KXQIvc6DgLGhW8TsmstPvfbBL0Frpv76daIROB5Wk6RyCml6X1M0
-         INr/wU0RVuAcWcOkPbgbi5U7MaR0NTk6+o3rhiyEe0vywSW27g/jS59FjbvlDzhRr3
-         ovNt3nB3npaxHStYKaqE8ptag4HrP8L17DKCvcbQ=
-Date:   Mon, 20 Dec 2021 17:41:02 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        David Laight <David.Laight@aculab.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Guo Ren <guoren@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Jens Axboe <axboe@fb.com>, Jiri Olsa <jolsa@redhat.com>,
-        Joe Perches <joe@perches.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Marcin Wojtas <mw@semihalf.com>,
-        Mark Gross <markgross@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Solomon Peachy <pizza@shaftnet.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Tariq Toukan <tariqt@nvidia.com>, Tejun Heo <tj@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, kvm@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 08/17] all: replace bitmap_weight with
- bitmap_weight_{eq,gt,ge,lt,le} where appropriate
-Message-ID: <YcCyHvr1f+Z8M9M1@kroah.com>
-References: <20211218212014.1315894-1-yury.norov@gmail.com>
- <20211218212014.1315894-9-yury.norov@gmail.com>
+        id S240508AbhLTSml (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Dec 2021 13:42:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240502AbhLTSml (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 20 Dec 2021 13:42:41 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBA7C061574;
+        Mon, 20 Dec 2021 10:42:40 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id cf39so23739615lfb.8;
+        Mon, 20 Dec 2021 10:42:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/B6DvIqPMwlSVR6jVcqcmHQyA/k1m4TC+f89S6pXSVg=;
+        b=M205RQy7JwG8A5YBZYhvvTYxxsMlsX7puP2isVqnUuSrXgQSLkVJe55lz566iIcYxd
+         kk1+Y+QyjmM1ZSUB75X+GOIMjJGYn6GuNpn8dEH7EPAhix00XT8QuxKdAEyARshiIp9l
+         8C1hT3KMI9k/ofqdoEpVAiUoeIHOJs8YSOin39gaw88TLjghmJTHTiOUhsQ67+jDp/zz
+         t641xe+BaXAz/9Vf9W1LjQXpO9mcOoAJ3eodh7sPM/awqNO5fKMuKeDNu02DQaeExqQG
+         JOjCqGn2QbeiY2SnPMGusgbINGXbJouae9/CGH+bRK57Rm14cFKPl1EqPJEjUQLNWy2c
+         HeBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/B6DvIqPMwlSVR6jVcqcmHQyA/k1m4TC+f89S6pXSVg=;
+        b=R0Rc6r+hy4ogBAvE+2ooef8MgNoMUyW0Z3sckYuqpJ4JTQtPNOkeqm/O177Iyv+hNn
+         IBOjF6/Tn2jSI2NVdhRqdLquzYzjvrbOjWrrT2TtQPkw5C/js9Ein52mtSxTcn0Xcxwb
+         2VDUwPQnIxybgAwwOEOuQ3TJktKufOC/NoFpt30rKCRbOXjOmS1xt1pAAnY6U2ACNqmb
+         OM0RDsqQ7SFqwAywAtCvLnpKFdL4/y9YbF2F0I8wgUYVGHCM7hHAP++j6IVxe+Ts2Td0
+         uAk9r+iO/st7VOnDD7NrUTZuIKFcZEtSAbtAuIbhBY6SmU5Isi3oV43L9dCX+/AsAShc
+         oQuA==
+X-Gm-Message-State: AOAM533eMFqbUHe8AGO3ZhMniBACPcqzu/yLwiOXxU4N7FH0OGOZSUl3
+        CAHY30y/eGGBjbzkZMU3swk=
+X-Google-Smtp-Source: ABdhPJxrO0tXLkd6P533o5FnLjfiM6+dBkruUiqDKwbuhxKPifPAWiWVn3hrHme2uLXhyhPYUFbXgA==
+X-Received: by 2002:a05:6512:3995:: with SMTP id j21mr990465lfu.360.1640025758797;
+        Mon, 20 Dec 2021 10:42:38 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id s10sm239682lfr.45.2021.12.20.10.42.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Dec 2021 10:42:38 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] nvmem: brcm_nvram: parse NVRAM content into NVMEM cells
+Date:   Mon, 20 Dec 2021 19:42:25 +0100
+Message-Id: <20211220184226.6485-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211218212014.1315894-9-yury.norov@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Dec 18, 2021 at 01:20:04PM -0800, Yury Norov wrote:
-> Kernel code calls bitmap_weight() to compare the weight of bitmap with
-> a given number. We can do it more efficiently with bitmap_weight_{eq, ...}
-> because conditional bitmap_weight may stop traversing the bitmap earlier,
-> as soon as condition is met.
-> 
-> This patch replaces bitmap_weight with conditional versions where possible,
-> except for small bitmaps which size is not configurable and  known at
-> constant time. In that case conditional version of bitmap_weight would not
-> benefit due to small_const_nbits() optimization; but readability may
-> suffer.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c                 |  2 +-
->  drivers/iio/dummy/iio_simple_dummy_buffer.c            |  4 ++--
->  drivers/iio/industrialio-trigger.c                     |  2 +-
->  drivers/memstick/core/ms_block.c                       |  4 ++--
->  drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c         |  2 +-
->  .../net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c  |  2 +-
->  .../net/ethernet/marvell/octeontx2/nic/otx2_flows.c    |  4 ++--
->  drivers/net/ethernet/mellanox/mlx4/cmd.c               | 10 +++-------
->  drivers/net/ethernet/mellanox/mlx4/eq.c                |  4 ++--
->  drivers/net/ethernet/mellanox/mlx4/fw.c                |  4 ++--
->  drivers/net/ethernet/mellanox/mlx4/main.c              |  2 +-
->  drivers/perf/thunderx2_pmu.c                           |  4 ++--
->  drivers/staging/media/tegra-video/vi.c                 |  2 +-
->  13 files changed, 21 insertions(+), 25 deletions(-)
+From: Rafał Miłecki <rafal@milecki.pl>
 
-"all" is not how to submit changes to the kernel.  Please break them up
-into subsystem-specific patches, and send them after your core changes
-are accepted.
+NVRAM consist of header and NUL separated key-value pairs. Parse it and
+create NVMEM cell for every key-value entry.
 
-good luck!
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ drivers/nvmem/brcm_nvram.c | 93 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
 
-greg k-h
+diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
+index bd2ecaaf4585..01ad96c52809 100644
+--- a/drivers/nvmem/brcm_nvram.c
++++ b/drivers/nvmem/brcm_nvram.c
+@@ -6,12 +6,26 @@
+ #include <linux/io.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
++#include <linux/nvmem-consumer.h>
+ #include <linux/nvmem-provider.h>
+ #include <linux/platform_device.h>
++#include <linux/slab.h>
++
++#define NVRAM_MAGIC			"FLSH"
+ 
+ struct brcm_nvram {
+ 	struct device *dev;
+ 	void __iomem *base;
++	struct nvmem_cell_info *cells;
++	int ncells;
++};
++
++struct brcm_nvram_header {
++	char magic[4];
++	__le32 len;
++	__le32 crc_ver_init;	/* 0:7 crc, 8:15 ver, 16:31 sdram_init */
++	__le32 config_refresh;	/* 0:15 sdram_config, 16:31 sdram_refresh */
++	__le32 config_ncdl;	/* ncdl values for memc */
+ };
+ 
+ static int brcm_nvram_read(void *context, unsigned int offset, void *val,
+@@ -26,6 +40,78 @@ static int brcm_nvram_read(void *context, unsigned int offset, void *val,
+ 	return 0;
+ }
+ 
++static int brcm_nvram_add_cells(struct brcm_nvram *priv, uint8_t *data,
++				size_t len)
++{
++	struct device *dev = priv->dev;
++	char *var, *value, *eq;
++	int idx;
++
++	priv->ncells = 0;
++	for (var = data + sizeof(struct brcm_nvram_header);
++	     var < (char *)data + len && *var;
++	     var += strlen(var) + 1) {
++		priv->ncells++;
++	}
++	dev_info(dev, "ncells:%d", priv->ncells);
++
++	priv->cells = devm_kcalloc(dev, priv->ncells, sizeof(*priv->cells), GFP_KERNEL);
++	if (!priv->cells)
++		return -ENOMEM;
++
++	for (var = data + sizeof(struct brcm_nvram_header), idx = 0;
++	     var < (char *)data + len && *var;
++	     var = value + strlen(value) + 1, idx++) {
++		eq = strchr(var, '=');
++		if (!eq)
++			break;
++		*eq = '\0';
++		value = eq + 1;
++
++		dev_info(dev, "%s: %s", var, value);
++
++		priv->cells[idx].name = devm_kstrdup(dev, var, GFP_KERNEL);
++		if (!priv->cells[idx].name)
++			return -ENOMEM;
++		priv->cells[idx].offset = value - (char *)data;
++		priv->cells[idx].bytes = strlen(value);
++	}
++
++	return 0;
++}
++
++static int brcm_nvram_parse(struct brcm_nvram *priv)
++{
++	struct device *dev = priv->dev;
++	struct brcm_nvram_header header;
++	uint8_t *data;
++	size_t len;
++	int err;
++
++	memcpy_fromio(&header, priv->base, sizeof(header));
++
++	if (memcmp(header.magic, NVRAM_MAGIC, 4)) {
++		dev_err(dev, "Invalid NVRAM magic\n");
++		return -EINVAL;
++	}
++
++	len = le32_to_cpu(header.len);
++
++	data = kcalloc(1, len, GFP_KERNEL);
++	memcpy_fromio(data, priv->base, len);
++	data[len - 1] = '\0';
++
++	err = brcm_nvram_add_cells(priv, data, len);
++	if (err) {
++		dev_err(dev, "Failed to add cells: %d\n", err);
++		return err;
++	}
++
++	kfree(data);
++
++	return 0;
++}
++
+ static int brcm_nvram_probe(struct platform_device *pdev)
+ {
+ 	struct nvmem_config config = {
+@@ -35,6 +121,7 @@ static int brcm_nvram_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct resource *res;
+ 	struct brcm_nvram *priv;
++	int err;
+ 
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+@@ -46,7 +133,13 @@ static int brcm_nvram_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
+ 
++	err = brcm_nvram_parse(priv);
++	if (err)
++		return err;
++
+ 	config.dev = dev;
++	config.cells = priv->cells;
++	config.ncells = priv->ncells;
+ 	config.priv = priv;
+ 	config.size = resource_size(res);
+ 
+-- 
+2.31.1
+
