@@ -2,86 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABC747B37D
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Dec 2021 20:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C51247B3BE
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Dec 2021 20:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240694AbhLTTJK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 20 Dec 2021 14:09:10 -0500
-Received: from aposti.net ([89.234.176.197]:34378 "EHLO aposti.net"
+        id S240813AbhLTTd1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 20 Dec 2021 14:33:27 -0500
+Received: from aposti.net ([89.234.176.197]:38746 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240733AbhLTTJH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 20 Dec 2021 14:09:07 -0500
+        id S237942AbhLTTd0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 20 Dec 2021 14:33:26 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>
-Cc:     list@opendingux.net, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 2/2] mmc: jz4740: Support using a bi-directional DMA channel
-Date:   Mon, 20 Dec 2021 19:08:40 +0000
-Message-Id: <20211220190840.108061-3-paul@crapouillou.net>
-In-Reply-To: <20211220190840.108061-1-paul@crapouillou.net>
-References: <20211220190840.108061-1-paul@crapouillou.net>
+Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v3 0/2] clk: ingenic: Add MDMA and BDMA clocks
+Date:   Mon, 20 Dec 2021 19:33:17 +0000
+Message-Id: <20211220193319.114974-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Since the MMC/SD controller in Ingenic SoCs work in half-duplex, it is
-possible to use one single DMA channel for both TX and RX operations,
-instead of using separate channels.
+Hi Michael & Stephen,
 
-As some older Ingenic SoCs offer only a handful of DMA channels,
-supporting bi-directional channels allow more hardware to use the
-channels that would otherwise be used for the MMC/SD operation.
+Only the first patch (a tree-wide patch to rename include files)
+of my v2 was merged, so I thought I'd send the second patch again. Since
+checkpatch complained that DT includes must be in their own patch,
+I just did that and decided to send a V3 instead of a RESEND.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/mmc/host/jz4740_mmc.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+Changes from v2:
+- Previous patch [1/2] was merged
+- Split previous patch [2/2] into two patches
 
-diff --git a/drivers/mmc/host/jz4740_mmc.c b/drivers/mmc/host/jz4740_mmc.c
-index 80a2c270d502..a0b94f61ddcf 100644
---- a/drivers/mmc/host/jz4740_mmc.c
-+++ b/drivers/mmc/host/jz4740_mmc.c
-@@ -217,11 +217,23 @@ static void jz4740_mmc_release_dma_channels(struct jz4740_mmc_host *host)
- 		return;
- 
- 	dma_release_channel(host->dma_tx);
--	dma_release_channel(host->dma_rx);
-+	if (host->dma_rx)
-+		dma_release_channel(host->dma_rx);
- }
- 
- static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
- {
-+	struct device *dev = mmc_dev(host->mmc);
-+
-+	host->dma_tx = dma_request_chan(dev, "tx-rx");
-+	if (!IS_ERR(host->dma_tx))
-+		return 0;
-+
-+	if (PTR_ERR(host->dma_tx) != -ENODEV) {
-+		dev_err(dev, "Failed to get dma tx-rx channel\n");
-+		return PTR_ERR(host->dma_tx);
-+	}
-+
- 	host->dma_tx = dma_request_chan(mmc_dev(host->mmc), "tx");
- 	if (IS_ERR(host->dma_tx)) {
- 		dev_err(mmc_dev(host->mmc), "Failed to get dma_tx channel\n");
-@@ -241,7 +253,10 @@ static int jz4740_mmc_acquire_dma_channels(struct jz4740_mmc_host *host)
- static inline struct dma_chan *jz4740_mmc_get_dma_chan(struct jz4740_mmc_host *host,
- 						       struct mmc_data *data)
- {
--	return (data->flags & MMC_DATA_READ) ? host->dma_rx : host->dma_tx;
-+	if ((data->flags & MMC_DATA_READ) && host->dma_rx)
-+		return host->dma_rx;
-+	else
-+		return host->dma_tx;
- }
- 
- static void jz4740_mmc_dma_unmap(struct jz4740_mmc_host *host,
+Cheers,
+-Paul
+
+Paul Cercueil (2):
+  dt-bindings: clk/ingenic: Add MDMA and BDMA clocks
+  clk: ingenic: Add MDMA and BDMA clocks
+
+ drivers/clk/ingenic/jz4760-cgu.c               | 10 ++++++++++
+ drivers/clk/ingenic/jz4770-cgu.c               |  5 +++++
+ include/dt-bindings/clock/ingenic,jz4760-cgu.h |  2 ++
+ include/dt-bindings/clock/ingenic,jz4770-cgu.h |  1 +
+ 4 files changed, 18 insertions(+)
+
 -- 
 2.34.1
 
