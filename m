@@ -2,80 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7094F47C48A
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Dec 2021 18:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48F947C6B1
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Dec 2021 19:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240224AbhLURBs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Dec 2021 12:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240227AbhLURBr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Dec 2021 12:01:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B88C061574;
-        Tue, 21 Dec 2021 09:01:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08554B817C5;
-        Tue, 21 Dec 2021 17:01:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81050C36AEC;
-        Tue, 21 Dec 2021 17:01:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640106104;
-        bh=5T//5GQugAmz1CEViBCCmsXDs4J5BoJEcY/PJqyOdEA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ya5sC66uzXxa7udtqo/unVjSwoVcTSBjptfJw0RYyTUVDE5oX9+M504c435ZgQyBK
-         CaWRH0BVMHqbBzk3gvaE3HqqMpgsEQb/drJi0wMSuBfKzLL0S81UhispyKobCvYqbw
-         g8RpTdht/DMzv4i7nYcl3kmmkyePlFagSwR09dIq7rv+PC+fzcrHmJwor4Nx+dGHxU
-         nFSO7Nh/8NBsBUlCA/lWWFDUJxdGavC9OUFEXCEJeexB+o7Vib9O+36R5+GWXgfqrh
-         Vk5CLMreK1SrxVUkKqA0NnZPFt2df8Ir0fs7VD/AnJ+po7zceJU21PauXCitI0BsEF
-         r6+BrSBpUMEgg==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, will@kernel.org, tglx@linutronix.de,
-        benh@kernel.crashing.org, arnd@arndb.de, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.or,
-        linuxppc-dev@lists.ozlabs.org, inux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 8/8] sched: mips: Remove unused TASK_SIZE_OF
-Date:   Wed, 22 Dec 2021 01:00:57 +0800
-Message-Id: <20211221170057.2637763-9-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211221170057.2637763-1-guoren@kernel.org>
-References: <20211221170057.2637763-1-guoren@kernel.org>
+        id S237303AbhLUSdl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Dec 2021 13:33:41 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:60277 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233866AbhLUSdk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Dec 2021 13:33:40 -0500
+Received: from mail-lj1-f169.google.com ([209.85.208.169]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MA844-1nADHt0GWg-00Bc2W; Tue, 21 Dec 2021 19:33:39 +0100
+Received: by mail-lj1-f169.google.com with SMTP id b19so22741727ljr.12;
+        Tue, 21 Dec 2021 10:33:38 -0800 (PST)
+X-Gm-Message-State: AOAM532SPmI13WrRQtDIXB/w4seTF8AOxEwKfqq6HzsxzA57lkvnGT5i
+        dbr6QYroCg7d+VNa/Hc4qJiCAcFTR6OPeQnKnEo=
+X-Google-Smtp-Source: ABdhPJxLPfvoBB+dfcIJaQqwJtQ3BevGRPxqadC+I3rCQp9PvcGuMoU65G3rfQPJYAfstpb2qB1NqFuHBwuqdhFOzcw=
+X-Received: by 2002:adf:f051:: with SMTP id t17mr3447981wro.192.1640107753248;
+ Tue, 21 Dec 2021 09:29:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211221170057.2637763-1-guoren@kernel.org> <20211221170057.2637763-2-guoren@kernel.org>
+In-Reply-To: <20211221170057.2637763-2-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 21 Dec 2021 18:28:57 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3_Ha89oH5NYx6zPzTBj9y8spCAeihcbjqQVriDv9jCaQ@mail.gmail.com>
+Message-ID: <CAK8P3a3_Ha89oH5NYx6zPzTBj9y8spCAeihcbjqQVriDv9jCaQ@mail.gmail.com>
+Subject: Re: [PATCH 1/8] sched: Remove unused TASK_SIZE_OF
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.or>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:3mNbFTCsQCLdexz0lNRo7TDSExMnsNoRzl52Qq/10skgGsq2NMd
+ hiMJFIjrjHOsJbCIQ2PZlecBeRVIyEtSWhqQCHAOcc9DlhwKnHjpRmSwxlc8g2zCe96Mus1
+ 8FmqMzpqsC4uw1H9Tz5v8Fo93CvLxelyRSG5sauhkcHZFjLjtbkhLeLgMaYR76RvPbFUHtz
+ +t+D5cUkHr3tJDE4XA80Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CHGcO7wWq08=:cVqUL4HobZ3TNA+3TxwBet
+ S4yYsR4PXHvryR/gSO1/judUKjOugN9nF1ZxLBsxSvTsarjPeb/FVfNHW8naWN5EH80jzREgm
+ cQbg0mTLWlh/oFD/xa3LAO23GAvrl0DxWdwsawe7HPn79Tu3ZGXluXqH9GMxINOp9mkzwX9Pi
+ 8wIbwWB0wiR6syfmfzCKcGzbna2Cl7/PI4/9cwhf8QmYJFLX+IHnydTm+JfuBIzzmEC10NQBx
+ eUSauINKD41TWgJshVo5eUTPAgqltRKPGg98+yP3LVlES5y1nGtMjb51WQriCazTKs0TNvbro
+ V/g7J8i89XmqnYFWJvd8P51dJALReze2bcEyhzF9jQXlm+S4LZjmL7G++n8qS+Yy25fIr6ReD
+ UPWAh3prCFRXVeq4GYR9AwRoYqOgF403QTyf9MaFh94OZQQzgwchwchti4BFPxtzQ9BCzhTCA
+ 6mVvUe8slt025xm5uhQ3Sd0KuTXCs+li63lrRLF5lmhwo/Vz40r7YLomTM/tSXcpbYnSmGHr8
+ SiDXZn0JiQ9EFfyrmgvOJBM5TaoLAl5njbFm5zuS5V6MRFj+QXEyBKylYh5xSQVHkBxFYGNXi
+ Q6xk4mfvM1q5BnQ0ms5+jodpKGM4dLv2RJJoDQ+OUUjoEOQ/QGoX/YzVjpLTF1uHRSeYkk2td
+ W1C9fAObitMw5MYrjuRgDIdTuRO354XZZRyS9EWZO1wOAk94Wtu15/8dkk6viuL9agatbPQkU
+ 4KCbMsC0hu0CfLpwUgzRH+3ErL7dS3x+QWDVjWdR/u/GS7UWUH/R5CtobnLZ+6H3FVdvBua6P
+ Rnd+OkzSXyl2x3upSaExdXTsqqEUhG3dnFi+PkqqAfq3uhcK+U=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Tue, Dec 21, 2021 at 6:00 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> This macro isn't used in Linux, now. Delete in include/linux/sched.h
+> and arch's include/asm. This would confuse people who are
+> implementing the COMPAT feature for architecture.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 
-This macro isn't used in Linux sched, now. Delete in
-include/linux/sched.h and arch's include/asm.
+It would help to list how long it has been unused for. Looking through
+the git history, I see commit a06db751c321 ("pagemap: check
+permissions and capabilities at open time") removing the last user.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- arch/mips/include/asm/processor.h | 3 ---
- 1 file changed, 3 deletions(-)
+I would normally offer to take the entire series through the asm-generic
+tree, as I do for this kind of cross-architecture work. I'll probably
+not have time before the merge window to pick it up though, so it
+may be better to go through the architecture trees, or possibly
+linux-mm for anything that fails to get picked up.
 
-diff --git a/arch/mips/include/asm/processor.h b/arch/mips/include/asm/processor.h
-index 4bb24579d12e..8871fc5b0baa 100644
---- a/arch/mips/include/asm/processor.h
-+++ b/arch/mips/include/asm/processor.h
-@@ -61,9 +61,6 @@ extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src
- #define TASK_SIZE (test_thread_flag(TIF_32BIT_ADDR) ? TASK_SIZE32 : TASK_SIZE64)
- #define STACK_TOP_MAX	TASK_SIZE64
- 
--#define TASK_SIZE_OF(tsk)						\
--	(test_tsk_thread_flag(tsk, TIF_32BIT_ADDR) ? TASK_SIZE32 : TASK_SIZE64)
--
- #define TASK_IS_32BIT_ADDR test_thread_flag(TIF_32BIT_ADDR)
- 
- #endif
--- 
-2.25.1
+For the series:
 
+Review-by: Arnd Bergmann <arnd@arndb.de>
