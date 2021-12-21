@@ -2,65 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5584947C115
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Dec 2021 14:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DF047C460
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Dec 2021 18:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238311AbhLUN6B (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 21 Dec 2021 08:58:01 -0500
-Received: from elvis.franken.de ([193.175.24.41]:58826 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238308AbhLUN6B (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 21 Dec 2021 08:58:01 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mzfeR-0000gu-01; Tue, 21 Dec 2021 14:57:59 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 67A92C09D8; Tue, 21 Dec 2021 14:57:36 +0100 (CET)
-Date:   Tue, 21 Dec 2021 14:57:36 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Adrian Schmutzler <freifunk@adrianschmutzler.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Octeon: Fix build errors using clang
-Message-ID: <20211221135736.GB9153@alpha.franken.de>
-References: <20211216095014.11918-1-tianjia.zhang@linux.alibaba.com>
+        id S240116AbhLURBK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 21 Dec 2021 12:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240104AbhLURBJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 21 Dec 2021 12:01:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA615C061574;
+        Tue, 21 Dec 2021 09:01:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FE53B817C6;
+        Tue, 21 Dec 2021 17:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5408C36AE8;
+        Tue, 21 Dec 2021 17:01:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640106066;
+        bh=7d8LhHNqF8chXHYwnQCba3+BVf9M2vb5t0LpTpOXl3I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dEgydiYrKTv4MoEpX8HEQPqxS6hcDAYv3fewK7fRHlYo1CHlD/jbRbllFF0F8kZJR
+         7Ol7HU29iOHWoMgGNtsqJUJCM5S4W0bgP/zIGIS5hDslGvSBAcnMkOveiGKJ3RC9in
+         phVRHxd7jJND527OgA3JMqshWfpLFVLj3H6JoZQlMlYklclMYaZz0Kb7LD+CmhEWua
+         uKrgpIgE7bEmoNRS3EL88iGk+rcBxqSBw196mkCKvdSsMMYIldXUa3jUAkYsmHra4o
+         ZYOiY88ri24LqnBH+ncTH+nICWwBRbCrgyo/8AjbwLlOdXvXLXKKZdbHKtkvqkpvAZ
+         +r/YN5cJ3971w==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, will@kernel.org, tglx@linutronix.de,
+        benh@kernel.crashing.org, arnd@arndb.de, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.or,
+        linuxppc-dev@lists.ozlabs.org, inux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH 0/8] sched: Remove unused TASK_SIZE_OF
+Date:   Wed, 22 Dec 2021 01:00:49 +0800
+Message-Id: <20211221170057.2637763-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211216095014.11918-1-tianjia.zhang@linux.alibaba.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 05:50:14PM +0800, Tianjia Zhang wrote:
-> A large number of the following errors is reported when compiling
-> with clang:
-> 
->   cvmx-bootinfo.h:326:3: error: adding 'int' to a string does not append to the string [-Werror,-Wstring-plus-int]
->                   ENUM_BRD_TYPE_CASE(CVMX_BOARD_TYPE_NULL)
->                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
->           case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                          ~~~^~~~
->   cvmx-bootinfo.h:326:3: note: use array indexing to silence this warning
->   cvmx-bootinfo.h:321:20: note: expanded from macro 'ENUM_BRD_TYPE_CASE'
->           case x: return(#x + 16);        /* Skip CVMX_BOARD_TYPE_ */
->                           ^
-> 
-> Follow the prompts to use the address operator '&' to fix this error.
-> 
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  arch/mips/include/asm/octeon/cvmx-bootinfo.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+From: Guo Ren <guoren@linux.alibaba.com>
 
-applied to mips-next.
+This macro isn't used in Linux, now. Delete in include/linux/sched.h
+and arch's include/asm. This would confuse people who are
+implementing the COMPAT feature for architecture.
 
-Thomas.
+Guo Ren (8):
+  sched: Remove unused TASK_SIZE_OF
+  sched: x86: Remove unused TASK_SIZE_OF
+  sched: sparc: Remove unused TASK_SIZE_OF
+  sched: powerpc: Remove unused TASK_SIZE_OF
+  sched: s390: Remove unused TASK_SIZE_OF
+  sched: parisc: Remove unused TASK_SIZE_OF
+  sched: arm64: Remove unused TASK_SIZE_OF
+  sched: mips: Remove unused TASK_SIZE_OF
+
+ arch/arm64/include/asm/processor.h      | 2 --
+ arch/mips/include/asm/processor.h       | 3 ---
+ arch/parisc/include/asm/processor.h     | 3 +--
+ arch/powerpc/include/asm/task_size_64.h | 6 ++----
+ arch/s390/include/asm/processor.h       | 3 +--
+ arch/sparc/include/asm/processor_64.h   | 3 ---
+ arch/x86/include/asm/page_64_types.h    | 2 --
+ include/linux/sched.h                   | 4 ----
+ 8 files changed, 4 insertions(+), 22 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.25.1
+
