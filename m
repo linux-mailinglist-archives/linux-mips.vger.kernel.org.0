@@ -2,80 +2,122 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B0947D64D
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Dec 2021 19:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA6E47D953
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Dec 2021 23:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344516AbhLVSLL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 22 Dec 2021 13:11:11 -0500
-Received: from mail-qt1-f181.google.com ([209.85.160.181]:40746 "EHLO
-        mail-qt1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344507AbhLVSLK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Dec 2021 13:11:10 -0500
-Received: by mail-qt1-f181.google.com with SMTP id l17so2675799qtk.7;
-        Wed, 22 Dec 2021 10:11:09 -0800 (PST)
+        id S230397AbhLVWfh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 22 Dec 2021 17:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229665AbhLVWff (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 22 Dec 2021 17:35:35 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53739C061574;
+        Wed, 22 Dec 2021 14:35:35 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id j11so6631130lfg.3;
+        Wed, 22 Dec 2021 14:35:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=509cil0OJ5qdfWw2ojcCOYSwHBJ9P8vwyQkD+G8mLLA=;
+        b=ddZKfL8FvoJ0XwnKMMmKWLGJ3VqFSFGglRVDb0+PqM2DxuwldMzReXdg0Ebtk9Yobi
+         AVztMug/XvayfxM3v8GOeWIfRsrkU3pfCylaBXUmoqsMO81lth0cxfRUKMa/jua7By8h
+         fSZ6R/sGKPh5nSmA0ASRGeLeb6wdCjfYNft0YG0y8ivi5U/BpBfokB9hcGa9coBwNOMN
+         Gg+cjCxIPhQ2b7TcbEc1gjiCTijvdkgEF9rXZGv3s6zgXp/f1hq5bp68059Gc1Z9wTvm
+         bIqvGf1ZD6DqjfSFh05rCeUC0528fcV+nKXNDyihLdVmnm+p0/XORPV26mvKGpvGa4Zb
+         OjAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Il/qIXEpM0k/r83Hkz4DiWBovhWj2kmv+y71DSrCm8c=;
-        b=OwrAUZb5StnHhcO28cBmna5iii7ghZZG+ogdQcsCILcswmI13LLALDrRpWEiFshe7Y
-         tYCsPe+Y/KrQxXeFnOe5jV8sEbIghTOA4wQtuxPsn7F+/Mos/ORxqksALw029It3ZFCI
-         oNzCYUqBXbLY3Ybg/UFxKw06RUMLTusVRm3wcCDaLuMZAsnrODjiKkOLbBfHZUW2V2En
-         QzGA+aagftw+IZxrYvhgVhoAWOeny3xb74rcsUbIDHIVSj9GuZS+I9pgw6d88Ifs7UmZ
-         mhB3b7RJj2EBwv2xzzc81vBJVJEmhzLvQ/f1cc+YGiKRFiuNORjmk9HN0Sy/MWzHRX56
-         IUEg==
-X-Gm-Message-State: AOAM531D8QGLcB5x7UEVS8K/neW5LEntHdmReZyFcTTEapJ5PTwFSeiM
-        5Az9QFV2rRbwGulBT7kO/g==
-X-Google-Smtp-Source: ABdhPJw47NUTqeOoKpNDgF7NJg6QIbxE7QNiZXBbjqvRNsib5jawU+pweuawJYm1Hu7bbr9h2qzQFA==
-X-Received: by 2002:a05:622a:1813:: with SMTP id t19mr2115869qtc.256.1640196669405;
-        Wed, 22 Dec 2021 10:11:09 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id g12sm2279193qtk.69.2021.12.22.10.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 10:11:08 -0800 (PST)
-Received: (nullmailer pid 2435332 invoked by uid 1000);
-        Wed, 22 Dec 2021 18:11:07 -0000
-Date:   Wed, 22 Dec 2021 14:11:07 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        list@opendingux.net, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: clk/ingenic: Add MDMA and BDMA clocks
-Message-ID: <YcNqOwjYQT8GTwqD@robh.at.kernel.org>
-References: <20211220193319.114974-1-paul@crapouillou.net>
- <20211220193319.114974-2-paul@crapouillou.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=509cil0OJ5qdfWw2ojcCOYSwHBJ9P8vwyQkD+G8mLLA=;
+        b=fPeJNrcjM0I21LFplQ6E42/HD1nBdO6KIBrT2hzIxhad8b4k2Yon4YRl15g0szmmPg
+         c6Z0VReoQToYgyNI0e8EirDlkXtDc5rKJMvlhqC+RFFF8NE43rE79aAP4WzSM2Px96cM
+         WVyxHH8I78qg1D1BFMSTzc7P5ai3RkHE1X7A+/dIFV4/Cuw2eu6xmtYV5LbjxKYh+Qw7
+         kbLiH3vL6MbxaUcfFWHmGcDxKxvuY4kUpsGfTnqFRrKj5M37p/uawi96DHpsq2/iX7p5
+         G4C8WAm40iW/1mP1vlEq4HZY5klMQcbeE2W4+C7K9tq8kLp6Gisk1Qi/mVm3vZrlFmzp
+         6Jjg==
+X-Gm-Message-State: AOAM532L3Jo3ZsQYkTP6XdfVAzOy0FX5nfBkvqDDQ5Na9hI9XfW8dzBh
+        alHtqg6JaY8sIRWgGJ9SeCcgyvC275L6/aAk89DsfBPvaUM=
+X-Google-Smtp-Source: ABdhPJyfufBHYdDFQz+ah/Iw/iZGRxjmctUcUf2op+2vKNZiQPXrZB6SUilBWwF8JJMaI1eDbZeGr+HUSlFNJ5XDS4Q=
+X-Received: by 2002:a05:6512:3486:: with SMTP id v6mr3634731lfr.483.1640212533273;
+ Wed, 22 Dec 2021 14:35:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211220193319.114974-2-paul@crapouillou.net>
+References: <20211220092318.5793-1-tianjia.zhang@linux.alibaba.com> <20211220092318.5793-2-tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <20211220092318.5793-2-tianjia.zhang@linux.alibaba.com>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Thu, 23 Dec 2021 09:35:21 +1100
+Message-ID: <CAGRGNgXE_5H20K+e9oejqybOGh8JezMpi2yrDJKqaZ4rWJkZdA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] crypto: sha256 - remove duplicate generic hash init function
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, 20 Dec 2021 19:33:18 +0000, Paul Cercueil wrote:
-> The Ingenic JZ4760 and JZ4770 both have an extra DMA core named BDMA
-> dedicated to the NAND and BCH controller, but which can also do
-> memory-to-memory transfers. The JZ4760 additionally has a DMA core named
-> MDMA dedicated to memory-to-memory transfers. The programming manual for
-> the JZ4770 does have a bit for a MDMA clock, but does not seem to have
-> the hardware wired in.
-> 
-> Add macros for the MDMA and BDMA clocks to the dt-bindings include
-> files, so that they can be used within Device Tree files.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
-> 
-> Notes:
->     v3: New patch
-> 
->  include/dt-bindings/clock/ingenic,jz4760-cgu.h | 2 ++
->  include/dt-bindings/clock/ingenic,jz4770-cgu.h | 1 +
->  2 files changed, 3 insertions(+)
-> 
+Hi Tianjia,
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Mon, Dec 20, 2021 at 8:25 PM Tianjia Zhang
+<tianjia.zhang@linux.alibaba.com> wrote:
+>
+> crypto_sha256_init() and sha256_base_init() are the same repeated
+> implementations, remove the crypto_sha256_init() in generic
+> implementation, sha224 is the same process.
+>
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> ---
+>  crypto/sha256_generic.c | 16 ++--------------
+>  1 file changed, 2 insertions(+), 14 deletions(-)
+>
+> diff --git a/crypto/sha256_generic.c b/crypto/sha256_generic.c
+> index 3b377197236e..bf147b01e313 100644
+> --- a/crypto/sha256_generic.c
+> +++ b/crypto/sha256_generic.c
+> @@ -72,7 +60,7 @@ EXPORT_SYMBOL(crypto_sha256_finup);
+>
+>  static struct shash_alg sha256_algs[2] = { {
+>         .digestsize     =       SHA256_DIGEST_SIZE,
+> -       .init           =       crypto_sha256_init,
+> +       .init           =       sha256_base_init,
+>         .update         =       crypto_sha256_update,
+>         .final          =       crypto_sha256_final,
+>         .finup          =       crypto_sha256_finup,
+> @@ -86,7 +74,7 @@ static struct shash_alg sha256_algs[2] = { {
+>         }
+>  }, {
+>         .digestsize     =       SHA224_DIGEST_SIZE,
+> -       .init           =       crypto_sha224_init,
+> +       .init           =       sha224_base_init,
+>         .update         =       crypto_sha256_update,
+>         .final          =       crypto_sha256_final,
+>         .finup          =       crypto_sha256_finup,
+
+Aren't these two functions defined as static inline functions? It
+appears that these crypto_ wrappers were added so there's "actual"
+referenceable functions for these structs.
+
+Did this actually compile?
+
+Thanks,
+
+-- 
+Julian Calaby
+
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
