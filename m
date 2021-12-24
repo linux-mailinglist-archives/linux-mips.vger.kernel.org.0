@@ -2,98 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C811747E466
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Dec 2021 15:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0139447EE29
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Dec 2021 11:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243821AbhLWOOZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 23 Dec 2021 09:14:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S1344171AbhLXKGh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 24 Dec 2021 05:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243728AbhLWOOZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 23 Dec 2021 09:14:25 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131C6C061756
-        for <linux-mips@vger.kernel.org>; Thu, 23 Dec 2021 06:14:25 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id i6so10131425uae.6
-        for <linux-mips@vger.kernel.org>; Thu, 23 Dec 2021 06:14:25 -0800 (PST)
+        with ESMTP id S1343878AbhLXKGg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 24 Dec 2021 05:06:36 -0500
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AE3C061401
+        for <linux-mips@vger.kernel.org>; Fri, 24 Dec 2021 02:06:36 -0800 (PST)
+Received: by mail-qk1-x741.google.com with SMTP id w27so1829249qkj.7
+        for <linux-mips@vger.kernel.org>; Fri, 24 Dec 2021 02:06:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ZUVKji3Do/P3J4cEGIS/Cm6Y/8n8p+cIcEmYJRPs71Q=;
-        b=VWyUuxCSzd9njdBAdH3pYjyJLbPk8KTDjE7GR3R7+Rk5wqlYXTg6mrwMvb1xwNqD5j
-         8vIftZCteMnM3PNWHC2G11RV1RG2JUVcdYdXOAH4GqtF777jEw3NFVbYnOpD2Raw+KJY
-         cQ3rn7iDGbm3R4cGKwK2ZyRZ9MEhgtmx9OFIACa9A3Jv8tOF/vxE2cCIwZPKXv8LP7Hs
-         ExpfD96c0aiyCYU5bvLWCw9lKHTZ29bUF8jKC9we63A0kXtWQpzx2xF5jP3QfARDoFrl
-         3EsxjH0ncg2eKQxDTTFrE4phWb1KIKP8180HZmoCW6xoYG+LEgdeBhx6IkzuZuojfzXV
-         /Ezw==
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=altN1ziOpWDN++hbyXBRbceXtpLFx3LBssV5viey1faegJY1lFUw0samYSeavsBH5u
+         uAodUpu4T8g78+/LoLMf5zGFRMT9PG3IkKMP2NggfDRSdJS0tNyRoNSH7hArKEFRmxrP
+         6zlxwDk1E7h6bwoDAob8uLRqIuvZTbF/0hFUqM5ovZY/mg63E1/PWZVN4SjJrG1LJEJf
+         3AMXhbwSvtAaV3xEpQ90EQAGn2UJJ5Mt5odhvd3GyVBmIkizDcKX3idJisVDRy9wuEg+
+         u2JObdAWUjvBw5dIvpl/OkkwKIZ/xoLpE/hrVX1q7hz7PzNfBe9WeMvqBk1A+Pqkp6AJ
+         NLvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=ZUVKji3Do/P3J4cEGIS/Cm6Y/8n8p+cIcEmYJRPs71Q=;
-        b=iyIpQaCfv0KqNb5nOOyM3xmI7A/ix8ngFWDhZy0IVG5gmM1ZZeVwhOJ8dssewC88Oa
-         1CJBwPYEwbMLA7hpBaFU+puNHAcmH2uNGoirsp7FEszgcs3WcLTgoW/Hw2nj2LC97PeF
-         POGcrTzLvFrWdALcE+uBtX4tBcI9yLEkRY5vbYbtMGBMl37WrFwfDKFP5aPnvd9VI7l5
-         m504iFIzR+Q1bUZ+e0OOrjhlOQcdV/V7BLN8uXVewbptnHr0X9KO8pfrUtn/D7bKaCm9
-         hZT9pwsZSCgPAzarLbFe1RgdH3kemf5q3fmEQNHFfTDvbwBUdiX3Vswqwsxd9VwClJ6e
-         hZZg==
-X-Gm-Message-State: AOAM530GleX5prUUWPD3ncF+TMOK7tiFaPMl4mFKe6ONfobE0CZqgMiU
-        5Wwlv0zTaPtVXSHfKLNpads+XiBJknGqOze+mBw=
-X-Google-Smtp-Source: ABdhPJxGFFuFkICkqU5kCY9vkFq5c2VCqCxpjYvHK3HuXqNgkI4OoirpGOeY3lDq/odI1szMlBOZg0rruXsQZzaC43U=
-X-Received: by 2002:a67:fa12:: with SMTP id i18mr802900vsq.2.1640268864123;
- Thu, 23 Dec 2021 06:14:24 -0800 (PST)
+        bh=DA2RfWm5BfTc8dY4tRUxJejPvziWb2AgHmDwtjqgqi8=;
+        b=MP7D0yywy/s5FiUDY+/Kr/g8HPjh0jh3FHCsBC4mA/dPUSFP+mgMJdYfBhfI+6dJq1
+         xOKmIq6EPfFTg6bgj2+j0X0Gc8bqZTAl/7gO6+/PfHhCeZKvnjbGtWlBysIvXPU1p3B+
+         AZzidR+Om1taDxM6MyJJwDKpDcZyUzfRqp9ImoJ6fDusCbRi4dv264v8sgxFlMwo+roW
+         olTTL1VkaRvR4h57udMdonk8NL5RP5P2/F770mm5/xbaV7zOm2dVVvBUsrTw3l7uAgxm
+         TwiSD3H6csHiIdNsY+d2gomEpHlpaB5M2ZCVDTxedEyT6Oz84gTMH21R5wb8SxUGRJYv
+         XgSA==
+X-Gm-Message-State: AOAM530N/XwQ4+RAS0CcGt8NUM288P00JbrCssRRYc42Q7urUzwoD4ge
+        LDzN7+SKB+o0iq1PiuQgGpPAlYFany+l+X38W+U=
+X-Google-Smtp-Source: ABdhPJwZWPhaMn7kf/jGUTL0wn6LiLkKcWeFYJF8thezQb7fgJrN3BfSGhZRiHti5ZHKo5/QKk6mLG98BZzlxAcOL3A=
+X-Received: by 2002:a37:9d14:: with SMTP id g20mr4237537qke.324.1640340395454;
+ Fri, 24 Dec 2021 02:06:35 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a67:d50b:0:0:0:0:0 with HTTP; Thu, 23 Dec 2021 06:14:23
+Received: by 2002:ad4:5c62:0:0:0:0:0 with HTTP; Fri, 24 Dec 2021 02:06:35
  -0800 (PST)
-Reply-To: zdrabrar@gmail.com
-From:   "dr.Abrar Zebadiyah" <amelia.kipkalya3322@gmail.com>
-Date:   Thu, 23 Dec 2021 06:14:23 -0800
-Message-ID: <CABT2H0xzZ8r0bNWE1wrf-TW1LC1FWmHmLop=j90TNor6PxNzkQ@mail.gmail.com>
-Subject: HELLO
+Reply-To: williamsreneta2019@gmail.com
+From:   MISS WILLIAMS <info.turvateealfastar@gmail.com>
+Date:   Fri, 24 Dec 2021 02:06:35 -0800
+Message-ID: <CAM-qQYYDs_ihdkG5iHB1AUOAd5Hu7qKhd47cYUHGEKngPxtS6g@mail.gmail.com>
+Subject: Greetings Dearest One,
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
--- 
-My Dear Friend.
+Greetings Dearest One,
 
-How are you and your family Today? I hope all is well, and I am happy
-to share this transaction with you ,but you must keep everything as
-secret and very confidential.
+How are you today, together with your family?Hope fine.I would like to
+use this opportunity to introduce myself to you. I am Miss Reneta
+Williams, From Benin Republic, West Africa. And my late parents are
+Mr. and Mrs. Dikko Williams; my father was a highly reputable business
+magnet who operated in Benin Republic during his days.
 
-I have a very lucrative business transaction which requires your
-utmost discretion. Please understand that you and me, are to work as
-one team to inherit this fund, hence I am your insider in the bank as
-the transaction commence. I advise you to feel free with me for all is
-going to be well with us. This business is 100% risk free.
+I am writing this mail to you with tears and sorrow from my heart.
+With due respect trust and humanity, I know this mail will come to you
+as a surprise since we haven't known or come across each other before,
+considering the fact that I sourced your email contact through the
+Internet in search of trusted person who can be trusted and will
+assist me.
 
-Though, I know it would come to you at uttermost surprise unbelief
-because it is virtually impossible to know who is trustworthy and who
-to believed I am dr.Abrar Zebadiyah sum of $10.5 million is lying in
-our bank without claim i want you to help me to claim and receive it
-to your account in your country for our benefit.
+It is sad to say that he passed away mysteriously in France during one
+of his business trips abroad. Though his sudden death was linked or
+rather suspected to have been masterminded by an uncle of his who
+traveled with him at that time. But God knows the truth! My mother
+died when I was just 6yrs old, and since then my father took me so
+special.
 
-I am aware of the unsafe nature of the internet, and was compelled to
-use this medium due to the nature of this project.I have access to
-every vital information that can be used to transfer this huge amount
-of money, which may culminate into the investment of the said funds
-into your account or any lucrative company in your country.
+Before his death, he called me and informed me that he has the sum of
+Eighteen Million Five Hundred , United State Dollar
+(USD$18.500,000.00) left in fixed deposit account in one of the
+leading banks in Africa. He further told me that he deposited the
+money in my name, and also gave me all the necessary but legal
+documents to this fund with the bank.
 
-If you will like to assist me as a partner then indicate your
-interest, after which we shall both discuss the modalities and the
-sharing percentage. Upon receipt of your reply on your expression of
-interest, I will give you full details on how the business will be
-executed. I am open for negotiation,
+I am 21 years old and a university undergraduate and really don't know
+what to do. Now I want an account overseas where I can transfer this
+funds and after the transaction I will come and reside permanently in
+your country till such a time that it will be convenient for me to
+return back home if I so desire.
 
-Thanks for your anticipated cooperation.Note you might receive this
-message in your inbox or spam folder, depends on your web host or
-server network
+The death of my father actually brought sorrow to my life. I also want
+to invest the fund under your care because I am ignorant of business
+world. I am in a sincere desire of your humble assistance in this
+regards. Your suggestions and ideas will be highly regarded.
 
-Contact my private email only if you are interested (zdrabrar@gmail.com)
+Now permit me to ask these few questions:
 
-Compliment of the day,
+1. Can you honestly help me from your heart?
+
+2. Can I completely trust you?
+
+3. What percentage of the total amount in question will be good for
+you after the money is in your account?
+
+Please, consider this and get back to me as soon as
+possible.Immediately and confirm your willingness on this my
+email(williamsreneta2019@gmail.com), here is one of my Picture and
+also i will inform you more details involved in this matter.
+
 Regards,
 
-dr.Abrar Zebadiyah
+Miss Reneta Williams.
