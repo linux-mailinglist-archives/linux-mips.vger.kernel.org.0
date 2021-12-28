@@ -2,101 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68670480895
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Dec 2021 11:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF25480830
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Dec 2021 11:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232906AbhL1K6O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Dec 2021 05:58:14 -0500
-Received: from www.linux-watchdog.org ([185.87.125.42]:43990 "EHLO
-        www.linux-watchdog.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236349AbhL1K6N (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Dec 2021 05:58:13 -0500
-X-Greylist: delayed 538 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 Dec 2021 05:58:12 EST
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-        id ACFC4409CD; Tue, 28 Dec 2021 10:21:40 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org ACFC4409CD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-        s=odk20180602; t=1640683300;
-        bh=w8aJnqJpyuqC/xW+n2cbZi4xCrodj+BMPfpwrAepq8g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E6A+Zft6yL02VjO/ZAA2eLOd46aBp6wp8jxGolGB+5zu6ZcrhRd4Xe3HZrnPvyxSt
-         I5vkXxHxn1NLzFoHWWt3nD8cUl0m2IkjVf2sfRPEJViD6vUYm8MlCPq4MNutT6BroT
-         YZwZlHFqYY3P/37WfLY+MTJSM15Gv8BC9L4ujEFs=
-Date:   Tue, 28 Dec 2021 10:21:40 +0100
-From:   Wim Van Sebroeck <wim@linux-watchdog.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Justin Chen <justinpopo6@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH V4 RESEND 1/2] dt-bindings: watchdog: convert Broadcom's
- WDT to the json-schema
-Message-ID: <20211228092140.GA26632@www.linux-watchdog.org>
-References: <f5745952-9e3c-ed7a-cced-ce42d3da2276@gmail.com>
- <Ya5ctkIU+jNzDfBc@google.com>
- <f4af4971-7047-80c9-69ae-e6587979ecd5@roeck-us.net>
- <e1fa1683-a0a6-8ee0-9da5-8e97dd9c820a@gmail.com>
- <432664af-5660-aaad-bf75-81e4d61cb078@roeck-us.net>
- <46a88b40-6d92-727c-7adc-5723921d08e3@gmail.com>
- <20211206195115.GC3759192@roeck-us.net>
- <Ya8xhUR5GbTxVE8w@google.com>
- <a86d5998-8d84-7afe-e34e-a632aa890683@roeck-us.net>
- <Ya+BX1X7/YqmfCU8@google.com>
+        id S233444AbhL1KIa (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 28 Dec 2021 05:08:30 -0500
+Received: from mail-pj1-f50.google.com ([209.85.216.50]:46909 "EHLO
+        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231577AbhL1KI3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Dec 2021 05:08:29 -0500
+Received: by mail-pj1-f50.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so16624366pjb.5;
+        Tue, 28 Dec 2021 02:08:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1LdjVJCupkO66VZRPSdtPXWlxTkxQlblL8anKkt6w1Y=;
+        b=ZxAXFS8epFPw09ZN0+5hygHuHtiZD15wSaBV6dxyVVAvNOnLiTLcLSpVzMBp3GRSKs
+         lHONSdKRFsYbvSS2nNdc9qIlUsl6URjcppunLPl7poQwyhsAq54aQFG1T5efkgB0WTpj
+         jszpoUuVcDSpiNtyCF/Iuv+E019pAkaqLrKm408xBzxLPCiT59hf7wA+OVGSqW1PuNBS
+         IqNSrixAy/47uuKqQSMp71+oq4JVQ+fqDdr+cgWwUC+3FyMTTUmoEZUTFjwdwPeTFdkk
+         2G9f/TmP0nFeemKqPiUCLCJcTYa9EtgokgorLJG3SqwEPSIAJjU+qr//95aOIB9Wm4dU
+         Qcww==
+X-Gm-Message-State: AOAM531kJlRu9ZXA2MVpfjDqV+WLIS9VCO+uQj4cWaFiXbaxO/6LYPJK
+        cz0WDB9ZfFOUiA17tbzDs4KXNIakGRV9DA==
+X-Google-Smtp-Source: ABdhPJwtJyt0BgB9nbPsBRAQG20xhRS7PITFUS4MEI44HL4ksxJALw2U9DOV/Yv9U25TYDqf80Z5gg==
+X-Received: by 2002:a17:90b:1e07:: with SMTP id pg7mr25529252pjb.228.1640686108603;
+        Tue, 28 Dec 2021 02:08:28 -0800 (PST)
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com. [209.85.216.52])
+        by smtp.gmail.com with ESMTPSA id rm3sm15580381pjb.8.2021.12.28.02.08.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Dec 2021 02:08:28 -0800 (PST)
+Received: by mail-pj1-f52.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so16624295pjb.5;
+        Tue, 28 Dec 2021 02:08:27 -0800 (PST)
+X-Received: by 2002:a05:6122:21a6:: with SMTP id j38mr6293010vkd.39.1640686096258;
+ Tue, 28 Dec 2021 02:08:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ya+BX1X7/YqmfCU8@google.com>
-User-Agent: Mutt/1.5.20 (2009-12-10)
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com> <20211227164317.4146918-3-schnelle@linux.ibm.com>
+In-Reply-To: <20211227164317.4146918-3-schnelle@linux.ibm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 28 Dec 2021 11:08:05 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+Message-ID: <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+Subject: Re: [RFC 02/32] Kconfig: introduce HAS_IOPORT option and select it as necessary
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Brian Cain <bcain@codeaurora.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, openrisc@lists.librecores.org,
+        linux-s390@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Greg Ungerer <gerg@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Lee,
+Hi Niklas,
 
-> On Tue, 07 Dec 2021, Guenter Roeck wrote:
-> 
-> > On 12/7/21 2:03 AM, Lee Jones wrote:
-> > [ ... ]
-> > > > It sounded to me like Lee wanted an immutable branch for that
-> > > 
-> > > Not exactly, I said:
-> > > 
-> > >    "> Suppose we should take patch #2 via [Watchdog] as well.
-> > > 
-> > >     If that happens, I would like a PR to an immutable branch."
-> > > 
-> > > The alternative is that I take the patch and provide an immutable
-> > > branch to you, which I am in a position to do.
-> > > 
-> > 
-> > I understand, only I am not in a position to take it since my tree
-> > isn't the official watchdog-next tree, and it doesn't show up in -next.
-> > If Wim takes it into the official watchdog-next tree or not would be
-> > completely up to him.
-> > 
-> > I personally don't care if the bindings check is clean in my inofficial
-> > tree, so maybe this is a non-issue.
-> 
-> That doesn't help, sadly.
-> 
-> I think the best course of action is for Wim to let me know when this
-> patch makes it into his tree.  I'll take the MFD one at the same time
-> and the two shall meet in -next.
-> 
-> Honestly, this is all such a faff.
-> 
-> Just to keep a script happy that 3 people care about.
+On Mon, Dec 27, 2021 at 5:44 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> We introduce a new HAS_IOPORT Kconfig option to gate support for
+> I/O port access. In a future patch HAS_IOPORT=n will disable compilation
+> of the I/O accessor functions inb()/outb() and friends on architectures
+> which can not meaningfully support legacy I/O spaces. On these platforms
+> inb()/outb() etc are currently just stubs in asm-generic/io.h which when
+> called will cause a NULL pointer access which some compilers actually
+> detect and warn about.
+>
+> The dependencies on HAS_IOPORT in drivers as well as ifdefs for
+> HAS_IOPORT specific sections will be added in subsequent patches on
+> a per subsystem basis. Then a final patch will ifdef the I/O access
+> functions on HAS_IOPORT thus turning any use not gated by HAS_IOPORT
+> into a compile-time warning.
+>
+> Link: https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-It's going in today.
+Thanks for your patch!
 
-Kind regards,
-Wim.
+> --- a/arch/m68k/Kconfig
+> +++ b/arch/m68k/Kconfig
+> @@ -16,6 +16,7 @@ config M68K
+>         select GENERIC_CPU_DEVICES
+>         select GENERIC_IOMAP
+>         select GENERIC_IRQ_SHOW
+> +       select HAS_IOPORT
+>         select HAVE_AOUT if MMU
+>         select HAVE_ASM_MODVERSIONS
+>         select HAVE_DEBUG_BUGVERBOSE
 
+This looks way too broad to me: most m68k platform do not have I/O
+port access support.
+
+My gut feeling says:
+
+    select HAS_IOPORT if PCI || ISA
+
+but that might miss some intricate details...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
