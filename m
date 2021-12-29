@@ -2,84 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A2B480FB0
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Dec 2021 05:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E48548115F
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Dec 2021 10:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238705AbhL2Eov (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 28 Dec 2021 23:44:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S235357AbhL2Jom (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Dec 2021 04:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238715AbhL2Eov (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 28 Dec 2021 23:44:51 -0500
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EB4C061748
-        for <linux-mips@vger.kernel.org>; Tue, 28 Dec 2021 20:44:50 -0800 (PST)
-Received: by mail-qk1-x736.google.com with SMTP id 131so18959410qkk.2
-        for <linux-mips@vger.kernel.org>; Tue, 28 Dec 2021 20:44:50 -0800 (PST)
+        with ESMTP id S235325AbhL2Jom (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Dec 2021 04:44:42 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0B1C06173E
+        for <linux-mips@vger.kernel.org>; Wed, 29 Dec 2021 01:44:41 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so11431840wme.4
+        for <linux-mips@vger.kernel.org>; Wed, 29 Dec 2021 01:44:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Qn/qIc+IdWDrpF18flmXoRQQTkgxgsIUgH+1qRMEjCs=;
-        b=MP4Bw8bSGHjBVZigYkLC58fVll36y0dQlPsgLsppOhzCyW8qenp/XoWFr3l/i0JY7g
-         x1Rj1WFUKL6KK7tgH/gY4+PT7MMPVTmYKvFsr3x0dYGUI0nE22xyip57MwLSGL9mzdD1
-         gdm2wdlQultX+fuX0Qqukedvyjvw/oRjtW3977LuTliMwgNGrlTNV8mJyFTLDgzqJ1wb
-         TeOHgJ2CrSue16+U5oI/zNm7a++7mE+nIexfrA8JbpBXRY23H4XCum8+iYbVTdqnOujG
-         0a2BPYykdnnlHzSw7wh0VA87E+IdTkvyacdxKty0K89QgGsd7KwfpwN9hd3KlvM+GH9M
-         NYVA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=A/fct5J4NPIx01cFbf+YndWM3TMLzEuJu/exKDLxHIY=;
+        b=FkamQq8DHD1NfbFo1iACDDheaSqN7MjBKzQnjD/G8y+fsycOqqoeDFvCRCN8Redv/d
+         n/8XLWSU7XfVx3NJ53TMo8QVpZ/owqJRFulRfIK/Ql7qbeom9t8/mf9haIE+6UJJxij7
+         Qt8kr/1RBHyEoTdHRlAtWLfwZ7A0V3inD7fSyvjDmWCLLdM1FBVFvnf5mT5iRdhlH9mF
+         g8B2VqvIdguXga3uqKByl5MKJV5e3bg+NaRSxJGXdByybEKujyqVpSCG50hazvoFzDA/
+         WTKYzi34nUwDimB0r6xouAJqHOUEI3TSpQG7dS6EHE0XTOh1tJrmRg6rW8WM3YYB7tYD
+         m4ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Qn/qIc+IdWDrpF18flmXoRQQTkgxgsIUgH+1qRMEjCs=;
-        b=uMWRqIySxYnsIUmV1KXQbdzkWcNGEPT4h4KRlhly2XF8pnDedtbqbxZpE9mIJA04u2
-         n9Bkm6HHdVv7MduCGNwkSpKlNNOXYx1Zl3Xs98WxJjXwfZKXtpOBbAWlFQq16b9sUiKM
-         n3VoXXWRiUB8H9HXs+V8F6FYj3/TWsxAbGLorjOveggZ/d2Bxdie9pXQThmDVYu3YtwP
-         4GZs9NhVn9SjI7kSENUoInHAQvyt1IfzpxJaLC5QBICn3ylqaKSYYj3yHaayV4jYIq3B
-         3hUWqlGf3KfT2zt+eGRO/T+fSuiva3Z2aVwv74yJaFKOkTyCNzaEhzTI4HdSObMDTKTm
-         oeRQ==
-X-Gm-Message-State: AOAM530J9xmVMjQQi1uCS6a4MjYSvKxRUnt51xqJgPfWJDWIwMPdin3z
-        t9Unj0NFpeux5rix7ObpbQ28uEp6m4xh/xw23J8=
-X-Google-Smtp-Source: ABdhPJwlQP9MFs65V5hIm27k9GgKwnQToph0gooxj5i4AA6YSU5EAqlHIHSc4Ts2u6OPdP6sfU6WN4inqVsPMqTonqE=
-X-Received: by 2002:a05:620a:404b:: with SMTP id i11mr17467238qko.585.1640753089738;
- Tue, 28 Dec 2021 20:44:49 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=A/fct5J4NPIx01cFbf+YndWM3TMLzEuJu/exKDLxHIY=;
+        b=wItqzoZINBctvlpkXYvVKCFxDms1VMwe5kVl0VdjCsBGZnEGcRkmG6dA6KEMkvGAbA
+         V4Lz2nbsxhItWNhC1nj46iVYPK8un9e1LDjJ5phpiOLumQ4UdZz94yfsOH0bl6Vy1EOw
+         EzvCQiQQrPYpHwKwAc/vlxCGXV3RChPcZwrPp0yrlfv7hxJmrmslVAzl7LK170Dpg0w5
+         kHKgSIXiIQRxjnd7qpwZ+B4c0Jc7hUWLQ3VgjCSp9M5n6cXA4Kg7LotXeJT+rawN+WYo
+         n0G6GNSQF91wx6bFwRJaWIOvI1cKz1XZ2JDf4/p+lCMGzmsDeTi2ehxXh/tppnFG5/P0
+         cU+g==
+X-Gm-Message-State: AOAM530aBa5UNKncxvgpD3I6hAhKdfFXSOICOivEDOG4QpHO/RnwZKen
+        IxFdFGDCg2alsgRL+GYqHnON2w==
+X-Google-Smtp-Source: ABdhPJx9p7zRq2s6zNo82cPfLCe7SHW5GHj9Ww1gEm8LftTQ8WL1ZtaVdkodJkxqXRGZJFbAWRTI+g==
+X-Received: by 2002:a1c:c915:: with SMTP id f21mr20830715wmb.39.1640771080382;
+        Wed, 29 Dec 2021 01:44:40 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id z6sm24736705wmp.9.2021.12.29.01.44.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 01:44:39 -0800 (PST)
+Date:   Wed, 29 Dec 2021 09:44:37 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V4 RESEND 2/2] dt-bindings: mfd: add Broadcom's
+ Timer-Watchdog block
+Message-ID: <YcwuBb0K7E4JfsTQ@google.com>
+References: <20211115055354.6089-1-zajec5@gmail.com>
+ <20211115055354.6089-2-zajec5@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ad4:4e83:0:0:0:0:0 with HTTP; Tue, 28 Dec 2021 20:44:49
- -0800 (PST)
-Reply-To: jw257243@gmail.com
-From:   Ahmad Massoud <hervedodzi@gmail.com>
-Date:   Wed, 29 Dec 2021 05:44:49 +0100
-Message-ID: <CAG7OqbLtVzDB5wEnenErP05Nn7ywZwvAKJ6bs6vCG9n0uFpv=w@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211115055354.6089-2-zajec5@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Peace be unto you.
+On Mon, 15 Nov 2021, Rafał Miłecki wrote:
 
-Myself, Ahmad Massoud, from Afghanistan, a politician and government
-official working with the ministry of finance before the Talibans took
-control of Afghanistan. I plead for your help to receive and secure my
-luggage in your country.
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> It's a block implementing few time related functions depending on a
+> (SoC specific) variant. At this point there is ready binding for a
+> watchdog only. Work on remaining subblocks (e.g. "reg" based reboot) is
+> in progress.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> V2: Update $id, description, compatible, example & commit message
+> V3: Drop "brcm,twd" from compatible list per Rob's review
+> RESEND: Patchwork lost 1/2, marc.info lost 2/2
+> ---
+>  .../devicetree/bindings/mfd/brcm,twd.yaml     | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/brcm,twd.yaml
 
-I want to send out my digital safe box containing my life savings, two
-million six hundred thousand dollars and some of my very important
-documents through diplomatic delivery from Afghanistan to your country
-for security reasons and for investment in your country.
-Unfortunately, I cannot send the money through bank because the
-Talibans has taken control of all the institutions in afghanistan. we
-are under imminent threat from massacres and targeted executions of
-government officials since the Talibans returned to power in our
-country and I have been in hiding to avoid the risk of deadly
-reprisals by the Talibans as I wait for paperwork to evacuate with my
-family.
+Applied, thanks.
 
-I hope to hear from you through email [ jw257243@gmail.com ] for my
-safety because the Talibans are tracking calls to find out our exact
-location in Kabul. For the delivery to your country, please send me
-your full name, address and telephone number.
-
-I look forward to hearing from you.
-
-Ahmad Massoud.
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
