@@ -2,94 +2,135 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B75DA48152B
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Dec 2021 17:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB0548183B
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Dec 2021 02:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240842AbhL2Ql5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 29 Dec 2021 11:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
+        id S234211AbhL3Bsk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 29 Dec 2021 20:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbhL2Ql4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Dec 2021 11:41:56 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EDEC061574;
-        Wed, 29 Dec 2021 08:41:56 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id v13-20020a17090a088d00b001b0e3a74cf7so14889512pjc.1;
-        Wed, 29 Dec 2021 08:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=O2pbmS818arXigvBH3gLZ+98cJUFjjjLwuoZwBCC54M=;
-        b=N7L/omppPMV1C0ehMzFhzNPNeqZA3VP/LFeXG2fzUnpA7oT+fQ5eHCVLFYLxB4kx4G
-         5SidwXOxubPiDh7BsEHiytCsZfgbPBCrNIHVbBmvCyLlYeQVhSFz68wOiIKs95zmNMWK
-         4ckShIPdJiKLQURmfcPITh+FoBrcGvGd0ItAscVNTuNG6KJf1ca+mNIZ8ngGG9wc6HQ0
-         bXa5qVLrCeKWjle5tMbigdgU04SL9vczQA3sXr8FcSASgZUaIEBLx2TZ+KjfokX/vO3G
-         ymzBwUYDi1NmlNiXUrQbUqnLWDwxmazyJD8sRKQyQTb+FXy5nu1AQfVE0FUvihzEMuNU
-         XSbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=O2pbmS818arXigvBH3gLZ+98cJUFjjjLwuoZwBCC54M=;
-        b=cLPc2QcjV+sD1PxgKzmSXFdZTrT6X3hPQkcVM7kEsFO+ZeTdyOwj8MHeYpLvVTwrB9
-         RM1Yo8GaLHOo68AS8T8VPqSsXZTN3PRa/L0ltCBdH97P+mwq+G0euiXxlkQa31/6Jxll
-         jCCMKAA/VnHICkhSuZjl4uDIo/IdIHvEdX0Ir4XYxFlqvE9N22LFpQas19Ey+iLADo9O
-         KP779uBcdBvOVd+PxsFBpIcs0Vd306EllgVo0u1Lec7MvvqS7i0OsZVUxZfJoYkwz2lb
-         0SDPqoDpLSuyzLPJAqNcl8OjBXSnLCpx3++m+OCZRQsUCg/c6UfY/CKNgs3rg0UAAp8E
-         OV1Q==
-X-Gm-Message-State: AOAM532Rys6JlaWgVLHxyS5IYDjJ/6uFTfB3T3/d/uvBGLCsFJ2uYxHw
-        Rs057G5tgonjWsWtCsMYtcs=
-X-Google-Smtp-Source: ABdhPJzR4LfeXTTm9rQzzjk9apUOFDuZ8ZDYkGLT2rBEW4l51w8K06POiEJOQ3cgVmgta0tUZxVizg==
-X-Received: by 2002:a17:902:a408:b0:149:9055:98b1 with SMTP id p8-20020a170902a40800b00149905598b1mr9422261plq.2.1640796116250;
-        Wed, 29 Dec 2021 08:41:56 -0800 (PST)
-Received: from [10.230.2.158] ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id 145sm20757066pgd.0.2021.12.29.08.41.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Dec 2021 08:41:55 -0800 (PST)
-Message-ID: <abefdc9b-bf5f-3ec9-4d14-172f525d962f@gmail.com>
-Date:   Wed, 29 Dec 2021 08:41:54 -0800
+        with ESMTP id S232602AbhL3Bsj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 29 Dec 2021 20:48:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1D7C061574;
+        Wed, 29 Dec 2021 17:48:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D2E6153E;
+        Thu, 30 Dec 2021 01:48:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B23C36AE1;
+        Thu, 30 Dec 2021 01:48:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640828918;
+        bh=81MO7TacqQe8I5ko0Q8CwbDD4h/99BabB8aCDnWo0lQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jV/ycMyovnmu9pbcNLGboBsGNIaWSzFTvzZh+Mx9BwCcRQ4wkFdLiGVgRkSKcn1av
+         ACLs6uhvkNBtfi0XHerEvqHG9aDTvnP0DnkZJ23UYJg1+rpYpog6ujNkprLhWymjWQ
+         hVule2DRwuMYA/yBJYRWrQwKgFOWg5pmJP5humJTKlsctrnxGtyKKZV5MSDWgxD4iF
+         I5CuYOMx73K52jL6eCERvW0K/qJG/CffLHmjFLJmfkBjIdmKueJ2GntN8tpN5P6Axu
+         +/iJu6EgjHsacUxqabHsXc98pimqrGXyEBPg4rn/eSXczdd7VTgu9//4yKsbFR5Bjg
+         v0Y95G8jR3CDw==
+Received: by mail-ed1-f51.google.com with SMTP id z29so92390390edl.7;
+        Wed, 29 Dec 2021 17:48:37 -0800 (PST)
+X-Gm-Message-State: AOAM530OpLJ1IYviklCTU8VkdA4pUW5FJ1KdT+R3XO0MKZs3RJLmTmzG
+        dtm/uwS2c5wclM3VztcRc9KsNAhfDVWfcqgCzoA=
+X-Google-Smtp-Source: ABdhPJzYCdRT3l8EecUhPG5EkJz2cutHHKG9LloyzIQNKSKV94+pfG1Ig6YswCjGB6BOha4SzAwDhMxmrauWo4kartQ=
+X-Received: by 2002:a5d:6989:: with SMTP id g9mr22454231wru.12.1640828906053;
+ Wed, 29 Dec 2021 17:48:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH] mips: bcm63xx: add support for clk_set_parent()
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-3-schnelle@linux.ibm.com> <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+ <d406b93a-0f76-d056-3380-65d459d05ea9@gmail.com> <CAK8P3a2j-OFUUp+haHoV4PyL-On4EASZ9+59SDqNqmL8Gv_k7Q@mail.gmail.com>
+ <1f90f145-219e-1cad-6162-9959d43a27ad@gmail.com>
+In-Reply-To: <1f90f145-219e-1cad-6162-9959d43a27ad@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 29 Dec 2021 20:48:23 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a3NqU-3nUZ9ve=QyPPB5Uep3eK+_hicjjSiP8VuL4FYfA@mail.gmail.com>
+Message-ID: <CAK8P3a3NqU-3nUZ9ve=QyPPB5Uep3eK+_hicjjSiP8VuL4FYfA@mail.gmail.com>
+Subject: Re: [RFC 02/32] Kconfig: introduce HAS_IOPORT option and select it as necessary
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Brian Cain <bcain@codeaurora.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
-        bcm-kernel-feedback-list@broadcom.com, alsa-devel@alsa-project.org
-References: <20211229000553.32240-1-rdunlap@infradead.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211229000553.32240-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, openrisc@lists.librecores.org,
+        linux-s390@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        Greg Ungerer <gerg@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Tue, Dec 28, 2021 at 11:15 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> Am 29.12.2021 um 16:41 schrieb Arnd Bergmann:
+> > On Tue, Dec 28, 2021 at 8:20 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> I'd hope not - we spent some effort to make sure setting ATARI_ROM_ISA
+> does not affect other m68k platforms when e.g. building multiplatform
+> kernels.
 
+Ok
 
-On 12/28/2021 4:05 PM, Randy Dunlap wrote:
-> The MIPS BMC63XX subarch does not provide/support clk_set_parent().
-> This causes build errors in a few drivers, so add a simple implementation
-> of that function so that callers of it will build without errors.
-> 
-> Fixes these build errors:
-> 
-> ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
-> ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
-> 
-> Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx family of SOCs." )
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Replacing inb() by readb() without any address translation won't do much
+> good for m68k though - addresses in the traditional ISA I/O port range
+> would hit the (unmapped) zero page.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Correct, this is exactly the problem that Niklas is trying to solve here:
+we do have drivers that hit this bug, and on s390 clang actually produces
+a compile-time error for drivers that cause a NULL pointer dereference
+this way.
 
-Thanks!
--- 
-Florian
+What some other architectures do is to rely on inb()/outb() to have a
+zero-based offset, and use an io_offset in PCI buses to ensure that a
+low port number on the bus gets translated into a pointer value for the
+virtual mapping in the kernel, which is then represented as an unsigned
+int.
+
+As this is indistinguishable from architectures that just don't have
+a base address for I/O ports (we unfortunately picked 0 as the default
+PCI_IOBASE value), my suggestion was to start marking architectures
+that may have this problem as using HAS_IOPORT in order to keep
+the existing behavior unchanged. If m68k does not suffer from this,
+making HAS_IOPORT conditional on those config options that actually
+need it would of course be best.
+
+         Arnd
