@@ -2,82 +2,62 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE7C48308E
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Jan 2022 12:32:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F944837D3
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Jan 2022 20:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbiACLcN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 3 Jan 2022 06:32:13 -0500
-Received: from aposti.net ([89.234.176.197]:56640 "EHLO aposti.net"
+        id S234355AbiACT6d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 3 Jan 2022 14:58:33 -0500
+Received: from elvis.franken.de ([193.175.24.41]:55904 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231569AbiACLcM (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 3 Jan 2022 06:32:12 -0500
-Date:   Mon, 03 Jan 2022 11:32:02 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] mtd: rawnand: ingenic: Fix missing put_device in
- ingenic_ecc_get
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <EDT45R.P10AQNFPT9FP1@crapouillou.net>
-In-Reply-To: <20211230072751.21622-1-linmq006@gmail.com>
-References: <20211230072751.21622-1-linmq006@gmail.com>
+        id S230228AbiACT6c (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 3 Jan 2022 14:58:32 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1n4TTQ-0004X1-00; Mon, 03 Jan 2022 20:58:28 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 3B398C0A4B; Mon,  3 Jan 2022 20:51:33 +0100 (CET)
+Date:   Mon, 3 Jan 2022 20:51:33 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        alsa-devel@alsa-project.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] mips: lantiq: add support for clk_set_parent()
+Message-ID: <20220103195133.GA10983@alpha.franken.de>
+References: <20211229000345.24199-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211229000345.24199-1-rdunlap@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
-
-Le jeu., déc. 30 2021 at 07:27:51 +0000, Miaoqian Lin 
-<linmq006@gmail.com> a écrit :
-> If of_find_device_by_node() succeeds, ingenic_ecc_get() doesn't have
-> a corresponding put_device(). Thus add put_device() to fix the 
-> exception
-> handling.
+On Tue, Dec 28, 2021 at 04:03:45PM -0800, Randy Dunlap wrote:
+> Provide a simple implementation of clk_set_parent() in the lantiq
+> subarch so that callers of it will build without errors.
 > 
-> Fixes: 15de8c6 ("mtd: rawnand: ingenic: Separate top-level and SoC 
-> specific code")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
+> Fixes these build errors:
+> 
+> ERROR: modpost: "clk_set_parent" [sound/soc/jz4740/snd-soc-jz4740-i2s.ko] undefined!
+> ERROR: modpost: "clk_set_parent" [sound/soc/atmel/snd-soc-atmel-i2s.ko] undefined!
+> 
+> Fixes: 171bb2f19ed6 ("MIPS: Lantiq: Add initial support for Lantiq SoCs")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> --to=linux-mips@vger.kernel.org --cc="John Crispin <john@phrozen.org>" --cc="Jonathan Cameron <jic23@kernel.org>" --cc="Russell King <linux@armlinux.org.uk>" --cc="Andy Shevchenko <andy.shevchenko@gmail.com>" --cc=alsa-devel@alsa-project.org --to="Thomas Bogendoerfer <tsbogend@alpha.franken.de>"
 > ---
->  drivers/mtd/nand/raw/ingenic/ingenic_ecc.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c 
-> b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
-> index efe0ffe4f1ab..9054559e52dd 100644
-> --- a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
-> +++ b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.c
-> @@ -68,9 +68,14 @@ static struct ingenic_ecc *ingenic_ecc_get(struct 
-> device_node *np)
->  	struct ingenic_ecc *ecc;
-> 
->  	pdev = of_find_device_by_node(np);
-> -	if (!pdev || !platform_get_drvdata(pdev))
-> +	if (!pdev)
->  		return ERR_PTR(-EPROBE_DEFER);
-> 
-> +	if (!platform_get_drvdata(pdev)) {
-> +		put_device(&pdev->dev);
-> +		return ERR_PTR(-EPROBE_DEFER);
-> +	}
-> +
->  	ecc = platform_get_drvdata(pdev);
->  	clk_prepare_enable(ecc->clk);
-> 
-> --
-> 2.17.1
-> 
+>  arch/mips/lantiq/clk.c |    6 ++++++
+>  1 file changed, 6 insertions(+)
 
+applied to mips-next.
 
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
