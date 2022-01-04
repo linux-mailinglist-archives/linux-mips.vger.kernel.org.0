@@ -2,90 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B16484722
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jan 2022 18:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882DD484A06
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jan 2022 22:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234414AbiADRmM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Jan 2022 12:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234403AbiADRmM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Jan 2022 12:42:12 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA995C061761;
-        Tue,  4 Jan 2022 09:42:11 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id f134-20020a1c1f8c000000b00345c05bc12dso1847888wmf.3;
-        Tue, 04 Jan 2022 09:42:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=7YnihPBgtVAxUbFRzoc/RmwxofXsfmor0Pi1YgJwWgU=;
-        b=lTVky4crBY1Oof0c+EBDJOkiYXvEzqNvVgiA5anoQP9We0rrK+Hx+75xE8mpo01pqg
-         apAxJJflBC1p+Tpafv6/Ym9EwRwTwFXL1j9wE7qoHatwWfiBSx7VgMQMTNSJPAza2uQP
-         sFGWjcC4nbu12cmHDfNwYE6GLytCNpy8nt+CHM+1yIB/O8Su2fSQOPrMwEUzboYK9Gpo
-         rhvcFXbcMcD+dwIJGJdcN7V1J/IhjYzryp/7Pe87BkIS7FEtstBtMaWGk2N/wINGPw6S
-         4coldltzqLXLodrlBWWJqpoeRf9tt8ogYgy1KSV3EAPe2chCUN5mgpBMRlI7C4Z8C1XD
-         JNnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7YnihPBgtVAxUbFRzoc/RmwxofXsfmor0Pi1YgJwWgU=;
-        b=RBkCfeAWFUFLEiQsJOszALQk+NuA9qT8Lai19MiAiDcfn8WpLOCwt33qRtQUeKO8K4
-         2NKJwOEho4keEekH+G56lUfjRB/WSrK2pFA0T3Q2wIXTd++6K7iJAfskyh/RZ3v6kW1d
-         U8qQVApQjeL/S+0kYkSy1rQP9Lne0iYwrDDjpPfNMlZKLV1TEkaQ174uk2AfH4I/piqq
-         I8lMQAM46i8EkZi8suCSW2jJcfMsHP59kaUGz8GZqTFiIkShD5usCLWV4WYyeSBZzgle
-         uBBX8Jc+CG9qJNhm34k7XrJ4dW7o019V6HxiyC9O7S8bvPdQMLWlSI0a+u6IgcxInnsQ
-         YKLg==
-X-Gm-Message-State: AOAM532ZB/c29AHRsdpQLIOyBYtNXegEthQ9oOoH0wYF06O/J17Ck5qO
-        F+SizMMB1jq2sbBf5lM71P0=
-X-Google-Smtp-Source: ABdhPJzD9GtqaQey1+cYN6EOaC5u8lArftuaJ96fiW3xLtAfAvHCGrLirjl6LW5Pk7woK2zFoCXfBw==
-X-Received: by 2002:a05:600c:c6:: with SMTP id u6mr42442324wmm.8.1641318130504;
-        Tue, 04 Jan 2022 09:42:10 -0800 (PST)
-Received: from [10.0.0.4] ([37.165.184.46])
-        by smtp.gmail.com with ESMTPSA id i8sm64866wmq.4.2022.01.04.09.42.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Jan 2022 09:42:10 -0800 (PST)
-Message-ID: <0db849a8-2708-6412-301d-fe77b2cf8d00@gmail.com>
-Date:   Tue, 4 Jan 2022 09:42:08 -0800
+        id S234561AbiADVmW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Jan 2022 16:42:22 -0500
+Received: from aposti.net ([89.234.176.197]:52028 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233569AbiADVmW (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 4 Jan 2022 16:42:22 -0500
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 0/8] DEV_PM_OPS macros rework
+Date:   Tue,  4 Jan 2022 21:42:06 +0000
+Message-Id: <20220104214214.198843-1-paul@crapouillou.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH net-next 3/3] net: lantiq_xrx200: convert to build_skb
-Content-Language: en-US
-To:     Aleksander Jan Bajkowski <olek2@wp.pl>, tsbogend@alpha.franken.de,
-        hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220104151144.181736-1-olek2@wp.pl>
- <20220104151144.181736-4-olek2@wp.pl>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-In-Reply-To: <20220104151144.181736-4-olek2@wp.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi,
 
-On 1/4/22 07:11, Aleksander Jan Bajkowski wrote:
-> We can increase the efficiency of rx path by using buffers to receive
-> packets then build SKBs around them just before passing into the network
-> stack. In contrast, preallocating SKBs too early reduces CPU cache
-> efficiency.
->
-> NAT Performance results on BT Home Hub 5A (kernel 5.10.89, mtu 1500):
->
-> 	Down		Up
-> Before	577 Mbps	648 Mbps
-> After	624 Mbps	695 Mbps
->
-> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
-> ---
+This set of commits rework a bit the *_DEV_PM_OPS() macros that were
+introduced recently.
+
+- Remove the DEFINE_UNIVERSAL_DEV_PM_OPS() macro, since I highly doubt
+  anything is going to use it. The macro it replaces
+  (UNIVERSAL_DEV_PM_OPS) seems to only be used incorrectly in code that
+  hasn't been updated in ages.
+
+- Remove the static qualifier in DEFINE_SIMPLE_DEV_PM_OPS, so that the
+  macro is more in line with what's done elsewhere in the kernel.
+
+- Add a DEFINE_RUNTIME_DEV_PM_OPS() macro, for use with drivers that use
+  runtime PM, and use runtime_pm_force_suspend/runtime_pm_force_resume
+  as their system sleep callbacks.
+
+- Add EXPORT_*_DEV_PM_OPS macros, which can be used for when the
+  underlying dev_pm_ops is to be exported. With CONFIG_PM set, the
+  symbol is exported as you would expect. With CONFIG_PM disabled, the
+  dev_pm_ops is garbage-collected along with the suspend/resume
+  callbacks.
+
+- Update the two places which used DEFINE_SIMPLE_DEV_PM_OPS, to add back
+  the "static" qualifier that was stripped from the macro.
+
+- Update one driver to use EXPORT_RUNTIME_DEV_PM_OPS(), just to showcase
+  how to use this macro in the case where a dev_pm_ops is to be
+  exported.
+  Note that the driver itself is GPL, and the symbol is only used within
+  a GPL driver, so I would assume the symbol would be exported as GPL.
+  But it was not the case in the original code, so I did not change the
+  behaviour.
+
+Feedback welcome.
+
+Cheers,
+-Paul
 
 
-Not sure why GRO is not yet implemented in this driver...
+Paul Cercueil (8):
+  PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+  PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
+  PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+  PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
+  PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
+  mmc: mxc: Make dev_pm_ops struct static
+  mmc: jz4740: Make dev_pm_ops struct static
+  iio: gyro: mpu3050: Use new PM macros
 
+ drivers/iio/gyro/mpu3050-core.c | 13 +++-----
+ drivers/iio/gyro/mpu3050-i2c.c  |  2 +-
+ drivers/mmc/host/jz4740_mmc.c   |  4 +--
+ drivers/mmc/host/mxcmmc.c       |  2 +-
+ include/linux/pm.h              | 53 +++++++++++++++++++++++----------
+ include/linux/pm_runtime.h      | 21 +++++++++++++
+ 6 files changed, 67 insertions(+), 28 deletions(-)
+
+-- 
+2.34.1
 
