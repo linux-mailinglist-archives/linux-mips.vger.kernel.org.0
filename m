@@ -2,75 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4746F484272
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jan 2022 14:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D834842B2
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jan 2022 14:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbiADN24 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Jan 2022 08:28:56 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17324 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbiADN2z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Jan 2022 08:28:55 -0500
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JSthm4g5Jz9s3P;
-        Tue,  4 Jan 2022 21:27:52 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 4 Jan 2022 21:28:54 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 4 Jan
- 2022 21:28:53 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>
-CC:     <tsbogend@alpha.franken.de>, <zhangqing@loongson.cn>
-Subject: [PATCH -next] MIPS: Loongson64: Add missing of_node_put() in ls2k_reset_init()
-Date:   Tue, 4 Jan 2022 21:34:15 +0800
-Message-ID: <20220104133415.805209-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S233657AbiADNnK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Jan 2022 08:43:10 -0500
+Received: from mga04.intel.com ([192.55.52.120]:3770 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229821AbiADNnK (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 4 Jan 2022 08:43:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641303790; x=1672839790;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C1LSGlnSyj/Ydi2jbe8mn+CezILCARLbZkzxLCt5ecA=;
+  b=GK+VOYLU63ryr7/joK/8KKPY8G77WCL+JjLvilujYl5cUnF0rWoQU+lh
+   /tAF6IpmRhKedHcmdh6vQ4qNhZLBfQZtRcDxgDTKROKOv23EwP7aXMJyr
+   9hJAHzQ17vaY3A1mV4+bRI946XEFcbBb7u8Ux6YX2Q5hacofCYLGIoumi
+   v8IjLhqIgrNw44+rMDQ79cikXevJ/dlJVJFb6KRzFJgb4jfC4MMz3RYqa
+   E0t9WTrm8tOMyAlIdDMiVzypjgqmMfLy0J+91AxFi8uuAjPl3X8Ct3s+z
+   BFJyqYIuRexi6kOHmIQvyWcgODMxsUBOrqSURmJrxIczYP+3dPR7tX/5K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="241042457"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="241042457"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 05:43:10 -0800
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="574024431"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 05:43:08 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1n4k4V-006DdZ-5N;
+        Tue, 04 Jan 2022 15:41:51 +0200
+Date:   Tue, 4 Jan 2022 15:41:50 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        linux-mips@vger.kernel.org, Vikas Gupta <vikas.gupta@broadcom.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        tee-dev@lists.linaro.org
+Subject: Re: [RESEND PATCH v1] firmware: tee_bnxt: Use UUID API for exporting
+ the UUID
+Message-ID: <YdROnjYXefJfo8jp@smile.fi.intel.com>
+References: <20210121183741.45333-1-andriy.shevchenko@linux.intel.com>
+ <Ybeu5wWyw8E4vIVb@smile.fi.intel.com>
+ <YbevI+Jg/aoKH8uW@smile.fi.intel.com>
+ <20220104092406.GA18693@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104092406.GA18693@lst.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This node pointer is returned by of_find_compatible_node() with
-refcount incremented in ls2k_reset_init(). Calling of_node_put()
-to aovid the refcount leak.
+On Tue, Jan 04, 2022 at 10:24:06AM +0100, Christoph Hellwig wrote:
+> On Mon, Dec 13, 2021 at 10:37:55PM +0200, Andy Shevchenko wrote:
+> > + Cc: Christoph. Maybe you can apply this one, please?
+> 
+> I've not even seen the original patch.
 
-Fixes: 7eb7819a2e12 ("MIPS: Loongson64: Add Loongson-2K1000 reset platform driver")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/platform/mips/ls2k-reset.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It's easy to retrieve with b4 tool:
+`b4 am -s 20210121183741.45333-1-andriy.shevchenko@linux.intel.com`
 
-diff --git a/drivers/platform/mips/ls2k-reset.c b/drivers/platform/mips/ls2k-reset.c
-index b70e7b8a092c..8f42d5d16480 100644
---- a/drivers/platform/mips/ls2k-reset.c
-+++ b/drivers/platform/mips/ls2k-reset.c
-@@ -38,6 +38,7 @@ static int ls2k_reset_init(void)
- 	}
- 
- 	base = of_iomap(np, 0);
-+	of_node_put(np);
- 	if (!base) {
- 		pr_info("Failed to map PM register base address\n");
- 		return -ENOMEM;
-@@ -46,7 +47,6 @@ static int ls2k_reset_init(void)
- 	_machine_restart = ls2k_restart;
- 	pm_power_off = ls2k_poweroff;
- 
--	of_node_put(np);
- 	return 0;
- }
- 
+But for your convenience I may resend once more with you being Cc'ed.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
