@@ -2,100 +2,75 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD084840B0
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jan 2022 12:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4746F484272
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Jan 2022 14:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbiADLUo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Jan 2022 06:20:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbiADLUo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Jan 2022 06:20:44 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD66C061761;
-        Tue,  4 Jan 2022 03:20:44 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id u20so31943687pfi.12;
-        Tue, 04 Jan 2022 03:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=43jwoc03WEbmmZwioDwFkhGaJRKAIQrMfi2IPHILK2c=;
-        b=PjPkB50c8TAK2w123ivcBHeD5VQY1n6OS9+Q3PHObFfYz1cIgJh3kck9v2UMzqGh3T
-         VKPxxQMkcbDYgui5jRt40TxSxpvlnJvtCIG1zHz5S5TQ/vmBIMvvATXYWMlf/SwVruvv
-         hNW+q09A32jeupKabYF3J7SlLweAc/NzdW7f0gKTEWaCGezBEscZ7W+BlrPSV21WWjJ2
-         KM28ionkNcRpnpLOR2ZXiuYgwt2m7mDsCbroNQaAg3/zcIHxZ2QL/M4aIvKW8/Qbul5Q
-         PXoZEgL9VqQbvX5y9NvZVhIy3Kds9kWt1fuYECNdQNIDTCUii/mfkhbZXVe1wsS2eUMv
-         ot7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=43jwoc03WEbmmZwioDwFkhGaJRKAIQrMfi2IPHILK2c=;
-        b=ZfVFWnFAOqKRkARWnRf8lPSDt7MHePtYdA48AmhRJOBzGcB4L3XOTR2IY3NuN/by3I
-         VEva0vxfW02bGRo1+d48azqAH2Xzn7Mk0sgXKMny+3mETpZo+DR4eo4bnLh3g75zfJQf
-         u2bnvCLvZuNUgZKKseMWYG/RZ+A8D5/MubpTf06koe8Ux3e4tyqQuXH9N0FLL2qwPonr
-         b0wMD0kGSBW+OsakZJzka1r2kcRAJrgGTiG2tb8cdJuV0/broYQI2qh6OJ0Npkv3j5Bm
-         JSGGkwqUYyJiVBdEBwSMnwz6WWxlANFsHi64W+rdeLcMQhY6SOrPYkdl7k0mzPNmJxm1
-         fgTQ==
-X-Gm-Message-State: AOAM533YWVwQD0WmXvo0UuAcVa54BYX3Ssk/iLbFcQbT9yoLqRKGFmk9
-        G6kpPzen/IKjU3g67oXKXQw=
-X-Google-Smtp-Source: ABdhPJwSoNgMa51jrtEScKoF34mgUWtlr4CH+62tieINlCQozd4h/dSm7n5qf70w6uPNjpOuFIWW6w==
-X-Received: by 2002:a63:575c:: with SMTP id h28mr43354858pgm.171.1641295243889;
-        Tue, 04 Jan 2022 03:20:43 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id r10sm37119288pgn.4.2022.01.04.03.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 03:20:43 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     tsbogend@alpha.franken.de
-Cc:     maz@kernel.org, ilya.lipnitskiy@gmail.com, chi.minghao@zte.com.cn,
-        ryazanov.s.a@gmail.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-Subject: [PATCH] mips/pci: remove redundant ret variable
-Date:   Tue,  4 Jan 2022 11:20:24 +0000
-Message-Id: <20220104112024.601765-1-chi.minghao@zte.com.cn>
+        id S231343AbiADN24 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 4 Jan 2022 08:28:56 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:17324 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232341AbiADN2z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 4 Jan 2022 08:28:55 -0500
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JSthm4g5Jz9s3P;
+        Tue,  4 Jan 2022 21:27:52 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 4 Jan 2022 21:28:54 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 4 Jan
+ 2022 21:28:53 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-mips@vger.kernel.org>
+CC:     <tsbogend@alpha.franken.de>, <zhangqing@loongson.cn>
+Subject: [PATCH -next] MIPS: Loongson64: Add missing of_node_put() in ls2k_reset_init()
+Date:   Tue, 4 Jan 2022 21:34:15 +0800
+Message-ID: <20220104133415.805209-1-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+This node pointer is returned by of_find_compatible_node() with
+refcount incremented in ls2k_reset_init(). Calling of_node_put()
+to aovid the refcount leak.
 
-Return value from rt3883_pci_r32() directly instead
-of taking this in another redundant variable.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+Fixes: 7eb7819a2e12 ("MIPS: Loongson64: Add Loongson-2K1000 reset platform driver")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- arch/mips/pci/pci-rt3883.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/platform/mips/ls2k-reset.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/pci/pci-rt3883.c b/arch/mips/pci/pci-rt3883.c
-index d3c947fa2969..e07ae098bdd8 100644
---- a/arch/mips/pci/pci-rt3883.c
-+++ b/arch/mips/pci/pci-rt3883.c
-@@ -102,14 +102,12 @@ static u32 rt3883_pci_read_cfg32(struct rt3883_pci_controller *rpc,
- 			       unsigned func, unsigned reg)
- {
- 	u32 address;
--	u32 ret;
+diff --git a/drivers/platform/mips/ls2k-reset.c b/drivers/platform/mips/ls2k-reset.c
+index b70e7b8a092c..8f42d5d16480 100644
+--- a/drivers/platform/mips/ls2k-reset.c
++++ b/drivers/platform/mips/ls2k-reset.c
+@@ -38,6 +38,7 @@ static int ls2k_reset_init(void)
+ 	}
  
- 	address = rt3883_pci_get_cfgaddr(bus, slot, func, reg);
+ 	base = of_iomap(np, 0);
++	of_node_put(np);
+ 	if (!base) {
+ 		pr_info("Failed to map PM register base address\n");
+ 		return -ENOMEM;
+@@ -46,7 +47,6 @@ static int ls2k_reset_init(void)
+ 	_machine_restart = ls2k_restart;
+ 	pm_power_off = ls2k_poweroff;
  
- 	rt3883_pci_w32(rpc, address, RT3883_PCI_REG_CFGADDR);
--	ret = rt3883_pci_r32(rpc, RT3883_PCI_REG_CFGDATA);
- 
--	return ret;
-+	return rt3883_pci_r32(rpc, RT3883_PCI_REG_CFGDATA);
+-	of_node_put(np);
+ 	return 0;
  }
  
- static void rt3883_pci_write_cfg32(struct rt3883_pci_controller *rpc,
 -- 
 2.25.1
 
