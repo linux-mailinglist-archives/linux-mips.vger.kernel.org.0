@@ -2,93 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB5C484A2F
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Jan 2022 22:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6F6485004
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Jan 2022 10:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235001AbiADVn0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 4 Jan 2022 16:43:26 -0500
-Received: from aposti.net ([89.234.176.197]:52190 "EHLO aposti.net"
+        id S238869AbiAEJ3W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 5 Jan 2022 04:29:22 -0500
+Received: from elvis.franken.de ([193.175.24.41]:58347 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235003AbiADVn0 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 4 Jan 2022 16:43:26 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 8/8] iio: gyro: mpu3050: Use new PM macros
-Date:   Tue,  4 Jan 2022 21:42:14 +0000
-Message-Id: <20220104214214.198843-9-paul@crapouillou.net>
-In-Reply-To: <20220104214214.198843-1-paul@crapouillou.net>
-References: <20220104214214.198843-1-paul@crapouillou.net>
+        id S232432AbiAEJ3V (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Wed, 5 Jan 2022 04:29:21 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1n52be-0006hW-00; Wed, 05 Jan 2022 10:29:18 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 21937C0D5D; Wed,  5 Jan 2022 09:54:52 +0100 (CET)
+Date:   Wed, 5 Jan 2022 09:54:52 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     cgel.zte@gmail.com
+Cc:     maz@kernel.org, ilya.lipnitskiy@gmail.com, chi.minghao@zte.com.cn,
+        ryazanov.s.a@gmail.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] mips/pci: remove redundant ret variable
+Message-ID: <20220105085452.GA5406@alpha.franken.de>
+References: <20220104112024.601765-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220104112024.601765-1-chi.minghao@zte.com.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use the new EXPORT_RUNTIME_DEV_PM_OPS() macro. It allows the underlying
-dev_pm_ops struct as well as the suspend/resume callbacks to be detected
-as dead code in the case where CONFIG_PM is disabled, without having to
-wrap everything inside #ifdef CONFIG_PM guards.
+On Tue, Jan 04, 2022 at 11:20:24AM +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Return value from rt3883_pci_r32() directly instead
+> of taking this in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> Signed-off-by: CGEL ZTE <cgel.zte@gmail.com>
+> ---
+>  arch/mips/pci/pci-rt3883.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/arch/mips/pci/pci-rt3883.c b/arch/mips/pci/pci-rt3883.c
+> index d3c947fa2969..e07ae098bdd8 100644
+> --- a/arch/mips/pci/pci-rt3883.c
+> +++ b/arch/mips/pci/pci-rt3883.c
+> @@ -102,14 +102,12 @@ static u32 rt3883_pci_read_cfg32(struct rt3883_pci_controller *rpc,
+>  			       unsigned func, unsigned reg)
+>  {
+>  	u32 address;
+> -	u32 ret;
+>  
+>  	address = rt3883_pci_get_cfgaddr(bus, slot, func, reg);
+>  
+>  	rt3883_pci_w32(rpc, address, RT3883_PCI_REG_CFGADDR);
+> -	ret = rt3883_pci_r32(rpc, RT3883_PCI_REG_CFGDATA);
+>  
+> -	return ret;
+> +	return rt3883_pci_r32(rpc, RT3883_PCI_REG_CFGDATA);
+>  }
+>  
+>  static void rt3883_pci_write_cfg32(struct rt3883_pci_controller *rpc,
+> -- 
+> 2.25.1
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/iio/gyro/mpu3050-core.c | 13 ++++---------
- drivers/iio/gyro/mpu3050-i2c.c  |  2 +-
- 2 files changed, 5 insertions(+), 10 deletions(-)
+applied to mips-next.
 
-diff --git a/drivers/iio/gyro/mpu3050-core.c b/drivers/iio/gyro/mpu3050-core.c
-index ea387efab62d..7d6721e268fe 100644
---- a/drivers/iio/gyro/mpu3050-core.c
-+++ b/drivers/iio/gyro/mpu3050-core.c
-@@ -1281,7 +1281,6 @@ int mpu3050_common_remove(struct device *dev)
- }
- EXPORT_SYMBOL(mpu3050_common_remove);
- 
--#ifdef CONFIG_PM
- static int mpu3050_runtime_suspend(struct device *dev)
- {
- 	return mpu3050_power_down(iio_priv(dev_get_drvdata(dev)));
-@@ -1291,15 +1290,11 @@ static int mpu3050_runtime_resume(struct device *dev)
- {
- 	return mpu3050_power_up(iio_priv(dev_get_drvdata(dev)));
- }
--#endif /* CONFIG_PM */
- 
--const struct dev_pm_ops mpu3050_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
--				pm_runtime_force_resume)
--	SET_RUNTIME_PM_OPS(mpu3050_runtime_suspend,
--			   mpu3050_runtime_resume, NULL)
--};
--EXPORT_SYMBOL(mpu3050_dev_pm_ops);
-+EXPORT_RUNTIME_DEV_PM_OPS(mpu3050_dev_pm_ops,
-+			  mpu3050_runtime_suspend,
-+			  mpu3050_runtime_resume,
-+			  NULL);
- 
- MODULE_AUTHOR("Linus Walleij");
- MODULE_DESCRIPTION("MPU3050 gyroscope driver");
-diff --git a/drivers/iio/gyro/mpu3050-i2c.c b/drivers/iio/gyro/mpu3050-i2c.c
-index ef5bcbc4b45b..820133cad601 100644
---- a/drivers/iio/gyro/mpu3050-i2c.c
-+++ b/drivers/iio/gyro/mpu3050-i2c.c
-@@ -114,7 +114,7 @@ static struct i2c_driver mpu3050_i2c_driver = {
- 	.driver = {
- 		.of_match_table = mpu3050_i2c_of_match,
- 		.name = "mpu3050-i2c",
--		.pm = &mpu3050_dev_pm_ops,
-+		.pm = pm_ptr(&mpu3050_dev_pm_ops),
- 	},
- };
- module_i2c_driver(mpu3050_i2c_driver);
+Thomas.
+
 -- 
-2.34.1
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
