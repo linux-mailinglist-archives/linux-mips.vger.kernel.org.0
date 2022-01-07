@@ -2,80 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F575487CA8
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jan 2022 19:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C18487EFE
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jan 2022 23:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiAGS57 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 7 Jan 2022 13:57:59 -0500
-Received: from aposti.net ([89.234.176.197]:59818 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231931AbiAGS53 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:57:29 -0500
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        list@opendingux.net, Paul Cercueil <paul@crapouillou.net>,
-        kernel test robot <lkp@intel.com>,
-        Nick Terrell <terrelln@fb.com>
-Subject: [PATCH] MIPS: compressed: Fix build with ZSTD compression
-Date:   Fri,  7 Jan 2022 18:57:22 +0000
-Message-Id: <20220107185722.78693-1-paul@crapouillou.net>
+        id S231219AbiAGWhJ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Jan 2022 17:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231197AbiAGWhI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 7 Jan 2022 17:37:08 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F837C061401
+        for <linux-mips@vger.kernel.org>; Fri,  7 Jan 2022 14:37:08 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id t28so6916634wrb.4
+        for <linux-mips@vger.kernel.org>; Fri, 07 Jan 2022 14:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6+ftPPg+mBtDFE1Rumj/v9cdHX74g8JsGDvIeuaB0sw=;
+        b=AP4vnWnjNZ0+FbyV/paMdWCoPqlJsNv7u/VAZmbyQPIQYIkKmM9xtluYweMfGDCwlx
+         M6xlF3WNOEXlhJIw5eYbOUznnu+94L5InBLgV7SPnjq7TeH+Tly04IZtkTcFGb0zS0Ry
+         30CmLfIo2fCaXdYowRSZPyRgSImplqOqzG+tI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6+ftPPg+mBtDFE1Rumj/v9cdHX74g8JsGDvIeuaB0sw=;
+        b=QRudzPAMx4YdyE772LW5a14R6hWoamPEoK15Pqasa6jQ3Cm4p+FeewiFJPjYoD1qtW
+         frv/bpk8k4lOY0K6aoTK29IgDVusenE67uQXKcKvCwTTp5jKNwUvupLX5VSURjKnmzsk
+         jHZs55hn2vbxzBDi+C5fSIKppisnw3LIMXhoCZmbV9V8fLtgpKFgpBPkJlkRL1yfHFy4
+         hHY3QHVyuBT1jKpqfNkPJ2yhLKBtH8ry7w4twezUawB8KO3kZs9jUHP9+wN+a4tJxLBr
+         uKhZO87fdCIpqDoQne6z4wHkLETSdqzNBqFC4SCawJFMipfe068FxY5BrGbMJp55n9NP
+         Rvzw==
+X-Gm-Message-State: AOAM533tBSETRpWN5oj41rMZ9sgvE2r3TG3Od6WEVoo+c97XeelWUi8c
+        tbgcfPd1b9PIZi4B7bAM0+MBb7NcerVaqT0gNCVUvA==
+X-Google-Smtp-Source: ABdhPJxBgtZis30xOXNXG44kdaru7DxXX4kR8w0Gqb6L6sTYxtDqty53dbly3IotCoc7BxQNTyR5PLfs45h7sgxRwXM=
+X-Received: by 2002:a05:6000:18af:: with SMTP id b15mr56930329wri.616.1641595026619;
+ Fri, 07 Jan 2022 14:37:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211209204726.6676-1-jim2101024@gmail.com> <20220105104202.GD7009@alpha.franken.de>
+In-Reply-To: <20220105104202.GD7009@alpha.franken.de>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Fri, 7 Jan 2022 17:36:55 -0500
+Message-ID: <CA+-6iNyjDvuTFo9usprg9OX9a-vsieoh2z2-KAfaxAAZ2cw_Og@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] PCI: brcmstb: Augment driver for MIPs SOCs
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Jim Quinlan <jim2101024@gmail.com>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>, linux-mips@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>,
+        Saenz Julienne <nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Fix the following build issues:
+On Wed, Jan 5, 2022 at 5:42 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Thu, Dec 09, 2021 at 03:47:21PM -0500, Jim Quinlan wrote:
+> > With this patchset, the Broadcom STB PCIe controller driver
+> > supports Arm, Arm64, and now MIPs.
+> >
+> > Jim Quinlan (4):
+> >   dt-bindings: PCI: Add compatible string for Brcmstb 74[23]5 MIPs SOCs
+> >   MIPS: bmips: Add support PCIe controller device nodes
+> >   MIPS: bmips: Remove obsolete DMA mapping support
+> >   PCI: brcmstb: Augment driver for MIPs SOCs
+> >
+> >  .../bindings/pci/brcm,stb-pcie.yaml           |   2 +
+> >  arch/mips/Kconfig                             |   1 -
+> >  arch/mips/bmips/dma.c                         | 106 +-----------------
+> >  arch/mips/boot/dts/brcm/bcm7425.dtsi          |  30 +++++
+> >  arch/mips/boot/dts/brcm/bcm7435.dtsi          |  30 +++++
+> >  arch/mips/boot/dts/brcm/bcm97425svmb.dts      |   9 ++
+> >  arch/mips/boot/dts/brcm/bcm97435svmb.dts      |   9 ++
+> >  drivers/pci/controller/Kconfig                |   2 +-
+> >  drivers/pci/controller/pcie-brcmstb.c         |  82 +++++++++++++-
+> >  9 files changed, 161 insertions(+), 110 deletions(-)
+>
+> if nobody objects I'd like to add this series to mips-next.
+Hi Thomas,
 
-mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_buildDTable_internal':
- decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `BIT_initDStream':
-   decompress.c:(.text.BIT_initDStream+0x7c): undefined reference to `__clzdi2'
-   mips64el-linux-ld: decompress.c:(.text.BIT_initDStream+0x158): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_buildFSETable_body_default.constprop.0':
- decompress.c:(.text.ZSTD_buildFSETable_body_default.constprop.0+0x2a8): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_readNCount_body_default':
- decompress.c:(.text.FSE_readNCount_body_default+0x130): undefined reference to `__ctzdi2'
- mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x1a4): undefined reference to `__ctzdi2'
- mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x2e4): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `HUF_readStats_body_default':
- decompress.c:(.text.HUF_readStats_body_default+0x184): undefined reference to `__clzdi2'
- mips64el-linux-ld: decompress.c:(.text.HUF_readStats_body_default+0x1b4): undefined reference to `__clzdi2'
-   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_DCtx_getParameter':
- decompress.c:(.text.ZSTD_DCtx_getParameter+0x60): undefined reference to `__clzdi2'
+I have another pullreq in progress [1] that may possibly be accepted
+soon.  I have tested that
+these two pullreqs do not conflict or cause compiler errors regardless
+of their merge order.
 
-Fixes: a510b616131f ("MIPS: Add support for ZSTD-compressed kernels")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Nick Terrell <terrelln@fb.com>
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- arch/mips/boot/compressed/Makefile  | 2 +-
- arch/mips/boot/compressed/clz_ctz.c | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 arch/mips/boot/compressed/clz_ctz.c
+Regards,
+Jim Quinlan
+Broadcom STB
 
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index f27cf31b4140..38e233f7fd7a 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -52,7 +52,7 @@ endif
- 
- vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
- 
--vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o
-+vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o $(obj)/clz_ctz.o
- 
- targets := $(notdir $(vmlinuzobjs-y))
- 
-diff --git a/arch/mips/boot/compressed/clz_ctz.c b/arch/mips/boot/compressed/clz_ctz.c
-new file mode 100644
-index 000000000000..b4a1b6eb2f8a
---- /dev/null
-+++ b/arch/mips/boot/compressed/clz_ctz.c
-@@ -0,0 +1,2 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include "../../../../lib/clz_ctz.c"
--- 
-2.34.1
+[1] [PATCH v10 0/7] PCI: brcmstb: root port turns on sub-device power
 
+
+[PATCH v10 0/7] PCI: brcmstb: root port turns on sub-device power
+
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
