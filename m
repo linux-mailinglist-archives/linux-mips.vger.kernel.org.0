@@ -2,49 +2,80 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8657C487C17
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jan 2022 19:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F575487CA8
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jan 2022 19:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240757AbiAGSVC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 7 Jan 2022 13:21:02 -0500
-Received: from aposti.net ([89.234.176.197]:55030 "EHLO aposti.net"
+        id S231401AbiAGS57 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 7 Jan 2022 13:57:59 -0500
+Received: from aposti.net ([89.234.176.197]:59818 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240599AbiAGSVB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:21:01 -0500
-Date:   Fri, 07 Jan 2022 18:20:44 +0000
+        id S231931AbiAGS53 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 7 Jan 2022 13:57:29 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 0/6] DEV_PM_OPS macros rework v3
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Message-Id: <KYQC5R.1KGGF7OLTKZV3@crapouillou.net>
-In-Reply-To: <20220107181723.54392-1-paul@crapouillou.net>
-References: <20220107181723.54392-1-paul@crapouillou.net>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        list@opendingux.net, Paul Cercueil <paul@crapouillou.net>,
+        kernel test robot <lkp@intel.com>,
+        Nick Terrell <terrelln@fb.com>
+Subject: [PATCH] MIPS: compressed: Fix build with ZSTD compression
+Date:   Fri,  7 Jan 2022 18:57:22 +0000
+Message-Id: <20220107185722.78693-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Fix the following build issues:
 
+mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_buildDTable_internal':
+ decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `BIT_initDStream':
+   decompress.c:(.text.BIT_initDStream+0x7c): undefined reference to `__clzdi2'
+   mips64el-linux-ld: decompress.c:(.text.BIT_initDStream+0x158): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_buildFSETable_body_default.constprop.0':
+ decompress.c:(.text.ZSTD_buildFSETable_body_default.constprop.0+0x2a8): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `FSE_readNCount_body_default':
+ decompress.c:(.text.FSE_readNCount_body_default+0x130): undefined reference to `__ctzdi2'
+ mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x1a4): undefined reference to `__ctzdi2'
+ mips64el-linux-ld: decompress.c:(.text.FSE_readNCount_body_default+0x2e4): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `HUF_readStats_body_default':
+ decompress.c:(.text.HUF_readStats_body_default+0x184): undefined reference to `__clzdi2'
+ mips64el-linux-ld: decompress.c:(.text.HUF_readStats_body_default+0x1b4): undefined reference to `__clzdi2'
+   mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in function `ZSTD_DCtx_getParameter':
+ decompress.c:(.text.ZSTD_DCtx_getParameter+0x60): undefined reference to `__clzdi2'
 
-Le ven., janv. 7 2022 at 18:17:17 +0000, Paul Cercueil 
-<paul@crapouillou.net> a écrit :
-> Hi,
-> 
-> A V2 of my patchset that tweaks a bit the *_DEV_PM_OPS() macros that
-> were introduced recently.
+Fixes: a510b616131f ("MIPS: Add support for ZSTD-compressed kernels")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Nick Terrell <terrelln@fb.com>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ arch/mips/boot/compressed/Makefile  | 2 +-
+ arch/mips/boot/compressed/clz_ctz.c | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 arch/mips/boot/compressed/clz_ctz.c
 
-I meant V3 here. Bad copy-paste.
-
--Paul
-
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index f27cf31b4140..38e233f7fd7a 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -52,7 +52,7 @@ endif
+ 
+ vmlinuzobjs-$(CONFIG_KERNEL_XZ) += $(obj)/ashldi3.o
+ 
+-vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o
++vmlinuzobjs-$(CONFIG_KERNEL_ZSTD) += $(obj)/bswapdi.o $(obj)/ashldi3.o $(obj)/clz_ctz.o
+ 
+ targets := $(notdir $(vmlinuzobjs-y))
+ 
+diff --git a/arch/mips/boot/compressed/clz_ctz.c b/arch/mips/boot/compressed/clz_ctz.c
+new file mode 100644
+index 000000000000..b4a1b6eb2f8a
+--- /dev/null
++++ b/arch/mips/boot/compressed/clz_ctz.c
+@@ -0,0 +1,2 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "../../../../lib/clz_ctz.c"
+-- 
+2.34.1
 
