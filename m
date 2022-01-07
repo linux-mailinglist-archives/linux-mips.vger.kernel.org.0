@@ -2,134 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77834486567
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Jan 2022 14:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FEC486EDD
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jan 2022 01:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239637AbiAFNm1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 Jan 2022 08:42:27 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4354 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiAFNmY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Jan 2022 08:42:24 -0500
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JV6sf4pLnz67Vhh;
-        Thu,  6 Jan 2022 21:39:50 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 6 Jan 2022 14:42:22 +0100
-Received: from localhost (10.47.27.61) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 6 Jan
- 2022 13:42:21 +0000
-Date:   Thu, 6 Jan 2022 13:42:23 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Lars-Peter Clausen" <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Arnd Bergmann" <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, <list@opendingux.net>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 6/6] iio: pressure: bmp280: Use new PM macros
-Message-ID: <20220106134223.00006a9f@Huawei.com>
-In-Reply-To: <20220105182939.106885-7-paul@crapouillou.net>
-References: <20220105182939.106885-1-paul@crapouillou.net>
-        <20220105182939.106885-7-paul@crapouillou.net>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        id S1343934AbiAGAbd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 Jan 2022 19:31:33 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:60588 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343798AbiAGAbd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Jan 2022 19:31:33 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V18Mzg9_1641515490;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V18Mzg9_1641515490)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 07 Jan 2022 08:31:31 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] MIPS: Remove duplicated include in local.h
+Date:   Fri,  7 Jan 2022 08:31:28 +0800
+Message-Id: <20220107003128.81300-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.27.61]
-X-ClientProxiedBy: lhreml721-chm.china.huawei.com (10.201.108.72) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 5 Jan 2022 18:29:39 +0000
-Paul Cercueil <paul@crapouillou.net> wrote:
+Fix following includecheck warning:
+./arch/mips/include/asm/local.h: asm/asm.h is included more than once.
 
-> Use the new EXPORT_RUNTIME_DEV_PM_OPS() macro. It allows the underlying
-> dev_pm_ops struct as well as the suspend/resume callbacks to be detected
-> as dead code in the case where CONFIG_PM is disabled, without having to
-> wrap everything inside #ifdef CONFIG_PM guards.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ arch/mips/include/asm/local.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks
-
-> ---
-> 
-> Notes:
->     v2: New patch
-> 
->  drivers/iio/pressure/bmp280-core.c | 11 ++---------
->  drivers/iio/pressure/bmp280-i2c.c  |  2 +-
->  drivers/iio/pressure/bmp280-spi.c  |  2 +-
->  3 files changed, 4 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-> index 6b7da40f99c8..bf8167f43c56 100644
-> --- a/drivers/iio/pressure/bmp280-core.c
-> +++ b/drivers/iio/pressure/bmp280-core.c
-> @@ -1138,7 +1138,6 @@ int bmp280_common_probe(struct device *dev,
->  }
->  EXPORT_SYMBOL(bmp280_common_probe);
->  
-> -#ifdef CONFIG_PM
->  static int bmp280_runtime_suspend(struct device *dev)
->  {
->  	struct iio_dev *indio_dev = dev_get_drvdata(dev);
-> @@ -1159,15 +1158,9 @@ static int bmp280_runtime_resume(struct device *dev)
->  	usleep_range(data->start_up_time, data->start_up_time + 100);
->  	return data->chip_info->chip_config(data);
->  }
-> -#endif /* CONFIG_PM */
->  
-> -const struct dev_pm_ops bmp280_dev_pm_ops = {
-> -	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-> -				pm_runtime_force_resume)
-> -	SET_RUNTIME_PM_OPS(bmp280_runtime_suspend,
-> -			   bmp280_runtime_resume, NULL)
-> -};
-> -EXPORT_SYMBOL(bmp280_dev_pm_ops);
-> +EXPORT_RUNTIME_DEV_PM_OPS(bmp280_dev_pm_ops, bmp280_runtime_suspend,
-> +			  bmp280_runtime_resume, NULL);
->  
->  MODULE_AUTHOR("Vlad Dogaru <vlad.dogaru@intel.com>");
->  MODULE_DESCRIPTION("Driver for Bosch Sensortec BMP180/BMP280 pressure and temperature sensor");
-> diff --git a/drivers/iio/pressure/bmp280-i2c.c b/drivers/iio/pressure/bmp280-i2c.c
-> index 8b03ea15c0d0..35045bd92846 100644
-> --- a/drivers/iio/pressure/bmp280-i2c.c
-> +++ b/drivers/iio/pressure/bmp280-i2c.c
-> @@ -58,7 +58,7 @@ static struct i2c_driver bmp280_i2c_driver = {
->  	.driver = {
->  		.name	= "bmp280",
->  		.of_match_table = bmp280_of_i2c_match,
-> -		.pm = &bmp280_dev_pm_ops,
-> +		.pm = pm_ptr(&bmp280_dev_pm_ops),
->  	},
->  	.probe		= bmp280_i2c_probe,
->  	.id_table	= bmp280_i2c_id,
-> diff --git a/drivers/iio/pressure/bmp280-spi.c b/drivers/iio/pressure/bmp280-spi.c
-> index 625b86878ad8..41f6cc56d229 100644
-> --- a/drivers/iio/pressure/bmp280-spi.c
-> +++ b/drivers/iio/pressure/bmp280-spi.c
-> @@ -109,7 +109,7 @@ static struct spi_driver bmp280_spi_driver = {
->  	.driver = {
->  		.name = "bmp280",
->  		.of_match_table = bmp280_of_spi_match,
-> -		.pm = &bmp280_dev_pm_ops,
-> +		.pm = pm_ptr(&bmp280_dev_pm_ops),
->  	},
->  	.id_table = bmp280_spi_id,
->  	.probe = bmp280_spi_probe,
+diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
+index d4d47c846bb2..08366b1fd273 100644
+--- a/arch/mips/include/asm/local.h
++++ b/arch/mips/include/asm/local.h
+@@ -8,7 +8,6 @@
+ #include <asm/asm.h>
+ #include <asm/cmpxchg.h>
+ #include <asm/compiler.h>
+-#include <asm/asm.h>
+ 
+ typedef struct
+ {
+-- 
+2.20.1.7.g153144c
 
