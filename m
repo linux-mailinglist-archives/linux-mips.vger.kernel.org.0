@@ -2,67 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AF6486FED
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jan 2022 02:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8A5487173
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jan 2022 04:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344415AbiAGBwH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 6 Jan 2022 20:52:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S230364AbiAGDwF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 6 Jan 2022 22:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344429AbiAGBwH (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Jan 2022 20:52:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4741C0611FD;
-        Thu,  6 Jan 2022 17:52:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A02F9B824A3;
-        Fri,  7 Jan 2022 01:52:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AACFC36AE5;
-        Fri,  7 Jan 2022 01:52:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641520324;
-        bh=8aNMSd2LjTF1fT1O87x/hjzHQzOifUmvU82cq4e1PiM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=e+C1JuNtmxO1Oh6o8u89tQZQmtbZcFpg89UQ+938qT3Res9XRoHc+ctOmI4VgqsQJ
-         ZkdEthZ9mD1ZnCFjyHuFj8sWiqwKFH5Ps0HjYJ+wApUVGLuX7oNPedmtNB70584uag
-         0pfR75L1SLKc/t3WJNHkl0KWW9FHSEh88Eh/TIbSaUQRdw9qfNrkmqysikkZmIleBv
-         kZc9XTvKVwuetTAC8lScpEEssRg0GGmQiQ9Xt854GQ0Md/5KHYdUt5AVw2zLko5fs/
-         pwnXYtmUd4lfuHbloMQfkXRi8DKWxwwuIr225sQz+J+P3N7Xjw3Glnjn7pcXZB1BbV
-         tN+zS4s6SwyIQ==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229698AbiAGDwE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 6 Jan 2022 22:52:04 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB10BC061245;
+        Thu,  6 Jan 2022 19:52:03 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id l15so3916699pls.7;
+        Thu, 06 Jan 2022 19:52:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xeJKwvibLAZx+Ooa1fsa6gavzzajmlPyHtN598WeKPM=;
+        b=Hw2dsIRdW3XAqMZDonhzG3UOkWSvEwQaRh5BDuD3kz0nlLlmzytNch5Uv70hH9vLKF
+         zRZn+//sfL77gT8lIZy8y1SD+dfQkWW1TuWabpe43pJjGzECgAtTLuiXWFLo21yvyBQw
+         HJtWrXqpW4VwYsm0u/pJKzdLkpyHnfiElFPdGIC5rVOYbzSymW5eIPboHjwHoK71mNes
+         79UKKKvO2KSdB0XhcjMS12DGNCfP0/0BHyKBgj8NIrez+Anrl+Jgm0nh4nUA5MgO2s6d
+         SEr81Ub2QbBkLO8xBZrt6kr3+h+dmJHBpSoex0ljjws5Zv7Bai7JiRYU8pEZhJDO14Qr
+         4QTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xeJKwvibLAZx+Ooa1fsa6gavzzajmlPyHtN598WeKPM=;
+        b=snebyFYDEt+rTznmp/A+DaZGHNKfKxfNcuXtsKnHPjSyMPNC2iNQjeySrZqus3duc8
+         CUtsmL6zS+BNYWLje/4tx5GYIsTuCvHA9jw7W2Gn75fs1ZCtipLhNtyapSAVWNeskjs0
+         0J8wdcjwiSIJMqSB+iOqPNYEmGZu+RdidzGZRiPfBkPVPMnryv+cUjEhvfplGqTI8JUx
+         hKphnIKsrTpcy4myx/g3fnWg+bg+YNxL5sKrV20YvTf4m+goFdasznHriwaRsOMQNlSU
+         ETV8E/s8Vh/JwpX78Du1NJSCBGSehE2Bio+8VW1kDqdDMELHbIyMbrptlcqfHufI6U65
+         VfJA==
+X-Gm-Message-State: AOAM532vchnASvxCgFeuzdb7/P9BIgWgCOZQYSFGVq2kp8jGDQjGdVEi
+        6Kg1argk+fJ+VbfckR71iTLm/dKiKVo=
+X-Google-Smtp-Source: ABdhPJwIcd2PMSEJOLUZy7dQq3L2lDKlpXhRPPuicS7M3ICy4r2TdUQ/7BPbNxIQbRu0NREAVDexjQ==
+X-Received: by 2002:a17:902:8305:b0:149:6295:4d4c with SMTP id bd5-20020a170902830500b0014962954d4cmr57145501plb.63.1641527523009;
+        Thu, 06 Jan 2022 19:52:03 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id j16sm4043855pfj.16.2022.01.06.19.52.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 19:52:02 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 0/5] MIPS: BCM47XX: Board updates from OpenWrt
+Date:   Thu,  6 Jan 2022 19:51:36 -0800
+Message-Id: <20220107035141.2325384-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211220193319.114974-3-paul@crapouillou.net>
-References: <20211220193319.114974-1-paul@crapouillou.net> <20211220193319.114974-3-paul@crapouillou.net>
-Subject: Re: [PATCH v3 2/2] clk: ingenic: Add MDMA and BDMA clocks
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     list@opendingux.net, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 06 Jan 2022 17:52:03 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20220107015204.4AACFC36AE5@smtp.kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Paul Cercueil (2021-12-20 11:33:19)
-> The Ingenic JZ4760 and JZ4770 both have an extra DMA core named BDMA
-> dedicated to the NAND and BCH controller, but which can also do
-> memory-to-memory transfers. The JZ4760 additionally has a DMA core named
-> MDMA dedicated to memory-to-memory transfers. The programming manual for
-> the JZ4770 does have a bit for a MDMA clock, but does not seem to have
-> the hardware wired in.
->=20
-> Add the BDMA and MDMA clocks to the JZ4760 CGU code, and the BDMA clock
-> to the JZ4770 code, so that the BDMA and MDMA controllers can be used.
->=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
+Hi all,
 
-Applied to clk-next
+This patch is breaking up the larger patch that OpenWrt carries at:
+
+https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/bcm47xx/patches-5.10/320-MIPS-BCM47XX-Devices-database-update-for-4.x.patch;h=bde811c1956578a33cc230b80c3a2b4a20cd9aa5;hb=HEAD
+
+into a series of patches that add support for each board individually.
+
+Florian Fainelli (5):
+  MIPS: BCM47XX: Define Linksys WRT310N V2 buttons
+  MIPS: BCM47XX: Add board entry for Linksys WRT320N v1
+  MIPS: BCM47XX: Add LEDs and buttons for Asus RTN-10U
+  MIPS: BCM47XX: Add support for Netgear R6300 v1
+  MIPS: BCM47XX: Add support for Netgear WN2500RP v1 & v2
+
+ arch/mips/bcm47xx/board.c                     |  4 ++
+ arch/mips/bcm47xx/buttons.c                   | 44 +++++++++++++++++++
+ arch/mips/bcm47xx/leds.c                      | 21 +++++++++
+ .../include/asm/mach-bcm47xx/bcm47xx_board.h  |  4 ++
+ 4 files changed, 73 insertions(+)
+
+-- 
+2.25.1
+
