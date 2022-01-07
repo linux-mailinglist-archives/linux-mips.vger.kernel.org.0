@@ -2,27 +2,37 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C41C6487B73
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Jan 2022 18:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43689487B89
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Jan 2022 18:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240174AbiAGRcC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 7 Jan 2022 12:32:02 -0500
-Received: from aposti.net ([89.234.176.197]:46346 "EHLO aposti.net"
+        id S240293AbiAGRjl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 7 Jan 2022 12:39:41 -0500
+Received: from aposti.net ([89.234.176.197]:47836 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237699AbiAGRcC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 7 Jan 2022 12:32:02 -0500
-Date:   Fri, 07 Jan 2022 17:31:52 +0000
+        id S240245AbiAGRjk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 7 Jan 2022 12:39:40 -0500
+Date:   Fri, 07 Jan 2022 17:39:27 +0000
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined
- reference to `__clzdi2'
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        BROADCOM NVRAM DRIVER <linux-mips@vger.kernel.org>
-Message-Id: <4POC5R.OFCAH4UODPNE2@crapouillou.net>
-In-Reply-To: <AAD37797-0EC4-47FC-939E-F855F2E9954C@fb.com>
-References: <202201060233.mO6P39bM-lkp@intel.com>
-        <AAD37797-0EC4-47FC-939E-F855F2E9954C@fb.com>
+Subject: Re: [PATCH v2 1/6] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS()
+ macro
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
+Message-Id: <R1PC5R.M6H5LAMRKZ9P@crapouillou.net>
+In-Reply-To: <CAPDyKFpPOsoxBbamJWoAso_8cEb--Y1i4zDAnnTQ00EkSySVLQ@mail.gmail.com>
+References: <20220105182939.106885-1-paul@crapouillou.net>
+        <20220105182939.106885-2-paul@crapouillou.net>
+        <CAPDyKFqiVTcsr03SqCzZsTraivrnM4YxKxPQ7dMmt14dT1uiCQ@mail.gmail.com>
+        <U5MC5R.JX72XLGEKI8P@crapouillou.net>
+        <CAPDyKFpPOsoxBbamJWoAso_8cEb--Y1i4zDAnnTQ00EkSySVLQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: 8BIT
@@ -30,101 +40,127 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nick,
 
-Le mer., janv. 5 2022 at 20:18:27 +0000, Nick Terrell <terrelln@fb.com> 
-a écrit :
-> 
-> 
->>  On Jan 5, 2022, at 11:02 AM, kernel test robot <lkp@intel.com> 
->> wrote:
->> 
->>  tree:   
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
->> master
->>  head:   c9e6606c7fe92b50a02ce51dda82586ebdf99b48
->>  commit: e0c1b49f5b674cca7b10549c53b3791d0bbc90a8 lib: zstd: Upgrade 
->> to latest upstream zstd version 1.4.10
->>  date:   8 weeks ago
->>  config: mips-randconfig-r025-20220105 
->> (https://download.01.org/0day-ci/archive/20220106/202201060233.mO6P39bM-lkp@intel.com/config 
->> )
->>  compiler: mips64el-linux-gcc (GCC) 11.2.0
->>  reproduce (this is a W=1 build):
->>         wget 
->> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
->>  -O ~/bin/make.cross
->>         chmod +x ~/bin/make.cross
->>         # 
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1b49f5b674cca7b10549c53b3791d0bbc90a8
->>         git remote add linus 
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>         git fetch --no-tags linus master
->>         git checkout e0c1b49f5b674cca7b10549c53b3791d0bbc90a8
->>         # save the config file to linux build tree
->>         mkdir build_dir
->>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 
->> make.cross O=build_dir ARCH=mips SHELL=/bin/bash
->> 
->>  If you fix the issue, kindly add following tag as appropriate
->>  Reported-by: kernel test robot <lkp@intel.com>
->> 
->>  All errors (new ones prefixed by >>):
->> 
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `FSE_buildDTable_internal':
->>>>  decompress.c:(.text.FSE_buildDTable_internal+0x2cc): undefined 
->>>> reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `BIT_initDStream':
->>    decompress.c:(.text.BIT_initDStream+0x7c): undefined reference to 
->> `__clzdi2'
->>    mips64el-linux-ld: decompress.c:(.text.BIT_initDStream+0x158): 
->> undefined reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `ZSTD_buildFSETable_body_default.constprop.0':
->>>>  
->>>> decompress.c:(.text.ZSTD_buildFSETable_body_default.constprop.0+0x2a8): 
->>>> undefined reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `FSE_readNCount_body_default':
->>>>  decompress.c:(.text.FSE_readNCount_body_default+0x130): undefined 
->>>> reference to `__ctzdi2'
->>>>  mips64el-linux-ld: 
->>>> decompress.c:(.text.FSE_readNCount_body_default+0x1a4): undefined 
->>>> reference to `__ctzdi2'
->>>>  mips64el-linux-ld: 
->>>> decompress.c:(.text.FSE_readNCount_body_default+0x2e4): undefined 
->>>> reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `HUF_readStats_body_default':
->>>>  decompress.c:(.text.HUF_readStats_body_default+0x184): undefined 
->>>> reference to `__clzdi2'
->>>>  mips64el-linux-ld: 
->>>> decompress.c:(.text.HUF_readStats_body_default+0x1b4): undefined 
->>>> reference to `__clzdi2'
->>    mips64el-linux-ld: arch/mips/boot/compressed/decompress.o: in 
->> function `ZSTD_DCtx_getParameter':
->>>>  decompress.c:(.text.ZSTD_DCtx_getParameter+0x60): undefined 
->>>> reference to `__clzdi2'
-> 
-> These are complaining about usage of __builtin_c{l,t}z(). The code 
-> before this change also used
-> __builtin_clz(), so this isn't new. E.g. the call in 
-> BIT_initDStream() is present before the change,
-> it just moved locations. So these errors aren't new.
-> 
-> This is breaking the MIPS boot code when zstd compressed kernels are 
-> enabled, and was
-> Introduced in commit a510b61613 [0][1]. The fix is to include the 
-> definitions from `lib/clz_ctz.c` [2].
-> The same problem was fixed for s390 in this patch [3].
-> 
-> CC: Paul Cercueil
 
-Thanks, I'll send a patch.
+Le ven., janv. 7 2022 at 17:40:57 +0100, Ulf Hansson 
+<ulf.hansson@linaro.org> a écrit :
+> On Fri, 7 Jan 2022 at 17:37, Paul Cercueil <paul@crapouillou.net> 
+> wrote:
+>> 
+>>  Hi Ulf,
+>> 
+>>  Le ven., janv. 7 2022 at 17:26:07 +0100, Ulf Hansson
+>>  <ulf.hansson@linaro.org> a écrit :
+>>  > On Wed, 5 Jan 2022 at 19:29, Paul Cercueil <paul@crapouillou.net>
+>>  > wrote:
+>>  >>
+>>  >>  The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided
+>>  >> callbacks
+>>  >>  for both runtime PM and system sleep, which is very likely to 
+>> be a
+>>  >>  mistake, as a system sleep can be triggered while a given 
+>> device is
+>>  >>  already PM-suspended, which would cause the suspend callback to 
+>> be
+>>  >>  called twice.
+>>  >>
+>>  >>  The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
+>>  >>  occurences) compared to the number of places where
+>>  >>  SET_SYSTEM_SLEEP_PM_OPS() is used with 
+>> pm_runtime_force_suspend()
+>>  >> and
+>>  >>  pm_runtime_force_resume(), which makes me think that none of 
+>> these
+>>  >> cases
+>>  >>  are actually valid.
+>>  >>
+>>  >>  As this macro is currently unused, remove it before someone 
+>> starts
+>>  >> to
+>>  >>  use it in yet another invalid case.
+>>  >
+>>  > I assume you refer to DEFINE_UNIVERSAL_DEV_PM_OPS here. Can you
+>>  > perhaps make that more clear?
+>> 
+>>  I can.
+>> 
+>>  >>
+>>  >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  >>  Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>>  >>  ---
+>>  >>
+>>  >>  Notes:
+>>  >>      v2: No change
+>>  >>
+>>  >>   include/linux/pm.h | 19 ++++++-------------
+>>  >>   1 file changed, 6 insertions(+), 13 deletions(-)
+>>  >>
+>>  >>  diff --git a/include/linux/pm.h b/include/linux/pm.h
+>>  >>  index e1e9402180b9..31bbaafb06d2 100644
+>>  >>  --- a/include/linux/pm.h
+>>  >>  +++ b/include/linux/pm.h
+>>  >>  @@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
+>>  >>          SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  >>   }
+>>  >>
+>>  >>  +/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+>>  >>  +#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+>>  >>  +const struct dev_pm_ops __maybe_unused name = { \
+>>  >>  +       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  >>  +}
+>>  >>  +
+>>  >>   /*
+>>  >>    * Use this for defining a set of PM operations to be used in 
+>> all
+>>  >> situations
+>>  >>    * (system suspend, hibernation or runtime PM).
+>>  >>  @@ -379,19 +385,6 @@ static const struct dev_pm_ops name = { \
+>>  >>    * .resume_early(), to the same routines as .runtime_suspend() 
+>> and
+>>  >>    * .runtime_resume(), respectively (and analogously for
+>>  >> hibernation).
+>>  >>    */
+>>  >>  -#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, 
+>> resume_fn,
+>>  >> idle_fn) \
+>>  >>  -static const struct dev_pm_ops name = { \
+>>  >>  -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  >>  -       RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+>>  >>  -}
+>>  >>  -
+>>  >>  -/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+>>  >>  -#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+>>  >>  -const struct dev_pm_ops __maybe_unused name = { \
+>>  >>  -       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  >>  -}
+>>  >>  -
+>>  >>  -/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
+>>  >
+>>  > Shouldn't this macro be deprecated any more?
+>> 
+>>  I can only deprecate it if there is an alternative for it. The
+>>  alternative is DEFINE_RUNTIME_DEV_PM_OPS() which is added in patch 
+>> 4/6.
+> 
+> I don't think we need an immediate alternative to leave it 
+> deprecated, do we?
+> 
+> My point is, a user can still combine the macros in a way so that it
+> doesn't need to use the UNIVERSAL_DEV_PM_OPS.
+
+Ok. I'll leave it deprecated in that patch then.
 
 Cheers,
 -Paul
+
+>>  >>   #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, 
+>> idle_fn)
+>>  >> \
+>>  >>   const struct dev_pm_ops __maybe_unused name = { \
+>>  >>          SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>>  >>  --
+> 
+> Kind regards
+> Uffe
 
 
