@@ -2,153 +2,191 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A2D48851F
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Jan 2022 18:55:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A17C74886F0
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Jan 2022 00:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbiAHRz3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 8 Jan 2022 12:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiAHRz3 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Jan 2022 12:55:29 -0500
-X-Greylist: delayed 1332 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 08 Jan 2022 09:55:28 PST
-Received: from balrog.mythic-beasts.com (balrog.mythic-beasts.com [IPv6:2a00:1098:0:82:1000:0:2:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A058C061401;
-        Sat,  8 Jan 2022 09:55:28 -0800 (PST)
-Received: from [81.101.6.87] (port=34286 helo=jic23-huawei)
-        by balrog.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <jic23@jic23.retrosnub.co.uk>)
-        id 1n6Faq-0001DM-Oj; Sat, 08 Jan 2022 17:33:33 +0000
-Date:   Sat, 8 Jan 2022 17:38:51 +0000
-From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        id S234956AbiAHXff (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 8 Jan 2022 18:35:35 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:6635 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230502AbiAHXfe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sat, 8 Jan 2022 18:35:34 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JWbzn6Bf4z9c;
+        Sun,  9 Jan 2022 00:35:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1641684931; bh=PlUOfTOJmz/Ue3/EDBlVUxJ2DxqecfDU18/1xQbQtoA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FscL30pAUhiOa20r1Aci5nnOyAPPM7+JoY4I/TdvClRTh0U4D6S+wg1hl5DP6lTxY
+         uXsR1x49ZX58OBDSXL5QGeKh44OE5Qx3HX+fhAHnzzl6d2Bb3RMolFLW/CZs7ANyT9
+         2B2bqDVSaDvrnFLV9W4laov2KVjSpYZyXNNSx0uhvIf6/Ty/Jc6im2Ya6WtOK+mKnU
+         8tBa912YBdNEWU6kN5XGlGndW+KwbfYMSoJHIv4OJWOXoW7NdW+vFlXd5iG2C0Sl5t
+         yLjrrdYJpGeB9xfuugFJFXVZkd4+VRh97hWFY+LEwPEsT5kUEeN00fOMl2F0IbFH2g
+         x9nJQfgC6GmfA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.4 at mail
+Date:   Sun, 9 Jan 2022 00:35:15 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v3 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS
- macros
-Message-ID: <20220108173825.08ebf8ba@jic23-huawei>
-In-Reply-To: <20220107181723.54392-4-paul@crapouillou.net>
-References: <20220107181723.54392-1-paul@crapouillou.net>
-        <20220107181723.54392-4-paul@crapouillou.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v5 04/21] kernel: Add combined power-off+restart handler
+ call chain API
+Message-ID: <Ydofs2CIfA+r5KAz@qmqm.qmqm.pl>
+References: <20211212210309.9851-1-digetx@gmail.com>
+ <20211212210309.9851-5-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-BlackCat-Spam-Score: 19
-X-Spam-Status: No, score=1.9
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211212210309.9851-5-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri,  7 Jan 2022 18:17:20 +0000
-Paul Cercueil <paul@crapouillou.net> wrote:
-
-> These macros are defined conditionally, according to CONFIG_PM:
-> - if CONFIG_PM is enabled, these macros resolve to
->   DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
->   exported.
-> 
-> - if CONFIG_PM is disabled, these macros will result in a dummy static
->   dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
->   will then be discarded by the compiler, along with the provided
->   callback functions if they are not used anywhere else.
-> 
-> In the second case, the symbol is not exported, which should be
-> perfectly fine - users of the symbol should all use the pm_ptr() or
-> pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
-> client's code will never be accessed.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-Hi Paul,
-
-Can definitely be a follow up rather than needing to be in this series
-but an EXPORT_NS_[_GPL]_SIMPLE_DEV_PM_OPS() will be needed as I suspect
-a lot of the places that export pm_ops structures will have their exports
-moved to a namespace at somepoint.
-
-That can easily go in with the first user though rather than needing
-to be rushed in now.
-
-Jonathan
-
-> ---
-> 
-> Notes:
->     v2: Remove useless empty line
->     v3: - Reorder the code to have non-private macros together in the file
->         - Add comment about the necesity to use the new export macro when
->           the dev_pm_ops has to be exported
-> 
->  include/linux/pm.h | 35 ++++++++++++++++++++++++++++++++---
->  1 file changed, 32 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 8e13387e70ec..8279af2c538a 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -8,6 +8,7 @@
->  #ifndef _LINUX_PM_H
->  #define _LINUX_PM_H
->  
-> +#include <linux/export.h>
->  #include <linux/list.h>
->  #include <linux/workqueue.h>
->  #include <linux/spinlock.h>
-> @@ -357,14 +358,42 @@ struct dev_pm_ops {
->  #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
->  #endif
->  
-> +#define _DEFINE_DEV_PM_OPS(name, \
-> +			   suspend_fn, resume_fn, \
-> +			   runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +const struct dev_pm_ops name = { \
-> +	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> +	RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
-> +}
-> +
-> +#ifdef CONFIG_PM
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn, sec) \
-> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn); \
-> +	_EXPORT_SYMBOL(name, sec)
-> +#else
-> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
-> +			   runtime_resume_fn, idle_fn, sec) \
-> +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
-> +					 resume_fn, runtime_suspend_fn, \
-> +					 runtime_resume_fn, idle_fn)
-> +#endif
-> +
->  /*
->   * Use this if you want to use the same suspend and resume callbacks for suspend
->   * to RAM and hibernation.
+On Mon, Dec 13, 2021 at 12:02:52AM +0300, Dmitry Osipenko wrote:
+[...]
+> +/**
+> + * struct power_off_data - Power-off callback argument
 > + *
-> + * If the underlying dev_pm_ops struct symbol has to be exported, use
-> + * EXPORT_SIMPLE_DEV_PM_OPS() or EXPORT_GPL_SIMPLE_DEV_PM_OPS() instead.
->   */
->  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> -const struct dev_pm_ops name = { \
-> -	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> -}
-> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
+> + * @cb_data: Callback data.
+> + */
+> +struct power_off_data {
+> +	void *cb_data;
+> +};
 > +
-> +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
-> +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
->  
->  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
->  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +/**
+> + * struct power_off_prep_data - Power-off preparation callback argument
+> + *
+> + * @cb_data: Callback data.
+> + */
+> +struct power_off_prep_data {
+> +	void *cb_data;
+> +};
 
+Why two exactly same structures? Why only a single pointer instead? If
+it just to enable type-checking callbacks, then thouse could be opaque
+or zero-sized structs that would be embedded or casted away in
+respective callbacks.
+
+> +
+> +/**
+> + * struct restart_data - Restart callback argument
+> + *
+> + * @cb_data: Callback data.
+> + * @cmd: Restart command string.
+> + * @stop_chain: Further lower priority callbacks won't be executed if set to
+> + *		true. Can be changed within callback. Default is false.
+> + * @mode: Reboot mode ID.
+> + */
+> +struct restart_data {
+> +	void *cb_data;
+> +	const char *cmd;
+> +	bool stop_chain;
+> +	enum reboot_mode mode;
+> +};
+> +
+> +/**
+> + * struct reboot_prep_data - Reboot and shutdown preparation callback argument
+> + *
+> + * @cb_data: Callback data.
+> + * @cmd: Restart command string.
+> + * @stop_chain: Further lower priority callbacks won't be executed if set to
+> + *		true. Can be changed within callback. Default is false.
+
+Why would we want to stop power-off or erboot chain? If the callback
+succeded, then further calls won't be made. If it doesn't succeed, but
+possibly breaks the system somehow, it shouldn't return. Then the only
+case left would be to just try the next method of shutting down.
+
+> + * @mode: Preparation mode ID.
+> + */
+> +struct reboot_prep_data {
+> +	void *cb_data;
+> +	const char *cmd;
+> +	bool stop_chain;
+> +	enum reboot_prepare_mode mode;
+> +};
+> +
+> +struct sys_off_handler_private_data {
+> +	struct notifier_block power_off_nb;
+> +	struct notifier_block restart_nb;
+> +	struct notifier_block reboot_nb;
+
+What's the difference between restart and reboot?
+
+> +	void (*platform_power_off_cb)(void);
+> +	void (*simple_power_off_cb)(void *data);
+> +	void *simple_power_off_cb_data;
+> +	bool registered;
+> +};
+
+BTW, I couldn't find a right description of my idea of unifying the
+chains before, so let me sketch it now.
+
+The idea is to have a single system-off chain in which the callback
+gets a mode ({QUERY_*, PREP_*, DO_*} for each of {*_REBOOT, *_POWEROFF, ...?).
+The QUERY_* calls would be made in can_kernel_reboot/poweroff(): all
+would be called, and if at least one returned true, then the shutdown
+mode would continue. All of PREP_* would be called then. After that
+all DO_* would be tried until one doesn't return (succeeded or broke
+the system hard). Classic for(;;); could be a final fallback for the
+case where arch/machine (lowest priority) call would return instead
+of halting the system in machine-dependent way. The QUERY and PREP
+stages could be combined, but I haven't thought about it enough to
+see what conditions would need to be imposed on the callbacks in
+that case (maybe it's not worth the trouble, since it isn't a fast
+path anyway?). The goal here is to have less (duplicated) code in
+kernel, but otherwise it seems equivalent to your API proposal.
+
+Best Regards
+Micha³ Miros³aw
