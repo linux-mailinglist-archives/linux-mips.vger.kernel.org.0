@@ -2,80 +2,153 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1854884B5
-	for <lists+linux-mips@lfdr.de>; Sat,  8 Jan 2022 17:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A2D48851F
+	for <lists+linux-mips@lfdr.de>; Sat,  8 Jan 2022 18:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbiAHQvO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 8 Jan 2022 11:51:14 -0500
-Received: from mx3.wp.pl ([212.77.101.10]:53448 "EHLO mx3.wp.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231398AbiAHQvO (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 8 Jan 2022 11:51:14 -0500
-Received: (wp-smtpd smtp.wp.pl 15411 invoked from network); 8 Jan 2022 17:44:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1641660270; bh=2ziz++hZNvKYQewm3YU3czmOHDf77wlaj2YlXPBb/FI=;
-          h=Subject:To:From;
-          b=iYl9E6IGZTkdeTeBaiDrGkK9aQJrz4mzXiRCm+rbVb4aADC81PlgjsuPicSUk4ycl
-           ez+RbyYDczhLctJqKoq6+dLIF0AWfWSl6yTk36GM6g5ctWY5Xwl6LhNSxyeyvDPa/c
-           q7Vvri8bCekILR504ACoa2X2b1UDk8W0mssPZH84=
-Received: from riviera.nat.ds.pw.edu.pl (HELO [192.168.3.133]) (olek2@wp.pl@[194.29.137.1])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <eric.dumazet@gmail.com>; 8 Jan 2022 17:44:30 +0100
-Message-ID: <7b491825-8359-86d0-7c1c-6b3cf3c67146@wp.pl>
-Date:   Sat, 8 Jan 2022 17:44:30 +0100
+        id S232294AbiAHRz3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 8 Jan 2022 12:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230249AbiAHRz3 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 8 Jan 2022 12:55:29 -0500
+X-Greylist: delayed 1332 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 08 Jan 2022 09:55:28 PST
+Received: from balrog.mythic-beasts.com (balrog.mythic-beasts.com [IPv6:2a00:1098:0:82:1000:0:2:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A058C061401;
+        Sat,  8 Jan 2022 09:55:28 -0800 (PST)
+Received: from [81.101.6.87] (port=34286 helo=jic23-huawei)
+        by balrog.mythic-beasts.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <jic23@jic23.retrosnub.co.uk>)
+        id 1n6Faq-0001DM-Oj; Sat, 08 Jan 2022 17:33:33 +0000
+Date:   Sat, 8 Jan 2022 17:38:51 +0000
+From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v3 3/6] PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS
+ macros
+Message-ID: <20220108173825.08ebf8ba@jic23-huawei>
+In-Reply-To: <20220107181723.54392-4-paul@crapouillou.net>
+References: <20220107181723.54392-1-paul@crapouillou.net>
+        <20220107181723.54392-4-paul@crapouillou.net>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH net-next 3/3] net: lantiq_xrx200: convert to build_skb
-Content-Language: en-US
-To:     Eric Dumazet <eric.dumazet@gmail.com>, tsbogend@alpha.franken.de,
-        hauke@hauke-m.de, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220104151144.181736-1-olek2@wp.pl>
- <20220104151144.181736-4-olek2@wp.pl>
- <0db849a8-2708-6412-301d-fe77b2cf8d00@gmail.com>
-From:   Aleksander Bajkowski <olek2@wp.pl>
-In-Reply-To: <0db849a8-2708-6412-301d-fe77b2cf8d00@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: b5337672c9c80cb619e6e0e18deaab85
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000B [EbPE]                               
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-BlackCat-Spam-Score: 19
+X-Spam-Status: No, score=1.9
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Enric,
+On Fri,  7 Jan 2022 18:17:20 +0000
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-On 1/4/22 18:42, Eric Dumazet wrote:
+> These macros are defined conditionally, according to CONFIG_PM:
+> - if CONFIG_PM is enabled, these macros resolve to
+>   DEFINE_SIMPLE_DEV_PM_OPS(), and the dev_pm_ops symbol will be
+>   exported.
 > 
-> On 1/4/22 07:11, Aleksander Jan Bajkowski wrote:
->> We can increase the efficiency of rx path by using buffers to receive
->> packets then build SKBs around them just before passing into the network
->> stack. In contrast, preallocating SKBs too early reduces CPU cache
->> efficiency.
->>
->> NAT Performance results on BT Home Hub 5A (kernel 5.10.89, mtu 1500):
->>
->>     Down        Up
->> Before    577 Mbps    648 Mbps
->> After    624 Mbps    695 Mbps
->>
->> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
->> ---
+> - if CONFIG_PM is disabled, these macros will result in a dummy static
+>   dev_pm_ops to be created with the __maybe_unused flag. The dev_pm_ops
+>   will then be discarded by the compiler, along with the provided
+>   callback functions if they are not used anywhere else.
 > 
+> In the second case, the symbol is not exported, which should be
+> perfectly fine - users of the symbol should all use the pm_ptr() or
+> pm_sleep_ptr() macro, so the dev_pm_ops marked as "extern" in the
+> client's code will never be accessed.
 > 
-> Not sure why GRO is not yet implemented in this driver...
-> 
-> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
+Hi Paul,
 
-I changed netif_receive_skb() to napi_gro_receive() and did
-some tests. I don't see any performance difference. Are any
-further changes needed to support GRO?
+Can definitely be a follow up rather than needing to be in this series
+but an EXPORT_NS_[_GPL]_SIMPLE_DEV_PM_OPS() will be needed as I suspect
+a lot of the places that export pm_ops structures will have their exports
+moved to a namespace at somepoint.
 
-Maybe this is because this MAC is connected to a DSA switch
-and the napi_gro_receive() function cannot aggregate packets
-until the DSA tag is removed. 
+That can easily go in with the first user though rather than needing
+to be rushed in now.
+
+Jonathan
+
+> ---
+> 
+> Notes:
+>     v2: Remove useless empty line
+>     v3: - Reorder the code to have non-private macros together in the file
+>         - Add comment about the necesity to use the new export macro when
+>           the dev_pm_ops has to be exported
+> 
+>  include/linux/pm.h | 35 ++++++++++++++++++++++++++++++++---
+>  1 file changed, 32 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index 8e13387e70ec..8279af2c538a 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -8,6 +8,7 @@
+>  #ifndef _LINUX_PM_H
+>  #define _LINUX_PM_H
+>  
+> +#include <linux/export.h>
+>  #include <linux/list.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/spinlock.h>
+> @@ -357,14 +358,42 @@ struct dev_pm_ops {
+>  #define SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+>  #endif
+>  
+> +#define _DEFINE_DEV_PM_OPS(name, \
+> +			   suspend_fn, resume_fn, \
+> +			   runtime_suspend_fn, runtime_resume_fn, idle_fn) \
+> +const struct dev_pm_ops name = { \
+> +	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> +	RUNTIME_PM_OPS(runtime_suspend_fn, runtime_resume_fn, idle_fn) \
+> +}
+> +
+> +#ifdef CONFIG_PM
+> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
+> +			   runtime_resume_fn, idle_fn, sec) \
+> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
+> +			   runtime_resume_fn, idle_fn); \
+> +	_EXPORT_SYMBOL(name, sec)
+> +#else
+> +#define _EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, runtime_suspend_fn, \
+> +			   runtime_resume_fn, idle_fn, sec) \
+> +static __maybe_unused _DEFINE_DEV_PM_OPS(__static_##name, suspend_fn, \
+> +					 resume_fn, runtime_suspend_fn, \
+> +					 runtime_resume_fn, idle_fn)
+> +#endif
+> +
+>  /*
+>   * Use this if you want to use the same suspend and resume callbacks for suspend
+>   * to RAM and hibernation.
+> + *
+> + * If the underlying dev_pm_ops struct symbol has to be exported, use
+> + * EXPORT_SIMPLE_DEV_PM_OPS() or EXPORT_GPL_SIMPLE_DEV_PM_OPS() instead.
+>   */
+>  #define DEFINE_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> -const struct dev_pm_ops name = { \
+> -	SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -}
+> +	_DEFINE_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL)
+> +
+> +#define EXPORT_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "")
+> +#define EXPORT_GPL_SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +	_EXPORT_DEV_PM_OPS(name, suspend_fn, resume_fn, NULL, NULL, NULL, "_gpl")
+>  
+>  /* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+>  #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+
