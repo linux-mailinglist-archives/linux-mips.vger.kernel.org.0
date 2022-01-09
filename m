@@ -2,191 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A17C74886F0
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Jan 2022 00:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0CE48898C
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Jan 2022 14:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiAHXff (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 8 Jan 2022 18:35:35 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:6635 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230502AbiAHXfe (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 8 Jan 2022 18:35:34 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4JWbzn6Bf4z9c;
-        Sun,  9 Jan 2022 00:35:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1641684931; bh=PlUOfTOJmz/Ue3/EDBlVUxJ2DxqecfDU18/1xQbQtoA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FscL30pAUhiOa20r1Aci5nnOyAPPM7+JoY4I/TdvClRTh0U4D6S+wg1hl5DP6lTxY
-         uXsR1x49ZX58OBDSXL5QGeKh44OE5Qx3HX+fhAHnzzl6d2Bb3RMolFLW/CZs7ANyT9
-         2B2bqDVSaDvrnFLV9W4laov2KVjSpYZyXNNSx0uhvIf6/Ty/Jc6im2Ya6WtOK+mKnU
-         8tBa912YBdNEWU6kN5XGlGndW+KwbfYMSoJHIv4OJWOXoW7NdW+vFlXd5iG2C0Sl5t
-         yLjrrdYJpGeB9xfuugFJFXVZkd4+VRh97hWFY+LEwPEsT5kUEeN00fOMl2F0IbFH2g
-         x9nJQfgC6GmfA==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.4 at mail
-Date:   Sun, 9 Jan 2022 00:35:15 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v5 04/21] kernel: Add combined power-off+restart handler
- call chain API
-Message-ID: <Ydofs2CIfA+r5KAz@qmqm.qmqm.pl>
-References: <20211212210309.9851-1-digetx@gmail.com>
- <20211212210309.9851-5-digetx@gmail.com>
+        id S235642AbiAINRe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 9 Jan 2022 08:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233983AbiAINRd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Jan 2022 08:17:33 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7EEC061751
+        for <linux-mips@vger.kernel.org>; Sun,  9 Jan 2022 05:17:32 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id b13so42603662edd.8
+        for <linux-mips@vger.kernel.org>; Sun, 09 Jan 2022 05:17:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=NdonzBmQ8GAPbs/WLTboFJCrlKbR6tI6Y2UMvojR29M=;
+        b=KctYciuEp/oAmoqAD2NrJIuesl+o6W8pUrei975SVDRl3fu3TIb/BotQnulg3skRTA
+         ov4C5CdQIk5fe8Wpi0UO/mV5EZNo2cPvaIo3qAIuIcaG1SIeDvoIvdfctPRvSmt2tWRe
+         1dGbnle6dzBJf4ptHUUWeft4k5VWdsSJPmmL9JprTrKzhuWGdr7KDD6qQ7tSPUF03PQn
+         uYHfoaFB1vPb8+DlSOyn+EiUqLaWOB8gs5VKsi1FUeowjv3nHSMDxy+y/L6oGz0fZ25H
+         r1NXQh1G+3fkVD0eiJ6R2E/+g7SN4U1a+mr/k0/r3X+FjjM+cIGQEGwaL7qS4XIiJDkA
+         YvkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=NdonzBmQ8GAPbs/WLTboFJCrlKbR6tI6Y2UMvojR29M=;
+        b=wVpPL2u6WD1AvsJpqDqlTx7djgzGnLP+4Ix71KraL6CJIByX6Nj5JxeEZDDHZo5Bgo
+         FlO+jhcnlZnuXU2zO77JBfNnFDY/34S+yRavoZkld7nPi2MjrLC7BV3p9YuHZxH/H+mL
+         QYnpX9INbeLJC/R4j2ecWML7ETP8nfuJr1B8mja3QzDLCGNa0vGUC5P7BNW5bCn48UdQ
+         868P3ZWaHef4cuRgia//BmyUsoKFnZ6kjAxzU/UW9pXjld6q4WK7m5WaIcUx3I7+1Yi1
+         qOJBDi2J0J71xcFw3Nls/c+JE+sj78OLlrvlsqBI4cYh9qwQLefKviZ4kuSUxHmvfWHR
+         rp2Q==
+X-Gm-Message-State: AOAM530d1UdtAAhq8+hfKogYTE11+G5afhcXqhZM2qh3qXHvWm6ckVDR
+        vMllxLGv5ooIBZgPATxind3KZhbHNDqnB8K3WS0=
+X-Google-Smtp-Source: ABdhPJy1Kk2P1qr60unDYkLmxpe29AxO1ybT01oom74v5kgYB4CXpazeNrGbVGU0Eb6c72WVg+9vphFa51PVrjJn79Q=
+X-Received: by 2002:aa7:d8d4:: with SMTP id k20mr10191779eds.17.1641734251531;
+ Sun, 09 Jan 2022 05:17:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211212210309.9851-5-digetx@gmail.com>
+Reply-To: jennybezoss14@gmail.com
+Sender: mrsnicolemarois94@gmail.com
+Received: by 2002:a17:906:9c83:0:0:0:0 with HTTP; Sun, 9 Jan 2022 05:17:30
+ -0800 (PST)
+From:   Mrs Jenny Bezos <jennybezos1@gmail.com>
+Date:   Sun, 9 Jan 2022 13:17:30 +0000
+X-Google-Sender-Auth: 9WOQPfJPVVx74kvKQTeLsijzTF8
+Message-ID: <CALas=iYKSw+Yx6FTDyWCgedQSzW10sx7L_AC_6ESH=0E-Z9BKg@mail.gmail.com>
+Subject: Dearest Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Dec 13, 2021 at 12:02:52AM +0300, Dmitry Osipenko wrote:
-[...]
-> +/**
-> + * struct power_off_data - Power-off callback argument
-> + *
-> + * @cb_data: Callback data.
-> + */
-> +struct power_off_data {
-> +	void *cb_data;
-> +};
-> +
-> +/**
-> + * struct power_off_prep_data - Power-off preparation callback argument
-> + *
-> + * @cb_data: Callback data.
-> + */
-> +struct power_off_prep_data {
-> +	void *cb_data;
-> +};
+-- 
 
-Why two exactly same structures? Why only a single pointer instead? If
-it just to enable type-checking callbacks, then thouse could be opaque
-or zero-sized structs that would be embedded or casted away in
-respective callbacks.
+Dearest Friend,
 
-> +
-> +/**
-> + * struct restart_data - Restart callback argument
-> + *
-> + * @cb_data: Callback data.
-> + * @cmd: Restart command string.
-> + * @stop_chain: Further lower priority callbacks won't be executed if set to
-> + *		true. Can be changed within callback. Default is false.
-> + * @mode: Reboot mode ID.
-> + */
-> +struct restart_data {
-> +	void *cb_data;
-> +	const char *cmd;
-> +	bool stop_chain;
-> +	enum reboot_mode mode;
-> +};
-> +
-> +/**
-> + * struct reboot_prep_data - Reboot and shutdown preparation callback argument
-> + *
-> + * @cb_data: Callback data.
-> + * @cmd: Restart command string.
-> + * @stop_chain: Further lower priority callbacks won't be executed if set to
-> + *		true. Can be changed within callback. Default is false.
+I am Mrs. Jenny Bezos from America  USA, I decided to donate what I
+have to you  for investment towards the good work of charity
+organizations, and also  to help the motherless and the less
+privileged ones and to carry out charitable works in your Country and
+around the World on my Behalf.
 
-Why would we want to stop power-off or erboot chain? If the callback
-succeded, then further calls won't be made. If it doesn't succeed, but
-possibly breaks the system somehow, it shouldn't return. Then the only
-case left would be to just try the next method of shutting down.
+I am diagnosing of throat Cancer, hospitalize for good 2 years and
+some months now and quite obvious that I have few days to live, and I
+am a Widow no child; I decided to will/donate the sum of $7.8 million
+to you for the good work of God, and also to help the motherless and
+less privilege and also forth assistance of the widows. At the moment
+I cannot take any telephone calls right now due to the fact that my
+relatives (who have squandered the funds for this purpose before) are
+around me and my health also. I have adjusted my will and my Bank  is
+aware.
 
-> + * @mode: Preparation mode ID.
-> + */
-> +struct reboot_prep_data {
-> +	void *cb_data;
-> +	const char *cmd;
-> +	bool stop_chain;
-> +	enum reboot_prepare_mode mode;
-> +};
-> +
-> +struct sys_off_handler_private_data {
-> +	struct notifier_block power_off_nb;
-> +	struct notifier_block restart_nb;
-> +	struct notifier_block reboot_nb;
+ I have willed those properties to you by quoting my Personal File
+Routing and Account Information. And I have also notified the bank
+that I am willing to give that property to you for good, effective and
+prudent work. It is right to say that I have been directed to do this
+by God. I will be going in for a surgery soon and I want to make sure
+that I make this donation before undergoing this surgery.  I will need
+your support to make this dream come through, could you let me know
+your interest to enable me to give you further information. And I
+hereby advise you to contact me by this email address.
 
-What's the difference between restart and reboot?
-
-> +	void (*platform_power_off_cb)(void);
-> +	void (*simple_power_off_cb)(void *data);
-> +	void *simple_power_off_cb_data;
-> +	bool registered;
-> +};
-
-BTW, I couldn't find a right description of my idea of unifying the
-chains before, so let me sketch it now.
-
-The idea is to have a single system-off chain in which the callback
-gets a mode ({QUERY_*, PREP_*, DO_*} for each of {*_REBOOT, *_POWEROFF, ...?).
-The QUERY_* calls would be made in can_kernel_reboot/poweroff(): all
-would be called, and if at least one returned true, then the shutdown
-mode would continue. All of PREP_* would be called then. After that
-all DO_* would be tried until one doesn't return (succeeded or broke
-the system hard). Classic for(;;); could be a final fallback for the
-case where arch/machine (lowest priority) call would return instead
-of halting the system in machine-dependent way. The QUERY and PREP
-stages could be combined, but I haven't thought about it enough to
-see what conditions would need to be imposed on the callbacks in
-that case (maybe it's not worth the trouble, since it isn't a fast
-path anyway?). The goal here is to have less (duplicated) code in
-kernel, but otherwise it seems equivalent to your API proposal.
-
-Best Regards
-Micha³ Miros³aw
+Thanks
+Mrs. Jenny Bezos.
