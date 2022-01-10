@@ -2,80 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D225E489687
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 11:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EDB4897CA
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 12:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244076AbiAJKiu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Jan 2022 05:38:50 -0500
-Received: from 3.mo560.mail-out.ovh.net ([46.105.58.226]:46395 "EHLO
-        3.mo560.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244070AbiAJKiJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jan 2022 05:38:09 -0500
-X-Greylist: delayed 3601 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Jan 2022 05:38:09 EST
-Received: from player158.ha.ovh.net (unknown [10.109.156.105])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 0BA49235D2
-        for <linux-mips@vger.kernel.org>; Mon, 10 Jan 2022 09:20:49 +0000 (UTC)
-Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player158.ha.ovh.net (Postfix) with ESMTPSA id 7F73126197E92;
-        Mon, 10 Jan 2022 09:20:45 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-97G0022a894267-133c-4f10-ac0a-2ba7a01a8ba8,
-                    87B431A081F4B8A046F7AA1E67E4DC22F76031C8) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Message-ID: <2f42cafb-10e3-d6d2-31da-2d17c791e278@milecki.pl>
-Date:   Mon, 10 Jan 2022 10:20:44 +0100
+        id S244963AbiAJLpK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jan 2022 06:45:10 -0500
+Received: from mout.kundenserver.de ([212.227.126.133]:47905 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245002AbiAJLna (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jan 2022 06:43:30 -0500
+Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MlbPO-1mhCz0102k-00ikU9; Mon, 10 Jan 2022 12:43:24 +0100
+Received: by mail-wr1-f44.google.com with SMTP id x4so1027657wru.7;
+        Mon, 10 Jan 2022 03:43:24 -0800 (PST)
+X-Gm-Message-State: AOAM532cJ9YupYp5rv8tKPmIheJoY7X4QmkcE3vWoQQYsa0bkqTHzigf
+        8WPRdoJ7E9PyVsphGN03UXBrneNCeEzEgJ7Rf74=
+X-Google-Smtp-Source: ABdhPJzLcQEl2WnX1Puj9mlVNbd4vaTr3cFkZQMjDOmTeJ+poLBbKI4XZ3sC+IOr25uQ9in4zKpCyj1iJaRs8pYrhxQ=
+X-Received: by 2002:adf:fd46:: with SMTP id h6mr1566034wrs.192.1641815003810;
+ Mon, 10 Jan 2022 03:43:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH] bcma: get SoC device struct & assign dma_mask
-To:     Christoph Hellwig <hch@lst.de>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20220107041744.2388470-1-f.fainelli@gmail.com>
- <20220110090955.GA7422@lst.de>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-In-Reply-To: <20220110090955.GA7422@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 18045923710505102182
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrudehtddgtdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepgeevveffjeeigfeikefftdehvedvffelteethffgkefgteetueeuuedutdetieevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkpheptddrtddrtddrtddpudelgedrudekjedrjeegrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhduheekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprhgrfhgrlhesmhhilhgvtghkihdrphhlpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+References: <20211228143958.3409187-1-guoren@kernel.org> <20211228143958.3409187-2-guoren@kernel.org>
+In-Reply-To: <20211228143958.3409187-2-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 10 Jan 2022 12:43:07 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0E+2=BnKienWp_VuT2g=YcEfP81SJmgbrLWZbdhRXXrA@mail.gmail.com>
+Message-ID: <CAK8P3a0E+2=BnKienWp_VuT2g=YcEfP81SJmgbrLWZbdhRXXrA@mail.gmail.com>
+Subject: Re: [PATCH V2 01/17] kconfig: Add SYSVIPC_COMPAT for all architectures
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup.patel@wdc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:gutJNwyMuuTtGpDlfeICZuij2FOpsCzptA9h7G3xYohePOG8wKa
+ qLxKJ4cSljVVu53YMy4KjvsBLQp6JzHVB5xgM5u7sKr8Li3uOQGuGolvY+AP18ofbAUYtEn
+ 17QIiccD7/rATL7HkGsYkc1VAivZ6REBlXybI/+YaL//Ll0zotVZqqyqfRpfNkNVz3C1YeM
+ NHXHlq3+dgA6ndJsz0R5Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lIN9WQRIHgU=:w3Mgy0NJruiLGOp8UgCTRy
+ DwAfYFVcA2r6tMoTf7wKf+wr86VTzN6lilV4UIlVq3UkdLC1VS18A7f9LztizjXGNu7ty8rGs
+ zzCHNhnqaebVjPf+mvnyxUypKUv60af+F1jqSSxFS0pb++TkTZzdUzlHWUQauhWKEw+fODzXZ
+ O/lhb1Pdd9rcjpk+rR1z4tGrbAp69CAUjb9iCmQ9F3tTGwrOkk4NrsIcTNt8pgkvK3AwmrSjB
+ TFE36mGbyRrpaqby3AQLBTduwb6YdNaMQpFsjy5hWNQQeSj3wDZ0TZ1u/DtG7OF73truS+TnB
+ 0s/pKf07mel9631+weh3fOuk5fe4i49kyguCJ21NuN/Nv270I0N58iJ00Px370VxUWshXnGBj
+ E34D1oVgRdqaOw+LLSEt3cfFuBp7s/vUwJvJf8nHsr2wvK1WWhMoCW1PwkDsphNuI4h2k6Unf
+ aws0Ikhe/tBPbeqi7ZX7sMvCuYWuc49bLojb3jnFkRqHsp8krBz4/CvH1BsDBOytTspYu4KAG
+ 0uFQyf+ypSvcfWET6c9Zib1eQKQdNTwYZVcTPsWxxf1r4/Tp+/c0fEtJONnuvwUldBfsQ5rtQ
+ PbleS2KTKPD/ZxGlzU32bdob65SBnqlCcbVhSx3WaVZZqsR0WwTs9psxPMNYnBXbwZeRyfJwZ
+ nXyylD/cS34+Zx7B20UKnCG+ksFoq+h1c/i2U+qpkbMKuFNKpi0Q0eaHU0HJgAM0ldtvDHngX
+ Adj69Jln3pU2Pa9K9LyvfAdWtNC27hHVsLOoN6Ax8+pL5NBrdz6Gd3Yr6PSVXTdxl4qC8B3Cg
+ VzXcMU68MLDnNULfiqyGSnQZnXC0STc6g2OzgLtJp3ibWoMGYc=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10.01.2022 10:09, Christoph Hellwig wrote:
-> On Thu, Jan 06, 2022 at 08:17:44PM -0800, Florian Fainelli wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->>
->> For bus devices to be fully usable it's required to set their DMA
->> parameters.
->>
->> For years it has been missing and remained unnoticed because of
->> mips_dma_alloc_coherent() silently handling the empty coherent_dma_mask.
->> Kernel 4.19 came with a lot of DMA changes and caused a regression on
->> the bcm47xx. Starting with the commit f8c55dc6e828 ("MIPS: use generic
->> dma noncoherent ops for simple noncoherent platforms") DMA coherent
->> allocations just fail. Example:
->> [    1.114914] bgmac_bcma bcma0:2: Allocation of TX ring 0x200 failed
->> [    1.121215] bgmac_bcma bcma0:2: Unable to alloc memory for DMA
->> [    1.127626] bgmac_bcma: probe of bcma0:2 failed with error -12
->> [    1.133838] bgmac_bcma: Broadcom 47xx GBit MAC driver loaded
->>
->> This change fixes above regression in addition to the MIPS bcm47xx
->> commit 321c46b91550 ("MIPS: BCM47XX: Setup struct device for the SoC").
-> 
-> How did it take so long to notice this?
+On Tue, Dec 28, 2021 at 3:39 PM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The existing per-arch definitions are pretty much historic cruft.
+> Move SYSVIPC_COMPAT into init/Kconfig.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Christoph Hellwig <hch@infradead.org>
 
-I noticed it 3 years ago and sent semi-fix that wasn't accepted (for
-probably a good reason) back then:
-[PATCH wireless-drivers-next] bcma: get SoC device struct & copy its DMA params to the subdevices
-https://patchwork.kernel.org/project/linux-wireless/patch/20190121101121.24555-1-zajec5@gmail.com/
-
-Since then OpenWrt carried on above fix as a downstream patch.
-
-I guess OpenWrt is the only active user of that code.
-
-Thanks a lot Florian for bringing that upstream.
+Acked-by: Arnd Bergmann <arnd@arndb.de>
