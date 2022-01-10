@@ -2,33 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EDB4897CA
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 12:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8604897DA
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 12:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244963AbiAJLpK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Jan 2022 06:45:10 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:47905 "EHLO
+        id S245139AbiAJLqe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jan 2022 06:46:34 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:46837 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245002AbiAJLna (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jan 2022 06:43:30 -0500
-Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MlbPO-1mhCz0102k-00ikU9; Mon, 10 Jan 2022 12:43:24 +0100
-Received: by mail-wr1-f44.google.com with SMTP id x4so1027657wru.7;
-        Mon, 10 Jan 2022 03:43:24 -0800 (PST)
-X-Gm-Message-State: AOAM532cJ9YupYp5rv8tKPmIheJoY7X4QmkcE3vWoQQYsa0bkqTHzigf
-        8WPRdoJ7E9PyVsphGN03UXBrneNCeEzEgJ7Rf74=
-X-Google-Smtp-Source: ABdhPJzLcQEl2WnX1Puj9mlVNbd4vaTr3cFkZQMjDOmTeJ+poLBbKI4XZ3sC+IOr25uQ9in4zKpCyj1iJaRs8pYrhxQ=
-X-Received: by 2002:adf:fd46:: with SMTP id h6mr1566034wrs.192.1641815003810;
- Mon, 10 Jan 2022 03:43:23 -0800 (PST)
+        with ESMTP id S245057AbiAJLor (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jan 2022 06:44:47 -0500
+Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N6srB-1mIELs0cE3-018Ljf; Mon, 10 Jan 2022 12:44:43 +0100
+Received: by mail-wm1-f41.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso7100925wme.1;
+        Mon, 10 Jan 2022 03:44:42 -0800 (PST)
+X-Gm-Message-State: AOAM533rbW8I/zhbzzufvc7FVVKccYs2HyUks/Txze1jfZ/j7XE332Xm
+        Bk2YP3WYRRlkZiX6t5B/nD4R+yzhVNZCNnGIh7U=
+X-Google-Smtp-Source: ABdhPJxOkVX5X/eP4ROAMmqEcBQO9QsPU/GNla4UTfIaHqTpDouNC4IkJVmWSHu8Rit8nW/iWcW7PE1EcM2YzrteSLk=
+X-Received: by 2002:a05:600c:287:: with SMTP id 7mr738103wmk.98.1641815082604;
+ Mon, 10 Jan 2022 03:44:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20211228143958.3409187-1-guoren@kernel.org> <20211228143958.3409187-2-guoren@kernel.org>
-In-Reply-To: <20211228143958.3409187-2-guoren@kernel.org>
+References: <20211228143958.3409187-1-guoren@kernel.org> <20211228143958.3409187-3-guoren@kernel.org>
+In-Reply-To: <20211228143958.3409187-3-guoren@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 10 Jan 2022 12:43:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0E+2=BnKienWp_VuT2g=YcEfP81SJmgbrLWZbdhRXXrA@mail.gmail.com>
-Message-ID: <CAK8P3a0E+2=BnKienWp_VuT2g=YcEfP81SJmgbrLWZbdhRXXrA@mail.gmail.com>
-Subject: Re: [PATCH V2 01/17] kconfig: Add SYSVIPC_COMPAT for all architectures
+Date:   Mon, 10 Jan 2022 12:44:26 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3RALe7ihmhZ-5jucrH_0CZm3VyPaVfT-nC-96=1pKTcQ@mail.gmail.com>
+Message-ID: <CAK8P3a3RALe7ihmhZ-5jucrH_0CZm3VyPaVfT-nC-96=1pKTcQ@mail.gmail.com>
+Subject: Re: [PATCH V2 02/17] fs: stat: compat: Add __ARCH_WANT_COMPAT_STAT
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup.patel@wdc.com>,
@@ -49,24 +49,24 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         "the arch/x86 maintainers" <x86@kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:gutJNwyMuuTtGpDlfeICZuij2FOpsCzptA9h7G3xYohePOG8wKa
- qLxKJ4cSljVVu53YMy4KjvsBLQp6JzHVB5xgM5u7sKr8Li3uOQGuGolvY+AP18ofbAUYtEn
- 17QIiccD7/rATL7HkGsYkc1VAivZ6REBlXybI/+YaL//Ll0zotVZqqyqfRpfNkNVz3C1YeM
- NHXHlq3+dgA6ndJsz0R5Q==
+X-Provags-ID: V03:K1:QcdpajMVdqePgdZs3xa0JNoXkGWZsqEGyIW4ADogHwcH7sEw3sc
+ B6Sdrms+G3BiHqA+1duROp8eIXF5HRkaiSYuyQ8n5o0Tgy8/Z2VI2ZYq5WzkvDflqkuWZA2
+ WXt7FJmbO0Sfj8IuxngKGVl+wMGrGDmXYiYvIF29XIJaKk2wqtDfl6T5Vm0ldkRjsZpCzoy
+ 09PG46k5SIvkQ+r5Cx6lg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lIN9WQRIHgU=:w3Mgy0NJruiLGOp8UgCTRy
- DwAfYFVcA2r6tMoTf7wKf+wr86VTzN6lilV4UIlVq3UkdLC1VS18A7f9LztizjXGNu7ty8rGs
- zzCHNhnqaebVjPf+mvnyxUypKUv60af+F1jqSSxFS0pb++TkTZzdUzlHWUQauhWKEw+fODzXZ
- O/lhb1Pdd9rcjpk+rR1z4tGrbAp69CAUjb9iCmQ9F3tTGwrOkk4NrsIcTNt8pgkvK3AwmrSjB
- TFE36mGbyRrpaqby3AQLBTduwb6YdNaMQpFsjy5hWNQQeSj3wDZ0TZ1u/DtG7OF73truS+TnB
- 0s/pKf07mel9631+weh3fOuk5fe4i49kyguCJ21NuN/Nv270I0N58iJ00Px370VxUWshXnGBj
- E34D1oVgRdqaOw+LLSEt3cfFuBp7s/vUwJvJf8nHsr2wvK1WWhMoCW1PwkDsphNuI4h2k6Unf
- aws0Ikhe/tBPbeqi7ZX7sMvCuYWuc49bLojb3jnFkRqHsp8krBz4/CvH1BsDBOytTspYu4KAG
- 0uFQyf+ypSvcfWET6c9Zib1eQKQdNTwYZVcTPsWxxf1r4/Tp+/c0fEtJONnuvwUldBfsQ5rtQ
- PbleS2KTKPD/ZxGlzU32bdob65SBnqlCcbVhSx3WaVZZqsR0WwTs9psxPMNYnBXbwZeRyfJwZ
- nXyylD/cS34+Zx7B20UKnCG+ksFoq+h1c/i2U+qpkbMKuFNKpi0Q0eaHU0HJgAM0ldtvDHngX
- Adj69Jln3pU2Pa9K9LyvfAdWtNC27hHVsLOoN6Ax8+pL5NBrdz6Gd3Yr6PSVXTdxl4qC8B3Cg
- VzXcMU68MLDnNULfiqyGSnQZnXC0STc6g2OzgLtJp3ibWoMGYc=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/alrCxvyf30=:xd+QVZb4vLhBhl9WqKJCsl
+ KHyain12c7ZXDs+xxhVJ+ZuondJEPviA2Y9XjboF+Z0SYK2zuSK0ZA5oJ92FGKocjul5mkzrR
+ P/NWIWw6ni0hXK8zFOFyfYR+4wbaGshot7xigWvapHBvnYwfjAMOke7+RdruEkPBhpW78hBVJ
+ KcVcLkxrryggCdZIgoGKQrkyf50Htvd3umV0Isp+dYG5FGVLT5IXuGneRgiSXWGi5FeMRm2F9
+ kuXwcLCyqKaWsMrE5WRNgvFdpBZwUMC2G2T1GKKrvhts1DZy8+oRqOTxklOE+MdE3velfyPUP
+ MpQ+0cMzifobCG3NMduXl0dPXH1v8jEaU0AvX9uHHncsNP7NmqIuK+xDHQvjpXq6JXM3k1fnC
+ Ep30dBWoGgD8iKKzN5ycaWMDV7wfVp9YwCCpLuUFYi/zWEQLy0gRWW9F9EMX3BoV4Sj2af6Fo
+ tR0qEibZ6OmWHwzN0Uh2OfYCggNGj65XGIS0GoALdHsXvMXCY5punoRClJ16yNFYaz25j0JrU
+ RtUXH5jvSwX8XoF/6ak+ShK/KPPzynO21x/vz84ZY3NbAA8I3MmTFBtvZbLE5K0HJX0gwUBH5
+ PLJfHSSPltQ+4PNDWwqC6RUN0XEu/z4e+zYp29euQJzlKHroZoX9pD+2jJK2aI9s/tgWEIVOL
+ 2M66X8/3aSIKUmPfjF9oPoxnt4/X8V0KLkpuD3ViTZ/Z6OB3cNvtYLE6FAeAsHvC3axoZiUgk
+ lsoKgitUGmAQkUjOue1ahu05yVml8G7orsz4294vomAvNIbJYSY6y3OqdW77Ul9Aagq9MEueG
+ OrMvJ+pbN1Vl5uRFvAoHGnYk9GfLRHnr1rGVlDVvAU1dhr+VqA=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -75,12 +75,10 @@ On Tue, Dec 28, 2021 at 3:39 PM <guoren@kernel.org> wrote:
 >
 > From: Guo Ren <guoren@linux.alibaba.com>
 >
-> The existing per-arch definitions are pretty much historic cruft.
-> Move SYSVIPC_COMPAT into init/Kconfig.
+> RISC-V doesn't neeed compat_stat, so using __ARCH_WANT_COMPAT_STAT
+> to exclude unnecessary SYSCALL functions.
 >
 > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Christoph Hellwig <hch@infradead.org>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
