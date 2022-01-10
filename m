@@ -2,83 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8604897DA
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 12:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F2C489827
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 12:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245139AbiAJLqe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Jan 2022 06:46:34 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:46837 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245057AbiAJLor (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jan 2022 06:44:47 -0500
-Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N6srB-1mIELs0cE3-018Ljf; Mon, 10 Jan 2022 12:44:43 +0100
-Received: by mail-wm1-f41.google.com with SMTP id a83-20020a1c9856000000b00344731e044bso7100925wme.1;
-        Mon, 10 Jan 2022 03:44:42 -0800 (PST)
-X-Gm-Message-State: AOAM533rbW8I/zhbzzufvc7FVVKccYs2HyUks/Txze1jfZ/j7XE332Xm
-        Bk2YP3WYRRlkZiX6t5B/nD4R+yzhVNZCNnGIh7U=
-X-Google-Smtp-Source: ABdhPJxOkVX5X/eP4ROAMmqEcBQO9QsPU/GNla4UTfIaHqTpDouNC4IkJVmWSHu8Rit8nW/iWcW7PE1EcM2YzrteSLk=
-X-Received: by 2002:a05:600c:287:: with SMTP id 7mr738103wmk.98.1641815082604;
- Mon, 10 Jan 2022 03:44:42 -0800 (PST)
+        id S245102AbiAJL6w (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jan 2022 06:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245097AbiAJL6v (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jan 2022 06:58:51 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3F7C061757
+        for <linux-mips@vger.kernel.org>; Mon, 10 Jan 2022 03:58:50 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id x6so43393906lfa.5
+        for <linux-mips@vger.kernel.org>; Mon, 10 Jan 2022 03:58:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vAXIYuNH/ABiPfxXuFwD6hgcp+PMFzZ1M3jPIGte8RQ=;
+        b=NJ/1KfGQ48zcYiEWUDeXEubmTWTNVNFMx+ELOnyY6J+LpNXaV8IC5nwRla3xErpV/s
+         TD3hTj+tjN5UDqdhhH1Fwv1KeGp+wSi9yu/hUyLr13SBtxex8FCmU0IkQcz4NZA3haNA
+         sskjdqxUaOqcgQl1CXZrfiNtUG4RvqEFEydULZ9huWWhkfyUcuOITbZ/wXmBEgjIMtEe
+         dkjXZE0Bn6DsBearqgyC3xlueG6vynTLnXe8Ymf+I3pkfAVZkNv0dnAWWg1Byc3UYwRA
+         3PefZz7HTTY6TmTTSy5bWJGzXf6+/dtgPJzNuuoh5iIm+mroxAgS/jfW4o1aLrqxU9hN
+         o0EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vAXIYuNH/ABiPfxXuFwD6hgcp+PMFzZ1M3jPIGte8RQ=;
+        b=mHVnIsmIWKwbtxbWyJ9TBbbOsLHhmqz8Qgma1vQeNyi6806yplx4FpVUtheTgdH/Xd
+         BxAce2d29oeZtJJPPE2MKsuAzLEzOWmhPLgbLhd+4RrRt3bqIuKyxMyo6mTDq8BYlzyo
+         bTicdZcFwjPiCHXL8cTWIonQ+ebxqpL3bA9oEcxko0WIAMajDz2fdZymVoiEEBA9E7T+
+         wzTWhfPZJq6dvMA6BQmiVCuRyUfokY2ORNBKgWqKNtWNpB3owciqec4sXU53hgGpDM7s
+         TbbKlW7RyXE/CD8rzNjZVq7rOrRo7WZWhlUv44ug7g6qgMTaYL9K1iFq/pqx/EneCuL8
+         rrsg==
+X-Gm-Message-State: AOAM533jb7RckA7VcBflCKR8g1kPh3cfH9tTszbkKeWT1YIn5dNo7Ur4
+        8W+3qnvYUJEJfK57l/DX+6+SxzLHpiqApcCG9nL/nSEt80wxiw==
+X-Google-Smtp-Source: ABdhPJyvU0aPWAbZNBBTFMu8lAzaFaDMBdxzeezJqVEtf7JUnEGWH30MbzadfScGxijR2bznfgG5kndzKGGMa/VaCeE=
+X-Received: by 2002:a05:6512:4021:: with SMTP id br33mr4147162lfb.233.1641815928741;
+ Mon, 10 Jan 2022 03:58:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20211228143958.3409187-1-guoren@kernel.org> <20211228143958.3409187-3-guoren@kernel.org>
-In-Reply-To: <20211228143958.3409187-3-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 10 Jan 2022 12:44:26 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3RALe7ihmhZ-5jucrH_0CZm3VyPaVfT-nC-96=1pKTcQ@mail.gmail.com>
-Message-ID: <CAK8P3a3RALe7ihmhZ-5jucrH_0CZm3VyPaVfT-nC-96=1pKTcQ@mail.gmail.com>
-Subject: Re: [PATCH V2 02/17] fs: stat: compat: Add __ARCH_WANT_COMPAT_STAT
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        inux-parisc@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
+References: <20220107181723.54392-1-paul@crapouillou.net> <20220107181723.54392-2-paul@crapouillou.net>
+In-Reply-To: <20220107181723.54392-2-paul@crapouillou.net>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 10 Jan 2022 12:58:12 +0100
+Message-ID: <CAPDyKFobtZ_WGtbzhHdBRDT4RjQ8M_NXF+FmqXg2ZHTX=Z1frg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Jonathan Cameron <jonathan.cameron@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:QcdpajMVdqePgdZs3xa0JNoXkGWZsqEGyIW4ADogHwcH7sEw3sc
- B6Sdrms+G3BiHqA+1duROp8eIXF5HRkaiSYuyQ8n5o0Tgy8/Z2VI2ZYq5WzkvDflqkuWZA2
- WXt7FJmbO0Sfj8IuxngKGVl+wMGrGDmXYiYvIF29XIJaKk2wqtDfl6T5Vm0ldkRjsZpCzoy
- 09PG46k5SIvkQ+r5Cx6lg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/alrCxvyf30=:xd+QVZb4vLhBhl9WqKJCsl
- KHyain12c7ZXDs+xxhVJ+ZuondJEPviA2Y9XjboF+Z0SYK2zuSK0ZA5oJ92FGKocjul5mkzrR
- P/NWIWw6ni0hXK8zFOFyfYR+4wbaGshot7xigWvapHBvnYwfjAMOke7+RdruEkPBhpW78hBVJ
- KcVcLkxrryggCdZIgoGKQrkyf50Htvd3umV0Isp+dYG5FGVLT5IXuGneRgiSXWGi5FeMRm2F9
- kuXwcLCyqKaWsMrE5WRNgvFdpBZwUMC2G2T1GKKrvhts1DZy8+oRqOTxklOE+MdE3velfyPUP
- MpQ+0cMzifobCG3NMduXl0dPXH1v8jEaU0AvX9uHHncsNP7NmqIuK+xDHQvjpXq6JXM3k1fnC
- Ep30dBWoGgD8iKKzN5ycaWMDV7wfVp9YwCCpLuUFYi/zWEQLy0gRWW9F9EMX3BoV4Sj2af6Fo
- tR0qEibZ6OmWHwzN0Uh2OfYCggNGj65XGIS0GoALdHsXvMXCY5punoRClJ16yNFYaz25j0JrU
- RtUXH5jvSwX8XoF/6ak+ShK/KPPzynO21x/vz84ZY3NbAA8I3MmTFBtvZbLE5K0HJX0gwUBH5
- PLJfHSSPltQ+4PNDWwqC6RUN0XEu/z4e+zYp29euQJzlKHroZoX9pD+2jJK2aI9s/tgWEIVOL
- 2M66X8/3aSIKUmPfjF9oPoxnt4/X8V0KLkpuD3ViTZ/Z6OB3cNvtYLE6FAeAsHvC3axoZiUgk
- lsoKgitUGmAQkUjOue1ahu05yVml8G7orsz4294vomAvNIbJYSY6y3OqdW77Ul9Aagq9MEueG
- OrMvJ+pbN1Vl5uRFvAoHGnYk9GfLRHnr1rGVlDVvAU1dhr+VqA=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 3:39 PM <guoren@kernel.org> wrote:
+On Fri, 7 Jan 2022 at 19:17, Paul Cercueil <paul@crapouillou.net> wrote:
 >
-> From: Guo Ren <guoren@linux.alibaba.com>
+> The deprecated UNIVERSAL_DEV_PM_OPS() macro uses the provided callbacks
+> for both runtime PM and system sleep, which is very likely to be a
+> mistake, as a system sleep can be triggered while a given device is
+> already PM-suspended, which would cause the suspend callback to be
+> called twice.
 >
-> RISC-V doesn't neeed compat_stat, so using __ARCH_WANT_COMPAT_STAT
-> to exclude unnecessary SYSCALL functions.
+> The amount of users of UNIVERSAL_DEV_PM_OPS() is also tiny (16
+> occurences) compared to the number of places where
+> SET_SYSTEM_SLEEP_PM_OPS() is used with pm_runtime_force_suspend() and
+> pm_runtime_force_resume(), which makes me think that none of these cases
+> are actually valid.
 >
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
+> As the new macro DEFINE_UNIVERSAL_DEV_PM_OPS() which was introduced to
+> replace UNIVERSAL_DEV_PM_OPS() is currently unused, remove it before
+> someone starts to use it in yet another invalid case.
+>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+
+> ---
+>
+> Notes:
+>     v2: No change
+>     v3: - Keep UNIVERSAL_DEV_PM_OPS deprecated
+>         - Rework commit message
+>
+>  include/linux/pm.h | 21 ++++++++-------------
+>  1 file changed, 8 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index e1e9402180b9..02f059d814bb 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -366,6 +366,12 @@ static const struct dev_pm_ops name = { \
+>         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+>  }
+>
+> +/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> +#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +const struct dev_pm_ops __maybe_unused name = { \
+> +       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> +}
+> +
+>  /*
+>   * Use this for defining a set of PM operations to be used in all situations
+>   * (system suspend, hibernation or runtime PM).
+> @@ -378,20 +384,9 @@ static const struct dev_pm_ops name = { \
+>   * suspend and "early" resume callback pointers, .suspend_late() and
+>   * .resume_early(), to the same routines as .runtime_suspend() and
+>   * .runtime_resume(), respectively (and analogously for hibernation).
+> + *
+> + * Deprecated. You most likely don't want this macro.
+>   */
+> -#define DEFINE_UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+> -static const struct dev_pm_ops name = { \
+> -       SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -       RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+> -#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> -const struct dev_pm_ops __maybe_unused name = { \
+> -       SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> -}
+> -
+> -/* Deprecated. Use DEFINE_UNIVERSAL_DEV_PM_OPS() instead. */
+>  #define UNIVERSAL_DEV_PM_OPS(name, suspend_fn, resume_fn, idle_fn) \
+>  const struct dev_pm_ops __maybe_unused name = { \
+>         SET_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> --
+> 2.34.1
+>
