@@ -2,105 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1028D488FBF
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 06:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C5D4894BE
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 10:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238712AbiAJF0O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Jan 2022 00:26:14 -0500
-Received: from mga09.intel.com ([134.134.136.24]:54947 "EHLO mga09.intel.com"
+        id S242269AbiAJJJ7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jan 2022 04:09:59 -0500
+Received: from verein.lst.de ([213.95.11.211]:37684 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230407AbiAJF0L (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 10 Jan 2022 00:26:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641792371; x=1673328371;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=04XjPUd5I3uXPOgfXYDSNAJy4WDjy994czFo7/wAE5E=;
-  b=Yu05MZP3h/8AuoW4ri4ov+MR6XqVllqlGVn/UseY0XGw8cwqaUVn8TeW
-   1j0MlFQljWUXWWd3BV+5Z8+9Rm1ZueB3zfOT+YuUEvEOPCnfbu9IJJBSB
-   d3cDkoMGzPTxTNokLxQgyN47nZ8ESGM/aFva8i/oT+Vnqr6P60tvbHDXd
-   +BmnEOO0kRK8qkRLh9VXKFP+qD8Q38Nas4iyUBEqvav/SframwMnooi5Q
-   w81rnobUv+0wT4vLptwxIy73T0wI6k9aR4kK+tGpgbYJ3l9sqpfyC0dF9
-   xI3Jk/t3VW84MMO/DibHYi6vQjdSxfGStF+S+YhdMbwj/UYth5UeL1eEe
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="242952666"
-X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
-   d="scan'208";a="242952666"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2022 21:26:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
-   d="scan'208";a="575709888"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Jan 2022 21:26:07 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n6nC3-0002Ge-72; Mon, 10 Jan 2022 05:26:07 +0000
-Date:   Mon, 10 Jan 2022 13:25:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-mips@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [mips-linux:mips-next 47/54] sound/pci/ca0106/ca0106.h:62:9:
- warning: 'PTR' macro redefined
-Message-ID: <202201101327.4yt7VUmE-lkp@intel.com>
+        id S238722AbiAJJJ6 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 10 Jan 2022 04:09:58 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 8A00968AA6; Mon, 10 Jan 2022 10:09:55 +0100 (CET)
+Date:   Mon, 10 Jan 2022 10:09:55 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-mips@vger.kernel.org,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH] bcma: get SoC device struct & assign dma_mask
+Message-ID: <20220110090955.GA7422@lst.de>
+References: <20220107041744.2388470-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220107041744.2388470-1-f.fainelli@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git mips-next
-head:   c5c7440fe7f74645940d5c9e2c49cd7efb706a4f
-commit: f0b7ddbd794bdffade370f22bb7a774002208ef4 [47/54] MIPS: retire "asm/llsc.h"
-config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20220110/202201101327.4yt7VUmE-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=f0b7ddbd794bdffade370f22bb7a774002208ef4
-        git remote add mips-linux https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
-        git fetch --no-tags mips-linux mips-next
-        git checkout f0b7ddbd794bdffade370f22bb7a774002208ef4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash sound/pci/
+On Thu, Jan 06, 2022 at 08:17:44PM -0800, Florian Fainelli wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> For bus devices to be fully usable it's required to set their DMA
+> parameters.
+> 
+> For years it has been missing and remained unnoticed because of
+> mips_dma_alloc_coherent() silently handling the empty coherent_dma_mask.
+> Kernel 4.19 came with a lot of DMA changes and caused a regression on
+> the bcm47xx. Starting with the commit f8c55dc6e828 ("MIPS: use generic
+> dma noncoherent ops for simple noncoherent platforms") DMA coherent
+> allocations just fail. Example:
+> [    1.114914] bgmac_bcma bcma0:2: Allocation of TX ring 0x200 failed
+> [    1.121215] bgmac_bcma bcma0:2: Unable to alloc memory for DMA
+> [    1.127626] bgmac_bcma: probe of bcma0:2 failed with error -12
+> [    1.133838] bgmac_bcma: Broadcom 47xx GBit MAC driver loaded
+> 
+> This change fixes above regression in addition to the MIPS bcm47xx
+> commit 321c46b91550 ("MIPS: BCM47XX: Setup struct device for the SoC").
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+How did it take so long to notice this?
 
-All warnings (new ones prefixed by >>):
+> I don't know if this is what you had in mind. I am also not sure if we
+> should have the bcma_bus_type implement .dma_configure and set it to
+> platform_dma_configure?
 
-   In file included from sound/pci/ca0106/ca0106_main.c:156:
->> sound/pci/ca0106/ca0106.h:62:9: warning: 'PTR' macro redefined [-Wmacro-redefined]
-   #define PTR                     0x00            /* Indexed register set pointer register        */
-           ^
-   arch/mips/include/asm/asm.h:288:9: note: previous definition is here
-   #define PTR             .word
-           ^
-   1 warning generated.
+Unless you have an OF tree that declares DMA limitations there is no
+need to call platform_dma_configure.
 
+> --- a/drivers/bcma/host_soc.c
+> +++ b/drivers/bcma/host_soc.c
+> @@ -191,6 +191,8 @@ int __init bcma_host_soc_init(struct bcma_soc *soc)
+>  	struct bcma_bus *bus = &soc->bus;
+>  	int err;
+>  
+> +	bus->dev = soc->dev;
+> +
+>  	/* Scan bus and initialize it */
+>  	err = bcma_bus_early_register(bus);
+>  	if (err)
+> diff --git a/drivers/bcma/main.c b/drivers/bcma/main.c
+> index 8e7ca3e4c8c4..6793c2ff60fd 100644
+> --- a/drivers/bcma/main.c
+> +++ b/drivers/bcma/main.c
+> @@ -253,6 +253,8 @@ void bcma_prepare_core(struct bcma_bus *bus, struct bcma_device *core)
+>  		if (IS_ENABLED(CONFIG_OF) && bus->dev) {
+>  			core->dma_dev = bus->dev;
+>  		} else {
+> +			if (!core->dev.coherent_dma_mask)
+> +				core->dev.coherent_dma_mask = DMA_BIT_MASK(32);
 
-vim +/PTR +62 sound/pci/ca0106/ca0106.h
+Is there any way coherent_dma_mask could already be set here?
 
-^1da177e4c3f41 Linus Torvalds 2005-04-16  61  
-^1da177e4c3f41 Linus Torvalds 2005-04-16 @62  #define PTR			0x00		/* Indexed register set pointer register	*/
-^1da177e4c3f41 Linus Torvalds 2005-04-16  63  						/* NOTE: The CHANNELNUM and ADDRESS words can	*/
-^1da177e4c3f41 Linus Torvalds 2005-04-16  64  						/* be modified independently of each other.	*/
-^1da177e4c3f41 Linus Torvalds 2005-04-16  65  						/* CNL[1:0], ADDR[27:16]                        */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  66  
+>  			core->dev.dma_mask = &core->dev.coherent_dma_mask;
+>  			core->dma_dev = &core->dev;
 
-:::::: The code at line 62 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Not really needed for the quick fix, but pointing the dma_mask to the
+coherent_dma_mask is a bad idea as it removes the often used feature
+to use a different mask for the cohernent allocations vs the streaming
+mappings.
