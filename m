@@ -2,148 +2,127 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CA9489EE3
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 19:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED2848A32E
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 23:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238786AbiAJSNM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Jan 2022 13:13:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S241522AbiAJWsx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jan 2022 17:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238833AbiAJSNL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jan 2022 13:13:11 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3F0C06173F
-        for <linux-mips@vger.kernel.org>; Mon, 10 Jan 2022 10:13:11 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id q14so13154635plx.4
-        for <linux-mips@vger.kernel.org>; Mon, 10 Jan 2022 10:13:11 -0800 (PST)
+        with ESMTP id S241114AbiAJWsx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jan 2022 17:48:53 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9A9C06173F
+        for <linux-mips@vger.kernel.org>; Mon, 10 Jan 2022 14:48:52 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id x6so49798587lfa.5
+        for <linux-mips@vger.kernel.org>; Mon, 10 Jan 2022 14:48:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cxHGoCKPeejXxn5ep9tK45CMa9YRfaVUDgYewv3YftQ=;
-        b=C0Thjxa3dCGz67AdkuR74RfRQ7KlkfeMXGWaPiALi5GgyYYn6Wf4TWwUspA9OGwQL1
-         tplKF9rQ5IIpbOeSi6LT3MiFV4G6BxzpqGx03ayATy/ZKjE3JyoNywkAquc+MztVX/ZX
-         uXguxTxcjttnpLxrRPDUUjPVudN+B+88gs9d85RHvqBCXWM3koRvSPxiSX3TehGJXXYi
-         7k7llEmMn62tUxGI3S9jNC6Q/2IHzbVqaUIsBuCpeu9b1ffOLsUeXPf6BKWj3mKuGMf5
-         mOs5c9AVi1sgfn/XdFffzhHhUwY+IPGoOKfvUDaXBtIRN8exi0+TvERDLouR5nIxyAZT
-         eYpA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+xeifoUkWFTCfsCxyebM1z99nTIlkDjdcY667ebGhr0=;
+        b=bA6Of3QR/l34jgB3XN18pfWfYSWRuad2hUTGD0Zlzev8rBq3Nu2Z5lIlQSDJ9BSQqk
+         ITWUfYNGcA+w5pruCx8UxMybrv1DQnK9SjdWRXGMVwsisv1cORGs1w3pnFXD7xvHFoS3
+         W1FvYDmrh4sR6fg00z6C/sjIuJNJOENNAm0/mTn5K7o9ADnrJLprFAax+zZMMSccezcE
+         gXWSpC2SBuRXXR2IvY+lNo53uG2x7kLCe8aBohDFevPP9j1mxDthIKWLjrSzP7aCqHr0
+         P7h/dygGznq3TQjZmo8zeYRcgu01QMmc3P0wn33zVtN4zJf/aM21ELZXdl7g1Pb9SOBE
+         k5OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=cxHGoCKPeejXxn5ep9tK45CMa9YRfaVUDgYewv3YftQ=;
-        b=fCtkzQvJ3tk7WF48bqPZ2lxOvlv9CgFhBEmSSIRyrutJ2i/7CtVPrZ/pu6GraJVXHg
-         RaO9dmw/ZlN7ldd7daP8+NwrygPjNdbDej5vooNBqWdb7dIZO8ohXTW2ATPQA24ekkR9
-         iIbMReWxMGeQG3aQRaAkW3iApMHpNy9sfwUWn+NTtWB9fgWOe3wKUg9+A5l0leTJwb7S
-         XoVYBmCuvbapshwPNDGm+NQiFwDnI5LGRPpl1SmYyrXxmZSzuwf6hXNdsob1lSpIXBZf
-         ik+FCc7GJY45JDvWKloC0xzJXs8asl/87CpK0n1q173FpEwVklWAWhfJIjtvwYKXlg23
-         O8NA==
-X-Gm-Message-State: AOAM533/khgKKLWMzgzvWGLkEhb/H8lIxtrHUwdKeTeLXcwpwqWQZRaZ
-        hPV1iNPn2A1D1AF0XKq6cJaCfdN25cU=
-X-Google-Smtp-Source: ABdhPJz7mSiSxbHL+EUfHqVArK20ih0VFUCQryotdM1xWwPm8JRS7U8Ydo0bOtO0sSMgE+2j1XqDng==
-X-Received: by 2002:aa7:8084:0:b0:4bc:9423:96b2 with SMTP id v4-20020aa78084000000b004bc942396b2mr833557pff.45.1641838390676;
-        Mon, 10 Jan 2022 10:13:10 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id q19sm7755137pfk.83.2022.01.10.10.13.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jan 2022 10:13:10 -0800 (PST)
-Subject: Re: [PATCH] bcma: get SoC device struct & assign dma_mask
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-mips@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20220107041744.2388470-1-f.fainelli@gmail.com>
- <20220110090955.GA7422@lst.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <bcae2722-c2c5-5cb9-805e-8e8a06bccd2a@gmail.com>
-Date:   Mon, 10 Jan 2022 10:13:08 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        bh=+xeifoUkWFTCfsCxyebM1z99nTIlkDjdcY667ebGhr0=;
+        b=JKsfvPxo4eY0Ac97dWC9c7NqHhqYmXli8/fHRrhcXx/MWdQZZrV4j6jwHXnWijZgFc
+         q1k0g5X+o8UqaDqfKGwDZ/+qKO5FXoidlR0Giz5h16+82Xlc9RPDwrWrvRNU9wmbaXEv
+         bzerPjKFz0e6m4deTHLfWbPqO1o5/qpxdZILtE1pCb2kJDdBBt+pNqR6iW5Z6OLGquFi
+         qhBZosMvsLnSl03orme2eOGjrtNyBmJ+2bGVeeTJFg8rkIcRyNzs1Q8yGgbl4hvBNtoi
+         o/SN/mabBQg6Am0kpf/QimNygKWaE3PJC6X/r3sT9QsKODi0lafRUl9K0X7yGLq6VuDb
+         eT5g==
+X-Gm-Message-State: AOAM533aEuXpBZ6cVcmNvdsUxOdLVdwpZDTZFWZsgUjx8c2igusRWKZ2
+        1C+covoQAALCC8+RTKH+1A3/AYnDMfU=
+X-Google-Smtp-Source: ABdhPJy5puzgvxincpYl+1XzgqbGHR0wFRrWBrIsAjZfe28UVK0IknhggWFemFWRg/++IF8Zt+X94g==
+X-Received: by 2002:ac2:4a9e:: with SMTP id l30mr1351378lfp.608.1641854931146;
+        Mon, 10 Jan 2022 14:48:51 -0800 (PST)
+Received: from rafiki.local ([2001:470:71:330:af19:dcf:6d1d:d05c])
+        by smtp.gmail.com with ESMTPSA id k10sm1139057ljg.48.2022.01.10.14.48.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 14:48:50 -0800 (PST)
+From:   Lech Perczak <lech.perczak@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Cc:     Lech Perczak <lech.perczak@gmail.com>,
+        John Crispin <john@phrozen.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: [PATCH] MIPS: ath79: drop _machine_restart again
+Date:   Mon, 10 Jan 2022 23:48:44 +0100
+Message-Id: <20220110224844.2329275-1-lech.perczak@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220110090955.GA7422@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 1/10/22 1:09 AM, Christoph Hellwig wrote:
-> On Thu, Jan 06, 2022 at 08:17:44PM -0800, Florian Fainelli wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->>
->> For bus devices to be fully usable it's required to set their DMA
->> parameters.
->>
->> For years it has been missing and remained unnoticed because of
->> mips_dma_alloc_coherent() silently handling the empty coherent_dma_mask.
->> Kernel 4.19 came with a lot of DMA changes and caused a regression on
->> the bcm47xx. Starting with the commit f8c55dc6e828 ("MIPS: use generic
->> dma noncoherent ops for simple noncoherent platforms") DMA coherent
->> allocations just fail. Example:
->> [    1.114914] bgmac_bcma bcma0:2: Allocation of TX ring 0x200 failed
->> [    1.121215] bgmac_bcma bcma0:2: Unable to alloc memory for DMA
->> [    1.127626] bgmac_bcma: probe of bcma0:2 failed with error -12
->> [    1.133838] bgmac_bcma: Broadcom 47xx GBit MAC driver loaded
->>
->> This change fixes above regression in addition to the MIPS bcm47xx
->> commit 321c46b91550 ("MIPS: BCM47XX: Setup struct device for the SoC").
-> 
-> How did it take so long to notice this?
-> 
->> I don't know if this is what you had in mind. I am also not sure if we
->> should have the bcma_bus_type implement .dma_configure and set it to
->> platform_dma_configure?
-> 
-> Unless you have an OF tree that declares DMA limitations there is no
-> need to call platform_dma_configure.
+Commit 81424d0ad0d4 ("MIPS: ath79: Use the reset controller to restart
+OF machines") removed setup of _machine_restart on OF machines to use
+reset handler in reset controller driver.
+While removing remnants of non-OF machines in commit 3a77e0d75eed
+("MIPS: ath79: drop machfiles"), this was introduced again, making it
+impossible to use additional restart handlers registered through device
+tree. Drop setting _machine_restart altogether, and ath79_restart
+function, which is no longer used after this.
 
-OK, so we may have to implement that callback then because on ARM-based
-Devices we have BCMA plus Device Tree being used. Although none of those
-ARM platforms define any DMA apertures or restrictions, I suppose
+Fixes: 3a77e0d75eed ("MIPS: ath79: drop machfiles")
+Cc: John Crispin <john@phrozen.org>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Lech Perczak <lech.perczak@gmail.com>
+---
 
-> 
->> --- a/drivers/bcma/host_soc.c
->> +++ b/drivers/bcma/host_soc.c
->> @@ -191,6 +191,8 @@ int __init bcma_host_soc_init(struct bcma_soc *soc)
->>  	struct bcma_bus *bus = &soc->bus;
->>  	int err;
->>  
->> +	bus->dev = soc->dev;
->> +
->>  	/* Scan bus and initialize it */
->>  	err = bcma_bus_early_register(bus);
->>  	if (err)
->> diff --git a/drivers/bcma/main.c b/drivers/bcma/main.c
->> index 8e7ca3e4c8c4..6793c2ff60fd 100644
->> --- a/drivers/bcma/main.c
->> +++ b/drivers/bcma/main.c
->> @@ -253,6 +253,8 @@ void bcma_prepare_core(struct bcma_bus *bus, struct bcma_device *core)
->>  		if (IS_ENABLED(CONFIG_OF) && bus->dev) {
->>  			core->dma_dev = bus->dev;
->>  		} else {
->> +			if (!core->dev.coherent_dma_mask)
->> +				core->dev.coherent_dma_mask = DMA_BIT_MASK(32);
-> 
-> Is there any way coherent_dma_mask could already be set here?
+Side note: a lot of code, that was previously encompassed by
+"if (mips_machtype != ATH79_MACH_GENERIC_OF) {...} " seems to be
+unnecessary at the time of dropping the non-OF machine definitions.
+However it was retained for some reason, and I see a lot of references
+to it by the drivers. OTOH, OF part of ath79 platform - basically whole ath79
+target of OpenWrt works well without this code in 19.07 release, using 4.14.y
+tree, on which the bug I'm fixing here is absent as well.
 
-On MIPS-based devices (not using Device Tree), I don't see a way this
-could be set, however on ARM based devices, since they use Device Tree,
-maybe this value could be different than 0. I will run some tests on
-both types of devices and post an updated patch if relevant.
+I tested this change on several devices:
+TP-Link TL-WDR4300, TP-Link Archer C7v2, Meraki MR18 using OF,
+and on ZTE MF286 - using OF as well - which is the very reason I discovered
+this issue, as it requires registration of  gpio-restart handler,
+ineffective due to this issue.
 
-Thanks!
+ arch/mips/ath79/setup.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-> 
->>  			core->dev.dma_mask = &core->dev.coherent_dma_mask;
->>  			core->dma_dev = &core->dev;
-> 
-> Not really needed for the quick fix, but pointing the dma_mask to the
-> coherent_dma_mask is a bad idea as it removes the often used feature
-> to use a different mask for the cohernent allocations vs the streaming
-> mappings.
-
-OK.
+diff --git a/arch/mips/ath79/setup.c b/arch/mips/ath79/setup.c
+index 891f495c4c3c..0ac435fe2dc9 100644
+--- a/arch/mips/ath79/setup.c
++++ b/arch/mips/ath79/setup.c
+@@ -34,15 +34,6 @@
+ 
+ static char ath79_sys_type[ATH79_SYS_TYPE_LEN];
+ 
+-static void ath79_restart(char *command)
+-{
+-	local_irq_disable();
+-	ath79_device_reset_set(AR71XX_RESET_FULL_CHIP);
+-	for (;;)
+-		if (cpu_wait)
+-			cpu_wait();
+-}
+-
+ static void ath79_halt(void)
+ {
+ 	while (1)
+@@ -234,7 +225,6 @@ void __init plat_mem_setup(void)
+ 
+ 	detect_memory_region(0, ATH79_MEM_SIZE_MIN, ATH79_MEM_SIZE_MAX);
+ 
+-	_machine_restart = ath79_restart;
+ 	_machine_halt = ath79_halt;
+ 	pm_power_off = ath79_halt;
+ }
 -- 
-Florian
+2.30.2
+
