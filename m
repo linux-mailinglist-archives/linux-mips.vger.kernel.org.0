@@ -2,149 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D34874A3045
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jan 2022 16:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9764A3183
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jan 2022 20:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348103AbiA2PXn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jan 2022 10:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351152AbiA2PXl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jan 2022 10:23:41 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147FFC061751
-        for <linux-mips@vger.kernel.org>; Sat, 29 Jan 2022 07:23:40 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id j14so13248137lja.3
-        for <linux-mips@vger.kernel.org>; Sat, 29 Jan 2022 07:23:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=drummond.us; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0mCWH6Tux8tcx0O8BuZbvK36ydxh3XeFUHA8Flrblcc=;
-        b=cmvGYiFpo2ar6tVj5q2BCQVYb9k8BBD0XwhyxqAVItAmy2DCdgiftAuj8oc7BBE49Q
-         LjK1fzbe0hOX97nInIogSNxADc9w4GpCfyauU6NFtNktDIG03u61lrQy9hqdUvd6EUft
-         C6I/tHY4kzyBauIRoXYOzo9LGSe929OK0jEzQ59wjAL3By0a+QjA0M9X3G7I1kcoxcb7
-         Q0AdPG8TS8c6yTTOUze5l0qFpdoVitgV/p2s3UNbwqPC0EG+SKAZieLlLnSPMO8rnFD5
-         +FIv54+PLtXCBluE0vkOLnAVfI1OEciJIeE6mtAgIHH1+Z3qSeTB6dFp5Kah63auycAx
-         k05w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0mCWH6Tux8tcx0O8BuZbvK36ydxh3XeFUHA8Flrblcc=;
-        b=5WP4v2Dl9/pCCHw6leqqaHcGtCfiyYJ7Q5p7v9t+StkY3YSc30F1Hs/TX/E5TPkNhf
-         +gWVIRbA50QYt3F86k6piXCNWr1aXVWGHlX5+5aO890A+HW8oxr7inLmWF44enGnF4c6
-         7r641iyhPTVf1apXZ3Gp6L4H5qD5b3Fu8GN+oJAIjNcWfszWw6I1oH60nyZV0fefdHWy
-         IO2yRtY+ebNuxHKjnip1gaiCLa+lYfbxzAZDBEsKLMre36xLCEnUI6zaS5mO3YMbursi
-         ZYRm7eUWK40+tE3KCx4deyUPWbWCdk5lf2uguo0KnCoAXK/TnHSdE9dtOFd34BsaiTls
-         CzkQ==
-X-Gm-Message-State: AOAM533O5TuB9Us4loiD7y6+tP1HuvRY+l5mfnFB9/UTLOEZhNgM0hFx
-        5IRNGCvDu+jjuGEBmRRP3ZmMyL34iNd39Yr1hAfJ8w==
-X-Google-Smtp-Source: ABdhPJzK4pFoabd9NoIBHHNS2OQ2X0frUhiKWXvHsU/uBjqxnLeu+8dmN2me2gLqvfH4JEfcPiamxCIYMad5ipU8E2c=
-X-Received: by 2002:a2e:994a:: with SMTP id r10mr8482884ljj.254.1643469817879;
- Sat, 29 Jan 2022 07:23:37 -0800 (PST)
+        id S1352759AbiA2TXM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jan 2022 14:23:12 -0500
+Received: from [36.155.112.122] ([36.155.112.122]:59518 "EHLO
+        ecs-42a4.novalocal" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230301AbiA2TXL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jan 2022 14:23:11 -0500
+Received: from User (localhost [127.0.0.1])
+        by ecs-42a4.novalocal (Postfix) with SMTP id D13AB4C92E7;
+        Tue, 11 Jan 2022 06:02:30 +0800 (CST)
+Reply-To: <andbaill228@mail2world.com>
+From:   "Vlieghe" <andbaill228@mail2world.com>
+Subject: Very Importante Notice
+Date:   Tue, 11 Jan 2022 00:01:09 +0200
 MIME-Version: 1.0
-References: <20220118044259.764945-1-walt@drummond.us> <YfFQeC1cUVFmISMK@kroah.com>
-In-Reply-To: <YfFQeC1cUVFmISMK@kroah.com>
-From:   Walt Drummond <walt@drummond.us>
-Date:   Sat, 29 Jan 2022 07:23:26 -0800
-Message-ID: <CADCN6nyyChM=jb9nmc2jDg2UdHUoXp3E05=ifxRpcs=8k8t09Q@mail.gmail.com>
-Subject: Re: [PATCH 0/3] status: TTY status message request
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
-        borntraeger@linux.ibm.com, chris@zankel.net, davem@davemloft.net,
-        hca@linux.ibm.com, deller@gmx.de, ink@jurassic.park.msu.ru,
-        James.Bottomley@hansenpartnership.com, jirislaby@kernel.org,
-        mattst88@gmail.com, jcmvbkbc@gmail.com, mpe@ellerman.id.au,
-        paulus@samba.org, rth@twiddle.net, dalias@libc.org,
-        tsbogend@alpha.franken.de, gor@linux.ibm.com, ysato@users.osdn.me,
-        linux-kernel@vger.kernel.org, ar@cs.msu.ru,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20220110220231.D13AB4C92E7@ecs-42a4.novalocal>
+To:     undisclosed-recipients:;
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-ACK, will do.
+Sir/Madam,
 
-On Wed, Jan 26, 2022 at 5:45 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Jan 17, 2022 at 08:42:57PM -0800, Walt Drummond wrote:
-> > This patchset adds TTY status message request feature to the n_tty
-> > line dicipline.  This feature prints a brief message containing basic
-> > system and process group information to a user's TTY in response to a
-> > new control character in the line dicipline (default Ctrl-T) or the
-> > TIOCSTAT ioctl.  The message contains the current system load, the
-> > name and PID of an interesting process in the forground process group,
-> > it's run time, percent CPU usage and RSS.  An example of this message
-> > is:
-> >
-> >   load: 0.31  cmd: sleep 3616843 [sleeping] 0.36r 0.00u 0.00s 0% 696k
-> >
-> > User API visible changes are limited to:
-> >  - The addition of VSTATUS in termios.c_cc[]
-> >  - The addition of NOKERNINFO bit in termios.l_cflags
-> >  - The addition of the TIOCSTAT ioctl number
-> >
-> > None of these changes break the existing kernel api as the termios
-> > structure on all architectures has enough space in the control
-> > character array (.c_cc) for the new character, and the other changes
-> > are space agnostic.
-> >
-> > This feature is in many other Unix-like systems, both current and
-> > historical.  In other implementations, this feature would also send
-> > SIGINFO to the process group; this implementation does not.
-> >
-> > Walt Drummond (3):
-> >   vstatus: Allow the n_tty line dicipline to write to a user tty
-> >   vstatus: Add user space API definitions for VSTATUS, NOKERNINFO and
-> >     TIOCSTAT
-> >   status: Display an informational message when the VSTATUS character is
-> >     pressed or TIOCSTAT ioctl is called.
-> >
-> >  arch/alpha/include/asm/termios.h         |   4 +-
-> >  arch/alpha/include/uapi/asm/ioctls.h     |   1 +
-> >  arch/alpha/include/uapi/asm/termbits.h   |  34 ++---
-> >  arch/ia64/include/asm/termios.h          |   4 +-
-> >  arch/ia64/include/uapi/asm/termbits.h    |  34 ++---
-> >  arch/mips/include/asm/termios.h          |   4 +-
-> >  arch/mips/include/uapi/asm/ioctls.h      |   1 +
-> >  arch/mips/include/uapi/asm/termbits.h    |  36 ++---
-> >  arch/parisc/include/asm/termios.h        |   4 +-
-> >  arch/parisc/include/uapi/asm/ioctls.h    |   1 +
-> >  arch/parisc/include/uapi/asm/termbits.h  |  34 ++---
-> >  arch/powerpc/include/asm/termios.h       |   4 +-
-> >  arch/powerpc/include/uapi/asm/ioctls.h   |   2 +
-> >  arch/powerpc/include/uapi/asm/termbits.h |  34 ++---
-> >  arch/s390/include/asm/termios.h          |   4 +-
-> >  arch/sh/include/uapi/asm/ioctls.h        |   1 +
-> >  arch/sparc/include/uapi/asm/ioctls.h     |   1 +
-> >  arch/sparc/include/uapi/asm/termbits.h   |  38 +++---
-> >  arch/xtensa/include/uapi/asm/ioctls.h    |   1 +
-> >  drivers/tty/Makefile                     |   2 +-
-> >  drivers/tty/n_tty.c                      | 113 +++++++++++-----
-> >  drivers/tty/n_tty_status.c               | 162 +++++++++++++++++++++++
-> >  drivers/tty/tty_io.c                     |   2 +-
-> >  include/asm-generic/termios.h            |   4 +-
-> >  include/linux/tty.h                      | 123 ++++++++---------
-> >  include/uapi/asm-generic/ioctls.h        |   1 +
-> >  include/uapi/asm-generic/termbits.h      |  34 ++---
-> >  27 files changed, 461 insertions(+), 222 deletions(-)
-> >  create mode 100644 drivers/tty/n_tty_status.c
-> >
-> > --
-> > 2.30.2
-> >
->
-> You forgot to cc: me on patch 2/3, which would be needed if I was to
-> take them all.
->
-> Please fix up patch 2 and resend the whole series.
->
-> thanks,
->
-> greg k-h
+Good day to you.
+
+I am Dr.Gertjan Vlieghe personal Secretary to Andrew Bailey who double as the Governor, Bank of England (https://en.wikipedia.org/wiki/Andrew_Bailey_%28banker%29). We have an inheritance of a deceased client, who bear the same name  with your surname. kindly contact Andrew Bailey through his personal email ( andbaill228@mail2world.com ) with your details for more information.
+
+Thank you.
+
+Dr.Gertjan Vlieghe
