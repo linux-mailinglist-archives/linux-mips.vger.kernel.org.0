@@ -2,86 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2E8488F52
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 05:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1028D488FBF
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 06:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbiAJE2z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 9 Jan 2022 23:28:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238606AbiAJE2E (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 9 Jan 2022 23:28:04 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59400C034008
-        for <linux-mips@vger.kernel.org>; Sun,  9 Jan 2022 20:27:00 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id j11so39879753lfg.3
-        for <linux-mips@vger.kernel.org>; Sun, 09 Jan 2022 20:27:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=dKFXRxFFjh9xw1vPCYWrhibJscdy5DYIaUyqlpaPFVc=;
-        b=LJk8AnJN/vcLlNMVINt5qv4Oir+hisptzERGH9x6MjhdyanWL32qtYVh9rQ2/IrTbj
-         Wkbrz1xsUP8Aj9zQKIz6L64DQtRXHReIhmdwPsqiNgkhe2vOGw/+ii4tJsvcDW4HCwkO
-         xgF7mkRZthSha2Z8zn2E7mbMJwL86kG+RpL2pjiSpGxQ3IARP/ImluJMIjJYV2as1JMn
-         jQ5BNa0tgJAZ5dggkN9LV8E5bHdqTdF+lD53a0wJiEI1MSdTFv9p+8T6O3m80Qdx4Cce
-         Btek27gnaBh5H88WRqIJFVmAQrGlJeV74GLhMgZKvK603yDW5nDgXNHtEArbBzRKiZ5R
-         z4+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=dKFXRxFFjh9xw1vPCYWrhibJscdy5DYIaUyqlpaPFVc=;
-        b=P0uNvZZMaX5GV34gLWrm4SaknPmHEhzzktrNJkU0YVkTmJiq0fH2hxagozixUz9Tcg
-         7636mHoLb821/NejKu0HiHQPCkBgheZwVw/E74EzhMxd6Zq4dHlT7XVSzUA0Q6Uy23cB
-         aE5grMtSkegjOJRpx0T2qYPOXlP7gRn4iDmpV/m60x4FLCM2QktOAPhN5dyJK+UiuC2a
-         qMU2ANqmIV34kZUdqD6CLqFIlbodZuRjYM94FkXmUErTEJ5srKZ5MoaoCxjdoysGVRla
-         4DYQ4nS8Ao8EAUyKKgb/l6ITy7MWHATKh+1WIVk/JlHGkOq8GkyLPoW9nmE+1gCx7CZc
-         mWdQ==
-X-Gm-Message-State: AOAM532nzVyB2MSYIA1ef329AUDrgm00xllcMT68IwF7B7P1sHFWzZa2
-        KMyU4xWv8Pjq+6oT69v2vThMLqvtn9Ij26jK+K8=
-X-Google-Smtp-Source: ABdhPJx8sm/6Yo9ERzbYCaDngB1jthgf8OU9uxyud8yOAcywJPMong/90IgIcIzjHWDGS5PASMDtIAKc1dpPYMkM9jQ=
-X-Received: by 2002:a05:6512:2606:: with SMTP id bt6mr64112111lfb.202.1641788818437;
- Sun, 09 Jan 2022 20:26:58 -0800 (PST)
+        id S238712AbiAJF0O (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jan 2022 00:26:14 -0500
+Received: from mga09.intel.com ([134.134.136.24]:54947 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230407AbiAJF0L (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 10 Jan 2022 00:26:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641792371; x=1673328371;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=04XjPUd5I3uXPOgfXYDSNAJy4WDjy994czFo7/wAE5E=;
+  b=Yu05MZP3h/8AuoW4ri4ov+MR6XqVllqlGVn/UseY0XGw8cwqaUVn8TeW
+   1j0MlFQljWUXWWd3BV+5Z8+9Rm1ZueB3zfOT+YuUEvEOPCnfbu9IJJBSB
+   d3cDkoMGzPTxTNokLxQgyN47nZ8ESGM/aFva8i/oT+Vnqr6P60tvbHDXd
+   +BmnEOO0kRK8qkRLh9VXKFP+qD8Q38Nas4iyUBEqvav/SframwMnooi5Q
+   w81rnobUv+0wT4vLptwxIy73T0wI6k9aR4kK+tGpgbYJ3l9sqpfyC0dF9
+   xI3Jk/t3VW84MMO/DibHYi6vQjdSxfGStF+S+YhdMbwj/UYth5UeL1eEe
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10222"; a="242952666"
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="242952666"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2022 21:26:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,276,1635231600"; 
+   d="scan'208";a="575709888"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Jan 2022 21:26:07 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1n6nC3-0002Ge-72; Mon, 10 Jan 2022 05:26:07 +0000
+Date:   Mon, 10 Jan 2022 13:25:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huang Pei <huangpei@loongson.cn>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-mips@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [mips-linux:mips-next 47/54] sound/pci/ca0106/ca0106.h:62:9:
+ warning: 'PTR' macro redefined
+Message-ID: <202201101327.4yt7VUmE-lkp@intel.com>
 MIME-Version: 1.0
-Reply-To: godwinppter@gmail.com
-Sender: mrpkabore1@gmail.com
-Received: by 2002:a05:6504:502f:0:0:0:0 with HTTP; Sun, 9 Jan 2022 20:26:57
- -0800 (PST)
-From:   Godwin Pete <godwinnpeter@gmail.com>
-Date:   Mon, 10 Jan 2022 05:26:57 +0100
-X-Google-Sender-Auth: PDYM_wxVO19gBVVI_RVvYC10SB0
-Message-ID: <CAEspYAqx1F8fxGQyRHbamcWWMTMi1d4p2x5EhOYQ-jB3-NVnMg@mail.gmail.com>
-Subject: This is for you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git mips-next
+head:   c5c7440fe7f74645940d5c9e2c49cd7efb706a4f
+commit: f0b7ddbd794bdffade370f22bb7a774002208ef4 [47/54] MIPS: retire "asm/llsc.h"
+config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20220110/202201101327.4yt7VUmE-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f3a344d2125fa37e59bae1b0874442c650a19607)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=f0b7ddbd794bdffade370f22bb7a774002208ef4
+        git remote add mips-linux https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git
+        git fetch --no-tags mips-linux mips-next
+        git checkout f0b7ddbd794bdffade370f22bb7a774002208ef4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash sound/pci/
 
-How are you doing? I am very happy to inform you about my success. I'm
-currently out of the country for an investment with part of my share,
-after completing the transfer with an Indian business man. But i will
-visit your country, next year, after the completion of my project.
-Please, contact my secretary to send you the (ATM) card which I've
-already credited with the sum of ($300,000.00). Just contact her to
-help you in receiving the (ATM) card. I've explained everything to her
-before my trip. This is what I can do for you because, you couldn't
-help in the transfer, but for the fact that you're the person whom
-I've contacted initially, for the transfer. I decided to give this
-($300,000.00) as a compensation for being contacted initially for the
-transfer. I always try to make the difference, in dealing with people
-any time I come in contact with them. I'm also trying to show that I'm
-quite a different person from others whose may have a different
-purpose within them. I believe that you will render some help to me
-when I, will visit your country, for another investment there. So
-contact my secretary for the card, Her contact are as follows,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Full name: Mrs, Victoria Nyemuya,
-Country: Burkina Faso
-Email: victorynyemuya@gmail.com
+All warnings (new ones prefixed by >>):
 
-Thanks, and hope for a good corporation with you in future.
+   In file included from sound/pci/ca0106/ca0106_main.c:156:
+>> sound/pci/ca0106/ca0106.h:62:9: warning: 'PTR' macro redefined [-Wmacro-redefined]
+   #define PTR                     0x00            /* Indexed register set pointer register        */
+           ^
+   arch/mips/include/asm/asm.h:288:9: note: previous definition is here
+   #define PTR             .word
+           ^
+   1 warning generated.
 
-Godwin Peter,
+
+vim +/PTR +62 sound/pci/ca0106/ca0106.h
+
+^1da177e4c3f41 Linus Torvalds 2005-04-16  61  
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @62  #define PTR			0x00		/* Indexed register set pointer register	*/
+^1da177e4c3f41 Linus Torvalds 2005-04-16  63  						/* NOTE: The CHANNELNUM and ADDRESS words can	*/
+^1da177e4c3f41 Linus Torvalds 2005-04-16  64  						/* be modified independently of each other.	*/
+^1da177e4c3f41 Linus Torvalds 2005-04-16  65  						/* CNL[1:0], ADDR[27:16]                        */
+^1da177e4c3f41 Linus Torvalds 2005-04-16  66  
+
+:::::: The code at line 62 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
