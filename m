@@ -2,164 +2,176 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D53EE489B42
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 15:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D9D489CDD
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Jan 2022 16:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235506AbiAJOad (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 10 Jan 2022 09:30:33 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:40055 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235510AbiAJO27 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 10 Jan 2022 09:28:59 -0500
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MyK9U-1m8X1J1Mpo-00yhft; Mon, 10 Jan 2022 15:28:57 +0100
-Received: by mail-wr1-f54.google.com with SMTP id v6so27050965wra.8;
-        Mon, 10 Jan 2022 06:28:57 -0800 (PST)
-X-Gm-Message-State: AOAM532VBMarH7QeVUHGoz8+ZXjU/9qZZeVZVz90AB9wVWVF/f/m2yjD
-        M7TXr0hBOeDI3wSDD6t42Wu4QNex4i4JfLRdij8=
-X-Google-Smtp-Source: ABdhPJwP2dj7vwEXcQpaQSkksNl0ZEmP7KqS5c95/LhZe5KvkABgHfbU/HDC2zAjxcbRJXknKfqyiFGKdYDX7S/ttBs=
-X-Received: by 2002:a05:6000:16c7:: with SMTP id h7mr17539097wrf.317.1641824936821;
- Mon, 10 Jan 2022 06:28:56 -0800 (PST)
+        id S236788AbiAJP4X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 10 Jan 2022 10:56:23 -0500
+Received: from mail-eopbgr90080.outbound.protection.outlook.com ([40.107.9.80]:44208
+        "EHLO FRA01-MR2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236654AbiAJP4X (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 10 Jan 2022 10:56:23 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lp4NPyELV3OAzKOdsWoM+xtRogmAbVX7VkRIEFigLc5sXsDsU/6C2zRm6ALK2bVFcx2BpehJpnjbbyErOcl2JlKKiy8Mggz8fo3Td8stvZH2zIDdIHGIqPQ+hgws4JeRZyzX/+BF/YUq2g+ZfP1Zy3vO4rls7s+4qVaO3Z69I+Wt7OxLxzMXice0KG4qLSSgXzB8HKsAVPaXK5/KlRGckgNI45cKYteK1+eNr1LBRTtDayu4z0Il2wwVDmfXi01ADqGT3t0mKntv/4deL6D4zKOr2TAiBuFES/1ILXem7iIoOb4PDW4Vgwx+qY3UZUjz6dC2s/HJFsG3aF1xJzwqyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3mAEJyMIdb3VsVsy5493kv7UAnH3zDC55bpa+Tcojpc=;
+ b=UPJTW2HE4M3EjQwHkoh8EqxjchjFf1LPuIs0ucX3JRzr38J+uEuMwGPPMEku1lTvr+mLkucPtLWQv67lbXFbLrd2q5meUoerXb4oJRs5iW/zIQYIv5iw1EIZMBXVdZMV+i6yzQ2yWEDn8ByvmVPjYHOTanl40Ul88XMrSJJRDQBgrVf+JZICCbVrxAP0OEXBDS7XF3N+dJzIMygoCw9tFBO3O/412KKXK81J6kKHvpRl6N2YlVf25pAhnbMU7vh8RM7KDLgMRPr6fGW0GeZ5fY1nrZjWr5SFTbThnYLrtn6lpFWN9WTnvY03j21BSanJFW5wA1rUq6PGLkrZq8IAnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR2P264MB0643.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.7; Mon, 10 Jan
+ 2022 15:56:19 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::9d4f:1090:9b36:3fc5]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::9d4f:1090:9b36:3fc5%4]) with mapi id 15.20.4867.011; Mon, 10 Jan 2022
+ 15:56:19 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "guoren@kernel.org" <guoren@kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "anup.patel@wdc.com" <anup.patel@wdc.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "liush@allwinnertech.com" <liush@allwinnertech.com>,
+        "wefu@redhat.com" <wefu@redhat.com>,
+        "drew@beagleboard.org" <drew@beagleboard.org>,
+        "wangjunqiang@iscas.ac.cn" <wangjunqiang@iscas.ac.cn>,
+        "hch@infradead.org" <hch@infradead.org>
+CC:     "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "inux-parisc@vger.kernel.org" <inux-parisc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH V2 03/17] asm-generic: fcntl: compat: Remove duplicate
+ definitions
+Thread-Topic: [PATCH V2 03/17] asm-generic: fcntl: compat: Remove duplicate
+ definitions
+Thread-Index: AQHX+/kpy3NwvC9DQUiLoTFp3BRg2qxcfUSA
+Date:   Mon, 10 Jan 2022 15:56:19 +0000
+Message-ID: <d64c8b66-c5bc-81a1-55c6-a0b44cafb19a@csgroup.eu>
+References: <20211228143958.3409187-1-guoren@kernel.org>
+ <20211228143958.3409187-4-guoren@kernel.org>
+In-Reply-To: <20211228143958.3409187-4-guoren@kernel.org>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0dca9241-98cc-494d-e592-08d9d451be21
+x-ms-traffictypediagnostic: MR2P264MB0643:EE_
+x-microsoft-antispam-prvs: <MR2P264MB06437FA080963D2BA43C6CC5ED509@MR2P264MB0643.FRAP264.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:3173;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fsMDdQYz/Amekb2qsUZTKnzsDEiWCNb9SSryyJd3cGb0G7Lvxva8uCjs9RwOcgyfqXn9yS0VZKeS4fEZzpKr/ydy+Sk2YyTmEKpf6iOnDH+Uuqg8JAEr6dXOo0FkHiRPqowWhQawWPiikBMGxpGHyuQTRIPaaSemuWua8B4ZS2HOnM8uzhKgiaLL2SurBcVupZx2IjpgR6o8GmcvVDliwqnProZcUaUTeVrZ+qO7sVYMCBYfw35KWTsa/myNF7b9U6oY8zXpfgCO4AtDglsy1Tgr9ZEGyB0YhGPOE2yM4tBX5I8bRXH4zAi+7n68BlXhZOxIdGhzjY0/1FgbwY2QlBQAjE/LQwugCuz/TnQNtMNx6/TO5dRuZSvu6EAN04L/XaiUsfPZH84PUV7dapS2g0fo3vUi7b9Ij7aRC5txNNh5rtImA0hADQagKWff7/lkQB+11Z5bc8UQQC6xPZVmBs7d0vsxz1iDBPCaVcyJeZKqgU2u2Tn4frfZ4gTcS2sIo+WtKJ+ziCuYS+Iu9y2yPQIdtwIBClbPM5ndI3OsZZp1M2DBXSZFXVdSkZdlTGuWcVSO574FxEieLpSCHPNjYMVPCWwPrKb/Mez0S/lJnKjKYtnx0W8StSpSYcxiB3e85lpcWzXsVeOVZEsBmTdN8XlMV/baPajTyT9jr9wMDwxMkSRVRoaTCyT2H+1c0hqfAdRflM3RbCuq4/JWQ8Rvx2/njT2kPYl9+lxzmBTthIm5uJG+u/iFT/Tqj7tiH/4H1eSIYizRa456owB4f6oOZRaUk8ES+QvWSNo0dztqOWH+XmoGs/J4k/TF7qV3LVNj
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(2906002)(86362001)(31686004)(83380400001)(31696002)(66556008)(64756008)(66446008)(122000001)(66476007)(66946007)(76116006)(91956017)(38100700002)(4326008)(7416002)(316002)(71200400001)(6486002)(186003)(6512007)(8936002)(508600001)(8676002)(38070700005)(54906003)(5660300002)(921005)(36756003)(2616005)(26005)(6506007)(110136005)(44832011)(41533002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c0FtL3NVa0o2S0lXeEdjdUJXRzBQeHBXa2ppSWdMUmEzUFJqaE42d0EzK1JW?=
+ =?utf-8?B?Y0gxWkhyd2dXeWdiSitzQmpPdWdMT3BwdndKRXBKbEp0clNXZTBUNi8wNFFo?=
+ =?utf-8?B?cGRUbkxjNkl6VmNzVWtpUW5ESy8vUTJ0R2FrNkYzd0NYVUdlTmEraERMcjUz?=
+ =?utf-8?B?bWlCalZBT2JhMEVmWDF2bUM5bCt3UGlicE42SCtyL0YvSUxFV1ppdGlRUm5H?=
+ =?utf-8?B?eHl2WXFacnlKQUN2NGx0c1JOSk1oeDhuTHhZS2dIandyaVhBK2MzWThsSTZK?=
+ =?utf-8?B?ZGtFQW42RlBHYnlUVE1FS0VMS00yL1R1dTlScmw2YUVlM0xxY0ZSUmhSWEFU?=
+ =?utf-8?B?LzBqSGp3NDh0VlBtUVNFNjl3U2VhUlR0MEJMUnlGc3FZeXJ2RmNmYnU4bjZ6?=
+ =?utf-8?B?SS9Yajk4a0duTnZyN3QyR3BGSWk4NUZMRS9DNEJZVEViUjdKT0UwNFdjTVJK?=
+ =?utf-8?B?TlhMMWdDc0lNRzJRUjcwV2dYcFBTZVA1TFRGeFB1TGZhNmMzWkk4eEdSc1B6?=
+ =?utf-8?B?ZEVQUUhsT0hFNUlYdGhYK2tkU3B5M3VuWXR0UWdMTFkyTEgvVkRVWkg0WFcx?=
+ =?utf-8?B?blNEVkJHTlRnZ245RUpsaG5wWW9OMHZmNk5wRTVqSWJ5TDllNWlpNEYrNW9l?=
+ =?utf-8?B?MlQyNWRacVQ0V0M1RXVHNjBTeE5BREFQTlBwOWZOVHc4ejArbGczbjZMbFp0?=
+ =?utf-8?B?NDNoeXovWkFCSDZTcWtxcnRhSks5a1NUNEhUaTJPY3VoTHlWRlRyNmYzWUds?=
+ =?utf-8?B?TTlrc3YzdGpvWTFaNGdkTE44MGNmbDNBTUMyZjFWTEV3N2NjT3hmVlY1UXlW?=
+ =?utf-8?B?QzZBOFNvT21wdkVMUEg3ZzNaZERwMG1iOGljRHU3VDhyYnA1ak4vWFFNbDJR?=
+ =?utf-8?B?ZVV6VUh5OWd0bmNVQi9vbVhOYzN6UFY1ektkcGh5UVJKNHZYZERWQmxlRElL?=
+ =?utf-8?B?cDQ1UUtNbjZZRGdKcmlNZlZFeTl5YWlIUEczUnIyZHQ1c0kvTUFYenhnQzJF?=
+ =?utf-8?B?STJCY2tnN3p4U2JDZjB4ZVMrYnNzMGNnemNKQmw5RmRKZHZVaGhKNWs2enpP?=
+ =?utf-8?B?eHBNTjBmOFl3V2FGQmM0MEorMHB6VVEwTmlIMERSY2VPS3pQMHp0Q1FyVjJz?=
+ =?utf-8?B?eHJCQThqZ2NjYzhPNE04S3pqNU1EZ3NnMnJ6Nm5UZUh4VHhKTmVGMkd5OVA1?=
+ =?utf-8?B?RTlRZk1ZalRxVHE0K051M011Y01jTk9CaURrTWJCYVJxRHlTMTJ2S3JUSm00?=
+ =?utf-8?B?amFCaVkzeGE2MHRpS0FETUlLVmRzUkFUZm5nOVRpNURwTjRIcWFSZEg5VTBZ?=
+ =?utf-8?B?SFhieFRoSEpLeFFZWVdjZ1RjVEEwLzFFYXlJU21lRnA4a1VMWFR2NTRUb0tp?=
+ =?utf-8?B?VStTWTBvTytMY1UwT2N3YmFYUnlMM0NtTXg4bk9NWFFsVGJxTTNNL1Y2MFFJ?=
+ =?utf-8?B?QVV5OGNUeTBQaXlLSEVzNnJyd3dDYkQ3VVdRZWRoVnU0TWxCVnpEbWpUNVZu?=
+ =?utf-8?B?d1Q2R1VRcXJiZ2ZUMmhSdHc0OXRRSExMdmpRdlVKTmJsamJNanZkaCsrU3ZV?=
+ =?utf-8?B?WUhIVkl2RWJERncwRStSSm9iOWp5MHIxRURCYUpOdUtVZkxIazNYajhNMGp5?=
+ =?utf-8?B?b2VybHVmcjlSTi9TcCtGNitzeDdTcHBNZk52bXhoQWxXeHVHcmw5aWNTVXMw?=
+ =?utf-8?B?YmhnQk92UXUySE9JdklqdlpNNXVXVHdOcXlFbzJoay85VDFJamlmVzVMYmZM?=
+ =?utf-8?B?YVVhTkdIK2QzTjk1UktHOUtTcjZDemhOTEtRVVZBWXZubnpBM0hodjN1dW9Z?=
+ =?utf-8?B?dnh5cFhLVmNwVjJhUzMrN29iN0tYM3pnUktWVXkvMnFpMWNmNDRMSmZtNG5t?=
+ =?utf-8?B?Umo3NXFRTjdjY09xRHFRam5Jdm1JWmtINEtoMEUrVjM1KzFTK3JBTDdQOW9k?=
+ =?utf-8?B?TXRnUDhyeGdDbkxUK1h2bnFINERydkY4SnF4VmhZQ3hMWTVwZ2VZRk1JMUZS?=
+ =?utf-8?B?UEorOC9odEl0cW0wQlZQWmZkNlNhamRsTFlrMGwyblFrdzdrNUorMTdZVXdE?=
+ =?utf-8?B?RFRyQjFOSm52SXBzcjdBL1JKOUNHSnM0Zi9IVmNjdEw0ZkpZb2FlNEl5QzVP?=
+ =?utf-8?B?ZmJuTjhFTEovRXVoMXhFNGYzWDFXZDh4SHlVQU5VYW9DbjFUaUI3OEhSc3BO?=
+ =?utf-8?B?QVgyWmJEbzJFZWVXTHovRHVNR1F5bDFab3ZMa1M2ejVhMWFnNXUrOHFpc3hW?=
+ =?utf-8?Q?FeCLZTbULduYOEJSO4LGmPsUle/qAGBNL+tbjzBSd4=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <218151C46623A54F868167BCE789D359@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20211228143958.3409187-1-guoren@kernel.org> <20211228143958.3409187-12-guoren@kernel.org>
-In-Reply-To: <20211228143958.3409187-12-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 10 Jan 2022 15:28:40 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0H2Nq=bFdzWGzzGuFWP85JA7=Td6_rb8GqOF3bYCRJBw@mail.gmail.com>
-Message-ID: <CAK8P3a0H2Nq=bFdzWGzzGuFWP85JA7=Td6_rb8GqOF3bYCRJBw@mail.gmail.com>
-Subject: Re: [PATCH V2 11/17] riscv: compat: Add elf.h implementation
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup.patel@wdc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        inux-parisc@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:UXLcJaB2lA59YOxwVTQMBTB9Dxji9s7QCHe0L7WJKm/zT8kjwvJ
- LBjfwCCXJ/N9g7kU69rg+/0EvE2V8nB7GMF9P5FdaYUvOWUrZjBOg+gBanVkEGe4nGS+gU1
- 8Xf8k4fDqhQcn3LL+8hWphPJsrAxWcQ+EFPACTlxX+KeCmtT8e9jRJkmlC+eSDByMH3JQpC
- QwVuQNtUX5VMAzqJpf1qw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HoS1Cfn33y0=:PConMlud95CuR/s+ENDO8j
- Ww8aJhs5Ekbl///6FhHqJvuP/JCTeh7mxyXPpzUN3+nHP50EYZO3IccdpdYDzS0i6rta7poqd
- 0+MHUB1dC5NHSXq7+K5fuC6JV6HEuW03p0s218WvrY1JS1WAeSg/U2oFd42Y0miGh+fbxeURe
- BEDN3EacpJJWsvZMIWaQB2c4E80LxGUcjLHVlTYy3cGvxXrWlewDSe9Q3YSHqX2OxHvFra9Y1
- iacjjPdOoSg28DTtAkE0lsgzWma34lAz8+2ZmqR5iqOsQ/UQMKc3lbKVjxyKb1h0dn7KDoKwQ
- 86zMwLCY6HwT2/4tH8Q2vo6dIABEbit3qXl+3+t2rlt0jaqJ1lRXy0WoV4yovKRXKgr9EQrLI
- vAHP/+Z/jGTTDOdxAs4Lz8jXaSA7n09S2iPz9muukRCtaV2vz7vSylhJFRyb176Yh+g73Sjwr
- /EV+kFNwU/5GaK5FtE894LoZPbfyYXtR80ccbWc4mzXcgiGSV4+kmmv5+HDKJuF/0Tvhmxb6V
- RaNcmGAeRt1uOrGShSUArpz48oCGx9sdsNJjLaO7/tjBntpjdEKo/b/z9GAWDb4MYFPox33vy
- JVhLLYUWb/hHQ3mn3KY7jcvAu8xogbG67nZWJe81LWlHUVBxnEi/mAbfz8f31bXlx3VR42/79
- zze8iRoiPpPNjzfW/V6GffCmJDtaTwbEcAcNtuJ2+3H5TsSbrGZgkdG7yvWiaaDGt0EXLFOb/
- PUCrDfBdyUw8e/nxfEaVOyb7qcc+UYeNif3GiE6TRCeqChpq4ET4SNU7YLpjmek18j2lkqmlq
- k1BGXt0oneRdhdFqllETd4UBBhB9R7DxyQOyTge6+EJPPGzwSA=
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0dca9241-98cc-494d-e592-08d9d451be21
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jan 2022 15:56:19.6342
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /2MzHhKrkR6DFps8SCi1rRJvqmWbheEXwY2CBrBqY0tq/pn41aq6pqn7l38mhQQPfXcgPPHjV4bOOfkXQtYMkclVmKOGlMvKYrKzzGLnK7s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR2P264MB0643
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Dec 28, 2021 at 3:39 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> Implement necessary type and macro for compat elf. See the code
-> comment for detail.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-
-This looks mostly correct,
-
-> +/*
-> + * FIXME: not sure SET_PERSONALITY for compat process is right!
-> + */
-> +#define SET_PERSONALITY(ex)                                               \
-> +do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)                         \
-> +               set_thread_flag(TIF_32BIT);                                \
-> +       else                                                               \
-> +               clear_thread_flag(TIF_32BIT);                              \
-> +       set_personality(PER_LINUX | (current->personality & (~PER_MASK))); \
-> +} while (0)
-
-This means the personality after exec is always set to PER_LINUX, not
-PER_LINUX32, which I think is wrong: you want the PER_LINUX32
-setting to stick, just like the upper bits do in the default implementation.
-
-What the other ones do is:
-
-| arch/parisc/include/asm/elf.h-
-set_personality((current->personality & ~PER_MASK) | PER_LINUX); \
-
-This looks like the same problem you introduce here: always forcing PER_LINUX
-instead of PER_LINUX32 makes it impossible to use PER_LINUX32.
-
-| arch/alpha/include/asm/elf.h:#define SET_PERSONALITY(EX)
-                           \
-| arch/alpha/include/asm/elf.h-   set_personality(((EX).e_flags &
-EF_ALPHA_32BIT)         \
-| arch/alpha/include/asm/elf.h-      ? PER_LINUX_32BIT : PER_LINUX)
-| arch/csky/include/asm/elf.h:#define SET_PERSONALITY(ex)
-set_personality(PER_LINUX)
-| arch/nds32/include/asm/elf.h:#define SET_PERSONALITY(ex)
-set_personality(PER_LINUX)
-
-These look even worse: instead of forcing the lower bits to
-PER_LINUX/PER_LINUX32 and
-leaving the upper bits untouched, these also clear the upper bits
-unconditionally.
-
-| arch/arm64/include/asm/elf.h:#define SET_PERSONALITY(ex)
-                                   \
-| arch/arm64/include/asm/elf.h-   current->personality &=
-~READ_IMPLIES_EXEC;                     \
-| arch/x86/um/asm/elf.h:#define SET_PERSONALITY(ex) do {} while(0)
-| arch/x86/include/asm/elf.h:#define set_personality_64bit()      do {
-} while (0)
-| arch/x86/kernel/process_64.c:static void __set_personality_ia32(void)
-|         current->personality |= force_personality32;
-
-Inconsistent: does not enforce PER_LINUX/PER_LINUX32 as the default
-implementation
-does, but just leaves the value untouched (other than (re)setting
-READ_IMPLIES_EXEC).
-I think this is harmless otherwise, as we generally ignore the lower
-bits, except for the
-bit of code that checks for PER_LINUX32 in override_architecture() to mangle the
-output of sys_newuname() or in /proc/cpuinfo.
-
-| arch/s390/include/asm/elf.h-    if
-(personality(current->personality) != PER_LINUX32)   \
-| arch/s390/include/asm/elf.h-            set_personality(PER_LINUX |
-                   \
-| arch/s390/include/asm/elf.h-
-(current->personality & ~PER_MASK));    \
-| arch/powerpc/include/asm/elf.h- if
-(personality(current->personality) != PER_LINUX32)   \
-| arch/powerpc/include/asm/elf.h-         set_personality(PER_LINUX |
-                   \
-| arch/powerpc/include/asm/elf.h-
-(current->personality & (~PER_MASK)));  \
-| arch/sparc/include/asm/elf_64.h-        if
-(personality(current->personality) != PER_LINUX32)   \
-| arch/sparc/include/asm/elf_64.h-
-set_personality(PER_LINUX |             \
-| arch/sparc/include/asm/elf_64.h-
-(current->personality & (~PER_MASK)));  \
-
-This is probably the behavior you want to copy.
-
-      Arnd
+DQoNCkxlIDI4LzEyLzIwMjEgw6AgMTU6MzksIGd1b3JlbkBrZXJuZWwub3JnIGEgw6ljcml0wqA6
+DQo+IEZyb206IEd1byBSZW4gPGd1b3JlbkBsaW51eC5hbGliYWJhLmNvbT4NCj4gDQo+IFJlbW92
+ZSBkdXBsaWNhdGUgRl9HRVRMSzY0LEZfU0VUTEs2NCxGX1NFVExLVzY0IGRlZmluaXRpb25zIGlu
+DQo+IGFyY2gvKi9pbmNsdWRlL2FzbS9jb21wYXQuaC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEd1
+byBSZW4gPGd1b3JlbkBsaW51eC5hbGliYWJhLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogR3VvIFJl
+biA8Z3VvcmVuQGtlcm5lbC5vcmc+DQo+IENjOiBBcm5kIEJlcmdtYW5uIDxhcm5kQGFybmRiLmRl
+Pg0KPiAtLS0NCj4gICBhcmNoL2FybTY0L2luY2x1ZGUvYXNtL2NvbXBhdC5oICAgfCA0IC0tLS0N
+Cj4gICBhcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vY29tcGF0LmggfCA0IC0tLS0NCj4gICBhcmNo
+L3MzOTAvaW5jbHVkZS9hc20vY29tcGF0LmggICAgfCA0IC0tLS0NCj4gICBhcmNoL3NwYXJjL2lu
+Y2x1ZGUvYXNtL2NvbXBhdC5oICAgfCA0IC0tLS0NCj4gICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9j
+b21wYXQuaCAgICAgfCA0IC0tLS0NCj4gICBpbmNsdWRlL3VhcGkvYXNtLWdlbmVyaWMvZmNudGwu
+aCAgfCAyICstDQo+ICAgNiBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMjEgZGVsZXRp
+b25zKC0pDQo+IA0KDQouLi4NCg0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2FzbS1nZW5l
+cmljL2ZjbnRsLmggYi9pbmNsdWRlL3VhcGkvYXNtLWdlbmVyaWMvZmNudGwuaA0KPiBpbmRleCBl
+Y2QwZjViZGZjMWQuLjViYzFlNTFkNzNiMSAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS91YXBpL2Fz
+bS1nZW5lcmljL2ZjbnRsLmgNCj4gKysrIGIvaW5jbHVkZS91YXBpL2FzbS1nZW5lcmljL2ZjbnRs
+LmgNCj4gQEAgLTExNiw3ICsxMTYsNyBAQA0KPiAgICNkZWZpbmUgRl9HRVRTSUcJMTEJLyogZm9y
+IHNvY2tldHMuICovDQo+ICAgI2VuZGlmDQo+ICAgDQo+IC0jaWZuZGVmIENPTkZJR182NEJJVA0K
+PiArI2lmICFkZWZpbmVkKENPTkZJR182NEJJVCkgfHwgZGVmaW5lZChDT05GSUdfQ09NUEFUKQ0K
+PiAgICNpZm5kZWYgRl9HRVRMSzY0DQo+ICAgI2RlZmluZSBGX0dFVExLNjQJMTIJLyogIHVzaW5n
+ICdzdHJ1Y3QgZmxvY2s2NCcgKi8NCj4gICAjZGVmaW5lIEZfU0VUTEs2NAkxMw0KDQpUaGVyZSBz
+ZWVtcyB0byBiZSBhIHByb2JsZW0gd2l0aCB0aGlzIGNoYW5nZToNCg0KZXJyb3I6IC9saW51eC9p
+bmNsdWRlL3VhcGkvYXNtLWdlbmVyaWMvZmNudGwuaDogbGVhayBDT05GSUdfQ09NUEFUIHRvIA0K
+dXNlci1zcGFjZQ0KbWFrZVszXTogKioqIFsvbGludXgvc2NyaXB0cy9NYWtlZmlsZS5oZWFkZXJz
+aW5zdDo2MzogDQp1c3IvaW5jbHVkZS9hc20tZ2VuZXJpYy9mY250bC5oXSBFcnJvciAxDQptYWtl
+WzNdOiAqKiogV2FpdGluZyBmb3IgdW5maW5pc2hlZCBqb2JzLi4uLg0KbWFrZVsyXTogKioqIFsv
+bGludXgvTWFrZWZpbGU6MTI4MzogaGVhZGVyc10gRXJyb3IgMg0KbWFrZVsxXTogKioqIFtNYWtl
+ZmlsZToyMTk6IF9fc3ViLW1ha2VdIEVycm9yIDINCm1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5
+ICcvb3V0cHV0Jw0KbWFrZVsxXTogTGVhdmluZyBkaXJlY3RvcnkgJy9saW51eCcNCm1ha2U6ICoq
+KiBbTWFrZWZpbGU6MTU3OiBraGRyXSBFcnJvciAyDQptYWtlOiBMZWF2aW5nIGRpcmVjdG9yeSAn
+L2xpbnV4L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzJw0KIyMgU2VsZnRlc3QgYnVpbGQgY29tcGxl
+dGVkIHJjID0gMg0KIyMgRm91bmQgMiBiaW5hcmllcw0KISEhISEhISEhISEhISEhISEhISEhISEh
+ISEhISEhISEhISEhISEhIQ0KISEgRXJyb3IgYnVpbGQgZmFpbGVkIHJjIDINCiEhISEhISEhISEh
+ISEhISEhISEhISEhISEhISEhISEhISEhISEhISENCkVycm9yOiBQcm9jZXNzIGNvbXBsZXRlZCB3
+aXRoIGV4aXQgY29kZSAyLg==
