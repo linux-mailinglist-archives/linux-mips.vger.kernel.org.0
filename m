@@ -2,91 +2,68 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 806DD48FC77
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Jan 2022 13:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6BB48FD07
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Jan 2022 13:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbiAPMFW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Sun, 16 Jan 2022 07:05:22 -0500
-Received: from aposti.net ([89.234.176.197]:33250 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231932AbiAPMFV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 16 Jan 2022 07:05:21 -0500
-Date:   Sun, 16 Jan 2022 12:05:06 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 0/6] DEV_PM_OPS macros rework v3
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Message-Id: <IKXS5R.AB16PVIGN8Z9@crapouillou.net>
-In-Reply-To: <20220107181723.54392-1-paul@crapouillou.net>
-References: <20220107181723.54392-1-paul@crapouillou.net>
+        id S235263AbiAPMuj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 16 Jan 2022 07:50:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235275AbiAPMue (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 16 Jan 2022 07:50:34 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716DBC061751
+        for <linux-mips@vger.kernel.org>; Sun, 16 Jan 2022 04:50:29 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id k15so53481002edk.13
+        for <linux-mips@vger.kernel.org>; Sun, 16 Jan 2022 04:50:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=PyRpPTc+lYT7F6qOCuBrcyW6Zv6hiWy7jcx5AiHp/s4=;
+        b=iEUR2NSc8wSybBDNUN4EYKlffPB0CzrW8YPgLNRCA7pFkpjWqEI0uZHHfwujW5cd7E
+         hc2yEeeyudnI7b0WbN56Ic8e24v49++ZEq3Ii4Ei69nGWkobivw8dpPgxK26j38242eg
+         eOkcMNwVo04lStQmE9zWQWx59zJ7FVGZyg+ePRaD1diiPJdTTfkuSYqPeh+3sQJsL8ec
+         ezhzBjdN8V+FCj/yN/2mVC+DVkBb7czMBlKOW2uqwQKI+xMb1b/d9wRdvZldCEzrJwbk
+         5swuBb6Q97HyzIFnNkTZVhMTmfOYSCqXfqGsgfU3ilcc+BhSkpylLHmDtX5nTS9tfD24
+         fQiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=PyRpPTc+lYT7F6qOCuBrcyW6Zv6hiWy7jcx5AiHp/s4=;
+        b=qVa6jaj4JeZnfTj1CzNeKYyh9YF8QIvHpIbqtMYHj7DqMDXdl7zfCikp9wjWQWpDhJ
+         lJg4suQ5gbrlr0QElPHKrAsQghC7F5Sy17Amr6qSLJ7qOPCTVeGWNq1nG03VeDfospVN
+         aKse1PvOjI9fr8LxhHwLB5jDe03xgjF7maji1j074VbnUtuPoI6tqOWh/xZxQs9e50vg
+         V8w1adkyBzWTfHllflKxWVNHJ+GtpYrK0Ko97Ff/oXhNm1XbvUKkb3bj9HQuWIHLGCYS
+         YQTbA7Pc5BkIpge6zG+bYyEug8iHMG1S+c9SP02qo1cDY5ZaxHOc7phOJyqeV/ofp0U/
+         7WEA==
+X-Gm-Message-State: AOAM531E8NzrdGgS+Jcf3ZHt1WSJinop6lKZJKZkPZ0FGjqTNZLchEEx
+        ewXL5t+WKQgyywjwMd1+30JD1jGy4AVzFegrJZc=
+X-Google-Smtp-Source: ABdhPJzh+Brr4dNNf8s0mBdu7Y82h9zgIurYczUeI1EO7xLprmuD+X2hfLWRojwTySa2WozXLmtsicP/j0sruVn4xeo=
+X-Received: by 2002:a17:906:2802:: with SMTP id r2mr14173617ejc.172.1642337427786;
+ Sun, 16 Jan 2022 04:50:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Received: by 2002:a05:6402:2548:0:0:0:0 with HTTP; Sun, 16 Jan 2022 04:50:27
+ -0800 (PST)
+Reply-To: dwilliamssdavid@gmail.com
+From:   "Mr. David Williams" <paulwilliams34252555@gmail.com>
+Date:   Sun, 16 Jan 2022 06:50:27 -0600
+Message-ID: <CABgBS-E_=U9bM8e38-HEhsYiBPM6_xB1EQ8S-8wOWb9V5p7x7Q@mail.gmail.com>
+Subject: Are you aware
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rafael,
+-- 
+Hello ,
 
-Could patches [1/6] and [2/6] make it to 5.17-rc1, or at least -rc2?
+Are you aware that the paying bank is about to transfer your ( Seven
+million two hundred thousand US dollars ) to Mr. Graham Jarvis of 31
+Freshney Drive Grimsby DN31 1TN ENGLAND?.
 
-I'm afraid that if these two have to wait for the 5.18 cycle, then I'll 
-have more drivers to fix later.
+I await your response soon.
 
-Should I add a Fixes tag maybe?
-
-Cheers,
--Paul
-
-
-Le ven., janv. 7 2022 at 18:17:17 +0000, Paul Cercueil 
-<paul@crapouillou.net> a écrit :
-> Hi,
-> 
-> A V2 of my patchset that tweaks a bit the *_DEV_PM_OPS() macros that
-> were introduced recently.
-> 
-> Changes since V2:
-> * [1/6]: - Keep UNIVERSAL_DEV_PM_OPS() macro deprecated
->          - Rework commit message
-> * [3/6]: - Reorder the code to have non-private macros together in the
->            file
-> 	 - Add comment about the necesity to use the new export macro
-> 	   when the dev_pm_ops has to be exported
-> * [5/6]: Add comment about the necesity to use the new export macro
->          when the dev_pm_ops has to be exported
-> 
-> Cheers,
-> -Paul
-> 
-> Paul Cercueil (6):
->   PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
->   PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
->   PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
->   PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
->   PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
->   iio: pressure: bmp280: Use new PM macros
-> 
->  drivers/iio/pressure/bmp280-core.c | 11 ++----
->  drivers/iio/pressure/bmp280-i2c.c  |  2 +-
->  drivers/iio/pressure/bmp280-spi.c  |  2 +-
->  drivers/mmc/host/jz4740_mmc.c      |  4 +--
->  drivers/mmc/host/mxcmmc.c          |  2 +-
->  include/linux/pm.h                 | 55 
-> ++++++++++++++++++++++--------
->  include/linux/pm_runtime.h         | 24 +++++++++++++
->  7 files changed, 71 insertions(+), 29 deletions(-)
-> 
-> --
-> 2.34.1
-> 
-
-
+Regards
+Mr. David Williams
