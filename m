@@ -2,67 +2,91 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F29A548EBC9
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Jan 2022 15:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 806DD48FC77
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Jan 2022 13:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241874AbiANOjD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 14 Jan 2022 09:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242161AbiANOjC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 14 Jan 2022 09:39:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69AFC06161C;
-        Fri, 14 Jan 2022 06:39:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6687A61E77;
-        Fri, 14 Jan 2022 14:39:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CE0D4C36AEA;
-        Fri, 14 Jan 2022 14:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642171140;
-        bh=HWavl3cxxAnrrvk9d1dWlzPzYiQFUvvBV2f9MwAYy4Q=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=XEzQIXr6+htyw4/GyqvsXa82IsKyFuQSXBbR6ZUHqG+Dz4eHAGWMFNhTMvprAsGqZ
-         HHh1aRIQ8VCWBA+bYYzxTLzf8rp6Ce5qj4piz2wo183kpU5eI/1QZNJHzKPT7jl2W+
-         4IazEVXo+a9iZhDTj3ElotOuHUopLJe5NHvy2jcqd9ZmmcJ4Ritxj/gj73E9JvIXUa
-         XcUMzRoLu5+OBfqibb6cGjrfyzvxApDoskVLIsWe/IH0A/5ND0WDgaFxcTk/lPzfHn
-         wmNFKuaA+hj7u+8ctQiVPXc/CkhC633kBIU8zqFOgxvFUgStk+KxHO6VBkYOs49NAR
-         okM2sykkJFgeg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BD3DAF60794;
-        Fri, 14 Jan 2022 14:39:00 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS changes for v5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220114083938.GA4892@alpha.franken.de>
-References: <20220114083938.GA4892@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220114083938.GA4892@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.17
-X-PR-Tracked-Commit-Id: d3115128bdafb62628ab41861a4f06f6d02ac320
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3fb561b1e0bf4c75bc5f4d799845b08fa5ab3853
-Message-Id: <164217114076.3976.15559922916388051600.pr-tracker-bot@kernel.org>
-Date:   Fri, 14 Jan 2022 14:39:00 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S232996AbiAPMFW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Sun, 16 Jan 2022 07:05:22 -0500
+Received: from aposti.net ([89.234.176.197]:33250 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231932AbiAPMFV (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Sun, 16 Jan 2022 07:05:21 -0500
+Date:   Sun, 16 Jan 2022 12:05:06 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v3 0/6] DEV_PM_OPS macros rework v3
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Message-Id: <IKXS5R.AB16PVIGN8Z9@crapouillou.net>
+In-Reply-To: <20220107181723.54392-1-paul@crapouillou.net>
+References: <20220107181723.54392-1-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Fri, 14 Jan 2022 09:39:38 +0100:
+Hi Rafael,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_5.17
+Could patches [1/6] and [2/6] make it to 5.17-rc1, or at least -rc2?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3fb561b1e0bf4c75bc5f4d799845b08fa5ab3853
+I'm afraid that if these two have to wait for the 5.18 cycle, then I'll 
+have more drivers to fix later.
 
-Thank you!
+Should I add a Fixes tag maybe?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Cheers,
+-Paul
+
+
+Le ven., janv. 7 2022 at 18:17:17 +0000, Paul Cercueil 
+<paul@crapouillou.net> a écrit :
+> Hi,
+> 
+> A V2 of my patchset that tweaks a bit the *_DEV_PM_OPS() macros that
+> were introduced recently.
+> 
+> Changes since V2:
+> * [1/6]: - Keep UNIVERSAL_DEV_PM_OPS() macro deprecated
+>          - Rework commit message
+> * [3/6]: - Reorder the code to have non-private macros together in the
+>            file
+> 	 - Add comment about the necesity to use the new export macro
+> 	   when the dev_pm_ops has to be exported
+> * [5/6]: Add comment about the necesity to use the new export macro
+>          when the dev_pm_ops has to be exported
+> 
+> Cheers,
+> -Paul
+> 
+> Paul Cercueil (6):
+>   PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
+>   PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS macro
+>   PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
+>   PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
+>   PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
+>   iio: pressure: bmp280: Use new PM macros
+> 
+>  drivers/iio/pressure/bmp280-core.c | 11 ++----
+>  drivers/iio/pressure/bmp280-i2c.c  |  2 +-
+>  drivers/iio/pressure/bmp280-spi.c  |  2 +-
+>  drivers/mmc/host/jz4740_mmc.c      |  4 +--
+>  drivers/mmc/host/mxcmmc.c          |  2 +-
+>  include/linux/pm.h                 | 55 
+> ++++++++++++++++++++++--------
+>  include/linux/pm_runtime.h         | 24 +++++++++++++
+>  7 files changed, 71 insertions(+), 29 deletions(-)
+> 
+> --
+> 2.34.1
+> 
+
+
