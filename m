@@ -2,32 +2,32 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C28E490E79
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jan 2022 18:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5170490E8C
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jan 2022 18:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241853AbiAQRJQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 17 Jan 2022 12:09:16 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57308 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbiAQRHN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jan 2022 12:07:13 -0500
+        id S242534AbiAQRLQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jan 2022 12:11:16 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55498 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242757AbiAQRHu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jan 2022 12:07:50 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A86AF61253;
-        Mon, 17 Jan 2022 17:07:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDAA2C36AE3;
-        Mon, 17 Jan 2022 17:07:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 653C7B8115E;
+        Mon, 17 Jan 2022 17:07:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B4EC36AEC;
+        Mon, 17 Jan 2022 17:07:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642439232;
+        s=k20201202; t=1642439267;
         bh=Qf6XnIzeElSZlaTPE0+w9iFReX52uTDmquC2axMPOMY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hKN+FhLMEJywY0mwR8OKJNGxRkWChO4M5JZhwcRQWeoGQsfx38halPc8RmtYJSRCs
-         fhri8QVFMhJSFzZvse0Rch/v8NYxCyM8oEYGB1MUPUCdVm+xnvqocQC5pTrdLsGq4J
-         UWHEij5MYfIeYISrQ2jI2+0Omn/0ThtUtTI/ZsEwWpEzqBC0oZs6VSNZuLocK6HgHa
-         +/5GQl5bP/uz9Xmi/9LlO1H5mI4xvjrOjJ6rhp/GIpn/YD794WWFLB9UrT+Kyb7DsX
-         e48eaI0rtCawPIoeGlsI2hWO9ga38/ivDoSj44Q1OBeXnooRTdE9KUZECPNF4KnZAr
-         EOaH/WvMHc2hg==
+        b=lP4tWNZUugAsEkkmDkAS9RhB9+78B7ywxuTxAZW7oNml+sm6iFYH2uxo/1NT0Uic/
+         3aRg8J7IGZxra+iykCS8UVUmE7rikcXjVALkovLX6SRRG6ZNzndRHui0ZBFIh+zv3o
+         jaWUCjWTvluM7aggrrM9CFg5DMrr1C5t6ixUufbUrPaLZs+TmG5/I2725LiHLLhy55
+         +mIOSIGlsDch5LGjwPWLGUGbYA6+8sHhKNmEvJB8RyqtQmecjdTDduxM1LVQzQo8uG
+         cCasMOrsDnUs7WQ39XF5tf0ccQK3EfK/ae92ZF2kZK88l/VuTm/077JKjknj1cfjKI
+         Tao6+2RBBdAQQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
@@ -37,12 +37,12 @@ Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
         Sasha Levin <sashal@kernel.org>, ndesaulniers@google.com,
         freifunk@adrianschmutzler.de, linux-mips@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.14 14/16] MIPS: Octeon: Fix build errors using clang
-Date:   Mon, 17 Jan 2022 12:06:36 -0500
-Message-Id: <20220117170638.1472900-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 11/13] MIPS: Octeon: Fix build errors using clang
+Date:   Mon, 17 Jan 2022 12:07:19 -0500
+Message-Id: <20220117170722.1473137-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220117170638.1472900-1-sashal@kernel.org>
-References: <20220117170638.1472900-1-sashal@kernel.org>
+In-Reply-To: <20220117170722.1473137-1-sashal@kernel.org>
+References: <20220117170722.1473137-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
