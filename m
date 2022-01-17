@@ -2,119 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4625D490CB2
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Jan 2022 17:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C09A490D06
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Jan 2022 18:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235345AbiAQQ6G convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 17 Jan 2022 11:58:06 -0500
-Received: from aposti.net ([89.234.176.197]:56930 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237844AbiAQQ6G (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 17 Jan 2022 11:58:06 -0500
-Date:   Mon, 17 Jan 2022 16:57:52 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 0/6] DEV_PM_OPS macros rework v3
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, list@opendingux.net,
-        linux-iio@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        BROADCOM NVRAM DRIVER <linux-mips@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Message-Id: <GS5V5R.BVK5SB217XZU2@crapouillou.net>
-In-Reply-To: <CAJZ5v0htDq+qFhEoV+PLQ9_pOy_xa7+rMoaGtqK7QpEbpUDA+Q@mail.gmail.com>
-References: <20220107181723.54392-1-paul@crapouillou.net>
-        <IKXS5R.AB16PVIGN8Z9@crapouillou.net>
-        <CAJZ5v0htDq+qFhEoV+PLQ9_pOy_xa7+rMoaGtqK7QpEbpUDA+Q@mail.gmail.com>
+        id S241659AbiAQRA2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 17 Jan 2022 12:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237872AbiAQQ77 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 17 Jan 2022 11:59:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D055DC06175D;
+        Mon, 17 Jan 2022 08:59:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3C13611D8;
+        Mon, 17 Jan 2022 16:59:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F58C36AE3;
+        Mon, 17 Jan 2022 16:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642438798;
+        bh=9aUcXT3IAkm0wq9zoAJHhvROrGWTCBthzqq60iNgH8g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XKB4OrJl5rJRzPA1HRdr3TSIn+BnR5MAs6bbxrQT209qNFwTNNhH8G5qK0IKB5qHq
+         YgDXnKG2wE9iL98L8Co1I6FqqXKKJxlT+2gDA0uLW782M4fBAwJMiRYJJF9jd5X4P2
+         elcKAAN+2pZQ1IweuxuoX3Pnc0P057Eew7Z2lW1JyqSltSKxID6S78dc8uiT1dyR/d
+         StHg2x3IGYTgzQOPxEc4rIxe6Xg1BXdL5TCZH4Y2kImgxwpifnDi5q4T+PW3ePASmB
+         NabV8x4C8SdL722hYN2vIVW7klannKkwmNqqAJNGXB6uYVdNdnXecj9rRj6SIyE0OF
+         Z8izLEWXaWy0g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>, chenhuacai@kernel.org,
+        jiaxun.yang@flygoat.com, ndesaulniers@google.com,
+        linux-mips@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.16 26/52] MIPS: Loongson64: Use three arguments for slti
+Date:   Mon, 17 Jan 2022 11:58:27 -0500
+Message-Id: <20220117165853.1470420-26-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220117165853.1470420-1-sashal@kernel.org>
+References: <20220117165853.1470420-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+From: Nathan Chancellor <nathan@kernel.org>
 
+[ Upstream commit f2c6c22fa83ab2577619009057b3ebcb5305bb03 ]
 
-Le lun., janv. 17 2022 at 14:37:45 +0100, Rafael J. Wysocki 
-<rafael@kernel.org> a écrit :
-> Hi,
-> 
-> On Sun, Jan 16, 2022 at 1:05 PM Paul Cercueil <paul@crapouillou.net> 
-> wrote:
->> 
->>  Hi Rafael,
->> 
->>  Could patches [1/6] and [2/6] make it to 5.17-rc1, or at least -rc2?
-> 
-> Yes.  I'm going to send a PR with the whole series later today.
+LLVM's integrated assembler does not support 'slti <reg>, <imm>':
 
-Ok, perfect then. I saw my previous PM patches in upstream/master and 
-assumed that you already sent your PR.
+<instantiation>:16:12: error: invalid operand for instruction
+ slti $12, (0x6300 | 0x0008)
+           ^
+arch/mips/kernel/head.S:86:2: note: while in macro instantiation
+ kernel_entry_setup # cpu specific setup
+ ^
+<instantiation>:16:12: error: invalid operand for instruction
+ slti $12, (0x6300 | 0x0008)
+           ^
+arch/mips/kernel/head.S:150:2: note: while in macro instantiation
+ smp_slave_setup
+ ^
 
-Cheers,
--Paul
+To increase compatibility with LLVM's integrated assembler, use the full
+form of 'slti <reg>, <reg>, <imm>', which matches the rest of
+arch/mips/. This does not result in any change for GNU as.
 
-> 
->>  I'm afraid that if these two have to wait for the 5.18 cycle, then 
->> I'll
->>  have more drivers to fix later.
->> 
->>  Should I add a Fixes tag maybe?
-> 
-> No need, thanks!
-> 
->>  Le ven., janv. 7 2022 at 18:17:17 +0000, Paul Cercueil
->>  <paul@crapouillou.net> a écrit :
->>  > Hi,
->>  >
->>  > A V2 of my patchset that tweaks a bit the *_DEV_PM_OPS() macros 
->> that
->>  > were introduced recently.
->>  >
->>  > Changes since V2:
->>  > * [1/6]: - Keep UNIVERSAL_DEV_PM_OPS() macro deprecated
->>  >          - Rework commit message
->>  > * [3/6]: - Reorder the code to have non-private macros together 
->> in the
->>  >            file
->>  >        - Add comment about the necesity to use the new export 
->> macro
->>  >          when the dev_pm_ops has to be exported
->>  > * [5/6]: Add comment about the necesity to use the new export 
->> macro
->>  >          when the dev_pm_ops has to be exported
->>  >
->>  > Cheers,
->>  > -Paul
->>  >
->>  > Paul Cercueil (6):
->>  >   PM: core: Remove DEFINE_UNIVERSAL_DEV_PM_OPS() macro
->>  >   PM: core: Remove static qualifier in DEFINE_SIMPLE_DEV_PM_OPS 
->> macro
->>  >   PM: core: Add EXPORT[_GPL]_SIMPLE_DEV_PM_OPS macros
->>  >   PM: runtime: Add DEFINE_RUNTIME_DEV_PM_OPS() macro
->>  >   PM: runtime: Add EXPORT[_GPL]_RUNTIME_DEV_PM_OPS macros
->>  >   iio: pressure: bmp280: Use new PM macros
->>  >
->>  >  drivers/iio/pressure/bmp280-core.c | 11 ++----
->>  >  drivers/iio/pressure/bmp280-i2c.c  |  2 +-
->>  >  drivers/iio/pressure/bmp280-spi.c  |  2 +-
->>  >  drivers/mmc/host/jz4740_mmc.c      |  4 +--
->>  >  drivers/mmc/host/mxcmmc.c          |  2 +-
->>  >  include/linux/pm.h                 | 55
->>  > ++++++++++++++++++++++--------
->>  >  include/linux/pm_runtime.h         | 24 +++++++++++++
->>  >  7 files changed, 71 insertions(+), 29 deletions(-)
->>  >
->>  > --
->>  > 2.34.1
->>  >
->> 
->> 
+Link: https://github.com/ClangBuiltLinux/linux/issues/1526
+Reported-by: Ryutaroh Matsumoto <ryutaroh@ict.e.titech.ac.jp>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/include/asm/mach-loongson64/kernel-entry-init.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+index 13373c5144f89..efb41b3519747 100644
+--- a/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
++++ b/arch/mips/include/asm/mach-loongson64/kernel-entry-init.h
+@@ -32,7 +32,7 @@
+ 	nop
+ 	/* Loongson-3A R2/R3 */
+ 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
+-	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
++	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
+ 	bnez	t0, 2f
+ 	nop
+ 1:
+@@ -63,7 +63,7 @@
+ 	nop
+ 	/* Loongson-3A R2/R3 */
+ 	andi	t0, (PRID_IMP_MASK | PRID_REV_MASK)
+-	slti	t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
++	slti	t0, t0, (PRID_IMP_LOONGSON_64C | PRID_REV_LOONGSON3A_R2_0)
+ 	bnez	t0, 2f
+ 	nop
+ 1:
+-- 
+2.34.1
 
