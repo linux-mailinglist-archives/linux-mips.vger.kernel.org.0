@@ -2,247 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E240491F82
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Jan 2022 07:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254D54920F2
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Jan 2022 09:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243604AbiARGtr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Jan 2022 01:49:47 -0500
-Received: from mga07.intel.com ([134.134.136.100]:32573 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243775AbiARGtq (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 18 Jan 2022 01:49:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1642488586; x=1674024586;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=osuXG+anjBv2tJZWB6/GHb9x1pC7y9dn5ivYyboeLSo=;
-  b=OQPv49FnWbTk/L02sc2r1vsmVmqJ1ApP7tPv4wlrCfRwimimQ3A9GikJ
-   JBgtsGBrQAx6HPSZdmcSav3EwHTKkFSDklXWebR3oVwXgSDBNDeUEqwJ1
-   gHPIvQWA7AF7mpip7Du480bjly3dLm93RTSzEIIfab4UMnbtfvK+hDSu6
-   W5SnkoCKmVlv8dj0ffaPu8RTwciDTNhk6LGU/mDXZe1vA1sY6ol2dyhba
-   U/9lNamHg96jJpbxgmBf4WXVXNjssud+fW9fqzv9Ybi4qUSX53jSNEHkk
-   T3/n+ycq7Q1eGIfMzH36m7RvPEv2Mi7ZyPdTcBzYmTh1+h13ZUt84nuRf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10230"; a="308090438"
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="308090438"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 22:49:46 -0800
-X-IronPort-AV: E=Sophos;i="5.88,296,1635231600"; 
-   d="scan'208";a="531648627"
-Received: from hyperv-sh4.sh.intel.com ([10.239.48.22])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2022 22:49:35 -0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     kvm@vger.kernel.org, seanjc@google.com, pbonzini@redhat.com,
-        kevin.tian@intel.com, tglx@linutronix.de
-Cc:     Chao Gao <chao.gao@intel.com>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        id S1343921AbiARIJD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 18 Jan 2022 03:09:03 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:49457 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236238AbiARIJC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jan 2022 03:09:02 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MnJQq-1mQjd93nCG-00jLy4; Tue, 18 Jan 2022 09:09:00 +0100
+Received: by mail-ot1-f45.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso23176086otr.6;
+        Tue, 18 Jan 2022 00:08:58 -0800 (PST)
+X-Gm-Message-State: AOAM532fK7b9r2MQpFYeHxUhEZWuwrAtssHkw2podjFcPSr4466Mo9BB
+        ODCbufzb+b+yNetPHpg0G/w9K3nUrghvsNYorWk=
+X-Google-Smtp-Source: ABdhPJydwgmux0eMV8HI8b9BdklNP+7LV2ch1rDgfPNeEtqq30DY58YS5CzATVJf7L4CaVG1qsRotI3Rplk0R7Z1cCo=
+X-Received: by 2002:a05:6830:2095:: with SMTP id y21mr17140172otq.368.1642493337643;
+ Tue, 18 Jan 2022 00:08:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20220118044323.765038-1-walt@drummond.us> <20220118044323.765038-2-walt@drummond.us>
+In-Reply-To: <20220118044323.765038-2-walt@drummond.us>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 18 Jan 2022 09:08:41 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0ohW+w8_A8qMNqxpTmFcvxQr+z9YR96RAu5-wtdG_5+g@mail.gmail.com>
+Message-ID: <CAK8P3a0ohW+w8_A8qMNqxpTmFcvxQr+z9YR96RAu5-wtdG_5+g@mail.gmail.com>
+Subject: Re: [PATCH 2/3] vstatus: Add user space API definitions for VSTATUS,
+ NOKERNINFO and TIOCSTAT
+To:     Walt Drummond <walt@drummond.us>
+Cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
         Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
-Subject: [PATCH v2 2/4] Partially revert "KVM: Pass kvm_init()'s opaque param to additional arch funcs"
-Date:   Tue, 18 Jan 2022 14:44:25 +0800
-Message-Id: <20220118064430.3882337-3-chao.gao@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220118064430.3882337-1-chao.gao@intel.com>
-References: <20220118064430.3882337-1-chao.gao@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Yoshinori Sato <ysato@users.osdn.me>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, ar@cs.msu.ru,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>, linux-ia64@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:jroLeFEX00jpZO68/IoXmOXHzWxP7+RGfe7zZU/LWVRAmJVnGNv
+ gfoJ7rRgSe65YOQp/O3YEeGDAfFcsSjHHsUjkcqrszvHWg5gBHfk3A3YFhGq/FHJpavxKjU
+ roGZKdTzpl8vLd/uu2J1imMm3MThe3zqsntL/I34IuX5wJpdmQaX9h4PjCqbe58qz7w1Fkf
+ 7f/exEH7NfiMcGfZ1sIcw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wB2+zO+N3vY=:/xxomx9nt6MxOycubjZZYy
+ xJGx9bTbvBhoDW38MMyjlL1FygVKIiNX15B07KZWwWYDLLJz5Qku+J61UsgVvA+NZ2ybs0GTy
+ ZThv/7qJhh1Vo6vVUeLE8qwK7QH7nwP+SBbe43yzNoQTwN3N8h8UYUxFBjFCWb0LFypjiGskc
+ 39NNBA/L6Cz+Ch+Kv1bGxsBLTIW7DpcqdijUrHfO3A8J9eTXT2MizvislYR3E4y2HF7kgBLDz
+ wUz7d5vMGdv//PxHcmbDb69S1gpg32Ztb/INYb5oKX3vdo/xe5ynUS6QCFDDQuWw3JMgGl6IN
+ GyICh17QWiGK/CU10BoUnaW9B7RXdZrlQZ4WrNPR5uGj1J62hRhk28AGveSizBc/tsOfjSFiN
+ j++m5AIktQRGC+4mdSYmKzkcb3/zOpuYyygnk901obnlGL/eJ58/svq1M1oRu5sPVqj2RW+46
+ qjNYKZs0TWBWBGIMcqjYhKGufFKxKkktY+7FKDVBB+I3lFTANKXbAQE6BJEiqDm1AWzFwoGRP
+ 9oiyqtz8/3RlWgmHFlnI/gDVMQN4dXCkzuZD2kYsbvljhXqNrk7JPpOd3NWdNlGEQsTMvW+ll
+ ovhpX0MuYPTEH0ZtZHoH4XloLH7cKpCTNPod40yg8aU55seCw2dAOv0K8/reVbpYyH5qxBQdW
+ a23XMaPEBbU95U38zuZOC4N70hkYFlj0a+ViEb3T/N/WUSxHE6GtWsiGkaqeSZnZgxSHWJ6Dd
+ 6HcU+2t0DTvSOTzpVKcEKtgtPYyOPizbAv8lWFtKKwYyHhzUMEO2yEX/Kb3AjoAUIbzr6ecKV
+ T6BJ/0OKJ+D9Hlbef17QLHHCP5aDTXghnUzlddHSLWeuiHhpJQ=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This partially reverts commit b99040853738 ("KVM: Pass kvm_init()'s opaque
-param to additional arch funcs") remove opaque from
-kvm_arch_check_processor_compat because no one uses this opaque now.
-Address conflicts for ARM (due to file movement) and manually handle RISC-V
-which comes after the commit.
+On Tue, Jan 18, 2022 at 5:43 AM Walt Drummond <walt@drummond.us> wrote:
 
-And changes about kvm_arch_hardware_setup() in original commit are still
-needed so they are not reverted.
+> diff --git a/include/uapi/asm-generic/ioctls.h b/include/uapi/asm-generic/ioctls.h
+> index cdc9f4ca8c27..eafb662d6a0e 100644
+> --- a/include/uapi/asm-generic/ioctls.h
+> +++ b/include/uapi/asm-generic/ioctls.h
+> @@ -97,6 +97,7 @@
+>
+>  #define TIOCMIWAIT     0x545C  /* wait for a change on serial input line(s) */
+>  #define TIOCGICOUNT    0x545D  /* read serial port inline interrupt counts */
+> +#define TIOCSTAT        0x545E /* display process group stats on tty */
+>
+>  /*
+>   * Some arches already define FIOQSIZE due to a historical
 
-Signed-off-by: Chao Gao <chao.gao@intel.com>
----
- arch/arm64/kvm/arm.c       |  2 +-
- arch/mips/kvm/mips.c       |  2 +-
- arch/powerpc/kvm/powerpc.c |  2 +-
- arch/riscv/kvm/main.c      |  2 +-
- arch/s390/kvm/kvm-s390.c   |  2 +-
- arch/x86/kvm/x86.c         |  2 +-
- include/linux/kvm_host.h   |  2 +-
- virt/kvm/kvm_main.c        | 16 +++-------------
- 8 files changed, 10 insertions(+), 20 deletions(-)
+I don't see any advantage in using the old-style ioctl command definitions
+here, and looking through the history of this file, all recent additions used
+the now normal _IOWR() style macros, so please use those as well.
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 868109cf96b4..92ab3d5516ce 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -73,7 +73,7 @@ int kvm_arch_hardware_setup(void *opaque)
- 	return 0;
- }
- 
--int kvm_arch_check_processor_compat(void *opaque)
-+int kvm_arch_check_processor_compat(void)
- {
- 	return 0;
- }
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index e59cb6246f76..c5dc4fe53bfc 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -140,7 +140,7 @@ int kvm_arch_hardware_setup(void *opaque)
- 	return 0;
- }
- 
--int kvm_arch_check_processor_compat(void *opaque)
-+int kvm_arch_check_processor_compat(void)
- {
- 	return 0;
- }
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index 2ad0ccd202d5..30c817f3fa0c 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -423,7 +423,7 @@ int kvm_arch_hardware_setup(void *opaque)
- 	return 0;
- }
- 
--int kvm_arch_check_processor_compat(void *opaque)
-+int kvm_arch_check_processor_compat(void)
- {
- 	return kvmppc_core_check_processor_compat();
- }
-diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-index 2e5ca43c8c49..992877e78393 100644
---- a/arch/riscv/kvm/main.c
-+++ b/arch/riscv/kvm/main.c
-@@ -20,7 +20,7 @@ long kvm_arch_dev_ioctl(struct file *filp,
- 	return -EINVAL;
- }
- 
--int kvm_arch_check_processor_compat(void *opaque)
-+int kvm_arch_check_processor_compat(void)
- {
- 	return 0;
- }
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 9c6d45d0d345..99c70d881cb6 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -252,7 +252,7 @@ int kvm_arch_hardware_enable(void)
- 	return 0;
- }
- 
--int kvm_arch_check_processor_compat(void *opaque)
-+int kvm_arch_check_processor_compat(void)
- {
- 	return 0;
- }
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index f8bc1948a8b5..6f3bf78afb29 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11470,7 +11470,7 @@ void kvm_arch_hardware_unsetup(void)
- 	static_call(kvm_x86_hardware_unsetup)();
- }
- 
--int kvm_arch_check_processor_compat(void *opaque)
-+int kvm_arch_check_processor_compat(void)
- {
- 	struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
- 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 3c47b146851a..a51e9ab520fc 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1310,7 +1310,7 @@ int kvm_arch_hardware_enable(void);
- void kvm_arch_hardware_disable(void);
- int kvm_arch_hardware_setup(void *opaque);
- void kvm_arch_hardware_unsetup(void);
--int kvm_arch_check_processor_compat(void *opaque);
-+int kvm_arch_check_processor_compat(void);
- int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
- bool kvm_arch_vcpu_in_kernel(struct kvm_vcpu *vcpu);
- int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu);
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 6e8e9d36f382..148f7169b431 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -5603,22 +5603,14 @@ struct kvm_vcpu * __percpu *kvm_get_running_vcpus(void)
-         return &kvm_running_vcpu;
- }
- 
--struct kvm_cpu_compat_check {
--	void *opaque;
--	int *ret;
--};
--
--static void check_processor_compat(void *data)
-+static void check_processor_compat(void *rtn)
- {
--	struct kvm_cpu_compat_check *c = data;
--
--	*c->ret = kvm_arch_check_processor_compat(c->opaque);
-+	*(int *)rtn = kvm_arch_check_processor_compat();
- }
- 
- int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
- 		  struct module *module)
- {
--	struct kvm_cpu_compat_check c;
- 	int r;
- 	int cpu;
- 
-@@ -5646,10 +5638,8 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
- 	if (r < 0)
- 		goto out_free_1;
- 
--	c.ret = &r;
--	c.opaque = opaque;
- 	for_each_online_cpu(cpu) {
--		smp_call_function_single(cpu, check_processor_compat, &c, 1);
-+		smp_call_function_single(cpu, check_processor_compat, &r, 1);
- 		if (r < 0)
- 			goto out_free_2;
- 	}
--- 
-2.25.1
-
+       Arnd
