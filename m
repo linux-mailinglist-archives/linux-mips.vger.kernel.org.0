@@ -2,94 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F59492F75
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Jan 2022 21:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B1D49351F
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Jan 2022 07:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234473AbiARUh6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 18 Jan 2022 15:37:58 -0500
-Received: from mail-ua1-f52.google.com ([209.85.222.52]:41574 "EHLO
-        mail-ua1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234251AbiARUh5 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 18 Jan 2022 15:37:57 -0500
-Received: by mail-ua1-f52.google.com with SMTP id i10so413755uab.8;
-        Tue, 18 Jan 2022 12:37:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rccm2Ng7Ygp1cY/As0QYhUzGpE8sU6W4R2NG0olHuac=;
-        b=eNh/IBBk4hyYz852AMrG2ovnWsKHp758oVpVmICAFSJSZARiAAkJvGSMxD5AG0jR84
-         GmYSA4nyQYFTDpx09bCKdMJdFMH62yRSWQhrluUKrFMvanvPjB6DclpVRVlMcPjCMRFa
-         XaHnLivk2i3uU50WuMafS3HD6ZWN/NOyWPOxSRFhm8ClFx+kSMYmrEuFuECUzoFEav/E
-         mFS4d3yFoIMpBivYQ5oflXRs4MGazy3DRJsgPBJQceZJoKiTbrkbldi9LyvuHfkNCH90
-         IrN40zyEGYUAsyZLhayRFI0ThqGbZEt9S+vsOsaghT6G9kMvCkNf5X4QPldR+ZHwdmSD
-         uOHw==
-X-Gm-Message-State: AOAM531zXiwfL6kMz6huL3TZDAj2LwX0mSWA74UWwcVQsxtLN1f1QzMs
-        66+DzYWOUmOHkCS1mn5Pdurhw2BViixUew==
-X-Google-Smtp-Source: ABdhPJwxE0WRP3zsobMcA4/zbKuQzV/vmvQXpoOtg4aIYa/fy1piy51AvDYqRlqi4OqrLR0icA92Ww==
-X-Received: by 2002:ab0:60d0:: with SMTP id g16mr10462759uam.121.1642538276786;
-        Tue, 18 Jan 2022 12:37:56 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id u107sm387690uau.6.2022.01.18.12.37.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jan 2022 12:37:56 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id m90so469443uam.2;
-        Tue, 18 Jan 2022 12:37:56 -0800 (PST)
-X-Received: by 2002:a05:6102:3581:: with SMTP id h1mr10453087vsu.5.1642538275904;
- Tue, 18 Jan 2022 12:37:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
- <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
- <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
- <20211129122052.GA7921@alpha.franken.de> <CAMuHMdWbvpzZCs4HOXErbVYQTiQAB0syuiR6Wd7=sTA2vFpXzw@mail.gmail.com>
- <20211129130535.GA8644@alpha.franken.de> <CAMuHMdU94tk5pcTK4Fa-g9vm56oooCeWXkkL8nOgofk5aKbwig@mail.gmail.com>
- <alpine.DEB.2.21.2201090221150.56863@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2201090221150.56863@angie.orcam.me.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 18 Jan 2022 21:37:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXiLk+b2RtS+9xOfurVF2ajac92i_L48UAF_9B3Let0jQ@mail.gmail.com>
-Message-ID: <CAMuHMdXiLk+b2RtS+9xOfurVF2ajac92i_L48UAF_9B3Let0jQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software nodes
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1345299AbiASGmA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 19 Jan 2022 01:42:00 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.84]:39903 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344439AbiASGle (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 19 Jan 2022 01:41:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1642574425;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=soxn4qgkDsTZ0oHmNOMh5qyy1VH0WMra/yBF1KFdkyA=;
+    b=mDhwJ6A64h1u9LKK91u8VrQk1niBls3lKkpkpSbsdonYHAbR2zvclGS4ElY+YlQE6X
+    fdxktMrEev2PpoaFbcDAfvKyz7p/5WGRLIPykNQlp4JGybb+DUwJrriEcRTJmp6rl0iK
+    AGTQicUwQEAN2gzfGzeIIYDtRgbl3RY/Z0NlxJ8jngZ+nRiTUT+S/9RpF7R8n9Q+/FYe
+    cqioEpmJzUVviuwTRMzFBG5LqoYZfrUHD1IKM0suKDpyDI3Nq8yk77dLqKzs2jlm26Zp
+    8ZeT/QrooqXvw2LpQGw9H+bl14ilb2yJq2uyv/UH3F8VUsBEsIioNgbTJhQ7NS1HPHpZ
+    zUDg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw4TlkQ=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.37.6 DYNA|AUTH)
+    with ESMTPSA id D61423y0J6eNjFW
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 19 Jan 2022 07:40:23 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v5 2/7] drm/ingenic: Add support for JZ4780 and HDMI
+ output
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <13356060.GkHXLIg068@jason>
+Date:   Wed, 19 Jan 2022 07:40:22 +0100
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        <devicetree@vger.kernel.org>, Kees Cook <keescook@chromium.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D0989ACA-F6DB-4E16-8D95-5ACBAD90AACD@goldelico.com>
+References: <cover.1633436959.git.hns@goldelico.com>
+ <C846BAFB-473D-41D8-93B9-B9ECDD1846C1@goldelico.com>
+ <AI0X5R.YWIZO63QXTF4@crapouillou.net> <13356060.GkHXLIg068@jason>
+To:     Paul Boddie <paul@boddie.org.uk>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Maciej,
+Hi Paul,
 
-On Tue, Jan 18, 2022 at 8:59 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
-> > Took me a bit to test proper operation, as contemporary cross-toolchains
-> > create userland binaries that can no longer run on MIPS-II/III CPUs,
-> > and native development is slow and memory-constrained (dpkg OOM)...
->
->  You mean cross-toolchains included with (some) distributions, right?
+> Am 18.01.2022 um 23:59 schrieb Paul Boddie <paul@boddie.org.uk>:
+>=20
+> On Tuesday, 18 January 2022 17:58:58 CET Paul Cercueil wrote:
+>>=20
+>> Not at all. If the clock is disabled, the LCD controller is disabled,
+>> so all the registers read zero, this makes sense. You can only read =
+the
+>> registers when the clock is enabled. On some SoCs, reading disabled
+>> registers can even cause a complete lockup.
+>=20
+> My concern was that something might be accessing the registers before =
+the=20
+> clock had been enabled. It seems unlikely, given that the clock is =
+enabled in=20
+> the bind function, and I would have thought that nothing would invoke =
+the=20
+> different driver operations ("funcs") until bind has been called, nor =
+should=20
+> anything called from within bind itself be accessing registers.
+>=20
+>> Why is this JZ_LCD_OSDC_ALPHAEN bit needed now? I remember it working
+>> fine last time I tried, and now I indeed get a black screen unless =
+this
+>> bit is set. The PM doesn't make it obvious that the bit is required,
+>> but that wouldn't be surprising.
+>=20
+> It isn't actually needed. If the DMA descriptors are set up =
+appropriately, the=20
+> OSD alpha bit seems to be set as a consequence. In my non-Linux =
+testing=20
+> environment I don't even set any OSD registers explicitly, but the OSD =
+alpha=20
+> and enable flags become set when the display is active.
 
-Yep, the MIPS cross-toolchain that comes with Ubuntu.
+Is it set by DMA descriptors or by explicit code?
 
->  I do hope so or otherwise I'd be very concerned.  Myself I've been using
-> a self-built MIPS cross-compiler, running on POWER9, which builds MIPS I
-> binaries just fine, e.g.:
->
-> $ file install/usr/sysroot/{lib/ld-2.32.9000.so,usr/bin/gdbserver}
-> install/usr/sysroot/lib/ld-2.32.9000.so: ELF 32-bit LSB pie executable, MIPS, MIPS-I version 1 (SYSV), dynamically linked, with debug_info, not stripped
-> install/usr/sysroot/usr/bin/gdbserver: ELF 32-bit LSB executable, MIPS, MIPS-I version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld.so.1, for GNU/Linux 3.2.0, not stripped
+We did have an explicit setting of JZ_LCD_OSDC_ALPHAEN
 
-Debian raised the minimum requirements for MIPS, hence mine are
-ELF 32-bit MSB shared object, MIPS, MIPS32 rel2 version 1 (SYSV)
+https://www.spinics.net/lists/devicetree/msg438447.html
 
-Gr{oetje,eeting}s,
+but that was postponed for further discussion. And now if we
+add it (from basic functionality) back, it is fine again.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+BR,
+Nikolaus=
