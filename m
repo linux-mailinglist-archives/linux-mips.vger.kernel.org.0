@@ -2,53 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4106F494EE0
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 14:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D68494F14
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 14:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbiATN1Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jan 2022 08:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
+        id S232875AbiATNgL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jan 2022 08:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiATN1X (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 08:27:23 -0500
+        with ESMTP id S232103AbiATNgK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 08:36:10 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA07C061574;
-        Thu, 20 Jan 2022 05:27:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9DBC061574;
+        Thu, 20 Jan 2022 05:36:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12A87B81D06;
-        Thu, 20 Jan 2022 13:27:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3590C340F4;
-        Thu, 20 Jan 2022 13:27:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F6E0B81D72;
+        Thu, 20 Jan 2022 13:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD834C340EB;
+        Thu, 20 Jan 2022 13:36:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642685240;
-        bh=nij2NveTxD7AFS+dy/E2mbGaK4KnuKanTl6xzPnPkQc=;
+        s=k20201202; t=1642685767;
+        bh=6jJqCWRTzzUUFc2Awke9IkkPGC7X5zNsQTSVKll9PUQ=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FV+LquNrcNIM4IyWdRQJ+RvURALdqn9xfCmH3u+EPyPxG/8iNUaCslKvqNdupslBw
-         QBRP2q+FNxO6+wSFKXMyFDUNcAy6V3evf7SWZUwB8rE9gCJk0lFv2usPRlA4tmXnjW
-         vRGqr4TSyisCJv6r/7+ohMVsNxAxtBY3zte/1y5zEGDFC5uZXE7MNp3XDVrgmwwKCy
-         AGAIguEIxRllBb8wrI5vQZ0cZFle3X27KHhHktX3rhu2eQxIiCHXn4K2loU116xQoc
-         RLuRjDVXG8TasUHF/D9VQs3KiylNZRmOC3843iD+ztRTmijocFRzUI+MmuAOojOLAW
-         /CrONDsZ7cwvg==
-Received: by mail-vk1-f177.google.com with SMTP id l196so679518vki.5;
-        Thu, 20 Jan 2022 05:27:20 -0800 (PST)
-X-Gm-Message-State: AOAM532JXnA8i+RIAeGNMzXTWOrSyrejCuLKQPEOAk9zlegcPUoQxHlF
-        gHjMRn7MGAMyTUNMX9y7T5SsQ6lbygGA4FLnIz8=
-X-Google-Smtp-Source: ABdhPJwXq7rWM9TR2/dX3Ce8RNnGwk7ErUknPTqNCDOUbla5Lz39Gh+9ETVvKbMYpePGn1XdP3gT3y8Rtd9l9zviaqA=
-X-Received: by 2002:ac5:cbc8:: with SMTP id h8mr12691275vkn.8.1642685239536;
- Thu, 20 Jan 2022 05:27:19 -0800 (PST)
+        b=f6do9cXfKBIhavH9kot/9wsjq2yObe2lT7dMc1dGUr3hFaIHULRpc6Im9hBAIcisC
+         eDekM99GYajIpqxj6pk3pf8POql1UVa55NAT7X5tjRFB9UsnxZslxCWB5WZWqBDVJr
+         8gDeXdyIroIlE//1234wZAOr1J5PAF//PpO/tp0C8PN9cs8JcSeKYxBJeAO+fJX5f8
+         Zzw9mWQdJHl7vQGGXNGqTETTdXAZvSS2AkRWCFWvBQVfO4iJLfOUyeTYEfGr+VvXtZ
+         KkebSvrN6+FTyVOToFkMm3YZrKZfFcQi9tF8PdPBl3l8R5P30PQMDQ75SGyfnZ8nsJ
+         hG4QcSP3+PQvg==
+Received: by mail-ua1-f44.google.com with SMTP id w21so10825577uan.7;
+        Thu, 20 Jan 2022 05:36:07 -0800 (PST)
+X-Gm-Message-State: AOAM531LJ70N8LMRZ2TdBPaV73hkp1ciLeoEXk7VY2qxTOh4rmoc68xP
+        TkVyDvyfTvnf1f6pQo/gb4BoeN1IYfj2c2iT42o=
+X-Google-Smtp-Source: ABdhPJwONmW1aazI1eCt0g+A2J9M0/Dq8pC6p8K0QjKcU/9jXkiBA8g9Bq8N9trIX7DU0e3r8/DVXgSoIzqqFr0N4e8=
+X-Received: by 2002:a05:6102:34ec:: with SMTP id bi12mr12309550vsb.51.1642685766798;
+ Thu, 20 Jan 2022 05:36:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120073911.99857-8-guoren@kernel.org> <CAK8P3a1UvqsS-D7cVXBkp4KCRWDfquQ6QTkvrQ=FqLxhsAi7Rw@mail.gmail.com>
- <f16cf10425a14c2e8183d5c90667ce72@AcuMS.aculab.com>
-In-Reply-To: <f16cf10425a14c2e8183d5c90667ce72@AcuMS.aculab.com>
+References: <20220120073911.99857-11-guoren@kernel.org> <CAK8P3a2HaeFGdOr4Rm_ZcEP0rjh2Mo53=-ZRnEPtFfnmzfeE6g@mail.gmail.com>
+In-Reply-To: <CAK8P3a2HaeFGdOr4Rm_ZcEP0rjh2Mo53=-ZRnEPtFfnmzfeE6g@mail.gmail.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 20 Jan 2022 21:27:08 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRwh40xDBkoRJWZEUketKFDAy7_z=-WW7E=T46yH4zPvw@mail.gmail.com>
-Message-ID: <CAJF2gTRwh40xDBkoRJWZEUketKFDAy7_z=-WW7E=T46yH4zPvw@mail.gmail.com>
-Subject: Re: [PATCH V3 07/17] riscv: compat: Re-implement TASK_SIZE for COMPAT_32BIT
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+Date:   Thu, 20 Jan 2022 21:35:56 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQnrCS1X6KQt0pbNFc01sYgBDgfb9RGT1G=rTEGK1mbRQ@mail.gmail.com>
+Message-ID: <CAJF2gTQnrCS1X6KQt0pbNFc01sYgBDgfb9RGT1G=rTEGK1mbRQ@mail.gmail.com>
+Subject: Re: [PATCH V3 10/17] riscv: compat: Add elf.h implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup@brainfault.org>,
         gregkh <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
@@ -58,11 +57,11 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
         Christoph Hellwig <hch@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
         linux-s390 <linux-s390@vger.kernel.org>,
         sparclinux <sparclinux@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "inux-parisc@vger.kernel.org" <inux-parisc@vger.kernel.org>,
+        inux-parisc@vger.kernel.org,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         "the arch/x86 maintainers" <x86@kernel.org>,
@@ -72,37 +71,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 8:53 PM David Laight <David.Laight@aculab.com> wrote:
+On Thu, Jan 20, 2022 at 9:33 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> > > Limit 32-bit compatible process in 0-2GB virtual address range
-> > > (which is enough for real scenarios), because it could avoid
-> > > address sign extend problem when 32-bit enter 64-bit and ease
-> > > software design.
+> On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Implement necessary type and macro for compat elf. See the code
+> > comment for detail.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 >
-> Eh?
-> I thought nearly all the other 32bit unix ports (of any flavour)
-> put the user-kernel boundary at 3GB.
-No, riscv32 is about 2.4G, csky is 2G/2.5G.
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>
+> > +
+> > +/*
+> > + * FIXME: not sure SET_PERSONALITY for compat process is right!
+> > + */
+> > +#define SET_PERSONALITY(ex)                                    \
+> > +do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)              \
+> > +               set_thread_flag(TIF_32BIT);                     \
+> > +       else                                                    \
+> > +               clear_thread_flag(TIF_32BIT);                   \
+> > +       if (personality(current->personality) != PER_LINUX32)   \
+> > +               set_personality(PER_LINUX |                     \
+> > +                       (current->personality & (~PER_MASK)));  \
+> > +} while (0)
+> > +
+>
+> The implementation looks good to me now,  you can remove that comment above it.
+Thx for pointing it out. I forgot.
 
-> (Apart from some very old sparc ones that use 3.5GB.)
 >
-> 2GB is used by Windows.
->
-> I think the x86-64 32bit compat code even puts the boundary at 4GB.
-Yes, we could give rv32 compat for 4GB with some effort. But it's unnecessary.
-
-There are no history issues for rv32, we use compat mode to reduce
-memory footprint. eg: only 64MB memory available.
-
-At end compat for 4GB is another topic, let's give the initial compat
-for 2GB support to riscv.
-
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+>         Arnd
 
 
 
