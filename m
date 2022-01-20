@@ -2,79 +2,85 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC374948C1
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 08:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73801494AAD
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 10:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344059AbiATHmA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jan 2022 02:42:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234604AbiATHlk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 02:41:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABABC061756;
-        Wed, 19 Jan 2022 23:41:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08536616CA;
-        Thu, 20 Jan 2022 07:41:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73AD3C36AE3;
-        Thu, 20 Jan 2022 07:41:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642664498;
-        bh=KczpaYYxoMGx41tEylY7vYP9V7d2/gwOtWp0+pQI1sQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SoHKcLAbBRynCkDM25QymLddQPGokjxZWUXnz/C9Z/c9CM+6aBpTN2iW2HlHf8OcZ
-         DvdM8kYes0KuSUihXi19oyVed9O24Fcyd3T1vlfejN0ZYrFb4SrYdvwkV5BXqengFt
-         ptfJZ/LJQ+W4YCfoEbx8IQ1xgl8OjvN9joS2nfQPs6ajAG/EEwwXNGWEezEclwkyjg
-         0Fjxfc0orzJMqb0vXLUw4X5LseWg+aWm18Rtx/Slt4NNvcGtQwXpD3gV0KOE2ePcTb
-         GROcMJT9VT4/SBaQYee9ajIjuxe4cUqhulfkx3ziJhLfmtSOEm08Bnt9CZJ1Vcya5i
-         76J8FDUpiSyjA==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup@brainfault.org, gregkh@linuxfoundation.org,
-        liush@allwinnertech.com, wefu@redhat.com, drew@beagleboard.org,
-        wangjunqiang@iscas.ac.cn, hch@lst.de, hch@infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        inux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V3 17/17] KVM: compat: riscv: Prevent KVM_COMPAT from being selected
-Date:   Thu, 20 Jan 2022 15:39:10 +0800
-Message-Id: <20220120073911.99857-18-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        id S242009AbiATJ0j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jan 2022 04:26:39 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:35575 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234276AbiATJ0i (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 04:26:38 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MqbDs-1mX06m2Ey0-00mfPd; Thu, 20 Jan 2022 10:26:36 +0100
+Received: by mail-oi1-f170.google.com with SMTP id q186so8478481oih.8;
+        Thu, 20 Jan 2022 01:26:35 -0800 (PST)
+X-Gm-Message-State: AOAM530IS6cMCdv3arv1VITiCM41IZlTFYKedU3XPQQraoDSFQvHiYtB
+        lrVraWDG10iuGZ2ZJMFWfUsF1JRzoAeo78l1PK8=
+X-Google-Smtp-Source: ABdhPJwUHTIEKGF9B/deLoD+NLX/BPhPwhEAEkpKqsuu70hdzaWxQnSHkYBLqgySPz6euydrj/73VVU+G7+wmpaPV1k=
+X-Received: by 2002:a05:6808:2206:: with SMTP id bd6mr6829962oib.11.1642670794688;
+ Thu, 20 Jan 2022 01:26:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220120073911.99857-5-guoren@kernel.org>
+In-Reply-To: <20220120073911.99857-5-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 20 Jan 2022 10:26:18 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3ixShQBKmdXWxf8QdB_aLeWr7TQB+7MqQBSgh0-shSSQ@mail.gmail.com>
+Message-ID: <CAK8P3a3ixShQBKmdXWxf8QdB_aLeWr7TQB+7MqQBSgh0-shSSQ@mail.gmail.com>
+Subject: Re: [PATCH V3 04/17] syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:9+M0fmdb5HxFeLZX9pIqezr+U7soQTbqk+JjtRs2FIL6hfst5O4
+ 2BQfFrTCSQVRnaR/fgEHUJOO70yHaGyLxtJj4EYgVaqfAN5xJTyCv/VoAJcfB7BOoxCvwS3
+ MYW00xSfV4tr14+j8/NYptBPa/Ix+5VygRkmhO2iqPTyB03zQLV5vryYNqFPR2w5k4x02Y6
+ TsZpLJc0Xmc1lJsPQZRZg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nUtO5XneSiM=:Dg12rz9J3w1TQnxrs/E87G
+ iesAAgSk2cZqLybrx9KAQoiYkbu8unUjK1VJXdruvwBXb1OyXQoDIfLZsAx0aTt0YXKAa0A/H
+ AOyz1OVRRpVA6uLccCRnnlUoqHceRjCBDgFyH9oWc3Az3c0OXlhJEycCggpc1NDn1t/XBg1Me
+ y4mZNvF3ItCXVn8G2bkjcjRAB2rY64oE/2YNCAGld6AQppFrkRMLtM8gbc1bZgJO2Qdl4/+kX
+ ob38D6pruMcguRg80vHYA+Jq32WcmYbY4LS/8l5l+zfsGcJxhYrjRvtmadwk3qasckMn4iJTV
+ pxpWoWzAPDvrpwGb09ijS0uCUztqlBGZJawiizg10VZQsgtfqELHpw+lhibeUpGzMrlCy5ZK1
+ 3EJDvtMx186UF8Ih7VZRpb2HVKXxry+rF0LdOuVwpsz36Aztw5StTL8I6sqVvpiZkG+syTS5L
+ rvOruz6CL6Qz8wWyrQFKTZda1IwxALpBpan8aHexjjE+yvdbmme6ZAEq/gh57B5cL8ObHte/f
+ rkXz4586yb0YgEBF5V2fX3BzUWrQHpnR13Xga/gVkQy2x4q2MPsdVNlWESuUkZxmZ11YDWL7T
+ a5UQywC02JzoRKEti73luxoQ1K8rwExYfyUaBtzN46VajCjZ2iLa+5DZleXTz0b1CJyNIxDIh
+ XugEsiMi8P1dH8pEa39CHcbWmQgDH8ixCYrx0eOm6xc+HMiKG5QB1HGf1uGLHJyUIqUZV2FKd
+ w99m5jj8ake0mC8UFOr3AjYJsG/rwK2EC4t6lrdKPGrjRlduZQpg97LrkjJrHPD1CJxsdpjgA
+ tivxNThey85wjJQBGsTjaQpN03Y8rBDs/vczTRjQDoJ396CASY=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Thu, Jan 20, 2022 at 8:38 AM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Make "uapi asm unistd.h" could be used for architectures' COMPAT
+> mode. The __SYSCALL_COMPAT is first used in riscv.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
 
-Current riscv doesn't support the 32bit KVM/arm API. Let's make it
-clear by not selecting KVM_COMPAT.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
- virt/kvm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-index f4834c20e4a6..a8c5c9f06b3c 100644
---- a/virt/kvm/Kconfig
-+++ b/virt/kvm/Kconfig
-@@ -53,7 +53,7 @@ config KVM_GENERIC_DIRTYLOG_READ_PROTECT
- 
- config KVM_COMPAT
-        def_bool y
--       depends on KVM && COMPAT && !(S390 || ARM64)
-+       depends on KVM && COMPAT && !(S390 || ARM64 || RISCV)
- 
- config HAVE_KVM_IRQ_BYPASS
-        bool
--- 
-2.25.1
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
