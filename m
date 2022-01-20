@@ -2,93 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7284951BA
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 16:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C07C7495608
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 22:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376521AbiATPq1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jan 2022 10:46:27 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:48669 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1376523AbiATPqX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 20 Jan 2022 10:46:23 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-193-7WTwajXxOa6GXzO1g1m_hA-1; Thu, 20 Jan 2022 15:46:20 +0000
-X-MC-Unique: 7WTwajXxOa6GXzO1g1m_hA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 20 Jan 2022 15:46:18 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 20 Jan 2022 15:46:18 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>, Guo Ren <guoren@kernel.org>
-CC:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "inux-parisc@vger.kernel.org" <inux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: RE: [PATCH V3 07/17] riscv: compat: Re-implement TASK_SIZE for
- COMPAT_32BIT
-Thread-Topic: [PATCH V3 07/17] riscv: compat: Re-implement TASK_SIZE for
- COMPAT_32BIT
-Thread-Index: AQHYDePReMzknTU7UkCjQWPLhaJn7Kxr3G8ggAAj9ueAAAuaMA==
-Date:   Thu, 20 Jan 2022 15:46:18 +0000
-Message-ID: <01a8da9e5a374373a922e569a1e10ee8@AcuMS.aculab.com>
-References: <20220120073911.99857-8-guoren@kernel.org>
- <CAK8P3a1UvqsS-D7cVXBkp4KCRWDfquQ6QTkvrQ=FqLxhsAi7Rw@mail.gmail.com>
- <f16cf10425a14c2e8183d5c90667ce72@AcuMS.aculab.com>
- <CAJF2gTRwh40xDBkoRJWZEUketKFDAy7_z=-WW7E=T46yH4zPvw@mail.gmail.com>
- <CAK8P3a3FLnqibdXCGR8c+mm92HSiuvocZDeW8MyoTO_L1sYT=w@mail.gmail.com>
-In-Reply-To: <CAK8P3a3FLnqibdXCGR8c+mm92HSiuvocZDeW8MyoTO_L1sYT=w@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1347201AbiATVkL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jan 2022 16:40:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231373AbiATVkL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 16:40:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62671C061574;
+        Thu, 20 Jan 2022 13:40:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F06CA618E8;
+        Thu, 20 Jan 2022 21:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7702C340E0;
+        Thu, 20 Jan 2022 21:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642714810;
+        bh=WTK4x+RMVHC2SkV4JqF2eL7XTJAYgGKA4+L/GkpSgXY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GHAeDLJs2E4fu8rPPggQzPa+Pn/iV8Ls/n8sB94ky75RJjFwCV4/FLO/lr9DhHr1Y
+         qlZM0aSMicOKW6cr/tbZYlqaTlsQOg58eWIzyJA1AAcbST24Im4028OytA1aUrhMfP
+         X+mae4bdnct/pGLL/H99GNKTB+N25mLJCGNEO07yT2wnkSpCu16YnrppSdI6RjZzs0
+         NgUcgO5of0CJDYVkF/d5hKaSl3xiKPKH0lm+Yw7vG5tzC+ETFZQOIWigbz2VfV+JGj
+         mrQjabmnU6j2R2l6Oyd/ibK2XdNuAJ2oG6GmnXPDW8RqegPE46MwAp6n4FxWxVheED
+         4fRyewtN9By2Q==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 1/2] MIPS: Loongson64: Clean up use of cc-ifversion
+Date:   Thu, 20 Jan 2022 14:40:00 -0700
+Message-Id: <20220120214001.1879469-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Li4uDQo+IE9uZSBleGFtcGxlIG9mIHNvZnR3YXJlIHRoYXQgcnVucyBpbnRvIHZpcnR1YWwgbWVt
-b3J5IHNpemUgbGltaXRhdGlvbnMgaXMNCj4gdGhlIGdudSBsaW5rZXIgd2hlbiBidWlsZGluZyBs
-YXJnZSBhcHBsaWNhdGlvbnMsIGJ1dCBpdCdzIHVubGlrZWx5IHRoYXQgeW91J2xsDQo+IGFjdHVh
-bGx5IG5lZWQgdG8gcnVuIGFwcGxpY2F0aW9ucyB0aGF0IHJ1biBpbnRvIHRoaXMsIHdoaWxlIGFs
-c28gbmVlZGluZyB0bw0KPiBidWlsZCB0aGVtIG5hdGl2ZWx5Lg0KDQpUaGVyZSBhcmUgYWxzbyBk
-YXRhYmFzZSBwcm9ncmFtcyB0aGF0IHdhbnQgdG8gbW1hcCgpIGxhcmdlIHNwYXJzZSBmaWxlcy4N
-ClRvIHNvbWUgZXh0ZW50IHRoYXQgaXMgd2hlcmUgdGhlIHByZXNzdXJlIGZvciA2NGJpdCBhZGRy
-ZXNzZXMgY29tZXMgZnJvbS4NCg0KV2hpbGUgKEkgdGhpbmspIG1vc3Qgb2YgdGhlIGN1cnJlbnQg
-cmlzY3Ygc3lzdGVtcyBhcmUgJ3RveScgb25lcw0KdGhlcmUgYXJlIGRlZmluaXRlbHkgcHJlc3Mg
-cmVwb3J0cyBvZiBzb21lIHF1aXRlIGhpZ2ggcG93ZXIgc3lzdGVtcy4NCg0KSSBzdXNwZWN0IHRo
-ZXkgYXJlIGxlc3MgJ3RveScgdGhhbiB0aGUgQWx0ZXJhIChJbnRlbCkgTmlvcyBwcm9jZXNzb3Jz
-DQp3ZSB1c2Ugb24gb3V0IGZwZ2EgLSB5b3UgY2FuIHJ1biBsaW51eCBvbiB0aGUgTmlvcyBjcHUs
-IGJ1dCB5b3UgcHJvYmFibHkNCmRvbid0IHJlYWxseSB3YW50IHRvIGRvIHNvLg0KQmV0dGVyIHRv
-IGZpbmQgYW4gZnBnYSB3aXRoIGEgJ3Byb3BlcicgQVJNIGNvcmUgaW4gdGhlIGNvcm5lci4NCg0K
-CURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBN
-b3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAx
-Mzk3Mzg2IChXYWxlcykNCg==
+This Makefile checks that GCC is 4.9 or newer, which is redundant after
+commit 76ae847497bc ("Documentation: raise minimum supported version of
+GCC to 5.1"), so cc-option can be removed.
+
+Clang does not support -march=loongson3a so it needs to continue to use
+-march=mips64r2, along with binutils less than 2.25, so check that both
+GCC and binutils 2.25 or newer are being used before using
+-march=loongson3a. These flags do not need to be checked with cc-option
+anymore because all GCC versions support -march=loongson3a and
+-march=mips64r2 and all clang versions support -march=mips64r2.
+
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/mips/loongson64/Platform | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
+
+diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
+index 3e660d6d3c2b..981d3abc150e 100644
+--- a/arch/mips/loongson64/Platform
++++ b/arch/mips/loongson64/Platform
+@@ -12,17 +12,10 @@ cflags-$(CONFIG_CPU_LOONGSON64)	+= -Wa,--trap
+ # by GAS.  The cc-option can't probe for this behaviour so -march=loongson3a
+ # can't easily be used safely within the kbuild framework.
+ #
+-ifeq ($(call cc-ifversion, -ge, 0409, y), y)
+-  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
+-    cflags-$(CONFIG_CPU_LOONGSON64)  += \
+-      $(call cc-option,-march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
+-  else
+-    cflags-$(CONFIG_CPU_LOONGSON64)  += \
+-      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
+-  endif
++ifeq ($(CONFIG_CC_IS_GCC)$(call ld-ifversion, -ge, 22500, y), yy)
++  cflags-$(CONFIG_CPU_LOONGSON64) += -march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64
+ else
+-    cflags-$(CONFIG_CPU_LOONGSON64)  += \
+-      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
++  cflags-$(CONFIG_CPU_LOONGSON64) += -march=mips64r2
+ endif
+ 
+ # Some -march= flags enable MMI instructions, and GCC complains about that
+
+base-commit: 2c271fe77d52a0555161926c232cd5bc07178b39
+-- 
+2.34.1
 
