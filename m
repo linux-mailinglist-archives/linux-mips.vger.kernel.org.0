@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB25494E5E
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 13:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D561E494E87
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 14:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243013AbiATMyR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jan 2022 07:54:17 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:27766 "EHLO
+        id S244913AbiATNCf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jan 2022 08:02:35 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:31916 "EHLO
         eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244118AbiATMxR (ORCPT
+        by vger.kernel.org with ESMTP id S244861AbiATNCd (ORCPT
         <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 20 Jan 2022 07:53:17 -0500
+        Thu, 20 Jan 2022 08:02:33 -0500
 Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-321-XSo6eQ28MlKlbqVx3cst0g-1; Thu, 20 Jan 2022 12:53:13 +0000
-X-MC-Unique: XSo6eQ28MlKlbqVx3cst0g-1
+ uk-mta-33-Vn3vaJQAO5ObVFev711Zzw-1; Thu, 20 Jan 2022 13:02:29 +0000
+X-MC-Unique: Vn3vaJQAO5ObVFev711Zzw-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 20 Jan 2022 12:53:11 +0000
+ Server (TLS) id 15.0.1497.28; Thu, 20 Jan 2022 13:02:27 +0000
 Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
  AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 20 Jan 2022 12:53:11 +0000
+ 15.00.1497.028; Thu, 20 Jan 2022 13:02:27 +0000
 From:   David Laight <David.Laight@ACULAB.COM>
 To:     'Arnd Bergmann' <arnd@arndb.de>, Guo Ren <guoren@kernel.org>
-CC:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
+CC:     linux-s390 <linux-s390@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
         gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
         Drew Fustini <drew@beagleboard.org>,
+        Anup Patel <anup@brainfault.org>,
         Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "inux-parisc@vger.kernel.org" <inux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         the arch/x86 maintainers <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: RE: [PATCH V3 07/17] riscv: compat: Re-implement TASK_SIZE for
- COMPAT_32BIT
-Thread-Topic: [PATCH V3 07/17] riscv: compat: Re-implement TASK_SIZE for
- COMPAT_32BIT
-Thread-Index: AQHYDePReMzknTU7UkCjQWPLhaJn7Kxr3G8g
-Date:   Thu, 20 Jan 2022 12:53:11 +0000
-Message-ID: <f16cf10425a14c2e8183d5c90667ce72@AcuMS.aculab.com>
-References: <20220120073911.99857-8-guoren@kernel.org>
- <CAK8P3a1UvqsS-D7cVXBkp4KCRWDfquQ6QTkvrQ=FqLxhsAi7Rw@mail.gmail.com>
-In-Reply-To: <CAK8P3a1UvqsS-D7cVXBkp4KCRWDfquQ6QTkvrQ=FqLxhsAi7Rw@mail.gmail.com>
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "inux-parisc@vger.kernel.org" <inux-parisc@vger.kernel.org>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        liush <liush@allwinnertech.com>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Wei Fu <wefu@redhat.com>
+Subject: RE: [PATCH V3 03/17] asm-generic: compat: Cleanup duplicate
+ definitions
+Thread-Topic: [PATCH V3 03/17] asm-generic: compat: Cleanup duplicate
+ definitions
+Thread-Index: AQHYDfvLsUgI09Yi+EGR4Ve6KMrB5Kxr3nRg
+Date:   Thu, 20 Jan 2022 13:02:27 +0000
+Message-ID: <f2c1a3a10bf643d693afed6d23b3baf9@AcuMS.aculab.com>
+References: <20220120073911.99857-4-guoren@kernel.org>
+ <CAK8P3a1UmnjHk8B6hSULiKv3FKoY5BW9=4=ESerQzc+4=LR5Zw@mail.gmail.com>
+In-Reply-To: <CAK8P3a1UmnjHk8B6hSULiKv3FKoY5BW9=4=ESerQzc+4=LR5Zw@mail.gmail.com>
 Accept-Language: en-GB, en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
@@ -71,15 +72,20 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-PiA+IExpbWl0IDMyLWJpdCBjb21wYXRpYmxlIHByb2Nlc3MgaW4gMC0yR0IgdmlydHVhbCBhZGRy
-ZXNzIHJhbmdlDQo+ID4gKHdoaWNoIGlzIGVub3VnaCBmb3IgcmVhbCBzY2VuYXJpb3MpLCBiZWNh
-dXNlIGl0IGNvdWxkIGF2b2lkDQo+ID4gYWRkcmVzcyBzaWduIGV4dGVuZCBwcm9ibGVtIHdoZW4g
-MzItYml0IGVudGVyIDY0LWJpdCBhbmQgZWFzZQ0KPiA+IHNvZnR3YXJlIGRlc2lnbi4NCg0KRWg/
-DQpJIHRob3VnaHQgbmVhcmx5IGFsbCB0aGUgb3RoZXIgMzJiaXQgdW5peCBwb3J0cyAob2YgYW55
-IGZsYXZvdXIpDQpwdXQgdGhlIHVzZXIta2VybmVsIGJvdW5kYXJ5IGF0IDNHQi4NCihBcGFydCBm
-cm9tIHNvbWUgdmVyeSBvbGQgc3BhcmMgb25lcyB0aGF0IHVzZSAzLjVHQi4pDQoNCjJHQiBpcyB1
-c2VkIGJ5IFdpbmRvd3MuDQoNCkkgdGhpbmsgdGhlIHg4Ni02NCAzMmJpdCBjb21wYXQgY29kZSBl
-dmVuIHB1dHMgdGhlIGJvdW5kYXJ5IGF0IDRHQi4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQg
-QWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVz
-LCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyMCBKYW51YXJ5IDIwMjIgMTE6NTINCi4uDQo+
+IEFzIHdpdGggY29tcGF0X2Zsb2NrLCB0aGUgcGFja2VkIGF0dHJpYnV0ZSBoYXMgbm8gaW1wYWN0
+IG9uIHRoZSBsYXlvdXQNCj4gaGVyZSwgYnV0IHBsZWFzZSBkcm9wIGl0IGFueXdheSBmb3IgY29u
+c2lzdGVuY3kuDQoNCk5ldmVyIG1pbmQgdGhlIHN0cnVjdHVyZSBsYXlvdXQsIGJlY2F1c2UgJ3Bh
+Y2tlZCcgYWxsb3dzIHRoZQ0Kc3RydWN0dXJlIHRvIGJlIGFsaWduZWQgb24gYW55IGJvdW5kYXJ5
+IGl0IGZvcmNlcyB0aGUgY29tcGlsZXINCnRvIHVzZSBieXRlIG1lbW9yeSBhY2Nlc3NlcyBhbmQg
+c2hpZnRzIG9uIHNvbWUgYXJjaGl0ZWN0dXJlcy4NClRoaXMgaXMgYSBob3JyaWQgcGVyZm9ybWFu
+Y2UgcGVuYWx0eS4NCg0KJ3BhY2tlZCcgc2hvdWxkIG9ubHkgYmUgc3BlY2lmaWVkIGZvciBzdHJ1
+Y3R1cmVzIHRoYXQgY2FuDQpvY2N1ciBvbiBhbnkgYWRkcmVzcyBib3VuZGFyeS4NCmllIGJhc2lj
+YWxseSBuZXZlci4NCg0KSWYgeW91IG5lZWQgdG8gcmVtb3ZlIHRoZSBpbXBsaWNpdCBwYWQgYmVm
+b3JlIGEgZmllbGQgKGVnIDY0Yml0DQpmaWVsZHMgb24geDY0LTMyKSB0aGVuIHlvdSBjYW4gbWFy
+ayB0aGUgZmllbGQgaXRzZWxmIGFzICdwYWNrZWQnLg0KQWx0aG91Z2gsIGluIHRoYXQgY2FzZSwg
+cHV0dGluZyB0aGUgYXR0cmlidXRlIG9uIHRoZSB0eXBlIChjb21wYXRfczY0KQ0KaXMgZ2VuZXJh
+bGx5IGNsZWFuZXIuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUs
+IEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJl
+Z2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
