@@ -2,33 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73801494AAD
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 10:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8D8494BC0
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 11:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242009AbiATJ0j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jan 2022 04:26:39 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:35575 "EHLO
+        id S1376287AbiATKb2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jan 2022 05:31:28 -0500
+Received: from mout.kundenserver.de ([217.72.192.74]:34027 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234276AbiATJ0i (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 04:26:38 -0500
-Received: from mail-oi1-f170.google.com ([209.85.167.170]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MqbDs-1mX06m2Ey0-00mfPd; Thu, 20 Jan 2022 10:26:36 +0100
-Received: by mail-oi1-f170.google.com with SMTP id q186so8478481oih.8;
-        Thu, 20 Jan 2022 01:26:35 -0800 (PST)
-X-Gm-Message-State: AOAM530IS6cMCdv3arv1VITiCM41IZlTFYKedU3XPQQraoDSFQvHiYtB
-        lrVraWDG10iuGZ2ZJMFWfUsF1JRzoAeo78l1PK8=
-X-Google-Smtp-Source: ABdhPJwUHTIEKGF9B/deLoD+NLX/BPhPwhEAEkpKqsuu70hdzaWxQnSHkYBLqgySPz6euydrj/73VVU+G7+wmpaPV1k=
-X-Received: by 2002:a05:6808:2206:: with SMTP id bd6mr6829962oib.11.1642670794688;
- Thu, 20 Jan 2022 01:26:34 -0800 (PST)
+        with ESMTP id S1359821AbiATKb1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 05:31:27 -0500
+Received: from mail-yb1-f181.google.com ([209.85.219.181]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MZT2u-1mqAXb2MwY-00WXSU; Thu, 20 Jan 2022 11:31:25 +0100
+Received: by mail-yb1-f181.google.com with SMTP id g81so16315857ybg.10;
+        Thu, 20 Jan 2022 02:31:24 -0800 (PST)
+X-Gm-Message-State: AOAM530i1rFy8RoQsWbFOx8Lh4Dz9sevMKDwwE8Ap+KWRMQknWrarX9a
+        xBA3GOd0jYejqU4+LPfKREnuiw9IZszljyJK0/o=
+X-Google-Smtp-Source: ABdhPJw23cQjee+wzKe1BZuP5Egl38StW0xVS2Lx2CrxQkm8C96LIXXcbD+ld7BJcIRLzViPyYDZ1TVXzpuf+zNTwjI=
+X-Received: by 2002:a05:6830:2095:: with SMTP id y21mr25066257otq.368.1642670990087;
+ Thu, 20 Jan 2022 01:29:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120073911.99857-5-guoren@kernel.org>
-In-Reply-To: <20220120073911.99857-5-guoren@kernel.org>
+References: <20220120073911.99857-7-guoren@kernel.org>
+In-Reply-To: <20220120073911.99857-7-guoren@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 20 Jan 2022 10:26:18 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3ixShQBKmdXWxf8QdB_aLeWr7TQB+7MqQBSgh0-shSSQ@mail.gmail.com>
-Message-ID: <CAK8P3a3ixShQBKmdXWxf8QdB_aLeWr7TQB+7MqQBSgh0-shSSQ@mail.gmail.com>
-Subject: Re: [PATCH V3 04/17] syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
+Date:   Thu, 20 Jan 2022 10:29:33 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
+Message-ID: <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
+Subject: Re: [PATCH V3 06/17] riscv: compat: Add basic compat date type implementation
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup@brainfault.org>,
@@ -50,37 +50,42 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         "the arch/x86 maintainers" <x86@kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9+M0fmdb5HxFeLZX9pIqezr+U7soQTbqk+JjtRs2FIL6hfst5O4
- 2BQfFrTCSQVRnaR/fgEHUJOO70yHaGyLxtJj4EYgVaqfAN5xJTyCv/VoAJcfB7BOoxCvwS3
- MYW00xSfV4tr14+j8/NYptBPa/Ix+5VygRkmhO2iqPTyB03zQLV5vryYNqFPR2w5k4x02Y6
- TsZpLJc0Xmc1lJsPQZRZg==
+X-Provags-ID: V03:K1:/YrZFEbx0m1uHPEKUQKkFLX41ybymALXeZwa95Ver43ecocL+01
+ VkusKCnCY435UYabAymjiaqEbCkKjnvVmkXoZhKWMKspaftuIB87JRW21PACROoIaS5mOt2
+ t61sDWYl+4B9rsTTfcJM5zdAGFA0dRFKSNEj9/2vlVNRJgNiIUKT1Ese3rIOGUEmZpPLxo9
+ MkM0azpjuJfqPWJM4R4Fw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nUtO5XneSiM=:Dg12rz9J3w1TQnxrs/E87G
- iesAAgSk2cZqLybrx9KAQoiYkbu8unUjK1VJXdruvwBXb1OyXQoDIfLZsAx0aTt0YXKAa0A/H
- AOyz1OVRRpVA6uLccCRnnlUoqHceRjCBDgFyH9oWc3Az3c0OXlhJEycCggpc1NDn1t/XBg1Me
- y4mZNvF3ItCXVn8G2bkjcjRAB2rY64oE/2YNCAGld6AQppFrkRMLtM8gbc1bZgJO2Qdl4/+kX
- ob38D6pruMcguRg80vHYA+Jq32WcmYbY4LS/8l5l+zfsGcJxhYrjRvtmadwk3qasckMn4iJTV
- pxpWoWzAPDvrpwGb09ijS0uCUztqlBGZJawiizg10VZQsgtfqELHpw+lhibeUpGzMrlCy5ZK1
- 3EJDvtMx186UF8Ih7VZRpb2HVKXxry+rF0LdOuVwpsz36Aztw5StTL8I6sqVvpiZkG+syTS5L
- rvOruz6CL6Qz8wWyrQFKTZda1IwxALpBpan8aHexjjE+yvdbmme6ZAEq/gh57B5cL8ObHte/f
- rkXz4586yb0YgEBF5V2fX3BzUWrQHpnR13Xga/gVkQy2x4q2MPsdVNlWESuUkZxmZ11YDWL7T
- a5UQywC02JzoRKEti73luxoQ1K8rwExYfyUaBtzN46VajCjZ2iLa+5DZleXTz0b1CJyNIxDIh
- XugEsiMi8P1dH8pEa39CHcbWmQgDH8ixCYrx0eOm6xc+HMiKG5QB1HGf1uGLHJyUIqUZV2FKd
- w99m5jj8ake0mC8UFOr3AjYJsG/rwK2EC4t6lrdKPGrjRlduZQpg97LrkjJrHPD1CJxsdpjgA
- tivxNThey85wjJQBGsTjaQpN03Y8rBDs/vczTRjQDoJ396CASY=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:T7bI/xAO8l0=:qNCIqTulaofY9UgGdzj5lY
+ ATdqoSNUNo0XJ6PgNk3+AgMF3KnQPf52A8y+L8vdS8MglIOZkpuz+jdZQWIviipSc+ILFj6TJ
+ V2kDG0+Ru3nZDp7t3JaHomT2RWNo8C1NcamFdCBz7aRxGqXWjDjQihMwkgyalMA6p1nxiAxQd
+ gYR++/VttGi++oIx2zyUGWruULnfQJfGxLsUDmJvCWVvtvxvimEXv0zRCYKtewrnMjiwTAE0z
+ +aft7FKchhA397VhrdxgoZ6//aL+k9vylD25bMxigKCH0FpgSQs6/QJre+Q72BbfUXZLgXfxg
+ khBBxOPtAqA7s+2fj8vbPg5v8BbskmglChPfZX28qFsABRp4zOGhAd83SL0fkiTi6fYmcZd+P
+ dBq24bfvTxomAFc3uQjvZqO48V65ny8JBvsT8q6Fzo8W8M8fXFcVpS16XVU0Ub/9wq51wiWpB
+ CF2wzN0dgQe0QcqRarjGi1PLDTRkjjWECFnIi3jQb/bEBBCKQtQMAAeRuVqM7nfhm4vFvR6b3
+ METIKEiCFqBFyZgCczbVEghq74hQSxyCf/GJ7Nq7WCsBD615yDPnGOytFcoNX2qOzMwiLg3I/
+ zmhS3e/Yas9npym27cEJ1eEs6WeYuraqrn+7S/Arq3Ig2OLYw+1/klIEYHjlugq8Yyja72/75
+ qN3VmkWmPa4FPHFXZhiRRVD/G9/BTDxeoMa0WEHCgYpyJy8RLGzxGr4juS9ybpnjPF2uNw8Fn
+ sH+h55Ktki2o8OXr310DYiUIvIT2Um4HwkEp9jYAVlASK0mjuEQ2SQawdbp84fedAQ7pfTVq5
+ pFOodo0W5sulmF73m+AC4MKxw6P68EciMuFtq7wPhk8fmoQMEdCNKoC4nR8TjnJhGabmRmz
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 On Thu, Jan 20, 2022 at 8:38 AM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> Make "uapi asm unistd.h" could be used for architectures' COMPAT
-> mode. The __SYSCALL_COMPAT is first used in riscv.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> @@ -0,0 +1,136 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef __ASM_COMPAT_H
+> +#define __ASM_COMPAT_H
+> +
+> +#define compat_mode_t  compat_mode_t
+> +typedef u16            compat_mode_t;
+
+I think this one is wrong, as rv32 should get the native definition from
+
+include/uapi/asm-generic/posix_types.h:typedef unsigned int     __kernel_mode_t;
+
+I think it works if you just remove those two lines. The rest looks good to me.
+
+       Arnd
