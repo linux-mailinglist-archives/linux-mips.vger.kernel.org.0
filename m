@@ -2,36 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42456495076
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 15:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE4E4950AB
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 15:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243048AbiATOnE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jan 2022 09:43:04 -0500
-Received: from mout.kundenserver.de ([212.227.126.135]:32999 "EHLO
+        id S1357724AbiATO5s (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 20 Jan 2022 09:57:48 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:42733 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345740AbiATOnD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 09:43:03 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N94FT-1mGkex1bh1-0164IJ; Thu, 20 Jan 2022 15:43:00 +0100
-Received: by mail-oi1-f178.google.com with SMTP id e81so9165229oia.6;
-        Thu, 20 Jan 2022 06:42:59 -0800 (PST)
-X-Gm-Message-State: AOAM532fTQeZvdseBVNpP7JhI7X4GUoHSyhpLrOibn821AnyycWSbVfG
-        7gdcN6oRoZQACfzl55Dx6kZhpqevXG0Q2Pv9cWo=
-X-Google-Smtp-Source: ABdhPJx7CtRumP0QQYfXweJthBATxPSWS8llRiPfBtrUDHNd5XtCBWTkqgRw8si0X+m1xq787CRD7WnkdtRMWwwXsuo=
-X-Received: by 2002:a05:6808:1490:: with SMTP id e16mr7781849oiw.84.1642689778452;
- Thu, 20 Jan 2022 06:42:58 -0800 (PST)
+        with ESMTP id S1356745AbiATO5r (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 09:57:47 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MHndY-1n7lap2Jvi-00Es1l; Thu, 20 Jan 2022 15:57:45 +0100
+Received: by mail-oi1-f181.google.com with SMTP id t9so9168099oie.12;
+        Thu, 20 Jan 2022 06:57:44 -0800 (PST)
+X-Gm-Message-State: AOAM532ur7kb+ZJ3gkm0JgO0s8P5UWnOgJaBPq7evKhod0Uk0ONZn2C/
+        nXJDWfIBAjEUHqIChtcKEYQKjBJDBXi85nHgFSY=
+X-Google-Smtp-Source: ABdhPJwjtLdN6iyHNeRuxhdvl9Y6OeJzbUgAsOZS1tuaBlnRH/pfBDfrQe9jdzUZRHtHuLOgUQesyOgPAeGaNPDH+P4=
+X-Received: by 2002:a05:6808:9a:: with SMTP id s26mr7926312oic.108.1642690663723;
+ Thu, 20 Jan 2022 06:57:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120073911.99857-9-guoren@kernel.org>
-In-Reply-To: <20220120073911.99857-9-guoren@kernel.org>
+References: <20220120073911.99857-8-guoren@kernel.org> <CAK8P3a1UvqsS-D7cVXBkp4KCRWDfquQ6QTkvrQ=FqLxhsAi7Rw@mail.gmail.com>
+ <f16cf10425a14c2e8183d5c90667ce72@AcuMS.aculab.com> <CAJF2gTRwh40xDBkoRJWZEUketKFDAy7_z=-WW7E=T46yH4zPvw@mail.gmail.com>
+In-Reply-To: <CAJF2gTRwh40xDBkoRJWZEUketKFDAy7_z=-WW7E=T46yH4zPvw@mail.gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 20 Jan 2022 15:42:42 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0LxB3we9wHOa4OPmNow6wz5NP49zeYhh7QXNv-MiR8UA@mail.gmail.com>
-Message-ID: <CAK8P3a0LxB3we9wHOa4OPmNow6wz5NP49zeYhh7QXNv-MiR8UA@mail.gmail.com>
-Subject: Re: [PATCH V3 08/17] riscv: compat: syscall: Add compat_sys_call_table
- implementation
+Date:   Thu, 20 Jan 2022 15:57:27 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3FLnqibdXCGR8c+mm92HSiuvocZDeW8MyoTO_L1sYT=w@mail.gmail.com>
+Message-ID: <CAK8P3a3FLnqibdXCGR8c+mm92HSiuvocZDeW8MyoTO_L1sYT=w@mail.gmail.com>
+Subject: Re: [PATCH V3 07/17] riscv: compat: Re-implement TASK_SIZE for COMPAT_32BIT
 To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+Cc:     David Laight <David.Laight@aculab.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup@brainfault.org>,
         gregkh <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
@@ -41,106 +43,63 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Christoph Hellwig <hch@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
         linux-s390 <linux-s390@vger.kernel.org>,
         sparclinux <sparclinux@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        inux-parisc@vger.kernel.org,
+        "inux-parisc@vger.kernel.org" <inux-parisc@vger.kernel.org>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         "the arch/x86 maintainers" <x86@kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:KOZKKo+WIJ1Y1zAPI6JeyCqeUpeTH9yVVag9YtkkrptSaffd3Hm
- p/3BvUygj4t2gs30sYZIJBjkyQAFHcPP6vZXD2vVfJqsszWM8hAv3PLyyYPUvURfxaGPzP+
- E8ck/3z6XRRBr7GqEd1raIUC6qFVnOkWbmRKKrwDEXBzP5rig2QA81gfrlG0smBz4mMjoyR
- 44YTYZeBiLcgbab50Hn1A==
+X-Provags-ID: V03:K1:ebq+f8qblaxd9E/WdJgeKxnEvzsD5T+KESng71vOs/CWvdRMDlH
+ NkzD0RmyN8eSV4KFIA7QtXifTjrQqboztxcBuvgGrnrhQyc3CXAiweVRT3N4SGZbkQpU1RK
+ c/MQoab7YcK4IKxNzDnIBOEcQSW/NfJtQzz03FrWhfbjodQcezVr3JOKqdquhdOqrtDIJyh
+ LaXQmo0QAPULP2HCb1zrQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Mcn8p1yf5TA=:KXPyAAJ49Kconojf7p5XMu
- 2m0vIrZiPbqBK9AFU33jpY8G+65O57LOHHfnmLfG0s2Qlw7Ohj6zM9eGSw9B0qzxntRlTsw4B
- 9Kxed0sow5Jf+zi8nWx7404wq+0RNh5itNVlRNPTxPUlMEM+37DfaBY2pyO9SJlVz49ziijgK
- zEK1zGkB13W2/JMwflFyhKNam0Al2k0G40SsPAH2qnOKHm/wXNr+7dTIJ2+8IoxRhqBL1qwFG
- ySTKH0T90DTf/5und6cZTCniDgcZxzLTddMPK4XtjVohaSZXPaRTagr3lqIEI1Y3aJuzeCVkJ
- kXqHlYKCrSIZNOP8TVUj7qoYTiO5wzrhzHmUS6b2XSWxFbVfqN5poQYWAn+ufpyWorCMmhNhq
- tUZBvUhqzd5xfrcTGNm4vAyh10ApKsmDEXGEYzdJBUodHOluUVAvx1pFj/4XdRD4qFGt/+NRQ
- 9eLx+/dMZHfIXG6DRNzL6D8vm6KRY84=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ja7xTabe8b4=:rOkAX4N/fElJ9mRJ1qbsTv
+ /CLiyFtBXVu7wVnESukj51MjR0Su+7KjNooXiyCuMsYKBa/suOX/6xED3vHQfsy5Ko73zLOPo
+ JOrPPFQeqMONk3jWn7UNFkOxmP3gvynqIdzvnnAhUl+NJE9O2rXUZzMnR5cEAFswgmF4+43p1
+ MH22WI0HeDMg97CbAQGQ9MEoQN81BNzhqqebKpT7g8a4crXrzb1UDVmZFg5kaMI6X05Rq+yJZ
+ V27Ws40orOduuzBVb9/XePF3WrNLMsJU8H6IT+pn6bVcOlC6hOu8FOWudLprPT3s65NPNmkAq
+ drGEG4WFOei0mj2R8t5rxicizUmHC6I+Z3vShqSnSw3KcCICpmExzUSvCqWtP+ZgK0Yqz/cbS
+ BWvifAK/rjqJj/QAVvfpdNdQNl422rx5XOhO1ftmUMkS6MK7QRW3qKx+YMizyavtJatszuOmN
+ Ef1wzw5neeRaeJuJiFBcEbTTJKl4uBeAsfdpiuj8QHlfbwb/8hzF8MrXKi9TgFD088+fWDjwV
+ 6IPf2MbZng+MWfg6BbIx9DVrqo5XgUy0K30hWcOhdpih4KfOkKhCfruICqG5hrQcVPPnQqGKj
+ MX+uj4tlit+dsAnW41X9KDnEahpWqlMPKKDWPbqeAQJAaoMzN1a5XvZH0SGG9/sjbuNeO+gq1
+ BGkwDsQew29OnF49WnZfzxTXOZFfTJIkDmVflXVoG0DLq6UjQ8p/yFexOKQ28RUanYvm/jp6I
+ 9uj4ePgs6wlM1o2NOU/BqQg9JYng+bUPaX50zsHimewZAIMGHJWrs9kHXOXrvr3AwjtPI+v68
+ /34uGlgUXshE5Ckncx1XJWF/Vk+4gke4OEGECWQD5jOFxqwaVw=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
+On Thu, Jan 20, 2022 at 2:27 PM Guo Ren <guoren@kernel.org> wrote:
+> On Thu, Jan 20, 2022 at 8:53 PM David Laight <David.Laight@aculab.com> wrote:
+> > I think the x86-64 32bit compat code even puts the boundary at 4GB.
+> Yes, we could give rv32 compat for 4GB with some effort. But it's unnecessary.
 >
->  /* The array of function pointers for syscalls. */
->  extern void * const sys_call_table[];
-> +#ifdef CONFIG_COMPAT
-> +extern void * const compat_sys_call_table[];
-> +#endif
+> There are no history issues for rv32, we use compat mode to reduce
+> memory footprint. eg: only 64MB memory available.
+>
+> At end compat for 4GB is another topic, let's give the initial compat
+> for 2GB support to riscv.
 
-No need for the #ifdef, the normal convention is to just define the
-extern declaration unconditionally for symbols that may or may not be defined.
+I think it's fine either way. Having the entire 4GB space available is nice
+when you are trying to build 32-bit software natively rather then using a
+cross-compiler, as you can just do it on a larger machine that supports both.
 
-> +COMPAT_SYSCALL_DEFINE3(truncate64, const char __user *, pathname,
-> +                      arg_u32p(length))
-> +{
-> +       return ksys_truncate(pathname, arg_u64(length));
-> +}
+One example of software that runs into virtual memory size limitations is
+the gnu linker when building large applications, but it's unlikely that you'll
+actually need to run applications that run into this, while also needing to
+build them natively.
 
-Are you sure these are the right calling conventions? According to [1],
-I think the 64-bit argument should be in an aligned pair of registers,
-which means you need an extra pad argument as in the arm64 version
-of these functions. Same for ftruncate64, pread64, pwrite64, and
-readahead.
+Using the same limit as on native 32-bit machines can help with compatibility
+of certain software, but again this is rarely a problem and I have not seen any
+reports of issues with the 4GB TASK_SIZE_32 on arm64. On x86, there
+is an option to use the native 3GB TASK_SIZE for compat tasks. This was
+introduced to work around buggy applications a long time ago, but is
+probably not used any more in practice.
 
-> +COMPAT_SYSCALL_DEFINE3(ftruncate64, unsigned int, fd, arg_u32p(length))
-> +{
-> +       return ksys_ftruncate(fd, arg_u64(length));
-> +}
-> +
-> +COMPAT_SYSCALL_DEFINE6(fallocate, int, fd, int, mode,
-> +                      arg_u32p(offset), arg_u32p(len))
-> +{
-> +       return ksys_fallocate(fd, mode, arg_u64(offset), arg_u64(len));
-> +}
-> +
-> +COMPAT_SYSCALL_DEFINE5(pread64, unsigned int, fd, char __user *, buf,
-> +                      size_t, count, arg_u32p(pos))
-> +{
-> +       return ksys_pread64(fd, buf, count, arg_u64(pos));
-> +}
-> +
-> +COMPAT_SYSCALL_DEFINE5(pwrite64, unsigned int, fd,
-> +                      const char __user *, buf, size_t, count, arg_u32p(pos))
-> +{
-> +       return ksys_pwrite64(fd, buf, count, arg_u64(pos));
-> +}
-> +
-> +COMPAT_SYSCALL_DEFINE6(sync_file_range, int, fd, arg_u32p(offset),
-> +                      arg_u32p(nbytes), unsigned int, flags)
-> +{
-> +       return ksys_sync_file_range(fd, arg_u64(offset), arg_u64(nbytes),
-> +                                   flags);
-> +}
-> +
-> +COMPAT_SYSCALL_DEFINE4(readahead, int, fd, arg_u32p(offset),
-> +                      size_t, count)
-> +{
-> +       return ksys_readahead(fd, arg_u64(offset), count);
-> +}
-> +
-> +COMPAT_SYSCALL_DEFINE6(fadvise64_64, int, fd, int, advice, arg_u32p(offset),
-> +                      arg_u32p(len))
-> +{
-> +       return ksys_fadvise64_64(fd, arg_u64(offset), arg_u64(len), advice);
-> +}
-
-I still feel like these should be the common implementations next to the
-native handlers inside of an #ifdef CONFIG_COMPAT.
-
-The names clash with the custom versions defined for powerpc and sparc,
-but the duplicates look compatible if you can account for the padded
-argument and the lo/hi order of the pairs, so could just be removed here
-(all other architectures use custom function names instead).
-
-        Arnd
-
-[1] https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf
+       Arnd
