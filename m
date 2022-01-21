@@ -2,51 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBD7495A05
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jan 2022 07:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04276495A36
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jan 2022 07:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378731AbiAUGgL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jan 2022 01:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
+        id S245233AbiAUG7q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jan 2022 01:59:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378720AbiAUGgI (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jan 2022 01:36:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3126C061574;
-        Thu, 20 Jan 2022 22:36:07 -0800 (PST)
+        with ESMTP id S233755AbiAUG7q (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jan 2022 01:59:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51499C061574;
+        Thu, 20 Jan 2022 22:59:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 11A9CCE2221;
-        Fri, 21 Jan 2022 06:36:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C982C340EA;
-        Fri, 21 Jan 2022 06:36:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09A16B81F4F;
+        Fri, 21 Jan 2022 06:59:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0C6C36AE3;
+        Fri, 21 Jan 2022 06:59:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642746964;
-        bh=OapTYucU006/664lVqAyS8BT5iSkNJKlZLbM69QQ02s=;
+        s=k20201202; t=1642748382;
+        bh=4ShAu9TMO9pCCFhxDCpJN37xIb8io+l6Oyhyz+wkc74=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GyeoGBec3Mxxwihc80e8LN96Gzd5XeBsuNCOi7xxq0OUlO7wI66J+kph/004N5YlM
-         ZphpsSdABXAW0cGfBs8tDJ2kaQt1QFdvMTjCMTyr6Bg8OcqIWKmeOaRmmnBE13F1EM
-         AuEdwDMswd2hT0y57hMztgmKAEzQCaUypXzFkzAxSJ0+w8Q/Xs8m4tpDWn+VYnqnnN
-         z9Ejp2Exvg1liCnyEAPgNaaENyPLldmhKZgF1KSYkIDtAxyFKfemjvExbxV5m4Xmou
-         +f+05ibW2RAfW0HnazvCqTXvAO8o7EkoN+/B2BScAQl+D+PHtXxrtHd+6loQi9uk+g
-         TzEikaKl0BY1Q==
-Received: by mail-ua1-f41.google.com with SMTP id w21so15156096uan.7;
-        Thu, 20 Jan 2022 22:36:04 -0800 (PST)
-X-Gm-Message-State: AOAM53068lAFo1d1oYGEHQPov6DrJv1z3ZlPyfBGculqPESW1Zl1iGMQ
-        d147kzLAW058K9nO5QrvmHe+/X2UKQSAmRsVUSM=
-X-Google-Smtp-Source: ABdhPJwE7D6l9CEOckPMqifjprc+HPS6gXhdx42Itd64DW8S7D8rq3j2EK3bHxYHAPm3yMKSrqoSRwZpgjSjhZ4KQwc=
-X-Received: by 2002:ab0:728c:: with SMTP id w12mr1223277uao.108.1642746963165;
- Thu, 20 Jan 2022 22:36:03 -0800 (PST)
+        b=rkWc8GrmU4jDh8MIgKhU1tVmZnCPK978zpVeaoKL9BABXmrLvJhp7qT1axvVYenFf
+         EXl+ILKxghGdYexiqzYSqUGqzgOJdRw9gxLBkPt1lugs/J2H5kUsa8aA2+geA99vJC
+         kLBagAY8ht9vk/XtIQSnuK2KgVnBG1tZNY3D+9ZpekZpAe6KG4Y1gKHuohLVN8Frmz
+         tT2NlAfoov0vkk9BzpknOsIfrUfWc/Co/Jj4RBd96p/9JkewBRZ2gjADB/m/KTeuzB
+         RegN4xP87sZHPeAD0ROhV9YXpgX9yXjHzCBlxEjIP0LlJnVH/PD2rGtIyqpYIfLIwl
+         Ft604c34avssg==
+Received: by mail-vk1-f180.google.com with SMTP id 48so1865315vki.0;
+        Thu, 20 Jan 2022 22:59:42 -0800 (PST)
+X-Gm-Message-State: AOAM5315llELNQu4h1g/U6Q4fRld37XjlC1fehpgLa18vIjiUPleHx0M
+        D4yU8yOl4Dm+pjGRLE8rCwedNF6TvqB6dYLEe2E=
+X-Google-Smtp-Source: ABdhPJzfHGuI3QjQ1xrUHESSAg6lyHrYGXHJnEkduCUf4mRHX9u1+bm5wEa4HeHgEF2DEq8OtNRB3r3xOJW73X//3VQ=
+X-Received: by 2002:ac5:cbc8:: with SMTP id h8mr1146902vkn.8.1642748381690;
+ Thu, 20 Jan 2022 22:59:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120073911.99857-18-guoren@kernel.org> <CAK8P3a1_qwRpfHRyF75WEqfxGxgVnfB15vNS-egQctx7R5-DvA@mail.gmail.com>
-In-Reply-To: <CAK8P3a1_qwRpfHRyF75WEqfxGxgVnfB15vNS-egQctx7R5-DvA@mail.gmail.com>
+References: <20220120073911.99857-7-guoren@kernel.org> <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
+In-Reply-To: <CAK8P3a00uYPBBphpipBoqCnGFwr_C9vDzS1p1iLN==YTVOARug@mail.gmail.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 21 Jan 2022 14:35:52 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTCwOiTPJO1B6Asa2NUNR0D624t26nnA8S4vrSSax8R-Q@mail.gmail.com>
-Message-ID: <CAJF2gTTCwOiTPJO1B6Asa2NUNR0D624t26nnA8S4vrSSax8R-Q@mail.gmail.com>
-Subject: Re: [PATCH V3 17/17] KVM: compat: riscv: Prevent KVM_COMPAT from
- being selected
+Date:   Fri, 21 Jan 2022 14:59:30 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQVgDkyVdoezsrA4AN=9C7RMOxZBCyLB2JvQkKYsLud3Q@mail.gmail.com>
+Message-ID: <CAJF2gTQVgDkyVdoezsrA4AN=9C7RMOxZBCyLB2JvQkKYsLud3Q@mail.gmail.com>
+Subject: Re: [PATCH V3 06/17] riscv: compat: Add basic compat date type implementation
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup@brainfault.org>,
@@ -72,40 +71,25 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 6:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Thu, Jan 20, 2022 at 5:35 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Current riscv doesn't support the 32bit KVM/arm API. Let's make it
-> > clear by not selecting KVM_COMPAT.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > ---
-> >  virt/kvm/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-> > index f4834c20e4a6..a8c5c9f06b3c 100644
-> > --- a/virt/kvm/Kconfig
-> > +++ b/virt/kvm/Kconfig
-> > @@ -53,7 +53,7 @@ config KVM_GENERIC_DIRTYLOG_READ_PROTECT
-> >
-> >  config KVM_COMPAT
-> >         def_bool y
-> > -       depends on KVM && COMPAT && !(S390 || ARM64)
-> > +       depends on KVM && COMPAT && !(S390 || ARM64 || RISCV)
+> On Thu, Jan 20, 2022 at 8:38 AM <guoren@kernel.org> wrote:
 >
-> Maybe this should be flipped around into a positive list now?
-I think it's another patch to do that. Not in this series.
+> > @@ -0,0 +1,136 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +#ifndef __ASM_COMPAT_H
+> > +#define __ASM_COMPAT_H
+> > +
+> > +#define compat_mode_t  compat_mode_t
+> > +typedef u16            compat_mode_t;
+>
+> I think this one is wrong, as rv32 should get the native definition from
+>
+> include/uapi/asm-generic/posix_types.h:typedef unsigned int     __kernel_mode_t;
+>
+> I think it works if you just remove those two lines. The rest looks good to me.
+Yes, you are right. compat_mode_t should be unsigned int.
 
-> The remaining architectures would be mips, powerpc and x86, but it's unclear
-> if this actually meant to work on all of them, or any potential ones
-> added in the
-Yes, it's unclear and arch maintainers need to confirm that.
-
-> future.
 >
 >        Arnd
 
