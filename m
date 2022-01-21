@@ -2,77 +2,199 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C172A49560A
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Jan 2022 22:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B9D4959E4
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jan 2022 07:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347479AbiATVkR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 20 Jan 2022 16:40:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34748 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiATVkR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 20 Jan 2022 16:40:17 -0500
+        id S1378695AbiAUGZp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jan 2022 01:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378696AbiAUGZp (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jan 2022 01:25:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E31C06173F;
+        Thu, 20 Jan 2022 22:25:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0B9EB81E66;
-        Thu, 20 Jan 2022 21:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB7A2C340E3;
-        Thu, 20 Jan 2022 21:40:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6647B81F4A;
+        Fri, 21 Jan 2022 06:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88D23C36AE7;
+        Fri, 21 Jan 2022 06:25:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642714814;
-        bh=RK4Wx98CLevcla/neFB51ar1oynVV09cZXlwV/iBl0I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JCEpVAnxHTlYlDlnSydVPYCOExOZSkkZhdu2Z+23XnUf2NGCzgQvV5rbNiDdcHgkc
-         zR0GdGJlKW0vIpkdwUgb3P940t99p88zslzsE237+o5IlakNO6DtK8+8KOxlLxb5I/
-         5CY5z8mHvg5Dx7Ro3l87/0hpuLWuZB3T0q1/3bir7TRkUjw7BFhBlhK7V389inaArG
-         IOzZd5LK6sJkwRfeznFpz1bPRCmWzbbqpjPP+Mid/STD729IGJOmuecNbzNssv0BQ8
-         uPmY9Ogw+6Kl4Tre5MmlD8DDuMCPZbi8ef2uC+yiZI8pdWCabxx4CE0yvwAmhY4PQg
-         18KSRheaLuDGw==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 2/2] MIPS: Loongson64: Wrap -mno-branch-likely with cc-option
-Date:   Thu, 20 Jan 2022 14:40:01 -0700
-Message-Id: <20220120214001.1879469-2-nathan@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220120214001.1879469-1-nathan@kernel.org>
-References: <20220120214001.1879469-1-nathan@kernel.org>
+        s=k20201202; t=1642746341;
+        bh=Isi0LP5N8Hd28Ba/kM6pY+YaZm5nWrdB7apzNizLGkI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QGovHoz1oiofsdeaaXvjyotkiuHEDH0/CO+SlieoWuLCgx5KtV+Ai2Csju6ecvcNn
+         xTbsrzAaDUp9BLR9AyNzODSTM1WIjQcjd/vxArKlUGwNgK09W1bVBsghi+Zm7UWemM
+         uEtNuhsOXX8Ugo1Y4qHLm4MRe1sX1QcTL2nYe/FfR+RV6+/ofNF6GmJUNEvEHvHK+e
+         w1SoJRREbXxjcdQQSlT7aN2dH/O/U5TVCUyEr9r+jtwrROIzQilSGVx4QeQK9dZVSh
+         d1xgfZJVGsxLsNdaiWOd+utFZwUfcRwN3wT3+g6qcQI0ranll2u6k7n00Y/woKgW8j
+         jDKVRZ3MkFA6w==
+Received: by mail-ua1-f45.google.com with SMTP id r15so15165463uao.3;
+        Thu, 20 Jan 2022 22:25:41 -0800 (PST)
+X-Gm-Message-State: AOAM531o1hGvHoRX5X6NRHKYSV3HPnON1mXcOnKe386cx1rrWYA36DfY
+        M1NGgl+PD3UWDui+YcedmjcKpQniT2wYk59fM8o=
+X-Google-Smtp-Source: ABdhPJwB7ga72MDOno+HFBeeiGH/FKsBJy+/4qpm4/UjbqnmBZuKa8XMIWL0JsmA8KTM5bJQlsAjrV4ffWb0zfo7B4M=
+X-Received: by 2002:a67:e016:: with SMTP id c22mr1147085vsl.51.1642746340414;
+ Thu, 20 Jan 2022 22:25:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220120073911.99857-9-guoren@kernel.org> <CAK8P3a0LxB3we9wHOa4OPmNow6wz5NP49zeYhh7QXNv-MiR8UA@mail.gmail.com>
+In-Reply-To: <CAK8P3a0LxB3we9wHOa4OPmNow6wz5NP49zeYhh7QXNv-MiR8UA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 21 Jan 2022 14:25:29 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQVUF4LSO0a6_MV8x-UAiJw32pAFyS1oPNLXhcEaemzqg@mail.gmail.com>
+Message-ID: <CAJF2gTQVUF4LSO0a6_MV8x-UAiJw32pAFyS1oPNLXhcEaemzqg@mail.gmail.com>
+Subject: Re: [PATCH V3 08/17] riscv: compat: syscall: Add compat_sys_call_table
+ implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This flag is not supported by clang, which results in a warning:
+On Thu, Jan 20, 2022 at 10:43 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
+> >
+> >  /* The array of function pointers for syscalls. */
+> >  extern void * const sys_call_table[];
+> > +#ifdef CONFIG_COMPAT
+> > +extern void * const compat_sys_call_table[];
+> > +#endif
+>
+> No need for the #ifdef, the normal convention is to just define the
+> extern declaration unconditionally for symbols that may or may not be defined.
+Okay
 
-  clang-14: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
+>
+> > +COMPAT_SYSCALL_DEFINE3(truncate64, const char __user *, pathname,
+> > +                      arg_u32p(length))
+> > +{
+> > +       return ksys_truncate(pathname, arg_u64(length));
+> > +}
+>
+> Are you sure these are the right calling conventions? According to [1],
+> I think the 64-bit argument should be in an aligned pair of registers,
+> which means you need an extra pad argument as in the arm64 version
+> of these functions. Same for ftruncate64, pread64, pwrite64, and
+> readahead.
 
-This breaks cc-option, which adds -Werror to make this warning fatal and
-catch flags that are not supported. Wrap the flag in cc-option so that
-it does not cause cc-option to fail, which can cause randconfigs to be
-really noisy.
+[1] has abandoned.
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/mips/loongson64/Platform | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+See:
+https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-cc.adoc
 
-diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
-index 981d3abc150e..acf9edc9b15d 100644
---- a/arch/mips/loongson64/Platform
-+++ b/arch/mips/loongson64/Platform
-@@ -26,5 +26,6 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
- # Loongson Machines' Support
- #
- 
--cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64 -mno-branch-likely
-+cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64
-+cflags-$(CONFIG_MACH_LOONGSON64) += $(call cc-option,-mno-branch-likely)
- load-$(CONFIG_CPU_LOONGSON64) += 0xffffffff80200000
+Ltp test results:
+
+ftruncate01                                        PASS       0
+ftruncate01_64                                     PASS       0
+ftruncate03                                        PASS       0
+ftruncate03_64                                     PASS       0
+ftruncate04                                        CONF       32
+ftruncate04_64                                     CONF       32
+
+truncate02                                         PASS       0
+truncate02_64                                      PASS       0
+truncate03                                         PASS       0
+truncate03_64                                      PASS       0
+
+pread01                                            PASS       0
+pread01_64                                         PASS       0
+pread02                                            PASS       0
+pread02_64                                         PASS       0
+pread03                                            PASS       0
+pread03_64                                         PASS       0
+
+pwrite01_64                                        PASS       0
+pwrite02_64                                        PASS       0
+pwrite03_64                                        PASS       0
+pwrite04_64                                        PASS       0
+
+readahead01                                        PASS       0
+readahead02                                        CONF       32
+
+
+>
+> > +COMPAT_SYSCALL_DEFINE3(ftruncate64, unsigned int, fd, arg_u32p(length))
+> > +{
+> > +       return ksys_ftruncate(fd, arg_u64(length));
+> > +}
+> > +
+> > +COMPAT_SYSCALL_DEFINE6(fallocate, int, fd, int, mode,
+> > +                      arg_u32p(offset), arg_u32p(len))
+> > +{
+> > +       return ksys_fallocate(fd, mode, arg_u64(offset), arg_u64(len));
+> > +}
+> > +
+> > +COMPAT_SYSCALL_DEFINE5(pread64, unsigned int, fd, char __user *, buf,
+> > +                      size_t, count, arg_u32p(pos))
+> > +{
+> > +       return ksys_pread64(fd, buf, count, arg_u64(pos));
+> > +}
+> > +
+> > +COMPAT_SYSCALL_DEFINE5(pwrite64, unsigned int, fd,
+> > +                      const char __user *, buf, size_t, count, arg_u32p(pos))
+> > +{
+> > +       return ksys_pwrite64(fd, buf, count, arg_u64(pos));
+> > +}
+> > +
+> > +COMPAT_SYSCALL_DEFINE6(sync_file_range, int, fd, arg_u32p(offset),
+> > +                      arg_u32p(nbytes), unsigned int, flags)
+> > +{
+> > +       return ksys_sync_file_range(fd, arg_u64(offset), arg_u64(nbytes),
+> > +                                   flags);
+> > +}
+> > +
+> > +COMPAT_SYSCALL_DEFINE4(readahead, int, fd, arg_u32p(offset),
+> > +                      size_t, count)
+> > +{
+> > +       return ksys_readahead(fd, arg_u64(offset), count);
+> > +}
+> > +
+> > +COMPAT_SYSCALL_DEFINE6(fadvise64_64, int, fd, int, advice, arg_u32p(offset),
+> > +                      arg_u32p(len))
+> > +{
+> > +       return ksys_fadvise64_64(fd, arg_u64(offset), arg_u64(len), advice);
+> > +}
+>
+> I still feel like these should be the common implementations next to the
+> native handlers inside of an #ifdef CONFIG_COMPAT.
+>
+> The names clash with the custom versions defined for powerpc and sparc,
+> but the duplicates look compatible if you can account for the padded
+> argument and the lo/hi order of the pairs, so could just be removed here
+> (all other architectures use custom function names instead).
+I would try it later.
+
+>
+>         Arnd
+>
+> [1] https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf
+
+
+
 -- 
-2.34.1
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/
