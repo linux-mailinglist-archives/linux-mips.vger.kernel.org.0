@@ -2,177 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AB3495C04
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jan 2022 09:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6AE495C63
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jan 2022 09:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234155AbiAUIfH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jan 2022 03:35:07 -0500
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:64199 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379612AbiAUIem (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jan 2022 03:34:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1642754083; x=1674290083;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Q8+w+zY/fos4SCamEOckILzxUl1jS3yfE7nrCAZdjSU=;
-  b=fqnOhhN64yWyE5YwOYG/xE4/DvfQ6bIY0LAk0pnapHA6gHSlXejCId/e
-   GbNDLs7U6qflUFZlkFsjANWIYzYGalWt3ejVc/pZxShKq47syZWrYHB5M
-   QZu8pd5MdF3nh1wEUsZASFbdDaW4/J8nSP0Vj8XsnHLQVCiHpom1Jn+LC
-   JTq+63zBEXNEKmdc1TzGHE2rmf6zMLEonAObI6uq4b1Tk7SyWSH3qR0Vj
-   0WPf1ehet1XT4a85JJ41Z2I9zOIzUEYfLgnuZjDjzEWzirojytVj6MtYG
-   M0sZ1Vz/X4XHDkcHsuaDDGA5NzjgF9/QivKuYdRs7fHBhs1HArT32ayMz
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,304,1635177600"; 
-   d="scan'208";a="192036801"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Jan 2022 16:34:42 +0800
-IronPort-SDR: Ek0z0c4Q9w67UrqofPryhpx6FyXMCSMwx8q2aVZAQvqLeDIOfVjIGSYW98owdnd9EVUza1sqVh
- fMOuRDtPiPyp0PwAmQWsRO0EwJuWi5uR2FC/d4QOjJezBRIw6IBB62uflc8RJFJKyw3YTYpQYo
- PxEO+YlPpL7/Jfr7ZrK8cyuToXB5CkVHzCBwaippeGm0d9l2ID42lOmWksXSgQ/C9IaGEXoxkA
- MG0dsq+lA07I3xhCRx2OpDm+y0gGFR/Bhy100OxgipSNIMaJEU+tmNB3YBd6MdZbXKNvfM5TOT
- i71ygqWLfEzOd1buqVFiEZVU
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:06:52 -0800
-IronPort-SDR: oqwhMGq1ahQ4f0f51UcZixfDPce1GKzK+lPmYMRXVkTl8nhOtejE7lbzLZrW4yGgdly0gkrPfO
- ZaPsP1Q1+zms8T3eaK7CU0fH/140NMs5mMb7tAUx721zuGxehE4W3FKer+ou1m1r0hPIbaFjJ/
- kfkXgM5JSosYGzX0qqI6qDRCLix/AN0iXiH0yost8ppKnHIZZE43oN48LB9K+wD7TN5vbf01Wi
- aLlBHBypRJNJ5AbA2Xc+QdqVKTZ1qttEqI+lIsdXFQ84Jogu5Hgex0Er30q7J9B/vpftk4Ux4R
- waA=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:34:41 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JgCNc4qNFz1SVp7
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jan 2022 00:34:40 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1642754079; x=1645346080; bh=Q8+w+zY/fos4SCamEOckILzxUl1jS3yfE7n
-        rCAZdjSU=; b=mBYTwNFWNI2gJI+EMJOK8vQ/zPGTFIxOb8hlRMRHucnDP+YTM7c
-        cNhsPI1aSRlDbAhQcy18FB1qtTC4P9C4G6NmL9ktzVOywAqcmYxwZ1rRkVyAfrd5
-        Q/GKJoIsFc5u8zVhoM0c2laOEJ5SBEnjZGgpZT9VFmpJCU71t0XdyCUhfA2sMxKW
-        h51xd2nqdiKkrWyc1uYpBKyZNNTwakYJcW0SNyLrk+3exBpr+HS/iGC9VEK02NKG
-        UNgzuVjUrp41rI4Fu+NwJovQHwpBb8wikIvWBxQTY9jogP3hAqnAaTdw4E06Fdpp
-        vKZbjS7ovToZ6RIzMVfc0310N9+thni8guA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id kir6OG55FNFP for <linux-mips@vger.kernel.org>;
-        Fri, 21 Jan 2022 00:34:39 -0800 (PST)
-Received: from [10.225.163.53] (unknown [10.225.163.53])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JgCNY3K7Vz1RvlN;
-        Fri, 21 Jan 2022 00:34:37 -0800 (PST)
-Message-ID: <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com>
-Date:   Fri, 21 Jan 2022 17:34:35 +0900
+        id S1349524AbiAUI5E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jan 2022 03:57:04 -0500
+Received: from mout.kundenserver.de ([212.227.126.130]:33879 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234205AbiAUI5E (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jan 2022 03:57:04 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M9WiK-1nGJMv0rHY-005WIw; Fri, 21 Jan 2022 09:57:01 +0100
+Received: by mail-oi1-f175.google.com with SMTP id x193so12786488oix.0;
+        Fri, 21 Jan 2022 00:57:00 -0800 (PST)
+X-Gm-Message-State: AOAM530JDR3GWqRtnL7inzM2TCJNCeLWB7HWJCYZCn4LdGrWw9ulABJu
+        80ROBoJWSEwxEscNhLZajR5dzGehlCoGAtpcJkA=
+X-Google-Smtp-Source: ABdhPJylnMQV70n0iz9SImQwsqAn8J+KL/hKoGrWF8c1XxnGFchA2qX7H9h0ZVY5igqqe7kHNmQOCuoQNmiaakrHJBA=
+X-Received: by 2002:a05:6808:9a:: with SMTP id s26mr2365492oic.108.1642755419287;
+ Fri, 21 Jan 2022 00:56:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [next] mips: cavium_octeon_defconfig: pata_octeon_cf.c:598:23:
- error: passing argument 1 of 'trace_ata_bmdma_stop' from incompatible pointer
- type
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-References: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220120073911.99857-9-guoren@kernel.org> <CAK8P3a0LxB3we9wHOa4OPmNow6wz5NP49zeYhh7QXNv-MiR8UA@mail.gmail.com>
+ <CAJF2gTQVUF4LSO0a6_MV8x-UAiJw32pAFyS1oPNLXhcEaemzqg@mail.gmail.com>
+In-Reply-To: <CAJF2gTQVUF4LSO0a6_MV8x-UAiJw32pAFyS1oPNLXhcEaemzqg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 21 Jan 2022 09:56:43 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1sOejkdOyoRUfw4ESS7ewX_8Wj9tQNrZ40OiuDqJnrmw@mail.gmail.com>
+Message-ID: <CAK8P3a1sOejkdOyoRUfw4ESS7ewX_8Wj9tQNrZ40OiuDqJnrmw@mail.gmail.com>
+Subject: Re: [PATCH V3 08/17] riscv: compat: syscall: Add compat_sys_call_table
+ implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        inux-parisc@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:IRpQPv8WoAqPSucQu/tG6nYL/K7Y5OESJf7MTo7MX1bQCNjtbkX
+ mgieNxFEqUu9XXdJHhk9CH4iJ3s3ba6aZc39s3BytPSR5sZ6og+VWElDBiG+lMGhIbu49Yp
+ xtVVwqEsPyaFk7uAss600Ux+zMasvK/PRfcCfqNeu9pu93+kt8mebWFL8jk5zE+39N3e7Tu
+ zMnPh760S6oQqgLLahT3Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6ZAe3wFVFro=:Mp2/8vZ841C8qpVmzjLTG0
+ 3vQdqDDuwG6NoS80SODh6gmJ2uPM1IRaO7AuVtu/xT/5X8+f0u6ySwlNYiQL1QVsU3CZyPIUi
+ /1NFBGxq69oP20f9pbNLI1zdTT8hSS1prrdPud2GpYUNrh3WVBwNs66xEq0jQmDVHjX3+DKhF
+ xmC6bw9mZD4qDoTAUgx1FEhmTiu8essyxPAIk2Ic2eVQR1iQf5FpCd0kZpeC9323LCQ4AKomY
+ vfLiadMVIYuadOauUSqF34Tl9HpLGPWP+meTW42WettJkxSkIyi/yLRCaZlB2i7pHR0XzrTjw
+ Cq7XXM3SpJvTQu3hRl7IRXUFAI0fyChieeyIbB2wqvkLE+zMGRy4vqYBMr1fUl/ugRwfc+cpV
+ SL0merbPFUarMIFUZ7Jey8lgvtXqkEa7VyV8RFUEzGd7/RrwPY/+DhWgPr+YCLgaObT90w2xG
+ wtL1L89mZjnn81YOIv5bP6jIXt0lipYrub7EJYxMMH15JpdU0ADmT1T5ldvoFutc3Pkal8p5Y
+ J8dtSJQyYQeJlS3fIOforELqnqOxkyaTdQ0WWmXYbm3Occ8vyDwFKv/n8dy5L7Fqd0vZYNV+5
+ W+/uszNEIo9OBqYkE4INiNDYqFd+aYu1gNAC7ZXgVkQz3CoKZunUoPog5g/VMGgP+fxh4HjAi
+ zJb4r62U4DqDFrP5QF6AxI3uVCMPiSnLwENbQUDxlqsbeSyii6V96qaisw1/U5qchkM94r0kn
+ 56zkjZGV4vIQAIcgADkoZlBYQtue43EiL3WOjJ2J4w8zaAiLad6+WkRhegW2SmPnz0gdyh5ji
+ QYNKtT8r1iGhiHF4pu1kB3SQOGESEDKIC41mA6nMQpDYGticy0=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 1/21/22 17:02, Naresh Kamboju wrote:
-> Linux next-20220106..next-20220121 mips build failing with gcc-10.
-> 
-> drivers/ata/pata_octeon_cf.c: In function 'octeon_cf_dma_finished':
-> drivers/ata/pata_octeon_cf.c:598:23: error: passing argument 1 of
-> 'trace_ata_bmdma_stop' from incompatible pointer type
-> [-Werror=incompatible-pointer-types]
->   598 |  trace_ata_bmdma_stop(qc, &qc->tf, qc->tag);
->       |                       ^~
->       |                       |
->       |                       struct ata_queued_cmd *
-> In file included from include/trace/events/libata.h:10,
->                  from drivers/ata/pata_octeon_cf.c:22:
-> include/trace/events/libata.h:414:33: note: expected 'struct ata_port
-> *' but argument is of type 'struct ata_queued_cmd *'
->   414 |       TP_PROTO(struct ata_port *ap, const struct ata_taskfile
-> *tf, unsigned int tag),
->       |                ~~~~~~~~~~~~~~~~~^~
-> include/linux/tracepoint.h:342:34: note: in definition of macro
-> '__DECLARE_TRACE'
->   342 |  static inline void trace_##name(proto)    \
->       |                                  ^~~~~
-> include/linux/tracepoint.h:419:24: note: in expansion of macro 'PARAMS'
->   419 |  __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
->       |                        ^~~~~~
-> include/linux/tracepoint.h:542:2: note: in expansion of macro 'DECLARE_TRACE'
->   542 |  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
->       |  ^~~~~~~~~~~~~
-> include/linux/tracepoint.h:542:22: note: in expansion of macro 'PARAMS'
->   542 |  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
->       |                      ^~~~~~
-> include/trace/events/libata.h:413:1: note: in expansion of macro 'DEFINE_EVENT'
->   413 | DEFINE_EVENT(ata_exec_command_template, ata_bmdma_stop,
->       | ^~~~~~~~~~~~
-> include/trace/events/libata.h:414:7: note: in expansion of macro 'TP_PROTO'
->   414 |       TP_PROTO(struct ata_port *ap, const struct ata_taskfile
-> *tf, unsigned int tag),
->       |       ^~~~~~~~
-> cc1: some warnings being treated as errors
-> make[3]: *** [scripts/Makefile.build:289: drivers/ata/pata_octeon_cf.o] Error 1
-> make[3]: Target '__build' not remade because of errors.
-> make[2]: *** [scripts/Makefile.build:572: drivers/ata] Error 2
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Fri, Jan 21, 2022 at 7:25 AM Guo Ren <guoren@kernel.org> wrote:
+> On Thu, Jan 20, 2022 at 10:43 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Thu, Jan 20, 2022 at 8:39 AM <guoren@kernel.org> wrote:
 
-I just posted a fix. As I do not have the environment to compile test
-mips, could someone test please ? I will send the fix to Linus asap
-after confirmation that it is OK.
+> > Are you sure these are the right calling conventions? According to [1],
+> > I think the 64-bit argument should be in an aligned pair of registers,
+> > which means you need an extra pad argument as in the arm64 version
+> > of these functions. Same for ftruncate64, pread64, pwrite64, and
+> > readahead.
+>
+> [1] has abandoned.
+>
+> See:
+> https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-cc.adoc
 
-Thanks.
+Ok, thanks for the reference, I picked the first one that came up in
+a google search and didn't expect this to ever have changed.
 
+> > I still feel like these should be the common implementations next to the
+> > native handlers inside of an #ifdef CONFIG_COMPAT.
+> >
+> > The names clash with the custom versions defined for powerpc and sparc,
+> > but the duplicates look compatible if you can account for the padded
+> > argument and the lo/hi order of the pairs, so could just be removed here
+> > (all other architectures use custom function names instead).
+> I would try it later.
 
-> 
-> metadata:
->   git branch: master
->   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git describe: next-20220121
->   kernel-config: https://builds.tuxbuild.com/23zIBGjQZgIYW8OnGcYjwWlj40X/config
->   build: https://builds.tuxbuild.com/23zIBGjQZgIYW8OnGcYjwWlj40X/
-> 
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
-> # See https://docs.tuxmake.org/ for complete documentation.
-> # Original tuxmake command with fragments listed below.
-> 
-> tuxmake --runtime podman --target-arch mips --toolchain gcc-10
-> --kconfig cavium_octeon_defconfig
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+This becomes easier then, as powerpc and sparc already have the non-padded
+calling conventions, so you could just generalize those without looking at
+the other architectures or adding the padding. The powerpc version already
+has the dual-endian version, so using that will work on big-endian sparc and
+on little-endian riscv as well, though we may need to come up with a better name
+for the arg_u32/arg_u64/merge_64 macros in order to put that into a global
+header without namespace collisions.
 
-
--- 
-Damien Le Moal
-Western Digital Research
+         Arnd
