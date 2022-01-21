@@ -2,134 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D73495CA5
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Jan 2022 10:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBF9495CB0
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Jan 2022 10:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244436AbiAUJRY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 21 Jan 2022 04:17:24 -0500
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:9289 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379698AbiAUJRW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jan 2022 04:17:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1642756642; x=1674292642;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DDt33//J7HC81vPepGQWceRVhDsuFSNWZ9d7bVsT2sk=;
-  b=cYTr5QDlqnvFLR65W0wYsf6+AbHn/zxLKn0C8USNs2di9MjatVpHLJAB
-   bOshWTNpYqaprNLuaGzuFYC1nVV9Yy8YKDnnZ+gOiSR+UfE0si6bwDr+I
-   VfO7v/JKjoqt/BVg8+xlfgNvlIFmA2eaMutILIdDRTUrv+2oDu1hA+FMh
-   LxerqwHEn/HUPbGxy3QdlEz+VFHCCJHY4WHNd/KH2/CIhOvrE8Tg+p3g0
-   Ito5yOw4rQDtZyWPqAY32LgAkDwgkizvcNuxqBO9Rm9Sa21o3cRSZQOqb
-   zTwUcWhvIsxT9e5hc1w/h0bSzL/t7rki9hzIh1Odvsa7jk6mhswy//7v6
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,304,1635177600"; 
-   d="scan'208";a="295096772"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Jan 2022 17:17:17 +0800
-IronPort-SDR: p8KcA42SA+tTtI5KbEPa3yH5RdpXDsQoLxNVfc1lKLed27uFNDEdZlcy+RON8lZ08kv2hFZFKU
- J1k4ViwM7K32Qq26MhVOi1lCZCo3ffI66K+mGi6uYh+YF88sr2VYYCO+P40OnBhQI3uOiHXBfu
- d1dtlQGpeBLV5boMJTdQRQr1SDy0WdQ4r9mpua//lgi1fmCnDdCFXsd1qzJtbqZe1LHktnTui8
- mQnqEwM96zaevQl0ofeoQlHHZAA8Ks5T6dcz6gogp/sNwRnOcO8g7JSfV8YtJVDlhenxcHbXII
- ferBjll4NPhpxHMTCHhiGDUB
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 00:49:28 -0800
-IronPort-SDR: ecuh9msgzq3y/HYUbAUFFQBF4AcDjEeOjxMnEh/d7Xj9Z4y14NLwCa6gVUiXdZVdW7SOX7tQ6G
- VptrncPrcnbzuUdXin1+JYfRGUJh0tXno3hk0qiHFLZQIkmRyJ2lSkxK4e2+WdVfA/uL3ySYFB
- V8R6QJqoDi89tmNxHYz8xDDU7TTfSMQvh6GRzR9APo3wHO6y+BKhUWugnxWZ0BnVKUhmgJmWQi
- ah/i16+ZEMQEeZZheeSPix/N+35uDmINyJ7ScYpvyZJdnK7Bu3Jf8kRjtOrCnT29PbUP/FFpJb
- XcY=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 01:17:17 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JgDKm3vjZz1SVny
-        for <linux-mips@vger.kernel.org>; Fri, 21 Jan 2022 01:17:16 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1642756635; x=1645348636; bh=DDt33//J7HC81vPepGQWceRVhDsuFSNWZ9d
-        7bVsT2sk=; b=JJ1bWH54T0ozCRDNFOawIcDYYrXmiS6mLF3bufMWI8NIa+2kaQT
-        gCBgwenjhfSIESElInLy4f7hnR7B/c8AlmdP0YJlB/yBcj4ZSDRucj/ARZ8iebTx
-        fX4cav++QB5+nrjZ/xNlR7WsOefucQ/VKRddYsk1OsSGfjMxLK9ouF+vHs+ICHA7
-        QaQ2sHdGGswVwNNN4/NAuldiTPB3O2e4rjI+PHGvCgubY6wPSEdLOP7NfwwXL43W
-        0XkAgLTCQC9ZIavzM31zb7IlI4uGbI4OgvYnMIVfBXIQVP013Dxgw+JTtTEtRqj5
-        CB028YmS/z+ll5kfBZyeWV7wOCiloVbazWA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id q-OYoiNV1TeX for <linux-mips@vger.kernel.org>;
-        Fri, 21 Jan 2022 01:17:15 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JgDKk0DRvz1RvlN;
-        Fri, 21 Jan 2022 01:17:13 -0800 (PST)
-Message-ID: <350720e8-9b78-bd24-5c60-602076610bf4@opensource.wdc.com>
-Date:   Fri, 21 Jan 2022 18:17:12 +0900
+        id S1379708AbiAUJTT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 21 Jan 2022 04:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379707AbiAUJTO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 21 Jan 2022 04:19:14 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B981C061401
+        for <linux-mips@vger.kernel.org>; Fri, 21 Jan 2022 01:19:14 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id p7so10101972iod.2
+        for <linux-mips@vger.kernel.org>; Fri, 21 Jan 2022 01:19:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=gH2EGf9M8vDRpjJ6FizfRbTHS+ThfQet+aA9JvagV+4=;
+        b=NXLnCpIrD6/AzJmY3cqtcV1M1FmkBMs15kaZtzE8sCfqXkWcnBpN0Wgr7npCvIpsMT
+         WRvMj3S7+KkLD4YnlqQhi/wTi8SsS2dVEWRa7DXlWI0d1VYavN681Lqm5RdBq1OZluFr
+         4hzfEVrm3RHeAFznYg18oeTwTi7wjyxLKPWs/N8Ea17Fhh8yo86tS1YxeR2h+SqS7Gqj
+         Ex3JXryUj/mn6FN87uiFNZxxHdTMnxC7bR2S0skcFXwuKtMGuZWl/TZ5g2za1jpYoHjk
+         Zp5PzpMNUQcIanc2J4h1QkZ15wIdoXlAWE2gJR3anQ3aPNreElEFAah7LRmzlRw2aHBd
+         sFfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=gH2EGf9M8vDRpjJ6FizfRbTHS+ThfQet+aA9JvagV+4=;
+        b=I3qDGFW8miO1iwvFbsulRVQicvo+8rh5P8v5FNfDByR4Qigp5bvn2KiocS8vgJsKD1
+         zumItgUx/3GqdVAn/UF3sSje2wD0tcY2yMEMchDMMDbfBNE9BO30gzsq3AVZhEvE+H/t
+         VedbHS65gKI6RKaUCOc3AynxWMllFrXduAbYv4xO2N+4pPsceWz8UuG8wNjWkfMZPk+Y
+         dNVQNzfav3+qV4GjLshimq6J51n9hOiNvrFYTsjmvT99///JB7a2mQ2pgBB8nG/hfaHu
+         vw50LUMTLgL0QZnhVv9W7t+Jq2aldM7GnfHLEQqBI2g45XYCbiIHgKhjlAyHZBIb8kgb
+         VhAQ==
+X-Gm-Message-State: AOAM533bEZhBGBOfePKmhkQYUw+oQlciu//hjzVTj9pI21hngSX8WMBp
+        cLyhv4DyBI4bB6uRzni/j6T8vel+kxA//jzYQsE=
+X-Google-Smtp-Source: ABdhPJxvSRelUwybI8tv5F08v7PWC99AvVYniNN/qsBEbwhYeW5j1ytVW8tuvnjPxdFcjPw95JLO8c53yzk08u0/xu4=
+X-Received: by 2002:a05:6602:208c:: with SMTP id a12mr1538032ioa.43.1642756753533;
+ Fri, 21 Jan 2022 01:19:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [next] mips: cavium_octeon_defconfig: pata_octeon_cf.c:598:23:
- error: passing argument 1 of 'trace_ata_bmdma_stop' from incompatible pointer
- type
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        CGEL ZTE <cgel.zte@gmail.com>
-References: <CA+G9fYtq0wzSeG8YG-a+=KrbdWqHJMXk1hvq0FKeAvj9sZAK2g@mail.gmail.com>
- <6249735f-e6b7-1331-eb2b-361bb17d6115@opensource.wdc.com>
- <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <CA+G9fYu__OOvk-ESXoOqbd-Lk+CmO8CSQ8chEFf3MyeTjKtp9g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a4f:2158:0:0:0:0:0 with HTTP; Fri, 21 Jan 2022 01:19:12
+ -0800 (PST)
+From:   Elizabeth Benson <elizabethbensone.b199@gmail.com>
+Date:   Fri, 21 Jan 2022 09:19:12 +0000
+Message-ID: <CAPGdNne1bSZJ+_hxmFYW7Hc3Ww3zeafP=B2HJ7LC5sjqjQFHOA@mail.gmail.com>
+Subject: DEAR PLEASE I NEED YOUR HELP.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 2022/01/21 17:58, Naresh Kamboju wrote:
->> I just posted a fix. As I do not have the environment to compile test
->> mips, could someone test please ? I will send the fix to Linus asap
->> after confirmation that it is OK.
-> 
-> Please share your patch / patch link. I will test it with tuxmake.
+I am Mrs Elizabeth Benson the wife of late David Benson whom died, as
+a victim of the Corona Virus on,12 of May 2020. I have some Funds
 
-I posted on linux-ide and CC-ed linux-mips:
+I want you to handle for me,Get back for more Informations.
 
-https://marc.info/?l=linux-ide&m=164275458614058&w=2
+Please reply through this Email: elizabeth.ben.mrs@gmail.com
 
-> 
-> you may also give a try with these easy steps.
-> 
-> # To install tuxmake on your system globally:
-> # sudo pip3 install -U tuxmake
-> #
-> # See https://docs.tuxmake.org/ for complete documentation.
-> # Original tuxmake command with fragments listed below.
-> 
->  tuxmake --runtime podman --target-arch mips --toolchain gcc-10
-> --kconfig cavium_octeon_defconfig
+Thanks You
 
-I saw this in the compilation error report. Will try this.
-
-> 
-> - Naresh
-
-
--- 
-Damien Le Moal
-Western Digital Research
+Mrs Elizabeth Benson,
