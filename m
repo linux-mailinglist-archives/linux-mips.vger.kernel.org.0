@@ -2,54 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CBE497292
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Jan 2022 16:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BF84973C4
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Jan 2022 18:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237674AbiAWPbr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 23 Jan 2022 10:31:47 -0500
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:53113 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237676AbiAWPbr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Jan 2022 10:31:47 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B5981FF802;
-        Sun, 23 Jan 2022 15:31:42 +0000 (UTC)
-Date:   Sun, 23 Jan 2022 16:31:40 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: rawnand: ingenic: Fix missing put_device in
- ingenic_ecc_get
-Message-ID: <20220123163140.557a251b@xps13>
-In-Reply-To: <20220123152332.529757-1-miquel.raynal@bootlin.com>
-References: <20211230072751.21622-1-linmq006@gmail.com>
-        <20220123152332.529757-1-miquel.raynal@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S236112AbiAWRkg (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 23 Jan 2022 12:40:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232441AbiAWRkf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Jan 2022 12:40:35 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CD9C06173B;
+        Sun, 23 Jan 2022 09:40:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=DGKiPi5akBMuoplIkl0mUGNJKDwOspsRE8AW46Bb654=; b=pUkZwGn4D13IFlPeXuPy+oXY7O
+        AEYvbWj6EEizsuNe9coBAHL2WBtCYY7eDUkKxpaZZHuvmkztVsKq1Q7bxtwPhPXzh/fmzrSzuLjp8
+        K2EPdv+5BzcGTYNgXrJilsaT6MH09/aIsxaZp7Ve2w6KbA9Ug6FZJ89qUHETRpyASUVa2nrBodFrI
+        qv4wRrxetygmov6bnxq9L+NpLERVg2fa2rRi6LwBt+wGrtsmcc0YdXUEdGNPoT4SUJMj2dQtlS0Kj
+        UCWqiW4H60Lt+MeMXlf/qKXyBZXgbO3iPS0HzYXxmi6GEIAITTtBZEIZpwD1DgsHinMgZrPuXZzI4
+        5wVmQyIQ==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nBgqu-001VRa-Ox; Sun, 23 Jan 2022 17:40:32 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Kees Cook <keescook@chromium.org>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
+Date:   Sun, 23 Jan 2022 09:40:31 -0800
+Message-Id: <20220123174031.3109-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+When the MIPS_ALCHEMY board selection is MIPS_XXS1500 instead of
+MIPS_DB1XXX, the PCMCIA driver 'db1xxx_ss' has build errors due
+to missing DB1XXX symbols. The PCMCIA driver should be restricted
+to MIPS_DB1XXX instead of MIPS_ALCHEMY to fix this build error.
 
-miquel.raynal@bootlin.com wrote on Sun, 23 Jan 2022 16:23:32 +0100:
+ERROR: modpost: "bcsr_read" [drivers/pcmcia/db1xxx_ss.ko] undefined!
+ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
 
-> On Thu, 2021-12-30 at 07:27:51 UTC, Miaoqian Lin wrote:
-> > If of_find_device_by_node() succeeds, ingenic_ecc_get() doesn't have
-> > a corresponding put_device(). Thus add put_device() to fix the exception
-> > handling.
-> > 
-> > Fixes: 15de8c6 ("mtd: rawnand: ingenic: Separate top-level and SoC specific code")
-> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> > Reviewed-by: Paul Cercueil <paul@crapouillou.net>  
-> 
-> Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
+Fixes: 42a4f17dc356 ("MIPS: Alchemy: remove SOC_AU1X00 in favor of MIPS_ALCHEMY")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Manuel Lauss <manuel.lauss@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+---
+ drivers/pcmcia/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Pushed on mtd/fixes, actually.
+--- linux-next-20220121.orig/drivers/pcmcia/Kconfig
++++ linux-next-20220121/drivers/pcmcia/Kconfig
+@@ -151,7 +151,7 @@ config TCIC
+ 
+ config PCMCIA_ALCHEMY_DEVBOARD
+ 	tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
+-	depends on MIPS_ALCHEMY && PCMCIA
++	depends on MIPS_DB1XXX && PCMCIA
+ 	help
+ 	  Enable this driver of you want PCMCIA support on your Alchemy
+ 	  Db1000, Db/Pb1100, Db/Pb1500, Db/Pb1550, Db/Pb1200, DB1300
