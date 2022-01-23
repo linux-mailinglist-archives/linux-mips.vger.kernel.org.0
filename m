@@ -2,89 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 419C0497271
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Jan 2022 16:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CBE497292
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Jan 2022 16:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234758AbiAWP1S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 23 Jan 2022 10:27:18 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:49588 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229562AbiAWP1R (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sun, 23 Jan 2022 10:27:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=CDXH3slO3ImdP5p+Qxn309qZZbRCzo4mZK6/h2SqEPI=; b=Px
-        ZodgiK3xqJxqUn06GVYRp3qh+CtF8LPumMDL3kOpW4O4W3gNg5pi68ozY97QXkzF7BxLCCy7rsf1R
-        4SMD2uklnSJO0yWmyQH/1VY8fA87yX4XLuvpRYlus34qOGJpai14qqxUGABTzu9GHIibeL9gXhk3y
-        hjTSY1hcs0wAOwM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nBelc-002OC8-St; Sun, 23 Jan 2022 16:26:56 +0100
-Date:   Sun, 23 Jan 2022 16:26:56 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     DENG Qingfang <dqfext@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Siddhant Gupta <siddhantgupta416@gmail.com>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Felix Fietkau <nbd@nbd.name>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>, linux-mips@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, openwrt-devel@lists.openwrt.org,
-        erkin.bozoglu@xeront.com
-Subject: Re: MT7621 SoC Traffic Won't Flow on RGMII2 Bus/2nd GMAC
-Message-ID: <Ye1zwIFUa5LPQbQm@lunn.ch>
-References: <83a35aa3-6cb8-2bc4-2ff4-64278bbcd8c8@arinc9.com>
- <CALW65jZ4N_YRJd8F-uaETWm1Hs3rNcy95csf++rz7vTk8G8oOg@mail.gmail.com>
- <02ecce91-7aad-4392-c9d7-f45ca1b31e0b@arinc9.com>
+        id S237674AbiAWPbr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 23 Jan 2022 10:31:47 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:53113 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237676AbiAWPbr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Jan 2022 10:31:47 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B5981FF802;
+        Sun, 23 Jan 2022 15:31:42 +0000 (UTC)
+Date:   Sun, 23 Jan 2022 16:31:40 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Harvey Hunt <harveyhuntnexus@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: rawnand: ingenic: Fix missing put_device in
+ ingenic_ecc_get
+Message-ID: <20220123163140.557a251b@xps13>
+In-Reply-To: <20220123152332.529757-1-miquel.raynal@bootlin.com>
+References: <20211230072751.21622-1-linmq006@gmail.com>
+        <20220123152332.529757-1-miquel.raynal@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <02ecce91-7aad-4392-c9d7-f45ca1b31e0b@arinc9.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 11:33:04AM +0300, Arınç ÜNAL wrote:
-> Hey Deng,
-> 
-> On 23/01/2022 09:51, DENG Qingfang wrote:
-> > Hi,
+
+miquel.raynal@bootlin.com wrote on Sun, 23 Jan 2022 16:23:32 +0100:
+
+> On Thu, 2021-12-30 at 07:27:51 UTC, Miaoqian Lin wrote:
+> > If of_find_device_by_node() succeeds, ingenic_ecc_get() doesn't have
+> > a corresponding put_device(). Thus add put_device() to fix the exception
+> > handling.
 > > 
-> > Do you set the ethernet pinmux correctly?
-> > 
-> > &ethernet {
-> >      pinctrl-names = "default";
-> >      pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
-> > };
+> > Fixes: 15de8c6 ("mtd: rawnand: ingenic: Separate top-level and SoC specific code")
+> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> > Reviewed-by: Paul Cercueil <paul@crapouillou.net>  
 > 
-> This fixed it! We did have &rgmii2_pins on the gmac1 node (it was originally
-> on external_phy) so we never thought to investigate the pinctrl
-> configuration further! Turns out &rgmii2_pins needs to be defined on the
-> ethernet node instead.
+> Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-PHYs are generally external, so pinmux on them makes no sense. PHYs in
-DT are not devices in the usual sense, so i don't think the driver
-core will handle pinmux for them, even if you did list them.
-
-This could be interesting for the DT compliance checker. Ideally we
-want it to warn if it finds a pinmux configuration in a PHY node.
-
-It also sounds like you had them somewhere else wrong?
-
-     Andrew
+Pushed on mtd/fixes, actually.
