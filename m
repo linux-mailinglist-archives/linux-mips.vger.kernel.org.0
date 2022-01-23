@@ -2,128 +2,105 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ACE4973C9
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Jan 2022 18:49:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD8A497489
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Jan 2022 19:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239330AbiAWRtN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 23 Jan 2022 12:49:13 -0500
-Received: from sender4-op-o14.zoho.com ([136.143.188.14]:17433 "EHLO
-        sender4-op-o14.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232441AbiAWRtN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Jan 2022 12:49:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1642960109; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=j7uqZ3uwvuF1I9hP9HaHYPcidRWKSpOholKukqUGDxC7YaE9m9KLBgEPmm62mY9bJSNrEVMYyn3SvB9TU4w/Jv0u1MHg6q8lYR0vkkfAps9ttCIXp3onboe9F1LPJjIcHoqFvTfZeE8UhIgzg9TxWkWQDunbdHo2uj3NWKuA26I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1642960109; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=+eH2PmYS7tvCH6Q20kS59btHpbfUOjKupc/umJyNmOY=; 
-        b=Hzn5Fhcd8KR5rfQx2ckUioTp7S/zlexQVZVclmDdrMbQVb9BUiSjwrDDF4YiiF6TqZDIR9e037yW972CuUi1ZwQlr8R1gO1j9Jr+XPCCo+l6EH+u9Ze+rlvIlh8Oo/jWigQWyKNyHrB9YthSLUYsKByi72UZ6xFnJqPEd/TfgCA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1642960109;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        bh=+eH2PmYS7tvCH6Q20kS59btHpbfUOjKupc/umJyNmOY=;
-        b=hjkOGn2PGskaRzUpQ7Arz55/nwl3+xOkgttcy31Y7bkaoc0MFll1eeXXB6L7TrbP
-        rct/XRxi9uFAW5MAtXB0RGlUEQNyY4RqFqqXYZ8j5/A9gZEIeQi1drWk2DHQ6pGH7EU
-        jHSK9EMOkqVOBH0AEHON15vkvSpSfZPkizY6ssEM=
-Received: from [10.10.10.216] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1642960108103128.06493738732195; Sun, 23 Jan 2022 09:48:28 -0800 (PST)
-Message-ID: <1c100b5b-1ea2-cb66-96e0-d0127b50f1a2@arinc9.com>
-Date:   Sun, 23 Jan 2022 20:48:21 +0300
+        id S239788AbiAWSlP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 23 Jan 2022 13:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239780AbiAWSkw (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 23 Jan 2022 13:40:52 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE56C061759;
+        Sun, 23 Jan 2022 10:40:48 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id n8so13502444plc.3;
+        Sun, 23 Jan 2022 10:40:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=cO0Z3PvJvrtBIn6aCGpasZToGZcZBgiQnRAFqmRKoUA=;
+        b=VTMY+YdRuNkseAuKEB0sacTZvHBgfmV4zPDgBlUHO02zbXakt4ftdzjgYgBnhNFYrJ
+         Gq/uz/GbVuYEBJ11Si9b0Vn28HMi/mKcmODrHWStsvvykUL1wKNDqrObs/faG5tjJnMP
+         OFcvcKedlRAfcJ0JntIkaDRTuDhuOwUp6/XHLbkcuMjlet0EBexHnDi/ng57aRf/xLdn
+         1R/z7KVKOdfOw/cNFfqJCxm+KwLQZH3lH+oCNAjmxn67gPX35JUauw2ASaBtUHJW84ui
+         7X7hf94iixk6ny58oeNC4S0XBdNtjpDuPJIvRp+WVBgHJCoL0Ieo81r93udRPOdgTwY0
+         3e3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cO0Z3PvJvrtBIn6aCGpasZToGZcZBgiQnRAFqmRKoUA=;
+        b=G9OX+MsPW8hB9aTVfrhDYWPI/3f6yU6LtHjJq+HMEgedto9yeYfnXcbcrdHqwmwuLj
+         r9j36Xn/Qu09sW9CL9RRMfbA3VlfDHuVUilmdqHojmBqsqgrV8BZJ/SVdHEq+aVM2hm8
+         oNWzOZ206W9iEv4EwqirKTUkihIDoMA8EqG/bbhai/lJuD243z9BJs+o6L4834YXIrc6
+         aH+3aLDckl+ou5mr2KBEa2SRFprBz+mPrGR4Bs2HMnNQ+WJj+EXsIu8rTpXFlkC+sywC
+         AQ5ko7/iIgBT+EVXAWoFoeK5d5s8pCtaB9RL5B9iNZzNTPfZhEspfmcNy7NQFvpHD2ic
+         cOqQ==
+X-Gm-Message-State: AOAM532CSSVdJpNxlb3Tcr2DoCQqz8o/AiuecbJo/GcnNePMIGFJLDX1
+        BsdXpupwTvnC9E6XhnartrI=
+X-Google-Smtp-Source: ABdhPJwrgZ6tKrcQ8FvcUHvDuVXP9x3ixqRStUB6a92ecxEbeN5yZXa/hXjzJafBTJp3VTMlXUGOfA==
+X-Received: by 2002:a17:902:ec82:b0:14a:6b35:903 with SMTP id x2-20020a170902ec8200b0014a6b350903mr11826986plg.78.1642963248015;
+        Sun, 23 Jan 2022 10:40:48 -0800 (PST)
+Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id q21sm13893599pfj.94.2022.01.23.10.40.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jan 2022 10:40:47 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org
+Subject: [PATCH 19/54] drivers/irqchip: replace cpumask_weight with cpumask_empty where appropriate
+Date:   Sun, 23 Jan 2022 10:38:50 -0800
+Message-Id: <20220123183925.1052919-20-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220123183925.1052919-1-yury.norov@gmail.com>
+References: <20220123183925.1052919-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: MT7621 SoC Traffic Won't Flow on RGMII2 Bus/2nd GMAC
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     DENG Qingfang <dqfext@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Siddhant Gupta <siddhantgupta416@gmail.com>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Felix Fietkau <nbd@nbd.name>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>, linux-mips@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, openwrt-devel@lists.openwrt.org,
-        erkin.bozoglu@xeront.com
-References: <83a35aa3-6cb8-2bc4-2ff4-64278bbcd8c8@arinc9.com>
- <CALW65jZ4N_YRJd8F-uaETWm1Hs3rNcy95csf++rz7vTk8G8oOg@mail.gmail.com>
- <02ecce91-7aad-4392-c9d7-f45ca1b31e0b@arinc9.com> <Ye1zwIFUa5LPQbQm@lunn.ch>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <Ye1zwIFUa5LPQbQm@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23/01/2022 18:26, Andrew Lunn wrote:
-> On Sun, Jan 23, 2022 at 11:33:04AM +0300, Arınç ÜNAL wrote:
->> Hey Deng,
->>
->> On 23/01/2022 09:51, DENG Qingfang wrote:
->>> Hi,
->>>
->>> Do you set the ethernet pinmux correctly?
->>>
->>> &ethernet {
->>>       pinctrl-names = "default";
->>>       pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
->>> };
->>
->> This fixed it! We did have &rgmii2_pins on the gmac1 node (it was originally
->> on external_phy) so we never thought to investigate the pinctrl
->> configuration further! Turns out &rgmii2_pins needs to be defined on the
->> ethernet node instead.
-> 
-> PHYs are generally external, so pinmux on them makes no sense. PHYs in
-> DT are not devices in the usual sense, so i don't think the driver
-> core will handle pinmux for them, even if you did list them.
-> 
-> This could be interesting for the DT compliance checker. Ideally we
-> want it to warn if it finds a pinmux configuration in a PHY node.
+bcm6345_l1_of_init() calls cpumask_weight() to check if any bit of a given
+cpumask is set. We can do it more efficiently with cpumask_empty() because
+cpumask_empty() stops traversing the cpumask as soon as it finds first set
+bit, while cpumask_weight() counts all bits unconditionally.
 
-I don't see any warnings about it:
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ drivers/irqchip/irq-bcm6345-l1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-$ cpp -nostdinc -I include -I arch -undef -x assembler-with-cpp 
-drivers/staging/mt7621-dts/mt7621.dtsi mt7621.dtsi.preprocessed
-$ dtc -I dts -O dtb -p 0x1000 mt7621.dtsi.preprocessed -o mt7621.dtb
-drivers/staging/mt7621-dts/mt7621.dtsi:28.21-33.4: Warning 
-(unit_address_vs_reg): /cpuintc@0: node has a unit name, but no reg property
-drivers/staging/mt7621-dts/mt7621.dtsi:40.34-47.6: Warning 
-(unit_address_vs_reg): /fixedregulator@0: node has a unit name, but no 
-reg property
-drivers/staging/mt7621-dts/mt7621.dtsi:49.39-56.4: Warning 
-(unit_address_vs_reg): /fixedregulator@1: node has a unit name, but no 
-reg property
-drivers/staging/mt7621-dts/mt7621.dtsi:410.11-449.7: Warning 
-(unit_address_vs_reg): /ethernet@1e100000/mdio-bus/switch0@0/ports: node 
-has a reg or ranges property, but no unit name
-drivers/staging/mt7621-dts/mt7621.dtsi:28.21-33.4: Warning 
-(unique_unit_address): /cpuintc@0: duplicate unit-address (also used in 
-node /fixedregulator@0)
+diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l1.c
+index fd079215c17f..142a7431745f 100644
+--- a/drivers/irqchip/irq-bcm6345-l1.c
++++ b/drivers/irqchip/irq-bcm6345-l1.c
+@@ -315,7 +315,7 @@ static int __init bcm6345_l1_of_init(struct device_node *dn,
+ 			cpumask_set_cpu(idx, &intc->cpumask);
+ 	}
+ 
+-	if (!cpumask_weight(&intc->cpumask)) {
++	if (cpumask_empty(&intc->cpumask)) {
+ 		ret = -ENODEV;
+ 		goto out_free;
+ 	}
+-- 
+2.30.2
 
-> 
-> It also sounds like you had them somewhere else wrong?
-
-Yes, it was under the phy_external node:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/staging/mt7621-dts/mt7621.dtsi#n350
-
-I had put it under gmac1 node instead since we didn't enable the 
-phy_external node.
-
-Arınç
