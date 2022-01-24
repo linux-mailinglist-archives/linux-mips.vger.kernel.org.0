@@ -2,141 +2,200 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 899304986F3
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jan 2022 18:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF69498931
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jan 2022 19:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241456AbiAXRe1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jan 2022 12:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S1344107AbiAXSxb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jan 2022 13:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236694AbiAXRe1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jan 2022 12:34:27 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E82C06173B;
-        Mon, 24 Jan 2022 09:34:27 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id g2so16003468pgo.9;
-        Mon, 24 Jan 2022 09:34:26 -0800 (PST)
+        with ESMTP id S1343614AbiAXSwI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jan 2022 13:52:08 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6FCC061770;
+        Mon, 24 Jan 2022 10:52:00 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id m8-20020a9d4c88000000b00592bae7944bso23549757otf.1;
+        Mon, 24 Jan 2022 10:52:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZyDNjyTk1g5RHID85BarMSjV5u48polFgmuVs6EELTc=;
-        b=fQlDXQHTJYMjYvbnXqHdGAykkgWwHhP7VJ3dDIAvDCxb2ywj07Dqxr41jgWLAdNqii
-         qnXkcy2N4001VUlkE9BEdGglIc80QYhxCXNqMpA6APHgPkf7P0Wp+P2v53QSKsHw1jAD
-         mhlgR4MVK7YdVIBk9Y3lJyLPWufxeyInJnEgfYHwvoIHDGPsJkDGuJDhydy+sFq6zMjt
-         lxmIueLbwLWOMcQSm+8xV8JSSz1sGtRzeIbAQhXc5aXsKexJIDVuwby1fzWnPgIvd5a5
-         ZBWlhnDmQXzjZM0ySO0G/wtPCji8sG/KUPwDjGbEBnnQOldBiHMWKEIK7MDEX7jHHK6R
-         xnKw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=r9ORcgxwPP4ycG1Uxe8mTwFvOudbcps3q5Aj2rRnpck=;
+        b=e0jdHKVOQgUpteOMfqGIsKj6bppWqqtxb5ZahWfm3lk77uMULiAbyRMiAKafk9wKhT
+         obaUU1owPGL5j6q0WlyHQe9AZXD63iBfKn5yQBktSaUkSZYotefpB1vQhY2MmOd20UBa
+         fdBk/sNOEbcRNXpK/Co7No3CejVyF+9fEZtBPov/vxP85W1L74LxnkeMRUb11+lGqngi
+         KbyoW40hJ9R+ETAV8kSKkfrsiXWCw57UPUGDO88HRIlqTpbTn5NCBbuFoyhnfHe2+k+i
+         GhAQO4/ddpnm1G0bgPsxgqM79TPbDXHjC18GDBxasAnV+4V0d2cXD4/AM/CNIFipJ34V
+         Fudw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZyDNjyTk1g5RHID85BarMSjV5u48polFgmuVs6EELTc=;
-        b=k+t7Eg4K9sTf4H7wxMmvGPOX5jnkumRw8ezm1FT5ZcxBUuDiZtLYy6nFxpkH8tTTI+
-         yhD1bcCJw+pVuPqUpFgqY0GciGCwyujf14BL/x8+H14GJWXGcTGt0U2IY0QhnsYD1rHY
-         Q9x+IgjKgKIpFgFzjmc0Zk03pFCtBEqsB8Vc2ri+gRoXdzpm/AMIsYHKqky/eXAPBZLt
-         r72HZ30JiTVwI9sHi/PDVw0IEPWQM/VXjkZMgJMwzRKo7V26thzpmP6aZH8N1wnRydzZ
-         d6dZdPUZ1pRQktLlhMEgBPagvIDzK4DBkqPKZFgJSD1cm5vC83vXzM1MkWpFBo/p2SFE
-         Ooiw==
-X-Gm-Message-State: AOAM532RVzaI5twxsiv853TRcCFTZXU/b4e1laQ7Ex8OJaj1YdjG/wm+
-        t1XjkMWhOv0YsHiEAeZW/uk=
-X-Google-Smtp-Source: ABdhPJxEMy4wan/+d+ujiXjIpF3AAO0pFS5nxHMHA0D8KpXdACgqaIiBMtuARCp2I3vT/O90wVTDvw==
-X-Received: by 2002:a63:87c6:: with SMTP id i189mr5221362pge.261.1643045666452;
-        Mon, 24 Jan 2022 09:34:26 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id o11sm12949904pgj.33.2022.01.24.09.34.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 09:34:25 -0800 (PST)
-Message-ID: <4fd93933-9b98-175a-d6f2-8cb3ddc30c51@gmail.com>
-Date:   Mon, 24 Jan 2022 09:34:23 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=r9ORcgxwPP4ycG1Uxe8mTwFvOudbcps3q5Aj2rRnpck=;
+        b=rJWUKkupxwaVuEF05cdSSNiaTo+Sigj9wkGFdORJKgSTxudK7LHOJzGWru4x4OId2G
+         muaDe6u++v7t5xiKz5B2LWM4EcbwW8IO0k3MZTiBpZ4GEEV0P8acIOAwPR4b01aVBPp8
+         RUuuuQFtSMJG0+A53tKS7cwuFuJ99YkRDnnTWydPXKFoR7XGQreYSKXXQvbsMRzYBwO0
+         +9LUmHWKdYrw9c3fsrSm4eN4GlKFER9QumOPM18e+ASAQAjzDJ86IecbVSTej2a+FgCD
+         RiFi2aze+K2GdTSU4pGCOW+gdxvva3w/J7eidUlEhqRnmECEyUYos5eCbAlAs9D1KG1z
+         3F9w==
+X-Gm-Message-State: AOAM532vDpxoK0S+bNEagJp1c0cHVzL9tcc9Hh0K9slbPDoAzLdRHl2+
+        tYfKt2UNxhoQvFz2MEvgf//Sp9989W6TqPnvo5Y=
+X-Google-Smtp-Source: ABdhPJz1Khf3SO0+bH9fYxpAMD7XCc9wWdnY55JgNJ7kmV9RJ/cvxr18HoDYHDiBJbnuymI0c1uy0F3r7GxxZrlfypU=
+X-Received: by 2002:a9d:601a:: with SMTP id h26mr3092033otj.357.1643050319496;
+ Mon, 24 Jan 2022 10:51:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: MT7621 SoC Traffic Won't Flow on RGMII2 Bus/2nd GMAC
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Siddhant Gupta <siddhantgupta416@gmail.com>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Felix Fietkau <nbd@nbd.name>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>, linux-mips@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, openwrt-devel@lists.openwrt.org,
-        erkin.bozoglu@xeront.com
-References: <83a35aa3-6cb8-2bc4-2ff4-64278bbcd8c8@arinc9.com>
- <CALW65jZ4N_YRJd8F-uaETWm1Hs3rNcy95csf++rz7vTk8G8oOg@mail.gmail.com>
- <02ecce91-7aad-4392-c9d7-f45ca1b31e0b@arinc9.com> <Ye1zwIFUa5LPQbQm@lunn.ch>
- <acf98ec3-1120-bcc0-2a2f-85d97c48febd@gmail.com>
- <Ye7hMWRR4URUnSFp@shell.armlinux.org.uk>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <Ye7hMWRR4URUnSFp@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220123125737.2658758-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2201240851560.2674757@ramsan.of.borg>
+In-Reply-To: <alpine.DEB.2.22.394.2201240851560.2674757@ramsan.of.borg>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 24 Jan 2022 13:51:48 -0500
+Message-ID: <CADnq5_MUq0fX7wMLJyUUxxa+2xoRinonL-TzD8tUhXALRfY8-A@mail.gmail.com>
+Subject: Re: Build regressions/improvements in v5.17-rc1
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, alsa-devel@alsa-project.org,
+        kvm@vger.kernel.org, Network Development <netdev@vger.kernel.org>,
+        linux-um@lists.infradead.org, linux-mips@vger.kernel.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+        sparclinux@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "Tobin C. Harding" <me@tobin.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, Jan 24, 2022 at 5:25 AM Geert Uytterhoeven <geert@linux-m68k.org> w=
+rote:
+>
+> On Sun, 23 Jan 2022, Geert Uytterhoeven wrote:
+> > Below is the list of build error/warning regressions/improvements in
+> > v5.17-rc1[1] compared to v5.16[2].
+> >
+> > Summarized:
+> >  - build errors: +17/-2
+> >  - build warnings: +23/-25
+> >
+> > Note that there may be false regressions, as some logs are incomplete.
+> > Still, they're build errors/warnings.
+> >
+> > Happy fixing! ;-)
+> >
+> > Thanks to the linux-next team for providing the build service.
+> >
+> > [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e783362eb54cd=
+99b2cac8b3a9aeac942e6f6ac07/ (all 99 configs)
+> > [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/df0cc57e057f1=
+8e44dac8e6c18aba47ab53202f9/ (98 out of 99 configs)
+> >
+> >
+> > *** ERRORS ***
+> >
+> > 17 error regressions:
+> >  + /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit declar=
+ation of function 'nmi_cpu_backtrace' [-Werror=3Dimplicit-function-declarat=
+ion]:  =3D> 171:2
+> >  + /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit declar=
+ation of function 'nmi_trigger_cpumask_backtrace' [-Werror=3Dimplicit-funct=
+ion-declaration]:  =3D> 226:2
+>
+> powerpc-gcc5/skiroot_defconfig
+>
+> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
+function types from 'void (*)(long unsigned int)' to 'void (*)(long unsigne=
+d int,  long unsigned int,  long unsigned int,  long unsigned int,  long un=
+signed int)' [-Werror=3Dcast-function-type]:  =3D> 1756:13, 1639:13
+> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
+function types from 'void (*)(struct mm_struct *)' to 'void (*)(long unsign=
+ed int,  long unsigned int,  long unsigned int,  long unsigned int,  long u=
+nsigned int)' [-Werror=3Dcast-function-type]:  =3D> 1674:29, 1662:29
+> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
+function types from 'void (*)(struct mm_struct *, long unsigned int)' to 'v=
+oid (*)(long unsigned int,  long unsigned int,  long unsigned int,  long un=
+signed int,  long unsigned int)' [-Werror=3Dcast-function-type]:  =3D> 1767=
+:21
+> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
+function types from 'void (*)(struct vm_area_struct *, long unsigned int)' =
+to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  lo=
+ng unsigned int,  long unsigned int)' [-Werror=3Dcast-function-type]:  =3D>=
+ 1741:29, 1726:29
+> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible =
+function types from 'void (*)(struct vm_area_struct *, long unsigned int,  =
+long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  lo=
+ng unsigned int,  long unsigned int,  long unsigned int)' [-Werror=3Dcast-f=
+unction-type]:  =3D> 1694:29, 1711:29
+>
+> sparc64-gcc11/sparc-allmodconfig
+>
+> >  + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called o=
+bject is not a function or function pointer:  =3D> 103:18
+> >  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: assignment make=
+s pointer from integer without a cast [-Werror=3Dint-conversion]:  =3D> 324=
+:9, 317:9
+> >  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declar=
+ation of function 'ioport_map' [-Werror=3Dimplicit-function-declaration]:  =
+=3D> 317:11
+> >  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declar=
+ation of function 'ioport_unmap' [-Werror=3Dimplicit-function-declaration]:=
+  =3D> 338:15
+>
+> um-x86_64/um-allyesconfig
+>
+> >  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: err=
+or: control reaches end of non-void function [-Werror=3Dreturn-type]:  =3D>=
+ 1560:1
 
+I don't really see what's going on here:
 
-On 1/24/2022 9:26 AM, Russell King (Oracle) wrote:
-> On Mon, Jan 24, 2022 at 09:13:38AM -0800, Florian Fainelli wrote:
->> On 1/23/2022 7:26 AM, Andrew Lunn wrote:
->>> On Sun, Jan 23, 2022 at 11:33:04AM +0300, Arınç ÜNAL wrote:
->>>> Hey Deng,
->>>>
->>>> On 23/01/2022 09:51, DENG Qingfang wrote:
->>>>> Hi,
->>>>>
->>>>> Do you set the ethernet pinmux correctly?
->>>>>
->>>>> &ethernet {
->>>>>        pinctrl-names = "default";
->>>>>        pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
->>>>> };
->>>>
->>>> This fixed it! We did have &rgmii2_pins on the gmac1 node (it was originally
->>>> on external_phy) so we never thought to investigate the pinctrl
->>>> configuration further! Turns out &rgmii2_pins needs to be defined on the
->>>> ethernet node instead.
->>>
->>> PHYs are generally external, so pinmux on them makes no sense. PHYs in
->>> DT are not devices in the usual sense, so i don't think the driver
->>> core will handle pinmux for them, even if you did list them.
->>
->> Not sure I understand your comment here, this is configuring the pinmux on
->> the SoC side in order for the second RGMII interface's data path to work.
-> 
-> The pinmux configuration was listed under the external PHY node, which
-> is qutie unusual. In the case of phylib and external ethernet PHYs,
-> this can be a problem.
-> 
-> The pinmux configuration is normally handled at device probe time by
-> the device model, but remember phylib bypasses that when it attaches
-> the generic PHY driver - meaning you don't get the pinmux configured.
-> 
-> What this means is that pinmux configuration in ethernet PHY nodes is
-> unreliable. It will only happen if we have a specific driver for the
-> PHY and the driver model binds that driver.
-> 
-> Of course, if we killed the generic driver, that would get around this
-> issue by requiring every PHY to have its own specific driver, but there
-> would be many complaints because likely lots would stop working.
+#ifdef CONFIG_X86_64
+return cpu_data(first_cpu_of_numa_node).apicid;
+#else
+return first_cpu_of_numa_node;
+#endif
 
-I suppose that explains why this is still in staging then :) Andrew's 
-answer makes more sense now, thanks.
--- 
-Florian
+Alex
+
+>
+> um-x86_64/um-all{mod,yes}config
+>
+> >  + /kisskb/src/drivers/net/ethernet/freescale/fec_mpc52xx.c: error: pas=
+sing argument 2 of 'mpc52xx_fec_set_paddr' discards 'const' qualifier from =
+pointer target type [-Werror=3Ddiscarded-qualifiers]:  =3D> 659:29
+>
+> powerpc-gcc5/ppc32_allmodconfig
+>
+> >  + /kisskb/src/drivers/pinctrl/pinctrl-thunderbay.c: error: assignment =
+discards 'const' qualifier from pointer target type [-Werror=3Ddiscarded-qu=
+alifiers]:  =3D> 815:8, 815:29
+>
+> arm64-gcc5.4/arm64-allmodconfig
+> arm64-gcc8/arm64-allmodconfig
+>
+> >  + /kisskb/src/lib/test_printf.c: error: "PTR" redefined [-Werror]:  =
+=3D> 247:0, 247
+> >  + /kisskb/src/sound/pci/ca0106/ca0106.h: error: "PTR" redefined [-Werr=
+or]:  =3D> 62, 62:0
+>
+> mips-gcc8/mips-allmodconfig
+> mipsel/mips-allmodconfig
+>
+> >  + error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to f=
+it: R_PPC64_REL14 (stub) against symbol `machine_check_common' defined in .=
+text section in arch/powerpc/kernel/head_64.o:  =3D> (.text+0x3e4)
+>
+> powerpc-gcc5/powerpc-allyesconfig
+>
+> Gr{oetje,eeting}s,
+>
+>                                                 Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                                             -- Linus Torv=
+alds
