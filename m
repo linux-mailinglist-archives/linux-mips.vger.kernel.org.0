@@ -2,86 +2,179 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5177B497C5C
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jan 2022 10:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0605498008
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jan 2022 13:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234440AbiAXJqN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jan 2022 04:46:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbiAXJqN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jan 2022 04:46:13 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30C0C06173B;
-        Mon, 24 Jan 2022 01:46:12 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id n15so28268092uaq.5;
-        Mon, 24 Jan 2022 01:46:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p96M4E4XtTOqPEwsF9Q62UadvumL5u9cv+LYUa/tLkg=;
-        b=e2npIRYt1QpQa5AgxDkUjImJZXm7wGZZB6WohSkMkAy3+C8cLPw1lBl/gzda2bsLuC
-         25YGpBqJWDN8LbIw1esHepWbMHGNKzI9Fxm+yAfOKUyuNoRKtKYPTmDbR0q5ynINtGO3
-         EuZ1TYrXW7HC8IrFh2lIMsP9O4r1zI1y5QnLuntd+mHvwgmgD0Tutyri+ESZokbchSgV
-         colnpndUYf5CaZ88WGeqttP1SIAwFZRApeIHc1P6X+qqu/iRoOMSkr9fk90dGKEUQIpi
-         h1INxM8a6jFfo/qLQ7Gp3LffuqkshDQts39vysQxlJmlyiikpX1xKNG4Jq2bLzlgqL3M
-         MKDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p96M4E4XtTOqPEwsF9Q62UadvumL5u9cv+LYUa/tLkg=;
-        b=l2mxP4Pbx1W9zUgiQhvoaCZbPbqJX/5Tkkb/J5MZhFTtEsX97/wBbhoIwGzcSYBK1u
-         ZKZiQmLQ71jLl1mQWQ4mAjGWDran4RB/oeM7APYcpnf8JBhX1Ejni6eJi2dnVHhI/08h
-         EK0QR1QMjOOTZSOz6egatQruqoldFmgMHKFx9lM1uvHp3dCfxicmdP2lMNkvPhs3BhqA
-         45YyouPOj+cwhSL3mu8Ar1ZJcoqGtjhWYG8+r/EU491nyD1CjlU4LxKPuOPROnuLihRs
-         rz7+1RqCX9wT9QaR7aIe7jJql5cCgUELimmbSc/ISLODqQJG1XNxg4RnYN0afYNbJyr3
-         Bk5g==
-X-Gm-Message-State: AOAM532xITLRWhzIT4G0R1kvSwAqwM7+lZjdYBNc9zhDTDEs1DuhI3Al
-        vCaqenbh9FDIZXaLog+Pf6DVINGKO48WaLpeB8I=
-X-Google-Smtp-Source: ABdhPJwQFXBcNaW/Sbw2W4Dmnvaq4tSnfxGNL0yLRBNzy5KCrBIahgE3R+dOKvstiUbD988TVquZsL+d46navZZUVcA=
-X-Received: by 2002:a05:6102:9d0:: with SMTP id g16mr4062881vsi.40.1643017571848;
- Mon, 24 Jan 2022 01:46:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20220123174031.3109-1-rdunlap@infradead.org>
-In-Reply-To: <20220123174031.3109-1-rdunlap@infradead.org>
-From:   Manuel Lauss <manuel.lauss@gmail.com>
-Date:   Mon, 24 Jan 2022 10:45:36 +0100
-Message-ID: <CAOLZvyH1UTf4e94xa-yF2CasqOCbyCOz5YZEs9QjLBOyVipt4A@mail.gmail.com>
-Subject: Re: [PATCH] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Kees Cook <keescook@chromium.org>,
+        id S242696AbiAXM5j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jan 2022 07:57:39 -0500
+Received: from foss.arm.com ([217.140.110.172]:32930 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242240AbiAXM5j (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Mon, 24 Jan 2022 07:57:39 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74692ED1;
+        Mon, 24 Jan 2022 04:57:38 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.43.190])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2C56E3F774;
+        Mon, 24 Jan 2022 04:57:34 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
+        akpm@linux-foundation.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Linux-MIPS <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-mips@vger.kernel.org
+Subject: [RFC V1 07/31] mips/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 24 Jan 2022 18:26:44 +0530
+Message-Id: <1643029028-12710-8-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
+References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello,
+This defines and exports a platform specific custom vm_get_page_prot() via
+subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+macros can be dropped which are no longer needed.
 
-On Sun, Jan 23, 2022 at 6:40 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> When the MIPS_ALCHEMY board selection is MIPS_XXS1500 instead of
-> MIPS_DB1XXX, the PCMCIA driver 'db1xxx_ss' has build errors due
-> to missing DB1XXX symbols. The PCMCIA driver should be restricted
-> to MIPS_DB1XXX instead of MIPS_ALCHEMY to fix this build error.
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+ arch/mips/Kconfig               |  1 +
+ arch/mips/include/asm/pgtable.h | 22 -----------
+ arch/mips/mm/cache.c            | 65 ++++++++++++++++++++-------------
+ 3 files changed, 41 insertions(+), 47 deletions(-)
 
->  config PCMCIA_ALCHEMY_DEVBOARD
->         tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
-> -       depends on MIPS_ALCHEMY && PCMCIA
-> +       depends on MIPS_DB1XXX && PCMCIA
->         help
->           Enable this driver of you want PCMCIA support on your Alchemy
->           Db1000, Db/Pb1100, Db/Pb1500, Db/Pb1550, Db/Pb1200, DB1300
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 058446f01487..fcbfc52a1567 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -13,6 +13,7 @@ config MIPS
+ 	select ARCH_HAS_STRNLEN_USER
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
++	select ARCH_HAS_VM_GET_PAGE_PROT
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_KEEP_MEMBLOCK
+ 	select ARCH_SUPPORTS_UPROBES
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 7b8037f25d9e..bf193ad4f195 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -41,28 +41,6 @@ struct vm_area_struct;
+  * by reasonable means..
+  */
+ 
+-/*
+- * Dummy values to fill the table in mmap.c
+- * The real values will be generated at runtime
+- */
+-#define __P000 __pgprot(0)
+-#define __P001 __pgprot(0)
+-#define __P010 __pgprot(0)
+-#define __P011 __pgprot(0)
+-#define __P100 __pgprot(0)
+-#define __P101 __pgprot(0)
+-#define __P110 __pgprot(0)
+-#define __P111 __pgprot(0)
+-
+-#define __S000 __pgprot(0)
+-#define __S001 __pgprot(0)
+-#define __S010 __pgprot(0)
+-#define __S011 __pgprot(0)
+-#define __S100 __pgprot(0)
+-#define __S101 __pgprot(0)
+-#define __S110 __pgprot(0)
+-#define __S111 __pgprot(0)
+-
+ extern unsigned long _page_cachable_default;
+ extern void __update_cache(unsigned long address, pte_t pte);
+ 
+diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
+index 830ab91e574f..06e29982965a 100644
+--- a/arch/mips/mm/cache.c
++++ b/arch/mips/mm/cache.c
+@@ -159,30 +159,6 @@ EXPORT_SYMBOL(_page_cachable_default);
+ 
+ #define PM(p)	__pgprot(_page_cachable_default | (p))
+ 
+-static inline void setup_protection_map(void)
+-{
+-	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[4]  = PM(_PAGE_PRESENT);
+-	protection_map[5]  = PM(_PAGE_PRESENT);
+-	protection_map[6]  = PM(_PAGE_PRESENT);
+-	protection_map[7]  = PM(_PAGE_PRESENT);
+-
+-	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
+-	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
+-	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
+-				_PAGE_NO_READ);
+-	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
+-	protection_map[12] = PM(_PAGE_PRESENT);
+-	protection_map[13] = PM(_PAGE_PRESENT);
+-	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
+-	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
+-}
+-
+-#undef PM
+-
+ void cpu_cache_init(void)
+ {
+ 	if (cpu_has_3k_cache) {
+@@ -206,6 +182,45 @@ void cpu_cache_init(void)
+ 
+ 		octeon_cache_init();
+ 	}
++}
+ 
+-	setup_protection_map();
++pgprot_t vm_get_page_prot(unsigned long vm_flags)
++{
++	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
++	case VM_NONE:
++		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
++	case VM_READ:
++		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	case VM_WRITE:
++		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
++	case VM_READ | VM_WRITE:
++		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	case VM_EXEC:
++		return PM(_PAGE_PRESENT);
++	case VM_EXEC | VM_READ:
++		return PM(_PAGE_PRESENT);
++	case VM_EXEC | VM_WRITE:
++		return PM(_PAGE_PRESENT);
++	case VM_EXEC | VM_READ | VM_WRITE:
++		return PM(_PAGE_PRESENT);
++	case VM_SHARED:
++		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
++	case VM_SHARED | VM_READ:
++		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
++	case VM_SHARED | VM_WRITE:
++		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
++	case VM_SHARED | VM_READ | VM_WRITE:
++		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
++	case VM_SHARED | VM_EXEC:
++		return PM(_PAGE_PRESENT);
++	case VM_SHARED | VM_EXEC | VM_READ:
++		return PM(_PAGE_PRESENT);
++	case VM_SHARED | VM_EXEC | VM_WRITE:
++		return PM(_PAGE_PRESENT | _PAGE_WRITE);
++	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
++		return PM(_PAGE_PRESENT | _PAGE_WRITE);
++	default:
++		BUILD_BUG();
++	}
+ }
++EXPORT_SYMBOL(vm_get_page_prot);
+-- 
+2.25.1
 
-Seems sensible.
-Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
-
-Thank you!
-      Manuel
