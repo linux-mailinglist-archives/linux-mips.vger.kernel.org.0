@@ -2,58 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1497B499CBE
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECF4499CBF
 	for <lists+linux-mips@lfdr.de>; Mon, 24 Jan 2022 23:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580013AbiAXWIH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jan 2022 17:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S1580078AbiAXWIO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jan 2022 17:08:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572946AbiAXVmw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jan 2022 16:42:52 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B4EC0419ED
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jan 2022 12:31:45 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id x11so52439386lfa.2
-        for <linux-mips@vger.kernel.org>; Mon, 24 Jan 2022 12:31:45 -0800 (PST)
+        with ESMTP id S1577988AbiAXWBY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jan 2022 17:01:24 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B3FC024160
+        for <linux-mips@vger.kernel.org>; Mon, 24 Jan 2022 12:41:12 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id x11so52486861lfa.2
+        for <linux-mips@vger.kernel.org>; Mon, 24 Jan 2022 12:41:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+d4eE8vTSmnTfcsF06A9ijaErxq3MGUA0JFQlf6Ufdo=;
-        b=iGTTMnQUe6uCwdHf5Y3Mp1+38vh4KuCC/+c8hZNfhXimk0D0Ayh2BU70jO35jFEpcK
-         cOCeEvEQ/Iraq9AGogYQpDBg9mbz93t+A86PMxJjW/CWDucXsgesD2+Tv37M9X6yB42r
-         oPQ/Wbltm6WTxGzZ4T8pnqtIReASplBaKYxk/kaH4hF4UeEYZN0/G79oE7sRD7//rrfd
-         ixrXNgbKQmnOKvkmf+amiE4RxQeQY1LgUmnSGznOHsOKgzquLg03V1MyNBpe0Z1F4JSV
-         m1ayHjlKDHflrMB6jVZ4FApQ7CpB0So9LjO8/+TwRhvQMe0SPR61YdGgKWXFBpXOWlrD
-         hkJg==
+        bh=1LJGjDTYMuLmHfQpWatQs3kMJ9qbd2ha/UHX5cFngus=;
+        b=mvCHYThbHbgCT4TsM9CfI+ZrMCLe2++pHQhdwPeI8vb/8sEb8D65Iom2uXnznuVmVS
+         +nGb5Ow23gtXLzerVRkV3f3Uw+Z6842cwIsDw+5dB7yqFKE3AjaTZwN1OxOvhrrjaDh2
+         75UtaMM4hS2p9EATTlFqNg0mtAUeJig69pu4EtGEQtcCKDwuG+KfNOM4L3+EXZwrdQ7j
+         TaqH65KfdgS3yLgVjAMhReY9jxu4RJWojw24J+Cl2+1KPAHeQ2TmTq2dOeVhSHk7T0DQ
+         ikZdyLW3rbZhcNdw2hBGpnM2eaid1iX33aaQTP+GjCBH5HwNygxtlrFmGpLuLQXIMqWG
+         Hmkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+d4eE8vTSmnTfcsF06A9ijaErxq3MGUA0JFQlf6Ufdo=;
-        b=5strwqaiCal3bDZIA0Bycb9kpAAAP/KVsY6n9ObVtlcY4LIVBUKjkdjccctY2rJfV2
-         m54Id6OCZmDN01YW2fo6E9aCj99NtiVY0C8T19oaou4uL4pAPYBTTBfXhozzSho6tLqY
-         XgA9JaUNDPpBF483hp2GM+h0tubUQ+UBAzRKHjzQnqP215PQxf+BfNJ4HPPyqDijPp+v
-         bK+LoMrnLFNLVNt+/ebGeGE0wdvzqTnVHM1eij6Dziu2eVictPxvWa/DEmFuBJw7mbBL
-         6id622TJFadjgORhLPatobhxWZ/vqQewTBhtBPiWVSVAcAH9fvLfxTiAH5nrBI+8Us6j
-         T8/g==
-X-Gm-Message-State: AOAM530ckwBUWBsbSvYle9aI+vXGy+qDIFV0TICV5JLlCpa5c2vt9b1t
-        Ogr0xFV6+7p9D18tlSJDa2zRCrqhqBhPQebKYmusp2HIkGa7jg==
-X-Google-Smtp-Source: ABdhPJwKfa6Ns5aNibD/NX7BlH7zp+cXMKbhPhjC0LcBq64TG0tqzj8/gnpWVJ+3dgyOXXYYuTSKDsNwY9wFloSu3bk=
-X-Received: by 2002:a05:6512:308d:: with SMTP id z13mr13958467lfd.523.1643056303222;
- Mon, 24 Jan 2022 12:31:43 -0800 (PST)
+        bh=1LJGjDTYMuLmHfQpWatQs3kMJ9qbd2ha/UHX5cFngus=;
+        b=OrZmtd2RyIFoU+/j58QX1WQUqPUvhaFlDkLDhqbBdEjxmMh7qUe0567ynNFdChW/cY
+         Fcz7iBLsQFqubWKMlvPTqDjEPm7cMTZycSWvnQ7Uqsq4qEYd7UqmuQqCZVA0usaYuKW5
+         rJC673LfbUPpWNEvkajOThujArgFwaH+3Bo4qv+TD2X88MDG2n/46roo62UQv9Hmt+72
+         oyRkZeWn4+rBEfYnShCyAZgokiHqslIdB8k5YY9AWqJ/R0tM3vhqHgfht8c0hLxtwwZl
+         hmx+SGbHkAhKmjsTc1JW9uwDEI//a7Tw829njYj+6oAs0LSnem8jAsphQ2yzm3qW9mYN
+         LfeQ==
+X-Gm-Message-State: AOAM5301g4206ZL0P4tI8rgK7MgiarpqqW8qi7NAk36YvvBqtUnFFzs2
+        IcPHrx0n2EoPcS03kcV/7k+PH4TlZtLzb4KAz62+Bw==
+X-Google-Smtp-Source: ABdhPJw5wfq7L+SJLcrq8u2A8nE43CCiP3/gypswmbsopPtzGSfHfId+dsvXuFq4G0FIe+wlsrViT3Ke+xM97hf2HYg=
+X-Received: by 2002:a05:6512:b0d:: with SMTP id w13mr14398285lfu.240.1643056870722;
+ Mon, 24 Jan 2022 12:41:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20220120214001.1879469-1-nathan@kernel.org>
-In-Reply-To: <20220120214001.1879469-1-nathan@kernel.org>
+References: <20220120214001.1879469-1-nathan@kernel.org> <20220120214001.1879469-2-nathan@kernel.org>
+In-Reply-To: <20220120214001.1879469-2-nathan@kernel.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 24 Jan 2022 12:31:31 -0800
-Message-ID: <CAKwvOd=4QBW5uFLM7zbHfG+5499tT_zqBTaZQgzqegmuq_5+MQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] MIPS: Loongson64: Clean up use of cc-ifversion
+Date:   Mon, 24 Jan 2022 12:40:58 -0800
+Message-ID: <CAKwvOdmTBUcre5+=kopcyAv3q=55=Z5O65QHmvy3Ra2JqgLNHw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] MIPS: Loongson64: Wrap -mno-branch-likely with cc-option
 To:     Nathan Chancellor <nathan@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+        Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Huacai Chen <chenhuacai@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
@@ -63,60 +64,51 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 On Thu, Jan 20, 2022 at 1:40 PM Nathan Chancellor <nathan@kernel.org> wrote:
 >
-> This Makefile checks that GCC is 4.9 or newer, which is redundant after
-> commit 76ae847497bc ("Documentation: raise minimum supported version of
-> GCC to 5.1"), so cc-option can be removed.
+> This flag is not supported by clang, which results in a warning:
 >
-> Clang does not support -march=loongson3a so it needs to continue to use
-> -march=mips64r2, along with binutils less than 2.25, so check that both
-> GCC and binutils 2.25 or newer are being used before using
-> -march=loongson3a. These flags do not need to be checked with cc-option
-> anymore because all GCC versions support -march=loongson3a and
-> -march=mips64r2 and all clang versions support -march=mips64r2.
+>   clang-14: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
+>
+> This breaks cc-option, which adds -Werror to make this warning fatal and
+> catch flags that are not supported. Wrap the flag in cc-option so that
+> it does not cause cc-option to fail, which can cause randconfigs to be
+> really noisy.
 >
 > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Thanks for the patch. I wonder why `_MIPS_ISA` only seems to be set at
-all for `-march=loongson3a` AFAICT, though that question is orthogonal
-to this patch. Perhaps the Loongson or MIPS maintainers know more?
-Otherwise seems like most uses of _MIPS_ISA can either be deleted or
-simplified now.
+We should convert more of these tests to Kconfig checks that run once
+per configuration, rather than multiple times for a build. IIRC Linus
+mentioned this somewhere...yeah, the -Wimplicit-fallthrough patches.
+See
+dee2b702bcf06 ("kconfig: Add support for -Wimplicit-fallthrough")
+
+I wonder if we can check ARCH or SUBARCH in Kconfig to limit invoking
+the tool under test for certain arch specific command line flags?
+
+I'll take this patch over such a larger change, but I think towards
+the goal of speeding up already configured builds, we eventually want
+to be migrating cc-option and ld-option checks to Kconfig.
 
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 > ---
->  arch/mips/loongson64/Platform | 13 +++----------
->  1 file changed, 3 insertions(+), 10 deletions(-)
+>  arch/mips/loongson64/Platform | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
 > diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
-> index 3e660d6d3c2b..981d3abc150e 100644
+> index 981d3abc150e..acf9edc9b15d 100644
 > --- a/arch/mips/loongson64/Platform
 > +++ b/arch/mips/loongson64/Platform
-> @@ -12,17 +12,10 @@ cflags-$(CONFIG_CPU_LOONGSON64)     += -Wa,--trap
->  # by GAS.  The cc-option can't probe for this behaviour so -march=loongson3a
->  # can't easily be used safely within the kbuild framework.
+> @@ -26,5 +26,6 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
+>  # Loongson Machines' Support
 >  #
-> -ifeq ($(call cc-ifversion, -ge, 0409, y), y)
-> -  ifeq ($(call ld-ifversion, -ge, 22500, y), y)
-> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
-> -      $(call cc-option,-march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-> -  else
-> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
-> -      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-> -  endif
-> +ifeq ($(CONFIG_CC_IS_GCC)$(call ld-ifversion, -ge, 22500, y), yy)
-> +  cflags-$(CONFIG_CPU_LOONGSON64) += -march=loongson3a -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64
->  else
-> -    cflags-$(CONFIG_CPU_LOONGSON64)  += \
-> -      $(call cc-option,-march=mips64r2,-mips64r2 -U_MIPS_ISA -D_MIPS_ISA=_MIPS_ISA_MIPS64)
-> +  cflags-$(CONFIG_CPU_LOONGSON64) += -march=mips64r2
->  endif
 >
->  # Some -march= flags enable MMI instructions, and GCC complains about that
->
-> base-commit: 2c271fe77d52a0555161926c232cd5bc07178b39
+> -cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64 -mno-branch-likely
+> +cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64
+> +cflags-$(CONFIG_MACH_LOONGSON64) += $(call cc-option,-mno-branch-likely)
+>  load-$(CONFIG_CPU_LOONGSON64) += 0xffffffff80200000
 > --
 > 2.34.1
+>
 >
 
 
