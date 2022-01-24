@@ -2,118 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C93694979D6
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jan 2022 08:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5177B497C5C
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jan 2022 10:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241945AbiAXHzp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jan 2022 02:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57932 "EHLO
+        id S234440AbiAXJqN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jan 2022 04:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241942AbiAXHzp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jan 2022 02:55:45 -0500
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AB5C061401
-        for <linux-mips@vger.kernel.org>; Sun, 23 Jan 2022 23:55:44 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:20cc:b383:efc8:c1b8])
-        by xavier.telenet-ops.be with bizsmtp
-        id mXvh260014688xB01XvhAj; Mon, 24 Jan 2022 08:55:43 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nBuCS-00BDqh-Mn; Mon, 24 Jan 2022 08:55:40 +0100
-Date:   Mon, 24 Jan 2022 08:55:40 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org,
-        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
-        kvm@vger.kernel.org, linux-mips@vger.kernel.org,
-        "Tobin C. Harding" <me@tobin.cc>, alsa-devel@alsa-project.org,
-        amd-gfx@lists.freedesktop.org, netdev@vger.kernel.org
-Subject: Re: Build regressions/improvements in v5.17-rc1
-In-Reply-To: <20220123125737.2658758-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2201240851560.2674757@ramsan.of.borg>
-References: <20220123125737.2658758-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S232102AbiAXJqN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jan 2022 04:46:13 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30C0C06173B;
+        Mon, 24 Jan 2022 01:46:12 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id n15so28268092uaq.5;
+        Mon, 24 Jan 2022 01:46:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p96M4E4XtTOqPEwsF9Q62UadvumL5u9cv+LYUa/tLkg=;
+        b=e2npIRYt1QpQa5AgxDkUjImJZXm7wGZZB6WohSkMkAy3+C8cLPw1lBl/gzda2bsLuC
+         25YGpBqJWDN8LbIw1esHepWbMHGNKzI9Fxm+yAfOKUyuNoRKtKYPTmDbR0q5ynINtGO3
+         EuZ1TYrXW7HC8IrFh2lIMsP9O4r1zI1y5QnLuntd+mHvwgmgD0Tutyri+ESZokbchSgV
+         colnpndUYf5CaZ88WGeqttP1SIAwFZRApeIHc1P6X+qqu/iRoOMSkr9fk90dGKEUQIpi
+         h1INxM8a6jFfo/qLQ7Gp3LffuqkshDQts39vysQxlJmlyiikpX1xKNG4Jq2bLzlgqL3M
+         MKDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p96M4E4XtTOqPEwsF9Q62UadvumL5u9cv+LYUa/tLkg=;
+        b=l2mxP4Pbx1W9zUgiQhvoaCZbPbqJX/5Tkkb/J5MZhFTtEsX97/wBbhoIwGzcSYBK1u
+         ZKZiQmLQ71jLl1mQWQ4mAjGWDran4RB/oeM7APYcpnf8JBhX1Ejni6eJi2dnVHhI/08h
+         EK0QR1QMjOOTZSOz6egatQruqoldFmgMHKFx9lM1uvHp3dCfxicmdP2lMNkvPhs3BhqA
+         45YyouPOj+cwhSL3mu8Ar1ZJcoqGtjhWYG8+r/EU491nyD1CjlU4LxKPuOPROnuLihRs
+         rz7+1RqCX9wT9QaR7aIe7jJql5cCgUELimmbSc/ISLODqQJG1XNxg4RnYN0afYNbJyr3
+         Bk5g==
+X-Gm-Message-State: AOAM532xITLRWhzIT4G0R1kvSwAqwM7+lZjdYBNc9zhDTDEs1DuhI3Al
+        vCaqenbh9FDIZXaLog+Pf6DVINGKO48WaLpeB8I=
+X-Google-Smtp-Source: ABdhPJwQFXBcNaW/Sbw2W4Dmnvaq4tSnfxGNL0yLRBNzy5KCrBIahgE3R+dOKvstiUbD988TVquZsL+d46navZZUVcA=
+X-Received: by 2002:a05:6102:9d0:: with SMTP id g16mr4062881vsi.40.1643017571848;
+ Mon, 24 Jan 2022 01:46:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+References: <20220123174031.3109-1-rdunlap@infradead.org>
+In-Reply-To: <20220123174031.3109-1-rdunlap@infradead.org>
+From:   Manuel Lauss <manuel.lauss@gmail.com>
+Date:   Mon, 24 Jan 2022 10:45:36 +0100
+Message-ID: <CAOLZvyH1UTf4e94xa-yF2CasqOCbyCOz5YZEs9QjLBOyVipt4A@mail.gmail.com>
+Subject: Re: [PATCH] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Linux-MIPS <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, 23 Jan 2022, Geert Uytterhoeven wrote:
-> Below is the list of build error/warning regressions/improvements in
-> v5.17-rc1[1] compared to v5.16[2].
->
-> Summarized:
->  - build errors: +17/-2
->  - build warnings: +23/-25
->
-> Note that there may be false regressions, as some logs are incomplete.
-> Still, they're build errors/warnings.
->
-> Happy fixing! ;-)
->
-> Thanks to the linux-next team for providing the build service.
->
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e783362eb54cd99b2cac8b3a9aeac942e6f6ac07/ (all 99 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/df0cc57e057f18e44dac8e6c18aba47ab53202f9/ (98 out of 99 configs)
->
->
-> *** ERRORS ***
->
-> 17 error regressions:
->  + /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit declaration of function 'nmi_cpu_backtrace' [-Werror=implicit-function-declaration]:  => 171:2
->  + /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit declaration of function 'nmi_trigger_cpumask_backtrace' [-Werror=implicit-function-declaration]:  => 226:2
+Hello,
 
-powerpc-gcc5/skiroot_defconfig
+On Sun, Jan 23, 2022 at 6:40 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> When the MIPS_ALCHEMY board selection is MIPS_XXS1500 instead of
+> MIPS_DB1XXX, the PCMCIA driver 'db1xxx_ss' has build errors due
+> to missing DB1XXX symbols. The PCMCIA driver should be restricted
+> to MIPS_DB1XXX instead of MIPS_ALCHEMY to fix this build error.
 
->  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]:  => 1756:13, 1639:13
->  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(struct mm_struct *)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]:  => 1674:29, 1662:29
->  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(struct mm_struct *, long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]:  => 1767:21
->  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(struct vm_area_struct *, long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]:  => 1741:29, 1726:29
->  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible function types from 'void (*)(struct vm_area_struct *, long unsigned int,  long unsigned int)' to 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int,  long unsigned int)' [-Werror=cast-function-type]:  => 1694:29, 1711:29
+>  config PCMCIA_ALCHEMY_DEVBOARD
+>         tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
+> -       depends on MIPS_ALCHEMY && PCMCIA
+> +       depends on MIPS_DB1XXX && PCMCIA
+>         help
+>           Enable this driver of you want PCMCIA support on your Alchemy
+>           Db1000, Db/Pb1100, Db/Pb1500, Db/Pb1550, Db/Pb1200, DB1300
 
-sparc64-gcc11/sparc-allmodconfig
+Seems sensible.
+Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
 
->  + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer:  => 103:18
->  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]:  => 324:9, 317:9
->  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declaration of function 'ioport_map' [-Werror=implicit-function-declaration]:  => 317:11
->  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declaration of function 'ioport_unmap' [-Werror=implicit-function-declaration]:  => 338:15
-
-um-x86_64/um-allyesconfig
-
->  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: control reaches end of non-void function [-Werror=return-type]:  => 1560:1
-
-um-x86_64/um-all{mod,yes}config
-
->  + /kisskb/src/drivers/net/ethernet/freescale/fec_mpc52xx.c: error: passing argument 2 of 'mpc52xx_fec_set_paddr' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]:  => 659:29
-
-powerpc-gcc5/ppc32_allmodconfig
-
->  + /kisskb/src/drivers/pinctrl/pinctrl-thunderbay.c: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]:  => 815:8, 815:29
-
-arm64-gcc5.4/arm64-allmodconfig
-arm64-gcc8/arm64-allmodconfig
-
->  + /kisskb/src/lib/test_printf.c: error: "PTR" redefined [-Werror]:  => 247:0, 247
->  + /kisskb/src/sound/pci/ca0106/ca0106.h: error: "PTR" redefined [-Werror]:  => 62, 62:0
-
-mips-gcc8/mips-allmodconfig
-mipsel/mips-allmodconfig
-
->  + error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to fit: R_PPC64_REL14 (stub) against symbol `machine_check_common' defined in .text section in arch/powerpc/kernel/head_64.o:  => (.text+0x3e4)
-
-powerpc-gcc5/powerpc-allyesconfig
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+Thank you!
+      Manuel
