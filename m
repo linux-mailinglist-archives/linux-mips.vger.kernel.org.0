@@ -2,179 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0605498008
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Jan 2022 13:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F2B4985BA
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Jan 2022 18:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242696AbiAXM5j (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 24 Jan 2022 07:57:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:32930 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242240AbiAXM5j (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Mon, 24 Jan 2022 07:57:39 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74692ED1;
-        Mon, 24 Jan 2022 04:57:38 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.43.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2C56E3F774;
-        Mon, 24 Jan 2022 04:57:34 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
-        akpm@linux-foundation.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [RFC V1 07/31] mips/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 24 Jan 2022 18:26:44 +0530
-Message-Id: <1643029028-12710-8-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
-References: <1643029028-12710-1-git-send-email-anshuman.khandual@arm.com>
+        id S244115AbiAXREw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 24 Jan 2022 12:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244163AbiAXREi (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 24 Jan 2022 12:04:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CABC061401;
+        Mon, 24 Jan 2022 09:04:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDA97B8114B;
+        Mon, 24 Jan 2022 17:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B1A9C340EA;
+        Mon, 24 Jan 2022 17:04:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643043875;
+        bh=insQqMWnYMCGenvJ/GiGEQqwN5YovpVzQGFYxKA9tQg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PQnJEytBbZhtef4QS9fYOrX+Ch7nDfVnbG/JevXc/AFMdYQHZSDqJKIGTkB44ufwF
+         V+18bE2CqrzYJ5hpVKIoii/NkUIZVgtlYwpzC+kdYmDhO/owqtkSnVpYY3MCWncTdd
+         zsWneK3qAoWa9TL8pJNluNkNXT53C83adwivI2Q1UVUGvgTwXLnvtSazcvdKC42x36
+         SQeMO73zU+UoAO/1q0Lxp7bifAxhzWk0oG3USUAnvA1VvcWtY3cgdS1DuUTI2cn7Zd
+         Di3bjkEISM7VrAR64kwxah+grsjKM6XDhV4ePKo6AbZVK75wfPm3/md4voEHGx9klT
+         DXM0UH/8fD42g==
+Date:   Mon, 24 Jan 2022 09:04:33 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
+        kvm@vger.kernel.org, linux-mips@vger.kernel.org,
+        "Tobin C. Harding" <me@tobin.cc>, alsa-devel@alsa-project.org,
+        amd-gfx@lists.freedesktop.org, netdev@vger.kernel.org
+Subject: Re: Build regressions/improvements in v5.17-rc1
+Message-ID: <20220124090433.1951e2ea@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <alpine.DEB.2.22.394.2201240851560.2674757@ramsan.of.borg>
+References: <20220123125737.2658758-1-geert@linux-m68k.org>
+        <alpine.DEB.2.22.394.2201240851560.2674757@ramsan.of.borg>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This defines and exports a platform specific custom vm_get_page_prot() via
-subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-macros can be dropped which are no longer needed.
+On Mon, 24 Jan 2022 08:55:40 +0100 (CET) Geert Uytterhoeven wrote:
+> >  + /kisskb/src/drivers/net/ethernet/freescale/fec_mpc52xx.c: error: passing argument 2 of 'mpc52xx_fec_set_paddr' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]:  => 659:29  
+> 
+> powerpc-gcc5/ppc32_allmodconfig
+> 
+> >  + /kisskb/src/drivers/pinctrl/pinctrl-thunderbay.c: error: assignment discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]:  => 815:8, 815:29  
+> 
+> arm64-gcc5.4/arm64-allmodconfig
+> arm64-gcc8/arm64-allmodconfig
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/mips/Kconfig               |  1 +
- arch/mips/include/asm/pgtable.h | 22 -----------
- arch/mips/mm/cache.c            | 65 ++++++++++++++++++++-------------
- 3 files changed, 41 insertions(+), 47 deletions(-)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 058446f01487..fcbfc52a1567 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -13,6 +13,7 @@ config MIPS
- 	select ARCH_HAS_STRNLEN_USER
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-+	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_SUPPORTS_UPROBES
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 7b8037f25d9e..bf193ad4f195 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -41,28 +41,6 @@ struct vm_area_struct;
-  * by reasonable means..
-  */
- 
--/*
-- * Dummy values to fill the table in mmap.c
-- * The real values will be generated at runtime
-- */
--#define __P000 __pgprot(0)
--#define __P001 __pgprot(0)
--#define __P010 __pgprot(0)
--#define __P011 __pgprot(0)
--#define __P100 __pgprot(0)
--#define __P101 __pgprot(0)
--#define __P110 __pgprot(0)
--#define __P111 __pgprot(0)
--
--#define __S000 __pgprot(0)
--#define __S001 __pgprot(0)
--#define __S010 __pgprot(0)
--#define __S011 __pgprot(0)
--#define __S100 __pgprot(0)
--#define __S101 __pgprot(0)
--#define __S110 __pgprot(0)
--#define __S111 __pgprot(0)
--
- extern unsigned long _page_cachable_default;
- extern void __update_cache(unsigned long address, pte_t pte);
- 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index 830ab91e574f..06e29982965a 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -159,30 +159,6 @@ EXPORT_SYMBOL(_page_cachable_default);
- 
- #define PM(p)	__pgprot(_page_cachable_default | (p))
- 
--static inline void setup_protection_map(void)
--{
--	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[4]  = PM(_PAGE_PRESENT);
--	protection_map[5]  = PM(_PAGE_PRESENT);
--	protection_map[6]  = PM(_PAGE_PRESENT);
--	protection_map[7]  = PM(_PAGE_PRESENT);
--
--	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
--				_PAGE_NO_READ);
--	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
--	protection_map[12] = PM(_PAGE_PRESENT);
--	protection_map[13] = PM(_PAGE_PRESENT);
--	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
--	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
--}
--
--#undef PM
--
- void cpu_cache_init(void)
- {
- 	if (cpu_has_3k_cache) {
-@@ -206,6 +182,45 @@ void cpu_cache_init(void)
- 
- 		octeon_cache_init();
- 	}
-+}
- 
--	setup_protection_map();
-+pgprot_t vm_get_page_prot(unsigned long vm_flags)
-+{
-+	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-+	case VM_NONE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	case VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	case VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	case VM_READ | VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	case VM_EXEC:
-+		return PM(_PAGE_PRESENT);
-+	case VM_EXEC | VM_READ:
-+		return PM(_PAGE_PRESENT);
-+	case VM_EXEC | VM_WRITE:
-+		return PM(_PAGE_PRESENT);
-+	case VM_EXEC | VM_READ | VM_WRITE:
-+		return PM(_PAGE_PRESENT);
-+	case VM_SHARED:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	case VM_SHARED | VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	case VM_SHARED | VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
-+	case VM_SHARED | VM_READ | VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
-+	case VM_SHARED | VM_EXEC:
-+		return PM(_PAGE_PRESENT);
-+	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PM(_PAGE_PRESENT);
-+	case VM_SHARED | VM_EXEC | VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_WRITE);
-+	case VM_SHARED | VM_EXEC | VM_READ | VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_WRITE);
-+	default:
-+		BUILD_BUG();
-+	}
- }
-+EXPORT_SYMBOL(vm_get_page_prot);
--- 
-2.25.1
-
+Let me take care of these in net.
