@@ -2,34 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A696349AFF6
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jan 2022 10:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8988149AFF5
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jan 2022 10:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355285AbiAYJVl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jan 2022 04:21:41 -0500
-Received: from mail.trueanalyze24.com ([149.154.157.156]:40018 "EHLO
-        mail.trueanalyze24.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457739AbiAYJRB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jan 2022 04:17:01 -0500
-Received: by mail.trueanalyze24.com (Postfix, from userid 1001)
-        id 0B8754203B; Tue, 25 Jan 2022 09:58:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trueanalyze24.com;
-        s=mail; t=1643102220;
-        bh=EGenFkmmv/iHCwB4AbTzX8IXCMu1xRW+9eep7HJGZMM=;
+        id S237687AbiAYJVf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jan 2022 04:21:35 -0500
+Received: from mail.belongsenergy.pl ([185.45.112.191]:35842 "EHLO
+        mail.belongsenergy.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1456435AbiAYJLG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jan 2022 04:11:06 -0500
+X-Greylist: delayed 622 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Jan 2022 04:11:06 EST
+Received: by mail.belongsenergy.pl (Postfix, from userid 1001)
+        id 80077265EE; Tue, 25 Jan 2022 09:00:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=belongsenergy.pl;
+        s=mail; t=1643101241;
+        bh=JAEkA4FCBmQ7T7M+WVau75EdqeDf4MEEr9hE2/l61BA=;
         h=Date:From:To:Subject:From;
-        b=K5Zbu8Iy3ssfgWv82ffw6FxvqwWyRZAK3iLhshpto1P31rydFeFMSvnONyojOkr76
-         bUdUGmxN/Err/MI0VbXDiY4h0PgFeQiYZ3PZiPzUWxGUdTc1UsUPo42LTIZMNQInyc
-         suNNAL9nEnO8kft+KnraIJBNBM/OHk5eWne+I1F//Wnx/MGbPcwfPrY4nTdlsmaxkr
-         kEsc4A64cwKc37MdCLahn2/jcIG6fRgam+bYluC9KtKhkJ1Uz6SIKIreAbP+tUDgf+
-         sAK2Fl6H+Gftt6y6DOXHrqhTNVGM3MSjNx/QJmRd+KziwqL2bFwtwH4JRPydjjKGe+
-         75UO+CdkYD/lg==
-Received: by mail.trueanalyze24.com for <linux-mips@vger.kernel.org>; Tue, 25 Jan 2022 08:57:25 GMT
-Message-ID: <20220125084505-0.1.1b.e7ih.0.zifbhun1ax@trueanalyze24.com>
-Date:   Tue, 25 Jan 2022 08:57:25 GMT
-From:   "Mateusz Talaga" <mateusz.talaga@trueanalyze24.com>
+        b=qN94RoiyNK5JiBw+oMo/W1JomFfOVe5iJZL3vyQ2CXvpamFEIrIYJK6TMkFEoBFes
+         hO/V5N818x+CLdTELDp61iRbYDf9+3xG7iRSDpmRhQrVSLpewgl0gGgqqlgTOx5+IP
+         TxEHeeJh0BlmOkS1Hjqt9gBn+ldwB2PiqJkUsrjNaqaluqNaa5r6cRXZoPfOYXWEye
+         PQrkXFWGjZB61HVyMc/lmQaptoE498i6uWBf/NXl5N9zWXvJErUamitfA4SqQ3AWnS
+         MecaUc+EaXxIeUcVEydt/EjNGGU95eapxmyBZoJqwTcRIl1RxrW6OcTyWNUQ4MXAOW
+         yZMf1nZnqEh4A==
+Received: by mail.belongsenergy.pl for <linux-mips@vger.kernel.org>; Tue, 25 Jan 2022 09:00:32 GMT
+Message-ID: <20220125074500-0.1.7.22z.0.blzw7lqacg@belongsenergy.pl>
+Date:   Tue, 25 Jan 2022 09:00:32 GMT
+From:   "Maciej Nitycz" <maciej.nitycz@belongsenergy.pl>
 To:     <linux-mips@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.trueanalyze24.com
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.belongsenergy.pl
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -37,24 +38,17 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dzie=C5=84 dobry!
+Dzie=C5=84 dobry,
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
-
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
 
-Z powa=C5=BCaniem,
-Mateusz Talaga
+Pozdrawiam,
+Maciej Nitycz
