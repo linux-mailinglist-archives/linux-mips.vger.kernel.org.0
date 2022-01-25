@@ -2,297 +2,969 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FFB49B47F
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jan 2022 14:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 464B449B654
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Jan 2022 15:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574324AbiAYNAx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jan 2022 08:00:53 -0500
-Received: from mga09.intel.com ([134.134.136.24]:15268 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1574505AbiAYM6n (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:58:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643115518; x=1674651518;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=et9+ZqkMxNyaIinPs3rLA/T1shewefofFV8LdQgNIlw=;
-  b=JkAgogLMCBZ0XoBcH8KYXjMDv5f6i5Xx24RVdrAO7gCrTSlJNG4I8tjL
-   hw/CUF51rR8aoGmOjMwFELrRmiNPkzciuCEVRXH+nN9Jg8FVmxB2IdQn+
-   0U9AnlOudqKlcUZF63tWMSJZ6A29mZu5rvIafz0/MgqFd0kPE/qJn0q6h
-   A+fnfsmB3rjKM+ygcK6bJDKVNb7CxJ62kJiPj3w9A15AR9mSJtYFkQxbV
-   rjbTCXujBiNVP0LEcwPDdx3vmUbVRyLFe2szuL33Y1lQQEGlhTdWMZG5e
-   Lq9PoSLqY7Wlcg00glGNCw3kKCaWntJpIMZCdMXDxOguZwiGY/KSCvab3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="246073891"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="246073891"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 04:56:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="627918605"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by orsmga004.jf.intel.com with ESMTP; 25 Jan 2022 04:56:53 -0800
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 25 Jan 2022 04:56:52 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Tue, 25 Jan 2022 04:56:52 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Tue, 25 Jan 2022 04:56:52 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BiORTeM0ByWEbS5LwZElUP87ak84FkFyevl7ZvVTz7k6iOkVCm/uGuKUBlrJpDRmm18AUwU0V0hTOP2Z5n+aDXR3lrlhBPDKPMmhkSZvhkOFRQ0sE8JJTQxJ1eGvMSnpi9YOa+XVKlf7FV7D03o/vnN5C5ccEP5RRied/LGTUu8+GRTHXmAvHbk8XqlKVdHVnuqHimGgqyuOzMLgQyy7dMiD022wXltehdlh8RWTrSXavSnhG+yyt5Fke7e/x/QnWsypfrMwcmLEUYJVtkQKuB/Nai8WIrB0nA0Q1arTkIMEvhegCpXULPmaltu75Zb3M79FVvKZjc+IB/DxPXL0Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yoONrviKz6vG5zQ/UkX5bzbT6WkMkSWgzx/0kJBMnwI=;
- b=NwAWZiS8ybQud206MGr5x0JhbdBkx955KXv2Ja8xt1Q8WVjHTH8l4VSh9h/XLenrkFfhyuBGe0mRWY6yuHuxs/vPkbOoAkBKbdLuIoVVHnP1xg+JKvaYR9dWUIHbsKEw9GMwRkO26wxoVguV+ZLfWTT3sjt09vny+LqflUdDnoDKlhuZsRAUM+9Mrki3HjV/cNFvFteeOcyH2JyOD3iw95dibaQKKpTuOOEnxE0NH5bvrtTJ9s+QtSkfbshY7IDF+ES9zPoyFVO5shHK/EIewCOlKY3aLqJa0mKBZcJAj+gNkPqwQRs7DKuTgE89JfPySUIhPLTUqMiIVStMPiEfww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from DM6PR11MB3660.namprd11.prod.outlook.com (2603:10b6:5:13c::17)
- by CO1PR11MB5011.namprd11.prod.outlook.com (2603:10b6:303:6d::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.8; Tue, 25 Jan
- 2022 12:56:50 +0000
-Received: from DM6PR11MB3660.namprd11.prod.outlook.com
- ([fe80::753b:f9a6:9c93:278c]) by DM6PR11MB3660.namprd11.prod.outlook.com
- ([fe80::753b:f9a6:9c93:278c%3]) with mapi id 15.20.4909.019; Tue, 25 Jan 2022
- 12:56:50 +0000
-From:   "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Tobin C. Harding" <me@tobin.cc>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: Build regressions/improvements in v5.17-rc1
-Thread-Topic: Build regressions/improvements in v5.17-rc1
-Thread-Index: AQHYEPfSFpmDnQzpgkifGWSL3krxPKxzsmGw
-Date:   Tue, 25 Jan 2022 12:56:50 +0000
-Message-ID: <DM6PR11MB3660804C821D7CA7329B6CAFC45F9@DM6PR11MB3660.namprd11.prod.outlook.com>
-References: <20220123125737.2658758-1-geert@linux-m68k.org>
- <alpine.DEB.2.22.394.2201240851560.2674757@ramsan.of.borg>
-In-Reply-To: <alpine.DEB.2.22.394.2201240851560.2674757@ramsan.of.borg>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.200.16
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8c2a41c2-48eb-42e3-3acb-08d9e002278e
-x-ms-traffictypediagnostic: CO1PR11MB5011:EE_
-x-microsoft-antispam-prvs: <CO1PR11MB50119942373926B13B967E76C45F9@CO1PR11MB5011.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TSOxQ8EjKVAuiKHG9e/SKn+DuA76OZBOHZoRNhGzANCWUEUo/3RbCZtp+pYe76uNAyZEiJgEBIOr2/VUItaPbWpJj1+4j2VQheR2dEHy65kc2bXfGe5U1KLrpwHOMxtVu6RM5iwt3tlgEIpvExLdLT6deuBbFSpG8Ot6Y3Ng8S0ouGymtW2H5i2MBH/lJ19EWHtSj04GsGKyVNy14MwK0JUilppfL/RgzaKumfckUr2lhFVyjRM1sfiScgcuQlMjf74hM6MA6MTzkYUhZfztvtdAsw1XXi95fV6xwt70IMv+H4HSaGqoN2wMfG8HzhbRoOg/lLNnTxeEnywWdfCKzGetnkPc/d7mdbicr/8lbrrTGXskicrPOXtCCmIbwjdZoEdMW3vGEJ2OT08XgQ3pW2AIznzTU9mV1YqFUPxHPCx8HlrnQvCi/P60WD7rNcDsgD8BKOAPTRoHaKXEcvmQlGzNThIpvIPFy1fmdLl7uX//m+lMY+iyu5xN8PFvWVGTudADmCoabfzBoo4mO1+Sp6T44oDQvW5mc0TT3WpbaOS6//RwcvFtyvzjaR55tXTZ4yn6NpyQwKUail/QtMRbJUmgQFlYE6DfM+auznAhNPClF19DR0WHWqJ8ML4NhC5y0RcEH749zlomRMNzY7FfI54YrnLOTBwP1Pk9buFttbvVj4tYxewc+4tgEUSQqBD46c1bvXCO6zuj6qU0ieboFzY8GZ5+c4Xeln1LRw2Zx52NZrrwT4bVQ8ii3ZScKDF5BjZVk1vRil0XukQkipYXPwrOtdt5WLz4irz/nyeLOg0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3660.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(82960400001)(66946007)(110136005)(8936002)(2906002)(966005)(38070700005)(66574015)(508600001)(38100700002)(52536014)(54906003)(76116006)(8676002)(186003)(86362001)(9686003)(5660300002)(4326008)(71200400001)(33656002)(26005)(66556008)(316002)(6506007)(7696005)(83380400001)(7416002)(55016003)(66446008)(53546011)(66476007)(64756008)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?fUk/DrnQ8TNg8PT0qbnVaCbMpNxKN1Xauy6bLbJY/zuWKBENB/8jTyrFxL?=
- =?iso-8859-2?Q?mFyHcaB4Ho/5/6T+v9L4PgBQGNzy2/AC+NTCAZOSQ6Ryl4NFAbaQyL/a03?=
- =?iso-8859-2?Q?ly0U781i4qhwqLKk9Ood3EJF3zABFPukaN0NaRN6aQU+emZL06t2DY97PE?=
- =?iso-8859-2?Q?ZshVHce6vU12nrp+k77qW3d9MyV0/iOGjcyyWjTkshm5AzkfV4Vyymit2J?=
- =?iso-8859-2?Q?JiL8GY5Nh5ASP3/KpCPUls8iR0xJYLWwXtzcpyZ76+kpSUfYs25lEezUfB?=
- =?iso-8859-2?Q?+DVwTv8i70OjyA5jCujEq/MwjTcx3Be+X3E8xmesIWCSOuOq9u6mo2oP1H?=
- =?iso-8859-2?Q?vKER5rleLoQHKkgEPtfwU0ChFVCOZjCNbQu/Hcmr6MhKWOaRngwRXKCZG2?=
- =?iso-8859-2?Q?1uTQAfI8Lazi8azj9eiwMKyTQE7CO4WQtnD+O6QOJS72zA80STFQox/KKG?=
- =?iso-8859-2?Q?nqX6X+D21cvmBOcJx55WhdCRAavE5EA+jxHC/LlJ2QNU7upc/n7rf2vqFf?=
- =?iso-8859-2?Q?sNx4p7pgPpBZXcLpsvxyIAdvtFhcL2e9qFI+qfEMjjAfTYZnQNRzCPDN7W?=
- =?iso-8859-2?Q?8J6fGuhabzOPCzNjVbgYoe4azea56wBJ069lADAnTzTGBfkszrbAOgkzd8?=
- =?iso-8859-2?Q?Qjnf9fKKJ2JhhFtSdN4jnlQDexUns4P3ad2stAuXJLiVyH5WK+STVtk2Fi?=
- =?iso-8859-2?Q?Q9xQE9oZe33ElQKSdFWUpQelyij67yaV9CfLGu5ERtKDQLjxOWFq5Vizph?=
- =?iso-8859-2?Q?1JuFcW2yQGURrszcDwwglo5xsQX5VF/gHBC+Z4U3myvzJyESB6SWLEQwxy?=
- =?iso-8859-2?Q?/2Jqod4Q9IpLdcWhK6oeOdsjui2UXCKcE93WYA+kExCCiTC5Lx3aLi0hhR?=
- =?iso-8859-2?Q?Qo7j9UKMf69uX54jWPCw11z0NRU2aZnKCEXLR1rc+rV0QMJttqL1YjzlMF?=
- =?iso-8859-2?Q?ssn1KCc2RCFdkqk126s+pg34i4c0XRYIEkFT227UJKsHloVND80HGv09b7?=
- =?iso-8859-2?Q?rBDEl+ZiK5gLmkoRHcZSjh5YSu1EkQ3rp5mP0lUaoTsqRsK8WgPNXuA6Sx?=
- =?iso-8859-2?Q?ioh4bzVSehS+o2S8N9S+X5lLS7298Mtcun1HWiKE4wcX6fSVxX20IdXr4m?=
- =?iso-8859-2?Q?bJn6FjPuZTtvGLzZ5DuaIqHvnOLn0lKlcbERck0jwbx6kAQ62dOHHWDahe?=
- =?iso-8859-2?Q?+4ggTxXk6nr6yHaTQAzdXzA7FYZTKRcUu4u9lUMaAuOe3nWhLP/TZHM5ih?=
- =?iso-8859-2?Q?K/cNNuQI6igzarCHfQGupU4/gD9YJMqQUNHBZTe8zsplhmjNWbPHrUMiPn?=
- =?iso-8859-2?Q?/r/NxkpcNdKiDLm4XLjrBs9Ig3T7phHVhgLctqwEtRaA6BpHLffIqjt7uR?=
- =?iso-8859-2?Q?wyOaPnLYPi7lolnAsf3sfFnRrhJsbrxyEjL7QtOC94lzKupY+S6H7gA1d7?=
- =?iso-8859-2?Q?c38Mm42mEdTuyHLlsAZKigmBfxIf7CzP6r6YrcQrxm347N3Y2K/7HAu+vy?=
- =?iso-8859-2?Q?0dWm5ARlTZgxfChpv2lTWZyh9D4+fuEM8CPz5W5XFajOXtmtJWr/f9WLjt?=
- =?iso-8859-2?Q?FquoCejYxqMMB+9QghdX3ae+XKkEQvrNHcdohJKEnugRfk2jeUrChEOJe/?=
- =?iso-8859-2?Q?byy4uQdhMbv1lqHjpkraYALlflfD4gtEFKbDkF3YmPxR596G37ttrsRUOj?=
- =?iso-8859-2?Q?6wO21sJA9KlJ7YvMO8T5S/kmRKXQB+oNWzuqUrLTbcbDIn86U8aL0NkTte?=
- =?iso-8859-2?Q?G0sg=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S238978AbiAYOex (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 25 Jan 2022 09:34:53 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:40670 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230007AbiAYOaI (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jan 2022 09:30:08 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 7C7E11F381;
+        Tue, 25 Jan 2022 14:30:02 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 6E654A3B87;
+        Tue, 25 Jan 2022 14:30:02 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Fix build error due to PTR used in more places
+Date:   Tue, 25 Jan 2022 15:19:44 +0100
+Message-Id: <20220125141946.54114-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3660.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c2a41c2-48eb-42e3-3acb-08d9e002278e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2022 12:56:50.6731
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0aLZFmIS/Ikp1vMUBSaHHcYeEvITtt9hICbp8N854aPuAM4V68wOPmFIPJvKukHOD2oPbydxyCdOtOPsKwOEgt0n3hYJRp8B4yuuf+Ok+Lw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5011
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Use PTR_WD instead of PTR to avoid clashes with other parts.
 
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/include/asm/asm.h            |   4 +-
+ arch/mips/include/asm/ftrace.h         |   4 +-
+ arch/mips/include/asm/r4kcache.h       |   4 +-
+ arch/mips/include/asm/unaligned-emul.h | 176 ++++++++++++-------------
+ arch/mips/kernel/mips-r2-to-r6-emul.c  | 104 +++++++--------
+ arch/mips/kernel/r2300_fpu.S           |   6 +-
+ arch/mips/kernel/r4k_fpu.S             |   2 +-
+ arch/mips/kernel/relocate_kernel.S     |  22 ++--
+ arch/mips/kernel/scall32-o32.S         |  10 +-
+ arch/mips/kernel/scall64-n32.S         |   2 +-
+ arch/mips/kernel/scall64-n64.S         |   2 +-
+ arch/mips/kernel/scall64-o32.S         |  10 +-
+ arch/mips/kernel/syscall.c             |   8 +-
+ arch/mips/lib/csum_partial.S           |   4 +-
+ arch/mips/lib/memcpy.S                 |   4 +-
+ arch/mips/lib/memset.S                 |   2 +-
+ arch/mips/lib/strncpy_user.S           |   4 +-
+ arch/mips/lib/strnlen_user.S           |   2 +-
+ 18 files changed, 185 insertions(+), 185 deletions(-)
 
-> -----Original Message-----
-> From: Geert Uytterhoeven <geert@linux-m68k.org>
-> Sent: Monday, January 24, 2022 1:26 PM
-> To: linux-kernel@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org; sparclinux@vger.kernel.org; linux-
-> um@lists.infradead.org; D, Lakshmi Sowjanya
-> <lakshmi.sowjanya.d@intel.com>; kvm@vger.kernel.org; linux-
-> mips@vger.kernel.org; Tobin C. Harding <me@tobin.cc>; alsa-devel@alsa-
-> project.org; amd-gfx@lists.freedesktop.org; netdev@vger.kernel.org
-> Subject: Re: Build regressions/improvements in v5.17-rc1
->=20
-> On Sun, 23 Jan 2022, Geert Uytterhoeven wrote:
-> > Below is the list of build error/warning regressions/improvements in
-> > v5.17-rc1[1] compared to v5.16[2].
-> >
-> > Summarized:
-> >  - build errors: +17/-2
-> >  - build warnings: +23/-25
-> >
-> > Note that there may be false regressions, as some logs are incomplete.
-> > Still, they're build errors/warnings.
-> >
-> > Happy fixing! ;-)
-> >
-> > Thanks to the linux-next team for providing the build service.
-> >
-> > [1]
-> > http://kisskb.ellerman.id.au/kisskb/branch/linus/head/e783362eb54cd99b
-> > 2cac8b3a9aeac942e6f6ac07/ (all 99 configs) [2]
-> > http://kisskb.ellerman.id.au/kisskb/branch/linus/head/df0cc57e057f18e4
-> > 4dac8e6c18aba47ab53202f9/ (98 out of 99 configs)
-> >
-> >
-> > *** ERRORS ***
-> >
-> > 17 error regressions:
-> >  + /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit
-> > declaration of function 'nmi_cpu_backtrace'
-> > [-Werror=3Dimplicit-function-declaration]:  =3D> 171:2  +
-> > /kisskb/src/arch/powerpc/kernel/stacktrace.c: error: implicit
-> > declaration of function 'nmi_trigger_cpumask_backtrace'
-> > [-Werror=3Dimplicit-function-declaration]:  =3D> 226:2
->=20
-> powerpc-gcc5/skiroot_defconfig
->=20
-> >  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible
-> > function types from 'void (*)(long unsigned int)' to 'void (*)(long
-> > unsigned int,  long unsigned int,  long unsigned int,  long unsigned
-> > int,  long unsigned int)' [-Werror=3Dcast-function-type]:  =3D> 1756:13=
-,
-> > 1639:13  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between
-> > incompatible function types from 'void (*)(struct mm_struct *)' to
-> > 'void (*)(long unsigned int,  long unsigned int,  long unsigned int,
-> > long unsigned int,  long unsigned int)' [-Werror=3Dcast-function-type]:
-> > =3D> 1674:29, 1662:29  + /kisskb/src/arch/sparc/mm/srmmu.c: error: cast
-> > between incompatible function types from 'void (*)(struct mm_struct *,
-> > long unsigned int)' to 'void (*)(long unsigned int,  long unsigned
-> > int,  long unsigned int,  long unsigned int,  long unsigned int)'
-> > [-Werror=3Dcast-function-type]:  =3D> 1767:21  +
-> > /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible
-> > function types from 'void (*)(struct vm_area_struct *, long unsigned
-> > int)' to 'void (*)(long unsigned int,  long unsigned int,  long
-> > unsigned int,  long unsigned int,  long unsigned int)'
-> > [-Werror=3Dcast-function-type]:  =3D> 1741:29, 1726:29  +
-> > /kisskb/src/arch/sparc/mm/srmmu.c: error: cast between incompatible
-> > function types from 'void (*)(struct vm_area_struct *, long unsigned
-> > int,  long unsigned int)' to 'void (*)(long unsigned int,  long
-> > unsigned int,  long unsigned int,  long unsigned int,  long unsigned
-> > int)' [-Werror=3Dcast-function-type]:  =3D> 1694:29, 1711:29
->=20
-> sparc64-gcc11/sparc-allmodconfig
->=20
-> >  + /kisskb/src/arch/um/include/asm/processor-generic.h: error: called
-> > object is not a function or function pointer:  =3D> 103:18  +
-> > /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: assignment makes
-> > pointer from integer without a cast [-Werror=3Dint-conversion]:  =3D>
-> > 324:9, 317:9  + /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error:
-> > implicit declaration of function 'ioport_map'
-> > [-Werror=3Dimplicit-function-declaration]:  =3D> 317:11  +
-> > /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit
-> > declaration of function 'ioport_unmap'
-> > [-Werror=3Dimplicit-function-declaration]:  =3D> 338:15
->=20
-> um-x86_64/um-allyesconfig
->=20
-> >  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c:
-> > error: control reaches end of non-void function [-Werror=3Dreturn-type]=
-:
-> > =3D> 1560:1
->=20
-> um-x86_64/um-all{mod,yes}config
->=20
-> >  + /kisskb/src/drivers/net/ethernet/freescale/fec_mpc52xx.c: error:
-> > passing argument 2 of 'mpc52xx_fec_set_paddr' discards 'const'
-> > qualifier from pointer target type [-Werror=3Ddiscarded-qualifiers]:  =
-=3D>
-> > 659:29
->=20
-> powerpc-gcc5/ppc32_allmodconfig
->=20
-> >  + /kisskb/src/drivers/pinctrl/pinctrl-thunderbay.c: error: assignment
-> > discards 'const' qualifier from pointer target type
-> > [-Werror=3Ddiscarded-qualifiers]:  =3D> 815:8, 815:29
->=20
-> arm64-gcc5.4/arm64-allmodconfig
-> arm64-gcc8/arm64-allmodconfig
->=20
+diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
+index 6ffdd4b5e1d0..336ac9b65235 100644
+--- a/arch/mips/include/asm/asm.h
++++ b/arch/mips/include/asm/asm.h
+@@ -285,7 +285,7 @@ symbol		=	value
+ 
+ #define PTR_SCALESHIFT	2
+ 
+-#define PTR		.word
++#define PTR_WD		.word
+ #define PTRSIZE		4
+ #define PTRLOG		2
+ #endif
+@@ -310,7 +310,7 @@ symbol		=	value
+ 
+ #define PTR_SCALESHIFT	3
+ 
+-#define PTR		.dword
++#define PTR_WD		.dword
+ #define PTRSIZE		8
+ #define PTRLOG		3
+ #endif
+diff --git a/arch/mips/include/asm/ftrace.h b/arch/mips/include/asm/ftrace.h
+index b463f2aa5a61..db497a8167da 100644
+--- a/arch/mips/include/asm/ftrace.h
++++ b/arch/mips/include/asm/ftrace.h
+@@ -32,7 +32,7 @@ do {							\
+ 		".previous\n"				\
+ 							\
+ 		".section\t__ex_table,\"a\"\n\t"	\
+-		STR(PTR) "\t1b, 3b\n\t"			\
++		STR(PTR_WD) "\t1b, 3b\n\t"		\
+ 		".previous\n"				\
+ 							\
+ 		: [tmp_dst] "=&r" (dst), [tmp_err] "=r" (error)\
+@@ -54,7 +54,7 @@ do {						\
+ 		".previous\n"			\
+ 						\
+ 		".section\t__ex_table,\"a\"\n\t"\
+-		STR(PTR) "\t1b, 3b\n\t"		\
++		STR(PTR_WD) "\t1b, 3b\n\t"	\
+ 		".previous\n"			\
+ 						\
+ 		: [tmp_err] "=r" (error)	\
+diff --git a/arch/mips/include/asm/r4kcache.h b/arch/mips/include/asm/r4kcache.h
+index af3788589ee6..431a1c9d53fc 100644
+--- a/arch/mips/include/asm/r4kcache.h
++++ b/arch/mips/include/asm/r4kcache.h
+@@ -119,7 +119,7 @@ static inline void flush_scache_line(unsigned long addr)
+ 	"	j	2b			\n"		\
+ 	"	.previous			\n"		\
+ 	"	.section __ex_table,\"a\"	\n"		\
+-	"	"STR(PTR)" 1b, 3b		\n"		\
++	"	"STR(PTR_WD)" 1b, 3b		\n"		\
+ 	"	.previous"					\
+ 	: "+r" (__err)						\
+ 	: "i" (op), "r" (addr), "i" (-EFAULT));			\
+@@ -142,7 +142,7 @@ static inline void flush_scache_line(unsigned long addr)
+ 	"	j	2b			\n"		\
+ 	"	.previous			\n"		\
+ 	"	.section __ex_table,\"a\"	\n"		\
+-	"	"STR(PTR)" 1b, 3b		\n"		\
++	"	"STR(PTR_WD)" 1b, 3b		\n"		\
+ 	"	.previous"					\
+ 	: "+r" (__err)						\
+ 	: "i" (op), "r" (addr), "i" (-EFAULT));			\
+diff --git a/arch/mips/include/asm/unaligned-emul.h b/arch/mips/include/asm/unaligned-emul.h
+index 2022b18944b9..9af0f4d3d288 100644
+--- a/arch/mips/include/asm/unaligned-emul.h
++++ b/arch/mips/include/asm/unaligned-emul.h
+@@ -20,8 +20,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -41,8 +41,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -74,10 +74,10 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (value), "=r" (res)	    \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -102,8 +102,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -125,8 +125,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -145,8 +145,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -178,10 +178,10 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (value), "=r" (res)	    \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -223,14 +223,14 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
+-		STR(PTR)"\t5b, 11b\n\t"		    \
+-		STR(PTR)"\t6b, 11b\n\t"		    \
+-		STR(PTR)"\t7b, 11b\n\t"		    \
+-		STR(PTR)"\t8b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
++		STR(PTR_WD)"\t5b, 11b\n\t"	    \
++		STR(PTR_WD)"\t6b, 11b\n\t"	    \
++		STR(PTR_WD)"\t7b, 11b\n\t"	    \
++		STR(PTR_WD)"\t8b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (value), "=r" (res)	    \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -255,8 +255,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"              \
+-		STR(PTR)"\t2b, 4b\n\t"              \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=r" (res)                        \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT));\
+@@ -276,8 +276,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=r" (res)                                \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
+@@ -296,8 +296,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=r" (res)                                \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
+@@ -325,10 +325,10 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (res)				    \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
+@@ -365,14 +365,14 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
+-		STR(PTR)"\t5b, 11b\n\t"		    \
+-		STR(PTR)"\t6b, 11b\n\t"		    \
+-		STR(PTR)"\t7b, 11b\n\t"		    \
+-		STR(PTR)"\t8b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
++		STR(PTR_WD)"\t5b, 11b\n\t"	    \
++		STR(PTR_WD)"\t6b, 11b\n\t"	    \
++		STR(PTR_WD)"\t7b, 11b\n\t"	    \
++		STR(PTR_WD)"\t8b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (res)				    \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
+@@ -398,8 +398,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -419,8 +419,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -452,10 +452,10 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (value), "=r" (res)	    \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -481,8 +481,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -504,8 +504,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -524,8 +524,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=&r" (value), "=r" (res)         \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -557,10 +557,10 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (value), "=r" (res)	    \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -602,14 +602,14 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
+-		STR(PTR)"\t5b, 11b\n\t"		    \
+-		STR(PTR)"\t6b, 11b\n\t"		    \
+-		STR(PTR)"\t7b, 11b\n\t"		    \
+-		STR(PTR)"\t8b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
++		STR(PTR_WD)"\t5b, 11b\n\t"	    \
++		STR(PTR_WD)"\t6b, 11b\n\t"	    \
++		STR(PTR_WD)"\t7b, 11b\n\t"	    \
++		STR(PTR_WD)"\t8b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (value), "=r" (res)	    \
+ 		: "r" (addr), "i" (-EFAULT));       \
+@@ -632,8 +632,8 @@ do {                                                 \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=r" (res)                        \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT));\
+@@ -653,8 +653,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=r" (res)                                \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
+@@ -673,8 +673,8 @@ do {                                                \
+ 		"j\t3b\n\t"                         \
+ 		".previous\n\t"                     \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 4b\n\t"               \
+-		STR(PTR)"\t2b, 4b\n\t"               \
++		STR(PTR_WD)"\t1b, 4b\n\t"           \
++		STR(PTR_WD)"\t2b, 4b\n\t"           \
+ 		".previous"                         \
+ 		: "=r" (res)                                \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT));  \
+@@ -703,10 +703,10 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (res)				    \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
+@@ -743,14 +743,14 @@ do {                                                \
+ 		"j\t10b\n\t"			    \
+ 		".previous\n\t"			    \
+ 		".section\t__ex_table,\"a\"\n\t"    \
+-		STR(PTR)"\t1b, 11b\n\t"		    \
+-		STR(PTR)"\t2b, 11b\n\t"		    \
+-		STR(PTR)"\t3b, 11b\n\t"		    \
+-		STR(PTR)"\t4b, 11b\n\t"		    \
+-		STR(PTR)"\t5b, 11b\n\t"		    \
+-		STR(PTR)"\t6b, 11b\n\t"		    \
+-		STR(PTR)"\t7b, 11b\n\t"		    \
+-		STR(PTR)"\t8b, 11b\n\t"		    \
++		STR(PTR_WD)"\t1b, 11b\n\t"	    \
++		STR(PTR_WD)"\t2b, 11b\n\t"	    \
++		STR(PTR_WD)"\t3b, 11b\n\t"	    \
++		STR(PTR_WD)"\t4b, 11b\n\t"	    \
++		STR(PTR_WD)"\t5b, 11b\n\t"	    \
++		STR(PTR_WD)"\t6b, 11b\n\t"	    \
++		STR(PTR_WD)"\t7b, 11b\n\t"	    \
++		STR(PTR_WD)"\t8b, 11b\n\t"	    \
+ 		".previous"			    \
+ 		: "=&r" (res)				    \
+ 		: "r" (value), "r" (addr), "i" (-EFAULT)    \
+diff --git a/arch/mips/kernel/mips-r2-to-r6-emul.c b/arch/mips/kernel/mips-r2-to-r6-emul.c
+index a39ec755e4c2..750fe569862b 100644
+--- a/arch/mips/kernel/mips-r2-to-r6-emul.c
++++ b/arch/mips/kernel/mips-r2-to-r6-emul.c
+@@ -1258,10 +1258,10 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"	j	10b\n"
+ 			"	.previous\n"
+ 			"	.section	__ex_table,\"a\"\n"
+-			STR(PTR) " 1b,8b\n"
+-			STR(PTR) " 2b,8b\n"
+-			STR(PTR) " 3b,8b\n"
+-			STR(PTR) " 4b,8b\n"
++			STR(PTR_WD) " 1b,8b\n"
++			STR(PTR_WD) " 2b,8b\n"
++			STR(PTR_WD) " 3b,8b\n"
++			STR(PTR_WD) " 4b,8b\n"
+ 			"	.previous\n"
+ 			"	.set	pop\n"
+ 			: "+&r"(rt), "=&r"(rs),
+@@ -1333,10 +1333,10 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"	j	10b\n"
+ 			"       .previous\n"
+ 			"	.section	__ex_table,\"a\"\n"
+-			STR(PTR) " 1b,8b\n"
+-			STR(PTR) " 2b,8b\n"
+-			STR(PTR) " 3b,8b\n"
+-			STR(PTR) " 4b,8b\n"
++			STR(PTR_WD) " 1b,8b\n"
++			STR(PTR_WD) " 2b,8b\n"
++			STR(PTR_WD) " 3b,8b\n"
++			STR(PTR_WD) " 4b,8b\n"
+ 			"	.previous\n"
+ 			"	.set	pop\n"
+ 			: "+&r"(rt), "=&r"(rs),
+@@ -1404,10 +1404,10 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"	j	9b\n"
+ 			"	.previous\n"
+ 			"	.section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,8b\n"
+-			STR(PTR) " 2b,8b\n"
+-			STR(PTR) " 3b,8b\n"
+-			STR(PTR) " 4b,8b\n"
++			STR(PTR_WD) " 1b,8b\n"
++			STR(PTR_WD) " 2b,8b\n"
++			STR(PTR_WD) " 3b,8b\n"
++			STR(PTR_WD) " 4b,8b\n"
+ 			"	.previous\n"
+ 			"	.set	pop\n"
+ 			: "+&r"(rt), "=&r"(rs),
+@@ -1474,10 +1474,10 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"	j	9b\n"
+ 			"	.previous\n"
+ 			"	.section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,8b\n"
+-			STR(PTR) " 2b,8b\n"
+-			STR(PTR) " 3b,8b\n"
+-			STR(PTR) " 4b,8b\n"
++			STR(PTR_WD) " 1b,8b\n"
++			STR(PTR_WD) " 2b,8b\n"
++			STR(PTR_WD) " 3b,8b\n"
++			STR(PTR_WD) " 4b,8b\n"
+ 			"	.previous\n"
+ 			"	.set	pop\n"
+ 			: "+&r"(rt), "=&r"(rs),
+@@ -1589,14 +1589,14 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"	j	9b\n"
+ 			"	.previous\n"
+ 			"	.section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,8b\n"
+-			STR(PTR) " 2b,8b\n"
+-			STR(PTR) " 3b,8b\n"
+-			STR(PTR) " 4b,8b\n"
+-			STR(PTR) " 5b,8b\n"
+-			STR(PTR) " 6b,8b\n"
+-			STR(PTR) " 7b,8b\n"
+-			STR(PTR) " 0b,8b\n"
++			STR(PTR_WD) " 1b,8b\n"
++			STR(PTR_WD) " 2b,8b\n"
++			STR(PTR_WD) " 3b,8b\n"
++			STR(PTR_WD) " 4b,8b\n"
++			STR(PTR_WD) " 5b,8b\n"
++			STR(PTR_WD) " 6b,8b\n"
++			STR(PTR_WD) " 7b,8b\n"
++			STR(PTR_WD) " 0b,8b\n"
+ 			"	.previous\n"
+ 			"	.set	pop\n"
+ 			: "+&r"(rt), "=&r"(rs),
+@@ -1708,14 +1708,14 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"	j      9b\n"
+ 			"	.previous\n"
+ 			"	.section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,8b\n"
+-			STR(PTR) " 2b,8b\n"
+-			STR(PTR) " 3b,8b\n"
+-			STR(PTR) " 4b,8b\n"
+-			STR(PTR) " 5b,8b\n"
+-			STR(PTR) " 6b,8b\n"
+-			STR(PTR) " 7b,8b\n"
+-			STR(PTR) " 0b,8b\n"
++			STR(PTR_WD) " 1b,8b\n"
++			STR(PTR_WD) " 2b,8b\n"
++			STR(PTR_WD) " 3b,8b\n"
++			STR(PTR_WD) " 4b,8b\n"
++			STR(PTR_WD) " 5b,8b\n"
++			STR(PTR_WD) " 6b,8b\n"
++			STR(PTR_WD) " 7b,8b\n"
++			STR(PTR_WD) " 0b,8b\n"
+ 			"	.previous\n"
+ 			"	.set    pop\n"
+ 			: "+&r"(rt), "=&r"(rs),
+@@ -1827,14 +1827,14 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"	j	9b\n"
+ 			"	.previous\n"
+ 			"	.section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,8b\n"
+-			STR(PTR) " 2b,8b\n"
+-			STR(PTR) " 3b,8b\n"
+-			STR(PTR) " 4b,8b\n"
+-			STR(PTR) " 5b,8b\n"
+-			STR(PTR) " 6b,8b\n"
+-			STR(PTR) " 7b,8b\n"
+-			STR(PTR) " 0b,8b\n"
++			STR(PTR_WD) " 1b,8b\n"
++			STR(PTR_WD) " 2b,8b\n"
++			STR(PTR_WD) " 3b,8b\n"
++			STR(PTR_WD) " 4b,8b\n"
++			STR(PTR_WD) " 5b,8b\n"
++			STR(PTR_WD) " 6b,8b\n"
++			STR(PTR_WD) " 7b,8b\n"
++			STR(PTR_WD) " 0b,8b\n"
+ 			"	.previous\n"
+ 			"	.set	pop\n"
+ 			: "+&r"(rt), "=&r"(rs),
+@@ -1945,14 +1945,14 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"       j	9b\n"
+ 			"       .previous\n"
+ 			"       .section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,8b\n"
+-			STR(PTR) " 2b,8b\n"
+-			STR(PTR) " 3b,8b\n"
+-			STR(PTR) " 4b,8b\n"
+-			STR(PTR) " 5b,8b\n"
+-			STR(PTR) " 6b,8b\n"
+-			STR(PTR) " 7b,8b\n"
+-			STR(PTR) " 0b,8b\n"
++			STR(PTR_WD) " 1b,8b\n"
++			STR(PTR_WD) " 2b,8b\n"
++			STR(PTR_WD) " 3b,8b\n"
++			STR(PTR_WD) " 4b,8b\n"
++			STR(PTR_WD) " 5b,8b\n"
++			STR(PTR_WD) " 6b,8b\n"
++			STR(PTR_WD) " 7b,8b\n"
++			STR(PTR_WD) " 0b,8b\n"
+ 			"       .previous\n"
+ 			"       .set	pop\n"
+ 			: "+&r"(rt), "=&r"(rs),
+@@ -2007,7 +2007,7 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"j	2b\n"
+ 			".previous\n"
+ 			".section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,3b\n"
++			STR(PTR_WD) " 1b,3b\n"
+ 			".previous\n"
+ 			: "=&r"(res), "+&r"(err)
+ 			: "r"(vaddr), "i"(SIGSEGV)
+@@ -2065,7 +2065,7 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"j	2b\n"
+ 			".previous\n"
+ 			".section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,3b\n"
++			STR(PTR_WD) " 1b,3b\n"
+ 			".previous\n"
+ 			: "+&r"(res), "+&r"(err)
+ 			: "r"(vaddr), "i"(SIGSEGV));
+@@ -2126,7 +2126,7 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"j	2b\n"
+ 			".previous\n"
+ 			".section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,3b\n"
++			STR(PTR_WD) " 1b,3b\n"
+ 			".previous\n"
+ 			: "=&r"(res), "+&r"(err)
+ 			: "r"(vaddr), "i"(SIGSEGV)
+@@ -2189,7 +2189,7 @@ int mipsr2_decoder(struct pt_regs *regs, u32 inst, unsigned long *fcr31)
+ 			"j	2b\n"
+ 			".previous\n"
+ 			".section        __ex_table,\"a\"\n"
+-			STR(PTR) " 1b,3b\n"
++			STR(PTR_WD) " 1b,3b\n"
+ 			".previous\n"
+ 			: "+&r"(res), "+&r"(err)
+ 			: "r"(vaddr), "i"(SIGSEGV));
+diff --git a/arch/mips/kernel/r2300_fpu.S b/arch/mips/kernel/r2300_fpu.S
+index cbf6db98cfb3..2748c55820c2 100644
+--- a/arch/mips/kernel/r2300_fpu.S
++++ b/arch/mips/kernel/r2300_fpu.S
+@@ -23,14 +23,14 @@
+ #define EX(a,b)							\
+ 9:	a,##b;							\
+ 	.section __ex_table,"a";				\
+-	PTR	9b,fault;					\
++	PTR_WD	9b,fault;					\
+ 	.previous
+ 
+ #define EX2(a,b)						\
+ 9:	a,##b;							\
+ 	.section __ex_table,"a";				\
+-	PTR	9b,fault;					\
+-	PTR	9b+4,fault;					\
++	PTR_WD	9b,fault;					\
++	PTR_WD	9b+4,fault;					\
+ 	.previous
+ 
+ 	.set	mips1
+diff --git a/arch/mips/kernel/r4k_fpu.S b/arch/mips/kernel/r4k_fpu.S
+index b91e91106475..2e687c60bc4f 100644
+--- a/arch/mips/kernel/r4k_fpu.S
++++ b/arch/mips/kernel/r4k_fpu.S
+@@ -31,7 +31,7 @@
+ .ex\@:	\insn	\reg, \src
+ 	.set	pop
+ 	.section __ex_table,"a"
+-	PTR	.ex\@, fault
++	PTR_WD	.ex\@, fault
+ 	.previous
+ 	.endm
+ 
+diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
+index f3c908abdbb8..cfde14b48fd8 100644
+--- a/arch/mips/kernel/relocate_kernel.S
++++ b/arch/mips/kernel/relocate_kernel.S
+@@ -147,10 +147,10 @@ LEAF(kexec_smp_wait)
+ 
+ kexec_args:
+ 	EXPORT(kexec_args)
+-arg0:	PTR		0x0
+-arg1:	PTR		0x0
+-arg2:	PTR		0x0
+-arg3:	PTR		0x0
++arg0:	PTR_WD		0x0
++arg1:	PTR_WD		0x0
++arg2:	PTR_WD		0x0
++arg3:	PTR_WD		0x0
+ 	.size	kexec_args,PTRSIZE*4
+ 
+ #ifdef CONFIG_SMP
+@@ -161,10 +161,10 @@ arg3:	PTR		0x0
+  */
+ secondary_kexec_args:
+ 	EXPORT(secondary_kexec_args)
+-s_arg0: PTR		0x0
+-s_arg1: PTR		0x0
+-s_arg2: PTR		0x0
+-s_arg3: PTR		0x0
++s_arg0: PTR_WD		0x0
++s_arg1: PTR_WD		0x0
++s_arg2: PTR_WD		0x0
++s_arg3: PTR_WD		0x0
+ 	.size	secondary_kexec_args,PTRSIZE*4
+ kexec_flag:
+ 	LONG		0x1
+@@ -173,17 +173,17 @@ kexec_flag:
+ 
+ kexec_start_address:
+ 	EXPORT(kexec_start_address)
+-	PTR		0x0
++	PTR_WD		0x0
+ 	.size		kexec_start_address, PTRSIZE
+ 
+ kexec_indirection_page:
+ 	EXPORT(kexec_indirection_page)
+-	PTR		0
++	PTR_WD		0
+ 	.size		kexec_indirection_page, PTRSIZE
+ 
+ relocate_new_kernel_end:
+ 
+ relocate_new_kernel_size:
+ 	EXPORT(relocate_new_kernel_size)
+-	PTR		relocate_new_kernel_end - relocate_new_kernel
++	PTR_WD		relocate_new_kernel_end - relocate_new_kernel
+ 	.size		relocate_new_kernel_size, PTRSIZE
+diff --git a/arch/mips/kernel/scall32-o32.S b/arch/mips/kernel/scall32-o32.S
+index b1b2e106f711..9bfce5f75f60 100644
+--- a/arch/mips/kernel/scall32-o32.S
++++ b/arch/mips/kernel/scall32-o32.S
+@@ -72,10 +72,10 @@ loads_done:
+ 	.set	pop
+ 
+ 	.section __ex_table,"a"
+-	PTR	load_a4, bad_stack_a4
+-	PTR	load_a5, bad_stack_a5
+-	PTR	load_a6, bad_stack_a6
+-	PTR	load_a7, bad_stack_a7
++	PTR_WD	load_a4, bad_stack_a4
++	PTR_WD	load_a5, bad_stack_a5
++	PTR_WD	load_a6, bad_stack_a6
++	PTR_WD	load_a7, bad_stack_a7
+ 	.previous
+ 
+ 	lw	t0, TI_FLAGS($28)	# syscall tracing enabled?
+@@ -216,7 +216,7 @@ einval: li	v0, -ENOSYS
+ #endif /* CONFIG_MIPS_MT_FPAFF */
+ 
+ #define __SYSCALL_WITH_COMPAT(nr, native, compat)	__SYSCALL(nr, native)
+-#define __SYSCALL(nr, entry) 	PTR entry
++#define __SYSCALL(nr, entry) 	PTR_WD entry
+ 	.align	2
+ 	.type	sys_call_table, @object
+ EXPORT(sys_call_table)
+diff --git a/arch/mips/kernel/scall64-n32.S b/arch/mips/kernel/scall64-n32.S
+index f650c55a17dc..97456b2ca7dc 100644
+--- a/arch/mips/kernel/scall64-n32.S
++++ b/arch/mips/kernel/scall64-n32.S
+@@ -101,7 +101,7 @@ not_n32_scall:
+ 
+ 	END(handle_sysn32)
+ 
+-#define __SYSCALL(nr, entry)	PTR entry
++#define __SYSCALL(nr, entry)	PTR_WD entry
+ 	.type	sysn32_call_table, @object
+ EXPORT(sysn32_call_table)
+ #include <asm/syscall_table_n32.h>
+diff --git a/arch/mips/kernel/scall64-n64.S b/arch/mips/kernel/scall64-n64.S
+index 5d7bfc65e4d0..5f6ed4b4c399 100644
+--- a/arch/mips/kernel/scall64-n64.S
++++ b/arch/mips/kernel/scall64-n64.S
+@@ -109,7 +109,7 @@ illegal_syscall:
+ 	j	n64_syscall_exit
+ 	END(handle_sys64)
+ 
+-#define __SYSCALL(nr, entry)	PTR entry
++#define __SYSCALL(nr, entry)	PTR_WD entry
+ 	.align	3
+ 	.type	sys_call_table, @object
+ EXPORT(sys_call_table)
+diff --git a/arch/mips/kernel/scall64-o32.S b/arch/mips/kernel/scall64-o32.S
+index cedc8bd88804..d3c2616cba22 100644
+--- a/arch/mips/kernel/scall64-o32.S
++++ b/arch/mips/kernel/scall64-o32.S
+@@ -73,10 +73,10 @@ load_a7: lw	a7, 28(t0)		# argument #8 from usp
+ loads_done:
+ 
+ 	.section __ex_table,"a"
+-	PTR	load_a4, bad_stack_a4
+-	PTR	load_a5, bad_stack_a5
+-	PTR	load_a6, bad_stack_a6
+-	PTR	load_a7, bad_stack_a7
++	PTR_WD	load_a4, bad_stack_a4
++	PTR_WD	load_a5, bad_stack_a5
++	PTR_WD	load_a6, bad_stack_a6
++	PTR_WD	load_a7, bad_stack_a7
+ 	.previous
+ 
+ 	li	t1, _TIF_WORK_SYSCALL_ENTRY
+@@ -214,7 +214,7 @@ einval: li	v0, -ENOSYS
+ 	END(sys32_syscall)
+ 
+ #define __SYSCALL_WITH_COMPAT(nr, native, compat)	__SYSCALL(nr, compat)
+-#define __SYSCALL(nr, entry)	PTR entry
++#define __SYSCALL(nr, entry)	PTR_WD entry
+ 	.align	3
+ 	.type	sys32_call_table,@object
+ EXPORT(sys32_call_table)
+diff --git a/arch/mips/kernel/syscall.c b/arch/mips/kernel/syscall.c
+index 5512cd586e6e..ae93a607ddf7 100644
+--- a/arch/mips/kernel/syscall.c
++++ b/arch/mips/kernel/syscall.c
+@@ -122,8 +122,8 @@ static inline int mips_atomic_set(unsigned long addr, unsigned long new)
+ 		"	j	3b					\n"
+ 		"	.previous					\n"
+ 		"	.section __ex_table,\"a\"			\n"
+-		"	"STR(PTR)"	1b, 4b				\n"
+-		"	"STR(PTR)"	2b, 4b				\n"
++		"	"STR(PTR_WD)"	1b, 4b				\n"
++		"	"STR(PTR_WD)"	2b, 4b				\n"
+ 		"	.previous					\n"
+ 		"	.set	pop					\n"
+ 		: [old] "=&r" (old),
+@@ -152,8 +152,8 @@ static inline int mips_atomic_set(unsigned long addr, unsigned long new)
+ 		"	j	3b					\n"
+ 		"	.previous					\n"
+ 		"	.section __ex_table,\"a\"			\n"
+-		"	"STR(PTR)"	1b, 5b				\n"
+-		"	"STR(PTR)"	2b, 5b				\n"
++		"	"STR(PTR_WD)"	1b, 5b				\n"
++		"	"STR(PTR_WD)"	2b, 5b				\n"
+ 		"	.previous					\n"
+ 		"	.set	pop					\n"
+ 		: [old] "=&r" (old),
+diff --git a/arch/mips/lib/csum_partial.S b/arch/mips/lib/csum_partial.S
+index a46db0807195..7767137c3e49 100644
+--- a/arch/mips/lib/csum_partial.S
++++ b/arch/mips/lib/csum_partial.S
+@@ -347,7 +347,7 @@ EXPORT_SYMBOL(csum_partial)
+ 	.if \mode == LEGACY_MODE;		\
+ 9:		insn reg, addr;			\
+ 		.section __ex_table,"a";	\
+-		PTR	9b, .L_exc;		\
++		PTR_WD	9b, .L_exc;		\
+ 		.previous;			\
+ 	/* This is enabled in EVA mode */	\
+ 	.else;					\
+@@ -356,7 +356,7 @@ EXPORT_SYMBOL(csum_partial)
+ 		    ((\to == USEROP) && (type == ST_INSN));	\
+ 9:			__BUILD_EVA_INSN(insn##e, reg, addr);	\
+ 			.section __ex_table,"a";		\
+-			PTR	9b, .L_exc;			\
++			PTR_WD	9b, .L_exc;			\
+ 			.previous;				\
+ 		.else;						\
+ 			/* EVA without exception */		\
+diff --git a/arch/mips/lib/memcpy.S b/arch/mips/lib/memcpy.S
+index 277c32296636..18a43f2e29c8 100644
+--- a/arch/mips/lib/memcpy.S
++++ b/arch/mips/lib/memcpy.S
+@@ -116,7 +116,7 @@
+ 	.if \mode == LEGACY_MODE;				\
+ 9:		insn reg, addr;					\
+ 		.section __ex_table,"a";			\
+-		PTR	9b, handler;				\
++		PTR_WD	9b, handler;				\
+ 		.previous;					\
+ 	/* This is assembled in EVA mode */			\
+ 	.else;							\
+@@ -125,7 +125,7 @@
+ 		    ((\to == USEROP) && (type == ST_INSN));	\
+ 9:			__BUILD_EVA_INSN(insn##e, reg, addr);	\
+ 			.section __ex_table,"a";		\
+-			PTR	9b, handler;			\
++			PTR_WD	9b, handler;			\
+ 			.previous;				\
+ 		.else;						\
+ 			/*					\
+diff --git a/arch/mips/lib/memset.S b/arch/mips/lib/memset.S
+index b0baa3c79fad..0b342bae9a98 100644
+--- a/arch/mips/lib/memset.S
++++ b/arch/mips/lib/memset.S
+@@ -52,7 +52,7 @@
+ 9:		___BUILD_EVA_INSN(insn, reg, addr);	\
+ 	.endif;						\
+ 	.section __ex_table,"a";			\
+-	PTR	9b, handler;				\
++	PTR_WD	9b, handler;				\
+ 	.previous
+ 
+ 	.macro	f_fill64 dst, offset, val, fixup, mode
+diff --git a/arch/mips/lib/strncpy_user.S b/arch/mips/lib/strncpy_user.S
+index 556acf684d7b..13aaa9927ad1 100644
+--- a/arch/mips/lib/strncpy_user.S
++++ b/arch/mips/lib/strncpy_user.S
+@@ -15,7 +15,7 @@
+ #define EX(insn,reg,addr,handler)			\
+ 9:	insn	reg, addr;				\
+ 	.section __ex_table,"a";			\
+-	PTR	9b, handler;				\
++	PTR_WD	9b, handler;				\
+ 	.previous
+ 
+ /*
+@@ -59,7 +59,7 @@ LEAF(__strncpy_from_user_asm)
+ 	jr		ra
+ 
+ 	.section	__ex_table,"a"
+-	PTR		1b, .Lfault
++	PTR_WD		1b, .Lfault
+ 	.previous
+ 
+ 	EXPORT_SYMBOL(__strncpy_from_user_asm)
+diff --git a/arch/mips/lib/strnlen_user.S b/arch/mips/lib/strnlen_user.S
+index 92b63f20ec05..6de31b616f9c 100644
+--- a/arch/mips/lib/strnlen_user.S
++++ b/arch/mips/lib/strnlen_user.S
+@@ -14,7 +14,7 @@
+ #define EX(insn,reg,addr,handler)			\
+ 9:	insn	reg, addr;				\
+ 	.section __ex_table,"a";			\
+-	PTR	9b, handler;				\
++	PTR_WD	9b, handler;				\
+ 	.previous
+ 
+ /*
+-- 
+2.29.2
 
-These errors are fixed with the patch set by Rafa=B3 Mi=B3ecki:=20
-https://lore.kernel.org/all/CACRpkdYbR-hpLTcvN1_LuxEH_mgHLqDmopDqo1ddui9o8Z=
-vSPQ@mail.gmail.com/t/
-
-Regards,
-Lakshmi Sowjanya
-
-> >  + /kisskb/src/lib/test_printf.c: error: "PTR" redefined [-Werror]:
-> > =3D> 247:0, 247  + /kisskb/src/sound/pci/ca0106/ca0106.h: error: "PTR"
-> > redefined [-Werror]:  =3D> 62, 62:0
->=20
-> mips-gcc8/mips-allmodconfig
-> mipsel/mips-allmodconfig
->=20
-> >  + error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to
-> > fit: R_PPC64_REL14 (stub) against symbol `machine_check_common'
-> > defined in .text section in arch/powerpc/kernel/head_64.o:  =3D>
-> > (.text+0x3e4)
->=20
-> powerpc-gcc5/powerpc-allyesconfig
->=20
-> Gr{oetje,eeting}s,
->=20
->  						Geert
->=20
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-
-> m68k.org
->=20
-> In personal conversations with technical people, I call myself a hacker. =
-But when
-> I'm talking to journalists I just say "programmer" or something like that=
-.
->  							    -- Linus Torvalds
