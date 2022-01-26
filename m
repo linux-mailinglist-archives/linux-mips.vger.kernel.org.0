@@ -2,122 +2,128 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E99749BE5E
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Jan 2022 23:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B42149CB2A
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Jan 2022 14:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbiAYWTw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 25 Jan 2022 17:19:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47346 "EHLO
+        id S235309AbiAZNpf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 26 Jan 2022 08:45:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58226 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233735AbiAYWTw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 25 Jan 2022 17:19:52 -0500
+        with ESMTP id S235305AbiAZNpe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 26 Jan 2022 08:45:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C86ACB81B76;
-        Tue, 25 Jan 2022 22:19:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD26FC340E7;
-        Tue, 25 Jan 2022 22:19:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643149189;
-        bh=3ZivQ+FV86iNurkooJ7KOtL0OLNq/84ROVUSZKlyUQk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R1bwuR0A6QqrCq/SDFCiXZKLqitK5ygFouhvtwcGnCqmRrB+sA4+WwQX8sTzzvQUN
-         i302fTiAqLA6FD6R8XIGsfnzRLUkfhtF5tWAFnW/PnJLX5JLWRCRaImDxJMOcnEd1f
-         ncOdBckbw2V4fsZ4DTDsciUNrEGo3frRNuwM6skqlVfqLBG3LIWRnXw+nSil75TWl8
-         Aqy95geVO1I9rDUz18e3ql8vQ44KSCSWChZmkAoFKicY3++slU4WnY8NXCkA1Ew542
-         0dmeQb2TbPY5TJIAuS20mMBShWABctXvFngYF2KNe5i4Y+Jz2fU+8ViuXDRapHz8ck
-         4dhQzjVt1Yhfw==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 2/2] MIPS: Loongson{2ef,64}: Wrap -mno-branch-likely with cc-option
-Date:   Tue, 25 Jan 2022 15:19:25 -0700
-Message-Id: <20220125221925.3547683-2-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20220125221925.3547683-1-nathan@kernel.org>
-References: <20220125221925.3547683-1-nathan@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CE77B81E0F;
+        Wed, 26 Jan 2022 13:45:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9195C340E3;
+        Wed, 26 Jan 2022 13:45:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643204731;
+        bh=aXQde9wq7cWvdCRLRrI1FIQr3++bEQ4exG2q/lhqD3E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=v+g8gUQjIt/c0ktBUQcit03sTj8G5mLw8FT+LXQqudlxh2iXfgafDrgsKIgJcd+6A
+         KW7BP0Pf7wtiKC9gzDKJw1Q0VKMx5apmABXH/60JK3d2VK/Sw93FHWeCcfYpb1QPrC
+         cxProUa3b1FFVLRT4j2tOajkb4EpxDNqSymszfjw=
+Date:   Wed, 26 Jan 2022 14:45:28 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Walt Drummond <walt@drummond.us>
+Cc:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
+        borntraeger@linux.ibm.com, chris@zankel.net, davem@davemloft.net,
+        hca@linux.ibm.com, deller@gmx.de, ink@jurassic.park.msu.ru,
+        James.Bottomley@hansenpartnership.com, jirislaby@kernel.org,
+        mattst88@gmail.com, jcmvbkbc@gmail.com, mpe@ellerman.id.au,
+        paulus@samba.org, rth@twiddle.net, dalias@libc.org,
+        tsbogend@alpha.franken.de, gor@linux.ibm.com, ysato@users.osdn.me,
+        linux-kernel@vger.kernel.org, ar@cs.msu.ru,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH 0/3] status: TTY status message request
+Message-ID: <YfFQeC1cUVFmISMK@kroah.com>
+References: <20220118044259.764945-1-walt@drummond.us>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118044259.764945-1-walt@drummond.us>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This flag is not supported by clang, which results in a warning:
+On Mon, Jan 17, 2022 at 08:42:57PM -0800, Walt Drummond wrote:
+> This patchset adds TTY status message request feature to the n_tty
+> line dicipline.  This feature prints a brief message containing basic
+> system and process group information to a user's TTY in response to a
+> new control character in the line dicipline (default Ctrl-T) or the
+> TIOCSTAT ioctl.  The message contains the current system load, the
+> name and PID of an interesting process in the forground process group,
+> it's run time, percent CPU usage and RSS.  An example of this message
+> is:
+> 
+>   load: 0.31  cmd: sleep 3616843 [sleeping] 0.36r 0.00u 0.00s 0% 696k
+> 
+> User API visible changes are limited to:
+>  - The addition of VSTATUS in termios.c_cc[]
+>  - The addition of NOKERNINFO bit in termios.l_cflags
+>  - The addition of the TIOCSTAT ioctl number
+> 
+> None of these changes break the existing kernel api as the termios
+> structure on all architectures has enough space in the control
+> character array (.c_cc) for the new character, and the other changes
+> are space agnostic.
+> 
+> This feature is in many other Unix-like systems, both current and
+> historical.  In other implementations, this feature would also send
+> SIGINFO to the process group; this implementation does not.
+> 
+> Walt Drummond (3):
+>   vstatus: Allow the n_tty line dicipline to write to a user tty
+>   vstatus: Add user space API definitions for VSTATUS, NOKERNINFO and
+>     TIOCSTAT
+>   status: Display an informational message when the VSTATUS character is
+>     pressed or TIOCSTAT ioctl is called.
+> 
+>  arch/alpha/include/asm/termios.h         |   4 +-
+>  arch/alpha/include/uapi/asm/ioctls.h     |   1 +
+>  arch/alpha/include/uapi/asm/termbits.h   |  34 ++---
+>  arch/ia64/include/asm/termios.h          |   4 +-
+>  arch/ia64/include/uapi/asm/termbits.h    |  34 ++---
+>  arch/mips/include/asm/termios.h          |   4 +-
+>  arch/mips/include/uapi/asm/ioctls.h      |   1 +
+>  arch/mips/include/uapi/asm/termbits.h    |  36 ++---
+>  arch/parisc/include/asm/termios.h        |   4 +-
+>  arch/parisc/include/uapi/asm/ioctls.h    |   1 +
+>  arch/parisc/include/uapi/asm/termbits.h  |  34 ++---
+>  arch/powerpc/include/asm/termios.h       |   4 +-
+>  arch/powerpc/include/uapi/asm/ioctls.h   |   2 +
+>  arch/powerpc/include/uapi/asm/termbits.h |  34 ++---
+>  arch/s390/include/asm/termios.h          |   4 +-
+>  arch/sh/include/uapi/asm/ioctls.h        |   1 +
+>  arch/sparc/include/uapi/asm/ioctls.h     |   1 +
+>  arch/sparc/include/uapi/asm/termbits.h   |  38 +++---
+>  arch/xtensa/include/uapi/asm/ioctls.h    |   1 +
+>  drivers/tty/Makefile                     |   2 +-
+>  drivers/tty/n_tty.c                      | 113 +++++++++++-----
+>  drivers/tty/n_tty_status.c               | 162 +++++++++++++++++++++++
+>  drivers/tty/tty_io.c                     |   2 +-
+>  include/asm-generic/termios.h            |   4 +-
+>  include/linux/tty.h                      | 123 ++++++++---------
+>  include/uapi/asm-generic/ioctls.h        |   1 +
+>  include/uapi/asm-generic/termbits.h      |  34 ++---
+>  27 files changed, 461 insertions(+), 222 deletions(-)
+>  create mode 100644 drivers/tty/n_tty_status.c
+> 
+> -- 
+> 2.30.2
+> 
 
-  clang-14: warning: argument unused during compilation: '-mno-branch-likely' [-Wunused-command-line-argument]
+You forgot to cc: me on patch 2/3, which would be needed if I was to
+take them all.
 
-This breaks cc-option, which adds -Werror to make this warning fatal and
-catch flags that are not supported.
+Please fix up patch 2 and resend the whole series.
 
-Wrap this flag in cc-option so that it does not cause cc-option to fail,
-which can cause randconfigs to be really noisy, due to warnings not
-getting disabled that should be.
+thanks,
 
-Additionally, move the cc-option check to Kconfig so that the check is
-done at configuration time, rather than build time, as builds with no
-configuration change will be quicker because the cc-option call will not
-need to happen in those instances.
-
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-v1 -> v2: https://lore.kernel.org/r/20220120214001.1879469-2-nathan@kernel.org/
-
-* Move cc-option call to Kconfig (Nick).
-* Also apply to loongson2ef, even though this will not currently build
-  with clang.
-
- arch/mips/Kconfig              | 4 ++++
- arch/mips/loongson2ef/Platform | 3 ++-
- arch/mips/loongson64/Platform  | 3 ++-
- 3 files changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 058446f01487..da6b3e0501a7 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -3202,6 +3202,10 @@ config MIPS32_N32
- 
- 	  If unsure, say N.
- 
-+config CC_HAS_MNO_BRANCH_LIKELY
-+	def_bool y
-+	depends on $(cc-option,-mno-branch-likely)
-+
- menu "Power management options"
- 
- config ARCH_HIBERNATION_POSSIBLE
-diff --git a/arch/mips/loongson2ef/Platform b/arch/mips/loongson2ef/Platform
-index 50e659aca543..eebabf9df6ac 100644
---- a/arch/mips/loongson2ef/Platform
-+++ b/arch/mips/loongson2ef/Platform
-@@ -41,6 +41,7 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
- # Loongson Machines' Support
- #
- 
--cflags-$(CONFIG_MACH_LOONGSON2EF) += -I$(srctree)/arch/mips/include/asm/mach-loongson2ef -mno-branch-likely
-+cflags-$(CONFIG_MACH_LOONGSON2EF) += -I$(srctree)/arch/mips/include/asm/mach-loongson2ef
-+cflags-$(CONFIG_CC_HAS_MNO_BRANCH_LIKELY) += -mno-branch-likely
- load-$(CONFIG_LEMOTE_FULOONG2E) += 0xffffffff80100000
- load-$(CONFIG_LEMOTE_MACH2F) += 0xffffffff80200000
-diff --git a/arch/mips/loongson64/Platform b/arch/mips/loongson64/Platform
-index f2a08a185ee2..473404cae1c4 100644
---- a/arch/mips/loongson64/Platform
-+++ b/arch/mips/loongson64/Platform
-@@ -18,5 +18,6 @@ cflags-y += $(call cc-option,-mno-loongson-mmi)
- # Loongson Machines' Support
- #
- 
--cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64 -mno-branch-likely
-+cflags-$(CONFIG_MACH_LOONGSON64) += -I$(srctree)/arch/mips/include/asm/mach-loongson64
-+cflags-$(CONFIG_CC_HAS_MNO_BRANCH_LIKELY) += -mno-branch-likely
- load-$(CONFIG_CPU_LOONGSON64) += 0xffffffff80200000
--- 
-2.35.0
-
+greg k-h
