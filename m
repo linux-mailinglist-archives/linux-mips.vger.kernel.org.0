@@ -2,84 +2,81 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1021749E6D8
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Jan 2022 17:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE8549E6F6
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Jan 2022 17:03:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243323AbiA0QBz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 27 Jan 2022 11:01:55 -0500
-Received: from mga04.intel.com ([192.55.52.120]:25457 "EHLO mga04.intel.com"
+        id S235055AbiA0QDb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 27 Jan 2022 11:03:31 -0500
+Received: from mga14.intel.com ([192.55.52.115]:11695 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243322AbiA0QBy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 27 Jan 2022 11:01:54 -0500
+        id S231878AbiA0QDb (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 27 Jan 2022 11:03:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643299314; x=1674835314;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gyBZixaBm40qjjJXVPmiJ75pob0TuT04D30E4HETsXo=;
-  b=AVuFUIJwgrPxo8wX4MvAUkySZ7BNJc7JpyyUy8WFvgFqiCwyL5sFTuLZ
-   HrXpidAXTxCSJNQEB6u4NtOkiz95M5Epk6mQbOfWs0jTfFlkfQClPlNg0
-   SZYyHOyV2Ox3vzUeiHiyXaz5PjihHiLpBMs6bTY6HL1RHgg/vIWIexhM0
-   Tq4RgeVJhlF3vtPivbLmeBLE3dYT7MehN9KkjFsSfnvnS2X5CKVOkEdiU
-   F6Q22oUiYzsSn+yxqiJNHfZqcwq7C6aA63gQh/5DA7xJk0PZF0Lhjg8O1
-   6aot2J81lpVre5loqTtaN/q1SY8hUZaUM6z+iwQLDBjYeskcwIeau9tno
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="245735788"
+  t=1643299411; x=1674835411;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fYgwz2CYUy6X9S8wKDbHet3nwY1aK+DlV0isQZe8FzU=;
+  b=MGEqaQ8f4bF2ELxBl3gwHZTkDi5Pah+X2jUrecPiupoGvnB4vBpGaxk9
+   YooiMuzy5bSxqmPSV8kooyi0Sbms5+dxn6KhEqFJ3aUhGW0W2b7oJSTVB
+   nRqCz/h+E0+2Fy7sgYdUWGXJ0GQp4e4zXG7iGbjeAa1wsnfDG8202RNBX
+   9lR45WocQA0/AApSASOCOquKiUBdZHQ5njRIPgEqBwQYXe0WMKX3uyhIW
+   SarOJNOffwul2ef9ta4ArBw29iKBvFJLkMmOvjGz+CzzMXmkKlGP8eaVG
+   jpqSNlqzsRNt7Z8nqjV0IZaVFngYttWDrTotek3Mrc5ug6N4bA/QCeUvq
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10239"; a="247114531"
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="245735788"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:01:44 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="247114531"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:03:12 -0800
 X-IronPort-AV: E=Sophos;i="5.88,321,1635231600"; 
-   d="scan'208";a="563833241"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 27 Jan 2022 08:01:42 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id C5CBD167; Thu, 27 Jan 2022 18:01:55 +0200 (EET)
+   d="scan'208";a="628738405"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2022 08:03:10 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nD7Dp-00F2AV-6f;
+        Thu, 27 Jan 2022 18:02:05 +0200
+Date:   Thu, 27 Jan 2022 18:02:04 +0200
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Allen Pais <apais@linux.microsoft.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] firmware: tee_bnxt: Use UUID API for exporting the UUID
-Date:   Thu, 27 Jan 2022 18:01:50 +0200
-Message-Id: <20220127160150.48140-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        linux-mips@vger.kernel.org, Vikas Gupta <vikas.gupta@broadcom.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        tee-dev@lists.linaro.org
+Subject: Re: [RESEND PATCH v1] firmware: tee_bnxt: Use UUID API for exporting
+ the UUID
+Message-ID: <YfLB/Jw9MHUJ+Ocq@smile.fi.intel.com>
+References: <20210121183741.45333-1-andriy.shevchenko@linux.intel.com>
+ <Ybeu5wWyw8E4vIVb@smile.fi.intel.com>
+ <YbevI+Jg/aoKH8uW@smile.fi.intel.com>
+ <20220104092406.GA18693@lst.de>
+ <YdROnjYXefJfo8jp@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdROnjYXefJfo8jp@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There is export_uuid() function which exports uuid_t to the u8 array.
-Use it instead of open coding variant.
+On Tue, Jan 04, 2022 at 03:41:51PM +0200, Andy Shevchenko wrote:
+> On Tue, Jan 04, 2022 at 10:24:06AM +0100, Christoph Hellwig wrote:
+> > On Mon, Dec 13, 2021 at 10:37:55PM +0200, Andy Shevchenko wrote:
+> > > + Cc: Christoph. Maybe you can apply this one, please?
+> > 
+> > I've not even seen the original patch.
+> 
+> It's easy to retrieve with b4 tool:
+> `b4 am -s 20210121183741.45333-1-andriy.shevchenko@linux.intel.com`
+> 
+> But for your convenience I may resend once more with you being Cc'ed.
 
-This allows to hide the uuid_t internals.
+Just sent a v2 which is basically the same :-)
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-
-v2: resent with Cc to Christoph since the original maintainers are
-    non-responsive for mare than a year (previous resent was dated
-    2021-01-21).
-
- drivers/firmware/broadcom/tee_bnxt_fw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
-index a5bf4c3f6dc7..40e3183a3d11 100644
---- a/drivers/firmware/broadcom/tee_bnxt_fw.c
-+++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
-@@ -197,7 +197,7 @@ static int tee_bnxt_fw_probe(struct device *dev)
- 		return -ENODEV;
- 
- 	/* Open session with Bnxt load Trusted App */
--	memcpy(sess_arg.uuid, bnxt_device->id.uuid.b, TEE_IOCTL_UUID_LEN);
-+	export_uuid(sess_arg.uuid, &bnxt_device->id.uuid);
- 	sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
- 	sess_arg.num_params = 0;
- 
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
