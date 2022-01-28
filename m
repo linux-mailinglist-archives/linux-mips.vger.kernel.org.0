@@ -2,67 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BF049FFA3
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Jan 2022 18:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1874A041B
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jan 2022 00:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344064AbiA1RgG (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 28 Jan 2022 12:36:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350499AbiA1RgE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 28 Jan 2022 12:36:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B546C061751;
-        Fri, 28 Jan 2022 09:36:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D80DDB82656;
-        Fri, 28 Jan 2022 17:36:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F503C340E6;
-        Fri, 28 Jan 2022 17:36:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643391360;
-        bh=WQZ/mWm2lpWMiUPo+FywdX/Py8CIb0JBXrJutwPyRdc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=nDD6nHiZr6bBSDWbKtUaJi2TncYHmrMYlYP0JHxyfXPPTSRyiQHRuO3KtkTrKyWJq
-         TtlrDTOZ14njaharm4snitjZbsdSR13GknmZmJNi7w264VHJTtA0RkFrUzYxpPbY7m
-         ApOAdhPKbHRhuDdJZvn/Niko+uoog7ya05CuKfdOZsJOQBRc0GUw9TiCUjKNgg/59o
-         o6pWukCiIDf4XFV+2YtzN6lTt0L0fLgIzFbCSGsfnxGPMhqpA6P5ss2mZ9O4oraxbT
-         lasDLzwhiTjhQAKl1zVC8BOLqkkanMuIzKXXO7B/N6F209qdQ7UUoIhkHOfvE/2dKU
-         a7K2l3UvSgjGg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3C74DF6079F;
-        Fri, 28 Jan 2022 17:36:00 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220128133345.GA10829@alpha.franken.de>
-References: <20220128133345.GA10829@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220128133345.GA10829@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_1
-X-PR-Tracked-Commit-Id: fa62f39dc7e25fc16371b958ac59b9a6fd260bea
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e0152705e4630b4a6ae8eb716aa44ed5a90054ea
-Message-Id: <164339136024.16649.5575093232445715999.pr-tracker-bot@kernel.org>
-Date:   Fri, 28 Jan 2022 17:36:00 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S1345308AbiA1XKI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 28 Jan 2022 18:10:08 -0500
+Received: from mout.gmx.net ([212.227.15.19]:52127 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344400AbiA1XKH (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 28 Jan 2022 18:10:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1643411401;
+        bh=YkOgAasWKFL5PqtYuaKrziNPA6t6TWtBGIK2VpojFBc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=NeQc2ECq2cHbOnMXrFqejqxN/NKTFpRX+cKNFon3hcPl949QQqGWVYo4m1hZ9/fyB
+         MrvcIMJZHPjFgcsQki2e/N+s+F72jTRgutb/BnI33duHgmnFRRDzfT1h1TfQd6Sqe0
+         q4ad6Xo/nOX2L1+rd3ZlG70gKUtkzetLruJzGL/k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([89.0.80.162]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M7sDg-1n9iV12kUc-0050it; Sat, 29
+ Jan 2022 00:10:01 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH 2/4] clk: loongson1: Terminate clk_div_table with sentinel element
+Date:   Sat, 29 Jan 2022 00:09:20 +0100
+Message-Id: <20220128230922.2047140-3-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220128230922.2047140-1-j.neuschaefer@gmx.net>
+References: <20220128230922.2047140-1-j.neuschaefer@gmx.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:nZ8SJq7BpTEcPnWOM9Te0gkmF9e9dOoAILUHTJNguPc7Cnm2RHV
+ O6GUWmUGaAbvxy+K7YZl5sWP0MjdV6Xhl1TSew/MYhEAEmNZtNfy/XFHJWFGlGMlIYQEt1S
+ 5HqmtxNaRvgIGiT0PM1Fs0SLFY432NiA68lQB7hAWnzolA3GMZcO3hlCgMZB91VgDLvgpZN
+ tjNSR6nWwfL0MUH3KjOBw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yao6eQGl4PM=:eCZ3r7lvohoK7z/DrboGgN
+ FQmgyNEGsQ7zCH+uXNy74kQVHGOUyefs9QbM2Or2oxbXWQ84oXNPq0+jasQ2Tv1HzrIqLmxT6
+ Ce3LlyVmiUoYP/i+oS0bTq7sc1vRXs5X/dJ1lsVzhcFraETxQd8JxAT9AbL9G95+DSCBmZb5V
+ HRVIav7jqNGjlcK+3/e9ihgVm1VCRZSqAUOw71htg8JFOflJMIPiA1Dyf9z2mcjTb1XRHOfsu
+ 2RO/xryeg9xZdU6cLHGLz03CEMo3JAffS/HvnneXggPyRuDLsBIRGYLX6g/a+zsfatM7fXj9O
+ W7BKlTJISF7EyllHlBJ8nHPp0/ZuCWB3ZUYcehX8qog25vPWzLXNzkX2pDWSqkVNbxtMTmgw/
+ 6QJc1Q5XQb1nr31jy0Bs1imumR9p7VEtIZWB75IWEj4Yhw6vk2tTRxdS4NSguUksqU+UIBsd/
+ tF346EqQWheWZ+6a+BA5DH8bWZ23zSZ4a+RQd26vFOpwO9eWCkn1Qer0FeVO76pqteRenRhsd
+ v+13sHdY/1gFaQk+epiMRc7ikU4lPyE9St/RXa5LFAl8eq06nssH4Vw7j8SfLon33XxBkCapc
+ TBSJ34hBk6NtD299fOfNDvhXvMkYge3r2atUdLQURUHdvR4hN62UXjcL+mr/gfVR4+LVp/ZnI
+ CwV4aI2nRAe80lv027NUr+3hBSakX1wnzPwRc/TLPxQaZgcVsPgMNP4uUWuxJC3qHzzUCgxBS
+ DAmnAxxeLmT4F6hCdwAsYYSKp/4dXGjgTSL8sDcvXpYxyfn/ViSoOO5fr2yDvxfQot8WA1tlH
+ lAFJfKmGU1bNIeO0W5tzLGv44qC38IEeX1c3FddSHsZPWFf+2Tm3P82j565qASdPK4987qy0L
+ D4c1mpmL86FzfVq51m3aX60xlgXthNUwK+/WVdNUY8qYrx7l5NDCvBqGZnUIAcCJxPB2MC7F4
+ T58s27HK1WG6e/P+ZAzLMJEy02Y6Ax/tpX2pep7cxLQH6i3U/B4Lcv0UNBvYOFM3qtSWKSsIc
+ aMQx6QlEGzNj/FdZl96aYY1uusS5NXXgFkKhOdin/T3A5EOtj2fS486fldWN6Lm134YHe0EYC
+ Tn6NHSTBHJT3nc=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Fri, 28 Jan 2022 14:33:45 +0100:
+In order that the end of a clk_div_table can be detected, it must be
+terminated with a sentinel element (.div =3D 0).
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_1
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/clk/loongson1/clk-loongson1c.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e0152705e4630b4a6ae8eb716aa44ed5a90054ea
+diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson=
+1/clk-loongson1c.c
+index 703f87622cf5f..6b29ae9ede3e5 100644
+=2D-- a/drivers/clk/loongson1/clk-loongson1c.c
++++ b/drivers/clk/loongson1/clk-loongson1c.c
+@@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] =3D {
+ 	[1] =3D { .val =3D 1, .div =3D 4 },
+ 	[2] =3D { .val =3D 2, .div =3D 3 },
+ 	[3] =3D { .val =3D 3, .div =3D 3 },
++	[4] =3D { .val =3D 0, .div =3D 0 },
+ };
 
-Thank you!
+ void __init ls1x_clk_init(void)
+=2D-
+2.34.1
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
