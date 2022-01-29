@@ -2,744 +2,455 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7144A2E39
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jan 2022 12:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D054A2EC9
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jan 2022 13:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237468AbiA2LbT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jan 2022 06:31:19 -0500
-Received: from pio-pvt-msa1.bahnhof.se ([79.136.2.40]:52506 "EHLO
-        pio-pvt-msa1.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235093AbiA2LbS (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jan 2022 06:31:18 -0500
-X-Greylist: delayed 485 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Jan 2022 06:31:17 EST
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id E30513F5BA;
-        Sat, 29 Jan 2022 12:23:10 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -1.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 tagged_above=-999 required=6.31
-        tests=[BAYES_00=-1.9, NO_RELAYS=-0.001, URIBL_BLOCKED=0.001]
-        autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YEnBGlYHaRGx; Sat, 29 Jan 2022 12:23:09 +0100 (CET)
-Received: by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id 773F63F3AC;
-        Sat, 29 Jan 2022 12:23:06 +0100 (CET)
-Date:   Sat, 29 Jan 2022 12:23:06 +0100
-From:   Fredrik Noring <noring@nocrew.org>
-To:     linux-mips@vger.kernel.org, Helge Deller <deller@gmx.de>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: Re: [PATCH 094/120] MIPS: PS2: FB: Frame buffer driver for the
- PlayStation 2
-Message-ID: <YfUjmpjWD8C5b4iP@sx9>
-References: <cover.1567326213.git.noring@nocrew.org>
- <4927c42fb3401c42c4c5a077f272331ac79d80b1.1567326213.git.noring@nocrew.org>
+        id S244304AbiA2MRs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jan 2022 07:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243013AbiA2MRs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jan 2022 07:17:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BD6C061714;
+        Sat, 29 Jan 2022 04:17:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A16B60C01;
+        Sat, 29 Jan 2022 12:17:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C83C340E5;
+        Sat, 29 Jan 2022 12:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643458666;
+        bh=1V5SPry45jhLFLIRDrwSgC+15hlSu0+/FkI3wHQCPK4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZcUrbfXdOg1CgiL/OF5ohloeAv5KEUiA/bsNmP5POVBElyD5mxLIHO/kvoLcG/sF1
+         QSmp655jjGvRSgw6GovLvgsXgPEFADg8xqhDOO34Fp5vJRe4af8dtaZ3TToNH06Wzv
+         Two6ZDRw+CTnZ22u5iCUO1wiPScA4FJu6b8xcnZs6a2/foJu+ZxUfBtyVF6ztHBr3Y
+         2cHMjVWaXnrm2kKEGRZDHrv8edIxSeGZ7u4RsF3ZA27mhwUk9CcNaKQEEbG4Trp6PA
+         TXuPWJCm+7IrlbcHJtW6sxpR0L0DVV0g3IcIFXQTQlibSbW6QStFbrsppDgdLdFM0x
+         6h7bQifrGZlWw==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        anup@brainfault.org, gregkh@linuxfoundation.org,
+        liush@allwinnertech.com, wefu@redhat.com, drew@beagleboard.org,
+        wangjunqiang@iscas.ac.cn, hch@lst.de, hch@infradead.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V4 00/17] riscv: compat: Add COMPAT mode support for rv64
+Date:   Sat, 29 Jan 2022 20:17:11 +0800
+Message-Id: <20220129121728.1079364-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4927c42fb3401c42c4c5a077f272331ac79d80b1.1567326213.git.noring@nocrew.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Helge,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Thank you for maintaining fbdev! The PlayStation 2 port makes heavy use of
-it and its acceleration features[1], including tiling operations:
+Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
+s390, mips, sparc) have supported COMPAT mode. But they all have
+history issues and can't use standard linux unistd.h. RISC-V would
+be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
+/unistd.h.
 
-	info->flags = FBINFO_DEFAULT |
-		      FBINFO_HWACCEL_COPYAREA |
-		      FBINFO_HWACCEL_FILLRECT |
-		      FBINFO_HWACCEL_IMAGEBLIT |
-		      FBINFO_HWACCEL_XPAN |
-		      FBINFO_HWACCEL_YPAN |
-		      FBINFO_HWACCEL_YWRAP |
-		      FBINFO_PARTIAL_PAN_OK |
-		      FBINFO_READS_FAST;
+The patchset are based on v5.17-rc1, you can compare rv64-compat32
+v.s. rv32-whole in qemu with following step:
 
-	info->flags |= FBINFO_MISC_TILEBLITTING;
-	info->tileops = &tileops;
+ - Prepare rv32 rootfs & fw_jump.bin by buildroot.org
+   $ git clone git://git.busybox.net/buildroot
+   $ cd buildroot
+   $ make qemu_riscv32_virt_defconfig O=qemu_riscv32_virt_defconfig
+   $ make -C qemu_riscv32_virt_defconfig
+   $ make qemu_riscv64_virt_defconfig O=qemu_riscv64_virt_defconfig
+   $ make -C qemu_riscv64_virt_defconfig
+   (Got fw_jump.bin & rootfs.ext2 in qemu_riscvXX_virt_defconfig/images)
 
-I attempted a DRM port[2], but my impression is that the DRM subsystem has
-grave problems in that
+ - Prepare Linux rv32 & rv64 Image
+   $ git clone git@github.com:c-sky/csky-linux.git -b riscv_compat_v4 linux
+   $ cd linux
+   $ echo "CONFIG_STRICT_KERNEL_RWX=n" >> arch/riscv/configs/defconfig
+   $ echo "CONFIG_STRICT_MODULE_RWX=n" >> arch/riscv/configs/defconfig
+   $ make ARCH=riscv CROSS_COMPILE=riscv32-buildroot-linux-gnu- O=../build-rv32/ rv32_defconfig
+   $ make ARCH=riscv CROSS_COMPILE=riscv32-buildroot-linux-gnu- O=../build-rv32/ Image
+   $ make ARCH=riscv CROSS_COMPILE=riscv64-buildroot-linux-gnu- O=../build-rv64/ defconfig
+   $ make ARCH=riscv CROSS_COMPILE=riscv64-buildroot-linux-gnu- O=../build-rv64/ Image
 
-- fbset command timing mode settings are ignored;
-- attempts to set modes with /sys/class/graphics/fb0/mode are ignored;
-- /sys/class/graphics/fb0/modes outputs incorrect refresh rates and types;
-- relevant modes are missing in /sys/class/graphics/fb0/modes;
-- the standard DRM video modes seem to mix up the sync and front porch
-  timings in struct drm_display_mode but this remains to be confirmed;
-- the DRM seems to rely heavily on EDID to negotiate a video resolution,
-  but EDID isn't available with vintage analogue display hardware.
+ - Prepare Qemu: (made by LIU Zhiwei <zhiwei_liu@c-sky.com>)
+   $ git clone git@github.com:alistair23/qemu.git -b riscv-to-apply.for-upstream linux
+   $ cd qemu
+   $ ./configure --target-list="riscv64-softmmu riscv32-softmmu"
+   $ make
 
-This is only for a (fast and efficient) text console.
+ - Run rv64 with rv32 rootfs in compat mode:
+   $ ./build/qemu-system-riscv64 -cpu rv64,x-h=true -M virt -m 64m -nographic -bios qemu_riscv64_virt_defconfig/images/fw_jump.bin -kernel build-rv64/Image -drive file qemu_riscv32_virt_defconfig/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -append "rootwait root=/dev/vda ro console=ttyS0 earlycon=sbi" -netdev user,id=net0 -device virtio-net-device,netdev=net0
 
-My impression is also that the DRM wouldn't do more than displaying a text
-console, and perhaps an inefficient virtual frame buffer, due to the nature
-of the Graphics Synthesizer hardware. The complete set of features of the
-Graphics Synthesizer, and related vector and image processors, seem to go
-beyond what the DRM subsystem can offer in its current form. I admit that
-there may possibilities that I haven't seen yet, though. :-)
+QEMU emulator version 6.2.50 (v6.2.0-29-g196d7182c8)
+OpenSBI v0.9
+[    0.000000] Linux version 5.16.0-rc6-00017-g750f87086bdd-dirty (guoren@guoren-Z87-HD3) (riscv64-unknown-linux-gnu-gcc (GCC) 10.2.0, GNU ld (GNU Binutils) 2.37) #96 SMP Tue Dec 28 21:01:55 CST 2021
+[    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+[    0.000000] Machine model: riscv-virtio,qemu
+[    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
+[    0.000000] printk: bootconsole [sbi0] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] Zone ranges:
+[    0.000000]   DMA32    [mem 0x0000000080200000-0x0000000083ffffff]
+[    0.000000]   Normal   empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080200000-0x0000000083ffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080200000-0x0000000083ffffff]
+[    0.000000] SBI specification v0.2 detected
+[    0.000000] SBI implementation ID=0x1 Version=0x9
+[    0.000000] SBI TIME extension detected
+[    0.000000] SBI IPI extension detected
+[    0.000000] SBI RFENCE extension detected
+[    0.000000] SBI v0.2 HSM extension detected
+[    0.000000] riscv: ISA extensions acdfhimsu
+[    0.000000] riscv: ELF capabilities acdfim
+[    0.000000] percpu: Embedded 17 pages/cpu s30696 r8192 d30744 u69632
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 15655
+[    0.000000] Kernel command line: rootwait root=/dev/vda ro console=ttyS0 earlycon=sbi
+[    0.000000] Dentry cache hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Virtual kernel memory layout:
+[    0.000000]       fixmap : 0xffffffcefee00000 - 0xffffffceff000000   (2048 kB)
+[    0.000000]       pci io : 0xffffffceff000000 - 0xffffffcf00000000   (  16 MB)
+[    0.000000]      vmemmap : 0xffffffcf00000000 - 0xffffffcfffffffff   (4095 MB)
+[    0.000000]      vmalloc : 0xffffffd000000000 - 0xffffffdfffffffff   (65535 MB)
+[    0.000000]       lowmem : 0xffffffe000000000 - 0xffffffe003e00000   (  62 MB)
+[    0.000000]       kernel : 0xffffffff80000000 - 0xffffffffffffffff   (2047 MB)
+[    0.000000] Memory: 52788K/63488K available (6184K kernel code, 888K rwdata, 1917K rodata, 294K init, 297K bss, 10700K reserved, 0K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] rcu: Hierarchical RCU implementation.
+[    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=1.
+[    0.000000] rcu:     RCU debug extended QS entry/exit.
+[    0.000000]  Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] riscv-intc: 64 local interrupts mapped
+[    0.000000] plic: plic@c000000: mapped 53 interrupts with 1 handlers for 2 contexts.
+...
+Welcome to Buildroot
+buildroot login: root
+# cat /proc/cpuinfo
+processor       : 0
+hart            : 0
+isa             : rv64imafdcsuh
+mmu             : sv48
 
-Some background on the Graphics Synthesizer can be found in [3], as well
-as in official documentation[4][5]. Many of its command primitives are
-defined in [6][7], and there is more to it with the data paths from
-various co-processors, etc.
+# file /bin/busybox
+/bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
+# ca[   78.386630] random: fast init done
+# cat /proc/meminfo
+MemTotal:          53076 kB
+MemFree:           40264 kB
+MemAvailable:      40244 kB
+Buffers:             236 kB
+Cached:             1560 kB
+SwapCached:            0 kB
+Active:             1700 kB
+Inactive:            516 kB
+Active(anon):         40 kB
+Inactive(anon):      424 kB
+Active(file):       1660 kB
+Inactive(file):       92 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:                 0 kB
+Writeback:             0 kB
+AnonPages:           444 kB
+Mapped:             1188 kB
+Shmem:                44 kB
+KReclaimable:        952 kB
+Slab:               5744 kB
+SReclaimable:        952 kB
+SUnreclaim:         4792 kB
+KernelStack:         624 kB
+PageTables:          156 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:       26536 kB
+Committed_AS:       1748 kB
+VmallocTotal:   67108863 kB
+VmallocUsed:         652 kB
+VmallocChunk:          0 kB
+Percpu:               80 kB
+#
 
-Note: The fbdev patch below was, at the time, submitted in a series of
-18 patches related to fbdev for PlayStation 2. See the complete ps2fb.c[1].
+ - Run rv32 with rv32 rootfs:
+   $ ./build/qemu-system-riscv32 -cpu rv32,x-h=true -M virt -m 64m -nographic -bios qemu_riscv32_virt_defconfig/images/fw_jump.bin -kernel build-rv32/Image -drive file qemu_riscv32_virt_defconfig/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -append "rootwait root=/dev/vda ro console=ttyS0 earlycon=sbi" -netdev user,id=net0 -device virtio-net-device,netdev=net0
 
-References:
+QEMU emulator version 6.2.50 (v6.2.0-29-g196d7182c8)
+OpenSBI v0.9
+[    0.000000] Linux version 5.16.0-rc6-00017-g750f87086bdd-dirty (guoren@guoren-Z87-HD3) (riscv32-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.11-201-g7600ca7960-dirty) 10.3.0, GNU ld (GNU Binutils) 2.36.1) #7 SMP Tue Dec 28 21:02:21 CST 2021
+[    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80400000
+[    0.000000] Machine model: riscv-virtio,qemu
+[    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
+[    0.000000] printk: bootconsole [sbi0] enabled
+[    0.000000] efi: UEFI not found.
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000080400000-0x0000000083ffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080400000-0x0000000083ffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080400000-0x0000000083ffffff]
+[    0.000000] SBI specification v0.2 detected
+[    0.000000] SBI implementation ID=0x1 Version=0x9
+[    0.000000] SBI TIME extension detected
+[    0.000000] SBI IPI extension detected
+[    0.000000] SBI RFENCE extension detected
+[    0.000000] SBI v0.2 HSM extension detected
+[    0.000000] riscv: ISA extensions acdfhimsu
+[    0.000000] riscv: ELF capabilities acdfim
+[    0.000000] percpu: Embedded 12 pages/cpu s16600 r8192 d24360 u49152
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 15240
+[    0.000000] Kernel command line: rootwait root=/dev/vda ro console=ttyS0 earlycon=sbi
+[    0.000000] Dentry cache hash table entries: 8192 (order: 3, 32768 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Virtual kernel memory layout:
+[    0.000000]       fixmap : 0x9dc00000 - 0x9e000000   (4096 kB)
+[    0.000000]       pci io : 0x9e000000 - 0x9f000000   (  16 MB)
+[    0.000000]      vmemmap : 0x9f000000 - 0x9fffffff   (  15 MB)
+[    0.000000]      vmalloc : 0xa0000000 - 0xbfffffff   ( 511 MB)
+[    0.000000]       lowmem : 0xc0000000 - 0xc3c00000   (  60 MB)
+[    0.000000] Memory: 51924K/61440K available (6117K kernel code, 695K rwdata, 1594K rodata, 255K init, 241K bss, 9516K reserved, 0K cma-reserved)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] rcu: Hierarchical RCU implementation.
+[    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=1.
+[    0.000000] rcu:     RCU debug extended QS entry/exit.
+[    0.000000]  Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000] riscv-intc: 32 local interrupts mapped
+[    0.000000] plic: plic@c000000: mapped 53 interrupts with 1 handlers for 2 contexts.
+...
+Welcome to Buildroot
+buildroot login: root
+# cat /proc/cpuinfo
+processor       : 0
+hart            : 0
+isa             : rv32imafdcsuh
+mmu             : sv32
 
-[1] https://github.com/frno7/linux/blob/ps2-main/drivers/video/fbdev/ps2fb.c
-[2] https://github.com/frno7/linux/tree/ps2-main/drivers/gpu/drm/gs
-[3] https://github.com/frno7/linux/wiki/The-Graphics-Synthesizer
-[4] EE User's Manual, version 6.0, Sony Computer Entertainment Inc.
-[5] GS User's Manual, version 6.0, Sony Computer Entertainment Inc.
-[6] https://github.com/frno7/linux/blob/ps2-main/arch/mips/include/uapi/asm/gs.h
-[7] https://github.com/frno7/linux/blob/ps2-main/arch/mips/include/uapi/asm/gif.h
+# file /bin/busybox
+/bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
+[   79.320589] random: fast init done
+# cat /proc/meminfo
+MemTotal:          52176 kB
+MemFree:           41012 kB
+MemAvailable:      42176 kB
+Buffers:             644 kB
+Cached:             2724 kB
+SwapCached:            0 kB
+Active:             3128 kB
+Inactive:            752 kB
+Active(anon):         40 kB
+Inactive(anon):      516 kB
+Active(file):       3088 kB
+Inactive(file):      236 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:                 4 kB
+Writeback:             0 kB
+AnonPages:           556 kB
+Mapped:             2172 kB
+Shmem:                44 kB
+KReclaimable:        656 kB
+Slab:               3684 kB
+SReclaimable:        656 kB
+SUnreclaim:         3028 kB
+KernelStack:         312 kB
+PageTables:           88 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:       26088 kB
+Committed_AS:       2088 kB
+VmallocTotal:     524287 kB
+VmallocUsed:          12 kB
+VmallocChunk:          0 kB
+Percpu:               60 kB
+#
 
-Fredrik
+ Some conclusions:
+ - kernel statics:
+   64: Memory: 52788K/63488K available (6184K kernel code, 888K rwdata, 1917K rodata, 294K init, 297K bss, 10700K reserved)
+   32: Memory: 51924K/61440K available (6117K kernel code, 695K rwdata, 1594K rodata, 255K init, 241K bss,  9516K reserved)
+   rv32 better than rv64:                  1%               22%           17%          13%        19%         11%
+   The code size is very similar, but data size rv32 would be better.
 
-On Sunday, 1 September 2019, Fredrik Noring wrote:
-> The main limitation is the lack of mmap, since the Graphics Synthesizer
-> has local frame buffer memory that is not directly accessible from the
-> main bus. The GS has 4 MiB of local memory.
-> 
-> The console drawing primitives are synchronous to allow printk at any
-> time. This is highly useful for debugging but it is not the fastest
-> possible implementation. The console is nevertheless very fast and
-> makes use of several hardware accelerated features of the Graphics
-> Synthesizer.
-> 
-> The maximum practical resolution is 1920x1080p at 16 bits per pixel that
-> requires 4147200 bytes of local memory, leaving 47104 bytes for a tiled
-> font, which at 8x8 pixels and a minimum 4 bits indexed texture palette is
-> at most 1464 characters. The indexed palette makes switching colours easy.
-> &struct fb_tile_ops is accelerated with GS texture sprites that are fast
-> (GS local copy) for the kernel via simple DMA GS commands via the GIF.
-> 
-> Signed-off-by: Fredrik Noring <noring@nocrew.org>
-> ---
->  drivers/video/fbdev/Kconfig    |  12 +
->  drivers/video/fbdev/Makefile   |   1 +
->  drivers/video/fbdev/ps2fb.c    | 533 +++++++++++++++++++++++++++++++++
->  include/linux/console_struct.h |   2 +
->  include/uapi/linux/fb.h        |   1 +
->  5 files changed, 549 insertions(+)
->  create mode 100644 drivers/video/fbdev/ps2fb.c
-> 
-> diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
-> index 6b2de93bd302..cc93cbd67b01 100644
-> --- a/drivers/video/fbdev/Kconfig
-> +++ b/drivers/video/fbdev/Kconfig
-> @@ -1999,6 +1999,18 @@ config FB_IBM_GXT4500
->  	  doesn't use Geometry Engine GT1000. This driver also supports
->  	  AGP Fire GL2/3/4 cards on x86.
->  
-> +# FIXME FB_SYS_*
-> +config FB_PS2
-> +	tristate "Frame buffer driver for Sony Playstation 2"
-> +	depends on FB && SONY_PS2
-> +	select PS2_GS
-> +	select FB_TILEBLITTING
-> +	default y
-> +	help
-> +	  Frame buffer driver for the Sony Playstation 2 Graphics Synthesizer.
-> +	  Memory mapping is not supported since the frame buffer is local to
-> +	  the GS.
-> +
->  config FB_PS3
->  	tristate "PS3 GPU framebuffer driver"
->  	depends on FB && PS3_PS3AV
-> diff --git a/drivers/video/fbdev/Makefile b/drivers/video/fbdev/Makefile
-> index 7dc4861a93e6..1e55fa8ca4af 100644
-> --- a/drivers/video/fbdev/Makefile
-> +++ b/drivers/video/fbdev/Makefile
-> @@ -105,6 +105,7 @@ obj-$(CONFIG_FB_S3C2410)	  += s3c2410fb.o
->  obj-$(CONFIG_FB_FSL_DIU)	  += fsl-diu-fb.o
->  obj-$(CONFIG_FB_COBALT)           += cobalt_lcdfb.o
->  obj-$(CONFIG_FB_IBM_GXT4500)	  += gxt4500.o
-> +obj-$(CONFIG_FB_PS2)		  += ps2fb.o
->  obj-$(CONFIG_FB_PS3)		  += ps3fb.o
->  obj-$(CONFIG_FB_SM501)            += sm501fb.o
->  obj-$(CONFIG_FB_UDL)		  += udlfb.o
-> diff --git a/drivers/video/fbdev/ps2fb.c b/drivers/video/fbdev/ps2fb.c
-> new file mode 100644
-> index 000000000000..7bfbc3c2aa4d
-> --- /dev/null
-> +++ b/drivers/video/fbdev/ps2fb.c
-> @@ -0,0 +1,533 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * PlayStation 2 frame buffer driver
-> + *
-> + * Copyright (C) 2019 Fredrik Noring
-> + */
-> +
-> +/**
-> + * DOC: The PlayStation 2 frame buffer console
-> + *
-> + * The frame buffer supports a tiled frame buffer console. The main limitation
-> + * is the lack of memory mapping (mmap), since the Graphics Synthesizer has
-> + * local frame buffer memory that is not directly accessible from the main bus.
-> + * The GS has 4 MiB of local memory.
-> + *
-> + * The console drawing primitives are synchronous to allow printk at any time.
-> + * This is highly useful for debugging but it is not the fastest possible
-> + * implementation. The console is nevertheless very fast and makes use of
-> + * several hardware accelerated features of the Graphics Synthesizer.
-> + *
-> + * The maximum practical resolution is 1920x1080p at 16 bits per pixel that
-> + * requires 4147200 bytes of local memory, leaving 47104 bytes for a tiled
-> + * font, which at 8x8 pixels and a minimum 4 bits indexed texture palette is
-> + * at most 1464 characters. The indexed palette makes switching colours easy.
-> + * &struct fb_tile_ops is accelerated with GS texture sprites that are fast
-> + * (GS local copy) for the kernel via simple DMA GS commands via the GIF.
-> + *
-> + * The local memory is organised as follows: first comes the display buffer,
-> + * then one block of a palette, and finally the font installed as a texture.
-> + *
-> + * All frame buffer transmissions are done by DMA via GIF PATH3.
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/delay.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/errno.h>
-> +#include <linux/fb.h>
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mm.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/string.h>
-> +#include <linux/uaccess.h>
-> +
-> +#include <asm/io.h>
-> +
-> +#include <asm/mach-ps2/dmac.h>
-> +#include <asm/mach-ps2/gif.h>
-> +#include <asm/mach-ps2/gs.h>
-> +#include <asm/mach-ps2/gs-registers.h>
-> +
-> +#include <uapi/asm/gif.h>
-> +#include <uapi/asm/gs.h>
-> +
-> +#define DEVICE_NAME "ps2fb"
-> +
-> +#define PALETTE_BLOCK_COUNT 1	/* One block is used for the indexed colors */
-> +
-> +/* Module parameters */
-> +static char *mode_option;
-> +
-> +union package {
-> +	union gif_data gif;
-> +	struct dma_tag dma;
-> +};
-> +
-> +/**
-> + * struct tile_texture - texture representing a tile
-> + * @tbp: texture base pointer
-> + * @u: texel u coordinate (x coordinate)
-> + * @v: texel v coordinate (y coordinate)
-> + */
-> +struct tile_texture {
-> +	u32 tbp;
-> +	u32 u;
-> +	u32 v;
-> +};
-> +
-> +/**
-> + * struct console_buffer - console buffer
-> + * @block_count: number of frame buffer blocks
-> + * @bg: background color index
-> + * @fg: foreground color index
-> + * @tile: tile dimensions
-> + * @tile.width: width in pixels
-> + * @tile.height: height in pixels
-> + * @tile.width2: least width in pixels, power of 2
-> + * @tile.height2: least height in pixels, power of 2
-> + * @tile.block: tiles are stored as textures in the PSMT4 pixel storage format
-> + * 	with both cols and rows as powers of 2
-> + * @tile.block.cols: tile columns per GS block
-> + * @tile.block.rows: tile rows per GS block
-> + */
-> +struct console_buffer {
-> +	u32 block_count;
-> +
-> +	u32 bg;
-> +	u32 fg;
-> +
-> +	struct cb_tile {
-> +		u32 width;
-> +		u32 height;
-> +
-> +		u32 width2;
-> +		u32 height2;
-> +
-> +		struct {
-> +			u32 cols;
-> +			u32 rows;
-> +		} block;
-> +	} tile;
-> +};
-> +
-> +/**
-> + * struct ps2fb_par - driver specific structure
-> + * @lock: spin lock to be taken for all structure operations
-> + * @cb: console buffer definition
-> + * @package: tags and datafor the GIF
-> + * @package.capacity: maximum number of GIF packages in 16-byte unit
-> + * @package.buffer: DMA buffer for GIF packages
-> + */
-> +struct ps2fb_par {
-> +	spinlock_t lock;
-> +
-> +	struct console_buffer cb;
-> +
-> +	struct {
-> +		size_t capacity;
-> +		union package *buffer;
-> +	} package;
-> +};
-> +
-> +/**
-> + * texture_least_power_of_2 - round up to a power of 2, not less than 8
-> + * @n: integer to round up
-> + *
-> + * Return: least integer that is a power of 2 and not less than @n or 8
-> + */
-> +static u32 texture_least_power_of_2(u32 n)
-> +{
-> +	return max(1 << get_count_order(n), 8);
-> +}
-> +
-> +/**
-> + * cb_tile - create a console buffer tile object
-> + * @width: width of tile in pixels
-> + * @height: height of tile in pixels
-> + *
-> + * Return: a console buffer tile object with the given width and height
-> + */
-> +static struct cb_tile cb_tile(u32 width, u32 height)
-> +{
-> +	const u32 width2 = texture_least_power_of_2(width);
-> +	const u32 height2 = texture_least_power_of_2(height);
-> +
-> +	return (struct cb_tile) {
-> +		.width = width,
-> +		.height = height,
-> +
-> +		.width2 = width2,
-> +		.height2 = height2,
-> +
-> +		.block = {
-> +			.cols = GS_PSMT4_BLOCK_WIDTH / width2,
-> +			.rows = GS_PSMT4_BLOCK_HEIGHT / height2,
-> +		},
-> +	};
-> +}
-> +
-> +/**
-> + * display_buffer_size - display buffer size for a given video resolution
-> + *
-> + * This calculation is a lower bound estimate. A precise calculation would have
-> + * to take memory pages, blocks and column arrangements into account. To choose
-> + * the appropriate standard video mode such details can be disregarded, though.
-> + *
-> + * Return: the size in bytes of the display buffer
-> + */
-> +static u32 display_buffer_size(const u32 xres_virtual, const u32 yres_virtual,
-> +      const u32 bits_per_pixel)
-> +{
-> +	return (xres_virtual * yres_virtual * bits_per_pixel) / 8;
-> +}
-> +
-> +/**
-> + * ps2fb_cb_get_tilemax - maximum number of tiles
-> + * @info: frame buffer info object
-> + *
-> + * Return: the maximum number of tiles
-> + */
-> +static int ps2fb_cb_get_tilemax(struct fb_info *info)
-> +{
-> +	const struct ps2fb_par *par = info->par;
-> +	const u32 block_tile_count =
-> +		par->cb.tile.block.cols *
-> +		par->cb.tile.block.rows;
-> +	const s32 blocks_available =
-> +		GS_BLOCK_COUNT - par->cb.block_count - PALETTE_BLOCK_COUNT;
-> +
-> +	return blocks_available > 0 ? blocks_available * block_tile_count : 0;
-> +}
-> +
-> +/**
-> + * bits_per_pixel_fits - does the given resolution fit the given buffer size?
-> + * @xres_virtual: virtual x resolution in pixels
-> + * @yres_virtual: virtual y resolution in pixels
-> + * @bits_per_pixel: number of bits per pixel
-> + * @buffer_size: size in bytes of display buffer
-> + *
-> + * The size calculation is approximate, but accurate enough for the standard
-> + * video modes.
-> + *
-> + * Return: %true if the resolution fits the given buffer size, otherwise %false
-> + */
-> +static bool bits_per_pixel_fits(const u32 xres_virtual, const u32 yres_virtual,
-> +      const int bits_per_pixel, const size_t buffer_size)
-> +{
-> +	return display_buffer_size(xres_virtual, yres_virtual,
-> +		bits_per_pixel) <= buffer_size;
-> +}
-> +
-> +/**
-> + * default_bits_per_pixel - choose either 16 or 32 bits per pixel
-> + * @xres_virtual: virtual x resolution in pixels
-> + * @yres_virtual: virtual y resolution in pixels
-> + * @buffer_size: size in bytes of display buffer
-> + *
-> + * 32 bits per pixel is returned unless this does not fit the given buffer size.
-> + *
-> + * The size calculation is approximate, but accurate enough for the standard
-> + * video modes.
-> + *
-> + * Return: 16 or 32 bits per pixel
-> + */
-> +static int default_bits_per_pixel(
-> +	const u32 xres_virtual, const u32 yres_virtual,
-> +	const size_t buffer_size)
-> +{
-> +	return bits_per_pixel_fits(xres_virtual, yres_virtual,
-> +		32, buffer_size) ? 32 : 16;
-> +}
-> +
-> +/**
-> + * filled_var_videomode - is the screen info video mode filled in?
-> + * @var: screen info object to check
-> + *
-> + * Return: %true if the video mode is filled in, otherwise %false
-> + */
-> +static bool filled_var_videomode(const struct fb_var_screeninfo *var)
-> +{
-> +	return var->xres > 0 && var->hsync_len > 0 &&
-> +	       var->yres > 0 && var->vsync_len > 0 && var->pixclock > 0;
-> +}
-> +
-> +static int ps2fb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
-> +{
-> +	/* Check whether video mode defaults are needed. */
-> +	if (!filled_var_videomode(var)) {
-> +		const struct fb_videomode *vm =
-> +			fb_find_best_mode(var, &info->modelist);
-> +
-> +		if (!vm)
-> +			return -EINVAL;
-> +
-> +		fb_videomode_to_var(var, vm);
-> +	}
-> +
-> +        /* GS video register resolution is limited to 2048. */
-> +        if (var->xres < 1 || 2048 < var->xres ||
-> +	    var->yres < 1 || 2048 < var->yres)
-> +		return -EINVAL;
-> +
-> +	var->xres_virtual = var->xres;
-> +	var->yres_virtual = var->yres;
-> +	var->xoffset = 0;
-> +	var->yoffset = 0;
-> +
-> +        /* Check bits per pixel. */
-> +        if (!var->bits_per_pixel)
-> +		var->bits_per_pixel = default_bits_per_pixel(
-> +		     var->xres_virtual, var->yres_virtual, info->fix.smem_len);
-> +	else if (var->bits_per_pixel != 16 &&
-> +		 var->bits_per_pixel != 32)
-> +		return -EINVAL;
-> +        if (!bits_per_pixel_fits(var->xres_virtual, var->yres_virtual,
-> +			var->bits_per_pixel, info->fix.smem_len))
-> +		var->bits_per_pixel = default_bits_per_pixel(
-> +		     var->xres_virtual, var->yres_virtual, info->fix.smem_len);
-> +        if (!bits_per_pixel_fits(var->xres_virtual, var->yres_virtual,
-> +			var->bits_per_pixel, info->fix.smem_len))
-> +		return -ENOMEM;
-> +	if (var->bits_per_pixel == 16) {
-> +		var->red    = (struct fb_bitfield){ .offset =  0, .length = 5 };
-> +		var->green  = (struct fb_bitfield){ .offset =  5, .length = 5 };
-> +		var->blue   = (struct fb_bitfield){ .offset = 10, .length = 5 };
-> +		var->transp = (struct fb_bitfield){ .offset = 15, .length = 1 };
-> +	} else if (var->bits_per_pixel == 32) {
-> +		var->red    = (struct fb_bitfield){ .offset =  0, .length = 8 };
-> +		var->green  = (struct fb_bitfield){ .offset =  8, .length = 8 };
-> +		var->blue   = (struct fb_bitfield){ .offset = 16, .length = 8 };
-> +		var->transp = (struct fb_bitfield){ .offset = 24, .length = 8 };
-> +	} else
-> +		return -EINVAL;		/* Unsupported bits per pixel. */
-> +
-> +        /* Screen rotations are not supported. */
-> +	if (var->rotate)
-> +		return -EINVAL;
-> +
-> +        return 0;
-> +}
-> +
-> +static int ps2fb_cb_check_var(
-> +	struct fb_var_screeninfo *var, struct fb_info *info)
-> +{
-> +	struct ps2fb_par *par = info->par;
-> +	unsigned long flags;
-> +	int err;
-> +
-> +	spin_lock_irqsave(&par->lock, flags);
-> +	err = ps2fb_check_var(var, info);
-> +	spin_unlock_irqrestore(&par->lock, flags);
-> +
-> +	if (!err && info->tileops)
-> +		if (info->tileops->fb_get_tilemax(info) < 256)
-> +			err = -ENOMEM;
-> +
-> +	return err;
-> +}
-> +
-> +static u32 block_dimensions(u32 dim, u32 alignment)
-> +{
-> +	u32 mask = 0;
-> +	u32 d;
-> +
-> +	for (d = 1; d <= dim; d++)
-> +		if (d % alignment == 0)
-> +			mask |= 1 << (d - 1);
-> +
-> +	return mask;
-> +}
-> +
-> +static int init_console_buffer(struct platform_device *pdev,
-> +	struct fb_info *info)
-> +{
-> +	static struct fb_ops fbops = {
-> +		.owner		= THIS_MODULE,
-> +		.fb_check_var	= ps2fb_cb_check_var,
-> +	};
-> +
-> +	static struct fb_tile_ops tileops = {
-> +		.fb_get_tilemax = ps2fb_cb_get_tilemax
-> +	};
-> +
-> +	struct ps2fb_par *par = info->par;
-> +
-> +	fb_info(info, "Graphics Synthesizer console frame buffer device\n");
-> +
-> +	info->screen_size = 0;
-> +	info->screen_base = NULL;	/* mmap is unsupported by hardware */
-> +
-> +	info->fix.smem_start = 0;	/* GS frame buffer is local memory */
-> +	info->fix.smem_len = GS_MEMORY_SIZE;
-> +
-> +	info->fbops = &fbops;
-> +	info->flags = FBINFO_DEFAULT |
-> +		      FBINFO_READS_FAST;
-> +
-> +	info->flags |= FBINFO_MISC_TILEBLITTING;
-> +	info->tileops = &tileops;
-> +
-> +	/*
-> +	 * BITBLTBUF for pixel format CT32 requires divisibility by 2,
-> +	 * and CT16 requires divisibility by 4. So 4 is a safe choice.
-> +	 */
-> +	info->pixmap.blit_x = block_dimensions(GS_PSMT4_BLOCK_WIDTH, 4);
-> +	info->pixmap.blit_y = block_dimensions(GS_PSMT4_BLOCK_HEIGHT, 1);
-> +
-> +	/* 8x8 default font tile size for fb_get_tilemax */
-> +	par->cb.tile = cb_tile(8, 8);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ps2fb_probe(struct platform_device *pdev)
-> +{
-> +	struct ps2fb_par *par;
-> +	struct fb_info *info;
-> +	int err;
-> +
-> +	info = framebuffer_alloc(sizeof(*par), &pdev->dev);
-> +	if (info == NULL) {
-> +		dev_err(&pdev->dev, "framebuffer_alloc failed\n");
-> +		err = -ENOMEM;
-> +		goto err_framebuffer_alloc;
-> +	}
-> +
-> +	par = info->par;
-> +
-> +	spin_lock_init(&par->lock);
-> +
-> +	par->package.buffer = (union package *)__get_free_page(GFP_DMA);
-> +	if (!par->package.buffer) {
-> +		dev_err(&pdev->dev, "Failed to allocate package buffer\n");
-> +		err = -ENOMEM;
-> +		goto err_package_buffer;
-> +	}
-> +	par->package.capacity = PAGE_SIZE / sizeof(union package);
-> +
-> +	strlcpy(info->fix.id, "PS2 GS", ARRAY_SIZE(info->fix.id));
-> +	info->fix.accel = FB_ACCEL_PLAYSTATION_2;
-> +
-> +	err = init_console_buffer(pdev, info);
-> +	if (err < 0)
-> +		goto err_init_buffer;
-> +
-> +	info->mode = &par->mode;
-> +
-> +	if (register_framebuffer(info) < 0) {
-> +		fb_err(info, "register_framebuffer failed\n");
-> +		err = -EINVAL;
-> +		goto err_register_framebuffer;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, info);
-> +
-> +	return 0;
-> +
-> +err_register_framebuffer:
-> +err_init_buffer:
-> +	free_page((unsigned long)par->package.buffer);
-> +err_package_buffer:
-> +	framebuffer_release(info);
-> +err_framebuffer_alloc:
-> +	return err;
-> +}
-> +
-> +static int ps2fb_remove(struct platform_device *pdev)
-> +{
-> +	struct fb_info *info = platform_get_drvdata(pdev);
-> +	struct ps2fb_par *par = info->par;
-> +	int err = 0;
-> +
-> +	if (info != NULL) {
-> +		unregister_framebuffer(info);
-> +		fb_dealloc_cmap(&info->cmap);
-> +
-> +		framebuffer_release(info);
-> +	}
-> +
-> +	if (!gif_wait()) {
-> +		fb_err(info, "Failed to complete GIF DMA transfer\n");
-> +		err = -EBUSY;
-> +	}
-> +	free_page((unsigned long)par->package.buffer);
-> +
-> +	return err;
-> +}
-> +
-> +static struct platform_driver ps2fb_driver = {
-> +	.probe		= ps2fb_probe,
-> +	.remove		= ps2fb_remove,
-> +	.driver = {
-> +		.name	= DEVICE_NAME,
-> +	},
-> +};
-> +
-> +static struct platform_device *ps2fb_device;
-> +
-> +static int __init ps2fb_init(void)
-> +{
-> +	int err;
-> +
-> +#ifndef MODULE
-> +	char *options = NULL;
-> +	char *this_opt;
-> +
-> +	if (fb_get_options(DEVICE_NAME, &options))
-> +		return -ENODEV;
-> +	if (!options || !*options)
-> +		goto no_options;
-> +
-> +	while ((this_opt = strsep(&options, ",")) != NULL) {
-> +		if (!*this_opt)
-> +			continue;
-> +
-> +		if (!strncmp(this_opt, "mode_option:", 12))
-> +			mode_option = &this_opt[12];
-> +		else if ('0' <= this_opt[0] && this_opt[0] <= '9')
-> +			mode_option = this_opt;
-> +		else
-> +			pr_warn(DEVICE_NAME ": Unrecognized option \"%s\"\n",
-> +				this_opt);
-> +	}
-> +
-> +no_options:
-> +#endif /* !MODULE */
-> +
-> +	/* Default to a suitable PAL or NTSC broadcast mode. */
-> +	if (!mode_option)
-> +		mode_option = gs_region_pal() ? "576x460i@50" : "576x384i@60";
-> +
-> +	ps2fb_device = platform_device_alloc("ps2fb", 0);
-> +	if (!ps2fb_device)
-> +		return -ENOMEM;
-> +
-> +	err = platform_device_add(ps2fb_device);
-> +	if (err < 0) {
-> +		platform_device_put(ps2fb_device);
-> +		return err;
-> +	}
-> +
-> +	return platform_driver_register(&ps2fb_driver);
-> +}
-> +
-> +static void __exit ps2fb_exit(void)
-> +{
-> +	platform_driver_unregister(&ps2fb_driver);
-> +	platform_device_unregister(ps2fb_device);
-> +}
-> +
-> +module_init(ps2fb_init);
-> +module_exit(ps2fb_exit);
-> +
-> +module_param(mode_option, charp, 0);
-> +MODULE_PARM_DESC(mode_option,
-> +	"Specify initial video mode as \"<xres>x<yres>[-<bpp>][@<refresh>]\"");
-> +
-> +MODULE_DESCRIPTION("PlayStation 2 frame buffer driver");
-> +MODULE_AUTHOR("Fredrik Noring");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/console_struct.h b/include/linux/console_struct.h
-> index 24d4c16e3ae0..cb562672cc3a 100644
-> --- a/include/linux/console_struct.h
-> +++ b/include/linux/console_struct.h
-> @@ -13,9 +13,11 @@
->  #ifndef _LINUX_CONSOLE_STRUCT_H
->  #define _LINUX_CONSOLE_STRUCT_H
->  
-> +#include <linux/tty.h>
->  #include <linux/wait.h>
->  #include <linux/vt.h>
->  #include <linux/workqueue.h>
-> +#include <uapi/linux/kd.h>
->  
->  struct uni_pagedir;
->  struct uni_screen;
-> diff --git a/include/uapi/linux/fb.h b/include/uapi/linux/fb.h
-> index b6aac7ee1f67..38d88eebf651 100644
-> --- a/include/uapi/linux/fb.h
-> +++ b/include/uapi/linux/fb.h
-> @@ -149,6 +149,7 @@
->  #define FB_ACCEL_SUPERSAVAGE    0x8c    /* S3 Supersavage               */
->  #define FB_ACCEL_PROSAVAGE_DDR  0x8d	/* S3 ProSavage DDR             */
->  #define FB_ACCEL_PROSAVAGE_DDRK 0x8e	/* S3 ProSavage DDR-K           */
-> +#define FB_ACCEL_PLAYSTATION_2  0x8f	/* PlayStation 2                */
->  
->  #define FB_ACCEL_PUV3_UNIGFX	0xa0	/* PKUnity-v3 Unigfx		*/
->  
-> -- 
-> 2.21.0
-> 
+ - rv32 kernel runtime KernelStack, Slab... are smaller,
+   rv64: MemTotal: 53076 kB,        MemFree: 40264 kB
+   rv32: MemTotal: 52176 + 2048 kB, MemFree: 41012  + 2048 kB
+   rv32 better than rv64:       2%                         6%
+
+   (Because opensbi problem, we could add another 2MB for rv32.)
+   Overall, rv64-compat is 6% worse than rv32-full at memory footprint.
+   If the user space memory usage increases, the gap will be further
+   reduced.
+
+ - Qemu, kernel, rv32 = rv64 defconfig, rootfs, opensbi
+   are the same in this comparison.
+
+Changes in v4:
+ - Rebase on linux-5.17-rc1
+ - Optimize compat_sys_call_table implementation with Arnd's advice
+ - Add reviewed-by for Arnd. Thx :)
+ - Remove FIXME comment in elf.h
+ - Optimize Cleanup duplicate definitions in compat.h with Arnd's advice
+
+Changes in v3:
+ - Rebase on newest master (pre linux-5.17-rc1)
+ - Using newest qemu version v7 for test
+ - Remove fcntl common modification
+ - Fixup SET_PERSONALITY in elf.h by Arnd
+ - Fixup KVM Kconfig
+ - Update Acked-by & Reviewed-by
+
+Changes in v2:
+ - Add __ARCH_WANT_COMPAT_STAT suggested
+ - Cleanup fcntl compatduplicate definitions
+ - Cleanup compat.h
+ - Move rv32_defconfig into Makefile
+ - Fixup rv64 rootfs boot failed, remove hw_compat_mode_detect
+ - Move SYSVIPC_COMPAT into init/Kconfig
+ - Simplify compat_elf_check
+
+Guo Ren (17):
+  kconfig: Add SYSVIPC_COMPAT for all architectures
+  fs: stat: compat: Add __ARCH_WANT_COMPAT_STAT
+  asm-generic: compat: Cleanup duplicate definitions
+  syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
+  riscv: Fixup difference with defconfig
+  riscv: compat: Add basic compat date type implementation
+  riscv: compat: Re-implement TASK_SIZE for COMPAT_32BIT
+  riscv: compat: syscall: Add compat_sys_call_table implementation
+  riscv: compat: syscall: Add entry.S implementation
+  riscv: compat: Add elf.h implementation
+  riscv: compat: vdso: Add rv32 VDSO base code implementation
+  riscv: compat: vdso: Add setup additional pages implementation
+  riscv: compat: signal: Add rt_frame implementation
+  riscv: compat: ptrace: Add compat_arch_ptrace implement
+  riscv: compat: Add UXL_32 support in start_thread
+  riscv: compat: Add COMPAT Kbuild skeletal support
+  KVM: compat: riscv: Prevent KVM_COMPAT from being selected
+
+
+Guo Ren (17):
+  kconfig: Add SYSVIPC_COMPAT for all architectures
+  fs: stat: compat: Add __ARCH_WANT_COMPAT_STAT
+  asm-generic: compat: Cleanup duplicate definitions
+  syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
+  riscv: Fixup difference with defconfig
+  riscv: compat: Add basic compat date type implementation
+  riscv: compat: Re-implement TASK_SIZE for COMPAT_32BIT
+  riscv: compat: syscall: Add compat_sys_call_table implementation
+  riscv: compat: syscall: Add entry.S implementation
+  riscv: compat: process: Add UXL_32 support in start_thread
+  riscv: compat: Add elf.h implementation
+  riscv: compat: vdso: Add rv32 VDSO base code implementation
+  riscv: compat: vdso: Add setup additional pages implementation
+  riscv: compat: signal: Add rt_frame implementation
+  riscv: compat: ptrace: Add compat_arch_ptrace implement
+  riscv: compat: Add COMPAT Kbuild skeletal support
+  KVM: compat: riscv: Prevent KVM_COMPAT from being selected
+
+ arch/arm64/Kconfig                            |   4 -
+ arch/arm64/include/asm/compat.h               | 106 +-------
+ arch/arm64/include/asm/unistd.h               |   1 +
+ arch/mips/Kconfig                             |   5 -
+ arch/mips/include/asm/compat.h                |  27 +-
+ arch/mips/include/asm/unistd.h                |   2 +
+ arch/parisc/Kconfig                           |   4 -
+ arch/parisc/include/asm/compat.h              |  45 +---
+ arch/parisc/include/asm/unistd.h              |   1 +
+ arch/powerpc/Kconfig                          |   5 -
+ arch/powerpc/include/asm/compat.h             |  46 +---
+ arch/powerpc/include/asm/unistd.h             |   1 +
+ arch/riscv/Kconfig                            |  19 ++
+ arch/riscv/Makefile                           |   9 +
+ arch/riscv/configs/rv32_defconfig             | 135 ----------
+ arch/riscv/include/asm/compat.h               | 135 ++++++++++
+ arch/riscv/include/asm/csr.h                  |   7 +
+ arch/riscv/include/asm/elf.h                  |  53 +++-
+ arch/riscv/include/asm/mmu.h                  |   1 +
+ arch/riscv/include/asm/pgtable.h              |  13 +-
+ arch/riscv/include/asm/syscall.h              |   1 +
+ arch/riscv/include/asm/thread_info.h          |   1 +
+ arch/riscv/include/asm/unistd.h               |  11 +
+ arch/riscv/include/asm/vdso.h                 |   9 +
+ arch/riscv/include/uapi/asm/unistd.h          |   2 +-
+ arch/riscv/kernel/Makefile                    |   3 +
+ arch/riscv/kernel/compat_signal.c             | 243 ++++++++++++++++++
+ arch/riscv/kernel/compat_syscall_table.c      |  19 ++
+ arch/riscv/kernel/compat_vdso/.gitignore      |   2 +
+ arch/riscv/kernel/compat_vdso/Makefile        |  68 +++++
+ arch/riscv/kernel/compat_vdso/compat_vdso.S   |   8 +
+ .../kernel/compat_vdso/compat_vdso.lds.S      |   3 +
+ arch/riscv/kernel/compat_vdso/flush_icache.S  |   3 +
+ .../compat_vdso/gen_compat_vdso_offsets.sh    |   5 +
+ arch/riscv/kernel/compat_vdso/getcpu.S        |   3 +
+ arch/riscv/kernel/compat_vdso/note.S          |   3 +
+ arch/riscv/kernel/compat_vdso/rt_sigreturn.S  |   3 +
+ arch/riscv/kernel/entry.S                     |  18 +-
+ arch/riscv/kernel/process.c                   |   5 +
+ arch/riscv/kernel/ptrace.c                    |  87 ++++++-
+ arch/riscv/kernel/signal.c                    |  13 +-
+ arch/riscv/kernel/sys_riscv.c                 |   6 +-
+ arch/riscv/kernel/vdso.c                      | 104 +++++---
+ arch/riscv/kernel/vdso/vdso.S                 |   6 +-
+ arch/s390/Kconfig                             |   3 -
+ arch/s390/include/asm/compat.h                |  95 +------
+ arch/s390/include/asm/unistd.h                |   1 +
+ arch/sparc/Kconfig                            |   5 -
+ arch/sparc/include/asm/compat.h               |  42 ++-
+ arch/sparc/include/asm/unistd.h               |   1 +
+ arch/x86/Kconfig                              |   4 -
+ arch/x86/include/asm/compat.h                 |  89 +------
+ arch/x86/include/asm/unistd.h                 |   1 +
+ fs/open.c                                     |  24 ++
+ fs/read_write.c                               |  16 ++
+ fs/stat.c                                     |   2 +-
+ fs/sync.c                                     |   9 +
+ include/asm-generic/compat.h                  | 133 ++++++++++
+ include/linux/compat.h                        |  37 +++
+ include/uapi/asm-generic/unistd.h             |   4 +-
+ init/Kconfig                                  |   4 +
+ mm/fadvise.c                                  |  11 +
+ mm/readahead.c                                |   7 +
+ tools/include/uapi/asm-generic/unistd.h       |   4 +-
+ virt/kvm/Kconfig                              |   2 +-
+ 65 files changed, 1141 insertions(+), 598 deletions(-)
+ delete mode 100644 arch/riscv/configs/rv32_defconfig
+ create mode 100644 arch/riscv/include/asm/compat.h
+ create mode 100644 arch/riscv/kernel/compat_signal.c
+ create mode 100644 arch/riscv/kernel/compat_syscall_table.c
+ create mode 100644 arch/riscv/kernel/compat_vdso/.gitignore
+ create mode 100644 arch/riscv/kernel/compat_vdso/Makefile
+ create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.S
+ create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
+ create mode 100644 arch/riscv/kernel/compat_vdso/flush_icache.S
+ create mode 100755 arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh
+ create mode 100644 arch/riscv/kernel/compat_vdso/getcpu.S
+ create mode 100644 arch/riscv/kernel/compat_vdso/note.S
+ create mode 100644 arch/riscv/kernel/compat_vdso/rt_sigreturn.S
+
+-- 
+2.25.1
+
