@@ -2,132 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE8B4A31D8
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Jan 2022 21:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A818F4A31F5
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Jan 2022 21:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353121AbiA2Ue3 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 29 Jan 2022 15:34:29 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:41502 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1353104AbiA2Ue3 (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Sat, 29 Jan 2022 15:34:29 -0500
-Received: from openarena.loongson.cn (unknown [10.20.42.36])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxWuC2pPVhqYwFAA--.16809S2;
-        Sun, 30 Jan 2022 04:33:58 +0800 (CST)
-From:   suijingfeng <suijingfeng@loongson.cn>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S1353197AbiA2U6Z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 29 Jan 2022 15:58:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353175AbiA2U6Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 29 Jan 2022 15:58:25 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26FAC061714;
+        Sat, 29 Jan 2022 12:58:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=qDaqx4uPzigiZNs9b0PXl1R6NK3i5Wj+JiU5Hgbuaiw=; b=EIsHDgeS8OmzCpSP31tJgQWAoL
+        OGrdQhBrOhDpYthHpbIdgc2YerBNjTRsi4e5NkcFOR7haNtNtauUeXbnvDpu9EzvqJkZ5CJha0b+Y
+        Rzb3cRAHbwPA7RShEnnWF3Do5TOKuA8yVWg28sBML1GQl/nVmm3yqYAfpfyPjqLJu9Qy1KDGUn8s8
+        rijx55saWJo3B1VzXe1D54Dydznk4pADR1HbpGXF+ei8ZWXpFTOyISBYLhTiSpRy2wzWFM0SUBsmE
+        724IiLtCRhfqJ93H8ZFGQmSo2ZaWYdl34W3g/c7o9xcOm01TswfF0zr/uTye+xQVuJ3PkSxTkyII4
+        WHbRVg/g==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nDune-005QDy-Or; Sat, 29 Jan 2022 20:58:22 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH 0/1] drm/lsdc: add drm driver support for loongson display controller
-Date:   Sun, 30 Jan 2022 04:33:56 +0800
-Message-Id: <20220129203357.1613654-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        linux-mips@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        James Hogan <jhogan@kernel.org>, kvm@vger.kernel.org
+Subject: [PATCH] MIPS: KVM: fix vz.c kernel-doc notation
+Date:   Sat, 29 Jan 2022 12:58:19 -0800
+Message-Id: <20220129205819.23781-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxWuC2pPVhqYwFAA--.16809S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCrW7GFyxtw4fAF4rWw4kJFb_yoW5tw18pF
-        47AFyFyr18JF47tryfA3WrGry3A3WfXFWSkF12qwnxW3y8Aa4UAF98AFW3Jr9rWFy2y342
-        qrn3Ka4UGF1IyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUQvtAUUUUU=
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-There is a display controller in loongson's LS2K1000 SoC and LS7A1000
-bridge, and the DC in those chip is a pci device. This display controller
-have two display pipes(CRTC) but with only one hardware cursor.
+Fix all kernel-doc warnings in mips/kvm/vz.c as reported by the
+kernel test robot:
 
-This display controller is uncommon outside of china, it don't have rich
-document either. This patch try to provided a minial support for this
-display controller which is for graphic environment bring up. Hope the
-code could speak for itself.
+  arch/mips/kvm/vz.c:471: warning: Function parameter or member 'out_compare' not described in '_kvm_vz_save_htimer'
+  arch/mips/kvm/vz.c:471: warning: Function parameter or member 'out_cause' not described in '_kvm_vz_save_htimer'
+  arch/mips/kvm/vz.c:471: warning: Excess function parameter 'compare' description in '_kvm_vz_save_htimer'
+  arch/mips/kvm/vz.c:471: warning: Excess function parameter 'cause' description in '_kvm_vz_save_htimer'
+  arch/mips/kvm/vz.c:1551: warning: No description found for return value of 'kvm_trap_vz_handle_cop_unusable'
+  arch/mips/kvm/vz.c:1552: warning: expecting prototype for kvm_trap_vz_handle_cop_unusuable(). Prototype was for kvm_trap_vz_handle_cop_unusable() instead
+  arch/mips/kvm/vz.c:1597: warning: No description found for return value of 'kvm_trap_vz_handle_msa_disabled'
 
-For ls7a1000, there are 4 gpios who register is located at dc register
-space which is used to emulation i2c. LS2K1000 and LS2K0500 SoC don't
-have those hardware, they use general purpose gpio or hardware i2c to
-serve this purpose.
+Fixes: c992a4f6a9b0 ("KVM: MIPS: Implement VZ support")
+Fixes: f4474d50c7d4 ("KVM: MIPS/VZ: Support hardware guest timer")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+Cc: James Hogan <jhogan@kernel.org>
+Cc: kvm@vger.kernel.org
+---
+ arch/mips/kvm/vz.c |   12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-LS2K1000 is a double core 1.0Ghz mips64r2 compatible SoC[1]. LS7A1000 is
-a bridge chip made by Loongson corporation which act as north and/or south
-bridge of loongson's desktop and server level processor. It is equivalent
-to RS780E or something like that. More details can be read from its user
-manual[2].
-
-This bridge chip is typically use with LS3A3000, LS3A4000 and LS3A5000 cpu.
-LS3A3000 is 4 core 1.45gHz mips64r2 compatible cpu.
-LS3A4000 is 4 core 1.8gHz mips64r5 compatible cpu.
-LS3A5000 is 4 core 2.5gHz loongarch cpu[3].
-
-[1] https://wiki.debian.org/InstallingDebianOn/Lemote/Loongson2K1000
-[2] https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN.html
-[3] https://loongson.github.io/LoongArch-Documentation/Loongson-3A5000-usermanual-EN.html
-
-
-suijingfeng (1):
-  drm/lsdc: add drm driver for loongson display controller
-
- drivers/gpu/drm/Kconfig               |   2 +
- drivers/gpu/drm/Makefile              |   1 +
- drivers/gpu/drm/lsdc/Kconfig          |  32 +
- drivers/gpu/drm/lsdc/Makefile         |  15 +
- drivers/gpu/drm/lsdc/lsdc_connector.c | 440 ++++++++++++++
- drivers/gpu/drm/lsdc/lsdc_connector.h |  60 ++
- drivers/gpu/drm/lsdc/lsdc_crtc.c      | 438 ++++++++++++++
- drivers/gpu/drm/lsdc/lsdc_drv.c       | 824 ++++++++++++++++++++++++++
- drivers/gpu/drm/lsdc/lsdc_drv.h       | 212 +++++++
- drivers/gpu/drm/lsdc/lsdc_encoder.c   |  79 +++
- drivers/gpu/drm/lsdc/lsdc_i2c.c       | 220 +++++++
- drivers/gpu/drm/lsdc/lsdc_i2c.h       |  61 ++
- drivers/gpu/drm/lsdc/lsdc_irq.c       |  77 +++
- drivers/gpu/drm/lsdc/lsdc_irq.h       |  37 ++
- drivers/gpu/drm/lsdc/lsdc_plane.c     | 713 ++++++++++++++++++++++
- drivers/gpu/drm/lsdc/lsdc_pll.c       | 596 +++++++++++++++++++
- drivers/gpu/drm/lsdc/lsdc_pll.h       | 109 ++++
- drivers/gpu/drm/lsdc/lsdc_regs.h      | 242 ++++++++
- 18 files changed, 4158 insertions(+)
- create mode 100644 drivers/gpu/drm/lsdc/Kconfig
- create mode 100644 drivers/gpu/drm/lsdc/Makefile
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.c
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.h
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_crtc.c
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.c
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.h
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_encoder.c
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.c
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.h
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.c
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.h
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_plane.c
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.c
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.h
- create mode 100644 drivers/gpu/drm/lsdc/lsdc_regs.h
-
--- 
-2.25.1
-
+--- linux-next-20220128.orig/arch/mips/kvm/vz.c
++++ linux-next-20220128/arch/mips/kvm/vz.c
+@@ -458,8 +458,8 @@ void kvm_vz_acquire_htimer(struct kvm_vc
+ /**
+  * _kvm_vz_save_htimer() - Switch to software emulation of guest timer.
+  * @vcpu:	Virtual CPU.
+- * @compare:	Pointer to write compare value to.
+- * @cause:	Pointer to write cause value to.
++ * @out_compare: Pointer to write compare value to.
++ * @out_cause:	Pointer to write cause value to.
+  *
+  * Save VZ guest timer state and switch to software emulation of guest CP0
+  * timer. The hard timer must already be in use, so preemption should be
+@@ -1541,11 +1541,14 @@ static int kvm_trap_vz_handle_guest_exit
+ }
+ 
+ /**
+- * kvm_trap_vz_handle_cop_unusuable() - Guest used unusable coprocessor.
++ * kvm_trap_vz_handle_cop_unusable() - Guest used unusable coprocessor.
+  * @vcpu:	Virtual CPU context.
+  *
+  * Handle when the guest attempts to use a coprocessor which hasn't been allowed
+  * by the root context.
++ *
++ * Return: value indicating whether to resume the host or the guest
++ * 	   (RESUME_HOST or RESUME_GUEST)
+  */
+ static int kvm_trap_vz_handle_cop_unusable(struct kvm_vcpu *vcpu)
+ {
+@@ -1592,6 +1595,9 @@ static int kvm_trap_vz_handle_cop_unusab
+  *
+  * Handle when the guest attempts to use MSA when it is disabled in the root
+  * context.
++ *
++ * Return: value indicating whether to resume the host or the guest
++ * 	   (RESUME_HOST or RESUME_GUEST)
+  */
+ static int kvm_trap_vz_handle_msa_disabled(struct kvm_vcpu *vcpu)
+ {
