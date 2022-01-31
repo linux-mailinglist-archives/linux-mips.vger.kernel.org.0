@@ -2,130 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5554A472B
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jan 2022 13:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD6A4A4781
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jan 2022 13:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241615AbiAaMaE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jan 2022 07:30:04 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.121]:35539 "EHLO
-        mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350930AbiAaMaE (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 07:30:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1643632024;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=DD71IXMXLAUb/SwAxlzhI320P5TBWxS6ZOLaX5UaUJg=;
-    b=IutJj+1eQJwHb4zzzvhnQaU9u1Qt1+lF1CmnT+0LDR4OgssHpN9nlOOPOfo++ewXVE
-    YjWGNOfRkU1u9MgXN9xlJmbsduk9l1ZkkooX3WJ9V3dw0oaSzr1vpQ+ZTkOVCxUsj+lz
-    TUIme3dzXxSRlGNgL0EmmyKGGE/SaHxcq4XlR6pK3AEDd7OM0EjE0wyzzJMuBTtBzdtB
-    wg6ClAmB1RxIkEf93B53H4Sn0mt9AECTzVDLu4wx1Q16TJnixR74AUW1LW8xS0sqBSdM
-    MTJGYH3YwGrXyJM+j9JCY2svGTnrcjjNewqo8QezLb/5ChwicWY287UUODPRHcazJ3n0
-    jT/A==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lByOdcK1L0"
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 47.38.0 DYNA|AUTH)
-    with ESMTPSA id j5fc80y0VCR3u8q
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 31 Jan 2022 13:27:03 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v12 8/9] MIPS: DTS: CI20: fix how ddc power is enabled
-Date:   Mon, 31 Jan 2022 13:26:54 +0100
-Message-Id: <5a46a4784de0d2ecda16a4923037a3027dc00a45.1643632014.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <cover.1643632014.git.hns@goldelico.com>
-References: <cover.1643632014.git.hns@goldelico.com>
+        id S1378091AbiAaMtV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jan 2022 07:49:21 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:41787 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240768AbiAaMtT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 07:49:19 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MzQc2-1mJ6320Q5o-00vQEz; Mon, 31 Jan 2022 13:49:16 +0100
+Received: by mail-oi1-f176.google.com with SMTP id v67so26377549oie.9;
+        Mon, 31 Jan 2022 04:49:15 -0800 (PST)
+X-Gm-Message-State: AOAM530MUhJjxHs4lN8uEOaSb8M+hbaDjaI0XH9LOJMiEFS5TJs59mvW
+        WWl2KRm09sLPH3x0egJ0DrXHFNU9MZs6JEah+R0=
+X-Google-Smtp-Source: ABdhPJy98n+kDWK/9SbbjWdkcIPv//3sxAoIsXTByqyfuSFCJCabGM0ZH14kpP64umFfYvpncQnk8rPRUpmA1wB2kjw=
+X-Received: by 2002:aca:2b16:: with SMTP id i22mr15607147oik.128.1643633354113;
+ Mon, 31 Jan 2022 04:49:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-6-guoren@kernel.org>
+ <YffUqErSVDgbGLTu@infradead.org>
+In-Reply-To: <YffUqErSVDgbGLTu@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 31 Jan 2022 13:48:58 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
+Message-ID: <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
+Subject: Re: [PATCH V4 05/17] riscv: Fixup difference with defconfig
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Anup Patel <anup.patel@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:djGQj121T/Up79PV9vFe3c3xFVYWtTtn038P31Wi6YWVhZsb7CH
+ EWUc8VlWcickQHCTaodxi2PwS/49NtPQkRJKgVjui3yT2gl4ORQlI1/MiZXJMdpsdD1aZSh
+ j5i7ILCBXXo9S6BeA8TxrAWH0lSCHoAJ1aoJOV69A1zT/H8uT9VxlxySVe4GNFkBrMXjAwW
+ wzeiuGQ17BqnsLNJLNKtg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZH5LM8F2Bio=:iB3XsXNdUOq9ydk/56//Ap
+ ygzKiwd747DPcnWv4JephLLgjcJN/oPQ/nOfySsB/xbDPlB3cme3km4ROyqlWL0CAVzcs01gs
+ RhEc5wZoQCuocaDBY/qh20LWX2XgmGzstKMoAdLEJpwDT53xv8/RZzSW1GOS5Ugq/im3mCvEP
+ t4j5XvKwXkMuCt0yyWB4fzMIHX/fnyXoT+dt+B7l+hhIw/oFU/O9gV61t0DKpi/9smj22Y0d1
+ v1oPXyfkmDoaIclTGygnc9Iu5AcT89Qf7PttG5zsjj6vua8yFCX9thdOTVDI+19rYkmfPD+IN
+ CI4fCNvJqDHpArJ9q+d2w6qas4y9eYU9m2jSZu8pheXxCXJBoVhr0op0VwZJ2P8PNYGaYTPW+
+ W5W0FzRhsp45xn9G9MVN6/oYQqpV6x8bv8Fi5tTJJ2g4HGsrOc+Md3MvCq88yJiu3uJyYAvsP
+ uj1k70QZ4sl7dZpP0p98gD4i9GdncRnk96Mb7jvwt7yt+C05GKbz2rIpxoahiYoStdl0KPenj
+ ucYkY65kz7E9mad2H20UiA6Z0348ukzyAmSTaHzS+Mbi8en47i8/WPi3NYlm2duFIsOK2eX2f
+ luBlpwT9r5ZQXCXE9s1U7Y8NpBQ79ly7U58oJrc/yU7qmgZtlHLPeRZzObbFxQeWXk/hBBSjF
+ iF4lRgIU1qcoUDvnIBgDGwlnfObta2XyKhMT+GSJCXhTEHcoTIpfMR9aPYWV9B7+vvgxkbt9a
+ PDLwoWE+daaBhoHuyu7RQcNCXR8OxUI6Zldek/DhFHJjlXS3IGAEOfj+FUryc+sQks/wVfX5L
+ 3swFfq8Q/1DJJigRwhmxaY/F702+y0FrL+2b4Ijbzh0YjQOMco=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Originally we proposed a new hdmi-5v-supply regulator reference
-for CI20 device tree but that was superseded by a better idea to use
-the already defined "ddc-en-gpios" property of the "hdmi-connector".
+On Mon, Jan 31, 2022 at 1:23 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Sat, Jan 29, 2022 at 08:17:16PM +0800, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Let's follow the origin patch's spirit:
+> >
+> > The only difference between rv32_defconfig and defconfig is that
+> > rv32_defconfig has  CONFIG_ARCH_RV32I=y.
+> >
+> > This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
+> >
+> > Fixes: 1b937e8faa87ccfb ("RISC-V: Add separate defconfig for 32bit systems")
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+>
+> Wouldn't a common.config that generats both the 32-bit and 64-bit
+> configs a better idea?
 
-Since "MIPS: DTS: CI20: Add DT nodes for HDMI setup" has already
-been applied to v5.17-rc1, we add this on top.
+I thought that is what the patch does, there is already the normal 64-bit
+defconfig, and the new makefile target makes this shared with 32-bit
+to prevent them from diverging again.
 
-Fixes: ae1b8d2c2de9 ("MIPS: DTS: CI20: Add DT nodes for HDMI setup")
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- arch/mips/boot/dts/ingenic/ci20.dts | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
-
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 3e336b3dbb109..ab6e3dc0bc1d0 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -83,6 +83,8 @@ hdmi_out: connector {
- 		label = "HDMI OUT";
- 		type = "a";
- 
-+		ddc-en-gpios = <&gpa 25 GPIO_ACTIVE_HIGH>;
-+
- 		port {
- 			hdmi_con: endpoint {
- 				remote-endpoint = <&dw_hdmi_out>;
-@@ -114,17 +116,6 @@ otg_power: fixedregulator@2 {
- 		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
- 		enable-active-high;
- 	};
--
--	hdmi_power: fixedregulator@3 {
--		compatible = "regulator-fixed";
--
--		regulator-name = "hdmi_power";
--		regulator-min-microvolt = <5000000>;
--		regulator-max-microvolt = <5000000>;
--
--		gpio = <&gpa 25 0>;
--		enable-active-high;
--	};
- };
- 
- &ext {
-@@ -576,8 +567,6 @@ &hdmi {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pins_hdmi_ddc>;
- 
--	hdmi-5v-supply = <&hdmi_power>;
--
- 	ports {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
--- 
-2.33.0
-
+        Arnd
