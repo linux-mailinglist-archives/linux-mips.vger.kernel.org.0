@@ -2,55 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC364A48BE
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jan 2022 14:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7469A4A49DC
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jan 2022 16:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239351AbiAaNxN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jan 2022 08:53:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiAaNxM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 08:53:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A4FC061714;
-        Mon, 31 Jan 2022 05:53:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DA31B82B2E;
-        Mon, 31 Jan 2022 13:53:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25FBEC340F9;
-        Mon, 31 Jan 2022 13:53:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643637190;
-        bh=ubnmPmWzE8WZHK6ZDIgiYDZ8V5Auo9sjXu6gY0DackM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tE6Azk07ef7p3PyY9nPWsvB4UG0ym7aIa7c0/Aq4ps9A01ne0MZvdOrWsFqal0AiU
-         0P7V4TI/ZhF33PhVXme354y8saJj86gikF7RnUZvdvua8uDRQHsud7M0acourjCUn9
-         zdR16D1WrF68aNJlsNa9P3qBuqWtesfv8rw5IF2hNE5wWlmhVz2+xC6JL/7OFxTrUu
-         iYRe6d4g7Gbq/Qos37N0Q1pmKEbdxburfCFLWH+4ZWaTzMUR00B3+zFQtir0xTCFaf
-         b1l+X6y8wEge0g7mMXhya3HjmyH2u/XnQNDpSggCfTYPXq4wmSCGpISV7WE9u1iTrZ
-         WZsj7ejW6v9Gw==
-Received: by mail-vs1-f47.google.com with SMTP id t20so11856012vsq.12;
-        Mon, 31 Jan 2022 05:53:10 -0800 (PST)
-X-Gm-Message-State: AOAM533xM7vLzjc1c+Jr/9SLC4MLJIS9l/ZE3ZEtR+Zx6Svsl29tEbKy
-        cS7j7wNW7cKzT6P29gHs4G13w0D1UG6pIl3/EPw=
-X-Google-Smtp-Source: ABdhPJwJr063nx9nXXC4e7XbyWpioW1G/tD5r4ayyBqg50Z49dU59MzIv8eNccq661nAVS/wEBLJ08MiD/T+S+t5NT0=
-X-Received: by 2002:a67:e947:: with SMTP id p7mr7925194vso.59.1643637189058;
- Mon, 31 Jan 2022 05:53:09 -0800 (PST)
+        id S1349180AbiAaPIc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jan 2022 10:08:32 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:53371 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242493AbiAaPIb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 10:08:31 -0500
+Received: from mail-oi1-f171.google.com ([209.85.167.171]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mqrs9-1mRgsP1MDx-00muV1; Mon, 31 Jan 2022 16:08:28 +0100
+Received: by mail-oi1-f171.google.com with SMTP id q186so27161597oih.8;
+        Mon, 31 Jan 2022 07:08:27 -0800 (PST)
+X-Gm-Message-State: AOAM531ArSmyPNT2zDbO0BAwADbNSvZCdsObrLuklzR2O6UTzDjz+Jx8
+        4158Hkp6OE5AcFXeV6R2jmngk0bW+KYGAiuHd0I=
+X-Google-Smtp-Source: ABdhPJxqzdad29yoPfVQVqkeuINyquIZpxlEvxSx06sdTnz4rryvUZKfSJUaDKGmBUmu6Be3uaLlJuvMhrTHZxz8Zkc=
+X-Received: by 2002:aca:f03:: with SMTP id 3mr13235991oip.102.1643635190773;
+ Mon, 31 Jan 2022 05:19:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-4-guoren@kernel.org>
- <YffURrqD0pfXnEkV@infradead.org>
-In-Reply-To: <YffURrqD0pfXnEkV@infradead.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 31 Jan 2022 21:52:58 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSQafQxzAyaD90n-O6pPo22RCDXdsrOn=csUJBur0u-Ew@mail.gmail.com>
-Message-ID: <CAJF2gTSQafQxzAyaD90n-O6pPo22RCDXdsrOn=csUJBur0u-Ew@mail.gmail.com>
-Subject: Re: [PATCH V4 03/17] asm-generic: compat: Cleanup duplicate definitions
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-6-guoren@kernel.org>
+ <YffUqErSVDgbGLTu@infradead.org> <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
+ <YffdbErmAjAWYuD9@infradead.org>
+In-Reply-To: <YffdbErmAjAWYuD9@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 31 Jan 2022 14:19:34 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0VZt8PF1C4W0X4+SNhP=NbHAigq3N6fEawNpPd-RZDjw@mail.gmail.com>
+Message-ID: <CAK8P3a0VZt8PF1C4W0X4+SNhP=NbHAigq3N6fEawNpPd-RZDjw@mail.gmail.com>
+Subject: Re: [PATCH V4 05/17] riscv: Fixup difference with defconfig
 To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        gregkh <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
         Drew Fustini <drew@beagleboard.org>,
         Wang Junqiang <wangjunqiang@iscas.ac.cn>,
@@ -65,42 +50,45 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
+        Guo Ren <guoren@linux.alibaba.com>,
+        Anup Patel <anup.patel@wdc.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:B7uYZm6BSOcndg7Pih7L4iMd0uyp8WiU4EGM8oDHCSAF54eyV5e
+ BhZw7/Y27szH94pGBNcAgsLiq/7xUESPZA3wANRgNI6Ktu30MJCdBMuVjXNBt+6JbfoZydl
+ DyPNTyOWMM1egsQya/XcIKeamdh1/73pNIb+QRU7bQSAaYZgr2IK4QqMK/beXiaXWE+nCkr
+ BUv9kFoCV/ggq0p26b45A==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:domFXOMNj8E=:WeQkqDz1VLzM9CLAjWfrAY
+ anHFoiFnbhbyO76GFWArXb9hzfxNVWQYyV5AWh6Th4Hn4WePjkllV5vgZ+CLtGhiHuwy09pfZ
+ qLfubreMP7ZjSHSgVUAotH3yryMyYpl1RnauHUg1i/1abQUhKi9jjOmrNpGc0P7RzWlYCGXy7
+ AWeetWN9V1fSafwAuJZlT1oz2ucTUw6BaUuEV2+WKdmY+wqC+Ey3kk7CkrRK02uj4UpmTtWat
+ 3p+n/fa53QDOWAiks7USmFZ2bBMXMJsJr2Usrv+NEHzlb9Uo5ktmFLSpvUDEcfnxvnxRM4uAl
+ 9r1Pa/yQAPtq6mnTqWT2+YcoSjQY3oxQtJ53Wodvo5dJE2QQSRTOuLmWNpmtPviFhS9fMvM2J
+ Hn289d5Jd62q8MG4b5UHeO0/ycY4KEAjG6FZSAcZ6T8oNsgDcVFSVd182QGSDCmTnH5entLG9
+ x4PnQs0J9SbaN5mIkiVy4nDEHpHjW3cfnbSoLTOP/RrLaFmE4WLEfFeQlWI5EFZ+asfDuK0uR
+ 7WFvifMjs16riXlO1AxQlJDMol7CuBh30HozDaNqPQKnoZK5GWq2XIRlAk0O01JKPaxJ4fcw7
+ 9ogzd//dIPO7vd52mOaAquoJTfHsPx3pzJT7SOtiLp7IjrKYo2mn3N7QLFMrXzuAj4uV/ItEZ
+ d658UkAUFJ0xcMGLI4O1UuCMKWaXEJeVBzlwfiD3rgAeqy8pQBQt1AIApwUkcV5J9XkNM8kjB
+ w4pnQC8oRFFppXcUWzJP25DcUw+Z6Elu+B0B9LOhSN88KqextdT5ntV6ySeGHYpnlRvKu25Ny
+ DJr4bA0R2UxOlZWBjulnD+RALTraB/SHNaVBLlU7h3HwgS/Hp4=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 8:21 PM Christoph Hellwig <hch@infradead.org> wrote:
+On Mon, Jan 31, 2022 at 2:00 PM Christoph Hellwig <hch@infradead.org> wrote:
 >
-> On Sat, Jan 29, 2022 at 08:17:14PM +0800, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > There are 7 64bit architectures that support Linux COMPAT mode to
-> > run 32bit applications. A lot of definitions are duplicate:
-> >  - COMPAT_USER_HZ
-> >  - COMPAT_RLIM_INFINITY
-> >  - COMPAT_OFF_T_MAX
-> >  - __compat_uid_t, __compat_uid_t
-> >  - compat_dev_t
-> >  - compat_ipc_pid_t
-> >  - struct compat_flock
-> >  - struct compat_flock64
-> >  - struct compat_statfs
-> >  - struct compat_ipc64_perm, compat_semid64_ds,
-> >         compat_msqid64_ds, compat_shmid64_ds
-> >
-> > Cleanup duplicate definitions and merge them into asm-generic.
+> On Mon, Jan 31, 2022 at 01:48:58PM +0100, Arnd Bergmann wrote:
+> > I thought that is what the patch does, there is already the normal 64-bit
+> > defconfig, and the new makefile target makes this shared with 32-bit
+> > to prevent them from diverging again.
 >
-> The flock part seems to clash with the general compat_flock
-> consolidation.  Otherwise this looks like a good idea.
-Okay, In the next version, I would rebase on general compat_flock
-consolidation v4.
+> I ment using a common fragment and the deriving both 32-bit and 64-bit
+> configs from it. The 64-bit specific fragment will be empty for now,
+> but we will sooner or later have an option that can only go into the
+> 64-bit defconfig.
 
+Ah right, that should work as well, not sure if it makes much of a difference.
 
+I suggested this method because it is the same thing we do on powerpc.
 
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+        Arnd
