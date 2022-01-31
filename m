@@ -2,310 +2,297 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5ED4A3DDC
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jan 2022 07:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 491464A3E3A
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jan 2022 08:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357797AbiAaGtz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jan 2022 01:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
+        id S1357909AbiAaHcz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jan 2022 02:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357779AbiAaGty (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 01:49:54 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD90C061714;
-        Sun, 30 Jan 2022 22:49:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=6AGTRKiyo3n1kN0MLVro9fLjev96qAcQ9JxUzJQ4Exg=; b=OX44eeG08FsSiBoK0NTB6AN//9
-        WIu9AG+Z0SnsQjPns4+rLEeJ03tiJ9hIOYUGPKGs1Kdsg18vV6uNY0yFPObKBNjxOUNM6qc4+gtPM
-        qId7I7d85PzGJ5Gyqf4lAqPHZQTor9mjoU7h4CVHaZxXVNnaNwcnx7xoCAkSEQVpRIB0MoI/n13xY
-        Ks30Ydhqt+0/wKst8QRww4+WaYdOEHk8FLpjLOAAqu5Zh+JyOF/Col3NH6cQiH+CEV37HfA5L1+0S
-        VVVpT2KgipBJputRepPJaYMifn502BXBVHQPx2JUJYoTlgug2M85LVPyT1Rx5R5TJSOgHKSUaq598
-        S1nRQ8xw==;
-Received: from [2001:4bb8:191:327d:13f5:1d0a:e266:6974] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nEQVb-008AX1-F1; Mon, 31 Jan 2022 06:49:51 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guo Ren <guoren@kernel.org>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 5/5] compat: consolidate the compat_flock{,64} definition
-Date:   Mon, 31 Jan 2022 07:49:33 +0100
-Message-Id: <20220131064933.3780271-6-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220131064933.3780271-1-hch@lst.de>
-References: <20220131064933.3780271-1-hch@lst.de>
+        with ESMTP id S1348119AbiAaHcu (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 02:32:50 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD2EC06173D
+        for <linux-mips@vger.kernel.org>; Sun, 30 Jan 2022 23:32:50 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id i10so37657929ybt.10
+        for <linux-mips@vger.kernel.org>; Sun, 30 Jan 2022 23:32:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=TGUXorpSDAKgj0QsOiF2A9Dkgmv8D/UrY5CjKLgD/kA=;
+        b=PhjzCwvHcmYXp6njfB6W+ohC4edEQdVQGgFYuJx/9gDRmzmuB+axox3UttISgp4Np9
+         4ppBzzrcfGZcXJw2GlBJSUFBYaytsPPW1la6fD4K256PgZMR2BOrdnlIsQaMjq19Ykcv
+         +rH7UjL4iwTXDNlBTmGl4Y2gTiyfqNUG1WFwaOI73H//vqDWw7RsqRTnDalHYroYcS3o
+         F9nteZLTVHUbf/BJrMVdmnFfZWudeTl/0C/BkGtqE7QCdvt26A0mc1OPhEWD5XdrNzG3
+         IJxuUWfT4UbwvnBq5ckclF8+kcaA6WfNVngDNiqe0TGjFg8ofalYcOtLtmqXWA/cWbTL
+         A+Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=TGUXorpSDAKgj0QsOiF2A9Dkgmv8D/UrY5CjKLgD/kA=;
+        b=joCJcKBpUoWvtufk+wOeMOHk95TAnFBvRb1p4ekJcAhpD//B5lCpOzgiuuU1068Uff
+         kbXsN9bQCnmtG8vmDipBbKoFYSkf8B1IipFEtxgcy2jQqTqZQvKK6lo66+CClw25ZCI5
+         iZvTN6P0GJVG52cIx+EzBbwJ1TVYXMrgL4+TYEde8lUbkvDUNOd54x2dG7UXtbe9Q3VP
+         MfwYp1boCxoOv6rGF8ruWUeAe9fQURMFlxxIGp+1eqmX0+nvaOl4/6InOm4sjjzJxNXv
+         7kIr/RyglGRMlWgQpj1fpez+vf2G9bdLqKtsXyNLr2hP101UQtx7FLI4t7DCs8ZKM9Hz
+         9iwA==
+X-Gm-Message-State: AOAM531YBifsE0osNddnczJH9ciWDFOUDeu3wQXWlncCXEyCOWIkHcmK
+        kkW+kWjxWNLYB6KvMlSjTev4Z559Vyzlya+UpXfHVlLpXF16cw==
+X-Google-Smtp-Source: ABdhPJyl2aP+0wY4wB+SmxvfCUrtBeMO9Ao11MdNpzPUCnLAZg/hzDhtnWtrflFHBxJnUwjqSz5dqOZ8+puYdLfJJI0=
+X-Received: by 2002:a25:97c4:: with SMTP id j4mr29211965ybo.108.1643614368772;
+ Sun, 30 Jan 2022 23:32:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 31 Jan 2022 13:02:37 +0530
+Message-ID: <CA+G9fYt4JnOkZeRu9ASXbgbDE+C8AYua+UzBuvWi9sUtEXd7Lw@mail.gmail.com>
+Subject: [next] mips: cavium-octeon/octeon-memcpy.o] Error 1
+To:     linux-mips@vger.kernel.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Provide a single common definition for the compat_flock and
-compat_flock64 structures using the same tricks as for the native
-variants.  Another extra define is added for the packing required on
-x86.
+Following build errors noticed on Linux next 20220131 mips with
+cavium_octeon_defconfig
+  - mips  cavium_octeon_defconfig gcc-8 - FAILED
+  - mips  cavium_octeon_defconfig gcc-10 - FAILED
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- arch/arm64/include/asm/compat.h   | 16 ----------------
- arch/mips/include/asm/compat.h    | 19 ++-----------------
- arch/parisc/include/asm/compat.h  | 16 ----------------
- arch/powerpc/include/asm/compat.h | 16 ----------------
- arch/s390/include/asm/compat.h    | 16 ----------------
- arch/sparc/include/asm/compat.h   | 18 +-----------------
- arch/x86/include/asm/compat.h     | 20 +++-----------------
- include/linux/compat.h            | 31 +++++++++++++++++++++++++++++++
- 8 files changed, 37 insertions(+), 115 deletions(-)
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+'HOSTCC=sccache gcc' cavium_octeon_defconfig
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/current ARCH=mips
+CROSS_COMPILE=mips-linux-gnu- 'CC=sccache mips-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S: Assembler messages:
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:187: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:188: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:189: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:190: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:192: Error:
+unrecognized opcode `ptr 9b,s_exc_p16u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:193: Error:
+unrecognized opcode `ptr 9b,s_exc_p15u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:194: Error:
+unrecognized opcode `ptr 9b,s_exc_p14u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:195: Error:
+unrecognized opcode `ptr 9b,s_exc_p13u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:196: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:197: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:198: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:199: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:200: Error:
+unrecognized opcode `ptr 9b,s_exc_p12u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:201: Error:
+unrecognized opcode `ptr 9b,s_exc_p11u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:202: Error:
+unrecognized opcode `ptr 9b,s_exc_p10u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:204: Error:
+unrecognized opcode `ptr 9b,s_exc_p9u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:206: Error:
+unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:207: Error:
+unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:208: Error:
+unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:209: Error:
+unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:210: Error:
+unrecognized opcode `ptr 9b,s_exc_p8u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:211: Error:
+unrecognized opcode `ptr 9b,s_exc_p7u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:212: Error:
+unrecognized opcode `ptr 9b,s_exc_p6u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:213: Error:
+unrecognized opcode `ptr 9b,s_exc_p5u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:214: Error:
+unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:215: Error:
+unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:216: Error:
+unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:217: Error:
+unrecognized opcode `ptr 9b,l_exc_copy_rewind16'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:218: Error:
+unrecognized opcode `ptr 9b,s_exc_p4u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:219: Error:
+unrecognized opcode `ptr 9b,s_exc_p3u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:220: Error:
+unrecognized opcode `ptr 9b,s_exc_p2u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:221: Error:
+unrecognized opcode `ptr 9b,s_exc_p1u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:235: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:236: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:237: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:238: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:240: Error:
+unrecognized opcode `ptr 9b,s_exc_p8u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:241: Error:
+unrecognized opcode `ptr 9b,s_exc_p7u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:242: Error:
+unrecognized opcode `ptr 9b,s_exc_p6u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:243: Error:
+unrecognized opcode `ptr 9b,s_exc_p5u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:244: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:245: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:246: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:247: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:248: Error:
+unrecognized opcode `ptr 9b,s_exc_p4u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:249: Error:
+unrecognized opcode `ptr 9b,s_exc_p3u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:250: Error:
+unrecognized opcode `ptr 9b,s_exc_p2u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:251: Error:
+unrecognized opcode `ptr 9b,s_exc_p1u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:262: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:263: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:264: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:265: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:267: Error:
+unrecognized opcode `ptr 9b,s_exc_p4u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:268: Error:
+unrecognized opcode `ptr 9b,s_exc_p3u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:269: Error:
+unrecognized opcode `ptr 9b,s_exc_p2u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:270: Error:
+unrecognized opcode `ptr 9b,s_exc_p1u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:285: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:288: Error:
+unrecognized opcode `ptr 9b,s_exc_p1u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:295: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:298: Error:
+unrecognized opcode `ptr 9b,s_exc_p1u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:305: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:310: Error:
+unrecognized opcode `ptr 9b,s_exc_p1u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:324: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:325: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:327: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:328: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:329: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:330: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:331: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:332: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:334: Error:
+unrecognized opcode `ptr 9b,s_exc_p4u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:335: Error:
+unrecognized opcode `ptr 9b,s_exc_p3u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:336: Error:
+unrecognized opcode `ptr 9b,s_exc_p2u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:337: Error:
+unrecognized opcode `ptr 9b,s_exc_p1u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:347: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:348: Error:
+unrecognized opcode `ptr 9b,l_exc_copy'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:350: Error:
+unrecognized opcode `ptr 9b,s_exc_p1u'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:366: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:366: Error:
+unrecognized opcode `ptr 9b,s_exc_p1'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:367: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:367: Error:
+unrecognized opcode `ptr 9b,s_exc_p1'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:368: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:368: Error:
+unrecognized opcode `ptr 9b,s_exc_p1'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:369: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:369: Error:
+unrecognized opcode `ptr 9b,s_exc_p1'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:370: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:370: Error:
+unrecognized opcode `ptr 9b,s_exc_p1'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:371: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:371: Error:
+unrecognized opcode `ptr 9b,s_exc_p1'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:372: Error:
+unrecognized opcode `ptr 9b,l_exc'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:375: Error:
+unrecognized opcode `ptr 9b,s_exc_p1'
+/builds/linux/arch/mips/cavium-octeon/octeon-memcpy.S:399: Error:
+unrecognized opcode `ptr 9b,l_exc'
+make[3]: *** [/builds/linux/scripts/Makefile.build:411:
+arch/mips/cavium-octeon/octeon-memcpy.o] Error 1
+make[3]: Target '__build' not remade because of errors.
+make[2]: *** [/builds/linux/scripts/Makefile.build:572:
+arch/mips/cavium-octeon] Error 2
+make[2]: Target '__build' not remade because of errors.
+make[1]: *** [/builds/linux/Makefile:1965: arch/mips] Error 2
 
-diff --git a/arch/arm64/include/asm/compat.h b/arch/arm64/include/asm/compat.h
-index 2763287654081..e0faec1984a1c 100644
---- a/arch/arm64/include/asm/compat.h
-+++ b/arch/arm64/include/asm/compat.h
-@@ -65,22 +65,6 @@ struct compat_stat {
- 	compat_ulong_t	__unused4[2];
- };
- 
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--};
--
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--};
--
- struct compat_statfs {
- 	int		f_type;
- 	int		f_bsize;
-diff --git a/arch/mips/include/asm/compat.h b/arch/mips/include/asm/compat.h
-index 6a350c1f70d7e..6d6e5a451f4d9 100644
---- a/arch/mips/include/asm/compat.h
-+++ b/arch/mips/include/asm/compat.h
-@@ -55,23 +55,8 @@ struct compat_stat {
- 	s32		st_pad4[14];
- };
- 
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	s32		l_sysid;
--	compat_pid_t	l_pid;
--	s32		pad[4];
--};
--
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--};
-+#define __ARCH_COMPAT_FLOCK_EXTRA_SYSID		s32 l_sysid;
-+#define __ARCH_COMPAT_FLOCK_PAD			s32 pad[4];
- 
- struct compat_statfs {
- 	int		f_type;
-diff --git a/arch/parisc/include/asm/compat.h b/arch/parisc/include/asm/compat.h
-index c04f5a637c390..a1e4534d80509 100644
---- a/arch/parisc/include/asm/compat.h
-+++ b/arch/parisc/include/asm/compat.h
-@@ -53,22 +53,6 @@ struct compat_stat {
- 	u32			st_spare4[3];
- };
- 
--struct compat_flock {
--	short			l_type;
--	short			l_whence;
--	compat_off_t		l_start;
--	compat_off_t		l_len;
--	compat_pid_t		l_pid;
--};
--
--struct compat_flock64 {
--	short			l_type;
--	short			l_whence;
--	compat_loff_t		l_start;
--	compat_loff_t		l_len;
--	compat_pid_t		l_pid;
--};
--
- struct compat_statfs {
- 	s32		f_type;
- 	s32		f_bsize;
-diff --git a/arch/powerpc/include/asm/compat.h b/arch/powerpc/include/asm/compat.h
-index 83d8f70779cbc..5ef3c7c83c343 100644
---- a/arch/powerpc/include/asm/compat.h
-+++ b/arch/powerpc/include/asm/compat.h
-@@ -44,22 +44,6 @@ struct compat_stat {
- 	u32		__unused4[2];
- };
- 
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--};
--
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--};
--
- struct compat_statfs {
- 	int		f_type;
- 	int		f_bsize;
-diff --git a/arch/s390/include/asm/compat.h b/arch/s390/include/asm/compat.h
-index 0f14b3188b1bb..07f04d37068b6 100644
---- a/arch/s390/include/asm/compat.h
-+++ b/arch/s390/include/asm/compat.h
-@@ -102,22 +102,6 @@ struct compat_stat {
- 	u32		__unused5;
- };
- 
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--};
--
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--};
--
- struct compat_statfs {
- 	u32		f_type;
- 	u32		f_bsize;
-diff --git a/arch/sparc/include/asm/compat.h b/arch/sparc/include/asm/compat.h
-index 108078751bb5a..d78fb44942e0f 100644
---- a/arch/sparc/include/asm/compat.h
-+++ b/arch/sparc/include/asm/compat.h
-@@ -75,23 +75,7 @@ struct compat_stat64 {
- 	unsigned int	__unused5;
- };
- 
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--	short		__unused;
--};
--
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--	short		__unused;
--};
-+#define __ARCH_COMPAT_FLOCK_PAD		short __unused;
- 
- struct compat_statfs {
- 	int		f_type;
-diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
-index 8d19a212f4f26..de794d8958663 100644
---- a/arch/x86/include/asm/compat.h
-+++ b/arch/x86/include/asm/compat.h
-@@ -50,25 +50,11 @@ struct compat_stat {
- 	u32		__unused5;
- };
- 
--struct compat_flock {
--	short		l_type;
--	short		l_whence;
--	compat_off_t	l_start;
--	compat_off_t	l_len;
--	compat_pid_t	l_pid;
--};
--
- /*
-- * IA32 uses 4 byte alignment for 64 bit quantities,
-- * so we need to pack this structure.
-+ * IA32 uses 4 byte alignment for 64 bit quantities, so we need to pack the
-+ * compat flock64 structure.
-  */
--struct compat_flock64 {
--	short		l_type;
--	short		l_whence;
--	compat_loff_t	l_start;
--	compat_loff_t	l_len;
--	compat_pid_t	l_pid;
--} __attribute__((packed));
-+#define __ARCH_NEED_COMPAT_FLOCK64_PACKED
- 
- struct compat_statfs {
- 	int		f_type;
-diff --git a/include/linux/compat.h b/include/linux/compat.h
-index 1c758b0e03598..a0481fe6c5d51 100644
---- a/include/linux/compat.h
-+++ b/include/linux/compat.h
-@@ -258,6 +258,37 @@ struct compat_rlimit {
- 	compat_ulong_t	rlim_max;
- };
- 
-+#ifdef __ARCH_NEED_COMPAT_FLOCK64_PACKED
-+#define __ARCH_COMPAT_FLOCK64_PACK	__attribute__((packed))
-+#else
-+#define __ARCH_COMPAT_FLOCK64_PACK
-+#endif
-+
-+struct compat_flock {
-+	short			l_type;
-+	short			l_whence;
-+	compat_off_t		l_start;
-+	compat_off_t		l_len;
-+#ifdef __ARCH_COMPAT_FLOCK_EXTRA_SYSID
-+	__ARCH_COMPAT_FLOCK_EXTRA_SYSID
-+#endif
-+	compat_pid_t		l_pid;
-+#ifdef __ARCH_COMPAT_FLOCK_PAD
-+	__ARCH_COMPAT_FLOCK_PAD
-+#endif
-+};
-+
-+struct compat_flock64 {
-+	short		l_type;
-+	short		l_whence;
-+	compat_loff_t	l_start;
-+	compat_loff_t	l_len;
-+	compat_pid_t	l_pid;
-+#ifdef __ARCH_COMPAT_FLOCK64_PAD
-+	__ARCH_COMPAT_FLOCK64_PAD
-+#endif
-+} __ARCH_COMPAT_FLOCK64_PACK;
-+
- struct compat_rusage {
- 	struct old_timeval32 ru_utime;
- 	struct old_timeval32 ru_stime;
--- 
-2.30.2
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+meta data:
+-----------
+    git describe: next-20220131
+    git_repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+    git_sha: 887a333c44eb67973622e530e43cd5e4cf9af927
+    target_arch: mips
+    kconfig: cavium_octeon_defconfig
+    toolchain: gcc-10
+
+Build log:
+-------------
+https://builds.tuxbuild.com/24RxfqNGrh0Y5VPGCY9Ixeo6ejf/
+
+Steps to reproduce:
+--------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+
+tuxmake --runtime podman --target-arch mips --toolchain gcc-10
+--kconfig cavium_octeon_defconfig
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
