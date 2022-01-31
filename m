@@ -2,93 +2,84 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7469A4A49DC
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jan 2022 16:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF844A5238
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Jan 2022 23:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349180AbiAaPIc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jan 2022 10:08:32 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:53371 "EHLO
+        id S232591AbiAaWTx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jan 2022 17:19:53 -0500
+Received: from mout.kundenserver.de ([217.72.192.73]:44207 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242493AbiAaPIb (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 10:08:31 -0500
-Received: from mail-oi1-f171.google.com ([209.85.167.171]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mqrs9-1mRgsP1MDx-00muV1; Mon, 31 Jan 2022 16:08:28 +0100
-Received: by mail-oi1-f171.google.com with SMTP id q186so27161597oih.8;
-        Mon, 31 Jan 2022 07:08:27 -0800 (PST)
-X-Gm-Message-State: AOAM531ArSmyPNT2zDbO0BAwADbNSvZCdsObrLuklzR2O6UTzDjz+Jx8
-        4158Hkp6OE5AcFXeV6R2jmngk0bW+KYGAiuHd0I=
-X-Google-Smtp-Source: ABdhPJxqzdad29yoPfVQVqkeuINyquIZpxlEvxSx06sdTnz4rryvUZKfSJUaDKGmBUmu6Be3uaLlJuvMhrTHZxz8Zkc=
-X-Received: by 2002:aca:f03:: with SMTP id 3mr13235991oip.102.1643635190773;
- Mon, 31 Jan 2022 05:19:50 -0800 (PST)
+        with ESMTP id S232213AbiAaWTx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 17:19:53 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M8QFi-1nAHJO2u12-004S46; Mon, 31 Jan 2022 23:19:50 +0100
+Received: by mail-ot1-f47.google.com with SMTP id g15-20020a9d6b0f000000b005a062b0dc12so14447815otp.4;
+        Mon, 31 Jan 2022 14:19:49 -0800 (PST)
+X-Gm-Message-State: AOAM5300s7H3HiZT7/ALZlbQL4+XMBMcpcRCqxXse+CMwLgyREt7CTVh
+        ReWIzABKLRLNgXPntwPlS7C6QAO1JxlT/LE6Q+o=
+X-Google-Smtp-Source: ABdhPJzNvIQa/ifQ4mpIl/LfU521F5G6KLcdIXkWgKV/jA7MRG2n/k6e84fLlMfFqeGk7bXCvjxkFnVtwxdt/dBnQNc=
+X-Received: by 2002:a9d:654f:: with SMTP id q15mr12902241otl.119.1643667588784;
+ Mon, 31 Jan 2022 14:19:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-6-guoren@kernel.org>
- <YffUqErSVDgbGLTu@infradead.org> <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
- <YffdbErmAjAWYuD9@infradead.org>
-In-Reply-To: <YffdbErmAjAWYuD9@infradead.org>
+References: <20220131064933.3780271-1-hch@lst.de>
+In-Reply-To: <20220131064933.3780271-1-hch@lst.de>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 31 Jan 2022 14:19:34 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0VZt8PF1C4W0X4+SNhP=NbHAigq3N6fEawNpPd-RZDjw@mail.gmail.com>
-Message-ID: <CAK8P3a0VZt8PF1C4W0X4+SNhP=NbHAigq3N6fEawNpPd-RZDjw@mail.gmail.com>
-Subject: Re: [PATCH V4 05/17] riscv: Fixup difference with defconfig
-To:     Christoph Hellwig <hch@infradead.org>
+Date:   Mon, 31 Jan 2022 23:19:32 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1YzdC1ev0FP-Pe0YyjsY+H3dNWErPGtB=zfcs3kVmkyw@mail.gmail.com>
+Message-ID: <CAK8P3a1YzdC1ev0FP-Pe0YyjsY+H3dNWErPGtB=zfcs3kVmkyw@mail.gmail.com>
+Subject: Re: consolidate the compat fcntl definitions v2
+To:     Christoph Hellwig <hch@lst.de>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         linux-s390 <linux-s390@vger.kernel.org>,
         sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Anup Patel <anup.patel@wdc.com>
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:B7uYZm6BSOcndg7Pih7L4iMd0uyp8WiU4EGM8oDHCSAF54eyV5e
- BhZw7/Y27szH94pGBNcAgsLiq/7xUESPZA3wANRgNI6Ktu30MJCdBMuVjXNBt+6JbfoZydl
- DyPNTyOWMM1egsQya/XcIKeamdh1/73pNIb+QRU7bQSAaYZgr2IK4QqMK/beXiaXWE+nCkr
- BUv9kFoCV/ggq0p26b45A==
+X-Provags-ID: V03:K1:Oz3mvogPccg/7xXrnVYc1t/5reQ5uLC3I9ySHFqCfH22nktDZk2
+ GiO2dxDqCqyaYLIVwvk51XQiOo3ffvYcODm+qVyNbWffBolCk5kBCIdNwuJYUoz/U0M04P7
+ YHPXOhWvKBhmn7zB1/uVYYlbhSUZG2fW6bmi32+wpXkhigUNfqpwvyzTmUcex77PxItycdN
+ hIkWF+6OjrEKXlrkvjnAw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:domFXOMNj8E=:WeQkqDz1VLzM9CLAjWfrAY
- anHFoiFnbhbyO76GFWArXb9hzfxNVWQYyV5AWh6Th4Hn4WePjkllV5vgZ+CLtGhiHuwy09pfZ
- qLfubreMP7ZjSHSgVUAotH3yryMyYpl1RnauHUg1i/1abQUhKi9jjOmrNpGc0P7RzWlYCGXy7
- AWeetWN9V1fSafwAuJZlT1oz2ucTUw6BaUuEV2+WKdmY+wqC+Ey3kk7CkrRK02uj4UpmTtWat
- 3p+n/fa53QDOWAiks7USmFZ2bBMXMJsJr2Usrv+NEHzlb9Uo5ktmFLSpvUDEcfnxvnxRM4uAl
- 9r1Pa/yQAPtq6mnTqWT2+YcoSjQY3oxQtJ53Wodvo5dJE2QQSRTOuLmWNpmtPviFhS9fMvM2J
- Hn289d5Jd62q8MG4b5UHeO0/ycY4KEAjG6FZSAcZ6T8oNsgDcVFSVd182QGSDCmTnH5entLG9
- x4PnQs0J9SbaN5mIkiVy4nDEHpHjW3cfnbSoLTOP/RrLaFmE4WLEfFeQlWI5EFZ+asfDuK0uR
- 7WFvifMjs16riXlO1AxQlJDMol7CuBh30HozDaNqPQKnoZK5GWq2XIRlAk0O01JKPaxJ4fcw7
- 9ogzd//dIPO7vd52mOaAquoJTfHsPx3pzJT7SOtiLp7IjrKYo2mn3N7QLFMrXzuAj4uV/ItEZ
- d658UkAUFJ0xcMGLI4O1UuCMKWaXEJeVBzlwfiD3rgAeqy8pQBQt1AIApwUkcV5J9XkNM8kjB
- w4pnQC8oRFFppXcUWzJP25DcUw+Z6Elu+B0B9LOhSN88KqextdT5ntV6ySeGHYpnlRvKu25Ny
- DJr4bA0R2UxOlZWBjulnD+RALTraB/SHNaVBLlU7h3HwgS/Hp4=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aSNwj6GN85Q=:6u43FVFakJeCUyjujdXZAJ
+ nH1Eb1BCXn0p06iSS1ZrO055xSbokdvwGcAVA5hsWPMSsXvKy87UdhVhRzrdb9Uqf8TSfGHWg
+ m/rTBm4dsO9IxFqzCZBXGSz1a8FeujW//AujuH47pp41pjzE/CXFAukbGKA2gMs1idFSIbP4N
+ YUuRhRON1JoIpyXjxfwSoBqeBH6Iw/7yHika7VEJf8kTLTt288ET8b+Y/3/dHdqYLqTJIpiby
+ u+GSgygb0FARlJqqStxb7IbhwpPBW/F28dNddp/A5ETdLGn2UeGS5ILnDIEZpFwh3D5sYa3vw
+ KvkxeMQD5RHL0RU6ABF3VwKCNoh+HbLQ1shYXxgqr/vVkCzEcEDvbMps/iCVjzlB1av/EiLMO
+ 3bZ7FjR4cmvVVEGsCy3pkZJodILX2o5u3fFzoRb3sUZHXtl0KrRCE5Y1KpSjEQ6yhhXBZpdI8
+ wopTxBWbnQoinQjtRjMcROObLew2B4rJ6dBqJ7uAPiKXBPp031Kv0jbqAphCyfpS0pgEROnJr
+ X70gzHhsnbhgAENY3wlEN5xEOuwVOU0PPuTptiZATzOYBUagezvXWz1RAYR+5/RMRhpQ2OJrA
+ W1kH50NLO2Ar7eKx23ya8N8jQDQgb3PUHIOYVOeD1YQAl870H1Mosoh94GYKTaeieLlnKv0fj
+ uurqEyb9ilCd/OB27VlNBel/Xj8IJKutEccZMwF+6plyO69uWSiaMhkEs9Zxhfskzk/E=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 2:00 PM Christoph Hellwig <hch@infradead.org> wrote:
+On Mon, Jan 31, 2022 at 7:49 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> On Mon, Jan 31, 2022 at 01:48:58PM +0100, Arnd Bergmann wrote:
-> > I thought that is what the patch does, there is already the normal 64-bit
-> > defconfig, and the new makefile target makes this shared with 32-bit
-> > to prevent them from diverging again.
+> Hi all,
 >
-> I ment using a common fragment and the deriving both 32-bit and 64-bit
-> configs from it. The 64-bit specific fragment will be empty for now,
-> but we will sooner or later have an option that can only go into the
-> 64-bit defconfig.
+> currenty the compat fcnt definitions are duplicate for all compat
+> architectures, and the native fcntl64 definitions aren't even usable
+> from userspace due to a bogus CONFIG_64BIT ifdef.  This series tries
+> to sort out all that.
+>
+> Changes since v1:
+>  - only make the F*64 defines uapi visible for 32-bit architectures
 
-Ah right, that should work as well, not sure if it makes much of a difference.
+Looks all good to me,
 
-I suggested this method because it is the same thing we do on powerpc.
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-        Arnd
+I think it would be best to merge this through the risc-v tree along
+with the coming compat support
+that depends on it. Alternatively, I can put it into my asm-generic
+tree for 5.18.
+
+         Arnd
