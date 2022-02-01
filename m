@@ -2,35 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF844A5238
-	for <lists+linux-mips@lfdr.de>; Mon, 31 Jan 2022 23:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB0C4A5462
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Feb 2022 02:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbiAaWTx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 31 Jan 2022 17:19:53 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:44207 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbiAaWTx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 17:19:53 -0500
-Received: from mail-ot1-f47.google.com ([209.85.210.47]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M8QFi-1nAHJO2u12-004S46; Mon, 31 Jan 2022 23:19:50 +0100
-Received: by mail-ot1-f47.google.com with SMTP id g15-20020a9d6b0f000000b005a062b0dc12so14447815otp.4;
-        Mon, 31 Jan 2022 14:19:49 -0800 (PST)
-X-Gm-Message-State: AOAM5300s7H3HiZT7/ALZlbQL4+XMBMcpcRCqxXse+CMwLgyREt7CTVh
-        ReWIzABKLRLNgXPntwPlS7C6QAO1JxlT/LE6Q+o=
-X-Google-Smtp-Source: ABdhPJzNvIQa/ifQ4mpIl/LfU521F5G6KLcdIXkWgKV/jA7MRG2n/k6e84fLlMfFqeGk7bXCvjxkFnVtwxdt/dBnQNc=
-X-Received: by 2002:a9d:654f:: with SMTP id q15mr12902241otl.119.1643667588784;
- Mon, 31 Jan 2022 14:19:48 -0800 (PST)
+        id S231404AbiBABB7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 31 Jan 2022 20:01:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39114 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231382AbiBABB7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 31 Jan 2022 20:01:59 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D331CB82CCC;
+        Tue,  1 Feb 2022 01:01:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809BFC340F1;
+        Tue,  1 Feb 2022 01:01:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643677316;
+        bh=24FXUCIsHwKxxR+z8h2fdRjDdPuEdYGTAEhE92+MHoI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=clh1/HjQGb7FJU4zPzPLiisxkyHkQlnwEUc1A6WJVkLW9dIYHzQ0PXw4lW/Vg5DKn
+         5onsZUt0vDOUMNoI9WfI6vQJXZKP178khvz7Rq/VRq50kAOsmLgiRpwDgWTf2d6Az7
+         qLLypiHBxQ842LxMEUccZgMyk/XMUjcPBz93s3VdrNd5dv3a+NX+dhnLCXs8RsY6Ej
+         szFyd6hEacAuk+xV4M1QXs0NlXsIc9Vh6ETIb6OW1MK4jno/HWBhJQ0lLshUp3jyTP
+         p53YjCtDBYYTX1iJ4l0WOEvKEOBySalMQB06SHGlsy3K9zXrrAATm/rudnkdWX0ZNi
+         JDIE41IDEur2Q==
+Received: by mail-vs1-f44.google.com with SMTP id a19so14138948vsi.2;
+        Mon, 31 Jan 2022 17:01:56 -0800 (PST)
+X-Gm-Message-State: AOAM532wGK4A+TO/3YBT8t6Y5VNRFUhH9ly2flGfQJNEMYrx3c17gX2l
+        SsCVSzfXa1RAUC/UsjAZv4TW5hIdowkUET/tC8o=
+X-Google-Smtp-Source: ABdhPJzvz8wBZE7e6h6dqVKudXyTop3viJjp7xMEZGl4tGQghEfTaAqS8qRRv1daCipOlRappkP5Ne/ctRPXJ89sRVI=
+X-Received: by 2002:a67:e947:: with SMTP id p7mr9138694vso.59.1643677315521;
+ Mon, 31 Jan 2022 17:01:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220131064933.3780271-1-hch@lst.de>
-In-Reply-To: <20220131064933.3780271-1-hch@lst.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 31 Jan 2022 23:19:32 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1YzdC1ev0FP-Pe0YyjsY+H3dNWErPGtB=zfcs3kVmkyw@mail.gmail.com>
-Message-ID: <CAK8P3a1YzdC1ev0FP-Pe0YyjsY+H3dNWErPGtB=zfcs3kVmkyw@mail.gmail.com>
+References: <20220131064933.3780271-1-hch@lst.de> <CAK8P3a1YzdC1ev0FP-Pe0YyjsY+H3dNWErPGtB=zfcs3kVmkyw@mail.gmail.com>
+In-Reply-To: <CAK8P3a1YzdC1ev0FP-Pe0YyjsY+H3dNWErPGtB=zfcs3kVmkyw@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 1 Feb 2022 09:01:44 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRXiCKw8M2c10KVzn6CtLirsqx+3radkgqnKgN=H9Szzw@mail.gmail.com>
+Message-ID: <CAJF2gTRXiCKw8M2c10KVzn6CtLirsqx+3radkgqnKgN=H9Szzw@mail.gmail.com>
 Subject: Re: consolidate the compat fcntl definitions v2
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
         "the arch/x86 maintainers" <x86@kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -41,45 +55,42 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
         sparclinux <sparclinux@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Oz3mvogPccg/7xXrnVYc1t/5reQ5uLC3I9ySHFqCfH22nktDZk2
- GiO2dxDqCqyaYLIVwvk51XQiOo3ffvYcODm+qVyNbWffBolCk5kBCIdNwuJYUoz/U0M04P7
- YHPXOhWvKBhmn7zB1/uVYYlbhSUZG2fW6bmi32+wpXkhigUNfqpwvyzTmUcex77PxItycdN
- hIkWF+6OjrEKXlrkvjnAw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aSNwj6GN85Q=:6u43FVFakJeCUyjujdXZAJ
- nH1Eb1BCXn0p06iSS1ZrO055xSbokdvwGcAVA5hsWPMSsXvKy87UdhVhRzrdb9Uqf8TSfGHWg
- m/rTBm4dsO9IxFqzCZBXGSz1a8FeujW//AujuH47pp41pjzE/CXFAukbGKA2gMs1idFSIbP4N
- YUuRhRON1JoIpyXjxfwSoBqeBH6Iw/7yHika7VEJf8kTLTt288ET8b+Y/3/dHdqYLqTJIpiby
- u+GSgygb0FARlJqqStxb7IbhwpPBW/F28dNddp/A5ETdLGn2UeGS5ILnDIEZpFwh3D5sYa3vw
- KvkxeMQD5RHL0RU6ABF3VwKCNoh+HbLQ1shYXxgqr/vVkCzEcEDvbMps/iCVjzlB1av/EiLMO
- 3bZ7FjR4cmvVVEGsCy3pkZJodILX2o5u3fFzoRb3sUZHXtl0KrRCE5Y1KpSjEQ6yhhXBZpdI8
- wopTxBWbnQoinQjtRjMcROObLew2B4rJ6dBqJ7uAPiKXBPp031Kv0jbqAphCyfpS0pgEROnJr
- X70gzHhsnbhgAENY3wlEN5xEOuwVOU0PPuTptiZATzOYBUagezvXWz1RAYR+5/RMRhpQ2OJrA
- W1kH50NLO2Ar7eKx23ya8N8jQDQgb3PUHIOYVOeD1YQAl870H1Mosoh94GYKTaeieLlnKv0fj
- uurqEyb9ilCd/OB27VlNBel/Xj8IJKutEccZMwF+6plyO69uWSiaMhkEs9Zxhfskzk/E=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 7:49 AM Christoph Hellwig <hch@lst.de> wrote:
+On Tue, Feb 1, 2022 at 6:19 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Hi all,
+> On Mon, Jan 31, 2022 at 7:49 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > Hi all,
+> >
+> > currenty the compat fcnt definitions are duplicate for all compat
+> > architectures, and the native fcntl64 definitions aren't even usable
+> > from userspace due to a bogus CONFIG_64BIT ifdef.  This series tries
+> > to sort out all that.
+> >
+> > Changes since v1:
+> >  - only make the F*64 defines uapi visible for 32-bit architectures
 >
-> currenty the compat fcnt definitions are duplicate for all compat
-> architectures, and the native fcntl64 definitions aren't even usable
-> from userspace due to a bogus CONFIG_64BIT ifdef.  This series tries
-> to sort out all that.
+> Looks all good to me,
 >
-> Changes since v1:
->  - only make the F*64 defines uapi visible for 32-bit architectures
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>
+> I think it would be best to merge this through the risc-v tree along
+> with the coming compat support
+> that depends on it.
+Okay, I would include it in my next version series.
 
-Looks all good to me,
+> Alternatively, I can put it into my asm-generic
+> tree for 5.18.
+>
+>          Arnd
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-I think it would be best to merge this through the risc-v tree along
-with the coming compat support
-that depends on it. Alternatively, I can put it into my asm-generic
-tree for 5.18.
 
-         Arnd
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
