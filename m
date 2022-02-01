@@ -2,137 +2,94 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7A44A651D
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Feb 2022 20:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E1F4A68C3
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Feb 2022 00:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbiBATnw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Feb 2022 14:43:52 -0500
-Received: from mout.gmx.net ([212.227.15.15]:40339 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229967AbiBATnv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Feb 2022 14:43:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643744616;
-        bh=mlXNAspUBC3g9aZKzGDlPsP/MrhxZykfCLw8MFC0Vs4=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=CshimOylHKnEg4xSk9EkpUgmMEJWn0629esrD+DtvFU0WDXYa790WUfTZ53onTVXn
-         zzDv6owy6He43YQE8UQONeH+f3m0JpTjO4/BbsDdrLyNEAE2YWA8HQlCwjaUB54tIG
-         ppVwJajQ/BeXgQRGLsk20XsM/3tFlxqnx/wp3EaI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M26vL-1nCV1N0Xph-002VsI; Tue, 01
- Feb 2022 20:43:36 +0100
-Date:   Tue, 1 Feb 2022 20:43:35 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <f4bug@amsat.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 2/4] clk: loongson1: Terminate clk_div_table with
- sentinel element
-Message-ID: <YfmNZ882rcI7c8Kq@latitude>
-References: <20220128230922.2047140-1-j.neuschaefer@gmx.net>
- <20220128230922.2047140-3-j.neuschaefer@gmx.net>
- <CAAdtpL5xVjiKSFVcdFiMQHrki2bDSbDppP65QDC5ybBp3u-kMw@mail.gmail.com>
+        id S230352AbiBAXtF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Feb 2022 18:49:05 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:43606 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230127AbiBAXtE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Feb 2022 18:49:04 -0500
+Received: by mail-oi1-f178.google.com with SMTP id t199so19938570oie.10;
+        Tue, 01 Feb 2022 15:49:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Jo2m2mDixIShQQUxCkK1P+1sHxGPYJ+EgazaMUeqSAM=;
+        b=poUH0+E9tEaWE6aUrty+8jYPdaXCn/AQ3b/EEkn5rIigepw/nOmB56OtZ1sGfk1PTU
+         PEjsjekEGM66UR8Osuyy1oc5tQ/knXRDU2AEVbBdfiBznFJzngGogXPFk1Z0NLzly1vf
+         +8wzhNwVaeDbsk1IVTmsiMH9H3pyybxa0mqpeA+5bXFbNJXjr1DfIX/ueWspMcnPkX8P
+         jqAZO6q43VUblXd5sEq8HyPLV/baeYBIg7pKGxnTAcvT1EbanLOOFTyQRHadfJTMjYGD
+         FTOHK+ti2QslxSgOidIITf2aRPswkmvoa4lY+QtyN/51vXxvnB4SdBtj8W0HXdIu9bp9
+         ECSA==
+X-Gm-Message-State: AOAM530QxLnF6Zx2jrC6Yb+xwdk7Dr5ueJzPRFhI/R0iRA89DbKRRn5y
+        Xt216YJmTgbEZooZEtp6eQ==
+X-Google-Smtp-Source: ABdhPJz7iZxzXNX7wyNhOMdRzRTkrf4cKGMZQJfj7fb0fteyV/W1kMAx9bEDfj3D6o//zA58hAxZ2A==
+X-Received: by 2002:a05:6808:180f:: with SMTP id bh15mr3030078oib.233.1643759344332;
+        Tue, 01 Feb 2022 15:49:04 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id j3sm13191444oig.37.2022.02.01.15.49.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Feb 2022 15:49:03 -0800 (PST)
+Received: (nullmailer pid 996340 invoked by uid 1000);
+        Tue, 01 Feb 2022 23:49:01 -0000
+Date:   Tue, 1 Feb 2022 17:49:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        letux-kernel@openphoenux.org, dri-devel@lists.freedesktop.org,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-mips@vger.kernel.org, Robert Foss <robert.foss@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH v12 3/9] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
+ DT Schema
+Message-ID: <YfnG7SnlQyzU3H5l@robh.at.kernel.org>
+References: <cover.1643632014.git.hns@goldelico.com>
+ <2386420a975e0a6c17393828af776991f3d17c01.1643632014.git.hns@goldelico.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rS/vUSa6UlTIcpRM"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAdtpL5xVjiKSFVcdFiMQHrki2bDSbDppP65QDC5ybBp3u-kMw@mail.gmail.com>
-X-Provags-ID: V03:K1:qBSeOjxsDd70rGegqzdelP0N1Nmu7D5XTe5+K6fjo6OQF3Kc1Fv
- u4iuoafBaueIm+9Vbkb23VNkhZYmt+5OoQa0Dq6aPEkkKxpso0Y17FpYlZ5z5goxCaIG34I
- 3JymUB7hz5I4Se+Lwjzke4oBKj1K1VcnSyC26Ji7gXO5JkmCRwVD/ac4eKmXME8B0Dj3uC0
- MDx6YOw/zLJrxtXMiEHEA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gPGBRzmsrEQ=:HOEMtA4Gm6bsKspVwKP4ld
- tootLVhMqkHsavorui0LRQjlXZhy4sISYlQApCxy9zStGdZjTIafDNS9gVpGYjRGke+cLObmG
- wEpDIEjDUh4pBSe1cgozjXPLiZO+xmo0LLwZenq5+fI0sRqUWED3q+Eucd4Fl30aPfXP3IMut
- GLfJ97o0Dq8jvdu9vjR5Fa/XSc0dPcfMRWfiE/Chs/O7Rzw0zsOE6fOpH4KLGLPIM8WxcZKGM
- KilATJEH91ghdgw+DCnHPrPWMp6dCPRRNm8fm3RkhKYv4nitKnK/gTiCg14YKHH0tQMoWxd7n
- Jdv3inozgEv0NKn+C9GZfzxlgHxCPTnoQ7wSYiQGP+wLC9h/WK13cd5HONuIxnhZKfdgIWOjp
- UibjaBJWYmen9STz3s5xf7waQL+/PqTkec95KgW+WgEKOk81hN8e75/aUKssob9aAB4HMyIjp
- STgSYimK6oLU84IleQzMge2v8jff23pIPBfOibjPkg9GpqzTV2tx14vJsA5KL6XlEo8EAiBC7
- y0btvFT1GgxlmbuCqHSMxnp8IRPlnzI0/anwbyBO/l/fus9dfXKTVwcLcbHFxyUwza5I++Ba6
- vkokvJncsqDuX66zZNiTzmCczVo4ah071M2NnBnZWpp7quIhFRtLCkk4DVqxtMrJRRmmnxUyo
- 2m6cGfK/Sx2EuenK9UKaLyxATZHz6PL+9Cl3zkzp30ItZv6MwN6+bSHkkk2/29EHY8oPzq5pz
- LlFrK2RJJqxR1i1x94whFcNUuehrducH680L4D290HgGxKqjmvUHlIXL2Gnnuk7/EPuUy3fCq
- /wVoL+ogmlEz8zukSpjtKs7A8w6Hw+02uJ+gvyKY/8TX5udJgtZBTGKHV41pM/vwhiuSshwol
- 3i0EhwDqRN+EzsJRJ0v1G/+HSVoeFy7evfzegFOX8i/6MbXShrptkHhaXxXGQuh1wU5eYyEKe
- kNr3UnUA6Aqab75Yk8H8LfNkAl6dp/riU58DoSH0GMOFmtyMqR3iXnOBJrzj8yI2481QJMnXt
- fylBoMC6dW7EwH5YAqSp50n6ss7AIDgOklOha+7Tjj7wBLviReQAbSKD0s1luBAEmePh/6+In
- JiZDZSPgKWamsY=
+In-Reply-To: <2386420a975e0a6c17393828af776991f3d17c01.1643632014.git.hns@goldelico.com>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, 31 Jan 2022 13:26:49 +0100, H. Nikolaus Schaller wrote:
+> From: Sam Ravnborg <sam@ravnborg.org>
+> 
+> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
+> Based on .txt binding from Zubair Lutfullah Kakakhel
+> 
+> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> ---
+>  .../display/bridge/ingenic,jz4780-hdmi.yaml   | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
+> 
 
---rS/vUSa6UlTIcpRM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Feb 01, 2022 at 02:57:03PM +0100, Philippe Mathieu-Daud=C3=A9 wrote:
-> On Mon, Jan 31, 2022 at 12:48 PM Jonathan Neusch=C3=A4fer
-> <j.neuschaefer@gmx.net> wrote:
-> >
-> > In order that the end of a clk_div_table can be detected, it must be
-> > terminated with a sentinel element (.div =3D 0).
-> >
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > ---
-> >  drivers/clk/loongson1/clk-loongson1c.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loong=
-son1/clk-loongson1c.c
-> > index 703f87622cf5f..6b29ae9ede3e5 100644
-> > --- a/drivers/clk/loongson1/clk-loongson1c.c
-> > +++ b/drivers/clk/loongson1/clk-loongson1c.c
-> > @@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] =3D=
- {
-> >         [1] =3D { .val =3D 1, .div =3D 4 },
-> >         [2] =3D { .val =3D 2, .div =3D 3 },
-> >         [3] =3D { .val =3D 3, .div =3D 3 },
-> > +       [4] =3D { .val =3D 0, .div =3D 0 },
->=20
-> Easier to review when self-explicit:
->=20
->         [4] =3D { /* sentinel */ }
->=20
-> Preferably updated:
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
->=20
-> And eventually:
-> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-
-All good suggestions, I'll incorporate them into v2.
-
-
-Thanks,
-Jonathan
-
---rS/vUSa6UlTIcpRM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmH5jUQACgkQCDBEmo7z
-X9sbfBAAsWRQW7hSSe6lv8B+ILWJbizwV2Gv8Hr/4ah4C40e+tL2AL3Zb74SFFIB
-JiSa3eNiZtGS6k6z0nTny9jaGBTmamzgVaO1+oX4yrPVud/ZRgBWNkIqKtykodlc
-+yGaXPGuNzsyg1rq4zUmw1yE7yf2SdRRew92wrVlvMG92qztcCPOKmYQnIPSuHQB
-Sh8thsnqQhREK4tfgj7Jvbgyalr3EPOy4PQ8EV/F0sukNx4goC/NvzpQCW05b8zW
-mIDrP9gCKT0x8nao869YunTUshRxwJJyh7q9RroyuBPA2nGruDBDxipIf8jYD0j6
-yxx6Ovqgun4/RGfTBiJguwdGewAw9Ul0S9src+CWH5LTwnqYjFowLe7FxTy646DY
-WHQ71olyqYQWJ6iNnNVYqyyiyxN+epd14ujTErCqHanBrO4QmOnPWKCmNQNtlgBG
-1jHpp4lGh80CUAMXDuoqz5rl9nZix4U+HKg5yvgqsAnv31XW3Q5zMl3TQgVESldU
-dsF3ustKDo3UXmNCXH8UiIWyolu3uaXu6WTAS01h6oEwe76yVtjWyWQemWY2Zvub
-pp5lCHWv3LOR2pRYpcH+GXJd/UPyIGg/o5ysjVWjRrNzQFidHzQv9ijqeX/Q7s0O
-sEfURHyrrYzgED1DMeUw52uGJzFagKyvq7gNNrKZzIufWRcc+zk=
-=Qh1l
------END PGP SIGNATURE-----
-
---rS/vUSa6UlTIcpRM--
+Reviewed-by: Rob Herring <robh@kernel.org>
