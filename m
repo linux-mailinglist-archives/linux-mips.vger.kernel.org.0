@@ -2,75 +2,69 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B62A24A5806
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Feb 2022 08:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACF24A5832
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Feb 2022 09:02:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiBAHpC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Feb 2022 02:45:02 -0500
-Received: from verein.lst.de ([213.95.11.211]:57800 "EHLO verein.lst.de"
+        id S235285AbiBAICS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Feb 2022 03:02:18 -0500
+Received: from elvis.franken.de ([193.175.24.41]:50685 "EHLO elvis.franken.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229975AbiBAHpC (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Feb 2022 02:45:02 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 6C0AE68AA6; Tue,  1 Feb 2022 08:44:57 +0100 (CET)
-Date:   Tue, 1 Feb 2022 08:44:57 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V4 16/17] riscv: compat: Add COMPAT Kbuild skeletal
- support
-Message-ID: <20220201074457.GC29119@lst.de>
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-17-guoren@kernel.org> <YffVZZg9GNcjgVdm@infradead.org> <CAJF2gTRXDotO1L1FMojQs6msrqvCzA782Pux8rg3AfZgA=y0ew@mail.gmail.com>
+        id S235217AbiBAICS (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 1 Feb 2022 03:02:18 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nEo7E-0001iW-00; Tue, 01 Feb 2022 09:02:16 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9115BC1F78; Tue,  1 Feb 2022 09:01:41 +0100 (CET)
+Date:   Tue, 1 Feb 2022 09:01:41 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-mips@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        James Hogan <jhogan@kernel.org>, kvm@vger.kernel.org
+Subject: Re: [PATCH] MIPS: KVM: fix vz.c kernel-doc notation
+Message-ID: <20220201080141.GA5886@alpha.franken.de>
+References: <20220129205819.23781-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJF2gTRXDotO1L1FMojQs6msrqvCzA782Pux8rg3AfZgA=y0ew@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20220129205819.23781-1-rdunlap@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 09:50:58PM +0800, Guo Ren wrote:
-> On Mon, Jan 31, 2022 at 8:26 PM Christoph Hellwig <hch@infradead.org> wrote:
-> >
-> > Given that most rv64 implementations can't run in rv32 mode, what is the
-> > failure mode if someone tries it with the compat mode enabled?
-> A static linked simple hello_world could still run on a non-compat
-> support hardware. But most rv32 apps would meet different userspace
-> segment faults.
+On Sat, Jan 29, 2022 at 12:58:19PM -0800, Randy Dunlap wrote:
+> Fix all kernel-doc warnings in mips/kvm/vz.c as reported by the
+> kernel test robot:
 > 
-> Current code would let the machine try the rv32 apps without detecting
-> whether hw support or not.
+>   arch/mips/kvm/vz.c:471: warning: Function parameter or member 'out_compare' not described in '_kvm_vz_save_htimer'
+>   arch/mips/kvm/vz.c:471: warning: Function parameter or member 'out_cause' not described in '_kvm_vz_save_htimer'
+>   arch/mips/kvm/vz.c:471: warning: Excess function parameter 'compare' description in '_kvm_vz_save_htimer'
+>   arch/mips/kvm/vz.c:471: warning: Excess function parameter 'cause' description in '_kvm_vz_save_htimer'
+>   arch/mips/kvm/vz.c:1551: warning: No description found for return value of 'kvm_trap_vz_handle_cop_unusable'
+>   arch/mips/kvm/vz.c:1552: warning: expecting prototype for kvm_trap_vz_handle_cop_unusuable(). Prototype was for kvm_trap_vz_handle_cop_unusable() instead
+>   arch/mips/kvm/vz.c:1597: warning: No description found for return value of 'kvm_trap_vz_handle_msa_disabled'
+> 
+> Fixes: c992a4f6a9b0 ("KVM: MIPS: Implement VZ support")
+> Fixes: f4474d50c7d4 ("KVM: MIPS/VZ: Support hardware guest timer")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+> Cc: James Hogan <jhogan@kernel.org>
+> Cc: kvm@vger.kernel.org
+> ---
+>  arch/mips/kvm/vz.c |   12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 
-Hmm, we probably want some kind of check for not even offer running
-rv32 binaries.  I guess trying to write UXL some time during early
-boot and catching the resulting exception would be the way to go?
+applied to mips-fixes.
 
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
----end quoted text---
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
