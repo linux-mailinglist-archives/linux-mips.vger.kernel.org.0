@@ -2,232 +2,114 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5DF4A607C
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Feb 2022 16:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1E34A60E8
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Feb 2022 17:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240570AbiBAPsl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Feb 2022 10:48:41 -0500
-Received: from ptr.189.cn ([183.61.185.102]:13120 "EHLO 189.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240560AbiBAPsl (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Tue, 1 Feb 2022 10:48:41 -0500
-HMM_SOURCE_IP: 10.64.8.41:39240.932732977
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 45E9C1002AA;
-        Tue,  1 Feb 2022 23:48:37 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 4a469cc7c95148bfb79c12a54aa8e898 for dan.carpenter@oracle.com;
-        Tue, 01 Feb 2022 23:48:38 CST
-X-Transaction-ID: 4a469cc7c95148bfb79c12a54aa8e898
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Sam <Ravnborgsam@ravnborg.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v4 3/3] dt-bingdings: mips: loongson: introduce board specific dts
-Date:   Tue,  1 Feb 2022 23:48:21 +0800
-Message-Id: <20220201154821.3058-4-15330273260@189.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220201154821.3058-1-15330273260@189.cn>
-References: <20220201154821.3058-1-15330273260@189.cn>
+        id S240776AbiBAQBV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Feb 2022 11:01:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20074 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240769AbiBAQBV (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Feb 2022 11:01:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643731278;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9TOgZSvYLjnxXgPMR3aA+UnxenzdhiCu/Ec4ih921w8=;
+        b=GwQZVoxHXSx3xUaS0YWw+G/lDXsXgdwBaKi0Dd70KwcS784axjNHKSdXjxDfS145rKTr/x
+        fVEkq38geeGZX3WR7ePDFasVO/lefF8oaU7dftda72TXkoDvNdM0drOC3DsAdidxfIrsAd
+        IEXMRFmT/RSpgJSkH0kF8jyaRLuGZpw=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-76-ZkAgZHyTPXWw_wD3ZcknCQ-1; Tue, 01 Feb 2022 11:01:03 -0500
+X-MC-Unique: ZkAgZHyTPXWw_wD3ZcknCQ-1
+Received: by mail-ej1-f72.google.com with SMTP id ky6-20020a170907778600b0068e4bd99fd1so6738084ejc.15
+        for <linux-mips@vger.kernel.org>; Tue, 01 Feb 2022 08:01:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9TOgZSvYLjnxXgPMR3aA+UnxenzdhiCu/Ec4ih921w8=;
+        b=xBWSkKIekn/WyAK9S6EP76SLBcHuB1vTJs5yiJfgtNmd0ZvB30bWYVwgyDdX1cJ73y
+         gZ5QaXLkvLCazLdIilLqZ3qqgL3GXrCXYga2lDos35tndDyHnHclslGKsHmuGhJBwWTQ
+         5Pc27LM+UV1vZSIl0I4VZfGzW4GaKydCqsZhSAilKJV1hIuUnqdtaisSBhu3ELK+/zrO
+         or2sWsJJa9yCtJ4vJ+PZJtDwxPotIVazpvFLBcR44lof0IP37HOAEN5iUcJjFEd6ePZ7
+         erXeCErGQnHf1Y3slXi9kOfZBMtRrevQdvphpEbJMlCPrLMM4gkx2BOsYJQ7oeH4Tn0O
+         WQRA==
+X-Gm-Message-State: AOAM531WJIePY8KmwVd7IT+BRGPdRzCs/3xlcWzJ5cm79FJB910jrNtK
+        kwlg4FBXSyMzLAyIw9NTejrEvM8jmDvuAvU4Rgt9GMHFOfWj0xel6nJtbfmW7zw7csF0NDEvmSH
+        C9v17HBsgrA27mEDoioTOwQ==
+X-Received: by 2002:a17:907:72d6:: with SMTP id du22mr21767246ejc.179.1643731257032;
+        Tue, 01 Feb 2022 08:00:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyi6gqf6sTZV2adqJ/EwU8K0kh4yabr0HjJDqz0uGv4IXAxFUKBb//nn4tH0Br/W6v0yRG1zw==
+X-Received: by 2002:a17:907:72d6:: with SMTP id du22mr21767209ejc.179.1643731256826;
+        Tue, 01 Feb 2022 08:00:56 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id gh33sm14883510ejc.17.2022.02.01.08.00.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Feb 2022 08:00:56 -0800 (PST)
+Message-ID: <f8359e15-412a-03d6-1b0c-a9f253816497@redhat.com>
+Date:   Tue, 1 Feb 2022 17:00:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V5 21/21] KVM: compat: riscv: Prevent KVM_COMPAT from
+ being selected
+Content-Language: en-US
+To:     Anup Patel <anup@brainfault.org>, Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>
+References: <20220201150545.1512822-1-guoren@kernel.org>
+ <20220201150545.1512822-22-guoren@kernel.org>
+ <CAAhSdy27nVvh9F08kPgffJe-Y-gOOc9cnQtCLFAE0GbDhHVbiQ@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CAAhSdy27nVvh9F08kPgffJe-Y-gOOc9cnQtCLFAE0GbDhHVbiQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: suijingfeng <suijingfeng@loongson.cn>
+On 2/1/22 16:44, Anup Patel wrote:
+> +Paolo
+> 
+> On Tue, Feb 1, 2022 at 8:38 PM <guoren@kernel.org> wrote:
+>>
+>> From: Guo Ren <guoren@linux.alibaba.com>
+>>
+>> Current riscv doesn't support the 32bit KVM API. Let's make it
+>> clear by not selecting KVM_COMPAT.
+>>
+>> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> Signed-off-by: Guo Ren <guoren@kernel.org>
+>> Cc: Arnd Bergmann <arnd@arndb.de>
+>> Cc: Anup Patel <anup@brainfault.org>
+> 
+> This looks good to me.
+> 
+> Reviewed-by: Anup Patel <anup@brainfault.org>
 
-For board specific devices which is outside of the cpu and bridge chip
+Hi Anup,
 
-Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
-Signed-off-by: Sui Jingfeng <15330273260@189.cn>
----
- arch/mips/boot/dts/loongson/lemote_a1901.dts  | 64 +++++++++++++++++
- .../boot/dts/loongson/ls3a4000_7a1000_evb.dts | 69 +++++++++++++++++++
- arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |  2 +-
- 3 files changed, 134 insertions(+), 1 deletion(-)
- create mode 100644 arch/mips/boot/dts/loongson/lemote_a1901.dts
- create mode 100644 arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+feel free to send this via a pull request (perhaps together with Mark 
+Rutland's entry/exit rework).
 
-diff --git a/arch/mips/boot/dts/loongson/lemote_a1901.dts b/arch/mips/boot/dts/loongson/lemote_a1901.dts
-new file mode 100644
-index 000000000000..81828945ba52
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/lemote_a1901.dts
-@@ -0,0 +1,64 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/dts-v1/;
-+
-+#include "loongson64g-package.dtsi"
-+#include "ls7a-pch.dtsi"
-+
-+/ {
-+	compatible = "lemode,a1901", "loongson,loongson64g-4core-ls7a";
-+	model = "lemode,a1901";
-+};
-+
-+&package0 {
-+	htvec: interrupt-controller@efdfb000080 {
-+		compatible = "loongson,htvec-1.0";
-+		reg = <0xefd 0xfb000080 0x40>;
-+		interrupt-controller;
-+		#interrupt-cells = <1>;
-+
-+		interrupt-parent = <&liointc>;
-+		interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
-+			     <25 IRQ_TYPE_LEVEL_HIGH>,
-+			     <26 IRQ_TYPE_LEVEL_HIGH>,
-+			     <27 IRQ_TYPE_LEVEL_HIGH>,
-+			     <28 IRQ_TYPE_LEVEL_HIGH>,
-+			     <29 IRQ_TYPE_LEVEL_HIGH>,
-+			     <30 IRQ_TYPE_LEVEL_HIGH>,
-+			     <31 IRQ_TYPE_LEVEL_HIGH>;
-+	};
-+};
-+
-+&pch {
-+	msi: msi-controller@2ff00000 {
-+		compatible = "loongson,pch-msi-1.0";
-+		reg = <0 0x2ff00000 0 0x8>;
-+		interrupt-controller;
-+		msi-controller;
-+		loongson,msi-base-vec = <64>;
-+		loongson,msi-num-vecs = <192>;
-+		interrupt-parent = <&htvec>;
-+	};
-+};
-+
-+&lsdc {
-+	/* use_vram_helper; */
-+	output-ports = <&dvo0 &dvo1>;
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	dvo0: dvo@0 {
-+		/* 0 for DVO0 */
-+		reg = <0>;
-+		status = "disabled";
-+	};
-+
-+	dvo1: dvo@1 {
-+		/* 1 for DVO1 */
-+		reg = <1>;
-+		connector = "vga-connector";
-+		encoder = "adi,adv7125";
-+		status = "okay";
-+	};
-+};
-diff --git a/arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts b/arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
-new file mode 100644
-index 000000000000..abe7d3fb1633
---- /dev/null
-+++ b/arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/dts-v1/;
-+
-+#include "loongson64g-package.dtsi"
-+#include "ls7a-pch.dtsi"
-+
-+/ {
-+	compatible = "loongson,loongson64g-4core-ls7a";
-+	model = "loongson,ls3a4000_7a1000_evb";
-+	version = "v1.4";
-+};
-+
-+&package0 {
-+	htvec: interrupt-controller@efdfb000080 {
-+		compatible = "loongson,htvec-1.0";
-+		reg = <0xefd 0xfb000080 0x40>;
-+		interrupt-controller;
-+		#interrupt-cells = <1>;
-+
-+		interrupt-parent = <&liointc>;
-+		interrupts = <24 IRQ_TYPE_LEVEL_HIGH>,
-+			     <25 IRQ_TYPE_LEVEL_HIGH>,
-+			     <26 IRQ_TYPE_LEVEL_HIGH>,
-+			     <27 IRQ_TYPE_LEVEL_HIGH>,
-+			     <28 IRQ_TYPE_LEVEL_HIGH>,
-+			     <29 IRQ_TYPE_LEVEL_HIGH>,
-+			     <30 IRQ_TYPE_LEVEL_HIGH>,
-+			     <31 IRQ_TYPE_LEVEL_HIGH>;
-+	};
-+};
-+
-+&pch {
-+	msi: msi-controller@2ff00000 {
-+		compatible = "loongson,pch-msi-1.0";
-+		reg = <0 0x2ff00000 0 0x8>;
-+		interrupt-controller;
-+		msi-controller;
-+		loongson,msi-base-vec = <64>;
-+		loongson,msi-num-vecs = <192>;
-+		interrupt-parent = <&htvec>;
-+	};
-+};
-+
-+
-+&lsdc {
-+	/* use_vram_helper; */
-+	output-ports = <&dvo0 &dvo1>;
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	dvo0: dvo@0 {
-+		/* 0 for DVO0 */
-+		reg = <0>;
-+		connector = "vga-connector";
-+		encoder = "adi,adv7125";
-+		status = "okey";
-+	};
-+
-+	dvo1: dvo@1 {
-+		/* 1 for DVO1 */
-+		reg = <1>;
-+		connector = "dvi-connector";
-+		encoder = "ti,tfp410";
-+		digital;
-+		status = "okay";
-+	};
-+};
-diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-index 2f45fce2cdc4..70a0b7ac0839 100644
---- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-+++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-@@ -160,7 +160,7 @@
- 				interrupt-parent = <&pic>;
- 			};
- 
--			dc@6,1 {
-+			lsdc: dc@6,1 {
- 				compatible = "pci0014,7a06.0",
- 						   "pci0014,7a06",
- 						   "pciclass030000",
--- 
-2.20.1
+Paolo
 
