@@ -2,114 +2,200 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DAA4A605F
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Feb 2022 16:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2AE4A6079
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Feb 2022 16:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbiBAPpK (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Feb 2022 10:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240272AbiBAPpJ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Feb 2022 10:45:09 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1BFC06173E
-        for <linux-mips@vger.kernel.org>; Tue,  1 Feb 2022 07:45:09 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m13-20020a05600c3b0d00b00353951c3f62so1796271wms.5
-        for <linux-mips@vger.kernel.org>; Tue, 01 Feb 2022 07:45:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LCcU9g3LWk+Ni1MDTb90PSlSH2Ejv1l38RdD5isGmzA=;
-        b=dNCxlG7n/ZWCDBHispxymrFtrSs4c9YqEglHxbiG1ucYsKtBOTQqyfDQwy3eotCMjP
-         uLM2L/H5EOfuyuixCibGBeRPuEqC7JcUChO4/5W88/l97mdNAgNvT/xqYmtLFgbKxh5n
-         w5nISZOS0HKXiiexKQd+CqHtqM0kejpiHufa6rVenmJHxnYBkcSCvAZ+K0lfDvYe8v8/
-         paGmxHQs3RqMpJLOQQe5QQ5vAOhsHvaHBxJGkYOele0OKszptBqf8ga7cK7KXkXhM0iv
-         Gsb4gJ97geGtk3lJlPWcjuPmCn1m0Qbge+0Fy+Y8HGop/fCzxMmzbROs7ofYWtG8VEDd
-         mjlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LCcU9g3LWk+Ni1MDTb90PSlSH2Ejv1l38RdD5isGmzA=;
-        b=oyAgtzZdkQYPdyDELseekTmJGBG7k7EaJwassIo3RTLBTIUH4LaFmTjgbVXkDqUY/Z
-         B29SQmlEgdB5b9U0MTU3HOVCQcsESwUtlWiybCYq+7miPe5ZzUVPkeZrZPe9yuBbKtNx
-         wQa9PMBSHEstQKLn9UMR6AgS26EaTUE2zfwKkw/9TL22S4SzVH7aR5zKHK9DTkie7oyv
-         gu9Iu4foY7iYqMOZyKC2vVhTmDK8uF62USUunMtbvq1Y0AgjBK8/kNAZlMIBSHRYho7d
-         QYFUxVJu6MvMtjO8xkfWN5XRqFVFo+9Uv26QnnSRwUALOC1nwr7LsExhXDmkqT6WOBZm
-         v0Zg==
-X-Gm-Message-State: AOAM5314DjibcJVO6i5Tawxfe9w/a1zQF4SOlHnUMcIgH0EHEDL0zNwE
-        36LcApESu3L61hlNgxRWvy8ga2kS/NpEjE58zbfK+A==
-X-Google-Smtp-Source: ABdhPJzLJXIjzEoU+zr9xqvCLUKq64QKzCzT5/D/E4v9iXKOT2PZW4bgO0vZKGKExLFNyrBqW6Lzx4h6BrcWo4/kvAI=
-X-Received: by 2002:a7b:c929:: with SMTP id h9mr2237691wml.176.1643730307764;
- Tue, 01 Feb 2022 07:45:07 -0800 (PST)
+        id S240556AbiBAPsj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Feb 2022 10:48:39 -0500
+Received: from ptr.189.cn ([183.61.185.102]:13117 "EHLO 189.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S235634AbiBAPsj (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Tue, 1 Feb 2022 10:48:39 -0500
+HMM_SOURCE_IP: 10.64.8.41:39240.932732977
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 60BD31002A0;
+        Tue,  1 Feb 2022 23:48:26 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 2bb72a98004f4164aa4ffa68e1b66efd for dan.carpenter@oracle.com;
+        Tue, 01 Feb 2022 23:48:28 CST
+X-Transaction-ID: 2bb72a98004f4164aa4ffa68e1b66efd
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Sam <Ravnborgsam@ravnborg.org>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v4 0/3] drm/lsdc: add drm driver for loongson display controller
+Date:   Tue,  1 Feb 2022 23:48:18 +0800
+Message-Id: <20220201154821.3058-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220201150545.1512822-1-guoren@kernel.org> <20220201150545.1512822-22-guoren@kernel.org>
-In-Reply-To: <20220201150545.1512822-22-guoren@kernel.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 1 Feb 2022 21:14:56 +0530
-Message-ID: <CAAhSdy27nVvh9F08kPgffJe-Y-gOOc9cnQtCLFAE0GbDhHVbiQ@mail.gmail.com>
-Subject: Re: [PATCH V5 21/21] KVM: compat: riscv: Prevent KVM_COMPAT from
- being selected
-To:     Guo Ren <guoren@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        kvm-riscv@lists.infradead.org, KVM General <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+Paolo
+v4: add dts required and explain why device tree is required.
+    give more description about the code.
+    fix warnings reported by kernel test robot.
+    introduce stride_alignment member into struct lsdc_chip_desc,
+    the stride alignment is 256 bytes for ls7a1000, ls2k1000 and ls2k0500
+    SoC. But ls7a2000 improve it to 32 bytes.
 
-On Tue, Feb 1, 2022 at 8:38 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> Current riscv doesn't support the 32bit KVM API. Let's make it
-> clear by not selecting KVM_COMPAT.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Anup Patel <anup@brainfault.org>
+v3: fix more grammar mistakes in Kconfig reported by Randy Dunlap and give
+    more details about lsdc.
 
-This looks good to me.
+v2: fixup warnings reported by kernel test robot
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+bridge, and the DC in those chip is a PCI device. This display controller
+have two display pipes but with only one hardware cursor. Each way has a
+DVO output interface and the CRTC is able to scanout from 1920x1080
+resolution at 60Hz. LS2K1000 is a SoC, only system memory is available.
+Therefore scanout form system memory is the only choice and we prefer the
+cma helper base solution even through it is possible to use VRAM helper
+base solution on ls2k1000 by carving out part of system memory as VRAM.
 
-Regards,
-Anup
+The dc in ls7a1000 can scanout from both the system memory and the dedicate
+VRAM attached to the ddr3 memory controller. Sadly, only scanout from the
+VRAM is proved to be a reliable solution for massive product. Scanout from
+the system memory suffer from some hardware deficiency which cause the
+screen flickering under RAM pressure. This is the reason why we integrate
+two distict helpers into one piece of device driver.
 
-> ---
->  virt/kvm/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-> index f4834c20e4a6..a8c5c9f06b3c 100644
-> --- a/virt/kvm/Kconfig
-> +++ b/virt/kvm/Kconfig
-> @@ -53,7 +53,7 @@ config KVM_GENERIC_DIRTYLOG_READ_PROTECT
->
->  config KVM_COMPAT
->         def_bool y
-> -       depends on KVM && COMPAT && !(S390 || ARM64)
-> +       depends on KVM && COMPAT && !(S390 || ARM64 || RISCV)
->
->  config HAVE_KVM_IRQ_BYPASS
->         bool
-> --
-> 2.25.1
->
+    +------+
+    | DDR4 |
+    +------+
+       || MC0            +-----------------------+------------+
+  +----------+   Hyper   |         LS7A1000      |    DDR3    |   +------+
+  | LS3A4000 |<--------->| +--------+  +-------+ |   memory   |<->| VRAM |
+  |   CPU    |<--------->| | GC1000 |  |  LSDC | | controller |   +------+
+  +----------+ Transport | +--------+  +-+---+-+ +------------|
+       || MC1            +---------------|---|----------------+
+    +------+                             |   |
+    | DDR4 |          +-------+    DVO0  |   |  DVO1  +------+
+    +------+   VGA <--|ADV7125|<---------+   +------->|TFP410|--> DVI/HDMI
+                      +-------+                       +------+
+
+The above picture give a simple usage of LS7A1000, note that the encoder is
+not necessary adv7125 or tfp410, it is a choice of the downstream board
+manufacturer. Other candicate encoder can be ch7034b, sil9022 and ite66121
+etc. This is the reason why we still need device tree to provide board
+specific information. Beside, the dc in both ls2k1000 and ls7k1000 have
+the vendor:device id of 0x0014:0x7a06. even the reverison id is also same.
+We can't tell it apart simply(this is the firmware engineer's mistake).
+But firmware already flushed to the board and sold out, so we resolve those
+issues by using the device tree which already have certain support.
+
+Nevertheless, this patch try to provided a minimal support for this display
+controller which is mainly for graphic environment bring up. Hope that the
+code can speak for itself.
+
+For ls7a1000, there are 4 gpios who register is located at dc register
+space which is used to emulation i2c. LS2K1000 and LS2K0500 SoC don't
+have those hardware, they use general purpose gpio or hardware i2c to
+serve this purpose. For ladc, there is only a 1:1 mapping of encoders
+and connectors.
+
+     +-------------------+                                      _________
+     |                   |                                     |         |
+     |  CRTC0 --> DVO0 ---------> Encoder0 --> Connector0 ---> | Monotor |
+     |                   |           ^            ^            |_________|
+     |                   |           |            |
+     |                <----- i2c0 ----------------+
+     |   LSDC IP CORE    |
+     |                <----- i2c1 ----------------+
+     |                   |           |            |             _________
+     |                   |           |            |            |         |
+     |  CRTC1 --> DVO1 ---------> Encoder1 --> Connector1 ---> |  Panel  |
+     |                   |                                     |_________|
+     +-------------------+
+
+Below is a brief introduction of loongson's CPU, bridge chip and SoC.
+LS2K1000 is a double core 1.0Ghz mips64r2 compatible SoC[1]. LS7A1000 is
+a bridge chip made by Loongson corporation which act as north and/or south
+bridge of loongson's desktop and server level processor. It is equivalent
+to RS780E or something like that. More details can be read from its user
+manual[2].
+
+This bridge chip is typically use with LS3A3000, LS3A4000 and LS3A5000 cpu.
+LS3A3000 is 4 core 1.45gHz mips64r2 compatible cpu.
+LS3A4000 is 4 core 1.8gHz mips64r5 compatible cpu.
+LS3A5000 is 4 core 2.5gHz loongarch cpu[3].
+
+[1] https://wiki.debian.org/InstallingDebianOn/Lemote/Loongson2K1000
+[2] https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN.html
+[3] https://loongson.github.io/LoongArch-Documentation/Loongson-3A5000-usermanual-EN.html
+
+Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+
+suijingfeng (3):
+  drm/lsdc: add drm driver for loongson display controller
+  dt-bingdings: ls2k1000: add the display controller device node
+  dt-bingdings: mips: loongson: introduce board specific dts
+
+ arch/mips/boot/dts/loongson/lemote_a1901.dts  |  64 ++
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |  11 +
+ .../boot/dts/loongson/ls3a4000_7a1000_evb.dts |  69 ++
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   2 +-
+ drivers/gpu/drm/Kconfig                       |   2 +
+ drivers/gpu/drm/Makefile                      |   1 +
+ drivers/gpu/drm/lsdc/Kconfig                  |  38 +
+ drivers/gpu/drm/lsdc/Makefile                 |  15 +
+ drivers/gpu/drm/lsdc/lsdc_connector.c         | 439 +++++++++
+ drivers/gpu/drm/lsdc/lsdc_connector.h         |  60 ++
+ drivers/gpu/drm/lsdc/lsdc_crtc.c              | 441 +++++++++
+ drivers/gpu/drm/lsdc/lsdc_drv.c               | 838 ++++++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_drv.h               | 211 +++++
+ drivers/gpu/drm/lsdc/lsdc_encoder.c           |  79 ++
+ drivers/gpu/drm/lsdc/lsdc_i2c.c               | 220 +++++
+ drivers/gpu/drm/lsdc/lsdc_i2c.h               |  61 ++
+ drivers/gpu/drm/lsdc/lsdc_irq.c               |  77 ++
+ drivers/gpu/drm/lsdc/lsdc_irq.h               |  37 +
+ drivers/gpu/drm/lsdc/lsdc_plane.c             | 688 ++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_pll.c               | 613 +++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_pll.h               | 109 +++
+ drivers/gpu/drm/lsdc/lsdc_regs.h              | 246 +++++
+ 22 files changed, 4320 insertions(+), 1 deletion(-)
+ create mode 100644 arch/mips/boot/dts/loongson/lemote_a1901.dts
+ create mode 100644 arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+ create mode 100644 drivers/gpu/drm/lsdc/Kconfig
+ create mode 100644 drivers/gpu/drm/lsdc/Makefile
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_crtc.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_encoder.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_plane.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_regs.h
+
+-- 
+2.20.1
+
