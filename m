@@ -2,74 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE524A6C7E
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Feb 2022 08:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A7A4A6E2A
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Feb 2022 10:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbiBBHwF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Feb 2022 02:52:05 -0500
-Received: from verein.lst.de ([213.95.11.211]:33222 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231368AbiBBHwE (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Wed, 2 Feb 2022 02:52:04 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id D45AE67373; Wed,  2 Feb 2022 08:51:59 +0100 (CET)
-Date:   Wed, 2 Feb 2022 08:51:59 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     guoren@kernel.org
-Cc:     palmer@dabbelt.com, arnd@arndb.de, anup@brainfault.org,
-        gregkh@linuxfoundation.org, liush@allwinnertech.com,
-        wefu@redhat.com, drew@beagleboard.org, wangjunqiang@iscas.ac.cn,
-        hch@lst.de, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V5 15/21] riscv: compat: Add hw capability check for elf
-Message-ID: <20220202075159.GB18398@lst.de>
-References: <20220201150545.1512822-1-guoren@kernel.org> <20220201150545.1512822-16-guoren@kernel.org>
+        id S232329AbiBBJxA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Feb 2022 04:53:00 -0500
+Received: from mail.trueanalyze24.com ([149.154.157.156]:35578 "EHLO
+        mail.trueanalyze24.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245627AbiBBJw7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Feb 2022 04:52:59 -0500
+Received: by mail.trueanalyze24.com (Postfix, from userid 1001)
+        id F37CA43A62; Wed,  2 Feb 2022 10:32:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trueanalyze24.com;
+        s=mail; t=1643795522;
+        bh=EGenFkmmv/iHCwB4AbTzX8IXCMu1xRW+9eep7HJGZMM=;
+        h=Date:From:To:Subject:From;
+        b=pMBH1aPMsKjTWHBWdVBfs35c5M0Kk66Jc2MuoRKrsm4lCLzEhwtuvMSaUqvHwqUi5
+         2KQmM3CGZSwHJIbi6ZfXmeck5Q/5A8AMoT3OmFdKT7ttYnNNp0kXwJd62TZjidSFST
+         1iOdN3uQniz8FrDqO8F6HvZ7DqhOkIjuvMCWMijPFV6hFDETWthSRlJhrGKNDMwXnC
+         1IEwpZzYvBo9o5joMKpjYp0UZ+1fxwcux0UV4uZN3qhHBwf/C6dLtpfiUDFbZm/MwP
+         +7Ldl95ELeo20KVYZ1QFLDB8iPeyDWpeIki2op9A8jaoJW1cTSVOQrRS6umde5gNcO
+         oRW13llrmwkmQ==
+Received: by mail.trueanalyze24.com for <linux-mips@vger.kernel.org>; Wed,  2 Feb 2022 09:32:10 GMT
+Message-ID: <20220202084511-0.1.1h.h61o.0.j40r1pmprr@trueanalyze24.com>
+Date:   Wed,  2 Feb 2022 09:32:10 GMT
+From:   "Mateusz Talaga" <mateusz.talaga@trueanalyze24.com>
+To:     <linux-mips@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.trueanalyze24.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201150545.1512822-16-guoren@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 11:05:39PM +0800, guoren@kernel.org wrote:
-> +bool compat_elf_check_arch(Elf32_Ehdr *hdr)
-> +{
-> +	if (compat_mode_support && (hdr->e_machine == EM_RISCV))
-> +		return true;
-> +	else
-> +		return false;
-> +}
+Dzie=C5=84 dobry!
 
-This can be simplified to:
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
-	return compat_mode_support && hdr->e_machine == EM_RISCV;
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
 
-I'd also rename compat_mode_support to compat_mode_supported
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
 
-> +
-> +static int compat_mode_detect(void)
-> +{
-> +	unsigned long tmp = csr_read(CSR_STATUS);
-> +
-> +	csr_write(CSR_STATUS, (tmp & ~SR_UXL) | SR_UXL_32);
-> +
-> +	if ((csr_read(CSR_STATUS) & SR_UXL) != SR_UXL_32) {
-> +		pr_info("riscv: 32bit compat mode detect failed\n");
-> +		compat_mode_support = false;
-> +	} else {
-> +		compat_mode_support = true;
-> +		pr_info("riscv: 32bit compat mode detected\n");
-> +	}
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
 
-I don't think we need these printks here.
 
-Also this could be simplified to:
-
-	compat_mode_supported = (csr_read(CSR_STATUS) & SR_UXL) == SR_UXL_32;
+Z powa=C5=BCaniem,
+Mateusz Talaga
