@@ -2,450 +2,117 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70514A884A
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 17:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F044A8864
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 17:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiBCQEY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Feb 2022 11:04:24 -0500
-Received: from ptr.189.cn ([183.61.185.102]:13125 "EHLO 189.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229993AbiBCQEY (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Feb 2022 11:04:24 -0500
-HMM_SOURCE_IP: 10.64.8.41:45850.886286331
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id B0734100199;
-        Fri,  4 Feb 2022 00:04:20 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 2637270b75c940a69ca20338fa5b705f for maxime@cerno.tech;
-        Fri, 04 Feb 2022 00:04:21 CST
-X-Transaction-ID: 2637270b75c940a69ca20338fa5b705f
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <11ac5696-29e3-fefa-31c0-b7b86c88bbdc@189.cn>
-Date:   Fri, 4 Feb 2022 00:04:19 +0800
+        id S1352136AbiBCQMX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Feb 2022 11:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243578AbiBCQMW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Feb 2022 11:12:22 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C7BC061714;
+        Thu,  3 Feb 2022 08:12:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 82451CE205D;
+        Thu,  3 Feb 2022 16:12:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A7BC340EF;
+        Thu,  3 Feb 2022 16:12:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643904738;
+        bh=tHVZdpOeaDUJxjE7UYVAKrIDf5NQfx3p8v5KExnPRz8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NRtSFsbtCY6tw10trp0cRyK09ca2gwiH/rIdXiTLJzjOGCzluAwBbkC/FOneKXb4m
+         wyu4NLQe1771JC36tpnNVoatGhSIQBdAMx4NcHdmEH51GeEvrvf93g1McL0a8Jhjaj
+         DfNlgXSmy9+Z626IupK/gzi9yYKOyVLgRAddCvd61yiEhYPS0ltjVAd3HmAkDgXhZA
+         XH2tEtfQ0aPHT7W4E1jbkjBuIWG9J6a2mPnLw1mOU8wsFu14bGHddJw6OpXodxsDX9
+         WpVAI0ZTszicK8BqmkjzHK/QUy3gvA1cpgwneme6SvipZ9tDTww+vwcWixC/vI3gvi
+         hNdmx75bfd68Q==
+Date:   Thu, 3 Feb 2022 21:42:10 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Saravanan Sekar <sravanhome@gmail.com>,
+        Parthiban Nallathambi <pn@denx.de>,
+        linux-actions@lists.infradead.org
+Subject: Re: [PATCH v2 1/4] clk: actions: Terminate clk_div_table with
+ sentinel element
+Message-ID: <20220203161210.GA138829@thinkpad>
+References: <20220203142153.260720-1-j.neuschaefer@gmx.net>
+ <20220203142153.260720-2-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20220203082546.3099-1-15330273260@189.cn>
- <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20220203085851.yqstkfgt4dz7rcnw@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220203142153.260720-2-j.neuschaefer@gmx.net>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, Feb 03, 2022 at 03:21:50PM +0100, Jonathan Neusch�fer wrote:
+> In order that the end of a clk_div_table can be detected, it must be
+> terminated with a sentinel element (.div = 0).
+> 
+> Fixes: d47317ca4ade1 ("clk: actions: Add S700 SoC clock support")
+> Fixes: d85d20053e195 ("clk: actions: Add S900 SoC clock support")
+> Signed-off-by: Jonathan Neusch�fer <j.neuschaefer@gmx.net>
+> ---
+> 
+> I'm not so sure about usb3_mac_div_table. Maybe the { 0, 8 } element was
+> meant to be { 0, 0 }? I'd appreciate if someone with access to the
+> datasheet or hardware could verify what's correct.
 
+USB3 factor table is not documented in the datasheet I have access to. But by
+looking at the value, it looks to be a typo. So please change the last entry.
+With that,
 
->> diff --git a/drivers/gpu/drm/lsdc/Makefile b/drivers/gpu/drm/lsdc/Makefile
->> new file mode 100644
->> index 000000000000..342990654478
->> --- /dev/null
->> +++ b/drivers/gpu/drm/lsdc/Makefile
->> @@ -0,0 +1,15 @@
->> +#
->> +# Makefile for the lsdc drm device driver.
->> +#
->> +
->> +lsdc-y := \
->> +	lsdc_drv.o \
->> +	lsdc_crtc.o \
->> +	lsdc_irq.o \
->> +	lsdc_plane.o \
->> +	lsdc_pll.o \
->> +	lsdc_i2c.o \
->> +	lsdc_encoder.o \
->> +	lsdc_connector.o
->> +
->> +obj-$(CONFIG_DRM_LSDC) += lsdc.o
->> diff --git a/drivers/gpu/drm/lsdc/lsdc_connector.c b/drivers/gpu/drm/lsdc/lsdc_connector.c
->> new file mode 100644
->> index 000000000000..ae5fc0c90961
->> --- /dev/null
->> +++ b/drivers/gpu/drm/lsdc/lsdc_connector.c
->> @@ -0,0 +1,443 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Copyright 2020 Loongson Corporation
->> + *
->> + * Permission is hereby granted, free of charge, to any person obtaining a
->> + * copy of this software and associated documentation files (the
->> + * "Software"), to deal in the Software without restriction, including
->> + * without limitation the rights to use, copy, modify, merge, publish,
->> + * distribute, sub license, and/or sell copies of the Software, and to
->> + * permit persons to whom the Software is furnished to do so, subject to
->> + * the following conditions:
->> + *
->> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
->> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
->> + * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL
->> + * THE COPYRIGHT HOLDERS, AUTHORS AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAIM,
->> + * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
->> + * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
->> + * USE OR OTHER DEALINGS IN THE SOFTWARE.
->> + *
->> + * The above copyright notice and this permission notice (including the
->> + * next paragraph) shall be included in all copies or substantial portions
->> + * of the Software.
->> + */
-> That's the MIT license, yet you claim the driver to be licensed under
-> the GPLv2 or later?
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
 
-I just copy then paste it blindly, sorry about that.
-I do not know the difference, we want open the source anyway.
-I will correct it in next version, thanks.
+Thanks,
+Mani
 
->> +
->> +/*
->> + * Authors:
->> + *      Sui Jingfeng <suijingfeng@loongson.cn>
->> + */
->> +
->> +#include <drm/drm_print.h>
->> +#include <drm/drm_edid.h>
->> +#include <drm/drm_probe_helper.h>
->> +#include <drm/drm_atomic_helper.h>
->> +#include <drm/drm_crtc_helper.h>
->> +#include <drm/drm_connector.h>
->> +
->> +#include <video/videomode.h>
->> +#include <video/of_display_timing.h>
->> +
->> +#include "lsdc_drv.h"
->> +#include "lsdc_i2c.h"
->> +#include "lsdc_connector.h"
->> +
->> +
->> +static int lsdc_get_modes_from_edid(struct drm_connector *connector)
->> +{
->> +	struct drm_device *ddev = connector->dev;
->> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
->> +	struct edid *edid_p = (struct edid *)lconn->edid_data;
->> +	int num = drm_add_edid_modes(connector, edid_p);
->> +
->> +	if (num)
->> +		drm_connector_update_edid_property(connector, edid_p);
->> +
->> +	drm_dbg_kms(ddev, "%d modes added\n", num);
->> +
->> +	return num;
->> +}
->> +
->> +
->> +static int lsdc_get_modes_from_timings(struct drm_connector *connector)
->> +{
->> +	struct drm_device *ddev = connector->dev;
->> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
->> +	struct display_timings *disp_tim = lconn->disp_tim;
->> +	unsigned int num = 0;
->> +	unsigned int i;
->> +
->> +	for (i = 0; i < disp_tim->num_timings; i++) {
->> +		const struct display_timing *dt = disp_tim->timings[i];
->> +		struct drm_display_mode *mode;
->> +		struct videomode vm;
->> +
->> +		videomode_from_timing(dt, &vm);
->> +		mode = drm_mode_create(ddev);
->> +		if (!mode) {
->> +			drm_err(ddev, "failed to add mode %ux%u\n",
->> +					dt->hactive.typ, dt->vactive.typ);
->> +			continue;
->> +		}
->> +
->> +		drm_display_mode_from_videomode(&vm, mode);
->> +
->> +		mode->type |= DRM_MODE_TYPE_DRIVER;
->> +
->> +		if (i == disp_tim->native_mode)
->> +			mode->type |= DRM_MODE_TYPE_PREFERRED;
->> +
->> +		drm_mode_probed_add(connector, mode);
->> +		num++;
->> +	}
->> +
->> +	drm_dbg_kms(ddev, "%d modes added\n", num);
->> +
->> +	return num;
->> +}
->> +
->> +
->> +static int lsdc_get_modes_from_ddc(struct drm_connector *connector,
->> +				   struct i2c_adapter *ddc)
->> +{
->> +	unsigned int num = 0;
->> +	struct edid *edid;
->> +
->> +	edid = drm_get_edid(connector, ddc);
->> +	if (edid) {
->> +		drm_connector_update_edid_property(connector, edid);
->> +		num = drm_add_edid_modes(connector, edid);
->> +		kfree(edid);
->> +	}
->> +
->> +	return num;
->> +}
->> +
->> +
->> +static int lsdc_get_modes(struct drm_connector *connector)
->> +{
->> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
->> +	unsigned int num = 0;
->> +
->> +	if (lconn->has_edid)
->> +		return lsdc_get_modes_from_edid(connector);
->> +
->> +	if (lconn->has_disp_tim)
->> +		return lsdc_get_modes_from_timings(connector);
->> +
->> +	if (IS_ERR_OR_NULL(lconn->ddc) == false)
->> +		return lsdc_get_modes_from_ddc(connector, lconn->ddc);
->> +
->> +	if (connector->connector_type == DRM_MODE_CONNECTOR_VIRTUAL) {
->> +		num = drm_add_modes_noedid(connector,
->> +				     connector->dev->mode_config.max_width,
->> +				     connector->dev->mode_config.max_height);
->> +
->> +		drm_set_preferred_mode(connector, 1024, 768);
->> +
->> +		return num;
->> +	}
->> +
->> +
->> +	/*
->> +	 * In case we cannot retrieve the EDIDs (broken or missing i2c
->> +	 * bus), fallback on the XGA standards, because we are for board
->> +	 * bringup.
->> +	 */
->> +	num = drm_add_modes_noedid(connector, 1920, 1200);
->> +
->> +	/* And prefer a mode pretty much anyone can handle */
->> +	drm_set_preferred_mode(connector, 1024, 768);
->> +
->> +	return num;
->> +
->> +}
->> +
->> +
->> +static enum drm_connector_status
->> +lsdc_connector_detect(struct drm_connector *connector, bool force)
->> +{
->> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
->> +
->> +	if (lconn->has_edid == true)
->> +		return connector_status_connected;
->> +
->> +	if (lconn->has_disp_tim == true)
->> +		return connector_status_connected;
->> +
->> +	if (IS_ERR_OR_NULL(lconn->ddc) == false)
->> +		return drm_probe_ddc(lconn->ddc);
->> +
->> +	if (lconn->ddc && drm_probe_ddc(lconn->ddc))
->> +		return connector_status_connected;
->> +
->> +	if (connector->connector_type == DRM_MODE_CONNECTOR_VIRTUAL)
->> +		return connector_status_connected;
->> +
->> +	if ((connector->connector_type == DRM_MODE_CONNECTOR_DVIA) ||
->> +	    (connector->connector_type == DRM_MODE_CONNECTOR_DVID) ||
->> +	    (connector->connector_type == DRM_MODE_CONNECTOR_DVII))
->> +		return connector_status_disconnected;
->> +
->> +	if ((connector->connector_type == DRM_MODE_CONNECTOR_HDMIA) ||
->> +	    (connector->connector_type == DRM_MODE_CONNECTOR_HDMIB))
->> +		return connector_status_disconnected;
->> +
->> +	return connector_status_unknown;
->> +}
->> +
->> +
->> +/*
->> + * @connector: point to the drm_connector structure
->> + *
->> + * Clean up connector resources
->> + */
->> +static void lsdc_connector_destroy(struct drm_connector *connector)
->> +{
->> +	struct drm_device *ddev = connector->dev;
->> +	struct lsdc_connector *lconn = to_lsdc_connector(connector);
->> +
->> +	if (lconn) {
->> +		if (lconn->ddc)
->> +			lsdc_destroy_i2c(connector->dev, lconn->ddc);
->> +
->> +		drm_info(ddev, "destroying connector%u\n", lconn->index);
->> +
->> +		devm_kfree(ddev->dev, lconn);
->> +	}
->> +
->> +	drm_connector_cleanup(connector);
->> +}
->> +
->> +
->> +static const struct drm_connector_helper_funcs lsdc_connector_helpers = {
->> +	.get_modes = lsdc_get_modes,
->> +};
->> +
->> +/*
->> + * These provide the minimum set of functions required to handle a connector
->> + *
->> + * Control connectors on a given device.
->> + *
->> + * Each CRTC may have one or more connectors attached to it.
->> + * The functions below allow the core DRM code to control
->> + * connectors, enumerate available modes, etc.
->> + */
->> +static const struct drm_connector_funcs lsdc_connector_funcs = {
->> +	.dpms = drm_helper_connector_dpms,
->> +	.detect = lsdc_connector_detect,
->> +	.fill_modes = drm_helper_probe_single_connector_modes,
->> +	.destroy = lsdc_connector_destroy,
->> +	.reset = drm_atomic_helper_connector_reset,
->> +	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
->> +	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
->> +};
->> +
->> +
->> +/* Get the simple EDID data from the device tree
->> + * the length must be EDID_LENGTH, since it is simple.
->> + *
->> + * @np: device node contain edid data
->> + * @edid_data: where the edid data to store to
->> + */
->> +static bool lsdc_get_edid_from_dtb(struct device_node *np,
->> +				   unsigned char *edid_data)
->> +{
->> +	int length;
->> +	const void *prop;
->> +
->> +	if (np == NULL)
->> +		return false;
->> +
->> +	prop = of_get_property(np, "edid", &length);
->> +	if (prop && (length == EDID_LENGTH)) {
->> +		memcpy(edid_data, prop, EDID_LENGTH);
->> +		return true;
->> +	}
->> +
->> +	return false;
->> +}
-> You don't have a device tree binding for that driver, this is something
-> that is required. And it's not clear to me why you'd want EDID in the
-> DTB?
-
-1) It is left to the end user of this driver.
-
-The downstream motherboard maker may use a dpi(XRGB888) or LVDS panel
-which don't have DDC support either, doing this way allow them put a
-EDID property into the dc device node in the DTS. Then the entire system works.
-Note those panel usually support only one display mode.
-
-2) That is for the display controller in ls2k1000 SoC.
-
-Currently, the upstream kernel still don't have GPIO, PWM and I2C driver support
-for LS2K1000 SoC.
-
-How dose you read EDID from the monitor without a I2C driver?
-
-without reading EDID the device tree support, the screen just black,
-the lsdc driver just stall. With reading EDID from device tree support
-we do not need a i2c driver to light up the monitor.
-
-This make lsdc drm driver work on various ls2k1000 development board
-before I2C driver and GPIO driver and PWM backlight driver is upstream.
-
-I have many local private dts with the bindings, those local change just can not
-upstream at this time, below is an example.
-
-3) Again, doing this way is for graphic environment bring up.
-
-&lsdc {
-
-     output-ports = <&dvo0 &dvo1>;
-     #address-cells = <1>;
-     #size-cells = <0>;
-     dvo0: dvo@0 {
-         reg = <0>;
-
-         connector = "dpi-connector";
-         encoder = "none";
-         status = "ok";
-
-         display-timings {
-             native-mode = <&mode_0_1024x600_60>;
-
-             mode_0_1024x600_60: panel-timing@0 {
-                 clock-frequency = <51200000>;
-                 hactive = <1024>;
-                 vactive = <600>;
-                 hsync-len = <4>;
-                 hfront-porch = <160>;
-                 hback-porch = <156>;
-                 vfront-porch = <11>;
-                 vback-porch = <23>;
-                 vsync-len = <1>;
-             };
-
-             mode_1_800x480_60: panel-timing@1 {
-                 clock-frequency = <30066000>;
-                 hactive = <800>;
-                 vactive = <480>;
-                 hfront-porch = <50>;
-                 hback-porch = <70>;
-                 hsync-len = <50>;
-                 vback-porch = <0>;
-                 vfront-porch = <0>;
-                 vsync-len = <50>;
-             };
-         };
-     };
-
-     dvo1: dvo@1 {
-         reg = <1>;
-
-         connector = "hdmi-connector";
-         type = "a";
-         encoder = "sil9022";
-
-         edid = [ 00 ff ff ff ff ff ff 00 1e 6d 54 5b 0b cc 04 00
-              02 1c 01 03 6c 30 1b 78 ea 31 35 a5 55 4e a1 26
-              0c 50 54 a5 4b 00 71 4f 81 80 95 00 b3 00 a9 c0
-              81 00 81 c0 90 40 02 3a 80 18 71 38 2d 40 58 2c
-              45 00 e0 0e 11 00 00 1e 00 00 00 fd 00 38 4b 1e
-              53 0f 00 0a 20 20 20 20 20 20 00 00 00 fc 00 4c
-              47 20 46 55 4c 4c 20 48 44 0a 20 20 00 00 00 ff
-              00 38 30 32 4e 54 43 5a 39 38 33 37 39 0a 00 35 ];
-
-         status = "ok";
-     };
-};
-
-
+> 
+> v2:
+> - Add Fixes tags
+> ---
+>  drivers/clk/actions/owl-s700.c | 1 +
+>  drivers/clk/actions/owl-s900.c | 4 ++--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/actions/owl-s700.c b/drivers/clk/actions/owl-s700.c
+> index a2f34d13fb543..617174644f728 100644
+> --- a/drivers/clk/actions/owl-s700.c
+> +++ b/drivers/clk/actions/owl-s700.c
+> @@ -162,6 +162,7 @@ static struct clk_div_table hdmia_div_table[] = {
+> 
+>  static struct clk_div_table rmii_div_table[] = {
+>  	{0, 4},   {1, 10},
+> +	{0, 0},
+>  };
+> 
+>  /* divider clocks */
+> diff --git a/drivers/clk/actions/owl-s900.c b/drivers/clk/actions/owl-s900.c
+> index 790890978424a..f6f49100a865b 100644
+> --- a/drivers/clk/actions/owl-s900.c
+> +++ b/drivers/clk/actions/owl-s900.c
+> @@ -139,8 +139,8 @@ static struct clk_div_table rmii_ref_div_table[] = {
+>  };
+> 
+>  static struct clk_div_table usb3_mac_div_table[] = {
+> -	{ 1, 2 }, { 2, 3 }, { 3, 4 },
+> -	{ 0, 8 },
+> +	{ 1, 2 }, { 2, 3 }, { 3, 4 }, { 0, 8 },
+> +	{ 0, 0 },
+>  };
+> 
+>  static struct clk_div_table i2s_div_table[] = {
+> --
+> 2.34.1
+> 
