@@ -2,103 +2,67 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909CD4A860F
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 15:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E614A8720
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 15:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351138AbiBCOWX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Feb 2022 09:22:23 -0500
-Received: from mout.gmx.net ([212.227.17.21]:39987 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235184AbiBCOWT (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Feb 2022 09:22:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643898130;
-        bh=s5TWocQnifuLlbQy45UKIXlTdxwlmwlpmSTvwvw0mHA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=jwL/VB9p0i/TJeBbTULlhzQtUe7cCb/q8Q0+dhgiUeMeJ93pW3pZZEpUGChzc7UOs
-         wE0uVJglnRuPoZm0I0F+We4Go5kbK389qariL+nQhdKOTb+vKamFZU5l9HetBkHIUW
-         9ukZ8Vgitpzvgc6n5z4vvQcLd7M1w1DmnYV9/9FQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([185.66.193.41]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8hVB-1nAyA432wL-004gDk; Thu, 03
- Feb 2022 15:22:09 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-clk@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Mike Turquette <mturquette@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v2 4/4] clk: clps711x: Terminate clk_div_table with sentinel element
-Date:   Thu,  3 Feb 2022 15:21:53 +0100
-Message-Id: <20220203142153.260720-5-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203142153.260720-1-j.neuschaefer@gmx.net>
-References: <20220203142153.260720-1-j.neuschaefer@gmx.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:gAyEM69PgyfCPiDmJpqcef8sPklrNOg9HX/TNXJYBajcoyyfSlR
- oaOfjeh1k04n9IrDpnlxQZOxkxBy8bQ+0myStyQAxPoNOtRUdwSdiF2HxqtQ/HQ/NkoVgAd
- 3ldCOrL7hThoCn9+iVHbKojNnprr4lEk79+t8quGzZxegUkSfglg1UNs0GWEjgI6PI6OhCM
- eX5lmhsQh2nz4PWUVOkHQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NYPg6mR/Ibw=:G80UHyYLkZ1XwFVfIMd3SU
- UoqmN52WNUhvx4VIJ9UeIOC6z4RArx/p2Z/Qrip5EZOlHxI0sAIkVLyzVTGdHjgrwbBIyilLN
- Pw1z8TmSel5wC63jASogVNsIrtfaxk2hJmeorMf/sUssppnH328utO/K4Zs03q2MNJJrElz0J
- x5jTvIMYCz6IUP1e/1NP8mYWJ/5pABN3fDxXXzz665a39qH/1iKlGH9WaCqNQrHd9TF/VWVOf
- 7YCQRBLddY+bq8uVcLaB3jIScGgYqpt6lEd10kcmPPoXrTjTbRCszA8TQ0v7Y5I/nBmjQvEfV
- xPTPL5pRAE0NIAvM7yrxpU7b3aisnou7vCmM1p9rMKGpmj8ZcxiZ2hgCIq7/gES8VyB4FWWtW
- AE8RUQ59QpzYRjwj0YnD7N9jISJYOXHZT3ure7AM1Cvfeqy35/bGX0/XKjdjy/MITHF4+LyKB
- sMcHoE+wh+AGxL1YOT5nH4vtVRz8oLrtNgJkKOpwl3Yj3b8UugS2ZN8wQJOJbPPPsRdIagcl6
- HKpagFutWiPYE1Rb/05iUg3+Tg1RXLrVhAFgBkKjVvJKB/L9LyMN+kVb46Ta2KXn/lcP1AdDk
- 5EVwkionVVKctSEXZscyuyqAEiSU2j4fKR5S/kdrHwc/I5bpox2U0afpX8luVRKFkRvBVyUV4
- tO+l6/XbrKH9qCUGIU7yQJsgcy9PSbt76QW757oGJn/jJbjvT3jHcgEN6QzOkT7rA9DYSSyIt
- RWldb5MVm/3+u5qt3KlUqZALu4ZRu5zP6Vr5Th7YVf1nawZ6dWHEH+YH51CqWuxOMqUDgQ3GT
- LH8V5lkQmIIMMl2C8vvPF1kM8DvEuMZ0AEWWu6xMd8YzA4L4waGeMYAdBqJHbtlyVi7uiVEzh
- OUyfQy2cWn/RzkOPQN9NSXk+6bJ7Gr2mpz/oqRYClxA3j3+JZpDmUA61cr/idEe7VePWSlZf/
- zbI5N6ZUwBcTkHeDUUXdWEyRwYw8hd0ZLnla/YdHcN4PAFJ0qbGcY1oWApu8RtYGm9gzU1Pw2
- uhaJxxTF6PjzKAjydWq0C32OHgVcdHmlGvmCJFkyXSP6dCDBkgqQKZEpZMdrkMI5qkC49F/on
- joLyE6dXBBXcog=
+        id S242104AbiBCO5W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Feb 2022 09:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236285AbiBCO5W (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Feb 2022 09:57:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFE3C061714;
+        Thu,  3 Feb 2022 06:57:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9040561A53;
+        Thu,  3 Feb 2022 14:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 037F9C340E4;
+        Thu,  3 Feb 2022 14:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643900241;
+        bh=rZqRbsG2l7ER8PFv8mXrGg1IyiTqFVzh6i0XCds10/c=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=CyeAvlunIjmxlw7af6EGCKOXyafIBzE5ZlthWSpob7BKB1n47luYuI4G/AMgd1Asp
+         7GWSq+uKeuzatCBhcqT/WoaiQ69CSkzCCiVEifeYv1sA6J+RMqyo2nAZcSxfj1TMpa
+         dcXvIORgX3jtXu0MZs18jjzRuwuFJB8LJmMsA7dfjmGh9voOtIEAYfmIK6j/xf2h2m
+         W+sUc7As/pNH/GEgCKXp19ck4tpLg1JKBfNmgelGWIJjYx0ku15ylrVd6WpxzndZpB
+         Df1u6B+4cPRPKjfT5BS+gPbqfo+dS8F6f07iqaa7sz0DMJ46i61xtiEW8lC5iEiiyb
+         ugiTbhlFKgwSA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E83A0E5D08C;
+        Thu,  3 Feb 2022 14:57:20 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220203085602.GA5364@alpha.franken.de>
+References: <20220203085602.GA5364@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220203085602.GA5364@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_2
+X-PR-Tracked-Commit-Id: 2161ba070999a709f975910b6b9ad6b51cd6f120
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d394bb77dd0bd20b125459da25fdac00a853be28
+Message-Id: <164390024094.8873.8664251448338199732.pr-tracker-bot@kernel.org>
+Date:   Thu, 03 Feb 2022 14:57:20 +0000
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In order that the end of a clk_div_table can be detected, it must be
-terminated with a sentinel element (.div =3D 0).
+The pull request you sent on Thu, 3 Feb 2022 09:56:02 +0100:
 
-Fixes: 631c53478973d ("clk: Add CLPS711X clk driver")
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_2
 
-v2:
-- Add Fixes tag
-=2D--
- drivers/clk/clk-clps711x.c | 2 ++
- 1 file changed, 2 insertions(+)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d394bb77dd0bd20b125459da25fdac00a853be28
 
-diff --git a/drivers/clk/clk-clps711x.c b/drivers/clk/clk-clps711x.c
-index a2c6486ef1708..d96d96c8752c7 100644
-=2D-- a/drivers/clk/clk-clps711x.c
-+++ b/drivers/clk/clk-clps711x.c
-@@ -28,11 +28,13 @@ static const struct clk_div_table spi_div_table[] =3D =
-{
- 	{ .val =3D 1, .div =3D 8, },
- 	{ .val =3D 2, .div =3D 2, },
- 	{ .val =3D 3, .div =3D 1, },
-+	{}
- };
+Thank you!
 
- static const struct clk_div_table timer_div_table[] =3D {
- 	{ .val =3D 0, .div =3D 256, },
- 	{ .val =3D 1, .div =3D 1, },
-+	{}
- };
-
- struct clps711x_clk {
-=2D-
-2.34.1
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
