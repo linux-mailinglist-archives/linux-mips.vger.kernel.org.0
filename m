@@ -2,70 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150364A873C
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 16:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A804A87F3
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 16:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiBCPGw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Feb 2022 10:06:52 -0500
-Received: from mga03.intel.com ([134.134.136.65]:55933 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237438AbiBCPGv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Feb 2022 10:06:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643900811; x=1675436811;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kimg+WP471TxgYHSZdGgWrJTRHBz7dzY4QrTP/ooh3U=;
-  b=OCWJIFRR4jday+H6NJj8nAfWe8634Md2Tp/wzApPpbUZ38ceNQls58l/
-   ZDUkal7O7SbXS1lwDQicZqWKzFSnKsLFn5uRqK2ZV2rPqBxE8ARvFoqss
-   NJBsKM69QsBK3DSF80kTQAhqfm+M6Jjk2t4NnO0IRW56X6WIMv5vLICsT
-   6me/SdeJQpTlIVpNBcQdphZRVg4SeFdmXtbGgdkV2pjejlOt2mYn4mwTA
-   A6VlifGbUR7Z9fb9UfrAYnsOKTTS6er0csRi0CG4euy2OJ0PCqjmHmupe
-   LkosW+BHLDy6R8btpRaY/ltBDqSm5QMHuqx+Y0rENDwEH3hLlnJie00Ii
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="248112289"
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="248112289"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:06:50 -0800
-X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
-   d="scan'208";a="699336743"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:06:47 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nFdgA-000Rxn-5I;
-        Thu, 03 Feb 2022 17:05:46 +0200
-Date:   Thu, 3 Feb 2022 17:05:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Allen Pais <apais@linux.microsoft.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v2 1/1] firmware: tee_bnxt: Use UUID API for exporting
- the UUID
-Message-ID: <YfvvSTrSv3lv4CEE@smile.fi.intel.com>
-References: <20220127160150.48140-1-andriy.shevchenko@linux.intel.com>
+        id S1344963AbiBCPrl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Feb 2022 10:47:41 -0500
+Received: from ptr.189.cn ([183.61.185.101]:11377 "EHLO 189.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1351929AbiBCPrd (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Feb 2022 10:47:33 -0500
+HMM_SOURCE_IP: 10.64.8.31:39466.934777394
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id DCD1E1001F1;
+        Thu,  3 Feb 2022 23:47:30 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 028d37242dba4320bff33254090a6948 for maxime@cerno.tech;
+        Thu, 03 Feb 2022 23:47:31 CST
+X-Transaction-ID: 028d37242dba4320bff33254090a6948
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <57805e19-285a-76d3-16e3-09a3eb7a9540@189.cn>
+Date:   Thu, 3 Feb 2022 23:47:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127160150.48140-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
+ controller
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20220203082546.3099-1-15330273260@189.cn>
+ <20220203082546.3099-2-15330273260@189.cn>
+ <20220203085851.yqstkfgt4dz7rcnw@houat>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20220203085851.yqstkfgt4dz7rcnw@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 06:01:50PM +0200, Andy Shevchenko wrote:
-> There is export_uuid() function which exports uuid_t to the u8 array.
-> Use it instead of open coding variant.
-> 
-> This allows to hide the uuid_t internals.
 
-Any comments, tags? Can it be accepted now?
+On 2022/2/3 16:58, Maxime Ripard wrote:
+>> diff --git a/drivers/gpu/drm/lsdc/Kconfig b/drivers/gpu/drm/lsdc/Kconfig
+>> new file mode 100644
+>> index 000000000000..7ed1b0fdbe1b
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/lsdc/Kconfig
+>> @@ -0,0 +1,38 @@
+>> +config DRM_LSDC
+>> +	tristate "DRM Support for loongson's display controller"
+>> +	depends on DRM && PCI
+>> +	depends on MACH_LOONGSON64 || LOONGARCH || MIPS || COMPILE_TEST
+>> +	select OF
+>> +	select CMA if HAVE_DMA_CONTIGUOUS
+>> +	select DMA_CMA if HAVE_DMA_CONTIGUOUS
+>> +	select DRM_KMS_HELPER
+>> +	select DRM_KMS_FB_HELPER
+>> +	select DRM_GEM_CMA_HELPER
+>> +	select VIDEOMODE_HELPERS
+>> +	select BACKLIGHT_PWM if CPU_LOONGSON2K
+>> +	select I2C_GPIO if CPU_LOONGSON2K
+>> +	select I2C_LS2X if CPU_LOONGSON2K
+>> +	default m
+>> +	help
+>> +	  This is a KMS driver for the display controller in the LS7A1000
+>> +	  bridge chip and LS2K1000 SoC. The display controller has two
+>> +	  display pipes and it is a PCI device.
+>> +	  When using this driver on LS2K1000/LS2K0500 SoC, its framebuffer
+>> +	  is located at system memory.
+>> +	  If "M" is selected, the module will be called lsdc.
+>> +
+>> +	  If in doubt, say "Y".
+>> +
+>> +config DRM_LSDC_VRAM_DRIVER
+>> +	bool "vram helper based device driver support"
+>> +	depends on DRM_LSDC
+>> +	select DRM_VRAM_HELPER
+>> +	default y
+>> +	help
+>> +	  When using this driver on LS7A1000 + LS3A3000/LS3A4000/LS3A5000
+>> +	  platform, the LS7A1000 bridge chip has dedicated video RAM. Using
+>> +	  "lsdc.use_vram_helper=1" in the kernel command line will enable
+>> +	  this driver mode and then the framebuffer will be located at the
+>> +	  VRAM at the price of losing PRIME support.
+>> +
+>> +	  If in doubt, say "Y".
+> This doesn't sound right. The driver should make the proper decision
+> depending on the platform, not the user or the distribution.
 
--- 
-With Best Regards,
-Andy Shevchenko
+The LS7A1000 north bridge chip has dedicated video RAM, but the DC in LS7A1000
+can also scanout from the system memory directly like a display controller in a
+SoC does. In fact, this display controller is envolved from early product of
+Loongson 2H SoC. This driver still works even if the downstream PC board
+manufacturer doesn't solder a video RAM on the mother board.
+
+The lsdc_should_vram_helper_based() function in lsdc_drv.c will examine
+if the DC device node contain a use_vram_helper property at driver loading time.
+If there is no use_vram_helper property, CMA helper based DRM driver will be used.
+Doing this way allow the user using "lsdc.use_vram_helper=0" override the default
+behavior even through there is a "use_vram_helper;" property in the DTS.
+
+In short, It is intend to let the command line passed from kernel has higher
+priority than the device tree. Otherwise the end user can not switch different
+driver mode through the kernel command line once the DC device node contain
+"use_vram_helper;" property.
+
+This driver's author already made the decision by the time when the patch is
+sent out, even through this**may not proper.
+
+The CMA helper based driver will be used by default, if the DC device node contain
+"use_vram_helper;" then VRAM based driver will be used. This is my initial intention.
 
 
