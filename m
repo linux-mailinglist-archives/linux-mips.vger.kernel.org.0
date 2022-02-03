@@ -2,61 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976674A80AA
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 09:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99B44A819D
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 10:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235874AbiBCI4L (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Feb 2022 03:56:11 -0500
-Received: from elvis.franken.de ([193.175.24.41]:54799 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233411AbiBCI4L (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Thu, 3 Feb 2022 03:56:11 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nFXuT-0002mf-00; Thu, 03 Feb 2022 09:56:09 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 0C783C20D9; Thu,  3 Feb 2022 09:56:03 +0100 (CET)
-Date:   Thu, 3 Feb 2022 09:56:02 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     torvalds@linux-foundation.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS fixes for v5.17
-Message-ID: <20220203085602.GA5364@alpha.franken.de>
+        id S1349760AbiBCJl4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Feb 2022 04:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230206AbiBCJl4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Feb 2022 04:41:56 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FA7C06173B
+        for <linux-mips@vger.kernel.org>; Thu,  3 Feb 2022 01:41:56 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id d3so1612794ilr.10
+        for <linux-mips@vger.kernel.org>; Thu, 03 Feb 2022 01:41:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=tbvkki+FG495UMDGj8YGsaWwULlaLlKMQ8n4Ft7eZtk=;
+        b=Xk6NSuxbh/ts1EazWy/mmK48uY9h3N5K2j81dJrp0q7e2D+WOxQpUr+OF/dyJEPaM3
+         oWUgk6/DhbiM1WhBrUA7LqGdrs7VWRENQZaFSH3elkhGJ5Kl4cEqwvKk4dWtXJbHGHE5
+         7TCLGj0tK9cbIuCyzpu5SM1Cc94Cx+QSrmaZNhCki3kWca+ojMkXhM8iI7KMVbAx8UhA
+         bpcNLQA8ZlyGwpr3SJqzbJo+NaARLtu5MmcDmUQmP3M11IgBL6SSjWLUGddNUXixmiQE
+         IpYjcmZenknwOdf3MZ0LmUKKl/0SrMRketVmmvLRAEx+o03REa17Fun09gd8UU74ywsi
+         v0JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=tbvkki+FG495UMDGj8YGsaWwULlaLlKMQ8n4Ft7eZtk=;
+        b=f4mDc9leiooG7sGw1SwoxOtLLaCp1TExR7Ikv9M/rgHqDdZF9Or/4y8YHWcDynz910
+         i1b8VjTpOnGFP/NlfoLLrDLHpA6o0gF62yMh+HRMQe9vAp8QzAcpgcXY6NZTLUAG9Yw8
+         thkWXvUlUdD5AJF9Yu+oelgBzhVUOIvNKDg0RU/fwrnyT0bWu8wGIyGakEZa8h0whP/t
+         PDVzZFO5LGvbypS0FOB3IHzLlEm4MZak9sb8EOJVn9On4cX2ihjdvTjjooQb7Y1h3UoE
+         4u/Pqwz6E37skNnVTW47pNHzgIQG8BIVGL8BzZPclcSVqc59jk7A1e1+8tE4pepIX5hO
+         gJ4g==
+X-Gm-Message-State: AOAM531yb8bKkb841QySXztneI7/vwFC8IQEVrjRRElLGjQ+3C+1VShg
+        AAZ6oMxDWv513jb/4WDnVbi56Nq2VqtUrUMfwcA=
+X-Google-Smtp-Source: ABdhPJxrRxMJqgI9yYekqHiKf39JZDf/P+X/k3FxdSY98u0MNhk36VeUmr4KLSpoDb4G/8Sr7Uk5nZpBf6AS6DuS5i4=
+X-Received: by 2002:a92:3609:: with SMTP id d9mr5894482ila.282.1643881315335;
+ Thu, 03 Feb 2022 01:41:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a05:6602:14d2:0:0:0:0 with HTTP; Thu, 3 Feb 2022 01:41:54
+ -0800 (PST)
+Reply-To: m223443d@gmail.com
+From:   michael <m223441d@gmail.com>
+Date:   Thu, 3 Feb 2022 09:41:54 +0000
+Message-ID: <CANJxbPZGH21Ma7baqGG4UL4EhPTah9Q8c=JJJrC24arHHNgbog@mail.gmail.com>
+Subject: I need your cooperation.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The following changes since commit fa62f39dc7e25fc16371b958ac59b9a6fd260bea:
+Dear Friend,
 
-  MIPS: Fix build error due to PTR used in more places (2022-01-27 09:04:19 +0100)
+With due respect, I need your cooperation in transferring the sum of
+$11.3million to your account where this money can be shared between
+us. The money has been here in our bank lying dormant for years
+without anybody coming for the claim.
 
-are available in the Git repository at:
+I want to release the money to you as the beneficiary, so that we can
+use it to secure the future of our both families and to support the
+orphans. By indicating your interest, I will send you the full details
+on how the business will be executed.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_2
+Please respond urgently and delete if you are not interested.
 
-for you to fetch changes up to 2161ba070999a709f975910b6b9ad6b51cd6f120:
-
-  MIPS: KVM: fix vz.c kernel-doc notation (2022-02-01 08:36:27 +0100)
-
-----------------------------------------------------------------
-- fix missed change for PTR->PTR_WD conversion
-- kernel-doc fixes
-
-----------------------------------------------------------------
-Randy Dunlap (1):
-      MIPS: KVM: fix vz.c kernel-doc notation
-
-Thomas Bogendoerfer (1):
-      MIPS: octeon: Fix missed PTR->PTR_WD conversion
-
- arch/mips/cavium-octeon/octeon-memcpy.S |  2 +-
- arch/mips/kvm/vz.c                      | 12 +++++++++---
- 2 files changed, 10 insertions(+), 4 deletions(-)
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Best regards,
+Michael Doku.
