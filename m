@@ -2,50 +2,50 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BA64A8DD1
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 21:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 111E54A8E77
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 21:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354608AbiBCUdf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Feb 2022 15:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S1355234AbiBCUha (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Feb 2022 15:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354613AbiBCUcV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Feb 2022 15:32:21 -0500
+        with ESMTP id S1355301AbiBCUf1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Feb 2022 15:35:27 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD8AC061777;
-        Thu,  3 Feb 2022 12:32:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEAFC0613AA;
+        Thu,  3 Feb 2022 12:34:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F03E261A60;
-        Thu,  3 Feb 2022 20:32:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8A8C340E8;
-        Thu,  3 Feb 2022 20:32:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D08061B03;
+        Thu,  3 Feb 2022 20:34:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF57C340EB;
+        Thu,  3 Feb 2022 20:34:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643920330;
+        s=k20201202; t=1643920481;
         bh=znVR6a2LcZIz3IM5xQh8puk/jSKkRJbrkCAjfY5E4qU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uTf7vvFS4FZ3WmlXF8hRFjtNN/nEVvh6i7+tmOLI/aZQTbn1czSogD/nC4tcCJ+0r
-         cSGalDtR/EnRIJTz9tSCH51OB6O3QNJHmZ5xmKd3qw8yfRrEFVDKgjkepStnH03pvH
-         DxGJgRl05bc//KU8fJ0RRh55F4sJajbIQH7Ll7dcRYzhrQqKFhksgC/7nmvo+PKOPQ
-         CsefGZWM9VEovOJscJVFp/c5thMAYLG3rCVYCkMbRdseW3My2s3zox8+farc1puuvr
-         5caM+fzwk6R7L9bZfEsBPIqb9SlApNpnGJNtixJq6O7ksbGXd6XLXwOj8jSj7PyYe8
-         rO8umweakhkKQ==
+        b=JZUaeSAkgWS0c0VW2ucDB5UCWaBjIEk1vgOncX+t1s/1oeV8+ZGdwGV96MH2U2iPO
+         NpdqRp7/pYRpFpcreMdrA1brBPuisskn0gmFk5STewQQvEjcQWKWeZnKUdCwUmqUC4
+         uoPZhofpomZnMt1Gu46CCctQ11J/57FnjvdTjVnugdZtmAnMwgo7j9TdbQPAklPaD9
+         NHVWosigRgimTiHvFHGAhNnwKN1k8zw1wHqN7aIa6aNLhl4Z/HqxY9yazWWnirUcj7
+         65JvwbdUQBAC1zvj6JustuCSTvOl4PWc/4YBmuCbp8uASaGhehCasGwg3+UeP1w+JY
+         a8CCApE+i+3AQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>, rostedt@goodmis.org,
         mingo@redhat.com, huangpei@loongson.cn, pmladek@suse.com,
-        ebiederm@xmission.com, macro@orcam.me.uk, tangyouling@loongson.cn,
-        hejinyang@loongson.cn, chenhuacai@kernel.org, masahiroy@kernel.org,
-        arnd@arndb.de, akpm@linux-foundation.org,
+        macro@orcam.me.uk, ebiederm@xmission.com, chenhuacai@kernel.org,
+        hejinyang@loongson.cn, tangyouling@loongson.cn,
+        masahiroy@kernel.org, akpm@linux-foundation.org, arnd@arndb.de,
         linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 44/52] MIPS: Fix build error due to PTR used in more places
-Date:   Thu,  3 Feb 2022 15:29:38 -0500
-Message-Id: <20220203202947.2304-44-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 39/41] MIPS: Fix build error due to PTR used in more places
+Date:   Thu,  3 Feb 2022 15:32:43 -0500
+Message-Id: <20220203203245.3007-39-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203202947.2304-1-sashal@kernel.org>
-References: <20220203202947.2304-1-sashal@kernel.org>
+In-Reply-To: <20220203203245.3007-1-sashal@kernel.org>
+References: <20220203203245.3007-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
