@@ -2,67 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E614A8720
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 15:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150364A873C
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Feb 2022 16:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242104AbiBCO5W (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 3 Feb 2022 09:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbiBCO5W (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Feb 2022 09:57:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFE3C061714;
-        Thu,  3 Feb 2022 06:57:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9040561A53;
-        Thu,  3 Feb 2022 14:57:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 037F9C340E4;
-        Thu,  3 Feb 2022 14:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643900241;
-        bh=rZqRbsG2l7ER8PFv8mXrGg1IyiTqFVzh6i0XCds10/c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CyeAvlunIjmxlw7af6EGCKOXyafIBzE5ZlthWSpob7BKB1n47luYuI4G/AMgd1Asp
-         7GWSq+uKeuzatCBhcqT/WoaiQ69CSkzCCiVEifeYv1sA6J+RMqyo2nAZcSxfj1TMpa
-         dcXvIORgX3jtXu0MZs18jjzRuwuFJB8LJmMsA7dfjmGh9voOtIEAYfmIK6j/xf2h2m
-         W+sUc7As/pNH/GEgCKXp19ck4tpLg1JKBfNmgelGWIJjYx0ku15ylrVd6WpxzndZpB
-         Df1u6B+4cPRPKjfT5BS+gPbqfo+dS8F6f07iqaa7sz0DMJ46i61xtiEW8lC5iEiiyb
-         ugiTbhlFKgwSA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E83A0E5D08C;
-        Thu,  3 Feb 2022 14:57:20 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220203085602.GA5364@alpha.franken.de>
-References: <20220203085602.GA5364@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220203085602.GA5364@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_2
-X-PR-Tracked-Commit-Id: 2161ba070999a709f975910b6b9ad6b51cd6f120
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d394bb77dd0bd20b125459da25fdac00a853be28
-Message-Id: <164390024094.8873.8664251448338199732.pr-tracker-bot@kernel.org>
-Date:   Thu, 03 Feb 2022 14:57:20 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        id S230327AbiBCPGw (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Feb 2022 10:06:52 -0500
+Received: from mga03.intel.com ([134.134.136.65]:55933 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237438AbiBCPGv (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Thu, 3 Feb 2022 10:06:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643900811; x=1675436811;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kimg+WP471TxgYHSZdGgWrJTRHBz7dzY4QrTP/ooh3U=;
+  b=OCWJIFRR4jday+H6NJj8nAfWe8634Md2Tp/wzApPpbUZ38ceNQls58l/
+   ZDUkal7O7SbXS1lwDQicZqWKzFSnKsLFn5uRqK2ZV2rPqBxE8ARvFoqss
+   NJBsKM69QsBK3DSF80kTQAhqfm+M6Jjk2t4NnO0IRW56X6WIMv5vLICsT
+   6me/SdeJQpTlIVpNBcQdphZRVg4SeFdmXtbGgdkV2pjejlOt2mYn4mwTA
+   A6VlifGbUR7Z9fb9UfrAYnsOKTTS6er0csRi0CG4euy2OJ0PCqjmHmupe
+   LkosW+BHLDy6R8btpRaY/ltBDqSm5QMHuqx+Y0rENDwEH3hLlnJie00Ii
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10246"; a="248112289"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="248112289"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:06:50 -0800
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="699336743"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 07:06:47 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nFdgA-000Rxn-5I;
+        Thu, 03 Feb 2022 17:05:46 +0200
+Date:   Thu, 3 Feb 2022 17:05:45 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Allen Pais <apais@linux.microsoft.com>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Cc:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v2 1/1] firmware: tee_bnxt: Use UUID API for exporting
+ the UUID
+Message-ID: <YfvvSTrSv3lv4CEE@smile.fi.intel.com>
+References: <20220127160150.48140-1-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220127160150.48140-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Thu, 3 Feb 2022 09:56:02 +0100:
+On Thu, Jan 27, 2022 at 06:01:50PM +0200, Andy Shevchenko wrote:
+> There is export_uuid() function which exports uuid_t to the u8 array.
+> Use it instead of open coding variant.
+> 
+> This allows to hide the uuid_t internals.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_2
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d394bb77dd0bd20b125459da25fdac00a853be28
-
-Thank you!
+Any comments, tags? Can it be accepted now?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+With Best Regards,
+Andy Shevchenko
+
+
