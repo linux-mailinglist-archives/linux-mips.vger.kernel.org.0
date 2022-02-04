@@ -2,99 +2,86 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475894A9476
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Feb 2022 08:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284364A96BD
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Feb 2022 10:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350100AbiBDHWF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Feb 2022 02:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S1358569AbiBDJ26 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Feb 2022 04:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237760AbiBDHWB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Feb 2022 02:22:01 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BBEC061714;
-        Thu,  3 Feb 2022 23:22:01 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id r131so135882wma.1;
-        Thu, 03 Feb 2022 23:22:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p6DGI5sVIhhj3OfLgZuXsgd+zv/1jmTBmFJHvIA+N+Q=;
-        b=G98XBVlzBs42R1W1bzlN3A9pjwssWOb+icktgcrKOi4tEu2yfPSEJC6RZCh3TbyXOI
-         qDtQJsT+yY+a6VxueTToxwT70fegCf9gkjkWYKZP3yU1iNAY95Sv3YKRINgcDw78O7da
-         6hdExCMTFLyqi05R2i583VgeoYB+p/ZEDn3HJU2D/zaHWgIi8DcUtgjmPtCbBMCvhDQ0
-         mpuHGvF8qYA6Fk7jVodLcCTampRGP/AiemBYCjFX61cdWUpUppVT+d0FOQMQoINaYwPV
-         tM7zIFuemqrUe+K4o9vEC3QdMPr6hLBGQ9E9ke3pydbr38Crk+VhrhxrmpP50XVIX+12
-         JUOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p6DGI5sVIhhj3OfLgZuXsgd+zv/1jmTBmFJHvIA+N+Q=;
-        b=lUKoNIJ6sskE+eNdmdooVSe7L4GIa6hBmqnNF2i0AaFL+GO7k/9gpLs4cwyDz35GUM
-         N26yMBJfcL6n8Vw9A5SjMxcofsk2gW3g1ilqpTnWX5cnMyt8LrCD+nTCpxYv/wWepnHh
-         rI/y3ylwdtIDt28+hQspxd21U1Ub0UkzVHpDXdbMnLJs2zvcvHpO8mI0Xt0JsVWJjGDs
-         pujbEbYUUy0y61bNJET0oGy3eoysWNG+bcjOGSeu6QmSFIwbDapwuEAAdEqO08v5d3Ch
-         wvVe8LRJOjkt89wMYzXITEQ3ndlvwh+MvjH2NWC0KOeLrBTEVvvz69Ef89gALSiWBHrk
-         J+JQ==
-X-Gm-Message-State: AOAM532qAvV09C9YYnuhNTqg5UTFvUeNeeWzmY+HNf+siqaYdxJNQPJ+
-        zeZzU8ASpqzZ6eBB54/vKEo=
-X-Google-Smtp-Source: ABdhPJz+NGiTp+ixvIXLo1LDOKLYuGdbU3PtRrPqFiRJw1ay9KncCecOk2c0SucPFOnZG9cwkC/7TQ==
-X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr1090297wmq.44.1643959319580;
-        Thu, 03 Feb 2022 23:21:59 -0800 (PST)
-Received: from hp-power-15.promwad.corp (mm-89-21-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.21.89])
-        by smtp.gmail.com with ESMTPSA id c13sm1096524wrv.24.2022.02.03.23.21.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Feb 2022 23:21:59 -0800 (PST)
-From:   Siarhei Volkau <lis8215@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, Siarhei Volkau <lis8215@gmail.com>
-Subject: [PATCH v2 1/1] clk: jz4725b: fix mmc0 clock gating
-Date:   Fri,  4 Feb 2022 10:21:41 +0300
-Message-Id: <20220204072141.542909-2-lis8215@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220204072141.542909-1-lis8215@gmail.com>
-References: <ZFOR6R.SY2BLN8DYNHG3@crapouillou.net>
- <20220204072141.542909-1-lis8215@gmail.com>
+        with ESMTP id S1357774AbiBDJ1K (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Feb 2022 04:27:10 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48A0C061783;
+        Fri,  4 Feb 2022 01:26:28 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nFurI-0007GZ-ER; Fri, 04 Feb 2022 10:26:25 +0100
+Message-ID: <585e1812-3d0c-552f-3195-4e947b4fef9d@leemhuis.info>
+Date:   Fri, 4 Feb 2022 10:26:23 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MIPS: Fix build error due to PTR used in more places
+Content-Language: en-BS
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220125141946.54114-1-tsbogend@alpha.franken.de>
+ <20220130163725.GA2792319@roeck-us.net>
+ <20220131100845.GA19252@alpha.franken.de>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220131100845.GA19252@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1643966788;12f74f95;
+X-HE-SMSGID: 1nFurI-0007GZ-ER
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The mmc0 clock gate bit was mistakenly assigned to "i2s" clock.
-You can find that the same bit is assigned to "mmc0" too.
-It leads to mmc0 hang for a long time after any sound activity
-also it  prevented PM_SLEEP to work properly.
-I guess it was introduced by copy-paste from jz4740 driver
-where it is really controls I2S clock gate.
+Hi, this is your Linux kernel regression tracker speaking.
 
-Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
-Tested-by: Siarhei Volkau <lis8215@gmail.com>
----
- drivers/clk/ingenic/jz4725b-cgu.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+On 31.01.22 11:08, Thomas Bogendoerfer wrote:
+> On Sun, Jan 30, 2022 at 08:37:25AM -0800, Guenter Roeck wrote:
+>> On Tue, Jan 25, 2022 at 03:19:44PM +0100, Thomas Bogendoerfer wrote:
+>>> Use PTR_WD instead of PTR to avoid clashes with other parts.
+>>>
+>>> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>>
+>> Building mips:cavium_octeon_defconfig ... failed
+>> --------------
+>> Error log:
+>> arch/mips/cavium-octeon/octeon-memcpy.S: Assembler messages:
+>> arch/mips/cavium-octeon/octeon-memcpy.S:187: Error: unrecognized opcode `ptr 9b,l_exc'
+>> ...
+>>
+>> Missed one place in Cavium assembler code.
+>>
+>> arch/mips/cavium-octeon/octeon-memcpy.S:        PTR     9b, handler;
+>>
+>> #regzbot introduced: fa62f39dc7e2
 
-diff --git a/drivers/clk/ingenic/jz4725b-cgu.c b/drivers/clk/ingenic/jz4725b-cgu.c
-index 744d136..15d6179 100644
---- a/drivers/clk/ingenic/jz4725b-cgu.c
-+++ b/drivers/clk/ingenic/jz4725b-cgu.c
-@@ -139,11 +139,10 @@ static const struct ingenic_cgu_clk_info jz4725b_cgu_clocks[] = {
- 	},
- 
- 	[JZ4725B_CLK_I2S] = {
--		"i2s", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		"i2s", CGU_CLK_MUX | CGU_CLK_DIV,
- 		.parents = { JZ4725B_CLK_EXT, JZ4725B_CLK_PLL_HALF, -1, -1 },
- 		.mux = { CGU_REG_CPCCR, 31, 1 },
- 		.div = { CGU_REG_I2SCDR, 0, 1, 9, -1, -1, -1 },
--		.gate = { CGU_REG_CLKGR, 6 },
- 	},
- 
- 	[JZ4725B_CLK_SPI] = {
--- 
-2.35.1
+@Guenter: thx for getting the regression tracked!
 
+> d'oh, fix sent.
+
+Sadly you didn't link to the report about the issue using a "Link:" tag,
+as explained by both Documentation/process/submitting-patches.rst and
+Documentation/process/5.Posting.rst
+
+Could you please do so in the future? Than would make my life as a Linux
+kernel's regression tracker a lot easier, as my regression tracking bot
+would then have been able to automatically detect the patch posting and
+the commit (I for now decided to not make the bot rely on the "Fixes:"
+tag alone, as that might do the wrong thing if one commit causes
+multiple regressions).
+
+Anyway: I no big deal (just makes regression tracking a lot harder), I
+can tell regzbot manually about the fix:
+
+#regzbot introduced: 50317b636e7184d
+
+Ciao, Thorsten
