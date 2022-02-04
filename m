@@ -2,59 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD33F4A9751
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Feb 2022 11:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E334A982F
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Feb 2022 12:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235147AbiBDKAW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Feb 2022 05:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358064AbiBDKAV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Feb 2022 05:00:21 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAEEC06173D;
-        Fri,  4 Feb 2022 02:00:21 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nFvO6-0005Ng-6Z; Fri, 04 Feb 2022 11:00:18 +0100
-Message-ID: <9d10a295-e087-fbbf-3714-63c872cc6dd6@leemhuis.info>
-Date:   Fri, 4 Feb 2022 11:00:17 +0100
+        id S236450AbiBDLGC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 4 Feb 2022 06:06:02 -0500
+Received: from aposti.net ([89.234.176.197]:55262 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232139AbiBDLGB (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 4 Feb 2022 06:06:01 -0500
+Date:   Fri, 04 Feb 2022 11:05:50 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 0/1] clk: jz4725b: fix mmc0 clock gating
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Message-Id: <QH1S6R.BMH4KZNDZAOO3@crapouillou.net>
+In-Reply-To: <20220204072141.542909-1-lis8215@gmail.com>
+References: <ZFOR6R.SY2BLN8DYNHG3@crapouillou.net>
+        <20220204072141.542909-1-lis8215@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] MIPS: Fix build error due to PTR used in more places
-Content-Language: en-BS
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220125141946.54114-1-tsbogend@alpha.franken.de>
- <20220130163725.GA2792319@roeck-us.net>
- <20220131100845.GA19252@alpha.franken.de>
- <585e1812-3d0c-552f-3195-4e947b4fef9d@leemhuis.info>
-In-Reply-To: <585e1812-3d0c-552f-3195-4e947b4fef9d@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1643968821;2f4d6b38;
-X-HE-SMSGID: 1nFvO6-0005Ng-6Z
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 04.02.22 10:26, Thorsten Leemhuis wrote:
+Hi,
 
-> Anyway: I no big deal (just makes regression tracking a lot harder), I
-> can tell regzbot manually about the fix:
-> 
-> #regzbot introduced: 50317b636e7184d
+Le ven., févr. 4 2022 at 10:21:40 +0300, Siarhei Volkau 
+<lis8215@gmail.com> a écrit :
+> The mmc0 clock gate bit was mistakenly assigned to "i2s" clock.
+> You can find that the same bit is assigned to "mmc0" too.
+> It leads to mmc0 hang for a long time after any sound activity
+> also it  prevented PM_SLEEP to work properly.
+> I guess it was introduced by copy-paste from jz4740 driver
+> where it is really controls I2S clock gate.
 
-Argh, sorry, stupid me doesn't known how to use his own bot:
+Ok, I was wondering why it didn't happen on other JZ4725B devices, it 
+turns out they all use NAND + mmc1, and mmc0 is unused.
 
-#regzbot introduced: fa62f39dc7e2
-#regzbot fixed-by: 50317b636e7184d
+Can you confirm that the MMC0 controller will work even with the bit 6 
+off?
 
-:-/ Sorry for the noise.
+Do you know if the MMC0 bit has been moved elsewhere, or the MMC0 
+controller is permanently enabled?
 
-Ciao, Torsten
+Cheers,
+-Paul
+
+
