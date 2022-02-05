@@ -2,128 +2,92 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9184AA4C2
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Feb 2022 00:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30454AA525
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Feb 2022 01:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236728AbiBDX5b (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Feb 2022 18:57:31 -0500
-Received: from mout.gmx.net ([212.227.17.20]:37375 "EHLO mout.gmx.net"
+        id S1378333AbiBEAwk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Feb 2022 19:52:40 -0500
+Received: from mout.gmx.net ([212.227.17.21]:57599 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241379AbiBDX5b (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 4 Feb 2022 18:57:31 -0500
+        id S1350118AbiBEAwk (ORCPT <rfc822;linux-mips@vger.kernel.org>);
+        Fri, 4 Feb 2022 19:52:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644019036;
-        bh=1Kwp7/KAIFTkmXJSYkq3CZKgQvseK9UqHtzpJM2awG8=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Gsc2nTVAR6tJrqcmCrHJaqNL8pSC8PkENl2iOnfVeB0Xp/WUWa3NUI+yDSjGD8YJF
-         BEvgNziaAJcTZ6FTIzjJ70zIDsBTobPipQrEInniP22+nMiBC+H0lMu3EzyCHg921e
-         /6SkhNvkn4AaVIv/DdjnJLSBzeHkf7DtzM+gAlnE=
+        s=badeba3b8450; t=1644022354;
+        bh=wIyL4al0PsasGkNaS8/JAuA3QXn07ABIpg5+HKjlwG8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=HsPdQi53TXygor8N6Zr0DctwaMhOCff5ecNGaa2AGIy0X8cVTGt/jGCjpm55VMvZq
+         97MlTclckxjK2Q7w0uXbpg5w1Gwg2ZMtQF1NQEmp30Uc5yuNUItf84cqJXj1I18Xqp
+         19MljIiPVkm/66eHYRkQhSM/ZmNHcmrq1ZO0VNVM=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MPokN-1muSpU36YN-00MuYh; Sat, 05
- Feb 2022 00:57:15 +0100
-Date:   Sat, 5 Feb 2022 00:57:14 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Saravanan Sekar <sravanhome@gmail.com>,
-        Parthiban Nallathambi <pn@denx.de>,
-        linux-actions@lists.infradead.org
-Subject: Re: [PATCH v2 1/4] clk: actions: Terminate clk_div_table with
- sentinel element
-Message-ID: <Yf29Wt6DGYxDUlDj@latitude>
-References: <20220203142153.260720-1-j.neuschaefer@gmx.net>
- <20220203142153.260720-2-j.neuschaefer@gmx.net>
- <20220203161210.GA138829@thinkpad>
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfpOT-1mZwwF21yT-00gDkq; Sat, 05
+ Feb 2022 01:52:34 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Subject: [PATCH v3 0/4] clk drivers: Terminate clk_div_table with sentinel element
+Date:   Sat,  5 Feb 2022 01:52:27 +0100
+Message-Id: <20220205005232.772726-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rJDN8eL983l7maVq"
-Content-Disposition: inline
-In-Reply-To: <20220203161210.GA138829@thinkpad>
-X-Provags-ID: V03:K1:qK3ksEUkC4NY6uQA9JGHANigRFTqspIpM3bfrw1t3TfmoxkEnDI
- xsBoY+yOee54IhFeJG6I0IFn9sBfFDEwbzJdf7reoUgQ5e7koC2AB+BuDkPOC5jw/nuQL2N
- nyedVTQnXfu/XI0sKaXhr/tPuSKw/M66Ef9yCGWt5Tajsfr9Ys7Pl+Pt7QGc7f4I2zLJtwO
- ZWbUYKWRBzxmFFP4CssXQ==
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:9fScLoBVc1AvLdfroCYbMuG7hAIm23Ktivf4fb2VHwt7qUq1wyV
+ P4dVNaVo9hIYZEQm3v3mss2zcKs3XWI/sByMqVsVW42UqnOtT1HIi2vqenx83jMtWPuGcSO
+ 3DBZKVA2PXS32WtKsAIeqc2/1RdwXo4MMAq1+VDAgCA8P01J3LVSWLbPzRcFZqJGtQfqeDJ
+ IgwRZNK5uj+m+s9ONX9Pg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bKGC50lIqqM=:8FZ6ZutMvSeGn8vJnHPVMV
- RHgaIKaXc8YRAMmCmHSoKSO3yzf8VCDT1Rr68lqnu1fb96T1temqzH2otu2jvvgaS2EOBtLqz
- N9gjzAug2AMcOcAUgXs8qIVPodcBLAOhbes37nhkgNS3+LYpyzsTvMKLYgw+G0atXBCCTh3kj
- fmOzOHJA7AzkVP6WZCAYIHMSbkJxk/4xGKI6TwBrcyKMTLt99zF6A25ZcJzwFJkS6r10Iarq/
- 8J2Z9YhOdSzeF102jNXy+9WldBOeC1ivZlUA396SdTZO9Kb8k/IpP76nKt/3FtSMQBajGN4kA
- i/K508HzjOpC8pEn8i2/x/m0578cg2pHDDW06/hu0yBBVKNx9yDv06GOZw1jGSikqrhq68+Z+
- FcuVJ37N1JvYTYxBQI3jOPnUKbdeMuqvMThuaOQTQu344gnA6+OBftpK6iHu+47LIl+KspLkP
- rxoo1Cxi0AGXouZpn2LIwUOSyC3z5cTiriKEMjPMQ9buoDSIEVKWKZV1O7zh/L3fnX3k8Bvyz
- wDR/wcgFrXgMT24O/h9JysnWEfqjRTvBIuY90uXaWk8WFZc5KCkIAxzcTooyzZ9jpIRvpMb05
- MWteaKSWlWkKCxuomCax1z+Ij/5l70LIQ5BkCLkQ9P1MSg0OnL98cCY+jz4mzxfi1oEofyRvD
- sEF+YYnfafsxaQibpTrB6HUpEZLNGlxJpygyEK2HA8vRhni244yVQ6m057RXqz1oj12J+ecGr
- XeRBdAAjY8sw1ecZ3ljMDldoENQ10s6mAQyYCclbfwpOeeUANWnzTwWIHspIWHYsFHcL40oHP
- Zvc7sj86pnt5sVyoxPI4RgxHo/I9MGWsZTA/QIY34QQe0D5f4lkYvt0xLoZruFPaXBe9zH0jA
- hyN9lvXnvtUuxOOrkmj7LLuc/DqKl0qRVYeccsL3s8rIh6aWpq6EDtTrf0CFzockXWd3i7sJa
- SPu7vFe3sOnjV+o5u/jFVKnBUhcPQbKqroeqLTxXN7x36IGqsRJfvDsQYyu4ZdVrzEMzdM6kL
- 0+t1+S9A3ClQEgUqeSGjWtBgboBY4lGiW8DoftpciYRH5LFrwODZTcDoeTdEh4OapuvSnpci2
- g5eMutVCqY3SPg=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GQhVJHbvBWs=:y8CEHFw88CMRjBonKpNunl
+ 5QlhswsQJR62sWLovD6jKAae6xuBssjfp7SoyYzd/syfutCafTKyQGzKukJalzPNu/Csz6Dxa
+ sF2AhHmsJ7HyOsHxVpKziBrZRTNrtInytUOxIn5exNWzyZ18rsXMBdTm+W6QyYy2uAHW83LFV
+ pnPBc7L//C4bgYXn5Q/fUl60TomVlYvqmaQNYCUH0KAw3GRbZ1XPjCfdd0Joz3PZddyLx62cr
+ u463ylXLs8U6dOLeb1+CisH4DhSeMpXkwwv/BqFw68tcgqPh83LlRkvi+W4+wEOmfxDuLrR7X
+ 67PP/2iyary1EqLDQhEe19Fth7trhza+D+T/lvIhdhqcslmS+TTiGqB06Q6ZTEMBw9X4jSKmC
+ Jc4bUvQpADIRbraENQAE9AXftB6+FH9Os2DlSb7CLDarlstP5qdP2+auTMBjvjiN145+HtVdW
+ kq7/04layKpDNBpm5qjDc7+GAHHiJtoQYEioU/jGj7UFqvvGpTuENvnuU2uNjcuXPBYiTUM2z
+ zRVZzpQ25OBMS8fhiX3SdF6LKbJha2q9E2QGN+aZxBDHUz6DC16Z67piHK0QDE5jcPRRSnOg7
+ TmNLwJSXzNVP5OgbM1vlKDi1vJ7mzWB1uYJLbLYdNo1V34F7TLaey2noVTj1zDT54px9niX35
+ /zkQpYXou8z45Qk3KccjnmfupMF8T6Hb2r2/6y2tfOeMLbz7WNI2kP2a/aZ6CSGYpC/R5RIUp
+ Wfpb4jzRXjmDgXrQqt54ecurpyMDRZOENEC7VeeDHcxASEH0LgkTQA8pDJsAD3y6JI0FbCKb1
+ eDI8PjzIlc8f3JpE3HI0DxMsFHhqR7wFaPg3EQqwN8bDRR7tpO9bHRLoUVkTjEKGbrctD2DJT
+ vsR4yDQv1W7eQY+4fY4J1ylRwFlBeBMx6r7rWBqaFf9WgTzv9HnZW7R6MsrYUruZVl9S8Vsce
+ Jib0wfCUd0DW80O3nviVppC3Q/vZELdZzZsIyo6yjD2lqfTUW/s+4ipmb8OeAdbrezJfOBaa6
+ V58nIFyYc5swbflC/yfDlq6yR7e0K+RRjlezM5xymiQLPBP1DzhnKlEKkuI8vYUuVO3tYq3g6
+ S6dNKiD1ZTFk10=
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+I noticed that some of the clk_div_tables in different drivers are not
+terminated with a sentinel element. This may cause the code in
+clk-divider.c to read garbage that happens to be beyond the end.
 
---rJDN8eL983l7maVq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patchset fixed all instances of this bug that I could find, except
+for a case in drivers/phy/ti/phy-j721e-wiz.c that is already fixed in
+linux-next:
+  https://lore.kernel.org/lkml/20220117110108.4117-1-kishon@ti.com/
 
-On Thu, Feb 03, 2022 at 09:42:10PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Feb 03, 2022 at 03:21:50PM +0100, Jonathan Neusch=C3=A4fer wrote:
-> > In order that the end of a clk_div_table can be detected, it must be
-> > terminated with a sentinel element (.div =3D 0).
-> >=20
-> > Fixes: d47317ca4ade1 ("clk: actions: Add S700 SoC clock support")
-> > Fixes: d85d20053e195 ("clk: actions: Add S900 SoC clock support")
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > ---
-> >=20
-> > I'm not so sure about usb3_mac_div_table. Maybe the { 0, 8 } element was
-> > meant to be { 0, 0 }? I'd appreciate if someone with access to the
-> > datasheet or hardware could verify what's correct.
->=20
-> USB3 factor table is not documented in the datasheet I have access to. Bu=
-t by
-> looking at the value, it looks to be a typo. So please change the last en=
-try.
+v3:
+- Change the Actions patch according to Mani's comment
 
-Okay.
+v2:
+- Add Fixes tags
 
-> With that,
->=20
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Jonathan Neusch=C3=A4fer (4):
+  clk: actions: Terminate clk_div_table with sentinel element
+  clk: loongson1: Terminate clk_div_table with sentinel element
+  clk: hisilicon: Terminate clk_div_table with sentinel element
+  clk: clps711x: Terminate clk_div_table with sentinel element
 
-Thanks!
+ drivers/clk/actions/owl-s700.c         | 1 +
+ drivers/clk/actions/owl-s900.c         | 2 +-
+ drivers/clk/clk-clps711x.c             | 2 ++
+ drivers/clk/hisilicon/clk-hi3559a.c    | 4 ++--
+ drivers/clk/loongson1/clk-loongson1c.c | 1 +
+ 5 files changed, 7 insertions(+), 3 deletions(-)
 
-Jonathan
+=2D-
+2.34.1
 
---rJDN8eL983l7maVq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmH9vSwACgkQCDBEmo7z
-X9uuyg/413Iw4xZ5o1Tp/qcRiH6I1L+O4tPXbZJS1Oe/YbA96rMszKsKbFuKD93/
-XTGS1UEZBO8QRIT1hHF92JLWIDkCQIofhgsqyKFz7tTGxJ2yj23xszPF8GZvZSl1
-NXnL2CUNcUGq049M3eLJ7tW2x40b2r7ceK+IcsOGeKuCMqqaLFQcCe8yR7PH3Xar
-BkqVP22gj1zcVXfjDKFk9kio9c+uLTTg4r9xH+7ut6F5mXdSt9KW+54UfWcXWEHO
-8fO/NNhHwJ8kl7m3uhcVotEAwcdY4UYUq87qmEAbvB2TdBIgjw2RHP2T4gvUyG26
-HqywQf2oImnrFKGmeCSTkfuHshiRP0C9p5ayz6J2R535sqV7M3t9pOP/QmjdtDfM
-984lc5YNd22V4+rHc7k35UndhL5O6gEF9pMnWDTjxwamRKSehAhDQpNxY9F8JiBi
-UAgv+6Iw51qnI8D3Sugbnr7yAcLhVqUzXAORpUvusZRlaBXSUWWmpVR8Ac+D1yD/
-XYYT4ZdtIDnVPHlpxyU8vA6jmcVMueXBWN89umR/D3eIU25i+gvunf440evHm1PK
-CWaNNl8uxv4u380+BX3GDpgam4mAF2nxnb5z1rnyg1HJSYA4xJVGwyoxacfSoRb4
-9IeQMt76GNfWcxlpmeZWKmWmZQR7TrEBpFj1OqVGasJ52C+RBQ==
-=WP+E
------END PGP SIGNATURE-----
-
---rJDN8eL983l7maVq--
