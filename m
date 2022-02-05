@@ -2,106 +2,93 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940194AA52F
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Feb 2022 01:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B97A14AA7F3
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Feb 2022 10:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378833AbiBEAw4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Feb 2022 19:52:56 -0500
-Received: from mout.gmx.net ([212.227.15.15]:37127 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378821AbiBEAwy (ORCPT <rfc822;linux-mips@vger.kernel.org>);
-        Fri, 4 Feb 2022 19:52:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644022365;
-        bh=sih0C9j+Skh+Iygcka4TI9uLM35zlkT/bJ3P6AAoP4s=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ArCdDHDNPjq5S6JG8DwnGdtNk7/AObqFNvc/dfj+iA8wU6NQRQ3o0RX7pdEZEqMBB
-         WUq4cc1EFgtOb4hASA3VVRkc2NZ8rXcwcM6PJUHApZSNiv7Via60P2t4xRGt7THyON
-         1Q+rNwyQdenrA+SDQDWVROuZUjAcjzu0sHs3idmk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MF3DW-1n0nFF0aVc-00FPzJ; Sat, 05
- Feb 2022 01:52:45 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-clk@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mike Turquette <mturquette@linaro.org>
-Subject: [PATCH v3 4/4] clk: clps711x: Terminate clk_div_table with sentinel element
-Date:   Sat,  5 Feb 2022 01:52:31 +0100
-Message-Id: <20220205005232.772726-5-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220205005232.772726-1-j.neuschaefer@gmx.net>
-References: <20220205005232.772726-1-j.neuschaefer@gmx.net>
+        id S1358400AbiBEJqS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Feb 2022 04:46:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232747AbiBEJqR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Feb 2022 04:46:17 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C8CC061346;
+        Sat,  5 Feb 2022 01:46:15 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id k6-20020a05600c1c8600b003524656034cso5219622wms.2;
+        Sat, 05 Feb 2022 01:46:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qU07P8b4s3aU3J8L25YSPpPeM9OCHx/a+SiTu8+fsuI=;
+        b=aEZ75wmyYlr2tUWJgSM0dFUNoQXiyqTDbiM5XAhiKDc74EUfqyUwA0H8fYxWemHphG
+         ZBIfKnkBlnd4mDNDsbnUvFM0+K0UungO3GGXw9nvFGJdjECj9sXsktWmzpUY8THuC7Ud
+         lD6U5xDdmhn1paOX0vjMoqYxCzyXoZSwt2zfNaXipv2XV1ip2qNPkbO8SjA5DDl2vpwk
+         0gri7d7wZWORI/ScsabGRZJX5B4SiyGirmbOiqiXfCiplwMy3YppaBpH84xTh0GH3N59
+         S1pERXJ5EzGwCLpG3AAy+tC5Jspx0NObf/5hAuFNKYoRPm5snzQOzhM23H46ClupZOeF
+         hxIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qU07P8b4s3aU3J8L25YSPpPeM9OCHx/a+SiTu8+fsuI=;
+        b=i3TYjGSkFfV+EPU0SpMVv5pwo878Qwjv/C9I6aJhkfUF0thDJwSdNiv1i92MwKRkjJ
+         40BX6HZHG/1hIuvq02xIYbUvSXpmojO0A27rTVd25I5rkF92sCvot0mXtMWTH2f259Ro
+         HcVGUQd7nUtq3F92JkFhBfFmyehNTz8s+BGziPDi8+Md2AdJKJerAHtuXzHxRXTAJgIy
+         fYANfppyday3YNlo3p2lq3oI2q7N+mwmA0gAT+PlSHz9fdgsm8ywmONSN8HfWKQj3g3g
+         OAEClp57EJjY+jzJWS8msQUFGXvR9ojN5rlAqC7GWwIFoRnEItFOV1dyccwH4AsbWzf9
+         HmCQ==
+X-Gm-Message-State: AOAM533wu7MXdcsqZpdL/XePB4QdGLnOz2WRan6RC0wODlpS6LI4H+2/
+        B737/wN1Don6EuQVXVr5AR0=
+X-Google-Smtp-Source: ABdhPJxJaaH6KUScVhffLZs1OWOKJ2bmEM8BAACp+OFqd5p4nwHLDa8NHgE4WvjNAQDcS8x36Z9UAw==
+X-Received: by 2002:a05:600c:1d85:: with SMTP id p5mr2388303wms.36.1644054373571;
+        Sat, 05 Feb 2022 01:46:13 -0800 (PST)
+Received: from hp-power-15.localdomain (mm-89-21-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.21.89])
+        by smtp.gmail.com with ESMTPSA id n2sm4679828wrx.108.2022.02.05.01.46.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Feb 2022 01:46:13 -0800 (PST)
+From:   Siarhei Volkau <lis8215@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org,
+        linux-clk@vger.kernel.org, stable@vger.kernel.org,
+        Siarhei Volkau <lis8215@gmail.com>
+Subject: [PATCH v3 0/1] clk: jz4725b: fix mmc0 clock gating
+Date:   Sat,  5 Feb 2022 12:45:30 +0300
+Message-Id: <20220205094531.676371-1-lis8215@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <4FSS6R.0A48V2ZMZD7X1@crapouillou.net>
+References: <4FSS6R.0A48V2ZMZD7X1@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+5sqN1NQdxdcUbRRd06FLeYyXi4FGGlmCXSn1bq0vyEbH2GQK6k
- bl1TYLc9US7ekOSTBfxcJ3rRwiaKuN6P1XkdCxlFs7D2/k7ThOpD1GLzRJIwlKsGWuk9CWT
- hChHeYaUiWwb+h04wPjv2uKl06n0mZKyJ8lZxGZv7E+seBrQPDmT2LOIbpQQxWa7aMMF45E
- GRHYH8RSlI1bS6/zbRWLg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tZkDayIuqb4=:eEicf82nMKSeBkY7O1GHXE
- HHXII8ZGGdKNnXtoqbt9PF26lxVpXOg/PkYbUFWe4KSWuNvR61ZNKAq0KFRbKEU5T81KCarHm
- pzzHEbkU8uhJWieCWamE9l2v6Ua+1r4zO7PMfpAK+d1yvAWQxGAsWuC84L8/w+6BzhM6kT9QK
- 7ViRwmI/kbqihnvpRV/lCVuTdFaKq7KPhT7mPxwVtwSK3jFk3JpGOqbvh9MRSJmQKwfmcaXaL
- cHKC4oZ2HMTl4qralxvQIUwDOf+5paYJG/nijQCBS3g44bUsVEBfdXKNzjPSUHFlWPplGpi2u
- zSXLK1696aZv6kkKu2BaKmaIuBjXY/qz+B0sqeyruiHAU/XwHmjM/mv2RDh6vP0lBOBj5+ObI
- kw7CiNabv6qvD706LipeXWZr/V8nmt6D+yPL3RKIsU1LvLExsg/UloYLmz5iEmoxPLEvR8Ssr
- KMOHrT8xWaULtjOwi5xi6g11eJTAME8HlnTxMT9Jal2cVFLAVmWEMoUTndF9FCiklJCwIC/dq
- bS4odSwLxxIF0Br01gZCZuAFadk1zrzw2Hsw7OxVZVaVOCDNGsY0QwnNiTbpESSNjx4Ycm93n
- czrG7UNC7dYoFAYSxB06VkaAO15f+rSMIrhIuUt588K6zXTABbr7RBIrho+J7QC4xmA8Tl/WF
- PkpKPMdWC5Jz10cC6g/j7PAqC/pkUmFhQ6/TsVROKZ/6elZmK6mKSb+UmtlxohcCEb1Pd2cMR
- 2mYV8h/Pxda6ZLzPK/LxN/mVKJ2GshShtbtWUB64jr4pndfpp06xSCU6GKa3ngzNCDWbx913Y
- KKoykqAQYMBy0FJyWzjn0kpyDzGKUBGbv0hp2TRuS6dHcsujA36A4e5ZFdKpx4/ufAiP15UHx
- JDhz1keoAWn/nIBVNwUPYpuUpKDW2XaRDvWnCxR+eIY6MdDAlJAhhFhsM/QyugM3Slg9XBqIM
- Sfs4Iw1g8HfugYOS12aojoLliPzTKXc0Gsihq4kZrqlz01sNwRQ7cWEac2Q/OqJ6f5RuoM82m
- VeCYykPRaZZyaXXyIgW7gfiv9lyMmlllgsHBMzwvjhEX9YpMy7vQ6M5TPV9wekIgF/kDwaWcN
- pSgD5qAn0l9E78=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In order that the end of a clk_div_table can be detected, it must be
-terminated with a sentinel element (.div =3D 0).
+The mmc0 clock gate bit was mistakenly assigned to "i2s" clock.
+You can find that the same bit is assigned to "mmc0" too.
+It leads to mmc0 hang for a long time after any sound activity
+also it  prevented PM_SLEEP to work properly.
+I guess it was introduced by copy-paste from jz4740 driver
+where it is really controls I2S clock gate.
 
-Fixes: 631c53478973d ("clk: Add CLPS711X clk driver")
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+Changelog v2 .. v3:
+ - Added tags Fixes and Reviewed-by.
+Changelog v1 .. v2:
+ - Added useful info above to the commit itself.
 
-v3:
-- no changes
+Siarhei Volkau (1):
+  clk: jz4725b: fix mmc0 clock gating
 
-v2:
-- Add Fixes tag
-=2D--
- drivers/clk/clk-clps711x.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/ingenic/jz4725b-cgu.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/clk/clk-clps711x.c b/drivers/clk/clk-clps711x.c
-index a2c6486ef1708..d96d96c8752c7 100644
-=2D-- a/drivers/clk/clk-clps711x.c
-+++ b/drivers/clk/clk-clps711x.c
-@@ -28,11 +28,13 @@ static const struct clk_div_table spi_div_table[] =3D =
-{
- 	{ .val =3D 1, .div =3D 8, },
- 	{ .val =3D 2, .div =3D 2, },
- 	{ .val =3D 3, .div =3D 1, },
-+	{}
- };
-
- static const struct clk_div_table timer_div_table[] =3D {
- 	{ .val =3D 0, .div =3D 256, },
- 	{ .val =3D 1, .div =3D 1, },
-+	{}
- };
-
- struct clps711x_clk {
-=2D-
-2.34.1
+-- 
+2.35.1
 
