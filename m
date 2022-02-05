@@ -2,80 +2,54 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7895C4AA8AB
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Feb 2022 13:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067DA4AA8D4
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Feb 2022 13:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379824AbiBEMRP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Feb 2022 07:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
+        id S1379862AbiBEMsl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Feb 2022 07:48:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348925AbiBEMRP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Feb 2022 07:17:15 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14658C061346;
-        Sat,  5 Feb 2022 04:17:15 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so8699238pjb.1;
-        Sat, 05 Feb 2022 04:17:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uqGnPKycliIrfQeJhWM/nWoXkY9Kuok+TUu6COA/cjQ=;
-        b=gxLi54I26BgtahUJQEkgF9JqusmDqrlAc13CmdieV7SiDJH3DcqP0z2LhBxVg3Iq1A
-         lD/p06xRzuAt9Pw31JxTtXh1AEGg3EPAMfKWScbtAmdH3RXhddHlb8dteRl9jcq9O4Y5
-         +4jiSzjbisMuFsMq1WD+4490KodpBRR82P12S+fSwXRRI5stCqR3F3crzNdDGYSvfnUk
-         sPZEQU4CvqW/k/e2jpAx6T7j+K1kFFOv35R6vUBgnQChaJJkuH/pS6wlJmPF1IYLlqh4
-         xpCZN3hAy4AAY7Tr1xYlCLQKHXqAVhhcYl+IZgWCFw+D79ZLuJpnb+F+M5lPjZTDapOk
-         rxPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uqGnPKycliIrfQeJhWM/nWoXkY9Kuok+TUu6COA/cjQ=;
-        b=7NVBhc8+sUvfq3bvrjBvFKuLNE82V/hP6+aMbGYrw9tF9HnKYVz129lWEDL9F5skMW
-         yZ36TMZYSB8fiAvdpwcQGO8GA5W0P/ScqMexxOHm/IPY2ed6I0XckGI2JRi8l5XWkWsE
-         8cf2Cg6RTY3V8As2JeFCLn9jFLnvvOxqwAEiVCPJ3esx7CPVibzADObSS5AIPYGHz6/+
-         D+NF9+7hjhvnO5E6XOmyHPtUvJBX76ha136LAcvPHns/7SB4Y5os2Dbicyz2/xyeLDee
-         1K1HjPf9vpjVgix/Y2i4O1RYhggnmUYLC95klnxhhkNNzwDDBtEqY24FCeWZ28d4j6ix
-         bRpg==
-X-Gm-Message-State: AOAM531/0rjztXhQT70igL8DFd3kz9jejN9ga1SlMjLlxAnZylqrtoeh
-        Y5D94tUUJEvoxaEoPkbdVE0=
-X-Google-Smtp-Source: ABdhPJw0Sz2DUXfgdU65gdyvhLEyFIAQkBjm1zUqJayPu4sxNQo7PaZgd0aK7QrbqQN5iAVH9IzuCA==
-X-Received: by 2002:a17:902:c9c2:: with SMTP id q2mr8055131pld.18.1644063434622;
-        Sat, 05 Feb 2022 04:17:14 -0800 (PST)
-Received: from [192.168.1.33] (154.red-83-50-83.dynamicip.rima-tde.net. [83.50.83.154])
-        by smtp.gmail.com with ESMTPSA id lr7sm5716192pjb.42.2022.02.05.04.17.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Feb 2022 04:17:14 -0800 (PST)
-Sender: =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= 
-        <philippe.mathieu.daude@gmail.com>
-Message-ID: <1415e1d2-eca4-aa36-6ef0-708b8290089d@amsat.org>
-Date:   Sat, 5 Feb 2022 13:17:10 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v3 2/4] clk: loongson1: Terminate clk_div_table with
- sentinel element
-Content-Language: en-US
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
+        with ESMTP id S233550AbiBEMsl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Feb 2022 07:48:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E31C061346;
+        Sat,  5 Feb 2022 04:48:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4205160E0B;
+        Sat,  5 Feb 2022 12:48:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05748C340E8;
+        Sat,  5 Feb 2022 12:48:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644065319;
+        bh=EbzIvH3DHALdK99fPQJAohdRconWYIor1ltDGqBnVRw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W+49/S2/5xhBwjD6PUDX09s9GcXW04tsBQMAcwbIsujWRXLGA9KgeUZoYLBXlmmRP
+         1Y7fYgPHuJj/ROUva7BhlgekQtl1SsS9D2QOEH/WoE49V4eUm9+mfG3XYVdLRqi4Qu
+         EtR9gucwKYZPCer7jog6GohjOkKZV3TwpMJj6HhI=
+Date:   Sat, 5 Feb 2022 13:48:36 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Yang Ling <gnaygnil@gmail.com>
-References: <20220205005232.772726-1-j.neuschaefer@gmx.net>
- <20220205005232.772726-3-j.neuschaefer@gmx.net>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-In-Reply-To: <20220205005232.772726-3-j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org,
+        linux-clk@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] clk: jz4725b: fix mmc0 clock gating
+Message-ID: <Yf5yJKWAfxfQUVHU@kroah.com>
+References: <4FSS6R.0A48V2ZMZD7X1@crapouillou.net>
+ <20220205094531.676371-1-lis8215@gmail.com>
+ <20220205094531.676371-2-lis8215@gmail.com>
+ <Yf5KlvxlRwM9JsZr@kroah.com>
+ <FDZT6R.4ATV1Z4FNCP21@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <FDZT6R.4ATV1Z4FNCP21@crapouillou.net>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,41 +57,60 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 5/2/22 01:52, Jonathan Neusch√§fer wrote:
-> In order that the end of a clk_div_table can be detected, it must be
-> terminated with a sentinel element (.div = 0).
+On Sat, Feb 05, 2022 at 12:15:15PM +0000, Paul Cercueil wrote:
+> Hi Greg,
 > 
-> Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-> Signed-off-by: Jonathan Neusch√§fer <j.neuschaefer@gmx.net>
-> Reviewed-by: Philippe Mathieu-Daud√© <f4bug@amsat.org>
-> ---
+> Le sam., fÈvr. 5 2022 at 10:59:50 +0100, Greg KH
+> <gregkh@linuxfoundation.org> a Ècrit :
+> > On Sat, Feb 05, 2022 at 12:45:31PM +0300, Siarhei Volkau wrote:
+> > >  The mmc0 clock gate bit was mistakenly assigned to "i2s" clock.
+> > >  You can find that the same bit is assigned to "mmc0" too.
+> > >  It leads to mmc0 hang for a long time after any sound activity
+> > >  also it  prevented PM_SLEEP to work properly.
+> > >  I guess it was introduced by copy-paste from jz4740 driver
+> > >  where it is really controls I2S clock gate.
+> > > 
+> > >  Fixes: 226dfa4726eb ("clk: Add Ingenic jz4725b CGU driver")
+> > >  Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> > >  Tested-by: Siarhei Volkau <lis8215@gmail.com>
+> > >  Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+> > >  ---
+> > >   drivers/clk/ingenic/jz4725b-cgu.c | 3 +--
+> > >   1 file changed, 1 insertion(+), 2 deletions(-)
+> > > 
+> > >  diff --git a/drivers/clk/ingenic/jz4725b-cgu.c
+> > > b/drivers/clk/ingenic/jz4725b-cgu.c
+> > >  index 744d136..15d6179 100644
+> > >  --- a/drivers/clk/ingenic/jz4725b-cgu.c
+> > >  +++ b/drivers/clk/ingenic/jz4725b-cgu.c
+> > >  @@ -139,11 +139,10 @@ static const struct ingenic_cgu_clk_info
+> > > jz4725b_cgu_clocks[] = {
+> > >   	},
+> > > 
+> > >   	[JZ4725B_CLK_I2S] = {
+> > >  -		"i2s", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
+> > >  +		"i2s", CGU_CLK_MUX | CGU_CLK_DIV,
+> > >   		.parents = { JZ4725B_CLK_EXT, JZ4725B_CLK_PLL_HALF, -1, -1 },
+> > >   		.mux = { CGU_REG_CPCCR, 31, 1 },
+> > >   		.div = { CGU_REG_I2SCDR, 0, 1, 9, -1, -1, -1 },
+> > >  -		.gate = { CGU_REG_CLKGR, 6 },
+> > >   	},
+> > > 
+> > >   	[JZ4725B_CLK_SPI] = {
+> > >  --
+> > >  2.35.1
+> > > 
+> > 
+> > <formletter>
+> > 
+> > This is not the correct way to submit patches for inclusion in the
+> > stable kernel tree.  Please read:
+> > https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> > for how to do this properly.
+> > 
+> > </formletter>
 > 
-> v3:
-> - no changes
-> 
-> v2:
-> - Add Fixes and R-b tags
-> ---
->   drivers/clk/loongson1/clk-loongson1c.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
-> index 703f87622cf5f..a6f9f20fc8b99 100644
-> --- a/drivers/clk/loongson1/clk-loongson1c.c
-> +++ b/drivers/clk/loongson1/clk-loongson1c.c
-> @@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] = {
->   	[1] = { .val = 1, .div = 4 },
->   	[2] = { .val = 2, .div = 3 },
->   	[3] = { .val = 3, .div = 3 },
-> +	[4] = { /* sentinel */ },
+> What's wrong with this patch exactly? It looks good to me.
 
-Sorry for being nitpicky here, but we don't need the trailing comma,
-since this is the last entry.
-
->   };
-> 
->   void __init ls1x_clk_init(void)
-> --
-> 2.34.1
-> 
+No "Cc: stable@..." in the signed-off-by area.
 
