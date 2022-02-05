@@ -2,100 +2,70 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B12D4AA800
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Feb 2022 10:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693714AA80D
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Feb 2022 11:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358559AbiBEJ7z (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 5 Feb 2022 04:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbiBEJ7z (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Feb 2022 04:59:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A52BC061346;
-        Sat,  5 Feb 2022 01:59:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E3B560ADD;
-        Sat,  5 Feb 2022 09:59:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A91C340E8;
-        Sat,  5 Feb 2022 09:59:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644055193;
-        bh=W5YmqexkL6b0U2LlECgOXWwtWCfw0QjpKZw0Ip+T2xI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DL2JNS8XmdlEEPAGoDHitCg7jF06NjQDTc7v8sY7/WebGhFkHaLcUBH5FmC4rDu+Y
-         7c3MVahAfx5OcEP97BuruVwQYciernb6GT0HTiDK54XXBUdQgjmDnxXXP4RjLe/QAO
-         N4IbMQR9nng1/Vd52yglT76E/v9pRWgFClkT5BQ8=
-Date:   Sat, 5 Feb 2022 10:59:50 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Siarhei Volkau <lis8215@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] clk: jz4725b: fix mmc0 clock gating
-Message-ID: <Yf5KlvxlRwM9JsZr@kroah.com>
-References: <4FSS6R.0A48V2ZMZD7X1@crapouillou.net>
- <20220205094531.676371-1-lis8215@gmail.com>
- <20220205094531.676371-2-lis8215@gmail.com>
+        id S229484AbiBEKXZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Feb 2022 05:23:25 -0500
+Received: from isilmar-4.linta.de ([136.243.71.142]:57378 "EHLO
+        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377656AbiBEKXY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Feb 2022 05:23:24 -0500
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 24D932013AF;
+        Sat,  5 Feb 2022 10:23:22 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 9F54C811AC; Sat,  5 Feb 2022 11:23:14 +0100 (CET)
+Date:   Sat, 5 Feb 2022 11:23:14 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Kees Cook <keescook@chromium.org>,
+        Manuel Lauss <manuel.lauss@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
+Message-ID: <Yf5QEpz0FeXjBOcB@owl.dominikbrodowski.net>
+References: <20220123174031.3109-1-rdunlap@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220205094531.676371-2-lis8215@gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <20220123174031.3109-1-rdunlap@infradead.org>
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, Feb 05, 2022 at 12:45:31PM +0300, Siarhei Volkau wrote:
-> The mmc0 clock gate bit was mistakenly assigned to "i2s" clock.
-> You can find that the same bit is assigned to "mmc0" too.
-> It leads to mmc0 hang for a long time after any sound activity
-> also it  prevented PM_SLEEP to work properly.
-> I guess it was introduced by copy-paste from jz4740 driver
-> where it is really controls I2S clock gate.
+Am Sun, Jan 23, 2022 at 09:40:31AM -0800 schrieb Randy Dunlap:
+> When the MIPS_ALCHEMY board selection is MIPS_XXS1500 instead of
+> MIPS_DB1XXX, the PCMCIA driver 'db1xxx_ss' has build errors due
+> to missing DB1XXX symbols. The PCMCIA driver should be restricted
+> to MIPS_DB1XXX instead of MIPS_ALCHEMY to fix this build error.
 > 
-> Fixes: 226dfa4726eb ("clk: Add Ingenic jz4725b CGU driver")
-> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
-> Tested-by: Siarhei Volkau <lis8215@gmail.com>
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  drivers/clk/ingenic/jz4725b-cgu.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> ERROR: modpost: "bcsr_read" [drivers/pcmcia/db1xxx_ss.ko] undefined!
+> ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
 > 
-> diff --git a/drivers/clk/ingenic/jz4725b-cgu.c b/drivers/clk/ingenic/jz4725b-cgu.c
-> index 744d136..15d6179 100644
-> --- a/drivers/clk/ingenic/jz4725b-cgu.c
-> +++ b/drivers/clk/ingenic/jz4725b-cgu.c
-> @@ -139,11 +139,10 @@ static const struct ingenic_cgu_clk_info jz4725b_cgu_clocks[] = {
->  	},
->  
->  	[JZ4725B_CLK_I2S] = {
-> -		"i2s", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-> +		"i2s", CGU_CLK_MUX | CGU_CLK_DIV,
->  		.parents = { JZ4725B_CLK_EXT, JZ4725B_CLK_PLL_HALF, -1, -1 },
->  		.mux = { CGU_REG_CPCCR, 31, 1 },
->  		.div = { CGU_REG_I2SCDR, 0, 1, 9, -1, -1, -1 },
-> -		.gate = { CGU_REG_CLKGR, 6 },
->  	},
->  
->  	[JZ4725B_CLK_SPI] = {
-> -- 
-> 2.35.1
-> 
+> Fixes: 42a4f17dc356 ("MIPS: Alchemy: remove SOC_AU1X00 in favor of MIPS_ALCHEMY")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Manuel Lauss <manuel.lauss@gmail.com>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
 
-<formletter>
+Applied to -pcmcia, thanks!
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
-
-</formletter>
+	Dominik
