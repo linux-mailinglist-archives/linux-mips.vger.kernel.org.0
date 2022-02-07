@@ -2,34 +2,38 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE934AC7E9
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Feb 2022 18:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A8E74AC7EF
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Feb 2022 18:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiBGRtZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Feb 2022 12:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S236699AbiBGRts (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Feb 2022 12:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383621AbiBGRkd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Feb 2022 12:40:33 -0500
+        with ESMTP id S1383727AbiBGRke (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Feb 2022 12:40:34 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E54CC0401D9
-        for <linux-mips@vger.kernel.org>; Mon,  7 Feb 2022 09:40:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C5A1C0401D9;
+        Mon,  7 Feb 2022 09:40:34 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nH7yl-0006Gx-00; Mon, 07 Feb 2022 18:39:07 +0100
+        id 1nH7yl-0006Gx-01; Mon, 07 Feb 2022 18:39:07 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E2F8EC20E1; Mon,  7 Feb 2022 18:35:25 +0100 (CET)
-Date:   Mon, 7 Feb 2022 18:35:25 +0100
+        id 66847C2116; Mon,  7 Feb 2022 18:35:50 +0100 (CET)
+Date:   Mon, 7 Feb 2022 18:35:50 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Wenli Looi <wlooi@ucalgary.ca>
-Cc:     linux-mips@vger.kernel.org
-Subject: Re: [PATCH] MIPS: ath79: add support for QCN550x
-Message-ID: <20220207173525.GA16822@alpha.franken.de>
-References: <20220124071329.76057-1-wlooi@ucalgary.ca>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v2 1/2] MIPS: Loongson64: Clean up use of cc-ifversion
+Message-ID: <20220207173550.GB16822@alpha.franken.de>
+References: <20220125221925.3547683-1-nathan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220124071329.76057-1-wlooi@ucalgary.ca>
+In-Reply-To: <20220125221925.3547683-1-nathan@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -40,23 +44,32 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 11:13:31PM -0800, Wenli Looi wrote:
-> Adds support for QCN550x, which appears to be very similar to QCA956x.
+On Tue, Jan 25, 2022 at 03:19:24PM -0700, Nathan Chancellor wrote:
+> This Makefile checks that GCC is 4.9 or newer, which is redundant after
+> commit 76ae847497bc ("Documentation: raise minimum supported version of
+> GCC to 5.1"), so cc-option can be removed.
 > 
-> Signed-off-by: Wenli Looi <wlooi@ucalgary.ca>
+> Clang does not support -march=loongson3a so it needs to continue to use
+> -march=mips64r2, which no longer needs cc-option because all supported
+> clang versions recognize this flag.
+> 
+> -march=loonson3a can be used unconditionally with GCC because the
+> minimum supported GCC version has been bumped past 4.9.0, which won't
+> have the bug mentioned in the comment. The _MIPS_ISA macro redefinition
+> can be removed at the same time for the same reason.
+> 
+> Suggested-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
 > 
-> Notes:
-> - OpenWrt pull request: https://github.com/openwrt/openwrt/pull/4271
->   (contains boot log with stock firmware and with this patch)
-> - QSDK source: https://source.codeaurora.org/quic/qsdk/oss/system/openwrt/tree/target/linux/ar71xx/patches-3.3/9991-MIPS-ath79-add-SoC-detection-code-for-QCN550X.patch?h=aa/banana
-> - QSDK clock init appears identical to QCA956x.
-> - Only tested on QCN5502, not sure if it works for QCN5500.
+> v1 -> v2: https://lore.kernel.org/r/20220120214001.1879469-1-nathan@kernel.org/
 > 
->  arch/mips/ath79/early_printk.c                 | 1 +
->  arch/mips/ath79/setup.c                        | 6 ++++++
->  arch/mips/include/asm/mach-ath79/ar71xx_regs.h | 1 +
->  3 files changed, 8 insertions(+)
+> * Eliminate ld-option call (Jiaxun).
+> * Eliminate _MIPS_ISA macro redefinitions (Nick).
+> 
+>  arch/mips/loongson64/Platform | 21 +++------------------
+>  1 file changed, 3 insertions(+), 18 deletions(-)
 
 applied to mips-next.
 
