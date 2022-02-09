@@ -2,35 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B55804AF44C
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 15:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775FF4AF58B
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 16:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbiBIOms (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Feb 2022 09:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S236119AbiBIPlM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Feb 2022 10:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbiBIOmr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 09:42:47 -0500
-X-Greylist: delayed 241 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 06:42:48 PST
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94B25C06157B;
-        Wed,  9 Feb 2022 06:42:48 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.31:46846.1353479076
+        with ESMTP id S236255AbiBIPlK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 10:41:10 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1098C0613C9;
+        Wed,  9 Feb 2022 07:41:11 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.41:55300.899968331
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 5A47810013E;
-        Wed,  9 Feb 2022 22:38:43 +0800 (CST)
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id E409310020D;
+        Wed,  9 Feb 2022 23:41:08 +0800 (CST)
 Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id b8ba3d7581f14446908f10874ba183d2 for maxime@cerno.tech;
-        Wed, 09 Feb 2022 22:38:45 CST
-X-Transaction-ID: b8ba3d7581f14446908f10874ba183d2
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 9a8476fe4b9e405690dea299605a0bea for maxime@cerno.tech;
+        Wed, 09 Feb 2022 23:41:09 CST
+X-Transaction-ID: 9a8476fe4b9e405690dea299605a0bea
 X-Real-From: 15330273260@189.cn
 X-Receive-IP: 172.27.8.53
 X-MEDUSA-Status: 0
 Sender: 15330273260@189.cn
-Message-ID: <84bfb2fc-595c-3bae-e8a0-c19ccbcfcfd8@189.cn>
-Date:   Wed, 9 Feb 2022 22:38:41 +0800
+Message-ID: <def50622-fe08-01f7-83bd-e6e0bc39fe1b@189.cn>
+Date:   Wed, 9 Feb 2022 23:41:06 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -58,15 +57,15 @@ Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
 References: <20220203082546.3099-1-15330273260@189.cn>
  <20220203082546.3099-2-15330273260@189.cn>
  <20220203085851.yqstkfgt4dz7rcnw@houat>
- <11ac5696-29e3-fefa-31c0-b7b86c88bbdc@189.cn>
- <20220209084908.kub4bs64rzhvpvon@houat>
+ <f5381561-25da-61e3-5025-fa6dd61dd730@189.cn>
+ <20220209084331.fpq5ng3yuqxmby4q@houat>
 From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20220209084908.kub4bs64rzhvpvon@houat>
+In-Reply-To: <20220209084331.fpq5ng3yuqxmby4q@houat>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,167 +74,131 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
-On 2022/2/9 16:49, Maxime Ripard wrote:
-> On Fri, Feb 04, 2022 at 12:04:19AM +0800, Sui Jingfeng wrote:
->>>> +/* Get the simple EDID data from the device tree
->>>> + * the length must be EDID_LENGTH, since it is simple.
->>>> + *
->>>> + * @np: device node contain edid data
->>>> + * @edid_data: where the edid data to store to
->>>> + */
->>>> +static bool lsdc_get_edid_from_dtb(struct device_node *np,
->>>> +				   unsigned char *edid_data)
->>>> +{
->>>> +	int length;
->>>> +	const void *prop;
+On 2022/2/9 16:43, Maxime Ripard wrote:
+> On Fri, Feb 04, 2022 at 12:29:39AM +0800, Sui Jingfeng wrote:
+>>>> +static int lsdc_modeset = 1;
+>>>> +MODULE_PARM_DESC(modeset, "Enable/disable CMA-based KMS(1 = enabled(default), 0 = disabled)");
+>>>> +module_param_named(modeset, lsdc_modeset, int, 0644);
 >>>> +
->>>> +	if (np == NULL)
->>>> +		return false;
+>>>> +static int lsdc_cached_coherent = 1;
+>>>> +MODULE_PARM_DESC(cached_coherent, "uss cached coherent mapping(1 = enabled(default), 0 = disabled)");
+>>>> +module_param_named(cached_coherent, lsdc_cached_coherent, int, 0644);
 >>>> +
->>>> +	prop = of_get_property(np, "edid", &length);
->>>> +	if (prop && (length == EDID_LENGTH)) {
->>>> +		memcpy(edid_data, prop, EDID_LENGTH);
->>>> +		return true;
->>>> +	}
+>>>> +static int lsdc_dirty_update = -1;
+>>>> +MODULE_PARM_DESC(dirty_update, "enable dirty update(1 = enabled, 0 = disabled(default))");
+>>>> +module_param_named(dirty_update, lsdc_dirty_update, int, 0644);
 >>>> +
->>>> +	return false;
->>>> +}
->>> You don't have a device tree binding for that driver, this is something
->>> that is required. And it's not clear to me why you'd want EDID in the
->>> DTB?
->> 1) It is left to the end user of this driver.
+>>>> +static int lsdc_use_vram_helper = -1;
+>>>> +MODULE_PARM_DESC(use_vram_helper, "use vram helper based solution(1 = enabled, 0 = disabled(default))");
+>>>> +module_param_named(use_vram_helper, lsdc_use_vram_helper, int, 0644);
+>>>> +
+>>>> +static int lsdc_verbose = -1;
+>>>> +MODULE_PARM_DESC(verbose, "Enable/disable print some key information");
+>>>> +module_param_named(verbose, lsdc_verbose, int, 0644);
+>>> It's not really clear to me why you need any of those parameters. Why
+>>> would a user want to use a non coherent mapping for example?
+>>>
+>> Because we are Mips architecture. Paul Cercueil already explained it
+>> in his mmap GEM buffers cachedpatch  <https://lkml.kernel.org/lkml/20200822164233.71583-1-paul@crapouillou.net/T/>. I drag part of it to here for
+>> convenient to reading:
 >>
->> The downstream motherboard maker may use a dpi(XRGB888) or LVDS panel
->> which don't have DDC support either, doing this way allow them put a
->> EDID property into the dc device node in the DTS. Then the entire system works.
->> Note those panel usually support only one display mode.
-> I guess it depends on what we mean exactly by the user, but the DTB
-> usually isn't under the (end) user control. And the drm.edid_firmware is
-> here already to address exactly this issue.
+>> /Traditionally, GEM buffers are mapped write-combine. Writes to the buffer
+>> are accelerated, and reads are slow. Application doing lots////of
+>> alpha-blending paint inside shadow buffers, which is then memcpy'd////into
+>> the final GEM buffer.///
+>> "non coherent mapping" is actually cached and it is for CMA helpers
+>> base driver, not for VRAM helper based driver. For Loongson CPU/SoCs.
+>> The cache coherency is maintained by hardware, therefore there no
+>> need to worry about coherency problems. This is true at least for
+>> ls3a3000, ls3a4000 and ls3a5000.
+>>
+>> "non coherent" or "coherent" is not important here, the key point is
+>> that the backing memory of the framebuffer is cached with non coherent
+>> mapping, you don't need a shadow buffer layer when using X server's
+>> modesetting driver.
+>>
+>> Read and write to the framebuffer in system memory is much faster than
+>> read and write to the framebuffer in the VRAM.
+>>
+>> Why CMA helper based solution is faster than the VRAM based solution on Mips platform?
+>>
+>> Partly because of the CPU have L1, L2 and L3 cache, especially L3 cache
+>> is as large as 8MB, read and write from the cache is fast.
+>>
+>> Another reason is as Paul Cercueil said, read from VRAM with write-combine
+>> cache mode is slow. it is just uncache read.
+>> Please note that we don't have a GPU here, we are just a display controller.
+>>
+>> For the VRAM helper based driver case, the backing memory of the framebuffer
+>> is located at VRAM, When using X server's modesetting driver, we have to enable
+>> the ShadowFB option, Uncache acceleration support(at the kernel size) should
+>> also be enabled. Otherwise the performance of graphic application is just slow.
+>>
+>> Beside write-combine cache mode have bugs on our platform, a kernel side
+>> developer have disabled it. Write-combine cache mode just boil down to uncached
+>> now. See [1] and [2]
+>>
+>> [1]https://lkml.org/lkml/2020/8/10/255
+>> [2]https://lkml.kernel.org/lkml/1617701112-14007-1-git-send-email-yangtiezhu@loongson.cn/T/
+>>
+>> This is the reason why we prefer CMA helper base solution with non coherent mapping,
+>> simply because it is fast.
+>>
+>> As far as I know, Loongson's CPU does not has the concept of write-combine,
+>> it only support three caching mode:  uncached, cached and uncache acceleration.
+>> write-combine is implemented with uncache acceleration on Mips.
+> My point wasn't just about the VRAM vs CMA stuff, it was about why do
+> you need all those switches in the first place?
 >
-> On the other end, if the board has a static panel without any DDC lines,
-> then just put the timings in the device tree, there's no need for an
-> EDID blob.
+> Take the verbose parameter for example: it's entirely redundant with the
+> already existing, documented, DRM logging infrastructure.
 
-Loongson have a long history of using PMON firmware, The PMON firmware
-support flush the dtb into the the firmware before grub loading the kernel.
-You press 'c' key, then the PMON will give you a shell. it is much like a
-UEFI shell. Suppose foo.dtb is what you want to pass to the vmlinuz.
-Then type the follow single command can flush the dtb into the PMON firmware.
+Yes, verbose is redundant, we will use drm_dbg() instead of verbose.  
+thanks.
 
-|load_dtb /dev/fs/fat@usb0/foo.dtb|
+I am correcting.
 
-For our PMON firmware, it**is**  totally under developer/pc board maker's control.
-You can flush whatever dtb every time you bootup until you satisfied.
-It(the pmon firmware) is designed to let downstream motherboard maker and/or
-customers to play easily.
+> Then, you have "modeset", and I'm not sure why it's supposed to be
+> there, at all. This is a modesetting driver, why would I want to disable
+> modesetting entirely?
 
-Support of reading EDID from the dtb is really a feature which downstream
-motherboard maker or customer wanted. They sometimes using eDP also whose
-resolution is not 1024x768. This is out of control for a graphic driver
-developer like me. And drm.edid_firmware have only a few limited resolution
-which is weak.
+Something you want fbdev driver, for example simple-framebuffer driver which
+using the firmware passed fb (screeninfo).
 
-I will consider to adding drm.edid_firmware support, thanks.
+besides, text mode support.
 
->> 2) That is for the display controller in ls2k1000 SoC.
->>
->> Currently, the upstream kernel still don't have GPIO, PWM and I2C driver support
->> for LS2K1000 SoC.
->>
->> How dose you read EDID from the monitor without a I2C driver?
->>
->> without reading EDID the device tree support, the screen just black,
->> the lsdc driver just stall. With reading EDID from device tree support
->> we do not need a i2c driver to light up the monitor.
->>
->> This make lsdc drm driver work on various ls2k1000 development board
->> before I2C driver and GPIO driver and PWM backlight driver is upstream.
->>
->> I have many local private dts with the bindings, those local change just can not
->> upstream at this time, below is an example.
->>
->> The device tree is a platform description language. It's there to let
->> the OS know what the hardware is, but the state of hardware support in
->> the said OS isn't a parameter we have to take into account for a new
->> binding.
->>
->> If you don't have any DDC support at the moment, use the firmware
->> mechanism above, or add fixed modes using drm_add_modes_noedid in the
->> driver, and leave the DT out of it. Once you'll gain support for the
->> EDID readout in the driver, then it'll just work and you won't need to
->> change the DT again.
->>
-The resolution will be 1024x768, it will also add a lot modes which may
-not supported by the specific panel. Take 1024x600 as an example,
-Both drm_add_modes_noedid() and firmware mechanism above will fail.
+> More fundamentally (and this extends to the CMA, caching and VRAM stuff
+> you explained above), why can't the driver pick the right decision all
+> the time and why would that be under the user control?
 
-Because the user supply EDID only and manufacturer of some strange panel
-supply EDID only.
+The right decision for ls7a1000 is to use VRAM based helper, But sometimes
+we need CMA helper based solution. Because: The PRIME support is lost, use
+lsdc with etnaviv is not possible any more.
 
->> 3) Again, doing this way is for graphic environment bring up.
->>
->> &lsdc {
->>
->>      output-ports = <&dvo0 &dvo1>;
->>      #address-cells = <1>;
->>      #size-cells = <0>;
->>      dvo0: dvo@0 {
->>          reg = <0>;
->>
->>          connector = "dpi-connector";
->>          encoder = "none";
->>          status = "ok";
->>
->>          display-timings {
->>              native-mode = <&mode_0_1024x600_60>;
->>
->>              mode_0_1024x600_60: panel-timing@0 {
->>                  clock-frequency = <51200000>;
->>                  hactive = <1024>;
->>                  vactive = <600>;
->>                  hsync-len = <4>;
->>                  hfront-porch = <160>;
->>                  hback-porch = <156>;
->>                  vfront-porch = <11>;
->>                  vback-porch = <23>;
->>                  vsync-len = <1>;
->>              };
->>
->>              mode_1_800x480_60: panel-timing@1 {
->>                  clock-frequency = <30066000>;
->>                  hactive = <800>;
->>                  vactive = <480>;
->>                  hfront-porch = <50>;
->>                  hback-porch = <70>;
->>                  hsync-len = <50>;
->>                  vback-porch = <0>;
->>                  vfront-porch = <0>;
->>                  vsync-len = <50>;
->>              };
->>          };
->>      };
->>
->>      dvo1: dvo@1 {
->>          reg = <1>;
->>
->>          connector = "hdmi-connector";
->>          type = "a";
->>          encoder = "sil9022";
->>
->>          edid = [ 00 ff ff ff ff ff ff 00 1e 6d 54 5b 0b cc 04 00
->>               02 1c 01 03 6c 30 1b 78 ea 31 35 a5 55 4e a1 26
->>               0c 50 54 a5 4b 00 71 4f 81 80 95 00 b3 00 a9 c0
->>               81 00 81 c0 90 40 02 3a 80 18 71 38 2d 40 58 2c
->>               45 00 e0 0e 11 00 00 1e 00 00 00 fd 00 38 4b 1e
->>               53 0f 00 0a 20 20 20 20 20 20 00 00 00 fc 00 4c
->>               47 20 46 55 4c 4c 20 48 44 0a 20 20 00 00 00 ff
->>               00 38 30 32 4e 54 43 5a 39 38 33 37 39 0a 00 35 ];
->>
->>          status = "ok";
->>      };
->> };
-> Yeah, this needs to be documented with a YAML schema
+  Buffer sharing with etnaviv is no longer possible, loongson display controllers
+  are simple which require scanout buffers to be physically contiguous.
+
+  We still need to develop userspace driver(say xf86-video-loongson)
+  on ls3a4000 + ls7a1000 platform then deploy those driver to ls2k1000 platform.
+
+  ls3a4000 and ls3a5000 is fast enough which can build the linux kernel directly.
+  Build mesa, libdrm, xf86-video-loongson just a piece of cake.
+
+  Is is so fast on ls3a5000+ls7a1000, developing driver on ls2k1000 is cumbersome,
+  embarrassing slow.
+
+  I means it(ls3a4000/ls3a5000 + ls7a1000) is not just target for end user, but
+  it is a platform which can be used to develop software for other platform.
+
+  The author of linux device driver told us that device driver is providing mechanism, not policy.
+
+  We are able to make the decision, but we want to give the user more choice.
+
+  "pick the right decision all the time" is also true, i am considering correct this,
+  thanks.
+
+> You were mentioning that you need to work-around MIPS memory management.
+> Then fine, just do that on MIPS, and don't it on the other architectures
+> that don't need it. There's no need for a knob.
 >
 > Maxime
-Yes, It takes time to learn that.
