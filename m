@@ -2,64 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 629894AE7B5
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 04:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09184AEB4D
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 08:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245575AbiBIDDd (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 8 Feb 2022 22:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S237427AbiBIHld (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Feb 2022 02:41:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359815AbiBICyA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 8 Feb 2022 21:54:00 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF131C061353
-        for <linux-mips@vger.kernel.org>; Tue,  8 Feb 2022 18:53:59 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso886520pjh.5
-        for <linux-mips@vger.kernel.org>; Tue, 08 Feb 2022 18:53:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3uOgLe/RVQ0Vs20wfvHEbpezYoxPnv0Gf+KP4+9Watg=;
-        b=HCh/v6d1iQTxKf/TmU0YnImgzK9mb60Zao0AqsI53+ExsYAnUw0cOdNCowVxQvP38A
-         xXq9TonHkNwdZJSC8OGZJtrn5SQ/04GBMcX79l4H6r57jaYSUO/rXOk5vIzz1WnanOcE
-         YoxVQKXTUa9Eulq85GwqXOoTo1mDpuULbp5EU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3uOgLe/RVQ0Vs20wfvHEbpezYoxPnv0Gf+KP4+9Watg=;
-        b=Fc1+/CVHt1P4sFCLMvB3RMpKydjnOMBLkYCuGfFTIcGZDHomKUcM026lsRTXhV2bz1
-         QvU/Nn/ReXHB3nfnmp2S4Ld5o7mAEOaI1VxBIWEcF8cFZR/yosWWUWi/67Eo++rQfu++
-         Opq6dwmSOk/1J6/7BCGCWFdxOWJg2rFFzBoX8Dz4ud09hwTvGdyzsvKwAy/GK1tKgzRY
-         8a/Pxe02gS/jpIt9fm5DpyPo9TS74cdcokOFzUy63GdjP78UFTBVSjtv4O2s6c48iryP
-         73A4dQQbHQ9C2ySPBzmOIa81HlZRZtgyoS4q/sd8h42LssQCW//Bo1mlLm4TjdRWBh18
-         ATdw==
-X-Gm-Message-State: AOAM5332GcQIdtnnF6UrjuYsfBT97ze9MADgSzm8jwBhciX4C/ba7jAX
-        caLRNi68dsWooxF1xw0LH90agA==
-X-Google-Smtp-Source: ABdhPJy5PzatkkErIC2tiNV2a6nOTPpNdrpLG5LJn92XJLQonky4qxwZ0slr4Qo5CdpmtWQElk+MsA==
-X-Received: by 2002:a17:903:24f:: with SMTP id j15mr126492plh.16.1644375239308;
-        Tue, 08 Feb 2022 18:53:59 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s10sm17930181pfu.186.2022.02.08.18.53.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 18:53:58 -0800 (PST)
-Date:   Tue, 8 Feb 2022 18:53:58 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH] MIPS: Malta: Enable BLK_DEV_INITRD
-Message-ID: <202202081853.B4C45735@keescook>
-References: <20220208191726.1304731-1-nathan@kernel.org>
+        with ESMTP id S232283AbiBIHlb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 02:41:31 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D20C0613CB;
+        Tue,  8 Feb 2022 23:41:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644392495; x=1675928495;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ptt8R/RvwFaVk8njj6dZCgZ7G353iPS7PsxtHDnt7q4=;
+  b=Q1G4XrTJmgjUvRYOmGMMd5++rTE9xHuMR0IggqiL2/R0i9GlqR8pmTnN
+   ZOFZF8MC4mlJ92HZUd31PBouep2cmZjNYNCG8gox2HRuywErqHsy90aVh
+   o2NfMU2ugg3l5PGBzLxoGf3rNabjHAJUaSKJN7x/o2Mug5H12lTmNz0vn
+   3GQpk7B07A1INrBJm9SlmWSJkJkgNZkNWfSP7JCSeiYC6RY2BpkD4KGSY
+   UMHrshfBrkNgy765kxfqRirgH5BhYFE6DGOnxJtbtf08VmdXWy32MCggz
+   QuAjuZH0GDQM3IBfub0lIjuAm46lW/oemsJylS2o1OQaMbxsOFiwqYv5v
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="247980712"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="247980712"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 23:41:34 -0800
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="540984524"
+Received: from hyperv-sh4.sh.intel.com ([10.239.48.22])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 23:41:21 -0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     kvm@vger.kernel.org, seanjc@google.com, pbonzini@redhat.com,
+        kevin.tian@intel.com, tglx@linutronix.de
+Cc:     Chao Gao <chao.gao@intel.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Bharata B Rao <bharata@linux.ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        John Garry <john.garry@huawei.com>,
+        kvmarm@lists.cs.columbia.edu, kvm-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Will Deacon <will@kernel.org>, x86@kernel.org
+Subject: [PATCH v3 0/5] Improve KVM's interaction with CPU hotplug
+Date:   Wed,  9 Feb 2022 15:41:01 +0800
+Message-Id: <20220209074109.453116-1-chao.gao@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208191726.1304731-1-nathan@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,53 +105,79 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 12:17:26PM -0700, Nathan Chancellor wrote:
-> This configuration is useful for boot testing malta_defconfig in QEMU
-> with just a simple cpio initrd, instead of a full ext4 rootfs.
-> 
-> This results in an increase of ~164KB of vmlinux (with GCC 11.2.0):
-> 
-> $ diskus vmlinux.before
-> 11.19 MB (11,194,368 bytes)
-> 
-> $ diskus vmlinux.after
-> 11.36 MB (11,358,208 bytes)
-> 
-> This size increase comes from the fact that usr/Kconfig is sourced when
-> CONFIG_BLK_DEV_INITRD is enabled, which defaults to supporting several
-> decompression algorithms for compressed initrds. This seems like a
-> reasonable tradeoff but these configurations could be disabled in the
-> future if there are complaints about the size increase.
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Changes from v2->v3:
+ - rebased to the latest kvm/next branch. 
+ - patch 1: rename {svm,vmx}_check_processor_compat to follow the name
+	    convention
+ - patch 3: newly added to provide more information when hardware enabling
+	    fails
+ - patch 4: reset hardware_enable_failed if hardware enabling fails. And
+	    remove redundent kernel log.
+ - patch 5: add a pr_err() for setup_vmcs_config() path.
 
-I'm all for having a regular way to test all defconfigs. So, FWIW:
+Changes from v1->v2: (all comments/suggestions on v1 are from Sean, thanks)
+ - Merged v1's patch 2 into patch 1, and v1's patch 5 into patch 6.
+ - Use static_call for check_processor_compatibility().
+ - Generate patch 2 with "git revert" and do manual changes based on that.
+ - Loosen the WARN_ON() in kvm_arch_check_processor_compat() instead of
+   removing it.
+ - KVM always prevent incompatible CPUs from being brought up regardless of
+   running VMs.
+ - Use pr_warn instead of pr_info to emit logs when KVM finds offending
+   CPUs.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+KVM registers its CPU hotplug callback to CPU starting section. And in the
+callback, KVM enables hardware virtualization on hotplugged CPUs if any VM
+is running on existing CPUs.
 
--Kees
+There are two problems in the process:
+1. KVM doesn't do compatibility checks before enabling hardware
+virtualization on hotplugged CPUs. This may cause #GP if VMX isn't
+supported or vmentry failure if some in-use VMX features are missing on
+hotplugged CPUs. Both break running VMs.
+2. Callbacks in CPU STARTING section cannot fail. So, even if KVM finds
+some incompatible CPUs, its callback cannot block CPU hotplug.
 
-> ---
->  arch/mips/configs/malta_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/mips/configs/malta_defconfig b/arch/mips/configs/malta_defconfig
-> index 3321bb576944..3456ac8ded6c 100644
-> --- a/arch/mips/configs/malta_defconfig
-> +++ b/arch/mips/configs/malta_defconfig
-> @@ -4,6 +4,7 @@ CONFIG_HIGH_RES_TIMERS=y
->  CONFIG_LOG_BUF_SHIFT=15
->  CONFIG_NAMESPACES=y
->  CONFIG_RELAY=y
-> +CONFIG_BLK_DEV_INITRD=y
->  CONFIG_EXPERT=y
->  # CONFIG_COMPAT_BRK is not set
->  CONFIG_SLAB=y
-> 
-> base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
-> -- 
-> 2.35.1
-> 
+This series improves KVM's interaction with CPU hotplug to avoid
+incompatible CPUs breaking running VMs. Following changes are made:
+
+1. move KVM's CPU hotplug callback to ONLINE section (suggested by Thomas)
+2. do compatibility checks on hotplugged CPUs.
+3. abort onlining incompatible CPUs
+
+This series is a follow-up to the discussion about KVM and CPU hotplug
+https://lore.kernel.org/lkml/3d3296f0-9245-40f9-1b5a-efffdb082de9@redhat.com/T/
+
+Note: this series is tested only on Intel systems.
+
+Chao Gao (4):
+  KVM: x86: Move check_processor_compatibility from init ops to runtime
+    ops
+  Partially revert "KVM: Pass kvm_init()'s opaque param to additional
+    arch funcs"
+  KVM: Rename and move CPUHP_AP_KVM_STARTING to ONLINE section
+  KVM: Do compatibility checks on hotplugged CPUs
+
+Sean Christopherson (1):
+  KVM: Provide more information in kernel log if hardware enabling fails
+
+ arch/arm64/kvm/arm.c               |  2 +-
+ arch/mips/kvm/mips.c               |  2 +-
+ arch/powerpc/kvm/powerpc.c         |  2 +-
+ arch/riscv/kvm/main.c              |  2 +-
+ arch/s390/kvm/kvm-s390.c           |  2 +-
+ arch/x86/include/asm/kvm-x86-ops.h |  1 +
+ arch/x86/include/asm/kvm_host.h    |  2 +-
+ arch/x86/kvm/svm/svm.c             |  4 +-
+ arch/x86/kvm/vmx/evmcs.c           |  2 +-
+ arch/x86/kvm/vmx/evmcs.h           |  2 +-
+ arch/x86/kvm/vmx/vmx.c             | 22 +++++----
+ arch/x86/kvm/x86.c                 | 16 +++++--
+ include/linux/cpuhotplug.h         |  2 +-
+ include/linux/kvm_host.h           |  2 +-
+ virt/kvm/kvm_main.c                | 73 +++++++++++++++++++-----------
+ 15 files changed, 83 insertions(+), 53 deletions(-)
 
 -- 
-Kees Cook
+2.25.1
+
