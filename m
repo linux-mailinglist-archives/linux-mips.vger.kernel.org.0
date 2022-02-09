@@ -2,203 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 775FF4AF58B
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 16:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7620F4AF5A7
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 16:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236119AbiBIPlM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Feb 2022 10:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S234668AbiBIPoM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 9 Feb 2022 10:44:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236255AbiBIPlK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 10:41:10 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1098C0613C9;
-        Wed,  9 Feb 2022 07:41:11 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.41:55300.899968331
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id E409310020D;
-        Wed,  9 Feb 2022 23:41:08 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 9a8476fe4b9e405690dea299605a0bea for maxime@cerno.tech;
-        Wed, 09 Feb 2022 23:41:09 CST
-X-Transaction-ID: 9a8476fe4b9e405690dea299605a0bea
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <def50622-fe08-01f7-83bd-e6e0bc39fe1b@189.cn>
-Date:   Wed, 9 Feb 2022 23:41:06 +0800
+        with ESMTP id S232680AbiBIPoK (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 10:44:10 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD40C05CB8F;
+        Wed,  9 Feb 2022 07:44:13 -0800 (PST)
+Date:   Wed, 09 Feb 2022 15:44:02 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 0/3] Clock fixes for Ingenic SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <EPN17R.TB21BVY3XDUH1@crapouillou.net>
+In-Reply-To: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
+References: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20220203082546.3099-1-15330273260@189.cn>
- <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat>
- <f5381561-25da-61e3-5025-fa6dd61dd730@189.cn>
- <20220209084331.fpq5ng3yuqxmby4q@houat>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20220209084331.fpq5ng3yuqxmby4q@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hi Aidan,
 
-On 2022/2/9 16:43, Maxime Ripard wrote:
-> On Fri, Feb 04, 2022 at 12:29:39AM +0800, Sui Jingfeng wrote:
->>>> +static int lsdc_modeset = 1;
->>>> +MODULE_PARM_DESC(modeset, "Enable/disable CMA-based KMS(1 = enabled(default), 0 = disabled)");
->>>> +module_param_named(modeset, lsdc_modeset, int, 0644);
->>>> +
->>>> +static int lsdc_cached_coherent = 1;
->>>> +MODULE_PARM_DESC(cached_coherent, "uss cached coherent mapping(1 = enabled(default), 0 = disabled)");
->>>> +module_param_named(cached_coherent, lsdc_cached_coherent, int, 0644);
->>>> +
->>>> +static int lsdc_dirty_update = -1;
->>>> +MODULE_PARM_DESC(dirty_update, "enable dirty update(1 = enabled, 0 = disabled(default))");
->>>> +module_param_named(dirty_update, lsdc_dirty_update, int, 0644);
->>>> +
->>>> +static int lsdc_use_vram_helper = -1;
->>>> +MODULE_PARM_DESC(use_vram_helper, "use vram helper based solution(1 = enabled, 0 = disabled(default))");
->>>> +module_param_named(use_vram_helper, lsdc_use_vram_helper, int, 0644);
->>>> +
->>>> +static int lsdc_verbose = -1;
->>>> +MODULE_PARM_DESC(verbose, "Enable/disable print some key information");
->>>> +module_param_named(verbose, lsdc_verbose, int, 0644);
->>> It's not really clear to me why you need any of those parameters. Why
->>> would a user want to use a non coherent mapping for example?
->>>
->> Because we are Mips architecture. Paul Cercueil already explained it
->> in his mmap GEM buffers cachedpatch  <https://lkml.kernel.org/lkml/20200822164233.71583-1-paul@crapouillou.net/T/>. I drag part of it to here for
->> convenient to reading:
->>
->> /Traditionally, GEM buffers are mapped write-combine. Writes to the buffer
->> are accelerated, and reads are slow. Application doing lots////of
->> alpha-blending paint inside shadow buffers, which is then memcpy'd////into
->> the final GEM buffer.///
->> "non coherent mapping" is actually cached and it is for CMA helpers
->> base driver, not for VRAM helper based driver. For Loongson CPU/SoCs.
->> The cache coherency is maintained by hardware, therefore there no
->> need to worry about coherency problems. This is true at least for
->> ls3a3000, ls3a4000 and ls3a5000.
->>
->> "non coherent" or "coherent" is not important here, the key point is
->> that the backing memory of the framebuffer is cached with non coherent
->> mapping, you don't need a shadow buffer layer when using X server's
->> modesetting driver.
->>
->> Read and write to the framebuffer in system memory is much faster than
->> read and write to the framebuffer in the VRAM.
->>
->> Why CMA helper based solution is faster than the VRAM based solution on Mips platform?
->>
->> Partly because of the CPU have L1, L2 and L3 cache, especially L3 cache
->> is as large as 8MB, read and write from the cache is fast.
->>
->> Another reason is as Paul Cercueil said, read from VRAM with write-combine
->> cache mode is slow. it is just uncache read.
->> Please note that we don't have a GPU here, we are just a display controller.
->>
->> For the VRAM helper based driver case, the backing memory of the framebuffer
->> is located at VRAM, When using X server's modesetting driver, we have to enable
->> the ShadowFB option, Uncache acceleration support(at the kernel size) should
->> also be enabled. Otherwise the performance of graphic application is just slow.
->>
->> Beside write-combine cache mode have bugs on our platform, a kernel side
->> developer have disabled it. Write-combine cache mode just boil down to uncached
->> now. See [1] and [2]
->>
->> [1]https://lkml.org/lkml/2020/8/10/255
->> [2]https://lkml.kernel.org/lkml/1617701112-14007-1-git-send-email-yangtiezhu@loongson.cn/T/
->>
->> This is the reason why we prefer CMA helper base solution with non coherent mapping,
->> simply because it is fast.
->>
->> As far as I know, Loongson's CPU does not has the concept of write-combine,
->> it only support three caching mode:  uncached, cached and uncache acceleration.
->> write-combine is implemented with uncache acceleration on Mips.
-> My point wasn't just about the VRAM vs CMA stuff, it was about why do
-> you need all those switches in the first place?
->
-> Take the verbose parameter for example: it's entirely redundant with the
-> already existing, documented, DRM logging infrastructure.
+Le mar., févr. 8 2022 at 01:00:45 +0000, Aidan MacDonald 
+<aidanmacdonald.0x0@gmail.com> a écrit :
+> I ran across a problem trying to get Linux running on an Ingenic 
+> X1000 SoC:
+> since the memory clock isn't referenced by any driver, it appears 
+> unused and
+> gets disabled automatically. After that, the system hangs on any RAM 
+> access.
+> 
+> There is a hack in board-ingenic.c to forcibly enable the CPU clock, 
+> but this
+> is insufficient for the X1000 since the memory clock has its own gate 
+> and mux
+> that isn't tied to the CPU.
+> 
+> This patch series fixes the bug by adding CLK_IS_CRITICAL flags to 
+> important
+> clocks, which seems to be the approach used in many other SoC clock 
+> drivers.
+> 
+> It's my first time submitting patches to the kernel so let me know if 
+> I
+> messed anything up.
 
-Yes, verbose is redundant, we will use drm_dbg() instead of verbose.Â  
-thanks.
+You did everything good.
 
-I am correcting.
+I think the CI20 suffered from the same problem, it would only boot as 
+long as the "clk_ignore_unused" flag was added on the command line. I 
+will need to try it there to see if it improved the situation.
 
-> Then, you have "modeset", and I'm not sure why it's supposed to be
-> there, at all. This is a modesetting driver, why would I want to disable
-> modesetting entirely?
+I tested the patchset on JZ4770 and it works fine. So:
 
-Something you want fbdev driver, for example simple-framebuffer driver which
-using the firmware passed fb (screeninfo).
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-besides, text mode support.
+@Stephen: I don't see any changes pending on board-ingenic.c so it 
+should be safe for you to also take [PATCH 3/3] in the clk tree.
 
-> More fundamentally (and this extends to the CMA, caching and VRAM stuff
-> you explained above), why can't the driver pick the right decision all
-> the time and why would that be under the user control?
+Cheers,
+-Paul
 
-The right decision for ls7a1000 is to use VRAM based helper, But sometimes
-we need CMA helper based solution. Because: The PRIME support is lost, use
-lsdc with etnaviv is not possible any more.
+> Aidan MacDonald (3):
+>   clk: ingenic: Allow specifying common clock flags
+>   clk: ingenic: Mark critical clocks in Ingenic SoCs
+>   mips: ingenic: Do not manually reference the CPU clock
+> 
+>  arch/mips/generic/board-ingenic.c | 26 --------------------------
+>  drivers/clk/ingenic/cgu.c         |  2 +-
+>  drivers/clk/ingenic/cgu.h         |  3 +++
+>  drivers/clk/ingenic/jz4725b-cgu.c |  2 ++
+>  drivers/clk/ingenic/jz4740-cgu.c  |  2 ++
+>  drivers/clk/ingenic/jz4760-cgu.c  |  2 ++
+>  drivers/clk/ingenic/jz4770-cgu.c  |  1 +
+>  drivers/clk/ingenic/jz4780-cgu.c  |  3 +++
+>  drivers/clk/ingenic/x1000-cgu.c   |  3 +++
+>  drivers/clk/ingenic/x1830-cgu.c   |  3 +++
+>  10 files changed, 20 insertions(+), 27 deletions(-)
+> 
+> --
+> 2.34.1
+> 
 
-  Buffer sharing with etnaviv is no longer possible, loongson display controllers
-  are simple which require scanout buffers to be physically contiguous.
 
-  We still need to develop userspace driver(say xf86-video-loongson)
-  on ls3a4000 + ls7a1000 platform then deploy those driver to ls2k1000 platform.
-
-  ls3a4000 and ls3a5000 is fast enough which can build the linux kernel directly.
-  Build mesa, libdrm, xf86-video-loongson just a piece of cake.
-
-  Is is so fast on ls3a5000+ls7a1000, developing driver on ls2k1000 is cumbersome,
-  embarrassing slow.
-
-  I means it(ls3a4000/ls3a5000 + ls7a1000) is not just target for end user, but
-  it is a platform which can be used to develop software for other platform.
-
-  The author of linux device driver told us that device driver is providing mechanism, not policy.
-
-  We are able to make the decision, but we want to give the user more choice.
-
-  "pick the right decision all the time" is also true, i am considering correct this,
-  thanks.
-
-> You were mentioning that you need to work-around MIPS memory management.
-> Then fine, just do that on MIPS, and don't it on the other architectures
-> that don't need it. There's no need for a knob.
->
-> Maxime
