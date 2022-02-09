@@ -2,59 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32FD4B00DF
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Feb 2022 00:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD17E4B00F3
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Feb 2022 00:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236869AbiBIXCX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Feb 2022 18:02:23 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53700 "EHLO
+        id S236982AbiBIXIi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Feb 2022 18:08:38 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236811AbiBIXCW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 18:02:22 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51210E01976B;
-        Wed,  9 Feb 2022 15:02:21 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id co28so8046059edb.1;
-        Wed, 09 Feb 2022 15:02:21 -0800 (PST)
+        with ESMTP id S236886AbiBIXIh (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 18:08:37 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44835C1038D3;
+        Wed,  9 Feb 2022 15:08:39 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id u20so6857704ejx.3;
+        Wed, 09 Feb 2022 15:08:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WGIEHx+L4uAdTf1VzXQaUpLJlWUcIhu07EIIF1wAFus=;
-        b=maSInnkknThRDgxyUU26cPJ/GRDE224IYjl3dSi18eCKyBLTJ97jIO6112ZO2In8QI
-         x/0TAq3dIe01KVRgLgH5Ah5VOIkLIZdhfS7F3DZVxJBChqQcrScKSEDDnkP6zh+YTMWt
-         n0ReI2QRmnzhetKFakFCSoOLxgjCx0du7xWhy+TWpRC0YJitAneSbEVoKGBOosEWo/ev
-         pGm55G2vxJd6CUpIHFES9oZKgQYbtulzTLYxBeNkMyaAjzUaOHa5uxdk38iFmIUUECtR
-         AZZUOfML8t/FnZnGziM6atPBwFuHuiFJGlbhK2yh0sERjVll1SNPt1sIrPmKxjaNVWWR
-         u+og==
+        bh=n4p8pNRxlbLuMm4Zivi3qzSEX1/XkIY61NA/5+SHRUE=;
+        b=GDYxvemGi17tsPt1GHWDoNRw66clseUB/uO4JIWKzcCvACwk7HeYNGUjzr9gF/r+34
+         eokR8lDNNgUFUow8mSzalfpAwEEKYT5s+6cJkAgS0WPHkXrLCayerlj9gqGZyRhbyJ9c
+         Kkh1Nn0F9k3ZSNs6JclkgcfF9VoezFI94Cbd47KKdbNc7x8LNwgLNUduDGO7MXYdPRNj
+         mgQaWn2dp5tfZiAMJ/4xDkI5OBEkHvWf76tsHA1n0JC98vRlE2ApQpW4XqQ9IWnxbYD7
+         Xfz8I4qO84SPDv3k6Ca8/xSEHdkVHG+oxupGQNyYW69y7h0swqc4vFeNQ1koDdkhkuIa
+         425A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WGIEHx+L4uAdTf1VzXQaUpLJlWUcIhu07EIIF1wAFus=;
-        b=6B2wSik8IrG6D4jD9U7IYKRRYdp0IkyZNudsW1CE9uorZL+GFNKnuHsKw8JbXFEZsO
-         pnjAebh8aP9YtBBleXKUZmcU51Au7zh4NDyrAWB4fLrnmBWsRqZx2Yy2kdD5f9FkJL1E
-         i/j+i506sPp5A6mD0//7xS9fRzTuHQXnLw1vn7hu2skPeobRd0rez64hxxsJNGe9DGb2
-         UpQPLX4Lk5Inl8VEBF71cFZS9lx9MDj4PrIWXmT6hhqjh0oNQ2ENuKRQsPH8Dcu7h8Gn
-         7jc79HKphrJkvsqUQoe8vAG2IgEyx647uzuVTNEZdJCQUABBxkGl+Uo+1qTPyII1/G8h
-         K9xw==
-X-Gm-Message-State: AOAM533iBDKoqMAzIutgSUW91Rx7dEc8ZdeK4fWohUv1QbHY/2mBc4AW
-        ZYdTZkBM6jmRiG8f6c8tahI=
-X-Google-Smtp-Source: ABdhPJzlM0o29Q+3zByPxKJEGxnYYWb7oyrYi3rp56w8xk/KHhpxnLk1OPFtL2bTTKxUmi0lbIujIw==
-X-Received: by 2002:aa7:cfcd:: with SMTP id r13mr5265548edy.55.1644447739764;
-        Wed, 09 Feb 2022 15:02:19 -0800 (PST)
+        bh=n4p8pNRxlbLuMm4Zivi3qzSEX1/XkIY61NA/5+SHRUE=;
+        b=m8iJxXa3IfkYRYt8fTBHPY1gHbwDH4Ydp9ct0mqY30Ohbnv5RQzw2WFa4vcjwDk1EU
+         eQ/PP3InvFFJ0h6RlvTqypJ/WZjau2Uc1eImAmn8OJ0RBh+WYno+QRKN21R/cgZNeMBa
+         6+FVCjZnKy18QxkN0xYg4mmXLw0bFDNn+GskfSKUdlXw9pnLyGRVNbsIz88gzHWjqsXt
+         7W1WUbgsuluLV1CGC6CxpQ5Yo0iXFRTBS5LseNjVpeLXSW1szwCuv+c46SSlpsGd1Vwk
+         BCNNwCwnlO0O1MMnbL2WG8DbhJytnZvJFkLRTtzMH3HTCrMvRXFaGrOZ3C6JMvB8cT13
+         bhdA==
+X-Gm-Message-State: AOAM530s8okMCZTMPm1yNsCuAUEFsra4eliLooooLyJkQgHVIXKivnz/
+        FF2OGhZCA0mrgxPxi7Ro6Ms=
+X-Google-Smtp-Source: ABdhPJwIG5feFVw1N3Qa7gtwNXlORasD8MGuGnqIF/J4wiv9+LUWW4IWxnx659skrjQsuDPh5l3Lbg==
+X-Received: by 2002:a17:906:7812:: with SMTP id u18mr4078755ejm.335.1644448117785;
+        Wed, 09 Feb 2022 15:08:37 -0800 (PST)
 Received: from localhost (92.40.202.147.threembb.co.uk. [92.40.202.147])
-        by smtp.gmail.com with ESMTPSA id z22sm7843198edq.9.2022.02.09.15.02.17
+        by smtp.gmail.com with ESMTPSA id p1sm6136112edy.69.2022.02.09.15.08.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 15:02:19 -0800 (PST)
+        Wed, 09 Feb 2022 15:08:37 -0800 (PST)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, robh+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: ingenic-tcu: Fix missing TCU clock for X1000 SoC
-Date:   Wed,  9 Feb 2022 23:01:47 +0000
-Message-Id: <20220209230145.18943-1-aidanmacdonald.0x0@gmail.com>
+To:     paul@crapouillou.net, linus.walleij@linaro.org
+Cc:     linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] pinctrl: ingenic: Fix regmap on X series SoCs
+Date:   Wed,  9 Feb 2022 23:04:54 +0000
+Message-Id: <20220209230452.19535-1-aidanmacdonald.0x0@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,45 +67,38 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The X1000 does have a TCU clock gate, so pass it to the driver.
-Without this the TCU can be gated automatically, which prevents
-timers from running and stops register writes from taking effect.
+The X series Ingenic SoCs have a shadow GPIO group which
+is at a higher offset than the other groups, and is used
+for all GPIO configuration. The regmap did not take this
+offset into account and set max_register too low. Writes
+to the shadow group registers were blocked, which made it
+impossible to change any pin configuration.
+
+Fix this by pretending there are at least 8 chips on any
+'X' SoC for the purposes of calculating max_register. This
+ensures the shadow group is accessible.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
- drivers/clk/ingenic/tcu.c             | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ drivers/pinctrl/pinctrl-ingenic.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-index 8bd27edef216..c69df8eb158e 100644
---- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-@@ -111,8 +111,9 @@ tcu: timer@10002000 {
+diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+index 2712f51eb238..9d2bccda50f1 100644
+--- a/drivers/pinctrl/pinctrl-ingenic.c
++++ b/drivers/pinctrl/pinctrl-ingenic.c
+@@ -4168,7 +4168,10 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
+ 		return PTR_ERR(base);
  
- 		clocks = <&cgu X1000_CLK_RTCLK>,
- 			 <&cgu X1000_CLK_EXCLK>,
--			 <&cgu X1000_CLK_PCLK>;
--		clock-names = "rtc", "ext", "pclk";
-+			 <&cgu X1000_CLK_PCLK>,
-+			 <&cgu X1000_CLK_TCU>;
-+		clock-names = "rtc", "ext", "pclk", "tcu";
+ 	regmap_config = ingenic_pinctrl_regmap_config;
+-	regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset;
++	if (chip_info->version >= ID_X1000)
++		regmap_config.max_register = MIN(8, chip_info->num_chips) * chip_info->reg_offset;
++	else
++		regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset;
  
- 		interrupt-controller;
- 		#interrupt-cells = <1>;
-diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-index 77acfbeb4830..9c86043f673a 100644
---- a/drivers/clk/ingenic/tcu.c
-+++ b/drivers/clk/ingenic/tcu.c
-@@ -320,7 +320,7 @@ static const struct ingenic_soc_info jz4770_soc_info = {
- static const struct ingenic_soc_info x1000_soc_info = {
- 	.num_channels = 8,
- 	.has_ost = false, /* X1000 has OST, but it not belong TCU */
--	.has_tcu_clk = false,
-+	.has_tcu_clk = true,
- };
- 
- static const struct of_device_id __maybe_unused ingenic_tcu_of_match[] __initconst = {
+ 	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
+ 	if (IS_ERR(jzpc->map)) {
 -- 
 2.34.1
 
