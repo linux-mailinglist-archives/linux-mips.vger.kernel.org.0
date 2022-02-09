@@ -2,26 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C17C84AF169
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 13:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F4D4AF2D7
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 14:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbiBIMX3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Wed, 9 Feb 2022 07:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S234073AbiBINfE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Feb 2022 08:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233101AbiBIMVt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 07:21:49 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1C6C02B5FB;
-        Wed,  9 Feb 2022 04:18:29 -0800 (PST)
-Date:   Wed, 09 Feb 2022 12:18:14 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v13 6/9] dw-hdmi/ingenic-dw-hdmi: repair interworking with
- hdmi-connector
+        with ESMTP id S234066AbiBINe7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 08:34:59 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EE1AC0613C9;
+        Wed,  9 Feb 2022 05:35:02 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nHn7Y-0005Ye-00; Wed, 09 Feb 2022 14:34:56 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 4CC9AC24BD; Wed,  9 Feb 2022 14:34:15 +0100 (CET)
+Date:   Wed, 9 Feb 2022 14:34:15 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Kees Cook <keescook@chromium.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
@@ -45,93 +48,43 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
         Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org
-Message-Id: <E6E17R.ND5XW1IG4SYA@crapouillou.net>
-In-Reply-To: <866f84621974992f4831bd471ae5a53414de9255.1643819482.git.hns@goldelico.com>
+Subject: Re: [PATCH v13 8/9] MIPS: DTS: CI20: fix how ddc power is enabled
+Message-ID: <20220209133415.GA11741@alpha.franken.de>
 References: <cover.1643819482.git.hns@goldelico.com>
-        <866f84621974992f4831bd471ae5a53414de9255.1643819482.git.hns@goldelico.com>
+ <0e5dc9a7c67b1cdfdb4427f631a8caa43777270e.1643819482.git.hns@goldelico.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0e5dc9a7c67b1cdfdb4427f631a8caa43777270e.1643819482.git.hns@goldelico.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Nikolaus,
-
-Le mer., févr. 2 2022 at 17:31:20 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus 
-> fmts callbacks")
+On Wed, Feb 02, 2022 at 05:31:22PM +0100, H. Nikolaus Schaller wrote:
+> Originally we proposed a new hdmi-5v-supply regulator reference
+> for CI20 device tree but that was superseded by a better idea to use
+> the already defined "ddc-en-gpios" property of the "hdmi-connector".
 > 
-> introduced a new mechanism to negotiate bus formats between hdmi 
-> connector
-> and the synopsys hdmi driver inside the jz4780.
+> Since "MIPS: DTS: CI20: Add DT nodes for HDMI setup" has already
+> been applied to v5.17-rc1, we add this on top.
 > 
-> By this, the dw-hdmi is no longer the only bridge and sets up a list
-> of formats in dw_hdmi_bridge_atomic_get_output_bus_fmts().
-> 
-> This includes MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the jz4780 
-> but only
-> produces a black screen.
-> 
-> This fix is based on the observation that max_bpc = 0 when running 
-> this
-> function while info->bpc = 8. Since the formats checks before this 
-> always test
-> for max_bpc >= info->pbc indirectly my assumption is that we must 
-> check it
-> here as well.
-
-This fix looks really strange to me, so I'll let the DRM experts 
-comment.
-
-It would still be better to move the patch before the introduction of 
-dw-ingenic-hdmi.c, so that once this one is introduced, everything 
-works. This also enables bisectability.
-
-Cheers,
--Paul
-
-
-> 
-> Adding the proposed patch makes the CI20/jz4780 panel work again in
-> MEDIA_BUS_FMT_RGB888_1X24 mode.
-> 
-> Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus 
-> fmts callbacks")
+> Fixes: ae1b8d2c2de9 ("MIPS: DTS: CI20: Add DT nodes for HDMI setup")
 > Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c 
-> b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index 52e7cd2e020d3..34703a15ee4ff 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -2620,10 +2620,10 @@ static u32 
-> *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->  		output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
->  	}
-> 
-> -	if (info->color_formats & DRM_COLOR_FORMAT_YCRCB422)
-> +	if (max_bpc >= info->bpc && info->color_formats & 
-> DRM_COLOR_FORMAT_YCRCB422)
->  		output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
-> 
-> -	if (info->color_formats & DRM_COLOR_FORMAT_YCRCB444)
-> +	if (max_bpc >= info->bpc && info->color_formats & 
-> DRM_COLOR_FORMAT_YCRCB444)
->  		output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
-> 
->  	/* Default 8bit RGB fallback */
-> --
-> 2.33.0
-> 
+>  arch/mips/boot/dts/ingenic/ci20.dts | 15 ++-------------
+>  1 file changed, 2 insertions(+), 13 deletions(-)
 
+applied to mips-fixes.
 
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
