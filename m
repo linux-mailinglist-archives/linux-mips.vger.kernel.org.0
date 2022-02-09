@@ -2,65 +2,71 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0A14AF399
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 15:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F234AF3D8
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Feb 2022 15:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbiBIOEk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Feb 2022 09:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
+        id S234855AbiBIOOU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Feb 2022 09:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbiBIOEj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 09:04:39 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7ACC0613C9;
-        Wed,  9 Feb 2022 06:04:39 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 0A9AD5801A9;
-        Wed,  9 Feb 2022 09:04:37 -0500 (EST)
+        with ESMTP id S233904AbiBIOOU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Feb 2022 09:14:20 -0500
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09534C06157B;
+        Wed,  9 Feb 2022 06:14:23 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 3FFF758016B;
+        Wed,  9 Feb 2022 09:14:22 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 09 Feb 2022 09:04:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=6C3Zbv7qcftcJPNdinXDELfCRJAPbtGEO9aofq
-        ELC1c=; b=RbTJLLPSHVAvRbZaSx+PE/OOh6dwrdKo5fF8ddis1mPVVlOd+rbbOw
-        WNgNng9NOAg2tC7ME61PAATrqcEL2Iq1EhU+dNttV2/alXDEY+TRmrxgSI4qQ6Q2
-        gxdOFwVQgGTzVPWATM+X56Yfwqf/G/QqaTq5zIVe0XGUQaXIhYmh9RhVa+4gR9wR
-        cJMYUz0oxESU6HCz0r3DP7Q0h01iiI2FqG9xPc+CPwpN54Wajx7WXuQWFGAjozhZ
-        ItVHbeQ1H7j61Ph7OLb8cTuWMxdQDOyKAwRTHLNd+4MA7xfpA0zEl6cibfdfo2o1
-        g8FvQ8oaj8urf9tG307CeqSKVDoQsFng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+  by compute2.internal (MEProxy); Wed, 09 Feb 2022 09:14:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=6C3Zbv7qcftcJPNdi
-        nXDELfCRJAPbtGEO9aofqELC1c=; b=juG876JtEkhqls5pvMUbR4O2Cp+hpvAIr
-        qOrSZGofNApNDWdrr5kYUh/qFGSkFKWu6BCPnJ+gVk77IRw1hdFYl7WiNrIRZJja
-        cSrh7/Mj5EKxnb77Sg3nTOLeuRnztE4B6US5twBLQ4NvBrUC9ciMgBpfDc80XBLJ
-        pfBBmerR8Snh3eJVYst3S6GwUXxipNILBDktURLw1C7bCnA8G5tO2rVlzcLdCTSH
-        WncaYfPCHddxoQVG+01hWghQ0shscaRIQQDPM6DtlBE2APyBAvD4kh1BjdzxIGWs
-        YHK1yCF4HL9s5oqB/z4j0IMPlxxoCOWs2RmxX4DxkYpXwTf5gpFUg==
-X-ME-Sender: <xms:88kDYrTKYO8ov1PvHt0MleH7wilA9FoIlPoq0BwliyH0lvGYQfp5TQ>
-    <xme:88kDYswiOiC-Yrv9inepzR2830IQlOtLTUmaH6ucbennMlyTrvNKW12fzrD83st18
-    XBRqEd0MLehA_tmjuc>
-X-ME-Received: <xmr:88kDYg1xdOfDPeeTE6ibwkWTym6h9cuWHGrN7zmIWWx1C5xofp0BpVAO355Xa54_ex7L6-6JEK7AwpdiyR_vGdKhrHG9xzJ_yPRn5ZA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgdehkecutefuodetggdotefrodftvf
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=TmJou/XbDJVWvQ
+        v3YSL4bJUa/8221zv0DCH0YWYGppc=; b=m39aEsSTG/1rlyyX/TTWu51ZBaV5Ck
+        iH8lf2grpzH46I2MRjyxDK6ggRR3JX3U/KYcHlXHddLSbDiLMtJ+gJtzCTZ/tmtx
+        16SoijoR4OZY7tGgWIj2D4bL31Gw6fjb8uYIZjm5QY+eJCFz3jnjb7Br1nJwbvEs
+        xreO2Onm+kwRHdnOMpJvAznTpJvv6zdIv7fXyGoNAIBXd+sErrp8xS1lVW3eu7NY
+        yl/zQbU4iAsRr7uYGxQjNkl9f6X2y7e3eoZLrTbhFdy+aY6zZJEC9zogc/cBHnAO
+        yFiR8N3feNYgCFvPe985vxVJLfH0+9S8VMyAJzSss0yxR2ayissJt9sw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=TmJou/XbDJVWvQv3YSL4bJUa/8221zv0DCH0YWYGp
+        pc=; b=D24s8NWFBRzM/pqaYTJ5dgrv5WmZp8+CL5gUVnY5vemFm6blxtabCM2z5
+        1xHR60MUWH3LZUU63D2HCpc9xKVDl9ZwEhXs+X38cL1raKxJsPecnlJxLJ53HoJG
+        cJVUEcIkYlohx5oWqPiJZtAJopC2t4hFGXjb3Io0g1NWRojt+x0Kx/uZllNP+UnF
+        IWt2k7vx9sI8TBOEWvYZr8VTE43eRLv+1ArqAQJIminD3LV7T7ZJZoEu/n85zwGM
+        M5rI64c0z6uIvGEx6Dvt2m1aiv0lN93LhOpd4XKtcRqY/ILe97xK1CUJVbqrtXCT
+        iByuGQ5O79sKzOkhYkWxqtwyT49OQ==
+X-ME-Sender: <xms:PcwDYiK6kPG53do9P_Gn6W23_zqbHMhJSeUPX3wh8Fq9Px1FW6hh3A>
+    <xme:PcwDYqLoJz0bqEHGTll7Auwj9Qa_L-XnjNNi4yu8YO6Za7vYS0b-wzCn6IiyVBySD
+    gMwc4YUA3cHclhX96s>
+X-ME-Received: <xmr:PcwDYivxt82yjsVv18xnviNK9JIcqKQdFoYLiYus3KiebZ_PziM2ly3Y-g9S2pk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgdeitdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeeutdfgjeeuudehvefgvedvtedtudelfffgffekledtffekgedukeejueevieeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:88kDYrA8Be05SyEG96uriDnvHQlCLxPXh5nTzO1T5HVsiQcoK83WMQ>
-    <xmx:88kDYki7RG4p27sdKSq9Gp2JD2Fj5MNRd26p_slr_pJFoFA3GAkoFg>
-    <xmx:88kDYvoJzUrLElH-l28YJDxD3tBKV1W_8MeALkc5wNUvd3dN9f3Evg>
-    <xmx:9MkDYta9hxxFCyROgf7oo6Q76Xof1_w0KIUC1bSOzptwSnCvgJVVvg>
+    fjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepheeiuddvvefhkeejfedttdekieethfdukedvieeuueelgfelieej
+    geehvdekudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:PcwDYna9hbyhGdns6SPNJMM9H-bTDsrIv5AZq6a8-5xBw4-1S3_D1g>
+    <xmx:PcwDYpZzNaa2Mo9hCvqBa-kS1ltnGYjDc9dEfMucsOoealvXpBNG8w>
+    <xmx:PcwDYjCXye1iP4QturoMSL2SpUWrkHxMnxTyvUzhodsIlJaJg2bBZQ>
+    <xmx:PswDYmQRm74ad1tLNDH7JH_IveGrad8mtvtVvmyOKS-pmOjtumVkwA>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Feb 2022 09:04:34 -0500 (EST)
-Date:   Wed, 9 Feb 2022 15:04:32 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+ 9 Feb 2022 09:14:19 -0500 (EST)
+Message-ID: <3133a629-eebf-928e-d6b0-72867d96d2b5@flygoat.com>
+Date:   Wed, 9 Feb 2022 14:14:18 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
+ controller
+To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     Sui Jingfeng <15330273260@189.cn>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Lucas Stach <l.stach@pengutronix.de>,
@@ -79,24 +85,21 @@ Cc:     Sui Jingfeng <15330273260@189.cn>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org,
         Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <20220209140432.ekqszxbtitmacpk5@houat>
 References: <20220203082546.3099-1-15330273260@189.cn>
  <20220203082546.3099-2-15330273260@189.cn>
  <20220203085851.yqstkfgt4dz7rcnw@houat>
  <57805e19-285a-76d3-16e3-09a3eb7a9540@189.cn>
  <20220209085215.65qbdsgwtnvujdng@houat>
  <8e7f7946-b9e5-7c4d-f5c9-e091bf5f814b@flygoat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vl5too7ki5enoddb"
-Content-Disposition: inline
-In-Reply-To: <8e7f7946-b9e5-7c4d-f5c9-e091bf5f814b@flygoat.com>
+ <20220209140432.ekqszxbtitmacpk5@houat>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20220209140432.ekqszxbtitmacpk5@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -104,45 +107,34 @@ List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
 
---vl5too7ki5enoddb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 09, 2022 at 11:56:48AM +0000, Jiaxun Yang wrote:
->=20
->=20
-> =E5=9C=A8 2022/2/9 8:52, Maxime Ripard =E5=86=99=E9=81=93:
-> > On Thu, Feb 03, 2022 at 11:47:16PM +0800, Sui Jingfeng wrote:
-> [...]
-> > DT isn't really a solution either. Let's take the distribution
-> > perspective there. Suppose you're a Fedora or Debian developer, and want
-> > to make a single kernel image, and ship a DT to the user for their board
-> > without any modification. How is either the Kconfig solution or DT flags
-> > solution any good there? It doesn't help them at all.
+在 2022/2/9 14:04, Maxime Ripard 写道:
+> On Wed, Feb 09, 2022 at 11:56:48AM +0000, Jiaxun Yang wrote:
+>>
+>> 在 2022/2/9 8:52, Maxime Ripard 写道:
+>>> On Thu, Feb 03, 2022 at 11:47:16PM +0800, Sui Jingfeng wrote:
+>> [...]
+>>> DT isn't really a solution either. Let's take the distribution
+>>> perspective there. Suppose you're a Fedora or Debian developer, and want
+>>> to make a single kernel image, and ship a DT to the user for their board
+>>> without any modification. How is either the Kconfig solution or DT flags
+>>> solution any good there? It doesn't help them at all.
+>> We are working in another way. As we can tell model of the board by strings
+>> passed from the firmware, we just built-in all poosible DTs into the kernel
+>> and then tell which DT to load at boot time. So we can ensure users has
+>> smmoth experience.
+> It's not really for you to say though. Once your driver is in a release,
+> distros are going to use it. That's the whole point of you asking us to
+> merge it.
+
+Ah I was meant to say we can determine which type of memory is best for a
+type of board and then hardcode it into ST accroading to the model.
+
+Though personally I want a knob in cmdline to override it at runtime.
+
+Thanks.
+- Jiaxun
+
 >
-> We are working in another way. As we can tell model of the board by strin=
-gs
-> passed from the firmware, we just built-in all poosible DTs into the kern=
-el
-> and then tell which DT to load at boot time. So we can ensure users has
-> smmoth experience.
+> Maxime
 
-It's not really for you to say though. Once your driver is in a release,
-distros are going to use it. That's the whole point of you asking us to
-merge it.
-
-Maxime
-
---vl5too7ki5enoddb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgPJ8AAKCRDj7w1vZxhR
-xQ7jAP9etfpiFR/7BaYwCwRPhBjfmYKdaCacf+X7uAN8xqcKDwD9FtD6v8xZ4gAL
-l00pbTcOa2efVrqJ8frFZMlTOvz47QI=
-=gzq+
------END PGP SIGNATURE-----
-
---vl5too7ki5enoddb--
