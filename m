@@ -2,51 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA714B1997
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Feb 2022 00:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7B74B1A37
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Feb 2022 01:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345733AbiBJXgC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Feb 2022 18:36:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45170 "EHLO
+        id S1346158AbiBKANf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Feb 2022 19:13:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345734AbiBJXgB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Feb 2022 18:36:01 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609875F6B;
-        Thu, 10 Feb 2022 15:36:01 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id o10so5711977ilh.0;
-        Thu, 10 Feb 2022 15:36:01 -0800 (PST)
+        with ESMTP id S243610AbiBKANf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Feb 2022 19:13:35 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFE426DA;
+        Thu, 10 Feb 2022 16:13:34 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id h11so5699490ilq.9;
+        Thu, 10 Feb 2022 16:13:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=+6fGWOvKupFRHqASATl4H7ePp2/LogONFRX5QE2erMk=;
-        b=c5TKy1a65HE0+KDrrZ0l/0nyjG2KwQMjf+LTDiNfbSE5RPViIvGC8K2sHtLqVEcATl
-         s9UJ/l/F0Gz6sTG4Um9A9x+I5/IKHSGqrabca7G/pE0GFSn3XrH1YGeZFwiQrdeYQ2OO
-         wRYGq1zhoyCG6jEZqlxFK4gKdjeLjsn3FyH/9KWUGJa5YZSktM3YXMRDDCVu/rR+AA2Z
-         oA78RSF7auCtcAT5js4nUbb4fLc9eIrWmHdj2Xyew4TFqMHZNPCFuVgHQyJVH43uWM+x
-         hbbn18w+pjBpT7F/P3oXQdsqSOIcktcYds/lAjybQxjTdeU0egJ1F0ul5vz3eBMhF1Qg
-         zMvw==
+        bh=P9CQld7JqGJfJXS61tcHY1+Q0rrT2ByYuWx5h8QfDxg=;
+        b=Si1YTbH4uVu7arrxfMdWslaIjgTMOegSVuC2K771A/Gpc/h4LY+Ug2RAq06koXGaGB
+         19raDUJ4IbyL5UxNmkSlCjq8yC0/MQs7ny+ceRdiPJgWKRUH/g18HGx76TR+d4u5aMzn
+         wHojbv8airUCDg2dFG2TbYE125EbBMUIDn3GuuP1WbW788400zH6+9vtkV/0b0LEQHXH
+         hSz7xK8WHhKcCHAo+/a9VIqRueI+LX7YZgdAseKgEsfWPcC9ycBltcYUnix/qjFGgExK
+         TIgNvHH3qNwC7XplpKn5TZgIeG+RXXAOipR9U+RCHjmeX2WVTrja7/7RtroVmHPwzzgT
+         KOGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+6fGWOvKupFRHqASATl4H7ePp2/LogONFRX5QE2erMk=;
-        b=Je0WUv8LTZFb/06BB0tyffvW5e+Oc7MqqdghD3pFwzPq1WhT6yfLFUhxLkl1RsCcEg
-         7JW8ssOV6hUweOq6Uu9htKUk/oOQnFkssshDDPwt9IHjp5tf4bFY9UItTtBQP3zYcV9Y
-         7Z0qVWVMj8rhz+q/CLVYPg2FiRvKIgt3+/tLSLQQdMUq/nt9W6Mqwo9I06WiBY+1AlMa
-         l51BhzCu6EdHkDLQoh1LXDLNZtV8ipEtkU0xbfsF610BC3V2ckhaHu+/FXRTXCzZW851
-         a5WtVzooDXFuD+i+SEYrm2sY56MHrYjwVQ2TokMOjJr++ZAVHSkPQh/IHPmo7/Z23r35
-         feCA==
-X-Gm-Message-State: AOAM533CM9eYh7FtzcLm2Q2NI++rCkX4i/+hfMwl246sK+2oi6h9Ih+D
-        FLCa1+cN5WdOmhPe120HajE=
-X-Google-Smtp-Source: ABdhPJxIyAONwSqovY5ap0uN+hIkP7cYxn35rT83uobFJrTicWBOWExdY8XujcVELZYNJmB7R5CauA==
-X-Received: by 2002:a92:db0e:: with SMTP id b14mr5408913iln.153.1644536160698;
-        Thu, 10 Feb 2022 15:36:00 -0800 (PST)
+        bh=P9CQld7JqGJfJXS61tcHY1+Q0rrT2ByYuWx5h8QfDxg=;
+        b=DQmyz7j565RKn7ovZ2VBATROAmt1KOcPfCnTt0W0fxdNzgD1ATBFregAi8sP4SLYg1
+         G5tRJ0caFLFzl/Bav3COONZkY07bp5fLuNKHiCQ/HcKgvq1k0Xi+Cx6YEDBvBh+Ci0SQ
+         kZnYvqh2picx9PxGFBQCK2nOMt3oGyB+h+/Wz/4WcDyuvcyJ762yCBAi7imVWiA1AHaV
+         Po2Xe/g1zyi4FjZx2WnPlfDQDdCuH3WsiqKjuZcczchTJ2Zad2a2EhZSZEEDIuPBMUUC
+         cLlzIllWz7nJLkHf7cKTPmLYpGC929apoDoehtYdD5kDnJpeH9w1ucxcWO6LP1btULpq
+         fGrQ==
+X-Gm-Message-State: AOAM532EeUtBAr+BGqXc49rR9h8jDqOYjpMuOj4yH04esSRN74gtSceP
+        Dj7+AQldqYJcj/3EoiFBwvU=
+X-Google-Smtp-Source: ABdhPJxfWUlPP3bz5Kd/ubQZOjy0O9kW3lT//YIrBrMf5tL4x2+m9mGFhShROfdFB+0MnnI9PBIWKg==
+X-Received: by 2002:a92:d944:: with SMTP id l4mr4723853ilq.2.1644538413618;
+        Thu, 10 Feb 2022 16:13:33 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id a10sm12126701ilv.44.2022.02.10.15.36.00
+        by smtp.gmail.com with ESMTPSA id c11sm7148530iln.56.2022.02.10.16.13.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:36:00 -0800 (PST)
+        Thu, 10 Feb 2022 16:13:33 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,13 +62,12 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
         linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org
-Subject: [PATCH 20/49] irq: mips: replace cpumask_weight with cpumask_empty where appropriate
-Date:   Thu, 10 Feb 2022 14:49:04 -0800
-Message-Id: <20220210224933.379149-21-yury.norov@gmail.com>
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH 37/49] arch/mips: replace cpumask_weight with cpumask_weight_{eq, ...} where appropriate
+Date:   Thu, 10 Feb 2022 14:49:21 -0800
+Message-Id: <20220210224933.379149-38-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -84,29 +83,52 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-bcm6345_l1_of_init() calls cpumask_weight() to check if any bit of a given
-cpumask is set. We can do it more efficiently with cpumask_empty() because
-cpumask_empty() stops traversing the cpumask as soon as it finds first set
-bit, while cpumask_weight() counts all bits unconditionally.
+Mips code uses calls cpumask_weight() to compare the weight of cpumask
+with a given number. We can do it more efficiently with
+cpumask_weight_{eq, ...} because conditional cpumask_weight may stop
+traversing the cpumask earlier, as soon as condition is (or can't be) met.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- drivers/irqchip/irq-bcm6345-l1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/cavium-octeon/octeon-irq.c | 4 ++--
+ arch/mips/kernel/crash.c             | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l1.c
-index fd079215c17f..142a7431745f 100644
---- a/drivers/irqchip/irq-bcm6345-l1.c
-+++ b/drivers/irqchip/irq-bcm6345-l1.c
-@@ -315,7 +315,7 @@ static int __init bcm6345_l1_of_init(struct device_node *dn,
- 			cpumask_set_cpu(idx, &intc->cpumask);
- 	}
+diff --git a/arch/mips/cavium-octeon/octeon-irq.c b/arch/mips/cavium-octeon/octeon-irq.c
+index 844f882096e6..914871f15fb7 100644
+--- a/arch/mips/cavium-octeon/octeon-irq.c
++++ b/arch/mips/cavium-octeon/octeon-irq.c
+@@ -763,7 +763,7 @@ static void octeon_irq_cpu_offline_ciu(struct irq_data *data)
+ 	if (!cpumask_test_cpu(cpu, mask))
+ 		return;
  
--	if (!cpumask_weight(&intc->cpumask)) {
-+	if (cpumask_empty(&intc->cpumask)) {
- 		ret = -ENODEV;
- 		goto out_free;
+-	if (cpumask_weight(mask) > 1) {
++	if (cpumask_weight_gt(mask, 1)) {
+ 		/*
+ 		 * It has multi CPU affinity, just remove this CPU
+ 		 * from the affinity set.
+@@ -795,7 +795,7 @@ static int octeon_irq_ciu_set_affinity(struct irq_data *data,
+ 	 * This removes the need to do locking in the .ack/.eoi
+ 	 * functions.
+ 	 */
+-	if (cpumask_weight(dest) != 1)
++	if (!cpumask_weight_eq(dest, 1))
+ 		return -EINVAL;
+ 
+ 	if (!enable_one)
+diff --git a/arch/mips/kernel/crash.c b/arch/mips/kernel/crash.c
+index 81845ba04835..5b690d52491f 100644
+--- a/arch/mips/kernel/crash.c
++++ b/arch/mips/kernel/crash.c
+@@ -72,7 +72,7 @@ static void crash_kexec_prepare_cpus(void)
+ 	 */
+ 	pr_emerg("Sending IPI to other cpus...\n");
+ 	msecs = 10000;
+-	while ((cpumask_weight(&cpus_in_crash) < ncpus) && (--msecs > 0)) {
++	while (cpumask_weight_lt(&cpus_in_crash, ncpus) && (--msecs > 0)) {
+ 		cpu_relax();
+ 		mdelay(1);
  	}
 -- 
 2.32.0
