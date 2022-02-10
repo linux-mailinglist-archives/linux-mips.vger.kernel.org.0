@@ -2,73 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC514B0F94
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Feb 2022 15:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA714B1997
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Feb 2022 00:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242598AbiBJODH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Feb 2022 09:03:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56476 "EHLO
+        id S1345733AbiBJXgC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Feb 2022 18:36:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242575AbiBJODC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Feb 2022 09:03:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689539A;
-        Thu, 10 Feb 2022 06:03:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0433D612CC;
-        Thu, 10 Feb 2022 14:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 673CDC004E1;
-        Thu, 10 Feb 2022 14:03:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644501783;
-        bh=L+PpSV/TcNiz+mfnm44CEXLNSfejV2BvLcPSOPgEGHg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=heErZJ5gEuTECPxXK3+pdRe0LQ3IWwF+7AdPZ5b+6req+YnOf+g8gWdiHus1kJ+Rr
-         FdZUryam4V3vKWG33gVz6Y5h5Ovwuwv5W15E4ejY2Nq5bJxFAoNTQFFPTax7zuXJA6
-         hL2tdNzVFbvYU3/AOL3K6tMiNEY4RTq22Q+J1GBWYUuUb9EhNjoiNz9cf90FPPZ+ou
-         3gyjJLg/srnPLH3a2jGEW7SI3XjZb35xh3TPfPgRQynwYSt4kwW+5nRZ6wD6+Aw1yN
-         JyMwYAC/fz+bpMea+sZ89UKq1GQvS9cc/Bxqg2oVbJXXl3Z6IjA16LyKeJxkVEaJhD
-         jfoVPfw5ObEwg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5181FE5D084;
-        Thu, 10 Feb 2022 14:03:03 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220210102939.GA9285@alpha.franken.de>
-References: <20220210102939.GA9285@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220210102939.GA9285@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_3
-X-PR-Tracked-Commit-Id: d9565bf40da22426d2f660cb31700b6858d1911d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e3c85076d7a6f986445b9008be7e7f83d1b0780a
-Message-Id: <164450178331.30240.93820123938051512.pr-tracker-bot@kernel.org>
-Date:   Thu, 10 Feb 2022 14:03:03 +0000
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S1345734AbiBJXgB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Feb 2022 18:36:01 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609875F6B;
+        Thu, 10 Feb 2022 15:36:01 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id o10so5711977ilh.0;
+        Thu, 10 Feb 2022 15:36:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=+6fGWOvKupFRHqASATl4H7ePp2/LogONFRX5QE2erMk=;
+        b=c5TKy1a65HE0+KDrrZ0l/0nyjG2KwQMjf+LTDiNfbSE5RPViIvGC8K2sHtLqVEcATl
+         s9UJ/l/F0Gz6sTG4Um9A9x+I5/IKHSGqrabca7G/pE0GFSn3XrH1YGeZFwiQrdeYQ2OO
+         wRYGq1zhoyCG6jEZqlxFK4gKdjeLjsn3FyH/9KWUGJa5YZSktM3YXMRDDCVu/rR+AA2Z
+         oA78RSF7auCtcAT5js4nUbb4fLc9eIrWmHdj2Xyew4TFqMHZNPCFuVgHQyJVH43uWM+x
+         hbbn18w+pjBpT7F/P3oXQdsqSOIcktcYds/lAjybQxjTdeU0egJ1F0ul5vz3eBMhF1Qg
+         zMvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+6fGWOvKupFRHqASATl4H7ePp2/LogONFRX5QE2erMk=;
+        b=Je0WUv8LTZFb/06BB0tyffvW5e+Oc7MqqdghD3pFwzPq1WhT6yfLFUhxLkl1RsCcEg
+         7JW8ssOV6hUweOq6Uu9htKUk/oOQnFkssshDDPwt9IHjp5tf4bFY9UItTtBQP3zYcV9Y
+         7Z0qVWVMj8rhz+q/CLVYPg2FiRvKIgt3+/tLSLQQdMUq/nt9W6Mqwo9I06WiBY+1AlMa
+         l51BhzCu6EdHkDLQoh1LXDLNZtV8ipEtkU0xbfsF610BC3V2ckhaHu+/FXRTXCzZW851
+         a5WtVzooDXFuD+i+SEYrm2sY56MHrYjwVQ2TokMOjJr++ZAVHSkPQh/IHPmo7/Z23r35
+         feCA==
+X-Gm-Message-State: AOAM533CM9eYh7FtzcLm2Q2NI++rCkX4i/+hfMwl246sK+2oi6h9Ih+D
+        FLCa1+cN5WdOmhPe120HajE=
+X-Google-Smtp-Source: ABdhPJxIyAONwSqovY5ap0uN+hIkP7cYxn35rT83uobFJrTicWBOWExdY8XujcVELZYNJmB7R5CauA==
+X-Received: by 2002:a92:db0e:: with SMTP id b14mr5408913iln.153.1644536160698;
+        Thu, 10 Feb 2022 15:36:00 -0800 (PST)
+Received: from localhost ([12.28.44.171])
+        by smtp.gmail.com with ESMTPSA id a10sm12126701ilv.44.2022.02.10.15.36.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 15:36:00 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org
+Subject: [PATCH 20/49] irq: mips: replace cpumask_weight with cpumask_empty where appropriate
+Date:   Thu, 10 Feb 2022 14:49:04 -0800
+Message-Id: <20220210224933.379149-21-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The pull request you sent on Thu, 10 Feb 2022 11:29:39 +0100:
+bcm6345_l1_of_init() calls cpumask_weight() to check if any bit of a given
+cpumask is set. We can do it more efficiently with cpumask_empty() because
+cpumask_empty() stops traversing the cpumask as soon as it finds first set
+bit, while cpumask_weight() counts all bits unconditionally.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_3
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/irqchip/irq-bcm6345-l1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e3c85076d7a6f986445b9008be7e7f83d1b0780a
-
-Thank you!
-
+diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l1.c
+index fd079215c17f..142a7431745f 100644
+--- a/drivers/irqchip/irq-bcm6345-l1.c
++++ b/drivers/irqchip/irq-bcm6345-l1.c
+@@ -315,7 +315,7 @@ static int __init bcm6345_l1_of_init(struct device_node *dn,
+ 			cpumask_set_cpu(idx, &intc->cpumask);
+ 	}
+ 
+-	if (!cpumask_weight(&intc->cpumask)) {
++	if (cpumask_empty(&intc->cpumask)) {
+ 		ret = -ENODEV;
+ 		goto out_free;
+ 	}
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.32.0
+
