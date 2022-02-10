@@ -2,28 +2,27 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A9B4B0B6A
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Feb 2022 11:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6614B0BAE
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Feb 2022 12:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240148AbiBJKwM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 10 Feb 2022 05:52:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60250 "EHLO
+        id S240434AbiBJLDW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Thu, 10 Feb 2022 06:03:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240086AbiBJKwL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Feb 2022 05:52:11 -0500
+        with ESMTP id S232915AbiBJLDW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Feb 2022 06:03:22 -0500
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E282E122;
-        Thu, 10 Feb 2022 02:52:12 -0800 (PST)
-Date:   Thu, 10 Feb 2022 10:52:01 +0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B8CB6B;
+        Thu, 10 Feb 2022 03:03:23 -0800 (PST)
+Date:   Thu, 10 Feb 2022 11:03:13 +0000
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] clk: ingenic-tcu: Fix missing TCU clock for X1000 SoC
+Subject: Re: [PATCH] pinctrl: ingenic: Fix regmap on X series SoCs
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <PU437R.PYKJZT9CEDWM@crapouillou.net>
-In-Reply-To: <20220209230145.18943-1-aidanmacdonald.0x0@gmail.com>
-References: <20220209230145.18943-1-aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <DD537R.K2D13DXGNPGH@crapouillou.net>
+In-Reply-To: <20220209230452.19535-1-aidanmacdonald.0x0@gmail.com>
+References: <20220209230452.19535-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: 8BIT
@@ -38,56 +37,54 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Aidan,
 
-Le mer., févr. 9 2022 at 23:01:47 +0000, Aidan MacDonald 
+Le mer., févr. 9 2022 at 23:04:54 +0000, Aidan MacDonald 
 <aidanmacdonald.0x0@gmail.com> a écrit :
-> The X1000 does have a TCU clock gate, so pass it to the driver.
-> Without this the TCU can be gated automatically, which prevents
-> timers from running and stops register writes from taking effect.
+> The X series Ingenic SoCs have a shadow GPIO group which
+> is at a higher offset than the other groups, and is used
+> for all GPIO configuration. The regmap did not take this
+> offset into account and set max_register too low. Writes
+> to the shadow group registers were blocked, which made it
+> impossible to change any pin configuration.
 > 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
->  drivers/clk/ingenic/tcu.c             | 2 +-
+> Fix this by pretending there are at least 8 chips on any
+> 'X' SoC for the purposes of calculating max_register. This
+> ensures the shadow group is accessible.
 
-The Device Tree changes should be split into their own patch.
+I don't like your solution, it sounds very hacky. I think it would make 
+more sense to use a dedicated x1000_pinctrl_regmap_config that would be 
+used for the X1000 SoC. That would also allow you to express that there 
+are no registers in the 0x400-0x700 range (through 
+regmap_config.wr_table / .rd_table).
 
 Cheers,
 -Paul
 
->  2 files changed, 4 insertions(+), 3 deletions(-)
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  drivers/pinctrl/pinctrl-ingenic.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi 
-> b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> index 8bd27edef216..c69df8eb158e 100644
-> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-> @@ -111,8 +111,9 @@ tcu: timer@10002000 {
+> diff --git a/drivers/pinctrl/pinctrl-ingenic.c 
+> b/drivers/pinctrl/pinctrl-ingenic.c
+> index 2712f51eb238..9d2bccda50f1 100644
+> --- a/drivers/pinctrl/pinctrl-ingenic.c
+> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> @@ -4168,7 +4168,10 @@ static int __init ingenic_pinctrl_probe(struct 
+> platform_device *pdev)
+>  		return PTR_ERR(base);
 > 
->  		clocks = <&cgu X1000_CLK_RTCLK>,
->  			 <&cgu X1000_CLK_EXCLK>,
-> -			 <&cgu X1000_CLK_PCLK>;
-> -		clock-names = "rtc", "ext", "pclk";
-> +			 <&cgu X1000_CLK_PCLK>,
-> +			 <&cgu X1000_CLK_TCU>;
-> +		clock-names = "rtc", "ext", "pclk", "tcu";
+>  	regmap_config = ingenic_pinctrl_regmap_config;
+> -	regmap_config.max_register = chip_info->num_chips * 
+> chip_info->reg_offset;
+> +	if (chip_info->version >= ID_X1000)
+> +		regmap_config.max_register = MIN(8, chip_info->num_chips) * 
+> chip_info->reg_offset;
+> +	else
+> +		regmap_config.max_register = chip_info->num_chips * 
+> chip_info->reg_offset;
 > 
->  		interrupt-controller;
->  		#interrupt-cells = <1>;
-> diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-> index 77acfbeb4830..9c86043f673a 100644
-> --- a/drivers/clk/ingenic/tcu.c
-> +++ b/drivers/clk/ingenic/tcu.c
-> @@ -320,7 +320,7 @@ static const struct ingenic_soc_info 
-> jz4770_soc_info = {
->  static const struct ingenic_soc_info x1000_soc_info = {
->  	.num_channels = 8,
->  	.has_ost = false, /* X1000 has OST, but it not belong TCU */
-> -	.has_tcu_clk = false,
-> +	.has_tcu_clk = true,
->  };
-> 
->  static const struct of_device_id __maybe_unused 
-> ingenic_tcu_of_match[] __initconst = {
+>  	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
+>  	if (IS_ERR(jzpc->map)) {
 > --
 > 2.34.1
 > 
