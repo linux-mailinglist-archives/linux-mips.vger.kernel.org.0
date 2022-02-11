@@ -2,97 +2,96 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0820D4B2083
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Feb 2022 09:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559094B26F1
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Feb 2022 14:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245508AbiBKIqW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Feb 2022 03:46:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37628 "EHLO
+        id S1350475AbiBKNQF (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Feb 2022 08:16:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348131AbiBKIqV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Feb 2022 03:46:21 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56228E80;
-        Fri, 11 Feb 2022 00:46:20 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id m24so9408228vsp.7;
-        Fri, 11 Feb 2022 00:46:20 -0800 (PST)
+        with ESMTP id S233987AbiBKNQE (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Feb 2022 08:16:04 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF302E9A
+        for <linux-mips@vger.kernel.org>; Fri, 11 Feb 2022 05:16:02 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id d27so15211873wrc.6
+        for <linux-mips@vger.kernel.org>; Fri, 11 Feb 2022 05:16:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EEi9rjZri+XFBAgqsZ4Dh190lYm+ILIASE0FNRwP8Bc=;
-        b=cFM3Bo93sb4bZ5QWlYpqdSzufSzk0QZyX40jtGtPY8m7paLI35o0hPq9I1jrJy0Wdp
-         iwXU11s96NYMpWRFcxaZOpOc+ZxQ0mzu47f0b9h6rHqrhxNgFoDfstTf8sqqeu1u66Fo
-         hYpFaktZhhi3XifvracAqeotZx87nLuOeEzW79zXtHRbZl9EUYxvE6WVMd4TWE6WaWlV
-         +xcCNM8T1OQpCU7utzg9IvVpiuY83nqcXawNIA1+DZyYfc0lWevHHsLNlS0dVOoJAhHs
-         wlc7F7lpbGHwP79ZlDlcKPAdQmEkxuVkp8Pve0DOVvEm9ffy6dNgXz2aAMl6kQSFHdzE
-         2LUw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QCpMm7qsr6O0bxYqGbmSdc7lNGFoKFGgal9SKsG8Ank=;
+        b=AFyyYIsqPRbasTtY4anubelYpEioV3Wwu3kIW0EQumk8NKwmjSZ4wFbl1yZwf2BU/r
+         t+sukPqbIygmTLsmpCmwLUYbuhMPyD9Zb8GziBiGbpPPAIMJfNI3DRMz8fz0veTNGHus
+         gyA2HflAOpkNhpvu3+l6J48nUXfWA/2ZayFSV33FsW/kOiD//SLIDgO+3TLAKfTHUeW1
+         0SVgXmnV2tw0asbD01fEO5e2BO3XOOT/G6hdXB1q91o1dUswtGL9+gYr2t1Nu1p9c3Yj
+         g9/Fv0fF0fqHGZpN/Ll80x/u9CXOH/20jHd2nNw6oLxdBZw5XT5phqVL2ZM/eogR7eRm
+         dxDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EEi9rjZri+XFBAgqsZ4Dh190lYm+ILIASE0FNRwP8Bc=;
-        b=I7tJ7VAx41jO1VC3BW/+xF1JaaqZV94gnsay457QIVjnk3HsuLN1gTaMxvErgrR+ye
-         KbvIFi9UTDVCbP2HB6Pt3M9Bet+NH8DULdRtXQXIXxF/ZJEPoSg19gsO/Elh2Invk/7p
-         XBgdEFpmezEvdfDSVzPKbupFOZnSOM8mgDlXgVAFULGS7nDelYrH2YyA+Lic+eXnHpGb
-         jcg+tcj9/78+p1LT9B2XMGierg8xB78Sd2wZhrKT6iaQY86f/CuauTqpqkCgzGtMGZe1
-         xnFbvBe1sb+bDzgpeO/hsJANrGPbcpwXqYb0v83rQvJe9jIpsIcAvWk/1+IdKnOL1l/N
-         Kwaw==
-X-Gm-Message-State: AOAM532l+xoq9Vuv+//dg6HvwUxWGVdYI1bnIV+v+IPo4zIO2xR2tC3b
-        G7YtOLjSbWOH6FZKnjl3gJ1DjX8H2IO6gLVZIQ==
-X-Google-Smtp-Source: ABdhPJwS3UPkWHoBkGQeoYjm2Fjxk5btkaW/VYsdRqv4tooP2EqAOa4W8SISuMt7dDyz+x3iDwqnPL/QwZ0/R/eV61I=
-X-Received: by 2002:a05:6102:1611:: with SMTP id cu17mr212809vsb.28.1644569179482;
- Fri, 11 Feb 2022 00:46:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20220211001345.3429572-1-gch981213@gmail.com>
-In-Reply-To: <20220211001345.3429572-1-gch981213@gmail.com>
-From:   Rui Salvaterra <rsalvaterra@gmail.com>
-Date:   Fri, 11 Feb 2022 08:46:08 +0000
-Message-ID: <CALjTZva7fKOzG7u4QYhZ+3ZGN2p5DV+fLh6WbFLFtSSfjKQ-ug@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
-To:     Chuanhong Guo <gch981213@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QCpMm7qsr6O0bxYqGbmSdc7lNGFoKFGgal9SKsG8Ank=;
+        b=tRB8DIlMFSg7CSP5z46AgufUyHhIS99Xil9bMshMMbAnap/0pdxEBrfPeDNtK5fMMR
+         dGApiEKif8XvByxW1to4kQUbA5xAkIHPJ78/c14vcNtrHb4gmDj6WQMyNerIDoU0mcDZ
+         NRFxTer7zbnTbrZuxNzyT2zC3sCD12ngvmcdN0BuTWdk12ou4AfasQAemGg4+Vhox5Be
+         G5TY9pf1nfwNrvWQBsotrBMak8DGlq6pj5FVjYNfpzLz47KpSVA1z86qZviVlik1R816
+         JOUS1QbV5zrPiu0Mz510BvDxipYbViPAcsec0BjTLopnZYl6S3axFFo/lB3lPZxNxyBm
+         sXSQ==
+X-Gm-Message-State: AOAM531bSH3qcnUzczvXUXidRErWsYrk2fQmLt6mFmltmJBftY3jTihG
+        t/AQJsEzk6j4TEJzq4JBltScS2Qr/NVc2w==
+X-Google-Smtp-Source: ABdhPJzuxNwPz6T0r0OlxZfHQ6sud5bMIYd0BoEEx9oUAF6+5PoUxaHp25nyrIxI7EGKoNx1sQmNTQ==
+X-Received: by 2002:a5d:61d0:: with SMTP id q16mr1398425wrv.615.1644585360964;
+        Fri, 11 Feb 2022 05:16:00 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:922:c67f:c98a:9e8b])
+        by smtp.gmail.com with ESMTPSA id n14sm21859177wri.80.2022.02.11.05.15.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 05:16:00 -0800 (PST)
+Date:   Fri, 11 Feb 2022 14:15:54 +0100
+From:   Marco Elver <elver@google.com>
+To:     Nemanja Rakovic <nemanja.rakovic@syrmia.com>
 Cc:     linux-mips@vger.kernel.org,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, dragan.mladjenovic@syrmia.com
+Subject: Re: [PATCH] mips: Enable KCSAN
+Message-ID: <YgZhinv9C9CBIEIG@elver.google.com>
+References: <20220131101709.17434-1-nemanja.rakovic@syrmia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131101709.17434-1-nemanja.rakovic@syrmia.com>
+User-Agent: Mutt/2.1.4 (2021-12-11)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi, Guo,
+On Mon, Jan 31, 2022 at 11:17AM +0100, Nemanja Rakovic wrote:
+> This patch enables KCSAN for the 64-bit version. Updated rules
+> for the incompatible compilation units (vdso, boot/compressed).
+> 
+> Signed-off-by: Nemanja Rakovic <nemanja.rakovic@syrmia.com>
+[...]
+> diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+> index 5a15d51e8884..a35f78212ea9 100644
+> --- a/arch/mips/boot/compressed/Makefile
+> +++ b/arch/mips/boot/compressed/Makefile
+> @@ -38,6 +38,7 @@ KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+>  KCOV_INSTRUMENT		:= n
+>  GCOV_PROFILE := n
+>  UBSAN_SANITIZE := n
+> +KASAN_SANITIZE			:= n
+>  
 
-On Fri, 11 Feb 2022 at 00:14, Chuanhong Guo <gch981213@gmail.com> wrote:
->
-> It's reported that current memory detection code occasionally detects
-> larger memory under some bootloaders.
-> Current memory detection code tests whether address space wraps around
-> on KSEG0, which is unreliable because it's cached.
->
-> Rewrite memory size detection to perform the same test on KSEG1 instead.
-> While at it, this patch also does the following two things:
-> 1. use a fixed pattern instead of a random function pointer as the magic
->    value.
-> 2. add an additional memory write and a second comparison as part of the
->    test to prevent possible smaller memory detection result due to
->    leftover values in memory.
-
-[patch snipped]
-
-No issues here, and it does seem to have fixed the RAM size detection
-on my Redmi AC2100. It's always been a very sporadic failure here, so
-I'll be keeping an eye on it to see if there are any further
-misdetections. :)
-In any case, feel free to add my
-
-Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
+Should this have said KCSAN_SANITIZE? You probably want one for
+KASAN_SANITIZE as well, but probably not in this patch, given mips
+doesn't support KASAN yet (AFAIK).
 
 Thanks,
-Rui
+-- Marco
