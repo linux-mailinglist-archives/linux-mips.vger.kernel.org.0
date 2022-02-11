@@ -2,66 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 618294B1922
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Feb 2022 00:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9E34B1A39
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Feb 2022 01:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345446AbiBJXKQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Feb 2022 18:10:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59226 "EHLO
+        id S243610AbiBKAO1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Feb 2022 19:14:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238904AbiBJXKP (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Feb 2022 18:10:15 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740EDE31;
-        Thu, 10 Feb 2022 15:10:15 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id b13so13745745edn.0;
-        Thu, 10 Feb 2022 15:10:15 -0800 (PST)
+        with ESMTP id S1346196AbiBKAO0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Feb 2022 19:14:26 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B8E272E;
+        Thu, 10 Feb 2022 16:14:25 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id w20so3266365plq.12;
+        Thu, 10 Feb 2022 16:14:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=4zd+d9NdEXjmSBG6eKyyZ32RF9eXdrBZvgQdiNkAdR4=;
-        b=JerGdJDRLq42TNluoDiDdyNEa5OPpLv5oClSPNriUX77iN4SVSpFrrCj8awES3byVZ
-         2hEJabfnFYY7ptl7M0jjxrmxJscJjkMV15GrCx0y8xw5KrBZ+vq80gW4uVItK2r3WlxK
-         X5jbpvzf31Xsq6M9tQ/KjGinbM0jA+y/SzxuDAdbSrrUb47JQP5TDiIKR10idscms+Fq
-         DNUrbm6iPhhQ/eIEktGPAv2iSPib/cmjz/ouIiOxUdWavH2Bzw5Yg0EMLS76DpofHavh
-         zCYmP8sgju1C0daSBk7jIl8mZINhLQlBSKmqjaPQixwVMlq9JlivNQ6QPCIGpBsj/b7R
-         E9lQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9fDAF8X8Fc16BM/UGlkxTgN+MKXCULAYOKP8eqzMERk=;
+        b=dBIv+vQgH8sLnxQcKrIIiMMmHs2a93SjcNMIG0txbKJAxMwZShzuAIGy+6osS/9eYh
+         3quuI2z1PaGEcJ4vJ/Q06qdYJ6nur0HMtKfgZJKgW7Hvgl782TVmTF0uzewIvKL8vlNM
+         imw1QH16+a4mH9J63KyEayApZhtzrt6GbDvCtHKMBrA2J2Q/ux5AnLSF6TfJgNw1A4Bn
+         0fyIe/EAQfpr0VhavoJFwZoVHexxT6w3vcXBCKWkUE93DunAAHU+mErcEhQaGshSAixx
+         Qak7LtHPk2HQdcvG86KTiz1e7e4LhSyo9RH28WOEDI+4wQDtmZ1OmNl83fTo4GknVThk
+         RhAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=4zd+d9NdEXjmSBG6eKyyZ32RF9eXdrBZvgQdiNkAdR4=;
-        b=7an6M1ozyB8FHSH8kHBqJnCz6A/N42eTizictQkWhW6tO62xu/jlyOcdg1eJLA5RJg
-         8FnhVKDq//ipk8YW400HypI3WZuJl1mN0ULuaoLKAvyN+jHkZynVaxx02TzKkmK7pYlf
-         qepfAUbgW5YJitostbAj/TwouQcG6cdUDrmeGREMaf3CJBbGnke6SovQkx0BJT6997Ku
-         jPZywYUK4deyFqU2f97ft6LMggcHZSXw3FiQUUaX9XZcJMug4Qx2HTUba8WICtEYLVHI
-         D6StjQ5G/dxuDoIwgKvFr6hzNKk8U8WZ4tW3CPLPiPCBByDMUNYyUjY9ln24ugAdtOnq
-         eWVg==
-X-Gm-Message-State: AOAM530INHaqL+eKWrjXSN2ymtGSX9OPnC7ihQ25abEUxvl+ZyOXfErV
-        TmIQsUHXyqAtfoP7MY08N3M=
-X-Google-Smtp-Source: ABdhPJzX7WEZ/93GNx4TcH64x4mdLF678GL6+j9Mynk3mAi5IzBr1N/UwQtqQ7WyHJfKSEpndcM+Pw==
-X-Received: by 2002:a05:6402:440a:: with SMTP id y10mr10569403eda.215.1644534614032;
-        Thu, 10 Feb 2022 15:10:14 -0800 (PST)
-Received: from localhost (92.40.202.152.threembb.co.uk. [92.40.202.152])
-        by smtp.gmail.com with ESMTPSA id h6sm2213164ede.50.2022.02.10.15.10.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9fDAF8X8Fc16BM/UGlkxTgN+MKXCULAYOKP8eqzMERk=;
+        b=3sWy8QLiRzhU4AIZ6RvxpFs0xAoi/aRnsziZ079BLkDgcMqzt/+vH9ohszgog579sz
+         rANmUJxFApPtoivxHdDRuaAGNPct8o+EyAU4yv6fzIlAYVHNI3NbOaDGUes5yYo0QEvs
+         VhB+iKbZWS61Ly61CG/D8QgF5JMqEGykYM/m5J+5XRmrpMlBzL6OpIAWf4alWBgbMkQy
+         K12tqhg2txKocRlRv9KS4xbh8zN8lh6xt3j/kRpHs4CRrTX3uHhv+340mrMjos17wKd2
+         7IW8vG/cU3ISvtGu14/ZO3mT45pdBrIlkNXwVjI2E0yHKXyV9b+TDdhHopJimASKfwhy
+         Q6Hg==
+X-Gm-Message-State: AOAM530z6DbinQbZbkCXDZmiBqMf51nvnOczS9uSbsLQgnRiyOJKjPFx
+        7cd1axA0XHAu/CCOpUVpB7p3YSybHD8L4448m6c=
+X-Google-Smtp-Source: ABdhPJyTW1FzA/TJ0begPk8qu38cqR9Y8WG85GOzhLikIoWO5rSMey4rPwSgG3ZC8JXPYfcazfkUtQ==
+X-Received: by 2002:a17:90b:1d84:: with SMTP id pf4mr5403535pjb.106.1644538465112;
+        Thu, 10 Feb 2022 16:14:25 -0800 (PST)
+Received: from guoguo-omen.lan ([240e:379:96b:fc59:8af:1020:18bc:afc2])
+        by smtp.gmail.com with ESMTPSA id h6sm25553351pfc.96.2022.02.10.16.14.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:10:13 -0800 (PST)
-Date:   Thu, 10 Feb 2022 23:10:45 +0000
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pinctrl: ingenic: Fix regmap on X series SoCs
-Message-ID: <YgWbdYDiVQyHkHiJ@localhost>
-References: <20220209230452.19535-1-aidanmacdonald.0x0@gmail.com>
- <DD537R.K2D13DXGNPGH@crapouillou.net>
+        Thu, 10 Feb 2022 16:14:24 -0800 (PST)
+From:   Chuanhong Guo <gch981213@gmail.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Chuanhong Guo <gch981213@gmail.com>,
+        Rui Salvaterra <rsalvaterra@gmail.com>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
+Date:   Fri, 11 Feb 2022 08:13:44 +0800
+Message-Id: <20220211001345.3429572-1-gch981213@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DD537R.K2D13DXGNPGH@crapouillou.net>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -72,65 +71,86 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 11:03:13AM +0000, Paul Cercueil wrote:
-> Hi Aidan,
-> 
-> Le mer., févr. 9 2022 at 23:04:54 +0000, Aidan MacDonald 
-> <aidanmacdonald.0x0@gmail.com> a écrit :
-> > The X series Ingenic SoCs have a shadow GPIO group which
-> > is at a higher offset than the other groups, and is used
-> > for all GPIO configuration. The regmap did not take this
-> > offset into account and set max_register too low. Writes
-> > to the shadow group registers were blocked, which made it
-> > impossible to change any pin configuration.
-> > 
-> > Fix this by pretending there are at least 8 chips on any
-> > 'X' SoC for the purposes of calculating max_register. This
-> > ensures the shadow group is accessible.
-> 
-> I don't like your solution, it sounds very hacky. I think it would make 
-> more sense to use a dedicated x1000_pinctrl_regmap_config that would be 
-> used for the X1000 SoC. That would also allow you to express that there 
-> are no registers in the 0x400-0x700 range (through 
-> regmap_config.wr_table / .rd_table).
-> 
-> Cheers,
-> -Paul
-> 
+It's reported that current memory detection code occasionally detects
+larger memory under some bootloaders.
+Current memory detection code tests whether address space wraps around
+on KSEG0, which is unreliable because it's cached.
 
-That's fine, I'll put together a v2 patch using the approach you suggest.
-I think all the 'X' SoCs will require a similar regmap as they're using
-ingenic_gpio_shadow_* functions too, but I'll check their datasheets to
-be sure.
+Rewrite memory size detection to perform the same test on KSEG1 instead.
+While at it, this patch also does the following two things:
+1. use a fixed pattern instead of a random function pointer as the magic
+   value.
+2. add an additional memory write and a second comparison as part of the
+   test to prevent possible smaller memory detection result due to
+   leftover values in memory.
 
-> > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> > ---
-> >  drivers/pinctrl/pinctrl-ingenic.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/pinctrl/pinctrl-ingenic.c 
-> > b/drivers/pinctrl/pinctrl-ingenic.c
-> > index 2712f51eb238..9d2bccda50f1 100644
-> > --- a/drivers/pinctrl/pinctrl-ingenic.c
-> > +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> > @@ -4168,7 +4168,10 @@ static int __init ingenic_pinctrl_probe(struct 
-> > platform_device *pdev)
-> >  		return PTR_ERR(base);
-> > 
-> >  	regmap_config = ingenic_pinctrl_regmap_config;
-> > -	regmap_config.max_register = chip_info->num_chips * 
-> > chip_info->reg_offset;
-> > +	if (chip_info->version >= ID_X1000)
-> > +		regmap_config.max_register = MIN(8, chip_info->num_chips) * 
-> > chip_info->reg_offset;
-> > +	else
-> > +		regmap_config.max_register = chip_info->num_chips * 
-> > chip_info->reg_offset;
-> > 
-> >  	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
-> >  	if (IS_ERR(jzpc->map)) {
-> > --
-> > 2.34.1
-> > 
-> 
-> 
+Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
+Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+---
+ arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
+
+diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
+index d6efffd4dd20..12c8808e0dea 100644
+--- a/arch/mips/ralink/mt7621.c
++++ b/arch/mips/ralink/mt7621.c
+@@ -22,7 +22,9 @@
+ 
+ #include "common.h"
+ 
+-static void *detect_magic __initdata = detect_memory_region;
++#define MT7621_MEM_TEST_PATTERN         0xaa5555aa
++
++static u32 detect_magic __initdata;
+ 
+ int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
+ {
+@@ -58,24 +60,32 @@ phys_addr_t mips_cpc_default_phys_base(void)
+ 	panic("Cannot detect cpc address");
+ }
+ 
++static bool __init mt7621_addr_wraparound_test(phys_addr_t size)
++{
++	void *dm = (void *)KSEG1ADDR(&detect_magic);
++
++	if (CPHYSADDR(dm + size) >= MT7621_LOWMEM_MAX_SIZE)
++		return true;
++	__raw_writel(MT7621_MEM_TEST_PATTERN, dm);
++	if (__raw_readl(dm) != __raw_readl(dm + size))
++		return false;
++	__raw_writel(!MT7621_MEM_TEST_PATTERN, dm);
++	return __raw_readl(dm) == __raw_readl(dm + size);
++}
++
+ static void __init mt7621_memory_detect(void)
+ {
+-	void *dm = &detect_magic;
+ 	phys_addr_t size;
+ 
+-	for (size = 32 * SZ_1M; size < 256 * SZ_1M; size <<= 1) {
+-		if (!__builtin_memcmp(dm, dm + size, sizeof(detect_magic)))
+-			break;
++	for (size = 32 * SZ_1M; size <= 256 * SZ_1M; size <<= 1) {
++		if (mt7621_addr_wraparound_test(size)) {
++			memblock_add(MT7621_LOWMEM_BASE, size);
++			return;
++		}
+ 	}
+ 
+-	if ((size == 256 * SZ_1M) &&
+-	    (CPHYSADDR(dm + size) < MT7621_LOWMEM_MAX_SIZE) &&
+-	    __builtin_memcmp(dm, dm + size, sizeof(detect_magic))) {
+-		memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
+-		memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
+-	} else {
+-		memblock_add(MT7621_LOWMEM_BASE, size);
+-	}
++	memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
++	memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
+ }
+ 
+ void __init ralink_of_remap(void)
+-- 
+2.34.1
+
