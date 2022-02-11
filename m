@@ -2,61 +2,63 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12584B1B64
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Feb 2022 02:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3F84B1EC7
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Feb 2022 07:50:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343922AbiBKBlj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Feb 2022 20:41:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47590 "EHLO
+        id S233706AbiBKGun (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Feb 2022 01:50:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235662AbiBKBlj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Feb 2022 20:41:39 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9AB559F;
-        Thu, 10 Feb 2022 17:41:39 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id s18so9661084ioa.12;
-        Thu, 10 Feb 2022 17:41:39 -0800 (PST)
+        with ESMTP id S231983AbiBKGum (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Feb 2022 01:50:42 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B636C1120;
+        Thu, 10 Feb 2022 22:50:41 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id v6so9132414vsp.11;
+        Thu, 10 Feb 2022 22:50:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=g672afMOWPofXOHvvpzMvP9no/e9tuPgH5JHAmWPU8Y=;
-        b=ndoVMRkaFlE5uP+00x6Ts/PUE4LWG3Od0SOLJomDYAqb3ExhfLwgb32rA1o8beLjTU
-         669MmZKMX15+2uZ4xHxl/nuAiB4MC5f4GuqTd44R9Ccwp6W+NSAjFpoYPz1LiOj0/EGV
-         pAJXYf7fLa3OWVsitFb3SATLm2AjkK+BmXKsIZTD2y8vV8wxMmUxBs4zQgaPRFn5USk9
-         RRhd9aYY7jcQhPCEA48GHdkEJIqlW+PoQClKxy1hYn1m6XwVNnm25q/4XsLCuHKNK2gV
-         /mQ/1sSrJg+/U583qtvsGhxdT4GYo2eU77OIYReybBY3h90tpeLH7GImTMCXBPRn1QoI
-         L/3g==
+        bh=OSROPkIHqOIfi3Mx6GPXtGKkcEJ0TQ6U5/02TvsWVjs=;
+        b=aI6iirQLDE79NFBohp4tGvHl9CuJHutPPj78yxbu89pb2Pwy6FzthqI52TCGsqnVsi
+         nPByOczGUEQLxLF7f1hvq3IXINsb2d9nh0ou1Wta6vGgRAtOfLEzuANmnWkMTOreMtzB
+         2c4wtjp2fBfGXIrnZXEJvVtxF8EVqhIj2sM5OgI0b8diZIHQQIyv3wtxvu8+DYJ+UuIK
+         r3nQlVWV1kLAAX9S28hNVCmp0jo6g0YdYBkL/Yu79JCSUKNVlGiCKQY1aLtSD9n+jgMo
+         mQYD1lmQXYKOeApQjSEv1ygK0HRmSDt6YnYU1IvD4AO0i4+wlymSHKeYyK9EtZ/XFvwZ
+         jH9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g672afMOWPofXOHvvpzMvP9no/e9tuPgH5JHAmWPU8Y=;
-        b=UKIhDiZssm38K5pptJCB5FErO5kj8SKAbdAjHf8LJTRZPMwoiSX7wWkUnw4Qw6SCxZ
-         ABO7Pfx9Kk5xUzmU5h6MMlqtV9RYf7bSxRhplTKDSo21gRsEaWO9SMdj9K7Au6ONpjp0
-         E7qewWoBRNAmyvEwsGM8Sdc6Qt7WSfBdBambD+W2KZsifGOPZZdia5nv1wxe4UYeQlmT
-         lXHqHfBHTNWi4xWnQAQ/SZfeWt/H/JrlbtSa07X5e75QdCphe9kvpWE0OPI6JoQj9FNN
-         FcqKkkXBEAbAF/U7buGLs5o+v2Kubzc1PkZ5lkOhiKhPUCIsrdCMPWztH8L6wSXVowuH
-         kgag==
-X-Gm-Message-State: AOAM533XRp4fQ7v4dumPg3cKgn89k+2wIE9YXtcRCQQcB45pr3BXs/Bu
-        AxuPX038iwUQogMQoRbx9mwktXK7aUQ3aUsFL9M=
-X-Google-Smtp-Source: ABdhPJxC9eGByQeSdgYqYLzhyYHZME+2EFUVP1AXlEQbwcxc0ZAHjxxfggmaKLG8zVSb6vHb/m6iuUXgbaTmS/IX0qo=
-X-Received: by 2002:a02:c8c8:: with SMTP id q8mr5164312jao.243.1644543698735;
- Thu, 10 Feb 2022 17:41:38 -0800 (PST)
+        bh=OSROPkIHqOIfi3Mx6GPXtGKkcEJ0TQ6U5/02TvsWVjs=;
+        b=HRdyqYp98Tl3wVr9JmKHhxmWr7qUqL8BkRw2RlEVlPHNDp0LycOUmw17E8LoqQJQ8N
+         e3TapNegMYreMRLVm07NZgSbvFg7TD2gPot9hFyZ9p83hVNSUz9cvFqv844aGz4nQubf
+         eYHfPqLYODJcZlshxZny/0RZygza0WAcFW5t/LroGi+5cUafutPaO36eMkFsNw8kMGNB
+         hsRsHf+/zgB3q/DRboEkGWqwdwmRTG9uiMzSDh7aN0UabmvQC0IS/++Qn1tSdSZoixjN
+         TltnzEe/5f+yAd/qUZLfuw613yoFyBsq0mydHbOIJRB+abOolocSyOvhjidMQ5pWosf3
+         cP/Q==
+X-Gm-Message-State: AOAM530RLc1+13tXUgqElxby1sbkrvs4lQNJaPONDhm3Y0jkk7lh0Ey3
+        w1RKEpWFXu06bamRQ6mzn53h6ybypboLUAX9SUo=
+X-Google-Smtp-Source: ABdhPJzCPF1tTpcQ1FWpqWN/gHplGyCbU2hVnrJ2gUBllwLUgLp6iZnR43b4mmVnWetix67HkzQhNADYz8Oi3+nNfFE=
+X-Received: by 2002:a67:10c4:: with SMTP id 187mr85908vsq.1.1644562240863;
+ Thu, 10 Feb 2022 22:50:40 -0800 (PST)
 MIME-Version: 1.0
 References: <20220211001345.3429572-1-gch981213@gmail.com>
 In-Reply-To: <20220211001345.3429572-1-gch981213@gmail.com>
-From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-Date:   Thu, 10 Feb 2022 17:41:28 -0800
-Message-ID: <CALCv0x3uYMovfqzobM6xfr8_apZQtz=DhyM-DsJe2L_rqAj65g@mail.gmail.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 11 Feb 2022 07:50:29 +0100
+Message-ID: <CAMhs-H9O=EagT-6296-CMQFBYFfekj2agrH9a8JpHzeC36EiUg@mail.gmail.com>
 Subject: Re: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
 To:     Chuanhong Guo <gch981213@gmail.com>
 Cc:     "open list:MIPS" <linux-mips@vger.kernel.org>,
         Rui Salvaterra <rsalvaterra@gmail.com>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -70,7 +72,7 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Guo,
 
-On Thu, Feb 10, 2022 at 4:14 PM Chuanhong Guo <gch981213@gmail.com> wrote:
+On Fri, Feb 11, 2022 at 4:56 AM Chuanhong Guo <gch981213@gmail.com> wrote:
 >
 > It's reported that current memory detection code occasionally detects
 > larger memory under some bootloaders.
@@ -91,72 +93,11 @@ On Thu, Feb 10, 2022 at 4:14 PM Chuanhong Guo <gch981213@gmail.com> wrote:
 > ---
 >  arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
 >  1 file changed, 23 insertions(+), 13 deletions(-)
->
-> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-> index d6efffd4dd20..12c8808e0dea 100644
-> --- a/arch/mips/ralink/mt7621.c
-> +++ b/arch/mips/ralink/mt7621.c
-> @@ -22,7 +22,9 @@
->
->  #include "common.h"
->
-> -static void *detect_magic __initdata = detect_memory_region;
-> +#define MT7621_MEM_TEST_PATTERN         0xaa5555aa
-> +
-> +static u32 detect_magic __initdata;
->
->  int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
->  {
-> @@ -58,24 +60,32 @@ phys_addr_t mips_cpc_default_phys_base(void)
->         panic("Cannot detect cpc address");
->  }
->
-> +static bool __init mt7621_addr_wraparound_test(phys_addr_t size)
-> +{
-> +       void *dm = (void *)KSEG1ADDR(&detect_magic);
-> +
-> +       if (CPHYSADDR(dm + size) >= MT7621_LOWMEM_MAX_SIZE)
-> +               return true;
-> +       __raw_writel(MT7621_MEM_TEST_PATTERN, dm);
-> +       if (__raw_readl(dm) != __raw_readl(dm + size))
-> +               return false;
-> +       __raw_writel(!MT7621_MEM_TEST_PATTERN, dm);
-> +       return __raw_readl(dm) == __raw_readl(dm + size);
-> +}
-> +
->  static void __init mt7621_memory_detect(void)
->  {
-> -       void *dm = &detect_magic;
->         phys_addr_t size;
->
-> -       for (size = 32 * SZ_1M; size < 256 * SZ_1M; size <<= 1) {
-> -               if (!__builtin_memcmp(dm, dm + size, sizeof(detect_magic)))
-> -                       break;
-> +       for (size = 32 * SZ_1M; size <= 256 * SZ_1M; size <<= 1) {
-> +               if (mt7621_addr_wraparound_test(size)) {
-> +                       memblock_add(MT7621_LOWMEM_BASE, size);
-> +                       return;
-> +               }
->         }
->
-> -       if ((size == 256 * SZ_1M) &&
-> -           (CPHYSADDR(dm + size) < MT7621_LOWMEM_MAX_SIZE) &&
-> -           __builtin_memcmp(dm, dm + size, sizeof(detect_magic))) {
-> -               memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
-> -               memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
-> -       } else {
-> -               memblock_add(MT7621_LOWMEM_BASE, size);
-> -       }
-> +       memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
-> +       memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
->  }
->
->  void __init ralink_of_remap(void)
-> --
-> 2.34.1
->
-Thanks for your change. I think this will also fix
-https://lore.kernel.org/lkml/202201191557.OISJHNMi-lkp@intel.com/
-since you are removing __builtin_memcmp usage.
 
-Ilya
+Thanks! Nothing seems to be broken after these changes, at least for
+my boards :)
+
+Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+
+Best regards,
+    Sergio Paracuellos
