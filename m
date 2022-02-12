@@ -2,145 +2,159 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573114B380E
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Feb 2022 21:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F4F4B3860
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Feb 2022 23:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbiBLUw5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Feb 2022 15:52:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59864 "EHLO
+        id S232063AbiBLWay (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Feb 2022 17:30:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbiBLUw4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Feb 2022 15:52:56 -0500
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEF1606EA;
-        Sat, 12 Feb 2022 12:52:50 -0800 (PST)
-Received: by mail-io1-f44.google.com with SMTP id s18so15542959ioa.12;
-        Sat, 12 Feb 2022 12:52:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EaOHzElyl19Lio2+IgXQrdRampgn3IJJk51hhGDrqvQ=;
-        b=lg1AvYy9fZrQEDNWMtPVa7VQR/1im6pdmkOxCByxuogTnT6Digp6YIDUe8/RfOWcQt
-         EpYLoGOo+HKj8g8VLaEstBQCwy63+OHBHFLux5Tw1ckyt1irbvPq67VKjPFfUPdgb/WS
-         qgkYn629dTWv0a99DWcCJ+2NNOGP9t36tcYcZndKL1eN0lxw88u2uaHyCnaMi+vRhyou
-         um+qg76vyaql2ViSTBqvpC4UiQQUd0P3ykW0K9zRP1E3PQ3N1FITHBYk2aP1LVjdbIda
-         SHaokF84Rz9TQqVMebHYFAX/8QANtUOnl23lGBA6EJzQPqo9ueLvzNox8/6w+lZMebqh
-         dNLw==
-X-Gm-Message-State: AOAM533aSqEAKNbU7h4xUxLB7yfC9Koru/1rDd2NKNPx8ehh2tKN1QB2
-        GHPqRTSQGo6K+b+aO7fMRW8QwEWxqf9LplraZqs=
-X-Google-Smtp-Source: ABdhPJx930dZNCBqHCUogbSTyuDbp2FVQxBA/TLL+y3xo4J5StPz1eItQanT5mUqU7fNh7az3GyCJ7Yxv3mwAOSpRYU=
-X-Received: by 2002:a05:6638:37a1:: with SMTP id w33mr3957440jal.73.1644699168559;
- Sat, 12 Feb 2022 12:52:48 -0800 (PST)
+        with ESMTP id S229532AbiBLWax (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Feb 2022 17:30:53 -0500
+X-Greylist: delayed 560 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Feb 2022 14:30:48 PST
+Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch [185.70.41.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C10A60A84
+        for <linux-mips@vger.kernel.org>; Sat, 12 Feb 2022 14:30:48 -0800 (PST)
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail-41104.protonmail.ch (Postfix) with ESMTPS id 4Jx4hR2dNHz4xCS7
+        for <linux-mips@vger.kernel.org>; Sat, 12 Feb 2022 22:21:27 +0000 (UTC)
+Authentication-Results: mail-41104.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="BOwEQaoN"
+Date:   Sat, 12 Feb 2022 22:21:11 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1644704481;
+        bh=ryu2oTX8un4bZO5aF2kiNhHdcBaW57NJk9xC8bxjxWI=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=BOwEQaoNJ9gUhvKzLyzWSmrumL727bl9a//yWCI7WeudDkmHE98BDsGHyvqyYvdvX
+         ZnRYQ0D1kl6fdsDNTCI46OQK0tLBRWIpJb/+5DiyHa1HARSL6nw0jZRHHvy+GFINtf
+         +ncjWuhd857xRL2n6bimZAvUtrjrVkcVkESealWWZKnKsPUgJ/4dnhLRxS0GJPs5RU
+         mYoaPBRLHB5kkqc4DAGm2QJf/uDuoO+9FpiWiuJk+QItLZGYCxu5JYBc8d8Z8Epoog
+         oX10by4GjjCDr7hCHoX/DQBD3BrMjojYUEuM8XbThGR6Uh6IUQ9KOQQ+whoKhwe0Nf
+         XXt+ZihtAwEuw==
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Lobakin <alobakin@pm.me>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps earlier
+Message-ID: <20220212221347.442070-1-alobakin@pm.me>
 MIME-Version: 1.0
-References: <20220203082546.3099-1-15330273260@189.cn> <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat> <11ac5696-29e3-fefa-31c0-b7b86c88bbdc@189.cn>
- <20220209084908.kub4bs64rzhvpvon@houat> <84bfb2fc-595c-3bae-e8a0-c19ccbcfcfd8@189.cn>
- <20220209161624.42ijbnhanaaari46@houat>
-In-Reply-To: <20220209161624.42ijbnhanaaari46@houat>
-From:   Ilia Mirkin <imirkin@alum.mit.edu>
-Date:   Sat, 12 Feb 2022 15:52:37 -0500
-Message-ID: <CAKb7UvjJHaDtCnLkVpOpxXC90X6o3TLC+EQOmf9g-BPbS-_rHA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display controller
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Roland Scheidegger <sroland@vmware.com>,
-        linux-mips@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 11:16 AM Maxime Ripard <maxime@cerno.tech> wrote:
->
-> On Wed, Feb 09, 2022 at 10:38:41PM +0800, Sui Jingfeng wrote:
-> > On 2022/2/9 16:49, Maxime Ripard wrote:
-> > > On Fri, Feb 04, 2022 at 12:04:19AM +0800, Sui Jingfeng wrote:
-> > > > > > +/* Get the simple EDID data from the device tree
-> > > > > > + * the length must be EDID_LENGTH, since it is simple.
-> > > > > > + *
-> > > > > > + * @np: device node contain edid data
-> > > > > > + * @edid_data: where the edid data to store to
-> > > > > > + */
-> > > > > > +static bool lsdc_get_edid_from_dtb(struct device_node *np,
-> > > > > > +                                unsigned char *edid_data)
-> > > > > > +{
-> > > > > > +     int length;
-> > > > > > +     const void *prop;
-> > > > > > +
-> > > > > > +     if (np == NULL)
-> > > > > > +             return false;
-> > > > > > +
-> > > > > > +     prop = of_get_property(np, "edid", &length);
-> > > > > > +     if (prop && (length == EDID_LENGTH)) {
-> > > > > > +             memcpy(edid_data, prop, EDID_LENGTH);
-> > > > > > +             return true;
-> > > > > > +     }
-> > > > > > +
-> > > > > > +     return false;
-> > > > > > +}
-> > > > > You don't have a device tree binding for that driver, this is something
-> > > > > that is required. And it's not clear to me why you'd want EDID in the
-> > > > > DTB?
-> > > > 1) It is left to the end user of this driver.
-> > > >
-> > > > The downstream motherboard maker may use a dpi(XRGB888) or LVDS panel
-> > > > which don't have DDC support either, doing this way allow them put a
-> > > > EDID property into the dc device node in the DTS. Then the entire system works.
-> > > > Note those panel usually support only one display mode.
-> > > I guess it depends on what we mean exactly by the user, but the DTB
-> > > usually isn't under the (end) user control. And the drm.edid_firmware is
-> > > here already to address exactly this issue.
-> > >
-> > > On the other end, if the board has a static panel without any DDC lines,
-> > > then just put the timings in the device tree, there's no need for an
-> > > EDID blob.
-> >
-> > Loongson have a long history of using PMON firmware, The PMON firmware
-> > support flush the dtb into the the firmware before grub loading the kernel.
-> > You press 'c' key, then the PMON will give you a shell. it is much like a
-> > UEFI shell. Suppose foo.dtb is what you want to pass to the vmlinuz.
-> > Then type the follow single command can flush the dtb into the PMON firmware.
-> >
-> > |load_dtb /dev/fs/fat@usb0/foo.dtb|
-> >
-> > For our PMON firmware, it**is**  totally under developer/pc board maker's control.
-> > You can flush whatever dtb every time you bootup until you satisfied.
-> > It(the pmon firmware) is designed to let downstream motherboard maker and/or
-> > customers to play easily.
-> >
-> > Support of reading EDID from the dtb is really a feature which downstream
-> > motherboard maker or customer wanted. They sometimes using eDP also whose
-> > resolution is not 1024x768. This is out of control for a graphic driver
-> > developer like me.
->
-> And, to reinstate, we already have a mechanism to set an EDID, and if it
-> wasn't an option, the DT is not the place to store an EDID blob.
+After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
+2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
+the following:
 
-Note that it's pretty common on laptop GPUs to have the attached
-panel's EDID be baked into the VBIOS or ACPI (for LVDS / eDP). The hw
-drivers in question (e.g. nouveau, radeon, probably i915) know how to
-retrieve it specially. I'm no DT expert, but I'd imagine that it's
-meant to allow mirroring those types of configurations. Stuff like
-"drm.edid_firmware" isn't really meant for system-configuration-level
-things, more as an out in case something doesn't work as it should.
+[    0.025698] CPU1 revision is: 0001a120 (MIPS interAptiv (multi))
+[    0.048183] ------------[ cut here ]------------
+[    0.048187] WARNING: CPU: 1 PID: 0 at kernel/sched/core.c:6025 sched_cor=
+e_cpu_starting+0x198/0x240
+[    0.048220] Modules linked in:
+[    0.048233] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc3+ #35 b7=
+b319f24073fd9a3c2aa7ad15fb7993eec0b26f
+[    0.048247] Stack : 817f0000 00000004 327804c8 810eb050 00000000 0000000=
+4 00000000 c314fdd1
+[    0.048278]         830cbd64 819c0000 81800000 817f0000 83070bf4 0000000=
+1 830cbd08 00000000
+[    0.048307]         00000000 00000000 815fcbc4 00000000 00000000 0000000=
+0 00000000 00000000
+[    0.048334]         00000000 00000000 00000000 00000000 817f0000 0000000=
+0 00000000 817f6f34
+[    0.048361]         817f0000 818a3c00 817f0000 00000004 00000000 0000000=
+0 4dc33260 0018c933
+[    0.048389]         ...
+[    0.048396] Call Trace:
+[    0.048399] [<8105a7bc>] show_stack+0x3c/0x140
+[    0.048424] [<8131c2a0>] dump_stack_lvl+0x60/0x80
+[    0.048440] [<8108b5c0>] __warn+0xc0/0xf4
+[    0.048454] [<8108b658>] warn_slowpath_fmt+0x64/0x10c
+[    0.048467] [<810bd418>] sched_core_cpu_starting+0x198/0x240
+[    0.048483] [<810c6514>] sched_cpu_starting+0x14/0x80
+[    0.048497] [<8108c0f8>] cpuhp_invoke_callback_range+0x78/0x140
+[    0.048510] [<8108d914>] notify_cpu_starting+0x94/0x140
+[    0.048523] [<8106593c>] start_secondary+0xbc/0x280
+[    0.048539]
+[    0.048543] ---[ end trace 0000000000000000 ]---
+[    0.048636] Synchronize counters for CPU 1: done.
 
-Cheers,
+...for each but CPU 0/boot.
+Basic debug printks right before the mentioned line say:
 
-  -ilia
+[    0.048170] CPU: 1, smt_mask:
+
+So smt_mask, which is sibling mask obviously, is empty when entering
+the function.
+This is critical, as sched_core_cpu_starting() calculates
+core-scheduling parameters only once per CPU start, and it's crucial
+to have all the parameters filled in at that moment (at least it
+uses cpu_smt_mask() which in fact is `&cpu_sibling_map[cpu]` on
+MIPS).
+
+A bit of debugging led me to that set_cpu_sibling_map() performing
+the actual map calculation, was being invocated after
+notify_cpu_start(), and exactly the latter function starts CPU HP
+callback round (sched_core_cpu_starting() is basically a CPU HP
+callback).
+While the flow is same on ARM64 (maps after the notifier, although
+before calling set_cpu_online()), x86 started calculating sibling
+maps earlier than starting the CPU HP callbacks in Linux 4.14 (see
+[0] for the reference). Neither me nor my brief tests couldn't find
+any potential caveats in calculating the maps right after performing
+delay calibration, but the WARN splat is now gone.
+The very same debug prints now yield exactly what I expected from
+them:
+
+[    0.048433] CPU: 1, smt_mask: 0-1
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?=
+id=3D76ce7cfe35ef
+
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ arch/mips/kernel/smp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+index d542fb7af3ba..1986d1309410 100644
+--- a/arch/mips/kernel/smp.c
++++ b/arch/mips/kernel/smp.c
+@@ -351,6 +351,9 @@ asmlinkage void start_secondary(void)
+ =09cpu =3D smp_processor_id();
+ =09cpu_data[cpu].udelay_val =3D loops_per_jiffy;
+
++=09set_cpu_sibling_map(cpu);
++=09set_cpu_core_map(cpu);
++
+ =09cpumask_set_cpu(cpu, &cpu_coherent_mask);
+ =09notify_cpu_starting(cpu);
+
+@@ -362,9 +365,6 @@ asmlinkage void start_secondary(void)
+ =09/* The CPU is running and counters synchronised, now mark it online */
+ =09set_cpu_online(cpu, true);
+
+-=09set_cpu_sibling_map(cpu);
+-=09set_cpu_core_map(cpu);
+-
+ =09calculate_cpu_foreign_map();
+
+ =09/*
+--
+2.35.1
+
+
