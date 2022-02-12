@@ -2,102 +2,196 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADD64B35CE
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Feb 2022 16:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C624B35F0
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Feb 2022 16:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236374AbiBLPJ4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Feb 2022 10:09:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60748 "EHLO
+        id S236408AbiBLPuM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Feb 2022 10:50:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236359AbiBLPJz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Feb 2022 10:09:55 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75440B0B;
-        Sat, 12 Feb 2022 07:09:51 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id h6so19844163wrb.9;
-        Sat, 12 Feb 2022 07:09:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=y6rK33RVsJ8ict1sPgpfIjdEeAWbWsXMVJ0khfSr/MA=;
-        b=GKradZqxOgToue9ytU42MEBx+sFCTatmIhU/hgAN0i8fRncz8bb8ao0jjbXEdh/wg0
-         xhklPOL8vYJnud/PIzw63QX9CaxFDb01Pd3PxQFSxJX7Fs2DuV8sgEKlwuW8WA99krIP
-         FQ03hGJYQqIvhqiE3vxurHjWL1YJISlxEMH/1juBXIkkMOBDT18zOXPkG2BUsknd9gw7
-         SJut4z7b0naFdbUDyKMBpSqIKfYH9nCOIhiUKXSmQJyCAsoDoyaF6NLnhxqKVTtw6gax
-         D1Vo20ntQOxzIJJRnXVegOdhg59vqFnQeHIhtE0H5PJ2Z+zQyA326UESfl9CeVrrsE6R
-         vpcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=y6rK33RVsJ8ict1sPgpfIjdEeAWbWsXMVJ0khfSr/MA=;
-        b=Z/yzNDN955ZT9dPgkAZfMm/3xBrjr0Rsz5tTRLknfZYh8rM813tjA+TXvDo1qb6N9/
-         ggELDjvmOods54ZsJXdz7P7jWLSWb0Ju7meByv1MwKb11xEvyz4b3D50xDfM9h+9UQ/3
-         P/4FUu5v9Kxsm2TXKsYIdbUg7yRyQsiPf7wnW/lhHoXCuLymMCLKj6D2jw3gSKJLziv7
-         5PE3hCY5DGgNlXi0fmAOM5jSgX1ouOH1kv0beJBTxlWqpI88iDIMm2UgERfutHh1AXyt
-         Sw7X5DB7Y6NU4l6pquynGXqIewew42t6Ca0SYx1okpQ8tqeghdOQ1OMus15jxCi1NDh0
-         +9Lg==
-X-Gm-Message-State: AOAM533ccAxv+KR+7EwQ/6BSjkbumSP3NAVN3sub3MGfNZYJYMoTH5x3
-        M0XfNg2ywA0ulVsCYqD9jz4=
-X-Google-Smtp-Source: ABdhPJz/oimDtL1dKb7oi5BhaasQds+dZlobT7RnNlFaApC1121mN3wXqZz0qp7njb1K3LLqge55tg==
-X-Received: by 2002:a5d:598a:: with SMTP id n10mr2765332wri.364.1644678590051;
-        Sat, 12 Feb 2022 07:09:50 -0800 (PST)
-Received: from localhost (92.40.203.136.threembb.co.uk. [92.40.203.136])
-        by smtp.gmail.com with ESMTPSA id o4sm4582459wms.9.2022.02.12.07.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 07:09:49 -0800 (PST)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, robh+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000 SoC
-Date:   Sat, 12 Feb 2022 15:09:28 +0000
-Message-Id: <20220212150927.39513-2-aidanmacdonald.0x0@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220212150927.39513-1-aidanmacdonald.0x0@gmail.com>
-References: <20220212150927.39513-1-aidanmacdonald.0x0@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S236359AbiBLPuL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Feb 2022 10:50:11 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6345A212;
+        Sat, 12 Feb 2022 07:50:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644680989;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=R6w3GhxZTZuX3WNo1RvUOO07u8frIg4/HwNvBFu29SI=;
+    b=dIbjz/GdYkfdLb7EuIeZIt2y2DX4C8C15j5OIwMnJDScC2YVtL035byaAu+1d5VGxX
+    mB7R2pnMvy/XWkZm7gxr0u/FhQXdnucYYBwdVZa+PRJpedRpGedIxrrD7HMjHoABLhcK
+    erVuQKxm09DA6rpF0N9SfH7LsbRpcaSx2QWVwBcIkpfba9rRYaHpeez5OnR4PPSrpqHg
+    KIoyvSvQFeK6URDphJt0prFNxNbzBbAaN0TU0BOzJRvCsin3TA1Zu1Fthj7ULdv3RMWt
+    gGRgbN65v29wsino/+GejRL+uOvTR1WA2Xbgq32pGFsaX4sFXQWhlwoPJgr75ppFNvLa
+    NAPQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDaqyA=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
+    with ESMTPSA id L29417y1CFnlswe
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Sat, 12 Feb 2022 16:49:47 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v14 1/9] drm/ingenic: Add support for JZ4780 and HDMI
+ output
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <WY477R.1XWC44S25QIN3@crapouillou.net>
+Date:   Sat, 12 Feb 2022 16:49:47 +0100
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F12ED081-8A7B-455C-BB8A-D4620F330F5E@goldelico.com>
+References: <cover.1644675566.git.hns@goldelico.com>
+ <31eff2819f94fefcb01aa5cb23c79ccf302d9238.1644675566.git.hns@goldelico.com>
+ <WY477R.1XWC44S25QIN3@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The X1000 does have a TCU clock gate, so pass it to the driver.
-Without this the TCU can be gated automatically, which prevents
-timers from running.
+Hi Paul,
 
-Fixes: dc6a81c3382f74fe ("clk: Ingenic: Add support for TCU of X1000.")
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
-I've just realized, maybe this is an ABI break. Now that the TCU clock is
-required, the driver probe will fail if given an old device tree which is
-missing that clock. Is it necessary to add a hack of some sort to support
-the old device tree?
+> Am 12.02.2022 um 15:44 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+> Le sam., f=C3=A9vr. 12 2022 at 15:19:19 +0100, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> From: Paul Boddie <paul@boddie.org.uk>
+>> Add support for the LCD controller present on JZ4780 SoCs.
+>> This SoC uses 8-byte descriptors which extend the current
+>> 4-byte descriptors used for other Ingenic SoCs.
+>> Note that plane f0 is not working and disabled to be
+>> seen from user-space.
+>> Tested on MIPS Creator CI20 board.
+>=20
+> That's not really what the patch does though. It's a fix for a commit =
+that has the exact same title and description, and is already merged: =
+b807fd2c43fe ("drm/ingenic: Add support for JZ4780 and HDMI output").
 
- drivers/clk/ingenic/tcu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Well, last version was not a fix...
 
-diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-index 77acfbeb4830..9c86043f673a 100644
---- a/drivers/clk/ingenic/tcu.c
-+++ b/drivers/clk/ingenic/tcu.c
-@@ -320,7 +320,7 @@ static const struct ingenic_soc_info jz4770_soc_info = {
- static const struct ingenic_soc_info x1000_soc_info = {
- 	.num_channels = 8,
- 	.has_ost = false, /* X1000 has OST, but it not belong TCU */
--	.has_tcu_clk = false,
-+	.has_tcu_clk = true,
- };
- 
- static const struct of_device_id __maybe_unused ingenic_tcu_of_match[] __initconst = {
--- 
-2.34.1
+I simply did not notice that parts of the commit contents were removed =
+by rebase to drm-misc-next and the commit message diverged...
+
+> Please rewrite the patch's title and description to actually describe =
+its purpose.
+
+Well, git rebase should do this for us if it removes the code described =
+in the commit and makes a fix out of it. What do we have automation for =
+:)
+
+v15 will come now...
+
+BR and thanks,
+Nikolaus
+
+>=20
+> Cheers,
+> -Paul
+>=20
+>> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+>> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> ---
+>> drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 12 ++++++++++--
+>> 1 file changed, 10 insertions(+), 2 deletions(-)
+>> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c =
+b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>> index 7f10d6eed549d..dcf44cb00821f 100644
+>> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+>> @@ -65,8 +65,10 @@ struct ingenic_dma_hwdescs {
+>> struct jz_soc_info {
+>> 	bool needs_dev_clk;
+>> 	bool has_osd;
+>> +	bool has_alpha;
+>> 	bool map_noncoherent;
+>> 	bool use_extended_hwdesc;
+>> +	bool plane_f0_not_working;
+>> 	unsigned int max_width, max_height;
+>> 	const u32 *formats_f0, *formats_f1;
+>> 	unsigned int num_formats_f0, num_formats_f1;
+>> @@ -453,7 +455,7 @@ static int ingenic_drm_plane_atomic_check(struct =
+drm_plane *plane,
+>> 	if (!crtc)
+>> 		return 0;
+>> -	if (plane =3D=3D &priv->f0)
+>> +	if (priv->soc_info->plane_f0_not_working && plane =3D=3D =
+&priv->f0)
+>> 		return -EINVAL;
+>> 	crtc_state =3D drm_atomic_get_existing_crtc_state(state,
+>> @@ -1055,6 +1057,7 @@ static int ingenic_drm_bind(struct device *dev, =
+bool has_components)
+>> 	long parent_rate;
+>> 	unsigned int i, clone_mask =3D 0;
+>> 	int ret, irq;
+>> +	u32 osdc =3D 0;
+>> 	soc_info =3D of_device_get_match_data(dev);
+>> 	if (!soc_info) {
+>> @@ -1312,7 +1315,10 @@ static int ingenic_drm_bind(struct device =
+*dev, bool has_components)
+>> 	/* Enable OSD if available */
+>> 	if (soc_info->has_osd)
+>> -		regmap_write(priv->map, JZ_REG_LCD_OSDC, =
+JZ_LCD_OSDC_OSDEN);
+>> +		osdc |=3D JZ_LCD_OSDC_OSDEN;
+>> +	if (soc_info->has_alpha)
+>> +		osdc |=3D JZ_LCD_OSDC_ALPHAEN;
+>> +	regmap_write(priv->map, JZ_REG_LCD_OSDC, osdc);
+>> 	mutex_init(&priv->clk_mutex);
+>> 	priv->clock_nb.notifier_call =3D ingenic_drm_update_pixclk;
+>> @@ -1511,7 +1517,9 @@ static const struct jz_soc_info jz4770_soc_info =
+=3D {
+>> static const struct jz_soc_info jz4780_soc_info =3D {
+>> 	.needs_dev_clk =3D true,
+>> 	.has_osd =3D true,
+>> +	.has_alpha =3D true,
+>> 	.use_extended_hwdesc =3D true,
+>> +	.plane_f0_not_working =3D true,	/* REVISIT */
+>> 	.max_width =3D 4096,
+>> 	.max_height =3D 2048,
+>> 	.formats_f1 =3D jz4770_formats_f1,
+>> --
+>> 2.33.0
+>=20
+>=20
 
