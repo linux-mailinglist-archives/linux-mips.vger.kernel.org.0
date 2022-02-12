@@ -2,159 +2,175 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F4F4B3860
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Feb 2022 23:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AC34B387C
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Feb 2022 00:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbiBLWay (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Feb 2022 17:30:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41842 "EHLO
+        id S232298AbiBLXGN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Feb 2022 18:06:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiBLWax (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Feb 2022 17:30:53 -0500
-X-Greylist: delayed 560 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Feb 2022 14:30:48 PST
-Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch [185.70.41.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C10A60A84
-        for <linux-mips@vger.kernel.org>; Sat, 12 Feb 2022 14:30:48 -0800 (PST)
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        by mail-41104.protonmail.ch (Postfix) with ESMTPS id 4Jx4hR2dNHz4xCS7
-        for <linux-mips@vger.kernel.org>; Sat, 12 Feb 2022 22:21:27 +0000 (UTC)
-Authentication-Results: mail-41104.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="BOwEQaoN"
-Date:   Sat, 12 Feb 2022 22:21:11 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1644704481;
-        bh=ryu2oTX8un4bZO5aF2kiNhHdcBaW57NJk9xC8bxjxWI=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=BOwEQaoNJ9gUhvKzLyzWSmrumL727bl9a//yWCI7WeudDkmHE98BDsGHyvqyYvdvX
-         ZnRYQ0D1kl6fdsDNTCI46OQK0tLBRWIpJb/+5DiyHa1HARSL6nw0jZRHHvy+GFINtf
-         +ncjWuhd857xRL2n6bimZAvUtrjrVkcVkESealWWZKnKsPUgJ/4dnhLRxS0GJPs5RU
-         mYoaPBRLHB5kkqc4DAGm2QJf/uDuoO+9FpiWiuJk+QItLZGYCxu5JYBc8d8Z8Epoog
-         oX10by4GjjCDr7hCHoX/DQBD3BrMjojYUEuM8XbThGR6Uh6IUQ9KOQQ+whoKhwe0Nf
-         XXt+ZihtAwEuw==
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Lobakin <alobakin@pm.me>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps earlier
-Message-ID: <20220212221347.442070-1-alobakin@pm.me>
+        with ESMTP id S232253AbiBLXGH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Feb 2022 18:06:07 -0500
+Received: from smtp.gentoo.org (smtp.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B70B5F8CB;
+        Sat, 12 Feb 2022 15:06:03 -0800 (PST)
+Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+References: <20220211210757.612595-1-Jason@zx2c4.com>
+From:   Joshua Kinard <kumba@gentoo.org>
+Message-ID: <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
+Date:   Sat, 12 Feb 2022 18:05:54 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
+In-Reply-To: <20220211210757.612595-1-Jason@zx2c4.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
-2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
-the following:
+On 2/11/2022 16:07, Jason A. Donenfeld wrote:
+> This is very much an RFC patch, or maybe even an RFG -- request for
+> grumbles. This topic has come up a million times, and usually doesn't go
+> anywhere. This time I thought I'd bring it up with a slightly narrower
+> focus. Before you read further, realize that I do not intend to merge
+> this without there being an appropriate amount of consensus for it and
+> discussion about it.
+> 
+> Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
+> rather than passively wait for it"), the RNG does a haveged-style jitter
+> dance around the scheduler, in order to produce entropy (and credit it)
+> for the case when we're stuck in wait_for_random_bytes(). How ever you
+> feel about the Linus Jitter Dance is beside the point: it's been there
+> for three years and usually gets the RNG initialized in a second or so.
+> 
+> As a matter of fact, this is what happens currently when people use
+> getrandom(2).
+> 
+> So, given that the kernel has grown this mechanism for seeding itself
+> from nothing, and that this procedure happens pretty fast, maybe there's
+> no point any longer in having /dev/urandom give insecure bytes. In the
+> past we didn't want the boot process to deadlock, which was
+> understandable. But now, in the worst case, a second goes by, and the
+> problem is resolved. It seems like maybe we're finally at a point when
+> we can get rid of the infamous "urandom read hole".
+> 
+> Maybe. And this is why this is a request for grumbles patch: the Linus
+> Jitter Dance relies on random_get_entropy() returning a cycle counter
+> value. The first lines of try_to_generate_entropy() are:
+> 
+> 	stack.now = random_get_entropy();
+> 	/* Slow counter - or none. Don't even bother */
+> 	if (stack.now == random_get_entropy())
+> 		return;
+> 
+> So it would appear that what seemed initially like a panacea does not in
+> fact work everywhere. Where doesn't it work?
+> 
+> On every platform, random_get_entropy() is connected to get_cycles(),
+> except for three: m68k, MIPS, and RISC-V.
+> 
 
-[    0.025698] CPU1 revision is: 0001a120 (MIPS interAptiv (multi))
-[    0.048183] ------------[ cut here ]------------
-[    0.048187] WARNING: CPU: 1 PID: 0 at kernel/sched/core.c:6025 sched_cor=
-e_cpu_starting+0x198/0x240
-[    0.048220] Modules linked in:
-[    0.048233] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc3+ #35 b7=
-b319f24073fd9a3c2aa7ad15fb7993eec0b26f
-[    0.048247] Stack : 817f0000 00000004 327804c8 810eb050 00000000 0000000=
-4 00000000 c314fdd1
-[    0.048278]         830cbd64 819c0000 81800000 817f0000 83070bf4 0000000=
-1 830cbd08 00000000
-[    0.048307]         00000000 00000000 815fcbc4 00000000 00000000 0000000=
-0 00000000 00000000
-[    0.048334]         00000000 00000000 00000000 00000000 817f0000 0000000=
-0 00000000 817f6f34
-[    0.048361]         817f0000 818a3c00 817f0000 00000004 00000000 0000000=
-0 4dc33260 0018c933
-[    0.048389]         ...
-[    0.048396] Call Trace:
-[    0.048399] [<8105a7bc>] show_stack+0x3c/0x140
-[    0.048424] [<8131c2a0>] dump_stack_lvl+0x60/0x80
-[    0.048440] [<8108b5c0>] __warn+0xc0/0xf4
-[    0.048454] [<8108b658>] warn_slowpath_fmt+0x64/0x10c
-[    0.048467] [<810bd418>] sched_core_cpu_starting+0x198/0x240
-[    0.048483] [<810c6514>] sched_cpu_starting+0x14/0x80
-[    0.048497] [<8108c0f8>] cpuhp_invoke_callback_range+0x78/0x140
-[    0.048510] [<8108d914>] notify_cpu_starting+0x94/0x140
-[    0.048523] [<8106593c>] start_secondary+0xbc/0x280
-[    0.048539]
-[    0.048543] ---[ end trace 0000000000000000 ]---
-[    0.048636] Synchronize counters for CPU 1: done.
+[snip]
 
-...for each but CPU 0/boot.
-Basic debug printks right before the mentioned line say:
+> On MIPS, it looks like this:
+> 
+>         if (can_use_mips_counter(prid))
+>                 return read_c0_count();
+>         else if (likely(imp != PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
+>                 return read_c0_random();
+>         else
+>                 return 0;
+> 
+> So it seems like we're okay except for R6000 and R6000A.
 
-[    0.048170] CPU: 1, smt_mask:
+The R6000/R6000A CPU only ever existed in systems in the late 1980's that
+were fairly large, and I don't think there is a complete, working unit out
+there that can actually boot up, let alone boot a Linux kernel.  This check
+was probably added as a mental exercise following a processor manual or such.
 
-So smt_mask, which is sibling mask obviously, is empty when entering
-the function.
-This is critical, as sched_core_cpu_starting() calculates
-core-scheduling parameters only once per CPU start, and it's crucial
-to have all the parameters filled in at that moment (at least it
-uses cpu_smt_mask() which in fact is `&cpu_sibling_map[cpu]` on
-MIPS).
+The old linux-mips wiki even says this:
+https://www.linux-mips.org/wiki/R6000
 
-A bit of debugging led me to that set_cpu_sibling_map() performing
-the actual map calculation, was being invocated after
-notify_cpu_start(), and exactly the latter function starts CPU HP
-callback round (sched_core_cpu_starting() is basically a CPU HP
-callback).
-While the flow is same on ARM64 (maps after the notifier, although
-before calling set_cpu_online()), x86 started calculating sibling
-maps earlier than starting the CPU HP callbacks in Linux 4.14 (see
-[0] for the reference). Neither me nor my brief tests couldn't find
-any potential caveats in calculating the maps right after performing
-delay calibration, but the WARN splat is now gone.
-The very same debug prints now yield exactly what I expected from
-them:
+"""
+The R6000 is an ECL implementation of the MIPS architecture which was
+produced by Bipolar Integrated Technology. The R6000 miroprocessor did
+introduce the MIPS II instruction set. Its TLB and cache architecture are
+different from all other members of the MIPS family. The R6000 did not
+deliver the promised performance benefits, and although it saw some use in
+Control Data machines, it quickly disappeared from the mainstream market.
+"""
 
-[    0.048433] CPU: 1, smt_mask: 0-1
+A a quick grep of a recent kernel tree shows this one conditional as the
+only user, plus the two defines:
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?=
-id=3D76ce7cfe35ef
+# grep -r "PRID_IMP_R6000" *
+arch/mips/include/asm/cpu.h:70:#define PRID_IMP_R6000           0x0300
+    /* Same as R3000A  */
+arch/mips/include/asm/cpu.h:72:#define PRID_IMP_R6000A          0x0600
+arch/mips/include/asm/timex.h:94:       else if (likely(imp !=
+PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
 
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
----
- arch/mips/kernel/smp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-index d542fb7af3ba..1986d1309410 100644
---- a/arch/mips/kernel/smp.c
-+++ b/arch/mips/kernel/smp.c
-@@ -351,6 +351,9 @@ asmlinkage void start_secondary(void)
- =09cpu =3D smp_processor_id();
- =09cpu_data[cpu].udelay_val =3D loops_per_jiffy;
-
-+=09set_cpu_sibling_map(cpu);
-+=09set_cpu_core_map(cpu);
-+
- =09cpumask_set_cpu(cpu, &cpu_coherent_mask);
- =09notify_cpu_starting(cpu);
-
-@@ -362,9 +365,6 @@ asmlinkage void start_secondary(void)
- =09/* The CPU is running and counters synchronised, now mark it online */
- =09set_cpu_online(cpu, true);
-
--=09set_cpu_sibling_map(cpu);
--=09set_cpu_core_map(cpu);
--
- =09calculate_cpu_foreign_map();
-
- =09/*
---
-2.35.1
+I'd say it's better to remove the check and simplify the conditional to
+eliminate this corner case.  Maybe keep the #defines around for
+documentation, but even that may not be necessary for CPUs that likely don't
+exist anymore.
 
 
+> 
+> I think what this adds up to is that this change would positively affect
+> everybody, except for _possibly_ negatively affecting poorly configured
+> non-Amiga m68k systems and the MIPS R6000 and R6000A. Does that analysis
+> seem correct to folks reading, or did I miss something?
+> 
+> Are there other cases where the cycle counter does exist but is simply
+> too slow? Perhaps some computer historians can chime in here.
+> 
+> If my general analysis is correct, are these ancient platforms really
+> worth holding this back? I halfway expect to receive a few thrown
+> tomatoes, an angry fist, and a "get off my lawn!", and if that's _all_ I
+> hear, I'll take a hint and we can forget I ever proposed this. As
+> mentioned, I do not intend to merge this unless there's broad consensus
+> about it. But on the off chance that people feel differently, perhaps
+> the Linus Jitter Dance is finally the solution to years of /dev/urandom
+> kvetching.
+
+
+-- 
+Joshua Kinard
+Gentoo/MIPS
+kumba@gentoo.org
+rsa6144/5C63F4E3F5C6C943 2015-04-27
+177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
+
+"The past tempts us, the present confuses us, the future frightens us.  And
+our lives slip away, moment by moment, lost in that vast, terrible in-between."
+
+--Emperor Turhan, Centauri Republic
