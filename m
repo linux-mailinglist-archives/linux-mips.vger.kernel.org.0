@@ -2,81 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DE84B3890
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Feb 2022 00:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB5E4B3934
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Feb 2022 04:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbiBLXWL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Feb 2022 18:22:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42564 "EHLO
+        id S233093AbiBMDQE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Feb 2022 22:16:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232443AbiBLXWK (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Feb 2022 18:22:10 -0500
-X-Greylist: delayed 509 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Feb 2022 15:22:06 PST
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DEEA5FF08;
-        Sat, 12 Feb 2022 15:22:05 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 5036892009C; Sun, 13 Feb 2022 00:13:33 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 4182F92009B;
-        Sat, 12 Feb 2022 23:13:33 +0000 (GMT)
-Date:   Sat, 12 Feb 2022 23:13:33 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Joshua Kinard <kumba@gentoo.org>
-cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        with ESMTP id S233306AbiBMDQC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Feb 2022 22:16:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA61F5F25B
+        for <linux-mips@vger.kernel.org>; Sat, 12 Feb 2022 19:15:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 778D2B8085D
+        for <linux-mips@vger.kernel.org>; Sun, 13 Feb 2022 03:15:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F15C340ED;
+        Sun, 13 Feb 2022 03:15:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644722155;
+        bh=cfBWan6cCytJstd6/pWGmDyKPrlRMs3PhvFLZb9flIA=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=n6JbxKlqcL0RAOuXM/wB7PjxNSkOwDc3Mk5RwS+gAaCsG9+WtOvtx0ANA+x9xFJ5w
+         mbXMBbPJydMkjNn3FLkYFKafzV8vihxga6fQD0iDOLO2yVmsjCgk/MvdqjoPKAPQz6
+         moUjoQXuSLmC+ANubX4LzdHVEVmdRvZAWYJ3pRZMkZhSsk/ADJjfOtUffO6ea+L6vB
+         9BT9kvv7671cLvTM6lWU/wj4+wxhJktllZJ+gMIikltRcu5F7JxkwCEv7UrGC8fgO1
+         BY5P9IQyAXsSva1KrgyBvfSt5E+NDpbmKoZ+G262fdNB2d8RFvUGvsCwE2hVXPp4Jf
+         hRCwPV49B1KYA==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 1BF9027C0054;
+        Sat, 12 Feb 2022 22:15:52 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+  by compute5.internal (MEProxy); Sat, 12 Feb 2022 22:15:53 -0500
+X-ME-Sender: <xms:53cIYsWHCSBLT20UKSNUTMb5qweuMdG6OtrolriGuqewjZWZS1dtlw>
+    <xme:53cIYgnpm3vUbdrGFAUQQSkkvpvKuUaaSwRCyJz73WAfHhyZxyuOMXUqPKKjs7ynQ
+    JGCD5Ni84IuoaGqbOg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrieekgdegfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdetnhgu
+    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpedvleehjeejvefhuddtgeegffdtjedtffegveethedvgfejieevieeu
+    feevuedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
+    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
+    drlhhuthhordhush
+X-ME-Proxy: <xmx:53cIYganbE64N5FtxbXIhcvP5cEsBlcLyBW1qmXC6zPjhg2K9UldOQ>
+    <xmx:53cIYrXtvXSgyojTVSs8d7oybism5nfG7LO6nh_CZPbzlAALvAhXiQ>
+    <xmx:53cIYmmYjq0iVHPXlfReLn_yJanYCFq6QJyScKOL1uKgMZWSpTVD4g>
+    <xmx:6HcIYldQHsQwB-Dv9w6_2nhXKOggZdLrPO6ylOa8HrDKqODCn_wNmh87cJ8>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8F97C21E006E; Sat, 12 Feb 2022 22:15:51 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4748-g31a5b5f50e-fm-cal2020-20220204.001-g31a5b5f5
+Mime-Version: 1.0
+Message-Id: <fbdd43e1-a305-48d1-8ccb-2deffcb715f7@www.fastmail.com>
+In-Reply-To: <20220211210757.612595-1-Jason@zx2c4.com>
+References: <20220211210757.612595-1-Jason@zx2c4.com>
+Date:   Sat, 12 Feb 2022 19:15:31 -0800
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Linux Crypto Mailing List" <linux-crypto@vger.kernel.org>
+Cc:     "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
         linux-riscv@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
         linux-m68k@lists.linux-m68k.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
         linux-mips@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ralf Baechle <ralf@linux-mips.org>
+        "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        "Eric Biggers" <ebiggers@google.com>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Lennart Poettering" <mzxreary@0pointer.de>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
 Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
-In-Reply-To: <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
-Message-ID: <alpine.DEB.2.21.2202122309560.34636@angie.orcam.me.uk>
-References: <20220211210757.612595-1-Jason@zx2c4.com> <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sat, 12 Feb 2022, Joshua Kinard wrote:
 
-> # grep -r "PRID_IMP_R6000" *
-> arch/mips/include/asm/cpu.h:70:#define PRID_IMP_R6000           0x0300
->     /* Same as R3000A  */
-> arch/mips/include/asm/cpu.h:72:#define PRID_IMP_R6000A          0x0600
-> arch/mips/include/asm/timex.h:94:       else if (likely(imp !=
-> PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
-> 
-> I'd say it's better to remove the check and simplify the conditional to
-> eliminate this corner case.  Maybe keep the #defines around for
-> documentation, but even that may not be necessary for CPUs that likely don't
-> exist anymore.
 
- IIRC Ralf used to have a working R6k machine, but I have no idea what has 
-happened to it.  No port of Linux has been made for that system though, 
-that's for sure.
+On Fri, Feb 11, 2022, at 1:07 PM, Jason A. Donenfeld wrote:
+> This is very much an RFC patch, or maybe even an RFG -- request for
+> grumbles. This topic has come up a million times, and usually doesn't =
+go
+> anywhere. This time I thought I'd bring it up with a slightly narrower
+> focus. Before you read further, realize that I do not intend to merge
+> this without there being an appropriate amount of consensus for it and
+> discussion about it.
+>
+> Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
+> rather than passively wait for it"), the RNG does a haveged-style jitt=
+er
+> dance around the scheduler, in order to produce entropy (and credit it)
+> for the case when we're stuck in wait_for_random_bytes(). How ever you
+> feel about the Linus Jitter Dance is beside the point: it's been there
+> for three years and usually gets the RNG initialized in a second or so.
 
-  Maciej
+I dislike this patch for a reason that has nothing to do with security. =
+Somewhere there=E2=80=99s a Linux machine that boots straight to Nethack=
+ in a glorious 50ms.  If Nethack gets 256 bits of amazing entropy from /=
+dev/urandom, then the machine=E2=80=99s owner has to play for real. If i=
+t repeats the same game on occasion, the owner can be disappointed or am=
+used. If it gets a weak seed that can be brute forced, then the owner ca=
+n have fun brute forcing it.
+
+If, on the other hand, it waits 750ms for enough jitter entropy to be pe=
+rfect, it=E2=80=99s a complete fail.  No one wants to wait 750ms to play=
+ Nethack.
+
+Replace Nethack with something with a backup camera or a lightbulb, both=
+ of which have regulations related to startup time, and there may be a r=
+eal problem. Keep in mind that some language runtimes randomize their ha=
+sh table seeds at startup, possibly using /dev/urandom. This patch may b=
+reak actual, correct, working code.
