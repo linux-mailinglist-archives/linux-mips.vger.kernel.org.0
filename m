@@ -2,134 +2,223 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB5E4B3934
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Feb 2022 04:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DDA4B3BAB
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Feb 2022 15:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbiBMDQE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 12 Feb 2022 22:16:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36732 "EHLO
+        id S236294AbiBMORD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sun, 13 Feb 2022 09:17:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233306AbiBMDQC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Feb 2022 22:16:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA61F5F25B
-        for <linux-mips@vger.kernel.org>; Sat, 12 Feb 2022 19:15:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 778D2B8085D
-        for <linux-mips@vger.kernel.org>; Sun, 13 Feb 2022 03:15:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F15C340ED;
-        Sun, 13 Feb 2022 03:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644722155;
-        bh=cfBWan6cCytJstd6/pWGmDyKPrlRMs3PhvFLZb9flIA=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=n6JbxKlqcL0RAOuXM/wB7PjxNSkOwDc3Mk5RwS+gAaCsG9+WtOvtx0ANA+x9xFJ5w
-         mbXMBbPJydMkjNn3FLkYFKafzV8vihxga6fQD0iDOLO2yVmsjCgk/MvdqjoPKAPQz6
-         moUjoQXuSLmC+ANubX4LzdHVEVmdRvZAWYJ3pRZMkZhSsk/ADJjfOtUffO6ea+L6vB
-         9BT9kvv7671cLvTM6lWU/wj4+wxhJktllZJ+gMIikltRcu5F7JxkwCEv7UrGC8fgO1
-         BY5P9IQyAXsSva1KrgyBvfSt5E+NDpbmKoZ+G262fdNB2d8RFvUGvsCwE2hVXPp4Jf
-         hRCwPV49B1KYA==
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 1BF9027C0054;
-        Sat, 12 Feb 2022 22:15:52 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute5.internal (MEProxy); Sat, 12 Feb 2022 22:15:53 -0500
-X-ME-Sender: <xms:53cIYsWHCSBLT20UKSNUTMb5qweuMdG6OtrolriGuqewjZWZS1dtlw>
-    <xme:53cIYgnpm3vUbdrGFAUQQSkkvpvKuUaaSwRCyJz73WAfHhyZxyuOMXUqPKKjs7ynQ
-    JGCD5Ni84IuoaGqbOg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrieekgdegfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdetnhgu
-    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedvleehjeejvefhuddtgeegffdtjedtffegveethedvgfejieevieeu
-    feevuedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
-    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
-    drlhhuthhordhush
-X-ME-Proxy: <xmx:53cIYganbE64N5FtxbXIhcvP5cEsBlcLyBW1qmXC6zPjhg2K9UldOQ>
-    <xmx:53cIYrXtvXSgyojTVSs8d7oybism5nfG7LO6nh_CZPbzlAALvAhXiQ>
-    <xmx:53cIYmmYjq0iVHPXlfReLn_yJanYCFq6QJyScKOL1uKgMZWSpTVD4g>
-    <xmx:6HcIYldQHsQwB-Dv9w6_2nhXKOggZdLrPO6ylOa8HrDKqODCn_wNmh87cJ8>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8F97C21E006E; Sat, 12 Feb 2022 22:15:51 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4748-g31a5b5f50e-fm-cal2020-20220204.001-g31a5b5f5
-Mime-Version: 1.0
-Message-Id: <fbdd43e1-a305-48d1-8ccb-2deffcb715f7@www.fastmail.com>
-In-Reply-To: <20220211210757.612595-1-Jason@zx2c4.com>
-References: <20220211210757.612595-1-Jason@zx2c4.com>
-Date:   Sat, 12 Feb 2022 19:15:31 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Linux Crypto Mailing List" <linux-crypto@vger.kernel.org>
-Cc:     "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        "Eric Biggers" <ebiggers@google.com>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Lennart Poettering" <mzxreary@0pointer.de>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230011AbiBMORC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Feb 2022 09:17:02 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C374A5F257;
+        Sun, 13 Feb 2022 06:16:54 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.41:34274.536114013
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id A882C100139;
+        Sun, 13 Feb 2022 22:16:51 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id ebba22aeed614101910b8b306142232d for mripard@kernel.org;
+        Sun, 13 Feb 2022 22:16:52 CST
+X-Transaction-ID: ebba22aeed614101910b8b306142232d
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH v7 0/7] drm/lsdc: add drm driver for loongson display controller
+Date:   Sun, 13 Feb 2022 22:16:42 +0800
+Message-Id: <20220213141649.1115987-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+bridge chip, the DC is a PCI device in those chips. It has two display
+pipes but with only one hardware cursor. Each way has a DVO interface
+which provide RGB888 signals, vertical & horizontal synchronisations,
+data enable and the pixel clock. Each CRTC is able to scanout from
+1920x1080 resolution at 60Hz. The maxmium resolution is 2048x2048
+according to the hardware spec.
 
+Loongson display controllers are simple which require scanout buffers
+to be physically contiguous. LS2K1000 is a SOC, Only system memory is
+available. Therefore CMA helper based driver is intended to be use,
+although it is possible to use VRAM helper based solution by carving
+out part of system memory as VRAM.
 
-On Fri, Feb 11, 2022, at 1:07 PM, Jason A. Donenfeld wrote:
-> This is very much an RFC patch, or maybe even an RFG -- request for
-> grumbles. This topic has come up a million times, and usually doesn't =
-go
-> anywhere. This time I thought I'd bring it up with a slightly narrower
-> focus. Before you read further, realize that I do not intend to merge
-> this without there being an appropriate amount of consensus for it and
-> discussion about it.
->
-> Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
-> rather than passively wait for it"), the RNG does a haveged-style jitt=
-er
-> dance around the scheduler, in order to produce entropy (and credit it)
-> for the case when we're stuck in wait_for_random_bytes(). How ever you
-> feel about the Linus Jitter Dance is beside the point: it's been there
-> for three years and usually gets the RNG initialized in a second or so.
+On LS7A1000/LS7A2000 bridge chip, the DC is equipped with a dedicated
+video memory which is typically 64MB or more. In this case, VRAM helper
+based solution which scanout from local VRAM is reconmended to use.
+It is reliable to use for massive production, but CMA based helper
+solution is still usable on ls7a1000 and ls7a2000, at the price of
+the CRTC must access the FB in RAM through the PCIe bus and HT3.0 bus.
+This causes continuous traffic on the bus regardless of whether the FB
+image is updating or not. Sadly, it suffer from screen flickering under
+RAM pressure on LS7A1000. Luckily, It show extremely good condition on
+LS7A2000 even under stressapptest, Maybe the hardware engineer resolve
+this issue. Integrating two distict helpers based driver into one piece
+allow code sharing.
 
-I dislike this patch for a reason that has nothing to do with security. =
-Somewhere there=E2=80=99s a Linux machine that boots straight to Nethack=
- in a glorious 50ms.  If Nethack gets 256 bits of amazing entropy from /=
-dev/urandom, then the machine=E2=80=99s owner has to play for real. If i=
-t repeats the same game on occasion, the owner can be disappointed or am=
-used. If it gets a weak seed that can be brute forced, then the owner ca=
-n have fun brute forcing it.
+We have also implemented demage update on top of CMA helper which copy
+the demaged region from the shadow framebuffer in system RAM to the real
+framebuffer in VRAM manually. This is intend to overcome the screen
+flicking issue on LS7A1000, but the performance is not good.
+Using "lsdc.dirty_update=1" in the kernel commmand line if you would like
+to have a try.
 
-If, on the other hand, it waits 750ms for enough jitter entropy to be pe=
-rfect, it=E2=80=99s a complete fail.  No one wants to wait 750ms to play=
- Nethack.
+For LS7A1000, there are 4 dedicated GPIOs whose control register is
+located at the DC register space, They are used to emulate two way i2c.
+One for DVO0, another for DVO1. This is the reason why this driver is
+not switch to drm bridge framework yet. LS2K1000 and LS2K0500 SoC don't
+have such GPIO hardwared, they grab i2c adapter from other module,
+either general purpose GPIO emulated i2c or hardware i2c adapter.
+Drm bridge and drm panel driver for the external encoder is suitable for
+those SoC. We have already implemented this on our downstream 4.19.190
+kernel. But due to the GPIO, PWM and I2C device driver support for
+LS2K1000 is not upstreamed yet, this driver still can be use to bring
+the graphic environment up by providing display timings or similar things
+in the device tree.
 
-Replace Nethack with something with a backup camera or a lightbulb, both=
- of which have regulations related to startup time, and there may be a r=
-eal problem. Keep in mind that some language runtimes randomize their ha=
-sh table seeds at startup, possibly using /dev/urandom. This patch may b=
-reak actual, correct, working code.
+The DC in LS7A1000 has only one hardware cursor, we simply let the two
+CRTC share it. The DC in LS7A2000 have two cursor, two built-in hdmi
+encoder and one transparent vga encoder and more, surport for LS7A2000
+is on the way. In short, we have built-in gpio emulated i2c support,
+we also have hardware cursor support. LS7A2000 The kind of tiny drivers
+in drm/tiny is not suitable for us.
+
+    +------+            +-----------------------------------+
+    | DDR4 |            |  +-------------------+            |
+    +------+            |  | PCIe Root complex |   LS7A1000 |
+       || MC0           |  +--++---------++----+            |
+  +----------+  HT 3.0  |     ||         ||                 |
+  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
+  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
+  +----------+          | +--------+  +-+--+-+    +---------+   +------+
+       || MC1           +---------------|--|----------------+
+    +------+                            |  |
+    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
+                      +-------+                      +------+
+
+The above picture give a simple usage of LS7A1000, note that the encoder
+is not necessary adv7125 or tfp410, it is a choice of the downstream board
+manufacturer. Other candicate encoders can be ch7034b, sil9022 and ite66121
+lt8618 etc. Besides, the DC in both ls2k1000 and ls7k1000 has the same of
+PCI vendor id and pci device id. Both is 0x0014:0x7a06, the reverison id
+is also same. This is the firmware engineer's mistake, but such firmware
+and various boards ship with such firmware already released. We choose to
+deduce the chip's identification from information provided by device tree.
+For lsdc, there is only a 1:1 mapping of encoders and connectors.
+
+Below is a brief introduction of loongson's CPU, bridge chip and SoC.
+LS2K1000 is a double core 1.0Ghz mips64r2 compatible SoC[1]. LS7A1000 is
+a bridge chip made by Loongson corporation which act as north and/or south
+bridge of loongson's desktop and server level processor. It is equivalent
+to AMD RS780E+SB710 or something like that. More details can be read from
+its user manual[2].
+
+This bridge chip is typically use with LS3A3000, LS3A4000 and LS3A5000 cpu.
+LS3A3000 is 4 core 1.45gHz mips64r2 compatible cpu.
+LS3A4000 is 4 core 1.8gHz mips64r5 compatible cpu.
+LS3A5000 is 4 core 2.5gHz loongarch cpu[3].
+
+Nearly all loongson cpu has the hardware maintain the cache coherency,
+except for early version of ls2k1000 or ls3a2000. This is the most distinct
+feature from other mips cpu.
+
+[1] https://wiki.debian.org/InstallingDebianOn/Lemote/Loongson2K1000
+[2] https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN.html
+[3] https://loongson.github.io/LoongArch-Documentation/Loongson-3A5000-usermanual-EN.html
+
+suijingfeng (7):
+  drm/lsdc: add drm driver for loongson display controller
+  MIPS: Loongson: ls7a-pch.dtsi: add has_dedicated_vram property
+  MIPS: Loongson: introduce dts for ls3A4000 evaluation board
+  MIPS: Loongson: introduce dts for lemote A1901 3a4000 motherboard
+  MIPS: Loongson: ls2k1000: add the display controller device node
+  MIPS: Loongson: Add dts for ls2k1000 pai evaluation board
+  MAINTAINERS: add maintainers for DRM LSDC driver
+
+ MAINTAINERS                                   |   9 +
+ arch/mips/boot/dts/loongson/lemote_a1901.dts  |  59 ++
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |  11 +
+ arch/mips/boot/dts/loongson/ls2k1000_pai.dts  |  69 ++
+ .../boot/dts/loongson/ls3a4000_7a1000_evb.dts |  61 ++
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   3 +-
+ drivers/gpu/drm/Kconfig                       |   2 +
+ drivers/gpu/drm/Makefile                      |   1 +
+ drivers/gpu/drm/lsdc/Kconfig                  |  39 +
+ drivers/gpu/drm/lsdc/Makefile                 |  13 +
+ drivers/gpu/drm/lsdc/lsdc_connector.c         | 334 ++++++++
+ drivers/gpu/drm/lsdc/lsdc_connector.h         |  38 +
+ drivers/gpu/drm/lsdc/lsdc_crtc.c              | 341 ++++++++
+ drivers/gpu/drm/lsdc/lsdc_drv.c               | 776 ++++++++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_drv.h               | 217 +++++
+ drivers/gpu/drm/lsdc/lsdc_encoder.c           |  54 ++
+ drivers/gpu/drm/lsdc/lsdc_i2c.c               | 198 +++++
+ drivers/gpu/drm/lsdc/lsdc_i2c.h               |  40 +
+ drivers/gpu/drm/lsdc/lsdc_irq.c               |  60 ++
+ drivers/gpu/drm/lsdc/lsdc_irq.h               |  20 +
+ drivers/gpu/drm/lsdc/lsdc_plane.c             | 572 +++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_pll.c               | 580 +++++++++++++
+ drivers/gpu/drm/lsdc/lsdc_pll.h               |  90 ++
+ drivers/gpu/drm/lsdc/lsdc_regs.h              | 202 +++++
+ 24 files changed, 3788 insertions(+), 1 deletion(-)
+ create mode 100644 arch/mips/boot/dts/loongson/lemote_a1901.dts
+ create mode 100644 arch/mips/boot/dts/loongson/ls2k1000_pai.dts
+ create mode 100644 arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+ create mode 100644 drivers/gpu/drm/lsdc/Kconfig
+ create mode 100644 drivers/gpu/drm/lsdc/Makefile
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_connector.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_crtc.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_drv.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_encoder.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_i2c.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_irq.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_plane.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.c
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_pll.h
+ create mode 100644 drivers/gpu/drm/lsdc/lsdc_regs.h
+
+-- 
+2.25.1
+
