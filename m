@@ -2,78 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EFD4B5CBC
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 22:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 017334B5C8D
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 22:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbiBNV0H (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Feb 2022 16:26:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34444 "EHLO
+        id S230429AbiBNVVU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Feb 2022 16:21:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbiBNV0G (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 16:26:06 -0500
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B9C2A701;
-        Mon, 14 Feb 2022 13:25:58 -0800 (PST)
-Received: by mail-oo1-xc35.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so20889853ooi.2;
-        Mon, 14 Feb 2022 13:25:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5/DaZmV9acYDCTgPotmTjkv5wdpuSuU2XjrOsJthBBQ=;
-        b=nWQxV8bwhbOD3UF50A117xCVxj+SdTH8j0ePhfp/vJCb8IjI9vBWg6cxXRzKNHYnA2
-         cWK3cz+qshBj6PDjeKoogB7Z176jQ/iWDg9drN0TMGnqsZjErTE8Y0fhjM2HuB0hTZ7k
-         WvoWhgELlUECaUOdFHVDVUNSFL9XTETtsx/yiLVvgbMzOxc99n7KNkG87N5dS1e59o/P
-         tG7l3iVWZoA37J/EBljjE3AvYVBP4USRavxZz22fUyPo1Fyt++TsRu3eGtHrwG5tEj67
-         0nlOi1QUyysEhYHzoj7rdRxXZjvOaS5yt/bFcOiBA9oNZ6VC7M2mvOTMw8FnY9P287O5
-         iONA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5/DaZmV9acYDCTgPotmTjkv5wdpuSuU2XjrOsJthBBQ=;
-        b=K0udV4jb+lxh1GRzYjWqNFY4apGO1MqsjTaIJbpiPq9VTLgkOLJAk3og+91QB4+WKr
-         4uXzm5DShXpMAmp12Cp3hhnG9Cl4A5Le4cwxgXVPoJEYSzKJTpMzxh2vVCrTmVXCm/kE
-         AI1+hleOzdAqOjcBxCbYfu6VYtECNwoH4kWj5ClhGlAHKYLYd49EFrPo9MDzWM8oPJR2
-         CKam1oQ0p+w0eNwOQ7984nlSUO1xsv0KQKnzCPsGmiXZitvffckATBua5aWJtYElzvfS
-         IzYjwIJiemRdvYlQ/Q+TZaPz7P2PcBCa2Oia0N9rSGP72GeZaTEJiBJAW79Ic0h60/oS
-         WaTQ==
-X-Gm-Message-State: AOAM532scMYpKdi8TLEXh1k5XPTH4goK9mRfzz9xLhFpT4mZ8zlWSBu+
-        Glp2wMIChwCjUGESU7Ujz9r7iLHrdjY=
-X-Google-Smtp-Source: ABdhPJwoikppkKPhBbf43zKKC+nQQi8QmN17ON2BtIKBG/X7Qj3NKBvQo5nyXCW7kCKLxOljb9sS1Q==
-X-Received: by 2002:a17:90a:8c8b:: with SMTP id b11mr16258736pjo.197.1644865217384;
-        Mon, 14 Feb 2022 11:00:17 -0800 (PST)
-Received: from [192.168.1.35] (71.red-83-50-68.dynamicip.rima-tde.net. [83.50.68.71])
-        by smtp.gmail.com with ESMTPSA id d8sm3507592pjr.29.2022.02.14.11.00.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 11:00:17 -0800 (PST)
-Sender: =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= 
-        <philippe.mathieu.daude@gmail.com>
-Message-ID: <5324be35-5c49-31c1-3f9a-267a5dae8c84@amsat.org>
-Date:   Mon, 14 Feb 2022 20:00:12 +0100
+        with ESMTP id S230213AbiBNVVT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 16:21:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927913C390;
+        Mon, 14 Feb 2022 13:21:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E93F6111F;
+        Mon, 14 Feb 2022 19:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8984C340F4;
+        Mon, 14 Feb 2022 19:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644866741;
+        bh=zLWY4rc6tKJzkfOHU66+tSLIxceIVdBozj8MWHl9tz8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dahbLYzx2Cck5kbI+J06pUjtONQgq4wac0B/zMHO2t8H4+atEXbbC3nQoEeMZmjvT
+         itq7QzJ+hcqJRhHre9S0Rv1ba7ESMo4l9io+gmxznvUC35vP0sSOIkYlCR+0otG3GN
+         tdNTUG6Qu0hKopOLGNe9r6lsk3LXktZTgdyM6DDF4qnI4CaboAovPMzaA5UAbOEp8B
+         APnMM/NoSUEX7k/TbfFZOMIAXqeOgVfYlaUUwS5IVx/KX2WaZSUcXBZdLbU9c3dXWc
+         B7yscltnO9vN4AE6rtNUxs37L8HmCFQQ4zLTncxcS+Y4byxc1hWLvKupRncU1kUVIh
+         Se79TuvvAK7PA==
+Received: by mail-wr1-f41.google.com with SMTP id e3so28621725wra.0;
+        Mon, 14 Feb 2022 11:25:41 -0800 (PST)
+X-Gm-Message-State: AOAM533lGBGdzQ2n4n/+tiFsDCW6M+1s0S1dxwkv7EnqcNwoNPD/D0To
+        g73TG23bEoHghzGuOFucaeUtVTcCMiOXD2j8fXA=
+X-Google-Smtp-Source: ABdhPJwrOpkav7UeztG9pweW7/OWsS+hZNYg7RZgUDmgoSoPSixwWLgUERuof4XivnroH6SdfUIEp08YoMpfbv7qa3w=
+X-Received: by 2002:a5d:5446:: with SMTP id w6mr422520wrv.12.1644866740020;
+ Mon, 14 Feb 2022 11:25:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps
- earlier
-Content-Language: en-US
-To:     Alexander Lobakin <alobakin@pm.me>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
+References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-8-arnd@kernel.org>
+ <YgqOLZbFK7/B2HJT@zeniv-ca.linux.org.uk>
+In-Reply-To: <YgqOLZbFK7/B2HJT@zeniv-ca.linux.org.uk>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 14 Feb 2022 20:25:24 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a36U35DK22UT6id=WawWaJa-2+_W9HFgmwdDJ_tVYE5NQ@mail.gmail.com>
+Message-ID: <CAK8P3a36U35DK22UT6id=WawWaJa-2+_W9HFgmwdDJ_tVYE5NQ@mail.gmail.com>
+Subject: Re: [PATCH 07/14] uaccess: generalize access_ok()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Peter Zijlstra <peterz@infradead.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220212221347.442070-1-alobakin@pm.me>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-In-Reply-To: <20220212221347.442070-1-alobakin@pm.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,73 +109,47 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 12/2/22 23:21, Alexander Lobakin wrote:
-> After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
-> 2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
-> the following:
-> 
-> [    0.025698] CPU1 revision is: 0001a120 (MIPS interAptiv (multi))
-> [    0.048183] ------------[ cut here ]------------
-> [    0.048187] WARNING: CPU: 1 PID: 0 at kernel/sched/core.c:6025 sched_core_cpu_starting+0x198/0x240
-> [    0.048220] Modules linked in:
-> [    0.048233] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc3+ #35 b7b319f24073fd9a3c2aa7ad15fb7993eec0b26f
-> [    0.048247] Stack : 817f0000 00000004 327804c8 810eb050 00000000 00000004 00000000 c314fdd1
-> [    0.048278]         830cbd64 819c0000 81800000 817f0000 83070bf4 00000001 830cbd08 00000000
-> [    0.048307]         00000000 00000000 815fcbc4 00000000 00000000 00000000 00000000 00000000
-> [    0.048334]         00000000 00000000 00000000 00000000 817f0000 00000000 00000000 817f6f34
-> [    0.048361]         817f0000 818a3c00 817f0000 00000004 00000000 00000000 4dc33260 0018c933
-> [    0.048389]         ...
-> [    0.048396] Call Trace:
-> [    0.048399] [<8105a7bc>] show_stack+0x3c/0x140
-> [    0.048424] [<8131c2a0>] dump_stack_lvl+0x60/0x80
-> [    0.048440] [<8108b5c0>] __warn+0xc0/0xf4
-> [    0.048454] [<8108b658>] warn_slowpath_fmt+0x64/0x10c
-> [    0.048467] [<810bd418>] sched_core_cpu_starting+0x198/0x240
-> [    0.048483] [<810c6514>] sched_cpu_starting+0x14/0x80
-> [    0.048497] [<8108c0f8>] cpuhp_invoke_callback_range+0x78/0x140
-> [    0.048510] [<8108d914>] notify_cpu_starting+0x94/0x140
-> [    0.048523] [<8106593c>] start_secondary+0xbc/0x280
-> [    0.048539]
-> [    0.048543] ---[ end trace 0000000000000000 ]---
-> [    0.048636] Synchronize counters for CPU 1: done.
-> 
-> ...for each but CPU 0/boot.
-> Basic debug printks right before the mentioned line say:
-> 
-> [    0.048170] CPU: 1, smt_mask:
-> 
-> So smt_mask, which is sibling mask obviously, is empty when entering
-> the function.
-> This is critical, as sched_core_cpu_starting() calculates
-> core-scheduling parameters only once per CPU start, and it's crucial
-> to have all the parameters filled in at that moment (at least it
-> uses cpu_smt_mask() which in fact is `&cpu_sibling_map[cpu]` on
-> MIPS).
-> 
-> A bit of debugging led me to that set_cpu_sibling_map() performing
-> the actual map calculation, was being invocated after
-> notify_cpu_start(), and exactly the latter function starts CPU HP
-> callback round (sched_core_cpu_starting() is basically a CPU HP
-> callback).
-> While the flow is same on ARM64 (maps after the notifier, although
-> before calling set_cpu_online()), x86 started calculating sibling
-> maps earlier than starting the CPU HP callbacks in Linux 4.14 (see
-> [0] for the reference). Neither me nor my brief tests couldn't find
-> any potential caveats in calculating the maps right after performing
-> delay calibration, but the WARN splat is now gone.
-> The very same debug prints now yield exactly what I expected from
-> them:
-> 
-> [    0.048433] CPU: 1, smt_mask: 0-1
-> 
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=76ce7cfe35ef
+On Mon, Feb 14, 2022 at 6:15 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Mon, Feb 14, 2022 at 05:34:45PM +0100, Arnd Bergmann wrote:
+>
+> > diff --git a/arch/csky/kernel/signal.c b/arch/csky/kernel/signal.c
+> > index c7b763d2f526..8867ddf3e6c7 100644
+> > --- a/arch/csky/kernel/signal.c
+> > +++ b/arch/csky/kernel/signal.c
+> > @@ -136,7 +136,7 @@ static inline void __user *get_sigframe(struct ksignal *ksig,
+> >  static int
+> >  setup_rt_frame(struct ksignal *ksig, sigset_t *set, struct pt_regs *regs)
+> >  {
+> > -     struct rt_sigframe *frame;
+> > +     struct rt_sigframe __user *frame;
+> >       int err = 0;
+> >
+> >       frame = get_sigframe(ksig, regs, sizeof(*frame));
+>
+> Minor nit: might make sense to separate annotations (here, on nios2, etc.) from the rest...
 
-Isn't it worth Cc'ing stable@vger.kernel.org here?
+Done.
 
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> ---
->   arch/mips/kernel/smp.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+> > -}
+> > -
+> > -static inline int access_ok(const void __user * addr, unsigned long size)
+> > -{
+> > -     return 1;
+> > -}
+> > +#define __range_not_ok(addr, size, limit) (!__access_ok(addr, size))
+>
+> is really wrong.  For sparc64, access_ok() should always be true.
+> This __range_not_ok() thing is used *only* for valid_user_frame() in
+> arch/sparc/kernel/perf_event.c - it's not a part of normal access_ok()
+> there.
+>
+> sparc64 has separate address spaces for kernel and for userland; access_ok()
+> had never been useful there.
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Ok, fixed as well now. I had the access_ok() bit right, the definition just
+moved around here so it comes before the #include, but I missed the
+bit about __range_not_ok(), which I have now reverted back to the
+correct version in my tree.
 
+        Arnd
