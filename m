@@ -2,184 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39474B3F80
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 03:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240474B4184
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 06:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239457AbiBNCbt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 13 Feb 2022 21:31:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45728 "EHLO
+        id S234790AbiBNFyU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Feb 2022 00:54:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239501AbiBNCbj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 13 Feb 2022 21:31:39 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C307555BCF;
-        Sun, 13 Feb 2022 18:31:25 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C3EAED1;
-        Sun, 13 Feb 2022 18:31:25 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.47.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EF64B3F718;
-        Sun, 13 Feb 2022 18:31:22 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org,
+        with ESMTP id S232505AbiBNFyT (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 00:54:19 -0500
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724F95005C;
+        Sun, 13 Feb 2022 21:54:12 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id C8E14580250;
+        Mon, 14 Feb 2022 00:54:09 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 14 Feb 2022 00:54:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=7G1lu+Rs8krLJ/
+        ey20PWYfJYeLvb+/uRN91S0nKBhFA=; b=zJHdmFpN/e/OJdqwKifAMyFVTpteDm
+        Okgo/yjwGIcpIo3hy4N2PRAolI2CJWLdxdobtD6LAUfY7NAgxy63NcyNJJSu49gv
+        220erR8Q6vPwDG3K5oIzw4Hi75qhds8OG4BE6+EMMU9SO4y4sGyjxnvlE6QIC1oN
+        Rcmcc7KdBcUqHDphMWsnzYiCCPFsWdXZdufoDgE6jfwIzgrB3kbsdbWJlaz+1Dnp
+        fL8tst1uzkVNYFPsdsi6fZqmLQIhHmcRnm2TidDbdPks9ENOGt5yD0qwDGR22aAv
+        UG9EBDFHwBBWZwZLqjSYEY4TLcq0B+uU7W48akP8N5CQoLyUzu7lfEQg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=7G1lu+Rs8krLJ/ey20PWYfJYeLvb+/uRN91S0nKBh
+        FA=; b=Cvwydq+wnq3Hzm9BrFnHlgK86hB8Cl7f6wb90EbKyok6ldYahY5HCKYI+
+        mocig9T8pQ2IRMMcHgkm2Drt3c4BYugPmw++Ykm2o2/7UN7o2KPD8eruLmrQ2nUQ
+        vGvsJV4fr/0jLpwwgSrit13XJpRmwe9dwcNmfl7nm65Wzi21psfwJTbApOSxLVwz
+        q9QQg84BiawRIAykblueIWmrBUVYGZx/NjGUI494P1pDVbRmrY6P+sQaJ8GdK5Ve
+        X0Aeu3f3w4QN3WnVfisqQa3nAAjdDChHUJfGzxj2i9efa9DtInCzGgiAbrLEMTsz
+        QXWyfdQvdf6LqOkSiup8EyaC8URLA==
+X-ME-Sender: <xms:gO4JYmVkUDIw-TmSNyP-uYrXQEZ6sa0sdLzpahEl7nXqN14QFZo6Iw>
+    <xme:gO4JYimZfxFsyYrfHs8oiKFrAOI-7j4u1Mq0Fo2Oep80VlWDmBQFGDC_GJJf0yvpc
+    FbebeRHiWu8NVSWlvE>
+X-ME-Received: <xmr:gO4JYqZkG85YzKfCyoeGZMjP1arMjHFNWzWGiI7OuEOyj1ZJKNTPVvp4h2WXFLs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjedugdekkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfhfhfgjtgfgsehtkeertddtfeejnecuhfhrohhmpeflihgrgihu
+    nhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepheeiuddvvefhkeejfedttdekieethfdukedvieeuueelgfelieej
+    geehvdekudelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:gO4JYtVqAmCKxJ13watKGjz3LW7X3ztU7BHdcrEWYxiyb55YoGiQzA>
+    <xmx:gO4JYgmfonsGJ1mZwsQEqAfYdIri49t64ViQ7dnBz9Lzc_tVhQavNQ>
+    <xmx:gO4JYidpUqqJo-QziOaNhambD0tDI1XwUwhcr0NN1ue335KMVor7HQ>
+    <xmx:ge4JYqFR_fLxkl3mGl74OWIpn5adHaquvTV4RpEQpXATbx5ytSAnVQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Feb 2022 00:54:05 -0500 (EST)
+Message-ID: <380d93a4-6f36-00d2-6cd3-e4428534cbb1@flygoat.com>
+Date:   Mon, 14 Feb 2022 05:54:03 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v7 0/7] drm/lsdc: add drm driver for loongson display
+ controller
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 07/30] mips/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 14 Feb 2022 08:00:30 +0530
-Message-Id: <1644805853-21338-8-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
-References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220213141649.1115987-1-15330273260@189.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20220213141649.1115987-1-15330273260@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This defines and exports a platform specific custom vm_get_page_prot() via
-subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-macros can be dropped which are no longer needed.
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/mips/Kconfig               |  1 +
- arch/mips/include/asm/pgtable.h | 22 ------------
- arch/mips/mm/cache.c            | 60 +++++++++++++++++++--------------
- 3 files changed, 36 insertions(+), 47 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 058446f01487..fcbfc52a1567 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -13,6 +13,7 @@ config MIPS
- 	select ARCH_HAS_STRNLEN_USER
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-+	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_SUPPORTS_UPROBES
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 7b8037f25d9e..bf193ad4f195 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -41,28 +41,6 @@ struct vm_area_struct;
-  * by reasonable means..
-  */
- 
--/*
-- * Dummy values to fill the table in mmap.c
-- * The real values will be generated at runtime
-- */
--#define __P000 __pgprot(0)
--#define __P001 __pgprot(0)
--#define __P010 __pgprot(0)
--#define __P011 __pgprot(0)
--#define __P100 __pgprot(0)
--#define __P101 __pgprot(0)
--#define __P110 __pgprot(0)
--#define __P111 __pgprot(0)
--
--#define __S000 __pgprot(0)
--#define __S001 __pgprot(0)
--#define __S010 __pgprot(0)
--#define __S011 __pgprot(0)
--#define __S100 __pgprot(0)
--#define __S101 __pgprot(0)
--#define __S110 __pgprot(0)
--#define __S111 __pgprot(0)
--
- extern unsigned long _page_cachable_default;
- extern void __update_cache(unsigned long address, pte_t pte);
- 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index 830ab91e574f..9f33ce4fb105 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -159,30 +159,6 @@ EXPORT_SYMBOL(_page_cachable_default);
- 
- #define PM(p)	__pgprot(_page_cachable_default | (p))
- 
--static inline void setup_protection_map(void)
--{
--	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[4]  = PM(_PAGE_PRESENT);
--	protection_map[5]  = PM(_PAGE_PRESENT);
--	protection_map[6]  = PM(_PAGE_PRESENT);
--	protection_map[7]  = PM(_PAGE_PRESENT);
--
--	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
--				_PAGE_NO_READ);
--	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
--	protection_map[12] = PM(_PAGE_PRESENT);
--	protection_map[13] = PM(_PAGE_PRESENT);
--	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
--	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
--}
--
--#undef PM
--
- void cpu_cache_init(void)
- {
- 	if (cpu_has_3k_cache) {
-@@ -206,6 +182,40 @@ void cpu_cache_init(void)
- 
- 		octeon_cache_init();
- 	}
-+}
- 
--	setup_protection_map();
-+pgprot_t vm_get_page_prot(unsigned long vm_flags)
-+{
-+	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-+	case VM_NONE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	case VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	case VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	case VM_WRITE | VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	case VM_EXEC:
-+	case VM_EXEC | VM_READ:
-+	case VM_EXEC | VM_WRITE:
-+	case VM_EXEC | VM_WRITE | VM_READ:
-+		return PM(_PAGE_PRESENT);
-+	case VM_SHARED:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	case VM_SHARED | VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	case VM_SHARED | VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
-+	case VM_SHARED | VM_WRITE | VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
-+	case VM_SHARED | VM_EXEC:
-+	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PM(_PAGE_PRESENT);
-+	case VM_SHARED | VM_EXEC | VM_WRITE:
-+	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_WRITE);
-+	default:
-+		BUILD_BUG();
-+	}
- }
-+EXPORT_SYMBOL(vm_get_page_prot);
--- 
-2.25.1
+在 2022/2/13 14:16, Sui Jingfeng 写道:
+> There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+> bridge chip, the DC is a PCI device in those chips. It has two display
+> pipes but with only one hardware cursor. Each way has a DVO interface
+> which provide RGB888 signals, vertical & horizontal synchronisations,
+> data enable and the pixel clock. Each CRTC is able to scanout from
+> 1920x1080 resolution at 60Hz. The maxmium resolution is 2048x2048
+> according to the hardware spec.
 
+Hi Jiangfeng,
+
+I see you added dts for those boards, but I didn't see you wire up them
+in Makefile and code? How can you use them in present systems?
+
+I guess to make those dts work for general all-in-one kernel, what you
+need to do is, for example Lemota A1901:
+
+1. Add __dtb_lemote_a1901 to builtin_dtbs.h
+
+2. Wire up with something like:
+
+if (!strcmp("LEMOTE-/LS3A4000/-7A1000-1w-V01-pc", eboard->name)
+     loongson_fdt_blob = __dtb_lemote_a1901
+
+In arch/mips/loongson64/env.c.
+
+Thanks.
+- Jiaxun
