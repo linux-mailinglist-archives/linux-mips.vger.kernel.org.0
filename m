@@ -2,125 +2,110 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566614B5D74
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 23:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED684B5DEB
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 23:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiBNWNu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Feb 2022 17:13:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60730 "EHLO
+        id S232009AbiBNWxR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Feb 2022 17:53:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbiBNWNt (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 17:13:49 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDCA813FACF
-        for <linux-mips@vger.kernel.org>; Mon, 14 Feb 2022 14:13:39 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-3-0IuFZHXpM1-VcUsNfepTpQ-1; Mon, 14 Feb 2022 22:13:36 +0000
-X-MC-Unique: 0IuFZHXpM1-VcUsNfepTpQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 14 Feb 2022 22:13:34 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 14 Feb 2022 22:13:34 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>, Rich Felker <dalias@libc.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
+        with ESMTP id S232000AbiBNWxQ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 17:53:16 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACCC171870;
+        Mon, 14 Feb 2022 14:53:07 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id AF0BF580632;
+        Mon, 14 Feb 2022 17:53:04 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 14 Feb 2022 17:53:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=e2LfV2BcYFTZ6ZIg8
+        FOTVm2MpIs9idDpZ8R+EsQHXrs=; b=SJdNeO/8jyTfLiWOckcAG2OHGKCIILKot
+        CoUd+ViU7KAYtLt39PVDcb/IGuv6zV7lLNGGyCe8EGuQ5DurWAtyc+59koNFynFb
+        Vax9tANM2zkhCcUoof6TNS/nhOKqyPS+Hw3tsgsfWgJvrvYRq/oTiaPhFIsCZ3gq
+        572A76x7uTT/SQOWr2a+qXWcnzfFPlN8I/AlTAP67o6ZCB+w+xPm/B5psHno61aJ
+        DCH/hrkY5RKmleyp5ih42WMsScPaotRe9Unr3WD7ZeSnt0m2dNzPfz999KUbozwI
+        V020ATKE/pSE4MZC8o1aHNCuKDsllmkkIJSgA7ad0fRyvnrt2DTiw==
+X-ME-Sender: <xms:T90KYtUsU1i8H8oKgKHJ6zYGcswaPP0J8WgFAclau0XetWuIQzG0mw>
+    <xme:T90KYtmQA6gxwJzCjpgsGZ91IZLbkRkK9l-KZyxb5ryxN91ZuejBSqStpdrtODbHF
+    GifMxA7HMTM-t1YzjE>
+X-ME-Received: <xmr:T90KYpb6E2tmhE99twMc1QbFpCxPqjw62-HdwNAwXMsB5Z1t4aNo3u9CZxAFYhuTPi2ZXSZxw3FS5jdDrwiRWsSOAlcaid0NeVA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeefgddtfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcuvfhh
+    rghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtth
+    gvrhhnpeffudfhgeefvdeitedugfelueegheekkeefveffhfeiveetledvhfdtveffteeu
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfth
+    hhrghinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:T90KYgXiz-V4ond-i7eX1uAvA0i9WOmsdnB3aAw0H2uwKsVWoxeXRw>
+    <xmx:T90KYnl-c428-0I3-b8b87OVnAgj1cO8HsHp8BhvVhhh6vh8QeegDA>
+    <xmx:T90KYtcrQAQMyH87a2CMfgA9HSwqEFEk9lDpm9-zJ546bLNuMFdolw>
+    <xmx:UN0KYnHmkgdFIoGzRmz69Z6jzOvFrkcKI8C9eYQOxPNBA0jBhzy_3Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Feb 2022 17:53:00 -0500 (EST)
+Date:   Tue, 15 Feb 2022 09:53:11 +1100 (AEDT)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+cc:     Joshua Kinard <kumba@gentoo.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         linux-riscv <linux-riscv@lists.infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "Brian Cain" <bcain@codeaurora.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        Richard Weinberger <richard@nod.at>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Stafford Horne <shorne@gmail.com>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        David Miller <davem@davemloft.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: RE: [PATCH 04/14] x86: use more conventional access_ok() definition
-Thread-Topic: [PATCH 04/14] x86: use more conventional access_ok() definition
-Thread-Index: AQHYIeHe9n+22PBgtUWxf89GrdwkK6yTmyQw
-Date:   Mon, 14 Feb 2022 22:13:34 +0000
-Message-ID: <2dda07f893cb4ef9b5ea2265adccb98f@AcuMS.aculab.com>
-References: <20220214163452.1568807-1-arnd@kernel.org>
- <20220214163452.1568807-5-arnd@kernel.org> <YgqLFYqIqkIsNC92@infradead.org>
- <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
- <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
- <CAHk-=wgYu67OwP4LhcrPdDVxv2mOsx-Xsc2DKoVW6GZwKFtOYQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgYu67OwP4LhcrPdDVxv2mOsx-Xsc2DKoVW6GZwKFtOYQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
+In-Reply-To: <CAHmME9ooEbgiv3DRk87ei+rUoVNMJthY7UuG_xCgm=kfMZAajw@mail.gmail.com>
+Message-ID: <b43cc58-5ace-11e1-1a11-6cca42f65e7@linux-m68k.org>
+References: <20220211210757.612595-1-Jason@zx2c4.com> <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org> <CAHmME9ooEbgiv3DRk87ei+rUoVNMJthY7UuG_xCgm=kfMZAajw@mail.gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMTQgRmVicnVhcnkgMjAyMiAyMDoyNA0KPiA+
-DQo+ID4geDg2LTY0IGhhcyBhbHdheXMoKikgdXNlZCBUQVNLX1NJWkVfTUFYIGZvciBhY2Nlc3Nf
-b2soKSwgYW5kIHRoZQ0KPiA+IGdldF91c2VyKCkgYXNzZW1ibGVyIGltcGxlbWVudGF0aW9uIGRv
-ZXMgdGhlIHNhbWUuDQo+IA0KPiBTaWRlIG5vdGU6IHdlIGNvdWxkIGp1c3QgY2hlY2sgdGhlIHNp
-Z24gYml0IGluc3RlYWQsIGFuZCBhdm9pZCBiaWcNCj4gY29uc3RhbnRzIHRoYXQgd2F5Lg0KDQpU
-aGUgY2hlYXAgdGVzdCBmb3IgbW9zdCA2NGJpdCBpcyAoYWRkciB8IHNpemUpID4+IDYyICE9IDAu
-DQoNCkkgZGlkIHNvbWUgdGVzdHMgbGFzdCB3ZWVrIGFuZCB0aGUgY29tcGlsZXJzIGNvcnJlY3Rs
-eSBvcHRpbWlzZQ0Kb3V0IGNvbnN0YW50IHNpemUuDQoNCkRvZXNuJ3Qgc3BhcmM2NCBzdGlsbCBu
-ZWVkIGEgd3JhcCB0ZXN0Pw0KT3IgaXMgdGhhdCBhc3N1bWVkIGJlY2F1c2UgdGhlcmUgaXMgYWx3
-YXlzIGFuIHVubWFwcGVkIHBhZ2UNCmFuZCB0cmFuc2ZlciBhcmUgJ2FkZXF1YXRlbHknIGRvbmUg
-b24gaW5jcmVhc2luZyBhZGRyZXNzZXM/DQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJl
-c3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsx
-IDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Mon, 14 Feb 2022, Jason A. Donenfeld wrote:
 
+> 
+> So the only systems we're actually talking about without a good cycle 
+> counter are non-Amiga m68k? If so, that'd be a pretty terrific finding. 
+> It'd mean that this idea can move forward, and we only need to worry 
+> about some m68k museum pieces with misconfigured userspaces...
+> 
+
+A processor cycle counter is helpful when mounting a timing attack but my 
+museum pieces don't suffer from that problem.
+
+Also, they are and always were immune from spectre, meltdown etc.
+
+You misrepresent those secure hardware designs as being problematic, just 
+because of some bad advice on some random blogs about RNG API usage.
+
+Do you have a phone that no longer gets updates from its vendor? Have you 
+tried patching it?
+
+Your insecure museum pieces are the real problem, not my secure ones.
