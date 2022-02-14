@@ -2,113 +2,111 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477D54B4C5B
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 11:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60A44B4D1B
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 12:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348295AbiBNKkU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 14 Feb 2022 05:40:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49886 "EHLO
+        id S1349008AbiBNKpD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Feb 2022 05:45:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348882AbiBNKji (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 05:39:38 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61DEA9965;
-        Mon, 14 Feb 2022 02:04:01 -0800 (PST)
-Date:   Mon, 14 Feb 2022 10:03:01 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 06/23] drm/ingenic: Make use of the helper
- component_compare_of
-To:     Yong Wu <yong.wu@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        with ESMTP id S1348656AbiBNKo4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 05:44:56 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1998AB86A;
+        Mon, 14 Feb 2022 02:07:30 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.43:35964.414113341
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id CD6CD10029D;
+        Mon, 14 Feb 2022 18:07:27 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id 2ce5d89c9d2b4751bf53523b557ba63b for jiaxun.yang@flygoat.com;
+        Mon, 14 Feb 2022 18:07:29 CST
+X-Transaction-ID: 2ce5d89c9d2b4751bf53523b557ba63b
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <79f30dcb-48f5-e8b4-7cdd-770dd30d4896@189.cn>
+Date:   Mon, 14 Feb 2022 18:07:26 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v7 0/7] drm/lsdc: add drm driver for loongson display
+ controller
+Content-Language: en-US
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        James Wang <james.qian.wang@arm.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        iommu@lists.linux-foundation.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-mediatek@lists.infradead.org,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tfiga@chromium.org>, srv_heupstream@mediatek.com,
-        Rob Clark <robdclark@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-mips@vger.kernel.org
-Message-Id: <19HA7R.NEIIBC5SNORY1@crapouillou.net>
-In-Reply-To: <20220214060819.7334-7-yong.wu@mediatek.com>
-References: <20220214060819.7334-1-yong.wu@mediatek.com>
-        <20220214060819.7334-7-yong.wu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220213141649.1115987-1-15330273260@189.cn>
+ <380d93a4-6f36-00d2-6cd3-e4428534cbb1@flygoat.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <380d93a4-6f36-00d2-6cd3-e4428534cbb1@flygoat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi,
 
-Le lun., f�vr. 14 2022 at 14:08:02 +0800, Yong Wu 
-<yong.wu@mediatek.com> a �crit :
-> Use the common compare helper from component.
-> 
-> Cc: Paul Cercueil <paul@crapouillou.net>
-> Cc: linux-mips@vger.kernel.org
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+On 2022/2/14 13:54, Jiaxun Yang wrote:
+>
+>
+> 在 2022/2/13 14:16, Sui Jingfeng 写道:
+>> There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+>> bridge chip, the DC is a PCI device in those chips. It has two display
+>> pipes but with only one hardware cursor. Each way has a DVO interface
+>> which provide RGB888 signals, vertical & horizontal synchronisations,
+>> data enable and the pixel clock. Each CRTC is able to scanout from
+>> 1920x1080 resolution at 60Hz. The maxmium resolution is 2048x2048
+>> according to the hardware spec.
+>
+> Hi Jiangfeng,
+>
+> I see you added dts for those boards, but I didn't see you wire up them
+> in Makefile and code? How can you use them in present systems?
+>
+> I guess to make those dts work for general all-in-one kernel, what you
+> need to do is, for example Lemota A1901:
+>
+> 1. Add __dtb_lemote_a1901 to builtin_dtbs.h
+>
+> 2. Wire up with something like:
+>
+> if (!strcmp("LEMOTE-/LS3A4000/-7A1000-1w-V01-pc", eboard->name)
+>     loongson_fdt_blob = __dtb_lemote_a1901
+>
+> In arch/mips/loongson64/env.c.
+>
+> Thanks.
+> - Jiaxun
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> ---
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
-> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> index b4943a56be09..23b8f012b418 100644
-> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> @@ -1322,11 +1322,6 @@ static int 
-> ingenic_drm_bind_with_components(struct device *dev)
->  	return ingenic_drm_bind(dev, true);
->  }
-> 
-> -static int compare_of(struct device *dev, void *data)
-> -{
-> -	return dev->of_node == data;
-> -}
-> -
->  static void ingenic_drm_unbind(struct device *dev)
->  {
->  	struct ingenic_drm *priv = dev_get_drvdata(dev);
-> @@ -1360,7 +1355,7 @@ static int ingenic_drm_probe(struct 
-> platform_device *pdev)
->  	if (!np)
->  		return ingenic_drm_bind(dev, false);
-> 
-> -	drm_of_component_match_add(dev, &match, compare_of, np);
-> +	drm_of_component_match_add(dev, &match, component_compare_of, np);
->  	of_node_put(np);
-> 
->  	return component_master_add_with_match(dev, &ingenic_master_ops, 
-> match);
-> --
-> 2.18.0
-> 
-
+For most board, this driver is ready to be use out of box.
+Device tree is for supplement purpose.
 
