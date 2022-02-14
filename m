@@ -2,30 +2,29 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBC14B4F63
+	by mail.lfdr.de (Postfix) with ESMTP id EC1EF4B4F65
 	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 12:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348011AbiBNLwZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 14 Feb 2022 06:52:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54504 "EHLO
+        id S235729AbiBNLxg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 14 Feb 2022 06:53:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235729AbiBNLwZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 06:52:25 -0500
+        with ESMTP id S242465AbiBNLxf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 06:53:35 -0500
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD44C34;
-        Mon, 14 Feb 2022 03:52:17 -0800 (PST)
-Date:   Mon, 14 Feb 2022 11:52:07 +0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ED8C35;
+        Mon, 14 Feb 2022 03:53:28 -0800 (PST)
+Date:   Mon, 14 Feb 2022 11:52:58 +0000
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000
- SoC
+Subject: Re: [PATCH v2 1/2] dts: x1000: Fix missing TCU clock in tcu device
+ node
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <VAMA7R.PG2P5IFR07772@crapouillou.net>
-In-Reply-To: <20220212150927.39513-2-aidanmacdonald.0x0@gmail.com>
+Message-Id: <ACMA7R.XSUTVF0NI87S3@crapouillou.net>
+In-Reply-To: <20220212150927.39513-1-aidanmacdonald.0x0@gmail.com>
 References: <20220212150927.39513-1-aidanmacdonald.0x0@gmail.com>
-        <20220212150927.39513-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: 8BIT
@@ -38,63 +37,46 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Aidan,
+Hi,
 
-Le sam., févr. 12 2022 at 15:09:28 +0000, Aidan MacDonald 
+Le sam., févr. 12 2022 at 15:09:27 +0000, Aidan MacDonald 
 <aidanmacdonald.0x0@gmail.com> a écrit :
-> The X1000 does have a TCU clock gate, so pass it to the driver.
-> Without this the TCU can be gated automatically, which prevents
-> timers from running.
+> This should've been present all along, but was omitted due to
+> a mistake in the TCU driver.
 > 
-> Fixes: dc6a81c3382f74fe ("clk: Ingenic: Add support for TCU of 
-> X1000.")
 > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
-> I've just realized, maybe this is an ABI break. Now that the TCU 
-> clock is
-> required, the driver probe will fail if given an old device tree 
-> which is
-> missing that clock. Is it necessary to add a hack of some sort to 
-> support
-> the old device tree?
 
-Yes, that's a valid concern. The driver should then support the TCU 
-clock being missing (but only for the x1000), with a comment that 
-explain why the workaround exists.
-
-You can use of_clk_get_by_name(), and if you get -EINVAL and the 
-workaround flag is set, allow the driver to continue. Also change the 
-checks for (tcu->soc_info->has_tcu_clk) in the function's cleanup to 
-checks for (tcu->clk) so that the clk_disable_unprepare/clk_put are 
-only done on a valid pointer.
-
-Note that the x1830 also has a TCU clock that's not specified in the 
-device tree; so you could add a patch similar to your current [1/2] 
-that adds it to x1830.dtsi as well. It uses the "ingenic,x1000-tcu" 
-string as fallback, so the driver wouldn't have to be modified further.
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
 Cheers,
 -Paul
 
+> ---
+> v1 -> v2: 
+> https://lore.kernel.org/linux-mips/20220209230145.18943-1-aidanmacdonald.0x0@gmail.com/
 > 
->  drivers/clk/ingenic/tcu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  * Split DTS changes to separate patch.
 > 
-> diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-> index 77acfbeb4830..9c86043f673a 100644
-> --- a/drivers/clk/ingenic/tcu.c
-> +++ b/drivers/clk/ingenic/tcu.c
-> @@ -320,7 +320,7 @@ static const struct ingenic_soc_info 
-> jz4770_soc_info = {
->  static const struct ingenic_soc_info x1000_soc_info = {
->  	.num_channels = 8,
->  	.has_ost = false, /* X1000 has OST, but it not belong TCU */
-> -	.has_tcu_clk = false,
-> +	.has_tcu_clk = true,
->  };
+>  arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
->  static const struct of_device_id __maybe_unused 
-> ingenic_tcu_of_match[] __initconst = {
+> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi 
+> b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> index 8bd27edef216..c69df8eb158e 100644
+> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> @@ -111,8 +111,9 @@ tcu: timer@10002000 {
+> 
+>  		clocks = <&cgu X1000_CLK_RTCLK>,
+>  			 <&cgu X1000_CLK_EXCLK>,
+> -			 <&cgu X1000_CLK_PCLK>;
+> -		clock-names = "rtc", "ext", "pclk";
+> +			 <&cgu X1000_CLK_PCLK>,
+> +			 <&cgu X1000_CLK_TCU>;
+> +		clock-names = "rtc", "ext", "pclk", "tcu";
+> 
+>  		interrupt-controller;
+>  		#interrupt-cells = <1>;
 > --
 > 2.34.1
 > 
