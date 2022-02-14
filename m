@@ -2,134 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3AA4B58B6
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 18:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD064B5A63
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Feb 2022 20:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345679AbiBNRk7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Feb 2022 12:40:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60812 "EHLO
+        id S229524AbiBNTFL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Feb 2022 14:05:11 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348450AbiBNRk6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 12:40:58 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3A565438
-        for <linux-mips@vger.kernel.org>; Mon, 14 Feb 2022 09:40:49 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id qk11so18640377ejb.2
-        for <linux-mips@vger.kernel.org>; Mon, 14 Feb 2022 09:40:49 -0800 (PST)
+        with ESMTP id S229482AbiBNTE4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Feb 2022 14:04:56 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BD28EB5C;
+        Mon, 14 Feb 2022 11:04:38 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id u12so11249892plf.13;
+        Mon, 14 Feb 2022 11:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hl2tx2/b0j1as4iPc8br7ak6VbssTN3Lkaa01qKImp4=;
-        b=B3+89vMVlD+t/jr4Ir3J5heCAGLy+8O/Bfqv5DSjHS7vGRacFAUCCs0TF2tOD5+IOJ
-         DARHbhMwmXg8IKTGNN5wyW1UIWJ3dy3zDkUXnMSy6euD4EH/SAawjrYbWaSs+0JtxWja
-         ZBOb3OkzZ9V/CSYGxjkJVHb89skxzNvZve0yg=
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5/DaZmV9acYDCTgPotmTjkv5wdpuSuU2XjrOsJthBBQ=;
+        b=nWQxV8bwhbOD3UF50A117xCVxj+SdTH8j0ePhfp/vJCb8IjI9vBWg6cxXRzKNHYnA2
+         cWK3cz+qshBj6PDjeKoogB7Z176jQ/iWDg9drN0TMGnqsZjErTE8Y0fhjM2HuB0hTZ7k
+         WvoWhgELlUECaUOdFHVDVUNSFL9XTETtsx/yiLVvgbMzOxc99n7KNkG87N5dS1e59o/P
+         tG7l3iVWZoA37J/EBljjE3AvYVBP4USRavxZz22fUyPo1Fyt++TsRu3eGtHrwG5tEj67
+         0nlOi1QUyysEhYHzoj7rdRxXZjvOaS5yt/bFcOiBA9oNZ6VC7M2mvOTMw8FnY9P287O5
+         iONA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hl2tx2/b0j1as4iPc8br7ak6VbssTN3Lkaa01qKImp4=;
-        b=W1Q9xYGloHrfTiekLCsDo3fL1QyUsbTZkMP60jy/jU4KPYw32XxagiEFAHEHqThGHd
-         wkI9PEzVGSVrTwZgM9yuq/ZgFZubt4Ob8p//trGbspP4djUHJA/Hgf/pIf0goLTxghkg
-         Kzvx9OVvKLkWXFEub1+PCZwQbx2FnfL/DIb28kCsoeYk82lXTlMwFe67nWqrlu2LeaGp
-         qzI9QbIB9Y2mxhRJRakU5BNDq0t5iAXE6Z7MmZfqh6K3DdmHAWurAxi1f/SkhwcNyzEs
-         qctpHzF5SsX6N5fhfTyN+CTESBblU4Jd1fxXgsn62EdABbotF42ls5e3mR8xM8pY8p0T
-         JlrQ==
-X-Gm-Message-State: AOAM530VhoIoBpSPIL7WwFm3sf6It0pWxW2ry8IVsZnsIZskiLFARNiN
-        8Ky6qUZn6JmM61eKJS5UwWaSTqPyEfGwGh5fLzs=
-X-Google-Smtp-Source: ABdhPJw9GGEXPsPRidnutGNqhmiTrKbFwxrI94b79sOPLY+oh2fRInFzwFsD2Ropc3Wd4J+lM5dVPw==
-X-Received: by 2002:a17:906:519c:: with SMTP id y28mr515587ejk.567.1644860447936;
-        Mon, 14 Feb 2022 09:40:47 -0800 (PST)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id q8sm4281629edd.10.2022.02.14.09.40.47
-        for <linux-mips@vger.kernel.org>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5/DaZmV9acYDCTgPotmTjkv5wdpuSuU2XjrOsJthBBQ=;
+        b=tJUuEKtMIdqTVgAUrnvnoQwjRRJp/4POslhuKcwRFyixzE5iEinnZQGYtcILC2AMOf
+         cuUqg1WycPMxGsfXcx73LMuQ/0nwkbmVhsQgTH31Q2En1mQI9nhHHg8w3NkazhXxCrk7
+         SFvFgdoi2XIDvlPQMLbD0pLdLu2gKcbTAFMm0SC3TQ67vHgnV5PDk3sFr1OuuB8tNW/P
+         UsOw7jJtz+NwT/fwl3j7WdeYDXtMNvVzsFsw/tZs0oO1okXQXfkI/bLTSOfZI2FaT8SY
+         +kS3dGKBq07bQpEBmTUQSvO7KrXbsWNej2gm2bvGMsUHfxVIUtgwHDb+wWWOb+DqnNfY
+         FS3g==
+X-Gm-Message-State: AOAM531/hdXLCQO+cjC9+xLAnT6K5wvT+lPrjTdXoLv705LiShcU7POZ
+        8cCjSmLFMBEHZWZRpugVnLs=
+X-Google-Smtp-Source: ABdhPJwoikppkKPhBbf43zKKC+nQQi8QmN17ON2BtIKBG/X7Qj3NKBvQo5nyXCW7kCKLxOljb9sS1Q==
+X-Received: by 2002:a17:90a:8c8b:: with SMTP id b11mr16258736pjo.197.1644865217384;
+        Mon, 14 Feb 2022 11:00:17 -0800 (PST)
+Received: from [192.168.1.35] (71.red-83-50-68.dynamicip.rima-tde.net. [83.50.68.71])
+        by smtp.gmail.com with ESMTPSA id d8sm3507592pjr.29.2022.02.14.11.00.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 09:40:47 -0800 (PST)
-Received: by mail-wr1-f41.google.com with SMTP id s10so14573152wrb.1
-        for <linux-mips@vger.kernel.org>; Mon, 14 Feb 2022 09:40:47 -0800 (PST)
-X-Received: by 2002:a19:4302:: with SMTP id q2mr49672lfa.449.1644860131952;
- Mon, 14 Feb 2022 09:35:31 -0800 (PST)
+        Mon, 14 Feb 2022 11:00:17 -0800 (PST)
+Sender: =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= 
+        <philippe.mathieu.daude@gmail.com>
+Message-ID: <5324be35-5c49-31c1-3f9a-267a5dae8c84@amsat.org>
+Date:   Mon, 14 Feb 2022 20:00:12 +0100
 MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org>
-In-Reply-To: <20220214163452.1568807-1-arnd@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 14 Feb 2022 09:35:15 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whXYWoP6of7js=f4zov62on97mNFRSVRWhY75WoGM6CoQ@mail.gmail.com>
-Message-ID: <CAHk-=whXYWoP6of7js=f4zov62on97mNFRSVRWhY75WoGM6CoQ@mail.gmail.com>
-Subject: Re: [PATCH 00/14] clean up asm/uaccess.h, kill set_fs for good
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps
+ earlier
+Content-Language: en-US
+To:     Alexander Lobakin <alobakin@pm.me>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-hexagon <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        openrisc@lists.librecores.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220212221347.442070-1-alobakin@pm.me>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+In-Reply-To: <20220212221347.442070-1-alobakin@pm.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 8:35 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> I did a patch for microblaze at some point, which turned out to be fairly
-> generic, and now ported it to most other architectures, using new generic
-> implementations of access_ok() and __{get,put}_kernel_nocheck().
+On 12/2/22 23:21, Alexander Lobakin wrote:
+> After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
+> 2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
+> the following:
+> 
+> [    0.025698] CPU1 revision is: 0001a120 (MIPS interAptiv (multi))
+> [    0.048183] ------------[ cut here ]------------
+> [    0.048187] WARNING: CPU: 1 PID: 0 at kernel/sched/core.c:6025 sched_core_cpu_starting+0x198/0x240
+> [    0.048220] Modules linked in:
+> [    0.048233] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc3+ #35 b7b319f24073fd9a3c2aa7ad15fb7993eec0b26f
+> [    0.048247] Stack : 817f0000 00000004 327804c8 810eb050 00000000 00000004 00000000 c314fdd1
+> [    0.048278]         830cbd64 819c0000 81800000 817f0000 83070bf4 00000001 830cbd08 00000000
+> [    0.048307]         00000000 00000000 815fcbc4 00000000 00000000 00000000 00000000 00000000
+> [    0.048334]         00000000 00000000 00000000 00000000 817f0000 00000000 00000000 817f6f34
+> [    0.048361]         817f0000 818a3c00 817f0000 00000004 00000000 00000000 4dc33260 0018c933
+> [    0.048389]         ...
+> [    0.048396] Call Trace:
+> [    0.048399] [<8105a7bc>] show_stack+0x3c/0x140
+> [    0.048424] [<8131c2a0>] dump_stack_lvl+0x60/0x80
+> [    0.048440] [<8108b5c0>] __warn+0xc0/0xf4
+> [    0.048454] [<8108b658>] warn_slowpath_fmt+0x64/0x10c
+> [    0.048467] [<810bd418>] sched_core_cpu_starting+0x198/0x240
+> [    0.048483] [<810c6514>] sched_cpu_starting+0x14/0x80
+> [    0.048497] [<8108c0f8>] cpuhp_invoke_callback_range+0x78/0x140
+> [    0.048510] [<8108d914>] notify_cpu_starting+0x94/0x140
+> [    0.048523] [<8106593c>] start_secondary+0xbc/0x280
+> [    0.048539]
+> [    0.048543] ---[ end trace 0000000000000000 ]---
+> [    0.048636] Synchronize counters for CPU 1: done.
+> 
+> ...for each but CPU 0/boot.
+> Basic debug printks right before the mentioned line say:
+> 
+> [    0.048170] CPU: 1, smt_mask:
+> 
+> So smt_mask, which is sibling mask obviously, is empty when entering
+> the function.
+> This is critical, as sched_core_cpu_starting() calculates
+> core-scheduling parameters only once per CPU start, and it's crucial
+> to have all the parameters filled in at that moment (at least it
+> uses cpu_smt_mask() which in fact is `&cpu_sibling_map[cpu]` on
+> MIPS).
+> 
+> A bit of debugging led me to that set_cpu_sibling_map() performing
+> the actual map calculation, was being invocated after
+> notify_cpu_start(), and exactly the latter function starts CPU HP
+> callback round (sched_core_cpu_starting() is basically a CPU HP
+> callback).
+> While the flow is same on ARM64 (maps after the notifier, although
+> before calling set_cpu_online()), x86 started calculating sibling
+> maps earlier than starting the CPU HP callbacks in Linux 4.14 (see
+> [0] for the reference). Neither me nor my brief tests couldn't find
+> any potential caveats in calculating the maps right after performing
+> delay calibration, but the WARN splat is now gone.
+> The very same debug prints now yield exactly what I expected from
+> them:
+> 
+> [    0.048433] CPU: 1, smt_mask: 0-1
+> 
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=76ce7cfe35ef
 
-Thanks for doing this.
+Isn't it worth Cc'ing stable@vger.kernel.org here?
 
-Apart from the sparc64 issue with completely separate address spaces
-(so access_ok() should always return true like Al pointed out), this
-looks excellent to me.
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
+>   arch/mips/kernel/smp.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 
-Somebody should check that there aren't other cases like sparc64, but
-let's merge this asap other than that.
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
 
-              Linus
