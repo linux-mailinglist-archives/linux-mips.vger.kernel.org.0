@@ -2,55 +2,64 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A1D4B70B1
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Feb 2022 17:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4321A4B75AE
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Feb 2022 21:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239130AbiBOOwN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Feb 2022 09:52:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33964 "EHLO
+        id S240529AbiBOQtB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Feb 2022 11:49:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237447AbiBOOvl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Feb 2022 09:51:41 -0500
-Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26FD11C7FB
-        for <linux-mips@vger.kernel.org>; Tue, 15 Feb 2022 06:50:17 -0800 (PST)
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        by mail-41103.protonmail.ch (Postfix) with ESMTPS id 4JykWy1sxWz4xgjb
-        for <linux-mips@vger.kernel.org>; Tue, 15 Feb 2022 14:49:50 +0000 (UTC)
-Authentication-Results: mail-41103.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="BDvn1o1Z"
-Date:   Tue, 15 Feb 2022 14:49:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1644936545;
-        bh=BNi3yC/9jw1c/szfUfUGT5h9vUtlRUvDAK4sFcLdjmk=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=BDvn1o1ZnCovptmLn11diWMUEAWct4RD312L8UhYymcv2YyALQ0+t4WLvihd2EiZC
-         tPc5WJekOp7nZTc3KwH24zmXXoHCubCivqzXXamMSRzo5TgUJkbYT+22j7Nu8u82Ai
-         Z99eglNVPxJLUMXHt20FU09SULmsFJkzUZZNMJXnqxMqGItr5a+HEju7xrB+xwjtHH
-         /ABhwuILabSjR0rBdRp/niEjUx8Ghyfouiy//TJCKQO2uoNzNSLWxqUpxdmehiglJ+
-         ASV2R5Klz+28noHpnpCsQBmCuQic75pIp8Y+1uWN5ADRY5i92MirLhvMCNoKobJ86+
-         f0ojLOvQR2VYg==
-To:     =?utf-8?Q?Philippe_Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps earlier
-Message-ID: <5324be35-5c49-31c1-3f9a-267a5dae8c84@amsat.org>
+        with ESMTP id S239641AbiBOQtA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Feb 2022 11:49:00 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9951AC12F9;
+        Tue, 15 Feb 2022 08:48:50 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id o10so15304125ilh.0;
+        Tue, 15 Feb 2022 08:48:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xVNa8VSn91ahuDas6Q5c0c7M86VbUIOrBrr7Lsj6DYI=;
+        b=PJDVFdbVGvtaA9kJk1qSkNbj2TZJQK5Mesv4NIHxeYbJjjsrvieJhKSRKVXt6TY5qE
+         liHaAXttXZkNvNs1PuyLiH5sYg3h7nVrZTs/mbhPPbQIEu98CvEiHYU4MoLF7eZlXo02
+         OOV2CBDh3w0126BeK/5eIbxlEmvYr4Xs8bfZaVeS9IX/k9xlrXHL/i7XSE6lOB8CsFou
+         f+HwKwGMZLBvxkr1l+9WBL6JIebLLsTnOIXNVGoFQbxPgu3BI93LHZyoT61o3C4xQj+g
+         S4onaRA3VmSZqMXHYDDXcsGNiV/OW7jzV3v/escGendjwkt2o8Ko874lbpHrzRnToXht
+         Mytw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xVNa8VSn91ahuDas6Q5c0c7M86VbUIOrBrr7Lsj6DYI=;
+        b=jH+7fT2muAmEgfCkZ2zmlChMJc3M/aBDqzpB4Yg5vTW14R+hRR7JvIbww6N7M1sLZa
+         i8FLsuXwusM++e1aOmJUNEs9em+M4AFH+csnELKBQuyxnSmD7vt627As9L0BCj/IPn1l
+         kfrE8g+jEVe8VpLXLnqPINzH/naXtonD46nHMjo7Nfy6pSOCcN7y2qv/gBZWWwD5uRhF
+         EG6kGOkc6LeshjlSpi7KdRFuzxrIoTj0YoNw+ge6tNl9MNZw/WRpJ709uVrwCgYKEJpz
+         5NFDBqRSsN505EdLEWK+kdlANiE05z7Lcn1RXjzC1WSNggbXDoftwKJvZFh5/mck1fsP
+         ZM5Q==
+X-Gm-Message-State: AOAM5308nqnrM74sDjL4/TuQoahUp7f8mlM+zGzru6oXnZ1PDHIQS+0f
+        DGeg58XX72ZEctOQJOao8JH3xN4nrWXpbBhYSdzpfgsu9uShBqd4/Eo=
+X-Google-Smtp-Source: ABdhPJzymnqvOR8CKBiej0duKzd4TqeQtGYPKBaMhp/OB51xLEndFfIOeke7AoujuH13SWODXChgu1WA4elZudT6SiM=
+X-Received: by 2002:a05:6e02:1887:: with SMTP id o7mr3086428ilu.169.1644943729176;
+ Tue, 15 Feb 2022 08:48:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+References: <20220211001345.3429572-1-gch981213@gmail.com>
+In-Reply-To: <20220211001345.3429572-1-gch981213@gmail.com>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Wed, 16 Feb 2022 00:48:38 +0800
+Message-ID: <CAJsYDVLyasPAmgxguqLznORC2SihKHRLrFFw5nHbepJvu0va3Q@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
+To:     linux-mips@vger.kernel.org
+Cc:     Rui Salvaterra <rsalvaterra@gmail.com>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,45 +67,68 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
-Date: Mon, 14 Feb 2022 20:00:12 +0100
+ Hi!
 
-> On 12/2/22 23:21, Alexander Lobakin wrote:
-> > After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
-> > 2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
-> > the following:
-> >
-
---- 8< ---
-
-> >
-> > [    0.048433] CPU: 1, smt_mask: 0-1
-> >
-> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/comm=
-it/?id=3D76ce7cfe35ef
+On Fri, Feb 11, 2022 at 8:14 AM Chuanhong Guo <gch981213@gmail.com> wrote:
 >
-> Isn't it worth Cc'ing stable@vger.kernel.org here?
-
-Probably. It doesn't have any Fixes tag (this is a fix, but the bug
-is caused not by a particular commit, rather by a combination of
-changes and code flows from the past), but it still can be
-backported, right.
-
-Thomas, should I queue a v2 with this tag added?
-
-Cc: stable@vger.kernel.org # 5.14+
-
-Or it can be picked up automatically?
-
+> It's reported that current memory detection code occasionally detects
+> larger memory under some bootloaders.
+> Current memory detection code tests whether address space wraps around
+> on KSEG0, which is unreliable because it's cached.
 >
-> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> > ---
-> >   arch/mips/kernel/smp.c | 6 +++---
-> >   1 file changed, 3 insertions(+), 3 deletions(-)
+> Rewrite memory size detection to perform the same test on KSEG1 instead.
+> While at it, this patch also does the following two things:
+> 1. use a fixed pattern instead of a random function pointer as the magic
+>    value.
+> 2. add an additional memory write and a second comparison as part of the
+>    test to prevent possible smaller memory detection result due to
+>    leftover values in memory.
 >
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
+> Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
 
-Thanks!
+I misplaced a bracket in this Fixes tag.
 
-Al
+> Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> ---
+>  arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
+>  1 file changed, 23 insertions(+), 13 deletions(-)
+>
+> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
+> index d6efffd4dd20..12c8808e0dea 100644
+> --- a/arch/mips/ralink/mt7621.c
+> +++ b/arch/mips/ralink/mt7621.c
+> @@ -22,7 +22,9 @@
+>
+>  #include "common.h"
+>
+> -static void *detect_magic __initdata = detect_memory_region;
+> +#define MT7621_MEM_TEST_PATTERN         0xaa5555aa
+> +
+> +static u32 detect_magic __initdata;
+>
+>  int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
+>  {
+> @@ -58,24 +60,32 @@ phys_addr_t mips_cpc_default_phys_base(void)
+>         panic("Cannot detect cpc address");
+>  }
+>
+> +static bool __init mt7621_addr_wraparound_test(phys_addr_t size)
+> +{
+> +       void *dm = (void *)KSEG1ADDR(&detect_magic);
+> +
+> +       if (CPHYSADDR(dm + size) >= MT7621_LOWMEM_MAX_SIZE)
+> +               return true;
+> +       __raw_writel(MT7621_MEM_TEST_PATTERN, dm);
+> +       if (__raw_readl(dm) != __raw_readl(dm + size))
+> +               return false;
+> +       __raw_writel(!MT7621_MEM_TEST_PATTERN, dm);
 
+Someone on Github notified me that this second test pattern is incorrect.
+I actually mean to use ~MT7621_MEM_TEST_PATTERN here.
+
+I'll send a v2 fixing both issues.
+
+--
+Regards,
+Chuanhong Guo
