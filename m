@@ -2,172 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE4C4B6D63
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Feb 2022 14:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A1D4B70B1
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Feb 2022 17:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238207AbiBON3R (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Feb 2022 08:29:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56582 "EHLO
+        id S239130AbiBOOwN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Feb 2022 09:52:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238253AbiBON3Q (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Feb 2022 08:29:16 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6BE6106B14
-        for <linux-mips@vger.kernel.org>; Tue, 15 Feb 2022 05:29:04 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-182-H3Rwu_w8NV6V0ZRo-LH3cg-1; Tue, 15 Feb 2022 13:29:01 +0000
-X-MC-Unique: H3Rwu_w8NV6V0ZRo-LH3cg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 15 Feb 2022 13:28:59 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 15 Feb 2022 13:28:59 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-CC:     Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        with ESMTP id S237447AbiBOOvl (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Feb 2022 09:51:41 -0500
+Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26FD11C7FB
+        for <linux-mips@vger.kernel.org>; Tue, 15 Feb 2022 06:50:17 -0800 (PST)
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail-41103.protonmail.ch (Postfix) with ESMTPS id 4JykWy1sxWz4xgjb
+        for <linux-mips@vger.kernel.org>; Tue, 15 Feb 2022 14:49:50 +0000 (UTC)
+Authentication-Results: mail-41103.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="BDvn1o1Z"
+Date:   Tue, 15 Feb 2022 14:49:00 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1644936545;
+        bh=BNi3yC/9jw1c/szfUfUGT5h9vUtlRUvDAK4sFcLdjmk=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=BDvn1o1ZnCovptmLn11diWMUEAWct4RD312L8UhYymcv2YyALQ0+t4WLvihd2EiZC
+         tPc5WJekOp7nZTc3KwH24zmXXoHCubCivqzXXamMSRzo5TgUJkbYT+22j7Nu8u82Ai
+         Z99eglNVPxJLUMXHt20FU09SULmsFJkzUZZNMJXnqxMqGItr5a+HEju7xrB+xwjtHH
+         /ABhwuILabSjR0rBdRp/niEjUx8Ghyfouiy//TJCKQO2uoNzNSLWxqUpxdmehiglJ+
+         ASV2R5Klz+28noHpnpCsQBmCuQic75pIp8Y+1uWN5ADRY5i92MirLhvMCNoKobJ86+
+         f0ojLOvQR2VYg==
+To:     =?utf-8?Q?Philippe_Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
-Subject: RE: [PATCH 09/14] m68k: drop custom __access_ok()
-Thread-Topic: [PATCH 09/14] m68k: drop custom __access_ok()
-Thread-Index: AQHYIlMtkSdfU5++r0iADsDmNo4Sd6yUlQ9w
-Date:   Tue, 15 Feb 2022 13:28:59 +0000
-Message-ID: <665a8abfa86f4b5f9a66e294a79bb531@AcuMS.aculab.com>
-References: <20220214163452.1568807-1-arnd@kernel.org>
- <20220214163452.1568807-10-arnd@kernel.org>
- <Ygr11RGjj3C9uAUg@zeniv-ca.linux.org.uk> <20220215062942.GA12551@lst.de>
- <YgtSpk0boDjsyjFK@zeniv-ca.linux.org.uk>
- <CAK8P3a0t-dnJXvXH0Mx5L-AeVQe1mYzRi0sQjYxzMQw-mVPv0Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a0t-dnJXvXH0Mx5L-AeVQe1mYzRi0sQjYxzMQw-mVPv0Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH mips-fixes] MIPS: smp: fill in sibling and core maps earlier
+Message-ID: <5324be35-5c49-31c1-3f9a-267a5dae8c84@amsat.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAxNSBGZWJydWFyeSAyMDIyIDEwOjAyDQo+IA0K
-PiBPbiBUdWUsIEZlYiAxNSwgMjAyMiBhdCA4OjEzIEFNIEFsIFZpcm8gPHZpcm9AemVuaXYubGlu
-dXgub3JnLnVrPiB3cm90ZToNCj4gPiBPbiBUdWUsIEZlYiAxNSwgMjAyMiBhdCAwNzoyOTo0MkFN
-ICswMTAwLCBDaHJpc3RvcGggSGVsbHdpZyB3cm90ZToNCj4gPiA+IE9uIFR1ZSwgRmViIDE1LCAy
-MDIyIGF0IDEyOjM3OjQxQU0gKzAwMDAsIEFsIFZpcm8gd3JvdGU6DQo+ID4gPiA+IFBlcmhhcHMg
-c2ltcGx5IHdyYXAgdGhhdCBzdWNrZXIgaW50byAjaWZkZWYgQ09ORklHX0NQVV9IQVNfQUREUkVT
-U19TUEFDRVMNCj4gPiA+ID4gKGFuZCB0cmltIHRoZSBjb21tZW50IGRvd24gdG8gImNvbGRmaXJl
-IGFuZCA2ODAwMCB3aWxsIHBpY2sgZ2VuZXJpYw0KPiA+ID4gPiB2YXJpYW50Iik/DQo+ID4gPg0K
-PiA+ID4gSSB3b25kZXIgaWYgd2Ugc2hvdWxkIGludmVydCBDT05GSUdfQVJDSF9IQVNfTk9OX09W
-RVJMQVBQSU5HX0FERFJFU1NfU1BBQ0UsDQo+ID4gPiBzZWxlY3QgdGhlIHNlcGFyYXRlIGFkZHJl
-c3Mgc3BhY2UgY29uZmlnIGZvciBzMzkwLCBzcGFyYzY0LCBub24tY29sZGZpcmUNCj4gPiA+IG02
-OGsgYW5kIG1pcHMgd2l0aCBFVkEgYW5kIHRoZW4ganVzdCBoYXZlIG9uZSBzaW5nbGUgYWNjZXNz
-X29rIGZvcg0KPiA+ID4gb3ZlcmxhcHBpbmcgYWRkcmVzcyBzcGFjZSAoYXMgYWRkZWQgYnkgQXJu
-ZCkgYW5kIG5vbi1vdmVybGFwcGluZyBvbmVzDQo+ID4gPiAoYWx3YXlzIHJldHVybiB0cnVlKS4N
-Cj4gPg0KPiA+IHBhcmlzYyBpcyBhbHNvIHN1Y2guLi4gIEhvdyBhYm91dA0KPiA+DQo+ID4gICAg
-ICAgICBzZWxlY3QgQUxURVJOQVRFX1NQQUNFX1VTRVJMQU5EDQo+ID4NCj4gPiBmb3IgdGhhdCBi
-dW5jaD8NCj4gDQo+IEVpdGhlciBvZiB0aG9zZSB3b3JrcyBmb3IgbWUuIE15IGN1cnJlbnQgdmVy
-c2lvbiBoYXMgdGhpcyBrZXllZCBvZmYNCj4gVEFTS19TSVpFX01BWD09VUxPTkdfTUFYLCBidXQg
-YSBDT05GSUdfIHN5bWJvbCBkb2VzDQo+IGxvb2sgbW9yZSBkZXNjcmlwdGl2ZS4NCj4gDQo+ID4g
-IFdoaWxlIHdlIGFyZSBhdCBpdCwgaG93IG1hbnkgdW51c3VhbCBhY2Nlc3Nfb2soKSBpbnN0YW5j
-ZXMgYXJlDQo+ID4gbGVmdCBhZnRlciB0aGlzIHNlcmllcz8gIGFybTY0LCBpdGFuaWMsIHVtLCBh
-bnl0aGluZyBlbHNlPw0KPiANCj4geDg2IGFkZHMgYSBXQVJOX09OX0lOX0lSUSgpIGNoZWNrIGlu
-IHRoZXJlLg0KDQpJZiBpcyBhIG5vb3AgdW5sZXNzIENPTkZJR19ERUJVR19BVE9NSUNfU0xFRVAg
-aXMgc2V0Lg0KSSBkb3VidCB0aGF0IGlzIG9mdGVuIGVuYWJsZWQuDQoNCj4gVGhpcyBjb3VsZCBi
-ZQ0KPiBtYWRlIGdlbmVyaWMsIGJ1dCBpdCdzIG5vdCBvYnZpb3VzIHdoYXQgZXhhY3RseSB0aGUg
-ZXhjZXB0aW9ucyBhcmUNCj4gdGhhdCBvdGhlciBhcmNoaXRlY3R1cmVzIG5lZWQuIFRoZSBhcm02
-NCB0YWdnZWQgcG9pbnRlcnMgY291bGQNCj4gcHJvYmFibHkgYWxzbyBnZXQgaW50ZWdyYXRlZCBp
-bnRvIHRoZSBnZW5lcmljIHZlcnNpb24uDQo+IA0KPiA+IEZXSVcsIHNwYXJjMzIgaGFzIGEgc2xp
-Z2h0bHkgdW51c3VhbCBpbnN0YW5jZSAoc2VlIHVhY2Nlc3NfMzIuaCB0aGVyZSk7IGl0J3MNCj4g
-PiBvYnZpb3VzbHkgY2hlYXBlciB0aGFuIGdlbmVyaWMgYW5kIEkgd29uZGVyIGlmIHRoZSB0cmlj
-ayBpcyBsZWdpdGltYXRlIChhbmQNCj4gPiBhcHBsaWNhYmxlIGVsc2V3aGVyZSwgcGVyaGFwcyku
-Li4NCj4gDQo+IFJpZ2h0LCBhIGZldyBvdGhlcnMgaGF2ZSB0aGUgc2FtZSwgYnV0IEkgd2Fzbid0
-IGNvbnZpbmNlZCB0aGF0IHRoaXMNCj4gaXMgYWN0dWFsbHkgc2FmZSBmb3IgY2FsbCBwb3NzaWJs
-ZSBjYXNlczogaXQncyB0cml2aWFsIHRvIGNvbnN0cnVjdCBhIGNhbGxlcg0KPiB0aGF0IHdvcmtz
-IG9uIG90aGVyIGFyY2hpdGVjdHVyZXMgYnV0IG5vdCB0aGlzIG9uZSwgaWYgeW91IHBhc3MgYSBs
-YXJnZQ0KPiBlbm91Z2ggc2l6ZSB2YWx1ZSBhbmQgZG9uJ3QgYWNjZXNzIHRoZSBjb250ZW50cyBp
-biBzZXF1ZW5jZS4NCg0KWW91J2QgbmVlZCBjb2RlIHRoYXQgZGlkIGFuIGFjY2Vzc19vaygpIGNo
-ZWNrIGFuZCB0aGVuIHJlYWQgZnJvbQ0KYSBsYXJnZSBvZmZzZXQgZnJvbSB0aGUgYWRkcmVzcyAt
-IHVubGlrZWx5Lg0KSXQncyBub3QgbGlrZSB0aGUgYWNjZXNzX29rKCkgY2hlY2sgZm9yIHJlYWQv
-d3JpdGUgaXMgZG9uZSBvbiBzeXNjYWxsDQplbnRyeSBhbmQgdGhlbiBldmVyeXRoaW5nIHVuZGVy
-bmVhdGggYXNzdW1lcyBpdCBpcyB2YWxpZC4NCg0KSGFzbid0IChhbG1vc3QpIGV2ZXJ5dGhpbmcg
-YmVlbiBjaGVja2VkIGZvciBmdW5jdGlvbiBjYWxscyBiZXR3ZWVuDQp1c2VyX2FjY2Vzc19iZWdp
-bigpIGFuZCB0aGUgYWN0dWFsIGFjY2Vzc2VzPw0KQW5kIGFjY2Vzc19vaygpIGlzIGRvbmUgYnkv
-YXQgdGhlIHNhbWUgdGltZSBhcyB1c2VyX2FjY2Vzc19iZWdpbigpPw0KDQpZb3UgZG8gbmVlZCBh
-biB1bm1hcHBlZCBwYWdlIGFib3ZlIHRoZSBhZGRyZXNzIHRoYXQgaXMgdGVzdGVkLg0KDQo+IEFs
-c28sIGxpa2UgdGhlICgoYWRkciB8IChhZGRyICsgc2l6ZSkpICYgTUFTSykgY2hlY2sgb24gc29t
-ZSBvdGhlcg0KPiBhcmNoaXRlY3R1cmVzLCBpdCBpcyBsZXNzIHBvcnRhYmxlIGJlY2F1c2UgaXQg
-bWFrZXMgYXNzdW1wdGlvbnMgYWJvdXQNCj4gdGhlIGFjdHVhbCBsYXlvdXQgYmV5b25kIGEgZml4
-ZWQgYWRkcmVzcyBsaW1pdC4NCg0KSXNuJ3QgdGhhdCB0ZXN0IGJyb2tlbiB3aXRob3V0IGEgc2Vw
-YXJhdGUgYm91bmQgY2hlY2sgb24gc2l6ZT8NCg0KSSBhbHNvIHNlZW0gdG8gcmVtZW1iZXIgdGhh
-dCBhY2Nlc3Nfb2soeHh4LCAwKSBpcyBhbHdheXMgJ29rJw0KYW5kIHNvbWUgb2YgdGhlICdmYXN0
-JyB0ZXN0cyBnaXZlIGEgZmFsc2UgbmVnYXRpdmUgaWYgdGhlIHVzZXINCmJ1ZmZlciBlbmRzIHdp
-dGggdGhlIGxhc3QgYnl0ZSBvZiB1c2VyIGFkZHJlc3Mgc3BhY2UuDQoNClNvIHlvdSBtYXkgbmVl
-ZDoNCglzaXplIDwgVEFTS19TSVpFICYmIChhZGRyIDwgKFRBU0tfU0laRSAtIHNpemUgLSAxKSB8
-fCAhc2l6ZSkNCihzcHJpbmtsZWQgd2l0aCBbdW5dbGlrZWx5KCkpDQoNCglEYXZpZA0KDQotDQpS
-ZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWls
-dG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMp
-DQo=
+From: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
+Date: Mon, 14 Feb 2022 20:00:12 +0100
+
+> On 12/2/22 23:21, Alexander Lobakin wrote:
+> > After enabling CONFIG_SCHED_CORE (landed during 5.14 cycle),
+> > 2-core 2-thread-per-core interAptiv (CPS-driven) started emitting
+> > the following:
+> >
+
+--- 8< ---
+
+> >
+> > [    0.048433] CPU: 1, smt_mask: 0-1
+> >
+> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/comm=
+it/?id=3D76ce7cfe35ef
+>
+> Isn't it worth Cc'ing stable@vger.kernel.org here?
+
+Probably. It doesn't have any Fixes tag (this is a fix, but the bug
+is caused not by a particular commit, rather by a combination of
+changes and code flows from the past), but it still can be
+backported, right.
+
+Thomas, should I queue a v2 with this tag added?
+
+Cc: stable@vger.kernel.org # 5.14+
+
+Or it can be picked up automatically?
+
+>
+> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> > ---
+> >   arch/mips/kernel/smp.c | 6 +++---
+> >   1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <f4bug@amsat.org>
+
+Thanks!
+
+Al
 
