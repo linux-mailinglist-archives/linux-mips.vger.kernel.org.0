@@ -2,133 +2,157 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4321A4B75AE
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Feb 2022 21:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFACB4B7A1B
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Feb 2022 23:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240529AbiBOQtB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Feb 2022 11:49:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48384 "EHLO
+        id S241611AbiBOWA6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Feb 2022 17:00:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239641AbiBOQtA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Feb 2022 11:49:00 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9951AC12F9;
-        Tue, 15 Feb 2022 08:48:50 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id o10so15304125ilh.0;
-        Tue, 15 Feb 2022 08:48:50 -0800 (PST)
+        with ESMTP id S243036AbiBOWAs (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Feb 2022 17:00:48 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9207679;
+        Tue, 15 Feb 2022 14:00:37 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id d23so156794lfv.13;
+        Tue, 15 Feb 2022 14:00:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xVNa8VSn91ahuDas6Q5c0c7M86VbUIOrBrr7Lsj6DYI=;
-        b=PJDVFdbVGvtaA9kJk1qSkNbj2TZJQK5Mesv4NIHxeYbJjjsrvieJhKSRKVXt6TY5qE
-         liHaAXttXZkNvNs1PuyLiH5sYg3h7nVrZTs/mbhPPbQIEu98CvEiHYU4MoLF7eZlXo02
-         OOV2CBDh3w0126BeK/5eIbxlEmvYr4Xs8bfZaVeS9IX/k9xlrXHL/i7XSE6lOB8CsFou
-         f+HwKwGMZLBvxkr1l+9WBL6JIebLLsTnOIXNVGoFQbxPgu3BI93LHZyoT61o3C4xQj+g
-         S4onaRA3VmSZqMXHYDDXcsGNiV/OW7jzV3v/escGendjwkt2o8Ko874lbpHrzRnToXht
-         Mytw==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:cc:references:to:in-reply-to:content-transfer-encoding;
+        bh=DVulEGE2JpmKCAwv+Z9nIfk2u5ZwvRtSEnvF0++tohE=;
+        b=eAbTUd8SWrkduWMDvYSL9PCIMvTyx1/PDNq+g34U5a6HTO/JfyDazuc/276Sm7ld7f
+         RQAUjz9KnJpaex/eozKDcsnVqqRwA5Fj5CSlNJHiQfzBkJVLCc7y3vw02lxihPY3TExU
+         lYcUYoYFkQWAG/XD2qnNsvTl5P4zqH6pcaasqRB1LojAt2IN4Q9BVX82FHrNStE8wYB4
+         mmhCvKeDI7YjVSy4dXfgCBsx8WWHAoaLNoouUIXdBuim6buHAqSq3/5veKqw8hxrEwEf
+         aYlaoKh86/GFDdT8ghhsvoX3tr735feUL8boUX68tZ9vbfpFMdKPrE/wFw8zC0NNEmPZ
+         ssKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xVNa8VSn91ahuDas6Q5c0c7M86VbUIOrBrr7Lsj6DYI=;
-        b=jH+7fT2muAmEgfCkZ2zmlChMJc3M/aBDqzpB4Yg5vTW14R+hRR7JvIbww6N7M1sLZa
-         i8FLsuXwusM++e1aOmJUNEs9em+M4AFH+csnELKBQuyxnSmD7vt627As9L0BCj/IPn1l
-         kfrE8g+jEVe8VpLXLnqPINzH/naXtonD46nHMjo7Nfy6pSOCcN7y2qv/gBZWWwD5uRhF
-         EG6kGOkc6LeshjlSpi7KdRFuzxrIoTj0YoNw+ge6tNl9MNZw/WRpJ709uVrwCgYKEJpz
-         5NFDBqRSsN505EdLEWK+kdlANiE05z7Lcn1RXjzC1WSNggbXDoftwKJvZFh5/mck1fsP
-         ZM5Q==
-X-Gm-Message-State: AOAM5308nqnrM74sDjL4/TuQoahUp7f8mlM+zGzru6oXnZ1PDHIQS+0f
-        DGeg58XX72ZEctOQJOao8JH3xN4nrWXpbBhYSdzpfgsu9uShBqd4/Eo=
-X-Google-Smtp-Source: ABdhPJzymnqvOR8CKBiej0duKzd4TqeQtGYPKBaMhp/OB51xLEndFfIOeke7AoujuH13SWODXChgu1WA4elZudT6SiM=
-X-Received: by 2002:a05:6e02:1887:: with SMTP id o7mr3086428ilu.169.1644943729176;
- Tue, 15 Feb 2022 08:48:49 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:cc:references:to:in-reply-to
+         :content-transfer-encoding;
+        bh=DVulEGE2JpmKCAwv+Z9nIfk2u5ZwvRtSEnvF0++tohE=;
+        b=wTomICDpoIwEpCbz/72bMDFaEmVWU7jQc/NuRAsg5bofzOt+vrWhjPQ2iKSRqFWatq
+         2nn/6InANIri5CuyLP57qbEDM9mNc+5oZNOvgWA5aUbfkk3r9wDjbUSkFFER2DeqtH/a
+         bADUAVck22cpEUHFrfulL2xsLu64LIqrFQ+00XUn0A7FBhLtpL22/xqTllsHNe4eEPm7
+         g1Fru5sO0wB860IhOJJiDRGaDBtpzxBNQqYE73Et7s+bciz4Ih7cIC4g6X8+IJ3dqZ+K
+         17whSiQLXyb07yrqfCubnrkgnA7Ks4PppPUCaKBYPiXtyTFtzwoLKHoc68JFMAcjRFuF
+         yOWA==
+X-Gm-Message-State: AOAM531oZB9VDs53ngcnjqCct//CiNbyr8ZzJgloNmrvVFVlHGjuR1ts
+        zMznJoIsXh+/1v7IepFIBTg=
+X-Google-Smtp-Source: ABdhPJyJtWqeT1e2wzvijosINOm/qc6wwzWUL/FDa9uqhHR32CJOoO1KF1UaVLhHtHEQQhQBEaQuLQ==
+X-Received: by 2002:a05:6512:96d:: with SMTP id v13mr790998lft.343.1644962435902;
+        Tue, 15 Feb 2022 14:00:35 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id k3sm66075lfo.10.2022.02.15.14.00.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Feb 2022 14:00:35 -0800 (PST)
+Message-ID: <635e8121-fca4-580c-6af5-d9317a2eee1b@gmail.com>
+Date:   Wed, 16 Feb 2022 01:00:33 +0300
 MIME-Version: 1.0
-References: <20220211001345.3429572-1-gch981213@gmail.com>
-In-Reply-To: <20220211001345.3429572-1-gch981213@gmail.com>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Wed, 16 Feb 2022 00:48:38 +0800
-Message-ID: <CAJsYDVLyasPAmgxguqLznORC2SihKHRLrFFw5nHbepJvu0va3Q@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
-To:     linux-mips@vger.kernel.org
-Cc:     Rui Salvaterra <rsalvaterra@gmail.com>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 00/21] Introduce power-off+restart call chain API
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+References: <20220130233718.21544-1-digetx@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+In-Reply-To: <20220130233718.21544-1-digetx@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
- Hi!
+31.01.2022 02:36, Dmitry Osipenko пишет:
+> Problem
+> -------
+> 
+> SoC devices require power-off call chaining functionality from kernel.
+> We have a widely used restart chaining provided by restart notifier API,
+> but nothing for power-off.
+> 
+> Solution
+> --------
+> 
+> Introduce new API that provides both restart and power-off call chains.
+> 
+> Why combine restart with power-off? Because drivers often do both.
+> More practical to have API that provides both under the same roof.
+> 
+> The new API is designed with simplicity and extensibility in mind.
+> It's built upon the existing restart and reboot APIs. The simplicity
+> is in new helper functions that are convenient for drivers. The
+> extensibility is in the design that doesn't hardcode callback
+> arguments, making easy to add new parameters and remove old.
+> 
+> This is a third attempt to introduce the new API. First was made by
+> Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+> In fact the work didn't stop and recently arm_pm_restart() was removed
+> from v5.14 kernel, which was a part of preparatory work started by
+> Guenter Roeck. I took into account experience and ideas from the
+> previous attempts, extended and polished them.
 
-On Fri, Feb 11, 2022 at 8:14 AM Chuanhong Guo <gch981213@gmail.com> wrote:
->
-> It's reported that current memory detection code occasionally detects
-> larger memory under some bootloaders.
-> Current memory detection code tests whether address space wraps around
-> on KSEG0, which is unreliable because it's cached.
->
-> Rewrite memory size detection to perform the same test on KSEG1 instead.
-> While at it, this patch also does the following two things:
-> 1. use a fixed pattern instead of a random function pointer as the magic
->    value.
-> 2. add an additional memory write and a second comparison as part of the
->    test to prevent possible smaller memory detection result due to
->    leftover values in memory.
->
-> Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
 
-I misplaced a bracket in this Fixes tag.
+Rafael and all, do you see anything critical that needs to be improved
+in this v6?
 
-> Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> ---
->  arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
->  1 file changed, 23 insertions(+), 13 deletions(-)
->
-> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-> index d6efffd4dd20..12c8808e0dea 100644
-> --- a/arch/mips/ralink/mt7621.c
-> +++ b/arch/mips/ralink/mt7621.c
-> @@ -22,7 +22,9 @@
->
->  #include "common.h"
->
-> -static void *detect_magic __initdata = detect_memory_region;
-> +#define MT7621_MEM_TEST_PATTERN         0xaa5555aa
-> +
-> +static u32 detect_magic __initdata;
->
->  int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
->  {
-> @@ -58,24 +60,32 @@ phys_addr_t mips_cpc_default_phys_base(void)
->         panic("Cannot detect cpc address");
->  }
->
-> +static bool __init mt7621_addr_wraparound_test(phys_addr_t size)
-> +{
-> +       void *dm = (void *)KSEG1ADDR(&detect_magic);
-> +
-> +       if (CPHYSADDR(dm + size) >= MT7621_LOWMEM_MAX_SIZE)
-> +               return true;
-> +       __raw_writel(MT7621_MEM_TEST_PATTERN, dm);
-> +       if (__raw_readl(dm) != __raw_readl(dm + size))
-> +               return false;
-> +       __raw_writel(!MT7621_MEM_TEST_PATTERN, dm);
-
-Someone on Github notified me that this second test pattern is incorrect.
-I actually mean to use ~MT7621_MEM_TEST_PATTERN here.
-
-I'll send a v2 fixing both issues.
-
---
-Regards,
-Chuanhong Guo
+Will be great if you could take this patchset via the power tree if it
+looks okay, or give an ack.
