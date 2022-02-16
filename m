@@ -2,277 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16CF4B7E98
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Feb 2022 04:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 912254B8758
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Feb 2022 13:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240799AbiBPD0X (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Feb 2022 22:26:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34230 "EHLO
+        id S232916AbiBPMJS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Feb 2022 07:09:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiBPD0X (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Feb 2022 22:26:23 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CB9FEB0C
-        for <linux-mips@vger.kernel.org>; Tue, 15 Feb 2022 19:26:10 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id o34so415924wms.1
-        for <linux-mips@vger.kernel.org>; Tue, 15 Feb 2022 19:26:10 -0800 (PST)
+        with ESMTP id S230057AbiBPMJR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Feb 2022 07:09:17 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CB8B3E4D
+        for <linux-mips@vger.kernel.org>; Wed, 16 Feb 2022 04:09:06 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id w10-20020a4ae08a000000b0031bdf7a6d76so452482oos.10
+        for <linux-mips@vger.kernel.org>; Wed, 16 Feb 2022 04:09:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jwhFIm2pjxqH4S1QMmhp69WD0Yx/q3G7DzS41sze+Fs=;
-        b=riYhJ/NFDeUTP+27duj6KaHVTshaiOQWoiNe0wD5HsocnEG4P2zjeu1WJJDyF+7tg8
-         HCeN+YgLtAuAqFdXC5u5r4J1kreE47Ve+t4e9Tzc3e/bR6dW6cfCEx+AULlAjs0UFA7b
-         5iYtqizK/2DbwQ3MdQzFC5ShahlfHXfxfbRTyv3sjEKEHhbO96isAQ/oJlBBafJ4RfO6
-         Ik2sa+YCrQVXyZRleWwPOmZS9xfiQMBjan/DE793V7AulbEAwpf909pO0yRuMLybh51Z
-         HNPSzg49iXmvLcs5NFrZBcGz1w3jwq6ATwFOagq0fPdiZtS5k3qPuXa39lc6+Ewfq3Uz
-         nhCA==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=DNlgyVaU8TjCWNLA871jCHNl9EtR9BXdeye9SGukbxg=;
+        b=eGRtd3uvmkREXDZjnXqRDyIBYLniWrQjkiNjafxwdQsgoyuPolmhW2LLFg4ryrBjoV
+         UrCfYOV53zNpuz8asAc5iR8iHDKUI0XoZg//bLBBuIs2qK3hrrFKIPDhjJBDFWM5+Y3D
+         mxx2Hi0yRImibKBHEIYFfoVgNBT07bsA2CEIRgUXO3fTiB2ijngIw6SefDg54tTkeBsc
+         H7pxXSLq4U6K3vTTU1TSRgqLEvcnHVn92QVvPTAYAJLbId8TmQXaFY7v2iNOXGdffPxq
+         xUmIdpohyOBXrC3ULs9Hpzx2zYb5OaCvZkfJF+J8m/qcloZGJhd9GtCVniWNsNNJd6RE
+         kkag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jwhFIm2pjxqH4S1QMmhp69WD0Yx/q3G7DzS41sze+Fs=;
-        b=YrtGjLncHIsyWFtZDyUtPybudXntIJNoPD+3KvP5K/VTcd/aJYui2EmZ0ek8dbn6XM
-         JT5NPbQsZEeCRzuaMmzMxy6qqc41+xmFyfibvtxVZTYxTWdnO5UBJV7svSUf2b+IXnSs
-         GvDdplHKGQAdA114H7gIYU8JslKpQjMc2bsyCOmbqh8nUEFlH7pXfsXStGTAfiQqSPpA
-         xAtU5D7ZAOTCFUE63qczQj/8R5Ut8GOlS9NxTHutCp7DPw/wluyQCtCk3WtOcULTEpec
-         dKeMP6KUe6lpbG6kb80s7S+24Kfr5NdNrofw/TtAR8ZPx9jpCOepVSOmPZ5Ky552lNMz
-         YeJg==
-X-Gm-Message-State: AOAM5319y6v6CgPoh7yt4P0FTch5n1cS4C70Uq0e+4dUMasfIYU6UPIW
-        9zfJJtQSrBD4i4PIHHh1sGxJVISTf4s4Nr9EUqAaQw==
-X-Google-Smtp-Source: ABdhPJyRrOhHG9NugLem/Yuo2TIr9R5jqud/r7I7SljQVLpVr4bWltjwldVI0/2cSoJTehq0BS93uj6Y8dpcZ9dYSY0=
-X-Received: by 2002:a7b:cf16:0:b0:37b:c4c9:96c6 with SMTP id
- l22-20020a7bcf16000000b0037bc4c996c6mr683144wmg.59.1644981969162; Tue, 15 Feb
- 2022 19:26:09 -0800 (PST)
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=DNlgyVaU8TjCWNLA871jCHNl9EtR9BXdeye9SGukbxg=;
+        b=BERDvmeeCnqxaYejDtE8/wwpB1OHJS0CyVgy4Xs54iTO2wZwGjlUdZM8orbtFCcIY2
+         QcrfFyHSG36ru3AU5sp8Fie193/RktWHJ26cuk4yicpKqNKixGdhnYlPHUAc423koKxe
+         SQ517SsJz5Xa7ia7zwM+49cEISIUKYjyFW4BlHvOqIn3rYYLKgUDO5ZMDxq0L6tcgrU6
+         Z2aXCgw+cx5s5nMGAPwZBBEBuDXmS7QfwGSxYLMnZUt5IeZJiVZPXsT8Bsli2MIaBX/y
+         Pzq7D3QBo1jIIuy+RhcuIx7vXkZoVL1ePKRmBOlImuoBQv6Kp3GF/YhS8H6yeIguxVuq
+         KheQ==
+X-Gm-Message-State: AOAM531BgSrNkrl7tLuIC1ZJ/K9oayJMA1k8MzAvcSSHGT85fTzK0cxe
+        7tRyCSifl4G8UVwvqfsyeQw3h5FXII65kLi7nFs=
+X-Google-Smtp-Source: ABdhPJyMyxS0gjF1Vfq6YVT/r95eH7xw9pjzg1ecAmgrtUbSMsESJtYUp7jsR+iiF3Z/F4FjpjjQAnOfgPN1Fg00p1E=
+X-Received: by 2002:a05:6870:30e:b0:bf:9b7f:7c63 with SMTP id
+ m14-20020a056870030e00b000bf9b7f7c63mr326053oaf.84.1645013345405; Wed, 16 Feb
+ 2022 04:09:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20220216031528.92558-1-chao.gao@intel.com> <20220216031528.92558-3-chao.gao@intel.com>
-In-Reply-To: <20220216031528.92558-3-chao.gao@intel.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 16 Feb 2022 08:55:55 +0530
-Message-ID: <CAAhSdy0PfCegu9vQY76pD-cLfP_S1xnyWARdinG4jbuJ_eVQkg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] Partially revert "KVM: Pass kvm_init()'s opaque
- param to additional arch funcs"
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        KVM General <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, kevin.tian@intel.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm-riscv@lists.infradead.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390@vger.kernel.org
+Sender: mrazaraibrahim2010@gmail.com
+Received: by 2002:a4a:9621:0:0:0:0:0 with HTTP; Wed, 16 Feb 2022 04:09:04
+ -0800 (PST)
+From:   "Mr.Ibrahim" <ibrahimidewu4@gmail.com>
+Date:   Wed, 16 Feb 2022 13:09:04 +0100
+X-Google-Sender-Auth: bgMI-hpQsgoHN25lVd-BdcGUcS4
+Message-ID: <CAFvumbSsSnf2wrb2ZHa9ni+QixnFbKwNQdMCSwC9VBMWwNhKuw@mail.gmail.com>
+Subject: GREETINGS
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=ADVANCE_FEE_2_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:c2e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrazaraibrahim2010[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrazaraibrahim2010[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  1.7 ADVANCE_FEE_2_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 8:46 AM Chao Gao <chao.gao@intel.com> wrote:
->
-> This partially reverts commit b99040853738 ("KVM: Pass kvm_init()'s opaque
-> param to additional arch funcs") remove opaque from
-> kvm_arch_check_processor_compat because no one uses this opaque now.
-> Address conflicts for ARM (due to file movement) and manually handle RISC-V
-> which comes after the commit.
->
-> And changes about kvm_arch_hardware_setup() in original commit are still
-> needed so they are not reverted.
->
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
+I have a business proposal in the tune of $19.3m USD for you to handle
+with me. I have opportunity to transfer this abandon fund to your bank
+account in your country which belongs to our client.
 
-For KVM RISC-V:
-Acked-by: Anup Patel <anup@brainfault.org>
+I am inviting you in this transaction where this money can be shared
+between us at ratio of 50/50% and help the needy around us don=E2=80=99t be
+afraid of anything I am with you I will instruct you what you will do
+to maintain this fund.
 
-Regards,
-Anup
+Please kindly contact me with your information's if you are interested
+in this tranasction for more details(ibrahimidewu4@gmail.com)
 
+1. Your Full Name.....................
+2. Your Address......................
+3. Your Country of Origin.............
+4. Your Age..........................
+5. Your ID card copy and telephone number for easy communication...........=
+....
 
-> ---
->  arch/arm64/kvm/arm.c       |  2 +-
->  arch/mips/kvm/mips.c       |  2 +-
->  arch/powerpc/kvm/powerpc.c |  2 +-
->  arch/riscv/kvm/main.c      |  2 +-
->  arch/s390/kvm/kvm-s390.c   |  2 +-
->  arch/x86/kvm/x86.c         |  2 +-
->  include/linux/kvm_host.h   |  2 +-
->  virt/kvm/kvm_main.c        | 16 +++-------------
->  8 files changed, 10 insertions(+), 20 deletions(-)
->
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index ecc5958e27fe..0165cf3aac3a 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -73,7 +73,7 @@ int kvm_arch_hardware_setup(void *opaque)
->         return 0;
->  }
->
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->         return 0;
->  }
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index a25e0b73ee70..092d09fb6a7e 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -140,7 +140,7 @@ int kvm_arch_hardware_setup(void *opaque)
->         return 0;
->  }
->
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->         return 0;
->  }
-> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-> index 2ad0ccd202d5..30c817f3fa0c 100644
-> --- a/arch/powerpc/kvm/powerpc.c
-> +++ b/arch/powerpc/kvm/powerpc.c
-> @@ -423,7 +423,7 @@ int kvm_arch_hardware_setup(void *opaque)
->         return 0;
->  }
->
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->         return kvmppc_core_check_processor_compat();
->  }
-> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-> index 2e5ca43c8c49..992877e78393 100644
-> --- a/arch/riscv/kvm/main.c
-> +++ b/arch/riscv/kvm/main.c
-> @@ -20,7 +20,7 @@ long kvm_arch_dev_ioctl(struct file *filp,
->         return -EINVAL;
->  }
->
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->         return 0;
->  }
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 577f1ead6a51..0053b81c6b02 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -252,7 +252,7 @@ int kvm_arch_hardware_enable(void)
->         return 0;
->  }
->
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->         return 0;
->  }
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 9b484ed61f37..ffb88f0b7265 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11509,7 +11509,7 @@ void kvm_arch_hardware_unsetup(void)
->         static_call(kvm_x86_hardware_unsetup)();
->  }
->
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->  {
->         struct cpuinfo_x86 *c = &cpu_data(smp_processor_id());
->
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index f11039944c08..2ad78e729bf7 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1413,7 +1413,7 @@ int kvm_arch_hardware_enable(void);
->  void kvm_arch_hardware_disable(void);
->  int kvm_arch_hardware_setup(void *opaque);
->  void kvm_arch_hardware_unsetup(void);
-> -int kvm_arch_check_processor_compat(void *opaque);
-> +int kvm_arch_check_processor_compat(void);
->  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu);
->  bool kvm_arch_vcpu_in_kernel(struct kvm_vcpu *vcpu);
->  int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu);
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 83c57bcc6eb6..ee47d33d69e1 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -5643,22 +5643,14 @@ void kvm_unregister_perf_callbacks(void)
->  }
->  #endif
->
-> -struct kvm_cpu_compat_check {
-> -       void *opaque;
-> -       int *ret;
-> -};
-> -
-> -static void check_processor_compat(void *data)
-> +static void check_processor_compat(void *rtn)
->  {
-> -       struct kvm_cpu_compat_check *c = data;
-> -
-> -       *c->ret = kvm_arch_check_processor_compat(c->opaque);
-> +       *(int *)rtn = kvm_arch_check_processor_compat();
->  }
->
->  int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
->                   struct module *module)
->  {
-> -       struct kvm_cpu_compat_check c;
->         int r;
->         int cpu;
->
-> @@ -5686,10 +5678,8 @@ int kvm_init(void *opaque, unsigned vcpu_size, unsigned vcpu_align,
->         if (r < 0)
->                 goto out_free_1;
->
-> -       c.ret = &r;
-> -       c.opaque = opaque;
->         for_each_online_cpu(cpu) {
-> -               smp_call_function_single(cpu, check_processor_compat, &c, 1);
-> +               smp_call_function_single(cpu, check_processor_compat, &r, 1);
->                 if (r < 0)
->                         goto out_free_2;
->         }
-> --
-> 2.25.1
->
+Best regards,
+Mr.Ibrahim Idewu.
