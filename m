@@ -2,168 +2,134 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDAB4B9098
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Feb 2022 19:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66DF4B909C
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Feb 2022 19:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237766AbiBPSok (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Feb 2022 13:44:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35570 "EHLO
+        id S237795AbiBPSox (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Feb 2022 13:44:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234744AbiBPSof (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Feb 2022 13:44:35 -0500
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D085222DEF
-        for <linux-mips@vger.kernel.org>; Wed, 16 Feb 2022 10:44:19 -0800 (PST)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id 7cf017e4-8f58-11ec-baa1-0050568c148b;
-        Wed, 16 Feb 2022 18:44:35 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 3B79C194B3E;
-        Wed, 16 Feb 2022 19:44:17 +0100 (CET)
-Date:   Wed, 16 Feb 2022 19:44:13 +0100
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
-        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
-        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
-        dalias@libc.org, davem@davemloft.net, richard@nod.at,
-        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
-Message-ID: <Yg1F/VT4vRX4aHEt@ravnborg.org>
-References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-19-arnd@kernel.org>
+        with ESMTP id S237819AbiBPSov (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Feb 2022 13:44:51 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1DC222DDF;
+        Wed, 16 Feb 2022 10:44:37 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D0C8A580DEA;
+        Wed, 16 Feb 2022 13:44:34 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 16 Feb 2022 13:44:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=UtEJAftqPvQNvO
+        Clej1+Mse1oLVwQ9J15EJX/K1D8M8=; b=qn+nJoBEadhFokijMOvs8dp/xSXrDL
+        Ouq3uUnCeqyyr31cvilhnokrTmMQoYWgDdVeGCOqx4+eDGBSfEssIhgf5uS364nE
+        fAsvdLL20tdBOujUABUrYV7Rt8immg8/wTr0U4DgQPIG4WnczSgGQCXoXo79/IHY
+        np8W2ohmCH8qKmI83LGOT+jy62rvQik8n+bRMm5sxamgEtRUCOjQA0fMk0UmmPkn
+        WK+6cHruo+fama2NkBphGvR3Ob7PuNaMCUsGjnhXcXJTjKnpzhTYjzXfD9EIrAY5
+        +vcU84tdcTgld+8waKEWdaDYE2ojG6vdQPlV1GmcqueVvh8hFcLwPvbA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=UtEJAftqPvQNvOClej1+Mse1oLVwQ9J15EJX/K1D8
+        M8=; b=fYdyp7ZQB3WO+ba4hZ3UyqxxIbrIaYc+UwEkkFxTahCB/5qtog9kngDfo
+        0J9md1jPgpIXvTVDMh0/4fiuruBMr9GlkIgdzZBgnnsQ+dkvK+9PF8yXGbSn3O8t
+        q2/1Gh+eJPxSFScqf7phHiZmm9tskkQCc4TNhecXMbzdN42Zk6OfKVtYXigjBvUk
+        bHMtH9oVJDWLOQ0dmiN24DejDEfchF5tOfTCDAOKX1PbbFmMgtVlQFg+tdFg7Qjb
+        MrCZ7f3tkcFJ2jhD0Aug+Lo/0VYRYUXnVuKWeK80LCUEECtqWbHWt87LTtFNJfN3
+        okOkiyt3a7+GU8ijCEPZru13YpE/w==
+X-ME-Sender: <xms:EEYNYiEV39KMAdGPBQX_eK1uXGVB8BOUoLg_ZBbm-zgX3oYunFYO6Q>
+    <xme:EEYNYjXBWZbFRFceIL8Glf76OtMxPUAbnDJJdmju2cC7DfoXrcqhJBmxJnxJXS2Qy
+    z1xVoljJ1WPYEfReag>
+X-ME-Received: <xmr:EEYNYsI5CbLwmaTQnJpeRL4rulUP0T089uhjcMoZMPP0oqhxR-p2JzViHfgvtcc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjeeigdduudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
+    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
+    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:EEYNYsFPjdfP60uQp6VNa4CSPkBmd3Bq7KKrkb84cwJZn3whHr685w>
+    <xmx:EEYNYoUfAt3IWJxvpXdHSYp5NqDHcpk744YBvAnU8YoU8lAtLY_tbw>
+    <xmx:EEYNYvOFu-e2Jl0r-7JRuqj9JHK3K3QojzGVJkD5csVdq9u-EVfjaw>
+    <xmx:EkYNYq1vKHtpVLUi9JW-_GQLU_K-f6D-6xhZlUFFMbLKDslNhO8Hkg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 16 Feb 2022 13:44:29 -0500 (EST)
+Message-ID: <76e3d3f2-c457-2940-10ea-834f13e526cb@flygoat.com>
+Date:   Wed, 16 Feb 2022 18:44:25 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216131332.1489939-19-arnd@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v8 2/3] MIPS: Loongson64: dts: update the display
+ controller device node
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220216181712.1493400-1-15330273260@189.cn>
+ <20220216181712.1493400-3-15330273260@189.cn>
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20220216181712.1493400-3-15330273260@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arnd,
 
-Fix spelling in $subject...
 
-sparc/Kconfig b/arch/sparc/Kconfig
-> index 9f6f9bce5292..9276f321b3e3 100644
-> --- a/arch/sparc/Kconfig
-> +++ b/arch/sparc/Kconfig
-> @@ -46,7 +46,6 @@ config SPARC
->  	select LOCKDEP_SMALL if LOCKDEP
->  	select NEED_DMA_MAP_STATE
->  	select NEED_SG_DMA_LENGTH
-> -	select SET_FS
->  	select TRACE_IRQFLAGS_SUPPORT
->  
->  config SPARC32
-> @@ -101,6 +100,7 @@ config SPARC64
->  	select HAVE_SETUP_PER_CPU_AREA
->  	select NEED_PER_CPU_EMBED_FIRST_CHUNK
->  	select NEED_PER_CPU_PAGE_FIRST_CHUNK
-> +	select SET_FS
-This looks wrong - looks like some merge went wrong here.
+在 2022/2/16 18:17, Sui Jingfeng 写道:
+> From: suijingfeng <suijingfeng@loongson.cn>
+>
+> The display controller is a pci device, its PCI vendor id is 0x0014
+> its PCI device id is 0x7a06.
+>
+> 1) In order to let the lsdc kms driver to know which chip the DC is
+>     contained in, we add different compatible for different chip.
+>
+> 2) Add display controller device node for ls2k1000 SoC
+>
+> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+> ---
+>   .../loongson/loongson,display-controller.yaml | 114 ++++++++++++++++++
+>   .../display/loongson/loongson-drm.txt         |  16 +++
+^ Is loongson-drm.txt intentional?
+It seems irrelevant....
 
->  
->  config ARCH_PROC_KCORE_TEXT
->  	def_bool y
-> diff --git a/arch/sparc/include/asm/processor_32.h b/arch/sparc/include/asm/processor_32.h
-> index 647bf0ac7beb..b26c35336b51 100644
-> --- a/arch/sparc/include/asm/processor_32.h
-> +++ b/arch/sparc/include/asm/processor_32.h
-> @@ -32,10 +32,6 @@ struct fpq {
->  };
->  #endif
->  
-> -typedef struct {
-> -	int seg;
-> -} mm_segment_t;
-> -
->  /* The Sparc processor specific thread struct. */
->  struct thread_struct {
->  	struct pt_regs *kregs;
-> @@ -50,11 +46,9 @@ struct thread_struct {
->  	unsigned long   fsr;
->  	unsigned long   fpqdepth;
->  	struct fpq	fpqueue[16];
-> -	mm_segment_t current_ds;
->  };
->  
->  #define INIT_THREAD  { \
-> -	.current_ds = KERNEL_DS, \
->  	.kregs = (struct pt_regs *)(init_stack+THREAD_SIZE)-1 \
->  }
->  
-> diff --git a/arch/sparc/include/asm/uaccess_32.h b/arch/sparc/include/asm/uaccess_32.h
-> index 367747116260..9fd6c53644b6 100644
-> --- a/arch/sparc/include/asm/uaccess_32.h
-> +++ b/arch/sparc/include/asm/uaccess_32.h
-> @@ -12,19 +12,6 @@
->  #include <linux/string.h>
->  
->  #include <asm/processor.h>
-> -
-> -/* Sparc is not segmented, however we need to be able to fool access_ok()
-> - * when doing system calls from kernel mode legitimately.
-> - *
-> - * "For historical reasons, these macros are grossly misnamed." -Linus
-> - */
-> -
-> -#define KERNEL_DS   ((mm_segment_t) { 0 })
-> -#define USER_DS     ((mm_segment_t) { -1 })
-> -
-> -#define get_fs()	(current->thread.current_ds)
-> -#define set_fs(val)	((current->thread.current_ds) = (val))
-> -
->  #include <asm-generic/access_ok.h>
->  
->  /* Uh, these should become the main single-value transfer routines..
-> diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_32.c
-> index 2dc0bf9fe62e..88c0c14aaff0 100644
-> --- a/arch/sparc/kernel/process_32.c
-> +++ b/arch/sparc/kernel/process_32.c
-> @@ -300,7 +300,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
->  		extern int nwindows;
->  		unsigned long psr;
->  		memset(new_stack, 0, STACKFRAME_SZ + TRACEREG_SZ);
-> -		p->thread.current_ds = KERNEL_DS;
->  		ti->kpc = (((unsigned long) ret_from_kernel_thread) - 0x8);
->  		childregs->u_regs[UREG_G1] = sp; /* function */
->  		childregs->u_regs[UREG_G2] = arg;
-> @@ -311,7 +310,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
->  	}
->  	memcpy(new_stack, (char *)regs - STACKFRAME_SZ, STACKFRAME_SZ + TRACEREG_SZ);
->  	childregs->u_regs[UREG_FP] = sp;
-> -	p->thread.current_ds = USER_DS;
->  	ti->kpc = (((unsigned long) ret_from_fork) - 0x8);
->  	ti->kpsr = current->thread.fork_kpsr | PSR_PIL;
->  	ti->kwim = current->thread.fork_kwim;
-
-Other than the above the sparc32 changes looks fine, and with the Kconf
-stuff fixed:
-Acked-by: Sam Ravnborg <sam@ravnborg.org> # for sparc32 changes
+Thanks.
+>   .../boot/dts/loongson/loongson64-2k1000.dtsi  |   8 ++
+>   arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +-
+>   4 files changed, 140 insertions(+), 5 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson-drm.txt
+[...]
+- Jiaxun
