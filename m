@@ -2,121 +2,154 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912254B8758
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Feb 2022 13:09:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F054B878D
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Feb 2022 13:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbiBPMJS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Feb 2022 07:09:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50056 "EHLO
+        id S233143AbiBPM0H convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 16 Feb 2022 07:26:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiBPMJR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Feb 2022 07:09:17 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CB8B3E4D
-        for <linux-mips@vger.kernel.org>; Wed, 16 Feb 2022 04:09:06 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id w10-20020a4ae08a000000b0031bdf7a6d76so452482oos.10
-        for <linux-mips@vger.kernel.org>; Wed, 16 Feb 2022 04:09:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DNlgyVaU8TjCWNLA871jCHNl9EtR9BXdeye9SGukbxg=;
-        b=eGRtd3uvmkREXDZjnXqRDyIBYLniWrQjkiNjafxwdQsgoyuPolmhW2LLFg4ryrBjoV
-         UrCfYOV53zNpuz8asAc5iR8iHDKUI0XoZg//bLBBuIs2qK3hrrFKIPDhjJBDFWM5+Y3D
-         mxx2Hi0yRImibKBHEIYFfoVgNBT07bsA2CEIRgUXO3fTiB2ijngIw6SefDg54tTkeBsc
-         H7pxXSLq4U6K3vTTU1TSRgqLEvcnHVn92QVvPTAYAJLbId8TmQXaFY7v2iNOXGdffPxq
-         xUmIdpohyOBXrC3ULs9Hpzx2zYb5OaCvZkfJF+J8m/qcloZGJhd9GtCVniWNsNNJd6RE
-         kkag==
+        with ESMTP id S229643AbiBPM0F (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Feb 2022 07:26:05 -0500
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B027AA10;
+        Wed, 16 Feb 2022 04:25:53 -0800 (PST)
+Received: by mail-yb1-f173.google.com with SMTP id bt13so5538742ybb.2;
+        Wed, 16 Feb 2022 04:25:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=DNlgyVaU8TjCWNLA871jCHNl9EtR9BXdeye9SGukbxg=;
-        b=BERDvmeeCnqxaYejDtE8/wwpB1OHJS0CyVgy4Xs54iTO2wZwGjlUdZM8orbtFCcIY2
-         QcrfFyHSG36ru3AU5sp8Fie193/RktWHJ26cuk4yicpKqNKixGdhnYlPHUAc423koKxe
-         SQ517SsJz5Xa7ia7zwM+49cEISIUKYjyFW4BlHvOqIn3rYYLKgUDO5ZMDxq0L6tcgrU6
-         Z2aXCgw+cx5s5nMGAPwZBBEBuDXmS7QfwGSxYLMnZUt5IeZJiVZPXsT8Bsli2MIaBX/y
-         Pzq7D3QBo1jIIuy+RhcuIx7vXkZoVL1ePKRmBOlImuoBQv6Kp3GF/YhS8H6yeIguxVuq
-         KheQ==
-X-Gm-Message-State: AOAM531BgSrNkrl7tLuIC1ZJ/K9oayJMA1k8MzAvcSSHGT85fTzK0cxe
-        7tRyCSifl4G8UVwvqfsyeQw3h5FXII65kLi7nFs=
-X-Google-Smtp-Source: ABdhPJyMyxS0gjF1Vfq6YVT/r95eH7xw9pjzg1ecAmgrtUbSMsESJtYUp7jsR+iiF3Z/F4FjpjjQAnOfgPN1Fg00p1E=
-X-Received: by 2002:a05:6870:30e:b0:bf:9b7f:7c63 with SMTP id
- m14-20020a056870030e00b000bf9b7f7c63mr326053oaf.84.1645013345405; Wed, 16 Feb
- 2022 04:09:05 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZzgKkF+Qi9uD0PohBja9X66WgBtIRyDp12JGMxNBcpY=;
+        b=SmFG6cMNn2WzcalJa27s9eH1YqlUBva1gEkgs99/RkIpoUz6kxJSHUIqIP7IRJx6zM
+         2cEsy4f2xS3oirL8EQeh/CI1NAiwXnbQvdfzVfu02n721tJsL2/AuNc1vM7QZ9KWhAMM
+         WVoauxya1DfWyx/5DmjnV0NDxwqzmH2YKw2Yf+t6ZUXasSFFCXZg/7BG+1ZKrGzN0umZ
+         uZiKTrlruhxGMLpVdVQZOkREYLBpFIp/tUz71rL7dD2XPupu+bXIk//dgX5JMg6Q5/VF
+         nRn8ocKmLjm8+2xI1oA4PniZi16eW6h9mhgr9cdwwmrT84vYCT32ceA88etkK8vxNX1n
+         zXpw==
+X-Gm-Message-State: AOAM531dUfwXvaobtSMX/InoOCL/yhv4RMB/74kpsaF6OhowM7VW9glf
+        GHM3ooZHTWYtAdEvXiLHWpd23aAcTie6I4M2hkA=
+X-Google-Smtp-Source: ABdhPJzgB2WXDlMNWyEW279no9A0knLc+PLldmsjtAqBW5sJWGuZ+ouM0fPGPUzKV7R9c8p8BV9gaIDPnZPFqeD/pjM=
+X-Received: by 2002:a81:f008:0:b0:2d0:cd72:74e5 with SMTP id
+ p8-20020a81f008000000b002d0cd7274e5mr2135032ywm.301.1645014353165; Wed, 16
+ Feb 2022 04:25:53 -0800 (PST)
 MIME-Version: 1.0
-Sender: mrazaraibrahim2010@gmail.com
-Received: by 2002:a4a:9621:0:0:0:0:0 with HTTP; Wed, 16 Feb 2022 04:09:04
- -0800 (PST)
-From:   "Mr.Ibrahim" <ibrahimidewu4@gmail.com>
-Date:   Wed, 16 Feb 2022 13:09:04 +0100
-X-Google-Sender-Auth: bgMI-hpQsgoHN25lVd-BdcGUcS4
-Message-ID: <CAFvumbSsSnf2wrb2ZHa9ni+QixnFbKwNQdMCSwC9VBMWwNhKuw@mail.gmail.com>
-Subject: GREETINGS
-To:     undisclosed-recipients:;
+References: <20220130233718.21544-1-digetx@gmail.com> <635e8121-fca4-580c-6af5-d9317a2eee1b@gmail.com>
+In-Reply-To: <635e8121-fca4-580c-6af5-d9317a2eee1b@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 16 Feb 2022 13:25:39 +0100
+Message-ID: <CAJZ5v0g0MrBm2+GwctkB7kUyBEt6HTAexRCFFRmTF1UKDrVQ-g@mail.gmail.com>
+Subject: Re: [PATCH v6 00/21] Introduce power-off+restart call chain API
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=ADVANCE_FEE_2_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:c2e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrazaraibrahim2010[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrazaraibrahim2010[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  1.7 ADVANCE_FEE_2_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-X-Spam-Level: *******
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-I have a business proposal in the tune of $19.3m USD for you to handle
-with me. I have opportunity to transfer this abandon fund to your bank
-account in your country which belongs to our client.
+On Tue, Feb 15, 2022 at 11:00 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 31.01.2022 02:36, Dmitry Osipenko пишет:
+> > Problem
+> > -------
+> >
+> > SoC devices require power-off call chaining functionality from kernel.
+> > We have a widely used restart chaining provided by restart notifier API,
+> > but nothing for power-off.
+> >
+> > Solution
+> > --------
+> >
+> > Introduce new API that provides both restart and power-off call chains.
+> >
+> > Why combine restart with power-off? Because drivers often do both.
+> > More practical to have API that provides both under the same roof.
+> >
+> > The new API is designed with simplicity and extensibility in mind.
+> > It's built upon the existing restart and reboot APIs. The simplicity
+> > is in new helper functions that are convenient for drivers. The
+> > extensibility is in the design that doesn't hardcode callback
+> > arguments, making easy to add new parameters and remove old.
+> >
+> > This is a third attempt to introduce the new API. First was made by
+> > Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+> > In fact the work didn't stop and recently arm_pm_restart() was removed
+> > from v5.14 kernel, which was a part of preparatory work started by
+> > Guenter Roeck. I took into account experience and ideas from the
+> > previous attempts, extended and polished them.
+>
+>
+> Rafael and all, do you see anything critical that needs to be improved
+> in this v6?
+>
+> Will be great if you could take this patchset via the power tree if it
+> looks okay, or give an ack.
 
-I am inviting you in this transaction where this money can be shared
-between us at ratio of 50/50% and help the needy around us don=E2=80=99t be
-afraid of anything I am with you I will instruct you what you will do
-to maintain this fund.
+I need some more time for this, sorry.
 
-Please kindly contact me with your information's if you are interested
-in this tranasction for more details(ibrahimidewu4@gmail.com)
+I'm a bit concerned about seeing no response to this set from anyone.
 
-1. Your Full Name.....................
-2. Your Address......................
-3. Your Country of Origin.............
-4. Your Age..........................
-5. Your ID card copy and telephone number for easy communication...........=
-....
-
-Best regards,
-Mr.Ibrahim Idewu.
+It looks like multiple platforms may be affected by it in principle,
+so doesn't anyone care?
