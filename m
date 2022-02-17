@@ -2,119 +2,202 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48814BA96B
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 20:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8A14BAA25
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 20:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245075AbiBQTPl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Feb 2022 14:15:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36260 "EHLO
+        id S245409AbiBQTrZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Feb 2022 14:47:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245077AbiBQTPk (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 14:15:40 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434B390FE7
-        for <linux-mips@vger.kernel.org>; Thu, 17 Feb 2022 11:15:24 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id p9so9576200ejd.6
-        for <linux-mips@vger.kernel.org>; Thu, 17 Feb 2022 11:15:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+RZ8CAgnGa1bk5gBxds4oezzFjZLQMV+wOvrmesI1Hw=;
-        b=aC4vKGs+W+TwIvfSuol31sXb0DdwmBd+7ynpizLCKhXxCJFdEAZpxJvcWGa/FztIyE
-         kaM//DxAJXCDh5aNx4GSOgCqArnp/pPXpeZOwL6NCOz09LePB9aHf9rLmhVNdEQhmOfG
-         zcHXwBp2FYlRXI6tXnhZ/KCBgXws1BhNZED9tFrHvUNz3V476fnXQSLMeM+Shpqaev6m
-         W07DvhrokY4sorGqrqwhi0S/cnzs7UTqO0cIGR6WWEAN8VmZadQ9VO/+zsTblOwHPeWg
-         SsUN3Cw66rH7ga20AFYG5KTR6BdWsnByVkv9VANJJ9bhC1jZcqQ2NhN41BgDZLcdhMyk
-         TY3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+RZ8CAgnGa1bk5gBxds4oezzFjZLQMV+wOvrmesI1Hw=;
-        b=Xv0RMQYtaOEuq3e8XWvZ9ZSoCZKcv+eAu2Z9zvzPDJXFyoGeqB3Ye3YxAmICExmuti
-         UCEt70T1OX1Zi3Wdy3tlGyRMNxaSQJo5YRyemClnY1nkEoDOsabYDG/fP9iMbgyzXbhx
-         36h69hWUSPhEPpj+0Nr/hL2olv/Vi2WumQ3gSOJPkdqXDVyXI8KwQSehbJg96e2f4JFE
-         hw8sD32ktsP3i0REBMgzIN5cdx0Z0owCE4LIDNOcHUq0GAAlxqENpFdno9fGk9ZBTUUk
-         0ypVF0SstyCaXBqJcnGrvu/hLdALnsbMnGV2OcjuQBM8TzNCWwsVLcE5mpjjeBBuPLyR
-         1AFQ==
-X-Gm-Message-State: AOAM532m9TtzjWVirBL/Duva9sTe1tDOpX7f/m1kRHcYDv42hKSD//4B
-        FLYATdtPi9GLN2IruOmlRFOLe+KtMI9E8gbiMERxTg==
-X-Google-Smtp-Source: ABdhPJw48Oadf8QR2zY/o5TdRU0UiMjXS1n08+Rvo/jef0cepMooOXBMnDr3m4SH0a9wsDyMLo89s3cuvktj12QRONA=
-X-Received: by 2002:a17:906:4b52:b0:6cd:3863:b35e with SMTP id
- j18-20020a1709064b5200b006cd3863b35emr3488094ejv.415.1645125322737; Thu, 17
- Feb 2022 11:15:22 -0800 (PST)
+        with ESMTP id S245399AbiBQTrX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 14:47:23 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C0C26548;
+        Thu, 17 Feb 2022 11:47:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645127228; x=1676663228;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U4npDy91UVHGnXoEf8fnuC7pAS1YpWNELPCKYb0ijkI=;
+  b=L4FREd2thzcvsQ3EqwGT1ev3TWYl51F3JxLCpiItJd4u1Sh9DTtUeDeO
+   5IEnpwKhIb17MIT47NOqcKAbPaH1VEhy4Mna1K9D/kQqi1pBRCqhscPRI
+   TMmM8fPqLo6cyp+s/kZPaDFjRW0od7bH7NgPjViAMwM+rebqEjItFeMX3
+   2UrgDhsGLUtI37uapqg6ziSBSv2bgRHwpNVwv6F40L4cKqKiqgzephjxY
+   cwbJaCxRsZFigWLpQtkYG5LGtb8U/GM/0RRoUh51AlQdp/HOVmc279NeQ
+   xpBADGNMaQCvIrpBeyysnO5AKUwk0lEe5iYrhqIIgZNrMvgxRbR/25gYu
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="238363452"
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="238363452"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2022 11:47:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,376,1635231600"; 
+   d="scan'208";a="626224966"
+Received: from lkp-server01.sh.intel.com (HELO 6f05bf9e3301) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Feb 2022 11:47:01 -0800
+Received: from kbuild by 6f05bf9e3301 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nKmk1-0000Tw-2j; Thu, 17 Feb 2022 19:47:01 +0000
+Date:   Fri, 18 Feb 2022 03:46:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <error27@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     kbuild-all@lists.01.org, devicetree@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 1/4] drm/lsdc: add drm driver for loongson display
+ controller
+Message-ID: <202202172203.r8yqYAWT-lkp@intel.com>
+References: <20220217105523.1525122-2-15330273260@189.cn>
 MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-14-arnd@kernel.org>
-In-Reply-To: <20220216131332.1489939-14-arnd@kernel.org>
-From:   Andy Lutomirski <luto@amacapital.net>
-Date:   Thu, 17 Feb 2022 11:15:11 -0800
-Message-ID: <CALCETrVOvYPN4_6hS8wpm2v9bGZupZ5x4=vZAseG57OUgvLGfw@mail.gmail.com>
-Subject: Re: [PATCH v2 13/18] uaccess: generalize access_ok()
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
-        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
-        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
-        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
-        dalias@libc.org, davem@davemloft.net, richard@nod.at,
-        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217105523.1525122-2-15330273260@189.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 5:19 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> There are many different ways that access_ok() is defined across
-> architectures, but in the end, they all just compare against the
-> user_addr_max() value or they accept anything.
->
-> Provide one definition that works for most architectures, checking
-> against TASK_SIZE_MAX for user processes or skipping the check inside
-> of uaccess_kernel() sections.
->
-> For architectures without CONFIG_SET_FS(), this should be the fastest
-> check, as it comes down to a single comparison of a pointer against a
-> compile-time constant, while the architecture specific versions tend to
-> do something more complex for historic reasons or get something wrong.
+Hi Sui,
 
-This isn't actually optimal.  On x86, TASK_SIZE_MAX is a bizarre
-constant that has a very specific value to work around a bug^Wdesign
-error^Wfeature of Intel CPUs.  TASK_SIZE_MAX is the maximum address at
-which userspace is permitted to allocate memory, but there is a huge
-gap between user and kernel addresses, and any value in the gap would
-be adequate for the comparison.  If we wanted to optimize this, simply
-checking the high bit (which x86 can do without any immediate
-constants at all) would be sufficient and, for an access known to fit
-in 32 bits, one could get even fancier and completely ignore the size
-of the access.  (For accesses not known to fit in 32 bits, I suspect
-some creativity could still come up with a construction that's
-substantially faster than the one in your patch.)
+Thank you for the patch! Perhaps something to improve:
 
-So there's plenty of room for optimization here.
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on robh/for-next v5.17-rc4 next-20220217]
+[cannot apply to mripard/sunxi/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-(This is not in any respect a NAK -- it's just an observation that
-this could be even better.)
+url:    https://github.com/0day-ci/linux/commits/Sui-Jingfeng/drm-lsdc-add-drm-driver-for-loongson-display-controller/20220217-185718
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: m68k-randconfig-r034-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172203.r8yqYAWT-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/822d08dcd4408130e10897446cfdd640bcd53c8a
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Sui-Jingfeng/drm-lsdc-add-drm-driver-for-loongson-display-controller/20220217-185718
+        git checkout 822d08dcd4408130e10897446cfdd640bcd53c8a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpu/drm/lsdc/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:15,
+                    from include/linux/pci.h:37,
+                    from drivers/gpu/drm/lsdc/lsdc_drv.c:15:
+   drivers/gpu/drm/lsdc/lsdc_drv.c: In function 'lsdc_vram_init':
+>> include/drm/drm_print.h:425:39: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 3 has type 'resource_size_t' {aka 'unsigned int'} [-Wformat=]
+     425 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+         |                                       ^~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
+     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                          ^~~~~~~
+   include/drm/drm_print.h:425:9: note: in expansion of macro 'dev_info'
+     425 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+         |         ^~~~
+   include/drm/drm_print.h:429:9: note: in expansion of macro '__drm_printk'
+     429 |         __drm_printk((drm), info,, fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~
+   drivers/gpu/drm/lsdc/lsdc_drv.c:518:9: note: in expansion of macro 'drm_info'
+     518 |         drm_info(ddev, "vram start: 0x%llx, size: %uMB\n", base, (u32)(size >> 20));
+         |         ^~~~~~~~
+--
+   In file included from drivers/gpu/drm/lsdc/lsdc_drv.h:17,
+                    from drivers/gpu/drm/lsdc/lsdc_pll.c:14:
+   drivers/gpu/drm/lsdc/lsdc_pll.c: In function 'lsdc_pixpll_setup':
+>> drivers/gpu/drm/lsdc/lsdc_pll.c:169:62: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     169 |                 this->index, this->reg_base, this->reg_size, (u64)this->mmio);
+         |                                                              ^
+   include/drm/drm_print.h:461:70: note: in definition of macro 'drm_dbg'
+     461 |         drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRIVER, fmt, ##__VA_ARGS__)
+         |                                                                      ^~~~~~~~~~~
+
+
+vim +425 include/drm/drm_print.h
+
+02c9656b2f0d69 Haneen Mohammed       2017-10-17  385  
+02c9656b2f0d69 Haneen Mohammed       2017-10-17  386  /**
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  387   * DRM_DEV_DEBUG() - Debug output for generic drm code
+02c9656b2f0d69 Haneen Mohammed       2017-10-17  388   *
+306589856399e1 Douglas Anderson      2021-09-21  389   * NOTE: this is deprecated in favor of drm_dbg_core().
+306589856399e1 Douglas Anderson      2021-09-21  390   *
+091756bbb1a961 Haneen Mohammed       2017-10-17  391   * @dev: device pointer
+091756bbb1a961 Haneen Mohammed       2017-10-17  392   * @fmt: printf() like format string.
+02c9656b2f0d69 Haneen Mohammed       2017-10-17  393   */
+db87086492581c Joe Perches           2018-03-16  394  #define DRM_DEV_DEBUG(dev, fmt, ...)					\
+db87086492581c Joe Perches           2018-03-16  395  	drm_dev_dbg(dev, DRM_UT_CORE, fmt, ##__VA_ARGS__)
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  396  /**
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  397   * DRM_DEV_DEBUG_DRIVER() - Debug output for vendor specific part of the driver
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  398   *
+306589856399e1 Douglas Anderson      2021-09-21  399   * NOTE: this is deprecated in favor of drm_dbg() or dev_dbg().
+306589856399e1 Douglas Anderson      2021-09-21  400   *
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  401   * @dev: device pointer
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  402   * @fmt: printf() like format string.
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  403   */
+db87086492581c Joe Perches           2018-03-16  404  #define DRM_DEV_DEBUG_DRIVER(dev, fmt, ...)				\
+db87086492581c Joe Perches           2018-03-16  405  	drm_dev_dbg(dev, DRM_UT_DRIVER,	fmt, ##__VA_ARGS__)
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  406  /**
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  407   * DRM_DEV_DEBUG_KMS() - Debug output for modesetting code
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  408   *
+306589856399e1 Douglas Anderson      2021-09-21  409   * NOTE: this is deprecated in favor of drm_dbg_kms().
+306589856399e1 Douglas Anderson      2021-09-21  410   *
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  411   * @dev: device pointer
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  412   * @fmt: printf() like format string.
+b52817e9de06a3 Mauro Carvalho Chehab 2020-10-27  413   */
+db87086492581c Joe Perches           2018-03-16  414  #define DRM_DEV_DEBUG_KMS(dev, fmt, ...)				\
+db87086492581c Joe Perches           2018-03-16  415  	drm_dev_dbg(dev, DRM_UT_KMS, fmt, ##__VA_ARGS__)
+a18b21929453af Lyude Paul            2018-07-16  416  
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  417  /*
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  418   * struct drm_device based logging
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  419   *
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  420   * Prefer drm_device based logging over device or prink based logging.
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  421   */
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  422  
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  423  /* Helper for struct drm_device based logging. */
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  424  #define __drm_printk(drm, level, type, fmt, ...)			\
+fb6c7ab8718eb2 Jani Nikula           2019-12-10 @425  	dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  426  
+fb6c7ab8718eb2 Jani Nikula           2019-12-10  427  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
