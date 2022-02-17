@@ -2,130 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D934B9A52
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 08:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 237684B9A60
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 09:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236791AbiBQH6K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Feb 2022 02:58:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43842 "EHLO
+        id S237116AbiBQH7m (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Feb 2022 02:59:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236875AbiBQH6I (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 02:58:08 -0500
-X-Greylist: delayed 305 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 23:57:53 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA5EE015;
-        Wed, 16 Feb 2022 23:57:52 -0800 (PST)
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MTRhS-1nhaUr1zAK-00TmQM; Thu, 17 Feb 2022 08:52:45 +0100
-Received: by mail-wr1-f54.google.com with SMTP id x5so2599562wrg.13;
-        Wed, 16 Feb 2022 23:52:45 -0800 (PST)
-X-Gm-Message-State: AOAM531TqIZdxzgjKe4IT23BQjAj1r63uuynd0Qg8QWg7OVn4Y2HxdBL
-        jgNv3OGPn/PBpOvnautqsDKZ5B1nfPHZOSMxt4U=
-X-Google-Smtp-Source: ABdhPJwQLFNR2EKsG8wmZOAHPh9E9pyoICR3LxZT862dIjr2W4W3Sw6yF+ayzR5i5e/QGR8IN4+3KhdYVHoGFF4fNyc=
-X-Received: by 2002:adf:ea01:0:b0:1e4:b3e6:1f52 with SMTP id
- q1-20020adfea01000000b001e4b3e61f52mr1268592wrm.317.1645084364936; Wed, 16
- Feb 2022 23:52:44 -0800 (PST)
+        with ESMTP id S237415AbiBQH7Z (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 02:59:25 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68FEF258625;
+        Wed, 16 Feb 2022 23:58:54 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nKbgi-0000vy-00; Thu, 17 Feb 2022 08:58:52 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 0B097C250A; Thu, 17 Feb 2022 08:58:30 +0100 (CET)
+Date:   Thu, 17 Feb 2022 08:58:29 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mips@vger.kernel.org, Rui Salvaterra <rsalvaterra@gmail.com>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
+Message-ID: <20220217075829.GA5185@alpha.franken.de>
+References: <20220211001345.3429572-1-gch981213@gmail.com>
+ <20220216195423.GA17551@alpha.franken.de>
+ <CAJsYDVJw2DJX97cRwoAofzq_jL0GhyaC5j7UuT6OzC=Lp8WkSQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-14-arnd@kernel.org>
-In-Reply-To: <20220216131332.1489939-14-arnd@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 17 Feb 2022 08:52:29 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2T1Xr80GeM-3p1riyq=gKDJGeKVz_c5=r5=s14tXimLw@mail.gmail.com>
-Message-ID: <CAK8P3a2T1Xr80GeM-3p1riyq=gKDJGeKVz_c5=r5=s14tXimLw@mail.gmail.com>
-Subject: Re: [PATCH v2 13/18] uaccess: generalize access_ok()
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:6qcGhdTsQQvMIjB+11ipNF1DrG+OLInVcjYi4AXjSR4T+7w4a4G
- tvj/SU8V3XwoOWQPVG9LxfZPKnFfLZip/Q4k4pg7UiCm4QGSGIJG0sIDDl9GKfICP6+qAIY
- 2+TUcn5VnZN+i0sxBK5Yt242p2TWzmOaCg69Dt9OeqZlWdjtizeah9g/3PjyvE9B+9lCD1L
- cKNv6Z/s/LgftziOoQUwQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3CQ1JAQGrF0=:m+j1qyGbULyUrnu+pAp/L7
- aw2zyOJvMBLpw9qPx/a/bOtMxNuxcAk4Jy9S5iNS3gwExa9IDRJeCo9FzAcs5CkTmB8as+kq2
- pw5HGfQzw8FU3GUy3sY6zV0y6wbve29dF/0lUxWFW9AX73dPVIcVOLHIJReSQ6uRCx9XL6HEz
- QYbG3u6zOALJFWaHRDLwwN36S51Yf82lrMKvYa2X/WzbS27K1K7Oo1Mxpwwl5NEBDT65a0Q43
- OjUKlX4MhriB2rc4v2vm0fRspANdluMzAzzaW4nuy4UrcwYPDM+hyz9ml5dyDcc3rynlbBdSO
- XkAjx5LNO5eUkjbT+WkGwIWQZ5M+eFbVvZINJV1j9hfgXbS4vuU0lUjecWPH+e38xlkQj1QB0
- bbZ+73nYCnC4RWT6Tq1g3Ogu/velbg4oNCi5rcTpkkzoOD/jkBCylL4lG7VcbVV+XYKeknUZH
- hgpO2NaBKeXLaUjHHQKcTUmEoCEikK6Au956S8X1Wh0TQ4TTv8ERW0C0OF4BTSCCJmgrSv1TX
- IEGgutddy0JqQM9rEBMu1srM45PA/+NAose2E/g7I0GcEZXhdCudb+qW7KR/q60qDbrxbIQFb
- yyrEqvFWqMKjAU058gdzCyKQPyNg2dqGSlDQ25u81S5XpvSaQlxlFyo3c79bak+h9fAukbbkS
- oZ0bFwa97SwaIdtR17B6CX9hjxNTXJzgOJRPcHEUddroS2hHh4wZjyeYH/ZHn9DnVXm1jxcT8
- KrRtnkWhcRc6GiHQtcdftL3xV9SeeCOB0j6P03kbC5JMDBruIYMMR51bo20MnVDNE4yXDkRLb
- q8X7G+we4HTJA8p7nK4nn4s6ubx3+CJAbJUDq0nN/UzZpW5HSs=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJsYDVJw2DJX97cRwoAofzq_jL0GhyaC5j7UuT6OzC=Lp8WkSQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 2:13 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Thu, Feb 17, 2022 at 12:06:09PM +0800, Chuanhong Guo wrote:
+> Hi!
+> 
+> On Thu, Feb 17, 2022 at 3:57 AM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > On Fri, Feb 11, 2022 at 08:13:44AM +0800, Chuanhong Guo wrote:
+> > > It's reported that current memory detection code occasionally detects
+> > > larger memory under some bootloaders.
+> > > Current memory detection code tests whether address space wraps around
+> > > on KSEG0, which is unreliable because it's cached.
+> > >
+> > > Rewrite memory size detection to perform the same test on KSEG1 instead.
+> > > While at it, this patch also does the following two things:
+> > > 1. use a fixed pattern instead of a random function pointer as the magic
+> > >    value.
+> > > 2. add an additional memory write and a second comparison as part of the
+> > >    test to prevent possible smaller memory detection result due to
+> > >    leftover values in memory.
+> > >
+> > > Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
+> > > Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
+> > > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> > > ---
+> > >  arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
+> > >  1 file changed, 23 insertions(+), 13 deletions(-)
+> >
+> > applied to mips-fixes.
+> 
+> Oops.
+> 
+> As I mentioned in a previous mail, this patch has two cosmetic problems:
+> 1. misplaced bracket in commit message "Fixes" tag
+> 2. incorrect second test pattern: I meant to flip all the bits in the
+> first pattern,
+>    but I used "!" instead of "~". Any value will work just fine but it
+> looks weird
+>    to construct a zero using !MT7621_MEM_TEST_PATTERN.
+> 
+> Should I send a second patch to fix this patch or send a v2 of the
+> original patch?
 
-> + * limit and catch all possible overflows.
-> + * On architectures with separate user address space (m68k, s390, parisc,
-> + * sparc64) or those without an MMU, this should always return true.
-...
-> +static inline int __access_ok(const void __user *ptr, unsigned long size)
-> +{
-> +       unsigned long limit = user_addr_max();
-> +       unsigned long addr = (unsigned long)ptr;
-> +
-> +       if (IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE))
-> +               return true;
+a second patch please.
 
-I noticed that I'm missing the check for !CONFIG_MMU here, despite
-mentioning that in the comment above it. I've added it now.
+Thomas.
 
-        Arnd
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
