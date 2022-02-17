@@ -2,139 +2,193 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F354B9BD2
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 10:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 992A24B9CDC
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 11:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238472AbiBQJOI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Feb 2022 04:14:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33890 "EHLO
+        id S239045AbiBQKNP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Feb 2022 05:13:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiBQJOC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 04:14:02 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DB9279093;
-        Thu, 17 Feb 2022 01:13:47 -0800 (PST)
-Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MbBUc-1nrlkP3FMG-00ba8D; Thu, 17 Feb 2022 10:13:45 +0100
-Received: by mail-wm1-f49.google.com with SMTP id k127-20020a1ca185000000b0037bc4be8713so5642392wme.3;
-        Thu, 17 Feb 2022 01:13:45 -0800 (PST)
-X-Gm-Message-State: AOAM530cXqInqFnRZrNHPv8F9Bv9ZU/6Nrbg1+9ZyKwZgp/QWCzhK7q4
-        a8jtrAnR1/f9sa2bnwNcvcjPnvgEc/kRcs1balk=
-X-Google-Smtp-Source: ABdhPJwu2NVHGHLxx29UDj0eC2QtTDz9ABoGgqvKd5FtPXFo3D/c1j3IHxwDsslquGRbQQhg+y3kZFZQ6qJy+rJ75Go=
-X-Received: by 2002:a05:600c:1d27:b0:37c:74bb:2b4d with SMTP id
- l39-20020a05600c1d2700b0037c74bb2b4dmr4990966wms.82.1645085639420; Thu, 17
- Feb 2022 00:13:59 -0800 (PST)
+        with ESMTP id S236012AbiBQKNP (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 05:13:15 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140AB143469;
+        Thu, 17 Feb 2022 02:13:01 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id n24so7474925ljj.10;
+        Thu, 17 Feb 2022 02:13:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OO8O5AkWPhI/5yGYSTEQp+LjZetKZnyQ+pZ7++XrzEA=;
+        b=X8w7in6JtN9+vwIDY375tbKdJ6/kAXjQzoJEMNX/aRNZ/xldyGjWjXODYmSy5mi1RE
+         IVBvYSJ5Q0hWoh3euDgluS6hajxAwota0SjPBhdLfholDQzq33VHuJfcHHzCkXGyz8tb
+         MDBzs6ibY/EGdDqB/ff2GewtKr6TpYHNqvy5y4L9nhOeKSaVrEEfVSAdHs3oIc8/KGvy
+         BUoC/Ntz4HLIebyoKI3bup9qeurRZrprpsOzzaMBNquRHtxpasWvx6s1xD7yjJ47gW7a
+         aqMUkT2VhDOvjwLmzIlZFje3GuDLrgVXuDJcvjJJbqm/WRU77L4UMZYg+2nxY7fnS64M
+         8wzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OO8O5AkWPhI/5yGYSTEQp+LjZetKZnyQ+pZ7++XrzEA=;
+        b=7pr47jE/gdAdaDrCCfyYmBUiEIX35Jia+LTn+J6qHiHUFJ3a6Bm/wYJfBtMgD80XM7
+         08+9aZXK57FDzfN0oNQNxysoi9K3/Z9SCmgPPmMAqi5DvgiNWbWGtT1Psubir4+SXU+o
+         gRV+UCMI/bHhNXyFqqq4EYldR+1mU0vky+FWzW805Nb6ZzUABhsqUHBgWy3W64kJuagb
+         xrQofwp652Cdq7wqG1Ppo7wdJLFt4fCdhv7dcE/6F5zEC0gt38PkKdGWMDRMUqoHH14A
+         Lbe+x56E4n+G+Qrx8fdAHjTSmjCd/nzEYPt6JB/gtxXm0ufp6JJ870vKPi7kBlYpJT/q
+         PKYw==
+X-Gm-Message-State: AOAM531lg7CNRkr5GP49SV/u3DBjyETkU9AirEe1YGwbGmOKQGR7AOrk
+        mSTXBVd88G2R12+sHTThCSLVPemO/hU=
+X-Google-Smtp-Source: ABdhPJzppLbwPh7ryO4JRMtpJc/4Lz2rbVquaymBUgCgBO2OneSkA3o02raf386TVCaqFDiGA98BPg==
+X-Received: by 2002:a05:651c:1544:b0:246:1887:cf4c with SMTP id y4-20020a05651c154400b002461887cf4cmr917179ljp.118.1645092779295;
+        Thu, 17 Feb 2022 02:12:59 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id o10sm5079173lfl.116.2022.02.17.02.12.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Feb 2022 02:12:58 -0800 (PST)
+Message-ID: <4f0d1b50-9f55-dd81-f0c7-f5e0dfd75c2a@gmail.com>
+Date:   Thu, 17 Feb 2022 13:12:57 +0300
 MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org>
-In-Reply-To: <20220216131332.1489939-1-arnd@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 17 Feb 2022 09:13:43 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3QBWDYjr6VpPdjTBGFg88DdH3SHVgxEowgScgJOkNguQ@mail.gmail.com>
-Message-ID: <CAK8P3a3QBWDYjr6VpPdjTBGFg88DdH3SHVgxEowgScgJOkNguQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/18] clean up asm/uaccess.h, kill set_fs for good
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 00/21] Introduce power-off+restart call chain API
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
         Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:DWw8/YboN0VA6d+k6fSV83nQbC/ZW2wmQtyWyNvQRDOztud3WQ1
- AnIMws496a5T5xk4vOXJvIH3ubEyigceAA3MZmosjx3t/8wYb2bAkyFAHAnlH/gXyXoO4MC
- 6OXbGHp0kRSDSXaSqC/pBLsY/XbPRAn4510M1I/nBvX1e+0Sh7I2brZBCtBQBKMNI/DlCeC
- ATdzznqt6hmKNtUzV76jA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bCDoBw/rSs4=:7ZpiywYHjbn9ofMCGDNfAY
- ZmaKOeukHz/i1FvEWeUnFD0+Ss3VsIj+ifgbYRpWCti0Gh1IkbQlObrmQEtIgfRfm09n5f5H4
- juKvdnlr6upa6dkn0Kj1+Mjv86NpYedKVeAEuDu5MmJ4Uled5HrF9cMkpAK/McqYRWq65wjK2
- 40dWs0HF+wIXDWq+qoskgDMIWBSlXVlHAUSamn5ghAWxS0kcMHW5ns/O2yCI0+XAI4Ra4U5qY
- HEaJOLhW0PC35eAPWAU3/ztD54YhNmPLbODiw0iipIV0rBLsFx5ZxvJaiZnQte52YfmeUFgUa
- k3PaKnQXm27l+0veXT+nctw37AC5BwVknsgEXLNPiKJIol6HbJ8J5t5PcZ1D/QOmTdjGeO4AR
- 0g9GN43ocXW4LVZkCjdxmPh1EG9Dk93/krP1UZogxKLIuXKk9uiaeM2q5KYryQPPC0eBnERKW
- 3aoGe/Vd2e1PtAgwFISoQ2Mc60EDRajfVEmwNsc+ZJ6F5QuDc3GVdc3LMXbLgXPuJp/Bk1T54
- uug2aTPCPctCC0Kjkmvd9xxC4jsLMx7x9CtymMugFg8Eje946mauR1ArtzUQgTpwn/vFVpWsa
- 6zHXLMQg52xS3vcAZUlA9niqd26IcwOShz2/29sRFEZzp0qYv8frWdS2Wk7OX3BZ3GUjJgKsz
- BqJiQVW7t8fuf17y2qd8J7A5Sh8nQIpBxE9ZqAULMxjdpJ8zdo1SRttVQbE6L29lIFc94t+fu
- X7JFQ1XAR4JQV5MIV4VE+QhO0Utkv4QnwYspZJXM10rUIJe63cIUNIri6hGTrZoHv8NGMVgCk
- n8pRSzEIvcv/sRuJ686AST0gjiFHSTP64ColJil/N3M5h5gr6sojMyFYJXE6I+FXI0acF0k
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
+        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+References: <20220130233718.21544-1-digetx@gmail.com>
+ <635e8121-fca4-580c-6af5-d9317a2eee1b@gmail.com>
+ <CAJZ5v0g0MrBm2+GwctkB7kUyBEt6HTAexRCFFRmTF1UKDrVQ-g@mail.gmail.com>
+ <de2cbd2a-8d0d-8678-e514-b153d04546cc@gmx.de>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <de2cbd2a-8d0d-8678-e514-b153d04546cc@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 2:13 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Christoph Hellwig and a few others spent a huge effort on removing
-> set_fs() from most of the important architectures, but about half the
-> other architectures were never completed even though most of them don't
-> actually use set_fs() at all.
->
-> I did a patch for microblaze at some point, which turned out to be fairly
-> generic, and now ported it to most other architectures, using new generic
-> implementations of access_ok() and __{get,put}_kernel_nocheck().
->
-> Three architectures (sparc64, ia64, and sh) needed some extra work,
-> which I also completed.
->
-> The final series contains extra cleanup changes that touch all
-> architectures. Please review and test these, so we can merge them
-> for v5.18.
->
-> The series is available at
-> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=set_fs-2
-> for testing.
+16.02.2022 23:30, Helge Deller пишет:
+> On 2/16/22 13:25, Rafael J. Wysocki wrote:
+>> On Tue, Feb 15, 2022 at 11:00 PM Dmitry Osipenko <digetx@gmail.com> wrote:
+>>>
+>>> 31.01.2022 02:36, Dmitry Osipenko пишет:
+>>>> Problem
+>>>> -------
+>>>>
+>>>> SoC devices require power-off call chaining functionality from kernel.
+>>>> We have a widely used restart chaining provided by restart notifier API,
+>>>> but nothing for power-off.
+>>>>
+>>>> Solution
+>>>> --------
+>>>>
+>>>> Introduce new API that provides both restart and power-off call chains.
+>>>>
+>>>> Why combine restart with power-off? Because drivers often do both.
+>>>> More practical to have API that provides both under the same roof.
+>>>>
+>>>> The new API is designed with simplicity and extensibility in mind.
+>>>> It's built upon the existing restart and reboot APIs. The simplicity
+>>>> is in new helper functions that are convenient for drivers. The
+>>>> extensibility is in the design that doesn't hardcode callback
+>>>> arguments, making easy to add new parameters and remove old.
+>>>>
+>>>> This is a third attempt to introduce the new API. First was made by
+>>>> Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+>>>> In fact the work didn't stop and recently arm_pm_restart() was removed
+>>>> from v5.14 kernel, which was a part of preparatory work started by
+>>>> Guenter Roeck. I took into account experience and ideas from the
+>>>> previous attempts, extended and polished them.
+>>>
+>>>
+>>> Rafael and all, do you see anything critical that needs to be improved
+>>> in this v6?
+>>>
+>>> Will be great if you could take this patchset via the power tree if it
+>>> looks okay, or give an ack.
+>>
+>> I need some more time for this, sorry.
 
-I've added the updated contents to my asm-generic tree now to put them
-into linux-next.
+No worries, we're not in a rush.
 
-         Arnd
+>> I'm a bit concerned about seeing no response to this set from anyone.
+>>
+>> It looks like multiple platforms may be affected by it in principle,
+>> so doesn't anyone care?
+
+The platforms that didn't provide ack so far are: SH, x86, IA64, MIPS
+and NDS32. At least x86 and MIPS are alive, not sure why maintainers
+didn't bother to answer yet.
+
+> I did looked into the whole patch set after applying it locally.
+> 
+> While I agree a new combined API is good, and the beginning looked promising,
+> after some time I started to ask myself if the whole infrastructure might
+> be a little overdesigned.
+> 
+> Anyway, I tested it and it works for me on parisc.
+> And it's probably better than what we have today.
+
+Thank you!
