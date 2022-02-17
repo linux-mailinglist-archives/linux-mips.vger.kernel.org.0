@@ -2,130 +2,119 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17C24BA640
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 17:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B48814BA96B
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 20:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243344AbiBQQkY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Feb 2022 11:40:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49598 "EHLO
+        id S245075AbiBQTPl (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Feb 2022 14:15:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbiBQQkV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 11:40:21 -0500
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2122B31A2;
-        Thu, 17 Feb 2022 08:40:06 -0800 (PST)
-Received: by mail-il1-f172.google.com with SMTP id f13so2670281ilq.5;
-        Thu, 17 Feb 2022 08:40:06 -0800 (PST)
+        with ESMTP id S245077AbiBQTPk (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 14:15:40 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434B390FE7
+        for <linux-mips@vger.kernel.org>; Thu, 17 Feb 2022 11:15:24 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id p9so9576200ejd.6
+        for <linux-mips@vger.kernel.org>; Thu, 17 Feb 2022 11:15:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+RZ8CAgnGa1bk5gBxds4oezzFjZLQMV+wOvrmesI1Hw=;
+        b=aC4vKGs+W+TwIvfSuol31sXb0DdwmBd+7ynpizLCKhXxCJFdEAZpxJvcWGa/FztIyE
+         kaM//DxAJXCDh5aNx4GSOgCqArnp/pPXpeZOwL6NCOz09LePB9aHf9rLmhVNdEQhmOfG
+         zcHXwBp2FYlRXI6tXnhZ/KCBgXws1BhNZED9tFrHvUNz3V476fnXQSLMeM+Shpqaev6m
+         W07DvhrokY4sorGqrqwhi0S/cnzs7UTqO0cIGR6WWEAN8VmZadQ9VO/+zsTblOwHPeWg
+         SsUN3Cw66rH7ga20AFYG5KTR6BdWsnByVkv9VANJJ9bhC1jZcqQ2NhN41BgDZLcdhMyk
+         TY3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=42YgXKsYX5OZqyMF3kRdlVgh0yrlkJ5vHS9c6U9AXD8=;
-        b=uvSwjivzanb29+kwl7fByzsu2bthAzwtX9G0+k6erRNYnedtGile3qSm4dcBaVk02t
-         h3DOJRelgu5E93hFd/lcPQPHXvT9Li/y0R15YTOhuOuUEDXDgsvGVnIIhWp8TDxH/wSJ
-         y86DWQqZ4WzcnBONBx2y76mUjC/htlIWbhjM6G3LrVNzssS8eKwJyF23xClrXtngNDQM
-         SJ0FMnqgb0Rzz3WbuvsoObx+POXSxCpsgqVVcK8QUaepzjyvqxpbVxzIyKsxsNt1KAfj
-         irAEzUFHyogxTfHIEexHj3GMp9kD8UL27TlNceY7emP/mOcMIHUhzFoHSqmciC+HHpuL
-         cwOw==
-X-Gm-Message-State: AOAM532zubg56qQ4v7tw41pHrexG10glqJ1hRksJ5YCctclcPP7HOrDo
-        1RvhSOtOUVw9Oygla+V14w==
-X-Google-Smtp-Source: ABdhPJzblA3h4h2T4K+K98Bdy6EvTCXy87z0Zrx38haaMlOdtIg1+JWX6SDxGNwnl4O1+t+hZSC20A==
-X-Received: by 2002:a05:6e02:2168:b0:2c1:a436:d18c with SMTP id s8-20020a056e02216800b002c1a436d18cmr499762ilv.49.1645116005928;
-        Thu, 17 Feb 2022 08:40:05 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id a19sm2309825iot.35.2022.02.17.08.40.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 08:40:05 -0800 (PST)
-Received: (nullmailer pid 3365323 invoked by uid 1000);
-        Thu, 17 Feb 2022 16:39:55 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>, Li Yi <liyi@loongson.cn>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Zack Rusin <zackr@vmware.com>, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Ilia Mirkin <imirkin@alum.mit.edu>
-In-Reply-To: <20220216181712.1493400-3-15330273260@189.cn>
-References: <20220216181712.1493400-1-15330273260@189.cn> <20220216181712.1493400-3-15330273260@189.cn>
-Subject: Re: [PATCH v8 2/3] MIPS: Loongson64: dts: update the display controller device node
-Date:   Thu, 17 Feb 2022 10:39:55 -0600
-Message-Id: <1645115995.354636.3365322.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+RZ8CAgnGa1bk5gBxds4oezzFjZLQMV+wOvrmesI1Hw=;
+        b=Xv0RMQYtaOEuq3e8XWvZ9ZSoCZKcv+eAu2Z9zvzPDJXFyoGeqB3Ye3YxAmICExmuti
+         UCEt70T1OX1Zi3Wdy3tlGyRMNxaSQJo5YRyemClnY1nkEoDOsabYDG/fP9iMbgyzXbhx
+         36h69hWUSPhEPpj+0Nr/hL2olv/Vi2WumQ3gSOJPkdqXDVyXI8KwQSehbJg96e2f4JFE
+         hw8sD32ktsP3i0REBMgzIN5cdx0Z0owCE4LIDNOcHUq0GAAlxqENpFdno9fGk9ZBTUUk
+         0ypVF0SstyCaXBqJcnGrvu/hLdALnsbMnGV2OcjuQBM8TzNCWwsVLcE5mpjjeBBuPLyR
+         1AFQ==
+X-Gm-Message-State: AOAM532m9TtzjWVirBL/Duva9sTe1tDOpX7f/m1kRHcYDv42hKSD//4B
+        FLYATdtPi9GLN2IruOmlRFOLe+KtMI9E8gbiMERxTg==
+X-Google-Smtp-Source: ABdhPJw48Oadf8QR2zY/o5TdRU0UiMjXS1n08+Rvo/jef0cepMooOXBMnDr3m4SH0a9wsDyMLo89s3cuvktj12QRONA=
+X-Received: by 2002:a17:906:4b52:b0:6cd:3863:b35e with SMTP id
+ j18-20020a1709064b5200b006cd3863b35emr3488094ejv.415.1645125322737; Thu, 17
+ Feb 2022 11:15:22 -0800 (PST)
+MIME-Version: 1.0
+References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-14-arnd@kernel.org>
+In-Reply-To: <20220216131332.1489939-14-arnd@kernel.org>
+From:   Andy Lutomirski <luto@amacapital.net>
+Date:   Thu, 17 Feb 2022 11:15:11 -0800
+Message-ID: <CALCETrVOvYPN4_6hS8wpm2v9bGZupZ5x4=vZAseG57OUgvLGfw@mail.gmail.com>
+Subject: Re: [PATCH v2 13/18] uaccess: generalize access_ok()
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
+        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
+        dalias@libc.org, davem@davemloft.net, richard@nod.at,
+        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, 17 Feb 2022 02:17:11 +0800, Sui Jingfeng wrote:
-> From: suijingfeng <suijingfeng@loongson.cn>
-> 
-> The display controller is a pci device, its PCI vendor id is 0x0014
-> its PCI device id is 0x7a06.
-> 
-> 1) In order to let the lsdc kms driver to know which chip the DC is
->    contained in, we add different compatible for different chip.
-> 
-> 2) Add display controller device node for ls2k1000 SoC
-> 
-> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
-> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
-> ---
->  .../loongson/loongson,display-controller.yaml | 114 ++++++++++++++++++
->  .../display/loongson/loongson-drm.txt         |  16 +++
->  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   8 ++
->  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +-
->  4 files changed, 140 insertions(+), 5 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson-drm.txt
-> 
+On Wed, Feb 16, 2022 at 5:19 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> There are many different ways that access_ok() is defined across
+> architectures, but in the end, they all just compare against the
+> user_addr_max() value or they accept anything.
+>
+> Provide one definition that works for most architectures, checking
+> against TASK_SIZE_MAX for user processes or skipping the check inside
+> of uaccess_kernel() sections.
+>
+> For architectures without CONFIG_SET_FS(), this should be the fastest
+> check, as it comes down to a single comparison of a pointer against a
+> compile-time constant, while the architecture specific versions tend to
+> do something more complex for historic reasons or get something wrong.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This isn't actually optimal.  On x86, TASK_SIZE_MAX is a bizarre
+constant that has a very specific value to work around a bug^Wdesign
+error^Wfeature of Intel CPUs.  TASK_SIZE_MAX is the maximum address at
+which userspace is permitted to allocate memory, but there is a huge
+gap between user and kernel addresses, and any value in the gap would
+be adequate for the comparison.  If we wanted to optimize this, simply
+checking the high bit (which x86 can do without any immediate
+constants at all) would be sufficient and, for an access known to fit
+in 32 bits, one could get even fancier and completely ignore the size
+of the access.  (For accesses not known to fit in 32 bits, I suspect
+some creativity could still come up with a construction that's
+substantially faster than the one in your patch.)
 
-yamllint warnings/errors:
+So there's plenty of room for optimization here.
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
-Error: Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dts:22.30-31 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:378: Documentation/devicetree/bindings/display/loongson/loongson,display-controller.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1398: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1593886
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+(This is not in any respect a NAK -- it's just an observation that
+this could be even better.)
