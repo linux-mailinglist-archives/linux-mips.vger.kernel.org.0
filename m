@@ -2,50 +2,41 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E49D4B9DBF
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 11:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540674B9E4D
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 12:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239334AbiBQK5r (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Feb 2022 05:57:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59608 "EHLO
+        id S237483AbiBQLIA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Feb 2022 06:08:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239431AbiBQK5p (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 05:57:45 -0500
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40831295FD2;
-        Thu, 17 Feb 2022 02:57:28 -0800 (PST)
-Received: by mail-ed1-f47.google.com with SMTP id f17so8951262edd.2;
-        Thu, 17 Feb 2022 02:57:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M3e7mx5k5NMbWVbjczqCykQR7v8yJGLEFmzV0ogAmRw=;
-        b=teSk+Kcb/TpY8cCR4cBHIssnhCoggcSZgrAI2apsf39bWdB+HyRDFOP9zJ9Mnh1NWp
-         aRChvNQQ8AOrWDEosBAcdIjhylop92dS5iZqHusbfPFQmVzq2JwxfKhXXwKnD+/34MAO
-         RnZWvKhGNIAInnIADFqbY7A0wvMS/pxuGkmkPyCX9BXDzqux3Oeu3NcowNCJPAJdxBCx
-         K5d6J6VRHloZhwWr8bxCKDeEiRPehyd3On7gJWp1XM/4ywaIV3MqP8I6kgRLko2MWgmP
-         uuEuK1iDnZ7LMy0PzSzGjyVpvgqYQ1fqI7F89QEBpLyBCCkkx/inVKTzKNGvPLBUnJIQ
-         JF5g==
-X-Gm-Message-State: AOAM532FU6fSTXPINFBNcbgrbRQvzVQCtc2SzI4WQJl1nyxCQzTQS4LT
-        Zgmb/55moX/jpR9cnaSl/AY=
-X-Google-Smtp-Source: ABdhPJzdcJvIkE/xnI3Airtm4grRt8mWc6C1SZCYJ1ZG2gZ8Rkd4+4IYzW3RPliBpPHomPvCIUDEzA==
-X-Received: by 2002:a05:6402:110a:b0:408:e478:9618 with SMTP id u10-20020a056402110a00b00408e4789618mr2017659edv.344.1645095446544;
-        Thu, 17 Feb 2022 02:57:26 -0800 (PST)
-Received: from [192.168.0.111] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.googlemail.com with ESMTPSA id 9sm1067336ejk.28.2022.02.17.02.57.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Feb 2022 02:57:25 -0800 (PST)
-Message-ID: <0ed34852-990d-af07-afd7-1d8ce3a2baf9@kernel.org>
-Date:   Thu, 17 Feb 2022 11:57:24 +0100
+        with ESMTP id S230221AbiBQLIA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 06:08:00 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB3251AE2D0;
+        Thu, 17 Feb 2022 03:07:44 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.41:56322.1846661901
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id C11C3100139;
+        Thu, 17 Feb 2022 19:07:42 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 5afda76d27df4881bf43c5741b4b3b34 for krzk@kernel.org;
+        Thu, 17 Feb 2022 19:07:43 CST
+X-Transaction-ID: 5afda76d27df4881bf43c5741b4b3b34
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <e635074c-8bff-564b-f9a2-38255ba45625@189.cn>
+Date:   Thu, 17 Feb 2022 19:07:40 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v9 3/4] Documentation/dt: Add descriptions for loongson
- display controller
+Subject: Re: [PATCH v8 2/3] MIPS: Loongson64: dts: update the display
+ controller device node
 Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Roland Scheidegger <sroland@vmware.com>,
@@ -63,167 +54,56 @@ To:     Sui Jingfeng <15330273260@189.cn>,
         Lucas Stach <l.stach@pengutronix.de>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
+        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
         suijingfeng <suijingfeng@loongson.cn>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220217105523.1525122-1-15330273260@189.cn>
- <20220217105523.1525122-4-15330273260@189.cn>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220217105523.1525122-4-15330273260@189.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220216181712.1493400-1-15330273260@189.cn>
+ <20220216181712.1493400-3-15330273260@189.cn>
+ <687aad50-6e37-dab9-71a0-4df89abbd9d4@kernel.org>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <687aad50-6e37-dab9-71a0-4df89abbd9d4@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 17/02/2022 11:55, Sui Jingfeng wrote:
-> From: suijingfeng <suijingfeng@loongson.cn>
-> 
-> Add DT documentation for loongson display controller found in
-> LS2K1000, LS2K0500, LS7A1000 and LS7A2000.
-> 
-> v2: DT binding docs and includes should be a separate patch,
->     fix a warnning because of that.
-> 
-> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
-> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
-> ---
->  .../loongson/loongson,display-controller.yaml | 114 ++++++++++++++++++
->  1 file changed, 114 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
-> new file mode 100644
-> index 000000000000..94229519022a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
-> @@ -0,0 +1,114 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/loongson,display-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson LS7A2000/LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Sui Jingfeng <suijingfeng@loongson.cn>
-> +
-> +description: |+
-> +
-> +  Loongson display controllers are simple which require scanout buffers
-> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
-> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
-> +  with a dedicated video ram which is 64MB or more.
-> +
-> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
-> +  located at the DC register space. They are used to emulate two way i2c,
-> +  One for DVO0, another for DVO1.
-> +
-> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
-> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
-> +
-> +  LSDC has two display pipes, each way has a DVO interface which provide
-> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
-> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
-> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
-> +
-> +  LSDC's display pipeline have several components as below description,
-> +
-> +  The display controller in LS7A1000:
-> +    ___________________                                     _________
-> +    |            -------|                                   |         |
-> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monotor |
-> +    |  _   _     -------|        ^             ^            |_________|
-> +    | | | | |    -------|        |             |
-> +    | |_| |_|    | i2c0 <--------+-------------+
-> +    |            -------|
-> +    |   DC IN LS7A1000  |
-> +    |  _   _     -------|
-> +    | | | | |    | i2c1 <--------+-------------+
-> +    | |_| |_|    -------|        |             |             _________
-> +    |            -------|        |             |            |         |
-> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
-> +    |            -------|                                   |_________|
-> +    |___________________|
-> +
-> +  Simple usage of LS7A1000 with LS3A4000 CPU:
-> +
-> +    +------+            +-----------------------------------+
-> +    | DDR4 |            |  +-------------------+            |
-> +    +------+            |  | PCIe Root complex |   LS7A1000 |
-> +       || MC0           |  +--++---------++----+            |
-> +  +----------+  HT 3.0  |     ||         ||                 |
-> +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
-> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
-> +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
-> +       || MC1           +---------------|--|----------------+
-> +    +------+                            |  |
-> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
-> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
-> +                      +-------+                      +------+
-> +
-> +  The display controller in LS2K1000/LS2K0500:
-> +     ___________________                                     _________
-> +    |            -------|                                   |         |
-> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monotor |
-> +    |  _   _     -------|        ^              ^           |_________|
-> +    | | | | |           |        |              |
-> +    | |_| |_|           |     +------+          |
-> +    |                   <---->| i2c0 |<---------+
-> +    |   DC IN LS2K1000  |     +------+
-> +    |  _   _            |     +------+
-> +    | | | | |           <---->| i2c1 |----------+
-> +    | |_| |_|           |     +------+          |            _________
-> +    |            -------|        |              |           |         |
-> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
-> +    |            -------|                                   |_________|
-> +    |___________________|
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - loongson,ls7a2000-dc
-> +      - loongson,ls7a1000-dc
-> +      - loongson,ls2k1000-dc
-> +      - loongson,ls2k0500-dc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 1
 
-No need for minItems, if you have maxItems:1.
+On 2022/2/17 16:42, Krzysztof Kozlowski wrote:
+>>   .../boot/dts/loongson/loongson64-2k1000.dtsi  |   8 ++
+>>   arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   7 +-
+>>   4 files changed, 140 insertions(+), 5 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson-drm.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>> new file mode 100644
+>> index 000000000000..64d8364b50ab
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>> @@ -0,0 +1,114 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id:http://devicetree.org/schemas/display/pci0014,7a06.yaml#
+> The file name looks different than ID. Does this pass `make
+> dt_binding_check` validation?
+>
+  I run make dt_binding_check, it say 'dt-doc-validate' not found!
 
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    lsdc: display-controller@6,1 {
-> +        compatible = "loongson,ls7a1000-dc";
-> +        reg = <0x3100 0x0 0x0 0x0 0x0>;
-> +        interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
-> +        interrupt-parent = <&pic>;
-> +    };
+Ensure dtschema python package is installed and in your PATH.
+Current PATH is:
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+make[1]: *** [Documentation/devicetree/bindings/Makefile:12: 
+check_dtschema_version] Error 1
 
-I still do not think you actually tested it with dt_bindings_check...
+make: *** [Makefile:1398: dt_binding_check] Error 2
 
 
-Best regards,
-Krzysztof
