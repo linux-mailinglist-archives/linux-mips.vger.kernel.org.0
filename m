@@ -2,228 +2,415 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B004B9E7A
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 12:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1890A4BA1D7
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Feb 2022 14:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234020AbiBQLV4 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Feb 2022 06:21:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47242 "EHLO
+        id S237030AbiBQNq6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Feb 2022 08:46:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiBQLVz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 06:21:55 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 595F1260B;
-        Thu, 17 Feb 2022 03:21:37 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.31:59904.1315278447
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 60DFA1002A9;
-        Thu, 17 Feb 2022 19:21:33 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 45689aa60f704e2f9cd7547de120f433 for krzk@kernel.org;
-        Thu, 17 Feb 2022 19:21:35 CST
-X-Transaction-ID: 45689aa60f704e2f9cd7547de120f433
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <f75be7e3-bf14-77f5-4885-df9786951348@189.cn>
-Date:   Thu, 17 Feb 2022 19:21:33 +0800
+        with ESMTP id S236833AbiBQNq5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 08:46:57 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48999260A;
+        Thu, 17 Feb 2022 05:46:41 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A0BAF1F37D;
+        Thu, 17 Feb 2022 13:46:40 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 8D667A3B85;
+        Thu, 17 Feb 2022 13:46:40 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: remove asm/war.h
+Date:   Thu, 17 Feb 2022 14:46:28 +0100
+Message-Id: <20220217134630.42203-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v9 3/4] Documentation/dt: Add descriptions for loongson
- display controller
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220217105523.1525122-1-15330273260@189.cn>
- <20220217105523.1525122-4-15330273260@189.cn>
- <0ed34852-990d-af07-afd7-1d8ce3a2baf9@kernel.org>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <0ed34852-990d-af07-afd7-1d8ce3a2baf9@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+The major part for workaround handling has already moved to config
+options. This change replaces the remaining defines by already
+available config options and gets rid of war.h
 
-On 2022/2/17 18:57, Krzysztof Kozlowski wrote:
-> On 17/02/2022 11:55, Sui Jingfeng wrote:
->> From: suijingfeng <suijingfeng@loongson.cn>
->>
->> Add DT documentation for loongson display controller found in
->> LS2K1000, LS2K0500, LS7A1000 and LS7A2000.
->>
->> v2: DT binding docs and includes should be a separate patch,
->>      fix a warnning because of that.
->>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> ---
->>   .../loongson/loongson,display-controller.yaml | 114 ++++++++++++++++++
->>   1 file changed, 114 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> new file mode 100644
->> index 000000000000..94229519022a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> @@ -0,0 +1,114 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/loongson,display-controller.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson LS7A2000/LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
->> +
->> +maintainers:
->> +  - Sui Jingfeng <suijingfeng@loongson.cn>
->> +
->> +description: |+
->> +
->> +  Loongson display controllers are simple which require scanout buffers
->> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
->> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
->> +  with a dedicated video ram which is 64MB or more.
->> +
->> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
->> +  located at the DC register space. They are used to emulate two way i2c,
->> +  One for DVO0, another for DVO1.
->> +
->> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
->> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
->> +
->> +  LSDC has two display pipes, each way has a DVO interface which provide
->> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
->> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
->> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
->> +
->> +  LSDC's display pipeline have several components as below description,
->> +
->> +  The display controller in LS7A1000:
->> +    ___________________                                     _________
->> +    |            -------|                                   |         |
->> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monotor |
->> +    |  _   _     -------|        ^             ^            |_________|
->> +    | | | | |    -------|        |             |
->> +    | |_| |_|    | i2c0 <--------+-------------+
->> +    |            -------|
->> +    |   DC IN LS7A1000  |
->> +    |  _   _     -------|
->> +    | | | | |    | i2c1 <--------+-------------+
->> +    | |_| |_|    -------|        |             |             _________
->> +    |            -------|        |             |            |         |
->> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->> +    |            -------|                                   |_________|
->> +    |___________________|
->> +
->> +  Simple usage of LS7A1000 with LS3A4000 CPU:
->> +
->> +    +------+            +-----------------------------------+
->> +    | DDR4 |            |  +-------------------+            |
->> +    +------+            |  | PCIe Root complex |   LS7A1000 |
->> +       || MC0           |  +--++---------++----+            |
->> +  +----------+  HT 3.0  |     ||         ||                 |
->> +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
->> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
->> +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
->> +       || MC1           +---------------|--|----------------+
->> +    +------+                            |  |
->> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
->> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
->> +                      +-------+                      +------+
->> +
->> +  The display controller in LS2K1000/LS2K0500:
->> +     ___________________                                     _________
->> +    |            -------|                                   |         |
->> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monotor |
->> +    |  _   _     -------|        ^              ^           |_________|
->> +    | | | | |           |        |              |
->> +    | |_| |_|           |     +------+          |
->> +    |                   <---->| i2c0 |<---------+
->> +    |   DC IN LS2K1000  |     +------+
->> +    |  _   _            |     +------+
->> +    | | | | |           <---->| i2c1 |----------+
->> +    | |_| |_|           |     +------+          |            _________
->> +    |            -------|        |              |           |         |
->> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->> +    |            -------|                                   |_________|
->> +    |___________________|
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - loongson,ls7a2000-dc
->> +      - loongson,ls7a1000-dc
->> +      - loongson,ls2k1000-dc
->> +      - loongson,ls2k0500-dc
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    minItems: 1
-> No need for minItems, if you have maxItems:1.
->
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    lsdc: display-controller@6,1 {
->> +        compatible = "loongson,ls7a1000-dc";
->> +        reg = <0x3100 0x0 0x0 0x0 0x0>;
->> +        interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
->> +        interrupt-parent = <&pic>;
->> +    };
-> I still do not think you actually tested it with dt_bindings_check...
->
->
-> Best regards,
-> Krzysztof
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/Kconfig                  | 38 ++++++++++++++++
+ arch/mips/include/asm/futex.h      |  1 -
+ arch/mips/include/asm/mipsmtregs.h |  1 -
+ arch/mips/include/asm/mipsregs.h   |  1 -
+ arch/mips/include/asm/war.h        | 73 ------------------------------
+ arch/mips/kernel/entry.S           |  1 -
+ arch/mips/kernel/genex.S           |  1 -
+ arch/mips/kernel/r4k-bugs64.c      |  9 ++--
+ arch/mips/kernel/scall32-o32.S     |  1 -
+ arch/mips/kernel/scall64-n64.S     |  1 -
+ arch/mips/kernel/signal.c          |  1 -
+ arch/mips/kernel/signal_n32.c      |  1 -
+ arch/mips/lib/delay.c              |  1 -
+ arch/mips/mm/c-octeon.c            |  1 -
+ arch/mips/mm/c-r4k.c               |  1 -
+ arch/mips/mm/page.c                |  5 +-
+ arch/mips/mm/tlbex.c               |  1 -
+ 17 files changed, 47 insertions(+), 91 deletions(-)
+ delete mode 100644 arch/mips/include/asm/war.h
 
-I'm hurry to fix a few error in the v8 of this patch set, to avoid
-reviewers get angry about those mistake in my patch.
-   
-I come cross a few problems when running make dt_bindings_check,
-i am confusing about that, writing DT discpription of PCI display
-controller is not as easy as platform one. I will fix it at next version,
-thanks you.
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 058446f01487..03b1fd4ceb97 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2520,13 +2520,51 @@ config CPU_HAS_SYNC
+ #
+ # CPU non-features
+ #
++
++# Work around the "daddi" and "daddiu" CPU errata:
++#
++# - The `daddi' instruction fails to trap on overflow.
++#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
++#   erratum #23
++#
++# - The `daddiu' instruction can produce an incorrect result.
++#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
++#   erratum #41
++#   "MIPS R4000MC Errata, Processor Revision 2.2 and 3.0", erratum
++#   #15
++#   "MIPS R4400PC/SC Errata, Processor Revision 1.0", erratum #7
++#   "MIPS R4400MC Errata, Processor Revision 1.0", erratum #5
+ config CPU_DADDI_WORKAROUNDS
+ 	bool
+ 
++# Work around certain R4000 CPU errata (as implemented by GCC):
++#
++# - A double-word or a variable shift may give an incorrect result
++#   if executed immediately after starting an integer division:
++#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
++#   erratum #28
++#   "MIPS R4000MC Errata, Processor Revision 2.2 and 3.0", erratum
++#   #19
++#
++# - A double-word or a variable shift may give an incorrect result
++#   if executed while an integer multiplication is in progress:
++#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
++#   errata #16 & #28
++#
++# - An integer division may give an incorrect result if started in
++#   a delay slot of a taken branch or a jump:
++#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
++#   erratum #52
+ config CPU_R4000_WORKAROUNDS
+ 	bool
+ 	select CPU_R4400_WORKAROUNDS
+ 
++# Work around certain R4400 CPU errata (as implemented by GCC):
++#
++# - A double-word or a variable shift may give an incorrect result
++#   if executed immediately after starting an integer division:
++#   "MIPS R4400MC Errata, Processor Revision 1.0", erratum #10
++#   "MIPS R4400MC Errata, Processor Revision 2.0 & 3.0", erratum #4
+ config CPU_R4400_WORKAROUNDS
+ 	bool
+ 
+diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.h
+index 8612a7e42d78..05832eb240fa 100644
+--- a/arch/mips/include/asm/futex.h
++++ b/arch/mips/include/asm/futex.h
+@@ -17,7 +17,6 @@
+ #include <asm/compiler.h>
+ #include <asm/errno.h>
+ #include <asm/sync.h>
+-#include <asm/war.h>
+ 
+ #define arch_futex_atomic_op_inuser arch_futex_atomic_op_inuser
+ #define futex_atomic_cmpxchg_inatomic futex_atomic_cmpxchg_inatomic
+diff --git a/arch/mips/include/asm/mipsmtregs.h b/arch/mips/include/asm/mipsmtregs.h
+index be4cf9d477be..a8d67c2f4f7b 100644
+--- a/arch/mips/include/asm/mipsmtregs.h
++++ b/arch/mips/include/asm/mipsmtregs.h
+@@ -9,7 +9,6 @@
+ #define _ASM_MIPSMTREGS_H
+ 
+ #include <asm/mipsregs.h>
+-#include <asm/war.h>
+ 
+ #ifndef __ASSEMBLY__
+ 
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 2616353b940c..305651af15b3 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -17,7 +17,6 @@
+ #include <linux/types.h>
+ #include <asm/hazards.h>
+ #include <asm/isa-rev.h>
+-#include <asm/war.h>
+ 
+ /*
+  * The following macros are especially useful for __asm__
+diff --git a/arch/mips/include/asm/war.h b/arch/mips/include/asm/war.h
+deleted file mode 100644
+index 21443f096238..000000000000
+--- a/arch/mips/include/asm/war.h
++++ /dev/null
+@@ -1,73 +0,0 @@
+-/*
+- * This file is subject to the terms and conditions of the GNU General Public
+- * License.  See the file "COPYING" in the main directory of this archive
+- * for more details.
+- *
+- * Copyright (C) 2002, 2004, 2007 by Ralf Baechle
+- * Copyright (C) 2007  Maciej W. Rozycki
+- */
+-#ifndef _ASM_WAR_H
+-#define _ASM_WAR_H
+-
+-/*
+- * Work around certain R4000 CPU errata (as implemented by GCC):
+- *
+- * - A double-word or a variable shift may give an incorrect result
+- *   if executed immediately after starting an integer division:
+- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
+- *   erratum #28
+- *   "MIPS R4000MC Errata, Processor Revision 2.2 and 3.0", erratum
+- *   #19
+- *
+- * - A double-word or a variable shift may give an incorrect result
+- *   if executed while an integer multiplication is in progress:
+- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
+- *   errata #16 & #28
+- *
+- * - An integer division may give an incorrect result if started in
+- *   a delay slot of a taken branch or a jump:
+- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
+- *   erratum #52
+- */
+-#ifdef CONFIG_CPU_R4000_WORKAROUNDS
+-#define R4000_WAR 1
+-#else
+-#define R4000_WAR 0
+-#endif
+-
+-/*
+- * Work around certain R4400 CPU errata (as implemented by GCC):
+- *
+- * - A double-word or a variable shift may give an incorrect result
+- *   if executed immediately after starting an integer division:
+- *   "MIPS R4400MC Errata, Processor Revision 1.0", erratum #10
+- *   "MIPS R4400MC Errata, Processor Revision 2.0 & 3.0", erratum #4
+- */
+-#ifdef CONFIG_CPU_R4400_WORKAROUNDS
+-#define R4400_WAR 1
+-#else
+-#define R4400_WAR 0
+-#endif
+-
+-/*
+- * Work around the "daddi" and "daddiu" CPU errata:
+- *
+- * - The `daddi' instruction fails to trap on overflow.
+- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
+- *   erratum #23
+- *
+- * - The `daddiu' instruction can produce an incorrect result.
+- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
+- *   erratum #41
+- *   "MIPS R4000MC Errata, Processor Revision 2.2 and 3.0", erratum
+- *   #15
+- *   "MIPS R4400PC/SC Errata, Processor Revision 1.0", erratum #7
+- *   "MIPS R4400MC Errata, Processor Revision 1.0", erratum #5
+- */
+-#ifdef CONFIG_CPU_DADDI_WORKAROUNDS
+-#define DADDI_WAR 1
+-#else
+-#define DADDI_WAR 0
+-#endif
+-
+-#endif /* _ASM_WAR_H */
+diff --git a/arch/mips/kernel/entry.S b/arch/mips/kernel/entry.S
+index 4b896f5023ff..d8ca173680f9 100644
+--- a/arch/mips/kernel/entry.S
++++ b/arch/mips/kernel/entry.S
+@@ -17,7 +17,6 @@
+ #include <asm/stackframe.h>
+ #include <asm/isadep.h>
+ #include <asm/thread_info.h>
+-#include <asm/war.h>
+ 
+ #ifndef CONFIG_PREEMPTION
+ #define resume_kernel	restore_all
+diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+index 743d75927b71..fc53ea2cf850 100644
+--- a/arch/mips/kernel/genex.S
++++ b/arch/mips/kernel/genex.S
+@@ -19,7 +19,6 @@
+ #include <asm/mipsregs.h>
+ #include <asm/stackframe.h>
+ #include <asm/sync.h>
+-#include <asm/war.h>
+ #include <asm/thread_info.h>
+ 
+ 	__INIT
+diff --git a/arch/mips/kernel/r4k-bugs64.c b/arch/mips/kernel/r4k-bugs64.c
+index 35729c9e6cfa..11392e40d034 100644
+--- a/arch/mips/kernel/r4k-bugs64.c
++++ b/arch/mips/kernel/r4k-bugs64.c
+@@ -163,7 +163,8 @@ static __always_inline __init void check_mult_sh(void)
+ 	}
+ 
+ 	pr_cont("no.\n");
+-	panic(bug64hit, !R4000_WAR ? r4kwar : nowar);
++	panic(bug64hit, !IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS) ? r4kwar :
++								    nowar);
+ }
+ 
+ static volatile int daddi_ov;
+@@ -239,7 +240,8 @@ static __init void check_daddi(void)
+ 	}
+ 
+ 	pr_cont("no.\n");
+-	panic(bug64hit, !DADDI_WAR ? daddiwar : nowar);
++	panic(bug64hit, !IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS) ? daddiwar :
++								    nowar);
+ }
+ 
+ int daddiu_bug	= -1;
+@@ -307,7 +309,8 @@ static __init void check_daddiu(void)
+ 	}
+ 
+ 	pr_cont("no.\n");
+-	panic(bug64hit, !DADDI_WAR ? daddiwar : nowar);
++	panic(bug64hit, !IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS) ? daddiwar :
++								    nowar);
+ }
+ 
+ void __init check_bugs64_early(void)
+diff --git a/arch/mips/kernel/scall32-o32.S b/arch/mips/kernel/scall32-o32.S
+index 9bfce5f75f60..18dc9b345056 100644
+--- a/arch/mips/kernel/scall32-o32.S
++++ b/arch/mips/kernel/scall32-o32.S
+@@ -19,7 +19,6 @@
+ #include <asm/sysmips.h>
+ #include <asm/thread_info.h>
+ #include <asm/unistd.h>
+-#include <asm/war.h>
+ #include <asm/asm-offsets.h>
+ 
+ 	.align	5
+diff --git a/arch/mips/kernel/scall64-n64.S b/arch/mips/kernel/scall64-n64.S
+index 5f6ed4b4c399..e6264aa62e45 100644
+--- a/arch/mips/kernel/scall64-n64.S
++++ b/arch/mips/kernel/scall64-n64.S
+@@ -18,7 +18,6 @@
+ #include <asm/sysmips.h>
+ #include <asm/thread_info.h>
+ #include <asm/unistd.h>
+-#include <asm/war.h>
+ 
+ #ifndef CONFIG_MIPS32_COMPAT
+ /* Neither O32 nor N32, so define handle_sys here */
+diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
+index 5bce782e694c..71e309be86a2 100644
+--- a/arch/mips/kernel/signal.c
++++ b/arch/mips/kernel/signal.c
+@@ -35,7 +35,6 @@
+ #include <asm/sim.h>
+ #include <asm/ucontext.h>
+ #include <asm/cpu-features.h>
+-#include <asm/war.h>
+ #include <asm/dsp.h>
+ #include <asm/inst.h>
+ #include <asm/msa.h>
+diff --git a/arch/mips/kernel/signal_n32.c b/arch/mips/kernel/signal_n32.c
+index 7bd00fad61af..cfc77b69420a 100644
+--- a/arch/mips/kernel/signal_n32.c
++++ b/arch/mips/kernel/signal_n32.c
+@@ -24,7 +24,6 @@
+ #include <asm/ucontext.h>
+ #include <asm/fpu.h>
+ #include <asm/cpu-features.h>
+-#include <asm/war.h>
+ 
+ #include "signal-common.h"
+ 
+diff --git a/arch/mips/lib/delay.c b/arch/mips/lib/delay.c
+index 2e8dfc1d59c8..ccdb1fc1e4bf 100644
+--- a/arch/mips/lib/delay.c
++++ b/arch/mips/lib/delay.c
+@@ -16,7 +16,6 @@
+ 
+ #include <asm/asm.h>
+ #include <asm/compiler.h>
+-#include <asm/war.h>
+ 
+ #ifndef CONFIG_CPU_DADDI_WORKAROUNDS
+ #define GCC_DADDI_IMM_ASM() "I"
+diff --git a/arch/mips/mm/c-octeon.c b/arch/mips/mm/c-octeon.c
+index 737870d8fd94..c7ed589de882 100644
+--- a/arch/mips/mm/c-octeon.c
++++ b/arch/mips/mm/c-octeon.c
+@@ -23,7 +23,6 @@
+ #include <asm/r4kcache.h>
+ #include <asm/traps.h>
+ #include <asm/mmu_context.h>
+-#include <asm/war.h>
+ 
+ #include <asm/octeon/octeon.h>
+ 
+diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
+index 50261fd8eb21..ccb9e47322b0 100644
+--- a/arch/mips/mm/c-r4k.c
++++ b/arch/mips/mm/c-r4k.c
+@@ -33,7 +33,6 @@
+ #include <asm/r4kcache.h>
+ #include <asm/sections.h>
+ #include <asm/mmu_context.h>
+-#include <asm/war.h>
+ #include <asm/cacheflush.h> /* for run_uncached() */
+ #include <asm/traps.h>
+ #include <asm/mips-cps.h>
+diff --git a/arch/mips/mm/page.c b/arch/mips/mm/page.c
+index 504bc4047c4c..d3b4459d0fe8 100644
+--- a/arch/mips/mm/page.c
++++ b/arch/mips/mm/page.c
+@@ -25,7 +25,6 @@
+ #include <asm/mipsregs.h>
+ #include <asm/mmu_context.h>
+ #include <asm/cpu.h>
+-#include <asm/war.h>
+ 
+ #ifdef CONFIG_SIBYTE_DMA_PAGEOPS
+ #include <asm/sibyte/sb1250.h>
+@@ -103,7 +102,9 @@ static int cache_line_size;
+ static inline void
+ pg_addiu(u32 **buf, unsigned int reg1, unsigned int reg2, unsigned int off)
+ {
+-	if (cpu_has_64bit_gp_regs && DADDI_WAR && r4k_daddiu_bug()) {
++	if (cpu_has_64bit_gp_regs &&
++	    IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS) &&
++	    r4k_daddiu_bug()) {
+ 		if (off > 0x7fff) {
+ 			uasm_i_lui(buf, T9, uasm_rel_hi(off));
+ 			uasm_i_addiu(buf, T9, T9, uasm_rel_lo(off));
+diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
+index b131e6a77383..d9df2c43b15c 100644
+--- a/arch/mips/mm/tlbex.c
++++ b/arch/mips/mm/tlbex.c
+@@ -33,7 +33,6 @@
+ #include <asm/cacheflush.h>
+ #include <asm/cpu-type.h>
+ #include <asm/mmu_context.h>
+-#include <asm/war.h>
+ #include <asm/uasm.h>
+ #include <asm/setup.h>
+ #include <asm/tlbex.h>
+-- 
+2.29.2
 
