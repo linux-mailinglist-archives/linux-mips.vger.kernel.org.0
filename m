@@ -2,54 +2,82 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230144BAEFC
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Feb 2022 02:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B164BAF47
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Feb 2022 02:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiBRBFH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Feb 2022 20:05:07 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47090 "EHLO
+        id S231364AbiBRBvD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Feb 2022 20:51:03 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbiBRBFG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 20:05:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1B12BE827;
-        Thu, 17 Feb 2022 17:04:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45A5A61B3B;
-        Fri, 18 Feb 2022 01:04:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB16C340E8;
-        Fri, 18 Feb 2022 01:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645146290;
-        bh=N4cuNEd7G76uAap18rTecTTT3WxlZgWBWv4QnkhqrMk=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=XF5uaIqPZfrfFug06WIqlPWTvjBrg94hj4TNBc/EGp6gpFUEIt+EnbRG2o2fG4oJm
-         DpzBKXIcf054kQNl83/JLtOKxriO8c70rS/9eaY6ryLdXtwtYIe8HugmGOF8uvmxsZ
-         EvkgRkwKsuEdr8S2dZW3mwhwtOMSnn84GbIwEbD9VykO6HlsD/7BI4IvmA+Xnw9363
-         mv8y+05M6S/6pUKiI5mFG3X7MsG5Hi8i462xdQV0F9AcOUbEAxsRfQaCraYuu8/tZA
-         vtK8Mu5gm3MGAnkcg2VbgvI+ZM6i2xUcxQSzyAmDQ7v7dE8dfI/uyusR9/EOqqbTas
-         9U91JgPZgM9Lg==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231344AbiBRBvC (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Feb 2022 20:51:02 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B7653E3F;
+        Thu, 17 Feb 2022 17:50:46 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKsPs-002csm-Jn; Fri, 18 Feb 2022 01:50:36 +0000
+Date:   Fri, 18 Feb 2022 01:50:36 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "dalias@libc.org" <dalias@libc.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "bcain@codeaurora.org" <bcain@codeaurora.org>,
+        "deller@gmx.de" <deller@gmx.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "green.hu@gmail.com" <green.hu@gmail.com>,
+        "shorne@gmail.com" <shorne@gmail.com>,
+        "monstr@monstr.eu" <monstr@monstr.eu>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "nickhu@andestech.com" <nickhu@andestech.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Subject: Re: [PATCH v2 00/18] clean up asm/uaccess.h, kill set_fs for good
+Message-ID: <Yg77bNZfNhSk0bVQ@zeniv-ca.linux.org.uk>
+References: <20220216131332.1489939-1-arnd@kernel.org>
+ <00496df2-f9f2-2547-3ca3-7989e4713d6b@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220205171849.687805-2-lis8215@gmail.com>
-References: <Yf5yJKWAfxfQUVHU@kroah.com> <20220205171849.687805-1-lis8215@gmail.com> <20220205171849.687805-2-lis8215@gmail.com>
-Subject: Re: [PATCH v4 1/1] clk: jz4725b: fix mmc0 clock gating
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        stable@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Siarhei Volkau <lis8215@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Siarhei Volkau <lis8215@gmail.com>
-Date:   Thu, 17 Feb 2022 17:04:48 -0800
-User-Agent: alot/0.10
-Message-Id: <20220218010450.9DB16C340E8@smtp.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00496df2-f9f2-2547-3ca3-7989e4713d6b@csgroup.eu>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,22 +85,13 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Quoting Siarhei Volkau (2022-02-05 09:18:49)
-> The mmc0 clock gate bit was mistakenly assigned to "i2s" clock.
-> You can find that the same bit is assigned to "mmc0" too.
-> It leads to mmc0 hang for a long time after any sound activity
-> also it  prevented PM_SLEEP to work properly.
-> I guess it was introduced by copy-paste from jz4740 driver
-> where it is really controls I2S clock gate.
->=20
-> Fixes: 226dfa4726eb ("clk: Add Ingenic jz4725b CGU driver")
-> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
-> Tested-by: Siarhei Volkau <lis8215@gmail.com>
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: stable@vger.kernel.org
-> ---
+On Thu, Feb 17, 2022 at 07:20:11AM +0000, Christophe Leroy wrote:
 
-In the future please don't send patches in reply to previous versions. I
-don't see in thread view that this has been sent many times.
+> And we have also 
+> user_access_begin()/user_read_access_begin()/user_write_access_begin() 
+> which call access_ok() then do the real work. Could be made generic with 
+> call to some arch specific __user_access_begin() and friends after the 
+> access_ok() and eventually the might_fault().
 
-Applied to clk-fixes
+Not a good idea, considering the fact that we do not want to invite
+uses of "faster" variants...
