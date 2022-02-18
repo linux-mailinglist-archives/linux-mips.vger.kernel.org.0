@@ -2,120 +2,138 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AD54BB9B7
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Feb 2022 13:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8130C4BBC68
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Feb 2022 16:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235683AbiBRM5d (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Feb 2022 07:57:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34460 "EHLO
+        id S237191AbiBRPs0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 18 Feb 2022 10:48:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235624AbiBRM5L (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Feb 2022 07:57:11 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5352F27FE4
-        for <linux-mips@vger.kernel.org>; Fri, 18 Feb 2022 04:56:38 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id f17so15375566edd.2
-        for <linux-mips@vger.kernel.org>; Fri, 18 Feb 2022 04:56:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=JQAvlLJWgldHDOHcIcacjIOpg5TUZmVngZ2Pms5NG7Q=;
-        b=OZEbl6KFipfUGSY3KFbkW5bY3S675hY6/6OQBZOkiQDH6GySEY4TVOEFN7FJqiqPJO
-         agFru8efuG36LReL5w2nHtLPmYtalsoT1wnvZtm5B66UR3WpHZe7YTWBnI+8hwcg+B9b
-         6VTqOjeC2sjnoEVsct21NLGE+w42y7sE+dK+Kvyf2ZNQWqLNSVCxvg8SrSQ4nfcquitG
-         gNzOCZpbJ3cIiSkDeprGVHuEDLqS0lNFTsmcAJrL1QvP69xRb+k98zeCzu96aeF/5vna
-         AQQtm0c00Xr1SD+EXnd+BcRUJLCn+nrZnVcDaQjb8hG/lck3U1O70LYNSK/UVt5iDZ4s
-         w/aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=JQAvlLJWgldHDOHcIcacjIOpg5TUZmVngZ2Pms5NG7Q=;
-        b=LbVfzQxrlpIzEc+xMDpOni5h5xFzyambLuvdeD07+j38dNpv5Br3wK7eAUeWQCoJui
-         N0KfFi1bZKWAx/d88le3odAu4KDOy38Btkx+TPozTOsRlUH1kCVpKn2/4b+vqgt7lxXN
-         DtQLjylHZ1cw8or1VVtms4yxpQU0Q9ON6lXGOJCw3ShmzQI/2HsLSqLzZnqJcw1UNl50
-         RaScS9dAwiLjtkjEHz4YGmjOFC8DjwZrXg/Yg7dow/W8eohIUfSiW9p7ulwIYDEIy1Y+
-         HnI9u63ChFWAK1M6ALMcIGToEeSvuBJzD7jlm4mlG5KsYoKa1aUuKSIyJES6X7PndVBE
-         HOFg==
-X-Gm-Message-State: AOAM531w03ZRooL4ikWwdlAkSkBD536nf6rnzvd+EBX/vDGttoxGUYF1
-        U+T7Hq+ct+suE2GF/ji+4Er15pm28UTElLYJj1g=
-X-Google-Smtp-Source: ABdhPJyy4wsNexIMJl8t/qFduIub1BwgK6qhMR7/odqNLNSPL6c7sGIHAwwI3wMCua1JSW86yo5J9Zuy9ZUHmEauhdw=
-X-Received: by 2002:a05:6402:2801:b0:410:a592:a5d0 with SMTP id
- h1-20020a056402280100b00410a592a5d0mr8026964ede.253.1645188996769; Fri, 18
- Feb 2022 04:56:36 -0800 (PST)
+        with ESMTP id S237158AbiBRPsW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Feb 2022 10:48:22 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 861A52B3541
+        for <linux-mips@vger.kernel.org>; Fri, 18 Feb 2022 07:46:02 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-70--4RjbVXtMcueaeoDqT_n6w-1; Fri, 18 Feb 2022 15:45:59 +0000
+X-MC-Unique: -4RjbVXtMcueaeoDqT_n6w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Fri, 18 Feb 2022 15:45:56 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Fri, 18 Feb 2022 15:45:56 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>, Arnd Bergmann <arnd@kernel.org>
+CC:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "will@kernel.org" <will@kernel.org>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "bcain@codeaurora.org" <bcain@codeaurora.org>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "monstr@monstr.eu" <monstr@monstr.eu>,
+        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+        "nickhu@andestech.com" <nickhu@andestech.com>,
+        "green.hu@gmail.com" <green.hu@gmail.com>,
+        "dinguyen@kernel.org" <dinguyen@kernel.org>,
+        "shorne@gmail.com" <shorne@gmail.com>,
+        "deller@gmx.de" <deller@gmx.de>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "dalias@libc.org" <dalias@libc.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "richard@nod.at" <richard@nod.at>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: RE: [PATCH v2 05/18] x86: remove __range_not_ok()
+Thread-Topic: [PATCH v2 05/18] x86: remove __range_not_ok()
+Thread-Index: AQHYJJDV6CwChj5QoEqoVAdoFeMQC6yZc16A
+Date:   Fri, 18 Feb 2022 15:45:56 +0000
+Message-ID: <905678e9e05d40b9a4e13e7b1a34cb68@AcuMS.aculab.com>
+References: <20220216131332.1489939-1-arnd@kernel.org>
+ <20220216131332.1489939-6-arnd@kernel.org> <20220218062851.GC22576@lst.de>
+In-Reply-To: <20220218062851.GC22576@lst.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Sender: brianphilippe60@gmail.com
-Received: by 2002:a17:906:d04b:0:0:0:0 with HTTP; Fri, 18 Feb 2022 04:56:36
- -0800 (PST)
-From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
-Date:   Fri, 18 Feb 2022 12:56:36 +0000
-X-Google-Sender-Auth: zimhkdm4D_7Zb9el7ImS1HVoEM8
-Message-ID: <CAG_+5rzYP5EJeFoJ8ag25DHdaJAYO-mwwPF+ctcuT0zqZyKjHw@mail.gmail.com>
-Subject: Investment proposal,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5245]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aishagaddafi1894[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [brianphilippe60[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello Dear Friend,
+From: Christoph Hellwig
+> Sent: 18 February 2022 06:29
+...
+> 
+> > diff --git a/arch/x86/kernel/stacktrace.c b/arch/x86/kernel/stacktrace.c
+> > index 15b058eefc4e..ee117fcf46ed 100644
+> > --- a/arch/x86/kernel/stacktrace.c
+> > +++ b/arch/x86/kernel/stacktrace.c
+> > @@ -90,7 +90,7 @@ copy_stack_frame(const struct stack_frame_user __user *fp,
+> >  {
+> >  	int ret;
+> >
+> > -	if (__range_not_ok(fp, sizeof(*frame), TASK_SIZE))
+> > +	if (!__access_ok(fp, sizeof(*frame)))
+> >  		return 0;
+> 
+> Just switch the __get_user calls below to get_user instead.
 
-With due respect to your person and much sincerity of purpose I wish
-to write to you today for our mutual benefit in this investment
-transaction.
-I'm Mrs. Aisha Al-Gaddafi, presently residing herein Oman the
-Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
-single Mother and a widow with three Children. I am the only
-biological Daughter of the late Libyan President (Late Colonel.
-Muammar Gaddafi). I have an investment funds worth Twenty Seven
-Million Five Hundred Thousand United State Dollars ($27.500.000.00 )
-and i need an investment Manager/Partner and because of my Asylum
-Status I will authorize you the ownership of the investment funds,
-However, I am interested in you for investment project assistance in
-your country, may be from there,. we can build a business relationship
-in the nearest future.
+Is this worth doing at all?
+How much userspace code is actually compiled with stack frames?
 
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits. If you are
-willing to handle this project kindly reply urgently to enable me to
-provide you more information about the investment funds.
+Won't work well for a 32bit process on a 64bit kernel either.
 
-Your urgent reply will be appreciated if only you are interested in
-this investment project..
-Best Regards
-Mrs. Aisha Al-Gaddafi.
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
