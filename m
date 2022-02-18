@@ -2,415 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82664BB639
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Feb 2022 11:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A77B4BB6C0
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Feb 2022 11:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbiBRKFC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Feb 2022 05:05:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42166 "EHLO
+        id S233516AbiBRKSY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Feb 2022 05:18:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbiBRKFB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Feb 2022 05:05:01 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7850366A7;
-        Fri, 18 Feb 2022 02:04:44 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 6C4BD219A0;
-        Fri, 18 Feb 2022 10:04:43 +0000 (UTC)
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 58E79A3B8A;
-        Fri, 18 Feb 2022 10:04:43 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] MIPS: remove asm/war.h
-Date:   Fri, 18 Feb 2022 11:04:39 +0100
-Message-Id: <20220218100441.81944-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.29.2
+        with ESMTP id S231867AbiBRKSX (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Feb 2022 05:18:23 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C65A15C9F8;
+        Fri, 18 Feb 2022 02:18:07 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id n24so3541326ljj.10;
+        Fri, 18 Feb 2022 02:18:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2ZwRbT+1qqEejXkPLNRT0P8U1UfOqBbbk2S+jBiDX7w=;
+        b=HwIPNQm6bvP1qyt1DqVyrK6i1IxYBe3pF4kvKD1l9aL3skpcmD5TAiFiTR6vJgOz7B
+         t0z9AUGb6zG6pfmU+9BHmWZjjYP8p3JYLtLTfoKdh3BnjyAxS8kyH7aEYnXi01jFZIzF
+         573soHdCsmr3/P5ZM1x4mLpZvC48QquGUZEsW8SQQoM18/kWlPpgaxZHrqDS4b16t7Hk
+         CPrKR07D3pDZ+6DpMa26njx9Ou6mX/WqALsfbj1Nd6drypXMoKGnpqS7eLYJp4gC/zQZ
+         HSj8/Kstfvi7dLE4U0H5uDSTCcko9eMQl/aHEl20oLYR3YeK8yM1gI0YoPwa5+wSkB+m
+         kvAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2ZwRbT+1qqEejXkPLNRT0P8U1UfOqBbbk2S+jBiDX7w=;
+        b=Rrff1ppEKFr5n76ER/Jmq2+22XhwZvXYSYmBlwxXoG+yztqBwi8r9DeaOAYGdeBo6O
+         SXdQoBsjvoEAWcyO2qRLdawDdUaGoJ736q6Dae+BUOWiPRx2BE7cz0HpeEstQV3fw8/H
+         aH3KusAIpMcqxqSlYgJ0U2tGDT8O2UXUVHUrkL4jIB2mFc17/8n40CGiZC11R3NGlz49
+         ehqQl5PPyVqvsdKx7zE5b/RB4ieSGiatmpvxvrvz8+u3TRf37TnRMdOR0R7X1EAg7QPn
+         QPYpAG0K92Q9TajtIwLbTQS807LlHB+7hngoc0Q/W4tOya2FP5jKW9GTb5FrmPyrNYnQ
+         RVuQ==
+X-Gm-Message-State: AOAM53355PCix2gDEzs9ALsM6AFmDr8DPvWXfvz95Xqbhxmr5uXV9bVm
+        5i1nZY2h1VKu8NlZP/8D4oI=
+X-Google-Smtp-Source: ABdhPJzoG5dWVDHzQOQKtFLm+HFsVZSdj/YZ6lPLZtzc83WeDz9kMHzkcgdFaN0a4Fhn9IjcgX1EIQ==
+X-Received: by 2002:a05:651c:1594:b0:244:d406:5224 with SMTP id h20-20020a05651c159400b00244d4065224mr5639426ljq.130.1645179485463;
+        Fri, 18 Feb 2022 02:18:05 -0800 (PST)
+Received: from curiosity ([5.188.167.245])
+        by smtp.gmail.com with ESMTPSA id k18sm207268lfg.217.2022.02.18.02.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Feb 2022 02:18:04 -0800 (PST)
+Date:   Fri, 18 Feb 2022 13:18:03 +0300
+From:   Sergey Matyukevich <geomatsi@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
+        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
+        dalias@libc.org, davem@davemloft.net, richard@nod.at,
+        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
+Message-ID: <Yg9yWxqD4RO7jI2g@curiosity>
+References: <20220216131332.1489939-1-arnd@kernel.org>
+ <20220216131332.1489939-19-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216131332.1489939-19-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-The major part for workaround handling has already moved to config
-options. This change replaces the remaining defines by already
-available config options and gets rid of war.h
+Hi Arnd,
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/Kconfig                  | 38 ++++++++++++++++
- arch/mips/include/asm/futex.h      |  1 -
- arch/mips/include/asm/mipsmtregs.h |  1 -
- arch/mips/include/asm/mipsregs.h   |  1 -
- arch/mips/include/asm/war.h        | 73 ------------------------------
- arch/mips/kernel/entry.S           |  1 -
- arch/mips/kernel/genex.S           |  1 -
- arch/mips/kernel/r4k-bugs64.c      |  9 ++--
- arch/mips/kernel/scall32-o32.S     |  1 -
- arch/mips/kernel/scall64-n64.S     |  1 -
- arch/mips/kernel/signal.c          |  1 -
- arch/mips/kernel/signal_n32.c      |  1 -
- arch/mips/lib/delay.c              |  1 -
- arch/mips/mm/c-octeon.c            |  1 -
- arch/mips/mm/c-r4k.c               |  1 -
- arch/mips/mm/page.c                |  5 +-
- arch/mips/mm/tlbex.c               |  1 -
- 17 files changed, 47 insertions(+), 91 deletions(-)
- delete mode 100644 arch/mips/include/asm/war.h
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> There are no remaining callers of set_fs(), so CONFIG_SET_FS
+> can be removed globally, along with the thread_info field and
+> any references to it.
+> 
+> This turns access_ok() into a cheaper check against TASK_SIZE_MAX.
+> 
+> With CONFIG_SET_FS gone, so drop all remaining references to
+> set_fs()/get_fs(), mm_segment_t and uaccess_kernel().
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index c6672547ac5e..f8f11542d044 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2521,13 +2521,51 @@ config CPU_HAS_SYNC
- #
- # CPU non-features
- #
-+
-+# Work around the "daddi" and "daddiu" CPU errata:
-+#
-+# - The `daddi' instruction fails to trap on overflow.
-+#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-+#   erratum #23
-+#
-+# - The `daddiu' instruction can produce an incorrect result.
-+#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-+#   erratum #41
-+#   "MIPS R4000MC Errata, Processor Revision 2.2 and 3.0", erratum
-+#   #15
-+#   "MIPS R4400PC/SC Errata, Processor Revision 1.0", erratum #7
-+#   "MIPS R4400MC Errata, Processor Revision 1.0", erratum #5
- config CPU_DADDI_WORKAROUNDS
- 	bool
- 
-+# Work around certain R4000 CPU errata (as implemented by GCC):
-+#
-+# - A double-word or a variable shift may give an incorrect result
-+#   if executed immediately after starting an integer division:
-+#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-+#   erratum #28
-+#   "MIPS R4000MC Errata, Processor Revision 2.2 and 3.0", erratum
-+#   #19
-+#
-+# - A double-word or a variable shift may give an incorrect result
-+#   if executed while an integer multiplication is in progress:
-+#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-+#   errata #16 & #28
-+#
-+# - An integer division may give an incorrect result if started in
-+#   a delay slot of a taken branch or a jump:
-+#   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-+#   erratum #52
- config CPU_R4000_WORKAROUNDS
- 	bool
- 	select CPU_R4400_WORKAROUNDS
- 
-+# Work around certain R4400 CPU errata (as implemented by GCC):
-+#
-+# - A double-word or a variable shift may give an incorrect result
-+#   if executed immediately after starting an integer division:
-+#   "MIPS R4400MC Errata, Processor Revision 1.0", erratum #10
-+#   "MIPS R4400MC Errata, Processor Revision 2.0 & 3.0", erratum #4
- config CPU_R4400_WORKAROUNDS
- 	bool
- 
-diff --git a/arch/mips/include/asm/futex.h b/arch/mips/include/asm/futex.h
-index 8612a7e42d78..05832eb240fa 100644
---- a/arch/mips/include/asm/futex.h
-+++ b/arch/mips/include/asm/futex.h
-@@ -17,7 +17,6 @@
- #include <asm/compiler.h>
- #include <asm/errno.h>
- #include <asm/sync.h>
--#include <asm/war.h>
- 
- #define arch_futex_atomic_op_inuser arch_futex_atomic_op_inuser
- #define futex_atomic_cmpxchg_inatomic futex_atomic_cmpxchg_inatomic
-diff --git a/arch/mips/include/asm/mipsmtregs.h b/arch/mips/include/asm/mipsmtregs.h
-index be4cf9d477be..a8d67c2f4f7b 100644
---- a/arch/mips/include/asm/mipsmtregs.h
-+++ b/arch/mips/include/asm/mipsmtregs.h
-@@ -9,7 +9,6 @@
- #define _ASM_MIPSMTREGS_H
- 
- #include <asm/mipsregs.h>
--#include <asm/war.h>
- 
- #ifndef __ASSEMBLY__
- 
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index 2616353b940c..305651af15b3 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -17,7 +17,6 @@
- #include <linux/types.h>
- #include <asm/hazards.h>
- #include <asm/isa-rev.h>
--#include <asm/war.h>
- 
- /*
-  * The following macros are especially useful for __asm__
-diff --git a/arch/mips/include/asm/war.h b/arch/mips/include/asm/war.h
-deleted file mode 100644
-index 21443f096238..000000000000
---- a/arch/mips/include/asm/war.h
-+++ /dev/null
-@@ -1,73 +0,0 @@
--/*
-- * This file is subject to the terms and conditions of the GNU General Public
-- * License.  See the file "COPYING" in the main directory of this archive
-- * for more details.
-- *
-- * Copyright (C) 2002, 2004, 2007 by Ralf Baechle
-- * Copyright (C) 2007  Maciej W. Rozycki
-- */
--#ifndef _ASM_WAR_H
--#define _ASM_WAR_H
--
--/*
-- * Work around certain R4000 CPU errata (as implemented by GCC):
-- *
-- * - A double-word or a variable shift may give an incorrect result
-- *   if executed immediately after starting an integer division:
-- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-- *   erratum #28
-- *   "MIPS R4000MC Errata, Processor Revision 2.2 and 3.0", erratum
-- *   #19
-- *
-- * - A double-word or a variable shift may give an incorrect result
-- *   if executed while an integer multiplication is in progress:
-- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-- *   errata #16 & #28
-- *
-- * - An integer division may give an incorrect result if started in
-- *   a delay slot of a taken branch or a jump:
-- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-- *   erratum #52
-- */
--#ifdef CONFIG_CPU_R4000_WORKAROUNDS
--#define R4000_WAR 1
--#else
--#define R4000_WAR 0
--#endif
--
--/*
-- * Work around certain R4400 CPU errata (as implemented by GCC):
-- *
-- * - A double-word or a variable shift may give an incorrect result
-- *   if executed immediately after starting an integer division:
-- *   "MIPS R4400MC Errata, Processor Revision 1.0", erratum #10
-- *   "MIPS R4400MC Errata, Processor Revision 2.0 & 3.0", erratum #4
-- */
--#ifdef CONFIG_CPU_R4400_WORKAROUNDS
--#define R4400_WAR 1
--#else
--#define R4400_WAR 0
--#endif
--
--/*
-- * Work around the "daddi" and "daddiu" CPU errata:
-- *
-- * - The `daddi' instruction fails to trap on overflow.
-- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-- *   erratum #23
-- *
-- * - The `daddiu' instruction can produce an incorrect result.
-- *   "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0",
-- *   erratum #41
-- *   "MIPS R4000MC Errata, Processor Revision 2.2 and 3.0", erratum
-- *   #15
-- *   "MIPS R4400PC/SC Errata, Processor Revision 1.0", erratum #7
-- *   "MIPS R4400MC Errata, Processor Revision 1.0", erratum #5
-- */
--#ifdef CONFIG_CPU_DADDI_WORKAROUNDS
--#define DADDI_WAR 1
--#else
--#define DADDI_WAR 0
--#endif
--
--#endif /* _ASM_WAR_H */
-diff --git a/arch/mips/kernel/entry.S b/arch/mips/kernel/entry.S
-index 4b896f5023ff..d8ca173680f9 100644
---- a/arch/mips/kernel/entry.S
-+++ b/arch/mips/kernel/entry.S
-@@ -17,7 +17,6 @@
- #include <asm/stackframe.h>
- #include <asm/isadep.h>
- #include <asm/thread_info.h>
--#include <asm/war.h>
- 
- #ifndef CONFIG_PREEMPTION
- #define resume_kernel	restore_all
-diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-index 743d75927b71..fc53ea2cf850 100644
---- a/arch/mips/kernel/genex.S
-+++ b/arch/mips/kernel/genex.S
-@@ -19,7 +19,6 @@
- #include <asm/mipsregs.h>
- #include <asm/stackframe.h>
- #include <asm/sync.h>
--#include <asm/war.h>
- #include <asm/thread_info.h>
- 
- 	__INIT
-diff --git a/arch/mips/kernel/r4k-bugs64.c b/arch/mips/kernel/r4k-bugs64.c
-index 35729c9e6cfa..6ffefb2c6971 100644
---- a/arch/mips/kernel/r4k-bugs64.c
-+++ b/arch/mips/kernel/r4k-bugs64.c
-@@ -163,7 +163,8 @@ static __always_inline __init void check_mult_sh(void)
- 	}
- 
- 	pr_cont("no.\n");
--	panic(bug64hit, !R4000_WAR ? r4kwar : nowar);
-+	panic(bug64hit,
-+	      IS_ENABLED(CONFIG_CPU_R4000_WORKAROUNDS) ? nowar : r4kwar);
- }
- 
- static volatile int daddi_ov;
-@@ -239,7 +240,8 @@ static __init void check_daddi(void)
- 	}
- 
- 	pr_cont("no.\n");
--	panic(bug64hit, !DADDI_WAR ? daddiwar : nowar);
-+	panic(bug64hit,
-+	      IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS) ? nowar : daddiwar);
- }
- 
- int daddiu_bug	= -1;
-@@ -307,7 +309,8 @@ static __init void check_daddiu(void)
- 	}
- 
- 	pr_cont("no.\n");
--	panic(bug64hit, !DADDI_WAR ? daddiwar : nowar);
-+	panic(bug64hit,
-+	      IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS) ? nowar : daddiwar);
- }
- 
- void __init check_bugs64_early(void)
-diff --git a/arch/mips/kernel/scall32-o32.S b/arch/mips/kernel/scall32-o32.S
-index 9bfce5f75f60..18dc9b345056 100644
---- a/arch/mips/kernel/scall32-o32.S
-+++ b/arch/mips/kernel/scall32-o32.S
-@@ -19,7 +19,6 @@
- #include <asm/sysmips.h>
- #include <asm/thread_info.h>
- #include <asm/unistd.h>
--#include <asm/war.h>
- #include <asm/asm-offsets.h>
- 
- 	.align	5
-diff --git a/arch/mips/kernel/scall64-n64.S b/arch/mips/kernel/scall64-n64.S
-index 5f6ed4b4c399..e6264aa62e45 100644
---- a/arch/mips/kernel/scall64-n64.S
-+++ b/arch/mips/kernel/scall64-n64.S
-@@ -18,7 +18,6 @@
- #include <asm/sysmips.h>
- #include <asm/thread_info.h>
- #include <asm/unistd.h>
--#include <asm/war.h>
- 
- #ifndef CONFIG_MIPS32_COMPAT
- /* Neither O32 nor N32, so define handle_sys here */
-diff --git a/arch/mips/kernel/signal.c b/arch/mips/kernel/signal.c
-index 5bce782e694c..71e309be86a2 100644
---- a/arch/mips/kernel/signal.c
-+++ b/arch/mips/kernel/signal.c
-@@ -35,7 +35,6 @@
- #include <asm/sim.h>
- #include <asm/ucontext.h>
- #include <asm/cpu-features.h>
--#include <asm/war.h>
- #include <asm/dsp.h>
- #include <asm/inst.h>
- #include <asm/msa.h>
-diff --git a/arch/mips/kernel/signal_n32.c b/arch/mips/kernel/signal_n32.c
-index 7bd00fad61af..cfc77b69420a 100644
---- a/arch/mips/kernel/signal_n32.c
-+++ b/arch/mips/kernel/signal_n32.c
-@@ -24,7 +24,6 @@
- #include <asm/ucontext.h>
- #include <asm/fpu.h>
- #include <asm/cpu-features.h>
--#include <asm/war.h>
- 
- #include "signal-common.h"
- 
-diff --git a/arch/mips/lib/delay.c b/arch/mips/lib/delay.c
-index 2e8dfc1d59c8..ccdb1fc1e4bf 100644
---- a/arch/mips/lib/delay.c
-+++ b/arch/mips/lib/delay.c
-@@ -16,7 +16,6 @@
- 
- #include <asm/asm.h>
- #include <asm/compiler.h>
--#include <asm/war.h>
- 
- #ifndef CONFIG_CPU_DADDI_WORKAROUNDS
- #define GCC_DADDI_IMM_ASM() "I"
-diff --git a/arch/mips/mm/c-octeon.c b/arch/mips/mm/c-octeon.c
-index 737870d8fd94..c7ed589de882 100644
---- a/arch/mips/mm/c-octeon.c
-+++ b/arch/mips/mm/c-octeon.c
-@@ -23,7 +23,6 @@
- #include <asm/r4kcache.h>
- #include <asm/traps.h>
- #include <asm/mmu_context.h>
--#include <asm/war.h>
- 
- #include <asm/octeon/octeon.h>
- 
-diff --git a/arch/mips/mm/c-r4k.c b/arch/mips/mm/c-r4k.c
-index 50261fd8eb21..ccb9e47322b0 100644
---- a/arch/mips/mm/c-r4k.c
-+++ b/arch/mips/mm/c-r4k.c
-@@ -33,7 +33,6 @@
- #include <asm/r4kcache.h>
- #include <asm/sections.h>
- #include <asm/mmu_context.h>
--#include <asm/war.h>
- #include <asm/cacheflush.h> /* for run_uncached() */
- #include <asm/traps.h>
- #include <asm/mips-cps.h>
-diff --git a/arch/mips/mm/page.c b/arch/mips/mm/page.c
-index 504bc4047c4c..d3b4459d0fe8 100644
---- a/arch/mips/mm/page.c
-+++ b/arch/mips/mm/page.c
-@@ -25,7 +25,6 @@
- #include <asm/mipsregs.h>
- #include <asm/mmu_context.h>
- #include <asm/cpu.h>
--#include <asm/war.h>
- 
- #ifdef CONFIG_SIBYTE_DMA_PAGEOPS
- #include <asm/sibyte/sb1250.h>
-@@ -103,7 +102,9 @@ static int cache_line_size;
- static inline void
- pg_addiu(u32 **buf, unsigned int reg1, unsigned int reg2, unsigned int off)
- {
--	if (cpu_has_64bit_gp_regs && DADDI_WAR && r4k_daddiu_bug()) {
-+	if (cpu_has_64bit_gp_regs &&
-+	    IS_ENABLED(CONFIG_CPU_DADDI_WORKAROUNDS) &&
-+	    r4k_daddiu_bug()) {
- 		if (off > 0x7fff) {
- 			uasm_i_lui(buf, T9, uasm_rel_hi(off));
- 			uasm_i_addiu(buf, T9, T9, uasm_rel_lo(off));
-diff --git a/arch/mips/mm/tlbex.c b/arch/mips/mm/tlbex.c
-index b131e6a77383..d9df2c43b15c 100644
---- a/arch/mips/mm/tlbex.c
-+++ b/arch/mips/mm/tlbex.c
-@@ -33,7 +33,6 @@
- #include <asm/cacheflush.h>
- #include <asm/cpu-type.h>
- #include <asm/mmu_context.h>
--#include <asm/war.h>
- #include <asm/uasm.h>
- #include <asm/setup.h>
- #include <asm/tlbex.h>
--- 
-2.29.2
+Tested-by: Sergey Matyukevich <sergey.matyukevich@synopsys.com> # for arc changes
 
+Regards,
+Sergey
