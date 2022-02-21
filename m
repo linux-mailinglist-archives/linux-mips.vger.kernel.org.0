@@ -2,124 +2,95 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9F74BDF6D
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Feb 2022 18:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A301B4BE5D3
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Feb 2022 19:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378851AbiBUPIX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Feb 2022 10:08:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49460 "EHLO
+        id S1378562AbiBUO4Q (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Feb 2022 09:56:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378841AbiBUPIU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Feb 2022 10:08:20 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3813E1A390;
-        Mon, 21 Feb 2022 07:07:52 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nMAI2-0001zd-01; Mon, 21 Feb 2022 16:07:50 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id F02CFC25EA; Mon, 21 Feb 2022 15:42:02 +0100 (CET)
-Date:   Mon, 21 Feb 2022 15:42:02 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>, alankao@andestech.com,
-        "K . C . Kuen-Chern Lin" <kclin@andestech.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v6 16/21] mips: Use do_kernel_power_off()
-Message-ID: <20220221144202.GA17239@alpha.franken.de>
-References: <20220130233718.21544-1-digetx@gmail.com>
- <20220130233718.21544-17-digetx@gmail.com>
+        with ESMTP id S1378482AbiBUO4P (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Feb 2022 09:56:15 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD09205F8;
+        Mon, 21 Feb 2022 06:55:51 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 22A6C5C00EE;
+        Mon, 21 Feb 2022 09:55:49 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 21 Feb 2022 09:55:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; bh=JGbkcex9y9YUBKi+GNxGiILoS3G1VFSFax2+98z2bK0=; b=WPgTg
+        bU/6VX4eRi1RavCz9qNrf/MnNOYkFVdzGXIc+mr0u+ZsL9X1DOuGAvkjfpTNbYwX
+        gzz1cjoqX4EHHUBLgjRASH/jx/nchpAZGWS+FyjfppQioxoCc3z4XBAOp6GwUtSc
+        /BveZXXkc+DEqzaC2zLMaiDnj9fJrhCk+C+TWQ3JQaWPipeUd3z1y6w8He5H/syR
+        KaqwOSUySMB8gqWSgHW6uTEhcMWWtU8+h5KKt4AkgvBc6hCpJo0MF8y7YwVXgcOs
+        yj2vD4I5KE+lpytCNWsaRF4b/TMBz0+P+3VWUYqgiotWbnDqSN4KhnaxmRexqr45
+        K70xrK1Zshy5xV6+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=JGbkcex9y9YUBKi+GNxGiILoS3G1V
+        FSFax2+98z2bK0=; b=BMxB3A5H0zwMzKjHbXlT3/q5G0tSV/ROBoApgHH3AEkJ4
+        ve9tMZGdzWpUDefgR2aFyxbkQpISqvdqu+iiJLrIgriLz1iShbakECi9Z1ADnEPP
+        PDBXOAIJR5BaBJwRG0Iin245v78izjyJsjqVquNMU/1QgL5hMEUm+7MPshJBEjrP
+        i12t5UDF5g2Q2Q5xCPos1Z6GdijwWgOv3BjcczK4OtPqgMhmgUYNxERkTNJMD+gF
+        h6+f04N5tkiuewZ5XrgF0l9NMzL1BmxVBVqjusX61X86H8bh7jz3oX7dSjNArknF
+        TkuxgCcZygPyXa9aY3xs4+rt5u6bEe0TCmf6+AAFw==
+X-ME-Sender: <xms:9KcTYhFMSS1qvMhQDw1MJQ7bgUe0LlpBWOg7tVyYzaLk2aeTYUBA4A>
+    <xme:9KcTYmXFLkjpMDjroN0ApEX3HjNiPQGC2Jk7d8K58H-ynbe-12lktw3odOr0KfDLG
+    ppGVm_hfcWWdTqEeew>
+X-ME-Received: <xmr:9KcTYjIiv0dUI8s--ShDi6cGlbt4n5bt4IBzckqBZ6XIS4hVXOFi04A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeigdeikecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhl
+    hihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfejtdektdeuhedtieefteekve
+    ffteejteefgeekveegffetvddugfeliefhtddunecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrth
+    drtghomh
+X-ME-Proxy: <xmx:9KcTYnHnFWya_pb4nYz1iQK68INpUnjXEvs1ptchGHUyNhO_sf71IQ>
+    <xmx:9KcTYnXVskn-O1P1lKpj-ckFykPIG2rC9rFKSfYC0Ay2y9_mRafwMw>
+    <xmx:9KcTYiOdrstGF_Q6UD9L0KYch9-zrcpGyeWPoAH1dH_6fI3RmO_P5Q>
+    <xmx:9acTYtyaUEoA6XYhFUu_nycHAlgwfQovGVfhQZdy4V-kP5Tk0QrZBA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Feb 2022 09:55:47 -0500 (EST)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, chenhuacai@kernel.org,
+        tsbogend@alpha.franken.de, macro@orcam.me.uk,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [RFC PATCH 0/3] MIPS: Chaos of barrier misuses
+Date:   Mon, 21 Feb 2022 14:55:28 +0000
+Message-Id: <20220221145531.10479-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220130233718.21544-17-digetx@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 02:37:13AM +0300, Dmitry Osipenko wrote:
-> Kernel now supports chained power-off handlers. Use do_kernel_power_off()
-> that invokes chained power-off handlers. It also invokes legacy
-> pm_power_off() for now, which will be removed once all drivers will
-> be converted to the new power-off API.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  arch/mips/kernel/reset.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/reset.c b/arch/mips/kernel/reset.c
-> index 6288780b779e..e7ce07b3e79b 100644
-> --- a/arch/mips/kernel/reset.c
-> +++ b/arch/mips/kernel/reset.c
-> @@ -114,8 +114,7 @@ void machine_halt(void)
->  
->  void machine_power_off(void)
->  {
-> -	if (pm_power_off)
-> -		pm_power_off();
-> +	do_kernel_power_off();
->  
->  #ifdef CONFIG_SMP
->  	preempt_disable();
-> -- 
-> 2.34.1
+This series clears the chaos of barrier misuse.
+In prepration of light weight barrier series.
 
-Ackey-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Jiaxun Yang (3):
+  MIPS: Loongson64: Clearify IO barriers
+  MIPS: io.h use barrier terminology from asm-generic
+  MIPS: io.h: Remove barriers before MMIO accessors for CPU without WB
+
+ arch/mips/Kconfig          |  1 -
+ arch/mips/include/asm/io.h | 25 ++++++++++++++++++++-----
+ 2 files changed, 20 insertions(+), 6 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.35.1
+
