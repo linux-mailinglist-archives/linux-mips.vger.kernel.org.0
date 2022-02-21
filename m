@@ -2,183 +2,232 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589364BD622
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Feb 2022 07:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F25C4BD732
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Feb 2022 08:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345301AbiBUGje (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Feb 2022 01:39:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41192 "EHLO
+        id S1346212AbiBUHcY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Feb 2022 02:32:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240670AbiBUGjc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Feb 2022 01:39:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD4CC24F07;
-        Sun, 20 Feb 2022 22:39:09 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACCBB1509;
-        Sun, 20 Feb 2022 22:39:09 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.49.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E3CFF3F70D;
-        Sun, 20 Feb 2022 22:39:06 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-arch@vger.kernel.org,
+        with ESMTP id S1346189AbiBUHcR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Feb 2022 02:32:17 -0500
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B60BE81;
+        Sun, 20 Feb 2022 23:31:54 -0800 (PST)
+Received: by mail-wr1-f42.google.com with SMTP id m27so13620207wrb.4;
+        Sun, 20 Feb 2022 23:31:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=5//PYWEwFxOsjGcmy5LlfToRPGdJHDlgUauWSglKfRI=;
+        b=OBrHcYXtuHo/g5Uw6lLziThAA2iWSSLT1Bq+vzPRCjDpqs0n2FDI0uOiDMQWTfuXep
+         gOq+DawXtKtT+AkZ9YwZv6Jyz3rAgMmRtQuLFwCCKoF5b3d04AOiMe/xCUoehSN4M+Xg
+         ce4wb/Z1a2nEzVXzbpf8lROmz1YutXJ5VM15cMRzTS90dGvUuQO8EpxZa+NftIvEhhCM
+         3jp3WtShug11w1CLtAYpDe82p9gemSkkoIssEvUuU/UfRlcXvedlbGncVpFBfvN+rN8Z
+         bTT263gDAGxfOET5eqvMSHAltHHqOdjTig5MVg+BqDW/xA0+/4k1L4lTYzZTt52DrKAE
+         smTg==
+X-Gm-Message-State: AOAM530GFjql2FncWw5MKnb0EE65Dp8UenUozw7Jj17+sqZr+yBsZAGV
+        lafUaSpNiexReW4KFxeKiUE=
+X-Google-Smtp-Source: ABdhPJwMx6zuA308tUc3Zgv1aFGCt3rBmCALjr+NQUR4RsadvQELLTVYSUCFakdAOiwouuAKhexLBQ==
+X-Received: by 2002:adf:908e:0:b0:1e7:bea7:3486 with SMTP id i14-20020adf908e000000b001e7bea73486mr14360071wri.401.1645428712059;
+        Sun, 20 Feb 2022 23:31:52 -0800 (PST)
+Received: from [192.168.0.120] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.googlemail.com with ESMTPSA id z5-20020a05600c0a0500b0037bb8df81a2sm7619393wmp.13.2022.02.20.23.31.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Feb 2022 23:31:51 -0800 (PST)
+Message-ID: <fd34eb5e-4947-1c47-8375-1e84bcedffb8@kernel.org>
+Date:   Mon, 21 Feb 2022 08:31:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 2/4] Documentation/dt: Add descriptions for loongson
+ display controller
+Content-Language: en-US
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH V2 07/30] mips/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 21 Feb 2022 12:08:16 +0530
-Message-Id: <1645425519-9034-8-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
-References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Rob Herring <robh@kernel.org>
+References: <20220220145554.117854-1-15330273260@189.cn>
+ <20220220145554.117854-3-15330273260@189.cn>
+ <4dd5949f-2699-b83b-0fbf-c1b7beb0fa9a@flygoat.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <4dd5949f-2699-b83b-0fbf-c1b7beb0fa9a@flygoat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-This defines and exports a platform specific custom vm_get_page_prot() via
-subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-macros can be dropped which are no longer needed.
+On 20/02/2022 19:22, Jiaxun Yang wrote:
+> 
+> 
+> 在 2022/2/20 14:55, Sui Jingfeng 写道:
+>> From: suijingfeng <suijingfeng@loongson.cn>
+>>
+>> Add DT documentation for loongson display controller found in LS2K1000,
+>> LS2K0500 and LS7A1000.
+>>
+>> v2: DT binding docs and includes should be a separate patch,
+>>      fix a warnning because of that.
+>>
+>> v3: split dt-bindings from other changes into a separate patch.
+>>
+>> v4: fix warnings and errors when running make dt_binding_check
+>>
+>> Reported-by: Rob Herring <robh@kernel.org>
+>> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
+>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+>> ---
+>>   .../loongson/loongson,display-controller.yaml | 122 ++++++++++++++++++
+>>   1 file changed, 122 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>> new file mode 100644
+>> index 000000000000..ee1a59b91943
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>> @@ -0,0 +1,122 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Sui Jingfeng <suijingfeng@loongson.cn>
+>> +
+>> +description: |+
+>> +
+>> +  Loongson display controllers are simple which require scanout buffers
+>> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
+>> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
+>> +  with a dedicated video ram which is 64MB or more.
+>> +
+>> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
+>> +  located at the DC register space. They are used to emulate two way i2c,
+>> +  One for DVO0, another for DVO1.
+>> +
+>> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
+>> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
+>> +
+>> +  LSDC has two display pipes, each way has a DVO interface which provide
+>> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
+>> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
+>> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
+>> +
+>> +  LSDC's display pipeline have several components as below description,
+>> +
+>> +  The display controller in LS7A1000:
+>> +    ___________________                                     _________
+>> +    |            -------|                                   |         |
+>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+>> +    |  _   _     -------|        ^             ^            |_________|
+>> +    | | | | |    -------|        |             |
+>> +    | |_| |_|    | i2c0 <--------+-------------+
+>> +    |            -------|
+>> +    |   DC IN LS7A1000  |
+>> +    |  _   _     -------|
+>> +    | | | | |    | i2c1 <--------+-------------+
+>> +    | |_| |_|    -------|        |             |             _________
+>> +    |            -------|        |             |            |         |
+>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+>> +    |            -------|                                   |_________|
+>> +    |___________________|
+>> +
+>> +  Simple usage of LS7A1000 with LS3A4000 CPU:
+>> +
+>> +    +------+            +-----------------------------------+
+>> +    | DDR4 |            |  +-------------------+            |
+>> +    +------+            |  | PCIe Root complex |   LS7A1000 |
+>> +       || MC0           |  +--++---------++----+            |
+>> +  +----------+  HT 3.0  |     ||         ||                 |
+>> +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
+>> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
+>> +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
+>> +       || MC1           +---------------|--|----------------+
+>> +    +------+                            |  |
+>> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+>> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
+>> +                      +-------+                      +------+
+>> +
+>> +  The display controller in LS2K1000/LS2K0500:
+>> +     ___________________                                     _________
+>> +    |            -------|                                   |         |
+>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+>> +    |  _   _     -------|        ^              ^           |_________|
+>> +    | | | | |           |        |              |
+>> +    | |_| |_|           |     +------+          |
+>> +    |                   <---->| i2c0 |<---------+
+>> +    |   DC IN LS2K1000  |     +------+
+>> +    |  _   _            |     +------+
+>> +    | | | | |           <---->| i2c1 |----------+
+>> +    | |_| |_|           |     +------+          |            _________
+>> +    |            -------|        |              |           |         |
+>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+>> +    |            -------|                                   |_________|
+>> +    |___________________|
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
+>> +
+>> +  compatible:
+>> +    enum:
+>> +      - loongson,ls7a1000-dc
+>> +      - loongson,ls2k1000-dc
+>> +      - loongson,ls2k0500-dc
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
+> Given that it is possible to have output subnodes I guess 
+> additionalProperties
+> should be allowed?
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- arch/mips/Kconfig               |  1 +
- arch/mips/include/asm/pgtable.h | 22 ------------
- arch/mips/mm/cache.c            | 60 +++++++++++++++++++--------------
- 3 files changed, 36 insertions(+), 47 deletions(-)
+subnodes should be instead listed. Either with strict name (if these are
+e.g. ports) or with some more or less relaxed pattern.
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 058446f01487..fcbfc52a1567 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -13,6 +13,7 @@ config MIPS
- 	select ARCH_HAS_STRNLEN_USER
- 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-+	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_SUPPORTS_UPROBES
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 7b8037f25d9e..bf193ad4f195 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -41,28 +41,6 @@ struct vm_area_struct;
-  * by reasonable means..
-  */
- 
--/*
-- * Dummy values to fill the table in mmap.c
-- * The real values will be generated at runtime
-- */
--#define __P000 __pgprot(0)
--#define __P001 __pgprot(0)
--#define __P010 __pgprot(0)
--#define __P011 __pgprot(0)
--#define __P100 __pgprot(0)
--#define __P101 __pgprot(0)
--#define __P110 __pgprot(0)
--#define __P111 __pgprot(0)
--
--#define __S000 __pgprot(0)
--#define __S001 __pgprot(0)
--#define __S010 __pgprot(0)
--#define __S011 __pgprot(0)
--#define __S100 __pgprot(0)
--#define __S101 __pgprot(0)
--#define __S110 __pgprot(0)
--#define __S111 __pgprot(0)
--
- extern unsigned long _page_cachable_default;
- extern void __update_cache(unsigned long address, pte_t pte);
- 
-diff --git a/arch/mips/mm/cache.c b/arch/mips/mm/cache.c
-index 830ab91e574f..9f33ce4fb105 100644
---- a/arch/mips/mm/cache.c
-+++ b/arch/mips/mm/cache.c
-@@ -159,30 +159,6 @@ EXPORT_SYMBOL(_page_cachable_default);
- 
- #define PM(p)	__pgprot(_page_cachable_default | (p))
- 
--static inline void setup_protection_map(void)
--{
--	protection_map[0]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[1]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[2]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[3]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[4]  = PM(_PAGE_PRESENT);
--	protection_map[5]  = PM(_PAGE_PRESENT);
--	protection_map[6]  = PM(_PAGE_PRESENT);
--	protection_map[7]  = PM(_PAGE_PRESENT);
--
--	protection_map[8]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
--	protection_map[9]  = PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
--	protection_map[10] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE |
--				_PAGE_NO_READ);
--	protection_map[11] = PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
--	protection_map[12] = PM(_PAGE_PRESENT);
--	protection_map[13] = PM(_PAGE_PRESENT);
--	protection_map[14] = PM(_PAGE_PRESENT | _PAGE_WRITE);
--	protection_map[15] = PM(_PAGE_PRESENT | _PAGE_WRITE);
--}
--
--#undef PM
--
- void cpu_cache_init(void)
- {
- 	if (cpu_has_3k_cache) {
-@@ -206,6 +182,40 @@ void cpu_cache_init(void)
- 
- 		octeon_cache_init();
- 	}
-+}
- 
--	setup_protection_map();
-+pgprot_t vm_get_page_prot(unsigned long vm_flags)
-+{
-+	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-+	case VM_NONE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	case VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	case VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	case VM_WRITE | VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	case VM_EXEC:
-+	case VM_EXEC | VM_READ:
-+	case VM_EXEC | VM_WRITE:
-+	case VM_EXEC | VM_WRITE | VM_READ:
-+		return PM(_PAGE_PRESENT);
-+	case VM_SHARED:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_NO_READ);
-+	case VM_SHARED | VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC);
-+	case VM_SHARED | VM_WRITE:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE | _PAGE_NO_READ);
-+	case VM_SHARED | VM_WRITE | VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_NO_EXEC | _PAGE_WRITE);
-+	case VM_SHARED | VM_EXEC:
-+	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PM(_PAGE_PRESENT);
-+	case VM_SHARED | VM_EXEC | VM_WRITE:
-+	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-+		return PM(_PAGE_PRESENT | _PAGE_WRITE);
-+	default:
-+		BUILD_BUG();
-+	}
- }
-+EXPORT_SYMBOL(vm_get_page_prot);
--- 
-2.25.1
 
+Best regards,
+Krzysztof
