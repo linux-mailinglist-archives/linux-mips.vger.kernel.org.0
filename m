@@ -2,232 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F25C4BD732
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Feb 2022 08:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C4F4BD7E6
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Feb 2022 09:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346212AbiBUHcY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Feb 2022 02:32:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49876 "EHLO
+        id S239261AbiBUILc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Feb 2022 03:11:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346189AbiBUHcR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Feb 2022 02:32:17 -0500
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B60BE81;
-        Sun, 20 Feb 2022 23:31:54 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id m27so13620207wrb.4;
-        Sun, 20 Feb 2022 23:31:54 -0800 (PST)
+        with ESMTP id S229604AbiBUILb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Feb 2022 03:11:31 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D542011C06
+        for <linux-mips@vger.kernel.org>; Mon, 21 Feb 2022 00:11:05 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id q198-20020a1ca7cf000000b0037bb52545c6so12941385wme.1
+        for <linux-mips@vger.kernel.org>; Mon, 21 Feb 2022 00:11:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=JB6dXNwwZJkB6iGRj3HKx/fo7Dqgtazj5+XksdVG3L4=;
+        b=wm0ykQg94yejPkgcXMlGZLMmDGpfVJnKXhVTMcZIg9GMaHhhfPYuIWsL9sjzqIn6Xj
+         4Ig7oPq7JJDZ3itGc2fPv9qS4n+4zTl/82MSDKKWl4Bip6yZMC7jVE8hUSzFWcbaLVy5
+         v5hMjPdP2lz03vKsivVWLPVsp9yOFUzydZmIJfmfNrCUcmXRTqtsNQkIoltvPWmRXxZM
+         8h4/N8U1OEWb8TuumP3WwbOAKgXjJn2iAzmtwsplK9NfJSLBFBHY3piLiUmYMB67K1rX
+         dR9Ua+McrxMlcCYejatMjiXqmjyBhaMwW5X9LKlCVPxN8wBipMpzmlR7IBXmAU5rpVcT
+         xQBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=5//PYWEwFxOsjGcmy5LlfToRPGdJHDlgUauWSglKfRI=;
-        b=OBrHcYXtuHo/g5Uw6lLziThAA2iWSSLT1Bq+vzPRCjDpqs0n2FDI0uOiDMQWTfuXep
-         gOq+DawXtKtT+AkZ9YwZv6Jyz3rAgMmRtQuLFwCCKoF5b3d04AOiMe/xCUoehSN4M+Xg
-         ce4wb/Z1a2nEzVXzbpf8lROmz1YutXJ5VM15cMRzTS90dGvUuQO8EpxZa+NftIvEhhCM
-         3jp3WtShug11w1CLtAYpDe82p9gemSkkoIssEvUuU/UfRlcXvedlbGncVpFBfvN+rN8Z
-         bTT263gDAGxfOET5eqvMSHAltHHqOdjTig5MVg+BqDW/xA0+/4k1L4lTYzZTt52DrKAE
-         smTg==
-X-Gm-Message-State: AOAM530GFjql2FncWw5MKnb0EE65Dp8UenUozw7Jj17+sqZr+yBsZAGV
-        lafUaSpNiexReW4KFxeKiUE=
-X-Google-Smtp-Source: ABdhPJwMx6zuA308tUc3Zgv1aFGCt3rBmCALjr+NQUR4RsadvQELLTVYSUCFakdAOiwouuAKhexLBQ==
-X-Received: by 2002:adf:908e:0:b0:1e7:bea7:3486 with SMTP id i14-20020adf908e000000b001e7bea73486mr14360071wri.401.1645428712059;
-        Sun, 20 Feb 2022 23:31:52 -0800 (PST)
-Received: from [192.168.0.120] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id z5-20020a05600c0a0500b0037bb8df81a2sm7619393wmp.13.2022.02.20.23.31.50
+        bh=JB6dXNwwZJkB6iGRj3HKx/fo7Dqgtazj5+XksdVG3L4=;
+        b=M3JqiWGnnsr0S0fDY9+M7OE2MrTJHFR9TJxRHzb2o/8je0O/xeAgnLRQ7c15eWjHTM
+         hYAQdqohQAZ9AqkSD7+jnp/rD7FC1fZPF+Cs7+vR2n/C2VaCzUGi+wVBTSOiTnQmmJBe
+         aBbVaUnEoAhYTsx6yyU5S3qTMtP5svGVOkM+Ng61+yRfCXTDhDuhWzmQ48ShcAkWcmse
+         MkUwFJZfNaxkM3Kc2q/jsor4NExmMknUPsK4EYwOJLWmGcTsBvEQZfuth0b+Mf4vtvk8
+         zaO/Jam1vnbUfjGbvmJU69Eow/zTM1MEPyPLMuHlhWWJjglwpLFJsva959aFCkoqsdjd
+         O9zQ==
+X-Gm-Message-State: AOAM5332eJ0oh+GSu4D0dLknCEiQ+ePfH0YDgA6ny6tILXr89vQgORFS
+        VBHPJ6Ah+97QOoYbWcFHCqPuSw==
+X-Google-Smtp-Source: ABdhPJwUo68BmHkh+ctGRaDR2gGH/uYCSPEVA9Ebr8pVUJTgy+yFEQa4bIQ8YqSliGK+k63ogBRbMg==
+X-Received: by 2002:a7b:ce84:0:b0:37c:52fe:a3ff with SMTP id q4-20020a7bce84000000b0037c52fea3ffmr20298453wmj.48.1645431064300;
+        Mon, 21 Feb 2022 00:11:04 -0800 (PST)
+Received: from ?IPV6:2001:861:44c0:66c0:77b7:547a:df0c:28d8? ([2001:861:44c0:66c0:77b7:547a:df0c:28d8])
+        by smtp.gmail.com with ESMTPSA id q76sm7295000wme.1.2022.02.21.00.11.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Feb 2022 23:31:51 -0800 (PST)
-Message-ID: <fd34eb5e-4947-1c47-8375-1e84bcedffb8@kernel.org>
-Date:   Mon, 21 Feb 2022 08:31:49 +0100
+        Mon, 21 Feb 2022 00:11:03 -0800 (PST)
+Message-ID: <9c6f5c0b-5879-736f-344f-dfa12a0d7937@baylibre.com>
+Date:   Mon, 21 Feb 2022 09:11:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v10 2/4] Documentation/dt: Add descriptions for loongson
- display controller
+Subject: Re: [PATCH v15 4/7] drm/bridge: dw-hdmi: repair interworking with
+ hdmi-connector for jz4780
 Content-Language: en-US
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Sui Jingfeng <15330273260@189.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Rob Herring <robh@kernel.org>
-References: <20220220145554.117854-1-15330273260@189.cn>
- <20220220145554.117854-3-15330273260@189.cn>
- <4dd5949f-2699-b83b-0fbf-c1b7beb0fa9a@flygoat.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <4dd5949f-2699-b83b-0fbf-c1b7beb0fa9a@flygoat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Paul Cercueil <paul@crapouillou.net>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     letux-kernel@openphoenux.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jonas Karlman <jonas@kwiboo.se>
+References: <cover.1644681054.git.hns@goldelico.com>
+ <d4d08582c49ec089095dd0ede4cdf2752f9d1eb8.1644681054.git.hns@goldelico.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <d4d08582c49ec089095dd0ede4cdf2752f9d1eb8.1644681054.git.hns@goldelico.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 20/02/2022 19:22, Jiaxun Yang wrote:
+Hi,
+
+On 12/02/2022 16:50, H. Nikolaus Schaller wrote:
+> Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus fmts callbacks")
 > 
+> introduced a new mechanism to negotiate bus formats between hdmi connector
+> and the synopsys hdmi driver inside the jz4780.
 > 
-> 在 2022/2/20 14:55, Sui Jingfeng 写道:
->> From: suijingfeng <suijingfeng@loongson.cn>
->>
->> Add DT documentation for loongson display controller found in LS2K1000,
->> LS2K0500 and LS7A1000.
->>
->> v2: DT binding docs and includes should be a separate patch,
->>      fix a warnning because of that.
->>
->> v3: split dt-bindings from other changes into a separate patch.
->>
->> v4: fix warnings and errors when running make dt_binding_check
->>
->> Reported-by: Rob Herring <robh@kernel.org>
->> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> ---
->>   .../loongson/loongson,display-controller.yaml | 122 ++++++++++++++++++
->>   1 file changed, 122 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> new file mode 100644
->> index 000000000000..ee1a59b91943
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
->> @@ -0,0 +1,122 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
->> +
->> +maintainers:
->> +  - Sui Jingfeng <suijingfeng@loongson.cn>
->> +
->> +description: |+
->> +
->> +  Loongson display controllers are simple which require scanout buffers
->> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
->> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
->> +  with a dedicated video ram which is 64MB or more.
->> +
->> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
->> +  located at the DC register space. They are used to emulate two way i2c,
->> +  One for DVO0, another for DVO1.
->> +
->> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
->> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
->> +
->> +  LSDC has two display pipes, each way has a DVO interface which provide
->> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
->> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
->> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
->> +
->> +  LSDC's display pipeline have several components as below description,
->> +
->> +  The display controller in LS7A1000:
->> +    ___________________                                     _________
->> +    |            -------|                                   |         |
->> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
->> +    |  _   _     -------|        ^             ^            |_________|
->> +    | | | | |    -------|        |             |
->> +    | |_| |_|    | i2c0 <--------+-------------+
->> +    |            -------|
->> +    |   DC IN LS7A1000  |
->> +    |  _   _     -------|
->> +    | | | | |    | i2c1 <--------+-------------+
->> +    | |_| |_|    -------|        |             |             _________
->> +    |            -------|        |             |            |         |
->> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->> +    |            -------|                                   |_________|
->> +    |___________________|
->> +
->> +  Simple usage of LS7A1000 with LS3A4000 CPU:
->> +
->> +    +------+            +-----------------------------------+
->> +    | DDR4 |            |  +-------------------+            |
->> +    +------+            |  | PCIe Root complex |   LS7A1000 |
->> +       || MC0           |  +--++---------++----+            |
->> +  +----------+  HT 3.0  |     ||         ||                 |
->> +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
->> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
->> +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
->> +       || MC1           +---------------|--|----------------+
->> +    +------+                            |  |
->> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
->> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
->> +                      +-------+                      +------+
->> +
->> +  The display controller in LS2K1000/LS2K0500:
->> +     ___________________                                     _________
->> +    |            -------|                                   |         |
->> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
->> +    |  _   _     -------|        ^              ^           |_________|
->> +    | | | | |           |        |              |
->> +    | |_| |_|           |     +------+          |
->> +    |                   <---->| i2c0 |<---------+
->> +    |   DC IN LS2K1000  |     +------+
->> +    |  _   _            |     +------+
->> +    | | | | |           <---->| i2c1 |----------+
->> +    | |_| |_|           |     +------+          |            _________
->> +    |            -------|        |              |           |         |
->> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
->> +    |            -------|                                   |_________|
->> +    |___________________|
->> +
->> +properties:
->> +  $nodename:
->> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
->> +
->> +  compatible:
->> +    enum:
->> +      - loongson,ls7a1000-dc
->> +      - loongson,ls2k1000-dc
->> +      - loongson,ls2k0500-dc
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +
->> +additionalProperties: false
-> Given that it is possible to have output subnodes I guess 
-> additionalProperties
-> should be allowed?
+> By this, the dw-hdmi is no longer the only bridge and sets up a list
+> of formats in dw_hdmi_bridge_atomic_get_output_bus_fmts().
+> 
+> This includes MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the jz4780 but only
+> produces a black screen.
+> 
+> This fix is based on the observation that max_bpc = 0 when running this
+> function while info->bpc = 8. Since the formats checks before this always test
+> for max_bpc >= info->pbc indirectly my assumption is that we must check it
+> here as well.
+> 
+> Adding the proposed patch makes the CI20/jz4780 panel work again in
+> MEDIA_BUS_FMT_RGB888_1X24 mode.
+> 
+> Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus fmts callbacks")
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> index b0d8110dd412c..826a055a7a273 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -2620,10 +2620,10 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+>   		output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
+>   	}
+>   
+> -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+> +	if (max_bpc >= info->bpc && info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+>   		output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
+>   
+> -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+> +	if (max_bpc >= info->bpc && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>   		output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
+>   
+>   	/* Default 8bit RGB fallback */
 
-subnodes should be instead listed. Either with strict name (if these are
-e.g. ports) or with some more or less relaxed pattern.
+Please do the same for all other cases and change the patch subject to something more accurate like:
+"drm/bridge: dw-hdmi: take display info bpc in account for bus formats negociation"
 
-
-Best regards,
-Krzysztof
+Neil
