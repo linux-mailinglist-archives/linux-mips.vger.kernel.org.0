@@ -2,117 +2,166 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968354BE3CE
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Feb 2022 18:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF51B4BE762
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Feb 2022 19:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359053AbiBUN0K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Feb 2022 08:26:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34252 "EHLO
+        id S1376788AbiBUNyD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Feb 2022 08:54:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359028AbiBUN0J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Feb 2022 08:26:09 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CE4F21E21;
-        Mon, 21 Feb 2022 05:25:44 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nM8h9-0001Eo-00; Mon, 21 Feb 2022 14:25:39 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id E4525C25DD; Mon, 21 Feb 2022 14:24:56 +0100 (CET)
-Date:   Mon, 21 Feb 2022 14:24:56 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
-        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
-        nickhu@andestech.com, green.hu@gmail.com, dinguyen@kernel.org,
-        shorne@gmail.com, deller@gmx.de, mpe@ellerman.id.au,
-        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        hca@linux.ibm.com, dalias@libc.org, davem@davemloft.net,
-        richard@nod.at, x86@kernel.org, jcmvbkbc@gmail.com,
-        ebiederm@xmission.com, akpm@linux-foundation.org, ardb@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v2 09/18] mips: use simpler access_ok()
-Message-ID: <20220221132456.GA7139@alpha.franken.de>
-References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-10-arnd@kernel.org>
+        with ESMTP id S1376746AbiBUNyA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Feb 2022 08:54:00 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C2A2BF7F;
+        Mon, 21 Feb 2022 05:53:35 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.43:49386.1635481058
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 247AB100135;
+        Mon, 21 Feb 2022 21:53:29 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id 8927a885023a44a3b0b45b301e09b9e3 for sergei.shtylyov@gmail.com;
+        Mon, 21 Feb 2022 21:53:33 CST
+X-Transaction-ID: 8927a885023a44a3b0b45b301e09b9e3
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <f7782013-6a4a-e333-369c-e8caf13997b7@189.cn>
+Date:   Mon, 21 Feb 2022 21:53:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216131332.1489939-10-arnd@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 1/4] MIPS: Loongson64: dts: update the display
+ controller device node
+Content-Language: en-US
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220220145554.117854-1-15330273260@189.cn>
+ <20220220145554.117854-2-15330273260@189.cn>
+ <08abcb14-f1f6-8be5-6309-cd16e0578c05@gmail.com>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <08abcb14-f1f6-8be5-6309-cd16e0578c05@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 02:13:23PM +0100, Arnd Bergmann wrote:
-> 
-> diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
-> index db9a8e002b62..d7c89dc3426c 100644
-> --- a/arch/mips/include/asm/uaccess.h
-> +++ b/arch/mips/include/asm/uaccess.h
-> @@ -19,6 +19,7 @@
->  #ifdef CONFIG_32BIT
->  
->  #define __UA_LIMIT 0x80000000UL
-> +#define TASK_SIZE_MAX	__UA_LIMIT
->  
->  #define __UA_ADDR	".word"
->  #define __UA_LA		"la"
-> @@ -33,6 +34,7 @@
->  extern u64 __ua_limit;
->  
->  #define __UA_LIMIT	__ua_limit
-> +#define TASK_SIZE_MAX	XKSSEG
 
-this doesn't work. For every access above maximum implemented virtual address
-space of the CPU an address error will be issued, but not a TLB miss.
-And address error isn't able to handle this situation.
+On 2022/2/21 17:19, Sergei Shtylyov wrote:
+> On 2/20/22 5:55 PM, Sui Jingfeng wrote:
+>
+>> From: suijingfeng <suijingfeng@loongson.cn>
+>>
+>> The display controller is a pci device, its PCI vendor id is 0x0014
+>> its PCI device id is 0x7a06.
+>>
+>> 1) In order to let the driver to know which chip the DC is contained
+>>     in, the compatible string of the display controller is updated
+>>     according to the chip's name.
+>>
+>> 2) Add display controller device node for ls2k1000 SoC
+>>
+>> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
+>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+>> ---
+>>   arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 8 ++++++++
+>>   arch/mips/boot/dts/loongson/ls7a-pch.dtsi          | 7 ++-----
+>>   2 files changed, 10 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> index 768cf2abcea3..af9cda540f9e 100644
+>> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
+>> @@ -209,6 +209,14 @@ gpu@5,0 {
+>>   				interrupt-parent = <&liointc0>;
+>>   			};
+>>   
+>> +			lsdc: display-controller@6,0 {
+>     Shouldn't the node name just be "display", according to the section 2.2.2
+> of the DT spec?
+>
+> [...]
+>> diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+>> index 2f45fce2cdc4..ec35ea9b2fe8 100644
+>> --- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+>> +++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+>> @@ -160,11 +160,8 @@ gpu@6,0 {
+>>   				interrupt-parent = <&pic>;
+>>   			};
+>>   
+>> -			dc@6,1 {
+>> -				compatible = "pci0014,7a06.0",
+>> -						   "pci0014,7a06",
+>> -						   "pciclass030000",
+>> -						   "pciclass0300";
+>> +			lsdc: display-controller@6,1 {
+>     Same here...
+>
+> [...]
+>
+> MBR, Sergey
 
-With this patch
+Display sounds like a panel or monitor, while we are the device that driven the display device.
 
-diff --git a/arch/mips/kernel/unaligned.c b/arch/mips/kernel/unaligned.c
-index df4b708c04a9..3911f1481f3d 100644
---- a/arch/mips/kernel/unaligned.c
-+++ b/arch/mips/kernel/unaligned.c
-@@ -1480,6 +1480,13 @@ asmlinkage void do_ade(struct pt_regs *regs)
- 	prev_state = exception_enter();
- 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS,
- 			1, regs, regs->cp0_badvaddr);
-+
-+	/* Are we prepared to handle this kernel fault?	 */
-+	if (fixup_exception(regs)) {
-+		current->thread.cp0_baduaddr = regs->cp0_badvaddr;
-+		return;
-+	}
-+
- 	/*
- 	 * Did we catch a fault trying to load an instruction?
- 	 */
+Running find . -name "*.dtsi" -type f | xargs grep "display-controller"
+at drm-tip/arch/ directory show that there are a number of vendors using
+display controller as theirnode name, for example Atmel and STM32.
 
-I at least get my simple test cases fixed, but I'm not sure this is
-correct.
 
-Is there a reason to not also #define TASK_SIZE_MAX   __UA_LIMIT like
-for the 32bit case ?
+./arm/boot/dts/pxa3xx.dtsi:		gcu: display-controller@54000000 {
+./arm/boot/dts/at91sam9n12.dtsi:				hlcdc-display-controller {
+./arm/boot/dts/at91sam9n12.dtsi:					compatible = "atmel,hlcdc-display-controller";
+./arm/boot/dts/at91-dvk_su60_somc_lcm.dtsi:	hlcdc-display-controller {
+./arm/boot/dts/stm32h743.dtsi:		ltdc: display-controller@50001000 {
+./arm/boot/dts/stm32mp151.dtsi:		ltdc: display-controller@5a001000 {
+./arm/boot/dts/at91sam9x5dm.dtsi:	hlcdc-display-controller {
+./arm/boot/dts/gemini.dtsi:		display-controller@6a000000 {
+./arm/boot/dts/stm32f429.dtsi:		ltdc: display-controller@40016800 {
+./arm/boot/dts/at91sam9x5_lcd.dtsi:				hlcdc-display-controller {
+./arm/boot/dts/at91sam9x5_lcd.dtsi:					compatible = "atmel,hlcdc-display-controller";
+./arm/boot/dts/sama5d2.dtsi:				hlcdc-display-controller {
+./arm/boot/dts/sama5d2.dtsi:					compatible = "atmel,hlcdc-display-controller";
+./arm/boot/dts/sama5d4.dtsi:				hlcdc-display-controller {
+./arm/boot/dts/sama5d4.dtsi:					compatible = "atmel,hlcdc-display-controller";
+./arm/boot/dts/sama5d3_lcd.dtsi:				hlcdc-display-controller {
+./arm/boot/dts/sama5d3_lcd.dtsi:					compatible = "atmel,hlcdc-display-controller";
+./arm/boot/dts/sam9x60.dtsi:				hlcdc-display-controller {
+./arm/boot/dts/sam9x60.dtsi:					compatible = "atmel,hlcdc-display-controller";
 
-Thomas.
+./arm/boot/dts/at91-sama5d4_ma5d4evk.dts:				hlcdc-display-controller {
+./arm/boot/dts/at91sam9n12ek.dts:				hlcdc-display-controller {
+./arm/boot/dts/am335x-pdu001.dts:	display-controller@0 {
+./arm/boot/dts/at91-nattis-2-natte-2.dts:	hlcdc-display-controller {
+./arm/boot/dts/gemini-dlink-dir-685.dts:		display-controller@6a000000 {
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
