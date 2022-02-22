@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293A64BF9E1
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Feb 2022 14:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8292C4BFB14
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Feb 2022 15:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiBVNyV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Feb 2022 08:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S231940AbiBVOrI (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Feb 2022 09:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiBVNyV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Feb 2022 08:54:21 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 315E89F6FE;
-        Tue, 22 Feb 2022 05:53:54 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.41:39724.521596506
+        with ESMTP id S232761AbiBVOrH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Feb 2022 09:47:07 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F5251FC;
+        Tue, 22 Feb 2022 06:46:39 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.31:53590.1226820573
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 0E3FF1001AE;
-        Tue, 22 Feb 2022 21:53:48 +0800 (CST)
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 2669A100282;
+        Tue, 22 Feb 2022 22:46:36 +0800 (CST)
 Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 437f38b646a245689e764bf8741df661 for maxime@cerno.tech;
-        Tue, 22 Feb 2022 21:53:53 CST
-X-Transaction-ID: 437f38b646a245689e764bf8741df661
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 608c66110ce94bae849ff8b258bd58fa for maxime@cerno.tech;
+        Tue, 22 Feb 2022 22:46:38 CST
+X-Transaction-ID: 608c66110ce94bae849ff8b258bd58fa
 X-Real-From: 15330273260@189.cn
 X-Receive-IP: 114.242.206.180
 X-MEDUSA-Status: 0
 Sender: 15330273260@189.cn
-Message-ID: <400476ec-4b81-6a3d-651a-dbfa8eb5717e@189.cn>
-Date:   Tue, 22 Feb 2022 21:53:45 +0800
+Message-ID: <54ea69d7-2fac-74dc-2ef6-843a666cff85@189.cn>
+Date:   Tue, 22 Feb 2022 22:46:35 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -66,10 +66,10 @@ References: <20220220145554.117854-1-15330273260@189.cn>
 From:   Sui Jingfeng <15330273260@189.cn>
 In-Reply-To: <20220222082747.66otrkc4zwvhem7w@houat>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,110 +79,39 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 On 2022/2/22 16:27, Maxime Ripard wrote:
-> Hi,
->
-> On Sun, Feb 20, 2022 at 10:55:53PM +0800, Sui Jingfeng wrote:
->> +/* lsdc_get_display_timings_from_dtb - Get display timings from the device tree
->> + *
->> + * @np: point to the device node contain the display timings
->> + * @pptim: point to where the pointer of struct display_timings is store to
->> + */
->> +static void lsdc_get_display_timings_from_dtb(struct device_node *np,
->> +					      struct display_timings **pptim)
->> +{
->> +	struct display_timings *timings;
+>> +	if (!of_device_is_available(output)) {
+>> +		of_node_put(output);
+>> +		drm_info(ddev, "connector%d is not available\n", index);
+>> +		return NULL;
+>> +	}
 >> +
->> +	if (!np)
->> +		return;
+>> +	disp_tims_np = of_get_child_by_name(output, "display-timings");
+>> +	if (disp_tims_np) {
+>> +		lsdc_get_display_timings_from_dtb(output, &lconn->disp_tim);
+>> +		lconn->has_disp_tim = true;
+>> +		of_node_put(disp_tims_np);
+>> +		drm_info(ddev, "Found display timings provided by connector%d\n", index);
+>> +	}
 >> +
->> +	timings = of_get_display_timings(np);
->> +	if (timings)
->> +		*pptim = timings;
->> +}
-> This is not documented in your binding.
->
->> +static int lsdc_get_connector_type(struct drm_device *ddev,
->> +				   struct device_node *output,
->> +				   unsigned int index)
->> +{
->> +	const char *name;
->> +	int ret;
+>> +	connector_type = lsdc_get_connector_type(ddev, output, index);
 >> +
->> +	ret = of_property_read_string(output, "connector", &name);
->> +	if (ret < 0)
->> +		return DRM_MODE_CONNECTOR_Unknown;
+>> +	if (output) {
+>> +		of_node_put(output);
+>> +		output = NULL;
+>> +	}
 >> +
->> +	if (strncmp(name, "vga-connector", 13) == 0) {
->> +		ret = DRM_MODE_CONNECTOR_VGA;
->> +		drm_info(ddev, "connector%d is VGA\n", index);
->> +	} else if (strncmp(name, "dvi-connector", 13) == 0) {
->> +		bool analog, digital;
+>> +DT_SKIPED:
 >> +
->> +		analog = of_property_read_bool(output, "analog");
->> +		digital = of_property_read_bool(output, "digital");
+>> +	/* Only create the i2c channel if display timing is not provided */
+>> +	if (!lconn->has_disp_tim) {
+>> +		const struct lsdc_chip_desc * const desc = ldev->desc;
 >> +
->> +		if (analog && !digital)
->> +			ret = DRM_MODE_CONNECTOR_DVIA;
->> +		else if (analog && digital)
->> +			ret = DRM_MODE_CONNECTOR_DVII;
+>> +		if (desc->have_builtin_i2c)
+>> +			lconn->ddc = lsdc_create_i2c_chan(ddev, index);
 >> +		else
->> +			ret = DRM_MODE_CONNECTOR_DVID;
->> +
->> +		drm_info(ddev, "connector%d is DVI\n", index);
->> +	} else if (strncmp(name, "virtual-connector", 17) == 0) {
->> +		ret = DRM_MODE_CONNECTOR_VIRTUAL;
->> +		drm_info(ddev, "connector%d is virtual\n", index);
->> +	} else if (strncmp(name, "dpi-connector", 13) == 0) {
->> +		ret = DRM_MODE_CONNECTOR_DPI;
->> +		drm_info(ddev, "connector%d is DPI\n", index);
->> +	} else if (strncmp(name, "hdmi-connector", 14) == 0) {
->> +		int res;
->> +		const char *hdmi_type;
->> +
->> +		ret = DRM_MODE_CONNECTOR_HDMIA;
->> +
->> +		res = of_property_read_string(output, "type", &hdmi_type);
->> +		if (res == 0 && !strcmp(hdmi_type, "b"))
->> +			ret = DRM_MODE_CONNECTOR_HDMIB;
->> +
->> +		drm_info(ddev, "connector%d is HDMI, type is %s\n", index, hdmi_type);
->> +	} else {
->> +		ret = DRM_MODE_CONNECTOR_Unknown;
->> +		drm_info(ddev, "The type of connector%d is unknown\n", index);
->> +	}
->> +
->> +	return ret;
->> +}
-> Your ports and that you're using the connectors bindings either.
+>> +			lconn->ddc = lsdc_get_i2c_adapter(ddev, index);
+> This looks weird: the connector bindings have a property to store the
+> i2c controller connected to the DDC lines, so you should use that
+> instead.
 >
->> +struct lsdc_connector *lsdc_connector_init(struct lsdc_device *ldev, unsigned int index)
->> +{
->> +	struct drm_device *ddev = &ldev->drm;
->> +	struct device_node *np = ddev->dev->of_node;
->> +	struct device_node *output = NULL;
->> +	unsigned int connector_type = DRM_MODE_CONNECTOR_Unknown;
->> +	struct device_node *disp_tims_np;
->> +	struct lsdc_connector *lconn;
->> +	struct drm_connector *connector;
->> +	int ret;
->> +
->> +	lconn = devm_kzalloc(ddev->dev, sizeof(*lconn), GFP_KERNEL);
->> +	if (!lconn)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	lconn->index = index;
->> +	lconn->has_disp_tim = false;
->> +	lconn->ddc = NULL;
->> +
->> +	output = of_parse_phandle(np, "output-ports", index);
->> +	if (!output) {
->> +		drm_warn(ddev, "no output-ports property, please update dtb\n");
->> +		/*
->> +		 * Providing a blindly support even though no output-ports
->> +		 * property is provided in the dtb.
->> +		 */
->> +		goto DT_SKIPED;
->> +	}
-> output-ports is not documented either.
-Thanks for you take time review my patch, i will try to document it at 
-next version.
+This is not  weird,  ast, mgag200, hibmc do the same thing.
