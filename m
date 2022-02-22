@@ -2,35 +2,33 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EBF4BF402
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Feb 2022 09:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FA74BF3FD
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Feb 2022 09:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiBVIsP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Feb 2022 03:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S229953AbiBVIsO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Feb 2022 03:48:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiBVIsN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Feb 2022 03:48:13 -0500
+        with ESMTP id S229766AbiBVIsM (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Feb 2022 03:48:12 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 288D4A2F3C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28A51A4190;
         Tue, 22 Feb 2022 00:47:48 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nMQpn-0001CP-00; Tue, 22 Feb 2022 09:47:47 +0100
+        id 1nMQpn-0001CP-02; Tue, 22 Feb 2022 09:47:47 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 54F15C25FC; Tue, 22 Feb 2022 09:43:31 +0100 (CET)
-Date:   Tue, 22 Feb 2022 09:43:31 +0100
+        id 300C3C2609; Tue, 22 Feb 2022 09:46:15 +0100 (CET)
+Date:   Tue, 22 Feb 2022 09:46:15 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH] mips: setup: fix setnocoherentio() boolean setting
-Message-ID: <20220222084331.GA7049@alpha.franken.de>
-References: <20220221175029.6046-1-rdunlap@infradead.org>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: remove asm/war.h
+Message-ID: <20220222084615.GC7049@alpha.franken.de>
+References: <20220218100441.81944-1-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220221175029.6046-1-rdunlap@infradead.org>
+In-Reply-To: <20220218100441.81944-1-tsbogend@alpha.franken.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
@@ -41,32 +39,34 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 09:50:29AM -0800, Randy Dunlap wrote:
-> Correct a typo/pasto: setnocoherentio() should set
-> dma_default_coherent to false, not true.
+On Fri, Feb 18, 2022 at 11:04:39AM +0100, Thomas Bogendoerfer wrote:
+> The major part for workaround handling has already moved to config
+> options. This change replaces the remaining defines by already
+> available config options and gets rid of war.h
 > 
-> Fixes: 14ac09a65e19 ("MIPS: refactor the runtime coherent vs noncoherent DMA indicators")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > ---
->  arch/mips/kernel/setup.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- linux-next-20220217.orig/arch/mips/kernel/setup.c
-> +++ linux-next-20220217/arch/mips/kernel/setup.c
-> @@ -803,7 +803,7 @@ early_param("coherentio", setcoherentio)
->  
->  static int __init setnocoherentio(char *str)
->  {
-> -	dma_default_coherent = true;
-> +	dma_default_coherent = false;
->  	pr_info("Software DMA cache coherency (command line)\n");
->  	return 0;
->  }
+>  arch/mips/Kconfig                  | 38 ++++++++++++++++
+>  arch/mips/include/asm/futex.h      |  1 -
+>  arch/mips/include/asm/mipsmtregs.h |  1 -
+>  arch/mips/include/asm/mipsregs.h   |  1 -
+>  arch/mips/include/asm/war.h        | 73 ------------------------------
+>  arch/mips/kernel/entry.S           |  1 -
+>  arch/mips/kernel/genex.S           |  1 -
+>  arch/mips/kernel/r4k-bugs64.c      |  9 ++--
+>  arch/mips/kernel/scall32-o32.S     |  1 -
+>  arch/mips/kernel/scall64-n64.S     |  1 -
+>  arch/mips/kernel/signal.c          |  1 -
+>  arch/mips/kernel/signal_n32.c      |  1 -
+>  arch/mips/lib/delay.c              |  1 -
+>  arch/mips/mm/c-octeon.c            |  1 -
+>  arch/mips/mm/c-r4k.c               |  1 -
+>  arch/mips/mm/page.c                |  5 +-
+>  arch/mips/mm/tlbex.c               |  1 -
+>  17 files changed, 47 insertions(+), 91 deletions(-)
+>  delete mode 100644 arch/mips/include/asm/war.h
 
-applied to mips-fixes.
+applied to mips-next.
 
 Thomas.
 
