@@ -2,64 +2,100 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EDA4BF40A
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Feb 2022 09:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5CF4BF5B9
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Feb 2022 11:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiBVIsQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Feb 2022 03:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        id S231148AbiBVKZN (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Feb 2022 05:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiBVIsN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Feb 2022 03:48:13 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28B00BA75D;
-        Tue, 22 Feb 2022 00:47:48 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nMQpn-0001CP-04; Tue, 22 Feb 2022 09:47:47 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 2DDFBC2609; Tue, 22 Feb 2022 09:47:14 +0100 (CET)
-Date:   Tue, 22 Feb 2022 09:47:14 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] MIPS: Constify static irq_domain_ops structs
-Message-ID: <20220222084714.GB7123@alpha.franken.de>
-References: <20220207211816.57860-1-rikard.falkeborn@gmail.com>
+        with ESMTP id S231147AbiBVKZJ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Feb 2022 05:25:09 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB88A159E80;
+        Tue, 22 Feb 2022 02:24:44 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id 8so4277855qvf.2;
+        Tue, 22 Feb 2022 02:24:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZwVsXW12gm3VwwhPmVGdM4QmytARwditCmcefz+2r74=;
+        b=Z1mQiaGgxCb9cd9lkH/PWqaC7V+yMwbi8iDmq2TQ4kPMn+Dhm9OXlqeFFF+rMvgQZE
+         8/b7D5EtYdkfjwwtrUAf7pUFKB2+NgTSsiVs2WbKyMoYVQ69FLQdzDOFEa2MghOF06jO
+         M/JBE0U0abxWVXw8mRF0MX4CV6fcS3JfA+R6qMUqmkOKLT+v+N2kt2nlDEYeaIJuu+jR
+         xJ02RjQCyzFBjewl4i3R6pRfjFHD09KEOHWd+wDAjMiBe/kvBX4tRYIMhNuHZdRCXRIm
+         703qF9SZZX+aDIspAJafIAXDPQca+8eflHkw3Uve9aGUzOgMh6foCNCgOAn9M5JKmznP
+         Y1hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZwVsXW12gm3VwwhPmVGdM4QmytARwditCmcefz+2r74=;
+        b=b4DExrUS1MUbJiuB4G+axJ022v8Iw2xk4dbgJalgN7tI8EUNAL9PcoUHWk3w2Gdw5c
+         ziIxCOfFZKsvh3+cju+w7DOh7hm6n8hFGFaGFj41HcsEqkZHFqi0b6NTrmI7iOIoOxZT
+         9atS/DzJooPTHAZnJ4BRCTMgk3GkeYRFC3rJVsC3wiMBv09GwAPluopTwCcIqZnSkq5U
+         VQtrj1zC7kHjOW4ksvnAg3pPL3A+eDx+E9sV+CR8pwmajPBoM8q2lsGyX6xxbudDNVFo
+         yhrNc8cfdFpJAP72CTVx7oRcSNT3FG1tDULzf2XPEn1vrln5SMWq6zIwJgDfDyQ/ZFml
+         XCSg==
+X-Gm-Message-State: AOAM532u/rlF+L4lF92a+QBONRyk94bPwQT+GxqvmjbvUwiD+CFHROBq
+        tovKTdX+/fkML4MDumIKhiI=
+X-Google-Smtp-Source: ABdhPJwY72MpP1R5Ah7WW2R4pXSYtRWIGk0/fr7S/30d7VWzLmNB/IjZkS1+K5fOokHdqM4wX5Slow==
+X-Received: by 2002:a05:6214:4a1:b0:432:3676:f227 with SMTP id w1-20020a05621404a100b004323676f227mr2877021qvz.25.1645525483968;
+        Tue, 22 Feb 2022 02:24:43 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y18sm32215141qtj.33.2022.02.22.02.24.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 02:24:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6534b889-41c5-dd7a-578b-27dc6668064a@roeck-us.net>
+Date:   Tue, 22 Feb 2022 02:24:40 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207211816.57860-1-rikard.falkeborn@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] MIPS: Remove TX39XX support
+Content-Language: en-US
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, dmaengine@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <20220222090435.62571-1-tsbogend@alpha.franken.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220222090435.62571-1-tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 10:18:13PM +0100, Rikard Falkeborn wrote:
-> Constify a number of static irq_domain_ops structs that were never
-> modified. This allows the compiler to put them in read-only memory.
+On 2/22/22 01:04, Thomas Bogendoerfer wrote:
+> No (active) developer owns this hardware, so let's remove Linux support.
 > 
-> Rikard Falkeborn (3):
->   MIPS: OCTEON: Constify static irq_domain_ops
->   MIPS: ath25: Constify static irq_domain_ops
->   MIPS: pci-ar2315: Constify static irq_domain_ops
-> 
->  arch/mips/ath25/ar2315.c             |  2 +-
->  arch/mips/ath25/ar5312.c             |  2 +-
->  arch/mips/cavium-octeon/octeon-irq.c | 10 +++++-----
->  arch/mips/pci/pci-ar2315.c           |  2 +-
->  4 files changed, 8 insertions(+), 8 deletions(-)
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> ---
+[ ... ]
 
-series applied to mips-next.
+>   drivers/watchdog/Kconfig                      |   2 +-
 
-Thomas.
+For watchdog:
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Acked-by: Guenter Roeck <linux@roeck-us.net>
