@@ -2,171 +2,123 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 363874BFC99
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Feb 2022 16:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A19034BFCD7
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Feb 2022 16:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiBVPbM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Feb 2022 10:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
+        id S233534AbiBVPgP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Feb 2022 10:36:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiBVPbM (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Feb 2022 10:31:12 -0500
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC7D160401
-        for <linux-mips@vger.kernel.org>; Tue, 22 Feb 2022 07:30:45 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:c0fe:4675:4cef:99a5])
-        by baptiste.telenet-ops.be with bizsmtp
-        id yFWe260014Plfy301FWeNn; Tue, 22 Feb 2022 16:30:43 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nMX7d-001Yw6-D0; Tue, 22 Feb 2022 16:30:37 +0100
-Date:   Tue, 22 Feb 2022 16:30:37 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-cc:     Marek Szyprowski <m.szyprowski@samsung.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        =?ISO-8859-15?Q?Toke_H=F8iland-J=F8rgensen?= <toke@toke.dk>,
-        =?ISO-8859-15?Q?Toke_H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH net-next v3 2/3] net: dev: Makes sure netif_rx() can be
- invoked in any context.
-In-Reply-To: <da6abfe2-dafd-4aa1-adca-472137423ba4@samsung.com>
-Message-ID: <alpine.DEB.2.22.394.2202221622570.372449@ramsan.of.borg>
-References: <20220211233839.2280731-1-bigeasy@linutronix.de>        <20220211233839.2280731-3-bigeasy@linutronix.de>        <CGME20220216085613eucas1p1d33aca0243a3671ed0798055fc65dc54@eucas1p1.samsung.com> <da6abfe2-dafd-4aa1-adca-472137423ba4@samsung.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        with ESMTP id S233535AbiBVPf7 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Feb 2022 10:35:59 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C83E163D5E;
+        Tue, 22 Feb 2022 07:35:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=16nouNo24ejNp/bHBqFUpHpMmYYgIL88sf6fCnA5oxw=; b=Evl4OhdNJ9vFGI4KBDyMJ2uY4v
+        ahlgofRSzpQsvpw+qbnrer3aKbB3W7rQQSWiEtHPv1GOLM+A33NRlrQJtcbKPQZsq8ZJ0Ur1vnRRo
+        g3p2qbcU3jr70C8mOofs0g3hzUW4uVlAhWSisJaMMZC6wOX8A4tQ90Hk2vLNc+kmD6djArF9T8eoW
+        9u4suY2drGIZP4mp6SqQGG0Ti0UU5XC5RKqrHf1fSU30Q1huprZkGdvFxmCo5kR0DDj/lBC1BQkHm
+        KDzcPMMmVkYt9l5nGrPt5RR+4vvyTE3FSJuO351gMgi78pWHFgl6Edsr7ZHkmjhcz+ut06I1oIQyx
+        rYiE4tRw==;
+Received: from [2001:4bb8:198:f8fc:c22a:ebfc:be8d:63c2] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMXC9-00AGnS-1u; Tue, 22 Feb 2022 15:35:17 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     iommu@lists.linux-foundation.org
+Cc:     x86@kernel.org, Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
+        linux-pci@vger.kernel.org
+Subject: cleanup swiotlb initialization
+Date:   Tue, 22 Feb 2022 16:35:03 +0100
+Message-Id: <20220222153514.593231-1-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-147414761-1645543837=:372449"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi all,
 
---8323329-147414761-1645543837=:372449
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8BIT
+this series tries to clean up the swiotlb initialization, including
+that of swiotlb-xen.  To get there is also removes the x86 iommu table
+infrastructure that massively obsfucates the initialization path.
 
- 	Hi Sebastian,
+Git tree:
 
-On Wed, 16 Feb 2022, Marek Szyprowski wrote:
-> On 12.02.2022 00:38, Sebastian Andrzej Siewior wrote:
->> Dave suggested a while ago (eleven years by now) "Let's make netif_rx()
->> work in all contexts and get rid of netif_rx_ni()". Eric agreed and
->> pointed out that modern devices should use netif_receive_skb() to avoid
->> the overhead.
->> In the meantime someone added another variant, netif_rx_any_context(),
->> which behaves as suggested.
->>
->> netif_rx() must be invoked with disabled bottom halves to ensure that
->> pending softirqs, which were raised within the function, are handled.
->> netif_rx_ni() can be invoked only from process context (bottom halves
->> must be enabled) because the function handles pending softirqs without
->> checking if bottom halves were disabled or not.
->> netif_rx_any_context() invokes on the former functions by checking
->> in_interrupts().
->>
->> netif_rx() could be taught to handle both cases (disabled and enabled
->> bottom halves) by simply disabling bottom halves while invoking
->> netif_rx_internal(). The local_bh_enable() invocation will then invoke
->> pending softirqs only if the BH-disable counter drops to zero.
->>
->> Eric is concerned about the overhead of BH-disable+enable especially in
->> regard to the loopback driver. As critical as this driver is, it will
->> receive a shortcut to avoid the additional overhead which is not needed.
->>
->> Add a local_bh_disable() section in netif_rx() to ensure softirqs are
->> handled if needed.
->> Provide __netif_rx() which does not disable BH and has a lockdep assert
->> to ensure that interrupts are disabled. Use this shortcut in the
->> loopback driver and in drivers/net/*.c.
->> Make netif_rx_ni() and netif_rx_any_context() invoke netif_rx() so they
->> can be removed once they are no more users left.
->>
->> Link: https://lkml.kernel.org/r/20100415.020246.218622820.davem@davemloft.net
->> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
->> Reviewed-by: Eric Dumazet <edumazet@google.com>
->> Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
->
-> This patch landed in linux-next 20220215 as commit baebdf48c360 ("net:
-> dev: Makes sure netif_rx() can be invoked in any context."). I found
-> that it triggers the following warning on my test systems with USB CDC
-> ethernet gadget:
->
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 876 at kernel/softirq.c:308
-> __local_bh_disable_ip+0xbc/0xc0
+    git://git.infradead.org/users/hch/misc.git swiotlb-init-cleanup
 
-Similar on rbtx4927 (CONFIG_NE2000=y), where I'm getting a slightly
-different warning:
+Gitweb:
 
-     Sending DHCP requests .
-     ------------[ cut here ]------------
-     WARNING: CPU: 0 PID: 0 at kernel/softirq.c:362 __local_bh_enable_ip+0x4c/0xc0
-     Modules linked in:
-     CPU: 0 PID: 0 Comm: swapper Not tainted 5.17.0-rc5-rbtx4927-00770-ga8ca72253967 #300
-     Stack : 9800000000b80800 0000000000000008 0000000000000000 a5ba96d4be38c8b0
- 	    0000000000000000 9800000000813c10 ffffffff80468188 9800000000813a90
- 	    0000000000000001 9800000000813ab0 0000000000000000 20746f4e20726570
- 	    0000000000000010 ffffffff802c1400 ffffffff8054ce76 722d302e37312e35
- 	    0000000000000000 0000000000000000 0000000000000009 0000000000000000
- 	    98000000008bfd40 000000000000004c 0000000006020283 0000000006020287
- 	    0000000000000000 0000000000000000 0000000000000000 ffffffff80540000
- 	    ffffffff804b8000 9800000000813c10 9800000000b80800 ffffffff801238bc
- 	    0000000000000000 ffffffff80470000 0000000000000000 0000000000000009
- 	    0000000000000000 ffffffff80108738 0000000000000000 ffffffff801238bc
- 	    ...
-     Call Trace:
-     [<ffffffff80108738>] show_stack+0x68/0xf4
-     [<ffffffff801238bc>] __warn+0xc0/0xf0
-     [<ffffffff80123964>] warn_slowpath_fmt+0x78/0x94
-     [<ffffffff80126408>] __local_bh_enable_ip+0x4c/0xc0
-     [<ffffffff80341754>] netif_rx+0x20/0x30
-     [<ffffffff8031d870>] ei_receive+0x2f0/0x36c
-     [<ffffffff8031e624>] eip_interrupt+0x2dc/0x36c
-     [<ffffffff8014f488>] __handle_irq_event_percpu+0x8c/0x134
-     [<ffffffff8014f548>] handle_irq_event_percpu+0x18/0x60
-     [<ffffffff8014f5c8>] handle_irq_event+0x38/0x60
-     [<ffffffff80152008>] handle_level_irq+0x80/0xbc
-     [<ffffffff8014eecc>] handle_irq_desc+0x24/0x3c
-     [<ffffffff804014b8>] do_IRQ+0x18/0x24
-     [<ffffffff801031b0>] handle_int+0x148/0x154
-     [<ffffffff80104e18>] arch_local_irq_enable+0x18/0x24
-     [<ffffffff8040148c>] default_idle_call+0x2c/0x3c
-     [<ffffffff801445d0>] do_idle+0xcc/0x104
-     [<ffffffff80144620>] cpu_startup_entry+0x18/0x20
-     [<ffffffff80508e34>] start_kernel+0x6f4/0x738
+    http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/swiotlb-init-cleanup
 
-     ---[ end trace 0000000000000000 ]---
-     , OK
-     IP-Config: Got DHCP answer from a.b.c.d, my address is a.b.c.e
-     IP-Config: Complete:
-
-Reverting baebdf48c3600807 ("net: dev: Makes sure netif_rx() can be
-invoked in any context.") fixes the issue for me.
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
---8323329-147414761-1645543837=:372449--
+Diffstat:
+ arch/ia64/include/asm/iommu_table.h      |    7 -
+ arch/x86/include/asm/iommu_table.h       |  102 -------------------
+ arch/x86/include/asm/swiotlb.h           |   30 -----
+ arch/x86/kernel/pci-iommu_table.c        |   77 --------------
+ arch/x86/kernel/pci-swiotlb.c            |   77 --------------
+ arch/x86/xen/pci-swiotlb-xen.c           |   96 ------------------
+ b/arch/arm/mm/init.c                     |    6 -
+ b/arch/arm/xen/mm.c                      |   23 ++--
+ b/arch/arm64/mm/init.c                   |    6 -
+ b/arch/ia64/mm/init.c                    |    4 
+ b/arch/mips/cavium-octeon/dma-octeon.c   |   15 --
+ b/arch/mips/loongson64/dma.c             |    2 
+ b/arch/mips/pci/pci-octeon.c             |    2 
+ b/arch/mips/sibyte/common/dma.c          |    2 
+ b/arch/powerpc/include/asm/svm.h         |    4 
+ b/arch/powerpc/include/asm/swiotlb.h     |    1 
+ b/arch/powerpc/mm/mem.c                  |    6 -
+ b/arch/powerpc/platforms/pseries/setup.c |    3 
+ b/arch/powerpc/platforms/pseries/svm.c   |   26 ----
+ b/arch/riscv/mm/init.c                   |    8 -
+ b/arch/s390/mm/init.c                    |    3 
+ b/arch/x86/include/asm/dma-mapping.h     |   12 --
+ b/arch/x86/include/asm/gart.h            |    5 
+ b/arch/x86/include/asm/iommu.h           |    8 +
+ b/arch/x86/include/asm/xen/page.h        |    5 
+ b/arch/x86/include/asm/xen/swiotlb-xen.h |    2 
+ b/arch/x86/kernel/Makefile               |    2 
+ b/arch/x86/kernel/amd_gart_64.c          |    5 
+ b/arch/x86/kernel/aperture_64.c          |   14 --
+ b/arch/x86/kernel/cpu/mshyperv.c         |    8 -
+ b/arch/x86/kernel/pci-dma.c              |  114 +++++++++++++++++----
+ b/arch/x86/kernel/tboot.c                |    1 
+ b/arch/x86/kernel/vmlinux.lds.S          |   12 --
+ b/arch/x86/mm/mem_encrypt_amd.c          |    3 
+ b/arch/x86/pci/sta2x11-fixup.c           |    2 
+ b/arch/x86/xen/Makefile                  |    2 
+ b/drivers/iommu/amd/init.c               |    6 -
+ b/drivers/iommu/amd/iommu.c              |    5 
+ b/drivers/iommu/intel/dmar.c             |    6 -
+ b/drivers/xen/swiotlb-xen.c              |  132 -------------------------
+ b/include/linux/dmar.h                   |    6 -
+ b/include/linux/swiotlb.h                |   22 ++--
+ b/include/trace/events/swiotlb.h         |   29 +----
+ b/include/xen/arm/page.h                 |    1 
+ b/include/xen/swiotlb-xen.h              |    8 +
+ b/kernel/dma/direct.h                    |    2 
+ b/kernel/dma/swiotlb.c                   |  163 +++++++++++++++----------------
+ 47 files changed, 258 insertions(+), 817 deletions(-)
