@@ -2,41 +2,53 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2E44C10FA
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Feb 2022 12:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84C74C11DE
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Feb 2022 12:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239632AbiBWLF2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Feb 2022 06:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
+        id S239716AbiBWLu1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Feb 2022 06:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbiBWLF1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Feb 2022 06:05:27 -0500
-X-Greylist: delayed 305 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 03:04:59 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4C678062;
-        Wed, 23 Feb 2022 03:04:59 -0800 (PST)
-Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MlfCk-1o4Ra6312w-00inTg; Wed, 23 Feb 2022 11:59:52 +0100
-Received: by mail-wr1-f52.google.com with SMTP id o4so2135193wrf.3;
-        Wed, 23 Feb 2022 02:59:52 -0800 (PST)
-X-Gm-Message-State: AOAM532w0I/FQasSXoRn7paj/0r708sN7Hcll05a600icEtPzbVFW5nu
-        NA3gFKSoZzvNLofXWNFCuRR21wXtMvkt8QI7GtY=
-X-Google-Smtp-Source: ABdhPJz3tjc3IejYq+UPcpb0b0B/1/NsttPG6/6KnMrBytsQxjHYO0/p2daBPMgz1AgVYfLNcxR3Ydw+Oyz4L5S8GiA=
-X-Received: by 2002:adf:90c1:0:b0:1e4:ad27:22b9 with SMTP id
- i59-20020adf90c1000000b001e4ad2722b9mr23150986wri.219.1645613992251; Wed, 23
- Feb 2022 02:59:52 -0800 (PST)
+        with ESMTP id S233558AbiBWLu0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Feb 2022 06:50:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E144615A21;
+        Wed, 23 Feb 2022 03:49:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 946B6B81F01;
+        Wed, 23 Feb 2022 11:49:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F55C340F9;
+        Wed, 23 Feb 2022 11:49:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645616996;
+        bh=hfHAFROwfpOFFi/tQhhl9G3FjcazCR7QoA9DMgKIuUs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EOJnR4gJ7ufXtY/T43KGngmiB+iKTj+5cW86rQLuY+AjanWMIJyMBhBaRqmwDJD4N
+         V/9ez038ffWbHbyJH72BzMeOVgAiIxHgggY4rvgT6/A5uwAL3ZDFJx0ocryfEaL67z
+         1dihWRgm5e/JWnIzCiAyxJME5lsoD/4hfcIYkmp9JBQ6ltc+Hx+U9A5YZod1iPgQtV
+         C9zDSuh4UoJNuPnSWSxAntKHNDYOL5EwEZJ4Qr4VhtTjs9Elsutn1KsWJTVGiwCo4+
+         xA4TmD5EiA26macIZsqIXj2wnzfpGEUoGtufgWDeRcYGNP5WYhYqUNCuKd7osCCi2C
+         fXrTfME84AP9w==
+Received: by mail-vk1-f173.google.com with SMTP id x62so4288874vkg.6;
+        Wed, 23 Feb 2022 03:49:56 -0800 (PST)
+X-Gm-Message-State: AOAM530Mjq6YYwQsmqoPMh4kCAKGbVwaAMLcRGjgZsY0kkfXaIQ0IaQh
+        7l6+Db8EkXgxFCKgFLKm039BIaXKe645GC4PB6M=
+X-Google-Smtp-Source: ABdhPJyqJLnPeoxGeO22JI8w60FhVdlZOJm/ivkvGivlInjfGWyPsT7PT1FafotgeKHBNd2cGszxDxqC/GZp/VCntVY=
+X-Received: by 2002:a05:6122:887:b0:332:699e:7e67 with SMTP id
+ 7-20020a056122088700b00332699e7e67mr1087720vkf.35.1645616995136; Wed, 23 Feb
+ 2022 03:49:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220201150545.1512822-1-guoren@kernel.org> <mhng-36783ff3-37c2-454b-9337-8cb124195255@palmer-ri-x1c9>
-In-Reply-To: <mhng-36783ff3-37c2-454b-9337-8cb124195255@palmer-ri-x1c9>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Feb 2022 11:59:36 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1W3Ns1WYiSGXb3Qn6-p+SPsx1UGqXdTkk2taPB72OZUA@mail.gmail.com>
-Message-ID: <CAK8P3a1W3Ns1WYiSGXb3Qn6-p+SPsx1UGqXdTkk2taPB72OZUA@mail.gmail.com>
-Subject: Re: [PATCH V5 00/21] riscv: compat: Add COMPAT mode support for rv64
+References: <20220201150545.1512822-18-guoren@kernel.org> <mhng-fda909a7-d09a-4835-94a9-90a0746f6a95@palmer-ri-x1c9>
+In-Reply-To: <mhng-fda909a7-d09a-4835-94a9-90a0746f6a95@palmer-ri-x1c9>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 23 Feb 2022 19:49:44 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT_AKREbdgFEea_zOhYgnK23xn8Y6TXTRv1v03XeUak8w@mail.gmail.com>
+Message-ID: <CAJF2gTT_AKREbdgFEea_zOhYgnK23xn8Y6TXTRv1v03XeUak8w@mail.gmail.com>
+Subject: Re: [PATCH V5 17/21] riscv: compat: vdso: Add setup additional pages implementation
 To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>,
         Greg KH <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
         Drew Fustini <drew@beagleboard.org>,
@@ -55,83 +67,317 @@ Cc:     Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         "the arch/x86 maintainers" <x86@kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fDj8UNVRV8r/eEkDy+HCLSo5oTnkzwOoBxcvqklwcRxXRwi6wUV
- 6SE5GCBES+rEkqbaFiHz6aGc/CNcIz7j4g51nG2OX1z+qqp19c2xUqQAOlXIpbA/+vI2jCi
- 66nCed0HrHG8pKuBjTvpQfJ7mhp2uPg7qBZSY37R2iNdBB0GFnk2uzfcY2yijMhTM9tVR5a
- 82jnAWH9+MAZlTC76Larg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Tk21r7KoD1U=:LKedfq+z13QAGf6g3pHobL
- qNudvffbsCYXzO9EGN1Z5B1rrCdr2Fcbz6+/CANHNZQCAc+E1q/3ZFmzjha7N9VFeqFKP7SsI
- LK4AIB8K6nFhw6XUH7jVeCxm7bC3VIXBEL1rMOOzVG32xRuqL+K0YB1CDOBm3832bnMFCR0L/
- DtH3CKvKGY5MFBqNl46CfQyBzP4FlQrHFSEpVs08yBQeKIgKna5fOrUQYq0u7xziCrpvN2SRu
- C94CNte8/G6nRuKvkQ32hM/+5XgZI9Q6YyXH3Y/DBPD+Q9+3ejD5jvinImkykTTDkQn3fzh7V
- F1WnCHIHGtdV6lpPwYAyCBNnY70HvTDBa3G4K68TiJWmhFaZlUbX1g4s7FhKRbbEpZbcHvMyN
- gCe654hGC76pNIoSYZAaSkzGGkjzvuMCpqg8gNhdXIyKgZ8C+5wOgNvFtSwtPz5Eahe53zJH3
- ht5euN78Jkw8wmAblemYdHG9STbDCMdRe+8CaWkLv0jJbaEOn0EiNidOWMFD5ZnTrtNv9bvr9
- d5xTBV6gmhzAEsys4XPR1Q+e3qETmcGcI97QNogu9luQcb6Jk+xszux0Uw2wieVQa059o8Iic
- bb/MkqhLaHFDrpGcFB7sVRg8EiFs/Kd0GZaLuCjnaEivgLqC547T5BJ/Mq7zZD69cbZo57PoQ
- oj8H55QCEVXhkpyMVG5yeZczW56G5yATMCnGiv0e+pp+M4EwQUlv42AH3xvSDE5VuyJIdjKUq
- 2RoPonOuTxk/BVf17rGlfzuBHJZNE+J7viLdsXuCB2yVMtIoSHViqBAmQ+NkiB32UA20GZV9v
- eqkZqppq3SBJTTGEWOTBeq+yVQISfszRwROD8YTaodYTid2AFs=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 2:43 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+On Wed, Feb 23, 2022 at 9:42 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
 >
-> On Tue, 01 Feb 2022 07:05:24 PST (-0800), guoren@kernel.org wrote:
+> On Tue, 01 Feb 2022 07:05:41 PST (-0800), guoren@kernel.org wrote:
 > > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
-> > s390, mips, sparc) have supported COMPAT mode. But they all have
-> > history issues and can't use standard linux unistd.h. RISC-V would
-> > be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
-> > /unistd.h.
+> > Reconstruct __setup_additional_pages() by appending vdso info
+> > pointer argument to meet compat_vdso_info requirement. And change
+> > vm_special_mapping *dm, *cm initialization into static.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > ---
+> >  arch/riscv/include/asm/elf.h |   5 ++
+> >  arch/riscv/include/asm/mmu.h |   1 +
+> >  arch/riscv/kernel/vdso.c     | 104 +++++++++++++++++++++++++----------
+> >  3 files changed, 81 insertions(+), 29 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+> > index 3a4293dc7229..d87d3bcc758d 100644
+> > --- a/arch/riscv/include/asm/elf.h
+> > +++ b/arch/riscv/include/asm/elf.h
+> > @@ -134,5 +134,10 @@ do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)                \
+> >  typedef compat_ulong_t                       compat_elf_greg_t;
+> >  typedef compat_elf_greg_t            compat_elf_gregset_t[ELF_NGREG];
+> >
+> > +extern int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
+> > +                                           int uses_interp);
+> > +#define compat_arch_setup_additional_pages \
+> > +                             compat_arch_setup_additional_pages
+> > +
+> >  #endif /* CONFIG_COMPAT */
+> >  #endif /* _ASM_RISCV_ELF_H */
+> > diff --git a/arch/riscv/include/asm/mmu.h b/arch/riscv/include/asm/mmu.h
+> > index 0099dc116168..cedcf8ea3c76 100644
+> > --- a/arch/riscv/include/asm/mmu.h
+> > +++ b/arch/riscv/include/asm/mmu.h
+> > @@ -16,6 +16,7 @@ typedef struct {
+> >       atomic_long_t id;
+> >  #endif
+> >       void *vdso;
+> > +     void *vdso_info;
+> >  #ifdef CONFIG_SMP
+> >       /* A local icache flush is needed before user execution can resume. */
+> >       cpumask_t icache_stale_mask;
+> > diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+> > index a9436a65161a..deca69524799 100644
+> > --- a/arch/riscv/kernel/vdso.c
+> > +++ b/arch/riscv/kernel/vdso.c
+> > @@ -23,6 +23,9 @@ struct vdso_data {
+> >  #endif
+> >
+> >  extern char vdso_start[], vdso_end[];
+> > +#ifdef CONFIG_COMPAT
+> > +extern char compat_vdso_start[], compat_vdso_end[];
+> > +#endif
+> >
+> >  enum vvar_pages {
+> >       VVAR_DATA_PAGE_OFFSET,
+> > @@ -30,6 +33,11 @@ enum vvar_pages {
+> >       VVAR_NR_PAGES,
+> >  };
+> >
+> > +enum rv_vdso_map {
+> > +     RV_VDSO_MAP_VVAR,
+> > +     RV_VDSO_MAP_VDSO,
+> > +};
+> > +
+> >  #define VVAR_SIZE  (VVAR_NR_PAGES << PAGE_SHIFT)
+> >
+> >  /*
+> > @@ -52,12 +60,6 @@ struct __vdso_info {
+> >       struct vm_special_mapping *cm;
+> >  };
+> >
+> > -static struct __vdso_info vdso_info __ro_after_init = {
+> > -     .name = "vdso",
+> > -     .vdso_code_start = vdso_start,
+> > -     .vdso_code_end = vdso_end,
+> > -};
+> > -
+> >  static int vdso_mremap(const struct vm_special_mapping *sm,
+> >                      struct vm_area_struct *new_vma)
+> >  {
+> > @@ -66,35 +68,35 @@ static int vdso_mremap(const struct vm_special_mapping *sm,
+> >       return 0;
+> >  }
+> >
+> > -static int __init __vdso_init(void)
+> > +static int __init __vdso_init(struct __vdso_info *vdso_info)
+> >  {
+> >       unsigned int i;
+> >       struct page **vdso_pagelist;
+> >       unsigned long pfn;
+> >
+> > -     if (memcmp(vdso_info.vdso_code_start, "\177ELF", 4)) {
+> > +     if (memcmp(vdso_info->vdso_code_start, "\177ELF", 4)) {
+> >               pr_err("vDSO is not a valid ELF object!\n");
+> >               return -EINVAL;
+> >       }
+> >
+> > -     vdso_info.vdso_pages = (
+> > -             vdso_info.vdso_code_end -
+> > -             vdso_info.vdso_code_start) >>
+> > +     vdso_info->vdso_pages = (
+> > +             vdso_info->vdso_code_end -
+> > +             vdso_info->vdso_code_start) >>
+> >               PAGE_SHIFT;
+> >
+> > -     vdso_pagelist = kcalloc(vdso_info.vdso_pages,
+> > +     vdso_pagelist = kcalloc(vdso_info->vdso_pages,
+> >                               sizeof(struct page *),
+> >                               GFP_KERNEL);
+> >       if (vdso_pagelist == NULL)
+> >               return -ENOMEM;
+> >
+> >       /* Grab the vDSO code pages. */
+> > -     pfn = sym_to_pfn(vdso_info.vdso_code_start);
+> > +     pfn = sym_to_pfn(vdso_info->vdso_code_start);
+> >
+> > -     for (i = 0; i < vdso_info.vdso_pages; i++)
+> > +     for (i = 0; i < vdso_info->vdso_pages; i++)
+> >               vdso_pagelist[i] = pfn_to_page(pfn + i);
+> >
+> > -     vdso_info.cm->pages = vdso_pagelist;
+> > +     vdso_info->cm->pages = vdso_pagelist;
+> >
+> >       return 0;
+> >  }
+> > @@ -116,13 +118,14 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+> >  {
+> >       struct mm_struct *mm = task->mm;
+> >       struct vm_area_struct *vma;
+> > +     struct __vdso_info *vdso_info = mm->context.vdso_info;
 >
-> TBH, I'd always sort of hoped we wouldn't have to do this: it's a lot of
-> ABI surface to keep around for a use case I'm not really sure is ever
-> going to get any traction (it's not like we have legacy 32-bit
-> userspaces floating around, the 32-bit userspace is newer than the
-> 64-bit userspace).
+> IIUC this is the only use for context.vdso_info?  If that's the case,
+> can we just switch between VDSO targets based on __is_compat_task(task)?
+> That'd save an mm_struct pointer, which is always nice.  It'd probably
+> be worth cleaning up the arm64 port too, which zaps both mappings.
+>
+> >
+> >       mmap_read_lock(mm);
+> >
+> >       for (vma = mm->mmap; vma; vma = vma->vm_next) {
+> >               unsigned long size = vma->vm_end - vma->vm_start;
+> >
+> > -             if (vma_is_special_mapping(vma, vdso_info.dm))
+> > +             if (vma_is_special_mapping(vma, vdso_info->dm))
+> >                       zap_page_range(vma, vma->vm_start, size);
+> >       }
+> >
+> > @@ -187,11 +190,6 @@ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+> >       return vmf_insert_pfn(vma, vmf->address, pfn);
+> >  }
+> >
+> > -enum rv_vdso_map {
+> > -     RV_VDSO_MAP_VVAR,
+> > -     RV_VDSO_MAP_VDSO,
+> > -};
+> > -
+> >  static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
+> >       [RV_VDSO_MAP_VVAR] = {
+> >               .name   = "[vvar]",
+> > @@ -203,25 +201,53 @@ static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
+> >       },
+> >  };
+> >
+> > +static struct __vdso_info vdso_info __ro_after_init = {
+> > +     .name = "vdso",
+> > +     .vdso_code_start = vdso_start,
+> > +     .vdso_code_end = vdso_end,
+> > +     .dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+> > +     .cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+> > +};
+> > +
+> > +#ifdef CONFIG_COMPAT
+> > +static struct __vdso_info compat_vdso_info __ro_after_init = {
+> > +     .name = "compat_vdso",
+> > +     .vdso_code_start = compat_vdso_start,
+> > +     .vdso_code_end = compat_vdso_end,
+> > +     .dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+> > +     .cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+> > +};
+> > +#endif
+> > +
+> >  static int __init vdso_init(void)
+> >  {
+> > -     vdso_info.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR];
+> > -     vdso_info.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO];
+> > +     int ret;
+> > +
+> > +     ret = __vdso_init(&vdso_info);
+> > +     if (ret)
+> > +             goto out;
+> >
+> > -     return __vdso_init();
+> > +#ifdef CONFIG_COMPAT
+> > +     ret = __vdso_init(&compat_vdso_info);
+> > +     if (ret)
+> > +             goto out;
+>
+> It's a bit pedantic (we're just going to crash anyway), but this is
+> mising the cleanup for the first __vdso_init().
+I would use panic in __vdso_init:
+static void __init __vdso_init(struct __vdso_info *vdso_info)
+{
+...
+        if (memcmp(vdso_info->vdso_code_start, "\177ELF", 4)) {
+-               pr_err("vDSO is not a valid ELF object!\n");
+-               return -EINVAL;
++              panic("vDSO is not a valid ELF object!\n");
+        }
+>
+> > +#endif
+> > +out:
+> > +     return ret;
+> >  }
+> >  arch_initcall(vdso_init);
+> >
+> >  static int __setup_additional_pages(struct mm_struct *mm,
+> >                                   struct linux_binprm *bprm,
+> > -                                 int uses_interp)
+> > +                                 int uses_interp,
+> > +                                 struct __vdso_info *vdso_info)
+> >  {
+> >       unsigned long vdso_base, vdso_text_len, vdso_mapping_len;
+> >       void *ret;
+> >
+> >       BUILD_BUG_ON(VVAR_NR_PAGES != __VVAR_PAGES);
+> >
+> > -     vdso_text_len = vdso_info.vdso_pages << PAGE_SHIFT;
+> > +     vdso_text_len = vdso_info->vdso_pages << PAGE_SHIFT;
+> >       /* Be sure to map the data page */
+> >       vdso_mapping_len = vdso_text_len + VVAR_SIZE;
+> >
+> > @@ -232,16 +258,18 @@ static int __setup_additional_pages(struct mm_struct *mm,
+> >       }
+> >
+> >       ret = _install_special_mapping(mm, vdso_base, VVAR_SIZE,
+> > -             (VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info.dm);
+> > +             (VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info->dm);
+> >       if (IS_ERR(ret))
+> >               goto up_fail;
+> >
+> >       vdso_base += VVAR_SIZE;
+> >       mm->context.vdso = (void *)vdso_base;
+> > +     mm->context.vdso_info = (void *)vdso_info;
+> > +
+> >       ret =
+> >          _install_special_mapping(mm, vdso_base, vdso_text_len,
+> >               (VM_READ | VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC),
+> > -             vdso_info.cm);
+> > +             vdso_info->cm);
+> >
+> >       if (IS_ERR(ret))
+> >               goto up_fail;
+> > @@ -253,6 +281,24 @@ static int __setup_additional_pages(struct mm_struct *mm,
+> >       return PTR_ERR(ret);
+> >  }
+> >
+> > +#ifdef CONFIG_COMPAT
+> > +int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
+> > +                                    int uses_interp)
+> > +{
+> > +     struct mm_struct *mm = current->mm;
+> > +     int ret;
+> > +
+> > +     if (mmap_write_lock_killable(mm))
+> > +             return -EINTR;
+> > +
+> > +     ret = __setup_additional_pages(mm, bprm, uses_interp,
+> > +                                                     &compat_vdso_info);
+> > +     mmap_write_unlock(mm);
+> > +
+> > +     return ret;
+> > +}
+> > +#endif
+> > +
+> >  int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+> >  {
+> >       struct mm_struct *mm = current->mm;
+> > @@ -261,7 +307,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+> >       if (mmap_write_lock_killable(mm))
+> >               return -EINTR;
+> >
+> > -     ret = __setup_additional_pages(mm, bprm, uses_interp);
+> > +     ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso_info);
+> >       mmap_write_unlock(mm);
+> >
+> >       return ret;
+>
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+>
+> As I don't think either of these are big enough of a deal to keep from merging
+> this.
 
-The low-end embedded market isn't usually that newsworthy, but the
-machines ship in huge quantities, and they all run 32-bit user
-space for good reasons:
 
-The cheapest Linux systems at the moment use a low-end MIPS or
-Arm core with a single DDR2 (32MB to 128MB) or DDR3 (128MB
-to 512MB) memory chip that for now is a bit cheaper than a larger
-LP-DDR4 (256MB+). The smaller configurations will go away over
-time as they get outpriced by systems with LP-DDR4, but a 32-bit
-system with 256MB will keep beating a 64-bit-only system with
-512MB on price, and will run most workloads better than a 64-bit
-system with the same amount of RAM.
 
-On the Arm side, I hope that these systems will migrate to Armv8
-based designs (Cortex-A53/A35 or newer) running 64-bit kernel
-with 32-bit user space to replace the currently dominant but aging
-32-bit Cortex-A7 cores. As you say, RISC-V is at a disadvantage
-here because there is no existing 32-bit ecosystem, but it may take
-a chunk of that market anyway based on licensing cost. Between
-doing this using pure 32-bit cores or on mixed 32/64-bit cores,
-I found Guo Ren's explanation very sensible, it lets you use the
-same chip both as a low-end embedded version with SiP
-memory, or using an external DDR3/LPDDR4 chip with enough
-capacity to run a generic 64-bit distro.
+-- 
+Best Regards
+ Guo Ren
 
-> My assumption is that users who actually wanted the
-> memory savings (likely a very small number) would be better served with
-> rv64/ilp32, as that'll allow the larger registers that the hardware
-> supports.  From some earlier discussions it looks like rv64/ilp32 isn't
-> going to be allowed, though, so this seems like the only way to go.
-
-Right, between rv32 user space and a hypothetical rv64-ilp32 target,
-I think it's clear that the former is better because it means introducing
-only one fringe ABI rather than two incompatible ones with minor
-performance differences.
-
-        Arnd
+ML: https://lore.kernel.org/linux-csky/
