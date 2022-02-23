@@ -2,59 +2,51 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6974C1765
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Feb 2022 16:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 306B44C1787
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Feb 2022 16:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242108AbiBWPok (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Feb 2022 10:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S238717AbiBWPpo (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Feb 2022 10:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242342AbiBWPoe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Feb 2022 10:44:34 -0500
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0CEC1148;
-        Wed, 23 Feb 2022 07:44:06 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id bg10so53324117ejb.4;
-        Wed, 23 Feb 2022 07:44:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D9YoXmL0fH0aKcdRK7BK9p6bYV4a8ZT32GFRySXCBdU=;
-        b=RIV+5pwRmII3crrgV/JucWi0BPJWGTQ+CRLXqi5IRsjf4U7TcYZDgjd3mX9V14Bx4s
-         OqBGQHnyQx7FiEkzh+o6CK9OPWccSXqgl99gTpR/Kp0n51Ov600SSirjnK+0JXcuvyCl
-         WS72KrwxZHHzKCMRI1i3/Bq7AbveLGC12hvota+S5WdY0jXENgdpG1IaGLfOhzlXLElQ
-         xAAdxSfA5IRafzyUIjC4nkt9bYwJViKQupZNON+i2EXcxN4xqHKt3013YpnESRKyCBVz
-         ISyJQK/R+JQ4VCaJEikyuKvep+Kn+JkiEnnCJ4eE9s96bymcmZg4M40hgwGWDPSJC8O3
-         fcIQ==
-X-Gm-Message-State: AOAM532OjLIwv1+F9PA9yqSyKuXE+5uuC/nchMMbPW31mH+mm7JBVvW4
-        9ymjsAHQKq9Yott0yZtyDQM=
-X-Google-Smtp-Source: ABdhPJxXI094jfo93LhxnFNB5bGS9gHU1H1rFlcOLOWlSh9AKcr6Cm2g1nUnSRsQyalvpUvbbLbSDA==
-X-Received: by 2002:a17:906:35d5:b0:6b7:faf7:9611 with SMTP id p21-20020a17090635d500b006b7faf79611mr238158ejb.537.1645631044590;
-        Wed, 23 Feb 2022 07:44:04 -0800 (PST)
-Received: from [192.168.0.125] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id f3sm8446edy.72.2022.02.23.07.44.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 07:44:03 -0800 (PST)
-Message-ID: <2929cc96-b272-7144-f4a4-71d60852c5cd@kernel.org>
-Date:   Wed, 23 Feb 2022 16:44:02 +0100
+        with ESMTP id S233481AbiBWPpo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Feb 2022 10:45:44 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A35FC086D;
+        Wed, 23 Feb 2022 07:45:15 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.41:39052.248346700
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 6343D1001E9;
+        Wed, 23 Feb 2022 23:45:09 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 78e25a8ea10b40aeaab670c3aa257de1 for maxime@cerno.tech;
+        Wed, 23 Feb 2022 23:45:13 CST
+X-Transaction-ID: 78e25a8ea10b40aeaab670c3aa257de1
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <dfdea1f8-635f-3abc-e051-5131ce1f705d@189.cn>
+Date:   Wed, 23 Feb 2022 23:45:08 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v10 2/4] Documentation/dt: Add descriptions for loongson
- display controller
+Subject: Re: [PATCH v10 3/4] drm/lsdc: add drm driver for loongson display
+ controller
 Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>, Rob Herring <robh@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
         Roland Scheidegger <sroland@vmware.com>,
         Zack Rusin <zackr@vmware.com>,
         Christian Gmeiner <christian.gmeiner@gmail.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         "David S . Miller" <davem@davemloft.net>,
@@ -62,67 +54,72 @@ Cc:     Maxime Ripard <mripard@kernel.org>,
         Lucas Stach <l.stach@pengutronix.de>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>
 References: <20220220145554.117854-1-15330273260@189.cn>
- <20220220145554.117854-3-15330273260@189.cn>
- <YhVrigEnXTiNgk67@robh.at.kernel.org>
- <720f940e.5ac.17f26de3a5b.Coremail.suijingfeng@loongson.cn>
- <72e3790f-088d-1a70-a5f7-3a18c14a6eae@189.cn>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <72e3790f-088d-1a70-a5f7-3a18c14a6eae@189.cn>
-Content-Type: text/plain; charset=UTF-8
+ <20220220145554.117854-4-15330273260@189.cn>
+ <20220222082747.66otrkc4zwvhem7w@houat>
+ <54ea69d7-2fac-74dc-2ef6-843a666cff85@189.cn>
+ <20220223143912.m727fie3vtdkvklo@houat>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20220223143912.m727fie3vtdkvklo@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 23/02/2022 16:35, Sui Jingfeng wrote:
-> 
-> On 2022/2/23 21:56, 隋景峰 wrote:
->> Something like this:
->>   
->> dt-bindings: display: Add Loongson display controller
-> 
-> Hi,
 
-Thanks for resending in a proper format. I already replied to your
-original post, so let me paste it here as well.
-
-> 
-> We are not a platform device driver, there is no
-> of_device_id defined in my driver. In other word,
-> my driver will not bind against devices whose compatible
-> is "loongson,ls7a1000-dc". We just parse the device tree
-> actively, find necessary information of interest.
-> 
-> What's the meaning of dt-bindings by definition ?
-> In this case, can I use the word "dt-bindings" in the commit title?
-
-This is a patch for specific subsystem, so as Rob said, it should follow
-subsystem conventions.
-
-The patch itself is a dt-bindings patch, so there is nothing here
-special which would encourage for any exception.
-
-> 
-> I want to follow the conventions, but get some push back,
-> Krzysztof say that he can not see any bindings, these are not bindings.
-
-I said in comment to your patch with DTS, which you called bindings,
-that there are no bindings at all in it. Because in your patch with DTS
-you did not include bindings, but you called it bindings.
-
-Here, this is a patch with bindings, so your comment "these are not
-bindings" is not true.
-
-Best regards,
-Krzysztof
+On 2022/2/23 22:39, Maxime Ripard wrote:
+> On Tue, Feb 22, 2022 at 10:46:35PM +0800, Sui Jingfeng wrote:
+>> On 2022/2/22 16:27, Maxime Ripard wrote:
+>>>> +	if (!of_device_is_available(output)) {
+>>>> +		of_node_put(output);
+>>>> +		drm_info(ddev, "connector%d is not available\n", index);
+>>>> +		return NULL;
+>>>> +	}
+>>>> +
+>>>> +	disp_tims_np = of_get_child_by_name(output, "display-timings");
+>>>> +	if (disp_tims_np) {
+>>>> +		lsdc_get_display_timings_from_dtb(output, &lconn->disp_tim);
+>>>> +		lconn->has_disp_tim = true;
+>>>> +		of_node_put(disp_tims_np);
+>>>> +		drm_info(ddev, "Found display timings provided by connector%d\n", index);
+>>>> +	}
+>>>> +
+>>>> +	connector_type = lsdc_get_connector_type(ddev, output, index);
+>>>> +
+>>>> +	if (output) {
+>>>> +		of_node_put(output);
+>>>> +		output = NULL;
+>>>> +	}
+>>>> +
+>>>> +DT_SKIPED:
+>>>> +
+>>>> +	/* Only create the i2c channel if display timing is not provided */
+>>>> +	if (!lconn->has_disp_tim) {
+>>>> +		const struct lsdc_chip_desc * const desc = ldev->desc;
+>>>> +
+>>>> +		if (desc->have_builtin_i2c)
+>>>> +			lconn->ddc = lsdc_create_i2c_chan(ddev, index);
+>>>> +		else
+>>>> +			lconn->ddc = lsdc_get_i2c_adapter(ddev, index);
+>>> This looks weird: the connector bindings have a property to store the
+>>> i2c controller connected to the DDC lines, so you should use that
+>>> instead.
+>>>
+>> This is not  weird,  ast, mgag200, hibmc do the same thing.
+> And none of them have DT support.
+>
+> Maxime
+Ok, I have already correct this issue. see it at the next version.
