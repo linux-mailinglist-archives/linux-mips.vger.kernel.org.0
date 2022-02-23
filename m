@@ -2,75 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5097E4C1742
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Feb 2022 16:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6974C1765
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Feb 2022 16:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240601AbiBWPmW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Feb 2022 10:42:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S242108AbiBWPok (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Feb 2022 10:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241099AbiBWPmR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Feb 2022 10:42:17 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363852D1E5;
-        Wed, 23 Feb 2022 07:41:41 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 34AD75802FD;
-        Wed, 23 Feb 2022 10:41:38 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 23 Feb 2022 10:41:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=M2/b5MIE6bQJByA3Vh9tC6cYzTZFNeBiNnMth2
-        KLMVo=; b=Bnv7woDYcd7mmSSfipVO5la+dn+WX97gG+qYFku5RwmJ0b+uz29gKk
-        W/2lgSs3Ox46zW5BJNzdu9QnQWAlaLv9ZEUY0uScxAuhSrTdfl0gsZRpbn1AcuYR
-        rp4ogfiwhwIy7fX4XzhoNXVUe1eeXWt2U9LEcNfLrDCarGqOdsOMaBwLKq6lc07C
-        TkJ7jeBpIQyorDeqGZ0InOnN44owKvZhafYZamH9gD/VG9LHBpIY8KrmyNlKXmeU
-        eCiGVRY7pmgpwMCiDx8x4QwOzvl7/1CU5o57TZXUXTmaZH8/duxrLhtRBf3tyn49
-        j2w6NdoCyh5lxb0a9vrXxRjbWQl/WwkQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=M2/b5MIE6bQJByA3V
-        h9tC6cYzTZFNeBiNnMth2KLMVo=; b=QV9Juy7QQSjZuVHHhURF+1JcKbpnwuM2L
-        VBX0qBqM9COq6G8JtlBAGoYKPbuEo+hs+LLmqfg83f1gF0NFFEBeGu+vJf1DmY8O
-        RkOddVQ2IlNLls2Oj3ZkY6djaPU4zSBcDqnY6Z/0iUIHZy49MsCds/ZL33u9ch/v
-        XetHOyJnIKeMMcKumKLPnQssQ+uO+DjUdMMOt4QblQzlekvmXrX7Cdw2zhJBzdDN
-        jc0jXWr9dqAXKhvw3sk/mR4XmLh8trrHmi9ogmq8oIbzZSMIhdSgCAyKh2oBolEm
-        4kYXV2zaSg26RpZYRA1icgL6iyLDAVcbbQrBkYREWdhapRc3V6SVw==
-X-ME-Sender: <xms:sFUWYm-GEEjdbSALW-ne4zr0sLOEzsXQtkNn_Zyd5wc69QchaF-seA>
-    <xme:sFUWYmsTGwCa4aj1bgfQeK6Cx2WlsgGywYi7Yg_ErHCOtJxzNXhtdN_z_Nh5HhqYF
-    OHdd9nQg-pDWF5Imfw>
-X-ME-Received: <xmr:sFUWYsC-_QYnAVMxuCBJ1m-eY9bXN7V78hbuLSoOd0TrLUfjscuc6K4DsF-X7mzly28hBjWUH6uJLxKEMMSh9bEaiPH4okiUoU0G8Q0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrledtgdejkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeduvdduhfekkeehgffftefflefgffdtheffudffgeevteffheeuiedvvdejvdfg
-    veenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:sFUWYucjTpHs6Qn-MDTcCWWmXKBaJcOi8k7atOJd8k3NlTCjoAZtcQ>
-    <xmx:sFUWYrOXvrls4gJweUQTNaIcB_4eu8l17ekbpWVprS4CJ_ltn8bFIg>
-    <xmx:sFUWYokFXOZhIiRJnnF2QEvDa3gLV_16w0kxGw56zZN4sFSw0cYyug>
-    <xmx:slUWYucAa7gT1-vE7e0qdSDMi9pH5PrgDoV3u88A1vtFcOMsjvpvWg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 23 Feb 2022 10:41:36 -0500 (EST)
-Date:   Wed, 23 Feb 2022 16:41:34 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        with ESMTP id S242342AbiBWPoe (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Feb 2022 10:44:34 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0CEC1148;
+        Wed, 23 Feb 2022 07:44:06 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id bg10so53324117ejb.4;
+        Wed, 23 Feb 2022 07:44:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D9YoXmL0fH0aKcdRK7BK9p6bYV4a8ZT32GFRySXCBdU=;
+        b=RIV+5pwRmII3crrgV/JucWi0BPJWGTQ+CRLXqi5IRsjf4U7TcYZDgjd3mX9V14Bx4s
+         OqBGQHnyQx7FiEkzh+o6CK9OPWccSXqgl99gTpR/Kp0n51Ov600SSirjnK+0JXcuvyCl
+         WS72KrwxZHHzKCMRI1i3/Bq7AbveLGC12hvota+S5WdY0jXENgdpG1IaGLfOhzlXLElQ
+         xAAdxSfA5IRafzyUIjC4nkt9bYwJViKQupZNON+i2EXcxN4xqHKt3013YpnESRKyCBVz
+         ISyJQK/R+JQ4VCaJEikyuKvep+Kn+JkiEnnCJ4eE9s96bymcmZg4M40hgwGWDPSJC8O3
+         fcIQ==
+X-Gm-Message-State: AOAM532OjLIwv1+F9PA9yqSyKuXE+5uuC/nchMMbPW31mH+mm7JBVvW4
+        9ymjsAHQKq9Yott0yZtyDQM=
+X-Google-Smtp-Source: ABdhPJxXI094jfo93LhxnFNB5bGS9gHU1H1rFlcOLOWlSh9AKcr6Cm2g1nUnSRsQyalvpUvbbLbSDA==
+X-Received: by 2002:a17:906:35d5:b0:6b7:faf7:9611 with SMTP id p21-20020a17090635d500b006b7faf79611mr238158ejb.537.1645631044590;
+        Wed, 23 Feb 2022 07:44:04 -0800 (PST)
+Received: from [192.168.0.125] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.googlemail.com with ESMTPSA id f3sm8446edy.72.2022.02.23.07.44.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 07:44:03 -0800 (PST)
+Message-ID: <2929cc96-b272-7144-f4a4-71d60852c5cd@kernel.org>
+Date:   Wed, 23 Feb 2022 16:44:02 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 2/4] Documentation/dt: Add descriptions for loongson
+ display controller
+Content-Language: en-US
+To:     Sui Jingfeng <15330273260@189.cn>, Rob Herring <robh@kernel.org>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Roland Scheidegger <sroland@vmware.com>,
         Zack Rusin <zackr@vmware.com>,
         Christian Gmeiner <christian.gmeiner@gmail.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
         Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         "David S . Miller" <davem@davemloft.net>,
@@ -78,135 +62,67 @@ Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
         Lucas Stach <l.stach@pengutronix.de>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v10 3/4] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <20220223154134.y7slxu3jaje2jtwr@houat>
+        Qing Zhang <zhangqing@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
 References: <20220220145554.117854-1-15330273260@189.cn>
- <20220220145554.117854-4-15330273260@189.cn>
- <20220222082747.66otrkc4zwvhem7w@houat>
- <54ea69d7-2fac-74dc-2ef6-843a666cff85@189.cn>
- <20220223143912.m727fie3vtdkvklo@houat>
- <0d4a75c4-78bb-4aed-0fa8-88e9cc165896@189.cn>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uwizgizeraqcnone"
-Content-Disposition: inline
-In-Reply-To: <0d4a75c4-78bb-4aed-0fa8-88e9cc165896@189.cn>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <20220220145554.117854-3-15330273260@189.cn>
+ <YhVrigEnXTiNgk67@robh.at.kernel.org>
+ <720f940e.5ac.17f26de3a5b.Coremail.suijingfeng@loongson.cn>
+ <72e3790f-088d-1a70-a5f7-3a18c14a6eae@189.cn>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <72e3790f-088d-1a70-a5f7-3a18c14a6eae@189.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On 23/02/2022 16:35, Sui Jingfeng wrote:
+> 
+> On 2022/2/23 21:56, 隋景峰 wrote:
+>> Something like this:
+>>   
+>> dt-bindings: display: Add Loongson display controller
+> 
+> Hi,
 
---uwizgizeraqcnone
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for resending in a proper format. I already replied to your
+original post, so let me paste it here as well.
 
-On Wed, Feb 23, 2022 at 11:14:12PM +0800, Sui Jingfeng wrote:
->=20
-> On 2022/2/23 22:39, Maxime Ripard wrote:
-> > On Tue, Feb 22, 2022 at 10:46:35PM +0800, Sui Jingfeng wrote:
-> > > On 2022/2/22 16:27, Maxime Ripard wrote:
-> > > > > +	if (!of_device_is_available(output)) {
-> > > > > +		of_node_put(output);
-> > > > > +		drm_info(ddev, "connector%d is not available\n", index);
-> > > > > +		return NULL;
-> > > > > +	}
-> > > > > +
-> > > > > +	disp_tims_np =3D of_get_child_by_name(output, "display-timings"=
-);
-> > > > > +	if (disp_tims_np) {
-> > > > > +		lsdc_get_display_timings_from_dtb(output, &lconn->disp_tim);
-> > > > > +		lconn->has_disp_tim =3D true;
-> > > > > +		of_node_put(disp_tims_np);
-> > > > > +		drm_info(ddev, "Found display timings provided by connector%d\=
-n", index);
-> > > > > +	}
-> > > > > +
-> > > > > +	connector_type =3D lsdc_get_connector_type(ddev, output, index);
-> > > > > +
-> > > > > +	if (output) {
-> > > > > +		of_node_put(output);
-> > > > > +		output =3D NULL;
-> > > > > +	}
-> > > > > +
-> > > > > +DT_SKIPED:
-> > > > > +
-> > > > > +	/* Only create the i2c channel if display timing is not provide=
-d */
-> > > > > +	if (!lconn->has_disp_tim) {
-> > > > > +		const struct lsdc_chip_desc * const desc =3D ldev->desc;
-> > > > > +
-> > > > > +		if (desc->have_builtin_i2c)
-> > > > > +			lconn->ddc =3D lsdc_create_i2c_chan(ddev, index);
-> > > > > +		else
-> > > > > +			lconn->ddc =3D lsdc_get_i2c_adapter(ddev, index);
-> > > > This looks weird: the connector bindings have a property to store t=
-he
-> > > > i2c controller connected to the DDC lines, so you should use that
-> > > > instead.
-> > > >=20
-> > > This is not=A0 weird,=A0 ast, mgag200, hibmc do the same thing.
-> > And none of them have DT support.
-> >=20
-> > Maxime
->=20
-> You are wrong, ast driver have dt support. See ast_detect_config_mode() in
-> drm/ast/ast_main.c
->=20
-> static void ast_detect_config_mode(struct drm_device *dev, u32 *scu_rev)
-> {
-> =A0=A0 =A0struct device_node *np =3D dev->dev->of_node;
-> =A0=A0 =A0struct ast_private *ast =3D to_ast_private(dev);
-> =A0=A0 =A0struct pci_dev *pdev =3D to_pci_dev(dev->dev);
-> =A0=A0 =A0uint32_t data, jregd0, jregd1;
->=20
-> =A0=A0 =A0/* Defaults */
-> =A0=A0 =A0ast->config_mode =3D ast_use_defaults;
-> =A0=A0 =A0*scu_rev =3D 0xffffffff;
->=20
-> =A0=A0 =A0/* Check if we have device-tree properties */
-> =A0=A0 =A0if (np && !of_property_read_u32(np, "aspeed,scu-revision-id",
-> =A0=A0 =A0=A0=A0=A0 =A0=A0=A0 =A0=A0=A0 =A0=A0=A0 scu_rev)) {
-> =A0=A0 =A0=A0=A0=A0 /* We do, disable P2A access */
-> =A0=A0 =A0=A0=A0=A0 ast->config_mode =3D ast_use_dt;
-> =A0=A0 =A0=A0=A0=A0 drm_info(dev, "Using device-tree for configuration\n"=
-);
-> =A0=A0 =A0=A0=A0=A0 return;
-> =A0=A0 =A0}
->=20
-> =A0....
->=20
-> }
+> 
+> We are not a platform device driver, there is no
+> of_device_id defined in my driver. In other word,
+> my driver will not bind against devices whose compatible
+> is "loongson,ls7a1000-dc". We just parse the device tree
+> actively, find necessary information of interest.
+> 
+> What's the meaning of dt-bindings by definition ?
+> In this case, can I use the word "dt-bindings" in the commit title?
 
-It doesn't seem to probe from the DT though. It uses 4 properties, and
-none of them are documented. It's still a widely different case than
-your driver that uses the connector binding, and therefore has access to
-the ddc bus there.
+This is a patch for specific subsystem, so as Rob said, it should follow
+subsystem conventions.
 
-Maxime
+The patch itself is a dt-bindings patch, so there is nothing here
+special which would encourage for any exception.
 
---uwizgizeraqcnone
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> I want to follow the conventions, but get some push back,
+> Krzysztof say that he can not see any bindings, these are not bindings.
 
------BEGIN PGP SIGNATURE-----
+I said in comment to your patch with DTS, which you called bindings,
+that there are no bindings at all in it. Because in your patch with DTS
+you did not include bindings, but you called it bindings.
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYhZVrQAKCRDj7w1vZxhR
-xS48AQCiz86aru05sqZwXNd++y8Km72yvxlQbVk5ANA9UCjlYAD+KYiiiZuOLSqM
-9g3/jplVDK9jJSxClRqmlsO5loCq/QI=
-=H2N/
------END PGP SIGNATURE-----
+Here, this is a patch with bindings, so your comment "these are not
+bindings" is not true.
 
---uwizgizeraqcnone--
+Best regards,
+Krzysztof
