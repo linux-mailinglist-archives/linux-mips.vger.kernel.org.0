@@ -2,59 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440BF4C2EEC
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Feb 2022 16:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5E44C2EE7
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Feb 2022 16:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235760AbiBXPD7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S235758AbiBXPD7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Thu, 24 Feb 2022 10:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235681AbiBXPD4 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Feb 2022 10:03:56 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5678B141E24;
-        Thu, 24 Feb 2022 07:03:26 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id d3so108678wrf.1;
-        Thu, 24 Feb 2022 07:03:26 -0800 (PST)
+        with ESMTP id S235692AbiBXPD6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Feb 2022 10:03:58 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DF4141FD5;
+        Thu, 24 Feb 2022 07:03:27 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id r10so96587wrp.3;
+        Thu, 24 Feb 2022 07:03:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=07w1eqbJ15tC5JNVyR7gPyWNsdMe4ksKSNb7RJ89FRc=;
-        b=Kr/SpNEEK10kPz2CyojbzFHbGPxq0EX6NdwDNWASMKt2PU6AnpTD4G1XPni+fCxeiI
-         qibZ21FBLSzAJ7yC/uBZb2LDSgFPDKb206q5vFxFFNeg10zYXzLp5UWurTeXquCTvFAC
-         jZ4llp7fd64thdCXYnVRQaYnbfmqglDTdE0OoUCH8v59qkDy+AXkNFkieNYPW+vL6lxu
-         K9vhzSUyHtN18Xg5UuD4F9+YkyWv3cnRAhj7gFkCgnW/NkwROdCDvNKQ6O01SsFVqEQ2
-         wKU18h1zPMLPLlA8Xf1kim5yR084gAKEj9kHrzPLCC6Lu+hQSalUpwraBCoxA3OYRY6B
-         EucA==
+        bh=08kWMu8EWgkGMNZO7oAp0aMUwUz5/Yejkwq/Vcz2uh0=;
+        b=gTHMAiinkyBPE+VQqjN7qQEaLUqMvBPDz569RmrRaBcRGhzfuC4E62j3ENRvr9mCOC
+         O2MeHYJGRZS1U+ry9PvNBBeg0nN0Qc3QVohtiCIA3fuHDXisivv8qDiLKcXhUviq4qq/
+         8zu/2ru/QQvVas9YGVJ1j4c8CfYOXS2kderdXulmOQR6hGjQL2zyfjcirAd3qyrUHmE8
+         zCyyrmx8A/BpnPpdukQ67gcVxthWmbLjEK5ydiXUGN0iqNt0Z2SqIGslrhzPDISY0w3/
+         NLbNoVgt56xAe2XD5UqPG7HsNTnM+vSiQ9R7L7jD0NRgPR0+eqB0XTj6KuRjK2DRCWes
+         8YmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=07w1eqbJ15tC5JNVyR7gPyWNsdMe4ksKSNb7RJ89FRc=;
-        b=IEwh7dPK3nOmkhEdRlv1pTJHjbwwnvdhRJjQ+4vZMusNKA56hzge0Qi/zN048Z8wYN
-         c8OdY8Nzx8Gzrp+WvSrGuS1UyobGnoH6+a2KQp/jlmJWc1VqrQ3cQ1y2q+tmkxOvlCfP
-         qIZOd7Eo16G+tBJIxpgzLv5tck6p6tcZoUo0+5yrRKP6JpiLUjG8K9O2tOcvi+eI+rev
-         5An3lfPcRps5X/6kkQaTmqiU7+TYgEQGY/EahS/UOcXHsn9SCfB61smxEv3IJzvq/kgS
-         EtIftdsBWJDipjLnQCCGrAWri3T6YBcMGkqkwrXhQIOUUxD4DPjiRqF7ZKj+QixPn85K
-         8TGw==
-X-Gm-Message-State: AOAM531bib91LSvJmlwvRMhpwG1lmr5fcQAfc3nZXuQkjd4xXrPcXHR8
-        ybsvEYKzhcYfbryYUsDD9JV11V+1lJTw2A==
-X-Google-Smtp-Source: ABdhPJx6KbtOCExwexuwkiyhLyven+vSwBXYqmckAU+Jlq72l1EYhf+xNeAbVtVrN6thv/ozgo/qCQ==
-X-Received: by 2002:a05:6000:18c8:b0:1e4:b8f4:da8f with SMTP id w8-20020a05600018c800b001e4b8f4da8fmr2694759wrq.199.1645715004964;
-        Thu, 24 Feb 2022 07:03:24 -0800 (PST)
+        bh=08kWMu8EWgkGMNZO7oAp0aMUwUz5/Yejkwq/Vcz2uh0=;
+        b=5CqJZWK8TNDEbHsci0laxQuTVvqLvcMTCAwD0vfX6m+Z/MpGXI5JMijhWCgPaXgA3C
+         kXyfkK3lWU6B+b0k6jESA5LDkcw+qs5I94598YpWuzwdDRjpcMN3duBo2cBvmroMaoTE
+         joBr/7jCs4o9mJixNtJRQxErsBAgubB3wMOhd6wjW6ysX1LRshCcL0WZ+FyMn6N+ws5k
+         cTFb2YZDIMAxVBQ+GWX6YeQq3J/D6DaT9J9c4aVQ0ROjjA9hB1m03Jae1L91vANE1WdH
+         J5cxwsJr1l/Ey4un0rqj2AzLhdddVFl+1klk9/JfFwuourHR+/F0Xw9u4TVp/p39mRwS
+         h4Ow==
+X-Gm-Message-State: AOAM5316J/U7YESHzUog6pDfLd9t/cxzPwJRws37D0oiWYwxJtWI3eiD
+        4qV/dLrMikcNd8GxgfCFNNQ=
+X-Google-Smtp-Source: ABdhPJxtGuHxidUOxzvC+NL9qNBASYdVy+OU8CEHL0/hLOX3ZZRNXnfkO39PVZuIEPbAGiqK0KHvMg==
+X-Received: by 2002:adf:f049:0:b0:1ee:7523:ed53 with SMTP id t9-20020adff049000000b001ee7523ed53mr1477081wro.586.1645715006148;
+        Thu, 24 Feb 2022 07:03:26 -0800 (PST)
 Received: from localhost (92.40.203.111.threembb.co.uk. [92.40.203.111])
-        by smtp.gmail.com with ESMTPSA id w13sm3088645wrv.21.2022.02.24.07.03.23
+        by smtp.gmail.com with ESMTPSA id w13sm3088645wrv.21.2022.02.24.07.03.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 07:03:24 -0800 (PST)
+        Thu, 24 Feb 2022 07:03:25 -0800 (PST)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, robh+dt@kernel.org, mturquette@baylibre.com,
         sboyd@kernel.org
 Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/3] mips: dts: ingenic: x1830: Add TCU clock to tcu device node
-Date:   Thu, 24 Feb 2022 15:03:26 +0000
-Message-Id: <20220224150326.525707-2-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v3 3/3] clk: ingenic-tcu: Fix missing TCU clock for X1000 SoC
+Date:   Thu, 24 Feb 2022 15:03:27 +0000
+Message-Id: <20220224150326.525707-3-aidanmacdonald.0x0@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220224150326.525707-1-aidanmacdonald.0x0@gmail.com>
 References: <20220224150326.525707-1-aidanmacdonald.0x0@gmail.com>
@@ -70,29 +70,94 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Like the X1000, the X1830 was missing a TCU clock that belongs here.
+The X1000 and X1830 have a TCU clock gate, so pass it to the driver.
+Without this the TCU can be gated automatically, which prevents timers
+from running.
+
+Add a workaround to allow the driver to probe even if the TCU clock
+is missing on the affected SoCs; in this case the TCU clock is ignored,
+as it was before. With workarounds like "clk_ignore_unused" on the
+kernel command line, this allows users who upgrade the kernel but use
+the old device tree to boot successfully. They will now get a warning
+encouraging them to update the device tree.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/clk/ingenic/tcu.c | 37 +++++++++++++++++++++++++++----------
+ 1 file changed, 27 insertions(+), 10 deletions(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi b/arch/mips/boot/dts/ingenic/x1830.dtsi
-index 2595df8671c7..4408df24ca98 100644
---- a/arch/mips/boot/dts/ingenic/x1830.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
-@@ -104,8 +104,9 @@ tcu: timer@10002000 {
+diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
+index 77acfbeb4830..03e9553bcac4 100644
+--- a/drivers/clk/ingenic/tcu.c
++++ b/drivers/clk/ingenic/tcu.c
+@@ -31,6 +31,7 @@ struct ingenic_soc_info {
+ 	unsigned int num_channels;
+ 	bool has_ost;
+ 	bool has_tcu_clk;
++	bool allow_missing_tcu_clk;
+ };
  
- 		clocks = <&cgu X1830_CLK_RTCLK>,
- 			 <&cgu X1830_CLK_EXCLK>,
--			 <&cgu X1830_CLK_PCLK>;
--		clock-names = "rtc", "ext", "pclk";
-+			 <&cgu X1830_CLK_PCLK>,
-+			 <&cgu X1830_CLK_TCU>;
-+		clock-names = "rtc", "ext", "pclk", "tcu";
+ struct ingenic_tcu_clk_info {
+@@ -320,7 +321,8 @@ static const struct ingenic_soc_info jz4770_soc_info = {
+ static const struct ingenic_soc_info x1000_soc_info = {
+ 	.num_channels = 8,
+ 	.has_ost = false, /* X1000 has OST, but it not belong TCU */
+-	.has_tcu_clk = false,
++	.has_tcu_clk = true,
++	.allow_missing_tcu_clk = true,
+ };
  
- 		interrupt-controller;
- 		#interrupt-cells = <1>;
+ static const struct of_device_id __maybe_unused ingenic_tcu_of_match[] __initconst = {
+@@ -355,14 +357,29 @@ static int __init ingenic_tcu_probe(struct device_node *np)
+ 		tcu->clk = of_clk_get_by_name(np, "tcu");
+ 		if (IS_ERR(tcu->clk)) {
+ 			ret = PTR_ERR(tcu->clk);
+-			pr_crit("Cannot get TCU clock\n");
+-			goto err_free_tcu;
+-		}
+ 
+-		ret = clk_prepare_enable(tcu->clk);
+-		if (ret) {
+-			pr_crit("Unable to enable TCU clock\n");
+-			goto err_put_clk;
++			/*
++			 * Old versions of this driver incorrectly specified
++			 * some SoCs as not having a TCU clock, so old device
++			 * trees didn't define one. We try to allow the kernel
++			 * to boot with an old device tree by just continuing
++			 * on without the clock and hoping it won't get turned
++			 * off (eg. with "clk_ignore_unused" kernel argument).
++			 */
++			if (ret == -EINVAL &&
++			    tcu->soc_info->allow_missing_tcu_clk) {
++				pr_warn("TCU clock missing from device tree, please update your device tree\n");
++				tcu->clk = NULL;
++			} else {
++				pr_crit("Cannot get TCU clock\n");
++				goto err_free_tcu;
++			}
++		} else {
++			ret = clk_prepare_enable(tcu->clk);
++			if (ret) {
++				pr_crit("Unable to enable TCU clock\n");
++				goto err_put_clk;
++			}
+ 		}
+ 	}
+ 
+@@ -432,10 +449,10 @@ static int __init ingenic_tcu_probe(struct device_node *np)
+ 			clk_hw_unregister(tcu->clocks->hws[i]);
+ 	kfree(tcu->clocks);
+ err_clk_disable:
+-	if (tcu->soc_info->has_tcu_clk)
++	if (tcu->clk)
+ 		clk_disable_unprepare(tcu->clk);
+ err_put_clk:
+-	if (tcu->soc_info->has_tcu_clk)
++	if (tcu->clk)
+ 		clk_put(tcu->clk);
+ err_free_tcu:
+ 	kfree(tcu);
 -- 
 2.34.1
 
