@@ -2,128 +2,126 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4074C2C64
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Feb 2022 14:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 652744C2D66
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Feb 2022 14:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234721AbiBXNAE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Feb 2022 08:00:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
+        id S234581AbiBXNl1 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Feb 2022 08:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiBXNAA (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Feb 2022 08:00:00 -0500
-X-Greylist: delayed 435 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 04:59:30 PST
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E1C728F949
-        for <linux-mips@vger.kernel.org>; Thu, 24 Feb 2022 04:59:30 -0800 (PST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxSMl8fxdizHIGAA--.7452S2;
-        Thu, 24 Feb 2022 20:52:13 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        with ESMTP id S231139AbiBXNl0 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Feb 2022 08:41:26 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDF24FC4E;
+        Thu, 24 Feb 2022 05:40:56 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id a8so4395844ejc.8;
+        Thu, 24 Feb 2022 05:40:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=OtIKf+7z6cN26PveqgHj5P2ZBhojQfOSSI42f03I2J8=;
+        b=LXi8fuRxXuYDOyME6b+AaEEa+RCOA1Te38QwedNpMxVT6d/ZoARYTi0b1u45AtopfA
+         6wrRCZaxMR+XR8hn8CEpiCFoZGKvNOlG/sVWbHpVc2hGbAR2MIHlA4l1aberSHnAdl8x
+         aRdUAYBtNpokxJxvno6Sp9LsC5C20v7LWKGUUIiYpLzRnv8262/ZwiwUMOR0rjl73fvc
+         w34u4JMIlY/nnXQ9veIQRhxumWvm3kzGKaCy1c6g880n6kiOc6Y55AAsJSqYSl0RRkWe
+         DaldEiCK/66ueUxYYUPrzS2oawzO/T5Ozyt5n8PxL2wLZbB15k9PcgpESZ9bFV6WGcEx
+         6Szg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OtIKf+7z6cN26PveqgHj5P2ZBhojQfOSSI42f03I2J8=;
+        b=xu+27sq6bdwaZdJpNzXYTwWz26WQ0I1dXdg9CO6d+i2UY8p9fSzT4sxxnNQPJzWi3o
+         jr8+Ltv0EJe02A0hr58JwSKQ+XF24dPYc8RfS76kkaY6xJbhsiUgi8oMCcJqTiKyrHj6
+         Smsn1ky3fM+Z4ziC3i1PGNryuWS/1uUPGTcMzc2UptBHHtpRZNZeC8t+vkEklOjpCo5k
+         xrH+OSiYapcuVBzULOLICkMrolXG4tWwUGjtpEhfA1T7doE/yp3m71IDOf2fxHeM/lOk
+         cN4Oets1GF106Vj08bUv0O30csxMP8KQOmrkJkJmRaFFtO5us1yv5AE8kk2uz1LiP/7r
+         oB+Q==
+X-Gm-Message-State: AOAM532MYZ7GgeoPs+L9V881h7NEYSZEHCMTi0zF1efBs66OtOgkq+6E
+        Aagxsjc3qkC+dH9yluVst4Y=
+X-Google-Smtp-Source: ABdhPJwfYT01HQ1tCbz57HCwFnhjgxB0BjhcKiUt+3R5TB/lUIQ34pVVAX1F+8ev9JDL6OaPklrXYQ==
+X-Received: by 2002:a17:907:f81:b0:6ce:7247:557d with SMTP id kb1-20020a1709070f8100b006ce7247557dmr2386166ejc.308.1645710054819;
+        Thu, 24 Feb 2022 05:40:54 -0800 (PST)
+Received: from orome (p200300e41f0a6900000000000000043a.dip0.t-ipconnect.de. [2003:e4:1f0a:6900::43a])
+        by smtp.gmail.com with ESMTPSA id x12sm1364228edv.57.2022.02.24.05.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 05:40:53 -0800 (PST)
+Date:   Thu, 24 Feb 2022 14:40:51 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, linux-mips@vger.kernel.org,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: Refactor early_parse_mem() to fix mem= parameter
-Date:   Thu, 24 Feb 2022 20:52:12 +0800
-Message-Id: <1645707132-10121-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9DxSMl8fxdizHIGAA--.7452S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr15JF17tFyUXF1rCFyrCrg_yoW8uFW3pw
-        1Sv34fKr4DtF9rZaySyrn3W345Aw1vkFy2qay2krn5J3Wjkr1UGr1IgFW5Zry2qryxJ3W0
-        qF1ktFy0g39Fy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Xr1l
-        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
-        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
-        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUUJ733UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH 2/2] pwm: jz4740: Add support for X1000 SoC
+Message-ID: <YheK4+t9w5IeHiDT@orome>
+References: <20220209231141.20184-1-aidanmacdonald.0x0@gmail.com>
+ <20220209231141.20184-2-aidanmacdonald.0x0@gmail.com>
+ <2SMA7R.9OBQWV0ONR102@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KE21u3QmCih2Rfpn"
+Content-Disposition: inline
+In-Reply-To: <2SMA7R.9OBQWV0ONR102@crapouillou.net>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-According to Documentation/admin-guide/kernel-parameters.txt,
-the kernel command-line parameter mem= means "Force usage of
-a specific amount of memory", but when add "mem=3G" to the
-command-line, kernel boot hangs in sparse_init().
 
-This commit is similar with the implementation of the other
-archs such as arm64, powerpc and riscv, refactor the function
-early_parse_mem() and then use memblock_enforce_memory_limit()
-to limit the memory size.
+--KE21u3QmCih2Rfpn
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-With this patch, when add "mem=3G" to the command-line, the
-kernel boots successfully, we can see the following messages:
+On Mon, Feb 14, 2022 at 12:02:26PM +0000, Paul Cercueil wrote:
+> Hi Aidan,
+>=20
+> Le mer., f=C3=A9vr. 9 2022 at 23:11:42 +0000, Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> a =C3=A9crit :
+> > The X1000 has the same TCU / PWM hardware as other Ingenic SoCs,
+> > but it has only 5 channels.
+> >=20
+> > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> > ---
+> >  arch/mips/boot/dts/ingenic/x1000.dtsi | 13 +++++++++++++
+> >  drivers/pwm/pwm-jz4740.c              |  5 +++++
+>=20
+> Please put the driver and device tree changes into separate patches.
 
-  [    0.000000] Memory limited to 3072MB
-  ...
-  [    0.000000] Memory: 2991952K/3145728K available (...)
+Seemed a shame not to take this, so I've manually removed the DTS
+changes and applied this to the PWM tree.
 
-After login, the output of free command is consistent with the
-above log.
+Aidan, probably best to resend the DTS snippet as a separate patch,
+unless Paul also wants to apply this manually.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/kernel/setup.c | 25 ++++++++-----------------
- 1 file changed, 8 insertions(+), 17 deletions(-)
+Thierry
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index f979adf..2917412 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -339,27 +339,15 @@ static void __init bootmem_init(void)
- #endif	/* CONFIG_SGI_IP27 */
- 
- static int usermem __initdata;
-+static phys_addr_t memory_limit;
- 
- static int __init early_parse_mem(char *p)
- {
--	phys_addr_t start, size;
--
--	/*
--	 * If a user specifies memory size, we
--	 * blow away any automatically generated
--	 * size.
--	 */
--	if (usermem == 0) {
--		usermem = 1;
--		memblock_remove(memblock_start_of_DRAM(),
--			memblock_end_of_DRAM() - memblock_start_of_DRAM());
--	}
--	start = 0;
--	size = memparse(p, &p);
--	if (*p == '@')
--		start = memparse(p + 1, &p);
-+	if (!p)
-+		return 1;
- 
--	memblock_add(start, size);
-+	memory_limit = memparse(p, &p) & PAGE_MASK;
-+	pr_notice("Memory limited to %lldMB\n", memory_limit >> 20);
- 
- 	return 0;
- }
-@@ -633,6 +621,9 @@ static void __init arch_mem_init(char **cmdline_p)
- 
- 	parse_early_param();
- 
-+	/* Limit the memory size via mem= command-line parameter */
-+	memblock_enforce_memory_limit(memory_limit);
-+
- 	if (usermem)
- 		pr_info("User-defined physical RAM map overwrite\n");
- 
--- 
-2.1.0
+--KE21u3QmCih2Rfpn
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIXiuMACgkQ3SOs138+
+s6Fcng/+ITgV7uxb+GLIEexW0f1xhKS31CQmh33tzizsVYdmFFYnGTBBmqJIBez9
+pDUQOygsU+Fj+gdrTYT4zK828x/YZpgVyJpa2bFlZjglwzU6lmp5nAeowO9XdYQZ
+kwbFjMkYyepAy/ddkmh+C8TjUd+h7JqK1TR1JV+eIX1WDIhBO76mbV1JLkkgBvo3
+II6WbehJZMm48/q+ThqkMkNUt/XlavqqitXENHKH5neB4BsXvNlqoizHeRYLXMdE
+MXW9bM1xVq+IRQ75Ytr7aKIAePcTQQNWvy3h0mGPSg4j2UTyowr7AqZD9RiFGmUh
+cQ4un3otzeWfMMZmsr8xvPZjsI2VP48KpplKgxargDb3jxbxFlVGsjHlceyqfATX
+7RLXuxiPUlHQvVLo8mohzmK6HXUnvAdyGO1/qUNoG4yktr6PjW60LtnwhM2VkS13
+9QjpSgxANKc9Wo4HREMrtQJ8mDOLxgdmCU0TH2E3x/wLGMPF14n84bIQ4MHsFRwF
+wrHgNweoJu/MZFCNIq/1t5xs+6BlI5CrHLKyPjI5gsBqhO841NQTGpxbb2fhMXPz
+QKfI3G4ASjSvInXXXya42jTsikWiaXqGBIEV7EkNszM+vLa/5Iu25Hf+iR3lSFnZ
+LbYSLtLklHgZ1Tvja3yDfl1470Zv8AcRYeU88HhQMzrxw8FRP80=
+=OxUN
+-----END PGP SIGNATURE-----
+
+--KE21u3QmCih2Rfpn--
