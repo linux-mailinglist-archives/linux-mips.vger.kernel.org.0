@@ -2,78 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743B54C2773
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Feb 2022 10:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E994C27CB
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Feb 2022 10:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbiBXJEz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Feb 2022 04:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S232355AbiBXJPb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Feb 2022 04:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiBXJEy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Feb 2022 04:04:54 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B7518A7A4;
-        Thu, 24 Feb 2022 01:04:24 -0800 (PST)
-Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MWiYo-1nlKm71Ofo-00X7zY; Thu, 24 Feb 2022 10:04:23 +0100
-Received: by mail-wm1-f47.google.com with SMTP id l1-20020a7bcf01000000b0037f881182a8so3065539wmg.2;
-        Thu, 24 Feb 2022 01:04:23 -0800 (PST)
-X-Gm-Message-State: AOAM530FCm5GYNTPUNhsxLPZjBSLMZWXuWIg8HSA9REPaezbRWPguvIQ
-        CVrUzD2MVro3CMZbCKcDDdiaMRYotRsx4rldn8w=
-X-Google-Smtp-Source: ABdhPJyjEw35XhDO0nptzAMVKk2Hxde9tm8LwW6lNeB58GkA2TxxKPLSRkO1YZW5ApcDqUwIlDhAXRFgLJ95HKAPDdY=
-X-Received: by 2002:a05:600c:48a:b0:380:3f3a:e08e with SMTP id
- d10-20020a05600c048a00b003803f3ae08emr10577359wme.1.1645693462887; Thu, 24
- Feb 2022 01:04:22 -0800 (PST)
+        with ESMTP id S232659AbiBXJPa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Feb 2022 04:15:30 -0500
+X-Greylist: delayed 463 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 01:15:00 PST
+Received: from mail.onlinesuccesses.pl (mail.onlinesuccesses.pl [198.244.150.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25AD268345
+        for <linux-mips@vger.kernel.org>; Thu, 24 Feb 2022 01:15:00 -0800 (PST)
+Received: by mail.onlinesuccesses.pl (Postfix, from userid 1002)
+        id 83AB6A43CB; Thu, 24 Feb 2022 09:06:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onlinesuccesses.pl;
+        s=mail; t=1645693576;
+        bh=nE8HqilgMh4dy7+Z8ksfg7Bc9rmPeQtYFq3/3YR2ODU=;
+        h=Date:From:To:Subject:From;
+        b=fLpPZr6WVU2uu+7Gpr8FXtxaCu/Xfy7aoiE9pyApmZffMEIZkVppjjtkuPvGhkvMc
+         bq253OOQVrYSzZwIEMFdoEe3Na8DsOsIWQQF7KnGKUu7ssk1tDdbnrDugVJjcl0CIB
+         Xu/Q3fMusmGitkNTVUh+WaslXhlhtkRKxRS2BQGfX/9NwSit1r/Cw/be0eJPD/qQ1T
+         4qMYz4zTdH3Gg2BDbAPD9s4si4fNlwW6K/o5XuJaNiDGMpRf9pZJmoWT/chDvdvSOj
+         dVE9ffwjLJaiw/2TtX3KR+8/IuLwGIMqR/kmvtwj2NRwOvEeICaiQhcRWZn9tAfdJy
+         CvBsXNRot+RMQ==
+Received: by mail.onlinesuccesses.pl for <linux-mips@vger.kernel.org>; Thu, 24 Feb 2022 09:05:53 GMT
+Message-ID: <20220224074501-0.1.2r.ho6b.0.i741c72fa3@onlinesuccesses.pl>
+Date:   Thu, 24 Feb 2022 09:05:53 GMT
+From:   "Wiktor Zielonko" <wiktor.zielonko@onlinesuccesses.pl>
+To:     <linux-mips@vger.kernel.org>
+Subject: Ruch z pierwszej pozycji w Google
+X-Mailer: mail.onlinesuccesses.pl
 MIME-Version: 1.0
-References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-20-guoren@kernel.org>
-In-Reply-To: <20220224085410.399351-20-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 24 Feb 2022 10:04:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3vmB4Vm9UOHx3qnTY6wUyw_r3R11amYwyHNpEhFiknrw@mail.gmail.com>
-Message-ID: <CAK8P3a3vmB4Vm9UOHx3qnTY6wUyw_r3R11amYwyHNpEhFiknrw@mail.gmail.com>
-Subject: Re: [PATCH V6 19/20] riscv: compat: ptrace: Add compat_arch_ptrace implement
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:hqP+0S9onqPXjEc/plYI652niBmPQNsect9n2Zn0kmP9aAUySLJ
- JV5CqZA6ExYvpjHrNwUeqPQndgnaxyn/FMhuE70Nf5JCQqlRFqrnVgM1PdqmazzSogipLXQ
- AiJ2dp2HAGvlKjxOaGDSWWYGDm4zJv2aViLkM/ccCw4F/AlycXVrRlqlU9DTGlpMj8CyH6K
- lPhaqxyPXj3BykKqOWhVg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UFZmV5HYQXI=:4zIeOikdnlT7/1M6xfURhe
- yD3y9gKQZW676YNE3EcSPMFEvhfJoGMJbLPO6AXTBmC2uVWRQfE9S/DW7NZwsrjD4oJwT1pMj
- H1lFJ4mQdP6EFpN+6V6ykRYaGbQtZLQGBYwZirAR5wAy3MUfhq0U/Rn3JLSdIkXzyTR09IzId
- PuEh+dt1NJBQl+JaMqzy3hUM09pzLMxhKgH0zCXpQY3TLt3GWuMCfaKxsytADB6S3vMkuL6EB
- gNQXnYjcoXERIOKEPGluqC5EatgbMrn2yz5LxfX+QLoKOkS2xCYuovSHC83/UGdTnUT92BKLQ
- 1TbRFcs+Z+nFgjTWvQFs+6qVMuCuQATvhknEfyWuCiD1BTMX6/fjw4+ApNVgDa7QE13qCdLAq
- bY/d7+REG/kewRLDJ1kdCCFh9117j2gSDy80ZCvo0BC2i4XeSOuAuFrEKY0N+RueYn4E/WJoh
- yX0mdgfNCUAeFVXBSpYaAOC109Ycytki2m6XXKF2YhwPvNWEApv8k4lpbNwvETpELyTbVUaZP
- BzX5doYZN364zRYyh5lzNCv8Z7dRxY0aZW5uN9mR3SOoEQNqsh4LgPM69cWuR5xm00Fv5tklB
- FDPebKiqC72nutCNrZrpxC1d/bL8UU934DukBJDvKzPw2zyOca0x+h8eiNBAr55fgPaLztuZc
- ZqE/uqYeyyjt/YagyqvRkowGe4Bxixe+a+s9Uqwq/8GCELdm9r38J5KXgkppvJgDJaBUNZfBi
- dcg5UZ7ErPULVlamJbkqV0/jgN2YpngkcNVYs0vs5bRIP9hj0y4Kl7/YJZpd/0OQbYqunBXbB
- d8f1tUAd7xxRV42Bl/1aB5an3+SPIq+NqNY+qvvx1J5nCWKiMc=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,12 +46,22 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 9:54 AM <guoren@kernel.org> wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+Dzie=C5=84 dobry,=20
 
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
+j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
+e Google.=20
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
+=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
+w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
+owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
+dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
+
+Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
+edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
+edstawi=C4=87 ofert=C4=99?=20
+
+
+Pozdrawiam serdecznie,
+Wiktor Zielonko
