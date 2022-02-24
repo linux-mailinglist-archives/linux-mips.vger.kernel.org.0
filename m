@@ -2,167 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9A24C3339
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Feb 2022 18:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407734C3437
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Feb 2022 18:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiBXRI5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Feb 2022 12:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S232574AbiBXR6A (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Feb 2022 12:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiBXRIy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Feb 2022 12:08:54 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B45714A234;
-        Thu, 24 Feb 2022 09:08:24 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21OFWY9S007293;
-        Thu, 24 Feb 2022 17:07:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=+nO2rVtfBk9wR3DMR04tVAteK2MA3ZuQ7oyViyDcIDI=;
- b=BSO7Y07jUq+hOiswwyQjaNk0Rf4Qem25r1XSYc06GKiF7kkMoALbP4o+BzutS40I69Fd
- 8ihLbse+7W6v+nkMuxEk5EqVL/Pno1ymI6GT5qmk5Ob9vZgkC9AKwRgMHRXHVoMtFmHK
- ihA/qxSIp0rlilQBALJ7QMP5bZdRZL7qx9jl/pOEx1Z5kLC2CPnT67dZ8ZhRqY8fcUDT
- bjKoQMfUIGO/eTaQCX86n2pdK4QvHcc5rTi5WWAMH7oZ3UqGJrWG2LJQAijkDfkA9BKI
- pYO+eQkmihWGBUpc0fFzcEas/9JcL2MR4udgrkD3tS+Dva2Jlrz+dMOHgnJVVJ9495GO xQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ectsx81m3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Feb 2022 17:07:41 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21OGuuWh068779;
-        Thu, 24 Feb 2022 17:07:40 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
-        by userp3020.oracle.com with ESMTP id 3eat0r21w2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Feb 2022 17:07:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T7HTRI2p8jGmYKYKwfRH3F6dgPGyUlDb3C3/CIX5pPDnFgjAis12c4DbJkwVeWYeR5R/WsHrDeCjU63WVOFatjlWeRVrb5dg992LmyR+SEZcH/fAtDXLxnbwX0C8LhyJjJmywT9479U6gP/TMucv+U8HwPAmSP/JMPY6ir+Hzo8eHLDwXOZOLsriKR9yEppz2W13dIAY+vUPZ/OvHXNjLrsZySst/DBWyCVgV1wk393K7+BmP1gTcooDbJPJJvwV+RNRWAea+a1wlOeuoGxYVabU7vj88rnwpIE07e/n6uEMBRtsAkETHgnJ/xqajCv5dlaGaRdhYiSy0pCm2ompBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+nO2rVtfBk9wR3DMR04tVAteK2MA3ZuQ7oyViyDcIDI=;
- b=eJ7UjF9fYf6MYMcev9J0D1H2opwgPKQpkRqYjZYovyj0aqwDVNL2CLBn+WqkHA6/solgKLQrxZ9fqZ8WAsqEdgCux9FgVNF4Wsqb93eWI73B1L8rjvNKxpVxUIjJqAFatLNtal64BYDRNOW4Jv4E0sOGnahS6NKDAYlcDBTnaU2oqdwRmDxY5rFe7HvRaGGRioxeHR946y9Phmwcd7UufMbX25j2eKYTfYCXfxcbC0KFjqCxSqmGvSHDAIu3tt+/ZV1tPro8vzJ95X4G2YLFJUxm67sh8CUL0kqkdbkODM7gRw1E34z3se3s+wGz+NIsBxjfQRau6+d62OWE6OXd8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        with ESMTP id S232517AbiBXR57 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Feb 2022 12:57:59 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39306662C
+        for <linux-mips@vger.kernel.org>; Thu, 24 Feb 2022 09:57:27 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id ay3so2470464plb.1
+        for <linux-mips@vger.kernel.org>; Thu, 24 Feb 2022 09:57:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+nO2rVtfBk9wR3DMR04tVAteK2MA3ZuQ7oyViyDcIDI=;
- b=WIDO5I5Oi1Atd6Raf3i6egZhe1p19jRmqLMdnPz5HcDZum3+eXSmPCsKvQZ/S5fNgdDgotue79Q9tBCsB0dD6aDeUp053r1fh6Zijm7kiFydEG06zCveIGtO4kQDUL5Hx3BMC8XH84cuiSndsLW48qtLTj0slqmZTt8NDqnHxFk=
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
- by BYAPR10MB2933.namprd10.prod.outlook.com (2603:10b6:a03:88::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Thu, 24 Feb
- 2022 17:07:38 +0000
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::6d20:6694:a16:56f7]) by BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::6d20:6694:a16:56f7%3]) with mapi id 15.20.5017.024; Thu, 24 Feb 2022
- 17:07:38 +0000
-Message-ID: <8ffd8587-7eb3-d5b6-eab0-b86df5c0ebbd@oracle.com>
-Date:   Thu, 24 Feb 2022 12:07:26 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: cleanup swiotlb initialization
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     iommu@lists.linux-foundation.org, x86@kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
-        linux-pci@vger.kernel.org
-References: <20220222153514.593231-1-hch@lst.de>
- <09cb4ad3-88e7-3744-b4b8-a6d745ecea9e@oracle.com>
- <20220224155854.GA30938@lst.de>
- <206ba6a3-770a-70ad-96bc-76c6380da988@oracle.com>
- <20220224163943.GA32088@lst.de>
-From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
-In-Reply-To: <20220224163943.GA32088@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR08CA0046.namprd08.prod.outlook.com
- (2603:10b6:a03:117::23) To BLAPR10MB5009.namprd10.prod.outlook.com
- (2603:10b6:208:321::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2c344323-bd09-4fec-46b3-08d9f7b828c9
-X-MS-TrafficTypeDiagnostic: BYAPR10MB2933:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR10MB293364751D244699B3F963878A3D9@BYAPR10MB2933.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kmiNM9QWpQj3JRvlplQEXw9n/9qemJPRczQ5h4XI1X8TxQHyezzBVC9rnADCp2fQAXXDnirGZjBwrzUFahXAvyn+ZrgRnnGA8JSlOTFJL/H8zlqul10fbhpvtAJcmkA8sb5IHqltBJzSdfZEbXEZXrcgsALNz6uL0wz/mTfoAWVTwijIR9d6xyTcHGIaPo7A2fpM4N/uGqydbJ8HWbbeAST5OfyagYqb/itokkBoo74tZG2399h1ml2KwkL2jL8yF2eO64sFOFvISf57tcEBGfQj2EC75U0TKbmZhXvGRi9SNPlM8/lDy0ZSejtGKPCm3lh+K+QbTXBaRgQGYHDn/giW54+4W1OJidcWHRiI1+JrxJHX+osAJyFn+xh/Z7zC6Z2Vm0AYphpP0hB+I4PZ/1eMmIe2ausp9TT+kFZVBoDsYs/nlZgsWqOPDu4SCwf3dl6125h/KADx/uWixUHPw0xZf1JgAPc+Va69FcDxHKc4fyLWF7zP9F+e2mGzcm55TvPiF40j5X6qOJ/j//AMkdfBWLHaOLu7sFN/FNn4KjtxUMHFuSlH+lqKWTIz27mM2YPDYrRuJoJo8b7CWj+OHWPEeFHlkZWQFGZ4+91MpaEBE1VDauQZuYBLtz5+YsKAgJD4mu4zvFw5NYHUAuBPBLcrw12d9ut06+uF1DCCLxcMDXkl1sR6gZ2iQOpzndC8n1ioPsYMOYeeeVRIY05b6QatGIfcU441X05vSGYbbtU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(26005)(508600001)(38100700002)(186003)(2906002)(2616005)(316002)(6486002)(31686004)(86362001)(36756003)(6666004)(53546011)(8936002)(31696002)(5660300002)(6512007)(66556008)(66476007)(8676002)(4326008)(3480700007)(66946007)(6506007)(54906003)(6916009)(7116003)(44832011)(4744005)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXQ2a3h3YzlVY3psR24zdC9QcUZ6TTFiRE9UUDhmRXczMEEyaG81YkY0em1H?=
- =?utf-8?B?Z2pjY05OVFJVRkluTFJ6S3hhM0ZlYVd6bXlYMlVtRCtpOUtZa243QWZIOW45?=
- =?utf-8?B?cytsS3I5UmR6VWliQ2lnWUtxZzlJZkFjbTkxMUtzcGlTc0p5Q0dYVUE4aU52?=
- =?utf-8?B?WE51WEV3Zkl0UGpObFU4MGR1MjAyR1hrMVJIeExudXRtbTRLcWZ6cXdTWjBj?=
- =?utf-8?B?RTF3OXhkcjlieklUcEZqSDRZeS9JbitvWTR3d0tOOGpjcEtVcVNXaE9NUnZs?=
- =?utf-8?B?cVBRdDNXblJJZ2tmZTRUU2NUbUh5ZWg2K1RKK0ZCWGtYa2hRSDVORStiNzds?=
- =?utf-8?B?Zll0cmdDQzlsT1VnOVNPSmQxQVJUeWpPZ0czamNqRURWOTRxTGNMRjk0SndO?=
- =?utf-8?B?Z1RRbjZFbCtSQ1kvSFh5QmNVNzNNWE9UUmF3TmxjblA4Tml1TjZVSlVteFVD?=
- =?utf-8?B?UmtJdGFkSlpUQ1ZlMW1OSkZlcXJWcTNXTkpFcXRoNDdIWTRoSkdhY0hJeEs0?=
- =?utf-8?B?Uk1Gc3B3RzhHelRWMDlBbkZDcVdkWFB6TzB1Y3RqbUVpZExEWUM1M3N3OGJl?=
- =?utf-8?B?S1BQc0Z4VlhQeHZudjdMOGxpc0RpN3dOM1RaUXg0SHFUYWFJTElyNmgyRlRD?=
- =?utf-8?B?SS9XZWxxYjY4R0lQWGhXeU5scXhGRTJWYXVNdFZsWEl1TG9BaFdjVEQzT1JU?=
- =?utf-8?B?bm1oOHQyVGlqVExLMjAxNjlTRSsvYkFwZjZhZGUrTDNCTkFlanoyUHVSb05v?=
- =?utf-8?B?NFU1bHp6dDB1ak1wL1N5bWhlWkdqc3h0Q0Z5dm9naW4rMXFEa1VXNVdnS01s?=
- =?utf-8?B?aHU4N3lsNkVBSlNrNnhtMnhJd3pwRElmVmk3bFZpbis2dU4rSENVSVBrLzFB?=
- =?utf-8?B?YzVlMXdMSVY4dS8ycjlHam5hRkh2ZFFwSEFnNTdIZGRwT1hMcGNIbkRPbFNs?=
- =?utf-8?B?SWoxbTZDelRrbWU1QlhOODRJeHJZc0hIWnJhVmhtVnhxNGxhRVMxcGc1SHJr?=
- =?utf-8?B?WEx2bEZCMlN6bStlUTBiS2tISUl4cmFYbE54SzRSWjFwVGN2czVlaisrN1lP?=
- =?utf-8?B?enB5UUgzL3NpcEE1TWRFT0dnRE5NS01OVkwxTHdFQ1Jzb3QvRUdNVUVYNGZQ?=
- =?utf-8?B?KzdaKzJ5SmlnN1dqa1h6L1ZmK0FYUUxaeU5IR0xRS1dCVktrQnB4TDdxR3dM?=
- =?utf-8?B?eFczVlRRSWZIWG5ubzNkc2VwS0xSc29oanJWVjhrN2dyNVc2a0tCbXROdlZJ?=
- =?utf-8?B?U0pCQUp0VktzNHoxTG9ubDdBRnRPWTNYb1R5dWUzOVh6TTJJUGp4UUtHbWdJ?=
- =?utf-8?B?aWVCMW9YTDFmV0F0WnM3UVVwVVRHSnBaUGx4ZFUrTXpFR1ZkRkZ6S01Fa0dD?=
- =?utf-8?B?NVBjM3h3alBHU3ViRkRSTWpubUZSODVTaWxwQmZzai9OOTFPMFJXQk01Yk14?=
- =?utf-8?B?dFJVbVowK1c5cTlQZ0cyWjNRRUQ2S3ZNZEJWQVFETGZPM1hlckROd3JpUjk4?=
- =?utf-8?B?d0JKWFUwYW1XQ1l6OEd4MVVhQWY1VVZPZi96cTVkaDlkdVYvSlRyRm1SVThN?=
- =?utf-8?B?UVBmTGE0bFZwVVA0bXc5cnJzZzZoSVRwRWY2UmluWGc4NHYyNnRuMXJwRWNO?=
- =?utf-8?B?ZlVkT1lMYm9GYzlYemdVZWF3TUFCc044OEtVQmVvYWM4Wk5FUStEV0VZUEVU?=
- =?utf-8?B?R1ZqZ1VUc0VCTHdhOURsWXVFZERiTmIxdEVnVnpOdVlJeWJFMjdUUkRqZGZr?=
- =?utf-8?B?ZjdJYUt5WEV5aGk0aHA3S3drN2FlZ0xmRzcrR0hieHJSdEd1ek0zdDhqUjgx?=
- =?utf-8?B?ai81TzFIMjlmSWJRRFFJRXdEZlQ1MDBqS2J6ZTh0c3Z1SnFiaC9yTjhha0Jq?=
- =?utf-8?B?UzFFQiszbC9mOTladHdUN0xVa09qbm9DUVRuV2RqTTFTSWNTVmQ1eDI0Y2Jr?=
- =?utf-8?B?SWk1dUN1bmY2bG5OZlJaWVE4b0puc1BMMmxYdUVKRW9qRlE1bVZkdXREYW9N?=
- =?utf-8?B?QlJxK0ltVEtuTzdTclAyVkc0UWczU2tOTHZIdHNTTytLcWF4REhOa2lXOGFE?=
- =?utf-8?B?bEZSV2p2VkhkbExtUnAwUkRiNTVqTjNya0NZRzZ5RW5HWWFrZmRLY3dxbERW?=
- =?utf-8?B?ZFhVN1dUOGVzWUFka1c3dERxUmI2MGJjYTdSaHBpbm5zVlFsQlV2TXdnejJj?=
- =?utf-8?B?bXRuaFBhZXhaVzM2czAwNS9RMmYxbjhCWEgwWDFtNEZmZDVwQmVXd0VxOWJE?=
- =?utf-8?Q?BkoLh6ytPfb1Mq2SNHtZK1OlFSwXllg8oIkRQkvJBo=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c344323-bd09-4fec-46b3-08d9f7b828c9
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2022 17:07:38.1520
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OQhDrtunFcKjN1DE8Dow4ZY7CuAmUiIhNF7BLK4sLDan25KyIQMoygGuCDWSe0UW3is5lw+Dsq8etoGwToveJaplWJMRTMAkmSb9T/DDWXw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR10MB2933
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10268 signatures=684655
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
- mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202240097
-X-Proofpoint-ORIG-GUID: dRhxuVACkwLDmdqzFGNh1tB3chsQYZpc
-X-Proofpoint-GUID: dRhxuVACkwLDmdqzFGNh1tB3chsQYZpc
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4cyzICQ/23bHkeHtwzkbDtebSfIDfHBmF44TmpxS3Qs=;
+        b=QZHtEKtUvZANVn2ElYT0MVq8L/sw0zRAND1G1+7+T2vN4rMWTQslOFNc01eWURY+2B
+         sy0EKF687Is70s9G179bTT4gb7OQj+aQvL7fNGMlm6ZA8EcAnbYhS2KBw8jCxSfkagq+
+         NucZ/R5TLUf/99L9ngjjYTgdH5a/n6N1tEKoBktikDcP1aWmcVutEpP4UHTORBHS9qay
+         VyS3Euibr59HFzGcQDm5Yb7u3hl49gPPn7xuZGLRjDMT13qhnDD4l6inYvCW8iV01vNz
+         aHx07dUlEYNNW1X1TiCzN3QQXMEUIWH8zIPIAR3ST5+sQ2z8sYlghZ5x1NpIC2rYLmfR
+         XjLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=4cyzICQ/23bHkeHtwzkbDtebSfIDfHBmF44TmpxS3Qs=;
+        b=7dc+BgKz+awkn/P6zngN3b+JU1XsuTj/lfWoKUrZxrDPypUHwRpA/eL92L5ljOFdod
+         xQx9Yh7ilznP4k0kxtv2L/91v7eMZIZFYr0kP5gXKLTjF5qn+CKVy/BhTT8NJMe7J7ev
+         kGih9yiZ9a5aaR8PBgLwOcmCnW/8CHverZLsNNfdSbKTnCFAhXsuuo0TfxBJTM3IBFSn
+         UgpyNKOZu7lJYQXJCdEU+6ckmoJRDLMJ6gjrVUlq+BrWgyqGkNUflR6xXuyxI6RK8+4Y
+         JjhK7gpB85SQJJgeijTmgbSmvFmJ72fzFPjo0Y+dD4cA1ZiDpniD58mPEqAYSnr8w8au
+         JBHQ==
+X-Gm-Message-State: AOAM530tzcOqGlYogYkF7lYWXrvHw6GrNXS7CPFrCi6lIHBbzEGXj7Zj
+        hNGyxTwMfJbcniDi/hRatGQmaw==
+X-Google-Smtp-Source: ABdhPJyVgqSJ004YUstyik+jYZz4EuPzBWmUx2Fjtwy+WACEd9Ui4gBxtYL98zOt7vqmGF1V37Iq4w==
+X-Received: by 2002:a17:902:e74e:b0:14f:f1c0:aaed with SMTP id p14-20020a170902e74e00b0014ff1c0aaedmr3958082plf.19.1645725447254;
+        Thu, 24 Feb 2022 09:57:27 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id b9-20020a056a000cc900b004f3581ae086sm183340pfv.16.2022.02.24.09.57.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 09:57:26 -0800 (PST)
+Date:   Thu, 24 Feb 2022 09:57:26 -0800 (PST)
+X-Google-Original-Date: Thu, 24 Feb 2022 09:56:39 PST (-0800)
+Subject:     Re: [PATCH V6 17/20] riscv: compat: vdso: Add setup additional pages implementation
+In-Reply-To: <20220224085410.399351-18-guoren@kernel.org>
+CC:     guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        anup@brainfault.org, Greg KH <gregkh@linuxfoundation.org>,
+        liush@allwinnertech.com, wefu@redhat.com, drew@beagleboard.org,
+        wangjunqiang@iscas.ac.cn, Christoph Hellwig <hch@lst.de>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-985c5e53-71d5-4d94-b9ff-deff7f834fc5@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -170,22 +76,274 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu, 24 Feb 2022 00:54:07 PST (-0800), guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Reconstruct __setup_additional_pages() by appending vdso info
+> pointer argument to meet compat_vdso_info requirement. And change
+> vm_special_mapping *dm, *cm initialization into static.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/riscv/include/asm/elf.h |   5 ++
+>  arch/riscv/include/asm/mmu.h |   1 +
+>  arch/riscv/kernel/vdso.c     | 103 +++++++++++++++++++++++------------
+>  3 files changed, 74 insertions(+), 35 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+> index 3a4293dc7229..d87d3bcc758d 100644
+> --- a/arch/riscv/include/asm/elf.h
+> +++ b/arch/riscv/include/asm/elf.h
+> @@ -134,5 +134,10 @@ do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)		\
+>  typedef compat_ulong_t			compat_elf_greg_t;
+>  typedef compat_elf_greg_t		compat_elf_gregset_t[ELF_NGREG];
+>
+> +extern int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
+> +					      int uses_interp);
+> +#define compat_arch_setup_additional_pages \
+> +				compat_arch_setup_additional_pages
+> +
+>  #endif /* CONFIG_COMPAT */
+>  #endif /* _ASM_RISCV_ELF_H */
+> diff --git a/arch/riscv/include/asm/mmu.h b/arch/riscv/include/asm/mmu.h
+> index 0099dc116168..cedcf8ea3c76 100644
+> --- a/arch/riscv/include/asm/mmu.h
+> +++ b/arch/riscv/include/asm/mmu.h
+> @@ -16,6 +16,7 @@ typedef struct {
+>  	atomic_long_t id;
+>  #endif
+>  	void *vdso;
+> +	void *vdso_info;
+>  #ifdef CONFIG_SMP
+>  	/* A local icache flush is needed before user execution can resume. */
+>  	cpumask_t icache_stale_mask;
+> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+> index a9436a65161a..f864811aa011 100644
+> --- a/arch/riscv/kernel/vdso.c
+> +++ b/arch/riscv/kernel/vdso.c
+> @@ -23,6 +23,9 @@ struct vdso_data {
+>  #endif
+>
+>  extern char vdso_start[], vdso_end[];
+> +#ifdef CONFIG_COMPAT
+> +extern char compat_vdso_start[], compat_vdso_end[];
+> +#endif
+>
+>  enum vvar_pages {
+>  	VVAR_DATA_PAGE_OFFSET,
+> @@ -30,6 +33,11 @@ enum vvar_pages {
+>  	VVAR_NR_PAGES,
+>  };
+>
+> +enum rv_vdso_map {
+> +	RV_VDSO_MAP_VVAR,
+> +	RV_VDSO_MAP_VDSO,
+> +};
+> +
+>  #define VVAR_SIZE  (VVAR_NR_PAGES << PAGE_SHIFT)
+>
+>  /*
+> @@ -52,12 +60,6 @@ struct __vdso_info {
+>  	struct vm_special_mapping *cm;
+>  };
+>
+> -static struct __vdso_info vdso_info __ro_after_init = {
+> -	.name = "vdso",
+> -	.vdso_code_start = vdso_start,
+> -	.vdso_code_end = vdso_end,
+> -};
+> -
+>  static int vdso_mremap(const struct vm_special_mapping *sm,
+>  		       struct vm_area_struct *new_vma)
+>  {
+> @@ -66,37 +68,33 @@ static int vdso_mremap(const struct vm_special_mapping *sm,
+>  	return 0;
+>  }
+>
+> -static int __init __vdso_init(void)
+> +static void __init __vdso_init(struct __vdso_info *vdso_info)
+>  {
+>  	unsigned int i;
+>  	struct page **vdso_pagelist;
+>  	unsigned long pfn;
+>
+> -	if (memcmp(vdso_info.vdso_code_start, "\177ELF", 4)) {
+> -		pr_err("vDSO is not a valid ELF object!\n");
+> -		return -EINVAL;
+> -	}
+> +	if (memcmp(vdso_info->vdso_code_start, "\177ELF", 4))
+> +		panic("vDSO is not a valid ELF object!\n");
+>
+> -	vdso_info.vdso_pages = (
+> -		vdso_info.vdso_code_end -
+> -		vdso_info.vdso_code_start) >>
+> +	vdso_info->vdso_pages = (
+> +		vdso_info->vdso_code_end -
+> +		vdso_info->vdso_code_start) >>
+>  		PAGE_SHIFT;
+>
+> -	vdso_pagelist = kcalloc(vdso_info.vdso_pages,
+> +	vdso_pagelist = kcalloc(vdso_info->vdso_pages,
+>  				sizeof(struct page *),
+>  				GFP_KERNEL);
+>  	if (vdso_pagelist == NULL)
+> -		return -ENOMEM;
+> +		panic("vDSO kcalloc failed!\n");
+>
+>  	/* Grab the vDSO code pages. */
+> -	pfn = sym_to_pfn(vdso_info.vdso_code_start);
+> +	pfn = sym_to_pfn(vdso_info->vdso_code_start);
+>
+> -	for (i = 0; i < vdso_info.vdso_pages; i++)
+> +	for (i = 0; i < vdso_info->vdso_pages; i++)
+>  		vdso_pagelist[i] = pfn_to_page(pfn + i);
+>
+> -	vdso_info.cm->pages = vdso_pagelist;
+> -
+> -	return 0;
+> +	vdso_info->cm->pages = vdso_pagelist;
+>  }
+>
+>  #ifdef CONFIG_TIME_NS
+> @@ -116,13 +114,14 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
+>  {
+>  	struct mm_struct *mm = task->mm;
+>  	struct vm_area_struct *vma;
+> +	struct __vdso_info *vdso_info = mm->context.vdso_info;
+>
+>  	mmap_read_lock(mm);
+>
+>  	for (vma = mm->mmap; vma; vma = vma->vm_next) {
+>  		unsigned long size = vma->vm_end - vma->vm_start;
+>
+> -		if (vma_is_special_mapping(vma, vdso_info.dm))
+> +		if (vma_is_special_mapping(vma, vdso_info->dm))
+>  			zap_page_range(vma, vma->vm_start, size);
+>  	}
+>
+> @@ -187,11 +186,6 @@ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+>  	return vmf_insert_pfn(vma, vmf->address, pfn);
+>  }
+>
+> -enum rv_vdso_map {
+> -	RV_VDSO_MAP_VVAR,
+> -	RV_VDSO_MAP_VDSO,
+> -};
+> -
+>  static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
+>  	[RV_VDSO_MAP_VVAR] = {
+>  		.name   = "[vvar]",
+> @@ -203,25 +197,44 @@ static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
+>  	},
+>  };
+>
+> +static struct __vdso_info vdso_info __ro_after_init = {
+> +	.name = "vdso",
+> +	.vdso_code_start = vdso_start,
+> +	.vdso_code_end = vdso_end,
+> +	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+> +	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+> +};
+> +
+> +#ifdef CONFIG_COMPAT
+> +static struct __vdso_info compat_vdso_info __ro_after_init = {
+> +	.name = "compat_vdso",
+> +	.vdso_code_start = compat_vdso_start,
+> +	.vdso_code_end = compat_vdso_end,
+> +	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+> +	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
+> +};
+> +#endif
+> +
+>  static int __init vdso_init(void)
+>  {
+> -	vdso_info.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR];
+> -	vdso_info.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO];
+> +	__vdso_init(&vdso_info);
+> +	__vdso_init(&compat_vdso_info);
 
-On 2/24/22 11:39 AM, Christoph Hellwig wrote:
-> On Thu, Feb 24, 2022 at 11:18:33AM -0500, Boris Ostrovsky wrote:
->> On 2/24/22 10:58 AM, Christoph Hellwig wrote:
->>> Thanks.
->>>
->>> This looks really strange as early_amd_iommu_init should not interact much
->>> with the changes.  I'll see if I can find a AMD system to test on.
->>
->> Just to be clear: this crashes only as dom0. Boots fine as baremetal.
-> Ah.  I can gues what this might be.  On Xen the hypervisor controls the
-> IOMMU and we should never end up initializing it in Linux, right?
+An autobuilder is pointing out an issue here.  I'm assuming just an `#if 
+defined(CONFIG_COMPAT)` will fix it, I'm OK squashing that in if it's 
+the only issue -- a fixed one never hurts, though ;)
 
+I'll try to take another look soon.
 
-Right, we shouldn't be in that code path.
-
-
--boris
-
+> -	return __vdso_init();
+> +	return 0;
+>  }
+>  arch_initcall(vdso_init);
+>
+>  static int __setup_additional_pages(struct mm_struct *mm,
+>  				    struct linux_binprm *bprm,
+> -				    int uses_interp)
+> +				    int uses_interp,
+> +				    struct __vdso_info *vdso_info)
+>  {
+>  	unsigned long vdso_base, vdso_text_len, vdso_mapping_len;
+>  	void *ret;
+>
+>  	BUILD_BUG_ON(VVAR_NR_PAGES != __VVAR_PAGES);
+>
+> -	vdso_text_len = vdso_info.vdso_pages << PAGE_SHIFT;
+> +	vdso_text_len = vdso_info->vdso_pages << PAGE_SHIFT;
+>  	/* Be sure to map the data page */
+>  	vdso_mapping_len = vdso_text_len + VVAR_SIZE;
+>
+> @@ -232,16 +245,18 @@ static int __setup_additional_pages(struct mm_struct *mm,
+>  	}
+>
+>  	ret = _install_special_mapping(mm, vdso_base, VVAR_SIZE,
+> -		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info.dm);
+> +		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info->dm);
+>  	if (IS_ERR(ret))
+>  		goto up_fail;
+>
+>  	vdso_base += VVAR_SIZE;
+>  	mm->context.vdso = (void *)vdso_base;
+> +	mm->context.vdso_info = (void *)vdso_info;
+> +
+>  	ret =
+>  	   _install_special_mapping(mm, vdso_base, vdso_text_len,
+>  		(VM_READ | VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC),
+> -		vdso_info.cm);
+> +		vdso_info->cm);
+>
+>  	if (IS_ERR(ret))
+>  		goto up_fail;
+> @@ -253,6 +268,24 @@ static int __setup_additional_pages(struct mm_struct *mm,
+>  	return PTR_ERR(ret);
+>  }
+>
+> +#ifdef CONFIG_COMPAT
+> +int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
+> +				       int uses_interp)
+> +{
+> +	struct mm_struct *mm = current->mm;
+> +	int ret;
+> +
+> +	if (mmap_write_lock_killable(mm))
+> +		return -EINTR;
+> +
+> +	ret = __setup_additional_pages(mm, bprm, uses_interp,
+> +							&compat_vdso_info);
+> +	mmap_write_unlock(mm);
+> +
+> +	return ret;
+> +}
+> +#endif
+> +
+>  int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+>  {
+>  	struct mm_struct *mm = current->mm;
+> @@ -261,7 +294,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+>  	if (mmap_write_lock_killable(mm))
+>  		return -EINTR;
+>
+> -	ret = __setup_additional_pages(mm, bprm, uses_interp);
+> +	ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso_info);
+>  	mmap_write_unlock(mm);
+>
+>  	return ret;
