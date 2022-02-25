@@ -2,137 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EFB4C3D55
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Feb 2022 05:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BB14C3EC5
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Feb 2022 08:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237428AbiBYEe2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Feb 2022 23:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S236827AbiBYHKW (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Feb 2022 02:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235373AbiBYEe1 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Feb 2022 23:34:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08511AAA51;
-        Thu, 24 Feb 2022 20:33:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D34F61893;
-        Fri, 25 Feb 2022 04:33:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF2F6C340E7;
-        Fri, 25 Feb 2022 04:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645763634;
-        bh=uh4UnFdDR53Ujc6m18f6ctjt+AIyhJXv2xufWpNaVhA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Uvtrsu50Hf9ISgTqjw2cZIY/fdalMvrStTdfqoQM3mdhWwRTlcM+di3Mlxj2LfRYC
-         sL2lOFI5CCKzGB0MNHSMJUWPqE4dtIOpz2JXIrS4+Xkvjw7ulJEnCWAELTi2BsI79T
-         +YcmqfASppeT6+G8sHwqPvTdqA+0hk873k0laznUkKMLOPw4ZEEscH10+2t1L5fKp+
-         8BfsQshsS4Im5IcgpwMXaxmFYPmHS4QO6tZE5Cu6VT+1C4lCHB7iNpJZvNEdHwtoNJ
-         zTpbMfhiIoucAZFTRmPZuLhWqy/lBlhaelfx8iUJ+lK7d4LQiirbG9AaOIPIgpnmXG
-         aNgH1u0nAoM1w==
-Message-ID: <3927b6f5-c8d0-1421-407d-850ede02dd0f@kernel.org>
-Date:   Thu, 24 Feb 2022 22:33:46 -0600
+        with ESMTP id S232670AbiBYHKW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Feb 2022 02:10:22 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBB01E1107
+        for <linux-mips@vger.kernel.org>; Thu, 24 Feb 2022 23:09:50 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id d21so4099812yba.11
+        for <linux-mips@vger.kernel.org>; Thu, 24 Feb 2022 23:09:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=RkKJ3feumDpaH/4Q4R9EWvmv9jLE7v7OSMOwoBOQVW8=;
+        b=HWn4IvjfftzLpqogskfwiXRMAhH2YnmMfM5OsMY9RPUSUcpryyGeZSTHjOYBaHiIhl
+         DVOSOUlkmc+GGeLQcCUCEg0bwaxihtZERTQVzs5XnzXFXVQtPTUIDk9zHM5vNiWqySP/
+         oCCjbOR3glTpDgw6Ab7PaILpFVVNUw4Z0UebaRQq7ZVMZmcXjHL8O/hAGCL94evRM/CE
+         1JnE2fM1rc/x9+lklrxU1xg20vX4oB7de6MI2UDp54zDrz/ZqQ1qP5CvbBTmPTSLBvA4
+         b7esENhujCgn/h//pWlg7FsoklcZbtwyv1b98q4BPSugWpd5aACAOCjFVOaDvk67eTwE
+         2iJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=RkKJ3feumDpaH/4Q4R9EWvmv9jLE7v7OSMOwoBOQVW8=;
+        b=Z5GoiVxPq4+s65Zhyt7g64fwiMD3ZNOQoBsZt3tMEnRKZmxR958fqqwiC5vhmY2snz
+         a+zZLX02ukib5+iiT1TSTCEFBqCSE6s5EJ8Vcz3KDMass18No61YtgRpwaMXbt4PoO/x
+         Fp1g2VlxLjcttcmyakNj5h8uM5RKf0dmIZrbtwe8KYPNeBm5a6a2oF3L24SJI1umBCY3
+         uFc0eRsQ8vnG6bmgQn7y8jTRFk0EgSCFHTQHze84qe0rpMC8IHFPnxlk4otn82P0/GQN
+         S4p5Vlf1Uq0FQYoGhnhPg3ThmvkIJn6n8ihI4Xvd0fjjaItR6cqKt/02A+63+BRZmVXg
+         sTzQ==
+X-Gm-Message-State: AOAM531lGcLnNndEkYqMZAK4nCxDvgqdzHwETToPVPQPRibUnPjozv7q
+        vIkm0ZVuq/dujVBzufFR7psG/DCmwhzXefcfpSjm7r+fJPtIbg==
+X-Google-Smtp-Source: ABdhPJz5laBsJeGK80mAX/WEbB1K3EIdSrupGykMNNj/HIKrR3FFyHPZAgRAHsNtHZz81rqQLu1yS8VO8iZ7ZOAkxDU=
+X-Received: by 2002:a25:2551:0:b0:623:a424:e2b5 with SMTP id
+ l78-20020a252551000000b00623a424e2b5mr6277259ybl.603.1645772989000; Thu, 24
+ Feb 2022 23:09:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk
-Cc:     linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
-        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, nickhu@andestech.com,
-        green.hu@gmail.com, shorne@gmail.com, deller@gmx.de,
-        mpe@ellerman.id.au, peterz@infradead.org, mingo@redhat.com,
-        mark.rutland@arm.com, hca@linux.ibm.com, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at, x86@kernel.org,
-        jcmvbkbc@gmail.com, ebiederm@xmission.com,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-19-arnd@kernel.org>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <20220216131332.1489939-19-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 25 Feb 2022 12:39:37 +0530
+Message-ID: <CA+G9fYtEx=k9TM7c7EihbO3U0qxZLbKX26NWJ1L=jjEOuy7cHQ@mail.gmail.com>
+Subject: [next] mips-mt.c:233:19: error: conflicting types for 'mt_init'
+To:     linux-mips@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Kees Cook <keescook@chromium.org>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+[Please ignore this email if it is already reported]
+
+Linux next-20220224 arch mips build errors / warnings noticed [1].
+
+Build configs:
+  -  mips-gcc-8-malta_defconfig
+  -  mips-gcc-10-malta_defconfig
+  -  mips-gcc-8-defconfig
+  -  mips-gcc-10-defconfig
+
+metadata:
+    git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+    git_sha: 44948bd49d878dad6c9707e34f4a06df73c3a800
+    git_short_log: 44948bd49d87 (\Add linux-next specific files for 20220224\)
+    kconfig: defconfig
+    target_arch: mips
+    toolchain: gcc-10
 
 
-On 2/16/22 07:13, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> There are no remaining callers of set_fs(), so CONFIG_SET_FS
-> can be removed globally, along with the thread_info field and
-> any references to it.
-> 
-> This turns access_ok() into a cheaper check against TASK_SIZE_MAX.
-> 
-> With CONFIG_SET_FS gone, so drop all remaining references to
-> set_fs()/get_fs(), mm_segment_t and uaccess_kernel().
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   arch/Kconfig                              |  3 -
->   arch/alpha/Kconfig                        |  1 -
->   arch/alpha/include/asm/processor.h        |  4 --
->   arch/alpha/include/asm/thread_info.h      |  2 -
->   arch/alpha/include/asm/uaccess.h          | 19 ------
->   arch/arc/Kconfig                          |  1 -
->   arch/arc/include/asm/segment.h            | 20 -------
->   arch/arc/include/asm/thread_info.h        |  3 -
->   arch/arc/include/asm/uaccess.h            |  1 -
->   arch/arm/lib/uaccess_with_memcpy.c        | 10 ----
->   arch/csky/Kconfig                         |  1 -
->   arch/csky/include/asm/processor.h         |  2 -
->   arch/csky/include/asm/segment.h           | 10 ----
->   arch/csky/include/asm/thread_info.h       |  2 -
->   arch/csky/include/asm/uaccess.h           |  3 -
->   arch/csky/kernel/asm-offsets.c            |  1 -
->   arch/h8300/Kconfig                        |  1 -
->   arch/h8300/include/asm/processor.h        |  1 -
->   arch/h8300/include/asm/segment.h          | 40 -------------
->   arch/h8300/include/asm/thread_info.h      |  3 -
->   arch/h8300/kernel/entry.S                 |  1 -
->   arch/h8300/kernel/head_ram.S              |  1 -
->   arch/h8300/mm/init.c                      |  6 --
->   arch/h8300/mm/memory.c                    |  1 -
->   arch/hexagon/Kconfig                      |  1 -
->   arch/hexagon/include/asm/thread_info.h    |  6 --
->   arch/hexagon/kernel/process.c             |  1 -
->   arch/microblaze/Kconfig                   |  1 -
->   arch/microblaze/include/asm/thread_info.h |  6 --
->   arch/microblaze/include/asm/uaccess.h     | 24 --------
->   arch/microblaze/kernel/asm-offsets.c      |  1 -
->   arch/microblaze/kernel/process.c          |  1 -
->   arch/nds32/Kconfig                        |  1 -
->   arch/nds32/include/asm/thread_info.h      |  4 --
->   arch/nds32/include/asm/uaccess.h          | 15 +----
->   arch/nds32/kernel/process.c               |  5 +-
->   arch/nds32/mm/alignment.c                 |  3 -
->   arch/nios2/Kconfig                        |  1 -
->   arch/nios2/include/asm/thread_info.h      |  9 ---
->   arch/nios2/include/asm/uaccess.h          | 12 ----
+Build errors / warnings:
 
-For NIOS2:
+arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for 'mt_init'
+  233 | static int __init mt_init(void)
+      |                   ^~~~~~~
+In file included from include/linux/mm_types.h:12,
+                 from include/linux/mmzone.h:21,
+                 from include/linux/gfp.h:6,
+                 from include/linux/radix-tree.h:12,
+                 from include/linux/idr.h:15,
+                 from include/linux/kernfs.h:12,
+                 from include/linux/sysfs.h:16,
+                 from include/linux/kobject.h:20,
+                 from include/linux/energy_model.h:7,
+                 from include/linux/device.h:16,
+                 from arch/mips/kernel/mips-mt.c:7:
+include/linux/maple_tree.h:589:20: note: previous definition of
+'mt_init' was here
+  589 | static inline void mt_init(struct maple_tree *mt)
+      |                    ^~~~~~~
+make[3]: *** [scripts/Makefile.build:288: arch/mips/kernel/mips-mt.o] Error 1
 
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Steps to reproduce:
+------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+
+tuxmake --runtime podman --target-arch mips --toolchain gcc-10
+--kconfig defconfig
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://builds.tuxbuild.com/25aFF2X7uoyebURaYzNHW9FVEmN/
