@@ -2,40 +2,55 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0FD4C4993
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Feb 2022 16:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B78354C4A22
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Feb 2022 17:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242338AbiBYPuj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Feb 2022 10:50:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S242632AbiBYQIO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Feb 2022 11:08:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235600AbiBYPui (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Feb 2022 10:50:38 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1296BDD7;
-        Fri, 25 Feb 2022 07:50:05 -0800 (PST)
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mtf7H-1oDw3g12Nz-00v42n; Fri, 25 Feb 2022 16:50:03 +0100
-Received: by mail-wr1-f48.google.com with SMTP id s1so5125752wrg.10;
-        Fri, 25 Feb 2022 07:50:03 -0800 (PST)
-X-Gm-Message-State: AOAM532T7Z2pc1YU+YopXLubdUeMfitJTxUPHucNwZM3+g/43QTOFdty
-        UFasBnUGe99F+tBA9K6Ow4GdDLxGkOiuVfoPwN8=
-X-Google-Smtp-Source: ABdhPJysyJQAyOWUBXwECRmjF7nJ/3KDCWU/jhvnP3qXA/ljoo2U2xK+NNU2HPSONjjfnno6VeVoMKIwA9lIuOaBaho=
-X-Received: by 2002:a5d:59aa:0:b0:1ed:9f45:c2ff with SMTP id
- p10-20020a5d59aa000000b001ed9f45c2ffmr6588564wrr.192.1645804202754; Fri, 25
- Feb 2022 07:50:02 -0800 (PST)
+        with ESMTP id S242636AbiBYQHv (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Feb 2022 11:07:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9EB21131F;
+        Fri, 25 Feb 2022 08:07:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE9AB83273;
+        Fri, 25 Feb 2022 16:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22393C340F2;
+        Fri, 25 Feb 2022 16:07:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645805236;
+        bh=KbJfW32hJ/F19yfN7A1bXil25wuVvtsMCViBmRGt63Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WkbIlFcJhtK50zmM1SUqT+c2BPoPb/PAsS5g6c6LqFS7dLJTZxLAPvig1x6SXi8te
+         l5Cx5rIlFRnbSFqV0Md2Gt99TvNmEAE85nc8zZkW2KAysaFXNYW8weU3KRSI1Joub1
+         XfgGa954+3/CiMxkbGo51ZitZf59ze3/G/mztC6h6fIENRXkrcAjUFFN1d6J+PDcBw
+         gx1uVRfyOgaOR4bZKjVcG7PIz/MCA3RNLoXSnngVfstymXQ0A55zH1r8rE0BbpfyBI
+         53H/HcqUiVVHaCBF70mR9z8l6owgUIz3VOsTGHF1gt/NgeAutWcTYSskkxOKLmnMHx
+         9rb/DOmJIf44g==
+Received: by mail-ua1-f46.google.com with SMTP id 4so2689384uaf.0;
+        Fri, 25 Feb 2022 08:07:16 -0800 (PST)
+X-Gm-Message-State: AOAM532qmB3RCzM2eOyjrm4h1R0Jocb2mLGQ2iLUY34AQqe43FcrxgKL
+        8xYBWINlULGTU8a+TQKYajEleFQ9L6CmhHkvOLQ=
+X-Google-Smtp-Source: ABdhPJzyFkCkLFwk2uiu55UbxfUmfSs3x9iDpfEO2XzZ1mh9E9zaiS00R4pCw1xb9Wsx0R973/NIBGmLnXTfXz/Q4Mk=
+X-Received: by 2002:ab0:1112:0:b0:33e:802f:e335 with SMTP id
+ e18-20020ab01112000000b0033e802fe335mr3769822uab.57.1645805235064; Fri, 25
+ Feb 2022 08:07:15 -0800 (PST)
 MIME-Version: 1.0
 References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-17-guoren@kernel.org>
- <CAK8P3a13_VBpTidoF_pUdV5g0MFqpSe17rgw=XUv69CCFCN0_g@mail.gmail.com> <CAJF2gTTu5=XwDUwNq=PfnzVRj-jPHH+0cOGhhLr_dFED1H24_g@mail.gmail.com>
-In-Reply-To: <CAJF2gTTu5=XwDUwNq=PfnzVRj-jPHH+0cOGhhLr_dFED1H24_g@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 25 Feb 2022 16:49:46 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
-Message-ID: <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
+ <CAK8P3a13_VBpTidoF_pUdV5g0MFqpSe17rgw=XUv69CCFCN0_g@mail.gmail.com>
+ <CAJF2gTTu5=XwDUwNq=PfnzVRj-jPHH+0cOGhhLr_dFED1H24_g@mail.gmail.com> <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
+In-Reply-To: <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 26 Feb 2022 00:07:04 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQtUonLQn+aRyf6f1Ei9o6wWCrjHXNkfa2rxKMEGuDw2g@mail.gmail.com>
+Message-ID: <CAJF2gTQtUonLQn+aRyf6f1Ei9o6wWCrjHXNkfa2rxKMEGuDw2g@mail.gmail.com>
 Subject: Re: [PATCH V6 16/20] riscv: compat: vdso: Add rv32 VDSO base code implementation
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup@brainfault.org>,
         gregkh <gregkh@linuxfoundation.org>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
@@ -55,67 +70,66 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
         "the arch/x86 maintainers" <x86@kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:VJmerkgNSVRaQs6ZdeKmfJ/UIRQqAkKTaskIAwrKr/BRXblvHF1
- Q9ojRcsi00yiaKba6v+JD/RpfxY5jDkEe5Yy9SG4QgVFPJQG1/7Af//f6EJiofuGjY67KN/
- owJqmXBrS36FZJJ5a7C/ePLaN+mWXGB5Mpl5GeK2mG7/XoKE5dA/TRrGsB+rMbq/DsG4oPE
- kZuNrhloqf4bdqMgqSekw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:AtbfbC+a71g=:JoPSHBClamW4vFn8Dbx4qD
- JTdYG+rQH/rqTKOb3Vi9+abJqdQBhrB3+KpP5R1gK3CmCAVcAEswn4Iqjx4jC2ILsMEXdAAdK
- vMP3gOpkKGKuxlp+ckY4zeaCtPU1YDanEPyBL8+5tmFb+rFxQG/iEfzyvQF4eCPvjTDL8BOBA
- uUBt4ybyLndHcqDpxlsRaiaxR6URTeYqRy4G48IbA613ToXaEiDXnbZnobDfJx3sjvn0jtFAq
- BGsJl3o06/QHJuu/uK9EwD5Fh5WSFzcqdVMBOR6bNkvy8zTS2cW9Dw5CYaV6H5yqjFT3RmLR1
- 3xuTU3nx+0OykEigJNz0DVHQ7E5lxRkgwLbIMR339Fvq4DTiqBvZb7YAJbxhRoEfPsgfD27+K
- M2AFSUTkNrgo6oNlyOGjf9zj2uLMMGz94eudWpQuyblzjUQLVkWRtI44cLpBOFmnN9keZ8FfC
- 6XjaKJPloLtA2kvXREwWuNmc4XFvnyM0svwy1Gy9ZIWhdt/lzKgXWpMCArOpP/amBbHBcNjyz
- N2DkRA49bJyH6XNWtdZCDrjeuEU8HfZd2tKrykqHYKGyYgTv5T4Ysm24bFuxSzm4IyTQ2jtJh
- IaepGFNB2LBaS+aiS/TmU4cHxyv0D8OXpv5yoKQm6gPDFqEYBoPlYLu5K0gOpa9Wmzwik05hz
- SoSnSsOZ+MokbJjo9pWCGDf1ggwA9eGdElxcDzj23/lV4k2xH//BFQLSX2yoD2vVILoO4rv0y
- 3sJW2SijUswXNVAuyXSmOnSFKHmXUHJj2cPHx6kfO6FTrZBQjEjrTkKewCgG4GdhsHt/corwx
- Dm3NaC8qUymw5Rf6HFOZN6NtpPV2gJ1vYH7IgDAOHSPkxBvKEg=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 4:42 PM Guo Ren <guoren@kernel.org> wrote:
+On Fri, Feb 25, 2022 at 11:50 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Hi Arnd & Palmer,
+> On Fri, Feb 25, 2022 at 4:42 PM Guo Ren <guoren@kernel.org> wrote:
+> >
+> > Hi Arnd & Palmer,
+> >
+> > Here is the new modified compat_vdso/Makefile, please have a look,
+> > first. Then I would update it to v7:
+> > ===========================================
+> > # SPDX-License-Identifier: GPL-2.0-only
+> > #
+> > # Makefile for compat_vdso
+> > #
+> >
+> > # Symbols present in the compat_vdso
+> > compat_vdso-syms  = rt_sigreturn
+> > compat_vdso-syms += getcpu
+> > compat_vdso-syms += flush_icache
+> >
+> > ifdef CROSS_COMPILE_COMPAT
+> >         COMPAT_CC := $(CROSS_COMPILE_COMPAT)gcc
+> >         COMPAT_LD := $(CROSS_COMPILE_COMPAT)ld
+> > else
+> >         COMPAT_CC := $(CC)
+> >         COMPAT_LD := $(LD)
+> > endif
+> >
+> > COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
+> > COMPAT_LD_FLAGS := -melf32lriscv
 >
-> Here is the new modified compat_vdso/Makefile, please have a look,
-> first. Then I would update it to v7:
-> ===========================================
-> # SPDX-License-Identifier: GPL-2.0-only
-> #
-> # Makefile for compat_vdso
-> #
->
-> # Symbols present in the compat_vdso
-> compat_vdso-syms  = rt_sigreturn
-> compat_vdso-syms += getcpu
-> compat_vdso-syms += flush_icache
->
-> ifdef CROSS_COMPILE_COMPAT
->         COMPAT_CC := $(CROSS_COMPILE_COMPAT)gcc
->         COMPAT_LD := $(CROSS_COMPILE_COMPAT)ld
-> else
->         COMPAT_CC := $(CC)
->         COMPAT_LD := $(LD)
-> endif
->
-> COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
-> COMPAT_LD_FLAGS := -melf32lriscv
+> Have you come across a case in which a separate cross toolchain
+> is required? If not, I would leave this out and just set the flags for the
+> normal toolchain.
+Okay
 
-Have you come across a case in which a separate cross toolchain
-is required? If not, I would leave this out and just set the flags for the
-normal toolchain.
+>
+> I also think it would be a nicer split to build the two vdso variants
+> as vdso64/vdso32 rather than vdso/compat_vdso. That way,
+> the build procedure can be kept as close as possible to the
+> native 32-bit build.
+Yes, current native 32-bit vdso & 64-bit vdso use the same
+vdso/Makfile. So, I think it could be another patch for this cleanup.
 
-I also think it would be a nicer split to build the two vdso variants
-as vdso64/vdso32 rather than vdso/compat_vdso. That way,
-the build procedure can be kept as close as possible to the
-native 32-bit build.
+>
+>         Arnd
 
-        Arnd
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
