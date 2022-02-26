@@ -2,134 +2,146 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78354C4A22
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Feb 2022 17:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC534C56FA
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Feb 2022 18:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242632AbiBYQIO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Feb 2022 11:08:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S232403AbiBZRN2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 26 Feb 2022 12:13:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242636AbiBYQHv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Feb 2022 11:07:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9EB21131F;
-        Fri, 25 Feb 2022 08:07:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE9AB83273;
-        Fri, 25 Feb 2022 16:07:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22393C340F2;
-        Fri, 25 Feb 2022 16:07:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645805236;
-        bh=KbJfW32hJ/F19yfN7A1bXil25wuVvtsMCViBmRGt63Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WkbIlFcJhtK50zmM1SUqT+c2BPoPb/PAsS5g6c6LqFS7dLJTZxLAPvig1x6SXi8te
-         l5Cx5rIlFRnbSFqV0Md2Gt99TvNmEAE85nc8zZkW2KAysaFXNYW8weU3KRSI1Joub1
-         XfgGa954+3/CiMxkbGo51ZitZf59ze3/G/mztC6h6fIENRXkrcAjUFFN1d6J+PDcBw
-         gx1uVRfyOgaOR4bZKjVcG7PIz/MCA3RNLoXSnngVfstymXQ0A55zH1r8rE0BbpfyBI
-         53H/HcqUiVVHaCBF70mR9z8l6owgUIz3VOsTGHF1gt/NgeAutWcTYSskkxOKLmnMHx
-         9rb/DOmJIf44g==
-Received: by mail-ua1-f46.google.com with SMTP id 4so2689384uaf.0;
-        Fri, 25 Feb 2022 08:07:16 -0800 (PST)
-X-Gm-Message-State: AOAM532qmB3RCzM2eOyjrm4h1R0Jocb2mLGQ2iLUY34AQqe43FcrxgKL
-        8xYBWINlULGTU8a+TQKYajEleFQ9L6CmhHkvOLQ=
-X-Google-Smtp-Source: ABdhPJzyFkCkLFwk2uiu55UbxfUmfSs3x9iDpfEO2XzZ1mh9E9zaiS00R4pCw1xb9Wsx0R973/NIBGmLnXTfXz/Q4Mk=
-X-Received: by 2002:ab0:1112:0:b0:33e:802f:e335 with SMTP id
- e18-20020ab01112000000b0033e802fe335mr3769822uab.57.1645805235064; Fri, 25
- Feb 2022 08:07:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-17-guoren@kernel.org>
- <CAK8P3a13_VBpTidoF_pUdV5g0MFqpSe17rgw=XUv69CCFCN0_g@mail.gmail.com>
- <CAJF2gTTu5=XwDUwNq=PfnzVRj-jPHH+0cOGhhLr_dFED1H24_g@mail.gmail.com> <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
-In-Reply-To: <CAK8P3a0MtcB7YMWKZKvpcy4Txi4JTXT61KqFoKZOqhVP530oEA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 26 Feb 2022 00:07:04 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQtUonLQn+aRyf6f1Ei9o6wWCrjHXNkfa2rxKMEGuDw2g@mail.gmail.com>
-Message-ID: <CAJF2gTQtUonLQn+aRyf6f1Ei9o6wWCrjHXNkfa2rxKMEGuDw2g@mail.gmail.com>
-Subject: Re: [PATCH V6 16/20] riscv: compat: vdso: Add rv32 VDSO base code implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229924AbiBZRN2 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 26 Feb 2022 12:13:28 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BEFBD7CC;
+        Sat, 26 Feb 2022 09:12:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1645895556;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=rAYy4Z35sSvRmW3KU/N66fatHaFpRvigK4dz2yH4zPQ=;
+    b=RqqY8R83HtnL0jTR22tpkHKb0et4BaXXkFDbAnYqGNqqnpFOX9QewquRUQJaZa3rSW
+    BG/4dxSRpQFuQuMZ2+VUJ+bCkZRBHbDVopudOmBGnxDS/WZhnCKgqDUy6dEuYESKatQb
+    CUUThk3ThvCcrps0vfp4qr5HIamaMGW9KyP5wxhRsu3+kT85dNTBcFv0Cs4dmD/07ISv
+    7MS7g/W6qrEhi1nHziGAHNhVLGpxroWY4BT9OMlXNiPgQyuo5N3F2PfAqZXevz4upvoI
+    jhBSkOG7tCzQmA7a3dD7JjXmof7qoARDyYeVmz1CW+w/t0FstTI69LCo1X08z2VYjWP6
+    6wTg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43sTrQ="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.40.1 SBL|AUTH)
+    with ESMTPSA id V41e6fy1QHCYE1v
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Sat, 26 Feb 2022 18:12:34 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v15 4/7] drm/bridge: dw-hdmi: repair interworking with
+ hdmi-connector for jz4780
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <9c6f5c0b-5879-736f-344f-dfa12a0d7937@baylibre.com>
+Date:   Sat, 26 Feb 2022 18:12:34 +0100
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        letux-kernel@openphoenux.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jonas Karlman <jonas@kwiboo.se>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3F01AD9B-EA49-4A34-A421-43E9E6268311@goldelico.com>
+References: <cover.1644681054.git.hns@goldelico.com>
+ <d4d08582c49ec089095dd0ede4cdf2752f9d1eb8.1644681054.git.hns@goldelico.com>
+ <9c6f5c0b-5879-736f-344f-dfa12a0d7937@baylibre.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 11:50 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Feb 25, 2022 at 4:42 PM Guo Ren <guoren@kernel.org> wrote:
-> >
-> > Hi Arnd & Palmer,
-> >
-> > Here is the new modified compat_vdso/Makefile, please have a look,
-> > first. Then I would update it to v7:
-> > ===========================================
-> > # SPDX-License-Identifier: GPL-2.0-only
-> > #
-> > # Makefile for compat_vdso
-> > #
-> >
-> > # Symbols present in the compat_vdso
-> > compat_vdso-syms  = rt_sigreturn
-> > compat_vdso-syms += getcpu
-> > compat_vdso-syms += flush_icache
-> >
-> > ifdef CROSS_COMPILE_COMPAT
-> >         COMPAT_CC := $(CROSS_COMPILE_COMPAT)gcc
-> >         COMPAT_LD := $(CROSS_COMPILE_COMPAT)ld
-> > else
-> >         COMPAT_CC := $(CC)
-> >         COMPAT_LD := $(LD)
-> > endif
-> >
-> > COMPAT_CC_FLAGS := -march=rv32g -mabi=ilp32
-> > COMPAT_LD_FLAGS := -melf32lriscv
->
-> Have you come across a case in which a separate cross toolchain
-> is required? If not, I would leave this out and just set the flags for the
-> normal toolchain.
-Okay
+Hi Neil,
 
->
-> I also think it would be a nicer split to build the two vdso variants
-> as vdso64/vdso32 rather than vdso/compat_vdso. That way,
-> the build procedure can be kept as close as possible to the
-> native 32-bit build.
-Yes, current native 32-bit vdso & 64-bit vdso use the same
-vdso/Makfile. So, I think it could be another patch for this cleanup.
+> Am 21.02.2022 um 09:11 schrieb Neil Armstrong =
+<narmstrong@baylibre.com>:
+>=20
+> Hi,
+>=20
+> On 12/02/2022 16:50, H. Nikolaus Schaller wrote:
+>> Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus =
+fmts callbacks")
+>> introduced a new mechanism to negotiate bus formats between hdmi =
+connector
+>> and the synopsys hdmi driver inside the jz4780.
+>> By this, the dw-hdmi is no longer the only bridge and sets up a list
+>> of formats in dw_hdmi_bridge_atomic_get_output_bus_fmts().
+>> This includes MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the jz4780 =
+but only
+>> produces a black screen.
+>> This fix is based on the observation that max_bpc =3D 0 when running =
+this
+>> function while info->bpc =3D 8. Since the formats checks before this =
+always test
+>> for max_bpc >=3D info->pbc indirectly my assumption is that we must =
+check it
+>> here as well.
+>> Adding the proposed patch makes the CI20/jz4780 panel work again in
+>> MEDIA_BUS_FMT_RGB888_1X24 mode.
+>> Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus =
+fmts callbacks")
+>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+>> ---
+>>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c =
+b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>> index b0d8110dd412c..826a055a7a273 100644
+>> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+>> @@ -2620,10 +2620,10 @@ static u32 =
+*dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+>>  		output_fmts[i++] =3D MEDIA_BUS_FMT_RGB101010_1X30;
+>>  	}
+>>  -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+>> +	if (max_bpc >=3D info->bpc && info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR422)
+>>  		output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY8_1X16;
+>>  -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+>> +	if (max_bpc >=3D info->bpc && info->color_formats & =
+DRM_COLOR_FORMAT_YCBCR444)
+>>  		output_fmts[i++] =3D MEDIA_BUS_FMT_YUV8_1X24;
+>>    	/* Default 8bit RGB fallback */
+>=20
+> Please do the same for all other cases and change the patch subject to =
+something more accurate like:
+> "drm/bridge: dw-hdmi: take display info bpc in account for bus formats =
+negociation"
 
->
->         Arnd
+thank you very much for this analysis.
 
+In fact my fix was also not correctly doing the right comparisons. The =
+rules should have the
+same structure as for all cases before, i.e. check for >=3D 8 and then =
+handle both color formats.
+I have fixed and tested on my CI20 board and updated the description and =
+Fixes: tags.
 
+v16 will come now (as part of the jz4780 hdmi series).
 
--- 
-Best Regards
- Guo Ren
+BR and thanks,
+Nikolaus
 
-ML: https://lore.kernel.org/linux-csky/
