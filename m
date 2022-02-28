@@ -2,53 +2,78 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539064C62ED
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Feb 2022 07:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 257AC4C6337
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Feb 2022 07:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233175AbiB1GcA (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Feb 2022 01:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S233349AbiB1Gkx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Mon, 28 Feb 2022 01:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbiB1Gb7 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 01:31:59 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 111A066AE8;
-        Sun, 27 Feb 2022 22:31:17 -0800 (PST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxGMkrbBxiQxMIAA--.10334S6;
-        Mon, 28 Feb 2022 14:31:09 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] MIPS: Remove not used variable usermem
-Date:   Mon, 28 Feb 2022 14:31:06 +0800
-Message-Id: <1646029866-6692-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1646029866-6692-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1646029866-6692-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxGMkrbBxiQxMIAA--.10334S6
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFW7Xw4kJr48CryfXr1rtFb_yoWfJFc_tr
-        47XF4kZr1UZ3Wj9rWqqw4fWFWIyws2qFZa9wn2v39Yyw15Jr1UurZ0yF9Iqrn5urs5ArZY
-        yrZ0vFn0kF4xWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb68FF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-        F7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr
-        1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE
-        3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
-        x0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8
-        JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWx
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbY0PDUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        with ESMTP id S233317AbiB1Gks (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 01:40:48 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 149F83D1CF
+        for <linux-mips@vger.kernel.org>; Sun, 27 Feb 2022 22:40:09 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-127-ln2z8qc2NY6O0etIBpyffg-1; Mon, 28 Feb 2022 06:40:07 +0000
+X-MC-Unique: ln2z8qc2NY6O0etIBpyffg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Mon, 28 Feb 2022 06:40:04 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Mon, 28 Feb 2022 06:40:04 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'guoren@kernel.org'" <guoren@kernel.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "liush@allwinnertech.com" <liush@allwinnertech.com>,
+        "wefu@redhat.com" <wefu@redhat.com>,
+        "drew@beagleboard.org" <drew@beagleboard.org>,
+        "wangjunqiang@iscas.ac.cn" <wangjunqiang@iscas.ac.cn>,
+        "hch@lst.de" <hch@lst.de>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH V7 03/20] compat: consolidate the compat_flock{,64}
+ definition
+Thread-Topic: [PATCH V7 03/20] compat: consolidate the compat_flock{,64}
+ definition
+Thread-Index: AQHYK/ctkLOBFN5NzkqkonsQCyvC26yogbZg
+Date:   Mon, 28 Feb 2022 06:40:04 +0000
+Message-ID: <b8e765910e274c0fb574ff23f88b881c@AcuMS.aculab.com>
+References: <20220227162831.674483-1-guoren@kernel.org>
+ <20220227162831.674483-4-guoren@kernel.org>
+In-Reply-To: <20220227162831.674483-4-guoren@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,36 +81,71 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now, the variable usermem is not used any more, just remove it.
+From: guoren@kernel.org
+> Sent: 27 February 2022 16:28
+> 
+> From: Christoph Hellwig <hch@lst.de>
+> 
+> Provide a single common definition for the compat_flock and
+> compat_flock64 structures using the same tricks as for the native
+> variants.  Another extra define is added for the packing required on
+> x86.
+...
+> diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
+...
+>  /*
+> - * IA32 uses 4 byte alignment for 64 bit quantities,
+> - * so we need to pack this structure.
+> + * IA32 uses 4 byte alignment for 64 bit quantities, so we need to pack the
+> + * compat flock64 structure.
+>   */
+...
+> +#define __ARCH_NEED_COMPAT_FLOCK64_PACKED
+> 
+>  struct compat_statfs {
+>  	int		f_type;
+> diff --git a/include/linux/compat.h b/include/linux/compat.h
+> index 1c758b0e0359..a0481fe6c5d5 100644
+> --- a/include/linux/compat.h
+> +++ b/include/linux/compat.h
+> @@ -258,6 +258,37 @@ struct compat_rlimit {
+>  	compat_ulong_t	rlim_max;
+>  };
+> 
+> +#ifdef __ARCH_NEED_COMPAT_FLOCK64_PACKED
+> +#define __ARCH_COMPAT_FLOCK64_PACK	__attribute__((packed))
+> +#else
+> +#define __ARCH_COMPAT_FLOCK64_PACK
+> +#endif
+...
+> +struct compat_flock64 {
+> +	short		l_type;
+> +	short		l_whence;
+> +	compat_loff_t	l_start;
+> +	compat_loff_t	l_len;
+> +	compat_pid_t	l_pid;
+> +#ifdef __ARCH_COMPAT_FLOCK64_PAD
+> +	__ARCH_COMPAT_FLOCK64_PAD
+> +#endif
+> +} __ARCH_COMPAT_FLOCK64_PACK;
+> +
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/kernel/setup.c | 5 -----
- 1 file changed, 5 deletions(-)
+Provided compat_loff_t are correctly defined with __aligned__(4)
+marking the structure packed isn't needed.
+I believe compat_u64 and compat_s64 both have aligned(4).
+It is also wrong, consider:
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index e3b1f2e..a65d0b28 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -338,7 +338,6 @@ static void __init bootmem_init(void)
- 
- #endif	/* CONFIG_SGI_IP27 */
- 
--static int usermem __initdata;
- static phys_addr_t memory_limit;
- static phys_addr_t memory_base;
- 
-@@ -596,10 +595,6 @@ static void __init arch_mem_init(char **cmdline_p)
- 	*cmdline_p = command_line;
- 
- 	parse_early_param();
+struct foo {
+	char x;
+	struct compat_flock64 fl64;
+};
+
+There should be 3 bytes of padding after 'x'.
+But you've removed it.
+
+	David
+
 -
--	if (usermem)
--		pr_info("User-defined physical RAM map overwrite\n");
--
- 	check_kernel_sections_mem();
- 
- 	early_init_fdt_reserve_self();
--- 
-2.1.0
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
