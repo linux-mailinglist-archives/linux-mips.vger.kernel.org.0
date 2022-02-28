@@ -2,90 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B1A4C6E13
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Feb 2022 14:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A7A4C6E8A
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Feb 2022 14:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbiB1NY2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Feb 2022 08:24:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S236779AbiB1NuD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Feb 2022 08:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235712AbiB1NYZ (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 08:24:25 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A217E26576;
-        Mon, 28 Feb 2022 05:23:45 -0800 (PST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxeMjazBxiKEAIAA--.10706S6;
-        Mon, 28 Feb 2022 21:23:39 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] MIPS: Remove not used variable usermem
-Date:   Mon, 28 Feb 2022 21:23:37 +0800
-Message-Id: <1646054617-16799-5-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1646054617-16799-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1646054617-16799-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxeMjazBxiKEAIAA--.10706S6
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFW7Xw4kJr48CryfXr1rtFb_yoWfJFb_tr
-        47tF4kZr15Z3Wj9rWDXw4fWFWIyan2qFZa9wnYv3yayw15Jr1UurWYyF9xXrn5urs5ArZY
-        yrZ0vFn0kF4xWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbhxFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-        IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-        F7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr
-        1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ry8MxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z2
-        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUCJm7UUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        with ESMTP id S236740AbiB1NuA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 08:50:00 -0500
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEC84A3E7;
+        Mon, 28 Feb 2022 05:49:20 -0800 (PST)
+Received: by mail-vs1-f41.google.com with SMTP id u10so12962347vsu.13;
+        Mon, 28 Feb 2022 05:49:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9ZlhBssXvwBUH+DmkM+uVIB26RD/VtgYSa5UcFW0OSE=;
+        b=ME1GTl9CGgA+A8M1UU52UG/Gtlss9C0iIg4sxO0WmL4Cd8Ic6L3kRYcInardep7fO7
+         qCrM852oJ1TUbDt5C5/9eOi4SuXkd/rwskANIZGpJDToD8R9dARY5tBW0fT61hKnyvS8
+         V6ernEVfyJKnqMblapwQU3+kAx85skIcTcyM40Clr6SHq6FWsr+/lVGspn1VThtwt2IM
+         KNN0SXnrDy7atslQ8/Wufx+7gG6GzbfEVKhzJX9a5xneNo0k3odS+C7zKTflZMcmkY2d
+         A7qASNElSJOigQl2zBS47az4uhgWQZqoeH6E/pnc9WStivpg3+AxFFsysiEgHqZu+8WT
+         wIlQ==
+X-Gm-Message-State: AOAM5314yER7xvTQWX8RbYr0BQ7tT9BHwmA/PGgumRZYcGuzBDeBHZfj
+        ASk+J2wwVgLMec50WYnFg0DlluAiuMbjyQ==
+X-Google-Smtp-Source: ABdhPJweMf/Et4YuLWxLus2oWw/go9t2rgdokcne6lJ/T6d4SmO528QF5G51ga8DIXgqHdlR6bqNMw==
+X-Received: by 2002:a67:d804:0:b0:31b:a7fd:2d9 with SMTP id e4-20020a67d804000000b0031ba7fd02d9mr7354987vsj.3.1646056159463;
+        Mon, 28 Feb 2022 05:49:19 -0800 (PST)
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
+        by smtp.gmail.com with ESMTPSA id q131-20020a1f2a89000000b003209a39cc60sm1668859vkq.5.2022.02.28.05.49.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Feb 2022 05:49:18 -0800 (PST)
+Received: by mail-vs1-f44.google.com with SMTP id j3so12992566vsi.7;
+        Mon, 28 Feb 2022 05:49:18 -0800 (PST)
+X-Received: by 2002:a67:af08:0:b0:31b:9451:bc39 with SMTP id
+ v8-20020a67af08000000b0031b9451bc39mr7516436vsl.68.1646056157983; Mon, 28 Feb
+ 2022 05:49:17 -0800 (PST)
+MIME-Version: 1.0
+References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+ <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com> <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
+In-Reply-To: <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 28 Feb 2022 14:49:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWve8XkqtMJCTB_BH9JRZ8C4f7ynF60D1fvx3hxaK4YzA@mail.gmail.com>
+Message-ID: <CAMuHMdWve8XkqtMJCTB_BH9JRZ8C4f7ynF60D1fvx3hxaK4YzA@mail.gmail.com>
+Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Linux MM <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        arcml <linux-snps-arc@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Now, the variable usermem is not used any more, just remove it.
+Hi Russell,
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/kernel/setup.c | 5 -----
- 1 file changed, 5 deletions(-)
+On Mon, Feb 28, 2022 at 11:57 AM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+> On Mon, Feb 28, 2022 at 04:17:32PM +0530, Anshuman Khandual wrote:
+> > This defines and exports a platform specific custom vm_get_page_prot() via
+> > subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+> > macros can be dropped which are no longer needed.
+>
+> What I would really like to know is why having to run _code_ to work out
+> what the page protections need to be is better than looking it up in a
+> table.
+>
+> Not only is this more expensive in terms of CPU cycles, it also brings
+> additional code size with it.
+>
+> I'm struggling to see what the benefit is.
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index c940405..89fdaae 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -338,7 +338,6 @@ static void __init bootmem_init(void)
- 
- #endif	/* CONFIG_SGI_IP27 */
- 
--static int usermem __initdata;
- static phys_addr_t memory_limit;
- static phys_addr_t memory_base;
- 
-@@ -628,10 +627,6 @@ static void __init arch_mem_init(char **cmdline_p)
- 	*cmdline_p = command_line;
- 
- 	parse_early_param();
--
--	if (usermem)
--		pr_info("User-defined physical RAM map overwrite\n");
--
- 	check_kernel_sections_mem();
- 
- 	early_init_fdt_reserve_self();
--- 
-2.1.0
+I was wondering about that as well. But at least for code size on
+m68k, this didn't have much impact.  Looking at the generated code,
+the increase due to using code for the (few different) cases is offset
+by a 16-bit jump table (which is to be credited to the compiler).
 
+In terms of CPU cycles, it's indeed worse than before.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
