@@ -2,189 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4A64C635E
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Feb 2022 07:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AAB4C63D8
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Feb 2022 08:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233374AbiB1GvX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Feb 2022 01:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S231683AbiB1Hgb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Feb 2022 02:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiB1GvW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 01:51:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966FE66FB7;
-        Sun, 27 Feb 2022 22:50:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F28D61004;
-        Mon, 28 Feb 2022 06:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9679FC340F6;
-        Mon, 28 Feb 2022 06:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646031043;
-        bh=2vbR4V4J6Cl+G68h2G7HleCPAcHpAjpd5tVKzN3DzfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rG9vBVuLZVmRU5mV+q2sCGqqiMY4Be4m9BXjNnwq5ZHCV4KCMOXXHIf10GvlfGs6G
-         A1MBytsQt+8GYtqHnZhzjV7oklq5SfV2Nug+Gzm7d73u971rZQGhJT9IizJqdmxvoP
-         zGIZ82TDL5CoTklP/UufP01m8lOT2Thg+lt+a7gDa6AnPH8x6h+Q0rpPnhzCiZuhds
-         KiSIGQsJEFC5tMmwCLG9BitLWcjqYbaJMtrtvh4aZAK5ZC3dlaQVu7G2RItGpGanfJ
-         Krp6IEyGU4a03Ix/j/BV//Za4Gm0PLmaFF1qqx9i73jo165hv8Zc4cRIQFn5+xbvcy
-         li3l6jr/LB/7g==
-Date:   Mon, 28 Feb 2022 08:50:34 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] MIPS: Refactor early_parse_memmap() to fix
- memmap= parameter
-Message-ID: <YhxwuixN+9D8mRF2@kernel.org>
-References: <1646029866-6692-1-git-send-email-yangtiezhu@loongson.cn>
- <1646029866-6692-4-git-send-email-yangtiezhu@loongson.cn>
+        with ESMTP id S229882AbiB1Hgb (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 02:36:31 -0500
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ECE48E6C;
+        Sun, 27 Feb 2022 23:35:53 -0800 (PST)
+Received: by mail-pj1-x1041.google.com with SMTP id m22so10404142pja.0;
+        Sun, 27 Feb 2022 23:35:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eNQzlZJkJsg681JtNsITrim/wO6tqCPKGyH2V036pnY=;
+        b=N7JOakZSQSmEP1Oa+o2/fEb+6ZOVzaBYle/336KLveT44q1/ZB4rIoC6wBgXtYK2iR
+         tzFcqAwy+S4hQdpnkrtnjIlMtCllyPvHP21iQb9heF81JL9Czlb8FFAXw9MbgWlXCt7v
+         +5BHJoi/gNxoD8woPdGeXQ6vOcEvjVQoAUZidAZzUiRMwGAETGcgHSs/ppAmY/Wr7X3l
+         9/mQJ9y3tNKsmMtJkJuw4YcUTBEa1mKrXmIIq9r9G/wNsNqny/YL76/00/0USnxSQa/y
+         HMaBzCLWjT9n6n2duvl4YXSncHL2z2n8s8P00rLalRv8bYDyslXOGUj2lCecNeJxva98
+         z6jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eNQzlZJkJsg681JtNsITrim/wO6tqCPKGyH2V036pnY=;
+        b=Hjd7KZnmCJ2qvYUmJQZaCwT8wm3K2TXeC5wEkcs9Vl+w2JbYrbDl8F8VOqG2ikMKKW
+         8tY+ZfRpjiZdvHxK0N2eJA8tDUjLPYfadqr5afZkbjM6wm/mCRH+YC3udwSQ7Im3TdM/
+         eHL4ycYUXtY3Sm4qvcSvS6mrl8LwiUKvJx79MNktqrmjmshJ0m9gXg5F2iIa+DKafiSo
+         lXXfzZv/OdMvfmFIaJlOmt3nqtUxCgPiHYWqsv6cJOx/TgZYKCfFyknBeIIfyrDie5hu
+         PyKzM7w1D3ei6qA0pWWr/QKMrVWikcFSg319TjrUNC71Vpw6u0eneDNe8qYCbTzS+cDs
+         Iaeg==
+X-Gm-Message-State: AOAM5300MOmVPYkIOL3/64eUU+9Mj6XVKoQxEK3uJJNQEiEtgE1UOR9p
+        vBAWzalfptzDl2nVg1XjCHM=
+X-Google-Smtp-Source: ABdhPJxRf6P1hGGf4GbwgPbFCRR3QL2lZa7eNo1FccD1GmTGtNvPjB9j1vcT0T9Eol/wtcFLwuuZDQ==
+X-Received: by 2002:a17:90a:9ec:b0:1bc:50bc:e058 with SMTP id 99-20020a17090a09ec00b001bc50bce058mr15521918pjo.183.1646033752713;
+        Sun, 27 Feb 2022 23:35:52 -0800 (PST)
+Received: from slim.das-security.cn ([103.84.139.54])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004f1111c66afsm12127133pfl.148.2022.02.27.23.35.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 23:35:52 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     john@phrozen.org, tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] mips: ralink: fix a refcount leak in ill_acc_of_setup()
+Date:   Mon, 28 Feb 2022 15:35:37 +0800
+Message-Id: <20220228073537.31621-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646029866-6692-4-git-send-email-yangtiezhu@loongson.cn>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 02:31:05PM +0800, Tiezhu Yang wrote:
-> According to Documentation/admin-guide/kernel-parameters.txt,
-> the kernel command-line parameter memmap= means "Force usage
-> of a specific region of memory", but when add "memmap=3G@64M"
-> to the command-line, kernel boot hangs in sparse_init().
-> 
-> In order to support memmap=limit@base, refactor the function
-> early_parse_memmap() and then use memblock_mem_range_remove_map()
-> to limit the memory region.
-> 
-> With this patch, when add "memmap=3G@64M" to the command-line,
-> the kernel boots successfully, we can see the following messages:
-> 
->   [    0.000000] Memory limited to 64MB-3136MB
->   ...
->   [    0.000000] Early memory node ranges
->   [    0.000000]   node   0: [mem 0x0000000004000000-0x000000000effffff]
->   [    0.000000]   node   0: [mem 0x0000000090200000-0x00000000ffffffff]
->   [    0.000000]   node   0: [mem 0x0000000120000000-0x00000001653fffff]
->   ...
->   [    0.000000] Memory: 3070816K/3147776K available (...)
-> 
-> When add "memmap=128M@64M nr_cpus=1 init 3" to the command-line,
-> the kernel also boots successfully, we can see the following messages:
-> 
->   [    0.000000] Memory limited to 64MB-192MB
->   ...
->   [    0.000000] Early memory node ranges
->   [    0.000000]   node   0: [mem 0x0000000004000000-0x000000000c1fffff]
->   ...
->   [    0.000000] Memory: 95312K/133120K available (...)
-> 
-> After login, the output of free command is consistent with the
-> above log.
-> 
-> By the way, this commit only supports memmap=limit@base format,
-> the other formats such as memmap=limit#base, memmap=limit$base
-> and memmap=limit!base can be added if they are necessary in the
-> future.
-> 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/mips/kernel/setup.c | 42 +++++++++---------------------------------
->  1 file changed, 9 insertions(+), 33 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-> index 6b6d718..e3b1f2e 100644
-> --- a/arch/mips/kernel/setup.c
-> +++ b/arch/mips/kernel/setup.c
-> @@ -340,6 +340,7 @@ static void __init bootmem_init(void)
->  
->  static int usermem __initdata;
->  static phys_addr_t memory_limit;
-> +static phys_addr_t memory_base;
->  
->  static int __init early_parse_mem(char *p)
->  {
-> @@ -355,42 +356,17 @@ early_param("mem", early_parse_mem);
->  
->  static int __init early_parse_memmap(char *p)
->  {
-> -	char *oldp;
-> -	u64 start_at, mem_size;
-> -
->  	if (!p)
-> -		return -EINVAL;
-> +		return 1;
->  
-> -	if (!strncmp(p, "exactmap", 8)) {
-> -		pr_err("\"memmap=exactmap\" invalid on MIPS\n");
-> -		return 0;
-> -	}
-> +	memory_limit = memparse(p, &p) & PAGE_MASK;
-> +	if (*p == '@')
-> +		memory_base = memparse(p + 1, &p) & PAGE_MASK;
->  
-> -	oldp = p;
-> -	mem_size = memparse(p, &p);
-> -	if (p == oldp)
-> -		return -EINVAL;
-> -
-> -	if (*p == '@') {
-> -		start_at = memparse(p+1, &p);
-> -		memblock_add(start_at, mem_size);
-> -	} else if (*p == '#') {
-> -		pr_err("\"memmap=nn#ss\" (force ACPI data) invalid on MIPS\n");
-> -		return -EINVAL;
-> -	} else if (*p == '$') {
-> -		start_at = memparse(p+1, &p);
-> -		memblock_add(start_at, mem_size);
-> -		memblock_reserve(start_at, mem_size);
-> -	} else {
-> -		pr_err("\"memmap\" invalid format!\n");
-> -		return -EINVAL;
+of_node_put(np) needs to be called when pdev == NULL.
 
-This breaks backward compatibility for systems that use memmap=X#Y and
-memmap=X$Y.
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ arch/mips/ralink/ill_acc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-For your use case it is enough to implement "memmap=exactmap" that will
-drop memory provided by the firmware and only use ranges supplied in
-memmap=
-
-> -	}
-> +	pr_notice("Memory limited to %lldMB-%lldMB\n",
-> +		  memory_base >> 20, (memory_base + memory_limit) >> 20);
->  
-> -	if (*p == '\0') {
-> -		usermem = 1;
-> -		return 0;
-> -	} else
-> -		return -EINVAL;
-> +	return 0;
->  }
->  early_param("memmap", early_parse_memmap);
->  
-> @@ -667,7 +643,7 @@ static void __init arch_mem_init(char **cmdline_p)
->  		__pa_symbol(&__nosave_end) - __pa_symbol(&__nosave_begin));
->  
->  	/* Limit the memory. */
-> -	memblock_enforce_memory_limit(memory_limit);
-> +	memblock_mem_range_remove_map(memory_base, memory_limit);
->  	memblock_allow_resize();
->  
->  	early_memtest(PFN_PHYS(ARCH_PFN_OFFSET), PFN_PHYS(max_low_pfn));
-> -- 
-> 2.1.0
-> 
-
+diff --git a/arch/mips/ralink/ill_acc.c b/arch/mips/ralink/ill_acc.c
+index 115a69fc20ca..f395ae218470 100644
+--- a/arch/mips/ralink/ill_acc.c
++++ b/arch/mips/ralink/ill_acc.c
+@@ -61,6 +61,7 @@ static int __init ill_acc_of_setup(void)
+ 	pdev = of_find_device_by_node(np);
+ 	if (!pdev) {
+ 		pr_err("%pOFn: failed to lookup pdev\n", np);
++		of_node_put(np);
+ 		return -EINVAL;
+ 	}
+ 
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+
