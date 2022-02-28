@@ -2,148 +2,83 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 133354C6D30
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Feb 2022 13:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 294F94C6E0F
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Feb 2022 14:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbiB1MwC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Feb 2022 07:52:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S234436AbiB1NY0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Feb 2022 08:24:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiB1MwB (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 07:52:01 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0D67804F;
-        Mon, 28 Feb 2022 04:51:22 -0800 (PST)
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MvKTJ-1oFX692esT-00rGkv; Mon, 28 Feb 2022 13:51:20 +0100
-Received: by mail-wr1-f47.google.com with SMTP id j17so15350943wrc.0;
-        Mon, 28 Feb 2022 04:51:20 -0800 (PST)
-X-Gm-Message-State: AOAM533j5Gwpt1KJc3MLGO63cDs+7RTgPih1iAaSUZEoN4UNOLafFtfC
-        BoeUpflDt2dnP8PjiRW/uEzsMZq1gIKwNhPZp98=
-X-Google-Smtp-Source: ABdhPJxqAXtjqyu3XGhO9l+qeiMZpUmH3VvfwpXSNlGORAG+H/kTZ6DoBe9bebMaudh7ucMT2NCbvco6L/QKSBCYl4U=
-X-Received: by 2002:a5d:63c2:0:b0:1ef:840e:e139 with SMTP id
- c2-20020a5d63c2000000b001ef840ee139mr8301106wrw.192.1646052680182; Mon, 28
- Feb 2022 04:51:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-4-guoren@kernel.org>
- <b8e765910e274c0fb574ff23f88b881c@AcuMS.aculab.com> <CAJF2gTRQ0XWSjoEeREtEGr5PPD-rHrBKFY_i6_9uW3eEN_6muQ@mail.gmail.com>
- <e5ee4f6799704bd59b0c580157a05d2d@AcuMS.aculab.com> <CAJF2gTQhFK55z4juC7uHpWmHsEXSOkbMyXeid6KsnhfPRo7wqg@mail.gmail.com>
-In-Reply-To: <CAJF2gTQhFK55z4juC7uHpWmHsEXSOkbMyXeid6KsnhfPRo7wqg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 28 Feb 2022 13:51:03 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0ZXuGWO+n2ghxhXmxntZAk_HPDmsk3cigdh2FBMQcKYA@mail.gmail.com>
-Message-ID: <CAK8P3a0ZXuGWO+n2ghxhXmxntZAk_HPDmsk3cigdh2FBMQcKYA@mail.gmail.com>
-Subject: Re: [PATCH V7 03/20] compat: consolidate the compat_flock{,64} definition
-To:     Guo Ren <guoren@kernel.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "liush@allwinnertech.com" <liush@allwinnertech.com>,
-        "wefu@redhat.com" <wefu@redhat.com>,
-        "drew@beagleboard.org" <drew@beagleboard.org>,
-        "wangjunqiang@iscas.ac.cn" <wangjunqiang@iscas.ac.cn>,
-        "hch@lst.de" <hch@lst.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:B0AtdJlqMXQDEgJHvuqtO1DU4MGLOpbhpQEBpVaQa9DAv4/KSs9
- INCrI+meMd2OjWcOwf1AkmQYwrBDdJa2HE2I/BLnzI0ywmQfbUhjtxMsAhLZmBOCTN5mXbu
- WLPrcYEEuYZR2vty06GMJNUVf1zoSqzf8Qp6kNTTHD87uJoagOquXn0k4gp3zIRqEC22p/i
- 8B1bPt/kCnBwGtcK6GD8g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eppUcn1u+fI=:gspmD17GQoBvp3XPDmBjBs
- dwrJFXkFnYIFQhGnKqWYlN0c8JjOZWUD8HAPILhcNTkkxZevvFyH23i75fTTa11TS9ths7xR6
- svAsq+geXeo+Jt/dmY5xrcVHO/dTTWNrpoYA0w+xFFUH3oDC8DG21kldBz6t7pgi91g2sNTMv
- 1K8V8FZQxbeE02c1poU5aN9vn6VAmVDk1cEpvIjqlTwl/JFJ4VyVvm1kqYuUWsEhn3eNFBeID
- U7ek7bpF3+0NgC/JbFh62Az5clcxVAe0A07TS397IgqaL8/M4VCso4yYuy5i22A9JZ+l8I9tI
- muvStCtNL6Xxi1Y/5kcjpZ9AP1vRbvYsXNLNHopFi7aSoffnNfm2WeSyNaUkYh4xpzErVdom0
- kzmEq/L8rEwPgxoP5bRyAwR113roU/ylN8QG8a1nROpFksPkdIUqo9n8mvRVVmWfv/cRG/tLU
- 2syVNzqrkJJ8g7wEIOOl7fr/ZW9FAIOgAY0qTA1bO/liheVGDh8Ksjq1Kmjrqc911ztMDJZ/E
- RhJju6guuXp1h/bpD00q0kVjSBtUk5F8rYjMIOnwY9zhpr0SG8JvyJLETKXs78nXY+HNocS04
- Bi0tJ2LGqaomL5Myhj79KXiQSedb0zT1LFmNsykNlj2LlH3IYJ5a+8Q0EBbPIO7n3kWW4iFq/
- Qc9MhHN6HVMvnQU4iXnXKlDg+JbS9tqrBKypBa7WOpzKhB6uWTrZsbvbivMXGRrgDipjGj0dK
- Av5/geYkcfw13a3ebmngh1AvuFOTCBB4EP3yMTWZG6DBrnsTMUgnXYgHzIi0QudqdxHGVCyeY
- YcoNNR6NmqUKH1nXF4uLYfnmtyHZivcyI+Qhg3xWz1zB0uVo+s=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235696AbiB1NYZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 08:24:25 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2301826AD6;
+        Mon, 28 Feb 2022 05:23:44 -0800 (PST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxeMjazBxiKEAIAA--.10706S2;
+        Mon, 28 Feb 2022 21:23:38 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] MIPS: Modify mem= and memmap= parameter
+Date:   Mon, 28 Feb 2022 21:23:33 +0800
+Message-Id: <1646054617-16799-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxeMjazBxiKEAIAA--.10706S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKr4xGFyxXr17Zw1DCF45KFg_yoWDKrb_tF
+        WY9F9rGw47GF43WFWrtF43XFyxtr4UXw4rtFn7K3yxKr9rAF45GF43u3yavr1vvFyvv3W5
+        J3s8Z3s3tr129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbc8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+        cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6ry8MxAI
+        w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY
+        6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU1NVyUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 1:13 PM Guo Ren <guoren@kernel.org> wrote:
-> On Mon, Feb 28, 2022 at 8:02 PM David Laight <David.Laight@aculab.com> wrote:
-> > From: Guo Ren Sent: 28 February 2022 11:52
-> > > On Mon, Feb 28, 2022 at 2:40 PM David Laight <David.Laight@aculab.com> wrote:
-> > > > ...
-> > > > > +struct compat_flock64 {
-> > > > > +     short           l_type;
-> > > > > +     short           l_whence;
-> > > > > +     compat_loff_t   l_start;
-> > > > > +     compat_loff_t   l_len;
-> > > > > +     compat_pid_t    l_pid;
-> > > > > +#ifdef __ARCH_COMPAT_FLOCK64_PAD
-> > > > > +     __ARCH_COMPAT_FLOCK64_PAD
-> > > > > +#endif
-> > > > > +} __ARCH_COMPAT_FLOCK64_PACK;
-> > > > > +
-> > > >
-> > > > Provided compat_loff_t are correctly defined with __aligned__(4)
-> > > See include/asm-generic/compat.h
-> > >
-> > > typedef s64 compat_loff_t;
-> > >
-> > > Only:
-> > > #ifdef CONFIG_COMPAT_FOR_U64_ALIGNMENT
-> > > typedef s64 __attribute__((aligned(4))) compat_s64;
-> > >
-> > > So how do you think compat_loff_t could be defined with __aligned__(4)?
-> >
-> > compat_loff_t should be compat_s64 not s64.
-> >
-> > The same should be done for all 64bit 'compat' types.
-> Changing
-> typedef s64 compat_loff_t;
-> to
-> typedef compat_s64 compat_loff_t;
->
-> should be another patch and it affects all architectures, I don't
-> think we should involve it in this series.
+In the current code, the kernel command-line parameter mem= and memmap=
+can not work well on MIPS, this patchset refactors the related code to
+fix them.
 
-Agreed, your patch (originally from Christoph) looks fine, it correctly
-transforms the seven copies of the structure into a shared version.
+For kdump on MIPS, if the users want to limit the memory region for the
+capture kernel to avoid corrupting the memory image of the panic kernel,
+use the parameter memmap=limit@base is the proper way, I will submit a
+patch to use memmap=limit@base for kexec-tools after this patchset is
+applied.
 
-There is always more that can be improved, but for this series,
-I think you have already done enough.
+v3: Modify patch #3 to maintain compatibility for memmap=limit{$,#,!}base,
+    commented by Mike Rapoport, thank you.
 
-> look at kernel/power/user.c:
-> struct compat_resume_swap_area {
->         compat_loff_t offset;
->         u32 dev;
-> } __packed;
->
-> I thnk keep "typedef s64 compat_loff_t;" is a sensible choice for
-> COMPAT support patchset series.
+v2: Add some new patches to support memmap=limit@base
 
-The only references to compat_loff_t that we have in the kernel
-could all be simplified by defining compat_loff_t as compat_s64
-instead of s64, but it has no impact on correctness here.
+Tiezhu Yang (4):
+  MIPS: Refactor early_parse_mem() to fix mem= parameter
+  memblock: Introduce memblock_mem_range_remove_map()
+  MIPS: Refactor early_parse_memmap() to fix memmap= parameter
+  MIPS: Remove not used variable usermem
 
-Let's make sure you get your series into 5.18, and then David can
-follow-up with any further cleanups after that.
+ arch/mips/kernel/setup.c | 69 ++++++++++++++++++++++--------------------------
+ include/linux/memblock.h |  1 +
+ mm/memblock.c            |  9 +++++--
+ 3 files changed, 40 insertions(+), 39 deletions(-)
 
-         Arnd
+-- 
+2.1.0
+
