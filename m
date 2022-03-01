@@ -2,74 +2,113 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4944C8B05
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Mar 2022 12:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B804C8B1E
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Mar 2022 12:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234613AbiCALoV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Mar 2022 06:44:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        id S232726AbiCALwR (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Mar 2022 06:52:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbiCALoV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Mar 2022 06:44:21 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5843054BF3;
-        Tue,  1 Mar 2022 03:43:40 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 5C51F68AFE; Tue,  1 Mar 2022 12:43:35 +0100 (CET)
-Date:   Tue, 1 Mar 2022 12:43:35 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "tboot-devel@lists.sourceforge.net" 
-        <tboot-devel@lists.sourceforge.net>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH 08/12] x86: centralize setting SWIOTLB_FORCE when guest
- memory encryption is enabled
-Message-ID: <20220301114335.GA2881@lst.de>
-References: <20220301105311.885699-1-hch@lst.de> <20220301105311.885699-9-hch@lst.de> <8e623a11-d809-4fab-401c-2ce609a9fc14@citrix.com>
+        with ESMTP id S229508AbiCALwR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Mar 2022 06:52:17 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AFA581180;
+        Tue,  1 Mar 2022 03:51:35 -0800 (PST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn8+7CB5iY2MAAA--.2269S3;
+        Tue, 01 Mar 2022 19:51:23 +0800 (CST)
+Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
+To:     Mike Rapoport <rppt@kernel.org>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
+ <Yh3tgr+g/6IElq0P@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
+Date:   Tue, 1 Mar 2022 19:51:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8e623a11-d809-4fab-401c-2ce609a9fc14@citrix.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yh3tgr+g/6IElq0P@kernel.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Dxn8+7CB5iY2MAAA--.2269S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw18Jr1DCr45uFW7Xr4rGrg_yoW8Ww17pw
+        1Sqayayr4kXr1IvF1I9w1xXry5Jw18tr97Gry2yrWrCr4YkF1Iqr4xXan5ZFyqv34fGa47
+        WrsxtF909w1UAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
+        Y487MxkIecxEwVAFwVW8KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUjDKsUUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 11:39:29AM +0000, Andrew Cooper wrote:
-> This isn't really "must".  The guest is perfectly capable of sharing
-> memory with the hypervisor.
-> 
-> It's just that for now, bounce buffering is allegedly faster, and the
-> simple way of getting it working.
 
-Yeah, I guess you щould just share/unshare on demand.  But given that
-this isn't implemented it is a must in the current kernel.  But if
-you want a different wording suggest one and I'll put it in.
+
+On 03/01/2022 05:55 PM, Mike Rapoport wrote:
+> Hi,
+>
+> On Tue, Mar 01, 2022 at 12:28:57PM +0800, Tiezhu Yang wrote:
+>> In the current code, the kernel command-line parameter mem= and memmap=
+>> can not work well on MIPS, this patchset refactors the related code to
+>> fix them.
+>>
+>> For kdump on MIPS, if the users want to limit the memory region for the
+>> capture kernel to avoid corrupting the memory image of the panic kernel,
+>> use the parameter memmap=limit@base is the proper way, I will submit a
+>> patch to use memmap=limit@base for kexec-tools after this patchset is
+>> applied.
+>
+> Sorry, apparently I misread the prevoius version.
+> What's wrong with the current implementation of mem=limit@base for the
+> kdump case?
+
+In the current code, without this patchset, kernel boot hangs when add
+mem=3G, mem=3G@64M or memmap=3G@64M to the command-line, it means that
+the parameter mem= and memmap= have bug on mips.
+
+Thanks,
+Tiezhu
+
+>
+>> v4: Fix some build warnings reported by kernel test robot
+>>
+>> v3: Modify patch #3 to maintain compatibility for memmap=limit{$,#,!}base,
+>>     commented by Mike Rapoport, thank you
+>>
+>> v2: Add some new patches to support memmap=limit@base
+>>
+>> Tiezhu Yang (4):
+>>   MIPS: Refactor early_parse_mem() to fix mem= parameter
+>>   memblock: Introduce memblock_mem_range_remove_map()
+>>   MIPS: Refactor early_parse_memmap() to fix memmap= parameter
+>>   MIPS: Remove not used variable usermem
+>>
+>>  arch/mips/kernel/setup.c | 69 ++++++++++++++++++++++--------------------------
+>>  include/linux/memblock.h |  1 +
+>>  mm/memblock.c            |  9 +++++--
+>>  3 files changed, 40 insertions(+), 39 deletions(-)
+>>
+>> --
+>> 2.1.0
+>>
+>
+
