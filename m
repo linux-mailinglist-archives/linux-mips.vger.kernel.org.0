@@ -2,127 +2,101 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E544C8DC6
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Mar 2022 15:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369654C8F18
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Mar 2022 16:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235019AbiCAOck (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Mar 2022 09:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
+        id S232757AbiCAPcV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Mar 2022 10:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234969AbiCAOci (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Mar 2022 09:32:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC844A1472;
-        Tue,  1 Mar 2022 06:31:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68B04615A3;
-        Tue,  1 Mar 2022 14:31:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE37C340EE;
-        Tue,  1 Mar 2022 14:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646145115;
-        bh=iJGcKs3EFTZxwY5OYzsHuFQIOWVuyWXpcuW8J5KMOfI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XzEYZqdNO26snXjLDdHwtozmVQkSkeCS42yZ9Pk0EsfUBJI35V0icrfHKmRhDfEzt
-         jABS9bDzz0ZNov4uq6Fp2s++Zyb4dW1GAa6FJthe0lk0pqMFXv+3KGRH+cSUJ1cxR5
-         wYvcH9/9l+ciwXo2fjQwDTgLOaTdDtSXA+kA/dSgsNmsAO0BGasD7SyMWtMRrOTe/U
-         QXiwtBs7BPdK95H3+C2hRD1OM5G/6FaYw4qaqiCkx1hVl+NIY3UHhX+LS2ndjFEqHn
-         YlIk4DtjPzM5LJ/TLVK+SRoWGzo6pykfaO4pyTdEexL3ZwN1wYnt9mBmHHq5+WT/Vv
-         p+hmtIJAarKOg==
-Date:   Tue, 1 Mar 2022 16:31:46 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
-Message-ID: <Yh4uUoYT+YS5Jxsv@kernel.org>
-References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
- <Yh3tgr+g/6IElq0P@kernel.org>
- <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
+        with ESMTP id S231533AbiCAPcU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Mar 2022 10:32:20 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5012B26C4;
+        Tue,  1 Mar 2022 07:31:38 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id d3so21148426wrf.1;
+        Tue, 01 Mar 2022 07:31:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E0v1/XoAfo8OiusawK2xptMevQgjSP/uOA1ylFEwvrk=;
+        b=q6Gl7JqGRLJ0IZnenEDJZ/SUKFSNwODzYLrxYwlmeP0SmOiTSYPCOALs3UAeL5KFBo
+         tqm+ucw3tVQoLNOZCvGiGAX9YCFeDMuAmrEdX2Ptln3sl1Vufdf3Cx3hqWAkv5Y2KKgE
+         jbA53JJouHY3E/H3giRlhRK/cNIfxfwPPXLlY2Js8L+Pxi+ubQVMQhlK535HkuZMhsOL
+         vLCJcGGldWV6BsziBqqUWvnc/r8yLuHOaQa0PWeuqOwYgOMcdmw/KwUmyYGYEUyQBX2v
+         MYPoRpWMY+BkI1ET6F1pkuZu0BjvNT3JsIgaqgQQFMccUqG056bATPVPXZaW1UZU3VRC
+         dJmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E0v1/XoAfo8OiusawK2xptMevQgjSP/uOA1ylFEwvrk=;
+        b=4Lsw4OSJ5MiozvJcG6IKDpQlZdJ4Hfk55kv3SqsiAWlr9DtTLKkX6HDA6Rs0NoIEBo
+         EOnBNxv1e+DT7Toq8a0+iCyOLLVJxKxf3EP74C9P6Uul+PCko3MtYKn0IModz8V4sznf
+         V9rsmxdTiJJjt0iOK0hRLT5o/ktE7ITywa/ej6OjyHCGVKSqPXLBFR2dumWdGzR/2CHT
+         zOG85iSnFMEcBic1sdVVc5zlpzn9iKMilLIcBo9Aa2N458SYhP5NyKWdoTXq4hE0uC2z
+         Qqh8MClzSzRtP5oWvflE7xxJBsLF85rhaieGiDhCPH5bGLAWao7JkmBTeCQlRtQm1xvp
+         E16A==
+X-Gm-Message-State: AOAM533xO/ZhOI+m/GNV3xckhANUgyQ/FGRmtwJqs9AFo6EFdPiGVxD6
+        AkMVyIqHMCFoGBGHNPQnIao=
+X-Google-Smtp-Source: ABdhPJwrbutttcQ3i7t0ZjlgCyEYXrdYj31hgKGBJUFAXym1YFapciH6fS5sP/jnS+a185+S7Qs4+A==
+X-Received: by 2002:a05:6000:1b8a:b0:1e4:b3a3:4c1f with SMTP id r10-20020a0560001b8a00b001e4b3a34c1fmr20285634wru.202.1646148696732;
+        Tue, 01 Mar 2022 07:31:36 -0800 (PST)
+Received: from monk.home ([2a01:cb10:430:ec00:4737:d56e:186b:af1])
+        by smtp.gmail.com with ESMTPSA id b13-20020a05600c4e0d00b003816cb4892csm5797377wmq.0.2022.03.01.07.31.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 07:31:36 -0800 (PST)
+From:   Christophe Branchereau <cbranchereau@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v1 0/3] Ingenic DRM bridge_atomic_enable proposal
+Date:   Tue,  1 Mar 2022 16:31:19 +0100
+Message-Id: <20220301153122.20660-1-cbranchereau@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 07:51:23PM +0800, Tiezhu Yang wrote:
-> 
-> 
-> On 03/01/2022 05:55 PM, Mike Rapoport wrote:
-> > Hi,
-> > 
-> > On Tue, Mar 01, 2022 at 12:28:57PM +0800, Tiezhu Yang wrote:
-> > > In the current code, the kernel command-line parameter mem= and memmap=
-> > > can not work well on MIPS, this patchset refactors the related code to
-> > > fix them.
-> > > 
-> > > For kdump on MIPS, if the users want to limit the memory region for the
-> > > capture kernel to avoid corrupting the memory image of the panic kernel,
-> > > use the parameter memmap=limit@base is the proper way, I will submit a
-> > > patch to use memmap=limit@base for kexec-tools after this patchset is
-> > > applied.
-> > 
-> > Sorry, apparently I misread the prevoius version.
-> > What's wrong with the current implementation of mem=limit@base for the
-> > kdump case?
-> 
-> In the current code, without this patchset, kernel boot hangs when add
-> mem=3G, mem=3G@64M or memmap=3G@64M to the command-line, it means that
-> the parameter mem= and memmap= have bug on mips.
+Hello, this is a set of patches to allow the upstreaming of the
+NV3052C panel found in the Anbernic RG350M mips gaming handheld.
 
-I can see how mem=3G may be wrong when the memory does not start at 0, but
-it seems to do the right thing of mem=3G@64M. 
+It was never upstreamed so far due to a longstanding graphical
+bug, which I propose to solve by introducing ingenic_drm_bridge_atomic_enable
+in the drm driver so the CRTC can be enabled after the panel itself slept
+out, and not before as it used to.
 
-Do you see system hangs with mem=3G@64M?
+After the drm change, 2 of the existing panels have to be modified accordingly 
+to introduce missing .enable and .disable in their code.
 
-Do you have the logs before the hang?
+Christophe Branchereau (3):
+  drm/ingenic : add ingenic_drm_bridge_atomic_enable
+  drm/panel: Add panel driver for NewVision NV3052C based LCDs
+  drm/panel : innolux-ej030na and abt-y030xx067a : add .enable and
+    .disable
 
-As for memmap= option, it does not specify the memory map but rather alters
-the memory map passed by the firmware. Particularity in MIPS implementation
-it allows to add a single range of available or reserved memory.
-
-AFAIU, for the kdump use-case mem=X@Y should suffice.
-
-> Thanks,
-> Tiezhu
-> 
-> > 
-> > > v4: Fix some build warnings reported by kernel test robot
-> > > 
-> > > v3: Modify patch #3 to maintain compatibility for memmap=limit{$,#,!}base,
-> > >     commented by Mike Rapoport, thank you
-> > > 
-> > > v2: Add some new patches to support memmap=limit@base
-> > > 
-> > > Tiezhu Yang (4):
-> > >   MIPS: Refactor early_parse_mem() to fix mem= parameter
-> > >   memblock: Introduce memblock_mem_range_remove_map()
-> > >   MIPS: Refactor early_parse_memmap() to fix memmap= parameter
-> > >   MIPS: Remove not used variable usermem
-> > > 
-> > >  arch/mips/kernel/setup.c | 69 ++++++++++++++++++++++--------------------------
-> > >  include/linux/memblock.h |  1 +
-> > >  mm/memblock.c            |  9 +++++--
-> > >  3 files changed, 40 insertions(+), 39 deletions(-)
-> > > 
-> > > --
-> > > 2.1.0
-> > > 
-> > 
-> 
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  19 +-
+ drivers/gpu/drm/panel/Kconfig                 |   9 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-abt-y030xx067a.c  |  23 +-
+ drivers/gpu/drm/panel/panel-innolux-ej030na.c |  31 +-
+ .../gpu/drm/panel/panel-newvision-nv3052c.c   | 504 ++++++++++++++++++
+ 6 files changed, 575 insertions(+), 12 deletions(-)
+ create mode 100644 drivers/gpu/drm/panel/panel-newvision-nv3052c.c
 
 -- 
-Sincerely yours,
-Mike.
+2.34.1
+
