@@ -2,137 +2,98 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716534C7F3E
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Mar 2022 01:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6964C803B
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Mar 2022 02:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiCAAcV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Feb 2022 19:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S231509AbiCABPz (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Feb 2022 20:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiCAAcV (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 19:32:21 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81C7764C;
-        Mon, 28 Feb 2022 16:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Ulo3aKo1xFoE/cfpZL+xmuPztKVuMRRxvY14DLWAKfs=; b=TZ2cQwur5niBWVC6LB4QbXcHpv
-        yGq5XkdOUsSWNRkxXZ+xUu5Ne0aoSxjd3EFSlTw//uzlshcrTXL1WSIBeOMG//K6E9//LBKJUF9Lp
-        d7Y8pI7iUxxk/8UV8I9dwPeOHRQJrBUaCR39kXJqEljuLwSEl4MHOJijW5OikAy/N25r3lTVtf1Ag
-        oIBnjedmBuxSvxg8dfoYm9DWWD+PZV27EI5OegTGUF4/hMMKXqnxVwYbdXI8kc3CAp+2jMU4yuwUe
-        xKeSe/NHCpEfdBmuKjHRWnZEZR6+VRP60/U5O3k1v3b2eE1uOwifrodWENU1y4R33yD4snwtAShBo
-        RlwlILPw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57570)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nOqQP-0000ag-Kh; Tue, 01 Mar 2022 00:31:33 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nOqQK-0006cw-KE; Tue, 01 Mar 2022 00:31:28 +0000
-Date:   Tue, 1 Mar 2022 00:31:28 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
-        Christoph Hellwig <hch@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-alpha@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-parisc@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-um@lists.infradead.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Message-ID: <Yh1pYAOiskEQes3p@shell.armlinux.org.uk>
-References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
- <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com>
- <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
- <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
+        with ESMTP id S229922AbiCABPy (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 20:15:54 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAF8102;
+        Mon, 28 Feb 2022 17:15:15 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id d17so12746107pfl.0;
+        Mon, 28 Feb 2022 17:15:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L2N3D8QoxsO13zBELM1/Sh7gQDfV1csfU7R3EV5hbjg=;
+        b=jAjr++urMjFqZOxqosIYjxZh6gr09ljDTG1GcyPszajT6UIGE90xMe7xV6+f55PGi2
+         IMZc9keMiMgldlUik5lDaR5dXJ6eR6XabNDMP4QrBWxFqO6U05csb0Eq4VwPwwMdugLZ
+         hs5LLsgh16882JU1xpHVR9sOMA9kyhfptrn1G4t6Z2Ett1i7nLbnvqZXc5Ylv1IvPl3F
+         7+Rrb9YLS9Tcxfp4JCQXWZHFYkRp+G/Wgt/rXfO3bUMP0WsA22q6kHoTZYP96a3jfeWA
+         Itp3CWib/DQ0QNjvpEhkCT5wlCDekPqamgzuSQS8NGJFuTfWcedAtb1HeLbGPF5TY3Fu
+         adUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L2N3D8QoxsO13zBELM1/Sh7gQDfV1csfU7R3EV5hbjg=;
+        b=zhXoaLTEjwilOAXN7ZfjPm9Ecu4Y8HUOG3ZImTKpXnJ6eqnPJO6G24rV+l3FntWxmv
+         6pN4r+syiepZf2hUJs10D7sikfJiJlGGugm0RU98Ws3iSsgLiXPaloX0SeLy0ty0FiS/
+         iIf0Nf9ctN3lEgJZeieWlJeVvLjBX+YVed/kvVqu25WqjTlG1UkG3No+yRGUnSBrebyy
+         hhIpvfBmTuK1UvFRSYYcJ0IjLpaQDjQ9yYP4XxyTTqSeEp9KQk0mH0Ihl6KIyjGAoIY8
+         TGhhvFoas8VQyTZLUHVNeoldxXf8S7T4WMNJHLv+HxPuCFZERXKLGN7D3T/8W/zjyPHH
+         OG5g==
+X-Gm-Message-State: AOAM533kHZOLNE86RPNFWZG5eH/YmOKm2BUDPlqr2nrhdgcGngHHAuIQ
+        J932jZGme3mbaRcBeNyzg0M=
+X-Google-Smtp-Source: ABdhPJxuSyD3s5Dsiwi+BWQ5j4La3ZVUYFJ1aYPfrdAjAX1pB8xBzusNoaInIh8eZ6Dix6xZPtQqTQ==
+X-Received: by 2002:a63:3e45:0:b0:378:c5a9:abd1 with SMTP id l66-20020a633e45000000b00378c5a9abd1mr3770459pga.25.1646097314412;
+        Mon, 28 Feb 2022 17:15:14 -0800 (PST)
+Received: from z640-arch.lan ([2602:61:739f:8300::9d4])
+        by smtp.gmail.com with ESMTPSA id z23-20020aa79597000000b004e1bf2f5818sm15568633pfj.87.2022.02.28.17.15.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 17:15:14 -0800 (PST)
+From:   Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+To:     John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: ralink: mt7621: use bitwise NOT instead of logical
+Date:   Mon, 28 Feb 2022 17:15:07 -0800
+Message-Id: <20220301011507.15494-1-ilya.lipnitskiy@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 05:30:41AM +0530, Anshuman Khandual wrote:
-> On 2/28/22 4:27 PM, Russell King (Oracle) wrote:
-> > On Mon, Feb 28, 2022 at 04:17:32PM +0530, Anshuman Khandual wrote:
-> >> This defines and exports a platform specific custom vm_get_page_prot() via
-> >> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> >> macros can be dropped which are no longer needed.
-> > 
-> > What I would really like to know is why having to run _code_ to work out
-> > what the page protections need to be is better than looking it up in a
-> > table.
-> > 
-> > Not only is this more expensive in terms of CPU cycles, it also brings
-> > additional code size with it.
-> > 
-> > I'm struggling to see what the benefit is.
-> 
-> Currently vm_get_page_prot() is also being _run_ to fetch required page
-> protection values. Although that is being run in the core MM and from a
-> platform perspective __SXXX, __PXXX are just being exported for a table.
-> Looking it up in a table (and applying more constructs there after) is
-> not much different than a clean switch case statement in terms of CPU
-> usage. So this is not more expensive in terms of CPU cycles.
+It was the intention to reverse the bits, not make them all zero by
+using logical NOT operator.
 
-I disagree.
+Fixes: cc19db8b312a ("MIPS: ralink: mt7621: do memory detection on KSEG1")
+Suggested-by: Chuanhong Guo <gch981213@gmail.com>
+Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+---
+ arch/mips/ralink/mt7621.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-However, let's base this disagreement on some evidence. Here is the
-present 32-bit ARM implementation:
-
-00000048 <vm_get_page_prot>:
-      48:       e200000f        and     r0, r0, #15
-      4c:       e3003000        movw    r3, #0
-                        4c: R_ARM_MOVW_ABS_NC   .LANCHOR1
-      50:       e3403000        movt    r3, #0
-                        50: R_ARM_MOVT_ABS      .LANCHOR1
-      54:       e7930100        ldr     r0, [r3, r0, lsl #2]
-      58:       e12fff1e        bx      lr
-
-That is five instructions long.
-
-Please show that your new implementation is not more expensive on
-32-bit ARM. Please do so by building a 32-bit kernel, and providing
-the disassembly.
-
-I think you will find way more than five instructions in your version -
-the compiler will have to issue code to decode the protection bits,
-probably using a table of branches or absolute PC values, or possibly
-the worst case of using multiple comparisons and branches. It then has
-to load constants that may be moved using movw on ARMv7, but on
-older architectures would have to be created from multiple instructions
-or loaded from the literal pool. Then there'll be instructions to load
-the address of "user_pgprot", retrieve its value, and bitwise or that.
-
-Therefore, I fail to see how your approach of getting rid of the table
-is somehow "better" than what we currently have in terms of the effect
-on the resulting code.
-
-If you don't like the __P and __S stuff and two arch_* hooks, you could
-move the table into arch code along with vm_get_page_prot() without the
-additional unnecessary hooks, while keeping all the benefits of the
-table lookup.
-
-Thanks.
-
+diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
+index 12c8808e0dea..fb0565bc34fd 100644
+--- a/arch/mips/ralink/mt7621.c
++++ b/arch/mips/ralink/mt7621.c
+@@ -69,7 +69,7 @@ static bool __init mt7621_addr_wraparound_test(phys_addr_t size)
+ 	__raw_writel(MT7621_MEM_TEST_PATTERN, dm);
+ 	if (__raw_readl(dm) != __raw_readl(dm + size))
+ 		return false;
+-	__raw_writel(!MT7621_MEM_TEST_PATTERN, dm);
++	__raw_writel(~MT7621_MEM_TEST_PATTERN, dm);
+ 	return __raw_readl(dm) == __raw_readl(dm + size);
+ }
+ 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.35.1
+
