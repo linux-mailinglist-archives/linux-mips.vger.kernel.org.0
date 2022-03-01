@@ -2,221 +2,149 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FD64C7476
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Feb 2022 18:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 546B34C7EFA
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Mar 2022 01:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238277AbiB1RpU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 28 Feb 2022 12:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S229950AbiCAABb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 28 Feb 2022 19:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239943AbiB1Roy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 12:44:54 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D719819C28;
-        Mon, 28 Feb 2022 09:37:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646069843; x=1677605843;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vXTL8dLX7viXJuGg2oI1j6Lgyk1Ewv5xNOTP7Tgfu/4=;
-  b=e/anaTD22EDSuAss1/vBptNRBVh5a3EEDbjG0AXHstvKH875ksBTxDr4
-   XsfOn+Oqa/OeYq1q5xFa54dXY3KCEtRwVpYhhZnvUcjJRR0s0zNfoBpdz
-   +kBqs65V50fg0MkXbNNXt4M3HDLH4vXdvPKr0N6KdzD8dzG2aRMsF4q6+
-   7ujipAL9JTvp1SHmyKD3fSy3qSqt6moszwlsnr3m3U748eakdKuR2N4wi
-   2+lz9BZo8KSUGp5Db2Y6XqNY2h5m2/zgvI5oG5zFuGvOnZpiMG/b9PFK5
-   v6dpqiovC3VLWHOZrCse12upwScABh63gRgR6AHtY0OCSLLid9U1Z9J1y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="232912009"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="232912009"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 09:37:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="708726454"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Feb 2022 09:37:15 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOjxS-0007cT-Lj; Mon, 28 Feb 2022 17:37:14 +0000
-Date:   Tue, 1 Mar 2022 01:36:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] MIPS: Refactor early_parse_memmap() to fix
- memmap= parameter
-Message-ID: <202203010025.PU3GDSWx-lkp@intel.com>
-References: <1646054617-16799-4-git-send-email-yangtiezhu@loongson.cn>
+        with ESMTP id S229634AbiCAABa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 28 Feb 2022 19:01:30 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA30638798;
+        Mon, 28 Feb 2022 16:00:50 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F9BAD6E;
+        Mon, 28 Feb 2022 16:00:50 -0800 (PST)
+Received: from [10.163.50.231] (unknown [10.163.50.231])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52833F66F;
+        Mon, 28 Feb 2022 16:00:43 -0800 (PST)
+Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
+        Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-parisc@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-um@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+ <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com>
+ <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
+Date:   Tue, 1 Mar 2022 05:30:41 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1646054617-16799-4-git-send-email-yangtiezhu@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Tiezhu,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on hnaz-mm/master]
-[also build test WARNING on linus/master v5.17-rc6 next-20220225]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Tiezhu-Yang/MIPS-Modify-mem-and-memmap-parameter/20220228-212554
-base:   https://github.com/hnaz/linux-mm master
-config: mips-randconfig-r025-20220228 (https://download.01.org/0day-ci/archive/20220301/202203010025.PU3GDSWx-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/0day-ci/linux/commit/ab143b3c599254c414419565480fc01acb23452a
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Tiezhu-Yang/MIPS-Modify-mem-and-memmap-parameter/20220228-212554
-        git checkout ab143b3c599254c414419565480fc01acb23452a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/mips/kernel/setup.c:351:42: warning: format specifies type 'long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
-           pr_notice("Memory limited to %lldMB\n", memory_limit >> 20);
-                                        ~~~~       ^~~~~~~~~~~~~~~~~~
-                                        %u
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   arch/mips/kernel/setup.c:380:6: warning: format specifies type 'long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
-                             memory_base >> 20, (memory_base + memory_limit) >> 20);
-                             ^~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
->> arch/mips/kernel/setup.c:380:25: warning: format specifies type 'long long' but the argument has type 'unsigned int' [-Wformat]
-                             memory_base >> 20, (memory_base + memory_limit) >> 20);
-                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   arch/mips/kernel/setup.c:399:5: warning: format specifies type 'long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
-                     memory_base >> 20, (memory_base + memory_limit) >> 20);
-                     ^~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   arch/mips/kernel/setup.c:399:24: warning: format specifies type 'long long' but the argument has type 'unsigned int' [-Wformat]
-                     memory_base >> 20, (memory_base + memory_limit) >> 20);
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:509:36: note: expanded from macro 'pr_notice'
-           printk(KERN_NOTICE pr_fmt(fmt), ##__VA_ARGS__)
-                                     ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   5 warnings generated.
 
 
-vim +380 arch/mips/kernel/setup.c
+On 2/28/22 4:27 PM, Russell King (Oracle) wrote:
+> On Mon, Feb 28, 2022 at 04:17:32PM +0530, Anshuman Khandual wrote:
+>> This defines and exports a platform specific custom vm_get_page_prot() via
+>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+>> macros can be dropped which are no longer needed.
+> 
+> What I would really like to know is why having to run _code_ to work out
+> what the page protections need to be is better than looking it up in a
+> table.
+> 
+> Not only is this more expensive in terms of CPU cycles, it also brings
+> additional code size with it.
+> 
+> I'm struggling to see what the benefit is.
+> 
 
-   356	
-   357	static int __init early_parse_memmap(char *p)
-   358	{
-   359		char *oldp;
-   360	
-   361		if (!p)
-   362			return -EINVAL;
-   363	
-   364		if (!strncmp(p, "exactmap", 8)) {
-   365			pr_err("\"memmap=exactmap\" invalid on MIPS\n");
-   366			return 0;
-   367		}
-   368	
-   369		oldp = p;
-   370		memory_limit = memparse(p, &p) & PAGE_MASK;
-   371		if (p == oldp)
-   372			return -EINVAL;
-   373	
-   374		if (*p == '@') {
-   375			memory_base = memparse(p + 1, &p) & PAGE_MASK;
-   376		} else if (*p == '$') {
-   377			memory_base = memparse(p+1, &p) & PAGE_MASK;
-   378			memblock_reserve(memory_base, memory_limit);
-   379			pr_notice("Memory reserved to %lldMB-%lldMB\n",
- > 380				  memory_base >> 20, (memory_base + memory_limit) >> 20);
-   381			memory_base = 0;
-   382			memory_limit = 0;
-   383			return 0;
-   384		} else if (*p == '#') {
-   385			pr_err("\"memmap=nn#ss\" invalid on MIPS\n");
-   386			memory_limit = 0;
-   387			return -EINVAL;
-   388		} else if (*p == '!') {
-   389			pr_err("\"memmap=nn!ss\" invalid on MIPS\n");
-   390			memory_limit = 0;
-   391			return -EINVAL;
-   392		} else {
-   393			pr_err("Unrecognized memmap syntax: %s\n", p);
-   394			memory_limit = 0;
-   395			return -EINVAL;
-   396		}
-   397	
-   398		pr_notice("Memory limited to %lldMB-%lldMB\n",
-   399			  memory_base >> 20, (memory_base + memory_limit) >> 20);
-   400	
-   401		return *p == '\0' ? 0 : -EINVAL;
-   402	}
-   403	early_param("memmap", early_parse_memmap);
-   404	
+Currently vm_get_page_prot() is also being _run_ to fetch required page
+protection values. Although that is being run in the core MM and from a
+platform perspective __SXXX, __PXXX are just being exported for a table.
+Looking it up in a table (and applying more constructs there after) is
+not much different than a clean switch case statement in terms of CPU
+usage. So this is not more expensive in terms of CPU cycles.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--------------------------
+pgprot_t protection_map[16] __ro_after_init = {
+        __P000, __P001, __P010, __P011, __P100, __P101, __P110, __P111,
+        __S000, __S001, __S010, __S011, __S100, __S101, __S110, __S111
+};
+
+#ifndef CONFIG_ARCH_HAS_FILTER_PGPROT
+static inline pgprot_t arch_filter_pgprot(pgprot_t prot)
+{
+        return prot;
+}
+#endif
+
+pgprot_t vm_get_page_prot(unsigned long vm_flags)
+{
+        pgprot_t ret = __pgprot(pgprot_val(protection_map[vm_flags &
+                                (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
+                        pgprot_val(arch_vm_get_page_prot(vm_flags)));
+
+        return arch_filter_pgprot(ret);
+}
+EXPORT_SYMBOL(vm_get_page_prot)
+----------------------------
+
+There will be a single vm_get_page_prot() instance on a given platform
+just like before. So this also does not bring any additional code size
+with it.
+
+As mentioned earlier on a previous version.
+
+Remove multiple 'core MM <--> platform' abstraction layers to map
+vm_flags access permission combination into page protection.
+
+From the cover letter ......
+
+----------
+Currently there are multiple layers of abstraction i.e __SXXX/__PXXX macros
+, protection_map[], arch_vm_get_page_prot() and arch_filter_pgprot() built
+between the platform and generic MM, finally defining vm_get_page_prot().
+
+Hence this series proposes to drop all these abstraction levels and instead
+just move the responsibility of defining vm_get_page_prot() to the platform
+itself making it clean and simple.
+----------
+
+Benefits
+
+1. For platforms using arch_vm_get_page_prot() and/or arch_filter_pgprot()
+
+	- A simplified vm_get_page_prot()
+	- Dropped arch_vm_get_page_prot() and arch_filter_pgprot()
+	- Dropped __SXXX, __PXXX macros
+
+2. For platforms which just exported __SXXX, __PXXX
+
+	- A simplified vm_get_page_prot()
+	- Dropped __SXXX, __PXXX macros
+
+3. For core MM
+
+	- Dropped a complex vm_get_page_prot() with multiple layers
+ 	  of abstraction i.e __SXXX/__PXXX macros, protection_map[],
+	  arch_vm_get_page_prot(), arch_filter_pgprot() etc.
+
+- Anshuman
