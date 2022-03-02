@@ -2,352 +2,631 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4456E4CA219
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Mar 2022 11:25:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE614CA257
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Mar 2022 11:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240001AbiCBKZx (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Mar 2022 05:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
+        id S235052AbiCBKjZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Wed, 2 Mar 2022 05:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236372AbiCBKZw (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Mar 2022 05:25:52 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96504AC936
-        for <linux-mips@vger.kernel.org>; Wed,  2 Mar 2022 02:25:08 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id x15so1922026wru.13
-        for <linux-mips@vger.kernel.org>; Wed, 02 Mar 2022 02:25:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=DKXEJNswJVuDL+USTupC0gsrP+tnzJ6kN2u2U+1FUvw=;
-        b=1uadc+8xwzLc6ZK8m0P37ZJT+uedeMUjCltkPqP1ylyWtgKiGkYLcRu6zJi0OJo8mm
-         j4iOS0r7Xwbo4O39e0yozgYePZsR/KMZSOHyxmx2fnTvxG5kxK9zzTSsSiKuIyv/roWy
-         BgtsZgJ9Cw2Ri9EijxlM7CGz4N1b/dsKVUxuhxszVL0ze8na0blMev93VbomLITA2mwl
-         ZVLOSPpZ4N0d57zQX/IoxnL9a1M6TEb2aXWkKDXEwXD6ctEyLuNGnO3zj2z53p3QKT8A
-         zjqSLSJpNaJ2tc09NNIv1EKzNDFSyzybxdkL0Idm/v1gh+Wv+yE4wSKencIclieBvJ8f
-         01AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=DKXEJNswJVuDL+USTupC0gsrP+tnzJ6kN2u2U+1FUvw=;
-        b=Uhpo+lvqZdZHUA/oosEpelpfowOFE6+PAaO9kY2aAnMYUgEiOs3qjie2onmXqxr68X
-         5qbSDq1p8xnIg/8nI63jh2L24NA5K4RaNBIbduJgVd4vMV+h2HgH0is5Ic7jgLhsujHM
-         gqqCU1PZpCg5cBg/57Xxye22MtNkzr6JaIAYs1u6aUxUj7F5WGDi9M5XDG4D12XuMH5B
-         wvqDw+VZ6vgxPlp4o2sb16rqRcXleVSFMjvzAu/FtE/1dRLF+RImEAEu3tda/r8+DiqV
-         cHwRlIhOsl9Yo6kO/a/HRk7dveiOqx+n6Q+KHmeem9d9Vzs5N5paF5CZLWktfZWbTqPu
-         mNkA==
-X-Gm-Message-State: AOAM530T3FpPgLZDuUpkX/NcmiRsBJ3hHz7UaIRwDLrtzkabRqrozRmv
-        hPEG1+skMga2Vivi6hUREzywTw==
-X-Google-Smtp-Source: ABdhPJyX21sYi2BLzXTXHIOIRGn1aBhi3MP5O7ODmfsDwU/tAASzOj3FtCZTJSYmbicFsxAelIcUHg==
-X-Received: by 2002:adf:8b85:0:b0:1ed:b97b:493d with SMTP id o5-20020adf8b85000000b001edb97b493dmr22392634wra.108.1646216706914;
-        Wed, 02 Mar 2022 02:25:06 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:3530:ddb:a61:e8db? ([2001:861:44c0:66c0:3530:ddb:a61:e8db])
-        by smtp.gmail.com with ESMTPSA id q16-20020a056000137000b001f046a21afcsm648621wrz.15.2022.03.02.02.25.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 02:25:06 -0800 (PST)
-Message-ID: <fca28594-8d4e-dd2f-93a0-a052cb888d90@baylibre.com>
-Date:   Wed, 2 Mar 2022 11:25:05 +0100
+        with ESMTP id S229546AbiCBKjZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Mar 2022 05:39:25 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D90B16;
+        Wed,  2 Mar 2022 02:38:40 -0800 (PST)
+Date:   Wed, 02 Mar 2022 10:38:26 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v1 2/3] drm/panel: Add panel driver for NewVision NV3052C
+ based LCDs
+To:     Christophe Branchereau <cbranchereau@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org
+Message-Id: <2K548R.OKM2OPSDBF3L3@crapouillou.net>
+In-Reply-To: <20220301153122.20660-3-cbranchereau@gmail.com>
+References: <20220301153122.20660-1-cbranchereau@gmail.com>
+        <20220301153122.20660-3-cbranchereau@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v16 4/4] drm/bridge: dw-hdmi: fix bus formats negotiation
- for 8 bit modes
-Content-Language: en-US
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Paul Boddie <paul@boddie.org.uk>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-References: <cover.1645895582.git.hns@goldelico.com>
- <169afe64b4985c3f420177cd6f4e1e72feeb2449.1645895582.git.hns@goldelico.com>
- <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
- <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-H,
+Hi Christophe,
 
-On 01/03/2022 21:37, H. Nikolaus Schaller wrote:
-> Hi Neil,
-> 
-> 
->> Am 01.03.2022 um 10:18 schrieb Neil Armstrong <narmstrong@baylibre.com>:
->>
->> Hi,
->>
->> On 26/02/2022 18:13, H. Nikolaus Schaller wrote:
->>> Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus fmts callbacks")
->>> introduced a new mechanism to negotiate bus formats between hdmi connectors
->>> and bridges which is to be used e.g. for the jz4780 based CI20 board.
->>> In this case dw-hdmi sets up a list of formats in
->>> dw_hdmi_bridge_atomic_get_output_bus_fmts().
->>> This includes e.g. MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the CI20 but
->>> only produces a black screen.
->>> Analysis revealed an omission in
->>> Commit 6c3c719936dafe ("drm/bridge: synopsys: dw-hdmi: add bus format negociation")
->>> to check for 8 bit with when adding UYVY8 or YUV8 formats.
->>> This fix is based on the observation that max_bpc = 0 when running this
->>> function while info->bpc = 8.
->>
->> In fact if bpc = 0, it should be considered as 8, so the issue is elsewhere.
->>
->>> Adding the proposed patch makes the jz4780/CI20 panel work again with default
->>> MEDIA_BUS_FMT_RGB888_1X24 mode.
->>> Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus fmts callbacks")
->>> Fixes: 6c3c719936dafe ("drm/bridge: synopsys: dw-hdmi: add bus format negociation")
->>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->>> ---
->>>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 10 ++++++----
->>>   1 file changed, 6 insertions(+), 4 deletions(-)
->>> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->>> index 43e375da131e8..c08e2cc96584c 100644
->>> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->>> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->>> @@ -2621,11 +2621,13 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->>>   		output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
->>>   	}
->>>   -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
->>> -		output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
->>> +	if (max_bpc >= 8 && info->bpc >= 8) {
->>> +		if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
->>> +			output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
->>>   -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->>> -		output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
->>> +		if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->>> +			output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
->>> +	}
->>
->> It should not select YUV here if it's not possible, so something is wrong.
->>
->> Can you check if https://lore.kernel.org/r/20220119123656.1456355-2-narmstrong@baylibre.com fixes this issue instead ?
-> 
-> Well, I had to manually fix it to be appliable to drm-misc/drm-misc-next
-> and specifically:
-> 
-> c03d0b52ff71 ("drm/connector: Fix typo in output format")
-> 
-> My resulting patch is attached.
-> 
-> Unfortunately it did not work.
-> 
-> I added a printk for hdmi->sink_is_hdmi. This returns 1. Which IMHO is to be expected
-> since I am using a HDMI connector and panel... So your patch will still add the UYVY formats.
-> 
-> Either the synposys module inside the jz4780 or the panel does not understand them.
+Le mar., mars 1 2022 at 16:31:21 +0100, Christophe Branchereau 
+<cbranchereau@gmail.com> a écrit :
+> This driver supports the NewVision NV3052C based LCDs. Right now, it
+> only supports the LeadTek LTK035C5444T 2.4" 640x480 TFT LCD panel, 
+> which
+> can be found in the Anbernic RG-350M handheld console.
 
-By selecting the UYVY formats, the driver will enable the colorspace converters in the dw-hdmi IP,
-I don't see why it doesn't work here...
-
-There is a bit called `Support Color Space Converter` in config0_id:
-bit	|	Name	|	R/W	|	Desc
-2 	|	csc	| 	R 	|	Indicates if Color Space Conversion block is present
-
-Could you dump all the config0 bits:
-
-=======================><=============================
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-index 54d8fdad395f..547731482da8 100644
---- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-+++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-@@ -3431,6 +3431,7 @@ struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
-         pdevinfo.id = PLATFORM_DEVID_AUTO;
-
-         config0 = hdmi_readb(hdmi, HDMI_CONFIG0_ID);
-+       dev_info(dev, "config0: %x\n", config0);
-         config3 = hdmi_readb(hdmi, HDMI_CONFIG3_ID);
-
-         if (iores && config3 & HDMI_CONFIG3_AHBAUDDMA) {
-=======================><=============================
-
-If this bit is missing, this would explain the black screen.
-
-Neil
+You'd need to add a binding documentation for the NV3052C (in a 
+separate patch).
 
 > 
-> Here is the EDID. Unfortunately it does not pretty print the extended descriptors for UYVY etc.
-> so that I don't know the exact capabilities of the panel. And what I am not sure is if the
-> jz4780 SoC can convert to UYVY or how it can.
-> 
-> root@letux:~# parse-edid </sys/devices/platform/13050000.lcdc0/drm/card0/card0-HDMI-A-1/edid
-> Checksum Correct
-> 
-> Section "Monitor"
->          Identifier "LEN L1950wD"
->          ModelName "LEN L1950wD"
->          VendorName "LEN"
->          # Monitor Manufactured week 34 of 2011
->          # EDID version 1.3
->          # Digital Display
->          DisplaySize 410 260
->          Gamma 2.20
->          Option "DPMS" "true"
->          Horizsync 30-81
->          VertRefresh 50-76
->          # Maximum pixel clock is 140MHz
->          #Not giving standard mode: 1152x864, 75Hz
->          #Not giving standard mode: 1280x720, 60Hz
->          #Not giving standard mode: 1280x1024, 60Hz
->          #Not giving standard mode: 1280x1024, 60Hz
->          #Not giving standard mode: 1280x1024, 60Hz
->          #Not giving standard mode: 1440x900, 60Hz
->          #Not giving standard mode: 1440x900, 75Hz
->          #Not giving standard mode: 1920x1080, 60Hz
-> 
->          #Extension block found. Parsing...
->          Modeline        "Mode 15" -hsync -vsync
->          Modeline        "Mode 0" -hsync +vsync
->          Modeline        "Mode 1" 27.027 1440 1478 1602 1716 480 484 487 525 -hsync -vsync interlace
->          Modeline        "Mode 2" 27.027 1440 1478 1602 1716 480 484 487 525 -hsync -vsync interlace
->          Modeline        "Mode 3" 27.027 720 736 798 858 480 489 495 525 -hsync -vsync
->          Modeline        "Mode 4" 27.027 720 736 798 858 480 489 495 525 -hsync -vsync
->          Modeline        "Mode 5" 27.000 1440 1464 1590 1728 576 578 581 625 -hsync -vsync interlace
->          Modeline        "Mode 6" 27.000 1440 1464 1590 1728 576 578 581 625 -hsync -vsync interlace
->          Modeline        "Mode 7" 27.000 720 732 796 864 576 581 586 625 -hsync -vsync
->          Modeline        "Mode 8" 27.000 720 732 796 864 576 581 586 625 -hsync -vsync
->          Modeline        "Mode 9" 74.250 1280 1720 1760 1980 720 725 730 750 +hsync +vsync
->          Modeline        "Mode 10" 74.250 1280 1390 1420 1650 720 725 730 750 +hsync +vsync
->          Modeline        "Mode 11" 74.250 1920 2448 2492 2640 1080 1082 1089 1125 +hsync +vsync interlace
->          Modeline        "Mode 12" 74.250 1920 2008 2052 2200 1080 1082 1087 1125 +hsync +vsync interlace
->          Modeline        "Mode 13" 148.500 1920 2448 2492 2640 1080 1084 1089 1125 +hsync +vsync
->          Modeline        "Mode 14" 148.500 1920 2008 2052 2200 1080 1084 1089 1125 +hsync +vsync
->          Modeline        "Mode 16" +hsync +vsync interlace
->          Modeline        "Mode 17" +hsync +vsync interlace
->          Modeline        "Mode 18" +hsync +vsync
->          Option "PreferredMode" "Mode 15"
-> EndSection
-> root@letux:~# xxd /sys/devices/platform/13050000.lcdc0/drm/card0/card0-HDMI-A-1/
-> 00000000: 00ff ffff ffff ff00 30ae 8610 0101 0101  ........0.......
-> 00000010: 2215 0103 8029 1a78 eee5 b5a3 5549 9927  "....).x....UI.'
-> 00000020: 1350 54af ef00 714f 81c0 8180 8180 8180  .PT...qO........
-> 00000030: 9500 950f d1c0 2413 0020 4158 1620 050d  ......$.. AX. ..
-> 00000040: 2300 ffff 0000 001c 0000 00fc 004c 454e  #............LEN
-> 00000050: 204c 3139 3530 7744 0a20 0000 00fd 0032   L1950wD. .....2
-> 00000060: 4c1e 510e 000a 2020 2020 2020 0000 00ff  L.Q...      ....
-> 00000070: 0042 3334 3332 3834 350a 2020 2020 0101  .B3432845.    ..
-> 00000080: 0203 2171 4e06 0702 0315 9611 1213 0414  ..!qN...........
-> 00000090: 051f 9023 0907 0783 0100 0065 030c 0010  ...#.......e....
-> 000000a0: 008c 0ad0 9020 4031 200c 4055 00b9 8821  ..... @1 .@U...!
-> 000000b0: 0000 1801 1d80 1871 1c16 2058 2c25 00b9  .......q.. X,%..
-> 000000c0: 8821 0000 9e01 1d80 d072 1c16 2010 2c25  .!.......r.. .,%
-> 000000d0: 80b9 8821 0000 9e01 1d00 bc52 d01e 20b8  ...!.......R.. .
-> 000000e0: 2855 40b9 8821 0000 1e02 3a80 d072 382d  (U@..!....:..r8-
-> 000000f0: 4010 2c45 80b9 8821 0000 1e00 0000 00d0  @.,E...!........
-> root@letux:~# root@letux:~# dmesg|grep dw.hdmi
-> [    9.622138] dw-hdmi-ingenic 10180000.hdmi: Detected HDMI TX controller v1.31a with HDCP (DWC HDMI 3D TX PHY)
-> [    9.727840] dw-hdmi-ingenic 10180000.hdmi: registered DesignWare HDMI I2C bus driver
-> [   10.103864] dw_hdmi_bridge_atomic_get_output_bus_fmts: hdmi->sink_is_hdmi=1
-> 
-> So please let me know which parameters I should try to printk()...
-> 
-> BR and thanks,
-> Nikolaus
-> 
-> 
-> ------
-> 
->  From c84a3c4a500684e57b1243fe5386696c48fa1e1b Mon Sep 17 00:00:00 2001
-> From: Neil Armstrong <narmstrong@baylibre.com>
-> Date: Wed, 19 Jan 2022 13:36:56 +0100
-> Subject: [PATCH] drm/bridge: dw-hdmi: filter out YUV output formats when DVI
-> 
-> When the display is not an HDMI sink, only the RGB output format is
-> valid. Thus stop returning YUV output formats when sink is not HDMI.
-> 
-> Fixes: 6c3c719936da ("drm/bridge: synopsys: dw-hdmi: add bus format negociation")
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
 > ---
->   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 17 +++++++++--------
->   1 file changed, 9 insertions(+), 8 deletions(-)
+>  drivers/gpu/drm/panel/Kconfig                 |   9 +
+>  drivers/gpu/drm/panel/Makefile                |   1 +
+>  .../gpu/drm/panel/panel-newvision-nv3052c.c   | 504 
+> ++++++++++++++++++
+>  3 files changed, 514 insertions(+)
+>  create mode 100644 drivers/gpu/drm/panel/panel-newvision-nv3052c.c
 > 
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index 43e375da131e8..0ec0cbe448e05 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -2538,6 +2538,7 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->          struct drm_connector *conn = conn_state->connector;
->          struct drm_display_info *info = &conn->display_info;
->          struct drm_display_mode *mode = &crtc_state->mode;
-> +       struct dw_hdmi *hdmi = bridge->driver_private;
->          u8 max_bpc = conn_state->max_requested_bpc;
->          bool is_hdmi2_sink = info->hdmi.scdc.supported ||
->                               (info->color_formats & DRM_COLOR_FORMAT_YCBCR420);
-> @@ -2564,7 +2565,7 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->           * If the current mode enforces 4:2:0, force the output but format
->           * to 4:2:0 and do not add the YUV422/444/RGB formats
->           */
-> -       if (conn->ycbcr_420_allowed &&
-> +       if (hdmi->sink_is_hdmi && conn->ycbcr_420_allowed &&
->              (drm_mode_is_420_only(info, mode) ||
->               (is_hdmi2_sink && drm_mode_is_420_also(info, mode)))) {
->   
-> @@ -2595,36 +2596,36 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->           */
->   
->          if (max_bpc >= 16 && info->bpc == 16) {
-> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->                          output_fmts[i++] = MEDIA_BUS_FMT_YUV16_1X48;
->   
->                  output_fmts[i++] = MEDIA_BUS_FMT_RGB161616_1X48;
->          }
->   
->          if (max_bpc >= 12 && info->bpc >= 12) {
-> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
-> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
->                          output_fmts[i++] = MEDIA_BUS_FMT_UYVY12_1X24;
->   
-> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->                          output_fmts[i++] = MEDIA_BUS_FMT_YUV12_1X36;
->   
->                  output_fmts[i++] = MEDIA_BUS_FMT_RGB121212_1X36;
->          }
->   
->          if (max_bpc >= 10 && info->bpc >= 10) {
-> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
-> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
->                          output_fmts[i++] = MEDIA_BUS_FMT_UYVY10_1X20;
->   
-> -               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-> +               if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->                          output_fmts[i++] = MEDIA_BUS_FMT_YUV10_1X30;
->   
->                  output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
->          }
->   
-> -       if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
-> +       if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
->                  output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
->   
-> -       if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-> +       if (hdmi->sink_is_hdmi && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->                  output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
->   
->          /* Default 8bit RGB fallback */
+> diff --git a/drivers/gpu/drm/panel/Kconfig 
+> b/drivers/gpu/drm/panel/Kconfig
+> index bb2e47229c68..40084f709789 100644
+> --- a/drivers/gpu/drm/panel/Kconfig
+> +++ b/drivers/gpu/drm/panel/Kconfig
+> @@ -283,6 +283,15 @@ config DRM_PANEL_NEC_NL8048HL11
+>  	  panel (found on the Zoom2/3/3630 SDP boards). To compile this 
+> driver
+>  	  as a module, choose M here.
+> 
+> +config DRM_PANEL_NEWVISION_NV3052C
+> +	tristate "NewVision NV3052C RGB/SPI panel"
+> +	depends on OF && SPI
+> +	depends on BACKLIGHT_CLASS_DEVICE
+> +	select DRM_MIPI_DBI
+> +	help
+> +	  Say Y here if you want to enable support for the panels built
+> +	  around the NewVision NV3052C display controller.
+> +
+>  config DRM_PANEL_NOVATEK_NT35510
+>  	tristate "Novatek NT35510 RGB panel driver"
+>  	depends on OF
+> diff --git a/drivers/gpu/drm/panel/Makefile 
+> b/drivers/gpu/drm/panel/Makefile
+> index 5740911f637c..42a7ab54234b 100644
+> --- a/drivers/gpu/drm/panel/Makefile
+> +++ b/drivers/gpu/drm/panel/Makefile
+> @@ -26,6 +26,7 @@ obj-$(CONFIG_DRM_PANEL_LEADTEK_LTK500HD1829) += 
+> panel-leadtek-ltk500hd1829.o
+>  obj-$(CONFIG_DRM_PANEL_LG_LB035Q02) += panel-lg-lb035q02.o
+>  obj-$(CONFIG_DRM_PANEL_LG_LG4573) += panel-lg-lg4573.o
+>  obj-$(CONFIG_DRM_PANEL_NEC_NL8048HL11) += panel-nec-nl8048hl11.o
+> +obj-$(CONFIG_DRM_PANEL_NEWVISION_NV3052C) += 
+> panel-newvision-nv3052c.o
+>  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35510) += panel-novatek-nt35510.o
+>  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35560) += panel-novatek-nt35560.o
+>  obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35950) += panel-novatek-nt35950.o
+> diff --git a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c 
+> b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+> new file mode 100644
+> index 000000000000..08a3b33bcce0
+> --- /dev/null
+> +++ b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+> @@ -0,0 +1,504 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * NevVision NV3052C IPS LCD panel driver
+> + *
+> + * Copyright (C) 2020, Paul Cercueil <paul@crapouillou.net>
+> + * Copyright (C) 2022, Christophe Branchereau 
+> <cbranchereau@gmail.com>
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/media-bus-format.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/spi/spi.h>
+> +
+> +#include <video/mipi_display.h>
+> +
+> +#include <drm/drm_mipi_dbi.h>
+> +#include <drm/drm_modes.h>
+> +#include <drm/drm_panel.h>
+> +
+> +struct nv3052c_panel_info {
+> +	const struct drm_display_mode *display_modes;
+> +	unsigned int num_modes;
+> +	u16 width_mm, height_mm;
+> +	u32 bus_format, bus_flags;
+> +};
+> +
+> +struct nv3052c {
+> +	struct device *dev;
+> +	struct drm_panel panel;
+> +	struct mipi_dbi dbi;
+> +
+> +	const struct nv3052c_panel_info *panel_info;
+> +
+> +	struct regulator *supply;
+> +	struct gpio_desc *reset_gpio;
+> +};
+> +
+> +struct nv3052c_reg {
+> +	u8 cmd;
+> +	u8 val;
+> +};
+> +
+> +static const struct nv3052c_reg nv3052c_panel_regs[] = {
+> +	{ 0xff, 0x30 },
+> +	{ 0xff, 0x52 },
+> +	{ 0xff, 0x01 },
+> +	{ 0xe3, 0x00 },
+> +	{ 0x40, 0x00 },
+> +	{ 0x03, 0x40 },
+> +	{ 0x04, 0x00 },
+> +	{ 0x05, 0x03 },
+> +	{ 0x08, 0x00 },
+> +	{ 0x09, 0x07 },
+> +	{ 0x0a, 0x01 },
+> +	{ 0x0b, 0x32 },
+> +	{ 0x0c, 0x32 },
+> +	{ 0x0d, 0x0b },
+> +	{ 0x0e, 0x00 },
+> +	{ 0x23, 0xa0 },
+> +
+> +	{ 0x24, 0x0c },
+> +	{ 0x25, 0x06 },
+> +	{ 0x26, 0x14 },
+> +	{ 0x27, 0x14 },
+> +
+> +	{ 0x38, 0xcc },
+> +	{ 0x39, 0xd7 },
+> +	{ 0x3a, 0x4a },
+> +
+> +	{ 0x28, 0x40 },
+> +	{ 0x29, 0x01 },
+> +	{ 0x2a, 0xdf },
+> +	{ 0x49, 0x3c },
+> +	{ 0x91, 0x77 },
+> +	{ 0x92, 0x77 },
+> +	{ 0xa0, 0x55 },
+> +	{ 0xa1, 0x50 },
+> +	{ 0xa4, 0x9c },
+> +	{ 0xa7, 0x02 },
+> +	{ 0xa8, 0x01 },
+> +	{ 0xa9, 0x01 },
+> +	{ 0xaa, 0xfc },
+> +	{ 0xab, 0x28 },
+> +	{ 0xac, 0x06 },
+> +	{ 0xad, 0x06 },
+> +	{ 0xae, 0x06 },
+> +	{ 0xaf, 0x03 },
+> +	{ 0xb0, 0x08 },
+> +	{ 0xb1, 0x26 },
+> +	{ 0xb2, 0x28 },
+> +	{ 0xb3, 0x28 },
+> +	{ 0xb4, 0x33 },
+> +	{ 0xb5, 0x08 },
+> +	{ 0xb6, 0x26 },
+> +	{ 0xb7, 0x08 },
+> +	{ 0xb8, 0x26 },
+> +	{ 0xf0, 0x00 },
+> +	{ 0xf6, 0xc0 },
+> +
+> +	{ 0xff, 0x30 },
+> +	{ 0xff, 0x52 },
+> +	{ 0xff, 0x02 },
+> +	{ 0xb0, 0x0b },
+> +	{ 0xb1, 0x16 },
+> +	{ 0xb2, 0x17 },
+> +	{ 0xb3, 0x2c },
+> +	{ 0xb4, 0x32 },
+> +	{ 0xb5, 0x3b },
+> +	{ 0xb6, 0x29 },
+> +	{ 0xb7, 0x40 },
+> +	{ 0xb8, 0x0d },
+> +	{ 0xb9, 0x05 },
+> +	{ 0xba, 0x12 },
+> +	{ 0xbb, 0x10 },
+> +	{ 0xbc, 0x12 },
+> +	{ 0xbd, 0x15 },
+> +	{ 0xbe, 0x19 },
+> +	{ 0xbf, 0x0e },
+> +	{ 0xc0, 0x16 },
+> +	{ 0xc1, 0x0a },
+> +	{ 0xd0, 0x0c },
+> +	{ 0xd1, 0x17 },
+> +	{ 0xd2, 0x14 },
+> +	{ 0xd3, 0x2e },
+> +	{ 0xd4, 0x32 },
+> +	{ 0xd5, 0x3c },
+> +	{ 0xd6, 0x22 },
+> +	{ 0xd7, 0x3d },
+> +	{ 0xd8, 0x0d },
+> +	{ 0xd9, 0x07 },
+> +	{ 0xda, 0x13 },
+> +	{ 0xdb, 0x13 },
+> +	{ 0xdc, 0x11 },
+> +	{ 0xdd, 0x15 },
+> +	{ 0xde, 0x19 },
+> +	{ 0xdf, 0x10 },
+> +	{ 0xe0, 0x17 },
+> +	{ 0xe1, 0x0a },
+> +
+> +	{ 0xff, 0x30 },
+> +	{ 0xff, 0x52 },
+> +	{ 0xff, 0x03 },
+> +	{ 0x00, 0x2a },
+> +	{ 0x01, 0x2a },
+> +	{ 0x02, 0x2a },
+> +	{ 0x03, 0x2a },
+> +	{ 0x04, 0x61 },
+> +	{ 0x05, 0x80 },
+> +	{ 0x06, 0xc7 },
+> +	{ 0x07, 0x01 },
+> +	{ 0x08, 0x03 },
+> +	{ 0x09, 0x04 },
+> +	{ 0x70, 0x22 },
+> +	{ 0x71, 0x80 },
+> +	{ 0x30, 0x2a },
+> +	{ 0x31, 0x2a },
+> +	{ 0x32, 0x2a },
+> +	{ 0x33, 0x2a },
+> +	{ 0x34, 0x61 },
+> +	{ 0x35, 0xc5 },
+> +	{ 0x36, 0x80 },
+> +	{ 0x37, 0x23 },
+> +	{ 0x40, 0x03 },
+> +	{ 0x41, 0x04 },
+> +	{ 0x42, 0x05 },
+> +	{ 0x43, 0x06 },
+> +	{ 0x44, 0x11 },
+> +	{ 0x45, 0xe8 },
+> +	{ 0x46, 0xe9 },
+> +	{ 0x47, 0x11 },
+> +	{ 0x48, 0xea },
+> +	{ 0x49, 0xeb },
+> +	{ 0x50, 0x07 },
+> +	{ 0x51, 0x08 },
+> +	{ 0x52, 0x09 },
+> +	{ 0x53, 0x0a },
+> +	{ 0x54, 0x11 },
+> +	{ 0x55, 0xec },
+> +	{ 0x56, 0xed },
+> +	{ 0x57, 0x11 },
+> +	{ 0x58, 0xef },
+> +	{ 0x59, 0xf0 },
+> +	{ 0xb1, 0x01 },
+> +	{ 0xb4, 0x15 },
+> +	{ 0xb5, 0x16 },
+> +	{ 0xb6, 0x09 },
+> +	{ 0xb7, 0x0f },
+> +	{ 0xb8, 0x0d },
+> +	{ 0xb9, 0x0b },
+> +	{ 0xba, 0x00 },
+> +	{ 0xc7, 0x02 },
+> +	{ 0xca, 0x17 },
+> +	{ 0xcb, 0x18 },
+> +	{ 0xcc, 0x0a },
+> +	{ 0xcd, 0x10 },
+> +	{ 0xce, 0x0e },
+> +	{ 0xcf, 0x0c },
+> +	{ 0xd0, 0x00 },
+> +	{ 0x81, 0x00 },
+> +	{ 0x84, 0x15 },
+> +	{ 0x85, 0x16 },
+> +	{ 0x86, 0x10 },
+> +	{ 0x87, 0x0a },
+> +	{ 0x88, 0x0c },
+> +	{ 0x89, 0x0e },
+> +	{ 0x8a, 0x02 },
+> +	{ 0x97, 0x00 },
+> +	{ 0x9a, 0x17 },
+> +	{ 0x9b, 0x18 },
+> +	{ 0x9c, 0x0f },
+> +	{ 0x9d, 0x09 },
+> +	{ 0x9e, 0x0b },
+> +	{ 0x9f, 0x0d },
+> +	{ 0xa0, 0x01 },
+> +
+> +	{ 0xff, 0x30 },
+> +	{ 0xff, 0x52 },
+> +	{ 0xff, 0x02 },
+> +	{ 0x01, 0x01 },
+> +	{ 0x02, 0xda },
+> +	{ 0x03, 0xba },
+> +	{ 0x04, 0xa8 },
+> +	{ 0x05, 0x9a },
+> +	{ 0x06, 0x70 },
+> +	{ 0x07, 0xff },
+> +	{ 0x08, 0x91 },
+> +	{ 0x09, 0x90 },
+> +	{ 0x0a, 0xff },
+> +	{ 0x0b, 0x8f },
+> +	{ 0x0c, 0x60 },
+> +	{ 0x0d, 0x58 },
+> +	{ 0x0e, 0x48 },
+> +	{ 0x0f, 0x38 },
+> +	{ 0x10, 0x2b },
+> +
+> +	{ 0xff, 0x30 },
+> +	{ 0xff, 0x52 },
+> +	{ 0xff, 0x00 },
+> +	{ 0x36, 0x0a },
+> +};
+> +
+> +static inline struct nv3052c *to_nv3052c(struct drm_panel *panel)
+> +{
+> +	return container_of(panel, struct nv3052c, panel);
+> +}
+> +
+> +static int nv3052c_prepare(struct drm_panel *panel)
+> +{
+> +	struct nv3052c *priv = to_nv3052c(panel);
+> +	struct mipi_dbi *dbi = &priv->dbi;
+> +	unsigned int i;
+> +	int err;
+> +
+> +	err = regulator_enable(priv->supply);
+> +	if (err) {
+> +		dev_err(priv->dev, "Failed to enable power supply: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	/* Reset the chip */
+> +	gpiod_set_value_cansleep(priv->reset_gpio, 1);
+> +	usleep_range(10, 1000);
+> +	gpiod_set_value_cansleep(priv->reset_gpio, 0);
+> +	msleep(5);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(nv3052c_panel_regs); i++) {
+> +		err = mipi_dbi_command(dbi, nv3052c_panel_regs[i].cmd,
+> +				       nv3052c_panel_regs[i].val);
+> +
+> +		if (err) {
+> +			dev_err(priv->dev, "Unable to set register: %d\n", err);
+> +			goto err_disable_regulator;
+> +		}
+> +	}
+> +
+> +	err = mipi_dbi_command(dbi, MIPI_DCS_EXIT_SLEEP_MODE);
+> +	if (err) {
+> +		dev_err(priv->dev, "Unable to exit sleep mode: %d\n", err);
+> +		goto err_disable_regulator;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_disable_regulator:
+> +	regulator_disable(priv->supply);
+> +	return err;
+> +}
+> +
+> +static int nv3052c_unprepare(struct drm_panel *panel)
+> +{
+> +	struct nv3052c *priv = to_nv3052c(panel);
+> +	struct mipi_dbi *dbi = &priv->dbi;
+> +	int err;
+> +
+> +	err = mipi_dbi_command(dbi, MIPI_DCS_ENTER_SLEEP_MODE);
+> +	if (err) {
+> +		dev_err(priv->dev, "Unable to enter sleep mode: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	gpiod_set_value_cansleep(priv->reset_gpio, 1);
+> +	regulator_disable(priv->supply);
+> +
+> +	return 0;
+> +}
+> +
+> +static int nv3052c_enable(struct drm_panel *panel)
+> +{
+> +	struct nv3052c *priv = to_nv3052c(panel);
+> +	struct mipi_dbi *dbi = &priv->dbi;
+> +	int err;
+> +
+> +	err = mipi_dbi_command(dbi, MIPI_DCS_SET_DISPLAY_ON);
+> +	if (err) {
+> +		dev_err(priv->dev, "Unable to enable display: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	if (panel->backlight) {
+> +		/* Wait for the picture to be ready before enabling backlight */
+> +		msleep(120);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int nv3052c_disable(struct drm_panel *panel)
+> +{
+> +	struct nv3052c *priv = to_nv3052c(panel);
+> +	struct mipi_dbi *dbi = &priv->dbi;
+> +	int err;
+> +
+> +	err = mipi_dbi_command(dbi, MIPI_DCS_SET_DISPLAY_OFF);
+> +	if (err) {
+> +		dev_err(priv->dev, "Unable to disable display: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int nv3052c_get_modes(struct drm_panel *panel,
+> +			     struct drm_connector *connector)
+> +{
+> +	struct nv3052c *priv = to_nv3052c(panel);
+> +	const struct nv3052c_panel_info *panel_info = priv->panel_info;
+> +	struct drm_display_mode *mode;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < panel_info->num_modes; i++) {
+> +		mode = drm_mode_duplicate(connector->dev,
+> +					  &panel_info->display_modes[i]);
+> +		if (!mode)
+> +			return -ENOMEM;
+> +
+> +		drm_mode_set_name(mode);
+> +
+> +		mode->type = DRM_MODE_TYPE_DRIVER;
+> +		if (panel_info->num_modes == 1)
+> +			mode->type |= DRM_MODE_TYPE_PREFERRED;
+> +
+> +		drm_mode_probed_add(connector, mode);
+> +	}
+> +
+> +	connector->display_info.bpc = 8;
+> +	connector->display_info.width_mm = panel_info->width_mm;
+> +	connector->display_info.height_mm = panel_info->height_mm;
+> +
+> +	drm_display_info_set_bus_formats(&connector->display_info,
+> +					 &panel_info->bus_format, 1);
+> +	connector->display_info.bus_flags = panel_info->bus_flags;
+> +
+> +	return panel_info->num_modes;
+> +}
+> +
+> +static const struct drm_panel_funcs nv3052c_funcs = {
+> +	.prepare	= nv3052c_prepare,
+> +	.unprepare	= nv3052c_unprepare,
+> +	.enable		= nv3052c_enable,
+> +	.disable	= nv3052c_disable,
+> +	.get_modes	= nv3052c_get_modes,
+> +};
+> +
+> +static int nv3052c_probe(struct spi_device *spi)
+> +{
+> +	struct device *dev = &spi->dev;
+> +	struct nv3052c *priv;
+> +	int err;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->dev = dev;
+> +
+> +	priv->panel_info = of_device_get_match_data(dev);
+> +	if (!priv->panel_info)
+> +		return -EINVAL;
+> +
+> +	priv->supply = devm_regulator_get(dev, "power");
+> +	if (IS_ERR(priv->supply)) {
+> +		dev_err(dev, "Failed to get power supply\n");
+> +		return PTR_ERR(priv->supply);
+
+You can use dev_err_probe() here,
+
+> +	}
+> +
+> +	priv->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+> +	if (IS_ERR(priv->reset_gpio)) {
+> +		dev_err(dev, "Failed to get reset GPIO\n");
+> +		return PTR_ERR(priv->reset_gpio);
+
+and here as well, since devm_{regulator,gpiod}_get() may return 
+-EPROBE_DEFER.
+
+The rest of the driver looks fine to me.
+
+Cheers,
+-Paul
+
+> +	}
+> +
+> +	err = mipi_dbi_spi_init(spi, &priv->dbi, NULL);
+> +	if (err)
+> +		return dev_err_probe(dev, err, "MIPI DBI init failed\n");
+> +
+> +	priv->dbi.read_commands = NULL;
+> +
+> +	spi_set_drvdata(spi, priv);
+> +
+> +	drm_panel_init(&priv->panel, dev, &nv3052c_funcs,
+> +		       DRM_MODE_CONNECTOR_DPI);
+> +
+> +	err = drm_panel_of_backlight(&priv->panel);
+> +	if (err < 0) {
+> +		if (err != -EPROBE_DEFER)
+> +			dev_err(dev, "Failed to attach backlight\n");
+> +		return err;
+> +	}
+> +
+> +	drm_panel_add(&priv->panel);
+> +
+> +	return 0;
+> +}
+> +
+> +static int nv3052c_remove(struct spi_device *spi)
+> +{
+> +	struct nv3052c *priv = spi_get_drvdata(spi);
+> +
+> +	drm_panel_remove(&priv->panel);
+> +	drm_panel_disable(&priv->panel);
+> +	drm_panel_unprepare(&priv->panel);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct drm_display_mode ltk035c5444t_modes[] = {
+> +	{ /* 60 Hz */
+> +		.clock = 24000,
+> +		.hdisplay = 640,
+> +		.hsync_start = 640 + 96,
+> +		.hsync_end = 640 + 96 + 16,
+> +		.htotal = 640 + 96 + 16 + 48,
+> +		.vdisplay = 480,
+> +		.vsync_start = 480 + 5,
+> +		.vsync_end = 480 + 5 + 2,
+> +		.vtotal = 480 + 5 + 2 + 13,
+> +		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
+> +	},
+> +	{ /* 50 Hz */
+> +		.clock = 18000,
+> +		.hdisplay = 640,
+> +		.hsync_start = 640 + 39,
+> +		.hsync_end = 640 + 39 + 2,
+> +		.htotal = 640 + 39 + 2 + 39,
+> +		.vdisplay = 480,
+> +		.vsync_start = 480 + 5,
+> +		.vsync_end = 480 + 5 + 2,
+> +		.vtotal = 480 + 5 + 2 + 13,
+> +		.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
+> +	},
+> +};
+> +
+> +static const struct nv3052c_panel_info ltk035c5444t_spi_panel_info = 
+> {
+> +	.display_modes = ltk035c5444t_modes,
+> +	.num_modes = ARRAY_SIZE(ltk035c5444t_modes),
+> +	.width_mm = 77,
+> +	.height_mm = 64,
+> +	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
+> +	.bus_flags = DRM_BUS_FLAG_DE_HIGH | 
+> DRM_BUS_FLAG_PIXDATA_DRIVE_NEGEDGE,
+> +};
+> +
+> +static const struct of_device_id nv3052c_of_match[] = {
+> +	{ .compatible = "leadtek,ltk035c5444t-spi", .data = 
+> &ltk035c5444t_spi_panel_info },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, nv3052c_of_match);
+> +
+> +static struct spi_driver nv3052c_driver = {
+> +	.driver = {
+> +		.name = "nv3052c",
+> +		.of_match_table = nv3052c_of_match,
+> +	},
+> +	.probe = nv3052c_probe,
+> +	.remove = nv3052c_remove,
+> +};
+> +module_spi_driver(nv3052c_driver);
+> +
+> +MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
+> +MODULE_AUTHOR("Christophe Branchereau <cbranchereau@gmail.com>");
+> +MODULE_LICENSE("GPL v2");
+> --
+> 2.34.1
+> 
+
 
