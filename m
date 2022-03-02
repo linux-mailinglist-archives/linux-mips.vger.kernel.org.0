@@ -2,257 +2,88 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F524CA0B4
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Mar 2022 10:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB424CA12B
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Mar 2022 10:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbiCBJ3V (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Mar 2022 04:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+        id S236880AbiCBJsT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Mar 2022 04:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiCBJ3U (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Mar 2022 04:29:20 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D7FA2B253;
-        Wed,  2 Mar 2022 01:28:35 -0800 (PST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxsM67OB9iLz8BAA--.6653S3;
-        Wed, 02 Mar 2022 17:28:27 +0800 (CST)
-Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
-To:     Mike Rapoport <rppt@kernel.org>
-References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
- <Yh3tgr+g/6IElq0P@kernel.org>
- <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
- <Yh4uUoYT+YS5Jxsv@kernel.org>
- <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
- <Yh8kzK7TM7EhaKEQ@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <ab104917-d370-cbf3-6017-6e8e40221860@loongson.cn>
-Date:   Wed, 2 Mar 2022 17:28:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        with ESMTP id S240615AbiCBJsR (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Mar 2022 04:48:17 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED192D1E9
+        for <linux-mips@vger.kernel.org>; Wed,  2 Mar 2022 01:47:30 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id j5so1024866qvs.13
+        for <linux-mips@vger.kernel.org>; Wed, 02 Mar 2022 01:47:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=oVymzacBmHlfSEBN0NUcViscc1BlJREjJA6+b6RGOmg=;
+        b=QWdde23KNX46k7WkqryQHz1i3nNKX3hJ6bUw0DjcHiOt75WWu7w5auh04nLkT/xnOJ
+         R0VQHYTpPb3pK1dC5Q61RFQMwi4trskiEVa2TQn04UuisHYWibAazS7ATmu54TIBxXdA
+         5lK9Ys3nLH2M+OL5YbUWmBjXKkfNKuHDhT335FY7373hVh3ljtDU7hufDm+HoFdxRSC5
+         irTZ1zsjvdJCrCgb+ck2wdaojqCCFwevHlYpXu0UnAPPXOqgUXh+Q4uM4deQ12SqSBxO
+         anQ3SzaZnzqNuLNM3DIBa/tSUB0jwrQxi9OOPrEA2SXa6sqI0YSXgXVQjBwH2TaK1Eg7
+         1gOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=oVymzacBmHlfSEBN0NUcViscc1BlJREjJA6+b6RGOmg=;
+        b=N4Ix+fSC3n6D3AUsxVISkMexZ0WBEz2213xdPFWvvW8349/FiVxHpNa2IuqGzdocnM
+         PM7Rpd2fQ4xQVWQQB2sSiabT/74E4HaLqY9KlkImFQyfdbh40zVBxD2JrT/EqaaadE/+
+         y3mrAt7sq0ZZcpIft/4oyI4dZmUgJ56dlw8/Jskf+JUQKjdnG87D2iCrojpTEM0z6O0t
+         Owj99AX+hWLYikZI1LFFPubhqpAmM0vGXbKod5XSqOLX+C8ZcC2fKMpj3yibmX5QbojA
+         TC+L7khKuyUW9/nuiEcxjjXJj97+tH4WwLeFXjqwE/TgcgY/AXR27YQ5BSh1PTPjwdNX
+         EPRA==
+X-Gm-Message-State: AOAM530KlRH7Z/gR6GN92KngM6o9/HtQXwq/VeRS7Yr2BryoQHtkJ45L
+        cM7JvU2yfLXMEztddotEXdrXUGP0fRwWP3bqjNA=
+X-Google-Smtp-Source: ABdhPJwbpxn+o5lpNUFUhQmBWdx4hvUvkX98PANWZ50On8S1tPm3b2kQMdzMgrFsQtUtHu3RHExhB4D+i2WeoxrhN7I=
+X-Received: by 2002:a05:6214:f2d:b0:432:dc5f:ea15 with SMTP id
+ iw13-20020a0562140f2d00b00432dc5fea15mr14989081qvb.81.1646214448456; Wed, 02
+ Mar 2022 01:47:28 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <Yh8kzK7TM7EhaKEQ@kernel.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf9BxsM67OB9iLz8BAA--.6653S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Gw1xKFy3Kry3tw17Jr18Xwb_yoW3CrWfpF
-        WxX3Wjgr4kJryUAr1xtw17Jr9Iy34FkF1DXr13trn7Z3Z8trnrJw1UJr1Uua47Ary5JF1q
-        vF48tF9F9w4UAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxkIecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JU4BT5UUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:ad4:5443:0:0:0:0:0 with HTTP; Wed, 2 Mar 2022 01:47:27 -0800 (PST)
+From:   Anna Zakharchenko <fpar.org@gmail.com>
+Date:   Wed, 2 Mar 2022 10:47:27 +0100
+Message-ID: <CALr0R0oEzU-WF+OhADUDAnG2qytOv4T7_0dX6YBZoqPbR=3=NA@mail.gmail.com>
+Subject: Re: Help me in Ukraine
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+Hello,
 
 
-On 03/02/2022 04:03 PM, Mike Rapoport wrote:
-> On Wed, Mar 02, 2022 at 09:50:49AM +0800, Tiezhu Yang wrote:
->>
->>
->> On 03/01/2022 10:31 PM, Mike Rapoport wrote:
->>> On Tue, Mar 01, 2022 at 07:51:23PM +0800, Tiezhu Yang wrote:
->>>>
->>>>
->>>> On 03/01/2022 05:55 PM, Mike Rapoport wrote:
->>>>> Hi,
->>>>>
->>>>> On Tue, Mar 01, 2022 at 12:28:57PM +0800, Tiezhu Yang wrote:
->>>>>> In the current code, the kernel command-line parameter mem= and memmap=
->>>>>> can not work well on MIPS, this patchset refactors the related code to
->>>>>> fix them.
->>>>>>
->>>>>> For kdump on MIPS, if the users want to limit the memory region for the
->>>>>> capture kernel to avoid corrupting the memory image of the panic kernel,
->>>>>> use the parameter memmap=limit@base is the proper way, I will submit a
->>>>>> patch to use memmap=limit@base for kexec-tools after this patchset is
->>>>>> applied.
->>>>>
->>>>> Sorry, apparently I misread the prevoius version.
->>>>> What's wrong with the current implementation of mem=limit@base for the
->>>>> kdump case?
->>>>
->>>> In the current code, without this patchset, kernel boot hangs when add
->>>> mem=3G, mem=3G@64M or memmap=3G@64M to the command-line, it means that
->>>> the parameter mem= and memmap= have bug on mips.
->>>
->>> I can see how mem=3G may be wrong when the memory does not start at 0, but
->>> it seems to do the right thing of mem=3G@64M.
->>>
->>> Do you see system hangs with mem=3G@64M?
->>
->> Yes.
->>
->>>
->>> Do you have the logs before the hang?
->>
->> Here are the logs:
->>
->> [    0.000000] Linux version 5.17.0-rc3+ (loongson@linux) (gcc (GCC) 7.3.1
->> 20180303 (Red Hat 7.3.1-6), GNU ld version 2.28-13.fc21.loongson.6) #1 SMP
->> PREEMPT Wed Mar 2 09:07:39 CST 2022
->> [    0.000000] CpuClock = 1800000000
->> [    0.000000] The bridge chip is LS7A
->> [    0.000000] CP0_Config3: CP0 16.3 (0xdc8030a0)
->> [    0.000000] CP0_PageGrain: CP0 5.1 (0x28000000)
->> [    0.000000] NUMA: Discovered 4 cpus on 1 nodes
->> [    0.000000] Node0: mem_type:1, mem_start:0x200000, mem_size:0xee MB
->> [    0.000000]        start_pfn:0x80, end_pfn:0x3c00, num_physpages:0x3b80
->> [    0.000000] Node0: mem_type:2, mem_start:0x90200000, mem_size:0x6fe MB
->> [    0.000000]        start_pfn:0x24080, end_pfn:0x40000,
->> num_physpages:0x1fb00
->> [    0.000000] Node0: mem_type:2, mem_start:0x120000000, mem_size:0x1600 MB
->> [    0.000000]        start_pfn:0x48000, end_pfn:0xa0000,
->> num_physpages:0x77b00
->> [    0.000000] Node0's addrspace_offset is 0x0
->> [    0.000000] Node0: start_pfn=0x80, end_pfn=0xa0000
->> [    0.000000] NUMA: set cpumask cpu 0 on node 0
->> [    0.000000] NUMA: set cpumask cpu 1 on node 0
->> [    0.000000] NUMA: set cpumask cpu 2 on node 0
->> [    0.000000] NUMA: set cpumask cpu 3 on node 0
->> [    0.000000] printk: bootconsole [early0] enabled
->> [    0.000000] CPU0 revision is: 0014c001 (ICT Loongson-3)
->> [    0.000000] FPU revision is: 00f70501
->> [    0.000000] MSA revision is: 00060140
->> [    0.000000] OF: fdt: No chosen node found, continuing without
->> [    0.000000] MIPS: machine is loongson,loongson64g-4core-ls7a
->> [    0.000000] User-defined physical RAM map overwrite
->> [    0.000000] Kernel sections are not in the memory maps
->> [    0.000000] Initrd not found or empty - disabling initrd
->
-> Can you please also send the log with "memblock=debug" added to the kernel
-> command line?
+I am a Russian widow trapped in Ukraine's Donbass region amid Vladimir
+Putin's senseless conflict. During the 2014 battle in the Donbass, I
+lost my husband, a prominent Ukrainian businessman, who died without
+having children with me. I am currently in an underground bunker in
+Donetsk Oblast, a separatist war zone recognized by Russian President
+Vladimir Putin. I urgently request your assistance in moving my family
+trust fund worth =C2=A33,500,000.00 from the UK to your country to prevent
+European Union sanctions from seizing my money because I am a Russian
+citizen.
 
-[    0.000000] Linux version 5.17.0-rc3+ (loongson@linux) (gcc (GCC) 
-7.3.1 20180303 (Red Hat 7.3.1-6), GNU ld version 
-2.28-13.fc21.loongson.6) #1 SMP PREEMPT Wed Mar 2 09:07:39 CST 2022
-[    0.000000] CpuClock = 1800000000
-[    0.000000] The bridge chip is LS7A
-[    0.000000] CP0_Config3: CP0 16.3 (0xdc8030a0)
-[    0.000000] CP0_PageGrain: CP0 5.1 (0x28000000)
-[    0.000000] NUMA: Discovered 4 cpus on 1 nodes
-[    0.000000] Node0: mem_type:1, mem_start:0x200000, mem_size:0xee MB
-[    0.000000]        start_pfn:0x80, end_pfn:0x3c00, num_physpages:0x3b80
-[    0.000000] Node0: mem_type:2, mem_start:0x90200000, mem_size:0x6fe MB
-[    0.000000]        start_pfn:0x24080, end_pfn:0x40000, 
-num_physpages:0x1fb00
-[    0.000000] Node0: mem_type:2, mem_start:0x120000000, mem_size:0x1600 MB
-[    0.000000]        start_pfn:0x48000, end_pfn:0xa0000, 
-num_physpages:0x77b00
-[    0.000000] Node0's addrspace_offset is 0x0
-[    0.000000] Node0: start_pfn=0x80, end_pfn=0xa0000
-[    0.000000] NUMA: set cpumask cpu 0 on node 0
-[    0.000000] NUMA: set cpumask cpu 1 on node 0
-[    0.000000] NUMA: set cpumask cpu 2 on node 0
-[    0.000000] NUMA: set cpumask cpu 3 on node 0
-[    0.000000] printk: bootconsole [early0] enabled
-[    0.000000] CPU0 revision is: 0014c001 (ICT Loongson-3)
-[    0.000000] FPU revision is: 00f70501
-[    0.000000] MSA revision is: 00060140
-[    0.000000] OF: fdt: No chosen node found, continuing without
-[    0.000000] MIPS: machine is loongson,loongson64g-4core-ls7a
-[    0.000000] User-defined physical RAM map overwrite
-[    0.000000] Kernel sections are not in the memory maps
-[    0.000000] memblock_add: [0x0000000000200000-0x000000000231185f] 
-setup_arch+0x140/0x794
-[    0.000000] memblock_reserve: [0x0000000001260520-0x0000000001262560] 
-setup_arch+0x148/0x794
-[    0.000000] Initrd not found or empty - disabling initrd
-[    0.000000] memblock_alloc_try_nid: 8257 bytes align=0x40 nid=-1 
-from=0x0000000000000000 max_addr=0x0000000000000000 
-early_init_dt_alloc_memory_arch+0x30/0x60
-[    0.000000] memblock_reserve: [0x0000000004000000-0x0000000004002040] 
-memblock_alloc_range_nid+0xf0/0x178
-[    0.000000] memblock_alloc_try_nid: 37972 bytes align=0x8 nid=-1 
-from=0x0000000000000000 max_addr=0x0000000000000000 
-early_init_dt_alloc_memory_arch+0x30/0x60
-[    0.000000] memblock_reserve: [0x0000000004002048-0x000000000400b49b] 
-memblock_alloc_range_nid+0xf0/0x178
+Please help me save and protect this money. You will receive 30% of
+the total money as a reward for your efforts, while you must keep 70%
+for me until the conflict is over. For more information, you can
+contact me directly at (anna@sc2000.net).
 
->
->>> As for memmap= option, it does not specify the memory map but rather alters
->>> the memory map passed by the firmware. Particularity in MIPS implementation
->>> it allows to add a single range of available or reserved memory.
->>>
->>> AFAIU, for the kdump use-case mem=X@Y should suffice.
->>
->> We can modify some code to make mem=X@Y work well,
->> but according to Documentation/admin-guide/kernel-parameters.txt,
->> the common way is mem=X and memmap=X@Y, so mem=X@Y for mips seems
->> odd, the intention of this patchset is to make mem= and memmap=
->> work well and consistent with the other archs.
->
-> These options are anyway not consistent on different architectures.
-> arm, mips and x86 implement mem= one way and arm64, powerpc and riscv in
-> another so there is no common way to use mem=.
->
-> Your changes will break the existing systems that use mem= and memmap=
-> options because they change the semantics of their MIPS implementation.
 
-Thank you, I know your opinion.
-Let's wait for Thomas's review to get some more feedbacks.
-
-Thanks,
-Tiezhu
-
->
-> For kexec/kdump use-cases modern architectures usually do not pass mem= but
-> rather prepare the memory map for the kexeced kernel to use. I believe this
-> would be the right solution.
->
->> Thanks,
->> Tiezhu
->>
->>>
->>>> Thanks,
->>>> Tiezhu
->>>>
->>>>>
->>>>>> v4: Fix some build warnings reported by kernel test robot
->>>>>>
->>>>>> v3: Modify patch #3 to maintain compatibility for memmap=limit{$,#,!}base,
->>>>>>     commented by Mike Rapoport, thank you
->>>>>>
->>>>>> v2: Add some new patches to support memmap=limit@base
->>>>>>
->>>>>> Tiezhu Yang (4):
->>>>>>   MIPS: Refactor early_parse_mem() to fix mem= parameter
->>>>>>   memblock: Introduce memblock_mem_range_remove_map()
->>>>>>   MIPS: Refactor early_parse_memmap() to fix memmap= parameter
->>>>>>   MIPS: Remove not used variable usermem
->>>>>>
->>>>>>  arch/mips/kernel/setup.c | 69 ++++++++++++++++++++++--------------------------
->>>>>>  include/linux/memblock.h |  1 +
->>>>>>  mm/memblock.c            |  9 +++++--
->>>>>>  3 files changed, 40 insertions(+), 39 deletions(-)
->>>>>>
->>>>>> --
->>>>>> 2.1.0
->>>>>>
->>>>>
->>>>
->>>
->>
->
-
+Cordially
+Anna Zakharchenko
+My email address is: anna@sc2000.net
