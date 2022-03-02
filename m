@@ -2,362 +2,183 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF834C9718
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Mar 2022 21:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F9E4C9AB6
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Mar 2022 02:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237363AbiCAUiZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 1 Mar 2022 15:38:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
+        id S232397AbiCBBvj (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 1 Mar 2022 20:51:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234838AbiCAUiY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Mar 2022 15:38:24 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0067D29CB7;
-        Tue,  1 Mar 2022 12:37:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646167042;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=enUl4JsrLhrG2ZRTNPwk0f5xsufFIJ2pEEMEeqkBDQY=;
-    b=qoaCbST4XMW18rHVYihdg0wovg73mOulySTYQqkRjiopnvLmPoosis+1Gg3HSdtCcA
-    S1cwieVNCzK1I2O+vs9H4QScr74kBvXTWkbfZrMAa0zFNKh2PPfljv/ae2OFgpUPpTog
-    svrIoTxdE3OvmtmTk+1Jf+4VT0CaKaS6nhsHuhExtVKoR2bYp0zXRmUU9mrOrVYpX/og
-    QVk0mKsf5kTJrg9GN+W+Yz50jczFb+tGQf/qp7ikjbzSE7tXP5yoGoYiQpDP0vqmR3d/
-    5QzM+vMh4xr0Vv05psmycwKdbwr5hqkjkyupeXerkL/zVAHLNPxHLPLY4CFOdlUkahSK
-    OKCg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw47sdXM="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
-    with ESMTPSA id V41e6fy21KbKQst
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 1 Mar 2022 21:37:20 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v16 4/4] drm/bridge: dw-hdmi: fix bus formats negotiation
- for 8 bit modes
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
-Date:   Tue, 1 Mar 2022 21:37:20 +0100
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Jonas Karlman <jonas@kwiboo.se>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
-References: <cover.1645895582.git.hns@goldelico.com>
- <169afe64b4985c3f420177cd6f4e1e72feeb2449.1645895582.git.hns@goldelico.com>
- <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229784AbiCBBvj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 1 Mar 2022 20:51:39 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01810A2531;
+        Tue,  1 Mar 2022 17:50:55 -0800 (PST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxSs15zR5iIvgAAA--.3690S3;
+        Wed, 02 Mar 2022 09:50:50 +0800 (CST)
+Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
+To:     Mike Rapoport <rppt@kernel.org>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
+ <Yh3tgr+g/6IElq0P@kernel.org>
+ <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
+ <Yh4uUoYT+YS5Jxsv@kernel.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
+Date:   Wed, 2 Mar 2022 09:50:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <Yh4uUoYT+YS5Jxsv@kernel.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxSs15zR5iIvgAAA--.3690S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFyxZw43Zw1DAr4rZr1rtFb_yoWrCw4fpr
+        WSqa4Igr4kJryUZr1xtw1xJr9Iy395CF1vqry2yrn3u3Z0yr1xJr18Ja1j9asrA345Ja4q
+        vr48tF9F93WUA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfUFVyIUUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Neil,
 
 
-> Am 01.03.2022 um 10:18 schrieb Neil Armstrong =
-<narmstrong@baylibre.com>:
->=20
-> Hi,
->=20
-> On 26/02/2022 18:13, H. Nikolaus Schaller wrote:
->> Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus =
-fmts callbacks")
->> introduced a new mechanism to negotiate bus formats between hdmi =
-connectors
->> and bridges which is to be used e.g. for the jz4780 based CI20 board.
->> In this case dw-hdmi sets up a list of formats in
->> dw_hdmi_bridge_atomic_get_output_bus_fmts().
->> This includes e.g. MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the =
-CI20 but
->> only produces a black screen.
->> Analysis revealed an omission in
->> Commit 6c3c719936dafe ("drm/bridge: synopsys: dw-hdmi: add bus format =
-negociation")
->> to check for 8 bit with when adding UYVY8 or YUV8 formats.
->> This fix is based on the observation that max_bpc =3D 0 when running =
-this
->> function while info->bpc =3D 8.
->=20
-> In fact if bpc =3D 0, it should be considered as 8, so the issue is =
-elsewhere.
->=20
->> Adding the proposed patch makes the jz4780/CI20 panel work again with =
-default
->> MEDIA_BUS_FMT_RGB888_1X24 mode.
->> Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus =
-fmts callbacks")
->> Fixes: 6c3c719936dafe ("drm/bridge: synopsys: dw-hdmi: add bus format =
-negociation")
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> ---
->>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 10 ++++++----
->>  1 file changed, 6 insertions(+), 4 deletions(-)
->> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c =
-b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->> index 43e375da131e8..c08e2cc96584c 100644
->> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
->> @@ -2621,11 +2621,13 @@ static u32 =
-*dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->>  		output_fmts[i++] =3D MEDIA_BUS_FMT_RGB101010_1X30;
->>  	}
->>  -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
->> -		output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY8_1X16;
->> +	if (max_bpc >=3D 8 && info->bpc >=3D 8) {
->> +		if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
->> +			output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY8_1X16;
->>  -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->> -		output_fmts[i++] =3D MEDIA_BUS_FMT_YUV8_1X24;
->> +		if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
->> +			output_fmts[i++] =3D MEDIA_BUS_FMT_YUV8_1X24;
->> +	}
->=20
-> It should not select YUV here if it's not possible, so something is =
-wrong.
->=20
-> Can you check if =
-https://lore.kernel.org/r/20220119123656.1456355-2-narmstrong@baylibre.com=
- fixes this issue instead ?
+On 03/01/2022 10:31 PM, Mike Rapoport wrote:
+> On Tue, Mar 01, 2022 at 07:51:23PM +0800, Tiezhu Yang wrote:
+>>
+>>
+>> On 03/01/2022 05:55 PM, Mike Rapoport wrote:
+>>> Hi,
+>>>
+>>> On Tue, Mar 01, 2022 at 12:28:57PM +0800, Tiezhu Yang wrote:
+>>>> In the current code, the kernel command-line parameter mem= and memmap=
+>>>> can not work well on MIPS, this patchset refactors the related code to
+>>>> fix them.
+>>>>
+>>>> For kdump on MIPS, if the users want to limit the memory region for the
+>>>> capture kernel to avoid corrupting the memory image of the panic kernel,
+>>>> use the parameter memmap=limit@base is the proper way, I will submit a
+>>>> patch to use memmap=limit@base for kexec-tools after this patchset is
+>>>> applied.
+>>>
+>>> Sorry, apparently I misread the prevoius version.
+>>> What's wrong with the current implementation of mem=limit@base for the
+>>> kdump case?
+>>
+>> In the current code, without this patchset, kernel boot hangs when add
+>> mem=3G, mem=3G@64M or memmap=3G@64M to the command-line, it means that
+>> the parameter mem= and memmap= have bug on mips.
+>
+> I can see how mem=3G may be wrong when the memory does not start at 0, but
+> it seems to do the right thing of mem=3G@64M.
+>
+> Do you see system hangs with mem=3G@64M?
 
-Well, I had to manually fix it to be appliable to drm-misc/drm-misc-next
-and specifically:
+Yes.
 
-c03d0b52ff71 ("drm/connector: Fix typo in output format")
+>
+> Do you have the logs before the hang?
 
-My resulting patch is attached.
+Here are the logs:
 
-Unfortunately it did not work.
-
-I added a printk for hdmi->sink_is_hdmi. This returns 1. Which IMHO is =
-to be expected
-since I am using a HDMI connector and panel... So your patch will still =
-add the UYVY formats.
-
-Either the synposys module inside the jz4780 or the panel does not =
-understand them.
-
-Here is the EDID. Unfortunately it does not pretty print the extended =
-descriptors for UYVY etc.
-so that I don't know the exact capabilities of the panel. And what I am =
-not sure is if the
-jz4780 SoC can convert to UYVY or how it can.
-
-root@letux:~# parse-edid =
-</sys/devices/platform/13050000.lcdc0/drm/card0/card0-HDMI-A-1/edid
-Checksum Correct
-
-Section "Monitor"
-        Identifier "LEN L1950wD"
-        ModelName "LEN L1950wD"
-        VendorName "LEN"
-        # Monitor Manufactured week 34 of 2011
-        # EDID version 1.3
-        # Digital Display
-        DisplaySize 410 260
-        Gamma 2.20
-        Option "DPMS" "true"
-        Horizsync 30-81
-        VertRefresh 50-76
-        # Maximum pixel clock is 140MHz
-        #Not giving standard mode: 1152x864, 75Hz
-        #Not giving standard mode: 1280x720, 60Hz
-        #Not giving standard mode: 1280x1024, 60Hz
-        #Not giving standard mode: 1280x1024, 60Hz
-        #Not giving standard mode: 1280x1024, 60Hz
-        #Not giving standard mode: 1440x900, 60Hz
-        #Not giving standard mode: 1440x900, 75Hz
-        #Not giving standard mode: 1920x1080, 60Hz
-
-        #Extension block found. Parsing...
-        Modeline        "Mode 15" -hsync -vsync=20
-        Modeline        "Mode 0" -hsync +vsync=20
-        Modeline        "Mode 1" 27.027 1440 1478 1602 1716 480 484 487 =
-525 -hsync -vsync interlace
-        Modeline        "Mode 2" 27.027 1440 1478 1602 1716 480 484 487 =
-525 -hsync -vsync interlace
-        Modeline        "Mode 3" 27.027 720 736 798 858 480 489 495 525 =
--hsync -vsync
-        Modeline        "Mode 4" 27.027 720 736 798 858 480 489 495 525 =
--hsync -vsync
-        Modeline        "Mode 5" 27.000 1440 1464 1590 1728 576 578 581 =
-625 -hsync -vsync interlace
-        Modeline        "Mode 6" 27.000 1440 1464 1590 1728 576 578 581 =
-625 -hsync -vsync interlace
-        Modeline        "Mode 7" 27.000 720 732 796 864 576 581 586 625 =
--hsync -vsync
-        Modeline        "Mode 8" 27.000 720 732 796 864 576 581 586 625 =
--hsync -vsync
-        Modeline        "Mode 9" 74.250 1280 1720 1760 1980 720 725 730 =
-750 +hsync +vsync
-        Modeline        "Mode 10" 74.250 1280 1390 1420 1650 720 725 730 =
-750 +hsync +vsync
-        Modeline        "Mode 11" 74.250 1920 2448 2492 2640 1080 1082 =
-1089 1125 +hsync +vsync interlace
-        Modeline        "Mode 12" 74.250 1920 2008 2052 2200 1080 1082 =
-1087 1125 +hsync +vsync interlace
-        Modeline        "Mode 13" 148.500 1920 2448 2492 2640 1080 1084 =
-1089 1125 +hsync +vsync
-        Modeline        "Mode 14" 148.500 1920 2008 2052 2200 1080 1084 =
-1089 1125 +hsync +vsync
-        Modeline        "Mode 16" +hsync +vsync interlace
-        Modeline        "Mode 17" +hsync +vsync interlace
-        Modeline        "Mode 18" +hsync +vsync=20
-        Option "PreferredMode" "Mode 15"
-EndSection
-root@letux:~# xxd =
-/sys/devices/platform/13050000.lcdc0/drm/card0/card0-HDMI-A-1/=20
-00000000: 00ff ffff ffff ff00 30ae 8610 0101 0101  ........0.......
-00000010: 2215 0103 8029 1a78 eee5 b5a3 5549 9927  "....).x....UI.'
-00000020: 1350 54af ef00 714f 81c0 8180 8180 8180  .PT...qO........
-00000030: 9500 950f d1c0 2413 0020 4158 1620 050d  ......$.. AX. ..
-00000040: 2300 ffff 0000 001c 0000 00fc 004c 454e  #............LEN
-00000050: 204c 3139 3530 7744 0a20 0000 00fd 0032   L1950wD. .....2
-00000060: 4c1e 510e 000a 2020 2020 2020 0000 00ff  L.Q...      ....
-00000070: 0042 3334 3332 3834 350a 2020 2020 0101  .B3432845.    ..
-00000080: 0203 2171 4e06 0702 0315 9611 1213 0414  ..!qN...........
-00000090: 051f 9023 0907 0783 0100 0065 030c 0010  ...#.......e....
-000000a0: 008c 0ad0 9020 4031 200c 4055 00b9 8821  ..... @1 .@U...!
-000000b0: 0000 1801 1d80 1871 1c16 2058 2c25 00b9  .......q.. X,%..
-000000c0: 8821 0000 9e01 1d80 d072 1c16 2010 2c25  .!.......r.. .,%
-000000d0: 80b9 8821 0000 9e01 1d00 bc52 d01e 20b8  ...!.......R.. .
-000000e0: 2855 40b9 8821 0000 1e02 3a80 d072 382d  (U@..!....:..r8-
-000000f0: 4010 2c45 80b9 8821 0000 1e00 0000 00d0  @.,E...!........
-root@letux:~# root@letux:~# dmesg|grep dw.hdmi
-[    9.622138] dw-hdmi-ingenic 10180000.hdmi: Detected HDMI TX =
-controller v1.31a with HDCP (DWC HDMI 3D TX PHY)
-[    9.727840] dw-hdmi-ingenic 10180000.hdmi: registered DesignWare HDMI =
-I2C bus driver
-[   10.103864] dw_hdmi_bridge_atomic_get_output_bus_fmts: =
-hdmi->sink_is_hdmi=3D1
-
-So please let me know which parameters I should try to printk()...
-
-BR and thanks,
-Nikolaus
+[    0.000000] Linux version 5.17.0-rc3+ (loongson@linux) (gcc (GCC) 
+7.3.1 20180303 (Red Hat 7.3.1-6), GNU ld version 
+2.28-13.fc21.loongson.6) #1 SMP PREEMPT Wed Mar 2 09:07:39 CST 2022
+[    0.000000] CpuClock = 1800000000
+[    0.000000] The bridge chip is LS7A
+[    0.000000] CP0_Config3: CP0 16.3 (0xdc8030a0)
+[    0.000000] CP0_PageGrain: CP0 5.1 (0x28000000)
+[    0.000000] NUMA: Discovered 4 cpus on 1 nodes
+[    0.000000] Node0: mem_type:1, mem_start:0x200000, mem_size:0xee MB
+[    0.000000]        start_pfn:0x80, end_pfn:0x3c00, num_physpages:0x3b80
+[    0.000000] Node0: mem_type:2, mem_start:0x90200000, mem_size:0x6fe MB
+[    0.000000]        start_pfn:0x24080, end_pfn:0x40000, 
+num_physpages:0x1fb00
+[    0.000000] Node0: mem_type:2, mem_start:0x120000000, mem_size:0x1600 MB
+[    0.000000]        start_pfn:0x48000, end_pfn:0xa0000, 
+num_physpages:0x77b00
+[    0.000000] Node0's addrspace_offset is 0x0
+[    0.000000] Node0: start_pfn=0x80, end_pfn=0xa0000
+[    0.000000] NUMA: set cpumask cpu 0 on node 0
+[    0.000000] NUMA: set cpumask cpu 1 on node 0
+[    0.000000] NUMA: set cpumask cpu 2 on node 0
+[    0.000000] NUMA: set cpumask cpu 3 on node 0
+[    0.000000] printk: bootconsole [early0] enabled
+[    0.000000] CPU0 revision is: 0014c001 (ICT Loongson-3)
+[    0.000000] FPU revision is: 00f70501
+[    0.000000] MSA revision is: 00060140
+[    0.000000] OF: fdt: No chosen node found, continuing without
+[    0.000000] MIPS: machine is loongson,loongson64g-4core-ls7a
+[    0.000000] User-defined physical RAM map overwrite
+[    0.000000] Kernel sections are not in the memory maps
+[    0.000000] Initrd not found or empty - disabling initrd
 
 
-------
+>
+> As for memmap= option, it does not specify the memory map but rather alters
+> the memory map passed by the firmware. Particularity in MIPS implementation
+> it allows to add a single range of available or reserved memory.
+>
+> AFAIU, for the kdump use-case mem=X@Y should suffice.
 
-=46rom c84a3c4a500684e57b1243fe5386696c48fa1e1b Mon Sep 17 00:00:00 2001
-From: Neil Armstrong <narmstrong@baylibre.com>
-Date: Wed, 19 Jan 2022 13:36:56 +0100
-Subject: [PATCH] drm/bridge: dw-hdmi: filter out YUV output formats when =
-DVI
+We can modify some code to make mem=X@Y work well,
+but according to Documentation/admin-guide/kernel-parameters.txt,
+the common way is mem=X and memmap=X@Y, so mem=X@Y for mips seems
+odd, the intention of this patchset is to make mem= and memmap=
+work well and consistent with the other archs.
 
-When the display is not an HDMI sink, only the RGB output format is
-valid. Thus stop returning YUV output formats when sink is not HDMI.
+Thanks,
+Tiezhu
 
-Fixes: 6c3c719936da ("drm/bridge: synopsys: dw-hdmi: add bus format =
-negociation")
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c =
-b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-index 43e375da131e8..0ec0cbe448e05 100644
---- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-+++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-@@ -2538,6 +2538,7 @@ static u32 =
-*dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
-        struct drm_connector *conn =3D conn_state->connector;
-        struct drm_display_info *info =3D &conn->display_info;
-        struct drm_display_mode *mode =3D &crtc_state->mode;
-+       struct dw_hdmi *hdmi =3D bridge->driver_private;
-        u8 max_bpc =3D conn_state->max_requested_bpc;
-        bool is_hdmi2_sink =3D info->hdmi.scdc.supported ||
-                             (info->color_formats & =
-DRM_COLOR_FORMAT_YCBCR420);
-@@ -2564,7 +2565,7 @@ static u32 =
-*dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
-         * If the current mode enforces 4:2:0, force the output but =
-format
-         * to 4:2:0 and do not add the YUV422/444/RGB formats
-         */
--       if (conn->ycbcr_420_allowed &&
-+       if (hdmi->sink_is_hdmi && conn->ycbcr_420_allowed &&
-            (drm_mode_is_420_only(info, mode) ||
-             (is_hdmi2_sink && drm_mode_is_420_also(info, mode)))) {
-=20
-@@ -2595,36 +2596,36 @@ static u32 =
-*dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
-         */
-=20
-        if (max_bpc >=3D 16 && info->bpc =3D=3D 16) {
--               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-+               if (hdmi->sink_is_hdmi && info->color_formats & =
-DRM_COLOR_FORMAT_YCBCR444)
-                        output_fmts[i++] =3D MEDIA_BUS_FMT_YUV16_1X48;
-=20
-                output_fmts[i++] =3D MEDIA_BUS_FMT_RGB161616_1X48;
-        }
-=20
-        if (max_bpc >=3D 12 && info->bpc >=3D 12) {
--               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
-+               if (hdmi->sink_is_hdmi && info->color_formats & =
-DRM_COLOR_FORMAT_YCBCR422)
-                        output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY12_1X24;
-=20
--               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-+               if (hdmi->sink_is_hdmi && info->color_formats & =
-DRM_COLOR_FORMAT_YCBCR444)
-                        output_fmts[i++] =3D MEDIA_BUS_FMT_YUV12_1X36;
-=20
-                output_fmts[i++] =3D MEDIA_BUS_FMT_RGB121212_1X36;
-        }
-=20
-        if (max_bpc >=3D 10 && info->bpc >=3D 10) {
--               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
-+               if (hdmi->sink_is_hdmi && info->color_formats & =
-DRM_COLOR_FORMAT_YCBCR422)
-                        output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY10_1X20;
-=20
--               if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-+               if (hdmi->sink_is_hdmi && info->color_formats & =
-DRM_COLOR_FORMAT_YCBCR444)
-                        output_fmts[i++] =3D MEDIA_BUS_FMT_YUV10_1X30;
-=20
-                output_fmts[i++] =3D MEDIA_BUS_FMT_RGB101010_1X30;
-        }
-=20
--       if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
-+       if (hdmi->sink_is_hdmi && info->color_formats & =
-DRM_COLOR_FORMAT_YCBCR422)
-                output_fmts[i++] =3D MEDIA_BUS_FMT_UYVY8_1X16;
-=20
--       if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-+       if (hdmi->sink_is_hdmi && info->color_formats & =
-DRM_COLOR_FORMAT_YCBCR444)
-                output_fmts[i++] =3D MEDIA_BUS_FMT_YUV8_1X24;
-=20
-        /* Default 8bit RGB fallback */
---=20
-2.33.0
-
+>
+>> Thanks,
+>> Tiezhu
+>>
+>>>
+>>>> v4: Fix some build warnings reported by kernel test robot
+>>>>
+>>>> v3: Modify patch #3 to maintain compatibility for memmap=limit{$,#,!}base,
+>>>>     commented by Mike Rapoport, thank you
+>>>>
+>>>> v2: Add some new patches to support memmap=limit@base
+>>>>
+>>>> Tiezhu Yang (4):
+>>>>   MIPS: Refactor early_parse_mem() to fix mem= parameter
+>>>>   memblock: Introduce memblock_mem_range_remove_map()
+>>>>   MIPS: Refactor early_parse_memmap() to fix memmap= parameter
+>>>>   MIPS: Remove not used variable usermem
+>>>>
+>>>>  arch/mips/kernel/setup.c | 69 ++++++++++++++++++++++--------------------------
+>>>>  include/linux/memblock.h |  1 +
+>>>>  mm/memblock.c            |  9 +++++--
+>>>>  3 files changed, 40 insertions(+), 39 deletions(-)
+>>>>
+>>>> --
+>>>> 2.1.0
+>>>>
+>>>
+>>
+>
 
