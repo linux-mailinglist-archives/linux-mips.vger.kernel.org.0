@@ -2,136 +2,152 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F134CB23D
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Mar 2022 23:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FBC4CB452
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Mar 2022 02:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiCBWZr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 2 Mar 2022 17:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S231316AbiCCBZ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 2 Mar 2022 20:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiCBWZq (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Mar 2022 17:25:46 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE37E61DC;
-        Wed,  2 Mar 2022 14:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1646259883;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=iQfNJuH2Ji0pVE8fbybSO1iLM6ySE3fcPhmj0E324Ao=;
-    b=tE231fH5UsT9bLVeBm4aBSqC3K8UPgFe3CjQmY24dlNuUZWoHCHt3ejFr8EkmDDg/7
-    qiMj4GjqUcxmf1lvwOcefDUJ4/bBcZz4hKf+vFUSyywKOGFlGHrVlMON3lWTXsvfTPLd
-    YiqbJH+8OoEMcEs86uEiIjc+z7kBKMNNM0ukuOREaSqhVTrBLp6TwbWnIvsVTEnzSMrB
-    4tzonn0e9ds6zxCQSIiXjvTnGKKkLsMWRBTrE28VbAdIyxzTTFIPHwnFKPJIIIjs5mLT
-    kvk7LeuCZ9eajRQJdkj7QmpEy4EFmVmL5Orza9Z7nLY1Df/YZGK22ka8zW9eIROpizCh
-    ZPYg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43oQ+E="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.40.1 DYNA|AUTH)
-    with ESMTPSA id V41e6fy22MOhWCe
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Wed, 2 Mar 2022 23:24:43 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v16 4/4] drm/bridge: dw-hdmi: fix bus formats negotiation
- for 8 bit modes
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <4cb08b5d-c1ec-f2b4-a107-63a771146ec0@baylibre.com>
-Date:   Wed, 2 Mar 2022 23:24:42 +0100
-Cc:     Paul Boddie <paul@boddie.org.uk>, Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        Robert Foss <robert.foss@linaro.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <598F3A49-9CE2-4C59-95D4-CDA888A3B3BF@goldelico.com>
-References: <cover.1645895582.git.hns@goldelico.com>
- <169afe64b4985c3f420177cd6f4e1e72feeb2449.1645895582.git.hns@goldelico.com>
- <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
- <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
- <fca28594-8d4e-dd2f-93a0-a052cb888d90@baylibre.com>
- <75CBD357-577A-402D-9E3B-DBE82A84BC43@goldelico.com>
- <4cb08b5d-c1ec-f2b4-a107-63a771146ec0@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231249AbiCCBZ5 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 2 Mar 2022 20:25:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A921DA7B;
+        Wed,  2 Mar 2022 17:25:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C31C661150;
+        Thu,  3 Mar 2022 01:25:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2074AC340F2;
+        Thu,  3 Mar 2022 01:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646270712;
+        bh=OIWkR7Zp9BS5KcWgPGvH+7lGxsauASKPDzT5dWHRzcg=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=fyTcnY079RGVSWj1/bqnWf9UBPrXZmiZ32cJHGCuHKFrvhhlGSoeO8XnjyAULGbxy
+         xuEeYIRqhVQfty7l070VwdiiUBm+vhQMOyp1/UPCRCwJW1H8chwVFdTWSqF8JxQ7i6
+         pmngu4i/qw99iSRs7nF8V/KUQPfZMnX0OhdBfoyB3K0uXmVGkSCue1VhFC37hRyoHl
+         lqT9JrJPLf0sbQoGpagSmC+bBJdDfAOOQZXY1qQ2kFojarLkPJJigndyp3UGVx/CEp
+         1XnqlJ8dDyOAxVpGwUR+l8DwgqcaHVrJmCy/f+O96VijhpAG5o/2FbsTqBKQIZTLrT
+         qEo+TADXZ7B8A==
+Date:   Wed, 2 Mar 2022 17:25:10 -0800 (PST)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Christoph Hellwig <hch@lst.de>
+cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        iommu@lists.linux-foundation.org, x86@kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 11/12] swiotlb: merge swiotlb-xen initialization into
+ swiotlb
+In-Reply-To: <20220302081500.GB23075@lst.de>
+Message-ID: <alpine.DEB.2.22.394.2203021709470.3261@ubuntu-linux-20-04-desktop>
+References: <20220301105311.885699-1-hch@lst.de> <20220301105311.885699-12-hch@lst.de> <alpine.DEB.2.22.394.2203011720150.3261@ubuntu-linux-20-04-desktop> <20220302081500.GB23075@lst.de>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Neil,
+On Wed, 2 Mar 2022, Christoph Hellwig wrote:
+> On Tue, Mar 01, 2022 at 06:55:47PM -0800, Stefano Stabellini wrote:
+> > Unrelated to this specific patch series: now that I think about it, if
+> > io_tlb_default_mem.nslabs is already allocated by the time xen_mm_init
+> > is called, wouldn't we potentially have an issue with the GFP flags used
+> > for the earlier allocation (e.g. GFP_DMA32 not used)? Maybe something
+> > for another day.
+> 
+> swiotlb_init allocates low memory from meblock, which is roughly
+> equivalent to GFP_DMA allocations, so we'll be fine.
+> 
+> > > @@ -143,10 +141,15 @@ static int __init xen_mm_init(void)
+> > >  	if (!xen_swiotlb_detect())
+> > >  		return 0;
+> > >  
+> > > -	rc = xen_swiotlb_init();
+> > >  	/* we can work with the default swiotlb */
+> > > -	if (rc < 0 && rc != -EEXIST)
+> > > -		return rc;
+> > > +	if (!io_tlb_default_mem.nslabs) {
+> > > +		if (!xen_initial_domain())
+> > > +			return -EINVAL;
+> > 
+> > I don't think we need this xen_initial_domain() check. It is all
+> > already sorted out by the xen_swiotlb_detect() check above.
+> 
+> Is it?
+> 
+> static inline int xen_swiotlb_detect(void)
+> {
+> 	if (!xen_domain())
+> 		return 0;
+> 	if (xen_feature(XENFEAT_direct_mapped))
+> 		return 1;
+> 	/* legacy case */
+> 	if (!xen_feature(XENFEAT_not_direct_mapped) && xen_initial_domain())
+> 		return 1;
+> 	return 0;
+> }
 
-> Am 02.03.2022 um 15:34 schrieb Neil Armstrong =
-<narmstrong@baylibre.com>:
->=20
-> Hi,
->=20
->> (cross-checked: RGB mode still works if I force hdmi->sink_is_hdmi =3D =
-false)
->=20
-> I don't understand what's wrong, can you try to make the logic select =
-MEDIA_BUS_FMT_YUV8_1X24 instead of DRM_COLOR_FORMAT_YCBCR422 ?
+It used to be that we had a
 
-I have forced hdmi->sink_is_hdmi =3D false and replaced
+  if (!xen_initial_domain())
+      return -EINVAL;
 
- 	/* Default 8bit RGB fallback */
--	output_fmts[i++] =3D MEDIA_BUS_FMT_RGB888_1X24;
-+	output_fmts[i++] =3D MEDIA_BUS_FMT_YUV8_1X24;
+check in the initialization of swiotlb-xen on ARM. Then we replaced it
+with the more sophisticated xen_swiotlb_detect().
 
-And then screen remains black. MEDIA_BUS_FMT_RGB888_1X24 works.
-(MEDIA_BUS_FMT_VUY8_1X24 doesn't work either).
+The reason is that swiotlb-xen on ARM relies on Dom0 being 1:1 mapped
+(guest physical addresses == physical addresses). Recent changes in Xen
+allowed also DomUs to be 1:1 mapped. Changes still under discussion will
+allow Dom0 not to be 1:1 mapped.
 
-So this indicates that YUV conversion is not working properly. Maybe =
-missing some special
-setup.
+So, before all the Xen-side changes, knowing what was going to happen, I
+introduced a clearer interface: XENFEAT_direct_mapped and
+XENFEAT_not_direct_mapped tell us whether the guest (Linux) is 1:1
+mapped or not. If it is 1:1 mapped then Linux can take advantage of
+swiotlb-xen. Now xen_swiotlb_detect() returns true if Linux is 1:1
+mapped.
 
-What I have to test if it works on a different monitor. Not that this =
-specific panel
-(a 7 inch waveshare touch with HDMIinput) is buggy and reports YUV =
-capabilities
-but does not handle them...
+Then of course there is the legacy case. That's taken care of by:
 
-On the other hand this panel works on RasPi and OMAP5 (where I admit I =
-do not know in
-which mode).
+ 	if (!xen_feature(XENFEAT_not_direct_mapped) && xen_initial_domain())
+ 		return 1;
 
-> If your CSC is broken, we'll need to disable it on your platform.
+The intention is to say that if
+XENFEAT_direct_mapped/XENFEAT_not_direct_mapped are not present, then
+use xen_initial_domain() like we did before.
 
-Indeed.
+So if xen_swiotlb_detect() returns true we know that Linux is either
+dom0 (xen_initial_domain() == true) or we have very good reasons to
+think we should initialize swiotlb-xen anyway
+(xen_feature(XENFEAT_direct_mapped) == true).
 
-So it seems as if we need a mechanism to overwrite =
-dw_hdmi_bridge_atomic_get_output_bus_fmts()
-in our ingenic-dw-hdmi platform specialization [1] to always return =
-MEDIA_BUS_FMT_RGB888_1X24.
 
-Or alternatively set sink_is_hdmi =3D false there (unfortunately there =
-is no direct access to
-struct dw_hdmi in a specialization drivers).
+> I think I'd keep it as-is for now, as my planned next step would be to
+> fold xen-swiotlb into swiotlb entirely.
 
-Is this already possible or how can it be done?
-
-BR and thanks,
-Nikolaus
-
-[1]: =
-https://lore.kernel.org/all/24a27226a22adf5f5573f013e5d7d89b0ec73664.16458=
-95582.git.hns@goldelico.com/=
+Thinking more about it we actually need to drop the xen_initial_domain()
+check otherwise some cases won't be functional (Dom0 not 1:1 mapped, or
+DomU 1:1 mapped).
