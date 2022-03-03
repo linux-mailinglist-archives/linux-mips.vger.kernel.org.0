@@ -2,192 +2,196 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165E24CC0F6
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Mar 2022 16:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 464314CC13B
+	for <lists+linux-mips@lfdr.de>; Thu,  3 Mar 2022 16:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbiCCPQ6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Thu, 3 Mar 2022 10:16:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S234352AbiCCP3t (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 3 Mar 2022 10:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiCCPQ6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Mar 2022 10:16:58 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762CE190C30;
-        Thu,  3 Mar 2022 07:16:12 -0800 (PST)
-Date:   Thu, 03 Mar 2022 15:15:54 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v16 4/4] drm/bridge: dw-hdmi: fix bus formats negotiation
- for 8 bit modes
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        Robert Foss <robert.foss@linaro.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Message-Id: <I2D68R.CP2B1MABRO51@crapouillou.net>
-In-Reply-To: <d75cd860-2a4c-6f81-b5d0-dc75f37b7150@baylibre.com>
-References: <cover.1645895582.git.hns@goldelico.com>
-        <169afe64b4985c3f420177cd6f4e1e72feeb2449.1645895582.git.hns@goldelico.com>
-        <5da069b6-8a99-79c2-109c-c85715165857@baylibre.com>
-        <E0D3B7E8-0C8D-4119-8267-0556AB921B24@goldelico.com>
-        <fca28594-8d4e-dd2f-93a0-a052cb888d90@baylibre.com>
-        <75CBD357-577A-402D-9E3B-DBE82A84BC43@goldelico.com>
-        <4cb08b5d-c1ec-f2b4-a107-63a771146ec0@baylibre.com>
-        <598F3A49-9CE2-4C59-95D4-CDA888A3B3BF@goldelico.com>
-        <3625b23b-9718-640a-1aac-0b30773a26ab@baylibre.com>
-        <E95145AB-DEFC-419D-B926-B0BAF0985D09@goldelico.com>
-        <d75cd860-2a4c-6f81-b5d0-dc75f37b7150@baylibre.com>
+        with ESMTP id S233331AbiCCP3r (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 3 Mar 2022 10:29:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C8D3FBC5;
+        Thu,  3 Mar 2022 07:29:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30F47B8260E;
+        Thu,  3 Mar 2022 15:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 335A5C340F0;
+        Thu,  3 Mar 2022 15:28:54 +0000 (UTC)
+Date:   Thu, 3 Mar 2022 15:28:50 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
+        Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-alpha@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-parisc@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-um@lists.infradead.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-arch@vger.kernel.org, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH V3 05/30] arm64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Message-ID: <YiDessYDSt060Euc@arm.com>
+References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+ <1646045273-9343-6-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1646045273-9343-6-git-send-email-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Neil,
+Hi Anshuman,
 
-Any feedback on the other patches?
+On Mon, Feb 28, 2022 at 04:17:28PM +0530, Anshuman Khandual wrote:
+> +static inline pgprot_t __vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+> +	case VM_NONE:
+> +		return PAGE_NONE;
+> +	case VM_READ:
+> +	case VM_WRITE:
+> +	case VM_WRITE | VM_READ:
+> +		return PAGE_READONLY;
+> +	case VM_EXEC:
+> +		return PAGE_EXECONLY;
+> +	case VM_EXEC | VM_READ:
+> +	case VM_EXEC | VM_WRITE:
+> +	case VM_EXEC | VM_WRITE | VM_READ:
+> +		return PAGE_READONLY_EXEC;
+> +	case VM_SHARED:
+> +		return PAGE_NONE;
+> +	case VM_SHARED | VM_READ:
+> +		return PAGE_READONLY;
+> +	case VM_SHARED | VM_WRITE:
+> +	case VM_SHARED | VM_WRITE | VM_READ:
+> +		return PAGE_SHARED;
+> +	case VM_SHARED | VM_EXEC:
+> +		return PAGE_EXECONLY;
+> +	case VM_SHARED | VM_EXEC | VM_READ:
+> +		return PAGE_READONLY_EXEC;
+> +	case VM_SHARED | VM_EXEC | VM_WRITE:
+> +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
+> +		return PAGE_SHARED_EXEC;
+> +	default:
+> +		BUILD_BUG();
+> +	}
+> +}
 
-They look fine to me, but I still need an ack to merge them in 
-drm-misc-next.
+I'd say ack for trying to get of the extra arch_vm_get_page_prot() and
+arch_filter_pgprot() but, TBH, I'm not so keen on the outcome. I haven't
+built the code to see what's generated but I suspect it's no significant
+improvement. As for the code readability, the arm64 parts don't look
+much better either. The only advantage with this patch is that all
+functions have been moved under arch/arm64.
 
-Cheers,
--Paul
+I'd keep most architectures that don't have own arch_vm_get_page_prot()
+or arch_filter_pgprot() unchanged and with a generic protection_map[]
+array. For architectures that need fancier stuff, add a
+CONFIG_ARCH_HAS_VM_GET_PAGE_PROT (as you do) and allow them to define
+vm_get_page_prot() while getting rid of arch_vm_get_page_prot() and
+arch_filter_pgprot(). I think you could also duplicate protection_map[]
+for architectures with own vm_get_page_prot() (make it static) and
+#ifdef it out in mm/mmap.c.
 
+If later you have more complex needs or a switch statement generates
+better code, go for it, but for this series I'd keep things simple, only
+focus on getting rid of arch_vm_get_page_prot() and
+arch_filter_pgprot().
 
-Le jeu., mars 3 2022 at 12:42:02 +0100, Neil Armstrong 
-<narmstrong@baylibre.com> a écrit :
-> On 03/03/2022 11:40, H. Nikolaus Schaller wrote:
->> Hi Neil,
->> 
->>> Am 03.03.2022 um 09:35 schrieb Neil Armstrong 
->>> <narmstrong@baylibre.com>:
->>> 
->>> Hi,
->>> 
->>> On 02/03/2022 23:24, H. Nikolaus Schaller wrote:
->>>> Hi Neil,
->>>>> Am 02.03.2022 um 15:34 schrieb Neil Armstrong 
->>>>> <narmstrong@baylibre.com>:
->>>>> 
->>>>> Hi,
->>>>> 
->>>>>> (cross-checked: RGB mode still works if I force 
->>>>>> hdmi->sink_is_hdmi = false)
->>>>> 
->>>>> I don't understand what's wrong, can you try to make the logic 
->>>>> select MEDIA_BUS_FMT_YUV8_1X24 instead of 
->>>>> DRM_COLOR_FORMAT_YCBCR422 ?
->>>> I have forced hdmi->sink_is_hdmi = false and replaced
->>>>   	/* Default 8bit RGB fallback */
->>>> -	output_fmts[i++] = MEDIA_BUS_FMT_RGB888_1X24;
->>>> +	output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
->>>> And then screen remains black. MEDIA_BUS_FMT_RGB888_1X24 works.
->>>> (MEDIA_BUS_FMT_VUY8_1X24 doesn't work either).
->>>> So this indicates that YUV conversion is not working properly. 
->>>> Maybe missing some special
->>>> setup.
->>>> What I have to test if it works on a different monitor.
->> 
->> Same effect on a Xiaomi monitor (user manual just telling HDMI1,4 
->> compatible), an
->> older Acer video projector and a Sharp TV set.
->> 
->> The Xiaomi monitor does not say "No signal" but shows a black 
->> screen. The others
->> do not even report any HDMI signals. All work well with 
->> MEDIA_BUS_FMT_RGB888_1X24.
->> 
->> This means the transcoding to YUV does not work properly on the 
->> jz4780 SoC setup.
->> 
->> So it looks as if we have to disable it (at least unless someone 
->> finds a fix).
->> 
->>>> Not that this specific panel
->>>> (a 7 inch waveshare touch with HDMIinput) is buggy and reports YUV 
->>>> capabilities
->>>> but does not handle them...
->>>> On the other hand this panel works on RasPi and OMAP5 (where I 
->>>> admit I do not know in
->>>> which mode).
->>> 
->>> Pretty sure they don't support YUV HDMI output.
->>> 
->>> If you can try on a certified HDMI devices like a TV, it would here 
->>> figuring out where comes the issue.
->> 
->> I am not sure if the Sharp TV is fully certified but would assume...
->> 
->>> 
->>>>> If your CSC is broken, we'll need to disable it on your platform.
->>>> Indeed.
->>>> So it seems as if we need a mechanism to overwrite 
->>>> dw_hdmi_bridge_atomic_get_output_bus_fmts()
->>>> in our ingenic-dw-hdmi platform specialization [1] to always 
->>>> return MEDIA_BUS_FMT_RGB888_1X24.
->>>> Or alternatively set sink_is_hdmi = false there (unfortunately 
->>>> there is no direct access to
->>>> struct dw_hdmi in a specialization drivers).
->>>> Is this already possible or how can it be done?
->>> 
->>> It's not handled yet, but we may add the logic to handle the lack 
->>> of CSC config bit and
->>> add a glue config bit to override this like we already did for CEC.
->>> 
->>> I wrote an initial support to disable CSC (only compile-tested), 
->>> could you try on your platform with setting disable_csc = 1 in your 
->>> dw-hdmi glue code ?
->> 
->> This works!
->> 
->> So how can we get that merged? IMHO your proposal should be before 
->> we add ingenic-dw-hdmi.
->> If you have a version with proper commit message I can add it to the 
->> beginning of my
->> seried and include it in a v17. Or if you get yours merged to 
->> drm-misc/drm-misc-next I
->> can build on top.
-> 
-> You can add it in your v17 patchset with my authorship and my 
-> Signed-off-by tag + yours.
-> 
-> As commit message something like :
-> ====================
-> drm/bridge: dw-hdmi: handle unusable or non-configured CSC module
-> 
-> The dw-hdmi integrates an optional Color Space Conversion feature used
-> to handle color-space conversions.
-> 
-> On some platforms, the CSC isn't built-in or non-functional.
-> 
-> This adds the necessary code to disable the CSC functionality
-> and limit the bus format negotiation to force using the same
-> input bus format as the output bus format.
-> ====================
-> 
-> Thanks,
-> Neil
-> 
->> 
->> BR and thanks,
->> Nikolaus
->> 
-> 
+If I grep'ed correctly, there are only 4 architectures that have own
+arch_vm_get_page_prot() (arm64, powerpc, sparc, x86) and 2 that have own
+arch_filter_pgprot() (arm64, x86). Try to only change these for the time
+being, together with the other generic mm cleanups you have in this
+series. I think there are a couple more that touch protection_map[]
+(arm, m68k). You can leave the generic protection_map[] global if the
+arch does not select ARCH_HAS_VM_GET_PAGE_PROT.
 
+> +static pgprot_t arm64_arch_filter_pgprot(pgprot_t prot)
+> +{
+> +	if (cpus_have_const_cap(ARM64_HAS_EPAN))
+> +		return prot;
+> +
+> +	if (pgprot_val(prot) != pgprot_val(PAGE_EXECONLY))
+> +		return prot;
+> +
+> +	return PAGE_READONLY_EXEC;
+> +}
+> +
+> +static pgprot_t arm64_arch_vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	pteval_t prot = 0;
+> +
+> +	if (vm_flags & VM_ARM64_BTI)
+> +		prot |= PTE_GP;
+> +
+> +	/*
+> +	 * There are two conditions required for returning a Normal Tagged
+> +	 * memory type: (1) the user requested it via PROT_MTE passed to
+> +	 * mmap() or mprotect() and (2) the corresponding vma supports MTE. We
+> +	 * register (1) as VM_MTE in the vma->vm_flags and (2) as
+> +	 * VM_MTE_ALLOWED. Note that the latter can only be set during the
+> +	 * mmap() call since mprotect() does not accept MAP_* flags.
+> +	 * Checking for VM_MTE only is sufficient since arch_validate_flags()
+> +	 * does not permit (VM_MTE & !VM_MTE_ALLOWED).
+> +	 */
+> +	if (vm_flags & VM_MTE)
+> +		prot |= PTE_ATTRINDX(MT_NORMAL_TAGGED);
+> +
+> +	return __pgprot(prot);
+> +}
+> +
+> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	pgprot_t ret = __pgprot(pgprot_val(__vm_get_page_prot(vm_flags)) |
+> +			pgprot_val(arm64_arch_vm_get_page_prot(vm_flags)));
+> +
+> +	return arm64_arch_filter_pgprot(ret);
+> +}
 
+If we kept the array, we can have everything in a single function
+(untested and with my own comments for future changes):
+
+pgprot_t vm_get_page_prot(unsigned long vm_flags)
+{
+	pgprot_t prot = __pgprot(pgprot_val(protection_map[vm_flags &
+				(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]));
+
+	/*
+	 * We could get rid of this test if we updated protection_map[]
+	 * to turn exec-only into read-exec during boot.
+	 */
+	if (!cpus_have_const_cap(ARM64_HAS_EPAN) &&
+	    pgprot_val(prot) == pgprot_val(PAGE_EXECONLY))
+		prot = PAGE_READONLY_EXEC;
+
+	if (vm_flags & VM_ARM64_BTI)
+		prot != PTE_GP;
+
+	/*
+	 * We can get rid of the requirement for PROT_NORMAL to be 0
+	 * since here we can mask out PTE_ATTRINDX_MASK.
+	 */
+	if (vm_flags & VM_MTE) {
+		prot &= ~PTE_ATTRINDX_MASK;
+		prot |= PTE_ATTRINDX(MT_NORMAL_TAGGED);
+	}
+
+	return prot;
+}
+
+-- 
+Catalin
