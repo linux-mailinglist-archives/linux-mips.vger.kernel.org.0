@@ -2,40 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73CF4CD9B7
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 18:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA0C4CD9D2
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 18:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237347AbiCDRGh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Mar 2022 12:06:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S230190AbiCDRMe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Mar 2022 12:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240929AbiCDRGg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 12:06:36 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0129819D765
-        for <linux-mips@vger.kernel.org>; Fri,  4 Mar 2022 09:05:49 -0800 (PST)
+        with ESMTP id S237000AbiCDRMd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 12:12:33 -0500
+X-Greylist: delayed 358 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Mar 2022 09:11:45 PST
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C64A71CD9EF;
+        Fri,  4 Mar 2022 09:11:45 -0800 (PST)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 39EED92009C; Fri,  4 Mar 2022 18:05:46 +0100 (CET)
+        id F09E792009D; Fri,  4 Mar 2022 18:11:44 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 3295992009B;
-        Fri,  4 Mar 2022 17:05:46 +0000 (GMT)
-Date:   Fri, 4 Mar 2022 17:05:46 +0000 (GMT)
+        by angie.orcam.me.uk (Postfix) with ESMTP id EA18792009B;
+        Fri,  4 Mar 2022 17:11:44 +0000 (GMT)
+Date:   Fri, 4 Mar 2022 17:11:44 +0000 (GMT)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-cc:     Mike Rapoport <rppt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Mike Rapoport <rppt@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
-In-Reply-To: <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
-Message-ID: <alpine.DEB.2.21.2203041627150.47558@angie.orcam.me.uk>
-References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn> <Yh3tgr+g/6IElq0P@kernel.org> <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn> <Yh4uUoYT+YS5Jxsv@kernel.org> <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
+Subject: Re: [PATCH v4 1/4] MIPS: Refactor early_parse_mem() to fix mem=
+ parameter
+In-Reply-To: <20220304153517.GA28487@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2203041634040.47558@angie.orcam.me.uk>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn> <1646108941-27919-2-git-send-email-yangtiezhu@loongson.cn> <20220304151052.GA27642@alpha.franken.de> <20220304153517.GA28487@alpha.franken.de>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,55 +45,29 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, 2 Mar 2022, Tiezhu Yang wrote:
+On Fri, 4 Mar 2022, Thomas Bogendoerfer wrote:
 
-> > As for memmap= option, it does not specify the memory map but rather alters
-> > the memory map passed by the firmware. Particularity in MIPS implementation
-> > it allows to add a single range of available or reserved memory.
+> > > With this patch, when add "mem=3G" to the command-line, the
+> > > kernel boots successfully, we can see the following messages:
 > > 
-> > AFAIU, for the kdump use-case mem=X@Y should suffice.
+> > unfortunately this patch would break platforms without memory detection,
+> > which simply use mem=32M for memory configuration. Not sure how many
+> > rely on this mechanism. If we can make sure nobody uses it, I'm fine
+> > with your patch.
 > 
-> We can modify some code to make mem=X@Y work well,
-> but according to Documentation/admin-guide/kernel-parameters.txt,
-> the common way is mem=X and memmap=X@Y, so mem=X@Y for mips seems
-> odd, the intention of this patchset is to make mem= and memmap=
-> work well and consistent with the other archs.
+> maybe we could add a CONFIG option, which will be selected by
+> platforms, which don't need/want this usermem thing.
 
- It is not the MIPS implementation that is odd, it is the others that have 
-changed the semantics that are.
+ FWIW I don't understand what the issue is here beyond that we have a bug 
+that causes a system to hang when "mem=3G" is passed on the kernel command 
+line.  That is assuming that system does have contiguous RAM available for 
+the kernel to use from address 0 up to 3GiB; otherwise it's a user error 
+to tell the kernel it has that memory available (I did get bitten by that 
+myself too): garbage in, garbage out.
 
- When I added `mem=...' support to the MIPS platform, back on Dec 11th, 
-2000, which I needed for a system with with memory holes until I got 
-proper memory probing implemented, AFAIR the only other implementation was 
-for the x86 and naturally what I did for the MIPS platform was exactly the 
-same.  It used to be documented too, but the documentation was removed 
-sometime back in 2003 when someone has changed the x86 semantics for 
-reasons unknown to me and without letting people working on other 
-platforms know, so things diverged.
-
- Please review:
-
-<https://lore.kernel.org/linux-mips/alpine.LFD.2.21.2010050133330.333514@eddie.linux-mips.org/>
-
-as it has been already discussed.
-
- If you have a system that hangs with `mem=3G' and which does have 
-contiguous RAM available for the kernel to use from 0 through to 3GiB, 
-then please either bisect the problem or try finding the root cause as it 
-used to work at least those 21 years ago.  Conversely if your system does 
-*not* have such RAM available, then use the correct option(s) instead that 
-reflect your memory map.
-
- It is preferable that the memory map be determined automatically either 
-by the firmware and then passed to the kernel somehow, or a device tree 
-entry, or probed by the kernel itself.  You shouldn't have to specify 
-`mem=...' by hand except for debugging or as a temporary workaround.
-
- For example I have an x86 system that Linux does not how to interrogate 
-for RAM beyond 64MiB, so I do use `memmap=128M@0' (for legacy reasons the 
-x86 platform has a special exception to always exclude area between 640K 
-and 1M from being used even if not explicitly specified, but we do not 
-have a need for such legacy such legacy concerns with the MIPS port).  I 
-consider it an interim measure however until the kernel has been fixed.
+ I think having a CONFIG option automatically selected to disable the 
+ability to give a memory map override would handicap people in debugging 
+their systems or working around firmware bugs, so I would rather be 
+against it.
 
   Maciej
