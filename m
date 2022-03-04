@@ -2,55 +2,40 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DD24CD969
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 17:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D73CF4CD9B7
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 18:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240742AbiCDQsY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 4 Mar 2022 11:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        id S237347AbiCDRGh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Mar 2022 12:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239119AbiCDQsW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 11:48:22 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD5B39A;
-        Fri,  4 Mar 2022 08:47:31 -0800 (PST)
-Date:   Fri, 04 Mar 2022 16:47:19 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [Letux-kernel] [PATCH v16 1/4] drm/bridge: dw-hdmi: introduce
- dw_hdmi_enable_poll()
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        David Airlie <airlied@linux.ie>,
-        Robert Foss <robert.foss@linaro.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Message-Id: <VYB88R.ATGIVGZ13PFM1@crapouillou.net>
-In-Reply-To: <a52702bd-c929-8170-8896-d34ba82aba3c@baylibre.com>
-References: <cover.1645895582.git.hns@goldelico.com>
-        <e54838849f80454b863f9f5634dd10f79ef7bb8f.1645895582.git.hns@goldelico.com>
-        <983e9064-17ad-e646-f37d-ca9173ba0967@baylibre.com>
-        <C8AE9A7A-E288-4637-ACAD-40CD33CD5F8C@goldelico.com>
-        <3E620AF4-402E-45EA-9D92-92EAEA9647F5@goldelico.com>
-        <SHH68R.Z3J9KSY0GQVA2@crapouillou.net>
-        <ABC1BD09-383B-4499-B034-340CE88725B3@goldelico.com>
-        <RUI68R.Z009SPJAAD8N1@crapouillou.net>
-        <F0F8F36B-3A0A-476C-8C7D-566255C629C6@goldelico.com>
-        <a52702bd-c929-8170-8896-d34ba82aba3c@baylibre.com>
+        with ESMTP id S240929AbiCDRGg (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 12:06:36 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0129819D765
+        for <linux-mips@vger.kernel.org>; Fri,  4 Mar 2022 09:05:49 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 39EED92009C; Fri,  4 Mar 2022 18:05:46 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 3295992009B;
+        Fri,  4 Mar 2022 17:05:46 +0000 (GMT)
+Date:   Fri, 4 Mar 2022 17:05:46 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+cc:     Mike Rapoport <rppt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
+In-Reply-To: <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
+Message-ID: <alpine.DEB.2.21.2203041627150.47558@angie.orcam.me.uk>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn> <Yh3tgr+g/6IElq0P@kernel.org> <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn> <Yh4uUoYT+YS5Jxsv@kernel.org> <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,103 +43,55 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Neil,
+On Wed, 2 Mar 2022, Tiezhu Yang wrote:
 
-Le ven., mars 4 2022 at 14:30:46 +0100, Neil Armstrong 
-<narmstrong@baylibre.com> a écrit :
-> Hi,
+> > As for memmap= option, it does not specify the memory map but rather alters
+> > the memory map passed by the firmware. Particularity in MIPS implementation
+> > it allows to add a single range of available or reserved memory.
+> > 
+> > AFAIU, for the kdump use-case mem=X@Y should suffice.
 > 
-> On 03/03/2022 18:59, H. Nikolaus Schaller wrote:
->> Hi Paul, Neil,
->> 
->>> Am 03.03.2022 um 18:20 schrieb Paul Cercueil <paul@crapouillou.net>:
->>> 
->>> Hi Nikolaus,
->>> 
->>> [snip]
->>> 
->>>>> Well he said "the Ingenic DRM core" aka ingenic-drm-drv.c. You do 
->>>>> have access to the main drm_device in the ingenic_drm_bind() 
->>>>> function, so you can add it there (with a cleanup function 
->>>>> calling drm_kms_helper_poll_fini() registered with 
->>>>> drmm_add_action_or_reset()).
->>>> Well, do you really want to mix HPD detection between connector, 
->>>> Synopsys bridge and Ingenic DRM core? These are independent...
->>>> Or should be accessed only through the bridge chain pointers.
->>>> IMHO we should keep separate functions separate.
->>> 
->>> The drm_kms_helper_poll_init() just says "this DRM device may have 
->>> connectors that need to be polled" so it very well fits inside the 
->>> main driver, IMHO.
->> 
->> As far as I understand, it has the side-effect to always set 
->> dev->mode_config.poll_enabled and
->> schedule_delayed_work() for all devices.
->> I am not sure if this is intended for arbitrary ingenic-drm devices. 
->> But you know better than me.
->> 
->> 
->> Hm. But wait, I think I now finally remember why I have proposed it 
->> the way it is!
->> It is always better to go back to requirements and find the least 
->> invasive solution.
->> 
->> - HPD IRQ works and calls dw_hdmi_irq() [as can be shown by adding 
->> printk()]
->> - it is just that the udevd is only notified if poll_enabled = true 
->> (but no polling takes place!).
->> 
->> An earlier version (v4) to fix this proposed to add an explicit call 
->> to drm_kms_helper_hotplug_event()
->> in dw_hdmi_irq() but that was rejected a while ago because 
->> drm_helper_hpd_irq_event() will already call it:
->> 
->> 	https://www.spinics.net/lists/dri-devel/msg316846.html
->> 
->> Since this did not take into account that 
->> dev->mode_config.poll_enabled must be set true, I then proposed the
->> enable_poll() mechanism just to set this bit for the ingenic-dw-hdmi 
->> specialization.
->> 
->> So a HPD event is delivered to the dw-hdmi driver as dw_hdmi_irq() 
->> and that calls drm_helper_hpd_irq_event()
->> but not drm_kms_helper_hotplug_event() and user-space is not getting 
->> aware.
->> 
->> It is all a hack because we mix the dw-hdmi driver which originally 
->> did register its own connector
->> with an explicit connector...
->> 
->> In summary I now thing that the v4 patch is the simplest and least 
->> invasive solution.
->> 
->> We neither have to introduce a dw_hdmi_enable_poll() function or 
->> call drm_kms_helper_poll_init() anywhere.
->> 
->> It is just a single line to add to dw-hdmi. And neither touches 
->> ingenic-dw-hdmi nor ingenic-drm-drv.
->> 
->> So let's go back to v4 version (just modify commit message to better 
->> describe why we have to call
->> drm_kms_helper_hotplug_event() explicitly) and forget about 
->> alternatives.
-> 
-> Please don't and add drm_kms_helper_poll_init() from the 
-> ingenic-drm-drv.c like every other DRM driver.
-> 
-> Adding drm_kms_helper_hotplug_event() in dw-hdmi will impact other 
-> drivers using dw-hdmi but correctly
-> calling drm_kms_helper_poll_init().
+> We can modify some code to make mem=X@Y work well,
+> but according to Documentation/admin-guide/kernel-parameters.txt,
+> the common way is mem=X and memmap=X@Y, so mem=X@Y for mips seems
+> odd, the intention of this patchset is to make mem= and memmap=
+> work well and consistent with the other archs.
 
- From what I understood in Nikolaus' last message, HDMI hotplug is 
-actually correctly detected, so there's no need for polling. What is 
-missing is the call to drm_kms_helper_hotplug_event *somewhere*, so 
-that the information is correctly relayed to userspace.
+ It is not the MIPS implementation that is odd, it is the others that have 
+changed the semantics that are.
 
-I think this issue can be fixed by calling 
-drm_bridge_connector_enable_hpd() on the connector in ingenic-drm-drv.c.
+ When I added `mem=...' support to the MIPS platform, back on Dec 11th, 
+2000, which I needed for a system with with memory holes until I got 
+proper memory probing implemented, AFAIR the only other implementation was 
+for the x86 and naturally what I did for the MIPS platform was exactly the 
+same.  It used to be documented too, but the documentation was removed 
+sometime back in 2003 when someone has changed the x86 semantics for 
+reasons unknown to me and without letting people working on other 
+platforms know, so things diverged.
 
-Cheers,
--Paul
+ Please review:
 
+<https://lore.kernel.org/linux-mips/alpine.LFD.2.21.2010050133330.333514@eddie.linux-mips.org/>
 
+as it has been already discussed.
+
+ If you have a system that hangs with `mem=3G' and which does have 
+contiguous RAM available for the kernel to use from 0 through to 3GiB, 
+then please either bisect the problem or try finding the root cause as it 
+used to work at least those 21 years ago.  Conversely if your system does 
+*not* have such RAM available, then use the correct option(s) instead that 
+reflect your memory map.
+
+ It is preferable that the memory map be determined automatically either 
+by the firmware and then passed to the kernel somehow, or a device tree 
+entry, or probed by the kernel itself.  You shouldn't have to specify 
+`mem=...' by hand except for debugging or as a temporary workaround.
+
+ For example I have an x86 system that Linux does not how to interrogate 
+for RAM beyond 64MiB, so I do use `memmap=128M@0' (for legacy reasons the 
+x86 platform has a special exception to always exclude area between 640K 
+and 1M from being used even if not explicitly specified, but we do not 
+have a need for such legacy such legacy concerns with the MIPS port).  I 
+consider it an interim measure however until the kernel has been fixed.
+
+  Maciej
