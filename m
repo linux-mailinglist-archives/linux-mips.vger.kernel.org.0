@@ -2,47 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508814CD90A
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 17:24:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1CE4CD928
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 17:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236335AbiCDQZS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Mar 2022 11:25:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
+        id S236918AbiCDQfZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Mar 2022 11:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiCDQZR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 11:25:17 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FE81C2D8C;
-        Fri,  4 Mar 2022 08:24:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=fNKlE8/kIbGxOpYhbE5ion9py1Wp9T9tuw8AH7oCcZA=; b=UFYS7S+J+lksj2QuEtV0TQuSLE
-        LGVCc45JgNyS5hIudM0yXJbStGtiAEk77Ap35ryCFMJc/7yDbC8XdwPyR+F3JrWrQ+ovjtrakkCSI
-        MihN0AxqV08kY5/yY+uHs3Ed8pUNR+eOtdIbIt9z27R4kPudYlw00XeLW/c8IPSp9XeMLZCJ7bUwg
-        MfiXOoAv0py1RXBTT450L6N77fuiUXXQ/MNhtyUX60pjq+P1EAWFD+uJzUMTvPHFTqXnpNO3X+vxz
-        eLcCkpJNQdvyAdNTwuy7ub7NgK8BFcKTohEjNmd6vrU1sgUMJK+nmf+5CNjZumqYgYp4H1ovWZ/ML
-        xqYU9qqA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nQAjE-00B1Mk-6D; Fri, 04 Mar 2022 16:24:28 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v3] mips: DEC: honor CONFIG_MIPS_FP_SUPPORT=n
-Date:   Fri,  4 Mar 2022 08:24:27 -0800
-Message-Id: <20220304162427.27276-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229547AbiCDQfY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 11:35:24 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A836D4F7;
+        Fri,  4 Mar 2022 08:34:36 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id E2BFF68AFE; Fri,  4 Mar 2022 17:34:30 +0100 (CET)
+Date:   Fri, 4 Mar 2022 17:34:30 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Stefano Stabellini <sstabellini@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, iommu@lists.linux-foundation.org,
+        x86@kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 11/12] swiotlb: merge swiotlb-xen initialization into
+ swiotlb
+Message-ID: <20220304163430.GA12317@lst.de>
+References: <20220301105311.885699-1-hch@lst.de> <20220301105311.885699-12-hch@lst.de> <alpine.DEB.2.22.394.2203011720150.3261@ubuntu-linux-20-04-desktop> <20220302081500.GB23075@lst.de> <alpine.DEB.2.22.394.2203021709470.3261@ubuntu-linux-20-04-desktop> <20220303105931.GA15137@lst.de> <alpine.DEB.2.22.394.2203031447120.3261@ubuntu-linux-20-04-desktop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2203031447120.3261@ubuntu-linux-20-04-desktop>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,68 +53,27 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Include the DECstation interrupt handler in opting out of
-FPU support.
+On Thu, Mar 03, 2022 at 02:49:29PM -0800, Stefano Stabellini wrote:
+> On Thu, 3 Mar 2022, Christoph Hellwig wrote:
+> > On Wed, Mar 02, 2022 at 05:25:10PM -0800, Stefano Stabellini wrote:
+> > > Thinking more about it we actually need to drop the xen_initial_domain()
+> > > check otherwise some cases won't be functional (Dom0 not 1:1 mapped, or
+> > > DomU 1:1 mapped).
+> > 
+> > Hmm, but that would be the case even before this series, right?
+> 
+> Before this series we only have the xen_swiotlb_detect() check in
+> xen_mm_init, we don't have a second xen_initial_domain() check.
+> 
+> The issue is that this series is adding one more xen_initial_domain()
+> check in xen_mm_init.
 
-Fixes a linker error:
+In current mainline xen_mm_init calls xen_swiotlb_init unconditionally.
+But xen_swiotlb_init then calls xen_swiotlb_fixup after allocating
+the memory, which in turn calls xen_create_contiguous_region.
+xen_create_contiguous_region fails with -EINVAL for the
+!xen_initial_domain() and thus caues xen_swiotlb_fixup and
+xen_swiotlb_init to unwind and return -EINVAL.
 
-mips-linux-ld: arch/mips/dec/int-handler.o: in function `fpu':
-(.text+0x148): undefined reference to `handle_fpe_int'
-
-Fixes: 183b40f992c8 ("MIPS: Allow FP support to be disabled")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Maciej W. Rozycki <macro@orcam.me.uk>
-Cc: linux-mips@vger.kernel.org
----
-v2: add another ifdef block in int-handler.S; (Maciej)
-    add an ifdef block in dec/setup.c; (Maciej)
-v3: use IS_ENABLED() instead of an ifdef block in dec/setup.c; (Maciej)
-
- arch/mips/dec/int-handler.S |    6 +++---
- arch/mips/dec/setup.c       |    3 ++-
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
---- linux-next-20220303.orig/arch/mips/dec/int-handler.S
-+++ linux-next-20220303/arch/mips/dec/int-handler.S
-@@ -131,7 +131,7 @@
- 		 */
- 		mfc0	t0,CP0_CAUSE		# get pending interrupts
- 		mfc0	t1,CP0_STATUS
--#ifdef CONFIG_32BIT
-+#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
- 		lw	t2,cpu_fpu_mask
- #endif
- 		andi	t0,ST0_IM		# CAUSE.CE may be non-zero!
-@@ -139,7 +139,7 @@
- 
- 		beqz	t0,spurious
- 
--#ifdef CONFIG_32BIT
-+#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
- 		 and	t2,t0
- 		bnez	t2,fpu			# handle FPU immediately
- #endif
-@@ -280,7 +280,7 @@ handle_it:
- 		j	dec_irq_dispatch
- 		 nop
- 
--#ifdef CONFIG_32BIT
-+#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
- fpu:
- 		lw	t0,fpu_kstat_irq
- 		nop
---- linux-next-20220303.orig/arch/mips/dec/setup.c
-+++ linux-next-20220303/arch/mips/dec/setup.c
-@@ -746,7 +746,8 @@ void __init arch_init_irq(void)
- 		dec_interrupt[DEC_IRQ_HALT] = -1;
- 
- 	/* Register board interrupts: FPU and cascade. */
--	if (dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
-+	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT) &&
-+	    dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
- 		struct irq_desc *desc_fpu;
- 		int irq_fpu;
- 
+So as far as I can tell there is no change in behavior, but maybe I'm
+missing something subtle?
