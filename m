@@ -2,147 +2,121 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686894CE0EC
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Mar 2022 00:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF9B4CE13F
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Mar 2022 00:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiCDXXt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Mar 2022 18:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S230079AbiCDX4f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Mar 2022 18:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiCDXXs (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 18:23:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88154DEC5;
-        Fri,  4 Mar 2022 15:22:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230086AbiCDX4d (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 18:56:33 -0500
+Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E617B27B91E
+        for <linux-mips@vger.kernel.org>; Fri,  4 Mar 2022 15:55:44 -0800 (PST)
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42C0CB82C43;
-        Fri,  4 Mar 2022 23:22:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31A5C340E9;
-        Fri,  4 Mar 2022 23:22:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646436175;
-        bh=JGCldX7FEWqVZ5Q+U58HuEVwslrSLhbhnML6kEBr9Ws=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=rQAjzobsYiAs9wsfWE2rkUFtA1eVSkOA2Iav4ks0CqW9RP+ItlZh454EggaFHA0t7
-         cMuMuy/be5qJ5PPtyG/1I9k0vG8LWuC0s+fh9P52rFCGl1J82aaAj6ulLeOz4jBEd+
-         Nd/6EoXUpXBY6u39E8iSHqihbbZHokm82wpl1YjLkM0+9H+801fikQc/d+uXwGJnhl
-         XBKYJYaojo34JXtttn23IyibunqEvz4QH2Jr0xJKJVWlwM1v3PugwJccgZI7srIP8x
-         7QO2Nby/+u0TkfMtRQBDDfBlWCbEwfvoCjXrEBxdGWWN5TvTd9q9BnIh/lHE9wt82J
-         YB5glRBbksGuA==
-Date:   Fri, 4 Mar 2022 15:22:54 -0800 (PST)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Christoph Hellwig <hch@lst.de>
-cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        iommu@lists.linux-foundation.org, x86@kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 11/12] swiotlb: merge swiotlb-xen initialization into
- swiotlb
-In-Reply-To: <20220304163430.GA12317@lst.de>
-Message-ID: <alpine.DEB.2.22.394.2203041511090.3261@ubuntu-linux-20-04-desktop>
-References: <20220301105311.885699-1-hch@lst.de> <20220301105311.885699-12-hch@lst.de> <alpine.DEB.2.22.394.2203011720150.3261@ubuntu-linux-20-04-desktop> <20220302081500.GB23075@lst.de> <alpine.DEB.2.22.394.2203021709470.3261@ubuntu-linux-20-04-desktop>
- <20220303105931.GA15137@lst.de> <alpine.DEB.2.22.394.2203031447120.3261@ubuntu-linux-20-04-desktop> <20220304163430.GA12317@lst.de>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        by mail-41103.protonmail.ch (Postfix) with ESMTPS id 4K9Pqz2PTpz4x1gn
+        for <linux-mips@vger.kernel.org>; Fri,  4 Mar 2022 23:55:43 +0000 (UTC)
+Authentication-Results: mail-41103.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="UK7u3n1S"
+Date:   Fri, 04 Mar 2022 23:55:30 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1646438136;
+        bh=7iQsbSfGsE+f1tC4tYMCvNcqThKw+2jGothi5mFcCCI=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=UK7u3n1SZq50J3Aw2I1DEiuetRd2HHVjlZE3QvcV6iPKP3tXK1/8u4GflGLVr67Os
+         DtF0yVoisgLRoRC6jD/VytER49hooQtTybS/KlnPlYK9mL67A3UWb/D2qz1soAaDkN
+         a8SrfQAQXmgZc1Eu8u01l77fWdyyG8nxs8q3xZuyBDyykvZqOIE1ScmHRkDc3E30XI
+         5liUTHgHmP+Q2Mh+5G5/9UnqvAeVgKDfVZJipUTGXCLL8QnBESvYT5PP3S93VKTDKj
+         iWbhAimmcq1vWj0jfY0vG4W0KZaFMrsFJqJRCOlAOd6j5R3vaOTWibi7CLk/PbfwAR
+         iozr0O3sQHUEg==
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
+        linux-mips@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH mips-fixes] MIPS: fix fortify panic when copying asm exception handlers
+Message-ID: <20220304234818.153517-1-alobakin@pm.me>
+In-Reply-To: <20220301163411.GC13091@alpha.franken.de>
+References: <20220223012338.262041-1-alobakin@pm.me> <20220301163411.GC13091@alpha.franken.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 4 Mar 2022, Christoph Hellwig wrote:
-> On Thu, Mar 03, 2022 at 02:49:29PM -0800, Stefano Stabellini wrote:
-> > On Thu, 3 Mar 2022, Christoph Hellwig wrote:
-> > > On Wed, Mar 02, 2022 at 05:25:10PM -0800, Stefano Stabellini wrote:
-> > > > Thinking more about it we actually need to drop the xen_initial_domain()
-> > > > check otherwise some cases won't be functional (Dom0 not 1:1 mapped, or
-> > > > DomU 1:1 mapped).
-> > > 
-> > > Hmm, but that would be the case even before this series, right?
-> > 
-> > Before this series we only have the xen_swiotlb_detect() check in
-> > xen_mm_init, we don't have a second xen_initial_domain() check.
-> > 
-> > The issue is that this series is adding one more xen_initial_domain()
-> > check in xen_mm_init.
-> 
-> In current mainline xen_mm_init calls xen_swiotlb_init unconditionally.
-> But xen_swiotlb_init then calls xen_swiotlb_fixup after allocating
-> the memory, which in turn calls xen_create_contiguous_region.
-> xen_create_contiguous_region fails with -EINVAL for the
-> !xen_initial_domain() and thus caues xen_swiotlb_fixup and
-> xen_swiotlb_init to unwind and return -EINVAL.
-> 
-> So as far as I can tell there is no change in behavior, but maybe I'm
-> missing something subtle?
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Date: Tue, 1 Mar 2022 17:34:11 +0100
 
-You are right.
+> On Wed, Feb 23, 2022 at 01:30:23AM +0000, Alexander Lobakin wrote:
+> > With KCFLAGS=3D"-O3", I was able to trigger a fortify-source
+> > memcpy() overflow panic on set_vi_srs_handler().
+> > Although O3 level is not supported in the mainline, under some
+> > conditions that may've happened with any optimization settings,
+> > it's just a matter of inlining luck. The panic itself is correct,
+> > more precisely, 50/50 false-positive and not at the same time.
+> > >From the one side, no real overflow happens. Exception handler
+> > defined in asm just gets copied to some reserved places in the
+> > memory.
+> > But the reason behind is that C code refers to that exception
+> > handler declares it as `char`, i.e. something of 1 byte length.
+> > It's obvious that the asm function itself is way more than 1 byte,
+> > so fortify logics thought we are going to past the symbol declared.
+> > The standard way to refer to asm symbols from C code which is not
+> > supposed to be called from C is to declare them as
+> > `extern const u8[]`. This is fully correct from any point of view,
+> > as any code itself is just a bunch of bytes (including 0 as it is
+> > for syms like _stext/_etext/etc.), and the exact size is not known
+> > at the moment of compilation.
+> > Adjust the type of the except_vec_vi_*() and related variables.
+> > Make set_handler() take `const` as a second argument to avoid
+> > cast-away warnings and give a little more room for optimization.
+> >
+> > Fixes: e01402b115cc ("More AP / SP bits for the 34K, the Malta bits and=
+ things. Still wants")
+> > Fixes: c65a5480ff29 ("[MIPS] Fix potential latency problem due to non-a=
+tomic cpu_wait.")
+> > Cc: stable@vger.kernel.org # 3.10+
+>
+> I like your patch, but I have a problem with these tags. If I understand
+> your description correctly there is no bug, but because of the way the
+> code is written fortify-source gets confused. So if it doesn't fix
+> anything, there shouldn't be Fixes tags, IMHO. If you agree, I'll
+> apply this patch to mips-next and remove the tags.
 
-The xen_initial_domain() check in xen_create_contiguous_region() is
-wrong and we should get rid of it. It is a leftover from before the
-xen_swiotlb_detect rework.
+Oh, sorry for the late reply.
+Sure, feel free to apply to mips-next. Yeah, there is no real bug,
+just not-really-100%-clean-code which works anyways.
 
-We could either remove it or change it into another xen_swiotlb_detect()
-check.
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 =
+]
 
-Feel free to add the patch to your series or fold it with another patch
-or rework it as you prefer. Thanks for spotting this!
+Thanks,
+Al
 
----
-
-arm/xen: don't check for xen_initial_domain() in xen_create_contiguous_region
-
-It used to be that Linux enabled swiotlb-xen when running a dom0 on ARM.
-Since f5079a9a2a31 "xen/arm: introduce XENFEAT_direct_mapped and
-XENFEAT_not_direct_mapped", Linux detects whether to enable or disable
-swiotlb-xen based on the new feature flags: XENFEAT_direct_mapped and
-XENFEAT_not_direct_mapped.
-
-However, there is still a leftover xen_initial_domain() check in
-xen_create_contiguous_region. Remove the check as
-xen_create_contiguous_region is only called by swiotlb-xen during
-initialization. If xen_create_contiguous_region is called, we know Linux
-is running 1:1 mapped so there is no need for additional checks.
-
-Also update the in-code comment.
-
-Signed-off-by: Stefano Stabellini <stefano.stabellini@xilinx.com>
-
-
-diff --git a/arch/arm/xen/mm.c b/arch/arm/xen/mm.c
-index a7e54a087b80..28c207060253 100644
---- a/arch/arm/xen/mm.c
-+++ b/arch/arm/xen/mm.c
-@@ -122,10 +122,7 @@ int xen_create_contiguous_region(phys_addr_t pstart, unsigned int order,
- 				 unsigned int address_bits,
- 				 dma_addr_t *dma_handle)
- {
--	if (!xen_initial_domain())
--		return -EINVAL;
--
--	/* we assume that dom0 is mapped 1:1 for now */
-+	/* the domain is 1:1 mapped to use swiotlb-xen */
- 	*dma_handle = pstart;
- 	return 0;
- }
