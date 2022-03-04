@@ -2,66 +2,99 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574324CDF8A
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 22:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6363F4CDF9F
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 22:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbiCDVET (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Mar 2022 16:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
+        id S229473AbiCDVOC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Mar 2022 16:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiCDVES (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 16:04:18 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F55E766B;
-        Fri,  4 Mar 2022 13:03:29 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 0D8E068BEB; Fri,  4 Mar 2022 22:03:18 +0100 (CET)
-Date:   Fri, 4 Mar 2022 22:03:16 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        iommu@lists.linux-foundation.org, x86@kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 11/12] swiotlb: merge swiotlb-xen initialization into
- swiotlb
-Message-ID: <20220304210316.GA17365@lst.de>
-References: <20220301105311.885699-1-hch@lst.de> <20220301105311.885699-12-hch@lst.de> <alpine.DEB.2.22.394.2203011720150.3261@ubuntu-linux-20-04-desktop> <ca748512-12bb-7d75-13f1-8d5ec9703e26@oracle.com> <20220304172859.GA12860@lst.de> <fc3992a8-896b-f0fc-e500-9010ec085c57@oracle.com> <20220304174308.GA13515@lst.de> <75cb15b5-d861-1b88-5413-df326c3f1144@oracle.com>
+        with ESMTP id S229464AbiCDVOB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 16:14:01 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9952213CEC1;
+        Fri,  4 Mar 2022 13:13:12 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id BDB1892009C; Fri,  4 Mar 2022 22:13:11 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id B6A0792009B;
+        Fri,  4 Mar 2022 21:13:11 +0000 (GMT)
+Date:   Fri, 4 Mar 2022 21:13:11 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Sanitise Cavium switch cases in TLB handler
+ synthesizers
+Message-ID: <alpine.DEB.2.21.2203042044580.47558@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75cb15b5-d861-1b88-5413-df326c3f1144@oracle.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,HDRS_LCASE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 03:18:23PM -0500, Boris Ostrovsky wrote:
-> This indeed allows dom0 to boot. Not sure I see where in the next patch this would have been fixed?
+It makes no sense to fall through to `break'.  Therefore reorder the 
+switch statements so as to have the Cavium cases first, followed by the 
+default case, which improves readability and pacifies code analysis 
+tools.  No change in semantics, assembly produced is exactly the same.
 
-I thought it did, but it doesn't.  In the meantime I've pushed out an
-updated branch with this folded in to:
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Fixes: bc431d2153cc ("MIPS: Fix fall-through warnings for Clang")
+---
+ arch/mips/mm/tlbex.c |   23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
-git://git.infradead.org/users/hch/misc.git swiotlb-init-cleanup
-
-> (BTW, just noticed in iommu_setup() you set this variable to 1. Should be 'true')
-
-Thank, I'll fix this up.
+linux-mips-tlbex-cavium-odd-switch.diff
+Index: linux-macro/arch/mips/mm/tlbex.c
+===================================================================
+--- linux-macro.orig/arch/mips/mm/tlbex.c
++++ linux-macro/arch/mips/mm/tlbex.c
+@@ -2160,16 +2160,14 @@ static void build_r4000_tlb_load_handler
+ 		uasm_i_tlbr(&p);
+ 
+ 		switch (current_cpu_type()) {
+-		default:
+-			if (cpu_has_mips_r2_exec_hazard) {
+-				uasm_i_ehb(&p);
+-			fallthrough;
+-
+ 		case CPU_CAVIUM_OCTEON:
+ 		case CPU_CAVIUM_OCTEON_PLUS:
+ 		case CPU_CAVIUM_OCTEON2:
+-				break;
+-			}
++			break;
++		default:
++			if (cpu_has_mips_r2_exec_hazard)
++				uasm_i_ehb(&p);
++			break;
+ 		}
+ 
+ 		/* Examine  entrylo 0 or 1 based on ptr. */
+@@ -2236,15 +2234,14 @@ static void build_r4000_tlb_load_handler
+ 		uasm_i_tlbr(&p);
+ 
+ 		switch (current_cpu_type()) {
+-		default:
+-			if (cpu_has_mips_r2_exec_hazard) {
+-				uasm_i_ehb(&p);
+-
+ 		case CPU_CAVIUM_OCTEON:
+ 		case CPU_CAVIUM_OCTEON_PLUS:
+ 		case CPU_CAVIUM_OCTEON2:
+-				break;
+-			}
++			break;
++		default:
++			if (cpu_has_mips_r2_exec_hazard)
++				uasm_i_ehb(&p);
++			break;
+ 		}
+ 
+ 		/* Examine  entrylo 0 or 1 based on ptr. */
