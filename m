@@ -2,40 +2,49 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA0C4CD9D2
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 18:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 188204CDA5F
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Mar 2022 18:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbiCDRMe (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Mar 2022 12:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S238252AbiCDR3y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 4 Mar 2022 12:29:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237000AbiCDRMd (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 12:12:33 -0500
-X-Greylist: delayed 358 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Mar 2022 09:11:45 PST
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C64A71CD9EF;
-        Fri,  4 Mar 2022 09:11:45 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id F09E792009D; Fri,  4 Mar 2022 18:11:44 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id EA18792009B;
-        Fri,  4 Mar 2022 17:11:44 +0000 (GMT)
-Date:   Fri, 4 Mar 2022 17:11:44 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] MIPS: Refactor early_parse_mem() to fix mem=
- parameter
-In-Reply-To: <20220304153517.GA28487@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2203041634040.47558@angie.orcam.me.uk>
-References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn> <1646108941-27919-2-git-send-email-yangtiezhu@loongson.cn> <20220304151052.GA27642@alpha.franken.de> <20220304153517.GA28487@alpha.franken.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S229781AbiCDR3x (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 12:29:53 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B11145600;
+        Fri,  4 Mar 2022 09:29:05 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id C0EE168AFE; Fri,  4 Mar 2022 18:28:59 +0100 (CET)
+Date:   Fri, 4 Mar 2022 18:28:59 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        iommu@lists.linux-foundation.org, x86@kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 11/12] swiotlb: merge swiotlb-xen initialization into
+ swiotlb
+Message-ID: <20220304172859.GA12860@lst.de>
+References: <20220301105311.885699-1-hch@lst.de> <20220301105311.885699-12-hch@lst.de> <alpine.DEB.2.22.394.2203011720150.3261@ubuntu-linux-20-04-desktop> <ca748512-12bb-7d75-13f1-8d5ec9703e26@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca748512-12bb-7d75-13f1-8d5ec9703e26@oracle.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -45,29 +54,18 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, 4 Mar 2022, Thomas Bogendoerfer wrote:
+On Wed, Mar 02, 2022 at 08:15:03AM -0500, Boris Ostrovsky wrote:
+> Not for me, I fail to boot with
+>
+> [   52.202000] bnxt_en 0000:31:00.0: swiotlb buffer is full (sz: 256 bytes), total 0 (slots), used 0 (slots)
+>
+> (this is iscsi root so I need the NIC).
+>
+>
+> I bisected it to "x86: remove the IOMMU table infrastructure" but haven't actually looked at the code yet.
 
-> > > With this patch, when add "mem=3G" to the command-line, the
-> > > kernel boots successfully, we can see the following messages:
-> > 
-> > unfortunately this patch would break platforms without memory detection,
-> > which simply use mem=32M for memory configuration. Not sure how many
-> > rely on this mechanism. If we can make sure nobody uses it, I'm fine
-> > with your patch.
-> 
-> maybe we could add a CONFIG option, which will be selected by
-> platforms, which don't need/want this usermem thing.
+That looks like the swiotlb buffer did not get initialized at all, but I
+can't really explain why.
 
- FWIW I don't understand what the issue is here beyond that we have a bug 
-that causes a system to hang when "mem=3G" is passed on the kernel command 
-line.  That is assuming that system does have contiguous RAM available for 
-the kernel to use from address 0 up to 3GiB; otherwise it's a user error 
-to tell the kernel it has that memory available (I did get bitten by that 
-myself too): garbage in, garbage out.
-
- I think having a CONFIG option automatically selected to disable the 
-ability to give a memory map override would handicap people in debugging 
-their systems or working around firmware bugs, so I would rather be 
-against it.
-
-  Maciej
+Can you stick in a printk and see if xen_swiotlb_init_early gets called
+at all?
