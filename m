@@ -2,121 +2,142 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF9B4CE13F
-	for <lists+linux-mips@lfdr.de>; Sat,  5 Mar 2022 00:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 363374CE33E
+	for <lists+linux-mips@lfdr.de>; Sat,  5 Mar 2022 07:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiCDX4f (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 4 Mar 2022 18:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        id S229456AbiCEGUs (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 5 Mar 2022 01:20:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiCDX4d (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 4 Mar 2022 18:56:33 -0500
-Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E617B27B91E
-        for <linux-mips@vger.kernel.org>; Fri,  4 Mar 2022 15:55:44 -0800 (PST)
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        by mail-41103.protonmail.ch (Postfix) with ESMTPS id 4K9Pqz2PTpz4x1gn
-        for <linux-mips@vger.kernel.org>; Fri,  4 Mar 2022 23:55:43 +0000 (UTC)
-Authentication-Results: mail-41103.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="UK7u3n1S"
-Date:   Fri, 04 Mar 2022 23:55:30 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1646438136;
-        bh=7iQsbSfGsE+f1tC4tYMCvNcqThKw+2jGothi5mFcCCI=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=UK7u3n1SZq50J3Aw2I1DEiuetRd2HHVjlZE3QvcV6iPKP3tXK1/8u4GflGLVr67Os
-         DtF0yVoisgLRoRC6jD/VytER49hooQtTybS/KlnPlYK9mL67A3UWb/D2qz1soAaDkN
-         a8SrfQAQXmgZc1Eu8u01l77fWdyyG8nxs8q3xZuyBDyykvZqOIE1ScmHRkDc3E30XI
-         5liUTHgHmP+Q2Mh+5G5/9UnqvAeVgKDfVZJipUTGXCLL8QnBESvYT5PP3S93VKTDKj
-         iWbhAimmcq1vWj0jfY0vG4W0KZaFMrsFJqJRCOlAOd6j5R3vaOTWibi7CLk/PbfwAR
-         iozr0O3sQHUEg==
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH mips-fixes] MIPS: fix fortify panic when copying asm exception handlers
-Message-ID: <20220304234818.153517-1-alobakin@pm.me>
-In-Reply-To: <20220301163411.GC13091@alpha.franken.de>
-References: <20220223012338.262041-1-alobakin@pm.me> <20220301163411.GC13091@alpha.franken.de>
+        with ESMTP id S231288AbiCEGUr (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 5 Mar 2022 01:20:47 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F54E522DA;
+        Fri,  4 Mar 2022 22:19:55 -0800 (PST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxWs39ACNi6B0DAA--.15394S3;
+        Sat, 05 Mar 2022 14:19:42 +0800 (CST)
+Subject: Re: [PATCH v4 0/4] MIPS: Modify mem= and memmap= parameter
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
+ <Yh3tgr+g/6IElq0P@kernel.org>
+ <cfd74b5b-39c3-733a-5226-515991f91f39@loongson.cn>
+ <Yh4uUoYT+YS5Jxsv@kernel.org>
+ <8956c625-c18d-846e-3e65-7920776b27f3@loongson.cn>
+ <alpine.DEB.2.21.2203041627150.47558@angie.orcam.me.uk>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <4e10d7a4-3b3e-a220-8cd2-565614288950@loongson.cn>
+Date:   Sat, 5 Mar 2022 14:19:41 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <alpine.DEB.2.21.2203041627150.47558@angie.orcam.me.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9AxWs39ACNi6B0DAA--.15394S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCw1Uur1xJw4DKrWrKr48JFb_yoW5ZF1xpF
+        W5Ka1xKF4kJF1SkryxCw1Iqry0y3yrt395Kr93Jryvkws8ZF1I9r1fKa98Za4DXr1fWa42
+        vF42qF9F9a4DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxkIecxEwVAFwVW8AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjfU1uc_DUUUU
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date: Tue, 1 Mar 2022 17:34:11 +0100
 
-> On Wed, Feb 23, 2022 at 01:30:23AM +0000, Alexander Lobakin wrote:
-> > With KCFLAGS=3D"-O3", I was able to trigger a fortify-source
-> > memcpy() overflow panic on set_vi_srs_handler().
-> > Although O3 level is not supported in the mainline, under some
-> > conditions that may've happened with any optimization settings,
-> > it's just a matter of inlining luck. The panic itself is correct,
-> > more precisely, 50/50 false-positive and not at the same time.
-> > >From the one side, no real overflow happens. Exception handler
-> > defined in asm just gets copied to some reserved places in the
-> > memory.
-> > But the reason behind is that C code refers to that exception
-> > handler declares it as `char`, i.e. something of 1 byte length.
-> > It's obvious that the asm function itself is way more than 1 byte,
-> > so fortify logics thought we are going to past the symbol declared.
-> > The standard way to refer to asm symbols from C code which is not
-> > supposed to be called from C is to declare them as
-> > `extern const u8[]`. This is fully correct from any point of view,
-> > as any code itself is just a bunch of bytes (including 0 as it is
-> > for syms like _stext/_etext/etc.), and the exact size is not known
-> > at the moment of compilation.
-> > Adjust the type of the except_vec_vi_*() and related variables.
-> > Make set_handler() take `const` as a second argument to avoid
-> > cast-away warnings and give a little more room for optimization.
-> >
-> > Fixes: e01402b115cc ("More AP / SP bits for the 34K, the Malta bits and=
- things. Still wants")
-> > Fixes: c65a5480ff29 ("[MIPS] Fix potential latency problem due to non-a=
-tomic cpu_wait.")
-> > Cc: stable@vger.kernel.org # 3.10+
->
-> I like your patch, but I have a problem with these tags. If I understand
-> your description correctly there is no bug, but because of the way the
-> code is written fortify-source gets confused. So if it doesn't fix
-> anything, there shouldn't be Fixes tags, IMHO. If you agree, I'll
-> apply this patch to mips-next and remove the tags.
 
-Oh, sorry for the late reply.
-Sure, feel free to apply to mips-next. Yeah, there is no real bug,
-just not-really-100%-clean-code which works anyways.
+On 03/05/2022 01:05 AM, Maciej W. Rozycki wrote:
+> On Wed, 2 Mar 2022, Tiezhu Yang wrote:
+>
+>>> As for memmap= option, it does not specify the memory map but rather alters
+>>> the memory map passed by the firmware. Particularity in MIPS implementation
+>>> it allows to add a single range of available or reserved memory.
+>>>
+>>> AFAIU, for the kdump use-case mem=X@Y should suffice.
+>>
+>> We can modify some code to make mem=X@Y work well,
+>> but according to Documentation/admin-guide/kernel-parameters.txt,
+>> the common way is mem=X and memmap=X@Y, so mem=X@Y for mips seems
+>> odd, the intention of this patchset is to make mem= and memmap=
+>> work well and consistent with the other archs.
+>
+>  It is not the MIPS implementation that is odd, it is the others that have
+> changed the semantics that are.
+>
+>  When I added `mem=...' support to the MIPS platform, back on Dec 11th,
+> 2000, which I needed for a system with with memory holes until I got
+> proper memory probing implemented, AFAIR the only other implementation was
+> for the x86 and naturally what I did for the MIPS platform was exactly the
+> same.  It used to be documented too, but the documentation was removed
+> sometime back in 2003 when someone has changed the x86 semantics for
+> reasons unknown to me and without letting people working on other
+> platforms know, so things diverged.
+>
+>  Please review:
+>
+> <https://lore.kernel.org/linux-mips/alpine.LFD.2.21.2010050133330.333514@eddie.linux-mips.org/>
+>
+> as it has been already discussed.
+>
+>  If you have a system that hangs with `mem=3G' and which does have
+> contiguous RAM available for the kernel to use from 0 through to 3GiB,
+> then please either bisect the problem or try finding the root cause as it
+> used to work at least those 21 years ago.  Conversely if your system does
+> *not* have such RAM available, then use the correct option(s) instead that
+> reflect your memory map.
+>
+>  It is preferable that the memory map be determined automatically either
+> by the firmware and then passed to the kernel somehow, or a device tree
+> entry, or probed by the kernel itself.  You shouldn't have to specify
+> `mem=...' by hand except for debugging or as a temporary workaround.
+>
+>  For example I have an x86 system that Linux does not how to interrogate
+> for RAM beyond 64MiB, so I do use `memmap=128M@0' (for legacy reasons the
+> x86 platform has a special exception to always exclude area between 640K
+> and 1M from being used even if not explicitly specified, but we do not
+> have a need for such legacy such legacy concerns with the MIPS port).  I
+> consider it an interim measure however until the kernel has been fixed.
+>
+>   Maciej
+>
 
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+Hi Mike, Thomas and Maciej,
+
+Thank you very much for your feedbacks and discussions.
+
+To be frank, I think mem= and memmap= are used for debugging and testing
+in most cases, the intention of this patchset is to refactor the related
+code to make them work well on mips.
+
+Now, if put the current patch #2 as the first patch, and then modify the
+current patch #1 to support both mem=limit and mem=limit@base (if @base
+is omitted, it is equivalent to mem=limit), the other patches #3 and #4
+remain unchanged, make sense?
+
+I will send v5 for your review.
 
 Thanks,
-Al
+Tiezhu
 
