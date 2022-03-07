@@ -2,58 +2,73 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3C54D0336
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 16:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA37B4D0369
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 16:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243822AbiCGPpy (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Mar 2022 10:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
+        id S233462AbiCGPvM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Mar 2022 10:51:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbiCGPpx (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 10:45:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA2B7EA1D;
-        Mon,  7 Mar 2022 07:44:59 -0800 (PST)
+        with ESMTP id S232830AbiCGPvL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 10:51:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C4992D22;
+        Mon,  7 Mar 2022 07:50:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6592614B5;
-        Mon,  7 Mar 2022 15:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0485DC340E9;
-        Mon,  7 Mar 2022 15:44:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B695CB815F8;
+        Mon,  7 Mar 2022 15:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C24CC340EB;
+        Mon,  7 Mar 2022 15:50:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646667898;
-        bh=U0RuGnkHGZSN7rcOCs7fzKl6Y7/Lp0fhUWcoOUZcq5Q=;
+        s=k20201202; t=1646668214;
+        bh=kOQrIB//kV8fsU32x9w7qLTU4u76ufnPafjP+aW2LGY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ij3eAcL4q9iwJKBYHI831XyC2X3aweJTDGKv6pq1qYjqFEHhsWcwvpfB4x74p7jeI
-         jFVHLTLY/v/fHZGjI13dQeb/stTFMTUwwewrvRGShRnmRMpzfD4CzTq8UH75DJsGDx
-         r0WKa4OnhjgUMOWB7xEGpUJBcf8WpA6K0sJJ9iRggWFEXACaqjHBng5aBZAJw4w+KM
-         Ar3x3Ce8iUywGtRo6BWM6TWzj4MetT1f1Ul5K0nGGW0FPta87KPXS8vPUoHbgrrlsy
-         Iq/eaXjutkywtcI/65tVlISD1sXTttoZX4PxUOO0P8p65u7DT9fjliaLz36kMGk1pb
-         203t6MtlONLhA==
-Date:   Mon, 7 Mar 2022 17:44:17 +0200
+        b=Xn3UfVQig7siysNhTckqEt/3YwfSb/hQX777ZeUBNR25CWtPmBg3AozCiz0C9Vx6e
+         vI0+ZBFRrmaTJtZfVDBV/wXr9kndWweVAzDmNxzcrOpxEk6sb14183+qU7UsuGoPyD
+         BJdWxk6dfqo2i8LIPODB/uTqA5n5E/QX1Oc7iq5pAYpzAleGc7lc3aIGfn/PwB89lT
+         Ot8o/PrK/bdSm0BXhzDWSnMhi1VaTaPkbIEK8WSygHQZnXIc+PUDkiS/iC31zhENiH
+         FHocAoA6uueu5ukIdmZ08K5KjK1lXb4Pte/4tQ3FvPFI29pSDVfw1hXJlmCJ0ZynWA
+         ECBe+IItixYgw==
+Date:   Mon, 7 Mar 2022 17:49:33 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, Dave Hansen <dave.hansen@linux.intel.com>,
         Nathaniel McCallum <nathaniel@profian.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
-        linux-sgx@vger.kernel.org, jaharkes@cs.cmu.edu,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        codalist@telemann.coda.cs.cmu.edu, linux-unionfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH RFC v2] mm: Add f_ops->populate()
-Message-ID: <YiYoUfYuTDsld6L0@iki.fi>
-References: <20220306032655.97863-1-jarkko@kernel.org>
- <20220306152456.2649b1c56da2a4ce4f487be4@linux-foundation.org>
- <c3083144-bfc1-3260-164c-e59b2d110df8@intel.com>
- <YiXsJRE8CWOvFNWH@iki.fi>
- <3c974f25-ece6-102b-01c3-bd7e6274f613@intel.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        zhangyiru <zhangyiru3@huawei.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        linux-mips@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, codalist@coda.cs.cmu.edu,
+        linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/3] MAP_POPULATE for device memory
+Message-ID: <YiYpjdD8BYcoGQ4s@iki.fi>
+References: <20220306053211.135762-1-jarkko@kernel.org>
+ <d6b09f23-f470-c119-8d3e-7d72a3448b64@redhat.com>
+ <YiYVHTkS8IsMMw6T@iki.fi>
+ <dab25b2d-88f1-7ad5-c28a-15a97b38af03@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3c974f25-ece6-102b-01c3-bd7e6274f613@intel.com>
+In-Reply-To: <dab25b2d-88f1-7ad5-c28a-15a97b38af03@redhat.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,17 +79,74 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 07:29:22AM -0800, Dave Hansen wrote:
-> On 3/7/22 03:27, Jarkko Sakkinen wrote:
-> > But e.g. in __mm_populate() anything with (VM_IO | VM_PFNMAP) gets
-> > filtered out and never reach that function.
+On Mon, Mar 07, 2022 at 03:33:52PM +0100, David Hildenbrand wrote:
+> On 07.03.22 15:22, Jarkko Sakkinen wrote:
+> > On Mon, Mar 07, 2022 at 11:12:44AM +0100, David Hildenbrand wrote:
+> >> On 06.03.22 06:32, Jarkko Sakkinen wrote:
+> >>> For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
+> >>> to use that for initializing the device memory by providing a new callback
+> >>> f_ops->populate() for the purpose.
+> >>>
+> >>> SGX patches are provided to show the callback in context.
+> >>>
+> >>> An obvious alternative is a ioctl but it is less elegant and requires
+> >>> two syscalls (mmap + ioctl) per memory range, instead of just one
+> >>> (mmap).
+> >>
+> >> What about extending MADV_POPULATE_READ | MADV_POPULATE_WRITE to support
+> >> VM_IO | VM_PFNMAP (as well?) ?
 > > 
-> > I don't know unorthodox that'd be but could we perhaps have a VM
-> > flag for SGX?
+> > What would be a proper point to bind that behaviour? For mmap/mprotect it'd
+> > be probably populate_vma_page_range() because that would span both mmap()
+> > and mprotect() (Dave's suggestion in this thread).
 > 
-> SGX only works on a subset of the chips from one vendor on one
-> architecture.  That doesn't seem worth burning a VM flag.
+> MADV_POPULATE_* ends up in faultin_vma_page_range(), right next to
+> populate_vma_page_range(). So it might require a similar way to hook
+> into the driver I guess.
+> 
+> > 
+> > For MAP_POPULATE I did not have hard proof to show that it would be used
+> > by other drivers but for madvice() you can find at least a few ioctl
+> > based implementations:
+> > 
+> > $ git grep -e madv --and \( -e ioc \)  drivers/
+> > drivers/gpu/drm/i915/gem/i915_gem_ioctls.h:int i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
+> > drivers/gpu/drm/i915/i915_driver.c:     DRM_IOCTL_DEF_DRV(I915_GEM_MADVISE, i915_gem_madvise_ioctl, DRM_RENDER_ALLOW),
+> > drivers/gpu/drm/i915/i915_gem.c:i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
+> > drivers/gpu/drm/msm/msm_drv.c:static int msm_ioctl_gem_madvise(struct drm_device *dev, void *data,
+> > drivers/gpu/drm/msm/msm_drv.c:  DRM_IOCTL_DEF_DRV(MSM_GEM_MADVISE,  msm_ioctl_gem_madvise,  DRM_RENDER_ALLOW),
+> > drivers/gpu/drm/panfrost/panfrost_drv.c:static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+> > drivers/gpu/drm/vc4/vc4_drv.c:  DRM_IOCTL_DEF_DRV(VC4_GEM_MADVISE, vc4_gem_madvise_ioctl, DRM_RENDER_ALLOW),
+> > drivers/gpu/drm/vc4/vc4_drv.h:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
+> > drivers/gpu/drm/vc4/vc4_gem.c:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
+> > 
+> > IMHO this also provides supportive claim for MAP_POPULATE, and yeah, I
+> > agree that to be consistent implementation, both madvice() and MAP_POPULATE
+> > should work.
+> 
+> MADV_POPULATE_WRITE + MADV_DONTNEED/FALLOC_FL_PUNCH_HOLE is one way to
+> dynamically manage memory consumption inside a sparse memory mapping
+> (preallocate/populate via MADV_POPULATE_WRITE, discard via
+> MADV_DONTNEED/FALLOC_FL_PUNCH_HOLE).  Extending that whole mechanism to
+> deal with VM_IO | VM_PFNMAP mappings as well could be interesting.
+> 
+> At least I herd about some ideas where we might want to dynamically
+> expose memory to a VM (via virtio-mem) inside a sparse memory mapping,
+> and the memory in that sparse memory mapping is provided from a
+> dedicated memory pool managed by a device driver -- not just using
+> ordinary anonymous/file/hugetlb memory as we do right now.
+> 
+> Now, this is certainly stuff for the future, I just wanted to mention it.
 
-What do you think of Matthew's idea of using ra_state for prediction?
+For SGX purposes I'm now studying the possibly to use ra_state to get
+idea where do "prefetching" (EAUG's) in batches, as it is something
+that would not require any intrusive changes to mm but thank you for
+sharing this. Looking into implementing this properly is the 2nd option,
+if that does not work out.
+
+> -- 
+> Thanks,
+> 
+> David / dhildenb
 
 BR, Jarkko
