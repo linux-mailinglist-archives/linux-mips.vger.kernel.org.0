@@ -2,40 +2,39 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA054D000E
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 14:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 486284D0112
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 15:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236110AbiCGNbO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Mar 2022 08:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
+        id S242389AbiCGOYB (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Mar 2022 09:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiCGNbN (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 08:31:13 -0500
+        with ESMTP id S236077AbiCGOYA (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 09:24:00 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0C77EA0B;
-        Mon,  7 Mar 2022 05:30:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A9532F5;
+        Mon,  7 Mar 2022 06:23:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1E84B81243;
-        Mon,  7 Mar 2022 13:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00802C340E9;
-        Mon,  7 Mar 2022 13:30:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F791B81252;
+        Mon,  7 Mar 2022 14:23:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC2EC340E9;
+        Mon,  7 Mar 2022 14:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646659816;
-        bh=oBLz9AgNUk2wIEBHGy6U9s99emBLztMRAodnUzUj5w8=;
+        s=k20201202; t=1646662982;
+        bh=0Qn7igLK4+VBbSp7gLFhF/fhKeQP55ogIhfNSw2/WLE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sFCk7udNm2J44RTzfUJ+MfPwopHSW/nmauJl4OmAbMfrWN2sP0SwIOWXTFvBG7ITK
-         ZckklcNFLR5z7x04rHy7YPPgl/p5kkHiqVMVYe26/xj40ZZ/jSJS6b2bBHs4cT+qlg
-         lSryt84BjNDG2rf9ETJvTM0G+a+p4bQl/Xod+mFKXtsAk8t/TDHR0+xtUPhy5OHE2n
-         RV7OiySPImo+g4q9DZSj1HLZYgcZTUZlg7l86k4mMgBlrwGy8WT95FerjuTQ/xJ2ij
-         Fs2tnxaydRH2XVd9fVLVS75/YXpyxiD2u+Dk0fyp2LN6w5OcLV76rEDlCEotG1qXaU
-         ODeQnJrvkkvkg==
-Date:   Mon, 7 Mar 2022 15:29:35 +0200
+        b=cb3j8+IWzXN37rJiLWqQUGEVD4ii6/Oemo4DTwTpiEA4V+gXQjRM4GYfsht+kwvCv
+         vkJFpF1Y8Pg+GuNd2qQ+eew6sU/XDArFADYPsScLC8eEggcTV4tGCGKuzP6Qy2e+Nm
+         8MpMnjvXXS57bXAShOoZPh7yoFANSySevMH1tJOyg5/bAUisWebkjLlfSpcg/EnJBj
+         oyhvWTqMuoUsjTFLX0FkvNwQkf4lsrtYbzNriqlb3hba7r94ECnZbn+REMGSzfW/CT
+         V2S6AFBScxSzf4ndu3c4N9itn+XJ+SP9+zowaHjtzJ2J0llO4qZf8qNCIXpl85oQ0b
+         7rNZHKbPfu+sA==
+Date:   Mon, 7 Mar 2022 16:22:21 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, Dave Hansen <dave.hansen@linux.intel.com>,
         Nathaniel McCallum <nathaniel@profian.com>,
         Reinette Chatre <reinette.chatre@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -47,7 +46,7 @@ Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
         <thomas.hellstrom@linux.intel.com>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
         Jason Ekstrand <jason@jlekstrand.net>,
-        Chris Wilson <chris@chris-wilson.co.uk>, G@iki.fi,
+        Chris Wilson <chris@chris-wilson.co.uk>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
@@ -61,14 +60,13 @@ Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
         dri-devel@lists.freedesktop.org, codalist@coda.cs.cmu.edu,
         linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
 Subject: Re: [PATCH RFC 0/3] MAP_POPULATE for device memory
-Message-ID: <YiYIv9guOgClLKT8@iki.fi>
+Message-ID: <YiYVHTkS8IsMMw6T@iki.fi>
 References: <20220306053211.135762-1-jarkko@kernel.org>
- <YiSb7tsUEBRGS+HA@casper.infradead.org>
- <YiW4yurDXSifTYUt@infradead.org>
+ <d6b09f23-f470-c119-8d3e-7d72a3448b64@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YiW4yurDXSifTYUt@infradead.org>
+In-Reply-To: <d6b09f23-f470-c119-8d3e-7d72a3448b64@redhat.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,18 +77,47 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 11:48:26PM -0800, Christoph Hellwig wrote:
-> On Sun, Mar 06, 2022 at 11:33:02AM +0000, Matthew Wilcox wrote:
-> > On Sun, Mar 06, 2022 at 07:32:04AM +0200, Jarkko Sakkinen wrote:
-> > > For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
-> > > to use that for initializing the device memory by providing a new callback
-> > > f_ops->populate() for the purpose.
+On Mon, Mar 07, 2022 at 11:12:44AM +0100, David Hildenbrand wrote:
+> On 06.03.22 06:32, Jarkko Sakkinen wrote:
+> > For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
+> > to use that for initializing the device memory by providing a new callback
+> > f_ops->populate() for the purpose.
 > > 
-> > As I said, NAK.
+> > SGX patches are provided to show the callback in context.
+> > 
+> > An obvious alternative is a ioctl but it is less elegant and requires
+> > two syscalls (mmap + ioctl) per memory range, instead of just one
+> > (mmap).
 > 
-> Agreed.  This is an amazingly bad interface.
+> What about extending MADV_POPULATE_READ | MADV_POPULATE_WRITE to support
+> VM_IO | VM_PFNMAP (as well?) ?
 
-So what would you suggest to sort out the issue? I'm happy to go with
-ioctl if nothing else is acceptable.
+What would be a proper point to bind that behaviour? For mmap/mprotect it'd
+be probably populate_vma_page_range() because that would span both mmap()
+and mprotect() (Dave's suggestion in this thread).
+
+For MAP_POPULATE I did not have hard proof to show that it would be used
+by other drivers but for madvice() you can find at least a few ioctl
+based implementations:
+
+$ git grep -e madv --and \( -e ioc \)  drivers/
+drivers/gpu/drm/i915/gem/i915_gem_ioctls.h:int i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
+drivers/gpu/drm/i915/i915_driver.c:     DRM_IOCTL_DEF_DRV(I915_GEM_MADVISE, i915_gem_madvise_ioctl, DRM_RENDER_ALLOW),
+drivers/gpu/drm/i915/i915_gem.c:i915_gem_madvise_ioctl(struct drm_device *dev, void *data,
+drivers/gpu/drm/msm/msm_drv.c:static int msm_ioctl_gem_madvise(struct drm_device *dev, void *data,
+drivers/gpu/drm/msm/msm_drv.c:  DRM_IOCTL_DEF_DRV(MSM_GEM_MADVISE,  msm_ioctl_gem_madvise,  DRM_RENDER_ALLOW),
+drivers/gpu/drm/panfrost/panfrost_drv.c:static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+drivers/gpu/drm/vc4/vc4_drv.c:  DRM_IOCTL_DEF_DRV(VC4_GEM_MADVISE, vc4_gem_madvise_ioctl, DRM_RENDER_ALLOW),
+drivers/gpu/drm/vc4/vc4_drv.h:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
+drivers/gpu/drm/vc4/vc4_gem.c:int vc4_gem_madvise_ioctl(struct drm_device *dev, void *data,
+
+IMHO this also provides supportive claim for MAP_POPULATE, and yeah, I
+agree that to be consistent implementation, both madvice() and MAP_POPULATE
+should work.
+
+> -- 
+> Thanks,
+> 
+> David / dhildenb
 
 BR, Jarkko
