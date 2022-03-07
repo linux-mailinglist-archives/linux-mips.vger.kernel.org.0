@@ -2,122 +2,257 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8029C4D0427
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 17:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BB24D0536
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 18:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241027AbiCGQaS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Mar 2022 11:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
+        id S234305AbiCGR3e (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Mar 2022 12:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbiCGQaR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 11:30:17 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D09E58E4B;
-        Mon,  7 Mar 2022 08:29:21 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nRGEY-0000LM-00; Mon, 07 Mar 2022 17:29:18 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 89E38C1280; Mon,  7 Mar 2022 17:29:09 +0100 (CET)
-Date:   Mon, 7 Mar 2022 17:29:09 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] MIPS: Refactor early_parse_mem() to fix mem=
- parameter
-Message-ID: <20220307162909.GA18728@alpha.franken.de>
-References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
- <1646108941-27919-2-git-send-email-yangtiezhu@loongson.cn>
- <20220304151052.GA27642@alpha.franken.de>
- <20220304153517.GA28487@alpha.franken.de>
- <alpine.DEB.2.21.2203041634040.47558@angie.orcam.me.uk>
+        with ESMTP id S232999AbiCGR3d (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 12:29:33 -0500
+Received: from out29-73.mail.aliyun.com (out29-73.mail.aliyun.com [115.124.29.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DFD24F22;
+        Mon,  7 Mar 2022 09:28:37 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07437934|-1;BR=01201311R671S35rulernew998_84748_2000303;CH=blue;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0132764-0.000628198-0.986095;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047205;MF=zhouyu@wanyeetech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.N.Iespb_1646674114;
+Received: from 192.168.10.154(mailfrom:zhouyu@wanyeetech.com fp:SMTPD_---.N.Iespb_1646674114)
+          by smtp.aliyun-inc.com(33.37.68.185);
+          Tue, 08 Mar 2022 01:28:35 +0800
+Subject: Re: [PATCH v2] pinctrl: ingenic: Fix regmap on X series SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        paul@crapouillou.net, linus.walleij@linaro.org
+Cc:     linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220224145821.518835-1-aidanmacdonald.0x0@gmail.com>
+From:   Zhou Yanjie <zhouyu@wanyeetech.com>
+Message-ID: <a8322347-602b-ce48-6b58-4ed77df8951c@wanyeetech.com>
+Date:   Tue, 8 Mar 2022 01:28:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2203041634040.47558@angie.orcam.me.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220224145821.518835-1-aidanmacdonald.0x0@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 05:11:44PM +0000, Maciej W. Rozycki wrote:
-> On Fri, 4 Mar 2022, Thomas Bogendoerfer wrote:
-> 
-> > > > With this patch, when add "mem=3G" to the command-line, the
-> > > > kernel boots successfully, we can see the following messages:
-> > > 
-> > > unfortunately this patch would break platforms without memory detection,
-> > > which simply use mem=32M for memory configuration. Not sure how many
-> > > rely on this mechanism. If we can make sure nobody uses it, I'm fine
-> > > with your patch.
-> > 
-> > maybe we could add a CONFIG option, which will be selected by
-> > platforms, which don't need/want this usermem thing.
-> 
->  FWIW I don't understand what the issue is here beyond that we have a bug 
-> that causes a system to hang when "mem=3G" is passed on the kernel command 
-> line.  That is assuming that system does have contiguous RAM available for 
-> the kernel to use from address 0 up to 3GiB; otherwise it's a user error 
-> to tell the kernel it has that memory available (I did get bitten by that 
-> myself too): garbage in, garbage out.
+Hi Aidan,
 
-I did a quick test with an IP30:
+On 2022/2/24 下午10:58, Aidan MacDonald wrote:
+> The X series Ingenic SoCs have a shadow GPIO group which is at a higher
+> offset than the other groups, and is used for all GPIO configuration.
+> The regmap did not take this offset into account and set max_register
+> too low, so the regmap API blocked writes to the shadow group, which
+> made the pinctrl driver unable to configure any pins.
+>
+> Fix this by adding regmap access tables to the chip info.
+>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+> v1: https://lore.kernel.org/linux-mips/20220209230452.19535-1-aidanmacdonald.0x0@gmail.com/
+>
+>   drivers/pinctrl/pinctrl-ingenic.c | 53 ++++++++++++++++++++++++++++++-
+>   1 file changed, 52 insertions(+), 1 deletion(-)
 
->> bootp(): ip=dhcp root=/dev/nfs console=ttyS0 mem=384M
-Setting $netaddr to 192.168.8.208 (from server )
-Obtaining  from server 
-9012640+181664 entry: 0xa800000020664a60
-Linux version 5.17.0-rc3+ (tbogendoerfer@adalid) (mips64-linux-gnu-gcc (GCC) 6.1.1 20160621 (Red Hat Cross 6.1.1-2), GNU ld version 2.27-3.fc24) #155 SMP Mon Mar 7 13:12:01 CET 2022
-ARCH: SGI-IP30
-PROMLIB: ARC firmware Version 64 Revision 0
-printk: bootconsole [early0] enabled
-CPU0 revision is: 00000934 (R10000)
-FPU revision is: 00000900
-Detected 512MB of physical memory.
-User-defined physical RAM map overwrite
-Kernel sections are not in the memory maps
-IP30: Slot: 0, PrID: 00000934, PhyID: 0, VirtID: 0
-IP30: Slot: 1, PrID: 00000934, PhyID: 1, VirtID: 1
-IP30: Detected 2 CPU(s) present.
-Primary instruction cache 32kB, VIPT, 2-way, linesize 64 bytes.
-Primary data cache 32kB, 2-way, VIPT, no aliases, linesize 32 bytes
-Unified secondary cache 1024kB 2-way, linesize 128 bytes.
-Zone ranges:
-  DMA32    [mem 0x0000000000000000-0x00000000ffffffff]
-  Normal   empty
-Movable zone start for each node
-Early memory node ranges
-  node   0: [mem 0x0000000000000000-0x0000000017ffffff]
-  node   0: [mem 0x0000000020004000-0x00000000208c7fff]
-Initmem setup node 0 [mem 0x0000000000000000-0x00000000208c7fff]
 
-after that it's dead (it doesn't have memory starting at 0x0).
-Most SGI systems will act broken with mem= in one way or another.
-And I already had the need to limit the amount of memory.
+Tested-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
 
->  I think having a CONFIG option automatically selected to disable the 
-> ability to give a memory map override would handicap people in debugging 
-> their systems or working around firmware bugs, so I would rather be 
-> against it.
 
-I'm thinking about a CONFIG option, which isn't user selectable, but
-selected via Kconfig only. But that would give to differents semantics
-for mem=
-
-So can I just limit amount of memory without interfering with normal
-memory detection ?
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+>
+> diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
+> index 2712f51eb238..074c94edd90b 100644
+> --- a/drivers/pinctrl/pinctrl-ingenic.c
+> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> @@ -119,6 +119,9 @@ struct ingenic_chip_info {
+>   	unsigned int num_functions;
+>   
+>   	const u32 *pull_ups, *pull_downs;
+> +
+> +	unsigned int max_register;
+> +	const struct regmap_access_table* access_table;
+>   };
+>   
+>   struct ingenic_pinctrl {
+> @@ -228,6 +231,7 @@ static const struct ingenic_chip_info jz4730_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4730_functions),
+>   	.pull_ups = jz4730_pull_ups,
+>   	.pull_downs = jz4730_pull_downs,
+> +	.max_register = 4 * 0x30 - 4,
+>   };
+>   
+>   static const u32 jz4740_pull_ups[4] = {
+> @@ -337,6 +341,7 @@ static const struct ingenic_chip_info jz4740_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4740_functions),
+>   	.pull_ups = jz4740_pull_ups,
+>   	.pull_downs = jz4740_pull_downs,
+> +	.max_register = 4 * 0x100 - 4,
+>   };
+>   
+>   static int jz4725b_mmc0_1bit_pins[] = { 0x48, 0x49, 0x5c, };
+> @@ -439,6 +444,7 @@ static const struct ingenic_chip_info jz4725b_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4725b_functions),
+>   	.pull_ups = jz4740_pull_ups,
+>   	.pull_downs = jz4740_pull_downs,
+> +	.max_register = 4 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4750_pull_ups[6] = {
+> @@ -576,6 +582,7 @@ static const struct ingenic_chip_info jz4750_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4750_functions),
+>   	.pull_ups = jz4750_pull_ups,
+>   	.pull_downs = jz4750_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4755_pull_ups[6] = {
+> @@ -741,6 +748,7 @@ static const struct ingenic_chip_info jz4755_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4755_functions),
+>   	.pull_ups = jz4755_pull_ups,
+>   	.pull_downs = jz4755_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4760_pull_ups[6] = {
+> @@ -1089,6 +1097,7 @@ static const struct ingenic_chip_info jz4760_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4760_functions),
+>   	.pull_ups = jz4760_pull_ups,
+>   	.pull_downs = jz4760_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4770_pull_ups[6] = {
+> @@ -1429,6 +1438,7 @@ static const struct ingenic_chip_info jz4770_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4770_functions),
+>   	.pull_ups = jz4770_pull_ups,
+>   	.pull_downs = jz4770_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4775_pull_ups[7] = {
+> @@ -1702,6 +1712,7 @@ static const struct ingenic_chip_info jz4775_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4775_functions),
+>   	.pull_ups = jz4775_pull_ups,
+>   	.pull_downs = jz4775_pull_downs,
+> +	.max_register = 7 * 0x100 - 4,
+>   };
+>   
+>   static const u32 jz4780_pull_ups[6] = {
+> @@ -1966,6 +1977,7 @@ static const struct ingenic_chip_info jz4780_chip_info = {
+>   	.num_functions = ARRAY_SIZE(jz4780_functions),
+>   	.pull_ups = jz4780_pull_ups,
+>   	.pull_downs = jz4780_pull_downs,
+> +	.max_register = 6 * 0x100 - 4,
+>   };
+>   
+>   static const u32 x1000_pull_ups[4] = {
+> @@ -2179,6 +2191,17 @@ static const struct function_desc x1000_functions[] = {
+>   	{ "mac", x1000_mac_groups, ARRAY_SIZE(x1000_mac_groups), },
+>   };
+>   
+> +static const struct regmap_range x1000_access_ranges[] = {
+> +	regmap_reg_range(0x000, 0x400 - 4),
+> +	regmap_reg_range(0x700, 0x800 - 4),
+> +};
+> +
+> +/* shared with X1500 */
+> +static const struct regmap_access_table x1000_access_table = {
+> +	.yes_ranges = x1000_access_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(x1000_access_ranges),
+> +};
+> +
+>   static const struct ingenic_chip_info x1000_chip_info = {
+>   	.num_chips = 4,
+>   	.reg_offset = 0x100,
+> @@ -2189,6 +2212,7 @@ static const struct ingenic_chip_info x1000_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x1000_functions),
+>   	.pull_ups = x1000_pull_ups,
+>   	.pull_downs = x1000_pull_downs,
+> +	.access_table = &x1000_access_table,
+>   };
+>   
+>   static int x1500_uart0_data_pins[] = { 0x4a, 0x4b, };
+> @@ -2300,6 +2324,7 @@ static const struct ingenic_chip_info x1500_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x1500_functions),
+>   	.pull_ups = x1000_pull_ups,
+>   	.pull_downs = x1000_pull_downs,
+> +	.access_table = &x1000_access_table,
+>   };
+>   
+>   static const u32 x1830_pull_ups[4] = {
+> @@ -2506,6 +2531,16 @@ static const struct function_desc x1830_functions[] = {
+>   	{ "mac", x1830_mac_groups, ARRAY_SIZE(x1830_mac_groups), },
+>   };
+>   
+> +static const struct regmap_range x1830_access_ranges[] = {
+> +	regmap_reg_range(0x0000, 0x4000 - 4),
+> +	regmap_reg_range(0x7000, 0x8000 - 4),
+> +};
+> +
+> +static const struct regmap_access_table x1830_access_table = {
+> +	.yes_ranges = x1830_access_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(x1830_access_ranges),
+> +};
+> +
+>   static const struct ingenic_chip_info x1830_chip_info = {
+>   	.num_chips = 4,
+>   	.reg_offset = 0x1000,
+> @@ -2516,6 +2551,7 @@ static const struct ingenic_chip_info x1830_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x1830_functions),
+>   	.pull_ups = x1830_pull_ups,
+>   	.pull_downs = x1830_pull_downs,
+> +	.access_table = &x1830_access_table,
+>   };
+>   
+>   static const u32 x2000_pull_ups[5] = {
+> @@ -2969,6 +3005,17 @@ static const struct function_desc x2000_functions[] = {
+>   	{ "otg", x2000_otg_groups, ARRAY_SIZE(x2000_otg_groups), },
+>   };
+>   
+> +static const struct regmap_range x2000_access_ranges[] = {
+> +	regmap_reg_range(0x000, 0x500 - 4),
+> +	regmap_reg_range(0x700, 0x800 - 4),
+> +};
+> +
+> +/* shared with X2100 */
+> +static const struct regmap_access_table x2000_access_table = {
+> +	.yes_ranges = x2000_access_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(x2000_access_ranges),
+> +};
+> +
+>   static const struct ingenic_chip_info x2000_chip_info = {
+>   	.num_chips = 5,
+>   	.reg_offset = 0x100,
+> @@ -2979,6 +3026,7 @@ static const struct ingenic_chip_info x2000_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x2000_functions),
+>   	.pull_ups = x2000_pull_ups,
+>   	.pull_downs = x2000_pull_downs,
+> +	.access_table = &x2000_access_table,
+>   };
+>   
+>   static const u32 x2100_pull_ups[5] = {
+> @@ -3189,6 +3237,7 @@ static const struct ingenic_chip_info x2100_chip_info = {
+>   	.num_functions = ARRAY_SIZE(x2100_functions),
+>   	.pull_ups = x2100_pull_ups,
+>   	.pull_downs = x2100_pull_downs,
+> +	.access_table = &x2000_access_table,
+>   };
+>   
+>   static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8 reg)
+> @@ -4168,7 +4217,9 @@ static int __init ingenic_pinctrl_probe(struct platform_device *pdev)
+>   		return PTR_ERR(base);
+>   
+>   	regmap_config = ingenic_pinctrl_regmap_config;
+> -	regmap_config.max_register = chip_info->num_chips * chip_info->reg_offset;
+> +	regmap_config.rd_table = chip_info->access_table;
+> +	regmap_config.wr_table = chip_info->access_table;
+> +	regmap_config.max_register = chip_info->max_register;
+>   
+>   	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
+>   	if (IS_ERR(jzpc->map)) {
