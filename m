@@ -2,36 +2,35 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769194CFE4A
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 13:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7431B4CFE56
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 13:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241414AbiCGM0S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        id S242043AbiCGM0S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
         Mon, 7 Mar 2022 07:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236366AbiCGM0R (ORCPT
+        with ESMTP id S236937AbiCGM0R (ORCPT
         <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 07:26:17 -0500
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 177848023B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 177D98023C;
         Mon,  7 Mar 2022 04:25:22 -0800 (PST)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nRCQS-00072o-04; Mon, 07 Mar 2022 13:25:20 +0100
+        id 1nRCQS-00072o-05; Mon, 07 Mar 2022 13:25:20 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id DBA8FC1280; Mon,  7 Mar 2022 13:21:42 +0100 (CET)
-Date:   Mon, 7 Mar 2022 13:21:42 +0100
+        id ABB2BC1280; Mon,  7 Mar 2022 13:24:40 +0100 (CET)
+Date:   Mon, 7 Mar 2022 13:24:40 +0100
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     YunQiang Su <yunqiang.su@cipunited.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        od@opendingux.net, stable@vger.kernel.org
-Subject: Re: [PATCH] mips: Always permit to build u-boot images
-Message-ID: <20220307122142.GE14422@alpha.franken.de>
-References: <20220306151648.39599-1-paul@crapouillou.net>
+To:     Xi Ruoyao <xry111@mengyan1223.wang>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: Re: [PATCH] mips: remove reference to "newer Loongson-3"
+Message-ID: <20220307122440.GF14422@alpha.franken.de>
+References: <0b7c9431efb12c2d957fcc53ec8f0743725d61b3.camel@mengyan1223.wang>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220306151648.39599-1-paul@crapouillou.net>
+In-Reply-To: <0b7c9431efb12c2d957fcc53ec8f0743725d61b3.camel@mengyan1223.wang>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
@@ -42,21 +41,26 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Mar 06, 2022 at 03:16:48PM +0000, Paul Cercueil wrote:
-> The platforms where the kernel should be loaded above 0x8000.0000 do not
-> support loading u-boot images, that doesn't mean that we shouldn't be
-> able to generate them.
+On Sun, Aug 29, 2021 at 08:49:09PM +0800, Xi Ruoyao wrote:
+> Newest Loongson-3 processors have moved to use LoongArch architecture.
+> Sadly, the LL/SC issue is still existing on both latest Loongson-3
+> processors using MIPS64 (Loongson-3A4000) and LoongArch
+> (Loongson-3A5000).
 > 
-> Additionally, since commit 79876cc1d7b8 ("MIPS: new Kconfig option
-> ZBOOT_LOAD_ADDRESS"), the $(zload-y) variable was no longer hardcoded,
-> which made it impossible to use the uzImage.bin target.
+> As it's very unlikely there will be new Loongson-3 processors using
+> MIPS64, let's stop people from false hoping.
 > 
-> Fixes: 79876cc1d7b8 ("MIPS: new Kconfig option ZBOOT_LOAD_ADDRESS")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Xi Ruoyao <xry111@mengyan1223.wang>
+> Cc: Huacai Chen <chenhuacai@kernel.org>
 > ---
->  arch/mips/Makefile | 4 ----
->  1 file changed, 4 deletions(-)
+> 
+> Huacai: how's the status of LL/SC issue on Loongson-2K?  If
+> the issue exists on it as well, we can just force
+> CPU_LOONGSON3_WORKAROUNDS when CONFIG_CPU_LOONGSON64 and
+> CONFIG_SMP are both selected.
+> 
+>  arch/mips/Kconfig | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
 
 applied to mips-next.
 
