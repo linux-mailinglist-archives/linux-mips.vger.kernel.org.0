@@ -2,61 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39934D08C9
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 21:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BCA4D0A89
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 23:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238073AbiCGUw2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Mar 2022 15:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        id S230076AbiCGWId (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Mar 2022 17:08:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiCGUw0 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 15:52:26 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F60A29CA1;
-        Mon,  7 Mar 2022 12:51:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=9tM1IcUHnS8qh7d8odUKJS/jksWImABpShrJtrAv/fU=; b=nl0IUzM8m9zG2uM2Bg1l50f93u
-        KdNLWT3fvZCaIQHByKLJO5y2Buzwqj8Unp7PsxqY+A/7hfqDwG1abfy6lpWiWax7EH6HCkI8Rifpf
-        pTbTkH/N4loW4QOk09E5UVOaVV6Zy3Hp9/YBxSjW6rCbb1+zFcI+jldU/JHP/KL8JrgEzuDHfLFEQ
-        PEPholr+lgZBFTNDokot78d3MP0pRcaOE3Qv3H2xjgpOmgwESq5DoseTRGpfnpAB8MMHy3zBC+HK+
-        PH2a7IlVhUJDYCHvL/J7yHfRuTSvMcXAOMxYUHrkNM2Z35el1UXIQ2mj8tv/06ctcHAD1H+MFX325
-        t9kuHWtg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nRKK7-00FXcm-Nt; Mon, 07 Mar 2022 20:51:20 +0000
-Message-ID: <ea27ccf9-9ef2-f1db-815b-176b4ed1a907@infradead.org>
-Date:   Mon, 7 Mar 2022 12:51:13 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [next] mips-mt.c:233:19: error: conflicting types for 'mt_init'
-Content-Language: en-US
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S235685AbiCGWIc (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 17:08:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AFE2AF2;
+        Mon,  7 Mar 2022 14:07:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5DC860BC6;
+        Mon,  7 Mar 2022 22:07:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CB7DC340E9;
+        Mon,  7 Mar 2022 22:07:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646690857;
+        bh=MbxK4BPXX7Ie0YOP0mxZfgC5/K3/ktLCIYUXqFDFb/o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ISmv1JDwhARWWANtx6Ya2hNGPMkrKs2t60EQB42sWlz6cczqsgM0ysE3nUrbBXXp/
+         hoSU96u6eKC0Lofc1a2F1UrlF3A309P1uGF+CR/mByM/ELOcSSlSxs+nXwyOa+kfqN
+         oxzF1cUTlRl6iVu5GOIiW0fEY/GzdGSkZseXoAL29RqrE+NqP6FCzzVyRgXiR1O3VH
+         d59SoL2cyI9SfltDUh+Bvp83tA9manjwiWJF76jEEJORZrOyIbhliGix48Y37EsDUX
+         C2g22bB4qR5KknCaaEiWiC0BoEFeKv5+HuTEUgFySJ02WlNWzQtGt+FBxWofGUPWGP
+         FeveaYPO+ANtw==
+Date:   Tue, 8 Mar 2022 00:07:27 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Kees Cook <keescook@chromium.org>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <CA+G9fYtEx=k9TM7c7EihbO3U0qxZLbKX26NWJ1L=jjEOuy7cHQ@mail.gmail.com>
- <4c8f31d0-d51c-bb8c-acae-da1f1b1ada51@infradead.org>
- <20220307191537.jz6rho2vikdybpam@revolver>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220307191537.jz6rho2vikdybpam@revolver>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Andrew Morton <akpm@linux-foundation.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] MIPS: Refactor early_parse_mem() to fix mem=
+ parameter
+Message-ID: <YiaCH6UsQZSbnNHd@kernel.org>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn>
+ <1646108941-27919-2-git-send-email-yangtiezhu@loongson.cn>
+ <20220304151052.GA27642@alpha.franken.de>
+ <20220304153517.GA28487@alpha.franken.de>
+ <alpine.DEB.2.21.2203041634040.47558@angie.orcam.me.uk>
+ <20220307162909.GA18728@alpha.franken.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307162909.GA18728@alpha.franken.de>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,96 +62,94 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-
-
-On 3/7/22 11:15, Liam Howlett wrote:
-> Hello Randy,
+On Mon, Mar 07, 2022 at 05:29:09PM +0100, Thomas Bogendoerfer wrote:
+> On Fri, Mar 04, 2022 at 05:11:44PM +0000, Maciej W. Rozycki wrote:
+> > On Fri, 4 Mar 2022, Thomas Bogendoerfer wrote:
+> > 
+> > > > > With this patch, when add "mem=3G" to the command-line, the
+> > > > > kernel boots successfully, we can see the following messages:
+> > > > 
+> > > > unfortunately this patch would break platforms without memory detection,
+> > > > which simply use mem=32M for memory configuration. Not sure how many
+> > > > rely on this mechanism. If we can make sure nobody uses it, I'm fine
+> > > > with your patch.
+> > > 
+> > > maybe we could add a CONFIG option, which will be selected by
+> > > platforms, which don't need/want this usermem thing.
+> > 
+> >  FWIW I don't understand what the issue is here beyond that we have a bug 
+> > that causes a system to hang when "mem=3G" is passed on the kernel command 
+> > line.  That is assuming that system does have contiguous RAM available for 
+> > the kernel to use from address 0 up to 3GiB; otherwise it's a user error 
+> > to tell the kernel it has that memory available (I did get bitten by that 
+> > myself too): garbage in, garbage out.
 > 
-> I did address this when it occurred on the 24th [1].  I had looked at
-> this and was thinking I would rename the maple tree function, but
-> Matthew suggested renaming the mips function instead.  I looked into the
-> conflict and the arch/mips/kernel/mips-mt.c uses the mips_ prefix for
-> almost all of the functions. So I generated a patch on my tree for
-> next-20220225 which fixes the issue by renaming the mips side of things.
-> Please see 51e773764d11 for the very small rename.
+> I did a quick test with an IP30:
 > 
-> [1]
-> https://lore.kernel.org/linux-mm/202202241817.MXoE0NcM-lkp@intel.com/
+> >> bootp(): ip=dhcp root=/dev/nfs console=ttyS0 mem=384M
+> Setting $netaddr to 192.168.8.208 (from server )
+> Obtaining  from server 
+> 9012640+181664 entry: 0xa800000020664a60
+> Linux version 5.17.0-rc3+ (tbogendoerfer@adalid) (mips64-linux-gnu-gcc (GCC) 6.1.1 20160621 (Red Hat Cross 6.1.1-2), GNU ld version 2.27-3.fc24) #155 SMP Mon Mar 7 13:12:01 CET 2022
+> ARCH: SGI-IP30
+> PROMLIB: ARC firmware Version 64 Revision 0
+> printk: bootconsole [early0] enabled
+> CPU0 revision is: 00000934 (R10000)
+> FPU revision is: 00000900
+> Detected 512MB of physical memory.
+> User-defined physical RAM map overwrite
+> Kernel sections are not in the memory maps
+> IP30: Slot: 0, PrID: 00000934, PhyID: 0, VirtID: 0
+> IP30: Slot: 1, PrID: 00000934, PhyID: 1, VirtID: 1
+> IP30: Detected 2 CPU(s) present.
+> Primary instruction cache 32kB, VIPT, 2-way, linesize 64 bytes.
+> Primary data cache 32kB, 2-way, VIPT, no aliases, linesize 32 bytes
+> Unified secondary cache 1024kB 2-way, linesize 128 bytes.
+> Zone ranges:
+>   DMA32    [mem 0x0000000000000000-0x00000000ffffffff]
+>   Normal   empty
+> Movable zone start for each node
+> Early memory node ranges
+>   node   0: [mem 0x0000000000000000-0x0000000017ffffff]
+>   node   0: [mem 0x0000000020004000-0x00000000208c7fff]
+> Initmem setup node 0 [mem 0x0000000000000000-0x00000000208c7fff]
 > 
-> Thanks,
-> Liam
+> after that it's dead (it doesn't have memory starting at 0x0).
+> Most SGI systems will act broken with mem= in one way or another.
+> And I already had the need to limit the amount of memory.
+> 
+> >  I think having a CONFIG option automatically selected to disable the 
+> > ability to give a memory map override would handicap people in debugging 
+> > their systems or working around firmware bugs, so I would rather be 
+> > against it.
+> 
+> I'm thinking about a CONFIG option, which isn't user selectable, but
+> selected via Kconfig only. But that would give to differents semantics
+> for mem=
+> 
+> So can I just limit amount of memory without interfering with normal
+> memory detection ?
 
-OK, sounds good. Thanks.
+Maybe it's better to add a new encoding to mem= that will have the semantics
+of limiting amount of memory?
 
+E.g.
+
+mem=384M@
+
+would mean "only use 384M of memory that firmware reported" while
+
+mem=384M would mean "set memory to 0 - 384M" as it does now.
+
+I think it's fine to have this MIPS specific because there is anyway no
+consistency among architectures in mem= handling.
+ 
+> Thomas.
 > 
-> * Randy Dunlap <rdunlap@infradead.org> [220305 22:50]:
->> Hi Liam,
->>
->> Would you consider renaming maple tree's "mt_init()" function to
->> maple_tree_init() or mtree_init() or something that does not
->> conflict with the mt_init() function in arch/mips/ so that
->> these build errors don't happen?
->>
->> thanks.
->>
->> On 2/24/22 23:09, Naresh Kamboju wrote:
->>> [Please ignore this email if it is already reported]
->>>
->>> Linux next-20220224 arch mips build errors / warnings noticed [1].
->>>
->>> Build configs:
->>>   -  mips-gcc-8-malta_defconfig
->>>   -  mips-gcc-10-malta_defconfig
->>>   -  mips-gcc-8-defconfig
->>>   -  mips-gcc-10-defconfig
->>>
->>> metadata:
->>>     git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->>>     git_sha: 44948bd49d878dad6c9707e34f4a06df73c3a800
->>>     git_short_log: 44948bd49d87 (\Add linux-next specific files for 20220224\)
->>>     kconfig: defconfig
->>>     target_arch: mips
->>>     toolchain: gcc-10
->>>
->>>
->>> Build errors / warnings:
->>>
->>> arch/mips/kernel/mips-mt.c:233:19: error: conflicting types for 'mt_init'
->>>   233 | static int __init mt_init(void)
->>>       |                   ^~~~~~~
->>> In file included from include/linux/mm_types.h:12,
->>>                  from include/linux/mmzone.h:21,
->>>                  from include/linux/gfp.h:6,
->>>                  from include/linux/radix-tree.h:12,
->>>                  from include/linux/idr.h:15,
->>>                  from include/linux/kernfs.h:12,
->>>                  from include/linux/sysfs.h:16,
->>>                  from include/linux/kobject.h:20,
->>>                  from include/linux/energy_model.h:7,
->>>                  from include/linux/device.h:16,
->>>                  from arch/mips/kernel/mips-mt.c:7:
->>> include/linux/maple_tree.h:589:20: note: previous definition of
->>> 'mt_init' was here
->>>   589 | static inline void mt_init(struct maple_tree *mt)
->>>       |                    ^~~~~~~
->>> make[3]: *** [scripts/Makefile.build:288: arch/mips/kernel/mips-mt.o] Error 1
->>>
->>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>>
->>> Steps to reproduce:
->>> ------------------
->>> # To install tuxmake on your system globally:
->>> # sudo pip3 install -U tuxmake
->>>
->>> tuxmake --runtime podman --target-arch mips --toolchain gcc-10
->>> --kconfig defconfig
->>>
->>> --
->>>
->>> [1] https://builds.tuxbuild.com/25aFF2X7uoyebURaYzNHW9FVEmN/
->>
->> -- 
->> ~Randy
+> -- 
+> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+> good idea.                                                [ RFC1925, 2.3 ]
 
 -- 
-~Randy
+Sincerely yours,
+Mike.
