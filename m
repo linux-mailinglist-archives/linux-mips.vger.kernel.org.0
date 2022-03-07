@@ -2,38 +2,57 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7431B4CFE56
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 13:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C79C4CFF66
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 14:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242043AbiCGM0S (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Mar 2022 07:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S236104AbiCGNCC (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Mar 2022 08:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236937AbiCGM0R (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 07:26:17 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 177D98023C;
-        Mon,  7 Mar 2022 04:25:22 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nRCQS-00072o-05; Mon, 07 Mar 2022 13:25:20 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id ABB2BC1280; Mon,  7 Mar 2022 13:24:40 +0100 (CET)
-Date:   Mon, 7 Mar 2022 13:24:40 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Xi Ruoyao <xry111@mengyan1223.wang>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: Re: [PATCH] mips: remove reference to "newer Loongson-3"
-Message-ID: <20220307122440.GF14422@alpha.franken.de>
-References: <0b7c9431efb12c2d957fcc53ec8f0743725d61b3.camel@mengyan1223.wang>
+        with ESMTP id S235527AbiCGNCB (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 08:02:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989BF8A6D6;
+        Mon,  7 Mar 2022 05:01:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E79761195;
+        Mon,  7 Mar 2022 13:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21564C340E9;
+        Mon,  7 Mar 2022 13:01:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646658066;
+        bh=vNwLmHMPAuTNQ58SyXP5JOCzc1E/QIa9EAucHhxuwk4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uvdN7XqNAxzEAmE9bN4/uMtzHnmxTF8Bf1x603RX/KNlDIprB9VVaWZhQeHHnpzbB
+         L4kxbqOzloAbu6i7BoQuYqHyMOyLIeQm5T/Xe9xRq6c/W5XBudU0rcZiYQpMIqW8K8
+         1un6it52tzYgjHiFXgaZvOMiGyPNX8+j799swQCbH5hFeVmQIpZ6iuDIBfN618OhEW
+         E3SyRB41KCkHqiZUuZ0YCU6MdmAWosgy6SdJC1dEwmvD9h3AKYZQWeH4JTR8WfP89z
+         OZU/YwJS8GT7u3ZHIoY0Pijc0jpcUbZjNcaA6ewtS9TXcLeg8b87/dA7oNopSl/pXR
+         0BIy9frXh9DtQ==
+Date:   Mon, 7 Mar 2022 15:00:25 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        linux-sgx@vger.kernel.org, jaharkes@cs.cmu.edu,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        codalist@telemann.coda.cs.cmu.edu, linux-unionfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH RFC v2] mm: Add f_ops->populate()
+Message-ID: <YiYB6WWz8cbvaAqX@iki.fi>
+References: <20220306032655.97863-1-jarkko@kernel.org>
+ <20220306152456.2649b1c56da2a4ce4f487be4@linux-foundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0b7c9431efb12c2d957fcc53ec8f0743725d61b3.camel@mengyan1223.wang>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
+In-Reply-To: <20220306152456.2649b1c56da2a4ce4f487be4@linux-foundation.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,31 +60,55 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Sun, Aug 29, 2021 at 08:49:09PM +0800, Xi Ruoyao wrote:
-> Newest Loongson-3 processors have moved to use LoongArch architecture.
-> Sadly, the LL/SC issue is still existing on both latest Loongson-3
-> processors using MIPS64 (Loongson-3A4000) and LoongArch
-> (Loongson-3A5000).
+On Sun, Mar 06, 2022 at 03:24:56PM -0800, Andrew Morton wrote:
+> On Sun,  6 Mar 2022 05:26:55 +0200 Jarkko Sakkinen <jarkko@kernel.org> wrote:
 > 
-> As it's very unlikely there will be new Loongson-3 processors using
-> MIPS64, let's stop people from false hoping.
+> > Sometimes you might want to use MAP_POPULATE to ask a device driver to
+> > initialize the device memory in some specific manner. SGX driver can use
+> > this to request more memory by issuing ENCLS[EAUG] x86 opcode for each
+> > page in the address range.
 > 
-> Signed-off-by: Xi Ruoyao <xry111@mengyan1223.wang>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> ---
+> Why is this useful?  Please fully describe the benefit to kernel users.
+> Convince us that the benefit justifies the code churn, maintenance
+> cost and larger kernel footprint.
 > 
-> Huacai: how's the status of LL/SC issue on Loongson-2K?  If
-> the issue exists on it as well, we can just force
-> CPU_LOONGSON3_WORKAROUNDS when CONFIG_CPU_LOONGSON64 and
-> CONFIG_SMP are both selected.
-> 
->  arch/mips/Kconfig | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
+> Do we know of any other drivers which might use this?
 
-applied to mips-next.
+Brutal honesty: I don't know if any other drivers would use this but
+neither I would not be surprised if they did. The need for this might
+very well be "masked" by ioctl API's.  I was first proposing a ioctl
+for this but Dave suggested to at least try out this route.
 
-Thomas.
+> > Add f_ops->populate() with the same parameters as f_ops->mmap() and make
+> > it conditionally called inside call_mmap(). Update call sites
+> > accodingly.
+> 
+> spello
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Thanks, I noticed that but did not want to spam with a new version just
+because of that :-)
+
+> 
+> > -static inline int call_mmap(struct file *file, struct vm_area_struct *vma)
+> > +static inline int call_mmap(struct file *file, struct vm_area_struct *vma, bool do_populate)
+> >  {
+> > -	return file->f_op->mmap(file, vma);
+> > +	int ret = file->f_op->mmap(file, vma);
+> > +
+> > +	if (!ret && do_populate && file->f_op->populate)
+> > +		ret = file->f_op->populate(file, vma);
+> > +
+> > +	return ret;
+> >  }
+> 
+> Should this still be inlined?
+
+I think it might make sense at least to have call_mmap_populate() so and
+mmap_region_populate() instead of putting that boolean parameter to every
+flow (based on Greg's feedback). But only if this implementation approach
+is used in the first place.
+
+As said, I chose to use RFC to pinpoint a bottleneck for us, not claiming
+that this would be the best possible way to work around it.
+
+BR, Jarkko
