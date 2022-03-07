@@ -2,88 +2,42 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486054D0AA0
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 23:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE19E4D0BB8
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Mar 2022 00:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343596AbiCGWMX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Mon, 7 Mar 2022 17:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S1343514AbiCGXK0 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Mar 2022 18:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242732AbiCGWMW (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 17:12:22 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99ED18BE16
-        for <linux-mips@vger.kernel.org>; Mon,  7 Mar 2022 14:11:26 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-213-iFbUxoq8N32Ti0xfCSXC3A-1; Mon, 07 Mar 2022 22:11:23 +0000
-X-MC-Unique: iFbUxoq8N32Ti0xfCSXC3A-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 7 Mar 2022 22:11:19 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 7 Mar 2022 22:11:19 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-CC:     Matthew Wilcox <willy@infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Nathaniel McCallum" <nathaniel@profian.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
+        with ESMTP id S236037AbiCGXKZ (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 18:10:25 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC22DFD08;
+        Mon,  7 Mar 2022 15:09:30 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id BCAF992009C; Tue,  8 Mar 2022 00:09:28 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id B5C4A92009B;
+        Mon,  7 Mar 2022 23:09:28 +0000 (GMT)
+Date:   Mon, 7 Mar 2022 23:09:28 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Mike Rapoport <rppt@kernel.org>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthew Auld <matthew.auld@intel.com>,
-        =?iso-8859-1?Q?Thomas_Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Chris Wilson <chris@chris-wilson.co.uk>, "G@iki.fi" <G@iki.fi>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        zhangyiru <zhangyiru3@huawei.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Alexander Mikhalitsyn" <alexander.mikhalitsyn@virtuozzo.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "codalist@coda.cs.cmu.edu" <codalist@coda.cs.cmu.edu>,
-        "linux-unionfs@vger.kernel.org" <linux-unionfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: RE: [PATCH RFC 0/3] MAP_POPULATE for device memory
-Thread-Topic: [PATCH RFC 0/3] MAP_POPULATE for device memory
-Thread-Index: AQHYMjv2CAL18nxa1UOLUz+3aRpSlay0etRA
-Date:   Mon, 7 Mar 2022 22:11:19 +0000
-Message-ID: <5729d03d6a174da6b66d1534ebdb1127@AcuMS.aculab.com>
-References: <20220306053211.135762-1-jarkko@kernel.org>
- <YiSb7tsUEBRGS+HA@casper.infradead.org> <YiW4yurDXSifTYUt@infradead.org>
- <YiYIv9guOgClLKT8@iki.fi> <YiYrRWMp1akXY8Vb@infradead.org>
-In-Reply-To: <YiYrRWMp1akXY8Vb@infradead.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] MIPS: Refactor early_parse_mem() to fix mem=
+ parameter
+In-Reply-To: <YiaCH6UsQZSbnNHd@kernel.org>
+Message-ID: <alpine.DEB.2.21.2203072252300.47558@angie.orcam.me.uk>
+References: <1646108941-27919-1-git-send-email-yangtiezhu@loongson.cn> <1646108941-27919-2-git-send-email-yangtiezhu@loongson.cn> <20220304151052.GA27642@alpha.franken.de> <20220304153517.GA28487@alpha.franken.de> <alpine.DEB.2.21.2203041634040.47558@angie.orcam.me.uk>
+ <20220307162909.GA18728@alpha.franken.de> <YiaCH6UsQZSbnNHd@kernel.org>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,26 +45,37 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Christoph Hellwig
-> Sent: 07 March 2022 15:57
+On Tue, 8 Mar 2022, Mike Rapoport wrote:
+
+> > So can I just limit amount of memory without interfering with normal
+> > memory detection ?
 > 
-> On Mon, Mar 07, 2022 at 03:29:35PM +0200, Jarkko Sakkinen wrote:
-> > So what would you suggest to sort out the issue? I'm happy to go with
-> > ioctl if nothing else is acceptable.
+> Maybe it's better to add a new encoding to mem= that will have the semantics
+> of limiting amount of memory?
 > 
-> PLenty of drivers treat all mmaps as if MAP_POPULATE was specified,
-> typically by using (io_)remap_pfn_range.  If there any reason to only
-> optionally have the pre-fault semantics for sgx?  If not this should
-> be really simple.  And if we have a real need for it to be optional
-> we'll just need to find a sane way to pass that information to ->mmap.
+> E.g.
+> 
+> mem=384M@
+> 
+> would mean "only use 384M of memory that firmware reported" while
+> 
+> mem=384M would mean "set memory to 0 - 384M" as it does now.
 
-Is there any space in vma->vm_flags ?
+ I think you're going in the right direction, we'd just need to sort out 
+the most reasonable syntax for the new semantics; `mem=384M@' just seems 
+too analogous to me to `mem=384M@0'.  Maybe `mem=384M-'?
 
-That would be better than an extra argument or function.
+ NB that would have to work with the existing overrides, for e.g.:
 
-	David
+`mem=192M@0 mem=192M@256M mem=384M-'
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+to produce the following memory ranges available for use:
 
+  Normal   [mem 0x0000000000000000-0x000000000bffffff]
+  Normal   [mem 0x0000000010000000-0x0000000017ffffff]
+
+(so that you can paste the final cap at some command prompt and still have 
+earlier parameters respected that may have been passed by the firmware or 
+bootloader, or built in).
+
+  Maciej
