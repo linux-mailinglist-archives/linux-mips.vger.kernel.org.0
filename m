@@ -2,79 +2,102 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E7D4CF8E0
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 11:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CADE14CFBF8
+	for <lists+linux-mips@lfdr.de>; Mon,  7 Mar 2022 11:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236581AbiCGKCt (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 7 Mar 2022 05:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S241051AbiCGKzO (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 7 Mar 2022 05:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240442AbiCGKBC (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 05:01:02 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58372205FE;
-        Mon,  7 Mar 2022 01:48:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646646492; x=1678182492;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=zC3EygN9B67AQNPvzALqT8NwONoTEFy8bHC2L1G4njc=;
-  b=JstJxVGBbUqE7vEW33wQJkXrLylT4VHJHp2qZByUKOt5Ea7DtujQMZh8
-   eD4/p7aAvS7znQV2M4cLJCV3289l50yZljmgVJegACGGpfsnYkNK4iwEv
-   6Rq23GvPRKd9xdGv+/0yFzkXAu32KlTEIdIVlLnEKFwtmE1a8PlsK9Gv9
-   S5Vy0eNpJ1dwLCb9fVBk5sTsC5VDt96c4+53HwmmVr/stwhCVPE8BChgM
-   H0zS0ozy1z+ffacOSmiAbdAftg5+tnLSBZJ6qerHsv/n+0tvGrKgJ70Fr
-   gtaq25O0hr0Fd+5X5xvgw3//4ynct9C8buIMAbJVhuf23vJHpzDFbVSuv
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10278"; a="340782145"
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="340782145"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:48:11 -0800
-X-IronPort-AV: E=Sophos;i="5.90,161,1643702400"; 
-   d="scan'208";a="553088602"
-Received: from rabl-mobl2.ger.corp.intel.com ([10.252.54.114])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2022 01:48:03 -0800
-Date:   Mon, 7 Mar 2022 11:48:01 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Lukas Wunner <lukas@wunner.de>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-api@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [RFC PATCH 6/7] serial: General support for multipoint
- addresses
-In-Reply-To: <20220306194001.GD19394@wunner.de>
-Message-ID: <ab43569c-6488-12a6-823-3ef09f2849d@linux.intel.com>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com> <20220302095606.14818-7-ilpo.jarvinen@linux.intel.com> <20220306194001.GD19394@wunner.de>
+        with ESMTP id S237479AbiCGKyn (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 7 Mar 2022 05:54:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5BF5A8ED9
+        for <linux-mips@vger.kernel.org>; Mon,  7 Mar 2022 02:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646647968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EAtJPNtZqQT+pzIC8Y0yY8ijMFQMxHJn+7uAlJm9E2A=;
+        b=UZ+SDSnDZF+VsXQQefNOfVqNhUYEVXSyB5COW9cgKPDjqCDYYi63cbRm5MbY8glNzzlGYa
+        x4DgPQWgUDEb/WE8ygjXLrXp0XGKTG+QHqXsj4YK3Y7s5SIJSsqIRDU2oEoAaqI/kFN7Ow
+        YhYnq6VcqsKznBAzdBvLP4T1gcK9vzM=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-294-xOIGQxzDMviS3hzyGxVyyA-1; Mon, 07 Mar 2022 05:12:47 -0500
+X-MC-Unique: xOIGQxzDMviS3hzyGxVyyA-1
+Received: by mail-wm1-f72.google.com with SMTP id 20-20020a05600c231400b00389886f6b23so4433760wmo.6
+        for <linux-mips@vger.kernel.org>; Mon, 07 Mar 2022 02:12:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=EAtJPNtZqQT+pzIC8Y0yY8ijMFQMxHJn+7uAlJm9E2A=;
+        b=Q3A5bQ5E535RkYmAP76LuIVSI4EEXnnZp8oe+vW7MCZeMJhz39fxFkw/Ca+YfY5quz
+         GqttDE773dSZlKXrCVs8IdX1nvQ5LuGQ38PbcsgzpDhUaTVermXSuCjbAdm5Kfyk8Erd
+         i6vUbO35CzjZ01QpBustbPMZHb8FRuKKfjETFHsCNpywB+TBxphW273XE4MuuCWCngyW
+         hL6SpwpzdvXleK1pssfBKKkpFgns1PWg0h33cqkIpgi2hYV4aiKX2wAH5xjBXMo47LBH
+         R6j9OcIZCwiziIFt8HUnZekT9zOz96GADgFbfFBm4vG3ujSuCs8CqCrosJbaiKiobXRB
+         SYtw==
+X-Gm-Message-State: AOAM531pEcyH6jcWAe1rUJZ3ggiSz7t3sntUxEIBQTnqnO56v6WKGrUO
+        P/locvXaaihb+FstUaWv44/0QHWj/a5vd5T5DLTHp3GOnHX0ImtJWIJUmBqnXPo285TxRj2CYgL
+        JMLB7uSwHOm1Ti9JF5zFDpA==
+X-Received: by 2002:a5d:6046:0:b0:1f0:4973:142f with SMTP id j6-20020a5d6046000000b001f04973142fmr7674901wrt.538.1646647966508;
+        Mon, 07 Mar 2022 02:12:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwEV99RC6J+Vin5f1sKjrk/pcIneCd29UN8hGV1eMibccSf0NvkVF1D5zaL4pxEGhCcclmMGQ==
+X-Received: by 2002:a5d:6046:0:b0:1f0:4973:142f with SMTP id j6-20020a5d6046000000b001f04973142fmr7674887wrt.538.1646647966292;
+        Mon, 07 Mar 2022 02:12:46 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:1e00:8d67:f75a:a8ae:dc02? (p200300cbc7051e008d67f75aa8aedc02.dip0.t-ipconnect.de. [2003:cb:c705:1e00:8d67:f75a:a8ae:dc02])
+        by smtp.gmail.com with ESMTPSA id bg18-20020a05600c3c9200b0037c2ef07493sm14954074wmb.3.2022.03.07.02.12.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 02:12:45 -0800 (PST)
+Message-ID: <d6b09f23-f470-c119-8d3e-7d72a3448b64@redhat.com>
+Date:   Mon, 7 Mar 2022 11:12:44 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-971395012-1646646016=:1677"
-Content-ID: <cbee2ae-83f0-872e-34dd-cb9866dd3f6e@linux.intel.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RFC 0/3] MAP_POPULATE for device memory
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>, linux-mm@kvack.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Nathaniel McCallum <nathaniel@profian.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        zhangyiru <zhangyiru3@huawei.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        linux-mips@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, codalist@coda.cs.cmu.edu,
+        linux-unionfs@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20220306053211.135762-1-jarkko@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220306053211.135762-1-jarkko@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,46 +105,23 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-971395012-1646646016=:1677
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <07d5f9f-7fe3-3c54-6566-1873a5191970@linux.intel.com>
-
-On Sun, 6 Mar 2022, Lukas Wunner wrote:
-
-> On Wed, Mar 02, 2022 at 11:56:05AM +0200, Ilpo Järvinen wrote:
+On 06.03.22 06:32, Jarkko Sakkinen wrote:
+> For device memory (aka VM_IO | VM_PFNMAP) MAP_POPULATE does nothing. Allow
+> to use that for initializing the device memory by providing a new callback
+> f_ops->populate() for the purpose.
 > 
-> > This change is necessary for supporting devices with RS485
-> > multipoint addressing [*].
+> SGX patches are provided to show the callback in context.
 > 
-> If this is only used with RS485, why can't we just store the
-> addresses in struct serial_rs485 and use the existing TIOCSRS485
-> and TIOCGRS485 ioctls?  There's 20 bytes of padding left in
-> struct serial_rs485 which you could use.  No need to add more
-> user-space ABI.
+> An obvious alternative is a ioctl but it is less elegant and requires
+> two syscalls (mmap + ioctl) per memory range, instead of just one
+> (mmap).
 
-It could if it is agreed that serial multipoint addressing is just
-a thing in RS-485 and nowhere else? In that case, there is no point
-in adding more generic support for it.
-
-> > [*] Technically, RS485 is just an electronic spec and does not
-> > itself specify the 9th bit addressing mode but 9th bit seems
-> > at least "semi-standard" way to do addressing with RS485.
-> 
-> Is 9th bit addressing actually used by an Intel customer or was
-> it implemented just for feature completeness? I think this mode
-> isn't used often (I've never seen a use case myself), primarily
-> because it requires disabling parity.
-
-On what basis? ...The datasheet I'm looking at has a timing diagram 
-with both D8 (9th bit) and parity so I think your information must be
-incorrect. I don't have direct contacts with customers but I'm told
-it's important for other org's customers.
+What about extending MADV_POPULATE_READ | MADV_POPULATE_WRITE to support
+VM_IO | VM_PFNMAP (as well?) ?
 
 
 -- 
- i.
---8323329-971395012-1646646016=:1677--
+Thanks,
+
+David / dhildenb
+
