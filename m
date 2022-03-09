@@ -2,122 +2,136 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0489A4D3979
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Mar 2022 20:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14474D3972
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Mar 2022 20:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237257AbiCITGY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Mar 2022 14:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S237133AbiCITEV (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Mar 2022 14:04:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237222AbiCITGX (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Mar 2022 14:06:23 -0500
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f23e:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AC16F482;
-        Wed,  9 Mar 2022 11:05:23 -0800 (PST)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        with ESMTP id S237192AbiCITEU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Mar 2022 14:04:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8017D127544;
+        Wed,  9 Mar 2022 11:03:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 4A151100BA624;
-        Wed,  9 Mar 2022 20:05:21 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 278F54C5886; Wed,  9 Mar 2022 20:05:21 +0100 (CET)
-Date:   Wed, 9 Mar 2022 20:05:21 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-api@vger.kernel.org, Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [RFC PATCH 6/7] serial: General support for multipoint addresses
-Message-ID: <20220309190521.GA9832@wunner.de>
-References: <20220302095606.14818-1-ilpo.jarvinen@linux.intel.com>
- <20220302095606.14818-7-ilpo.jarvinen@linux.intel.com>
- <20220306194001.GD19394@wunner.de>
- <ab43569c-6488-12a6-823-3ef09f2849d@linux.intel.com>
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02715B82365;
+        Wed,  9 Mar 2022 19:03:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F8BEC340E8;
+        Wed,  9 Mar 2022 19:03:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646852593;
+        bh=wOn8Hies7HCzLfAvnQCaSqDPNyXoIclo0vQqj6JYG3k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uA1e9OONv2ENbAsD18d0StlyDCgqJKYPtI6aV2IVlfpPaF+EhE7QTYHxidyNAySdv
+         8kzQifHpplvlI9H6kI+pLhBq3GcW2ySU+VbhsgERJ0KzV4Kdzck2IebYp0ZbfVE5mq
+         B9kz+V7GPruzNc9dqc9Pt8eePI+/osQr/sDjFKKYhY5wg9BitFvlRoQ8p07FuRse/i
+         02vL0NqgSEFoH1dcMGNPG3O01kuA3FJoRVub+IJah4+OVfPfH1B5YP7iZKWNVTxAuS
+         ugJiI0yjRwJZQMXt4LW1DGS4M+kdcVGEjrutQZYktNsPLq/ITknB+hZIvg/KrDSRQf
+         DbFbVn1z0QkEA==
+Date:   Wed, 9 Mar 2022 13:11:43 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-mips@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] MIPS: boot/compressed: Use array reference for image
+ bounds
+Message-ID: <20220309191143.GA2264083@embeddedor>
+References: <20220309185032.229123-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ab43569c-6488-12a6-823-3ef09f2849d@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220309185032.229123-1-keescook@chromium.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 11:48:01AM +0200, Ilpo Järvinen wrote:
-> On Sun, 6 Mar 2022, Lukas Wunner wrote:
-> > On Wed, Mar 02, 2022 at 11:56:05AM +0200, Ilpo Järvinen wrote:
-> > > This change is necessary for supporting devices with RS485
-> > > multipoint addressing [*].
-> > 
-> > If this is only used with RS485, why can't we just store the
-> > addresses in struct serial_rs485 and use the existing TIOCSRS485
-> > and TIOCGRS485 ioctls?  There's 20 bytes of padding left in
-> > struct serial_rs485 which you could use.  No need to add more
-> > user-space ABI.
+On Wed, Mar 09, 2022 at 10:50:32AM -0800, Kees Cook wrote:
+> As done with other image addresses in other architectures, use an
+> explicit flexible array instead of "address of char", which can trip
+> bounds checking done by the compiler. Found when building with
+> -Warray-bounds:
 > 
-> It could if it is agreed that serial multipoint addressing is just
-> a thing in RS-485 and nowhere else? In that case, there is no point
-> in adding more generic support for it.
-
-It's just that the above-quoted sentence in the commit message
-specifically mentions RS485.  If you intend to use it with RS232
-as well, that should be made explicit, otherwise one wonders why
-it wasn't integrated into struct serial_rs485.
-
-I have no idea how common 9th bit addressing mode is with RS232.
-Goggle turns up links saying it's mainly used with RS485, "but also
-RS232".  Since RS232 isn't a bus but a point-to-point link,
-9th bit addressing doesn't seem to make as much sense.
-
-
-> > > [*] Technically, RS485 is just an electronic spec and does not
-> > > itself specify the 9th bit addressing mode but 9th bit seems
-> > > at least "semi-standard" way to do addressing with RS485.
-> > 
-> > Is 9th bit addressing actually used by an Intel customer or was
-> > it implemented just for feature completeness? I think this mode
-> > isn't used often (I've never seen a use case myself), primarily
-> > because it requires disabling parity.
+> In file included from ./include/linux/byteorder/little_endian.h:5,
+>                  from ./arch/mips/include/uapi/asm/byteorder.h:15,
+>                  from ./arch/mips/include/asm/bitops.h:21,
+>                  from ./include/linux/bitops.h:33,
+>                  from ./include/linux/kernel.h:22,
+>                  from arch/mips/boot/compressed/decompress.c:13:
+> arch/mips/boot/compressed/decompress.c: In function 'decompress_kernel':
+> ./include/asm-generic/unaligned.h:14:8: warning: array subscript -1 is outside array bounds of 'unsigned char[1]' [-Warray-bounds]
+>    14 |  __pptr->x;        \
+>       |  ~~~~~~^~~
+> ./include/uapi/linux/byteorder/little_endian.h:35:51: note: in definition of macro '__le32_to_cpu'
+>    35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>       |                                                   ^
+> ./include/asm-generic/unaligned.h:32:21: note: in expansion of macro '__get_unaligned_t'
+>    32 |  return le32_to_cpu(__get_unaligned_t(__le32, p));
+>       |                     ^~~~~~~~~~~~~~~~~
+> arch/mips/boot/compressed/decompress.c:29:37: note: while referencing '__image_end'
+>    29 | extern unsigned char __image_begin, __image_end;
+>       |                                     ^~~~~~~~~~~
 > 
-> On what basis? ...The datasheet I'm looking at has a timing diagram 
-> with both D8 (9th bit) and parity so I think your information must be
-> incorrect.
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: linux-mips@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-E.g. the discussion here says that 9th bit addressing requires that
-parity is disabled or the character size is reduced to 7-bit:
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-https://www.microchip.com/forums/m299904.aspx
+Thanks
+--
+Gustavo
 
-I guess that applies only to some UARTs, the Synopsys databook doesn't
-mention any such constraints.
-
-Thanks,
-
-Lukas
+> ---
+>  arch/mips/boot/compressed/decompress.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/mips/boot/compressed/decompress.c b/arch/mips/boot/compressed/decompress.c
+> index aae1346a509a..5b38a802e101 100644
+> --- a/arch/mips/boot/compressed/decompress.c
+> +++ b/arch/mips/boot/compressed/decompress.c
+> @@ -26,7 +26,7 @@ unsigned long free_mem_ptr;
+>  unsigned long free_mem_end_ptr;
+>  
+>  /* The linker tells us where the image is. */
+> -extern unsigned char __image_begin, __image_end;
+> +extern unsigned char __image_begin[], __image_end[];
+>  
+>  /* debug interfaces  */
+>  #ifdef CONFIG_DEBUG_ZBOOT
+> @@ -91,9 +91,9 @@ void decompress_kernel(unsigned long boot_heap_start)
+>  {
+>  	unsigned long zimage_start, zimage_size;
+>  
+> -	zimage_start = (unsigned long)(&__image_begin);
+> -	zimage_size = (unsigned long)(&__image_end) -
+> -	    (unsigned long)(&__image_begin);
+> +	zimage_start = (unsigned long)(__image_begin);
+> +	zimage_size = (unsigned long)(__image_end) -
+> +	    (unsigned long)(__image_begin);
+>  
+>  	puts("zimage at:     ");
+>  	puthex(zimage_start);
+> @@ -121,7 +121,7 @@ void decompress_kernel(unsigned long boot_heap_start)
+>  		dtb_size = fdt_totalsize((void *)&__appended_dtb);
+>  
+>  		/* last four bytes is always image size in little endian */
+> -		image_size = get_unaligned_le32((void *)&__image_end - 4);
+> +		image_size = get_unaligned_le32((void *)__image_end - 4);
+>  
+>  		/* The device tree's address must be properly aligned  */
+>  		image_size = ALIGN(image_size, STRUCT_ALIGNMENT);
+> -- 
+> 2.32.0
+> 
