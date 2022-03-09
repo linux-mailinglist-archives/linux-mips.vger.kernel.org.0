@@ -2,61 +2,90 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8984D2B3C
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Mar 2022 10:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0DC4D2B9D
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Mar 2022 10:17:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbiCIJDL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 9 Mar 2022 04:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
+        id S229836AbiCIJSP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 9 Mar 2022 04:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbiCIJCy (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Mar 2022 04:02:54 -0500
-Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6BE16AA58
-        for <linux-mips@vger.kernel.org>; Wed,  9 Mar 2022 01:01:56 -0800 (PST)
-Received: by mail.olerise.pl (Postfix, from userid 1001)
-        id 5293A459FC; Wed,  9 Mar 2022 09:56:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
-        t=1646816364; bh=ZNYiuZLXlxCdAPtstEG/gwJieB5RBwA/cHj1SZ3Mpl0=;
-        h=Date:From:To:Subject:From;
-        b=ZxLjtyXQLvIw7hEbc3eAW52qaWbEsGM9Eex07eWmBjTNIUkAvBgk02dkcwDYYgsJ5
-         VrOuOaEoCZd0nTd9dW+3ftTYLOn/Y3DyjBLUIqb03/FqnI3wB9HdloWVIK8/NY8P4y
-         E6Eh7JrvbQvn/tI8+Ppdiq+BnfSxOWIjYVO7km33ws0YCx3+4ku2GPbNaDRl5tFbId
-         pPU9CwC4ZA24Q3jY1C2xkSR90tDvR1ITGAEl3kPLwWe3zmoUQC+4I0Lyf8vz5ddb3/
-         ZS4jEq52BPBJ1P/aR9AkD+Nje3jUWwtBD2Aev2ATzD7svKcEpbsXFWLoVn41J69Q/P
-         kBN6VDolIqaLQ==
-Received: by mail.olerise.pl for <linux-mips@vger.kernel.org>; Wed,  9 Mar 2022 08:55:55 GMT
-Message-ID: <20220309084500-0.1.27.nsrx.0.20gr7q5040@olerise.pl>
-Date:   Wed,  9 Mar 2022 08:55:55 GMT
-From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= <mikolaj.rudzik@olerise.pl>
-To:     <linux-mips@vger.kernel.org>
-Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
-X-Mailer: mail.olerise.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_BL,
-        RCVD_IN_MSPIKE_L3,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S229475AbiCIJSO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 9 Mar 2022 04:18:14 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D775D16E7E5;
+        Wed,  9 Mar 2022 01:17:16 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id b8so1770599pjb.4;
+        Wed, 09 Mar 2022 01:17:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=aEzrS2PE1KETN7BwFBNCY3C6S3nrsSHP5KWZyXBcdRc=;
+        b=aZZk2KpRZQqGz0PSLYzj/p5onyZm29EV1v0s/9N/ftYnkE3uZPvUbtwtSd8/KExEUL
+         gJEHWQ5XoL8j3cHV+DwwY2HbvUMWLNAyAtL4b9n18bw94TDyAwS76dpfo1TL1gMSi8Bm
+         X1OuhVD4ll92HZIi0PHVuaab1Ypc0VQSYDOI1JyiTF2bwBXBO+bvRLGNSYW7TYC+ZldX
+         MtifsgnPTuFMMnM3fv5VxRdwykkn4UoWzopGxsDPQeLH0dA2UBayZVmguoBoMm94NnAX
+         NeeGaA1+sDxu2e6Yf3JJrc1g9vekU2FM/tyNNNK3Il5ZLKdxInBx7eLDAkkslFFJYSm4
+         4thA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=aEzrS2PE1KETN7BwFBNCY3C6S3nrsSHP5KWZyXBcdRc=;
+        b=QszoH/6Sgk2ZLqdw2jV0grP0extkGeS0g0pLeUle9+JNmi1D3oSMkh3B8Iim35Xn/D
+         6dLIF+ZI60zXnHJ93YSsCwe2fYIxCseKls3O/UyT3g4xwOmYl9y+sAIX1iQK5E7dQ4oh
+         WvbH8VZt+O2sbDyQVRYzYqA4rA002+rBcEzIIrs3TLNK2RP67BYudtsaAOcJtAMhw/dH
+         GyCL374t99UIH6We8MPbtlrTehc4XWCInwyrAzpyRgbTq5IvW4/D7QxyNrTduAmEoZxy
+         lYnzcbqBv01W1L/757DOob31IF0ykv8Ktgyu76IW59kkzBlOR8/SAF5UGVVW9LJ8hdZ0
+         FLNw==
+X-Gm-Message-State: AOAM533QpN7nO24iJJNaEpPkLRX1Y6B0meQtF2vsf1ASpjtJOFwl2K+V
+        1HYL6KVKthhuR2TqFg+JlMt5bkPZ7cVcQtmU9GA=
+X-Google-Smtp-Source: ABdhPJwEOC5WOrkJSmQNkYtXsu7npejbiABCxHhexU92EdsCQLpawdbqX16QC0seN3xuJyqr9XhBjg==
+X-Received: by 2002:a17:903:40c7:b0:151:a640:d69e with SMTP id t7-20020a17090340c700b00151a640d69emr21228754pld.121.1646817436345;
+        Wed, 09 Mar 2022 01:17:16 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id q21-20020a63e215000000b00373efe2cbcbsm1676461pgh.80.2022.03.09.01.17.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 01:17:16 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] mips: cdmm: Fix refcount leak in mips_cdmm_phys_base
+Date:   Wed,  9 Mar 2022 09:17:10 +0000
+Message-Id: <20220309091711.3850-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Dzie=C5=84 dobry,
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
-skania nowych zlece=C5=84 ze strony www.
+Fixes: 2121aa3e2312 ("mips: cdmm: Add mti,mips-cdmm dtb node support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/bus/mips_cdmm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
-, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
-=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
-jonowania strony w Google.
+diff --git a/drivers/bus/mips_cdmm.c b/drivers/bus/mips_cdmm.c
+index 626dedd110cb..fca0d0669aa9 100644
+--- a/drivers/bus/mips_cdmm.c
++++ b/drivers/bus/mips_cdmm.c
+@@ -351,6 +351,7 @@ phys_addr_t __weak mips_cdmm_phys_base(void)
+ 	np = of_find_compatible_node(NULL, NULL, "mti,mips-cdmm");
+ 	if (np) {
+ 		err = of_address_to_resource(np, 0, &res);
++		of_node_put(np);
+ 		if (!err)
+ 			return res.start;
+ 	}
+-- 
+2.17.1
 
-Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
-
-
-Pozdrawiam
-Miko=C5=82aj Rudzik
