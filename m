@@ -2,82 +2,106 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F30F4D4155
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Mar 2022 07:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8BD4D41BA
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Mar 2022 08:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239903AbiCJGvS (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Mar 2022 01:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S235335AbiCJHX5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Mar 2022 02:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiCJGvR (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Mar 2022 01:51:17 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D6A411AA26;
-        Wed,  9 Mar 2022 22:50:16 -0800 (PST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9BxsM6lnyliK0MGAA--.27068S5;
-        Thu, 10 Mar 2022 14:50:14 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] MIPS: Fix wrong comments in asm/prom.h
-Date:   Thu, 10 Mar 2022 14:50:12 +0800
-Message-Id: <1646895012-3143-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1646895012-3143-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1646895012-3143-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9BxsM6lnyliK0MGAA--.27068S5
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFWrWr15Gry7CrW7Ww1kuFg_yoWfXrg_C3
-        W7J3y8GryrWrW3Z347Janaq34UW348XFZF9r1SqF4rA3Zaqr45GaykCr1fJr4UurWDAF4r
-        uFZ5ta9IkFnF9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbSAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWwA2048vs2IY02
-        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8AwCF04k20x
-        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUYZXrUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230314AbiCJHX4 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Mar 2022 02:23:56 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1AB4F9D0;
+        Wed,  9 Mar 2022 23:22:55 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id l20so7814932lfg.12;
+        Wed, 09 Mar 2022 23:22:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uRNunbfVJZj3V0khFzxC/exb9GUQby76Xdm8mxOwtM0=;
+        b=DPAc3c3nnRtlOHHtjP2fyr/s7e94DFESjfTzk9QZ6Q7yiwbI/nqyNz4TB+C2UKsDiq
+         /73o4A3M9ECUpbR1iBVfXIGYxdgiZF/ZYjHMnhi/YTiMElZ9canqG5ZkxZSsUYQb1MqF
+         rQjEHFnhdrHbfyuee3+Bmx67MhVMUAMJTwEWGyzKRr4tjzqrJBIG3G/0+V9CCEkZQOrJ
+         qmfAVhgBb43mGrPsiigZsBDUc7xxaWbKR3lrVWMst3LNeUHtwaHUMAyN1rrNA7ajwBwq
+         dBCWmQgupSWWsnaPOyrlmIXiO6w1GFtNUR+OBwmObY5jOgPf7MDTaO9UIfaR5sIO8guJ
+         I0pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uRNunbfVJZj3V0khFzxC/exb9GUQby76Xdm8mxOwtM0=;
+        b=nuLzegrWJjU6c1aR1xaFBasDHbZBPd96qfj9nFejuXafOq80fEEGhxsGHt1DnlaKlG
+         Hv2T0uF61lsFhW3MG4mVNo0NbHYgyn74w68JZG93PnYgEhY8Vgk3guqO/9z6QNi0utGP
+         5qoC0++JFEfBUGF6QQtqyuTgJq5RijpRi92nBFRQDyGN/U84rCWzLvb9g7HZya73kTUk
+         StiN1+GOxLQAV7fZRIhlpehtt3Uh+AUU/zfgML2+XXBvOv+l8JgWms2KpZ5g5EE+iya7
+         1dP82TGsJE5r+tiAcXbonfbFTtI7ybVIMhelE6bkTatkNXI/oBCoWPYEtC9IbQkbHpa1
+         xeRQ==
+X-Gm-Message-State: AOAM5321MsoHCSDpLnHD8tslMRx9j3KbnzUnt49SEAistcQ5fnrCHSEz
+        2fOSHxVZn4g9rRkT2OvN1ec=
+X-Google-Smtp-Source: ABdhPJx1HRJ6odDkpoCnKTs3Zu46b1u9QFUfxqdZZRDSKc8J875snzWrgbaWzfBjTjwbZjrEq+KrkA==
+X-Received: by 2002:a05:6512:10c8:b0:448:3fdc:6407 with SMTP id k8-20020a05651210c800b004483fdc6407mr2112352lfg.360.1646896974120;
+        Wed, 09 Mar 2022 23:22:54 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id y23-20020a2e95d7000000b00247e4e386aasm894075ljh.121.2022.03.09.23.22.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 23:22:53 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] tty: serial: bcm63xx: use more precise Kconfig symbol
+Date:   Thu, 10 Mar 2022 08:22:39 +0100
+Message-Id: <20220310072239.4489-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-In arch/mips/include/asm/prom.h, it should use "!CONFIG_USE_OF"
-after #else and #endif.
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Patches lowering SERIAL_BCM63XX dependencies led to a discussion and
+documentation change regarding "depends" usage. Adjust Kconfig entry to
+match current guidelines. Make this symbol available for relevant
+architectures only.
+
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Ref: f35a07f92616 ("tty: serial: bcm63xx: lower driver dependencies")
+Ref: 18084e435ff6 ("Documentation/kbuild: Document platform dependency practises")
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 ---
- arch/mips/include/asm/prom.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/prom.h b/arch/mips/include/asm/prom.h
-index c42e076..2d74406 100644
---- a/arch/mips/include/asm/prom.h
-+++ b/arch/mips/include/asm/prom.h
-@@ -20,9 +20,9 @@ struct boot_param_header;
- extern void __dt_setup_arch(void *bph);
- extern int __dt_register_buses(const char *bus0, const char *bus1);
- 
--#else /* CONFIG_OF */
-+#else /* !CONFIG_USE_OF */
- static inline void device_tree_init(void) { }
--#endif /* CONFIG_OF */
-+#endif /* !CONFIG_USE_OF */
- 
- extern char *mips_get_machine_name(void);
- extern void mips_set_machine_name(const char *name);
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index e952ec5c7a7c..99313e16c2be 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -1100,7 +1100,8 @@ config SERIAL_TIMBERDALE
+ config SERIAL_BCM63XX
+ 	tristate "Broadcom BCM63xx/BCM33xx UART support"
+ 	select SERIAL_CORE
+-	depends on COMMON_CLK
++	depends on MIPS || ARM || ARM64 || COMPILE_TEST
++	default ARCH_BCM4908 || BCM63XX || BMIPS_GENERIC
+ 	help
+ 	  This enables the driver for the onchip UART core found on
+ 	  the following chipsets:
 -- 
-2.1.0
+2.34.1
 
