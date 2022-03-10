@@ -2,119 +2,234 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34EB44D4291
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Mar 2022 09:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6850A4D443C
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Mar 2022 11:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240362AbiCJIeL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Mar 2022 03:34:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S236145AbiCJKH2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Mar 2022 05:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240361AbiCJIeL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Mar 2022 03:34:11 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DCC5C864;
-        Thu, 10 Mar 2022 00:33:09 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id s25so6675227lji.5;
-        Thu, 10 Mar 2022 00:33:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=5kbIEXrorz/H9DvUKGpzubyMEhfXDoMfMqyoxlkwx5s=;
-        b=UrjYq2/KyC3hvwORoAq2rAi9RMIsuR0umGHAz3DXdsGHU46VPLPpRZ7oxHgbMoZzfP
-         TpJPe7CbBMnfx/r97HrJIw8EChbICBje8UAdC9Xur7ScmBVscc+jU56Vbgzb0NFuyZ3L
-         Yr3DRddja/lhGnlemyu7O8ubgNs5p3fxjkfcF9hpjCvEkIDhWBW7Hb4SHkDbe9ZR3sKe
-         JSLTPqNPtGssgo/N6E/lV8jQE4RiK2pu5k5MCrEjkdKQGSt6kEugPFgkbIDoRlYVB0sl
-         u+5CMCvl2xxZtIiEx+I8NV02zzxhBW9yTYM3QTD8161ihrXzLxtgEfWnTWwBF8jH6EzQ
-         PARw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5kbIEXrorz/H9DvUKGpzubyMEhfXDoMfMqyoxlkwx5s=;
-        b=5Sh4abJehEyo0VSM39lvJygbENY3Nnhzu7pS7NqESB+Y0beRufDihnkM32zLB8ja2g
-         73a4PDMGbWsa4yrnizk34viClI8fdhjSngsK8+7q5yQnD7yaG7oMw94Am/ElGOpnVTfM
-         KOvV3EbnzhPDVC+dgqlz+urpLNB1yQiQN59HVAdETBLTrRo0yM+6DKVFBb9gqRUEMtmv
-         9JwDrdExcwBZ+O2BcGBmf5YpZ9P3TrAtBGqttSFZ020V54crHQsexaBh6e+GBbvZlhpA
-         cUYKE0fdcppNja9lY8EXYdfCB1SAg6nafGTV0YveLIIiQpU8g8newNS9KTy8gT+v3AmY
-         2JMw==
-X-Gm-Message-State: AOAM531E6ZhOwLRiE3ZyxIAjUBDxoE/DKD+Ofncibdhm8nI69ypf5j2G
-        o09l+pEoLyp6K0TaaslMsqA=
-X-Google-Smtp-Source: ABdhPJxzhyaNeFJBtRmOqugCqJRepynC1ipQE7qbVJiJc/tZWrPO6G4gzHfE6PWCrhciUe6CBTBY2w==
-X-Received: by 2002:a2e:54b:0:b0:248:744:b859 with SMTP id 72-20020a2e054b000000b002480744b859mr2331586ljf.37.1646901187276;
-        Thu, 10 Mar 2022 00:33:07 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id j7-20020a2e3c07000000b00247fd2f7f46sm926039lja.47.2022.03.10.00.33.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 00:33:06 -0800 (PST)
-Message-ID: <145c66e0-2ba5-712c-57de-82378328ec3f@gmail.com>
-Date:   Thu, 10 Mar 2022 09:33:06 +0100
+        with ESMTP id S240199AbiCJKH1 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Mar 2022 05:07:27 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B56D13D927;
+        Thu, 10 Mar 2022 02:06:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B9609CE2315;
+        Thu, 10 Mar 2022 10:06:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EC5C340F5;
+        Thu, 10 Mar 2022 10:06:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646906782;
+        bh=vhFXTfR/hHQwooRMbLLv+htbY75oKp351jSwOX6ruus=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ud5l1qsbXJFf8gH+uYExyTYvIz8T6lX3+I9F5nGWuFeMgL1BlC5il7yZEy9Pq1jLQ
+         nDKmXAUT8gXbXi7oDJgboC3xxlHkuln8v/mLbeLLvO5uzw1gOunhZv4JbH5021WNIq
+         g97xqb1Uy9C9vWkGU2U0nDJcwD4VhE57HPj+c0rni/Qbq6cKLTZjLabYQFXW2nTNqo
+         8lrRQU9ez/ZlWCmyK17bvCLl3ffRET3rsX96uJX97ksR2RYMBCIxo/8ori2WEd59/O
+         OL7rioB5cgwtNpFV23tgpV2bB+46QAVVqSLDqlSOgSatoXmUK8z4m/gLlECpItSWkp
+         utWcxHO1iuYVA==
+Received: by mail-vs1-f45.google.com with SMTP id u124so5296398vsb.10;
+        Thu, 10 Mar 2022 02:06:22 -0800 (PST)
+X-Gm-Message-State: AOAM532QD1kKYLDdvA4GHDy2hm7znWX/9hnVc1cpRVvKSPOETZHJeKXp
+        nwdsJp7XvVV2j+17Df/4zyK3MTXkXvtjt1L+U1U=
+X-Google-Smtp-Source: ABdhPJxmgtCny+YtcJg2sILVIeyOg6uUfrGYFkSlV5X2IRbm6w3wA9qxxW2buYTHGP3tmE/NAGGje/tSIZYaB3Wi5MY=
+X-Received: by 2002:a67:fc17:0:b0:320:b039:afc0 with SMTP id
+ o23-20020a67fc17000000b00320b039afc0mr2196611vsq.2.1646906781754; Thu, 10 Mar
+ 2022 02:06:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH] tty: serial: bcm63xx: use more precise Kconfig symbol
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-15-guoren@kernel.org>
+In-Reply-To: <20220227162831.674483-15-guoren@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 10 Mar 2022 18:06:10 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQLWZbh_yZJMXAsWbjRfkeQMpdsuo5fQcFRYZbKQyGKaA@mail.gmail.com>
+Message-ID: <CAJF2gTQLWZbh_yZJMXAsWbjRfkeQMpdsuo5fQcFRYZbKQyGKaA@mail.gmail.com>
+Subject: Re: [PATCH V7 14/20] riscv: compat: Add elf.h implementation
+To:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20220310072239.4489-1-zajec5@gmail.com>
- <CAMuHMdWQNDABuT9uwAugrzdQM31wFtXX_9F8MviC-BRc-YngKw@mail.gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <CAMuHMdWQNDABuT9uwAugrzdQM31wFtXX_9F8MviC-BRc-YngKw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 10.03.2022 09:19, Geert Uytterhoeven wrote:
-> On Thu, Mar 10, 2022 at 8:22 AM Rafał Miłecki <zajec5@gmail.com> wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->>
->> Patches lowering SERIAL_BCM63XX dependencies led to a discussion and
->> documentation change regarding "depends" usage. Adjust Kconfig entry to
->> match current guidelines. Make this symbol available for relevant
->> architectures only.
->>
->> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
->> Ref: f35a07f92616 ("tty: serial: bcm63xx: lower driver dependencies")
->> Ref: 18084e435ff6 ("Documentation/kbuild: Document platform dependency practises")
->> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Thanks for your patch!
-> 
->> --- a/drivers/tty/serial/Kconfig
->> +++ b/drivers/tty/serial/Kconfig
->> @@ -1100,7 +1100,8 @@ config SERIAL_TIMBERDALE
->>   config SERIAL_BCM63XX
->>          tristate "Broadcom BCM63xx/BCM33xx UART support"
->>          select SERIAL_CORE
->> -       depends on COMMON_CLK
->> +       depends on MIPS || ARM || ARM64 || COMPILE_TEST
->> +       default ARCH_BCM4908 || BCM63XX || BMIPS_GENERIC
-> 
-> So ARCH_BCM4908 covers ARM64, and BCM63XX || BMIPS_GENERIC
-> cover MIPS.  Is there some symbol covering ARM so we can change the
-> depends to
-> 
->      depends on FOO || ARCH_BCM4908 || BCM63XX || BMIPS_GENERIC || COMPILE_TEST
-> 
-> ?
+Hi Palmer & Arnd
 
-Florian, Kevin: do you know what other platforms need that driver?
+Seems we need a more strict check to distinguish ELFCLASS32/64 RISC in
+elf for the elf_check_arch & compat_elf_check_arch. SET_PERSONALITY is
+not enough.
 
-Ref: c0ec3fd123e9 ("tty: serial: bcm63xx: Allow bcm63xx_uart to be built on other platforms")
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c0ec3fd123e9e64e095fb221ace841e00c04e40b
+diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+index d87d3bcc758d..2fcd854fb516 100644
+--- a/arch/riscv/include/asm/elf.h
++++ b/arch/riscv/include/asm/elf.h
+@@ -33,7 +33,8 @@
+ /*
+  * This is used to ensure we don't load something for the wrong architecture.
+  */
+-#define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
++#define elf_check_arch(x) (((x)->e_machine == EM_RISCV) && \
++                          ((x)->e_ident[EI_CLASS] == ELF_CLASS))
+
+ /*
+  * Use the same code with elf_check_arch, because elf32_hdr &
+diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+index 8caa5f48d0a1..f46016e96235 100644
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -88,7 +88,9 @@ static bool compat_mode_supported __read_mostly;
+
+ bool compat_elf_check_arch(Elf32_Ehdr *hdr)
+ {
+-       return compat_mode_supported && hdr->e_machine == EM_RISCV;
++       return compat_mode_supported &&
++              hdr->e_machine == EM_RISCV &&
++              hdr->e_ident[EI_CLASS] == ELFCLASS32;
+ }
+
+ static int __init compat_mode_detect(void)
+
+On Mon, Feb 28, 2022 at 12:30 AM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Implement necessary type and macro for compat elf. See the code
+> comment for detail.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/riscv/include/asm/elf.h | 46 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 45 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+> index f53c40026c7a..aee40040917b 100644
+> --- a/arch/riscv/include/asm/elf.h
+> +++ b/arch/riscv/include/asm/elf.h
+> @@ -8,6 +8,8 @@
+>  #ifndef _ASM_RISCV_ELF_H
+>  #define _ASM_RISCV_ELF_H
+>
+> +#include <uapi/linux/elf.h>
+> +#include <linux/compat.h>
+>  #include <uapi/asm/elf.h>
+>  #include <asm/auxvec.h>
+>  #include <asm/byteorder.h>
+> @@ -18,11 +20,13 @@
+>   */
+>  #define ELF_ARCH       EM_RISCV
+>
+> +#ifndef ELF_CLASS
+>  #ifdef CONFIG_64BIT
+>  #define ELF_CLASS      ELFCLASS64
+>  #else
+>  #define ELF_CLASS      ELFCLASS32
+>  #endif
+> +#endif
+>
+>  #define ELF_DATA       ELFDATA2LSB
+>
+> @@ -31,6 +35,13 @@
+>   */
+>  #define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
+>
+> +/*
+> + * Use the same code with elf_check_arch, because elf32_hdr &
+> + * elf64_hdr e_machine's offset are different. The checker is
+> + * a little bit simple compare to other architectures.
+> + */
+> +#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
+> +
+>  #define CORE_DUMP_USE_REGSET
+>  #define ELF_EXEC_PAGESIZE      (PAGE_SIZE)
+>
+> @@ -43,8 +54,14 @@
+>  #define ELF_ET_DYN_BASE                ((TASK_SIZE / 3) * 2)
+>
+>  #ifdef CONFIG_64BIT
+> +#ifdef CONFIG_COMPAT
+> +#define STACK_RND_MASK         (test_thread_flag(TIF_32BIT) ? \
+> +                                0x7ff >> (PAGE_SHIFT - 12) : \
+> +                                0x3ffff >> (PAGE_SHIFT - 12))
+> +#else
+>  #define STACK_RND_MASK         (0x3ffff >> (PAGE_SHIFT - 12))
+>  #endif
+> +#endif
+>  /*
+>   * This yields a mask that user programs can use to figure out what
+>   * instruction set this CPU supports.  This could be done in user space,
+> @@ -60,11 +77,19 @@ extern unsigned long elf_hwcap;
+>   */
+>  #define ELF_PLATFORM   (NULL)
+>
+> +#define COMPAT_ELF_PLATFORM    (NULL)
+> +
+>  #ifdef CONFIG_MMU
+>  #define ARCH_DLINFO                                            \
+>  do {                                                           \
+> +       /*                                                      \
+> +        * Note that we add ulong after elf_addr_t because      \
+> +        * casting current->mm->context.vdso triggers a cast    \
+> +        * warning of cast from pointer to integer for          \
+> +        * COMPAT ELFCLASS32.                                   \
+> +        */                                                     \
+>         NEW_AUX_ENT(AT_SYSINFO_EHDR,                            \
+> -               (elf_addr_t)current->mm->context.vdso);         \
+> +               (elf_addr_t)(ulong)current->mm->context.vdso);  \
+>         NEW_AUX_ENT(AT_L1I_CACHESIZE,                           \
+>                 get_cache_size(1, CACHE_TYPE_INST));            \
+>         NEW_AUX_ENT(AT_L1I_CACHEGEOMETRY,                       \
+> @@ -90,4 +115,23 @@ do {                                                        \
+>                 *(struct user_regs_struct *)regs;       \
+>  } while (0);
+>
+> +#ifdef CONFIG_COMPAT
+> +
+> +#define SET_PERSONALITY(ex)                                    \
+> +do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)              \
+> +               set_thread_flag(TIF_32BIT);                     \
+> +       else                                                    \
+> +               clear_thread_flag(TIF_32BIT);                   \
+> +       if (personality(current->personality) != PER_LINUX32)   \
+> +               set_personality(PER_LINUX |                     \
+> +                       (current->personality & (~PER_MASK)));  \
+> +} while (0)
+> +
+> +#define COMPAT_ELF_ET_DYN_BASE         ((TASK_SIZE_32 / 3) * 2)
+> +
+> +/* rv32 registers */
+> +typedef compat_ulong_t                 compat_elf_greg_t;
+> +typedef compat_elf_greg_t              compat_elf_gregset_t[ELF_NGREG];
+> +
+> +#endif /* CONFIG_COMPAT */
+>  #endif /* _ASM_RISCV_ELF_H */
+> --
+> 2.25.1
+>
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
