@@ -2,155 +2,226 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA88E4D612B
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Mar 2022 13:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D05A4D6201
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Mar 2022 14:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348528AbiCKMGM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Mar 2022 07:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S238742AbiCKNGb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Mar 2022 08:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348522AbiCKMGL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Mar 2022 07:06:11 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99B11B0BD0;
-        Fri, 11 Mar 2022 04:05:08 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id x15so12560644wru.13;
-        Fri, 11 Mar 2022 04:05:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pYOH+D47s+nPvs6dVoBRspa7x8lAvKDpmLjt6UBzJDU=;
-        b=AuKnyw0EnGIqZUppIffzfnzL+YN6QaezGTe6yGSfh/NDTX886ag6hFNQH9hMsjYMOy
-         vrKvoVIG+qFEpN1d55zp99Zm+HUAdTO24Wp5t5dgAglhXQJ1WzRaAlnB5LaILbYrrt4c
-         ZCIv1biM/+6eL0nt2tEWZGi5q0fyeQkoXBHWwtUO6wV2Znuart0Zp/vZlIY/2Hu4fbCB
-         Ks2sJlBsPZRk9uTJ1Q8C64gGSgV3z2nj2rMd3kwAPLVbxPQbu5aNR8LMaujPZtdHiY6a
-         xQzczXmGELqukqsmKW+uqVyuBQG7LkUKPZH7kFZCuqGdoJgtK7KO/mAL0MqSc7PX2RLQ
-         mOwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pYOH+D47s+nPvs6dVoBRspa7x8lAvKDpmLjt6UBzJDU=;
-        b=2bGii9ZIZKb0Spe7sZ8N+QmD4ucPdwothqNMxkHOVsAUnuPYRxgAo8L4ufBJUDyvkw
-         3rhx1XFtxnhECvE7z5qPIFuG4Ocf9yzolbhLY/4NbEJkRIQzhoW+GYS8cVE/OWaPfLg4
-         z8Hh7EGfs2+GCMC8cG2msR/o+4VoUAfWQcSqBDQHrL9wBSoA9Yeg53Rw09NqnuAvSQeF
-         mIu0sghLV0gT+i3QLmvxmRSTEKzgTNU0MEE6H1lVIc4ero5GzIc29pya7RFSuAVY6qIw
-         8jVZ0MXeQCwUNJ8RxA9zQZh/jg+fBBItTvPbUsdJwbFHMWW7PBXTYYsqcfKhpE9mNoTe
-         zXnw==
-X-Gm-Message-State: AOAM530XIHl4TUb2WqMiv9+OJsmW9YndO9V8tePgNCu5Ysp7ai8ZRKjm
-        lE90GVQPYYVErgMwgvY4Abg=
-X-Google-Smtp-Source: ABdhPJzPnjYD1zLgfIdrULQgUSle81YQ66OZvmi43Udp/O9Tniin/9iunU/jOKH1zntKpuZLoaZq0g==
-X-Received: by 2002:a5d:6405:0:b0:1f1:faf1:a48f with SMTP id z5-20020a5d6405000000b001f1faf1a48fmr7067835wru.684.1647000307260;
-        Fri, 11 Mar 2022 04:05:07 -0800 (PST)
-Received: from monk.home ([2a01:cb10:430:ec00:4737:d56e:186b:af1])
-        by smtp.gmail.com with ESMTPSA id r20-20020adfa154000000b001f0326a23e1sm6595223wrr.88.2022.03.11.04.05.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Mar 2022 04:05:06 -0800 (PST)
-From:   Christophe Branchereau <cbranchereau@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
+        with ESMTP id S236208AbiCKNGa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Mar 2022 08:06:30 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F411C1AFB;
+        Fri, 11 Mar 2022 05:05:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1647003923; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O7m9TXBNiZRYoA89hrhRuwOoSnJmPIkD1Cv1P/g9Zqs=;
+        b=MERMw+6FOV88njYAS6yz22ak8ZLlwjn5VZpMTKAo+HLXBEOKm9tjFjqVYBr5HezTJTCVX2
+        WRBxmoVcV7NWi80UA4LMICfxKThgDrkogBja1UfNQ8SdhiUBOoV1RlZzuNHmolr0Pekhvd
+        oLLv5z7WMetYIiLObDiEy2M8urjYEIk=
+Date:   Fri, 11 Mar 2022 13:05:13 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 4/4] dt-bindings: display/panel: Add Leadtek
+ ltk035c5444t
+To:     Rob Herring <robh@kernel.org>
+Cc:     Christophe Branchereau <cbranchereau@gmail.com>,
         David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-Subject: [PATCH v3 4/4] dt-bindings: display/panel: Add Leadtek ltk035c5444t
-Date:   Fri, 11 Mar 2022 13:04:53 +0100
-Message-Id: <20220311120453.163297-5-cbranchereau@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220311120453.163297-1-cbranchereau@gmail.com>
-References: <20220311120453.163297-1-cbranchereau@gmail.com>
+        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Message-Id: <PC0L8R.DOJJ0CSJMHTW@crapouillou.net>
+In-Reply-To: <Yip8AiKNOILjf0uj@robh.at.kernel.org>
+References: <20220308130643.260683-1-cbranchereau@gmail.com>
+        <20220308130643.260683-5-cbranchereau@gmail.com>
+        <Yip8AiKNOILjf0uj@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Add binding for the leadtek ltk035c5444t, which is a 640x480
-mipi-dbi over spi / 24-bit RGB panel based on the newvision
-NV03052C chipset.
+Hi Rob,
 
-It is found in the Anbernic RG350M mips handheld.
+Le jeu., mars 10 2022 at 16:30:26 -0600, Rob Herring <robh@kernel.org>=20
+a =E9crit :
+> On Tue, Mar 08, 2022 at 02:06:43PM +0100, Christophe Branchereau=20
+> wrote:
+>>  Add binding for the leadtek ltk035c5444t, which is a 640x480
+>>  mipi-dbi over spi / 24-bit RGB panel based on the newvision
+>>  NV03052C chipset.
+>>=20
+>>  It is found in the Anbernic RG350M mips handheld.
+>>=20
+>>  Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
+>>  ---
+>>   .../panel/leadtek,ltk035c5444t-spi.yaml       | 59=20
+>> +++++++++++++++++++
+>>   1 file changed, 59 insertions(+)
+>>   create mode 100644=20
+>> Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t-spi=
+.yaml
+>=20
+> We have 18 SPI based panels already:
+>=20
+> $ git grep -i 'spi.* {'=20
+> Documentation/devicetree/bindings/display/panel/
+> Documentation/devicetree/bindings/display/panel/abt,y030xx067a.yaml: =20
+>   spi {
+> Documentation/devicetree/bindings/display/panel/ilitek,ili9163.yaml: =20
+>   spi {
+> Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml: =20
+>   spi {
+> Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml: =20
+>   spi {
+> Documentation/devicetree/bindings/display/panel/innolux,ej030na.yaml:=20
+>    spi {
+> Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.=
+yaml:=20
+>    spi {
+> Documentation/devicetree/bindings/display/panel/lg,lg4573.yaml:   =20
+> spi {
+> Documentation/devicetree/bindings/display/panel/lgphilips,lb035q02.yaml:=20
+>    spi {
+> Documentation/devicetree/bindings/display/panel/nec,nl8048hl11.yaml: =20
+>   spi0 {
+> Documentation/devicetree/bindings/display/panel/samsung,ld9040.yaml: =20
+>   spi {
+> Documentation/devicetree/bindings/display/panel/samsung,lms380kf01.yaml:=20
+>    spi {
+> Documentation/devicetree/bindings/display/panel/samsung,lms397kf04.yaml:=20
+>    spi {
+> Documentation/devicetree/bindings/display/panel/samsung,s6d27a1.yaml:=20
+>    spi {
+> Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml:=20
+>    spi {
+> Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml:=20
+>    spi {
+> Documentation/devicetree/bindings/display/panel/sony,acx565akm.yaml: =20
+>   spi {
+> Documentation/devicetree/bindings/display/panel/tpo,td.yaml:    spi {
+> Documentation/devicetree/bindings/display/panel/tpo,tpg110.yaml:   =20
+> spi {
+>=20
+> Most except for the Samsung ones look like they'd fit in our=20
+> definition
+> of 'simple panels' which primarily means 1 supply.
+>=20
+> So I think it is time for a panel-simple-spi.yaml binding to combine=20
+> all
+> these. But I'm not going to make the person adding the 19th case to do
+> that, and this otherwise looks fine:
+>=20
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
----
- .../display/panel/leadtek,ltk035c5444t.yaml   | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
+I actually thought you sent a patch for this already (I remember you=20
+talking about it last a binding for a new SPI panel has been added).
 
-diff --git a/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
-new file mode 100644
-index 000000000000..9e728f8ce0cd
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
-@@ -0,0 +1,59 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/panel/leadtek,ltk035c5444t.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Leadtek ltk035c5444t 3.5" (640x480 pixels) 24-bit IPS LCD panel
-+
-+maintainers:
-+  - Paul Cercueil <paul@crapouillou.net>
-+  - Christophe Branchereau <cbranchereau@gmail.com>
-+
-+allOf:
-+  - $ref: panel-common.yaml#
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    const: leadtek,ltk035c5444t
-+
-+  backlight: true
-+  port: true
-+  power-supply: true
-+  reg: true
-+  reset-gpios: true
-+
-+required:
-+  - compatible
-+  - power-supply
-+  - reset-gpios
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        panel@0 {
-+            compatible = "leadtek,ltk035c5444t";
-+            reg = <0>;
-+
-+            spi-3wire;
-+            spi-max-frequency = <3125000>;
-+
-+            reset-gpios = <&gpe 2 GPIO_ACTIVE_LOW>;
-+
-+            backlight = <&backlight>;
-+            power-supply = <&vcc>;
-+
-+            port {
-+                panel_input: endpoint {
-+                    remote-endpoint = <&panel_output>;
-+                };
-+            };
-+        };
-+    };
--- 
-2.35.1
+I will work on it next week - provided Cristophe's patch has been=20
+merged before.
+
+Cheers,
+-Paul
+
+>=20
+> With one nit fixed below:
+>=20
+>>=20
+>>  diff --git=20
+>> a/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t-s=
+pi.yaml=20
+>> b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t-s=
+pi.yaml
+>>  new file mode 100644
+>>  index 000000000000..9b6f1810adab
+>>  --- /dev/null
+>>  +++=20
+>> b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t-s=
+pi.yaml
+>>  @@ -0,0 +1,59 @@
+>>  +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>  +%YAML 1.2
+>>  +---
+>>  +$id:=20
+>> http://devicetree.org/schemas/display/panel/leadtek,ltk035c5444t-spi.yam=
+l#
+>>  +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>  +
+>>  +title: Leadtek ltk035c5444t 3.5" (640x480 pixels) 24-bit IPS LCD=20
+>> panel
+>>  +
+>>  +maintainers:
+>>  +  - Paul Cercueil <paul@crapouillou.net>
+>>  +  - Christophe Branchereau <cbranchereau@gmail.com>
+>>  +
+>>  +allOf:
+>>  +  - $ref: panel-common.yaml#
+>>  +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+>>  +
+>>  +properties:
+>>  +  compatible:
+>>  +    const: leadtek,ltk035c5444t-spi
+>=20
+> '-spi' is redundant, so drop.
+>=20
+>>  +
+>>  +  backlight: true
+>>  +  port: true
+>>  +  power-supply: true
+>>  +  reg: true
+>>  +  reset-gpios: true
+>>  +
+>>  +required:
+>>  +  - compatible
+>>  +  - power-supply
+>>  +  - reset-gpios
+>>  +
+>>  +unevaluatedProperties: false
+>>  +
+>>  +examples:
+>>  +  - |
+>>  +    #include <dt-bindings/gpio/gpio.h>
+>>  +
+>>  +    spi {
+>>  +        #address-cells =3D <1>;
+>>  +        #size-cells =3D <0>;
+>>  +        panel@0 {
+>>  +            compatible =3D "leadtek,ltk035c5444t-spi";
+>=20
+> And update the example...
+>=20
+>>  +            reg =3D <0>;
+>>  +
+>>  +            spi-3wire;
+>>  +            spi-max-frequency =3D <3125000>;
+>>  +
+>>  +            reset-gpios =3D <&gpe 2 GPIO_ACTIVE_LOW>;
+>>  +
+>>  +            backlight =3D <&backlight>;
+>>  +            power-supply =3D <&vcc>;
+>>  +
+>>  +            port {
+>>  +                panel_input: endpoint {
+>>  +                    remote-endpoint =3D <&panel_output>;
+>>  +                };
+>>  +            };
+>>  +        };
+>>  +    };
+>>  --
+>>  2.34.1
+>>=20
+>>=20
+
 
