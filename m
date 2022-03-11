@@ -2,175 +2,131 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C794D56A3
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Mar 2022 01:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D98B4D582F
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Mar 2022 03:38:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243458AbiCKA11 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Mar 2022 19:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S1345663AbiCKCjZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 10 Mar 2022 21:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245535AbiCKA10 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Mar 2022 19:27:26 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2741A2728
-        for <linux-mips@vger.kernel.org>; Thu, 10 Mar 2022 16:26:15 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id s12-20020a17090a13cc00b001bee1e1677fso4261004pjf.0
-        for <linux-mips@vger.kernel.org>; Thu, 10 Mar 2022 16:26:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=C/6kqtgpfTZHxI5VWOjwoNRlEkRWSpZD6XXLim3vJOQ=;
-        b=Bs0Nt6VPOSGpoyrAZTXHtLQrqfTnnHH0UC9KK9A0vLWpFqtNCmQ76QkKCaoiU7vlME
-         Q0bTazFlFcbJfqcpCjLO9tF13nAtANqrfJ4/weyLzjhfeuO+6qrSrtOmMS7TIYUEvmoj
-         3jWCRL/2/6pXWfByCKv+9rhnbh7rbU0XaID/OlkGYUR1Z4dQD7f/Cw2G6GMi4iWL1Uec
-         P+O9K7voxCptiW2ggUfO7UL3R6VkHHKXqZbW0O4DhLGBotN31nqItGDXOibW5YjGwp66
-         nMmg3cEoPd8Q4NTBLdQxpNMCsJJ+tFv4B4qQ12ZQNrnMrYMMdODRkSRN3LkqTjAlbCWy
-         wjpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=C/6kqtgpfTZHxI5VWOjwoNRlEkRWSpZD6XXLim3vJOQ=;
-        b=yfOtBEcuS20A0l/Fd/+yrZErZHHutkmguhjqI5oO4VRbHYdL8p9T2e0Ak+OeGiCFP3
-         DBJgLjiNbZMbXOjHZYvaxiF/RXGTBY8f5cdjXq6RFVwmSjtYc2EVAbGsrWmSnkCF1dTg
-         XKbUlNZW3NahqCuKk6Yx5pEnAdcr9EKyUDy6Tm5r4VshumX2v+PuT2qDezrrqxbBqwUo
-         M3hv3zUxB0TAiHiYYWxlxf8tu1iyv9L0IAg7jpnf0o6oofyAo/6tbK5pxt44hG+YJrxE
-         ZTK0nlYYYyI20XOPSNroAQuPAJxmD2JnP/VUFDHWDdSCAtLsNGKufxWSp9m0UgPeSoEr
-         ORWw==
-X-Gm-Message-State: AOAM533L1OiuRFUlD+7/8t7w7QLic5iyE6PNWkn/w4mBgfWIyAWYLafM
-        J+UKeabNCoZ8XHaDCSX3Jm7PMi8O8VE0eA==
-X-Google-Smtp-Source: ABdhPJxWLEVXby9lk2SDFDSYjtNrAmaCeZHIJ0XIStrXC375fHHUc9G7571Y4uEmDYxZrmSHCBqVZt0xqwpthw==
-X-Received: from dmatlack-heavy.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:19cd])
- (user=dmatlack job=sendgmr) by 2002:a17:90a:12c8:b0:1bf:6484:3e27 with SMTP
- id b8-20020a17090a12c800b001bf64843e27mr7807022pjg.209.1646958375426; Thu, 10
- Mar 2022 16:26:15 -0800 (PST)
-Date:   Fri, 11 Mar 2022 00:25:28 +0000
-In-Reply-To: <20220311002528.2230172-1-dmatlack@google.com>
-Message-Id: <20220311002528.2230172-27-dmatlack@google.com>
-Mime-Version: 1.0
-References: <20220311002528.2230172-1-dmatlack@google.com>
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-Subject: [PATCH v2 26/26] KVM: selftests: Map x86_64 guest virtual memory with
- huge pages
-From:   David Matlack <dmatlack@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        with ESMTP id S235051AbiCKCjY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Mar 2022 21:39:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24EA108763;
+        Thu, 10 Mar 2022 18:38:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D373600BE;
+        Fri, 11 Mar 2022 02:38:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC43C340FC;
+        Fri, 11 Mar 2022 02:38:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646966301;
+        bh=Jl8zmUlue4qqSpvupSe770nwEDFbxuYU+7Bv15ArLNk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lSDH6JbZLjCrBKwhP5l06T0OkCO9oN/A8aEEjauCFSKrSGqZSLjhPkfyba8lYXT8b
+         qYNbLTfBYoaFYS9/EdstBjbcmkW1UfcrGbXKAA3XzivX2N/X7M8/MG2dJGhgzUj1xe
+         JwIgADZuHHJQV+vkPugE9tLJ05ZgR4K+s7Tqg3OYy0S0d/gkDWxZGRTQdcVyEyVTta
+         XcdW+bJU/6F0zGvwFWhD4c7+eaOFthHqbXVWvY103F1BoVPLPmpdBFX9VrRB9dX0cQ
+         RFdNXU0aoXtMTFwXmsyOd8jEdA/NcC/+rOGDrpxxb7LrGBkBTS5gvraGhc0yhF8ir3
+         59IUblFQhb99Q==
+Received: by mail-vs1-f48.google.com with SMTP id u124so8098304vsb.10;
+        Thu, 10 Mar 2022 18:38:21 -0800 (PST)
+X-Gm-Message-State: AOAM531r+0RCSa1uP+4DxvpwfnmVIeolCIthRU6hs16y0vps/+RpTX7N
+        HjMThTmSp9v4Mq//k9W35qDGb7jrYRzugH1eYPA=
+X-Google-Smtp-Source: ABdhPJzYUvUjuAFq8XvtZ71Qsvionf8y5EprAZIyEokbvQbCG5RE3xULelpIsGE/d8q0ktAquLt4SKjjcxqaZOgU8Ls=
+X-Received: by 2002:a05:6102:806:b0:31e:2206:f1c with SMTP id
+ g6-20020a056102080600b0031e22060f1cmr3912870vsb.59.1646966300562; Thu, 10 Mar
+ 2022 18:38:20 -0800 (PST)
+MIME-Version: 1.0
+References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-14-guoren@kernel.org>
+In-Reply-To: <20220227162831.674483-14-guoren@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 11 Mar 2022 10:38:09 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com>
+Message-ID: <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com>
+Subject: Re: [PATCH V7 13/20] riscv: compat: process: Add UXL_32 support in start_thread
+To:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
-        maciej.szmigiero@oracle.com,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>,
-        David Matlack <dmatlack@google.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Override virt_map() in x86_64 selftests to use the largest page size
-possible when mapping guest virtual memory. This enables testing eager
-page splitting with shadow paging (e.g. kvm_intel.ept=N), as it allows
-KVM to shadow guest memory with huge pages.
+Hi Arnd,
 
-Signed-off-by: David Matlack <dmatlack@google.com>
----
- .../selftests/kvm/include/x86_64/processor.h  |  6 ++++
- tools/testing/selftests/kvm/lib/kvm_util.c    |  4 +--
- .../selftests/kvm/lib/x86_64/processor.c      | 31 +++++++++++++++++++
- 3 files changed, 39 insertions(+), 2 deletions(-)
+On Mon, Feb 28, 2022 at 12:30 AM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> If the current task is in COMPAT mode, set SR_UXL_32 in status for
+> returning userspace. We need CONFIG _COMPAT to prevent compiling
+> errors with rv32 defconfig.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> ---
+>  arch/riscv/kernel/process.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> index 03ac3aa611f5..54787ca9806a 100644
+> --- a/arch/riscv/kernel/process.c
+> +++ b/arch/riscv/kernel/process.c
+> @@ -97,6 +97,11 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
+>         }
+>         regs->epc = pc;
+>         regs->sp = sp;
+> +
+FIxup:
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 37db341d4cc5..efb228d2fbf7 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -470,6 +470,12 @@ enum x86_page_size {
- 	X86_PAGE_SIZE_2M,
- 	X86_PAGE_SIZE_1G,
- };
-+
-+static inline size_t page_size_bytes(enum x86_page_size page_size)
-+{
-+	return 1UL << (page_size * 9 + 12);
-+}
-+
- void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- 		   enum x86_page_size page_size);
- 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 1665a220abcb..60198587236d 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1432,8 +1432,8 @@ vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm)
-  * Within the VM given by @vm, creates a virtual translation for
-  * @npages starting at @vaddr to the page range starting at @paddr.
-  */
--void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
--	      unsigned int npages)
-+void __weak virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
-+		     unsigned int npages)
- {
- 	size_t page_size = vm->page_size;
- 	size_t size = npages * page_size;
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 9f000dfb5594..7df84292d5de 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -282,6 +282,37 @@ void virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
- 	__virt_pg_map(vm, vaddr, paddr, X86_PAGE_SIZE_4K);
- }
- 
-+void virt_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, unsigned int npages)
-+{
-+	size_t size = (size_t) npages * vm->page_size;
-+	size_t vend = vaddr + size;
-+	enum x86_page_size page_size;
-+	size_t stride;
-+
-+	TEST_ASSERT(vaddr + size > vaddr, "Vaddr overflow");
-+	TEST_ASSERT(paddr + size > paddr, "Paddr overflow");
-+
-+	/*
-+	 * Map the region with all 1G pages if possible, falling back to all
-+	 * 2M pages, and finally all 4K pages. This could be improved to use
-+	 * a mix of page sizes so that more of the region is mapped with large
-+	 * pages.
-+	 */
-+	for (page_size = X86_PAGE_SIZE_1G; page_size >= X86_PAGE_SIZE_4K; page_size--) {
-+		stride = page_size_bytes(page_size);
-+
-+		if (!(vaddr % stride) && !(paddr % stride) && !(size % stride))
-+			break;
-+	}
-+
-+	TEST_ASSERT(page_size >= X86_PAGE_SIZE_4K,
-+		    "Cannot map unaligned region: vaddr 0x%lx paddr 0x%lx npages 0x%x\n",
-+		    vaddr, paddr, npages);
-+
-+	for (; vaddr < vend; vaddr += stride, paddr += stride)
-+		__virt_pg_map(vm, vaddr, paddr, page_size);
-+}
-+
- static struct pageTableEntry *_vm_get_page_table_entry(struct kvm_vm *vm, int vcpuid,
- 						       uint64_t vaddr)
- {
++ #ifdef CONFIG_COMPAT
+> +       if (is_compat_task())
+> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
+> +       else
+> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
++ #endif
+
+We still need "#ifdef CONFIG_COMPAT" here, because for rv32 we can't
+set SR_UXL at all. SR_UXL is BIT[32, 33].
+
+>  }
+>
+>  void flush_thread(void)
+> --
+> 2.25.1
+>
+
+
 -- 
-2.35.1.723.g4982287a31-goog
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/
