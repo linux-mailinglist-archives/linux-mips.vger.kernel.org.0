@@ -2,131 +2,147 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D98B4D582F
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Mar 2022 03:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12AE4D5E15
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Mar 2022 10:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345663AbiCKCjZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 10 Mar 2022 21:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
+        id S244207AbiCKJOy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-mips@lfdr.de>); Fri, 11 Mar 2022 04:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235051AbiCKCjY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 10 Mar 2022 21:39:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24EA108763;
-        Thu, 10 Mar 2022 18:38:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D373600BE;
-        Fri, 11 Mar 2022 02:38:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC43C340FC;
-        Fri, 11 Mar 2022 02:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646966301;
-        bh=Jl8zmUlue4qqSpvupSe770nwEDFbxuYU+7Bv15ArLNk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lSDH6JbZLjCrBKwhP5l06T0OkCO9oN/A8aEEjauCFSKrSGqZSLjhPkfyba8lYXT8b
-         qYNbLTfBYoaFYS9/EdstBjbcmkW1UfcrGbXKAA3XzivX2N/X7M8/MG2dJGhgzUj1xe
-         JwIgADZuHHJQV+vkPugE9tLJ05ZgR4K+s7Tqg3OYy0S0d/gkDWxZGRTQdcVyEyVTta
-         XcdW+bJU/6F0zGvwFWhD4c7+eaOFthHqbXVWvY103F1BoVPLPmpdBFX9VrRB9dX0cQ
-         RFdNXU0aoXtMTFwXmsyOd8jEdA/NcC/+rOGDrpxxb7LrGBkBTS5gvraGhc0yhF8ir3
-         59IUblFQhb99Q==
-Received: by mail-vs1-f48.google.com with SMTP id u124so8098304vsb.10;
-        Thu, 10 Mar 2022 18:38:21 -0800 (PST)
-X-Gm-Message-State: AOAM531r+0RCSa1uP+4DxvpwfnmVIeolCIthRU6hs16y0vps/+RpTX7N
-        HjMThTmSp9v4Mq//k9W35qDGb7jrYRzugH1eYPA=
-X-Google-Smtp-Source: ABdhPJzYUvUjuAFq8XvtZ71Qsvionf8y5EprAZIyEokbvQbCG5RE3xULelpIsGE/d8q0ktAquLt4SKjjcxqaZOgU8Ls=
-X-Received: by 2002:a05:6102:806:b0:31e:2206:f1c with SMTP id
- g6-20020a056102080600b0031e22060f1cmr3912870vsb.59.1646966300562; Thu, 10 Mar
- 2022 18:38:20 -0800 (PST)
+        with ESMTP id S235073AbiCKJOx (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Mar 2022 04:14:53 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC841BB716;
+        Fri, 11 Mar 2022 01:13:50 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id s15so6804816qtk.10;
+        Fri, 11 Mar 2022 01:13:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Qy21Roxk7Jw81ENX+w2eLBpFqTOjz71afyIHHh67koY=;
+        b=JpCokKohe3Vf6rV0NTt7oC3LuZNFXf3lalpq710xBlXxLjP2eKb7PkiC+OSjJl53nt
+         Z0QuHwf9Kkn2yg/6IEMO8vZckX7jRngd/1y+J1aZ3aKGErp/++6AfL8cA5pBspuGmFrK
+         oEatYWvGQZJifD/bs/iIE8Ohg0J5YN0R9Rr0AbWlPm9mWqWc1Dmgy+8QDrB2OPfQo50X
+         zLljhon77fGq1VLrDo2EoKNavvt4BbU3Zw7xC446OUC/i+CYQsJPkOj9eS9xkRorguDO
+         z7yVX2pAZ02pQ8nGl7vd66kloMN0kBjISmKi6o6KExM5+j9+di8Q1AxCTPMFmMWIa2q7
+         dY0w==
+X-Gm-Message-State: AOAM532YaNCgB4mWftw3f7LItZ8g3r9/zQU9/2l7+CbuFpSEcrC42hxb
+        JVhAzZwgEKMKe1JONXWcpJMZSEVy0/fu4w==
+X-Google-Smtp-Source: ABdhPJys4pNJaGnGgKuKQ6lJQlNzMX6ZiS2VMpULUfPkF+iD+DvbEAJ1gNytidkPvG3lnWYOMfjsKA==
+X-Received: by 2002:ac8:5743:0:b0:2e0:6069:8c54 with SMTP id 3-20020ac85743000000b002e060698c54mr7372813qtx.30.1646990028615;
+        Fri, 11 Mar 2022 01:13:48 -0800 (PST)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id f19-20020ac859d3000000b002de4d014733sm4993038qtf.13.2022.03.11.01.13.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 01:13:48 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id z30so16005797ybi.2;
+        Fri, 11 Mar 2022 01:13:47 -0800 (PST)
+X-Received: by 2002:a25:dc4:0:b0:629:2337:f9ea with SMTP id
+ 187-20020a250dc4000000b006292337f9eamr7243141ybn.6.1646990027606; Fri, 11 Mar
+ 2022 01:13:47 -0800 (PST)
 MIME-Version: 1.0
-References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-14-guoren@kernel.org>
-In-Reply-To: <20220227162831.674483-14-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 11 Mar 2022 10:38:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com>
-Message-ID: <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com>
-Subject: Re: [PATCH V7 13/20] riscv: compat: process: Add UXL_32 support in start_thread
-To:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
+References: <20220310072239.4489-1-zajec5@gmail.com> <CAMuHMdWQNDABuT9uwAugrzdQM31wFtXX_9F8MviC-BRc-YngKw@mail.gmail.com>
+ <145c66e0-2ba5-712c-57de-82378328ec3f@gmail.com> <7d7ed784-f01f-44a0-4387-cd7a76a8abe4@gmail.com>
+In-Reply-To: <7d7ed784-f01f-44a0-4387-cd7a76a8abe4@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 11 Mar 2022 10:13:36 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU92K9ZLptwJPG_opA4Reg61ksOgQ-P+2niHX=bf306Kg@mail.gmail.com>
+Message-ID: <CAMuHMdU92K9ZLptwJPG_opA4Reg61ksOgQ-P+2niHX=bf306Kg@mail.gmail.com>
+Subject: Re: [PATCH] tty: serial: bcm63xx: use more precise Kconfig symbol
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Arnd,
+Hi Florian,
 
-On Mon, Feb 28, 2022 at 12:30 AM <guoren@kernel.org> wrote:
+On Thu, Mar 10, 2022 at 10:49 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+> On 3/10/22 12:33 AM, Rafał Miłecki wrote:
+> > On 10.03.2022 09:19, Geert Uytterhoeven wrote:
+> >> On Thu, Mar 10, 2022 at 8:22 AM Rafał Miłecki <zajec5@gmail.com> wrote:
+> >>> From: Rafał Miłecki <rafal@milecki.pl>
+> >>>
+> >>> Patches lowering SERIAL_BCM63XX dependencies led to a discussion and
+> >>> documentation change regarding "depends" usage. Adjust Kconfig entry to
+> >>> match current guidelines. Make this symbol available for relevant
+> >>> architectures only.
+> >>>
+> >>> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> >>> Ref: f35a07f92616 ("tty: serial: bcm63xx: lower driver dependencies")
+> >>> Ref: 18084e435ff6 ("Documentation/kbuild: Document platform
+> >>> dependency practises")
+> >>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> >>
+> >> Thanks for your patch!
+> >>
+> >>> --- a/drivers/tty/serial/Kconfig
+> >>> +++ b/drivers/tty/serial/Kconfig
+> >>> @@ -1100,7 +1100,8 @@ config SERIAL_TIMBERDALE
+> >>>   config SERIAL_BCM63XX
+> >>>          tristate "Broadcom BCM63xx/BCM33xx UART support"
+> >>>          select SERIAL_CORE
+> >>> -       depends on COMMON_CLK
+> >>> +       depends on MIPS || ARM || ARM64 || COMPILE_TEST
+> >>> +       default ARCH_BCM4908 || BCM63XX || BMIPS_GENERIC
+> >>
+> >> So ARCH_BCM4908 covers ARM64, and BCM63XX || BMIPS_GENERIC
+> >> cover MIPS.  Is there some symbol covering ARM so we can change the
+> >> depends to
+> >>
+> >>      depends on FOO || ARCH_BCM4908 || BCM63XX || BMIPS_GENERIC ||
+> >> COMPILE_TEST
+> >>
+> >> ?
+> >
+> > Florian, Kevin: do you know what other platforms need that driver?
 >
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> If the current task is in COMPAT mode, set SR_UXL_32 in status for
-> returning userspace. We need CONFIG _COMPAT to prevent compiling
-> errors with rv32 defconfig.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> ---
->  arch/riscv/kernel/process.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-> index 03ac3aa611f5..54787ca9806a 100644
-> --- a/arch/riscv/kernel/process.c
-> +++ b/arch/riscv/kernel/process.c
-> @@ -97,6 +97,11 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
->         }
->         regs->epc = pc;
->         regs->sp = sp;
-> +
-FIxup:
+> Yes that would be ARCH_BCM_63XX.
 
-+ #ifdef CONFIG_COMPAT
-> +       if (is_compat_task())
-> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
-> +       else
-> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
-+ #endif
+Had to read this twice, before I realized this is different from BCM63XX.
 
-We still need "#ifdef CONFIG_COMPAT" here, because for rv32 we can't
-set SR_UXL at all. SR_UXL is BIT[32, 33].
+As we already have
 
->  }
->
->  void flush_thread(void)
-> --
-> 2.25.1
->
+    drivers/char/hw_random/Kconfig:    ARCH_BCM_63XX || BCM63XX ||
+BMIPS_GENERIC || COMPILE_TEST
+    drivers/spi/Kconfig: depends on BCM63XX || BMIPS_GENERIC ||
+ARCH_BCM_63XX || COMPILE_TEST
 
+and drivers/tty/serial/Kconfig would be a third case, would it make
+sense to unify BCM63XX and ARCH_BCM_63XX into a single symbol?
+We already share several ARCH_* symbols between arm and arm64,
+and I expect more will be shared with riscv in the future
+(e.g. ARCH_RENESAS).
 
--- 
-Best Regards
- Guo Ren
+Or are MIPS BCM63xx and ARM BCM63xx too dissimilar?
 
-ML: https://lore.kernel.org/linux-csky/
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
