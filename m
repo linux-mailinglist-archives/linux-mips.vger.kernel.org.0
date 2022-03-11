@@ -2,122 +2,125 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06874D5EA6
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Mar 2022 10:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D3A4D6123
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Mar 2022 13:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiCKJoc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-mips@lfdr.de>); Fri, 11 Mar 2022 04:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
+        id S1348288AbiCKMGE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 11 Mar 2022 07:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbiCKJob (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Mar 2022 04:44:31 -0500
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C452E17BC7B;
-        Fri, 11 Mar 2022 01:43:28 -0800 (PST)
-Received: by mail-qv1-f44.google.com with SMTP id e22so6569064qvf.9;
-        Fri, 11 Mar 2022 01:43:28 -0800 (PST)
+        with ESMTP id S236467AbiCKMGD (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Mar 2022 07:06:03 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59FF1AEEF1;
+        Fri, 11 Mar 2022 04:05:00 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id p9so12581005wra.12;
+        Fri, 11 Mar 2022 04:05:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CluZnJvaFq+gv5SsBEdks07J31iiWkZ5fHpUB0bqBcM=;
+        b=qw+ajJ3bas5PbBQI9GqAWDJtr1KHk5lF7RWDvKeZSUWN09yo6r3mVvLnJt7yrUnGGW
+         gsvPxknVOA7c9SgZrcdZQk/3ro/18kya2vr/H64cqmcHGXQxwOO4zMEPhYObRUfdsU+B
+         BHF2jjdpfoYCSQx+Y5G5ae/u1KXY38+LZrSmg00Q1P9Bhp1G2Fv5zTxiLOTs8MV1fkQf
+         tzMlShgQCn6RUx1pGONYHEq+GJV35waRSt1OKKqg69RAF76pyKUdhkHcQFWeNm5ZDGpG
+         lW3UVnxzzisq8e4IUJqjB6M3XKZfiAyg0y5Ad1BEA9nbtytriaHHdFj7HFv5BN/nN+yU
+         Eqyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/HUxs0nSCg7GyOeJqVRb99UMJe6feL25jT8YqOq9aIM=;
-        b=TaulkoaRGnfOpc3pYJij4XV+EY700eGijGuLtrS9iZFw9dQF20Bb36FxqjhYh7XceN
-         H/iVb+y+ztMdqnUFBAxyqyzWyYO3adClUYzAn6/KWWwSoAx/JYEGUUy2Y10jNHZnXnTe
-         /dZdWhItYxwZv3H5yYXhqWBm8TVUaemPrh2BH9gA/aOPyksg4x1GpMRN6dUfutXwjm8g
-         V6VO8nOjm5tdp9yb7GZi4ZuO7vkkmfD1PkJ3tEOR8jDLUeEr8bVxuHU/pC8HFr59EAZG
-         wUzcR/2RfdomTi3XG1PGwtNIvgkW4I5hy4p0Tz05zqhKxhOr8EXFFcw2977BGx6Uc8Kh
-         86Fw==
-X-Gm-Message-State: AOAM531TKKJWOhz8W6AF7L8Xz0VD2EWfz0UDmlwEhI2Pz0RpKPNZAB+E
-        FvVCNLHxPkulHlr57YANptoWY1Zi172Sjw==
-X-Google-Smtp-Source: ABdhPJy+azsOCUhGIXJN6LVj8KHHwHkZ13Mimr3eppMxmGxZQzntyq+Gir/70aByE9RT6LKQkD0QBw==
-X-Received: by 2002:a05:6214:19c6:b0:433:82b:b900 with SMTP id j6-20020a05621419c600b00433082bb900mr6903303qvc.7.1646991807532;
-        Fri, 11 Mar 2022 01:43:27 -0800 (PST)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id g21-20020ac85815000000b002e06e2623a7sm4978511qtg.0.2022.03.11.01.43.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Mar 2022 01:43:26 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id x200so16087443ybe.6;
-        Fri, 11 Mar 2022 01:43:25 -0800 (PST)
-X-Received: by 2002:a25:c54a:0:b0:628:9d7f:866a with SMTP id
- v71-20020a25c54a000000b006289d7f866amr7431768ybe.546.1646991804635; Fri, 11
- Mar 2022 01:43:24 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CluZnJvaFq+gv5SsBEdks07J31iiWkZ5fHpUB0bqBcM=;
+        b=kexN5pIfER/MqNFmTT0rMq5I7Nts5ZYItAT5TdnRC9wiOwpmWXIeG4lyG8Nl34Ceua
+         r71n/f+06kHjafrl8qhO6UWT5dlIGUAeWgCO8JknymxnObttLtK12+8Q+8gKsufptgdR
+         FRqKahUPAcdvmJEuIcsWmRPZKqVNnSSf/r/Z8y/9a8dc/641IIkTO2JiPPuetmsGD7gD
+         N0dmbRexuTxJOF9eaULO/SFnK5K0Bgr2PALvbMrT5HTYmUWUcMVpkM0GU1az4H6XVHAo
+         DmUhrL2WmKQuB4p26ZxlanPd9rOnTjLTP9EMzFPDjDXQOBLA4zlwQJ96kLgcpJpwuc6j
+         qEqw==
+X-Gm-Message-State: AOAM533bNNriM92sEnChpKBY1tADLEOfjPfcHwOz3cIIo1v/U6OUXHKo
+        7yxJLWmnO1Q/4/FKALoLkBk=
+X-Google-Smtp-Source: ABdhPJw60L/wNBZRfT4SbS1AbolE9XQ7lQrIbYwPi4ZXCq4AAqHgcxz8c6qE8LDV5dRnQfyrKPmEMg==
+X-Received: by 2002:a05:6000:184e:b0:1f0:3569:ccac with SMTP id c14-20020a056000184e00b001f03569ccacmr7235289wri.680.1647000299064;
+        Fri, 11 Mar 2022 04:04:59 -0800 (PST)
+Received: from monk.home ([2a01:cb10:430:ec00:4737:d56e:186b:af1])
+        by smtp.gmail.com with ESMTPSA id r20-20020adfa154000000b001f0326a23e1sm6595223wrr.88.2022.03.11.04.04.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Mar 2022 04:04:58 -0800 (PST)
+From:   Christophe Branchereau <cbranchereau@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
+Subject: [PATCH v3 0/4] Ingenic DRM bridge_atomic_enable proposal
+Date:   Fri, 11 Mar 2022 13:04:49 +0100
+Message-Id: <20220311120453.163297-1-cbranchereau@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220311093233.10012-1-zajec5@gmail.com>
-In-Reply-To: <20220311093233.10012-1-zajec5@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 11 Mar 2022 10:43:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWjOa7Mv_=HChjqPjSQ2T-b7Z9ZGEAT35q39x_Uy3zeLQ@mail.gmail.com>
-Message-ID: <CAMuHMdWjOa7Mv_=HChjqPjSQ2T-b7Z9ZGEAT35q39x_Uy3zeLQ@mail.gmail.com>
-Subject: Re: [PATCH V3] tty: serial: bcm63xx: use more precise Kconfig symbol
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Rafał,
+Hello, v3 :
 
-On Fri, Mar 11, 2022 at 10:32 AM Rafał Miłecki <zajec5@gmail.com> wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
->
-> Patches lowering SERIAL_BCM63XX dependencies led to a discussion and
-> documentation change regarding "depends" usage. Adjust Kconfig entry to
-> match current guidelines. Make this symbol available for relevant
-> architectures only.
->
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Ref: f35a07f92616 ("tty: serial: bcm63xx: lower driver dependencies")
-> Ref: 18084e435ff6 ("Documentation/kbuild: Document platform dependency practises")
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V2: Use precise "depends" (exact platforms)
-> V3: Don't default y for COMPILE_TEST
+Drop -spi in the compatible string, adjust bindings doc accordingly 
 
-Thanks for the update!
+KR
+Christophe
 
-> --- a/drivers/tty/serial/Kconfig
-> +++ b/drivers/tty/serial/Kconfig
-> @@ -1100,7 +1100,8 @@ config SERIAL_TIMBERDALE
->  config SERIAL_BCM63XX
->         tristate "Broadcom BCM63xx/BCM33xx UART support"
->         select SERIAL_CORE
-> -       depends on COMMON_CLK
-> +       depends on ARCH_BCM4908 || ARCH_BCM_63XX || BCM63XX || BMIPS_GENERIC || COMPILE_TEST
-> +       default ARCH_BCM4908 || ARCH_BCM_63XX || BCM63XX || BMIPS_GENERIC
+------------------------
 
-I'm still not convinced about the default, as it wasn't there before,
-hence all existing config files must already have it.
-But if the BCM people think it's good to have, I'll shut up ;-)
+Hello, this is the v2 for my set of patches :
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+- use dev_err_probe() instead of dev_err() in the newvision panel
+driver probe function
 
->         help
->           This enables the driver for the onchip UART core found on
->           the following chipsets:
+- add bindings documentation for the Leadtek ltk035c5444t
 
-Gr{oetje,eeting}s,
+Cheers - Christophe
 
-                        Geert
+------------------------
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Hello, this is a set of patches to allow the upstreaming of the
+NV3052C panel found in the Anbernic RG350M mips gaming handheld.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+It was never upstreamed so far due to a longstanding graphical
+bug, which I propose to solve by introducing ingenic_drm_bridge_atomic_enable
+in the drm driver so the CRTC can be enabled after the panel itself slept
+out, and not before as it used to.
+
+After the drm change, 2 of the existing panels have to be modified accordingly
+to introduce missing .enable and .disable in their code.
+
+Christophe Branchereau (4):
+  drm/ingenic : add ingenic_drm_bridge_atomic_enable
+  drm/panel: Add panel driver for NewVision NV3052C based LCDs
+  drm/panel : innolux-ej030na and abt-y030xx067a : add .enable and
+    .disable
+  dt-bindings: display/panel: Add Leadtek ltk035c5444t
+
+ .../display/panel/leadtek,ltk035c5444t.yaml   |  59 +++
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  19 +-
+ drivers/gpu/drm/panel/Kconfig                 |   9 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-abt-y030xx067a.c  |  23 +-
+ drivers/gpu/drm/panel/panel-innolux-ej030na.c |  31 +-
+ .../gpu/drm/panel/panel-newvision-nv3052c.c   | 497 ++++++++++++++++++
+ 7 files changed, 627 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+
+-- 
+2.35.1
+
