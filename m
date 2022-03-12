@@ -2,96 +2,139 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970F84D6C6E
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Mar 2022 05:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969AC4D6D97
+	for <lists+linux-mips@lfdr.de>; Sat, 12 Mar 2022 09:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbiCLEVh (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 11 Mar 2022 23:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
+        id S231432AbiCLIhn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 12 Mar 2022 03:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiCLEVg (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 11 Mar 2022 23:21:36 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EED2738DD;
-        Fri, 11 Mar 2022 20:20:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=fycX+0W01lwkWLDtUaJyvpZj5KgSVEIRZKJJ6G2XTZc=; b=kQK+Lz9y3Dk/XDrh/6d3DSBAfR
-        wAWqoO7ga4l0/kJ6jEn3nfLCc/KHFMnZnubR5Kofc8QUDHs0GWheQbNd0lq7TIFbPNtMotrDuZYYj
-        lzywRKyUJIMFUJzpG0Qphyib0f7LE1B8j2rO35E/hAQWHEtiMdO+5YHm30ieCgJ7EPEodukC/Ra5v
-        mdomQNT1ioh1BpEt4QHJZvdGs43WqZD60nOXnnSCcxo4KvpV0v+LhEzcwHE79iPNWOdbP02AFizCH
-        qow3MiALvbUtf9LIEcTIcOfznQLa8kxz4OkbLL1rIPEA192g/SXOMOjGcCxD7DHDlMmOgInG+csMg
-        tdrEwvWw==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nStEx-000k3M-1k; Sat, 12 Mar 2022 04:20:27 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     netdev@vger.kernel.org
-Cc:     patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Phil Sutter <n0-1@freewrt.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Daniel Walter <dwalter@google.com>
-Subject: [PATCH] MIPS: RB532: fix return value of __setup handler
-Date:   Fri, 11 Mar 2022 20:20:26 -0800
-Message-Id: <20220312042026.10482-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229925AbiCLIhm (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 12 Mar 2022 03:37:42 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334461081AE;
+        Sat, 12 Mar 2022 00:36:36 -0800 (PST)
+Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MLz3X-1nkl6Z3az3-00HwKj; Sat, 12 Mar 2022 09:36:34 +0100
+Received: by mail-wr1-f48.google.com with SMTP id x15so16177660wru.13;
+        Sat, 12 Mar 2022 00:36:34 -0800 (PST)
+X-Gm-Message-State: AOAM530+dzW2/6sWsLn+tnWQF1trrz3LOSKQs1I4K4jswEo5ho/21oSd
+        8ZXQ7d3JMi11zTud1t270janiW2dktymq9hoSEE=
+X-Google-Smtp-Source: ABdhPJwrBgijWcFmabOKnFeCHeAhHQBR3PR+3P0h6p5JQhHZX/5odIXHkxJDpCBUEOwN9ui3K5nWlIusCnBN24XocoE=
+X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
+ e15-20020a5d6d0f000000b0020391571c48mr7048966wrq.192.1647074194359; Sat, 12
+ Mar 2022 00:36:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-14-guoren@kernel.org>
+ <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com>
+ <509d2b62-7d52-bf5c-7a6c-213a740a5c00@codethink.co.uk> <CAJF2gTSkrm+Ek5i--TTikR2RDBUa6Eo72jwvszbj3uZg=Kxorg@mail.gmail.com>
+In-Reply-To: <CAJF2gTSkrm+Ek5i--TTikR2RDBUa6Eo72jwvszbj3uZg=Kxorg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sat, 12 Mar 2022 09:36:18 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0LqTdEk53XpUV4xRKoiJ_AvLkJSbMabqBgk7KNxF_XxQ@mail.gmail.com>
+Message-ID: <CAK8P3a0LqTdEk53XpUV4xRKoiJ_AvLkJSbMabqBgk7KNxF_XxQ@mail.gmail.com>
+Subject: Re: [PATCH V7 13/20] riscv: compat: process: Add UXL_32 support in start_thread
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Ben Dooks <ben.dooks@codethink.co.uk>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:JoxTfVCDx79fTzCQvh7Xq1YJCdm6SCwktIxWlWwG8+VS9j7ECgR
+ hisYe2M+lp7cotgX4ZOr1/udkDnAl+SMAtnscPfPkB60bFL01UxsPNzr1d9fqJ66zp8K+IC
+ c1xfjwfasZ1PVhIGHp944L/lvwV1OFpcPoLYg0YiArtXbNKbywR/VdNjAT4zxn6/LC948R0
+ 4MdwsLevkhtUQokHlCtcw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YZy9s3VKLyM=:6W94UhPkUrs6eRrOTLOKUz
+ YwE7Ow7awnu9Eal9apRYnGmelK+LS+wwP4NXm0p9qgBfD3nTyvZQY7IlgPB9ea6EuvA0w8iRy
+ mC7QLEM7gW0I2sfHOg71mdxrpykeknCXLueKOyJM/geekQ08Sk72GSIacK3oMZYH0NBsly32J
+ Tr/oPffhmGzB05FXW8vtOf4gIVN0263o62Cn/wj5sIxk55a/R3VShvXCGN2Uq38C6vXFFh9xa
+ qEu2k5F79SEPayYbTQUOICgTaZOWr3wUOa4HE6qPpvUeEy/BvAf9GW7O6gxvc3KcXz7GkKiNn
+ 7rcYvIYH+tmQaOQoBYSVzruDi1UozUrvGZ8tvMyGt0m7Hi+Hr+krqeXDND0chtFmlmrt0ViIB
+ 55lB+fHTzuT9NMlCCPITsRxHLmEpVUzPy+oD0O/2+dbs07nzjRLAds1uhn9N9k6bqa/ejABtj
+ FqgNy0sZBUk1jXQj8HOOPTnhnexBKgKlpZQN6DpSWKba5x2JNztRMfjESA2d2ODK8/ZW7TNad
+ ThErjQT+log5l2svhx9BiWBeO7S3bRlQPzPrjBS8yz3+pj5vnJXvyWHwG1kzvapj/6xXl1NZ0
+ 97/rqFoDL5G5AUUGB9mmFpHoX8uZgTXyILJpQhUpI651kDEAdTAuwp9JGfiVGtD8t3g/nxxyb
+ iPhdRrnbd8R5Nnajf2Jffw7ylfaQdPUgDRebhxUjBUUQN93PWtd7ajVYMWKJazN0N4maaixer
+ QUQKQFEvNQmuiBepIj4MN2u0813744Whkmr3d8Xq92rZtr3mW5i055mu6i+WNFVEYyahONPsN
+ NeW2OrfS2AIT0fp4Te5a2oihZf6bWXFt2SECvIqWt1OyT5h2ok=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from setup_kmac().
+On Sat, Mar 12, 2022 at 3:13 AM Guo Ren <guoren@kernel.org> wrote:
+> On Fri, Mar 11, 2022 at 9:38 PM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
+> > On 11/03/2022 02:38, Guo Ren wrote:
+> > >> --- a/arch/riscv/kernel/process.c
+> > >> +++ b/arch/riscv/kernel/process.c
+> > >> @@ -97,6 +97,11 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
+> > >>          }
+> > >>          regs->epc = pc;
+> > >>          regs->sp = sp;
+> > >> +
+> > > FIxup:
+> > >
+> > > + #ifdef CONFIG_COMPAT
+> > >> +       if (is_compat_task())
+> > >> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
+> > >> +       else
+> > >> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
+> > > + #endif
+> > >
+> > > We still need "#ifdef CONFIG_COMPAT" here, because for rv32 we can't
+> > > set SR_UXL at all. SR_UXL is BIT[32, 33].
+> >
+> > would an if (IS_ENABLED(CONFIG_COMPAT)) { } around the lot be better
+> > than an #ifdef here?
+>
+> I don't think, seems #ifdef CONFIG_COMPAT is more commonly used in arch/*
 
-Fixes: 9e21c7e40b7e ("MIPS: RB532: Replace parse_mac_addr() with mac_pton().")
-Fixes: 73b4390fb234 ("[MIPS] Routerboard 532: Support for base system")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-From: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Phil Sutter <n0-1@freewrt.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Daniel Walter <dwalter@google.com>
----
- arch/mips/rb532/devices.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+We used to require an #ifdef check around is_compat_task(), so there are
+a lot of stale #ifdefs that could be removed. In general, 'if (IS_ENABLED())'
+is considered more readable than #ifdef inside of a function. In this case
+there are a number of better ways to write the function if you want to get
+into the details:
 
---- linux-next-20220309.orig/arch/mips/rb532/devices.c
-+++ linux-next-20220309/arch/mips/rb532/devices.c
-@@ -301,11 +301,9 @@ static int __init plat_setup_devices(voi
- static int __init setup_kmac(char *s)
- {
- 	printk(KERN_INFO "korina mac = %s\n", s);
--	if (!mac_pton(s, korina_dev0_data.mac)) {
-+	if (!mac_pton(s, korina_dev0_data.mac))
- 		printk(KERN_ERR "Invalid mac\n");
--		return -EINVAL;
--	}
--	return 0;
-+	return 1;
- }
- 
- __setup("kmac=", setup_kmac);
+ - firstly, you should remove the #ifdef check around the definition of
+   SR_UXL, otherwise the IS_ENABLED() check does not work.
+
+ - you can use an 'if (!IS_ENABLED(CONFIG_COMPAT)) \\ return;' ahead of the
+   assignment since that is at the end of  the function.
+
+ - you can remove the bit masking since 'regs->status' is initialized above it,
+   adding in only the one bit, shortening it to
+
+    if (IS_ENABLED(CONFIG_COMPAT))
+               regs->status |= is_compat_task()) ? SR_UXL_32 : SR_UXL_64;
+
+ - to make this more logical, I would suggest always assigning the SR_UXL
+   bits regardless of CONFIG_COMPAT, and instead make it something like
+
+  if (IS_ENABLED(CONFIG_32BIT) || is_compat_task())
+            regs->status = | SR_UXL_32;
+  else
+            regs->status = | SR_UXL_64;
+
+       Arnd
