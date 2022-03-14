@@ -2,42 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321CA4D8D8E
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Mar 2022 20:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A9B4D8E7C
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Mar 2022 21:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244328AbiCNT7k (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 14 Mar 2022 15:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
+        id S244772AbiCNU4M (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 14 Mar 2022 16:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245123AbiCNT6y (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Mar 2022 15:58:54 -0400
+        with ESMTP id S232355AbiCNU4L (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 14 Mar 2022 16:56:11 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031F11128;
-        Mon, 14 Mar 2022 12:57:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1EA3D1EC;
+        Mon, 14 Mar 2022 13:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1647287862; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1647291298; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MJhVqCXdY5vJSE5DEOiKyiWllO/DjfEoLcGECqfYSW4=;
-        b=NIVNpvPTZkirRbu+BOYPi60LbI9AoqxRpyRbWSy3PC7vaNpfuMN52w1uACB69NAxLSxnyE
-        25hP3YRM/ICm61yd3jYj0TlLbVHBEDcKiPUG7PSJbPu0elKwdCGGK/4KUcVIH3pRDyB2hE
-        f3R+tOb354A4L3E2V8sLsbC1mdgrsCw=
-Date:   Mon, 14 Mar 2022 19:57:32 +0000
+        bh=Uz2k5nUu1Gg2qptwTocuJgcWPtTBxTEHiT3pqQ3nMhg=;
+        b=1VrvD6lxUP9r1QEUUnDIj9wF1x/SY8hEdzy2a5HAbjQAkp4cqYUKTFNd7jMIIEK+YEuz1j
+        y4QxQ7SCaCwzBY0qs8boPPrkDGmJfxKSbnf627nIyRLqwpB2835bEEzLN0BAxeZqPOZiWH
+        ibkOqHMFy0gytAs+ZpPZPVEaU+L6QNM=
+Date:   Mon, 14 Mar 2022 20:54:43 +0000
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 1/4] drm/ingenic : add ingenic_drm_bridge_atomic_enable
+Subject: Re: [PATCH v1 3/3] drm/panel : innolux-ej030na and abt-y030xx067a :
+ add .enable and .disable
 To:     Christophe Branchereau <cbranchereau@gmail.com>
 Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Message-Id: <WF3R8R.TU622OO0WUTK3@crapouillou.net>
-In-Reply-To: <20220311170240.173846-2-cbranchereau@gmail.com>
-References: <20220311170240.173846-1-cbranchereau@gmail.com>
-        <20220311170240.173846-2-cbranchereau@gmail.com>
+        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org
+Message-Id: <736R8R.46MVQ2VHV6IY1@crapouillou.net>
+In-Reply-To: <CAFsFa85Wb7HcxCqGCYQoSOHOTLJY9xtUHc85PoxO3XTbr=HN4g@mail.gmail.com>
+References: <20220301153122.20660-1-cbranchereau@gmail.com>
+        <20220301153122.20660-4-cbranchereau@gmail.com>
+        <VM548R.0I9BAN681OS83@crapouillou.net>
+        <CAFsFa85Wb7HcxCqGCYQoSOHOTLJY9xtUHc85PoxO3XTbr=HN4g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -52,82 +53,186 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi Christophe,
 
-Le ven., mars 11 2022 at 18:02:37 +0100, Christophe Branchereau=20
+Le lun., mars 7 2022 at 19:12:49 +0100, Christophe Branchereau=20
 <cbranchereau@gmail.com> a =E9crit :
-> This allows the CRTC to be enabled after panels have slept out,
-> and before their display is turned on, solving a graphical bug
-> on the newvision nv3502c
+> Hi Paul, it should in theory, but doesn't work in practice, the
+> display doesn't like having that bit set outside of the init sequence.
 >=20
-> Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
-> ---
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c=20
-> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> index dcf44cb00821..51512f41263e 100644
-> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> @@ -226,6 +226,18 @@ static int ingenic_drm_update_pixclk(struct=20
-> notifier_block *nb,
->  	}
->  }
->=20
-> +static void ingenic_drm_bridge_atomic_enable(struct drm_bridge=20
-> *bridge,
-> +					     struct drm_bridge_state *old_bridge_state)
-> +{
-> +	struct ingenic_drm *priv =3D drm_device_get_priv(bridge->dev);
-> +
-> +	regmap_write(priv->map, JZ_REG_LCD_STATE, 0);
-> +
-> +	regmap_update_bits(priv->map, JZ_REG_LCD_CTRL,
-> +			   JZ_LCD_CTRL_ENABLE | JZ_LCD_CTRL_DISABLE,
-> +			   JZ_LCD_CTRL_ENABLE);
-> +}
-> +
->  static void ingenic_drm_crtc_atomic_enable(struct drm_crtc *crtc,
->  					   struct drm_atomic_state *state)
->  {
-> @@ -237,17 +249,11 @@ static void=20
-> ingenic_drm_crtc_atomic_enable(struct drm_crtc *crtc,
->  	if (WARN_ON(IS_ERR(priv_state)))
->  		return;
->=20
-> -	regmap_write(priv->map, JZ_REG_LCD_STATE, 0);
-> -
->  	/* Set addresses of our DMA descriptor chains */
->  	next_id =3D priv_state->use_palette ? HWDESC_PALETTE : 0;
->  	regmap_write(priv->map, JZ_REG_LCD_DA0, dma_hwdesc_addr(priv,=20
-> next_id));
->  	regmap_write(priv->map, JZ_REG_LCD_DA1, dma_hwdesc_addr(priv, 1));
->=20
-> -	regmap_update_bits(priv->map, JZ_REG_LCD_CTRL,
-> -			   JZ_LCD_CTRL_ENABLE | JZ_LCD_CTRL_DISABLE,
-> -			   JZ_LCD_CTRL_ENABLE);
-> -
->  	drm_crtc_vblank_on(crtc);
->  }
->=20
-> @@ -968,6 +974,7 @@ static const struct drm_encoder_helper_funcs=20
-> ingenic_drm_encoder_helper_funcs =3D
->=20
->  static const struct drm_bridge_funcs ingenic_drm_bridge_funcs =3D {
->  	.attach			=3D ingenic_drm_bridge_attach,
-> +	.atomic_enable		=3D ingenic_drm_bridge_atomic_enable,
+> Feel free to experiment if you think you can make it work though, you
+> should have that panel on 1 or 2 devices I think.
 
-Shouldn't we have a .atomic_disable() as well? If the CRTC is now=20
-enabled in the bridge's .atomic_enable, it would make sense to have it=20
-disabled in the .atomic_disable().
+It does actually work in practice; what probably fails for you is the=20
+regmap_set_bits(), which causes a spi-read-then-write. Since AFAIK it=20
+is not possible to read registers from this panel (only write), then=20
+this does not work.
+
+An easy fix would be to just use REGCACHE_FLAT as the cache type in the=20
+regmap_config. Then regmap_set_bits() can be used.
 
 Cheers,
 -Paul
 
->  	.atomic_check		=3D ingenic_drm_bridge_atomic_check,
->  	.atomic_reset		=3D drm_atomic_helper_bridge_reset,
->  	.atomic_duplicate_state	=3D drm_atomic_helper_bridge_duplicate_state,
-> --
-> 2.35.1
 >=20
+> KR
+> CB
+>=20
+> On Wed, Mar 2, 2022 at 12:22 PM Paul Cercueil <paul@crapouillou.net>=20
+> wrote:
+>>=20
+>>  Hi Christophe,
+>>=20
+>>  Le mar., mars 1 2022 at 16:31:22 +0100, Christophe Branchereau
+>>  <cbranchereau@gmail.com> a =E9crit :
+>>  > Following the introduction of bridge_atomic_enable in the ingenic
+>>  > drm driver, the crtc is enabled between .prepare and .enable, if
+>>  > it exists.
+>>  >
+>>  > Add it so the backlight is only enabled after the crtc is, to=20
+>> avoid
+>>  > graphical issues.
+>>  >
+>>  > Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
+>>  > ---
+>>  >  drivers/gpu/drm/panel/panel-abt-y030xx067a.c  | 23 ++++++++++++--
+>>  >  drivers/gpu/drm/panel/panel-innolux-ej030na.c | 31
+>>  > ++++++++++++++++---
+>>  >  2 files changed, 48 insertions(+), 6 deletions(-)
+>>  >
+>>  > diff --git a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
+>>  > b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
+>>  > index f043b484055b..b5736344e3ec 100644
+>>  > --- a/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
+>>  > +++ b/drivers/gpu/drm/panel/panel-abt-y030xx067a.c
+>>  > @@ -183,8 +183,6 @@ static int y030xx067a_prepare(struct drm_panel
+>>  > *panel)
+>>  >               goto err_disable_regulator;
+>>  >       }
+>>  >
+>>  > -     msleep(120);
+>>  > -
+>>  >       return 0;
+>>  >
+>>  >  err_disable_regulator:
+>>  > @@ -202,6 +200,25 @@ static int y030xx067a_unprepare(struct=20
+>> drm_panel
+>>  > *panel)
+>>  >       return 0;
+>>  >  }
+>>  >
+>>  > +static int y030xx067a_enable(struct drm_panel *panel)
+>>  > +{
+>>  > +     if (panel->backlight) {
+>>  > +             /* Wait for the picture to be ready before enabling=20
+>> backlight */
+>>  > +             msleep(120);
+>>  > +     }
+>>  > +
+>>  > +     return 0;
+>>  > +}
+>>  > +
+>>  > +static int y030xx067a_disable(struct drm_panel *panel)
+>>  > +{
+>>  > +     struct y030xx067a *priv =3D to_y030xx067a(panel);
+>>  > +
+>>  > +     regmap_clear_bits(priv->map, 0x06, REG06_XPSAVE);
+>>=20
+>>  Shouldn't that be balanced by a regmap_set_bits() in the .enable()
+>>  function?
+>>=20
+>>  Cheers,
+>>  -Paul
+>>=20
+>>  > +
+>>  > +     return 0;
+>>  > +}
+>>  > +
+>>  >  static int y030xx067a_get_modes(struct drm_panel *panel,
+>>  >                               struct drm_connector *connector)
+>>  >  {
+>>  > @@ -239,6 +256,8 @@ static int y030xx067a_get_modes(struct=20
+>> drm_panel
+>>  > *panel,
+>>  >  static const struct drm_panel_funcs y030xx067a_funcs =3D {
+>>  >       .prepare        =3D y030xx067a_prepare,
+>>  >       .unprepare      =3D y030xx067a_unprepare,
+>>  > +     .enable         =3D y030xx067a_enable,
+>>  > +     .disable        =3D y030xx067a_disable,
+>>  >       .get_modes      =3D y030xx067a_get_modes,
+>>  >  };
+>>  >
+>>  > diff --git a/drivers/gpu/drm/panel/panel-innolux-ej030na.c
+>>  > b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
+>>  > index c558de3f99be..6de7370185cd 100644
+>>  > --- a/drivers/gpu/drm/panel/panel-innolux-ej030na.c
+>>  > +++ b/drivers/gpu/drm/panel/panel-innolux-ej030na.c
+>>  > @@ -80,8 +80,6 @@ static const struct reg_sequence
+>>  > ej030na_init_sequence[] =3D {
+>>  >       { 0x47, 0x08 },
+>>  >       { 0x48, 0x0f },
+>>  >       { 0x49, 0x0f },
+>>  > -
+>>  > -     { 0x2b, 0x01 },
+>>  >  };
+>>  >
+>>  >  static int ej030na_prepare(struct drm_panel *panel)
+>>  > @@ -109,8 +107,6 @@ static int ej030na_prepare(struct drm_panel
+>>  > *panel)
+>>  >               goto err_disable_regulator;
+>>  >       }
+>>  >
+>>  > -     msleep(120);
+>>  > -
+>>  >       return 0;
+>>  >
+>>  >  err_disable_regulator:
+>>  > @@ -128,6 +124,31 @@ static int ej030na_unprepare(struct drm_panel
+>>  > *panel)
+>>  >       return 0;
+>>  >  }
+>>  >
+>>  > +static int ej030na_enable(struct drm_panel *panel)
+>>  > +{
+>>  > +     struct ej030na *priv =3D to_ej030na(panel);
+>>  > +
+>>  > +     /* standby off */
+>>  > +     regmap_write(priv->map, 0x2b, 0x01);
+>>  > +
+>>  > +     if (panel->backlight) {
+>>  > +             /* Wait for the picture to be ready before enabling=20
+>> backlight */
+>>  > +             msleep(120);
+>>  > +     }
+>>  > +
+>>  > +     return 0;
+>>  > +}
+>>  > +
+>>  > +static int ej030na_disable(struct drm_panel *panel)
+>>  > +{
+>>  > +     struct ej030na *priv =3D to_ej030na(panel);
+>>  > +
+>>  > +     /* standby on */
+>>  > +     regmap_write(priv->map, 0x2b, 0x00);
+>>  > +
+>>  > +     return 0;
+>>  > +}
+>>  > +
+>>  >  static int ej030na_get_modes(struct drm_panel *panel,
+>>  >                            struct drm_connector *connector)
+>>  >  {
+>>  > @@ -165,6 +186,8 @@ static int ej030na_get_modes(struct drm_panel
+>>  > *panel,
+>>  >  static const struct drm_panel_funcs ej030na_funcs =3D {
+>>  >       .prepare        =3D ej030na_prepare,
+>>  >       .unprepare      =3D ej030na_unprepare,
+>>  > +     .enable         =3D ej030na_enable,
+>>  > +     .disable        =3D ej030na_disable,
+>>  >       .get_modes      =3D ej030na_get_modes,
+>>  >  };
+>>  >
+>>  > --
+>>  > 2.34.1
+>>  >
+>>=20
+>>=20
 
 
