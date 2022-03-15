@@ -2,432 +2,274 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BDD4DA165
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Mar 2022 18:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DA34DA1E8
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Mar 2022 19:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345617AbiCORkn (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Mar 2022 13:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S1350764AbiCOSGP (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Mar 2022 14:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232837AbiCORkn (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Mar 2022 13:40:43 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF5E58E41;
-        Tue, 15 Mar 2022 10:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1647365968; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=Kvu8imCV/205X9z6pdv/O03duWWurdxgxEOtz6zczms=;
-        b=1HHK8mOJeDjg6wkB4fkuJ6XrAUTF9dacI6X/fneskI0OgCsbe1ULjZoO8+m/6zmBLC9yDY
-        iyCcdtTASMk4VYYu7v3IvtINj86mkDNtt5tiCPRCZ5Dp9ZMao/JEK0XbDuFkVWd1VhYK0X
-        vsMM9MxuT6RFJY0z/Yipfb6udtERBiA=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     od@opendingux.net, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH] pinctrl: ingenic: Garbage-collect code paths for SoCs disabled by config
-Date:   Tue, 15 Mar 2022 17:39:22 +0000
-Message-Id: <20220315173922.153389-1-paul@crapouillou.net>
+        with ESMTP id S245048AbiCOSGN (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Mar 2022 14:06:13 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39542205E8;
+        Tue, 15 Mar 2022 11:05:00 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id qx21so43187918ejb.13;
+        Tue, 15 Mar 2022 11:05:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=7bpalvhMp7syEkA5bOD6m3Hiadeq1GFGR2u5DFZQUPg=;
+        b=DFsEVIcpVFZmsLrzVsuXGfCDAOQo45HphHPPHqSlOIJqflipspyIX6nDmHEdm7p5ZN
+         qStS1Me4q0ChYcco/kXFdiYP6BFh8vXOSO+RranC2vJEEDyM2cTCdEwWsBLGXaFTO3cm
+         ZrLXhRs0Zr57Jp4HWFlA6dsjObFGsCSo2ta1XqASGUjr5h2618FD/7YtapV90aJTALFH
+         26YUJTPAW2tj1bjGYJa3B53LWudxdy+KC1sO3IaOfXY9WMLiKhQeh7CYPtaRCelYukQ0
+         ykHuhInylyATUkZelWpM9ZbZh88D3lun1+FtqQDueri5iYlC11fvs52nKVwDvhxDADZb
+         itcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7bpalvhMp7syEkA5bOD6m3Hiadeq1GFGR2u5DFZQUPg=;
+        b=yVfeJO3gp/REeXZIAbrCfnUauoMDNukzvOt+Ib7pMTueQeZnhQIdN2WBQ9/6zyb6zw
+         xNMrU8Otvg13BeDddgnh/rZ3uOpHmbwd/NBcwex85O+R+6TRZXFxNMs1j+EauSvrnuSM
+         Pm5QX6PpavKom9jkLi7WLaXVvwer5rQdBFHCX3HHf1tJXu/6wc/vaigfg1+ivlhjUcAo
+         klmFHc9KrcZP5pjj/6oPJ9/c3T1UbHd4SUTMlcn0sClHF1DQJyWIxPV/y0Zzsi6rgxy9
+         t9h/Ej0hC89MhvoJYPmA2JISLdv1gExzoaLlKpGTGnuuiC0oMDH1Hgjy5uIQWAM/4vq7
+         Zz/A==
+X-Gm-Message-State: AOAM530Clz67FnSELuQ15ggvBCzqWF1EVfqlFx1bcpwTtteZjaDKElG3
+        eXcXRw5FmpnUrIi4XirIVp0QDNBnKzvZISRXXig=
+X-Google-Smtp-Source: ABdhPJxW6+1eFC3OcTirM9mgeDfTXvBfatrTIVC6OBa4JEN+KNKCGi5wT8QrdQtnyTpzndOFbCuPp9umJm3+8HzbnXM=
+X-Received: by 2002:a17:906:4cc7:b0:6d0:7efb:49f with SMTP id
+ q7-20020a1709064cc700b006d07efb049fmr23301879ejt.639.1647367498316; Tue, 15
+ Mar 2022 11:04:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 15 Mar 2022 20:03:44 +0200
+Message-ID: <CAHp75VdH4vGr57v6tfkRuxh-3agRKO8C08+DH8dsB1HnPfnz5Q@mail.gmail.com>
+Subject: Re: [PATCH v8 00/16] clk: provide new devm helpers for prepared and
+ enabled clocks
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        linux-hwmon@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Tomislav Denis <tomislav.denis@avl.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        =?UTF-8?Q?Andr=C3=A9_Gustavo_Nakagomi_Lopez?= <andregnl@usp.br>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        linux-crypto <linux-crypto@vger.kernel.org>,
+        linux-amlogic <linux-amlogic@lists.infradead.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-pwm@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Amireddy Mallikarjuna reddy 
+        <mallikarjunax.reddy@linux.intel.com>,
+        dmaengine <dmaengine@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-By being a bit smarter about how the SoC version checks are performed,
-it is possible to have all the code paths that correspond to SoCs
-disabled in the kernel config automatically marked as dead code by the
-compiler, and therefore garbage-collected.
+On Mon, Mar 14, 2022 at 5:14 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> Hello,
+>
+> this is another try to convince the relevant people that
+> devm_clk_get_enabled() is a nice idea. Compared to v7 (back in May 2021) =
+this
+> series is rebased to v5.17-rc8 and converts quite some drivers that open =
+code
+> devm_clk_get_enabled() up to now (patches #3 - #11).
+>
+> A concern about devm_clk_get_enabled() in v7 was that it helps people to =
+be
+> lazy and I agree that in some situations when devm_clk_get_enabled() is u=
+sed it
+> would be more efficient and sensible to care to only enable the clk when =
+really
+> needed.
+>
+> On the other hand, the function is right for some users, e.g. the watchdo=
+g
+> drivers. For the others it's not so simple to judge. Given that there are=
+ a
+> lot of drivers that are lazy even if doing so is some effort (i.e. callin=
+g
+> clk_prepare_enable() and devm_add_action()) convinces me, that introducin=
+g the
+> function family is sensible. (And if you want to work on these drivers,
+> grepping for devm_clk_get_enabled gives you a few candidates once the
+> series is in :-)
 
-With this patch, when compiling a kernel that only targets the JZ4760
-for instance, the driver is now about 4.5 KiB smaller.
+FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+for drivers/iio
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/pinctrl/pinctrl-ingenic.c | 118 ++++++++++++++++++------------
- 1 file changed, 71 insertions(+), 47 deletions(-)
+Thanks for doing this!
 
-diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
-index 2712f51eb238..61d42a5e9768 100644
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -137,6 +137,30 @@ struct ingenic_gpio_chip {
- 	unsigned int irq, reg_base;
- };
- 
-+static const u32 enabled_socs =
-+	IS_ENABLED(CONFIG_MACH_JZ4730) << ID_JZ4730 |
-+	IS_ENABLED(CONFIG_MACH_JZ4740) << ID_JZ4740 |
-+	IS_ENABLED(CONFIG_MACH_JZ4725B) << ID_JZ4725B |
-+	IS_ENABLED(CONFIG_MACH_JZ4750) << ID_JZ4750 |
-+	IS_ENABLED(CONFIG_MACH_JZ4755) << ID_JZ4755 |
-+	IS_ENABLED(CONFIG_MACH_JZ4760) << ID_JZ4760 |
-+	IS_ENABLED(CONFIG_MACH_JZ4770) << ID_JZ4770 |
-+	IS_ENABLED(CONFIG_MACH_JZ4775) << ID_JZ4775 |
-+	IS_ENABLED(CONFIG_MACH_JZ4780) << ID_JZ4780 |
-+	IS_ENABLED(CONFIG_MACH_X1000) << ID_X1000 |
-+	IS_ENABLED(CONFIG_MACH_X1500) << ID_X1500 |
-+	IS_ENABLED(CONFIG_MACH_X1830) << ID_X1830 |
-+	IS_ENABLED(CONFIG_MACH_X2000) << ID_X2000 |
-+	IS_ENABLED(CONFIG_MACH_X2100) << ID_X2100;
-+
-+static bool
-+is_soc_or_above(const struct ingenic_pinctrl *jzpc, enum jz_version version)
-+{
-+	return (enabled_socs >> version) &&
-+		(!(enabled_socs & GENMASK((unsigned int)version - 1, 0))
-+		 || jzpc->info->version >= version);
-+}
-+
- static const u32 jz4730_pull_ups[4] = {
- 	0x3fa3320f, 0xf200ffff, 0xffffffff, 0xffffffff,
- };
-@@ -3203,7 +3227,7 @@ static u32 ingenic_gpio_read_reg(struct ingenic_gpio_chip *jzgc, u8 reg)
- static void ingenic_gpio_set_bit(struct ingenic_gpio_chip *jzgc,
- 		u8 reg, u8 offset, bool set)
- {
--	if (jzgc->jzpc->info->version == ID_JZ4730) {
-+	if (!is_soc_or_above(jzgc->jzpc, ID_JZ4740)) {
- 		regmap_update_bits(jzgc->jzpc->map, jzgc->reg_base + reg,
- 				BIT(offset), set ? BIT(offset) : 0);
- 		return;
-@@ -3261,9 +3285,9 @@ static inline bool ingenic_gpio_get_value(struct ingenic_gpio_chip *jzgc,
- static void ingenic_gpio_set_value(struct ingenic_gpio_chip *jzgc,
- 				   u8 offset, int value)
- {
--	if (jzgc->jzpc->info->version >= ID_JZ4770)
-+	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
- 		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_PAT0, offset, !!value);
--	else if (jzgc->jzpc->info->version >= ID_JZ4740)
-+	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
- 		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_DATA, offset, !!value);
- 	else
- 		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_DATA, offset, !!value);
-@@ -3298,10 +3322,10 @@ static void irq_set_type(struct ingenic_gpio_chip *jzgc,
- 		break;
- 	}
- 
--	if (jzgc->jzpc->info->version >= ID_JZ4770) {
-+	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770)) {
- 		reg1 = JZ4770_GPIO_PAT1;
- 		reg2 = JZ4770_GPIO_PAT0;
--	} else if (jzgc->jzpc->info->version >= ID_JZ4740) {
-+	} else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740)) {
- 		reg1 = JZ4740_GPIO_TRIG;
- 		reg2 = JZ4740_GPIO_DIR;
- 	} else {
-@@ -3311,12 +3335,12 @@ static void irq_set_type(struct ingenic_gpio_chip *jzgc,
- 		return;
- 	}
- 
--	if (jzgc->jzpc->info->version >= ID_X2000) {
-+	if (is_soc_or_above(jzgc->jzpc, ID_X2000)) {
- 		ingenic_gpio_shadow_set_bit(jzgc, reg2, offset, val1);
- 		ingenic_gpio_shadow_set_bit(jzgc, reg1, offset, val2);
- 		ingenic_gpio_shadow_set_bit_load(jzgc);
- 		ingenic_gpio_set_bit(jzgc, X2000_GPIO_EDG, offset, val3);
--	} else if (jzgc->jzpc->info->version >= ID_X1000) {
-+	} else if (is_soc_or_above(jzgc->jzpc, ID_X1000)) {
- 		ingenic_gpio_shadow_set_bit(jzgc, reg2, offset, val1);
- 		ingenic_gpio_shadow_set_bit(jzgc, reg1, offset, val2);
- 		ingenic_gpio_shadow_set_bit_load(jzgc);
-@@ -3332,7 +3356,7 @@ static void ingenic_gpio_irq_mask(struct irq_data *irqd)
- 	struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
- 	int irq = irqd->hwirq;
- 
--	if (jzgc->jzpc->info->version >= ID_JZ4740)
-+	if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
- 		ingenic_gpio_set_bit(jzgc, GPIO_MSK, irq, true);
- 	else
- 		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIMR, irq, true);
-@@ -3344,7 +3368,7 @@ static void ingenic_gpio_irq_unmask(struct irq_data *irqd)
- 	struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
- 	int irq = irqd->hwirq;
- 
--	if (jzgc->jzpc->info->version >= ID_JZ4740)
-+	if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
- 		ingenic_gpio_set_bit(jzgc, GPIO_MSK, irq, false);
- 	else
- 		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIMR, irq, false);
-@@ -3356,9 +3380,9 @@ static void ingenic_gpio_irq_enable(struct irq_data *irqd)
- 	struct ingenic_gpio_chip *jzgc = gpiochip_get_data(gc);
- 	int irq = irqd->hwirq;
- 
--	if (jzgc->jzpc->info->version >= ID_JZ4770)
-+	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
- 		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_INT, irq, true);
--	else if (jzgc->jzpc->info->version >= ID_JZ4740)
-+	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
- 		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_SELECT, irq, true);
- 	else
- 		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIER, irq, true);
-@@ -3374,9 +3398,9 @@ static void ingenic_gpio_irq_disable(struct irq_data *irqd)
- 
- 	ingenic_gpio_irq_mask(irqd);
- 
--	if (jzgc->jzpc->info->version >= ID_JZ4770)
-+	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
- 		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_INT, irq, false);
--	else if (jzgc->jzpc->info->version >= ID_JZ4740)
-+	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
- 		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_SELECT, irq, false);
- 	else
- 		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPIER, irq, false);
-@@ -3390,7 +3414,7 @@ static void ingenic_gpio_irq_ack(struct irq_data *irqd)
- 	bool high;
- 
- 	if ((irqd_get_trigger_type(irqd) == IRQ_TYPE_EDGE_BOTH) &&
--		(jzgc->jzpc->info->version < ID_X2000)) {
-+	    !is_soc_or_above(jzgc->jzpc, ID_X2000)) {
- 		/*
- 		 * Switch to an interrupt for the opposite edge to the one that
- 		 * triggered the interrupt being ACKed.
-@@ -3402,9 +3426,9 @@ static void ingenic_gpio_irq_ack(struct irq_data *irqd)
- 			irq_set_type(jzgc, irq, IRQ_TYPE_LEVEL_HIGH);
- 	}
- 
--	if (jzgc->jzpc->info->version >= ID_JZ4770)
-+	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
- 		ingenic_gpio_set_bit(jzgc, JZ4770_GPIO_FLAG, irq, false);
--	else if (jzgc->jzpc->info->version >= ID_JZ4740)
-+	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
- 		ingenic_gpio_set_bit(jzgc, JZ4740_GPIO_DATA, irq, true);
- 	else
- 		ingenic_gpio_set_bit(jzgc, JZ4730_GPIO_GPFR, irq, false);
-@@ -3429,7 +3453,7 @@ static int ingenic_gpio_irq_set_type(struct irq_data *irqd, unsigned int type)
- 		irq_set_handler_locked(irqd, handle_bad_irq);
- 	}
- 
--	if ((type == IRQ_TYPE_EDGE_BOTH) && (jzgc->jzpc->info->version < ID_X2000)) {
-+	if ((type == IRQ_TYPE_EDGE_BOTH) && !is_soc_or_above(jzgc->jzpc, ID_X2000)) {
- 		/*
- 		 * The hardware does not support interrupts on both edges. The
- 		 * best we can do is to set up a single-edge interrupt and then
-@@ -3461,9 +3485,9 @@ static void ingenic_gpio_irq_handler(struct irq_desc *desc)
- 
- 	chained_irq_enter(irq_chip, desc);
- 
--	if (jzgc->jzpc->info->version >= ID_JZ4770)
-+	if (is_soc_or_above(jzgc->jzpc, ID_JZ4770))
- 		flag = ingenic_gpio_read_reg(jzgc, JZ4770_GPIO_FLAG);
--	else if (jzgc->jzpc->info->version >= ID_JZ4740)
-+	else if (is_soc_or_above(jzgc->jzpc, ID_JZ4740))
- 		flag = ingenic_gpio_read_reg(jzgc, JZ4740_GPIO_FLAG);
- 	else
- 		flag = ingenic_gpio_read_reg(jzgc, JZ4730_GPIO_GPFR);
-@@ -3508,14 +3532,14 @@ static inline void ingenic_config_pin(struct ingenic_pinctrl *jzpc,
- 	unsigned int offt = pin / PINS_PER_GPIO_CHIP;
- 
- 	if (set) {
--		if (jzpc->info->version >= ID_JZ4740)
-+		if (is_soc_or_above(jzpc, ID_JZ4740))
- 			regmap_write(jzpc->map, offt * jzpc->info->reg_offset +
- 					REG_SET(reg), BIT(idx));
- 		else
- 			regmap_set_bits(jzpc->map, offt * jzpc->info->reg_offset +
- 					reg, BIT(idx));
- 	} else {
--		if (jzpc->info->version >= ID_JZ4740)
-+		if (is_soc_or_above(jzpc, ID_JZ4740))
- 			regmap_write(jzpc->map, offt * jzpc->info->reg_offset +
- 					REG_CLEAR(reg), BIT(idx));
- 		else
-@@ -3574,12 +3598,12 @@ static int ingenic_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
- 	struct ingenic_pinctrl *jzpc = jzgc->jzpc;
- 	unsigned int pin = gc->base + offset;
- 
--	if (jzpc->info->version >= ID_JZ4770) {
-+	if (is_soc_or_above(jzpc, ID_JZ4770)) {
- 		if (ingenic_get_pin_config(jzpc, pin, JZ4770_GPIO_INT) ||
- 		    ingenic_get_pin_config(jzpc, pin, JZ4770_GPIO_PAT1))
- 			return GPIO_LINE_DIRECTION_IN;
- 		return GPIO_LINE_DIRECTION_OUT;
--	} else if (jzpc->info->version == ID_JZ4730) {
-+	} else if (!is_soc_or_above(jzpc, ID_JZ4740)) {
- 		if (!ingenic_get_pin_config(jzpc, pin, JZ4730_GPIO_GPDIR))
- 			return GPIO_LINE_DIRECTION_IN;
- 		return GPIO_LINE_DIRECTION_OUT;
-@@ -3630,18 +3654,18 @@ static int ingenic_pinmux_set_pin_fn(struct ingenic_pinctrl *jzpc,
- 	dev_dbg(jzpc->dev, "set pin P%c%u to function %u\n",
- 			'A' + offt, idx, func);
- 
--	if (jzpc->info->version >= ID_X1000) {
-+	if (is_soc_or_above(jzpc, ID_X1000)) {
- 		ingenic_shadow_config_pin(jzpc, pin, JZ4770_GPIO_INT, false);
- 		ingenic_shadow_config_pin(jzpc, pin, GPIO_MSK, false);
- 		ingenic_shadow_config_pin(jzpc, pin, JZ4770_GPIO_PAT1, func & 0x2);
- 		ingenic_shadow_config_pin(jzpc, pin, JZ4770_GPIO_PAT0, func & 0x1);
- 		ingenic_shadow_config_pin_load(jzpc, pin);
--	} else if (jzpc->info->version >= ID_JZ4770) {
-+	} else if (is_soc_or_above(jzpc, ID_JZ4770)) {
- 		ingenic_config_pin(jzpc, pin, JZ4770_GPIO_INT, false);
- 		ingenic_config_pin(jzpc, pin, GPIO_MSK, false);
- 		ingenic_config_pin(jzpc, pin, JZ4770_GPIO_PAT1, func & 0x2);
- 		ingenic_config_pin(jzpc, pin, JZ4770_GPIO_PAT0, func & 0x1);
--	} else if (jzpc->info->version >= ID_JZ4740) {
-+	} else if (is_soc_or_above(jzpc, ID_JZ4740)) {
- 		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_FUNC, true);
- 		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_TRIG, func & 0x2);
- 		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_SELECT, func & 0x1);
-@@ -3699,16 +3723,16 @@ static int ingenic_pinmux_gpio_set_direction(struct pinctrl_dev *pctldev,
- 	dev_dbg(pctldev->dev, "set pin P%c%u to %sput\n",
- 			'A' + offt, idx, input ? "in" : "out");
- 
--	if (jzpc->info->version >= ID_X1000) {
-+	if (is_soc_or_above(jzpc, ID_X1000)) {
- 		ingenic_shadow_config_pin(jzpc, pin, JZ4770_GPIO_INT, false);
- 		ingenic_shadow_config_pin(jzpc, pin, GPIO_MSK, true);
- 		ingenic_shadow_config_pin(jzpc, pin, JZ4770_GPIO_PAT1, input);
- 		ingenic_shadow_config_pin_load(jzpc, pin);
--	} else if (jzpc->info->version >= ID_JZ4770) {
-+	} else if (is_soc_or_above(jzpc, ID_JZ4770)) {
- 		ingenic_config_pin(jzpc, pin, JZ4770_GPIO_INT, false);
- 		ingenic_config_pin(jzpc, pin, GPIO_MSK, true);
- 		ingenic_config_pin(jzpc, pin, JZ4770_GPIO_PAT1, input);
--	} else if (jzpc->info->version >= ID_JZ4740) {
-+	} else if (is_soc_or_above(jzpc, ID_JZ4740)) {
- 		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_SELECT, false);
- 		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_DIR, !input);
- 		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_FUNC, false);
-@@ -3740,7 +3764,7 @@ static int ingenic_pinconf_get(struct pinctrl_dev *pctldev,
- 	unsigned int bias, reg;
- 	bool pull, pullup, pulldown;
- 
--	if (jzpc->info->version >= ID_X2000) {
-+	if (is_soc_or_above(jzpc, ID_X2000)) {
- 		pullup = ingenic_get_pin_config(jzpc, pin, X2000_GPIO_PEPU) &&
- 				!ingenic_get_pin_config(jzpc, pin, X2000_GPIO_PEPD) &&
- 				(jzpc->info->pull_ups[offt] & BIT(idx));
-@@ -3748,7 +3772,7 @@ static int ingenic_pinconf_get(struct pinctrl_dev *pctldev,
- 				!ingenic_get_pin_config(jzpc, pin, X2000_GPIO_PEPU) &&
- 				(jzpc->info->pull_downs[offt] & BIT(idx));
- 
--	} else if (jzpc->info->version >= ID_X1830) {
-+	} else if (is_soc_or_above(jzpc, ID_X1830)) {
- 		unsigned int half = PINS_PER_GPIO_CHIP / 2;
- 		unsigned int idxh = (pin % half) * 2;
- 
-@@ -3765,9 +3789,9 @@ static int ingenic_pinconf_get(struct pinctrl_dev *pctldev,
- 		pulldown = (bias == GPIO_PULL_DOWN) && (jzpc->info->pull_downs[offt] & BIT(idx));
- 
- 	} else {
--		if (jzpc->info->version >= ID_JZ4770)
-+		if (is_soc_or_above(jzpc, ID_JZ4770))
- 			pull = !ingenic_get_pin_config(jzpc, pin, JZ4770_GPIO_PEN);
--		else if (jzpc->info->version >= ID_JZ4740)
-+		else if (is_soc_or_above(jzpc, ID_JZ4740))
- 			pull = !ingenic_get_pin_config(jzpc, pin, JZ4740_GPIO_PULL_DIS);
- 		else
- 			pull = ingenic_get_pin_config(jzpc, pin, JZ4730_GPIO_GPPUR);
-@@ -3796,9 +3820,9 @@ static int ingenic_pinconf_get(struct pinctrl_dev *pctldev,
- 		break;
- 
- 	case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
--		if (jzpc->info->version >= ID_X2000)
-+		if (is_soc_or_above(jzpc, ID_X2000))
- 			reg = X2000_GPIO_SMT;
--		else if (jzpc->info->version >= ID_X1830)
-+		else if (is_soc_or_above(jzpc, ID_X1830))
- 			reg = X1830_GPIO_SMT;
- 		else
- 			return -EINVAL;
-@@ -3807,9 +3831,9 @@ static int ingenic_pinconf_get(struct pinctrl_dev *pctldev,
- 		break;
- 
- 	case PIN_CONFIG_SLEW_RATE:
--		if (jzpc->info->version >= ID_X2000)
-+		if (is_soc_or_above(jzpc, ID_X2000))
- 			reg = X2000_GPIO_SR;
--		else if (jzpc->info->version >= ID_X1830)
-+		else if (is_soc_or_above(jzpc, ID_X1830))
- 			reg = X1830_GPIO_SR;
- 		else
- 			return -EINVAL;
-@@ -3828,7 +3852,7 @@ static int ingenic_pinconf_get(struct pinctrl_dev *pctldev,
- static void ingenic_set_bias(struct ingenic_pinctrl *jzpc,
- 		unsigned int pin, unsigned int bias)
- {
--	if (jzpc->info->version >= ID_X2000) {
-+	if (is_soc_or_above(jzpc, ID_X2000)) {
- 		switch (bias) {
- 		case GPIO_PULL_UP:
- 			ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPD, false);
-@@ -3846,7 +3870,7 @@ static void ingenic_set_bias(struct ingenic_pinctrl *jzpc,
- 			ingenic_config_pin(jzpc, pin, X2000_GPIO_PEPD, false);
- 		}
- 
--	} else if (jzpc->info->version >= ID_X1830) {
-+	} else if (is_soc_or_above(jzpc, ID_X1830)) {
- 		unsigned int idx = pin % PINS_PER_GPIO_CHIP;
- 		unsigned int half = PINS_PER_GPIO_CHIP / 2;
- 		unsigned int idxh = (pin % half) * 2;
-@@ -3864,9 +3888,9 @@ static void ingenic_set_bias(struct ingenic_pinctrl *jzpc,
- 					REG_SET(X1830_GPIO_PEH), bias << idxh);
- 		}
- 
--	} else if (jzpc->info->version >= ID_JZ4770) {
-+	} else if (is_soc_or_above(jzpc, ID_JZ4770)) {
- 		ingenic_config_pin(jzpc, pin, JZ4770_GPIO_PEN, !bias);
--	} else if (jzpc->info->version >= ID_JZ4740) {
-+	} else if (is_soc_or_above(jzpc, ID_JZ4740)) {
- 		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_PULL_DIS, !bias);
- 	} else {
- 		ingenic_config_pin(jzpc, pin, JZ4730_GPIO_GPPUR, bias);
-@@ -3876,7 +3900,7 @@ static void ingenic_set_bias(struct ingenic_pinctrl *jzpc,
- static void ingenic_set_schmitt_trigger(struct ingenic_pinctrl *jzpc,
- 		unsigned int pin, bool enable)
- {
--	if (jzpc->info->version >= ID_X2000)
-+	if (is_soc_or_above(jzpc, ID_X2000))
- 		ingenic_config_pin(jzpc, pin, X2000_GPIO_SMT, enable);
- 	else
- 		ingenic_config_pin(jzpc, pin, X1830_GPIO_SMT, enable);
-@@ -3885,9 +3909,9 @@ static void ingenic_set_schmitt_trigger(struct ingenic_pinctrl *jzpc,
- static void ingenic_set_output_level(struct ingenic_pinctrl *jzpc,
- 				     unsigned int pin, bool high)
- {
--	if (jzpc->info->version >= ID_JZ4770)
-+	if (is_soc_or_above(jzpc, ID_JZ4770))
- 		ingenic_config_pin(jzpc, pin, JZ4770_GPIO_PAT0, high);
--	else if (jzpc->info->version >= ID_JZ4740)
-+	else if (is_soc_or_above(jzpc, ID_JZ4740))
- 		ingenic_config_pin(jzpc, pin, JZ4740_GPIO_DATA, high);
- 	else
- 		ingenic_config_pin(jzpc, pin, JZ4730_GPIO_DATA, high);
-@@ -3896,7 +3920,7 @@ static void ingenic_set_output_level(struct ingenic_pinctrl *jzpc,
- static void ingenic_set_slew_rate(struct ingenic_pinctrl *jzpc,
- 		unsigned int pin, unsigned int slew)
- {
--	if (jzpc->info->version >= ID_X2000)
-+	if (is_soc_or_above(jzpc, ID_X2000))
- 		ingenic_config_pin(jzpc, pin, X2000_GPIO_SR, slew);
- 	else
- 		ingenic_config_pin(jzpc, pin, X1830_GPIO_SR, slew);
-@@ -3952,7 +3976,7 @@ static int ingenic_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 			break;
- 
- 		case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
--			if (jzpc->info->version < ID_X1830)
-+			if (!is_soc_or_above(jzpc, ID_X1830))
- 				return -EINVAL;
- 
- 			ingenic_set_schmitt_trigger(jzpc, pin, arg);
-@@ -3967,7 +3991,7 @@ static int ingenic_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
- 			break;
- 
- 		case PIN_CONFIG_SLEW_RATE:
--			if (jzpc->info->version < ID_X1830)
-+			if (!is_soc_or_above(jzpc, ID_X1830))
- 				return -EINVAL;
- 
- 			ingenic_set_slew_rate(jzpc, pin, arg);
--- 
-2.35.1
+> Otherwise looking at the diffstat of this series:
+>
+>  48 files changed, 257 insertions(+), 851 deletions(-)
+>
+> is quite convincing. Just the first two patches (which introduce the new
+> functions) account for
+>
+>  2 files changed, 169 insertions(+), 17 deletions(-)
+>
+> . A rough third of the added lines is documentation. The rest is driver
+> updates which then has:
+>
+>  46 files changed, 88 insertions(+), 834 deletions(-)
+>
+> which makes a really nice cleanup.
+>
+> The series is build-tested on arm64, m68k, powerpc, riscv, s390, sparc64
+> and x86_64 using an allmodconfig.
+>
+> Best regards
+> Uwe
+>
+> Uwe Kleine-K=C3=B6nig (16):
+>   clk: generalize devm_clk_get() a bit
+>   clk: Provide new devm_clk helpers for prepared and enabled clocks
+>   hwmon: Make use of devm_clk_get_enabled()
+>   iio: Make use of devm_clk_get_enabled()
+>   hwrng: meson - Don't open-code devm_clk_get_optional_enabled()
+>   bus: bt1: Don't open code devm_clk_get_enabled()
+>   gpio: vf610: Simplify error handling in probe
+>   drm/meson: dw-hdmi: Don't open code devm_clk_get_enabled()
+>   rtc: ingenic: Simplify using devm_clk_get_enabled()
+>   clk: meson: axg-audio: Don't duplicate devm_clk_get_enabled()
+>   watchdog: Make use of devm_clk_get_enabled()
+>   pwm: atmel: Simplify using devm_clk_get_prepared()
+>   rtc: at91sam9: Simplify using devm_clk_get_enabled()
+>   i2c: imx: Simplify using devm_clk_get_enabled()
+>   spi: davinci: Simplify using devm_clk_get_enabled()
+>   dmaengine: lgm: Fix error handling
+>
+>  drivers/bus/bt1-apb.c                 | 23 +------
+>  drivers/bus/bt1-axi.c                 | 23 +------
+>  drivers/char/hw_random/meson-rng.c    | 20 +-----
+>  drivers/clk/clk-devres.c              | 96 ++++++++++++++++++++++-----
+>  drivers/clk/meson/axg-audio.c         | 36 ++--------
+>  drivers/dma/lgm/lgm-dma.c             |  8 +--
+>  drivers/gpio/gpio-vf610.c             | 45 +++----------
+>  drivers/gpu/drm/meson/meson_dw_hdmi.c | 48 +++++---------
+>  drivers/hwmon/axi-fan-control.c       | 15 +----
+>  drivers/hwmon/ltc2947-core.c          | 17 +----
+>  drivers/hwmon/mr75203.c               | 26 +-------
+>  drivers/hwmon/sparx5-temp.c           | 19 +-----
+>  drivers/i2c/busses/i2c-imx.c          | 12 +---
+>  drivers/iio/adc/ad7124.c              | 15 +----
+>  drivers/iio/adc/ad7768-1.c            | 17 +----
+>  drivers/iio/adc/ad9467.c              | 17 +----
+>  drivers/iio/adc/ingenic-adc.c         | 15 +----
+>  drivers/iio/adc/lpc18xx_adc.c         | 18 +----
+>  drivers/iio/adc/rockchip_saradc.c     | 44 +-----------
+>  drivers/iio/adc/ti-ads131e08.c        | 19 +-----
+>  drivers/iio/adc/xilinx-ams.c          | 15 +----
+>  drivers/iio/adc/xilinx-xadc-core.c    | 18 +----
+>  drivers/iio/frequency/adf4371.c       | 17 +----
+>  drivers/iio/frequency/admv1013.c      | 15 +----
+>  drivers/iio/frequency/adrf6780.c      | 16 +----
+>  drivers/iio/imu/adis16475.c           | 15 +----
+>  drivers/pwm/pwm-atmel.c               | 16 +----
+>  drivers/rtc/rtc-at91sam9.c            | 22 ++----
+>  drivers/rtc/rtc-jz4740.c              | 21 +-----
+>  drivers/spi/spi-davinci.c             | 11 +--
+>  drivers/watchdog/cadence_wdt.c        | 17 +----
+>  drivers/watchdog/davinci_wdt.c        | 18 +----
+>  drivers/watchdog/imgpdc_wdt.c         | 31 +--------
+>  drivers/watchdog/imx2_wdt.c           | 15 +----
+>  drivers/watchdog/imx7ulp_wdt.c        | 15 +----
+>  drivers/watchdog/loongson1_wdt.c      | 17 +----
+>  drivers/watchdog/lpc18xx_wdt.c        | 30 +--------
+>  drivers/watchdog/meson_gxbb_wdt.c     | 16 +----
+>  drivers/watchdog/of_xilinx_wdt.c      | 16 +----
+>  drivers/watchdog/pic32-dmt.c          | 15 +----
+>  drivers/watchdog/pic32-wdt.c          | 17 +----
+>  drivers/watchdog/pnx4008_wdt.c        | 15 +----
+>  drivers/watchdog/qcom-wdt.c           | 16 +----
+>  drivers/watchdog/rtd119x_wdt.c        | 16 +----
+>  drivers/watchdog/st_lpc_wdt.c         | 16 +----
+>  drivers/watchdog/stm32_iwdg.c         | 31 +--------
+>  drivers/watchdog/visconti_wdt.c       | 18 +----
+>  include/linux/clk.h                   | 90 ++++++++++++++++++++++++-
+>  48 files changed, 257 insertions(+), 851 deletions(-)
+>
+>
+> base-commit: 09688c0166e76ce2fb85e86b9d99be8b0084cdf9
+> --
+> 2.35.1
+>
 
+
+--=20
+With Best Regards,
+Andy Shevchenko
