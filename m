@@ -2,58 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D184D957B
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Mar 2022 08:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4AC4D958D
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Mar 2022 08:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345570AbiCOHlm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Mar 2022 03:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S1345617AbiCOHr7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Mar 2022 03:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345607AbiCOHle (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Mar 2022 03:41:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 201BE4B867
-        for <linux-mips@vger.kernel.org>; Tue, 15 Mar 2022 00:40:19 -0700 (PDT)
+        with ESMTP id S1345615AbiCOHr6 (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Mar 2022 03:47:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C6F54B862
+        for <linux-mips@vger.kernel.org>; Tue, 15 Mar 2022 00:46:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1647330018;
+        s=mimecast20190719; t=1647330406;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=uq0Z2NOXqlkVrEm1qJusGexqNZk1tmem0xILqLvczWc=;
-        b=flkWWW1HKdXs3++8E25mr0vdkz/5aivM/5EJy7jojqxuUmGmswgh9Unk7DXZH7m4kk4OEO
-        ezW7oP9uZg8y+0YSrUQ5K7FED4BW8hHf43MY0MD9+teq/KdyI88TCaQ3HU3oAkvrOYRBXX
-        f1z+jIFkD1Bk3/IYxFMNTckuLl7CQ10=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=jWeRmNoHqA79eh4aTLJgqBLVAPL7D60jcq/uE/nVP+g=;
+        b=N9+Wuu2666HEX3UqTiKtRHbYPSm/FnRO1maniq8E6CvcJVzNUK4/C7btB6zyWMhpNIXRWu
+        KgenoJCGecJjchgi+QfYZBN7T1ws1haDqvNZchObYpTcYAD2Fz0DppRTLsRSTNuQTvoq2n
+        HH9Uf3PP7tpf+x4kQIO+9VgPiY8682A=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-snilo69QO62Dk37ygoC15A-1; Tue, 15 Mar 2022 03:40:15 -0400
-X-MC-Unique: snilo69QO62Dk37ygoC15A-1
-Received: by mail-pf1-f197.google.com with SMTP id y7-20020a626407000000b004f6d39f1b0fso11254295pfb.5
-        for <linux-mips@vger.kernel.org>; Tue, 15 Mar 2022 00:40:15 -0700 (PDT)
+ us-mta-561-xHpYl8_1NhG0OFdmJqCU5g-1; Tue, 15 Mar 2022 03:46:44 -0400
+X-MC-Unique: xHpYl8_1NhG0OFdmJqCU5g-1
+Received: by mail-pj1-f72.google.com with SMTP id p5-20020a17090a748500b001bee6752974so1398033pjk.8
+        for <linux-mips@vger.kernel.org>; Tue, 15 Mar 2022 00:46:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=uq0Z2NOXqlkVrEm1qJusGexqNZk1tmem0xILqLvczWc=;
-        b=Hv5ABIKi8tKJgSg3ihi516Fuv2MZ/aNxY7pcp1/8qEdqECyoImezXdS0Xq5E1UMGvy
-         yaFrT9I54HlMhK+v69BvIxi9VFo/nF5CwewqCvVzrB4LX+T7xGchvRzGMpN10PYKzoQ8
-         GzRg2+Z2gjzlZz7udI78dsFOxevR2JGS9x4YwSuRVSXTpHgApFruN3WynkDCxVZOoEtg
-         FAHo5/ca+dCWKJ7VToR8NV2w3IBtOkj5KDDFMT41X37Wpumj7qsE/bqCX3ytsTN0prNc
-         gomMDxupE5U1gxONU7svevNBxc+EiNNnQ5iKjqlyjN9BdRiSqCb+41VnISioCWJ0XC8U
-         vCJg==
-X-Gm-Message-State: AOAM5316PCnraE0t2fVg2lPJuRAY3hUfRFoiceIpXhrCKjeTUctIL6lM
-        9tYoOGWA8Sss0pYp7j1jLRq7aa/o/akHMI5B4GqKj6ars7tVNxCpANc8JhlalNejvKB3Yz9DWEj
-        mS1fzvSK5QWWOt5IIYp1GFw==
-X-Received: by 2002:a63:4543:0:b0:374:87b6:c9f5 with SMTP id u3-20020a634543000000b0037487b6c9f5mr23348156pgk.302.1647330014626;
-        Tue, 15 Mar 2022 00:40:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJztMHMNYKIpNAuJc8FteBiELgu/J7bC35KETwQh5TE/MrV9Kwi39pAoHxQ4fUsa/R32a5KHkg==
-X-Received: by 2002:a63:4543:0:b0:374:87b6:c9f5 with SMTP id u3-20020a634543000000b0037487b6c9f5mr23348131pgk.302.1647330014348;
-        Tue, 15 Mar 2022 00:40:14 -0700 (PDT)
+        bh=jWeRmNoHqA79eh4aTLJgqBLVAPL7D60jcq/uE/nVP+g=;
+        b=kwFcP/DOf6pTOUu9EanESfij4ZMGSP4msZN82fqJ+AFh79JG7CvQQdOHbP6Q+wTTbB
+         j+NzcBSZr/gG9SfTqBptJJHPYfwFcoTF1VPG7xDkvHf7p9syuZwMxUsPnIFts1OEbWd8
+         O1lYgjOsv71gdCCXD37aQ8HDVApFZo4LO32ZmZAg1R5UpKDhhDYdyfA8S4Ef81XgwiS0
+         oW2p4WMH0J9NmXlaGq6dZezs1bIRjeX28vYu2XZDSxOJhbPo9WrkP3Pdh41KPD/LjcRD
+         zif29bWPv4LSoxZRzgay72E5T/Frb36HcA5aC1AQPTP0LaxG/AGU/YHR607e7Va/cgjE
+         AaSg==
+X-Gm-Message-State: AOAM533WTA6tSWaJ+P40/zexXqQBJLWB105LIZqwrdy9Um9RSxxqMtTu
+        yHxmtxXzvbeA2QLPkoINItF8XCtIhyZmTcJlcg0Ny+1C+KCWT/aYF+ivuO1WHBrVg9yPw5Zi3jq
+        MymM8fgsUOhLyDfl4ud7JrA==
+X-Received: by 2002:a17:90b:3a81:b0:1c2:bf38:b57a with SMTP id om1-20020a17090b3a8100b001c2bf38b57amr3181536pjb.172.1647330403431;
+        Tue, 15 Mar 2022 00:46:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy7FLPnde4MmAng4UXgI9r1HTOD3VSQ8zmxvVJmWLA5YqMaBNH24gOlC5XFnQFle7qC0BS3aA==
+X-Received: by 2002:a17:90b:3a81:b0:1c2:bf38:b57a with SMTP id om1-20020a17090b3a8100b001c2bf38b57amr3181502pjb.172.1647330403166;
+        Tue, 15 Mar 2022 00:46:43 -0700 (PDT)
 Received: from xz-m1.local ([191.101.132.43])
-        by smtp.gmail.com with ESMTPSA id c7-20020aa78e07000000b004f6e4d8ccc8sm22380450pfr.163.2022.03.15.00.40.07
+        by smtp.gmail.com with ESMTPSA id s30-20020a056a001c5e00b004f75773f3fcsm22480075pfw.119.2022.03.15.00.46.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 00:40:14 -0700 (PDT)
-Date:   Tue, 15 Mar 2022 15:40:05 +0800
+        Tue, 15 Mar 2022 00:46:42 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 15:46:34 +0800
 From:   Peter Xu <peterx@redhat.com>
 To:     David Matlack <dmatlack@google.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
@@ -74,48 +74,40 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         <kvm@vger.kernel.org>,
         "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
         <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Subject: Re: [PATCH v2 01/26] KVM: x86/mmu: Optimize MMU page cache lookup
- for all direct SPs
-Message-ID: <YjBC1ZLio2iPkZ0V@xz-m1.local>
+Subject: Re: [PATCH v2 02/26] KVM: x86/mmu: Use a bool for direct
+Message-ID: <YjBEWm3YsuSKj+ES@xz-m1.local>
 References: <20220311002528.2230172-1-dmatlack@google.com>
- <20220311002528.2230172-2-dmatlack@google.com>
+ <20220311002528.2230172-3-dmatlack@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220311002528.2230172-2-dmatlack@google.com>
+In-Reply-To: <20220311002528.2230172-3-dmatlack@google.com>
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 12:25:03AM +0000, David Matlack wrote:
-> Commit fb58a9c345f6 ("KVM: x86/mmu: Optimize MMU page cache lookup for
-> fully direct MMUs") skipped the unsync checks and write flood clearing
-> for full direct MMUs. We can extend this further and skip the checks for
-> all direct shadow pages. Direct shadow pages are never marked unsynced
-> or have a non-zero write-flooding count.
-
-Nit: IMHO it's better to spell out the exact functional change, IIUC those
-are the direct mapped SPs where guest uses huge pages but host uses only
-small pages for the shadowing?
-
-> 
-> Checking sp->role.direct alos generates better code than checking
-> direct_map because, due to register pressure, direct_map has to get
-> shoved onto the stack and then pulled back off.
+On Fri, Mar 11, 2022 at 12:25:04AM +0000, David Matlack wrote:
+> The parameter "direct" can either be true or false, and all of the
+> callers pass in a bool variable or true/false literal, so just use the
+> type bool.
 > 
 > No functional change intended.
 > 
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
 > Signed-off-by: David Matlack <dmatlack@google.com>
 
-Reviewed-by: Peter Xu <peterx@redhat.com>
+If we care about this.. how about convert another one altogether?
+
+TRACE_EVENT(kvm_hv_stimer_expiration,
+	TP_PROTO(int vcpu_id, int timer_index, int direct, int msg_send_result),
+	TP_ARGS(vcpu_id, timer_index, direct, msg_send_result),
+
+Thanks,
 
 -- 
 Peter Xu
