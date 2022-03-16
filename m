@@ -2,269 +2,870 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D11D4DA6FF
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Mar 2022 01:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C02B4DA795
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Mar 2022 02:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351971AbiCPAmL (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 15 Mar 2022 20:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        id S245082AbiCPBwb (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 15 Mar 2022 21:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiCPAmL (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Mar 2022 20:42:11 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404D65DE4E;
-        Tue, 15 Mar 2022 17:40:58 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22FKiVtF011483;
-        Wed, 16 Mar 2022 00:39:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=djr6kN0TcawL+ku/NK2R0BtYVj8lg5bDD1C02JuafMc=;
- b=EBYUADnZPAOiAe6ii2Z0V+oPucuY/Cn266HvKd5+/l46tYcXVvj7/YitoCXO8zmROodR
- h6OJ5ORH5KnLf52aiKKxUKCdV2BiW5Mt4M8AgloktDvi6pR8RAqzTRn57DaA6SOhw3j4
- V9HrGVZHStjvj+iuXGRtDBzRs3hwncQWPiO+ZZvHbM+TwidRrOo3+/VqltYiP2hJQZQY
- B0oYHq5xATW7YHTcOwrc5bsbyngL35yzxKZaetRItMww9TbzIEWsbr3IEbVC27SHlkMi
- YHdtMgHIFsnI76td2YA9MQYKoSWw9BLR8fh/TqPbPODOYyO+FJnF+ijki5HCwbJU6RsJ Uw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3et5s6mref-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Mar 2022 00:39:56 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22G0W1lN149534;
-        Wed, 16 Mar 2022 00:39:54 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
-        by aserp3020.oracle.com with ESMTP id 3et64kc83y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 16 Mar 2022 00:39:54 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NCf1GgmtgU38mK3x65627G1OHXxN9fBlOrOzqvWNaC5H5COvyCcmdOi/ZxWSBB5pKMnGlUWX42HlduLuWgBnaKl8ca8mbOH5KWYvyBhcCYLDAkpGMx7gF5hv+0qt+un2SbrKfhCkjpoEsuSM2g7JqQ0OdIQgQsozeNguicDaxmIOupUPUwGJZq03vwEew2hCGVdIZfrCNvq7tZiGg7bFkhK0YpRWEre5VgSgyi2s5YLdw+Gp83SNKRSwZhrg9SBQj+yJCGpeO3KN4k45ZbZClb/b1KBFoER+ihdNVyQXbgop9n3Nu3miDvGSQ6BX00H29nSia21iZw1yzFTvW+iUfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=djr6kN0TcawL+ku/NK2R0BtYVj8lg5bDD1C02JuafMc=;
- b=dtE4oz7YZxKUYUofSCCAVkvQRBm4EGM/hPwXLL+y9NNadZekU7K7NCy1glPwFLG6tKNbGLCyWFggYGVEY1m5AmBTrdjeRUlD/tVzz0yhas1nkgsF1rQHR5WUK+Z4whkfO3Qalq3KBO6sBLKrJ/EXIr25e2BcgX6B5PcE1mGX7X1A0do1YbwadmzmHwmeW9+tZM88uSU5I2S8Giuu1SOgfZuIG8iMyvFigOXZ9GA0kgCIXy+UAIO8j3rDkG2o67K71rApAusnhS1apVejtZsMy0GgCFA8kNGjZFwkhgbADbhzAsJGK698BOSzijRXFFh6gqYQ7D5F+WvA5aNYn/v5tQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=djr6kN0TcawL+ku/NK2R0BtYVj8lg5bDD1C02JuafMc=;
- b=jx0go0yY6nbYsdwLI+pIXNpFlvP59jfq7l0bVX7CKVkiei3RaaIgql97qHG3X9Q6SjPE+zT8lHXm3lELEbP45kc5rvh+aIk61yv3tPKn8hjd6K133om7KrgJovt+eElqZfMuXs4YAlW9MRz5zLC79/P0bCNjWL2YQt4/uGaSieQ=
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com (2603:10b6:208:321::10)
- by BY5PR10MB4147.namprd10.prod.outlook.com (2603:10b6:a03:20e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Wed, 16 Mar
- 2022 00:39:51 +0000
-Received: from BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::1b2:b41c:b2f0:c755]) by BLAPR10MB5009.namprd10.prod.outlook.com
- ([fe80::1b2:b41c:b2f0:c755%9]) with mapi id 15.20.5081.014; Wed, 16 Mar 2022
- 00:39:51 +0000
-Message-ID: <3a8cc553-4b60-b6bb-a2d8-2b33c4c1cf23@oracle.com>
-Date:   Tue, 15 Mar 2022 20:39:29 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH 12/15] swiotlb: provide swiotlb_init variants that remap
- the buffer
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     iommu@lists.linux-foundation.org, x86@kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        xen-devel@lists.xenproject.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, tboot-devel@lists.sourceforge.net,
-        linux-pci@vger.kernel.org
-References: <20220314073129.1862284-1-hch@lst.de>
- <20220314073129.1862284-13-hch@lst.de>
- <4d800aa8-5e38-1ad9-284f-1754c83d0f8a@oracle.com>
- <20220315063618.GA1244@lst.de>
-From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
-In-Reply-To: <20220315063618.GA1244@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN1PR12CA0075.namprd12.prod.outlook.com
- (2603:10b6:802:20::46) To BLAPR10MB5009.namprd10.prod.outlook.com
- (2603:10b6:208:321::10)
+        with ESMTP id S1353024AbiCPBwa (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 15 Mar 2022 21:52:30 -0400
+X-Greylist: delayed 1276 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Mar 2022 18:51:15 PDT
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.49.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1DE5E175
+        for <linux-mips@vger.kernel.org>; Tue, 15 Mar 2022 18:51:15 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id A25005ADD
+        for <linux-mips@vger.kernel.org>; Tue, 15 Mar 2022 20:29:58 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id UIUAnHU8M9AGSUIUAnNlzl; Tue, 15 Mar 2022 20:29:58 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=IbxGqv3Oq1sXCEpO+2j7r8BZ8/RG4aBDSa5JRx8TG/I=; b=U5YJ4Vlke+EYvoU0mefGL0XJMv
+        cbCKmf/iQ6kqn+BErgDQJme33UtrO5P33xU6wT6lH9UWjZJFfrgChMYNQUwhJCyBghpXiwkhowoTk
+        OVkf/k3JCQ29VHLN3oF4LAETMNZe9hpJUtpUYw2z8cEEBxUz/ePSCbJ0MC5uYqZWQLUnezrp0eJSt
+        7UwTrI6l1dK1jBBS3fR3Mgkq38x2ATnM4/wdeaX5WHP25/dQRfQ+GHesG8t4JvaT558mOY/ZzrcQw
+        YpyD3IRiuyCsYQSpZ/TEtT0Myz6F0HMHTkYz2jNXgKA3QoULcwXUaqeVUVcfDMFyRuXhb1grpH47A
+        PHAKR8OQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57500 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nUIU8-003mWC-FR; Wed, 16 Mar 2022 01:29:56 +0000
+Date:   Tue, 15 Mar 2022 18:29:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v8 11/16] watchdog: Make use of devm_clk_get_enabled()
+Message-ID: <20220316012954.GA4167754@roeck-us.net>
+References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
+ <20220314141643.22184-12-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3e5cdd27-5357-4844-66be-08da06e57b07
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4147:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR10MB414758A1650DD7DEDCA267AA8A119@BY5PR10MB4147.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Uy1tmGQRi05CoYG/1TM0569ITNymGf/zYpC7r28gCMp0pa423BF75gvKu00jVL7g9ths/7kV+CPK19h2EJTCErXbcns4YEVEXELJl6tprFPrOtyJuCfCCjJ7TJrxqdlT87yL0toLjH2MQIp8RuCLBBX63CZin+2EOK66ceYJ6+1e59TDw8Of9zJ4fmh2uBaWjH+aGh5ULM322wwzr/TkD3w+H8TOKxGjYX5QV20Ev/Fe2oIe2PKRJWiyIloskXk03tRUtSc9U0hbKG8UtM4DLC5m0K4Ru1P9BkjP4zRH3poSKDSnRKVsy5mBy5JlepNhX+AlErQcPFa8uXFdq09eL1bITYtcx7s37h8D1cgRpOBQIqEEq2vjZHNs3XMjLdVLLi48XkL2TToqDp19eKdukQt9nIDcorhnfSvfkUuI2CbFPoV3U7ch6VCWI2ISLpWQbmJzMPG3LHE+FGZfmeydUzOGOmaE7HVgqdAQJUKlMnChBNC+GswPSQgW9LFrmrJdJ4R7AML6uyzZhnZW/r8DwF037RzPcuu6mjPfZc3410bgPuIkZLLLzd3RyTvEUCrTIXlAzbgzUS8Lax7HErG+HaG7jKJcLzyv4ws1ZOUmlicBCRQ9DCbBu8HTKr+CohONxpbIt/sVstytQygqJXUNpRpdlJSPBHbkY0Ty0wusYuKaCwYR1a1wC5RuZP2Zpe/hGLVr0UVPNoVjBlHLY6Lv+VtVL8MvcKl1DLVQF67GsHGoFgcVKviraS/FWpR5lI4A
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5009.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(6486002)(86362001)(31696002)(54906003)(316002)(6916009)(2616005)(53546011)(6506007)(6666004)(26005)(186003)(83380400001)(6512007)(8936002)(44832011)(7416002)(5660300002)(8676002)(66476007)(66556008)(4326008)(66946007)(2906002)(31686004)(38100700002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NU45NTZoaENrVkdoL3U4SjRhTjJLRmxRR2VjYytKZXU4Q0RDWEZQMUE5RWNv?=
- =?utf-8?B?dDJ5WmVjZ1daVWd4cWNlekl4NG9aakhhZGV1NmxKcWl2VEJ3aWFvbE1Sc0R3?=
- =?utf-8?B?RTBEZitVaUVRSHJKNTZrQ0NQeEgralArK2p2c1Q5YUhVa1Yvb040alJUU204?=
- =?utf-8?B?dllEdi9Tc3M0d3lFM01hUEk5Z0JLNFZ0UlVsRlF2emFHMTVtTjdQcTJkYXds?=
- =?utf-8?B?eHZVaUxsdWUzQ05SNnhLRmxkcXF2ODlVblNHRHBmcFkzL2UwZVVwZXlNMEdy?=
- =?utf-8?B?T1A2QmhjTUZRWEZUTVlvRndpOERITUl4WC9WcnJINGNGblpKREJPZjArWlNt?=
- =?utf-8?B?TnBqMmZ3U0Eyd0p2cHNxMW54dytHd1JHY0VacldwaEFObVdpcTVicGxsUnQw?=
- =?utf-8?B?Q041ZFNBbkdwTDljNnhDYythc0h1dkVxazB1N0tlME5tR1B1WXlVeXFaNmNK?=
- =?utf-8?B?ZGxFRVY0OVNTZW1UeW82cGRQNjhQRzdpQTc1dHM1dWx3ZDBIUEdndnd5S001?=
- =?utf-8?B?enhlWHhHanZjQk9EK0pvaTJYVjRTenNwUmJ2NGFSMTBLZHhiN01heXg3R09R?=
- =?utf-8?B?VUdwSVZUL21PbkhVV1JXbklZMzJENkRQbGpmZVptWDRkWDhqbzluWWpOdFVX?=
- =?utf-8?B?dkxLUm92czJHTGo3QXpXekVFaXZKbTdrNnZuM0FGL0tLZldIZ2h3TkRpTHhw?=
- =?utf-8?B?aFpOOXl6OWxjR1FPWjhQcFdTN1F0K3RndlBER2E5U2ZFeEdDSWpaalNKYS92?=
- =?utf-8?B?OGFCZkp6eW16cHZCOVdNR1pTdTk0Kzk5ZmJPeXluTk5BNFpqdlF3d0FyKzdX?=
- =?utf-8?B?VkViRVFKa0s4bytINzc2UWRVM2EwOENiTWM5VEpnYWRUMGZhVHJMQ09ZVmN2?=
- =?utf-8?B?NVRkdGcvVDZjTzFXTDlrT0NRb3Z6ZnEzT3BCbG9lWERBUUxTbGxuNFozNWJj?=
- =?utf-8?B?Q2pGRFhYYy8ydmV2Q1VVcllRMnVpbk5KT0pmTFRkcGJnQnBHMGY0STh4OVFU?=
- =?utf-8?B?K1VId0ZManJkM09XZHBOdnNFYVNNNmpEd2FJMDM1VWxrZnJQbjl1eitJeTFN?=
- =?utf-8?B?N29nd05EQndrU3dMaGpvUXZOS0RVRjZpMHlLZ0p4TnhOUTlFbldjWlZ0MTgy?=
- =?utf-8?B?cG5EQldKb1Zhb0VhYkJ6cDFBUUx5anRlTjh6bStXOGFtRUdDS01hekd3U25Q?=
- =?utf-8?B?ZmkwRG5GZVBUTjd5SXhUc1FOUlRFd1Z3TVFOcXVFM3pyQUZiWE1hbHpqc0x1?=
- =?utf-8?B?V3dHM1gzQnAwM29PZG9yd2RYb1Bkb2Nhd1BkcnVTUVFTeldRQlZNcUZhRGhk?=
- =?utf-8?B?REltYTdidGE2Nm43MUxQWEl0QXA0RFdnZHkzVHY2OTNOemhLYlM5UFBKdDh5?=
- =?utf-8?B?dmJLSTZycGVhRG9PSGMxdEJVQndSN1FLM2tBYzZUS3k1VXdPTVhDT1IwWmhh?=
- =?utf-8?B?SWhicCtQdmJzVDc5dy9KVTNrREM2cXRxUnJoa3NNWVozeXZyblJJbVFXbDhr?=
- =?utf-8?B?YzQwMVVtZEttR0QzUjJCTVRHMFh6RDFqRlF6b3hQbzdDMXI1U29QM01WVzRB?=
- =?utf-8?B?c29mWGwwVzJyQVprSEdDdjRpWTdJaGZrTjlidzNYYWFNZlZRU3hQb0lwdkJs?=
- =?utf-8?B?SGp5TFRoYWN0QTFIZmR1OFJvcEQ0d1FUYjhOczkvSHBLNUMrUnJoTU5iVTlG?=
- =?utf-8?B?MENmTy9tTVRmUFFNUzhMdUdscFNQVFdkb25WdFIwcldSZzJlUHRjY1BYbTRC?=
- =?utf-8?B?NS92TE00QitoYmdkd3pIVGVPaG9ZMUlZOENadHpnQVcyellmSFExUVN6aEFh?=
- =?utf-8?B?Z3RaMWxXZHBLdDNCSVpraWpPSUZLNFRqc1VZNDYzbXd3aEI5bnlQRHF3emt6?=
- =?utf-8?B?MDBWd1VKcmZOVlk5eXVrQlNVL2xCV2RjS0JScS85TnFraCtEaVBEeWVua1BY?=
- =?utf-8?B?Uzd3cUc0YmhCeW1iYkNhN2x0aDFQcGEwT3pHRVIyV2hINFJhelFzajFmSE0w?=
- =?utf-8?B?LzdOVWVsTjNBPT0=?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e5cdd27-5357-4844-66be-08da06e57b07
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5009.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2022 00:39:51.0206
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9TF2vJtebLSAdleNi6D9YetFLcgmSTX4xMsfZC7SUCCVEZYWXQpsxgZnKXWVvpiGxky5mlpaee7FuakjCFAEO10lkRh1KySJSMuwMBNfLwA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4147
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10287 signatures=693139
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203160001
-X-Proofpoint-GUID: eIH6PojFSQs8pjue0vLu4KGA-a1ppM4Y
-X-Proofpoint-ORIG-GUID: eIH6PojFSQs8pjue0vLu4KGA-a1ppM4Y
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220314141643.22184-12-u.kleine-koenig@pengutronix.de>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nUIU8-003mWC-FR
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57500
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 10
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Mon, Mar 14, 2022 at 03:16:38PM +0100, Uwe Kleine-König wrote:
+> Several drivers manually register a devm handler to disable their clk.
+> Convert them to devm_clk_get_enabled().
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-On 3/15/22 2:36 AM, Christoph Hellwig wrote:
-
-> @@ -271,12 +273,23 @@ void __init swiotlb_init(bool addressing_limit, unsigned int flags)
->   	 * allow to pick a location everywhere for hypervisors with guest
->   	 * memory encryption.
->   	 */
-> +retry:
-> +	bytes = PAGE_ALIGN(default_nslabs << IO_TLB_SHIFT);
->   	if (flags & SWIOTLB_ANY)
->   		tlb = memblock_alloc(bytes, PAGE_SIZE);
->   	else
->   		tlb = memblock_alloc_low(bytes, PAGE_SIZE);
->   	if (!tlb)
->   		goto fail;
-> +	if (remap && remap(tlb, nslabs) < 0) {
-> +		memblock_free(tlb, PAGE_ALIGN(bytes));
-> +
-> +		if (nslabs <= IO_TLB_MIN_SLABS)
-> +			panic("%s: Failed to remap %zu bytes\n",
-> +			      __func__, bytes);
-> +		nslabs = max(1024UL, ALIGN(nslabs >> 1, IO_TLB_SEGSIZE));
-
-
-I spoke with Konrad (who wrote the original patch --- f4b2f07b2ed9b469ead87e06fc2fc3d12663a725) and apparently the reason for 2MB was to optimize for Xen's slab allocator, it had nothing to do with IO_TLB_MIN_SLABS. Since this is now common code we should not expose Xen-specific optimizations here and smaller values will still work so IO_TLB_MIN_SLABS is fine.
-
-I think this should be mentioned in the commit message though, probably best in the next patch where you switch to this code.
-
-As far as the hunk above, I don't think we need the max() here: with IO_TLB_MIN_SLABS being 512 we may get stuck in an infinite loop. Something like
-
-	nslabs = ALIGN(nslabs >> 1, IO_TLB_SEGSIZE);
-	if (nslabs <= IO_TLB_MIN_SLABS)
-		panic()
-
-should be sufficient.
-
-
-> +		goto retry;
-> +	}
->   	if (swiotlb_init_with_tbl(tlb, default_nslabs, flags))
->   		goto fail_free_mem;
->   	return;
-> @@ -287,12 +300,18 @@ void __init swiotlb_init(bool addressing_limit, unsigned int flags)
->   	pr_warn("Cannot allocate buffer");
->   }
->   
-> +void __init swiotlb_init(bool addressing_limit, unsigned int flags)
-> +{
-> +	return swiotlb_init_remap(addressing_limit, flags, NULL);
-> +}
-> +
->   /*
->    * Systems with larger DMA zones (those that don't support ISA) can
->    * initialize the swiotlb later using the slab allocator if needed.
->    * This should be just like above, but with some error catching.
->    */
-> -int swiotlb_init_late(size_t size, gfp_t gfp_mask)
-> +int swiotlb_init_late(size_t size, gfp_t gfp_mask,
-> +		int (*remap)(void *tlb, unsigned long nslabs))
->   {
->   	unsigned long nslabs = ALIGN(size >> IO_TLB_SHIFT, IO_TLB_SEGSIZE);
->   	unsigned long bytes;
-> @@ -303,6 +322,7 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask)
->   	if (swiotlb_force_disable)
->   		return 0;
->   
-> +retry:
->   	order = get_order(nslabs << IO_TLB_SHIFT);
->   	nslabs = SLABS_PER_PAGE << order;
->   	bytes = nslabs << IO_TLB_SHIFT;
-> @@ -317,6 +337,16 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask)
->   
->   	if (!vstart)
->   		return -ENOMEM;
-> +	if (remap)
-> +		rc = remap(vstart, nslabs);
-> +	if (rc) {
-> +		free_pages((unsigned long)vstart, order);
-> +
-> +		if (IO_TLB_MIN_SLABS <= 1024)
-> +			return rc;
-> +		nslabs = max(1024UL, ALIGN(nslabs >> 1, IO_TLB_SEGSIZE));
-
-
-Same here. (The 'if' check above is wrong anyway).
-
-Patches 13 and 14 look good.
-
-
--boris
-
-
-
-> +		goto retry;
-> +	}
->   
->   	if (order != get_order(bytes)) {
->   		pr_warn("only able to allocate %ld MB\n",
+> ---
+>  drivers/watchdog/cadence_wdt.c    | 17 +----------------
+>  drivers/watchdog/davinci_wdt.c    | 18 +-----------------
+>  drivers/watchdog/imgpdc_wdt.c     | 31 +++----------------------------
+>  drivers/watchdog/imx2_wdt.c       | 15 +--------------
+>  drivers/watchdog/imx7ulp_wdt.c    | 15 +--------------
+>  drivers/watchdog/loongson1_wdt.c  | 17 +----------------
+>  drivers/watchdog/lpc18xx_wdt.c    | 30 ++----------------------------
+>  drivers/watchdog/meson_gxbb_wdt.c | 16 +---------------
+>  drivers/watchdog/of_xilinx_wdt.c  | 16 +---------------
+>  drivers/watchdog/pic32-dmt.c      | 15 +--------------
+>  drivers/watchdog/pic32-wdt.c      | 17 +----------------
+>  drivers/watchdog/pnx4008_wdt.c    | 15 +--------------
+>  drivers/watchdog/qcom-wdt.c       | 16 +---------------
+>  drivers/watchdog/rtd119x_wdt.c    | 16 +---------------
+>  drivers/watchdog/st_lpc_wdt.c     | 16 +---------------
+>  drivers/watchdog/stm32_iwdg.c     | 31 ++-----------------------------
+>  drivers/watchdog/visconti_wdt.c   | 18 +-----------------
+>  17 files changed, 21 insertions(+), 298 deletions(-)
+> 
+> diff --git a/drivers/watchdog/cadence_wdt.c b/drivers/watchdog/cadence_wdt.c
+> index bc99e9164930..23d41043863f 100644
+> --- a/drivers/watchdog/cadence_wdt.c
+> +++ b/drivers/watchdog/cadence_wdt.c
+> @@ -274,11 +274,6 @@ static const struct watchdog_ops cdns_wdt_ops = {
+>  	.set_timeout = cdns_wdt_settimeout,
+>  };
+>  
+> -static void cdns_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  /************************Platform Operations*****************************/
+>  /**
+>   * cdns_wdt_probe - Probe call for the device.
+> @@ -333,21 +328,11 @@ static int cdns_wdt_probe(struct platform_device *pdev)
+>  	watchdog_stop_on_reboot(cdns_wdt_device);
+>  	watchdog_set_drvdata(cdns_wdt_device, wdt);
+>  
+> -	wdt->clk = devm_clk_get(dev, NULL);
+> +	wdt->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(wdt->clk))
+>  		return dev_err_probe(dev, PTR_ERR(wdt->clk),
+>  				     "input clock not found\n");
+>  
+> -	ret = clk_prepare_enable(wdt->clk);
+> -	if (ret) {
+> -		dev_err(dev, "unable to enable clock\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, cdns_clk_disable_unprepare,
+> -				       wdt->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	clock_f = clk_get_rate(wdt->clk);
+>  	if (clock_f <= CDNS_WDT_CLK_75MHZ) {
+>  		wdt->prescaler = CDNS_WDT_PRESCALE_512;
+> diff --git a/drivers/watchdog/davinci_wdt.c b/drivers/watchdog/davinci_wdt.c
+> index 584a56893b81..5f2184bda7b2 100644
+> --- a/drivers/watchdog/davinci_wdt.c
+> +++ b/drivers/watchdog/davinci_wdt.c
+> @@ -189,14 +189,8 @@ static const struct watchdog_ops davinci_wdt_ops = {
+>  	.restart	= davinci_wdt_restart,
+>  };
+>  
+> -static void davinci_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int davinci_wdt_probe(struct platform_device *pdev)
+>  {
+> -	int ret = 0;
+>  	struct device *dev = &pdev->dev;
+>  	struct watchdog_device *wdd;
+>  	struct davinci_wdt_device *davinci_wdt;
+> @@ -205,21 +199,11 @@ static int davinci_wdt_probe(struct platform_device *pdev)
+>  	if (!davinci_wdt)
+>  		return -ENOMEM;
+>  
+> -	davinci_wdt->clk = devm_clk_get(dev, NULL);
+> +	davinci_wdt->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(davinci_wdt->clk))
+>  		return dev_err_probe(dev, PTR_ERR(davinci_wdt->clk),
+>  				     "failed to get clock node\n");
+>  
+> -	ret = clk_prepare_enable(davinci_wdt->clk);
+> -	if (ret) {
+> -		dev_err(dev, "failed to prepare clock\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, davinci_clk_disable_unprepare,
+> -				       davinci_wdt->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	platform_set_drvdata(pdev, davinci_wdt);
+>  
+>  	wdd			= &davinci_wdt->wdd;
+> diff --git a/drivers/watchdog/imgpdc_wdt.c b/drivers/watchdog/imgpdc_wdt.c
+> index b57ff3787052..a55f801895d4 100644
+> --- a/drivers/watchdog/imgpdc_wdt.c
+> +++ b/drivers/watchdog/imgpdc_wdt.c
+> @@ -175,16 +175,11 @@ static const struct watchdog_ops pdc_wdt_ops = {
+>  	.restart        = pdc_wdt_restart,
+>  };
+>  
+> -static void pdc_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int pdc_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	u64 div;
+> -	int ret, val;
+> +	int val;
+>  	unsigned long clk_rate;
+>  	struct pdc_wdt_dev *pdc_wdt;
+>  
+> @@ -196,38 +191,18 @@ static int pdc_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(pdc_wdt->base))
+>  		return PTR_ERR(pdc_wdt->base);
+>  
+> -	pdc_wdt->sys_clk = devm_clk_get(dev, "sys");
+> +	pdc_wdt->sys_clk = devm_clk_get_enabled(dev, "sys");
+>  	if (IS_ERR(pdc_wdt->sys_clk)) {
+>  		dev_err(dev, "failed to get the sys clock\n");
+>  		return PTR_ERR(pdc_wdt->sys_clk);
+>  	}
+>  
+> -	pdc_wdt->wdt_clk = devm_clk_get(dev, "wdt");
+> +	pdc_wdt->wdt_clk = devm_clk_get_enabled(dev, "wdt");
+>  	if (IS_ERR(pdc_wdt->wdt_clk)) {
+>  		dev_err(dev, "failed to get the wdt clock\n");
+>  		return PTR_ERR(pdc_wdt->wdt_clk);
+>  	}
+>  
+> -	ret = clk_prepare_enable(pdc_wdt->sys_clk);
+> -	if (ret) {
+> -		dev_err(dev, "could not prepare or enable sys clock\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, pdc_clk_disable_unprepare,
+> -				       pdc_wdt->sys_clk);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = clk_prepare_enable(pdc_wdt->wdt_clk);
+> -	if (ret) {
+> -		dev_err(dev, "could not prepare or enable wdt clock\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, pdc_clk_disable_unprepare,
+> -				       pdc_wdt->wdt_clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	/* We use the clock rate to calculate the max timeout */
+>  	clk_rate = clk_get_rate(pdc_wdt->wdt_clk);
+>  	if (clk_rate == 0) {
+> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+> index 51bfb796898b..273d720588bf 100644
+> --- a/drivers/watchdog/imx2_wdt.c
+> +++ b/drivers/watchdog/imx2_wdt.c
+> @@ -248,11 +248,6 @@ static const struct regmap_config imx2_wdt_regmap_config = {
+>  	.max_register = 0x8,
+>  };
+>  
+> -static void imx2_wdt_action(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int __init imx2_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -277,7 +272,7 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+>  		return PTR_ERR(wdev->regmap);
+>  	}
+>  
+> -	wdev->clk = devm_clk_get(dev, NULL);
+> +	wdev->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(wdev->clk)) {
+>  		dev_err(dev, "can't get Watchdog clock\n");
+>  		return PTR_ERR(wdev->clk);
+> @@ -297,14 +292,6 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+>  				      dev_name(dev), wdog))
+>  			wdog->info = &imx2_wdt_pretimeout_info;
+>  
+> -	ret = clk_prepare_enable(wdev->clk);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = devm_add_action_or_reset(dev, imx2_wdt_action, wdev->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	wdev->clk_is_on = true;
+>  
+>  	regmap_read(wdev->regmap, IMX2_WDT_WRSR, &val);
+> diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
+> index 922b60374295..61517abf2dba 100644
+> --- a/drivers/watchdog/imx7ulp_wdt.c
+> +++ b/drivers/watchdog/imx7ulp_wdt.c
+> @@ -200,11 +200,6 @@ static int imx7ulp_wdt_init(void __iomem *base, unsigned int timeout)
+>  	return ret;
+>  }
+>  
+> -static void imx7ulp_wdt_action(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int imx7ulp_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct imx7ulp_wdt_device *imx7ulp_wdt;
+> @@ -222,20 +217,12 @@ static int imx7ulp_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(imx7ulp_wdt->base))
+>  		return PTR_ERR(imx7ulp_wdt->base);
+>  
+> -	imx7ulp_wdt->clk = devm_clk_get(dev, NULL);
+> +	imx7ulp_wdt->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(imx7ulp_wdt->clk)) {
+>  		dev_err(dev, "Failed to get watchdog clock\n");
+>  		return PTR_ERR(imx7ulp_wdt->clk);
+>  	}
+>  
+> -	ret = clk_prepare_enable(imx7ulp_wdt->clk);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = devm_add_action_or_reset(dev, imx7ulp_wdt_action, imx7ulp_wdt->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	wdog = &imx7ulp_wdt->wdd;
+>  	wdog->info = &imx7ulp_wdt_info;
+>  	wdog->ops = &imx7ulp_wdt_ops;
+> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
+> index bb3d075c0633..c55656cfb403 100644
+> --- a/drivers/watchdog/loongson1_wdt.c
+> +++ b/drivers/watchdog/loongson1_wdt.c
+> @@ -79,11 +79,6 @@ static const struct watchdog_ops ls1x_wdt_ops = {
+>  	.set_timeout = ls1x_wdt_set_timeout,
+>  };
+>  
+> -static void ls1x_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int ls1x_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -100,20 +95,10 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(drvdata->base))
+>  		return PTR_ERR(drvdata->base);
+>  
+> -	drvdata->clk = devm_clk_get(dev, pdev->name);
+> +	drvdata->clk = devm_clk_get_enabled(dev, pdev->name);
+>  	if (IS_ERR(drvdata->clk))
+>  		return PTR_ERR(drvdata->clk);
+>  
+> -	err = clk_prepare_enable(drvdata->clk);
+> -	if (err) {
+> -		dev_err(dev, "clk enable failed\n");
+> -		return err;
+> -	}
+> -	err = devm_add_action_or_reset(dev, ls1x_clk_disable_unprepare,
+> -				       drvdata->clk);
+> -	if (err)
+> -		return err;
+> -
+>  	clk_rate = clk_get_rate(drvdata->clk);
+>  	if (!clk_rate)
+>  		return -EINVAL;
+> diff --git a/drivers/watchdog/lpc18xx_wdt.c b/drivers/watchdog/lpc18xx_wdt.c
+> index 60b6d74f267d..1b9b5f21a0df 100644
+> --- a/drivers/watchdog/lpc18xx_wdt.c
+> +++ b/drivers/watchdog/lpc18xx_wdt.c
+> @@ -197,16 +197,10 @@ static const struct watchdog_ops lpc18xx_wdt_ops = {
+>  	.restart        = lpc18xx_wdt_restart,
+>  };
+>  
+> -static void lpc18xx_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int lpc18xx_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct lpc18xx_wdt_dev *lpc18xx_wdt;
+>  	struct device *dev = &pdev->dev;
+> -	int ret;
+>  
+>  	lpc18xx_wdt = devm_kzalloc(dev, sizeof(*lpc18xx_wdt), GFP_KERNEL);
+>  	if (!lpc18xx_wdt)
+> @@ -216,38 +210,18 @@ static int lpc18xx_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(lpc18xx_wdt->base))
+>  		return PTR_ERR(lpc18xx_wdt->base);
+>  
+> -	lpc18xx_wdt->reg_clk = devm_clk_get(dev, "reg");
+> +	lpc18xx_wdt->reg_clk = devm_clk_get_enabled(dev, "reg");
+>  	if (IS_ERR(lpc18xx_wdt->reg_clk)) {
+>  		dev_err(dev, "failed to get the reg clock\n");
+>  		return PTR_ERR(lpc18xx_wdt->reg_clk);
+>  	}
+>  
+> -	lpc18xx_wdt->wdt_clk = devm_clk_get(dev, "wdtclk");
+> +	lpc18xx_wdt->wdt_clk = devm_clk_get_enabled(dev, "wdtclk");
+>  	if (IS_ERR(lpc18xx_wdt->wdt_clk)) {
+>  		dev_err(dev, "failed to get the wdt clock\n");
+>  		return PTR_ERR(lpc18xx_wdt->wdt_clk);
+>  	}
+>  
+> -	ret = clk_prepare_enable(lpc18xx_wdt->reg_clk);
+> -	if (ret) {
+> -		dev_err(dev, "could not prepare or enable sys clock\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, lpc18xx_clk_disable_unprepare,
+> -				       lpc18xx_wdt->reg_clk);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = clk_prepare_enable(lpc18xx_wdt->wdt_clk);
+> -	if (ret) {
+> -		dev_err(dev, "could not prepare or enable wdt clock\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, lpc18xx_clk_disable_unprepare,
+> -				       lpc18xx_wdt->wdt_clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	/* We use the clock rate to calculate timeouts */
+>  	lpc18xx_wdt->clk_rate = clk_get_rate(lpc18xx_wdt->wdt_clk);
+>  	if (lpc18xx_wdt->clk_rate == 0) {
+> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
+> index d3c9e2f6e63b..cf65d096f3c0 100644
+> --- a/drivers/watchdog/meson_gxbb_wdt.c
+> +++ b/drivers/watchdog/meson_gxbb_wdt.c
+> @@ -146,16 +146,10 @@ static const struct of_device_id meson_gxbb_wdt_dt_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, meson_gxbb_wdt_dt_ids);
+>  
+> -static void meson_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct meson_gxbb_wdt *data;
+> -	int ret;
+>  
+>  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+> @@ -165,18 +159,10 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(data->reg_base))
+>  		return PTR_ERR(data->reg_base);
+>  
+> -	data->clk = devm_clk_get(dev, NULL);
+> +	data->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(data->clk))
+>  		return PTR_ERR(data->clk);
+>  
+> -	ret = clk_prepare_enable(data->clk);
+> -	if (ret)
+> -		return ret;
+> -	ret = devm_add_action_or_reset(dev, meson_clk_disable_unprepare,
+> -				       data->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	platform_set_drvdata(pdev, data);
+>  
+>  	data->wdt_dev.parent = dev;
+> diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+> index 3318544366b8..2a079ca04aa3 100644
+> --- a/drivers/watchdog/of_xilinx_wdt.c
+> +++ b/drivers/watchdog/of_xilinx_wdt.c
+> @@ -154,11 +154,6 @@ static u32 xwdt_selftest(struct xwdt_device *xdev)
+>  		return XWT_TIMER_FAILED;
+>  }
+>  
+> -static void xwdt_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int xwdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -193,7 +188,7 @@ static int xwdt_probe(struct platform_device *pdev)
+>  
+>  	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
+>  
+> -	xdev->clk = devm_clk_get(dev, NULL);
+> +	xdev->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(xdev->clk)) {
+>  		if (PTR_ERR(xdev->clk) != -ENOENT)
+>  			return PTR_ERR(xdev->clk);
+> @@ -211,15 +206,6 @@ static int xwdt_probe(struct platform_device *pdev)
+>  				 "The watchdog clock freq cannot be obtained\n");
+>  	} else {
+>  		pfreq = clk_get_rate(xdev->clk);
+> -		rc = clk_prepare_enable(xdev->clk);
+> -		if (rc) {
+> -			dev_err(dev, "unable to enable clock\n");
+> -			return rc;
+> -		}
+> -		rc = devm_add_action_or_reset(dev, xwdt_clk_disable_unprepare,
+> -					      xdev->clk);
+> -		if (rc)
+> -			return rc;
+>  	}
+>  
+>  	/*
+> diff --git a/drivers/watchdog/pic32-dmt.c b/drivers/watchdog/pic32-dmt.c
+> index f43062b3c4c8..bc4ccddc75a3 100644
+> --- a/drivers/watchdog/pic32-dmt.c
+> +++ b/drivers/watchdog/pic32-dmt.c
+> @@ -164,11 +164,6 @@ static struct watchdog_device pic32_dmt_wdd = {
+>  	.ops		= &pic32_dmt_fops,
+>  };
+>  
+> -static void pic32_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int pic32_dmt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -184,20 +179,12 @@ static int pic32_dmt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(dmt->regs))
+>  		return PTR_ERR(dmt->regs);
+>  
+> -	dmt->clk = devm_clk_get(dev, NULL);
+> +	dmt->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(dmt->clk)) {
+>  		dev_err(dev, "clk not found\n");
+>  		return PTR_ERR(dmt->clk);
+>  	}
+>  
+> -	ret = clk_prepare_enable(dmt->clk);
+> -	if (ret)
+> -		return ret;
+> -	ret = devm_add_action_or_reset(dev, pic32_clk_disable_unprepare,
+> -				       dmt->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	wdd->timeout = pic32_dmt_get_timeout_secs(dmt);
+>  	if (!wdd->timeout) {
+>  		dev_err(dev, "failed to read watchdog register timeout\n");
+> diff --git a/drivers/watchdog/pic32-wdt.c b/drivers/watchdog/pic32-wdt.c
+> index 41715d68d9e9..6d1a00222991 100644
+> --- a/drivers/watchdog/pic32-wdt.c
+> +++ b/drivers/watchdog/pic32-wdt.c
+> @@ -162,11 +162,6 @@ static const struct of_device_id pic32_wdt_dt_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, pic32_wdt_dt_ids);
+>  
+> -static void pic32_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int pic32_wdt_drv_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -186,22 +181,12 @@ static int pic32_wdt_drv_probe(struct platform_device *pdev)
+>  	if (!wdt->rst_base)
+>  		return -ENOMEM;
+>  
+> -	wdt->clk = devm_clk_get(dev, NULL);
+> +	wdt->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(wdt->clk)) {
+>  		dev_err(dev, "clk not found\n");
+>  		return PTR_ERR(wdt->clk);
+>  	}
+>  
+> -	ret = clk_prepare_enable(wdt->clk);
+> -	if (ret) {
+> -		dev_err(dev, "clk enable failed\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, pic32_clk_disable_unprepare,
+> -				       wdt->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	if (pic32_wdt_is_win_enabled(wdt)) {
+>  		dev_err(dev, "windowed-clear mode is not supported.\n");
+>  		return -ENODEV;
+> diff --git a/drivers/watchdog/pnx4008_wdt.c b/drivers/watchdog/pnx4008_wdt.c
+> index e0ea133c1690..87a44a5675a1 100644
+> --- a/drivers/watchdog/pnx4008_wdt.c
+> +++ b/drivers/watchdog/pnx4008_wdt.c
+> @@ -179,11 +179,6 @@ static struct watchdog_device pnx4008_wdd = {
+>  	.max_timeout = MAX_HEARTBEAT,
+>  };
+>  
+> -static void pnx4008_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int pnx4008_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -195,18 +190,10 @@ static int pnx4008_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(wdt_base))
+>  		return PTR_ERR(wdt_base);
+>  
+> -	wdt_clk = devm_clk_get(dev, NULL);
+> +	wdt_clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(wdt_clk))
+>  		return PTR_ERR(wdt_clk);
+>  
+> -	ret = clk_prepare_enable(wdt_clk);
+> -	if (ret)
+> -		return ret;
+> -	ret = devm_add_action_or_reset(dev, pnx4008_clk_disable_unprepare,
+> -				       wdt_clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	pnx4008_wdd.bootstatus = (readl(WDTIM_RES(wdt_base)) & WDOG_RESET) ?
+>  			WDIOF_CARDRESET : 0;
+>  	pnx4008_wdd.parent = dev;
+> diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+> index 0d2209c5eaca..d776474dcdf3 100644
+> --- a/drivers/watchdog/qcom-wdt.c
+> +++ b/drivers/watchdog/qcom-wdt.c
+> @@ -175,11 +175,6 @@ static const struct watchdog_info qcom_wdt_pt_info = {
+>  	.identity	= KBUILD_MODNAME,
+>  };
+>  
+> -static void qcom_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static const struct qcom_wdt_match_data match_data_apcs_tmr = {
+>  	.offset = reg_offset_data_apcs_tmr,
+>  	.pretimeout = false,
+> @@ -226,21 +221,12 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(wdt->base))
+>  		return PTR_ERR(wdt->base);
+>  
+> -	clk = devm_clk_get(dev, NULL);
+> +	clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(clk)) {
+>  		dev_err(dev, "failed to get input clock\n");
+>  		return PTR_ERR(clk);
+>  	}
+>  
+> -	ret = clk_prepare_enable(clk);
+> -	if (ret) {
+> -		dev_err(dev, "failed to setup clock\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, qcom_clk_disable_unprepare, clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	/*
+>  	 * We use the clock rate to calculate the max timeout, so ensure it's
+>  	 * not zero to avoid a divide-by-zero exception.
+> diff --git a/drivers/watchdog/rtd119x_wdt.c b/drivers/watchdog/rtd119x_wdt.c
+> index 834b94ff3f90..95c8d7abce42 100644
+> --- a/drivers/watchdog/rtd119x_wdt.c
+> +++ b/drivers/watchdog/rtd119x_wdt.c
+> @@ -94,16 +94,10 @@ static const struct of_device_id rtd119x_wdt_dt_ids[] = {
+>  	 { }
+>  };
+>  
+> -static void rtd119x_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int rtd119x_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct rtd119x_watchdog_device *data;
+> -	int ret;
+>  
+>  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+> @@ -113,18 +107,10 @@ static int rtd119x_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(data->base))
+>  		return PTR_ERR(data->base);
+>  
+> -	data->clk = devm_clk_get(dev, NULL);
+> +	data->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(data->clk))
+>  		return PTR_ERR(data->clk);
+>  
+> -	ret = clk_prepare_enable(data->clk);
+> -	if (ret)
+> -		return ret;
+> -	ret = devm_add_action_or_reset(dev, rtd119x_clk_disable_unprepare,
+> -				       data->clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	data->wdt_dev.info = &rtd119x_wdt_info;
+>  	data->wdt_dev.ops = &rtd119x_wdt_ops;
+>  	data->wdt_dev.timeout = 120;
+> diff --git a/drivers/watchdog/st_lpc_wdt.c b/drivers/watchdog/st_lpc_wdt.c
+> index 14ab6559c748..d79823e1b07e 100644
+> --- a/drivers/watchdog/st_lpc_wdt.c
+> +++ b/drivers/watchdog/st_lpc_wdt.c
+> @@ -142,11 +142,6 @@ static struct watchdog_device st_wdog_dev = {
+>  	.ops		= &st_wdog_ops,
+>  };
+>  
+> -static void st_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int st_wdog_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -190,7 +185,7 @@ static int st_wdog_probe(struct platform_device *pdev)
+>  		return PTR_ERR(regmap);
+>  	}
+>  
+> -	clk = devm_clk_get(dev, NULL);
+> +	clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(clk)) {
+>  		dev_err(dev, "Unable to request clock\n");
+>  		return PTR_ERR(clk);
+> @@ -210,15 +205,6 @@ static int st_wdog_probe(struct platform_device *pdev)
+>  	st_wdog_dev.max_timeout = 0xFFFFFFFF / st_wdog->clkrate;
+>  	st_wdog_dev.parent = dev;
+>  
+> -	ret = clk_prepare_enable(clk);
+> -	if (ret) {
+> -		dev_err(dev, "Unable to enable clock\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, st_clk_disable_unprepare, clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	watchdog_set_drvdata(&st_wdog_dev, st_wdog);
+>  	watchdog_set_nowayout(&st_wdog_dev, WATCHDOG_NOWAYOUT);
+>  
+> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
+> index 570a71509d2a..01849720310d 100644
+> --- a/drivers/watchdog/stm32_iwdg.c
+> +++ b/drivers/watchdog/stm32_iwdg.c
+> @@ -150,50 +150,23 @@ static int stm32_iwdg_set_timeout(struct watchdog_device *wdd,
+>  	return 0;
+>  }
+>  
+> -static void stm32_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int stm32_iwdg_clk_init(struct platform_device *pdev,
+>  			       struct stm32_iwdg *wdt)
+>  {
+>  	struct device *dev = &pdev->dev;
+> -	u32 ret;
+>  
+> -	wdt->clk_lsi = devm_clk_get(dev, "lsi");
+> +	wdt->clk_lsi = devm_clk_get_enabled(dev, "lsi");
+>  	if (IS_ERR(wdt->clk_lsi))
+>  		return dev_err_probe(dev, PTR_ERR(wdt->clk_lsi), "Unable to get lsi clock\n");
+>  
+>  	/* optional peripheral clock */
+>  	if (wdt->data->has_pclk) {
+> -		wdt->clk_pclk = devm_clk_get(dev, "pclk");
+> +		wdt->clk_pclk = devm_clk_get_enabled(dev, "pclk");
+>  		if (IS_ERR(wdt->clk_pclk))
+>  			return dev_err_probe(dev, PTR_ERR(wdt->clk_pclk),
+>  					     "Unable to get pclk clock\n");
+> -
+> -		ret = clk_prepare_enable(wdt->clk_pclk);
+> -		if (ret) {
+> -			dev_err(dev, "Unable to prepare pclk clock\n");
+> -			return ret;
+> -		}
+> -		ret = devm_add_action_or_reset(dev,
+> -					       stm32_clk_disable_unprepare,
+> -					       wdt->clk_pclk);
+> -		if (ret)
+> -			return ret;
+>  	}
+>  
+> -	ret = clk_prepare_enable(wdt->clk_lsi);
+> -	if (ret) {
+> -		dev_err(dev, "Unable to prepare lsi clock\n");
+> -		return ret;
+> -	}
+> -	ret = devm_add_action_or_reset(dev, stm32_clk_disable_unprepare,
+> -				       wdt->clk_lsi);
+> -	if (ret)
+> -		return ret;
+> -
+>  	wdt->rate = clk_get_rate(wdt->clk_lsi);
+>  
+>  	return 0;
+> diff --git a/drivers/watchdog/visconti_wdt.c b/drivers/watchdog/visconti_wdt.c
+> index 83ef55e66ca8..1127e42734f4 100644
+> --- a/drivers/watchdog/visconti_wdt.c
+> +++ b/drivers/watchdog/visconti_wdt.c
+> @@ -112,11 +112,6 @@ static const struct watchdog_ops visconti_wdt_ops = {
+>  	.set_timeout	= visconti_wdt_set_timeout,
+>  };
+>  
+> -static void visconti_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static int visconti_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct watchdog_device *wdev;
+> @@ -134,20 +129,9 @@ static int visconti_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(priv->base))
+>  		return PTR_ERR(priv->base);
+>  
+> -	clk = devm_clk_get(dev, NULL);
+> +	clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(clk))
+>  		return dev_err_probe(dev, PTR_ERR(clk), "Could not get clock\n");
+> -
+> -	ret = clk_prepare_enable(clk);
+> -	if (ret) {
+> -		dev_err(dev, "Could not enable clock\n");
+> -		return ret;
+> -	}
+> -
+> -	ret = devm_add_action_or_reset(dev, visconti_clk_disable_unprepare, clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	clk_freq = clk_get_rate(clk);
+>  	if (!clk_freq)
+>  		return -EINVAL;
+> -- 
+> 2.35.1
+> 
