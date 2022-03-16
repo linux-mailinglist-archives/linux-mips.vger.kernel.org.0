@@ -2,128 +2,195 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67A54DAB64
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Mar 2022 08:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0351C4DAC7B
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Mar 2022 09:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344383AbiCPHJE (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 16 Mar 2022 03:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S1354331AbiCPIdr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 16 Mar 2022 04:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354285AbiCPHHe (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Mar 2022 03:07:34 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0D127CD4;
-        Wed, 16 Mar 2022 00:05:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 05368CE1D38;
-        Wed, 16 Mar 2022 07:05:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03B3C340F2;
-        Wed, 16 Mar 2022 07:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647414325;
-        bh=qyoPYJlSA6NEig6jnwlt/QYfSWiYQ9maXb6WEkmPDVA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JIDcpiyYJGUG0u1uBju5PqK5t9M2mPYNatynjN0Mv5NqHVzP2HQEfvwkvepJ1eMla
-         lipxIQuXxrUrwGQy+P12VKgy/HG8qmRmlXKH/+sdG5/TnC4qKfeyeIxsGR+5xgliN3
-         XJEOAcpVeh9dPEEXypx+oaEiFkbKOvlbAsW+aff2lx976+56uP4Qfqs2fKMTCJrcNK
-         GK7/mXelJLLIDZNpWb3Bx4q5VlhLdMLQurplQ0PA3sk2WAdqUdMULGsg5qucMreHuj
-         3XuyRm7ks8Zc0ee6nsctIa1LxX4BEA/wJ3945l11HpcWRMoPwwQn4QztJS7nyI/XpV
-         8xhP4p6q/rBXg==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup@brainfault.org, gregkh@linuxfoundation.org, hch@lst.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V8 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-Date:   Wed, 16 Mar 2022 15:03:17 +0800
-Message-Id: <20220316070317.1864279-21-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220316070317.1864279-1-guoren@kernel.org>
-References: <20220316070317.1864279-1-guoren@kernel.org>
+        with ESMTP id S1350092AbiCPIdq (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 16 Mar 2022 04:33:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DABE063BCF
+        for <linux-mips@vger.kernel.org>; Wed, 16 Mar 2022 01:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647419551;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jjZm70XMrj/Rp5s34/zzGgqrERGbjp7SPfa5KT7Pao4=;
+        b=bCKQxZ0wfO30YzWp9lUmxjYd2fVkbrB+zw4Viveux91MjauvQAqtI/wHwR0sDXMdNxG7Y5
+        wC6d5qBYzFjMjgXhML7xt7xRVOve5iAnwlcl0sFtGNhsOuYAm3yN/ignwVEmR1q9loC6/C
+        tD4h9HxWExZ33WuXGwAQ3KXYGmaqG0M=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-MsVrN4IHOm-GEDaND6I-0A-1; Wed, 16 Mar 2022 04:32:27 -0400
+X-MC-Unique: MsVrN4IHOm-GEDaND6I-0A-1
+Received: by mail-pl1-f197.google.com with SMTP id q8-20020a170902f78800b00151cc484688so947817pln.20
+        for <linux-mips@vger.kernel.org>; Wed, 16 Mar 2022 01:32:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jjZm70XMrj/Rp5s34/zzGgqrERGbjp7SPfa5KT7Pao4=;
+        b=Ylj8Q3KKIz8aSvv9keNf7EdDb79dP4waiPzvpn8Coba4uhkY36EN8zDMVsCAh2s/Xv
+         fQU0laFdCLvUeFAhgER5owJeTymPOMHbWQkN89R43xPiUpfzxhZnyG5lOTWLEJJ5EUIo
+         thChAusd1CueVz2I9eInOH7haY5/HseOPaHIYx1m7CgFYKFvJP+8RbxMfeevPuz9bNSW
+         J+xsQAsKJAKl5GH1tECiw3FXePLwJ0ENYlMdTQ+XXAUFdNpUCcBB+jPVqpJ+XALNh2A5
+         lJs8Tq9DE7AnTTNohO7D0sXLI0pLjtZyOHWfsxu2d50hah5dqe0jvoApB1SqZFR5zLcg
+         Cbtg==
+X-Gm-Message-State: AOAM531Ynxl8npb55BtbEOXtQYwu7HpGJKs2iEGuo0BZd7Sld0TUltGs
+        vQO8cA99SpCyytsFqD1fPpdFaueua8SQv9bcMjLHTP91Zi+7OcnNeXm4vzLEbURYf/6/9vslPwE
+        R7aiDvkhWAVjUfjxbpErYug==
+X-Received: by 2002:a63:4e14:0:b0:374:4a37:4966 with SMTP id c20-20020a634e14000000b003744a374966mr26992343pgb.118.1647419542791;
+        Wed, 16 Mar 2022 01:32:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxNPcz5i9opLI37VCXelA4fPh3aZshlOtJoDylYilxYNapzjAAQzajYYuBDJJrlk3n3Pyh3Pw==
+X-Received: by 2002:a63:4e14:0:b0:374:4a37:4966 with SMTP id c20-20020a634e14000000b003744a374966mr26992316pgb.118.1647419542495;
+        Wed, 16 Mar 2022 01:32:22 -0700 (PDT)
+Received: from xz-m1.local ([191.101.132.128])
+        by smtp.gmail.com with ESMTPSA id a5-20020a621a05000000b004f79f8f795fsm2072222pfa.0.2022.03.16.01.32.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 01:32:22 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 16:32:13 +0800
+From:   Peter Xu <peterx@redhat.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>, maciej.szmigiero@oracle.com,
+        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
+        <kvmarm@lists.cs.columbia.edu>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <linux-mips@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+Subject: Re: [PATCH v2 16/26] KVM: x86/mmu: Cache the access bits of shadowed
+ translations
+Message-ID: <YjGgjTnP/9sG8L+2@xz-m1.local>
+References: <20220311002528.2230172-1-dmatlack@google.com>
+ <20220311002528.2230172-17-dmatlack@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220311002528.2230172-17-dmatlack@google.com>
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Fri, Mar 11, 2022 at 12:25:18AM +0000, David Matlack wrote:
+> In order to split a huge page we need to know what access bits to assign
+> to the role of the new child page table. This can't be easily derived
+> from the huge page SPTE itself since KVM applies its own access policies
+> on top, such as for HugePage NX.
+> 
+> We could walk the guest page tables to determine the correct access
+> bits, but that is difficult to plumb outside of a vCPU fault context.
+> Instead, we can store the original access bits for each leaf SPTE
+> alongside the GFN in the gfns array. The access bits only take up 3
+> bits, which leaves 61 bits left over for gfns, which is more than
+> enough. So this change does not require any additional memory.
 
-Adds initial skeletal COMPAT Kbuild (Running 32bit U-mode on
-64bit S-mode) support.
- - Setup kconfig & dummy functions for compiling.
- - Implement compat_start_thread by the way.
+I have a pure question on why eager page split needs to worry on hugepage
+nx..
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
----
- arch/riscv/Kconfig | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+IIUC that was about forbidden huge page being mapped as executable.  So
+afaiu the only missing bit that could happen if we copy over the huge page
+ptes is the executable bit.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5adcbd9b5e88..6f11df8c189f 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -73,6 +73,7 @@ config RISCV
- 	select HAVE_ARCH_KGDB if !XIP_KERNEL
- 	select HAVE_ARCH_KGDB_QXFER_PKT
- 	select HAVE_ARCH_MMAP_RND_BITS if MMU
-+	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
-@@ -123,12 +124,18 @@ config ARCH_MMAP_RND_BITS_MIN
- 	default 18 if 64BIT
- 	default 8
- 
-+config ARCH_MMAP_RND_COMPAT_BITS_MIN
-+	default 8
-+
- # max bits determined by the following formula:
- #  VA_BITS - PAGE_SHIFT - 3
- config ARCH_MMAP_RND_BITS_MAX
- 	default 24 if 64BIT # SV39 based
- 	default 17
- 
-+config ARCH_MMAP_RND_COMPAT_BITS_MAX
-+	default 17
-+
- # set if we run in machine mode, cleared if we run in supervisor mode
- config RISCV_M_MODE
- 	bool
-@@ -406,6 +413,18 @@ config CRASH_DUMP
- 
- 	  For more details see Documentation/admin-guide/kdump/kdump.rst
- 
-+config COMPAT
-+	bool "Kernel support for 32-bit U-mode"
-+	default 64BIT
-+	depends on 64BIT && MMU
-+	help
-+	  This option enables support for a 32-bit U-mode running under a 64-bit
-+	  kernel at S-mode. riscv32-specific components such as system calls,
-+	  the user helper functions (vdso), signal rt_frame functions and the
-+	  ptrace interface are handled appropriately by the kernel.
-+
-+	  If you want to execute 32-bit userspace applications, say Y.
-+
- endmenu
- 
- menu "Boot options"
+But then?  I think we could get a page fault on fault->exec==true on the
+split small page (because when we copy over it's cleared, even though the
+page can actually be executable), but it should be well resolved right
+after that small page fault.
+
+The thing is IIUC this is a very rare case, IOW, it should mostly not
+happen in 99% of the use case?  And there's a slight penalty when it
+happens, but only perf-wise.
+
+As I'm not really fluent with the code base, perhaps I missed something?
+
+> 
+> In order to keep the access bit cache in sync with the guest, we have to
+> extend FNAME(sync_page) to also update the access bits.
+
+Besides sync_page(), I also see that in mmu_set_spte() there's a path that
+we will skip the rmap_add() if existed:
+
+	if (!was_rmapped) {
+		WARN_ON_ONCE(ret == RET_PF_SPURIOUS);
+		kvm_update_page_stats(vcpu->kvm, level, 1);
+		rmap_add(vcpu, slot, sptep, gfn);
+	}
+
+I didn't check, but it's not obvious whether the sync_page() change here
+will cover all of the cases, hence raise this up too.
+
+> 
+> Now that the gfns array caches more information than just GFNs, rename
+> it to shadowed_translation.
+> 
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  2 +-
+>  arch/x86/kvm/mmu/mmu.c          | 32 +++++++++++++++++++-------------
+>  arch/x86/kvm/mmu/mmu_internal.h | 15 +++++++++++++--
+>  arch/x86/kvm/mmu/paging_tmpl.h  |  7 +++++--
+>  4 files changed, 38 insertions(+), 18 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index f72e80178ffc..0f5a36772bdc 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -694,7 +694,7 @@ struct kvm_vcpu_arch {
+>  
+>  	struct kvm_mmu_memory_cache mmu_pte_list_desc_cache;
+>  	struct kvm_mmu_memory_cache mmu_shadow_page_cache;
+> -	struct kvm_mmu_memory_cache mmu_gfn_array_cache;
+> +	struct kvm_mmu_memory_cache mmu_shadowed_translation_cache;
+
+I'd called it with a shorter name.. :) maybe mmu_shadowed_info_cache?  No
+strong opinion.
+
+>  	struct kvm_mmu_memory_cache mmu_page_header_cache;
+>  
+>  	/*
+
+[...]
+
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index b6e22ba9c654..c5b8ee625df7 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -32,6 +32,11 @@ extern bool dbg;
+>  
+>  typedef u64 __rcu *tdp_ptep_t;
+>  
+> +struct shadowed_translation_entry {
+> +	u64 access:3;
+> +	u64 gfn:56;
+
+Why 56?
+
+> +};
+
+Thanks,
+
 -- 
-2.25.1
+Peter Xu
 
