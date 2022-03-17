@@ -2,40 +2,43 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4762C4DC94B
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Mar 2022 15:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A45534DCF24
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Mar 2022 21:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234483AbiCQOyk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Mar 2022 10:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S229523AbiCQULu (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Mar 2022 16:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbiCQOyj (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Mar 2022 10:54:39 -0400
+        with ESMTP id S229522AbiCQULt (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Mar 2022 16:11:49 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A970D4458;
-        Thu, 17 Mar 2022 07:53:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA8A29EE3E;
+        Thu, 17 Mar 2022 13:10:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1647528799; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1647547824; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dYfYDYIQFfoWNGhKwXIbrjye+EKia8c1ukrhWtjT/ek=;
-        b=OatruVl52eASm2VlXjarCVS80LTDmPf3nNaadkkKlsDgKdUvUvkPUaDPVUWpetT0PWqLjZ
-        mo7CyXaZH0jA01RiG3bbpDpbCocea4BEjw43XO4LirZ4rN89TSUQpROLGWDReVh3J35JP1
-        S8Va2xeffO12lgVNwh3PFuwz7EFG5RY=
-Date:   Thu, 17 Mar 2022 14:53:10 +0000
+        bh=TBhB5mnj+yU5UQCD6yhog64770XneXJJnfqfginvPmo=;
+        b=eIHZgUYBBumSPI4xw5meu79N9cSbfki0qgEzFAf/RVYUvpkeFP4EkLreDOAlI+5YSidDqX
+        c6BqiOViZLrayAJTMhSeN9IYJXETgI0f5ZqnktWoBauBv7mzqNwgrAi3uS8UFmwXzi/aWc
+        TMl+T5IsLybiEqIOSn6YeyoWf2HzXAo=
+Date:   Thu, 17 Mar 2022 20:10:14 +0000
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] MIPS: ingenic: correct unit node address
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <MC9W8R.BUBMZ3NYL78N2@crapouillou.net>
-In-Reply-To: <20220317115259.448868-1-krzysztof.kozlowski@canonical.com>
-References: <20220317115259.448868-1-krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v4 4/4] dt-bindings: display/panel: Add Leadtek
+ ltk035c5444t
+To:     Christophe Branchereau <cbranchereau@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+Message-Id: <21OW8R.3JWZ0IT11MIP2@crapouillou.net>
+In-Reply-To: <20220311170240.173846-5-cbranchereau@gmail.com>
+References: <20220311170240.173846-1-cbranchereau@gmail.com>
+        <20220311170240.173846-5-cbranchereau@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -50,41 +53,103 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 Hi,
 
-Le jeu., mars 17 2022 at 12:52:59 +0100, Krzysztof Kozlowski=20
-<krzysztof.kozlowski@canonical.com> a =E9crit :
-> Unit node addresses should not have leading 0x:
+Le ven., mars 11 2022 at 18:02:40 +0100, Christophe Branchereau=20
+<cbranchereau@gmail.com> a =E9crit :
+> Add binding for the leadtek ltk035c5444t, which is a 640x480
+> mipi-dbi over spi / 24-bit RGB panel based on the newvision
+> NV03052C chipset.
 >=20
->   Warning (unit_address_format):=20
-> /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should not have=20
-> leading "0x"
+> It is found in the Anbernic RG350M mips handheld.
 >=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Signed-off-by: Christophe Branchereau <cbranchereau@gmail.com>
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Applied to drm-misc-next.
 
-Cheers,
+Thanks,
 -Paul
 
 > ---
->  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../display/panel/leadtek,ltk035c5444t.yaml   | 59=20
+> +++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644=20
+> Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
 >=20
-> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi=20
-> b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-> index 3f9ea47a10cd..b998301f179c 100644
-> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
-> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
-> @@ -510,7 +510,7 @@ efuse: efuse@d0 {
->  			#address-cells =3D <1>;
->  			#size-cells =3D <1>;
->=20
-> -			eth0_addr: eth-mac-addr@0x22 {
-> +			eth0_addr: eth-mac-addr@22 {
->  				reg =3D <0x22 0x6>;
->  			};
->  		};
+> diff --git=20
+> a/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.ya=
+ml=20
+> b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.ya=
+ml
+> new file mode 100644
+> index 000000000000..817a9bed7d5a
+> --- /dev/null
+> +++=20
+> b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.ya=
+ml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id:=20
+> http://devicetree.org/schemas/display/panel/leadtek,ltk035c5444t.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Leadtek ltk035c5444t 3.5" (640x480 pixels) 24-bit IPS LCD=20
+> panel
+> +
+> +maintainers:
+> +  - Paul Cercueil <paul@crapouillou.net>
+> +  - Christophe Branchereau <cbranchereau@gmail.com>
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: leadtek,ltk035c5444t
+> +
+> +  backlight: true
+> +  port: true
+> +  power-supply: true
+> +  reg: true
+> +  reset-gpios: true
+> +
+> +required:
+> +  - compatible
+> +  - power-supply
+> +  - reset-gpios
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    spi {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +        panel@0 {
+> +            compatible =3D "leadtek,ltk035c5444t";
+> +            reg =3D <0>;
+> +
+> +            spi-3wire;
+> +            spi-max-frequency =3D <3125000>;
+> +
+> +            reset-gpios =3D <&gpe 2 GPIO_ACTIVE_LOW>;
+> +
+> +            backlight =3D <&backlight>;
+> +            power-supply =3D <&vcc>;
+> +
+> +            port {
+> +                panel_input: endpoint {
+> +                    remote-endpoint =3D <&panel_output>;
+> +                };
+> +            };
+> +        };
+> +    };
 > --
-> 2.32.0
+> 2.35.1
 >=20
 
 
