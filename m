@@ -2,125 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64AA4DC781
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Mar 2022 14:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4762C4DC94B
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Mar 2022 15:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234527AbiCQN0G (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 17 Mar 2022 09:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
+        id S234483AbiCQOyk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 17 Mar 2022 10:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234529AbiCQN0G (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Mar 2022 09:26:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B54716F6FC;
-        Thu, 17 Mar 2022 06:24:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C303B1515;
-        Thu, 17 Mar 2022 06:24:48 -0700 (PDT)
-Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD8113F766;
-        Thu, 17 Mar 2022 06:24:42 -0700 (PDT)
-Message-ID: <0d9d605e-4f92-3947-f99d-91faf9dbc2d7@arm.com>
-Date:   Thu, 17 Mar 2022 13:24:41 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/6] Partially revert "KVM: Pass kvm_init()'s opaque
- param to additional arch funcs"
-Content-Language: en-US
-To:     Chao Gao <chao.gao@intel.com>, seanjc@google.com, maz@kernel.org,
-        kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
-        tglx@linutronix.de
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        with ESMTP id S233293AbiCQOyj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 17 Mar 2022 10:54:39 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A970D4458;
+        Thu, 17 Mar 2022 07:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1647528799; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dYfYDYIQFfoWNGhKwXIbrjye+EKia8c1ukrhWtjT/ek=;
+        b=OatruVl52eASm2VlXjarCVS80LTDmPf3nNaadkkKlsDgKdUvUvkPUaDPVUWpetT0PWqLjZ
+        mo7CyXaZH0jA01RiG3bbpDpbCocea4BEjw43XO4LirZ4rN89TSUQpROLGWDReVh3J35JP1
+        S8Va2xeffO12lgVNwh3PFuwz7EFG5RY=
+Date:   Thu, 17 Mar 2022 14:53:10 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] MIPS: ingenic: correct unit node address
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        Bharata B Rao <bharata@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
-References: <20220216031528.92558-1-chao.gao@intel.com>
- <20220216031528.92558-3-chao.gao@intel.com>
-From:   Suzuki Kuruppassery Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220216031528.92558-3-chao.gao@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <MC9W8R.BUBMZ3NYL78N2@crapouillou.net>
+In-Reply-To: <20220317115259.448868-1-krzysztof.kozlowski@canonical.com>
+References: <20220317115259.448868-1-krzysztof.kozlowski@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On 16/02/2022 03:15, Chao Gao wrote:
-> This partially reverts commit b99040853738 ("KVM: Pass kvm_init()'s opaque
-> param to additional arch funcs") remove opaque from
-> kvm_arch_check_processor_compat because no one uses this opaque now.
-> Address conflicts for ARM (due to file movement) and manually handle RISC-V
-> which comes after the commit.
-> 
-> And changes about kvm_arch_hardware_setup() in original commit are still
-> needed so they are not reverted.
-> 
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
+Hi,
+
+Le jeu., mars 17 2022 at 12:52:59 +0100, Krzysztof Kozlowski=20
+<krzysztof.kozlowski@canonical.com> a =E9crit :
+> Unit node addresses should not have leading 0x:
+>=20
+>   Warning (unit_address_format):=20
+> /nemc@13410000/efuse@d0/eth-mac-addr@0x22: unit name should not have=20
+> leading "0x"
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
 > ---
->   arch/arm64/kvm/arm.c       |  2 +-
->   arch/mips/kvm/mips.c       |  2 +-
->   arch/powerpc/kvm/powerpc.c |  2 +-
->   arch/riscv/kvm/main.c      |  2 +-
->   arch/s390/kvm/kvm-s390.c   |  2 +-
->   arch/x86/kvm/x86.c         |  2 +-
->   include/linux/kvm_host.h   |  2 +-
->   virt/kvm/kvm_main.c        | 16 +++-------------
->   8 files changed, 10 insertions(+), 20 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index ecc5958e27fe..0165cf3aac3a 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -73,7 +73,7 @@ int kvm_arch_hardware_setup(void *opaque)
->   	return 0;
->   }
->   
-> -int kvm_arch_check_processor_compat(void *opaque)
-> +int kvm_arch_check_processor_compat(void)
->   {
->   	return 0;
->   }
+>  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi=20
+> b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+> index 3f9ea47a10cd..b998301f179c 100644
+> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+> @@ -510,7 +510,7 @@ efuse: efuse@d0 {
+>  			#address-cells =3D <1>;
+>  			#size-cells =3D <1>;
+>=20
+> -			eth0_addr: eth-mac-addr@0x22 {
+> +			eth0_addr: eth-mac-addr@22 {
+>  				reg =3D <0x22 0x6>;
+>  			};
+>  		};
+> --
+> 2.32.0
+>=20
 
-For arm64 :
 
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
