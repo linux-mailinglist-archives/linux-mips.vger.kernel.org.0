@@ -2,50 +2,59 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36C44DDC5D
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Mar 2022 16:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F134DE260
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Mar 2022 21:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237722AbiCRPGp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 18 Mar 2022 11:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S240604AbiCRU1P (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 18 Mar 2022 16:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237713AbiCRPGo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Mar 2022 11:06:44 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E48DFE0E1;
-        Fri, 18 Mar 2022 08:05:23 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxqsywnzRicaQLAA--.9144S5;
-        Fri, 18 Mar 2022 23:05:22 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] MIPS: Use memblock_add_node() in early_parse_mem() under CONFIG_NUMA
-Date:   Fri, 18 Mar 2022 23:05:20 +0800
-Message-Id: <1647615920-23103-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1647615920-23103-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1647615920-23103-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9AxqsywnzRicaQLAA--.9144S5
-X-Coremail-Antispam: 1UD129KBjvdXoWrtFyDGw4DGw1kAw1kKw4kWFg_yoWDWFb_tw
-        1S9rWkW34ayF1Fvr47X3s3Wa4jy3yUXFyxuFn3ur42ywn8JFyUG393A3WDZrs8uw1DAr95
-        ZrsxCry5Can7WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbSxFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWwA2048vs2IY02
-        0Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E
-        0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67
-        AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48I
-        cxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_XrWl42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRKD73DUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        with ESMTP id S235038AbiCRU1O (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 18 Mar 2022 16:27:14 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A13E28AC5C;
+        Fri, 18 Mar 2022 13:25:54 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 4249822239;
+        Fri, 18 Mar 2022 21:25:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647635152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CjYRXqLQZoAevpessURi47tpYDs5HOjG6CCvnj8Lq/A=;
+        b=UGDvv1muvDVuBFBFxe+oKlWyNQbWK8xcz1dbOZi7U6a0lqz+5N7oR4WgV5CO9SK6QTXFee
+        jNnl7id9IaKKts1wqH7fBGYCytK4PBXmg3UKJ2bwRnRvyASU1lc6rQt86cC0FZPpbx0gux
+        eY6P8V1Q77ZTIPx136VDfFr3Z99pomo=
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v2 0/8] pinctrl: ocelot: convert to YAML format
+Date:   Fri, 18 Mar 2022 21:25:39 +0100
+Message-Id: <20220318202547.1650687-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,39 +63,49 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Use memblock_add_node to add new memblock region within a NUMA node
-in early_parse_mem() under CONFIG_NUMA, otherwise the mem parameter
-can not work well.
+Convert the pinctrl ocelot binding to the new YAML format. Pin
+configuration nodes should have a "-pins" postfix. But unfortunately,
+there are many device trees which don't follow this. First rename
+all these nodes and then convert the binding to the YAML format so
+that the validation will pass.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/mips/kernel/setup.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Because there were no maintainers before and there is none in
+MAINTAINERS I added Alexandre Belloni and Lars Povlsen, juding by
+the commits - to the binding as maintainers. Please tell me if you
+disagree.
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index c8c8f60..50cdc08 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -37,6 +37,7 @@
- #include <asm/cdmm.h>
- #include <asm/cpu.h>
- #include <asm/debug.h>
-+#include <asm/mmzone.h>
- #include <asm/sections.h>
- #include <asm/setup.h>
- #include <asm/smp-ops.h>
-@@ -378,7 +379,10 @@ static int __init early_parse_mem(char *p)
- 			memblock_end_of_DRAM() - memblock_start_of_DRAM());
- 	}
- 
--	memblock_add(start, size);
-+	if (IS_ENABLED(CONFIG_NUMA))
-+		memblock_add_node(start, size, pa_to_nid(start), MEMBLOCK_NONE);
-+	else
-+		memblock_add(start, size);
- 
- 	return 0;
- }
+changes since v1:
+ - drop "Device Tree Binding" from the title of the binding
+ - describe reg properties and provide minItems and set it differently
+   depending on the compatible string
+ - skip interrupt description
+ - move required section after patternProperties
+
+Michael Walle (8):
+  MIPS: mscc: jaguar2: fix pinctrl nodes
+  MIPS: mscc: ocelot: fix MIIM1 pinctrl node name
+  MIPS: mscc: ocelot: fix PHY interrupt pinctrl node name
+  MIPS: mscc: ocelot: fix load/save GPIO pinctrl name
+  MIPS: mscc: serval: fix pinctrl node names
+  arm64: dts: sparx5: fix pinctrl node names
+  ARM: dts: lan9662-pcb8291: fix pinctrl node name
+  dt-bindings: pinctrl: convert ocelot-pinctrl to YAML format
+
+ .../bindings/pinctrl/mscc,ocelot-pinctrl.txt  |  42 -------
+ .../bindings/pinctrl/mscc,ocelot-pinctrl.yaml | 108 ++++++++++++++++++
+ arch/arm/boot/dts/lan966x-pcb8291.dts         |   2 +-
+ .../dts/microchip/sparx5_pcb134_board.dtsi    |  26 ++---
+ .../dts/microchip/sparx5_pcb135_board.dtsi    |  10 +-
+ arch/mips/boot/dts/mscc/jaguar2_pcb110.dts    |  10 +-
+ arch/mips/boot/dts/mscc/jaguar2_pcb111.dts    |  10 +-
+ arch/mips/boot/dts/mscc/jaguar2_pcb118.dts    |   6 +-
+ arch/mips/boot/dts/mscc/ocelot.dtsi           |   4 +-
+ arch/mips/boot/dts/mscc/ocelot_pcb120.dts     |   6 +-
+ arch/mips/boot/dts/mscc/serval_common.dtsi    |  14 +--
+ 11 files changed, 152 insertions(+), 86 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.txt
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/mscc,ocelot-pinctrl.yaml
+
 -- 
-2.1.0
+2.30.2
 
