@@ -2,161 +2,109 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A7A4DE751
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Mar 2022 10:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8752A4DE7A1
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Mar 2022 12:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240995AbiCSJls (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 19 Mar 2022 05:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S242810AbiCSLjk (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 19 Mar 2022 07:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240092AbiCSJlo (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Mar 2022 05:41:44 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6F9DCAA2
-        for <linux-mips@vger.kernel.org>; Sat, 19 Mar 2022 02:40:23 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id o23so6768511pgk.13
-        for <linux-mips@vger.kernel.org>; Sat, 19 Mar 2022 02:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sSKAo9ygHvD7Q9p59ab1ni3UsATAZV/ndn3vT2xF4Zc=;
-        b=JSn7c5+dRg+JsMMk7J0cqVYOgDfAMhmoLjCF1EBJnPkiKt9nt09Sr+Yz0xCcfc9cC1
-         JowR7MUCZeA39ZVlyiW1/7XH4LLnDIDD0jd2TG3rdmTVly5OaR63PkMsmAKC2fjagAVD
-         HY79GHeqshAKLpiecszpobAYU9+cSoxOFsQcnECXHEiopObntYG4303kMktoWKImpH1q
-         w6MmTVdasbIzAAvWFk+Lh9JivAbNJ91J0OgC/ds8iAFtiXsotRDezlSY2dz0MrOF/Drj
-         AHD7Se/MFj5SY6pwThPqWpZG24T/28+EMOKMTuUTYbniRM+c0sHgDhoJL2GzTTSzx0F9
-         S7IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sSKAo9ygHvD7Q9p59ab1ni3UsATAZV/ndn3vT2xF4Zc=;
-        b=maFGua8XZfdouJFJK6aDW0EvbJghokc0xPsvNevpFxvqYoH7Ds3eYX9YKHfoR8KeP0
-         W7UwkfA1kd36iK6uD4P0b5NJ9UDB1uc6hBRRr5KMzsfp3DJIpw9mTRzwvjDY9X61lqn0
-         hlG6nlALzzpX+ZUDZB8l0SdrFXY0rqzdejM6+N1mAOifJbFvOPJggyKFqUAm4K526nr1
-         N7ZARP2ZsXGOZkuK2bxKQK+pX7L8+VezGhRkkTG2+4KBdliGLcvoUL2FnNseUeneYHjD
-         dDxeZg/vD1+l10wIvvLlUKpjrkT5GHko+MNAecWbWrklCs133i2VwCFcoqpqK/yjU4ee
-         9Bew==
-X-Gm-Message-State: AOAM530oqQ/luhcjCpvaQmiu/OUunbIUB0418NSBR7LiG45IRb5Z41va
-        E8wKssFCIGUqJQovkKNLHi/KxC5B8zw0Q4aAke8=
-X-Google-Smtp-Source: ABdhPJxPOpxxYGRHkGFKmSYLbLhE9412ELEmIVKyrohOBNiWV7K+g8uBiefMM5uS6chWaxsMxnv2HA==
-X-Received: by 2002:a05:6a00:c8a:b0:4f7:a02d:2706 with SMTP id a10-20020a056a000c8a00b004f7a02d2706mr14622777pfv.32.1647682823308;
-        Sat, 19 Mar 2022 02:40:23 -0700 (PDT)
-Received: from localhost.localdomain ([112.20.108.139])
-        by smtp.gmail.com with ESMTPSA id z12-20020a17090a398c00b001c5f926f293sm10491973pjb.3.2022.03.19.02.40.19
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 19 Mar 2022 02:40:22 -0700 (PDT)
-From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
-X-Google-Original-From: Feiyang Chen <chenfeiyang@loongson.cn>
-To:     tsbogend@alpha.franken.de
-Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, chenhuacai@kernel.org,
-        jiaxun.yang@flygoat.com, tangyouling@loongson.cn,
-        chris.chenfeiyang@gmail.com, linux-mips@vger.kernel.org
-Subject: [PATCH v2] MIPS: Fix build error for loongson64 and sgi-ip27
-Date:   Sat, 19 Mar 2022 17:40:02 +0800
-Message-Id: <78559205988aa1c0b42ee6ac20bb0fec3200f978.1647682458.git.chenfeiyang@loongson.cn>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S231818AbiCSLjj (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Mar 2022 07:39:39 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AE586E16;
+        Sat, 19 Mar 2022 04:38:17 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 094082223B;
+        Sat, 19 Mar 2022 12:38:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1647689895;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zmfB9xFrYldmqq1FLPQ4/Iztnp51kdC7eGjZLGK9R9I=;
+        b=nK72s+a+CriFy2uCBz7cVC/oV2dJ7STsg5K6+FvOMXhbU9OHAvyFezhKJEonlNukjIE/At
+        iOXENIVw/Ky8/ukxJLQk4qnF9236PXkZDjyKrMEr+u4yWjrEg/Q+8XVa+s9iLb4n4DtONH
+        11Plc7zM79jDmEgGlak5dmfX2BOKI3A=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Sat, 19 Mar 2022 12:38:14 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 7/8] ARM: dts: lan9662-pcb8291: fix pinctrl node name
+In-Reply-To: <cf2a6d1a-bf98-e382-2623-e44e5979ca29@gmail.com>
+References: <20220318202547.1650687-1-michael@walle.cc>
+ <20220318202547.1650687-8-michael@walle.cc>
+ <cf2a6d1a-bf98-e382-2623-e44e5979ca29@gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e7467fe3a8dae5f5af84d595a0c4ab16@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Select HAVE_ARCH_NODEDATA_EXTENSION for loongson64 to fix build error
-when CONFIG_NUMA=y:
+Hi,
 
-mips64el-unknown-linux-gnu-ld: mm/page_alloc.o: in function `free_area_init':
-(.init.text+0x1714): undefined reference to `node_data'
-mips64el-unknown-linux-gnu-ld: (.init.text+0x1730): undefined reference to `node_data'
+Am 2022-03-19 09:24, schrieb Sergei Shtylyov:
+> Hello!
+> 
+> On 3/18/22 11:25 PM, Michael Walle wrote:
+> 
+>> The pinctrl device tree binding will be converted to YAML format. All
+>> the pin nodes should end with "-pins". Fix them.
+> 
+>    It does end with "pins" already, right?
 
-Also, select HAVE_ARCH_NODEDATA_EXTENSION for sgi-ip27 to fix build error:
+It ends with "_pins". Please note the underscore.
 
-mips64el-unknown-linux-gnu-ld: mm/page_alloc.o: in function `free_area_init':
-page_alloc.c:(.init.text+0x1ba8): undefined reference to `node_data'
-mips64el-unknown-linux-gnu-ld: page_alloc.c:(.init.text+0x1bcc): undefined reference to `node_data'
-mips64el-unknown-linux-gnu-ld: page_alloc.c:(.init.text+0x1be4): undefined reference to `node_data'
-mips64el-unknown-linux-gnu-ld: page_alloc.c:(.init.text+0x1bf4): undefined reference to `node_data'
+>> Fixes: 290deaa10c50 ("ARM: dts: add DT for lan966 SoC and 2-port board 
+>> pcb8291")
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>>  arch/arm/boot/dts/lan966x-pcb8291.dts | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts 
+>> b/arch/arm/boot/dts/lan966x-pcb8291.dts
+>> index 3281af90ac6d..3c7e3a7d6f14 100644
+>> --- a/arch/arm/boot/dts/lan966x-pcb8291.dts
+>> +++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
+>> @@ -35,7 +35,7 @@ fc3_b_pins: fcb3-spi-pins {
+>>  		function = "fc3_b";
+>>  	};
+>> 
+>> -	can0_b_pins:  can0_b_pins {
+>> +	can0_b_pins:  can0-b-pins {
+> 
+>    Mhm, I can't even see what is changed here... :-/
 
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
----
- arch/mips/Kconfig                |  5 +++++
- arch/mips/loongson64/numa.c      | 10 ++++++++++
- arch/mips/sgi-ip27/ip27-memory.c | 10 ++++++++++
- 3 files changed, 25 insertions(+)
+The name of the node, s/_/-/
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 0dae5f1e61cc..de3b32a507d2 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -513,6 +513,7 @@ config MACH_LOONGSON64
- 	select USE_OF
- 	select BUILTIN_DTB
- 	select PCI_HOST_GENERIC
-+	select HAVE_ARCH_NODEDATA_EXTENSION if NUMA
- 	help
- 	  This enables the support of Loongson-2/3 family of machines.
- 
-@@ -709,6 +710,7 @@ config SGI_IP27
- 	select WAR_R10000_LLSC
- 	select MIPS_L1_CACHE_SHIFT_7
- 	select NUMA
-+	select HAVE_ARCH_NODEDATA_EXTENSION
- 	help
- 	  This are the SGI Origin 200, Origin 2000 and Onyx 2 Graphics
- 	  workstations.  To compile a Linux kernel that runs on these, say Y
-@@ -2708,6 +2710,9 @@ config NUMA
- config SYS_SUPPORTS_NUMA
- 	bool
- 
-+config HAVE_ARCH_NODEDATA_EXTENSION
-+	bool
-+
- config RELOCATABLE
- 	bool "Relocatable kernel"
- 	depends on SYS_SUPPORTS_RELOCATABLE
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index e8e3e48c5333..69a533148efd 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -197,3 +197,13 @@ void __init prom_init_numa_memory(void)
- 	prom_meminit();
- }
- EXPORT_SYMBOL(prom_init_numa_memory);
-+
-+pg_data_t * __init arch_alloc_nodedata(int nid)
-+{
-+	return memblock_alloc(sizeof(pg_data_t), SMP_CACHE_BYTES);
-+}
-+
-+void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
-+{
-+	__node_data[nid] = pgdat;
-+}
-diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-index adc2faeecf7c..f79c48393716 100644
---- a/arch/mips/sgi-ip27/ip27-memory.c
-+++ b/arch/mips/sgi-ip27/ip27-memory.c
-@@ -422,3 +422,13 @@ void __init mem_init(void)
- 	memblock_free_all();
- 	setup_zero_pages();	/* This comes from node 0 */
- }
-+
-+pg_data_t * __init arch_alloc_nodedata(int nid)
-+{
-+	return memblock_alloc(sizeof(pg_data_t), SMP_CACHE_BYTES);
-+}
-+
-+void arch_refresh_nodedata(int nid, pg_data_t *pgdat)
-+{
-+	__node_data[nid] = (struct node_data *)pgdat;
-+}
--- 
-2.27.0
-
+-michael
