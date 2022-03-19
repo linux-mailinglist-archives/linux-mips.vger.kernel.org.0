@@ -2,84 +2,65 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BFF4DE700
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Mar 2022 09:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDC34DE711
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Mar 2022 09:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242489AbiCSIZ6 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sat, 19 Mar 2022 04:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S242497AbiCSI3Y (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Sat, 19 Mar 2022 04:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbiCSIZ6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Mar 2022 04:25:58 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B5427CE26;
-        Sat, 19 Mar 2022 01:24:36 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id s25so13941406lji.5;
-        Sat, 19 Mar 2022 01:24:36 -0700 (PDT)
+        with ESMTP id S232549AbiCSI3Y (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Sat, 19 Mar 2022 04:29:24 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE1FC48
+        for <linux-mips@vger.kernel.org>; Sat, 19 Mar 2022 01:28:03 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id i11so8169650plr.1
+        for <linux-mips@vger.kernel.org>; Sat, 19 Mar 2022 01:28:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/ZpwHLQU+wmeCbu/+G/e1bt058wLloUaoM6rRJWzX2w=;
-        b=DJNAfZI9glvof+R+9AsDOymBUSQGXACtnv7dvlJQQEgvbUSWDUOgX5XISdPn+rIR58
-         OiT8eG4zSIxaHrZi+XcXJKUFQakRoCNNVtsUFMIIyN1D51u/cneuivhimssLvvLDS+BX
-         Kl4Ok1kPRWmAfIledIpwp/6rhssj1Nd/+TRYm7ZqQYj20dAsIQ/xjL5QTThus236/Q3W
-         pPXOtpkPay8UpZmcvERp9POaAD7x4ib+wxEhnzwJb1xlMTSd6gYwWNrM6xm0fDUmGzfd
-         YiKvurcwKGK5ypt22E1W5MlFk1M3VOh8CCQlKa8QNb3a1/gI0GPTRDbR5Alskwet5Ubk
-         6A5Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mhkVe1JeFwkPrldbgt/DHkUP3qNpxWgxE9EwfQ7uHOQ=;
+        b=cYFiS+S+PRRcjRbHAPnlA8ryqQbtc7oi4ytsdygYlpVUhKNDTRfY8jFpuato2e3ZVC
+         /EMQVLo4GhSZY70bitVRV0mYtOjDy+Q+nIFy0029mbcdj1B6gpPOT1DAss2Y/3WQGEgY
+         ixtZZcygL1p7QVEH92oXetb4C3aOasM3fae/bUy5g4ekXE54uumutHNIz0cUwbt3h913
+         Z5NlxUiPUN4LbbRFUvncHUXMkqIMPxa8x9Of9FT7aXsV5KqHRbzZ4C7oIHurhttE2y7X
+         T7XDPaiMPz/PYMG6/plA9iFyyobohU2KoGGdM4FJ01DrFOsVwCTt1PMSeF5lyxdvvoPZ
+         DIKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/ZpwHLQU+wmeCbu/+G/e1bt058wLloUaoM6rRJWzX2w=;
-        b=8KzvjUa1CCZ5qNJxt8KyuBpbBQ94X7T4PMEYawaK4aGM80k25mWu4zMqm0R7oflOe+
-         PCl/XfNXULw5v92zNWPui+idCTT59VFPgfm1d0Rag7gYZT5kWoEO6BIfxSFwJPKyRmD2
-         dRzdKshmgLpeOyhL6x7UXDyoX4lCZkhVadi7RvW5XjMHyP5xcRNy5mh71v/8DwJsajLm
-         7UCrhscfojUtCoIzKHv6Gb0tEr+V7zsBL+rBqdgpUbseTOPuR8Pd6caaoKnKv6PMMC6o
-         gc8N6oSpMT5+eRuLl1MaH37l5jtE209UtymSHWpOUnVT0swG+EyJkkawQzy/ILRQSesA
-         6lKA==
-X-Gm-Message-State: AOAM530YdtDzkxIy3KSlc0+pkQn4GmP5t3mXCBDJUI/o3LqHFw2X/vr0
-        9MmXdc6HwjxGE0YcrmsZUZbJQmXb4N8=
-X-Google-Smtp-Source: ABdhPJyZ2UsDbC5F5eTFm1ubxR/1o29YAZM4C0C4KHStzRN8blY/0Q/TrWEVjWw+WlnXPv8mueqrbw==
-X-Received: by 2002:a05:651c:17a3:b0:245:f39e:f2d2 with SMTP id bn35-20020a05651c17a300b00245f39ef2d2mr8861978ljb.490.1647678274018;
-        Sat, 19 Mar 2022 01:24:34 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.72.203])
-        by smtp.gmail.com with ESMTPSA id bi2-20020a0565120e8200b004484aaaf818sm1232576lfb.13.2022.03.19.01.24.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Mar 2022 01:24:33 -0700 (PDT)
-Subject: Re: [PATCH v2 7/8] ARM: dts: lan9662-pcb8291: fix pinctrl node name
-To:     Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Quentin Schulz <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-References: <20220318202547.1650687-1-michael@walle.cc>
- <20220318202547.1650687-8-michael@walle.cc>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <cf2a6d1a-bf98-e382-2623-e44e5979ca29@gmail.com>
-Date:   Sat, 19 Mar 2022 11:24:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mhkVe1JeFwkPrldbgt/DHkUP3qNpxWgxE9EwfQ7uHOQ=;
+        b=QwaQuIIZwXG70ELYLu1W0TNGxQmQw4glnrBjPA3IEAi18jcsQqMTaUpWz0Uvb8YWZd
+         Z8KX9Q87U+nMOWNK9UbdjEBjrVpxdCWNLArBkV8xIOgHyZYNSqfx/OAwbnM2UIjq5qJB
+         d62KGDom89PyJEgZOVxzUt1fQnjo8k/86XmNcqkEZhb8PqYnJrFxik/SBffXbwUrgQfq
+         7EsAzxCPGrqRAE9pYe7dVnDrk609JRTLLs0kYCsXf5RFROWqNm8TOfngjNJbklid8G9x
+         ho2H8i8tT0fs0Q/Uy9BXuOUMxYekAC42/o75jRI8QLuEwsZ8pHIG5evSor2fzgSLGUh2
+         UCWQ==
+X-Gm-Message-State: AOAM531VBZvwUOahh4carCFxLZgn6lO/CDXUJdOCkOAC+VWqXZIEZilT
+        Nzc6ECfe4NMarDHeSWJT1TQSAH1ZgJifrirxVOU=
+X-Google-Smtp-Source: ABdhPJygohprSani1vapS+Cou927wDKnAm/HGPizhygT8cms0Pst1A8TyyAam4ODJG/Uc/ktPrwyx5kJoLxZAglpubA=
+X-Received: by 2002:a17:90a:ab17:b0:1b9:b61a:aadb with SMTP id
+ m23-20020a17090aab1700b001b9b61aaadbmr15295757pjq.77.1647678483150; Sat, 19
+ Mar 2022 01:28:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220318202547.1650687-8-michael@walle.cc>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1647671808.git.chenfeiyang@loongson.cn> <91781d982e1b89ab4fc7f1f378433eaa0e44b15a.1647671808.git.chenfeiyang@loongson.cn>
+ <08a8983a-d6bd-a8d6-7996-59e1aa4c6590@loongson.cn>
+In-Reply-To: <08a8983a-d6bd-a8d6-7996-59e1aa4c6590@loongson.cn>
+From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
+Date:   Sat, 19 Mar 2022 16:27:48 +0800
+Message-ID: <CACWXhKnyC8Qa2ipqkg7f0R6wL=-0Y0gFDCSK6NXpscbxgeqEFQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MIPS: loongson64: Fix build error when CONFIG_NUMA is set
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Feiyang Chen <chenfeiyang@loongson.cn>, chenhuacai@kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,34 +69,180 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hello!
+On Sat, 19 Mar 2022 at 16:03, Youling Tang <tangyouling@loongson.cn> wrote:
+>
+> Hi, Feiyang
+> On 2022/3/19 =E4=B8=8B=E5=8D=883:11, Feiyang Chen wrote:
+> > Modify __node_data to node_data to fix the build error when CONFIG_NUMA=
+=3Dy:
+> >
+> > mips64el-unknown-linux-gnu-ld: mm/page_alloc.o: in function `free_area_=
+init':
+> > (.init.text+0x1714): undefined reference to `node_data'
+> > mips64el-unknown-linux-gnu-ld: (.init.text+0x1730): undefined reference=
+ to `node_data'
+> 1. This issue was introduced by the patch "mm, memory_hotplug: make
+> arch_alloc_nodedata independent on CONFIG_MEMORY_HOTPLUG". The patch
+> has not yet been synced to the mips-next branch.
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
+t/?id=3D9039a226f22047ba6b066128318d5be8ef794273
+>
+> 2. The build error should not modify mips but should modifythe
+> include/linux/memory_hotplug.h file, which will use "NODE_DATA"
+> instead of "node_data".
 
-On 3/18/22 11:25 PM, Michael Walle wrote:
+Hi, Youling,
 
-> The pinctrl device tree binding will be converted to YAML format. All
-> the pin nodes should end with "-pins". Fix them.
+The comment in include/linux/memory_hotplug.h says:
 
-   It does end with "pins" already, right?
+/*
+* For supporting node-hotadd, we have to allocate a new pgdat.
+*
+* If an arch has generic style NODE_DATA(),
+* node_data[nid] =3D kzalloc() works well. But it depends on the architectu=
+re.
+*
+* In general, generic_alloc_nodedata() is used.
+*
+*/
 
-> Fixes: 290deaa10c50 ("ARM: dts: add DT for lan966 SoC and 2-port board pcb8291")
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  arch/arm/boot/dts/lan966x-pcb8291.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
-> index 3281af90ac6d..3c7e3a7d6f14 100644
-> --- a/arch/arm/boot/dts/lan966x-pcb8291.dts
-> +++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
-> @@ -35,7 +35,7 @@ fc3_b_pins: fcb3-spi-pins {
->  		function = "fc3_b";
->  	};
->  
-> -	can0_b_pins:  can0_b_pins {
-> +	can0_b_pins:  can0-b-pins {
+I don't think it's a good idea to modify "node_data" to "NODE_DATA".
 
-   Mhm, I can't even see what is changed here... :-/
+>
+> 3. If "__node_data" is changed to "node_data" in mips, it will cause
+> problems with the crash tool.
 
-[...]
+How about selecting HAVE_ARCH_NODEDATA_EXTENSION and overloading
+functions as sgi-ip27 in Patch 2?
 
-MBR, Sergey
+Thanks,
+Feiyang
+
+>
+> Thanks,
+> Youling.
+> >
+> > BTW, modify __node_distances and __node_cpumask to follow the same styl=
+e.
+> >
+> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> > ---
+> >   .../mips/include/asm/mach-loongson64/mmzone.h |  4 ++--
+> >   .../include/asm/mach-loongson64/topology.h    |  8 +++----
+> >   arch/mips/loongson64/numa.c                   | 22 +++++++++---------=
+-
+> >   3 files changed, 17 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/arch/mips/include/asm/mach-loongson64/mmzone.h b/arch/mips=
+/include/asm/mach-loongson64/mmzone.h
+> > index ebb1deaa77b9..14e2b860ad65 100644
+> > --- a/arch/mips/include/asm/mach-loongson64/mmzone.h
+> > +++ b/arch/mips/include/asm/mach-loongson64/mmzone.h
+> > @@ -14,9 +14,9 @@
+> >   #define pa_to_nid(addr)  (((addr) & 0xf00000000000) >> NODE_ADDRSPACE=
+_SHIFT)
+> >   #define nid_to_addrbase(nid) ((unsigned long)(nid) << NODE_ADDRSPACE_=
+SHIFT)
+> >
+> > -extern struct pglist_data *__node_data[];
+> > +extern struct pglist_data *node_data[];
+> >
+> > -#define NODE_DATA(n)         (__node_data[n])
+> > +#define NODE_DATA(n)         (node_data[n])
+> >
+> >   extern void setup_zero_pages(void);
+> >   extern void __init prom_init_numa_memory(void);
+> > diff --git a/arch/mips/include/asm/mach-loongson64/topology.h b/arch/mi=
+ps/include/asm/mach-loongson64/topology.h
+> > index 3414a1fd1783..dc71eaf9c819 100644
+> > --- a/arch/mips/include/asm/mach-loongson64/topology.h
+> > +++ b/arch/mips/include/asm/mach-loongson64/topology.h
+> > @@ -6,17 +6,17 @@
+> >
+> >   #define cpu_to_node(cpu)    (cpu_logical_map(cpu) >> 2)
+> >
+> > -extern cpumask_t __node_cpumask[];
+> > -#define cpumask_of_node(node)        (&__node_cpumask[node])
+> > +extern cpumask_t node_cpumask[];
+> > +#define cpumask_of_node(node)        (&node_cpumask[node])
+> >
+> >   struct pci_bus;
+> >   extern int pcibus_to_node(struct pci_bus *);
+> >
+> >   #define cpumask_of_pcibus(bus)      (cpu_online_mask)
+> >
+> > -extern unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
+> > +extern unsigned char node_distances[MAX_NUMNODES][MAX_NUMNODES];
+> >
+> > -#define node_distance(from, to)      (__node_distances[(from)][(to)])
+> > +#define node_distance(from, to)      (node_distances[(from)][(to)])
+> >
+> >   #endif
+> >
+> > diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+> > index e8e3e48c5333..9c1bf29c1aae 100644
+> > --- a/arch/mips/loongson64/numa.c
+> > +++ b/arch/mips/loongson64/numa.c
+> > @@ -27,13 +27,13 @@
+> >   #include <boot_param.h>
+> >   #include <loongson.h>
+> >
+> > -unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
+> > -EXPORT_SYMBOL(__node_distances);
+> > -struct pglist_data *__node_data[MAX_NUMNODES];
+> > -EXPORT_SYMBOL(__node_data);
+> > +unsigned char node_distances[MAX_NUMNODES][MAX_NUMNODES];
+> > +EXPORT_SYMBOL(node_distances);
+> > +struct pglist_data *node_data[MAX_NUMNODES];
+> > +EXPORT_SYMBOL(node_data);
+> >
+> > -cpumask_t __node_cpumask[MAX_NUMNODES];
+> > -EXPORT_SYMBOL(__node_cpumask);
+> > +cpumask_t node_cpumask[MAX_NUMNODES];
+> > +EXPORT_SYMBOL(node_cpumask);
+> >
+> >   static void cpu_node_probe(void)
+> >   {
+> > @@ -71,11 +71,11 @@ static void __init init_topology_matrix(void)
+> >
+> >       for (row =3D 0; row < MAX_NUMNODES; row++)
+> >               for (col =3D 0; col < MAX_NUMNODES; col++)
+> > -                     __node_distances[row][col] =3D -1;
+> > +                     node_distances[row][col] =3D -1;
+> >
+> >       for_each_online_node(row) {
+> >               for_each_online_node(col) {
+> > -                     __node_distances[row][col] =3D
+> > +                     node_distances[row][col] =3D
+> >                               compute_node_distance(row, col);
+> >               }
+> >       }
+> > @@ -107,7 +107,7 @@ static void __init node_mem_init(unsigned int node)
+> >       tnid =3D early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
+> >       if (tnid !=3D node)
+> >               pr_info("NODE_DATA(%d) on node %d\n", node, tnid);
+> > -     __node_data[node] =3D nd;
+> > +     node_data[node] =3D nd;
+> >       NODE_DATA(node)->node_start_pfn =3D start_pfn;
+> >       NODE_DATA(node)->node_spanned_pages =3D end_pfn - start_pfn;
+> >
+> > @@ -146,7 +146,7 @@ static __init void prom_meminit(void)
+> >               if (node_online(node)) {
+> >                       szmem(node);
+> >                       node_mem_init(node);
+> > -                     cpumask_clear(&__node_cpumask[node]);
+> > +                     cpumask_clear(&node_cpumask[node]);
+> >               }
+> >       }
+> >       max_low_pfn =3D PHYS_PFN(memblock_end_of_DRAM());
+> > @@ -159,7 +159,7 @@ static __init void prom_meminit(void)
+> >               if (loongson_sysconf.reserved_cpus_mask & (1<<cpu))
+> >                       continue;
+> >
+> > -             cpumask_set_cpu(active_cpu, &__node_cpumask[node]);
+> > +             cpumask_set_cpu(active_cpu, &node_cpumask[node]);
+> >               pr_info("NUMA: set cpumask cpu %d on node %d\n", active_c=
+pu, node);
+> >
+> >               active_cpu++;
+>
