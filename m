@@ -2,71 +2,112 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDA44E1E68
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Mar 2022 01:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D40384E2147
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Mar 2022 08:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343873AbiCUAXp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Sun, 20 Mar 2022 20:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S1343570AbiCUHZT (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Mar 2022 03:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234559AbiCUAXp (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Sun, 20 Mar 2022 20:23:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BFBD95C3;
-        Sun, 20 Mar 2022 17:22:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F39166126A;
-        Mon, 21 Mar 2022 00:22:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2A6C36AE2;
-        Mon, 21 Mar 2022 00:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647822140;
-        bh=sl757+nQ+uoFAxIuw/aW760I9HoJj/9PyrFKOdrvNPc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FaiuqVxuSXdpGRvEpDxoM+RJxM/OiPTeOBHcmxMy4hOU34jzlt7y8hxP1G9mgEEME
-         YSYT3z/urqe2Jix0G2SD5g2K8I7xvs5FfETynak3yu1xUVdnnydZ7NhSjGmZEPHOZi
-         yn83ZWnN+anRqZEXdP7wNRAW5/RQUJx+++8CxsUhvAtPms7Xtrwe0fJZ3fXJQvbH9R
-         UDgziGUYpQlnF2Crqt+yGJ5TAU+smY5s8nVPEorCmdBuD00ycNVS7ye4ugauhVzBrS
-         ANHE8JNJsO3F1cVJ+4BqUTMXb90mjqNHqwPgSdg7IY7YT8t3GGikF6Qs7TY3xMQ8IT
-         4jbU8GeAkYJuw==
-Received: by mail-vk1-f179.google.com with SMTP id x125so1427666vkb.7;
-        Sun, 20 Mar 2022 17:22:20 -0700 (PDT)
-X-Gm-Message-State: AOAM533zl//8y7x2w5FAypLqVSlBZUxpWo94NPMPnXwddfx5dQzI8+iq
-        QFwIzP8pszQ07Jx/EqnaTdMjzGWTWwQvenNn9Z4=
-X-Google-Smtp-Source: ABdhPJwJRuOhAiysCoOvQHwSmmYd801IxVPP+erWrfdv5T2vb3ztD/y1NOJnWVmPMPDyYpcC1/3ppbBpVDzb6NrH1hM=
-X-Received: by 2002:a1f:2d6:0:b0:33e:9b64:e07e with SMTP id
- 205-20020a1f02d6000000b0033e9b64e07emr5719806vkc.28.1647822139345; Sun, 20
- Mar 2022 17:22:19 -0700 (PDT)
+        with ESMTP id S1344862AbiCUHZO (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Mar 2022 03:25:14 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8888154F8A
+        for <linux-mips@vger.kernel.org>; Mon, 21 Mar 2022 00:23:46 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nWCND-0006et-Tt; Mon, 21 Mar 2022 08:22:39 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nWCMp-0021t4-Og; Mon, 21 Mar 2022 08:22:16 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nWCMp-00AcZn-OA; Mon, 21 Mar 2022 08:22:15 +0100
+Date:   Mon, 21 Mar 2022 08:22:15 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tomislav Denis <tomislav.denis@avl.com>,
+        =?utf-8?B?QW5kcsOp?= Gustavo Nakagomi Lopez <andregnl@usp.br>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-i2c@vger.kernel.org,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-rtc@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-pwm@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-iio@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Michal Simek <michal.simek@xilinx.com>, kernel@pengutronix.de,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Vladimir Zapolskiy <vz@mleia.com>, linux-gpio@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Fabio Estevam <festevam@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        linux-amlogic@lists.infradead.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        linux-hwmon@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        UNGLinuxDriver@microchip.com, Vinod Koul <vkoul@kernel.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        dmaengine@vger.kernel.org,
+        Amireddy Mallikarjuna reddy 
+        <mallikarjunax.reddy@linux.intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>
+Subject: Re: [PATCH v8 02/16] clk: Provide new devm_clk helpers for prepared
+ and enabled clocks
+Message-ID: <20220321072215.5lffm7qtpvg5ofk4@pengutronix.de>
+References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
+ <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
+ <20220319182936.06d75742@jic23-huawei>
 MIME-Version: 1.0
-References: <20220316070317.1864279-1-guoren@kernel.org> <20220316070317.1864279-11-guoren@kernel.org>
-In-Reply-To: <20220316070317.1864279-11-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 21 Mar 2022 08:22:08 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSqbS3cUNcxKGoMT2zE3ws+gH6a0EssVEutpypR5YoHCA@mail.gmail.com>
-Message-ID: <CAJF2gTSqbS3cUNcxKGoMT2zE3ws+gH6a0EssVEutpypR5YoHCA@mail.gmail.com>
-Subject: Re: [PATCH V8 10/20] riscv: compat: Re-implement TASK_SIZE for COMPAT_32BIT
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oterd73bfcoy35ck"
+Content-Disposition: inline
+In-Reply-To: <20220319182936.06d75742@jic23-huawei>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,87 +115,73 @@ Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-For this patch, we need to add below to fixup the rv32 call rv64 elf
-segment fault.
 
-diff --git a/arch/riscv/include/asm/processor.h
-b/arch/riscv/include/asm/processor.h
-index 0749924d9e55..21c8072dce17 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -19,7 +19,11 @@
- #define TASK_UNMAPPED_BASE     PAGE_ALIGN(TASK_SIZE / 3)
+--oterd73bfcoy35ck
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- #define STACK_TOP              TASK_SIZE
--#define STACK_TOP_MAX          STACK_TOP
-+#ifdef CONFIG_64BIT
-+#define STACK_TOP_MAX          TASK_SIZE_64
-+#else
-+#define STACK_TOP_MAX          TASK_SIZE
-+#endif
- #define STACK_ALIGN            16
+On Sat, Mar 19, 2022 at 06:29:36PM +0000, Jonathan Cameron wrote:
+> On Mon, 14 Mar 2022 15:16:29 +0100
+> Uwe Kleine-K=F6nig         <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > When a driver keeps a clock prepared (or enabled) during the whole
+> > lifetime of the driver, these helpers allow to simplify the drivers.
+> >=20
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> One trivial thing below.
+>=20
+> > ---
+> >  drivers/clk/clk-devres.c | 31 ++++++++++++++
+> >  include/linux/clk.h      | 90 +++++++++++++++++++++++++++++++++++++++-
+> >  2 files changed, 120 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
+> > index fb7761888b30..4707fe718f0b 100644
+> > --- a/drivers/clk/clk-devres.c
+> > +++ b/drivers/clk/clk-devres.c
+> > @@ -67,12 +67,43 @@ struct clk *devm_clk_get(struct device *dev, const =
+char *id)
+> >  }
+> >  EXPORT_SYMBOL(devm_clk_get);
+> > =20
+> > +struct clk *devm_clk_get_prepared(struct device *dev, const char *id)
+> > +{
+> > +	return __devm_clk_get(dev, id, clk_get, clk_prepare, clk_unprepare);
+>=20
+> Nitpick but this spacing before } in functions is rather unusual and not
+> in keeping with the existing code in this file.
+>=20
+> > +
+> > +}
 
- #ifndef __ASSEMBLY__
+ack, I fixed that in my tree, so this will be part of an v9. I won't
+send it just for this change, though. I fixed three further functions
+that had a similar empty line, too.
 
-On Wed, Mar 16, 2022 at 3:04 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> Make TASK_SIZE from const to dynamic detect TIF_32BIT flag
-> function. Refer to arm64 to implement DEFAULT_MAP_WINDOW_64 for
-> efi-stub.
->
-> Limit 32-bit compatible process in 0-2GB virtual address range
-> (which is enough for real scenarios), because it could avoid
-> address sign extend problem when 32-bit enter 64-bit and ease
-> software design.
->
-> The standard 32-bit TASK_SIZE is 0x9dc00000:FIXADDR_START, and
-> compared to a compatible 32-bit, it increases 476MB for the
-> application's virtual address.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/include/asm/pgtable.h | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pg=
-table.h
-> index e3549e50de95..afdc9ece2ba4 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -705,8 +705,17 @@ static inline pmd_t pmdp_establish(struct vm_area_st=
-ruct *vma,
->   * 63=E2=80=9348 all equal to bit 47, or else a page-fault exception wil=
-l occur."
->   */
->  #ifdef CONFIG_64BIT
-> -#define TASK_SIZE      (PGDIR_SIZE * PTRS_PER_PGD / 2)
-> -#define TASK_SIZE_MIN  (PGDIR_SIZE_L3 * PTRS_PER_PGD / 2)
-> +#define TASK_SIZE_64   (PGDIR_SIZE * PTRS_PER_PGD / 2)
-> +#define TASK_SIZE_MIN  (PGDIR_SIZE_L3 * PTRS_PER_PGD / 2)
-> +
-> +#ifdef CONFIG_COMPAT
-> +#define TASK_SIZE_32   (_AC(0x80000000, UL) - PAGE_SIZE)
-> +#define TASK_SIZE      (test_thread_flag(TIF_32BIT) ? \
-> +                        TASK_SIZE_32 : TASK_SIZE_64)
-> +#else
-> +#define TASK_SIZE      TASK_SIZE_64
-> +#endif
-> +
->  #else
->  #define TASK_SIZE      FIXADDR_START
->  #define TASK_SIZE_MIN  TASK_SIZE
-> --
-> 2.25.1
->
+Thanks for looking
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---
-Best Regards
- Guo Ren
+--oterd73bfcoy35ck
+Content-Type: application/pgp-signature; name="signature.asc"
 
-ML: https://lore.kernel.org/linux-csky/
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmI4J6MACgkQwfwUeK3K
+7Ak5sAf/aG3oVD1FgzqJLWD3uSmF0uX0/3lky1l56go3LpRjDym8tlGglXT4z7Hl
+Z3q8YXru6LSihHT/n6V4EUdpV6f49dxPfrr9hu9OFU+UY0Cd7NgisKr+0Wi61dbS
+d8IVGHwcCPqBZanHdAEjhle7d7WdWhfukR1oLljd8B2XM6qP2jQgjFWzrSJfZ+hd
+qd6k9TcfIHjy8n8xBtyIYSvYZbywqfa+wJeU54fe4fp4NNPVTmxGtzHFNDipSZGL
+uF+yg7qDqSezst7wO3dNeblEvpVZfG9TZAXvGMCZQLn9x4b35iSmZtLVPN+HZZM4
+WBr/EA6mCSOr4iHXCKfNr4UegGV4/w==
+=gON5
+-----END PGP SIGNATURE-----
+
+--oterd73bfcoy35ck--
