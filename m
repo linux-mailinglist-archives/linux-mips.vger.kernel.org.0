@@ -2,426 +2,357 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC754E3570
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Mar 2022 01:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB164E36BA
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Mar 2022 03:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233568AbiCVAMc (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Mon, 21 Mar 2022 20:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        id S235427AbiCVCfY (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Mon, 21 Mar 2022 22:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233715AbiCVAMc (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Mar 2022 20:12:32 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494F81AA065
-        for <linux-mips@vger.kernel.org>; Mon, 21 Mar 2022 17:09:41 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 5so9004398lfp.1
-        for <linux-mips@vger.kernel.org>; Mon, 21 Mar 2022 17:09:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HajGksMSq1RuOfUtCvBANBROHaJPWfbgSuMQb23l8Ro=;
-        b=KzdT/r2b+R4xT9E4ZyW0pA3n2KF3e8r8r9jgILDidIfEfyel8zLeYcb4r+2u77UaAh
-         pc/Yg7QbJagANBD+oN8ancQDLMRPWyDJebAxBSNT9aCf0VYWKS06DjU5/zEIIvIk/Q1I
-         nkFXsdVMcPK3kwVbf1u62S2hNnKfQJJGatVAcFntq5+bMjZCKrPRgwPh4QP/D7wL2/4t
-         /vuDNvin8RXFKN5DQ+DqwE7aVzCojlTAeCvJabLCq0ozAw1AsOEfMz9D2xPgs0gsviGo
-         lwX3Ai+CSBpgrtHkmrqXgloO6s8kyNJX1xf/sV1gZ7EapjUJdQ7cTcxqO5zK3qZxUVnP
-         TVRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HajGksMSq1RuOfUtCvBANBROHaJPWfbgSuMQb23l8Ro=;
-        b=Rxm0ovwvshvKHqyG0E4Qi8D8vXb7e0v8nkxQ+IIOsgzmhFv3CtcLqO14e4YohzIclH
-         0LU0FHAqN1OwVtowhSgFd88PDsbKwuaur5WBwAVbXeKxEYBrSaZWOOCMYOZBWX7ZN7K6
-         7HvGEKcMc5ots2sOPfo/cpsSwyZrG6Z0OMhCxtpCrVztPsSUiZEILs6UXTEtMbTVi5fn
-         aJFZWaBXnWO+h/vnVOXW+8UlWaWOZfxYXDU2/G0Szxv+b/RvwJm2sQu8YSK4hpBaQme3
-         tSiH0QfhqwRO87TQzBBasJe/XqjrMwAGsx3VXl69I07NTuX89iVKErNcvmXmoW7MGDh/
-         i1Qg==
-X-Gm-Message-State: AOAM530qtjCbkWbqk7ujra9AhPhrrglA92R16XDnjaYf9/K3ijK8sZr4
-        JL0AoJe5aiMUx92shm6ejMVuFIkUFK6zYV1Qta9I/g==
-X-Google-Smtp-Source: ABdhPJyr2CHJfKFlgXHv7B6Wio+Fhr9ZiDa/iuyftFTLzzh0ztintaAMADr5wc/dGTnXMgI7Ud+S7N2nKq2tEXPmjGg=
-X-Received: by 2002:a19:674c:0:b0:448:3f49:e6d5 with SMTP id
- e12-20020a19674c000000b004483f49e6d5mr16515926lfj.518.1647907691443; Mon, 21
- Mar 2022 17:08:11 -0700 (PDT)
+        with ESMTP id S235297AbiCVCfY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Mon, 21 Mar 2022 22:35:24 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75411DFA3;
+        Mon, 21 Mar 2022 19:33:55 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:48144.976236044
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 784681002BB;
+        Tue, 22 Mar 2022 10:33:48 +0800 (CST)
+Received: from  ([172.27.8.53])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id f99435236ca14be49c68a89810849220 for robh@kernel.org;
+        Tue, 22 Mar 2022 10:33:54 CST
+X-Transaction-ID: f99435236ca14be49c68a89810849220
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 172.27.8.53
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
+Date:   Tue, 22 Mar 2022 10:33:45 +0800
 MIME-Version: 1.0
-References: <20220311002528.2230172-1-dmatlack@google.com> <20220311002528.2230172-21-dmatlack@google.com>
- <YjG7Zh4zwTDsO3L1@xz-m1.local>
-In-Reply-To: <YjG7Zh4zwTDsO3L1@xz-m1.local>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 21 Mar 2022 17:07:44 -0700
-Message-ID: <CALzav=fPvi2eHt2Dbuti=9A1yw_bFFwgY_AFN2wSvbCLVyUjFQ@mail.gmail.com>
-Subject: Re: [PATCH v2 20/26] KVM: x86/mmu: Extend Eager Page Splitting to the
- shadow MMU
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
+ controller
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-6-15330273260@189.cn>
+ <YjkITWpbnCmhKaX+@robh.at.kernel.org>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <YjkITWpbnCmhKaX+@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 3:27 AM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Mar 11, 2022 at 12:25:22AM +0000, David Matlack wrote:
-> > Extend KVM's eager page splitting to also split huge pages that are
-> > mapped by the shadow MMU. Specifically, walk through the rmap splitting
-> > all 1GiB pages to 2MiB pages, and splitting all 2MiB pages to 4KiB
-> > pages.
-> >
-> > Splitting huge pages mapped by the shadow MMU requries dealing with some
-> > extra complexity beyond that of the TDP MMU:
-> >
-> > (1) The shadow MMU has a limit on the number of shadow pages that are
-> >     allowed to be allocated. So, as a policy, Eager Page Splitting
-> >     refuses to split if there are KVM_MIN_FREE_MMU_PAGES or fewer
-> >     pages available.
-> >
-> > (2) Huge pages may be mapped by indirect shadow pages which have the
-> >     possibility of being unsync. As a policy we opt not to split such
-> >     pages as their translation may no longer be valid.
-> >
-> > (3) Splitting a huge page may end up re-using an existing lower level
-> >     shadow page tables. This is unlike the TDP MMU which always allocates
-> >     new shadow page tables when splitting.  This commit does *not*
-> >     handle such aliasing and opts not to split such huge pages.
-> >
-> > (4) When installing the lower level SPTEs, they must be added to the
-> >     rmap which may require allocating additional pte_list_desc structs.
-> >     This commit does *not* handle such cases and instead opts to leave
-> >     such lower-level SPTEs non-present. In this situation TLBs must be
-> >     flushed before dropping the MMU lock as a portion of the huge page
-> >     region is being unmapped.
-> >
-> > Suggested-by: Peter Feiner <pfeiner@google.com>
-> > [ This commit is based off of the original implementation of Eager Page
-> >   Splitting from Peter in Google's kernel from 2016. ]
-> > Signed-off-by: David Matlack <dmatlack@google.com>
-> > ---
-> >  .../admin-guide/kernel-parameters.txt         |   3 -
-> >  arch/x86/kvm/mmu/mmu.c                        | 307 ++++++++++++++++++
-> >  2 files changed, 307 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > index 05161afd7642..495f6ac53801 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -2360,9 +2360,6 @@
-> >                       the KVM_CLEAR_DIRTY ioctl, and only for the pages being
-> >                       cleared.
-> >
-> > -                     Eager page splitting currently only supports splitting
-> > -                     huge pages mapped by the TDP MMU.
-> > -
-> >                       Default is Y (on).
-> >
-> >       kvm.enable_vmware_backdoor=[KVM] Support VMware backdoor PV interface.
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 926ddfaa9e1a..dd56b5b9624f 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -727,6 +727,11 @@ static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
-> >
-> >  static struct pte_list_desc *mmu_alloc_pte_list_desc(struct kvm_mmu_memory_cache *cache)
-> >  {
-> > +     static const gfp_t gfp_nocache = GFP_ATOMIC | __GFP_ACCOUNT | __GFP_ZERO;
-> > +
-> > +     if (WARN_ON_ONCE(!cache))
-> > +             return kmem_cache_alloc(pte_list_desc_cache, gfp_nocache);
-> > +
->
-> I also think this is not proper to be added into this patch.  Maybe it'll
-> be more suitable for the rmap_add() rework patch previously, or maybe it
-> can be dropped directly if it should never trigger at all. Then we die hard
-> at below when referencing it.
->
-> >       return kvm_mmu_memory_cache_alloc(cache);
-> >  }
-> >
-> > @@ -743,6 +748,28 @@ static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index)
-> >       return sp->gfn + (index << ((sp->role.level - 1) * PT64_LEVEL_BITS));
-> >  }
-> >
-> > +static gfn_t sptep_to_gfn(u64 *sptep)
-> > +{
-> > +     struct kvm_mmu_page *sp = sptep_to_sp(sptep);
-> > +
-> > +     return kvm_mmu_page_get_gfn(sp, sptep - sp->spt);
-> > +}
-> > +
-> > +static unsigned int kvm_mmu_page_get_access(struct kvm_mmu_page *sp, int index)
-> > +{
-> > +     if (!sp->role.direct)
-> > +             return sp->shadowed_translation[index].access;
-> > +
-> > +     return sp->role.access;
-> > +}
-> > +
-> > +static unsigned int sptep_to_access(u64 *sptep)
-> > +{
-> > +     struct kvm_mmu_page *sp = sptep_to_sp(sptep);
-> > +
-> > +     return kvm_mmu_page_get_access(sp, sptep - sp->spt);
-> > +}
-> > +
-> >  static void kvm_mmu_page_set_gfn_access(struct kvm_mmu_page *sp, int index,
-> >                                       gfn_t gfn, u32 access)
-> >  {
-> > @@ -912,6 +939,9 @@ static int pte_list_add(struct kvm_mmu_memory_cache *cache, u64 *spte,
-> >       return count;
-> >  }
-> >
-> > +static struct kvm_rmap_head *gfn_to_rmap(gfn_t gfn, int level,
-> > +                                      const struct kvm_memory_slot *slot);
-> > +
-> >  static void
-> >  pte_list_desc_remove_entry(struct kvm_rmap_head *rmap_head,
-> >                          struct pte_list_desc *desc, int i,
-> > @@ -2125,6 +2155,23 @@ static struct kvm_mmu_page *__kvm_mmu_find_shadow_page(struct kvm *kvm,
-> >       return sp;
-> >  }
-> >
-> > +static struct kvm_mmu_page *kvm_mmu_find_direct_sp(struct kvm *kvm, gfn_t gfn,
-> > +                                                union kvm_mmu_page_role role)
-> > +{
-> > +     struct kvm_mmu_page *sp;
-> > +     LIST_HEAD(invalid_list);
-> > +
-> > +     BUG_ON(!role.direct);
-> > +
-> > +     sp = __kvm_mmu_find_shadow_page(kvm, gfn, role, &invalid_list);
-> > +
-> > +     /* Direct SPs are never unsync. */
-> > +     WARN_ON_ONCE(sp && sp->unsync);
-> > +
-> > +     kvm_mmu_commit_zap_page(kvm, &invalid_list);
-> > +     return sp;
-> > +}
-> > +
-> >  /*
-> >   * Looks up an existing SP for the given gfn and role if one exists. The
-> >   * return SP is guaranteed to be synced.
-> > @@ -6063,12 +6110,266 @@ void kvm_mmu_slot_remove_write_access(struct kvm *kvm,
-> >               kvm_arch_flush_remote_tlbs_memslot(kvm, memslot);
-> >  }
-> >
-> > +static int prepare_to_split_huge_page(struct kvm *kvm,
-> > +                                   const struct kvm_memory_slot *slot,
-> > +                                   u64 *huge_sptep,
-> > +                                   struct kvm_mmu_page **spp,
-> > +                                   bool *flush,
-> > +                                   bool *dropped_lock)
-> > +{
-> > +     int r = 0;
-> > +
-> > +     *dropped_lock = false;
-> > +
-> > +     if (kvm_mmu_available_pages(kvm) <= KVM_MIN_FREE_MMU_PAGES)
-> > +             return -ENOSPC;
-> > +
-> > +     if (need_resched() || rwlock_needbreak(&kvm->mmu_lock))
-> > +             goto drop_lock;
-> > +
->
-> Not immediately clear on whether there'll be case that *spp is set within
-> the current function.  Some sanity check might be nice?
->
-> > +     *spp = kvm_mmu_alloc_direct_sp_for_split(true);
-> > +     if (r)
-> > +             goto drop_lock;
-> > +
-> > +     return 0;
-> > +
-> > +drop_lock:
-> > +     if (*flush)
-> > +             kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
-> > +
-> > +     *flush = false;
-> > +     *dropped_lock = true;
-> > +
-> > +     write_unlock(&kvm->mmu_lock);
-> > +     cond_resched();
-> > +     *spp = kvm_mmu_alloc_direct_sp_for_split(false);
-> > +     if (!*spp)
-> > +             r = -ENOMEM;
-> > +     write_lock(&kvm->mmu_lock);
-> > +
-> > +     return r;
-> > +}
-> > +
-> > +static struct kvm_mmu_page *kvm_mmu_get_sp_for_split(struct kvm *kvm,
-> > +                                                  const struct kvm_memory_slot *slot,
-> > +                                                  u64 *huge_sptep,
-> > +                                                  struct kvm_mmu_page **spp)
-> > +{
-> > +     struct kvm_mmu_page *split_sp;
-> > +     union kvm_mmu_page_role role;
-> > +     unsigned int access;
-> > +     gfn_t gfn;
-> > +
-> > +     gfn = sptep_to_gfn(huge_sptep);
-> > +     access = sptep_to_access(huge_sptep);
-> > +
-> > +     /*
-> > +      * Huge page splitting always uses direct shadow pages since we are
-> > +      * directly mapping the huge page GFN region with smaller pages.
-> > +      */
-> > +     role = kvm_mmu_child_role(huge_sptep, true, access);
-> > +     split_sp = kvm_mmu_find_direct_sp(kvm, gfn, role);
-> > +
-> > +     /*
-> > +      * Opt not to split if the lower-level SP already exists. This requires
-> > +      * more complex handling as the SP may be already partially filled in
-> > +      * and may need extra pte_list_desc structs to update parent_ptes.
-> > +      */
-> > +     if (split_sp)
-> > +             return NULL;
->
-> This smells tricky..
->
-> Firstly we're trying to lookup the existing SPs that has shadowed this huge
-> page in split way, with the access bits fetched from the shadow cache (so
-> without hugepage nx effect).  However could the pages be mapped with
-> different permissions from the currently hugely mapped page?
->
-> IIUC all these is for the fact that we can't allocate pte_list_desc and we
-> want to make sure we won't make the pte list to be >1.
->
-> But I also see that the pte_list check below...
->
-> > +
-> > +     swap(split_sp, *spp);
-> > +     init_shadow_page(kvm, split_sp, slot, gfn, role);
-> > +     trace_kvm_mmu_get_page(split_sp, true);
-> > +
-> > +     return split_sp;
-> > +}
-> > +
-> > +static int kvm_mmu_split_huge_page(struct kvm *kvm,
-> > +                                const struct kvm_memory_slot *slot,
-> > +                                u64 *huge_sptep, struct kvm_mmu_page **spp,
-> > +                                bool *flush)
-> > +
-> > +{
-> > +     struct kvm_mmu_page *split_sp;
-> > +     u64 huge_spte, split_spte;
-> > +     int split_level, index;
-> > +     unsigned int access;
-> > +     u64 *split_sptep;
-> > +     gfn_t split_gfn;
-> > +
-> > +     split_sp = kvm_mmu_get_sp_for_split(kvm, slot, huge_sptep, spp);
-> > +     if (!split_sp)
-> > +             return -EOPNOTSUPP;
-> > +
-> > +     /*
-> > +      * Since we did not allocate pte_list_desc_structs for the split, we
-> > +      * cannot add a new parent SPTE to parent_ptes. This should never happen
-> > +      * in practice though since this is a fresh SP.
-> > +      *
-> > +      * Note, this makes it safe to pass NULL to __link_shadow_page() below.
-> > +      */
-> > +     if (WARN_ON_ONCE(split_sp->parent_ptes.val))
-> > +             return -EINVAL;
-> > +
-> > +     huge_spte = READ_ONCE(*huge_sptep);
-> > +
-> > +     split_level = split_sp->role.level;
-> > +     access = split_sp->role.access;
-> > +
-> > +     for (index = 0; index < PT64_ENT_PER_PAGE; index++) {
-> > +             split_sptep = &split_sp->spt[index];
-> > +             split_gfn = kvm_mmu_page_get_gfn(split_sp, index);
-> > +
-> > +             BUG_ON(is_shadow_present_pte(*split_sptep));
-> > +
-> > +             /*
-> > +              * Since we did not allocate pte_list_desc structs for the
-> > +              * split, we can't add a new SPTE that maps this GFN.
-> > +              * Skipping this SPTE means we're only partially mapping the
-> > +              * huge page, which means we'll need to flush TLBs before
-> > +              * dropping the MMU lock.
-> > +              *
-> > +              * Note, this make it safe to pass NULL to __rmap_add() below.
-> > +              */
-> > +             if (gfn_to_rmap(split_gfn, split_level, slot)->val) {
-> > +                     *flush = true;
-> > +                     continue;
-> > +             }
->
-> ... here.
->
-> IIUC this check should already be able to cover all the cases and it's
-> accurate on the fact that we don't want to grow any rmap to >1 len.
->
-> > +
-> > +             split_spte = make_huge_page_split_spte(
-> > +                             huge_spte, split_level + 1, index, access);
-> > +
-> > +             mmu_spte_set(split_sptep, split_spte);
-> > +             __rmap_add(kvm, NULL, slot, split_sptep, split_gfn, access);
->
-> __rmap_add() with a NULL cache pointer is weird.. same as
-> __link_shadow_page() below.
->
-> I'll stop here for now I guess.. Have you considered having rmap allocation
-> ready altogether, rather than making this intermediate step but only add
-> that later?  Because all these look hackish to me..  It's also possible
-> that I missed something important, if so please shoot.
 
-I'd be happy to do it that way. The reasons I broke it up into the
-intermediate steps are:
- - At Google we only support up to including this patch. We don't
-handle the cases where the rmap or parent_ptes list need to grow.
- - It seemed like a good way to break up the support into smaller
-patches. But I think this backfired since the intermediate steps
-introduce their own complexity such as passing in NULL to
-__rmap_add().
+On 2022/3/22 07:20, Rob Herring wrote:
+> On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
+>> From: suijingfeng <suijingfeng@loongson.cn>
+>>
+> Needs a commit message.
+>
+>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+> Same person? Don't need both emails.
 
+Yes,  suijingfeng@loongson.cn is my company's email. But it can not be 
+used to send patches to dri-devel,
+
+when send patches with this email, the patch will not be shown on patch 
+works.
+
+Emails  are either blocked or got  rejected  by loongson's mail server.  
+It can only receive emails
+
+from you and other people, but not dri-devel. so have to use my personal 
+email(15330273260@189.cn) to send patches.
+
+>> ---
+>>   .../loongson/loongson,display-controller.yaml | 230 ++++++++++++++++++
+>>   1 file changed, 230 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>> new file mode 100644
+>> index 000000000000..7be63346289e
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+>> @@ -0,0 +1,230 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
+>> +
+>> +maintainers:
+>> +  - Sui Jingfeng <suijingfeng@loongson.cn>
+>> +
+>> +description: |+
+>> +
+>> +  Loongson display controllers are simple which require scanout buffers
+>> +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
+>> +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
+>> +  with a dedicated video RAM which is 64MB or more, precise size can be
+>> +  read from the PCI BAR 2 of the GPU device(0x0014:0x7A15) in the bridge
+>> +  chip.
+>> +
+>> +  LSDC has two display pipes, each way has a DVO interface which provide
+>> +  RGB888 signals, vertical & horizontal synchronisations, data enable and
+>> +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
+>> +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
+>> +
+>> +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
+>> +  located at the DC register space. They are used to emulate two way i2c,
+>> +  One for DVO0, another for DVO1.
+>> +
+>> +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
+>> +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
+>> +
+>> +  LSDC's display pipeline have several components as below description,
+>> +
+>> +  The display controller in LS7A1000:
+>> +     ___________________                                     _________
+>> +    |            -------|                                   |         |
+>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+>> +    |  _   _     -------|        ^             ^            |_________|
+>> +    | | | | |    -------|        |             |
+>> +    | |_| |_|    | i2c0 <--------+-------------+
+>> +    |            -------|
+>> +    |   DC IN LS7A1000  |
+>> +    |  _   _     -------|
+>> +    | | | | |    | i2c1 <--------+-------------+
+>> +    | |_| |_|    -------|        |             |             _________
+>> +    |            -------|        |             |            |         |
+>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+>> +    |            -------|                                   |_________|
+>> +    |___________________|
+>> +
+>> +  Simple usage of LS7A1000 with LS3A4000 CPU:
+>> +
+>> +    +------+            +-----------------------------------+
+>> +    | DDR4 |            |  +-------------------+            |
+>> +    +------+            |  | PCIe Root complex |   LS7A1000 |
+>> +       || MC0           |  +--++---------++----+            |
+>> +  +----------+  HT 3.0  |     ||         ||                 |
+>> +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
+>> +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
+>> +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
+>> +       || MC1           +---------------|--|----------------+
+>> +    +------+                            |  |
+>> +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+>> +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
+>> +                      +-------+                      +------+
+>> +
+>> +  The display controller in LS2K1000/LS2K0500:
+>> +     ___________________                                     _________
+>> +    |            -------|                                   |         |
+>> +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+>> +    |  _   _     -------|        ^              ^           |_________|
+>> +    | | | | |           |        |              |
+>> +    | |_| |_|           |     +------+          |
+>> +    |                   <---->| i2c0 |<---------+
+>> +    |   DC IN LS2K1000  |     +------+
+>> +    |  _   _            |     +------+
+>> +    | | | | |           <---->| i2c1 |----------+
+>> +    | |_| |_|           |     +------+          |            _________
+>> +    |            -------|        |              |           |         |
+>> +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+>> +    |            -------|                                   |_________|
+>> +    |___________________|
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
+>> +
+>> +  compatible:
+>> +    oneOf:
+>> +      - items:
+>> +          - enum:
+>> +              - loongson,ls7a1000-dc
+>> +              - loongson,ls2k1000-dc
+>> +              - loongson,ls2k0500-dc
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  '#address-cells':
+>> +    const: 1
+>> +
+>> +  '#size-cells':
+>> +    const: 0
+>> +
+>> +  i2c-gpio@0:
+>> +    description: |
+>> +      Built-in GPIO emulate i2c exported for external display bridge
+> If you have i2c-gpio, that belongs at the DT top-level, not here.
 >
-> Thanks,
+>> +      configuration, onitor detection and edid read back etc, for ls7a1000
+>> +      only. Its compatible must be lsdc,i2c-gpio-0. The reg property can be
+> No, there's a defined i2c-gpio compatible already.
+
+This is different from the i2c-gpio already defined under drivers/i2c/busses/i2c-gpio.c,
+By design, my i2c-gpio is vendor specific properties, lsdc device driver create the i2c
+adapter at runtime. These are 4 dedicated GPIOs whose control register is located at the
+LSDC register space, not general purpose GPIOs with separate control register resource.
+So i think it is the child node of display-controller@6,1, it belongs to LSDC.
+It seems that put it at the DT top-level break the hierarchy and relationship.
+
+>> +      used to specify a I2c adapter bus number, if you don't specify one
+>> +      i2c driver core will dynamically assign a bus number. Please specify
+> Bus numbers are a linux detail not relevant to DT binding.
 >
-> > +     }
-> > +
-> > +     /*
-> > +      * Replace the huge spte with a pointer to the populated lower level
-> > +      * page table. Since we are making this change without a TLB flush vCPUs
-> > +      * will see a mix of the split mappings and the original huge mapping,
-> > +      * depending on what's currently in their TLB. This is fine from a
-> > +      * correctness standpoint since the translation will either be identical
-> > +      * or non-present. To account for non-present mappings, the TLB will be
-> > +      * flushed prior to dropping the MMU lock.
-> > +      */
-> > +     __drop_large_spte(kvm, huge_sptep, false);
-> > +     __link_shadow_page(NULL, huge_sptep, split_sp);
-> > +
-> > +     return 0;
-> > +}
->
-> --
-> Peter Xu
->
+>> +      it only when its bus number matters. Bus number greater than 6 is safe
+>> +      because ls7a1000 bridge have 6 hardware I2C controller integrated.
+>> +
+>> +  i2c-gpio@1:
+>> +    description: |
+>> +      Built-in GPIO emulate i2c exported for external display bridge
+>> +      configuration, onitor detection and edid read back etc, for ls7a1000
+>> +      only. Its compatible must be lsdc,i2c-gpio-1.
+>> +
+>> +  ports:
+>> +    $ref: /schemas/graph.yaml#/properties/ports
+>> +
+>> +    properties:
+>> +      port@0:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
+>> +
+>> +      port@1:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
+>> +
+>> +    required:
+>> +      - port@0
+>> +      - port@1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - ports
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    bus {
+>> +
+>> +        #address-cells = <3>;
+>> +        #size-cells = <2>;
+>> +        #interrupt-cells = <2>;
+>> +
+>> +        display-controller@6,1 {
+>> +            compatible = "loongson,ls7a1000-dc";
+>> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
+>> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +
+>> +            i2c-gpio@0 {
+>> +                compatible = "lsdc,i2c-gpio-0";
+>> +                reg = <6>;
+>> +                sda = <0>;
+>> +                scl = <1>;
+>> +            };
+>> +
+>> +            i2c-gpio@1 {
+>> +                compatible = "lsdc,i2c-gpio-1";
+>> +                reg = <7>;
+>> +                sda = <2>;
+>> +                scl = <3>;
+>> +            };
+>> +
+>> +            ports {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +                port@0 {
+>> +                    reg = <0>;
+>> +                    endpoint {
+>> +                            remote-endpoint = <&vga_encoder_in>;
+>> +                    };
+>> +                };
+>> +                port@1 {
+>> +                    reg = <1>;
+>> +                    endpoint {
+>> +                            remote-endpoint = <&dvi_encoder_in>;
+>> +                    };
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    bus {
+>> +
+>> +        #address-cells = <3>;
+>> +        #size-cells = <2>;
+>> +        #interrupt-cells = <2>;
+>> +
+>> +        display-controller@6,0 {
+>> +            compatible = "loongson,ls2k1000-dc";
+>> +            reg = <0x3100 0x0 0x0 0x0 0x0>;
+>> +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +            ports {
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +                port@0 {
+>> +                    reg = <0>;
+>> +                    endpoint {
+>> +                            remote-endpoint = <&panel_in>;
+>> +                    };
+>> +                };
+>> +                port@1 {
+>> +                    reg = <1>;
+>> +                    endpoint {
+>> +                            remote-endpoint = <&hdmi_encoder_in>;
+>> +                    };
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +...
+>> -- 
+>> 2.25.1
+>>
+>>
