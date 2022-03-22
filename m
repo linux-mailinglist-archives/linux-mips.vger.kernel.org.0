@@ -2,57 +2,56 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA114E48F0
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Mar 2022 23:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 550764E4931
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Mar 2022 23:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237377AbiCVWK7 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Mar 2022 18:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
+        id S229614AbiCVWcM (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Mar 2022 18:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233929AbiCVWK6 (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Mar 2022 18:10:58 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484612314B
-        for <linux-mips@vger.kernel.org>; Tue, 22 Mar 2022 15:09:29 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 25so25839759ljv.10
-        for <linux-mips@vger.kernel.org>; Tue, 22 Mar 2022 15:09:29 -0700 (PDT)
+        with ESMTP id S237385AbiCVWcL (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Mar 2022 18:32:11 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3693756238
+        for <linux-mips@vger.kernel.org>; Tue, 22 Mar 2022 15:30:42 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id u3so25994879ljd.0
+        for <linux-mips@vger.kernel.org>; Tue, 22 Mar 2022 15:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YulFfxGuY3s5pZU2mZSRJ47ZNRwCdbPLLqIFBwNkP1w=;
-        b=qZGito7rUgupqtfaAd4svmkZQfQWv/+FGxP7lfQo/9FKefYWqfZxVgM2UbTS2hzF/6
-         Am/pdfCVWJZf0OUQgl29Mkd5wxd6RmGNbIJ+i4quxJGdXX3JM8hmrE74m8u/+DA9k+lx
-         SOhfUBm0cUGCH73x0694q54PQATIgIG9REuIvlLhqTyMHAM0+fdLfHEFIw7gkrUJ90AU
-         dQmTminPU88Y4AOtXY1+eLSCeHglaIgmLWMjDv9Pqgq/S3b/+UGHHV30UTdBbZISjo4E
-         ubS0u1BpEQMxGkjc/OrpQPrLQHf73eswGXVmiJi9QoJnWiMR6reLnm7xvxkTqgvLszBF
-         Z4aQ==
+        bh=6C0VjdCibQefdFArpO2DUnsXQA3a5kOhFYGWARoK0ng=;
+        b=MtxBqgU4fKDJGR32yDNgrmZJHVZ9bb2nYLZL1tpRrFZwetiJIn2bt+LK4GS5a9FE5z
+         VSPQClN4wmv6t2ZS3+SThHgq+PTzoGZq9WwphTds4WaaDJdV9wLjRQpgZHXFo04LFK45
+         DbaKwmn1MdC1W7oub9gJLVmt5D8P4MEz1fP9/LgQ/6jSqje2aE9tMYh2pUN8eBLuP7qB
+         udL4gP5YkOBOuV/Q88HWPp0T5BcfMPOLoR6L4dUQPfvZn57wp9e+uFder/QNBPdTndt+
+         VeiKQCAW7TVguWPR+wPjehqbqxcuqPr3qQWGhkmcTKwqPIpCQL2ZKGEShVUUNvzQVTAa
+         ri3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YulFfxGuY3s5pZU2mZSRJ47ZNRwCdbPLLqIFBwNkP1w=;
-        b=Oty+82xV2LHh2yTMz/OufD5HEWPnRWwYovSZRX7spRnrTI0Gp9gP5pehZGIkkFIKJd
-         OkhuwFbDmKlIzDLxXfHGoxNCE8zBupHjikWCdbmF5pv9Qy1yZ5oY9XdAljAYIE9L/U9M
-         eTfyoeIAlpn1MuWzADqg00J4w/Uc6V8PlBDf6P064VrdE50yrPgb/VJnd4A5FRoVV0Ex
-         RZAzK5srxZmOneJsJk3NqCldPmkLOn/F87VaKj3hb9Ozpha9E9BuwXi6zniyOlqa7EDd
-         k31oVVfT7kNbkes2d1pOE2QCbKU7/VxCcKjEW7iGhAP+3X0h4XSKTGdLdG1XxRTxLlbo
-         9bow==
-X-Gm-Message-State: AOAM533z0ohZVqkUQijFmJZbu7s7rT+3WBzvlLL+foHeysYGVzayaec+
-        6JHjxN7EXxX1/nPakwhItqjiVYr4vxjMTtQ0NLU0eg==
-X-Google-Smtp-Source: ABdhPJyo+PHJdKkv1Rsy+fLHM3hSBk/m9RSBycD2dahs0AuT8nMD+Oec514GvjsYeS1kaZZN/zRX88tmNvGh5X45Yv4=
+        bh=6C0VjdCibQefdFArpO2DUnsXQA3a5kOhFYGWARoK0ng=;
+        b=ueQwbar+oEq4lKRLcNAXWyX3Ga6JjPB3n2pB+FiEhGcfLmTsu0dIqez8it0nStgSa1
+         AROuRcQDsmfhzCC87SjLYbg2L0pq25ZewdPQ1zBgwD2jNqrHejx9TjOIUihokxezJkBA
+         nLzavLmrCk9uCh4/WvyJkSdmGVoc86Ef+BtWPIjt8DdcL9GfoBM7yKzlGr2yQW0cWAz0
+         9h7Zg5lZBzzK45xwN5r9z9qPZSARQTjbhGuZpQMWtgTmgM8vwl3AsNqmUPNpxyjgocfM
+         bYVWirwAebRzNN2wx2qs+bYxQEBIqVDJ/OMNiYZSGV0l4M/5i8rxGl1uHhJy/zAgy4ab
+         hrSA==
+X-Gm-Message-State: AOAM5327HugqCBRL+sDhCNPmlmQbtIhntKV5gDAMG6/f63GITDtD6uE6
+        obvZ5trl+Vdw4f1BkO5kb/otdzwxl2X+0A5FsHOS8Q==
+X-Google-Smtp-Source: ABdhPJzVn7Ue1RCjw9fF5Wh1a2QmXc4MY9QvN0TqD0+X9MMkibqMAaH0yMU5CoBRsExNt7Oq9j3MqODGm4HDDa8jxEw=
 X-Received: by 2002:a2e:9119:0:b0:247:e306:1379 with SMTP id
- m25-20020a2e9119000000b00247e3061379mr20328662ljg.361.1647986967344; Tue, 22
- Mar 2022 15:09:27 -0700 (PDT)
+ m25-20020a2e9119000000b00247e3061379mr20387823ljg.361.1647988240437; Tue, 22
+ Mar 2022 15:30:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220311002528.2230172-1-dmatlack@google.com> <20220311002528.2230172-5-dmatlack@google.com>
- <YjBTal9gWoEKybxi@xz-m1.local>
-In-Reply-To: <YjBTal9gWoEKybxi@xz-m1.local>
+References: <20220311002528.2230172-1-dmatlack@google.com> <20220311002528.2230172-9-dmatlack@google.com>
+ <YjBkm8mYKNc5sdpU@xz-m1.local>
+In-Reply-To: <YjBkm8mYKNc5sdpU@xz-m1.local>
 From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 22 Mar 2022 15:09:00 -0700
-Message-ID: <CALzav=ewmDSc+wviY17Fz_nD4TfRd=+h0h5-zPVgqhbxmuVq2Q@mail.gmail.com>
-Subject: Re: [PATCH v2 04/26] KVM: x86/mmu: Decompose kvm_mmu_get_page() into
- separate functions
+Date:   Tue, 22 Mar 2022 15:30:14 -0700
+Message-ID: <CALzav=d82wAqcLQdGOfS7r95SSG3g=yKcY1hRc3fziZfNSHpzg@mail.gmail.com>
+Subject: Re: [PATCH v2 08/26] KVM: x86/mmu: Link spt to sp during allocation
 To:     Peter Xu <peterx@redhat.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
@@ -78,238 +77,61 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 1:51 AM Peter Xu <peterx@redhat.com> wrote:
+On Tue, Mar 15, 2022 at 3:04 AM Peter Xu <peterx@redhat.com> wrote:
 >
-> On Fri, Mar 11, 2022 at 12:25:06AM +0000, David Matlack wrote:
-> > Decompose kvm_mmu_get_page() into separate helper functions to increase
-> > readability and prepare for allocating shadow pages without a vcpu
-> > pointer.
+> On Fri, Mar 11, 2022 at 12:25:10AM +0000, David Matlack wrote:
+> > Link the shadow page table to the sp (via set_page_private()) during
+> > allocation rather than initialization. This is a more logical place to
+> > do it because allocation time is also where we do the reverse link
+> > (setting sp->spt).
 > >
-> > Specifically, pull the guts of kvm_mmu_get_page() into 3 helper
-> > functions:
-> >
-> > __kvm_mmu_find_shadow_page() -
-> >   Walks the page hash checking for any existing mmu pages that match the
-> >   given gfn and role. Does not attempt to synchronize the page if it is
-> >   unsync.
-> >
-> > kvm_mmu_find_shadow_page() -
-> >   Wraps __kvm_mmu_find_shadow_page() and handles syncing if necessary.
-> >
-> > kvm_mmu_new_shadow_page()
-> >   Allocates and initializes an entirely new kvm_mmu_page. This currently
-> >   requries a vcpu pointer for allocation and looking up the memslot but
-> >   that will be removed in a future commit.
-> >
-> >   Note, kvm_mmu_new_shadow_page() is temporary and will be removed in a
-> >   subsequent commit. The name uses "new" rather than the more typical
-> >   "alloc" to avoid clashing with the existing kvm_mmu_alloc_page().
+> > This creates one extra call to set_page_private(), but having multiple
+> > calls to set_page_private() is unavoidable anyway. We either do
+> > set_page_private() during allocation, which requires 1 per allocation
+> > function, or we do it during initialization, which requires 1 per
+> > initialization function.
 > >
 > > No functional change intended.
 > >
+> > Suggested-by: Ben Gardon <bgardon@google.com>
 > > Signed-off-by: David Matlack <dmatlack@google.com>
 >
-> Looks good to me, a few nitpicks and questions below.
+> Ah I should have read one more patch before commenting in previous one..
 >
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c         | 132 ++++++++++++++++++++++++---------
-> >  arch/x86/kvm/mmu/paging_tmpl.h |   5 +-
-> >  arch/x86/kvm/mmu/spte.c        |   5 +-
-> >  3 files changed, 101 insertions(+), 41 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 23c2004c6435..80dbfe07c87b 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -2027,16 +2027,25 @@ static void clear_sp_write_flooding_count(u64 *spte)
-> >       __clear_sp_write_flooding_count(sptep_to_sp(spte));
-> >  }
-> >
-> > -static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
-> > -                                          union kvm_mmu_page_role role)
-> > +/*
-> > + * Searches for an existing SP for the given gfn and role. Makes no attempt to
-> > + * sync the SP if it is marked unsync.
-> > + *
-> > + * If creating an upper-level page table, zaps unsynced pages for the same
-> > + * gfn and adds them to the invalid_list. It's the callers responsibility
-> > + * to call kvm_mmu_commit_zap_page() on invalid_list.
-> > + */
-> > +static struct kvm_mmu_page *__kvm_mmu_find_shadow_page(struct kvm *kvm,
-> > +                                                    gfn_t gfn,
-> > +                                                    union kvm_mmu_page_role role,
-> > +                                                    struct list_head *invalid_list)
-> >  {
-> >       struct hlist_head *sp_list;
-> >       struct kvm_mmu_page *sp;
-> >       int collisions = 0;
-> > -     LIST_HEAD(invalid_list);
-> >
-> > -     sp_list = &vcpu->kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
-> > -     for_each_valid_sp(vcpu->kvm, sp, sp_list) {
-> > +     sp_list = &kvm->arch.mmu_page_hash[kvm_page_table_hashfn(gfn)];
-> > +     for_each_valid_sp(kvm, sp, sp_list) {
-> >               if (sp->gfn != gfn) {
-> >                       collisions++;
-> >                       continue;
-> > @@ -2053,60 +2062,109 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
-> >                        * upper-level page will be write-protected.
-> >                        */
-> >                       if (role.level > PG_LEVEL_4K && sp->unsync)
-> > -                             kvm_mmu_prepare_zap_page(vcpu->kvm, sp,
-> > -                                                      &invalid_list);
-> > +                             kvm_mmu_prepare_zap_page(kvm, sp, invalid_list);
-> > +
-> >                       continue;
-> >               }
-> >
-> > -             /* unsync and write-flooding only apply to indirect SPs. */
-> > -             if (sp->role.direct)
-> > -                     goto trace_get_page;
-> > +             /* Write-flooding is only tracked for indirect SPs. */
-> > +             if (!sp->role.direct)
-> > +                     __clear_sp_write_flooding_count(sp);
-> >
-> > -             if (sp->unsync) {
-> > -                     /*
-> > -                      * The page is good, but is stale.  kvm_sync_page does
-> > -                      * get the latest guest state, but (unlike mmu_unsync_children)
-> > -                      * it doesn't write-protect the page or mark it synchronized!
-> > -                      * This way the validity of the mapping is ensured, but the
-> > -                      * overhead of write protection is not incurred until the
-> > -                      * guest invalidates the TLB mapping.  This allows multiple
-> > -                      * SPs for a single gfn to be unsync.
-> > -                      *
-> > -                      * If the sync fails, the page is zapped.  If so, break
-> > -                      * in order to rebuild it.
-> > -                      */
-> > -                     if (!kvm_sync_page(vcpu, sp, &invalid_list))
-> > -                             break;
-> > +             goto out;
-> > +     }
-> >
-> > -                     WARN_ON(!list_empty(&invalid_list));
-> > -                     kvm_flush_remote_tlbs(vcpu->kvm);
-> > -             }
-> > +     sp = NULL;
-> >
-> > -             __clear_sp_write_flooding_count(sp);
-> > +out:
-> > +     if (collisions > kvm->stat.max_mmu_page_hash_collisions)
-> > +             kvm->stat.max_mmu_page_hash_collisions = collisions;
-> > +
-> > +     return sp;
-> > +}
-> >
-> > -trace_get_page:
-> > -             trace_kvm_mmu_get_page(sp, false);
-> > +/*
-> > + * Looks up an existing SP for the given gfn and role if one exists. The
-> > + * return SP is guaranteed to be synced.
-> > + */
-> > +static struct kvm_mmu_page *kvm_mmu_find_shadow_page(struct kvm_vcpu *vcpu,
-> > +                                                  gfn_t gfn,
-> > +                                                  union kvm_mmu_page_role role)
-> > +{
-> > +     struct kvm_mmu_page *sp;
-> > +     LIST_HEAD(invalid_list);
-> > +
-> > +     sp = __kvm_mmu_find_shadow_page(vcpu->kvm, gfn, role, &invalid_list);
-> > +     if (!sp)
-> >               goto out;
-> > +
-> > +     if (sp->unsync) {
-> > +             /*
-> > +              * The page is good, but is stale.  kvm_sync_page does
-> > +              * get the latest guest state, but (unlike mmu_unsync_children)
-> > +              * it doesn't write-protect the page or mark it synchronized!
-> > +              * This way the validity of the mapping is ensured, but the
-> > +              * overhead of write protection is not incurred until the
-> > +              * guest invalidates the TLB mapping.  This allows multiple
-> > +              * SPs for a single gfn to be unsync.
-> > +              *
-> > +              * If the sync fails, the page is zapped and added to the
-> > +              * invalid_list.
-> > +              */
-> > +             if (!kvm_sync_page(vcpu, sp, &invalid_list)) {
-> > +                     sp = NULL;
-> > +                     goto out;
-> > +             }
-> > +
-> > +             WARN_ON(!list_empty(&invalid_list));
+> Personally I (a little bit) like the other way around, since if with this
+> in mind ideally we should also keep the use_mmu_page accounting in
+> allocation helper:
 >
-> Not related to this patch because I think it's a pure movement here,
-> however I have a question on why invalid_list is guaranteed to be empty..
->
-> I'm thinking the case where when lookup the page we could have already
-> called kvm_mmu_prepare_zap_page() there, then when reach here (which is the
-> kvm_sync_page==true case) invalid_list shouldn't be touched in
-> kvm_sync_page(), so it looks possible that it still contains some page to
-> be commited?
+>   kvm_mod_used_mmu_pages(vcpu->kvm, 1);
 
-I also had this question when I was re-organizing this code but
-haven't had the time to look into it yet.
+The TDP MMU doesn't call kvm_mod_used_mmu_pages() when it allocates
+SPs. So that would prevent sharing kvm_mmu_alloc_shadow_page() with
+the TDP MMU in patch 11.
+
+Ben pointed out that we link the the page to sp->spt during
+allocation, so it makes sense to do the reverse link at the same time.
+Also, the set_page_private() call is common between the TDP MMU and
+shadow MMU, so it makes sense to do it in the SP allocation code since
+the allocation functions are shared between the two MMUs.
+
+
+
+
 
 >
-> > +             kvm_flush_remote_tlbs(vcpu->kvm);
-> >       }
-> >
-> > +out:
+> But then we dup yet another line to all elsewheres as long as sp allocated.
 >
-> I'm wondering whether this "out" can be dropped.. with something like:
->
->         sp = __kvm_mmu_find_shadow_page(...);
->
->         if (sp && sp->unsync) {
->                 if (kvm_sync_page(vcpu, sp, &invalid_list)) {
->                         ..
->                 } else {
->                         sp = NULL;
->                 }
->         }
+> IOW, in my opinion the helpers should service 1st on code deduplications
+> rather than else.  No strong opinion though..
 
-Sure will do. I used the goto to reduce the amount of indentation, but
-I can definitely get rid of it.
 
->
-> [...]
->
-> > +static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu, gfn_t gfn,
-> > +                                          union kvm_mmu_page_role role)
-> > +{
-> > +     struct kvm_mmu_page *sp;
-> > +     bool created = false;
-> > +
-> > +     sp = kvm_mmu_find_shadow_page(vcpu, gfn, role);
-> > +     if (sp)
-> > +             goto out;
-> > +
-> > +     created = true;
-> > +     sp = kvm_mmu_new_shadow_page(vcpu, gfn, role);
-> > +
-> > +out:
-> > +     trace_kvm_mmu_get_page(sp, created);
-> >       return sp;
->
-> Same here, wondering whether we could drop the "out" by:
->
->         sp = kvm_mmu_find_shadow_page(vcpu, gfn, role);
->         if (!sp) {
->                 created = true;
->                 sp = kvm_mmu_new_shadow_page(vcpu, gfn, role);
->         }
->
->         trace_kvm_mmu_get_page(sp, created);
->         return sp;
-
-Ditto.
 
 >
 > Thanks,
