@@ -2,450 +2,474 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAF14E49D5
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Mar 2022 00:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7843D4E4A57
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Mar 2022 02:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240794AbiCWAAH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Mar 2022 20:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60954 "EHLO
+        id S241039AbiCWBLf (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Mar 2022 21:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240797AbiCWAAG (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Mar 2022 20:00:06 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB46432980
-        for <linux-mips@vger.kernel.org>; Tue, 22 Mar 2022 16:58:36 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id w27so49656lfa.5
-        for <linux-mips@vger.kernel.org>; Tue, 22 Mar 2022 16:58:36 -0700 (PDT)
+        with ESMTP id S241035AbiCWBLf (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Mar 2022 21:11:35 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46296FA03
+        for <linux-mips@vger.kernel.org>; Tue, 22 Mar 2022 18:10:00 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id pv16so19018ejb.0
+        for <linux-mips@vger.kernel.org>; Tue, 22 Mar 2022 18:10:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Tlu9SL5J8R6omNurz/8ecWUmBgsP2CZL3lQ7lttJwIo=;
-        b=RrfGYgXpjnJ8ez8X6CM7k+LaOf3xmCUxJSQMhdEXy4J5Q+IBIRBCH1wKcXexUWIhlT
-         THFZxMbK3Rh9Ak7v5s96Wl/fIrQQocvtsSIRyNDqJzvwdHeVL3bYtldUbd4bDKf1mHEV
-         kBB0PwBVITYpyD4qWwUJ7e1ADJlk7b5Z0uvoXGZudW8GwXMJpE79P4tFHsrLK+iYLY6U
-         tB5jU3pv7Bu4mjv83RAWnlerAvQmfrRyxVg0GKQtsKMoaqv8lJsQ21+5+nnzyadDL9IE
-         iT05UhKXjQfs1p+615uNJigSwoRkmdhO1UafP11DRN3NrO+xo4+AjJnHqBPwG/5CYSp3
-         t8sA==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Usl1cb51/8av9PlFaE8pZNe2bf5KKJvN2T2RDmfs+5U=;
+        b=aHnC0nri4D5uQSk+Up+F9iO14ux5h+n+BlngUlSSFeHS/nBafyWB5cs4vZ93RjxRy2
+         wJXhLNWWc4Sik01lxZUoXit/e8NGk9gmTwKIthzLrAuEpaZh/OXDTTV5kj4arkx5nlBV
+         9lQ+a3b/01wBnY+xhOVsxRiB6sr0n+zL4SRu1X9Kk8Tid9zvjnlN/06+uOJfUpKf1D+a
+         EyrESDwNVBpZnhUZMlSYX17D9zFLXFZx3X9SRPvtUYZlKfhl5VEftIoXXGtqluU9hmzs
+         AhnTYmCOcYwIIpU0FxoE2e3NPn77ruuyWC/AdHP727WgZeNKirx17nssTJB6pquUPX5I
+         FL+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Tlu9SL5J8R6omNurz/8ecWUmBgsP2CZL3lQ7lttJwIo=;
-        b=c9OWpCN5T+X0humdgDzBqlnEH82A3ZSeJvbO4lxOEh30R6JioODOBjgGPPVVAp0Zva
-         UlH56gsq81mjKel1qi8EKlx+i8+emhoNVJhzqLrkXyVsXWkKtQp5qpxdyPJ4Ff3dL04E
-         UrOs1QSUNCp6DRyendg/oskR2HP5pGe/6dziGu7jgBMrYMKpM3ZdfrNZ/rhPqOGvlfJA
-         9uzenYHWG3g2RrZylZDtygnPOmQNNzKJLRc2RUhqKPFw0MQ1PPH2ZfcEQxjEeJ3Y+SUv
-         mPPnTZcU2Fpn5FOt2P8Hy5AcnnwCvS5wKoHcw4mgn2XKxWNxCfPKUkrfb+231fVFTfON
-         wsWw==
-X-Gm-Message-State: AOAM533uOIZH3jf4EpiLJh7TsMK10T3hr8ARaoDllZpioCmtMwQzR63v
-        WcwPhQspWYqaVNyqZHCon+8x7Axs9kyeI0KGV7TFiA==
-X-Google-Smtp-Source: ABdhPJzAHjryVgyItrSJbyclkF/PK/xzk6cO8k9gztUg+3u5ufFEp9D+g2GXAVQOphYpNtog59blAdCJnA5c63QCI6o=
-X-Received: by 2002:a05:6512:1114:b0:448:388c:b79f with SMTP id
- l20-20020a056512111400b00448388cb79fmr19983100lfg.250.1647993514765; Tue, 22
- Mar 2022 16:58:34 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Usl1cb51/8av9PlFaE8pZNe2bf5KKJvN2T2RDmfs+5U=;
+        b=ERLlp8RNaJW4TZDe4PzsDl97FG68OsYjNjmAvm12QsorKzMSwZI0qOX4gVFggffV6A
+         XCKnlxgGQHeb9wpUVL3ak+BTok5PAY3CT68j4ftrWBiW102KmMRcr7g9rIaNOvcrt7Um
+         o0Pm1dr80Psziwcd8Utja/LJJeLhiDNeC3QdMMeuAR4Z+HLlPphpwCUVTDtAKueEENik
+         K9muz12JT6CfWb+HheF7b7AzVektm3oZSu5vkioP+YOhS4nEWnILvuKHArksB9J+Lhx9
+         OXv5q/XaD8HHEpaysak1sxrc4dcatTNCd5fS+uHIkeoQZHAMatWWekvKMUv9oLN7KN1R
+         Dcgg==
+X-Gm-Message-State: AOAM533QyhXe256OylxubpXk0oScGl0lXnLAr0u1VkyfqZPWvagvwNH4
+        7FWkrMMv4lBxE0M58xiP8iXMPPycy+wMY5q3OkM=
+X-Google-Smtp-Source: ABdhPJx2Fe0bZIuqd87mbasfgYXrFbgLcYQO3s8qk+AEOPZGfqexNtyVhVbs6oN/bUxTGEH4Qt7tzAlq7El+neeWNC0=
+X-Received: by 2002:a17:907:c0c:b0:6d1:8c46:6415 with SMTP id
+ ga12-20020a1709070c0c00b006d18c466415mr29543836ejc.326.1647997799095; Tue, 22
+ Mar 2022 18:09:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220311002528.2230172-1-dmatlack@google.com> <20220311002528.2230172-21-dmatlack@google.com>
- <YjG7Zh4zwTDsO3L1@xz-m1.local>
-In-Reply-To: <YjG7Zh4zwTDsO3L1@xz-m1.local>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 22 Mar 2022 16:58:08 -0700
-Message-ID: <CALzav=fRFzbGEVhdMSwhX1Gs1++DGW6MOWvKzeQ-RTtLsus=SQ@mail.gmail.com>
-Subject: Re: [PATCH v2 20/26] KVM: x86/mmu: Extend Eager Page Splitting to the
- shadow MMU
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>,
-        "moderated list:KERNEL VIRTUAL MACHINE FOR ARM64 (KVM/arm64)" 
-        <kvmarm@lists.cs.columbia.edu>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <linux-mips@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
-        <kvm-riscv@lists.infradead.org>, Peter Feiner <pfeiner@google.com>
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Wed, 23 Mar 2022 01:09:50 +0000
+Message-ID: <CAHpNFcN_tkiK1hO5HkJtvydLhj8biSLVQ+sFsuidM7wYF8PJPw@mail.gmail.com>
+Subject: GPIO & QFFT : RS : Subject Re: [PATCH] watchdog: gpio_wdt: Support
+ GPO lines with the toggle algorithm
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-(On Wed, Mar 16, 2022 at 3:27 AM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Mar 11, 2022 at 12:25:22AM +0000, David Matlack wrote:
-> > Extend KVM's eager page splitting to also split huge pages that are
-> > mapped by the shadow MMU. Specifically, walk through the rmap splitting
-> > all 1GiB pages to 2MiB pages, and splitting all 2MiB pages to 4KiB
-> > pages.
-> >
-> > Splitting huge pages mapped by the shadow MMU requries dealing with some
-> > extra complexity beyond that of the TDP MMU:
-> >
-> > (1) The shadow MMU has a limit on the number of shadow pages that are
-> >     allowed to be allocated. So, as a policy, Eager Page Splitting
-> >     refuses to split if there are KVM_MIN_FREE_MMU_PAGES or fewer
-> >     pages available.
-> >
-> > (2) Huge pages may be mapped by indirect shadow pages which have the
-> >     possibility of being unsync. As a policy we opt not to split such
-> >     pages as their translation may no longer be valid.
-> >
-> > (3) Splitting a huge page may end up re-using an existing lower level
-> >     shadow page tables. This is unlike the TDP MMU which always allocates
-> >     new shadow page tables when splitting.  This commit does *not*
-> >     handle such aliasing and opts not to split such huge pages.
-> >
-> > (4) When installing the lower level SPTEs, they must be added to the
-> >     rmap which may require allocating additional pte_list_desc structs.
-> >     This commit does *not* handle such cases and instead opts to leave
-> >     such lower-level SPTEs non-present. In this situation TLBs must be
-> >     flushed before dropping the MMU lock as a portion of the huge page
-> >     region is being unmapped.
-> >
-> > Suggested-by: Peter Feiner <pfeiner@google.com>
-> > [ This commit is based off of the original implementation of Eager Page
-> >   Splitting from Peter in Google's kernel from 2016. ]
-> > Signed-off-by: David Matlack <dmatlack@google.com>
-> > ---
-> >  .../admin-guide/kernel-parameters.txt         |   3 -
-> >  arch/x86/kvm/mmu/mmu.c                        | 307 ++++++++++++++++++
-> >  2 files changed, 307 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > index 05161afd7642..495f6ac53801 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -2360,9 +2360,6 @@
-> >                       the KVM_CLEAR_DIRTY ioctl, and only for the pages being
-> >                       cleared.
-> >
-> > -                     Eager page splitting currently only supports splitting
-> > -                     huge pages mapped by the TDP MMU.
-> > -
-> >                       Default is Y (on).
-> >
-> >       kvm.enable_vmware_backdoor=[KVM] Support VMware backdoor PV interface.
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 926ddfaa9e1a..dd56b5b9624f 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -727,6 +727,11 @@ static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
-> >
-> >  static struct pte_list_desc *mmu_alloc_pte_list_desc(struct kvm_mmu_memory_cache *cache)
-> >  {
-> > +     static const gfp_t gfp_nocache = GFP_ATOMIC | __GFP_ACCOUNT | __GFP_ZERO;
-> > +
-> > +     if (WARN_ON_ONCE(!cache))
-> > +             return kmem_cache_alloc(pte_list_desc_cache, gfp_nocache);
-> > +
->
-> I also think this is not proper to be added into this patch.  Maybe it'll
-> be more suitable for the rmap_add() rework patch previously, or maybe it
-> can be dropped directly if it should never trigger at all. Then we die hard
-> at below when referencing it.
+GPIO is used for Super speed output, However Serialised Parallel
+processing allows constant flow:
 
-I can drop this, Ben suggested the same. cache should really never be
-NULL so there's no need for this backup code.
+Examples:
 
->
-> >       return kvm_mmu_memory_cache_alloc(cache);
-> >  }
-> >
-> > @@ -743,6 +748,28 @@ static gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index)
-> >       return sp->gfn + (index << ((sp->role.level - 1) * PT64_LEVEL_BITS));
-> >  }
-> >
-> > +static gfn_t sptep_to_gfn(u64 *sptep)
-> > +{
-> > +     struct kvm_mmu_page *sp = sptep_to_sp(sptep);
-> > +
-> > +     return kvm_mmu_page_get_gfn(sp, sptep - sp->spt);
-> > +}
-> > +
-> > +static unsigned int kvm_mmu_page_get_access(struct kvm_mmu_page *sp, int index)
-> > +{
-> > +     if (!sp->role.direct)
-> > +             return sp->shadowed_translation[index].access;
-> > +
-> > +     return sp->role.access;
-> > +}
-> > +
-> > +static unsigned int sptep_to_access(u64 *sptep)
-> > +{
-> > +     struct kvm_mmu_page *sp = sptep_to_sp(sptep);
-> > +
-> > +     return kvm_mmu_page_get_access(sp, sptep - sp->spt);
-> > +}
-> > +
-> >  static void kvm_mmu_page_set_gfn_access(struct kvm_mmu_page *sp, int index,
-> >                                       gfn_t gfn, u32 access)
-> >  {
-> > @@ -912,6 +939,9 @@ static int pte_list_add(struct kvm_mmu_memory_cache *cache, u64 *spte,
-> >       return count;
-> >  }
-> >
-> > +static struct kvm_rmap_head *gfn_to_rmap(gfn_t gfn, int level,
-> > +                                      const struct kvm_memory_slot *slot);
-> > +
-> >  static void
-> >  pte_list_desc_remove_entry(struct kvm_rmap_head *rmap_head,
-> >                          struct pte_list_desc *desc, int i,
-> > @@ -2125,6 +2155,23 @@ static struct kvm_mmu_page *__kvm_mmu_find_shadow_page(struct kvm *kvm,
-> >       return sp;
-> >  }
-> >
-> > +static struct kvm_mmu_page *kvm_mmu_find_direct_sp(struct kvm *kvm, gfn_t gfn,
-> > +                                                union kvm_mmu_page_role role)
-> > +{
-> > +     struct kvm_mmu_page *sp;
-> > +     LIST_HEAD(invalid_list);
-> > +
-> > +     BUG_ON(!role.direct);
-> > +
-> > +     sp = __kvm_mmu_find_shadow_page(kvm, gfn, role, &invalid_list);
-> > +
-> > +     /* Direct SPs are never unsync. */
-> > +     WARN_ON_ONCE(sp && sp->unsync);
-> > +
-> > +     kvm_mmu_commit_zap_page(kvm, &invalid_list);
-> > +     return sp;
-> > +}
-> > +
-> >  /*
-> >   * Looks up an existing SP for the given gfn and role if one exists. The
-> >   * return SP is guaranteed to be synced.
-> > @@ -6063,12 +6110,266 @@ void kvm_mmu_slot_remove_write_access(struct kvm *kvm,
-> >               kvm_arch_flush_remote_tlbs_memslot(kvm, memslot);
-> >  }
-> >
-> > +static int prepare_to_split_huge_page(struct kvm *kvm,
-> > +                                   const struct kvm_memory_slot *slot,
-> > +                                   u64 *huge_sptep,
-> > +                                   struct kvm_mmu_page **spp,
-> > +                                   bool *flush,
-> > +                                   bool *dropped_lock)
-> > +{
-> > +     int r = 0;
-> > +
-> > +     *dropped_lock = false;
-> > +
-> > +     if (kvm_mmu_available_pages(kvm) <= KVM_MIN_FREE_MMU_PAGES)
-> > +             return -ENOSPC;
-> > +
-> > +     if (need_resched() || rwlock_needbreak(&kvm->mmu_lock))
-> > +             goto drop_lock;
-> > +
->
-> Not immediately clear on whether there'll be case that *spp is set within
-> the current function.  Some sanity check might be nice?
+Audio devices such as creative logic ISA & PCI Cards on SUPER
+input mode (Mic & Input ports)16Bit HQ into 256 Drums in 32Bit Super HQ
 
-Sorry I'm not sure what you mean here. What kind of sanity check did
-you have in mind?
+CPU Coprocessors such as the QFFT : Input & Output alternate lines on pins
 
->
-> > +     *spp = kvm_mmu_alloc_direct_sp_for_split(true);
-> > +     if (r)
-> > +             goto drop_lock;
-> > +
-> > +     return 0;
-> > +
-> > +drop_lock:
-> > +     if (*flush)
-> > +             kvm_arch_flush_remote_tlbs_memslot(kvm, slot);
-> > +
-> > +     *flush = false;
-> > +     *dropped_lock = true;
-> > +
-> > +     write_unlock(&kvm->mmu_lock);
-> > +     cond_resched();
-> > +     *spp = kvm_mmu_alloc_direct_sp_for_split(false);
-> > +     if (!*spp)
-> > +             r = -ENOMEM;
-> > +     write_lock(&kvm->mmu_lock);
-> > +
-> > +     return r;
-> > +}
-> > +
-> > +static struct kvm_mmu_page *kvm_mmu_get_sp_for_split(struct kvm *kvm,
-> > +                                                  const struct kvm_memory_slot *slot,
-> > +                                                  u64 *huge_sptep,
-> > +                                                  struct kvm_mmu_page **spp)
-> > +{
-> > +     struct kvm_mmu_page *split_sp;
-> > +     union kvm_mmu_page_role role;
-> > +     unsigned int access;
-> > +     gfn_t gfn;
-> > +
-> > +     gfn = sptep_to_gfn(huge_sptep);
-> > +     access = sptep_to_access(huge_sptep);
-> > +
-> > +     /*
-> > +      * Huge page splitting always uses direct shadow pages since we are
-> > +      * directly mapping the huge page GFN region with smaller pages.
-> > +      */
-> > +     role = kvm_mmu_child_role(huge_sptep, true, access);
-> > +     split_sp = kvm_mmu_find_direct_sp(kvm, gfn, role);
-> > +
-> > +     /*
-> > +      * Opt not to split if the lower-level SP already exists. This requires
-> > +      * more complex handling as the SP may be already partially filled in
-> > +      * and may need extra pte_list_desc structs to update parent_ptes.
-> > +      */
-> > +     if (split_sp)
-> > +             return NULL;
->
-> This smells tricky..
->
-> Firstly we're trying to lookup the existing SPs that has shadowed this huge
-> page in split way, with the access bits fetched from the shadow cache (so
-> without hugepage nx effect).
+Parallel ports in Super IO mode! 4MB/S WOW
 
-Yeah this is tricky for sure.
+Hard Drives IO 120MB/s Write Cycle (Audio Recording Desks & Studio
+Recording Studios)
 
-For direct shadow pages, sp->role.access is always the guest access
-permissions being shadowed (or ACC_ALL for situations where there is
-no shadowing, e.g. __direct_map() and the TDP MMU). That's why we use
-shadow translation cache to lookup up an existing SP or creating a new
-SP, rather than taking the access permissions from the huge SPTE
-itself (which may have KVM-specific policies applied such as HugePage
-NX, access tracking, etc.). In other words, we want to look up
-existing SPs in the same exact way that the fault handler looks them
-up.
+Tape DECKS : IBM, Fuji, Sony & Samsung TAPE Backups Super IO GPIO :
+1.2GB/s to 72GB/s Compressed
 
-> However could the pages be mapped with
-> different permissions from the currently hugely mapped page?
+GPIO Could be used on RAM : Examples is 4 special pins on the RAM for
+burst mode!
 
-Yes, I think there can be some differences, such as:
+GPIO is rather more relevant than you think!
 
- - The child SPTEs may have execute permission granted due to HugePage
-NX while the huge page does not.
- - The child SPTEs may be in a different access tracking state than
-the huge page.
+Rupert S
 
-There may be others. But no matter what, the same differences are
-possible when we split a huge page during a fault, which leads me to
-conclude it is safe.
+https://science.n-helix.com/2021/11/wave-focus-anc.html
 
+https://science.n-helix.com/2021/10/noise-violation-technology-bluetooth.ht=
+ml
+
+
+https://www.orosound.com/
+
+https://www.consumerreports.org/noise-canceling-headphone/best-noise-cancel=
+ing-headphones-of-the-year-a1166868524/
+
+
+https://lkml.org/lkml/2022/3/22/1112
+
+Date Tue, 22 Mar 2022 17:04:53 -0700
+From Guenter Roeck <>
+Subject Re: [PATCH] watchdog: gpio_wdt: Support GPO lines with the
+toggle algorithm
+share 0
+On 3/22/22 15:29, Tobias Waldekranz wrote:
+> Support using GPO lines (i.e. GPIOs that are output-only) with
+> gpio_wdt using the "toggle" algorithm.
 >
-> IIUC all these is for the fact that we can't allocate pte_list_desc and we
-> want to make sure we won't make the pte list to be >1.
+> Since its inception, gpio_wdt has configured its GPIO line as an input
+> when using the "toggle" algorithm, even though it is used as an output
+> when kicking. This needlessly barred hardware with output-only pins
+> from using the driver.
 >
-> But I also see that the pte_list check below...
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
 >
-> > +
-> > +     swap(split_sp, *spp);
-> > +     init_shadow_page(kvm, split_sp, slot, gfn, role);
-> > +     trace_kvm_mmu_get_page(split_sp, true);
-> > +
-> > +     return split_sp;
-> > +}
-> > +
-> > +static int kvm_mmu_split_huge_page(struct kvm *kvm,
-> > +                                const struct kvm_memory_slot *slot,
-> > +                                u64 *huge_sptep, struct kvm_mmu_page **spp,
-> > +                                bool *flush)
-> > +
-> > +{
-> > +     struct kvm_mmu_page *split_sp;
-> > +     u64 huge_spte, split_spte;
-> > +     int split_level, index;
-> > +     unsigned int access;
-> > +     u64 *split_sptep;
-> > +     gfn_t split_gfn;
-> > +
-> > +     split_sp = kvm_mmu_get_sp_for_split(kvm, slot, huge_sptep, spp);
-> > +     if (!split_sp)
-> > +             return -EOPNOTSUPP;
-> > +
-> > +     /*
-> > +      * Since we did not allocate pte_list_desc_structs for the split, we
-> > +      * cannot add a new parent SPTE to parent_ptes. This should never happen
-> > +      * in practice though since this is a fresh SP.
-> > +      *
-> > +      * Note, this makes it safe to pass NULL to __link_shadow_page() below.
-> > +      */
-> > +     if (WARN_ON_ONCE(split_sp->parent_ptes.val))
-> > +             return -EINVAL;
-> > +
-> > +     huge_spte = READ_ONCE(*huge_sptep);
-> > +
-> > +     split_level = split_sp->role.level;
-> > +     access = split_sp->role.access;
-> > +
-> > +     for (index = 0; index < PT64_ENT_PER_PAGE; index++) {
-> > +             split_sptep = &split_sp->spt[index];
-> > +             split_gfn = kvm_mmu_page_get_gfn(split_sp, index);
-> > +
-> > +             BUG_ON(is_shadow_present_pte(*split_sptep));
-> > +
-> > +             /*
-> > +              * Since we did not allocate pte_list_desc structs for the
-> > +              * split, we can't add a new SPTE that maps this GFN.
-> > +              * Skipping this SPTE means we're only partially mapping the
-> > +              * huge page, which means we'll need to flush TLBs before
-> > +              * dropping the MMU lock.
-> > +              *
-> > +              * Note, this make it safe to pass NULL to __rmap_add() below.
-> > +              */
-> > +             if (gfn_to_rmap(split_gfn, split_level, slot)->val) {
-> > +                     *flush = true;
-> > +                     continue;
-> > +             }
+> Hi,
 >
-> ... here.
+> This patch has been in our downstream tree for a long time. We need it
+> because our kick GPIO can't be used as an input.
 >
-> IIUC this check should already be able to cover all the cases and it's
-> accurate on the fact that we don't want to grow any rmap to >1 len.
+> What I really can't figure out is why the driver would request the pin
+> as in input, when it's always going to end up being used as an output
+> anyway.
 >
-> > +
-> > +             split_spte = make_huge_page_split_spte(
-> > +                             huge_spte, split_level + 1, index, access);
-> > +
-> > +             mmu_spte_set(split_sptep, split_spte);
-> > +             __rmap_add(kvm, NULL, slot, split_sptep, split_gfn, access);
+> So I thought I'd send it upstream in the hopes of either getting it
+> merged, or an explanation as to why it is needed.
 >
-> __rmap_add() with a NULL cache pointer is weird.. same as
-> __link_shadow_page() below.
+
+I _think_ the assumption / idea was that "toggle" implies that the output
+is connected to a pull-up resistor and that the pin either floats or is
+pulled down to ground, causing the signal to toggle. I don't know if/how
+that works in practice, though.
+
+Guenter
+
+>   drivers/watchdog/gpio_wdt.c | 13 +++++--------
+>   1 file changed, 5 insertions(+), 8 deletions(-)
 >
-> I'll stop here for now I guess.. Have you considered having rmap allocation
-> ready altogether, rather than making this intermediate step but only add
-> that later?  Because all these look hackish to me..  It's also possible
-> that I missed something important, if so please shoot.
+> diff --git a/drivers/watchdog/gpio_wdt.c b/drivers/watchdog/gpio_wdt.c
+> index 0923201ce874..f7686688e0e2 100644
+> --- a/drivers/watchdog/gpio_wdt.c
+> +++ b/drivers/watchdog/gpio_wdt.c
+> @@ -108,7 +108,6 @@ static int gpio_wdt_probe(struct platform_device *pde=
+v)
+>   struct device *dev =3D &pdev->dev;
+>   struct device_node *np =3D dev->of_node;
+>   struct gpio_wdt_priv *priv;
+> - enum gpiod_flags gflags;
+>   unsigned int hw_margin;
+>   const char *algo;
+>   int ret;
+> @@ -122,17 +121,15 @@ static int gpio_wdt_probe(struct platform_device *p=
+dev)
+>   ret =3D of_property_read_string(np, "hw_algo", &algo);
+>   if (ret)
+>   return ret;
+> - if (!strcmp(algo, "toggle")) {
+> +
+> + if (!strcmp(algo, "toggle"))
+>   priv->hw_algo =3D HW_ALGO_TOGGLE;
+> - gflags =3D GPIOD_IN;
+> - } else if (!strcmp(algo, "level")) {
+> + else if (!strcmp(algo, "level"))
+>   priv->hw_algo =3D HW_ALGO_LEVEL;
+> - gflags =3D GPIOD_OUT_LOW;
+> - } else {
+> + else
+>   return -EINVAL;
+> - }
 >
-> Thanks,
+> - priv->gpiod =3D devm_gpiod_get(dev, NULL, gflags);
+> + priv->gpiod =3D devm_gpiod_get(dev, NULL, GPIOD_OUT_LOW);
+>   if (IS_ERR(priv->gpiod))
+>   return PTR_ERR(priv->gpiod);
 >
-> > +     }
-> > +
-> > +     /*
-> > +      * Replace the huge spte with a pointer to the populated lower level
-> > +      * page table. Since we are making this change without a TLB flush vCPUs
-> > +      * will see a mix of the split mappings and the original huge mapping,
-> > +      * depending on what's currently in their TLB. This is fine from a
-> > +      * correctness standpoint since the translation will either be identical
-> > +      * or non-present. To account for non-present mappings, the TLB will be
-> > +      * flushed prior to dropping the MMU lock.
-> > +      */
-> > +     __drop_large_spte(kvm, huge_sptep, false);
-> > +     __link_shadow_page(NULL, huge_sptep, split_sp);
-> > +
-> > +     return 0;
-> > +}
->
-> --
-> Peter Xu
->
+
+*****
+
+Get the best out of Youtube encoding with GPL QFFT Codecs for :
+Windows,Linux & Android #RockTheHouseGoogle!
+
+Advanced FFT & 3D Audio functions for CPU & GPU
+https://gpuopen.com/true-audio-next/
+
+Multimedia Codec SDK https://gpuopen.com/advanced-media-framework/
+
+(c)Rupert S https://science.n-helix.com
+
+***
+Decoder CB 2021 Codecs
+
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":2,"bytes per frame":4,"channel
+layout":"STEREO","channels":2,"codec":"aac","codec delay":0,"discard
+decoder delay":false,"encryption scheme":"Unencrypted","has extra
+data":false,"profile":"unknown","sample format":"Signed
+16-bit","samples per second":48000,"seek preroll":"0us"}]
+
+kVideoDecoderName "MojoVideoDecoder"
+kVideoPlaybackFreezing 0.10006
+kVideoPlaybackRoughness 3.048
+kVideoTracks [{"alpha mode":"is_opaque","codec":"h264","coded
+size":"426x240","color space":"{primaries:BT709, transfer:BT709,
+matrix:BT709, range:LIMITED}","encryption scheme":"Unencrypted","has
+extra data":false,"hdr metadata":"unset","natural
+size":"426x240","orientation":"0=C2=B0","profile":"h264 baseline","visible
+rect":"0,0 426x240"}]
+
+info "Selected FFmpegAudioDecoder for audio decoding, config: codec:
+mp3, profile: unknown, bytes_per_channel: 2, channel_layout: STEREO,
+channels: 2, samples_per_second: 44100, sample_format: Signed 16-bit
+planar, bytes_per_frame: 4, seek_preroll: 0us, codec_delay: 0, has
+extra data: false, encryption scheme: Unencrypted, discard decoder
+delay: true"
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":2,"bytes per frame":4,"channel
+layout":"STEREO","channels":2,"codec":"mp3","codec delay":0,"discard
+decoder delay":true,"encryption scheme":"Unencrypted","has extra
+data":false,"profile":"unknown","sample format":"Signed 16-bit
+planar","samples per second":44100,"seek preroll":"0us"}]
+kBitrate 192000
+
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":4,"bytes per frame":8,"channel
+layout":"STEREO","channels":2,"codec":"opus","codec
+delay":312,"discard decoder delay":true,"encryption
+scheme":"Unencrypted","has extra
+data":true,"profile":"unknown","sample format":"Float 32-bit","samples
+per second":48000,"seek preroll":"80000us"}]
+
+kVideoDecoderName "VpxVideoDecoder"
+kVideoTracks [{"alpha mode":"is_opaque","codec":"vp9","coded
+size":"1920x1080","color space":"{primaries:BT709, transfer:BT709,
+matrix:BT709, range:LIMITED}","encryption scheme":"Unencrypted","has
+extra data":false,"hdr metadata":"unset","natural
+size":"1920x1080","orientation":"0=C2=B0","profile":"vp9 profile0","visible
+rect":"0,0 1920x1080"}]
+
+kAudioDecoderName "FFmpegAudioDecoder"
+kAudioTracks [{"bytes per channel":2,"bytes per frame":4,"channel
+layout":"STEREO","channels":2,"codec":"aac","codec delay":0,"discard
+decoder delay":false,"encryption scheme":"Unencrypted","has extra
+data":false,"profile":"unknown","sample format":"Signed
+16-bit","samples per second":44100,"seek preroll":"0us"}]
+
+kVideoDecoderName "MojoVideoDecoder"
+kVideoTracks [{"alpha mode":"is_opaque","codec":"h264","coded
+size":"1920x1080","color space":"{primaries:BT709, transfer:BT709,
+matrix:BT709, range:LIMITED}","encryption scheme":"Unencrypted","has
+extra data":false,"hdr metadata":"unset","natural
+size":"1920x1080","orientation":"0=C2=B0","profile":"h264 main","visible
+rect":"0,0 1920x1080"}]
+***
+
+PlayStation 5 and Xbox Series Spatial Audio Comparison | Technalysis
+Audio 3D Tested : Tempest,ATMOS,DTX,DTS
+
+https://www.youtube.com/watch?v=3DvsC2orqiCwI
+
+*
+
+Waves & Shape FFT original QFFT Audio device & CPU/GPU : (c)RS
+
+The use of an FFT simple unit to output directly: Sound
+& other content such as a BLENDER or DAC Content : (c)RS
+
+FFT Examples :
+
+Analogue smoothed audio ..
+Using a capacitor on the pin output to a micro diode laser (for analogue Fi=
+bre)
+
+Digital output using:
+8 to 128Bit multiple high frequency burst mode..
+
+(Multi Phase step at higher frequency & smooth interpolation)
+Analogue wave converted to digital in key steps through a DAC at
+higher frequency & amplitude.
+
+For many systems an analogue wave makes sense when high speed crystal
+digital is too expensive.
+
+Multiple frequency overlapped digital signals with a time formula is
+also possible.
+
+The mic works by calculating angle on a drum...
+Light.. and timing & dispersion...
+The audio works by QFFT replication of audio function..
+The DAC works by quantifying as Analog digital or Metric Matrix..
+The CPU/GPU by interpreting the data of logic, Space & timing...
+
+We need to calculate Quantum is not the necessary feature;
+
+But it is the highlight of our:
+Data storage cache.
+Our Temporary RAM
+Our Data transport..
+Of our fusion future.
+
+FFT & fast precise wave operations in SiMD
+
+Several features included for Audio & Video : Add to Audio & Video
+drivers & sdk i love you <3 DL
+
+In particular I want Bluetooth audio optimized with SiMD,AVX vector
+instructions & DSP process drivers..
+
+The opportunity presents itself to improve the DAC; In particular of
+the Video cards & Audio devices & HardDrives & BDBlueRay Player Record
+& load functions of the fluctuating laser..
+More than that FFT is logical and fast; Precise & adaptive; FP & SiMD
+present these opportunities with correct FFT operations & SDK's.
+
+3D surround optimised the same, In particular with FFT efficient code,
+As one imagines video is also effected by FFT ..
+
+Video colour & representation & wavelet compression & sharpness restoration=
+..
+Vivid presentation of audio & video & 3D objects and texture; For
+example DOT compression & image,Audio presentation...
+
+SSD & HD technology presents unique opportunities for magnetic waves
+and amplitude speculation & presentation.
+
+FFT : FMA : SiMD instructions & speed : application examples : Audio,
+Colour pallet , Rainbows, LUT, Blood corpuscles with audio & vibration
+interaction, Rain with environmental effects & gravity.. There are
+many application examples of transforms in action (More and more
+complex by example)
+
+High performance SIMD modular arithmetic for polynomial evaluation
+
+FFT Examples :  in the SiMD Folder...
+
+Evaluation of FFT and polynomial X array algebra .. is here handled to
+over 50Bits...
+As we understand it the maths depends on a 64bit value with a 128Bit  ..
+as explained in the article value have to be in identical ranges bit
+wise, However odd bit depth sizes are non conforming (God i need
+coffee!)
+
+In one example (page 9) Most of the maths is 64Bit & One value 128Bit
+"We therefore focus in this article on the use of floating-point (FP)
+FMA (fused multiply-add) instructions for floating-point based modular
+arithmetic. Since the FMA instruction performs two operations (a =E2=88=97 =
+b +
+c) with one single final rounding, it can indeed be used to design a
+fast error-free transformation of the product of two floating-point
+numbers"
+
+Our latest addition is a quite detailed example for us
+High performance SIMD modular arithmetic for
+polynomial evaluation 2020
+
+Pierre Fortin, Ambroise Fleury, Fran=C3=A7ois Lemaire, Michael Monagan
+
+https://hal.archives-ouvertes.fr/hal-02552673/document
+
+Contains multiple algorithm examples & is open about the computer
+operations in use.
+
+Advanced FFT & 3D Audio functions for CPU & GPU
+https://gpuopen.com/true-audio-next/
+
+Multimedia Codec SDK https://gpuopen.com/advanced-media-framework/
+
+(c)Rupert S https://science.n-helix.com
+
+*****
+
+Lets face it, Realtec could well resource the QFFT Audio device &
+transformer/DAC
+
+(c)Rupert S https://science.n-helix.com
+
+document work examples :
+
+https://eurekalert.org/pub_releases/2021-01/epfd-lpb010621.php
+
+"Light-based processors boost machine-learning processing
+ECOLE POLYTECHNIQUE F=C3=89D=C3=89RALE DE LAUSANNE
+
+Research News
+
+IMAGE
+IMAGE: SCHEMATIC REPRESENTATION OF A PROCESSOR FOR MATRIX
+MULTIPLICATIONS WHICH RUNS ON LIGHT. view more
+
+CREDIT: UNIVERSITY OF OXFORD
+
+The exponential growth of data traffic in our digital age poses some
+real challenges on processing power. And with the advent of machine
+learning and AI in, for example, self-driving vehicles and speech
+recognition, the upward trend is set to continue. All this places a
+heavy burden on the ability of current computer processors to keep up
+with demand.
+
+Now, an international team of scientists has turned to light to tackle
+the problem. The researchers developed a new approach and architecture
+that combines processing and data storage onto a single chip by using
+light-based, or "photonic" processors, which are shown to surpass
+conventional electronic chips by processing information much more
+rapidly and in parallel.
+
+The scientists developed a hardware accelerator for so-called
+matrix-vector multiplications, which are the backbone of neural
+networks (algorithms that simulate the human brain), which themselves
+are used for machine-learning algorithms. Since different light
+wavelengths (colors) don't interfere with each other, the researchers
+could use multiple wavelengths of light for parallel calculations. But
+to do this, they used another innovative technology, developed at
+EPFL, a chip-based "frequency comb", as a light source.
+
+"Our study is the first to apply frequency combs in the field of
+artificially neural networks," says Professor Tobias Kippenberg at
+EPFL, one the study's leads. Professor Kippenberg's research has
+pioneered the development of frequency combs. "The frequency comb
+provides a variety of optical wavelengths that are processed
+independently of one another in the same photonic chip."
+
+"Light-based processors for speeding up tasks in the field of machine
+learning enable complex mathematical tasks to be processed at high
+speeds and throughputs," says senior co-author Wolfram Pernice at
+M=C3=BCnster University, one of the professors who led the research. "This
+is much faster than conventional chips which rely on electronic data
+transfer, such as graphic cards or specialized hardware like TPU's
+(Tensor Processing Unit)."
+
+After designing and fabricating the photonic chips, the researchers
+tested them on a neural network that recognizes of hand-written
+numbers. Inspired by biology, these networks are a concept in the
+field of machine learning and are used primarily in the processing of
+image or audio data. "The convolution operation between input data and
+one or more filters - which can identify edges in an image, for
+example, are well suited to our matrix architecture," says Johannes
+Feldmann, now based at the University of Oxford Department of
+Materials. Nathan Youngblood (Oxford University) adds: "Exploiting
+wavelength multiplexing permits higher data rates and computing
+densities, i.e. operations per area of processor, not previously
+attained."
+
+"This work is a real showcase of European collaborative research,"
+says David Wright at the University of Exeter, who leads the EU
+project FunComp, which funded the work. "Whilst every research group
+involved is world-leading in their own way, it was bringing all these
+parts together that made this work truly possible."
+
+The study is published in Nature this week, and has far-reaching
+applications: higher simultaneous (and energy-saving) processing of
+data in artificial intelligence, larger neural networks for more
+accurate forecasts and more precise data analysis, large amounts of
+clinical data for diagnoses, enhancing rapid evaluation of sensor data
+in self-driving vehicles, and expanding cloud computing
+infrastructures with more storage space, computing power, and
+applications software.
+
+###
+
+Reference
+
+J. Feldmann, N. Youngblood, M. Karpov, H. Gehring, X. Li, M. Stappers,
+M. Le Gallo, X. Fu, A. Lukashchuk, A.S. Raja, J. Liu, C.D. Wright, A.
+Sebastian, T.J. Kippenberg, W.H.P. Pernice, H. Bhaskaran. Parallel
+convolution processing using an integrated photonic tensor core.
+Nature 07 January 2021. DOI: 10.1038/s41586-020-03070-1"
+
+Time Measurement
+
+"Let's Play" Station NitroMagika_LightCaster
