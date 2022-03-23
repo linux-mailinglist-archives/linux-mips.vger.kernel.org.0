@@ -2,34 +2,34 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF30E4E4E86
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Mar 2022 09:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B478A4E4F71
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Mar 2022 10:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242871AbiCWIvD (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Wed, 23 Mar 2022 04:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
+        id S239046AbiCWJde (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Wed, 23 Mar 2022 05:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242799AbiCWIvD (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Mar 2022 04:51:03 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D661A710EB;
-        Wed, 23 Mar 2022 01:49:30 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:41174.1449576847
+        with ESMTP id S233726AbiCWJdd (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Wed, 23 Mar 2022 05:33:33 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D94C76D1AD;
+        Wed, 23 Mar 2022 02:32:02 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:35378.1509098416
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
 Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id D4AA810023D;
-        Wed, 23 Mar 2022 16:49:18 +0800 (CST)
+        by 189.cn (HERMES) with SMTP id 3405D100225;
+        Wed, 23 Mar 2022 17:31:58 +0800 (CST)
 Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id f13d8488257c43b0a5381e0c8ff61c77 for robh@kernel.org;
-        Wed, 23 Mar 2022 16:49:29 CST
-X-Transaction-ID: f13d8488257c43b0a5381e0c8ff61c77
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 61937688d8bb45d78e3cf3b4744afb5f for robh@kernel.org;
+        Wed, 23 Mar 2022 17:32:02 CST
+X-Transaction-ID: 61937688d8bb45d78e3cf3b4744afb5f
 X-Real-From: 15330273260@189.cn
 X-Receive-IP: 114.242.206.180
 X-MEDUSA-Status: 0
 Sender: 15330273260@189.cn
-Message-ID: <23c0f1ec-bc7b-df38-62e9-0c9f2f21f6d3@189.cn>
-Date:   Wed, 23 Mar 2022 16:49:15 +0800
+Message-ID: <f0db9bc0-ae9b-e86e-cc14-376dc40b86f4@189.cn>
+Date:   Wed, 23 Mar 2022 17:31:57 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -78,30 +78,69 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 On 2022/3/23 04:49, Rob Herring wrote:
->> +/*
->> + * ls7a_gpio_i2c_set - set the state of a gpio pin indicated by mask
->> + * @mask: gpio pin mask
->> + */
->> +static void ls7a_gpio_i2c_set(struct lsdc_i2c * const li2c, int mask, int state)
->> +{
->> +	unsigned long flags;
->> +	u8 val;
 >> +
->> +	spin_lock_irqsave(&li2c->reglock, flags);
-> What are you protecting? Doesn't the caller serialize calls to these
-> functions?
+>> +	if (state) {
+>> +		val = readb(li2c->dir_reg);
+>> +		val |= mask;
+>> +		writeb(val, li2c->dir_reg);
+>> +	} else {
+>> +		val = readb(li2c->dir_reg);
+>> +		val &= ~mask;
+>> +		writeb(val, li2c->dir_reg);
+>> +
+>> +		val = readb(li2c->dat_reg);
+>> +		if (state)
+> This condition is never true. We're in the 'else' because !state.
 >
-This driver is ported from my work from my downstream work.
+>> +			val |= mask;
+>> +		else
+>> +			val &= ~mask;
+>> +		writeb(val, li2c->dat_reg);
+> Shouldn't you set the data register low first and then change the
+> direction? Otherwise, you may be driving high for a moment. However, if
+> high is always done by setting the direction as input, why write the
+> data register each time? I'm assuming whatever is written to the dat_reg
+> is maintained regardless of pin state.
 
-Maxime also ask this question before, but i did not answer.
-He is right, protect single register access is not necessary.
-uncached access have done the job itself.
-so i remove it in V11 of my patch set.
+To be honest, i have rewrite GPIO emulated i2c several times.
+Either give data first, then give the direction
+or give the direction first, then the data
+will be OK in practice.
 
-There are two way GPIO emulated i2c, I want the code between
-spin_lock_irqsave(&li2c->reglock, flags) and spin_unlock_irqrestore(&li2c->reglock, flags);
-finished in a atomic way, without any disruption.
+In the theory, the GPIO data should be given before the GPIO direction,
+I was told doing that way when learning Single-Chip Microcomputer (AT89S52).
 
-The two i2c should not have any influence each other.
-I write it by gut feeling, and luckily it works very well in practice.
+But the high "MUST" be done by setting the direction as input.
+It is "MUST" not "CAN" because writing code as the following
+way works in practice.
+
+         if (state) {
+                 val = readb(li2c->dir_reg);
+                 val |= mask;
+                 writeb(val, li2c->dir_reg);
+         } else {
+                // ...
+         }
+
+If the adjust the above code by first set the detection as output,
+then set the GPIO data register with high voltage level("1"). as
+the following demonstrate code,
+
+         if (state) {
+		/* First set this pin as output */
+		val = readb(li2c->dir_reg);
+		val |= mask;
+		writeb(val, li2c->dir_reg);
+
+		/* Then, set the state to high */
+		val = readb(li2c->dat_reg);
+		val |= mask;
+		writeb(val, li2c->dat_reg);
+         } else {
+                // ...
+         }
+
+Then i2c6 will NOT work as exacted, i2c7 will work, so strangely.
+It may because the GPIO is open drained, not Push-pull output.
+Output high is achieved by externalpull up resistance on the PCB.
 
