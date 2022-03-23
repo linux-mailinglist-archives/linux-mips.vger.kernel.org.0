@@ -2,107 +2,58 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9004E4AEA
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Mar 2022 03:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7CD4E4AFE
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Mar 2022 03:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236987AbiCWCbi (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Tue, 22 Mar 2022 22:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S240660AbiCWCoH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Tue, 22 Mar 2022 22:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiCWCbh (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Mar 2022 22:31:37 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB5566ACD;
-        Tue, 22 Mar 2022 19:30:08 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 2E9FD580273;
-        Tue, 22 Mar 2022 22:30:06 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 22 Mar 2022 22:30:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=z448nDq6oePU/m
-        QSH0x3hhq/M5ZKeqSdorKIcUafQmQ=; b=1cirzLxzmbufXSFnaOvbvxX7mx3EKS
-        HVMeAJmDODCXBlm3DNszMIFlYWGhM96QRaDTs/MkRYWv66e8EoEHUIRQkS3x0oeI
-        TE85TQOHjaYHQo4YFV9p4U/io7z+V7Lo4X+oikO6P+ijiiC/I+bxXC+VNIKoFBNr
-        WLPpTX/drRez0pQvRhq7GzwDPfi0njrPNvi4vXgAOW8cUMhkbjVwmtUyYOWqCUyV
-        xQXrpfhawIr0b7sHAmXrd+LHDtUCVvyiQBV/qFuLrWoyumfcjEJRoN6eXnVlKpgw
-        hmCLRe+fscTRGdiKgLxLWRlzl7k66u7YXyKJ6s0ObYQ7ifEryfIfjS/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=z448nDq6oePU/mQSH0x3hhq/M5ZKeqSdorKIcUafQ
-        mQ=; b=gfma0HoXMMYkAMu/STYjCpy0yb58vNWXI0wyrB8cvOHQqcQn5fU9fHkil
-        o086v7oKaVrI7E9PzOjcW6gCJfBh7ua2GM7RaQS14AX2zirt47kI5+Vuz4QFBwHt
-        SVCRiyWbCmhyQiOTrxRac5LcYr1rj1MXMaFPR8JefGc7Aw/IjgX+YMRoYbXmEvYj
-        79NpP1pS3t1qRQqZqNQzMjD6CeTryzImTU3UxIuLM+30X9QwgAgxcjqbyejOJPG/
-        xiuNeCU5FxaY35RbrF7B9vOhPyHIhFFkapOwiG9M5Nd5hfluMFVsmmo9ewtrbvI+
-        LHe9syJFsAIjtj6lUuBbrM6le7k4w==
-X-ME-Sender: <xms:LIY6Ym0BhdV2sC2kSQradoXRNqtzb2kC3P7dthRcZ_sX5LfP0t9mMg>
-    <xme:LIY6YpGlW4edpX0xA6gKgjm7DBYZvl2oiUyBR31Hg7kNT-YFn2A5To-3mggMhLj2O
-    2kfF1YugkAlJWEk6VA>
-X-ME-Received: <xmr:LIY6Yu4c0k8IVs35qeZZnvNXWlHPLP2bHAR_BwnzeGvRQYNiPD5rsGNFkuqHh8o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegiedggeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheplfhirgig
-    uhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeehieduvdevhfekjeeftddtkeeitefhudekvdeiueeulefgleei
-    jeeghedvkeduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:LIY6Yn2RvxaO0WAw_nQ_zj3S2natVIJvHXJ0QUVibx__HL5VZ5W5yA>
-    <xmx:LIY6YpEEx42Ukfd3i88up_UNwg5micsJX_zWmfaty-VTdKkab54Meg>
-    <xmx:LIY6Yg_UaaAApUaapt0j_xI1k0l191Q4Whp8TqPgmlGMkFiUAORRsg>
-    <xmx:LoY6YuuZ_u5thrRte02ss6sakFKjscOSU7gZZSG7uHUymaaBFlsNRg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Mar 2022 22:30:01 -0400 (EDT)
-Message-ID: <87d4f869-2ae8-f8d3-a55f-1a563cb21115@flygoat.com>
-Date:   Wed, 23 Mar 2022 02:29:59 +0000
+        with ESMTP id S237555AbiCWCoH (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Tue, 22 Mar 2022 22:44:07 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90ED5673ED;
+        Tue, 22 Mar 2022 19:42:37 -0700 (PDT)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxaswUiTpiuWQOAA--.13880S3;
+        Wed, 23 Mar 2022 10:42:29 +0800 (CST)
+Subject: Re: [PATCH 3/3] MIPS: Use memblock_add_node() in early_parse_mem()
+ under CONFIG_NUMA
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <1647615920-23103-1-git-send-email-yangtiezhu@loongson.cn>
+ <1647615920-23103-4-git-send-email-yangtiezhu@loongson.cn>
+ <33241bd3-2f12-954c-6701-56cf563060bb@flygoat.com>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <fb188614-0301-3255-c31c-3d443cf17b91@loongson.cn>
+Date:   Wed, 23 Mar 2022 10:42:28 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v11 2/7] MIPS: Loongson64: dts: introduce ls3A4000
- evaluation board
-Content-Language: en-GB
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        chenhuacai@kernel.org, Tiezhu Yang <yangtiezhu@loongson.cn>,
-        liyi@loongson.cn
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-3-15330273260@189.cn>
- <2644866a-8db2-923e-4227-2aa6d8e375fe@flygoat.com>
- <2c671752-6684-f87b-7b2d-90568d36adde@189.cn>
- <005099b5-33ed-4cb7-f8e4-10e1de780311@flygoat.com>
- <abe784ce-eb9e-0143-dbc3-d415bbedbb81@189.cn>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <abe784ce-eb9e-0143-dbc3-d415bbedbb81@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <33241bd3-2f12-954c-6701-56cf563060bb@flygoat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-CM-TRANSID: AQAAf9AxaswUiTpiuWQOAA--.13880S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WryDGw4xKFW3ZFyUur4UArb_yoW8urW5pF
+        1qkFWrKF4DXFyjgay8A390kw13t3Z5GryftFyUW34UZ3Wvqw17JrsavF1DtryjqayxtF40
+        qFyfWw15ZF409w7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUgVyxUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -113,49 +64,81 @@ X-Mailing-List: linux-mips@vger.kernel.org
 
 
 
-在 2022/3/23 1:53, Sui Jingfeng 写道:
-> Hi, Jiaxun
+On 03/22/2022 09:19 PM, Jiaxun Yang wrote:
 >
-> Build all dts into vmlinuz will make the vmlinuz bigger and bigger.
-> How does the kernel get the dtb is another big issue, either from 
-> built-in
-> dtb or pass from the firmware(pmon and uefi etc). This should be
-> solved with another patch carefully. Providing board specific dts
-> helps to code review, it helps reviewers understand that there are
-> variant boards and have to be express with different OF graph.
-Hi,
+>
+> 在 2022/3/18 15:05, Tiezhu Yang 写道:
+>> Use memblock_add_node to add new memblock region within a NUMA node
+>> in early_parse_mem() under CONFIG_NUMA, otherwise the mem parameter
+>> can not work well.
+>
+> Hi Tiezhu,
+>
+> pa_to_nid doesn't exist when CONFIG_NUME is disabled.
+> So probably you want #ifdef macro instead ？
 
-I insist my taste on those code. If the only intention is to demonstrate
-the usage of the driver then please just leave them in dt document
-or commit message.
+Hi Jiaxun,
+
+Thank you for your reply.
+
+As far as I can tell, if CONFIG_NUMA is set, IS_ENABLED(CONFIG_NUMA)
+is 1, pa_to_nid() is defined in the platform dependent header file:
+
+	arch/mips/include/asm/mach-ip27/mmzone.h
+	arch/mips/include/asm/mach-loongson64/mmzone.h
+
+if CONFIG_NUMA is not set, IS_ENABLED(CONFIG_NUMA) is 0, pa_to_nid()
+is always 0 which is defined in arch/mips/include/asm/mmzone.h:
+
+	#ifdef CONFIG_NUMA
+	# include <mmzone.h>
+	#endif
+
+	#ifndef pa_to_nid
+	#define pa_to_nid(addr) 0
+	#endif
+
+So pa_to_nid() is defined under both CONFIG_NUMA and !CONFIG_NUMA,
+there is no build error.
+
+Additionally, use #ifdef CONFIG_NUMA is also OK, but I prefer to
+use IS_ENABLED(CONFIG_NUMA).
+
+If I am missing something, please let me know, thank you.
+
+Thanks,
+Tiezhu
 
 >
-> Now, there are about 6 dts under arch/mips/boot/dts/loongson/,
-> Suppose loongson have 1000+ different board, do you want built all
-> of them into vmlinuz?
-Note that we are supporting all those boards on "platform" bias. Which
-means if they share similar design then they will use the same DTS.
-If we have a new design then unfortunately our kernel binary must grow.
-
-For those who intended to build a size-optimized kernel they will be
-able to disable unused DTS in Kconfig.
-
-If you want to blame somebody for the problem then please don't
-blame us. We tried very hard to fit all those stuff into kernel's model
-of devices. You should blame those who did the initial design of
-Loongson's boot interface that failed to introduce a proper way
-to describe the platform.
-
+> Thanks.
+> - Jiaxun
 >
-> Besides, ls7a1000 and ls2k1000 lack a i2c driver, gpio driver,
-> pwm driver, clk driver, can you pay more attention to salve those
-> problems, please ?
-Are you trying to make a TODO list for your colleague :-)
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   arch/mips/kernel/setup.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+>> index c8c8f60..50cdc08 100644
+>> --- a/arch/mips/kernel/setup.c
+>> +++ b/arch/mips/kernel/setup.c
+>> @@ -37,6 +37,7 @@
+>>   #include <asm/cdmm.h>
+>>   #include <asm/cpu.h>
+>>   #include <asm/debug.h>
+>> +#include <asm/mmzone.h>
+>>   #include <asm/sections.h>
+>>   #include <asm/setup.h>
+>>   #include <asm/smp-ops.h>
+>> @@ -378,7 +379,10 @@ static int __init early_parse_mem(char *p)
+>>               memblock_end_of_DRAM() - memblock_start_of_DRAM());
+>>       }
+>>   -    memblock_add(start, size);
+>> +    if (IS_ENABLED(CONFIG_NUMA))
+>> +        memblock_add_node(start, size, pa_to_nid(start), MEMBLOCK_NONE);
+>> +    else
+>> +        memblock_add(start, size);
+>>         return 0;
+>>   }
 
-We , community developers, don't owe you anything. So please
-don't expect anything from us. I lost access to most Loongson
-devices since I'm currently study abroad, but I'm determined to
-keep platform code in a good shape. That's my duty as a maintainer.
-
-Thanks.
-- Jiaxun
