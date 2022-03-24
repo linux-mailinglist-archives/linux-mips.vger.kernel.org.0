@@ -2,96 +2,77 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CA54E5F7C
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 08:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F654E60AA
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 09:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348722AbiCXHeQ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Mar 2022 03:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
+        id S1343963AbiCXIxH (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Mar 2022 04:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348698AbiCXHdv (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 03:33:51 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFB6E99EE4;
-        Thu, 24 Mar 2022 00:32:14 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:35082.2361266
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id A44201002A8;
-        Thu, 24 Mar 2022 15:32:03 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id a2f8b1704e0a4b46bd8d83d638ee28cd for robh@kernel.org;
-        Thu, 24 Mar 2022 15:32:13 CST
-X-Transaction-ID: a2f8b1704e0a4b46bd8d83d638ee28cd
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <2aa26f44-38aa-4b3c-ccc3-0956a2ab5d77@189.cn>
-Date:   Thu, 24 Mar 2022 15:32:01 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kernel test robot <lkp@intel.com>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-8-15330273260@189.cn>
- <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S1344839AbiCXIxG (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 04:53:06 -0400
+X-Greylist: delayed 929 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Mar 2022 01:51:34 PDT
+Received: from m12-12.163.com (m12-12.163.com [220.181.12.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2F809D04A
+        for <linux-mips@vger.kernel.org>; Thu, 24 Mar 2022 01:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=N9N4rpZMnZh4Wu4qa2
+        A3A82svr8AanjCcqyvb5y6Oww=; b=GXumAnIfEdDziwGZ7sPFxfS7BYeViCbCg6
+        JgcWscvNIKTbi/VLo1Z8LLvb09jpDZdypIJWuHoLoTs/FA4TK+VCMqI/mjgWf1Jo
+        +ptkI0seXRUoxjKF018OgMOBNah3uielarRP559ndpJfqDWp77PwkikcRZQdKO8/
+        mBT52GepE=
+Received: from localhost (unknown [159.226.95.33])
+        by smtp8 (Coremail) with SMTP id DMCowADnVYRdLTxiHW_9Bg--.28421S2;
+        Thu, 24 Mar 2022 16:35:41 +0800 (CST)
+From:   QintaoShen <unSimple1993@163.com>
+To:     f.fainelli@gmail.com
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, QintaoShen <unSimple1993@163.com>
+Subject: [PATCH v1] soc: bcm: Check for NULL return of devm_kzalloc()
+Date:   Thu, 24 Mar 2022 16:35:40 +0800
+Message-Id: <1648110940-4684-1-git-send-email-unSimple1993@163.com>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: DMCowADnVYRdLTxiHW_9Bg--.28421S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF15ZF4ftF43Gw4xZF4DXFb_yoWfGFX_CF
+        WkXrZrW39Ygry7tF1ayw4xZ34jgFs8Zr97Za1YqayakryDArZ5Xa48ZrsxJFZrWw4xCFZr
+        ZF1qqF4Svr17GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUUdWrPUUUUU==
+X-Originating-IP: [159.226.95.33]
+X-CM-SenderInfo: 5xqvxz5sohimizt6il2tof0z/1tbiXxjNH1153xZR7wABsH
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+As the potential failuer of allocation, devm_kzalloc() may return NULL.
+Then the 'pd->pmb' and the follow lines of code may bring null pointer dereference.
 
-On 2022/3/23 04:49, Rob Herring wrote:
->> +	}
->> +
->> +	spin_lock_init(&li2c->reglock);
->> +
->> +	snprintf(compat, sizeof(compat), "lsdc,i2c-gpio-%d", index);
-> compatible values shouldn't have an index and you shouldn't need a
-> index in DT. You need to iterate over child nodes with matching
-> compatible.
+Therefore, it is better to check the return value of devm_kzalloc() to avoid this confusion.
 
-Why compatible values shouldn't have an index, does devicetree
-specification prohibit this? [1]
+Signed-off-by: QintaoShen <unSimple1993@163.com>
+---
+ drivers/soc/bcm/bcm63xx/bcm-pmb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The recommended format is "manufacturer,model", where manufacturer is a string describing the name
-of the manufacturer (such as a stock ticker symbol), and model specifies the model number. [1]
-
-[1] https://www.devicetree.org/specifications/
+diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+index 7bbe46e..55bf389 100644
+--- a/drivers/soc/bcm/bcm63xx/bcm-pmb.c
++++ b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+@@ -311,6 +311,8 @@ static int bcm_pmb_probe(struct platform_device *pdev)
+ 
+ 	for (e = table; e->name; e++) {
+ 		struct bcm_pmb_pm_domain *pd = devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
++		if (!pd)
++			return -ENOMEM;
+ 
+ 		pd->pmb = pmb;
+ 		pd->data = e;
+-- 
+2.7.4
 
