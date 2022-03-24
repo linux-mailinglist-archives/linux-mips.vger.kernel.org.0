@@ -2,136 +2,171 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8ECD4E6435
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 14:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0C34E6442
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 14:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350473AbiCXNjm (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Mar 2022 09:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
+        id S242339AbiCXNoX (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Mar 2022 09:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346176AbiCXNjl (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 09:39:41 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FE32409B
-        for <linux-mips@vger.kernel.org>; Thu, 24 Mar 2022 06:38:08 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id gb19so4756608pjb.1
-        for <linux-mips@vger.kernel.org>; Thu, 24 Mar 2022 06:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sudomaker-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/sQV5rp+cw1wax1iRP0Va+YLBH7FLeLa8L9B5UtJM84=;
-        b=5C0v6M5Hca9omePnMbOPDpTfrC6UCYwPeyi8waSFJfu9um0WM6EYF/qIWVeK5AbbLF
-         wkZzp6EmIYdKs5gMZh1XNk47iQlsQ6zX5fntXSaFGB8DcHmIx28bwOtiRIuo5dC4+pqQ
-         l1W9DFCo7FFvwRLZi7jKhXI4YAfO3K/rFp6K+jWPQeuU5KTwWssrdLJ+V3kdXBJZAoim
-         cc/p4GjzFLFfwizcm5LzYkDpkcYWYpJkWiOJ4WhVkuC5hAN8JFYhzW4GeAXvSoH/BcU3
-         QJoDIXAw/8cfSVpOhVPSCP7VrjWofUsuatyWBjvKceUeGgf2sg/0iCbAnXGJ1Dj+KCU7
-         oNzQ==
+        with ESMTP id S238731AbiCXNoW (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 09:44:22 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A501A94D2;
+        Thu, 24 Mar 2022 06:42:50 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id k10so4952440oia.0;
+        Thu, 24 Mar 2022 06:42:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/sQV5rp+cw1wax1iRP0Va+YLBH7FLeLa8L9B5UtJM84=;
-        b=Nr1hemrjQi0KwvPSy2mPiS0P6iKbU+L50+EMj6HJRN+8YEs68sEeg3XQxZ61Y+B4SX
-         KAAsPthL5c2i9BSGM8cQVJVccHi6r0dj9YeXJUiRD3GZ/yWQy/VIv65GJfuT4MeEHzpC
-         OZHpFE7H7b1PtDKvQ+ajOjXQv1kxEUjgtihgWTltKmcfrXnBz4hJPfDnShQINKXMo+Dc
-         ccDPISUd5xLSMF1uSTq2gDmHlu62ZCgJLNxzi/BSxu6bgPaHGEHVtXHxIweCjUbAo9pK
-         3G5xf9Lrpmc/cLqsZ2vBXa5dCe/6j/+V/WMUc9HctNuR+SszaKNzFRJJexOum0HOko0z
-         I7CQ==
-X-Gm-Message-State: AOAM530ijC30TfBCHkCkc0iZXwEmCZUVDYAbwjbpB8Tu7KW688dP5cIH
-        bDh6Wo6P9+nn/pU+uk3RV8eQUA==
-X-Google-Smtp-Source: ABdhPJz1XaJS5LG/TJcD0dYQ+F6zCb5Vf3z0cQhZ4l5Rv2149Mor9j9sUR8PwJik08KZjzFrZAQAWQ==
-X-Received: by 2002:a17:902:7888:b0:148:adf2:9725 with SMTP id q8-20020a170902788800b00148adf29725mr5824851pll.136.1648129088094;
-        Thu, 24 Mar 2022 06:38:08 -0700 (PDT)
-Received: from [172.16.24.11] ([91.219.212.226])
-        by smtp.gmail.com with ESMTPSA id x2-20020a63aa42000000b0038265eb2495sm2765064pgo.88.2022.03.24.06.38.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 06:38:07 -0700 (PDT)
-Message-ID: <5c1f03d1-f72a-bc6b-92b4-927898aa3b2d@sudomaker.com>
-Date:   Thu, 24 Mar 2022 21:39:03 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=k0XLE9bSSftZDbfLEu3mqCg9VES7NclFvpk1DiwzsCU=;
+        b=p6GCh5GiyGdgcTRqCr9sf40dOthH6RFI9f3DQBGolTm/yV4gKKEQjYDjbRZE/pdake
+         cvZ62/ccounWNOFXPUdn9eldhe/nvapUKjbFYnWXk8G4+V8gxccWZbTrPBitgz+oqRtx
+         z4Ov0qE3B2E8yswlz2d8goxHWD0dhy7D3wzpc0di3VYkD7EsiV0sq5u/AQNJEpswkqhE
+         EGiEkmZ/tH7ppP9mbgmYcdJllVRvXazs6eOG1AgmhLQtkPuvjK1hvK/RSRQ3Tpa81aue
+         AKdKBhBqlOu9WNRQXrOnbsMobPSn2KeiU6hBnBw1gxjRFamHuC0ZBWChRjA7lQL8cPHu
+         2NoA==
+X-Gm-Message-State: AOAM5321WR9boytR//PFppQwEoutBjKjXQBJX4xslhotWAEHyqtKACVt
+        EFepRFTzlibv4e6HS5wpVw==
+X-Google-Smtp-Source: ABdhPJzqqN+FJJDwdKcMMRgy5goFaR/Q6upsH/doVxugr8UxtoUj4bHD6zeF85BdW4NQ+asO8xTuOw==
+X-Received: by 2002:a05:6808:208b:b0:2d3:a5cc:540 with SMTP id s11-20020a056808208b00b002d3a5cc0540mr2700275oiw.41.1648129369806;
+        Thu, 24 Mar 2022 06:42:49 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05680811d000b002d72ec3a921sm1463006oiv.21.2022.03.24.06.42.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 06:42:48 -0700 (PDT)
+Received: (nullmailer pid 1940986 invoked by uid 1000);
+        Thu, 24 Mar 2022 13:42:47 -0000
+Date:   Thu, 24 Mar 2022 08:42:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
+ controller
+Message-ID: <Yjx1V1Lx0bAtgsCp@robh.at.kernel.org>
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-8-15330273260@189.cn>
+ <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
+ <33766d08-bd88-2234-0f85-5926e4256dfb@189.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] pinctrl: Ingenic: Add missing UART2 group C for X1000/E
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ea710c27-00e9-065c-77a3-78e3c5f73ed3@sudomaker.com>
- <3H099R.GNKMFWXCJG5U1@crapouillou.net>
-From:   Yunian Yang <reimu@sudomaker.com>
-In-Reply-To: <3H099R.GNKMFWXCJG5U1@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <33766d08-bd88-2234-0f85-5926e4256dfb@189.cn>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-Hi Paul,
+On Thu, Mar 24, 2022 at 09:39:49AM +0800, Sui Jingfeng wrote:
+> 
+> On 2022/3/23 04:49, Rob Herring wrote:
+> > On Tue, Mar 22, 2022 at 12:29:16AM +0800, Sui Jingfeng wrote:
+> > > From: suijingfeng <suijingfeng@loongson.cn>
+> > > 
+> > > There is a display controller in loongson's LS2K1000 SoC and LS7A1000
+> > > bridge chip, the display controller is a PCI device in those chips. It
+> > > has two display pipes but with only one hardware cursor. Each way has
+> > > a DVO interface which provide RGB888 signals, vertical & horizontal
+> > > synchronisations, data enable and the pixel clock. Each CRTC is able to
+> > > scanout from 1920x1080 resolution at 60Hz, the maxmium resolution is
+> > > 2048x2048 according to the hardware spec. Loongson display controllers
+> > > are simple which require scanout buffers to be physically contiguous.
 
-Thank you for pointing this out. I sent the refined patch.
+[...]
 
-On 3/24/22 20:10, Paul Cercueil wrote:
-> Hi Yunian,
+> > > +			val |= mask;
+> > > +		else
+> > > +			val &= ~mask;
+> > > +		writeb(val, li2c->dat_reg);
+> > Shouldn't you set the data register low first and then change the
+> > direction? Otherwise, you may be driving high for a moment. However, if
+> > high is always done by setting the direction as input, why write the
+> > data register each time? I'm assuming whatever is written to the dat_reg
+> > is maintained regardless of pin state.
+> > 
+> When the pin is input, i am not sure value written to it will be preserved.
 > 
-> Le jeu., mars 24 2022 at 20:04:41 +0800, Yunian Yang <reimu@sudomaker.com> a écrit :
->> X1000/E has a third UART2 pin group selection, which uses the TDI(G2) as RX
->> and TDO(G1) as TX. This configuration is becoming increasingly popular in
->> newer core boards, such as the Halley2 v4.1. This is done by enabling
->> function 1 of a "virtual pin" PC31. See section 19.3.3 of the X1000
->> Programming Manual for details.
->>
->> Signed-off-by: Yunian Yang <reimu@sudomaker.com>
->> ---
->>  drivers/pinctrl/pinctrl-ingenic.c | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
->> index 2712f51eb238..29709059d62b 100644
->> --- a/drivers/pinctrl/pinctrl-ingenic.c
->> +++ b/drivers/pinctrl/pinctrl-ingenic.c
->> @@ -1982,6 +1982,7 @@ static int x1000_uart1_data_a_pins[] = { 0x04, 0x05, };
->>  static int x1000_uart1_data_d_pins[] = { 0x62, 0x63, };
->>  static int x1000_uart1_hwflow_pins[] = { 0x64, 0x65, };
->>  static int x1000_uart2_data_a_pins[] = { 0x02, 0x03, };
->> +static int x1000_uart2_data_c_pins[] = { 0x5f, 0x5f, };
+> I'm worry about it get flushed by the external input value.
 > 
-> One should be enough.
+> Because the output data register is same with the input data register(
+> offset is� 0x1650).
 > 
-> Looks fine otherwise.
-> 
-> Cheers,
-> -Paul
-> 
->>  static int x1000_uart2_data_d_pins[] = { 0x65, 0x64, };
->>  static int x1000_sfc_data_pins[] = { 0x1d, 0x1c, 0x1e, 0x1f, };
->>  static int x1000_sfc_clk_pins[] = { 0x1a, };
->> @@ -2058,6 +2059,7 @@ static const struct group_desc x1000_groups[] = {
->>         INGENIC_PIN_GROUP("uart1-data-d", x1000_uart1_data_d, 1),
->>         INGENIC_PIN_GROUP("uart1-hwflow", x1000_uart1_hwflow, 1),
->>         INGENIC_PIN_GROUP("uart2-data-a", x1000_uart2_data_a, 2),
->> +       INGENIC_PIN_GROUP("uart2-data-c", x1000_uart2_data_c, 1),
->>         INGENIC_PIN_GROUP("uart2-data-d", x1000_uart2_data_d, 0),
->>         INGENIC_PIN_GROUP("sfc-data", x1000_sfc_data, 1),
->>         INGENIC_PIN_GROUP("sfc-clk", x1000_sfc_clk, 1),
->> @@ -2115,7 +2117,7 @@ static const char *x1000_uart0_groups[] = { "uart0-data", "uart0-hwflow", };
->>  static const char *x1000_uart1_groups[] = {
->>         "uart1-data-a", "uart1-data-d", "uart1-hwflow",
->>  };
->> -static const char *x1000_uart2_groups[] = { "uart2-data-a", "uart2-data-d", };
->> +static const char *x1000_uart2_groups[] = { "uart2-data-a", "uart2-data-c", "uart2-data-d", };
->>  static const char *x1000_sfc_groups[] = { "sfc-data", "sfc-clk", "sfc-ce", };
->>  static const char *x1000_ssi_groups[] = {
->>         "ssi-dt-a-22", "ssi-dt-a-29", "ssi-dt-d",
->> -- 
->> 2.30.2
-> 
-> 
+> The hardware designer do not provided a� separation.
 
+Usually for GPIO data registers the read value is current pin state 
+regardless of direction and the written value is what to drive as an 
+output. But your h/w could be different.
+
+
+> > > +
+> > > +		/* Optional properties which made the driver more flexible */
+> > > +		of_property_read_u32(i2c_np, "udelay", &udelay);
+> > > +		of_property_read_u32(i2c_np, "timeout", &timeout);
+> > These aren't documented. Do you really need them in DT?
+> 
+> Yes, in very rare case:
+> 
+> When debugging, sometimes one way I2C works, another way I2C not on specific
+> board.
+
+This is not specific to you, so why do you solve it in a way that only 
+works for you? If you want to add tuning parameters to the i2c bit 
+algorithm, why don't you do so in a way that works for all users? I'm 
+sure the I2C maintainer and others have some opinion on this, but 
+they'll never see it hidden away in some display driver.
+
+
+> and you want to see what will happen if you change it from 5 to 2.
+> 
+> modify device tree is enough, have to recompile the kernel and driver
+> modules every time.
+
+Modifying the DT is not the easiest way to debug either.
+
+
+> It is optional through.
+
+Lots of properties are optional, what's your point?
+
+
+> Please do not ask me to document such a easy thing,
+
+Everything must be documented. There's nothing more to discuss.
+
+
+> DT itself is a documention, human readable,� it already speak for itself.
+
+It is machine readable too. Undocumented properties generate warnings 
+now.
+
+Rob
