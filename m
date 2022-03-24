@@ -2,117 +2,120 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1636F4E65B2
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 15:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21D94E6770
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 18:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242281AbiCXO4K (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Mar 2022 10:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S1352021AbiCXRGU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Mar 2022 13:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242275AbiCXO4J (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 10:56:09 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BFF7486C;
-        Thu, 24 Mar 2022 07:54:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1648133676; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k4RqB7TRAYJBu7Wm3B9VZjS3Tw7CidJf6vGxQitVk5U=;
-        b=JZkuKyp52NeLVnkK54mHEffdaxGZogn6w7EExst0FnYnOjuPeY02hv0eN/B3k7788lYv8O
-        TD1U7aFUKGOnTvCF+8COJRlHOzZDJ25L0JD0yHEfjl3W8KRbReteN5anggoyJQwNAQvYIO
-        a/oYoJyMwMp16R4dCiGVwY/2qGnoACk=
-Date:   Thu, 24 Mar 2022 14:54:17 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2] pinctrl: Ingenic: Add missing UART2 group C for
- X1000/E
-To:     Yunian Yang <reimu@sudomaker.com>
-Cc:     linux-mips@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <H2899R.18AGJJTC83P61@crapouillou.net>
-In-Reply-To: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
-References: <fd813c7d-888a-ce53-b1e5-d9b41003b58b@sudomaker.com>
+        with ESMTP id S1352006AbiCXRGU (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 13:06:20 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCCCB0D12;
+        Thu, 24 Mar 2022 10:04:47 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so5775773pjo.1;
+        Thu, 24 Mar 2022 10:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=STMU7e/I1m6VY6MjvIoI76oz7x7+nWXzvbO+4NLxw0s=;
+        b=JSTzQSr8a6ZV3CML3sQN/TWvPdbiQsTWJhG0wSSRtNr0MFPFt1eJMYS2u2lUa8X2y9
+         8CYfd1wDhQl103rijG5UpmGdXeQ4pGUS8aG53v0DKJkfJfjt07wYbCJz9Gfq4rTBJCSH
+         cD8mCnXDywf1XZ9SEnt057QMM2oEW5bKnaV4Umj8uzeFpFdLPtT2QKmmy2ehyqQu1aDC
+         QIdajoXJydC8sFtFi+654fInQ/JC0tCP4c7AByNs4AiZffn6jBZ6S+PheMInlG6EMqWn
+         V1a+1Ikd4oIomJWbiqplvpXvoDsIa0sDeq+JchDAwg7ytkRWxblCXzCqN2mfP3JN+g3M
+         EJ4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=STMU7e/I1m6VY6MjvIoI76oz7x7+nWXzvbO+4NLxw0s=;
+        b=WALNx3kgR2ApQsljmFtpA9f/+YvQWyZs3cABsjyiCWoDM2BPwKst5W9wzu3ODgoR+/
+         TlOBzHaVhqnxDV2eAkXW8Z2krbW416HA80pFh/LGU8PP3NJ9i/M8LEi76hPiRVdgENqY
+         +iLmwJHkBH5zLm39opJ2HT9ByAr5tm1ZEjYyIxWR0xIEoTP6lUaOH/OTKQok1aY4cYBh
+         jauRI/TG5PKly+dczH5LMOtQg28d3V2M1g+3Lj44gdJDqu899pn9FvZ8saIw764EZgGr
+         g+JHOBA0HTrTrU4WQrPOsLazpUT4rUoNHbxjA1/6KwsQQpA14ruY4gsrR0XFNTyTelH6
+         x98A==
+X-Gm-Message-State: AOAM531Y4HszFCwTtY7mt9NLRiVX1R+JJnm6zlKVTQwokUFJFRfIBfC/
+        GVmXEjt5xMQNGdp8auT9MGI=
+X-Google-Smtp-Source: ABdhPJyqnVKumV45iugDqVnPP9eNJESsThCjmfsGBkuivLqQTsBP+aQqhmb7Usy13oPb4HSIXacstQ==
+X-Received: by 2002:a17:90a:a78f:b0:1bc:8042:9330 with SMTP id f15-20020a17090aa78f00b001bc80429330mr19740927pjq.229.1648141486862;
+        Thu, 24 Mar 2022 10:04:46 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id o65-20020a17090a0a4700b001bef5cffea7sm7331537pjo.0.2022.03.24.10.04.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Mar 2022 10:04:45 -0700 (PDT)
+Message-ID: <2a8afc70-c0d8-2b37-9d49-9a054a30ea4b@gmail.com>
+Date:   Thu, 24 Mar 2022 10:04:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1] soc: bcm: Check for NULL return of devm_kzalloc()
+Content-Language: en-US
+To:     QintaoShen <unSimple1993@163.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1648110940-4684-1-git-send-email-unSimple1993@163.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <1648110940-4684-1-git-send-email-unSimple1993@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
++Rafal,
 
+On 3/24/22 01:35, QintaoShen wrote:
+> As the potential failuer of allocation, devm_kzalloc() may return NULL.
 
-Le jeu., mars 24 2022 at 21:33:56 +0800, Yunian Yang=20
-<reimu@sudomaker.com> a =E9crit :
-> v2: Define PC31 pin only once, noted by Paul Cercueil=20
-> <paul@crapouillou.net>
->     Confirmed to work on hardware. Although the Ingenic folks did=20
-> this twice
->     in their 4.4 kernel fork; not sure why.
->=20
-> X1000/E has a third UART2 pin group selection, which uses the TDI(G2)=20
-> as RX
-> and TDO(G1) as TX. This configuration is becoming increasingly=20
-> popular in
-> newer core boards, such as the Halley2 v4.1. This is done by enabling
-> function 1 of a "virtual pin" PC31. See section 19.3.3 of the X1000
-> Programming Manual for details.
->=20
-> Signed-off-by: Yunian Yang <reimu@sudomaker.com>
+s/failuer/failure/
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+> Then the 'pd->pmb' and the follow lines of code may bring null pointer dereference.
+> 
+> Therefore, it is better to check the return value of devm_kzalloc() to avoid this confusion.
+> 
+> Signed-off-by: QintaoShen <unSimple1993@163.com>
 
-Cheers,
--Paul
+Fixes: 8bcac4011ebe ("soc: bcm: add PM driver for Broadcom's PMB")
 
 > ---
->  drivers/pinctrl/pinctrl-ingenic.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c=20
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 2712f51eb238..29709059d62b 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -1982,6 +1982,7 @@ static int x1000_uart1_data_a_pins[] =3D { 0x04,=20
-> 0x05, };
->  static int x1000_uart1_data_d_pins[] =3D { 0x62, 0x63, };
->  static int x1000_uart1_hwflow_pins[] =3D { 0x64, 0x65, };
->  static int x1000_uart2_data_a_pins[] =3D { 0x02, 0x03, };
-> +static int x1000_uart2_data_c_pins[] =3D { 0x5f, };
->  static int x1000_uart2_data_d_pins[] =3D { 0x65, 0x64, };
->  static int x1000_sfc_data_pins[] =3D { 0x1d, 0x1c, 0x1e, 0x1f, };
->  static int x1000_sfc_clk_pins[] =3D { 0x1a, };
-> @@ -2058,6 +2059,7 @@ static const struct group_desc x1000_groups[] =3D=20
-> {
->         INGENIC_PIN_GROUP("uart1-data-d", x1000_uart1_data_d, 1),
->         INGENIC_PIN_GROUP("uart1-hwflow", x1000_uart1_hwflow, 1),
->         INGENIC_PIN_GROUP("uart2-data-a", x1000_uart2_data_a, 2),
-> +       INGENIC_PIN_GROUP("uart2-data-c", x1000_uart2_data_c, 1),
->         INGENIC_PIN_GROUP("uart2-data-d", x1000_uart2_data_d, 0),
->         INGENIC_PIN_GROUP("sfc-data", x1000_sfc_data, 1),
->         INGENIC_PIN_GROUP("sfc-clk", x1000_sfc_clk, 1),
-> @@ -2115,7 +2117,7 @@ static const char *x1000_uart0_groups[] =3D {=20
-> "uart0-data", "uart0-hwflow", };
->  static const char *x1000_uart1_groups[] =3D {
->         "uart1-data-a", "uart1-data-d", "uart1-hwflow",
->  };
-> -static const char *x1000_uart2_groups[] =3D { "uart2-data-a",=20
-> "uart2-data-d", };
-> +static const char *x1000_uart2_groups[] =3D { "uart2-data-a",=20
-> "uart2-data-c", "uart2-data-d", };
->  static const char *x1000_sfc_groups[] =3D { "sfc-data", "sfc-clk",=20
-> "sfc-ce", };
->  static const char *x1000_ssi_groups[] =3D {
->         "ssi-dt-a-22", "ssi-dt-a-29", "ssi-dt-d",
-> --
-> 2.30.2
+>   drivers/soc/bcm/bcm63xx/bcm-pmb.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+> index 7bbe46e..55bf389 100644
+> --- a/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+> +++ b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
+> @@ -311,6 +311,8 @@ static int bcm_pmb_probe(struct platform_device *pdev)
+>   
+>   	for (e = table; e->name; e++) {
+>   		struct bcm_pmb_pm_domain *pd = devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
+> +		if (!pd)
+> +			return -ENOMEM;
+
+I am of two minds as to what the appropriate behavior could be here, we 
+could equally use an:
+
+		if (!pd)
+			continue;
+
+or do what you are doing.
+
+>   
+>   		pd->pmb = pmb;
+>   		pd->data = e;
 
 
+-- 
+Florian
