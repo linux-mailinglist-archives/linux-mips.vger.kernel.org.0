@@ -2,120 +2,89 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21D94E6770
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 18:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B734E690A
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 20:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352021AbiCXRGU (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Mar 2022 13:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
+        id S1352831AbiCXTIp (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Mar 2022 15:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352006AbiCXRGU (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 13:06:20 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCCCB0D12;
-        Thu, 24 Mar 2022 10:04:47 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so5775773pjo.1;
-        Thu, 24 Mar 2022 10:04:47 -0700 (PDT)
+        with ESMTP id S1352834AbiCXTIo (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 15:08:44 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC0CB82D9
+        for <linux-mips@vger.kernel.org>; Thu, 24 Mar 2022 12:07:12 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2e612af95e3so61154357b3.9
+        for <linux-mips@vger.kernel.org>; Thu, 24 Mar 2022 12:07:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=STMU7e/I1m6VY6MjvIoI76oz7x7+nWXzvbO+4NLxw0s=;
-        b=JSTzQSr8a6ZV3CML3sQN/TWvPdbiQsTWJhG0wSSRtNr0MFPFt1eJMYS2u2lUa8X2y9
-         8CYfd1wDhQl103rijG5UpmGdXeQ4pGUS8aG53v0DKJkfJfjt07wYbCJz9Gfq4rTBJCSH
-         cD8mCnXDywf1XZ9SEnt057QMM2oEW5bKnaV4Umj8uzeFpFdLPtT2QKmmy2ehyqQu1aDC
-         QIdajoXJydC8sFtFi+654fInQ/JC0tCP4c7AByNs4AiZffn6jBZ6S+PheMInlG6EMqWn
-         V1a+1Ikd4oIomJWbiqplvpXvoDsIa0sDeq+JchDAwg7ytkRWxblCXzCqN2mfP3JN+g3M
-         EJ4A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pseG2z7S6drXw7B6bZFmu5Aq0qIPkTegmGqNFv03N28=;
+        b=YV8zjBbDPKhPuua63RB0aEnfwtnQRi2RXudWvZLwzJ6TbcetrLsgZP2EXKryNkqqNs
+         WzObgFsfIMMm8KL8SyoRILWYW3dOaaD2QUYX9QCWsy+YSBLUgn0t8woNrgmak24MCpeA
+         bkXHLnIYyUWVOmJitwEmeQ8kfrl88nff9tzE+TnhF+NmDe4vc/B0KtfInUxKdfHFEvPf
+         jAtgjS6GqSAV5VDDLJfTHZHWKdteM1is/qGpgTzJElZ8oryga8khQztvmc1tTSETeHAR
+         DX0HC6lRwhkVx3TZIxVjZmCzbX/lTTQOGTUFrPuhAKObpAh2f7sUYrS67XpgBlBd6RDJ
+         bn5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=STMU7e/I1m6VY6MjvIoI76oz7x7+nWXzvbO+4NLxw0s=;
-        b=WALNx3kgR2ApQsljmFtpA9f/+YvQWyZs3cABsjyiCWoDM2BPwKst5W9wzu3ODgoR+/
-         TlOBzHaVhqnxDV2eAkXW8Z2krbW416HA80pFh/LGU8PP3NJ9i/M8LEi76hPiRVdgENqY
-         +iLmwJHkBH5zLm39opJ2HT9ByAr5tm1ZEjYyIxWR0xIEoTP6lUaOH/OTKQok1aY4cYBh
-         jauRI/TG5PKly+dczH5LMOtQg28d3V2M1g+3Lj44gdJDqu899pn9FvZ8saIw764EZgGr
-         g+JHOBA0HTrTrU4WQrPOsLazpUT4rUoNHbxjA1/6KwsQQpA14ruY4gsrR0XFNTyTelH6
-         x98A==
-X-Gm-Message-State: AOAM531Y4HszFCwTtY7mt9NLRiVX1R+JJnm6zlKVTQwokUFJFRfIBfC/
-        GVmXEjt5xMQNGdp8auT9MGI=
-X-Google-Smtp-Source: ABdhPJyqnVKumV45iugDqVnPP9eNJESsThCjmfsGBkuivLqQTsBP+aQqhmb7Usy13oPb4HSIXacstQ==
-X-Received: by 2002:a17:90a:a78f:b0:1bc:8042:9330 with SMTP id f15-20020a17090aa78f00b001bc80429330mr19740927pjq.229.1648141486862;
-        Thu, 24 Mar 2022 10:04:46 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id o65-20020a17090a0a4700b001bef5cffea7sm7331537pjo.0.2022.03.24.10.04.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Mar 2022 10:04:45 -0700 (PDT)
-Message-ID: <2a8afc70-c0d8-2b37-9d49-9a054a30ea4b@gmail.com>
-Date:   Thu, 24 Mar 2022 10:04:44 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pseG2z7S6drXw7B6bZFmu5Aq0qIPkTegmGqNFv03N28=;
+        b=dD2+QWDmiNPD8s45iIeTbLUXbPES35kn0ixV6nV5LYP32PqbEM5H54v8MgHCh8Zpwh
+         NoLmlNrtumy+GBQg91usc+o+wwvMVsWvGcPcgLkwpcxJNIYv0KQCgPzk3T6BdCxwVtc/
+         QsmXx1mUrUsaBTiplR3SxYIQ2vnUd3eNXzsYejEdc2+31tUtunm1OIeOkwHuekve+mD1
+         NakLJfZfMoLcZS38uRLSoENwIYS2Fp2r6FONhjZfDPTQU7Ea/3iuQZeaSHfFDTxCYp6E
+         mFf9xKOfR1IsgYi33mC+Gt21o1ycFJxeRYNPjqkNMDWvVe6x+erlcFv8GQ0FUuW+rxQD
+         rYYA==
+X-Gm-Message-State: AOAM531UU3TZYsO/4m377V/x3dw6QiQlPy0NNERvC5dcLb/PKc1V9EJW
+        ptNkpcRrJsN72mfrC0qVSE0cLquaE/se5xpsEJWRDQ==
+X-Google-Smtp-Source: ABdhPJy3Tun+JOoRB0PYnpMrTm04joB8Ft64Szzjf/r0Dh8SbNJEXf+JKX1agsVDSy3HORuyZGHZFxe9asZz1qxEwjw=
+X-Received: by 2002:a81:d542:0:b0:2e5:c060:a0ac with SMTP id
+ l2-20020a81d542000000b002e5c060a0acmr6382708ywj.118.1648148831342; Thu, 24
+ Mar 2022 12:07:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1] soc: bcm: Check for NULL return of devm_kzalloc()
-Content-Language: en-US
-To:     QintaoShen <unSimple1993@163.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1648110940-4684-1-git-send-email-unSimple1993@163.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <1648110940-4684-1-git-send-email-unSimple1993@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220317000740.1045204-1-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220317000740.1045204-1-aidanmacdonald.0x0@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 24 Mar 2022 20:07:00 +0100
+Message-ID: <CACRpkdbEukaSdZDbA0JRuwCFjK5WLdMWB1Rs2VLe=WNSvfjBZA@mail.gmail.com>
+Subject: Re: [PATCH v4] pinctrl: ingenic: Fix regmap on X series SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     paul@crapouillou.net, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-+Rafal,
+On Thu, Mar 17, 2022 at 1:07 AM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
 
-On 3/24/22 01:35, QintaoShen wrote:
-> As the potential failuer of allocation, devm_kzalloc() may return NULL.
-
-s/failuer/failure/
-
-> Then the 'pd->pmb' and the follow lines of code may bring null pointer dereference.
-> 
-> Therefore, it is better to check the return value of devm_kzalloc() to avoid this confusion.
-> 
-> Signed-off-by: QintaoShen <unSimple1993@163.com>
-
-Fixes: 8bcac4011ebe ("soc: bcm: add PM driver for Broadcom's PMB")
-
+> The X series Ingenic SoCs have a shadow GPIO group which is at a higher
+> offset than the other groups, and is used for all GPIO configuration.
+> The regmap did not take this offset into account and set max_register
+> too low, so the regmap API blocked writes to the shadow group, which
+> made the pinctrl driver unable to configure any pins.
+>
+> Fix this by adding regmap access tables to the chip info. The way that
+> max_register was computed was also off by one, since max_register is an
+> inclusive bound, not an exclusive bound; this has been fixed.
+>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->   drivers/soc/bcm/bcm63xx/bcm-pmb.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/soc/bcm/bcm63xx/bcm-pmb.c b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
-> index 7bbe46e..55bf389 100644
-> --- a/drivers/soc/bcm/bcm63xx/bcm-pmb.c
-> +++ b/drivers/soc/bcm/bcm63xx/bcm-pmb.c
-> @@ -311,6 +311,8 @@ static int bcm_pmb_probe(struct platform_device *pdev)
->   
->   	for (e = table; e->name; e++) {
->   		struct bcm_pmb_pm_domain *pd = devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
-> +		if (!pd)
-> +			return -ENOMEM;
+> v1 -> v2: use regmap_access_table
+> v2 -> v3: compute max_register instead of putting it in chip_info
+> v3 -> v4: explain the fix to the max_register calculation
 
-I am of two minds as to what the appropriate behavior could be here, we 
-could equally use an:
+Patch applied!
 
-		if (!pd)
-			continue;
-
-or do what you are doing.
-
->   
->   		pd->pmb = pmb;
->   		pd->data = e;
-
-
--- 
-Florian
+Yours,
+Linus Walleij
