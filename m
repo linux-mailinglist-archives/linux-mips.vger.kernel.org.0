@@ -2,184 +2,187 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889144E6367
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 13:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B159D4E6379
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 13:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350213AbiCXMb2 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Mar 2022 08:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
+        id S1350149AbiCXMl5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Mar 2022 08:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350215AbiCXMbY (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 08:31:24 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73FFA995A;
-        Thu, 24 Mar 2022 05:29:52 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id D99535C014D;
-        Thu, 24 Mar 2022 08:29:51 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute1.internal (MEProxy); Thu, 24 Mar 2022 08:29:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=Up3dHTMXn3+4fL
-        UoQJEi2QXNKuRNdeUTtoLiyFBrbHM=; b=y9MiYRW2H0kvGQzUrfOSK49obI2x2v
-        k3hmCDgVcsW5ejjQwtxVh3M80/wXFTbFwm3zPmwDhCT5op4dLd5ic7ef0Q9oYJYA
-        OsJhez+oHpUzG6LaOLRNiY3chK3U70ObYI6doFNbRdXGzdCfDKprBiCDX0+/VZBG
-        lG9UYeBAkhot8/BdV7Jx8jDARk4dLluVXfMslc6HW+eLyQWlOtfAPsL2vvma/zDL
-        crtY1YKRuEGHuB+XHMsYd/84K/3xiUFQejncBFMRyM3qrrUo1dILeoJHoVglGU6b
-        sOL5hDSnOqngl+7/vc9jcjQf7d1Batro8RmhFyQDzXM9Wm3/WqZc/nAw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=Up3dHTMXn3+4fLUoQJEi2QXNKuRNdeUTtoLiyFBrb
-        HM=; b=nM7p8Gqmnsgq/0LE2Ng99N0xuYBHq3UhCUY5NVZ32LQBa+BEgCb6pV31i
-        tvJrgkWuHvwwWGU2ozl+T9tJk407AWgK6kSY+OxPh8NADs/oJsUKKmJl1UBmvtn3
-        CzVLUQOisYtBp9oULeZ9grWvpQZkDHLva/CyFR/q4lGhmKAd4uxARx0uBW47nRmL
-        J+eNQzmnmV6Bft8daqgJ24iHl7wrJYWdPI1mnOQPovg0338ppxeWmEu0fXpt86+G
-        4DJx09AgKAoVpy0tz7GHbR1GxybRNGjZLy72BVwh0hR4ZLDKQSXtkLp7HMJ2sQGU
-        b61c9FEbBMRe6h1Ykp9rP887L6Yvw==
-X-ME-Sender: <xms:P2Q8Yoga1vwQXDV_yWxUJceE7hQs2YhJ60S9IKk3Q4EDYpFYPisCWg>
-    <xme:P2Q8YhCYVbCU8Nm1JFW6aWNlE3A42O6jMOWpxgNdsX9zEGeY_y3vjH1tqQZ7qme11
-    2uivyAs-Pw_MSpZL5I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegledgfeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
-    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-    eqnecuggftrfgrthhtvghrnhepfeetgeekveeftefhgfduheegvdeuuddvieefvddvlefh
-    feehkeetfeeukedtfeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:P2Q8YgF3MAHlGghZfDECDNkBdDWMxDS5t4ezS_9p_rQ_cgx8vtxjow>
-    <xmx:P2Q8YpT9XOQvEzForAQ2mE5p0KBbB0FBxU-vFIlzFOoaA-3ubYTh8A>
-    <xmx:P2Q8Yly0HiBnMFzuQ_raMJ7kCKrrGi965YP1wq2ijWiggvu9Ub7t2Q>
-    <xmx:P2Q8Yg9xEShgAe4Q1QmRJo_E91MtDXHlD9kwBo3rbHASRgwN9fYXMg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3F51FFA0AA6; Thu, 24 Mar 2022 08:29:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4911-g925b585eab-fm-20220323.003-g925b585e
-Mime-Version: 1.0
-Message-Id: <490570bf-0e91-471b-b081-5ebd35541522@www.fastmail.com>
-In-Reply-To: <fb188614-0301-3255-c31c-3d443cf17b91@loongson.cn>
-References: <1647615920-23103-1-git-send-email-yangtiezhu@loongson.cn>
- <1647615920-23103-4-git-send-email-yangtiezhu@loongson.cn>
- <33241bd3-2f12-954c-6701-56cf563060bb@flygoat.com>
- <fb188614-0301-3255-c31c-3d443cf17b91@loongson.cn>
-Date:   Thu, 24 Mar 2022 12:29:28 +0000
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Tiezhu Yang" <yangtiezhu@loongson.cn>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc:     "Xuefeng Li" <lixuefeng@loongson.cn>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] MIPS: Use memblock_add_node() in early_parse_mem() under
- CONFIG_NUMA
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1344638AbiCXMlz (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 08:41:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B0F31506;
+        Thu, 24 Mar 2022 05:40:23 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4790F1F745;
+        Thu, 24 Mar 2022 12:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648125622; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qDsOr8gX6EHN1Nd1eU2WHHdDrdoOYMkulYetFKIueLs=;
+        b=pxsvihb9de9b5sHIHKI7fPyyRStLC9RYdvp2UQ/QFN2ProYk7+TPEzQWwCl0ahisn3Su4v
+        x0xLNT3elQ42FKA0H7RMjrWGWe98QGuq4bVEkt+418yQAdvOLp8wo4jjLM2asr1fXh7FlA
+        0rvi+Mf5M/4efAPR4nQV5DdGFcYKKfw=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id EAC5CA3B93;
+        Thu, 24 Mar 2022 12:40:21 +0000 (UTC)
+Date:   Thu, 24 Mar 2022 13:40:13 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-kernel@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-mips@vger.kernel.org
+Subject: Re: undefined reference to `node_data'
+Message-ID: <YjxmrTKxRpTFeHnE@dhcp22.suse.cz>
+References: <202203232042.AS9SV1zv-lkp@intel.com>
+ <Yjs0ausRy6/mLUFD@dhcp22.suse.cz>
+ <YjtPAwl/lhh+n3c2@dhcp22.suse.cz>
+ <20220324090443.GA5375@alpha.franken.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324090443.GA5375@alpha.franken.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
+On Thu 24-03-22 10:04:43, Thomas Bogendoerfer wrote:
+> On Wed, Mar 23, 2022 at 05:46:59PM +0100, Michal Hocko wrote:
+> > > > If you fix the issue, kindly add following tag as appropriate
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > 
+> > > > All errors (new ones prefixed by >>):
+> > > > 
+> > > >    mips64-linux-ld: mm/page_alloc.o: in function `free_area_init':
+> > > > >> (.init.text+0x1680): undefined reference to `node_data'
+> > > >    mips64-linux-ld: (.init.text+0x1690): undefined reference to `node_data'
+> > > 
+> > > OK, I can see what is going here. The page allocator normally
+> > > uses NODE_DATA but arch_refresh_nodedata refers to node_data directly.
+> > > This is a problem with
+> > > arch/mips/include/asm/mach-loongson64/mmzone.h:
+> > > extern struct pglist_data *__node_data[];
+> > > 
+> > > #define NODE_DATA(n)            (__node_data[n])
+> > > 
+> > > Unfortunately we cannot use NODE_DATA there because of header inclusion
+> > > ordering. I will think about a solution.
+> > 
+> > Is there any reason why (some?) MIPS arches use __node_data rather than
+> > node_data as most other architectures? Would it be acceptable to do the
+> > renaming? It would help to cover the above compilation problem because
+> > arch_refresh_nodedata could keep using node_data directly.
+> 
+> I've just checked history and I don't see a reason for __node_data.
+> So I'm fine with changing it to node_data.
 
-
-=E5=9C=A82022=E5=B9=B43=E6=9C=8823=E6=97=A5=E4=B8=89=E6=9C=88 =E4=B8=8A=E5=
-=8D=882:42=EF=BC=8CTiezhu Yang=E5=86=99=E9=81=93=EF=BC=9A
-> On 03/22/2022 09:19 PM, Jiaxun Yang wrote:
->>
->>
->> =E5=9C=A8 2022/3/18 15:05, Tiezhu Yang =E5=86=99=E9=81=93:
->>> Use memblock_add_node to add new memblock region within a NUMA node
->>> in early_parse_mem() under CONFIG_NUMA, otherwise the mem parameter
->>> can not work well.
->>
->> Hi Tiezhu,
->>
->> pa_to_nid doesn't exist when CONFIG_NUME is disabled.
->> So probably you want #ifdef macro instead =EF=BC=9F
->
-> Hi Jiaxun,
->
-> Thank you for your reply.
->
-> As far as I can tell, if CONFIG_NUMA is set, IS_ENABLED(CONFIG_NUMA)
-> is 1, pa_to_nid() is defined in the platform dependent header file:
-
-Yep you're right.
-Apologies for the noise.
-
-For the whole series:
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-Thanks.
-
->
-> 	arch/mips/include/asm/mach-ip27/mmzone.h
-> 	arch/mips/include/asm/mach-loongson64/mmzone.h
->
-> if CONFIG_NUMA is not set, IS_ENABLED(CONFIG_NUMA) is 0, pa_to_nid()
-> is always 0 which is defined in arch/mips/include/asm/mmzone.h:
->
-> 	#ifdef CONFIG_NUMA
-> 	# include <mmzone.h>
-> 	#endif
->
-> 	#ifndef pa_to_nid
-> 	#define pa_to_nid(addr) 0
-> 	#endif
->
-> So pa_to_nid() is defined under both CONFIG_NUMA and !CONFIG_NUMA,
-> there is no build error.
->
-> Additionally, use #ifdef CONFIG_NUMA is also OK, but I prefer to
-> use IS_ENABLED(CONFIG_NUMA).
->
-> If I am missing something, please let me know, thank you.
->
-> Thanks,
-> Tiezhu
->
->>
->> Thanks.
->> - Jiaxun
->>
->>>
->>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>> ---
->>>   arch/mips/kernel/setup.c | 6 +++++-
->>>   1 file changed, 5 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
->>> index c8c8f60..50cdc08 100644
->>> --- a/arch/mips/kernel/setup.c
->>> +++ b/arch/mips/kernel/setup.c
->>> @@ -37,6 +37,7 @@
->>>   #include <asm/cdmm.h>
->>>   #include <asm/cpu.h>
->>>   #include <asm/debug.h>
->>> +#include <asm/mmzone.h>
->>>   #include <asm/sections.h>
->>>   #include <asm/setup.h>
->>>   #include <asm/smp-ops.h>
->>> @@ -378,7 +379,10 @@ static int __init early_parse_mem(char *p)
->>>               memblock_end_of_DRAM() - memblock_start_of_DRAM());
->>>       }
->>>   -    memblock_add(start, size);
->>> +    if (IS_ENABLED(CONFIG_NUMA))
->>> +        memblock_add_node(start, size, pa_to_nid(start), MEMBLOCK_N=
-ONE);
->>> +    else
->>> +        memblock_add(start, size);
->>>         return 0;
->>>   }
-
---=20
-- Jiaxun
+Thanks a lot for double checking Thomas! This is a dump&simple sed over
+mips file. 0-day guys, could you give it a try please?
+--- 
+diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/asm/mach-ip27/mmzone.h
+index 08c36e50a860..a798ad379da1 100644
+--- a/arch/mips/include/asm/mach-ip27/mmzone.h
++++ b/arch/mips/include/asm/mach-ip27/mmzone.h
+@@ -20,9 +20,9 @@ struct node_data {
+ 	struct hub_data hub;
+ };
+ 
+-extern struct node_data *__node_data[];
++extern struct node_data *node_data[];
+ 
+-#define NODE_DATA(n)		(&__node_data[(n)]->pglist)
+-#define hub_data(n)		(&__node_data[(n)]->hub)
++#define NODE_DATA(n)		(&node_data[(n)]->pglist)
++#define hub_data(n)		(&node_data[(n)]->hub)
+ 
+ #endif /* _ASM_MACH_MMZONE_H */
+diff --git a/arch/mips/include/asm/mach-loongson64/mmzone.h b/arch/mips/include/asm/mach-loongson64/mmzone.h
+index ebb1deaa77b9..14e2b860ad65 100644
+--- a/arch/mips/include/asm/mach-loongson64/mmzone.h
++++ b/arch/mips/include/asm/mach-loongson64/mmzone.h
+@@ -14,9 +14,9 @@
+ #define pa_to_nid(addr)  (((addr) & 0xf00000000000) >> NODE_ADDRSPACE_SHIFT)
+ #define nid_to_addrbase(nid) ((unsigned long)(nid) << NODE_ADDRSPACE_SHIFT)
+ 
+-extern struct pglist_data *__node_data[];
++extern struct pglist_data *node_data[];
+ 
+-#define NODE_DATA(n)		(__node_data[n])
++#define NODE_DATA(n)		(node_data[n])
+ 
+ extern void setup_zero_pages(void);
+ extern void __init prom_init_numa_memory(void);
+diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
+index e8e3e48c5333..abbbc70ce980 100644
+--- a/arch/mips/loongson64/numa.c
++++ b/arch/mips/loongson64/numa.c
+@@ -29,8 +29,8 @@
+ 
+ unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
+ EXPORT_SYMBOL(__node_distances);
+-struct pglist_data *__node_data[MAX_NUMNODES];
+-EXPORT_SYMBOL(__node_data);
++struct pglist_data *node_data[MAX_NUMNODES];
++EXPORT_SYMBOL(node_data);
+ 
+ cpumask_t __node_cpumask[MAX_NUMNODES];
+ EXPORT_SYMBOL(__node_cpumask);
+@@ -107,7 +107,7 @@ static void __init node_mem_init(unsigned int node)
+ 	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
+ 	if (tnid != node)
+ 		pr_info("NODE_DATA(%d) on node %d\n", node, tnid);
+-	__node_data[node] = nd;
++	node_data[node] = nd;
+ 	NODE_DATA(node)->node_start_pfn = start_pfn;
+ 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
+ 
+diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
+index adc2faeecf7c..1c3a0b92d134 100644
+--- a/arch/mips/sgi-ip27/ip27-memory.c
++++ b/arch/mips/sgi-ip27/ip27-memory.c
+@@ -33,9 +33,9 @@
+ #define SLOT_PFNSHIFT		(SLOT_SHIFT - PAGE_SHIFT)
+ #define PFN_NASIDSHFT		(NASID_SHFT - PAGE_SHIFT)
+ 
+-struct node_data *__node_data[MAX_NUMNODES];
++struct node_data *node_data[MAX_NUMNODES];
+ 
+-EXPORT_SYMBOL(__node_data);
++EXPORT_SYMBOL(node_data);
+ 
+ static u64 gen_region_mask(void)
+ {
+@@ -358,8 +358,8 @@ static void __init node_mem_init(nasid_t node)
+ 	/*
+ 	 * Allocate the node data structures on the node first.
+ 	 */
+-	__node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
+-	memset(__node_data[node], 0, PAGE_SIZE);
++	node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
++	memset(node_data[node], 0, PAGE_SIZE);
+ 
+ 	NODE_DATA(node)->node_start_pfn = start_pfn;
+ 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
+@@ -401,7 +401,7 @@ void __init prom_meminit(void)
+ 			node_mem_init(node);
+ 			continue;
+ 		}
+-		__node_data[node] = &null_node;
++		node_data[node] = &null_node;
+ 	}
+ }
+-- 
+Michal Hocko
+SUSE Labs
