@@ -2,187 +2,341 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B159D4E6379
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 13:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B49D54E640F
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Mar 2022 14:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350149AbiCXMl5 (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Thu, 24 Mar 2022 08:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34904 "EHLO
+        id S1346373AbiCXN2E (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Thu, 24 Mar 2022 09:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344638AbiCXMlz (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 08:41:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B0F31506;
-        Thu, 24 Mar 2022 05:40:23 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4790F1F745;
-        Thu, 24 Mar 2022 12:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648125622; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qDsOr8gX6EHN1Nd1eU2WHHdDrdoOYMkulYetFKIueLs=;
-        b=pxsvihb9de9b5sHIHKI7fPyyRStLC9RYdvp2UQ/QFN2ProYk7+TPEzQWwCl0ahisn3Su4v
-        x0xLNT3elQ42FKA0H7RMjrWGWe98QGuq4bVEkt+418yQAdvOLp8wo4jjLM2asr1fXh7FlA
-        0rvi+Mf5M/4efAPR4nQV5DdGFcYKKfw=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id EAC5CA3B93;
-        Thu, 24 Mar 2022 12:40:21 +0000 (UTC)
-Date:   Thu, 24 Mar 2022 13:40:13 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-kernel@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-mips@vger.kernel.org
-Subject: Re: undefined reference to `node_data'
-Message-ID: <YjxmrTKxRpTFeHnE@dhcp22.suse.cz>
-References: <202203232042.AS9SV1zv-lkp@intel.com>
- <Yjs0ausRy6/mLUFD@dhcp22.suse.cz>
- <YjtPAwl/lhh+n3c2@dhcp22.suse.cz>
- <20220324090443.GA5375@alpha.franken.de>
+        with ESMTP id S236979AbiCXN2E (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Thu, 24 Mar 2022 09:28:04 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2A8A775A;
+        Thu, 24 Mar 2022 06:26:31 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id w17-20020a056830111100b005b22c584b93so3269757otq.11;
+        Thu, 24 Mar 2022 06:26:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=y0IvWNV6/MhmG/UNa7hi1l+d8pm1zx4Wo+VChftwr80=;
+        b=ZpLPnOk4Y0+V4MgrxC2fcjpgdmvo1ubqZgP0YptkEWAHI0ysRn5+JBOEKPTy78xiPI
+         BPidlX5pSAHNABd20kkXpIyyUYDrHbiRvKMKTayJrzz3WyNaeIhdS3mM/0Q4xM46JGif
+         rnWlQ8vKeNX+/qTospT3p3QlLzWeXPkRvNMq5+LNtD7i1JbMlJHgI4Ra/3eKoQO3vAsx
+         EhWkH1JaXbcR3JAJBi2g+wEun/WS51JjO24Ls5IiuAei/0oFD2wMWomC1WvWz1goQNM5
+         BKKplCAyt6id76Rjhu0WGD4Cs/2w0f/N0jRu90Zsz4SnAUZ43k7V6T5Kz51rBQ7L+Qjd
+         nrJQ==
+X-Gm-Message-State: AOAM5323P2QiL3AgyYgzZRtMr2eDcFQ5O4XbAa4Ql8UmT96VE6pYsR3M
+        GLelBzGJvAH1ZAhZ2MZiCQ==
+X-Google-Smtp-Source: ABdhPJws75hWIqsgautO0Ly6fZPQe3oBPYNsg71ris//OG6b7yyrLy4tHt5DfXoXKhuuQNmpDXhqqg==
+X-Received: by 2002:a05:6830:11d6:b0:5b2:5a37:3cc7 with SMTP id v22-20020a05683011d600b005b25a373cc7mr2031481otq.381.1648128390986;
+        Thu, 24 Mar 2022 06:26:30 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d20-20020a056830005400b005b22a187045sm1337116otp.11.2022.03.24.06.26.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Mar 2022 06:26:30 -0700 (PDT)
+Received: (nullmailer pid 1918774 invoked by uid 1000);
+        Thu, 24 Mar 2022 13:26:28 -0000
+Date:   Thu, 24 Mar 2022 08:26:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Qing Zhang <zhangqing@loongson.cn>,
+        David Airlie <airlied@linux.ie>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        devicetree@vger.kernel.org, suijingfeng <suijingfeng@loongson.cn>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v11 5/7] dt-bindings: display: Add Loongson display
+ controller
+Message-ID: <YjxxhNnmqteTIEOa@robh.at.kernel.org>
+References: <20220321162916.1116541-1-15330273260@189.cn>
+ <20220321162916.1116541-6-15330273260@189.cn>
+ <YjkITWpbnCmhKaX+@robh.at.kernel.org>
+ <f7eb61bc-6784-c77a-083f-7408c0a17e05@189.cn>
+ <Yjo3umi9bJ0xb2Gl@robh.at.kernel.org>
+ <199a2869-cd83-d24e-0ad0-25d15d76fc13@189.cn>
+ <YjsamuFslv6qlQMZ@robh.at.kernel.org>
+ <ac75aeff-1fca-f46f-1043-8437ef845ff9@189.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220324090443.GA5375@alpha.franken.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ac75aeff-1fca-f46f-1043-8437ef845ff9@189.cn>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-mips.vger.kernel.org>
 X-Mailing-List: linux-mips@vger.kernel.org
 
-On Thu 24-03-22 10:04:43, Thomas Bogendoerfer wrote:
-> On Wed, Mar 23, 2022 at 05:46:59PM +0100, Michal Hocko wrote:
-> > > > If you fix the issue, kindly add following tag as appropriate
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > 
-> > > > All errors (new ones prefixed by >>):
-> > > > 
-> > > >    mips64-linux-ld: mm/page_alloc.o: in function `free_area_init':
-> > > > >> (.init.text+0x1680): undefined reference to `node_data'
-> > > >    mips64-linux-ld: (.init.text+0x1690): undefined reference to `node_data'
-> > > 
-> > > OK, I can see what is going here. The page allocator normally
-> > > uses NODE_DATA but arch_refresh_nodedata refers to node_data directly.
-> > > This is a problem with
-> > > arch/mips/include/asm/mach-loongson64/mmzone.h:
-> > > extern struct pglist_data *__node_data[];
-> > > 
-> > > #define NODE_DATA(n)            (__node_data[n])
-> > > 
-> > > Unfortunately we cannot use NODE_DATA there because of header inclusion
-> > > ordering. I will think about a solution.
-> > 
-> > Is there any reason why (some?) MIPS arches use __node_data rather than
-> > node_data as most other architectures? Would it be acceptable to do the
-> > renaming? It would help to cover the above compilation problem because
-> > arch_refresh_nodedata could keep using node_data directly.
+On Thu, Mar 24, 2022 at 09:48:19AM +0800, Sui Jingfeng wrote:
 > 
-> I've just checked history and I don't see a reason for __node_data.
-> So I'm fine with changing it to node_data.
+> On 2022/3/23 21:03, Rob Herring wrote:
+> > On Wed, Mar 23, 2022 at 11:38:55AM +0800, Sui Jingfeng wrote:
+> > > On 2022/3/23 04:55, Rob Herring wrote:
+> > > > On Tue, Mar 22, 2022 at 10:33:45AM +0800, Sui Jingfeng wrote:
+> > > > > On 2022/3/22 07:20, Rob Herring wrote:
+> > > > > > On Tue, Mar 22, 2022 at 12:29:14AM +0800, Sui Jingfeng wrote:
+> > > > > > > From: suijingfeng <suijingfeng@loongson.cn>
+> > > > > > > 
+> > > > > > Needs a commit message.
+> > > > > > 
+> > > > > > > Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+> > > > > > > Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+> > > > > > Same person? Don't need both emails.
+> > > > > Yes,  suijingfeng@loongson.cn is my company's email. But it can not be used
+> > > > > to send patches to dri-devel,
+> > > > > 
+> > > > > when send patches with this email, the patch will not be shown on patch
+> > > > > works.
+> > > > > 
+> > > > > Emails  are either blocked or got  rejected  by loongson's mail server.  It
+> > > > > can only receive emails
+> > > > > 
+> > > > > from you and other people, but not dri-devel. so have to use my personal
+> > > > > email(15330273260@189.cn) to send patches.
+> > > > > 
+> > > > > > > ---
+> > > > > > >     .../loongson/loongson,display-controller.yaml | 230 ++++++++++++++++++
+> > > > > > >     1 file changed, 230 insertions(+)
+> > > > > > >     create mode 100644 Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+> > > > > > > 
+> > > > > > > diff --git a/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+> > > > > > > new file mode 100644
+> > > > > > > index 000000000000..7be63346289e
+> > > > > > > --- /dev/null
+> > > > > > > +++ b/Documentation/devicetree/bindings/display/loongson/loongson,display-controller.yaml
+> > > > > > > @@ -0,0 +1,230 @@
+> > > > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > > > > +%YAML 1.2
+> > > > > > > +---
+> > > > > > > +$id: http://devicetree.org/schemas/display/loongson/loongson,display-controller.yaml#
+> > > > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > > > +
+> > > > > > > +title: Loongson LS7A1000/LS2K1000/LS2K0500 Display Controller Device Tree Bindings
+> > > > > > > +
+> > > > > > > +maintainers:
+> > > > > > > +  - Sui Jingfeng <suijingfeng@loongson.cn>
+> > > > > > > +
+> > > > > > > +description: |+
+> > > > > > > +
+> > > > > > > +  Loongson display controllers are simple which require scanout buffers
+> > > > > > > +  to be physically contiguous. LS2K1000/LS2K0500 is a SOC, only system
+> > > > > > > +  memory is available. LS7A1000/LS7A2000 is bridge chip which is equipped
+> > > > > > > +  with a dedicated video RAM which is 64MB or more, precise size can be
+> > > > > > > +  read from the PCI BAR 2 of the GPU device(0x0014:0x7A15) in the bridge
+> > > > > > > +  chip.
+> > > > > > > +
+> > > > > > > +  LSDC has two display pipes, each way has a DVO interface which provide
+> > > > > > > +  RGB888 signals, vertical & horizontal synchronisations, data enable and
+> > > > > > > +  the pixel clock. LSDC has two CRTC, each CRTC is able to scanout from
+> > > > > > > +  1920x1080 resolution at 60Hz. Each CRTC has two FB address registers.
+> > > > > > > +
+> > > > > > > +  For LS7A1000, there are 4 dedicated GPIOs whose control register is
+> > > > > > > +  located at the DC register space. They are used to emulate two way i2c,
+> > > > > > > +  One for DVO0, another for DVO1.
+> > > > > > > +
+> > > > > > > +  LS2K1000 and LS2K0500 SoC grab i2c adapter from other module, either
+> > > > > > > +  general purpose GPIO emulated i2c or hardware i2c in the SoC.
+> > > > > > > +
+> > > > > > > +  LSDC's display pipeline have several components as below description,
+> > > > > > > +
+> > > > > > > +  The display controller in LS7A1000:
+> > > > > > > +     ___________________                                     _________
+> > > > > > > +    |            -------|                                   |         |
+> > > > > > > +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+> > > > > > > +    |  _   _     -------|        ^             ^            |_________|
+> > > > > > > +    | | | | |    -------|        |             |
+> > > > > > > +    | |_| |_|    | i2c0 <--------+-------------+
+> > > > > > > +    |            -------|
+> > > > > > > +    |   DC IN LS7A1000  |
+> > > > > > > +    |  _   _     -------|
+> > > > > > > +    | | | | |    | i2c1 <--------+-------------+
+> > > > > > > +    | |_| |_|    -------|        |             |             _________
+> > > > > > > +    |            -------|        |             |            |         |
+> > > > > > > +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+> > > > > > > +    |            -------|                                   |_________|
+> > > > > > > +    |___________________|
+> > > > > > > +
+> > > > > > > +  Simple usage of LS7A1000 with LS3A4000 CPU:
+> > > > > > > +
+> > > > > > > +    +------+            +-----------------------------------+
+> > > > > > > +    | DDR4 |            |  +-------------------+            |
+> > > > > > > +    +------+            |  | PCIe Root complex |   LS7A1000 |
+> > > > > > > +       || MC0           |  +--++---------++----+            |
+> > > > > > > +  +----------+  HT 3.0  |     ||         ||                 |
+> > > > > > > +  | LS3A4000 |<-------->| +---++---+  +--++--+    +---------+   +------+
+> > > > > > > +  |   CPU    |<-------->| | GC1000 |  | LSDC |<-->| DDR3 MC |<->| VRAM |
+> > > > > > > +  +----------+          | +--------+  +-+--+-+    +---------+   +------+
+> > > > > > > +       || MC1           +---------------|--|----------------+
+> > > > > > > +    +------+                            |  |
+> > > > > > > +    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
+> > > > > > > +    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
+> > > > > > > +                      +-------+                      +------+
+> > > > > > > +
+> > > > > > > +  The display controller in LS2K1000/LS2K0500:
+> > > > > > > +     ___________________                                     _________
+> > > > > > > +    |            -------|                                   |         |
+> > > > > > > +    |  CRTC0 --> | DVO0 ----> Encoder0 ---> Connector0 ---> | Monitor |
+> > > > > > > +    |  _   _     -------|        ^              ^           |_________|
+> > > > > > > +    | | | | |           |        |              |
+> > > > > > > +    | |_| |_|           |     +------+          |
+> > > > > > > +    |                   <---->| i2c0 |<---------+
+> > > > > > > +    |   DC IN LS2K1000  |     +------+
+> > > > > > > +    |  _   _            |     +------+
+> > > > > > > +    | | | | |           <---->| i2c1 |----------+
+> > > > > > > +    | |_| |_|           |     +------+          |            _________
+> > > > > > > +    |            -------|        |              |           |         |
+> > > > > > > +    |  CRTC1 --> | DVO1 ----> Encoder1 ---> Connector1 ---> |  Panel  |
+> > > > > > > +    |            -------|                                   |_________|
+> > > > > > > +    |___________________|
+> > > > > > > +
+> > > > > > > +properties:
+> > > > > > > +  $nodename:
+> > > > > > > +    pattern: "^display-controller@[0-9a-f],[0-9a-f]$"
+> > > > > > > +
+> > > > > > > +  compatible:
+> > > > > > > +    oneOf:
+> > > > > > > +      - items:
+> > > > > > > +          - enum:
+> > > > > > > +              - loongson,ls7a1000-dc
+> > > > > > > +              - loongson,ls2k1000-dc
+> > > > > > > +              - loongson,ls2k0500-dc
+> > > > > > > +
+> > > > > > > +  reg:
+> > > > > > > +    maxItems: 1
+> > > > > > > +
+> > > > > > > +  interrupts:
+> > > > > > > +    maxItems: 1
+> > > > > > > +
+> > > > > > > +  '#address-cells':
+> > > > > > > +    const: 1
+> > > > > > > +
+> > > > > > > +  '#size-cells':
+> > > > > > > +    const: 0
+> > > > > > > +
+> > > > > > > +  i2c-gpio@0:
+> > > > > > > +    description: |
+> > > > > > > +      Built-in GPIO emulate i2c exported for external display bridge
+> > > > > > If you have i2c-gpio, that belongs at the DT top-level, not here.
+> > > > > > 
+> > > > > > > +      configuration, onitor detection and edid read back etc, for ls7a1000
+> > > > > > > +      only. Its compatible must be lsdc,i2c-gpio-0. The reg property can be
+> > > > > > No, there's a defined i2c-gpio compatible already.
+> > > > > This is different from the i2c-gpio already defined under drivers/i2c/busses/i2c-gpio.c,
+> > > > > By design, my i2c-gpio is vendor specific properties, lsdc device driver create the i2c
+> > > > > adapter at runtime. These are 4 dedicated GPIOs whose control register is located at the
+> > > > > LSDC register space, not general purpose GPIOs with separate control register resource.
+> > > > > So i think it is the child node of display-controller@6,1, it belongs to LSDC.
+> > > > > It seems that put it at the DT top-level break the hierarchy and relationship.
+> > > > Okay, I see. Then just 'i2c' for the node names. You need a reference to
+> > > > i2c-controller.yaml for these nodes too.
+> > > > 
+> > > > The compatible should not have an index in it.
+> > > OK, i will fix this at the next version. thanks.
+> > > > > > > +      used to specify a I2c adapter bus number, if you don't specify one
+> > > > > > > +      i2c driver core will dynamically assign a bus number. Please specify
+> > > > > > Bus numbers are a linux detail not relevant to DT binding.
+> > > > > > 
+> > > > > > > +      it only when its bus number matters. Bus number greater than 6 is safe
+> > > > > > > +      because ls7a1000 bridge have 6 hardware I2C controller integrated.
+> > > > > > > +
+> > > > > > > +  i2c-gpio@1:
+> > > > > > > +    description: |
+> > > > > > > +      Built-in GPIO emulate i2c exported for external display bridge
+> > > > > > > +      configuration, onitor detection and edid read back etc, for ls7a1000
+> > > > > > > +      only. Its compatible must be lsdc,i2c-gpio-1.
+> > > > > > > +
+> > > > > > > +  ports:
+> > > > > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > > > > +
+> > > > > > > +    properties:
+> > > > > > > +      port@0:
+> > > > > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > > > > +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
+> > > > > > > +
+> > > > > > > +      port@1:
+> > > > > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > > > > +        description: output port node connected with DPI panels or external encoders, with only one endpoint.
+> > > > > > > +
+> > > > > > > +    required:
+> > > > > > > +      - port@0
+> > > > > > > +      - port@1
+> > > > > > > +
+> > > > > > > +required:
+> > > > > > > +  - compatible
+> > > > > > > +  - reg
+> > > > > > > +  - interrupts
+> > > > > > > +  - ports
+> > > > > > > +
+> > > > > > > +additionalProperties: false
+> > > > > > > +
+> > > > > > > +examples:
+> > > > > > > +  - |
+> > > > > > > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > > > > > > +    bus {
+> > > > > > > +
+> > > > > > > +        #address-cells = <3>;
+> > > > > > > +        #size-cells = <2>;
+> > > > > > > +        #interrupt-cells = <2>;
+> > > > > > > +
+> > > > > > > +        display-controller@6,1 {
+> > > > > > > +            compatible = "loongson,ls7a1000-dc";
+> > > > > > > +            reg = <0x3100 0x0 0x0 0x0 0x0>;
+> > > > > > > +            interrupts = <28 IRQ_TYPE_LEVEL_HIGH>;
+> > > > > > > +
+> > > > > > > +            #address-cells = <1>;
+> > > > > > > +            #size-cells = <0>;
+> > > > > > > +
+> > > > > > > +            i2c-gpio@0 {
+> > > > > > > +                compatible = "lsdc,i2c-gpio-0";
+> > > > > > > +                reg = <6>;
+> > > > 'reg' needs to be documented with some description of what 6 and 7
+> > > > represent. If they are the control register offset, then make the
+> > > > address translatable (use 'ranges' and define the size).
+> > > By design, the reg property is used to specify a I2c adapter bus number,
+> > > if we don't specify one, i2c driver core will dynamically assign a bus number.
+> > > then the nr of the i2c adapter will started from 0. I want is start from 6
+> > > to avoid potential conflict feature hardware I2C driver.
+> > > 
+> > > Because LS7A1000 bridge chip have 6 hardware I2C controller integrated,
+> > > but its driver is not up-streamed yet. By default these hardware I2C controller's
+> > > nr is started from 0.
+> > Linux's numbering doesn't belong in DT. So no, you can't use 'reg' in
+> > that way.
+> Then,  can i use something like lsdc,nr = <6> ?
+> > > Even through i2c driver core can dynamically generate a number, i still want it
+> > > to be fixed and keep consistent and explicit. That is, i2c6 is for display pipe 0,
+> > > i2c7 is for display pipe 1. This follow the convention and flexible enough.
+> > You may want that, but that is not how the kernel works. Specific
+> > numbers are not guaranteed. I'm sure you've seen this for disks, network
+> > interfaces, etc.
+> > 
+> > Rob
+> 
+> 2c_bit_add_numbered_bus() will guarantee it for you as long as If no devices
+> have pre-been declared for this bus.
+> 
+> you can read the comment of 2c_bit_add_numbered_bus() at
+> drivers/i2c/i2c-core-base.c
 
-Thanks a lot for double checking Thomas! This is a dump&simple sed over
-mips file. 0-day guys, could you give it a try please?
---- 
-diff --git a/arch/mips/include/asm/mach-ip27/mmzone.h b/arch/mips/include/asm/mach-ip27/mmzone.h
-index 08c36e50a860..a798ad379da1 100644
---- a/arch/mips/include/asm/mach-ip27/mmzone.h
-+++ b/arch/mips/include/asm/mach-ip27/mmzone.h
-@@ -20,9 +20,9 @@ struct node_data {
- 	struct hub_data hub;
- };
- 
--extern struct node_data *__node_data[];
-+extern struct node_data *node_data[];
- 
--#define NODE_DATA(n)		(&__node_data[(n)]->pglist)
--#define hub_data(n)		(&__node_data[(n)]->hub)
-+#define NODE_DATA(n)		(&node_data[(n)]->pglist)
-+#define hub_data(n)		(&node_data[(n)]->hub)
- 
- #endif /* _ASM_MACH_MMZONE_H */
-diff --git a/arch/mips/include/asm/mach-loongson64/mmzone.h b/arch/mips/include/asm/mach-loongson64/mmzone.h
-index ebb1deaa77b9..14e2b860ad65 100644
---- a/arch/mips/include/asm/mach-loongson64/mmzone.h
-+++ b/arch/mips/include/asm/mach-loongson64/mmzone.h
-@@ -14,9 +14,9 @@
- #define pa_to_nid(addr)  (((addr) & 0xf00000000000) >> NODE_ADDRSPACE_SHIFT)
- #define nid_to_addrbase(nid) ((unsigned long)(nid) << NODE_ADDRSPACE_SHIFT)
- 
--extern struct pglist_data *__node_data[];
-+extern struct pglist_data *node_data[];
- 
--#define NODE_DATA(n)		(__node_data[n])
-+#define NODE_DATA(n)		(node_data[n])
- 
- extern void setup_zero_pages(void);
- extern void __init prom_init_numa_memory(void);
-diff --git a/arch/mips/loongson64/numa.c b/arch/mips/loongson64/numa.c
-index e8e3e48c5333..abbbc70ce980 100644
---- a/arch/mips/loongson64/numa.c
-+++ b/arch/mips/loongson64/numa.c
-@@ -29,8 +29,8 @@
- 
- unsigned char __node_distances[MAX_NUMNODES][MAX_NUMNODES];
- EXPORT_SYMBOL(__node_distances);
--struct pglist_data *__node_data[MAX_NUMNODES];
--EXPORT_SYMBOL(__node_data);
-+struct pglist_data *node_data[MAX_NUMNODES];
-+EXPORT_SYMBOL(node_data);
- 
- cpumask_t __node_cpumask[MAX_NUMNODES];
- EXPORT_SYMBOL(__node_cpumask);
-@@ -107,7 +107,7 @@ static void __init node_mem_init(unsigned int node)
- 	tnid = early_pfn_to_nid(nd_pa >> PAGE_SHIFT);
- 	if (tnid != node)
- 		pr_info("NODE_DATA(%d) on node %d\n", node, tnid);
--	__node_data[node] = nd;
-+	node_data[node] = nd;
- 	NODE_DATA(node)->node_start_pfn = start_pfn;
- 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
- 
-diff --git a/arch/mips/sgi-ip27/ip27-memory.c b/arch/mips/sgi-ip27/ip27-memory.c
-index adc2faeecf7c..1c3a0b92d134 100644
---- a/arch/mips/sgi-ip27/ip27-memory.c
-+++ b/arch/mips/sgi-ip27/ip27-memory.c
-@@ -33,9 +33,9 @@
- #define SLOT_PFNSHIFT		(SLOT_SHIFT - PAGE_SHIFT)
- #define PFN_NASIDSHFT		(NASID_SHFT - PAGE_SHIFT)
- 
--struct node_data *__node_data[MAX_NUMNODES];
-+struct node_data *node_data[MAX_NUMNODES];
- 
--EXPORT_SYMBOL(__node_data);
-+EXPORT_SYMBOL(node_data);
- 
- static u64 gen_region_mask(void)
- {
-@@ -358,8 +358,8 @@ static void __init node_mem_init(nasid_t node)
- 	/*
- 	 * Allocate the node data structures on the node first.
- 	 */
--	__node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
--	memset(__node_data[node], 0, PAGE_SIZE);
-+	node_data[node] = __va(slot_freepfn << PAGE_SHIFT);
-+	memset(node_data[node], 0, PAGE_SIZE);
- 
- 	NODE_DATA(node)->node_start_pfn = start_pfn;
- 	NODE_DATA(node)->node_spanned_pages = end_pfn - start_pfn;
-@@ -401,7 +401,7 @@ void __init prom_meminit(void)
- 			node_mem_init(node);
- 			continue;
- 		}
--		__node_data[node] = &null_node;
-+		node_data[node] = &null_node;
- 	}
- }
--- 
-Michal Hocko
-SUSE Labs
+I didn't say it wasn't possible. It is not best practice. Grep 
+i2c_bit_add_numbered_bus and see how many users there are. Even if the 
+kernel allows specifying bus numbers, your Linux bus numbers don't 
+belong in DT.
+
+Rob
