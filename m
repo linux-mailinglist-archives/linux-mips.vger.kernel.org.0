@@ -2,54 +2,52 @@ Return-Path: <linux-mips-owner@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147604E6D72
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Mar 2022 05:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D40F4E6D75
+	for <lists+linux-mips@lfdr.de>; Fri, 25 Mar 2022 05:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239883AbiCYErr (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
-        Fri, 25 Mar 2022 00:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
+        id S1345852AbiCYEtZ (ORCPT <rfc822;lists+linux-mips@lfdr.de>);
+        Fri, 25 Mar 2022 00:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354802AbiCYErr (ORCPT
-        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Mar 2022 00:47:47 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C63C6ED2
-        for <linux-mips@vger.kernel.org>; Thu, 24 Mar 2022 21:46:12 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id qx21so13060084ejb.13
-        for <linux-mips@vger.kernel.org>; Thu, 24 Mar 2022 21:46:12 -0700 (PDT)
+        with ESMTP id S241526AbiCYEtY (ORCPT
+        <rfc822;linux-mips@vger.kernel.org>); Fri, 25 Mar 2022 00:49:24 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7658EC6EE7
+        for <linux-mips@vger.kernel.org>; Thu, 24 Mar 2022 21:47:50 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id c62so7917423edf.5
+        for <linux-mips@vger.kernel.org>; Thu, 24 Mar 2022 21:47:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:from:date:message-id:subject:to;
         bh=00jzhQ/dm8OoWIsxpxpfQ9KmK+AHhnesfJOmQ5Fhuhg=;
-        b=QU6k4hG9LkpSC7ZXt8ecxCx/NPQi+gU+T3o02SO264DbRUfLBC4bvegaZI0a3rYLsg
-         SLZ12Wi0RlNObUeZO7YsoBE9YJZ0mNoZQLwdu52QVY+7bcVHnPqgWFUTQSO/u+nnvDPB
-         ljumtTQjgZuKsp8kmv7NbC0dkVk5ldvjqFQf/yORG8gDckGxChM5ev450tJ9FsqrFiS7
-         9dmR/i4gS5tdnjG3ZixFcV/qOaUDUI6btgtpv4pz3pU/7lZOXoRemowIUpc8SV0VD8Z/
-         BEO1wIZ0R/AoS9Kks2v3nz4OU0E/cB32IoxFJqbRSl79DrAfaFYwIbJZE1kENwXf2Jje
-         YfLg==
+        b=Zsa9lDunYvgzYqdjsfHog1YwIH//5FotveIdu7R9YYUHQMil0jJbakiaY9yy1Xz1gy
+         txvh0Rl0/boyXCJZn6j84JxQA6VZDfFFhVVdr5lrIispfcNJwQ1JO4XpH32kzsKLSNUm
+         RNE7oOFAzYx5iOzIP6+V3QW/WSFPQJWl6eixaDNZ0rRs+uAiCV+nHtERdh6QuZP2Ttds
+         Y1yT4EQCA3AFE3VyN1FnRm7+U41+YEjiM5x/clrTDQwAaDh/7Ufv1CcLtNIZ/3d5ZzIh
+         7cobzHrsS43VXQdFYbbWjz6K8A5PbQkUs8JP6H7ojpo1ekdSxR6npt83epQiBGTEkjUY
+         s4gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
         bh=00jzhQ/dm8OoWIsxpxpfQ9KmK+AHhnesfJOmQ5Fhuhg=;
-        b=S5BuPHJtZ3aa9WGthDN/XH1O54/q6Rkj47j0+W2mgRMUDgdFX+bwm3rNN8QolvSti8
-         o6ivgqzqtArJxOv9wPhAZ2Cx5J1sD9hlCjgW/DSP8lPPgyuu7nlf7quaQhk8hmtJzkWf
-         LNQf3df4oJTi4bCKPnfczkVsrYYJS9K53ZvJteo2YU07co1Zx3/bbALOBtxrTN0uVgns
-         EGjH9WVgvHTrc07oy8FgSpuhXNrAKcmo3Ugc9cD9+vx9gq86RaMkFLpSJDnmW1CDn5WD
-         U8q9+xF3XBHEuY4uyNFjfJUddsZHyNppomRhbwyaNPTd49HjjWc9f8K3jegX3tWQ1lA+
-         8LoQ==
-X-Gm-Message-State: AOAM5313apCmvLwky3PVP6YqbV24/L7fwPJs9PnXEv1VrxHh7xZ0jf5X
-        4deGJAxij+15Z4m/7sdFGb/jktE/GH1r4P6/nMc=
-X-Google-Smtp-Source: ABdhPJyL50IzVEfVx7WnrbuwlwXsXkelOCAy/DNCVp8df/1c3AS1WdkE61pE9xD0p0RTYh9jqv2+eP2Kqw+JWsXVKP4=
-X-Received: by 2002:a17:906:1e94:b0:6cc:4382:f12e with SMTP id
- e20-20020a1709061e9400b006cc4382f12emr9269224ejj.482.1648183570342; Thu, 24
- Mar 2022 21:46:10 -0700 (PDT)
+        b=AM5c+DpgrzKZvsu7JXT8Uqej/7qgu7+i+0PPHgB4KDKW80+v4NbRkvqWk4mVq1cwao
+         8pb6fQcOI/rxGATMPAQBRYwAi4fwT/BK95c1RhegujoTnYzYj5iJ1FZE+EG8njl99TFh
+         TpE6oM660iHYE1XJgjrnrjsspxsgTrgefODMQlS5dIo1lzpsfxcZ59DtoQcxQ5ULPyqY
+         Apuv3MO9U0HopF7NtCvnRFu7HxvUUrppIpZ0MXMnJlIVrlAwMFw80klt8ZIbnLrV6Jnm
+         ErAl+BFVfCXYEKAfe0W1QDpiS3XqwvyYZ5rTjyKEtDgBuOi8Vc7rzvFFPaLf6augGcMJ
+         gLag==
+X-Gm-Message-State: AOAM530sBhhADR1OYZhcmdg/CYV74OuJosjQtAHxIbrfAGvLHLru+ne6
+        fegGAoYTpC5idt1JgaQUYgcXm7VmtHHynlJpWBo=
+X-Google-Smtp-Source: ABdhPJyzhC9de39mz/yg0+m00uY4XYPuvMdXaWoyYZauADKRT5G4RKkOIGfqGOnR3X0hFoEw3grjR0KqtkiT4EeSomQ=
+X-Received: by 2002:a50:99cd:0:b0:418:d6c2:2405 with SMTP id
+ n13-20020a5099cd000000b00418d6c22405mr10726277edb.342.1648183668753; Thu, 24
+ Mar 2022 21:47:48 -0700 (PDT)
 MIME-Version: 1.0
 From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Fri, 25 Mar 2022 04:45:58 +0000
-Message-ID: <CAHpNFcPh9X6dpE2=yu4bYfnJmAyrLqEd3qPey0Lh0maNc0+-0g@mail.gmail.com>
-Subject: Dev/Random : Importance : Our C/T/RNG Can Help GEA-2 Open Software
- implementation of 3 Bits (T/RNG) Not 1 : We need Chaos : GEA-1 and GEA-2
- Implementations we will improve with our /Dev/Random
-To:     mobile@cloudflare.com
+Date:   Fri, 25 Mar 2022 04:47:37 +0000
+Message-ID: <CAHpNFcPn_PVcZAiro5yJPUtGp=7jWYh=0rgjkObg8Une1=aR7g@mail.gmail.com>
+Subject: ICE-SSRTP GEA Replacement 2022 + RS https://science.n-helix.com/2022/03/ice-ssrtp.html
+To:     torvalds@linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
